@@ -1,13 +1,15 @@
+import BN from 'bn.js'
 import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { HorizontalStackedBar } from '@/common/components/HorizontalStackedBar'
 import { List } from '@/common/components/List'
 import { TextBig, TextMedium, TokenValue } from '@/common/components/typography'
+import { BN_ZERO } from '@/common/constants'
 import { DataListItem } from '@/financials/components/StackedBar/components/DataListItem'
 import { chartColors } from '@/financials/types/constants'
 
-export type Data = Record<string, number>
+export type Data = Record<string, BN>
 
 export interface StackedBarProps {
   data: Data
@@ -20,8 +22,11 @@ export interface StackedBarProps {
 
 export const StackedBar = ({ data, title, active, setActive, haveHover = true, barHeight = 50 }: StackedBarProps) => {
   const [preview, setPreview] = useState<number | string | null>(null)
-
-  const totalValue = useMemo(() => Object.entries(data).reduce((prev, next) => prev + next[1], 0), [data])
+  // const totalValue = useMemo(() => Object.entries(data).reduce((prev, next) => prev + next[1], 0), [data])
+  const totalValue = useMemo(
+    () => Object.entries(data).reduce((prev, next) => prev.add(new BN(next[1])), BN_ZERO),
+    [data]
+  )
 
   return (
     <>
@@ -33,7 +38,7 @@ export const StackedBar = ({ data, title, active, setActive, haveHover = true, b
       </TitleContainer>
       <HorizontalStackedBar
         keys={Object.keys(data)}
-        data={data}
+        data={data as any} //has to be changed
         height={barHeight}
         tooltip={(node) => (
           <Tooltip>
@@ -55,7 +60,10 @@ export const StackedBar = ({ data, title, active, setActive, haveHover = true, b
               isActive={active === key}
               title={key}
               color={chartColors[index]}
-              percentage={(value / (totalValue || 1)) * 100}
+              percentage={value
+                .div(totalValue || BN_ZERO)
+                .muln(100)
+                .toNumber()}
               value={<TokenValue value={value} />}
               haveHover={haveHover}
             />

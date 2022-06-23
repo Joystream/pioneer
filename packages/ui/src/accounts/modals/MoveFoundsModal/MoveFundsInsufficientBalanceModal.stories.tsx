@@ -1,4 +1,5 @@
 import { Meta, Story } from '@storybook/react'
+import BN from 'bn.js'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
@@ -35,7 +36,7 @@ const Template: Story<MoveFoundsInsufficientBalanceModalProps> = (args) => {
 
 export const Default = Template.bind({})
 Default.args = {
-  requiredStake: 1000,
+  requiredStake: new BN(1000),
   onClose: () => undefined,
   onManageAccountsClick: () => undefined,
 }

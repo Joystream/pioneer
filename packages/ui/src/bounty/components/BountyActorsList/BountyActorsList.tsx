@@ -24,7 +24,7 @@ const actorsMapFunction = (el: BountyActorItem) => {
     return (
       <ValueText lighter>
         Contributed
-        <Amount value={el.amount?.toNumber?.() ?? Number(el.amount)} />
+        <Amount value={el.amount} />
       </ValueText>
     )
   }

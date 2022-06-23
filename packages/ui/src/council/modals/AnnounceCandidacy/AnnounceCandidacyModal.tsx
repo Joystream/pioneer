@@ -87,7 +87,7 @@ export const AnnounceCandidacyModal = () => {
   const [state, send, service] = useMachine(announceCandidacyMachine)
   const constants = useCouncilConstants()
   const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
-    constants?.election.minCandidacyStake.toNumber() || 0,
+    constants?.election.minCandidacyStake || BN_ZERO,
     'Council Candidate'
   )
   const [stakingAccountMap, setStakingAccount] = useState<Account | undefined>(undefined)
@@ -241,7 +241,7 @@ export const AnnounceCandidacyModal = () => {
       data: {
         accountsWithCompatibleLocks,
         accountsWithTransferableBalance,
-        requiredStake: (constants?.election.minCandidacyStake as BN).toNumber(),
+        requiredStake: constants?.election.minCandidacyStake ?? BN_ZERO,
         lock: 'Council Candidate',
       },
     })

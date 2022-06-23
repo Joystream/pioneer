@@ -27,7 +27,7 @@ export interface BaseOpening {
   details: string
   createdAtBlock: Block
   stake: BN
-  budget: number
+  budget: BN
   rewardPerBlock: BN
 }
 
@@ -45,7 +45,7 @@ export interface WorkingGroupOpeningApplication {
 export interface WorkingGroupOpening extends BaseOpening {
   runtimeId: number
   leadId?: string | null
-  budget: number
+  budget: BN
   type: WorkingGroupOpeningType
   status: Status
   applicants: number

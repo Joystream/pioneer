@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React from 'react'
 
 import { AddressToBalanceMap, LockType } from '@/accounts/types'
@@ -14,7 +15,7 @@ import { ModalBody } from './styles'
 export interface MoveFoundsTransferableModalProps {
   onClose: () => void
   onManageAccountsClick: () => void
-  requiredStake: number
+  requiredStake: BN
   balances: AddressToBalanceMap
   accounts?: Address[]
   lock?: LockType

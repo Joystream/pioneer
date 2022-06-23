@@ -61,7 +61,7 @@ export const ApplyForRoleModal = () => {
   const [stakingAccountMap, setStakingAccount] = useState<Account | undefined>(undefined)
 
   const opening = modalData.opening
-  const requiredStake = opening.stake.toNumber()
+  const requiredStake = opening.stake
   const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
     requiredStake,
     groupToLockId(opening.groupId)

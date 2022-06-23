@@ -19,8 +19,8 @@ export interface Worker {
   status: WorkerStatusTypename
   isLead: boolean
   rewardPerBlock: BN
-  owedReward: number
-  stake: number
+  owedReward: BN
+  stake: BN
 }
 
 export interface WorkerWithDetails extends Worker {
@@ -30,7 +30,7 @@ export interface WorkerWithDetails extends Worker {
   rewardAccount: Address
   stakeAccount: Address
   hiredAtBlock: Block
-  minStake: number
+  minStake: BN
 }
 
 export interface PastWorker {

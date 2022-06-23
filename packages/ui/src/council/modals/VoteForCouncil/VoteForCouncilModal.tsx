@@ -7,6 +7,7 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { LockType } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
+import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
@@ -29,7 +30,7 @@ export const VoteForCouncilModal = () => {
 
   const constants = useCouncilConstants()
   const minStake = constants?.election.minVoteStake
-  const requiredStake = minStake?.toNumber() ?? 0
+  const requiredStake = minStake ?? BN_ZERO
 
   const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
     requiredStake,

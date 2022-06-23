@@ -85,7 +85,7 @@ export const AddNewProposalModal = () => {
 
   const constants = useProposalConstants(formMap[1])
   const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
-    constants?.requiredStake.toNumber() || 0,
+    constants?.requiredStake || BN_ZERO,
     'Proposals'
   )
   const balance = useBalance(formMap[0]?.address)
@@ -270,7 +270,7 @@ export const AddNewProposalModal = () => {
       data: {
         accountsWithCompatibleLocks,
         accountsWithTransferableBalance,
-        requiredStake: (constants?.requiredStake as BN).toNumber(),
+        requiredStake: constants?.requiredStake ?? BN_ZERO,
         lock: 'Proposals',
       },
     })

@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React from 'react'
 
 import { ButtonPrimary } from '@/common/components/buttons'
@@ -9,7 +10,7 @@ import { ModalBody } from './styles'
 export interface MoveFoundsInsufficientBalanceModalProps {
   onClose: () => void
   onManageAccountsClick: () => void
-  requiredStake: number
+  requiredStake: BN
 }
 
 export const MoveFundsInsufficientBalanceModal = ({

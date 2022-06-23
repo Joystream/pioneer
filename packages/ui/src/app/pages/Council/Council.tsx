@@ -78,6 +78,6 @@ const sortBy = ({ key, isDescending }: CouncilOrder): ((a: Councilor, b: Council
     case 'voterStake':
       return (a, b) => ((a[key] ?? BN_ZERO).gte(b[key] ?? BN_ZERO) ? 1 : -1 * direction)
     default:
-      return (a, b) => (a[key] - b[key]) * direction
+      return (a, b) => a[key].sub(b[key]) * direction
   }
 }

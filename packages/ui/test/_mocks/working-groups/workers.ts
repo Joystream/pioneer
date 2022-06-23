@@ -3,6 +3,7 @@ import { BN_TWO } from '@polkadot/util'
 import { WorkerWithDetails } from '@/working-groups/types'
 
 import { alice } from '../keyring'
+import BN from 'bn.js';
 
 export const WORKER: WorkerWithDetails = {
   membership: {
@@ -15,9 +16,9 @@ export const WORKER: WorkerWithDetails = {
   },
   isLead: false,
   rewardPerBlock: BN_TWO,
-  stake: 2000,
-  minStake: 2000,
-  owedReward: 1000,
+  stake: new BN(2000),
+  minStake: new BN(2000),
+  owedReward: new BN(1000),
   status: 'WorkerStatusActive',
   id: '1',
   runtimeId: 12,

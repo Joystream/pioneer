@@ -52,9 +52,9 @@ export const MyRole = () => {
 
   const workerExcessValue = useMemo(() => {
     if (canMoveExcessTokens) {
-      const excessValue = worker.stake - worker.minStake
+      const excessValue = worker.stake.sub(worker.minStake)
 
-      return stakeBalance.transferable.gtn(excessValue) ? new BN(excessValue) : stakeBalance.transferable
+      return stakeBalance.transferable.gte(excessValue) ? new BN(excessValue) : stakeBalance.transferable
     }
   }, [worker, stakeBalance])
 
