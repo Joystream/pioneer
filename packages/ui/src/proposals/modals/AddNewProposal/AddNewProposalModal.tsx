@@ -10,7 +10,6 @@ import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
@@ -247,21 +246,7 @@ export const AddNewProposalModal = () => {
     return null
   }
 
-  if (state.matches('requirementsFailed')) {
-    return (
-      <InsufficientFundsModal
-        onClose={hideModal}
-        address={activeMember.controllerAccount}
-        amount={feeInfo.transactionFee}
-      />
-    )
-  }
-
-  if (state.matches('warning')) {
-    return isHidingCaution ? null : <WarningModal onNext={() => send('NEXT')} />
-  }
-
-  if (state.matches('requiredStakeFailed')) {
+  if (state.matches('requirementsFailed') || state.matches('requiredStakeFailed')) {
     showModal<MoveFundsModalCall>({
       modal: 'MoveFundsModal',
       data: {
@@ -271,6 +256,10 @@ export const AddNewProposalModal = () => {
     })
 
     return null
+  }
+
+  if (state.matches('warning')) {
+    return isHidingCaution ? null : <WarningModal onNext={() => send('NEXT')} />
   }
 
   if (state.matches('bindStakingAccount')) {
