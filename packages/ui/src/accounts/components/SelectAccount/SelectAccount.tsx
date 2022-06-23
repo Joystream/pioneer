@@ -114,7 +114,12 @@ export const SelectStakingAccount = ({
   ...props
 }: SelectStakingAccountProps) => {
   const form = useFormContext()
-  const accountsWithLocks = useStakingAccountsLocks(minBalance, lockType, recoveryConditions)
+  const accountsWithLocks = useStakingAccountsLocks({
+    requiredStake: minBalance,
+    lockType,
+    recoveryConditions,
+    filterByBalance: true,
+  })
 
   if (!form || !name) {
     return <BaseSelectAccount {...props} accounts={accountsWithLocks} />

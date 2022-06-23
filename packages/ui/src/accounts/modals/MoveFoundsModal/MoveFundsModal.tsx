@@ -39,7 +39,7 @@ export const MoveFundsModal = () => {
 
   const balances = useMyBalances()
 
-  const accounts = useStakingAccountsLocks(new BN(requiredStake), lock)
+  const accounts = useStakingAccountsLocks({ requiredStake, lockType: lock, filterByBalance: false })
   const accountsWithTransferableBalance = Object.entries(balances).filter(([, balances]) =>
     balances.transferable.gt(BN_ZERO)
   )
@@ -49,9 +49,7 @@ export const MoveFundsModal = () => {
   )
   const insufficientBalances = transferableTotal.lt(requiredStake)
 
-  const freeAccounts = accounts.filter((account) =>
-    account.optionLocks ? account.optionLocks.length === 0 && account.optionLocks[0] === 'insufficientFunds' : true
-  )
+  const freeAccounts = accounts.filter((account) => (account.optionLocks ? account.optionLocks.length === 0 : true))
   const noFreeAccounts = freeAccounts.length === 0
 
   return (

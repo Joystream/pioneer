@@ -26,6 +26,14 @@ export const StyledOptionListAccount = styled(OptionListAccount)`
   width: 100%;
   border: 1px solid ${Colors.Black[200]};
   box-shadow: none;
+  & li:hover {
+    .accountName {
+      color: inherit;
+    }
+  }
+  & div {
+    cursor: default;
+  }
 `
 
 export const InfoList = styled.ul`

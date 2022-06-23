@@ -8,11 +8,19 @@ import { LockType, OptionLock, AccountOption } from '../types'
 import { useMyAccounts } from './useMyAccounts'
 import { useMyBalances } from './useMyBalances'
 
-export const useStakingAccountsLocks = (
-  requiredStake: BN,
-  lockType: LockType,
+interface UseStakingAccountsLocks {
+  requiredStake: BN
+  lockType: LockType
   recoveryConditions?: RecoveryConditions
-) => {
+  filterByBalance: boolean
+}
+
+export const useStakingAccountsLocks = ({
+  requiredStake,
+  lockType,
+  recoveryConditions,
+  filterByBalance,
+}: UseStakingAccountsLocks) => {
   const { allAccounts } = useMyAccounts()
   const balances = useMyBalances()
   const {
@@ -27,7 +35,7 @@ export const useStakingAccountsLocks = (
 
     const boundMembershipId = getMemberIdByBoundAccountAddress(accountAddress)
 
-    if (!balance.transferable.gte(requiredStake)) {
+    if (!balance.transferable.gte(requiredStake) && filterByBalance) {
       optionLocks.push('insufficientFunds')
     }
 
