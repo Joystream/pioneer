@@ -5,7 +5,7 @@ import { filter, map, Observable, share } from 'rxjs'
 
 import { ProxyApi } from '..'
 import { deserializeMessage } from '../models/payload'
-import { PostMessage, RawWorkerMessageEvent } from '../types'
+import { PostMessage, ProxyPromisePayload, RawWorkerMessageEvent } from '../types'
 import { apiInterfaceProxy } from '../utils/proxy'
 
 type ObservableMethods = typeof ObservableMethods[number]
@@ -26,7 +26,9 @@ export type WorkerTxMessage = {
   messageType: 'tx'
   txId: string
   callId: string
-  payload: ReturnType<SubmittableExtrinsic<'rxjs'>[ObservableMethods]> extends Observable<infer T> ? T : never
+  payload: ProxyPromisePayload<
+    ReturnType<SubmittableExtrinsic<'rxjs'>[ObservableMethods]> extends Observable<infer T> ? T : never
+  >
 }
 
 const ObservableMethods = ['paymentInfo', 'signAndSend'] as const
@@ -64,7 +66,13 @@ export const tx = (messages: Observable<RawWorkerMessageEvent>, postMessage: Pos
           _postMessage({ method: { key: method, id: callId }, payload: params })
           return _messages.pipe(
             filter((message) => message.callId === callId),
-            map(({ payload }) => payload),
+            map(({ payload: { error, result } }) => {
+              if (error) {
+                throw error
+              } else {
+                return result
+              }
+            }),
             share()
           )
         },

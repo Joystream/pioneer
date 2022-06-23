@@ -37,9 +37,10 @@ export const SelectAccountStep = ({ onAccountSelect }: Props) => {
             <JoystreamLogo />
           </IconsWrapper>
           <TextWrapper>
-            <TextExtraHuge bold>Connect account</TextExtraHuge>
+            <StyledTextHuge bold>Connect account</StyledTextHuge>
             <StyledSubtitle>
-              Select Polkadot account which you want to connect to your new joystream membership.
+              Select Polkadot account which you want to connect to your new joystream membership. <br />
+              Scroll down to select account on smaller screens.
             </StyledSubtitle>
           </TextWrapper>
           <StyledList>
@@ -65,9 +66,12 @@ export const SelectAccountStep = ({ onAccountSelect }: Props) => {
 }
 const StyledList = styled(List)`
   width: 90%;
-  margin: 20px auto 0 auto;
+  margin: 10px auto 0 auto;
 `
 
+const StyledTextHuge = styled(TextExtraHuge)`
+  line-height: 20px;
+`
 const IconsWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -84,7 +88,7 @@ const ContentWrapper = styled.div`
   width: 100%;
   max-width: 640px;
   height: 100%;
-  margin: 64px auto 40px;
+  margin: 24px auto 40px;
   padding: 0 0 24px;
   text-align: center;
 `
@@ -97,5 +101,5 @@ const StyledSubtitle = styled(TextMedium)`
   color: ${Colors.Black[500]};
   display: flex;
   margin: 8px auto 0 auto;
-  width: 50%;
+  width: 100%;
 `

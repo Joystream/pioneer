@@ -126,6 +126,10 @@ export const ApplyForRoleModal = () => {
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
   useEffect(() => {
+    if (state.matches('form') && !questions.length) {
+      send('NEXT')
+    }
+
     if (!state.matches('requirementsVerification')) {
       return
     }
@@ -212,7 +216,7 @@ export const ApplyForRoleModal = () => {
       opening_id: opening.runtimeId,
       role_account_id: stake.roleAccount.address,
       reward_account_id: stake.rewardAccount.address,
-      description: metadataToBytes(ApplicationMetadata, { answers: Object.values(formFields) as string[] }),
+      description: metadataToBytes(ApplicationMetadata, { answers: Object.values(formFields ?? {}) as string[] }),
       stake_parameters: {
         stake: stake.amount,
         staking_account_id: stake.account?.address,
@@ -263,6 +267,10 @@ export const ApplyForRoleModal = () => {
         There was a problem with applying for an opening.
       </FailureModal>
     )
+  }
+
+  if (state.matches('canceled')) {
+    return <FailureModal onClose={hideModal}>Transaction was canceled</FailureModal>
   }
 
   return (
