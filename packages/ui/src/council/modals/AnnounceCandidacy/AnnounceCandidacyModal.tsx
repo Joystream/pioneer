@@ -191,12 +191,9 @@ export const AnnounceCandidacyModal = () => {
       }
 
       if (feeInfo) {
-        return send(feeInfo.canAfford ? 'NEXT' : 'FAIL')
+        const areFundsSufficient = feeInfo.canAfford && hasRequiredStake
+        send(areFundsSufficient ? 'NEXT' : 'FAIL')
       }
-    }
-
-    if (state.matches('requiredStakeVerification')) {
-      return send(hasRequiredStake ? 'NEXT' : 'FAIL')
     }
 
     if (state.matches('beforeTransaction')) {
@@ -226,16 +223,6 @@ export const AnnounceCandidacyModal = () => {
   }
 
   if (state.matches('requirementsFailed')) {
-    return (
-      <InsufficientFundsModal
-        onClose={hideModal}
-        address={activeMember.controllerAccount}
-        amount={feeInfo.transactionFee}
-      />
-    )
-  }
-
-  if (state.matches('requiredStakeFailed')) {
     showModal<MoveFundsModalCall>({
       modal: 'MoveFundsModal',
       data: {
