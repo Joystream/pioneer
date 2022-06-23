@@ -11,10 +11,6 @@ export const CKEditorStylesOverrides = createGlobalStyle<{ minRows: number; maxR
     width: 100%;
   }
 
-  .ckeditor-anchor {
-    display: none;
-  }
-
   .ck.ck-content {
     line-height: ${EDITOR_LINE_HEIGHT}em;
     width: 100%;
