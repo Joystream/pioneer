@@ -158,7 +158,7 @@ describe('UI: ApplyForRoleModal', () => {
     })
 
     it('Insufficient funds', async () => {
-      const requiredStake = 10_000
+      const requiredStake = '10_000'
       const fields = adaptRecord(
         server.server?.schema.first('WorkingGroupOpening')
       ) as WorkingGroupOpeningFieldsFragment
