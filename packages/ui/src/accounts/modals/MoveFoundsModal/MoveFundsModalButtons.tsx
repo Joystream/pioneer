@@ -14,29 +14,27 @@ interface MoveFundsModalItemProps {
 }
 
 export const MoveFundsModalButtons = ({ insufficientBalances, noFreeAccounts }: MoveFundsModalItemProps) => {
-  const { showModal } = useModal()
+  const { showModal, hideModal } = useModal()
 
   if (insufficientBalances) {
     return (
       <>
-        <LinkButtonPrimary size="medium" to={BountyRoutes.currentBounties}>
-          Bounties
-        </LinkButtonPrimary>
-        <LinkButtonPrimary size="medium" to={WorkingGroupsRoutes.groups}>
-          Working groups
-        </LinkButtonPrimary>
+        <div onClick={() => hideModal()}>
+          <LinkButtonPrimary size="medium" to={BountyRoutes.currentBounties}>
+            Bounties
+          </LinkButtonPrimary>
+        </div>
+        <div onClick={() => hideModal()}>
+          <LinkButtonPrimary size="medium" to={WorkingGroupsRoutes.groups}>
+            Working groups
+          </LinkButtonPrimary>
+        </div>
       </>
     )
   }
 
   if (noFreeAccounts) {
-    return (
-      <>
-        <ButtonPrimary size="medium" onClick={() => null}>
-          Create new Account
-        </ButtonPrimary>
-      </>
-    )
+    return null
   }
 
   return (
