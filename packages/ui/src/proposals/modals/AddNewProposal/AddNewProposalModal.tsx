@@ -13,11 +13,9 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
 import { Api } from '@/api/types'
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Checkbox } from '@/common/components/forms'
-import { Arrow } from '@/common/components/icons'
-import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import {
   StepDescriptionColumn,
   Stepper,
@@ -169,33 +167,35 @@ export const AddNewProposalModal = () => {
     [state.context.discussionMode]
   )
 
-  const transaction = useMemo(() => {
-    if (activeMember && api) {
-      const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } =
-        form.getValues() as AddNewProposalForm
+  const { transaction, feeInfo } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => {
+      if (activeMember && api) {
+        const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } =
+          form.getValues() as AddNewProposalForm
 
-      const txBaseParams: BaseProposalParams = {
-        member_id: activeMember?.id,
-        title: proposalDetails?.title,
-        description: proposalDetails?.rationale,
-        ...(stakingAccount.stakingAccount ? { staking_account_id: stakingAccount.stakingAccount.address } : {}),
-        ...(triggerAndDiscussion.triggerBlock ? { exact_execution_block: triggerAndDiscussion.triggerBlock } : {}),
+        const txBaseParams: BaseProposalParams = {
+          member_id: activeMember?.id,
+          title: proposalDetails?.title,
+          description: proposalDetails?.rationale,
+          ...(stakingAccount.stakingAccount ? { staking_account_id: stakingAccount.stakingAccount.address } : {}),
+          ...(triggerAndDiscussion.triggerBlock ? { exact_execution_block: triggerAndDiscussion.triggerBlock } : {}),
+        }
+
+        const txSpecificParameters = getSpecificParameters(api, specifics)
+
+        if (stakingStatus === 'confirmed') {
+          return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
+        }
+
+        return api.tx.utility.batch([
+          api.tx.members.confirmStakingAccount(activeMember.id, stakingAccount.stakingAccount?.address ?? ''),
+          api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
+        ])
       }
-
-      const txSpecificParameters = getSpecificParameters(api, specifics)
-
-      if (stakingStatus === 'confirmed') {
-        return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
-      }
-
-      return api.tx.utility.batch([
-        api.tx.members.confirmStakingAccount(activeMember.id, stakingAccount.stakingAccount?.address ?? ''),
-        api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
-      ])
-    }
-  }, [state.value, connectionState, stakingStatus, form.formState.isValidating])
-
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+    },
+    [state.value, connectionState, stakingStatus, form.formState.isValidating]
+  )
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
@@ -378,27 +378,20 @@ export const AddNewProposalModal = () => {
           </StyledStepperBody>
         </StepperProposalWrapper>
       </StepperModalBody>
-      <ModalFooter twoColumns>
-        <StyledButtonsGroup align="left">
-          {!state.matches('proposalType') && (
-            <ButtonGhost onClick={goToPrevious} size="medium">
-              <Arrow direction="left" />
-              Previous step
-            </ButtonGhost>
-          )}
-        </StyledButtonsGroup>
-        <ButtonsGroup align="right">
-          {isExecutionError && (
-            <Checkbox isRequired onChange={setWarningAccepted} id="execution-requirement">
-              I understand the implications of overriding the execution constraints validation.
-            </Checkbox>
-          )}
-          <ButtonPrimary disabled={shouldDisableNext} onClick={() => send('NEXT')} size="medium">
-            {isLastStepActive(getSteps(service)) ? 'Create proposal' : 'Next step'}
-            <Arrow direction="right" />
-          </ButtonPrimary>
-        </ButtonsGroup>
-      </ModalFooter>
+      <ModalTransactionFooter
+        prev={{ disabled: state.matches('proposalType'), onClick: goToPrevious }}
+        next={{
+          disabled: shouldDisableNext,
+          label: isLastStepActive(getSteps(service)) ? 'Create proposal' : 'Next step',
+          onClick: () => send('NEXT'),
+        }}
+      >
+        {isExecutionError && (
+          <Checkbox isRequired onChange={setWarningAccepted} id="execution-requirement">
+            I understand the implications of overriding the execution constraints validation.
+          </Checkbox>
+        )}
+      </ModalTransactionFooter>
     </Modal>
   )
 }
@@ -410,8 +403,4 @@ export const StepperProposalWrapper = styled(StepperModalWrapper)`
 const StyledStepperBody = styled(StepperBody)`
   flex-direction: column;
   row-gap: 20px;
-`
-
-const StyledButtonsGroup = styled(ButtonsGroup)`
-  min-width: max-content;
 `
