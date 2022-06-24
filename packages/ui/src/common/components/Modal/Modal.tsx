@@ -95,7 +95,7 @@ export const ModalGlass = styled.div<ModalProps>`
       case 's':
         return '0px'
       case 'm':
-        return '120px'
+        return '60px'
       case 'l':
         return '44px'
       case 'xl':

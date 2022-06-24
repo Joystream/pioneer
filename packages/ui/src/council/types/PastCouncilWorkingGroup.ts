@@ -29,7 +29,7 @@ const getTotalMissedReward = (
     'workerId'
   )
 
-  return Object.values(groupedEvents).reduce((a, b) => a.add(new BN(b[0].newMissedRewardAmount)), BN_ZERO)
+  return Object.values(groupedEvents).reduce((a, b) => a.add(new BN(b[0].newMissedRewardAmount) ?? 0), BN_ZERO)
 }
 
 export const asPastCouncilWorkingGroup =

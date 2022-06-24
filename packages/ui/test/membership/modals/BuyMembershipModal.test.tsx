@@ -85,7 +85,7 @@ describe('UI: BuyMembershipModal', () => {
 
     await selectFromDropdown('Root account', 'bob')
     await selectFromDropdown('Controller account', 'alice')
-    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'BobbyBob' } })
     fireEvent.change(screen.getByLabelText(/Membership handle/i), { target: { value: 'realbobbybob' } })
     fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
 
@@ -99,7 +99,7 @@ describe('UI: BuyMembershipModal', () => {
 
     await selectFromDropdown('Root account', 'bob')
     await selectFromDropdown('Controller account', 'alice')
-    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'BobbyBob' } })
     fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
     fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
 
@@ -116,7 +116,7 @@ describe('UI: BuyMembershipModal', () => {
 
       await selectFromDropdown('Root account', 'bob')
       await selectFromDropdown('Controller account', 'alice')
-      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'BobbyBob' } })
       fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
       fireEvent.change(screen.getByLabelText(/about member/i), { target: { value: "I'm Bob" } })
       fireEvent.change(screen.getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })

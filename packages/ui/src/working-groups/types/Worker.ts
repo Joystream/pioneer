@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 
+import { BN_ZERO } from '@/common/constants'
 import { Address, asBlock, Block } from '@/common/types'
 import { castQueryResult } from '@/common/utils/casting'
 import { asMember, Member } from '@/memberships/types'
@@ -68,8 +69,8 @@ export const asWorker = (fields: WorkerFieldsFragment): Worker => ({
   status: fields.status.__typename,
   isLead: fields.isLead,
   rewardPerBlock: new BN(fields.rewardPerBlock),
-  stake: fields.stake,
-  owedReward: fields.missingRewardAmount,
+  stake: new BN(fields.stake),
+  owedReward: new BN(fields.missingRewardAmount || BN_ZERO),
 })
 
 export const asWorkerWithDetails = (fields: WorkerDetailedFieldsFragment): WorkerWithDetails => ({
@@ -79,7 +80,7 @@ export const asWorkerWithDetails = (fields: WorkerDetailedFieldsFragment): Worke
   roleAccount: fields.roleAccount,
   rewardAccount: fields.rewardAccount,
   stakeAccount: fields.stakeAccount,
-  minStake: fields.application.opening.stakeAmount,
+  minStake: new BN(fields.application.opening.stakeAmount),
   hiredAtBlock: asBlock(fields.entry),
 })
 

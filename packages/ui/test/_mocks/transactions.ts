@@ -1,5 +1,4 @@
 import { createType } from '@joystream/types'
-import { ApiRx } from '@polkadot/api'
 import { AugmentedEvents } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
@@ -7,6 +6,7 @@ import { set } from 'lodash'
 import { from, of, asyncScheduler, scheduled, Observable } from 'rxjs'
 
 import { LockType } from '@/accounts/types'
+import { Api } from '@/api/types'
 import { BN_ZERO } from '@/common/constants'
 import { ExtractTuple } from '@/common/model/JoystreamNode'
 import { UseApi } from '@/common/providers/api/provider'
@@ -143,7 +143,7 @@ export const stubConst = <T>(api: UseApi, constSubPath: string, value: T) => {
 
 export const stubApi = () => {
   const api: UseApi = {
-    api: {} as unknown as ApiRx,
+    api: {} as unknown as Api,
     isConnected: true,
     connectionState: 'connected',
   }

@@ -16,6 +16,6 @@ export const asCouncilor = (fields: CouncilMemberFieldsFragment): Councilor => (
   id: fields.id,
   member: asMember(fields.member),
   numberOfTerms: fields.member.councilMembers.length,
-  unpaidReward: fields.unpaidReward,
-  stake: fields.stake,
+  unpaidReward: new BN(fields.unpaidReward),
+  stake: new BN(fields.stake),
 })
