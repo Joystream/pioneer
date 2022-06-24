@@ -78,6 +78,8 @@ const sortBy = ({ key, isDescending }: CouncilOrder): ((a: Councilor, b: Council
     case 'voterStake':
       return (a, b) => ((a[key] ?? BN_ZERO).gte(b[key] ?? BN_ZERO) ? 1 : -1 * direction)
     default:
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       return (a, b) => a[key] - b[key] * direction
   }
 }
