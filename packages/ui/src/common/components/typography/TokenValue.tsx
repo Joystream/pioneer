@@ -6,7 +6,7 @@ import { CurrencyName } from '@/app/constants/currency'
 import { Skeleton } from '@/common/components/Skeleton'
 
 import { Colors, Fonts } from '../../constants'
-import { formatTokenValue } from '../../model/formatters'
+import { formatJoyValue, formatTokenValue } from '../../model/formatters'
 
 interface ValueSizingProps {
   size?: 's' | 'm' | 'l'
@@ -28,7 +28,7 @@ export const TokenValue = React.memo(({ className, value, size, isLoading }: Val
   }
   return (
     <ValueInJoys className={className} size={size}>
-      {formatTokenValue(value)}
+      {formatJoyValue(value)}
     </ValueInJoys>
   )
 })

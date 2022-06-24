@@ -53,12 +53,3 @@ export const subtitleMapping = (value: string) => {
       return value
   }
 }
-
-// export const currencyName = (value: number) => {
-//   const valueCalculation = value // value calculation if needed
-// if (valueCalculation >= 1) { //here should be added correct condition checking
-//   return `${valueCalculation} + ${CurrencyName.integerValue}`
-// } if (valueCalculation < 1) {
-//   return `${valueCalculation} + ${CurrencyName.decimalsValue}`
-//   }
-// }

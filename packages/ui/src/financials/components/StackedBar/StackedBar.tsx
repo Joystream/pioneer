@@ -22,11 +22,7 @@ export interface StackedBarProps {
 
 export const StackedBar = ({ data, title, active, setActive, haveHover = true, barHeight = 50 }: StackedBarProps) => {
   const [preview, setPreview] = useState<number | string | null>(null)
-  // const totalValue = useMemo(() => Object.entries(data).reduce((prev, next) => prev + next[1], 0), [data])
-  const totalValue = useMemo(
-    () => Object.entries(data).reduce((prev, next) => prev.add(new BN(next[1])), BN_ZERO),
-    [data]
-  )
+  const totalValue = useMemo(() => Object.values(data).reduce((prev, next) => prev.add(next), BN_ZERO), [data])
 
   return (
     <>

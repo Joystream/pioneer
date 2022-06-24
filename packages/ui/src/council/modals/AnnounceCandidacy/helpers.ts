@@ -30,7 +30,7 @@ export interface AnnounceCandidacyFrom {
 export const baseSchema = Yup.object().shape({
   staking: Yup.object().shape({
     account: StakingAccountSchema.required('This field is required'),
-    amount: BNSchema.test(minContext('Minimal stake amount is ${min}' + `'${CurrencyName.integerValue}'`, 'minStake'))
+    amount: BNSchema.test(minContext(`Minimal stake amount is \${min} ${CurrencyName.integerValue}`, 'minStake'))
       .test(maxContext('Insufficient funds to cover staking', 'controllerAccountBalance'))
       .required('This field is required'),
   }),

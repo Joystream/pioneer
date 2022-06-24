@@ -90,10 +90,7 @@ export const addBountyModalSchema = Yup.object().shape({
   }),
   [AddBountyStates.fundingPeriodDetails]: Yup.object().shape({
     cherry: BNSchema.test(
-      minContext(
-        'Cherry must be greater than minimum of' + '${min}' + `'${CurrencyName.integerValue}`,
-        'minCherryLimit'
-      )
+      minContext(`Cherry must be greater than minimum of' \${min} '${CurrencyName.integerValue}`, 'minCherryLimit')
     )
       .test(maxContext('Cherry of ${max} JOY exceeds your balance', 'maxCherryLimit'))
       .required(''),

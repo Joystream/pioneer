@@ -54,7 +54,7 @@ export const MyRole = () => {
     if (canMoveExcessTokens) {
       const excessValue = worker.stake.sub(worker.minStake)
 
-      return stakeBalance.transferable.gte(excessValue) ? new BN(excessValue) : stakeBalance.transferable
+      return stakeBalance.transferable.gte(excessValue) ? excessValue : stakeBalance.transferable
     }
   }, [worker, stakeBalance])
 
