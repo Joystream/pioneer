@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 
+import { BN_ZERO } from '@/common/constants'
 import { WorkerStatusToTypename } from '@/working-groups/types'
 
 import { useGetGroupDebtQuery } from '../queries'
@@ -16,6 +17,6 @@ export const useGroupDebt = (groupId: string) => {
   }
 
   return {
-    debt: data.workers.reduce((a, b) => a.add(new BN(b.missingRewardAmount)), new BN(0)),
+    debt: data.workers.reduce((a, b) => a.add(new BN(b.missingRewardAmount ?? 0)), BN_ZERO),
   }
 }

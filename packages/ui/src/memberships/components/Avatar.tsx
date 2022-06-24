@@ -19,6 +19,7 @@ interface MemberAvatarProps extends AvatarProps {
   noArea?: boolean
   isLead?: boolean
   fixedSize?: boolean
+  big?: boolean
 }
 
 export interface MemberInfoAvatarProps extends MemberAvatarProps {
@@ -49,9 +50,9 @@ export const Avatar = React.memo(({ avatarUri, className }: AvatarProps) => {
   )
 })
 
-export const MemberAvatar = React.memo(({ isLead, avatarUri, className, small, noArea }: MemberAvatarProps) => {
+export const MemberAvatar = React.memo(({ isLead, avatarUri, className, small, noArea, big }: MemberAvatarProps) => {
   return (
-    <MemberPhoto small={small} noArea={noArea}>
+    <MemberPhoto small={small} noArea={noArea} big={big}>
       <MemberPhotoContainer>
         <Avatar avatarUri={avatarUri} className={className} />
         {isLead && (

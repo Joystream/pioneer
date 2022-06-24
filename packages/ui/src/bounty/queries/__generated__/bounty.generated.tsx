@@ -11,13 +11,13 @@ export type BountyFieldsFragment = {
   title?: string | null
   bannerImageUri?: string | null
   description?: string | null
-  cherry: any
-  entrantStake: any
+  cherry: string
+  entrantStake: string
   workPeriod: number
   judgingPeriod: number
   stage: Types.BountyStage
   isTerminated: boolean
-  totalFunding: any
+  totalFunding: string
   discussionThreadId?: string | null
   creator?: {
     __typename: 'Membership'
@@ -92,7 +92,7 @@ export type BountyFieldsFragment = {
   contributions?: Array<{
     __typename: 'BountyContribution'
     id: string
-    amount: any
+    amount: string
     withdrawnInEvent?: { __typename: 'BountyFundingWithdrawalEvent'; id: string } | null
     contributor?: {
       __typename: 'Membership'
@@ -363,7 +363,7 @@ export type BountyWorkWithDetailsFieldsFragment = {
 export type BountyContributionFieldsFragment = {
   __typename: 'BountyContribution'
   id: string
-  amount: any
+  amount: string
   withdrawnInEvent?: { __typename: 'BountyFundingWithdrawalEvent'; id: string } | null
   contributor?: {
     __typename: 'Membership'
@@ -416,13 +416,13 @@ export type GetBountiesQuery = {
     title?: string | null
     bannerImageUri?: string | null
     description?: string | null
-    cherry: any
-    entrantStake: any
+    cherry: string
+    entrantStake: string
     workPeriod: number
     judgingPeriod: number
     stage: Types.BountyStage
     isTerminated: boolean
-    totalFunding: any
+    totalFunding: string
     discussionThreadId?: string | null
     creator?: {
       __typename: 'Membership'
@@ -497,7 +497,7 @@ export type GetBountiesQuery = {
     contributions?: Array<{
       __typename: 'BountyContribution'
       id: string
-      amount: any
+      amount: string
       withdrawnInEvent?: { __typename: 'BountyFundingWithdrawalEvent'; id: string } | null
       contributor?: {
         __typename: 'Membership'
@@ -626,13 +626,13 @@ export type GetBountyQuery = {
     title?: string | null
     bannerImageUri?: string | null
     description?: string | null
-    cherry: any
-    entrantStake: any
+    cherry: string
+    entrantStake: string
     workPeriod: number
     judgingPeriod: number
     stage: Types.BountyStage
     isTerminated: boolean
-    totalFunding: any
+    totalFunding: string
     discussionThreadId?: string | null
     creator?: {
       __typename: 'Membership'
@@ -707,7 +707,7 @@ export type GetBountyQuery = {
     contributions?: Array<{
       __typename: 'BountyContribution'
       id: string
-      amount: any
+      amount: string
       withdrawnInEvent?: { __typename: 'BountyFundingWithdrawalEvent'; id: string } | null
       contributor?: {
         __typename: 'Membership'
@@ -903,7 +903,7 @@ export type GetUserBountyStatisticsQuery = {
       | { __typename: 'BountyEntryStatusWithdrawn' }
       | { __typename: 'BountyEntryStatusWorking' }
   }>
-  bountyContributions: Array<{ __typename: 'BountyContribution'; amount: any }>
+  bountyContributions: Array<{ __typename: 'BountyContribution'; amount: string }>
 }
 
 export type GetUserBountyTabsInformationQueryVariables = Types.Exact<{
@@ -929,7 +929,7 @@ export type GetBountyContributorsQuery = {
   bountyContributions: Array<{
     __typename: 'BountyContribution'
     id: string
-    amount: any
+    amount: string
     withdrawnInEvent?: { __typename: 'BountyFundingWithdrawalEvent'; id: string } | null
     contributor?: {
       __typename: 'Membership'

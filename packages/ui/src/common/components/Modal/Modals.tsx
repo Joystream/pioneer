@@ -43,10 +43,11 @@ export const LockedAccount = styled(AccountRow)`
 
 export const TransactionAmount = styled.div<TransactionAmountProps>`
   display: grid;
-  grid-template-columns: 320px auto;
+  grid-template-columns: auto auto;
   grid-template-rows: 1fr;
   grid-column-gap: 12px;
   align-items: ${({ alignItemsToEnd }) => (alignItemsToEnd ? 'flex-end' : 'center')};
+  justify-content: flex-start;
 `
 
 export const TransactionInfoContainer = styled.div`

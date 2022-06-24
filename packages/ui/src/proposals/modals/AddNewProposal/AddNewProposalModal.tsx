@@ -1,5 +1,4 @@
 import { createType } from '@joystream/types'
-import { ApiRx } from '@polkadot/api'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -12,6 +11,7 @@ import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatu
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
+import { Api } from '@/api/types'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Checkbox } from '@/common/components/forms'
@@ -61,7 +61,7 @@ import { GroupIdName } from '@/working-groups/types'
 import { SignTransactionModal as SignModeChangeTransaction } from '../ChangeThreadMode/SignTransactionModal'
 
 export type BaseProposalParams = Exclude<
-  Parameters<ApiRx['tx']['proposalsCodex']['createProposal']>[0],
+  Parameters<Api['tx']['proposalsCodex']['createProposal']>[0],
   string | Uint8Array
 >
 
@@ -131,12 +131,12 @@ export const AddNewProposalModal = () => {
   }, [JSON.stringify(mapDependencies)])
 
   useEffect(() => {
-    form.trigger('stakingAccount')
+    form.trigger('stakingAccount.stakingAccount')
   }, [stakingStatus])
 
   useEffect(() => {
-    form.trigger(machineStateConverter(state.value) as keyof AddNewProposalForm)
-  }, [state.value])
+    form.trigger([])
+  }, [machineStateConverter(state.value)])
 
   useEffect(() => {
     if (machineStateConverter(state.value) === 'stakingPolicyAndReward') {

@@ -55,7 +55,7 @@ export const TriggerAndDiscussionStep = () => {
             units="block"
             inputSize="s"
             name="triggerAndDiscussion.triggerBlock"
-            message={triggerBlock && `≈ ${inBlocksDate(triggerBlock)}`}
+            message={triggerBlock ? `≈ ${inBlocksDate(triggerBlock)}` : ''}
           >
             <InputNumber
               id="triggerBlock"
@@ -80,7 +80,12 @@ export const TriggerAndDiscussionStep = () => {
               Closed mode: only the active council, the original proposer, or one among a set of whitelisted members can
               post.
             </TextMedium>
-            <InputComponent label="Add member to whitelist" required inputSize="l">
+            <InputComponent
+              name="triggerAndDiscussion.discussionWhitelist"
+              label="Add member to whitelist"
+              required
+              inputSize="l"
+            >
               <SelectMember
                 onChange={(member) => addMemberToWhitelist(member)}
                 filter={(member) =>

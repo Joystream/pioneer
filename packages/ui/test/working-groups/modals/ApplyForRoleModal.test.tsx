@@ -104,7 +104,7 @@ describe('UI: ApplyForRoleModal', () => {
 
   beforeEach(async () => {
     const fields = adaptRecord(server.server?.schema.first('WorkingGroupOpening')) as WorkingGroupOpeningFieldsFragment
-    // fields.stakeAmount = 2000
+    fields.stakeAmount = '2000'
     fields.openingfilledeventopening = []
     const opening: WorkingGroupOpening = asWorkingGroupOpening(fields)
     useModal.modalData = { opening }

@@ -1,4 +1,5 @@
 import { BN_TWO } from '@polkadot/util'
+import BN from 'bn.js'
 
 import { WorkerWithDetails } from '@/working-groups/types'
 
@@ -15,9 +16,9 @@ export const WORKER: WorkerWithDetails = {
   },
   isLead: false,
   rewardPerBlock: BN_TWO,
-  stake: 2000,
-  minStake: 2000,
-  owedReward: 1000,
+  stake: new BN(2000),
+  minStake: new BN(2000),
+  owedReward: new BN(1000),
   status: 'WorkerStatusActive',
   id: '1',
   runtimeId: 12,

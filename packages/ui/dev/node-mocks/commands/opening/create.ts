@@ -1,11 +1,9 @@
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
 
 import { getDataFromEvent, metadataToBytes } from '../../../../src/common/model/JoystreamNode'
-import { GroupIdName } from '../../../../src/working-groups/types'
+import { GROUP, GroupIdName } from '../../consts'
 import { getSudoAccount } from '../../data/addresses'
 import { signAndSend, withApi } from '../../lib/api'
-
-const GROUP = 'membershipWorkingGroup' // TODO pass as a parameter
 
 export const addOpeningCommand = async ({ group = GROUP }: { group?: GroupIdName } = {}) => {
   const title = `Test ${group} opening`

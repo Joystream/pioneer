@@ -605,14 +605,14 @@ describe('UI: AddNewProposalModal', () => {
           expect(button).toBeDisabled()
         })
 
-        it('Group selected', async () => {
+        it('Group selected, amount filled with half stake', async () => {
           await SpecificParameters.DecreaseWorkingGroupLeadStake.selectGroup('Forum')
           await waitFor(async () => expect(await getButton(/By half/i)).not.toBeDisabled())
 
           expect(screen.queryByText(/The actual stake for Forum Working Group Lead is /i)).not.toBeNull()
 
           const button = await getCreateButton()
-          expect(button).toBeDisabled()
+          expect(button).not.toBeDisabled()
         })
 
         it('Zero amount entered', async () => {
@@ -1135,17 +1135,25 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeDisabled()
         })
 
-        it('Invalid - group selected, amount not filled', async () => {
+        it('Invalid - group selected, amount lower than current stake filled with positive', async () => {
           await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
           await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
+          await SpecificParameters.fillAmount(100)
 
           expect(await getCreateButton()).toBeDisabled()
         })
 
-        it('Valid - group selected, positive amount filled', async () => {
+        it('Valid - group selected, amount automatically filled', async () => {
           await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
           await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
-          await SpecificParameters.fillAmount(100)
+
+          expect(await getCreateButton()).not.toBeDisabled()
+        })
+
+        it('Valid - group selected, amount bigger than current stake filled', async () => {
+          await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
+          await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
+          await SpecificParameters.fillAmount(3000)
 
           expect(await getCreateButton()).toBeEnabled()
         })
