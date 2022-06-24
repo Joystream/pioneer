@@ -4,7 +4,6 @@ import styled, { css } from 'styled-components'
 
 import { CurrencyName } from '@/app/constants/currency'
 import { Skeleton } from '@/common/components/Skeleton'
-import { isDefined } from '@/common/utils'
 
 import { Colors, Fonts } from '../../constants'
 import { formatTokenValue } from '../../model/formatters'

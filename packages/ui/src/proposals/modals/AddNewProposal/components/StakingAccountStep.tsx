@@ -9,7 +9,7 @@ import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
-import { TextMedium, TokenValue, ValueInJoys } from '@/common/components/typography'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 
 interface StakingAccountStepProps {
   requiredStake: BN
@@ -30,10 +30,7 @@ export const StakingAccountStep = ({ requiredStake }: StakingAccountStepProps) =
         <RowGapBlock gap={20}>
           <RowGapBlock gap={8}>
             <TextMedium>
-              You must stake{' '}
-              <ValueInJoys>
-                <TokenValue value={requiredStake} />
-              </ValueInJoys>{' '}
+              You must stake <TokenValue value={requiredStake} />
               to create this proposal. This stake will be returned to you when the proposal is either rejected or
               accepted via council voting. Please note the duration of the voting period is displayed on the left and
               your funds will be locked for at least the duration of the voting period
