@@ -27,7 +27,7 @@ export const DeletePostModal = () => {
   const { active } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
 
-  const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
+  const { feeInfo } = useTransactionFee(active?.controllerAccount, () => transaction)
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {

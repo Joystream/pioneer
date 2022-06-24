@@ -6,7 +6,7 @@ import { Address } from '@/common/types'
 export function useTransactionFee(
   signer?: Address,
   getTransaction?: () => Transaction | undefined,
-  deps?: DependencyList
+  deps: DependencyList = []
 ) {
   const { transaction, feeInfo, setSigner, setTransaction } = useContext(TransactionFeesContext)
 
@@ -20,7 +20,7 @@ export function useTransactionFee(
     if (signer && getTransaction) {
       setTransaction(getTransaction())
     }
-  }, [signer, !!getTransaction, setTransaction, ...(deps ?? [])])
+  }, [signer, !!getTransaction, setTransaction, ...deps])
 
   return { transaction, feeInfo }
 }
