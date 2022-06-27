@@ -7,6 +7,7 @@ import { BalancesContext } from '@/accounts/providers/balances/context'
 import { ContributeFundsModal } from '@/bounty/modals/ContributeFundsModal'
 import { FundingLimited } from '@/bounty/types/Bounty'
 import { BN_ZERO } from '@/common/constants'
+import {formatJoyValue} from '@/common/model/formatters';
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
@@ -104,15 +105,15 @@ describe('UI: ContributeFundsModal', () => {
   })
 
   it('Displays correct transaction fee', () => {
-    const expected = String(fee)
+    const expected = fee
     const valueContainer = screen.getByText('modals.common.transactionFee.label')?.nextSibling
 
-    expect(valueContainer?.textContent).toBe(expected)
+    expect(valueContainer?.textContent).toBe(formatJoyValue(new BN(expected)))
   })
 
   it('Displays correct contribute amount', () => {
-    const value = 555
-    const expected = String(value)
+    const value = new BN(555)
+    const expected = formatJoyValue(value)
     const input = screen.getByLabelText('modals.contribute.selectAmount')
     fireEvent.input(input, { target: { value } })
 

@@ -7,7 +7,7 @@ import {
   AuthorizeTransactionModal,
   Props as AuthorizeTransactionModalProps,
 } from '@/bounty/modals/AuthorizeTransactionModal'
-import { formatTokenValue } from '@/common/model/formatters'
+import {formatJoyValue, formatTokenValue} from '@/common/model/formatters'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
@@ -77,19 +77,19 @@ describe('UI: AuthorizeTransactionModal', () => {
   })
 
   it('Displays correct fee', () => {
-    const expected = String(fee)
+    const expected = fee
     const valueContainer = screen.getByText('modals.common.transactionFee.label')?.nextSibling
 
-    expect(valueContainer?.textContent).toBe(expected)
+    expect(valueContainer?.textContent).toBe(formatJoyValue(new BN(expected)))
   })
 
   it('Displays correct contribute amount', () => {
-    const expected = contributeAmount.toString()
+    const expected = contributeAmount
     const valueContainer = screen.getByText(
       `modals.common.contributeAmount ${formatTokenValue(contributeAmount)}`
     )?.nextSibling
 
-    expect(valueContainer?.textContent).toBe(expected)
+    expect(valueContainer?.textContent).toBe(formatJoyValue(new BN(expected)))
   })
 
   const renderModal = () =>

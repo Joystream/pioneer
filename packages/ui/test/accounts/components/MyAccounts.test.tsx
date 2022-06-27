@@ -95,7 +95,7 @@ describe('UI: Accounts list', () => {
 
       const aliceBox = (await findByText(shortenAddress(alice.address)))?.parentNode?.parentNode
       expect(aliceBox?.querySelector('h5')?.textContent).toBe('alice')
-      expect(aliceBox?.nextSibling?.textContent).toBe('1,000')
+      expect(aliceBox?.nextSibling?.textContent).toBe('1,000.0')
     })
   })
 
