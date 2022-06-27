@@ -233,7 +233,7 @@ describe('UI: ApplyForRoleModal', () => {
         await fillSteps()
 
         expect(await screen.findByText('You intend to bind account for staking')).toBeDefined()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('42')
+        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('42.0')
       })
 
       it('Bind account failure', async () => {
@@ -256,7 +256,7 @@ describe('UI: ApplyForRoleModal', () => {
         })
 
         expect(await screen.findByText(/You intend to apply for a role/i)).toBeDefined()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25.0')
       })
 
       it('Apply on opening success', async () => {
@@ -315,7 +315,7 @@ describe('UI: ApplyForRoleModal', () => {
         await fillSteps()
 
         expect(await screen.findByText(/You intend to apply for a role/i)).toBeDefined()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25.0')
       })
 
       it('Apply on opening success', async () => {
@@ -361,7 +361,7 @@ describe('UI: ApplyForRoleModal', () => {
         await fillSteps()
 
         expect(await screen.findByText(/You intend to apply for a role/i)).toBeDefined()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25.0')
       })
 
       it('Apply on opening success', async () => {

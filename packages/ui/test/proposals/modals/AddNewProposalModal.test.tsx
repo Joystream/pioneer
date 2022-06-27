@@ -1201,7 +1201,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Bind account step', async () => {
           expect(await screen.findByText('You intend to bind account for staking')).toBeDefined()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('42')
+          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('42.0')
         })
 
         it('Bind account failure', async () => {
@@ -1222,7 +1222,7 @@ describe('UI: AddNewProposalModal', () => {
           })
 
           expect(await screen.findByText(/You intend to create a proposa/i)).toBeDefined()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25.0')
         })
 
         it('Create proposal success', async () => {
@@ -1276,7 +1276,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Create proposal step', async () => {
           expect(await screen.findByText(/You intend to create a proposa/i)).not.toBeNull()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25.0')
         })
 
         it('Create proposal success', async () => {
@@ -1322,7 +1322,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Create proposal step', async () => {
           expect(await screen.findByText(/You intend to create a proposa/i)).not.toBeNull()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25.0')
         })
 
         it('Create proposal success', async () => {

@@ -162,7 +162,7 @@ describe('UI: InviteMemberModal', () => {
 
       expect(await screen.findByText('modals.authorizeTransaction.title')).toBeDefined()
       expect(await screen.findByText('You are inviting this member. You have 5 invites left.')).toBeDefined()
-      expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+      expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25.0')
       expect(await getButton(/^Sign and create/i)).toBeEnabled()
     })
 

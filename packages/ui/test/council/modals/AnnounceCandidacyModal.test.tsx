@@ -327,7 +327,7 @@ describe('UI: Announce Candidacy Modal', () => {
 
         it('Renders', async () => {
           expect(screen.queryByText('You intend to bind account for staking')).not.toBeNull()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('10')
+          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('10.0')
         })
 
         it('Success', async () => {
@@ -338,7 +338,7 @@ describe('UI: Announce Candidacy Modal', () => {
           })
 
           expect(await screen.findByText(/You intend to announce candidacy/i)).toBeDefined()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25.0')
         })
 
         it('Failure', async () => {
@@ -370,7 +370,7 @@ describe('UI: Announce Candidacy Modal', () => {
         await fillSummary(true)
 
         expect(await screen.findByText(/You intend to announce candidacy/i)).toBeDefined()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25.0')
       })
 
       it('Staking account is confirmed', async () => {
@@ -391,7 +391,7 @@ describe('UI: Announce Candidacy Modal', () => {
         await fillSummary(true)
 
         expect(await screen.findByText(/You intend to announce candidacy/i)).toBeDefined()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('20')
+        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('20.0')
       })
     })
 

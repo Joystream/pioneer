@@ -71,7 +71,7 @@ describe('UI: RevealingStageVotes', () => {
     renderComponent()
 
     expect(await screen.findByText(/alice/i)).toBeDefined()
-    expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('1,337')
+    expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('1,337.0')
     expect((await screen.findByText(/revealed votes/i)).nextSibling?.textContent).toEqual('1')
   })
 
@@ -83,7 +83,7 @@ describe('UI: RevealingStageVotes', () => {
     renderComponent()
 
     expect(await screen.findByText(/alice/i)).toBeDefined()
-    expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('2,945')
+    expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('2,945.0')
     expect((await screen.findByText(/revealed votes/i)).nextSibling?.textContent).toEqual('3')
   })
 
@@ -97,7 +97,7 @@ describe('UI: RevealingStageVotes', () => {
     renderComponent()
 
     expect(await screen.findByText(/alice/i)).toBeDefined()
-    expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('2,945')
+    expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('2,945.0')
     expect((await screen.findByText(/revealed votes/i)).nextSibling?.textContent).toEqual('3')
   })
 
@@ -112,8 +112,8 @@ describe('UI: RevealingStageVotes', () => {
     expect(await screen.findByText(/alice/i)).toBeDefined()
     expect(await screen.findByText(/bob/i)).toBeDefined()
     const stakes = await screen.findAllByText(/total stake/i)
-    expect(stakes[0].nextSibling?.textContent).toEqual('2,900')
-    expect(stakes[1].nextSibling?.textContent).toEqual('1,337')
+    expect(stakes[0].nextSibling?.textContent).toEqual('2,900.0')
+    expect(stakes[1].nextSibling?.textContent).toEqual('1,337.0')
     const voteNumbers = await screen.findAllByText(/revealed votes/i)
     expect(voteNumbers[0].nextSibling?.textContent).toEqual('2')
     expect(voteNumbers[1].nextSibling?.textContent).toEqual('1')
@@ -125,8 +125,8 @@ describe('UI: RevealingStageVotes', () => {
 
     renderComponent()
 
-    expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('3,000')
-    expect((await screen.findByText(/my stake/i)).nextSibling?.textContent).toEqual('2,000')
+    expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('3,000.0')
+    expect((await screen.findByText(/my stake/i)).nextSibling?.textContent).toEqual('2,000.0')
   })
 
   describe('Votes that can be revealed', () => {
