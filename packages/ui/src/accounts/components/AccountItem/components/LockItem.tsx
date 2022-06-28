@@ -78,7 +78,9 @@ export const LockItem = ({
           <LockDate createdInEvent={createdInEvent} />
         </div>
         <div>
-          <LockRecoveryTime time={time} unrecoverableLabel={unrecoverableLabel} tooltipLabel={tooltipLabel} />
+          {!isRecoverable && (
+            <LockRecoveryTime time={time} unrecoverableLabel={unrecoverableLabel} tooltipLabel={tooltipLabel} />
+          )}
         </div>
         <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
         {memberInfo && (
