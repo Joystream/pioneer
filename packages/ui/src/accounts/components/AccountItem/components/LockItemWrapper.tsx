@@ -43,7 +43,7 @@ export const LockItemWrapper = React.memo((props: LockDetailsProps) => {
       return WorkerLocks.includes(lockType as WorkerLockType) ? (
         <WorkingGroupLockItem {...props} />
       ) : (
-        <LockItem {...props} />
+        <LockItem {...props} lockRecovery={{}} />
       )
   }
 })

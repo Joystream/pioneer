@@ -73,3 +73,8 @@ export const DetailLabel = styled(Label)`
   margin-bottom: 8px;
   text-transform: uppercase;
 `
+
+export const RecoveryTimeWrapper = styled.div`
+  display: flex;
+  column-gap: 10px;
+`

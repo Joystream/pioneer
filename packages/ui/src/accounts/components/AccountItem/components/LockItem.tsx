@@ -23,11 +23,11 @@ import {
   TitleCell,
   ValueCell,
 } from './styles'
-import { LockDetailsProps } from './types'
+import { LockDetailsProps, LockRecoveryTimeProps } from './types'
 
 interface LockItemProps extends LockDetailsProps {
   createdInEvent?: Block
-  recoveryTime?: string | null
+  lockRecovery: LockRecoveryTimeProps
   memberInfo?: Member
   linkButtons?: React.ReactNode
 }
@@ -37,10 +37,11 @@ export const LockItem = ({
   address,
   isRecoverable,
   createdInEvent,
-  recoveryTime,
+  lockRecovery,
   memberInfo,
   linkButtons,
 }: LockItemProps) => {
+  const { time, unrecoverableLabel, tooltipLabel } = lockRecovery
   const {
     helpers: { getMemberIdByBoundAccountAddress },
   } = useMyMemberships()
@@ -76,7 +77,9 @@ export const LockItem = ({
           <DetailLabel>Lock date</DetailLabel>
           <LockDate createdInEvent={createdInEvent} />
         </div>
-        <div>{recoveryTime && <LockRecoveryTime value={recoveryTime} />}</div>
+        <div>
+          <LockRecoveryTime time={time} unrecoverableLabel={unrecoverableLabel} tooltipLabel={tooltipLabel} />
+        </div>
         <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
         {memberInfo && (
           <div>
