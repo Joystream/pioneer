@@ -116,7 +116,6 @@ export const OptionComponentContainer = styled.li<{ disabled?: boolean }>`
     if (disabled) {
       return css`
         pointer-events: none;
-        /* opacity: 0.6; */
         cursor: not-allowed;
       `
     }
