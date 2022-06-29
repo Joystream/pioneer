@@ -28,6 +28,7 @@ export const VoteForCouncilModal = () => {
 
   const constants = useCouncilConstants()
   const minStake = constants?.election.minVoteStake
+  // TODO: Delete conversion to BN after https://github.com/Joystream/pioneer/pull/3265 is merged
   const requiredStake = minStake as BN
 
   const { hasRequiredStake } = useHasRequiredStake(requiredStake?.toNumber(), 'Voting')
