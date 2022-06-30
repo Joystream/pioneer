@@ -3,10 +3,12 @@ import { createType } from '@joystream/types'
 import { adaptRecord } from '@miragejs/graphql/dist/orm/records'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
 
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
@@ -156,11 +158,27 @@ describe('UI: ApplyForRoleModal', () => {
     })
 
     it('Insufficient funds', async () => {
+      const requiredStake = '10_000'
+      const fields = adaptRecord(
+        server.server?.schema.first('WorkingGroupOpening')
+      ) as WorkingGroupOpeningFieldsFragment
+      fields.stakeAmount = requiredStake
+      fields.openingfilledeventopening = []
+      const opening: WorkingGroupOpening = asWorkingGroupOpening(fields)
+      useModal.modalData = { opening }
       batchTx = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening', 10_000)
 
       renderModal()
 
-      expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
+      const moveFundsModalCall: MoveFundsModalCall = {
+        modal: 'MoveFundsModal',
+        data: {
+          requiredStake: new BN(requiredStake),
+          lock: 'Forum Worker',
+        },
+      }
+
+      expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
   })
 

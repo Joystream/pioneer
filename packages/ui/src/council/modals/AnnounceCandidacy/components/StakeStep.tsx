@@ -1,11 +1,9 @@
 import BN from 'bn.js'
-import React, { useCallback, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import { SelectAccount } from '@/accounts/components/SelectAccount'
-import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
+import { SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
-import { Account } from '@/accounts/types'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
@@ -30,11 +28,6 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
     return Object.entries(balances).some(([, balance]) => balance.transferable.gte(stake ?? minStake))
   }, [stake?.toString(), JSON.stringify(balances)])
 
-  const accountsFilter = useCallback(
-    (account: Account) => filterByRequiredStake(stake ?? minStake, 'Council Candidate', balances[account.address]),
-    [(stake ?? minStake).toString(), JSON.stringify(balances)]
-  )
-
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -56,12 +49,7 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
             message={errorChecker('account') ? errorMessageGetter('account') : undefined}
             validation={errorChecker('account') ? 'invalid' : undefined}
           >
-            <SelectAccount
-              name="staking.account"
-              minBalance={stake}
-              filter={accountsFilter}
-              disabled={!isSomeBalanceGteStake}
-            />
+            <SelectStakingAccount name="staking.account" minBalance={minStake} lockType="Council Candidate" />
           </InputComponent>
           <RowGapBlock gap={8}>
             <h4>2. Stake</h4>

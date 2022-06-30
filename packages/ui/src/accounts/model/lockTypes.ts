@@ -67,12 +67,12 @@ const isConflictingWith = (lockTypeA: LockType): ((lockTypeB: LockType) => boole
   }
 }
 
-type RecoverStakeConditions = {
+export type RecoveryConditions = {
   isActiveCandidate: boolean
   isVoteStakeLocked: boolean
 }
 
-export const isRecoverable = (type: LockType, recoverConditions?: RecoverStakeConditions): boolean => {
+export const isRecoverable = (type: LockType, recoverConditions?: RecoveryConditions): boolean => {
   if (!RECOVERABLE.includes(type)) {
     return false
   }
