@@ -28,14 +28,14 @@ export const VoteLockItem = ({ lock, address, isRecoverable }: LockDetailsProps)
     const idlePeriod = constants?.idlePeriod
 
     if (!votingPeriod || !revealingPeriod || !idlePeriod) {
-      return {}
+      return
     }
 
     const duration = votingPeriod + revealingPeriod + idlePeriod * MILLISECONDS_PER_BLOCK
     const endTime = new Date(Date.now() + duration).toISOString()
 
     return { time: endTime, tooltipLabel: 'Depends on election results' }
-  }, [])
+  }, [JSON.stringify(constants)])
 
   const electionId = vote?.electionRound.cycleId
   const goToElectionButton = useMemo(() => {

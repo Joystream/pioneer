@@ -25,12 +25,12 @@ export const BountyLockItem = ({ lock, address, isRecoverable }: LockDetailsProp
 
   const recoveryTime = useMemo(() => {
     if (!workPeriod || !judgingPeriod) {
-      return {}
+      return
     }
     const fundingPeriodEndTime = getFundingPeriodEnd(bounty)
 
     if (!fundingPeriodEndTime) {
-      return {}
+      return
     }
 
     const durationTime = (workPeriod + judgingPeriod) * MILLISECONDS_PER_BLOCK

@@ -31,7 +31,7 @@ export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockDetai
       if (application?.status.__typename === 'ApplicationStatusAccepted') {
         return { unrecoverableLabel: 'Recoverable after released from role' }
       }
-      return {}
+      return
     }
   }, [opening?.status, application?.status.__typename])
 

@@ -36,7 +36,7 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockD
 
   const recoveryTime = useMemo(() => {
     if (!electionStart || !voteStageDuration || !revealStageDuration) {
-      return {}
+      return
     }
     const startTime = Date.parse(electionStart)
     const durationTime = (voteStageDuration + revealStageDuration) * MILLISECONDS_PER_BLOCK

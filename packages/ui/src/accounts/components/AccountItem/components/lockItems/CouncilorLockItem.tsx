@@ -35,7 +35,7 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockDetailsP
 
   const recoveryTime = useMemo(() => {
     if (!eventData || !idlePeriodDuration) {
-      return {}
+      return
     }
     const startTime = Date.parse(eventData.electedAtTime)
     const idleDurationTime = idlePeriodDuration * MILLISECONDS_PER_BLOCK

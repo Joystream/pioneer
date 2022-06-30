@@ -22,9 +22,10 @@ export const ProposalLockItem = ({ lock, address, isRecoverable }: LockDetailsPr
 
   const constants = useProposalConstants(proposal?.type)
   const recoveryDuration = useBlocksToProposalExecution(proposal, constants)
-  const recoveryTime = recoveryDuration
-    ? { time: new Date(Date.now() + recoveryDuration * MILLISECONDS_PER_BLOCK).toISOString() }
-    : {}
+  const recoveryTime =
+    typeof recoveryDuration !== 'undefined'
+      ? { time: new Date(Date.now() + recoveryDuration * MILLISECONDS_PER_BLOCK).toISOString() }
+      : undefined
 
   const proposalId = proposal?.id
   const goToProposalButton = useMemo(() => {
