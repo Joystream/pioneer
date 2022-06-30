@@ -23,7 +23,7 @@ export const OptionListAccount = React.memo(({ options, onChange, className }: P
         </Option>
       ))}
       {lockedAccounts.map((option) => (
-        <AccountLockTooltip locks={option.optionLocks}>
+        <AccountLockTooltip key={option.address} locks={option.optionLocks}>
           <Option key={option.address} onClick={() => onChange && onChange(option)} disabled>
             <OptionAccount option={option} />
           </Option>

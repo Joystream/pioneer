@@ -24,7 +24,7 @@ export const AccountLockTooltip = ({ locks, children }: Props) => {
 
     if (locks?.includes('boundMembership')) {
       texts.push(
-        <li>
+        <li className="tooltipLink" key="boundMembership">
           This account is bounded to another membership.{' '}
           <LinkText
             onClick={() =>
@@ -47,7 +47,7 @@ export const AccountLockTooltip = ({ locks, children }: Props) => {
 
     if (locks?.includes('rivalrousLock')) {
       texts.push(
-        <li>
+        <li className="tooltipLink" key="rivalrousLock">
           You cannot select this account because it contains rivalrous lock.{' '}
           <InlineExternalLink
             href="https://joystream.gitbook.io/testnet-workspace/system/accounts-and-staking#locks-1"
@@ -62,7 +62,7 @@ export const AccountLockTooltip = ({ locks, children }: Props) => {
 
     if (locks?.includes('recoverableLock')) {
       texts.push(
-        <li>
+        <li className="tooltipLink" key="recoverableLock">
           You cannot select this account because it contains lock.{' '}
           <TooltipLink to={ProfileRoutes.profile} target="_self">
             Recover this lock
@@ -75,7 +75,7 @@ export const AccountLockTooltip = ({ locks, children }: Props) => {
 
     if (locks?.includes('insufficientFunds')) {
       texts.push(
-        <li>
+        <li className="tooltipLink" key="insufficientFunds">
           This account does not have enough tokens. You can{' '}
           <LinkText onClick={() => showModal<TransferModalCall>({ modal: 'TransferTokens', data: {} })}>
             move funds

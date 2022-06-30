@@ -4,7 +4,7 @@ import { usePopper } from 'react-popper'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { BorderRad, Colors, Transitions, ZIndex } from '../../constants'
+import { BorderRad, Colors, Fonts, Transitions, ZIndex } from '../../constants'
 import { LinkSymbol, LinkSymbolStyle } from '../icons/symbols'
 
 import { DefaultTooltip } from './TooltipDefault'
@@ -222,13 +222,17 @@ export const TooltipPopupTitle = styled.h6`
   color: ${Colors.White};
 `
 
-export const TooltipText = styled.p`
+export const TooltipText = styled.div`
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;
   text-align: left;
   color: ${Colors.Black[500]};
   color: ${Colors.Black[400]};
+  /* copied global styles for p: */
+  margin: 0;
+  padding: 0;
+  font-family: ${Fonts.Inter};
 `
 
 export const TooltipLink = styled(Link)<{ to: string; target: string }>`
