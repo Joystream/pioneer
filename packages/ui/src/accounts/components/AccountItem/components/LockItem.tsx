@@ -27,7 +27,7 @@ import { LockDetailsProps, LockRecoveryTimeProps } from './types'
 
 interface LockItemProps extends LockDetailsProps {
   createdInEvent?: Block
-  lockRecovery: LockRecoveryTimeProps
+  lockRecovery?: LockRecoveryTimeProps
   memberInfo?: Member
   linkButtons?: React.ReactNode
 }
@@ -41,7 +41,6 @@ export const LockItem = ({
   memberInfo,
   linkButtons,
 }: LockItemProps) => {
-  const { time, unrecoverableLabel, tooltipLabel } = lockRecovery
   const {
     helpers: { getMemberIdByBoundAccountAddress },
   } = useMyMemberships()
@@ -78,9 +77,13 @@ export const LockItem = ({
           <LockDate createdInEvent={createdInEvent} />
         </div>
         <div>
-          {!isRecoverable && (
-            <LockRecoveryTime time={time} unrecoverableLabel={unrecoverableLabel} tooltipLabel={tooltipLabel} />
-          )}
+          {lockRecovery && !isRecoverable ? (
+            <LockRecoveryTime
+              time={lockRecovery.time}
+              unrecoverableLabel={lockRecovery.unrecoverableLabel}
+              tooltipLabel={lockRecovery.tooltipLabel}
+            />
+          ) : null}
         </div>
         <BalanceAmount amount={lock.amount} isRecoverable={isRecoverable} />
         {memberInfo && (
