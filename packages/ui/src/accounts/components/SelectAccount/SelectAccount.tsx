@@ -46,12 +46,13 @@ export const BaseSelectAccount = React.memo(
     const filteredOptions = useMemo(() => filterByText(options, search), [search, options])
     const keyring = useKeyring()
 
+    const notSelected = !selected || selected.address !== search
+
     useEffect(() => {
-      filteredOptions.length === 0 &&
-        isValidAddress(search, keyring) &&
-        (!selected || selected.address !== search) &&
+      if (filteredOptions.length === 0 && isValidAddress(search, keyring) && notSelected) {
         onChange?.(accountOrNamed(accounts, search, 'Unsaved account'))
-    }, [filteredOptions, search, selected])
+      }
+    }, [filteredOptions, search, notSelected])
 
     const change = (selected: AccountOption, close: () => void) => {
       onChange?.(selected)
