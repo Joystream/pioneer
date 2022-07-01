@@ -171,13 +171,15 @@ export const AnnounceCandidacyModal = () => {
     }
   }, [JSON.stringify(state.context), connectionState, activeMember?.id])
 
-  const feeTransaction = useMemo(() => {
-    if (api && candidacyNoteTransaction && announceCandidacyTransaction) {
-      return api.tx.utility.batch([announceCandidacyTransaction, candidacyNoteTransaction])
-    }
-  }, [connectionState, candidacyNoteTransaction, announceCandidacyTransaction])
-
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, feeTransaction)
+  const { transaction, feeInfo } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => {
+      if (api && candidacyNoteTransaction && announceCandidacyTransaction) {
+        return api.tx.utility.batch([announceCandidacyTransaction, candidacyNoteTransaction])
+      }
+    },
+    [connectionState, candidacyNoteTransaction, announceCandidacyTransaction]
+  )
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
@@ -221,7 +223,7 @@ export const AnnounceCandidacyModal = () => {
     }
   }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake, stakingStatus])
 
-  if (!api || !activeMember || !feeTransaction || !feeInfo) {
+  if (!api || !activeMember || !transaction || !feeInfo) {
     return null
   }
 

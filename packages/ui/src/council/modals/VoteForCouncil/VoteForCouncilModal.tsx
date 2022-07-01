@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
@@ -36,8 +36,11 @@ export const VoteForCouncilModal = () => {
     'Voting'
   )
 
-  const transaction = useMemo(() => api?.tx.referendum.vote('', requiredStake), [requiredStake])
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { feeInfo } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => api?.tx.referendum.vote('', requiredStake),
+    [requiredStake]
+  )
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {

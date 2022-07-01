@@ -88,13 +88,15 @@ export const ContributeFundsModal = () => {
     balance && setAmount(balance.transferable.divn(2))
   }, [balance])
 
-  const transaction = useMemo(() => {
-    if (api && isConnected && activeMember) {
-      return api.tx.bounty.fundBounty({ Member: activeMember.id }, bounty.id, state.context.amount ?? minFundingLimit)
-    }
-  }, [activeMember?.id, state.context.amount, isConnected, minFundingLimit.toString()])
-
-  const fee = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { transaction, feeInfo: fee } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => {
+      if (api && isConnected && activeMember) {
+        return api.tx.bounty.fundBounty({ Member: activeMember.id }, bounty.id, state.context.amount ?? minFundingLimit)
+      }
+    },
+    [activeMember?.id, state.context.amount, isConnected, minFundingLimit.toString()]
+  )
 
   const nextStep = useCallback(() => {
     send('NEXT')

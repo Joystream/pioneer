@@ -34,22 +34,24 @@ export const WithdrawContributionModal = () => {
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
 
-  const transaction = useMemo(() => {
-    if (api && connectionState === 'connected' && activeMember) {
-      createType<BountyActor, 'BountyActor'>('BountyActor', { Member: createType('u64', activeMember.id) })
-      return api.tx.bounty.withdrawFunding(
-        createType<BountyActor, 'BountyActor'>('BountyActor', { Member: createType('u64', activeMember.id) }),
-        bounty.id
-      )
-    }
-  }, [JSON.stringify(activeMember), connectionState])
-
   const amount = useMemo(
     () => bounty.contributors.find((contributor) => contributor.actor?.id === activeMember?.id)?.amount ?? BN_ZERO,
     [activeMember?.id]
   )
 
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { transaction, feeInfo } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => {
+      if (api && connectionState === 'connected' && activeMember) {
+        createType<BountyActor, 'BountyActor'>('BountyActor', { Member: createType('u64', activeMember.id) })
+        return api.tx.bounty.withdrawFunding(
+          createType<BountyActor, 'BountyActor'>('BountyActor', { Member: createType('u64', activeMember.id) }),
+          bounty.id
+        )
+      }
+    },
+    [JSON.stringify(activeMember), connectionState]
+  )
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {

@@ -2,14 +2,15 @@ import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect } from 'react'
 
+import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { FailureModal } from '@/common/components/FailureModal'
 import { TransferIcon } from '@/common/components/icons'
 import { WaitModal } from '@/common/components/WaitModal'
+import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 
 import { useMember } from '../../hooks/useMembership'
-import { useTransferInviteFee } from '../../hooks/useTransferInviteFee'
 import { Member } from '../../types'
 
 import { TransferInvitesModalCall } from '.'
@@ -22,13 +23,21 @@ export function TransferInviteModal() {
   const { hideModal, modalData } = useModal<TransferInvitesModalCall>()
   const { isLoading, member } = useMember(modalData.memberId)
   const [state, send] = useMachine(transferInvitesMachine)
-  const transactionFeeInfo = useTransferInviteFee(member)
+  const { api, isConnected } = useApi()
+
+  const { feeInfo } = useTransactionFee(
+    member?.controllerAccount,
+    () => {
+      return member ? api?.tx?.members?.transferInvites(member.id, member.id, 1) : undefined
+    },
+    [JSON.stringify(member), isConnected]
+  )
 
   useEffect(() => {
-    if (state.matches('requirementsVerification') && transactionFeeInfo) {
-      send(transactionFeeInfo.canAfford ? 'PASS' : 'FAIL')
+    if (state.matches('requirementsVerification') && feeInfo) {
+      send(feeInfo.canAfford ? 'PASS' : 'FAIL')
     }
-  }, [transactionFeeInfo])
+  }, [feeInfo?.canAfford])
 
   if (isLoading || !member) {
     return null
@@ -38,13 +47,9 @@ export function TransferInviteModal() {
     return <WaitModal onClose={hideModal} title="Loading..." description="" />
   }
 
-  if (state.matches('requirementsFailed') && transactionFeeInfo) {
+  if (state.matches('requirementsFailed') && feeInfo) {
     return (
-      <InsufficientFundsModal
-        onClose={hideModal}
-        address={member.controllerAccount}
-        amount={transactionFeeInfo.transactionFee}
-      />
+      <InsufficientFundsModal onClose={hideModal} address={member.controllerAccount} amount={feeInfo.transactionFee} />
     )
   }
 

@@ -52,13 +52,15 @@ export const WithdrawWorkEntryModal = () => {
     [activeMember?.id]
   )
 
-  const transaction = useMemo(() => {
-    if (api && connectionState === 'connected' && activeMember && entry) {
-      return api.tx.bounty.withdrawWorkEntry(activeMember.id, bounty.id, entry.id)
-    }
-  }, [activeMember?.id, entry?.id, connectionState])
-
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { transaction, feeInfo } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => {
+      if (api && connectionState === 'connected' && activeMember && entry) {
+        return api.tx.bounty.withdrawWorkEntry(activeMember.id, bounty.id, entry.id)
+      }
+    },
+    [activeMember?.id, entry?.id, connectionState]
+  )
 
   useEffect(() => {
     if (state.matches(WithdrawWorkModalState.requirementsVerification)) {

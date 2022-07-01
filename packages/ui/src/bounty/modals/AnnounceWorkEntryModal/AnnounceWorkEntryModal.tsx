@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react'
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import * as Yup from 'yup'
@@ -85,20 +85,26 @@ export const AnnounceWorkEntryModal = () => {
     }
   }, [JSON.stringify(balance), amount, stakingStatus])
 
-  const transaction = useMemo(() => {
-    if (api && isConnected && activeMember) {
-      if (stakingStatus === 'confirmed') {
-        return api.tx.bounty.announceWorkEntry(activeMember.id, bounty.id, state.context.stakingAccount?.address ?? '')
+  const { transaction, feeInfo: fee } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => {
+      if (api && isConnected && activeMember) {
+        if (stakingStatus === 'confirmed') {
+          return api.tx.bounty.announceWorkEntry(
+            activeMember.id,
+            bounty.id,
+            state.context.stakingAccount?.address ?? ''
+          )
+        }
+
+        return api.tx.utility.batch([
+          api.tx.members.confirmStakingAccount(activeMember.id, state.context.stakingAccount?.address ?? ''),
+          api.tx.bounty.announceWorkEntry(activeMember.id, bounty.id, state.context.stakingAccount?.address ?? ''),
+        ])
       }
-
-      return api.tx.utility.batch([
-        api.tx.members.confirmStakingAccount(activeMember.id, state.context.stakingAccount?.address ?? ''),
-        api.tx.bounty.announceWorkEntry(activeMember.id, bounty.id, state.context.stakingAccount?.address ?? ''),
-      ])
-    }
-  }, [activeMember?.id, state.context.stakingAccount?.address, isConnected, stakingStatus])
-
-  const fee = useTransactionFee(activeMember?.controllerAccount, transaction)
+    },
+    [activeMember?.id, state.context.stakingAccount?.address, isConnected, stakingStatus]
+  )
 
   const nextStep = useCallback(() => {
     send('NEXT')

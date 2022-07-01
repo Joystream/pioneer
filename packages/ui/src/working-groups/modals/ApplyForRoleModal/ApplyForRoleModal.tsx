@@ -123,7 +123,7 @@ export const ApplyForRoleModal = () => {
       })
     }
   }, [activeMember?.id, connectionState, state.value])
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => transaction)
 
   useEffect(() => {
     if (state.matches('form') && !questions.length) {
