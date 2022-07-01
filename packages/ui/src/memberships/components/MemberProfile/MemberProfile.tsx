@@ -35,7 +35,7 @@ export const MemberProfile = React.memo(() => {
       tabs={[
         { title: 'Member details', active: activeTab === 'DETAILS', onClick: () => setActiveTab('DETAILS') },
         { title: 'Accounts', active: activeTab === 'ACCOUNTS', onClick: () => setActiveTab('ACCOUNTS') },
-        { title: 'Roles', active: activeTab === 'ROLES', onClick: () => setActiveTab('ROLES') },
+        { title: 'Working Group Roles', active: activeTab === 'ROLES', onClick: () => setActiveTab('ROLES') },
       ]}
       member={member}
       isLoading={isLoading}
