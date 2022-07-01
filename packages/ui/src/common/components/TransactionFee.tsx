@@ -2,6 +2,9 @@ import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
+import { BN_ZERO } from '@/common/constants'
+import { formatJoyValue } from '@/common/model/formatters'
+
 import { BalanceInfoNarrow, InfoTitle, InfoValue } from './Modal'
 import { Tooltip, TooltipDefault } from './Tooltip'
 import { TokenValue } from './typography'
@@ -13,7 +16,7 @@ export interface TransactionFeeProps {
   tooltipTitle?: string
   tooltipLinkText?: React.ReactNode
   tooltipLinkURL?: string
-  fullValue?: string
+  fullValue: BN
 }
 
 export const TransactionFee = ({
@@ -23,14 +26,14 @@ export const TransactionFee = ({
   tooltipTitle,
   tooltipLinkText,
   tooltipLinkURL,
-  fullValue,
 }: TransactionFeeProps) => {
+  const intValue = formatJoyValue(value ?? BN_ZERO, 10).toString()
   return (
     <BalanceInfoNarrow>
       <FeeWrapper>
         <InfoTitle>{title}</InfoTitle>
         <InfoValue>
-          <Tooltip tooltipText={fullValue} absolute>
+          <Tooltip tooltipText={intValue} absolute>
             <StyledTokenValue value={value} />
           </Tooltip>
         </InfoValue>

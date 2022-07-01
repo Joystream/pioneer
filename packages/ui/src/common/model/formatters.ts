@@ -74,3 +74,39 @@ export const splitDuration =
     const amount = Math.floor(duration / unitValue)
     return [[amount, unitName], ...splitDuration(submultiples)(duration - amount * unitValue)]
   }
+
+const UNIT_VALUE = new BN(10000000000) // Will be 10,000M in Carthage
+const MIN_VALUE = new BN(100000000) // Will be 100M in Carthage
+const INT_VALUE = UNIT_VALUE.div(MIN_VALUE)
+const MIN_DEC = 1 / INT_VALUE.toNumber()
+
+// This function doesn't work (try to display value : 6.06)
+// export const formatJoyValue = (value: BN) => {
+//   if (value.isZero()) {
+//     return '0'
+//   } else if (value.gte(MIN_VALUE)) {
+//     const base = value.div(MIN_VALUE)
+//     const intPart = base.div(INT_VALUE)
+//     const decPart = base.sub(intPart.mul(INT_VALUE))
+//     return `${formatTokenValue(intPart)}.${decPart}`
+//   }
+//   if (value.lt(MIN_VALUE)) {
+//     return `> ${MIN_DEC}`
+//   }
+// }
+
+const DECIMAL_PLACES = 10 // Will be 10,000M in Carthage
+const PRECISION = 2 // Will be 100M in Carthage
+
+export const formatJoyValue = (value: BN, precision: number = PRECISION) => {
+  const stringValue = value.toString(10)
+
+  if (stringValue.length < DECIMAL_PLACES - precision + 1) {
+    return '< 0.' + '1'.padStart(precision, '0')
+  }
+
+  const result = stringValue.padStart(DECIMAL_PLACES + 1, '0')
+  const comma = result.length - DECIMAL_PLACES
+
+  return result.substring(0, comma) + '.' + result.substring(comma, comma + precision)
+}

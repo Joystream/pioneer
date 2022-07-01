@@ -6,14 +6,14 @@ import { Skeleton } from '@/common/components/Skeleton'
 import { isDefined } from '@/common/utils'
 
 import { Colors, Fonts } from '../../constants'
-import { formatTokenValue } from '../../model/formatters'
+import { formatJoyValue } from '../../model/formatters'
 
 interface ValueSizingProps {
   size?: 's' | 'm' | 'l'
 }
 
 interface ValueProps extends ValueSizingProps {
-  value?: BN | number | null
+  value?: BN | null
   className?: string
   isLoading?: boolean
 }
@@ -26,10 +26,9 @@ export const TokenValue = React.memo(({ className, value, size, isLoading }: Val
   if (value === null || !isDefined(value)) {
     return <span>-</span>
   }
-
   return (
     <ValueInJoys className={className} size={size}>
-      {formatTokenValue(value)}
+      {formatJoyValue(value)}
     </ValueInJoys>
   )
 })
