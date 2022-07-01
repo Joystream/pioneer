@@ -8,6 +8,7 @@ import React from 'react'
 import { Router } from 'react-router'
 import { interpret } from 'xstate'
 
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
@@ -131,19 +132,36 @@ describe('UI: Announce Candidacy Modal', () => {
     })
 
     it('Transaction fee', async () => {
+      const minStake = 10
+      stubCouncilConstants(api, { minStake })
       stubTransaction(api, 'api.tx.utility.batch', 10000)
+      renderModal()
 
-      const { queryByText } = renderModal()
-
-      expect(queryByText('modals.insufficientFunds.title')).not.toBeNull()
+      const moveFundsModalCall: MoveFundsModalCall = {
+        modal: 'MoveFundsModal',
+        data: {
+          requiredStake: new BN(minStake),
+          lock: 'Council Candidate',
+        },
+      }
+  
+      expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
 
     it('Required stake', async () => {
-      stubCouncilConstants(api, { minStake: 9999 })
+      const minStake = 9999
+      stubCouncilConstants(api, { minStake })
+      renderModal()
 
-      const { queryByText } = renderModal()
-
-      expect(queryByText(/^announce candidacy/i)).toBeNull()
+      const moveFundsModalCall: MoveFundsModalCall = {
+        modal: 'MoveFundsModal',
+        data: {
+          requiredStake: new BN(minStake),
+          lock: 'Council Candidate',
+        },
+      }
+  
+      expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
 
     it('All passed', async () => {

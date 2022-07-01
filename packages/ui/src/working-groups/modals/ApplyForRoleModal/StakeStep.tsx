@@ -1,8 +1,6 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 
-import { SelectAccount } from '@/accounts/components/SelectAccount'
-import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
-import { useMyBalances } from '@/accounts/hooks/useMyBalances'
+import { SelectAccount, SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { Account } from '@/accounts/types'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
@@ -26,12 +24,6 @@ export interface StakeStepFormFields {
 
 export function StakeStep({ opening, errorChecker, errorMessageGetter }: StakeStepProps) {
   const minStake = opening.stake
-  const balances = useMyBalances()
-
-  const accountsFilter = useCallback(
-    (account: Account) => filterByRequiredStake(minStake, groupToLockId(opening.groupId), balances[account.address]),
-    [minStake.toString(), JSON.stringify(balances)]
-  )
 
   return (
     <RowGapBlock gap={24}>
@@ -47,7 +39,11 @@ export function StakeStep({ opening, errorChecker, errorMessageGetter }: StakeSt
             message={errorChecker('account') ? errorMessageGetter('account') : undefined}
             tooltipText="Staking account will bear the role-specific lock, meaning you will not be able to re-use this account for other purposes, while in the role if your application accepted"
           >
-            <SelectAccount filter={accountsFilter} name="stake.account" />
+            <SelectStakingAccount
+              name="stake.account"
+              minBalance={minStake}
+              lockType={groupToLockId(opening.groupId)}
+            />
           </InputComponent>
           <RowGapBlock gap={8}>
             <h4>2. Stake</h4>

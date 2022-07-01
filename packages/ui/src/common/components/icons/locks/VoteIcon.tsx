@@ -13,7 +13,7 @@ export const VoteIcon = React.memo(({ className }: StyledIcon) => (
     color="currentColor"
     className={className}
   >
-    <g clip-path="url(#clip0_136_5831)">
+    <g clipPath="url(#clip0_136_5831)">
       <path
         fillRule="evenodd"
         clipRule="evenodd"

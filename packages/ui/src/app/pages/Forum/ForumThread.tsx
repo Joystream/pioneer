@@ -17,6 +17,7 @@ import { useApi } from '@/common/hooks/useApi'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getUrl } from '@/common/utils/getUrl'
 import { PostList } from '@/forum/components/PostList/PostList'
+import { ForumPostBlock } from '@/forum/components/PostList/PostListItem'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
@@ -105,7 +106,7 @@ export const ForumThread = () => {
   }
 
   const displayMain = () => (
-    <MainPanel ref={sideNeighborRef}>
+    <ThreadPanel ref={sideNeighborRef}>
       <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} replyToPost={setReplyTo} />
       {thread && isThreadActive && (
         <NewThreadPost
@@ -116,11 +117,18 @@ export const ForumThread = () => {
           replyToLink={`${generatePath(ForumRoutes.thread, { id: thread.id })}?post=${replyTo?.id}`}
         />
       )}
-    </MainPanel>
+    </ThreadPanel>
   )
 
   return <ForumPageLayout isThread header={displayHeader()} main={displayMain()} />
 }
+
+const ThreadPanel = styled(MainPanel)`
+  ${ForumPostBlock} {
+    width: 60%;
+    margin: 0 auto;
+  }
+`
 
 const ThreadPinned = styled.span`
   display: flex;
