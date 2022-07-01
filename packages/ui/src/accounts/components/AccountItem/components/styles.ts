@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 
+import { ButtonGhost } from '@/common/components/buttons'
 import { DropDownToggle } from '@/common/components/buttons/DropDownToggle'
+import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { Label } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 
@@ -72,4 +74,17 @@ export const DetailLabel = styled(Label)`
   display: block;
   margin-bottom: 8px;
   text-transform: uppercase;
+`
+
+export const RecoveryTimeWrapper = styled.div`
+  display: flex;
+  column-gap: 10px;
+`
+
+export const LockInternalLinkButton = styled(LinkButtonGhost)`
+  white-space: nowrap;
+`
+
+export const LockExternalLinkButton = styled(ButtonGhost)`
+  white-space: nowrap;
 `

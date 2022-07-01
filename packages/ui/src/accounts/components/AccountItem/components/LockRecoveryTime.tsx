@@ -1,21 +1,43 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { formatDurationDate } from '@/common/components/statistics'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
+import { TextInlineMedium } from '@/common/components/typography'
 import { DurationValue } from '@/common/components/typography/DurationValue'
 
-import { DetailLabel } from './styles'
+import { DetailLabel, RecoveryTimeWrapper } from './styles'
+import { LockRecoveryTimeProps } from './types'
 
-interface LockRecoveryTimeProps {
-  value: string
-  from?: string
-}
+export const LockRecoveryTime = ({ time, unrecoverableLabel, tooltipLabel }: LockRecoveryTimeProps) => {
+  const timeValue = useMemo(() => {
+    if (unrecoverableLabel) {
+      return <TextInlineMedium>{unrecoverableLabel}</TextInlineMedium>
+    }
 
-export const LockRecoveryTime = ({ value, from }: LockRecoveryTimeProps) => {
-  const duration = Date.parse(value) - (from ? Date.parse(from) : Date.now())
+    if (time) {
+      const duration = Date.parse(time) - Date.now()
+
+      if (duration < 0) {
+        return <TextInlineMedium>-</TextInlineMedium>
+      }
+
+      return <DurationValue value={formatDurationDate(duration)} />
+    }
+
+    return null
+  }, [unrecoverableLabel, time])
+
   return (
     <div>
       <DetailLabel>Estimated time to recover:</DetailLabel>
-      <DurationValue value={formatDurationDate(duration)} />
+      <RecoveryTimeWrapper>
+        {timeValue}
+        {tooltipLabel && (
+          <Tooltip tooltipText={tooltipLabel}>
+            <TooltipDefault />
+          </Tooltip>
+        )}
+      </RecoveryTimeWrapper>
     </div>
   )
 }

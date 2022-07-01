@@ -1776,7 +1776,48 @@ export type GetLatestProposalByMemberIdQuery = {
     __typename: 'Proposal'
     id: string
     exactExecutionBlock?: number | null
+    statusSetAtBlock: number
+    statusSetAtTime: any
+    createdAt: any
     createdInEvent: { __typename: 'ProposalCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+    status:
+      | { __typename: 'ProposalStatusCanceledByRuntime' }
+      | { __typename: 'ProposalStatusCancelled' }
+      | { __typename: 'ProposalStatusDeciding' }
+      | { __typename: 'ProposalStatusDormant' }
+      | { __typename: 'ProposalStatusExecuted' }
+      | { __typename: 'ProposalStatusExecutionFailed' }
+      | { __typename: 'ProposalStatusExpired' }
+      | { __typename: 'ProposalStatusGracing' }
+      | { __typename: 'ProposalStatusRejected' }
+      | { __typename: 'ProposalStatusSlashed' }
+      | { __typename: 'ProposalStatusVetoed' }
+    details:
+      | { __typename: 'AmendConstitutionProposalDetails' }
+      | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'CreateBlogPostProposalDetails' }
+      | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
+      | { __typename: 'EditBlogPostProposalDetails' }
+      | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'FundingRequestProposalDetails' }
+      | { __typename: 'LockBlogPostProposalDetails' }
+      | { __typename: 'RuntimeUpgradeProposalDetails' }
+      | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+      | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
+      | { __typename: 'SetInitialInvitationCountProposalDetails' }
+      | { __typename: 'SetMaxValidatorCountProposalDetails' }
+      | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+      | { __typename: 'SetMembershipPriceProposalDetails' }
+      | { __typename: 'SetReferralCutProposalDetails' }
+      | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+      | { __typename: 'SignalProposalDetails' }
+      | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
+      | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UnlockBlogPostProposalDetails' }
+      | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+      | { __typename: 'VetoProposalDetails' }
   }>
 }
 
@@ -2592,7 +2633,16 @@ export const GetLatestProposalByMemberIdDocument = gql`
         inBlock
         network
       }
+      status {
+        __typename
+      }
+      details {
+        __typename
+      }
       exactExecutionBlock
+      statusSetAtBlock
+      statusSetAtTime
+      createdAt
     }
   }
 `

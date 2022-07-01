@@ -35,13 +35,13 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockDetailsP
 
   const recoveryTime = useMemo(() => {
     if (!eventData || !idlePeriodDuration) {
-      return null
+      return
     }
     const startTime = Date.parse(eventData.electedAtTime)
     const idleDurationTime = idlePeriodDuration * MILLISECONDS_PER_BLOCK
     const endDate = new Date(startTime + idleDurationTime).toISOString()
 
-    return endDate
+    return { time: endDate, tooltipLabel: 'Recoverable after not re-elected' }
   }, [eventData?.electedAtTime, idlePeriodDuration])
 
   const councilId = eventData?.id
@@ -67,7 +67,7 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockDetailsP
       address={address}
       isRecoverable={isRecoverable}
       createdInEvent={createdInEvent}
-      recoveryTime={recoveryTime}
+      lockRecovery={recoveryTime}
       linkButtons={goToCouncilButton}
     />
   )
