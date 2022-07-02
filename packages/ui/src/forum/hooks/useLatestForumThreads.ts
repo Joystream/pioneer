@@ -6,14 +6,13 @@ import { useGetForumThreadsQuery } from '../queries/__generated__/forum.generate
 import { asForumThread } from '../types'
 
 export const useLatestForumThreads = (limit: number) => {
-  const status_json = {
-    isTypeOf_not: 'ThreadStatusModerated',
-  }
   const { data, loading } = useGetForumThreadsQuery({
     variables: {
       orderBy: ForumThreadOrderByInput.CreatedAtDesc, limit, where: {
         visibleThreadsCount_gte: 0,
-        status_json,
+        status_json:{
+          isTypeOf_not: 'ThreadStatusModerated',
+        },
       }
     },
   })
