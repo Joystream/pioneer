@@ -8,10 +8,14 @@ import { asForumThread } from '../types'
 export const useLatestForumThreads = (limit: number) => {
   const status_json = {
     isTypeOf_not: 'ThreadStatusModerated',
-    visibleThreadsCount_gte: 0,
   }
   const { data, loading } = useGetForumThreadsQuery({
-    variables: { orderBy: ForumThreadOrderByInput.CreatedAtDesc, limit, where: { status_json } },
+    variables: {
+      orderBy: ForumThreadOrderByInput.CreatedAtDesc, limit, where: {
+        visibleThreadsCount_gte: 0,
+        status_json,
+      }
+    },
   })
   const threads = useMemo(() => data?.forumThreads.map(asForumThread) ?? [], [data, loading])
   return { threads, isLoading: loading }
