@@ -9,7 +9,7 @@ export const useLatestForumThreads = (limit: number) => {
   const { data, loading } = useGetForumThreadsQuery({
     variables: {
       orderBy: ForumThreadOrderByInput.CreatedAtDesc, limit, where: {
-        visiblePostsCount_gte: 0,
+        visiblePostsCount_gt: 0,
         status_json:{
           isTypeOf_not: 'ThreadStatusModerated',
         },
