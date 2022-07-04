@@ -1,10 +1,12 @@
-import React from 'react'
+import { Wallet } from 'injectweb3-connect'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ArrowDownExpandedIcon, Icon } from '@/common/components/icons'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
 
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '..'
@@ -13,10 +15,10 @@ import { SwitchMemberModalCall } from '../../modals/SwitchMemberModal'
 import { AddMembershipButton } from '../AddMembershipButton'
 
 export const CurrentMember = () => {
-  const { wallet } = useMyAccounts()
+  const { wallet, setWallet } = useMyAccounts()
+  const [selectedWallet, setSelectedWallet] = useLocalStorage<Wallet | undefined>('recentWallet')
   const { members, hasMembers, active } = useMyMemberships()
   const { showModal } = useModal()
-
   if (!wallet) {
     return (
       <MembershipButtonsWrapper>

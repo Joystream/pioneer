@@ -7,13 +7,14 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { List, ListItem } from '@/common/components/List'
 import { Modal, ModalFooter, ModalFooterGroup, ModalHeader, ScrolledModalBody } from '@/common/components/Modal'
 import { TextBig, TextMedium } from '@/common/components/typography'
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
 import { ConnectWalletItem } from '@/common/modals/OnBoardingModal/components/ConnectWalletItem'
 import { RedBox } from '@/common/modals/OnBoardingModal/OnBoardingPlugin'
 
 export const SelectWalletModal = () => {
   const { hideModal } = useModal()
-  const [selectedWallet, setSelectedWallet] = useState<Wallet>()
+  const [selectedWallet, setSelectedWallet] = useLocalStorage<Wallet | undefined>('recentWallet')
   const { setWallet, error, wallet: contextWallet } = useMyAccounts()
   const handleClick = useCallback(() => {
     if (!selectedWallet?.installed && selectedWallet?.installUrl) {
@@ -32,7 +33,6 @@ export const SelectWalletModal = () => {
       hideModal()
     }
   }, [error, contextWallet?.extension])
-
   return (
     <Modal onClose={hideModal} modalSize="s">
       <ModalHeader title="Select Wallet" onClick={hideModal} />

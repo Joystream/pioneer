@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { BenefitsTable } from '@/app/components/OnboardingOverlay/components/BenefitsTable'
 import { DrawerContainer } from '@/app/components/OnboardingOverlay/components/DrawerContainer'
 import { ButtonPrimary } from '@/common/components/buttons'
@@ -10,7 +11,7 @@ import { ArrowUpExpandedIcon } from '@/common/components/icons/ArrowUpExpandedIc
 import { StepperStep } from '@/common/components/Stepper'
 import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper'
 import { VerticalStaticStepper } from '@/common/components/Stepper/VerticalStaticStepper'
-import { TextHuge, TextSmall } from '@/common/components/typography'
+import { TextHuge, TextMedium, TextSmall } from '@/common/components/typography'
 import { Colors, ZIndex } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
@@ -20,17 +21,17 @@ import { OnBoardingStatus } from '@/common/providers/onboarding/types'
 
 export const onBoardingSteps: StepperStep[] = [
   {
-    title: 'Select Wallet',
+    title: 'Connect wallet',
     type: 'next',
     id: 'installPlugin',
   },
   {
-    title: 'Create or select account',
+    title: 'Connect account',
     type: 'next',
     id: 'addAccount',
   },
   {
-    title: 'Create membership',
+    title: 'Create free membership',
     type: 'next',
     id: 'createMembership',
   },
@@ -38,13 +39,16 @@ export const onBoardingSteps: StepperStep[] = [
 
 const innerStaticStepperSteps = [
   {
-    title: 'Install Wallet extension',
+    title: 'Connect wallet',
+    subtitle: 'Select or install a free browser wallet extension. Popular with Joystream community:',
   },
   {
-    title: 'Create or select a Polkadot account',
+    title: 'Connect account',
+    subtitle: 'Select a wallet account to connect your Joystream membership with.',
   },
   {
-    title: 'Create membership for FREE',
+    title: 'Create a free membership',
+    subtitle: 'Set up a free Joystream membership.',
   },
 ]
 
@@ -65,6 +69,7 @@ export const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus
 
 export const OnBoardingOverlay = () => {
   const { showModal } = useModal<OnBoardingModalCall>()
+  const { wallet } = useMyAccounts()
   const { isLoading, status } = useOnBoarding()
   const [isOpen, toggle] = useToggle()
 
@@ -92,19 +97,25 @@ export const OnBoardingOverlay = () => {
           </StepperContainer>
           <ButtonContainer>
             <ButtonPrimary size="large" onClick={openOnBoardingModal}>
-              Join now
+              {!wallet ? 'Connect Wallet' : 'Join Now'}
             </ButtonPrimary>
           </ButtonContainer>
         </Wrapper>
         <StyledDropDown isDropped={isOpen}>
           <DropdownContent>
-            <DrawerContainer title="What are the benefits?">
+            <DrawerContainer
+              title="What are the benefits?"
+              subtitle="Becoming a Joystream member allows you to contribute to the project."
+            >
               <BenefitsTable />
             </DrawerContainer>
-            <DrawerContainer title="How to become a member?">
+            <DrawerContainer
+              title="How to become a member?"
+              subtitle="Joining the community is as simple as one-two-three!"
+            >
               <VerticalStaticStepper steps={innerStaticStepperSteps} />
               <ButtonPrimary onClick={openOnBoardingModal} size="large">
-                Continue
+                {!wallet ? 'Connect Wallet' : 'Continue'}
               </ButtonPrimary>
             </DrawerContainer>
           </DropdownContent>

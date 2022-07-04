@@ -32,9 +32,9 @@ const useOnBoarding = (): UseOnBoarding => {
     return { isLoading: true }
   }
 
-  if (!wallet?.extension) {
-    return { isLoading: false, status: undefined }
-  }
+  // if (!wallet?.extension) {
+  //   return { isLoading: false, status: undefined }
+  // }
 
   if (totalBalance.gtn(0)) {
     return { isLoading: false, status: 'finished' }

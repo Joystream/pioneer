@@ -19,7 +19,7 @@ export interface UseAccounts {
   isLoading: boolean
   error?: ExtensionError
   wallet?: Wallet
-  setWallet?: (wallet: Wallet) => void
+  setWallet?: (wallet: Wallet | undefined) => void
 }
 
 interface Props {

@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { TextHuge, TextInlineBig } from '@/common/components/typography'
+import { TextHuge, TextInlineBig, TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 
 interface VerticalStaticStepperData {
   title: string
-  subtitle?: string[]
+  subtitle?: string
 }
 export interface VerticalStaticStepperProps {
   steps: Array<VerticalStaticStepperData>
@@ -23,9 +23,7 @@ export const VerticalStaticStepper = ({ steps }: VerticalStaticStepperProps) => 
           <StepBody>
             <StepTitle>{item.title}</StepTitle>
             <StepSubtitleList>
-              {item.subtitle?.map((subtitle, indexSubtitle) => (
-                <StepSubtitle key={`vertical-stepper-subtitle-${indexSubtitle}`}>{subtitle}</StepSubtitle>
-              ))}
+              <StyledSubtitle>{item.subtitle}</StyledSubtitle>
             </StepSubtitleList>
           </StepBody>
         </StepWrap>
@@ -65,6 +63,10 @@ const StepSubtitleList = styled.ul`
 
 const StepSubtitle = styled.li`
   color: ${Colors.White};
+`
+
+const StyledSubtitle = styled(TextMedium)`
+  color: ${Colors.Black[300]};
 `
 const StepBody = styled.div`
   display: grid;

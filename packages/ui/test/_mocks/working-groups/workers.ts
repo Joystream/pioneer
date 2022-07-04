@@ -1,9 +1,10 @@
 import { BN_TWO } from '@polkadot/util'
 
+import BN from 'bn.js';
 import { WorkerWithDetails } from '@/working-groups/types'
 
 import { alice } from '../keyring'
-import BN from 'bn.js';
+
 
 export const WORKER: WorkerWithDetails = {
   membership: {
