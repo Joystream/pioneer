@@ -169,7 +169,17 @@ export const BuyMembershipForm = ({
                     label="Root account"
                     required
                     inputSize="l"
-                    tooltipText="Something about root accounts"
+                    tooltipText={
+                      <>
+                        Accounts free from rivalrous locks bound to current member required for staking.
+                        <TooltipExternalLink
+                          href="https://joystream.gitbook.io/testnet-workspace/system/council#candidacy-1"
+                          target="_blank"
+                        >
+                          <TextMedium>More details</TextMedium> <LinkSymbol />
+                        </TooltipExternalLink>
+                      </>
+                    }
                   >
                     <SelectAccount name="rootAccount" />
                   </InputComponent>
@@ -179,7 +189,7 @@ export const BuyMembershipForm = ({
                     label="Controller account"
                     required
                     inputSize="l"
-                    tooltipText="Something about controller account"
+                    tooltipText="When losing an election, your candidacy lock is removed and your steak becomes immediately recoverable. If you win and get elected, your candidacy lock will be automatically removed, and a council specific lock will be applied, with the same amount locked. When that council is replaced, this lock is removed, if you did not get re-elected."
                   >
                     <SelectAccount name="controllerAccount" />
                   </InputComponent>
