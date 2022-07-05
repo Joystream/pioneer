@@ -179,7 +179,7 @@ export const BuyMembershipForm = ({
                     label="Controller account"
                     required
                     inputSize="l"
-                    tooltipText="When losing an election, your candidacy lock is removed and your steak becomes immediately recoverable. If you win and get elected, your candidacy lock will be automatically removed, and a council specific lock will be applied, with the same amount locked. When that council is replaced, this lock is removed, if you did not get re-elected."
+                    tooltipText="Something about controller account"
                   >
                     <SelectAccount name="controllerAccount" />
                   </InputComponent>
