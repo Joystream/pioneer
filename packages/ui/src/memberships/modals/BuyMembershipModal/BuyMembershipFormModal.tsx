@@ -169,17 +169,7 @@ export const BuyMembershipForm = ({
                     label="Root account"
                     required
                     inputSize="l"
-                    tooltipText={
-                      <>
-                        Accounts free from rivalrous locks bound to current member required for staking.
-                        <TooltipExternalLink
-                          href="https://joystream.gitbook.io/testnet-workspace/system/council#candidacy-1"
-                          target="_blank"
-                        >
-                          <TextMedium>More details</TextMedium> <LinkSymbol />
-                        </TooltipExternalLink>
-                      </>
-                    }
+                    tooltipText="Something about root accounts"
                   >
                     <SelectAccount name="rootAccount" />
                   </InputComponent>
