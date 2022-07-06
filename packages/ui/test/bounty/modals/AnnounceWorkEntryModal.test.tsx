@@ -11,6 +11,7 @@ import { formatTokenValue } from '@/common/model/formatters'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
+import { Transaction, TransactionFeesContext, UseTransaction } from '@/common/providers/transactionFees/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import bounties from '@/mocks/data/raw/bounties.json'
 import { getMember } from '@/mocks/helpers'
@@ -44,6 +45,14 @@ describe('UI: AnnounceWorkEntryModal', () => {
   stubBountyConstants(api)
   const fee = 888
   const transaction = stubTransaction(api, 'api.tx.bounty.announceWorkEntry', fee)
+
+  const useTransactionFee: UseTransaction = {
+      transaction: transaction as Transaction,
+      feeInfo: { transactionFee: new BN(fee), canAfford: true },
+      setTransaction: () => undefined,
+      setSigner: () => undefined
+  }
+  
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
     showModal: jest.fn(),
@@ -92,7 +101,9 @@ describe('UI: AnnounceWorkEntryModal', () => {
   })
 
   it('Requirement failed', async () => {
-    stubTransaction(api, 'api.tx.utility.batch', 9999999)
+    const highFee = 9999999
+    stubTransaction(api, 'api.tx.utility.batch', highFee)
+    useTransactionFee.feeInfo = { transactionFee: new BN(highFee), canAfford: false }
     renderResult.unmount()
     render(<Modal />)
 
@@ -105,6 +116,7 @@ describe('UI: AnnounceWorkEntryModal', () => {
     }
 
     expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
+    useTransactionFee.feeInfo = { transactionFee: new BN(fee), canAfford: true }
   })
 
   it('Displays correct member', () => {
@@ -113,7 +125,7 @@ describe('UI: AnnounceWorkEntryModal', () => {
 
   it('Displays correct transaction fee', () => {
     const expected = String(fee)
-    const valueContainer = screen.getByText('modals.common.transactionFee.label')?.nextSibling
+    const valueContainer = screen.getByText('modals.transactionFee.label')?.nextSibling
 
     expect(valueContainer?.textContent).toBe(expected)
   })
@@ -165,7 +177,9 @@ describe('UI: AnnounceWorkEntryModal', () => {
             <MembershipContext.Provider value={useMembership}>
               <AccountsContext.Provider value={useAccounts}>
                 <BalancesContext.Provider value={useBalances}>
-                  <AnnounceWorkEntryModal />
+                  <TransactionFeesContext.Provider value={useTransactionFee}>
+                    <AnnounceWorkEntryModal />
+                  </TransactionFeesContext.Provider>
                 </BalancesContext.Provider>
               </AccountsContext.Provider>
             </MembershipContext.Provider>
