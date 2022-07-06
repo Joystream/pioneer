@@ -5,13 +5,13 @@ import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextInlineMedium } from '@/common/components/typography'
 import { DurationValue } from '@/common/components/typography/DurationValue'
 
-import { DetailLabel, RecoveryTimeWrapper } from './styles'
+import { DetailLabel, RecoveryTimeWrapper, UnrecoverableLabel } from './styles'
 import { LockRecoveryTimeProps } from './types'
 
 export const LockRecoveryTime = ({ time, unrecoverableLabel, tooltipLabel }: LockRecoveryTimeProps) => {
   const timeValue = useMemo(() => {
     if (unrecoverableLabel) {
-      return <TextInlineMedium>{unrecoverableLabel}</TextInlineMedium>
+      return <UnrecoverableLabel lighter>{unrecoverableLabel}</UnrecoverableLabel>
     }
 
     if (time) {

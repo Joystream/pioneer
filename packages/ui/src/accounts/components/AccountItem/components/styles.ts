@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { ButtonGhost } from '@/common/components/buttons'
 import { DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
-import { Label } from '@/common/components/typography'
-import { BorderRad, Colors } from '@/common/constants'
+import { Label, TextInlineSmall } from '@/common/components/typography'
+import { BorderRad, Colors, Fonts } from '@/common/constants'
 
 export const LockWrapper = styled.div`
   display: flex;
@@ -87,4 +87,8 @@ export const LockInternalLinkButton = styled(LinkButtonGhost)`
 
 export const LockExternalLinkButton = styled(ButtonGhost)`
   white-space: nowrap;
+`
+
+export const UnrecoverableLabel = styled(TextInlineSmall)`
+  font-family: ${Fonts.Grotesk};
 `
