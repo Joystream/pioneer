@@ -16,19 +16,17 @@ import { BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEn
 import { announceWorkEntryMachine, AnnounceWorkEntryStates } from '@/bounty/modals/AnnounceWorkEntryModal/machine'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Input, InputComponent, InputNumber } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import {
   Modal,
-  ModalFooter,
   ModalHeader,
+  ModalTransactionFooter,
   Row,
   ScrolledModalBody,
   ScrolledModalContainer,
   TransactionAmount,
-  TransactionInfoContainer,
 } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
@@ -283,19 +281,12 @@ export const AnnounceWorkEntryModal = () => {
           </Row>
         </ScrolledModalContainer>
       </ScrolledModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo title={t('modals.common.contributeAmount')} value={amount} />
-          <TransactionInfo
-            title={t('modals.common.transactionFee.label')}
-            value={fee?.transactionFee}
-            tooltipText={t('modals.common.transactionFee.tooltip')}
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={!isValid} onClick={nextStep}>
-          {t('modals.announceWorkEntry.nextButton')}
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={fee?.transactionFee}
+        next={{ disabled: !isValid, label: t('modals.announceWorkEntry.nextButton'), onClick: nextStep }}
+      >
+        <TransactionInfo title={t('modals.common.contributeAmount')} value={amount} />
+      </ModalTransactionFooter>
     </Modal>
   )
 }

@@ -1,10 +1,11 @@
+import BN from 'bn.js'
 import React, { FC } from 'react'
 
-import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
-import { ModalFooter } from '@/common/components/Modal'
-import { TokenValue } from '@/common/components/typography'
+import { ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
+
+import { TransactionFee } from '../TransactionFee'
 
 interface ButtonState {
   disabled?: boolean
@@ -13,14 +14,13 @@ interface ButtonState {
 }
 
 interface Props {
+  transactionFee?: BN
   prev?: ButtonState
   next: ButtonState
-  className?: 'string'
+  className?: string
 }
 
-export const ModalTransactionFooter: FC<Props> = ({ prev, next, className, children }) => {
-  const { feeInfo } = useTransactionFee()
-
+export const ModalTransactionFooter: FC<Props> = ({ transactionFee, prev, next, className, children }) => {
   return (
     <ModalFooter className={className} twoColumns>
       <ButtonsGroup align="left">
@@ -31,9 +31,11 @@ export const ModalTransactionFooter: FC<Props> = ({ prev, next, className, child
           </ButtonGhost>
         )}
       </ButtonsGroup>
-      <ButtonsGroup align="right">
+      <TransactionInfoContainer>
         {children}
-        Transaction Fee: <TokenValue value={feeInfo?.transactionFee} />
+        {transactionFee && <TransactionFee value={transactionFee} />}
+      </TransactionInfoContainer>
+      <ButtonsGroup align="right">
         <ButtonPrimary disabled={next.disabled} onClick={next.onClick} size="medium">
           {next.label ?? 'Next step'} <Arrow direction="right" />
         </ButtonPrimary>

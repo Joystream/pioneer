@@ -10,20 +10,17 @@ import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { WithdrawWorkModalMachine, WithdrawWorkModalState } from '@/bounty/modals/WithdrawWorkEntryModal/machine'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer } from '@/common/components/forms'
 import { FileIcon } from '@/common/components/icons'
 import {
   Modal,
-  ModalFooter,
   ModalHeader,
+  ModalTransactionFooter,
   ScrolledModalBody,
   ScrolledModalContainer,
-  TransactionInfoContainer,
 } from '@/common/components/Modal'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
-import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextBig, TextMedium, TokenValue } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { Colors } from '@/common/constants'
@@ -184,18 +181,13 @@ export const WithdrawWorkEntryModal = () => {
           </Container>
         </ScrolledModalContainer>
       </ScrolledModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title={t('modals.common.transactionFee.label')}
-            value={feeInfo.transactionFee}
-            tooltipText={t('modals.common.transactionFee.tooltip')}
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={() => send('NEXT')}>
-          {t('modals.withdrawWorkEntry.submitButton')}
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={feeInfo.transactionFee}
+        next={{
+          label: t('modals.withdrawWorkEntry.submitButton'),
+          onClick: () => send('NEXT'),
+        }}
+      />
     </Modal>
   )
 }

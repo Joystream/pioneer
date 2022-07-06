@@ -8,9 +8,8 @@ import { ActorRef } from 'xstate'
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { Account } from '@/accounts/types'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
-import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
+import { ModalBody, ModalTransactionFooter } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
@@ -77,24 +76,17 @@ export const AuthorizeTransactionModal = ({
           <SelectedAccount account={controllerAccount} />
         </InputComponent>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          {contributeAmount && (
-            <TransactionInfo
-              title={t('modals.common.contributeAmount', { value: formatTokenValue(contributeAmount) })}
-              value={contributeAmount}
-            />
-          )}
+      <ModalTransactionFooter
+        transactionFee={paymentInfo?.partialFee}
+        next={{ disabled: !hasFunds || !isReady, label: buttonLabel, onClick: sign }}
+      >
+        {contributeAmount && (
           <TransactionInfo
-            title={t('modals.common.transactionFee.label')}
-            value={paymentInfo?.partialFee}
-            tooltipText={t('modals.common.transactionFee.tooltip')}
+            title={t('modals.common.contributeAmount', { value: formatTokenValue(contributeAmount) })}
+            value={contributeAmount}
           />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={!hasFunds || !isReady} onClick={sign}>
-          {buttonLabel}
-        </ButtonPrimary>
-      </ModalFooter>
+        )}
+      </ModalTransactionFooter>
     </TransactionModal>
   )
 }

@@ -363,6 +363,7 @@ export const AddNewProposalModal = () => {
         </StepperProposalWrapper>
       </StepperModalBody>
       <ModalTransactionFooter
+        transactionFee={isLastStepActive(getSteps(service)) ? feeInfo.transactionFee : undefined}
         prev={{ disabled: state.matches('proposalType'), onClick: goToPrevious }}
         next={{
           disabled: shouldDisableNext,
