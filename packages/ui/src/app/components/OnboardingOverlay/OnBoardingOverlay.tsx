@@ -1,3 +1,4 @@
+import { Wallet } from 'injectweb3-connect'
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
@@ -11,12 +12,12 @@ import { ArrowUpExpandedIcon } from '@/common/components/icons/ArrowUpExpandedIc
 import { StepperStep } from '@/common/components/Stepper'
 import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper'
 import { VerticalStaticStepper } from '@/common/components/Stepper/VerticalStaticStepper'
-import { TextHuge, TextMedium, TextSmall } from '@/common/components/typography'
+import { TextHuge, TextSmall } from '@/common/components/typography'
 import { Colors, ZIndex } from '@/common/constants'
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { useToggle } from '@/common/hooks/useToggle'
-import { OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
 import { OnBoardingStatus } from '@/common/providers/onboarding/types'
 
 export const onBoardingSteps: StepperStep[] = [
@@ -45,10 +46,12 @@ const innerStaticStepperSteps = [
   {
     title: 'Connect account',
     subtitle: 'Select a wallet account to connect your Joystream membership with.',
+    walletIcon: false,
   },
   {
     title: 'Create a free membership',
     subtitle: 'Set up a free Joystream membership.',
+    walletIcon: false,
   },
 ]
 
@@ -68,13 +71,14 @@ export const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus
 }
 
 export const OnBoardingOverlay = () => {
-  const { showModal } = useModal<OnBoardingModalCall>()
+  const { showModal } = useModal()
   const { wallet } = useMyAccounts()
+  const [selectedWallet, setSelectedWallet] = useLocalStorage<Wallet | undefined>('recentWallet')
   const { isLoading, status } = useOnBoarding()
   const [isOpen, toggle] = useToggle()
 
   const openOnBoardingModal = useCallback(() => {
-    showModal({ modal: 'OnBoardingModal' })
+    showModal({ modal: !wallet && selectedWallet ? 'SelectWalletModal' : 'OnBoardingModal' })
   }, [])
 
   if (isLoading || !status || status === 'finished') {
@@ -138,7 +142,7 @@ const MainWrapper = styled.div`
 `
 
 const StyledDropDown = styled(DropDownToggle)`
-  background-color: ${Colors.Black[700]};
+  background-color: ${Colors.Black[800]};
   position: absolute;
   z-index: ${ZIndex.navbarInner};
 `
@@ -163,7 +167,7 @@ const DropdownContent = styled.div`
 
 const Wrapper = styled.div`
   width: 100%;
-  background-color: ${Colors.Black[700]};
+  background-color: ${Colors.Black[800]};
   color: ${Colors.White};
   height: 85px;
   display: flex;
@@ -201,7 +205,7 @@ const TextContainer = styled.div`
   }
 `
 
-const StepperContainer = styled.div`
+export const StepperContainer = styled.div`
   display: flex;
   flex: 3;
   align-items: center;

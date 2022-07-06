@@ -12,23 +12,26 @@ interface ModalHeaderBasicProps {
   icon?: React.ReactElement | string
   modalHeaderSize?: 's' | 'm' | undefined
   className?: string
+  dark?: boolean
 }
 
 interface ModalHeaderProps extends ModalHeaderBasicProps {
-  title: string
+  title: string | React.ReactNode
 }
 
 interface ModalCustomHeaderProps extends ModalHeaderBasicProps {
   children?: React.ReactNode
 }
 
-export const ModalHeader = React.memo(({ onClick, title, icon, modalHeaderSize, className }: ModalHeaderProps) => (
-  <ModalTopBar columns={icon ? 3 : 2} modalHeaderSize={modalHeaderSize} className={className}>
-    {icon ? <ModalHeaderIcon>{icon}</ModalHeaderIcon> : null}
-    <ModalTitle>{title}</ModalTitle>
-    <CloseButton onClick={onClick} />
-  </ModalTopBar>
-))
+export const ModalHeader = React.memo(
+  ({ onClick, title, icon, modalHeaderSize, className, dark }: ModalHeaderProps) => (
+    <ModalTopBar columns={icon ? 3 : 2} modalHeaderSize={modalHeaderSize} className={className} dark={dark}>
+      {icon ? <ModalHeaderIcon>{icon}</ModalHeaderIcon> : null}
+      <ModalTitle>{title}</ModalTitle>
+      <CloseButton onClick={onClick} />
+    </ModalTopBar>
+  )
+)
 
 export const ModalCustomContentHeader = React.memo(
   ({ onClick, children, icon, modalHeaderSize, className }: ModalCustomHeaderProps) => (
@@ -122,6 +125,7 @@ interface TopBarProps extends ThemedStyledProps<any, any> {
   columns: number
   modalHeaderProps?: 's' | 'm' | undefined
   className?: string
+  dark?: boolean
 }
 
 export const ModalTopBar = styled.header<TopBarProps>`
@@ -129,6 +133,7 @@ export const ModalTopBar = styled.header<TopBarProps>`
   position: relative;
   grid-auto-flow: column;
   grid-area: modalheader;
+  background-color: ${(props) => (props.dark ? `${Colors.Black[800]}` : '')};
   grid-template-columns: ${(props) => (props.columns > 2 ? '24px 1fr 20px' : '1fr 20px')};
   justify-content: start;
   grid-column-gap: 8px;

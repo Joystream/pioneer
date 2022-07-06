@@ -3,12 +3,20 @@ import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import {
+  asOnBoardingSteps,
+  onBoardingSteps,
+  StepperContainer,
+} from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { List, ListItem } from '@/common/components/List'
 import { Modal, ModalFooter, ModalFooterGroup, ModalHeader, ScrolledModalBody } from '@/common/components/Modal'
-import { TextBig, TextMedium } from '@/common/components/typography'
+import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper'
+import { TextBig, TextHuge, TextMedium } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
+import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { ConnectWalletItem } from '@/common/modals/OnBoardingModal/components/ConnectWalletItem'
 import { RedBox } from '@/common/modals/OnBoardingModal/OnBoardingPlugin'
 
@@ -16,6 +24,7 @@ export const SelectWalletModal = () => {
   const { hideModal } = useModal()
   const [selectedWallet, setSelectedWallet] = useLocalStorage<Wallet | undefined>('recentWallet')
   const { setWallet, error, wallet: contextWallet } = useMyAccounts()
+  const { isLoading, status } = useOnBoarding()
   const handleClick = useCallback(() => {
     if (!selectedWallet?.installed && selectedWallet?.installUrl) {
       window.open(selectedWallet.installUrl, '_blank')
@@ -33,11 +42,21 @@ export const SelectWalletModal = () => {
       hideModal()
     }
   }, [error, contextWallet?.extension])
+
+  if (isLoading || !status) {
+    return null
+  }
+
+  const steps = asOnBoardingSteps(onBoardingSteps, status)
   return (
     <Modal onClose={hideModal} modalSize="s">
-      <ModalHeader title="Select Wallet" onClick={hideModal} />
+      <ModalHeader title={<HorizontalStepper steps={steps} />} onClick={hideModal} dark />
       <ModalContainer>
         <List>
+          <TitleWrap>
+            <TextHuge>Connect Wallet</TextHuge>
+            <TextMedium lighter>Select the wallet to connect with Pioneer App.</TextMedium>
+          </TitleWrap>
           <ListItem>
             {getAllWallets().map((wallet) => (
               <ConnectWalletItem
@@ -79,4 +98,8 @@ const ModalContainer = styled(ScrolledModalBody)`
     width: 100%;
     margin: 20px 0 0 0;
   }
+`
+const TitleWrap = styled.div`
+  text-align: center;
+  padding-bottom: 15px;
 `

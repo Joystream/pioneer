@@ -1,17 +1,21 @@
+import { getAllWallets } from 'injectweb3-connect'
 import React from 'react'
 import styled from 'styled-components'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { TextHuge, TextInlineBig, TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
+import { MemberAvatar } from '@/memberships/components/Avatar'
+import { MemberStackStyles } from '@/memberships/components/MemberStack'
 
 interface VerticalStaticStepperData {
   title: string
   subtitle?: string
+  walletIcon?: boolean
 }
 export interface VerticalStaticStepperProps {
   steps: Array<VerticalStaticStepperData>
 }
-
 export const VerticalStaticStepper = ({ steps }: VerticalStaticStepperProps) => {
   return (
     <StepperWrap>
@@ -24,6 +28,13 @@ export const VerticalStaticStepper = ({ steps }: VerticalStaticStepperProps) => 
             <StepTitle>{item.title}</StepTitle>
             <StepSubtitleList>
               <StyledSubtitle>{item.subtitle}</StyledSubtitle>
+              {item.walletIcon ?? (
+                <WalletIconWrapper>
+                  {getAllWallets().map((wallet) => (
+                    <WalletIcons avatarUri={wallet.logo.src} />
+                  ))}
+                </WalletIconWrapper>
+              )}
             </StepSubtitleList>
           </StepBody>
         </StepWrap>
@@ -46,7 +57,7 @@ const StepNumber = styled.div`
   align-items: center;
   justify-self: center;
   border-radius: ${BorderRad.round};
-  background: ${Colors.Black[500]};
+  background-color: ${Colors.Black[800]};
   font-weight: 700;
 `
 
@@ -59,6 +70,11 @@ const StepTitle = styled(TextHuge)`
 const StepSubtitleList = styled.ul`
   list-style: disc;
   margin-left: 15px;
+`
+
+const WalletIcons = styled(MemberAvatar)``
+const WalletIconWrapper = styled(MemberStackStyles)`
+  margin-top: 5px;
 `
 
 const StepSubtitle = styled.li`
