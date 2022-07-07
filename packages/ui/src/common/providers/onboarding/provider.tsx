@@ -40,7 +40,7 @@ const useOnBoarding = (): UseOnBoarding => {
     return { isLoading: false, status: 'finished' }
   }
 
-  if (accountsError === 'NO_EXTENSION') {
+  if (accountsError === 'NO_EXTENSION' || !wallet) {
     // prolly some1 will have to remove this if, cause when that isnt any extension installed we don't wanna show onboarding
     return { isLoading: false, status: 'installPlugin' }
   }

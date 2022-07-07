@@ -3,17 +3,12 @@ import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import {
-  asOnBoardingSteps,
-  onBoardingSteps,
-  StepperContainer,
-} from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
+import { asOnBoardingSteps, onBoardingSteps } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { List, ListItem } from '@/common/components/List'
 import { Modal, ModalFooter, ModalFooterGroup, ModalHeader, ScrolledModalBody } from '@/common/components/Modal'
 import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper'
 import { TextBig, TextHuge, TextMedium } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
@@ -22,7 +17,8 @@ import { RedBox } from '@/common/modals/OnBoardingModal/OnBoardingPlugin'
 
 export const SelectWalletModal = () => {
   const { hideModal } = useModal()
-  const [selectedWallet, setSelectedWallet] = useLocalStorage<Wallet | undefined>('recentWallet')
+  const [selectedWallet, setSelectedWallet] = useState<Wallet>()
+  const [recentWalletName] = useLocalStorage<string | undefined>('recentWallet')
   const { setWallet, error, wallet: contextWallet } = useMyAccounts()
   const { isLoading, status } = useOnBoarding()
   const handleClick = useCallback(() => {
@@ -43,6 +39,13 @@ export const SelectWalletModal = () => {
     }
   }, [error, contextWallet?.extension])
 
+  useEffect(() => {
+    const recentWallet = getAllWallets().find((wallet) => wallet.extensionName === recentWalletName)
+    if (recentWallet) {
+      setSelectedWallet(recentWallet)
+    }
+  }, [recentWalletName])
+
   if (isLoading || !status) {
     return null
   }
@@ -60,6 +63,7 @@ export const SelectWalletModal = () => {
           <ListItem>
             {getAllWallets().map((wallet) => (
               <ConnectWalletItem
+                key={wallet.extensionName}
                 wallet={wallet}
                 onClick={() => setSelectedWallet(wallet)}
                 selected={selectedWallet?.extensionName === wallet.extensionName}
@@ -73,8 +77,8 @@ export const SelectWalletModal = () => {
               Extension is blocking Pioneer from access
             </TextBig>
             <TextMedium lighter>
-              Change the settings of the wallet browser plugin to allow it access to dao.joystream.org and reload the
-              page
+              Change the settings of the wallet browser plugin to allow it access to{' '}
+              {window.location.host ?? 'dao.joystream.org'} and reload the page
             </TextMedium>
           </RedBox>
         )}

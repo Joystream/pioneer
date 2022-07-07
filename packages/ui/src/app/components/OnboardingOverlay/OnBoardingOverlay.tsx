@@ -73,13 +73,13 @@ export const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus
 export const OnBoardingOverlay = () => {
   const { showModal } = useModal()
   const { wallet } = useMyAccounts()
-  const [selectedWallet, setSelectedWallet] = useLocalStorage<Wallet | undefined>('recentWallet')
+  const [selectedWallet] = useLocalStorage<Wallet | undefined>('recentWallet')
   const { isLoading, status } = useOnBoarding()
   const [isOpen, toggle] = useToggle()
 
   const openOnBoardingModal = useCallback(() => {
     showModal({ modal: !wallet && selectedWallet ? 'SelectWalletModal' : 'OnBoardingModal' })
-  }, [])
+  }, [wallet, selectedWallet])
 
   if (isLoading || !status || status === 'finished') {
     return null

@@ -5,6 +5,7 @@ import React, { ReactNode, useEffect, useState } from 'react'
 import { debounceTime, filter, skip } from 'rxjs/operators'
 
 import { useKeyring } from '@/common/hooks/useKeyring'
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useObservable } from '@/common/hooks/useObservable'
 
 import { Account } from '../../types'
@@ -88,6 +89,7 @@ export const AccountsContextProvider = (props: Props) => {
   const [isExtensionLoaded, setIsExtensionLoaded] = useState(false)
   const [selectedWallet, setSelectedWallet] = useState<Wallet>()
   const [extensionError, setExtensionError] = useState<ExtensionError>()
+  const [, setRecentWallet] = useLocalStorage<string | undefined>('recentWallet')
 
   useEffect(
     onExtensionLoaded(
@@ -110,13 +112,17 @@ export const AccountsContextProvider = (props: Props) => {
     }
 
     setExtensionError(undefined)
-    loadKeysFromExtension(keyring, selectedWallet).catch((error: Error) => {
-      setSelectedWallet(undefined)
+    loadKeysFromExtension(keyring, selectedWallet)
+      .then(() => {
+        setRecentWallet(selectedWallet.extensionName)
+      })
+      .catch((error: Error) => {
+        setSelectedWallet(undefined)
 
-      if (error?.message.includes('not allowed to interact') || error?.message.includes('Rejected')) {
-        setExtensionError('APP_REJECTED')
-      }
-    })
+        if (error?.message.includes('not allowed to interact') || error?.message.includes('Rejected')) {
+          setExtensionError('APP_REJECTED')
+        }
+      })
   }, [isExtensionLoaded, selectedWallet])
 
   const accounts = useObservable(
