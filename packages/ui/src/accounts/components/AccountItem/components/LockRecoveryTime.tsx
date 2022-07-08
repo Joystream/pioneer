@@ -17,7 +17,7 @@ export const LockRecoveryTime = ({ time, unrecoverableLabel, tooltipLabel }: Loc
     if (time) {
       const duration = Date.parse(time) - Date.now()
 
-      if (duration < 0) {
+      if (duration <= 0) {
         return <TextInlineMedium>-</TextInlineMedium>
       }
 
