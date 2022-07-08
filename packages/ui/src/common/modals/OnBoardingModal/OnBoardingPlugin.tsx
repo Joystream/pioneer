@@ -62,16 +62,18 @@ export const OnBoardingPlugin = () => {
       <OnBoardingTextFooter
         text="Please reload the page after installing the plugin!"
         button={
-          <StyledButton disabled={!selectedWallet} onClick={handleClick} size="large">
-            {selectedWallet?.installed ? (
-              'Select Wallet'
-            ) : (
-              <>
-                <LinkSymbol />
-                Install extension
-              </>
-            )}
-          </StyledButton>
+          <>
+            <StyledButton disabled={!selectedWallet} onClick={handleClick} size="medium">
+              {selectedWallet?.installed ? (
+                'Select Wallet'
+              ) : (
+                <>
+                  <LinkSymbol />
+                  Install extension
+                </>
+              )}
+            </StyledButton>
+          </>
         }
       />
     </>

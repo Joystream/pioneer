@@ -18,7 +18,7 @@ export const OnBoardingAccount = ({ onAccountSelect }: Props) => {
     }
 
     return <SelectAccountStep onAccountSelect={onAccountSelect} />
-  }, [])
+  }, [hasAccounts])
 
   if (isLoading) {
     return <Loading />

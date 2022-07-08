@@ -1,10 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import accountImg from '@/app/assets/images/OnBoarding/accountImage.png'
+import { ButtonPrimary } from '@/common/components/buttons'
 import { ScrolledModalBody } from '@/common/components/Modal'
 import { HorizontalStaticStepper } from '@/common/components/Stepper/HorizontalStaticStepper'
-import { TextExtraHuge, TextMedium } from '@/common/components/typography'
+import { TextExtraHuge } from '@/common/components/typography'
 import { OnBoardingTextFooter } from '@/common/modals/OnBoardingModal'
 
 const steps = [
@@ -13,6 +15,8 @@ const steps = [
 ]
 
 export const NoAccountStep = () => {
+  const { setWallet } = useMyAccounts()
+
   return (
     <>
       <ScrolledModalBody>
@@ -22,7 +26,14 @@ export const NoAccountStep = () => {
           <HorizontalStaticStepper steps={steps} />
         </Wrapper>
       </ScrolledModalBody>
-      <OnBoardingTextFooter text="Please reload the page after account creation!" />
+      <OnBoardingTextFooter
+        text="Please reload the page after account creation!"
+        button={
+          <ButtonPrimary size="medium" onClick={() => setWallet?.(undefined)}>
+            Return to wallet selection
+          </ButtonPrimary>
+        }
+      />
     </>
   )
 }

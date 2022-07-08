@@ -140,12 +140,19 @@ export const OnBoardingModal = () => {
   )
 }
 
-export const OnBoardingTextFooter = ({ text, button }: { text: string; button?: React.ReactNode }) => (
+interface OnBoardingTextFooterProps {
+  text?: string
+  button?: React.ReactNode
+}
+
+export const OnBoardingTextFooter = ({ text, button }: OnBoardingTextFooterProps) => (
   <OnBoardingTextFooterWrapper>
-    <ColumnGapBlock gap={5}>
-      <WarningIcon />
-      <TextMedium>{text}</TextMedium>
-    </ColumnGapBlock>
+    {text && (
+      <ColumnGapBlock gap={5}>
+        <WarningIcon />
+        <TextMedium>{text}</TextMedium>
+      </ColumnGapBlock>
+    )}
     {button}
   </OnBoardingTextFooterWrapper>
 )
