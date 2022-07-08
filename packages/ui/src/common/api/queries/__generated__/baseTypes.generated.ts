@@ -9,7 +9,7 @@ export type Scalars = {
   String: string
   Boolean: boolean
   Int: number
-  Float: number
+  Float: string
   /** GraphQL representation of BigInt */
   BigInt: string
   /** GraphQL representation of Bytes */
