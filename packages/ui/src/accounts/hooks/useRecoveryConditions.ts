@@ -16,9 +16,9 @@ export const useRecoveryConditions = (address: Address): RecoveryConditions => {
   const { data: applicationData } = useGetWorkingGroupApplicationsQuery({
     variables: { where: { stakingAccount_eq: address } },
   })
-  const applicationStatus = applicationData?.workingGroupApplications[0].status.__typename
+  const applicationStatus = applicationData?.workingGroupApplications[0]?.status?.__typename
   const { data: workerData } = useGetWorkerIdsQuery({ variables: { where: { stakeAccount_eq: address } } })
-  const workerId = workerData?.workers[0].id
+  const workerId = workerData?.workers[0]?.id
   const { unstakingPeriodEnd } = useWorkerUnstakingPeriodEnd(workerId)
 
   const isActiveCandidate = useMemo(
