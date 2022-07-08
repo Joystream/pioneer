@@ -62,7 +62,7 @@ const loadKeysFromExtension = async (keyring: Keyring, wallet: Wallet) => {
 }
 
 // Extensions is not always ready on application load, hence the check
-const onExtensionLoaded = (onSuccess: (selectedExtension?: string) => void, onFail: () => void) => () => {
+const onExtensionLoaded = (onSuccess: () => void, onFail: () => void, recentWallet?: string) => () => {
   const interval = 20
   const timeout = 1000
   let timeElapsed = 0
@@ -70,8 +70,14 @@ const onExtensionLoaded = (onSuccess: (selectedExtension?: string) => void, onFa
   const intervalId = setInterval(() => {
     const extensionsKeys = Object.keys((window as any)?.injectedWeb3 ?? {})
     if (extensionsKeys.length) {
-      clearInterval(intervalId)
-      onSuccess(undefined)
+      if (!recentWallet) {
+        clearInterval(intervalId)
+        onSuccess()
+      } else if (extensionsKeys.includes(recentWallet)) {
+        // some wallets load slower which will cause error when trying to preload them hence the check
+        clearInterval(intervalId)
+        onSuccess()
+      }
     } else {
       timeElapsed += interval
       if (timeElapsed >= timeout) {
@@ -89,19 +95,19 @@ export const AccountsContextProvider = (props: Props) => {
   const [isExtensionLoaded, setIsExtensionLoaded] = useState(false)
   const [selectedWallet, setSelectedWallet] = useState<Wallet>()
   const [extensionError, setExtensionError] = useState<ExtensionError>()
-  const [, setRecentWallet] = useLocalStorage<string | undefined>('recentWallet')
+  const [recentWallet, setRecentWallet] = useLocalStorage<string | undefined>('recentWallet')
 
   useEffect(
     onExtensionLoaded(
-      (possibleExtension) => {
+      () => {
         setIsExtensionLoaded(true)
-
-        if (possibleExtension) {
-          const possibleWallet = getWalletBySource(possibleExtension)
+        if (recentWallet) {
+          const possibleWallet = getWalletBySource(recentWallet)
           setSelectedWallet(possibleWallet)
         }
       },
-      () => setExtensionError('NO_EXTENSION')
+      () => setExtensionError('NO_EXTENSION'),
+      recentWallet
     ),
     []
   )
