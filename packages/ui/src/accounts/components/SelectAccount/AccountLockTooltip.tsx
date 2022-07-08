@@ -48,7 +48,9 @@ export const AccountLockTooltip = ({ locks, children }: Props) => {
     if (locks?.includes('rivalrousLock')) {
       texts.push(
         <li className="tooltipLink" key="rivalrousLock">
-          You cannot select this account because it contains rivalrous lock.{' '}
+          You cannot select this account because it has a lock preventing its usage for staking. Role stake can be
+          recovered after the role is terminated, while proposal locks get recovered automatically, when proposals get
+          executed.{' '}
           <InlineExternalLink
             href="https://joystream.gitbook.io/testnet-workspace/system/accounts-and-staking#locks-1"
             target="_blank"
