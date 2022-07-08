@@ -78,14 +78,12 @@ export const OnBoardingOverlay = () => {
   const [isOpen, toggle] = useToggle()
 
   const openOnBoardingModal = useCallback(() => {
-    showModal({ modal: !wallet && selectedWallet ? 'SelectWalletModal' : 'OnBoardingModal' })
+    showModal({ modal: 'OnBoardingModal' })
   }, [wallet, selectedWallet])
 
   if (isLoading || !status || status === 'finished') {
     return null
   }
-
-  const steps = asOnBoardingSteps(onBoardingSteps, status)
 
   return (
     <>
@@ -97,7 +95,7 @@ export const OnBoardingOverlay = () => {
             <TextSmall onClick={toggle}>Show how {!isOpen ? <ArrowDownIcon /> : <ArrowUpExpandedIcon />}</TextSmall>
           </TextContainer>
           <StepperContainer>
-            <HorizontalStepper steps={steps} />
+            <HorizontalStepper steps={onBoardingSteps} />
           </StepperContainer>
           <ButtonContainer>
             <ButtonPrimary size="large" onClick={openOnBoardingModal}>

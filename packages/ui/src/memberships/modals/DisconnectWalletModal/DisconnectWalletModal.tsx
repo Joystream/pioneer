@@ -11,9 +11,11 @@ import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
 import { SignOutModalCall } from '@/memberships/modals/SignOutModal/types'
 
+const defaultIconSrc = getWalletBySource('polkadot-js')?.logo.src
+
 export const DisconnectWalletModal = () => {
   const { wallet, setWallet } = useMyAccounts()
-  const [selectedWallet, setSelectedWallet] = useLocalStorage<Wallet | undefined>('recentWallet')
+  const [, setSelectedWallet] = useLocalStorage<Wallet | undefined>('recentWallet')
   const { hideModal } = useModal<SignOutModalCall>()
 
   const DisconnectWallet = () => {
@@ -21,7 +23,6 @@ export const DisconnectWalletModal = () => {
     setWallet?.(undefined)
     setSelectedWallet(undefined)
   }
-  const defaultIconSrc = getWalletBySource('polkadot-js')?.logo.src
   return (
     <Modal modalSize="xs" modalHeight="s" isDark onClose={hideModal}>
       <DisconnectButtonWrapper>
