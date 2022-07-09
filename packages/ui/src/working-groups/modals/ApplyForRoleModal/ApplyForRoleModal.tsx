@@ -130,7 +130,7 @@ export const ApplyForRoleModal = () => {
     if (!state.matches('requirementsVerification')) {
       return
     }
-    
+
     if (!activeMember) {
       showModal<SwitchMemberModalCall>({
         modal: 'SwitchMember',
@@ -140,7 +140,7 @@ export const ApplyForRoleModal = () => {
         },
       })
     }
-    
+
     if (feeInfo) {
       const areFundsSufficient = feeInfo.canAfford && hasRequiredStake
       send(areFundsSufficient ? 'PASS' : 'FAIL')

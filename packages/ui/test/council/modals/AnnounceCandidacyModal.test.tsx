@@ -144,7 +144,7 @@ describe('UI: Announce Candidacy Modal', () => {
           lock: 'Council Candidate',
         },
       }
-  
+
       expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
 
@@ -160,7 +160,7 @@ describe('UI: Announce Candidacy Modal', () => {
           lock: 'Council Candidate',
         },
       }
-  
+
       expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
 
