@@ -237,9 +237,9 @@ fragment ProposalMentionFields on Proposal {
   statusSetAtBlock
   statusSetAtTime
   createdAt
-  createdInEvent {
-    #network
-  }
+  #createdInEvent {
+  #network
+  #}
   details {
     __typename
   }
