@@ -37,7 +37,7 @@ fragment BountyFields on Bounty {
     inBlock
     rationale
     createdAt
-    network
+    #network
   }
   maxFundingReachedEvent {
     createdAt
@@ -91,7 +91,7 @@ fragment BountyWorkWithDetailsFields on BountyEntry {
     ...BountyWorkFields
     inBlock
     createdAt
-    network
+    #network
   }
 }
 
@@ -191,7 +191,7 @@ query GetLatestBountyEntry($lockAccount: String) {
     announcedInEvent {
       createdAt
       inBlock
-      network
+      #network
     }
   }
 }

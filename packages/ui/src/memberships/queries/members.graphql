@@ -32,7 +32,7 @@ fragment MemberFields on Membership {
   stakingaccountaddedeventmember {
     createdAt
     inBlock
-    network
+    #network
     account
   }
 }
@@ -44,14 +44,14 @@ fragment MemberWithDetailsFields on Membership {
       memberInvitedEvent {
         createdAt
         inBlock
-        network
+        #network
       }
     }
     ... on MembershipEntryPaid {
       membershipBoughtEvent {
         createdAt
         inBlock
-        network
+        #network
       }
     }
     ... on MembershipEntryGenesis {
@@ -166,6 +166,6 @@ query GetMemberInvitedEvents($lockAccount: String) {
   memberInvitedEvents(where: { controllerAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
     createdAt
     inBlock
-    network
+    #network
   }
 }

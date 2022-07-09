@@ -146,7 +146,7 @@ fragment CastVoteFields on CastVote {
   }
   castEvent: votecasteventcastVote {
     inBlock
-    network
+    #network
     createdAt
   }
 }

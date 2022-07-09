@@ -8,7 +8,7 @@ fragment ForumBaseCategoryFields on ForumCategory {
       categoryArchivalStatusUpdatedEvent {
         createdAt
         inBlock
-        network
+        #network
       }
     }
   }
@@ -98,7 +98,7 @@ fragment ForumThreadFields on ForumThread {
   createdInEvent {
     createdAt
     inBlock
-    network
+    #network
   }
   status {
     __typename
@@ -106,7 +106,7 @@ fragment ForumThreadFields on ForumThread {
       threadDeletedEvent {
         createdAt
         inBlock
-        network
+        #network
       }
     }
   }
@@ -132,7 +132,7 @@ fragment ForumPostWithoutReplyFields on ForumPost {
   postaddedeventpost {
     createdAt
     inBlock
-    network
+    #network
   }
   status {
     __typename
@@ -251,13 +251,13 @@ query GetForumPosts($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByInp
 query GetForumPostEdits($id: ID!) {
   edits: postTextUpdatedEvents(where: { post: { id_eq: $id } }, orderBy: [createdAt_ASC]) {
     newText
-    network
+    #network
     createdAt
     inBlock
   }
   initial: postAddedEvents(where: { post: { id_eq: $id } }) {
     createdAt
-    network
+    #network
     inBlock
     text
   }

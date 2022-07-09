@@ -13,13 +13,15 @@ export interface BlockInfoProp {
   inline?: boolean
 }
 
+export const NETWORK_VISIBILITY = false
+
 export const BlockInfo = ({ block, lessInfo, inline }: BlockInfoProp) => (
   <BlockInfoContainer lessInfo={lessInfo} inline={inline}>
     <BlockIcon />
     <span>
       {formatTokenValue(block.number)} {lessInfo && 'block'}
     </span>
-    {!lessInfo && <BlockNetworkInfo>on {block.network} network</BlockNetworkInfo>}
+    {!lessInfo && NETWORK_VISIBILITY && <BlockNetworkInfo>on {block.network} network</BlockNetworkInfo>}
   </BlockInfoContainer>
 )
 
