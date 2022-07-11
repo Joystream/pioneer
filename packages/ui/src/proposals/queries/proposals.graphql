@@ -40,7 +40,7 @@ fragment VoteWithDetailsFields on ProposalVotedEvent {
   rationale
   inBlock
   createdAt
-  #network
+  network
   proposalId
 }
 
@@ -55,12 +55,12 @@ fragment ProposalWithDetailsFields on Proposal {
   createdInEvent {
     inBlock
     createdAt
-    #network
+    network
   }
   proposalStatusUpdates {
     inBlock
     createdAt
-    #network
+    network
     newStatus {
       __typename
     }
@@ -213,7 +213,7 @@ fragment DiscussionPostWithoutReplyFields on ProposalDiscussionPost {
   createdInEvent {
     createdAt
     inBlock
-    #network
+    network
   }
   updatedAt
   author {
@@ -237,9 +237,9 @@ fragment ProposalMentionFields on Proposal {
   statusSetAtBlock
   statusSetAtTime
   createdAt
-  #createdInEvent {
-  #network
-  #}
+  createdInEvent {
+    network
+  }
   details {
     __typename
   }
@@ -333,7 +333,7 @@ query GetLatestProposalByMemberId($lockAccount: String) {
     createdInEvent {
       createdAt
       inBlock
-      #network
+      network
     }
     status {
       __typename

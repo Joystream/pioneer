@@ -38,21 +38,21 @@ fragment PastWorkerFields on Worker {
       workerExitedEvent {
         createdAt
         inBlock
-        #network
+        network
       }
     }
     ... on WorkerStatusTerminated {
       terminatedWorkerEvent {
         createdAt
         inBlock
-        #network
+        network
       }
     }
   }
   entry {
     createdAt
     inBlock
-    #network
+    network
   }
 }
 
@@ -63,7 +63,7 @@ fragment WorkerDetailedFields on Worker {
   stakeAccount
   entry {
     inBlock
-    #network
+    network
     createdAt
   }
   application {
@@ -194,7 +194,7 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   rewardPerBlock
   createdInEvent {
     inBlock
-    #network
+    network
     createdAt
   }
   metadata {
@@ -296,7 +296,7 @@ fragment WorkingGroupApplicationMentionFields on WorkingGroupApplication {
   createdInEvent {
     createdAt
     inBlock
-    #network
+    network
   }
   applicant {
     ...MemberFields
@@ -370,7 +370,7 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
   createdInEvent {
     createdAt
     inBlock
-    #network
+    network
   }
   stake
 }

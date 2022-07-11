@@ -38,7 +38,7 @@ fragment NewCandidateEventFields on NewCandidateEvent {
   id
   createdAt
   inBlock
-  #network
+  network
   candidate {
     member {
       id
