@@ -211,7 +211,6 @@ interface ModalWrapProps {
 
 export const ModalWrap = styled.section<ModalWrapProps>`
   display: grid;
-  max-height: calc(100% - 128px);
   @media only screen and (max-height: 700px) {
     max-height: 100%;
   }
