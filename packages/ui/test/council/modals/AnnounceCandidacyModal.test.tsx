@@ -42,6 +42,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
@@ -94,7 +95,7 @@ describe('UI: Announce Candidacy Modal', () => {
 
   beforeEach(async () => {
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
-    useMyMemberships.setActive(getMember('alice'))
+    useMyMemberships.active = getMember('alice')
 
     stubDefaultBalances(api)
     stubCouncilConstants(api)
@@ -103,6 +104,8 @@ describe('UI: Announce Candidacy Modal', () => {
     announceCandidacyTx = stubTransaction(api, 'api.tx.council.announceCandidacy', 20)
     candidacyNoteTx = stubTransaction(api, 'api.tx.council.setCandidacyNote', 30)
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
+    mockedTransactionFee.transaction = batchTx as any
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }
     stubQuery(
       api,
       'members.stakingAccountIdMemberStatus',
@@ -134,7 +137,9 @@ describe('UI: Announce Candidacy Modal', () => {
     it('Transaction fee', async () => {
       const minStake = 10
       stubCouncilConstants(api, { minStake })
-      stubTransaction(api, 'api.tx.utility.batch', 10000)
+      // stubTransaction(api, 'api.tx.utility.batch', 10000)
+      mockedTransactionFee.feeInfo = { transactionFee: new BN(10000), canAfford: false }
+
       renderModal()
 
       const moveFundsModalCall: MoveFundsModalCall = {
@@ -144,7 +149,7 @@ describe('UI: Announce Candidacy Modal', () => {
           lock: 'Council Candidate',
         },
       }
-  
+
       expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
 
@@ -160,7 +165,7 @@ describe('UI: Announce Candidacy Modal', () => {
           lock: 'Council Candidate',
         },
       }
-  
+
       expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
 
@@ -174,7 +179,6 @@ describe('UI: Announce Candidacy Modal', () => {
   describe('Stepper modal', () => {
     it('Renders a modal', async () => {
       const { queryByText } = renderModal()
-
       expect(queryByText(/^announce candidacy/i)).not.toBeNull()
     })
 
@@ -344,25 +348,25 @@ describe('UI: Announce Candidacy Modal', () => {
 
         it('Renders', async () => {
           expect(screen.queryByText('You intend to bind account for staking')).not.toBeNull()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('10')
+          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('10')
         })
 
         it('Success', async () => {
           stubTransactionSuccess(bindAccountTx, 'members', 'StakingAccountAdded')
 
           await act(async () => {
-            fireEvent.click(await getButton(/^Sign transaction/i))
+            fireEvent.click(await getButton(/^Sign transaction and Bind Staking Account/i))
           })
 
           expect(await screen.findByText(/You intend to announce candidacy/i)).toBeDefined()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
         })
 
         it('Failure', async () => {
           stubTransactionFailure(bindAccountTx)
 
           await act(async () => {
-            fireEvent.click(await getButton(/^Sign transaction/i))
+            fireEvent.click(await getButton(/^Sign transaction and Bind Staking Account/i))
           })
 
           expect(await screen.findByText('Failure')).toBeDefined()
@@ -387,7 +391,7 @@ describe('UI: Announce Candidacy Modal', () => {
         await fillSummary(true)
 
         expect(await screen.findByText(/You intend to announce candidacy/i)).toBeDefined()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+        expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
       })
 
       it('Staking account is confirmed', async () => {
@@ -408,7 +412,7 @@ describe('UI: Announce Candidacy Modal', () => {
         await fillSummary(true)
 
         expect(await screen.findByText(/You intend to announce candidacy/i)).toBeDefined()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('20')
+        expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('20')
       })
     })
 

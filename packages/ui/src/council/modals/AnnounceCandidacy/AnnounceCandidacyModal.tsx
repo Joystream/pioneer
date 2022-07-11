@@ -192,7 +192,7 @@ export const AnnounceCandidacyModal = () => {
         })
       }
 
-      if (feeInfo) {
+      if (feeInfo && Object.keys(balances).length) {
         const areFundsSufficient = feeInfo.canAfford && hasRequiredStake
         send(areFundsSufficient ? 'NEXT' : 'FAIL')
       }
@@ -218,7 +218,7 @@ export const AnnounceCandidacyModal = () => {
       // wrong account
       return feeInfo?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
-  }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake, stakingStatus])
+  }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake, stakingStatus, Object.keys(balances).length])
 
   if (!api || !activeMember || !transaction || !feeInfo) {
     return null

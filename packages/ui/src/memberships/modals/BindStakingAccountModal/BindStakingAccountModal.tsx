@@ -64,7 +64,7 @@ export const BindStakingAccountModal = ({ onClose, transaction, signer, service,
       </ModalBody>
       <ModalTransactionFooter
         transactionFee={partialFee?.toBn()}
-        next={{ disabled: signDisabled, label: 'Sign transacion and bind Staking Account', onClick: sign }}
+        next={{ disabled: signDisabled, label: 'Sign transaction and Bind Staking Account', onClick: sign }}
       />
     </TransactionModal>
   )
