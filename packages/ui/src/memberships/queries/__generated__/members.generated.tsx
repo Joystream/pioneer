@@ -35,6 +35,7 @@ export type MemberFieldsFragment = {
     network: Types.Network
     account: string
   }> | null
+  referrer_id?: string
 }
 
 export type MemberWithDetailsFieldsFragment = {
@@ -454,6 +455,26 @@ export const MemberFieldsFragmentDoc = gql`
       network
       account
     }
+    entry {
+      ... on MembershipEntryInvited {
+        memberInvitedEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+      ... on MembershipEntryPaid {
+        membershipBoughtEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+      ... on MembershipEntryGenesis {
+        phantom
+      }
+    }
+    referrer_id
   }
 `
 export const MemberWithDetailsFieldsFragmentDoc = gql`

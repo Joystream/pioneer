@@ -7,15 +7,15 @@ import { BorderRad, Fonts, Sizes, Transitions, Colors } from '../../../common/co
 
 type MemberItemKind = 'Member' | 'MyMember'
 export const colLayoutByType = (kind: MemberItemKind) => {
-  const id = 48
-  const name = 194
-  const concil = 92
+  const name = 190
   const roles = 164
+  const created = 90
+  const referrer = 50
   const count = kind === 'Member' ? 20 : 76
   const total = 120
 
   return kind === 'Member'
-    ? `${id}px ${name}px ${concil}px ${roles}px ${count}px ${count}px ${total}px ${total}px`
+    ? `${name}px ${roles}px ${created}px ${count}px ${referrer}px ${count}px ${total}px ${total}px`
     : `${name}px ${roles}px ${count}px ${count}px 96px 80px 46px`
 }
 

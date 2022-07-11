@@ -35,6 +35,25 @@ fragment MemberFields on Membership {
     network
     account
   }
+  entry {
+    ... on MembershipEntryInvited {
+      memberInvitedEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+    ... on MembershipEntryPaid {
+      membershipBoughtEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+    ... on MembershipEntryGenesis {
+      phantom
+    }
+  }
 }
 
 fragment MemberWithDetailsFields on Membership {

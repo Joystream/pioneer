@@ -8,12 +8,12 @@ import { Loading } from '@/common/components/Loading'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { GetSortProps } from '@/common/hooks/useSort'
 
-import { Member } from '../../types'
+import { Member, MemberWithDetails } from '../../types'
 import { MemberListItem } from '../MemberListItem'
 import { colLayoutByType } from '../MemberListItem/Fileds'
 
 interface MemberListProps {
-  members: Member[]
+  members: Array<Member & Partial<Pick<MemberWithDetails, 'entry'>>>
   isLoading?: boolean
   getSortProps: GetSortProps<MembershipOrderByInput>
 }
@@ -30,10 +30,10 @@ export const MemberList = ({ isLoading, members, getSortProps }: MemberListProps
   return (
     <div>
       <ListHeaders $colLayout={colLayoutByType('Member')}>
-        <SortHeader {...getSortProps('createdAt')}>ID</SortHeader>
         <SortHeader {...getSortProps('handle')}>Memberships</SortHeader>
-        <ListHeader>Council Member</ListHeader>
         <ListHeader>Roles</ListHeader>
+        <ListHeader>Created</ListHeader>
+        <ListHeader>Referrer</ListHeader>
         <ListHeader>Slashed</ListHeader>
         <ListHeader>Terminated</ListHeader>
         <ListHeader>Total Balance</ListHeader>

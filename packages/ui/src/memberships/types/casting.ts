@@ -17,7 +17,9 @@ const asBoundAccountsEvent = (
   account: fields.account,
 })
 
-export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member => ({
+export const asMember = (
+  data: Omit<MemberFieldsFragment, '__typename'> & Partial<Pick<MemberWithDetailsFieldsFragment, 'entry'>>
+): Member & Partial<Pick<MemberWithDetails, 'entry'>> => ({
   id: data.id,
   handle: data.handle,
   name: data.metadata.name ?? undefined,
@@ -32,6 +34,7 @@ export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member
   boundAccountsEvents: data.stakingaccountaddedeventmember?.map(asBoundAccountsEvent) ?? [],
   roles: data.roles.map(asMemberRole),
   createdAt: data.createdAt,
+  entry: data.entry ? asMemberEntry(data.entry) : undefined,
 })
 
 export const asMemberRole = (data: MemberFieldsFragment['roles'][0]): MemberRole => ({

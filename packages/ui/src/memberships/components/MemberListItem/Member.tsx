@@ -2,18 +2,17 @@ import React from 'react'
 
 import { AccountLocks } from '@/accounts/components/AccountLocks'
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { CheckboxIcon, CrossIcon } from '@/common/components/icons'
 import { TokenValue } from '@/common/components/typography/TokenValue'
 import { useMemberRowWorkDetails } from '@/memberships/hooks/useMemberRowWorkDetails'
 import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
 
-import { MemberInfo } from '..'
-import { Member } from '../../types'
+import { MemberInfo, MemberCreated } from '..'
+import { Member, MemberWithDetails } from '../../types'
 import { MemberRoles } from '../MemberRoles'
 
-import { CountInfo, Info, MemberColumn, MemberItemWrap, MemberModalTrigger, MemberRolesColumn } from './Fileds'
+import { CountInfo, MemberColumn, MemberItemWrap, MemberModalTrigger, MemberRolesColumn } from './Fileds'
 
-export const MemberListItem = ({ member }: { member: Member }) => {
+export const MemberListItem = ({ member }: { member: Member & Partial<Pick<MemberWithDetails, 'entry'>> }) => {
   const balance = useBalance(member.controllerAccount)
   const { slashed, terminated } = useMemberRowWorkDetails(member)
   const showMemberModal = useShowMemberModal(member.id)
@@ -21,21 +20,21 @@ export const MemberListItem = ({ member }: { member: Member }) => {
   return (
     <MemberItemWrap kind="Member">
       <MemberModalTrigger onClick={showMemberModal} />
-      <MemberColumn>
-        <Info>#{member.id}</Info>
-      </MemberColumn>
 
       <MemberColumn>
-        <MemberInfo member={member} hideGroup />
-      </MemberColumn>
-
-      <MemberColumn>
-        <Info>{member.isCouncilMember ? <CheckboxIcon /> : <CrossIcon />}</Info>
+        <MemberInfo member={member} hideGroup withCouncil withMemberId />
       </MemberColumn>
 
       <MemberRolesColumn>
         <MemberRoles wrapable roles={member.roles} size="l" />
       </MemberRolesColumn>
+
+      <MemberColumn>
+        <MemberCreated member={member} />
+      </MemberColumn>
+
+      <MemberColumn>Referrer</MemberColumn>
+
       <MemberColumn>
         <CountInfo count={slashed} />
       </MemberColumn>
