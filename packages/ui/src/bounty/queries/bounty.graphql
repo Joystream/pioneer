@@ -191,7 +191,7 @@ query GetLatestBountyEntry($lockAccount: String) {
     announcedInEvent {
       createdAt
       inBlock
-      #network
+      network
     }
   }
 }

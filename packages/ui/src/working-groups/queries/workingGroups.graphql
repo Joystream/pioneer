@@ -430,7 +430,7 @@ fragment UpcomingWorkingGroupOpeningFields on UpcomingWorkingGroupOpening {
   createdInEvent {
     createdAt
     inBlock
-    #network
+    network
   }
   metadata {
     ...WorkingGroupOpeningMetadataFields
