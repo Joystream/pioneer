@@ -20,14 +20,13 @@ import { UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
-import { seedMembers } from '@/mocks/data'
+import { seedMembers , seedOpening, seedOpeningStatuses } from '@/mocks/data'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 import { ApplyForRoleModal } from '@/working-groups/modals/ApplyForRoleModal'
 import { applyForRoleMachine } from '@/working-groups/modals/ApplyForRoleModal/machine'
 import { WorkingGroupOpeningFieldsFragment } from '@/working-groups/queries'
 import { asWorkingGroupOpening, WorkingGroupOpening } from '@/working-groups/types'
 
-import { seedOpening, seedOpeningStatuses } from '../../../src/mocks/data/seedOpenings'
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown, selectFromDropdownWithId } from '../../_helpers/selectFromDropdown'
 import { alice, bob } from '../../_mocks/keyring'
@@ -44,6 +43,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 const useHasRequiredStake = { hasRequiredStake: true }
 
@@ -103,6 +103,8 @@ describe('UI: ApplyForRoleModal', () => {
   })
 
   beforeEach(async () => {
+    mockedTransactionFee.feeInfo = { canAfford: true, transactionFee: new BN(10) }
+
     const fields = adaptRecord(server.server?.schema.first('WorkingGroupOpening')) as WorkingGroupOpeningFieldsFragment
     fields.stakeAmount = '2000'
     fields.openingfilledeventopening = []
@@ -167,7 +169,7 @@ describe('UI: ApplyForRoleModal', () => {
       const opening: WorkingGroupOpening = asWorkingGroupOpening(fields)
       useModal.modalData = { opening }
       batchTx = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening', 10_000)
-
+      mockedTransactionFee.feeInfo = { canAfford: false, transactionFee: new BN(10000) }
       renderModal()
 
       const moveFundsModalCall: MoveFundsModalCall = {
@@ -251,7 +253,7 @@ describe('UI: ApplyForRoleModal', () => {
         await fillSteps()
 
         expect(await screen.findByText('You intend to bind account for staking')).toBeDefined()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('42')
+        expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('42')
       })
 
       it('Bind account failure', async () => {
@@ -259,7 +261,7 @@ describe('UI: ApplyForRoleModal', () => {
         await fillSteps()
 
         await act(async () => {
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          fireEvent.click(screen.getByText(/^Sign transacion and bind Staking Account/i))
         })
 
         expect(await screen.findByText('Failure')).toBeDefined()
@@ -270,11 +272,11 @@ describe('UI: ApplyForRoleModal', () => {
         await fillSteps()
 
         await act(async () => {
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          fireEvent.click(screen.getByText(/^Sign transacion and bind Staking Account/i))
         })
 
         expect(await screen.findByText(/You intend to apply for a role/i)).toBeDefined()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+        expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
       })
 
       it('Apply on opening success', async () => {
@@ -285,7 +287,7 @@ describe('UI: ApplyForRoleModal', () => {
         ])
         await fillSteps()
         await act(async () => {
-          fireEvent.click(await screen.findByText(/^Sign transaction/i))
+          fireEvent.click(await screen.findByText(/^Sign transacion and bind Staking Account/i))
         })
 
         await waitFor(async () => await screen.findByText(/You intend to apply for a role/i))
@@ -302,14 +304,15 @@ describe('UI: ApplyForRoleModal', () => {
         stubTransactionSuccess(bindAccountTx, 'members', 'StakingAccountAdded')
         stubTransactionFailure(batchTx)
         await fillSteps()
+
         await act(async () => {
-          fireEvent.click(await screen.findByText(/^Sign transaction/i))
+          fireEvent.click(await screen.findByText(/^Sign transacion and bind Staking Account/i))
         })
 
         await waitFor(async () => await screen.findByText(/You intend to apply for a role/i))
 
         await act(async () => {
-          fireEvent.click(await screen.findByText(/^Sign transaction/i))
+          fireEvent.click(await screen.findByText(/^Sign transaction and Stake/i))
         })
 
         expect(await screen.findByText('Failure')).toBeDefined()
@@ -333,7 +336,7 @@ describe('UI: ApplyForRoleModal', () => {
         await fillSteps()
 
         expect(await screen.findByText(/You intend to apply for a role/i)).toBeDefined()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+        expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
       })
 
       it('Apply on opening success', async () => {
@@ -343,7 +346,7 @@ describe('UI: ApplyForRoleModal', () => {
         ])
         await fillSteps()
         await act(async () => {
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          fireEvent.click(screen.getByText(/^Sign transaction and Stake/i))
         })
 
         expect(await screen.findByText('Application submitted!')).toBeDefined()
@@ -379,7 +382,7 @@ describe('UI: ApplyForRoleModal', () => {
         await fillSteps()
 
         expect(await screen.findByText(/You intend to apply for a role/i)).toBeDefined()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+        expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
       })
 
       it('Apply on opening success', async () => {
@@ -416,7 +419,7 @@ describe('UI: ApplyForRoleModal', () => {
     await fillSteps('bob')
 
     await act(async () => {
-      fireEvent.click(screen.getByText(/^Sign transaction/i))
+      fireEvent.click(screen.getByText(/^Sign transacion and bind Staking Account/i))
     })
 
     await waitFor(async () => await screen.findByText(/You intend to apply for a role/i))
@@ -432,7 +435,7 @@ describe('UI: ApplyForRoleModal', () => {
     expect(beforeTransactionParam.stake_parameters.stake.toString()).toBe('2000')
 
     await act(async () => {
-      fireEvent.click(await screen.findByText(/^Sign transaction/i))
+      fireEvent.click(await screen.findByText(/^Sign transaction and stake/i))
     })
 
     const [transactionParam] = last(applyOnOpeningTxMock.mock.calls)
