@@ -115,7 +115,7 @@ describe('UI: UpdatedMembershipModal', () => {
       await changeNameAndSave()
 
       expect(await screen.findByText('modals.authorizeTransaction.title')).toBeDefined()
-      expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+      expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
     })
 
     it('Success step', async () => {

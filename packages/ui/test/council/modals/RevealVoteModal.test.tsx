@@ -1,5 +1,6 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -18,6 +19,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 describe('UI: RevealVoteModal', () => {
   const api = stubApi()
@@ -59,10 +61,13 @@ describe('UI: RevealVoteModal', () => {
 
   beforeEach(() => {
     modalData.votes = [voteData]
+    tx = stubTransaction(api, txPath, 10)
+    mockedTransactionFee.transaction = tx as any
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }
   })
 
   it('Requirements check failed', async () => {
-    tx = stubTransaction(api, txPath, 10000)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(10000), canAfford: false }
     renderModal()
     expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
   })

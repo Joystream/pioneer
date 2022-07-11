@@ -130,7 +130,7 @@ describe('UI: BuyMembershipModal', () => {
 
       expect(screen.getByText('modals.authorizeTransaction.title')).toBeDefined()
       expect(screen.getByText(/^Creation fee:/i)?.nextSibling?.textContent).toBe('100')
-      expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
+      expect(screen.getByText(/^modals.transactionFee.label/i)?.nextSibling?.textContent).toBe('25')
       expect(screen.getByRole('heading', { name: /alice/i })).toBeDefined()
     })
 

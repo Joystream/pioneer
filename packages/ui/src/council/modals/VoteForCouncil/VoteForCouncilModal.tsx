@@ -3,6 +3,7 @@ import BN from 'bn.js'
 import React, { useEffect } from 'react'
 
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
+import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { FailureModal } from '@/common/components/FailureModal'
@@ -25,6 +26,7 @@ export const VoteForCouncilModal = () => {
   const { api } = useApi()
 
   const { active: activeMember } = useMyMemberships()
+  const balances = useMyBalances()
 
   const constants = useCouncilConstants()
   const minStake = constants?.election.minVoteStake
@@ -50,12 +52,12 @@ export const VoteForCouncilModal = () => {
           },
         })
       }
-      if (feeInfo) {
+      if (feeInfo && Object.keys(balances).length) {
         const areFundsSufficient = feeInfo.canAfford && hasRequiredStake
         send(areFundsSufficient ? 'PASS' : 'FAIL')
       }
     }
-  }, [state.value, activeMember?.id, hasRequiredStake, feeInfo?.canAfford])
+  }, [state.value, activeMember?.id, hasRequiredStake, feeInfo?.canAfford, Object.keys(balances).length])
 
   if (state.matches('success')) {
     return <VoteForCouncilSuccessModal onClose={hideModal} candidateId={modalData.id} />

@@ -20,7 +20,7 @@ import { UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
-import { seedMembers , seedOpening, seedOpeningStatuses } from '@/mocks/data'
+import { seedMembers, seedOpening, seedOpeningStatuses } from '@/mocks/data'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 import { ApplyForRoleModal } from '@/working-groups/modals/ApplyForRoleModal'
 import { applyForRoleMachine } from '@/working-groups/modals/ApplyForRoleModal/machine'
@@ -261,7 +261,7 @@ describe('UI: ApplyForRoleModal', () => {
         await fillSteps()
 
         await act(async () => {
-          fireEvent.click(screen.getByText(/^Sign transacion and bind Staking Account/i))
+          fireEvent.click(screen.getByText(/^Sign transaction and Bind Staking Account/i))
         })
 
         expect(await screen.findByText('Failure')).toBeDefined()
@@ -272,7 +272,7 @@ describe('UI: ApplyForRoleModal', () => {
         await fillSteps()
 
         await act(async () => {
-          fireEvent.click(screen.getByText(/^Sign transacion and bind Staking Account/i))
+          fireEvent.click(screen.getByText(/^Sign transaction and Bind Staking Account/i))
         })
 
         expect(await screen.findByText(/You intend to apply for a role/i)).toBeDefined()
@@ -287,7 +287,7 @@ describe('UI: ApplyForRoleModal', () => {
         ])
         await fillSteps()
         await act(async () => {
-          fireEvent.click(await screen.findByText(/^Sign transacion and bind Staking Account/i))
+          fireEvent.click(await screen.findByText(/^Sign transaction and Bind Staking Account/i))
         })
 
         await waitFor(async () => await screen.findByText(/You intend to apply for a role/i))
@@ -306,7 +306,7 @@ describe('UI: ApplyForRoleModal', () => {
         await fillSteps()
 
         await act(async () => {
-          fireEvent.click(await screen.findByText(/^Sign transacion and bind Staking Account/i))
+          fireEvent.click(await screen.findByText(/^Sign transaction and Bind Staking Account/i))
         })
 
         await waitFor(async () => await screen.findByText(/You intend to apply for a role/i))
@@ -419,7 +419,7 @@ describe('UI: ApplyForRoleModal', () => {
     await fillSteps('bob')
 
     await act(async () => {
-      fireEvent.click(screen.getByText(/^Sign transacion and bind Staking Account/i))
+      fireEvent.click(screen.getByText(/^Sign transaction and Bind Staking Account/i))
     })
 
     await waitFor(async () => await screen.findByText(/You intend to apply for a role/i))

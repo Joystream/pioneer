@@ -28,18 +28,16 @@ export const RecoverBalanceModal = () => {
     return member?.controllerAccount ?? modalData.address
   }, [modalData.lock.type, modalData.address, member])
 
-  const { transaction, feeInfo } = useTransactionFee(
-    signer,
-    () => {
-      if (!api) {
-        return
-      }
-      return isCouncilCandidateData(modalData)
-        ? api.tx.council.releaseCandidacyStake(modalData.memberId)
-        : api.tx.referendum.releaseVoteStake()
-    },
-    [connectionState, modalData?.memberId, modalData.lock.type]
-  )
+  const transaction = useMemo(() => {
+    if (!api) {
+      return
+    }
+    return isCouncilCandidateData(modalData)
+      ? api.tx.council.releaseCandidacyStake(modalData.memberId)
+      : api.tx.referendum.releaseVoteStake()
+  }, [connectionState, modalData?.memberId, modalData.lock.type])
+
+  const { feeInfo } = useTransactionFee(signer, () => transaction, [transaction])
 
   useLayoutEffect(() => {
     if (state.matches('requirementsVerification') && isDefined(feeInfo?.canAfford)) {
