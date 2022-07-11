@@ -57,6 +57,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 const QUESTION_INPUT = OpeningMetadata.ApplicationFormQuestion.InputType
 
@@ -179,6 +180,8 @@ describe('UI: AddNewProposalModal', () => {
   })
 
   beforeEach(async () => {
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
 
@@ -1184,6 +1187,8 @@ describe('UI: AddNewProposalModal', () => {
         const requiredStake = 10
         stubProposalConstants(api, { requiredStake })
         stubTransaction(api, 'api.tx.utility.batch', 10000)
+        mockedTransactionFee.feeInfo = { transactionFee: new BN(10000), canAfford: false }
+
         await finishStakingAccount()
         await finishProposalDetails()
         await finishTriggerAndDiscussion()
@@ -1212,7 +1217,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Bind account step', async () => {
           expect(await screen.findByText('You intend to bind account for staking')).toBeDefined()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('42')
+          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('42')
         })
 
         it('Bind account failure', async () => {
@@ -1233,7 +1238,7 @@ describe('UI: AddNewProposalModal', () => {
           })
 
           expect(await screen.findByText(/You intend to create a proposa/i)).toBeDefined()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
         })
 
         it('Create proposal success', async () => {
@@ -1287,7 +1292,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Create proposal step', async () => {
           expect(await screen.findByText(/You intend to create a proposa/i)).not.toBeNull()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
         })
 
         it('Create proposal success', async () => {
@@ -1333,7 +1338,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Create proposal step', async () => {
           expect(await screen.findByText(/You intend to create a proposa/i)).not.toBeNull()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
         })
 
         it('Create proposal success', async () => {

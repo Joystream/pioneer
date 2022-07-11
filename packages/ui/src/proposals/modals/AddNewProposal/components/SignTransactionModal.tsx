@@ -64,7 +64,7 @@ export const SignTransactionModal = ({
       </ModalBody>
       <ModalTransactionFooter
         transactionFee={partialFee?.toBn()}
-        next={{ disabled: signDisabled, label: 'Sign transacion and Create', onClick: sign }}
+        next={{ disabled: signDisabled, label: 'Sign transaction and Create', onClick: sign }}
       >
         <TransactionInfo
           title="Stake:"

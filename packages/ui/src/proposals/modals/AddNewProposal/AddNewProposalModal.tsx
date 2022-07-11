@@ -163,35 +163,33 @@ export const AddNewProposalModal = () => {
     [state.context.discussionMode]
   )
 
-  const { transaction, feeInfo } = useTransactionFee(
-    activeMember?.controllerAccount,
-    () => {
-      if (activeMember && api) {
-        const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } =
-          form.getValues() as AddNewProposalForm
+  const transaction = useMemo(() => {
+    if (activeMember && api) {
+      const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } =
+        form.getValues() as AddNewProposalForm
 
-        const txBaseParams: BaseProposalParams = {
-          member_id: activeMember?.id,
-          title: proposalDetails?.title,
-          description: proposalDetails?.rationale,
-          ...(stakingAccount.stakingAccount ? { staking_account_id: stakingAccount.stakingAccount.address } : {}),
-          ...(triggerAndDiscussion.triggerBlock ? { exact_execution_block: triggerAndDiscussion.triggerBlock } : {}),
-        }
-
-        const txSpecificParameters = getSpecificParameters(api, specifics)
-
-        if (stakingStatus === 'confirmed') {
-          return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
-        }
-
-        return api.tx.utility.batch([
-          api.tx.members.confirmStakingAccount(activeMember.id, stakingAccount.stakingAccount?.address ?? ''),
-          api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
-        ])
+      const txBaseParams: BaseProposalParams = {
+        member_id: activeMember?.id,
+        title: proposalDetails?.title,
+        description: proposalDetails?.rationale,
+        ...(stakingAccount.stakingAccount ? { staking_account_id: stakingAccount.stakingAccount.address } : {}),
+        ...(triggerAndDiscussion.triggerBlock ? { exact_execution_block: triggerAndDiscussion.triggerBlock } : {}),
       }
-    },
-    [state.value, connectionState, stakingStatus, form.formState.isValidating]
-  )
+
+      const txSpecificParameters = getSpecificParameters(api, specifics)
+
+      if (stakingStatus === 'confirmed') {
+        return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
+      }
+
+      return api.tx.utility.batch([
+        api.tx.members.confirmStakingAccount(activeMember.id, stakingAccount.stakingAccount?.address ?? ''),
+        api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
+      ])
+    }
+  }, [state.value, connectionState, stakingStatus, form.formState.isValidating])
+
+  const { feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
