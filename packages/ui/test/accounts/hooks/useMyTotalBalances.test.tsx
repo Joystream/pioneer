@@ -25,7 +25,7 @@ describe('useMyTotalBalances', () => {
   })
 
   beforeEach(() => {
-    stubBalances(useApi, { available: 100, locked: 10, lockId: 'Forum Worker' })
+    stubBalances(useApi, { available: 100, locked: 10, lockId: 'Bound Staking Account' })
   })
 
   it('Returns zero balances when API not ready', () => {
@@ -58,7 +58,7 @@ describe('useMyTotalBalances', () => {
       locked: new BN(20),
       locks: new Array(2).fill({
         amount: createBalance(10),
-        type: 'Forum Worker',
+        type: 'Bound Staking Account',
       }),
       recoverable: new BN(0),
       total: new BN(220),

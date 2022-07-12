@@ -5,6 +5,8 @@ import { useApi } from '@/common/hooks/useApi'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { asBlock } from '@/common/types'
 import { CouncilRoutes } from '@/council/constants'
+import { useElectionRemainingPeriod } from '@/council/hooks/useElectionRemainingPeriod'
+import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { useGetCouncilorElectionEventQuery } from '@/council/queries'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -30,8 +32,9 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockDetailsP
       createdAt: eventData.electedAtTime,
       network: eventData.electedAtNetwork,
     })
-
   const idlePeriodDuration = api?.consts.council.idlePeriodDuration.toNumber()
+  const { stage } = useElectionStage()
+  const remainingPeriod = useElectionRemainingPeriod(stage)
 
   const recoveryTime = useMemo(() => {
     if (!eventData || !idlePeriodDuration) {
@@ -39,9 +42,14 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockDetailsP
     }
     const startTime = Date.parse(eventData.electedAtTime)
     const idleDurationTime = idlePeriodDuration * MILLISECONDS_PER_BLOCK
-    const endDate = new Date(startTime + idleDurationTime).toISOString()
+    const councilEnd = startTime + idleDurationTime
 
-    return { time: endDate, tooltipLabel: 'Recoverable after not re-elected' }
+    const endTime =
+      councilEnd > Date.now()
+        ? new Date(councilEnd).toISOString()
+        : new Date(Date.now() + (remainingPeriod?.toNumber() ?? 0) * MILLISECONDS_PER_BLOCK).toISOString()
+
+    return { time: endTime, tooltipLabel: 'Recoverable after not re-elected' }
   }, [eventData?.electedAtTime, idlePeriodDuration])
 
   const councilId = eventData?.id
