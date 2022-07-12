@@ -14,7 +14,7 @@ import { TotalValue } from './TokenValueStat'
 interface LabelledValue {
   label: string
   type?: 'token' | 'blocks'
-  value?: BN | number | null
+  value?: BN | null
 }
 
 interface MultiTokenValueStatProps extends StatisticItemProps {

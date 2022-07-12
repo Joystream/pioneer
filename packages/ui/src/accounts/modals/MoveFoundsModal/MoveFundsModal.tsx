@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 
@@ -27,7 +28,7 @@ export const MoveFundsModal = () => {
       <MoveFundsTransferableModal
         onClose={hideModal}
         onManageAccountsClick={onManageAccountsClick}
-        requiredStake={requiredStake}
+        requiredStake={new BN(requiredStake)}
         balances={balances}
         accounts={accountsWithTransferableBalance}
         lock={lock}
@@ -38,7 +39,7 @@ export const MoveFundsModal = () => {
       <MoveFundsLockedModal
         onClose={hideModal}
         onManageAccountsClick={onManageAccountsClick}
-        requiredStake={requiredStake}
+        requiredStake={new BN(requiredStake)}
         balances={balances}
       />
     )
@@ -47,7 +48,7 @@ export const MoveFundsModal = () => {
       <MoveFundsInsufficientBalanceModal
         onClose={hideModal}
         onManageAccountsClick={onManageAccountsClick}
-        requiredStake={requiredStake}
+        requiredStake={new BN(requiredStake)}
       />
     )
   }

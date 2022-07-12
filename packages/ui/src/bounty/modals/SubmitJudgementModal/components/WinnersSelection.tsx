@@ -73,13 +73,10 @@ export const WinnersSelection = ({
               {t('modals.submitJudgement.progressBar.distributed')}
               <TokenValue size="s" value={amountDistributed} />
             </DistributedText>
-            <ProgressBar
-              size="big"
-              end={!amountDistributed ? 0 : amountDistributed.toNumber() / bountyFunding.toNumber()}
-            />
+            <ProgressBar size="big" end={!amountDistributed ? 0 : amountDistributed.div(bountyFunding).toNumber()} />
             <RowGapBlock gap={5}>
               <TextSmall light>{t('modals.submitJudgement.progressBar.totalReward')}</TextSmall>
-              <TokenValue size="s" value={bountyFunding.toNumber()} />
+              <TokenValue size="s" value={bountyFunding} />
             </RowGapBlock>
             <ButtonGhost size="small" onClick={handleEqualDistribution}>
               {t('modals.submitJudgement.progressBar.distributeEqually')}

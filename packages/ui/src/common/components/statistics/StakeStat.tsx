@@ -11,14 +11,14 @@ import { StatisticItemProps, StatisticItemSpacedContent } from './StatisticItem'
 import { TokenValueStat, TotalValue } from './TokenValueStat'
 
 export interface StakeStatProps extends StatisticItemProps {
-  value: number | BN
-  minStake: number | BN
+  value: BN
+  minStake: BN
 }
 
 const title = 'Stake Height'
 
 export const StakeStat = ({ value, minStake }: StakeStatProps) => {
-  if (new BN(value).gte(new BN(minStake))) {
+  if (value.gte(minStake)) {
     return <TokenValueStat value={value} title={title} />
   }
 
