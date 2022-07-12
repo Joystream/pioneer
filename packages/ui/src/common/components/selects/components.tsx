@@ -191,14 +191,6 @@ export const OptionsListComponent = styled.ul`
     border-right: none;
     border-radius: 0;
 
-    &:first-child {
-      border-top: none;
-    }
-
-    &:last-child {
-      border-bottom: none;
-    }
-
     ${OptionComponent} {
       border-radius: 0;
     }

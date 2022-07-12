@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React from 'react'
 
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
@@ -10,6 +9,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { MoveFundsModalCall } from '.'
 import { MoveFundsModalButtons } from './MoveFundsModalButtons'
@@ -37,9 +37,10 @@ export const MoveFundsModal = () => {
     modalData: { requiredStake, lock },
   } = useModal<MoveFundsModalCall>()
 
+  const { active } = useMyMemberships()
   const balances = useMyBalances()
 
-  const accounts = useStakingAccountsLocks({ requiredStake, lockType: lock, filterByBalance: false })
+  const allAccounts = useStakingAccountsLocks({ requiredStake, lockType: lock, filterByBalance: false })
   const accountsWithTransferableBalance = Object.entries(balances).filter(([, balances]) =>
     balances.transferable.gt(BN_ZERO)
   )
@@ -49,8 +50,13 @@ export const MoveFundsModal = () => {
   )
   const insufficientBalances = transferableTotal.lt(requiredStake)
 
-  const freeAccounts = accounts.filter((account) => (account.optionLocks ? account.optionLocks.length === 0 : true))
+  const freeAccounts = allAccounts.filter((account) => (account.optionLocks ? account.optionLocks.length === 0 : true))
   const noFreeAccounts = freeAccounts.length === 0
+
+  const memberAccounts = allAccounts.filter((account) => active?.boundAccounts.includes(account.address))
+
+  // When all accounts are locked, display only accounts per selected-member
+  const displayedAccounts = noFreeAccounts ? memberAccounts : allAccounts
 
   return (
     <Modal modalSize="m" modalHeight="s" onClose={hideModal}>
@@ -65,7 +71,7 @@ export const MoveFundsModal = () => {
           <RowGapBlock gap={4}>
             <TextMedium bold>Accounts with transferable balances:</TextMedium>
             <RowGapBlock gap={16}>
-              <StyledOptionListAccount options={accounts} onChange={() => null} />
+              <StyledOptionListAccount options={displayedAccounts} onChange={() => null} />
               <Info title="Suggestion">
                 <MoveFundsModalInfo insufficientBalances={insufficientBalances} noFreeAccounts={noFreeAccounts} />
               </Info>
