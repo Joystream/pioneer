@@ -7,4 +7,6 @@ export interface MemberInfoWrapProps {
   hideGroup?: boolean
   skipModal?: boolean
   onlyTop?: boolean
+  withCouncil?: boolean
+  withMemberId?: boolean
 }

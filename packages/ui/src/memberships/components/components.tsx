@@ -9,16 +9,24 @@ import { AvatarImg } from './Avatar'
 import { MemberRoleHelp, MemberRolesWrapper, MemberStatusTooltip } from './MemberRoles'
 import { MemberInfoWrapProps } from './types'
 
-export const MemberHead = styled.div`
+export const MemberHead = styled.div<{ withMemberId?: boolean }>`
   display: grid;
   grid-area: memberhead;
   grid-auto-flow: column;
   align-items: center;
   grid-column-gap: 4px;
   width: fit-content;
+  ${({ withMemberId }) => {
+    if (withMemberId) {
+      return css`
+        grid-template-rows: min-content 1fr;
+        grid-row-gap: 4px;
+      `
+    }
+  }}
 `
 
-export const MemberHandle = styled.span`
+export const MemberHandle = styled.span<{ withCouncil?: boolean }>`
   max-width: 100%;
   font-size: 14px;
   line-height: 20px;
@@ -29,6 +37,28 @@ export const MemberHandle = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   transition: ${Transitions.all};
+  ${({ withCouncil }) => {
+    if (withCouncil) {
+      return css`
+        width: auto;
+        max-width: calc(100% - 16px);
+      `
+    }
+  }}
+`
+export const MemberHandleWrapper = styled.span<{ withCouncil?: boolean }>`
+  ${({ withCouncil }) => {
+    if (withCouncil) {
+      return css`
+        display: flex;
+        align-items: center;
+        grid-column-gap: 4px;
+        & > div {
+          display: inline-grid;
+        }
+      `
+    }
+  }}
 `
 
 export const MemberIcons = styled.div`
@@ -40,9 +70,25 @@ export const MemberIcons = styled.div`
   height: fit-content;
 `
 
-export const MemberId = styled(TextInlineSmall)`
-  grid-area: memberroles;
+export const MemberId = styled(TextInlineSmall)<{ withMemberId?: boolean }>`
   color: ${Colors.Black[400]};
+  ${({ withMemberId }) => {
+    if (withMemberId) {
+      return css`
+        font-family: ${Fonts.Inter}, Sans-serif;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 18px;
+      `
+    }
+    return css`
+      grid-area: memberroles;
+    `
+  }}
+`
+
+export const MemberIdWrapper = styled(TextInlineSmall)`
+  color: ${Colors.Black[900]};
 `
 
 interface MemberPhotoProps {
@@ -333,4 +379,22 @@ const MemberSmallElements = css`
   grid-template-rows: 20px 16px;
   grid-column-gap: 8px;
   grid-row-gap: 0;
+`
+
+export const MemeberCreated = styled.div`
+  display: grid;
+  grid-templete-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  font-family: ${Fonts.Grotesk};
+  line-height: 20px;
+`
+export const MemberCreatedDate = styled.div`
+  font-weight: 700;
+  font-size: 14px;
+  color: ${Colors.Black[900]};
+`
+export const MemberCreatedBlock = styled.div`
+  font-size: 12px;
+  color: ${Colors.Black[400]};
+  font-weight: 400;
 `

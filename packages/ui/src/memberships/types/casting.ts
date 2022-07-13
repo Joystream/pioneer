@@ -2,9 +2,9 @@ import { asBlock } from '@/common/types'
 import { castQueryResult } from '@/common/utils/casting'
 import { asWorkingGroupName } from '@/working-groups/types'
 
-import { MemberFieldsFragment, MemberWithDetailsFieldsFragment } from '../queries'
+import { MemberFieldsFragment, MemberWithDetailsFieldsFragment, MemberAllWithDetailsFieldsFragment } from '../queries'
 
-import { BoundAccountEvent, Member, MemberEntry, MemberRole, MemberWithDetails } from './Member'
+import { BoundAccountEvent, Member, MemberEntry, MemberRole, MemberWithDetails, MemberWithReferrer } from './Member'
 
 const asBoundAccountsEvent = (
   fields: NonNullable<MemberFieldsFragment['stakingaccountaddedeventmember']>[0]
@@ -32,6 +32,36 @@ export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member
   boundAccountsEvents: data.stakingaccountaddedeventmember?.map(asBoundAccountsEvent) ?? [],
   roles: data.roles.map(asMemberRole),
   createdAt: data.createdAt,
+})
+
+export const asMemeberWithDetails = (
+  data: Omit<MemberAllWithDetailsFieldsFragment, '__typename'>
+): MemberWithReferrer => ({
+  id: data.id,
+  handle: data.handle,
+  name: data.metadata.name ?? undefined,
+  avatar: castQueryResult(data.metadata.avatar, 'AvatarUri')?.avatarUri,
+  inviteCount: data.inviteCount,
+  isFoundingMember: data.isFoundingMember,
+  isCouncilMember: data.isCouncilMember,
+  isVerified: data.isVerified,
+  rootAccount: data.rootAccount,
+  controllerAccount: data.controllerAccount,
+  boundAccounts: [...data?.boundAccounts],
+  boundAccountsEvents: data.stakingaccountaddedeventmember?.map(asBoundAccountsEvent) ?? [],
+  roles: data.roles.map(asMemberRole),
+  createdAt: data.createdAt,
+  entry: data.entry ? asMemberEntry(data.entry) : undefined,
+  invitedBy: data.invitedBy
+    ? {
+        id: data.id,
+        handle: data.handle,
+        metadata: {
+          avatar: castQueryResult(data.invitedBy.metadata.avatar, 'AvatarUri')?.avatarUri,
+        },
+        roles: data.invitedBy.roles.map((role) => ({ id: role.id, groupName: asWorkingGroupName(role.group.name) })),
+      }
+    : undefined,
 })
 
 export const asMemberRole = (data: MemberFieldsFragment['roles'][0]): MemberRole => ({

@@ -74,9 +74,59 @@ fragment MemberWithDetailsFields on Membership {
   }
 }
 
+fragment MemberAllWithDetailsFields on Membership {
+  ...MemberFields
+  entry {
+    ... on MembershipEntryInvited {
+      memberInvitedEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+    ... on MembershipEntryPaid {
+      membershipBoughtEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+    ... on MembershipEntryGenesis {
+      phantom
+    }
+  }
+  invitedBy {
+    id
+    handle
+    roles {
+      id
+      createdAt
+      group {
+        id
+        createdAt
+        name
+      }
+    }
+    metadata {
+      avatar {
+        ... on AvatarUri {
+          __typename
+          avatarUri
+        }
+      }
+    }
+  }
+}
+
 query GetMembers($where: MembershipWhereInput, $orderBy: [MembershipOrderByInput!], $offset: Int, $limit: Int) {
   memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
     ...MemberFields
+  }
+}
+
+query GetAllMembers($where: MembershipWhereInput, $orderBy: [MembershipOrderByInput!], $offset: Int, $limit: Int) {
+  memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
+    ...MemberAllWithDetailsFields
   }
 }
 

@@ -1,7 +1,7 @@
 import { useGetMemberRowDetailsQuery } from '@/memberships/queries'
-import { Member } from '@/memberships/types'
+import { MemberWithReferrer } from '@/memberships/types'
 
-export function useMemberRowWorkDetails(member: Member) {
+export function useMemberRowWorkDetails(member: MemberWithReferrer) {
   const { data } = useGetMemberRowDetailsQuery({
     variables: { workerId_in: member.roles.map(({ id }) => id) },
   })

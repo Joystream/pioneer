@@ -21,6 +21,13 @@ export type MockMember = Omit<MemberFieldsFragment, '__typename' | 'metadata' | 
   }
   entry: Entry
   createdAt?: string
+  invitedBy?: {
+    id: string
+    roles: {
+      id: string
+      groupName: string
+    }[]
+  }
 }
 
 export const mockMembers: MockMember[] = rawMembers.map((rawMember) => rawMember)

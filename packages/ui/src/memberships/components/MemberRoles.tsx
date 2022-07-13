@@ -25,7 +25,7 @@ export interface MemberRolesProps {
   wrapable?: boolean
 }
 
-const defaultRole = {
+export const defaultRole = {
   id: '0',
   groupName: 'Member Role',
   isLead: false,

@@ -124,6 +124,75 @@ export type MemberWithDetailsFieldsFragment = {
   }> | null
 }
 
+export type MemberAllWithDetailsFieldsFragment = {
+  __typename: 'Membership'
+  id: string
+  rootAccount: string
+  controllerAccount: string
+  boundAccounts: Array<string>
+  handle: string
+  isVerified: boolean
+  isFoundingMember: boolean
+  isCouncilMember: boolean
+  inviteCount: number
+  createdAt: any
+  entry:
+    | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+    | {
+        __typename: 'MembershipEntryInvited'
+        memberInvitedEvent?: {
+          __typename: 'MemberInvitedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        } | null
+      }
+    | {
+        __typename: 'MembershipEntryPaid'
+        membershipBoughtEvent?: {
+          __typename: 'MembershipBoughtEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        } | null
+      }
+  invitedBy?: {
+    __typename: 'Membership'
+    id: string
+    handle: string
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+    }>
+    metadata: {
+      __typename: 'MemberMetadata'
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
+  } | null
+  metadata: {
+    __typename: 'MemberMetadata'
+    name?: string | null
+    about?: string | null
+    avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+  }
+  roles: Array<{
+    __typename: 'Worker'
+    id: string
+    createdAt: any
+    isLead: boolean
+    group: { __typename: 'WorkingGroup'; name: string }
+  }>
+  stakingaccountaddedeventmember?: Array<{
+    __typename: 'StakingAccountAddedEvent'
+    createdAt: any
+    inBlock: number
+    network: Types.Network
+    account: string
+  }> | null
+}
+
 export type GetMembersQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.MembershipWhereInput>
   orderBy?: Types.InputMaybe<Array<Types.MembershipOrderByInput> | Types.MembershipOrderByInput>
@@ -145,6 +214,85 @@ export type GetMembersQuery = {
     isCouncilMember: boolean
     inviteCount: number
     createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
+  }>
+}
+
+export type GetAllMembersQueryVariables = Types.Exact<{
+  where?: Types.InputMaybe<Types.MembershipWhereInput>
+  orderBy?: Types.InputMaybe<Array<Types.MembershipOrderByInput> | Types.MembershipOrderByInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type GetAllMembersQuery = {
+  __typename: 'Query'
+  memberships: Array<{
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    isCouncilMember: boolean
+    inviteCount: number
+    createdAt: any
+    entry:
+      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+      | {
+          __typename: 'MembershipEntryInvited'
+          memberInvitedEvent?: {
+            __typename: 'MemberInvitedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+      | {
+          __typename: 'MembershipEntryPaid'
+          membershipBoughtEvent?: {
+            __typename: 'MembershipBoughtEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+    invitedBy?: {
+      __typename: 'Membership'
+      id: string
+      handle: string
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+      }>
+      metadata: {
+        __typename: 'MemberMetadata'
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+    } | null
     metadata: {
       __typename: 'MemberMetadata'
       name?: string | null
@@ -484,6 +632,52 @@ export const MemberWithDetailsFieldsFragmentDoc = gql`
   }
   ${MemberFieldsFragmentDoc}
 `
+export const MemberAllWithDetailsFieldsFragmentDoc = gql`
+  fragment MemberAllWithDetailsFields on Membership {
+    ...MemberFields
+    entry {
+      ... on MembershipEntryInvited {
+        memberInvitedEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+      ... on MembershipEntryPaid {
+        membershipBoughtEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+      ... on MembershipEntryGenesis {
+        phantom
+      }
+    }
+    invitedBy {
+      id
+      handle
+      roles {
+        id
+        createdAt
+        group {
+          id
+          createdAt
+          name
+        }
+      }
+      metadata {
+        avatar {
+          ... on AvatarUri {
+            __typename
+            avatarUri
+          }
+        }
+      }
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+`
 export const GetMembersDocument = gql`
   query GetMembers($where: MembershipWhereInput, $orderBy: [MembershipOrderByInput!], $offset: Int, $limit: Int) {
     memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
@@ -525,6 +719,49 @@ export function useGetMembersLazyQuery(
 export type GetMembersQueryHookResult = ReturnType<typeof useGetMembersQuery>
 export type GetMembersLazyQueryHookResult = ReturnType<typeof useGetMembersLazyQuery>
 export type GetMembersQueryResult = Apollo.QueryResult<GetMembersQuery, GetMembersQueryVariables>
+export const GetAllMembersDocument = gql`
+  query GetAllMembers($where: MembershipWhereInput, $orderBy: [MembershipOrderByInput!], $offset: Int, $limit: Int) {
+    memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
+      ...MemberAllWithDetailsFields
+    }
+  }
+  ${MemberAllWithDetailsFieldsFragmentDoc}
+`
+
+/**
+ * __useGetAllMembersQuery__
+ *
+ * To run a query within a React component, call `useGetAllMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllMembersQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetAllMembersQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetAllMembersQuery, GetAllMembersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetAllMembersQuery, GetAllMembersQueryVariables>(GetAllMembersDocument, options)
+}
+export function useGetAllMembersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetAllMembersQuery, GetAllMembersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetAllMembersQuery, GetAllMembersQueryVariables>(GetAllMembersDocument, options)
+}
+export type GetAllMembersQueryHookResult = ReturnType<typeof useGetAllMembersQuery>
+export type GetAllMembersLazyQueryHookResult = ReturnType<typeof useGetAllMembersLazyQuery>
+export type GetAllMembersQueryResult = Apollo.QueryResult<GetAllMembersQuery, GetAllMembersQueryVariables>
 export const GetMembersCountDocument = gql`
   query GetMembersCount($where: MembershipWhereInput) {
     membershipsConnection(where: $where) {

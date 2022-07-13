@@ -13,7 +13,7 @@ import {
   Tooltip,
   TooltipComponent,
 } from '../../common/components/Tooltip'
-import { Member } from '../types'
+import { Member, MemberWithReferrer } from '../types'
 
 import { Avatar } from './Avatar'
 import {
@@ -24,13 +24,15 @@ import {
   MemberInfoWrap,
   MemberPhoto,
   MemberPhotoContainer,
+  MemberIdWrapper,
+  MemberHandleWrapper,
 } from './components'
 import { MemberRoles, MemberStatusTooltip } from './MemberRoles'
 import { MemberInfoWrapProps, MemberSize } from './types'
 
 export interface MemberInfoContainerProps {
   isLead?: boolean
-  member: Member
+  member: Member | MemberWithReferrer
   size?: MemberSize
   className?: string
   maxRoles?: number
@@ -54,6 +56,8 @@ export const MemberInfo = React.memo(
     isLead,
     skipModal,
     avatarSmall,
+    withCouncil,
+    withMemberId,
   }: MemberInfoProps) => {
     const roleSize = size === 's' ? 'm' : size
     const showMemberModal = useShowMemberModal(member.id)
@@ -82,8 +86,22 @@ export const MemberInfo = React.memo(
             )}
           </MemberPhotoContainer>
         </MemberPhoto>
-        <MemberHead>
-          <MemberHandle>{member.handle}</MemberHandle>
+        <MemberHead withMemberId={withMemberId}>
+          <MemberHandleWrapper withCouncil={withCouncil}>
+            <MemberHandle withCouncil={withCouncil && member.isCouncilMember}>{member.handle}</MemberHandle>
+            {withCouncil && member.isCouncilMember && (
+              <Tooltip tooltipText="Council Member">
+                <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'tooltipondark' : 'tooltiponlight'}>
+                  <VerifiedMemberIcon />
+                </MemberStatusTooltip>
+              </Tooltip>
+            )}
+          </MemberHandleWrapper>
+          {withMemberId && (
+            <MemberId withMemberId={withMemberId}>
+              Member ID: <MemberIdWrapper>{member.id}</MemberIdWrapper>
+            </MemberId>
+          )}
           {(member.isVerified || member.isFoundingMember) && (
             <MemberIcons>
               {member.isVerified && (
