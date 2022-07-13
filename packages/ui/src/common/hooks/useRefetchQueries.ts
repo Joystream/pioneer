@@ -17,6 +17,7 @@ export const useRefetchQueries = (
   { when = true, after, interval, include = 'active' } = DefaultOptions,
   deps?: DependencyList
 ) => {
+  const isRefetched = useRef(false)
   const apolloClient = useApolloClient()
   const couldRefetchNext = useRef(typeof after === 'undefined')
 
@@ -25,6 +26,7 @@ export const useRefetchQueries = (
       if (interval) {
         const handler = setInterval(() => {
           apolloClient.refetchQueries({ include })
+          isRefetched.current = true
         }, interval)
 
         return () => {
@@ -32,8 +34,11 @@ export const useRefetchQueries = (
         }
       } else {
         apolloClient.refetchQueries({ include })
+        isRefetched.current = true
       }
     }
     couldRefetchNext.current = after !== false
   }, deps)
+
+  return isRefetched.current
 }
