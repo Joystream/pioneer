@@ -2,12 +2,21 @@ import { createType as createType } from '@joystream/types'
 import { Codec, DetectCodec } from '@polkadot/types/types'
 
 const TypeMap = {
+  AccountId: 'Raw', // WARNING this one is wrong
+
+  Balance: 'u128',
+  BalanceOf: 'u128', // TODO check this
+  BlockNumber: 'u32',
+  BlockHash: 'Raw', // TODO check this
+  Hash: 'Raw', // TODO check this
+  Index: 'u32',
+
   ActorId: 'u64',
   MemberId: 'u64',
   ThreadId: 'u64',
   PostId: 'u64',
-  Address: 'AccountId',
-  LookupSource: 'AccountId',
+  Address: 'u64',
+  LookupSource: 'u64',
   ChannelId: 'u64',
   Url: 'Text',
   ForumUserId: 'u64',
@@ -46,6 +55,17 @@ const TypeMap = {
   CurrencyAmount: 'u128',
   NftMetadata: 'Vec<u8>',
   OpenAuctionId: 'u64',
+
+  // TODO remove for bounty v2
+  BountyActor: 'TODO',
+  BountyCreationParameters: 'TODO',
+  AssuranceContractType: 'TODO',
+  AssuranceContractType_Closed: 'TODO',
+  FundingType: 'TODO',
+  FundingType_Perpetual: 'TODO',
+  FundingType_Limited: 'TODO',
+  OracleJudgment: 'TODO',
+  OracleWorkEntryJudgment: 'TODO',
 } as const
 
 type MappedTypeNames = typeof TypeMap
