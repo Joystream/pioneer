@@ -32,7 +32,7 @@ export const Council = () => {
   const { activities } = useCouncilActivities()
 
   const [order, setOrder] = useState<CouncilOrder>({ key: 'member' })
-  const { councilors } = useCouncilorWithDetails(council)
+  const { councilors, isLoading: isLoadingCouncilors } = useCouncilorWithDetails(council)
   const sortedCouncilors = useMemo(() => councilors.sort(sortBy(order)), [councilors])
   const header = <PageHeaderWithHint title="Council" hintType="council" tabs={<CouncilTabs />} />
 
@@ -60,10 +60,10 @@ export const Council = () => {
         />
       </Statistics>
 
-      {!isLoading && sortedCouncilors.length === 0 ? (
+      {!(isLoadingCouncilors || isLoading) && sortedCouncilors.length === 0 ? (
         <NotFoundText>There is no council member at the moment</NotFoundText>
       ) : (
-        <CouncilList councilors={sortedCouncilors} order={order} onSort={setOrder} isLoading={isLoading} />
+        <CouncilList councilors={sortedCouncilors} order={order} onSort={setOrder} isLoading={isLoadingCouncilors} />
       )}
     </MainPanel>
   )
