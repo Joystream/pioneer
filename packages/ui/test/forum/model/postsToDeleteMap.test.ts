@@ -1,6 +1,3 @@
-import { PostId, ThreadId } from '@joystream/types/common'
-import { CategoryId } from '@joystream/types/forum'
-
 import { createType } from '@/common/model/createType'
 import { postsToDeleteMap } from '@/forum/model/postsToDeleteMap'
 

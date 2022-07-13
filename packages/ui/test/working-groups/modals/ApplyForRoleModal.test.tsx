@@ -428,7 +428,7 @@ describe('UI: ApplyForRoleModal', () => {
     expect(beforeTransactionParam.role_account_id).toBe(alice.address)
     expect(beforeTransactionParam.reward_account_id).toBe(alice.address)
 
-    expect(beforeTransactionParam.stake_parameters.staking_account_id).toBe(bob.address)
+    expect(beforeTransactionParam.stake_parameters.stakingAccountId).toBe(bob.address)
     expect(beforeTransactionParam.stake_parameters.stake.toString()).toBe('2000')
 
     await act(async () => {
@@ -443,7 +443,7 @@ describe('UI: ApplyForRoleModal', () => {
     expect(transactionParam.role_account_id).toBe(alice.address)
     expect(transactionParam.reward_account_id).toBe(alice.address)
 
-    expect(transactionParam.stake_parameters.staking_account_id).toBe(bob.address)
+    expect(transactionParam.stake_parameters.stakingAccountId).toBe(bob.address)
     expect(transactionParam.stake_parameters.stake.toString()).toBe('2000')
 
     expect(metadataFromBytes(ApplicationMetadata, transactionParam.description)).toEqual({

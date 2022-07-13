@@ -1,4 +1,3 @@
-import { BountyActor } from '@joystream/types/bounty'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'

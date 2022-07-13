@@ -36,6 +36,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
+import { asBN } from '@/common/utils/bn'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -205,15 +206,15 @@ export const AddBountyModal = () => {
 
               {state.matches(AddBountyStates.fundingPeriodDetails) && (
                 <FundingDetailsStep
-                  minCherryLimit={bountyApi?.minCherryLimit.toNumber() || 0}
+                  minCherryLimit={asBN(bountyApi?.minCherryLimit ?? 0)}
                   errorChecker={enhancedHasError(form.formState.errors, state.value as string)}
                   errorMessageGetter={enhancedGetErrorMessage(form.formState.errors, state.value as string)}
                 />
               )}
               {state.matches(AddBountyStates.workingPeriodDetails) && (
                 <WorkingDetailsStep
-                  minEntrantStake={bountyApi?.minWorkEntrantStake}
-                  whitelistLimit={bountyApi?.closedContractSizeLimit}
+                  minEntrantStake={asBN(bountyApi?.minWorkEntrantStake ?? 0)}
+                  whitelistLimit={bountyApi?.closedContractSizeLimit && Number(bountyApi?.closedContractSizeLimit)}
                   errorChecker={enhancedHasError(form.formState.errors, state.value as string)}
                   errorMessageGetter={enhancedGetErrorMessage(form.formState.errors, state.value as string)}
                 />

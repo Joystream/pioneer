@@ -2,9 +2,9 @@
 import { access, readFile } from 'fs/promises'
 import { isAbsolute, resolve } from 'path'
 
-import { createType } from '@joystream/types'
 import yargs from 'yargs'
 
+import { createType } from '../../../../src/common/model/createType'
 import { getDataFromEvent } from '../../../../src/common/model/JoystreamNode'
 import memberData from '../../../../src/mocks/data/raw/members.json'
 import { signAndSend, withApi } from '../../lib/api'
@@ -39,7 +39,7 @@ const createProposal = (args: Args) => {
       member_id: id,
       title: `Lorem ${Object.keys(args)[0]}`,
       description: JSON.stringify(args, null, 2),
-      staking_account_id: address,
+      stakingAccountId: address,
     }
     const proposalDetails = await specificParams(args)
 
@@ -56,7 +56,7 @@ const createProposal = (args: Args) => {
 const specificParams = async (args: Args) => {
   if (args.upgrade) {
     const file = await readFile(await filePath(args.upgrade))
-    return createType('ProposalDetailsOf', {
+    return createType('PalletProposalsCodexProposalDetails', {
       RuntimeUpgrade: [createType('Bytes', new Uint8Array(file))],
     })
   } else {

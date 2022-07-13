@@ -1,5 +1,3 @@
-import { PostId, ThreadId } from '@joystream/types/common'
-import { CategoryId } from '@joystream/types/forum'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'

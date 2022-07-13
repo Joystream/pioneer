@@ -1,6 +1,6 @@
 import { IBountyMetadata, IBountyWorkData } from '@joystream/metadata-protobuf'
 import { AugmentedConst } from '@polkadot/api/types'
-import { u32 } from '@polkadot/types'
+import { u32, u64 } from '@polkadot/types'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import BN from 'bn.js'
 import Long from 'long'
@@ -172,7 +172,7 @@ const fundingTypeFactory = (state: AddBountyFrom) => {
   }
 }
 
-export const createBountyMetadataFactory = (state: AddBountyFrom, newThreadId: BN): IBountyMetadata => ({
+export const createBountyMetadataFactory = (state: AddBountyFrom, newThreadId: u64): IBountyMetadata => ({
   title: state.generalParameters.title,
   description: state.generalParameters.description,
   bannerImageUri: state.generalParameters.coverPhotoLink,

@@ -96,14 +96,19 @@ export const stubTransactionFailure = (transaction: any) => {
 
 type PartialTuple<T extends AnyTuple> = Partial<T>
 
+type IgnoreModules = 'bounty'
 export const stubTransactionSuccess = <
-  Module extends keyof AugmentedEvents<'rxjs'>,
-  Event extends keyof AugmentedEvents<'rxjs'>[Module]
+  Module extends keyof AugmentedEvents<'rxjs'> | IgnoreModules,
+  Event extends Module extends keyof AugmentedEvents<'rxjs'> ? keyof AugmentedEvents<'rxjs'>[Module] : string
 >(
   transaction: any,
   module: Module,
   eventName: Event,
-  data?: PartialTuple<ExtractTuple<AugmentedEvents<'rxjs'>[Module][Event]>>
+  data?: Module extends keyof AugmentedEvents<'rxjs'>
+    ? Event extends keyof AugmentedEvents<'rxjs'>[Module]
+      ? PartialTuple<ExtractTuple<AugmentedEvents<'rxjs'>[Module][Event]>>
+      : any
+    : any
 ) => {
   set(transaction, 'signAndSend', () =>
     stubTransactionResult(createSuccessEvents((data ?? []) as any[], module, eventName as string))

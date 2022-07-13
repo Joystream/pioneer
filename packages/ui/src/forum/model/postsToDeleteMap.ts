@@ -1,4 +1,4 @@
-import { u64 } from '@polkadot/types-codec'
+import { u64 } from '@polkadot/types'
 
 import { createType } from '@/common/model/createType'
 

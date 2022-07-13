@@ -1,6 +1,3 @@
-import { OracleJudgment } from '@joystream/types/augment'
-import { BountyId, EntryId, OracleWorkEntryJudgment } from '@joystream/types/bounty'
-import { MemberId } from '@joystream/types/common'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo } from 'react'

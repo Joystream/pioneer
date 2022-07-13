@@ -1,6 +1,4 @@
 import { BountyWorkData } from '@joystream/metadata-protobuf'
-import { BountyId, EntryId } from '@joystream/types/bounty'
-import { MemberId } from '@joystream/types/common'
 import { useMachine } from '@xstate/react'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'

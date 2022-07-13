@@ -1,5 +1,3 @@
-import { ThreadId } from '@joystream/types/common'
-import { CategoryId } from '@joystream/types/forum'
 import { useMemo } from 'react'
 
 import { createType } from '@/common/model/createType'

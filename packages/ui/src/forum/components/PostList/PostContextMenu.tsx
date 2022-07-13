@@ -1,4 +1,3 @@
-import { PostId } from '@joystream/types/common'
 import React, { useMemo } from 'react'
 
 import { ContextMenu } from '@/common/components/ContextMenu'

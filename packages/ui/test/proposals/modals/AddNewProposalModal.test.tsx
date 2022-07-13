@@ -121,7 +121,7 @@ describe('AddNewProposalModal types parameters', () => {
       })
 
       it('Stake policy', () => {
-        const stakePolicy = result.asCreateWorkingGroupLeadOpening.stake_policy.toJSON()
+        const stakePolicy = result.asCreateWorkingGroupLeadOpening.stakePolicy.toJSON()
         expect(stakePolicy).toEqual({ stake_amount: 100, leaving_unstaking_period: 10 })
       })
     })

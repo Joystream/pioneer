@@ -22,8 +22,8 @@ export const createMembersCommand = async () => {
           name: member.metadata.name,
           about: member.metadata.about,
         }),
-        root_account: member.rootAccount,
-        controller_account: member.controllerAccount,
+        rootAccount: member.rootAccount,
+        controllerAccount: member.controllerAccount,
       })
     })
 

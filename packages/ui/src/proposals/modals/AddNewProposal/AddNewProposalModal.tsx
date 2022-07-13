@@ -171,10 +171,10 @@ export const AddNewProposalModal = () => {
         form.getValues() as AddNewProposalForm
 
       const txBaseParams: BaseProposalParams = {
-        member_id: activeMember?.id,
+        memberId: activeMember?.id,
         title: proposalDetails?.title,
         description: proposalDetails?.rationale,
-        ...(stakingAccount.stakingAccount ? { staking_account_id: stakingAccount.stakingAccount.address } : {}),
+        ...(stakingAccount.stakingAccount ? { stakingAccountId: stakingAccount.stakingAccount.address } : {}),
         ...(triggerAndDiscussion.triggerBlock ? { exact_execution_block: triggerAndDiscussion.triggerBlock } : {}),
       }
 

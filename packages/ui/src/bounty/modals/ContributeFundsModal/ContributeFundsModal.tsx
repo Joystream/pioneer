@@ -43,6 +43,7 @@ import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
 import { formatTokenValue } from '@/common/model/formatters'
+import { asBN } from '@/common/utils/bn'
 import { BNSchema, minContext } from '@/common/utils/validation'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -60,7 +61,7 @@ export const ContributeFundsModal = () => {
   } = useModal<BountyContributeFundsModalCall>()
   const { api, isConnected } = useApi()
   const [state, send] = useMachine(contributeFundsMachine)
-  const minFundingLimit = api?.consts.bounty.minFundingLimit ?? BN_ZERO
+  const minFundingLimit = asBN(api?.consts.bounty.minFundingLimit ?? 0)
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
   const balance = useBalance(activeMember?.controllerAccount)
