@@ -1,8 +1,12 @@
-import { createType, registry } from '@joystream/types'
-import { PostId, ThreadId } from '@joystream/types/common'
-import { CategoryId, PostsToDeleteMap } from '@joystream/types/forum'
+import { u64 } from '@polkadot/types-codec'
 
-export const postsToDeleteMap = (postId: PostId, threadId: ThreadId, categoryId: CategoryId) => {
-  const extendedPostId = createType('ExtendedPostId', { post_id: postId, thread_id: threadId, category_id: categoryId })
-  return new PostsToDeleteMap(registry, new Map([[extendedPostId, true]]))
+import { createType } from '@/common/model/createType'
+
+export const postsToDeleteMap = (postId: u64, threadId: u64, categoryId: u64) => {
+  const extendedPostId = createType('PalletForumExtendedPostIdObject', {
+    post_id: postId,
+    thread_id: threadId,
+    category_id: categoryId,
+  })
+  return createType('BTreeMap<PalletForumExtendedPostIdObject, bool>', new Map([[extendedPostId, true]]))
 }

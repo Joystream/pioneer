@@ -1,14 +1,12 @@
 import BN from 'bn.js'
 
-import { Api } from '@/api/types'
+import { GroupIdToGroupParam } from '@/working-groups/constants'
 import { getAverageStake } from '@/working-groups/model/getAverageStake'
 
 import { WorkingGroupDetailedFieldsFragment, WorkingGroupFieldsFragment } from '../queries'
 
-export type GroupIdName = Extract<
-  keyof Api['consts'] & keyof Api['tx'] & keyof Api['query'],
-  `${string}WorkingGroup` | `${string}WorkingGroup${string}`
->
+export type GroupIdName = keyof typeof GroupIdToGroupParam
+
 export interface WorkingGroup {
   id: GroupIdName
   name: string

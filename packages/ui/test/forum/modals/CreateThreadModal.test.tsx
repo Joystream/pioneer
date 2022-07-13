@@ -1,9 +1,9 @@
-import { createType } from '@joystream/types'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { generatePath, MemoryRouter, Route } from 'react-router-dom'
 
 import { CKEditorProps } from '@/common/components/CKEditor'
+import { createType } from '@/common/model/createType'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'

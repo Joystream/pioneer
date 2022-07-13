@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { PostId, ThreadId } from '@joystream/types/common'
 import { CategoryId } from '@joystream/types/forum'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
@@ -7,6 +6,7 @@ import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { createType } from '@/common/model/createType'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
@@ -42,9 +42,9 @@ describe('UI: DeletePostModal', () => {
   const txPath = 'api.tx.forum.deletePosts'
   const postId = 1
   const deleteMap = postsToDeleteMap(
-    createType<PostId, 'PostId'>('PostId', postId),
-    createType<ThreadId, 'ThreadId'>('ThreadId', 2),
-    createType<CategoryId, 'CategoryId'>('CategoryId', 3)
+    createType('PostId', postId),
+    createType('ThreadId', 2),
+    createType('CategoryId', 3)
   )
 
   let tx: any

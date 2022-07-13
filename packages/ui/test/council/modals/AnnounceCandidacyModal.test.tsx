@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import BN from 'bn.js'
@@ -13,6 +12,7 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CKEditorProps } from '@/common/components/CKEditor'
+import { createType } from '@/common/model/createType'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -106,7 +106,7 @@ describe('UI: Announce Candidacy Modal', () => {
     stubQuery(
       api,
       'members.stakingAccountIdMemberStatus',
-      createType('StakingAccountMemberBinding', {
+      createType('PalletMembershipStakingAccountMemberBinding', {
         member_id: 0,
         confirmed: false,
       })
@@ -373,7 +373,7 @@ describe('UI: Announce Candidacy Modal', () => {
         stubQuery(
           api,
           'members.stakingAccountIdMemberStatus',
-          createType('StakingAccountMemberBinding', {
+          createType('PalletMembershipStakingAccountMemberBinding', {
             member_id: createType('MemberId', 0),
             confirmed: createType('bool', false),
           })
@@ -394,7 +394,7 @@ describe('UI: Announce Candidacy Modal', () => {
         stubQuery(
           api,
           'members.stakingAccountIdMemberStatus',
-          createType('StakingAccountMemberBinding', {
+          createType('PalletMembershipStakingAccountMemberBinding', {
             member_id: createType('MemberId', 0),
             confirmed: createType('bool', true),
           })
@@ -417,7 +417,7 @@ describe('UI: Announce Candidacy Modal', () => {
         stubQuery(
           api,
           'members.stakingAccountIdMemberStatus',
-          createType('StakingAccountMemberBinding', {
+          createType('PalletMembershipStakingAccountMemberBinding', {
             member_id: createType('MemberId', 0),
             confirmed: createType('bool', confirmed),
           })
@@ -471,7 +471,7 @@ describe('UI: Announce Candidacy Modal', () => {
         stubQuery(
           api,
           'members.stakingAccountIdMemberStatus',
-          createType('StakingAccountMemberBinding', {
+          createType('PalletMembershipStakingAccountMemberBinding', {
             member_id: createType('MemberId', 0),
             confirmed: createType('bool', false),
           })
@@ -529,7 +529,7 @@ describe('UI: Announce Candidacy Modal', () => {
     stubQuery(
       api,
       'members.stakingAccountIdMemberStatus',
-      createType('StakingAccountMemberBinding', {
+      createType('PalletMembershipStakingAccountMemberBinding', {
         member_id: createType('MemberId', 0),
         confirmed: createType('bool', false),
       })

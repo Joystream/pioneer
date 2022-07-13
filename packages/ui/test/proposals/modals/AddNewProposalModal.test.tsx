@@ -1,5 +1,4 @@
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react'
 import BN from 'bn.js'
@@ -13,6 +12,7 @@ import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { camelCaseToText } from '@/common/helpers'
+import { createType } from '@/common/model/createType'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
@@ -108,7 +108,7 @@ const APPLICATION_DATA = {
 describe('AddNewProposalModal types parameters', () => {
   describe('Specific parameters', () => {
     describe('createWorkingGroupLeadOpening', () => {
-      const result = createType('ProposalDetailsOf', {
+      const result = createType('PalletProposalsCodexProposalDetails', {
         CreateWorkingGroupLeadOpening: {
           description: 'Dolor deserunt adipisicing velit et.',
           stake_policy: {
@@ -192,7 +192,7 @@ describe('UI: AddNewProposalModal', () => {
     stubQuery(
       api,
       'members.stakingAccountIdMemberStatus',
-      createType('StakingAccountMemberBinding', {
+      createType('PalletMembershipStakingAccountMemberBinding', {
         member_id: 0,
         confirmed: false,
       })
@@ -1270,7 +1270,7 @@ describe('UI: AddNewProposalModal', () => {
           stubQuery(
             api,
             'members.stakingAccountIdMemberStatus',
-            createType('StakingAccountMemberBinding', {
+            createType('PalletMembershipStakingAccountMemberBinding', {
               member_id: createType('MemberId', 0),
               confirmed: createType('bool', false),
             })
@@ -1316,7 +1316,7 @@ describe('UI: AddNewProposalModal', () => {
           stubQuery(
             api,
             'members.stakingAccountIdMemberStatus',
-            createType('StakingAccountMemberBinding', {
+            createType('PalletMembershipStakingAccountMemberBinding', {
               member_id: createType('MemberId', 0),
               confirmed: createType('bool', true),
             })
@@ -1385,7 +1385,7 @@ describe('UI: AddNewProposalModal', () => {
         stubQuery(
           api,
           'members.stakingAccountIdMemberStatus',
-          createType('StakingAccountMemberBinding', {
+          createType('PalletMembershipStakingAccountMemberBinding', {
             member_id: createType('MemberId', 0),
             confirmed: createType('bool', true),
           })
