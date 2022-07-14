@@ -14,7 +14,7 @@ type Entry = {
   memberInvitedEvent?: BlockFieldsMock
 }
 
-export type MockMember = Omit<MemberFieldsFragment, '__typename' | 'metadata' | 'roles' | 'createdAt'> & {
+export type MockMember = Omit<MemberFieldsFragment, '__typename' | 'metadata' | 'roles' | 'createdAt' | 'entry'> & {
   metadata: {
     name: string
     about: string

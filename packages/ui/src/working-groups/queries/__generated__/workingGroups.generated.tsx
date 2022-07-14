@@ -53,6 +53,41 @@ export type WorkerFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
+    invitedBy?: {
+      __typename: 'Membership'
+      id: string
+      handle: string
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+      }>
+      metadata: {
+        __typename: 'MemberMetadata'
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+    } | null
+    entry:
+      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+      | {
+          __typename: 'MembershipEntryInvited'
+          memberInvitedEvent?: {
+            __typename: 'MemberInvitedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+      | {
+          __typename: 'MembershipEntryPaid'
+          membershipBoughtEvent?: {
+            __typename: 'MembershipBoughtEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
   }
   group: { __typename: 'WorkingGroup'; id: string; name: string }
   status:
@@ -100,6 +135,41 @@ export type PastWorkerFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
+    invitedBy?: {
+      __typename: 'Membership'
+      id: string
+      handle: string
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+      }>
+      metadata: {
+        __typename: 'MemberMetadata'
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+    } | null
+    entry:
+      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+      | {
+          __typename: 'MembershipEntryInvited'
+          memberInvitedEvent?: {
+            __typename: 'MemberInvitedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+      | {
+          __typename: 'MembershipEntryPaid'
+          membershipBoughtEvent?: {
+            __typename: 'MembershipBoughtEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
   }
   status:
     | { __typename: 'WorkerStatusActive' }
@@ -176,6 +246,41 @@ export type WorkerDetailedFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
+    invitedBy?: {
+      __typename: 'Membership'
+      id: string
+      handle: string
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+      }>
+      metadata: {
+        __typename: 'MemberMetadata'
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+    } | null
+    entry:
+      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+      | {
+          __typename: 'MembershipEntryInvited'
+          memberInvitedEvent?: {
+            __typename: 'MemberInvitedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+      | {
+          __typename: 'MembershipEntryPaid'
+          membershipBoughtEvent?: {
+            __typename: 'MembershipBoughtEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
   }
   group: { __typename: 'WorkingGroup'; id: string; name: string }
   status:
@@ -328,6 +433,41 @@ export type GetWorkersQuery = {
         network: Types.Network
         account: string
       }> | null
+      invitedBy?: {
+        __typename: 'Membership'
+        id: string
+        handle: string
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+        }>
+        metadata: {
+          __typename: 'MemberMetadata'
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+      } | null
+      entry:
+        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+        | {
+            __typename: 'MembershipEntryInvited'
+            memberInvitedEvent?: {
+              __typename: 'MemberInvitedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
+        | {
+            __typename: 'MembershipEntryPaid'
+            membershipBoughtEvent?: {
+              __typename: 'MembershipBoughtEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
     }
     group: { __typename: 'WorkingGroup'; id: string; name: string }
     status:
@@ -385,6 +525,41 @@ export type GetPastWorkersQuery = {
         network: Types.Network
         account: string
       }> | null
+      invitedBy?: {
+        __typename: 'Membership'
+        id: string
+        handle: string
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+        }>
+        metadata: {
+          __typename: 'MemberMetadata'
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+      } | null
+      entry:
+        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+        | {
+            __typename: 'MembershipEntryInvited'
+            memberInvitedEvent?: {
+              __typename: 'MemberInvitedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
+        | {
+            __typename: 'MembershipEntryPaid'
+            membershipBoughtEvent?: {
+              __typename: 'MembershipBoughtEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
     }
     status:
       | { __typename: 'WorkerStatusActive' }
@@ -477,6 +652,41 @@ export type GetDetailedWorkersQuery = {
         network: Types.Network
         account: string
       }> | null
+      invitedBy?: {
+        __typename: 'Membership'
+        id: string
+        handle: string
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+        }>
+        metadata: {
+          __typename: 'MemberMetadata'
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+      } | null
+      entry:
+        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+        | {
+            __typename: 'MembershipEntryInvited'
+            memberInvitedEvent?: {
+              __typename: 'MemberInvitedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
+        | {
+            __typename: 'MembershipEntryPaid'
+            membershipBoughtEvent?: {
+              __typename: 'MembershipBoughtEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
     }
     group: { __typename: 'WorkingGroup'; id: string; name: string }
     status:
@@ -544,6 +754,41 @@ export type GetWorkerQuery = {
         network: Types.Network
         account: string
       }> | null
+      invitedBy?: {
+        __typename: 'Membership'
+        id: string
+        handle: string
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+        }>
+        metadata: {
+          __typename: 'MemberMetadata'
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+      } | null
+      entry:
+        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+        | {
+            __typename: 'MembershipEntryInvited'
+            memberInvitedEvent?: {
+              __typename: 'MemberInvitedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
+        | {
+            __typename: 'MembershipEntryPaid'
+            membershipBoughtEvent?: {
+              __typename: 'MembershipBoughtEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
     }
     group: { __typename: 'WorkingGroup'; id: string; name: string }
     status:
@@ -669,6 +914,41 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
         network: Types.Network
         account: string
       }> | null
+      invitedBy?: {
+        __typename: 'Membership'
+        id: string
+        handle: string
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+        }>
+        metadata: {
+          __typename: 'MemberMetadata'
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+      } | null
+      entry:
+        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+        | {
+            __typename: 'MembershipEntryInvited'
+            memberInvitedEvent?: {
+              __typename: 'MemberInvitedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
+        | {
+            __typename: 'MembershipEntryPaid'
+            membershipBoughtEvent?: {
+              __typename: 'MembershipBoughtEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
     }
   }>
   group: { __typename: 'WorkingGroup'; name: string; budget: string; leaderId?: string | null }
@@ -821,6 +1101,41 @@ export type GetWorkingGroupOpeningQuery = {
           network: Types.Network
           account: string
         }> | null
+        invitedBy?: {
+          __typename: 'Membership'
+          id: string
+          handle: string
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+          }>
+          metadata: {
+            __typename: 'MemberMetadata'
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+          }
+        } | null
+        entry:
+          | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+          | {
+              __typename: 'MembershipEntryInvited'
+              memberInvitedEvent?: {
+                __typename: 'MemberInvitedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+              } | null
+            }
+          | {
+              __typename: 'MembershipEntryPaid'
+              membershipBoughtEvent?: {
+                __typename: 'MembershipBoughtEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+              } | null
+            }
       }
     }>
     group: { __typename: 'WorkingGroup'; name: string; budget: string; leaderId?: string | null }
@@ -930,6 +1245,41 @@ export type WorkingGroupApplicationMentionFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
+    invitedBy?: {
+      __typename: 'Membership'
+      id: string
+      handle: string
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+      }>
+      metadata: {
+        __typename: 'MemberMetadata'
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+    } | null
+    entry:
+      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+      | {
+          __typename: 'MembershipEntryInvited'
+          memberInvitedEvent?: {
+            __typename: 'MemberInvitedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+      | {
+          __typename: 'MembershipEntryPaid'
+          membershipBoughtEvent?: {
+            __typename: 'MembershipBoughtEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
   }
   opening: {
     __typename: 'WorkingGroupOpening'
@@ -985,6 +1335,41 @@ export type GetWorkingGroupApplicationMentionQuery = {
         network: Types.Network
         account: string
       }> | null
+      invitedBy?: {
+        __typename: 'Membership'
+        id: string
+        handle: string
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+        }>
+        metadata: {
+          __typename: 'MemberMetadata'
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+      } | null
+      entry:
+        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+        | {
+            __typename: 'MembershipEntryInvited'
+            memberInvitedEvent?: {
+              __typename: 'MemberInvitedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
+        | {
+            __typename: 'MembershipEntryPaid'
+            membershipBoughtEvent?: {
+              __typename: 'MembershipBoughtEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
     }
     opening: {
       __typename: 'WorkingGroupOpening'
@@ -1108,6 +1493,41 @@ export type WorkingGroupApplicationFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
+    invitedBy?: {
+      __typename: 'Membership'
+      id: string
+      handle: string
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+      }>
+      metadata: {
+        __typename: 'MemberMetadata'
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+    } | null
+    entry:
+      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+      | {
+          __typename: 'MembershipEntryInvited'
+          memberInvitedEvent?: {
+            __typename: 'MemberInvitedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+      | {
+          __typename: 'MembershipEntryPaid'
+          membershipBoughtEvent?: {
+            __typename: 'MembershipBoughtEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
   }
   status:
     | { __typename: 'ApplicationStatusAccepted' }
@@ -1175,6 +1595,41 @@ export type GetWorkingGroupApplicationsQuery = {
         network: Types.Network
         account: string
       }> | null
+      invitedBy?: {
+        __typename: 'Membership'
+        id: string
+        handle: string
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+        }>
+        metadata: {
+          __typename: 'MemberMetadata'
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+      } | null
+      entry:
+        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+        | {
+            __typename: 'MembershipEntryInvited'
+            memberInvitedEvent?: {
+              __typename: 'MemberInvitedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
+        | {
+            __typename: 'MembershipEntryPaid'
+            membershipBoughtEvent?: {
+              __typename: 'MembershipBoughtEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
     }
     status:
       | { __typename: 'ApplicationStatusAccepted' }
@@ -1266,6 +1721,41 @@ export type GetWorkingGroupApplicationQuery = {
         network: Types.Network
         account: string
       }> | null
+      invitedBy?: {
+        __typename: 'Membership'
+        id: string
+        handle: string
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+        }>
+        metadata: {
+          __typename: 'MemberMetadata'
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+      } | null
+      entry:
+        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+        | {
+            __typename: 'MembershipEntryInvited'
+            memberInvitedEvent?: {
+              __typename: 'MemberInvitedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
+        | {
+            __typename: 'MembershipEntryPaid'
+            membershipBoughtEvent?: {
+              __typename: 'MembershipBoughtEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
     }
     status:
       | { __typename: 'ApplicationStatusAccepted' }

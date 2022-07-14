@@ -51,6 +51,41 @@ export type BountyFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
+    invitedBy?: {
+      __typename: 'Membership'
+      id: string
+      handle: string
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+      }>
+      metadata: {
+        __typename: 'MemberMetadata'
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+    } | null
+    entry:
+      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+      | {
+          __typename: 'MembershipEntryInvited'
+          memberInvitedEvent?: {
+            __typename: 'MemberInvitedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+      | {
+          __typename: 'MembershipEntryPaid'
+          membershipBoughtEvent?: {
+            __typename: 'MembershipBoughtEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
   } | null
   oracle?: {
     __typename: 'Membership'
@@ -84,6 +119,41 @@ export type BountyFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
+    invitedBy?: {
+      __typename: 'Membership'
+      id: string
+      handle: string
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+      }>
+      metadata: {
+        __typename: 'MemberMetadata'
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+    } | null
+    entry:
+      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+      | {
+          __typename: 'MembershipEntryInvited'
+          memberInvitedEvent?: {
+            __typename: 'MemberInvitedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+      | {
+          __typename: 'MembershipEntryPaid'
+          membershipBoughtEvent?: {
+            __typename: 'MembershipBoughtEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
   } | null
   entrantWhitelist?: {
     __typename: 'BountyEntrantWhitelist'
@@ -126,6 +196,41 @@ export type BountyFieldsFragment = {
         network: Types.Network
         account: string
       }> | null
+      invitedBy?: {
+        __typename: 'Membership'
+        id: string
+        handle: string
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+        }>
+        metadata: {
+          __typename: 'MemberMetadata'
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+      } | null
+      entry:
+        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+        | {
+            __typename: 'MembershipEntryInvited'
+            memberInvitedEvent?: {
+              __typename: 'MemberInvitedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
+        | {
+            __typename: 'MembershipEntryPaid'
+            membershipBoughtEvent?: {
+              __typename: 'MembershipBoughtEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
     } | null
   }> | null
   entries?: Array<{
@@ -170,6 +275,41 @@ export type BountyFieldsFragment = {
         network: Types.Network
         account: string
       }> | null
+      invitedBy?: {
+        __typename: 'Membership'
+        id: string
+        handle: string
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+        }>
+        metadata: {
+          __typename: 'MemberMetadata'
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+      } | null
+      entry:
+        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+        | {
+            __typename: 'MembershipEntryInvited'
+            memberInvitedEvent?: {
+              __typename: 'MemberInvitedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
+        | {
+            __typename: 'MembershipEntryPaid'
+            membershipBoughtEvent?: {
+              __typename: 'MembershipBoughtEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
     }
     status:
       | { __typename: 'BountyEntryStatusPassed' }
@@ -236,6 +376,41 @@ export type BountyEntryFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
+    invitedBy?: {
+      __typename: 'Membership'
+      id: string
+      handle: string
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+      }>
+      metadata: {
+        __typename: 'MemberMetadata'
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+    } | null
+    entry:
+      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+      | {
+          __typename: 'MembershipEntryInvited'
+          memberInvitedEvent?: {
+            __typename: 'MemberInvitedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+      | {
+          __typename: 'MembershipEntryPaid'
+          membershipBoughtEvent?: {
+            __typename: 'MembershipBoughtEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
   }
   status:
     | { __typename: 'BountyEntryStatusPassed' }
@@ -288,6 +463,41 @@ export type BountyEntryWithDetailsFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
+    invitedBy?: {
+      __typename: 'Membership'
+      id: string
+      handle: string
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+      }>
+      metadata: {
+        __typename: 'MemberMetadata'
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+    } | null
+    entry:
+      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+      | {
+          __typename: 'MembershipEntryInvited'
+          memberInvitedEvent?: {
+            __typename: 'MemberInvitedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+      | {
+          __typename: 'MembershipEntryPaid'
+          membershipBoughtEvent?: {
+            __typename: 'MembershipBoughtEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
   }
   status:
     | { __typename: 'BountyEntryStatusPassed' }
@@ -350,6 +560,41 @@ export type BountyWorkWithDetailsFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
+    invitedBy?: {
+      __typename: 'Membership'
+      id: string
+      handle: string
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+      }>
+      metadata: {
+        __typename: 'MemberMetadata'
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+    } | null
+    entry:
+      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+      | {
+          __typename: 'MembershipEntryInvited'
+          memberInvitedEvent?: {
+            __typename: 'MemberInvitedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+      | {
+          __typename: 'MembershipEntryPaid'
+          membershipBoughtEvent?: {
+            __typename: 'MembershipBoughtEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
   }
   status:
     | { __typename: 'BountyEntryStatusPassed' }
@@ -397,6 +642,41 @@ export type BountyContributionFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
+    invitedBy?: {
+      __typename: 'Membership'
+      id: string
+      handle: string
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+      }>
+      metadata: {
+        __typename: 'MemberMetadata'
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+    } | null
+    entry:
+      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+      | {
+          __typename: 'MembershipEntryInvited'
+          memberInvitedEvent?: {
+            __typename: 'MemberInvitedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+      | {
+          __typename: 'MembershipEntryPaid'
+          membershipBoughtEvent?: {
+            __typename: 'MembershipBoughtEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
   } | null
 }
 
@@ -456,6 +736,41 @@ export type GetBountiesQuery = {
         network: Types.Network
         account: string
       }> | null
+      invitedBy?: {
+        __typename: 'Membership'
+        id: string
+        handle: string
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+        }>
+        metadata: {
+          __typename: 'MemberMetadata'
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+      } | null
+      entry:
+        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+        | {
+            __typename: 'MembershipEntryInvited'
+            memberInvitedEvent?: {
+              __typename: 'MemberInvitedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
+        | {
+            __typename: 'MembershipEntryPaid'
+            membershipBoughtEvent?: {
+              __typename: 'MembershipBoughtEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
     } | null
     oracle?: {
       __typename: 'Membership'
@@ -489,6 +804,41 @@ export type GetBountiesQuery = {
         network: Types.Network
         account: string
       }> | null
+      invitedBy?: {
+        __typename: 'Membership'
+        id: string
+        handle: string
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+        }>
+        metadata: {
+          __typename: 'MemberMetadata'
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+      } | null
+      entry:
+        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+        | {
+            __typename: 'MembershipEntryInvited'
+            memberInvitedEvent?: {
+              __typename: 'MemberInvitedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
+        | {
+            __typename: 'MembershipEntryPaid'
+            membershipBoughtEvent?: {
+              __typename: 'MembershipBoughtEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
     } | null
     entrantWhitelist?: {
       __typename: 'BountyEntrantWhitelist'
@@ -531,6 +881,41 @@ export type GetBountiesQuery = {
           network: Types.Network
           account: string
         }> | null
+        invitedBy?: {
+          __typename: 'Membership'
+          id: string
+          handle: string
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+          }>
+          metadata: {
+            __typename: 'MemberMetadata'
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+          }
+        } | null
+        entry:
+          | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+          | {
+              __typename: 'MembershipEntryInvited'
+              memberInvitedEvent?: {
+                __typename: 'MemberInvitedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+              } | null
+            }
+          | {
+              __typename: 'MembershipEntryPaid'
+              membershipBoughtEvent?: {
+                __typename: 'MembershipBoughtEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+              } | null
+            }
       } | null
     }> | null
     entries?: Array<{
@@ -575,6 +960,41 @@ export type GetBountiesQuery = {
           network: Types.Network
           account: string
         }> | null
+        invitedBy?: {
+          __typename: 'Membership'
+          id: string
+          handle: string
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+          }>
+          metadata: {
+            __typename: 'MemberMetadata'
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+          }
+        } | null
+        entry:
+          | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+          | {
+              __typename: 'MembershipEntryInvited'
+              memberInvitedEvent?: {
+                __typename: 'MemberInvitedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+              } | null
+            }
+          | {
+              __typename: 'MembershipEntryPaid'
+              membershipBoughtEvent?: {
+                __typename: 'MembershipBoughtEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+              } | null
+            }
       }
       status:
         | { __typename: 'BountyEntryStatusPassed' }
@@ -666,6 +1086,41 @@ export type GetBountyQuery = {
         network: Types.Network
         account: string
       }> | null
+      invitedBy?: {
+        __typename: 'Membership'
+        id: string
+        handle: string
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+        }>
+        metadata: {
+          __typename: 'MemberMetadata'
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+      } | null
+      entry:
+        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+        | {
+            __typename: 'MembershipEntryInvited'
+            memberInvitedEvent?: {
+              __typename: 'MemberInvitedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
+        | {
+            __typename: 'MembershipEntryPaid'
+            membershipBoughtEvent?: {
+              __typename: 'MembershipBoughtEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
     } | null
     oracle?: {
       __typename: 'Membership'
@@ -699,6 +1154,41 @@ export type GetBountyQuery = {
         network: Types.Network
         account: string
       }> | null
+      invitedBy?: {
+        __typename: 'Membership'
+        id: string
+        handle: string
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+        }>
+        metadata: {
+          __typename: 'MemberMetadata'
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+      } | null
+      entry:
+        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+        | {
+            __typename: 'MembershipEntryInvited'
+            memberInvitedEvent?: {
+              __typename: 'MemberInvitedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
+        | {
+            __typename: 'MembershipEntryPaid'
+            membershipBoughtEvent?: {
+              __typename: 'MembershipBoughtEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
     } | null
     entrantWhitelist?: {
       __typename: 'BountyEntrantWhitelist'
@@ -741,6 +1231,41 @@ export type GetBountyQuery = {
           network: Types.Network
           account: string
         }> | null
+        invitedBy?: {
+          __typename: 'Membership'
+          id: string
+          handle: string
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+          }>
+          metadata: {
+            __typename: 'MemberMetadata'
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+          }
+        } | null
+        entry:
+          | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+          | {
+              __typename: 'MembershipEntryInvited'
+              memberInvitedEvent?: {
+                __typename: 'MemberInvitedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+              } | null
+            }
+          | {
+              __typename: 'MembershipEntryPaid'
+              membershipBoughtEvent?: {
+                __typename: 'MembershipBoughtEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+              } | null
+            }
       } | null
     }> | null
     entries?: Array<{
@@ -785,6 +1310,41 @@ export type GetBountyQuery = {
           network: Types.Network
           account: string
         }> | null
+        invitedBy?: {
+          __typename: 'Membership'
+          id: string
+          handle: string
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+          }>
+          metadata: {
+            __typename: 'MemberMetadata'
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+          }
+        } | null
+        entry:
+          | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+          | {
+              __typename: 'MembershipEntryInvited'
+              memberInvitedEvent?: {
+                __typename: 'MemberInvitedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+              } | null
+            }
+          | {
+              __typename: 'MembershipEntryPaid'
+              membershipBoughtEvent?: {
+                __typename: 'MembershipBoughtEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+              } | null
+            }
       }
       status:
         | { __typename: 'BountyEntryStatusPassed' }
@@ -868,6 +1428,41 @@ export type GetBountyWorksQuery = {
         network: Types.Network
         account: string
       }> | null
+      invitedBy?: {
+        __typename: 'Membership'
+        id: string
+        handle: string
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+        }>
+        metadata: {
+          __typename: 'MemberMetadata'
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+      } | null
+      entry:
+        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+        | {
+            __typename: 'MembershipEntryInvited'
+            memberInvitedEvent?: {
+              __typename: 'MemberInvitedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
+        | {
+            __typename: 'MembershipEntryPaid'
+            membershipBoughtEvent?: {
+              __typename: 'MembershipBoughtEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
     }
     status:
       | { __typename: 'BountyEntryStatusPassed' }
@@ -963,6 +1558,41 @@ export type GetBountyContributorsQuery = {
         network: Types.Network
         account: string
       }> | null
+      invitedBy?: {
+        __typename: 'Membership'
+        id: string
+        handle: string
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+        }>
+        metadata: {
+          __typename: 'MemberMetadata'
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+      } | null
+      entry:
+        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+        | {
+            __typename: 'MembershipEntryInvited'
+            memberInvitedEvent?: {
+              __typename: 'MemberInvitedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
+        | {
+            __typename: 'MembershipEntryPaid'
+            membershipBoughtEvent?: {
+              __typename: 'MembershipBoughtEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+            } | null
+          }
     } | null
   }>
 }

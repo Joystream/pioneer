@@ -2,7 +2,7 @@ import { asBlock } from '@/common/types'
 import { castQueryResult } from '@/common/utils/casting'
 import { asWorkingGroupName } from '@/working-groups/types'
 
-import { MemberFieldsFragment, MemberWithDetailsFieldsFragment, MemberAllWithDetailsFieldsFragment } from '../queries'
+import { MemberFieldsFragment, MemberWithDetailsFieldsFragment } from '../queries'
 
 import { BoundAccountEvent, Member, MemberEntry, MemberRole, MemberWithDetails, MemberWithReferrer } from './Member'
 
@@ -34,9 +34,7 @@ export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member
   createdAt: data.createdAt,
 })
 
-export const asMemeberWithDetails = (
-  data: Omit<MemberAllWithDetailsFieldsFragment, '__typename'>
-): MemberWithReferrer => ({
+export const asMemeberWithDetails = (data: Omit<MemberFieldsFragment, '__typename'>): MemberWithReferrer => ({
   id: data.id,
   handle: data.handle,
   name: data.metadata.name ?? undefined,

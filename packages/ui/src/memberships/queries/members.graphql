@@ -35,66 +35,6 @@ fragment MemberFields on Membership {
     network
     account
   }
-}
-
-fragment MemberWithDetailsFields on Membership {
-  ...MemberFields
-  entry {
-    ... on MembershipEntryInvited {
-      memberInvitedEvent {
-        createdAt
-        inBlock
-        network
-      }
-    }
-    ... on MembershipEntryPaid {
-      membershipBoughtEvent {
-        createdAt
-        inBlock
-        network
-      }
-    }
-    ... on MembershipEntryGenesis {
-      phantom
-    }
-  }
-  invitees {
-    ...MemberFields
-    ## Deeply nested join does not work
-    # See: https://github.com/Joystream/pioneer/issues/1493
-    #    entry {
-    #      ...on MembershipEntryInvited {
-    #        memberInvitedEvent {
-    #          createdAt
-    #          inBlock
-    #          network
-    #        }
-    #      }
-    #    }
-  }
-}
-
-fragment MemberAllWithDetailsFields on Membership {
-  ...MemberFields
-  entry {
-    ... on MembershipEntryInvited {
-      memberInvitedEvent {
-        createdAt
-        inBlock
-        network
-      }
-    }
-    ... on MembershipEntryPaid {
-      membershipBoughtEvent {
-        createdAt
-        inBlock
-        network
-      }
-    }
-    ... on MembershipEntryGenesis {
-      phantom
-    }
-  }
   invitedBy {
     id
     handle
@@ -116,17 +56,49 @@ fragment MemberAllWithDetailsFields on Membership {
       }
     }
   }
+  entry {
+    ... on MembershipEntryInvited {
+      memberInvitedEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+    ... on MembershipEntryPaid {
+      membershipBoughtEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+    ... on MembershipEntryGenesis {
+      phantom
+    }
+  }
+}
+
+fragment MemberWithDetailsFields on Membership {
+  ...MemberFields
+
+  invitees {
+    ...MemberFields
+    ## Deeply nested join does not work
+    # See: https://github.com/Joystream/pioneer/issues/1493
+    #    entry {
+    #      ...on MembershipEntryInvited {
+    #        memberInvitedEvent {
+    #          createdAt
+    #          inBlock
+    #          network
+    #        }
+    #      }
+    #    }
+  }
 }
 
 query GetMembers($where: MembershipWhereInput, $orderBy: [MembershipOrderByInput!], $offset: Int, $limit: Int) {
   memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
     ...MemberFields
-  }
-}
-
-query GetAllMembers($where: MembershipWhereInput, $orderBy: [MembershipOrderByInput!], $offset: Int, $limit: Int) {
-  memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
-    ...MemberAllWithDetailsFields
   }
 }
 
