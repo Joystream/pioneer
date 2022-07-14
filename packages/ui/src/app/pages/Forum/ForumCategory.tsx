@@ -28,15 +28,11 @@ export const ForumCategory = () => {
   const [page, setPage] = useState<number>(1)
   const { id, type } = useParams<{ id: string; type?: 'archive' }>()
   const isArchive = type === 'archive'
+  const isCategory = true
 
   const { category } = useForumCategory(id)
   const { order, getSortProps } = useSort<ForumThreadOrderByInput>('updatedAt')
-  const {
-    isLoading: isLoadingThreads,
-    threads,
-    threadCount,
-    refresh,
-  } = useForumCategoryThreads(
+  const { isLoading: isLoadingThreads, threads, threadCount, refresh } = useForumCategoryThreads(
     {
       categoryId: id,
       isArchive,
@@ -71,6 +67,7 @@ export const ForumCategory = () => {
               <PlusIcon /> Add New Thread
             </TransactionButton>
           }
+          isCategory
         >
           <ModeratorsContainer>
             Moderators: <MemberStack members={moderatorsSummary(category.moderators)} max={5} />
@@ -81,17 +78,15 @@ export const ForumCategory = () => {
         <>
           {!!category.subcategories.length && (
             <RowGapBlock gap={24}>
-              <ItemCount count={category.subcategories.length}>
-                {isArchive ? 'Archived categories' : 'Categories'}
-              </ItemCount>
-              <ForumCategoryList categories={category.subcategories} isArchive={isArchive} />
+              {isArchive ? 'Archived categories' : 'Categories'}
+              <ForumCategoryList categories={category.subcategories} isArchive={isArchive} isCategory={isCategory} />
             </RowGapBlock>
           )}
 
           <RowGapBlock gap={24}>
             <ThreadFilters onApply={(filters) => refresh({ filters })} isArchive={isArchive}>
               <ItemCount count={threadCount} size="xs">
-                {isArchive ? 'Archived Threads' : 'Threads'}
+                {isArchive ? 'Archived Threads' : 'adf Threads'}
               </ItemCount>
             </ThreadFilters>
 
@@ -113,4 +108,5 @@ export const ForumCategory = () => {
 
 const ModeratorsContainer = styled(Label)`
   align-items: center;
+  width: 100%;
 `

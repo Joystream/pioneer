@@ -5,19 +5,30 @@ import { BorderRad, Colors, Transitions } from '../../constants'
 export const List = styled.ul`
   display: flex;
   position: relative;
-  flex-direction: column;
   width: 100%;
   margin: 0;
   padding: 0;
   list-style: none;
 
-  ${({ isArchive }: { isArchive?: boolean }) =>
-    isArchive &&
-    css`
-      ${TableListItem} {
-        background-color: ${Colors.Black[50]};
-      }
-    `}
+  ${({ isArchive, isCategory }: { isArchive?: boolean; isCategory?: boolean }) => {
+    return isCategory
+      ? css`
+          grid-gap: 20px;
+          ${isArchive
+            ? `${TableListItem} {
+          background-color: ${Colors.Black[50]};
+        }`
+            : ''}
+        `
+      : css`
+          flex-direction: column;
+          ${isArchive
+            ? `${TableListItem} {
+          background-color: ${Colors.Black[50]};
+        }`
+            : ''}
+        `
+  }}
 `
 
 export const ListItem = styled.li<{ borderless?: boolean }>`
