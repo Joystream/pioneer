@@ -69,6 +69,10 @@ const CreateMemberSchema = Yup.object().shape({
   hasTerms: Yup.boolean().required().oneOf([true]),
   isReferred: Yup.boolean(),
   referrer: ReferrerSchema,
+  externalResources: Yup.object().shape({
+    EMAIL: Yup.string().email('Field has to be a valid email address'),
+    HYPERLINK: Yup.string().url('Invalid hyperlink format'),
+  }),
 })
 
 export interface MemberFormFields {

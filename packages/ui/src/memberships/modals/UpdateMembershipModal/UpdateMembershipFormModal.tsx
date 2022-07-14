@@ -40,6 +40,10 @@ const UpdateMemberSchema = Yup.object().shape({
   handle: Yup.string().when('$isHandleChanged', (isHandleChanged: boolean, schema: AnySchema) => {
     return isHandleChanged ? HandleSchema : schema
   }),
+  externalResources: Yup.object().shape({
+    EMAIL: Yup.string().email('Field has to be a valid email address'),
+    HYPERLINK: Yup.string().url('Invalid hyperlink format'),
+  }),
 })
 
 export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) => {

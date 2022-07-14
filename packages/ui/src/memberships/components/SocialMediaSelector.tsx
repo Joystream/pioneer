@@ -47,7 +47,7 @@ export const SocialMediaSelector = ({ initialSocials }: Props) => {
   const removeSocial = useCallback(
     (social: Socials) => () => {
       setChosenSocial((prev) => prev.filter((prevSocial) => prevSocial !== social))
-      form?.resetField(`externalResources.${social}` as keyof MemberFormFields)
+      form?.unregister(`externalResources.${social}` as keyof MemberFormFields)
     },
     [form.resetField]
   )
