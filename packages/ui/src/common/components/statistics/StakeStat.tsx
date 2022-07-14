@@ -12,7 +12,7 @@ import { TokenValueStat, TotalValue } from './TokenValueStat'
 
 export interface StakeStatProps extends StatisticItemProps {
   value: number | BN
-  minStake: number
+  minStake: number | BN
 }
 
 const title = 'Stake Height'

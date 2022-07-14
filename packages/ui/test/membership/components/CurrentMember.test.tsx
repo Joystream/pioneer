@@ -14,6 +14,10 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA } from '../../_mocks/server/seeds'
 
+jest.mock('@/common/hooks/useLocalStorage', () => ({
+  useLocalStorage: () => [undefined, jest.fn()],
+}))
+
 describe('UI: CurrentMember component', () => {
   const mockServer = setupMockServer()
 

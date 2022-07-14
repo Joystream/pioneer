@@ -7,6 +7,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor'
 import InlineEditor from '@ckeditor/ckeditor5-editor-inline/src/inlineeditor'
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials'
 import Heading from '@ckeditor/ckeditor5-heading/src/heading'
+import AutoImage from '@ckeditor/ckeditor5-image/src/autoimage'
 import Image from '@ckeditor/ckeditor5-image/src/image'
 import Indent from '@ckeditor/ckeditor5-indent/src/indent'
 import Link from '@ckeditor/ckeditor5-link/src/link'
@@ -36,6 +37,7 @@ const plugins = [
   Paragraph,
   PasteFromOffice,
   TextTransformation,
+  AutoImage,
 ]
 
 ClassicEditor.builtinPlugins = plugins

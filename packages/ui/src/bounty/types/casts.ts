@@ -23,7 +23,6 @@ import {
   BountyWork,
   Contributor,
   FundingType,
-  isFundingLimited,
   WorkEntry,
   WorkInfo,
 } from './Bounty'
@@ -90,7 +89,7 @@ export const asContributor = ({
   withdrawnInEvent,
 }: BountyContributionFieldsFragment): Contributor => ({
   hasWithdrawn: !!withdrawnInEvent?.id,
-  amount,
+  amount: new BN(amount),
   actor: contributor ? asMember(contributor) : undefined,
 })
 
@@ -106,22 +105,44 @@ export const asBountyWork =
   })
 
 export const periodBlockLeft = (fields: BountyFieldsFragment) => {
+  const blockSinceCreation = getSecondsPast(fields.createdAt) / SECONDS_PER_BLOCK
   switch (fields.stage) {
     case 'WorkSubmission': {
-      return fields.maxFundingReachedEvent?.createdAt
-        ? fields.workPeriod - getSecondsPast(fields.maxFundingReachedEvent.createdAt) / SECONDS_PER_BLOCK
-        : fields.workPeriod
+      if (fields.maxFundingReachedEvent?.createdAt) {
+        return fields.workPeriod - getSecondsPast(fields.maxFundingReachedEvent.createdAt) / SECONDS_PER_BLOCK
+      }
+
+      if (fields.fundingType.__typename === 'BountyFundingLimited') {
+        return (
+          fields.workPeriod + (getFundingPeriodLength(asBountyFunding(fields.fundingType)) ?? 0) - blockSinceCreation
+        )
+      }
+
+      return undefined
     }
     case 'Judgment': {
-      return fields.maxFundingReachedEvent?.createdAt
-        ? fields.workPeriod +
-            fields.judgingPeriod -
-            getSecondsPast(fields.maxFundingReachedEvent.createdAt) / SECONDS_PER_BLOCK
-        : fields.judgingPeriod
+      if (fields.maxFundingReachedEvent?.createdAt) {
+        return (
+          fields.workPeriod +
+          fields.judgingPeriod -
+          getSecondsPast(fields.maxFundingReachedEvent.createdAt) / SECONDS_PER_BLOCK
+        )
+      }
+
+      if (fields.fundingType.__typename === 'BountyFundingLimited') {
+        return (
+          fields.workPeriod +
+          (getFundingPeriodLength(asBountyFunding(fields.fundingType)) ?? 0) +
+          fields.judgingPeriod -
+          blockSinceCreation
+        )
+      }
+
+      return undefined
     }
     case 'Funding': {
       const fundingPeriodTime = getFundingPeriodLength(asBountyFunding(fields.fundingType))
-      return fundingPeriodTime ? fundingPeriodTime - getSecondsPast(fields.createdAt) / SECONDS_PER_BLOCK : undefined
+      return fundingPeriodTime ? fundingPeriodTime - blockSinceCreation : undefined
     }
   }
 }

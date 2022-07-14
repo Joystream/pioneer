@@ -35,7 +35,7 @@ export const IncreaseWorkerStakeModal = () => {
   const { hideModal, modalData } = useModal<IncreaseWorkerStakeModalCall>()
   const [state, send] = useMachine(increaseStakeMachine)
   const { minStake, stake, group, runtimeId, roleAccount } = modalData.worker
-  const minAddStake = minStake - stake
+  const minAddStake = minStake.sub(stake)
   const balance = useBalance(roleAccount)
   const { isValid, setContext, errors } = useSchema({ ...state?.context }, StakeFormSchema)
   useEffect(() => {

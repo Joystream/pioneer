@@ -3,6 +3,7 @@ import { asMember, Member } from '@/memberships/types'
 import { typenameToProposalDetails } from '@/proposals/model/proposalDetails'
 import { isProposalActive, typenameToProposalStatus } from '@/proposals/model/proposalStatus'
 import {
+  GetLatestProposalByMemberIdQuery,
   ProposalDiscussionPostMentionFieldsFragment,
   ProposalFieldsFragment,
   ProposalMentionFieldsFragment,
@@ -138,4 +139,27 @@ export const asProposalDiscussionPostMention = (
   text: fields.text,
   author: asMember(fields.author),
   createdAt: fields.createdAt,
+})
+
+export type LatestProposal = Pick<Proposal, 'id' | 'status' | 'type'> & {
+  createdInEvent: Block
+  statusSetAtBlock: Block
+  exactExecutionBlock?: number
+}
+
+export const asLatestProposal = (fields: GetLatestProposalByMemberIdQuery['proposals'][0]): LatestProposal => ({
+  id: fields.id,
+  status: typenameToProposalStatus(fields.status.__typename),
+  type: typenameToProposalDetails(fields.details.__typename),
+  createdInEvent: asBlock({
+    inBlock: fields.createdInEvent.inBlock,
+    createdAt: fields.createdInEvent.createdAt,
+    network: fields.createdInEvent.network,
+  }),
+  statusSetAtBlock: asBlock({
+    inBlock: fields.statusSetAtBlock,
+    createdAt: fields.statusSetAtTime,
+    network: fields.createdInEvent.network,
+  }),
+  exactExecutionBlock: fields.exactExecutionBlock ?? undefined,
 })

@@ -46,7 +46,7 @@ export const VotingStage = ({ election, isLoading }: VotingStageProps) => {
       />
       {tab === 'myVotes' && !myVotes?.length ? (
         <NoData>
-          Your votes will be shown in this list. Single member can vote multiple times with different accounts.'
+          Your votes will be shown in this list. Single member can vote multiple times with different accounts.
         </NoData>
       ) : (
         <CandidateCardList

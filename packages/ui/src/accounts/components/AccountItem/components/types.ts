@@ -6,3 +6,9 @@ export interface LockDetailsProps {
   address: Address
   isRecoverable?: boolean
 }
+
+export interface LockRecoveryTimeProps {
+  time?: string | null
+  unrecoverableLabel?: string
+  tooltipLabel?: string
+}

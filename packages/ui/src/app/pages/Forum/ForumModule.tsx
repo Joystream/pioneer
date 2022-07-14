@@ -10,6 +10,7 @@ import { ForumRoutes } from '@/forum/constant'
 import { ForumMyThreads } from './ForumMyThreads'
 import { ForumOverview } from './ForumOverview'
 import { LatestThreads } from './LatestThreads'
+import { TopThreads } from './TopThreads'
 
 export const ForumModule = () => {
   return (
@@ -21,6 +22,7 @@ export const ForumModule = () => {
       <Route path={ForumRoutes.forumOverview} exact component={ForumOverview} />
       <Route path={ForumRoutes.latestThreads} exact component={LatestThreads} />
       <Route path={ForumRoutes.myThreads} exact component={ForumMyThreads} />
+      <Route path={ForumRoutes.topThreads} exact component={TopThreads} />
       <Redirect from="/forum/*" to={ForumRoutes.forum} />
     </Switch>
   )

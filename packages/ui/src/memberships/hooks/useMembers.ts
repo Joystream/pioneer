@@ -42,11 +42,20 @@ export const useMembers = ({ order, filter, perPage = 10 }: UseMemberProps) => {
 
 type FilterGqlInput = Pick<
   MembershipWhereInput,
-  'id_eq' | 'roles_some' | 'isVerified_eq' | 'isFoundingMember_eq' | 'handle_contains' | 'isCouncilMember_eq'
+  | 'id_eq'
+  | 'roles_some'
+  | 'isVerified_eq'
+  | 'isFoundingMember_eq'
+  | 'handle_contains'
+  | 'controllerAccount_eq'
+  | 'rootAccount_eq'
+  | 'isCouncilMember_eq'
 >
 
 const filterToGqlInput = ({ search, roles, council, onlyVerified, onlyFounder }: MemberListFilter): FilterGqlInput => ({
-  ...(search ? { handle_contains: search } : {}),
+  ...(search
+    ? { OR: [{ controllerAccount_eq: search }, { rootAccount_eq: search }, { handle_contains: search }] }
+    : {}),
   ...(roles.length ? { roles_some: { groupId_in: roles.map(toString) } } : {}),
   ...(council === null ? {} : { isCouncilMember_eq: council }),
   ...(onlyVerified ? { isVerified_eq: true } : {}),

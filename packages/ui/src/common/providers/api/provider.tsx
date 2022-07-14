@@ -1,12 +1,9 @@
-import { registry, types } from '@joystream/types'
-import '@joystream/types/augment/augment-api'
-import '@joystream/types/augment/augment-types'
-import { ApiRx, WsProvider } from '@polkadot/api'
-import rpc from '@polkadot/types/interfaces/jsonrpc'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { firstValueFrom } from 'rxjs'
 
 import { useApiBenchmarking } from '@/api/hooks/useApiBenchmarking'
+import { Api } from '@/api/types'
+import { ProxyApi } from '@/proxyApi'
 
 import { useNetworkEndpoints } from '../../hooks/useNetworkEndpoints'
 
@@ -19,7 +16,7 @@ interface Props {
 type ConnectionState = 'connecting' | 'connected' | 'disconnected'
 
 interface BaseAPI {
-  api?: ApiRx
+  api?: Api
   isConnected: boolean
   connectionState: ConnectionState
 }
@@ -31,13 +28,13 @@ interface APIConnecting extends BaseAPI {
 }
 
 interface APIConnected extends BaseAPI {
-  api: ApiRx
+  api: Api
   isConnected: true
   connectionState: 'connected'
 }
 
 interface APIDisconnected extends BaseAPI {
-  api: ApiRx
+  api: Api
   isConnected: false
   connectionState: 'disconnected'
 }
@@ -45,26 +42,19 @@ interface APIDisconnected extends BaseAPI {
 export type UseApi = APIConnecting | APIConnected | APIDisconnected
 
 export const ApiContextProvider = ({ children }: Props) => {
-  const [api, setApi] = useState<ApiRx>()
+  const [api, setApi] = useState<Api>()
   const [connectionState, setConnectionState] = useState<ConnectionState>('connecting')
   const [endpoints] = useNetworkEndpoints()
 
   useApiBenchmarking(api)
 
   useEffect(() => {
-    const provider = new WsProvider(endpoints.nodeRpcEndpoint)
-    firstValueFrom(ApiRx.create({ provider, rpc, types, registry })).then(async (api) => {
+    firstValueFrom(ProxyApi.create(endpoints.nodeRpcEndpoint)).then((api) => {
       setApi(api)
       setConnectionState('connected')
       api.on('connected', () => setConnectionState('connected'))
       api.on('disconnected', () => setConnectionState('disconnected'))
     })
-
-    return () => {
-      if (api) {
-        api.disconnect()
-      }
-    }
   }, [])
 
   if (connectionState === 'connecting') {
@@ -86,7 +76,7 @@ export const ApiContextProvider = ({ children }: Props) => {
       <ApiContext.Provider
         value={{
           isConnected: true,
-          api: api as ApiRx,
+          api: api as Api,
           connectionState,
         }}
       >
@@ -100,7 +90,7 @@ export const ApiContextProvider = ({ children }: Props) => {
       <ApiContext.Provider
         value={{
           isConnected: false,
-          api: api as ApiRx,
+          api: api as Api,
           connectionState,
         }}
       >

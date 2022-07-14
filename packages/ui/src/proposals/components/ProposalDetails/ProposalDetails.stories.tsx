@@ -68,15 +68,15 @@ FundingRequest.args = {
     destinations: [
       {
         account: '5GBVQJZzv2nrRVtjgTg4JwCwbEfKeueiKqQ5ysFxLfiQPRiY',
-        amount: 30000,
+        amount: new BN(30000),
       },
       {
         account: '5JwCwbEfKeueiKqQ5ysFxLfiQPRiYGBVQJZzv2nrRVtjgTg4',
-        amount: 140000,
+        amount: new BN(140000),
       },
       {
         account: '5JwCwbEfKeueiKqQ5ysFxLfiQPRiYGBVQJZzv2nrRVtjgTg4',
-        amount: 140000,
+        amount: new BN(140000),
       },
     ],
   },

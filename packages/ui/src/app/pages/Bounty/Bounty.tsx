@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 
 import { PageLayout } from '@/app/components/PageLayout'
 import { BountyMain } from '@/app/pages/Bounty/components/BountyMain'
@@ -7,12 +7,21 @@ import { BountyPreviewHeader } from '@/bounty/components/BountyPreviewHeader/Bou
 import { BountyRouteParams } from '@/bounty/constants'
 import { useBounty } from '@/bounty/hooks/useBounty'
 import { Loading } from '@/common/components/Loading'
+import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 
 export const Bounty = () => {
   const { id } = useParams<BountyRouteParams>()
+  const history = useHistory()
   const { isLoading, bounty } = useBounty(id)
 
-  if (isLoading || !bounty) {
+  useRefetchQueries(
+    { when: bounty && !bounty.isTerminated, interval: MILLISECONDS_PER_BLOCK, include: ['GetBounty'] },
+    [bounty]
+  )
+
+  if (!bounty) {
+    if (!isLoading) history.replace('/404')
     return <Loading />
   }
 

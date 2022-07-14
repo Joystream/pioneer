@@ -1,11 +1,10 @@
 import { useMachine } from '@xstate/react'
+import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
 
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
-import { LockType } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
@@ -29,12 +28,10 @@ export const VoteForCouncilModal = () => {
 
   const constants = useCouncilConstants()
   const minStake = constants?.election.minVoteStake
-  const requiredStake = minStake?.toNumber() ?? 0
+  // TODO: Delete conversion to BN after https://github.com/Joystream/pioneer/pull/3265 is merged
+  const requiredStake = minStake as BN
 
-  const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
-    requiredStake,
-    'Voting'
-  )
+  const { hasRequiredStake } = useHasRequiredStake(requiredStake?.toNumber(), 'Voting')
 
   const transaction = useMemo(() => api?.tx.referendum.vote('', requiredStake), [requiredStake])
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
@@ -49,16 +46,10 @@ export const VoteForCouncilModal = () => {
             originalModalData: modalData,
           },
         })
-      } else if (!hasRequiredStake) {
-        const data = {
-          accountsWithCompatibleLocks,
-          accountsWithTransferableBalance,
-          requiredStake,
-          lock: 'Voting' as LockType,
-        }
-        showModal<MoveFundsModalCall>({ modal: 'MoveFundsModal', data })
-      } else if (feeInfo) {
-        send(feeInfo.canAfford ? 'PASS' : 'FAIL')
+      }
+      if (feeInfo) {
+        const areFundsSufficient = feeInfo.canAfford && hasRequiredStake
+        send(areFundsSufficient ? 'PASS' : 'FAIL')
       }
     }
   }, [state.value, activeMember?.id, hasRequiredStake, feeInfo?.canAfford])
@@ -78,13 +69,15 @@ export const VoteForCouncilModal = () => {
   }
 
   if (state.matches('requirementsFailed')) {
-    return (
-      <InsufficientFundsModal
-        onClose={hideModal}
-        address={activeMember.controllerAccount}
-        amount={feeInfo.transactionFee}
-      />
-    )
+    showModal<MoveFundsModalCall>({
+      modal: 'MoveFundsModal',
+      data: {
+        requiredStake,
+        lock: 'Voting',
+      },
+    })
+
+    return null
   } else if (state.matches('stake')) {
     return <VoteForCouncilFormModal minStake={minStake} send={send} state={state as VoteForCouncilMachineState} />
   } else if (state.matches('transaction')) {

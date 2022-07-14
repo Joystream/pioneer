@@ -8,8 +8,8 @@ const defaultOptions = {} as const
 export type CouncilMemberFieldsFragment = {
   __typename: 'CouncilMember'
   id: string
-  unpaidReward: any
-  stake: any
+  unpaidReward: string
+  stake: string
   member: {
     __typename: 'Membership'
     id: string
@@ -134,15 +134,23 @@ export type PastCouncilProposalsFieldsFragment = {
 
 export type PastCouncilWorkingGroupFieldsFragment = { __typename: 'WorkingGroup'; id: string; name: string }
 
-export type PastCouncilBudgetSetEventFieldsFragment = { __typename: 'BudgetSetEvent'; newBudget: any; groupId: string }
+export type PastCouncilBudgetSetEventFieldsFragment = {
+  __typename: 'BudgetSetEvent'
+  newBudget: string
+  groupId: string
+}
 
-export type PastCouncilRewardPaidEventFieldsFragment = { __typename: 'RewardPaidEvent'; groupId: string; amount: any }
+export type PastCouncilRewardPaidEventFieldsFragment = {
+  __typename: 'RewardPaidEvent'
+  groupId: string
+  amount: string
+}
 
 export type PastCouncilNewMissedRewardLevelReachedEventFieldsFragment = {
   __typename: 'NewMissedRewardLevelReachedEvent'
   groupId: string
   workerId: string
-  newMissedRewardAmount: any
+  newMissedRewardAmount: string
 }
 
 export type ElectedCouncilFieldsFragment = {
@@ -155,8 +163,8 @@ export type ElectedCouncilFieldsFragment = {
   councilMembers: Array<{
     __typename: 'CouncilMember'
     id: string
-    unpaidReward: any
-    stake: any
+    unpaidReward: string
+    stake: string
     member: {
       __typename: 'Membership'
       id: string
@@ -208,13 +216,13 @@ export type PastCouncilDetailedFieldsFragment = {
   endedAtBlock?: number | null
   endedAtNetwork?: Types.Network | null
   endedAtTime?: any | null
-  councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: any; unpaidReward: any }>
+  councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: string; unpaidReward: string }>
 }
 
 export type ElectionCandidateFieldsFragment = {
   __typename: 'Candidate'
   id: string
-  stake: any
+  stake: string
   status: Types.CandidacyStatus
   stakingAccountId: string
   member: {
@@ -265,7 +273,7 @@ export type ElectionRoundFieldsFragment = {
   candidates: Array<{
     __typename: 'Candidate'
     id: string
-    stake: any
+    stake: string
     status: Types.CandidacyStatus
     stakingAccountId: string
     member: {
@@ -318,7 +326,7 @@ export type LatestElectionRoundFieldsFragment = {
   candidates: Array<{
     __typename: 'Candidate'
     id: string
-    stake: any
+    stake: string
     status: Types.CandidacyStatus
     stakingAccountId: string
     member: {
@@ -371,7 +379,7 @@ export type PastElectionRoundFieldsFragment = {
   endedAtBlock?: number | null
   endedAtTime?: any | null
   endedAtNetwork?: Types.Network | null
-  candidates: Array<{ __typename: 'Candidate'; stake: any }>
+  candidates: Array<{ __typename: 'Candidate'; stake: string }>
   castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null }>
 }
 
@@ -384,7 +392,7 @@ export type PastElectionRoundDetailedFieldsFragment = {
   endedAtNetwork?: Types.Network | null
   candidates: Array<{
     __typename: 'Candidate'
-    stake: any
+    stake: string
     id: string
     status: Types.CandidacyStatus
     stakingAccountId: string
@@ -431,7 +439,7 @@ export type PastElectionRoundDetailedFieldsFragment = {
   }>
   castVotes: Array<{
     __typename: 'CastVote'
-    stake: any
+    stake: string
     stakeLocked: boolean
     voteForId?: string | null
     castBy: string
@@ -443,7 +451,7 @@ export type ElectionCandidateDetailedFieldsFragment = {
   stakingAccountId: string
   rewardAccountId: string
   id: string
-  stake: any
+  stake: string
   status: Types.CandidacyStatus
   electionRound: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
   member: {
@@ -491,14 +499,14 @@ export type ElectionCandidateDetailedFieldsFragment = {
 export type CastVoteFieldsFragment = {
   __typename: 'CastVote'
   id: string
-  stake: any
+  stake: string
   stakeLocked: boolean
   castBy: string
   commitment: string
   voteFor?: {
     __typename: 'Candidate'
     id: string
-    stake: any
+    stake: string
     status: Types.CandidacyStatus
     stakingAccountId: string
     member: {
@@ -548,7 +556,7 @@ export type CastVoteFieldsFragment = {
 
 export type CouncilSpendingEventFieldsFragment = {
   __typename: 'BudgetSpendingEvent'
-  amount: any
+  amount: string
   type?: Types.EventTypeOptions | null
 }
 
@@ -568,7 +576,7 @@ export type FundingRequestApprovedFragment = {
           __typename: 'FundingRequestProposalDetails'
           destinationsList?: {
             __typename: 'FundingRequestDestinationsList'
-            destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
+            destinations: Array<{ __typename: 'FundingRequestDestination'; amount: string; account: string }>
           } | null
         }
       | { __typename: 'LockBlogPostProposalDetails' }
@@ -605,8 +613,8 @@ export type GetElectedCouncilQuery = {
     councilMembers: Array<{
       __typename: 'CouncilMember'
       id: string
-      unpaidReward: any
-      stake: any
+      unpaidReward: string
+      stake: string
       member: {
         __typename: 'Membership'
         id: string
@@ -654,7 +662,7 @@ export type GetCouncilorVoterStakeQuery = {
   candidates: Array<{
     __typename: 'Candidate'
     memberId: string
-    votesReceived: Array<{ __typename: 'CastVote'; stake: any }>
+    votesReceived: Array<{ __typename: 'CastVote'; stake: string }>
   }>
 }
 
@@ -696,9 +704,13 @@ export type GetPastCouncilQuery = {
     endedAtBlock?: number | null
     endedAtNetwork?: Types.Network | null
     endedAtTime?: any | null
-    councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: any; unpaidReward: any }>
+    councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: string; unpaidReward: string }>
   } | null
-  budgetSpendingEvents: Array<{ __typename: 'BudgetSpendingEvent'; amount: any; type?: Types.EventTypeOptions | null }>
+  budgetSpendingEvents: Array<{
+    __typename: 'BudgetSpendingEvent'
+    amount: string
+    type?: Types.EventTypeOptions | null
+  }>
   fundingRequestsApproved: Array<{
     __typename: 'ProposalExecutedEvent'
     proposal: {
@@ -715,7 +727,7 @@ export type GetPastCouncilQuery = {
             __typename: 'FundingRequestProposalDetails'
             destinationsList?: {
               __typename: 'FundingRequestDestinationsList'
-              destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
+              destinations: Array<{ __typename: 'FundingRequestDestination'; amount: string; account: string }>
             } | null
           }
         | { __typename: 'LockBlogPostProposalDetails' }
@@ -967,13 +979,13 @@ export type GetPastCouncilWorkingGroupsQueryVariables = Types.Exact<{
 export type GetPastCouncilWorkingGroupsQuery = {
   __typename: 'Query'
   workingGroups: Array<{ __typename: 'WorkingGroup'; id: string; name: string }>
-  budgetSetEvents: Array<{ __typename: 'BudgetSetEvent'; newBudget: any; groupId: string }>
-  rewardPaidEvents: Array<{ __typename: 'RewardPaidEvent'; groupId: string; amount: any }>
+  budgetSetEvents: Array<{ __typename: 'BudgetSetEvent'; newBudget: string; groupId: string }>
+  rewardPaidEvents: Array<{ __typename: 'RewardPaidEvent'; groupId: string; amount: string }>
   newMissedRewardLevelReachedEvents: Array<{
     __typename: 'NewMissedRewardLevelReachedEvent'
     groupId: string
     workerId: string
-    newMissedRewardAmount: any
+    newMissedRewardAmount: string
   }>
 }
 
@@ -987,7 +999,7 @@ export type GetCurrentElectionQuery = {
     candidates: Array<{
       __typename: 'Candidate'
       id: string
-      stake: any
+      stake: string
       status: Types.CandidacyStatus
       stakingAccountId: string
       member: {
@@ -1045,7 +1057,7 @@ export type GetLatestElectionQuery = {
     candidates: Array<{
       __typename: 'Candidate'
       id: string
-      stake: any
+      stake: string
       status: Types.CandidacyStatus
       stakingAccountId: string
       member: {
@@ -1107,7 +1119,7 @@ export type GetPastElectionsQuery = {
     endedAtBlock?: number | null
     endedAtTime?: any | null
     endedAtNetwork?: Types.Network | null
-    candidates: Array<{ __typename: 'Candidate'; stake: any }>
+    candidates: Array<{ __typename: 'Candidate'; stake: string }>
     castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null }>
   }>
 }
@@ -1134,7 +1146,7 @@ export type GetPastElectionQuery = {
     endedAtNetwork?: Types.Network | null
     candidates: Array<{
       __typename: 'Candidate'
-      stake: any
+      stake: string
       id: string
       status: Types.CandidacyStatus
       stakingAccountId: string
@@ -1181,7 +1193,7 @@ export type GetPastElectionQuery = {
     }>
     castVotes: Array<{
       __typename: 'CastVote'
-      stake: any
+      stake: string
       stakeLocked: boolean
       voteForId?: string | null
       castBy: string
@@ -1200,7 +1212,7 @@ export type GetCandidateQuery = {
     stakingAccountId: string
     rewardAccountId: string
     id: string
-    stake: any
+    stake: string
     status: Types.CandidacyStatus
     electionRound: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
     member: {
@@ -1287,14 +1299,14 @@ export type GetCouncilVotesQuery = {
   castVotes: Array<{
     __typename: 'CastVote'
     id: string
-    stake: any
+    stake: string
     stakeLocked: boolean
     castBy: string
     commitment: string
     voteFor?: {
       __typename: 'Candidate'
       id: string
-      stake: any
+      stake: string
       status: Types.CandidacyStatus
       stakingAccountId: string
       member: {
@@ -1420,7 +1432,7 @@ export type GetPastCouncilStatsQuery = {
             __typename: 'FundingRequestProposalDetails'
             destinationsList?: {
               __typename: 'FundingRequestDestinationsList'
-              destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
+              destinations: Array<{ __typename: 'FundingRequestDestination'; amount: string; account: string }>
             } | null
           }
         | { __typename: 'LockBlogPostProposalDetails' }
@@ -1444,7 +1456,11 @@ export type GetPastCouncilStatsQuery = {
   }>
   proposalsRejected: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
   proposalsSlashed: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
-  budgetSpendingEvents: Array<{ __typename: 'BudgetSpendingEvent'; amount: any; type?: Types.EventTypeOptions | null }>
+  budgetSpendingEvents: Array<{
+    __typename: 'BudgetSpendingEvent'
+    amount: string
+    type?: Types.EventTypeOptions | null
+  }>
 }
 
 export type GetCouncilorElectionEventQueryVariables = Types.Exact<{

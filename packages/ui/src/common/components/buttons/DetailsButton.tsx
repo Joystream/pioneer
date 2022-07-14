@@ -1,33 +1,31 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { TransactionButtonWrapper } from '@/common/components/buttons/TransactionButton'
-import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
+import { BorderRad, Colors, Transitions } from '@/common/constants'
 
-import { MyProfileIcon } from '../../common/components/page/Sidebar/LinksIcons/MyProfileIcon'
-import { TextSmall } from '../../common/components/typography'
-import { BorderRad, Colors, Transitions } from '../../common/constants'
+import { TextSmall } from '../typography'
 
-interface Props {
+export interface DetailsButtonProps {
   onClick: () => void
+  icon: React.ReactNode
+  disabled?: boolean
+  titleText: string
+  subtitleText: string
 }
 
-export const AddMembershipButtonSwitch = ({ onClick }: Props) => {
-  const { isTransactionPending } = useTransactionStatus()
+export const DetailsButton = ({ onClick, icon, disabled, titleText, subtitleText }: DetailsButtonProps) => {
   return (
-    <TransactionButtonWrapper>
-      <AddMemberships onClick={onClick} disabled={isTransactionPending}>
-        <AddMembershipImage>
-          <MyProfileIcon />
-        </AddMembershipImage>
-        <AddMembershipTitle>New Member</AddMembershipTitle>
-        <AddMembershipText>Create a New Membership</AddMembershipText>
-      </AddMemberships>
-    </TransactionButtonWrapper>
+    <DetailsButtonWrapper onClick={onClick} disabled={disabled}>
+      <ImageWrapper>
+        <IconWrapper>{icon}</IconWrapper>
+      </ImageWrapper>
+      <TitleText>{titleText}</TitleText>
+      <SubtitleText>{subtitleText}</SubtitleText>
+    </DetailsButtonWrapper>
   )
 }
 
-const AddMembershipImage = styled.span`
+const ImageWrapper = styled.span`
   display: flex;
   grid-area: createicon;
   justify-content: center;
@@ -49,20 +47,26 @@ const AddMembershipImage = styled.span`
     }
   }
 `
+const IconWrapper = styled.div`
+  width: 16px;
+  height: 16px;
+  border-radius: ${BorderRad.round};
+  background-color: ${Colors.Black[75]};
+`
 
-const AddMembershipTitle = styled.h6`
+const TitleText = styled.h6`
   grid-area: createtitle;
   color: ${Colors.Black[75]};
   transition: ${Transitions.all};
 `
 
-const AddMembershipText = styled(TextSmall)`
+const SubtitleText = styled(TextSmall)`
   grid-area: createtext;
   color: ${Colors.Black[400]};
   transition: ${Transitions.all};
 `
 
-const AddMemberships = styled.button`
+const DetailsButtonWrapper = styled.button`
   display: grid;
   grid-template-columns: 40px 1fr;
   grid-template-rows: 20px 18px;
@@ -85,14 +89,14 @@ const AddMemberships = styled.button`
     outline: none;
     background-color: ${Colors.Black[600]};
 
-    ${AddMembershipImage} {
+    ${ImageWrapper} {
       background-color: ${Colors.Black[500]};
       color: ${Colors.Black[50]};
     }
-    ${AddMembershipTitle} {
+    ${TitleText} {
       color: ${Colors.Black[50]};
     }
-    ${AddMembershipText} {
+    ${SubtitleText} {
       color: ${Colors.Black[300]};
     }
   }

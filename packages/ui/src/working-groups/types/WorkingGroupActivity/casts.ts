@@ -200,7 +200,7 @@ export const asBudgetSetActivity: GroupActivityCast<BudgetSetEventFieldsFragment
   eventType: fragment.__typename,
   ...asBaseActivity(fragment),
   groupName: asWorkingGroupName(fragment.group.name),
-  newBudget: fragment.newBudget,
+  newBudget: new BN(fragment.newBudget),
 })
 
 export const asWorkerTerminatedActivity: GroupActivityCast<
@@ -227,7 +227,7 @@ export const asWorkerRewardAmountUpdatedActivity: GroupActivityCast<
 > = (fragment): WorkerRewardAmountUpdatedActivity => ({
   eventType: fragment.__typename,
   ...asBaseActivity(fragment),
-  newAmount: fragment.newRewardPerBlock,
+  newAmount: new BN(fragment.newRewardPerBlock),
 })
 
 type WorkingGroupEventFields =

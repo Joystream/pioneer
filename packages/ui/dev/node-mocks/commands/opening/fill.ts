@@ -3,11 +3,9 @@ import { ApplicationId } from '@joystream/types/working-group'
 import { BTreeSet } from '@polkadot/types'
 import yargs from 'yargs'
 
-import { GroupIdName } from '../../../../src/working-groups/types'
+import { GROUP, GroupIdName } from '../../consts'
 import { getSudoAccount } from '../../data/addresses'
 import { signAndSend, withApi } from '../../lib/api'
-
-const GROUP = 'membershipWorkingGroup' // TODO pass as a parameter
 
 const options = {
   applicationId: {
