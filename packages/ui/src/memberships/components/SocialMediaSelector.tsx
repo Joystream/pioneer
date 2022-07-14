@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
@@ -28,13 +29,19 @@ interface Props {
 
 export const SocialMediaSelector = ({ initialSocials }: Props) => {
   const [chosenSocial, setChosenSocial] = useState<Socials[]>(initialSocials ?? [])
+  const wrapperRef = useRef<HTMLDivElement>(null)
   const form = useFormContext()
 
   const selectSocial = useCallback(
     (social: Socials) => () => {
-      setChosenSocial((prev) => [...prev, social])
+      flushSync(() => {
+        setChosenSocial((prev) => [...prev, social])
+      })
+      if (wrapperRef.current && chosenSocial.length === 0) {
+        wrapperRef.current.lastElementChild?.scrollIntoView({ behavior: 'smooth' })
+      }
     },
-    []
+    [wrapperRef.current, chosenSocial.length]
   )
 
   const removeSocial = useCallback(
@@ -46,7 +53,7 @@ export const SocialMediaSelector = ({ initialSocials }: Props) => {
   )
 
   return (
-    <SocialMediaInput>
+    <SocialMediaInput ref={wrapperRef}>
       <TextBig bold>Social Profiles</TextBig>
       <TextMedium>This will help us to contact you</TextMedium>
 
