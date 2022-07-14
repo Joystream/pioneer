@@ -75,6 +75,7 @@ export const SocialMediaSelector = ({ initialSocials }: Props) => {
           key={'social' + index}
           id={social + 1}
           inputSize="m"
+          name={`externalResources.${social}`}
           label={capitalizeFirstLetter(social.toLowerCase())}
         >
           <InputText
