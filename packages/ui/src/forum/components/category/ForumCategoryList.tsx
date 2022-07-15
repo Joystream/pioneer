@@ -12,26 +12,29 @@ import { CategoryListItem } from './CategoryListItem'
 export interface ForumCategoryListProps {
   categories: ForumCategory[]
   isArchive?: boolean
+  isCategory?: boolean
 }
 
-export const ForumCategoryList = ({ categories, isArchive = false }: ForumCategoryListProps) => (
+export const ForumCategoryList = ({ categories, isArchive = false, isCategory }: ForumCategoryListProps) => (
   <ForumCategoryListStyles gap={4}>
-    <ListHeaders $colLayout={categoriesColLayout(isArchive)}>
-      <ListHeader>Category</ListHeader>
-      <ListHeader>Total threads</ListHeader>
-      <ListHeader>Last Post</ListHeader>
-      {isArchive ? (
-        <ListHeader>Archived</ListHeader>
-      ) : (
-        <>
-          <ListHeader>Popular Thread</ListHeader>
-          <ListHeader>Moderators</ListHeader>
-        </>
-      )}
-    </ListHeaders>
-    <List as="div" isArchive={isArchive}>
+    {!isCategory && (
+      <ListHeaders $colLayout={categoriesColLayout(isArchive)}>
+        <ListHeader>Category</ListHeader>
+        <ListHeader>Total threads</ListHeader>
+        <ListHeader>Last Post</ListHeader>
+        {isArchive ? (
+          <ListHeader>Archived</ListHeader>
+        ) : (
+          <>
+            <ListHeader>Popular Thread</ListHeader>
+            <ListHeader>Moderators</ListHeader>
+          </>
+        )}
+      </ListHeaders>
+    )}
+    <List as="div" isArchive={isArchive} isCategory={isCategory}>
       {categories.map((category, index) => (
-        <CategoryListItem key={index} category={category} isArchive={isArchive} />
+        <CategoryListItem key={index} category={category} isArchive={isArchive} isCategory={isCategory} />
       ))}
     </List>
   </ForumCategoryListStyles>

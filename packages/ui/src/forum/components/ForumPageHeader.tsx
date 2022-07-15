@@ -9,8 +9,9 @@ interface ForumPageHeaderProps {
   title: React.ReactNode
   children?: React.ReactNode
   buttons?: React.ReactNode
+  isCategory?: boolean
 }
-export const ForumPageHeader = ({ title, children, buttons }: ForumPageHeaderProps) => {
+export const ForumPageHeader = ({ title, children, buttons, isCategory }: ForumPageHeaderProps) => {
   const [search, setSearch] = useState('')
 
   const { showModal } = useModal()
@@ -19,16 +20,25 @@ export const ForumPageHeader = ({ title, children, buttons }: ForumPageHeaderPro
     <PageHeaderWrapper>
       <PageHeaderRow>
         {title}
-        <ButtonsGroup>
-          <SearchBox
-            value={search}
-            onChange={setSearch}
-            onApply={() => showModal({ modal: 'SearchResults', data: { search } })}
-          />
-          {buttons}
-        </ButtonsGroup>
+        {!isCategory && (
+          <ButtonsGroup>
+            <SearchBox
+              value={search}
+              onChange={setSearch}
+              onApply={() => showModal({ modal: 'SearchResults', data: { search } })}
+            />
+            {buttons}
+          </ButtonsGroup>
+        )}
       </PageHeaderRow>
       {children}
+      {isCategory && (
+        <SearchBox
+          value={search}
+          onChange={setSearch}
+          onApply={() => showModal({ modal: 'SearchResults', data: { search } })}
+        />
+      )}
     </PageHeaderWrapper>
   )
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { generatePath } from 'react-router'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
 import { LinkButtonInnerWrapper, LinkButtonLink } from '@/common/components/buttons/LinkButtons'
@@ -20,8 +20,9 @@ import { ThreadCount } from './ThreadCount'
 export interface CategoryListItemProps {
   category: ForumCategory
   isArchive?: boolean
+  isCategory?: boolean
 }
-export const CategoryListItem = ({ category, isArchive = false }: CategoryListItemProps) => {
+export const CategoryListItem = ({ category, isArchive = false, isCategory }: CategoryListItemProps) => {
   const block = category.status.categoryArchivalStatusUpdatedEvent
 
   const expectedStatus: CategoryStatusType = isArchive ? 'CategoryStatusArchived' : 'CategoryStatusActive'
@@ -34,8 +35,8 @@ export const CategoryListItem = ({ category, isArchive = false }: CategoryListIt
     ))
 
   return (
-    <CategoryListItemStyles $colLayout={categoriesColLayout(isArchive)}>
-      <Category>
+    <CategoryListItemStyles $colLayout={categoriesColLayout(isArchive)} isCategory={isCategory}>
+      <Category isCategory={isCategory}>
         <CategoryListItemTitle as={GhostRouterLink} to={categoryLink(category.id, isArchive)}>
           {category.title}
         </CategoryListItemTitle>
@@ -46,16 +47,18 @@ export const CategoryListItem = ({ category, isArchive = false }: CategoryListIt
         )}
       </Category>
 
-      <ThreadCount categoryId={category.id} isArchive={isArchive} />
-
-      <LatestPost categoryId={category.id} />
-
-      {isArchive ? (
-        block && <BlockTime block={block} layout="column" />
-      ) : (
+      <ThreadCount categoryId={category.id} isCategory={isCategory} isArchive={isArchive} />
+      {!isCategory && (
         <>
-          <PopularThread categoryId={category.id} />
-          <MemberStack members={moderatorsSummary(category.moderators)} max={5} />
+          <LatestPost categoryId={category.id} />
+          {isArchive ? (
+            block && <BlockTime block={block} layout="column" />
+          ) : (
+            <>
+              <PopularThread categoryId={category.id} />
+              <MemberStack members={moderatorsSummary(category.moderators)} max={5} />
+            </>
+          )}
         </>
       )}
     </CategoryListItemStyles>
@@ -68,6 +71,7 @@ const categoryLink = (id: string, isArchive: boolean) =>
 export interface CategoryItemFieldProps {
   categoryId: string
   isArchive?: boolean
+  isCategory?: boolean
 }
 
 const CategoryListItemTitle = styled.h5`
@@ -96,20 +100,28 @@ export const CategoryListItemStyles = styled(TableListItem)`
   align-items: start;
   height: 128px;
   padding: 14px 24px;
+  ${({ isCategory }: { isCategory?: boolean }) =>
+    isCategory &&
+    css`
+      display: flex;
+      align-items: center;
+      width: 50%;
+      grid: initial;
+    `};
 
   ${TableListItemAsLinkHover};
 
   & > * {
-    margin-top: 8px;
+  margin- top: 8px;
   }
 
-  &:hover,
-  &:focus,
-  &:focus-within {
+  &: hover,
+  &: focus,
+  &: focus - within {
     ${CategoryListItemTitle} {
-      color: ${Colors.Blue[500]};
-    }
+    color: ${Colors.Blue[500]};
   }
+}
 
   ${TextMedium},
   ${TextInlineExtraSmall},
@@ -118,12 +130,18 @@ export const CategoryListItemStyles = styled(TableListItem)`
   ${BlockTimeWrapper},
   ${ThreadInfoStyles},
   ${MemberStackStyles} {
-    z-index: 2;
-  }
+  z - index: 2;
+}
+
 `
 
 const Category = styled.div`
   margin: 0;
+  ${({ isCategory }: { isCategory?: boolean }) =>
+    isCategory &&
+    css`
+      width: 65%;
+    `};
   ${TextMedium} {
     color: ${Colors.Black[500]};
     margin: 12px 0 4px;
@@ -137,25 +155,25 @@ const Category = styled.div`
 const SubcategoryLink = styled(LinkButtonLink)`
   &,
   &:visited {
-    display: inline-flex;
-    font-size: inherit;
-    line-height: 12px;
-    font-weight: inherit;
-    color: inherit;
-    border: none;
+  display: inline - flex;
+  font - size: inherit;
+  line - height: 12px;
+  font - weight: inherit;
+  color: inherit;
+  border: none;
 
     &:before {
-      bottom: 0;
-      background-color: ${Colors.Black[400]};
-      transform: translateX(calc(-100% - 2px));
-    }
-    ${LinkButtonInnerWrapper} {
-      transform: translateY(0);
-    }
+    bottom: 0;
+    background - color: ${Colors.Black[400]};
+    transform: translateX(calc(-100 % - 2px));
   }
+    ${LinkButtonInnerWrapper} {
+    transform: translateY(0);
+  }
+}
   &:hover {
     &:before {
-      transform: translateX(0%);
-    }
+    transform: translateX(0 %);
   }
+}
 `
