@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { CheckboxIcon } from '@/common/components/icons'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextMedium } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
 import { SelectListWrapper } from '@/common/modals/OnBoardingModal/components/ConnectAccountItem'
 
 interface ConnectWalletItemProps {
@@ -48,5 +49,9 @@ const InnerWrapper = styled.div`
   img {
     object-fit: contain;
     width: 40px;
+  }
+
+  svg {
+    color: ${Colors.LogoPurple};
   }
 `

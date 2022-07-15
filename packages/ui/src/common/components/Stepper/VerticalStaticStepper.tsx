@@ -2,7 +2,6 @@ import { getAllWallets } from 'injectweb3-connect'
 import React from 'react'
 import styled from 'styled-components'
 
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { TextHuge, TextInlineBig, TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { MemberAvatar } from '@/memberships/components/Avatar'
@@ -69,16 +68,12 @@ const StepTitle = styled(TextHuge)`
 
 const StepSubtitleList = styled.ul`
   list-style: disc;
-  margin-left: 15px;
 `
 
 const WalletIcons = styled(MemberAvatar)``
+
 const WalletIconWrapper = styled(MemberStackStyles)`
   margin-top: 5px;
-`
-
-const StepSubtitle = styled.li`
-  color: ${Colors.White};
 `
 
 const StyledSubtitle = styled(TextMedium)`

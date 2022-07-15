@@ -48,4 +48,8 @@ export const SelectItemInnerWrap = styled.div`
   height: ${Sizes.accountHeight};
   padding: 16px 8px 16px 16px;
   margin-left: -1px;
+
+  svg {
+    color: ${Colors.LogoPurple};
+  }
 `

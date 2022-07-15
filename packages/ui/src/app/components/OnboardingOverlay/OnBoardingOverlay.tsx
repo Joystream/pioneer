@@ -148,7 +148,7 @@ const StyledDropDown = styled(DropDownToggle)`
 const DropdownContent = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  padding: 40px;
+  padding: 33px 24px 33px 33px;
 
   > *:first-child {
     padding-right: 10%;
@@ -156,10 +156,6 @@ const DropdownContent = styled.div`
 
   > *:nth-child(2) {
     justify-self: center;
-  }
-
-  button {
-    margin-left: 30%;
   }
 `
 

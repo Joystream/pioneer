@@ -71,6 +71,7 @@ const AccountName = styled.h5`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: left;
   transition: ${Transitions.all};
 `
 
