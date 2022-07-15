@@ -5,9 +5,9 @@ import { useBalance } from '@/accounts/hooks/useBalance'
 import { TokenValue } from '@/common/components/typography/TokenValue'
 import { useMemberRowWorkDetails } from '@/memberships/hooks/useMemberRowWorkDetails'
 import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
+import { MemberWithReferrer } from '@/memberships/types'
 
 import { MemberInfo, MemberCreated, MemberReferrer } from '..'
-import { MemberWithReferrer } from '../../types'
 import { MemberRoles } from '../MemberRoles'
 
 import { CountInfo, MemberColumn, MemberItemWrap, MemberModalTrigger, MemberRolesColumn } from './Fileds'

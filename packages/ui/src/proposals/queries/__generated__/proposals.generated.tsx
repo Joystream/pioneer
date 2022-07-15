@@ -39,41 +39,6 @@ export type WorkerProposalDetailsFragment = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   }
 }
 
@@ -155,41 +120,6 @@ export type ProposalFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   }
 }
 
@@ -230,41 +160,6 @@ export type VoteFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   }
 }
 
@@ -310,41 +205,6 @@ export type VoteWithDetailsFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   }
 }
 
@@ -396,41 +256,6 @@ export type ProposalWithDetailsFieldsFragment = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
   }>
   createdInEvent: { __typename: 'ProposalCreatedEvent'; inBlock: number; createdAt: any; network: Types.Network }
@@ -503,41 +328,6 @@ export type ProposalWithDetailsFieldsFragment = {
               network: Types.Network
               account: string
             }> | null
-            invitedBy?: {
-              __typename: 'Membership'
-              id: string
-              handle: string
-              roles: Array<{
-                __typename: 'Worker'
-                id: string
-                createdAt: any
-                group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-              }>
-              metadata: {
-                __typename: 'MemberMetadata'
-                avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-              }
-            } | null
-            entry:
-              | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-              | {
-                  __typename: 'MembershipEntryInvited'
-                  memberInvitedEvent?: {
-                    __typename: 'MemberInvitedEvent'
-                    createdAt: any
-                    inBlock: number
-                    network: Types.Network
-                  } | null
-                }
-              | {
-                  __typename: 'MembershipEntryPaid'
-                  membershipBoughtEvent?: {
-                    __typename: 'MembershipBoughtEvent'
-                    createdAt: any
-                    inBlock: number
-                    network: Types.Network
-                  } | null
-                }
           }
         } | null
       }
@@ -583,41 +373,6 @@ export type ProposalWithDetailsFieldsFragment = {
               network: Types.Network
               account: string
             }> | null
-            invitedBy?: {
-              __typename: 'Membership'
-              id: string
-              handle: string
-              roles: Array<{
-                __typename: 'Worker'
-                id: string
-                createdAt: any
-                group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-              }>
-              metadata: {
-                __typename: 'MemberMetadata'
-                avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-              }
-            } | null
-            entry:
-              | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-              | {
-                  __typename: 'MembershipEntryInvited'
-                  memberInvitedEvent?: {
-                    __typename: 'MemberInvitedEvent'
-                    createdAt: any
-                    inBlock: number
-                    network: Types.Network
-                  } | null
-                }
-              | {
-                  __typename: 'MembershipEntryPaid'
-                  membershipBoughtEvent?: {
-                    __typename: 'MembershipBoughtEvent'
-                    createdAt: any
-                    inBlock: number
-                    network: Types.Network
-                  } | null
-                }
           }
         } | null
       }
@@ -679,41 +434,6 @@ export type ProposalWithDetailsFieldsFragment = {
               network: Types.Network
               account: string
             }> | null
-            invitedBy?: {
-              __typename: 'Membership'
-              id: string
-              handle: string
-              roles: Array<{
-                __typename: 'Worker'
-                id: string
-                createdAt: any
-                group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-              }>
-              metadata: {
-                __typename: 'MemberMetadata'
-                avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-              }
-            } | null
-            entry:
-              | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-              | {
-                  __typename: 'MembershipEntryInvited'
-                  memberInvitedEvent?: {
-                    __typename: 'MemberInvitedEvent'
-                    createdAt: any
-                    inBlock: number
-                    network: Types.Network
-                  } | null
-                }
-              | {
-                  __typename: 'MembershipEntryPaid'
-                  membershipBoughtEvent?: {
-                    __typename: 'MembershipBoughtEvent'
-                    createdAt: any
-                    inBlock: number
-                    network: Types.Network
-                  } | null
-                }
           }
         } | null
       }
@@ -757,41 +477,6 @@ export type ProposalWithDetailsFieldsFragment = {
               network: Types.Network
               account: string
             }> | null
-            invitedBy?: {
-              __typename: 'Membership'
-              id: string
-              handle: string
-              roles: Array<{
-                __typename: 'Worker'
-                id: string
-                createdAt: any
-                group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-              }>
-              metadata: {
-                __typename: 'MemberMetadata'
-                avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-              }
-            } | null
-            entry:
-              | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-              | {
-                  __typename: 'MembershipEntryInvited'
-                  memberInvitedEvent?: {
-                    __typename: 'MemberInvitedEvent'
-                    createdAt: any
-                    inBlock: number
-                    network: Types.Network
-                  } | null
-                }
-              | {
-                  __typename: 'MembershipEntryPaid'
-                  membershipBoughtEvent?: {
-                    __typename: 'MembershipBoughtEvent'
-                    createdAt: any
-                    inBlock: number
-                    network: Types.Network
-                  } | null
-                }
           }
         } | null
       }
@@ -833,41 +518,6 @@ export type ProposalWithDetailsFieldsFragment = {
               network: Types.Network
               account: string
             }> | null
-            invitedBy?: {
-              __typename: 'Membership'
-              id: string
-              handle: string
-              roles: Array<{
-                __typename: 'Worker'
-                id: string
-                createdAt: any
-                group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-              }>
-              metadata: {
-                __typename: 'MemberMetadata'
-                avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-              }
-            } | null
-            entry:
-              | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-              | {
-                  __typename: 'MembershipEntryInvited'
-                  memberInvitedEvent?: {
-                    __typename: 'MemberInvitedEvent'
-                    createdAt: any
-                    inBlock: number
-                    network: Types.Network
-                  } | null
-                }
-              | {
-                  __typename: 'MembershipEntryPaid'
-                  membershipBoughtEvent?: {
-                    __typename: 'MembershipBoughtEvent'
-                    createdAt: any
-                    inBlock: number
-                    network: Types.Network
-                  } | null
-                }
           }
         } | null
       }
@@ -931,41 +581,6 @@ export type ProposalWithDetailsFieldsFragment = {
             network: Types.Network
             account: string
           }> | null
-          invitedBy?: {
-            __typename: 'Membership'
-            id: string
-            handle: string
-            roles: Array<{
-              __typename: 'Worker'
-              id: string
-              createdAt: any
-              group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-            }>
-            metadata: {
-              __typename: 'MemberMetadata'
-              avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-            }
-          } | null
-          entry:
-            | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-            | {
-                __typename: 'MembershipEntryInvited'
-                memberInvitedEvent?: {
-                  __typename: 'MemberInvitedEvent'
-                  createdAt: any
-                  inBlock: number
-                  network: Types.Network
-                } | null
-              }
-            | {
-                __typename: 'MembershipEntryPaid'
-                membershipBoughtEvent?: {
-                  __typename: 'MembershipBoughtEvent'
-                  createdAt: any
-                  inBlock: number
-                  network: Types.Network
-                } | null
-              }
         }
         status:
           | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -1010,41 +625,6 @@ export type ProposalWithDetailsFieldsFragment = {
           network: Types.Network
           account: string
         }> | null
-        invitedBy?: {
-          __typename: 'Membership'
-          id: string
-          handle: string
-          roles: Array<{
-            __typename: 'Worker'
-            id: string
-            createdAt: any
-            group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-          }>
-          metadata: {
-            __typename: 'MemberMetadata'
-            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-          }
-        } | null
-        entry:
-          | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-          | {
-              __typename: 'MembershipEntryInvited'
-              memberInvitedEvent?: {
-                __typename: 'MemberInvitedEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
-          | {
-              __typename: 'MembershipEntryPaid'
-              membershipBoughtEvent?: {
-                __typename: 'MembershipBoughtEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
       }
       status:
         | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -1105,41 +685,6 @@ export type ProposalWithDetailsFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   }
 }
 
@@ -1193,41 +738,6 @@ export type DiscussionPostFieldsFragment = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
     status:
       | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -1272,41 +782,6 @@ export type DiscussionPostFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   }
   status:
     | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -1358,41 +833,6 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   }
   status:
     | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -1489,41 +929,6 @@ export type ProposalDiscussionPostMentionFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   }
 }
 
@@ -1614,41 +1019,6 @@ export type GetProposalsQuery = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
   }>
 }
@@ -1716,41 +1086,6 @@ export type GetProposalQuery = {
           network: Types.Network
           account: string
         }> | null
-        invitedBy?: {
-          __typename: 'Membership'
-          id: string
-          handle: string
-          roles: Array<{
-            __typename: 'Worker'
-            id: string
-            createdAt: any
-            group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-          }>
-          metadata: {
-            __typename: 'MemberMetadata'
-            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-          }
-        } | null
-        entry:
-          | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-          | {
-              __typename: 'MembershipEntryInvited'
-              memberInvitedEvent?: {
-                __typename: 'MemberInvitedEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
-          | {
-              __typename: 'MembershipEntryPaid'
-              membershipBoughtEvent?: {
-                __typename: 'MembershipBoughtEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
       }
     }>
     createdInEvent: { __typename: 'ProposalCreatedEvent'; inBlock: number; createdAt: any; network: Types.Network }
@@ -1823,41 +1158,6 @@ export type GetProposalQuery = {
                 network: Types.Network
                 account: string
               }> | null
-              invitedBy?: {
-                __typename: 'Membership'
-                id: string
-                handle: string
-                roles: Array<{
-                  __typename: 'Worker'
-                  id: string
-                  createdAt: any
-                  group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-                }>
-                metadata: {
-                  __typename: 'MemberMetadata'
-                  avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-                }
-              } | null
-              entry:
-                | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-                | {
-                    __typename: 'MembershipEntryInvited'
-                    memberInvitedEvent?: {
-                      __typename: 'MemberInvitedEvent'
-                      createdAt: any
-                      inBlock: number
-                      network: Types.Network
-                    } | null
-                  }
-                | {
-                    __typename: 'MembershipEntryPaid'
-                    membershipBoughtEvent?: {
-                      __typename: 'MembershipBoughtEvent'
-                      createdAt: any
-                      inBlock: number
-                      network: Types.Network
-                    } | null
-                  }
             }
           } | null
         }
@@ -1903,41 +1203,6 @@ export type GetProposalQuery = {
                 network: Types.Network
                 account: string
               }> | null
-              invitedBy?: {
-                __typename: 'Membership'
-                id: string
-                handle: string
-                roles: Array<{
-                  __typename: 'Worker'
-                  id: string
-                  createdAt: any
-                  group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-                }>
-                metadata: {
-                  __typename: 'MemberMetadata'
-                  avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-                }
-              } | null
-              entry:
-                | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-                | {
-                    __typename: 'MembershipEntryInvited'
-                    memberInvitedEvent?: {
-                      __typename: 'MemberInvitedEvent'
-                      createdAt: any
-                      inBlock: number
-                      network: Types.Network
-                    } | null
-                  }
-                | {
-                    __typename: 'MembershipEntryPaid'
-                    membershipBoughtEvent?: {
-                      __typename: 'MembershipBoughtEvent'
-                      createdAt: any
-                      inBlock: number
-                      network: Types.Network
-                    } | null
-                  }
             }
           } | null
         }
@@ -1999,41 +1264,6 @@ export type GetProposalQuery = {
                 network: Types.Network
                 account: string
               }> | null
-              invitedBy?: {
-                __typename: 'Membership'
-                id: string
-                handle: string
-                roles: Array<{
-                  __typename: 'Worker'
-                  id: string
-                  createdAt: any
-                  group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-                }>
-                metadata: {
-                  __typename: 'MemberMetadata'
-                  avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-                }
-              } | null
-              entry:
-                | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-                | {
-                    __typename: 'MembershipEntryInvited'
-                    memberInvitedEvent?: {
-                      __typename: 'MemberInvitedEvent'
-                      createdAt: any
-                      inBlock: number
-                      network: Types.Network
-                    } | null
-                  }
-                | {
-                    __typename: 'MembershipEntryPaid'
-                    membershipBoughtEvent?: {
-                      __typename: 'MembershipBoughtEvent'
-                      createdAt: any
-                      inBlock: number
-                      network: Types.Network
-                    } | null
-                  }
             }
           } | null
         }
@@ -2077,41 +1307,6 @@ export type GetProposalQuery = {
                 network: Types.Network
                 account: string
               }> | null
-              invitedBy?: {
-                __typename: 'Membership'
-                id: string
-                handle: string
-                roles: Array<{
-                  __typename: 'Worker'
-                  id: string
-                  createdAt: any
-                  group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-                }>
-                metadata: {
-                  __typename: 'MemberMetadata'
-                  avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-                }
-              } | null
-              entry:
-                | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-                | {
-                    __typename: 'MembershipEntryInvited'
-                    memberInvitedEvent?: {
-                      __typename: 'MemberInvitedEvent'
-                      createdAt: any
-                      inBlock: number
-                      network: Types.Network
-                    } | null
-                  }
-                | {
-                    __typename: 'MembershipEntryPaid'
-                    membershipBoughtEvent?: {
-                      __typename: 'MembershipBoughtEvent'
-                      createdAt: any
-                      inBlock: number
-                      network: Types.Network
-                    } | null
-                  }
             }
           } | null
         }
@@ -2153,41 +1348,6 @@ export type GetProposalQuery = {
                 network: Types.Network
                 account: string
               }> | null
-              invitedBy?: {
-                __typename: 'Membership'
-                id: string
-                handle: string
-                roles: Array<{
-                  __typename: 'Worker'
-                  id: string
-                  createdAt: any
-                  group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-                }>
-                metadata: {
-                  __typename: 'MemberMetadata'
-                  avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-                }
-              } | null
-              entry:
-                | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-                | {
-                    __typename: 'MembershipEntryInvited'
-                    memberInvitedEvent?: {
-                      __typename: 'MemberInvitedEvent'
-                      createdAt: any
-                      inBlock: number
-                      network: Types.Network
-                    } | null
-                  }
-                | {
-                    __typename: 'MembershipEntryPaid'
-                    membershipBoughtEvent?: {
-                      __typename: 'MembershipBoughtEvent'
-                      createdAt: any
-                      inBlock: number
-                      network: Types.Network
-                    } | null
-                  }
             }
           } | null
         }
@@ -2251,41 +1411,6 @@ export type GetProposalQuery = {
               network: Types.Network
               account: string
             }> | null
-            invitedBy?: {
-              __typename: 'Membership'
-              id: string
-              handle: string
-              roles: Array<{
-                __typename: 'Worker'
-                id: string
-                createdAt: any
-                group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-              }>
-              metadata: {
-                __typename: 'MemberMetadata'
-                avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-              }
-            } | null
-            entry:
-              | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-              | {
-                  __typename: 'MembershipEntryInvited'
-                  memberInvitedEvent?: {
-                    __typename: 'MemberInvitedEvent'
-                    createdAt: any
-                    inBlock: number
-                    network: Types.Network
-                  } | null
-                }
-              | {
-                  __typename: 'MembershipEntryPaid'
-                  membershipBoughtEvent?: {
-                    __typename: 'MembershipBoughtEvent'
-                    createdAt: any
-                    inBlock: number
-                    network: Types.Network
-                  } | null
-                }
           }
           status:
             | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -2330,41 +1455,6 @@ export type GetProposalQuery = {
             network: Types.Network
             account: string
           }> | null
-          invitedBy?: {
-            __typename: 'Membership'
-            id: string
-            handle: string
-            roles: Array<{
-              __typename: 'Worker'
-              id: string
-              createdAt: any
-              group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-            }>
-            metadata: {
-              __typename: 'MemberMetadata'
-              avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-            }
-          } | null
-          entry:
-            | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-            | {
-                __typename: 'MembershipEntryInvited'
-                memberInvitedEvent?: {
-                  __typename: 'MemberInvitedEvent'
-                  createdAt: any
-                  inBlock: number
-                  network: Types.Network
-                } | null
-              }
-            | {
-                __typename: 'MembershipEntryPaid'
-                membershipBoughtEvent?: {
-                  __typename: 'MembershipBoughtEvent'
-                  createdAt: any
-                  inBlock: number
-                  network: Types.Network
-                } | null
-              }
         }
         status:
           | { __typename: 'ProposalDiscussionPostStatusActive' }
@@ -2425,41 +1515,6 @@ export type GetProposalQuery = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
   } | null
 }
@@ -2537,41 +1592,6 @@ export type GetVoteWithDetailsQuery = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
   } | null
 }
@@ -2638,41 +1658,6 @@ export type GetProposalVotesQuery = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
   }>
 }
@@ -2777,41 +1762,6 @@ export type GetProposalDiscussionPostMentionQuery = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
   } | null
 }

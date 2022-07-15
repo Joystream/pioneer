@@ -34,7 +34,9 @@ export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member
   createdAt: data.createdAt,
 })
 
-export const asMemeberWithDetails = (data: Omit<MemberFieldsFragment, '__typename'>): MemberWithReferrer => ({
+export const asMemeberWithDetails = (
+  data: Omit<MemberWithDetailsFieldsFragment, '__typename'>
+): MemberWithReferrer => ({
   id: data.id,
   handle: data.handle,
   name: data.metadata.name ?? undefined,
@@ -50,16 +52,7 @@ export const asMemeberWithDetails = (data: Omit<MemberFieldsFragment, '__typenam
   roles: data.roles.map(asMemberRole),
   createdAt: data.createdAt,
   entry: data.entry ? asMemberEntry(data.entry) : undefined,
-  invitedBy: data.invitedBy
-    ? {
-        id: data.id,
-        handle: data.handle,
-        metadata: {
-          avatar: castQueryResult(data.invitedBy.metadata.avatar, 'AvatarUri')?.avatarUri,
-        },
-        roles: data.invitedBy.roles.map((role) => ({ id: role.id, groupName: asWorkingGroupName(role.group.name) })),
-      }
-    : undefined,
+  invitedBy: data.invitedBy ? asMember(data.invitedBy) : undefined,
 })
 
 export const asMemberRole = (data: MemberFieldsFragment['roles'][0]): MemberRole => ({

@@ -35,26 +35,12 @@ fragment MemberFields on Membership {
     network
     account
   }
+}
+
+fragment MemberWithDetailsFields on Membership {
+  ...MemberFields
   invitedBy {
-    id
-    handle
-    roles {
-      id
-      createdAt
-      group {
-        id
-        createdAt
-        name
-      }
-    }
-    metadata {
-      avatar {
-        ... on AvatarUri {
-          __typename
-          avatarUri
-        }
-      }
-    }
+    ...MemberFields
   }
   entry {
     ... on MembershipEntryInvited {
@@ -75,11 +61,6 @@ fragment MemberFields on Membership {
       phantom
     }
   }
-}
-
-fragment MemberWithDetailsFields on Membership {
-  ...MemberFields
-
   invitees {
     ...MemberFields
     ## Deeply nested join does not work
@@ -93,6 +74,17 @@ fragment MemberWithDetailsFields on Membership {
     #        }
     #      }
     #    }
+  }
+}
+
+query GetMembersWithDetails(
+  $where: MembershipWhereInput
+  $orderBy: [MembershipOrderByInput!]
+  $offset: Int
+  $limit: Int
+) {
+  memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
+    ...MemberWithDetailsFields
   }
 }
 

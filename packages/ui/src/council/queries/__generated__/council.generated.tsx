@@ -43,41 +43,6 @@ export type CouncilMemberFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   }
 }
 
@@ -163,41 +128,6 @@ export type PastCouncilProposalsFieldsFragment = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
   }
 }
@@ -268,41 +198,6 @@ export type ElectedCouncilFieldsFragment = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
   }>
 }
@@ -362,41 +257,6 @@ export type ElectionCandidateFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   }
   noteMetadata: {
     __typename: 'CandidacyNoteMetadata'
@@ -448,41 +308,6 @@ export type ElectionRoundFieldsFragment = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
     noteMetadata: {
       __typename: 'CandidacyNoteMetadata'
@@ -536,41 +361,6 @@ export type LatestElectionRoundFieldsFragment = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
     noteMetadata: {
       __typename: 'CandidacyNoteMetadata'
@@ -638,41 +428,6 @@ export type PastElectionRoundDetailedFieldsFragment = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
     noteMetadata: {
       __typename: 'CandidacyNoteMetadata'
@@ -731,41 +486,6 @@ export type ElectionCandidateDetailedFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   }
   noteMetadata: {
     __typename: 'CandidacyNoteMetadata'
@@ -821,41 +541,6 @@ export type CastVoteFieldsFragment = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
     noteMetadata: {
       __typename: 'CandidacyNoteMetadata'
@@ -963,41 +648,6 @@ export type GetElectedCouncilQuery = {
           network: Types.Network
           account: string
         }> | null
-        invitedBy?: {
-          __typename: 'Membership'
-          id: string
-          handle: string
-          roles: Array<{
-            __typename: 'Worker'
-            id: string
-            createdAt: any
-            group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-          }>
-          metadata: {
-            __typename: 'MemberMetadata'
-            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-          }
-        } | null
-        entry:
-          | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-          | {
-              __typename: 'MembershipEntryInvited'
-              memberInvitedEvent?: {
-                __typename: 'MemberInvitedEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
-          | {
-              __typename: 'MembershipEntryPaid'
-              membershipBoughtEvent?: {
-                __typename: 'MembershipBoughtEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
       }
     }>
   }>
@@ -1143,41 +793,6 @@ export type GetPastCouncilMembersQuery = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
   }>
   proposalVotedEvents: Array<{
@@ -1262,41 +877,6 @@ export type GetPastCouncilMembersQuery = {
           network: Types.Network
           account: string
         }> | null
-        invitedBy?: {
-          __typename: 'Membership'
-          id: string
-          handle: string
-          roles: Array<{
-            __typename: 'Worker'
-            id: string
-            createdAt: any
-            group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-          }>
-          metadata: {
-            __typename: 'MemberMetadata'
-            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-          }
-        } | null
-        entry:
-          | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-          | {
-              __typename: 'MembershipEntryInvited'
-              memberInvitedEvent?: {
-                __typename: 'MemberInvitedEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
-          | {
-              __typename: 'MembershipEntryPaid'
-              membershipBoughtEvent?: {
-                __typename: 'MembershipBoughtEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
       }
     }
   }>
@@ -1387,41 +967,6 @@ export type GetPastCouncilProposalsQuery = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
   }>
 }
@@ -1489,41 +1034,6 @@ export type GetCurrentElectionQuery = {
           network: Types.Network
           account: string
         }> | null
-        invitedBy?: {
-          __typename: 'Membership'
-          id: string
-          handle: string
-          roles: Array<{
-            __typename: 'Worker'
-            id: string
-            createdAt: any
-            group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-          }>
-          metadata: {
-            __typename: 'MemberMetadata'
-            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-          }
-        } | null
-        entry:
-          | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-          | {
-              __typename: 'MembershipEntryInvited'
-              memberInvitedEvent?: {
-                __typename: 'MemberInvitedEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
-          | {
-              __typename: 'MembershipEntryPaid'
-              membershipBoughtEvent?: {
-                __typename: 'MembershipBoughtEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
       }
       noteMetadata: {
         __typename: 'CandidacyNoteMetadata'
@@ -1582,41 +1092,6 @@ export type GetLatestElectionQuery = {
           network: Types.Network
           account: string
         }> | null
-        invitedBy?: {
-          __typename: 'Membership'
-          id: string
-          handle: string
-          roles: Array<{
-            __typename: 'Worker'
-            id: string
-            createdAt: any
-            group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-          }>
-          metadata: {
-            __typename: 'MemberMetadata'
-            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-          }
-        } | null
-        entry:
-          | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-          | {
-              __typename: 'MembershipEntryInvited'
-              memberInvitedEvent?: {
-                __typename: 'MemberInvitedEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
-          | {
-              __typename: 'MembershipEntryPaid'
-              membershipBoughtEvent?: {
-                __typename: 'MembershipBoughtEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
       }
       noteMetadata: {
         __typename: 'CandidacyNoteMetadata'
@@ -1707,41 +1182,6 @@ export type GetPastElectionQuery = {
           network: Types.Network
           account: string
         }> | null
-        invitedBy?: {
-          __typename: 'Membership'
-          id: string
-          handle: string
-          roles: Array<{
-            __typename: 'Worker'
-            id: string
-            createdAt: any
-            group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-          }>
-          metadata: {
-            __typename: 'MemberMetadata'
-            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-          }
-        } | null
-        entry:
-          | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-          | {
-              __typename: 'MembershipEntryInvited'
-              memberInvitedEvent?: {
-                __typename: 'MemberInvitedEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
-          | {
-              __typename: 'MembershipEntryPaid'
-              membershipBoughtEvent?: {
-                __typename: 'MembershipBoughtEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
       }
       noteMetadata: {
         __typename: 'CandidacyNoteMetadata'
@@ -1807,41 +1247,6 @@ export type GetCandidateQuery = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
     noteMetadata: {
       __typename: 'CandidacyNoteMetadata'
@@ -1936,41 +1341,6 @@ export type GetCouncilVotesQuery = {
           network: Types.Network
           account: string
         }> | null
-        invitedBy?: {
-          __typename: 'Membership'
-          id: string
-          handle: string
-          roles: Array<{
-            __typename: 'Worker'
-            id: string
-            createdAt: any
-            group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-          }>
-          metadata: {
-            __typename: 'MemberMetadata'
-            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-          }
-        } | null
-        entry:
-          | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-          | {
-              __typename: 'MembershipEntryInvited'
-              memberInvitedEvent?: {
-                __typename: 'MemberInvitedEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
-          | {
-              __typename: 'MembershipEntryPaid'
-              membershipBoughtEvent?: {
-                __typename: 'MembershipBoughtEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
       }
       noteMetadata: {
         __typename: 'CandidacyNoteMetadata'

@@ -59,15 +59,5 @@ export interface MemberWithDetails extends Member {
 
 export interface MemberWithReferrer extends Omit<Member, 'invitedBy'> {
   entry?: MemberEntry
-  invitedBy?: {
-    id: string
-    handle: string
-    roles: {
-      id: string
-      groupName: string
-    }[]
-    metadata: {
-      avatar?: string
-    }
-  }
+  invitedBy?: Member
 }

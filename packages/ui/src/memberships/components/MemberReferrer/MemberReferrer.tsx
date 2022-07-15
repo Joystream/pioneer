@@ -5,17 +5,18 @@ import { CrossIcon } from '@/common/components/icons'
 import { Tooltip } from '@/common/components/Tooltip'
 import { BorderRad, Fonts, Colors } from '@/common/constants'
 import { memberRoleAbbreviation } from '@/memberships/helpers'
+import { MemberWithReferrer, Member, MemberRole } from '@/memberships/types'
 
 import { Avatar } from '../Avatar'
 import { defaultRole, MemberRoleHelpGroup, MemberRoleHelp } from '../MemberRoles'
 
-export const MemberReferrer = ({ member }: { member: any }) => {
+export const MemberReferrer = ({ member }: { member: MemberWithReferrer }) => {
   return (
     <div>
       {member.invitedBy ? (
         <AvatarWrapper width="24" height="24">
-          <Tooltip forBig popupContent={<ReferrerToolttip invited={member.invitedBy} tooltipOpen={true} max={5} />}>
-            <Avatar avatarUri={member.invitedBy.metadata.avatar} />
+          <Tooltip forBig popupContent={<ReferrerToolttip member={member.invitedBy} max={5} />}>
+            <Avatar avatarUri={member.invitedBy.avatar} />
           </Tooltip>
         </AvatarWrapper>
       ) : (
@@ -27,13 +28,13 @@ export const MemberReferrer = ({ member }: { member: any }) => {
   )
 }
 
-const ReferrerToolttip = ({ invited, max }: any) => {
-  let roles = invited.roles
-  if (!invited.roles || !invited.roles.length) {
+const ReferrerToolttip = ({ member, max }: { member: Member; max: number }) => {
+  let roles = member.roles
+  if (!member.roles || !member.roles.length) {
     roles = [defaultRole]
   }
 
-  const mapRoles = new Map<string, any[]>()
+  const mapRoles = new Map<string, MemberRole[]>()
   for (const role of roles) {
     const abbreviation = memberRoleAbbreviation(role)
     if (!mapRoles.has(abbreviation)) {
@@ -51,9 +52,9 @@ const ReferrerToolttip = ({ invited, max }: any) => {
     <div>
       <ReferrerTooltipWrapper>
         <ReferrerTooltipAvatarWrapper width="40" height="40">
-          <Avatar avatarUri={invited.metadata.avatar} />
+          <Avatar avatarUri={member.avatar} />
         </ReferrerTooltipAvatarWrapper>
-        <ReferrerInvitedName>{invited.handle}</ReferrerInvitedName>
+        <ReferrerInvitedName>{member.handle}</ReferrerInvitedName>
         <ReferrerInvitedRoles>
           {rolesToDisplay.map(([abbreviation, roles]: any, index: number) =>
             roles.length > 1 ? (

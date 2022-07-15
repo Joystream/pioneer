@@ -282,41 +282,6 @@ export type ForumPostFieldsFragment = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
     postaddedeventpost?: Array<{
       __typename: 'PostAddedEvent'
@@ -363,41 +328,6 @@ export type ForumPostFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   }
   postaddedeventpost?: Array<{
     __typename: 'PostAddedEvent'
@@ -452,41 +382,6 @@ export type ForumPostWithoutReplyFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   }
   postaddedeventpost?: Array<{
     __typename: 'PostAddedEvent'
@@ -568,41 +463,6 @@ export type ForumThreadMentionFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   }
   initialPost?: { __typename: 'ForumPost'; text: string } | null
 }
@@ -644,41 +504,6 @@ export type ForumPostMentionFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   }
 }
 
@@ -1051,41 +876,6 @@ export type GetForumPostsQuery = {
           network: Types.Network
           account: string
         }> | null
-        invitedBy?: {
-          __typename: 'Membership'
-          id: string
-          handle: string
-          roles: Array<{
-            __typename: 'Worker'
-            id: string
-            createdAt: any
-            group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-          }>
-          metadata: {
-            __typename: 'MemberMetadata'
-            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-          }
-        } | null
-        entry:
-          | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-          | {
-              __typename: 'MembershipEntryInvited'
-              memberInvitedEvent?: {
-                __typename: 'MemberInvitedEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
-          | {
-              __typename: 'MembershipEntryPaid'
-              membershipBoughtEvent?: {
-                __typename: 'MembershipBoughtEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
       }
       postaddedeventpost?: Array<{
         __typename: 'PostAddedEvent'
@@ -1132,41 +922,6 @@ export type GetForumPostsQuery = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
     postaddedeventpost?: Array<{
       __typename: 'PostAddedEvent'
@@ -1319,41 +1074,6 @@ export type GetForumPostMentionQuery = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
   } | null
 }
@@ -1401,41 +1121,6 @@ export type GetForumThreadMentionQuery = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }
     initialPost?: { __typename: 'ForumPost'; text: string } | null
   } | null

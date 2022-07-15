@@ -2,7 +2,7 @@ import { usePagination } from '@/common/hooks/usePagination'
 import { toQueryOrderByInput, SortOrder } from '@/common/hooks/useSort'
 import { error } from '@/common/logger'
 import { MemberListFilter } from '@/memberships/components/MemberListFilters'
-import { useGetMembersCountQuery, useGetMembersQuery } from '@/memberships/queries'
+import { useGetMembersCountQuery, useGetMembersWithDetailsQuery } from '@/memberships/queries'
 
 import { MembershipOrderByInput, MembershipWhereInput } from '../../common/api/queries'
 import { asMemeberWithDetails } from '../types'
@@ -26,7 +26,7 @@ export const useMembers = ({ order, filter, perPage = 10 }: UseMemberProps) => {
     where,
     orderBy: toQueryOrderByInput<MembershipOrderByInput>(order),
   }
-  const { data, loading, error: err } = useGetMembersQuery({ variables })
+  const { data, loading, error: err } = useGetMembersWithDetailsQuery({ variables })
 
   if (err) {
     error(err)

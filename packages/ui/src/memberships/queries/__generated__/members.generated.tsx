@@ -35,20 +35,52 @@ export type MemberFieldsFragment = {
     network: Types.Network
     account: string
   }> | null
+}
+
+export type MemberWithDetailsFieldsFragment = {
+  __typename: 'Membership'
+  id: string
+  rootAccount: string
+  controllerAccount: string
+  boundAccounts: Array<string>
+  handle: string
+  isVerified: boolean
+  isFoundingMember: boolean
+  isCouncilMember: boolean
+  inviteCount: number
+  createdAt: any
   invitedBy?: {
     __typename: 'Membership'
     id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    isCouncilMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
       createdAt: any
-      group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
     }>
-    metadata: {
-      __typename: 'MemberMetadata'
-      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-    }
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   } | null
   entry:
     | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
@@ -70,20 +102,6 @@ export type MemberFieldsFragment = {
           network: Types.Network
         } | null
       }
-}
-
-export type MemberWithDetailsFieldsFragment = {
-  __typename: 'Membership'
-  id: string
-  rootAccount: string
-  controllerAccount: string
-  boundAccounts: Array<string>
-  handle: string
-  isVerified: boolean
-  isFoundingMember: boolean
-  isCouncilMember: boolean
-  inviteCount: number
-  createdAt: any
   invitees: Array<{
     __typename: 'Membership'
     id: string
@@ -116,41 +134,6 @@ export type MemberWithDetailsFieldsFragment = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   }>
   metadata: {
     __typename: 'MemberMetadata'
@@ -172,41 +155,136 @@ export type MemberWithDetailsFieldsFragment = {
     network: Types.Network
     account: string
   }> | null
-  invitedBy?: {
+}
+
+export type GetMembersWithDetailsQueryVariables = Types.Exact<{
+  where?: Types.InputMaybe<Types.MembershipWhereInput>
+  orderBy?: Types.InputMaybe<Array<Types.MembershipOrderByInput> | Types.MembershipOrderByInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type GetMembersWithDetailsQuery = {
+  __typename: 'Query'
+  memberships: Array<{
     __typename: 'Membership'
     id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
     handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    isCouncilMember: boolean
+    inviteCount: number
+    createdAt: any
+    invitedBy?: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      isCouncilMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
+    } | null
+    entry:
+      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+      | {
+          __typename: 'MembershipEntryInvited'
+          memberInvitedEvent?: {
+            __typename: 'MemberInvitedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+      | {
+          __typename: 'MembershipEntryPaid'
+          membershipBoughtEvent?: {
+            __typename: 'MembershipBoughtEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+    invitees: Array<{
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      isCouncilMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
+    }>
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
     roles: Array<{
       __typename: 'Worker'
       id: string
       createdAt: any
-      group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
     }>
-    metadata: {
-      __typename: 'MemberMetadata'
-      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-    }
-  } | null
-  entry:
-    | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-    | {
-        __typename: 'MembershipEntryInvited'
-        memberInvitedEvent?: {
-          __typename: 'MemberInvitedEvent'
-          createdAt: any
-          inBlock: number
-          network: Types.Network
-        } | null
-      }
-    | {
-        __typename: 'MembershipEntryPaid'
-        membershipBoughtEvent?: {
-          __typename: 'MembershipBoughtEvent'
-          createdAt: any
-          inBlock: number
-          network: Types.Network
-        } | null
-      }
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
+  }>
 }
 
 export type GetMembersQueryVariables = Types.Exact<{
@@ -250,41 +328,6 @@ export type GetMembersQuery = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   }>
 }
 
@@ -315,6 +358,59 @@ export type GetMemberQuery = {
     isCouncilMember: boolean
     inviteCount: number
     createdAt: any
+    invitedBy?: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      isCouncilMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
+    } | null
+    entry:
+      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+      | {
+          __typename: 'MembershipEntryInvited'
+          memberInvitedEvent?: {
+            __typename: 'MemberInvitedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+      | {
+          __typename: 'MembershipEntryPaid'
+          membershipBoughtEvent?: {
+            __typename: 'MembershipBoughtEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
     invitees: Array<{
       __typename: 'Membership'
       id: string
@@ -347,41 +443,6 @@ export type GetMemberQuery = {
         network: Types.Network
         account: string
       }> | null
-      invitedBy?: {
-        __typename: 'Membership'
-        id: string
-        handle: string
-        roles: Array<{
-          __typename: 'Worker'
-          id: string
-          createdAt: any
-          group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-        }>
-        metadata: {
-          __typename: 'MemberMetadata'
-          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-        }
-      } | null
-      entry:
-        | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-        | {
-            __typename: 'MembershipEntryInvited'
-            memberInvitedEvent?: {
-              __typename: 'MemberInvitedEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
-        | {
-            __typename: 'MembershipEntryPaid'
-            membershipBoughtEvent?: {
-              __typename: 'MembershipBoughtEvent'
-              createdAt: any
-              inBlock: number
-              network: Types.Network
-            } | null
-          }
     }>
     metadata: {
       __typename: 'MemberMetadata'
@@ -403,41 +464,6 @@ export type GetMemberQuery = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   } | null
 }
 
@@ -481,41 +507,6 @@ export type SearchMembersQuery = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   }>
 }
 
@@ -567,41 +558,6 @@ export type GetMemberMentionQuery = {
       network: Types.Network
       account: string
     }> | null
-    invitedBy?: {
-      __typename: 'Membership'
-      id: string
-      handle: string
-      roles: Array<{
-        __typename: 'Worker'
-        id: string
-        createdAt: any
-        group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-      }>
-      metadata: {
-        __typename: 'MemberMetadata'
-        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-      }
-    } | null
-    entry:
-      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | {
-          __typename: 'MembershipEntryInvited'
-          memberInvitedEvent?: {
-            __typename: 'MemberInvitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'MembershipEntryPaid'
-          membershipBoughtEvent?: {
-            __typename: 'MembershipBoughtEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
   } | null
 }
 
@@ -694,26 +650,13 @@ export const MemberFieldsFragmentDoc = gql`
       network
       account
     }
+  }
+`
+export const MemberWithDetailsFieldsFragmentDoc = gql`
+  fragment MemberWithDetailsFields on Membership {
+    ...MemberFields
     invitedBy {
-      id
-      handle
-      roles {
-        id
-        createdAt
-        group {
-          id
-          createdAt
-          name
-        }
-      }
-      metadata {
-        avatar {
-          ... on AvatarUri {
-            __typename
-            avatarUri
-          }
-        }
-      }
+      ...MemberFields
     }
     entry {
       ... on MembershipEntryInvited {
@@ -734,17 +677,69 @@ export const MemberFieldsFragmentDoc = gql`
         phantom
       }
     }
-  }
-`
-export const MemberWithDetailsFieldsFragmentDoc = gql`
-  fragment MemberWithDetailsFields on Membership {
-    ...MemberFields
     invitees {
       ...MemberFields
     }
   }
   ${MemberFieldsFragmentDoc}
 `
+export const GetMembersWithDetailsDocument = gql`
+  query GetMembersWithDetails(
+    $where: MembershipWhereInput
+    $orderBy: [MembershipOrderByInput!]
+    $offset: Int
+    $limit: Int
+  ) {
+    memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
+      ...MemberWithDetailsFields
+    }
+  }
+  ${MemberWithDetailsFieldsFragmentDoc}
+`
+
+/**
+ * __useGetMembersWithDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetMembersWithDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMembersWithDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMembersWithDetailsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetMembersWithDetailsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetMembersWithDetailsQuery, GetMembersWithDetailsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetMembersWithDetailsQuery, GetMembersWithDetailsQueryVariables>(
+    GetMembersWithDetailsDocument,
+    options
+  )
+}
+export function useGetMembersWithDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMembersWithDetailsQuery, GetMembersWithDetailsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetMembersWithDetailsQuery, GetMembersWithDetailsQueryVariables>(
+    GetMembersWithDetailsDocument,
+    options
+  )
+}
+export type GetMembersWithDetailsQueryHookResult = ReturnType<typeof useGetMembersWithDetailsQuery>
+export type GetMembersWithDetailsLazyQueryHookResult = ReturnType<typeof useGetMembersWithDetailsLazyQuery>
+export type GetMembersWithDetailsQueryResult = Apollo.QueryResult<
+  GetMembersWithDetailsQuery,
+  GetMembersWithDetailsQueryVariables
+>
 export const GetMembersDocument = gql`
   query GetMembers($where: MembershipWhereInput, $orderBy: [MembershipOrderByInput!], $offset: Int, $limit: Int) {
     memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {

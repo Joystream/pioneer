@@ -90,41 +90,6 @@ export type GetAllDeadLinesQuery = {
           network: Types.Network
           account: string
         }> | null
-        invitedBy?: {
-          __typename: 'Membership'
-          id: string
-          handle: string
-          roles: Array<{
-            __typename: 'Worker'
-            id: string
-            createdAt: any
-            group: { __typename: 'WorkingGroup'; id: string; createdAt: any; name: string }
-          }>
-          metadata: {
-            __typename: 'MemberMetadata'
-            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-          }
-        } | null
-        entry:
-          | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-          | {
-              __typename: 'MembershipEntryInvited'
-              memberInvitedEvent?: {
-                __typename: 'MemberInvitedEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
-          | {
-              __typename: 'MembershipEntryPaid'
-              membershipBoughtEvent?: {
-                __typename: 'MembershipBoughtEvent'
-                createdAt: any
-                inBlock: number
-                network: Types.Network
-              } | null
-            }
       }
       noteMetadata: {
         __typename: 'CandidacyNoteMetadata'
