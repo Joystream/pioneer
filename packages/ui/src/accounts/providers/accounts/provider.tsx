@@ -62,33 +62,39 @@ const loadKeysFromExtension = async (keyring: Keyring, wallet: Wallet) => {
 }
 
 // Extensions is not always ready on application load, hence the check
-const onExtensionLoaded = (onSuccess: () => void, onFail: () => void, recentWallet?: string) => () => {
-  const interval = 20
-  const timeout = 1000
-  let timeElapsed = 0
+const onExtensionLoaded =
+  (onSuccess: (foundWallets: string[]) => void, onFail: () => void, recentWallet?: string) => () => {
+    const interval = 20
+    const timeout = 1000
+    let timeElapsed = 0
 
-  const intervalId = setInterval(() => {
-    const extensionsKeys = Object.keys((window as any)?.injectedWeb3 ?? {})
-    if (extensionsKeys.length) {
-      if (!recentWallet) {
-        clearInterval(intervalId)
-        onSuccess()
-      } else if (extensionsKeys.includes(recentWallet)) {
-        // some wallets load slower which will cause error when trying to preload them hence the check
-        clearInterval(intervalId)
-        onSuccess()
+    const intervalId = setInterval(() => {
+      const extensionsKeys = Object.keys((window as any)?.injectedWeb3 ?? {})
+      if (extensionsKeys.length) {
+        if (!recentWallet) {
+          clearInterval(intervalId)
+          onSuccess(extensionsKeys)
+        } else if (extensionsKeys.includes(recentWallet)) {
+          // some wallets load slower which will cause error when trying to preload them hence the check
+          clearInterval(intervalId)
+          onSuccess(extensionsKeys)
+        } else if (timeElapsed >= timeout) {
+          // if wallet in storage was disabled we don't want to wait for it too long
+          clearInterval(intervalId)
+          onSuccess(extensionsKeys)
+        }
+        timeElapsed += interval
+      } else {
+        timeElapsed += interval
+        if (timeElapsed >= timeout) {
+          clearInterval(intervalId)
+          onFail()
+        }
       }
-    } else {
-      timeElapsed += interval
-      if (timeElapsed >= timeout) {
-        clearInterval(intervalId)
-        onFail()
-      }
-    }
-  }, interval)
+    }, interval)
 
-  return () => clearInterval(intervalId)
-}
+    return () => clearInterval(intervalId)
+  }
 
 export const AccountsContextProvider = (props: Props) => {
   const keyring = useKeyring()
@@ -99,9 +105,9 @@ export const AccountsContextProvider = (props: Props) => {
 
   useEffect(
     onExtensionLoaded(
-      () => {
+      (foundWallets) => {
         setIsExtensionLoaded(true)
-        if (recentWallet) {
+        if (recentWallet && foundWallets.includes(recentWallet)) {
           const possibleWallet = getWalletBySource(recentWallet)
           setSelectedWallet(possibleWallet)
         }
