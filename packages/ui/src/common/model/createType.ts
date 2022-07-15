@@ -1,14 +1,16 @@
-import { createType as createType } from '@joystream/types'
+import { createType } from '@joystream/types'
+import type { AccountId, Perbill } from '@polkadot/types/interfaces'
 import { Codec, DetectCodec } from '@polkadot/types/types'
 
 const TypeMap = {
-  AccountId: 'Raw', // WARNING this one is wrong
-
+  AccountId: 'AccountId',
+  LockIdentifier: 'Raw',
+  Header: 'HeaderPartial',
   Balance: 'u128',
-  BalanceOf: 'u128', // TODO check this
+  BalanceOf: 'u128',
   BlockNumber: 'u32',
-  BlockHash: 'Raw', // TODO check this
-  Hash: 'Raw', // TODO check this
+  BlockHash: 'Raw',
+  Hash: 'Raw',
   Index: 'u32',
 
   ActorId: 'u64',
@@ -57,27 +59,39 @@ const TypeMap = {
   OpenAuctionId: 'u64',
 
   // TODO remove for bounty v2
-  BountyActor: 'TODO',
-  BountyCreationParameters: 'TODO',
-  AssuranceContractType: 'TODO',
-  AssuranceContractType_Closed: 'TODO',
-  FundingType: 'TODO',
-  FundingType_Perpetual: 'TODO',
-  FundingType_Limited: 'TODO',
-  OracleJudgment: 'TODO',
-  OracleWorkEntryJudgment: 'TODO',
+  BountyActor: 'BountyActor',
+  BountyCreationParameters: 'BountyCreationParameters',
+  AssuranceContractType: 'AssuranceContractType',
+  AssuranceContractType_Closed: 'AssuranceContractType_Closed',
+  FundingType: 'FundingType',
+  FundingType_Perpetual: 'FundingType_Perpetual',
+  FundingType_Limited: 'FundingType_Limited',
+  OracleJudgment: 'OracleJudgment',
+  OracleWorkEntryJudgment: 'OracleWorkEntryJudgment',
 } as const
 
 type MappedTypeNames = typeof TypeMap
 type ValidTypeName<T extends string> = Codec extends DetectCodec<Codec, T> ? never : string
+
 type ValidCodec<T extends string> = Codec extends DetectCodec<Codec, T> ? never : DetectCodec<Codec, T>
+interface CodecMap {
+  AccountId: AccountId
+  Perbill: Perbill
+}
+type SafeCodec<MTN extends keyof MappedTypeNames, TN extends string> = ValidCodec<TN> extends never
+  ? ValidCodec<MappedTypeNames[MTN]> extends never
+    ? MappedTypeNames[MTN] extends keyof CodecMap
+      ? CodecMap[MappedTypeNames[MTN]]
+      : never
+    : ValidCodec<MappedTypeNames[MTN]>
+  : ValidCodec<TN>
 
 const createSafeType = <MTN extends keyof MappedTypeNames, TN extends ValidTypeName<TN>>(
   typeName: MTN | TN,
   value: any
 ) => {
   const type = typeName in TypeMap ? (TypeMap as Record<string, string>)[typeName] : typeName
-  return createType(type, value) as ValidCodec<TN> extends never ? ValidCodec<MappedTypeNames[MTN]> : ValidCodec<TN>
+  return createType(type, value) as SafeCodec<MTN, TN>
 }
 
 export { createSafeType as createType }
