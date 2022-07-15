@@ -9,11 +9,10 @@ import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
 import { Api } from '@/api/types'
-import { ButtonPrimary } from '@/common/components/buttons'
+import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
@@ -61,11 +60,9 @@ export const ApplyForRoleModal = () => {
   const [stakingAccountMap, setStakingAccount] = useState<Account | undefined>(undefined)
 
   const opening = modalData.opening
-  const requiredStake = opening.stake.toNumber()
-  const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
-    requiredStake,
-    groupToLockId(opening.groupId)
-  )
+  const requiredStake = opening.stake
+
+  const { hasRequiredStake } = useHasRequiredStake(requiredStake.toNumber(), groupToLockId(opening.groupId))
 
   const schema = useMemo(() => {
     if (questions.length) {
@@ -79,7 +76,7 @@ export const ApplyForRoleModal = () => {
   const stakingStatus = useStakingAccountStatus(stakingAccountMap?.address, activeMember?.id)
   const form = useForm({
     resolver: useYupValidationResolver(schema, typeof state.value === 'string' ? state.value : undefined),
-    mode: 'onBlur',
+    mode: 'onChange',
     context: {
       minStake: opening.stake,
       balances: balance,
@@ -103,6 +100,10 @@ export const ApplyForRoleModal = () => {
   useEffect(() => {
     form.trigger('stake.account')
   }, [stakingStatus])
+
+  useEffect(() => {
+    form.trigger([])
+  }, [state.value])
 
   const transaction = useMemo(() => {
     const { stake } = form.getValues()
@@ -129,27 +130,8 @@ export const ApplyForRoleModal = () => {
     if (!state.matches('requirementsVerification')) {
       return
     }
-
-    if (!hasRequiredStake) {
-      showModal<MoveFundsModalCall>({
-        modal: 'MoveFundsModal',
-        data: {
-          accountsWithCompatibleLocks,
-          accountsWithTransferableBalance,
-          requiredStake,
-          lock: 'Forum Worker',
-        },
-      })
-
-      return
-    }
-
-    if (activeMember && feeInfo?.canAfford) {
-      send('PASS')
-      return
-    }
-
-    if (!activeMember && hasRequiredStake) {
+    
+    if (!activeMember) {
       showModal<SwitchMemberModalCall>({
         modal: 'SwitchMember',
         data: {
@@ -158,9 +140,10 @@ export const ApplyForRoleModal = () => {
         },
       })
     }
-
-    if (feeInfo && !feeInfo.canAfford) {
-      send('FAIL')
+    
+    if (feeInfo) {
+      const areFundsSufficient = feeInfo.canAfford && hasRequiredStake
+      send(areFundsSufficient ? 'PASS' : 'FAIL')
     }
   }, [state.value, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake])
 
@@ -170,18 +153,20 @@ export const ApplyForRoleModal = () => {
     }
   }, [state, stakingStatus])
 
-  if (!activeMember || !feeInfo || !hasRequiredStake) {
+  if (!activeMember || !feeInfo) {
     return null
   }
 
   if (state.matches('requirementsFailed')) {
-    return (
-      <InsufficientFundsModal
-        onClose={hideModal}
-        address={activeMember.controllerAccount}
-        amount={feeInfo.transactionFee}
-      />
-    )
+    showModal<MoveFundsModalCall>({
+      modal: 'MoveFundsModal',
+      data: {
+        requiredStake,
+        lock: 'Forum Worker',
+      },
+    })
+
+    return null
   }
 
   const bindStakingAccountService = state.children.bindStakingAccount
@@ -299,10 +284,20 @@ export const ApplyForRoleModal = () => {
         </StepperModalWrapper>
       </StepperModalBody>
       <ModalFooter>
-        <ButtonPrimary disabled={!form.formState.isValid} onClick={() => send('NEXT')} size="medium">
-          Next step
-          <Arrow direction="right" />
-        </ButtonPrimary>
+        <ButtonsGroup align="left">
+          {state.matches('form') && (
+            <ButtonGhost onClick={() => send('PREV')} size="medium">
+              <Arrow direction="left" />
+              Previous step
+            </ButtonGhost>
+          )}
+        </ButtonsGroup>
+        <ButtonsGroup align="right">
+          <ButtonPrimary disabled={!form.formState.isValid} onClick={() => send('NEXT')} size="medium">
+            Next step
+            <Arrow direction="right" />
+          </ButtonPrimary>
+        </ButtonsGroup>
       </ModalFooter>
     </Modal>
   )

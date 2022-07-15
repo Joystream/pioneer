@@ -88,6 +88,9 @@ export const CKEditorStylesOverrides = createGlobalStyle<{ minRows: number; maxR
   .ck.ck-list__item .ck-button:hover:not(.ck-disabled) {
     background-color: ${Colors.White};
   }
+  img {
+      max-height: 400px;
+  }
 
   :root {
     --ck-focus-ring: 1px solid ${Colors.Blue[300]};

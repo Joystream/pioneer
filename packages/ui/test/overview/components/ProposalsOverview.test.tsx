@@ -1,4 +1,5 @@
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
+import BN from 'bn.js'
 import { ProposalMock } from 'dev/query-node-mocks/generators/generateProposals'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
@@ -26,7 +27,7 @@ const decidingProposalMock: ProposalMock = {
         destinations: [
           {
             account: '5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF',
-            amount: 5000,
+            amount: new BN(5000),
           },
         ],
       },
@@ -72,7 +73,7 @@ const dormantProposalMock = {
         destinations: [
           {
             account: '5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF',
-            amount: 5000,
+            amount: new BN(5000),
           },
         ],
       },

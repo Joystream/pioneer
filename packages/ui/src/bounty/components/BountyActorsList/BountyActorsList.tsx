@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React, { memo } from 'react'
 import styled from 'styled-components'
 
@@ -24,7 +25,7 @@ const actorsMapFunction = (el: BountyActorItem) => {
     return (
       <ValueText lighter>
         Contributed
-        <Amount value={el.amount?.toNumber?.() ?? Number(el.amount)} />
+        <Amount value={new BN(el.amount)} />
       </ValueText>
     )
   }

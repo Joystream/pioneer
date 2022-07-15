@@ -3,16 +3,11 @@ import Long from 'long'
 
 import { metadataToBytes } from '../../../../src/common/model/JoystreamNode'
 import members from '../../../../src/mocks/data/raw/members.json'
-import { GroupIdName } from '../../../../src/working-groups/types'
+import { GROUP, GroupIdName } from '../../consts'
 import { signAndSend, withApi } from '../../lib/api'
-import { createMembersCommand } from '../members/create'
-import { applyOnOpeningCommand } from '../opening/apply'
-import { addOpeningCommand } from '../opening/create'
-import { fillOpeningCommand } from '../opening/fill'
+import { setLeadCommand } from '../setLead'
 
-const GROUP = 'membershipWorkingGroup' // TODO pass as a parameter
-
-const addUpcomingOpeningCommand = async ({ group = GROUP }: { group?: GroupIdName } = {}) => {
+const getUpcomingOpeningMetadata = ({ group = GROUP }: { group?: GroupIdName } = {}) => {
   const title = `Test ${group} upcoming opening`
 
   const openingMetadata = {
@@ -35,27 +30,23 @@ const addUpcomingOpeningCommand = async ({ group = GROUP }: { group?: GroupIdNam
     metadata: openingMetadata,
   }
 
-  const alice = members[0]
+  const metadata = { addUpcomingOpening: { metadata: upcomingOpeningMetadata } }
 
-  await withApi(async (api) => {
-    const metadata = { addUpcomingOpening: { metadata: upcomingOpeningMetadata } }
-    const tx = api.tx[group].setStatusText(metadataToBytes(WorkingGroupMetadataAction, metadata))
-
-    await signAndSend(tx, alice.controllerAccount)
-  })
+  return metadataToBytes(WorkingGroupMetadataAction, metadata)
 }
 
 const handler = async ({ group = GROUP }: { group?: GroupIdName } = {}) => {
-  // Add members mock data
-  await createMembersCommand()
-
   // Make Alice the group leader
-  const openingId = await addOpeningCommand({ group })
-  const applicationId = await applyOnOpeningCommand({ group, openingId })
-  await fillOpeningCommand({ group, openingId, applicationId })
+  setLeadCommand({ group })
 
   // Alice adds an upcoming opening
-  await addUpcomingOpeningCommand()
+  await withApi(async (api) => {
+    const metadata = getUpcomingOpeningMetadata({ group })
+    const alice = members[0]
+
+    const tx = api.tx[group].setStatusText(metadata)
+    await signAndSend(tx, alice.controllerAccount)
+  })
 }
 
 export const createUpcomingOpeningModule = {

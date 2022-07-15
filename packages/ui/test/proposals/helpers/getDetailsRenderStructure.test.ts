@@ -11,7 +11,7 @@ describe('getDetailsRenderStructure()', () => {
       destinations: [
         {
           account: alice.address,
-          amount: 20,
+          amount: new BN(20),
         },
       ],
     })
@@ -20,7 +20,7 @@ describe('getDetailsRenderStructure()', () => {
       structure: [
         {
           label: 'amount',
-          value: 20,
+          value: new BN(20),
           renderType: 'Amount',
         },
         {
@@ -41,16 +41,16 @@ describe('getDetailsRenderStructure()', () => {
       destinations: [
         {
           account: alice.address,
-          amount: 20,
+          amount: new BN(20),
         },
         {
           account: bob.address,
-          amount: 30,
+          amount: new BN(30),
         },
 
         {
           account: aliceStash.address,
-          amount: 10,
+          amount: new BN(10),
         },
       ],
     })
@@ -59,7 +59,7 @@ describe('getDetailsRenderStructure()', () => {
       structure: [
         {
           label: 'amount',
-          value: 20,
+          value: new BN(20),
           renderType: 'Amount',
         },
         {
@@ -72,7 +72,7 @@ describe('getDetailsRenderStructure()', () => {
         },
         {
           label: 'amount',
-          value: 30,
+          value: new BN(30),
           renderType: 'Amount',
         },
         {
@@ -85,7 +85,7 @@ describe('getDetailsRenderStructure()', () => {
         },
         {
           label: 'amount',
-          value: 10,
+          value: new BN(10),
           renderType: 'Amount',
         },
         {

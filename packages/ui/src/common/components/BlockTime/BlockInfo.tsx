@@ -34,7 +34,6 @@ export const BlockInfoContainer = styled.span<Omit<BlockInfoProp, 'block'>>`
   ${({ lessInfo }) =>
     lessInfo &&
     css`
-      margin-left: auto;
       font-weight: 700;
     `};
 `

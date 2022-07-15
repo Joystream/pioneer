@@ -7,6 +7,7 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
 
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
@@ -217,14 +218,6 @@ describe('UI: AddNewProposalModal', () => {
         data: { originalModalName: 'AddNewProposalModal' },
       })
     })
-
-    it('Insufficient funds', async () => {
-      stubTransaction(api, 'api.tx.utility.batch', 10000)
-
-      const { findByText } = renderModal()
-
-      expect(await findByText('modals.insufficientFunds.title')).toBeDefined()
-    })
   })
 
   describe('Warning modal', () => {
@@ -291,10 +284,19 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       it('Not enough funds', async () => {
-        stubProposalConstants(api, { requiredStake: 9999 })
+        const requiredStake = 9999
+        stubProposalConstants(api, { requiredStake })
         await finishProposalType()
 
-        expect(screen.queryByText('Creating new proposal')).toBeNull()
+        const moveFundsModalCall: MoveFundsModalCall = {
+          modal: 'MoveFundsModal',
+          data: {
+            requiredStake: new BN(requiredStake),
+            lock: 'Proposals',
+          },
+        }
+
+        expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
       })
 
       it('Enough funds', async () => {
@@ -1179,13 +1181,23 @@ describe('UI: AddNewProposalModal', () => {
       it('Fee fail before transaction', async () => {
         await finishWarning()
         await finishProposalType('fundingRequest')
+        const requiredStake = 10
+        stubProposalConstants(api, { requiredStake })
         stubTransaction(api, 'api.tx.utility.batch', 10000)
         await finishStakingAccount()
         await finishProposalDetails()
         await finishTriggerAndDiscussion()
         await SpecificParameters.FundingRequest.finish(100, 'bob')
 
-        expect(await screen.findByText('modals.insufficientFunds.title')).toBeInTheDocument()
+        const moveFundsModalCall: MoveFundsModalCall = {
+          modal: 'MoveFundsModal',
+          data: {
+            requiredStake: new BN(requiredStake),
+            lock: 'Proposals',
+          },
+        }
+
+        expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
       })
 
       describe('Staking account not bound nor staking candidate', () => {

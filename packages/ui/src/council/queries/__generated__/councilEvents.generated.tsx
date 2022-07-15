@@ -33,7 +33,7 @@ export type CouncilorRewardUpdatedEventFieldsFragment = {
   __typename: 'CouncilorRewardUpdatedEvent'
   id: string
   createdAt: any
-  rewardAmount: any
+  rewardAmount: string
 }
 
 export type NewCandidateEventFieldsFragment = {
@@ -107,7 +107,7 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'CategoryDeletedEvent' }
     | { __typename: 'CategoryMembershipOfModeratorUpdatedEvent' }
     | { __typename: 'CategoryStickyThreadUpdateEvent' }
-    | { __typename: 'CouncilorRewardUpdatedEvent'; id: string; createdAt: any; rewardAmount: any }
+    | { __typename: 'CouncilorRewardUpdatedEvent'; id: string; createdAt: any; rewardAmount: string }
     | { __typename: 'EnglishAuctionSettledEvent' }
     | { __typename: 'EnglishAuctionStartedEvent' }
     | { __typename: 'InitialInvitationBalanceUpdatedEvent' }
