@@ -33,8 +33,8 @@ export const CandidacyReview = memo(({ candidate, minStake }: CandidacyReviewPro
       <h4>{candidate.info.title}</h4>
 
       <CandidacyPointList>
-        {candidate.info.bulletPoints.map((bulletPoint) => (
-          <CandidacyPoint>{bulletPoint}</CandidacyPoint>
+        {candidate.info.bulletPoints.map((bulletPoint, index) => (
+          <CandidacyPoint key={`${candidate.id}-bullet-${index}`}>{bulletPoint}</CandidacyPoint>
         ))}
       </CandidacyPointList>
 
