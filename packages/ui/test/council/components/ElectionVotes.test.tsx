@@ -228,11 +228,11 @@ describe('UI: RevealingStageVotes', () => {
 
       const voteForAlice = await screen.findByText('alice')
       expect(voteForAlice).toBeDefined()
-      expect(voteForAlice.parentElement?.parentElement?.parentElement?.textContent).toContain('Revealed')
+      expect(voteForAlice.parentElement?.parentElement?.parentElement?.parentElement?.textContent).toContain('Revealed')
 
       const voteForBob = await screen.findByText('bob')
       expect(voteForBob).toBeDefined()
-      expect(voteForBob.parentElement?.parentElement?.parentElement?.textContent).toContain('Reveal')
+      expect(voteForBob.parentElement?.parentElement?.parentElement?.parentElement?.textContent).toContain('Reveal')
     })
   })
 
