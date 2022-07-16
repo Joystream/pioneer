@@ -14,20 +14,13 @@ type Entry = {
   memberInvitedEvent?: BlockFieldsMock
 }
 
-export type MockMember = Omit<MemberFieldsFragment, '__typename' | 'metadata' | 'roles' | 'createdAt' | 'entry'> & {
+export type MockMember = Omit<MemberFieldsFragment, '__typename' | 'metadata' | 'roles' | 'createdAt'> & {
   metadata: {
     name: string
     about: string
   }
   entry: Entry
   createdAt?: string
-  invitedBy?: {
-    id: string
-    roles: {
-      id: string
-      groupName: string
-    }[]
-  }
 }
 
 export const mockMembers: MockMember[] = rawMembers.map((rawMember) => rawMember)

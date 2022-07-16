@@ -23,7 +23,7 @@ describe('useProposals', () => {
 
   beforeAll(() => {
     seedMember(MEMBER_ALICE_DATA, mockServer.server)
-    seedMember({ ...MEMBER_ALICE_DATA }, mockServer.server)
+    seedMember({ ...MEMBER_ALICE_DATA, ...bob }, mockServer.server)
     testProposals.map((proposal) => seedProposal(proposal, mockServer.server))
   })
 

@@ -85,7 +85,7 @@ describe('Members', () => {
     expect(await screen.findByText(/my profile/i)).toBeDefined()
     expect(await screen.findByText(/Member Details/i)).toBeDefined()
     expect(await screen.findByText(/Member Name/i)).toBeDefined()
-    const idElement = await screen.findByText(/member id/i)
+    const idElement = await screen.findByText('Member ID')
     expect(idElement.parentNode?.textContent).toMatch(/^Member ID1$/)
   })
 
