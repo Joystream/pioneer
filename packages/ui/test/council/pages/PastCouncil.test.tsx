@@ -174,6 +174,7 @@ describe('UI: Past Council page', () => {
           const { getByText } = await renderComponent()
 
           const councilMemberRow = getByText(getMember('alice').handle)?.parentElement?.parentElement?.parentElement
+            ?.parentElement
           const approvedColumn = councilMemberRow?.children.item(1)?.textContent
 
           expect(approvedColumn).toBe('1')
@@ -196,6 +197,7 @@ describe('UI: Past Council page', () => {
           const { getByText } = await renderComponent()
 
           const councilMemberRow = getByText(getMember('alice').handle)?.parentElement?.parentElement?.parentElement
+            ?.parentElement
           const rejectColumn = councilMemberRow?.children.item(2)?.textContent
 
           expect(rejectColumn).toBe('1')
@@ -218,6 +220,7 @@ describe('UI: Past Council page', () => {
           const { getByText } = await renderComponent()
 
           const councilMemberRow = getByText(getMember('alice').handle)?.parentElement?.parentElement?.parentElement
+            ?.parentElement
           const slashColumn = councilMemberRow?.children.item(3)?.textContent
           expect(slashColumn).toBe('1')
         })
@@ -239,6 +242,7 @@ describe('UI: Past Council page', () => {
           const { getByText } = await renderComponent()
 
           const councilMemberRow = getByText(getMember('alice').handle)?.parentElement?.parentElement?.parentElement
+            ?.parentElement
           const abstainColumn = councilMemberRow?.children.item(4)?.textContent
           expect(abstainColumn).toBe('1')
         })
