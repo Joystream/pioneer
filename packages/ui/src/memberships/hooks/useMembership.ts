@@ -11,6 +11,7 @@ interface UseMember {
 export function useMember(memberId?: string): UseMember {
   const options = {
     variables: { where: { id: memberId ?? '' } },
+    skip: !memberId,
   }
 
   const { data, loading, error: err } = useGetMemberQuery(options)
