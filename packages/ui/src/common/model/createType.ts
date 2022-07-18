@@ -5,7 +5,7 @@ import { Codec, DetectCodec } from '@polkadot/types/types'
 const TypeMap = {
   AccountId: 'AccountId',
   LockIdentifier: 'Raw',
-  Header: 'HeaderPartial',
+  Header: '{"number":"u32"}', // TODO Replace by "Header" this once figured why hashes encoding fail
   Balance: 'u128',
   BalanceOf: 'u128',
   BlockNumber: 'u32',
