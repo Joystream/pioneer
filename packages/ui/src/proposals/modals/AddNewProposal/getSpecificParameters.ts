@@ -59,12 +59,12 @@ export const getSpecificParameters = (
               type: OpeningMetadata.ApplicationFormQuestion.InputType[shortValue ? 'TEXT' : 'TEXTAREA'],
             })),
           }),
-          stake_policy: {
-            stake_amount: specifics?.stakingPolicyAndReward?.stakingAmount,
-            leaving_unstaking_period: specifics?.stakingPolicyAndReward?.leavingUnstakingPeriod,
+          stakePolicy: {
+            stakeAmount: specifics?.stakingPolicyAndReward?.stakingAmount,
+            leavingUnstakingPeriod: specifics?.stakingPolicyAndReward?.leavingUnstakingPeriod,
           },
-          reward_per_block: specifics?.stakingPolicyAndReward?.rewardPerBlock,
-          working_group: getWorkingGroupParam(specifics?.workingGroupAndDescription?.groupId),
+          rewardPerBlock: specifics?.stakingPolicyAndReward?.rewardPerBlock,
+          workingGroup: getWorkingGroupParam(specifics?.workingGroupAndDescription?.groupId),
         },
       })
     }
@@ -89,9 +89,9 @@ export const getSpecificParameters = (
     case 'terminateWorkingGroupLead': {
       return createType('PalletProposalsCodexProposalDetails', {
         TerminateWorkingGroupLead: {
-          worker_id: specifics?.terminateWorkingGroupLead?.workerId,
-          working_group: getWorkingGroupParam(specifics?.terminateWorkingGroupLead?.groupId),
-          slashing_amount: specifics?.terminateWorkingGroupLead?.slashingAmount,
+          workerId: specifics?.terminateWorkingGroupLead?.workerId,
+          workingGroup: getWorkingGroupParam(specifics?.terminateWorkingGroupLead?.groupId),
+          slashingAmount: specifics?.terminateWorkingGroupLead?.slashingAmount,
         },
       })
     }
@@ -127,13 +127,13 @@ export const getSpecificParameters = (
     case 'fillWorkingGroupLeadOpening': {
       return createType('PalletProposalsCodexProposalDetails', {
         FillWorkingGroupLeadOpening: {
-          opening_id: specifics?.fillWorkingGroupLeadOpening?.openingId
+          openingId: specifics?.fillWorkingGroupLeadOpening?.openingId
             ? idToRuntimeId(specifics.fillWorkingGroupLeadOpening?.openingId)
             : 0,
-          successful_application_id: specifics?.fillWorkingGroupLeadOpening?.applicationId
+          successfulApplicationId: specifics?.fillWorkingGroupLeadOpening?.applicationId
             ? idToRuntimeId(specifics.fillWorkingGroupLeadOpening?.applicationId)
             : 0,
-          working_group: getWorkingGroupParam(specifics?.fillWorkingGroupLeadOpening?.groupId),
+          workingGroup: getWorkingGroupParam(specifics?.fillWorkingGroupLeadOpening?.groupId),
         },
       })
     }

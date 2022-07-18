@@ -134,10 +134,10 @@ export const createBountyParametersFactory = (state: AddBountyFrom) =>
       Member: createType('MemberId', Number((state.generalParameters.creator as any as Member)?.id || 0)),
     }),
     cherry: createType('u128', state.fundingPeriodDetails.cherry || 0),
-    entrant_stake: createType('u128', state.workingPeriodDetails.workingPeriodStake || 0),
+    entrantStake: createType('u128', state.workingPeriodDetails.workingPeriodStake || 0),
     funding_type: createType('FundingType', fundingTypeFactory(state)),
-    work_period: createType('u32', state.workingPeriodDetails.workingPeriodLength || 0),
-    judging_period: createType('u32', state.judgingPeriodDetails.judgingPeriodLength || 0),
+    workPeriod: createType('u32', state.workingPeriodDetails.workingPeriodLength || 0),
+    judgingPeriod: createType('u32', state.judgingPeriodDetails.judgingPeriodLength || 0),
   })
 
 const contractTypeFactory = (state: AddBountyFrom) => {
@@ -165,9 +165,9 @@ const fundingTypeFactory = (state: AddBountyFrom) => {
 
   return {
     Limited: createType('FundingType_Limited', {
-      min_funding_amount: createType('u128', state.fundingPeriodDetails.fundingMinimalRange || 0),
-      max_funding_amount: createType('u128', state.fundingPeriodDetails.fundingMaximalRange || 0),
-      funding_period: createType('u32', state.fundingPeriodDetails.fundingPeriodLength || 0),
+      minFundingAmount: createType('u128', state.fundingPeriodDetails.fundingMinimalRange || 0),
+      maxFundingAmount: createType('u128', state.fundingPeriodDetails.fundingMaximalRange || 0),
+      fundingPeriod: createType('u32', state.fundingPeriodDetails.fundingPeriodLength || 0),
     }),
   }
 }

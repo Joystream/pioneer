@@ -4,9 +4,9 @@ import { createType } from '@/common/model/createType'
 
 export const postsToDeleteMap = (postId: u64, threadId: u64, categoryId: u64) => {
   const extendedPostId = createType('PalletForumExtendedPostIdObject', {
-    post_id: postId,
-    thread_id: threadId,
-    category_id: categoryId,
+    postId: postId,
+    threadId: threadId,
+    categoryId: categoryId,
   })
   return createType('BTreeMap<PalletForumExtendedPostIdObject, bool>', new Map([[extendedPostId, true]]))
 }

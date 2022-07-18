@@ -122,7 +122,7 @@ describe('UI: ApplyForRoleModal', () => {
       api,
       'members.stakingAccountIdMemberStatus',
       createType('PalletMembershipStakingAccountMemberBinding', {
-        member_id: 0,
+        memberId: 0,
         confirmed: false,
       })
     )
@@ -322,7 +322,7 @@ describe('UI: ApplyForRoleModal', () => {
           api,
           'members.stakingAccountIdMemberStatus',
           createType('PalletMembershipStakingAccountMemberBinding', {
-            member_id: createType('MemberId', 0),
+            memberId: createType('MemberId', 0),
             confirmed: createType('bool', false),
           })
         )
@@ -368,7 +368,7 @@ describe('UI: ApplyForRoleModal', () => {
           api,
           'members.stakingAccountIdMemberStatus',
           createType('PalletMembershipStakingAccountMemberBinding', {
-            member_id: createType('MemberId', 0),
+            memberId: createType('MemberId', 0),
             confirmed: createType('bool', true),
           })
         )
@@ -422,14 +422,14 @@ describe('UI: ApplyForRoleModal', () => {
     await waitFor(async () => await screen.findByText(/You intend to apply for a role/i))
 
     const [beforeTransactionParam] = last(applyOnOpeningTxMock.mock.calls)
-    expect(beforeTransactionParam.opening_id).toBe(1)
+    expect(beforeTransactionParam.openingId).toBe(1)
 
-    expect(beforeTransactionParam.member_id).toBe(useMyMemberships.active?.id)
-    expect(beforeTransactionParam.role_account_id).toBe(alice.address)
-    expect(beforeTransactionParam.reward_account_id).toBe(alice.address)
+    expect(beforeTransactionParam.memberId).toBe(useMyMemberships.active?.id)
+    expect(beforeTransactionParam.roleAccountId).toBe(alice.address)
+    expect(beforeTransactionParam.rewardAccountId).toBe(alice.address)
 
-    expect(beforeTransactionParam.stake_parameters.stakingAccountId).toBe(bob.address)
-    expect(beforeTransactionParam.stake_parameters.stake.toString()).toBe('2000')
+    expect(beforeTransactionParam.stakeParameters.stakingAccountId).toBe(bob.address)
+    expect(beforeTransactionParam.stakeParameters.stake.toString()).toBe('2000')
 
     await act(async () => {
       fireEvent.click(await screen.findByText(/^Sign transaction/i))
@@ -437,14 +437,14 @@ describe('UI: ApplyForRoleModal', () => {
 
     const [transactionParam] = last(applyOnOpeningTxMock.mock.calls)
 
-    expect(transactionParam.opening_id).toBe(1)
+    expect(transactionParam.openingId).toBe(1)
 
-    expect(transactionParam.member_id).toBe(useMyMemberships.active?.id)
-    expect(transactionParam.role_account_id).toBe(alice.address)
-    expect(transactionParam.reward_account_id).toBe(alice.address)
+    expect(transactionParam.memberId).toBe(useMyMemberships.active?.id)
+    expect(transactionParam.roleAccountId).toBe(alice.address)
+    expect(transactionParam.rewardAccountId).toBe(alice.address)
 
-    expect(transactionParam.stake_parameters.stakingAccountId).toBe(bob.address)
-    expect(transactionParam.stake_parameters.stake.toString()).toBe('2000')
+    expect(transactionParam.stakeParameters.stakingAccountId).toBe(bob.address)
+    expect(transactionParam.stakeParameters.stake.toString()).toBe('2000')
 
     expect(metadataFromBytes(ApplicationMetadata, transactionParam.description)).toEqual({
       answers: ['Foo bar baz', 'Foo bar baz', 'Foo bar baz'],

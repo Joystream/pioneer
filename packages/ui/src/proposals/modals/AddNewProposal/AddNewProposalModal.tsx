@@ -175,7 +175,7 @@ export const AddNewProposalModal = () => {
         title: proposalDetails?.title,
         description: proposalDetails?.rationale,
         ...(stakingAccount.stakingAccount ? { stakingAccountId: stakingAccount.stakingAccount.address } : {}),
-        ...(triggerAndDiscussion.triggerBlock ? { exact_execution_block: triggerAndDiscussion.triggerBlock } : {}),
+        ...(triggerAndDiscussion.triggerBlock ? { exactExecutionBlock: triggerAndDiscussion.triggerBlock } : {}),
       }
 
       const txSpecificParameters = getSpecificParameters(api, specifics)

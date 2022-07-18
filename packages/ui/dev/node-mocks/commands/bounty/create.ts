@@ -22,14 +22,14 @@ export const createBountyCommand = async () => {
         Member: createType('MemberId', Number(bobMember.id)),
       }),
       cherry: api.consts.bounty.minCherryLimit,
-      entrant_stake: api.consts.bounty.minWorkEntrantStake,
+      entrantStake: api.consts.bounty.minWorkEntrantStake,
       funding_type: createType('FundingType', {
         Perpetual: createType('FundingType_Perpetual', {
           target: api.consts.bounty.minFundingLimit,
         }),
       }),
-      work_period: createType('u32', 11),
-      judging_period: createType('u32', 12),
+      workPeriod: createType('u32', 11),
+      judgingPeriod: createType('u32', 12),
     })
 
     const tx = api.tx.bounty.createBounty(

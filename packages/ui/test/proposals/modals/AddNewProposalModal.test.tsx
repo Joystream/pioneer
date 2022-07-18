@@ -111,18 +111,18 @@ describe('AddNewProposalModal types parameters', () => {
       const result = createType('PalletProposalsCodexProposalDetails', {
         CreateWorkingGroupLeadOpening: {
           description: 'Dolor deserunt adipisicing velit et.',
-          stake_policy: {
-            stake_amount: new BN(100),
-            leaving_unstaking_period: 10,
+          stakePolicy: {
+            stakeAmount: new BN(100),
+            leavingUnstakingPeriod: 10,
           },
-          reward_per_block: 10,
-          working_group: 'Forum',
+          rewardPerBlock: 10,
+          workingGroup: 'Forum',
         },
       })
 
       it('Stake policy', () => {
         const stakePolicy = result.asCreateWorkingGroupLeadOpening.stakePolicy.toJSON()
-        expect(stakePolicy).toEqual({ stake_amount: 100, leaving_unstaking_period: 10 })
+        expect(stakePolicy).toEqual({ stakeAmount: 100, leaving_stakePeriod: 10 })
       })
     })
   })
@@ -193,7 +193,7 @@ describe('UI: AddNewProposalModal', () => {
       api,
       'members.stakingAccountIdMemberStatus',
       createType('PalletMembershipStakingAccountMemberBinding', {
-        member_id: 0,
+        memberId: 0,
         confirmed: false,
       })
     )
@@ -674,9 +674,9 @@ describe('UI: AddNewProposalModal', () => {
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
           const parameters = txSpecificParameters.asTerminateWorkingGroupLead.toJSON()
           expect(parameters).toEqual({
-            slashing_amount: slashingAmount,
-            worker_id: Number(forumLeadId?.split('-')[1]),
-            working_group: group,
+            slashingAmount: slashingAmount,
+            workerId: Number(forumLeadId?.split('-')[1]),
+            workingGroup: group,
           })
 
           expect(button).not.toBeDisabled()
@@ -779,12 +779,12 @@ describe('UI: AddNewProposalModal', () => {
 
           const { description: metadata, ...data } = txSpecificParameters.asCreateWorkingGroupLeadOpening.toJSON()
           expect(data).toEqual({
-            reward_per_block: step4.rewardPerBlock,
-            stake_policy: {
-              stake_amount: step4.stake,
-              leaving_unstaking_period: step4.unstakingPeriod,
+            reward_perBlock: step4.rewardPerBlock,
+            stakePolicy: {
+              stakeAmount: step4.stake,
+              leaving_unstakingPeriod: step4.unstakingPeriod,
             },
-            working_group: step1.group,
+            workingGroup: step1.group,
           })
 
           expect(metadataFromBytes(OpeningMetadata, metadata)).toEqual({
@@ -1018,9 +1018,9 @@ describe('UI: AddNewProposalModal', () => {
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
           const parameters = txSpecificParameters.asFillWorkingGroupLeadOpening.toJSON()
           expect(parameters).toEqual({
-            opening_id: 1337,
-            successful_application_id: 1337,
-            working_group: 'Forum',
+            openingId: 1337,
+            successfulApplicationId: 1337,
+            workingGroup: 'Forum',
           })
           expect(await getCreateButton()).toBeEnabled()
         })
@@ -1271,7 +1271,7 @@ describe('UI: AddNewProposalModal', () => {
             api,
             'members.stakingAccountIdMemberStatus',
             createType('PalletMembershipStakingAccountMemberBinding', {
-              member_id: createType('MemberId', 0),
+              memberId: createType('MemberId', 0),
               confirmed: createType('bool', false),
             })
           )
@@ -1317,7 +1317,7 @@ describe('UI: AddNewProposalModal', () => {
             api,
             'members.stakingAccountIdMemberStatus',
             createType('PalletMembershipStakingAccountMemberBinding', {
-              member_id: createType('MemberId', 0),
+              memberId: createType('MemberId', 0),
               confirmed: createType('bool', true),
             })
           )
@@ -1386,7 +1386,7 @@ describe('UI: AddNewProposalModal', () => {
           api,
           'members.stakingAccountIdMemberStatus',
           createType('PalletMembershipStakingAccountMemberBinding', {
-            member_id: createType('MemberId', 0),
+            memberId: createType('MemberId', 0),
             confirmed: createType('bool', true),
           })
         )

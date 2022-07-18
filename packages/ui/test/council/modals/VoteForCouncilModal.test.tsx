@@ -131,7 +131,7 @@ describe('UI: Vote for Council Modal', () => {
       api,
       'members.stakingAccountIdMemberStatus',
       createType('PalletMembershipStakingAccountMemberBinding', {
-        member_id: 0,
+        memberId: 0,
         confirmed: false,
       })
     )

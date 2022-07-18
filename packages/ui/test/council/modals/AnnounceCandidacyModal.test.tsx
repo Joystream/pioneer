@@ -107,7 +107,7 @@ describe('UI: Announce Candidacy Modal', () => {
       api,
       'members.stakingAccountIdMemberStatus',
       createType('PalletMembershipStakingAccountMemberBinding', {
-        member_id: 0,
+        memberId: 0,
         confirmed: false,
       })
     )
@@ -374,7 +374,7 @@ describe('UI: Announce Candidacy Modal', () => {
           api,
           'members.stakingAccountIdMemberStatus',
           createType('PalletMembershipStakingAccountMemberBinding', {
-            member_id: createType('MemberId', 0),
+            memberId: createType('MemberId', 0),
             confirmed: createType('bool', false),
           })
         )
@@ -395,7 +395,7 @@ describe('UI: Announce Candidacy Modal', () => {
           api,
           'members.stakingAccountIdMemberStatus',
           createType('PalletMembershipStakingAccountMemberBinding', {
-            member_id: createType('MemberId', 0),
+            memberId: createType('MemberId', 0),
             confirmed: createType('bool', true),
           })
         )
@@ -418,7 +418,7 @@ describe('UI: Announce Candidacy Modal', () => {
           api,
           'members.stakingAccountIdMemberStatus',
           createType('PalletMembershipStakingAccountMemberBinding', {
-            member_id: createType('MemberId', 0),
+            memberId: createType('MemberId', 0),
             confirmed: createType('bool', confirmed),
           })
         )
@@ -472,7 +472,7 @@ describe('UI: Announce Candidacy Modal', () => {
           api,
           'members.stakingAccountIdMemberStatus',
           createType('PalletMembershipStakingAccountMemberBinding', {
-            member_id: createType('MemberId', 0),
+            memberId: createType('MemberId', 0),
             confirmed: createType('bool', false),
           })
         )
@@ -530,7 +530,7 @@ describe('UI: Announce Candidacy Modal', () => {
       api,
       'members.stakingAccountIdMemberStatus',
       createType('PalletMembershipStakingAccountMemberBinding', {
-        member_id: createType('MemberId', 0),
+        memberId: createType('MemberId', 0),
         confirmed: createType('bool', false),
       })
     )

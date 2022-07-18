@@ -36,7 +36,7 @@ const createProposal = (args: Args) => {
     const address = aliceMember.controllerAccount
 
     const commonParams = {
-      member_id: id,
+      memberId: id,
       title: `Lorem ${Object.keys(args)[0]}`,
       description: JSON.stringify(args, null, 2),
       stakingAccountId: address,
