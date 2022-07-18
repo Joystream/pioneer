@@ -2,18 +2,18 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { FounderMemberIcon, VerifiedMemberIcon, LeadMemberIcon } from '@/common/components/icons'
-import { TextInlineSmall } from '@/common/components/typography'
-import { Colors, Fonts } from '@/common/constants'
-import { isString } from '@/common/utils'
-import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
-
 import {
   DarkTooltipInnerItemProps,
   DefaultTooltip,
   DefaultTooltipProps,
   Tooltip,
   TooltipComponent,
-} from '../../common/components/Tooltip'
+} from '@/common/components/Tooltip'
+import { TextInlineSmall } from '@/common/components/typography'
+import { Colors, Fonts } from '@/common/constants'
+import { isString } from '@/common/utils'
+import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
+
 import { Member } from '../types'
 
 import { Avatar } from './Avatar'
@@ -37,6 +37,7 @@ export interface MemberInfoContainerProps {
   maxRoles?: number
   avatarSmall?: boolean
   skipModal?: boolean
+  withID?: boolean
 }
 
 export type MemberInfoProps = MemberInfoContainerProps & MemberInfoWrapProps & { hideGroup?: boolean }
@@ -55,6 +56,7 @@ export const MemberInfo = React.memo(
     isLead,
     skipModal,
     avatarSmall,
+    withID,
   }: MemberInfoProps) => {
     const roleSize = size === 's' ? 'm' : size
     const showMemberModal = useShowMemberModal(member.id)
@@ -112,10 +114,12 @@ export const MemberInfo = React.memo(
               </MemberIcons>
             )}
           </MemberHead>
-          <IdHeader>
-            <span>Member ID: </span>
-            {member.id}
-          </IdHeader>
+          {withID && (
+            <IdHeader>
+              <span>Member ID: </span>
+              {member.id}
+            </IdHeader>
+          )}
         </div>
         {showRoles && <MemberRoles roles={member.roles} size={roleSize} max={maxRoles} />}
         {showId && <MemberId>{isString(showIdOrText) ? showIdOrText : `Member ID: ${member.id}`}</MemberId>}

@@ -24,7 +24,7 @@ export const MemberListItem = ({ member }: { member: MemberWithDetails }) => {
       <MemberModalTrigger onClick={showMemberModal} />
 
       <MemberColumn>
-        <MemberInfo member={member} hideGroup />
+        <MemberInfo member={member} hideGroup withID />
       </MemberColumn>
 
       <MemberRolesColumn>
