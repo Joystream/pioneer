@@ -54,7 +54,6 @@ const asMemberEntry = (entry: MemberWithDetailsFieldsFragment['entry']): MemberE
 export const asMemberWithDetails = (fields: MemberWithDetailsFieldsFragment): MemberWithDetails => ({
   ...asMember(fields),
   about: fields.metadata.about ?? undefined,
-  invitedBy: '',
   entry: asMemberEntry(fields.entry),
   invitees: fields.invitees.map((fields) => {
     return {
@@ -63,4 +62,5 @@ export const asMemberWithDetails = (fields: MemberWithDetailsFieldsFragment): Me
       // entry: asMemberEntry(fields.entry) as InvitedEntry,
     }
   }),
+  invitedBy: fields.invitedBy ? asMember(fields.invitedBy) : undefined,
 })
