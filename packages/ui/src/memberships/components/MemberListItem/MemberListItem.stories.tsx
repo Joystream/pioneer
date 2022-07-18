@@ -43,5 +43,5 @@ Member.args = {
     boundAccounts: [],
     inviteCount: 0,
     createdAt: '',
-  },
+  } as unknown as any,
 }
