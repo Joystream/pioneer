@@ -13,5 +13,5 @@ export const LockDate = React.memo(({ createdInEvent }: LockDateProps) => {
     return <TextMedium value>Unknown</TextMedium>
   }
 
-  return <BlockTime block={createdInEvent} layout="column" />
+  return <BlockTime block={createdInEvent} layout="column" lessInfo />
 })

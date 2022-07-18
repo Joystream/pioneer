@@ -3,9 +3,7 @@ import React, { ReactNode, useCallback } from 'react'
 import { Event, EventData } from 'xstate/lib/types'
 import { ValidationError } from 'yup'
 
-import { SelectAccount } from '@/accounts/components/SelectAccount'
-import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
-import { useMyBalances } from '@/accounts/hooks/useMyBalances'
+import { SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { Account, LockType } from '@/accounts/types'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
@@ -36,25 +34,23 @@ export const StakeStep = ({
   state,
   errors,
 }: StakeStepProps) => {
-  const balances = useMyBalances()
-
   const selectAccountFilter = useCallback(
-    (account: Account) =>
-      (!accountsFilter || accountsFilter(account)) &&
-      filterByRequiredStake(state.context.stake ?? minStake, stakeLock, balances[account.address]),
-    [accountsFilter, state.context.stake?.toString(), JSON.stringify(balances)]
+    (account: Account) => !accountsFilter || accountsFilter(account),
+    [accountsFilter]
   )
+
   return (
     <RowGapBlock gap={24}>
       <Row>
         <RowGapBlock gap={20}>
           {accountText}
           <InputComponent label="Select account for Staking" required inputSize="l">
-            <SelectAccount
+            <SelectStakingAccount
               id="account-select"
               onChange={(account) => send('SET_ACCOUNT', { account })}
               selected={state.context.account}
               minBalance={minStake}
+              lockType={stakeLock}
               filter={selectAccountFilter}
             />
           </InputComponent>

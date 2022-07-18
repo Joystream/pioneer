@@ -1,9 +1,7 @@
 import BN from 'bn.js'
 import React from 'react'
 
-import { SelectAccount } from '@/accounts/components/SelectAccount'
-import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
-import { useMyBalances } from '@/accounts/hooks/useMyBalances'
+import { SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { InputComponent } from '@/common/components/forms'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Row } from '@/common/components/Modal'
@@ -17,8 +15,6 @@ interface StakingAccountStepProps {
 }
 
 export const StakingAccountStep = ({ requiredStake }: StakingAccountStepProps) => {
-  const balances = useMyBalances()
-
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -55,10 +51,10 @@ export const StakingAccountStep = ({ requiredStake }: StakingAccountStepProps) =
             required
             name="stakingAccount.stakingAccount"
           >
-            <SelectAccount
+            <SelectStakingAccount
               name="stakingAccount.stakingAccount"
               minBalance={requiredStake}
-              filter={(account) => filterByRequiredStake(requiredStake, 'Proposals', balances[account.address])}
+              lockType="Proposals"
             />
           </InputComponent>
         </RowGapBlock>

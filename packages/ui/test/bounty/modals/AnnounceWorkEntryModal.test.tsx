@@ -2,6 +2,7 @@ import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { AnnounceWorkEntryModal } from '@/bounty/modals/AnnounceWorkEntryModal'
@@ -25,13 +26,15 @@ import {
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
-const [bounty] = bounties
+const [bountyMock] = bounties
+const bounty = { ...bountyMock, entrantStake: new BN(bountyMock.entrantStake) }
+const sufficientBalance = bounty.entrantStake.addn(1000)
 
 const defaultBalance = {
-  total: BN_ZERO,
+  total: sufficientBalance,
   locked: BN_ZERO,
   recoverable: BN_ZERO,
-  transferable: new BN(1000),
+  transferable: sufficientBalance,
   locks: [],
 }
 
@@ -41,7 +44,6 @@ describe('UI: AnnounceWorkEntryModal', () => {
   stubBountyConstants(api)
   const fee = 888
   const transaction = stubTransaction(api, 'api.tx.bounty.announceWorkEntry', fee)
-
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
     showModal: jest.fn(),
@@ -89,12 +91,20 @@ describe('UI: AnnounceWorkEntryModal', () => {
     expect(screen.getByDisplayValue(bounty.title)).toBeInTheDocument()
   })
 
-  it('Insufficient funds', async () => {
+  it('Requirement failed', async () => {
     stubTransaction(api, 'api.tx.utility.batch', 9999999)
     renderResult.unmount()
     render(<Modal />)
 
-    expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
+    const moveFundsModalCall: MoveFundsModalCall = {
+      modal: 'MoveFundsModal',
+      data: {
+        requiredStake: bounty.entrantStake,
+        lock: 'Bounties',
+      },
+    }
+
+    expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
   })
 
   it('Displays correct member', () => {

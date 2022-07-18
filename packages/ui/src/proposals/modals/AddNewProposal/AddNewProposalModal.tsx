@@ -9,7 +9,6 @@ import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
 import { Api } from '@/api/types'
@@ -84,10 +83,7 @@ export const AddNewProposalModal = () => {
   const [isExecutionError, setIsExecutionError] = useState<boolean>(false)
 
   const constants = useProposalConstants(formMap[1])
-  const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
-    constants?.requiredStake.toNumber() || 0,
-    'Proposals'
-  )
+  const { hasRequiredStake } = useHasRequiredStake(constants?.requiredStake.toNumber() || 0, 'Proposals')
   const balance = useBalance(formMap[0]?.address)
   const stakingStatus = useStakingAccountStatus(formMap[0]?.address, activeMember?.id)
   const form = useForm<AddNewProposalForm>({
@@ -250,32 +246,20 @@ export const AddNewProposalModal = () => {
     return null
   }
 
-  if (state.matches('requirementsFailed')) {
-    return (
-      <InsufficientFundsModal
-        onClose={hideModal}
-        address={activeMember.controllerAccount}
-        amount={feeInfo.transactionFee}
-      />
-    )
-  }
-
-  if (state.matches('warning')) {
-    return isHidingCaution ? null : <WarningModal onNext={() => send('NEXT')} />
-  }
-
-  if (state.matches('requiredStakeFailed')) {
+  if (state.matches('requirementsFailed') || state.matches('requiredStakeFailed')) {
     showModal<MoveFundsModalCall>({
       modal: 'MoveFundsModal',
       data: {
-        accountsWithCompatibleLocks,
-        accountsWithTransferableBalance,
-        requiredStake: (constants?.requiredStake as BN).toNumber(),
+        requiredStake: constants?.requiredStake as BN,
         lock: 'Proposals',
       },
     })
 
     return null
+  }
+
+  if (state.matches('warning')) {
+    return isHidingCaution ? null : <WarningModal onNext={() => send('NEXT')} />
   }
 
   if (state.matches('bindStakingAccount')) {

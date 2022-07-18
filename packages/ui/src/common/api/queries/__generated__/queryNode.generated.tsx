@@ -9,9 +9,9 @@ export type GetQueryNodeStateSubscription = {
   __typename: 'Subscription'
   stateSubscription: {
     __typename: 'ProcessorState'
-    chainHead: number
-    indexerHead: number
-    lastCompleteBlock: number
+    chainHead: string
+    indexerHead: string
+    lastCompleteBlock: string
     lastProcessedEvent: string
   }
 }

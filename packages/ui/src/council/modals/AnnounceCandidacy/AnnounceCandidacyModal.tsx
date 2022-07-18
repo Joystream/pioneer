@@ -86,7 +86,8 @@ export const AnnounceCandidacyModal = () => {
   const { hideModal, showModal } = useModal()
   const [state, send, service] = useMachine(announceCandidacyMachine)
   const constants = useCouncilConstants()
-  const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
+  // TODO: minCandidacyStake should be BN after https://github.com/Joystream/pioneer/pull/3265 is merged
+  const { hasRequiredStake } = useHasRequiredStake(
     constants?.election.minCandidacyStake.toNumber() || 0,
     'Council Candidate'
   )
@@ -191,12 +192,9 @@ export const AnnounceCandidacyModal = () => {
       }
 
       if (feeInfo) {
-        return send(feeInfo.canAfford ? 'NEXT' : 'FAIL')
+        const areFundsSufficient = feeInfo.canAfford && hasRequiredStake
+        send(areFundsSufficient ? 'NEXT' : 'FAIL')
       }
-    }
-
-    if (state.matches('requiredStakeVerification')) {
-      return send(hasRequiredStake ? 'NEXT' : 'FAIL')
     }
 
     if (state.matches('beforeTransaction')) {
@@ -226,22 +224,10 @@ export const AnnounceCandidacyModal = () => {
   }
 
   if (state.matches('requirementsFailed')) {
-    return (
-      <InsufficientFundsModal
-        onClose={hideModal}
-        address={activeMember.controllerAccount}
-        amount={feeInfo.transactionFee}
-      />
-    )
-  }
-
-  if (state.matches('requiredStakeFailed')) {
     showModal<MoveFundsModalCall>({
       modal: 'MoveFundsModal',
       data: {
-        accountsWithCompatibleLocks,
-        accountsWithTransferableBalance,
-        requiredStake: (constants?.election.minCandidacyStake as BN).toNumber(),
+        requiredStake: constants?.election.minCandidacyStake as BN,
         lock: 'Council Candidate',
       },
     })

@@ -9,6 +9,7 @@ config:
   scalars:
     Date: Date
     BigInt: string
+    Float: string
   preResolveTypes: true # avoid using Pick
   nonOptionalTypename: true
 

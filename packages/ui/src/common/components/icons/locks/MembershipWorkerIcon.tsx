@@ -13,7 +13,7 @@ export const MembershipWorkerIcon = React.memo(({ className }: StyledIcon) => (
     color="currentColor"
     className={className}
   >
-    <g clip-path="url(#clip0_133_99)">
+    <g clipPath="url(#clip0_133_99)">
       <path d="M2.87363 21.6984C2.87281 21.5008 2.87198 21.6428 2.87363 21.6984V21.6984Z" fill="#EEEEEE" />
       <path d="M21.1255 21.8531C21.1281 21.799 21.1264 21.4777 21.1255 21.8531V21.8531Z" fill="#EEEEEE" />
       <path
