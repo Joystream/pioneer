@@ -1,5 +1,4 @@
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react'
 import BN from 'bn.js'
@@ -13,6 +12,7 @@ import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { camelCaseToText } from '@/common/helpers'
+import { createType } from '@/common/model/createType'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
@@ -108,21 +108,21 @@ const APPLICATION_DATA = {
 describe('AddNewProposalModal types parameters', () => {
   describe('Specific parameters', () => {
     describe('createWorkingGroupLeadOpening', () => {
-      const result = createType('ProposalDetailsOf', {
+      const result = createType('PalletProposalsCodexProposalDetails', {
         CreateWorkingGroupLeadOpening: {
           description: 'Dolor deserunt adipisicing velit et.',
-          stake_policy: {
-            stake_amount: new BN(100),
-            leaving_unstaking_period: 10,
+          stakePolicy: {
+            stakeAmount: new BN(100),
+            leavingUnstakingPeriod: 10,
           },
-          reward_per_block: 10,
-          working_group: 'Forum',
+          rewardPerBlock: 10,
+          group: 'Forum',
         },
       })
 
       it('Stake policy', () => {
-        const stakePolicy = result.asCreateWorkingGroupLeadOpening.stake_policy.toJSON()
-        expect(stakePolicy).toEqual({ stake_amount: 100, leaving_unstaking_period: 10 })
+        const stakePolicy = result.asCreateWorkingGroupLeadOpening.stakePolicy.toJSON()
+        expect(stakePolicy).toEqual({ stakeAmount: 100, leavingUnstakingPeriod: 10 })
       })
     })
   })
@@ -192,8 +192,8 @@ describe('UI: AddNewProposalModal', () => {
     stubQuery(
       api,
       'members.stakingAccountIdMemberStatus',
-      createType('StakingAccountMemberBinding', {
-        member_id: 0,
+      createType('PalletMembershipStakingAccountMemberBinding', {
+        memberId: 0,
         confirmed: false,
       })
     )
@@ -486,7 +486,7 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.Signal.fillSignal(signal)
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
-          const parameters = txSpecificParameters.asSignal.toJSON()
+          const parameters = txSpecificParameters.asSignal.toHuman()
           expect(parameters).toEqual(signal)
           const button = await getCreateButton()
           expect(button).toBeEnabled()
@@ -674,9 +674,9 @@ describe('UI: AddNewProposalModal', () => {
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
           const parameters = txSpecificParameters.asTerminateWorkingGroupLead.toJSON()
           expect(parameters).toEqual({
-            slashing_amount: slashingAmount,
-            worker_id: Number(forumLeadId?.split('-')[1]),
-            working_group: group,
+            slashingAmount: slashingAmount,
+            workerId: Number(forumLeadId?.split('-')[1]),
+            group,
           })
 
           expect(button).not.toBeDisabled()
@@ -779,12 +779,12 @@ describe('UI: AddNewProposalModal', () => {
 
           const { description: metadata, ...data } = txSpecificParameters.asCreateWorkingGroupLeadOpening.toJSON()
           expect(data).toEqual({
-            reward_per_block: step4.rewardPerBlock,
-            stake_policy: {
-              stake_amount: step4.stake,
-              leaving_unstaking_period: step4.unstakingPeriod,
+            rewardPerBlock: step4.rewardPerBlock,
+            stakePolicy: {
+              stakeAmount: step4.stake,
+              leavingUnstakingPeriod: step4.unstakingPeriod,
             },
-            working_group: step1.group,
+            group: step1.group,
           })
 
           expect(metadataFromBytes(OpeningMetadata, metadata)).toEqual({
@@ -1018,9 +1018,9 @@ describe('UI: AddNewProposalModal', () => {
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
           const parameters = txSpecificParameters.asFillWorkingGroupLeadOpening.toJSON()
           expect(parameters).toEqual({
-            opening_id: 1337,
-            successful_application_id: 1337,
-            working_group: 'Forum',
+            openingId: 1337,
+            applicationId: 1337,
+            workingGroup: 'Forum',
           })
           expect(await getCreateButton()).toBeEnabled()
         })
@@ -1270,8 +1270,8 @@ describe('UI: AddNewProposalModal', () => {
           stubQuery(
             api,
             'members.stakingAccountIdMemberStatus',
-            createType('StakingAccountMemberBinding', {
-              member_id: createType('MemberId', 0),
+            createType('PalletMembershipStakingAccountMemberBinding', {
+              memberId: createType('MemberId', 0),
               confirmed: createType('bool', false),
             })
           )
@@ -1316,8 +1316,8 @@ describe('UI: AddNewProposalModal', () => {
           stubQuery(
             api,
             'members.stakingAccountIdMemberStatus',
-            createType('StakingAccountMemberBinding', {
-              member_id: createType('MemberId', 0),
+            createType('PalletMembershipStakingAccountMemberBinding', {
+              memberId: createType('MemberId', 0),
               confirmed: createType('bool', true),
             })
           )
@@ -1385,8 +1385,8 @@ describe('UI: AddNewProposalModal', () => {
         stubQuery(
           api,
           'members.stakingAccountIdMemberStatus',
-          createType('StakingAccountMemberBinding', {
-            member_id: createType('MemberId', 0),
+          createType('PalletMembershipStakingAccountMemberBinding', {
+            memberId: createType('MemberId', 0),
             confirmed: createType('bool', true),
           })
         )

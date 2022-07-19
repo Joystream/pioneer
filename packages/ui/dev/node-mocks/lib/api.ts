@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
-import { registry, types } from '@joystream/types'
+import '@joystream/types'
 import { ApiPromise, ApiRx, WsProvider } from '@polkadot/api'
 import { ApiTypes, SubmittableExtrinsic } from '@polkadot/api/types'
 import { createTestKeyring } from '@polkadot/keyring/testing'
-import jsonrpc from '@polkadot/types/interfaces/jsonrpc'
 import { DispatchError, EventRecord } from '@polkadot/types/interfaces/system'
 import { ISubmittableResult, ITuple } from '@polkadot/types/types'
 import chalk from 'chalk'
@@ -21,8 +20,8 @@ export const getApi = async <T extends ApiTypes>(apiType: T, endpoint = 'ws://12
   const provider = new WsProvider(endpoint)
 
   const api = await (apiType === 'promise'
-    ? ApiPromise.create({ provider, rpc: jsonrpc, types, registry })
-    : firstValueFrom(ApiRx.create({ provider, rpc: jsonrpc, types, registry })))
+    ? ApiPromise.create({ provider })
+    : firstValueFrom(ApiRx.create({ provider })))
 
   console.log(chalk.green('✔'))
   return api as Api<T>

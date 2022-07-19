@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo } from 'react'
 
@@ -7,6 +6,7 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { createType } from '@/common/model/createType'
 
 import { RevealVoteModalCall } from '.'
 import { RevealVoteMachine } from './machine'

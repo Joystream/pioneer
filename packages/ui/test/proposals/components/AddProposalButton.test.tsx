@@ -1,7 +1,7 @@
-import { createType } from '@joystream/types'
 import { render } from '@testing-library/react'
 import React from 'react'
 
+import { createType } from '@/common/model/createType'
 import { ApiContext } from '@/common/providers/api/context'
 import { AddProposalButton } from '@/proposals/components/AddProposalButton'
 

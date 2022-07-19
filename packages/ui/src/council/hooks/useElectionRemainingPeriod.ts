@@ -27,7 +27,7 @@ export const useElectionRemainingPeriod = (electionStage: ElectionStage | undefi
     switch (electionStage) {
       case 'inactive':
       case 'announcing':
-        return api?.query.council.stage().pipe(map(({ changed_at }) => changed_at))
+        return api?.query.council.stage().pipe(map(({ changedAt }) => changedAt))
       case 'voting':
         return api?.query.referendum.stage().pipe(map(({ asVoting }) => asVoting.started))
       case 'revealing':

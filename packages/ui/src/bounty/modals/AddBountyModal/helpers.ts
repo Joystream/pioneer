@@ -1,11 +1,6 @@
 import { IBountyMetadata, IBountyWorkData } from '@joystream/metadata-protobuf'
-import { createType } from '@joystream/types'
-import { BountyCreationParameters } from '@joystream/types/augment'
-import { AssuranceContractType_Closed } from '@joystream/types/bounty'
-import { MemberId } from '@joystream/types/common'
-import { ThreadId } from '@joystream/types/src/common'
 import { AugmentedConst } from '@polkadot/api/types'
-import { u32 } from '@polkadot/types'
+import { u32, u64 } from '@polkadot/types'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import BN from 'bn.js'
 import Long from 'long'
@@ -14,6 +9,7 @@ import * as Yup from 'yup'
 import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { SubmitWorkModalMachineState } from '@/bounty/modals/SubmitWorkModal/machine'
 import { BN_ZERO } from '@/common/constants'
+import { createType } from '@/common/model/createType'
 import { whenDefined } from '@/common/utils'
 import { BNSchema, minContext, maxContext, moreThanMixed, lessThanMixed } from '@/common/utils/validation'
 import { MemberSchema } from '@/memberships/model/validation'
@@ -128,26 +124,20 @@ export const addBountyModalSchema = Yup.object().shape({
   }),
 })
 
-export const createBountyParametersFactory = (state: AddBountyFrom): BountyCreationParameters =>
-  createType<BountyCreationParameters, 'BountyCreationParameters'>('BountyCreationParameters', {
+export const createBountyParametersFactory = (state: AddBountyFrom) =>
+  createType('BountyCreationParameters', {
     oracle: createType('BountyActor', {
-      Member: createType<MemberId, 'MemberId'>(
-        'MemberId',
-        Number((state.judgingPeriodDetails.oracle as any as Member)?.id || 0)
-      ),
+      Member: createType('MemberId', Number((state.judgingPeriodDetails.oracle as any as Member)?.id || 0)),
     }),
     contract_type: createType('AssuranceContractType', contractTypeFactory(state)),
     creator: createType('BountyActor', {
-      Member: createType<MemberId, 'MemberId'>(
-        'MemberId',
-        Number((state.generalParameters.creator as any as Member)?.id || 0)
-      ),
+      Member: createType('MemberId', Number((state.generalParameters.creator as any as Member)?.id || 0)),
     }),
     cherry: createType('u128', state.fundingPeriodDetails.cherry || 0),
-    entrant_stake: createType('u128', state.workingPeriodDetails.workingPeriodStake || 0),
-    funding_type: createType('FundingType', fundingTypeFactory(state)),
-    work_period: createType('u32', state.workingPeriodDetails.workingPeriodLength || 0),
-    judging_period: createType('u32', state.judgingPeriodDetails.judgingPeriodLength || 0),
+    entrantStake: createType('u128', state.workingPeriodDetails.workingPeriodStake || 0),
+    fundingType: createType('FundingType', fundingTypeFactory(state)),
+    workPeriod: createType('u32', state.workingPeriodDetails.workingPeriodLength || 0),
+    judgingPeriod: createType('u32', state.judgingPeriodDetails.judgingPeriodLength || 0),
   })
 
 const contractTypeFactory = (state: AddBountyFrom) => {
@@ -158,14 +148,9 @@ const contractTypeFactory = (state: AddBountyFrom) => {
   }
 
   const whiteList =
-    state.workingPeriodDetails.workingPeriodWhitelist?.map((member) =>
-      createType<MemberId, 'MemberId'>('MemberId', Number(member.id))
-    ) ?? []
+    state.workingPeriodDetails.workingPeriodWhitelist?.map((member) => createType('MemberId', Number(member.id))) ?? []
   return {
-    Closed: createType<AssuranceContractType_Closed, 'AssuranceContractType_Closed'>(
-      'AssuranceContractType_Closed',
-      whiteList
-    ),
+    Closed: createType('AssuranceContractType_Closed', whiteList),
   }
 }
 
@@ -180,14 +165,14 @@ const fundingTypeFactory = (state: AddBountyFrom) => {
 
   return {
     Limited: createType('FundingType_Limited', {
-      min_funding_amount: createType('u128', state.fundingPeriodDetails.fundingMinimalRange || 0),
-      max_funding_amount: createType('u128', state.fundingPeriodDetails.fundingMaximalRange || 0),
-      funding_period: createType('u32', state.fundingPeriodDetails.fundingPeriodLength || 0),
+      minFundingAmount: createType('u128', state.fundingPeriodDetails.fundingMinimalRange || 0),
+      maxFundingAmount: createType('u128', state.fundingPeriodDetails.fundingMaximalRange || 0),
+      fundingPeriod: createType('u32', state.fundingPeriodDetails.fundingPeriodLength || 0),
     }),
   }
 }
 
-export const createBountyMetadataFactory = (state: AddBountyFrom, newThreadId: ThreadId): IBountyMetadata => ({
+export const createBountyMetadataFactory = (state: AddBountyFrom, newThreadId: u64): IBountyMetadata => ({
   title: state.generalParameters.title,
   description: state.generalParameters.description,
   bannerImageUri: state.generalParameters.coverPhotoLink,

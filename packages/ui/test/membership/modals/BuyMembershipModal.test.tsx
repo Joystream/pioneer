@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import BN from 'bn.js'
@@ -8,6 +7,7 @@ import { MemoryRouter } from 'react-router'
 import { of } from 'rxjs'
 
 import { Account } from '@/accounts/types'
+import { createType } from '@/common/model/createType'
 import { ApiContext } from '@/common/providers/api/context'
 import { BuyMembershipModal } from '@/memberships/modals/BuyMembershipModal'
 

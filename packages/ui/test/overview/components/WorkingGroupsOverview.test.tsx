@@ -1,8 +1,8 @@
-import { createType } from '@joystream/types'
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
+import { createType } from '@/common/model/createType'
 import { ApiContext } from '@/common/providers/api/context'
 import {
   seedWorkingGroups,

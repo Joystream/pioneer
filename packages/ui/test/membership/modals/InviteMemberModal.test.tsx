@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import BN from 'bn.js'
@@ -7,6 +6,7 @@ import React from 'react'
 import { of } from 'rxjs'
 
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { createType } from '@/common/model/createType'
 import { ApiContext } from '@/common/providers/api/context'
 import { InviteMemberModal } from '@/memberships/modals/InviteMemberModal'
 import { seedMembers } from '@/mocks/data'
