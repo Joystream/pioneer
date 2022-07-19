@@ -28,12 +28,12 @@ const useOnBoarding = (): UseOnBoarding => {
   const { isLoading: isLoadingMembers, hasMembers } = useMyMemberships()
   const [membershipAccount, setMembershipAccount] = useLocalStorage<string | undefined>('onboarding-membership-account')
 
-  if (!isConnected || isLoadingAccounts || isLoadingMembers) {
-    return { isLoading: true }
-  }
-
   if (totalBalance.gtn(0) && wallet) {
     return { isLoading: false, status: 'finished' }
+  }
+
+  if (!isConnected || isLoadingAccounts || isLoadingMembers) {
+    return { isLoading: true }
   }
 
   if (accountsError === 'NO_EXTENSION' || !wallet) {
