@@ -23,7 +23,7 @@ export const createBountyCommand = async () => {
       }),
       cherry: api.consts.bounty.minCherryLimit,
       entrantStake: api.consts.bounty.minWorkEntrantStake,
-      funding_type: createType('FundingType', {
+      fundingType: createType('FundingType', {
         Perpetual: createType('FundingType_Perpetual', {
           target: api.consts.bounty.minFundingLimit,
         }),

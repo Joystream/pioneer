@@ -135,7 +135,7 @@ export const createBountyParametersFactory = (state: AddBountyFrom) =>
     }),
     cherry: createType('u128', state.fundingPeriodDetails.cherry || 0),
     entrantStake: createType('u128', state.workingPeriodDetails.workingPeriodStake || 0),
-    funding_type: createType('FundingType', fundingTypeFactory(state)),
+    fundingType: createType('FundingType', fundingTypeFactory(state)),
     workPeriod: createType('u32', state.workingPeriodDetails.workingPeriodLength || 0),
     judgingPeriod: createType('u32', state.judgingPeriodDetails.judgingPeriodLength || 0),
   })
