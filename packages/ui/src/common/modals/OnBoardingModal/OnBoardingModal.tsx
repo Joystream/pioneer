@@ -12,6 +12,7 @@ import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper
 import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { Colors } from '@/common/constants'
+import { useDebounce } from '@/common/hooks/useDebounce'
 import { useModal } from '@/common/hooks/useModal'
 import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
@@ -26,7 +27,8 @@ import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipMod
 
 export const OnBoardingModal = () => {
   const { hideModal } = useModal()
-  const { status, membershipAccount, setMembershipAccount } = useOnBoarding()
+  const { status: realStatus, membershipAccount, setMembershipAccount, isLoading } = useOnBoarding()
+  const status = useDebounce(realStatus, 50)
   const [state, send] = useMachine(onBoardingMachine)
   const [membershipData, setMembershipData] = useState<{ id: string; blockHash: string }>()
   const transactionStatus = useQueryNodeTransactionStatus(membershipData?.blockHash)
@@ -116,7 +118,7 @@ export const OnBoardingModal = () => {
     )
   }
 
-  if (!statusRef.current || status === 'finished') {
+  if (!statusRef.current || status === 'finished' || isLoading || !status) {
     return null
   }
 
