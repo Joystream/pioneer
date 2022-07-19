@@ -64,7 +64,7 @@ export const getSpecificParameters = (
             leavingUnstakingPeriod: specifics?.stakingPolicyAndReward?.leavingUnstakingPeriod,
           },
           rewardPerBlock: specifics?.stakingPolicyAndReward?.rewardPerBlock,
-          workingGroup: getWorkingGroupParam(specifics?.workingGroupAndDescription?.groupId),
+          group: getWorkingGroupParam(specifics?.workingGroupAndDescription?.groupId),
         },
       })
     }
@@ -90,7 +90,7 @@ export const getSpecificParameters = (
       return createType('PalletProposalsCodexProposalDetails', {
         TerminateWorkingGroupLead: {
           workerId: specifics?.terminateWorkingGroupLead?.workerId,
-          workingGroup: getWorkingGroupParam(specifics?.terminateWorkingGroupLead?.groupId),
+          group: getWorkingGroupParam(specifics?.terminateWorkingGroupLead?.groupId),
           slashingAmount: specifics?.terminateWorkingGroupLead?.slashingAmount,
         },
       })
@@ -130,10 +130,10 @@ export const getSpecificParameters = (
           openingId: specifics?.fillWorkingGroupLeadOpening?.openingId
             ? idToRuntimeId(specifics.fillWorkingGroupLeadOpening?.openingId)
             : 0,
-          successfulApplicationId: specifics?.fillWorkingGroupLeadOpening?.applicationId
+          applicationId: specifics?.fillWorkingGroupLeadOpening?.applicationId
             ? idToRuntimeId(specifics.fillWorkingGroupLeadOpening?.applicationId)
             : 0,
-          workingGroup: getWorkingGroupParam(specifics?.fillWorkingGroupLeadOpening?.groupId),
+          group: getWorkingGroupParam(specifics?.fillWorkingGroupLeadOpening?.groupId),
         },
       })
     }
