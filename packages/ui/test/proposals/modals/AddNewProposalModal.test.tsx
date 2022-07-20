@@ -186,7 +186,7 @@ describe('UI: AddNewProposalModal', () => {
     stubProposalConstants(api)
 
     createProposalTx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
-    createProposalTxMock = api.api.tx.proposalsCodex.createProposal as unknown as jest.Mock
+    createProposalTxMock = (api.api.tx.proposalsCodex.createProposal as unknown) as jest.Mock
 
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 25)
     stubQuery(
@@ -487,7 +487,7 @@ describe('UI: AddNewProposalModal', () => {
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
           const parameters = txSpecificParameters.asSignal.toJSON()
-          expect(parameters).toEqual(signal)
+          expect(Buffer.from(parameters.slice(2), 'hex').toString()).toEqual(signal)
           const button = await getCreateButton()
           expect(button).toBeEnabled()
         })
@@ -676,7 +676,7 @@ describe('UI: AddNewProposalModal', () => {
           expect(parameters).toEqual({
             slashingAmount: slashingAmount,
             workerId: Number(forumLeadId?.split('-')[1]),
-            workingGroup: group,
+            group,
           })
 
           expect(button).not.toBeDisabled()
@@ -779,12 +779,12 @@ describe('UI: AddNewProposalModal', () => {
 
           const { description: metadata, ...data } = txSpecificParameters.asCreateWorkingGroupLeadOpening.toJSON()
           expect(data).toEqual({
-            reward_perBlock: step4.rewardPerBlock,
+            rewardPerBlock: step4.rewardPerBlock,
             stakePolicy: {
               stakeAmount: step4.stake,
-              leaving_unstakingPeriod: step4.unstakingPeriod,
+              leavingUnstakingPeriod: step4.unstakingPeriod,
             },
-            workingGroup: step1.group,
+            group: step1.group,
           })
 
           expect(metadataFromBytes(OpeningMetadata, metadata)).toEqual({
@@ -1019,7 +1019,7 @@ describe('UI: AddNewProposalModal', () => {
           const parameters = txSpecificParameters.asFillWorkingGroupLeadOpening.toJSON()
           expect(parameters).toEqual({
             openingId: 1337,
-            successfulApplicationId: 1337,
+            applicationId: 1337,
             workingGroup: 'Forum',
           })
           expect(await getCreateButton()).toBeEnabled()
