@@ -55,10 +55,12 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
             {children}
           </Mention>
         ) : (
-          <a href={href}>{children}</a>
+          <a style={{ overflowWrap: 'break-word' }} href={href}>
+            {children}
+          </a>
         )
       },
-
+      img: (props) => <img src={props.src} style={{ maxWidth: '100%', maxHeight: '400px' }} />,
       code: ({ children, inline }) => <code className={inline ? 'inline-code' : 'in-block-code'}>{children}</code>,
     }
   }, [markdown, append])

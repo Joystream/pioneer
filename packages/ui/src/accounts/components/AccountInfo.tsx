@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { CopyComponent } from '@/common/components/CopyComponent'
+import { LockIcon } from '@/common/components/icons/locks'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
 import { shortenAddress } from '@/common/model/formatters'
 import { Address } from '@/common/types'
@@ -12,16 +13,30 @@ import { Member } from '@/memberships/types'
 
 import { Account } from '../types'
 
-export const AccountInfo = React.memo(({ account }: { account: Account }) => {
+interface AccountInfoProps {
+  account: Account
+  locked?: boolean
+}
+
+export const AccountInfo = React.memo(({ account, locked }: AccountInfoProps) => {
   const { active } = useMyMemberships()
 
   return (
     <AccountInfoWrap>
-      <AccountPhoto>
-        <Identicon size={40} theme={'beachball'} value={account.address} />
-      </AccountPhoto>
+      <PhotoWrapper>
+        <AccountPhoto>
+          <Identicon size={40} theme={'beachball'} value={account.address} />
+        </AccountPhoto>
+        {locked && (
+          <LockIconWrapper>
+            <StyledLockIcon />
+          </LockIconWrapper>
+        )}
+      </PhotoWrapper>
       {active && <OptionalAccountType active={active} address={account.address} />}
-      <AccountName className="accountName">{account.name}</AccountName>
+      <AccountName className="accountName" locked={locked}>
+        {account.name}
+      </AccountName>
       <AccountCopyAddress altText={shortenAddress(account.address)} copyText={account.address} />
     </AccountInfoWrap>
   )
@@ -47,7 +62,6 @@ const AccountInfoWrap = styled.div`
 
 const AccountPhoto = styled.div`
   display: flex;
-  grid-area: accountphoto;
   justify-content: flex-end;
   align-items: center;
   align-content: center;
@@ -59,7 +73,30 @@ const AccountPhoto = styled.div`
   overflow: hidden;
 `
 
-const AccountName = styled.h5`
+const PhotoWrapper = styled.div`
+  grid-area: accountphoto;
+  position: relative;
+`
+
+const LockIconWrapper = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: ${Colors.White};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const StyledLockIcon = styled(LockIcon)`
+  width: 12px;
+  height: 12px;
+`
+
+const AccountName = styled.h5<{ locked?: boolean }>`
   grid-area: accountname;
   max-width: 100%;
   margin: 0;
@@ -67,7 +104,7 @@ const AccountName = styled.h5`
   font-size: 16px;
   line-height: 24px;
   font-weight: 700;
-  color: ${Colors.Black[900]};
+  color: ${({ locked }) => (locked ? Colors.Black[500] : Colors.Black[900])};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

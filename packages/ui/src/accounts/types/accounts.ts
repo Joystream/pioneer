@@ -5,3 +5,9 @@ export interface Account {
   address: Address
   source?: string
 }
+
+export type OptionLock = 'insufficientFunds' | 'boundMembership' | 'rivalrousLock' | 'recoverableLock'
+
+export interface AccountOption extends Account {
+  optionLocks?: OptionLock[]
+}

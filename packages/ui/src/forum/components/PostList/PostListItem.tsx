@@ -218,7 +218,7 @@ export const ForumPostStyles = styled.div`
   row-gap: 16px;
 `
 
-const ForumPostBlock = styled.div<Pick<PostListItemProps, 'isSelected' | 'isDiscussion'>>`
+export const ForumPostBlock = styled.div<Pick<PostListItemProps, 'isSelected' | 'isDiscussion'>>`
   ${({ isDiscussion }) =>
     !isDiscussion &&
     css`
@@ -228,8 +228,6 @@ const ForumPostBlock = styled.div<Pick<PostListItemProps, 'isSelected' | 'isDisc
       padding: 24px;
     `};
   scroll-margin: 48px;
-  width: 60%;
-  margin: 0 auto;
   // Animate selection:
   &,
   ${Reply} {

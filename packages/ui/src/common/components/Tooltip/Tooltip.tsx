@@ -4,13 +4,14 @@ import { usePopper } from 'react-popper'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { BorderRad, Colors, Transitions, ZIndex } from '../../constants'
+import { BorderRad, Colors, Fonts, Transitions, ZIndex } from '../../constants'
 import { LinkSymbol, LinkSymbolStyle } from '../icons/symbols'
 
 import { DefaultTooltip } from './TooltipDefault'
 
 export interface TooltipProps extends Omit<TooltipPopupProps, 'popUpHandlers' | 'position'> {
   absolute?: boolean
+  maxWidth?: boolean
   children: React.ReactNode
 }
 
@@ -35,6 +36,7 @@ export interface DarkTooltipInnerItemProps {
 
 export const Tooltip = ({
   absolute,
+  maxWidth,
   children,
   tooltipText,
   tooltipOpen = false,
@@ -92,8 +94,8 @@ export const Tooltip = ({
     tooltipLinkURL && (tooltipLinkURL.startsWith('http://') || tooltipLinkURL.startsWith('https://'))
 
   return (
-    <TooltipContainer absolute={absolute}>
-      <TooltipComponent ref={setReferenceElementRef} {...tooltipHandlers} z-index={0} tabIndex={0}>
+    <TooltipContainer absolute={absolute} maxWidth={maxWidth}>
+      <TooltipComponent ref={setReferenceElementRef} {...tooltipHandlers} z-index={0} tabIndex={0} maxWidth={maxWidth}>
         {children}
       </TooltipComponent>
       {isTooltipActive &&
@@ -220,13 +222,17 @@ export const TooltipPopupTitle = styled.h6`
   color: ${Colors.White};
 `
 
-export const TooltipText = styled.p`
+export const TooltipText = styled.div`
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;
   text-align: left;
   color: ${Colors.Black[500]};
   color: ${Colors.Black[400]};
+  /* copied global styles for p: */
+  margin: 0;
+  padding: 0;
+  font-family: ${Fonts.Inter};
 `
 
 export const TooltipLink = styled(Link)<{ to: string; target: string }>`
@@ -301,7 +307,7 @@ export const TooltipExternalLink = styled.a<{ href: string | undefined; target: 
   }
 `
 
-export const TooltipComponent = styled.i`
+export const TooltipComponent = styled.i<{ maxWidth?: boolean }>`
   display: flex;
   position: relative;
   justify-content: center;
@@ -311,6 +317,7 @@ export const TooltipComponent = styled.i`
   font-style: normal;
   background-color: transparent;
   padding: 0;
+  width: ${({ maxWidth }) => (maxWidth ? '100%' : 'initial')};
 
   &:hover,
   &:focus {
@@ -322,13 +329,13 @@ export const TooltipComponent = styled.i`
   }
 `
 
-export const TooltipContainer = styled.div<{ absolute?: boolean }>`
+export const TooltipContainer = styled.div<{ absolute?: boolean; maxWidth?: boolean }>`
   display: flex;
   position: ${({ absolute }) => (absolute ? 'absolute' : 'relative')};
   right: ${({ absolute }) => (absolute ? '-24px' : 'auto')};
   justify-content: center;
   align-items: center;
-  width: fit-content;
+  width: ${({ maxWidth }) => (maxWidth ? '100%' : 'fit-content')};
   height: fit-content;
   text-transform: none;
 `

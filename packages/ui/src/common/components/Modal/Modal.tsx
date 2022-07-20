@@ -105,6 +105,9 @@ export const ModalGlass = styled.div<ModalProps>`
         return '40px'
     }
   }};
+  @media only screen and (max-height: 700px) {
+    padding-top: 0px;
+  }
   padding-bottom: ${({ modalHeight }) => {
     switch (modalHeight) {
       case 'xl':
@@ -166,6 +169,7 @@ export const ModalCustomTopBar = styled(ModalTopBar)`
 `
 
 export const ModalBody = styled.div`
+  overflow-y: auto;
   display: grid;
   grid-area: modalbody;
   grid-row-gap: 16px;
@@ -212,8 +216,11 @@ interface ModalWrapProps {
 
 export const ModalWrap = styled.section<ModalWrapProps>`
   display: grid;
+  @media only screen and (max-height: 700px) {
+    max-height: 100%;
+  }
   grid-template-columns: 1fr;
-  grid-template-rows: ${({ modalHeight }) => (modalHeight === 'xl' ? '56px 1fr 64px' : 'auto auto auto')};
+  grid-template-rows: ${({ modalHeight }) => (modalHeight === 'xl' ? '56px 1fr 64px' : 'auto 1fr auto')};
   grid-template-areas:
     'modalheader'
     'modalbody'
