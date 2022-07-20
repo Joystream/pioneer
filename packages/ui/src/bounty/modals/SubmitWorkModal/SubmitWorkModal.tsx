@@ -11,6 +11,7 @@ import styled from 'styled-components'
 import * as Yup from 'yup'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { BountyRoutes } from '@/bounty/constants'
 import { submitWorkMetadataFactory } from '@/bounty/modals/AddBountyModal/helpers'
@@ -22,15 +23,14 @@ import {
 } from '@/bounty/modals/SubmitWorkModal/machine'
 import { SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal/types'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
-import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
 import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer, InputText } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import {
   Modal,
-  ModalFooter,
   ModalHeader,
+  ModalTransactionFooter,
   Row,
   ScrolledModalBody,
   ScrolledModalContainer,
@@ -81,6 +81,8 @@ export const SubmitWorkModal = () => {
       )
     }
   }, [activeMember?.id, isConnected, JSON.stringify(state.context)])
+
+  useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
 
   const goToCurrentBounties = useCallback(() => {
     hideModal()
@@ -214,13 +216,9 @@ export const SubmitWorkModal = () => {
           </RowGapBlock>
         </ScrolledModalContainer>
       </ScrolledModalBody>
-      <ModalFooter>
-        <ButtonsGroup align="right">
-          <ButtonPrimary disabled={!isValid} onClick={() => send('NEXT')} size="medium">
-            {t('modals.submitWork.button.submitWork')}
-          </ButtonPrimary>
-        </ButtonsGroup>
-      </ModalFooter>
+      <ModalTransactionFooter
+        next={{ disabled: !isValid, label: t('modals.submitWork.button.submitWork'), onClick: () => send('NEXT') }}
+      />
     </Modal>
   )
 }

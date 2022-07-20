@@ -11,10 +11,8 @@ import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatu
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
-import { Arrow } from '@/common/components/icons'
-import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
 import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
@@ -154,6 +152,8 @@ export const AnnounceCandidacyModal = () => {
       return api.tx.utility.batch([confirmStakingAccountTransaction, tx])
     }
   }, [connectionState, activeMember?.id, stakingStatus, confirmStakingAccountTransaction])
+
+  useTransactionFee(activeMember?.controllerAccount, () => announceCandidacyTransaction, [announceCandidacyTransaction])
 
   const candidacyNoteTransaction = useMemo(() => {
     const formValues = form.getValues() as AnnounceCandidacyFrom
@@ -323,28 +323,22 @@ export const AnnounceCandidacyModal = () => {
           </StepperBody>
         </StepperProposalWrapper>
       </StepperModalBody>
-      <ModalFooter twoColumns>
-        <ButtonsGroup align="left">
-          {!state.matches('staking') && (
-            <ButtonGhost onClick={() => send('BACK')} size="medium">
-              <Arrow direction="left" />
-              Previous step
-            </ButtonGhost>
-          )}
-        </ButtonsGroup>
-        <ButtonsGroup align="right">
-          {state.matches('candidateProfile.summaryAndBanner') && (
+      <ModalTransactionFooter
+        next={{
+          disabled: !form.formState.isValid,
+          label: isLastStepActive(getSteps(service)) ? 'Announce candidacy' : 'Next step',
+          onClick: () => send('NEXT'),
+        }}
+        prev={state.matches('staking') ? { onClick: () => send('BACK') } : undefined}
+        extraButtons={
+          state.matches('candidateProfile.summaryAndBanner') && (
             <PreviewButtons
               candidate={getCandidateForPreview(form.getValues() as AnnounceCandidacyFrom, activeMember)}
               disabled={!form.formState.isValid}
             />
-          )}
-          <ButtonPrimary disabled={!form.formState.isValid} onClick={() => send('NEXT')} size="medium">
-            {isLastStepActive(getSteps(service)) ? 'Announce candidacy' : 'Next step'}
-            <Arrow direction="right" />
-          </ButtonPrimary>
-        </ButtonsGroup>
-      </ModalFooter>
+          )
+        }
+      />
     </Modal>
   )
 }
