@@ -1,5 +1,6 @@
 import { web3Accounts, web3AccountsSubscribe, web3Enable } from '@polkadot/extension-dapp'
 import { Keyring } from '@polkadot/ui-keyring'
+import { decodeAddress, encodeAddress } from '@polkadot/util-crypto'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { debounceTime, filter, skip } from 'rxjs/operators'
 
@@ -19,6 +20,8 @@ export interface UseAccounts {
   isLoading: boolean
   error?: Error
 }
+
+const JOYSTREAM_SS58_PREFIX = 126
 
 interface Props {
   children: ReactNode
@@ -110,10 +113,13 @@ export const AccountsContextProvider = (props: Props) => {
 
   if (accounts) {
     allAccounts.push(
-      ...Object.values(accounts).map((account) => ({
-        address: account.json.address,
-        name: account.json.meta.name,
-      }))
+      ...Object.values(accounts).map((account) => {
+        const publicKey = decodeAddress(account.json.address)
+        return {
+          address: encodeAddress(publicKey, JOYSTREAM_SS58_PREFIX),
+          name: account.json.meta.name,
+        }
+      })
     )
   }
 
