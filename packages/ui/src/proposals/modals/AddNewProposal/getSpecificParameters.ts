@@ -90,7 +90,7 @@ export const getSpecificParameters = (
       return createType('PalletProposalsCodexProposalDetails', {
         TerminateWorkingGroupLead: {
           workerId: specifics?.terminateWorkingGroupLead?.workerId,
-          workingGroup: getWorkingGroupParam(specifics?.terminateWorkingGroupLead?.groupId),
+          group: getWorkingGroupParam(specifics?.terminateWorkingGroupLead?.groupId),
           slashingAmount: specifics?.terminateWorkingGroupLead?.slashingAmount,
         },
       })
@@ -133,7 +133,7 @@ export const getSpecificParameters = (
           applicationId: specifics?.fillWorkingGroupLeadOpening?.applicationId
             ? idToRuntimeId(specifics.fillWorkingGroupLeadOpening?.applicationId)
             : 0,
-          workingGroup: getWorkingGroupParam(specifics?.fillWorkingGroupLeadOpening?.groupId),
+          group: getWorkingGroupParam(specifics?.fillWorkingGroupLeadOpening?.groupId),
         },
       })
     }

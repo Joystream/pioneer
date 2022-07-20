@@ -116,13 +116,13 @@ describe('AddNewProposalModal types parameters', () => {
             leavingUnstakingPeriod: 10,
           },
           rewardPerBlock: 10,
-          workingGroup: 'Forum',
+          group: 'Forum',
         },
       })
 
       it('Stake policy', () => {
         const stakePolicy = result.asCreateWorkingGroupLeadOpening.stakePolicy.toJSON()
-        expect(stakePolicy).toEqual({ stakeAmount: 100, leaving_stakePeriod: 10 })
+        expect(stakePolicy).toEqual({ stakeAmount: 100, leavingUnstakingPeriod: 10 })
       })
     })
   })
@@ -486,8 +486,8 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.Signal.fillSignal(signal)
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
-          const parameters = txSpecificParameters.asSignal.toJSON()
-          expect(Buffer.from(parameters.slice(2), 'hex').toString()).toEqual(signal)
+          const parameters = txSpecificParameters.asSignal.toHuman()
+          expect(parameters).toEqual(signal)
           const button = await getCreateButton()
           expect(button).toBeEnabled()
         })
