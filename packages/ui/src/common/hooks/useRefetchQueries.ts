@@ -25,7 +25,15 @@ export const useRefetchQueries = (
     if (couldRefetchNext.current && when) {
       if (interval) {
         const handler = setInterval(() => {
-          apolloClient.refetchQueries({ include })
+          apolloClient.refetchQueries({
+            include,
+            onQueryUpdated(_, { complete }) {
+              if (complete) {
+                isRefetched.current = true
+              }
+              return complete
+            },
+          })
           isRefetched.current = true
         }, interval)
 
