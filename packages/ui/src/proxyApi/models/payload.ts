@@ -60,7 +60,7 @@ export const serializePayload = (
     } else if (value.kind === 'SubmittableExtrinsicProxy') {
       return { kind: value.kind, txId: value.txId }
     } else if (isSigner(value)) {
-      return serializeProxy(value, {}, 'signer', messages, postMessage)
+      return serializeProxy(value, {}, ['signPayload'], 'signer', messages, postMessage)
     } else {
       const result = isArray(value) ? [...value] : { ...value }
       stack.push(result)
@@ -106,7 +106,7 @@ export const deserializePayload = (
         case 'SubmittableExtrinsicProxy':
           return transactionsRecord?.[value.txId]
         case 'proxy':
-          return deserializeProxy(value.json, value.proxyId, messages, postMessage)
+          return deserializeProxy(value.json, value.methods, value.proxyId, messages, postMessage)
       }
     }
 
@@ -123,6 +123,7 @@ export const deserializeMessage =
 const serializeProxy = (
   obj: AnyObject,
   json: AnyObject = {},
+  methods: string[] = [],
   name = '',
   messages?: Observable<WorkerProxyMessage>,
   postMessage?: PostMessage<ClientProxyMessage>
@@ -141,11 +142,12 @@ const serializeProxy = (
       postMessage({ messageType: 'proxy', proxyId, payload: { error } })
     }
   })
-  return { kind: 'proxy', proxyId, json }
+  return { kind: 'proxy', proxyId, json, methods }
 }
 
 const deserializeProxy = (
   json: any,
+  methods: string[],
   proxyId: string,
   messages?: Observable<ClientProxyMessage>,
   postMessage?: PostMessage<WorkerProxyMessage>
@@ -156,13 +158,15 @@ const deserializeProxy = (
 
   return new Proxy(json, {
     get(json, prop: string) {
-      return prop in json
-        ? json[prop]
-        : async (...params: AnyTuple) => {
-            postMessage({ messageType: 'proxy', proxyId, method: prop, payload: params })
-            const { payload } = await firstValueFrom(messages.pipe(filter((message) => message.proxyId === proxyId)))
-            return payload.error ? Promise.reject(payload.error) : payload.result
-          }
+      if (prop in json) {
+        return prop in json
+      } else if (methods.includes(prop)) {
+        return async (...params: AnyTuple) => {
+          postMessage({ messageType: 'proxy', proxyId, method: prop, payload: params })
+          const { payload } = await firstValueFrom(messages.pipe(filter((message) => message.proxyId === proxyId)))
+          return payload.error ? Promise.reject(payload.error) : payload.result
+        }
+      }
     },
   })
 }
