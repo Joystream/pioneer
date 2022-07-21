@@ -1,8 +1,7 @@
-import { cleanup, render } from '@testing-library/react'
+import { cleanup, render, screen } from '@testing-library/react'
 import React from 'react'
 
-import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
-import { Colors } from '@/common/constants'
+import { OnBoardingOverlay, onBoardingSteps } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { UseOnBoarding } from '@/common/providers/onboarding/types'
 
 const mockOnBoarding: UseOnBoarding = {
@@ -15,6 +14,14 @@ jest.mock('@/common/hooks/useOnBoarding', () => ({
   useOnBoarding: () => mockOnBoarding,
 }))
 
+const mockMyAccounts: Record<string, unknown> = {
+  wallet: undefined,
+}
+
+jest.mock('@/accounts/hooks/useMyAccounts', () => ({
+  useMyAccounts: () => mockMyAccounts,
+}))
+
 describe('OnBoardingOverlay', () => {
   afterEach(cleanup)
 
@@ -23,12 +30,26 @@ describe('OnBoardingOverlay', () => {
 
     const { queryByText } = renderComponent()
 
-    expect(queryByText('Join now')).toBeNull()
+    expect(queryByText('Join Now')).toBeNull()
   })
 
   describe('Loaded', () => {
     beforeAll(() => {
       mockOnBoarding.isLoading = false
+    })
+
+    it('No wallet', () => {
+      renderComponent()
+
+      expect(screen.queryByText('Connect Wallet')).toBeInTheDocument()
+    })
+
+    it('After wallet is selected', () => {
+      mockMyAccounts.wallet = {}
+      renderComponent()
+
+      expect(screen.queryByText('Connect Wallet')).not.toBeInTheDocument()
+      expect(screen.queryByText('Join Now')).toBeInTheDocument()
     })
 
     it('Expands', () => {
@@ -40,46 +61,21 @@ describe('OnBoardingOverlay', () => {
       expect(getByText('How to become a member?')).toBeDefined()
     })
 
-    it('Install plugin', () => {
-      const { getByText } = renderComponent()
-      const pluginCircle = getStepCircle('Add Polkadot plugin', getByText)
+    it('Renders all steps', () => {
+      renderComponent()
 
-      expect(pluginCircle).toHaveStyle(`background-color: ${Colors.Blue[500]}`)
-    })
-
-    it('Add account', () => {
-      mockOnBoarding.status = 'addAccount'
-      const { getByText } = renderComponent()
-
-      const accountCircle = getStepCircle('Connect a Polkadot account', getByText)
-      const pluginCircle = getStepCircle('Add Polkadot plugin', getByText)
-
-      expect(pluginCircle).toHaveStyle(`background-color: ${Colors.Black[500]}`)
-      expect(accountCircle).toHaveStyle(`background-color: ${Colors.Blue[500]}`)
-    })
-
-    it('Create membership', () => {
-      mockOnBoarding.status = 'createMembership'
-      const { getByText } = renderComponent()
-
-      const pluginCircle = getStepCircle('Add Polkadot plugin', getByText)
-      const accountCircle = getStepCircle('Connect a Polkadot account', getByText)
-      const membershipCircle = getStepCircle('Create membership for FREE', getByText)
-
-      expect(pluginCircle).toHaveStyle(`background-color: ${Colors.Black[500]}`)
-      expect(accountCircle).toHaveStyle(`background-color: ${Colors.Black[500]}`)
-      expect(membershipCircle).toHaveStyle(`background-color: ${Colors.Blue[500]}`)
+      onBoardingSteps.map(({ title }) => {
+        expect(screen.queryByText(title)).toBeInTheDocument()
+      })
     })
 
     it('Finished', () => {
       mockOnBoarding.status = 'finished'
       const { queryByText } = renderComponent()
 
-      expect(queryByText('Join now')).toBeNull()
+      expect(queryByText('Join Now')).toBeNull()
     })
   })
-
-  const getStepCircle = (text: string, getByText: any) => getByText(text)?.parentElement?.previousElementSibling
 
   const renderComponent = () => render(<OnBoardingOverlay />)
 })

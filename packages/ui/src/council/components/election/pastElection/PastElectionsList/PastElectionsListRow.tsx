@@ -10,7 +10,7 @@ import { TokenValue } from '@/common/components/typography'
 import { Fraction } from '@/common/components/typography/Fraction'
 import { ElectionRoutes } from '@/council/constants'
 import { PastElection } from '@/council/types/PastElection'
-import { CountInfo, Info } from '@/memberships/components/MemberListItem/Fileds'
+import { CountInfo, Info } from '@/memberships/components/MemberListItem/Fields'
 
 interface PastElectionsListRowProps {
   election: PastElection

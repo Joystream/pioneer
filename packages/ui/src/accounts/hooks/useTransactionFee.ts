@@ -22,15 +22,14 @@ export function useTransactionFee(address?: Address, transaction?: SubmittableEx
   const balance = useBalance(address)
 
   useEffect(() => {
-    if (status === null && (!balance || !partialFee)) {
-      setStatus('loadingFees')
-    }
-    return () => {
-      if (status === 'loadingFees') {
-        setStatus(null)
+    if (!balance || !partialFee) {
+      if (status === null) {
+        setStatus('loadingFees')
       }
+    } else if (status === 'loadingFees') {
+      setStatus(null)
     }
-  }, [JSON.stringify(balance), partialFee?.toString()])
+  }, [status, !balance, !partialFee])
 
   return useMemo(
     () =>
