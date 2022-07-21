@@ -9,7 +9,6 @@ import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
@@ -75,7 +74,7 @@ const transactionSteps = [
 
 interface Conditions extends IStakingAccountSchema {
   minStake: BN
-  controllerAccountBalance: BN
+  stakingAccountBalance: BN
 }
 
 export const AnnounceCandidacyModal = () => {
@@ -99,11 +98,17 @@ export const AnnounceCandidacyModal = () => {
     resolver: useYupValidationResolver<AnnounceCandidacyFrom>(baseSchema, machineStateConverter(state.value)),
     context: {
       stakingStatus,
-      requiredAmount: stakingStatus === 'free' ? boundingLock : BN_ZERO,
+      requiredAmount:
+        (stakingStatus === 'free'
+          ? boundingLock.add(constants?.election.minCandidacyStake ?? BN_ZERO)
+          : constants?.election.minCandidacyStake) ?? BN_ZERO,
       stakeLock: 'Council Candidate',
       balances: balance,
       minStake: constants?.election.minCandidacyStake as BN,
-      controllerAccountBalance: balances[activeMember?.controllerAccount ?? '']?.transferable,
+      stakingAccountBalance:
+        stakingStatus === 'free'
+          ? balances[stakingAccountMap?.address ?? '']?.transferable
+          : balances[stakingAccountMap?.address ?? '']?.transferable.add(boundingLock),
     } as Conditions,
     mode: 'onChange',
     defaultValues: getAnnounceCandidacyFormInitialState(constants?.election.minCandidacyStake ?? BN_ZERO),
