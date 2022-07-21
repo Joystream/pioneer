@@ -544,6 +544,12 @@ export type GetOpeningsEventsQuery = {
     | { __typename: 'CategoryDeletedEvent' }
     | { __typename: 'CategoryMembershipOfModeratorUpdatedEvent' }
     | { __typename: 'CategoryStickyThreadUpdateEvent' }
+    | { __typename: 'CommentCreatedEvent' }
+    | { __typename: 'CommentDeletedEvent' }
+    | { __typename: 'CommentModeratedEvent' }
+    | { __typename: 'CommentPinnedEvent' }
+    | { __typename: 'CommentReactedEvent' }
+    | { __typename: 'CommentTextUpdatedEvent' }
     | { __typename: 'CouncilorRewardUpdatedEvent' }
     | { __typename: 'EnglishAuctionSettledEvent' }
     | { __typename: 'EnglishAuctionStartedEvent' }
@@ -554,11 +560,13 @@ export type GetOpeningsEventsQuery = {
     | { __typename: 'LeaderSetEvent' }
     | { __typename: 'LeaderUnsetEvent' }
     | { __typename: 'MemberAccountsUpdatedEvent' }
+    | { __typename: 'MemberBannedFromChannelEvent' }
     | { __typename: 'MemberInvitedEvent' }
     | { __typename: 'MemberProfileUpdatedEvent' }
     | { __typename: 'MemberVerificationStatusUpdatedEvent' }
     | { __typename: 'MembershipBoughtEvent' }
     | { __typename: 'MembershipPriceUpdatedEvent' }
+    | { __typename: 'MetaprotocolTransactionStatusEvent' }
     | { __typename: 'NewCandidateEvent' }
     | { __typename: 'NewCouncilElectedEvent' }
     | { __typename: 'NewCouncilNotElectedEvent' }
@@ -684,6 +692,8 @@ export type GetOpeningsEventsQuery = {
     | { __typename: 'ThreadMetadataUpdatedEvent' }
     | { __typename: 'ThreadModeratedEvent' }
     | { __typename: 'ThreadMovedEvent' }
+    | { __typename: 'VideoReactedEvent' }
+    | { __typename: 'VideoReactionsPreferenceEvent' }
     | { __typename: 'VoteCastEvent' }
     | { __typename: 'VoteOnPollEvent' }
     | { __typename: 'VoteRevealedEvent' }
