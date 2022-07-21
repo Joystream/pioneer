@@ -16,19 +16,18 @@ interface ConnectAccountItemProps {
 
 export const ConnectAccountItem = ({ account, totalBalance, selected }: ConnectAccountItemProps) => {
   return (
-    <AccountListWrapper selected={selected}>
-      <AccountItemWrap>
+    <SelectListWrapper selected={selected}>
+      <SelectItemInnerWrap>
         <AccountInfo account={account} />
         <TokenValue value={totalBalance} />
         {selected && <CheckboxIcon />}
-      </AccountItemWrap>
-    </AccountListWrapper>
+      </SelectItemInnerWrap>
+    </SelectListWrapper>
   )
 }
 
-const AccountListWrapper = styled.div<{ selected?: boolean }>`
+export const SelectListWrapper = styled.div<{ selected?: boolean }>`
   display: flex;
-  flex-direction: column;
   width: 100%;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
@@ -38,7 +37,7 @@ const AccountListWrapper = styled.div<{ selected?: boolean }>`
   background-color: ${({ selected }) => (selected ? Colors.Blue[50] : 'transparent')};
 `
 
-export const AccountItemWrap = styled.div`
+export const SelectItemInnerWrap = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 40px;
   grid-template-rows: 1fr;
@@ -49,4 +48,8 @@ export const AccountItemWrap = styled.div`
   height: ${Sizes.accountHeight};
   padding: 16px 8px 16px 16px;
   margin-left: -1px;
+
+  svg {
+    color: ${Colors.LogoPurple};
+  }
 `
