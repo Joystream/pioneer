@@ -144,7 +144,7 @@ describe('UI: Announce Candidacy Modal', () => {
           lock: 'Council Candidate',
         },
       }
-  
+
       expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
 
@@ -160,7 +160,7 @@ describe('UI: Announce Candidacy Modal', () => {
           lock: 'Council Candidate',
         },
       }
-  
+
       expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
 
@@ -203,7 +203,7 @@ describe('UI: Announce Candidacy Modal', () => {
         it('Lower than minimal stake', async () => {
           const { getByText } = renderModal()
 
-          await fillStakingAmount(2)
+          await fillStakingStep('alice', 2, false)
 
           expect(await getNextStepButton()).toBeDisabled()
           expect(includesTextWithMarkup(getByText, 'Minimal stake amount is 10 tJOY')).toBeInTheDocument()
@@ -212,7 +212,7 @@ describe('UI: Announce Candidacy Modal', () => {
         it('Higher than maximal balance', async () => {
           const { getByText } = renderModal()
 
-          await fillStakingAmount(10000)
+          await fillStakingStep('alice', 9999999, false)
 
           expect(await getNextStepButton()).toBeDisabled()
           expect(includesTextWithMarkup(getByText, 'Insufficient funds to cover staking')).toBeInTheDocument()
