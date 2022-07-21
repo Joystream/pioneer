@@ -2,9 +2,9 @@ import '@testing-library/jest-dom'
 import BN from 'bn.js'
 
 import { BN_ZERO } from '@/common/constants'
+import { DECIMAL_PLACES } from '@/common/model/formatters'
 import { UseTransaction } from '@/common/providers/transactionFees/context'
 
-import { DECIMAL_PLACES } from '@/common/model/formatters'
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
