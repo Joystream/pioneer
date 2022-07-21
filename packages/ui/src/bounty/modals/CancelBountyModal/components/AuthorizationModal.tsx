@@ -6,11 +6,9 @@ import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { Account } from '@/accounts/types'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
-import { Modal, ModalBody, ModalFooter, ModalHeader, TransactionInfoContainer } from '@/common/components/Modal'
+import { Modal, ModalBody, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
@@ -92,18 +90,10 @@ export const AuthorizationModal = ({ onClose, creator, bountyId, service }: Prop
           </InputComponent>
         </RowGapBlock>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title={t('common:modals.transactionFee.label')}
-            value={paymentInfo?.partialFee}
-            tooltipText={t('common:modals.transactionFee.tooltipText')}
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary disabled={!hasFunds || !isReady} onClick={sign} size="medium">
-          {t('common:authorizeTransaction')}
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={paymentInfo?.partialFee}
+        next={{ disabled: !hasFunds || !isReady, label: t('common:authorizeTransaction'), onClick: sign }}
+      />
     </Modal>
   )
 }

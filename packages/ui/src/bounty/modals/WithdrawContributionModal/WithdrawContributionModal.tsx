@@ -1,5 +1,3 @@
-import { createType } from '@joystream/types'
-import { BountyActor } from '@joystream/types/bounty'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
@@ -16,6 +14,7 @@ import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { createType } from '@/common/model/createType'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
@@ -36,9 +35,9 @@ export const WithdrawContributionModal = () => {
 
   const transaction = useMemo(() => {
     if (api && connectionState === 'connected' && activeMember) {
-      createType<BountyActor, 'BountyActor'>('BountyActor', { Member: createType('u64', activeMember.id) })
+      createType('BountyActor', { Member: createType('u64', activeMember.id) })
       return api.tx.bounty.withdrawFunding(
-        createType<BountyActor, 'BountyActor'>('BountyActor', { Member: createType('u64', activeMember.id) }),
+        createType('BountyActor', { Member: createType('u64', activeMember.id) }),
         bounty.id
       )
     }
@@ -49,7 +48,7 @@ export const WithdrawContributionModal = () => {
     [activeMember?.id]
   )
 
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {

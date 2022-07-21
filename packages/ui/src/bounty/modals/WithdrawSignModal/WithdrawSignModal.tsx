@@ -10,8 +10,7 @@ import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
 import { WithdrawInfo } from '@/bounty/components/WithdrawInfo/WithdrawInfo'
 import { Bounty } from '@/bounty/types/Bounty'
-import { ButtonPrimary } from '@/common/components/buttons'
-import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
+import { ModalBody, ModalTransactionFooter } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
@@ -94,23 +93,16 @@ export const WithdrawSignModal = ({
           />
         </RowGapBlock>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title={t('modals.common.amount')}
-            value={extraAmount ? amount.add(extraAmount) : amount}
-            tooltipText={bountyFailedInfo ? t('modals.withdraw.extraTooltipInformation') : undefined}
-          />
-          <TransactionInfo
-            title={t('modals.common.transactionFee.label')}
-            value={paymentInfo?.partialFee.toBn()}
-            tooltipText={t('modals.common.transactionFee.tooltip')}
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={!isReady} onClick={sign}>
-          {t(`modals.withdraw.${type}.button`)}
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={paymentInfo?.partialFee.toBn()}
+        next={{ disabled: !isReady, label: t(`modals.withdraw.${type}.button`), onClick: sign }}
+      >
+        <TransactionInfo
+          title={t('modals.common.amount')}
+          value={extraAmount ? amount.add(extraAmount) : amount}
+          tooltipText={bountyFailedInfo ? t('modals.withdraw.extraTooltipInformation') : undefined}
+        />
+      </ModalTransactionFooter>
     </TransactionModal>
   )
 }

@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { configure, findByText, fireEvent, queryByText, render, screen, waitFor } from '@testing-library/react'
 import BN from 'bn.js'
@@ -11,6 +10,7 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CKEditorProps } from '@/common/components/CKEditor'
+import { createType } from '@/common/model/createType'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
@@ -130,8 +130,8 @@ describe('UI: Vote for Council Modal', () => {
     stubQuery(
       api,
       'members.stakingAccountIdMemberStatus',
-      createType('StakingAccountMemberBinding', {
-        member_id: 0,
+      createType('PalletMembershipStakingAccountMemberBinding', {
+        memberId: 0,
         confirmed: false,
       })
     )
@@ -234,7 +234,7 @@ describe('UI: Vote for Council Modal', () => {
 
     expect(await screen.findByText(/^You intend to Vote and stake/i)).toBeDefined()
     expect(screen.getByText(/^Stake:/i)?.nextSibling?.textContent).toBe('500')
-    expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
+    expect(screen.getByText(/^modals.transactionFee.label/i)?.nextSibling?.textContent).toBe('25')
     expect(await getButton('Sign and send')).toBeDefined()
   })
 

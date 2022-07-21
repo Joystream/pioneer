@@ -24,6 +24,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
 import { ModalName } from '@/common/providers/modal/types'
+import { TransactionFeesProvider } from '@/common/providers/transactionFees/provider'
 import { AnnounceCandidacyModal, AnnounceCandidateModalCall } from '@/council/modals/AnnounceCandidacy'
 import { CandidacyPreview } from '@/council/modals/CandidacyPreview/CandidacyPreview'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
@@ -152,10 +153,10 @@ export const GlobalModals = () => {
 
   if (Modal) {
     return ReactDOM.createPortal(
-      <>
+      <TransactionFeesProvider>
         <Modal />
         {status === 'loadingFees' && <WaitModal onClose={hideModal} requirementsCheck />}
-      </>,
+      </TransactionFeesProvider>,
       document.body
     )
   }

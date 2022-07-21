@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { AugmentedEvents } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
@@ -8,6 +7,7 @@ import { from, of, asyncScheduler, scheduled, Observable } from 'rxjs'
 import { LockType } from '@/accounts/types'
 import { Api } from '@/api/types'
 import { BN_ZERO } from '@/common/constants'
+import { createType } from '@/common/model/createType'
 import { ExtractTuple } from '@/common/model/JoystreamNode'
 import { UseApi } from '@/common/providers/api/provider'
 import { proposalDetails } from '@/proposals/model/proposalDetails'
@@ -96,14 +96,19 @@ export const stubTransactionFailure = (transaction: any) => {
 
 type PartialTuple<T extends AnyTuple> = Partial<T>
 
+type IgnoreModules = 'bounty'
 export const stubTransactionSuccess = <
-  Module extends keyof AugmentedEvents<'rxjs'>,
-  Event extends keyof AugmentedEvents<'rxjs'>[Module]
+  Module extends keyof AugmentedEvents<'rxjs'> | IgnoreModules,
+  Event extends Module extends keyof AugmentedEvents<'rxjs'> ? keyof AugmentedEvents<'rxjs'>[Module] : string
 >(
   transaction: any,
   module: Module,
   eventName: Event,
-  data?: PartialTuple<ExtractTuple<AugmentedEvents<'rxjs'>[Module][Event]>>
+  data?: Module extends keyof AugmentedEvents<'rxjs'>
+    ? Event extends keyof AugmentedEvents<'rxjs'>[Module]
+      ? PartialTuple<ExtractTuple<AugmentedEvents<'rxjs'>[Module][Event]>>
+      : any
+    : any
 ) => {
   set(transaction, 'signAndSend', () =>
     stubTransactionResult(createSuccessEvents((data ?? []) as any[], module, eventName as string))
@@ -235,12 +240,12 @@ export const stubCouncilAndReferendum = (
   councilStage: 'Idle' | 'Election' | 'Announcing',
   referendumStage: 'Inactive' | 'Voting' | 'Revealing'
 ) => {
-  stubQuery(api, 'referendum.stage', createType('ReferendumStage', referendumStage))
+  stubQuery(api, 'referendum.stage', createType('PalletReferendumReferendumStage', referendumStage))
   stubQuery(
     api,
     'council.stage',
-    createType('CouncilStageUpdate', {
-      stage: createType('CouncilStage', councilStage),
+    createType('PalletCouncilCouncilStageUpdate', {
+      stage: createType('PalletCouncilCouncilStage', councilStage),
     })
   )
 }

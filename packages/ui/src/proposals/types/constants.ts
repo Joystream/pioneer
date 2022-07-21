@@ -1,6 +1,5 @@
+import { PalletProposalsEngineProposalParameters } from '@polkadot/types/lookup'
 import BN from 'bn.js'
-
-import { ProposalParameters } from '../../../../types/augment'
 
 export interface ProposalConstants {
   votingPeriod: number
@@ -13,7 +12,7 @@ export interface ProposalConstants {
   constitutionality: number
 }
 
-export const asProposalConstants = (params: ProposalParameters): ProposalConstants => ({
+export const asProposalConstants = (params: PalletProposalsEngineProposalParameters): ProposalConstants => ({
   votingPeriod: params.votingPeriod.toNumber(),
   gracePeriod: params.gracePeriod.toNumber(),
   approvalQuorumPercentage: params.approvalQuorumPercentage.toNumber(),

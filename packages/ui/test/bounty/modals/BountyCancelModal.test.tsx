@@ -89,7 +89,7 @@ describe('UI: BountyCancelModal', () => {
     it('Displays correct fee', async () => {
       await renderModalAndProceedToAuthorization()
 
-      const valueContainer = screen.getByText('common:modals.transactionFee.label')?.nextSibling
+      const valueContainer = screen.getByText('modals.transactionFee.label')?.nextSibling
 
       expect(valueContainer?.textContent).toBe('100')
     })

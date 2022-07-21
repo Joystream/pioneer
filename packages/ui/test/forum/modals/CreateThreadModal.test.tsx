@@ -1,9 +1,10 @@
-import { createType } from '@joystream/types'
 import { fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 import { generatePath, MemoryRouter, Route } from 'react-router-dom'
 
 import { CKEditorProps } from '@/common/components/CKEditor'
+import { createType } from '@/common/model/createType'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
@@ -25,6 +26,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
@@ -66,6 +68,8 @@ describe('CreateThreadModal', () => {
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
     tx = stubTransaction(api, txPath)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }
+
     stubDeposits()
   })
 
@@ -83,7 +87,7 @@ describe('CreateThreadModal', () => {
     })
 
     it('Insufficient funds for minimum fee', async () => {
-      tx = stubTransaction(api, txPath, 10_000)
+      mockedTransactionFee.feeInfo = { transactionFee: new BN(10000), canAfford: false }
       renderModal()
       expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
     })
@@ -166,7 +170,7 @@ describe('CreateThreadModal', () => {
       fireEvent.click(next)
 
       expect(screen.getByText(/^Thread creation and initial post deposit:/i)?.nextSibling?.textContent).toBe('205')
-      expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('101')
+      expect(screen.getByText(/^modals.transactionFee.label/i)?.nextSibling?.textContent).toBe('101')
     })
 
     it('Transaction failure', async () => {

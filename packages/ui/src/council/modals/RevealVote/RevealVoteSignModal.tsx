@@ -6,11 +6,8 @@ import { ActorRef, State } from 'xstate'
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
-import { Arrow } from '@/common/components/icons'
-import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
-import { TransactionInfo } from '@/common/components/TransactionInfo'
+import { ModalBody, ModalTransactionFooter } from '@/common/components/Modal'
 import { TextInlineMedium, TextMedium, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
@@ -54,20 +51,10 @@ export const RevealVoteSignModal = ({ service, transaction, vote }: Props) => {
         </InputComponent>
       </ModalBody>
 
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title="Transaction fee:"
-            value={paymentInfo?.partialFee.toBn()}
-            tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
-          />
-        </TransactionInfoContainer>
-
-        <ButtonPrimary size="medium" disabled={!isReady} onClick={sign}>
-          Sign and reveal
-          <Arrow direction="right" />
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={paymentInfo?.partialFee.toBn()}
+        next={{ disabled: !isReady, label: 'Sign and reveal', onClick: sign }}
+      />
     </TransactionModal>
   )
 }

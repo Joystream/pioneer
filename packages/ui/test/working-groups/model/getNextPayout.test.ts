@@ -1,6 +1,6 @@
-import { createType } from '@joystream/types'
 import BN from 'bn.js'
 
+import { createType } from '@/common/model/createType'
 import { GroupIdName } from '@/working-groups/types'
 
 import { getNextPayout } from '../../../src/working-groups/model/getNextPayout'

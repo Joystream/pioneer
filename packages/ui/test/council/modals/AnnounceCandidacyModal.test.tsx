@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import BN from 'bn.js'
@@ -13,6 +12,7 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CKEditorProps } from '@/common/components/CKEditor'
+import { createType } from '@/common/model/createType'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -42,6 +42,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
@@ -94,7 +95,7 @@ describe('UI: Announce Candidacy Modal', () => {
 
   beforeEach(async () => {
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
-    useMyMemberships.setActive(getMember('alice'))
+    useMyMemberships.active = getMember('alice')
 
     stubDefaultBalances(api)
     stubCouncilConstants(api)
@@ -103,11 +104,13 @@ describe('UI: Announce Candidacy Modal', () => {
     announceCandidacyTx = stubTransaction(api, 'api.tx.council.announceCandidacy', 20)
     candidacyNoteTx = stubTransaction(api, 'api.tx.council.setCandidacyNote', 30)
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
+    mockedTransactionFee.transaction = batchTx as any
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }
     stubQuery(
       api,
       'members.stakingAccountIdMemberStatus',
-      createType('StakingAccountMemberBinding', {
-        member_id: 0,
+      createType('PalletMembershipStakingAccountMemberBinding', {
+        memberId: 0,
         confirmed: false,
       })
     )
@@ -134,7 +137,9 @@ describe('UI: Announce Candidacy Modal', () => {
     it('Transaction fee', async () => {
       const minStake = 10
       stubCouncilConstants(api, { minStake })
-      stubTransaction(api, 'api.tx.utility.batch', 10000)
+      // stubTransaction(api, 'api.tx.utility.batch', 10000)
+      mockedTransactionFee.feeInfo = { transactionFee: new BN(10000), canAfford: false }
+
       renderModal()
 
       const moveFundsModalCall: MoveFundsModalCall = {
@@ -174,7 +179,6 @@ describe('UI: Announce Candidacy Modal', () => {
   describe('Stepper modal', () => {
     it('Renders a modal', async () => {
       const { queryByText } = renderModal()
-
       expect(queryByText(/^announce candidacy/i)).not.toBeNull()
     })
 
@@ -344,25 +348,25 @@ describe('UI: Announce Candidacy Modal', () => {
 
         it('Renders', async () => {
           expect(screen.queryByText('You intend to bind account for staking')).not.toBeNull()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('10')
+          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('10')
         })
 
         it('Success', async () => {
           stubTransactionSuccess(bindAccountTx, 'members', 'StakingAccountAdded')
 
           await act(async () => {
-            fireEvent.click(await getButton(/^Sign transaction/i))
+            fireEvent.click(await getButton(/^Sign transaction and Bind Staking Account/i))
           })
 
           expect(await screen.findByText(/You intend to announce candidacy/i)).toBeDefined()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
         })
 
         it('Failure', async () => {
           stubTransactionFailure(bindAccountTx)
 
           await act(async () => {
-            fireEvent.click(await getButton(/^Sign transaction/i))
+            fireEvent.click(await getButton(/^Sign transaction and Bind Staking Account/i))
           })
 
           expect(await screen.findByText('Failure')).toBeDefined()
@@ -373,8 +377,8 @@ describe('UI: Announce Candidacy Modal', () => {
         stubQuery(
           api,
           'members.stakingAccountIdMemberStatus',
-          createType('StakingAccountMemberBinding', {
-            member_id: createType('MemberId', 0),
+          createType('PalletMembershipStakingAccountMemberBinding', {
+            memberId: createType('MemberId', 0),
             confirmed: createType('bool', false),
           })
         )
@@ -387,15 +391,15 @@ describe('UI: Announce Candidacy Modal', () => {
         await fillSummary(true)
 
         expect(await screen.findByText(/You intend to announce candidacy/i)).toBeDefined()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+        expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
       })
 
       it('Staking account is confirmed', async () => {
         stubQuery(
           api,
           'members.stakingAccountIdMemberStatus',
-          createType('StakingAccountMemberBinding', {
-            member_id: createType('MemberId', 0),
+          createType('PalletMembershipStakingAccountMemberBinding', {
+            memberId: createType('MemberId', 0),
             confirmed: createType('bool', true),
           })
         )
@@ -408,7 +412,7 @@ describe('UI: Announce Candidacy Modal', () => {
         await fillSummary(true)
 
         expect(await screen.findByText(/You intend to announce candidacy/i)).toBeDefined()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('20')
+        expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('20')
       })
     })
 
@@ -417,8 +421,8 @@ describe('UI: Announce Candidacy Modal', () => {
         stubQuery(
           api,
           'members.stakingAccountIdMemberStatus',
-          createType('StakingAccountMemberBinding', {
-            member_id: createType('MemberId', 0),
+          createType('PalletMembershipStakingAccountMemberBinding', {
+            memberId: createType('MemberId', 0),
             confirmed: createType('bool', confirmed),
           })
         )
@@ -471,8 +475,8 @@ describe('UI: Announce Candidacy Modal', () => {
         stubQuery(
           api,
           'members.stakingAccountIdMemberStatus',
-          createType('StakingAccountMemberBinding', {
-            member_id: createType('MemberId', 0),
+          createType('PalletMembershipStakingAccountMemberBinding', {
+            memberId: createType('MemberId', 0),
             confirmed: createType('bool', false),
           })
         )
@@ -529,8 +533,8 @@ describe('UI: Announce Candidacy Modal', () => {
     stubQuery(
       api,
       'members.stakingAccountIdMemberStatus',
-      createType('StakingAccountMemberBinding', {
-        member_id: createType('MemberId', 0),
+      createType('PalletMembershipStakingAccountMemberBinding', {
+        memberId: createType('MemberId', 0),
         confirmed: createType('bool', false),
       })
     )

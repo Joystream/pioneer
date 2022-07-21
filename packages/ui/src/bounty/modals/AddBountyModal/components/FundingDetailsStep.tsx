@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React, { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
@@ -13,7 +14,7 @@ import { inBlocksDate } from '@/common/model/inBlocksDate'
 import { ValidationHelpers } from '@/common/utils/validation'
 
 export interface FundingDetailsStepProps extends ValidationHelpers {
-  minCherryLimit: number
+  minCherryLimit: BN
 }
 
 export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorChecker }: FundingDetailsStepProps) => {

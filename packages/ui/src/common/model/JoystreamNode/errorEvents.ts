@@ -1,4 +1,5 @@
-import { DispatchError, EventRecord } from '@polkadot/types/interfaces/system'
+import { EventRecord } from '@polkadot/types/interfaces/system'
+import { SpRuntimeDispatchError } from '@polkadot/types/lookup'
 
 import { isModuleEvent } from './isModuleEvent'
 
@@ -8,7 +9,7 @@ export const isErrorEvent = ({ event: { method } }: EventRecord) => {
 
 export const hasErrorEvent = (events: EventRecord[]) => !!events.find(isErrorEvent)
 
-const getErrorMeta = (error: DispatchError) => {
+const getErrorMeta = (error: SpRuntimeDispatchError) => {
   if (error.isModule) {
     return error.registry.findMetaError(error.asModule)
   }

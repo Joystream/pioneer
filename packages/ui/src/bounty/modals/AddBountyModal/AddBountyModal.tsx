@@ -24,10 +24,8 @@ import {
 } from '@/bounty/modals/AddBountyModal/helpers'
 import { addBountyMachine, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
-import { Arrow } from '@/common/components/icons'
-import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
 import { TokenValue } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
@@ -36,6 +34,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
+import { asBN } from '@/common/utils/bn'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -205,15 +204,15 @@ export const AddBountyModal = () => {
 
               {state.matches(AddBountyStates.fundingPeriodDetails) && (
                 <FundingDetailsStep
-                  minCherryLimit={bountyApi?.minCherryLimit.toNumber() || 0}
+                  minCherryLimit={asBN(bountyApi?.minCherryLimit ?? 0)}
                   errorChecker={enhancedHasError(form.formState.errors, state.value as string)}
                   errorMessageGetter={enhancedGetErrorMessage(form.formState.errors, state.value as string)}
                 />
               )}
               {state.matches(AddBountyStates.workingPeriodDetails) && (
                 <WorkingDetailsStep
-                  minEntrantStake={bountyApi?.minWorkEntrantStake}
-                  whitelistLimit={bountyApi?.closedContractSizeLimit}
+                  minEntrantStake={asBN(bountyApi?.minWorkEntrantStake ?? 0)}
+                  whitelistLimit={bountyApi?.closedContractSizeLimit && Number(bountyApi?.closedContractSizeLimit)}
                   errorChecker={enhancedHasError(form.formState.errors, state.value as string)}
                   errorMessageGetter={enhancedGetErrorMessage(form.formState.errors, state.value as string)}
                 />
@@ -223,21 +222,14 @@ export const AddBountyModal = () => {
           </StepperBody>
         </AddBountyModalWrapper>
       </StepperModalBody>
-      <ModalFooter>
-        <ButtonsGroup align="left">
-          {!state.matches(AddBountyStates.generalParameters) && (
-            <ButtonGhost onClick={() => send('BACK')} size="medium">
-              <Arrow direction="left" />
-              Previous step
-            </ButtonGhost>
-          )}
-        </ButtonsGroup>
-        <ButtonsGroup align="right">
-          <ButtonPrimary disabled={!form.formState.isValid} onClick={() => send('NEXT')} size="medium">
-            {isLastStepActive(getSteps(service)) ? 'Create bounty' : 'Next step'}
-          </ButtonPrimary>
-        </ButtonsGroup>
-      </ModalFooter>
+      <ModalTransactionFooter
+        prev={{ disabled: state.matches(AddBountyStates.generalParameters), onClick: () => send('BACK') }}
+        next={{
+          disabled: !form.formState.isValid,
+          label: isLastStepActive(getSteps(service)) ? 'Create bounty' : 'Next step',
+          onClick: () => send('NEXT'),
+        }}
+      />
     </Modal>
   )
 }

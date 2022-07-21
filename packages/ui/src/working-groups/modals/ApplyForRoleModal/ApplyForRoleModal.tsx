@@ -12,10 +12,8 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
 import { Api } from '@/api/types'
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
-import { Arrow } from '@/common/components/icons'
-import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import {
   StepDescriptionColumn,
   Stepper,
@@ -109,18 +107,18 @@ export const ApplyForRoleModal = () => {
     const { stake } = form.getValues()
     if (activeMember && api) {
       return api.tx[opening.groupId].applyOnOpening({
-        member_id: activeMember?.id,
-        opening_id: opening.runtimeId,
-        role_account_id: stake?.roleAccount?.address,
-        reward_account_id: stake?.rewardAccount?.address,
-        stake_parameters: {
+        memberId: activeMember?.id,
+        openingId: opening.runtimeId,
+        roleAccountId: stake?.roleAccount?.address,
+        rewardAccountId: stake?.rewardAccount?.address,
+        stakeParameters: {
           stake: opening.stake,
-          staking_account_id: stake?.account?.address,
+          stakingAccountId: stake?.account?.address,
         },
       })
     }
   }, [activeMember?.id, connectionState, state.value])
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => transaction)
 
   useEffect(() => {
     if (state.matches('form') && !questions.length) {
@@ -193,14 +191,14 @@ export const ApplyForRoleModal = () => {
     const { stake, form: formFields } = form.getValues()
 
     const applyOnOpeningTransaction = api.tx[opening.groupId].applyOnOpening({
-      member_id: activeMember?.id,
-      opening_id: opening.runtimeId,
-      role_account_id: stake.roleAccount.address,
-      reward_account_id: stake.rewardAccount.address,
+      memberId: activeMember?.id,
+      openingId: opening.runtimeId,
+      roleAccountId: stake.roleAccount.address,
+      rewardAccountId: stake.rewardAccount.address,
       description: metadataToBytes(ApplicationMetadata, { answers: Object.values(formFields ?? {}) as string[] }),
-      stake_parameters: {
+      stakeParameters: {
         stake: stake.amount,
-        staking_account_id: stake.account?.address,
+        stakingAccountId: stake.account?.address,
       },
     })
 
@@ -283,22 +281,10 @@ export const ApplyForRoleModal = () => {
           </StepperBody>
         </StepperModalWrapper>
       </StepperModalBody>
-      <ModalFooter>
-        <ButtonsGroup align="left">
-          {state.matches('form') && (
-            <ButtonGhost onClick={() => send('PREV')} size="medium">
-              <Arrow direction="left" />
-              Previous step
-            </ButtonGhost>
-          )}
-        </ButtonsGroup>
-        <ButtonsGroup align="right">
-          <ButtonPrimary disabled={!form.formState.isValid} onClick={() => send('NEXT')} size="medium">
-            Next step
-            <Arrow direction="right" />
-          </ButtonPrimary>
-        </ButtonsGroup>
-      </ModalFooter>
+      <ModalTransactionFooter
+        prev={{ disabled: !state.matches('form'), onClick: () => send('PREV') }}
+        next={{ disabled: !form.formState.isValid, onClick: () => send('NEXT') }}
+      />
     </Modal>
   )
 }

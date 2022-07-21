@@ -1,5 +1,6 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
@@ -30,6 +31,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
@@ -80,11 +82,13 @@ describe('UI: Vote for Proposal Modal', () => {
 
   beforeEach(() => {
     tx = stubTransaction(api, 'api.tx.proposalsEngine.vote', 100)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
     stubDefaultBalances(api)
   })
 
   it('Requirements verification', async () => {
     tx = stubTransaction(api, 'api.tx.proposalsEngine.vote', 10_000)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
 
     await renderModal(true)
 

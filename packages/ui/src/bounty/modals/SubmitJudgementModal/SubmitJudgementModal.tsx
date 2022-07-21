@@ -1,7 +1,3 @@
-import { createType } from '@joystream/types'
-import { OracleJudgment } from '@joystream/types/augment'
-import { BountyId, EntryId, OracleWorkEntryJudgment } from '@joystream/types/bounty'
-import { MemberId } from '@joystream/types/common'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo } from 'react'
@@ -10,6 +6,7 @@ import styled from 'styled-components'
 import * as Yup from 'yup'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import {
   CheckBoxLabelWrapper,
@@ -27,11 +24,10 @@ import {
 } from '@/bounty/modals/SubmitJudgementModal/machine'
 import { SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
 import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer, Label, ToggleCheckbox } from '@/common/components/forms'
-import { Modal, ModalDivider, ModalFooter, ModalHeader, ScrolledModalBody } from '@/common/components/Modal'
+import { Modal, ModalDivider, ModalHeader, ModalTransactionFooter, ScrolledModalBody } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextHuge, TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
@@ -39,6 +35,7 @@ import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
+import { createType } from '@/common/model/createType'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
 
@@ -159,11 +156,8 @@ export const SubmitJudgementModal = () => {
       const winnersApi = validWinners.map(
         ({ winner, reward }) =>
           [
-            createType<EntryId, 'EntryId'>(
-              'EntryId',
-              Number(bounty.entries?.find((entry) => entry.worker.id === winner.id)?.id) ?? 0
-            ),
-            createType<OracleWorkEntryJudgment, 'OracleWorkEntryJudgment'>('OracleWorkEntryJudgment', {
+            createType('EntryId', Number(bounty.entries?.find((entry) => entry.worker.id === winner.id)?.id) ?? 0),
+            createType('OracleWorkEntryJudgment', {
               Winner: { reward: createType('u128', reward) },
             }),
           ] as const
@@ -175,11 +169,11 @@ export const SubmitJudgementModal = () => {
       const rejectedApi = validRejections.map(
         (loser) =>
           [
-            createType<EntryId, 'EntryId'>(
+            createType(
               'EntryId',
               Number(bounty.entries?.find((entry) => entry.worker.id === loser.rejected.id)?.id) ?? 0
             ),
-            createType<OracleWorkEntryJudgment, 'OracleWorkEntryJudgment'>('OracleWorkEntryJudgment', {
+            createType('OracleWorkEntryJudgment', {
               Rejected: null,
             }),
           ] as const
@@ -188,13 +182,15 @@ export const SubmitJudgementModal = () => {
       const judgments = [...winnersApi, ...rejectedApi]
 
       return api?.tx.bounty.submitOracleJudgment(
-        { Member: createType<MemberId, 'MemberId'>('MemberId', Number(activeMember?.id || 0)) },
-        createType<BountyId, 'BountyId'>('BountyId', Number(bounty.id || 0)),
-        createType<OracleJudgment, 'OracleJudgment'>('OracleJudgment', new Map(judgments)),
+        { Member: createType('MemberId', Number(activeMember?.id || 0)) },
+        createType('BountyId', Number(bounty.id || 0)),
+        createType('OracleJudgment', new Map(judgments)),
         state.context.rationale ?? ''
       )
     }
   }, [api, isConnected, bounty, state.context])
+
+  useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
 
   useEffect(() => {
     if (api && transaction && activeMember && state.matches(SubmitJudgementStates.requirementsVerification)) {
@@ -342,11 +338,13 @@ export const SubmitJudgementModal = () => {
           </InputComponent>
         </ModalContainer>
       </ScrolledModalBody>
-      <ModalFooter>
-        <ButtonPrimary disabled={!isValid} size="medium" onClick={() => send('NEXT')}>
-          {t('modals.submitJudgement.authorizeTransaction')}
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        next={{
+          disabled: !isValid,
+          onClick: () => send('NEXT'),
+          label: t('modals.submitJudgement.authorizeTransaction'),
+        }}
+      />
     </Modal>
   )
 }

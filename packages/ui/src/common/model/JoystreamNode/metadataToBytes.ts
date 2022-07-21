@@ -1,4 +1,4 @@
-import { createType } from '@joystream/types'
+import { createType } from '../createType'
 
 export type AnyMessage<T> = T & {
   toJSON(): Record<string, unknown>

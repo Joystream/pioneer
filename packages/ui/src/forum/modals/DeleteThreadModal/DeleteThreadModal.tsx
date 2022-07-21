@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,6 +12,7 @@ import { SuccessModal } from '@/common/components/SuccessModal'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { createType } from '@/common/model/createType'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -28,12 +28,12 @@ export const DeleteThreadModal = () => {
   } = useModal<DeleteThreadModalCall>()
 
   const [state, send] = useMachine(defaultTransactionModalMachine, { context: { validateBeforeTransaction: true } })
-  const { api, connectionState } = useApi()
+  const { api, isConnected } = useApi()
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
 
   const transaction = useMemo(() => {
-    if (api && connectionState === 'connected') {
+    if (api && isConnected) {
       return api.tx.forum.deleteThread(
         createType('ForumUserId', Number.parseInt(thread.authorId)),
         createType('CategoryId', Number.parseInt(thread.categoryId)),
@@ -41,9 +41,9 @@ export const DeleteThreadModal = () => {
         true
       )
     }
-  }, [api, connectionState])
+  }, [thread.authorId, thread.categoryId, thread.id, isConnected])
 
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
