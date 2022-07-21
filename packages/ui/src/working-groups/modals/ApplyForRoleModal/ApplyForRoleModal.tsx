@@ -107,13 +107,13 @@ export const ApplyForRoleModal = () => {
     const { stake } = form.getValues()
     if (activeMember && api) {
       return api.tx[opening.groupId].applyOnOpening({
-        member_id: activeMember?.id,
-        opening_id: opening.runtimeId,
-        role_account_id: stake?.roleAccount?.address,
-        reward_account_id: stake?.rewardAccount?.address,
-        stake_parameters: {
+        memberId: activeMember?.id,
+        openingId: opening.runtimeId,
+        roleAccountId: stake?.roleAccount?.address,
+        rewardAccountId: stake?.rewardAccount?.address,
+        stakeParameters: {
           stake: opening.stake,
-          staking_account_id: stake?.account?.address,
+          stakingAccountId: stake?.account?.address,
         },
       })
     }
@@ -191,14 +191,14 @@ export const ApplyForRoleModal = () => {
     const { stake, form: formFields } = form.getValues()
 
     const applyOnOpeningTransaction = api.tx[opening.groupId].applyOnOpening({
-      member_id: activeMember?.id,
-      opening_id: opening.runtimeId,
-      role_account_id: stake.roleAccount.address,
-      reward_account_id: stake.rewardAccount.address,
+      memberId: activeMember?.id,
+      openingId: opening.runtimeId,
+      roleAccountId: stake.roleAccount.address,
+      rewardAccountId: stake.rewardAccount.address,
       description: metadataToBytes(ApplicationMetadata, { answers: Object.values(formFields ?? {}) as string[] }),
-      stake_parameters: {
+      stakeParameters: {
         stake: stake.amount,
-        staking_account_id: stake.account?.address,
+        stakingAccountId: stake.account?.address,
       },
     })
 

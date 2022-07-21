@@ -1,5 +1,4 @@
 import { ApplicationMetadata } from '@joystream/metadata-protobuf'
-import { createType } from '@joystream/types'
 import { adaptRecord } from '@miragejs/graphql/dist/orm/records'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
@@ -12,6 +11,7 @@ import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import { createType } from '@/common/model/createType'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
@@ -123,8 +123,8 @@ describe('UI: ApplyForRoleModal', () => {
     stubQuery(
       api,
       'members.stakingAccountIdMemberStatus',
-      createType('StakingAccountMemberBinding', {
-        member_id: 0,
+      createType('PalletMembershipStakingAccountMemberBinding', {
+        memberId: 0,
         confirmed: false,
       })
     )
@@ -324,8 +324,8 @@ describe('UI: ApplyForRoleModal', () => {
         stubQuery(
           api,
           'members.stakingAccountIdMemberStatus',
-          createType('StakingAccountMemberBinding', {
-            member_id: createType('MemberId', 0),
+          createType('PalletMembershipStakingAccountMemberBinding', {
+            memberId: createType('MemberId', 0),
             confirmed: createType('bool', false),
           })
         )
@@ -370,8 +370,8 @@ describe('UI: ApplyForRoleModal', () => {
         stubQuery(
           api,
           'members.stakingAccountIdMemberStatus',
-          createType('StakingAccountMemberBinding', {
-            member_id: createType('MemberId', 0),
+          createType('PalletMembershipStakingAccountMemberBinding', {
+            memberId: createType('MemberId', 0),
             confirmed: createType('bool', true),
           })
         )
@@ -425,14 +425,14 @@ describe('UI: ApplyForRoleModal', () => {
     await waitFor(async () => await screen.findByText(/You intend to apply for a role/i))
 
     const [beforeTransactionParam] = last(applyOnOpeningTxMock.mock.calls)
-    expect(beforeTransactionParam.opening_id).toBe(1)
+    expect(beforeTransactionParam.openingId).toBe(1)
 
-    expect(beforeTransactionParam.member_id).toBe(useMyMemberships.active?.id)
-    expect(beforeTransactionParam.role_account_id).toBe(alice.address)
-    expect(beforeTransactionParam.reward_account_id).toBe(alice.address)
+    expect(beforeTransactionParam.memberId).toBe(useMyMemberships.active?.id)
+    expect(beforeTransactionParam.roleAccountId).toBe(alice.address)
+    expect(beforeTransactionParam.rewardAccountId).toBe(alice.address)
 
-    expect(beforeTransactionParam.stake_parameters.staking_account_id).toBe(bob.address)
-    expect(beforeTransactionParam.stake_parameters.stake.toString()).toBe('2000')
+    expect(beforeTransactionParam.stakeParameters.stakingAccountId).toBe(bob.address)
+    expect(beforeTransactionParam.stakeParameters.stake.toString()).toBe('2000')
 
     await act(async () => {
       fireEvent.click(await screen.findByText(/^Sign transaction and stake/i))
@@ -440,14 +440,14 @@ describe('UI: ApplyForRoleModal', () => {
 
     const [transactionParam] = last(applyOnOpeningTxMock.mock.calls)
 
-    expect(transactionParam.opening_id).toBe(1)
+    expect(transactionParam.openingId).toBe(1)
 
-    expect(transactionParam.member_id).toBe(useMyMemberships.active?.id)
-    expect(transactionParam.role_account_id).toBe(alice.address)
-    expect(transactionParam.reward_account_id).toBe(alice.address)
+    expect(transactionParam.memberId).toBe(useMyMemberships.active?.id)
+    expect(transactionParam.roleAccountId).toBe(alice.address)
+    expect(transactionParam.rewardAccountId).toBe(alice.address)
 
-    expect(transactionParam.stake_parameters.staking_account_id).toBe(bob.address)
-    expect(transactionParam.stake_parameters.stake.toString()).toBe('2000')
+    expect(transactionParam.stakeParameters.stakingAccountId).toBe(bob.address)
+    expect(transactionParam.stakeParameters.stake.toString()).toBe('2000')
 
     expect(metadataFromBytes(ApplicationMetadata, transactionParam.description)).toEqual({
       answers: ['Foo bar baz', 'Foo bar baz', 'Foo bar baz'],

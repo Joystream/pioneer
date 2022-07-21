@@ -20,7 +20,7 @@ import { SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 
 interface Props extends ValidationHelpers {
-  whitelistLimit?: u32 & AugmentedConst<'rxjs'>
+  whitelistLimit?: number
   minEntrantStake?: BN
 }
 
@@ -80,15 +80,15 @@ export const WorkingDetailsStep = ({ whitelistLimit, minEntrantStake, errorCheck
       {!isWorkingPeriodOpen && (
         <RowGapBlock gap={10}>
           <TextMedium bold>Whitelist</TextMedium>
-          <TextMedium>Maximum {whitelistLimit?.toHuman() || 0} members.</TextMedium>
+          <TextMedium>Maximum {whitelistLimit ?? 0} members.</TextMedium>
           <InputComponent
-            disabled={+(whitelistLimit?.toHuman() || 0) === workingPeriodWhitelist.length}
+            disabled={+(whitelistLimit ?? 0) === workingPeriodWhitelist.length}
             tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
             inputSize="l"
           >
             <SelectMember
               id="select-whitelist"
-              disabled={+(whitelistLimit?.toHuman() || 0) === workingPeriodWhitelist.length}
+              disabled={+(whitelistLimit ?? 0) === workingPeriodWhitelist.length}
               filter={whitelistFilter}
               onChange={onMemberAdd}
             />

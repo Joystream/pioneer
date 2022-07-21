@@ -25,7 +25,7 @@ export const addOpeningCommand = async ({ group = GROUP }: { group?: GroupIdName
     const tx = api.tx[group].addOpening(
       metadataToBytes(OpeningMetadata, openingMetadata),
       'Leader',
-      { stake_amount: api.consts[group].minimumApplicationStake, leaving_unstaking_period: 360_000 },
+      { stakeAmount: api.consts[group].minimumApplicationStake, leavingUnstakingPeriod: 360_000 },
       '1337'
     )
 

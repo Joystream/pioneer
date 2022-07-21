@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -29,6 +28,7 @@ import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
+import { createType } from '@/common/model/createType'
 import { getMaxBlock } from '@/common/model/getMaxBlock'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useYupValidationResolver } from '@/common/utils/validation'
@@ -169,11 +169,11 @@ export const AddNewProposalModal = () => {
         form.getValues() as AddNewProposalForm
 
       const txBaseParams: BaseProposalParams = {
-        member_id: activeMember?.id,
+        memberId: activeMember?.id,
         title: proposalDetails?.title,
         description: proposalDetails?.rationale,
-        ...(stakingAccount.stakingAccount ? { staking_account_id: stakingAccount.stakingAccount.address } : {}),
-        ...(triggerAndDiscussion.triggerBlock ? { exact_execution_block: triggerAndDiscussion.triggerBlock } : {}),
+        ...(stakingAccount.stakingAccount ? { stakingAccountId: stakingAccount.stakingAccount.address } : {}),
+        ...(triggerAndDiscussion.triggerBlock ? { exactExecutionBlock: triggerAndDiscussion.triggerBlock } : {}),
       }
 
       const txSpecificParameters = getSpecificParameters(api, specifics)
@@ -290,7 +290,7 @@ export const AddNewProposalModal = () => {
 
   if (state.matches('discussionTransaction')) {
     const { triggerAndDiscussion } = form.getValues() as AddNewProposalForm
-    const threadMode = createType('ThreadMode', {
+    const threadMode = createType('PalletProposalsDiscussionThreadMode', {
       closed: triggerAndDiscussion.discussionWhitelist?.map((member) =>
         createType('MemberId', Number.parseInt(member.id))
       ),

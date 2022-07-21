@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
@@ -9,6 +8,7 @@ import React from 'react'
 import { TransferModal } from '@/accounts/modals/TransferModal'
 import { Account, Balances } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
+import { createType } from '@/common/model/createType'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 

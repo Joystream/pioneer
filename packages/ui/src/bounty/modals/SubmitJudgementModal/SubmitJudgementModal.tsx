@@ -1,7 +1,3 @@
-import { createType } from '@joystream/types'
-import { OracleJudgment } from '@joystream/types/augment'
-import { BountyId, EntryId, OracleWorkEntryJudgment } from '@joystream/types/bounty'
-import { MemberId } from '@joystream/types/common'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo } from 'react'
@@ -39,6 +35,7 @@ import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
+import { createType } from '@/common/model/createType'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
 
@@ -159,11 +156,8 @@ export const SubmitJudgementModal = () => {
       const winnersApi = validWinners.map(
         ({ winner, reward }) =>
           [
-            createType<EntryId, 'EntryId'>(
-              'EntryId',
-              Number(bounty.entries?.find((entry) => entry.worker.id === winner.id)?.id) ?? 0
-            ),
-            createType<OracleWorkEntryJudgment, 'OracleWorkEntryJudgment'>('OracleWorkEntryJudgment', {
+            createType('EntryId', Number(bounty.entries?.find((entry) => entry.worker.id === winner.id)?.id) ?? 0),
+            createType('OracleWorkEntryJudgment', {
               Winner: { reward: createType('u128', reward) },
             }),
           ] as const
@@ -175,11 +169,11 @@ export const SubmitJudgementModal = () => {
       const rejectedApi = validRejections.map(
         (loser) =>
           [
-            createType<EntryId, 'EntryId'>(
+            createType(
               'EntryId',
               Number(bounty.entries?.find((entry) => entry.worker.id === loser.rejected.id)?.id) ?? 0
             ),
-            createType<OracleWorkEntryJudgment, 'OracleWorkEntryJudgment'>('OracleWorkEntryJudgment', {
+            createType('OracleWorkEntryJudgment', {
               Rejected: null,
             }),
           ] as const
@@ -188,9 +182,9 @@ export const SubmitJudgementModal = () => {
       const judgments = [...winnersApi, ...rejectedApi]
 
       return api?.tx.bounty.submitOracleJudgment(
-        { Member: createType<MemberId, 'MemberId'>('MemberId', Number(activeMember?.id || 0)) },
-        createType<BountyId, 'BountyId'>('BountyId', Number(bounty.id || 0)),
-        createType<OracleJudgment, 'OracleJudgment'>('OracleJudgment', new Map(judgments)),
+        { Member: createType('MemberId', Number(activeMember?.id || 0)) },
+        createType('BountyId', Number(bounty.id || 0)),
+        createType('OracleJudgment', new Map(judgments)),
         state.context.rationale ?? ''
       )
     }

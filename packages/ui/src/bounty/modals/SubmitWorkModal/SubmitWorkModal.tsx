@@ -1,7 +1,4 @@
 import { BountyWorkData } from '@joystream/metadata-protobuf'
-import { createType } from '@joystream/types'
-import { BountyId, EntryId } from '@joystream/types/bounty'
-import { MemberId } from '@joystream/types/common'
 import { useMachine } from '@xstate/react'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -41,6 +38,7 @@ import { WaitModal } from '@/common/components/WaitModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
+import { createType } from '@/common/model/createType'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -74,9 +72,9 @@ export const SubmitWorkModal = () => {
   const transaction = useMemo(() => {
     if (api && isConnected && activeMember) {
       return api.tx.bounty.submitWork(
-        createType<MemberId, 'MemberId'>('MemberId', Number(activeMember?.id)),
-        createType<BountyId, 'BountyId'>('BountyId', Number(modalData.bounty.id)),
-        createType<EntryId, 'EntryId'>('EntryId', Number(entry?.id)),
+        createType('MemberId', Number(activeMember?.id)),
+        createType('BountyId', Number(modalData.bounty.id)),
+        createType('EntryId', Number(entry?.id)),
         metadataToBytes(BountyWorkData, submitWorkMetadataFactory(state as SubmitWorkModalMachineState))
       )
     }

@@ -1,6 +1,6 @@
-import { createType } from '@joystream/types'
 import { useMemo } from 'react'
 
+import { createType } from '@/common/model/createType'
 import { ProposalPostParentsFragment, useGetProposalPostParentQuery } from '@/proposals/queries'
 
 export const useProposalPostParents = (id: string) => {

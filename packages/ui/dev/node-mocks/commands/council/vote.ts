@@ -16,7 +16,7 @@ export const votes = (api: ApiPromise) => {
 const castVotes = () =>
   withApi(async (api) => {
     const stage = await api.query.referendum.stage()
-    const cycleId = stage.asVoting.current_cycle_id.toNumber()
+    const cycleId = stage.asVoting.currentCycleId.toNumber()
     await mapP(votes(api), async ({ accountId, optionsId, salt }) => {
       const commitment = calculateCommitment(accountId, optionsId, salt, cycleId)
       await signAndSend(api.tx.referendum.vote(commitment, 10_000), accountId)
