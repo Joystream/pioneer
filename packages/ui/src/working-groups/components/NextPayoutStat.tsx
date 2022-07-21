@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { useApi } from '@/common/hooks/useApi'
+import { useApi } from '@/api/hooks/useApi'
 
 import { StatisticItem } from '../../common/components/statistics'
 import { NumericValue } from '../../common/components/statistics/NumericValueStat'

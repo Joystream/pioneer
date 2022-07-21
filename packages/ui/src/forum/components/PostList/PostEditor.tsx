@@ -1,10 +1,10 @@
 import { createType } from '@joystream/types'
 import React, { MutableRefObject, Ref, useCallback, useMemo, useRef, useState } from 'react'
 
+import { useApi } from '@/api/hooks/useApi'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { BaseCKEditor } from '@/common/components/CKEditor'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { PostListItemType } from '@/forum/components/PostList/PostListItem'
 import { useForumPostParents } from '@/forum/hooks/useForumPostParents'

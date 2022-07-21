@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { map } from 'rxjs'
 
-import { useApi } from '@/common/hooks/useApi'
+import { useApi } from '@/api/hooks/useApi'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useObservable } from '@/common/hooks/useObservable'
 import { isDefined } from '@/common/utils'
