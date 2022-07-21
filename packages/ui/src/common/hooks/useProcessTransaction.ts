@@ -3,7 +3,6 @@ import { Hash } from '@polkadot/types/interfaces/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import { useActor } from '@xstate/react'
 import BN from 'bn.js'
-import { getWalletBySource } from 'injectweb3-connect'
 import { Dispatch, SetStateAction, useEffect } from 'react'
 import { Observable } from 'rxjs'
 import { ActorRef, Sender } from 'xstate'
@@ -93,38 +92,31 @@ export const useProcessTransaction = ({
   const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
   const { setService } = useTransactionStatus()
   const [endpoints] = useNetworkEndpoints()
-  const { allAccounts } = useMyAccounts()
+  const { allAccounts, wallet } = useMyAccounts()
 
   useEffect(() => {
     setService(service)
   }, [])
 
   useEffect(() => {
-    const fn = async () => {
-      const hasSigner = allAccounts.find((acc) => acc.address === signer)
-      const wallet = getWalletBySource(hasSigner?.source ?? '')
+    const hasSigner = allAccounts.find((acc) => acc.address === signer)
 
-      if (!state.matches('signing') || !transaction || !paymentInfo || !wallet) {
-        return
-      }
-
-      const fee = paymentInfo.partialFee.toBn()
-
-      await wallet?.enable('Pioneer')
-
-      observeTransaction(
-        transaction.signAndSend(signer, { signer: wallet.signer }),
-        send,
-        fee,
-        endpoints.nodeRpcEndpoint,
-        setBlockHash
-      )
-
-      send('SIGN_EXTERNAL')
+    if (!state.matches('signing') || !transaction || !paymentInfo || !hasSigner) {
+      return
     }
 
-    fn()
-  }, [state.value.toString(), paymentInfo])
+    const fee = paymentInfo.partialFee.toBn()
+
+    observeTransaction(
+      transaction.signAndSend(signer, { signer: wallet?.signer }),
+      send,
+      fee,
+      endpoints.nodeRpcEndpoint,
+      setBlockHash
+    )
+
+    send('SIGN_EXTERNAL')
+  }, [state.value.toString(), paymentInfo, wallet])
 
   return {
     send,

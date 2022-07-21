@@ -39,6 +39,7 @@ export const OnBoardingPlugin = () => {
             <ListItem>
               {getAllWallets().map((wallet) => (
                 <ConnectWalletItem
+                  key={wallet.extensionName}
                   wallet={wallet}
                   onClick={() => setSelectedWallet(wallet)}
                   selected={selectedWallet?.extensionName === wallet.extensionName}

@@ -118,7 +118,7 @@ export const OnBoardingModal = () => {
     )
   }
 
-  if (!statusRef.current || status === 'finished' || isLoading || !status) {
+  if (status === 'finished' || isLoading || !status) {
     return null
   }
 

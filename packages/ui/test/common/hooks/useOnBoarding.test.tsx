@@ -1,5 +1,6 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { renderHook } from '@testing-library/react-hooks'
+import { BaseDotsamaWallet } from 'injectweb3-connect'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -64,10 +65,12 @@ describe('useOnBoarding', () => {
         useMyMemberships.isLoading = false
         useMyAccounts.error = undefined
         useApi.isConnected = true
+        useMyAccounts.wallet = new BaseDotsamaWallet({ title: 'ExtraWallet' })
       })
 
       it('Install plugin', async () => {
         useMyAccounts.error = 'NO_EXTENSION'
+        useMyAccounts.wallet = undefined
 
         const { isLoading, status } = await renderUseOnBoarding()
 

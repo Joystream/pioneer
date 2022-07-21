@@ -117,7 +117,7 @@ export const OnBoardingOverlay = () => {
             >
               <VerticalStaticStepper steps={innerStaticStepperSteps} />
               <ButtonPrimary onClick={openOnBoardingModal} size="large">
-                {!wallet ? 'Connect Wallet' : 'Join now'}
+                {!wallet ? 'Connect Wallet' : 'Join Now'}
               </ButtonPrimary>
             </DrawerContainer>
           </DropdownContent>
