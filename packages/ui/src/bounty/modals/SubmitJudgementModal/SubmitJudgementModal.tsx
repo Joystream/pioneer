@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import * as Yup from 'yup'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import {
   CheckBoxLabelWrapper,
@@ -23,11 +24,10 @@ import {
 } from '@/bounty/modals/SubmitJudgementModal/machine'
 import { SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
 import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer, Label, ToggleCheckbox } from '@/common/components/forms'
-import { Modal, ModalDivider, ModalFooter, ModalHeader, ScrolledModalBody } from '@/common/components/Modal'
+import { Modal, ModalDivider, ModalHeader, ModalTransactionFooter, ScrolledModalBody } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextHuge, TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
@@ -190,6 +190,8 @@ export const SubmitJudgementModal = () => {
     }
   }, [api, isConnected, bounty, state.context])
 
+  useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
+
   useEffect(() => {
     if (api && transaction && activeMember && state.matches(SubmitJudgementStates.requirementsVerification)) {
       send('NEXT')
@@ -336,11 +338,13 @@ export const SubmitJudgementModal = () => {
           </InputComponent>
         </ModalContainer>
       </ScrolledModalBody>
-      <ModalFooter>
-        <ButtonPrimary disabled={!isValid} size="medium" onClick={() => send('NEXT')}>
-          {t('modals.submitJudgement.authorizeTransaction')}
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        next={{
+          disabled: !isValid,
+          onClick: () => send('NEXT'),
+          label: t('modals.submitJudgement.authorizeTransaction'),
+        }}
+      />
     </Modal>
   )
 }

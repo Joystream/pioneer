@@ -4,8 +4,7 @@ import BN from 'bn.js'
 import React from 'react'
 import { ActorRef } from 'xstate'
 
-import { ButtonPrimary } from '@/common/components/buttons'
-import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
+import { ModalBody, ModalTransactionFooter } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
@@ -50,15 +49,12 @@ export const IncreaseWorkerStakeSignModal = ({
           Amount of increase: <TokenValue value={amount} />
         </TextMedium>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo title="Stake:" value={amount} />
-          <TransactionInfo title="Transaction fee:" value={partialFee?.toBn()} />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={signDisabled} onClick={sign}>
-          Sign transaction and Stake
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={partialFee?.toBn()}
+        next={{ disabled: signDisabled, label: 'Sign transaction and Stake', onClick: sign }}
+      >
+        <TransactionInfo title="Stake:" value={amount} />
+      </ModalTransactionFooter>
     </TransactionModal>
   )
 }

@@ -48,7 +48,7 @@ export const WithdrawContributionModal = () => {
     [activeMember?.id]
   )
 
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {

@@ -31,18 +31,22 @@ export const CreateThreadModal = () => {
   const { allAccounts } = useMyAccounts()
   const { showModal, hideModal, modalData } = useModal<CreateThreadModalCall>()
   const [state, send] = useMachine(createThreadMachine)
-  const { api } = useApi()
+  const { api, isConnected } = useApi()
   const { breadcrumbs } = useForumCategoryBreadcrumbs(modalData.categoryId)
   const balance = useBalance(member?.controllerAccount)
 
   const postDeposit = useMemo(() => api?.consts.forum.postDeposit.toBn(), [api])
   const threadDeposit = useMemo(() => api?.consts.forum.threadDeposit.toBn(), [api])
 
-  const baseTransaction = api?.tx.forum.createThread(member?.id ?? 0, modalData.categoryId, '', '', null)
-  const baseTransactionFee = useTransactionFee(member?.controllerAccount, baseTransaction)
+  const { feeInfo } = useTransactionFee(
+    member?.controllerAccount,
+    () => api?.tx.forum.createThread(member?.id ?? 0, modalData.categoryId, '', '', null),
+    [member?.id, modalData.categoryId, isConnected]
+  )
+
   const minimumTransactionCost = useMemo(
-    () => postDeposit && threadDeposit && baseTransactionFee?.transactionFee.add(postDeposit).add(threadDeposit),
-    [postDeposit, threadDeposit, baseTransactionFee?.transactionFee.toString()]
+    () => postDeposit && threadDeposit && feeInfo?.transactionFee.add(postDeposit).add(threadDeposit),
+    [postDeposit, threadDeposit, feeInfo?.transactionFee.toString()]
   )
 
   const form = useForm<ThreadFormFields>({

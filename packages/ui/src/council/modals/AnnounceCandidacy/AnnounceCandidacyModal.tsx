@@ -9,13 +9,10 @@ import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
-import { Arrow } from '@/common/components/icons'
-import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
 import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
@@ -156,6 +153,8 @@ export const AnnounceCandidacyModal = () => {
     }
   }, [connectionState, activeMember?.id, stakingStatus, confirmStakingAccountTransaction])
 
+  useTransactionFee(activeMember?.controllerAccount, () => announceCandidacyTransaction, [announceCandidacyTransaction])
+
   const candidacyNoteTransaction = useMemo(() => {
     const formValues = form.getValues() as AnnounceCandidacyFrom
 
@@ -172,13 +171,15 @@ export const AnnounceCandidacyModal = () => {
     }
   }, [JSON.stringify(state.context), connectionState, activeMember?.id])
 
-  const feeTransaction = useMemo(() => {
-    if (api && candidacyNoteTransaction && announceCandidacyTransaction) {
-      return api.tx.utility.batch([announceCandidacyTransaction, candidacyNoteTransaction])
-    }
-  }, [connectionState, candidacyNoteTransaction, announceCandidacyTransaction])
-
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, feeTransaction)
+  const { transaction, feeInfo } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => {
+      if (api && candidacyNoteTransaction && announceCandidacyTransaction) {
+        return api.tx.utility.batch([announceCandidacyTransaction, candidacyNoteTransaction])
+      }
+    },
+    [connectionState, candidacyNoteTransaction, announceCandidacyTransaction]
+  )
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
@@ -191,7 +192,7 @@ export const AnnounceCandidacyModal = () => {
         })
       }
 
-      if (feeInfo) {
+      if (feeInfo && Object.keys(balances).length) {
         const areFundsSufficient = feeInfo.canAfford && hasRequiredStake
         send(areFundsSufficient ? 'NEXT' : 'FAIL')
       }
@@ -217,9 +218,9 @@ export const AnnounceCandidacyModal = () => {
       // wrong account
       return feeInfo?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
-  }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake, stakingStatus])
+  }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake, stakingStatus, Object.keys(balances).length])
 
-  if (!api || !activeMember || !feeTransaction || !feeInfo) {
+  if (!api || !activeMember || !transaction || !feeInfo) {
     return null
   }
 
@@ -322,28 +323,22 @@ export const AnnounceCandidacyModal = () => {
           </StepperBody>
         </StepperProposalWrapper>
       </StepperModalBody>
-      <ModalFooter twoColumns>
-        <ButtonsGroup align="left">
-          {!state.matches('staking') && (
-            <ButtonGhost onClick={() => send('BACK')} size="medium">
-              <Arrow direction="left" />
-              Previous step
-            </ButtonGhost>
-          )}
-        </ButtonsGroup>
-        <ButtonsGroup align="right">
-          {state.matches('candidateProfile.summaryAndBanner') && (
+      <ModalTransactionFooter
+        next={{
+          disabled: !form.formState.isValid,
+          label: isLastStepActive(getSteps(service)) ? 'Announce candidacy' : 'Next step',
+          onClick: () => send('NEXT'),
+        }}
+        prev={state.matches('staking') ? { onClick: () => send('BACK') } : undefined}
+        extraButtons={
+          state.matches('candidateProfile.summaryAndBanner') && (
             <PreviewButtons
               candidate={getCandidateForPreview(form.getValues() as AnnounceCandidacyFrom, activeMember)}
               disabled={!form.formState.isValid}
             />
-          )}
-          <ButtonPrimary disabled={!form.formState.isValid} onClick={() => send('NEXT')} size="medium">
-            {isLastStepActive(getSteps(service)) ? 'Announce candidacy' : 'Next step'}
-            <Arrow direction="right" />
-          </ButtonPrimary>
-        </ButtonsGroup>
-      </ModalFooter>
+          )
+        }
+      />
     </Modal>
   )
 }

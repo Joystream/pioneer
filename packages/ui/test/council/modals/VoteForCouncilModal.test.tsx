@@ -234,7 +234,7 @@ describe('UI: Vote for Council Modal', () => {
 
     expect(await screen.findByText(/^You intend to Vote and stake/i)).toBeDefined()
     expect(screen.getByText(/^Stake:/i)?.nextSibling?.textContent).toBe('500')
-    expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
+    expect(screen.getByText(/^modals.transactionFee.label/i)?.nextSibling?.textContent).toBe('25')
     expect(await getButton('Sign and send')).toBeDefined()
   })
 

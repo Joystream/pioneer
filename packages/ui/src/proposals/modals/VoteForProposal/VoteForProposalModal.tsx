@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
@@ -21,11 +21,12 @@ export const VoteForProposalModal = () => {
   const { api } = useApi()
   const { active } = useMyMemberships()
   const { proposal, isLoading } = useProposal(modalData.id)
-  const transactionFee = useMemo(
+
+  const { feeInfo } = useTransactionFee(
+    active?.controllerAccount,
     () => (active?.id ? api?.tx.proposalsEngine.vote(active?.id, modalData.id, 'Approve', '') : undefined),
     [active?.id]
   )
-  const feeInfo = useTransactionFee(active?.controllerAccount, transactionFee)
 
   const [state, send] = useMachine(machine)
 

@@ -17,7 +17,6 @@ import { BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsM
 import { contributeFundsMachine, ContributeFundStates } from '@/bounty/modals/ContributeFundsModal/machine'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { isFundingLimited } from '@/bounty/types/Bounty'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Input, InputComponent, InputNumber } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
@@ -26,13 +25,12 @@ import {
   AmountButton,
   AmountButtons,
   Modal,
-  ModalFooter,
   ModalHeader,
+  ModalTransactionFooter,
   Row,
   ScrolledModalBody,
   ScrolledModalContainer,
   TransactionAmount,
-  TransactionInfoContainer,
 } from '@/common/components/Modal'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
@@ -89,13 +87,15 @@ export const ContributeFundsModal = () => {
     balance && setAmount(balance.transferable.divn(2))
   }, [balance])
 
-  const transaction = useMemo(() => {
-    if (api && isConnected && activeMember) {
-      return api.tx.bounty.fundBounty({ Member: activeMember.id }, bounty.id, state.context.amount ?? minFundingLimit)
-    }
-  }, [activeMember?.id, state.context.amount, isConnected, minFundingLimit.toString()])
-
-  const fee = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { transaction, feeInfo: fee } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => {
+      if (api && isConnected && activeMember) {
+        return api.tx.bounty.fundBounty({ Member: activeMember.id }, bounty.id, state.context.amount ?? minFundingLimit)
+      }
+    },
+    [activeMember?.id, state.context.amount, isConnected, minFundingLimit.toString()]
+  )
 
   const nextStep = useCallback(() => {
     send('NEXT')
@@ -285,19 +285,12 @@ export const ContributeFundsModal = () => {
           </Row>
         </ScrolledModalContainer>
       </ScrolledModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo title={t('modals.common.contributeAmount')} value={state.context.amount} />
-          <TransactionInfo
-            title={t('modals.common.transactionFee.label')}
-            value={fee?.transactionFee}
-            tooltipText={t('modals.common.transactionFee.tooltip')}
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={!isValid} onClick={nextStep}>
-          {t('modals.contribute.nextButton')}
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={fee?.transactionFee}
+        next={{ disabled: !isValid, label: t('modals.contribute.nextButton'), onClick: nextStep }}
+      >
+        <TransactionInfo title={t('modals.common.contributeAmount')} value={state.context.amount} />
+      </ModalTransactionFooter>
     </Modal>
   )
 }
