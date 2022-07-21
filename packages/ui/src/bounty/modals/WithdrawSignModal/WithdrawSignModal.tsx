@@ -66,7 +66,6 @@ export const WithdrawSignModal = ({
       : BN_ZERO
 
   const bountyFailedInfo = bounty?.stage === 'failed' && !!isContributor
-
   return (
     <TransactionModal onClose={onClose} service={service} title={t(`modals.withdraw.${type}.title`)}>
       <ModalBody>
