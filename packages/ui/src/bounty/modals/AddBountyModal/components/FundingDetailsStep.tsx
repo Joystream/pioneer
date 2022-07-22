@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { CurrencyName } from '@/app/constants/currency'
 import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
-import { TokenInput, InputComponent, Label, ToggleCheckbox } from '@/common/components/forms'
+import { TokenInput, InputComponent, Label, ToggleCheckbox, InputNumber } from '@/common/components/forms'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipContainer, TooltipDefault, TooltipExternalLink } from '@/common/components/Tooltip'
@@ -120,7 +120,7 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
             id="field-periodLength"
             message={fundingPeriodLength ? `≈ ${inBlocksDate(fundingPeriodLength)}` : ''}
           >
-            <TokenInput
+            <InputNumber
               isInBN
               id="field-periodLength"
               name="fundingPeriodDetails.fundingPeriodLength"
