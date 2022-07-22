@@ -1,17 +1,12 @@
 import BN from 'bn.js'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import * as Yup from 'yup'
 
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { ButtonPrimary } from '@/common/components/buttons'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { PickedTransferIcon } from '@/common/components/icons/TransferIcons'
-import { BN_ZERO } from '@/common/constants'
-import { useForm } from '@/common/hooks/useForm'
-import { useNumberInput } from '@/common/hooks/useNumberInput'
-import { formatTokenValue } from '@/common/model/formatters'
-
-import { InputComponent, InputNumber } from '../../../common/components/forms'
 import {
   AmountButton,
   AmountButtons,
@@ -21,7 +16,10 @@ import {
   ModalHeader,
   Row,
   TransactionAmount,
-} from '../../../common/components/Modal'
+} from '@/common/components/Modal'
+import { BN_ZERO } from '@/common/constants'
+import { useForm } from '@/common/hooks/useForm'
+
 import { filterAccount, SelectAccount, SelectedAccount } from '../../components/SelectAccount'
 import { Account } from '../../types'
 
@@ -61,35 +59,33 @@ const schemaFactory = (maxValue?: BN, minValue?: BN, senderBalance?: BN) => {
 export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue, minValue, initialValue }: Props) {
   const [recipient, setRecipient] = useState<Account | undefined>(to)
   const [sender, setSender] = useState<Account | undefined>(from)
-  const [amount, setAmount] = useNumberInput(0, initialValue)
   const balances = useMyBalances()
   const filterSender = useCallback(
     (account: Account) => account.address !== recipient?.address && balances[account.address]?.transferable.gt(BN_ZERO),
     [recipient, balances]
   )
-
   const schema = useMemo(
     () => schemaFactory(maxValue, minValue, balances[sender?.address as string]?.transferable),
     [maxValue, minValue, balances, sender]
   )
 
-  const { changeField, validation } = useForm<TransferTokensFormField>({ amount: undefined }, schema)
+  const {
+    changeField,
+    validation,
+    fields: { amount },
+  } = useForm<TransferTokensFormField>({ amount: initialValue?.toString() }, schema)
   const { isValid, errors } = validation
-
-  useEffect(() => {
-    changeField('amount', amount)
-  }, [amount])
 
   const transferableBalance = balances[sender?.address as string]?.transferable ?? BN_ZERO
   const filterRecipient = useCallback(filterAccount(sender), [sender])
   const getIconType = () => (!from ? (!to ? 'transfer' : 'receive') : 'send')
 
-  const isZero = new BN(amount).lte(BN_ZERO)
-  const isOverBalance = new BN(amount).gt(maxValue || transferableBalance || 0)
+  const isZero = new BN(amount ?? 0).lte(BN_ZERO)
+  const isOverBalance = new BN(amount ?? 0).gt(maxValue || transferableBalance || 0)
   const isTransferDisabled = isZero || isOverBalance || !recipient || !isValid
   const isValueDisabled = !sender
 
-  const setHalf = () => setAmount(transferableBalance.divn(2).toString())
+  const setHalf = () => changeField('amount', transferableBalance.divn(2).toString())
   const onClick = () => {
     if (amount && recipient && sender) {
       onAccept(new BN(amount), sender, recipient)
@@ -126,10 +122,11 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
             validation={amount && hasError('amount', errors) ? 'invalid' : undefined}
             message={(amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined) || ' '}
           >
-            <InputNumber
+            <TokenInput
+              isTokenValue
               id="amount-input"
-              value={formatTokenValue(amount)}
-              onChange={(event) => setAmount(event.target.value)}
+              value={amount}
+              onChange={(_, value) => changeField('amount', value.toString())}
               disabled={isValueDisabled}
               placeholder="0"
             />
