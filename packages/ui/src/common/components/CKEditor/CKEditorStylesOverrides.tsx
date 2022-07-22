@@ -11,7 +11,7 @@ export const CKEditorStylesOverrides = createGlobalStyle<{ minRows: number; maxR
     width: 100%;
   }
 
-  .ckeditor-anchor {
+  .ckeditor-anchor:not(.ck-content) {
     display: none;
   }
 

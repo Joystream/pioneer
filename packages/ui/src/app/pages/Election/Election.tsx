@@ -13,6 +13,7 @@ import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextHuge, TextMedium } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
 import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { getUrl } from '@/common/utils/getUrl'
 import { AnnounceCandidacyButton } from '@/council/components/election/announcing/AnnounceCandidacyButton'
 import { AnnouncingStage } from '@/council/components/election/announcing/AnnouncingStage'
@@ -46,6 +47,10 @@ export const Election = () => {
   useCandidatePreviewViaUrlParameter()
 
   useRefetchQueries({ after: electionStage === 'announcing' }, [electionStage])
+  const isRefetched = useRefetchQueries(
+    { when: electionStage === 'announcing', interval: MILLISECONDS_PER_BLOCK, include: ['GetCurrentElection'] },
+    [electionStage]
+  )
 
   useEffect(() => {
     if (!isLoadingElectionStage && electionStage === 'inactive') {
@@ -126,7 +131,9 @@ export const Election = () => {
           </TextHuge>
         </StatisticItem>
       </Statistics>
-      {electionStage === 'announcing' && <AnnouncingStage election={election} isLoading={isLoadingElection} />}
+      {electionStage === 'announcing' && (
+        <AnnouncingStage election={election} isLoading={!isRefetched && isLoadingElection} />
+      )}
       {electionStage === 'voting' && <VotingStage election={election} isLoading={isLoadingElection} />}
       {electionStage === 'revealing' && <RevealingStage election={election} isLoading={isLoadingElection} />}
     </MainPanel>
