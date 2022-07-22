@@ -3,7 +3,7 @@ import React from 'react'
 
 import { ModalBlock, Row, TemplateBlock } from '../storybookParts/previewStyles'
 
-import { InputComponent, InputComponentProps, InputNumber, InputText } from './InputComponent'
+import { InputComponent, InputComponentProps, TokenInput, InputText } from './InputComponent'
 
 export default {
   title: 'Common/Forms/InputComponent',
@@ -18,7 +18,7 @@ const Template: Story<InputComponentProps> = (args) => (
           <InputText />
         </InputComponent>
         <InputComponent {...args}>
-          <InputNumber />
+          <TokenInput />
         </InputComponent>
       </Row>
       <Row>
@@ -26,7 +26,7 @@ const Template: Story<InputComponentProps> = (args) => (
           <InputText />
         </InputComponent>
         <InputComponent {...args} inputSize="l">
-          <InputNumber />
+          <TokenInput />
         </InputComponent>
       </Row>
     </TemplateBlock>

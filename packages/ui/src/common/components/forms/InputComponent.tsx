@@ -1,10 +1,10 @@
 import BN from 'bn.js'
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useFormContext, Controller } from 'react-hook-form'
 import styled, { css } from 'styled-components'
 
 import { cleanInputValue } from '@/common/hooks/useNumberInput'
-import { formatTokenValue } from '@/common/model/formatters'
+import { DECIMAL_NUMBER, formatFromJoyValue, formatToJoyValue, formatTokenValue } from '@/common/model/formatters'
 import { enhancedGetErrorMessage, enhancedHasError } from '@/common/utils/validation'
 
 import { BorderRad, Colors, Fonts, Shadows, Transitions } from '../../constants'
@@ -179,10 +179,84 @@ export const InputText = React.memo((props: InputProps) => {
   return <Input type="text" autoComplete="off" {...props} {...formContext.register(props.name)} />
 })
 
-interface BaseNumberInputProps extends Omit<InputProps, 'onChange'> {
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>, numberValue: number) => void
+interface BaseTokenInputProps extends Omit<InputProps, 'onChange'> {
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>, numberValue: BN) => void
   isTokenValue?: boolean
   maxAllowedValue?: number
+}
+
+const isValid = (value: string, maxAllowedValue?: number) =>
+  /^\d*\.?\d{0,10}$/.test(value) && maxAllowedValue
+    ? new BN(value).div(new BN(DECIMAL_NUMBER)).ltn(maxAllowedValue)
+    : true
+
+const BasedTokenInput = React.memo(
+  ({ id, onChange, isTokenValue = false, value = '', maxAllowedValue, ...props }: BaseTokenInputProps) => {
+    const [idPointShowing, showPoint] = useState(false)
+
+    const onInputChange = useCallback(
+      (evt: React.ChangeEvent<HTMLInputElement>) => {
+        const inputValue = evt.target.value
+        if (!isValid(inputValue, maxAllowedValue)) {
+          return
+        }
+        showPoint(inputValue.includes('.'))
+        onChange?.(evt, formatFromJoyValue(inputValue))
+      },
+      [onChange, maxAllowedValue]
+    )
+
+    const inputValue = useMemo(() => {
+      const { integer, decimal } = formatToJoyValue(value)
+      const point = decimal || idPointShowing
+      return `${integer}${point ? '.' : ''}${decimal}`
+    }, [value, idPointShowing])
+
+    return (
+      <StyledNumberInput
+        id={id}
+        name={id}
+        type="string" ///  1.1 -> 11000000... ||||||| block 10 -> 10 |||| isTokenValue
+        value={isTokenValue ? inputValue : value}
+        onChange={onInputChange}
+        autoComplete="off"
+        {...props}
+      />
+    )
+  }
+)
+
+interface TokenInputProps extends BaseTokenInputProps {
+  isInBN?: boolean
+}
+
+export const TokenInput = React.memo(({ name, isInBN = false, ...props }: TokenInputProps) => {
+  const formContext = useFormContext()
+
+  if (!formContext || !name) {
+    return <BasedTokenInput {...props} />
+  }
+
+  return (
+    <Controller
+      control={formContext.control}
+      name={name}
+      render={({ field }) => {
+        return (
+          <BasedTokenInput
+            {...props}
+            value={new BN(field.value)?.toString() ?? ''}
+            onChange={(_, value) => field.onChange(isInBN ? new BN(String(value)) : value)}
+            onBlur={field.onBlur}
+          />
+        )
+      }}
+    />
+  )
+})
+
+interface BaseNumberInputProps extends Omit<BaseTokenInputProps, 'onChange'> {
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>, numberValue: number) => void
 }
 
 const BasedInputNumber = React.memo(
@@ -208,11 +282,11 @@ const BasedInputNumber = React.memo(
   }
 )
 
-interface InputNumberProps extends BaseNumberInputProps {
+interface NumberInputProps extends BaseNumberInputProps {
   isInBN?: boolean
 }
 
-export const InputNumber = React.memo(({ name, isInBN = false, ...props }: InputNumberProps) => {
+export const InputNumber = React.memo(({ name, isInBN = false, ...props }: NumberInputProps) => {
   const formContext = useFormContext()
 
   if (!formContext || !name) {
