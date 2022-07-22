@@ -2,7 +2,6 @@ import { createType } from '@joystream/types'
 import { TypeRegistry } from '@polkadot/types'
 import { EventRecord } from '@polkadot/types/interfaces'
 import { AnyTuple, Codec } from '@polkadot/types/types'
-import { Constructor } from '@polkadot/util/types'
 import BN from 'bn.js'
 import { get, isArray, isFunction, merge, uniqueId } from 'lodash'
 import { filter, firstValueFrom, map, Observable } from 'rxjs'
@@ -175,8 +174,7 @@ interface SerializedCodec {
 }
 
 const serializeCodec = (codec: Codec) => {
-  const type =
-    (codec as any).meta?.type ?? codec.registry.getClassName(codec.constructor as Constructor) ?? codec.toRawType()
+  const type = codec.toRawType()
 
   if (!type) {
     error('Unrecognized codec object', codec, codec.toHuman())
@@ -196,7 +194,7 @@ const isCodec = (obj: any): obj is Codec => typeof obj?.registry === 'object' &&
 const isEventRecord = (type: string, codec: Codec): codec is EventRecord => type === 'EventRecord'
 
 const deserializeCodec = (serialized: SerializedCodec) => {
-  const codec = createType(serialized.type, serialized.value)
+  const codec = createType(serialized.type, serialized.value) as Codec
 
   if (serialized.type === 'EventRecord') {
     return recursiveProxy(codec, {

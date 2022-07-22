@@ -1,6 +1,7 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, waitFor } from '@testing-library/react'
 import { useMachine } from '@xstate/react'
+import { BaseDotsamaWallet } from 'injectweb3-connect'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -9,7 +10,7 @@ import { TransactionButton } from '@/common/components/buttons/TransactionButton
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { transactionMachine } from '@/common/model/machines'
 import { ApiContext } from '@/common/providers/api/context'
-import { TransactionContextProvider } from '@/common/providers/transaction/provider'
+import { TransactionStatusProvider } from '@/common/providers/transactionStatus/provider'
 
 import { getButton } from '../../_helpers/getButton'
 import { alice } from '../../_mocks/keyring'
@@ -27,6 +28,7 @@ describe('UI: TransactionButton', () => {
     isLoading: false,
     allAccounts: [{ ...alice, name: 'Alice Account' }],
     hasAccounts: true,
+    wallet: new BaseDotsamaWallet({ title: 'ExtraWallet' }),
   }
 
   beforeAll(async () => {
@@ -92,12 +94,12 @@ describe('UI: TransactionButton', () => {
         <MockApolloProvider>
           <AccountsContext.Provider value={useAccounts}>
             <ApiContext.Provider value={api}>
-              <TransactionContextProvider>
+              <TransactionStatusProvider>
                 <TestButton />
                 <TransactionButton style="primary" size="large">
                   Start new transaction
                 </TransactionButton>
-              </TransactionContextProvider>
+              </TransactionStatusProvider>
             </ApiContext.Provider>
           </AccountsContext.Provider>
         </MockApolloProvider>

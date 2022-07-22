@@ -1,25 +1,7 @@
 import styled from 'styled-components'
 
-import { BorderRad, Colors, Sizes } from '@/common/constants'
-
-export const MemberRow = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
-  align-items: center;
-  width: 100%;
-  min-height: ${Sizes.accountHeight};
-  max-height: ${Sizes.accountHeight};
-  padding: 8px 16px;
-  border: 1px solid ${Colors.Black[300]};
-  border-bottom: 0;
-  border-radius: ${BorderRad.s};
-  background-color: ${Colors.White};
-
-  &:last-child {
-    border-bottom: 1px solid ${Colors.Black[300]};
-  }
-`
+import { OptionListAccount } from '@/accounts/components/SelectAccount/OptionListAccount'
+import { Colors, Fonts } from '@/common/constants'
 
 export const ModalBody = styled.div`
   padding: 24px 24px 24px;
@@ -36,4 +18,27 @@ export const InlineLockIconWrapper = styled.div`
   width: fit-content;
   height: fit-content;
   margin-left: 8px;
+`
+
+export const StyledOptionListAccount = styled(OptionListAccount)`
+  position: static;
+  transform: none;
+  width: 100%;
+  border: 1px solid ${Colors.Black[200]};
+  box-shadow: none;
+  & li:hover {
+    .accountName {
+      color: inherit;
+    }
+  }
+  & div {
+    cursor: default;
+  }
+`
+
+export const InfoList = styled.ul`
+  list-style: disc;
+  margin-left: 20px;
+  font-family: ${Fonts.Inter};
+  color: ${Colors.Black[600]};
 `

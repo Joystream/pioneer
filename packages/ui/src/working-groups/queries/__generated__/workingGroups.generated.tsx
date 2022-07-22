@@ -713,6 +713,7 @@ export type CountWorkingGroupWorkersQuery = {
 
 export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.WorkingGroupOpeningWhereInput>
+  order?: Types.InputMaybe<Array<Types.WorkingGroupOpeningOrderByInput> | Types.WorkingGroupOpeningOrderByInput>
   limit?: Types.InputMaybe<Types.Scalars['Int']>
   offset?: Types.InputMaybe<Types.Scalars['Int']>
 }>
@@ -2193,8 +2194,13 @@ export type CountWorkingGroupWorkersQueryResult = Apollo.QueryResult<
   CountWorkingGroupWorkersQueryVariables
 >
 export const GetWorkingGroupOpeningsDocument = gql`
-  query GetWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput, $limit: Int, $offset: Int) {
-    workingGroupOpenings(where: $where, limit: $limit, offset: $offset) {
+  query GetWorkingGroupOpenings(
+    $where: WorkingGroupOpeningWhereInput
+    $order: [WorkingGroupOpeningOrderByInput!]
+    $limit: Int
+    $offset: Int
+  ) {
+    workingGroupOpenings(where: $where, limit: $limit, offset: $offset, orderBy: $order) {
       ...WorkingGroupOpeningFields
     }
   }
@@ -2214,6 +2220,7 @@ export const GetWorkingGroupOpeningsDocument = gql`
  * const { data, loading, error } = useGetWorkingGroupOpeningsQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      order: // value for 'order'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },

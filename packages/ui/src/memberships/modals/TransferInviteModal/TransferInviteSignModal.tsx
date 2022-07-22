@@ -5,10 +5,8 @@ import { ActorRef } from 'xstate'
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
-import { ModalBody, ModalFooter, SignTransferContainer, TransactionInfoContainer } from '@/common/components/Modal'
-import { TransactionInfo } from '@/common/components/TransactionInfo'
+import { ModalBody, ModalTransactionFooter, SignTransferContainer } from '@/common/components/Modal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
@@ -55,18 +53,10 @@ export const TransferInviteSignModal = ({ onClose, sourceMember, targetMember, a
           </InputComponent>
         </SignTransferContainer>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title="Transaction fee:"
-            value={fee}
-            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={sign} disabled={!isReady}>
-          Sign and Send
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={fee}
+        next={{ disabled: !isReady, label: 'Sign and Send', onClick: sign }}
+      />
     </TransactionModal>
   )
 }

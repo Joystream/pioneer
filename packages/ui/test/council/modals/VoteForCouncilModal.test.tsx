@@ -1,14 +1,16 @@
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { configure, findByText, fireEvent, queryByText, render, screen, waitFor } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { MemoryRouter } from 'react-router'
 
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CKEditorProps } from '@/common/components/CKEditor'
+import { createType } from '@/common/model/createType'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
@@ -128,8 +130,8 @@ describe('UI: Vote for Council Modal', () => {
     stubQuery(
       api,
       'members.stakingAccountIdMemberStatus',
-      createType('StakingAccountMemberBinding', {
-        member_id: 0,
+      createType('PalletMembershipStakingAccountMemberBinding', {
+        memberId: 0,
         confirmed: false,
       })
     )
@@ -152,11 +154,21 @@ describe('UI: Vote for Council Modal', () => {
     })
 
     it('Insufficient funds', async () => {
-      stubTransaction(api, 'api.tx.referendum.vote', 10_000)
+      const minStake = 10000
+      stubCouncilConstants(api, { minStake })
+      stubTransaction(api, 'api.tx.referendum.vote', 10)
 
       renderModal()
 
-      expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
+      const moveFundsModalCall: MoveFundsModalCall = {
+        modal: 'MoveFundsModal',
+        data: {
+          requiredStake: new BN(minStake),
+          lock: 'Voting',
+        },
+      }
+
+      expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
   })
 
@@ -221,8 +233,8 @@ describe('UI: Vote for Council Modal', () => {
     fireEvent.click(await getNextStepButton())
 
     expect(await screen.findByText(/^You intend to Vote and stake/i)).toBeDefined()
-    expect(screen.getByText(/^Stake:/i)?.nextSibling?.textContent).toBe('500.0')
-    expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25.0')
+    expect(screen.getByText(/^Stake:/i)?.nextSibling?.textContent).toBe('500')
+    expect(screen.getByText(/^modals.transactionFee.label/i)?.nextSibling?.textContent).toBe('25')
     expect(await getButton('Sign and send')).toBeDefined()
   })
 

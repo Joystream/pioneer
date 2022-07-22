@@ -19,7 +19,7 @@ import { ForumRoutes } from '@/forum/constant'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
-import { ExtensionWarning } from './components/ExtensionWarning'
+import { ExtensionNotification } from './components/ExtensionWarning'
 import { SideBar } from './components/SideBar'
 import { MembersRoutes, ProfileRoutes, SettingsRoutes, TermsRoutes } from './constants/routes'
 import { GlobalModals } from './GlobalModals'
@@ -67,7 +67,7 @@ export const App = () => (
     <NotificationsHolder>
       <TransactionStatus />
       <ConnectionStatus />
-      <ExtensionWarning />
+      <ExtensionNotification />
     </NotificationsHolder>
     <FMBanner />
   </Providers>

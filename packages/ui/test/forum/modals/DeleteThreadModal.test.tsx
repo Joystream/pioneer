@@ -1,5 +1,6 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -31,6 +32,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -91,6 +93,7 @@ describe('UI: DeleteThreadModal', () => {
   })
 
   beforeEach(async () => {
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
     stubDefaultBalances(api)
     transaction = stubTransaction(api, txPath, 100)
     txMock = api.api.tx.forum.deleteThread as unknown as jest.Mock
@@ -110,7 +113,8 @@ describe('UI: DeleteThreadModal', () => {
   })
 
   it('Requirements failed', async () => {
-    stubTransaction(api, txPath, 10000)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
+
     renderModal()
     expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
   })

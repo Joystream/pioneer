@@ -1,5 +1,6 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -28,6 +29,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -82,6 +84,7 @@ describe('UI: EditPostModal', () => {
   })
 
   beforeEach(async () => {
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
     stubDefaultBalances(api)
     tx = stubTransaction(api, txPath)
     modalData.transaction = api.api.tx.forum.editPostText(1, 1, 1, 1, '')
@@ -95,7 +98,8 @@ describe('UI: EditPostModal', () => {
   })
 
   it('Requirements failed', async () => {
-    tx = stubTransaction(api, txPath, 10000)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
+
     modalData.transaction = api.api.tx.forum.editPostText(1, 1, 1, 1, '')
     renderModal()
     expect(screen.queryByText('modals.insufficientFunds.title')).not.toBeNull()

@@ -8,8 +8,7 @@ import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { ButtonPrimary } from '@/common/components/buttons'
-import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
+import { ModalBody, ModalTransactionFooter, Row } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
@@ -56,23 +55,16 @@ export const ApplyForRoleSignModal = ({ onClose, transaction, signer, stake, ser
           <SelectedAccount account={signerAccount} />
         </Row>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title="Stake:"
-            value={stake}
-            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
-          />
-          <TransactionInfo
-            title="Transaction fee:"
-            value={partialFee?.toBn()}
-            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={sign} disabled={signDisabled}>
-          Sign transaction and Stake
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={partialFee?.toBn()}
+        next={{ disabled: signDisabled, label: 'Sign transaction and Stake', onClick: sign }}
+      >
+        <TransactionInfo
+          title="Stake:"
+          value={stake}
+          tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+        />
+      </ModalTransactionFooter>
     </TransactionModal>
   )
 }

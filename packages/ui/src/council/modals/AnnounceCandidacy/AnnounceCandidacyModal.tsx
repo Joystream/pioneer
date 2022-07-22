@@ -9,13 +9,10 @@ import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
-import { Arrow } from '@/common/components/icons'
-import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
 import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
@@ -86,7 +83,7 @@ export const AnnounceCandidacyModal = () => {
   const { hideModal, showModal } = useModal()
   const [state, send, service] = useMachine(announceCandidacyMachine)
   const constants = useCouncilConstants()
-  const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
+  const { hasRequiredStake } = useHasRequiredStake(
     constants?.election.minCandidacyStake || BN_ZERO,
     'Council Candidate'
   )
@@ -155,6 +152,8 @@ export const AnnounceCandidacyModal = () => {
     }
   }, [connectionState, activeMember?.id, stakingStatus, confirmStakingAccountTransaction])
 
+  useTransactionFee(activeMember?.controllerAccount, () => announceCandidacyTransaction, [announceCandidacyTransaction])
+
   const candidacyNoteTransaction = useMemo(() => {
     const formValues = form.getValues() as AnnounceCandidacyFrom
 
@@ -171,13 +170,15 @@ export const AnnounceCandidacyModal = () => {
     }
   }, [JSON.stringify(state.context), connectionState, activeMember?.id])
 
-  const feeTransaction = useMemo(() => {
-    if (api && candidacyNoteTransaction && announceCandidacyTransaction) {
-      return api.tx.utility.batch([announceCandidacyTransaction, candidacyNoteTransaction])
-    }
-  }, [connectionState, candidacyNoteTransaction, announceCandidacyTransaction])
-
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, feeTransaction)
+  const { transaction, feeInfo } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => {
+      if (api && candidacyNoteTransaction && announceCandidacyTransaction) {
+        return api.tx.utility.batch([announceCandidacyTransaction, candidacyNoteTransaction])
+      }
+    },
+    [connectionState, candidacyNoteTransaction, announceCandidacyTransaction]
+  )
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
@@ -190,13 +191,10 @@ export const AnnounceCandidacyModal = () => {
         })
       }
 
-      if (feeInfo) {
-        return send(feeInfo.canAfford ? 'NEXT' : 'FAIL')
+      if (feeInfo && Object.keys(balances).length) {
+        const areFundsSufficient = feeInfo.canAfford && hasRequiredStake
+        send(areFundsSufficient ? 'NEXT' : 'FAIL')
       }
-    }
-
-    if (state.matches('requiredStakeVerification')) {
-      return send(hasRequiredStake ? 'NEXT' : 'FAIL')
     }
 
     if (state.matches('beforeTransaction')) {
@@ -219,28 +217,16 @@ export const AnnounceCandidacyModal = () => {
       // wrong account
       return feeInfo?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
-  }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake, stakingStatus])
+  }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake, stakingStatus, Object.keys(balances).length])
 
-  if (!api || !activeMember || !feeTransaction || !feeInfo) {
+  if (!api || !activeMember || !transaction || !feeInfo) {
     return null
   }
 
   if (state.matches('requirementsFailed')) {
-    return (
-      <InsufficientFundsModal
-        onClose={hideModal}
-        address={activeMember.controllerAccount}
-        amount={feeInfo.transactionFee}
-      />
-    )
-  }
-
-  if (state.matches('requiredStakeFailed')) {
     showModal<MoveFundsModalCall>({
       modal: 'MoveFundsModal',
       data: {
-        accountsWithCompatibleLocks,
-        accountsWithTransferableBalance,
         requiredStake: constants?.election.minCandidacyStake ?? BN_ZERO,
         lock: 'Council Candidate',
       },
@@ -336,28 +322,22 @@ export const AnnounceCandidacyModal = () => {
           </StepperBody>
         </StepperProposalWrapper>
       </StepperModalBody>
-      <ModalFooter twoColumns>
-        <ButtonsGroup align="left">
-          {!state.matches('staking') && (
-            <ButtonGhost onClick={() => send('BACK')} size="medium">
-              <Arrow direction="left" />
-              Previous step
-            </ButtonGhost>
-          )}
-        </ButtonsGroup>
-        <ButtonsGroup align="right">
-          {state.matches('candidateProfile.summaryAndBanner') && (
+      <ModalTransactionFooter
+        next={{
+          disabled: !form.formState.isValid,
+          label: isLastStepActive(getSteps(service)) ? 'Announce candidacy' : 'Next step',
+          onClick: () => send('NEXT'),
+        }}
+        prev={state.matches('staking') ? { onClick: () => send('BACK') } : undefined}
+        extraButtons={
+          state.matches('candidateProfile.summaryAndBanner') && (
             <PreviewButtons
               candidate={getCandidateForPreview(form.getValues() as AnnounceCandidacyFrom, activeMember)}
               disabled={!form.formState.isValid}
             />
-          )}
-          <ButtonPrimary disabled={!form.formState.isValid} onClick={() => send('NEXT')} size="medium">
-            {isLastStepActive(getSteps(service)) ? 'Announce candidacy' : 'Next step'}
-            <Arrow direction="right" />
-          </ButtonPrimary>
-        </ButtonsGroup>
-      </ModalFooter>
+          )
+        }
+      />
     </Modal>
   )
 }

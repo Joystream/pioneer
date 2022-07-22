@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { TransactionContext, UseTransaction } from '@/common/providers/transaction/context'
+import { TransactionStatusContext, UseTransaction } from '@/common/providers/transactionStatus/context'
 
 import { Row, TemplateBlock } from '../storybookParts/previewStyles'
 
@@ -16,7 +16,7 @@ export default {
 } as Meta
 
 const Template: Story<UseTransaction> = (args) => (
-  <TransactionContext.Provider value={{ ...args }}>
+  <TransactionStatusContext.Provider value={{ ...args }}>
     <TemplateBlock>
       <Row>
         <TransactionButton style="primary" size="large">
@@ -30,7 +30,7 @@ const Template: Story<UseTransaction> = (args) => (
         </TransactionButton>
       </Row>
     </TemplateBlock>
-  </TransactionContext.Provider>
+  </TransactionStatusContext.Provider>
 )
 
 export const Buttons = Template.bind({})

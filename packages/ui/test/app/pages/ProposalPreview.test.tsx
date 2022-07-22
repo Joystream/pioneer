@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { render, screen, waitForElementToBeRemoved, within } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
@@ -7,6 +6,7 @@ import { Route, Router } from 'react-router-dom'
 
 import { ProposalPreview } from '@/app/pages/Proposals/ProposalPreview'
 import { CKEditorProps } from '@/common/components/CKEditor'
+import { createType } from '@/common/model/createType'
 import { ApiContext } from '@/common/providers/api/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'

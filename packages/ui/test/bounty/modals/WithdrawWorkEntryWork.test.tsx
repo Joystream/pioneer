@@ -28,6 +28,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 const bounty = bounties[0]
 const baseEntry = entries[1]
@@ -85,6 +86,8 @@ describe('UI: WithdrawWorkEntryModal', () => {
   beforeEach(async () => {
     stubDefaultBalances(api)
     tx = stubTransaction(api, txPath)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+    mockedTransactionFee.transaction = tx as any
   })
 
   it('Renders', async () => {
@@ -95,7 +98,7 @@ describe('UI: WithdrawWorkEntryModal', () => {
   })
 
   it('Insufficient funds', async () => {
-    stubTransaction(api, txPath, 99999)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
 
     renderModal()
 

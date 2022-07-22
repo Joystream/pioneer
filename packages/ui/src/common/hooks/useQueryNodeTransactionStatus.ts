@@ -1,4 +1,4 @@
-import { Hash } from '@joystream/types/common'
+import { Hash } from '@polkadot/types/interfaces/runtime'
 import { useEffect, useState } from 'react'
 
 import { info } from '../logger'

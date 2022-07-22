@@ -14,10 +14,10 @@ export const useUserBountiesStatistics = (memberId: string) => {
   const statistics = useMemo(() => {
     const amountEarned = data?.bountyEntries.reduce((prev, current) => {
       if (current.status.__typename === 'BountyEntryStatusWinner') {
-        return prev + current.status.reward
+        return prev.add(new BN(current.status.reward))
       }
       return prev
-    }, 0)
+    }, BN_ZERO)
 
     const amountContributed = data?.bountyContributions.reduce(
       (prev, current) => prev.add(new BN(current.amount)),

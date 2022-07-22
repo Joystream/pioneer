@@ -1,11 +1,9 @@
 import BN from 'bn.js'
-import React, { useCallback, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import { SelectAccount } from '@/accounts/components/SelectAccount'
-import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
+import { SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
-import { Account } from '@/accounts/types'
 import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
@@ -30,11 +28,6 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
     return Object.entries(balances).some(([, balance]) => balance.transferable.gte(stake ?? minStake))
   }, [stake?.toString(), JSON.stringify(balances)])
 
-  const accountsFilter = useCallback(
-    (account: Account) => filterByRequiredStake(stake ?? minStake, 'Council Candidate', balances[account.address]),
-    [(stake ?? minStake).toString(), JSON.stringify(balances)]
-  )
-
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -55,13 +48,16 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
             disabled={!isSomeBalanceGteStake}
             message={errorChecker('account') ? errorMessageGetter('account') : undefined}
             validation={errorChecker('account') ? 'invalid' : undefined}
+            tooltipText={
+              <>
+                When losing an election, your candidacy lock is removed and your steak becomes immediately recoverable.
+                If you win and get elected, your candidacy lock will be automatically removed, and a council specific
+                lock will be applied, with the same amount locked. When that council is replaced, this lock is removed,
+                if you did not get re-elected
+              </>
+            }
           >
-            <SelectAccount
-              name="staking.account"
-              minBalance={stake}
-              filter={accountsFilter}
-              disabled={!isSomeBalanceGteStake}
-            />
+            <SelectStakingAccount name="staking.account" minBalance={minStake} lockType="Council Candidate" />
           </InputComponent>
           <RowGapBlock gap={8}>
             <h4>2. Stake</h4>

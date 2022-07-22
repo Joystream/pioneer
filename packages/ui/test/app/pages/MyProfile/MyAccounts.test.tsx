@@ -149,12 +149,12 @@ describe('Page: MyAccounts', () => {
     })
 
     it('Nonrecoverable', async () => {
-      stubBalances(api, { locked: 250, available: 10_000, lockId: 'Storage Worker' })
+      stubBalances(api, { locked: 250, available: 10_000, lockId: 'Bound Staking Account' })
 
       renderPage()
 
       fireEvent.click(await screen.findByText(/alice/i))
-      await screen.findByText(/Storage Worker/i)
+      await screen.findByText(/Bound Staking Account/i)
 
       expect(await queryButton(/^recover$/i)).not.toBeDefined()
     })

@@ -11,7 +11,7 @@ import { PastCouncilProposalsItem } from '@/council/components/pastCouncil/PastC
 import { PastCouncilTabsHeaders } from '@/council/components/pastCouncil/PastCouncilTabs'
 import { PastCouncilMember } from '@/council/types/PastCouncilMember'
 import { MemberInfo } from '@/memberships/components'
-import { CountInfo } from '@/memberships/components/MemberListItem/Fileds'
+import { CountInfo } from '@/memberships/components/MemberListItem/Fields'
 
 interface Props {
   councilMember: PastCouncilMember

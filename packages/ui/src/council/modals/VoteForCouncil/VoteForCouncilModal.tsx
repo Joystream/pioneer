@@ -1,11 +1,11 @@
 import { useMachine } from '@xstate/react'
-import React, { useEffect, useMemo } from 'react'
+import BN from 'bn.js'
+import React, { useEffect } from 'react'
 
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
+import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
-import { LockType } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
 import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
@@ -27,18 +27,19 @@ export const VoteForCouncilModal = () => {
   const { api } = useApi()
 
   const { active: activeMember } = useMyMemberships()
+  const balances = useMyBalances()
 
   const constants = useCouncilConstants()
   const minStake = constants?.election.minVoteStake
   const requiredStake = minStake ?? BN_ZERO
 
-  const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
-    requiredStake,
-    'Voting'
-  )
+  const { hasRequiredStake } = useHasRequiredStake(requiredStake, 'Voting')
 
-  const transaction = useMemo(() => api?.tx.referendum.vote('', requiredStake), [requiredStake])
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { feeInfo } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => api?.tx.referendum.vote('', requiredStake),
+    [requiredStake]
+  )
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
@@ -50,19 +51,13 @@ export const VoteForCouncilModal = () => {
             originalModalData: modalData,
           },
         })
-      } else if (!hasRequiredStake) {
-        const data = {
-          accountsWithCompatibleLocks,
-          accountsWithTransferableBalance,
-          requiredStake,
-          lock: 'Voting' as LockType,
-        }
-        showModal<MoveFundsModalCall>({ modal: 'MoveFundsModal', data })
-      } else if (feeInfo) {
-        send(feeInfo.canAfford ? 'PASS' : 'FAIL')
+      }
+      if (feeInfo && Object.keys(balances).length) {
+        const areFundsSufficient = feeInfo.canAfford && hasRequiredStake
+        send(areFundsSufficient ? 'PASS' : 'FAIL')
       }
     }
-  }, [state.value, activeMember?.id, hasRequiredStake, feeInfo?.canAfford])
+  }, [state.value, activeMember?.id, hasRequiredStake, feeInfo?.canAfford, Object.keys(balances).length])
 
   if (state.matches('success')) {
     return <VoteForCouncilSuccessModal onClose={hideModal} candidateId={modalData.id} />
@@ -79,13 +74,15 @@ export const VoteForCouncilModal = () => {
   }
 
   if (state.matches('requirementsFailed')) {
-    return (
-      <InsufficientFundsModal
-        onClose={hideModal}
-        address={activeMember.controllerAccount}
-        amount={feeInfo.transactionFee}
-      />
-    )
+    showModal<MoveFundsModalCall>({
+      modal: 'MoveFundsModal',
+      data: {
+        requiredStake,
+        lock: 'Voting',
+      },
+    })
+
+    return null
   } else if (state.matches('stake')) {
     return <VoteForCouncilFormModal minStake={minStake} send={send} state={state as VoteForCouncilMachineState} />
   } else if (state.matches('transaction')) {

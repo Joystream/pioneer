@@ -12,14 +12,14 @@ export const getMessage = (fee?: BN) => {
 }
 
 export const toMemberTransactionParams = (formData: MemberFormFields) => ({
-  inviting_member_id: formData.invitor?.id,
-  root_account: formData.rootAccount?.address,
-  controller_account: formData.controllerAccount?.address,
+  invitingMemberId: formData.invitor?.id,
+  rootAccount: formData.rootAccount?.address,
+  controllerAccount: formData.controllerAccount?.address,
   handle: formData.handle,
   metadata: metadataToBytes(MembershipMetadata, {
     name: formData.name,
     about: formData.about,
     avatarUri: formData.avatarUri,
   }),
-  referrer_id: formData.referrer?.id,
+  referrerId: formData.referrer?.id,
 })

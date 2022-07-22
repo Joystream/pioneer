@@ -35,13 +35,15 @@ export const ClaimRewardModal = () => {
     [activeMember?.id]
   )
 
-  const transaction = useMemo(() => {
-    if (api && connectionState === 'connected' && activeMember && entry) {
-      return api.tx.bounty.withdrawWorkEntrantFunds(activeMember.id, bounty.id, entry.id)
-    }
-  }, [activeMember?.id, entry?.id, connectionState])
-
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { transaction, feeInfo } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => {
+      if (api && connectionState === 'connected' && activeMember && entry) {
+        return api.tx.bounty.withdrawWorkEntrantFunds(activeMember.id, bounty.id, entry.id)
+      }
+    },
+    [activeMember?.id, entry?.id, connectionState]
+  )
 
   const requirementsVerified = transaction && feeInfo && activeMember && entry?.reward && api
 

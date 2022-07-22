@@ -1,5 +1,4 @@
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react'
 import BN from 'bn.js'
@@ -7,12 +6,14 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
 
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
-import {CurrencyName} from '@/app/constants/currency';
+import { CurrencyName } from '@/app/constants/currency'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { camelCaseToText } from '@/common/helpers'
+import { createType } from '@/common/model/createType'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
@@ -57,6 +58,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 const QUESTION_INPUT = OpeningMetadata.ApplicationFormQuestion.InputType
 
@@ -108,21 +110,21 @@ const APPLICATION_DATA = {
 describe('AddNewProposalModal types parameters', () => {
   describe('Specific parameters', () => {
     describe('createWorkingGroupLeadOpening', () => {
-      const result = createType('ProposalDetailsOf', {
+      const result = createType('PalletProposalsCodexProposalDetails', {
         CreateWorkingGroupLeadOpening: {
           description: 'Dolor deserunt adipisicing velit et.',
-          stake_policy: {
-            stake_amount: new BN(100),
-            leaving_unstaking_period: 10,
+          stakePolicy: {
+            stakeAmount: new BN(100),
+            leavingUnstakingPeriod: 10,
           },
-          reward_per_block: 10,
-          working_group: 'Forum',
+          rewardPerBlock: 10,
+          group: 'Forum',
         },
       })
 
       it('Stake policy', () => {
-        const stakePolicy = result.asCreateWorkingGroupLeadOpening.stake_policy.toJSON()
-        expect(stakePolicy).toEqual({ stake_amount: 100, leaving_unstaking_period: 10 })
+        const stakePolicy = result.asCreateWorkingGroupLeadOpening.stakePolicy.toJSON()
+        expect(stakePolicy).toEqual({ stakeAmount: 100, leavingUnstakingPeriod: 10 })
       })
     })
   })
@@ -179,6 +181,8 @@ describe('UI: AddNewProposalModal', () => {
   })
 
   beforeEach(async () => {
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
 
@@ -192,8 +196,8 @@ describe('UI: AddNewProposalModal', () => {
     stubQuery(
       api,
       'members.stakingAccountIdMemberStatus',
-      createType('StakingAccountMemberBinding', {
-        member_id: 0,
+      createType('PalletMembershipStakingAccountMemberBinding', {
+        memberId: 0,
         confirmed: false,
       })
     )
@@ -217,14 +221,6 @@ describe('UI: AddNewProposalModal', () => {
         modal: 'SwitchMember',
         data: { originalModalName: 'AddNewProposalModal' },
       })
-    })
-
-    it('Insufficient funds', async () => {
-      stubTransaction(api, 'api.tx.utility.batch', 10000)
-
-      const { findByText } = renderModal()
-
-      expect(await findByText('modals.insufficientFunds.title')).toBeDefined()
     })
   })
 
@@ -292,10 +288,19 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       it('Not enough funds', async () => {
-        stubProposalConstants(api, { requiredStake: 9999 })
+        const requiredStake = 9999
+        stubProposalConstants(api, { requiredStake })
         await finishProposalType()
 
-        expect(screen.queryByText('Creating new proposal')).toBeNull()
+        const moveFundsModalCall: MoveFundsModalCall = {
+          modal: 'MoveFundsModal',
+          data: {
+            requiredStake: new BN(requiredStake),
+            lock: 'Proposals',
+          },
+        }
+
+        expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
       })
 
       it('Enough funds', async () => {
@@ -485,7 +490,7 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.Signal.fillSignal(signal)
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
-          const parameters = txSpecificParameters.asSignal.toJSON()
+          const parameters = txSpecificParameters.asSignal.toHuman()
           expect(parameters).toEqual(signal)
           const button = await getCreateButton()
           expect(button).toBeEnabled()
@@ -673,9 +678,9 @@ describe('UI: AddNewProposalModal', () => {
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
           const parameters = txSpecificParameters.asTerminateWorkingGroupLead.toJSON()
           expect(parameters).toEqual({
-            slashing_amount: slashingAmount,
-            worker_id: Number(forumLeadId?.split('-')[1]),
-            working_group: group,
+            slashingAmount: slashingAmount,
+            workerId: Number(forumLeadId?.split('-')[1]),
+            group,
           })
 
           expect(button).not.toBeDisabled()
@@ -778,12 +783,12 @@ describe('UI: AddNewProposalModal', () => {
 
           const { description: metadata, ...data } = txSpecificParameters.asCreateWorkingGroupLeadOpening.toJSON()
           expect(data).toEqual({
-            reward_per_block: step4.rewardPerBlock,
-            stake_policy: {
-              stake_amount: step4.stake,
-              leaving_unstaking_period: step4.unstakingPeriod,
+            rewardPerBlock: step4.rewardPerBlock,
+            stakePolicy: {
+              stakeAmount: step4.stake,
+              leavingUnstakingPeriod: step4.unstakingPeriod,
             },
-            working_group: step1.group,
+            group: step1.group,
           })
 
           expect(metadataFromBytes(OpeningMetadata, metadata)).toEqual({
@@ -1017,9 +1022,9 @@ describe('UI: AddNewProposalModal', () => {
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
           const parameters = txSpecificParameters.asFillWorkingGroupLeadOpening.toJSON()
           expect(parameters).toEqual({
-            opening_id: 1337,
-            successful_application_id: 1337,
-            working_group: 'Forum',
+            openingId: 1337,
+            applicationId: 1337,
+            workingGroup: 'Forum',
           })
           expect(await getCreateButton()).toBeEnabled()
         })
@@ -1061,7 +1066,7 @@ describe('UI: AddNewProposalModal', () => {
       })
       describe('Type - Set Initial Invitation Balance', () => {
         beforeAll(() => {
-          stubQuery(api, 'members.initialInvitationBalance', createType('Balance',2137))
+          stubQuery(api, 'members.initialInvitationBalance', createType('Balance', 2137))
         })
 
         beforeEach(async () => {
@@ -1180,13 +1185,25 @@ describe('UI: AddNewProposalModal', () => {
       it('Fee fail before transaction', async () => {
         await finishWarning()
         await finishProposalType('fundingRequest')
+        const requiredStake = 10
+        stubProposalConstants(api, { requiredStake })
         stubTransaction(api, 'api.tx.utility.batch', 10000)
+        mockedTransactionFee.feeInfo = { transactionFee: new BN(10000), canAfford: false }
+
         await finishStakingAccount()
         await finishProposalDetails()
         await finishTriggerAndDiscussion()
         await SpecificParameters.FundingRequest.finish(100, 'bob')
 
-        expect(await screen.findByText('modals.insufficientFunds.title')).toBeInTheDocument()
+        const moveFundsModalCall: MoveFundsModalCall = {
+          modal: 'MoveFundsModal',
+          data: {
+            requiredStake: new BN(requiredStake),
+            lock: 'Proposals',
+          },
+        }
+
+        expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
       })
 
       describe('Staking account not bound nor staking candidate', () => {
@@ -1201,7 +1218,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Bind account step', async () => {
           expect(await screen.findByText('You intend to bind account for staking')).toBeDefined()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('42.0')
+          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('42')
         })
 
         it('Bind account failure', async () => {
@@ -1222,7 +1239,7 @@ describe('UI: AddNewProposalModal', () => {
           })
 
           expect(await screen.findByText(/You intend to create a proposa/i)).toBeDefined()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25.0')
+          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
         })
 
         it('Create proposal success', async () => {
@@ -1259,8 +1276,8 @@ describe('UI: AddNewProposalModal', () => {
           stubQuery(
             api,
             'members.stakingAccountIdMemberStatus',
-            createType('StakingAccountMemberBinding', {
-              member_id: createType('MemberId', 0),
+            createType('PalletMembershipStakingAccountMemberBinding', {
+              memberId: createType('MemberId', 0),
               confirmed: createType('bool', false),
             })
           )
@@ -1276,7 +1293,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Create proposal step', async () => {
           expect(await screen.findByText(/You intend to create a proposa/i)).not.toBeNull()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25.0')
+          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
         })
 
         it('Create proposal success', async () => {
@@ -1305,8 +1322,8 @@ describe('UI: AddNewProposalModal', () => {
           stubQuery(
             api,
             'members.stakingAccountIdMemberStatus',
-            createType('StakingAccountMemberBinding', {
-              member_id: createType('MemberId', 0),
+            createType('PalletMembershipStakingAccountMemberBinding', {
+              memberId: createType('MemberId', 0),
               confirmed: createType('bool', true),
             })
           )
@@ -1322,7 +1339,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Create proposal step', async () => {
           expect(await screen.findByText(/You intend to create a proposa/i)).not.toBeNull()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25.0')
+          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
         })
 
         it('Create proposal success', async () => {
@@ -1374,8 +1391,8 @@ describe('UI: AddNewProposalModal', () => {
         stubQuery(
           api,
           'members.stakingAccountIdMemberStatus',
-          createType('StakingAccountMemberBinding', {
-            member_id: createType('MemberId', 0),
+          createType('PalletMembershipStakingAccountMemberBinding', {
+            memberId: createType('MemberId', 0),
             confirmed: createType('bool', true),
           })
         )

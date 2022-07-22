@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { ButtonGhost } from '@/common/components/buttons'
-import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { Arrow } from '@/common/components/icons'
+
+import { LockInternalLinkButton, LockExternalLinkButton } from './styles'
 
 interface LockLinkButtonProps {
   label: string
@@ -12,14 +12,14 @@ interface LockLinkButtonProps {
 
 export const LockLinkButton = React.memo(({ label, to, onClick }: LockLinkButtonProps) => {
   return to ? (
-    <LinkButtonGhost size="medium" to={to}>
+    <LockInternalLinkButton size="medium" to={to}>
       {label}
       <Arrow direction="right" />
-    </LinkButtonGhost>
+    </LockInternalLinkButton>
   ) : (
-    <ButtonGhost size="medium" onClick={onClick}>
+    <LockExternalLinkButton size="medium" onClick={onClick}>
       {label}
       <Arrow direction="right" />
-    </ButtonGhost>
+    </LockExternalLinkButton>
   )
 })

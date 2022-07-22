@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
@@ -8,6 +7,7 @@ import React from 'react'
 import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { createType } from '@/common/model/createType'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
@@ -26,6 +26,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 describe('UI: RecoverBalanceModal', () => {
   let useAccounts: UseAccounts
@@ -55,6 +56,8 @@ describe('UI: RecoverBalanceModal', () => {
     stubDefaultBalances(api)
     useMyMemberships.setActive(getMember('alice'))
     tx = stubTransaction(api, 'api.tx.council.releaseCandidacyStake')
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+    mockedTransactionFee.transaction = tx as any
     useAccounts = {
       isLoading: false,
       hasAccounts: true,
@@ -76,7 +79,7 @@ describe('UI: RecoverBalanceModal', () => {
   })
 
   it('Insufficient funds', async () => {
-    tx = stubTransaction(api, 'api.tx.council.releaseCandidacyStake', 10_000)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
 
     renderModal()
 

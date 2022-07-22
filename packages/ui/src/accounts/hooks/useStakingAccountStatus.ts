@@ -23,7 +23,7 @@ export const useStakingAccountStatus = (address?: string, memberId?: string): St
     return 'free'
   }
 
-  if (!stakingAccountInfo.member_id.eq(parseInt(memberId ?? '-1'))) {
+  if (!stakingAccountInfo.memberId.eq(String(memberId ?? '-1'))) {
     return 'other'
   }
 
