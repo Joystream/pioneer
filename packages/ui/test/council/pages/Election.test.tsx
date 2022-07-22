@@ -188,7 +188,7 @@ describe('UI: Election page', () => {
             })
 
             expect(queryAllByText(/newcomer/i).length).toBe(1)
-            expect(queryAllByText(/my stake/i).length).toBe(1)
+            expect(queryAllByText(/Staked/i).length).toBe(1)
             expect(await getButton(/^Withdraw Candidacy/)).toBeDefined()
           })
         })
