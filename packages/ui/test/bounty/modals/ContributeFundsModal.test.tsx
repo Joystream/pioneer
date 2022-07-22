@@ -24,6 +24,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 const [baseBounty] = bounties
 const bounty = {
@@ -84,6 +85,8 @@ describe('UI: ContributeFundsModal', () => {
 
   beforeEach(() => {
     transaction = stubTransaction(api, 'api.tx.bounty.fundBounty', fee)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(fee), canAfford: true }
+    mockedTransactionFee.transaction = transaction as any
     renderResult = render(<Modal />)
   })
 
@@ -92,7 +95,8 @@ describe('UI: ContributeFundsModal', () => {
   })
 
   it('Insufficient funds', async () => {
-    stubTransaction(api, 'api.tx.bounty.fundBounty', 99999)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
+
     renderResult.unmount()
     render(<Modal />)
 
@@ -105,7 +109,7 @@ describe('UI: ContributeFundsModal', () => {
 
   it('Displays correct transaction fee', () => {
     const expected = String(fee)
-    const valueContainer = screen.getByText('modals.common.transactionFee.label')?.nextSibling
+    const valueContainer = screen.getByText('modals.transactionFee.label')?.nextSibling
 
     expect(valueContainer?.textContent).toBe(expected)
   })

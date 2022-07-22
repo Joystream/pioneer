@@ -28,12 +28,12 @@ export const DeleteThreadModal = () => {
   } = useModal<DeleteThreadModalCall>()
 
   const [state, send] = useMachine(defaultTransactionModalMachine, { context: { validateBeforeTransaction: true } })
-  const { api, connectionState } = useApi()
+  const { api, isConnected } = useApi()
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
 
   const transaction = useMemo(() => {
-    if (api && connectionState === 'connected') {
+    if (api && isConnected) {
       return api.tx.forum.deleteThread(
         createType('ForumUserId', Number.parseInt(thread.authorId)),
         createType('CategoryId', Number.parseInt(thread.categoryId)),
@@ -41,9 +41,9 @@ export const DeleteThreadModal = () => {
         true
       )
     }
-  }, [api, connectionState])
+  }, [thread.authorId, thread.categoryId, thread.id, isConnected])
 
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {

@@ -12,7 +12,7 @@ export interface UseTransaction {
   setService: (service: ActorRef<TransactionEvent, State<TxContext>>) => void
 }
 
-export const TransactionContext = createContext<UseTransaction>({
+export const TransactionStatusContext = createContext<UseTransaction>({
   isTransactionPending: false,
   status: null,
   transactionEvents: null,

@@ -1,7 +1,9 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 import { generatePath, MemoryRouter, Route } from 'react-router-dom'
 
+import { Account } from '@/accounts/types'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
 import { ApiContext } from '@/common/providers/api/context'
@@ -25,6 +27,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
@@ -32,6 +35,14 @@ jest.mock('@/common/components/CKEditor', () => ({
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
+const mockMyAccounts = {
+  allAccounts: [] as Account[],
+}
+
+jest.mock('@/accounts/hooks/useMyAccounts', () => ({
+  useMyAccounts: () => mockMyAccounts,
 }))
 
 describe('CreateThreadModal', () => {
@@ -65,7 +76,10 @@ describe('CreateThreadModal', () => {
   beforeEach(async () => {
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
+    mockMyAccounts.allAccounts.push({ name: 'alice', address: getMember('alice').controllerAccount })
     tx = stubTransaction(api, txPath)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }
+
     stubDeposits()
   })
 
@@ -83,7 +97,7 @@ describe('CreateThreadModal', () => {
     })
 
     it('Insufficient funds for minimum fee', async () => {
-      tx = stubTransaction(api, txPath, 10_000)
+      mockedTransactionFee.feeInfo = { transactionFee: new BN(10000), canAfford: false }
       renderModal()
       expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
     })
@@ -166,7 +180,7 @@ describe('CreateThreadModal', () => {
       fireEvent.click(next)
 
       expect(screen.getByText(/^Thread creation and initial post deposit:/i)?.nextSibling?.textContent).toBe('205')
-      expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('101')
+      expect(screen.getByText(/^modals.transactionFee.label/i)?.nextSibling?.textContent).toBe('101')
     })
 
     it('Transaction failure', async () => {
@@ -174,7 +188,7 @@ describe('CreateThreadModal', () => {
       await fillAndProceed()
       fireEvent.click(await getButton(/sign and send/i))
 
-      expect(await screen.findByText(/failure/i)).toBeDefined()
+      expect(await screen.findByText(/Failure/i)).toBeDefined()
     })
 
     it('Transaction success', async () => {
@@ -188,9 +202,15 @@ describe('CreateThreadModal', () => {
     it('Proceed to thread on success', async () => {
       stubTransactionSuccess(tx, 'forum', 'ThreadCreated', [createType('CategoryId', 0), createType('ThreadId', 1337)])
       await fillAndProceed()
-      fireEvent.click(await getButton(/sign and send/i))
-      fireEvent.click(await getButton(/see my thread/i))
+      await act(async () => {
+        fireEvent.click(await getButton(/sign and send/i))
+      })
 
+      expect(await screen.findByText(/success!/i)).toBeDefined()
+
+      await act(async () => {
+        fireEvent.click(await getButton(/see my thread/i))
+      })
       expect(pathname).toEqual(generatePath(ForumRoutes.thread, { id: '1337' }))
     })
   })

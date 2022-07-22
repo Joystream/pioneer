@@ -16,16 +16,14 @@ export const TransactionStatus = () => {
 
   useEffect(() => {
     if (!status) {
-      setVisible(false)
-    }
-
-    if (status === 'signWithExtension') {
-      setVisible(true)
+      return setVisible(false)
     }
 
     if (status === 'success') {
       const timeout = setTimeout(() => setVisible(false), HIDE_STATUS_TIMEOUT)
       return () => clearTimeout(timeout)
+    } else {
+      setVisible(true)
     }
   }, [status])
 

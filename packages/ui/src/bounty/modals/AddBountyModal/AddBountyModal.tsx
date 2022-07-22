@@ -24,10 +24,8 @@ import {
 } from '@/bounty/modals/AddBountyModal/helpers'
 import { addBountyMachine, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
-import { Arrow } from '@/common/components/icons'
-import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
 import { TokenValue } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
@@ -224,21 +222,14 @@ export const AddBountyModal = () => {
           </StepperBody>
         </AddBountyModalWrapper>
       </StepperModalBody>
-      <ModalFooter>
-        <ButtonsGroup align="left">
-          {!state.matches(AddBountyStates.generalParameters) && (
-            <ButtonGhost onClick={() => send('BACK')} size="medium">
-              <Arrow direction="left" />
-              Previous step
-            </ButtonGhost>
-          )}
-        </ButtonsGroup>
-        <ButtonsGroup align="right">
-          <ButtonPrimary disabled={!form.formState.isValid} onClick={() => send('NEXT')} size="medium">
-            {isLastStepActive(getSteps(service)) ? 'Create bounty' : 'Next step'}
-          </ButtonPrimary>
-        </ButtonsGroup>
-      </ModalFooter>
+      <ModalTransactionFooter
+        prev={{ disabled: state.matches(AddBountyStates.generalParameters), onClick: () => send('BACK') }}
+        next={{
+          disabled: !form.formState.isValid,
+          label: isLastStepActive(getSteps(service)) ? 'Create bounty' : 'Next step',
+          onClick: () => send('NEXT'),
+        }}
+      />
     </Modal>
   )
 }

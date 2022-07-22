@@ -7,11 +7,10 @@ import { AuthorizationModal } from '@/bounty/modals/CancelBountyModal/components
 import { SuccessModal } from '@/bounty/modals/CancelBountyModal/components/SuccessModal'
 import { bountyCancelMachine, BountyCancelStates } from '@/bounty/modals/CancelBountyModal/machine'
 import { BountyCancelModalCall } from '@/bounty/modals/CancelBountyModal/types'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer } from '@/common/components/forms'
 import { FileIcon } from '@/common/components/icons'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { Modal, ModalBody, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
@@ -87,11 +86,9 @@ export const BountyCancelModal = () => {
           />
         </BodyContainer>
       </ModalBody>
-      <ModalFooter>
-        <ButtonPrimary size="medium" onClick={() => send('NEXT')}>
-          {t('modals.bountyCancel.authorization.button')}
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        next={{ onClick: () => send('NEXT'), label: t('modals.bountyCancel.authorization.button') }}
+      />
     </Modal>
   )
 }

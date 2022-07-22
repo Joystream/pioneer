@@ -1,8 +1,22 @@
 import '@testing-library/jest-dom'
 import BN from 'bn.js'
 
+import { BN_ZERO } from '@/common/constants'
+import { UseTransaction } from '@/common/providers/transactionFees/context'
+
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
+export const mockedTransactionFee: UseTransaction = {
+  transaction: undefined,
+  setTransaction: () => undefined,
+  setSigner: () => undefined,
+  feeInfo: { transactionFee: BN_ZERO, canAfford: true },
+}
+
+jest.mock('@/accounts/hooks/useTransactionFee', () => ({
+  useTransactionFee: jest.fn(() => mockedTransactionFee),
 }))
 
 declare global {

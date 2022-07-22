@@ -11,11 +11,9 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
 import { Api } from '@/api/types'
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Checkbox } from '@/common/components/forms'
-import { Arrow } from '@/common/components/icons'
-import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import {
   StepDescriptionColumn,
   Stepper,
@@ -191,7 +189,7 @@ export const AddNewProposalModal = () => {
     }
   }, [state.value, connectionState, stakingStatus, form.formState.isValidating])
 
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
@@ -362,27 +360,21 @@ export const AddNewProposalModal = () => {
           </StyledStepperBody>
         </StepperProposalWrapper>
       </StepperModalBody>
-      <ModalFooter twoColumns>
-        <StyledButtonsGroup align="left">
-          {!state.matches('proposalType') && (
-            <ButtonGhost onClick={goToPrevious} size="medium">
-              <Arrow direction="left" />
-              Previous step
-            </ButtonGhost>
-          )}
-        </StyledButtonsGroup>
-        <ButtonsGroup align="right">
-          {isExecutionError && (
-            <Checkbox isRequired onChange={setWarningAccepted} id="execution-requirement">
-              I understand the implications of overriding the execution constraints validation.
-            </Checkbox>
-          )}
-          <ButtonPrimary disabled={shouldDisableNext} onClick={() => send('NEXT')} size="medium">
-            {isLastStepActive(getSteps(service)) ? 'Create proposal' : 'Next step'}
-            <Arrow direction="right" />
-          </ButtonPrimary>
-        </ButtonsGroup>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={isLastStepActive(getSteps(service)) ? feeInfo.transactionFee : undefined}
+        prev={{ disabled: state.matches('proposalType'), onClick: goToPrevious }}
+        next={{
+          disabled: shouldDisableNext,
+          label: isLastStepActive(getSteps(service)) ? 'Create proposal' : 'Next step',
+          onClick: () => send('NEXT'),
+        }}
+      >
+        {isExecutionError && (
+          <Checkbox isRequired onChange={setWarningAccepted} id="execution-requirement">
+            I understand the implications of overriding the execution constraints validation.
+          </Checkbox>
+        )}
+      </ModalTransactionFooter>
     </Modal>
   )
 }
@@ -394,8 +386,4 @@ export const StepperProposalWrapper = styled(StepperModalWrapper)`
 const StyledStepperBody = styled(StepperBody)`
   flex-direction: column;
   row-gap: 20px;
-`
-
-const StyledButtonsGroup = styled(ButtonsGroup)`
-  min-width: max-content;
 `

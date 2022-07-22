@@ -166,7 +166,9 @@ describe('UI: TransferModal', () => {
     fireEvent.click(button)
 
     expect(await screen.findByText(/modals.authorizeTransaction.title/i)).toBeDefined()
-    expect((await screen.findByText(/Transaction fee:/i))?.parentNode?.textContent).toMatch(/^Transaction fee:25/)
+    expect((await screen.findByText(/modals.transactionFee.label/i))?.parentNode?.textContent).toMatch(
+      /^modals.transactionFee.label25/
+    )
   })
 
   it('Calls transaction from factory', async () => {

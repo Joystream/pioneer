@@ -27,7 +27,7 @@ export const EditPostModal = () => {
   const { active } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
 
-  const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
+  const { feeInfo } = useTransactionFee(active?.controllerAccount, () => transaction)
 
   const hideModalWithAction = (isSuccess?: boolean) => {
     if (isSuccess) {

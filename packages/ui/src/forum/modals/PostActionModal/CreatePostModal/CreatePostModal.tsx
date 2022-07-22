@@ -38,7 +38,7 @@ export const CreatePostModal = () => {
   const { api } = useApi()
 
   const postDeposit = api?.consts[module].postDeposit.toBn()
-  const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
+  const { feeInfo } = useTransactionFee(active?.controllerAccount, () => transaction)
   const requiredAmount = useMemo(
     () => feeInfo && api && feeInfo.transactionFee.add(postDeposit ?? BN_ZERO),
     [feeInfo, postDeposit]

@@ -25,6 +25,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -70,6 +71,8 @@ describe('UI: ClaimRewardModal', () => {
     useMyMemberships.setActive(getMember('alice'))
     stubDefaultBalances(api)
     tx = stubTransaction(api, txPath)
+    mockedTransactionFee.transaction = tx as any
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }
   })
 
   it('Requirements passed', async () => {
@@ -81,7 +84,7 @@ describe('UI: ClaimRewardModal', () => {
   })
 
   it('Requirements failed', async () => {
-    tx = stubTransaction(api, txPath, 10000)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: false }
     renderModal()
 
     expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()

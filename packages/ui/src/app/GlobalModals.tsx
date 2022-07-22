@@ -24,6 +24,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
 import { ModalName } from '@/common/providers/modal/types'
+import { TransactionFeesProvider } from '@/common/providers/transactionFees/provider'
 import { AnnounceCandidacyModal, AnnounceCandidateModalCall } from '@/council/modals/AnnounceCandidacy'
 import { CandidacyPreview } from '@/council/modals/CandidacyPreview/CandidacyPreview'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
@@ -41,6 +42,7 @@ import { EditPostModal, EditPostModalCall } from '@/forum/modals/PostActionModal
 import { PostHistoryModal, PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { MemberModalCall, MemberProfile } from '@/memberships/components/MemberProfile'
 import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals/BuyMembershipModal'
+import { DisconnectWalletModal, DisconnectWalletModalCall } from '@/memberships/modals/DisconnectWalletModal'
 import { SignOutModal } from '@/memberships/modals/SignOutModal/SignOutModal'
 import { SignOutModalCall } from '@/memberships/modals/SignOutModal/types'
 import { SwitchMemberModal, SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -100,6 +102,7 @@ export type ModalNames =
   | ModalName<SubmitJudgementModalCall>
   | ModalName<BountyWithdrawWorkEntryModalCall>
   | ModalName<SignOutModalCall>
+  | ModalName<DisconnectWalletModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -143,6 +146,7 @@ const modals: Record<ModalNames, ReactElement> = {
   WithdrawStakeModal: <WithdrawStakeModal />,
   SubmitJudgementModal: <SubmitJudgementModal />,
   SignOut: <SignOutModal />,
+  DisconnectWallet: <DisconnectWalletModal />,
 }
 
 export const GlobalModals = () => {
@@ -152,10 +156,10 @@ export const GlobalModals = () => {
 
   if (Modal) {
     return ReactDOM.createPortal(
-      <>
+      <TransactionFeesProvider>
         <Modal />
         {status === 'loadingFees' && <WaitModal onClose={hideModal} requirementsCheck />}
-      </>,
+      </TransactionFeesProvider>,
       document.body
     )
   }

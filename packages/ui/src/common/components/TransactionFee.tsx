@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { BalanceInfoNarrow, InfoTitle, InfoValue } from './Modal'
@@ -7,8 +8,8 @@ import { Tooltip, TooltipDefault } from './Tooltip'
 import { TokenValue } from './typography'
 
 export interface TransactionFeeProps {
-  title: string
-  value?: BN
+  title?: string
+  value: BN
   tooltipText?: React.ReactNode
   tooltipTitle?: string
   tooltipLinkText?: React.ReactNode
@@ -25,10 +26,11 @@ export const TransactionFee = ({
   tooltipLinkURL,
   fullValue,
 }: TransactionFeeProps) => {
+  const { t } = useTranslation()
   return (
     <BalanceInfoNarrow>
       <FeeWrapper>
-        <InfoTitle>{title}</InfoTitle>
+        <InfoTitle>{title ?? t('modals.transactionFee.label')}</InfoTitle>
         <InfoValue>
           <Tooltip tooltipText={fullValue} absolute>
             <StyledTokenValue value={value} />
