@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { CurrencyName } from '@/app/constants/currency'
 import { BountyWinner } from '@/bounty/modals/SubmitJudgementModal/machine'
 import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { FileIcon } from '@/common/components/icons'
 import { AmountButton, AmountButtons, TransactionAmount } from '@/common/components/Modal'
 import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
@@ -50,8 +50,8 @@ export const WinnersSelection = ({
   )
 
   const handleRewardEdit = useCallback(
-    (id: number) => (_: any, value: number) => {
-      editWinner(id, { reward: value })
+    (id: number) => (_: any, value: BN) => {
+      editWinner(id, { reward: value.toNumber() })
     },
     [editWinner]
   )
@@ -112,7 +112,7 @@ export const WinnersSelection = ({
               units={CurrencyName.integerValue}
               tight
             >
-              <InputNumber
+              <TokenInput
                 id={`winnerRewardInput${index + 1}`}
                 isTokenValue
                 value={String(winner.reward)}

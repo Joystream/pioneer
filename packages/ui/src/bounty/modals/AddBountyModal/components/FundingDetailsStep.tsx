@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { CurrencyName } from '@/app/constants/currency'
 import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
-import { InputNumber, InputComponent, Label, ToggleCheckbox } from '@/common/components/forms'
+import { TokenInput, InputComponent, Label, ToggleCheckbox } from '@/common/components/forms'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipContainer, TooltipDefault, TooltipExternalLink } from '@/common/components/Tooltip'
@@ -70,7 +70,7 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
           }
           validation={errorChecker('cherry') ? 'invalid' : undefined}
         >
-          <InputNumber isInBN id="field-cherry" isTokenValue placeholder="0" name="fundingPeriodDetails.cherry" />
+          <TokenInput isInBN id="field-cherry" isTokenValue placeholder="0" name="fundingPeriodDetails.cherry" />
         </InputComponent>
       </RowGapBlock>
       <RowGapBlock gap={20}>
@@ -120,7 +120,7 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
             id="field-periodLength"
             message={fundingPeriodLength ? `≈ ${inBlocksDate(fundingPeriodLength)}` : ''}
           >
-            <InputNumber
+            <TokenInput
               isInBN
               id="field-periodLength"
               name="fundingPeriodDetails.fundingPeriodLength"
@@ -151,7 +151,7 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
           label="Minimal range"
           tooltipText="Cumulative funding must be above minimal range for bounty to proceed to Working Stage period in limited funding."
         >
-          <InputNumber
+          <TokenInput
             isInBN
             id="field-minRange"
             name="fundingPeriodDetails.fundingMinimalRange"
@@ -183,7 +183,7 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
             </>
           }
         >
-          <InputNumber
+          <TokenInput
             isInBN
             id="field-maxRange"
             name="fundingPeriodDetails.fundingMaximalRange"

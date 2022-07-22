@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { CurrencyName } from '@/app/constants/currency'
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
@@ -25,7 +25,7 @@ export const SetMembershipPrice = () => {
             message="Value must be greater than zero"
             name="setMembershipPrice.amount"
           >
-            <InputNumber id="amount-input" name="setMembershipPrice.amount" isTokenValue isInBN placeholder="0" />
+            <TokenInput id="amount-input" name="setMembershipPrice.amount" isTokenValue isInBN placeholder="0" />
           </InputComponent>
         </RowGapBlock>
       </Row>

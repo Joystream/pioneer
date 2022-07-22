@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form'
 import { SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { CurrencyName } from '@/app/constants/currency'
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -75,13 +75,7 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
             validation={errorChecker('amount') ? 'invalid' : undefined}
             inputSize="s"
           >
-            <InputNumber
-              id="amount-input"
-              name="staking.amount"
-              isInBN
-              isTokenValue
-              placeholder={minStake.toString()}
-            />
+            <TokenInput id="amount-input" name="staking.amount" isInBN isTokenValue placeholder={minStake.toString()} />
           </InputComponent>
           {isSomeBalanceGteStake && errorMessageGetter('amount')?.startsWith('Insufficient') && (
             <Info>

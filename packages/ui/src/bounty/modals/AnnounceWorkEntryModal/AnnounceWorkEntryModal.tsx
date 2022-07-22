@@ -18,7 +18,7 @@ import { announceWorkEntryMachine, AnnounceWorkEntryStates } from '@/bounty/moda
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { FailureModal } from '@/common/components/FailureModal'
-import { Input, InputComponent, InputNumber } from '@/common/components/forms'
+import { Input, InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import {
   Modal,
@@ -276,7 +276,7 @@ export const AnnounceWorkEntryModal = () => {
                 disabled
                 tooltipText={t('modals.announceWorkEntry.selectAmountTooltip')}
               >
-                <InputNumber id="amount-input" value={amount.toString()} isTokenValue disabled />
+                <TokenInput id="amount-input" value={amount.toString()} isTokenValue disabled />
               </InputComponent>
             </TransactionAmount>
           </Row>

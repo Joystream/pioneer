@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { CurrencyName } from '@/app/constants/currency'
-import { InlineToggleWrap, InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
+import { InlineToggleWrap, InputComponent, TokenInput, Label, ToggleCheckbox } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -105,7 +105,7 @@ export const UpdateWorkingGroupBudget = () => {
             message="Amount must be greater than zero"
             disabled={!group}
           >
-            <InputNumber
+            <TokenInput
               id="amount-input"
               name="updateWorkingGroupBudget.budgetUpdate"
               isTokenValue

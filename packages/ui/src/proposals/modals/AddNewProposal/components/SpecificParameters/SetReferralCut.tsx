@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -50,7 +50,7 @@ export const SetReferralCut = () => {
               </TextMedium>
             }
           >
-            <InputNumber
+            <TokenInput
               id="amount-input"
               isTokenValue
               name="setReferralCut.referralCut"
