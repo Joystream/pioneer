@@ -1,7 +1,7 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import { InputComponent, TokenInput } from '@/common/components/forms'
+import { InputComponent, InputNumber, TokenInput } from '@/common/components/forms'
 import { LinkSymbol } from '@/common/components/icons/symbols/LinkSymbol'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -62,7 +62,7 @@ export const StakingPolicyAndReward = () => {
             name="stakingPolicyAndReward.leavingUnstakingPeriod"
             tight
           >
-            <TokenInput id="leaving-unstaking-period" name="stakingPolicyAndReward.leavingUnstakingPeriod" isInBN />
+            <InputNumber id="leaving-unstaking-period" name="stakingPolicyAndReward.leavingUnstakingPeriod" isInBN />
           </InputComponent>
           <InputComponent
             id="reward-per-block"
