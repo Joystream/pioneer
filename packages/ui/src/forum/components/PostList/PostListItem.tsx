@@ -17,6 +17,7 @@ import { Colors, Fonts, BorderRad, Shadows } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
+import { ReplyThreadModalCall } from '@/forum/modals/ReplyThreadModal'
 import { ForumPost } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -90,7 +91,13 @@ export const PostListItem = ({
 
   const onReply = (): void => {
     if (!active) showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
-    return replyToPost()
+    showModal<ReplyThreadModalCall>({
+      modal: 'ReplyThreadModal',
+      data: {
+        post,
+      },
+    })
+    // return replyToPost()
   }
 
   return (

@@ -39,6 +39,7 @@ import { CreatePostModal, CreatePostModalCall } from '@/forum/modals/PostActionM
 import { DeletePostModal, DeletePostModalCall } from '@/forum/modals/PostActionModal/DeletePostModal'
 import { EditPostModal, EditPostModalCall } from '@/forum/modals/PostActionModal/EditPostModal'
 import { PostHistoryModal, PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
+import { ReplyThreadModal, ReplyThreadModalCall } from '@/forum/modals/ReplyThreadModal'
 import { MemberModalCall, MemberProfile } from '@/memberships/components/MemberProfile'
 import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals/BuyMembershipModal'
 import { SignOutModal } from '@/memberships/modals/SignOutModal/SignOutModal'
@@ -72,6 +73,7 @@ export type ModalNames =
   | ModalName<AddNewProposalModalCall>
   | ModalName<VoteRationaleModalCall>
   | ModalName<CreateThreadModalCall>
+  | ModalName<ReplyThreadModalCall>
   | ModalName<DeleteThreadModalCall>
   | ModalName<DeletePostModalCall>
   | ModalName<EditPostModalCall>
@@ -115,6 +117,7 @@ const modals: Record<ModalNames, ReactElement> = {
   AddNewProposalModal: <AddNewProposalModal />,
   VoteRationaleModal: <VoteRationale />,
   CreateThreadModal: <CreateThreadModal />,
+  ReplyThreadModal: <ReplyThreadModal />,
   DeleteThreadModal: <DeleteThreadModal />,
   DeletePost: <DeletePostModal />,
   EditPost: <EditPostModal />,

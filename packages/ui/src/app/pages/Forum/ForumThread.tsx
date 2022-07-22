@@ -14,6 +14,7 @@ import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Colors } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
+import { useModal } from '@/common/hooks/useModal'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getUrl } from '@/common/utils/getUrl'
 import { PostList } from '@/forum/components/PostList/PostList'
@@ -39,9 +40,9 @@ export const ForumThread = () => {
   const history = useHistory()
   const [replyTo, setReplyTo] = useState<ForumPost | undefined>()
 
-  useEffect(() => {
-    replyTo && newPostRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'end' })
-  }, [replyTo])
+  // useEffect(() => {
+  //   replyTo && newPostRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'end' });
+  // }, [replyTo])
 
   const isThreadActive = !!(thread && thread.status.__typename === 'ThreadStatusActive')
 
@@ -108,7 +109,7 @@ export const ForumThread = () => {
   const displayMain = () => (
     <ThreadPanel ref={sideNeighborRef}>
       <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} replyToPost={setReplyTo} />
-      {thread && isThreadActive && (
+      {/* {thread && isThreadActive && (
         <NewThreadPost
           ref={newPostRef}
           replyTo={replyTo}
@@ -116,7 +117,7 @@ export const ForumThread = () => {
           getTransaction={getTransaction}
           replyToLink={`${generatePath(ForumRoutes.thread, { id: thread.id })}?post=${replyTo?.id}`}
         />
-      )}
+      )} */}
     </ThreadPanel>
   )
 

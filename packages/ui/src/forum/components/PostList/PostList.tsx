@@ -7,6 +7,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { Colors } from '@/common/constants'
 import { useLocation } from '@/common/hooks/useLocation'
+import { useModal } from '@/common/hooks/useModal'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
 import { AnyKeys } from '@/common/types'
 import { getUrl } from '@/common/utils/getUrl'
@@ -38,6 +39,8 @@ export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost, isD
     []
   )
 
+  const { showModal } = useModal()
+
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
 
@@ -66,7 +69,7 @@ export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost, isD
           isSelected={post.id === navigation.post}
           isThreadActive={isThreadActive}
           type="forum"
-          replyToPost={() => replyToPost({ ...post, repliesTo: undefined })}
+          replyToPost={() => showModal({ modal: 'ReplyThreadModal', data: { ...post, repliesTo: undefined } })}
           link={getUrl({ route: ForumRoutes.thread, params: { id: threadId }, query: { post: post.id } })}
           repliesToLink={`${generatePath(ForumRoutes.thread, { id: threadId })}?post=${post.repliesTo?.id}`}
           isDiscussion={isDiscussion}
