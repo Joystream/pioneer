@@ -77,6 +77,7 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     line-height: 1.5;
     font-weight: 400;
     color: ${normalColor};
+    word-break: break-word;
   }
 
   .markdown-preview li {
