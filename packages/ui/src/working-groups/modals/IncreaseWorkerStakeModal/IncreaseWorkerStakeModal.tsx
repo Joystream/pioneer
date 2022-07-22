@@ -6,7 +6,7 @@ import * as Yup from 'yup'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { useApi } from '@/common/hooks/useApi'
@@ -90,7 +90,7 @@ export const IncreaseWorkerStakeModal = () => {
           }
           required
         >
-          <InputNumber
+          <TokenInput
             id="amount-input"
             isTokenValue
             value={state.context.stake?.toString()}

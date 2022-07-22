@@ -2,7 +2,7 @@ import BN from 'bn.js'
 import React, { useCallback, useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { AmountButton, AmountButtons, Row, TransactionAmount } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -99,7 +99,7 @@ export const DecreaseWorkingGroupLeadStake = () => {
               name="decreaseWorkingGroupLeadStake.stakingAmount"
               message="Amount must be greater than zero and less than current stake"
             >
-              <InputNumber
+              <TokenInput
                 id="amount-input"
                 name="decreaseWorkingGroupLeadStake.stakingAmount"
                 isTokenValue

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
@@ -28,7 +28,7 @@ export const SetInitialInvitationCount = () => {
             required
             id="count-input"
           >
-            <InputNumber
+            <TokenInput
               id="count-input"
               isTokenValue
               isInBN

@@ -1,5 +1,3 @@
-import { AugmentedConst } from '@polkadot/api/types'
-import { u32 } from '@polkadot/types'
 import BN from 'bn.js'
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
@@ -7,7 +5,7 @@ import styled from 'styled-components'
 
 import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { CloseButton } from '@/common/components/buttons'
-import { InputNumber, ToggleCheckbox, InlineToggleWrap, InputComponent, Label } from '@/common/components/forms'
+import { TokenInput, ToggleCheckbox, InlineToggleWrap, InputComponent, Label } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
@@ -114,7 +112,7 @@ export const WorkingDetailsStep = ({ whitelistLimit, minEntrantStake, errorCheck
           tight
           message={workingPeriodLength ? `≈ ${inBlocksDate(workingPeriodLength)}` : ''}
         >
-          <InputNumber isInBN name="workingPeriodDetails.workingPeriodLength" id="field-periodLength" placeholder="0" />
+          <TokenInput isInBN name="workingPeriodDetails.workingPeriodLength" id="field-periodLength" placeholder="0" />
         </InputComponent>
       </Row>
 
@@ -132,7 +130,7 @@ export const WorkingDetailsStep = ({ whitelistLimit, minEntrantStake, errorCheck
         }
         validation={errorChecker('workingPeriodStake') ? 'invalid' : undefined}
       >
-        <InputNumber
+        <TokenInput
           isInBN
           name="workingPeriodDetails.workingPeriodStake"
           isTokenValue

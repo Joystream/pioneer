@@ -2,7 +2,7 @@ import React from 'react'
 
 import { SelectAccount, SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { Account } from '@/accounts/types'
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, ValueInJoys } from '@/common/components/typography'
@@ -63,7 +63,7 @@ export function StakeStep({ opening, errorChecker, errorMessageGetter }: StakeSt
             message={(errorChecker('amount') ? errorMessageGetter('amount') : undefined) || ' '}
             required
           >
-            <InputNumber id="amount-input" name="stake.amount" placeholder={minStake.toString()} isTokenValue isInBN />
+            <TokenInput id="amount-input" name="stake.amount" placeholder={minStake.toString()} isTokenValue isInBN />
           </InputComponent>
 
           <h4>3. Select Role Account</h4>

@@ -18,7 +18,7 @@ import { contributeFundsMachine, ContributeFundStates } from '@/bounty/modals/Co
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { isFundingLimited } from '@/bounty/types/Bounty'
 import { FailureModal } from '@/common/components/FailureModal'
-import { Input, InputComponent, InputNumber } from '@/common/components/forms'
+import { Input, InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import {
@@ -258,7 +258,7 @@ export const ContributeFundsModal = () => {
                   </>
                 }
               >
-                <InputNumber
+                <TokenInput
                   id="amount-input"
                   value={state.context.amount?.toString()}
                   onChange={(_, value) => setAmount(new BN(value))}

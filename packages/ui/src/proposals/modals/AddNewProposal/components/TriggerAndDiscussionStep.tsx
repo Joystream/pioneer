@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { CloseButton } from '@/common/components/buttons'
-import { InlineToggleWrap, InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
+import { InlineToggleWrap, InputComponent, TokenInput, Label, ToggleCheckbox } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
@@ -57,7 +57,7 @@ export const TriggerAndDiscussionStep = () => {
             name="triggerAndDiscussion.triggerBlock"
             message={triggerBlock ? `≈ ${inBlocksDate(triggerBlock)}` : ''}
           >
-            <InputNumber
+            <TokenInput
               id="triggerBlock"
               placeholder="0"
               name="triggerAndDiscussion.triggerBlock"

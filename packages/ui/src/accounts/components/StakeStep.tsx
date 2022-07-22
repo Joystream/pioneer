@@ -5,7 +5,7 @@ import { ValidationError } from 'yup'
 
 import { SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { Account, LockType } from '@/accounts/types'
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -71,7 +71,7 @@ export const StakeStep = ({
             }
             required
           >
-            <InputNumber
+            <TokenInput
               id="amount-input"
               isTokenValue
               value={state.context.stake?.toString()}

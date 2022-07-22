@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -70,7 +70,7 @@ export const SetWorkingGroupLeadReward = () => {
             required
             disabled={isDisabled}
           >
-            <InputNumber
+            <TokenInput
               id="amount-input"
               name="setWorkingGroupLeadReward.rewardPerBlock"
               isInBN
