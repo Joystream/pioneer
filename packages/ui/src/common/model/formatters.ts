@@ -1,7 +1,9 @@
 import BN from 'bn.js'
 
+import { cleanInputValue } from '@/common/hooks/useNumberInput'
+
 import { AN_HOUR, A_DAY, A_MINUTE, A_SECOND, SECONDS_PER_BLOCK } from '../constants'
-import { isDefined, isNumber } from '../utils'
+import { isDefined, isNumber, last } from '../utils'
 
 export const NUMBER_SEPARATOR_REG_EXP = /\B(?=(\d{3})+(?!\d))/g
 
@@ -99,24 +101,67 @@ export const DECIMAL_PLACES = 10 // Will be 10,000M in Carthage
 export const DECIMAL_NUMBER = Math.pow(10, DECIMAL_PLACES)
 export const PRECISION = 2 // Will be 100M in Carthage
 
-export const formatJoyValue = (value: BN, precision: number = PRECISION) => {
+export const formatJoyValue = (value: BN, precision: number = PRECISION, isInInput?: boolean) => {
   // todo uncomment after carthage merge - needs BN@5.9.1
   // const {div: int, mod: rest} = value.divmod(new BN(DECIMAL_NUMBER))
 
   const int = value.div(new BN(DECIMAL_NUMBER))
   const rest = value.mod(new BN(DECIMAL_NUMBER))
-  const rounded = (rest.toNumber() / Math.pow(10, 8)).toFixed()
 
   if (int.isZero() && rest.isZero()) {
     return '0'
   }
 
-  if (int.isZero() && +rounded < 1 && !rest.isZero()) {
+  if (isInInput) {
+    return `${int.toString().replace(NUMBER_SEPARATOR_REG_EXP, ',')}.${rest.toNumber().toFixed()}`
+  }
+
+  const rounded = (rest.toNumber() / Math.pow(10, 8)).toFixed()
+
+  if (!isInInput && int.isZero() && +rounded < 1 && !rest.isZero()) {
     return '< 0.' + '1'.padStart(precision, '0')
   }
 
   if (rest.isZero() || +rounded < 1) {
     return `${int.toString().replace(NUMBER_SEPARATOR_REG_EXP, ',')}`
   }
+
   return `${int.toString().replace(NUMBER_SEPARATOR_REG_EXP, ',')}.${String(rounded).padStart(2, '0')}`
+}
+
+export const formatToJoyValue = (joyValue: string | BN) => {
+  joyValue = new BN(joyValue)
+  const int = joyValue.div(new BN(DECIMAL_NUMBER))
+  const rest = joyValue.mod(new BN(DECIMAL_NUMBER))
+  return {
+    decimal: rest.toString().replace(/0+$/, ''),
+    integer: int.toString(),
+  }
+}
+
+export const formatFromJoyValue = (joyValue: string | BN) => {
+  joyValue = typeof joyValue === 'string' ? joyValue : joyValue.toString()
+  const values = joyValue.split('.')
+  if (values.length === 1) {
+    return new BN(DECIMAL_NUMBER).muln(+cleanInputValue(values[0]))
+  }
+
+  return new BN(cleanInputValue(values[0]) + values[1].padEnd(10, '0'))
+}
+
+export const isNumberInputValid = (value: string) => {
+  if (last(value) === '.') {
+    value = value.slice(0, value.length - 1)
+  }
+
+  switch (true) {
+    case isNaN(+value):
+      return false
+    case value.split('.')?.[1]?.length > 10:
+      return false
+    case new BN(value).ltn(0):
+      return false
+    default:
+      return true
+  }
 }
