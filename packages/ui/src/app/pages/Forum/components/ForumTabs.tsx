@@ -17,14 +17,15 @@ export const ForumTabs = () => {
 
 interface ForumForumTabsProps {
   categoryCount?: number
+  myThreadsCount?: number
 }
 
-export const ForumForumTabs = ({ categoryCount }: ForumForumTabsProps) => {
+export const ForumForumTabs = ({ categoryCount, myThreadsCount }: ForumForumTabsProps) => {
   const tabs = usePageTabs([
     ['Categories', ForumRoutes.forum, { count: categoryCount }],
     ['Latest threads ', ForumRoutes.latestThreads],
     ['Top threads', ForumRoutes.topThreads],
-    ['My threads', ForumRoutes.myThreads],
+    ['My threads', ForumRoutes.myThreads, { count: myThreadsCount }],
   ])
 
   return <ForumForumTabsStyles tabsSize="xs" tabs={tabs} />

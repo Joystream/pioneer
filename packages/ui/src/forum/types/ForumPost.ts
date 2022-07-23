@@ -15,9 +15,12 @@ export interface ForumPost {
   repliesTo?: ForumPost
   reaction?: PostReaction[]
   status: PostStatusTypename
+  thread?: ForumPostFieldsFragment['thread']
 }
 
-export const asForumPost = (fields: ForumPostFieldsFragment): ForumPost => ({
+export const asForumPost = (
+  fields: Omit<ForumPostFieldsFragment, 'thread'> & Partial<Pick<ForumPostFieldsFragment, 'thread'>>
+): ForumPost => ({
   id: fields.id,
   createdAt: fields.createdAt,
   updatedAt: fields.updatedAt,
@@ -28,6 +31,7 @@ export const asForumPost = (fields: ForumPostFieldsFragment): ForumPost => ({
   createdAtBlock:
     fields?.postaddedeventpost && fields.postaddedeventpost.length ? asBlock(fields.postaddedeventpost[0]) : undefined,
   status: fields.status.__typename,
+  ...(fields.thread ? { thread: fields.thread } : {}),
 })
 
 export interface PostEdit {

@@ -7,21 +7,23 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { Pagination } from '@/common/components/Pagination'
 import { useSort } from '@/common/hooks/useSort'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
-import { ThreadList } from '@/forum/components/threads/ThreadList'
+import { ThreadListCards } from '@/forum/components/threads/ThreadListCards'
 import { useMyThreads } from '@/forum/hooks/useMyThreads'
+import { useThreadsUserCount } from '@/forum/hooks/useThreadsUserCount'
 
 import { ForumForumTabs, ForumTabs } from './components/ForumTabs'
 
 export const ForumMyThreads = () => {
   const [page, setPage] = useState(1)
-  const { order, getSortProps } = useSort<ForumThreadOrderByInput>('updatedAt')
-  const { threads, pageCount, isLoading } = useMyThreads({ page, threadsPerPage: 5, order })
+  const { order } = useSort<ForumThreadOrderByInput>('updatedAt')
+  const { threads, pageCount, isLoading } = useMyThreads({ page: 1, threadsPerPage: 500, order })
+  const { myThreadsCount } = useThreadsUserCount()
 
   const displayThreads = () => {
     return (
       <RowGapBlock gap={24}>
         <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
-        <ThreadList threads={threads} isLoading={isLoading} getSortProps={getSortProps} />
+        <ThreadListCards threads={threads} isLoading={isLoading} />
         <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
       </RowGapBlock>
     )
@@ -31,7 +33,7 @@ export const ForumMyThreads = () => {
       header={
         <ForumPageHeader title={<PageTitle>My threads</PageTitle>}>
           <ForumTabs />
-          <ForumForumTabs />
+          <ForumForumTabs myThreadsCount={myThreadsCount} />
         </ForumPageHeader>
       }
       main={displayThreads()}

@@ -118,6 +118,12 @@ fragment ForumPostFields on ForumPost {
   repliesTo {
     ...ForumPostWithoutReplyFields
   }
+  thread {
+    category {
+      createdById
+      title
+    }
+  }
 }
 
 fragment ForumPostWithoutReplyFields on ForumPost {
@@ -227,6 +233,12 @@ query GetForumThreads($where: ForumThreadWhereInput, $orderBy: [ForumThreadOrder
 query GetForumThreadsCount($where: ForumThreadWhereInput) {
   forumThreadsConnection(where: $where) {
     totalCount
+  }
+}
+
+query GetForumThreadsUserCount($where: ForumThreadWhereInput) {
+  forumThreads(where: $where) {
+    id
   }
 }
 
