@@ -1,5 +1,4 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-import BN from 'bn.js';
 import React from 'react'
 
 import { ComplexStackedBar, ComplexStackedBarProps } from '@/financials/components/ComplexStackedBar/ComplexStackedBar'
@@ -15,23 +14,23 @@ describe('UI: ComplexStackedBar', () => {
   const title = 'Title'
   const details = {
     Dog: {
-      Man: new BN(3000),
-      Woman: new BN(2000),
+      Man: 3000,
+      Woman: 2000,
     },
     Cat: {
-      Man: new BN(1000),
-      Woman: new BN(2000),
+      Man: 1000,
+      Woman: 2000,
     },
     Rat: {
-      Man: new BN(3000),
-      Woman: new BN(3000),
+      Man: 3000,
+      Woman: 3000,
     },
   }
 
   const data = {
-    Dog: new BN(1000),
-    Cat: new BN(3000),
-    Rat: new BN(4000),
+    Dog: 1000,
+    Cat: 3000,
+    Rat: 4000,
   }
 
   const props: ComplexStackedBarProps = {
