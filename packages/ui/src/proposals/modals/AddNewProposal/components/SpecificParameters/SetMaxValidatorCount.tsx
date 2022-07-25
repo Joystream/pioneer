@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { InputComponent, TokenInput } from '@/common/components/forms'
+import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
@@ -26,7 +26,7 @@ export const SetMaxValidatorCount = () => {
             units="tJOY"
             required
           >
-            <TokenInput
+            <InputNumber
               id="amount-input"
               name="setMaxValidatorCount.validatorCount"
               isTokenValue

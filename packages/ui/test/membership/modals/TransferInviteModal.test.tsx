@@ -8,6 +8,7 @@ import { seedMembers } from '@/mocks/data'
 
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
+import { numberToInputWithDecimals } from '../../_helpers/utils'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubDefaultBalances, stubTransaction } from '../../_mocks/transactions'
@@ -47,7 +48,7 @@ describe('UI: TransferInviteModal', () => {
 
     const input = await screen.findByLabelText(/number of invites/i)
     expect(input).toBeDefined()
-    fireEvent.change(input, { target: { value: '1' } })
+    fireEvent.change(input, { target: { value: numberToInputWithDecimals(1) } })
 
     await selectFromDropdown('^to', 'bob')
 

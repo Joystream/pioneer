@@ -26,6 +26,7 @@ import {
 } from '@/mocks/data'
 
 import { getButton } from '../../_helpers/getButton'
+import { numberToInputWithDecimals } from '../../_helpers/utils'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
@@ -91,7 +92,7 @@ describe('UI: Vote for Council Modal', () => {
     await selectAlice()
     const input = await screen.findByLabelText(/Select amount for staking/i)
     act(() => {
-      fireEvent.change(input, { target: { value } })
+      fireEvent.change(input, { target: { value: numberToInputWithDecimals(value) } })
     })
   }
 
