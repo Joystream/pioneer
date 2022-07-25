@@ -1,11 +1,8 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import { BenefitListItem } from '@/app/components/OnboardingOverlay/components/BenefitListItem'
 import { List } from '@/common/components/List'
-import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { Colors } from '@/common/constants'
 
 export const BenefitsTableLayout = '1fr 100px 100px'
 
@@ -23,14 +20,14 @@ export const BenefitsTable = () => {
   )
 }
 
-const BenefitsTableHeader = styled(ListHeader)`
-  color: ${Colors.White};
-  font-weight: 700;
-  justify-self: center;
-  font-size: 14px;
-  text-transform: none;
-`
+// const BenefitsTableHeader = styled(ListHeader)`
+//   color: ${Colors.White};
+//   font-weight: 700;
+//   justify-self: center;
+//   font-size: 14px;
+//   text-transform: none;
+// `
 
-const BenefitsTableHeaders = styled(ListHeaders)`
-  margin-bottom: 24px;
-`
+// const BenefitsTableHeaders = styled(ListHeaders)`
+//   margin-bottom: 24px;
+// `

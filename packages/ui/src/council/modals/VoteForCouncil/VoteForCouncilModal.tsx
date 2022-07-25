@@ -1,5 +1,4 @@
 import { useMachine } from '@xstate/react'
-import BN from 'bn.js'
 import React, { useEffect } from 'react'
 
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'

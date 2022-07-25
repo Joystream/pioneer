@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { TileSection } from '@/bounty/components/TileSection'
@@ -6,7 +7,6 @@ import { TextHuge, TokenValue } from '@/common/components/typography'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
 import members from '@/mocks/data/raw/members.json'
-import BN from 'bn.js';
 
 const alice = members[0]
 

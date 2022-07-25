@@ -6,7 +6,7 @@ import { CurrencyName } from '@/app/constants/currency'
 import { Skeleton } from '@/common/components/Skeleton'
 
 import { Colors, Fonts } from '../../constants'
-import { formatJoyValue, formatTokenValue } from '../../model/formatters'
+import { formatJoyValue } from '../../model/formatters'
 
 interface ValueSizingProps {
   size?: 's' | 'm' | 'l'

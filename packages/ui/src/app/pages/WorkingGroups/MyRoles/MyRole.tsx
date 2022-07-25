@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React, { useCallback, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
