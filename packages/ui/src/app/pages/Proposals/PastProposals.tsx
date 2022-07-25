@@ -5,7 +5,6 @@ import { ProposalOrderByInput } from '@/common/api/queries'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { FilterPageHeader } from '@/common/components/forms/FilterBox'
 import { MainPanel } from '@/common/components/page/PageContent'
-import { SearchProcess } from '@/common/components/page/SearchProcess'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Pagination } from '@/common/components/Pagination'
 import { useSort } from '@/common/hooks/useSort'
@@ -40,14 +39,7 @@ export const PastProposals = () => {
       main={
         <MainPanel>
           <ProposalFilters searchSlot={searchSlot} types={types} stages={stages} onApply={setFilters} />
-          {isLoading ? (
-            <SearchProcess
-              title="Searching"
-              description="We are searching through all past proposals to find what your are looking for. "
-            />
-          ) : (
-            <ProposalList getSortProps={getSortProps} proposals={proposals} isPast />
-          )}
+          <ProposalList getSortProps={getSortProps} proposals={proposals} isLoading={isLoading} isPast />
           <Pagination {...pagination} />
         </MainPanel>
       }

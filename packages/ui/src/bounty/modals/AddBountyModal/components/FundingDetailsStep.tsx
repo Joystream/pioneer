@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { InputNumber, InputComponent, Label, ToggleCheckbox } from '@/common/components/forms'
 import { LinkSymbol } from '@/common/components/icons/symbols'
@@ -46,7 +47,7 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
           id="field-cherry"
           label="Cherry"
           tight
-          units="tJOY"
+          units={CurrencyName.integerValue}
           required
           tooltipText={
             <>
@@ -62,7 +63,11 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
               </TooltipExternalLink>
             </>
           }
-          message={errorChecker('cherry') ? errorMessageGetter('cherry') : `Minimum Cherry - ${minCherryLimit} tJOY`}
+          message={
+            errorChecker('cherry')
+              ? errorMessageGetter('cherry')
+              : `Minimum Cherry - ${minCherryLimit} ${CurrencyName.integerValue}`
+          }
           validation={errorChecker('cherry') ? 'invalid' : undefined}
         >
           <InputNumber isInBN id="field-cherry" isTokenValue placeholder="0" name="fundingPeriodDetails.cherry" />
@@ -136,7 +141,7 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
         <InputComponent
           id="field-minRange"
           tight
-          units="tJOY"
+          units={CurrencyName.integerValue}
           required
           disabled={isPerpetual}
           message={
@@ -158,7 +163,7 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
         <InputComponent
           id="field-maxRange"
           tight
-          units="tJOY"
+          units={CurrencyName.integerValue}
           required
           label="Maximal range"
           tooltipText={

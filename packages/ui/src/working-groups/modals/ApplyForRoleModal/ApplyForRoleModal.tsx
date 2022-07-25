@@ -59,8 +59,7 @@ export const ApplyForRoleModal = () => {
 
   const opening = modalData.opening
   const requiredStake = opening.stake
-
-  const { hasRequiredStake } = useHasRequiredStake(requiredStake.toNumber(), groupToLockId(opening.groupId))
+  const { hasRequiredStake } = useHasRequiredStake(requiredStake, groupToLockId(opening.groupId))
 
   const schema = useMemo(() => {
     if (questions.length) {

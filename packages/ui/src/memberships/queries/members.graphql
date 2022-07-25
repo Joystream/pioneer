@@ -72,11 +72,25 @@ fragment MemberWithDetailsFields on Membership {
     #      }
     #    }
   }
+  invitedBy {
+    ...MemberFields
+  }
 }
 
 query GetMembers($where: MembershipWhereInput, $orderBy: [MembershipOrderByInput!], $offset: Int, $limit: Int) {
   memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
     ...MemberFields
+  }
+}
+
+query GetMembersWithDetails(
+  $where: MembershipWhereInput
+  $orderBy: [MembershipOrderByInput!]
+  $offset: Int
+  $limit: Int
+) {
+  memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
+    ...MemberWithDetailsFields
   }
 }
 

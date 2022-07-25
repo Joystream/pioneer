@@ -108,6 +108,7 @@ const AccountName = styled.h5<{ locked?: boolean }>`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: left;
   transition: ${Transitions.all};
 `
 

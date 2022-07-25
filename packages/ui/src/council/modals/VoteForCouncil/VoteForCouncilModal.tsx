@@ -1,5 +1,4 @@
 import { useMachine } from '@xstate/react'
-import BN from 'bn.js'
 import React, { useEffect } from 'react'
 
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
@@ -7,6 +6,7 @@ import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { FailureModal } from '@/common/components/FailureModal'
+import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
@@ -30,10 +30,9 @@ export const VoteForCouncilModal = () => {
 
   const constants = useCouncilConstants()
   const minStake = constants?.election.minVoteStake
-  // TODO: Delete conversion to BN after https://github.com/Joystream/pioneer/pull/3265 is merged
-  const requiredStake = minStake as BN
+  const requiredStake = minStake ?? BN_ZERO
 
-  const { hasRequiredStake } = useHasRequiredStake(requiredStake?.toNumber(), 'Voting')
+  const { hasRequiredStake } = useHasRequiredStake(requiredStake, 'Voting')
 
   const { feeInfo } = useTransactionFee(
     activeMember?.controllerAccount,

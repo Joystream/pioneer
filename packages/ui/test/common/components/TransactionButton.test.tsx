@@ -1,6 +1,7 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, waitFor } from '@testing-library/react'
 import { useMachine } from '@xstate/react'
+import { BaseDotsamaWallet } from 'injectweb3-connect'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -27,6 +28,7 @@ describe('UI: TransactionButton', () => {
     isLoading: false,
     allAccounts: [{ ...alice, name: 'Alice Account' }],
     hasAccounts: true,
+    wallet: new BaseDotsamaWallet({ title: 'ExtraWallet' }),
   }
 
   beforeAll(async () => {

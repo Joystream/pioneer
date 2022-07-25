@@ -8,8 +8,8 @@ import { Colors } from '@/common/constants'
 export interface EarnedAndRewardProps {
   earnedTitle: string
   rewardTitle: string
-  earnedValue?: number | BN | null
-  rewardValue?: number | BN | null
+  earnedValue?: BN | null
+  rewardValue?: BN | null
 }
 
 export const EarnedAndReward = ({ earnedTitle, rewardTitle, earnedValue, rewardValue }: EarnedAndRewardProps) => {

@@ -2,8 +2,8 @@ import BN from 'bn.js'
 import React from 'react'
 import styled, { css } from 'styled-components'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { Skeleton } from '@/common/components/Skeleton'
-import { isDefined } from '@/common/utils'
 
 import { Colors, Fonts } from '../../constants'
 import { formatJoyValue } from '../../model/formatters'
@@ -23,10 +23,9 @@ export const TokenValue = React.memo(({ className, value, size, isLoading }: Val
     return <Skeleton id="tokenValueSkeleton" variant="rect" height="32px" width="50%" />
   }
 
-  if (value === null || !isDefined(value)) {
+  if (!value) {
     return <span>-</span>
   }
-
   return (
     <ValueInJoys className={className} size={size}>
       {formatJoyValue(value)}
@@ -46,7 +45,7 @@ export const ValueInJoys = styled.span<ValueSizingProps>`
   font-family: ${Fonts.Grotesk};
 
   &:after {
-    content: 'tJOY';
+    content: '${CurrencyName.integerValue}';
     display: inline-block;
     font-size: 14px;
     line-height: 20px;

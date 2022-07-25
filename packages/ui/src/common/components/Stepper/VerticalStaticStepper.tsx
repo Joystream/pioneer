@@ -1,17 +1,20 @@
+import { getAllWallets } from 'injectweb3-connect'
 import React from 'react'
 import styled from 'styled-components'
 
-import { TextHuge, TextInlineBig } from '@/common/components/typography'
+import { TextHuge, TextInlineBig, TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
+import { MemberAvatar } from '@/memberships/components/Avatar'
+import { MemberStackStyles } from '@/memberships/components/MemberStack'
 
 interface VerticalStaticStepperData {
   title: string
-  subtitle?: string[]
+  subtitle?: string
+  walletIcon?: boolean
 }
 export interface VerticalStaticStepperProps {
   steps: Array<VerticalStaticStepperData>
 }
-
 export const VerticalStaticStepper = ({ steps }: VerticalStaticStepperProps) => {
   return (
     <StepperWrap>
@@ -23,9 +26,14 @@ export const VerticalStaticStepper = ({ steps }: VerticalStaticStepperProps) => 
           <StepBody>
             <StepTitle>{item.title}</StepTitle>
             <StepSubtitleList>
-              {item.subtitle?.map((subtitle, indexSubtitle) => (
-                <StepSubtitle key={`vertical-stepper-subtitle-${indexSubtitle}`}>{subtitle}</StepSubtitle>
-              ))}
+              <StyledSubtitle>{item.subtitle}</StyledSubtitle>
+              {item.walletIcon ?? (
+                <WalletIconWrapper>
+                  {getAllWallets().map((wallet) => (
+                    <WalletIcons avatarUri={wallet.logo.src} />
+                  ))}
+                </WalletIconWrapper>
+              )}
             </StepSubtitleList>
           </StepBody>
         </StepWrap>
@@ -48,7 +56,7 @@ const StepNumber = styled.div`
   align-items: center;
   justify-self: center;
   border-radius: ${BorderRad.round};
-  background: ${Colors.Black[500]};
+  background-color: ${Colors.Black[800]};
   font-weight: 700;
 `
 
@@ -60,11 +68,16 @@ const StepTitle = styled(TextHuge)`
 
 const StepSubtitleList = styled.ul`
   list-style: disc;
-  margin-left: 15px;
 `
 
-const StepSubtitle = styled.li`
-  color: ${Colors.White};
+const WalletIcons = styled(MemberAvatar)``
+
+const WalletIconWrapper = styled(MemberStackStyles)`
+  margin-top: 5px;
+`
+
+const StyledSubtitle = styled(TextMedium)`
+  color: ${Colors.Black[300]};
 `
 const StepBody = styled.div`
   display: grid;

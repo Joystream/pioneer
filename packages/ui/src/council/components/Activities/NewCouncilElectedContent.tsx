@@ -5,6 +5,6 @@ import { ActivityRouterLink } from '@/common/components/Activities/ActivityRoute
 import { CouncilRoutes } from '@/council/constants'
 import { NewCouncilElectedActivity } from '@/council/types/CouncilActivities'
 
-export const NewCouncilElectedContent: ActivityContentComponent<NewCouncilElectedActivity> = ({ activity }) => (
+export const NewCouncilElectedContent: ActivityContentComponent<NewCouncilElectedActivity> = () => (
   <ActivityRouterLink to={CouncilRoutes.council}>New council elected.</ActivityRouterLink>
 )

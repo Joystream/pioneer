@@ -5,7 +5,7 @@ import { areLocksConflicting } from '@/accounts/model/lockTypes'
 import { LockType } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
 
-export const useHasRequiredStake = (stake: number, lock: LockType) => {
+export const useHasRequiredStake = (stake: BN, lock: LockType) => {
   const balances = useMyBalances()
 
   const compatibleAccounts = Object.entries(balances).filter(

@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { Label, TextMedium, TextHuge, TextInlineHuge } from '@/common/components/typography'
+import { Label, TextHuge, TextInlineHuge, TextMedium, TokenValue } from '@/common/components/typography'
 import { formatTokenValue } from '@/common/model/formatters'
 import { CouncilConstants } from '@/council/types/CouncilConstants'
 
@@ -37,9 +37,7 @@ export const AnnounceCandidacyConstantsWrapper = ({ constants }: { constants: Co
         <RowGapBlock gap={4}>
           <Label>Voting period</Label>
           <TextMedium lighter>
-            <TextInlineHuge dark value bold>
-              {formatTokenValue(constants?.election.votingPeriod)}
-            </TextInlineHuge>{' '}
+            <TokenValue value={constants?.election.minCandidacyStake} />
             blocks
           </TextMedium>
         </RowGapBlock>
@@ -60,9 +58,8 @@ export const AnnounceCandidacyConstantsWrapper = ({ constants }: { constants: Co
           <Label>Min. Candidate Stake</Label>
           <TextMedium lighter>
             <TextInlineHuge dark value bold>
-              {formatTokenValue(constants?.election.minCandidacyStake)}
+              <TokenValue value={constants?.election.minCandidacyStake} />
             </TextInlineHuge>{' '}
-            tJOY
           </TextMedium>
         </RowGapBlock>
       </Row>

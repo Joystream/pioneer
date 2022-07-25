@@ -51,7 +51,7 @@ describe('useHasRequiredStake', () => {
     locks: [],
   }
 
-  function renderUseTotalBalances(stake: number, lock: LockType) {
+  function renderUseTotalBalances(stake: BN, lock: LockType) {
     const wrapper = ({ children }: { children: ReactNode }) => (
       <MockKeyringProvider>
         <AccountsContextProvider>
@@ -70,7 +70,7 @@ describe('useHasRequiredStake', () => {
         transferable: new BN(1000),
       },
     }
-    const { result } = renderUseTotalBalances(1000, 'Voting')
+    const { result } = renderUseTotalBalances(new BN(1000), 'Voting')
 
     expect(result.current).toStrictEqual({
       hasRequiredStake: true,
@@ -87,7 +87,7 @@ describe('useHasRequiredStake', () => {
         transferable: new BN(1000),
       },
     }
-    const { result } = renderUseTotalBalances(2000, 'Voting')
+    const { result } = renderUseTotalBalances(new BN(2000), 'Voting')
 
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
@@ -111,7 +111,7 @@ describe('useHasRequiredStake', () => {
         ],
       },
     }
-    const { result } = renderUseTotalBalances(1000, 'Voting')
+    const { result } = renderUseTotalBalances(new BN(1000), 'Voting')
     expect(result.current).toStrictEqual({
       hasRequiredStake: true,
       accountsWithTransferableBalance: null,
@@ -134,7 +134,7 @@ describe('useHasRequiredStake', () => {
         ],
       },
     }
-    const { result } = renderUseTotalBalances(1000, 'Storage Worker')
+    const { result } = renderUseTotalBalances(new BN(1000), 'Storage Worker')
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
       accountsWithTransferableBalance: null,
@@ -160,7 +160,7 @@ describe('useHasRequiredStake', () => {
         transferable: new BN(2000),
       },
     }
-    const { result } = renderUseTotalBalances(1000, 'Bound Staking Account')
+    const { result } = renderUseTotalBalances(new BN(1000), 'Bound Staking Account')
     expect(result.current).toStrictEqual({
       hasRequiredStake: true,
       accountsWithTransferableBalance: null,
@@ -186,7 +186,7 @@ describe('useHasRequiredStake', () => {
         locked: new BN(20),
       },
     }
-    const { result } = renderUseTotalBalances(1000, 'Bound Staking Account')
+    const { result } = renderUseTotalBalances(new BN(1000), 'Bound Staking Account')
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
       accountsWithTransferableBalance: null,
@@ -215,7 +215,7 @@ describe('useHasRequiredStake', () => {
         transferable: new BN(100),
       },
     }
-    const { result } = renderUseTotalBalances(1000, 'Voting')
+    const { result } = renderUseTotalBalances(new BN(1000), 'Voting')
     expect(result.current).toStrictEqual({
       hasRequiredStake: true,
       accountsWithTransferableBalance: null,
@@ -244,7 +244,7 @@ describe('useHasRequiredStake', () => {
         transferable: new BN(50),
       },
     }
-    const { result } = renderUseTotalBalances(1000, 'Voting')
+    const { result } = renderUseTotalBalances(new BN(1000), 'Voting')
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
       accountsWithTransferableBalance: null,
@@ -273,7 +273,7 @@ describe('useHasRequiredStake', () => {
         transferable: new BN(350),
       },
     }
-    const { result } = renderUseTotalBalances(1000, 'Voting')
+    const { result } = renderUseTotalBalances(new BN(1000), 'Voting')
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
       accountsWithTransferableBalance: [alice.address, bobStash.address, bob.address],
@@ -324,7 +324,7 @@ describe('useHasRequiredStake', () => {
         ],
       },
     }
-    const { result } = renderUseTotalBalances(1000, 'Bound Staking Account')
+    const { result } = renderUseTotalBalances(new BN(1000), 'Bound Staking Account')
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
       accountsWithTransferableBalance: [alice.address, bobStash.address, bob.address],
@@ -362,7 +362,7 @@ describe('useHasRequiredStake', () => {
         transferable: new BN(300),
       },
     }
-    const { result } = renderUseTotalBalances(1000, 'Voting')
+    const { result } = renderUseTotalBalances(new BN(1000), 'Voting')
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
       accountsWithTransferableBalance: null,
