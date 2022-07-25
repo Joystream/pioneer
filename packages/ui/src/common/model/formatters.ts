@@ -1,7 +1,8 @@
 import BN from 'bn.js'
 
-import { AN_HOUR, A_DAY, A_MINUTE, A_SECOND, SECONDS_PER_BLOCK } from '../constants'
+import { AN_HOUR, A_DAY, A_MINUTE, A_SECOND, JOY_DECIMAL_PLACES, SECONDS_PER_BLOCK } from '../constants'
 import { isDefined, isNumber } from '../utils'
+import { powerOf10 } from '../utils/bn'
 
 export const NUMBER_SEPARATOR_REG_EXP = /\B(?=(\d{3})+(?!\d))/g
 
@@ -74,49 +75,23 @@ export const splitDuration =
     const amount = Math.floor(duration / unitValue)
     return [[amount, unitName], ...splitDuration(submultiples)(duration - amount * unitValue)]
   }
-//
-// const UNIT_VALUE = new BN(10000000000) // Will be 10,000M in Carthage
-// const MIN_VALUE = new BN(100000000) // Will be 100M in Carthage
-// const INT_VALUE = UNIT_VALUE.div(MIN_VALUE)
-// const MIN_DEC = 1 / INT_VALUE.toNumber()
 
-// This function doesn't work (try to display value : 6.06)
-// export const formatJoyValue = (value: BN) => {
-//   if (value.isZero()) {
-//     return '0'
-//   } else if (value.gte(MIN_VALUE)) {
-//     const base = value.div(MIN_VALUE)
-//     const intPart = base.div(INT_VALUE)
-//     const decPart = base.sub(intPart.mul(INT_VALUE))
-//     return `${formatTokenValue(intPart)}.${decPart}`
-//   }
-//   if (value.lt(MIN_VALUE)) {
-//     return `> ${MIN_DEC}`
-//   }
-// }
+const UNIT_VALUE = powerOf10(JOY_DECIMAL_PLACES)
 
-export const DECIMAL_PLACES = 10 // Will be 10,000M in Carthage
-export const DECIMAL_NUMBER = Math.pow(10, DECIMAL_PLACES)
-export const PRECISION = 2 // Will be 100M in Carthage
-
-export const formatJoyValue = (value: BN, precision: number = PRECISION) => {
-  // todo uncomment after carthage merge - needs BN@5.9.1
-  // const {div: int, mod: rest} = value.divmod(new BN(DECIMAL_NUMBER))
-
-  const int = value.div(new BN(DECIMAL_NUMBER))
-  const rest = value.mod(new BN(DECIMAL_NUMBER))
-  const rounded = (rest.toNumber() / Math.pow(10, 8)).toFixed()
-
-  if (int.isZero() && rest.isZero()) {
+export const formatJoyValue = (value: BN, precision = 10) => {
+  if (value.isZero()) {
     return '0'
   }
 
-  if (int.isZero() && +rounded < 1 && !rest.isZero()) {
-    return '< 0.' + '1'.padStart(precision, '0')
+  const safePrecision = Math.min(JOY_DECIMAL_PLACES, precision)
+  const roundedValue = value.divRound(powerOf10(JOY_DECIMAL_PLACES - safePrecision))
+
+  if (roundedValue.isZero()) {
+    return `> ${Math.pow(10, -safePrecision)}`
   }
 
-  if (rest.isZero() || +rounded < 1) {
-    return `${int.toString().replace(NUMBER_SEPARATOR_REG_EXP, ',')}`
-  }
-  return `${int.toString().replace(NUMBER_SEPARATOR_REG_EXP, ',')}.${String(rounded).padStart(2, '0')}`
+  const intPart = formatTokenValue(roundedValue.div(UNIT_VALUE))
+  const decPart = String(roundedValue.abs().mod(UNIT_VALUE))
+
+  return `${intPart}.${decPart}`.replace(/\.?0*$/, '')
 }

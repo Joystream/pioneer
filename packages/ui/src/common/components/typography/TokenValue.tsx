@@ -28,7 +28,7 @@ export const TokenValue = React.memo(({ className, value, size, isLoading }: Val
   }
   return (
     <ValueInJoys className={className} size={size}>
-      {formatJoyValue(value)}
+      {formatJoyValue(value, 2)}
     </ValueInJoys>
   )
 })
