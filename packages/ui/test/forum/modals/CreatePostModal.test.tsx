@@ -137,8 +137,8 @@ describe('UI: CreatePostModal', () => {
     stubConst(api, 'forum.postDeposit', createBalanceOf(101))
     modalData.isEditable = true
     renderModal()
-    expect(screen.getByText(/^Post deposit:/i)?.nextSibling?.textContent).toBe('101.0')
-    expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25.0')
+    expect(screen.getByText(/^Post deposit:/i)?.nextSibling?.textContent).toBe('101')
+    expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
   })
 
   const renderModal = () =>

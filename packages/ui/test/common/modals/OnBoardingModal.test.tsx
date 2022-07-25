@@ -174,7 +174,7 @@ describe('UI: OnBoardingModal', () => {
         const aliceBalance = alice?.parentElement?.parentElement?.children?.item(1)?.textContent
         const bobBalance = bob?.parentElement?.parentElement?.children?.item(1)?.textContent
 
-        expect(aliceBalance).toBe('10.0')
+        expect(aliceBalance).toBe('10')
         expect(bobBalance).toBe('0')
       })
 

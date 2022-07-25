@@ -91,7 +91,7 @@ describe('UI: BountyCancelModal', () => {
 
       const valueContainer = screen.getByText('modals.transactionFee.label')?.nextSibling
 
-      expect(valueContainer?.textContent).toBe('100.0')
+      expect(valueContainer?.textContent).toBe('100')
     })
 
     it('Enable button on sufficient balance', async () => {

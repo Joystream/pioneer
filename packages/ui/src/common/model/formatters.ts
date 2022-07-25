@@ -75,21 +75,4 @@ export const splitDuration =
     return [[amount, unitName], ...splitDuration(submultiples)(duration - amount * unitValue)]
   }
 
-const UNIT_VALUE = new BN(1) // Will be 10,000M in Carthage
-const MIN_VALUE = new BN(1) // Will be 100M in Carthage
-const INT_VALUE = UNIT_VALUE.div(MIN_VALUE)
-const MIN_DEC = 1 / INT_VALUE.toNumber()
-
-export const formatJoyValue = (value: BN) => {
-  if (value.isZero()) {
-    return '0'
-  } else if (value.gte(MIN_VALUE)) {
-    const base = value.div(MIN_VALUE)
-    const intPart = base.div(INT_VALUE)
-    const decPart = base.sub(intPart.mul(INT_VALUE))
-    return `${formatTokenValue(intPart)}.${decPart}`
-  }
-  if (value < MIN_VALUE) {
-    return `> ${MIN_DEC}`
-  }
-}
+export const formatJoyValue = formatTokenValue

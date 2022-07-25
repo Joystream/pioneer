@@ -89,8 +89,8 @@ describe('MyEarningsStat', () => {
 
     await waitForElementToBeRemoved(() => screen.getAllByText('-')[0])
 
-    expect(screen.getByText('100.0')).toBeDefined()
-    expect(screen.getByText('600.0')).toBeDefined()
+    expect(screen.getByText('100')).toBeDefined()
+    expect(screen.getByText('600')).toBeDefined()
   })
 
   function renderStat() {
