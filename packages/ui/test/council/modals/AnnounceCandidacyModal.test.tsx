@@ -212,7 +212,7 @@ describe('UI: Announce Candidacy Modal', () => {
 
           expect(await getNextStepButton()).toBeDisabled()
           expect(
-            includesTextWithMarkup(getByText, 'Minimal stake amount is 10' + `'${CurrencyName.integerValue}'`)
+            includesTextWithMarkup(getByText, `Minimal stake amount is 10 ${CurrencyName.integerValue}`)
           ).toBeInTheDocument()
         })
 

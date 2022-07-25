@@ -10,7 +10,7 @@ import {
 } from '@/bounty/modals/WithdrawContributionModal'
 import { Bounty, Contributor } from '@/bounty/types/Bounty'
 import { BN_ZERO } from '@/common/constants'
-import {formatJoyValue, formatTokenValue} from '@/common/model/formatters'
+import { formatJoyValue, formatTokenValue } from '@/common/model/formatters'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
