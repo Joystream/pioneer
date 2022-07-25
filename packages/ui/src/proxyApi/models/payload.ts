@@ -60,7 +60,7 @@ export const serializePayload = (
     } else if (value.kind === 'SubmittableExtrinsicProxy') {
       return { kind: value.kind, txId: value.txId }
     } else if (isSigner(value)) {
-      return serializeProxy(value, {}, 'signer', messages, postMessage)
+      return serializeProxy(value, {}, ['signPayload'], 'signer', messages, postMessage)
     } else {
       const result = isArray(value) ? [...value] : { ...value }
       stack.push(result)
@@ -103,10 +103,12 @@ export const deserializePayload = (
           return deserializeCodec(value)
         case 'BN':
           return new BN(value.value)
+        case 'extended-codec':
+          return deserializeExtendedCodec(value)
         case 'SubmittableExtrinsicProxy':
           return transactionsRecord?.[value.txId]
         case 'proxy':
-          return deserializeProxy(value.json, value.proxyId, messages, postMessage)
+          return deserializeProxy(value.json, value.methods, value.proxyId, messages, postMessage)
       }
     }
 
@@ -123,6 +125,7 @@ export const deserializeMessage =
 const serializeProxy = (
   obj: AnyObject,
   json: AnyObject = {},
+  methods: string[] = [],
   name = '',
   messages?: Observable<WorkerProxyMessage>,
   postMessage?: PostMessage<ClientProxyMessage>
@@ -141,11 +144,12 @@ const serializeProxy = (
       postMessage({ messageType: 'proxy', proxyId, payload: { error } })
     }
   })
-  return { kind: 'proxy', proxyId, json }
+  return { kind: 'proxy', proxyId, json, methods }
 }
 
 const deserializeProxy = (
   json: any,
+  methods: string[],
   proxyId: string,
   messages?: Observable<ClientProxyMessage>,
   postMessage?: PostMessage<WorkerProxyMessage>
@@ -156,13 +160,15 @@ const deserializeProxy = (
 
   return new Proxy(json, {
     get(json, prop: string) {
-      return prop in json
-        ? json[prop]
-        : async (...params: AnyTuple) => {
-            postMessage({ messageType: 'proxy', proxyId, method: prop, payload: params })
-            const { payload } = await firstValueFrom(messages.pipe(filter((message) => message.proxyId === proxyId)))
-            return payload.error ? Promise.reject(payload.error) : payload.result
-          }
+      if (prop in json) {
+        return prop in json
+      } else if (methods.includes(prop)) {
+        return async (...params: AnyTuple) => {
+          postMessage({ messageType: 'proxy', proxyId, method: prop, payload: params })
+          const { payload } = await firstValueFrom(messages.pipe(filter((message) => message.proxyId === proxyId)))
+          return payload.error ? Promise.reject(payload.error) : payload.result
+        }
+      }
     },
   })
 }
@@ -180,10 +186,10 @@ const serializeCodec = (codec: Codec) => {
     error('Unrecognized codec object', codec, codec.toHuman())
   }
 
-  if (isEventRecord(type, codec)) {
+  if (isEventRecord(codec)) {
     const { meta, method, section, typeDef } = codec.event
     const json = merge(codec.toJSON(), { event: { meta: meta.toJSON(), method, section, typeDef } })
-    return { kind: 'codec', type, value: json }
+    return { kind: 'extended-codec', type, value: json }
   }
 
   return { kind: 'codec', type, value: codec.toJSON() }
@@ -191,22 +197,17 @@ const serializeCodec = (codec: Codec) => {
 
 const isCodec = (obj: any): obj is Codec => typeof obj?.registry === 'object' && obj.registry instanceof TypeRegistry
 
-const isEventRecord = (type: string, codec: Codec): codec is EventRecord => type === 'EventRecord'
+const isEventRecord = (codec: Codec): codec is EventRecord => 'event' in codec
 
-const deserializeCodec = (serialized: SerializedCodec) => {
-  const codec = createType(serialized.type, serialized.value) as Codec
+const deserializeCodec = (serialized: SerializedCodec) => createType(serialized.type, serialized.value) as Codec
 
-  if (serialized.type === 'EventRecord') {
-    return recursiveProxy(codec, {
-      get: (target, path) =>
-        bindIfFunction(get(target, path) ?? get(serialized.value, path), () =>
-          path.length > 1 ? get(target, path.slice(0, -1)) : target
-        ),
-    })
-  }
-
-  return codec
-}
+const deserializeExtendedCodec = (serialized: SerializedCodec) =>
+  recursiveProxy(deserializeCodec(serialized), {
+    get: (target, path) =>
+      bindIfFunction(get(target, path) ?? get(serialized.value, path), () =>
+        path.length > 1 ? get(target, path.slice(0, -1)) : target
+      ),
+  })
 
 const bindIfFunction = (value: any, getContext: () => any) => (isFunction(value) ? value.bind(getContext()) : value)
 
