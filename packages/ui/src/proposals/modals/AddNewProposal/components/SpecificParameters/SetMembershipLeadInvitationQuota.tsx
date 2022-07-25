@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { CurrencyName } from '@/app/constants/currency'
-import { InputComponent, TokenInput } from '@/common/components/forms'
+import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
@@ -33,7 +33,7 @@ export const SetMembershipLeadInvitationQuota = () => {
                 : 'Amount must be greater than zero'
             }
           >
-            <TokenInput
+            <InputNumber
               id="amount-input"
               name="setMembershipLeadInvitationQuota.amount"
               isTokenValue
