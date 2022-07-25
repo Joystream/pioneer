@@ -982,12 +982,12 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeDisabled()
         })
 
-        // it('Validate max value', async () => {
-        //   await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
-        //   await SpecificParameters.fillAmount(Math.pow(2, 32))
-        //   expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
-        //   expect(await screen.queryByTestId('amount-input')).toBeEnabled()
-        // })
+        it('Validate max value', async () => {
+          await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
+          await fillField('amount-input', Math.pow(2, 32))
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toBeEnabled()
+        })
 
         it('Valid form', async () => {
           const amount = 100
