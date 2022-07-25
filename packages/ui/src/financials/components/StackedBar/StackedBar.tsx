@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -34,7 +33,7 @@ export const StackedBar = ({ data, title, active, setActive, haveHover = true, b
         <TextBig value bold>
           {title}
         </TextBig>
-        <TokenValue value={new BN(totalValue || 0)} size="l" />
+        <TokenValue value={totalValue || 0} size="l" />
       </TitleContainer>
       <HorizontalStackedBar
         keys={Object.keys(data)}
@@ -61,7 +60,7 @@ export const StackedBar = ({ data, title, active, setActive, haveHover = true, b
               title={key}
               color={chartColors[index]}
               percentage={(value / (totalValue || 1)) * 100}
-              value={<TokenValue value={new BN(value)} />}
+              value={<TokenValue value={value} />}
               haveHover={haveHover}
             />
           )
