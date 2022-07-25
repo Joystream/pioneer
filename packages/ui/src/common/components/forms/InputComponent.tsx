@@ -4,7 +4,7 @@ import { useFormContext, Controller } from 'react-hook-form'
 import styled, { css } from 'styled-components'
 
 import { cleanInputValue } from '@/common/hooks/useNumberInput'
-import { DECIMAL_NUMBER, formatFromJoyValue, formatToJoyValue, formatTokenValue } from '@/common/model/formatters'
+import { formatFromJoyValue, formatToJoyValue, formatTokenValue } from '@/common/model/formatters'
 import { enhancedGetErrorMessage, enhancedHasError } from '@/common/utils/validation'
 
 import { BorderRad, Colors, Fonts, Shadows, Transitions } from '../../constants'
@@ -185,10 +185,10 @@ interface BaseTokenInputProps extends Omit<InputProps, 'onChange'> {
   maxAllowedValue?: number
 }
 
-const isValid = (value: string, maxAllowedValue?: number) =>
-  /^\d*\.?\d{0,10}$/.test(value) && maxAllowedValue
-    ? new BN(value).div(new BN(DECIMAL_NUMBER)).ltn(maxAllowedValue)
-    : true
+const isValid = (value: string, maxAllowedValue?: number) => /^\d*\.?\d{0,10}$/.test(value)
+// && maxAllowedValue
+//   ? new BN(value).div(new BN(DECIMAL_NUMBER)).ltn(maxAllowedValue)
+//   : true
 
 const BasedTokenInput = React.memo(
   ({ id, onChange, isTokenValue = false, value = '', maxAllowedValue, ...props }: BaseTokenInputProps) => {

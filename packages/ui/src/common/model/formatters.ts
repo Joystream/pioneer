@@ -111,7 +111,7 @@ export const formatFromJoyValue = (joyValue: string | BN) => {
   joyValue = typeof joyValue === 'string' ? joyValue : joyValue.toString()
   const values = joyValue.split('.')
   if (values.length === 1) {
-    return new BN(DECIMAL_NUMBER).muln(+cleanInputValue(values[0]))
+    return new BN(DECIMAL_NUMBER).mul(new BN(cleanInputValue(values[0])))
   }
 
   return new BN(cleanInputValue(values[0]) + values[1].padEnd(10, '0'))
