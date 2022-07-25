@@ -8,8 +8,8 @@ import React from 'react'
 
 import { TransferModal } from '@/accounts/modals/TransferModal'
 import { Account, Balances } from '@/accounts/types'
+import { ApiContext } from '@/api/providers/context'
 import { BN_ZERO } from '@/common/constants'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 
 import { getButton } from '../../_helpers/getButton'

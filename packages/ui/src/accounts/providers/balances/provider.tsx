@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { toBalances } from '@/accounts/model/toBalances'
-import { useApi } from '@/common/hooks/useApi'
+import { useApi } from '@/api/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 
 import { AddressToBalanceMap } from '../../types'

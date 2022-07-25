@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react'
 import { ActorRef, State } from 'xstate'
 
+import { useApi } from '@/api/hooks/useApi'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
 import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
-import { useApi } from '@/common/hooks/useApi'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { TransactionEvent } from '@/common/model/machines'

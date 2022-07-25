@@ -7,7 +7,7 @@ import React from 'react'
 import { of } from 'rxjs'
 
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { ApiContext } from '@/common/providers/api/context'
+import { ApiContext } from '@/api/providers/context'
 import { InviteMemberModal } from '@/memberships/modals/InviteMemberModal'
 import { seedMembers } from '@/mocks/data'
 
