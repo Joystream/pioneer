@@ -115,14 +115,13 @@ describe('UI: ContributeFundsModal', () => {
   })
 
   it('Displays correct contribute amount', () => {
-    const value = 555
-    const expected = String(value)
+    const value = '555'
     const input = screen.getByLabelText('modals.contribute.selectAmount')
     fireEvent.input(input, { target: { value } })
 
     const valueContainer = screen.getByText('modals.common.contributeAmount')?.nextSibling
 
-    expect(valueContainer?.textContent).toBe(expected)
+    expect(valueContainer?.textContent).toBe(value)
   })
 
   describe('Transaction result', () => {

@@ -1,10 +1,9 @@
-import { AugmentedConst } from '@polkadot/api/types'
-import { u32 } from '@polkadot/types'
 import BN from 'bn.js'
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { CloseButton } from '@/common/components/buttons'
 import { InputNumber, ToggleCheckbox, InlineToggleWrap, InputComponent, Label } from '@/common/components/forms'
@@ -121,14 +120,14 @@ export const WorkingDetailsStep = ({ whitelistLimit, minEntrantStake, errorCheck
       <InputComponent
         id="field-periodStake"
         label="Entrant stake"
-        units="tJOY"
+        units={CurrencyName.integerValue}
         inputSize="m"
         tight
         required
         message={
           errorChecker('workingPeriodStake')
             ? errorMessageGetter('workingPeriodStake')
-            : `Minimal entrant stake is ${minEntrantStake?.toNumber() ?? 0} tJOY`
+            : `Minimal entrant stake is ${minEntrantStake?.toNumber() ?? 0} ${CurrencyName.integerValue}`
         }
         validation={errorChecker('workingPeriodStake') ? 'invalid' : undefined}
       >

@@ -74,3 +74,5 @@ export const splitDuration =
     const amount = Math.floor(duration / unitValue)
     return [[amount, unitName], ...splitDuration(submultiples)(duration - amount * unitValue)]
   }
+
+export const formatJoyValue = formatTokenValue

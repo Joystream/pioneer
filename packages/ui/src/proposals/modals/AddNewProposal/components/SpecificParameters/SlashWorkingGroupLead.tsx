@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
@@ -75,7 +76,7 @@ export const SlashWorkingGroupLead = () => {
           <InputComponent
             label="Decrease Stake Amount"
             tight
-            units="tJOY"
+            units={CurrencyName.integerValue}
             inputWidth="s"
             tooltipText="Amount to be slashed"
             name="slashWorkingGroupLead.slashingAmount"

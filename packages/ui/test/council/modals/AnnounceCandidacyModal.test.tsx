@@ -11,6 +11,7 @@ import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import { CurrencyName } from '@/app/constants/currency'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
 import { getSteps } from '@/common/model/machines/getSteps'
@@ -210,7 +211,9 @@ describe('UI: Announce Candidacy Modal', () => {
           await fillStakingAmount(2)
 
           expect(await getNextStepButton()).toBeDisabled()
-          expect(includesTextWithMarkup(getByText, 'Minimal stake amount is 10 tJOY')).toBeInTheDocument()
+          expect(
+            includesTextWithMarkup(getByText, `Minimal stake amount is 10 ${CurrencyName.integerValue}`)
+          ).toBeInTheDocument()
         })
 
         it('Higher than maximal balance', async () => {

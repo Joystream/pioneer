@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
+import { ListHeaders } from '@/common/components/List/ListHeader'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Colors } from '@/common/constants'
 import { WorkingGroupListItem } from '@/working-groups/components/WorkingGroupListItem'

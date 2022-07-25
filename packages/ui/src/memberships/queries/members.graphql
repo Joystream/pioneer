@@ -83,7 +83,12 @@ query GetMembers($where: MembershipWhereInput, $orderBy: [MembershipOrderByInput
   }
 }
 
-query GetMembersWithDetails($where: MembershipWhereInput, $orderBy: [MembershipOrderByInput!], $offset: Int, $limit: Int) {
+query GetMembersWithDetails(
+  $where: MembershipWhereInput
+  $orderBy: [MembershipOrderByInput!]
+  $offset: Int
+  $limit: Int
+) {
   memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
     ...MemberWithDetailsFields
   }

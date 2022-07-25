@@ -12,6 +12,7 @@ import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatu
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { CurrencyName } from '@/app/constants/currency'
 import { BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEntryModal/index'
 import { announceWorkEntryMachine, AnnounceWorkEntryStates } from '@/bounty/modals/AnnounceWorkEntryModal/machine'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
@@ -63,7 +64,7 @@ export const AnnounceWorkEntryModal = () => {
   const [state, send] = useMachine(announceWorkEntryMachine)
   const balance = useBalance(state.context.stakingAccount?.address)
   const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
-  const { hasRequiredStake } = useHasRequiredStake(amount.toNumber() || 0, 'Bounties')
+  const { hasRequiredStake } = useHasRequiredStake(amount ?? BN_ZERO, 'Bounties')
 
   const { setContext, errors, isValid } = useSchema<IStakingAccountSchema>(
     { account: state.context.stakingAccount },
@@ -271,7 +272,7 @@ export const AnnounceWorkEntryModal = () => {
                 id="amount-input"
                 required
                 inputWidth="s"
-                units="tJOY"
+                units={CurrencyName.integerValue}
                 disabled
                 tooltipText={t('modals.announceWorkEntry.selectAmountTooltip')}
               >

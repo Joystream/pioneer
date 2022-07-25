@@ -4,6 +4,7 @@ import React, { useEffect } from 'react'
 import * as Yup from 'yup'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
+import { CurrencyName } from '@/app/constants/currency'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputNumber } from '@/common/components/forms'
@@ -26,7 +27,12 @@ export interface IncreaseStakeFormFields {
 
 const StakeFormSchema = Yup.object().shape({
   stake: BNSchema.test(minContext('You need at least ${min} stake', 'minAddStake'))
-    .test(maxContext('Given amount exceed your transferable balance of ${max} tJOY', 'totalBalance'))
+    .test(
+      maxContext(
+        `Given amount exceed your transferable balance of \${max} ${CurrencyName.integerValue}`,
+        'totalBalance'
+      )
+    )
     .required(),
 })
 
@@ -83,7 +89,7 @@ export const IncreaseWorkerStakeModal = () => {
         <InputComponent
           id="amount-input"
           label="Select amount for Staking"
-          units="tJOY"
+          units={CurrencyName.integerValue}
           validation={state.context.stake && hasError('stake', errors) ? 'invalid' : undefined}
           message={
             (state.context.stake && hasError('stake', errors) ? getErrorMessage('stake', errors) : undefined) || ' '

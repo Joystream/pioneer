@@ -83,9 +83,8 @@ export const AnnounceCandidacyModal = () => {
   const { hideModal, showModal } = useModal()
   const [state, send, service] = useMachine(announceCandidacyMachine)
   const constants = useCouncilConstants()
-  // TODO: minCandidacyStake should be BN after https://github.com/Joystream/pioneer/pull/3265 is merged
   const { hasRequiredStake } = useHasRequiredStake(
-    constants?.election.minCandidacyStake.toNumber() || 0,
+    constants?.election.minCandidacyStake || BN_ZERO,
     'Council Candidate'
   )
   const [stakingAccountMap, setStakingAccount] = useState<Account | undefined>(undefined)
@@ -228,7 +227,7 @@ export const AnnounceCandidacyModal = () => {
     showModal<MoveFundsModalCall>({
       modal: 'MoveFundsModal',
       data: {
-        requiredStake: constants?.election.minCandidacyStake as BN,
+        requiredStake: constants?.election.minCandidacyStake ?? BN_ZERO,
         lock: 'Council Candidate',
       },
     })

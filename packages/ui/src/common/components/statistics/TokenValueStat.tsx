@@ -9,7 +9,7 @@ import { TokenValue } from '../typography'
 import { StatisticItem, StatisticItemProps } from './StatisticItem'
 
 export interface TokenValueStatProps extends StatisticItemProps {
-  value?: number | BN | null
+  value?: BN | null
   isLoading?: boolean
   textColor?: string
 }

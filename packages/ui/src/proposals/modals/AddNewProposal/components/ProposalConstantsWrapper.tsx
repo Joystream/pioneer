@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
+import { Label, TextInlineMedium, TextMedium, TokenValue } from '@/common/components/typography'
 import { formatTokenValue } from '@/common/model/formatters'
 import { ProposalConstants } from '@/proposals/types/constants'
 
@@ -65,7 +65,9 @@ export const ProposalConstantsWrapper = ({ constants }: { constants: ProposalCon
       <RowGapBlock gap={4}>
         <Label>Required Stake</Label>
         <TextMedium lighter>
-          <TextInlineMedium dark>{formatTokenValue(constants?.requiredStake)}</TextInlineMedium> tJOY
+          <TextInlineMedium dark>
+            <TokenValue value={constants?.requiredStake} />
+          </TextInlineMedium>
         </TextMedium>
       </RowGapBlock>
     </Row>

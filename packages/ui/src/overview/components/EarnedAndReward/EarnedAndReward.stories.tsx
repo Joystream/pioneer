@@ -1,4 +1,5 @@
 import { Meta, Story } from '@storybook/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
@@ -20,6 +21,6 @@ export const Default = Template.bind({})
 Default.args = {
   earnedTitle: 'Total earned this month',
   rewardTitle: 'Total owed reward this month',
-  earnedValue: 1000,
-  rewardValue: 2000,
+  earnedValue: new BN(1000),
+  rewardValue: new BN(2000),
 }

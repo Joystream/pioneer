@@ -2,14 +2,14 @@ import BN from 'bn.js'
 import React, { useCallback, useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { AmountButton, AmountButtons, Row, TransactionAmount } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextInlineMedium, TextMedium } from '@/common/components/typography'
+import { TextInlineMedium, TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { capitalizeFirstLetter } from '@/common/helpers'
-import { formatTokenValue } from '@/common/model/formatters'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
@@ -83,7 +83,10 @@ export const DecreaseWorkingGroupLeadStake = () => {
             <Info>
               <TextMedium>
                 The actual stake for {capitalizeFirstLetter(group.name)} Working Group Lead is{' '}
-                <TextInlineMedium bold>{formatTokenValue(group.leadWorker?.stake)} tJOY</TextInlineMedium>.
+                <TextInlineMedium bold>
+                  <TokenValue value={group.leadWorker?.stake} />
+                </TextInlineMedium>
+                .
               </TextMedium>
             </Info>
           )}
@@ -91,7 +94,7 @@ export const DecreaseWorkingGroupLeadStake = () => {
             <InputComponent
               label="Decrease Stake Amount"
               tight
-              units="tJOY"
+              units={CurrencyName.integerValue}
               inputWidth="s"
               tooltipText="Amount by which to decrease stake."
               required

@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 import { BenefitsTableLayout } from '@/app/components/OnboardingOverlay/components/BenefitsTable'
 import { CheckboxIcon } from '@/common/components/icons'
-import { CrossIcon } from '@/common/components/icons/CrossIcon'
 import { TableListItem } from '@/common/components/List'
 import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'

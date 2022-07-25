@@ -6,6 +6,7 @@ import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent } from '@/common/components/forms'
 import { ModalBody, ModalTransactionFooter } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -52,7 +53,9 @@ export const EditThreadTitleSignModal = ({ thread, newTitle, service, onClose }:
   const signDisabled = !isReady || !hasFunds
 
   const getMessage = (fee?: BN) => {
-    return `Insufficient funds to cover the title edition. You need at least ${fee?.toString()} tJOY on your account for this action.`
+    return `Insufficient funds to cover the title edition. You need at least ${fee?.toString()} ${
+      CurrencyName.integerValue
+    } on your account for this action.`
   }
 
   if (!threadAuthor || !controllerAccount) {

@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
@@ -72,7 +73,7 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
                 <SidePaneLabel text="Earned in 24h" />
                 <SidePaneColumn>
                   <SidePaneText>
-                    <TokenValue value={1000} />
+                    <TokenValue value={new BN(1000)} />
                   </SidePaneText>
                 </SidePaneColumn>
               </SidePaneRow>
