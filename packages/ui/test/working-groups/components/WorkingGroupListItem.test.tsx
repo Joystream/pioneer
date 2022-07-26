@@ -36,7 +36,7 @@ describe('WorkingGroupListItem', () => {
     seedOpeningStatuses(mockServer.server)
 
     group = mockServer.server?.schema.first('WorkingGroup')?.attrs as unknown as WorkingGroup
-    group.budget = group.budget ? new BN(group.budget) : undefined
+    group.budget = group.budget && new BN(group.budget)
   })
 
   it('Loading', () => {
