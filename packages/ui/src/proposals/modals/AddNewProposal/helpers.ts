@@ -24,6 +24,7 @@ export const defaultProposalValues = {
   },
   triggerAndDiscussion: {
     discussionWhitelist: [],
+    isDiscussionClosed: false,
   },
   updateWorkingGroupBudget: {
     isPositive: true,

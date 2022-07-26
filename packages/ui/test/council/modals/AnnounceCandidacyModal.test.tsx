@@ -14,7 +14,6 @@ import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CurrencyName } from '@/app/constants/currency'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
-import { DECIMAL_NUMBER } from '@/common/model/formatters'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -29,7 +28,6 @@ import { RawCouncilElectionMock, seedCouncilCandidate, seedCouncilElection, seed
 import { getButton } from '../../_helpers/getButton'
 import { includesTextWithMarkup } from '../../_helpers/includesTextWithMarkup'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
-import {numberToInputWithDecimals} from '../../_helpers/utils';
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { CANDIDATE_DATA } from '../../_mocks/council'
 import { alice, bob } from '../../_mocks/keyring'
@@ -209,7 +207,7 @@ describe('UI: Announce Candidacy Modal', () => {
         it('Lower than minimal stake', async () => {
           const { getByText } = renderModal()
 
-          await fillStakingAmount(numberToInputWithDecimals(1))
+          await fillStakingAmount(1)
 
           expect(await getNextStepButton()).toBeDisabled()
           expect(
@@ -581,7 +579,7 @@ describe('UI: Announce Candidacy Modal', () => {
 
   async function fillStakingStep(stakingAccount: string, stakingAmount: number, goNext?: boolean) {
     await selectFromDropdown('Select account for Staking', stakingAccount)
-    await fillStakingAmount(stakingAmount / DECIMAL_NUMBER)
+    await fillStakingAmount(stakingAmount)
 
     if (goNext) {
       await clickNextButton()

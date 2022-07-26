@@ -14,7 +14,6 @@ import { CurrencyName } from '@/app/constants/currency'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { camelCaseToText } from '@/common/helpers'
 import { createType } from '@/common/model/createType'
-import { DECIMAL_NUMBER } from '@/common/model/formatters'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ApiContext } from '@/common/providers/api/context'
@@ -43,7 +42,6 @@ import { ProposalType } from '@/proposals/types'
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
 import { toggleCheckBox } from '../../_helpers/toggleCheckBox'
-import { numberToInputWithDecimals } from '../../_helpers/utils'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { mockUseCurrentBlockNumber } from '../../_mocks/hooks/useCurrentBlockNumber'
 import { alice, bob } from '../../_mocks/keyring'
@@ -530,7 +528,8 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid - everything filled', async () => {
           const amount = 100
-          await SpecificParameters.fillAmount(amount)
+          // await SpecificParameters.fillAmount(amount)
+          await fillField('amount-input', amount)
           await SpecificParameters.FundingRequest.selectRecipient('bob')
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
@@ -785,9 +784,9 @@ describe('UI: AddNewProposalModal', () => {
 
           const { description: metadata, ...data } = txSpecificParameters.asCreateWorkingGroupLeadOpening.toJSON()
           expect(data).toEqual({
-            rewardPerBlock: step4.rewardPerBlock * DECIMAL_NUMBER,
+            rewardPerBlock: step4.rewardPerBlock,
             stakePolicy: {
-              stakeAmount: step4.stake * DECIMAL_NUMBER,
+              stakeAmount: step4.stake,
               leavingUnstakingPeriod: step4.unstakingPeriod,
             },
             group: step1.group,
@@ -834,7 +833,7 @@ describe('UI: AddNewProposalModal', () => {
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
           const parameters = txSpecificParameters.asSetWorkingGroupLeadReward.toJSON()
-          expect(parameters).toEqual([Number(forumLeadId?.split('-')[1]), amount * DECIMAL_NUMBER, group])
+          expect(parameters).toEqual([Number(forumLeadId?.split('-')[1]), amount, group])
         })
       })
 
@@ -1403,8 +1402,7 @@ describe('UI: AddNewProposalModal', () => {
         await finishProposalType('fundingRequest')
         await finishStakingAccount()
         await finishProposalDetails()
-        await discussionClosed()
-        await finishTriggerAndDiscussion()
+        await finishTriggerAndDiscussion(true)
         await SpecificParameters.FundingRequest.finish(100, 'bob')
 
         await act(async () => {
@@ -1470,7 +1468,10 @@ describe('UI: AddNewProposalModal', () => {
     await clickNextButton()
   }
 
-  async function finishTriggerAndDiscussion() {
+  async function finishTriggerAndDiscussion(closeDiscussion = false) {
+    if (closeDiscussion) {
+      await discussionClosed()
+    }
     await clickNextButton()
   }
 
@@ -1543,7 +1544,7 @@ describe('UI: AddNewProposalModal', () => {
   }
 
   const SpecificParameters = {
-    fillAmount: async (value: number) => await fillField('amount-input', numberToInputWithDecimals(value)),
+    fillAmount: async (value: number) => await fillField('amount-input', value),
     Signal: {
       fillSignal: async (value: string) => await fillField('signal', value),
     },
