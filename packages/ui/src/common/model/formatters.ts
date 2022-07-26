@@ -76,22 +76,21 @@ export const splitDuration =
     return [[amount, unitName], ...splitDuration(submultiples)(duration - amount * unitValue)]
   }
 
-const UNIT_VALUE = powerOf10(JOY_DECIMAL_PLACES)
-
 export const formatJoyValue = (value: BN, precision = 10) => {
   if (value.isZero()) {
     return '0'
   }
 
   const safePrecision = Math.min(JOY_DECIMAL_PLACES, precision)
-  const roundedValue = value.divRound(powerOf10(JOY_DECIMAL_PLACES - safePrecision))
+  const roundedValue = value.abs().divRound(powerOf10(JOY_DECIMAL_PLACES - safePrecision))
 
   if (roundedValue.isZero()) {
-    return `> ${Math.pow(10, -safePrecision)}`
+    return `${value.isNeg() ? '< -' : '> '}${Math.pow(10, -safePrecision)}`
   }
 
-  const intPart = formatTokenValue(roundedValue.div(UNIT_VALUE))
-  const decPart = String(roundedValue.abs().mod(UNIT_VALUE))
+  const sign = value.isNeg() ? '-' : ''
+  const intPart = formatTokenValue(roundedValue.div(powerOf10(safePrecision)))
+  const decPart = String(roundedValue.mod(powerOf10(safePrecision))).padStart(safePrecision, '0')
 
-  return `${intPart}.${decPart}`.replace(/\.?0*$/, '')
+  return `${sign}${intPart}.${decPart}`.replace(/\.?0*$/, '')
 }

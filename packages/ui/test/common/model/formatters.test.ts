@@ -5,6 +5,7 @@ import {
   durationFormatter,
   formatBlocksToDuration,
   formatDateString,
+  formatJoyValue,
   formatTokenValue,
   shortenAddress,
   splitDuration,
@@ -144,6 +145,46 @@ describe('formatters', () => {
         [0, 'hour'],
         [0, 'minute'],
       ])
+    })
+  })
+
+  describe('formatJoyValue', () => {
+    const constsMock = jest.requireMock('@/common/constants/numbers')
+    constsMock.JOY_DECIMAL_PLACES = 10 // This is the actual app value
+
+    it('Default', () => {
+      expect(formatJoyValue(new BN('0'))).toBe('0')
+      expect(formatJoyValue(new BN('0'), 2)).toBe('0')
+      expect(formatJoyValue(new BN('1 0000000000'))).toBe('1')
+      expect(formatJoyValue(new BN('1 0000000000'), 2)).toBe('1')
+
+      expect(formatJoyValue(new BN('1 000 000 000 000 0000000000'))).toBe('1,000,000,000,000')
+      expect(formatJoyValue(new BN('1 000 000 000 000 0000000001'))).toBe('1,000,000,000,000.0000000001')
+      expect(formatJoyValue(new BN('1 000 000 000 000 0000000000'), 2)).toBe('1,000,000,000,000')
+      expect(formatJoyValue(new BN('1 000 000 000 000 0000000001'), 2)).toBe('1,000,000,000,000')
+
+      expect(formatJoyValue(new BN('1 0010000000'))).toBe('1.001')
+      expect(formatJoyValue(new BN('1 0100000000'))).toBe('1.01')
+      expect(formatJoyValue(new BN('1 0010000000'), 2)).toBe('1')
+      expect(formatJoyValue(new BN('1 0100000000'), 2)).toBe('1.01')
+
+      expect(formatJoyValue(new BN('1 0140000000'))).toBe('1.014')
+      expect(formatJoyValue(new BN('1 0150000000'))).toBe('1.015')
+      expect(formatJoyValue(new BN('1 0140000000'), 2)).toBe('1.01')
+      expect(formatJoyValue(new BN('1 0150000000'), 2)).toBe('1.02')
+      expect(formatJoyValue(new BN('1 9950000000'), 2)).toBe('2')
+
+      expect(formatJoyValue(new BN('1'), 2)).toBe('> 0.01')
+      expect(formatJoyValue(new BN('1'))).toBe('0.0000000001')
+
+      expect(formatJoyValue(new BN('-1 0000000000'))).toBe('-1')
+      expect(formatJoyValue(new BN('-1'))).toBe('-0.0000000001')
+      expect(formatJoyValue(new BN('-1 0050000000'))).toBe('-1.005')
+      expect(formatJoyValue(new BN('-1 0000000000'), 2)).toBe('-1')
+      expect(formatJoyValue(new BN('-1'), 2)).toBe('< -0.01')
+      expect(formatJoyValue(new BN('-1 0050000000'), 2)).toBe('-1.01')
+
+      expect(formatJoyValue(new BN('1 5000000000'), 0)).toBe('2')
     })
   })
 })
