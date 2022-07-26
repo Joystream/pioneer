@@ -10,6 +10,7 @@ import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
@@ -71,7 +72,7 @@ export const IncreaseWorkerStakeModal = () => {
   }
 
   if (state.matches('success')) {
-    return <SuccessModal onClose={hideModal} amount={state.context.stake.toString() || '0'} />
+    return <SuccessModal onClose={hideModal} amount={state.context.stake ?? BN_ZERO} />
   }
 
   if (state.matches('error')) {

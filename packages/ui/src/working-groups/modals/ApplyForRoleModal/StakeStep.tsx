@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React from 'react'
 
 import { SelectAccount, SelectStakingAccount } from '@/accounts/components/SelectAccount'
@@ -17,7 +18,7 @@ interface StakeStepProps extends ValidationHelpers {
 
 export interface StakeStepFormFields {
   account?: Account
-  amount?: string
+  amount?: BN
   rewardAccount?: Account
   roleAccount?: Account
 }

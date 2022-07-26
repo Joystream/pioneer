@@ -432,7 +432,7 @@ describe('UI: ApplyForRoleModal', () => {
     expect(beforeTransactionParam.rewardAccountId).toBe(alice.address)
 
     expect(beforeTransactionParam.stakeParameters.stakingAccountId).toBe(bob.address)
-    expect(+beforeTransactionParam.stakeParameters.stake.toString()).toBe(2000)
+    expect(beforeTransactionParam.stakeParameters.stake.toString()).toBe('2000')
 
     await act(async () => {
       fireEvent.click(await screen.findByText(/^Sign transaction and stake/i))
@@ -447,7 +447,7 @@ describe('UI: ApplyForRoleModal', () => {
     expect(transactionParam.rewardAccountId).toBe(alice.address)
 
     expect(transactionParam.stakeParameters.stakingAccountId).toBe(bob.address)
-    expect(+transactionParam.stakeParameters.stake.toString()).toBe(2000)
+    expect(transactionParam.stakeParameters.stake.toString()).toBe('2000')
 
     expect(metadataFromBytes(ApplicationMetadata, transactionParam.description)).toEqual({
       answers: ['Foo bar baz', 'Foo bar baz', 'Foo bar baz'],
