@@ -18,7 +18,7 @@ export interface StakeStatProps extends StatisticItemProps {
 const title = 'Stake Height'
 
 export const StakeStat = ({ value, minStake }: StakeStatProps) => {
-  if (new BN(value).gte(new BN(minStake))) {
+  if (value.gte(minStake)) {
     return <TokenValueStat value={value} title={title} />
   }
   return (

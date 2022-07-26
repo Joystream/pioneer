@@ -1,4 +1,5 @@
 import { useMachine } from '@xstate/react'
+import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -177,7 +178,7 @@ export const WithdrawWorkEntryModal = () => {
             </Container>
           ))}
           <Container disabled label={t('modals.withdrawWorkEntry.stakeInput')} inputSize="l">
-            <TokenValue value={entry?.stake} size="s" />
+            <TokenValue value={entry?.stake ? new BN(entry.stake) : undefined} size="s" />
           </Container>
         </ScrolledModalContainer>
       </ScrolledModalBody>

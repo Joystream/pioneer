@@ -1,9 +1,10 @@
 import BN from 'bn.js'
 
-import { AN_HOUR, A_DAY, A_MINUTE, A_SECOND, SECONDS_PER_BLOCK } from '../constants'
+import { AN_HOUR, A_DAY, A_MINUTE, A_SECOND, JOY_DECIMAL_PLACES, SECONDS_PER_BLOCK } from '../constants'
 import { isDefined, isNumber } from '../utils'
+import { powerOf10 } from '../utils/bn'
 
-const NUMBER_SEPARATOR_REG_EXP = /\B(?=(\d{3})+(?!\d))/g
+export const NUMBER_SEPARATOR_REG_EXP = /\B(?=(\d{3})+(?!\d))/g
 
 export const formatTokenValue = (value: BN | number | string | undefined | null) => {
   if (!isDefined(value) || value === null || Number.isNaN(value)) {
@@ -75,4 +76,21 @@ export const splitDuration =
     return [[amount, unitName], ...splitDuration(submultiples)(duration - amount * unitValue)]
   }
 
-export const formatJoyValue = formatTokenValue
+export const formatJoyValue = (value: BN, precision = 10) => {
+  if (value.isZero()) {
+    return '0'
+  }
+
+  const safePrecision = Math.min(JOY_DECIMAL_PLACES, precision)
+  const roundedValue = value.abs().divRound(powerOf10(JOY_DECIMAL_PLACES - safePrecision))
+
+  if (roundedValue.isZero()) {
+    return `${value.isNeg() ? '< -' : '> '}${Math.pow(10, -safePrecision)}`
+  }
+
+  const sign = value.isNeg() ? '-' : ''
+  const intPart = formatTokenValue(roundedValue.div(powerOf10(safePrecision)))
+  const decPart = String(roundedValue.mod(powerOf10(safePrecision))).padStart(safePrecision, '0')
+
+  return `${sign}${intPart}.${decPart}`.replace(/\.?0*$/, '')
+}

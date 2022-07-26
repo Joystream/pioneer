@@ -19,6 +19,11 @@ jest.mock('@/accounts/hooks/useTransactionFee', () => ({
   useTransactionFee: jest.fn(() => mockedTransactionFee),
 }))
 
+jest.mock('@/common/constants/numbers', () => ({
+  ...jest.requireActual('@/common/constants/numbers'),
+  JOY_DECIMAL_PLACES: 0,
+}))
+
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
