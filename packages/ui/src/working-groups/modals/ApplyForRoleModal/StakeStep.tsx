@@ -63,7 +63,7 @@ export function StakeStep({ opening, errorChecker, errorMessageGetter }: StakeSt
             message={(errorChecker('amount') ? errorMessageGetter('amount') : undefined) || ' '}
             required
           >
-            <TokenInput id="amount-input" name="stake.amount" placeholder={minStake.toString()} isTokenValue isInBN />
+            <TokenInput id="amount-input" name="stake.amount" placeholder={minStake.toString()} />
           </InputComponent>
 
           <h4>3. Select Role Account</h4>

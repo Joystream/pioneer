@@ -108,8 +108,6 @@ export const UpdateWorkingGroupBudget = () => {
             <TokenInput
               id="amount-input"
               name="updateWorkingGroupBudget.budgetUpdate"
-              isTokenValue
-              isInBN
               placeholder="0"
               disabled={!group}
             />

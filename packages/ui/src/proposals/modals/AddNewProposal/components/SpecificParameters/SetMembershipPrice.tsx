@@ -25,7 +25,7 @@ export const SetMembershipPrice = () => {
             message="Value must be greater than zero"
             name="setMembershipPrice.amount"
           >
-            <TokenInput id="amount-input" name="setMembershipPrice.amount" isTokenValue isInBN placeholder="0" />
+            <TokenInput id="amount-input" name="setMembershipPrice.amount" placeholder="0" />
           </InputComponent>
         </RowGapBlock>
       </Row>

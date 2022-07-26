@@ -24,7 +24,7 @@ export const SetCouncilorReward = () => {
             required
             name="setCouncilorReward.amount"
           >
-            <TokenInput id="amount-input" isTokenValue isInBN name="setCouncilorReward.amount" placeholder="0" />
+            <TokenInput id="amount-input" name="setCouncilorReward.amount" placeholder="0" />
           </InputComponent>
         </RowGapBlock>
       </Row>

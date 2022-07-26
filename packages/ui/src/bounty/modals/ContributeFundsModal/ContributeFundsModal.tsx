@@ -263,10 +263,9 @@ export const ContributeFundsModal = () => {
               >
                 <TokenInput
                   id="amount-input"
-                  value={state.context.amount?.toString()}
-                  onChange={(_, value) => setAmount(new BN(value))}
+                  value={state.context.amount}
+                  onChange={(_, value) => setAmount(value)}
                   placeholder="0"
-                  isTokenValue
                 />
               </InputComponent>
               <StyledAmountButtons>

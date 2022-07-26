@@ -51,19 +51,19 @@ export const WinnersSelection = ({
 
   const handleRewardEdit = useCallback(
     (id: number) => (_: any, value: BN) => {
-      editWinner(id, { reward: value.toNumber() })
+      editWinner(id, { reward: value })
     },
     [editWinner]
   )
 
   const handleEqualDistribution = useCallback(() => {
-    const rewardMod = bountyFunding.toNumber() % winners.length
-    const reward = Math.floor(bountyFunding.toNumber() / winners.length)
+    const rewardMod = bountyFunding.modn(winners.length)
+    const reward = bountyFunding.divn(winners.length)
 
     winners.forEach((winner, index) => {
-      editWinner(winner.id, { reward: index === 0 ? reward + rewardMod : reward })
+      editWinner(winner.id, { reward: index === 0 ? bountyFunding : reward })
     })
-  }, [winners.length, bountyFunding.toNumber()])
+  }, [winners.length, bountyFunding.toString()])
 
   return (
     <>
@@ -114,21 +114,17 @@ export const WinnersSelection = ({
             >
               <TokenInput
                 id={`winnerRewardInput${index + 1}`}
-                isTokenValue
-                value={String(winner.reward)}
+                value={winner.reward}
                 onChange={handleRewardEdit(winner.id)}
               />
             </InputComponent>
             <AmountButtons>
               {winners.length > 1 && (
-                <AmountButton
-                  size="small"
-                  onClick={() => editWinner(winner.id, { reward: Math.floor(bountyFunding.toNumber() / 2) })}
-                >
+                <AmountButton size="small" onClick={() => editWinner(winner.id, { reward: bountyFunding.divn(2) })}>
                   {t('modals.submitJudgement.amountButtons.useHalf')}
                 </AmountButton>
               )}
-              <AmountButton size="small" onClick={() => editWinner(winner.id, { reward: bountyFunding.toNumber() })}>
+              <AmountButton size="small" onClick={() => editWinner(winner.id, { reward: bountyFunding })}>
                 {t('modals.submitJudgement.amountButtons.useMax')}
               </AmountButton>
             </AmountButtons>

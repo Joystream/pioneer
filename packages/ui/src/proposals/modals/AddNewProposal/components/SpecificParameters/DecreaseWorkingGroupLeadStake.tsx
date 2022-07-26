@@ -105,8 +105,6 @@ export const DecreaseWorkingGroupLeadStake = () => {
               <TokenInput
                 id="amount-input"
                 name="decreaseWorkingGroupLeadStake.stakingAmount"
-                isTokenValue
-                isInBN
                 placeholder="0"
                 disabled={isDisabled}
               />

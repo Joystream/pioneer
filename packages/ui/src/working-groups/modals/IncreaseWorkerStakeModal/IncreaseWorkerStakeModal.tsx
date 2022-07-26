@@ -98,8 +98,7 @@ export const IncreaseWorkerStakeModal = () => {
         >
           <TokenInput
             id="amount-input"
-            isTokenValue
-            value={state.context.stake?.toString()}
+            value={state.context.stake}
             placeholder={formatTokenValue(modalData.worker?.minStake)}
             onChange={(_, value) => send('SET_STAKE', { stake: new BN(value) })}
           />

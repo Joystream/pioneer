@@ -3,7 +3,7 @@ import React from 'react'
 
 import { ModalBlock, Row, TemplateBlock } from '../storybookParts/previewStyles'
 
-import { InputComponent, InputComponentProps, TokenInput, InputText } from './InputComponent'
+import { InputComponent, InputComponentProps, TokenInput, InputText } from '.'
 
 export default {
   title: 'Common/Forms/InputComponent',

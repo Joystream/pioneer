@@ -36,7 +36,7 @@ interface Props {
 }
 
 interface TransferTokensFormField {
-  amount?: string
+  amount?: BN
 }
 
 const schemaFactory = (maxValue?: BN, minValue?: BN, senderBalance?: BN) => {
@@ -74,22 +74,21 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
     changeField,
     validation,
     fields: { amount },
-  } = useForm<TransferTokensFormField>({ amount: initialValue?.toString() }, schema)
+  } = useForm<TransferTokensFormField>({ amount: initialValue }, schema)
   const { isValid, errors } = validation
 
   const transferableBalance = balances[sender?.address as string]?.transferable ?? BN_ZERO
   const filterRecipient = useCallback(filterAccount(sender), [sender])
   const getIconType = () => (!from ? (!to ? 'transfer' : 'receive') : 'send')
 
-  const isZero = new BN(amount ?? 0).lte(BN_ZERO)
-  const isOverBalance = new BN(amount ?? 0).gt(maxValue || transferableBalance || 0)
-  const isTransferDisabled = isZero || isOverBalance || !recipient || !isValid
+  const isOverBalance = amount?.gt(maxValue || transferableBalance || 0)
+  const isTransferDisabled = !amount || amount.isZero() || isOverBalance || !recipient || !isValid
   const isValueDisabled = !sender
 
-  const setHalf = () => changeField('amount', transferableBalance.divn(2).toString())
+  const setHalf = () => changeField('amount', transferableBalance.divn(2))
   const onClick = () => {
     if (amount && recipient && sender) {
-      onAccept(new BN(amount), sender, recipient)
+      onAccept(amount, sender, recipient)
     }
   }
   return (
@@ -124,10 +123,9 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
             message={(amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined) || ' '}
           >
             <TokenInput
-              isTokenValue
               id="amount-input"
               value={amount}
-              onChange={(_, value) => changeField('amount', value.toString())}
+              onChange={(_, value) => changeField('amount', value)}
               disabled={isValueDisabled}
               placeholder="0"
             />

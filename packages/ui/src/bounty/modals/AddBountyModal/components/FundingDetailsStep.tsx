@@ -70,7 +70,7 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
           }
           validation={errorChecker('cherry') ? 'invalid' : undefined}
         >
-          <TokenInput isInBN id="field-cherry" isTokenValue placeholder="0" name="fundingPeriodDetails.cherry" />
+          <TokenInput id="field-cherry" placeholder="0" name="fundingPeriodDetails.cherry" />
         </InputComponent>
       </RowGapBlock>
       <RowGapBlock gap={20}>
@@ -152,12 +152,10 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
           tooltipText="Cumulative funding must be above minimal range for bounty to proceed to Working Stage period in limited funding."
         >
           <TokenInput
-            isInBN
             id="field-minRange"
             name="fundingPeriodDetails.fundingMinimalRange"
             disabled={isPerpetual}
             placeholder="0"
-            isTokenValue
           />
         </InputComponent>
         <InputComponent
@@ -183,13 +181,7 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
             </>
           }
         >
-          <TokenInput
-            isInBN
-            id="field-maxRange"
-            name="fundingPeriodDetails.fundingMaximalRange"
-            placeholder="0"
-            isTokenValue
-          />
+          <TokenInput id="field-maxRange" name="fundingPeriodDetails.fundingMaximalRange" placeholder="0" />
         </InputComponent>
       </ColumnGapBlock>
     </RowGapBlock>

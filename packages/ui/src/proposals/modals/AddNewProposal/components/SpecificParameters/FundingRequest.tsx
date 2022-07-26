@@ -26,7 +26,7 @@ export const FundingRequest = () => {
             message="Amount must be greater than zero"
             name="fundingRequest.amount"
           >
-            <TokenInput id="amount-input" isTokenValue placeholder="0" isInBN name="fundingRequest.amount" />
+            <TokenInput id="amount-input" placeholder="0" name="fundingRequest.amount" />
           </InputComponent>
           <InputComponent label="Recipient account" required inputSize="l">
             <SelectAccount name="fundingRequest.account" />

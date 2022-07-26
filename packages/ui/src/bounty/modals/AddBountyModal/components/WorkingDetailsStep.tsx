@@ -138,13 +138,7 @@ export const WorkingDetailsStep = ({ whitelistLimit, minEntrantStake, errorCheck
         }
         validation={errorChecker('workingPeriodStake') ? 'invalid' : undefined}
       >
-        <TokenInput
-          isInBN
-          name="workingPeriodDetails.workingPeriodStake"
-          isTokenValue
-          id="field-periodStake"
-          placeholder="0"
-        />
+        <TokenInput name="workingPeriodDetails.workingPeriodStake" id="field-periodStake" placeholder="0" />
       </InputComponent>
     </RowGapBlock>
   )

@@ -75,7 +75,7 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
             validation={errorChecker('amount') ? 'invalid' : undefined}
             inputSize="s"
           >
-            <TokenInput id="amount-input" name="staking.amount" isInBN isTokenValue placeholder={minStake.toString()} />
+            <TokenInput id="amount-input" name="staking.amount" placeholder={minStake.toString()} />
           </InputComponent>
           {isSomeBalanceGteStake && errorMessageGetter('amount')?.startsWith('Insufficient') && (
             <Info>

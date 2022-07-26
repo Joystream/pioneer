@@ -94,7 +94,7 @@ export const SubmitJudgementModal = () => {
   const { errors, isValid, setContext } = useSchema<ISchema>({ ...state.context }, schema)
 
   const amountDistributed = useMemo(
-    () => state.context.winners?.reduce((prev, current) => prev.addn(current.reward ?? 0), BN_ZERO) ?? BN_ZERO,
+    () => state.context.winners?.reduce((prev, current) => prev.add(current.reward ?? BN_ZERO), BN_ZERO) ?? BN_ZERO,
     [state.context.winners]
   )
 

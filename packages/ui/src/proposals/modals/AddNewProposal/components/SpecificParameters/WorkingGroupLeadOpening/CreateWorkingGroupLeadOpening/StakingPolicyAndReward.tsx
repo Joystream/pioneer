@@ -32,13 +32,7 @@ export const StakingPolicyAndReward = () => {
             tight
             name="stakingPolicyAndReward.stakingAmount"
           >
-            <TokenInput
-              id="staking-amount"
-              isTokenValue
-              placeholder="0"
-              name="stakingPolicyAndReward.stakingAmount"
-              isInBN
-            />
+            <TokenInput id="staking-amount" placeholder="0" name="stakingPolicyAndReward.stakingAmount" />
           </InputComponent>
           <InputComponent
             id="leaving-unstaking-period"
@@ -74,12 +68,7 @@ export const StakingPolicyAndReward = () => {
             name="stakingPolicyAndReward.rewardPerBlock"
             required
           >
-            <TokenInput
-              id="reward-per-block"
-              isTokenValue
-              name="stakingPolicyAndReward.rewardPerBlock"
-              placeholder="0"
-            />
+            <TokenInput id="reward-per-block" name="stakingPolicyAndReward.rewardPerBlock" placeholder="0" />
           </InputComponent>
         </RowGapBlock>
       </Row>

@@ -276,7 +276,7 @@ export const AnnounceWorkEntryModal = () => {
                 disabled
                 tooltipText={t('modals.announceWorkEntry.selectAmountTooltip')}
               >
-                <TokenInput id="amount-input" value={amount.toString()} isTokenValue disabled />
+                <TokenInput id="amount-input" value={amount} disabled />
               </InputComponent>
             </TransactionAmount>
           </Row>

@@ -29,13 +29,7 @@ export const SetInitialInvitationBalance = () => {
             units={CurrencyName.integerValue}
             required
           >
-            <TokenInput
-              id="amount-input"
-              name="setInitialInvitationBalance.amount"
-              isTokenValue
-              isInBN
-              placeholder="0"
-            />
+            <TokenInput id="amount-input" name="setInitialInvitationBalance.amount" placeholder="0" />
           </InputComponent>
           <Row>
             <TextMedium lighter>

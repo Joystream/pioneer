@@ -87,8 +87,6 @@ export const SlashWorkingGroupLead = () => {
             <TokenInput
               id="amount-input"
               name="slashWorkingGroupLead.slashingAmount"
-              isTokenValue
-              isInBN
               placeholder="0"
               disabled={isDisabled}
             />

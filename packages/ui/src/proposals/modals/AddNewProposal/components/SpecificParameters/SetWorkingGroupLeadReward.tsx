@@ -74,8 +74,6 @@ export const SetWorkingGroupLeadReward = () => {
             <TokenInput
               id="amount-input"
               name="setWorkingGroupLeadReward.rewardPerBlock"
-              isInBN
-              isTokenValue
               placeholder="0"
               disabled={isDisabled}
             />
