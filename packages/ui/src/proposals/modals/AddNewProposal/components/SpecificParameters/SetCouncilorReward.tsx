@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -16,7 +17,13 @@ export const SetCouncilorReward = () => {
       </Row>
       <Row>
         <RowGapBlock gap={20}>
-          <InputComponent label="New Councilor Reward" tight units="tJOY" required name="setCouncilorReward.amount">
+          <InputComponent
+            label="New Councilor Reward"
+            tight
+            units={CurrencyName.integerValue}
+            required
+            name="setCouncilorReward.amount"
+          >
             <TokenInput id="amount-input" isTokenValue isInBN name="setCouncilorReward.amount" placeholder="0" />
           </InputComponent>
         </RowGapBlock>

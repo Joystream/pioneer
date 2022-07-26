@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { InlineToggleWrap, InputComponent, TokenInput, Label, ToggleCheckbox } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -72,7 +73,7 @@ export const TerminateWorkingGroupLead = () => {
             <InputComponent
               label="Optional slashing Amount"
               tight
-              units="tJOY"
+              units={CurrencyName.integerValue}
               inputWidth="s"
               tooltipText="Optional amount to be slashed"
               disabled={isDisabled}

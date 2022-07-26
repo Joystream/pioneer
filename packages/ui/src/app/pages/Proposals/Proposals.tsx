@@ -5,10 +5,11 @@ import { PageLayout } from '@/app/components/PageLayout'
 import { ProposalOrderByInput } from '@/common/api/queries'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { MainPanel } from '@/common/components/page/PageContent'
-import { SearchProcess } from '@/common/components/page/SearchProcess'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Pagination } from '@/common/components/Pagination'
+import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { useSort } from '@/common/hooks/useSort'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { AddProposalButton } from '@/proposals/components/AddProposalButton'
 import { NoProposals } from '@/proposals/components/NoProposals'
 import { ProposalList } from '@/proposals/components/ProposalList'
@@ -21,7 +22,7 @@ export const Proposals = () => {
   const { order, getSortProps } = useSort<ProposalOrderByInput>('statusSetAtTime')
 
   const { proposals, isLoading, pagination } = useProposals({ order: order, status: 'active' })
-
+  const isRefetched = useRefetchQueries({ interval: MILLISECONDS_PER_BLOCK, include: ['getProposals'] })
   const { activities } = useProposalsActivities()
 
   return (
@@ -35,16 +36,9 @@ export const Proposals = () => {
         />
       }
       main={
-        proposals.length || isLoading ? (
+        proposals.length || (!isRefetched && isLoading) ? (
           <MainPanel>
-            {isLoading ? (
-              <SearchProcess
-                title="Searching"
-                description="We are searching through all past proposals to find what your are looking for."
-              />
-            ) : (
-              <ProposalList getSortProps={getSortProps} proposals={proposals} />
-            )}
+            <ProposalList getSortProps={getSortProps} proposals={proposals} isLoading={!isRefetched && isLoading} />
             <Pagination {...pagination} />
           </MainPanel>
         ) : (
@@ -54,7 +48,7 @@ export const Proposals = () => {
         )
       }
       sidebar={
-        (proposals.length || isLoading) && (
+        proposals.length && (
           <SidePanel>
             <ActivitiesBlock activities={activities} label="Proposals Activities" />
           </SidePanel>

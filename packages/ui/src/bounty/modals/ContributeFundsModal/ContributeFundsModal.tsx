@@ -11,6 +11,7 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { CurrencyName } from '@/app/constants/currency'
 import { FundedRange } from '@/bounty/components/FundedRange'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
 import { BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal/index'
@@ -47,7 +48,9 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
 const schema = Yup.object().shape({
-  amount: BNSchema.test(minContext('${min} tJOY is smallest allowed contribution', 'minAmount')),
+  amount: BNSchema.test(
+    minContext(`\${min}${CurrencyName.integerValue} is smallest allowed contribution`, 'minAmount')
+  ),
 })
 
 export const ContributeFundsModal = () => {
@@ -242,7 +245,7 @@ export const ContributeFundsModal = () => {
                 id="amount-input"
                 required
                 inputWidth="s"
-                units="tJOY"
+                units={CurrencyName.integerValue}
                 validation={hasError('amount', errors) ? 'invalid' : undefined}
                 message={hasError('amount', errors) ? getErrorMessage('amount', errors) : ' '}
                 tooltipText={

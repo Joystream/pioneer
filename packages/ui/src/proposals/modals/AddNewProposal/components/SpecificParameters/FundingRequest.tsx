@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
+import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -20,7 +21,7 @@ export const FundingRequest = () => {
           <InputComponent
             label="Amount"
             tight
-            units="tJOY"
+            units={CurrencyName.integerValue}
             required
             message="Amount must be greater than zero"
             name="fundingRequest.amount"

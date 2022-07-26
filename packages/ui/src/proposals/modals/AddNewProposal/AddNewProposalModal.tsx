@@ -81,7 +81,7 @@ export const AddNewProposalModal = () => {
   const [isExecutionError, setIsExecutionError] = useState<boolean>(false)
 
   const constants = useProposalConstants(formMap[1])
-  const { hasRequiredStake } = useHasRequiredStake(constants?.requiredStake.toNumber() || 0, 'Proposals')
+  const { hasRequiredStake } = useHasRequiredStake(constants?.requiredStake || BN_ZERO, 'Proposals')
   const balance = useBalance(formMap[0]?.address)
   const stakingStatus = useStakingAccountStatus(formMap[0]?.address, activeMember?.id)
   const form = useForm<AddNewProposalForm>({
@@ -248,7 +248,7 @@ export const AddNewProposalModal = () => {
     showModal<MoveFundsModalCall>({
       modal: 'MoveFundsModal',
       data: {
-        requiredStake: constants?.requiredStake as BN,
+        requiredStake: constants?.requiredStake ?? BN_ZERO,
         lock: 'Proposals',
       },
     })

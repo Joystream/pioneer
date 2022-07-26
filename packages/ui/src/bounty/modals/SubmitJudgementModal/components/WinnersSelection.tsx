@@ -3,6 +3,7 @@ import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { BountyWinner } from '@/bounty/modals/SubmitJudgementModal/machine'
 import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent, TokenInput } from '@/common/components/forms'
@@ -108,7 +109,7 @@ export const WinnersSelection = ({
               inputWidth="s"
               label={t('modals.submitJudgement.winner.reward')}
               required
-              units="tJOY"
+              units={CurrencyName.integerValue}
               tight
             >
               <TokenInput

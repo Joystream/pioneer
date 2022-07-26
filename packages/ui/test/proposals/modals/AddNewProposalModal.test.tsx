@@ -10,6 +10,7 @@ import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import { CurrencyName } from '@/app/constants/currency'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { camelCaseToText } from '@/common/helpers'
 import { createType } from '@/common/model/createType'
@@ -1098,7 +1099,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Displays current balance', async () => {
-          expect(await screen.findByText('The current balance is 2137 tJOY.')).toBeDefined()
+          expect(await screen.queryByText(`The current balance is 2137 ${CurrencyName.integerValue}.`)).toBeDefined()
         })
       })
       describe('Type - Set Membership price', () => {

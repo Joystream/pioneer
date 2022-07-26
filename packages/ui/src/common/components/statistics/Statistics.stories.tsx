@@ -20,7 +20,7 @@ export default {
 const Template: Story<StatisticItemProps> = (args) => (
   <TemplateBlock>
     <Statistics>
-      <TokenValueStat {...args} title="Token value stat" value={100_000} />
+      <TokenValueStat {...args} title="Token value stat" value={new BN(100_000)} />
 
       <MultiValueStat
         {...args}

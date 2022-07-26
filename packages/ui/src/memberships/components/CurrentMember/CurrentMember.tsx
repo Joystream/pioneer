@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ArrowDownExpandedIcon, Icon } from '@/common/components/icons'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
@@ -12,8 +13,18 @@ import { SwitchMemberModalCall } from '../../modals/SwitchMemberModal'
 import { AddMembershipButton } from '../AddMembershipButton'
 
 export const CurrentMember = () => {
+  const { wallet } = useMyAccounts()
   const { members, hasMembers, active } = useMyMemberships()
   const { showModal } = useModal()
+  if (!wallet) {
+    return (
+      <MembershipButtonsWrapper>
+        <MembershipActionButton onClick={() => showModal({ modal: 'OnBoardingModal' })} size="large">
+          Connect Wallet
+        </MembershipActionButton>
+      </MembershipButtonsWrapper>
+    )
+  }
 
   if (!hasMembers) {
     return (

@@ -2,8 +2,9 @@ import BN from 'bn.js'
 
 import { cleanInputValue } from '@/common/hooks/useNumberInput'
 
-import { AN_HOUR, A_DAY, A_MINUTE, A_SECOND, SECONDS_PER_BLOCK } from '../constants'
+import { AN_HOUR, A_DAY, A_MINUTE, A_SECOND, JOY_DECIMAL_PLACES, SECONDS_PER_BLOCK } from '../constants'
 import { isDefined, isNumber, last } from '../utils'
+import { powerOf10 } from '../utils/bn'
 
 export const NUMBER_SEPARATOR_REG_EXP = /\B(?=(\d{3})+(?!\d))/g
 
@@ -76,63 +77,31 @@ export const splitDuration =
     const amount = Math.floor(duration / unitValue)
     return [[amount, unitName], ...splitDuration(submultiples)(duration - amount * unitValue)]
   }
-//
-// const UNIT_VALUE = new BN(10000000000) // Will be 10,000M in Carthage
-// const MIN_VALUE = new BN(100000000) // Will be 100M in Carthage
-// const INT_VALUE = UNIT_VALUE.div(MIN_VALUE)
-// const MIN_DEC = 1 / INT_VALUE.toNumber()
 
-// This function doesn't work (try to display value : 6.06)
-// export const formatJoyValue = (value: BN) => {
-//   if (value.isZero()) {
-//     return '0'
-//   } else if (value.gte(MIN_VALUE)) {
-//     const base = value.div(MIN_VALUE)
-//     const intPart = base.div(INT_VALUE)
-//     const decPart = base.sub(intPart.mul(INT_VALUE))
-//     return `${formatTokenValue(intPart)}.${decPart}`
-//   }
-//   if (value.lt(MIN_VALUE)) {
-//     return `> ${MIN_DEC}`
-//   }
-// }
+const UNIT_VALUE = powerOf10(JOY_DECIMAL_PLACES)
 
-export const DECIMAL_PLACES = 10 // Will be 10,000M in Carthage
-export const DECIMAL_NUMBER = Math.pow(10, DECIMAL_PLACES)
-export const PRECISION = 2 // Will be 100M in Carthage
-
-export const formatJoyValue = (value: BN, precision: number = PRECISION, isInInput?: boolean) => {
-  // todo uncomment after carthage merge - needs BN@5.9.1
-  // const {div: int, mod: rest} = value.divmod(new BN(DECIMAL_NUMBER))
-
-  const int = value.div(new BN(DECIMAL_NUMBER))
-  const rest = value.mod(new BN(DECIMAL_NUMBER))
-
-  if (int.isZero() && rest.isZero()) {
+export const formatJoyValue = (value: BN, precision = 10) => {
+  if (value.isZero()) {
     return '0'
   }
 
-  if (isInInput) {
-    return `${int.toString().replace(NUMBER_SEPARATOR_REG_EXP, ',')}.${rest.toNumber().toFixed()}`
+  const safePrecision = Math.min(JOY_DECIMAL_PLACES, precision)
+  const roundedValue = value.divRound(powerOf10(JOY_DECIMAL_PLACES - safePrecision))
+
+  if (roundedValue.isZero()) {
+    return `> ${Math.pow(10, -safePrecision)}`
   }
 
-  const rounded = (rest.toNumber() / Math.pow(10, 8)).toFixed()
+  const intPart = formatTokenValue(roundedValue.div(UNIT_VALUE))
+  const decPart = String(roundedValue.abs().mod(UNIT_VALUE))
 
-  if (!isInInput && int.isZero() && +rounded < 1 && !rest.isZero()) {
-    return '< 0.' + '1'.padStart(precision, '0')
-  }
-
-  if (rest.isZero() || +rounded < 1) {
-    return `${int.toString().replace(NUMBER_SEPARATOR_REG_EXP, ',')}`
-  }
-
-  return `${int.toString().replace(NUMBER_SEPARATOR_REG_EXP, ',')}.${String(rounded).padStart(2, '0')}`
+  return `${intPart}.${decPart}`.replace(/\.?0*$/, '')
 }
 
 export const formatToJoyValue = (joyValue: string | BN) => {
   joyValue = new BN(joyValue)
-  const int = joyValue.div(new BN(DECIMAL_NUMBER))
-  const rest = joyValue.mod(new BN(DECIMAL_NUMBER))
+  const int = joyValue.div(new BN(UNIT_VALUE))
+  const rest = joyValue.mod(new BN(UNIT_VALUE))
   return {
     decimal: rest.toString().replace(/0+$/, ''),
     integer: int.toString(),
@@ -143,7 +112,7 @@ export const formatFromJoyValue = (joyValue: string | BN) => {
   joyValue = typeof joyValue === 'string' ? joyValue : joyValue.toString()
   const values = joyValue.split('.')
   if (values.length === 1) {
-    return new BN(DECIMAL_NUMBER).mul(new BN(cleanInputValue(values[0])))
+    return new BN(UNIT_VALUE).mul(new BN(cleanInputValue(values[0])))
   }
 
   return new BN(cleanInputValue(values[0]) + values[1].padEnd(10, '0'))

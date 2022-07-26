@@ -4,12 +4,12 @@ import { useFormContext } from 'react-hook-form'
 
 import { SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
+import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium, TokenValue, ValueInJoys } from '@/common/components/typography'
-import { formatTokenValue } from '@/common/model/formatters'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { ValidationHelpers } from '@/common/utils/validation'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
@@ -48,20 +48,28 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
             disabled={!isSomeBalanceGteStake}
             message={errorChecker('account') ? errorMessageGetter('account') : undefined}
             validation={errorChecker('account') ? 'invalid' : undefined}
+            tooltipText={
+              <>
+                When losing an election, your candidacy lock is removed and your steak becomes immediately recoverable.
+                If you win and get elected, your candidacy lock will be automatically removed, and a council specific
+                lock will be applied, with the same amount locked. When that council is replaced, this lock is removed,
+                if you did not get re-elected
+              </>
+            }
           >
             <SelectStakingAccount name="staking.account" minBalance={minStake} lockType="Council Candidate" />
           </InputComponent>
           <RowGapBlock gap={8}>
             <h4>2. Stake</h4>
             <TextMedium>
-              You must stake <ValueInJoys>{formatTokenValue(minStake)}</ValueInJoys> to announce candidacy. his stake
-              will be return to you if your candidacy fails as a result of the council voting.
+              You must stake <TokenValue value={minStake} /> to announce candidacy. His stake will be return to you if
+              your candidacy fails as a result of the council voting.
             </TextMedium>
           </RowGapBlock>
           <InputComponent
             id="amount-input"
             label="Select amount for Staking"
-            units="tJOY"
+            units={CurrencyName.integerValue}
             required
             message={errorChecker('amount') ? errorMessageGetter('amount') : undefined}
             validation={errorChecker('amount') ? 'invalid' : undefined}

@@ -11,15 +11,25 @@ export interface DetailsButtonProps {
   disabled?: boolean
   titleText: string
   subtitleText: string
+  withoutBackground?: boolean
+  dangerText?: boolean
 }
 
-export const DetailsButton = ({ onClick, icon, disabled, titleText, subtitleText }: DetailsButtonProps) => {
+export const DetailsButton = ({
+  onClick,
+  icon,
+  disabled,
+  titleText,
+  subtitleText,
+  withoutBackground,
+  dangerText,
+}: DetailsButtonProps) => {
   return (
     <DetailsButtonWrapper onClick={onClick} disabled={disabled}>
       <ImageWrapper>
-        <IconWrapper>{icon}</IconWrapper>
+        <IconWrapper withoutBackground={withoutBackground}>{icon}</IconWrapper>
       </ImageWrapper>
-      <TitleText>{titleText}</TitleText>
+      <TitleText dangerText={dangerText}>{titleText}</TitleText>
       <SubtitleText>{subtitleText}</SubtitleText>
     </DetailsButtonWrapper>
   )
@@ -47,16 +57,16 @@ const ImageWrapper = styled.span`
     }
   }
 `
-const IconWrapper = styled.div`
+const IconWrapper = styled.div<{ withoutBackground?: boolean }>`
   width: 16px;
   height: 16px;
   border-radius: ${BorderRad.round};
-  background-color: ${Colors.Black[75]};
+  background-color: ${({ withoutBackground }) => (withoutBackground ? '' : Colors.Black[75])};
 `
 
-const TitleText = styled.h6`
+const TitleText = styled.h6<{ dangerText?: boolean }>`
   grid-area: createtitle;
-  color: ${Colors.Black[75]};
+  color: ${({ dangerText }) => (dangerText ? Colors.Red[400] : Colors.Black[75])};
   transition: ${Transitions.all};
 `
 

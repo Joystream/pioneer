@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 
 import { ForumThreadOrderByInput } from '@/common/api/queries'
+import { useGetForumThreadsQuery } from '@/forum/queries'
 
-import { useGetForumThreadsQuery } from '../queries/__generated__/forum.generated'
 import { asForumThread } from '../types'
 
 export const useLatestForumThreads = (limit: number) => {

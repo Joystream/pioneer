@@ -2,9 +2,7 @@ import '@testing-library/jest-dom'
 import BN from 'bn.js'
 
 import { BN_ZERO } from '@/common/constants'
-import { DECIMAL_PLACES } from '@/common/model/formatters'
 import { UseTransaction } from '@/common/providers/transactionFees/context'
-
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -21,14 +19,9 @@ jest.mock('@/accounts/hooks/useTransactionFee', () => ({
   useTransactionFee: jest.fn(() => mockedTransactionFee),
 }))
 
-const mockFormatJoyValue = (value: BN, precision?: number) =>
-  jest
-    .requireActual('@/common/model/formatters')
-    .formatJoyValue(value.mul(new BN(Math.pow(10, DECIMAL_PLACES))), precision)
-
-jest.mock('@/common/model/formatters', () => ({
-  ...jest.requireActual('@/common/model/formatters'),
-  formatJoyValue: (props: any) => mockFormatJoyValue(props),
+jest.mock('@/common/constants/numbers', () => ({
+  ...jest.requireActual('@/common/constants/numbers'),
+  JOY_DECIMAL_PLACES: 0,
 }))
 
 declare global {
