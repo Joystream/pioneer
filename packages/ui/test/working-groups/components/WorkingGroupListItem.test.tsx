@@ -1,5 +1,6 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
@@ -35,6 +36,7 @@ describe('WorkingGroupListItem', () => {
     seedOpeningStatuses(mockServer.server)
 
     group = mockServer.server?.schema.first('WorkingGroup')?.attrs as unknown as WorkingGroup
+    group.budget = group.budget ? new BN(group.budget) : undefined
   })
 
   it('Loading', () => {

@@ -78,7 +78,7 @@ export const splitDuration =
     return [[amount, unitName], ...splitDuration(submultiples)(duration - amount * unitValue)]
   }
 
-const UNIT_VALUE = powerOf10(JOY_DECIMAL_PLACES)
+export const UNIT_VALUE = powerOf10(JOY_DECIMAL_PLACES)
 
 export const formatJoyValue = (value: BN, precision = 10) => {
   if (value.isZero()) {

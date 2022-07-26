@@ -9,13 +9,11 @@ import { TransferModal } from '@/accounts/modals/TransferModal'
 import { Account, Balances } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
 import { createType } from '@/common/model/createType'
-import { DECIMAL_NUMBER } from '@/common/model/formatters'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
-import { numberToInputWithDecimals } from '../../_helpers/utils'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -144,7 +142,8 @@ describe('UI: TransferModal', () => {
   })
 
   it('Sets up initial value', async () => {
-    renderModal({ initialValue: new BN(500 * DECIMAL_NUMBER), to: alice, from: bob })
+    // renderModal({ initialValue: new BN(500 * DECIMAL_NUMBER), to: alice, from: bob })
+    renderModal({ initialValue: new BN(500), to: alice, from: bob })
 
     const input = await screen.findByLabelText<HTMLInputElement>(/number of tokens/i)
 
@@ -246,7 +245,7 @@ describe('UI: TransferModal', () => {
 
   const fillAmount = async (value: number) => {
     const input = await screen.findByLabelText('Number of tokens')
-    fireEvent.change(input, { target: { value: numberToInputWithDecimals(value) } })
+    fireEvent.change(input, { target: { value: value } })
   }
 
   function renderModal(data: ModalData) {
