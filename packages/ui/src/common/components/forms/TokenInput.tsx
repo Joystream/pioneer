@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useFormContext, Controller } from 'react-hook-form'
 
 import { BN_ZERO, JOY_DECIMAL_PLACES } from '@/common/constants'
@@ -16,26 +16,31 @@ export interface BaseTokenInputProps extends Omit<InputProps, 'value' | 'onChang
 const isValid = (value: string) => /^\d*\.?\d{0,10}$/.test(value)
 
 const BasedTokenInput = React.memo(({ id, onChange, value = BN_ZERO, ...props }: BaseTokenInputProps) => {
-  const [shouldShowPoint, showPoint] = useState(false)
+  const [inputValue, setInputValue] = useState('')
 
   const onInputChange = useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => {
-      const inputValue = evt.target.value
-      if (isValid(inputValue)) {
-        if (shouldShowPoint !== inputValue.includes('.')) {
-          showPoint(!shouldShowPoint)
+      const targetValue = evt.target.value
+      if (isValid(targetValue) && inputValue !== targetValue) {
+        setInputValue(targetValue)
+        const newValue = formatFromJoyValue(targetValue)
+        if (!newValue.eq(value)) {
+          onChange?.(evt, newValue)
         }
-        onChange?.(evt, formatFromJoyValue(inputValue))
       }
     },
     [onChange]
   )
 
-  const inputValue = useMemo(() => {
-    const { integer, decimal } = formatToJoyValue(value)
-    const point = decimal || shouldShowPoint
-    return `${integer}${point ? '.' : ''}${decimal}`
-  }, [value, shouldShowPoint])
+  useEffect(() => {
+    if (!formatFromJoyValue(inputValue).eq(value)) {
+      const { integer, decimal } = formatToJoyValue(value)
+      const newInputValue = `${integer}.${decimal}`.replace(/\.?0*$/, '')
+      if (formatFromJoyValue(newInputValue).eq(value)) {
+        setInputValue(newInputValue)
+      }
+    }
+  }, [String(value)])
 
   return (
     <StyledNumberInput
