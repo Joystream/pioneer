@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
@@ -75,28 +74,26 @@ stubTransaction(api, 'api.tx.bounty.submitWork', 2000)
 const Template: Story = (args) => {
   return (
     <MockApolloProvider members>
-      <MemoryRouter>
-        <ApiContext.Provider value={api}>
-          <MembershipContext.Provider value={membership}>
-            <AccountsContext.Provider value={accounts}>
-              <BalancesContext.Provider value={balance}>
-                <ModalContext.Provider
-                  value={{
-                    modalData: {
-                      bounty,
-                    },
-                    modal: 'foo',
-                    hideModal: () => undefined,
-                    showModal: () => undefined,
-                  }}
-                >
-                  <SubmitWorkModal {...args} />
-                </ModalContext.Provider>
-              </BalancesContext.Provider>
-            </AccountsContext.Provider>
-          </MembershipContext.Provider>
-        </ApiContext.Provider>
-      </MemoryRouter>
+      <ApiContext.Provider value={api}>
+        <MembershipContext.Provider value={membership}>
+          <AccountsContext.Provider value={accounts}>
+            <BalancesContext.Provider value={balance}>
+              <ModalContext.Provider
+                value={{
+                  modalData: {
+                    bounty,
+                  },
+                  modal: 'foo',
+                  hideModal: () => undefined,
+                  showModal: () => undefined,
+                }}
+              >
+                <SubmitWorkModal {...args} />
+              </ModalContext.Provider>
+            </BalancesContext.Provider>
+          </AccountsContext.Provider>
+        </MembershipContext.Provider>
+      </ApiContext.Provider>
     </MockApolloProvider>
   )
 }

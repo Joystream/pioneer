@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { TileSection, TileSectionProps } from '@/bounty/components/TileSection'
 import { TextHuge, TokenValue } from '@/common/components/typography'
@@ -18,11 +17,9 @@ export default {
 const alice = members[0]
 
 const Template: Story<TileSectionProps> = (args) => (
-  <MemoryRouter>
-    <MockApolloProvider>
-      <TileSection {...args} />
-    </MockApolloProvider>
-  </MemoryRouter>
+  <MockApolloProvider>
+    <TileSection {...args} />
+  </MockApolloProvider>
 )
 
 const firstRow = [

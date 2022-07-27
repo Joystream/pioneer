@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { asArray, repeat } from '@/common/utils'
 import { asStorybookModerator, asStorybookPost, asStorybookThread } from '@/forum/helpers/storybook'
@@ -48,9 +47,7 @@ const Template: Story<Props> = ({
   }
   return (
     <MockApolloProvider members forum={{ categories: [rawCategory], threads: asArray(thread), posts: asArray(post) }}>
-      <MemoryRouter>
-        <CategoryListItem category={category} isArchive={isArchive} />
-      </MemoryRouter>
+      <CategoryListItem category={category} isArchive={isArchive} />
     </MockApolloProvider>
   )
 }

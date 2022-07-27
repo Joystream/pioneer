@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { PostReaction } from '@/common/api/queries'
@@ -54,21 +53,19 @@ const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText
 
   return (
     <MockApolloProvider members workers forum>
-      <MemoryRouter>
-        <MembershipContext.Provider value={membershipContext}>
-          <Container>
-            <PostListItem
-              isFirstItem={true}
-              post={{ ...post, lastEditedAt, text, reaction, repliesTo }}
-              isThreadActive={isThreadActive}
-              type="forum"
-              replyToPost={() => true}
-              link="#"
-              repliesToLink=""
-            />
-          </Container>
-        </MembershipContext.Provider>
-      </MemoryRouter>
+      <MembershipContext.Provider value={membershipContext}>
+        <Container>
+          <PostListItem
+            isFirstItem={true}
+            post={{ ...post, lastEditedAt, text, reaction, repliesTo }}
+            isThreadActive={isThreadActive}
+            type="forum"
+            replyToPost={() => true}
+            link="#"
+            repliesToLink=""
+          />
+        </Container>
+      </MembershipContext.Provider>
     </MockApolloProvider>
   )
 }
