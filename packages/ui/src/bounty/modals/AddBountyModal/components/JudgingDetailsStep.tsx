@@ -42,7 +42,6 @@ export const JudgingDetailsStep = () => {
         >
           <InputNumber
             isInBN
-            isTokenValue
             id="field-periodLength"
             placeholder="0"
             name={`${AddBountyStates.judgingPeriodDetails}.judgingPeriodLength`}

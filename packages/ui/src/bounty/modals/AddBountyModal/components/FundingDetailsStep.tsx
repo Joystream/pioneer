@@ -125,7 +125,6 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
               id="field-periodLength"
               name="fundingPeriodDetails.fundingPeriodLength"
               placeholder="0"
-              isTokenValue
             />
           </InputComponent>
         </RowGapBlock>

@@ -36,7 +36,6 @@ export const SetMembershipLeadInvitationQuota = () => {
             <InputNumber
               id="amount-input"
               name="setMembershipLeadInvitationQuota.amount"
-              isTokenValue
               isInBN
               placeholder="0"
               maxAllowedValue={Math.pow(2, 32) - 1}

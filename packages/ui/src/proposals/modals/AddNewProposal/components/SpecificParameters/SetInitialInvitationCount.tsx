@@ -28,13 +28,7 @@ export const SetInitialInvitationCount = () => {
             required
             id="count-input"
           >
-            <InputNumber
-              id="count-input"
-              isTokenValue
-              isInBN
-              name="setInitialInvitationCount.invitationCount"
-              placeholder="0"
-            />
+            <InputNumber id="count-input" isInBN name="setInitialInvitationCount.invitationCount" placeholder="0" />
           </InputComponent>
         </Row>
         <Row>

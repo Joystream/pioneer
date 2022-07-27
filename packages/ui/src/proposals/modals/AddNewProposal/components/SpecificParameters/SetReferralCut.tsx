@@ -52,7 +52,6 @@ export const SetReferralCut = () => {
           >
             <InputNumber
               id="amount-input"
-              isTokenValue
               name="setReferralCut.referralCut"
               placeholder="0"
               maxAllowedValue={Math.pow(2, 8)}
