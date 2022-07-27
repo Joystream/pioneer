@@ -6,7 +6,14 @@ import styled from 'styled-components'
 import { CurrencyName } from '@/app/constants/currency'
 import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { CloseButton } from '@/common/components/buttons'
-import { InputNumber, ToggleCheckbox, InlineToggleWrap, InputComponent, Label } from '@/common/components/forms'
+import {
+  TokenInput,
+  ToggleCheckbox,
+  InlineToggleWrap,
+  InputComponent,
+  Label,
+  InputNumber,
+} from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
@@ -131,13 +138,7 @@ export const WorkingDetailsStep = ({ whitelistLimit, minEntrantStake, errorCheck
         }
         validation={errorChecker('workingPeriodStake') ? 'invalid' : undefined}
       >
-        <InputNumber
-          isInBN
-          name="workingPeriodDetails.workingPeriodStake"
-          isTokenValue
-          id="field-periodStake"
-          placeholder="0"
-        />
+        <TokenInput name="workingPeriodDetails.workingPeriodStake" id="field-periodStake" placeholder="0" />
       </InputComponent>
     </RowGapBlock>
   )

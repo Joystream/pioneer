@@ -20,6 +20,7 @@ import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
+import { powerOf2 } from '@/common/utils/bn'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import {
@@ -528,7 +529,8 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid - everything filled', async () => {
           const amount = 100
-          await SpecificParameters.fillAmount(amount)
+          // await SpecificParameters.fillAmount(amount)
+          await fillField('amount-input', amount)
           await SpecificParameters.FundingRequest.selectRecipient('bob')
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
@@ -536,7 +538,7 @@ describe('UI: AddNewProposalModal', () => {
           expect(parameters).toEqual([
             {
               account: getMember('bob').controllerAccount,
-              amount,
+              amount: amount,
             },
           ])
           const button = await getCreateButton()
@@ -558,14 +560,14 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid - over 100 percent', async () => {
-          await SpecificParameters.fillAmount(200)
+          await fillField('amount-input', 200)
           expect(await screen.getByTestId('amount-input')).toHaveValue('200')
           expect(await getCreateButton()).toBeDisabled()
         })
 
         it('Valid', async () => {
           const amount = 40
-          await SpecificParameters.fillAmount(amount)
+          await fillField('amount-input', amount)
           expect(await screen.getByTestId('amount-input')).toHaveValue(String(amount))
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
@@ -577,7 +579,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid with execution warning', async () => {
           const amount = 100
-          await SpecificParameters.fillAmount(amount)
+          await fillField('amount-input', amount)
           expect(await screen.getByTestId('amount-input')).toHaveValue(String(amount))
 
           expect(await getCreateButton()).toBeDisabled()
@@ -673,12 +675,12 @@ describe('UI: AddNewProposalModal', () => {
           expect(button).not.toBeDisabled()
 
           await triggerYes()
-          await SpecificParameters.fillAmount(100)
+          await SpecificParameters.fillAmount(slashingAmount)
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
           const parameters = txSpecificParameters.asTerminateWorkingGroupLead.toJSON()
           expect(parameters).toEqual({
-            slashingAmount: slashingAmount,
+            slashingAmount,
             workerId: Number(forumLeadId?.split('-')[1]),
             group,
           })
@@ -815,7 +817,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Invalid form', async () => {
           expect(await screen.queryByLabelText(/^Working Group$/i, { selector: 'input' })).toHaveValue('')
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await getCreateButton()).toBeDisabled()
 
           await SpecificParameters.SetWorkingGroupLeadReward.fillRewardAmount(0)
@@ -861,7 +863,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid form', async () => {
           const amount = 100
-          await SpecificParameters.fillAmount(amount)
+          await fillField('amount-input', amount)
           expect(await getCreateButton()).toBeEnabled()
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
@@ -905,7 +907,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid form', async () => {
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
           expect(await getCreateButton()).toBeDisabled()
 
@@ -914,8 +916,8 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Validate max value', async () => {
-          await SpecificParameters.fillAmount(Math.pow(2, 128))
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          await SpecificParameters.fillAmount(powerOf2(128))
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
           expect(await getCreateButton()).toBeDisabled()
         })
@@ -942,7 +944,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid form', async () => {
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
           expect(await getCreateButton()).toBeDisabled()
 
@@ -983,9 +985,9 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Validate max value', async () => {
           await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
-          await SpecificParameters.fillAmount(Math.pow(2, 32))
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
-          expect(await screen.queryByTestId('amount-input')).toBeEnabled()
+          await fillField('amount-input', powerOf2(32))
+          expect(screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(screen.queryByTestId('amount-input')).toBeEnabled()
         })
 
         it('Valid form', async () => {
@@ -1079,7 +1081,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid form', async () => {
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await getCreateButton()).toBeDisabled()
 
           await SpecificParameters.fillAmount(0)
@@ -1109,14 +1111,13 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Default - Invalid', async () => {
-          expect(await screen.getByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.getByTestId('amount-input')).toHaveValue('')
           expect(await getCreateButton()).toBeDisabled()
         })
 
         it('Valid', async () => {
           const price = 100
           await SpecificParameters.fillAmount(price)
-          expect(await screen.getByTestId('amount-input')).toHaveValue('100')
           expect(await getCreateButton()).toBeEnabled()
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
@@ -1142,7 +1143,7 @@ describe('UI: AddNewProposalModal', () => {
         it('Invalid - group selected, amount lower than current stake filled with positive', async () => {
           await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
           await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
-          await SpecificParameters.fillAmount(100)
+          await SpecificParameters.fillAmount(10)
 
           expect(await getCreateButton()).toBeDisabled()
         })
@@ -1170,7 +1171,7 @@ describe('UI: AddNewProposalModal', () => {
 
           // Switch to 'Decrease budget', input will be handled as negative
           await triggerYes()
-          await SpecificParameters.fillAmount(100)
+          await SpecificParameters.fillAmount(amount)
 
           expect(await getCreateButton()).toBeEnabled()
 
@@ -1402,8 +1403,7 @@ describe('UI: AddNewProposalModal', () => {
         await finishProposalType('fundingRequest')
         await finishStakingAccount()
         await finishProposalDetails()
-        await discussionClosed()
-        await finishTriggerAndDiscussion()
+        await finishTriggerAndDiscussion(true)
         await SpecificParameters.FundingRequest.finish(100, 'bob')
 
         await act(async () => {
@@ -1469,7 +1469,10 @@ describe('UI: AddNewProposalModal', () => {
     await clickNextButton()
   }
 
-  async function finishTriggerAndDiscussion() {
+  async function finishTriggerAndDiscussion(closeDiscussion = false) {
+    if (closeDiscussion) {
+      await discussionClosed()
+    }
     await clickNextButton()
   }
 
@@ -1534,15 +1537,15 @@ describe('UI: AddNewProposalModal', () => {
     await selectFromDropdown('^Application$', name)
   }
 
-  async function fillField(id: string, value: number | string) {
-    const amountInput = await screen.getByTestId(id)
+  async function fillField(id: string, value: number | BN | string) {
+    const amountInput = screen.getByTestId(id)
     act(() => {
-      fireEvent.change(amountInput, { target: { value } })
+      fireEvent.change(amountInput, { target: { value: String(value) } })
     })
   }
 
   const SpecificParameters = {
-    fillAmount: async (value: number) => await fillField('amount-input', value),
+    fillAmount: async (value: number | BN) => await fillField('amount-input', String(value)),
     Signal: {
       fillSignal: async (value: string) => await fillField('signal', value),
     },

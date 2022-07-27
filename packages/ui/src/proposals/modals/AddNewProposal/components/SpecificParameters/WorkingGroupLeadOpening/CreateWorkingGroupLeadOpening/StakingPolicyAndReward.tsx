@@ -2,7 +2,7 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { CurrencyName } from '@/app/constants/currency'
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { InputComponent, InputNumber, TokenInput } from '@/common/components/forms'
 import { LinkSymbol } from '@/common/components/icons/symbols/LinkSymbol'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -32,13 +32,7 @@ export const StakingPolicyAndReward = () => {
             tight
             name="stakingPolicyAndReward.stakingAmount"
           >
-            <InputNumber
-              id="staking-amount"
-              isTokenValue
-              placeholder="0"
-              name="stakingPolicyAndReward.stakingAmount"
-              isInBN
-            />
+            <TokenInput id="staking-amount" placeholder="0" name="stakingPolicyAndReward.stakingAmount" />
           </InputComponent>
           <InputComponent
             id="leaving-unstaking-period"
@@ -74,12 +68,7 @@ export const StakingPolicyAndReward = () => {
             name="stakingPolicyAndReward.rewardPerBlock"
             required
           >
-            <InputNumber
-              id="reward-per-block"
-              isTokenValue
-              name="stakingPolicyAndReward.rewardPerBlock"
-              placeholder="0"
-            />
+            <TokenInput id="reward-per-block" name="stakingPolicyAndReward.rewardPerBlock" placeholder="0" />
           </InputComponent>
         </RowGapBlock>
       </Row>

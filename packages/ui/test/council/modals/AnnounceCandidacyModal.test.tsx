@@ -138,7 +138,6 @@ describe('UI: Announce Candidacy Modal', () => {
     it('Transaction fee', async () => {
       const minStake = 10
       stubCouncilConstants(api, { minStake })
-      // stubTransaction(api, 'api.tx.utility.batch', 10000)
       mockedTransactionFee.feeInfo = { transactionFee: new BN(10000), canAfford: false }
 
       renderModal()
@@ -208,7 +207,7 @@ describe('UI: Announce Candidacy Modal', () => {
         it('Lower than minimal stake', async () => {
           const { getByText } = renderModal()
 
-          await fillStakingAmount(2)
+          await fillStakingAmount(1)
 
           expect(await getNextStepButton()).toBeDisabled()
           expect(
@@ -570,7 +569,7 @@ describe('UI: Announce Candidacy Modal', () => {
     expect(lastPage?.search).toEqual('?candidate=0')
   })
 
-  async function fillStakingAmount(value: number) {
+  async function fillStakingAmount(value: number | string) {
     const amountInput = await screen.getByTestId('amount-input')
 
     act(() => {

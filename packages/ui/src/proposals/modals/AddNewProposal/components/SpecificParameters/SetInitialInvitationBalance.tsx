@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { CurrencyName } from '@/app/constants/currency'
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TokenValue } from '@/common/components/typography'
@@ -29,13 +29,7 @@ export const SetInitialInvitationBalance = () => {
             units={CurrencyName.integerValue}
             required
           >
-            <InputNumber
-              id="amount-input"
-              name="setInitialInvitationBalance.amount"
-              isTokenValue
-              isInBN
-              placeholder="0"
-            />
+            <TokenInput id="amount-input" name="setInitialInvitationBalance.amount" placeholder="0" />
           </InputComponent>
           <Row>
             <TextMedium lighter>

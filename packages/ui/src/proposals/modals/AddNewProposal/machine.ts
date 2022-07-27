@@ -10,6 +10,7 @@ import {
   transactionMachine,
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
+import { defaultProposalValues } from '@/proposals/modals/AddNewProposal/helpers'
 import { ProposalType } from '@/proposals/types'
 
 interface ProposalTypeContext {
@@ -114,6 +115,9 @@ export const addNewProposalMachine = createMachine<
   AddNewProposalState
 >({
   initial: 'requirementsVerification',
+  context: {
+    discussionMode: defaultProposalValues.triggerAndDiscussion.isDiscussionClosed ? 'closed' : 'open',
+  },
   states: {
     requirementsVerification: {
       on: {

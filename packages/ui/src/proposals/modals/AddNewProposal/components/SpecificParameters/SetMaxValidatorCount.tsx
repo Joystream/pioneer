@@ -27,13 +27,7 @@ export const SetMaxValidatorCount = () => {
             units={CurrencyName.integerValue}
             required
           >
-            <InputNumber
-              id="amount-input"
-              name="setMaxValidatorCount.validatorCount"
-              isTokenValue
-              isInBN
-              placeholder="0"
-            />
+            <InputNumber id="amount-input" name="setMaxValidatorCount.validatorCount" isInBN placeholder="0" />
           </InputComponent>
         </RowGapBlock>
       </Row>

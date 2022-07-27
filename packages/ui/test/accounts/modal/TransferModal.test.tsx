@@ -118,33 +118,31 @@ describe('UI: TransferModal', () => {
 
   it('Disables when under min value', async () => {
     renderModal({ minValue: new BN(500), to: alice, from: bob })
-
-    const input = await screen.findByLabelText(/number of tokens/i)
     const submitButton = await getButton(/transfer tokens/i)
+    await fillAmount(100)
 
-    fireEvent.change(input, { target: { value: '100' } })
     expect(submitButton).toBeDisabled()
 
-    fireEvent.change(input, { target: { value: '600' } })
+    await fillAmount(600)
+
     expect(submitButton).not.toBeDisabled()
   })
 
   it('Disables when exceeds max value', async () => {
     renderModal({ maxValue: new BN(500), to: alice, from: bob })
 
-    const input = await screen.findByLabelText(/number of tokens/i)
     const submitButton = await getButton(/transfer tokens/i)
-
-    fireEvent.change(input, { target: { value: '100' } })
+    await fillAmount(100)
 
     expect(submitButton).not.toBeDisabled()
 
-    fireEvent.change(input, { target: { value: '600' } })
+    await fillAmount(600)
 
     expect(submitButton).toBeDisabled()
   })
 
   it('Sets up initial value', async () => {
+    // renderModal({ initialValue: new BN(500 * DECIMAL_NUMBER), to: alice, from: bob })
     renderModal({ initialValue: new BN(500), to: alice, from: bob })
 
     const input = await screen.findByLabelText<HTMLInputElement>(/number of tokens/i)
@@ -155,10 +153,8 @@ describe('UI: TransferModal', () => {
   it('Renders an Authorize transaction step', async () => {
     renderModal({ from: alice, to: bob })
 
-    const input = await screen.findByLabelText('Number of tokens')
     expect(await getButton('Transfer tokens')).toBeDisabled()
-
-    fireEvent.change(input, { target: { value: '1' } })
+    await fillAmount(1)
 
     const button = await getButton(/transfer tokens/i)
     expect(button).not.toBeDisabled()
@@ -181,9 +177,8 @@ describe('UI: TransferModal', () => {
 
     renderModal({ from: alice, to: bob, transactionFactory: factory })
 
-    const input = await screen.findByLabelText('Number of tokens')
     expect(await getButton('Transfer tokens')).toBeDisabled()
-    fireEvent.change(input, { target: { value: '100' } })
+    await fillAmount(100)
 
     const button = await getButton(/transfer tokens/i)
 
@@ -202,7 +197,7 @@ describe('UI: TransferModal', () => {
     async function renderAndSign() {
       renderModal({ from: alice, to: bob })
 
-      fireEvent.change(await screen.findByLabelText('Number of tokens'), { target: { value: '50' } })
+      await fillAmount(50)
 
       await act(async () => {
         fireEvent.click(await screen.findByText('Transfer tokens'))
@@ -247,6 +242,11 @@ describe('UI: TransferModal', () => {
       })
     })
   })
+
+  const fillAmount = async (value: number) => {
+    const input = await screen.findByLabelText('Number of tokens')
+    fireEvent.change(input, { target: { value: value } })
+  }
 
   function renderModal(data: ModalData) {
     return render(

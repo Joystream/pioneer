@@ -91,7 +91,7 @@ describe('UI: Vote for Council Modal', () => {
     await selectAlice()
     const input = await screen.findByLabelText(/Select amount for staking/i)
     act(() => {
-      fireEvent.change(input, { target: { value } })
+      fireEvent.change(input, { target: { value: value } })
     })
   }
 

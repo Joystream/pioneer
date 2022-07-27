@@ -116,12 +116,10 @@ describe('UI: IncreaseWorkerStakeModal', () => {
       const input = await getStakeInput()
       const submitButton = await getButton('Increase Stake')
 
-      fireEvent.change(input, { target: { value: '1000' } })
+      fireEvent.change(input, { target: { value: '1' } })
       fireEvent.click(submitButton)
 
-      const signButton = await getButton('Sign transaction and Stake')
-
-      expect(signButton).toBeDisabled()
+      expect(submitButton).toBeDisabled()
     })
 
     describe('Success', () => {
