@@ -3,21 +3,24 @@ import React from 'react'
 
 import { ModalBlock, Row, TemplateBlock } from '../storybookParts/previewStyles'
 
-import { InputComponent, InputComponentProps, TokenInput, InputText } from '.'
+import { InputComponent, InputComponentProps, TokenInput, InputText, InputNumber } from '.'
 
 export default {
   title: 'Common/Forms/InputComponent',
   component: InputComponent,
 } as Meta
 
-const Template: Story<InputComponentProps> = (args) => (
+const Template: Story<InputComponentProps> = ({ units, ...args }) => (
   <ModalBlock>
     <TemplateBlock>
       <Row>
         <InputComponent {...args}>
           <InputText />
         </InputComponent>
-        <InputComponent {...args}>
+        <InputComponent {...args} label="Number input" units={units}>
+          <InputNumber />
+        </InputComponent>
+        <InputComponent {...args} label="Joy input" units="JOY">
           <TokenInput />
         </InputComponent>
       </Row>
@@ -25,7 +28,10 @@ const Template: Story<InputComponentProps> = (args) => (
         <InputComponent {...args} inputSize="l">
           <InputText />
         </InputComponent>
-        <InputComponent {...args} inputSize="l">
+        <InputComponent {...args} label="Number input" units={units} inputSize="l">
+          <InputNumber />
+        </InputComponent>
+        <InputComponent {...args} label="Joy input" inputSize="l" units="JOY">
           <TokenInput />
         </InputComponent>
       </Row>
@@ -36,7 +42,7 @@ const Template: Story<InputComponentProps> = (args) => (
 export const InputComponentComponent = Template.bind({})
 
 InputComponentComponent.args = {
-  label: 'Label for input',
+  label: 'Text input label',
   required: true,
   validation: undefined,
   disabled: false,
