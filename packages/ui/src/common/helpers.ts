@@ -40,7 +40,7 @@ export const subtitleMapping = (value: string) => {
     case 'Distribution':
       return 'Run and maintain distributor nodes that deliver large volumes of upstream data to a large number of simultaneous end users.'
     case 'Gateway':
-      return 'Gateways'
+      return 'Gateway group is responsible for maintaining content directory and query node providing infrastructure for multiple consumer applications powered by the same chain.'
     case 'Operations Beta':
       return 'Human Resources working group is responsible for integrating new members greeting, onboarding, catalyzing and nurturing, as well as managing bounties.'
     case 'Operations Gamma':
