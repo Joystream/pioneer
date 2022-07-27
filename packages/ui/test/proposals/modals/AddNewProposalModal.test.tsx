@@ -20,6 +20,7 @@ import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
+import { powerOf2 } from '@/common/utils/bn'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import {
@@ -816,7 +817,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Invalid form', async () => {
           expect(await screen.queryByLabelText(/^Working Group$/i, { selector: 'input' })).toHaveValue('')
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await getCreateButton()).toBeDisabled()
 
           await SpecificParameters.SetWorkingGroupLeadReward.fillRewardAmount(0)
@@ -906,7 +907,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid form', async () => {
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
           expect(await getCreateButton()).toBeDisabled()
 
@@ -915,8 +916,8 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Validate max value', async () => {
-          await SpecificParameters.fillAmount(Math.pow(2, 128))
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          await SpecificParameters.fillAmount(powerOf2(128))
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
           expect(await getCreateButton()).toBeDisabled()
         })
@@ -943,7 +944,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid form', async () => {
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
           expect(await getCreateButton()).toBeDisabled()
 
@@ -984,9 +985,9 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Validate max value', async () => {
           await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
-          await fillField('amount-input', Math.pow(2, 32))
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
-          expect(await screen.queryByTestId('amount-input')).toBeEnabled()
+          await fillField('amount-input', powerOf2(32))
+          expect(screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(screen.queryByTestId('amount-input')).toBeEnabled()
         })
 
         it('Valid form', async () => {
@@ -1080,7 +1081,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid form', async () => {
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await getCreateButton()).toBeDisabled()
 
           await SpecificParameters.fillAmount(0)
@@ -1110,7 +1111,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Default - Invalid', async () => {
-          expect(await screen.getByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.getByTestId('amount-input')).toHaveValue('')
           expect(await getCreateButton()).toBeDisabled()
         })
 
@@ -1536,15 +1537,15 @@ describe('UI: AddNewProposalModal', () => {
     await selectFromDropdown('^Application$', name)
   }
 
-  async function fillField(id: string, value: number | string) {
-    const amountInput = await screen.getByTestId(id)
+  async function fillField(id: string, value: number | BN | string) {
+    const amountInput = screen.getByTestId(id)
     act(() => {
-      fireEvent.change(amountInput, { target: { value } })
+      fireEvent.change(amountInput, { target: { value: String(value) } })
     })
   }
 
   const SpecificParameters = {
-    fillAmount: async (value: number) => await fillField('amount-input', value),
+    fillAmount: async (value: number | BN) => await fillField('amount-input', String(value)),
     Signal: {
       fillSignal: async (value: string) => await fillField('signal', value),
     },
