@@ -35,7 +35,7 @@ export const TransactionFeesProvider: FC = ({ children }) => {
     } else if (status === 'loadingFees') {
       setStatus(null)
     }
-  }, [status, !balance, !transactionFee])
+  }, [status, !balance, !transactionFee, !transaction, !signer])
 
   return (
     <TransactionFeesContext.Provider value={{ transaction, feeInfo, setTransaction, setSigner }}>
