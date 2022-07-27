@@ -5,51 +5,62 @@ import NumberFormat, { NumberFormatValues, SourceInfo } from 'react-number-forma
 
 import { BN_ZERO, JOY_DECIMAL_PLACES } from '@/common/constants'
 import { formatJoyValue } from '@/common/model/formatters'
+import { powerOf2 } from '@/common/utils/bn'
 
 import { InputProps } from './InputComponent'
 import { StyledNumberInput } from './InputNumber'
 
 export interface BaseTokenInputProps extends Omit<InputProps, 'type' | 'defaultValue' | 'value' | 'onChange'> {
   value?: BN
+  maxAllowedValue?: BN
   onChange?: (event: React.ChangeEvent<HTMLInputElement>, numberValue: BN) => void
 }
 
-const BasedTokenInput = React.memo(({ id, onChange, value: joyValue = BN_ZERO, ...props }: BaseTokenInputProps) => {
-  const [inputValue, setInputValue] = useState('')
+const BasedTokenInput = React.memo(
+  ({ id, onChange, value: joyValue = BN_ZERO, maxAllowedValue = powerOf2(128), ...props }: BaseTokenInputProps) => {
+    const [inputValue, setInputValue] = useState('')
 
-  const onInputChange = useCallback(
-    ({ value }: NumberFormatValues, { event }: SourceInfo) => {
-      if (inputValue !== value) {
-        setInputValue(value)
-        const newJOYValue = stringToJoyValue(value)
-        if (!newJOYValue.eq(joyValue)) {
-          onChange?.(event, newJOYValue)
+    const onInputChange = useCallback(
+      ({ value }: NumberFormatValues, { event }: SourceInfo) => {
+        if (inputValue !== value) {
+          setInputValue(value)
+          const newJOYValue = stringToJoyValue(value)
+          if (!newJOYValue.eq(joyValue)) {
+            onChange?.(event, newJOYValue)
+          }
         }
+      },
+      [onChange]
+    )
+
+    const isAllowed = useCallback(
+      ({ value }: NumberFormatValues) => stringToJoyValue(value).lt(maxAllowedValue),
+      [maxAllowedValue]
+    )
+
+    useEffect(() => {
+      if (!stringToJoyValue(inputValue).eq(joyValue)) {
+        setInputValue(formatJoyValue(joyValue, { formatInt: String }))
       }
-    },
-    [onChange]
-  )
+    }, [String(joyValue)])
 
-  useEffect(() => {
-    if (!stringToJoyValue(inputValue).eq(joyValue)) {
-      setInputValue(formatJoyValue(joyValue, { formatInt: String }))
-    }
-  }, [String(joyValue)])
-
-  return (
-    <NumberFormat
-      {...props}
-      id={id}
-      name={id}
-      value={inputValue}
-      onValueChange={onInputChange}
-      autoComplete="off"
-      customInput={StyledNumberInput}
-      decimalScale={JOY_DECIMAL_PLACES}
-      thousandSeparator
-    />
-  )
-})
+    return (
+      <NumberFormat
+        {...props}
+        id={id}
+        name={id}
+        value={inputValue}
+        onValueChange={onInputChange}
+        autoComplete="off"
+        customInput={StyledNumberInput}
+        decimalScale={JOY_DECIMAL_PLACES}
+        isAllowed={isAllowed}
+        allowNegative={false}
+        thousandSeparator
+      />
+    )
+  }
+)
 
 export const TokenInput = React.memo(({ name, ...props }: BaseTokenInputProps) => {
   const formContext = useFormContext()

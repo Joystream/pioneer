@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useFormContext, Controller } from 'react-hook-form'
 import NumberFormat, { NumberFormatValues, SourceInfo } from 'react-number-format'
 import styled from 'styled-components'
@@ -11,28 +11,35 @@ interface BaseNumberInputProps extends Omit<InputProps, 'type' | 'defaultValue' 
   onChange?: (event: React.ChangeEvent<HTMLInputElement>, numberValue: number) => void
 }
 
-const BasedInputNumber = React.memo(({ id, onChange, value = '', maxAllowedValue, ...props }: BaseNumberInputProps) => {
-  const onInputChange = ({ value }: NumberFormatValues, { event }: SourceInfo) => {
-    const eventValue = Number(value)
-    if (isNaN(eventValue) || eventValue < 0 || (maxAllowedValue && !(eventValue < maxAllowedValue))) return
+const BasedInputNumber = React.memo(
+  ({ id, onChange, value = '', maxAllowedValue = 2 ** 32, ...props }: BaseNumberInputProps) => {
+    const onInputChange = useCallback(
+      ({ floatValue = 0 }: NumberFormatValues, { event }: SourceInfo) => onChange?.(event, floatValue),
+      [onChange]
+    )
 
-    onChange?.(event, eventValue)
+    const isAllowed = useCallback(
+      ({ floatValue = 0 }: NumberFormatValues) => floatValue < maxAllowedValue,
+      [maxAllowedValue]
+    )
+
+    return (
+      <NumberFormat
+        {...props}
+        id={id}
+        name={id}
+        value={value}
+        onValueChange={onInputChange}
+        autoComplete="off"
+        customInput={StyledNumberInput}
+        decimalScale={0}
+        isAllowed={isAllowed}
+        allowNegative={false}
+        thousandSeparator
+      />
+    )
   }
-
-  return (
-    <NumberFormat
-      {...props}
-      id={id}
-      name={id}
-      value={value}
-      onValueChange={onInputChange}
-      autoComplete="off"
-      customInput={StyledNumberInput}
-      decimalScale={0}
-      thousandSeparator
-    />
-  )
-})
+)
 
 interface NumberInputProps extends BaseNumberInputProps {
   isInBN?: boolean

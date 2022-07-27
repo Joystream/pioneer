@@ -1,4 +1,4 @@
-import { BN_TEN } from '@polkadot/util'
+import { BN_TEN, BN_TWO } from '@polkadot/util'
 import BN from 'bn.js'
 
 import { BN_ZERO } from '@/common/constants'
@@ -11,3 +11,5 @@ export const sumStakes = (entities: { stake: BNParam }[]) =>
 export const asBN = (value: any) => new BN(String(value))
 
 export const powerOf10 = (value: any) => BN_TEN.pow(asBN(value))
+
+export const powerOf2 = (value: any) => BN_TWO.pow(asBN(value))
