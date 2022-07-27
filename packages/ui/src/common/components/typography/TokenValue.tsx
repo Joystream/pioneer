@@ -30,7 +30,7 @@ export const TokenValue = React.memo(({ className, value, size, isLoading }: Val
   return (
     <Tooltip tooltipText={<JOYSuffix>{formatJoyValue(value)}</JOYSuffix>}>
       <ValueInJoys className={className} size={size}>
-        {formatJoyValue(value, 2)}
+        {formatJoyValue(value, { precision: 2 })}
       </ValueInJoys>
     </Tooltip>
   )

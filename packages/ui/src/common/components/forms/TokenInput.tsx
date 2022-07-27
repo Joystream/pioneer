@@ -32,7 +32,7 @@ const BasedTokenInput = React.memo(({ id, onChange, value: joyValue = BN_ZERO, .
 
   useEffect(() => {
     if (!stringToJoyValue(inputValue).eq(joyValue)) {
-      setInputValue(formatJoyValue(joyValue))
+      setInputValue(formatJoyValue(joyValue, { formatInt: String }))
     }
   }, [String(joyValue)])
 
