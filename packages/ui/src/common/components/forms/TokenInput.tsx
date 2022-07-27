@@ -1,31 +1,29 @@
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useFormContext, Controller } from 'react-hook-form'
+import NumberFormat, { NumberFormatValues, SourceInfo } from 'react-number-format'
 
 import { BN_ZERO, JOY_DECIMAL_PLACES } from '@/common/constants'
-import { powerOf10 } from '@/common/utils/bn'
+import { formatJoyValue } from '@/common/model/formatters'
 
 import { InputProps } from './InputComponent'
 import { StyledNumberInput } from './InputNumber'
 
-export interface BaseTokenInputProps extends Omit<InputProps, 'value' | 'onChange'> {
+export interface BaseTokenInputProps extends Omit<InputProps, 'type' | 'defaultValue' | 'value' | 'onChange'> {
   value?: BN
   onChange?: (event: React.ChangeEvent<HTMLInputElement>, numberValue: BN) => void
 }
 
-const isValid = (value: string) => /^\d*\.?\d{0,10}$/.test(value)
-
-const BasedTokenInput = React.memo(({ id, onChange, value = BN_ZERO, ...props }: BaseTokenInputProps) => {
+const BasedTokenInput = React.memo(({ id, onChange, value: joyValue = BN_ZERO, ...props }: BaseTokenInputProps) => {
   const [inputValue, setInputValue] = useState('')
 
   const onInputChange = useCallback(
-    (evt: React.ChangeEvent<HTMLInputElement>) => {
-      const targetValue = evt.target.value
-      if (isValid(targetValue) && inputValue !== targetValue) {
-        setInputValue(targetValue)
-        const newValue = formatFromJoyValue(targetValue)
-        if (!newValue.eq(value)) {
-          onChange?.(evt, newValue)
+    ({ value }: NumberFormatValues, { event }: SourceInfo) => {
+      if (inputValue !== value) {
+        setInputValue(value)
+        const newJOYValue = stringToJoyValue(value)
+        if (!newJOYValue.eq(joyValue)) {
+          onChange?.(event, newJOYValue)
         }
       }
     },
@@ -33,24 +31,22 @@ const BasedTokenInput = React.memo(({ id, onChange, value = BN_ZERO, ...props }:
   )
 
   useEffect(() => {
-    if (!formatFromJoyValue(inputValue).eq(value)) {
-      const { integer, decimal } = formatToJoyValue(value)
-      const newInputValue = `${integer}.${decimal}`.replace(/\.?0*$/, '')
-      if (formatFromJoyValue(newInputValue).eq(value)) {
-        setInputValue(newInputValue)
-      }
+    if (!stringToJoyValue(inputValue).eq(joyValue)) {
+      setInputValue(formatJoyValue(joyValue))
     }
-  }, [String(value)])
+  }, [String(joyValue)])
 
   return (
-    <StyledNumberInput
+    <NumberFormat
+      {...props}
       id={id}
       name={id}
-      type="string"
       value={inputValue}
-      onChange={onInputChange}
+      onValueChange={onInputChange}
       autoComplete="off"
-      {...props}
+      customInput={StyledNumberInput}
+      decimalScale={JOY_DECIMAL_PLACES}
+      thousandSeparator
     />
   )
 })
@@ -78,16 +74,7 @@ export const TokenInput = React.memo(({ name, ...props }: BaseTokenInputProps) =
   )
 })
 
-const formatToJoyValue = (value: BN) => {
-  const int = String(value.div(powerOf10(JOY_DECIMAL_PLACES)))
-  const rest = String(value.mod(powerOf10(JOY_DECIMAL_PLACES))).padStart(JOY_DECIMAL_PLACES, '0')
-  return {
-    decimal: rest.replace(/0+$/, ''),
-    integer: int,
-  }
-}
-
-const formatFromJoyValue = (value: string) => {
+const stringToJoyValue = (value: string) => {
   const [integer = '0', decimal = ''] = value.split('.')
   return new BN(integer + decimal.padEnd(JOY_DECIMAL_PLACES, '0'))
 }
