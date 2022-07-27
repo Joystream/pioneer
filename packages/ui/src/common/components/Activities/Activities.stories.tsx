@@ -254,7 +254,7 @@ const activities: Activity[] = [
     id: '20',
     createdAt: '2021-05-25T10:28:04.155Z',
     eventType: 'CouncilorRewardUpdatedEvent',
-    newReward: '1000',
+    newReward: new BN('1000'),
   },
   {
     id: '21',

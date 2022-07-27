@@ -1,3 +1,5 @@
+import { BN } from 'bn.js'
+
 import { asBaseActivity } from '@/common/types'
 import {
   NewCouncilElectedEventFieldsFragment,
@@ -84,7 +86,7 @@ const asCouncilorRewardUpdatedActivity: CouncilActivityCast<
 > = (fields) => ({
   eventType: fields.__typename,
   ...asBaseActivity(fields),
-  newReward: fields.rewardAmount,
+  newReward: new BN(fields.rewardAmount),
 })
 
 const asNotEnoughCandidatesActivity: CouncilActivityCast<

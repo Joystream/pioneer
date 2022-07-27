@@ -1,3 +1,5 @@
+import BN from 'bn.js'
+
 import { BaseActivity } from '@/common/types'
 import {
   NewCouncilElectedEventFieldsFragment,
@@ -50,7 +52,7 @@ export interface VotingPeriodStartedActivity extends BaseActivity {
 
 export interface CouncilorRewardUpdatedActivity extends BaseActivity {
   eventType: 'CouncilorRewardUpdatedEvent'
-  newReward: any
+  newReward: BN
 }
 
 export interface NotEnoughCandidatesActivity extends BaseActivity {
