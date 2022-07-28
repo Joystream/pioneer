@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { AccountLocks, AccountLocksWrapper } from '@/accounts/components/AccountLocks'
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { isRivalrous, stakingBalance } from '@/accounts/model/lockTypes'
+import { isRivalrous, getStakingBalance } from '@/accounts/model/lockTypes'
 import { AccountOption, LockType } from '@/accounts/types'
 import { BalanceInfoInRow, InfoTitle, InfoValue } from '@/common/components/Modal'
 import { TokenValue } from '@/common/components/typography'
@@ -17,7 +17,7 @@ interface Props {
 
 export const OptionAccount = ({ option, newLockType }: Props) => {
   const balances = useBalance(option.address)
-  const balance = balances && newLockType && stakingBalance(balances, newLockType)
+  const balance = balances && newLockType && getStakingBalance(balances, newLockType)
   const balanceType = newLockType && isRivalrous(newLockType) ? 'Transferable' : 'Total'
   const locks = option.optionLocks
   const isLocked = !!locks?.length
