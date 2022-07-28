@@ -8,6 +8,8 @@ import { AnyObjectSchema, ValidationError } from 'yup'
 import Reference from 'yup/lib/Reference'
 import { AnyObject } from 'yup/lib/types'
 
+import { formatJoyValue } from '@/common/model/formatters'
+
 export const BNSchema = Yup.mixed()
 
 /*
@@ -16,7 +18,7 @@ export const BNSchema = Yup.mixed()
  *   lessThanMixed and moreThanMixed are methods for BN working same
  *   as the ones on Yup.number
  */
-export const maxContext = (msg: string, contextPath: string): Yup.TestConfig<any, AnyObject> => ({
+export const maxContext = (msg: string, contextPath: string, isJoyValue = true): Yup.TestConfig<any, AnyObject> => ({
   name: 'maxContext',
   exclusive: false,
   test(value: number | BN) {
@@ -25,14 +27,22 @@ export const maxContext = (msg: string, contextPath: string): Yup.TestConfig<any
     }
     const validationValue = new BN(this.options.context?.[contextPath])
     if (validationValue && validationValue.lt(new BN(value))) {
-      return this.createError({ message: msg, params: { max: validationValue?.toNumber() ?? validationValue } })
+      return this.createError({
+        message: msg,
+        params: {
+          max:
+            isJoyValue && isBn(validationValue)
+              ? formatJoyValue(validationValue, { precision: 2 })
+              : validationValue.toString(),
+        },
+      })
     }
 
     return true
   },
 })
 
-export const minContext = (msg: string, contextPath: string): Yup.TestConfig<any, AnyObject> => ({
+export const minContext = (msg: string, contextPath: string, isJoyValue = true): Yup.TestConfig<any, AnyObject> => ({
   name: 'minContext',
   exclusive: false,
   test(value: number | BN) {
@@ -42,20 +52,60 @@ export const minContext = (msg: string, contextPath: string): Yup.TestConfig<any
 
     const validationValue = new BN(this.options.context?.[contextPath])
     if (validationValue && validationValue.gt(new BN(value))) {
-      return this.createError({ message: msg, params: { min: validationValue?.toNumber() ?? validationValue } })
+      return this.createError({
+        message: msg,
+        params: {
+          min:
+            isJoyValue && isBn(validationValue)
+              ? formatJoyValue(validationValue, { precision: 2 })
+              : validationValue.toString(),
+        },
+      })
     }
 
     return true
   },
 })
-
-export const lessThanMixed = (
-  less: Reference<number | BN> | number,
-  message: string
+export const maxMixed = (
+  max: Reference<number | BN> | number | BN,
+  message: string,
+  isJoyValue = true
 ): Yup.TestConfig<any, AnyObject> => ({
   message,
   name: 'lessThanMixed',
-  params: { less },
+  params: { max: isJoyValue && isBn(max) ? formatJoyValue(max, { precision: 2 }) : max },
+  exclusive: false,
+  test(value: BN) {
+    return !value || !isBn(value) || value.lte(new BN(this.resolve(max)))
+  },
+})
+
+export const minMixed = (
+  min: Reference<number | BN> | number | BN,
+  message: string,
+  isJoyValue = true
+): Yup.TestConfig<any, AnyObject> => ({
+  message,
+  name: 'lessThanMixed',
+  params: {
+    min: isJoyValue && isBn(min) ? formatJoyValue(min, { precision: 2 }) : min,
+  },
+  exclusive: false,
+  test(value: BN) {
+    return !value || !isBn(value) || value.gte(new BN(this.resolve(min)))
+  },
+})
+
+export const lessThanMixed = (
+  less: Reference<number | BN> | number,
+  message: string,
+  isJoyValue = true
+): Yup.TestConfig<any, AnyObject> => ({
+  message,
+  name: 'lessThanMixed',
+  params: {
+    less: isJoyValue && isBn(less) ? formatJoyValue(less, { precision: 2 }) : less,
+  },
   exclusive: false,
   test(value: BN) {
     return !value || !isBn(value) || value.lt(new BN(this.resolve(less)))
@@ -64,11 +114,14 @@ export const lessThanMixed = (
 
 export const moreThanMixed = (
   more: Reference<number | BN> | number,
-  message: string
+  message: string,
+  isJoyValue = true
 ): Yup.TestConfig<any, AnyObject> => ({
   message,
   name: 'lessThanMixed',
-  params: { more },
+  params: {
+    more: isJoyValue && isBn(more) ? formatJoyValue(more, { precision: 2 }) : more,
+  },
   exclusive: false,
   test(value: BN) {
     return !value || !isBn(value) || value.gt(new BN(this.resolve(more)))
