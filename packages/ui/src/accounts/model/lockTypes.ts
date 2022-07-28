@@ -44,7 +44,7 @@ const RIVALROUS: LockType[] = [
   'Distribution Worker',
 ]
 
-const isRivalrous = (lockType: LockType) => RIVALROUS.includes(lockType)
+export const isRivalrous = (lockType: LockType) => RIVALROUS.includes(lockType)
 const asLockTypes = (locks: BalanceLock[]): LockType[] => locks.flatMap((lock) => lock.type ?? [])
 const isConflictingWith = (lockTypeA: LockType): ((lockTypeB: LockType) => boolean) => {
   if (!lockTypeA) {
@@ -95,6 +95,9 @@ export const conflictingLocks = (lockType: LockType, existingLocks: BalanceLock[
   asLockTypes(existingLocks).filter(isConflictingWith(lockType))
 
 export const lockLookup = (id: LockIdentifier): LockType => lockTypes[id.toUtf8()]
+
+export const stakingBalance = (balances: Balances, lockType: LockType) =>
+  balances[isRivalrous(lockType) ? 'transferable' : 'total']
 
 export const getAvailableBalanceForNewStaking = (balances: Balances, newLock: LockType) => {
   if (newLock === 'Voting') {
