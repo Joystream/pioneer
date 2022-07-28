@@ -37,13 +37,15 @@ import { MappedStatuses, OpeningStatuses, WorkingGroupsRoutes } from '@/working-
 import { useOpening } from '@/working-groups/hooks/useOpening'
 import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
+import { urlParamToOpeningId } from '@/working-groups/model/workingGroupName'
 import { WorkingGroupOpening as WorkingGroupOpeningType } from '@/working-groups/types'
 
 export const WorkingGroupOpening = () => {
   const { id } = useParams<{ id: string }>()
   const { showModal } = useModal()
   const { active: activeMembership } = useMyMemberships()
-  const { isLoading, opening } = useOpening(id)
+
+  const { isLoading, opening } = useOpening(urlParamToOpeningId(id))
 
   const activeApplications = useMemo(() => {
     if (opening) {
