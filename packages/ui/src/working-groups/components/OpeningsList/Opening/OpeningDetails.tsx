@@ -6,7 +6,7 @@ import { TransactionButton } from '@/common/components/buttons/TransactionButton
 import { StatiscticContentColumn, Statistics, StatsBlock, MultiColumnsStatistic } from '@/common/components/statistics'
 import { TextBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
-import { isInFuture } from '@/common/helpers'
+import { isInFuture, nameMapping } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeTime } from '@/common/model/relativeTime'
 import { OpeningListItemProps } from '@/working-groups/components/OpeningsList/Opening/OpeningListItem'
@@ -19,6 +19,7 @@ import {
 import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { isOpeningOpen } from '@/working-groups/model/isOpeningOpen'
+import { groupNameToURLParam } from '@/working-groups/model/workingGroupName'
 
 export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps) => {
   const { showModal } = useModal()
@@ -67,7 +68,10 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
           </StatsBlock>
         </Statistics>
         <ButtonsGroup align="right">
-          <LinkButtonGhost to={`/working-groups/openings/${opening.id}`} size="medium">
+          <LinkButtonGhost
+            to={`/working-groups/openings/${groupNameToURLParam(nameMapping(opening.groupName))}-${opening.runtimeId}`}
+            size="medium"
+          >
             Learn more
           </LinkButtonGhost>
           {isOpeningOpen(opening) && (
