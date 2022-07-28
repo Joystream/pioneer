@@ -1,6 +1,7 @@
 import { LockIdentifier } from '@polkadot/types/interfaces'
 
-import { BalanceLock, LockType, WorkerLocks, WorkerLockType } from '@/accounts/types'
+import { BalanceLock, Balances, LockType, WorkerLocks, WorkerLockType } from '@/accounts/types'
+import { BN_ZERO } from '@/common/constants'
 
 // Mapping from:
 // - [/runtime/src/constants.rs:104](https://github.com/Joystream/joystream/blob/5a153fa18351a8fefd919a7d5230b911f180e13d/runtime/src/constants.rs#L104)
@@ -94,3 +95,29 @@ export const conflictingLocks = (lockType: LockType, existingLocks: BalanceLock[
   asLockTypes(existingLocks).filter(isConflictingWith(lockType))
 
 export const lockLookup = (id: LockIdentifier): LockType => lockTypes[id.toUtf8()]
+
+export const getAvailableBalanceForNewStaking = (balances: Balances, newLock: LockType) => {
+  if (newLock === 'Voting') {
+    return balances.total
+  }
+
+  let availableBalance = BN_ZERO
+  availableBalance = availableBalance.add(balances.transferable)
+
+  if (isRivalrous(newLock)) {
+    balances.locks
+      .filter((lock) => !isRivalrous(lock.type))
+      .forEach((lock: BalanceLock) => {
+        availableBalance = availableBalance.add(lock.amount)
+      })
+    return availableBalance
+  }
+
+  balances.locks.forEach((lock) => {
+    if (lock.type !== newLock) {
+      availableBalance = availableBalance.add(lock.amount)
+    }
+  })
+
+  return availableBalance
+}
