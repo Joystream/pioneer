@@ -1,6 +1,6 @@
 import { isBn } from '@polkadot/util'
 import BN from 'bn.js'
-import { at } from 'lodash'
+import { at, get } from 'lodash'
 import { useCallback } from 'react'
 import { FieldErrors, FieldValues, Resolver } from 'react-hook-form'
 import * as Yup from 'yup'
@@ -23,7 +23,8 @@ export const maxContext = (msg: string, contextPath: string): Yup.TestConfig<any
     if (!value) {
       return true
     }
-    const validationValue = new BN(this.options.context?.[contextPath])
+
+    const validationValue = new BN(get(this.options.context, contextPath))
     if (validationValue && validationValue.lt(new BN(value))) {
       return this.createError({ message: msg, params: { max: validationValue?.toNumber() ?? validationValue } })
     }
@@ -40,7 +41,7 @@ export const minContext = (msg: string, contextPath: string): Yup.TestConfig<any
       return true
     }
 
-    const validationValue = new BN(this.options.context?.[contextPath])
+    const validationValue = new BN(get(this.options.context, contextPath))
     if (validationValue && validationValue.gt(new BN(value))) {
       return this.createError({ message: msg, params: { min: validationValue?.toNumber() ?? validationValue } })
     }

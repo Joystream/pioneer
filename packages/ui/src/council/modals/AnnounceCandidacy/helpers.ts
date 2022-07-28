@@ -30,7 +30,7 @@ export const baseSchema = Yup.object().shape({
   staking: Yup.object().shape({
     account: StakingAccountSchema.required('This field is required'),
     amount: BNSchema.test(minContext('Minimal stake amount is ${min} tJOY', 'minStake'))
-      .test(maxContext('Insufficient funds to cover staking', 'controllerAccountBalance'))
+      .test(maxContext('Insufficient funds to cover staking', 'balances.transferable'))
       .required('This field is required'),
   }),
   rewardAccount: Yup.object().shape({

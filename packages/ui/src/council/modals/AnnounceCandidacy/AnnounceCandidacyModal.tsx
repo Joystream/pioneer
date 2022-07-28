@@ -75,14 +75,12 @@ const transactionSteps = [
 
 interface Conditions extends IStakingAccountSchema {
   minStake: BN
-  controllerAccountBalance: BN
 }
 
 export const AnnounceCandidacyModal = () => {
   const { api, connectionState } = useApi()
   const boundingLock = api?.consts.members.candidateStake ?? BN_ZERO
   const { active: activeMember } = useMyMemberships()
-  const balances = useMyBalances()
   const { hideModal, showModal } = useModal()
   const [state, send, service] = useMachine(announceCandidacyMachine)
   const constants = useCouncilConstants()
@@ -103,7 +101,6 @@ export const AnnounceCandidacyModal = () => {
       stakeLock: 'Council Candidate',
       balances: balance,
       minStake: constants?.election.minCandidacyStake as BN,
-      controllerAccountBalance: balances[activeMember?.controllerAccount ?? '']?.transferable,
     } as Conditions,
     mode: 'onChange',
     defaultValues: getAnnounceCandidacyFormInitialState(constants?.election.minCandidacyStake ?? BN_ZERO),

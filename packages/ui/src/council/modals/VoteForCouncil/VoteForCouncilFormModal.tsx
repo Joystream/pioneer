@@ -12,7 +12,7 @@ import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader, ScrollableModalColumn, ScrolledModalBody } from '@/common/components/Modal'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
-import { BNSchema, minContext } from '@/common/utils/validation'
+import { BNSchema, maxContext, minContext } from '@/common/utils/validation'
 import { useCandidate } from '@/council/hooks/useCandidate'
 import { useMyCastVotes } from '@/council/hooks/useMyCastVotes'
 import { VoteForCouncilEvent, VoteForCouncilMachineState } from '@/council/modals/VoteForCouncil/machine'
@@ -29,7 +29,9 @@ export interface VoteForCouncilFormModalProps {
 
 const StakeStepFormSchema = Yup.object().shape({
   account: StakingAccountSchema.required(),
-  stake: BNSchema.test(minContext('You need at least ${min} stake', 'minStake')).required(),
+  stake: BNSchema.test(minContext('You need at least ${min} stake', 'minStake'))
+    .test(maxContext('Insufficient funds to cover staking', 'balances.total'))
+    .required(),
 })
 
 interface IFormContext extends IStakingAccountSchema {
