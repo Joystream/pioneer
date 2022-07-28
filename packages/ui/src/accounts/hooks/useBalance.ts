@@ -5,14 +5,21 @@ import { Address } from '@/common/types'
 
 import { Balances } from '../types'
 
+import { useMyBalances } from './useMyBalances'
+
 export const useBalance = (address?: Address): Balances | null => {
   const { api, connectionState } = useApi()
+  const allMyBalances = useMyBalances()
+  const myBalances = address && allMyBalances[address]
 
-  const balances = useObservable(address ? api?.derive.balances.all(address) : undefined, [connectionState, address])
+  const balances = useObservable(!myBalances && address ? api?.derive.balances.all(address) : undefined, [
+    connectionState,
+    address,
+  ])
 
-  if (balances === undefined) {
-    return null
+  if (myBalances) {
+    return myBalances
   }
 
-  return toBalances(balances)
+  return balances ? toBalances(balances) : null
 }
