@@ -289,6 +289,45 @@ export type ForumPostFieldsFragment = {
       inBlock: number
       network: Types.Network
     }> | null
+    postmoderatedeventpost?: Array<{
+      __typename: 'PostModeratedEvent'
+      actor: {
+        __typename: 'Worker'
+        membership: {
+          __typename: 'Membership'
+          id: string
+          rootAccount: string
+          controllerAccount: string
+          boundAccounts: Array<string>
+          handle: string
+          isVerified: boolean
+          isFoundingMember: boolean
+          isCouncilMember: boolean
+          inviteCount: number
+          createdAt: any
+          metadata: {
+            __typename: 'MemberMetadata'
+            name?: string | null
+            about?: string | null
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+          }
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            isLead: boolean
+            group: { __typename: 'WorkingGroup'; name: string }
+          }>
+          stakingaccountaddedeventmember?: Array<{
+            __typename: 'StakingAccountAddedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+            account: string
+          }> | null
+        }
+      }
+    }> | null
     status:
       | { __typename: 'PostStatusActive' }
       | { __typename: 'PostStatusLocked' }
@@ -334,6 +373,45 @@ export type ForumPostFieldsFragment = {
     createdAt: any
     inBlock: number
     network: Types.Network
+  }> | null
+  postmoderatedeventpost?: Array<{
+    __typename: 'PostModeratedEvent'
+    actor: {
+      __typename: 'Worker'
+      membership: {
+        __typename: 'Membership'
+        id: string
+        rootAccount: string
+        controllerAccount: string
+        boundAccounts: Array<string>
+        handle: string
+        isVerified: boolean
+        isFoundingMember: boolean
+        isCouncilMember: boolean
+        inviteCount: number
+        createdAt: any
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null
+          about?: string | null
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          isLead: boolean
+          group: { __typename: 'WorkingGroup'; name: string }
+        }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
+      }
+    }
   }> | null
   status:
     | { __typename: 'PostStatusActive' }
@@ -388,6 +466,45 @@ export type ForumPostWithoutReplyFieldsFragment = {
     createdAt: any
     inBlock: number
     network: Types.Network
+  }> | null
+  postmoderatedeventpost?: Array<{
+    __typename: 'PostModeratedEvent'
+    actor: {
+      __typename: 'Worker'
+      membership: {
+        __typename: 'Membership'
+        id: string
+        rootAccount: string
+        controllerAccount: string
+        boundAccounts: Array<string>
+        handle: string
+        isVerified: boolean
+        isFoundingMember: boolean
+        isCouncilMember: boolean
+        inviteCount: number
+        createdAt: any
+        metadata: {
+          __typename: 'MemberMetadata'
+          name?: string | null
+          about?: string | null
+          avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+        }
+        roles: Array<{
+          __typename: 'Worker'
+          id: string
+          createdAt: any
+          isLead: boolean
+          group: { __typename: 'WorkingGroup'; name: string }
+        }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
+      }
+    }
   }> | null
   status:
     | { __typename: 'PostStatusActive' }
@@ -883,6 +1000,45 @@ export type GetForumPostsQuery = {
         inBlock: number
         network: Types.Network
       }> | null
+      postmoderatedeventpost?: Array<{
+        __typename: 'PostModeratedEvent'
+        actor: {
+          __typename: 'Worker'
+          membership: {
+            __typename: 'Membership'
+            id: string
+            rootAccount: string
+            controllerAccount: string
+            boundAccounts: Array<string>
+            handle: string
+            isVerified: boolean
+            isFoundingMember: boolean
+            isCouncilMember: boolean
+            inviteCount: number
+            createdAt: any
+            metadata: {
+              __typename: 'MemberMetadata'
+              name?: string | null
+              about?: string | null
+              avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+            }
+            roles: Array<{
+              __typename: 'Worker'
+              id: string
+              createdAt: any
+              isLead: boolean
+              group: { __typename: 'WorkingGroup'; name: string }
+            }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
+          }
+        }
+      }> | null
       status:
         | { __typename: 'PostStatusActive' }
         | { __typename: 'PostStatusLocked' }
@@ -928,6 +1084,45 @@ export type GetForumPostsQuery = {
       createdAt: any
       inBlock: number
       network: Types.Network
+    }> | null
+    postmoderatedeventpost?: Array<{
+      __typename: 'PostModeratedEvent'
+      actor: {
+        __typename: 'Worker'
+        membership: {
+          __typename: 'Membership'
+          id: string
+          rootAccount: string
+          controllerAccount: string
+          boundAccounts: Array<string>
+          handle: string
+          isVerified: boolean
+          isFoundingMember: boolean
+          isCouncilMember: boolean
+          inviteCount: number
+          createdAt: any
+          metadata: {
+            __typename: 'MemberMetadata'
+            name?: string | null
+            about?: string | null
+            avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+          }
+          roles: Array<{
+            __typename: 'Worker'
+            id: string
+            createdAt: any
+            isLead: boolean
+            group: { __typename: 'WorkingGroup'; name: string }
+          }>
+          stakingaccountaddedeventmember?: Array<{
+            __typename: 'StakingAccountAddedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+            account: string
+          }> | null
+        }
+      }
     }> | null
     status:
       | { __typename: 'PostStatusActive' }
@@ -1246,6 +1441,13 @@ export const ForumPostWithoutReplyFieldsFragmentDoc = gql`
       createdAt
       inBlock
       network
+    }
+    postmoderatedeventpost {
+      actor {
+        membership {
+          ...MemberFields
+        }
+      }
     }
     status {
       __typename
