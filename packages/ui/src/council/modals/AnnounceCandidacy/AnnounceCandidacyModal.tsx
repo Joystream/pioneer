@@ -52,7 +52,7 @@ import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
 const getCandidateForPreview = (context: AnnounceCandidacyFrom, member: Member): ElectionCandidateWithDetails => ({
   id: '0',
   stakingAccount: context.staking.account?.address ?? '',
-  rewardAccount: context.rewardAccount.rewardAccount?.address ?? '',
+  rewardAccount: context.reward.account?.address ?? '',
   stake: context.staking.amount ?? BN_ZERO,
   info: {
     title: context.titleAndBulletPoints.title ?? '',
@@ -113,7 +113,11 @@ export const AnnounceCandidacyModal = () => {
     mode: 'onChange',
     defaultValues: getAnnounceCandidacyFormInitialState(constants?.election.minCandidacyStake ?? BN_ZERO),
   })
-  const stakingAccount = form.watch('staking.account')
+  const [stakingAccount, rewardAccount, stakingAmount] = form.watch([
+    'staking.account',
+    'reward.account',
+    'staking.amount',
+  ])
 
   useEffect(() => {
     setStakingAccount(stakingAccount)
@@ -144,13 +148,12 @@ export const AnnounceCandidacyModal = () => {
   }, [JSON.stringify(state.context), connectionState, activeMember?.id])
 
   const announceCandidacyTransaction = useMemo(() => {
-    const formValues = form.getValues() as AnnounceCandidacyFrom
     if (activeMember && api && confirmStakingAccountTransaction) {
       const tx = api.tx.council.announceCandidacy(
         activeMember.id,
-        formValues.staking.account?.address ?? '',
-        formValues.rewardAccount.rewardAccount?.address ?? '',
-        formValues.staking.amount?.toNumber() ?? 0
+        stakingAccount?.address ?? '',
+        rewardAccount?.address ?? '',
+        stakingAmount ?? BN_ZERO
       )
 
       if (stakingStatus === 'confirmed') {
@@ -159,7 +162,15 @@ export const AnnounceCandidacyModal = () => {
 
       return api.tx.utility.batch([confirmStakingAccountTransaction, tx])
     }
-  }, [connectionState, activeMember?.id, stakingStatus, confirmStakingAccountTransaction])
+  }, [
+    connectionState,
+    activeMember?.id,
+    stakingAccount?.address,
+    rewardAccount?.address,
+    String(stakingAmount),
+    stakingStatus,
+    confirmStakingAccountTransaction,
+  ])
 
   const candidacyNoteTransaction = useMemo(() => {
     const formValues = form.getValues() as AnnounceCandidacyFrom
@@ -312,7 +323,7 @@ export const AnnounceCandidacyModal = () => {
                   )}
                 />
               )}
-              {state.matches('rewardAccount') && <RewardAccountStep />}
+              {state.matches('reward') && <RewardAccountStep />}
               {state.matches('candidateProfile.titleAndBulletPoints') && (
                 <TitleAndBulletPointsStep
                   errorChecker={enhancedHasError(form.formState.errors, machineStateConverter(state.value))}
