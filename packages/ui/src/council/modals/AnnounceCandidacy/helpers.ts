@@ -11,8 +11,8 @@ export interface AnnounceCandidacyFrom {
     amount?: BN
     account?: Account
   }
-  rewardAccount: {
-    rewardAccount?: Account
+  reward: {
+    account?: Account
   }
   titleAndBulletPoints: {
     title?: string
@@ -33,8 +33,8 @@ export const baseSchema = Yup.object().shape({
       .test(maxContext('Insufficient funds to cover staking', 'controllerAccountBalance'))
       .required('This field is required'),
   }),
-  rewardAccount: Yup.object().shape({
-    rewardAccount: AccountSchema.required('This field is required'),
+  reward: Yup.object().shape({
+    account: AccountSchema.required('This field is required'),
   }),
   titleAndBulletPoints: Yup.object().shape({
     title: Yup.string().trim().max(60, 'Maximum length is 60 symbols.').required('This field is required'),
@@ -53,8 +53,8 @@ export const getAnnounceCandidacyFormInitialState = (minStake: BN) => ({
     amount: minStake ?? undefined,
     account: undefined,
   },
-  rewardAccount: {
-    rewardAccount: undefined,
+  reward: {
+    account: undefined,
   },
   titleAndBulletPoints: {
     title: undefined,
