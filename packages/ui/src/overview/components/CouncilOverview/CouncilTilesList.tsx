@@ -3,8 +3,10 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { HorizontalScroller } from '@/common/components/HorizontalScroller/HorizontalScroller'
+import { Comparator } from '@/common/model/Comparator'
 import { useElectedCouncil } from '@/council/hooks/useElectedCouncil'
 import { useElectionVotes } from '@/council/hooks/useElectionVotes'
+import { ElectionCandidate } from '@/council/types'
 import { Election } from '@/council/types/Election'
 
 import { CouncilTile } from './CouncilTile'
@@ -46,12 +48,10 @@ export const CouncilRevealingTiles = ({ election }: Props) => {
   const candidates = election?.candidates
   const councilTiles = useMemo(
     () =>
-      candidates
-        ?.sort((a, b) => b.stake.toNumber() - a.stake.toNumber())
-        .map((candidate) => {
-          const stakePercent = totalStake ? candidate.stake.toNumber() / totalStake.toNumber() : 0
-          return <CouncilTile key={candidate.id} member={candidate.member} stakePercent={stakePercent} />
-        }),
+      candidates?.sort(Comparator<ElectionCandidate>(true, 'stake').bigNumber).map((candidate) => {
+        const stakePercent = totalStake ? candidate.stake.toNumber() / totalStake.toNumber() : 0
+        return <CouncilTile key={candidate.id} member={candidate.member} stakePercent={stakePercent} />
+      }),
     [candidates, totalStake]
   )
 

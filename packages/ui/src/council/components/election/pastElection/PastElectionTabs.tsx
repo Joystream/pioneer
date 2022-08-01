@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { Account } from '@/accounts/types'
 import { TabProps, Tabs } from '@/common/components/Tabs'
+import { Comparator } from '@/common/model/Comparator'
 import { CandidateVoteList } from '@/council/components/election/CandidateVote/CandidateVoteList'
 import { ElectionVotingResult, PastElectionWithDetails } from '@/council/types/PastElection'
 
@@ -17,7 +18,15 @@ const getMyVote = (votingResult: ElectionVotingResult, myAccounts: Account[]) =>
 export const PastElectionTabs = ({ election }: PastElectionTabsProps) => {
   const { allAccounts } = useMyAccounts()
   const [tab, setTab] = useState<'votingResults' | 'myVotes'>('votingResults')
-  const myVotes = election.votingResults.filter((votingResult) => !!getMyVote(votingResult, allAccounts))
+  const sortedVotingResults = useMemo(() => {
+    return election.votingResults.sort(
+      Comparator<PastElectionWithDetails['votingResults'][number]>(true, 'totalStake').bigNumber
+    )
+  }, [election.votingResults.length])
+
+  const myVotes = useMemo(() => {
+    return sortedVotingResults.filter((votingResult) => !!getMyVote(votingResult, allAccounts))
+  }, [sortedVotingResults?.length])
 
   const tabs: TabProps[] = [
     {
@@ -38,8 +47,6 @@ export const PastElectionTabs = ({ election }: PastElectionTabsProps) => {
   ]
 
   const displayVotingResults = (votingResults: ElectionVotingResult[]) => {
-    votingResults = votingResults.sort((a, b) => b.totalStake.sub(a.totalStake).toNumber())
-
     return (
       <CandidateVoteList
         votes={votingResults.map((votingResult, index) => {
@@ -64,7 +71,7 @@ export const PastElectionTabs = ({ election }: PastElectionTabsProps) => {
   return (
     <>
       <Tabs tabs={tabs} tabsSize="xs" />
-      {displayVotingResults(tab === 'votingResults' ? election.votingResults : myVotes)}
+      {displayVotingResults(tab === 'votingResults' ? sortedVotingResults : myVotes)}
     </>
   )
 }
