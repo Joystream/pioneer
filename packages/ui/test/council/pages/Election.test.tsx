@@ -23,7 +23,7 @@ import { VOTE_DATA } from '../../_mocks/council'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { stubApi, stubCouncilAndReferendum } from '../../_mocks/transactions'
+import { stubApi, stubCouncilAndReferendum, stubCouncilConstants } from '../../_mocks/transactions'
 
 configure({ testIdAttribute: 'id' })
 
@@ -125,6 +125,8 @@ describe('UI: Election page', () => {
 
     const commitment = '0x0000000000000000000000000000000000000000000000000000000000000000'
     seedCouncilVote({ ...VOTE_DATA, castBy: alice.address, commitment, electionRoundId: '0' }, mockServer.server)
+
+    stubCouncilConstants(api)
   })
 
   it('Inactive', async () => {

@@ -241,6 +241,7 @@ export const stubCouncilAndReferendum = (
     'council.stage',
     createType('CouncilStageUpdate', {
       stage: createType('CouncilStage', councilStage),
+      changed_at: BN_ZERO,
     })
   )
 }
