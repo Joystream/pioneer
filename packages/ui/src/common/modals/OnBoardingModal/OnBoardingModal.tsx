@@ -1,3 +1,4 @@
+import { useApolloClient } from '@apollo/client'
 import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
@@ -32,6 +33,7 @@ export const OnBoardingModal = () => {
   const [state, send] = useMachine(onBoardingMachine)
   const [membershipData, setMembershipData] = useState<{ id: string; blockHash: string }>()
   const transactionStatus = useQueryNodeTransactionStatus(membershipData?.blockHash)
+  const apolloClient = useApolloClient()
   const [endpoints] = useNetworkEndpoints()
   const statusRef = useRef<OnBoardingStatus>()
 
@@ -100,6 +102,7 @@ export const OnBoardingModal = () => {
   useEffect(() => {
     if (membershipData?.blockHash && transactionStatus === 'confirmed') {
       send('SUCCESS')
+      apolloClient.refetchQueries({ include: 'active' })
     }
   }, [JSON.stringify(membershipData), transactionStatus])
 
