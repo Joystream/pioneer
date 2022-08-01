@@ -48,6 +48,14 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
             disabled={!isSomeBalanceGteStake}
             message={errorChecker('account') ? errorMessageGetter('account') : undefined}
             validation={errorChecker('account') ? 'invalid' : undefined}
+            tooltipText={
+              <>
+                When losing an election, your candidacy lock is removed and your steak becomes immediately recoverable.
+                If you win and get elected, your candidacy lock will be automatically removed, and a council specific
+                lock will be applied, with the same amount locked. When that council is replaced, this lock is removed,
+                if you did not get re-elected
+              </>
+            }
           >
             <SelectStakingAccount name="staking.account" minBalance={minStake} lockType="Council Candidate" />
           </InputComponent>

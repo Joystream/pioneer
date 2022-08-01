@@ -41,6 +41,7 @@ import { EditPostModal, EditPostModalCall } from '@/forum/modals/PostActionModal
 import { PostHistoryModal, PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { MemberModalCall, MemberProfile } from '@/memberships/components/MemberProfile'
 import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals/BuyMembershipModal'
+import { DisconnectWalletModal, DisconnectWalletModalCall } from '@/memberships/modals/DisconnectWalletModal'
 import { SignOutModal } from '@/memberships/modals/SignOutModal/SignOutModal'
 import { SignOutModalCall } from '@/memberships/modals/SignOutModal/types'
 import { SwitchMemberModal, SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -100,6 +101,7 @@ export type ModalNames =
   | ModalName<SubmitJudgementModalCall>
   | ModalName<BountyWithdrawWorkEntryModalCall>
   | ModalName<SignOutModalCall>
+  | ModalName<DisconnectWalletModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -143,6 +145,7 @@ const modals: Record<ModalNames, ReactElement> = {
   WithdrawStakeModal: <WithdrawStakeModal />,
   SubmitJudgementModal: <SubmitJudgementModal />,
   SignOut: <SignOutModal />,
+  DisconnectWallet: <DisconnectWalletModal />,
 }
 
 export const GlobalModals = () => {

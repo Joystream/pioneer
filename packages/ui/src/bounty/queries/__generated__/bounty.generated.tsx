@@ -174,7 +174,7 @@ export type BountyFieldsFragment = {
     status:
       | { __typename: 'BountyEntryStatusPassed' }
       | { __typename: 'BountyEntryStatusRejected' }
-      | { __typename: 'BountyEntryStatusWinner'; reward: number }
+      | { __typename: 'BountyEntryStatusWinner'; reward: string }
       | { __typename: 'BountyEntryStatusWithdrawn' }
       | { __typename: 'BountyEntryStatusWorking' }
     withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
@@ -189,15 +189,15 @@ export type BountyFieldsFragment = {
   } | null
   maxFundingReachedEvent?: { __typename: 'BountyMaxFundingReachedEvent'; createdAt: any } | null
   fundingType:
-    | { __typename: 'BountyFundingLimited'; minFundingAmount: number; maxFundingAmount: number; fundingPeriod: number }
-    | { __typename: 'BountyFundingPerpetual'; target: number }
+    | { __typename: 'BountyFundingLimited'; minFundingAmount: string; maxFundingAmount: string; fundingPeriod: number }
+    | { __typename: 'BountyFundingPerpetual'; target: string }
 }
 
 export type BountyFundingTypeFieldsFragment = {
   __typename: 'Bounty'
   fundingType:
-    | { __typename: 'BountyFundingLimited'; minFundingAmount: number; maxFundingAmount: number; fundingPeriod: number }
-    | { __typename: 'BountyFundingPerpetual'; target: number }
+    | { __typename: 'BountyFundingLimited'; minFundingAmount: string; maxFundingAmount: string; fundingPeriod: number }
+    | { __typename: 'BountyFundingPerpetual'; target: string }
 }
 
 export type BountyEntryFieldsFragment = {
@@ -240,7 +240,7 @@ export type BountyEntryFieldsFragment = {
   status:
     | { __typename: 'BountyEntryStatusPassed' }
     | { __typename: 'BountyEntryStatusRejected' }
-    | { __typename: 'BountyEntryStatusWinner'; reward: number }
+    | { __typename: 'BountyEntryStatusWinner'; reward: string }
     | { __typename: 'BountyEntryStatusWithdrawn' }
     | { __typename: 'BountyEntryStatusWorking' }
   withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
@@ -292,7 +292,7 @@ export type BountyEntryWithDetailsFieldsFragment = {
   status:
     | { __typename: 'BountyEntryStatusPassed' }
     | { __typename: 'BountyEntryStatusRejected' }
-    | { __typename: 'BountyEntryStatusWinner'; reward: number }
+    | { __typename: 'BountyEntryStatusWinner'; reward: string }
     | { __typename: 'BountyEntryStatusWithdrawn' }
     | { __typename: 'BountyEntryStatusWorking' }
   withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
@@ -354,7 +354,7 @@ export type BountyWorkWithDetailsFieldsFragment = {
   status:
     | { __typename: 'BountyEntryStatusPassed' }
     | { __typename: 'BountyEntryStatusRejected' }
-    | { __typename: 'BountyEntryStatusWinner'; reward: number }
+    | { __typename: 'BountyEntryStatusWinner'; reward: string }
     | { __typename: 'BountyEntryStatusWithdrawn' }
     | { __typename: 'BountyEntryStatusWorking' }
   withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
@@ -579,7 +579,7 @@ export type GetBountiesQuery = {
       status:
         | { __typename: 'BountyEntryStatusPassed' }
         | { __typename: 'BountyEntryStatusRejected' }
-        | { __typename: 'BountyEntryStatusWinner'; reward: number }
+        | { __typename: 'BountyEntryStatusWinner'; reward: string }
         | { __typename: 'BountyEntryStatusWithdrawn' }
         | { __typename: 'BountyEntryStatusWorking' }
       withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
@@ -596,11 +596,11 @@ export type GetBountiesQuery = {
     fundingType:
       | {
           __typename: 'BountyFundingLimited'
-          minFundingAmount: number
-          maxFundingAmount: number
+          minFundingAmount: string
+          maxFundingAmount: string
           fundingPeriod: number
         }
-      | { __typename: 'BountyFundingPerpetual'; target: number }
+      | { __typename: 'BountyFundingPerpetual'; target: string }
   }>
 }
 
@@ -789,7 +789,7 @@ export type GetBountyQuery = {
       status:
         | { __typename: 'BountyEntryStatusPassed' }
         | { __typename: 'BountyEntryStatusRejected' }
-        | { __typename: 'BountyEntryStatusWinner'; reward: number }
+        | { __typename: 'BountyEntryStatusWinner'; reward: string }
         | { __typename: 'BountyEntryStatusWithdrawn' }
         | { __typename: 'BountyEntryStatusWorking' }
       withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
@@ -806,11 +806,11 @@ export type GetBountyQuery = {
     fundingType:
       | {
           __typename: 'BountyFundingLimited'
-          minFundingAmount: number
-          maxFundingAmount: number
+          minFundingAmount: string
+          maxFundingAmount: string
           fundingPeriod: number
         }
-      | { __typename: 'BountyFundingPerpetual'; target: number }
+      | { __typename: 'BountyFundingPerpetual'; target: string }
   } | null
 }
 
@@ -872,7 +872,7 @@ export type GetBountyWorksQuery = {
     status:
       | { __typename: 'BountyEntryStatusPassed' }
       | { __typename: 'BountyEntryStatusRejected' }
-      | { __typename: 'BountyEntryStatusWinner'; reward: number }
+      | { __typename: 'BountyEntryStatusWinner'; reward: string }
       | { __typename: 'BountyEntryStatusWithdrawn' }
       | { __typename: 'BountyEntryStatusWorking' }
     withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
@@ -899,7 +899,7 @@ export type GetUserBountyStatisticsQuery = {
     status:
       | { __typename: 'BountyEntryStatusPassed' }
       | { __typename: 'BountyEntryStatusRejected' }
-      | { __typename: 'BountyEntryStatusWinner'; reward: number }
+      | { __typename: 'BountyEntryStatusWinner'; reward: string }
       | { __typename: 'BountyEntryStatusWithdrawn' }
       | { __typename: 'BountyEntryStatusWorking' }
   }>
@@ -986,11 +986,11 @@ export type GetLatestBountyEntryQuery = {
       fundingType:
         | {
             __typename: 'BountyFundingLimited'
-            minFundingAmount: number
-            maxFundingAmount: number
+            minFundingAmount: string
+            maxFundingAmount: string
             fundingPeriod: number
           }
-        | { __typename: 'BountyFundingPerpetual'; target: number }
+        | { __typename: 'BountyFundingPerpetual'; target: string }
     }
     announcedInEvent: { __typename: 'WorkEntryAnnouncedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   }>

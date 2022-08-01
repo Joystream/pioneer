@@ -19,7 +19,7 @@ export const BlockInfo = ({ block, lessInfo, inline }: BlockInfoProp) => (
     <span>
       {formatTokenValue(block.number)} {lessInfo && 'block'}
     </span>
-    {!lessInfo && <BlockNetworkInfo>on {block.network} network</BlockNetworkInfo>}
+    {/* {!lessInfo && <BlockNetworkInfo>on {block.network} network</BlockNetworkInfo>} */}
   </BlockInfoContainer>
 )
 

@@ -27,8 +27,6 @@ export interface Member {
   isVerified: boolean
   isFoundingMember: boolean
   isCouncilMember: boolean
-  invitedBy?: ID
-  referredBy?: ID
   createdAt: string
   boundAccountsEvents?: BoundAccountEvent[]
 }
@@ -53,6 +51,7 @@ export type InvitedMember = Member // & { entry: InvitedEntry }
 
 export interface MemberWithDetails extends Member {
   about?: string
+  invitedBy?: Member
   entry: MemberEntry
   invitees: InvitedMember[]
 }
