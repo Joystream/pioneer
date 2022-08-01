@@ -12,7 +12,7 @@ import {
 import { CouncilRoutes } from '@/council/constants'
 import { usePastCouncilStats } from '@/council/hooks/usePastCouncilStats'
 import { PastCouncil } from '@/council/types/PastCouncil'
-import { CountInfo, Info } from '@/memberships/components/MemberListItem/Fileds'
+import { CountInfo, Info } from '@/memberships/components/MemberListItem/Fields'
 
 interface Props {
   council: PastCouncil

@@ -15,7 +15,7 @@ import {
 } from '@/mocks/data'
 
 import { CANDIDATE_DATA, VOTE_DATA } from '../../_mocks/council'
-import { alice, bob } from '../../_mocks/keyring/signers'
+import { alice, bob } from '../../_mocks/keyring'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 
@@ -228,11 +228,11 @@ describe('UI: RevealingStageVotes', () => {
 
       const voteForAlice = await screen.findByText('alice')
       expect(voteForAlice).toBeDefined()
-      expect(voteForAlice.parentElement?.parentElement?.parentElement?.textContent).toContain('Revealed')
+      expect(voteForAlice.parentElement?.parentElement?.parentElement?.parentElement?.textContent).toContain('Revealed')
 
       const voteForBob = await screen.findByText('bob')
       expect(voteForBob).toBeDefined()
-      expect(voteForBob.parentElement?.parentElement?.parentElement?.textContent).toContain('Reveal')
+      expect(voteForBob.parentElement?.parentElement?.parentElement?.parentElement?.textContent).toContain('Reveal')
     })
   })
 

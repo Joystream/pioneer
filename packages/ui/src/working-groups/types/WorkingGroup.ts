@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 
-import { Api } from '@/api/types'
+import { Api } from '@/api'
 import { getAverageStake } from '@/working-groups/model/getAverageStake'
 
 import { WorkingGroupDetailedFieldsFragment, WorkingGroupFieldsFragment } from '../queries'

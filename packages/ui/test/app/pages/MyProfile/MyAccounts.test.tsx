@@ -8,9 +8,9 @@ import { RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import { ApiContext } from '@/api/providers/context'
 import { GlobalModals } from '@/app/GlobalModals'
 import { MyAccounts } from '@/app/pages/Profile/MyAccounts'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -149,12 +149,12 @@ describe('Page: MyAccounts', () => {
     })
 
     it('Nonrecoverable', async () => {
-      stubBalances(api, { locked: 250, available: 10_000, lockId: 'Storage Worker' })
+      stubBalances(api, { locked: 250, available: 10_000, lockId: 'Bound Staking Account' })
 
       renderPage()
 
       fireEvent.click(await screen.findByText(/alice/i))
-      await screen.findByText(/Storage Worker/i)
+      await screen.findByText(/Bound Staking Account/i)
 
       expect(await queryButton(/^recover$/i)).not.toBeDefined()
     })

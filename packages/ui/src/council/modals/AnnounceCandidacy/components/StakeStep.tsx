@@ -21,7 +21,7 @@ interface StakingStepProps extends ValidationHelpers {
 
 export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessageGetter }: StakingStepProps) => {
   const form = useFormContext()
-  const [stake] = form.watch(['staking.account', 'staking.amount'])
+  const [stake] = form.watch(['staking.amount'])
   const balances = useMyBalances()
 
   const isSomeBalanceGteStake = useMemo(() => {
@@ -48,6 +48,14 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
             disabled={!isSomeBalanceGteStake}
             message={errorChecker('account') ? errorMessageGetter('account') : undefined}
             validation={errorChecker('account') ? 'invalid' : undefined}
+            tooltipText={
+              <>
+                When losing an election, your candidacy lock is removed and your steak becomes immediately recoverable.
+                If you win and get elected, your candidacy lock will be automatically removed, and a council specific
+                lock will be applied, with the same amount locked. When that council is replaced, this lock is removed,
+                if you did not get re-elected
+              </>
+            }
           >
             <SelectStakingAccount name="staking.account" minBalance={minStake} lockType="Council Candidate" />
           </InputComponent>
@@ -78,8 +86,7 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
           {isSomeBalanceGteStake && errorMessageGetter('amount')?.startsWith('Insufficient') && (
             <Info>
               <TextMedium>
-                You have sufficient funds on other account to cover
-                {<TokenValue value={minStake} />} stake.
+                You have sufficient funds on other account to cover {<TokenValue value={stake ?? minStake} />} stake.
               </TextMedium>
             </Info>
           )}

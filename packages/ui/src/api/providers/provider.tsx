@@ -1,11 +1,10 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 import { firstValueFrom } from 'rxjs'
 
+import { Api } from '@/api'
 import { useApiBenchmarking } from '@/api/hooks/useApiBenchmarking'
-import { Api } from '@/api/types'
-import { ProxyApi } from '@/proxyApi'
 
-import { useNetworkEndpoints } from '../../hooks/useNetworkEndpoints'
+import { useNetworkEndpoints } from '../../common/hooks/useNetworkEndpoints'
 
 import { ApiContext } from './context'
 
@@ -49,7 +48,7 @@ export const ApiContextProvider = ({ children }: Props) => {
   useApiBenchmarking(api)
 
   useEffect(() => {
-    firstValueFrom(ProxyApi.create(endpoints.nodeRpcEndpoint)).then((api) => {
+    firstValueFrom(Api.create(endpoints.nodeRpcEndpoint)).then((api) => {
       setApi(api)
       setConnectionState('connected')
       api.on('connected', () => setConnectionState('connected'))

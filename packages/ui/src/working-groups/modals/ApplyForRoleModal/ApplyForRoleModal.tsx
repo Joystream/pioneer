@@ -11,7 +11,8 @@ import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatu
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
-import { Api } from '@/api/types'
+import { Api } from '@/api'
+import { useApi } from '@/api/hooks/useApi'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Arrow } from '@/common/components/icons'
@@ -23,7 +24,6 @@ import {
   StepperModalBody,
   StepperModalWrapper,
 } from '@/common/components/StepperModal'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { getDataFromEvent, metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
@@ -130,7 +130,7 @@ export const ApplyForRoleModal = () => {
     if (!state.matches('requirementsVerification')) {
       return
     }
-    
+
     if (!activeMember) {
       showModal<SwitchMemberModalCall>({
         modal: 'SwitchMember',
@@ -140,7 +140,7 @@ export const ApplyForRoleModal = () => {
         },
       })
     }
-    
+
     if (feeInfo) {
       const areFundsSufficient = feeInfo.canAfford && hasRequiredStake
       send(areFundsSufficient ? 'PASS' : 'FAIL')

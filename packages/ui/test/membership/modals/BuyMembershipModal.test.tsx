@@ -8,7 +8,7 @@ import { MemoryRouter } from 'react-router'
 import { of } from 'rxjs'
 
 import { Account } from '@/accounts/types'
-import { ApiContext } from '@/common/providers/api/context'
+import { ApiContext } from '@/api/providers/context'
 import { BuyMembershipModal } from '@/memberships/modals/BuyMembershipModal'
 
 import { getButton } from '../../_helpers/getButton'

@@ -67,14 +67,16 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
         />
       </Statistics>
 
-      <OpeningsCategories>
-        <OpeningsCategory>
-          <Label>
-            Upcoming Openings <CountBadge count={upcomingOpenings.length} />
-          </Label>
-          <LoadingOpenings isLoading={isLoadingUpcoming} openings={upcomingOpenings} />
-        </OpeningsCategory>
-      </OpeningsCategories>
+      {!!upcomingOpenings.length && (
+        <OpeningsCategories>
+          <OpeningsCategory>
+            <Label>
+              Upcoming Openings <CountBadge count={upcomingOpenings.length} />
+            </Label>
+            <LoadingOpenings isLoading={isLoadingUpcoming} openings={upcomingOpenings} />
+          </OpeningsCategory>
+        </OpeningsCategories>
+      )}
 
       <OpeningsCategories>
         <OpeningsCategory>

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { generatePath } from 'react-router-dom'
 
-import { useApi } from '@/common/hooks/useApi'
+import { useApi } from '@/api/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { asBlock } from '@/common/types'

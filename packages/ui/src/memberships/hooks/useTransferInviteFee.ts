@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { useApi } from '@/common/hooks/useApi'
+import { useApi } from '@/api/hooks/useApi'
 
 import { Member } from '../types'
 

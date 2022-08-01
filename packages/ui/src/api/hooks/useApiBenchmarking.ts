@@ -3,7 +3,7 @@ import { firstValueFrom } from 'rxjs'
 
 import { benchmark } from '@/common/utils/benchmark'
 
-import { Api } from '../types'
+import { Api } from '..'
 
 const ALICE = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'
 

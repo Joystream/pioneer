@@ -39,9 +39,9 @@ import { CreatePostModal, CreatePostModalCall } from '@/forum/modals/PostActionM
 import { DeletePostModal, DeletePostModalCall } from '@/forum/modals/PostActionModal/DeletePostModal'
 import { EditPostModal, EditPostModalCall } from '@/forum/modals/PostActionModal/EditPostModal'
 import { PostHistoryModal, PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
-import { ReplyThreadModal, ReplyThreadModalCall } from '@/forum/modals/ReplyThreadModal'
 import { MemberModalCall, MemberProfile } from '@/memberships/components/MemberProfile'
 import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals/BuyMembershipModal'
+import { DisconnectWalletModal, DisconnectWalletModalCall } from '@/memberships/modals/DisconnectWalletModal'
 import { SignOutModal } from '@/memberships/modals/SignOutModal/SignOutModal'
 import { SignOutModalCall } from '@/memberships/modals/SignOutModal/types'
 import { SwitchMemberModal, SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -73,7 +73,6 @@ export type ModalNames =
   | ModalName<AddNewProposalModalCall>
   | ModalName<VoteRationaleModalCall>
   | ModalName<CreateThreadModalCall>
-  | ModalName<ReplyThreadModalCall>
   | ModalName<DeleteThreadModalCall>
   | ModalName<DeletePostModalCall>
   | ModalName<EditPostModalCall>
@@ -102,6 +101,7 @@ export type ModalNames =
   | ModalName<SubmitJudgementModalCall>
   | ModalName<BountyWithdrawWorkEntryModalCall>
   | ModalName<SignOutModalCall>
+  | ModalName<DisconnectWalletModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -117,7 +117,6 @@ const modals: Record<ModalNames, ReactElement> = {
   AddNewProposalModal: <AddNewProposalModal />,
   VoteRationaleModal: <VoteRationale />,
   CreateThreadModal: <CreateThreadModal />,
-  ReplyThreadModal: <ReplyThreadModal />,
   DeleteThreadModal: <DeleteThreadModal />,
   DeletePost: <DeletePostModal />,
   EditPost: <EditPostModal />,
@@ -146,6 +145,7 @@ const modals: Record<ModalNames, ReactElement> = {
   WithdrawStakeModal: <WithdrawStakeModal />,
   SubmitJudgementModal: <SubmitJudgementModal />,
   SignOut: <SignOutModal />,
+  DisconnectWallet: <DisconnectWalletModal />,
 }
 
 export const GlobalModals = () => {

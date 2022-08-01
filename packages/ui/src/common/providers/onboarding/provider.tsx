@@ -3,7 +3,7 @@ import React from 'react'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useMyTotalBalances } from '@/accounts/hooks/useMyTotalBalances'
 import { Account } from '@/accounts/types'
-import { useApi } from '@/common/hooks/useApi'
+import { useApi } from '@/api/hooks/useApi'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { OnBoardingContext } from '@/common/providers/onboarding/context'
 import { UseOnBoarding } from '@/common/providers/onboarding/types'
@@ -23,20 +23,20 @@ const hasAccount = (allAccounts: Account[], address: string) => {
 
 const useOnBoarding = (): UseOnBoarding => {
   const { isConnected } = useApi()
-  const { isLoading: isLoadingAccounts, error: accountsError, hasAccounts, allAccounts } = useMyAccounts()
+  const { isLoading: isLoadingAccounts, error: accountsError, hasAccounts, allAccounts, wallet } = useMyAccounts()
   const { total: totalBalance } = useMyTotalBalances()
   const { isLoading: isLoadingMembers, hasMembers } = useMyMemberships()
   const [membershipAccount, setMembershipAccount] = useLocalStorage<string | undefined>('onboarding-membership-account')
+
+  if (totalBalance.gtn(0) && wallet) {
+    return { isLoading: false, status: 'finished' }
+  }
 
   if (!isConnected || isLoadingAccounts || isLoadingMembers) {
     return { isLoading: true }
   }
 
-  if (totalBalance.gtn(0)) {
-    return { isLoading: false, status: 'finished' }
-  }
-
-  if (accountsError === 'EXTENSION') {
+  if (accountsError === 'NO_EXTENSION' || !wallet) {
     return { isLoading: false, status: 'installPlugin' }
   }
 

@@ -25,17 +25,21 @@ import { CouncilTabs } from './components/CouncilTabs'
 export const Council = () => {
   const { stage: electionStage } = useElectionStage()
 
-  useRefetchQueries({ interval: MILLISECONDS_PER_BLOCK, include: ['GetElectedCouncil', 'GetCouncilEvents'] }, [])
+  const isRefetched = useRefetchQueries(
+    { interval: MILLISECONDS_PER_BLOCK, include: ['GetElectedCouncil', 'GetCouncilEvents'] },
+    []
+  )
 
   const { council, isLoading } = useElectedCouncil()
   const { idlePeriodRemaining, budget, reward } = useCouncilStatistics(council?.electedAt.number)
   const { activities } = useCouncilActivities()
 
   const [order, setOrder] = useState<CouncilOrder>({ key: 'member' })
-  const { councilors } = useCouncilorWithDetails(council)
+  const { councilors, isLoading: isLoadingCouncilors } = useCouncilorWithDetails(council)
   const sortedCouncilors = useMemo(() => councilors.sort(sortBy(order)), [councilors])
   const header = <PageHeaderWithHint title="Council" hintType="council" tabs={<CouncilTabs />} />
 
+  const isCouncilorLoading = !isRefetched && (isLoading || isLoadingCouncilors)
   const main = (
     <MainPanel>
       <Statistics>
@@ -60,10 +64,10 @@ export const Council = () => {
         />
       </Statistics>
 
-      {!isLoading && sortedCouncilors.length === 0 ? (
+      {!isCouncilorLoading && sortedCouncilors.length === 0 ? (
         <NotFoundText>There is no council member at the moment</NotFoundText>
       ) : (
-        <CouncilList councilors={sortedCouncilors} order={order} onSort={setOrder} isLoading={isLoading} />
+        <CouncilList councilors={sortedCouncilors} order={order} onSort={setOrder} isLoading={isCouncilorLoading} />
       )}
     </MainPanel>
   )

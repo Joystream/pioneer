@@ -17,10 +17,11 @@ export const RewardAccountStep = () => {
         <RowGapBlock gap={20}>
           <InputComponent
             label="Select account receiving councilor rewards in case your candidacy is elected"
+            name="reward.account"
             required
             inputSize="l"
           >
-            <SelectAccount name="rewardAccount.rewardAccount" />
+            <SelectAccount name="reward.account" />
           </InputComponent>
         </RowGapBlock>
       </Row>
