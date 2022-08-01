@@ -300,17 +300,12 @@ describe('UI: Election page', () => {
         window.localStorage.clear()
       })
 
-      it('Displays no election round, no period remaining length', async () => {
-        const { queryAllByText } = await renderComponent()
+      it('Displays stage, remaining length, and no election round', async () => {
+        const { queryAllByText, queryByText } = await renderComponent()
 
-        // Except to see '-' in 2 places: Election stage and Period remaining length
-        expect(queryAllByText('-')).toHaveLength(2)
-      })
-
-      it('Displays stage', async () => {
-        const { queryByText } = await renderComponent()
-
-        expect(queryByText(/Revealing period/i)).not.toBeNull()
+        expect(queryByText(/Revealing period/i)).toBeInTheDocument()
+        expect(queryByText(/period remaining length/i)?.parentElement?.nextElementSibling).toHaveTextContent('< 1 min')
+        expect(queryAllByText('-')).toHaveLength(1)
       })
 
       describe('Votes count', () => {
