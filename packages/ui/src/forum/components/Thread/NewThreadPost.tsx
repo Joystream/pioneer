@@ -78,12 +78,12 @@ export const NewThreadPost = React.forwardRef(
             style="primary"
             size="medium"
             onClick={() => {
-              const transaction = getTransaction(postText, isEditable)
-              transaction &&
-                showModal<CreatePostModalCall>({
-                  modal: 'CreatePost',
-                  data: { module: 'proposalsDiscussion', postText, replyTo, transaction, isEditable, onSuccess },
-                })
+              // const transaction = getTransaction(postText, isEditable)
+              // transaction &&
+              //   showModal<CreatePostModalCall>({
+              //     modal: 'CreatePost',
+              //     data: { module: 'proposalsDiscussion', postText, replyTo, transaction, isEditable, onSuccess },
+              //   })
             }}
             disabled={postText === ''}
           >

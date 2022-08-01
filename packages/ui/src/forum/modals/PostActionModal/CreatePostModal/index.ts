@@ -5,14 +5,22 @@ import { ModalWithDataCall } from '@/common/providers/modal/types'
 import { ForumPost } from '@/forum/types'
 
 export * from './CreatePostModal'
+
+type GetTransaction = (
+  postText: string,
+  isEditable: boolean
+) => SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
+
 export type CreatePostModalCall = ModalWithDataCall<
   'CreatePost',
   {
-    postText: string
+    // onSuccess: () => void
+    getTransaction: GetTransaction
+    // postText: string
     module?: 'forum' | 'proposalsDiscussion'
     replyTo?: ForumPost
-    isEditable: boolean
-    transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
-    onSuccess: () => void
+    // isEditable: boolean
+    // transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult>
+    // onSuccess: () => void
   }
 >

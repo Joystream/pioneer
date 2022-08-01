@@ -1,5 +1,7 @@
+import { SubmittableExtrinsic } from '@polkadot/api/types'
+import { ISubmittableResult } from '@polkadot/types/types'
 import { useMachine } from '@xstate/react'
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { Ref, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
@@ -7,7 +9,13 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { ButtonsGroup } from '@/common/components/buttons'
+import { TransactionButton } from '@/common/components/buttons/TransactionButton'
+import { BaseCKEditor } from '@/common/components/CKEditor'
 import { FailureModal } from '@/common/components/FailureModal'
+import { Checkbox, InputComponent } from '@/common/components/forms'
+import { Modal, ModalBody, ModalHeader } from '@/common/components/Modal'
+import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
@@ -15,18 +23,24 @@ import { BN_ZERO } from '@/common/constants'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
+import { ForumPostAuthor, Reply, ReplyBadge } from '@/forum/components/PostList/PostListItem'
+import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { CreatePostModalCall } from '.'
 import { CreatePostSignModal } from './CreatePostSignModal'
 
 export const CreatePostModal = () => {
+  const [postText, setText] = useState('')
+  const [isEditable, setEditable] = useState(true)
   const { t } = useTranslation('accounts')
   const { modalData, hideModal } = useModal<CreatePostModalCall>()
-  const { module = 'forum', postText, replyTo, transaction, isEditable, onSuccess } = modalData
+  const [transaction, setTransaction] = useState<SubmittableExtrinsic<'rxjs', ISubmittableResult>>()
+  const { module = 'forum', getTransaction, replyTo } = modalData
+  // const { module = 'forum', postText, replyTo, transaction, isEditable, onSuccess } = modalData
 
   const hideModalAfterSuccess = useCallback(() => {
-    onSuccess()
+    // onSuccess()
     hideModal()
   }, [])
 
@@ -36,6 +50,9 @@ export const CreatePostModal = () => {
   const { allAccounts } = useMyAccounts()
   const balance = useBalance(active?.controllerAccount)
   const { api } = useApi()
+
+  const newPostRef = useRef<HTMLDivElement>(null)
+  const editorRef = useRef<HTMLDivElement>(null)
 
   const postDeposit = api?.consts[module].postDeposit.toBn()
   const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
@@ -121,5 +138,61 @@ export const CreatePostModal = () => {
     )
   }
 
-  return null
+  const createPostHandle = () => {
+    const tx = getTransaction(postText, isEditable)
+    setTransaction(tx)
+  }
+
+  return (
+    <Modal onClose={hideModal} modalSize="m">
+      <ModalHeader onClick={hideModal} title={replyTo ? 'Reply' : 'Create Post'} />
+      <ModalBody>
+        <RowGapBlock gap={8} ref={newPostRef}>
+          {replyTo && (
+            <Reply>
+              <ForumPostAuthor>{replyTo?.author && <MemberInfo size="s" member={replyTo?.author} />}</ForumPostAuthor>
+              <TextMedium light italic>
+                {replyTo?.text}
+              </TextMedium>
+              {/* <MarkdownPreview markdown={replyTo.text} size="s" isReply /> */}
+            </Reply>
+          )}
+          <InputComponent
+            inputSize="auto"
+            message={postText === '' ? 'This field cannot be empty. Type your message here' : undefined}
+          >
+            <EditorMemo setNewText={setText} editorRef={editorRef} />
+          </InputComponent>
+          <ButtonsGroup>
+            <TransactionButton
+              style="primary"
+              size="medium"
+              onClick={() => createPostHandle()}
+              disabled={postText === ''}
+            >
+              {replyTo ? 'Post a reply' : 'Create post'}
+            </TransactionButton>
+            <Checkbox id="set-editable" onChange={setEditable} isChecked={isEditable}>
+              Keep editable
+            </Checkbox>
+          </ButtonsGroup>
+        </RowGapBlock>
+      </ModalBody>
+    </Modal>
+  )
 }
+
+interface MemoEditorProps {
+  setNewText: (t: string) => void
+  editorRef: Ref<HTMLDivElement>
+}
+
+const EditorMemo = React.memo(({ setNewText, editorRef }: MemoEditorProps) => (
+  <BaseCKEditor
+    id="newPostEditor"
+    ref={editorRef}
+    onChange={(_, editor) => setNewText(editor.getData())}
+    onReady={(editor) => editor.setData('')}
+    onFocus={() => undefined}
+  />
+))

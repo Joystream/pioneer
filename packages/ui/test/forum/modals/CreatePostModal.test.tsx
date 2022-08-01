@@ -41,10 +41,10 @@ describe('UI: CreatePostModal', () => {
   let tx: any
   stubTransaction(api, txPath)
   const modalData: ModalCallData<CreatePostModalCall> = {
-    transaction: api.api.tx.forum.addPost(1, 1, 1, '', false),
-    postText: 'I disagree',
-    isEditable: false,
-    onSuccess: () => true,
+    getTransaction: () => api.api.tx.forum.addPost(1, 1, 1, '', false),
+    // postText: 'I disagree',
+    // isEditable: false,
+    // onSuccess: () => true,
   }
 
   const useModal: UseModal<any> = {
@@ -86,21 +86,21 @@ describe('UI: CreatePostModal', () => {
     stubDefaultBalances(api)
     tx = stubTransaction(api, txPath, 25)
     stubConst(api, 'forum.postDeposit', createBalanceOf(10))
-    modalData.isEditable = false
-    modalData.transaction = api.api.tx.forum.addPost(1, 1, 1, '', false)
+    // modalData.isEditable = false
+    // modalData.transaction = api.api.tx.forum.addPost(1, 1, 1, '', false)
   })
 
   describe('Requirements failed', () => {
     it('Cannot afford transaction fee', async () => {
       tx = stubTransaction(api, txPath, 10000)
-      modalData.transaction = api.api.tx.forum.addPost(1, 1, 1, '', false)
+      // modalData.transaction = api.api.tx.forum.addPost(1, 1, 1, '', false)
       renderModal()
       expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
     })
 
     it('Cannot afford post deposit', async () => {
       stubConst(api, 'forum.postDeposit', createBalanceOf(10000))
-      modalData.isEditable = true
+      // modalData.isEditable = true
       renderModal()
       expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
     })
@@ -130,7 +130,7 @@ describe('UI: CreatePostModal', () => {
 
   it('Displays post deposit', () => {
     stubConst(api, 'forum.postDeposit', createBalanceOf(101))
-    modalData.isEditable = true
+    // modalData.isEditable = true
     renderModal()
     expect(screen.getByText(/^Post deposit:/i)?.nextSibling?.textContent).toBe('101')
     expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')

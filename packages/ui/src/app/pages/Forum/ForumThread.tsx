@@ -8,6 +8,7 @@ import { PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockInfo } from '@/common/components/BlockTime/BlockInfo'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
+import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { LinkIcon } from '@/common/components/icons'
 import { PinIcon } from '@/common/components/icons/PinIcon'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
@@ -24,6 +25,7 @@ import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
 import { ForumRoutes } from '@/forum/constant'
 import { useForumThread } from '@/forum/hooks/useForumThread'
+import { CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
 import { ForumPost } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
@@ -39,6 +41,7 @@ export const ForumThread = () => {
   const newPostRef = useRef<HTMLDivElement>(null)
   const history = useHistory()
   const [replyTo, setReplyTo] = useState<ForumPost | undefined>()
+  const { showModal } = useModal()
 
   // useEffect(() => {
   //   replyTo && newPostRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'end' });
@@ -77,6 +80,26 @@ export const ForumThread = () => {
             <ThreadTitle thread={thread} />
           </PreviousPage>
           <ButtonsGroup>
+            <TransactionButton
+              style="primary"
+              size="medium"
+              onClick={() => {
+                // const transaction = getTransaction(postText, isEditable)
+                // transaction &&
+                showModal<CreatePostModalCall>({
+                  modal: 'CreatePost',
+                  data: {
+                    getTransaction,
+                    module: 'proposalsDiscussion',
+                    replyTo,
+                    // onSuccess
+                  },
+                })
+              }}
+              // disabled={postText === ''}
+            >
+              {replyTo ? 'Post a reply' : 'Create post'}
+            </TransactionButton>
             <CopyButtonTemplate
               size="medium"
               textToCopy={getUrl({ route: ForumRoutes.thread, params: { id: thread.id } })}
