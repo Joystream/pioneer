@@ -2,13 +2,13 @@ import { useMemo } from 'react'
 import { map } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
-import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useObservable } from '@/common/hooks/useObservable'
-import { isDefined } from '@/common/utils'
 
-export const useCouncilStatistics = (electedAtBlock?: number) => {
+import { useCouncilRemainingPeriod } from './useCouncilRemainingPeriod'
+
+export const useCouncilStatistics = () => {
   const { api, connectionState } = useApi()
-  const currentBlock = useCurrentBlockNumber()
+  const idlePeriodRemaining = useCouncilRemainingPeriod()
 
   const councilSize = api?.consts.council.councilSize
   const reward = useMemo(
@@ -18,11 +18,8 @@ export const useCouncilStatistics = (electedAtBlock?: number) => {
   const budgetAmount = useObservable(api?.query.council.budget(), [connectionState])
   const rewardAmount = useObservable(reward, [connectionState])
 
-  const idlePeriodDuration = api?.consts.council.idlePeriodDuration
-  const idlePeriodEnd = isDefined(electedAtBlock) ? idlePeriodDuration?.addn(electedAtBlock) : undefined
-
   return {
-    idlePeriodRemaining: currentBlock && idlePeriodEnd?.sub(currentBlock),
+    idlePeriodRemaining,
     budget: {
       amount: budgetAmount,
       refillPeriod: api?.consts.council.budgetRefillPeriod,
