@@ -26,7 +26,7 @@ import {
 import { ReplyThreadSignModal } from './ReplyThreadSignModal'
 import { ReplyThreadSuccessModal } from './ReplyThreadSuccessModal'
 
-export const ReplyThreadModal = () => {
+export const ReplyThreadModal = (): any => {
   const { active: member } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
   const { showModal, hideModal, modalData } = useModal<ReplyThreadModalCall>()
@@ -77,7 +77,7 @@ export const ReplyThreadModal = () => {
   if (state.matches('generalDetails') && member) {
     return (
       <FormProvider {...form}>
-        <ReplyThreadDetailsModal breadcrumbs={breadcrumbs} author={member} send={send} />
+        <ReplyThreadDetailsModal breadcrumbs={breadcrumbs} author={member} send={send} post={modalData.post} />
       </FormProvider>
     )
   }

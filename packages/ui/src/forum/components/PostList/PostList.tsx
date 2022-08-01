@@ -69,7 +69,7 @@ export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost, isD
           isSelected={post.id === navigation.post}
           isThreadActive={isThreadActive}
           type="forum"
-          replyToPost={() => showModal({ modal: 'ReplyThreadModal', data: { ...post, repliesTo: undefined } })}
+          replyToPost={() => showModal({ modal: 'ReplyThreadModal', data: { post, repliesTo: undefined } })}
           link={getUrl({ route: ForumRoutes.thread, params: { id: threadId }, query: { post: post.id } })}
           repliesToLink={`${generatePath(ForumRoutes.thread, { id: threadId })}?post=${post.repliesTo?.id}`}
           isDiscussion={isDiscussion}

@@ -14,7 +14,7 @@ export default {
   component: ReplyThreadDetailsModal,
 } as Meta
 
-const Template: Story = ({ breadcrumbs, send }) => {
+const Template: Story = ({ breadcrumbs, post, send }) => {
   return (
     <>
       <HashRouter>
@@ -27,7 +27,7 @@ const Template: Story = ({ breadcrumbs, send }) => {
               modal: null,
             }}
           >
-            <ReplyThreadDetailsModal breadcrumbs={breadcrumbs} author={getMember('alice')} send={send} />
+            <ReplyThreadDetailsModal breadcrumbs={breadcrumbs} author={getMember('alice')} post={post} send={send} />
           </ModalContext.Provider>
         </MockApolloProvider>
       </HashRouter>
