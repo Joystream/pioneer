@@ -2,7 +2,7 @@ import BN from 'bn.js'
 
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
-import { RecoveryConditions, isRecoverable, areLocksConflicting, getStakingBalance } from '../model/lockTypes'
+import { RecoveryConditions, isRecoverable, areLocksConflicting } from '../model/lockTypes'
 import { LockType, OptionLock, AccountOption } from '../types'
 
 import { useMyAccounts } from './useMyAccounts'
@@ -32,10 +32,9 @@ export const useStakingAccountsLocks = ({
     const optionLocks: OptionLock[] = []
     const accountAddress = account.address
     const accountBalances = balances[accountAddress]
-    const stakingBalance = getStakingBalance(accountBalances, lockType)
 
     const boundMembershipId = getMemberIdByBoundAccountAddress(accountAddress)
-    if (stakingBalance?.lt(requiredStake) && filterByBalance) {
+    if (accountBalances.total?.lt(requiredStake) && filterByBalance) {
       optionLocks.push('insufficientFunds')
     }
 

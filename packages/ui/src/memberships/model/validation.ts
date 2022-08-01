@@ -4,7 +4,7 @@ import { AnySchema } from 'yup'
 
 import { StakingStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { isValidAddress } from '@/accounts/model/isValidAddress'
-import { areLocksConflicting, getStakingBalance } from '@/accounts/model/lockTypes'
+import { areLocksConflicting } from '@/accounts/model/lockTypes'
 import { Balances, LockType } from '@/accounts/types'
 
 export const AccountSchema = Yup.object()
@@ -34,10 +34,8 @@ export const StakingAccountSchema = Yup.object()
       return true
     }
 
-    const { requiredAmount, balances, stakeLock } = context.options.context as IStakingAccountSchema
-    const stakingBalance = balances && getStakingBalance(balances, stakeLock)
-
-    return !!stakingBalance?.gte(requiredAmount)
+    const { requiredAmount, balances } = context.options.context as IStakingAccountSchema
+    return !!balances.total?.gte(requiredAmount)
   })
   .test('locks', 'This account has conflicting locks', (value, context) => {
     if (!value) {

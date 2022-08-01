@@ -4,21 +4,20 @@ import styled from 'styled-components'
 import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { AccountLocks, AccountLocksWrapper } from '@/accounts/components/AccountLocks'
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { isRivalrous, getStakingBalance } from '@/accounts/model/lockTypes'
-import { AccountOption, LockType } from '@/accounts/types'
+import { AccountOption } from '@/accounts/types'
 import { BalanceInfoInRow, InfoTitle, InfoValue } from '@/common/components/Modal'
 import { TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 
 interface Props {
   option: AccountOption
-  newLockType?: LockType
+  isForStaking?: boolean
 }
 
-export const OptionAccount = ({ option, newLockType }: Props) => {
+export const OptionAccount = ({ option, isForStaking }: Props) => {
   const balances = useBalance(option.address)
-  const balance = balances && newLockType && getStakingBalance(balances, newLockType)
-  const balanceType = newLockType && isRivalrous(newLockType) ? 'Transferable' : 'Total'
+  const balance = isForStaking ? balances?.total : balances?.transferable
+  const balanceType = isForStaking ? 'Total' : 'Transferable'
   const locks = option.optionLocks
   const isLocked = !!locks?.length
 
@@ -28,7 +27,7 @@ export const OptionAccount = ({ option, newLockType }: Props) => {
       <BalanceInfoInRow>
         <InfoTitle>{balanceType} balance</InfoTitle>
         <InfoValueWithLocks>
-          <Value value={balance} locked={isLocked} />
+          <Value value={balance ?? balances?.total} locked={isLocked} />
           <AccountLocks locks={balances?.locks} />
         </InfoValueWithLocks>
       </BalanceInfoInRow>

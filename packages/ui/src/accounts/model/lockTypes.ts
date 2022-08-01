@@ -1,7 +1,7 @@
 import { LockIdentifier } from '@polkadot/types/interfaces'
 
 // NOTE can't run the `node-mocks` script with the `@/...` aliases here
-import { BalanceLock, Balances, LockType, WorkerLocks, WorkerLockType } from '../types'
+import { BalanceLock, LockType, WorkerLocks, WorkerLockType } from '../types'
 
 // Mapping from:
 // - [/runtime/src/constants.rs:104](https://github.com/Joystream/joystream/blob/5a153fa18351a8fefd919a7d5230b911f180e13d/runtime/src/constants.rs#L104)
@@ -95,6 +95,3 @@ export const conflictingLocks = (lockType: LockType, existingLocks: BalanceLock[
   asLockTypes(existingLocks).filter(isConflictingWith(lockType))
 
 export const lockLookup = (id: LockIdentifier): LockType => lockTypes[id.toUtf8()]
-
-export const getStakingBalance = (balances: Balances | undefined, lockType: LockType) =>
-  balances?.[isRivalrous(lockType) ? 'transferable' : 'total']
