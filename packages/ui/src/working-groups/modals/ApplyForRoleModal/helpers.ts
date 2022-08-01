@@ -23,7 +23,7 @@ export const baseSchema = Yup.object().shape({
     rewardAccount: AccountSchema.required(),
     amount: Yup.number()
       .test(minContext('You need at least ${min} stake', 'minStake'))
-      .test(maxContext('Insufficient funds to cover staking', 'balances.transferable'))
+      .test(maxContext('Insufficient funds to cover staking', 'balances.total'))
       .required('Amount is required'),
   }),
   form: Yup.object().shape({}),
