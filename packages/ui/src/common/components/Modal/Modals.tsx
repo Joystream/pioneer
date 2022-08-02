@@ -82,6 +82,7 @@ export const InfoTitle = styled.span`
 
 export const InfoValue = styled.span`
   text-align: right;
+  text-align: -webkit-right;
   line-height: 20px;
 `
 

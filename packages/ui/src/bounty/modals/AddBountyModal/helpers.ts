@@ -90,11 +90,11 @@ export const addBountyModalSchema = Yup.object().shape({
     )
       .test(maxContext('Cherry of ${max} JOY exceeds your balance', 'maxCherryLimit'))
       .required(''),
-    fundingMaximalRange: BNSchema.test(moreThanMixed(0, 'Value must be greater than zero')).required(''),
+    fundingMaximalRange: BNSchema.test(moreThanMixed(0, 'Value must be greater than zero', false)).required(''),
     fundingMinimalRange: BNSchema.when('isPerpetual', {
       is: false,
       then: BNSchema.test(minContext('Minimal range must be bigger than ${min}', 'minFundingLimit'))
-        .test(lessThanMixed(Yup.ref('fundingMaximalRange'), 'Minimal range cannot be greater than maximal'))
+        .test(lessThanMixed(Yup.ref('fundingMaximalRange'), 'Minimal range cannot be greater than maximal', false))
         .required(''),
     }),
     fundingPeriodLength: Yup.number().when('isPerpetual', {

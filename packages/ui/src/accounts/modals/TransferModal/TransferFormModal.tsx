@@ -20,6 +20,7 @@ import {
 } from '@/common/components/Modal'
 import { BN_ZERO } from '@/common/constants'
 import { useForm } from '@/common/hooks/useForm'
+import { BNSchema, maxMixed, minMixed } from '@/common/utils/validation'
 
 import { filterAccount, SelectAccount, SelectedAccount } from '../../components/SelectAccount'
 import { Account } from '../../types'
@@ -41,18 +42,18 @@ interface TransferTokensFormField {
 
 const schemaFactory = (maxValue?: BN, minValue?: BN, senderBalance?: BN) => {
   const schema = Yup.object().shape({
-    amount: Yup.number(),
+    amount: BNSchema,
   })
 
   if (senderBalance) {
-    schema.fields.amount = schema.fields.amount.max(senderBalance.toNumber(), 'Maximum amount allowed is ${max}')
+    schema.fields.amount = schema.fields.amount.test(maxMixed(senderBalance, 'Maximum amount allowed is ${max}'))
   }
 
   if (maxValue && senderBalance && senderBalance.gt(maxValue)) {
-    schema.fields.amount = schema.fields.amount.max(maxValue.toNumber(), 'Maximum amount allowed is ${max}')
+    schema.fields.amount = schema.fields.amount.test(maxMixed(maxValue, 'Maximum amount allowed is ${max}'))
   }
   if (minValue) {
-    schema.fields.amount = schema.fields.amount.min(minValue.toNumber(), 'Minimum amount allowed is ${min}')
+    schema.fields.amount = schema.fields.amount.test(minMixed(minValue, 'Minimum amount allowed is ${min}'))
   }
   return schema
 }
