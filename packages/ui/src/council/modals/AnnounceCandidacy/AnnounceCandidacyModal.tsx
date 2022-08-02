@@ -6,7 +6,6 @@ import { useForm, FormProvider } from 'react-hook-form'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
-import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
@@ -73,6 +72,7 @@ const transactionSteps = [
 ]
 
 interface Conditions extends IStakingAccountSchema {
+  extraFees: BN
   minStake: BN
 }
 
@@ -92,16 +92,17 @@ export const AnnounceCandidacyModal = () => {
   const stakingStatus = useStakingAccountStatus(stakingAccountMap?.address, activeMember?.id)
   const balance = useBalance(stakingAccountMap?.address)
 
+  // TODO add transaction fees here
+  const extraFees = (stakingStatus === 'free' && boundingLock) || BN_ZERO
+
   const form = useForm({
     resolver: useYupValidationResolver<AnnounceCandidacyFrom>(baseSchema, machineStateConverter(state.value)),
     context: {
       stakingStatus,
-      requiredAmount:
-        (stakingStatus === 'free'
-          ? boundingLock.add(constants?.election.minCandidacyStake ?? BN_ZERO)
-          : constants?.election.minCandidacyStake) ?? BN_ZERO,
+      requiredAmount: extraFees.add(constants?.election.minCandidacyStake ?? BN_ZERO),
       stakeLock: 'Council Candidate',
       balances: balance,
+      extraFees,
       minStake: constants?.election.minCandidacyStake as BN,
     } as Conditions,
     mode: 'onChange',

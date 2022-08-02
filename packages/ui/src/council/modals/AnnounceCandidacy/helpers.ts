@@ -3,7 +3,7 @@ import { StateValueMap } from 'xstate'
 import * as Yup from 'yup'
 
 import { Account } from '@/accounts/types'
-import { BNSchema, maxContext, minContext } from '@/common/utils/validation'
+import { BNSchema, validStakingAmount } from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 
 export interface AnnounceCandidacyFrom {
@@ -29,9 +29,7 @@ export interface AnnounceCandidacyFrom {
 export const baseSchema = Yup.object().shape({
   staking: Yup.object().shape({
     account: StakingAccountSchema.required('This field is required'),
-    amount: BNSchema.test(minContext('Minimal stake amount is ${min} tJOY', 'minStake'))
-      .test(maxContext('Insufficient funds to cover staking', 'balances.total'))
-      .required('This field is required'),
+    amount: BNSchema.test(validStakingAmount()).required('This field is required'),
   }),
   reward: Yup.object().shape({
     account: AccountSchema.required('This field is required'),

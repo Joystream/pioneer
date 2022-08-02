@@ -76,6 +76,39 @@ export const moreThanMixed = (
   },
 })
 
+export const validStakingAmount = (): Yup.TestConfig<any, AnyObject> => ({
+  name: 'validStakingAmount',
+  exclusive: false,
+  test(value: number | BN) {
+    if (!value) {
+      return true
+    }
+    const stake = new BN(value)
+
+    const minStake: BN | undefined = this.options.context?.minStake
+    if (minStake && minStake.gt(stake)) {
+      return this.createError({ message: 'Minimal stake amount is ${min} tJOY', params: { min: minStake.toString() } })
+    }
+
+    const totalBalance: BN | undefined = this.options.context?.balances.total
+    const extraFees = new BN(this.options.context?.extraFees ?? 0)
+    const totalFee = stake.add(extraFees)
+    if (totalBalance && totalBalance.lt(new BN(totalFee))) {
+      return this.createError({
+        message: `Insufficient funds to cover staking \${max} tJoy ${
+          extraFees.isZero() ? '' : ' + extra ${extra} tJoy'
+        }`,
+        params: {
+          max: totalBalance.toString(),
+          extra: extraFees.toString(),
+        },
+      })
+    }
+
+    return true
+  },
+})
+
 interface IFormError {
   type: string
   message: string
