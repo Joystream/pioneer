@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
 import { ButtonPrimary } from '@/common/components/buttons'
-import { InputComponent, TokenInput } from '@/common/components/forms'
+import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader, Row, TransactionAmount } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
 import { maxContext, useYupValidationResolver } from '@/common/utils/validation'
@@ -31,7 +31,7 @@ const TransferInviteSchema = Yup.object().shape({
   from: AccountSchema.required('This field is required'),
   amount: Yup.number()
     .min(1, 'Number of invitation has to be greater than 0')
-    .test(maxContext('You only have ${max} invites left.', 'inviteCount'))
+    .test(maxContext('You only have ${max} invites left.', 'inviteCount', false))
     .required('This field is required'),
   to: AccountSchema.required('This field is required'),
 })
@@ -75,7 +75,7 @@ export function TransferInviteFormModal({ onClose, onAccept, icon, member }: Pro
               message={`You have ${member?.inviteCount} invites.`}
               inputWidth="s"
             >
-              <TokenInput id="amount-input" placeholder="0" name="amount" />
+              <InputNumber id="amount-input" placeholder="0" name="amount" />
             </InputComponent>
           </TransactionAmount>
           <InputComponent label="To" inputSize="l" required name="to">
