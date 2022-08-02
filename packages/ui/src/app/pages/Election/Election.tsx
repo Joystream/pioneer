@@ -23,8 +23,8 @@ import { RevealingStage } from '@/council/components/election/revealing/Revealin
 import { VotingStage } from '@/council/components/election/voting/VotingStage'
 import { ElectionRoutes } from '@/council/constants'
 import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidatePreviewViaUrlParameter'
+import { useCouncilRemainingPeriod } from '@/council/hooks/useCouncilRemainingPeriod'
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
-import { useElectionRemainingPeriod } from '@/council/hooks/useElectionRemainingPeriod'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { Election as ElectionType } from '@/council/types/Election'
 
@@ -42,7 +42,7 @@ export const Election = () => {
   const { isLoading: isLoadingElection, election } = useCurrentElection()
 
   const { isLoading: isLoadingElectionStage, stage: electionStage } = useElectionStage()
-  const remainingPeriod = useElectionRemainingPeriod(electionStage)
+  const remainingPeriod = useCouncilRemainingPeriod()
   const history = useHistory()
   useCandidatePreviewViaUrlParameter()
 
