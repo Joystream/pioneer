@@ -1,6 +1,6 @@
 import * as Yup from 'yup'
 
-import { maxContext, minContext } from '@/common/utils/validation'
+import { validStakingAmount } from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { ApplicationQuestion } from '@/working-groups/types'
 
@@ -21,10 +21,7 @@ export const baseSchema = Yup.object().shape({
     account: StakingAccountSchema.required(),
     roleAccount: AccountSchema.required(),
     rewardAccount: AccountSchema.required(),
-    amount: Yup.number()
-      .test(minContext('You need at least ${min} stake', 'minStake'))
-      .test(maxContext('Insufficient funds to cover staking', 'balances.total'))
-      .required('Amount is required'),
+    amount: Yup.number().test(validStakingAmount()).required('Amount is required'),
   }),
   form: Yup.object().shape({}),
 })
