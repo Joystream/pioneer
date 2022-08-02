@@ -2,8 +2,9 @@ import BN from 'bn.js'
 
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { areLocksConflicting } from '@/accounts/model/lockTypes'
-import { LockType } from '@/accounts/types'
+import { Balances, LockType } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
+import { Comparator } from '@/common/model/Comparator'
 
 export const useHasRequiredStake = (stake: BN, lock: LockType) => {
   const balances = useMyBalances()
@@ -34,7 +35,7 @@ export const useHasRequiredStake = (stake: BN, lock: LockType) => {
   const accountsWithTransferableBalance = Object.entries(balances)
     .filter(([, balances]) => balances.transferable.gt(BN_ZERO))
     .sort(([, balancesA], [, balancesB]) => {
-      return balancesB.transferable.sub(balancesA.transferable).toNumber()
+      return Comparator<Balances>(true, 'transferable').bigNumber(balancesA, balancesB)
     })
 
   const transferableTotal = accountsWithTransferableBalance.reduce(
