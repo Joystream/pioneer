@@ -22,7 +22,7 @@ interface UseForumThreadPosts {
 }
 
 export const useForumThreadPosts = (threadId: string, navigation: ThreadPostsNavigation): UseForumThreadPosts => {
-  const where = useMemo((): ForumPostWhereInput => ({ thread: { id_eq: threadId }, isVisible_eq: true }), [threadId])
+  const where = useMemo((): ForumPostWhereInput => ({ thread: { id_eq: threadId } }), [threadId])
 
   const [getPosts, postsResults] = useGetForumPostsLazyQuery()
   const [getPostIds, idsResults] = useGetForumPostsIdsLazyQuery()
