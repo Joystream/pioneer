@@ -49,7 +49,7 @@ export const CouncilRevealingTiles = ({ election }: Props) => {
   const councilTiles = useMemo(
     () =>
       candidates?.sort(Comparator<ElectionCandidate>(true, 'stake').bigNumber).map((candidate) => {
-        const stakePercent = totalStake ? candidate.stake.div(totalStake).toNumber() : 0
+        const stakePercent = totalStake ? candidate.stake.muln(100).div(totalStake).toNumber() / 100 : 0
         return <CouncilTile key={candidate.id} member={candidate.member} stakePercent={stakePercent} />
       }),
     [candidates, totalStake]
