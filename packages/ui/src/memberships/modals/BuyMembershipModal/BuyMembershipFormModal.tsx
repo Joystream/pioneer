@@ -57,9 +57,7 @@ const CreateMemberSchema = Yup.object().shape({
   rootAccount: AccountSchema.required('This field is required'),
   controllerAccount: AccountSchema.required('This field is required'),
   avatarUri: AvatarURISchema,
-  name: Yup.string()
-    .required('This field is required')
-    .matches(/^[a-zA-Z0-9_.-]*$/, 'Some of the characters are not allowed here '),
+  name: Yup.string().required('This field is required'),
   handle: HandleSchema.required('This field is required').matches(
     /^[a-zA-Z0-9_.-]*$/,
     'Some of the characters are not allowed here '
