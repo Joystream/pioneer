@@ -14,7 +14,7 @@ export const useVesting = (address: string) => {
   return asVesting(balances)
 }
 
-type Vesting = Pick<DeriveBalancesAll, 'vesting' | 'vestingTotal' | 'vestedBalance' | 'vestedClaimable'>
+export type Vesting = Pick<DeriveBalancesAll, 'vesting' | 'vestingTotal' | 'vestedBalance' | 'vestedClaimable'>
 
 const asVesting = (balances: DeriveBalancesAll): Vesting => ({
   vesting: balances.vesting,

@@ -6,6 +6,7 @@ import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { AccountLocks } from '@/accounts/components/AccountLocks'
 import { TransferButton } from '@/accounts/components/TransferButton'
 import { useBalance } from '@/accounts/hooks/useBalance'
+import { useVesting } from '@/accounts/hooks/useVesting'
 import { Account } from '@/accounts/types'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { TableListItemAsLinkHover } from '@/common/components/List'
@@ -24,7 +25,7 @@ interface AccountItemDataProps {
 export const AccountItem = ({ account }: AccountItemDataProps) => {
   const address = account.address
   const balance = useBalance(address)
-
+  const vesting = useVesting(address)
   const isSendDisabled = !balance?.transferable || !balance.transferable.gt(new BN(0))
 
   const [isDropped, setDropped] = useState(false)
@@ -47,7 +48,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
         </AccountControls>
       </AccountItemWrap>
       <StyledDropDown isDropped={isDropped}>
-        <LocksDetails balance={balance} address={address} />
+        <LocksDetails vesting={vesting} balance={balance} address={address} />
       </StyledDropDown>
     </AccountItemWrapper>
   )
