@@ -1,6 +1,6 @@
 import { isBn } from '@polkadot/util'
 import BN from 'bn.js'
-import { at } from 'lodash'
+import { at, get } from 'lodash'
 import { useCallback } from 'react'
 import { FieldErrors, FieldValues, Resolver } from 'react-hook-form'
 import * as Yup from 'yup'
@@ -23,7 +23,8 @@ export const maxContext = (msg: string, contextPath: string): Yup.TestConfig<any
     if (!value) {
       return true
     }
-    const validationValue = new BN(this.options.context?.[contextPath])
+
+    const validationValue = new BN(get(this.options.context, contextPath))
     if (validationValue && validationValue.lt(new BN(value))) {
       return this.createError({ message: msg, params: { max: validationValue?.toNumber() ?? validationValue } })
     }
@@ -40,7 +41,7 @@ export const minContext = (msg: string, contextPath: string): Yup.TestConfig<any
       return true
     }
 
-    const validationValue = new BN(this.options.context?.[contextPath])
+    const validationValue = new BN(get(this.options.context, contextPath))
     if (validationValue && validationValue.gt(new BN(value))) {
       return this.createError({ message: msg, params: { min: validationValue?.toNumber() ?? validationValue } })
     }
@@ -72,6 +73,39 @@ export const moreThanMixed = (
   exclusive: false,
   test(value: BN) {
     return !value || !isBn(value) || value.gt(new BN(this.resolve(more)))
+  },
+})
+
+export const validStakingAmount = (): Yup.TestConfig<any, AnyObject> => ({
+  name: 'validStakingAmount',
+  exclusive: false,
+  test(value: number | BN) {
+    if (!value) {
+      return true
+    }
+    const stake = new BN(value)
+
+    const minStake: BN | undefined = this.options.context?.minStake
+    if (minStake && minStake.gt(stake)) {
+      return this.createError({ message: 'Minimal stake amount is ${min} tJOY', params: { min: minStake.toString() } })
+    }
+
+    const totalBalance: BN | undefined = this.options.context?.balances.total
+    const extraFees = new BN(this.options.context?.extraFees ?? 0)
+    const totalFee = stake.add(extraFees)
+    if (totalBalance && totalBalance.lt(new BN(totalFee))) {
+      return this.createError({
+        message: `Insufficient funds to cover staking \${max} tJoy ${
+          extraFees.isZero() ? '' : ' + extra ${extra} tJoy'
+        }`,
+        params: {
+          max: totalBalance.toString(),
+          extra: extraFees.toString(),
+        },
+      })
+    }
+
+    return true
   },
 })
 

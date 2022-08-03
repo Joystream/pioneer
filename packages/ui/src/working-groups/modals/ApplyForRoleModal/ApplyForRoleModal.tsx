@@ -1,5 +1,6 @@
 import { ApplicationMetadata } from '@joystream/metadata-protobuf'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
+import { BN_ZERO } from '@polkadot/util'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -74,12 +75,18 @@ export const ApplyForRoleModal = () => {
 
   const balance = useBalance(stakingAccountMap?.address)
   const stakingStatus = useStakingAccountStatus(stakingAccountMap?.address, activeMember?.id)
+
+  const boundingLock = api?.consts.members.candidateStake ?? BN_ZERO
+  // TODO add transaction fees here
+  const extraFees = (stakingStatus === 'free' && boundingLock) || BN_ZERO
+
   const form = useForm({
     resolver: useYupValidationResolver(schema, typeof state.value === 'string' ? state.value : undefined),
     mode: 'onChange',
     context: {
       minStake: opening.stake,
       balances: balance,
+      extraFees,
       stakeLock: groupToLockId(opening.groupId),
       requiredAmount: opening.stake,
       stakingStatus,
