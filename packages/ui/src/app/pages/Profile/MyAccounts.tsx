@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { Accounts } from '@/accounts/components/Accounts'
 import { useMyTotalBalances } from '@/accounts/hooks/useMyTotalBalances'
+import { useTotalVesting } from '@/accounts/hooks/useTotalVesting'
 import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
@@ -14,6 +15,7 @@ import { MyProfileTabs } from './components/MyProfileTabs'
 
 export const MyAccounts = () => {
   const { total, transferable, locked, recoverable } = useMyTotalBalances()
+  const { totalVestedClaimable, totalVestingLocked, totalVestedClaimed } = useTotalVesting()
 
   return (
     <PageLayout
@@ -23,7 +25,7 @@ export const MyAccounts = () => {
             <PageTitle>My Profile</PageTitle>
             <MyProfileTabs />
           </PageHeaderWrapper>
-          <Statistics>
+          <StyledStatistics>
             <TokenValueStat
               title="Total balance"
               tooltipText="Total balance from all connected accounts. This includes transferable and locked balance."
@@ -52,7 +54,10 @@ export const MyAccounts = () => {
               value={locked}
             />
             <TokenValueStat title="Total recoverable" tooltipText="Lorem ipsum..." value={recoverable} />
-          </Statistics>
+            <TokenValueStat title="Total Locked in Vesting" tooltipText="Lorem ipsum..." value={totalVestingLocked} />
+            <TokenValueStat title="Total Vested Claimed" tooltipText="Lorem ipsum..." value={totalVestedClaimed} />
+            <TokenValueStat title="Total Vested Claimable" tooltipText="Lorem ipsum..." value={totalVestedClaimable} />
+          </StyledStatistics>
         </RowGapBlock>
       }
       main={<Accounts />}
@@ -66,4 +71,10 @@ export const StyledLink = styled.a`
   line-height: 20px;
   color: ${Colors.Black[400]};
   text-decoration: underline;
+`
+
+const StyledStatistics = styled(Statistics)`
+  > * {
+    flex-basis: 220px;
+  }
 `

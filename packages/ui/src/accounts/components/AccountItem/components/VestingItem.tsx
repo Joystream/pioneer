@@ -17,7 +17,7 @@ import { Vesting } from '@/accounts/hooks/useVesting'
 import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TextSmall, TokenValue } from '@/common/components/typography'
-import { BN_ZERO, SECONDS_PER_BLOCK } from '@/common/constants'
+import { SECONDS_PER_BLOCK } from '@/common/constants'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { DefaultDateFormatter } from '@/common/model/formatters'
 
@@ -67,10 +67,14 @@ export const VestingListItem = ({ vested, locked, endBlock, startingBlock, perBl
 }
 
 const TimeToBlock = ({ block }: { block: BN }) => {
-  const currentBlock = useCurrentBlockNumber() ?? BN_ZERO
+  const currentBlock = useCurrentBlockNumber()
   const timeCurrentMs = Date.now()
 
   const date = useMemo(() => {
+    if (!currentBlock) {
+      return
+    }
+
     if (currentBlock <= block) {
       const blocksLeft = block.sub(currentBlock)
       const milisecondsLeft = blocksLeft.muln(SECONDS_PER_BLOCK * 1000)
@@ -85,7 +89,7 @@ const TimeToBlock = ({ block }: { block: BN }) => {
   return (
     <StyledRowGapBlock gap={2}>
       <TextMedium bold>{block.toString()}</TextMedium>
-      <TextSmall lighter>{DefaultDateFormatter.format(new Date(date))}</TextSmall>
+      <TextSmall lighter>{date ? DefaultDateFormatter.format(new Date(date)) : '-'}</TextSmall>
     </StyledRowGapBlock>
   )
 }
