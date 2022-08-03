@@ -99,7 +99,7 @@ export const CandidateCard = ({
                 <StatsValue>
                   <TokenValue value={stake} />
                 </StatsValue>
-                <Subscription>My stake</Subscription>
+                <Subscription>Staked</Subscription>
               </CandidateCardStake>
             )}
             {withdrawable && (

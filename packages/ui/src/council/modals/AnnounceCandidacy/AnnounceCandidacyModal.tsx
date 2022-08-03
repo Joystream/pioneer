@@ -11,11 +11,11 @@ import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatu
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
+import { useApi } from '@/api/hooks/useApi'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
 import { BN_ZERO } from '@/common/constants'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
@@ -51,7 +51,7 @@ import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
 const getCandidateForPreview = (context: AnnounceCandidacyFrom, member: Member): ElectionCandidateWithDetails => ({
   id: '0',
   stakingAccount: context.staking.account?.address ?? '',
-  rewardAccount: context.rewardAccount.rewardAccount?.address ?? '',
+  rewardAccount: context.reward.account?.address ?? '',
   stake: context.staking.amount ?? BN_ZERO,
   info: {
     title: context.titleAndBulletPoints.title ?? '',
@@ -72,8 +72,8 @@ const transactionSteps = [
 ]
 
 interface Conditions extends IStakingAccountSchema {
+  extraFees: BN
   minStake: BN
-  controllerAccountBalance: BN
 }
 
 export const AnnounceCandidacyModal = () => {
@@ -92,20 +92,27 @@ export const AnnounceCandidacyModal = () => {
   const stakingStatus = useStakingAccountStatus(stakingAccountMap?.address, activeMember?.id)
   const balance = useBalance(stakingAccountMap?.address)
 
+  // TODO add transaction fees here
+  const extraFees = (stakingStatus === 'free' && boundingLock) || BN_ZERO
+
   const form = useForm({
     resolver: useYupValidationResolver<AnnounceCandidacyFrom>(baseSchema, machineStateConverter(state.value)),
     context: {
       stakingStatus,
-      requiredAmount: stakingStatus === 'free' ? boundingLock : BN_ZERO,
+      requiredAmount: extraFees.add(constants?.election.minCandidacyStake ?? BN_ZERO),
       stakeLock: 'Council Candidate',
       balances: balance,
+      extraFees,
       minStake: constants?.election.minCandidacyStake as BN,
-      controllerAccountBalance: balances?.[activeMember?.controllerAccount ?? '']?.transferable ?? BN_ZERO,
     } as Conditions,
     mode: 'onChange',
     defaultValues: getAnnounceCandidacyFormInitialState(constants?.election.minCandidacyStake ?? BN_ZERO),
   })
-  const stakingAccount = form.watch('staking.account')
+  const [stakingAccount, rewardAccount, stakingAmount] = form.watch([
+    'staking.account',
+    'reward.account',
+    'staking.amount',
+  ])
 
   useEffect(() => {
     setStakingAccount(stakingAccount)
@@ -136,13 +143,12 @@ export const AnnounceCandidacyModal = () => {
   }, [JSON.stringify(state.context), connectionState, activeMember?.id])
 
   const announceCandidacyTransaction = useMemo(() => {
-    const formValues = form.getValues() as AnnounceCandidacyFrom
     if (activeMember && api && confirmStakingAccountTransaction) {
       const tx = api.tx.council.announceCandidacy(
         activeMember.id,
-        formValues.staking.account?.address ?? '',
-        formValues.rewardAccount.rewardAccount?.address ?? '',
-        formValues.staking.amount?.toNumber() ?? 0
+        stakingAccount?.address ?? '',
+        rewardAccount?.address ?? '',
+        stakingAmount ?? BN_ZERO
       )
 
       if (stakingStatus === 'confirmed') {
@@ -151,7 +157,15 @@ export const AnnounceCandidacyModal = () => {
 
       return api.tx.utility.batch([confirmStakingAccountTransaction, tx])
     }
-  }, [connectionState, activeMember?.id, stakingStatus, confirmStakingAccountTransaction])
+  }, [
+    connectionState,
+    activeMember?.id,
+    stakingAccount?.address,
+    rewardAccount?.address,
+    String(stakingAmount),
+    stakingStatus,
+    confirmStakingAccountTransaction,
+  ])
 
   useTransactionFee(activeMember?.controllerAccount, () => announceCandidacyTransaction, [announceCandidacyTransaction])
 
@@ -218,7 +232,7 @@ export const AnnounceCandidacyModal = () => {
       // wrong account
       return feeInfo?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
-  }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake, stakingStatus])
+  }, [state, activeMember?.id, feeInfo?.canAfford, hasRequiredStake, stakingStatus])
 
   if (!api || !activeMember || !transaction || !feeInfo) {
     return null
@@ -308,7 +322,7 @@ export const AnnounceCandidacyModal = () => {
                   )}
                 />
               )}
-              {state.matches('rewardAccount') && <RewardAccountStep />}
+              {state.matches('reward') && <RewardAccountStep />}
               {state.matches('candidateProfile.titleAndBulletPoints') && (
                 <TitleAndBulletPointsStep
                   errorChecker={enhancedHasError(form.formState.errors, machineStateConverter(state.value))}

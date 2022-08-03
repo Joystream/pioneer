@@ -2,8 +2,8 @@ import { render, screen, waitFor, waitForElementToBeRemoved } from '@testing-lib
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
+import { ApiContext } from '@/api/providers/context'
 import { createType } from '@/common/model/createType'
-import { ApiContext } from '@/common/providers/api/context'
 import { seedMembers, seedProposal } from '@/mocks/data'
 import { ProposalListItem, ProposalListItemProps } from '@/proposals/components/ProposalList/ProposalListItem'
 import { Proposal } from '@/proposals/types'

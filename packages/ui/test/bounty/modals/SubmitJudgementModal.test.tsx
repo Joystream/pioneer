@@ -3,9 +3,9 @@ import { configure, fireEvent, render, screen, waitFor } from '@testing-library/
 import BN from 'bn.js'
 import React from 'react'
 
+import { ApiContext } from '@/api/providers/context'
 import { SubmitJudgementModal } from '@/bounty/modals/SubmitJudgementModal'
 import { CKEditorProps } from '@/common/components/CKEditor'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { last } from '@/common/utils'
 import { MembershipContext } from '@/memberships/providers/membership/context'

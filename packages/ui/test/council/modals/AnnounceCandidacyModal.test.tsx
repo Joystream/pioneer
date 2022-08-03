@@ -8,13 +8,14 @@ import { Router } from 'react-router'
 import { interpret } from 'xstate'
 
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { ApiContext } from '@/api/providers/context'
 import { CurrencyName } from '@/app/constants/currency'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
 import { getSteps } from '@/common/model/machines/getSteps'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
+import { last } from '@/common/utils'
 import { ElectionRoutes } from '@/council/constants'
 import { AnnounceCandidacyModal } from '@/council/modals/AnnounceCandidacy'
 import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
@@ -77,6 +78,7 @@ describe('UI: Announce Candidacy Modal', () => {
   let announceCandidacyTx: any
   let bindAccountTx: any
   let candidacyNoteTx: any
+  let txMock: jest.Mock
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -95,6 +97,7 @@ describe('UI: Announce Candidacy Modal', () => {
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 5)
     bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 10)
     announceCandidacyTx = stubTransaction(api, 'api.tx.council.announceCandidacy', 20)
+    txMock = api.api.tx.council.announceCandidacy as unknown as jest.Mock
     candidacyNoteTx = stubTransaction(api, 'api.tx.council.setCandidacyNote', 30)
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
     mockedTransactionFee.transaction = batchTx as any
@@ -199,7 +202,7 @@ describe('UI: Announce Candidacy Modal', () => {
         it('Lower than minimal stake', async () => {
           const { getByText } = renderModal()
 
-          await fillStakingAmount(1)
+          await fillStakingStep('alice', 1, false)
 
           expect(await getNextStepButton()).toBeDisabled()
           expect(
@@ -210,7 +213,7 @@ describe('UI: Announce Candidacy Modal', () => {
         it('Higher than maximal balance', async () => {
           const { getByText } = renderModal()
 
-          await fillStakingAmount(10000)
+          await fillStakingStep('alice', 9999999, false)
 
           expect(await getNextStepButton()).toBeDisabled()
           expect(includesTextWithMarkup(getByText, 'Insufficient funds to cover staking')).toBeInTheDocument()
@@ -234,12 +237,19 @@ describe('UI: Announce Candidacy Modal', () => {
 
       it('Not selected', async () => {
         expect(await getNextStepButton()).toBeDisabled()
+
+        const [, , rewardAccount] = last(txMock.mock.calls)
+        expect(rewardAccount).toBe('')
       })
 
       it('Selected', async () => {
-        await fillRewardAccountStep('alice')
+        await fillRewardAccountStep('bob')
 
+        screen.logTestingPlaygroundURL()
         expect(await getNextStepButton()).not.toBeDisabled()
+
+        const [, , rewardAccount] = last(txMock.mock.calls)
+        expect(rewardAccount).toBe(bob.address)
       })
     })
 
@@ -401,12 +411,18 @@ describe('UI: Announce Candidacy Modal', () => {
 
         renderModal()
         await fillStakingStep('alice', 15, true)
-        await fillRewardAccountStep('alice', true)
+        await fillRewardAccountStep('bob', true)
         await fillTitleAndBulletPointsStep('Some title', 'Some bullet point', true)
         await fillSummary(true)
 
         expect(await screen.findByText(/You intend to announce candidacy/i)).toBeDefined()
         expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('20')
+
+        const [memberId, stakingAccount, rewardAccount, stakingAmount] = last(txMock.mock.calls)
+        expect(memberId).toBe(getMember('alice').id)
+        expect(stakingAccount).toBe(alice.address)
+        expect(rewardAccount).toBe(bob.address)
+        expect(String(stakingAmount)).toBe('15')
       })
     })
 

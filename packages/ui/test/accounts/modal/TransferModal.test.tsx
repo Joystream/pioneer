@@ -7,8 +7,8 @@ import React from 'react'
 
 import { TransferModal } from '@/accounts/modals/TransferModal'
 import { Account } from '@/accounts/types'
+import { ApiContext } from '@/api/providers/context'
 import { createType } from '@/common/model/createType'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 
 import { getButton } from '../../_helpers/getButton'

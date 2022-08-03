@@ -8,11 +8,11 @@ import { from, of, asyncScheduler, scheduled, Observable } from 'rxjs'
 import { toBalances } from '@/accounts/model/toBalances'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { Account, LockType } from '@/accounts/types'
-import { Api } from '@/api/types'
+import { Api } from '@/api'
+import { UseApi } from '@/api/providers/provider'
 import { BN_ZERO } from '@/common/constants'
 import { createType } from '@/common/model/createType'
 import { ExtractTuple } from '@/common/model/JoystreamNode'
-import { UseApi } from '@/common/providers/api/provider'
 import { proposalDetails } from '@/proposals/model/proposalDetails'
 
 import { mockedBalances, mockedMyBalances, mockedUseMyAccounts } from '../setup'
@@ -247,6 +247,7 @@ export const stubCouncilAndReferendum = (
     'council.stage',
     createType('PalletCouncilCouncilStageUpdate', {
       stage: createType('PalletCouncilCouncilStage', councilStage),
+      changedAt: BN_ZERO,
     })
   )
 }

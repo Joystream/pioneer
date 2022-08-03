@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react'
 
+import { useApi } from '@/api/hooks/useApi'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useObservable } from '@/common/hooks/useObservable'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'

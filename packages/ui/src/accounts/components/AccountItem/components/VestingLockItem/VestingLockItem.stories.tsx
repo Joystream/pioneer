@@ -5,8 +5,8 @@ import { clamp } from 'lodash'
 import React, { useMemo } from 'react'
 
 import { VestingLockListItem } from '@/accounts/components/AccountItem/components/VestingLockItem/VestingLockItem'
+import { ApiContext } from '@/api/providers/context'
 import { JOY_DECIMAL_PLACES } from '@/common/constants'
-import { ApiContext } from '@/common/providers/api/context'
 
 import { stubApi, stubQuery } from '../../../../../../test/_mocks/transactions'
 

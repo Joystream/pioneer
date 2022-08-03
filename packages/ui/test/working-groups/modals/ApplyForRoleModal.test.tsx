@@ -8,10 +8,10 @@ import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
 
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { ApiContext } from '@/api/providers/context'
 import { createType } from '@/common/model/createType'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
@@ -105,9 +105,9 @@ describe('UI: ApplyForRoleModal', () => {
     useMyMemberships.setActive(getMember('alice'))
 
     stubConst(api, 'forumWorkingGroup.rewardPeriod', createType('u32', 14410))
-    stubBalances({
-      available: 2000,
-    })
+    stubConst(api, 'members.candidateStake', new BN(200))
+
+    stubBalances({ available: 3000 })
     applyTransaction = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
     applyOnOpeningTxMock = api.api.tx.forumWorkingGroup.applyOnOpening as unknown as jest.Mock
 
@@ -455,7 +455,9 @@ describe('UI: ApplyForRoleModal', () => {
     await fillFieldByLabel(/Select amount for staking/i, '2000')
     await selectFromDropdownWithId('role-account', 'alice')
     await selectFromDropdownWithId('reward-account', 'alice')
-    fireEvent.click(await getNextStepButton())
+    await act(async () => {
+      fireEvent.click(await getNextStepButton())
+    })
     await screen.findByText('Application')
   }
 
@@ -466,13 +468,19 @@ describe('UI: ApplyForRoleModal', () => {
     await fillFieldByLabel(/Question 1/i, 'Foo bar baz')
     await fillFieldByLabel(/Question 2/i, 'Foo bar baz')
     await fillFieldByLabel(/Question 3/i, 'Foo bar baz')
-    fireEvent.click(await getNextStepButton())
+    await act(async () => {
+      fireEvent.click(await getNextStepButton())
+    })
   }
 
   async function fillFieldByLabel(label: string | RegExp, value: number | string) {
     const amountInput = await screen.findByLabelText(label)
-    fireEvent.change(amountInput, { target: { value } })
-    fireEvent.blur(amountInput)
+    await act(async () => {
+      fireEvent.change(amountInput, { target: { value } })
+    })
+    await act(async () => {
+      fireEvent.blur(amountInput)
+    })
   }
 
   async function renderModal() {
