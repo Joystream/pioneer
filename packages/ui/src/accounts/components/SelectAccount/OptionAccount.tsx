@@ -36,7 +36,7 @@ const Value = styled(TokenValue)<{ locked?: boolean }>`
   color: ${({ locked }) => (locked ? Colors.Black[500] : 'default')};
 `
 
-const InfoValueWithLocks = styled(InfoValue)`
+export const InfoValueWithLocks = styled(InfoValue)`
   ${AccountLocksWrapper} {
     right: 0;
   }

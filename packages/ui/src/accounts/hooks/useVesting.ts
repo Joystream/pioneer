@@ -3,11 +3,11 @@ import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 
-export const useVesting = (address: string) => {
+export const useVesting = (address?: string) => {
   const { api, connectionState } = useApi()
 
   const balances = useObservable(address ? api?.derive.balances.all(address) : undefined, [connectionState, address])
-  if (balances === undefined) {
+  if (balances === undefined || !balances.isVesting) {
     return null
   }
 
