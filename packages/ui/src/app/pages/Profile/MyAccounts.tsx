@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { Accounts } from '@/accounts/components/Accounts'
+import { ClaimVestingButton } from '@/accounts/components/ClaimVestingButton'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useMyTotalBalances } from '@/accounts/hooks/useMyTotalBalances'
 import { useTotalVesting } from '@/accounts/hooks/useTotalVesting'
 import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
@@ -10,12 +12,34 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { TooltipText } from '@/common/components/Tooltip'
 import { Colors } from '@/common/constants'
+import { useApi } from '@/common/hooks/useApi'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { MyProfileTabs } from './components/MyProfileTabs'
 
+// preselect an acc on clim modal
 export const MyAccounts = () => {
+  const { wallet } = useMyAccounts()
+  const { active } = useMyMemberships()
+  const { api, isConnected } = useApi()
   const { total, transferable, locked, recoverable } = useMyTotalBalances()
   const { totalVestedClaimable, totalVestingLocked, totalVestedClaimed } = useTotalVesting()
+
+  useEffect(() => {
+    if (active && api) {
+      // api.tx.vesting
+      //   .vestedTransfer(
+      //     '5ETxSDiEkVp3Ayg5ew5aQN7ZYgNr4vCdmFZAGSnDRgQPXyQC',
+      //     createType('PalletVestingVestingInfo', {
+      //       locked: new BN(100000_000_000_000),
+      //       perBlock: new BN(100000000000),
+      //       startingBlock: new BN(100_170),
+      //     })
+      //   )
+      //   .signAndSend(active.controllerAccount, { signer: wallet?.signer })
+      // api.tx.vesting.vest().signAndSend(active.controllerAccount, { signer: wallet?.signer })
+    }
+  }, [isConnected])
 
   return (
     <PageLayout
@@ -23,6 +47,7 @@ export const MyAccounts = () => {
         <RowGapBlock gap={24}>
           <PageHeaderWrapper>
             <PageTitle>My Profile</PageTitle>
+            <ClaimVestingButton />
             <MyProfileTabs />
           </PageHeaderWrapper>
           <StyledStatistics>
@@ -54,8 +79,8 @@ export const MyAccounts = () => {
               value={locked}
             />
             <TokenValueStat title="Total recoverable" tooltipText="Lorem ipsum..." value={recoverable} />
+            <TokenValueStat title="Total initial vesting" tooltipText="Lorem ipsum..." value={totalVestedClaimed} />
             <TokenValueStat title="Total Locked in Vesting" tooltipText="Lorem ipsum..." value={totalVestingLocked} />
-            <TokenValueStat title="Total Vested Claimed" tooltipText="Lorem ipsum..." value={totalVestedClaimed} />
             <TokenValueStat title="Total Vested Claimable" tooltipText="Lorem ipsum..." value={totalVestedClaimable} />
           </StyledStatistics>
         </RowGapBlock>

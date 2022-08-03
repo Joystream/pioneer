@@ -50,15 +50,15 @@ export const VestingListItem = ({ vested, locked, endBlock, startingBlock, perBl
           <TimeToBlock block={endBlock} />
         </div>
         <div>
+          <DetailLabel>Initial vesting:</DetailLabel>
+          <TokenValue value={locked} />
+        </div>
+        <div>
           <DetailLabel>Unlocked per block:</DetailLabel>
           <TokenValue value={perBlock} />
         </div>
         <div>
-          <DetailLabel>Locked in vesting:</DetailLabel>
-          <TokenValue value={locked} />
-        </div>
-        <div>
-          <DetailLabel>Vested claimable</DetailLabel>
+          <DetailLabel>Total Unlocked:</DetailLabel>
           <TokenValue value={vested} />
         </div>
       </VestingStyledDropDown>

@@ -24,7 +24,7 @@ export const useTotalVesting = (): typeof baseTotalVesting => {
       () =>
         result?.reduce(
           (prev, next) => {
-            prev.totalVestedClaimed = prev.totalVestedClaimed.add(next.vestingTotal.sub(next.vestingLocked))
+            prev.totalVestedClaimed = prev.totalVestedClaimed.add(next.vestingTotal)
             prev.totalVestingLocked = prev.totalVestingLocked.add(next.vestingLocked)
             prev.totalVestedClaimable = prev.totalVestedClaimable.add(next.vestedClaimable)
 
