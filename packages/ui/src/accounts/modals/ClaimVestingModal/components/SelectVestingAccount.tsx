@@ -83,7 +83,7 @@ const OptionVesting = ({ option, onClick }: { option: AccountOption; onClick?: (
   )
 }
 
-const VestingListItem = ({ option, vestingClaimable }: { option: AccountOption; vestingClaimable?: BN }) => (
+export const VestingListItem = ({ option, vestingClaimable }: { option: AccountOption; vestingClaimable?: BN }) => (
   <>
     <AccountInfo account={option} />
     <VestingInfoRow>

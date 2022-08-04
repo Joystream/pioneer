@@ -21,7 +21,13 @@ import { SECONDS_PER_BLOCK } from '@/common/constants'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { DefaultDateFormatter, formatTokenValue } from '@/common/model/formatters'
 
-export const VestingListItem = ({ vested, locked, endBlock, startingBlock, perBlock }: Vesting['vesting'][number]) => {
+export const VestingLockListItem = ({
+  vested,
+  locked,
+  endBlock,
+  startingBlock,
+  perBlock,
+}: Vesting['vesting'][number]) => {
   const [isDropped, setDropped] = useState(false)
 
   return (
