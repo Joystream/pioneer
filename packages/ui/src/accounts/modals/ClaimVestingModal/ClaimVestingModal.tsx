@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import { ListHeader } from '@/accounts/components/Accounts'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
-import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { useVesting } from '@/accounts/hooks/useVesting'
 import { SelectVestingAccount } from '@/accounts/modals/ClaimVestingModal/components/SelectVestingAccount'
 import { Account } from '@/accounts/types'
@@ -41,9 +40,7 @@ export const ClaimVestingModal = () => {
 
   const transaction = useMemo(() => api?.tx.vesting.vest(), [])
 
-  useTransactionFee(selectedAccount?.address, () => transaction, [transaction])
-
-  const { isReady, sign } = useSignAndSendTransaction({
+  const { isReady, sign, paymentInfo } = useSignAndSendTransaction({
     transaction,
     signer: selectedAccount?.address ?? '',
     service: service as any,
@@ -93,6 +90,7 @@ export const ClaimVestingModal = () => {
           </RowGapBlock>
         </ModalBody>
         <ModalTransactionFooter
+          transactionFee={paymentInfo?.partialFee}
           next={{ onClick: () => sign(), label: 'Sign transaction and claim', disabled: !isReady }}
         />
       </Modal>
