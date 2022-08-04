@@ -57,7 +57,12 @@ export const MyAccounts = () => {
             <TokenValueStat title="Total recoverable" tooltipText="Lorem ipsum..." value={recoverable} />
             <TokenValueStat title="Total initial vesting" tooltipText="Lorem ipsum..." value={totalVestedClaimed} />
             <TokenValueStat title="Total Locked in Vesting" tooltipText="Lorem ipsum..." value={totalVestingLocked} />
-            <TokenValueStat title="Total Vested Claimable" tooltipText="Lorem ipsum..." value={totalVestedClaimable}>
+            <TokenValueStat
+              title="Total Vested Claimable"
+              tooltipText="Lorem ipsum..."
+              value={totalVestedClaimable}
+              inline
+            >
               {totalVestedClaimable.gtn(0) && <ClaimVestingButton />}
             </TokenValueStat>
           </StyledStatistics>
