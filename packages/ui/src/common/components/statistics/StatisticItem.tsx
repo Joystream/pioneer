@@ -51,6 +51,8 @@ export const StatsBlock = styled.div<StatiscticBlockProps>`
 
 export const StatsContent = styled.div`
   margin-top: auto;
+  display: flex;
+  justify-content: space-between;
 `
 
 export const StatisticItemSpacedContent = styled.div`

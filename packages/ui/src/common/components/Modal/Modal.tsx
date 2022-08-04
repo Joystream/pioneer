@@ -106,7 +106,7 @@ export const ModalGlass = styled.div<ModalProps>`
     }
   }};
   @media only screen and (max-height: 700px) {
-    padding-top: 0px;
+    padding-top: 0;
   }
   padding-bottom: ${({ modalHeight }) => {
     switch (modalHeight) {
@@ -241,7 +241,17 @@ export const ModalWrap = styled.section<ModalWrapProps>`
         return '1240px'
     }
   }};
-  height: ${({ modalHeight }) => (modalHeight === 'xl' ? '100%' : 'min-content')};
+  // height: ${({ modalHeight }) => (modalHeight === 'xl' ? '100%' : 'min-content')};
+  height: ${({ modalHeight }) => {
+    switch (modalHeight) {
+      case 'xl':
+        return '100%'
+      case 'l':
+        return '40%'
+      default:
+        return 'min-content'
+    }
+  }};
   border-radius: ${BorderRad.s};
   box-shadow: ${Shadows.common};
   ${Animations.showModalBlock};

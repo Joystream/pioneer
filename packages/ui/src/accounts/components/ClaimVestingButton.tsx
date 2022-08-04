@@ -7,8 +7,8 @@ export const ClaimVestingButton = () => {
   const { showModal } = useModal()
 
   return (
-    <ButtonPrimary size="medium" onClick={() => showModal({ modal: 'ClaimVestingModal' })}>
-      Claim vesting
+    <ButtonPrimary size="small" onClick={() => showModal({ modal: 'ClaimVestingModal' })}>
+      Claim all
     </ButtonPrimary>
   )
 }
