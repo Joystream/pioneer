@@ -6,10 +6,17 @@ import { BalanceComparator } from './BalanceComparator'
 
 export type SortKey = keyof Omit<Balances, 'locks' | 'vesting'> | 'name'
 
-export function sortAccounts(accounts: Account[], balanceMap: AddressToBalanceMap, key: SortKey, isDescending = false) {
+export function sortAccounts(
+  accounts: Account[],
+  balanceMap: AddressToBalanceMap | undefined,
+  key: SortKey,
+  isDescending = false
+) {
   return key === 'name'
     ? [...accounts].sort(Comparator<Account>(isDescending, key).string)
-    : [...accounts].sort(BalanceComparator(balanceMap, key, isDescending))
+    : balanceMap
+    ? [...accounts].sort(BalanceComparator(balanceMap, key, isDescending))
+    : accounts
 }
 
 export function setOrder(

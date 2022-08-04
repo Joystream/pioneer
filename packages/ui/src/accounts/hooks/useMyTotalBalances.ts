@@ -33,5 +33,5 @@ const addBalances = (a: Balances, b: Balances) => ({
 export function useMyTotalBalances(): Balances {
   const balances = useMyBalances()
 
-  return [...Object.values(balances)].reduce(addBalances, zeroBalance())
+  return [...Object.values(balances ?? [])].reduce(addBalances, zeroBalance())
 }

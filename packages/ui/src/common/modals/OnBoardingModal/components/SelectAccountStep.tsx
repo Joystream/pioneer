@@ -1,3 +1,4 @@
+import { BN_ZERO } from '@polkadot/util'
 import { getWalletBySource } from 'injectweb3-connect'
 import React, { useState } from 'react'
 import styled from 'styled-components'
@@ -50,7 +51,7 @@ export const SelectAccountStep = ({ onAccountSelect }: Props) => {
               <ListItem onClick={() => setSelectedAccountAddress(account.address)} key={account.address} borderless>
                 <ConnectAccountItem
                   account={account}
-                  totalBalance={balances[account.address]?.total}
+                  totalBalance={balances?.[account.address]?.total ?? BN_ZERO}
                   selected={account.address === selectedAccountAddress}
                 />
               </ListItem>
