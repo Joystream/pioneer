@@ -1,13 +1,19 @@
 import { useMachine } from '@xstate/react'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import styled from 'styled-components'
 
+import { ListHeader } from '@/accounts/components/Accounts'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { useVesting } from '@/accounts/hooks/useVesting'
 import { SelectVestingAccount } from '@/accounts/modals/ClaimVestingModal/components/SelectVestingAccount'
 import { Account } from '@/accounts/types'
-import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
+import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent } from '@/common/components/forms'
 import { Modal, ModalBody, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
+import { RowGapBlock } from '@/common/components/page/PageContent'
+import { SuccessModal } from '@/common/components/SuccessModal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
@@ -19,15 +25,45 @@ export const ClaimVestingModal = () => {
   const { api } = useApi()
   const [selectedAccount, setSelectedAccount] = useState<Account>()
   const vesting = useVesting(selectedAccount?.address)
-  const [state, service] = useMachine(transactionMachine)
+  const balances = useMyBalances()
+  const { allAccounts } = useMyAccounts()
+  const [state, , service] = useMachine(transactionMachine)
 
   useTransactionFee(selectedAccount?.address, () => api?.tx.vesting.vest())
 
-  // useSignAndSendTransaction({
-  //   transaction: api?.tx.vesting.vest(),
-  //   signer: selectedAccount?.address ?? '',
-  //   service,
-  // })
+  useEffect(() => {
+    if (balances) {
+      Object.entries(balances).forEach(([key, value]) => {
+        if (value.isVesting) {
+          setSelectedAccount(allAccounts.find((a) => a.address === key))
+        }
+      })
+    }
+  }, [!balances])
+
+  const transaction = useMemo(() => api?.tx.vesting.vest(), [])
+
+  const { isReady, sign } = useSignAndSendTransaction({
+    transaction,
+    signer: selectedAccount?.address ?? '',
+    service: service as any,
+  })
+
+  if (state.matches('canceled')) {
+    return <FailureModal onClose={hideModal}>Transaction was cancelled</FailureModal>
+  }
+
+  if (state.matches('error')) {
+    return (
+      <FailureModal onClose={hideModal} events={state.context.events}>
+        There was a problem with claiming vesting
+      </FailureModal>
+    )
+  }
+
+  if (state.matches('success')) {
+    return <SuccessModal onClose={hideModal} text="You have successfully claimed vesting" />
+  }
 
   return (
     <Modal onClose={hideModal} modalSize="s" modalHeight="l">
@@ -42,11 +78,41 @@ export const ClaimVestingModal = () => {
             <>Select account from which you wish to claim vesting</>
           )}
         </TextMedium>
-        <InputComponent inputSize="l">
-          <SelectVestingAccount selected={selectedAccount} onChange={setSelectedAccount} />
-        </InputComponent>
+        <RowGapBlock gap={5}>
+          <ItemHeaders>
+            <Header>Account</Header>
+            <Header>Unlocking</Header>
+            <Header>Total claimable</Header>
+          </ItemHeaders>
+          <InputComponent inputSize="l">
+            <SelectVestingAccount selected={selectedAccount} onChange={setSelectedAccount} />
+          </InputComponent>
+        </RowGapBlock>
       </ModalBody>
-      <ModalTransactionFooter next={{ onClick: () => undefined, label: 'Sign transaction and claim' }} />
+      <ModalTransactionFooter
+        next={{ onClick: () => sign(), label: 'Sign transaction and claim', disabled: !isReady }}
+      />
     </Modal>
   )
 }
+
+const ItemHeaders = styled.div`
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: space-between;
+  width: 100%;
+  padding-left: 16px;
+  padding-right: 8px;
+`
+
+const Header = styled(ListHeader)`
+  :nth-child(2) {
+    text-align: center;
+    justify-self: center;
+  }
+
+  :last-child {
+    padding-right: 40px;
+  }
+`

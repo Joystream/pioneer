@@ -47,6 +47,7 @@ export interface Balances {
   recoverable: BN
   transferable: BN
   locks: BalanceLock[]
+  isVesting?: boolean
 }
 
 export type AddressToBalanceMap = {
