@@ -65,35 +65,39 @@ export const ClaimVestingModal = () => {
     return <SuccessModal onClose={hideModal} text="You have successfully claimed vesting" />
   }
 
-  return (
-    <Modal onClose={hideModal} modalSize="s" modalHeight="l">
-      <ModalHeader title="Claim" onClick={hideModal} />
-      <ModalBody>
-        <TextMedium>
-          {selectedAccount ? (
-            <>
-              You intend to claim <TokenValue value={vesting?.vestedClaimable} /> from your vesting lock.
-            </>
-          ) : (
-            <>Select account from which you wish to claim vesting</>
-          )}
-        </TextMedium>
-        <RowGapBlock gap={5}>
-          <ItemHeaders>
-            <Header>Account</Header>
-            <Header>Unlocking</Header>
-            <Header>Total claimable</Header>
-          </ItemHeaders>
-          <InputComponent inputSize="l">
-            <SelectVestingAccount selected={selectedAccount} onChange={setSelectedAccount} />
-          </InputComponent>
-        </RowGapBlock>
-      </ModalBody>
-      <ModalTransactionFooter
-        next={{ onClick: () => sign(), label: 'Sign transaction and claim', disabled: !isReady }}
-      />
-    </Modal>
-  )
+  if (state.matches('prepare')) {
+    return (
+      <Modal onClose={hideModal} modalSize="s" modalHeight="l">
+        <ModalHeader title="Claim" onClick={hideModal} />
+        <ModalBody>
+          <TextMedium>
+            {selectedAccount ? (
+              <>
+                You intend to claim <TokenValue value={vesting?.vestedClaimable} /> from your vesting lock.
+              </>
+            ) : (
+              <>Select account from which you wish to claim vesting</>
+            )}
+          </TextMedium>
+          <RowGapBlock gap={5}>
+            <ItemHeaders>
+              <Header>Account</Header>
+              <Header>Unlocking</Header>
+              <Header>Total claimable</Header>
+            </ItemHeaders>
+            <InputComponent inputSize="l">
+              <SelectVestingAccount selected={selectedAccount} onChange={setSelectedAccount} />
+            </InputComponent>
+          </RowGapBlock>
+        </ModalBody>
+        <ModalTransactionFooter
+          next={{ onClick: () => sign(), label: 'Sign transaction and claim', disabled: !isReady }}
+        />
+      </Modal>
+    )
+  }
+
+  return null
 }
 
 const ItemHeaders = styled.div`
