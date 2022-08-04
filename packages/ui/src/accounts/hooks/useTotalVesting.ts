@@ -16,20 +16,21 @@ export const useTotalVesting = (): typeof baseTotalVesting => {
   const { api, isConnected } = useApi()
   const { allAccounts } = useMyAccounts()
   const addresses = allAccounts.map((account) => account.address)
-  const balancesObs = api ? addresses.map((address) => api.derive.balances.all(address)) : []
-  const result = useObservable(combineLatest(balancesObs), [isConnected, JSON.stringify(addresses)])
+  const balancesObs = useMemo(
+    () => (api ? addresses.map((address) => api.derive.balances.all(address)) : []),
+    [!api, addresses.length]
+  )
+  const result = useObservable(combineLatest(balancesObs), [isConnected, balancesObs])
 
   return (
     useMemo(
       () =>
         result?.reduce(
-          (prev, next) => {
-            prev.totalVestedClaimed = prev.totalVestedClaimed.add(next.vestingTotal)
-            prev.totalVestingLocked = prev.totalVestingLocked.add(next.vestingLocked)
-            prev.totalVestedClaimable = prev.totalVestedClaimable.add(next.vestedClaimable)
-
-            return prev
-          },
+          (prev, next) => ({
+            totalVestedClaimed: prev.totalVestedClaimed.add(next.vestingTotal),
+            totalVestingLocked: prev.totalVestingLocked.add(next.vestingLocked),
+            totalVestedClaimable: prev.totalVestedClaimable.add(next.vestedClaimable),
+          }),
           { ...baseTotalVesting }
         ),
       [result]

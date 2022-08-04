@@ -241,7 +241,6 @@ export const ModalWrap = styled.section<ModalWrapProps>`
         return '1240px'
     }
   }};
-  // height: ${({ modalHeight }) => (modalHeight === 'xl' ? '100%' : 'min-content')};
   height: ${({ modalHeight }) => {
     switch (modalHeight) {
       case 'xl':

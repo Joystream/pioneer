@@ -29,8 +29,6 @@ export const ClaimVestingModal = () => {
   const { allAccounts } = useMyAccounts()
   const [state, , service] = useMachine(transactionMachine)
 
-  useTransactionFee(selectedAccount?.address, () => api?.tx.vesting.vest())
-
   useEffect(() => {
     if (balances) {
       Object.entries(balances).forEach(([key, value]) => {
@@ -42,6 +40,8 @@ export const ClaimVestingModal = () => {
   }, [!balances])
 
   const transaction = useMemo(() => api?.tx.vesting.vest(), [])
+
+  useTransactionFee(selectedAccount?.address, () => transaction, [transaction])
 
   const { isReady, sign } = useSignAndSendTransaction({
     transaction,
