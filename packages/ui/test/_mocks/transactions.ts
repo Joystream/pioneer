@@ -12,7 +12,9 @@ import { ExtractTuple } from '@/common/model/JoystreamNode'
 import { UseApi } from '@/common/providers/api/provider'
 import { proposalDetails } from '@/proposals/model/proposalDetails'
 
-import { createBalanceLock, createRuntimeDispatchInfo } from './chainTypes'
+import { mockedMyBalances } from '../setup'
+
+import { createRuntimeDispatchInfo } from './chainTypes'
 
 const createSuccessEvents = (data: any[], section: string, method: string) => [
   {
@@ -256,30 +258,16 @@ export const stubBalances = (api: UseApi, { available, lockId, locked }: Balance
   const availableBalance = new BN(available ?? 0)
   const lockedBalance = new BN(locked ?? 0)
 
-  set(api, 'api.derive.balances.all', () =>
-    from([
-      {
-        availableBalance: createType('Balance', availableBalance),
-        lockedBalance: createType('Balance', lockedBalance),
-        accountId: createType('AccountId', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
-        accountNonce: createType('Index', 1),
-        freeBalance: createType('Balance', availableBalance.add(lockedBalance)),
-        frozenFee: new BN(0),
-        frozenMisc: new BN(0),
-        isVesting: false,
-        lockedBreakdown: lockedBalance.eq(BN_ZERO)
-          ? []
-          : [createBalanceLock(locked!, lockId ?? 'Bound Staking Account')],
-        reservedBalance: new BN(0),
-        vestedBalance: new BN(0),
-        vestedClaimable: new BN(0),
-        vestingEndBlock: createType('BlockNumber', 1234),
-        vestingLocked: new BN(0),
-        vestingPerBlock: new BN(0),
-        vestingTotal: new BN(0),
-        votingBalance: new BN(0),
-        vesting: [],
-      },
-    ])
-  )
+  mockedMyBalances.mockReturnValue({
+    total: availableBalance.add(lockedBalance),
+    locked: lockedBalance,
+    recoverable: BN_ZERO,
+    transferable: availableBalance,
+    locks: lockedBalance.isZero() ? [] : [{ amount: lockedBalance, type: lockId ?? 'Bound Staking Account' }],
+    vestedBalance: BN_ZERO,
+    vestedClaimable: BN_ZERO,
+    vestingLocked: BN_ZERO,
+    vestingTotal: BN_ZERO,
+    vesting: [],
+  })
 }

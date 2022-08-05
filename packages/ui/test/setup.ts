@@ -1,6 +1,8 @@
 import '@testing-library/jest-dom'
 import BN from 'bn.js'
+import React from 'react'
 
+import { Balances } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
 import { UseTransaction } from '@/common/providers/transactionFees/context'
 
@@ -30,6 +32,19 @@ export const mockedTransactionFee: UseTransaction = {
 
 jest.mock('@/accounts/hooks/useTransactionFee', () => ({
   useTransactionFee: jest.fn(() => mockedTransactionFee),
+}))
+
+export const mockedMyBalances = jest.fn<Balances, []>(() => ({} as Balances))
+
+jest.mock('@/accounts/hooks/useMyBalances', () => ({
+  useMyBalances: () =>
+    new Proxy({} as Balances, {
+      get: mockedMyBalances,
+    }),
+}))
+
+jest.mock('@/accounts/providers/balances/provider', () => ({
+  BalancesContextProvider: ({ children }: { children: React.ReactNode }) => children,
 }))
 
 jest.mock('@/common/constants/numbers', () => ({
