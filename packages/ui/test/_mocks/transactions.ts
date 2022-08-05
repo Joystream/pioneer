@@ -278,6 +278,7 @@ export const stubBalances = (api: UseApi, { available, lockId, locked }: Balance
         vestingPerBlock: new BN(0),
         vestingTotal: new BN(0),
         votingBalance: new BN(0),
+        vesting: [],
       },
     ])
   )

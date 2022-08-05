@@ -14,6 +14,7 @@ import { createBalance } from '../../_mocks/chainTypes'
 import { alice, aliceStash } from '../../_mocks/keyring'
 import { MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi, stubBalances } from '../../_mocks/transactions'
+import { mockDefaultBalance } from '../../setup'
 
 describe('useMyTotalBalances', () => {
   let useApi: UseApi = stubApi()
@@ -37,6 +38,7 @@ describe('useMyTotalBalances', () => {
     const { result } = renderUseTotalBalances()
 
     expect(result.current).toEqual({
+      ...mockDefaultBalance,
       total: new BN(0),
       transferable: new BN(0),
       locked: new BN(0),
@@ -55,6 +57,7 @@ describe('useMyTotalBalances', () => {
     })
 
     expect(result.current).toEqual({
+      ...mockDefaultBalance,
       locked: new BN(20),
       locks: new Array(2).fill({
         amount: createBalance(10),

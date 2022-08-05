@@ -41,8 +41,8 @@ export const formatDateString = (timestamp: string | number | undefined, size: '
 
   const defaultFormat = DefaultDateFormatter.format(new Date(timestamp))
   switch (size) {
-    case 's':
-      return defaultFormat.replace(/ ([AP]M)/i, (_, period: string) => period.toLocaleLowerCase())
+    case 'l':
+      return defaultFormat.replace(/ ([AP]M)/i, (_, period: string) => period.toUpperCase())
     default:
       return defaultFormat
   }
