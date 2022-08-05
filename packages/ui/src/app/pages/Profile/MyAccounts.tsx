@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { Accounts } from '@/accounts/components/Accounts'
 import { ClaimVestingButton } from '@/accounts/components/ClaimVestingButton'
 import { useMyTotalBalances } from '@/accounts/hooks/useMyTotalBalances'
-import { useTotalVesting } from '@/accounts/hooks/useTotalVesting'
 import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
@@ -15,8 +14,8 @@ import { Colors } from '@/common/constants'
 import { MyProfileTabs } from './components/MyProfileTabs'
 
 export const MyAccounts = () => {
-  const { total, transferable, locked, recoverable } = useMyTotalBalances()
-  const { totalVestedClaimable, totalVestingLocked, totalVestedClaimed } = useTotalVesting()
+  const { total, transferable, locked, recoverable, vestingTotal, vestedClaimable, vestingLocked } =
+    useMyTotalBalances()
 
   return (
     <PageLayout
@@ -55,15 +54,10 @@ export const MyAccounts = () => {
               value={locked}
             />
             <TokenValueStat title="Total recoverable" tooltipText="Lorem ipsum..." value={recoverable} />
-            <TokenValueStat title="Total initial vesting" tooltipText="Lorem ipsum..." value={totalVestedClaimed} />
-            <TokenValueStat title="Total Locked in Vesting" tooltipText="Lorem ipsum..." value={totalVestingLocked} />
-            <TokenValueStat
-              title="Total Vested Claimable"
-              tooltipText="Lorem ipsum..."
-              value={totalVestedClaimable}
-              inline
-            >
-              {totalVestedClaimable.gtn(0) && <ClaimVestingButton />}
+            <TokenValueStat title="Total initial vesting" tooltipText="Lorem ipsum..." value={vestingTotal} />
+            <TokenValueStat title="Total Locked in Vesting" tooltipText="Lorem ipsum..." value={vestingLocked} />
+            <TokenValueStat title="Total Vested Claimable" tooltipText="Lorem ipsum..." value={vestedClaimable} inline>
+              {vestedClaimable.gtn(0) && <ClaimVestingButton />}
             </TokenValueStat>
           </StyledStatistics>
         </RowGapBlock>

@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { filterByText } from '@/accounts/components/SelectAccount/helpers'
 import { InfoValueWithLocks } from '@/accounts/components/SelectAccount/OptionAccount'
+import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { useVesting } from '@/accounts/hooks/useVesting'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { isValidAddress } from '@/accounts/model/isValidAddress'
 import { Account, AccountOption } from '@/accounts/types'
@@ -26,7 +26,7 @@ interface SelectVestingAccountProps {
 
 export const SelectVestingAccount = ({ selected, onChange, id, disabled }: SelectVestingAccountProps) => {
   const { allAccounts: options } = useMyAccounts()
-  const selectedVesting = useVesting(selected?.address)
+  const selectedVesting = useBalance(selected?.address)
   const [search, setSearch] = useState('')
 
   const filteredOptions = useMemo(() => filterByText(options, search), [search, options])
@@ -70,7 +70,7 @@ export const SelectVestingAccount = ({ selected, onChange, id, disabled }: Selec
 }
 
 const OptionVesting = ({ option, onClick }: { option: AccountOption; onClick?: (option: AccountOption) => void }) => {
-  const vesting = useVesting(option.address)
+  const vesting = useBalance(option.address)
 
   if (!vesting || vesting.vestedClaimable.lten(0)) {
     return null

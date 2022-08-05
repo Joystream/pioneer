@@ -6,7 +6,6 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { ContributeFundsModal } from '@/bounty/modals/ContributeFundsModal'
 import { FundingLimited } from '@/bounty/types/Bounty'
-import { BN_ZERO } from '@/common/constants'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
@@ -24,7 +23,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
+import { mockDefaultBalance, mockedTransactionFee } from '../../setup'
 
 const [baseBounty] = bounties
 const bounty = {
@@ -38,11 +37,8 @@ const bounty = {
 }
 
 const defaultBalance = {
-  total: BN_ZERO,
-  locked: BN_ZERO,
-  recoverable: BN_ZERO,
+  ...mockDefaultBalance,
   transferable: new BN(1000),
-  locks: [],
 }
 
 describe('UI: ContributeFundsModal', () => {

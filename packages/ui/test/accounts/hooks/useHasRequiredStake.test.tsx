@@ -11,6 +11,7 @@ import { ApiContext } from '@/common/providers/api/context'
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi } from '../../_mocks/transactions'
+import { mockDefaultBalance } from '../../setup'
 
 const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   hasAccounts: true,
@@ -44,11 +45,7 @@ describe('useHasRequiredStake', () => {
   afterEach(cleanup)
 
   const zeroBalance = {
-    total: new BN(0),
-    locked: new BN(0),
-    transferable: new BN(0),
-    recoverable: new BN(0),
-    locks: [],
+    ...mockDefaultBalance,
   }
 
   function renderUseTotalBalances(stake: BN, lock: LockType) {

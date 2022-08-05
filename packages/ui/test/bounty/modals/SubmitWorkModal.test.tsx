@@ -6,7 +6,6 @@ import React from 'react'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { SubmitWorkModal } from '@/bounty/modals/SubmitWorkModal'
-import { BN_ZERO } from '@/common/constants'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -27,13 +26,11 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockDefaultBalance } from '../../setup'
 
 const defaultBalance = {
-  total: BN_ZERO,
-  locked: BN_ZERO,
-  recoverable: BN_ZERO,
+  ...mockDefaultBalance,
   transferable: new BN(1000),
-  locks: [],
 }
 
 describe('UI: BountySubmitModal', () => {

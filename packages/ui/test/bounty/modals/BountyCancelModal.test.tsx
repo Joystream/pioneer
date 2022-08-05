@@ -6,7 +6,6 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { BountyCancelModal } from '@/bounty/modals/CancelBountyModal'
-import { BN_ZERO } from '@/common/constants'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
@@ -17,16 +16,14 @@ import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../../_mocks/transactions'
+import { mockDefaultBalance } from '../../setup'
 
 const bounty = bounties[0]
 const creator = getMember('alice')
 
 const defaultBalance = {
-  total: BN_ZERO,
-  locked: BN_ZERO,
-  recoverable: BN_ZERO,
+  ...mockDefaultBalance,
   transferable: new BN(1000),
-  locks: [],
 }
 
 describe('UI: BountyCancelModal', () => {

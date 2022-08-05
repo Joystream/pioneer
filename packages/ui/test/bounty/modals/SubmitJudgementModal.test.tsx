@@ -34,6 +34,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockDefaultBalance } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
@@ -89,11 +90,9 @@ describe('UI: SubmitJudgementModal', () => {
 
   const useMyBalances: AddressToBalanceMap = {
     [useMyAccounts.allAccounts[0].address]: {
+      ...mockDefaultBalance,
       total: new BN(10000),
-      locked: new BN(0),
-      recoverable: new BN(0),
       transferable: new BN(10000),
-      locks: [],
     },
   }
 

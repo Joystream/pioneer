@@ -24,6 +24,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockDefaultBalance } from '../../setup'
 
 const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
   hasAccounts: true,
@@ -59,18 +60,18 @@ describe('UI: TransferModal', () => {
     jest.spyOn(console, 'log').mockImplementation()
     useMyAccounts.allAccounts.push(alice, bob)
     useMyBalances[alice.address] = {
+      ...mockDefaultBalance,
       total: BN_BALANCE,
       locked: BN_ZERO,
       recoverable: BN_BALANCE,
       transferable: BN_BALANCE,
-      locks: [],
     }
     useMyBalances[bob.address] = {
+      ...mockDefaultBalance,
       total: BN_BALANCE,
       locked: BN_ZERO,
       recoverable: BN_BALANCE,
       transferable: BN_BALANCE,
-      locks: [],
     }
   })
 

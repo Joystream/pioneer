@@ -1,6 +1,8 @@
 import BN from 'bn.js'
 
-import { sortAccounts } from '../../../src/accounts/model/sortAccounts'
+import { sortAccounts } from '@/accounts/model/sortAccounts'
+
+import { mockDefaultBalance } from '../../setup'
 
 describe('sortAccounts', () => {
   const emptyMap = {}
@@ -101,32 +103,31 @@ describe('sortAccounts', () => {
   describe('By balance', () => {
     const balances = {
       '0': {
+        ...mockDefaultBalance,
         total: new BN(1),
         locked: new BN(3),
         recoverable: new BN(1),
         transferable: new BN(11),
-        locks: [],
       },
       '1': {
+        ...mockDefaultBalance,
         total: new BN(3),
         locked: new BN(2),
-        recoverable: new BN(0),
         transferable: new BN(11),
-        locks: [],
       },
       '2': {
+        ...mockDefaultBalance,
         total: new BN(1),
         locked: new BN(1),
         recoverable: new BN(5),
         transferable: new BN(1),
-        locks: [],
       },
       '3': {
+        ...mockDefaultBalance,
         total: new BN(2),
         locked: new BN(6),
         recoverable: new BN(5),
         transferable: new BN(1),
-        locks: [],
       },
     }
     const anna = { name: 'Anna', address: '0' }

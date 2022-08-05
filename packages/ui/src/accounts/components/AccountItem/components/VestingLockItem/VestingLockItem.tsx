@@ -13,7 +13,7 @@ import {
   VestingStyledDropDown,
 } from '@/accounts/components/AccountItem/components/styles'
 import { lockIcon } from '@/accounts/components/AccountLocks'
-import { Vesting } from '@/accounts/hooks/useVesting'
+import { Balances } from '@/accounts/types'
 import { DropDownButton } from '@/common/components/buttons/DropDownToggle'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TextSmall, TokenValue } from '@/common/components/typography'
@@ -27,7 +27,7 @@ export const VestingLockListItem = ({
   endBlock,
   startingBlock,
   perBlock,
-}: Vesting['vesting'][number]) => {
+}: Balances['vesting'][number]) => {
   const [isDropped, setDropped] = useState(false)
 
   return (

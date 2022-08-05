@@ -18,6 +18,7 @@ import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockApiProvider, MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { mockDefaultBalance } from '../../setup'
 
 const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[]; isLoading: boolean } = {
   hasAccounts: false,
@@ -85,11 +86,9 @@ describe('UI: Accounts list', () => {
 
     it('Renders balance value', async () => {
       balances = {
+        ...mockDefaultBalance,
         total: new BN(1000),
-        locked: new BN(0),
         transferable: new BN(1000),
-        recoverable: new BN(0),
-        locks: [],
       }
       const { findByText } = renderAccounts()
 
@@ -107,11 +106,9 @@ describe('UI: Accounts list', () => {
 
     it("Annotate active member's accounts", async () => {
       balances = {
+        ...mockDefaultBalance,
         total: new BN(1000),
-        locked: new BN(0),
         transferable: new BN(1000),
-        recoverable: new BN(0),
-        locks: [],
       }
       const aliceMember = getMember('alice')
       seedMembers(mockServer.server, 2)

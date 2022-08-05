@@ -3,9 +3,9 @@ import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { ListHeader } from '@/accounts/components/Accounts'
+import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
-import { useVesting } from '@/accounts/hooks/useVesting'
 import { SelectVestingAccount } from '@/accounts/modals/ClaimVestingModal/components/SelectVestingAccount'
 import { Account } from '@/accounts/types'
 import { FailureModal } from '@/common/components/FailureModal'
@@ -23,7 +23,7 @@ export const ClaimVestingModal = () => {
   const { hideModal } = useModal()
   const { api } = useApi()
   const [selectedAccount, setSelectedAccount] = useState<Account>()
-  const vesting = useVesting(selectedAccount?.address)
+  const vesting = useBalance(selectedAccount?.address)
   const balances = useMyBalances()
   const { allAccounts } = useMyAccounts()
   const [state, , service] = useMachine(transactionMachine)
@@ -31,7 +31,7 @@ export const ClaimVestingModal = () => {
   useEffect(() => {
     if (balances) {
       Object.entries(balances).forEach(([key, value]) => {
-        if (value.isVesting) {
+        if (value.vesting.length) {
           setSelectedAccount(allAccounts.find((a) => a.address === key))
         }
       })

@@ -14,6 +14,7 @@ import { UseOnBoarding } from '@/common/providers/onboarding/types'
 
 import { MockApolloProvider } from '../../_mocks/providers'
 import { stubApi } from '../../_mocks/transactions'
+import { mockDefaultBalance } from '../../setup'
 
 const mockUseMyAccounts: UseAccounts = {
   isLoading: false,
@@ -140,18 +141,11 @@ describe('UI: OnBoardingModal', () => {
         ]
         mockMyBalances = {
           '123': {
+            ...mockDefaultBalance,
             total: new BN(10),
-            locked: new BN(0),
-            recoverable: new BN(0),
-            transferable: new BN(0),
-            locks: [],
           },
           '321': {
-            total: new BN(0),
-            locked: new BN(0),
-            recoverable: new BN(0),
-            transferable: new BN(0),
-            locks: [],
+            ...mockDefaultBalance,
           },
         }
       })
