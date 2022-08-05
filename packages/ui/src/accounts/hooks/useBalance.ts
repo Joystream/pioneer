@@ -19,9 +19,9 @@ export const useBalance = (address: Address = ''): Balances | null => {
     [address, myBalances, connectionState]
   )
 
-  if (balances === undefined) {
-    return null
+  if (myBalances) {
+    return myBalances
   }
 
-  return toBalances(balances)
+  return balances ? toBalances(balances) : null
 }
