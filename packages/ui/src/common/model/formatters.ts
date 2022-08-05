@@ -24,7 +24,7 @@ export function shortenAddress(address: string, length = 18) {
         address.substring(address.length - Math.floor(length / 2), address.length)
 }
 
-export const DefaultDateFormatter = Intl.DateTimeFormat('en', {
+export const DefaultDateFormatter = Intl.DateTimeFormat('en-GB', {
   year: 'numeric',
   month: '2-digit',
   day: '2-digit',
@@ -34,11 +34,15 @@ export const DefaultDateFormatter = Intl.DateTimeFormat('en', {
   timeZoneName: 'short',
 })
 
-export const formatDateString = (timestamp: string, size: 's' | 'l' = 'l') => {
+export const formatDateString = (timestamp: string | number | undefined, size: 's' | 'l' = 'l') => {
+  if (!isDefined(timestamp)) {
+    return '-'
+  }
+
   const defaultFormat = DefaultDateFormatter.format(new Date(timestamp))
   switch (size) {
     case 's':
-      return defaultFormat.replace(/ ([AP]M)/, (_, preriod: string) => preriod.toLocaleLowerCase())
+      return defaultFormat.replace(/ ([AP]M)/i, (_, period: string) => period.toLocaleLowerCase())
     default:
       return defaultFormat
   }

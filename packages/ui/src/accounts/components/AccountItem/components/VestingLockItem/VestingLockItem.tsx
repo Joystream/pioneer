@@ -19,7 +19,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TextSmall, TokenValue } from '@/common/components/typography'
 import { SECONDS_PER_BLOCK } from '@/common/constants'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
-import { DefaultDateFormatter, formatTokenValue } from '@/common/model/formatters'
+import { formatDateString, formatTokenValue } from '@/common/model/formatters'
 
 export const VestingLockListItem = ({
   vested,
@@ -95,7 +95,7 @@ const TimeToBlock = ({ block }: { block: BN }) => {
   return (
     <StyledRowGapBlock gap={2}>
       <TextMedium bold>{formatTokenValue(block)}</TextMedium>
-      <TextSmall lighter>{date ? DefaultDateFormatter.format(new Date(date)) : '-'}</TextSmall>
+      <TextSmall lighter>{formatDateString(date)}</TextSmall>
     </StyledRowGapBlock>
   )
 }
