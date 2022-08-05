@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import { toBalances } from '@/accounts/model/toBalances'
 import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
@@ -14,10 +16,11 @@ export const useBalance = (address: Address = ''): Balances | null => {
   const allMyBalances = useMyBalances()
   const myBalances = allMyBalances?.[address]
 
-  const balances = useObservable(
-    isDefined(allMyBalances) && address && !myBalances ? api?.derive.balances.all(address) : undefined,
-    [address, myBalances, connectionState]
+  const balancesObs = useMemo(
+    () => (isDefined(allMyBalances) && address && !myBalances ? api?.derive.balances.all(address) : undefined),
+    [address, myBalances]
   )
+  const balances = useObservable(balancesObs, [balancesObs, connectionState])
 
   if (myBalances) {
     return myBalances

@@ -16,12 +16,15 @@ interface Props {
 }
 export const BalancesContextProvider = (props: Props) => {
   const { allAccounts, isLoading } = useMyAccounts()
-  const { isConnected, api } = useApi()
+  const { api } = useApi()
 
   const addresses = allAccounts.map((account) => account.address)
-  const balancesObs = api ? addresses.map((address) => api.derive.balances.all(address).pipe(map(toBalances))) : []
 
-  const result = useObservable(combineLatest(balancesObs), [isConnected, JSON.stringify(addresses)])
+  const balancesObs = useMemo(
+    () => (api ? addresses.map((address) => api.derive.balances.all(address).pipe(map(toBalances))) : []),
+    [api, JSON.stringify(addresses)]
+  )
+  const result = useObservable(combineLatest(balancesObs), [balancesObs])
 
   const balances = useMemo(() => {
     if (!isLoading && result)
