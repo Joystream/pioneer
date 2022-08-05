@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
+import { SelectPopper } from '@/common/components/selects/SelectPopper'
 import { useEscape } from '@/common/hooks/useEscape'
 
 import { useToggle } from '../../hooks/useToggle'
@@ -28,6 +29,7 @@ export const Select = <T extends any, V extends any = T>({
   const [isOpen, toggleOpen] = useToggle()
   const selectNode = useRef<HTMLDivElement>(null)
   const textInput = useRef<HTMLInputElement>(null)
+  const portalRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     onSearch?.(search)
@@ -53,7 +55,7 @@ export const Select = <T extends any, V extends any = T>({
           ? !event.composedPath().some((path) => Array.from(tooltipLinks).includes(path as Element))
           : true
 
-      if (isOpen && selectNode.current && !event.composedPath().includes(selectNode.current)) {
+      if (isOpen && selectNode.current && portalRef.current && !event.composedPath().includes(portalRef.current)) {
         if (shouldToggle) {
           toggleOpen()
         }
@@ -109,7 +111,11 @@ export const Select = <T extends any, V extends any = T>({
           isDefined(selected) && renderSelected(selected)
         )}
       </Toggle>
-      {isOpen && renderList(onOptionClick, toggleOpen)}
+      {isOpen && selectNode.current && (
+        <SelectPopper ref={portalRef} anchorRect={selectNode.current.getBoundingClientRect()}>
+          {renderList(onOptionClick, toggleOpen)}
+        </SelectPopper>
+      )}
     </SelectComponent>
   )
 }

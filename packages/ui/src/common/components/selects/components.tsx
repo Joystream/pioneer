@@ -225,6 +225,7 @@ export const OptionContainer = styled.div`
   cursor: pointer;
   text-transform: capitalize;
   transition: ${Transitions.all};
+  height: 48px;
 
   ${({ focus, selected }: OptionProps) => (selected || focus) && OptionFocused}
   &:hover {
