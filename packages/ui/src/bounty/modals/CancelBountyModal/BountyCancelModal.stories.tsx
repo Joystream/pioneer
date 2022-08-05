@@ -12,6 +12,8 @@ import { ModalContext } from '@/common/providers/modal/context'
 import bounties from '@/mocks/data/raw/bounties.json'
 import members from '@/mocks/data/raw/members.json'
 
+import { mockDefaultBalance } from '../../../../test/setup'
+
 export default {
   title: 'Bounty/BountyCancelModal',
   component: BountyCancelModal,
@@ -34,18 +36,13 @@ const useMyAccounts: UseAccounts = {
 
 const useMyBalances: AddressToBalanceMap = {
   [useMyAccounts.allAccounts[0].address]: {
+    ...mockDefaultBalance,
     total: new BN(10000),
-    locked: new BN(0),
-    recoverable: new BN(0),
-    transferable: new BN(0),
-    locks: [],
   },
   [useMyAccounts.allAccounts[1].address]: {
+    ...mockDefaultBalance,
     total: new BN(10000),
-    locked: new BN(0),
-    recoverable: new BN(0),
     transferable: new BN(2001),
-    locks: [],
   },
 }
 

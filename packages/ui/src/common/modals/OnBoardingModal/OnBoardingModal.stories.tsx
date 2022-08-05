@@ -15,6 +15,8 @@ import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
+import { mockDefaultBalance } from '../../../../test/setup'
+
 export default {
   title: 'App/OnBoardingModal',
   component: OnBoardingModal,
@@ -38,18 +40,12 @@ const useMyAccounts: UseAccounts = {
 
 const useMyBalances: AddressToBalanceMap = {
   [useMyAccounts.allAccounts[0].address]: {
+    ...mockDefaultBalance,
     total: new BN(10000),
-    locked: new BN(0),
-    recoverable: new BN(0),
-    transferable: new BN(0),
-    locks: [],
   },
   [useMyAccounts.allAccounts[1].address]: {
+    ...mockDefaultBalance,
     total: new BN(10000),
-    locked: new BN(0),
-    recoverable: new BN(0),
-    transferable: new BN(0),
-    locks: [],
   },
 }
 

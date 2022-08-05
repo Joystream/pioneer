@@ -58,6 +58,7 @@ export const SelectedOption = styled.div`
   grid-template-rows: 1fr;
   align-items: center;
   padding: 0 4px 0 16px;
+  width: 100%;
 `
 
 export const EmptyOption = styled.input`

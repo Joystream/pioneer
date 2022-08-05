@@ -6,7 +6,6 @@ import React from 'react'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { WithdrawWorkEntryModal } from '@/bounty/modals/WithdrawWorkEntryModal'
-import { BN_ZERO } from '@/common/constants'
 import { formatTokenValue } from '@/common/model/formatters'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -28,18 +27,15 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
+import { mockDefaultBalance, mockedTransactionFee } from '../../setup'
 
 const bounty = bounties[0]
 const baseEntry = entries[1]
 const entry = { ...baseEntry, worker: getMember('bob'), works: [generateWork()] }
 
 const defaultBalance = {
-  total: BN_ZERO,
-  locked: BN_ZERO,
-  recoverable: BN_ZERO,
+  ...mockDefaultBalance,
   transferable: new BN(1000),
-  locks: [],
 }
 
 describe('UI: WithdrawWorkEntryModal', () => {

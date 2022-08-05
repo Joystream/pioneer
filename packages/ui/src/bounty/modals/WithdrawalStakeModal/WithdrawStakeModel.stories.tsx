@@ -14,6 +14,7 @@ import { MembershipContext } from '@/memberships/providers/membership/context'
 import { alice, bob } from '../../../../test/_mocks/keyring'
 import { getMember } from '../../../../test/_mocks/members'
 import { stubApi, stubBountyConstants, stubTransaction } from '../../../../test/_mocks/transactions'
+import { mockDefaultBalance } from '../../../../test/setup'
 
 import { WithdrawStakeModal } from '.'
 
@@ -47,18 +48,13 @@ const bounty: Bounty = {
 
 const balance: AddressToBalanceMap = {
   [accounts.allAccounts[0].address]: {
+    ...mockDefaultBalance,
     total: new BN(10000),
-    locked: new BN(0),
-    recoverable: new BN(0),
-    transferable: new BN(0),
-    locks: [],
   },
   [accounts.allAccounts[1].address]: {
+    ...mockDefaultBalance,
     total: new BN(10000),
-    locked: new BN(0),
-    recoverable: new BN(0),
     transferable: new BN(2001),
-    locks: [],
   },
 }
 

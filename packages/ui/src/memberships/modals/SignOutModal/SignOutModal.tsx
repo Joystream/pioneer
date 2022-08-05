@@ -13,7 +13,7 @@ import { SignOutModalCall } from '@/memberships/modals/SignOutModal/types'
 
 export const SignOutModal = () => {
   const { active: activeMember, setActive } = useMyMemberships()
-  const [recentMembership, setRecentMembership] = useLocalStorage<string>('recentMembership')
+  const [, setRecentMembership] = useLocalStorage<string>('recentMembership')
   const { hideModal } = useModal<SignOutModalCall>()
 
   const signOut = () => {

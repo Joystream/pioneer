@@ -8,6 +8,19 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
+export const mockDefaultBalance = {
+  total: BN_ZERO,
+  locked: BN_ZERO,
+  recoverable: BN_ZERO,
+  transferable: BN_ZERO,
+  locks: [],
+  vestingTotal: BN_ZERO,
+  vestedClaimable: BN_ZERO,
+  vestedBalance: BN_ZERO,
+  vestingLocked: BN_ZERO,
+  vesting: [],
+}
+
 export const mockedTransactionFee: UseTransaction = {
   transaction: undefined,
   setTransaction: () => undefined,

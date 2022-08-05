@@ -6,7 +6,6 @@ import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { AnnounceWorkEntryModal } from '@/bounty/modals/AnnounceWorkEntryModal'
-import { BN_ZERO } from '@/common/constants'
 import { formatTokenValue } from '@/common/model/formatters'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -26,18 +25,16 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
+import { mockDefaultBalance, mockedTransactionFee } from '../../setup'
 
 const [bountyMock] = bounties
 const bounty = { ...bountyMock, entrantStake: new BN(bountyMock.entrantStake) }
 const sufficientBalance = bounty.entrantStake.addn(1000)
 
 const defaultBalance = {
+  ...mockDefaultBalance,
   total: sufficientBalance,
-  locked: BN_ZERO,
-  recoverable: BN_ZERO,
   transferable: sufficientBalance,
-  locks: [],
 }
 
 describe('UI: AnnounceWorkEntryModal', () => {

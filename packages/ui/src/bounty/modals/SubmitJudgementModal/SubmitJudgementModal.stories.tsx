@@ -17,6 +17,7 @@ import { getMember } from '@/mocks/helpers'
 
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../../../test/_mocks/providers'
 import { stubApi, stubBountyConstants, stubTransaction } from '../../../../test/_mocks/transactions'
+import { mockDefaultBalance } from '../../../../test/setup'
 
 export default {
   title: 'Bounty/SubmitJudgementModal',
@@ -62,11 +63,9 @@ const useMyMemberships = {
 
 const useMyBalances: AddressToBalanceMap = {
   [useMyAccounts.allAccounts[0].address]: {
+    ...mockDefaultBalance,
     total: new BN(10000),
-    locked: new BN(0),
-    recoverable: new BN(0),
     transferable: new BN(10000),
-    locks: [],
   },
 }
 
