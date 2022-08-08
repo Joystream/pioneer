@@ -151,7 +151,10 @@ export const schemaFactory = (titleMaxLength: number, rationaleMaxLength: number
       stakingAccount: StakingAccountSchema.required('Field is required'),
     }),
     proposalDetails: Yup.object().shape({
-      title: Yup.string().required('Field is required').max(titleMaxLength, 'Title exceeds maximum length'),
+      title: Yup.string()
+        .required('Field is required')
+        .max(titleMaxLength, 'Title exceeds maximum length')
+        .matches(/^[a-zA-z 1-9]*$/, 'Title includes forbidden characters'),
       rationale: Yup.string().required('Field is required').max(rationaleMaxLength, 'Rationale exceeds maximum length'),
     }),
     triggerAndDiscussion: Yup.object().shape({
