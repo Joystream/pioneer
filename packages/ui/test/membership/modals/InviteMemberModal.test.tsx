@@ -5,7 +5,6 @@ import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { createType } from '@/common/model/createType'
 import { ApiContext } from '@/common/providers/api/context'
 import { InviteMemberModal } from '@/memberships/modals/InviteMemberModal'
@@ -18,6 +17,7 @@ import { alice, aliceStash, bobStash } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  stubAccounts,
   stubApi,
   stubBalances,
   stubDefaultBalances,
@@ -27,18 +27,6 @@ import {
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
-const useMyAccounts: UseAccounts = {
-  isLoading: false,
-  hasAccounts: false,
-  allAccounts: [],
-}
-
-jest.mock('@/accounts/hooks/useMyAccounts', () => {
-  return {
-    useMyAccounts: () => useMyAccounts,
-  }
-})
-
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
 }))
@@ -47,7 +35,7 @@ describe('UI: InviteMemberModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
-    useMyAccounts.allAccounts.push(alice, aliceStash)
+    stubAccounts([alice, aliceStash])
   })
 
   afterAll(() => {

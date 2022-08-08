@@ -9,27 +9,23 @@ import { KeyringContext } from '@/common/providers/keyring/context'
 import { mockKeyring } from '../../_mocks/keyring'
 import { MockApiProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-
-jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
-  return {
-    useMyAccounts: () => ({
-      hasAccounts: false,
-      allAccounts: [
-        { name: 'Alice', address: '1' },
-        { name: 'Bob', address: '5222' },
-        { name: 'Dave', address: '3' },
-        { name: 'Eve', address: '4' },
-      ],
-    }),
-  }
-})
+import { stubAccounts } from '../../_mocks/transactions'
 
 describe('UI: SelectAccount component', () => {
   setupMockServer()
 
   jest.useFakeTimers()
 
-  beforeAll(cryptoWaitReady)
+  beforeAll(() => {
+    stubAccounts([
+      { name: 'Alice', address: '1' },
+      { name: 'Bob', address: '5222' },
+      { name: 'Dave', address: '3' },
+      { name: 'Eve', address: '4' },
+    ])
+
+    cryptoWaitReady()
+  })
 
   it('Displays component', () => {
     const { getByRole } = renderComponent()
@@ -113,7 +109,6 @@ describe('UI: SelectAccount component', () => {
       act(() => {
         fireEvent.change(textBox, { target: { value: '5CStixio6DdmhMJGtTpUVWtR2PvR7Kydc7RnECRYefFr5mKy' } })
         fireEvent.keyDown(textBox, { key: 'Enter', code: 'Enter' })
-        jest.runOnlyPendingTimers()
       })
       expect(screen.getByText('Unsaved account')).toBeDefined()
     })

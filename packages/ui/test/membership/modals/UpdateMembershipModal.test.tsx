@@ -5,7 +5,6 @@ import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { ApiContext } from '@/common/providers/api/context'
 import { UpdateMembershipModal } from '@/memberships/modals/UpdateMembershipModal'
 import { Member } from '@/memberships/types'
@@ -18,24 +17,13 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  stubAccounts,
   stubApi,
   stubBatchTransactionFailure,
   stubBatchTransactionSuccess,
   stubDefaultBalances,
   stubTransaction,
 } from '../../_mocks/transactions'
-
-const useMyAccounts: UseAccounts = {
-  isLoading: false,
-  hasAccounts: true,
-  allAccounts: [],
-}
-
-jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
-  return {
-    useMyAccounts: () => useMyAccounts,
-  }
-})
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -45,7 +33,7 @@ describe('UI: UpdatedMembershipModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
-    useMyAccounts.allAccounts.push(alice, aliceStash, bob, bobStash)
+    stubAccounts([alice, aliceStash, bob, bobStash])
   })
 
   afterAll(() => {

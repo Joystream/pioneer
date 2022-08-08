@@ -131,7 +131,7 @@ describe('UI: Announce Candidacy Modal', () => {
         },
       }
 
-      expect(useModal.showModal).toBeCalledTimes(2)
+      expect(useModal.showModal).toBeCalledTimes(1)
       expect(useModal.showModal).toBeCalledWith({ ...switchMemberModalCall })
     })
 

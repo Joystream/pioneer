@@ -6,7 +6,7 @@ import { set } from 'lodash'
 import { from, of, asyncScheduler, scheduled, Observable } from 'rxjs'
 
 import { toBalances } from '@/accounts/model/toBalances'
-import { LockType } from '@/accounts/types'
+import { Account, LockType } from '@/accounts/types'
 import { Api } from '@/api/types'
 import { BN_ZERO } from '@/common/constants'
 import { createType } from '@/common/model/createType'
@@ -14,7 +14,7 @@ import { ExtractTuple } from '@/common/model/JoystreamNode'
 import { UseApi } from '@/common/providers/api/provider'
 import { proposalDetails } from '@/proposals/model/proposalDetails'
 
-import { mockedMyBalances } from '../setup'
+import { mockedBalances, mockedMyBalances, mockedUseMyAccounts } from '../setup'
 
 import { createBalanceLock, createRuntimeDispatchInfo } from './chainTypes'
 
@@ -172,7 +172,6 @@ export const stubApi = () => {
       }),
     ])
   )
-  stubDefaultBalances(api)
   set(api, 'api.rpc.chain.getBlockHash', () => {
     from([createType('BlockHash', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY')])
   })
@@ -180,7 +179,7 @@ export const stubApi = () => {
   return api
 }
 
-export const stubDefaultBalances = (api: UseApi) => {
+export const stubDefaultBalances = (api?: UseApi) => {
   stubBalances(api, {
     available: 1000,
     locked: 0,
@@ -256,7 +255,7 @@ export const stubCouncilAndReferendum = (
 
 type Balances = { available?: number; locked?: number; lockId?: LockType }
 
-export const stubBalances = (api: UseApi, { available, lockId, locked }: Balances) => {
+export const stubBalances = (api: UseApi | undefined, { available, lockId, locked }: Balances) => {
   const availableBalance = new BN(available ?? 0)
   const lockedBalance = new BN(locked ?? 0)
 
@@ -281,5 +280,15 @@ export const stubBalances = (api: UseApi, { available, lockId, locked }: Balance
     vesting: [],
   } as unknown as DeriveBalancesAll
 
-  mockedMyBalances.mockReturnValue(toBalances(deriveBalances))
+  const balance = toBalances(deriveBalances)
+  mockedBalances.mockReturnValue(balance)
+
+  mockedMyBalances.mockReturnValue(
+    Object.fromEntries(mockedUseMyAccounts().allAccounts.map(({ address }) => [address, balance]))
+  )
+}
+
+export const stubAccounts = (allAccounts: Account[], isLoading = false) => {
+  const hasAccounts = allAccounts.length > 0
+  mockedUseMyAccounts.mockReturnValue({ allAccounts, hasAccounts, isLoading })
 }

@@ -3,7 +3,6 @@ import BN from 'bn.js'
 import React from 'react'
 import { generatePath, MemoryRouter, Route } from 'react-router-dom'
 
-import { Account } from '@/accounts/types'
 import { CurrencyName } from '@/app/constants/currency'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
@@ -18,9 +17,11 @@ import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { getButton } from '../../_helpers/getButton'
 import { createBalanceOf } from '../../_mocks/chainTypes'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
+import { alice } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import {
+  stubAccounts,
   stubApi,
   stubConst,
   stubDefaultBalances,
@@ -36,14 +37,6 @@ jest.mock('@/common/components/CKEditor', () => ({
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
-}))
-
-const mockMyAccounts = {
-  allAccounts: [] as Account[],
-}
-
-jest.mock('@/accounts/hooks/useMyAccounts', () => ({
-  useMyAccounts: () => mockMyAccounts,
 }))
 
 describe('CreateThreadModal', () => {
@@ -74,10 +67,13 @@ describe('CreateThreadModal', () => {
     },
   }
 
+  beforeAll(() => {
+    stubAccounts([alice])
+  })
+
   beforeEach(async () => {
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
-    mockMyAccounts.allAccounts.push({ name: 'alice', address: getMember('alice').controllerAccount })
     tx = stubTransaction(api, txPath)
     mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }
 

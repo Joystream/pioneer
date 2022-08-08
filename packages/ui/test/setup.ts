@@ -1,9 +1,10 @@
+import { BN_THOUSAND } from '@polkadot/util'
 import '@testing-library/jest-dom'
 import BN from 'bn.js'
 import React from 'react'
 
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { Balances } from '@/accounts/types'
+import { AddressToBalanceMap, Balances } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
 import { UseTransaction } from '@/common/providers/transactionFees/context'
 
@@ -11,7 +12,7 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
-export const mockDefaultBalance = {
+export const zeroBalance = {
   total: BN_ZERO,
   locked: BN_ZERO,
   recoverable: BN_ZERO,
@@ -22,6 +23,11 @@ export const mockDefaultBalance = {
   vestedBalance: BN_ZERO,
   vestingLocked: BN_ZERO,
   vesting: [],
+}
+
+export const mockDefaultBalance = {
+  ...zeroBalance,
+  total: BN_THOUSAND,
 }
 
 export const mockedTransactionFee: UseTransaction = {
@@ -35,7 +41,7 @@ jest.mock('@/accounts/hooks/useTransactionFee', () => ({
   useTransactionFee: jest.fn(() => mockedTransactionFee),
 }))
 
-const mockedUseMyAccounts = jest.fn<UseAccounts, []>(() => ({
+export const mockedUseMyAccounts = jest.fn<UseAccounts, []>(() => ({
   allAccounts: [],
   hasAccounts: false,
   isLoading: true,
@@ -45,11 +51,16 @@ jest.mock('@/accounts/hooks/useMyAccounts', () => ({
   useMyAccounts: mockedUseMyAccounts,
 }))
 
-export const mockedMyBalances = jest.fn<Balances, []>(() => ({} as Balances))
-const mockedMyAddresses = jest.fn<string[], []>(() => [])
+export const mockedBalances = jest.fn<Balances | null, []>(() => mockDefaultBalance)
+
+jest.mock('@/accounts/hooks/useBalance', () => ({
+  useBalance: mockedBalances,
+}))
+
+export const mockedMyBalances = jest.fn<AddressToBalanceMap, []>(() => ({} as AddressToBalanceMap))
 
 jest.mock('@/accounts/hooks/useMyBalances', () => ({
-  useMyBalances: () => Object.fromEntries(mockedMyAddresses().map((address) => [address, mockedMyBalances()])),
+  useMyBalances: mockedMyBalances,
 }))
 
 jest.mock('@/accounts/providers/balances/provider', () => ({
@@ -59,9 +70,11 @@ jest.mock('@/accounts/providers/balances/provider', () => ({
 jest.mock('@/accounts/providers/accounts/context', () => ({
   AccountsContext: {
     Provider: ({ children, value }: { children: React.ReactNode; value: UseAccounts }) => {
-      const addresses = value.allAccounts.map(({ address }) => address)
-      mockedMyAddresses.mockReturnValue(addresses)
       mockedUseMyAccounts.mockReturnValue(value)
+      const balance = mockedBalances()
+      if (balance) {
+        mockedMyBalances.mockReturnValue(Object.fromEntries(value.allAccounts.map(({ address }) => [address, balance])))
+      }
       return children
     },
   },

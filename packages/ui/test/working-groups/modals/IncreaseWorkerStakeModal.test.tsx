@@ -3,7 +3,6 @@ import { configure, fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 
-import { Account } from '@/accounts/types'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { IncreaseWorkerStakeModal } from '@/working-groups/modals/IncreaseWorkerStakeModal'
@@ -12,6 +11,7 @@ import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import {
+  stubAccounts,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -20,17 +20,6 @@ import {
 } from '../../_mocks/transactions'
 
 configure({ testIdAttribute: 'id' })
-
-const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
-  hasAccounts: true,
-  allAccounts: [],
-}
-
-jest.mock('@/accounts/hooks/useMyAccounts', () => {
-  return {
-    useMyAccounts: () => useMyAccounts,
-  }
-})
 
 describe('UI: IncreaseWorkerStakeModal', () => {
   const api = stubApi()
@@ -56,7 +45,7 @@ describe('UI: IncreaseWorkerStakeModal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
-    useMyAccounts.allAccounts.push(alice, bob)
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
