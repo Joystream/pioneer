@@ -1,9 +1,11 @@
+import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import { AugmentedEvents } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import { from, of, asyncScheduler, scheduled, Observable } from 'rxjs'
 
+import { toBalances } from '@/accounts/model/toBalances'
 import { LockType } from '@/accounts/types'
 import { Api } from '@/api/types'
 import { BN_ZERO } from '@/common/constants'
@@ -14,7 +16,7 @@ import { proposalDetails } from '@/proposals/model/proposalDetails'
 
 import { mockedMyBalances } from '../setup'
 
-import { createRuntimeDispatchInfo } from './chainTypes'
+import { createBalanceLock, createRuntimeDispatchInfo } from './chainTypes'
 
 const createSuccessEvents = (data: any[], section: string, method: string) => [
   {
@@ -258,16 +260,26 @@ export const stubBalances = (api: UseApi, { available, lockId, locked }: Balance
   const availableBalance = new BN(available ?? 0)
   const lockedBalance = new BN(locked ?? 0)
 
-  mockedMyBalances.mockReturnValue({
-    total: availableBalance.add(lockedBalance),
-    locked: lockedBalance,
-    recoverable: BN_ZERO,
-    transferable: availableBalance,
-    locks: lockedBalance.isZero() ? [] : [{ amount: lockedBalance, type: lockId ?? 'Bound Staking Account' }],
-    vestedBalance: BN_ZERO,
-    vestedClaimable: BN_ZERO,
-    vestingLocked: BN_ZERO,
-    vestingTotal: BN_ZERO,
+  const deriveBalances = {
+    availableBalance: createType('Balance', availableBalance),
+    lockedBalance: createType('Balance', lockedBalance),
+    accountId: createType('AccountId', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
+    accountNonce: createType('Index', 1),
+    freeBalance: createType('Balance', availableBalance.add(lockedBalance)),
+    frozenFee: new BN(0),
+    frozenMisc: new BN(0),
+    isVesting: false,
+    lockedBreakdown: lockedBalance.eq(BN_ZERO) ? [] : [createBalanceLock(locked!, lockId ?? 'Bound Staking Account')],
+    reservedBalance: new BN(0),
+    vestedBalance: new BN(0),
+    vestedClaimable: new BN(0),
+    vestingEndBlock: createType('BlockNumber', 1234),
+    vestingLocked: new BN(0),
+    vestingPerBlock: new BN(0),
+    vestingTotal: new BN(0),
+    votingBalance: new BN(0),
     vesting: [],
-  })
+  } as unknown as DeriveBalancesAll
+
+  mockedMyBalances.mockReturnValue(toBalances(deriveBalances))
 }

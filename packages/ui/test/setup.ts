@@ -2,6 +2,7 @@ import '@testing-library/jest-dom'
 import BN from 'bn.js'
 import React from 'react'
 
+import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { Balances } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
 import { UseTransaction } from '@/common/providers/transactionFees/context'
@@ -34,17 +35,36 @@ jest.mock('@/accounts/hooks/useTransactionFee', () => ({
   useTransactionFee: jest.fn(() => mockedTransactionFee),
 }))
 
+const mockedUseMyAccounts = jest.fn<UseAccounts, []>(() => ({
+  allAccounts: [],
+  hasAccounts: false,
+  isLoading: true,
+}))
+
+jest.mock('@/accounts/hooks/useMyAccounts', () => ({
+  useMyAccounts: mockedUseMyAccounts,
+}))
+
 export const mockedMyBalances = jest.fn<Balances, []>(() => ({} as Balances))
+const mockedMyAddresses = jest.fn<string[], []>(() => [])
 
 jest.mock('@/accounts/hooks/useMyBalances', () => ({
-  useMyBalances: () =>
-    new Proxy({} as Balances, {
-      get: mockedMyBalances,
-    }),
+  useMyBalances: () => Object.fromEntries(mockedMyAddresses().map((address) => [address, mockedMyBalances()])),
 }))
 
 jest.mock('@/accounts/providers/balances/provider', () => ({
   BalancesContextProvider: ({ children }: { children: React.ReactNode }) => children,
+}))
+
+jest.mock('@/accounts/providers/accounts/context', () => ({
+  AccountsContext: {
+    Provider: ({ children, value }: { children: React.ReactNode; value: UseAccounts }) => {
+      const addresses = value.allAccounts.map(({ address }) => address)
+      mockedMyAddresses.mockReturnValue(addresses)
+      mockedUseMyAccounts.mockReturnValue(value)
+      return children
+    },
+  },
 }))
 
 jest.mock('@/common/constants/numbers', () => ({
