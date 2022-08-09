@@ -149,7 +149,12 @@ export const Select = <T extends any, V extends any = T>({
       </SelectComponent>
       {isOpen &&
         ReactDOM.createPortal(
-          <SelectPopper ref={setPopperElementRef} style={styles.popper} {...attributes.popper}>
+          <SelectPopper
+            id="select-popper-wrapper"
+            ref={setPopperElementRef}
+            style={styles.popper}
+            {...attributes.popper}
+          >
             {renderList(onOptionClick, toggleOpen)}
           </SelectPopper>,
           document.body
