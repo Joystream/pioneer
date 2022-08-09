@@ -3,8 +3,6 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { BalancesContext } from '@/accounts/providers/balances/context'
 import { WithdrawWorkEntryModal } from '@/bounty/modals/WithdrawWorkEntryModal'
 import { formatTokenValue } from '@/common/model/formatters'
 import { ApiContext } from '@/common/providers/api/context'
@@ -21,22 +19,18 @@ import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockApolloProvider } from '../../_mocks/providers'
 import {
+  stubAccounts,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockDefaultBalance, mockedTransactionFee } from '../../setup'
+import { mockedTransactionFee } from '../../setup'
 
 const bounty = bounties[0]
 const baseEntry = entries[1]
 const entry = { ...baseEntry, worker: getMember('bob'), works: [generateWork()] }
-
-const defaultBalance = {
-  ...mockDefaultBalance,
-  transferable: new BN(1000),
-}
 
 describe('UI: WithdrawWorkEntryModal', () => {
   const useModal: UseModal<any> = {
@@ -64,18 +58,9 @@ describe('UI: WithdrawWorkEntryModal', () => {
     },
   }
 
-  const useAccounts = {
-    isLoading: false,
-    hasAccounts: true,
-    allAccounts: [bob, alice],
-  }
-
-  const useBalances = {
-    [getMember('bob').controllerAccount]: { ...defaultBalance },
-    [getMember('alice').controllerAccount]: defaultBalance,
-  }
-
   beforeAll(async () => {
+    stubDefaultBalances()
+    stubAccounts([bob, alice])
     await cryptoWaitReady()
   })
 
@@ -166,15 +151,11 @@ describe('UI: WithdrawWorkEntryModal', () => {
       <MockApolloProvider>
         <ModalContext.Provider value={useModal}>
           <MockKeyringProvider>
-            <AccountsContext.Provider value={useAccounts}>
-              <MembershipContext.Provider value={useMyMemberships}>
-                <ApiContext.Provider value={api}>
-                  <BalancesContext.Provider value={useBalances}>
-                    <WithdrawWorkEntryModal />
-                  </BalancesContext.Provider>
-                </ApiContext.Provider>
-              </MembershipContext.Provider>
-            </AccountsContext.Provider>
+            <MembershipContext.Provider value={useMyMemberships}>
+              <ApiContext.Provider value={api}>
+                <WithdrawWorkEntryModal />
+              </ApiContext.Provider>
+            </MembershipContext.Provider>
           </MockKeyringProvider>
         </ModalContext.Provider>
       </MockApolloProvider>

@@ -2,8 +2,6 @@ import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { BalancesContext } from '@/accounts/providers/balances/context'
 import { ContributeFundsModal } from '@/bounty/modals/ContributeFundsModal'
 import { FundingLimited } from '@/bounty/types/Bounty'
 import { ApiContext } from '@/common/providers/api/context'
@@ -17,13 +15,15 @@ import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import {
+  stubAccounts,
   stubApi,
   stubBountyConstants,
+  stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockDefaultBalance, mockedTransactionFee } from '../../setup'
+import { mockedTransactionFee } from '../../setup'
 
 const [baseBounty] = bounties
 const bounty = {
@@ -34,11 +34,6 @@ const bounty = {
     maxAmount: new BN((baseBounty.fundingType as unknown as FundingLimited).maxAmount ?? 0),
     minAmount: new BN((baseBounty.fundingType as unknown as FundingLimited).minAmount ?? 0),
   },
-}
-
-const defaultBalance = {
-  ...mockDefaultBalance,
-  transferable: new BN(1000),
 }
 
 describe('UI: ContributeFundsModal', () => {
@@ -57,11 +52,6 @@ describe('UI: ContributeFundsModal', () => {
     },
   }
 
-  const useBalances = {
-    [getMember('bob').controllerAccount]: { ...defaultBalance },
-    [getMember('alice').controllerAccount]: defaultBalance,
-  }
-
   const useMembership = {
     isLoading: false,
     active: getMember('alice'),
@@ -73,11 +63,10 @@ describe('UI: ContributeFundsModal', () => {
     },
   }
 
-  const useAccounts = {
-    isLoading: false,
-    hasAccounts: true,
-    allAccounts: [bob, alice],
-  }
+  beforeAll(() => {
+    stubDefaultBalances()
+    stubAccounts([bob, alice])
+  })
 
   beforeEach(() => {
     transaction = stubTransaction(api, 'api.tx.bounty.fundBounty', fee)
@@ -158,11 +147,7 @@ describe('UI: ContributeFundsModal', () => {
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>
             <MembershipContext.Provider value={useMembership}>
-              <AccountsContext.Provider value={useAccounts}>
-                <BalancesContext.Provider value={useBalances}>
-                  <ContributeFundsModal />
-                </BalancesContext.Provider>
-              </AccountsContext.Provider>
+              <ContributeFundsModal />
             </MembershipContext.Provider>
           </ApiContext.Provider>
         </MockKeyringProvider>

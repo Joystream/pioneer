@@ -4,9 +4,6 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { AddBountyModal } from '@/bounty/modals/AddBountyModal'
 import { addBountyMachine } from '@/bounty/modals/AddBountyModal/machine'
 import { CKEditorProps } from '@/common/components/CKEditor'
@@ -28,6 +25,7 @@ import { getMember } from '../../_mocks/members'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  stubAccounts,
   stubApi,
   stubBountyConstants,
   stubDefaultBalances,
@@ -69,7 +67,6 @@ describe('UI: AddNewBountyModal', () => {
     },
   }
 
-  let useAccounts: UseAccounts
   let createTransaction: any
   let forumThreadTransaction: any
 
@@ -82,12 +79,7 @@ describe('UI: AddNewBountyModal', () => {
     seedForumCategories(server.server, [
       { parentId: null, status: { __typename: 'CategoryStatusActive' }, moderatorIds: [] },
     ])
-
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
@@ -444,17 +436,13 @@ describe('UI: AddNewBountyModal', () => {
       <MemoryRouter>
         <ModalContext.Provider value={useModal}>
           <MockKeyringProvider>
-            <AccountsContext.Provider value={useAccounts}>
-              <ApiContext.Provider value={api}>
-                <BalancesContextProvider>
-                  <MembershipContext.Provider value={useMyMemberships}>
-                    <MockApolloProvider>
-                      <AddBountyModal />
-                    </MockApolloProvider>
-                  </MembershipContext.Provider>
-                </BalancesContextProvider>
-              </ApiContext.Provider>
-            </AccountsContext.Provider>
+            <ApiContext.Provider value={api}>
+              <MembershipContext.Provider value={useMyMemberships}>
+                <MockApolloProvider>
+                  <AddBountyModal />
+                </MockApolloProvider>
+              </MembershipContext.Provider>
+            </ApiContext.Provider>
           </MockKeyringProvider>
         </ModalContext.Provider>
       </MemoryRouter>
