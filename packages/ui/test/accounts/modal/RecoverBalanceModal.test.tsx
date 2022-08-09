@@ -5,8 +5,6 @@ import { set } from 'lodash'
 import React from 'react'
 
 import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { createType } from '@/common/model/createType'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -20,6 +18,7 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  stubAccounts,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -29,7 +28,6 @@ import {
 import { mockedTransactionFee } from '../../setup'
 
 describe('UI: RecoverBalanceModal', () => {
-  let useAccounts: UseAccounts
   const api = stubApi()
   const server = setupMockServer({ noCleanupAfterEach: true })
   let tx: any
@@ -53,16 +51,12 @@ describe('UI: RecoverBalanceModal', () => {
   }
 
   beforeEach(async () => {
+    stubAccounts([alice, bob])
     stubDefaultBalances(api)
     useMyMemberships.setActive(getMember('alice'))
     tx = stubTransaction(api, 'api.tx.council.releaseCandidacyStake')
     mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
     mockedTransactionFee.transaction = tx as any
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
     useModal = {
       hideModal: jest.fn(),
       showModal: jest.fn(),
@@ -148,11 +142,9 @@ describe('UI: RecoverBalanceModal', () => {
         <MockQueryNodeProviders>
           <MembershipContext.Provider value={useMyMemberships}>
             <ApiContext.Provider value={api}>
-              <AccountsContext.Provider value={useAccounts}>
-                <ModalContext.Provider value={useModal}>
-                  <RecoverBalanceModal />
-                </ModalContext.Provider>
-              </AccountsContext.Provider>
+              <ModalContext.Provider value={useModal}>
+                <RecoverBalanceModal />
+              </ModalContext.Provider>
             </ApiContext.Provider>
           </MembershipContext.Provider>
         </MockQueryNodeProviders>

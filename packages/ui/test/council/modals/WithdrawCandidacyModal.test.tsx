@@ -3,8 +3,6 @@ import { configure, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { ApiContext } from '@/common/providers/api/context'
@@ -21,6 +19,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import {
   currentStubErrorMessage,
+  stubAccounts,
   stubApi,
   stubCouncilConstants,
   stubDefaultBalances,
@@ -38,7 +37,6 @@ jest.mock('@/common/components/CKEditor', () => ({
 describe('UI: Withdraw Candidacy Modal', () => {
   const api = stubApi()
 
-  let useAccounts: UseAccounts
   let tx: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
@@ -46,12 +44,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     seedMembers(server.server, 2)
-
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
@@ -109,13 +102,11 @@ describe('UI: Withdraw Candidacy Modal', () => {
         >
           <MockQueryNodeProviders>
             <MockKeyringProvider>
-              <AccountsContext.Provider value={useAccounts}>
-                <ApiContext.Provider value={api}>
-                  <BalancesContextProvider>
-                    <WithdrawCandidacyModal />
-                  </BalancesContextProvider>
-                </ApiContext.Provider>
-              </AccountsContext.Provider>
+              <ApiContext.Provider value={api}>
+                <BalancesContextProvider>
+                  <WithdrawCandidacyModal />
+                </BalancesContextProvider>
+              </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
         </ModalContext.Provider>

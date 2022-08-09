@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { RevealingStageVotes } from '@/council/components/election/CandidateVote/RevealingStageVotes'
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { useElectionVotes } from '@/council/hooks/useElectionVotes'
@@ -18,6 +17,7 @@ import { CANDIDATE_DATA, VOTE_DATA } from '../../_mocks/council'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { stubAccounts } from '../../_mocks/transactions'
 
 const Results = ({ onlyMyVotes }: { onlyMyVotes: boolean }) => {
   const { election } = useCurrentElection()
@@ -35,12 +35,6 @@ const Results = ({ onlyMyVotes }: { onlyMyVotes: boolean }) => {
 describe('UI: RevealingStageVotes', () => {
   const server = setupMockServer()
 
-  const useAccounts = {
-    isLoading: false,
-    hasAccounts: true,
-    allAccounts: [{ name: 'account', address: bob.address }],
-  }
-
   beforeEach(() => {
     seedMembers(server.server, 2)
     seedCouncilElection(
@@ -52,7 +46,7 @@ describe('UI: RevealingStageVotes', () => {
       server.server
     )
     seedCouncilCandidate(CANDIDATE_DATA, server.server)
-    useAccounts.allAccounts = [{ name: 'account', address: bob.address }]
+    stubAccounts([{ name: 'account', address: bob.address }])
   })
 
   it('No votes revealed', async () => {
@@ -161,10 +155,10 @@ describe('UI: RevealingStageVotes', () => {
     })
 
     it('Two votes for the same candidate, one of them revealed', async () => {
-      useAccounts.allAccounts = [
+      stubAccounts([
         { name: 'account', address: bob.address },
         { name: 'account2', address: alice.address },
-      ]
+      ])
       const salt1 = '0x7a0c114de774424abcd5d60fc58658a35341c9181b09e94a16dfff7ba2192206'
       seedCouncilVote(
         {
@@ -194,10 +188,10 @@ describe('UI: RevealingStageVotes', () => {
     })
 
     it('Two votes for different candidates, one of them revealed', async () => {
-      useAccounts.allAccounts = [
+      stubAccounts([
         { name: 'account', address: bob.address },
         { name: 'account2', address: alice.address },
-      ]
+      ])
       seedCouncilCandidate({ ...CANDIDATE_DATA, id: '1', memberId: '1' }, server.server)
       const salt = '0x7a0c114de774424abcd5d60fc58658a35341c9181b09e94a16dfff7ba2192206'
       seedCouncilVote(
@@ -278,10 +272,8 @@ describe('UI: RevealingStageVotes', () => {
 
   const renderComponent = (onlyMyVotes = false) =>
     render(
-      <AccountsContext.Provider value={useAccounts}>
-        <MockQueryNodeProviders>
-          <Results onlyMyVotes={onlyMyVotes} />
-        </MockQueryNodeProviders>
-      </AccountsContext.Provider>
+      <MockQueryNodeProviders>
+        <Results onlyMyVotes={onlyMyVotes} />
+      </MockQueryNodeProviders>
     )
 })

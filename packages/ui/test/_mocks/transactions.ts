@@ -297,4 +297,9 @@ export const stubAccounts = (allAccounts: Account[], myAccounts: Partial<UseAcco
     hasAccounts,
     ...myAccounts,
   })
+
+  const balance = mockedBalances()
+  if (balance) {
+    mockedMyBalances.mockReturnValue(Object.fromEntries(allAccounts.map(({ address }) => [address, balance])))
+  }
 }

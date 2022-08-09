@@ -3,8 +3,6 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { generatePath, Route, Switch } from 'react-router-dom'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { ForumThread as ForumThreadPage } from '@/app/pages/Forum/ForumThread'
 import { NotFound } from '@/app/pages/NotFound'
 import { CKEditorProps } from '@/common/components/CKEditor'
@@ -20,6 +18,7 @@ import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockApiProvider, MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { stubAccounts } from '../../_mocks/transactions'
 
 let mockThread: { isLoading: boolean; thread: ForumThread | null }
 let mockSuggestedThreads: { isLoading: boolean; threads: ForumThread[] }
@@ -39,11 +38,6 @@ jest.mock('@/common/components/CKEditor', () => ({
 describe('UI: Forum Thread Page', () => {
   const mockServer = setupMockServer()
 
-  const useAccounts: UseAccounts = {
-    isLoading: false,
-    hasAccounts: true,
-    allAccounts: [alice, bob],
-  }
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [getMember('alice'), getMember('bob')],
@@ -68,6 +62,7 @@ describe('UI: Forum Thread Page', () => {
   }
 
   beforeAll(() => {
+    stubAccounts([alice, bob])
     seedMembers(mockServer.server, 2)
   })
 
@@ -115,14 +110,12 @@ describe('UI: Forum Thread Page', () => {
         <MemoryRouter initialEntries={[generatePath(ForumRoutes.thread, { id: '1' })]}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
-              <AccountsContext.Provider value={useAccounts}>
-                <MembershipContext.Provider value={useMyMemberships}>
-                  <Switch>
-                    <Route path={ForumRoutes.thread} component={ForumThreadPage} />
-                    <Route path="/404" component={NotFound} />
-                  </Switch>
-                </MembershipContext.Provider>
-              </AccountsContext.Provider>
+              <MembershipContext.Provider value={useMyMemberships}>
+                <Switch>
+                  <Route path={ForumRoutes.thread} component={ForumThreadPage} />
+                  <Route path="/404" component={NotFound} />
+                </Switch>
+              </MembershipContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
         </MemoryRouter>

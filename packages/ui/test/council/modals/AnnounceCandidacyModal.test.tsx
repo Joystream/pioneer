@@ -8,8 +8,6 @@ import { Router } from 'react-router'
 import { interpret } from 'xstate'
 
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CurrencyName } from '@/app/constants/currency'
 import { CKEditorProps } from '@/common/components/CKEditor'
@@ -35,6 +33,7 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  stubAccounts,
   stubApi,
   stubCouncilConstants,
   stubDefaultBalances,
@@ -75,7 +74,6 @@ describe('UI: Announce Candidacy Modal', () => {
     },
   }
 
-  let useAccounts: UseAccounts
   let batchTx: any
   let announceCandidacyTx: any
   let bindAccountTx: any
@@ -86,12 +84,7 @@ describe('UI: Announce Candidacy Modal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     seedMembers(server.server)
-
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
@@ -653,15 +646,13 @@ describe('UI: Announce Candidacy Modal', () => {
         <ModalContext.Provider value={useModal}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
-              <AccountsContext.Provider value={useAccounts}>
-                <ApiContext.Provider value={api}>
-                  <BalancesContextProvider>
-                    <MembershipContext.Provider value={useMyMemberships}>
-                      <AnnounceCandidacyModal />
-                    </MembershipContext.Provider>
-                  </BalancesContextProvider>
-                </ApiContext.Provider>
-              </AccountsContext.Provider>
+              <ApiContext.Provider value={api}>
+                <BalancesContextProvider>
+                  <MembershipContext.Provider value={useMyMemberships}>
+                    <AnnounceCandidacyModal />
+                  </MembershipContext.Provider>
+                </BalancesContextProvider>
+              </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
         </ModalContext.Provider>

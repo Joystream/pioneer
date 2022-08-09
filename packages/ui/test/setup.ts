@@ -67,19 +67,6 @@ jest.mock('@/accounts/providers/balances/provider', () => ({
   BalancesContextProvider: ({ children }: { children: React.ReactNode }) => children,
 }))
 
-jest.mock('@/accounts/providers/accounts/context', () => ({
-  AccountsContext: {
-    Provider: ({ children, value }: { children: React.ReactNode; value: UseAccounts }) => {
-      mockedUseMyAccounts.mockReturnValue(value)
-      const balance = mockedBalances()
-      if (balance) {
-        mockedMyBalances.mockReturnValue(Object.fromEntries(value.allAccounts.map(({ address }) => [address, balance])))
-      }
-      return children
-    },
-  },
-}))
-
 jest.mock('@/common/constants/numbers', () => ({
   ...jest.requireActual('@/common/constants/numbers'),
   JOY_DECIMAL_PLACES: 0,

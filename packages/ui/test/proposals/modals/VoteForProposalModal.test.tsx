@@ -4,8 +4,6 @@ import BN from 'bn.js'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { ApiContext } from '@/common/providers/api/context'
@@ -25,6 +23,7 @@ import { setupMockServer } from '../../_mocks/server'
 import { PROPOSAL_DATA } from '../../_mocks/server/seeds'
 import {
   currentStubErrorMessage,
+  stubAccounts,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -62,8 +61,6 @@ describe('UI: Vote for Proposal Modal', () => {
     },
   }
 
-  let useAccounts: UseAccounts
-
   const server = setupMockServer({ noCleanupAfterEach: true })
 
   let tx: any
@@ -72,12 +69,7 @@ describe('UI: Vote for Proposal Modal', () => {
     await cryptoWaitReady()
     seedMembers(server.server, 2)
     seedProposal(PROPOSAL_DATA, server.server)
-
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(() => {
@@ -214,15 +206,13 @@ describe('UI: Vote for Proposal Modal', () => {
         <ModalContext.Provider value={useModal}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
-              <AccountsContext.Provider value={useAccounts}>
-                <ApiContext.Provider value={api}>
-                  <BalancesContextProvider>
-                    <MembershipContext.Provider value={useMyMemberships}>
-                      <VoteForProposalModal />
-                    </MembershipContext.Provider>
-                  </BalancesContextProvider>
-                </ApiContext.Provider>
-              </AccountsContext.Provider>
+              <ApiContext.Provider value={api}>
+                <BalancesContextProvider>
+                  <MembershipContext.Provider value={useMyMemberships}>
+                    <VoteForProposalModal />
+                  </MembershipContext.Provider>
+                </BalancesContextProvider>
+              </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
         </ModalContext.Provider>
