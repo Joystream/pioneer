@@ -1,4 +1,4 @@
-import { BountyMetadata } from '@joystream/metadata-protobuf'
+import { BountyMetadata, ForumThreadMetadata } from '@joystream/metadata-protobuf'
 import { useMachine } from '@xstate/react'
 import React, { useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
@@ -122,9 +122,11 @@ export const AddBountyModal = () => {
     const transaction = api.tx.forum.createThread(
       activeMember.id,
       threadCategory.id,
-      `${title} by ${creator?.handle}`,
-      `This is the description thread for ${title}`,
-      null
+      metadataToBytes(ForumThreadMetadata, {
+        tags: [''],
+        title: `${title} by ${creator?.handle}`,
+      }),
+      `This is the description thread for ${title}`
     )
     const service = state.children.createThread
     const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
