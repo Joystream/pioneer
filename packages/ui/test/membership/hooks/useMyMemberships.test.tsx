@@ -24,7 +24,7 @@ describe('useMyMemberships', () => {
   })
 
   it('Returns loading state', () => {
-    stubAccounts([], true)
+    stubAccounts([], { isLoading: true })
 
     const { result } = renderUseMembership()
 

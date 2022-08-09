@@ -6,6 +6,7 @@ import { set } from 'lodash'
 import { from, of, asyncScheduler, scheduled, Observable } from 'rxjs'
 
 import { toBalances } from '@/accounts/model/toBalances'
+import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { Account, LockType } from '@/accounts/types'
 import { Api } from '@/api/types'
 import { BN_ZERO } from '@/common/constants'
@@ -288,7 +289,12 @@ export const stubBalances = (api: UseApi | undefined, { available, lockId, locke
   )
 }
 
-export const stubAccounts = (allAccounts: Account[], isLoading = false) => {
+export const stubAccounts = (allAccounts: Account[], myAccounts: Partial<UseAccounts> = {}) => {
   const hasAccounts = allAccounts.length > 0
-  mockedUseMyAccounts.mockReturnValue({ allAccounts, hasAccounts, isLoading })
+  mockedUseMyAccounts.mockReturnValue({
+    isLoading: false,
+    allAccounts,
+    hasAccounts,
+    ...myAccounts,
+  })
 }

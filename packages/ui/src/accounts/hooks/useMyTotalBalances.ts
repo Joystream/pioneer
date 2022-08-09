@@ -4,7 +4,7 @@ import { Balances } from '../types'
 
 import { useMyBalances } from './useMyBalances'
 
-export const zeroBalance = () => ({
+export const zeroBalance = {
   recoverable: BN_ZERO,
   locked: BN_ZERO,
   transferable: BN_ZERO,
@@ -15,7 +15,7 @@ export const zeroBalance = () => ({
   vestedBalance: BN_ZERO,
   vesting: [],
   vestingLocked: BN_ZERO,
-})
+}
 
 const addBalances = (a: Balances, b: Balances) => ({
   recoverable: a.recoverable.add(b.recoverable),
@@ -33,5 +33,5 @@ const addBalances = (a: Balances, b: Balances) => ({
 export function useMyTotalBalances(): Balances {
   const balances = useMyBalances()
 
-  return [...Object.values(balances ?? [])].reduce(addBalances, zeroBalance())
+  return Object.values(balances ?? {}).reduce(addBalances, zeroBalance)
 }

@@ -35,7 +35,7 @@ describe('UI: Accounts list', () => {
 
   describe('with empty keyring', () => {
     it('Shows loading screen', async () => {
-      stubAccounts([], true)
+      stubAccounts([], { isLoading: true })
       const profile = render(
         <KeyringContext.Provider value={new Keyring()}>
           <Accounts />

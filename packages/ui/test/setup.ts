@@ -57,7 +57,7 @@ jest.mock('@/accounts/hooks/useBalance', () => ({
   useBalance: mockedBalances,
 }))
 
-export const mockedMyBalances = jest.fn<AddressToBalanceMap, []>(() => ({} as AddressToBalanceMap))
+export const mockedMyBalances = jest.fn<AddressToBalanceMap | undefined, []>(() => ({} as AddressToBalanceMap))
 
 jest.mock('@/accounts/hooks/useMyBalances', () => ({
   useMyBalances: mockedMyBalances,
