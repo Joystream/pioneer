@@ -68,7 +68,7 @@ describe('UI: LeaveRoleModal', () => {
 
   beforeEach(async () => {
     useMyMemberships.setActive(getMember('alice'))
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     transaction = stubTransaction(api, 'api.tx.forumWorkingGroup.leaveRole')
   })
 

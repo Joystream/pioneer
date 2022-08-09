@@ -136,7 +136,7 @@ describe('UI: BuyMembershipModal', () => {
     })
 
     it('Without required balance', async () => {
-      stubBalances(api, { available: 0, locked: 0 })
+      stubBalances({ available: 0, locked: 0 })
 
       await renderAuthorizeStep()
 

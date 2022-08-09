@@ -69,7 +69,7 @@ describe('UI: ClaimRewardModal', () => {
 
   beforeEach(async () => {
     useMyMemberships.setActive(getMember('alice'))
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     tx = stubTransaction(api, txPath)
     mockedTransactionFee.transaction = tx as any
     mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }

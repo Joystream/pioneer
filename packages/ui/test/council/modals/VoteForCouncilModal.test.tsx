@@ -116,7 +116,7 @@ describe('UI: Vote for Council Modal', () => {
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
 
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     stubCouncilConstants(api, { minStake: 500 })
     tx = stubTransaction(api, 'api.tx.referendum.vote', 25)
 

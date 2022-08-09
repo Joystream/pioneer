@@ -47,7 +47,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
   })
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     stubCouncilConstants(api)
     tx = stubTransaction(api, 'api.tx.council.withdrawCandidacy', 25)
   })

@@ -76,7 +76,7 @@ describe('UI: ChangeRoleModal', () => {
 
   beforeEach(async () => {
     useMyMemberships.setActive(getMember('alice'))
-    stubDefaultBalances(api)
+    stubDefaultBalances()
   })
 
   describe('Change role account - authorize step', () => {

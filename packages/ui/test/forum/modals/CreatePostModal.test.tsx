@@ -81,7 +81,7 @@ describe('UI: CreatePostModal', () => {
   beforeEach(async () => {
     mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
 
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     tx = stubTransaction(api, txPath, 25)
     stubConst(api, 'forum.postDeposit', createBalanceOf(10))
     modalData.isEditable = false

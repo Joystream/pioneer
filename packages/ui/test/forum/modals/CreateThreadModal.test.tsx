@@ -41,7 +41,7 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 
 describe('CreateThreadModal', () => {
   const api = stubApi()
-  stubDefaultBalances(api)
+  stubDefaultBalances()
   const txPath = 'api.tx.forum.createThread'
   let tx = {}
   let pathname: string

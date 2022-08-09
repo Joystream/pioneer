@@ -30,7 +30,7 @@ describe('UI: TransferInviteModal', () => {
   })
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     stubTransaction(api, 'api.tx.members.transferInvites')
   })
 

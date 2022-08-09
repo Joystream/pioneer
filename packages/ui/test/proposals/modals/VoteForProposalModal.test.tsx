@@ -74,7 +74,7 @@ describe('UI: Vote for Proposal Modal', () => {
   beforeEach(() => {
     tx = stubTransaction(api, 'api.tx.proposalsEngine.vote', 100)
     mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
-    stubDefaultBalances(api)
+    stubDefaultBalances()
   })
 
   it('Requirements verification', async () => {

@@ -52,7 +52,7 @@ describe('UI: RecoverBalanceModal', () => {
 
   beforeEach(async () => {
     stubAccounts([alice, bob])
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     useMyMemberships.setActive(getMember('alice'))
     tx = stubTransaction(api, 'api.tx.council.releaseCandidacyStake')
     mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }

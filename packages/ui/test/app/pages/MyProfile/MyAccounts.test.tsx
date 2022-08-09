@@ -59,7 +59,7 @@ describe('Page: MyAccounts', () => {
     useMyMemberships.members = []
 
     stubAccounts([alice, bob])
-    stubDefaultBalances(api)
+    stubDefaultBalances()
   })
 
   it('Accounts List', async () => {
@@ -80,7 +80,7 @@ describe('Page: MyAccounts', () => {
   })
 
   it('Locked balance', () => {
-    stubBalances(api, { locked: 250, available: 10_000 })
+    stubBalances({ locked: 250, available: 10_000 })
 
     renderPage()
 
@@ -92,7 +92,7 @@ describe('Page: MyAccounts', () => {
   })
 
   it('Recoverable locked balance', () => {
-    stubBalances(api, { locked: 250, available: 10_000, lockId: 'Council Candidate' })
+    stubBalances({ locked: 250, available: 10_000, lockId: 'Council Candidate' })
 
     renderPage()
 
@@ -106,7 +106,7 @@ describe('Page: MyAccounts', () => {
 
   describe('Recover balance button', () => {
     it('Recoverable', async () => {
-      stubBalances(api, { locked: 250, available: 10_000, lockId: 'Council Candidate' })
+      stubBalances({ locked: 250, available: 10_000, lockId: 'Council Candidate' })
 
       renderPage()
 
@@ -117,7 +117,7 @@ describe('Page: MyAccounts', () => {
     })
 
     it('Opens modal', async () => {
-      stubBalances(api, { locked: 250, available: 10_000, lockId: 'Council Candidate' })
+      stubBalances({ locked: 250, available: 10_000, lockId: 'Council Candidate' })
 
       renderPage()
 
@@ -141,7 +141,7 @@ describe('Page: MyAccounts', () => {
     })
 
     it('Nonrecoverable', async () => {
-      stubBalances(api, { locked: 250, available: 10_000, lockId: 'Bound Staking Account' })
+      stubBalances({ locked: 250, available: 10_000, lockId: 'Bound Staking Account' })
 
       renderPage()
 

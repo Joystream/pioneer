@@ -92,7 +92,7 @@ describe('UI: DeletePostModal', () => {
   beforeEach(async () => {
     mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
 
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     tx = stubTransaction(api, txPath)
     modalData.transaction = api.api.tx.forum.deletePosts(useMyMemberships.active?.id ?? 1, deleteMap, '')
   })

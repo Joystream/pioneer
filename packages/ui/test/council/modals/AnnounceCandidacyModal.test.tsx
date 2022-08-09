@@ -90,7 +90,7 @@ describe('UI: Announce Candidacy Modal', () => {
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.active = getMember('alice')
 
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     stubCouncilConstants(api)
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 5)
     bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 10)

@@ -48,7 +48,7 @@ describe('UI: InviteMemberModal', () => {
   let inviteMemberTx: any
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     stubQuery(api, 'membershipWorkingGroup.budget', createBalanceOf(1000))
     stubQuery(api, 'members.membershipPrice', createBalanceOf(100))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
@@ -155,7 +155,7 @@ describe('UI: InviteMemberModal', () => {
     })
 
     it('Validate funds', async () => {
-      stubBalances(api, { available: 0 })
+      stubBalances({ available: 0 })
       await fillFormAndProceed()
 
       expect(await getButton(/^Sign and create/i)).toBeDisabled()

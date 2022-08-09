@@ -47,7 +47,7 @@ describe('UI: UpdatedMembershipModal', () => {
   let member: Member
 
   beforeEach(() => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     set(api, 'api.query.members.membershipPrice', () => of(createBalanceOf(100)))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     stubTransaction(api, 'api.tx.members.updateProfile')

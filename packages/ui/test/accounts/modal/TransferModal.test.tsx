@@ -58,7 +58,7 @@ describe('UI: TransferModal', () => {
   })
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     transfer = stubTransaction(api, 'api.tx.balances.transfer')
   })
 

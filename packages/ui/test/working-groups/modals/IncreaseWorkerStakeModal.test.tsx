@@ -49,7 +49,7 @@ describe('UI: IncreaseWorkerStakeModal', () => {
   })
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     transfer = stubTransaction(api, 'api.tx.storageWorkingGroup.increaseStake')
   })
 

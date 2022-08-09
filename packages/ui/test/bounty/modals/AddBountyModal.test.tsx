@@ -94,7 +94,7 @@ describe('UI: AddNewBountyModal', () => {
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
 
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     stubBountyConstants(api)
     createTransaction = stubTransaction(api, 'api.tx.bounty.createBounty', 100)
     forumThreadTransaction = stubTransaction(api, 'api.tx.forum.createThread', 100)

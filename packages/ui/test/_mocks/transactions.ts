@@ -180,11 +180,8 @@ export const stubApi = () => {
   return api
 }
 
-export const stubDefaultBalances = (api?: UseApi) => {
-  stubBalances(api, {
-    available: 1000,
-    locked: 0,
-  })
+export const stubDefaultBalances = () => {
+  stubBalances({ available: 1000, locked: 0 })
 }
 
 export const stubCouncilConstants = (api: UseApi, constants?: { minStake: number }) => {
@@ -256,7 +253,7 @@ export const stubCouncilAndReferendum = (
 
 type Balances = { available?: number; locked?: number; lockId?: LockType }
 
-export const stubBalances = (api: UseApi | undefined, { available, lockId, locked }: Balances) => {
+export const stubBalances = ({ available, lockId, locked }: Balances) => {
   const availableBalance = new BN(available ?? 0)
   const lockedBalance = new BN(locked ?? 0)
 

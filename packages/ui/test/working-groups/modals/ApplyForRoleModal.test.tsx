@@ -105,7 +105,7 @@ describe('UI: ApplyForRoleModal', () => {
     useMyMemberships.setActive(getMember('alice'))
 
     stubConst(api, 'forumWorkingGroup.rewardPeriod', createType('u32', 14410))
-    stubBalances(api, {
+    stubBalances({
       available: 2000,
     })
     applyTransaction = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')

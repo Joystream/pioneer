@@ -79,7 +79,7 @@ describe('UI: EditPostModal', () => {
 
   beforeEach(async () => {
     mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     tx = stubTransaction(api, txPath)
     modalData.transaction = api.api.tx.forum.editPostText(1, 1, 1, 1, '')
   })

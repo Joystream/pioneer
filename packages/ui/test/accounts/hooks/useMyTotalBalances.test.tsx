@@ -31,7 +31,7 @@ describe('useMyTotalBalances', () => {
   })
 
   it('Returns total balances', () => {
-    stubBalances(undefined, { available: 100, locked: 10, lockId: 'Bound Staking Account' })
+    stubBalances({ available: 100, locked: 10, lockId: 'Bound Staking Account' })
 
     const { result } = renderUseTotalBalances()
 
