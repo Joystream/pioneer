@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
@@ -20,6 +20,7 @@ import {
   stubAccounts,
   stubApi,
   stubBalances,
+  stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
@@ -53,7 +54,7 @@ describe('UI: BuyMembershipModal', () => {
   })
 
   beforeEach(async () => {
-    // stubDefaultBalances(api)
+    stubDefaultBalances()
     set(api, 'api.query.members.membershipPrice', () => of(createBalanceOf(100)))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     transaction = stubTransaction(api, 'api.tx.members.buyMembership')
@@ -68,34 +69,42 @@ describe('UI: BuyMembershipModal', () => {
 
   it('Enables button when valid form', async () => {
     await renderModal()
+    const submitButton = await findSubmitButton()
 
-    expect(await findSubmitButton()).toBeDisabled()
+    expect(submitButton).toBeDisabled()
 
     await selectFromDropdown('Root account', 'bob')
     await selectFromDropdown('Controller account', 'alice')
-    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'BobbyBob' } })
-    fireEvent.change(screen.getByLabelText(/Membership handle/i), { target: { value: 'realbobbybob' } })
-    fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'BobbyBob' } })
+      fireEvent.change(screen.getByLabelText(/Membership handle/i), { target: { value: 'realbobbybob' } })
+      fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
+    })
 
-    await waitFor(async () => expect(await findSubmitButton()).not.toBeDisabled())
+    expect(submitButton).not.toBeDisabled()
   })
 
-  it('Disables button when invalid avatar URL', async () => {
+  // Skip because avatar is not mandatory ATM (this test shouldn't have been passing)
+  it.skip('Disables button when invalid avatar URL', async () => {
     await renderModal()
     const submitButton = await findSubmitButton()
     expect(submitButton).toBeDisabled()
 
     await selectFromDropdown('Root account', 'bob')
     await selectFromDropdown('Controller account', 'alice')
-    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'BobbyBob' } })
-    fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
-    fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'BobbyBob' } })
+      fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
+      fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
 
-    fireEvent.change(screen.getByLabelText(/member avatar/i), { target: { value: 'avatar' } })
-    await waitFor(() => expect(submitButton).toBeDisabled())
+      fireEvent.change(screen.getByLabelText(/member avatar/i), { target: { value: 'avatar' } })
+    })
+    expect(submitButton).toBeDisabled()
 
-    fireEvent.change(screen.getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
-    await waitFor(() => expect(submitButton).not.toBeDisabled())
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
+    })
+    expect(submitButton).not.toBeDisabled()
   })
 
   describe('Authorize step', () => {
@@ -104,13 +113,17 @@ describe('UI: BuyMembershipModal', () => {
 
       await selectFromDropdown('Root account', 'bob')
       await selectFromDropdown('Controller account', 'alice')
-      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'BobbyBob' } })
-      fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
-      fireEvent.change(screen.getByLabelText(/about member/i), { target: { value: "I'm Bob" } })
-      fireEvent.change(screen.getByLabelText(/member avatar/i), { target: { value: 'http://example.com/example.jpg' } })
-      fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
+      await act(async () => {
+        fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'BobbyBob' } })
+        fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
+        fireEvent.change(screen.getByLabelText(/about member/i), { target: { value: "I'm Bob" } })
+        fireEvent.change(screen.getByLabelText(/member avatar/i), {
+          target: { value: 'http://example.com/example.jpg' },
+        })
+        fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
 
-      fireEvent.click(await findSubmitButton())
+        fireEvent.click(await findSubmitButton())
+      })
     }
 
     it('Renders authorize transaction', async () => {
@@ -135,7 +148,9 @@ describe('UI: BuyMembershipModal', () => {
         stubTransactionSuccess(transaction, 'members', 'MembershipBought', [createType('MemberId', 1)])
         await renderAuthorizeStep()
 
-        fireEvent.click(await getButton(/^sign and create a member$/i))
+        await act(async () => {
+          fireEvent.click(await getButton(/^sign and create a member$/i))
+        })
 
         expect(await screen.findByText('Success')).toBeDefined()
         expect(screen.getByText(/^realbobbybob/i)).toBeDefined()
@@ -145,12 +160,16 @@ describe('UI: BuyMembershipModal', () => {
         stubTransactionSuccess(transaction, 'members', 'MembershipBought', [createType('MemberId', 12)])
         await renderAuthorizeStep()
 
-        fireEvent.click(await getButton(/^sign and create a member$/i))
+        await act(async () => {
+          fireEvent.click(await getButton(/^sign and create a member$/i))
+        })
 
         expect(await screen.findByText('Success')).toBeDefined()
         const button = await getButton('View my profile')
         expect(button).toBeEnabled()
-        fireEvent.click(button)
+        await act(async () => {
+          fireEvent.click(button)
+        })
         expect(mockCallback.mock.calls[0][0]).toEqual({ modal: 'Member', data: { id: '12' } })
       })
     })
@@ -160,7 +179,9 @@ describe('UI: BuyMembershipModal', () => {
         stubTransactionFailure(transaction)
         await renderAuthorizeStep()
 
-        fireEvent.click(await getButton(/^sign and create a member$/i))
+        await act(async () => {
+          fireEvent.click(await getButton(/^sign and create a member$/i))
+        })
 
         expect(await screen.findByText('Failure')).toBeDefined()
       })
