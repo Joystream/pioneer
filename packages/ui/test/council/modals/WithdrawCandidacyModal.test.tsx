@@ -3,7 +3,6 @@ import { configure, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -103,9 +102,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <ApiContext.Provider value={api}>
-                <BalancesContextProvider>
-                  <WithdrawCandidacyModal />
-                </BalancesContextProvider>
+                <WithdrawCandidacyModal />
               </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>

@@ -8,7 +8,6 @@ import { Router } from 'react-router'
 import { interpret } from 'xstate'
 
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CurrencyName } from '@/app/constants/currency'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
@@ -647,11 +646,9 @@ describe('UI: Announce Candidacy Modal', () => {
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <ApiContext.Provider value={api}>
-                <BalancesContextProvider>
-                  <MembershipContext.Provider value={useMyMemberships}>
-                    <AnnounceCandidacyModal />
-                  </MembershipContext.Provider>
-                </BalancesContextProvider>
+                <MembershipContext.Provider value={useMyMemberships}>
+                  <AnnounceCandidacyModal />
+                </MembershipContext.Provider>
               </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>

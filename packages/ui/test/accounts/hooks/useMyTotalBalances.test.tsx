@@ -5,7 +5,6 @@ import BN from 'bn.js'
 import React, { ReactNode } from 'react'
 
 import { useMyTotalBalances } from '@/accounts/hooks/useMyTotalBalances'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 
 import { createBalance } from '../../_mocks/chainTypes'
 import { alice, aliceStash } from '../../_mocks/keyring'
@@ -54,11 +53,7 @@ describe('useMyTotalBalances', () => {
   })
 
   function renderUseTotalBalances() {
-    const wrapper = ({ children }: { children: ReactNode }) => (
-      <MockKeyringProvider>
-        <BalancesContextProvider>{children}</BalancesContextProvider>
-      </MockKeyringProvider>
-    )
+    const wrapper = ({ children }: { children: ReactNode }) => <MockKeyringProvider>{children}</MockKeyringProvider>
     return renderHook(() => useMyTotalBalances(), { wrapper })
   }
 })

@@ -4,7 +4,6 @@ import BN from 'bn.js'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -207,11 +206,9 @@ describe('UI: Vote for Proposal Modal', () => {
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <ApiContext.Provider value={api}>
-                <BalancesContextProvider>
-                  <MembershipContext.Provider value={useMyMemberships}>
-                    <VoteForProposalModal />
-                  </MembershipContext.Provider>
-                </BalancesContextProvider>
+                <MembershipContext.Provider value={useMyMemberships}>
+                  <VoteForProposalModal />
+                </MembershipContext.Provider>
               </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>

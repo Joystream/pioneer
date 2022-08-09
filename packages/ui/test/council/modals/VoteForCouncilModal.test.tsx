@@ -6,7 +6,6 @@ import { act } from 'react-dom/test-utils'
 import { MemoryRouter } from 'react-router'
 
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
 import { ApiContext } from '@/common/providers/api/context'
@@ -262,11 +261,9 @@ describe('UI: Vote for Council Modal', () => {
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <ApiContext.Provider value={api}>
-                <BalancesContextProvider>
-                  <MembershipContext.Provider value={useMyMemberships}>
-                    <VoteForCouncilModal />
-                  </MembershipContext.Provider>
-                </BalancesContextProvider>
+                <MembershipContext.Provider value={useMyMemberships}>
+                  <VoteForCouncilModal />
+                </MembershipContext.Provider>
               </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>

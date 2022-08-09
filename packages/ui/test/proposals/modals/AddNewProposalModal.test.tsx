@@ -7,7 +7,6 @@ import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
 
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { CurrencyName } from '@/app/constants/currency'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { camelCaseToText } from '@/common/helpers'
@@ -1655,11 +1654,9 @@ describe('UI: AddNewProposalModal', () => {
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <ApiContext.Provider value={api}>
-                <BalancesContextProvider>
-                  <MembershipContext.Provider value={useMyMemberships}>
-                    <AddNewProposalModal />
-                  </MembershipContext.Provider>
-                </BalancesContextProvider>
+                <MembershipContext.Provider value={useMyMemberships}>
+                  <AddNewProposalModal />
+                </MembershipContext.Provider>
               </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>

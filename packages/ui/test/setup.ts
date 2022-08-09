@@ -1,7 +1,6 @@
 import { BN_THOUSAND } from '@polkadot/util'
 import '@testing-library/jest-dom'
 import BN from 'bn.js'
-import React from 'react'
 
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { AddressToBalanceMap, Balances } from '@/accounts/types'
@@ -61,10 +60,6 @@ export const mockedMyBalances = jest.fn<AddressToBalanceMap | undefined, []>(() 
 
 jest.mock('@/accounts/hooks/useMyBalances', () => ({
   useMyBalances: mockedMyBalances,
-}))
-
-jest.mock('@/accounts/providers/balances/provider', () => ({
-  BalancesContextProvider: ({ children }: { children: React.ReactNode }) => children,
 }))
 
 jest.mock('@/common/constants/numbers', () => ({

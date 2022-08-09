@@ -3,7 +3,6 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
@@ -139,9 +138,7 @@ describe('UI: DeleteThreadModal', () => {
           <MockKeyringProvider>
             <MembershipContext.Provider value={useMyMemberships}>
               <ApiContext.Provider value={api}>
-                <BalancesContextProvider>
-                  <DeleteThreadModal />
-                </BalancesContextProvider>
+                <DeleteThreadModal />
               </ApiContext.Provider>
             </MembershipContext.Provider>
           </MockKeyringProvider>

@@ -5,7 +5,6 @@ import React from 'react'
 import { Route, Router, Switch } from 'react-router-dom'
 
 import { RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { GlobalModals } from '@/app/GlobalModals'
 import { MyAccounts } from '@/app/pages/Profile/MyAccounts'
 import { ApiContext } from '@/common/providers/api/context'
@@ -160,18 +159,16 @@ describe('Page: MyAccounts', () => {
     render(
       <Router history={history}>
         <ApiContext.Provider value={api}>
-          <BalancesContextProvider>
-            <ModalContext.Provider value={useModal}>
-              <MockQueryNodeProviders>
-                <MembershipContext.Provider value={useMyMemberships}>
-                  <Switch>
-                    <Route path="/profile" component={MyAccounts} />
-                  </Switch>
-                  <GlobalModals />
-                </MembershipContext.Provider>
-              </MockQueryNodeProviders>
-            </ModalContext.Provider>
-          </BalancesContextProvider>
+          <ModalContext.Provider value={useModal}>
+            <MockQueryNodeProviders>
+              <MembershipContext.Provider value={useMyMemberships}>
+                <Switch>
+                  <Route path="/profile" component={MyAccounts} />
+                </Switch>
+                <GlobalModals />
+              </MembershipContext.Provider>
+            </MockQueryNodeProviders>
+          </ModalContext.Provider>
         </ApiContext.Provider>
       </Router>
     )

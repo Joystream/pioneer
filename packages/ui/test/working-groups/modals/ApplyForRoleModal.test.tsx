@@ -8,7 +8,6 @@ import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
 
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { createType } from '@/common/model/createType'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
@@ -485,9 +484,7 @@ describe('UI: ApplyForRoleModal', () => {
               <MockKeyringProvider>
                 <ApiContext.Provider value={api}>
                   <MembershipContext.Provider value={useMyMemberships}>
-                    <BalancesContextProvider>
-                      <ApplyForRoleModal />
-                    </BalancesContextProvider>
+                    <ApplyForRoleModal />
                   </MembershipContext.Provider>
                 </ApiContext.Provider>
               </MockKeyringProvider>
