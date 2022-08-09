@@ -1,12 +1,12 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
-import { stubAccounts } from 'test/_mocks/transactions'
 
 import { UnknownAccountInfo } from '../../../src/accounts/components/UnknownAccountInfo'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { stubAccounts } from '../../_mocks/transactions'
 
 describe('UI: UnknownAccountInfo component', () => {
   setupMockServer()

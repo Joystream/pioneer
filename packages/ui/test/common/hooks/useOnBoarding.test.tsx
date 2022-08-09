@@ -15,7 +15,7 @@ import { getAccount } from '../../../dev/node-mocks/data/addresses'
 import { alice } from '../../_mocks/keyring'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { stubAccounts } from '../../_mocks/transactions'
+import { stubAccounts, stubBalances } from '../../_mocks/transactions'
 
 let mockUseLocalStorage: [string | undefined, () => void] = [undefined, jest.fn()]
 
@@ -81,6 +81,7 @@ describe('useOnBoarding', () => {
 
       it('Create membership', async () => {
         stubAccounts([alice], { error: undefined, wallet })
+        stubBalances({ available: 0 })
         mockUseLocalStorage = [getAccount('alice'), jest.fn()]
 
         const { isLoading, status } = await renderUseOnBoarding()
