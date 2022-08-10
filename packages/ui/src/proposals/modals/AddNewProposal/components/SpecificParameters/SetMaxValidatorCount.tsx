@@ -6,8 +6,6 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 
-export const MAX_VALIDATOR_COUNT = 300
-
 export const SetMaxValidatorCount = () => {
   return (
     <RowGapBlock gap={24}>

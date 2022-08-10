@@ -3,11 +3,11 @@ import * as Yup from 'yup'
 
 import { Account } from '@/accounts/types'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
-import { BNSchema, lessThanMixed, maxContext, minContext, moreThanMixed } from '@/common/utils/validation'
+import { BNSchema, lessThanMixed, maxContext, maxMixed, minContext, moreThanMixed } from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
-import { MAX_VALIDATOR_COUNT } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMaxValidatorCount'
 import { ProposalType } from '@/proposals/types'
+import { ProxyApi } from '@/proxyApi'
 import { GroupIdName } from '@/working-groups/types'
 
 export const defaultProposalValues = {
@@ -141,7 +141,8 @@ export interface AddNewProposalForm {
   }
 }
 
-export const schemaFactory = (titleMaxLength: number, rationaleMaxLength: number) => {
+// export const schemaFactory = (titleMaxLength: number, rationaleMaxLength: number) => {
+export const schemaFactory = (api?: ProxyApi) => {
   return Yup.object().shape({
     groupId: Yup.string(),
     proposalType: Yup.object().shape({
@@ -151,8 +152,12 @@ export const schemaFactory = (titleMaxLength: number, rationaleMaxLength: number
       stakingAccount: StakingAccountSchema.required('Field is required'),
     }),
     proposalDetails: Yup.object().shape({
-      title: Yup.string().required('Field is required').max(titleMaxLength, 'Title exceeds maximum length'),
-      rationale: Yup.string().required('Field is required').max(rationaleMaxLength, 'Rationale exceeds maximum length'),
+      title: Yup.string()
+        .required('Field is required')
+        .max(api?.consts.proposalsEngine.titleMaxLength.toNumber() ?? 0, 'Title exceeds maximum length'),
+      rationale: Yup.string()
+        .required('Field is required')
+        .max(api?.consts.proposalsEngine.descriptionMaxLength.toNumber() ?? 0, 'Rationale exceeds maximum length'),
     }),
     triggerAndDiscussion: Yup.object().shape({
       trigger: Yup.boolean(),
@@ -173,7 +178,14 @@ export const schemaFactory = (titleMaxLength: number, rationaleMaxLength: number
       signal: Yup.string().required('Field is required').trim(),
     }),
     fundingRequest: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, '')).required('Field is required'),
+      amount: BNSchema.test(moreThanMixed(0, ''))
+        .test(
+          maxMixed(
+            new BN(api?.consts.proposalsCodex.fundingRequestProposalMaxAmount?.toString() ?? 0),
+            'Maximal amount allowed is {max}'
+          )
+        )
+        .required('Field is required'),
       account: AccountSchema.required('Field is required'),
     }),
     runtimeUpgrade: Yup.object().shape({
@@ -276,7 +288,13 @@ export const schemaFactory = (titleMaxLength: number, rationaleMaxLength: number
     }),
     setMaxValidatorCount: Yup.object().shape({
       validatorCount: BNSchema.test(minContext('Minimal amount allowed is ${min}', 'minimumValidatorCount', false))
-        .test(lessThanMixed(MAX_VALIDATOR_COUNT, 'Maximal amount allowed is ${less}', false))
+        .test(
+          lessThanMixed(
+            api?.consts.proposalsCodex.setMaxValidatorCountProposalMaxValidators?.toNumber() ?? 0,
+            'Maximal amount allowed is ${less}',
+            false
+          )
+        )
         .required('Field is required'),
     }),
     setMembershipPrice: Yup.object().shape({
