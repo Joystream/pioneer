@@ -191,7 +191,7 @@ describe('UI: AddNewProposalModal', () => {
     stubProposalConstants(api)
 
     createProposalTx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
-    createProposalTxMock = api.api.tx.proposalsCodex.createProposal as unknown as jest.Mock
+    createProposalTxMock = (api.api.tx.proposalsCodex.createProposal as unknown) as jest.Mock
 
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 25)
     stubQuery(
@@ -311,12 +311,12 @@ describe('UI: AddNewProposalModal', () => {
     })
 
     describe('General parameters', () => {
-      beforeEach(async () => {
-        await finishWarning()
-        await finishProposalType()
-      })
-
       describe('Staking account', () => {
+        beforeEach(async () => {
+          await finishWarning()
+          await finishProposalType()
+        })
+
         it('Not selected', async () => {
           const button = await getNextStepButton()
           expect(button).toBeDisabled()
@@ -332,6 +332,8 @@ describe('UI: AddNewProposalModal', () => {
 
       describe('Proposal details', () => {
         beforeEach(async () => {
+          await finishWarning()
+          await finishProposalType()
           await finishStakingAccount()
         })
 
@@ -349,8 +351,15 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       describe('Proposal details validation', () => {
+        beforeEach(async () => {
+          stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 5))
+          stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 5))
+          await finishWarning()
+          await finishProposalType()
+        })
         it('Title too long', async () => {
           stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 5))
+
           await finishStakingAccount()
 
           await fillProposalDetails()
@@ -361,7 +370,6 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Description too long', async () => {
-          stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 5))
           await finishStakingAccount()
 
           await fillProposalDetails()
@@ -372,8 +380,6 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Both fields too long', async () => {
-          stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 5))
-          stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 5))
           await finishStakingAccount()
 
           await fillProposalDetails()
@@ -387,6 +393,8 @@ describe('UI: AddNewProposalModal', () => {
 
       describe('Trigger & Discussion', () => {
         beforeEach(async () => {
+          await finishWarning()
+          await finishProposalType()
           await finishStakingAccount()
           await finishProposalDetails()
         })

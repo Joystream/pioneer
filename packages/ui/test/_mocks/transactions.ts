@@ -148,7 +148,7 @@ export const stubConst = <T>(api: UseApi, constSubPath: string, value: T) => {
 
 export const stubApi = () => {
   const api: UseApi = {
-    api: {} as unknown as Api,
+    api: ({} as unknown) as Api,
     isConnected: true,
     connectionState: 'connected',
   }
@@ -214,6 +214,8 @@ export const stubProposalConstants = (api: UseApi, constants?: { requiredStake: 
     })
   }
   set(api, 'api.consts.members.referralCutMaximumPercent', new BN(50))
+  set(api, 'api.consts.proposalsCodex.fundingRequestProposalMaxAmount', new BN(10_000))
+  set(api, 'api.consts.proposalsCodex.setMaxValidatorCountProposalMaxValidators', new BN(300))
   set(
     api,
     'api.query.members.membershipPrice',
