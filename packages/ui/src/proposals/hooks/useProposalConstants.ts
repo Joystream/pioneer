@@ -1,3 +1,5 @@
+import { u128, u32 } from '@polkadot/types'
+import { PalletProposalsEngineProposalParameters } from '@polkadot/types/lookup'
 import { useMemo } from 'react'
 
 import { Api } from '@/api/types'
@@ -21,9 +23,14 @@ export const useProposalConstants = (proposalType?: ProposalType): ProposalConst
     }
     const constants = api?.consts.proposalsCodex[constantKey]
 
-    return constants ? asProposalConstants(constants) : null
+    return constants && extendsProposalPallet(constants) ? asProposalConstants(constants) : null
   }, [proposalType, isConnected])
 }
+
+const extendsProposalPallet = (
+  proposalType: PalletProposalsEngineProposalParameters | u32 | u128
+): proposalType is PalletProposalsEngineProposalParameters =>
+  !(proposalType instanceof u128 || proposalType instanceof u32)
 
 const proposalTypeToConstantKey = new Map<ProposalType, keyof Api['consts']['proposalsCodex']>([
   ['amendConstitution', 'amendConstitutionProposalParameters'],
