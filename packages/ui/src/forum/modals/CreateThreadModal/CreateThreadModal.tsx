@@ -1,3 +1,4 @@
+import { ForumThreadMetadata } from '@joystream/metadata-protobuf'
 import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -10,6 +11,7 @@ import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { FailureModal } from '@/common/components/FailureModal'
 import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { useForumCategoryBreadcrumbs } from '@/forum/hooks/useForumCategoryBreadcrumbs'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -40,7 +42,16 @@ export const CreateThreadModal = () => {
 
   const { feeInfo } = useTransactionFee(
     member?.controllerAccount,
-    () => api?.tx.forum.createThread(member?.id ?? 0, modalData.categoryId, '', '', null),
+    () =>
+      api?.tx.forum.createThread(
+        member?.id ?? 0,
+        modalData.categoryId,
+        metadataToBytes(ForumThreadMetadata, {
+          tags: [''],
+          title: '',
+        }),
+        ''
+      ),
     [member?.id, modalData.categoryId, isConnected]
   )
 
@@ -89,7 +100,15 @@ export const CreateThreadModal = () => {
   if (state.matches('transaction') && api && postDeposit && threadDeposit) {
     const { topic, description } = form.getValues()
     const { memberId, categoryId, controllerAccount } = state.context
-    const transaction = api.tx.forum.createThread(memberId, categoryId, topic, description, null)
+    const transaction = api.tx.forum.createThread(
+      memberId,
+      categoryId,
+      metadataToBytes(ForumThreadMetadata, {
+        tags: [''],
+        title: topic,
+      }),
+      description
+    )
     const service = state.children.transaction
     return (
       <CreateThreadSignModal
