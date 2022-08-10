@@ -535,6 +535,15 @@ describe('UI: AddNewProposalModal', () => {
           expect(button).toBeDisabled()
         })
 
+        it('Invalid - amount exceeds max value of 10k', async () => {
+          await SpecificParameters.FundingRequest.selectRecipient('bob')
+          await SpecificParameters.fillAmount(100_000)
+
+          const button = await getCreateButton()
+          expect(screen.queryByText(/^Maximal amount allowed is*/)).toBeInTheDocument()
+          expect(button).toBeDisabled()
+        })
+
         it('Valid - everything filled', async () => {
           const amount = 100
           // await SpecificParameters.fillAmount(amount)
