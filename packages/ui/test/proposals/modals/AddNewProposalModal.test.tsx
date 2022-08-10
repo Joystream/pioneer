@@ -546,8 +546,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid - everything filled', async () => {
           const amount = 100
-          // await SpecificParameters.fillAmount(amount)
-          await fillField('amount-input', amount)
+          await SpecificParameters.fillAmount(amount)
           await SpecificParameters.FundingRequest.selectRecipient('bob')
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
@@ -577,14 +576,14 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid - over 100 percent', async () => {
-          await fillField('amount-input', 200)
+          await SpecificParameters.fillAmount(200)
           expect(await screen.getByTestId('amount-input')).toHaveValue('200')
           expect(await getCreateButton()).toBeDisabled()
         })
 
         it('Valid', async () => {
           const amount = 40
-          await fillField('amount-input', amount)
+          await SpecificParameters.fillAmount(amount)
           expect(await screen.getByTestId('amount-input')).toHaveValue(String(amount))
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
@@ -596,7 +595,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid with execution warning', async () => {
           const amount = 100
-          await fillField('amount-input', amount)
+          await SpecificParameters.fillAmount(amount)
           expect(await screen.getByTestId('amount-input')).toHaveValue(String(amount))
 
           expect(await getCreateButton()).toBeDisabled()
@@ -880,7 +879,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid form', async () => {
           const amount = 100
-          await fillField('amount-input', amount)
+          await SpecificParameters.fillAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
@@ -1002,7 +1001,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Validate max value', async () => {
           await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
-          await fillField('amount-input', powerOf2(32))
+          await SpecificParameters.fillAmount(powerOf2(32))
           expect(screen.queryByTestId('amount-input')).toHaveValue('0')
           expect(screen.queryByTestId('amount-input')).toBeEnabled()
         })
