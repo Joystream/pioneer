@@ -22,7 +22,7 @@ export const BalancesContextProvider = (props: Props) => {
 
   const balancesObs = useMemo(
     () => (api ? addresses.map((address) => api.derive.balances.all(address).pipe(map(toBalances))) : []),
-    [api, JSON.stringify(addresses)]
+    [!api, JSON.stringify(addresses)]
   )
   const result = useObservable(combineLatest(balancesObs), [balancesObs])
 
