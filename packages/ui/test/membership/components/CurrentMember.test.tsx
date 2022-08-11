@@ -3,7 +3,6 @@ import { act, fireEvent, render, screen, waitForElementToBeRemoved, within } fro
 import { BaseDotsamaWallet } from 'injectweb3-connect'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { GlobalModals } from '@/app/GlobalModals'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { CurrentMember } from '@/memberships/components/CurrentMember'
@@ -14,6 +13,7 @@ import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA } from '../../_mocks/server/seeds'
+import { stubAccounts } from '../../_mocks/transactions'
 
 jest.mock('@/common/hooks/useLocalStorage', () => ({
   useLocalStorage: () => [undefined, jest.fn()],
@@ -23,6 +23,7 @@ describe('UI: CurrentMember component', () => {
   const mockServer = setupMockServer()
 
   beforeAll(async () => {
+    stubAccounts([alice, aliceStash, bob, bobStash], { wallet: new BaseDotsamaWallet({ title: 'ExtraWallet' }) })
     await cryptoWaitReady()
   })
 
@@ -78,38 +79,12 @@ describe('UI: CurrentMember component', () => {
   function renderComponent() {
     return render(
       <MockKeyringProvider>
-        <AccountsContext.Provider
-          value={{
-            isLoading: false,
-            hasAccounts: true,
-            allAccounts: [
-              {
-                address: alice.address,
-                name: 'Alice',
-              },
-              {
-                address: aliceStash.address,
-                name: 'AliceStash',
-              },
-              {
-                address: bob.address,
-                name: 'Bob',
-              },
-              {
-                address: bobStash.address,
-                name: 'BobStash',
-              },
-            ],
-            wallet: new BaseDotsamaWallet({ title: 'ExtraWallet' }),
-          }}
-        >
-          <MockQueryNodeProviders>
-            <ModalContextProvider>
-              <CurrentMember />
-              <GlobalModals />
-            </ModalContextProvider>
-          </MockQueryNodeProviders>
-        </AccountsContext.Provider>
+        <MockQueryNodeProviders>
+          <ModalContextProvider>
+            <CurrentMember />
+            <GlobalModals />
+          </ModalContextProvider>
+        </MockQueryNodeProviders>
       </MockKeyringProvider>
     )
   }

@@ -3,23 +3,20 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 
 import { UnknownAccountInfo } from '../../../src/accounts/components/UnknownAccountInfo'
-import { AccountsContext } from '../../../src/accounts/providers/accounts/context'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { stubAccounts } from '../../_mocks/transactions'
 
 describe('UI: UnknownAccountInfo component', () => {
-  const useAccounts = {
-    isLoading: false,
-    hasAccounts: false,
-    allAccounts: [alice, bob],
-  }
-
   setupMockServer()
 
   jest.useFakeTimers()
 
-  beforeAll(cryptoWaitReady)
+  beforeAll(async () => {
+    stubAccounts([alice, bob])
+    await cryptoWaitReady()
+  })
 
   it('User account', () => {
     renderComponent(alice.address)
@@ -36,9 +33,7 @@ describe('UI: UnknownAccountInfo component', () => {
   function renderComponent(address: string) {
     return render(
       <MockQueryNodeProviders>
-        <AccountsContext.Provider value={useAccounts}>
-          <UnknownAccountInfo address={address} placeholderName="Root account" />
-        </AccountsContext.Provider>
+        <UnknownAccountInfo address={address} placeholderName="Root account" />
       </MockQueryNodeProviders>
     )
   }

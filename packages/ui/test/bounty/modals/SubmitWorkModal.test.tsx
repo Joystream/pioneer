@@ -1,10 +1,7 @@
 import { BountyWorkData } from '@joystream/metadata-protobuf'
 import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
-import BN from 'bn.js'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { BalancesContext } from '@/accounts/providers/balances/context'
 import { SubmitWorkModal } from '@/bounty/modals/SubmitWorkModal'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { ApiContext } from '@/common/providers/api/context'
@@ -20,18 +17,14 @@ import { alice, bob } from '../../_mocks/keyring'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  stubAccounts,
   stubApi,
   stubBountyConstants,
+  stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockDefaultBalance } from '../../setup'
-
-const defaultBalance = {
-  ...mockDefaultBalance,
-  transferable: new BN(1000),
-}
 
 describe('UI: BountySubmitModal', () => {
   const mockServer = setupMockServer({ noCleanupAfterEach: true })
@@ -67,11 +60,6 @@ describe('UI: BountySubmitModal', () => {
     }
   })
 
-  const useBalances = {
-    [getMember('bob').controllerAccount]: { ...defaultBalance },
-    [getMember('alice').controllerAccount]: defaultBalance,
-  }
-
   const useMembership = {
     isLoading: false,
     active: getMember('bob'),
@@ -83,11 +71,10 @@ describe('UI: BountySubmitModal', () => {
     },
   }
 
-  const useAccounts = {
-    isLoading: false,
-    hasAccounts: true,
-    allAccounts: [bob, alice],
-  }
+  beforeAll(() => {
+    stubDefaultBalances()
+    stubAccounts([bob, alice])
+  })
 
   beforeEach(() => {
     renderResult = render(<RenderModal />)
@@ -164,11 +151,7 @@ describe('UI: BountySubmitModal', () => {
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>
             <MembershipContext.Provider value={useMembership}>
-              <AccountsContext.Provider value={useAccounts}>
-                <BalancesContext.Provider value={useBalances}>
-                  <SubmitWorkModal />
-                </BalancesContext.Provider>
-              </AccountsContext.Provider>
+              <SubmitWorkModal />
             </MembershipContext.Provider>
           </ApiContext.Provider>
         </MockKeyringProvider>

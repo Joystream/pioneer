@@ -1,7 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { repeat } from '@/common/utils'
 import { useMyPastVotesStats } from '@/council/hooks/useMyPastVotesStats'
 import {
@@ -18,14 +17,14 @@ import { CANDIDATE_DATA, VOTE_DATA } from '../../_mocks/council'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { stubAccounts } from '../../_mocks/transactions'
 
 describe('useMyPastVotesStats', () => {
   const server = setupMockServer()
-  const useAccounts = {
-    isLoading: false,
-    hasAccounts: false,
-    allAccounts: [alice, bob],
-  }
+
+  beforeAll(() => {
+    stubAccounts([alice, bob])
+  })
 
   describe('Counts total cast votes', () => {
     beforeEach(() => {
@@ -234,11 +233,7 @@ describe('useMyPastVotesStats', () => {
 
   const renderUseStats = async () => {
     const { result, waitForNextUpdate } = renderHook(() => useMyPastVotesStats(), {
-      wrapper: ({ children }) => (
-        <MockApolloProvider>
-          <AccountsContext.Provider value={useAccounts}>{children}</AccountsContext.Provider>
-        </MockApolloProvider>
-      ),
+      wrapper: ({ children }) => <MockApolloProvider>{children}</MockApolloProvider>,
     })
     while (result.current.isLoading) {
       await waitForNextUpdate()

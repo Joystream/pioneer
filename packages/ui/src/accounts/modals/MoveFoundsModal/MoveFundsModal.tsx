@@ -41,11 +41,11 @@ export const MoveFundsModal = () => {
   const balances = useMyBalances()
 
   const allAccounts = useStakingAccountsLocks({ requiredStake, lockType: lock, filterByBalance: false })
-  const accountsWithTransferableBalance = Object.entries(balances).filter(([, balances]) =>
+  const accountsWithTransferableBalance = Object.values(balances ?? []).filter((balances) =>
     balances.transferable.gt(BN_ZERO)
   )
   const transferableTotal = accountsWithTransferableBalance.reduce(
-    (sum, [, { transferable }]) => sum.add(transferable),
+    (sum, { transferable }) => sum.add(transferable),
     BN_ZERO
   )
   const insufficientBalances = transferableTotal.lt(requiredStake)

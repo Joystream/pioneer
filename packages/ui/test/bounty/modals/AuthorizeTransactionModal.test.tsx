@@ -60,7 +60,7 @@ describe('UI: AuthorizeTransactionModal', () => {
   }
 
   beforeEach(() => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     renderModal()
   })
 

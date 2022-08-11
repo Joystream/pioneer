@@ -20,6 +20,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
+import { isDefined } from '@/common/utils'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { AnnounceCandidacyConstantsWrapper } from '@/council/modals/AnnounceCandidacy/components/AnnounceCandidacyConstantsWrapper'
@@ -99,7 +100,7 @@ export const AnnounceCandidacyModal = () => {
       stakeLock: 'Council Candidate',
       balances: balance,
       minStake: constants?.election.minCandidacyStake as BN,
-      controllerAccountBalance: balances[activeMember?.controllerAccount ?? '']?.transferable,
+      controllerAccountBalance: balances?.[activeMember?.controllerAccount ?? '']?.transferable ?? BN_ZERO,
     } as Conditions,
     mode: 'onChange',
     defaultValues: getAnnounceCandidacyFormInitialState(constants?.election.minCandidacyStake ?? BN_ZERO),
@@ -191,7 +192,7 @@ export const AnnounceCandidacyModal = () => {
         })
       }
 
-      if (feeInfo && Object.keys(balances).length) {
+      if (feeInfo && isDefined(hasRequiredStake)) {
         const areFundsSufficient = feeInfo.canAfford && hasRequiredStake
         send(areFundsSufficient ? 'NEXT' : 'FAIL')
       }
@@ -217,7 +218,7 @@ export const AnnounceCandidacyModal = () => {
       // wrong account
       return feeInfo?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
-  }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake, stakingStatus, Object.keys(balances).length])
+  }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake, stakingStatus])
 
   if (!api || !activeMember || !transaction || !feeInfo) {
     return null

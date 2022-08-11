@@ -2,7 +2,6 @@ import { act, configure, fireEvent, render, screen, waitForElementToBeRemoved } 
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { Election } from '@/app/pages/Election/Election'
 import { ApiContext } from '@/common/providers/api/context'
 import { calculateCommitment } from '@/council/model/calculateCommitment'
@@ -23,7 +22,7 @@ import { VOTE_DATA } from '../../_mocks/council'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { stubApi, stubCouncilAndReferendum } from '../../_mocks/transactions'
+import { stubAccounts, stubApi, stubCouncilAndReferendum } from '../../_mocks/transactions'
 
 configure({ testIdAttribute: 'id' })
 
@@ -338,29 +337,29 @@ describe('UI: Election page', () => {
   })
 
   async function renderComponent(accounts = [alice]) {
-    const rendered = render(
-      <MemoryRouter>
-        <ApiContext.Provider value={api}>
-          <MockQueryNodeProviders>
-            <MockKeyringProvider>
-              <AccountsContext.Provider
-                value={{ isLoading: false, hasAccounts: accounts.length > 0, allAccounts: accounts }}
-              >
+    stubAccounts(accounts)
+
+    await act(async () => {
+      render(
+        <MemoryRouter>
+          <ApiContext.Provider value={api}>
+            <MockQueryNodeProviders>
+              <MockKeyringProvider>
                 <MembershipContext.Provider value={useMyMemberships}>
                   <Election />
                 </MembershipContext.Provider>
-              </AccountsContext.Provider>
-            </MockKeyringProvider>
-          </MockQueryNodeProviders>
-        </ApiContext.Provider>
-      </MemoryRouter>
-    )
+              </MockKeyringProvider>
+            </MockQueryNodeProviders>
+          </ApiContext.Provider>
+        </MemoryRouter>
+      )
+    })
 
-    const loader = rendered.queryByText('Loading candidates...')
+    const loader = screen.queryByText('Loading candidates...')
     if (loader) {
       await waitForElementToBeRemoved(loader)
     }
 
-    return rendered
+    return screen
   }
 })

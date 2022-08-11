@@ -3,8 +3,6 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { createType } from '@/common/model/createType'
 import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -27,6 +25,7 @@ import { setupMockServer } from '../../_mocks/server'
 import { APPLICATION_DATA, OPENING_DATA, WORKER_DATA } from '../../_mocks/server/seeds'
 import {
   currentStubErrorMessage,
+  stubAccounts,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -59,7 +58,6 @@ describe('UI: ChangeRoleModal', () => {
     },
   }
 
-  let useAccounts: UseAccounts
   let transaction: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
@@ -67,13 +65,7 @@ describe('UI: ChangeRoleModal', () => {
   beforeAll(async () => {
     jest.spyOn(console, 'log').mockImplementation()
     await cryptoWaitReady()
-
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
-
+    stubAccounts([alice, bob])
     seedMembers(server.server)
     seedWorkingGroups(server.server)
     seedOpeningStatuses(server.server)
@@ -84,7 +76,7 @@ describe('UI: ChangeRoleModal', () => {
 
   beforeEach(async () => {
     useMyMemberships.setActive(getMember('alice'))
-    stubDefaultBalances(api)
+    stubDefaultBalances()
   })
 
   describe('Change role account - authorize step', () => {
@@ -149,13 +141,11 @@ describe('UI: ChangeRoleModal', () => {
         <ModalContext.Provider value={useModal}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
-              <AccountsContext.Provider value={useAccounts}>
-                <MembershipContext.Provider value={useMyMemberships}>
-                  <ApiContext.Provider value={api}>
-                    <ChangeAccountModal />
-                  </ApiContext.Provider>
-                </MembershipContext.Provider>
-              </AccountsContext.Provider>
+              <MembershipContext.Provider value={useMyMemberships}>
+                <ApiContext.Provider value={api}>
+                  <ChangeAccountModal />
+                </ApiContext.Provider>
+              </MembershipContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
         </ModalContext.Provider>

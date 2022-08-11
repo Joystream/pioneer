@@ -85,7 +85,7 @@ describe('UI: WithdrawContributionModal', () => {
   })
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     tx = stubTransaction(api, txPath)
     mockedTransactionFee.transaction = tx as any
     mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }

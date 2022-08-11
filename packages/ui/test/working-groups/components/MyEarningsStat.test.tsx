@@ -4,8 +4,6 @@ import { startOfToday, subDays } from 'date-fns'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedApplication, seedEvent, seedMember, seedOpening, seedWorker } from '@/mocks/data'
@@ -17,17 +15,13 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { APPLICATION_DATA, MEMBER_ALICE_DATA, OPENING_DATA, WORKER_DATA } from '../../_mocks/server/seeds'
+import { stubAccounts } from '../../_mocks/transactions'
 
 configure({ testIdAttribute: 'id' })
 
 describe('MyEarningsStat', () => {
   const mockServer = setupMockServer()
 
-  const useAccounts: UseAccounts = {
-    isLoading: false,
-    hasAccounts: true,
-    allAccounts: [alice, bob],
-  }
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [getMember('alice'), getMember('bob')],
@@ -40,6 +34,7 @@ describe('MyEarningsStat', () => {
   }
 
   beforeAll(async () => {
+    stubAccounts([alice, bob])
     await cryptoWaitReady()
   })
 
@@ -98,11 +93,9 @@ describe('MyEarningsStat', () => {
       <MemoryRouter>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
-            <AccountsContext.Provider value={useAccounts}>
-              <MembershipContext.Provider value={useMyMemberships}>
-                <MyEarningsStat />
-              </MembershipContext.Provider>
-            </AccountsContext.Provider>
+            <MembershipContext.Provider value={useMyMemberships}>
+              <MyEarningsStat />
+            </MembershipContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
       </MemoryRouter>

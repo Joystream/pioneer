@@ -24,9 +24,10 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
   const [stake] = form.watch(['staking.account', 'staking.amount'])
   const balances = useMyBalances()
 
-  const isSomeBalanceGteStake = useMemo(() => {
-    return Object.entries(balances).some(([, balance]) => balance.transferable.gte(stake ?? minStake))
-  }, [stake?.toString(), JSON.stringify(balances)])
+  const isSomeBalanceGteStake = useMemo(
+    () => Object.values(balances ?? []).some(({ transferable }) => transferable.gte(stake ?? minStake)),
+    [stake?.toString(), JSON.stringify(balances)]
+  )
 
   return (
     <RowGapBlock gap={24}>

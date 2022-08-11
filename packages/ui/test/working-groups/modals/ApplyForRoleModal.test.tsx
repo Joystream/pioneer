@@ -8,9 +8,6 @@ import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
 
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { createType } from '@/common/model/createType'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
@@ -35,6 +32,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import { OPENING_DATA } from '../../_mocks/server/seeds'
 import {
+  stubAccounts,
   stubApi,
   stubBalances,
   stubConst,
@@ -79,7 +77,6 @@ describe('UI: ApplyForRoleModal', () => {
     },
   }
 
-  let useAccounts: UseAccounts
   let batchTx: any
   let bindAccountTx: any
   let applyTransaction: any
@@ -94,12 +91,7 @@ describe('UI: ApplyForRoleModal', () => {
     seedWorkingGroups(server.server)
     seedOpeningStatuses(server.server)
     seedOpening(OPENING_DATA, server.server)
-
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
@@ -113,7 +105,7 @@ describe('UI: ApplyForRoleModal', () => {
     useMyMemberships.setActive(getMember('alice'))
 
     stubConst(api, 'forumWorkingGroup.rewardPeriod', createType('u32', 14410))
-    stubBalances(api, {
+    stubBalances({
       available: 2000,
     })
     applyTransaction = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
@@ -148,7 +140,7 @@ describe('UI: ApplyForRoleModal', () => {
     it('No active member', async () => {
       useMyMemberships.active = undefined
 
-      renderModal()
+      await renderModal()
 
       expect(useModal.showModal).toBeCalledWith({
         modal: 'SwitchMember',
@@ -170,7 +162,7 @@ describe('UI: ApplyForRoleModal', () => {
       useModal.modalData = { opening }
       batchTx = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening', 10_000)
       mockedTransactionFee.feeInfo = { canAfford: false, transactionFee: new BN(10000) }
-      renderModal()
+      await renderModal()
 
       const moveFundsModalCall: MoveFundsModalCall = {
         modal: 'MoveFundsModal',
@@ -185,21 +177,21 @@ describe('UI: ApplyForRoleModal', () => {
   })
 
   it('Renders a modal', async () => {
-    renderModal()
+    await renderModal()
 
     expect(await screen.findByText('Applying for role')).toBeDefined()
   })
 
   describe('Stake step', () => {
     it('Empty fields', async () => {
-      renderModal()
+      await renderModal()
 
       const button = await getNextStepButton()
       expect(button).toBeDisabled()
     })
 
     it('Too low stake', async () => {
-      renderModal()
+      await renderModal()
 
       await selectFromDropdown('Select account for Staking', 'alice')
       await fillFieldByLabel(/Select amount for staking/i, '50')
@@ -209,7 +201,7 @@ describe('UI: ApplyForRoleModal', () => {
     })
 
     it('Valid fields', async () => {
-      renderModal()
+      await renderModal()
 
       await selectFromDropdown('Select account for Staking', 'alice')
       await fillFieldByLabel(/Select amount for staking/i, '2000')
@@ -483,25 +475,23 @@ describe('UI: ApplyForRoleModal', () => {
     fireEvent.blur(amountInput)
   }
 
-  function renderModal() {
-    return render(
-      <MemoryRouter>
-        <ModalContext.Provider value={useModal}>
-          <MockQueryNodeProviders>
-            <MockKeyringProvider>
-              <ApiContext.Provider value={api}>
-                <AccountsContext.Provider value={useAccounts}>
+  async function renderModal() {
+    await act(async () => {
+      render(
+        <MemoryRouter>
+          <ModalContext.Provider value={useModal}>
+            <MockQueryNodeProviders>
+              <MockKeyringProvider>
+                <ApiContext.Provider value={api}>
                   <MembershipContext.Provider value={useMyMemberships}>
-                    <BalancesContextProvider>
-                      <ApplyForRoleModal />
-                    </BalancesContextProvider>
+                    <ApplyForRoleModal />
                   </MembershipContext.Provider>
-                </AccountsContext.Provider>
-              </ApiContext.Provider>
-            </MockKeyringProvider>
-          </MockQueryNodeProviders>
-        </ModalContext.Provider>
-      </MemoryRouter>
-    )
+                </ApiContext.Provider>
+              </MockKeyringProvider>
+            </MockQueryNodeProviders>
+          </ModalContext.Provider>
+        </MemoryRouter>
+      )
+    })
   }
 })

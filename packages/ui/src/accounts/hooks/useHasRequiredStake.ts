@@ -9,6 +9,14 @@ import { Comparator } from '@/common/model/Comparator'
 export const useHasRequiredStake = (stake: BN, lock: LockType) => {
   const balances = useMyBalances()
 
+  if (!balances) {
+    return {
+      hasRequiredStake: undefined,
+      accountsWithCompatibleLocks: null,
+      accountsWithTransferableBalance: null,
+    }
+  }
+
   const compatibleAccounts = Object.entries(balances).filter(
     ([, balances]) => !areLocksConflicting(lock, balances.locks)
   )

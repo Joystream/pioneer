@@ -5,12 +5,12 @@ import { toBalances } from '@/accounts/model/toBalances'
 import { Balances } from '@/accounts/types'
 
 import { createBalance, createBalanceLock, EMPTY_BALANCES } from '../../_mocks/chainTypes'
-import { mockDefaultBalance } from '../../setup'
+import { zeroBalance } from '../../setup'
 
 describe('toBalances', () => {
   it('Empty', () => {
     testBalances(EMPTY_BALANCES, {
-      ...mockDefaultBalance,
+      ...zeroBalance,
     })
   })
 
@@ -23,7 +23,7 @@ describe('toBalances', () => {
         votingBalance: createBalance(1234),
       },
       {
-        ...mockDefaultBalance,
+        ...zeroBalance,
         total: new BN(1234),
         transferable: createBalance(1234).toBn(),
       }
@@ -43,7 +43,7 @@ describe('toBalances', () => {
         votingBalance: createBalance(387),
       },
       {
-        ...mockDefaultBalance,
+        ...zeroBalance,
         locked: createBalance(200).toBn(),
         locks: [
           {
@@ -70,7 +70,7 @@ describe('toBalances', () => {
         votingBalance: createBalance(200),
       },
       {
-        ...mockDefaultBalance,
+        ...zeroBalance,
         locked: createBalance(200).toBn(),
         locks: [
           {
@@ -96,7 +96,7 @@ describe('toBalances', () => {
         votingBalance: createBalance(10_500),
       },
       {
-        ...mockDefaultBalance,
+        ...zeroBalance,
         locked: createBalance(10_000).toBn(),
         locks: [
           {
