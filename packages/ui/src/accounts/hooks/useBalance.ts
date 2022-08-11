@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import { toBalances } from '@/accounts/model/toBalances'
-import { useApi } from '@/common/hooks/useApi'
+import { useApi } from '@/api/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 import { Address } from '@/common/types'
 import { isDefined } from '@/common/utils'

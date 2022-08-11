@@ -7,7 +7,7 @@ import { TextBig, TextInlineMedium, TextMedium } from '@/common/components/typog
 import { DurationValue } from '@/common/components/typography/DurationValue'
 import { A_DAY, A_MINUTE, A_WEEK, AN_HOUR, Colors, Shadows } from '@/common/constants'
 import { splitDuration } from '@/common/model/formatters'
-import { useElectionRemainingPeriod } from '@/council/hooks/useElectionRemainingPeriod'
+import { useCouncilRemainingPeriod } from '@/council/hooks/useCouncilRemainingPeriod'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 
 const format = splitDuration([
@@ -25,12 +25,12 @@ interface Props {
 
 export const MyTitleDateTile = ({ title, type, duration }: Props) => {
   const { stage: electionStage } = useElectionStage()
-  const remainingPeriod = useElectionRemainingPeriod(electionStage)
+  const remainingPeriod = useCouncilRemainingPeriod()
   const { t } = useTranslation('overview')
 
   const time = useMemo(() => {
     if (type === 'election') {
-      return formatDuration(remainingPeriod?.toNumber() || 0)
+      return formatDuration(remainingPeriod ?? 0)
     }
 
     if (duration) {

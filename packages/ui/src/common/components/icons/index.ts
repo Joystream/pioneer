@@ -1,3 +1,4 @@
+export * from './AlertRoundedIcon'
 export * from './ArrowDownExpandedIcon'
 export * from './ArrowIcon'
 export * from './ArrowInsideIcon'

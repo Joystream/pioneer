@@ -34,11 +34,8 @@ export const StakingAccountSchema = Yup.object()
       return true
     }
 
-    const validationContext = context.options.context as IStakingAccountSchema
-    return (
-      !!validationContext?.balances &&
-      (validationContext.balances as Balances).transferable.gte(validationContext.requiredAmount)
-    )
+    const { requiredAmount, balances } = context.options.context as IStakingAccountSchema
+    return !!balances.total?.gte(requiredAmount)
   })
   .test('locks', 'This account has conflicting locks', (value, context) => {
     if (!value) {

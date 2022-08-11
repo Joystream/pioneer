@@ -21,7 +21,7 @@ interface StakingStepProps extends ValidationHelpers {
 
 export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessageGetter }: StakingStepProps) => {
   const form = useFormContext()
-  const [stake] = form.watch(['staking.account', 'staking.amount'])
+  const [stake] = form.watch(['staking.amount'])
   const balances = useMyBalances()
 
   const isSomeBalanceGteStake = useMemo(
@@ -81,8 +81,7 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
           {isSomeBalanceGteStake && errorMessageGetter('amount')?.startsWith('Insufficient') && (
             <Info>
               <TextMedium>
-                You have sufficient funds on other account to cover
-                {<TokenValue value={minStake} />} stake.
+                You have sufficient funds on other account to cover {<TokenValue value={stake ?? minStake} />} stake.
               </TextMedium>
             </Info>
           )}

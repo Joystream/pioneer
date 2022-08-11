@@ -1,7 +1,7 @@
 import { BN_MILLION, BN_ZERO } from '@polkadot/util'
 import BN from 'bn.js'
 
-import { Api } from '@/api/types'
+import { Api } from '@/api'
 
 import { Worker } from '../types'
 

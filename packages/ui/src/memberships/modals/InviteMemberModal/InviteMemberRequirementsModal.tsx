@@ -3,9 +3,9 @@ import React from 'react'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 
+import { useApi } from '../../../api/hooks/useApi'
 import { Modal, ModalBody, ModalHeader } from '../../../common/components/Modal'
 import { TextMedium, TokenValue } from '../../../common/components/typography'
-import { useApi } from '../../../common/hooks/useApi'
 import { useObservable } from '../../../common/hooks/useObservable'
 
 interface Props {
