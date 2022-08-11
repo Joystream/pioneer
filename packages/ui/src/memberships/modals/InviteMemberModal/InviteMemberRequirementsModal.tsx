@@ -1,12 +1,11 @@
 import React from 'react'
 
 import { LinkSymbol } from '@/common/components/icons/symbols'
+import { Modal, ModalBody, ModalHeader } from '@/common/components/Modal'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
-
-import { Modal, ModalBody, ModalHeader } from '../../../common/components/Modal'
-import { TextMedium, TokenValue } from '../../../common/components/typography'
-import { useApi } from '../../../common/hooks/useApi'
-import { useObservable } from '../../../common/hooks/useObservable'
+import { TextMedium, TokenValue } from '@/common/components/typography'
+import { useApi } from '@/common/hooks/useApi'
+import { useObservable } from '@/common/hooks/useObservable'
 
 interface Props {
   onClose: () => void
@@ -35,7 +34,7 @@ export const InviteMemberRequirementsModal = ({ onClose }: Props) => {
           Current budget: <TokenValue value={workingGroupBudget?.toBn()} />
         </TextMedium>
         <TextMedium>
-          Working Group Dept: <TokenValue value={membershipPrice?.toBn()} />
+          Working Group Debt: <TokenValue value={membershipPrice?.toBn()} />
         </TextMedium>
       </ModalBody>
     </Modal>
