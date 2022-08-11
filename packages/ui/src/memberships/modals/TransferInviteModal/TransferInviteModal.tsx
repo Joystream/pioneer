@@ -76,7 +76,14 @@ export function TransferInviteModal() {
 
   if (state.matches('success')) {
     const { targetMember, numberOfInvites } = state.context
-    return <TransferInviteSuccessModal onClose={hideModal} recipient={targetMember} amount={numberOfInvites} />
+    return (
+      <TransferInviteSuccessModal
+        onClose={hideModal}
+        recipient={targetMember}
+        amount={numberOfInvites}
+        memberId={member.id}
+      />
+    )
   }
 
   if (state.matches('error')) {
@@ -85,6 +92,10 @@ export function TransferInviteModal() {
         There was a problem transferring your invites.
       </FailureModal>
     )
+  }
+
+  if (state.matches('canceled')) {
+    hideModal()
   }
 
   return null
