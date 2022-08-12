@@ -22,7 +22,8 @@ export const TransactionFeesProvider: FC = ({ children }) => {
   const balance = useBalance(signer)
   const feeInfo = useMemo(() => {
     if (balance && transactionFee) {
-      return { transactionFee, canAfford: balance.transferable.gte(transactionFee) }
+      const extraSpendingBalance = balance.locks.find((lock) => lock.type === 'Invitation')?.amount ?? BN_ZERO
+      return { transactionFee, canAfford: balance.transferable.add(extraSpendingBalance).gte(transactionFee) }
     }
   }, [JSON.stringify(balance), transactionFee?.toString()])
 
