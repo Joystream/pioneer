@@ -2,13 +2,11 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import * as Yup from 'yup'
 
-import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
 import { InputComponent, InputText } from '@/common/components/forms'
-import { Arrow } from '@/common/components/icons'
 import {
-  ModalFooter,
   ModalHeader,
+  ModalTransactionFooter,
   ScrolledModal,
   ScrolledModalBody,
   ScrolledModalContainer,
@@ -87,15 +85,10 @@ export const CreateThreadDetailsModal = ({ breadcrumbs, author, send }: Props) =
             </RowGapBlock>
           </ScrolledModalContainer>
         </ScrolledModalBody>
-        <ModalFooter>
-          <ButtonsGroup align="right">
-            <PreviewPostButton author={author} postText={getValues().description} />
-            <ButtonPrimary onClick={() => send('NEXT')} size="medium" disabled={!formState.isValid}>
-              Next step
-              <Arrow direction="right" />
-            </ButtonPrimary>
-          </ButtonsGroup>
-        </ModalFooter>
+        <ModalTransactionFooter
+          extraButtons={<PreviewPostButton author={author} postText={getValues().description} />}
+          next={{ disabled: !formState.isValid, label: 'Next step', onClick: () => send('NEXT') }}
+        />
       </ScrolledModal>
     </>
   )
