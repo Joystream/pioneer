@@ -74,7 +74,7 @@ describe('UI: Vote for Council Modal', () => {
     act(() => {
       fireEvent.click(accountSelector.children[0])
     })
-    return accountSelector
+    return await screen.findByTestId('select-popper-wrapper')
   }
 
   const selectAlice = async () => {

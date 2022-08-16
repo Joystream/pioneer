@@ -183,7 +183,7 @@ describe('UI: AddNewProposalModal', () => {
     stubProposalConstants(api)
 
     createProposalTx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
-    createProposalTxMock = api.api.tx.proposalsCodex.createProposal as unknown as jest.Mock
+    createProposalTxMock = (api.api.tx.proposalsCodex.createProposal as unknown) as jest.Mock
 
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 25)
     stubQuery(
@@ -303,12 +303,12 @@ describe('UI: AddNewProposalModal', () => {
     })
 
     describe('General parameters', () => {
-      beforeEach(async () => {
-        await finishWarning()
-        await finishProposalType()
-      })
-
       describe('Staking account', () => {
+        beforeEach(async () => {
+          await finishWarning()
+          await finishProposalType()
+        })
+
         it('Not selected', async () => {
           const button = await getNextStepButton()
           expect(button).toBeDisabled()
@@ -324,6 +324,8 @@ describe('UI: AddNewProposalModal', () => {
 
       describe('Proposal details', () => {
         beforeEach(async () => {
+          await finishWarning()
+          await finishProposalType()
           await finishStakingAccount()
         })
 
@@ -341,8 +343,15 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       describe('Proposal details validation', () => {
+        beforeEach(async () => {
+          stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 5))
+          stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 5))
+          await finishWarning()
+          await finishProposalType()
+        })
         it('Title too long', async () => {
           stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 5))
+
           await finishStakingAccount()
 
           await fillProposalDetails()
@@ -353,7 +362,6 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Description too long', async () => {
-          stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 5))
           await finishStakingAccount()
 
           await fillProposalDetails()
@@ -364,8 +372,6 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Both fields too long', async () => {
-          stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 5))
-          stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 5))
           await finishStakingAccount()
 
           await fillProposalDetails()
@@ -379,6 +385,8 @@ describe('UI: AddNewProposalModal', () => {
 
       describe('Trigger & Discussion', () => {
         beforeEach(async () => {
+          await finishWarning()
+          await finishProposalType()
           await finishStakingAccount()
           await finishProposalDetails()
         })
@@ -519,10 +527,18 @@ describe('UI: AddNewProposalModal', () => {
           expect(button).toBeDisabled()
         })
 
+        it('Invalid - amount exceeds max value of 10k', async () => {
+          await SpecificParameters.FundingRequest.selectRecipient('bob')
+          await SpecificParameters.fillAmount(100_000)
+
+          const button = await getCreateButton()
+          expect(screen.queryByText(/^Maximal amount allowed is*/)).toBeInTheDocument()
+          expect(button).toBeDisabled()
+        })
+
         it('Valid - everything filled', async () => {
           const amount = 100
-          // await SpecificParameters.fillAmount(amount)
-          await fillField('amount-input', amount)
+          await SpecificParameters.fillAmount(amount)
           await SpecificParameters.FundingRequest.selectRecipient('bob')
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
@@ -552,14 +568,14 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid - over 100 percent', async () => {
-          await fillField('amount-input', 200)
+          await SpecificParameters.fillAmount(200)
           expect(await screen.getByTestId('amount-input')).toHaveValue('200')
           expect(await getCreateButton()).toBeDisabled()
         })
 
         it('Valid', async () => {
           const amount = 40
-          await fillField('amount-input', amount)
+          await SpecificParameters.fillAmount(amount)
           expect(await screen.getByTestId('amount-input')).toHaveValue(String(amount))
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
@@ -571,7 +587,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid with execution warning', async () => {
           const amount = 100
-          await fillField('amount-input', amount)
+          await SpecificParameters.fillAmount(amount)
           expect(await screen.getByTestId('amount-input')).toHaveValue(String(amount))
 
           expect(await getCreateButton()).toBeDisabled()
@@ -855,7 +871,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid form', async () => {
           const amount = 100
-          await fillField('amount-input', amount)
+          await SpecificParameters.fillAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
@@ -977,7 +993,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Validate max value', async () => {
           await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
-          await fillField('amount-input', powerOf2(32))
+          await SpecificParameters.fillAmount(powerOf2(32))
           expect(screen.queryByTestId('amount-input')).toHaveValue('0')
           expect(screen.queryByTestId('amount-input')).toBeEnabled()
         })
