@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { PastCouncilsList } from '@/council/components/pastCouncil/PastCouncilsList/PastCouncilsList'
 import { PastCouncil } from '@/council/types/PastCouncil'
@@ -18,11 +17,7 @@ interface Props {
 }
 
 const Template: Story<Props> = () => {
-  return (
-    <MemoryRouter>
-      <PastCouncilsList />
-    </MemoryRouter>
-  )
+  return <PastCouncilsList />
 }
 
 export const Default = Template.bind({})

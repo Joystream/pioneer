@@ -10,7 +10,8 @@ import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatu
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
-import { Api } from '@/api/types'
+import { Api } from '@/api'
+import { useApi } from '@/api/hooks/useApi'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Checkbox } from '@/common/components/forms'
 import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
@@ -23,7 +24,6 @@ import {
 } from '@/common/components/StepperModal'
 import { BN_ZERO } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
-import { useApi } from '@/common/hooks/useApi'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
@@ -84,14 +84,10 @@ export const AddNewProposalModal = () => {
   const { hasRequiredStake } = useHasRequiredStake(constants?.requiredStake || BN_ZERO, 'Proposals')
   const balance = useBalance(formMap[0]?.address)
   const stakingStatus = useStakingAccountStatus(formMap[0]?.address, activeMember?.id)
+  const schema = useMemo(() => schemaFactory(api), [!api])
+
   const form = useForm<AddNewProposalForm>({
-    resolver: useYupValidationResolver<AddNewProposalForm>(
-      schemaFactory(
-        api?.consts.proposalsEngine.titleMaxLength.toNumber() ?? 0,
-        api?.consts.proposalsEngine.descriptionMaxLength.toNumber() ?? 0
-      ),
-      machineStateConverter(state.value)
-    ),
+    resolver: useYupValidationResolver<AddNewProposalForm>(schema, machineStateConverter(state.value)),
     mode: 'onChange',
     context: {
       minimumValidatorCount,

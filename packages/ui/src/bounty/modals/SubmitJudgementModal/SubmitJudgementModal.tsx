@@ -8,6 +8,7 @@ import * as Yup from 'yup'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useApi } from '@/api/hooks/useApi'
 import {
   CheckBoxLabelWrapper,
   InlineToggleWrap,
@@ -32,7 +33,6 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextHuge, TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO } from '@/common/constants'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
 import { createType } from '@/common/model/createType'

@@ -4,6 +4,7 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
+import { ApiContext } from '@/api/providers/context'
 import {
   BountyWithdrawContributionModalCall,
   WithdrawContributionModal,
@@ -11,7 +12,6 @@ import {
 import { Bounty, Contributor } from '@/bounty/types/Bounty'
 import { BN_ZERO } from '@/common/constants'
 import { formatJoyValue, formatTokenValue } from '@/common/model/formatters'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'

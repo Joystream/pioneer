@@ -1,14 +1,13 @@
 import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { AddressToBalanceMap } from '@/accounts/types'
+import { ApiContext } from '@/api/providers/context'
 import { SubmitWorkModal } from '@/bounty/modals/SubmitWorkModal/SubmitWorkModal'
 import { Bounty } from '@/bounty/types/Bounty'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
@@ -71,28 +70,26 @@ stubTransaction(api, 'api.tx.bounty.submitWork', 2000)
 const Template: Story = (args) => {
   return (
     <MockApolloProvider members>
-      <MemoryRouter>
-        <ApiContext.Provider value={api}>
-          <MembershipContext.Provider value={membership}>
-            <AccountsContext.Provider value={accounts}>
-              <BalancesContext.Provider value={balance}>
-                <ModalContext.Provider
-                  value={{
-                    modalData: {
-                      bounty,
-                    },
-                    modal: 'foo',
-                    hideModal: () => undefined,
-                    showModal: () => undefined,
-                  }}
-                >
-                  <SubmitWorkModal {...args} />
-                </ModalContext.Provider>
-              </BalancesContext.Provider>
-            </AccountsContext.Provider>
-          </MembershipContext.Provider>
-        </ApiContext.Provider>
-      </MemoryRouter>
+      <ApiContext.Provider value={api}>
+        <MembershipContext.Provider value={membership}>
+          <AccountsContext.Provider value={accounts}>
+            <BalancesContext.Provider value={balance}>
+              <ModalContext.Provider
+                value={{
+                  modalData: {
+                    bounty,
+                  },
+                  modal: 'foo',
+                  hideModal: () => undefined,
+                  showModal: () => undefined,
+                }}
+              >
+                <SubmitWorkModal {...args} />
+              </ModalContext.Provider>
+            </BalancesContext.Provider>
+          </AccountsContext.Provider>
+        </MembershipContext.Provider>
+      </ApiContext.Provider>
     </MockApolloProvider>
   )
 }

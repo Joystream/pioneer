@@ -8,11 +8,11 @@ import { from, of, asyncScheduler, scheduled, Observable } from 'rxjs'
 import { toBalances } from '@/accounts/model/toBalances'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { Account, LockType } from '@/accounts/types'
-import { Api } from '@/api/types'
+import { Api } from '@/api'
+import { UseApi } from '@/api/providers/provider'
 import { BN_ZERO } from '@/common/constants'
 import { createType } from '@/common/model/createType'
 import { ExtractTuple } from '@/common/model/JoystreamNode'
-import { UseApi } from '@/common/providers/api/provider'
 import { proposalDetails } from '@/proposals/model/proposalDetails'
 
 import { mockedBalances, mockedMyBalances, mockedUseMyAccounts } from '../setup'
@@ -153,7 +153,7 @@ export const stubConst = <T>(api: UseApi, constSubPath: string, value: T) => {
 
 export const stubApi = () => {
   const api: UseApi = {
-    api: {} as unknown as Api,
+    api: ({} as unknown) as Api,
     isConnected: true,
     connectionState: 'connected',
   }
@@ -215,6 +215,8 @@ export const stubProposalConstants = (api: UseApi, constants?: { requiredStake: 
     })
   }
   set(api, 'api.consts.members.referralCutMaximumPercent', new BN(50))
+  set(api, 'api.consts.proposalsCodex.fundingRequestProposalMaxAmount', new BN(10_000))
+  set(api, 'api.consts.proposalsCodex.setMaxValidatorCountProposalMaxValidators', new BN(300))
   set(
     api,
     'api.query.members.membershipPrice',
@@ -247,6 +249,7 @@ export const stubCouncilAndReferendum = (
     'council.stage',
     createType('PalletCouncilCouncilStageUpdate', {
       stage: createType('PalletCouncilCouncilStage', councilStage),
+      changedAt: BN_ZERO,
     })
   )
 }

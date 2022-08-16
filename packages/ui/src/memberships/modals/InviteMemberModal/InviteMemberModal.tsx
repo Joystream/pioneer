@@ -1,9 +1,9 @@
 import { useMachine } from '@xstate/react'
 import React, { useEffect } from 'react'
 
+import { useApi } from '@/api/hooks/useApi'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
-import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 import { Address } from '@/common/types'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'

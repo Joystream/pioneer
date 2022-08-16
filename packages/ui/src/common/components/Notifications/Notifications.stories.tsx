@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
@@ -15,22 +14,20 @@ export default {
 } as Meta
 
 const Template: Story = () => (
-  <MemoryRouter>
-    <MockApolloProvider members council forum proposals workers workingGroups>
-      <ModalContext.Provider
-        value={{
-          showModal: () => null,
-          hideModal: () => null,
-          modal: '',
-          modalData: {},
-        }}
-      >
-        <TemplateBlock>
-          <Notifications onClose={() => null} isNotificationsPanelOpen={true} />
-        </TemplateBlock>
-      </ModalContext.Provider>
-    </MockApolloProvider>
-  </MemoryRouter>
+  <MockApolloProvider members council forum proposals workers workingGroups>
+    <ModalContext.Provider
+      value={{
+        showModal: () => null,
+        hideModal: () => null,
+        modal: '',
+        modalData: {},
+      }}
+    >
+      <TemplateBlock>
+        <Notifications onClose={() => null} isNotificationsPanelOpen={true} />
+      </TemplateBlock>
+    </ModalContext.Provider>
+  </MockApolloProvider>
 )
 
 export const Default = Template.bind({})

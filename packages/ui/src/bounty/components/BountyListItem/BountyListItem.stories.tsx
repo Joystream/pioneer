@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { BountyListItem } from '@/bounty/components/BountyListItem/BountyListItem'
 import { Bounty } from '@/bounty/types/Bounty'
@@ -22,11 +21,9 @@ export default {
 
 const Template: Story<Bounty> = (args) => {
   return (
-    <MemoryRouter>
-      <MockApolloProvider workingGroups members workers>
-        <BountyListItem {...args} />
-      </MockApolloProvider>
-    </MemoryRouter>
+    <MockApolloProvider workingGroups members workers>
+      <BountyListItem {...args} />
+    </MockApolloProvider>
   )
 }
 

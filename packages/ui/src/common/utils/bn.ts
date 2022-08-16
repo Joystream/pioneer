@@ -1,7 +1,5 @@
-import { BN_TEN, BN_TWO } from '@polkadot/util'
+import { BN_TEN, BN_TWO, BN_ZERO } from '@polkadot/util'
 import BN from 'bn.js'
-
-import { BN_ZERO } from '@/common/constants'
 
 type BNParam = number | string | number[] | Uint8Array | Buffer | BN
 

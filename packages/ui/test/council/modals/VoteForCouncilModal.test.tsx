@@ -6,9 +6,9 @@ import { act } from 'react-dom/test-utils'
 import { MemoryRouter } from 'react-router'
 
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { ApiContext } from '@/api/providers/context'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { VoteForCouncilModal } from '@/council/modals/VoteForCouncil'
@@ -74,7 +74,7 @@ describe('UI: Vote for Council Modal', () => {
     act(() => {
       fireEvent.click(accountSelector.children[0])
     })
-    return accountSelector
+    return await screen.findByTestId('select-popper-wrapper')
   }
 
   const selectAlice = async () => {

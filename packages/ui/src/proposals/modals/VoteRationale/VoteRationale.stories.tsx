@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { ModalContext } from '@/common/providers/modal/context'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
@@ -14,22 +13,20 @@ export default {
 
 export const Default: Story = () => {
   return (
-    <MemoryRouter>
-      <MockApolloProvider members proposals workingGroups workers>
-        <ModalContext.Provider
-          value={{
-            modalData: {
-              id: '1',
-            },
-            modal: 'Foo',
-            hideModal: () => undefined,
-            showModal: () => undefined,
-          }}
-        >
-          <VoteRationale />
-        </ModalContext.Provider>
-      </MockApolloProvider>
-    </MemoryRouter>
+    <MockApolloProvider members proposals workingGroups workers>
+      <ModalContext.Provider
+        value={{
+          modalData: {
+            id: '1',
+          },
+          modal: 'Foo',
+          hideModal: () => undefined,
+          showModal: () => undefined,
+        }}
+      >
+        <VoteRationale />
+      </ModalContext.Provider>
+    </MockApolloProvider>
   )
 }
 
