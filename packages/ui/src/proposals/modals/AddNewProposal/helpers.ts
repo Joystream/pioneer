@@ -141,7 +141,6 @@ export interface AddNewProposalForm {
   }
 }
 
-// export const schemaFactory = (titleMaxLength: number, rationaleMaxLength: number) => {
 export const schemaFactory = (api?: ProxyApi) => {
   return Yup.object().shape({
     groupId: Yup.string(),
