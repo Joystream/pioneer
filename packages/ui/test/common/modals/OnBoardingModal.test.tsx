@@ -4,8 +4,6 @@ import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { MemoryRouter } from 'react-router'
 
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { AddressToBalanceMap } from '@/accounts/types'
 import { Colors } from '@/common/constants'
 import { OnBoardingModal } from '@/common/modals/OnBoardingModal'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -13,31 +11,14 @@ import { UseModal } from '@/common/providers/modal/types'
 import { UseOnBoarding } from '@/common/providers/onboarding/types'
 
 import { MockApolloProvider } from '../../_mocks/providers'
-import { stubApi } from '../../_mocks/transactions'
-import { mockDefaultBalance } from '../../setup'
-
-const mockUseMyAccounts: UseAccounts = {
-  isLoading: false,
-  hasAccounts: false,
-  allAccounts: [],
-  error: undefined,
-}
+import { stubAccounts, stubApi } from '../../_mocks/transactions'
+import { mockedMyBalances, zeroBalance } from '../../setup'
 
 const mockOnBoarding: UseOnBoarding = {
   status: 'installPlugin',
   isLoading: false,
   setMembershipAccount: jest.fn(),
 }
-
-let mockMyBalances: AddressToBalanceMap = {}
-
-jest.mock('@/accounts/hooks/useMyAccounts', () => ({
-  useMyAccounts: () => mockUseMyAccounts,
-}))
-
-jest.mock('@/accounts/hooks/useMyBalances', () => ({
-  useMyBalances: () => mockMyBalances,
-}))
 
 jest.mock('@/common/hooks/useOnBoarding', () => ({
   useOnBoarding: () => mockOnBoarding,
@@ -128,8 +109,7 @@ describe('UI: OnBoardingModal', () => {
 
     describe('Pick account step', () => {
       beforeAll(() => {
-        mockUseMyAccounts.hasAccounts = true
-        mockUseMyAccounts.allAccounts = [
+        stubAccounts([
           {
             address: '123',
             name: 'Alice',
@@ -138,16 +118,16 @@ describe('UI: OnBoardingModal', () => {
             address: '321',
             name: 'Bob',
           },
-        ]
-        mockMyBalances = {
+        ])
+        mockedMyBalances.mockReturnValue({
           '123': {
-            ...mockDefaultBalance,
+            ...zeroBalance,
             total: new BN(10),
           },
           '321': {
-            ...mockDefaultBalance,
+            ...zeroBalance,
           },
-        }
+        })
       })
 
       it('Shows correct screen', () => {

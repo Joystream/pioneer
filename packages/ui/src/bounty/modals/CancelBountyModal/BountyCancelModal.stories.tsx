@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
@@ -48,22 +47,20 @@ const useMyBalances: AddressToBalanceMap = {
 
 const Template: Story = () => {
   return (
-    <MemoryRouter>
-      <ModalContext.Provider
-        value={{
-          hideModal: () => undefined,
-          modal: 'bar',
-          showModal: () => undefined,
-          modalData,
-        }}
-      >
-        <AccountsContext.Provider value={useMyAccounts}>
-          <BalancesContext.Provider value={useMyBalances}>
-            <BountyCancelModal />
-          </BalancesContext.Provider>
-        </AccountsContext.Provider>
-      </ModalContext.Provider>
-    </MemoryRouter>
+    <ModalContext.Provider
+      value={{
+        hideModal: () => undefined,
+        modal: 'bar',
+        showModal: () => undefined,
+        modalData,
+      }}
+    >
+      <AccountsContext.Provider value={useMyAccounts}>
+        <BalancesContext.Provider value={useMyBalances}>
+          <BountyCancelModal />
+        </BalancesContext.Provider>
+      </AccountsContext.Provider>
+    </ModalContext.Provider>
   )
 }
 

@@ -1,4 +1,4 @@
-import { BountyMetadata } from '@joystream/metadata-protobuf'
+import { BountyMetadata, ForumThreadMetadata } from '@joystream/metadata-protobuf'
 import { useMachine } from '@xstate/react'
 import React, { useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
@@ -8,6 +8,7 @@ import styled from 'styled-components'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useApi } from '@/api/hooks/useApi'
 import { useBountyForumCategory } from '@/bounty/hooks/useBountyForumCategory'
 import { FundingDetailsStep } from '@/bounty/modals/AddBountyModal/components/FundingDetailsStep'
 import { GeneralParametersStep } from '@/bounty/modals/AddBountyModal/components/GeneralParametersStep'
@@ -29,7 +30,6 @@ import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/
 import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
 import { TokenValue } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
@@ -122,9 +122,11 @@ export const AddBountyModal = () => {
     const transaction = api.tx.forum.createThread(
       activeMember.id,
       threadCategory.id,
-      `${title} by ${creator?.handle}`,
-      `This is the description thread for ${title}`,
-      null
+      metadataToBytes(ForumThreadMetadata, {
+        tags: [''],
+        title: `${title} by ${creator?.handle}`,
+      }),
+      `This is the description thread for ${title}`
     )
     const service = state.children.createThread
     const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')

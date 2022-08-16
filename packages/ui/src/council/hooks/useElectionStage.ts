@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { concatMap, EMPTY, merge, Observable, of } from 'rxjs'
 
-import { useApi } from '@/common/hooks/useApi'
+import { useApi } from '@/api/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 import { ElectionStage } from '@/council/types/Election'
 

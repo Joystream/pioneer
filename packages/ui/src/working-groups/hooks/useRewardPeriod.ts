@@ -1,6 +1,6 @@
 import { u32 } from '@polkadot/types'
 
-import { useApi } from '@/common/hooks/useApi'
+import { useApi } from '@/api/hooks/useApi'
 
 import { GroupIdName } from '../types'
 

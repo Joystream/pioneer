@@ -1,6 +1,6 @@
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
 
-import { Api } from '@/api/types'
+import { Api } from '@/api'
 import { BN_ZERO } from '@/common/constants'
 import { createType } from '@/common/model/createType'
 import { metadataToBytes } from '@/common/model/JoystreamNode'

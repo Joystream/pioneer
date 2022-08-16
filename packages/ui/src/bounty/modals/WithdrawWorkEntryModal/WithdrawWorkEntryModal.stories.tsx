@@ -1,13 +1,12 @@
 import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { AddressToBalanceMap } from '@/accounts/types'
+import { ApiContext } from '@/api/providers/context'
 import { WithdrawWorkEntryModal } from '@/bounty/modals/WithdrawWorkEntryModal/WithdrawWorkEntryModal'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import bounties from '@/mocks/data/raw/bounties.json'
@@ -66,26 +65,24 @@ stubTransaction(api, 'api.tx.bounty.withdrawWorkEntry', 888)
 
 const Template: Story = () => {
   return (
-    <MemoryRouter>
-      <ApiContext.Provider value={api}>
-        <MembershipContext.Provider value={membership}>
-          <AccountsContext.Provider value={accounts}>
-            <BalancesContext.Provider value={balance}>
-              <ModalContext.Provider
-                value={{
-                  modalData,
-                  modal: 'foo',
-                  hideModal: () => undefined,
-                  showModal: () => undefined,
-                }}
-              >
-                <WithdrawWorkEntryModal />
-              </ModalContext.Provider>
-            </BalancesContext.Provider>
-          </AccountsContext.Provider>
-        </MembershipContext.Provider>
-      </ApiContext.Provider>
-    </MemoryRouter>
+    <ApiContext.Provider value={api}>
+      <MembershipContext.Provider value={membership}>
+        <AccountsContext.Provider value={accounts}>
+          <BalancesContext.Provider value={balance}>
+            <ModalContext.Provider
+              value={{
+                modalData,
+                modal: 'foo',
+                hideModal: () => undefined,
+                showModal: () => undefined,
+              }}
+            >
+              <WithdrawWorkEntryModal />
+            </ModalContext.Provider>
+          </BalancesContext.Provider>
+        </AccountsContext.Provider>
+      </MembershipContext.Provider>
+    </ApiContext.Provider>
   )
 }
 

@@ -6,12 +6,9 @@ import { act } from 'react-dom/test-utils'
 import { MemoryRouter } from 'react-router'
 
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import { ApiContext } from '@/api/providers/context'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { VoteForCouncilModal } from '@/council/modals/VoteForCouncil'
@@ -33,6 +30,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import {
   currentStubErrorMessage,
+  stubAccounts,
   stubApi,
   stubCouncilConstants,
   stubDefaultBalances,
@@ -67,7 +65,6 @@ describe('UI: Vote for Council Modal', () => {
     },
   }
 
-  let useAccounts: UseAccounts
   let tx: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
@@ -77,7 +74,7 @@ describe('UI: Vote for Council Modal', () => {
     act(() => {
       fireEvent.click(accountSelector.children[0])
     })
-    return accountSelector
+    return await screen.findByTestId('select-popper-wrapper')
   }
 
   const selectAlice = async () => {
@@ -112,18 +109,14 @@ describe('UI: Vote for Council Modal', () => {
     seedCouncilCandidates(server.server, [{ memberId: '0' }])
     resetVotes()
 
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
 
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     stubCouncilConstants(api, { minStake: 500 })
     tx = stubTransaction(api, 'api.tx.referendum.vote', 25)
 
@@ -267,15 +260,11 @@ describe('UI: Vote for Council Modal', () => {
         <ModalContext.Provider value={useModal}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
-              <AccountsContext.Provider value={useAccounts}>
-                <ApiContext.Provider value={api}>
-                  <BalancesContextProvider>
-                    <MembershipContext.Provider value={useMyMemberships}>
-                      <VoteForCouncilModal />
-                    </MembershipContext.Provider>
-                  </BalancesContextProvider>
-                </ApiContext.Provider>
-              </AccountsContext.Provider>
+              <ApiContext.Provider value={api}>
+                <MembershipContext.Provider value={useMyMemberships}>
+                  <VoteForCouncilModal />
+                </MembershipContext.Provider>
+              </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
         </ModalContext.Provider>

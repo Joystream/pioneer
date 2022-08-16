@@ -8,7 +8,6 @@ import { MainPanel } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { BlockDurationStatistics, MultiValueStat, Statistics } from '@/common/components/statistics'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
-import { BN_ZERO } from '@/common/constants'
 import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { CouncilList, CouncilOrder } from '@/council/components/councilList'
@@ -31,7 +30,7 @@ export const Council = () => {
   )
 
   const { council, isLoading } = useElectedCouncil()
-  const { idlePeriodRemaining, budget, reward } = useCouncilStatistics(council?.electedAt.number)
+  const { idlePeriodRemaining, budget, reward } = useCouncilStatistics()
   const { activities } = useCouncilActivities()
 
   const [order, setOrder] = useState<CouncilOrder>({ key: 'member' })
@@ -43,7 +42,7 @@ export const Council = () => {
   const main = (
     <MainPanel>
       <Statistics>
-        {electionStage === 'inactive' && idlePeriodRemaining?.gt(BN_ZERO) ? (
+        {electionStage === 'inactive' ? (
           <BlockDurationStatistics title="Normal period remaining length" value={idlePeriodRemaining} />
         ) : (
           <ViewElectionButton />

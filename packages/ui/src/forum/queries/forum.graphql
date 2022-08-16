@@ -134,6 +134,13 @@ fragment ForumPostWithoutReplyFields on ForumPost {
     inBlock
     network
   }
+  postmoderatedeventpost {
+    actor {
+      membership {
+        ...MemberFields
+      }
+    }
+  }
   status {
     __typename
   }

@@ -4,10 +4,10 @@ import React, { useEffect } from 'react'
 
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
+import { useApi } from '@/api/hooks/useApi'
 import { FailureModal } from '@/common/components/FailureModal'
 import { TransferIcon } from '@/common/components/icons'
 import { WaitModal } from '@/common/components/WaitModal'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 
 import { useMember } from '../../hooks/useMembership'
@@ -76,7 +76,14 @@ export function TransferInviteModal() {
 
   if (state.matches('success')) {
     const { targetMember, numberOfInvites } = state.context
-    return <TransferInviteSuccessModal onClose={hideModal} recipient={targetMember} amount={numberOfInvites} />
+    return (
+      <TransferInviteSuccessModal
+        onClose={hideModal}
+        recipient={targetMember}
+        amount={numberOfInvites}
+        memberId={member.id}
+      />
+    )
   }
 
   if (state.matches('error')) {
@@ -85,6 +92,10 @@ export function TransferInviteModal() {
         There was a problem transferring your invites.
       </FailureModal>
     )
+  }
+
+  if (state.matches('canceled')) {
+    hideModal()
   }
 
   return null

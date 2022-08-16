@@ -1,14 +1,13 @@
 import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { AddressToBalanceMap } from '@/accounts/types'
+import { ApiContext } from '@/api/providers/context'
 import { SubmitJudgementModal } from '@/bounty/modals/SubmitJudgementModal/SubmitJudgementModal'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
@@ -75,32 +74,30 @@ stubTransaction(api, 'api.tx.bounty.submitOracleJudgment', 888)
 
 const Template: Story = () => {
   return (
-    <MemoryRouter>
-      <MockQueryNodeProviders>
-        <MockKeyringProvider>
-          <ApiContext.Provider value={api}>
-            <MockApolloProvider members>
-              <ModalContext.Provider
-                value={{
-                  hideModal: () => undefined,
-                  modal: 'bar',
-                  showModal: () => undefined,
-                  modalData,
-                }}
-              >
-                <AccountsContext.Provider value={useMyAccounts}>
-                  <BalancesContext.Provider value={useMyBalances}>
-                    <MembershipContext.Provider value={useMyMemberships}>
-                      <SubmitJudgementModal />
-                    </MembershipContext.Provider>
-                  </BalancesContext.Provider>
-                </AccountsContext.Provider>
-              </ModalContext.Provider>
-            </MockApolloProvider>
-          </ApiContext.Provider>
-        </MockKeyringProvider>
-      </MockQueryNodeProviders>
-    </MemoryRouter>
+    <MockQueryNodeProviders>
+      <MockKeyringProvider>
+        <ApiContext.Provider value={api}>
+          <MockApolloProvider members>
+            <ModalContext.Provider
+              value={{
+                hideModal: () => undefined,
+                modal: 'bar',
+                showModal: () => undefined,
+                modalData,
+              }}
+            >
+              <AccountsContext.Provider value={useMyAccounts}>
+                <BalancesContext.Provider value={useMyBalances}>
+                  <MembershipContext.Provider value={useMyMemberships}>
+                    <SubmitJudgementModal />
+                  </MembershipContext.Provider>
+                </BalancesContext.Provider>
+              </AccountsContext.Provider>
+            </ModalContext.Provider>
+          </MockApolloProvider>
+        </ApiContext.Provider>
+      </MockKeyringProvider>
+    </MockQueryNodeProviders>
   )
 }
 

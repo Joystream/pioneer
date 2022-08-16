@@ -2,8 +2,8 @@ import { render, screen, waitForElementToBeRemoved } from '@testing-library/reac
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
+import { ApiContext } from '@/api/providers/context'
 import { createType } from '@/common/model/createType'
-import { ApiContext } from '@/common/providers/api/context'
 import {
   seedWorkingGroups,
   seedMembers,

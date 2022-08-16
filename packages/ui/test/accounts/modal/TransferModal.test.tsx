@@ -6,10 +6,9 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { TransferModal } from '@/accounts/modals/TransferModal'
-import { Account, Balances } from '@/accounts/types'
-import { BN_ZERO } from '@/common/constants'
+import { Account } from '@/accounts/types'
+import { ApiContext } from '@/api/providers/context'
 import { createType } from '@/common/model/createType'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 
 import { getButton } from '../../_helpers/getButton'
@@ -18,30 +17,13 @@ import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  stubAccounts,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockDefaultBalance } from '../../setup'
-
-const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
-  hasAccounts: true,
-  allAccounts: [],
-}
-
-const useMyBalances: { [k: string]: Balances } = {}
-
-jest.mock('@/accounts/hooks/useMyAccounts', () => {
-  return {
-    useMyAccounts: () => useMyAccounts,
-  }
-})
-
-jest.mock('@/accounts/hooks/useMyBalances', () => ({
-  useMyBalances: () => useMyBalances,
-}))
 
 interface ModalData {
   from?: Account
@@ -52,27 +34,11 @@ interface ModalData {
   transactionFactory?: (amount: BN) => SubmittableExtrinsic<'rxjs', ISubmittableResult>
 }
 
-const BN_BALANCE = new BN(1000)
-
 describe('UI: TransferModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
-    useMyAccounts.allAccounts.push(alice, bob)
-    useMyBalances[alice.address] = {
-      ...mockDefaultBalance,
-      total: BN_BALANCE,
-      locked: BN_ZERO,
-      recoverable: BN_BALANCE,
-      transferable: BN_BALANCE,
-    }
-    useMyBalances[bob.address] = {
-      ...mockDefaultBalance,
-      total: BN_BALANCE,
-      locked: BN_ZERO,
-      recoverable: BN_BALANCE,
-      transferable: BN_BALANCE,
-    }
+    stubAccounts([alice, bob])
   })
 
   afterAll(() => {
@@ -92,7 +58,7 @@ describe('UI: TransferModal', () => {
   })
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     transfer = stubTransaction(api, 'api.tx.balances.transfer')
   })
 

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 
+import { useApi } from '@/api/hooks/useApi'
 import { ContextMenu } from '@/common/components/ContextMenu'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { createType } from '@/common/model/createType'
 import { PostListItemType } from '@/forum/components/PostList/PostListItem'

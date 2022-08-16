@@ -3,21 +3,23 @@ import { renderHook } from '@testing-library/react-hooks'
 import { BaseDotsamaWallet } from 'injectweb3-connect'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { ApiContext } from '@/api/providers/context'
+import { UseApi } from '@/api/providers/provider'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
-import { ApiContext } from '@/common/providers/api/context'
-import { UseApi } from '@/common/providers/api/provider'
 import { OnBoardingProvider } from '@/common/providers/onboarding/provider'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
 
 import { getAccount } from '../../../dev/node-mocks/data/addresses'
+import { alice } from '../../_mocks/keyring'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { stubAccounts, stubBalances } from '../../_mocks/transactions'
 
 let mockUseLocalStorage: [string | undefined, () => void] = [undefined, jest.fn()]
+
+const wallet = new BaseDotsamaWallet({ title: 'ExtraWallet' })
 
 jest.mock('@/common/hooks/useLocalStorage', () => ({
   useLocalStorage: () => mockUseLocalStorage,
@@ -26,11 +28,6 @@ jest.mock('@/common/hooks/useLocalStorage', () => ({
 describe('useOnBoarding', () => {
   const server = setupMockServer()
 
-  const useMyAccounts: UseAccounts = {
-    isLoading: true,
-    hasAccounts: false,
-    allAccounts: [],
-  }
   const useMyMemberships: MyMemberships = {
     helpers: {
       getMemberIdByBoundAccountAddress: () => undefined,
@@ -61,16 +58,13 @@ describe('useOnBoarding', () => {
 
     describe('Loaded', () => {
       beforeEach(() => {
-        useMyAccounts.isLoading = false
+        stubAccounts([], { error: undefined, wallet })
         useMyMemberships.isLoading = false
-        useMyAccounts.error = undefined
         useApi.isConnected = true
-        useMyAccounts.wallet = new BaseDotsamaWallet({ title: 'ExtraWallet' })
       })
 
       it('Install plugin', async () => {
-        useMyAccounts.error = 'NO_EXTENSION'
-        useMyAccounts.wallet = undefined
+        stubAccounts([], { error: 'NO_EXTENSION', wallet: undefined })
 
         const { isLoading, status } = await renderUseOnBoarding()
 
@@ -86,8 +80,8 @@ describe('useOnBoarding', () => {
       })
 
       it('Create membership', async () => {
-        useMyAccounts.hasAccounts = true
-        useMyAccounts.allAccounts = [{ name: 'Account', address: getAccount('alice') }]
+        stubAccounts([alice], { error: undefined, wallet })
+        stubBalances({ available: 0 })
         mockUseLocalStorage = [getAccount('alice'), jest.fn()]
 
         const { isLoading, status } = await renderUseOnBoarding()
@@ -97,7 +91,7 @@ describe('useOnBoarding', () => {
       })
 
       it('Finished', async () => {
-        useMyAccounts.hasAccounts = true
+        mockUseLocalStorage = [getAccount('alice'), jest.fn()]
         useMyMemberships.hasMembers = true
         mockUseLocalStorage = ['redeemed', jest.fn()]
         const { isLoading, status } = await renderUseOnBoarding()
@@ -113,11 +107,9 @@ describe('useOnBoarding', () => {
       wrapper: ({ children }) => (
         <MockApolloProvider>
           <ApiContext.Provider value={useApi}>
-            <AccountsContext.Provider value={useMyAccounts}>
-              <MembershipContext.Provider value={useMyMemberships}>
-                <OnBoardingProvider>{children}</OnBoardingProvider>
-              </MembershipContext.Provider>
-            </AccountsContext.Provider>
+            <MembershipContext.Provider value={useMyMemberships}>
+              <OnBoardingProvider>{children}</OnBoardingProvider>
+            </MembershipContext.Provider>
           </ApiContext.Provider>
         </MockApolloProvider>
       ),

@@ -52,9 +52,9 @@ export const AuthorizeTransactionModal = ({
 
   useEffect(() => {
     if (controllerAccount && paymentInfo?.partialFee) {
-      setHasFunds(balances[controllerAccount.address]?.transferable.gte(paymentInfo.partialFee))
+      setHasFunds(!!balances?.[controllerAccount.address]?.transferable.gte(paymentInfo.partialFee))
     }
-  }, [controllerAccount, paymentInfo?.partialFee])
+  }, [balances, controllerAccount, paymentInfo?.partialFee])
 
   return (
     <TransactionModal onClose={onClose} service={service} useMultiTransaction={useMultiTransaction}>

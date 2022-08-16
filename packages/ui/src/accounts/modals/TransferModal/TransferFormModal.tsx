@@ -63,11 +63,11 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
   const [sender, setSender] = useState<Account | undefined>(from)
   const balances = useMyBalances()
   const filterSender = useCallback(
-    (account: Account) => account.address !== recipient?.address && balances[account.address]?.transferable.gt(BN_ZERO),
+    ({ address }: Account) => address !== recipient?.address && !!balances?.[address]?.transferable.gt(BN_ZERO),
     [recipient, balances]
   )
   const schema = useMemo(
-    () => schemaFactory(maxValue, minValue, balances[sender?.address as string]?.transferable),
+    () => schemaFactory(maxValue, minValue, balances?.[sender?.address as string]?.transferable),
     [maxValue, minValue, balances, sender]
   )
 
@@ -78,7 +78,7 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
   } = useForm<TransferTokensFormField>({ amount: initialValue }, schema)
   const { isValid, errors } = validation
 
-  const transferableBalance = balances[sender?.address as string]?.transferable ?? BN_ZERO
+  const transferableBalance = balances?.[sender?.address as string]?.transferable ?? BN_ZERO
   const filterRecipient = useCallback(filterAccount(sender), [sender])
   const getIconType = () => (!from ? (!to ? 'transfer' : 'receive') : 'send')
 

@@ -3,11 +3,9 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { BalancesContext } from '@/accounts/providers/balances/context'
+import { ApiContext } from '@/api/providers/context'
 import { AnnounceWorkEntryModal } from '@/bounty/modals/AnnounceWorkEntryModal'
 import { formatTokenValue } from '@/common/model/formatters'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { Transaction, UseTransaction } from '@/common/providers/transactionFees/context'
@@ -19,23 +17,18 @@ import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import {
+  stubAccounts,
   stubApi,
+  stubBalances,
   stubBountyConstants,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockDefaultBalance, mockedTransactionFee } from '../../setup'
+import { mockedTransactionFee } from '../../setup'
 
 const [bountyMock] = bounties
 const bounty = { ...bountyMock, entrantStake: new BN(bountyMock.entrantStake) }
-const sufficientBalance = bounty.entrantStake.addn(1000)
-
-const defaultBalance = {
-  ...mockDefaultBalance,
-  total: sufficientBalance,
-  transferable: sufficientBalance,
-}
 
 describe('UI: AnnounceWorkEntryModal', () => {
   let renderResult: RenderResult
@@ -61,11 +54,6 @@ describe('UI: AnnounceWorkEntryModal', () => {
     },
   }
 
-  const useBalances = {
-    [getMember('bob').controllerAccount]: { ...defaultBalance },
-    [getMember('alice').controllerAccount]: defaultBalance,
-  }
-
   const useMembership = {
     isLoading: false,
     active: getMember('alice'),
@@ -77,11 +65,10 @@ describe('UI: AnnounceWorkEntryModal', () => {
     },
   }
 
-  const useAccounts = {
-    isLoading: false,
-    hasAccounts: true,
-    allAccounts: [bob, alice],
-  }
+  beforeAll(() => {
+    stubBalances({ available: +bountyMock.entrantStake + 1000 })
+    stubAccounts([alice, bob])
+  })
 
   beforeEach(() => {
     stubTransaction(api, 'api.tx.utility.batch', fee)
@@ -177,11 +164,7 @@ describe('UI: AnnounceWorkEntryModal', () => {
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>
             <MembershipContext.Provider value={useMembership}>
-              <AccountsContext.Provider value={useAccounts}>
-                <BalancesContext.Provider value={useBalances}>
-                  <AnnounceWorkEntryModal />
-                </BalancesContext.Provider>
-              </AccountsContext.Provider>
+              <AnnounceWorkEntryModal />
             </MembershipContext.Provider>
           </ApiContext.Provider>
         </MockKeyringProvider>

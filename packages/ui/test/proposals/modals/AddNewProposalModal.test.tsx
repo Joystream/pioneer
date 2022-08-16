@@ -7,16 +7,13 @@ import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
 
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import { ApiContext } from '@/api/providers/context'
 import { CurrencyName } from '@/app/constants/currency'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { camelCaseToText } from '@/common/helpers'
 import { createType } from '@/common/model/createType'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
@@ -50,6 +47,7 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  stubAccounts,
   stubApi,
   stubConst,
   stubDefaultBalances,
@@ -151,7 +149,6 @@ describe('UI: AddNewProposalModal', () => {
   }
   const forumLeadId = workingGroups.find((group) => group.id === 'forumWorkingGroup')?.leadId
 
-  let useAccounts: UseAccounts
   let createProposalTx: any
   let batchTx: any
   let bindAccountTx: any
@@ -173,12 +170,7 @@ describe('UI: AddNewProposalModal', () => {
     seedApplication(APPLICATION_DATA, server.server)
     seedWorkers(server.server)
     updateWorkingGroups(server.server)
-
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
@@ -187,11 +179,11 @@ describe('UI: AddNewProposalModal', () => {
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
 
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     stubProposalConstants(api)
 
     createProposalTx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
-    createProposalTxMock = api.api.tx.proposalsCodex.createProposal as unknown as jest.Mock
+    createProposalTxMock = (api.api.tx.proposalsCodex.createProposal as unknown) as jest.Mock
 
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 25)
     stubQuery(
@@ -311,12 +303,12 @@ describe('UI: AddNewProposalModal', () => {
     })
 
     describe('General parameters', () => {
-      beforeEach(async () => {
-        await finishWarning()
-        await finishProposalType()
-      })
-
       describe('Staking account', () => {
+        beforeEach(async () => {
+          await finishWarning()
+          await finishProposalType()
+        })
+
         it('Not selected', async () => {
           const button = await getNextStepButton()
           expect(button).toBeDisabled()
@@ -332,6 +324,8 @@ describe('UI: AddNewProposalModal', () => {
 
       describe('Proposal details', () => {
         beforeEach(async () => {
+          await finishWarning()
+          await finishProposalType()
           await finishStakingAccount()
         })
 
@@ -349,8 +343,15 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       describe('Proposal details validation', () => {
+        beforeEach(async () => {
+          stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 5))
+          stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 5))
+          await finishWarning()
+          await finishProposalType()
+        })
         it('Title too long', async () => {
           stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 5))
+
           await finishStakingAccount()
 
           await fillProposalDetails()
@@ -361,7 +362,6 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Description too long', async () => {
-          stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 5))
           await finishStakingAccount()
 
           await fillProposalDetails()
@@ -372,8 +372,6 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Both fields too long', async () => {
-          stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 5))
-          stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 5))
           await finishStakingAccount()
 
           await fillProposalDetails()
@@ -387,6 +385,8 @@ describe('UI: AddNewProposalModal', () => {
 
       describe('Trigger & Discussion', () => {
         beforeEach(async () => {
+          await finishWarning()
+          await finishProposalType()
           await finishStakingAccount()
           await finishProposalDetails()
         })
@@ -527,10 +527,18 @@ describe('UI: AddNewProposalModal', () => {
           expect(button).toBeDisabled()
         })
 
+        it('Invalid - amount exceeds max value of 10k', async () => {
+          await SpecificParameters.FundingRequest.selectRecipient('bob')
+          await SpecificParameters.fillAmount(100_000)
+
+          const button = await getCreateButton()
+          expect(screen.queryByText(/^Maximal amount allowed is*/)).toBeInTheDocument()
+          expect(button).toBeDisabled()
+        })
+
         it('Valid - everything filled', async () => {
           const amount = 100
-          // await SpecificParameters.fillAmount(amount)
-          await fillField('amount-input', amount)
+          await SpecificParameters.fillAmount(amount)
           await SpecificParameters.FundingRequest.selectRecipient('bob')
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
@@ -560,14 +568,14 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid - over 100 percent', async () => {
-          await fillField('amount-input', 200)
+          await SpecificParameters.fillAmount(200)
           expect(await screen.getByTestId('amount-input')).toHaveValue('200')
           expect(await getCreateButton()).toBeDisabled()
         })
 
         it('Valid', async () => {
           const amount = 40
-          await fillField('amount-input', amount)
+          await SpecificParameters.fillAmount(amount)
           expect(await screen.getByTestId('amount-input')).toHaveValue(String(amount))
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
@@ -579,7 +587,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid with execution warning', async () => {
           const amount = 100
-          await fillField('amount-input', amount)
+          await SpecificParameters.fillAmount(amount)
           expect(await screen.getByTestId('amount-input')).toHaveValue(String(amount))
 
           expect(await getCreateButton()).toBeDisabled()
@@ -863,7 +871,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid form', async () => {
           const amount = 100
-          await fillField('amount-input', amount)
+          await SpecificParameters.fillAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
@@ -985,7 +993,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Validate max value', async () => {
           await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
-          await fillField('amount-input', powerOf2(32))
+          await SpecificParameters.fillAmount(powerOf2(32))
           expect(screen.queryByTestId('amount-input')).toHaveValue('0')
           expect(screen.queryByTestId('amount-input')).toBeEnabled()
         })
@@ -1661,15 +1669,11 @@ describe('UI: AddNewProposalModal', () => {
         <ModalContext.Provider value={useModal}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
-              <AccountsContext.Provider value={useAccounts}>
-                <ApiContext.Provider value={api}>
-                  <BalancesContextProvider>
-                    <MembershipContext.Provider value={useMyMemberships}>
-                      <AddNewProposalModal />
-                    </MembershipContext.Provider>
-                  </BalancesContextProvider>
-                </ApiContext.Provider>
-              </AccountsContext.Provider>
+              <ApiContext.Provider value={api}>
+                <MembershipContext.Provider value={useMyMemberships}>
+                  <AddNewProposalModal />
+                </MembershipContext.Provider>
+              </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
         </ModalContext.Provider>

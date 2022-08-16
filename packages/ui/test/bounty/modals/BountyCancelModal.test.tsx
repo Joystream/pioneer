@@ -1,12 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-import BN from 'bn.js'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { BalancesContext } from '@/accounts/providers/balances/context'
+import { ApiContext } from '@/api/providers/context'
 import { BountyCancelModal } from '@/bounty/modals/CancelBountyModal'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import bounties from '@/mocks/data/raw/bounties.json'
@@ -15,16 +11,16 @@ import { getMember } from '@/mocks/helpers'
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
-import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../../_mocks/transactions'
-import { mockDefaultBalance } from '../../setup'
+import {
+  stubAccounts,
+  stubApi,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../../_mocks/transactions'
 
 const bounty = bounties[0]
 const creator = getMember('alice')
-
-const defaultBalance = {
-  ...mockDefaultBalance,
-  transferable: new BN(1000),
-}
 
 describe('UI: BountyCancelModal', () => {
   const api = stubApi()
@@ -39,22 +35,11 @@ describe('UI: BountyCancelModal', () => {
     },
   }
 
-  const useBalances = {
-    [getMember('bob').controllerAccount]: { ...defaultBalance },
-    [getMember('alice').controllerAccount]: defaultBalance,
-  }
-
   let transaction: any
-  let useAccounts: UseAccounts
 
   beforeAll(() => {
     transaction = stubTransaction(api, 'api.tx.bounty.cancelBounty', 100)
-
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [bob, alice],
-    }
+    stubAccounts([alice, bob])
   })
 
   it('Renders', async () => {
@@ -147,11 +132,7 @@ describe('UI: BountyCancelModal', () => {
         <ModalContext.Provider value={useModal}>
           <MockKeyringProvider>
             <ApiContext.Provider value={api}>
-              <AccountsContext.Provider value={useAccounts}>
-                <BalancesContext.Provider value={useBalances}>
-                  <BountyCancelModal />
-                </BalancesContext.Provider>
-              </AccountsContext.Provider>
+              <BountyCancelModal />
             </ApiContext.Provider>
           </MockKeyringProvider>
         </ModalContext.Provider>

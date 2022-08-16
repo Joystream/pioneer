@@ -30,6 +30,7 @@ type TransferInvitesState =
   | { value: 'transaction'; context: Required<TransferInvitesContext> }
   | { value: 'success'; context: Required<TransferInvitesContext> }
   | { value: 'error'; context: Required<Context> }
+  | { value: 'canceled'; context: Required<Context> }
 
 export type TransferInvitesEvent =
   | { type: 'PASS' }
