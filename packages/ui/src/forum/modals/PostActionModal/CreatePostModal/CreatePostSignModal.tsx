@@ -17,6 +17,7 @@ import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
+import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
 import { PreviewPostButton } from '@/forum/components/PreviewPostButton'
 import { ForumPost } from '@/forum/types'
 import { Member } from '@/memberships/types'
@@ -55,7 +56,7 @@ export const CreatePostSignModal = ({
       if (isEditable) {
         return balance.transferable.gte(paymentInfo.partialFee.add(postDeposit))
       }
-      return balance.transferable.gte(paymentInfo.partialFee)
+      return getFeeSpendableBalance(balance).gte(paymentInfo.partialFee)
     }
     return false
   }, [controllerAccount.address, balance?.transferable, paymentInfo?.partialFee, isEditable])
