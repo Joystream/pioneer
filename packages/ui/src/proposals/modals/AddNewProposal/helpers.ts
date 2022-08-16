@@ -154,7 +154,7 @@ export const schemaFactory = (titleMaxLength: number, rationaleMaxLength: number
       title: Yup.string()
         .required('Field is required')
         .max(titleMaxLength, 'Title exceeds maximum length')
-        .matches(/^[a-zA-z 1-9]*$/, 'Title includes forbidden characters'),
+        .matches(/^[\x20-\x7E]*$/, 'Title includes forbidden characters'),
       rationale: Yup.string().required('Field is required').max(rationaleMaxLength, 'Rationale exceeds maximum length'),
     }),
     triggerAndDiscussion: Yup.object().shape({
