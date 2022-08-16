@@ -3,12 +3,9 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { BalancesContext } from '@/accounts/providers/balances/context'
+import { ApiContext } from '@/api/providers/context'
 import { WithdrawWorkEntryModal } from '@/bounty/modals/WithdrawWorkEntryModal'
-import { BN_ZERO } from '@/common/constants'
 import { formatTokenValue } from '@/common/model/formatters'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -22,6 +19,7 @@ import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockApolloProvider } from '../../_mocks/providers'
 import {
+  stubAccounts,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -33,14 +31,6 @@ import { mockedTransactionFee } from '../../setup'
 const bounty = bounties[0]
 const baseEntry = entries[1]
 const entry = { ...baseEntry, worker: getMember('bob'), works: [generateWork()] }
-
-const defaultBalance = {
-  total: BN_ZERO,
-  locked: BN_ZERO,
-  recoverable: BN_ZERO,
-  transferable: new BN(1000),
-  locks: [],
-}
 
 describe('UI: WithdrawWorkEntryModal', () => {
   const useModal: UseModal<any> = {
@@ -68,23 +58,14 @@ describe('UI: WithdrawWorkEntryModal', () => {
     },
   }
 
-  const useAccounts = {
-    isLoading: false,
-    hasAccounts: true,
-    allAccounts: [bob, alice],
-  }
-
-  const useBalances = {
-    [getMember('bob').controllerAccount]: { ...defaultBalance },
-    [getMember('alice').controllerAccount]: defaultBalance,
-  }
-
   beforeAll(async () => {
+    stubDefaultBalances()
+    stubAccounts([bob, alice])
     await cryptoWaitReady()
   })
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     tx = stubTransaction(api, txPath)
     mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
     mockedTransactionFee.transaction = tx as any
@@ -170,15 +151,11 @@ describe('UI: WithdrawWorkEntryModal', () => {
       <MockApolloProvider>
         <ModalContext.Provider value={useModal}>
           <MockKeyringProvider>
-            <AccountsContext.Provider value={useAccounts}>
-              <MembershipContext.Provider value={useMyMemberships}>
-                <ApiContext.Provider value={api}>
-                  <BalancesContext.Provider value={useBalances}>
-                    <WithdrawWorkEntryModal />
-                  </BalancesContext.Provider>
-                </ApiContext.Provider>
-              </MembershipContext.Provider>
-            </AccountsContext.Provider>
+            <MembershipContext.Provider value={useMyMemberships}>
+              <ApiContext.Provider value={api}>
+                <WithdrawWorkEntryModal />
+              </ApiContext.Provider>
+            </MembershipContext.Provider>
           </MockKeyringProvider>
         </ModalContext.Provider>
       </MockApolloProvider>

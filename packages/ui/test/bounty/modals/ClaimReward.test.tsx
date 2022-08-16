@@ -4,9 +4,9 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
+import { ApiContext } from '@/api/providers/context'
 import { ClaimRewardModalCall, ClaimRewardModal } from '@/bounty/modals/ClaimRewardModal'
 import { formatTokenValue } from '@/common/model/formatters'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -69,7 +69,7 @@ describe('UI: ClaimRewardModal', () => {
 
   beforeEach(async () => {
     useMyMemberships.setActive(getMember('alice'))
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     tx = stubTransaction(api, txPath)
     mockedTransactionFee.transaction = tx as any
     mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }

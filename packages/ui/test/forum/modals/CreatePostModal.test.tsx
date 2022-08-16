@@ -3,9 +3,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { ApiContext } from '@/common/providers/api/context'
+import { ApiContext } from '@/api/providers/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { CreatePostModal, CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
@@ -24,6 +22,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import {
   currentStubErrorMessage,
+  stubAccounts,
   stubApi,
   stubConst,
   stubDefaultBalances,
@@ -65,7 +64,6 @@ describe('UI: CreatePostModal', () => {
       getMemberIdByBoundAccountAddress: () => undefined,
     },
   }
-  let useAccounts: UseAccounts
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -77,17 +75,13 @@ describe('UI: CreatePostModal', () => {
     mockPosts.map((post) => seedForumPost(post, server.server))
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
     mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
 
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     tx = stubTransaction(api, txPath, 25)
     stubConst(api, 'forum.postDeposit', createBalanceOf(10))
     modalData.isEditable = false
@@ -146,13 +140,11 @@ describe('UI: CreatePostModal', () => {
       <ModalContext.Provider value={useModal}>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
-            <AccountsContext.Provider value={useAccounts}>
-              <MembershipContext.Provider value={useMyMemberships}>
-                <ApiContext.Provider value={api}>
-                  <CreatePostModal />
-                </ApiContext.Provider>
-              </MembershipContext.Provider>
-            </AccountsContext.Provider>
+            <MembershipContext.Provider value={useMyMemberships}>
+              <ApiContext.Provider value={api}>
+                <CreatePostModal />
+              </ApiContext.Provider>
+            </MembershipContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
       </ModalContext.Provider>

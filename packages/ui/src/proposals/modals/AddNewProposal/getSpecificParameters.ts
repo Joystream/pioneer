@@ -1,6 +1,6 @@
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
 
-import { Api } from '@/api/types'
+import { Api } from '@/api'
 import { BN_ZERO } from '@/common/constants'
 import { createType } from '@/common/model/createType'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
@@ -133,7 +133,8 @@ export const getSpecificParameters = (
           applicationId: specifics?.fillWorkingGroupLeadOpening?.applicationId
             ? idToRuntimeId(specifics.fillWorkingGroupLeadOpening?.applicationId)
             : 0,
-          group: getWorkingGroupParam(specifics?.fillWorkingGroupLeadOpening?.groupId),
+          // Looks like name for wg parameter on fill wg lead opening differ for the rest, hance the change
+          workingGroup: getWorkingGroupParam(specifics?.fillWorkingGroupLeadOpening?.groupId),
         },
       })
     }

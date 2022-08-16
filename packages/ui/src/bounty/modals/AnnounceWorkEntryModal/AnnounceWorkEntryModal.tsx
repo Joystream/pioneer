@@ -12,13 +12,14 @@ import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatu
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useApi } from '@/api/hooks/useApi'
 import { CurrencyName } from '@/app/constants/currency'
 import { BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEntryModal/index'
 import { announceWorkEntryMachine, AnnounceWorkEntryStates } from '@/bounty/modals/AnnounceWorkEntryModal/machine'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { FailureModal } from '@/common/components/FailureModal'
-import { Input, InputComponent, InputNumber } from '@/common/components/forms'
+import { Input, InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import {
   Modal,
@@ -33,7 +34,6 @@ import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO, Fonts } from '@/common/constants'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
 import { formatTokenValue } from '@/common/model/formatters'
@@ -276,7 +276,7 @@ export const AnnounceWorkEntryModal = () => {
                 disabled
                 tooltipText={t('modals.announceWorkEntry.selectAmountTooltip')}
               >
-                <InputNumber id="amount-input" value={amount.toString()} isTokenValue disabled />
+                <TokenInput id="amount-input" value={amount} disabled />
               </InputComponent>
             </TransactionAmount>
           </Row>

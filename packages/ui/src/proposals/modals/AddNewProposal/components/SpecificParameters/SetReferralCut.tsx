@@ -1,12 +1,12 @@
 import React from 'react'
 
+import { useApi } from '@/api/hooks/useApi'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium, TokenValue } from '@/common/components/typography'
-import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 
 export const SetReferralCut = () => {
@@ -52,7 +52,6 @@ export const SetReferralCut = () => {
           >
             <InputNumber
               id="amount-input"
-              isTokenValue
               name="setReferralCut.referralCut"
               placeholder="0"
               maxAllowedValue={Math.pow(2, 8)}

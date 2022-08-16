@@ -6,13 +6,15 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { AddressToBalanceMap } from '@/accounts/types'
+import { ApiContext } from '@/api/providers/context'
 import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
 import { OnBoardingModal } from '@/common/modals/OnBoardingModal/OnBoardingModal'
-import { ApiContext } from '@/common/providers/api/context'
 import { OnBoardingProvider } from '@/common/providers/onboarding/provider'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+
+import { mockDefaultBalance } from '../../../../test/setup'
 
 export default {
   title: 'App/OnBoardingModal',
@@ -37,18 +39,12 @@ const useMyAccounts: UseAccounts = {
 
 const useMyBalances: AddressToBalanceMap = {
   [useMyAccounts.allAccounts[0].address]: {
+    ...mockDefaultBalance,
     total: new BN(10000),
-    locked: new BN(0),
-    recoverable: new BN(0),
-    transferable: new BN(0),
-    locks: [],
   },
   [useMyAccounts.allAccounts[1].address]: {
+    ...mockDefaultBalance,
     total: new BN(10000),
-    locked: new BN(0),
-    recoverable: new BN(0),
-    transferable: new BN(0),
-    locks: [],
   },
 }
 

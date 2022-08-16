@@ -1,4 +1,4 @@
-import { Api } from '@/api/types'
+import { Api } from '@/api'
 
 import { GroupIdName } from '../types'
 

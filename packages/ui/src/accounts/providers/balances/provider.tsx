@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { toBalances } from '@/accounts/model/toBalances'
-import { useApi } from '@/common/hooks/useApi'
+import { useApi } from '@/api/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 
 import { AddressToBalanceMap } from '../../types'
@@ -15,24 +15,26 @@ interface Props {
   children: ReactNode
 }
 export const BalancesContextProvider = (props: Props) => {
-  const { allAccounts } = useMyAccounts()
-  const { isConnected, api } = useApi()
+  const { allAccounts, isLoading } = useMyAccounts()
+  const { api } = useApi()
 
   const addresses = allAccounts.map((account) => account.address)
-  const balancesObs = api ? addresses.map((address) => api.derive.balances.all(address).pipe(map(toBalances))) : []
 
-  const result = useObservable(combineLatest(balancesObs), [isConnected, JSON.stringify(addresses)])
+  const balancesObs = useMemo(
+    () => (api ? addresses.map((address) => api.derive.balances.all(address).pipe(map(toBalances))) : []),
+    [!api, JSON.stringify(addresses)]
+  )
+  const result = useObservable(combineLatest(balancesObs), [balancesObs])
 
-  const balances = useMemo(
-    () =>
-      (result ?? []).reduce((acc, balance, index) => {
+  const balances = useMemo(() => {
+    if (!isLoading && result)
+      return result.reduce((acc, balance, index) => {
         return {
           ...{ [addresses[index]]: balance },
           ...acc,
         }
-      }, {} as AddressToBalanceMap),
-    [result]
-  )
+      }, {} as AddressToBalanceMap)
+  }, [result])
 
   return <BalancesContext.Provider value={balances}>{props.children}</BalancesContext.Provider>
 }

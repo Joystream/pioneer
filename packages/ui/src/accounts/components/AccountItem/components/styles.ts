@@ -61,6 +61,10 @@ export const StyledDropDown = styled(DropDownToggle)`
   background-color: ${Colors.White};
 `
 
+export const VestingStyledDropDown = styled(StyledDropDown)`
+  grid-template-columns: repeat(5, 1fr);
+`
+
 export const BalanceDetails = styled.div``
 export const LocksButtons = styled.div`
   grid-column: 4;

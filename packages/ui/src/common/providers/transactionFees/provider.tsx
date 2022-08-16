@@ -28,14 +28,14 @@ export const TransactionFeesProvider: FC = ({ children }) => {
 
   const { status, setStatus } = useTransactionStatus()
   useEffect(() => {
-    if (!balance || !transactionFee) {
+    if (transaction && signer && (!balance || !transactionFee)) {
       if (status === null) {
         setStatus('loadingFees')
       }
     } else if (status === 'loadingFees') {
       setStatus(null)
     }
-  }, [status, !balance, !transactionFee])
+  }, [status, !balance, !transactionFee, !transaction, !signer])
 
   return (
     <TransactionFeesContext.Provider value={{ transaction, feeInfo, setTransaction, setSigner }}>

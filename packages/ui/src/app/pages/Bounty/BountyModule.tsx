@@ -28,9 +28,11 @@ const EmptyPageComponent = () => (
   <EmptyPage>
     <img src={DisabledBounties} alt="Image of bag with coins" />
     <TextExtraHuge value bold>
-      Bounties will be back soon!
+      Bounties module is coming back soon!
     </TextExtraHuge>
-    <TextMedium value>We are currently working on implementing a new bounties. Stay tuned!</TextMedium>
+    <TextMedium value>
+      We are working on the necessary upgrades for the much loved Bounties module to be released shortly! Stay Tuned!
+    </TextMedium>
   </EmptyPage>
 )
 

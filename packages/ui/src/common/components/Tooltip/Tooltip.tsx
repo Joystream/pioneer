@@ -330,7 +330,7 @@ export const TooltipComponent = styled.i<{ maxWidth?: boolean }>`
 `
 
 export const TooltipContainer = styled.div<{ absolute?: boolean; maxWidth?: boolean }>`
-  display: flex;
+  display: inline-flex;
   position: ${({ absolute }) => (absolute ? 'absolute' : 'relative')};
   right: ${({ absolute }) => (absolute ? '-24px' : 'auto')};
   justify-content: center;

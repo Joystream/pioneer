@@ -1,10 +1,7 @@
-import BN from 'bn.js'
 import React, { useMemo } from 'react'
-import { useFormContext, Controller } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import styled, { css } from 'styled-components'
 
-import { cleanInputValue } from '@/common/hooks/useNumberInput'
-import { formatTokenValue } from '@/common/model/formatters'
 import { enhancedGetErrorMessage, enhancedHasError } from '@/common/utils/validation'
 
 import { BorderRad, Colors, Fonts, Shadows, Transitions } from '../../constants'
@@ -37,7 +34,7 @@ export type InputComponentProps = InputProps &
     children: React.ReactNode
   }
 
-interface InputProps<Element extends HTMLElement = HTMLInputElement> extends React.InputHTMLAttributes<Element> {
+export interface InputProps<Element extends HTMLElement = HTMLInputElement> extends React.InputHTMLAttributes<Element> {
   id?: string
   validation?: 'invalid' | 'valid' | 'warning' | undefined
   required?: boolean
@@ -179,64 +176,6 @@ export const InputText = React.memo((props: InputProps) => {
   return <Input type="text" autoComplete="off" {...props} {...formContext.register(props.name)} />
 })
 
-interface BaseNumberInputProps extends Omit<InputProps, 'onChange'> {
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>, numberValue: number) => void
-  isTokenValue?: boolean
-  maxAllowedValue?: number
-}
-
-const BasedInputNumber = React.memo(
-  ({ id, onChange, isTokenValue = false, value = '', maxAllowedValue, ...props }: BaseNumberInputProps) => {
-    const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const eventValue = +cleanInputValue(event.target.value)
-      if (isNaN(eventValue) || eventValue < 0 || (maxAllowedValue && !(eventValue < maxAllowedValue))) return
-
-      onChange?.(event, eventValue)
-    }
-
-    return (
-      <StyledNumberInput
-        id={id}
-        name={id}
-        type="string"
-        value={isTokenValue ? formatTokenValue(value) : value}
-        onChange={onInputChange}
-        autoComplete="off"
-        {...props}
-      />
-    )
-  }
-)
-
-interface InputNumberProps extends BaseNumberInputProps {
-  isInBN?: boolean
-}
-
-export const InputNumber = React.memo(({ name, isInBN = false, ...props }: InputNumberProps) => {
-  const formContext = useFormContext()
-
-  if (!formContext || !name) {
-    return <BasedInputNumber {...props} />
-  }
-
-  return (
-    <Controller
-      control={formContext.control}
-      name={name}
-      render={({ field }) => {
-        return (
-          <BasedInputNumber
-            {...props}
-            value={new BN(field.value)?.toString() ?? ''}
-            onChange={(_, value) => field.onChange(isInBN ? new BN(String(value)) : value)}
-            onBlur={field.onBlur}
-          />
-        )
-      }}
-    />
-  )
-})
-
 type TextAreaProps = InputProps<HTMLTextAreaElement & HTMLInputElement>
 
 export const InputTextarea = React.memo(({ name, ...props }: TextAreaProps) => {
@@ -298,10 +237,6 @@ export const Input = styled.input`
       margin: 0;
     }
   }
-`
-
-const StyledNumberInput = styled(Input)`
-  text-align: right;
 `
 
 const Textarea = styled.textarea`

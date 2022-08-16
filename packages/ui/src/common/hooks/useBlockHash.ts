@@ -1,4 +1,5 @@
-import { useApi } from './useApi'
+import { useApi } from '../../api/hooks/useApi'
+
 import { useObservable } from './useObservable'
 
 export function useBlockHash(num?: string) {

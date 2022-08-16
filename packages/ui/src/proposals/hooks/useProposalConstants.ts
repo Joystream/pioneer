@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
-import { Api } from '@/api/types'
-import { useApi } from '@/common/hooks/useApi'
+import { Api } from '@/api'
+import { useApi } from '@/api/hooks/useApi'
 import { asProposalConstants, ProposalConstants } from '@/proposals/types/constants'
 
 import { ProposalType } from '../types'

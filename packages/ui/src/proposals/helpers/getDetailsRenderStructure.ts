@@ -145,7 +145,7 @@ const memberMapper: Mapper<MemberDetail, 'member'> = (value): RenderNode[] => {
   return [
     {
       label: 'Worker ID',
-      value: value.id,
+      value: value?.id,
       renderType: 'Member',
     },
   ]

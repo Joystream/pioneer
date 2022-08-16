@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form'
 import { SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { CurrencyName } from '@/app/constants/currency'
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -21,12 +21,13 @@ interface StakingStepProps extends ValidationHelpers {
 
 export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessageGetter }: StakingStepProps) => {
   const form = useFormContext()
-  const [stake] = form.watch(['staking.account', 'staking.amount'])
+  const [stake] = form.watch(['staking.amount'])
   const balances = useMyBalances()
 
-  const isSomeBalanceGteStake = useMemo(() => {
-    return Object.entries(balances).some(([, balance]) => balance.transferable.gte(stake ?? minStake))
-  }, [stake?.toString(), JSON.stringify(balances)])
+  const isSomeBalanceGteStake = useMemo(
+    () => Object.values(balances ?? []).some(({ transferable }) => transferable.gte(stake ?? minStake)),
+    [stake?.toString(), JSON.stringify(balances)]
+  )
 
   return (
     <RowGapBlock gap={24}>
@@ -75,19 +76,12 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
             validation={errorChecker('amount') ? 'invalid' : undefined}
             inputSize="s"
           >
-            <InputNumber
-              id="amount-input"
-              name="staking.amount"
-              isInBN
-              isTokenValue
-              placeholder={minStake.toString()}
-            />
+            <TokenInput id="amount-input" name="staking.amount" placeholder={minStake.toString()} />
           </InputComponent>
           {isSomeBalanceGteStake && errorMessageGetter('amount')?.startsWith('Insufficient') && (
             <Info>
               <TextMedium>
-                You have sufficient funds on other account to cover
-                {<TokenValue value={minStake} />} stake.
+                You have sufficient funds on other account to cover {<TokenValue value={stake ?? minStake} />} stake.
               </TextMedium>
             </Info>
           )}

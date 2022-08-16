@@ -1,4 +1,4 @@
-import { useApi } from '@/common/hooks/useApi'
+import { useApi } from '@/api/hooks/useApi'
 import { asCouncilConstants, CouncilConstants } from '@/council/types/CouncilConstants'
 
 export const useCouncilConstants = (): CouncilConstants | null => {

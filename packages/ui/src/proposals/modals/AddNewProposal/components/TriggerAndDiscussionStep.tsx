@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { CloseButton } from '@/common/components/buttons'
-import { InlineToggleWrap, InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
+import { InlineToggleWrap, InputComponent, Label, ToggleCheckbox, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'

@@ -2,10 +2,10 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import EventEmitter from 'eventemitter3'
 import React from 'react'
 
-import { Api } from '@/api/types'
+import { Api } from '@/api'
+import { ApiContext } from '@/api/providers/context'
+import { UseApi } from '@/api/providers/provider'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
-import { ApiContext } from '@/common/providers/api/context'
-import { UseApi } from '@/common/providers/api/provider'
 
 describe('UI: Connection status component', () => {
   let eventEmitter: EventEmitter

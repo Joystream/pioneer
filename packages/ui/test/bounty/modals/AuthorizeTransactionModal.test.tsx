@@ -3,12 +3,12 @@ import BN from 'bn.js'
 import React from 'react'
 import { ActorRef } from 'xstate'
 
+import { ApiContext } from '@/api/providers/context'
 import {
   AuthorizeTransactionModal,
   Props as AuthorizeTransactionModalProps,
 } from '@/bounty/modals/AuthorizeTransactionModal'
 import { formatTokenValue } from '@/common/model/formatters'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import bounties from '@/mocks/data/raw/bounties.json'
@@ -60,7 +60,7 @@ describe('UI: AuthorizeTransactionModal', () => {
   }
 
   beforeEach(() => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     renderModal()
   })
 

@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react'
 import { ActorRef, State } from 'xstate'
 
+import { useApi } from '@/api/hooks/useApi'
 import { ModalBody, ModalTransactionFooter } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
-import { useApi } from '@/common/hooks/useApi'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { TransactionEvent } from '@/common/model/machines'

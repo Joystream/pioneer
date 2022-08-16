@@ -24,7 +24,7 @@ export function shortenAddress(address: string, length = 18) {
         address.substring(address.length - Math.floor(length / 2), address.length)
 }
 
-const DefaultDateFormatter = Intl.DateTimeFormat('en', {
+export const DefaultDateFormatter = Intl.DateTimeFormat('en-GB', {
   year: 'numeric',
   month: '2-digit',
   day: '2-digit',
@@ -34,11 +34,15 @@ const DefaultDateFormatter = Intl.DateTimeFormat('en', {
   timeZoneName: 'short',
 })
 
-export const formatDateString = (timestamp: string, size: 's' | 'l' = 'l') => {
+export const formatDateString = (timestamp: string | number | undefined, size: 's' | 'l' = 'l') => {
+  if (!isDefined(timestamp)) {
+    return '-'
+  }
+
   const defaultFormat = DefaultDateFormatter.format(new Date(timestamp))
   switch (size) {
-    case 's':
-      return defaultFormat.replace(/ ([AP]M)/, (_, preriod: string) => preriod.toLocaleLowerCase())
+    case 'l':
+      return defaultFormat.replace(/ ([AP]M)/i, (_, period: string) => period.toUpperCase())
     default:
       return defaultFormat
   }
@@ -76,7 +80,24 @@ export const splitDuration =
     return [[amount, unitName], ...splitDuration(submultiples)(duration - amount * unitValue)]
   }
 
-export const formatJoyValue = (value: BN, precision = 10) => {
+interface JOYFormatOption {
+  precision?: number
+  formatInt?: (value: BN) => string
+  formatDec?: (value: BN, size: number) => string
+}
+const defaultJOYFormatOption = {
+  precision: 10,
+  formatInt: formatTokenValue,
+  formatDec: (value: BN, length: number) => String(value).padStart(length, '0').replace(/0+$/, ''),
+}
+export const formatJoyValue = (
+  value: BN,
+  {
+    precision = defaultJOYFormatOption.precision,
+    formatInt = defaultJOYFormatOption.formatInt,
+    formatDec = defaultJOYFormatOption.formatDec,
+  }: JOYFormatOption = defaultJOYFormatOption
+) => {
   if (value.isZero()) {
     return '0'
   }
@@ -89,8 +110,8 @@ export const formatJoyValue = (value: BN, precision = 10) => {
   }
 
   const sign = value.isNeg() ? '-' : ''
-  const intPart = formatTokenValue(roundedValue.div(powerOf10(safePrecision)))
-  const decPart = String(roundedValue.mod(powerOf10(safePrecision))).padStart(safePrecision, '0')
+  const intPart = formatInt(roundedValue.div(powerOf10(safePrecision)))
+  const decPart = formatDec(roundedValue.mod(powerOf10(safePrecision)), safePrecision)
 
-  return `${sign}${intPart}.${decPart}`.replace(/\.?0*$/, '')
+  return `${sign}${intPart}.${decPart}`.replace(/\.$/, '')
 }

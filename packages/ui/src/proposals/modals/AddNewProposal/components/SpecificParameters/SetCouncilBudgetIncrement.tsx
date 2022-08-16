@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { CurrencyName } from '@/app/constants/currency'
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
@@ -25,13 +25,7 @@ export const SetCouncilBudgetIncrement = () => {
             name="setCouncilBudgetIncrement.amount"
             message="Value must be greater than zero"
           >
-            <InputNumber
-              id="amount-input"
-              isInBN
-              name="setCouncilBudgetIncrement.amount"
-              placeholder="0"
-              maxAllowedValue={Math.pow(2, 128)}
-            />
+            <TokenInput id="amount-input" name="setCouncilBudgetIncrement.amount" placeholder="0" />
           </InputComponent>
         </RowGapBlock>
       </Row>

@@ -3,10 +3,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
-import { ApiContext } from '@/common/providers/api/context'
+import { ApiContext } from '@/api/providers/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
@@ -26,6 +23,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import {
   currentStubErrorMessage,
+  stubAccounts,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -72,7 +70,6 @@ describe('UI: DeleteThreadModal', () => {
     },
   }
 
-  let useAccounts: UseAccounts
   let transaction: any
   let txMock: jest.Mock
 
@@ -85,16 +82,12 @@ describe('UI: DeleteThreadModal', () => {
     seedForumThread(mockThreads[0], server.server)
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
     mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     transaction = stubTransaction(api, txPath, 100)
     txMock = api.api.tx.forum.deleteThread as unknown as jest.Mock
   })
@@ -143,15 +136,11 @@ describe('UI: DeleteThreadModal', () => {
       <ModalContext.Provider value={useModal}>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
-            <AccountsContext.Provider value={useAccounts}>
-              <MembershipContext.Provider value={useMyMemberships}>
-                <ApiContext.Provider value={api}>
-                  <BalancesContextProvider>
-                    <DeleteThreadModal />
-                  </BalancesContextProvider>
-                </ApiContext.Provider>
-              </MembershipContext.Provider>
-            </AccountsContext.Provider>
+            <MembershipContext.Provider value={useMyMemberships}>
+              <ApiContext.Provider value={api}>
+                <DeleteThreadModal />
+              </ApiContext.Provider>
+            </MembershipContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
       </ModalContext.Provider>

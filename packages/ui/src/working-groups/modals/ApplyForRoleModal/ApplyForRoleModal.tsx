@@ -1,5 +1,6 @@
 import { ApplicationMetadata } from '@joystream/metadata-protobuf'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
+import { BN_ZERO } from '@polkadot/util'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -11,7 +12,8 @@ import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatu
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
-import { Api } from '@/api/types'
+import { Api } from '@/api'
+import { useApi } from '@/api/hooks/useApi'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import {
@@ -21,7 +23,6 @@ import {
   StepperModalBody,
   StepperModalWrapper,
 } from '@/common/components/StepperModal'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { getDataFromEvent, metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
@@ -71,12 +72,18 @@ export const ApplyForRoleModal = () => {
 
   const balance = useBalance(stakingAccountMap?.address)
   const stakingStatus = useStakingAccountStatus(stakingAccountMap?.address, activeMember?.id)
+
+  const boundingLock = api?.consts.members.candidateStake ?? BN_ZERO
+  // TODO add transaction fees here
+  const extraFees = (stakingStatus === 'free' && boundingLock) || BN_ZERO
+
   const form = useForm({
     resolver: useYupValidationResolver(schema, typeof state.value === 'string' ? state.value : undefined),
     mode: 'onChange',
     context: {
       minStake: opening.stake,
       balances: balance,
+      extraFees,
       stakeLock: groupToLockId(opening.groupId),
       requiredAmount: opening.stake,
       stakingStatus,
@@ -85,7 +92,7 @@ export const ApplyForRoleModal = () => {
   const stakingAccount = form.watch('stake.account')
 
   useEffect(() => {
-    form.setValue('stake.amount', opening.stake.toString())
+    form.setValue('stake.amount', opening.stake)
   }, [])
 
   useEffect(() => {

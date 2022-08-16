@@ -11,6 +11,7 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useApi } from '@/api/hooks/useApi'
 import { CurrencyName } from '@/app/constants/currency'
 import { FundedRange } from '@/bounty/components/FundedRange'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
@@ -19,7 +20,7 @@ import { contributeFundsMachine, ContributeFundStates } from '@/bounty/modals/Co
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { isFundingLimited } from '@/bounty/types/Bounty'
 import { FailureModal } from '@/common/components/FailureModal'
-import { Input, InputComponent, InputNumber } from '@/common/components/forms'
+import { Input, InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import {
@@ -38,7 +39,6 @@ import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO, Fonts } from '@/common/constants'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
 import { formatTokenValue } from '@/common/model/formatters'
@@ -261,12 +261,11 @@ export const ContributeFundsModal = () => {
                   </>
                 }
               >
-                <InputNumber
+                <TokenInput
                   id="amount-input"
-                  value={state.context.amount?.toString()}
-                  onChange={(_, value) => setAmount(new BN(value))}
+                  value={state.context.amount}
+                  onChange={(_, value) => setAmount(value)}
                   placeholder="0"
-                  isTokenValue
                 />
               </InputComponent>
               <StyledAmountButtons>

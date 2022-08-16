@@ -1,4 +1,4 @@
-import { BN } from 'bn.js'
+import BN from 'bn.js'
 
 import { asBaseActivity } from '@/common/types'
 import {

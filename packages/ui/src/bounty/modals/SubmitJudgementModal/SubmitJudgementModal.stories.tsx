@@ -6,8 +6,8 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { AddressToBalanceMap } from '@/accounts/types'
+import { ApiContext } from '@/api/providers/context'
 import { SubmitJudgementModal } from '@/bounty/modals/SubmitJudgementModal/SubmitJudgementModal'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
@@ -16,6 +16,7 @@ import { getMember } from '@/mocks/helpers'
 
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../../../test/_mocks/providers'
 import { stubApi, stubBountyConstants, stubTransaction } from '../../../../test/_mocks/transactions'
+import { mockDefaultBalance } from '../../../../test/setup'
 
 export default {
   title: 'Bounty/SubmitJudgementModal',
@@ -61,11 +62,9 @@ const useMyMemberships = {
 
 const useMyBalances: AddressToBalanceMap = {
   [useMyAccounts.allAccounts[0].address]: {
+    ...mockDefaultBalance,
     total: new BN(10000),
-    locked: new BN(0),
-    recoverable: new BN(0),
     transferable: new BN(10000),
-    locks: [],
   },
 }
 

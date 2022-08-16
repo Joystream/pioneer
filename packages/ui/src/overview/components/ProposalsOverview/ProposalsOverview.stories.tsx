@@ -1,8 +1,8 @@
 import { Meta, Story } from '@storybook/react'
 import React, { useState } from 'react'
 
-import { useApi } from '@/common/hooks/useApi'
-import { ApiContext } from '@/common/providers/api/context'
+import { useApi } from '@/api/hooks/useApi'
+import { ApiContext } from '@/api/providers/context'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
 import { ProposalsOverview } from './ProposalsOverview'

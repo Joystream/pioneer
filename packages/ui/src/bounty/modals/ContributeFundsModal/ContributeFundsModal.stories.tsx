@@ -5,13 +5,14 @@ import React from 'react'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { AddressToBalanceMap } from '@/accounts/types'
+import { ApiContext } from '@/api/providers/context'
 import { Bounty } from '@/bounty/types/Bounty'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 
 import { getMember } from '../../../../test/_mocks/members'
 import { stubApi, stubBountyConstants, stubTransaction } from '../../../../test/_mocks/transactions'
+import { mockDefaultBalance } from '../../../../test/setup'
 
 import { ContributeFundsModal } from './ContributeFundsModal'
 
@@ -41,18 +42,13 @@ const accounts = {
 
 const balance: AddressToBalanceMap = {
   [accounts.allAccounts[0].address]: {
+    ...mockDefaultBalance,
     total: new BN(10000),
-    locked: new BN(0),
-    recoverable: new BN(0),
-    transferable: new BN(0),
-    locks: [],
   },
   [accounts.allAccounts[1].address]: {
+    ...mockDefaultBalance,
     total: new BN(10000),
-    locked: new BN(0),
-    recoverable: new BN(0),
     transferable: new BN(2001),
-    locks: [],
   },
 }
 

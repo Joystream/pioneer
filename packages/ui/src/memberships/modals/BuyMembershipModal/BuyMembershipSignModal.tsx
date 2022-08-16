@@ -1,7 +1,7 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import { ISubmittableResult } from '@polkadot/types/types'
-import React, { useEffect, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { ActorRef } from 'xstate'
 
 import { SelectAccount, SelectedAccount } from '@/accounts/components/SelectAccount'
@@ -47,17 +47,15 @@ export const BuyMembershipSignModal = ({
     signer: fromAddress,
     service,
   })
-  const [hasFunds, setHasFunds] = useState(true)
   const balance = useBalance(fromAddress)
   const validationInfo = balance?.transferable && paymentInfo?.partialFee && membershipPrice
 
-  useEffect(() => {
+  const hasFunds = useMemo(() => {
     if (validationInfo) {
       const requiredBalance = paymentInfo.partialFee.add(membershipPrice)
-      const hasFunds = balance.transferable.gte(requiredBalance)
-      setHasFunds(hasFunds)
+      return balance.transferable.gte(requiredBalance)
     }
-  }, [fromAddress, balance])
+  }, [fromAddress, !balance, !validationInfo])
 
   const signDisabled = !isReady || !hasFunds || !validationInfo
 

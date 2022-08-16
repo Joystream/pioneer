@@ -1,16 +1,21 @@
+import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import { AugmentedEvents } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import { from, of, asyncScheduler, scheduled, Observable } from 'rxjs'
 
-import { LockType } from '@/accounts/types'
-import { Api } from '@/api/types'
+import { toBalances } from '@/accounts/model/toBalances'
+import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { Account, LockType } from '@/accounts/types'
+import { Api } from '@/api'
+import { UseApi } from '@/api/providers/provider'
 import { BN_ZERO } from '@/common/constants'
 import { createType } from '@/common/model/createType'
 import { ExtractTuple } from '@/common/model/JoystreamNode'
-import { UseApi } from '@/common/providers/api/provider'
 import { proposalDetails } from '@/proposals/model/proposalDetails'
+
+import { mockedBalances, mockedMyBalances, mockedUseMyAccounts } from '../setup'
 
 import { createBalanceLock, createRuntimeDispatchInfo } from './chainTypes'
 
@@ -168,7 +173,6 @@ export const stubApi = () => {
       }),
     ])
   )
-  stubDefaultBalances(api)
   set(api, 'api.rpc.chain.getBlockHash', () => {
     from([createType('BlockHash', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY')])
   })
@@ -176,11 +180,8 @@ export const stubApi = () => {
   return api
 }
 
-export const stubDefaultBalances = (api: UseApi) => {
-  stubBalances(api, {
-    available: 1000,
-    locked: 0,
-  })
+export const stubDefaultBalances = () => {
+  stubBalances({ available: 1000, locked: 0 })
 }
 
 export const stubCouncilConstants = (api: UseApi, constants?: { minStake: number }) => {
@@ -246,39 +247,57 @@ export const stubCouncilAndReferendum = (
     'council.stage',
     createType('PalletCouncilCouncilStageUpdate', {
       stage: createType('PalletCouncilCouncilStage', councilStage),
+      changedAt: BN_ZERO,
     })
   )
 }
 
 type Balances = { available?: number; locked?: number; lockId?: LockType }
 
-export const stubBalances = (api: UseApi, { available, lockId, locked }: Balances) => {
+export const stubBalances = ({ available, lockId, locked }: Balances) => {
   const availableBalance = new BN(available ?? 0)
   const lockedBalance = new BN(locked ?? 0)
 
-  set(api, 'api.derive.balances.all', () =>
-    from([
-      {
-        availableBalance: createType('Balance', availableBalance),
-        lockedBalance: createType('Balance', lockedBalance),
-        accountId: createType('AccountId', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
-        accountNonce: createType('Index', 1),
-        freeBalance: createType('Balance', availableBalance.add(lockedBalance)),
-        frozenFee: new BN(0),
-        frozenMisc: new BN(0),
-        isVesting: false,
-        lockedBreakdown: lockedBalance.eq(BN_ZERO)
-          ? []
-          : [createBalanceLock(locked!, lockId ?? 'Bound Staking Account')],
-        reservedBalance: new BN(0),
-        vestedBalance: new BN(0),
-        vestedClaimable: new BN(0),
-        vestingEndBlock: createType('BlockNumber', 1234),
-        vestingLocked: new BN(0),
-        vestingPerBlock: new BN(0),
-        vestingTotal: new BN(0),
-        votingBalance: new BN(0),
-      },
-    ])
+  const deriveBalances = {
+    availableBalance: createType('Balance', availableBalance),
+    lockedBalance: createType('Balance', lockedBalance),
+    accountId: createType('AccountId', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
+    accountNonce: createType('Index', 1),
+    freeBalance: createType('Balance', availableBalance.add(lockedBalance)),
+    frozenFee: new BN(0),
+    frozenMisc: new BN(0),
+    isVesting: false,
+    lockedBreakdown: lockedBalance.eq(BN_ZERO) ? [] : [createBalanceLock(locked!, lockId ?? 'Bound Staking Account')],
+    reservedBalance: new BN(0),
+    vestedBalance: new BN(0),
+    vestedClaimable: new BN(0),
+    vestingEndBlock: createType('BlockNumber', 1234),
+    vestingLocked: new BN(0),
+    vestingPerBlock: new BN(0),
+    vestingTotal: new BN(0),
+    votingBalance: new BN(0),
+    vesting: [],
+  } as unknown as DeriveBalancesAll
+
+  const balance = toBalances(deriveBalances)
+  mockedBalances.mockReturnValue(balance)
+
+  mockedMyBalances.mockReturnValue(
+    Object.fromEntries(mockedUseMyAccounts().allAccounts.map(({ address }) => [address, balance]))
   )
+}
+
+export const stubAccounts = (allAccounts: Account[], myAccounts: Partial<UseAccounts> = {}) => {
+  const hasAccounts = allAccounts.length > 0
+  mockedUseMyAccounts.mockReturnValue({
+    isLoading: false,
+    allAccounts,
+    hasAccounts,
+    ...myAccounts,
+  })
+
+  const balance = mockedBalances()
+  if (balance) {
+    mockedMyBalances.mockReturnValue(Object.fromEntries(allAccounts.map(({ address }) => [address, balance])))
+  }
 }

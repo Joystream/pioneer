@@ -6,7 +6,6 @@ import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
 import { Accounts } from '@/accounts/components/Accounts'
-import { Account, Balances } from '@/accounts/types'
 import { shortenAddress } from '@/common/model/formatters'
 import { KeyringContext } from '@/common/providers/keyring/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -16,28 +15,10 @@ import { seedMembers } from '@/mocks/data'
 
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
-import { MockApiProvider, MockApolloProvider } from '../../_mocks/providers'
+import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-
-const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[]; isLoading: boolean } = {
-  hasAccounts: false,
-  allAccounts: [],
-  isLoading: false,
-}
-
-jest.mock('@/accounts/hooks/useMyAccounts', () => {
-  return {
-    useMyAccounts: () => useMyAccounts,
-  }
-})
-
-let balances: Balances | null = null
-
-const useBalance = {
-  useBalance: () => balances,
-}
-
-jest.mock('@/accounts/hooks/useBalance', () => useBalance)
+import { stubAccounts } from '../../_mocks/transactions'
+import { mockDefaultBalance, mockedBalances } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
@@ -46,17 +27,15 @@ describe('UI: Accounts list', () => {
 
   beforeAll(cryptoWaitReady)
 
-  beforeEach(async () => {
-    useMyAccounts.hasAccounts = false
-    useMyAccounts.isLoading = false
-    useMyAccounts.allAccounts.splice(0)
+  beforeEach(() => {
+    stubAccounts([])
   })
 
   afterEach(cleanup)
 
   describe('with empty keyring', () => {
     it('Shows loading screen', async () => {
-      useMyAccounts.isLoading = true
+      stubAccounts([], { isLoading: true })
       const profile = render(
         <KeyringContext.Provider value={new Keyring()}>
           <Accounts />
@@ -69,8 +48,8 @@ describe('UI: Accounts list', () => {
 
   describe('with development accounts', () => {
     beforeEach(() => {
-      useMyAccounts.hasAccounts = true
-      useMyAccounts.allAccounts.push(alice)
+      stubAccounts([alice])
+      mockedBalances.mockReturnValue(null)
     })
 
     it('Renders empty balance when not returned', async () => {
@@ -84,13 +63,11 @@ describe('UI: Accounts list', () => {
     })
 
     it('Renders balance value', async () => {
-      balances = {
+      mockedBalances.mockReturnValue({
+        ...mockDefaultBalance,
         total: new BN(1000),
-        locked: new BN(0),
         transferable: new BN(1000),
-        recoverable: new BN(0),
-        locks: [],
-      }
+      })
       const { findByText } = renderAccounts()
 
       const aliceBox = (await findByText(shortenAddress(alice.address)))?.parentNode?.parentNode
@@ -101,18 +78,15 @@ describe('UI: Accounts list', () => {
 
   describe('with active membership', () => {
     beforeEach(() => {
-      useMyAccounts.hasAccounts = true
-      useMyAccounts.allAccounts.push(alice, aliceStash, bob, bobStash)
+      stubAccounts([alice, aliceStash, bob, bobStash])
     })
 
     it("Annotate active member's accounts", async () => {
-      balances = {
+      mockedBalances.mockReturnValue({
+        ...mockDefaultBalance,
         total: new BN(1000),
-        locked: new BN(0),
         transferable: new BN(1000),
-        recoverable: new BN(0),
-        locks: [],
-      }
+      })
       const aliceMember = getMember('alice')
       seedMembers(mockServer.server, 2)
       const { findByText } = renderAccounts(aliceMember)
@@ -128,13 +102,11 @@ describe('UI: Accounts list', () => {
   function renderAccounts(active?: Member) {
     return render(
       <HashRouter>
-        <MockApiProvider>
-          <MockApolloProvider>
-            <MembershipContext.Provider value={{ active, setActive: () => undefined } as unknown as MyMemberships}>
-              <Accounts />
-            </MembershipContext.Provider>
-          </MockApolloProvider>
-        </MockApiProvider>
+        <MockApolloProvider>
+          <MembershipContext.Provider value={{ active, setActive: () => undefined } as unknown as MyMemberships}>
+            <Accounts />
+          </MembershipContext.Provider>
+        </MockApolloProvider>
       </HashRouter>
     )
   }

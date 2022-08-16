@@ -24,6 +24,7 @@ export const defaultProposalValues = {
   },
   triggerAndDiscussion: {
     discussionWhitelist: [],
+    isDiscussionClosed: false,
   },
   updateWorkingGroupBudget: {
     isPositive: true,
@@ -158,8 +159,8 @@ export const schemaFactory = (titleMaxLength: number, rationaleMaxLength: number
       triggerBlock: Yup.number().when('trigger', {
         is: true,
         then: Yup.number()
-          .test(minContext('The minimum block number is ${min}', 'minTriggerBlock'))
-          .test(maxContext('The maximum block number is ${max}', 'maxTriggerBlock'))
+          .test(minContext('The minimum block number is ${min}', 'minTriggerBlock', false))
+          .test(maxContext('The maximum block number is ${max}', 'maxTriggerBlock', false))
           .required('Field is required'),
       }),
       isDiscussionClosed: Yup.boolean(),
@@ -225,7 +226,7 @@ export const schemaFactory = (titleMaxLength: number, rationaleMaxLength: number
         minContext('Input must be greater than ${min} for proposal to execute', 'leaderOpeningStake')
       ).required('Field is required'),
       leavingUnstakingPeriod: BNSchema.test(
-        minContext('Input must be greater than ${min} for proposal to execute', 'minUnstakingPeriodLimit')
+        minContext('Input must be greater than ${min} for proposal to execute', 'minUnstakingPeriodLimit', false)
       ).required('Field is required'),
       rewardPerBlock: BNSchema.test(moreThanMixed(1, 'Amount must be greater than zero')).required('Field is required'),
     }),
@@ -255,13 +256,15 @@ export const schemaFactory = (titleMaxLength: number, rationaleMaxLength: number
       budgetUpdate: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
     }),
     setInitialInvitationCount: Yup.object().shape({
-      invitationCount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required(
+      invitationCount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero', false)).required(
         'Field is required'
       ),
     }),
     setReferralCut: Yup.object().shape({
       referralCut: Yup.number()
-        .test(maxContext('Input must be equal or less than ${max}% for proposal to execute', 'maximumReferralCut'))
+        .test(
+          maxContext('Input must be equal or less than ${max}% for proposal to execute', 'maximumReferralCut', false)
+        )
         .max(100, 'Value exceed maximal percentage')
         .required('Field is required'),
     }),
@@ -272,8 +275,8 @@ export const schemaFactory = (titleMaxLength: number, rationaleMaxLength: number
       amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
     }),
     setMaxValidatorCount: Yup.object().shape({
-      validatorCount: BNSchema.test(minContext('Minimal amount allowed is ${min}', 'minimumValidatorCount'))
-        .test(lessThanMixed(MAX_VALIDATOR_COUNT, 'Maximal amount allowed is ${less}'))
+      validatorCount: BNSchema.test(minContext('Minimal amount allowed is ${min}', 'minimumValidatorCount', false))
+        .test(lessThanMixed(MAX_VALIDATOR_COUNT, 'Maximal amount allowed is ${less}', false))
         .required('Field is required'),
     }),
     setMembershipPrice: Yup.object().shape({
