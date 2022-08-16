@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { ModalContext } from '@/common/providers/modal/context'
 import { VoteForCouncilMachineState } from '@/council/modals/VoteForCouncil/machine'
@@ -30,13 +29,11 @@ interface Props extends Omit<VoteForCouncilFormModalProps, 'minStake'> {
 const Template: Story<Props> = ({ minStake, id, send, hideModal, showModal, state }) => {
   const modalData = { id }
   return (
-    <MemoryRouter>
-      <MockApolloProvider members council>
-        <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
-          <VoteForCouncilFormModal minStake={new BN(minStake)} send={send} state={state} />
-        </ModalContext.Provider>
-      </MockApolloProvider>
-    </MemoryRouter>
+    <MockApolloProvider members council>
+      <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
+        <VoteForCouncilFormModal minStake={new BN(minStake)} send={send} state={state} />
+      </ModalContext.Provider>
+    </MockApolloProvider>
   )
 }
 

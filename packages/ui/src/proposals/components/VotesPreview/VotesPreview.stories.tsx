@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { ProposalVoteKind } from '@/common/api/queries'
 import { SideBar, voteControl } from '@/common/components/storybookParts/previewStyles'
@@ -49,11 +48,9 @@ export const Default: Story<Args> = ({ approve = 0, reject = 0, slash = 0, absta
   const count = countVoteMap(map, approve + slash + reject + abstain, councilSize || undefined)
 
   return (
-    <MemoryRouter>
-      <SideBar>
-        <VotesPreview votes={{ map, count }} />
-      </SideBar>
-    </MemoryRouter>
+    <SideBar>
+      <VotesPreview votes={{ map, count }} />
+    </SideBar>
   )
 }
 

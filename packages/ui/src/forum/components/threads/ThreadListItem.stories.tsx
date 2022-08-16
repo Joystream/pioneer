@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { Network } from '@/common/api/queries'
 import { asArray } from '@/common/utils'
@@ -41,9 +40,7 @@ const Template: Story<Props> = ({ tags, isSticky, isArchive, rawThread }) => {
 
   return (
     <MockApolloProvider members forum={forum}>
-      <MemoryRouter>
-        <ThreadListItem thread={thread} isArchive={isArchive} />
-      </MemoryRouter>
+      <ThreadListItem thread={thread} isArchive={isArchive} />
     </MockApolloProvider>
   )
 }

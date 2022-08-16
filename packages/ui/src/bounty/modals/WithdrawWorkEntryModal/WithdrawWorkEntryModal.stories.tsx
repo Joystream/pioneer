@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
@@ -66,26 +65,24 @@ stubTransaction(api, 'api.tx.bounty.withdrawWorkEntry', 888)
 
 const Template: Story = () => {
   return (
-    <MemoryRouter>
-      <ApiContext.Provider value={api}>
-        <MembershipContext.Provider value={membership}>
-          <AccountsContext.Provider value={accounts}>
-            <BalancesContext.Provider value={balance}>
-              <ModalContext.Provider
-                value={{
-                  modalData,
-                  modal: 'foo',
-                  hideModal: () => undefined,
-                  showModal: () => undefined,
-                }}
-              >
-                <WithdrawWorkEntryModal />
-              </ModalContext.Provider>
-            </BalancesContext.Provider>
-          </AccountsContext.Provider>
-        </MembershipContext.Provider>
-      </ApiContext.Provider>
-    </MemoryRouter>
+    <ApiContext.Provider value={api}>
+      <MembershipContext.Provider value={membership}>
+        <AccountsContext.Provider value={accounts}>
+          <BalancesContext.Provider value={balance}>
+            <ModalContext.Provider
+              value={{
+                modalData,
+                modal: 'foo',
+                hideModal: () => undefined,
+                showModal: () => undefined,
+              }}
+            >
+              <WithdrawWorkEntryModal />
+            </ModalContext.Provider>
+          </BalancesContext.Provider>
+        </AccountsContext.Provider>
+      </MembershipContext.Provider>
+    </ApiContext.Provider>
   )
 }
 

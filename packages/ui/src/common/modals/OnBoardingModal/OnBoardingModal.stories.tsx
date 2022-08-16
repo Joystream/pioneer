@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
@@ -102,23 +101,21 @@ const Template: Story<Props> = ({ extension = false, account = false, accountPic
   }, [account, extension, accountPick])
 
   return (
-    <MemoryRouter>
-      <MockApolloProvider members>
-        <ApiContext.Provider value={state.useApi}>
-          <AccountsContext.Provider value={state.useMyAccounts}>
-            <MembershipContext.Provider value={state.useMyMemberships}>
-              <BalancesContext.Provider value={useMyBalances}>
-                <OnBoardingProvider>
-                  <TemplateBlock>
-                    <OnBoardingModal />
-                  </TemplateBlock>
-                </OnBoardingProvider>
-              </BalancesContext.Provider>
-            </MembershipContext.Provider>
-          </AccountsContext.Provider>
-        </ApiContext.Provider>
-      </MockApolloProvider>
-    </MemoryRouter>
+    <MockApolloProvider members>
+      <ApiContext.Provider value={state.useApi}>
+        <AccountsContext.Provider value={state.useMyAccounts}>
+          <MembershipContext.Provider value={state.useMyMemberships}>
+            <BalancesContext.Provider value={useMyBalances}>
+              <OnBoardingProvider>
+                <TemplateBlock>
+                  <OnBoardingModal />
+                </TemplateBlock>
+              </OnBoardingProvider>
+            </BalancesContext.Provider>
+          </MembershipContext.Provider>
+        </AccountsContext.Provider>
+      </ApiContext.Provider>
+    </MockApolloProvider>
   )
 }
 
