@@ -167,6 +167,7 @@ export const ApplyForRoleModal = () => {
       data: {
         requiredStake,
         lock: 'Forum Worker',
+        isFeeOriented: !feeInfo.canAfford,
       },
     })
 

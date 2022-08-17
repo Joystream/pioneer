@@ -6,7 +6,6 @@ import { useForm, FormProvider } from 'react-hook-form'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
-import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
@@ -80,7 +79,6 @@ export const AnnounceCandidacyModal = () => {
   const { api, connectionState } = useApi()
   const boundingLock = api?.consts.members.candidateStake ?? BN_ZERO
   const { active: activeMember } = useMyMemberships()
-  const balances = useMyBalances()
   const { hideModal, showModal } = useModal()
   const [state, send, service] = useMachine(announceCandidacyMachine)
   const constants = useCouncilConstants()
@@ -244,6 +242,7 @@ export const AnnounceCandidacyModal = () => {
       data: {
         requiredStake: constants?.election.minCandidacyStake ?? BN_ZERO,
         lock: 'Council Candidate',
+        isFeeOriented: !feeInfo.canAfford,
       },
     })
 

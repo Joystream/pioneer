@@ -77,6 +77,7 @@ export const VoteForCouncilModal = () => {
       data: {
         requiredStake,
         lock: 'Voting',
+        isFeeOriented: !feeInfo.canAfford,
       },
     })
 

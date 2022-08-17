@@ -246,6 +246,7 @@ export const AddNewProposalModal = () => {
       data: {
         requiredStake: constants?.requiredStake ?? BN_ZERO,
         lock: 'Proposals',
+        isFeeOriented: state.matches('requirementsFailed') && !feeInfo.canAfford,
       },
     })
 
