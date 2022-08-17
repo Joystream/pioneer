@@ -40,6 +40,12 @@ export const CreateThreadModal = () => {
   const postDeposit = useMemo(() => api?.consts.forum.postDeposit.toBn(), [api])
   const threadDeposit = useMemo(() => api?.consts.forum.threadDeposit.toBn(), [api])
 
+  const form = useForm<ThreadFormFields>({
+    resolver: useYupValidationResolver(CreateThreadSchema),
+    mode: 'onChange',
+    defaultValues: formDefaultValues,
+  })
+
   const { feeInfo } = useTransactionFee(
     member?.controllerAccount,
     () =>
@@ -52,19 +58,13 @@ export const CreateThreadModal = () => {
         }),
         ''
       ),
-    [member?.id, modalData.categoryId, isConnected]
+    [member?.id, modalData.categoryId, isConnected, JSON.stringify(form.getValues())]
   )
 
   const minimumTransactionCost = useMemo(
     () => postDeposit && threadDeposit && feeInfo?.transactionFee.add(postDeposit).add(threadDeposit),
     [postDeposit, threadDeposit, feeInfo?.transactionFee.toString()]
   )
-
-  const form = useForm<ThreadFormFields>({
-    resolver: useYupValidationResolver(CreateThreadSchema),
-    mode: 'onChange',
-    defaultValues: formDefaultValues,
-  })
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
