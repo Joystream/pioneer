@@ -109,7 +109,7 @@ describe('UI: ApplyForRoleModal', () => {
 
     stubBalances({ available: 3000 })
     applyTransaction = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
-    applyOnOpeningTxMock = api.api.tx.forumWorkingGroup.applyOnOpening as unknown as jest.Mock
+    applyOnOpeningTxMock = (api.api.tx.forumWorkingGroup.applyOnOpening as unknown) as jest.Mock
 
     stubTransaction(api, 'api.tx.members.confirmStakingAccount')
     stubQuery(
@@ -169,6 +169,7 @@ describe('UI: ApplyForRoleModal', () => {
         data: {
           requiredStake: new BN(requiredStake),
           lock: 'Forum Worker',
+          isFeeOriented: true,
         },
       }
 

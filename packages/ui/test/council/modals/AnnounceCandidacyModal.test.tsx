@@ -97,7 +97,7 @@ describe('UI: Announce Candidacy Modal', () => {
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 5)
     bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 10)
     announceCandidacyTx = stubTransaction(api, 'api.tx.council.announceCandidacy', 20)
-    txMock = api.api.tx.council.announceCandidacy as unknown as jest.Mock
+    txMock = (api.api.tx.council.announceCandidacy as unknown) as jest.Mock
     candidacyNoteTx = stubTransaction(api, 'api.tx.council.setCandidacyNote', 30)
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
     mockedTransactionFee.transaction = batchTx as any
@@ -142,6 +142,7 @@ describe('UI: Announce Candidacy Modal', () => {
         data: {
           requiredStake: new BN(minStake),
           lock: 'Council Candidate',
+          isFeeOriented: true,
         },
       }
 
@@ -157,6 +158,7 @@ describe('UI: Announce Candidacy Modal', () => {
         modal: 'MoveFundsModal',
         data: {
           requiredStake: new BN(minStake),
+          isFeeOriented: false,
           lock: 'Council Candidate',
         },
       }
