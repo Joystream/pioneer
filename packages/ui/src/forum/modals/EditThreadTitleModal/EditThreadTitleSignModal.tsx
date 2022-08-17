@@ -14,6 +14,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
+import { formatJoyValue } from '@/common/model/formatters'
 import { ForumThreadWithDetails } from '@/forum/types'
 import { useMember } from '@/memberships/hooks/useMembership'
 
@@ -53,7 +54,7 @@ export const EditThreadTitleSignModal = ({ thread, newTitle, service, onClose }:
   const signDisabled = !isReady || !hasFunds
 
   const getMessage = (fee?: BN) => {
-    return `Insufficient funds to cover the title edition. You need at least ${fee?.toString()} ${
+    return `Insufficient funds to cover the title edition. You need at least ${fee ? formatJoyValue(fee) : '-'} ${
       CurrencyName.integerValue
     } on your account for this action.`
   }
