@@ -174,7 +174,7 @@ export const getSpecificParameters = (
     }
     case 'setMembershipPrice': {
       return createType('PalletProposalsCodexProposalDetails', {
-        SetMembershipPrice: specifics?.setMembershipPrice?.amount?.toNumber() ?? 0,
+        SetMembershipPrice: specifics?.setMembershipPrice?.amount ?? 0,
       })
     }
     default:
