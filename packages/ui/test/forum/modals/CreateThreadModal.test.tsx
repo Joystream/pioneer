@@ -147,7 +147,7 @@ describe('CreateThreadModal', () => {
       expect(await getButton(/sign and send/i)).toBeDisabled()
       expect(
         await screen.findByText(
-          `Insufficient funds to cover the thread creation. You need at least 10000 ${CurrencyName.integerValue} on your account for this action.`
+          `Insufficient funds to cover the thread creation. You need at least 10,000 ${CurrencyName.integerValue} on your account for this action.`
         )
       ).toBeDefined()
     })
@@ -163,7 +163,7 @@ describe('CreateThreadModal', () => {
       expect(await getButton(/sign and send/i)).toBeDisabled()
       expect(
         await screen.findByText(
-          `Insufficient funds to cover the thread creation. You need at least 1200 ${CurrencyName.integerValue} on your account for this action.`
+          `Insufficient funds to cover the thread creation. You need at least 1,200 ${CurrencyName.integerValue} on your account for this action.`
         )
       ).toBeDefined()
     })
