@@ -10,6 +10,7 @@ import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TokenValue } from '@/common/components/typography'
+import { formatJoyValue } from '@/common/model/formatters'
 import { ValidationHelpers } from '@/common/utils/validation'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
@@ -76,7 +77,7 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
             validation={errorChecker('amount') ? 'invalid' : undefined}
             inputSize="s"
           >
-            <TokenInput id="amount-input" name="staking.amount" placeholder={minStake.toString()} />
+            <TokenInput id="amount-input" name="staking.amount" placeholder={formatJoyValue(minStake)} />
           </InputComponent>
           {isSomeBalanceGteStake && errorMessageGetter('amount')?.startsWith('Insufficient') && (
             <Info>

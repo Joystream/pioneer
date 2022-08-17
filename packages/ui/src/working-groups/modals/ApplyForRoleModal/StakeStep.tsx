@@ -8,6 +8,7 @@ import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TokenValue } from '@/common/components/typography'
+import { formatJoyValue } from '@/common/model/formatters'
 import { ValidationHelpers } from '@/common/utils/validation'
 
 import { groupToLockId, WorkingGroupOpening } from '../../types'
@@ -64,7 +65,7 @@ export function StakeStep({ opening, errorChecker, errorMessageGetter }: StakeSt
             message={(errorChecker('amount') ? errorMessageGetter('amount') : undefined) || ' '}
             required
           >
-            <TokenInput id="amount-input" name="stake.amount" placeholder={minStake.toString()} />
+            <TokenInput id="amount-input" name="stake.amount" placeholder={formatJoyValue(minStake)} />
           </InputComponent>
 
           <h4>3. Select Role Account</h4>

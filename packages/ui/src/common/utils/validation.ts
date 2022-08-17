@@ -140,7 +140,10 @@ export const validStakingAmount = (): Yup.TestConfig<any, AnyObject> => ({
 
     const minStake: BN | undefined = this.options.context?.minStake
     if (minStake && minStake.gt(stake)) {
-      return this.createError({ message: 'Minimal stake amount is ${min} tJOY', params: { min: minStake.toString() } })
+      return this.createError({
+        message: 'Minimal stake amount is ${min} tJOY',
+        params: { min: formatJoyValue(minStake) },
+      })
     }
 
     const totalBalance: BN | undefined = this.options.context?.balances.total
@@ -152,8 +155,8 @@ export const validStakingAmount = (): Yup.TestConfig<any, AnyObject> => ({
           extraFees.isZero() ? '' : ' + extra ${extra} tJoy'
         }`,
         params: {
-          max: totalBalance.toString(),
-          extra: extraFees.toString(),
+          max: formatJoyValue(totalBalance),
+          extra: formatJoyValue(extraFees),
         },
       })
     }
