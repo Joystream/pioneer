@@ -179,12 +179,7 @@ export const schemaFactory = (api?: ProxyApi) => {
     }),
     fundingRequest: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, ''))
-        .test(
-          maxMixed(
-            new BN(api?.consts.proposalsCodex.fundingRequestProposalMaxAmount?.toString() ?? 0),
-            'Maximal amount allowed is {max}'
-          )
-        )
+        .test(maxMixed(api?.consts.proposalsCodex.fundingRequestProposalMaxAmount, 'Maximal amount allowed is ${max}'))
         .required('Field is required'),
       account: AccountSchema.required('Field is required'),
     }),
@@ -290,7 +285,7 @@ export const schemaFactory = (api?: ProxyApi) => {
       validatorCount: BNSchema.test(minContext('Minimal amount allowed is ${min}', 'minimumValidatorCount', false))
         .test(
           lessThanMixed(
-            api?.consts.proposalsCodex.setMaxValidatorCountProposalMaxValidators?.toNumber() ?? 0,
+            api?.consts.proposalsCodex.setMaxValidatorCountProposalMaxValidators?.toNumber(),
             'Maximal amount allowed is ${less}',
             false
           )
