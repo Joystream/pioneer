@@ -22,7 +22,8 @@ export const InviteMemberRequirementsModal = ({ onClose }: Props) => {
       <ModalBody>
         <TextMedium margin="s">
           Memberships Working Group budget has to be sufficient to cover new member invitations. Speak with the
-          Membership Working Group Lead on Discord to find out about the upcoming funding proposals for this group.
+          Membership Working Group Lead on Discord to find out about the upcoming "Update Working Group Budget" and "Set
+          Membership Lead Invitation Quota" proposals.
           <TooltipExternalLink
             href="https://joystream.gitbook.io/joystream-handbook/subsystems/membership#working-group"
             target="_blank"
