@@ -1,7 +1,7 @@
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useForm, FormProvider, FieldError } from 'react-hook-form'
+import { useForm, FormProvider } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
@@ -50,7 +50,12 @@ import { SuccessModal } from '@/proposals/modals/AddNewProposal/components/Succe
 import { TriggerAndDiscussionStep } from '@/proposals/modals/AddNewProposal/components/TriggerAndDiscussionStep'
 import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
 import { getSpecificParameters } from '@/proposals/modals/AddNewProposal/getSpecificParameters'
-import { AddNewProposalForm, defaultProposalValues, schemaFactory } from '@/proposals/modals/AddNewProposal/helpers'
+import {
+  AddNewProposalForm,
+  checkForExecutionWarning,
+  defaultProposalValues,
+  schemaFactory,
+} from '@/proposals/modals/AddNewProposal/helpers'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
 import { addNewProposalMachine, AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalType } from '@/proposals/types'
@@ -133,24 +138,7 @@ export const AddNewProposalModal = () => {
   }, [machineStateConverter(state.value)])
 
   useEffect(() => {
-    if (machineStateConverter(state.value) === 'stakingPolicyAndReward') {
-      if (
-        form.formState.errors.stakingPolicyAndReward?.leavingUnstakingPeriod?.type === 'minContext' ||
-        (form.formState.errors.stakingPolicyAndReward?.stakingAmount as FieldError)?.type === 'minContext'
-      ) {
-        setIsExecutionError(true)
-      } else {
-        setIsExecutionError(false)
-      }
-    }
-
-    if (machineStateConverter(state.value) === 'setReferralCut') {
-      if (form.formState.errors.setReferralCut?.referralCut?.type === 'maxContext') {
-        setIsExecutionError(true)
-      } else {
-        setIsExecutionError(false)
-      }
-    }
+    checkForExecutionWarning(machineStateConverter(state.value), form.formState.errors, setIsExecutionError)
   }, [JSON.stringify(form.formState.errors)])
 
   const transactionsSteps = useMemo(
