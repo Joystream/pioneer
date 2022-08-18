@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React, { useState } from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { repeat } from '@/common/utils'
 import { getMember } from '@/mocks/helpers'
@@ -21,9 +20,7 @@ interface Props {
 const Template: Story<Props> = ({ count, councilor, isLoading }) => {
   const [order, setOrder] = useState<CouncilOrder>({ key: 'member' })
   return (
-    <MemoryRouter>
-      <CouncilList councilors={repeat(() => councilor, count)} order={order} onSort={setOrder} isLoading={isLoading} />
-    </MemoryRouter>
+    <CouncilList councilors={repeat(() => councilor, count)} order={order} onSort={setOrder} isLoading={isLoading} />
   )
 }
 

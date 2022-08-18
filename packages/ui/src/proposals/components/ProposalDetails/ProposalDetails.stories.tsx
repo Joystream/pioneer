@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
@@ -19,22 +18,20 @@ export default {
 type Props = Parameters<typeof ProposalDetails>[number]
 
 const Template: Story<Props> = (args) => (
-  <MemoryRouter>
-    <MockApolloProvider members proposals workingGroups workers>
-      <ModalContext.Provider
-        value={{
-          modal: null,
-          modalData: null,
-          showModal: () => undefined,
-          hideModal: () => undefined,
-        }}
-      >
-        <RowGapBlock gap={24}>
-          <ProposalDetails {...args} />
-        </RowGapBlock>
-      </ModalContext.Provider>
-    </MockApolloProvider>
-  </MemoryRouter>
+  <MockApolloProvider members proposals workingGroups workers>
+    <ModalContext.Provider
+      value={{
+        modal: null,
+        modalData: null,
+        showModal: () => undefined,
+        hideModal: () => undefined,
+      }}
+    >
+      <RowGapBlock gap={24}>
+        <ProposalDetails {...args} />
+      </RowGapBlock>
+    </ModalContext.Provider>
+  </MockApolloProvider>
 )
 
 export const CreateLeadOpening = Template.bind({})

@@ -153,7 +153,8 @@ export const schemaFactory = (api?: ProxyApi) => {
     proposalDetails: Yup.object().shape({
       title: Yup.string()
         .required('Field is required')
-        .max(api?.consts.proposalsEngine.titleMaxLength.toNumber() ?? 0, 'Title exceeds maximum length'),
+        .max(api?.consts.proposalsEngine.titleMaxLength.toNumber() ?? 0, 'Title exceeds maximum length')
+        .matches(/^[\x20-\x7E]*$/, 'Title includes forbidden characters'),
       rationale: Yup.string()
         .required('Field is required')
         .max(api?.consts.proposalsEngine.descriptionMaxLength.toNumber() ?? 0, 'Rationale exceeds maximum length'),

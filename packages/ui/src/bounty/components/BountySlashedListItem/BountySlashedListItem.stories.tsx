@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import {
   BountySlashedListItem,
@@ -17,11 +16,7 @@ export default {
 } as Meta
 
 const Template: Story<BountySlashedListItemProps> = (args) => {
-  return (
-    <MemoryRouter>
-      <BountySlashedListItem {...args} />
-    </MemoryRouter>
-  )
+  return <BountySlashedListItem {...args} />
 }
 
 export const Default = Template.bind({})

@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { getMember } from '@/mocks/helpers'
 
@@ -11,11 +10,7 @@ export default {
   component: SelectedMember,
 } as Meta
 
-const Template: Story<SelectedMemberProps> = (args) => (
-  <MemoryRouter>
-    <SelectedMember {...args} />
-  </MemoryRouter>
-)
+const Template: Story<SelectedMemberProps> = (args) => <SelectedMember {...args} />
 
 export const Default = Template.bind({})
 Default.args = {

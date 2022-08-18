@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { getMember } from '@/mocks/helpers'
@@ -24,11 +23,9 @@ export default {
 } as Meta
 
 const Template: Story<BountySidebarProps> = (args) => (
-  <MemoryRouter>
-    <MockApolloProvider>
-      <BountySidebar {...args} />
-    </MockApolloProvider>
-  </MemoryRouter>
+  <MockApolloProvider>
+    <BountySidebar {...args} />
+  </MockApolloProvider>
 )
 
 export const Default = Template.bind({})

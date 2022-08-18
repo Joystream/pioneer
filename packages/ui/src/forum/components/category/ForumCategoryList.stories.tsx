@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React, { useState } from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { Loading } from '@/common/components/Loading'
 import {
@@ -34,9 +33,8 @@ const Template: Story = ({ isArchive }) => {
           setCategories(data.forumCategories.map(asCategory))
         }}
       />
-      <MemoryRouter>
-        {!categories.length ? <Loading /> : <ForumCategoryList categories={categories} isArchive={isArchive} />}
-      </MemoryRouter>
+
+      {!categories.length ? <Loading /> : <ForumCategoryList categories={categories} isArchive={isArchive} />}
     </MockApolloProvider>
   )
 }

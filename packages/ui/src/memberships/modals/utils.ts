@@ -2,11 +2,12 @@ import { MembershipMetadata } from '@joystream/metadata-protobuf'
 import BN from 'bn.js'
 
 import { CurrencyName } from '@/app/constants/currency'
+import { formatJoyValue } from '@/common/model/formatters'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 
 export const getMessage = (fee?: BN) => {
-  return `Insufficient funds to cover the membership creation. You need at least ${fee?.toString()} ${
+  return `Insufficient funds to cover the membership creation. You need at least ${fee ? formatJoyValue(fee) : '-'} ${
     CurrencyName.integerValue
   } on your account for this action.`
 }
