@@ -158,6 +158,7 @@ describe('UI: Vote for Council Modal', () => {
         data: {
           requiredStake: new BN(minStake),
           lock: 'Voting',
+          isFeeOriented: false,
         },
       }
 

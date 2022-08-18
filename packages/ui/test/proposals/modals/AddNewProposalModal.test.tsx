@@ -290,6 +290,7 @@ describe('UI: AddNewProposalModal', () => {
           data: {
             requiredStake: new BN(requiredStake),
             lock: 'Proposals',
+            isFeeOriented: false,
           },
         }
 
@@ -1209,6 +1210,7 @@ describe('UI: AddNewProposalModal', () => {
           data: {
             requiredStake: new BN(requiredStake),
             lock: 'Proposals',
+            isFeeOriented: true,
           },
         }
 
