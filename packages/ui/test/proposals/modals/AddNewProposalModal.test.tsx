@@ -1137,6 +1137,7 @@ describe('UI: AddNewProposalModal', () => {
 
       describe('Type - Update Working Group Budget', () => {
         beforeEach(async () => {
+          stubQuery(api, 'council.budget', new BN(2500))
           await finishProposalType('updateWorkingGroupBudget')
           await finishStakingAccount()
           await finishProposalDetails()
@@ -1149,10 +1150,10 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeDisabled()
         })
 
-        it('Invalid - group selected, amount lower than current stake filled with positive', async () => {
+        it('Invalid - group selected, positive amount bigger than current council budget', async () => {
           await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
           await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
-          await SpecificParameters.fillAmount(10)
+          await SpecificParameters.fillAmount(3000)
 
           expect(await getCreateButton()).toBeDisabled()
         })
@@ -1160,16 +1161,27 @@ describe('UI: AddNewProposalModal', () => {
         it('Valid - group selected, amount automatically filled', async () => {
           await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
           await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
-
+          screen.logTestingPlaygroundURL()
           expect(await getCreateButton()).not.toBeDisabled()
         })
 
         it('Valid - group selected, amount bigger than current stake filled', async () => {
           await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
           await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
-          await SpecificParameters.fillAmount(3000)
+          await SpecificParameters.fillAmount(1000)
 
           expect(await getCreateButton()).toBeEnabled()
+        })
+
+        it('Invaild - group selected, negative amount bigger than current WG budget', async () => {
+          await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
+          await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
+
+          // Switch to 'Decrease budget', input will be handled as negative
+          await triggerYes()
+          await SpecificParameters.fillAmount(999999)
+
+          expect(await getCreateButton()).toBeDisabled()
         })
 
         it('Valid - group selected, negative amount filled', async () => {
