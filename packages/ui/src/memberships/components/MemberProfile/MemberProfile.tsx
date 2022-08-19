@@ -19,7 +19,7 @@ import { MemberModal } from './MemberModal'
 import { MemberSideRoles } from './MemberRoles'
 import { MemberModalCall } from './types'
 
-type ProfileTabs = 'DETAILS' | 'ACCOUNTS' | 'Working Group Roles'
+type ProfileTabs = 'DETAILS' | 'ACCOUNTS' | 'ROLES'
 
 export const MemberProfile = React.memo(() => {
   const [activeTab, setActiveTab] = useState<ProfileTabs>('DETAILS')
@@ -35,11 +35,7 @@ export const MemberProfile = React.memo(() => {
       tabs={[
         { title: 'Member details', active: activeTab === 'DETAILS', onClick: () => setActiveTab('DETAILS') },
         { title: 'Accounts', active: activeTab === 'ACCOUNTS', onClick: () => setActiveTab('ACCOUNTS') },
-        {
-          title: 'Working Group Roles',
-          active: activeTab === 'Working Group Roles',
-          onClick: () => setActiveTab('Working Group Roles'),
-        },
+        { title: 'Roles', active: activeTab === 'ROLES', onClick: () => setActiveTab('ROLES') },
       ]}
       member={member}
       isLoading={isLoading}
@@ -65,7 +61,7 @@ export const MemberProfile = React.memo(() => {
         <>
           {activeTab === 'DETAILS' && <MemberDetails member={member} />}
           {activeTab === 'ACCOUNTS' && <MemberAccounts member={member} />}
-          {activeTab === 'Working Group Roles' && <MemberSideRoles member={member} />}
+          {activeTab === 'ROLES' && <MemberSideRoles member={member} />}
         </>
       )}
     </MemberModal>
