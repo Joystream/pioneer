@@ -68,7 +68,7 @@ export const minContext = (msg: string, contextPath: string, isJoyValue = true):
   },
 })
 export const maxMixed = (
-  max: Reference<number | BN> | number | BN,
+  max: Reference<number | BN> | number | BN | undefined,
   message: string,
   isJoyValue = true
 ): Yup.TestConfig<any, AnyObject> => ({
@@ -77,12 +77,12 @@ export const maxMixed = (
   params: { max: isJoyValue && isBn(max) ? formatJoyValue(max, { precision: 2 }) : max },
   exclusive: false,
   test(value: BN) {
-    return !value || !isBn(value) || value.lte(new BN(this.resolve(max)))
+    return !value || typeof max === 'undefined' || !isBn(value) || value.lte(new BN(this.resolve(max)))
   },
 })
 
 export const minMixed = (
-  min: Reference<number | BN> | number | BN,
+  min: Reference<number | BN> | number | BN | undefined,
   message: string,
   isJoyValue = true
 ): Yup.TestConfig<any, AnyObject> => ({
@@ -93,12 +93,12 @@ export const minMixed = (
   },
   exclusive: false,
   test(value: BN) {
-    return !value || !isBn(value) || value.gte(new BN(this.resolve(min)))
+    return !value || typeof min === 'undefined' || !isBn(value) || value.gte(new BN(this.resolve(min)))
   },
 })
 
 export const lessThanMixed = (
-  less: Reference<number | BN> | number,
+  less: Reference<number | BN> | number | undefined,
   message: string,
   isJoyValue = true
 ): Yup.TestConfig<any, AnyObject> => ({
@@ -109,12 +109,12 @@ export const lessThanMixed = (
   },
   exclusive: false,
   test(value: BN) {
-    return !value || !isBn(value) || value.lt(new BN(this.resolve(less)))
+    return !value || typeof less === 'undefined' || !isBn(value) || value.lt(new BN(this.resolve(less)))
   },
 })
 
 export const moreThanMixed = (
-  more: Reference<number | BN> | number,
+  more: Reference<number | BN> | number | undefined,
   message: string,
   isJoyValue = true
 ): Yup.TestConfig<any, AnyObject> => ({
@@ -125,7 +125,7 @@ export const moreThanMixed = (
   },
   exclusive: false,
   test(value: BN) {
-    return !value || !isBn(value) || value.gt(new BN(this.resolve(more)))
+    return !value || typeof more === 'undefined' || !isBn(value) || value.gt(new BN(this.resolve(more)))
   },
 })
 
