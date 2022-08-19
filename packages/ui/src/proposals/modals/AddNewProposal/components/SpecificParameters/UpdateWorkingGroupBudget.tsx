@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { first } from 'rxjs'
 
+import { useApi } from '@/api/hooks/useApi'
 import { CurrencyName } from '@/app/constants/currency'
 import { InlineToggleWrap, InputComponent, TokenInput, Label, ToggleCheckbox } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
@@ -9,11 +11,14 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextInlineMedium, TextMedium, TokenValue } from '@/common/components/typography'
 import { capitalizeFirstLetter } from '@/common/helpers'
+import { useObservable } from '@/common/hooks/useObservable'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 export const UpdateWorkingGroupBudget = () => {
   const { setValue, watch, setError, formState, clearErrors } = useFormContext()
+  const { api } = useApi()
+  const councilBudget = useObservable(api?.query.council.budget().pipe(first()), [!api])
   const [groupId, isPositive, budgetUpdate] = watch([
     'updateWorkingGroupBudget.groupId',
     'updateWorkingGroupBudget.isPositive',
@@ -30,24 +35,24 @@ export const UpdateWorkingGroupBudget = () => {
   }, [group?.id])
 
   useEffect(() => {
-    if (!budgetUpdate || !group || formState.isValidating || !formState.isValid) return
+    if (!budgetUpdate || !councilBudget || !group || formState.isValidating || !formState.isValid) return
 
-    if (isPositive && budgetUpdate?.lte(group.budget)) {
+    if (isPositive && budgetUpdate?.gte(councilBudget)) {
       return setError('updateWorkingGroupBudget.budgetUpdate', {
-        type: 'custom',
-        message: 'Amount must be greater then current budget',
+        type: 'execution',
+        message: 'Amount must be lower then current council budget from proposal to execute',
       })
     }
 
     if (!isPositive && budgetUpdate?.gte(group.budget)) {
       return setError('updateWorkingGroupBudget.budgetUpdate', {
-        type: 'custom',
-        message: 'Amount must be lower then current budget',
+        type: 'execution',
+        message: 'Amount must be lower then current budget from proposal to execute',
       })
     }
 
     return clearErrors('updateWorkingGroupBudget.budgetUpdate')
-  }, [budgetUpdate?.toString(), formState.isValidating, isPositive])
+  }, [budgetUpdate?.toString(), councilBudget?.toString(), formState.isValidating, isPositive])
 
   return (
     <RowGapBlock gap={24}>
@@ -80,6 +85,17 @@ export const UpdateWorkingGroupBudget = () => {
                 Current budget for {capitalizeFirstLetter(group.name)} Working Group is{' '}
                 <TextInlineMedium bold>
                   <TokenValue value={group.budget} />
+                </TextInlineMedium>
+                .
+              </TextMedium>
+            </Info>
+          )}
+          {councilBudget && (
+            <Info>
+              <TextMedium>
+                Current budget for Council is{' '}
+                <TextInlineMedium bold>
+                  <TokenValue value={councilBudget} />
                 </TextInlineMedium>
                 .
               </TextMedium>

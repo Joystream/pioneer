@@ -1,4 +1,5 @@
 import BN from 'bn.js'
+import { FieldError, FieldErrors } from 'react-hook-form'
 import * as Yup from 'yup'
 
 import { Account } from '@/accounts/types'
@@ -296,4 +297,32 @@ export const schemaFactory = (api?: ProxyApi) => {
       amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
     }),
   })
+}
+
+export const checkForExecutionWarning = (
+  step: string,
+  errors: FieldErrors<AddNewProposalForm>,
+  errorController: (isError: boolean) => void
+) => {
+  switch (step) {
+    case 'stakingPolicyAndReward': {
+      if (
+        errors.stakingPolicyAndReward?.leavingUnstakingPeriod?.type === 'minContext' ||
+        (errors.stakingPolicyAndReward?.stakingAmount as FieldError)?.type === 'minContext'
+      ) {
+        errorController(true)
+      } else {
+        errorController(false)
+      }
+      break
+    }
+    case 'setReferralCut': {
+      errorController(errors.setReferralCut?.referralCut?.type === 'maxContext')
+      break
+    }
+    case 'updateWorkingGroupBudget': {
+      errorController((errors.updateWorkingGroupBudget?.budgetUpdate as FieldError)?.type === 'execution')
+      break
+    }
+  }
 }
