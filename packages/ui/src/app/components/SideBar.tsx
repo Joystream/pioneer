@@ -1,12 +1,11 @@
 import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion'
-import React, { useState } from 'react'
+import React from 'react'
 import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { MembersRoutes, ProfileRoutes, SettingsRoutes } from '@/app/constants/routes'
 import { BountyRoutes } from '@/bounty/constants'
 import { Arrow } from '@/common/components/icons'
-import { Notifications, NotificationsButton } from '@/common/components/Notifications'
 import { BandwidthIcon } from '@/common/components/page/Sidebar/LinksIcons/BandwidthIcon'
 import { BountyIcon } from '@/common/components/page/Sidebar/LinksIcons/BountyIcon'
 import { ConstitutionIcon } from '@/common/components/page/Sidebar/LinksIcons/ConstitutionIcon'
@@ -38,9 +37,7 @@ import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
 export const SideBar = () => {
-  const [isNotificationsPanelOpen, setNotificationsPanelOpen] = useState(false)
   const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)
-  const onClose = () => setNotificationsPanelOpen(false)
   const { stage: electionStage } = useElectionStage()
   const electionLink = electionStage === 'inactive' ? ElectionRoutes.pastElections : ElectionRoutes.currentElection
 
@@ -49,10 +46,10 @@ export const SideBar = () => {
       <NavigationInnerWrapper>
         <NavigationHeader>
           <LogoLink />
-          <NotificationsButton
-            onClick={() => setNotificationsPanelOpen(!isNotificationsPanelOpen)}
-            isNotificationsPanelOpen={isNotificationsPanelOpen}
-          />
+          {/*<NotificationsButton*/}
+          {/*  onClick={() => setNotificationsPanelOpen(!isNotificationsPanelOpen)}*/}
+          {/*  isNotificationsPanelOpen={isNotificationsPanelOpen}*/}
+          {/*/>*/}
         </NavigationHeader>
         <AnimateSharedLayout>
           <NavigationLinks>
@@ -164,7 +161,7 @@ export const SideBar = () => {
         </AnimateSharedLayout>
         <ProfileComponent />
       </NavigationInnerWrapper>
-      <Notifications onClose={onClose} isNotificationsPanelOpen={isNotificationsPanelOpen} />
+      {/*<Notifications onClose={onClose} isNotificationsPanelOpen={isNotificationsPanelOpen} />*/}
     </Navigation>
   )
 }
