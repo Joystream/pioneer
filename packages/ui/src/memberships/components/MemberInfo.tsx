@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { FounderMemberIcon, VerifiedMemberIcon, LeadMemberIcon } from '@/common/components/icons'
+import { FounderMemberIcon, VerifiedMemberIcon, LeadMemberIcon, CouncilMemberIcon } from '@/common/components/icons'
 import {
   DarkTooltipInnerItemProps,
   DefaultTooltip,
@@ -107,7 +107,7 @@ export const MemberInfo = React.memo(
                 {member.isCouncilMember && (
                   <Tooltip tooltipText="Council Member">
                     <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'tooltipondark' : 'tooltiponlight'}>
-                      <VerifiedMemberIcon />
+                      <CouncilMemberIcon />
                     </MemberStatusTooltip>
                   </Tooltip>
                 )}
