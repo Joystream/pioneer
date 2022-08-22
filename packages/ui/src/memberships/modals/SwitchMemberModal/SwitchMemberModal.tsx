@@ -51,7 +51,7 @@ export const SwitchMemberModal = () => {
               onClick={() => switchMember(member)}
               isMemberActive={active?.handle === member.handle}
             >
-              <MemberInfo member={member} isOnDark={true} skipModal />
+              <MemberInfo member={member} isOnDark skipModal />
               <Notification />
             </MemberItem>
           ))}
