@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { TogglableIcon } from '@/common/components/forms'
 import { Fields, FilterBox, FilterLabel } from '@/common/components/forms/FilterBox'
-import { CouncilMemberIcon, FounderMemberIcon, VerifiedMemberIcon } from '@/common/components/icons'
+import { CouncilMemberIcon, FounderMemberIcon } from '@/common/components/icons'
 import { ItemCount } from '@/common/components/ItemCount'
 import { SelectContainer } from '@/common/components/selects'
 import { objectEquals } from '@/common/utils'
@@ -14,7 +14,6 @@ import { SelectMemberRoles } from '../SelectMemberRoles'
 export interface MemberListFilter {
   search: string
   roles: MemberRole[]
-  onlyVerified: boolean
   onlyFounder: boolean
   onlyCouncil: boolean
 }
@@ -41,7 +40,6 @@ const filterReducer = (filters: MemberListFilter, action: Action): MemberListFil
 export const MemberListEmptyFilter: MemberListFilter = {
   search: '',
   roles: [],
-  onlyVerified: false,
   onlyFounder: false,
   onlyCouncil: false,
 }
@@ -56,7 +54,7 @@ export interface MemberListFiltersProps {
 
 export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberListFiltersProps) => {
   const [filters, dispatch] = useReducer(filterReducer, MemberListEmptyFilter)
-  const { search, roles, onlyVerified, onlyFounder, onlyCouncil } = filters
+  const { search, roles, onlyFounder, onlyCouncil } = filters
 
   const applyFilters = () => onApply(filters)
   const clear = isFilterEmpty(filters)
@@ -96,19 +94,9 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
       />
       <ToggleContainer>
         <FilterLabel>Member Type</FilterLabel>
-        <TogglableIcon
-          tooltipText="Verified Member"
-          value={onlyVerified}
-          onChange={(value) => {
-            dispatch({ type: 'change', field: 'onlyVerified', value })
-            onApply({ ...filters, onlyVerified: value })
-          }}
-        >
-          <VerifiedMemberIcon />
-        </TogglableIcon>
 
         <TogglableIcon
-          tooltipText="Founder Member"
+          tooltipText="Founding Member"
           value={onlyFounder}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'onlyFounder', value })
@@ -159,10 +147,10 @@ const FieldsHeader = styled.div`
 const ToggleContainer = styled.div`
   display: grid;
   gap: 4px 8px;
-  grid-template-columns: auto 1fr 1fr;
+  grid-template-columns: auto 1fr;
   height: 48px;
 
   & > :first-child {
-    grid-column: span 3;
+    grid-column: span 2;
   }
 `

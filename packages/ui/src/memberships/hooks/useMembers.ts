@@ -52,18 +52,11 @@ type FilterGqlInput = Pick<
   | 'isCouncilMember_eq'
 >
 
-const filterToGqlInput = ({
-  search,
-  roles,
-  onlyVerified,
-  onlyFounder,
-  onlyCouncil,
-}: MemberListFilter): FilterGqlInput => ({
+const filterToGqlInput = ({ search, roles, onlyFounder, onlyCouncil }: MemberListFilter): FilterGqlInput => ({
   ...(search
     ? { OR: [{ controllerAccount_eq: search }, { rootAccount_eq: search }, { handle_contains: search }] }
     : {}),
   ...(roles.length ? { roles_some: { groupId_in: roles.map(toString) } } : {}),
-  ...(onlyVerified ? { isVerified_eq: true } : {}),
   ...(onlyFounder ? { isFoundingMember_eq: true } : {}),
   ...(onlyCouncil ? { isCouncilMember_eq: true } : {}),
 })
