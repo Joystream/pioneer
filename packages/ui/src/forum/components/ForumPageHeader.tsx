@@ -19,14 +19,7 @@ export const ForumPageHeader = ({ title, children, buttons }: ForumPageHeaderPro
     <PageHeaderWrapper>
       <PageHeaderRow>
         {title}
-        <ButtonsGroup>
-          <SearchBox
-            value={search}
-            onChange={setSearch}
-            onApply={() => showModal({ modal: 'SearchResults', data: { search } })}
-          />
-          {buttons}
-        </ButtonsGroup>
+        <ButtonsGroup>{buttons}</ButtonsGroup>
       </PageHeaderRow>
       {children}
     </PageHeaderWrapper>

@@ -85,24 +85,24 @@ export const EmptyThreadItem = ({ text }: { text: string }) => (
   </ThreadItemWrapper>
 )
 
-const ThreadItemHeader = styled(ColumnGapBlock)`
+export const ThreadItemHeader = styled(ColumnGapBlock)`
   justify-content: space-between;
   width: 100%;
   max-width: 100%;
   overflow: hidden;
 `
 
-const ThreadItemTitle = styled.h5<{ empty?: boolean }>`
+export const ThreadItemTitle = styled.h5<{ empty?: boolean }>`
   font-weight: ${({ empty }) => (empty ? '400' : '700')};
   ${Overflow.FullDots};
   transition: ${Transitions.all};
 `
 
-const ThreadItemTime = styled(TextInlineExtraSmall)`
+export const ThreadItemTime = styled(TextInlineExtraSmall)`
   ${Overflow.FullDots};
 `
 
-const ThreadItemText = styled(TextMedium)`
+export const ThreadItemText = styled(TextMedium)`
   display: -webkit-box;
   max-height: 100%;
   -webkit-box-orient: vertical;

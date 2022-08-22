@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { ForumThreadOrderByInput } from '@/common/api/queries'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
+import { SearchBox } from '@/common/components/forms/FilterBox/FilterSearchBox'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
 import { ItemCount } from '@/common/components/ItemCount'
 import { Loading } from '@/common/components/Loading'
@@ -13,8 +14,9 @@ import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Label } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { useSort } from '@/common/hooks/useSort'
-import { ForumCategoryList } from '@/forum/components/category'
+import { SubForumCategoryList } from '@/forum/components/category'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
+import { PopularThreadList } from '@/forum/components/threads/PopularThreadList'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
 import { THREADS_PER_PAGE } from '@/forum/constant'
@@ -26,6 +28,7 @@ import { ForumPageLayout } from './components/ForumPageLayout'
 
 export const ForumCategory = () => {
   const [page, setPage] = useState<number>(1)
+  const [search, setSearch] = useState('')
   const { id, type } = useParams<{ id: string; type?: 'archive' }>()
   const isArchive = type === 'archive'
 
@@ -72,21 +75,33 @@ export const ForumCategory = () => {
             </TransactionButton>
           }
         >
-          <ModeratorsContainer>
-            Moderators: <MemberStack members={moderatorsSummary(category.moderators)} max={5} />
-          </ModeratorsContainer>
+          <Flex>
+            <ModeratorsContainer>
+              Moderators: <MemberStack members={moderatorsSummary(category.moderators)} max={5} />
+            </ModeratorsContainer>
+            <SearchBox
+              value={search}
+              onChange={setSearch}
+              onApply={() => showModal({ modal: 'SearchResults', data: { search } })}
+            />
+          </Flex>
         </ForumPageHeader>
       }
       main={
         <>
-          {!!category.subcategories.length && (
+          <RowGapBlock gap={24}>
             <RowGapBlock gap={24}>
-              <ItemCount count={category.subcategories.length}>
-                {isArchive ? 'Archived categories' : 'Categories'}
-              </ItemCount>
-              <ForumCategoryList categories={category.subcategories} isArchive={isArchive} />
+              Popular threads
+              <PopularThreadList />
             </RowGapBlock>
-          )}
+
+            {!!category.subcategories.length && (
+              <RowGapBlock gap={24}>
+                {isArchive ? 'Archived categories' : 'Categories'}
+                <SubForumCategoryList categories={category.subcategories} isArchive={isArchive} />
+              </RowGapBlock>
+            )}
+          </RowGapBlock>
 
           <RowGapBlock gap={24}>
             <ThreadFilters onApply={(filters) => refresh({ filters })} isArchive={isArchive}>
@@ -113,4 +128,9 @@ export const ForumCategory = () => {
 
 const ModeratorsContainer = styled(Label)`
   align-items: center;
+`
+const Flex = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `
