@@ -23,9 +23,9 @@ interface SignTransactionModalProps {
 export const SignTransactionModal = ({ onClose, transaction, signer, service, steps }: SignTransactionModalProps) => {
   const { allAccounts } = useMyAccounts()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
-  const { paymentInfo, sign, isReady, noFeeFunds } = useSignAndSendTransaction({ transaction, signer, service })
+  const { paymentInfo, sign, isReady, canAfford } = useSignAndSendTransaction({ transaction, signer, service })
   const partialFee = paymentInfo?.partialFee
-  const signDisabled = !isReady || noFeeFunds
+  const signDisabled = !isReady || !canAfford
 
   return (
     <TransactionModal onClose={onClose} service={service} useMultiTransaction={steps && { steps, active: 2 }}>

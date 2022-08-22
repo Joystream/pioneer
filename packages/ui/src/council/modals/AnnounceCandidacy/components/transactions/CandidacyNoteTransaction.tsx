@@ -29,14 +29,14 @@ export const CandidacyNoteTransaction = ({
 }: CandidacyNoteTransactionProps) => {
   const { allAccounts } = useMyAccounts()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
-  const { paymentInfo, sign, isReady, noFeeFunds } = useSignAndSendTransaction({
+  const { paymentInfo, sign, isReady, canAfford } = useSignAndSendTransaction({
     transaction,
     signer,
     service,
   })
   const partialFee = paymentInfo?.partialFee
 
-  const signDisabled = !isReady || noFeeFunds
+  const signDisabled = !isReady || !canAfford
 
   return (
     <TransactionModal onClose={onClose} service={service} useMultiTransaction={steps && { steps, active: 2 }}>

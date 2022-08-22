@@ -54,6 +54,6 @@ export const useSignAndSendTransaction = ({ transaction, signer, service, skipQu
     paymentInfo,
     sign,
     isReady,
-    noFeeFunds: Boolean(balance && paymentInfo && getFeeSpendableBalance(balance).lt(paymentInfo.partialFee)),
+    canAfford: Boolean(balance && paymentInfo && getFeeSpendableBalance(balance).gte(paymentInfo.partialFee)),
   }
 }

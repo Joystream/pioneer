@@ -27,13 +27,13 @@ interface SignProps {
 export const InviteMemberSignModal = ({ onClose, formData, transaction, signer, service }: SignProps) => {
   const { allAccounts } = useMyAccounts()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
-  const { paymentInfo, sign, isReady, noFeeFunds } = useSignAndSendTransaction({
+  const { paymentInfo, sign, isReady, canAfford } = useSignAndSendTransaction({
     transaction,
     signer: signer,
     service,
   })
   const partialFee = paymentInfo?.partialFee
-  const signDisabled = !isReady || noFeeFunds
+  const signDisabled = !isReady || !canAfford
 
   return (
     <TransactionModal onClose={onClose} service={service}>
@@ -49,8 +49,8 @@ export const InviteMemberSignModal = ({ onClose, formData, transaction, signer, 
           <InputComponent
             label="Sending from account"
             inputSize="l"
-            validation={noFeeFunds ? 'invalid' : undefined}
-            message={noFeeFunds ? getMessage(partialFee) : undefined}
+            validation={canAfford ? 'invalid' : undefined}
+            message={canAfford ? getMessage(partialFee) : undefined}
           >
             <SelectedAccount account={signerAccount} />
           </InputComponent>

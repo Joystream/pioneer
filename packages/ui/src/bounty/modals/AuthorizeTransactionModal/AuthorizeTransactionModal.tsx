@@ -39,13 +39,13 @@ export const AuthorizeTransactionModal = ({
   skipQueryNodeCheck,
 }: Props) => {
   const { t } = useTranslation('bounty')
-  const { sign, isReady, paymentInfo, noFeeFunds } = useSignAndSendTransaction({
+  const { sign, isReady, paymentInfo, canAfford } = useSignAndSendTransaction({
     service,
     transaction,
     signer: controllerAccount.address,
     skipQueryNode: skipQueryNodeCheck,
   })
-  const signDisabled = !isReady || noFeeFunds
+  const signDisabled = !isReady || !canAfford
 
   return (
     <TransactionModal onClose={onClose} service={service} useMultiTransaction={useMultiTransaction}>

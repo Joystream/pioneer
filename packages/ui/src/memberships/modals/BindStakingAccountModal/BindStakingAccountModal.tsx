@@ -28,14 +28,14 @@ export const BindStakingAccountModal = ({ onClose, transaction, signer, service,
   const { allAccounts } = useMyAccounts()
   const { member } = useMember(memberId)
   const signerAccount = accountOrNamed(allAccounts, signer, 'Account to Bind')
-  const { paymentInfo, sign, isReady, noFeeFunds } = useSignAndSendTransaction({
+  const { paymentInfo, sign, isReady, canAfford } = useSignAndSendTransaction({
     transaction,
     signer,
     service,
     skipQueryNode: true,
   })
   const partialFee = paymentInfo?.partialFee
-  const signDisabled = !isReady || noFeeFunds
+  const signDisabled = !isReady || !canAfford
 
   return (
     <TransactionModal onClose={onClose} service={service} useMultiTransaction={{ steps, active: 0 }}>
