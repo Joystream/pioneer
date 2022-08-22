@@ -1,12 +1,11 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActorRef } from 'xstate'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
-import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { Account } from '@/accounts/types'
 import { InputComponent } from '@/common/components/forms'
 import { ModalBody, ModalTransactionFooter } from '@/common/components/Modal'
@@ -40,21 +39,13 @@ export const AuthorizeTransactionModal = ({
   skipQueryNodeCheck,
 }: Props) => {
   const { t } = useTranslation('bounty')
-  const [hasFunds, setHasFunds] = useState<boolean>(false)
-  const balances = useMyBalances()
-
-  const { sign, isReady, paymentInfo } = useSignAndSendTransaction({
+  const { sign, isReady, paymentInfo, noFeeFunds } = useSignAndSendTransaction({
     service,
     transaction,
     signer: controllerAccount.address,
     skipQueryNode: skipQueryNodeCheck,
   })
-
-  useEffect(() => {
-    if (controllerAccount && paymentInfo?.partialFee) {
-      setHasFunds(!!balances?.[controllerAccount.address]?.transferable.gte(paymentInfo.partialFee))
-    }
-  }, [balances, controllerAccount, paymentInfo?.partialFee])
+  const signDisabled = !isReady || noFeeFunds
 
   return (
     <TransactionModal onClose={onClose} service={service} useMultiTransaction={useMultiTransaction}>
@@ -78,7 +69,7 @@ export const AuthorizeTransactionModal = ({
       </ModalBody>
       <ModalTransactionFooter
         transactionFee={paymentInfo?.partialFee}
-        next={{ disabled: !hasFunds || !isReady, label: buttonLabel, onClick: sign }}
+        next={{ disabled: signDisabled, label: buttonLabel, onClick: sign }}
       >
         {contributeAmount && (
           <TransactionInfo

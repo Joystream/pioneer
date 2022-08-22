@@ -1,10 +1,9 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { ActorRef } from 'xstate'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
-import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { InputComponent } from '@/common/components/forms'
@@ -28,23 +27,13 @@ interface SignProps {
 export const InviteMemberSignModal = ({ onClose, formData, transaction, signer, service }: SignProps) => {
   const { allAccounts } = useMyAccounts()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
-  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
+  const { paymentInfo, sign, isReady, noFeeFunds } = useSignAndSendTransaction({
     transaction,
     signer: signer,
     service,
   })
-  const [hasFunds, setHasFunds] = useState(false)
-  const balance = useBalance(signer)
-  const transferable = balance?.transferable
   const partialFee = paymentInfo?.partialFee
-
-  useEffect(() => {
-    if (transferable && partialFee) {
-      setHasFunds(transferable.gte(partialFee))
-    }
-  }, [partialFee?.toString(), transferable?.toString()])
-
-  const signDisabled = !isReady || !hasFunds
+  const signDisabled = !isReady || noFeeFunds
 
   return (
     <TransactionModal onClose={onClose} service={service}>
@@ -60,8 +49,8 @@ export const InviteMemberSignModal = ({ onClose, formData, transaction, signer, 
           <InputComponent
             label="Sending from account"
             inputSize="l"
-            validation={hasFunds ? undefined : 'invalid'}
-            message={hasFunds ? undefined : getMessage(partialFee)}
+            validation={noFeeFunds ? 'invalid' : undefined}
+            message={noFeeFunds ? getMessage(partialFee) : undefined}
           >
             <SelectedAccount account={signerAccount} />
           </InputComponent>

@@ -4,6 +4,9 @@ import { Hash } from '@polkadot/types/interfaces/types'
 import { useCallback, useEffect, useState } from 'react'
 import { ActorRef } from 'xstate'
 
+import { useBalance } from '@/accounts/hooks/useBalance'
+import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
+
 import { Address } from '../types'
 
 import { useProcessTransaction } from './useProcessTransaction'
@@ -25,6 +28,7 @@ export const useSignAndSendTransaction = ({ transaction, signer, service, skipQu
   const [blockHash, setBlockHash] = useState<Hash | string | undefined>(undefined)
   const queryNodeStatus = useQueryNodeTransactionStatus(blockHash, skipQueryNode)
   const apolloClient = useApolloClient()
+  const balance = useBalance(signer)
   const { send, paymentInfo, isReady, isProcessing } = useProcessTransaction({
     transaction,
     signer,
@@ -50,5 +54,6 @@ export const useSignAndSendTransaction = ({ transaction, signer, service, skipQu
     paymentInfo,
     sign,
     isReady,
+    noFeeFunds: Boolean(balance && paymentInfo && getFeeSpendableBalance(balance).lt(paymentInfo.partialFee)),
   }
 }
