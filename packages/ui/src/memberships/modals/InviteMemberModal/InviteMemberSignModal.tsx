@@ -49,8 +49,8 @@ export const InviteMemberSignModal = ({ onClose, formData, transaction, signer, 
           <InputComponent
             label="Sending from account"
             inputSize="l"
-            validation={canAfford ? 'invalid' : undefined}
-            message={canAfford ? getMessage(partialFee) : undefined}
+            validation={!canAfford ? 'invalid' : undefined}
+            message={!canAfford ? getMessage(partialFee) : undefined}
           >
             <SelectedAccount account={signerAccount} />
           </InputComponent>
