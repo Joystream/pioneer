@@ -187,9 +187,16 @@ const serializeCodec = (codec: Codec) => {
   }
 
   if (isEventRecord(codec)) {
-    const { meta, method, section, typeDef } = codec.event
-    const json = merge(codec.toJSON(), { event: { meta: meta.toJSON(), method, section, typeDef } })
-    return { kind: 'extended-codec', type, value: json }
+    const { data, index, meta, method, section, typeDef } = codec.event
+    const event = {
+      data: data.toJSON(),
+      index: index.toJSON(),
+      meta: meta.toJSON(),
+      method,
+      section,
+      typeDef,
+    }
+    return { kind: 'extended-codec', type, value: merge(codec.toJSON(), { event }) }
   }
 
   return { kind: 'codec', type, value: codec.toJSON() }
