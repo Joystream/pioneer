@@ -84,7 +84,12 @@ export const inviteMemberMachine = createMachine<Context, InviteMemberEvent, Inv
       },
     },
     success: { type: 'final' },
-    error: { type: 'final' },
-    canceled: { type: 'final' },
+    error: {
+      type: 'final',
+      meta: { message: 'There was a problem with creating a membership.' },
+    },
+    canceled: {
+      type: 'final',
+    },
   },
 })
