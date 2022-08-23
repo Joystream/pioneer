@@ -1,10 +1,9 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { ActorRef } from 'xstate'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
-import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { ModalBody, ModalTransactionFooter, Row } from '@/common/components/Modal'
@@ -24,19 +23,9 @@ interface SignTransactionModalProps {
 export const SignTransactionModal = ({ onClose, transaction, signer, service, steps }: SignTransactionModalProps) => {
   const { allAccounts } = useMyAccounts()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
-  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer, service })
-  const [hasFunds, setHasFunds] = useState(false)
-  const balance = useBalance(signer)
-  const transferable = balance?.transferable
+  const { paymentInfo, sign, isReady, canAfford } = useSignAndSendTransaction({ transaction, signer, service })
   const partialFee = paymentInfo?.partialFee
-
-  useEffect(() => {
-    if (transferable && partialFee) {
-      setHasFunds(transferable.gte(partialFee))
-    }
-  }, [partialFee?.toString(), transferable?.toString()])
-
-  const signDisabled = !isReady || !hasFunds
+  const signDisabled = !isReady || !canAfford
 
   return (
     <TransactionModal onClose={onClose} service={service} useMultiTransaction={steps && { steps, active: 2 }}>
