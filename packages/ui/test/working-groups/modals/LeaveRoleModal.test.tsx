@@ -4,8 +4,10 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { ApiContext } from '@/api/providers/context'
+import { GlobalModals } from '@/app/GlobalModals'
 import { createType } from '@/common/model/createType'
-import { ModalContext } from '@/common/providers/modal/context'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
@@ -33,6 +35,20 @@ import { WORKER } from '../../_mocks/working-groups'
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
+const mockUseModal: UseModal<any> = {
+  modal: null,
+  modalData: { workerId: 'forumWorkingGroup-1' },
+  showModal: () => null,
+  hideModal: () => null,
+}
+
+jest.mock('@/common/hooks/useModal', () => ({
+  useModal: () => ({
+    ...jest.requireActual('@/common/hooks/useModal').useModal(),
+    ...mockUseModal,
+  }),
 }))
 
 describe('UI: LeaveRoleModal', () => {
@@ -104,22 +120,16 @@ describe('UI: LeaveRoleModal', () => {
   })
 
   function renderModal() {
-    const modalContext = {
-      modal: 'LeaveRole',
-      modalData: { workerId: 'forumWorkingGroup-1' },
-      showModal: () => null,
-      hideModal: () => null,
-    }
-
     return render(
       <MemoryRouter>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
             <MembershipContext.Provider value={useMyMemberships}>
               <ApiContext.Provider value={api}>
-                <ModalContext.Provider value={modalContext}>
+                <ModalContextProvider>
+                  <GlobalModals />
                   <LeaveRoleModal />
-                </ModalContext.Provider>
+                </ModalContextProvider>
               </ApiContext.Provider>
             </MembershipContext.Provider>
           </MockKeyringProvider>

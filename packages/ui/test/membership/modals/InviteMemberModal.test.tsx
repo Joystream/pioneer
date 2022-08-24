@@ -6,7 +6,9 @@ import React from 'react'
 import { of } from 'rxjs'
 
 import { ApiContext } from '@/api/providers/context'
+import { GlobalModals } from '@/app/GlobalModals'
 import { createType } from '@/common/model/createType'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { InviteMemberModal } from '@/memberships/modals/InviteMemberModal'
 import { seedMembers } from '@/mocks/data'
 
@@ -191,7 +193,10 @@ describe('UI: InviteMemberModal', () => {
       <MockQueryNodeProviders>
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>
-            <InviteMemberModal onClose={() => undefined} />
+            <ModalContextProvider>
+              <GlobalModals />
+              <InviteMemberModal onClose={() => undefined} />
+            </ModalContextProvider>
           </ApiContext.Provider>
         </MockKeyringProvider>
       </MockQueryNodeProviders>

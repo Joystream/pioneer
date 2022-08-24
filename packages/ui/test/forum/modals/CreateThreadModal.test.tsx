@@ -5,9 +5,10 @@ import { generatePath, MemoryRouter, Route } from 'react-router-dom'
 
 import { ApiContext } from '@/api/providers/context'
 import { CurrencyName } from '@/app/constants/currency'
+import { GlobalModals } from '@/app/GlobalModals'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
-import { ModalContext } from '@/common/providers/modal/context'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { UseModal } from '@/common/providers/modal/types'
 import { ForumRoutes } from '@/forum/constant'
 import { CreateThreadModal } from '@/forum/modals/CreateThreadModal'
@@ -39,6 +40,20 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
+const mockUseModal: UseModal<any> = {
+  hideModal: jest.fn(),
+  showModal: jest.fn(),
+  modal: null,
+  modalData: { categoryId: '0' },
+}
+
+jest.mock('@/common/hooks/useModal', () => ({
+  useModal: () => ({
+    ...jest.requireActual('@/common/hooks/useModal').useModal(),
+    ...mockUseModal,
+  }),
+}))
+
 describe('CreateThreadModal', () => {
   const api = stubApi()
   stubDefaultBalances()
@@ -50,12 +65,6 @@ describe('CreateThreadModal', () => {
     stubConst(api, 'forum.threadDeposit', createBalanceOf(values?.thread ?? 10))
   }
 
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData: { categoryId: '0' },
-  }
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -84,11 +93,11 @@ describe('CreateThreadModal', () => {
     it('No active member', () => {
       useMyMemberships.active = undefined
       renderModal()
-      expect(useModal.showModal).toBeCalledWith({
+      expect(mockUseModal.showModal).toBeCalledWith({
         modal: 'SwitchMember',
         data: {
           originalModalName: 'CreateThreadModal',
-          originalModalData: useModal.modalData,
+          originalModalData: mockUseModal.modalData,
         },
       })
     })
@@ -231,10 +240,11 @@ describe('CreateThreadModal', () => {
     return render(
       <MemoryRouter initialEntries={['/forum']}>
         <ApiContext.Provider value={api}>
-          <ModalContext.Provider value={useModal}>
+          <ModalContextProvider>
             <MockKeyringProvider>
               <MembershipContext.Provider value={useMyMemberships}>
                 <MockApolloProvider>
+                  <GlobalModals />
                   <CreateThreadModal />
                   <Route
                     path="*"
@@ -246,7 +256,7 @@ describe('CreateThreadModal', () => {
                 </MockApolloProvider>
               </MembershipContext.Provider>
             </MockKeyringProvider>
-          </ModalContext.Provider>
+          </ModalContextProvider>
         </ApiContext.Provider>
       </MemoryRouter>
     )

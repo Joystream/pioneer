@@ -7,7 +7,10 @@ import { MemoryRouter } from 'react-router'
 import { of } from 'rxjs'
 
 import { ApiContext } from '@/api/providers/context'
+import { GlobalModals } from '@/app/GlobalModals'
 import { createType } from '@/common/model/createType'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { UseModal } from '@/common/providers/modal/types'
 import { BuyMembershipModal } from '@/memberships/modals/BuyMembershipModal'
 
 import { getButton } from '../../_helpers/getButton'
@@ -28,14 +31,19 @@ import {
 
 const mockCallback = jest.fn()
 
-jest.mock('@/common/hooks/useModal', () => {
-  return {
-    useModal: () => ({
-      showModal: mockCallback,
-      hideModal: () => null,
-    }),
-  }
-})
+const mockUseModal: UseModal<any> = {
+  hideModal: jest.fn(),
+  showModal: mockCallback,
+  modal: null,
+  modalData: undefined,
+}
+
+jest.mock('@/common/hooks/useModal', () => ({
+  useModal: () => ({
+    ...jest.requireActual('@/common/hooks/useModal').useModal(),
+    ...mockUseModal,
+  }),
+}))
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -199,7 +207,10 @@ describe('UI: BuyMembershipModal', () => {
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <ApiContext.Provider value={api}>
-                <BuyMembershipModal />
+                <ModalContextProvider>
+                  <GlobalModals />
+                  <BuyMembershipModal />
+                </ModalContextProvider>
               </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>

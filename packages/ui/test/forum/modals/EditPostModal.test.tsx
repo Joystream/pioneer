@@ -4,7 +4,8 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { ApiContext } from '@/api/providers/context'
-import { ModalContext } from '@/common/providers/modal/context'
+import { GlobalModals } from '@/app/GlobalModals'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { EditPostModal, EditPostModalCall } from '@/forum/modals/PostActionModal/EditPostModal'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -34,6 +35,20 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
+const mockUseModal: UseModal<any> = {
+  hideModal: jest.fn(),
+  showModal: jest.fn(),
+  modal: null,
+  modalData: null,
+}
+
+jest.mock('@/common/hooks/useModal', () => ({
+  useModal: () => ({
+    ...jest.requireActual('@/common/hooks/useModal').useModal(),
+    ...mockUseModal,
+  }),
+}))
+
 describe('UI: EditPostModal', () => {
   const api = stubApi()
   const txPath = 'api.tx.forum.editPostText'
@@ -47,12 +62,6 @@ describe('UI: EditPostModal', () => {
     onFail: () => true,
   }
 
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData,
-  }
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -67,6 +76,7 @@ describe('UI: EditPostModal', () => {
   const server = setupMockServer({ noCleanupAfterEach: true })
 
   beforeAll(async () => {
+    mockUseModal.modalData = modalData
     await cryptoWaitReady()
     rawMembers.slice(0, 2).map((member) => seedMember(member, server.server))
     seedForumCategory(mockCategories[0], server.server)
@@ -119,16 +129,17 @@ describe('UI: EditPostModal', () => {
 
   const renderModal = () =>
     render(
-      <ModalContext.Provider value={useModal}>
+      <ModalContextProvider>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
             <MembershipContext.Provider value={useMyMemberships}>
               <ApiContext.Provider value={api}>
+                <GlobalModals />
                 <EditPostModal />
               </ApiContext.Provider>
             </MembershipContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
-      </ModalContext.Provider>
+      </ModalContextProvider>
     )
 })

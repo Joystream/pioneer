@@ -6,6 +6,8 @@ import React from 'react'
 import { of } from 'rxjs'
 
 import { ApiContext } from '@/api/providers/context'
+import { GlobalModals } from '@/app/GlobalModals'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { UpdateMembershipModal } from '@/memberships/modals/UpdateMembershipModal'
 import { Member } from '@/memberships/types'
 
@@ -130,7 +132,10 @@ describe('UI: UpdatedMembershipModal', () => {
       <MockQueryNodeProviders>
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>
-            <UpdateMembershipModal onClose={() => undefined} member={member} />
+            <ModalContextProvider>
+              <GlobalModals />
+              <UpdateMembershipModal onClose={() => undefined} member={member} />
+            </ModalContextProvider>
           </ApiContext.Provider>
         </MockKeyringProvider>
       </MockQueryNodeProviders>

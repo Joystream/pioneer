@@ -10,10 +10,11 @@ import { interpret } from 'xstate'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { ApiContext } from '@/api/providers/context'
 import { CurrencyName } from '@/app/constants/currency'
+import { GlobalModals } from '@/app/GlobalModals'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
 import { getSteps } from '@/common/model/machines/getSteps'
-import { ModalContext } from '@/common/providers/modal/context'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
 import { ElectionRoutes } from '@/council/constants'
@@ -54,14 +55,22 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
+const mockUseModal: UseModal<any> = {
+  hideModal: jest.fn(),
+  showModal: jest.fn(),
+  modal: null,
+  modalData: undefined,
+}
+
+jest.mock('@/common/hooks/useModal', () => ({
+  useModal: () => ({
+    ...jest.requireActual('@/common/hooks/useModal').useModal(),
+    ...mockUseModal,
+  }),
+}))
+
 describe('UI: Announce Candidacy Modal', () => {
   const api = stubApi()
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData: undefined,
-  }
   set(api, 'api.consts.members.candidateStake', new BN(200))
   const useMyMemberships: MyMemberships = {
     active: undefined,
@@ -97,7 +106,7 @@ describe('UI: Announce Candidacy Modal', () => {
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 5)
     bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 10)
     announceCandidacyTx = stubTransaction(api, 'api.tx.council.announceCandidacy', 20)
-    txMock = (api.api.tx.council.announceCandidacy as unknown) as jest.Mock
+    txMock = api.api.tx.council.announceCandidacy as unknown as jest.Mock
     candidacyNoteTx = stubTransaction(api, 'api.tx.council.setCandidacyNote', 30)
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
     mockedTransactionFee.transaction = batchTx as any
@@ -126,8 +135,8 @@ describe('UI: Announce Candidacy Modal', () => {
         },
       }
 
-      expect(useModal.showModal).toBeCalledTimes(1)
-      expect(useModal.showModal).toBeCalledWith({ ...switchMemberModalCall })
+      expect(mockUseModal.showModal).toBeCalledTimes(1)
+      expect(mockUseModal.showModal).toBeCalledWith({ ...switchMemberModalCall })
     })
 
     it('Transaction fee', async () => {
@@ -146,7 +155,7 @@ describe('UI: Announce Candidacy Modal', () => {
         },
       }
 
-      expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
+      expect(mockUseModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
 
     it('Required stake', async () => {
@@ -163,7 +172,7 @@ describe('UI: Announce Candidacy Modal', () => {
         },
       }
 
-      expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
+      expect(mockUseModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
 
     it('All passed', async () => {
@@ -660,17 +669,18 @@ describe('UI: Announce Candidacy Modal', () => {
     const history = initialHistory ?? createMemoryHistory()
     return render(
       <Router history={history}>
-        <ModalContext.Provider value={useModal}>
+        <ModalContextProvider>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <ApiContext.Provider value={api}>
                 <MembershipContext.Provider value={useMyMemberships}>
+                  <GlobalModals />
                   <AnnounceCandidacyModal />
                 </MembershipContext.Provider>
               </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
-        </ModalContext.Provider>
+        </ModalContextProvider>
       </Router>
     )
   }

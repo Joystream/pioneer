@@ -7,9 +7,10 @@ import { MemoryRouter } from 'react-router'
 
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { ApiContext } from '@/api/providers/context'
+import { GlobalModals } from '@/app/GlobalModals'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
-import { ModalContext } from '@/common/providers/modal/context'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { UseModal } from '@/common/providers/modal/types'
 import { VoteForCouncilModal } from '@/council/modals/VoteForCouncil'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -46,14 +47,23 @@ jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
 }))
 
+const mockUseModal: UseModal<any> = {
+  hideModal: jest.fn(),
+  showModal: jest.fn(),
+  modal: null,
+  modalData: { id: '0-0' },
+}
+
+jest.mock('@/common/hooks/useModal', () => ({
+  useModal: () => ({
+    ...jest.requireActual('@/common/hooks/useModal').useModal(),
+    ...mockUseModal,
+  }),
+}))
+
 describe('UI: Vote for Council Modal', () => {
   const api = stubApi()
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData: { id: '0-0' },
-  }
+
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -137,7 +147,7 @@ describe('UI: Vote for Council Modal', () => {
 
       renderModal()
 
-      expect(useModal.showModal).toBeCalledWith({
+      expect(mockUseModal.showModal).toBeCalledWith({
         modal: 'SwitchMember',
         data: {
           originalModalData: { id: '0-0' },
@@ -162,7 +172,7 @@ describe('UI: Vote for Council Modal', () => {
         },
       }
 
-      expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
+      expect(mockUseModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
   })
 
@@ -258,17 +268,18 @@ describe('UI: Vote for Council Modal', () => {
   function renderModal() {
     return render(
       <MemoryRouter>
-        <ModalContext.Provider value={useModal}>
+        <ModalContextProvider>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <ApiContext.Provider value={api}>
                 <MembershipContext.Provider value={useMyMemberships}>
+                  <GlobalModals />
                   <VoteForCouncilModal />
                 </MembershipContext.Provider>
               </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
-        </ModalContext.Provider>
+        </ModalContextProvider>
       </MemoryRouter>
     )
   }

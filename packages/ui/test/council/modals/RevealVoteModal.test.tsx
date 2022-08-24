@@ -4,7 +4,8 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { ApiContext } from '@/api/providers/context'
-import { ModalContext } from '@/common/providers/modal/context'
+import { GlobalModals } from '@/app/GlobalModals'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { RevealVoteModal, RevealVoteModalCall } from '@/council/modals/RevealVote'
 
@@ -21,30 +22,37 @@ import {
 } from '../../_mocks/transactions'
 import { mockedTransactionFee } from '../../setup'
 
+const voteData = {
+  salt: '0x7a0c114de774424abcd5d60fc58658a35341c9181b09e94a16dfff7ba2192206',
+  accountId: alice.address,
+  optionId: '1',
+}
+
+const modalData: ModalCallData<RevealVoteModalCall> = {
+  votes: [voteData],
+  voteForHandle: 'Dave',
+}
+
+const mockUseModal: UseModal<any> = {
+  hideModal: jest.fn(),
+  showModal: jest.fn(),
+  modal: null,
+  modalData,
+}
+
+jest.mock('@/common/hooks/useModal', () => ({
+  useModal: () => ({
+    ...jest.requireActual('@/common/hooks/useModal').useModal(),
+    ...mockUseModal,
+  }),
+}))
+
 describe('UI: RevealVoteModal', () => {
   const api = stubApi()
   const txPath = 'api.tx.referendum.revealVote'
   let tx: any
 
   stubTransaction(api, txPath)
-
-  const voteData = {
-    salt: '0x7a0c114de774424abcd5d60fc58658a35341c9181b09e94a16dfff7ba2192206',
-    accountId: alice.address,
-    optionId: '1',
-  }
-
-  const modalData: ModalCallData<RevealVoteModalCall> = {
-    votes: [voteData],
-    voteForHandle: 'Dave',
-  }
-
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData,
-  }
 
   beforeAll(async () => {
     stubAccounts([
@@ -113,13 +121,14 @@ describe('UI: RevealVoteModal', () => {
   const renderModal = () =>
     render(
       <MockApolloProvider>
-        <ModalContext.Provider value={useModal}>
+        <ModalContextProvider>
           <MockKeyringProvider>
             <ApiContext.Provider value={api}>
+              <GlobalModals />
               <RevealVoteModal />
             </ApiContext.Provider>
           </MockKeyringProvider>
-        </ModalContext.Provider>
+        </ModalContextProvider>
       </MockApolloProvider>
     )
 })
