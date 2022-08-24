@@ -26,7 +26,7 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
   useEffect(() => {
     if (state.matches('requirementsVerification') && workingGroupBudget && membershipPrice) {
       const isBudgetOK = workingGroupBudget.toBn().gte(membershipPrice.toBn())
-      send(!isBudgetOK ? 'PASS' : 'FAIL')
+      send(isBudgetOK ? 'PASS' : 'FAIL')
     }
   }, [workingGroupBudget, membershipPrice])
 

@@ -185,17 +185,16 @@ const useGlobalModalHandler = (machine: UnknownMachine<any, any, any> | undefine
   if (state.matches('canceled')) {
     hideModal()
   }
-
-  if (state.matches('error') && get(state.meta, '(machine).error.message')) {
+  if (state.matches('error') && get(state.meta, ['(machine).error', 'message'])) {
     return (
       <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        {get(state.meta, '(machine).error.message')}
+        {get(state.meta, ['(machine).error', 'message'])}
       </FailureModal>
     )
   }
 
-  if (state.matches('success') && get(state.meta, '(machine).success.message')) {
-    return <SuccessModal onClose={hideModal} text={get(state.meta, '(machine).success.message')} />
+  if (state.matches('success') && get(state.meta, ['(machine).success', 'message'])) {
+    return <SuccessModal onClose={hideModal} text={get(state.meta, ['(machine).success', 'message'])} />
   }
 
   return null
