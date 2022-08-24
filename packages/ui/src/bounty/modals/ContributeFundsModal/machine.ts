@@ -93,7 +93,10 @@ export const contributeFundsMachine = createMachine<
       },
     },
     [ContributeFundStates.success]: { type: 'final' },
-    [ContributeFundStates.error]: { type: 'final' },
+    [ContributeFundStates.error]: {
+      type: 'final',
+      meta: { message: 'There was a problem while performing the contribution.' },
+    },
     [ContributeFundStates.cancel]: { type: 'final' },
   },
 })

@@ -1,4 +1,3 @@
-import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -15,6 +14,7 @@ import { Modal, ModalBody, ModalHeader, ModalTransactionFooter } from '@/common/
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { transactionMachine } from '@/common/model/machines'
@@ -45,10 +45,6 @@ export const ClaimVestingModal = () => {
     signer: selectedAccount?.address ?? '',
     service: service as any,
   })
-
-  if (state.matches('canceled')) {
-    return <FailureModal onClose={hideModal}>Transaction was cancelled</FailureModal>
-  }
 
   if (state.matches('error')) {
     return (

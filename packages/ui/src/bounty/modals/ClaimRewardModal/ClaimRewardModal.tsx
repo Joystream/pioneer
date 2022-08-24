@@ -1,4 +1,3 @@
-import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -11,6 +10,7 @@ import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal
 import { WithdrawSignModal } from '@/bounty/modals/WithdrawSignModal'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'

@@ -1,4 +1,3 @@
-import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -8,9 +7,8 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
-import { FailureModal } from '@/common/components/FailureModal'
-import { SuccessModal } from '@/common/components/SuccessModal'
 import { WaitModal } from '@/common/components/WaitModal'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { createType } from '@/common/model/createType'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
@@ -27,7 +25,10 @@ export const DeleteThreadModal = () => {
     hideModal,
   } = useModal<DeleteThreadModalCall>()
 
-  const [state, send] = useMachine(defaultTransactionModalMachine, { context: { validateBeforeTransaction: true } })
+  const [state, send] = useMachine(
+    defaultTransactionModalMachine('There was a problem deleting your thread.', 'Your thread has been deleted.'),
+    { context: { validateBeforeTransaction: true } }
+  )
   const { api, isConnected } = useApi()
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
@@ -83,18 +84,6 @@ export const DeleteThreadModal = () => {
         description={t('modals.deleteThread.description')}
         buttonLabel={t('modals.deleteThread.buttonLabel')}
       />
-    )
-  }
-
-  if (state.matches('success')) {
-    return <SuccessModal onClose={hideModal} text={t('modals.deleteThread.success')} />
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        {t('modals.deleteThread.error')}
-      </FailureModal>
     )
   }
 

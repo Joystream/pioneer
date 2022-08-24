@@ -1,5 +1,4 @@
 import { ForumThreadMetadata } from '@joystream/metadata-protobuf'
-import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
@@ -9,7 +8,7 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
-import { FailureModal } from '@/common/components/FailureModal'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { useYupValidationResolver } from '@/common/utils/validation'
@@ -123,14 +122,6 @@ export const CreateThreadModal = () => {
 
   if (state.matches('success')) {
     return <CreateThreadSuccessModal newThreadId={state.context.newThreadId.toString()} />
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem with creating your forum thread.
-      </FailureModal>
-    )
   }
 
   if (state.matches('requirementsFailed') && member && minimumTransactionCost) {
