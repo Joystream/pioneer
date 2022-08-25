@@ -3,9 +3,9 @@ import styled from 'styled-components'
 
 import { TogglableIcon } from '@/common/components/forms'
 import { Fields, FilterBox, FilterLabel } from '@/common/components/forms/FilterBox'
-import { FounderMemberIcon, VerifiedMemberIcon } from '@/common/components/icons'
+import { CouncilMemberIcon, FounderMemberIcon } from '@/common/components/icons'
 import { ItemCount } from '@/common/components/ItemCount'
-import { FilterSelect, SelectContainer } from '@/common/components/selects'
+import { SelectContainer } from '@/common/components/selects'
 import { objectEquals } from '@/common/utils'
 import { MemberRole } from '@/memberships/types'
 
@@ -14,9 +14,8 @@ import { SelectMemberRoles } from '../SelectMemberRoles'
 export interface MemberListFilter {
   search: string
   roles: MemberRole[]
-  council: boolean | null
-  onlyVerified: boolean
   onlyFounder: boolean
+  onlyCouncil: boolean
 }
 
 type FilterKey = keyof MemberListFilter
@@ -41,9 +40,8 @@ const filterReducer = (filters: MemberListFilter, action: Action): MemberListFil
 export const MemberListEmptyFilter: MemberListFilter = {
   search: '',
   roles: [],
-  council: null,
-  onlyVerified: false,
   onlyFounder: false,
+  onlyCouncil: false,
 }
 
 const isFilterEmpty = objectEquals(MemberListEmptyFilter, { depth: 2 })
@@ -56,7 +54,7 @@ export interface MemberListFiltersProps {
 
 export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberListFiltersProps) => {
   const [filters, dispatch] = useReducer(filterReducer, MemberListEmptyFilter)
-  const { search, roles, council, onlyVerified, onlyFounder } = filters
+  const { search, roles, onlyFounder, onlyCouncil } = filters
 
   const applyFilters = () => onApply(filters)
   const clear = isFilterEmpty(filters)
@@ -94,31 +92,11 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
           onApply({ ...filters, roles: [] })
         }}
       />
-
-      <FilterSelect
-        title="Council Members"
-        options={[true, false]}
-        renderOption={(value) => (value ? 'Yes' : 'No')}
-        value={council}
-        onChange={(value) => {
-          dispatch({ type: 'change', field: 'council', value })
-          onApply({ ...filters, council: value })
-        }}
-      />
-
       <ToggleContainer>
         <FilterLabel>Member Type</FilterLabel>
-        <TogglableIcon
-          value={onlyVerified}
-          onChange={(value) => {
-            dispatch({ type: 'change', field: 'onlyVerified', value })
-            onApply({ ...filters, onlyVerified: value })
-          }}
-        >
-          <VerifiedMemberIcon />
-        </TogglableIcon>
 
         <TogglableIcon
+          tooltipText="Founding Member"
           value={onlyFounder}
           onChange={(value) => {
             dispatch({ type: 'change', field: 'onlyFounder', value })
@@ -126,6 +104,16 @@ export const MemberListFilters = ({ searchSlot, memberCount, onApply }: MemberLi
           }}
         >
           <FounderMemberIcon />
+        </TogglableIcon>
+        <TogglableIcon
+          tooltipText="Council Member"
+          value={onlyCouncil}
+          onChange={(value) => {
+            dispatch({ type: 'change', field: 'onlyCouncil', value })
+            onApply({ ...filters, onlyCouncil: value })
+          }}
+        >
+          <CouncilMemberIcon />
         </TogglableIcon>
       </ToggleContainer>
     </MembersFilterBox>
