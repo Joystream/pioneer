@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
-import { Reply2Icon } from '@/common/components/icons'
+import { RepliesIcon } from '@/common/components/icons'
 import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { Colors, Fonts, Overflow, Transitions, BorderRad } from '@/common/constants'
@@ -45,7 +45,7 @@ export const PopularThread = ({ thread, empty }: PopularThreadProps) => {
         </ThreadItemText>
       )}
       <Replies>
-        <Reply2Icon />
+        <RepliesIcon />
         <CountBadge count={repliesCount} />
       </Replies>
     </StyledPopularThread>

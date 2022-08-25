@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { PageHeaderWrapper } from '@/app/components/PageLayout'
 import { ForumThreadOrderByInput } from '@/common/api/queries'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { SearchBox } from '@/common/components/forms/FilterBox/FilterSearchBox'
@@ -23,7 +24,6 @@ import { THREADS_PER_PAGE } from '@/forum/constant'
 import { useForumCategory } from '@/forum/hooks/useForumCategory'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { MemberStack, moderatorsSummary } from '@/memberships/components/MemberStack'
-
 import { ForumPageLayout } from './components/ForumPageLayout'
 
 export const ForumCategory = () => {
@@ -128,9 +128,8 @@ export const ForumCategory = () => {
 
 const ModeratorsContainer = styled(Label)`
   align-items: center;
-`
-const Flex = styled.div`
-  display: flex;
   flex-direction: column;
-  gap: 8px;
+`
+const Flex = styled(PageHeaderWrapper)`
+  flex-direction: column;
 `

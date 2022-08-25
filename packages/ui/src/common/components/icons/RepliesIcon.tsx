@@ -6,11 +6,11 @@ interface ReplyIconProps {
   className?: any
 }
 
-export const Reply2Icon = React.memo(({ className }: ReplyIconProps) => (
+export const RepliesIcon = React.memo(({ className }: ReplyIconProps) => (
   <Icon width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M0.666992 2.08529L1.40857 1.3335H14.5921L15.3337 2.08529V11.7379L14.5921 12.4897H8.95727L4.74959 15.3335L3.59666 14.708V12.4897H1.40857L0.666992 11.7379V2.08529Z"
       fill="#C4CAD6"
     />
