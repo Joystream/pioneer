@@ -34,10 +34,10 @@ export const SwitchMemberModal = () => {
 
   const filteredMembers = useMemo(() => {
     if (modalData?.membersToShow) {
-      return members.filter((member) => modalData.membersToShow?.includes(member.id))
+      return members.filter((member) => modalData.membersToShow?.includes(member.id)).sort((a,b) => (a.handle > b.handle) ? 1 : ((b.handle > a.handle) ? -1 : 0))
     }
 
-    return members
+    return members.sort((a,b) => (a.handle > b.handle) ? 1 : ((b.handle > a.handle) ? -1 : 0))
   }, [members, modalData?.membersToShow])
   return (
     <Modal modalSize="xs" modalHeight="s" isDark onClose={hideModal}>
@@ -145,7 +145,7 @@ const MembersList = styled.ul<{ memberIndicatorOffset?: string }>`
   flex-direction: column;
   width: calc(100% + 16px);
   height: 100%;
-  max-height: 192px;
+  max-height: 316px;
   margin-left: -16px;
   padding-left: 16px;
   overflow: hidden;
