@@ -15,8 +15,7 @@ import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
-
-import { getMessage } from '../utils'
+import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
 
 import { MemberFormFields } from './BuyMembershipFormModal'
 
@@ -52,13 +51,13 @@ export const BuyMembershipSignModal = ({
 
   const hasFunds = useMemo(() => {
     if (validationInfo) {
-      const requiredBalance = paymentInfo.partialFee.add(membershipPrice)
-      return balance.transferable.gte(requiredBalance)
+      const canAffordCreation = balance.transferable.gte(membershipPrice)
+      const canAffordFee = getFeeSpendableBalance(balance).sub(membershipPrice).gte(paymentInfo?.partialFee)
+      return canAffordFee && canAffordCreation
     }
   }, [fromAddress, !balance, !validationInfo])
 
   const signDisabled = !isReady || !hasFunds || !validationInfo
-
   return (
     <TransactionModal onClose={onClose} service={service}>
       <ModalBody>
@@ -74,7 +73,7 @@ export const BuyMembershipSignModal = ({
             label="Sending from account"
             inputSize="l"
             validation={hasFunds && balance ? undefined : 'invalid'}
-            message={hasFunds && balance ? undefined : getMessage(paymentInfo?.partialFee)}
+            message={hasFunds && balance ? undefined : 'Insufficient funds to cover the membership creation.'}
           >
             {initialSigner ? (
               <SelectAccount selected={from} onChange={(account) => setFrom(account)} />
