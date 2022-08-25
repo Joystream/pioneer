@@ -1,7 +1,7 @@
 import * as Types from '@/common/api/queries'
 import { isNumber } from '@/common/utils'
 
-export type NetworkType = 'BABYLON' | 'ALEXANDRIA' | 'ROME' | 'GIZA' | 'OLYMPIA'
+export type NetworkType = 'BABYLON' | 'ALEXANDRIA' | 'ROME' | 'GIZA' | 'OLYMPIA' | ''
 
 export interface Block {
   number: number

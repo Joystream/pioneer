@@ -56,7 +56,7 @@ export const PostListItem = ({
   repliesToLink,
 }: PostListItemProps) => {
   const { active } = useMyMemberships()
-  const { createdAtBlock, lastEditedAt, author, text, repliesTo, status } = post
+  const { createdAt, createdAtBlock, lastEditedAt, author, text, repliesTo, status } = post
   const [postText, setPostText] = useState<string>(text)
   const [postLastEditedAt, setPostLastEditedAt] = useState<string | undefined>(lastEditedAt)
 
@@ -100,6 +100,9 @@ export const PostListItem = ({
         <ForumPostRow>
           <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
           {createdAtBlock && <BlockTime block={createdAtBlock} layout="reverse" />}
+          {createdAtBlock == undefined && (
+            <BlockTime block={{ timestamp: createdAt, number: 0, network: '' }} layout="reverse" />
+          )}
         </ForumPostRow>
         <MessageBody>
           <ModeratedPostWrapper post={post}>
