@@ -161,7 +161,7 @@ const deserializeProxy = (
   return new Proxy(json, {
     get(json, prop: string) {
       if (prop in json) {
-        return prop in json
+        return json[prop]
       } else if (methods.includes(prop)) {
         return async (...params: AnyTuple) => {
           postMessage({ messageType: 'proxy', proxyId, method: prop, payload: params })
@@ -210,12 +210,10 @@ const deserializeCodec = (serialized: SerializedCodec) => createType(serialized.
 
 const deserializeExtendedCodec = (serialized: SerializedCodec) =>
   recursiveProxy(deserializeCodec(serialized), {
-    get: (target, path) =>
-      bindIfFunction(get(target, path) ?? get(serialized.value, path), () =>
-        path.length > 1 ? get(target, path.slice(0, -1)) : target
-      ),
+    get: ({ value, property }) => bindIfFunction(value[property], value),
+    default: ({ path }) => deserializePayload(get(serialized.value, path)),
   })
 
-const bindIfFunction = (value: any, getContext: () => any) => (isFunction(value) ? value.bind(getContext()) : value)
+const bindIfFunction = (value: any, context: any) => (isFunction(value) ? value.bind(context) : value)
 
 const isSigner = (obj: any) => typeof obj.signPayload === 'function' && typeof obj.signRaw === 'function'
