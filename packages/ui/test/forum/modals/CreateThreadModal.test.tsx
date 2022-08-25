@@ -9,7 +9,6 @@ import { GlobalModals } from '@/app/GlobalModals'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
-import { UseModal } from '@/common/providers/modal/types'
 import { ForumRoutes } from '@/forum/constant'
 import { CreateThreadModal } from '@/forum/modals/CreateThreadModal'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -30,7 +29,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
@@ -38,20 +37,6 @@ jest.mock('@/common/components/CKEditor', () => ({
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
-}))
-
-const mockUseModal: UseModal<any> = {
-  hideModal: jest.fn(),
-  showModal: jest.fn(),
-  modal: null,
-  modalData: { categoryId: '0' },
-}
-
-jest.mock('@/common/hooks/useModal', () => ({
-  useModal: () => ({
-    ...jest.requireActual('@/common/hooks/useModal').useModal(),
-    ...mockUseModal,
-  }),
 }))
 
 describe('CreateThreadModal', () => {
@@ -63,6 +48,11 @@ describe('CreateThreadModal', () => {
   const stubDeposits = (values?: { post?: number; thread?: number }) => {
     stubConst(api, 'forum.postDeposit', createBalanceOf(values?.post ?? 10))
     stubConst(api, 'forum.threadDeposit', createBalanceOf(values?.thread ?? 10))
+  }
+
+  const useModal = {
+    showModal: jest.fn(),
+    modalData: { categoryId: '0' },
   }
 
   const useMyMemberships: MyMemberships = {
@@ -78,6 +68,7 @@ describe('CreateThreadModal', () => {
 
   beforeAll(() => {
     stubAccounts([alice])
+    mockUseModalCall(useModal)
   })
 
   beforeEach(async () => {
@@ -93,11 +84,11 @@ describe('CreateThreadModal', () => {
     it('No active member', () => {
       useMyMemberships.active = undefined
       renderModal()
-      expect(mockUseModal.showModal).toBeCalledWith({
+      expect(useModal.showModal).toBeCalledWith({
         modal: 'SwitchMember',
         data: {
           originalModalName: 'CreateThreadModal',
-          originalModalData: mockUseModal.modalData,
+          originalModalData: useModal.modalData,
         },
       })
     })

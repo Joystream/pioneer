@@ -9,7 +9,6 @@ import { ApiContext } from '@/api/providers/context'
 import { GlobalModals } from '@/app/GlobalModals'
 import { createType } from '@/common/model/createType'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
-import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
@@ -26,28 +25,23 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
-
-const mockUseModal: UseModal<any> = {
-  hideModal: jest.fn(),
-  showModal: jest.fn(),
-  modal: null,
-  modalData: null,
-}
-
-jest.mock('@/common/hooks/useModal', () => ({
-  useModal: () => ({
-    ...jest.requireActual('@/common/hooks/useModal').useModal(),
-    ...mockUseModal,
-  }),
-}))
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 describe('UI: RecoverBalanceModal', () => {
   const api = stubApi()
   const server = setupMockServer({ noCleanupAfterEach: true })
   let tx: any
+  const modalData = {
+    lock: {
+      amount: new BN(300),
+      type: 'Council Candidate',
+    },
+    address: alice.address,
+    memberId: '0',
+  }
 
   beforeAll(async () => {
+    mockUseModalCall({ modalData })
     await cryptoWaitReady()
     seedMembers(server.server, 2)
   })
@@ -70,14 +64,6 @@ describe('UI: RecoverBalanceModal', () => {
     tx = stubTransaction(api, 'api.tx.council.releaseCandidacyStake')
     mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
     mockedTransactionFee.transaction = tx as any
-    mockUseModal.modalData = {
-      lock: {
-        amount: new BN(300),
-        type: 'Council Candidate',
-      },
-      address: alice.address,
-      memberId: '0',
-    }
   })
 
   it('Insufficient funds', async () => {
@@ -114,7 +100,7 @@ describe('UI: RecoverBalanceModal', () => {
     })
 
     it('Voting', async () => {
-      mockUseModal.modalData.lock = {
+      modalData.lock = {
         amount: new BN(300),
         type: 'Voting',
       }
@@ -128,6 +114,15 @@ describe('UI: RecoverBalanceModal', () => {
 
   it('Success', async () => {
     stubTransactionSuccess(tx, 'council', 'CandidacyStakeRelease', [createType('MemberId', 0)])
+    mockUseModalCall({
+      modalData: {
+        ...modalData,
+        lock: {
+          amount: new BN(300),
+          type: 'Council Candidate',
+        },
+      },
+    })
 
     renderModal()
     fireEvent.click(await screen.findByText(/^sign transaction and transfer$/i))
@@ -147,16 +142,16 @@ describe('UI: RecoverBalanceModal', () => {
   function renderModal() {
     render(
       <MockKeyringProvider>
-        <MockQueryNodeProviders>
-          <MembershipContext.Provider value={useMyMemberships}>
-            <ApiContext.Provider value={api}>
-              <ModalContextProvider>
+        <ModalContextProvider>
+          <MockQueryNodeProviders>
+            <MembershipContext.Provider value={useMyMemberships}>
+              <ApiContext.Provider value={api}>
                 <GlobalModals />
                 <RecoverBalanceModal />
-              </ModalContextProvider>
-            </ApiContext.Provider>
-          </MembershipContext.Provider>
-        </MockQueryNodeProviders>
+              </ApiContext.Provider>
+            </MembershipContext.Provider>
+          </MockQueryNodeProviders>
+        </ModalContextProvider>
       </MockKeyringProvider>
     )
   }

@@ -12,7 +12,6 @@ import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
-import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedForumCategories, seedMembers } from '@/mocks/data'
@@ -34,6 +33,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockUseModalCall } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
@@ -51,12 +51,7 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 
 describe('UI: AddNewBountyModal', () => {
   const api = stubApi()
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData: undefined,
-  }
+  const showModal = jest.fn()
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -75,7 +70,7 @@ describe('UI: AddNewBountyModal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
-
+    mockUseModalCall({ showModal })
     seedMembers(server.server, 2)
     seedForumCategories(server.server, [
       { parentId: null, status: { __typename: 'CategoryStatusActive' }, moderatorIds: [] },
@@ -101,7 +96,7 @@ describe('UI: AddNewBountyModal', () => {
 
       renderModal()
 
-      expect(useModal.showModal).toBeCalledWith({
+      expect(showModal).toBeCalledWith({
         modal: 'SwitchMember',
         data: {
           originalModalName: 'AddBounty',

@@ -11,7 +11,6 @@ import { GlobalModals } from '@/app/GlobalModals'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
-import { UseModal } from '@/common/providers/modal/types'
 import { VoteForCouncilModal } from '@/council/modals/VoteForCouncil'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
@@ -40,25 +39,12 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockUseModalCall } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
-}))
-
-const mockUseModal: UseModal<any> = {
-  hideModal: jest.fn(),
-  showModal: jest.fn(),
-  modal: null,
-  modalData: { id: '0-0' },
-}
-
-jest.mock('@/common/hooks/useModal', () => ({
-  useModal: () => ({
-    ...jest.requireActual('@/common/hooks/useModal').useModal(),
-    ...mockUseModal,
-  }),
 }))
 
 describe('UI: Vote for Council Modal', () => {
@@ -74,6 +60,8 @@ describe('UI: Vote for Council Modal', () => {
       getMemberIdByBoundAccountAddress: () => undefined,
     },
   }
+  const showModal = jest.fn()
+  const modalData = { id: '0-0' }
 
   let tx: any
 
@@ -113,6 +101,7 @@ describe('UI: Vote for Council Modal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
+    mockUseModalCall({ showModal, modalData })
     seedMembers(server.server, 2)
     seedElectedCouncils(server.server, [{}, {}])
     seedCouncilElections(server.server, [{}, {}])
@@ -147,7 +136,7 @@ describe('UI: Vote for Council Modal', () => {
 
       renderModal()
 
-      expect(mockUseModal.showModal).toBeCalledWith({
+      expect(showModal).toBeCalledWith({
         modal: 'SwitchMember',
         data: {
           originalModalData: { id: '0-0' },
@@ -172,7 +161,7 @@ describe('UI: Vote for Council Modal', () => {
         },
       }
 
-      expect(mockUseModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
+      expect(showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
   })
 

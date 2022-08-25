@@ -16,7 +16,6 @@ import { createType } from '@/common/model/createType'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
-import { UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
 import { powerOf2 } from '@/common/utils/bn'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -58,7 +57,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 const QUESTION_INPUT = OpeningMetadata.ApplicationFormQuestion.InputType
 
@@ -130,20 +129,6 @@ describe('AddNewProposalModal types parameters', () => {
   })
 })
 
-const mockUseModal: UseModal<any> = {
-  hideModal: jest.fn(),
-  showModal: jest.fn(),
-  modal: null,
-  modalData: undefined,
-}
-
-jest.mock('@/common/hooks/useModal', () => ({
-  useModal: () => ({
-    ...jest.requireActual('@/common/hooks/useModal').useModal(),
-    ...mockUseModal,
-  }),
-}))
-
 describe('UI: AddNewProposalModal', () => {
   const api = stubApi()
 
@@ -158,7 +143,7 @@ describe('UI: AddNewProposalModal', () => {
     },
   }
   const forumLeadId = workingGroups.find((group) => group.id === 'forumWorkingGroup')?.leadId
-
+  const showModal = jest.fn()
   let createProposalTx: any
   let batchTx: any
   let bindAccountTx: any
@@ -169,7 +154,7 @@ describe('UI: AddNewProposalModal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
-
+    mockUseModalCall({ showModal })
     seedMembers(server.server)
     seedWorkingGroups(server.server)
     seedOpeningStatuses(server.server)
@@ -220,7 +205,7 @@ describe('UI: AddNewProposalModal', () => {
 
       renderModal()
 
-      expect(mockUseModal.showModal).toBeCalledWith({
+      expect(showModal).toBeCalledWith({
         modal: 'SwitchMember',
         data: { originalModalName: 'AddNewProposalModal' },
       })
@@ -304,7 +289,7 @@ describe('UI: AddNewProposalModal', () => {
           },
         }
 
-        expect(mockUseModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
+        expect(showModal).toBeCalledWith({ ...moveFundsModalCall })
       })
 
       it('Enough funds', async () => {
@@ -1236,7 +1221,7 @@ describe('UI: AddNewProposalModal', () => {
           },
         }
 
-        expect(mockUseModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
+        expect(showModal).toBeCalledWith({ ...moveFundsModalCall })
       })
 
       describe('Staking account not bound nor staking candidate', () => {

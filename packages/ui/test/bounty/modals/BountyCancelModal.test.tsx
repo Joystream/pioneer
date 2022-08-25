@@ -4,7 +4,6 @@ import React from 'react'
 import { ApiContext } from '@/api/providers/context'
 import { BountyCancelModal } from '@/bounty/modals/CancelBountyModal'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
-import { UseModal } from '@/common/providers/modal/types'
 import bounties from '@/mocks/data/raw/bounties.json'
 import { getMember } from '@/mocks/helpers'
 
@@ -18,32 +17,21 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockUseModalCall } from '../../setup'
 
 const bounty = bounties[0]
 const creator = getMember('alice')
 
-const mockUseModal: UseModal<any> = {
-  hideModal: jest.fn(),
-  showModal: jest.fn(),
-  modal: null,
-  modalData: {
-    bounty: { ...bounty },
-    creator: { ...creator },
-  },
-}
-
-jest.mock('@/common/hooks/useModal', () => ({
-  useModal: () => ({
-    ...jest.requireActual('@/common/hooks/useModal').useModal(),
-    ...mockUseModal,
-  }),
-}))
-
 describe('UI: BountyCancelModal', () => {
   const api = stubApi()
   let transaction: any
+  const modalData = {
+    bounty: { ...bounty },
+    creator: { ...creator },
+  }
 
   beforeAll(() => {
+    mockUseModalCall({ modalData })
     transaction = stubTransaction(api, 'api.tx.bounty.cancelBounty', 100)
     stubAccounts([alice, bob])
   })
@@ -58,13 +46,13 @@ describe('UI: BountyCancelModal', () => {
   it('Displays correct bounty', () => {
     renderModal()
 
-    expect(screen.queryByText(mockUseModal.modalData.bounty.title)).toBeDefined()
+    expect(screen.queryByText(modalData.bounty.title)).toBeDefined()
   })
 
   it('Displays correct member', () => {
     renderModal()
 
-    expect(screen.queryByText(mockUseModal.modalData.creator.handle)).toBeDefined()
+    expect(screen.queryByText(modalData.creator.handle)).toBeDefined()
   })
 
   describe('AuthorizeModal', () => {

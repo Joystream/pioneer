@@ -10,7 +10,6 @@ import { ApiContext } from '@/api/providers/context'
 import { GlobalModals } from '@/app/GlobalModals'
 import { createType } from '@/common/model/createType'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
-import { UseModal } from '@/common/providers/modal/types'
 import { BuyMembershipModal } from '@/memberships/modals/BuyMembershipModal'
 
 import { getButton } from '../../_helpers/getButton'
@@ -28,22 +27,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-
-const mockCallback = jest.fn()
-
-const mockUseModal: UseModal<any> = {
-  hideModal: jest.fn(),
-  showModal: mockCallback,
-  modal: null,
-  modalData: undefined,
-}
-
-jest.mock('@/common/hooks/useModal', () => ({
-  useModal: () => ({
-    ...jest.requireActual('@/common/hooks/useModal').useModal(),
-    ...mockUseModal,
-  }),
-}))
+import { mockUseModalCall } from '../../setup'
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -52,11 +36,13 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 describe('UI: BuyMembershipModal', () => {
   const api = stubApi()
   let transaction: any
+  const showModal = jest.fn()
 
   setupMockServer()
 
   beforeAll(async () => {
     await cryptoWaitReady()
+    mockUseModalCall({ showModal })
     jest.spyOn(console, 'log').mockImplementation()
     stubAccounts([alice, bob])
   })
@@ -178,7 +164,7 @@ describe('UI: BuyMembershipModal', () => {
         await act(async () => {
           fireEvent.click(button)
         })
-        expect(mockCallback.mock.calls[0][0]).toEqual({ modal: 'Member', data: { id: '12' } })
+        expect(showModal.mock.calls[0][0]).toEqual({ modal: 'Member', data: { id: '12' } })
       })
     })
 

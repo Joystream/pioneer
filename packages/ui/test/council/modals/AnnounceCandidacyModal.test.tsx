@@ -15,7 +15,6 @@ import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
-import { UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
 import { ElectionRoutes } from '@/council/constants'
 import { AnnounceCandidacyModal } from '@/council/modals/AnnounceCandidacy'
@@ -43,7 +42,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
@@ -53,20 +52,6 @@ jest.mock('@/common/components/CKEditor', () => ({
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
-}))
-
-const mockUseModal: UseModal<any> = {
-  hideModal: jest.fn(),
-  showModal: jest.fn(),
-  modal: null,
-  modalData: undefined,
-}
-
-jest.mock('@/common/hooks/useModal', () => ({
-  useModal: () => ({
-    ...jest.requireActual('@/common/hooks/useModal').useModal(),
-    ...mockUseModal,
-  }),
 }))
 
 describe('UI: Announce Candidacy Modal', () => {
@@ -83,6 +68,7 @@ describe('UI: Announce Candidacy Modal', () => {
     },
   }
 
+  const showModal = jest.fn()
   let batchTx: any
   let announceCandidacyTx: any
   let bindAccountTx: any
@@ -93,6 +79,7 @@ describe('UI: Announce Candidacy Modal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
+    mockUseModalCall({ showModal })
     seedMembers(server.server)
     stubAccounts([alice, bob])
   })
@@ -135,8 +122,8 @@ describe('UI: Announce Candidacy Modal', () => {
         },
       }
 
-      expect(mockUseModal.showModal).toBeCalledTimes(1)
-      expect(mockUseModal.showModal).toBeCalledWith({ ...switchMemberModalCall })
+      expect(showModal).toBeCalledTimes(1)
+      expect(showModal).toBeCalledWith({ ...switchMemberModalCall })
     })
 
     it('Transaction fee', async () => {
@@ -155,7 +142,7 @@ describe('UI: Announce Candidacy Modal', () => {
         },
       }
 
-      expect(mockUseModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
+      expect(showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
 
     it('Required stake', async () => {
@@ -172,7 +159,7 @@ describe('UI: Announce Candidacy Modal', () => {
         },
       }
 
-      expect(mockUseModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
+      expect(showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
 
     it('All passed', async () => {

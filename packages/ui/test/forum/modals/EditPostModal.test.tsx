@@ -6,7 +6,7 @@ import React from 'react'
 import { ApiContext } from '@/api/providers/context'
 import { GlobalModals } from '@/app/GlobalModals'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
-import { ModalCallData, UseModal } from '@/common/providers/modal/types'
+import { ModalCallData } from '@/common/providers/modal/types'
 import { EditPostModal, EditPostModalCall } from '@/forum/modals/PostActionModal/EditPostModal'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
@@ -29,24 +29,10 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
-}))
-
-const mockUseModal: UseModal<any> = {
-  hideModal: jest.fn(),
-  showModal: jest.fn(),
-  modal: null,
-  modalData: null,
-}
-
-jest.mock('@/common/hooks/useModal', () => ({
-  useModal: () => ({
-    ...jest.requireActual('@/common/hooks/useModal').useModal(),
-    ...mockUseModal,
-  }),
 }))
 
 describe('UI: EditPostModal', () => {
@@ -76,8 +62,8 @@ describe('UI: EditPostModal', () => {
   const server = setupMockServer({ noCleanupAfterEach: true })
 
   beforeAll(async () => {
-    mockUseModal.modalData = modalData
     await cryptoWaitReady()
+    mockUseModalCall({ modalData })
     rawMembers.slice(0, 2).map((member) => seedMember(member, server.server))
     seedForumCategory(mockCategories[0], server.server)
     seedForumThread(mockThreads[0], server.server)
@@ -91,7 +77,6 @@ describe('UI: EditPostModal', () => {
     mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
     stubDefaultBalances()
     tx = stubTransaction(api, txPath)
-    modalData.transaction = api.api.tx.forum.editPostText(1, 1, 1, 1, '')
   })
 
   it('Requirements passed', async () => {
@@ -104,13 +89,14 @@ describe('UI: EditPostModal', () => {
   it('Requirements failed', async () => {
     mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
 
-    modalData.transaction = api.api.tx.forum.editPostText(1, 1, 1, 1, '')
     renderModal()
     expect(screen.queryByText('modals.insufficientFunds.title')).not.toBeNull()
   })
 
   it('Transaction failed', async () => {
     stubTransactionFailure(tx)
+    mockUseModalCall({ modalData: { ...modalData, transaction: api.api.tx.forum.editPostText(1, 1, 1, 1, '') } })
+
     renderModal()
     await act(async () => {
       fireEvent.click(await getButton(/Sign and edit/i))
@@ -120,6 +106,8 @@ describe('UI: EditPostModal', () => {
 
   it('Transaction success', async () => {
     stubTransactionSuccess(tx, 'forum', 'PostTextUpdated')
+    mockUseModalCall({ modalData: { ...modalData, transaction: api.api.tx.forum.editPostText(1, 1, 1, 1, '') } })
+
     renderModal()
     await act(async () => {
       fireEvent.click(await getButton(/Sign and edit/i))
