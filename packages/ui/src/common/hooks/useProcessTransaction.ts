@@ -9,6 +9,7 @@ import { ActorRef, Sender } from 'xstate'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 
+import { createBalanceOf } from '../../../test/_mocks/chainTypes'
 import { error, info } from '../logger'
 import { hasErrorEvent } from '../model/JoystreamNode'
 import { Address } from '../types'
@@ -138,7 +139,7 @@ export const useProcessTransaction = ({
 
   return {
     send,
-    paymentInfo,
+    paymentInfo: paymentInfo ?? { partialFee: createBalanceOf(0) },
     isReady: state.matches('prepare'),
     isProcessing: state.matches('processing'),
   }
