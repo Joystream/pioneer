@@ -10,13 +10,14 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
 import { InputComponent } from '@/common/components/forms'
+import { Info } from '@/common/components/Info'
 import { ModalBody, ModalTransactionFooter, Row } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
+import { BN_ZERO } from '@/common/constants'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
-
-import { getMessage } from '../utils'
+import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
 
 import { MemberFormFields } from './BuyMembershipFormModal'
 
@@ -52,13 +53,22 @@ export const BuyMembershipSignModal = ({
 
   const hasFunds = useMemo(() => {
     if (validationInfo) {
-      const requiredBalance = paymentInfo.partialFee.add(membershipPrice)
-      return balance.transferable.gte(requiredBalance)
+      const canAffordCreation = balance.transferable.gte(membershipPrice)
+      const canAffordFee = getFeeSpendableBalance(balance).sub(membershipPrice).gte(paymentInfo?.partialFee)
+      return canAffordFee && canAffordCreation
     }
   }, [fromAddress, !balance, !validationInfo])
 
-  const signDisabled = !isReady || !hasFunds || !validationInfo
+  const shouldInformAboutLock = useMemo(() => {
+    if (balance && membershipPrice && paymentInfo) {
+      return (
+        balance.transferable.lt(membershipPrice ?? BN_ZERO) &&
+        getFeeSpendableBalance(balance).gte(membershipPrice.add(paymentInfo.partialFee))
+      )
+    }
+  }, [!balance, !membershipPrice, !paymentInfo])
 
+  const signDisabled = !isReady || !hasFunds || !validationInfo
   return (
     <TransactionModal onClose={onClose} service={service}>
       <ModalBody>
@@ -74,7 +84,7 @@ export const BuyMembershipSignModal = ({
             label="Sending from account"
             inputSize="l"
             validation={hasFunds && balance ? undefined : 'invalid'}
-            message={hasFunds && balance ? undefined : getMessage(paymentInfo?.partialFee)}
+            message={hasFunds && balance ? undefined : 'Insufficient funds to cover the membership creation.'}
           >
             {initialSigner ? (
               <SelectAccount selected={from} onChange={(account) => setFrom(account)} />
@@ -83,6 +93,16 @@ export const BuyMembershipSignModal = ({
             )}
           </InputComponent>
         </Row>
+        {shouldInformAboutLock && (
+          <Row>
+            <Info>
+              <TextMedium>
+                Tokens subject to Vesting and Invitation locks do not cover membership creation fees, and cannot be used
+                to purchase new memberships.
+              </TextMedium>
+            </Info>
+          </Row>
+        )}
       </ModalBody>
       <ModalTransactionFooter
         transactionFee={paymentInfo?.partialFee.toBn()}

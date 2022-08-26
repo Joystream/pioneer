@@ -13,9 +13,9 @@ import { Transaction, TransactionFeesContext } from './context'
 
 export const getFeeSpendableBalance = (balance: Balances): BN =>
   balance.total.sub(
-    // Vesting and Invitation lock should not be subtracted from total balance, since they can be used to cover fees
+    // Invitation lock should not be subtracted from total balance, since it can be used to cover fees
     balance.locks.reduce((prev, next) => {
-      if (next.type !== 'Vesting' && next.type !== 'Invitation' && prev.lt(next.amount)) {
+      if (next.type !== 'Invitation' && prev.lt(next.amount)) {
         return next.amount
       }
       return prev
