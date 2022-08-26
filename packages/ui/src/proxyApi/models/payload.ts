@@ -1,12 +1,14 @@
 import { createType } from '@joystream/types'
 import { TypeRegistry } from '@polkadot/types'
 import { EventRecord } from '@polkadot/types/interfaces'
+import { SpRuntimeDispatchError } from '@polkadot/types/lookup'
 import { AnyTuple, Codec } from '@polkadot/types/types'
 import BN from 'bn.js'
-import { get, isArray, isFunction, merge, uniqueId } from 'lodash'
+import { get, isArray, isFunction, merge, startCase, uniqueId } from 'lodash'
 import { filter, firstValueFrom, map, Observable } from 'rxjs'
 
 import { error } from '@/common/logger'
+import { DispatchedError } from '@/common/model/JoystreamNode'
 import { AnyObject } from '@/common/types'
 import { recursiveProxy } from '@/common/utils/proxy'
 
@@ -87,7 +89,9 @@ export const deserializePayload = (
       }
     } else {
       for (const key of Object.keys(current)) {
-        current[key] = deserializeValue(current[key])
+        if ('value' in (Object.getOwnPropertyDescriptor(current, key) ?? {})) {
+          current[key] = deserializeValue(current[key])
+        }
       }
     }
   }
@@ -174,12 +178,12 @@ const deserializeProxy = (
 }
 
 interface SerializedCodec {
-  kind: 'codec'
+  kind: 'codec' | 'extended-codec'
   type: string
   value: any
 }
 
-const serializeCodec = (codec: Codec) => {
+const serializeCodec = (codec: Codec): SerializedCodec => {
   const type = codec.toRawType()
 
   if (!type) {
@@ -188,8 +192,16 @@ const serializeCodec = (codec: Codec) => {
 
   if (isEventRecord(codec)) {
     const { data, index, meta, method, section, typeDef } = codec.event
+    const serializedData = data.map((data) => {
+      const result = serializeCodec(data)
+      if (isDispatchError(data)) {
+        const error = serializePayload(findMetaError(data))
+        return { ...result, kind: 'extended-codec', value: { ...result.value, error } }
+      }
+      return result
+    })
     const event = {
-      data: data.toJSON(),
+      data: serializedData,
       index: index.toJSON(),
       meta: meta.toJSON(),
       method,
@@ -200,6 +212,24 @@ const serializeCodec = (codec: Codec) => {
   }
 
   return { kind: 'codec', type, value: codec.toJSON() }
+}
+
+const isDispatchError = (data: Codec): data is SpRuntimeDispatchError => {
+  const error = data as SpRuntimeDispatchError
+  const methods = ['isBadOrigin', 'isModule'] as const
+  return error.type && methods.every((method) => typeof error[method] === 'boolean')
+}
+
+const findMetaError = (data: SpRuntimeDispatchError): DispatchedError => {
+  const method: `as${SpRuntimeDispatchError['type']}` = `as${data.type}`
+  if (method in data) {
+    try {
+      return data.registry.findMetaError((data as any)[method])
+    } catch {
+      // Nothing
+    }
+  }
+  return { section: 'Error', name: data.type, docs: [`${startCase(data.type)} error`] }
 }
 
 const isCodec = (obj: any): obj is Codec => typeof obj?.registry === 'object' && obj.registry instanceof TypeRegistry
