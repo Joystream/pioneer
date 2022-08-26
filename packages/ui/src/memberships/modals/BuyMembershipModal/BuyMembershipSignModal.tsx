@@ -10,9 +10,11 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
 import { InputComponent } from '@/common/components/forms'
+import { Info } from '@/common/components/Info'
 import { ModalBody, ModalTransactionFooter, Row } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
+import { BN_ZERO } from '@/common/constants'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
@@ -57,6 +59,15 @@ export const BuyMembershipSignModal = ({
     }
   }, [fromAddress, !balance, !validationInfo])
 
+  const shouldInformAboutLock = useMemo(() => {
+    if (balance && membershipPrice && paymentInfo) {
+      return (
+        balance.transferable.lt(membershipPrice ?? BN_ZERO) &&
+        getFeeSpendableBalance(balance).gte(membershipPrice.add(paymentInfo.partialFee))
+      )
+    }
+  }, [!balance, !membershipPrice, !paymentInfo])
+
   const signDisabled = !isReady || !hasFunds || !validationInfo
   return (
     <TransactionModal onClose={onClose} service={service}>
@@ -82,6 +93,16 @@ export const BuyMembershipSignModal = ({
             )}
           </InputComponent>
         </Row>
+        {shouldInformAboutLock && (
+          <Row>
+            <Info>
+              <TextMedium>
+                Tokens subject to Vesting and Invitation locks do not cover membership creation fees, and cannot be used
+                to purchase new memberships.
+              </TextMedium>
+            </Info>
+          </Row>
+        )}
       </ModalBody>
       <ModalTransactionFooter
         transactionFee={paymentInfo?.partialFee.toBn()}
