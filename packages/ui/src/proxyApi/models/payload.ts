@@ -221,15 +221,12 @@ const isDispatchError = (data: Codec): data is SpRuntimeDispatchError => {
 }
 
 const findMetaError = (data: SpRuntimeDispatchError): DispatchedError => {
-  const method: `as${SpRuntimeDispatchError['type']}` = `as${data.type}`
-  if (method in data) {
-    try {
-      return data.registry.findMetaError((data as any)[method])
-    } catch {
-      // Nothing
-    }
-  }
-  return { section: 'Error', name: data.type, docs: [`${startCase(data.type)} error`] }
+  type ValidGetters = 'asModule' | 'asToken' | 'asArithmetic' | 'asTransactional'
+  const getter: `as${SpRuntimeDispatchError['type']}` = `as${data.type}`
+  const errorIndex = getter in data && data[getter as ValidGetters]
+  return errorIndex && !errorIndex.isEmpty
+    ? data.registry.findMetaError(errorIndex.toU8a())
+    : { section: 'Error', name: data.type, docs: [`${startCase(data.type)} error`] }
 }
 
 const isCodec = (obj: any): obj is Codec => typeof obj?.registry === 'object' && obj.registry instanceof TypeRegistry
