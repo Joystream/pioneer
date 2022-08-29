@@ -15,7 +15,7 @@ import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Label } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { useSort } from '@/common/hooks/useSort'
-import { SubForumCategoryList } from '@/forum/components/category'
+import { ForumCategoryList } from '@/forum/components/category'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { PopularThreadList } from '@/forum/components/threads/PopularThreadList'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
@@ -24,6 +24,7 @@ import { THREADS_PER_PAGE } from '@/forum/constant'
 import { useForumCategory } from '@/forum/hooks/useForumCategory'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { MemberStack, moderatorsSummary } from '@/memberships/components/MemberStack'
+
 import { ForumPageLayout } from './components/ForumPageLayout'
 
 export const ForumCategory = () => {
@@ -98,7 +99,7 @@ export const ForumCategory = () => {
             {!!category.subcategories.length && (
               <RowGapBlock gap={24}>
                 {isArchive ? 'Archived categories' : 'Categories'}
-                <SubForumCategoryList categories={category.subcategories} isArchive={isArchive} />
+                <ForumCategoryList categories={category.subcategories} isArchive={isArchive} />
               </RowGapBlock>
             )}
           </RowGapBlock>

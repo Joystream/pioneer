@@ -15,30 +15,15 @@ export interface ForumCategoryListProps {
 }
 
 export const ForumCategoryList = ({ categories, isArchive = false }: ForumCategoryListProps) => (
-  <ForumCategoryListStyles gap={4}>
-    <ListHeaders $colLayout={categoriesColLayout(isArchive)}>
-      <ListHeader>Category</ListHeader>
-      <ListHeader>Total threads</ListHeader>
-      <ListHeader>Last Post</ListHeader>
-      {isArchive ? (
-        <ListHeader>Archived</ListHeader>
-      ) : (
-        <>
-          <ListHeader>Popular Thread</ListHeader>
-          <ListHeader>Moderators</ListHeader>
-        </>
-      )}
-    </ListHeaders>
-    <List as="div" isArchive={isArchive}>
-      {categories.map((category, index) => (
-        <CategoryListItem key={index} category={category} isArchive={isArchive} />
-      ))}
-    </List>
-  </ForumCategoryListStyles>
+  <StyledList>
+    {categories.map((category, index) => (
+      <CategoryListItem key={index} category={category} isArchive={isArchive} />
+    ))}
+  </StyledList>
 )
 
-const ForumCategoryListStyles = styled(RowGapBlock)`
-  ${ListHeaders} {
-    padding: 0px 24px;
-  }
+const StyledList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 `

@@ -4,6 +4,8 @@ import styled from 'styled-components'
 
 import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
 import { LinkButtonInnerWrapper, LinkButtonLink } from '@/common/components/buttons/LinkButtons'
+import { ArrowRightIcon } from '@/common/components/icons'
+import { AnswerIcon } from '@/common/components/icons/AnswerIcon'
 import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineExtraSmall, TextInlineMedium, TextMedium } from '@/common/components/typography'
@@ -22,42 +24,22 @@ export interface CategoryListItemProps {
   isArchive?: boolean
 }
 export const CategoryListItem = ({ category, isArchive = false }: CategoryListItemProps) => {
-  const block = category.status.categoryArchivalStatusUpdatedEvent
-
-  const expectedStatus: CategoryStatusType = isArchive ? 'CategoryStatusArchived' : 'CategoryStatusActive'
-  const subcategories = category.subcategories
-    .filter(({ status }) => status === expectedStatus)
-    .map(({ id, title }) => (
-      <SubcategoryLink key={id} to={categoryLink(id, isArchive)} size="small">
-        {title}
-      </SubcategoryLink>
-    ))
-
   return (
-    <CategoryListItemStyles $colLayout={categoriesColLayout(isArchive)}>
+    <CategoryListItemStyles>
       <Category>
         <CategoryListItemTitle as={GhostRouterLink} to={categoryLink(category.id, isArchive)}>
           {category.title}
         </CategoryListItemTitle>
         <TextMedium light>{category.description}</TextMedium>
-
-        {subcategories.length > 0 && (
-          <TextInlineExtraSmall lighter>Subcategories: {intersperse(subcategories, () => ', ')}</TextInlineExtraSmall>
-        )}
       </Category>
 
-      <ThreadCount categoryId={category.id} isArchive={isArchive} />
-
-      <LatestPost categoryId={category.id} />
-
-      {isArchive ? (
-        block && <BlockTime block={block} layout="column" />
-      ) : (
-        <>
-          <PopularThread categoryId={category.id} />
-          <MemberStack members={moderatorsSummary(category.moderators)} max={5} />
-        </>
-      )}
+      <InfoWrapper>
+        <Info>
+          <StyledAnswerIcon />
+          <ThreadCount categoryId={category.id} isArchive={isArchive} />
+        </Info>
+        <ArrowRightIcon />
+      </InfoWrapper>
     </CategoryListItemStyles>
   )
 }
@@ -93,9 +75,12 @@ const CategoryListItemTitle = styled.h5`
 
 export const CategoryListItemStyles = styled(TableListItem)`
   position: relative;
-  align-items: start;
+  align-items: center;
   height: 128px;
   padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 
   ${TableListItemAsLinkHover};
 
@@ -134,7 +119,7 @@ const Category = styled.div`
   }
 `
 
-const SubcategoryLink = styled(LinkButtonLink)`
+const CategoryLink = styled(LinkButtonLink)`
   &,
   &:visited {
     display: inline-flex;
@@ -158,4 +143,30 @@ const SubcategoryLink = styled(LinkButtonLink)`
       transform: translateX(0%);
     }
   }
+`
+
+const Info = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+`
+
+const InfoWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  svg {
+    color: ${Colors.Black[300]};
+    &:hover {
+      ${CategoryListItemTitle} {
+        color: ${Colors.Blue[500]};
+      }
+    }
+  }
+`
+
+const StyledAnswerIcon = styled(AnswerIcon)`
+  color: ${Colors.Black[300]};
 `
