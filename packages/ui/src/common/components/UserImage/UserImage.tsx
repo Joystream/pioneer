@@ -1,5 +1,4 @@
 import React, { ImgHTMLAttributes, useMemo, useRef } from 'react'
-import { useLocation } from 'react-router'
 import styled from 'styled-components'
 
 import { ReportIcon } from '@/common/components/icons/ReportIcon'
@@ -14,12 +13,7 @@ export interface UserImageProps extends ImgHTMLAttributes<HTMLImageElement> {
 export const UserImage = (props: UserImageProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null)
   const { blacklistedImages, sendReport } = useImageReport()
-  const location = useLocation()
-
-  const blacklistImage = useMemo(
-    () => blacklistedImages.find((image) => image.fields.url === props.src),
-    [blacklistedImages.length]
-  )
+  const blacklistImage = useMemo(() => blacklistedImages.find((url) => url === props.src), [blacklistedImages.length])
 
   return (
     <>
@@ -27,18 +21,14 @@ export const UserImage = (props: UserImageProps) => {
         props.customFallbackComponent ? (
           props.customFallbackComponent
         ) : (
-          <ModeratedItem
-            title="This image was removed by a moderator"
-            moderatorMemberId={blacklistImage.fields.moderatorId}
-            reason={blacklistImage.fields.reason}
-          />
+          <ModeratedItem title="This image was removed by a moderator" />
         )
       ) : (
         <Wrapper ref={wrapperRef}>
           <Image {...props} />
           <ButtonWrapper id="report-btn-wrapper">
             <Tooltip hideOnComponentLeave offset={[0, 5]} tooltipText="Report image">
-              <Button onClick={() => sendReport(props.src ?? '', location.pathname)}>
+              <Button onClick={() => sendReport(props.src ?? '')}>
                 <StyledReportIcon />
               </Button>
             </Tooltip>
@@ -71,15 +61,6 @@ const ButtonWrapper = styled.div`
   right: 8px;
   top: 8px;
   display: none;
-  //i {
-  //  visibility: hidden;
-  //}
-  //
-  //:hover {
-  //  i {
-  //    visibility: visible;
-  //  }
-  //}
 `
 
 const Button = styled.button`
