@@ -43,6 +43,7 @@ const PageHeader = styled.header`
 
 export const PageHeaderWrapper = styled.section`
   display: flex;
+  flex-direction: column;
   position: relative;
   flex-wrap: wrap;
   justify-content: space-between;

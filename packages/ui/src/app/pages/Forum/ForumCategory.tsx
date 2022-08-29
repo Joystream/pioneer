@@ -76,7 +76,7 @@ export const ForumCategory = () => {
             </TransactionButton>
           }
         >
-          <Flex>
+          <PageHeaderWrapper>
             <ModeratorsContainer>
               Moderators: <MemberStack members={moderatorsSummary(category.moderators)} max={5} />
             </ModeratorsContainer>
@@ -85,7 +85,7 @@ export const ForumCategory = () => {
               onChange={setSearch}
               onApply={() => showModal({ modal: 'SearchResults', data: { search } })}
             />
-          </Flex>
+          </PageHeaderWrapper>
         </ForumPageHeader>
       }
       main={
@@ -129,8 +129,5 @@ export const ForumCategory = () => {
 
 const ModeratorsContainer = styled(Label)`
   align-items: center;
-  flex-direction: column;
-`
-const Flex = styled(PageHeaderWrapper)`
   flex-direction: column;
 `
