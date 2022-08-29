@@ -217,3 +217,52 @@ https://pioneer.joystream.app/#/settings?network-config=https://playground.test/
 ```
 
 This will save the endpoints locally under the "Auto-conf" network.
+
+### Configuring image safety on application build
+Pioneer image safety is based on external vendor which is providing ability to read and write to
+an API endpoint (e.g. AirTable, Google Table). User after reporting an image will send a request with image URL to the database of
+maintainer choice. Maintainer then can decide whether image should or should not be blacklisted. In case of image that's validating
+the terms url of this image can be added to blacklist table.
+
+This feature is configurable by environment variables listed below.
+```
+REACT_APP_BLACKLIST_TABLE_POST_URL=https://api.airtable.com/v0/airtable_base_id/airtable_table_id
+BLACKLIST_TABLE_GET_URL=https://api.airtable.com/v0/airtable_base_id/airtable_table_id
+REACT_APP_BLACKLIST_API_KEY=YOUR_PUBLIC_API_KEY
+REACT_APP_BLACKLIST_POST_PAYLOAD_SCAFFOLD={"records":[{"fields":{"url":"{value}"}}]}
+BLACKLIST_URL_JSON_PATH=$..fields.url
+```
+
+`REACT_APP_BLACKLIST_TABLE_POST_URL` will be used to post a report by any user,
+on the other hand `BLACKLIST_TABLE_GET_URL` will be used to fetch blacklist on the time of the **build**.
+This means only rebuild and redeploy will cause blacklist update.
+
+`REACT_APP_BLACKLIST_API_KEY` is your public API key generated the have only necessary access to the report table to post new reports.
+If supported by the chosen platform API key can be passed with URLs as well.
+
+`REACT_APP_BLACKLIST_POST_PAYLOAD_SCAFFOLD` variable is responsible for correctly mapping reported URL to
+the POST format of chosen platform. In example above you can see scaffold for AirTable post request to the table with only one column with `url` name.
+This is JSON structure of `JSON.stringify` method, Pioneer will take it and replace `{value}` for the url that is being reported.
+
+`BLACKLIST_URL_JSON_PATH` last, but not least, this variable is responsible for retrieving the url from your platform
+GET request to the blacklist table. Pioneer is using `jsonpath` to achieve that, so here are the [docs](https://github.com/dchester/jsonpath#jsonpath) to help with creating own path.
+
+AirTable for table with only `URL` column, GET request returns a JSON of given structure:
+```
+{
+    "id": "recQVwXqJyc5jFcE0",
+    "createdTime": "2022-08-29T12:25:46.000Z",
+    "fields": {
+        "url": "https://www.aljazeera.com/wp-content/uploads/2022/08/AP22234538827867-1.jpg?resize=770%2C513"
+    }
+}
+```
+To access all URLs and map them to the array of URL correct jsonpath in this exmaple will be `$..fields.url`
+
+
+
+
+
+
+
+
