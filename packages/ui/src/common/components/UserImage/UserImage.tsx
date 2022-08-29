@@ -31,9 +31,7 @@ export const UserImage = (props: UserImageProps) => {
             title="This image was removed by a moderator"
             moderatorMemberId={blacklistImage.fields.moderatorId}
             reason={blacklistImage.fields.reason}
-          >
-            <Image {...props} />
-          </ModeratedItem>
+          />
         )
       ) : (
         <Wrapper ref={wrapperRef}>

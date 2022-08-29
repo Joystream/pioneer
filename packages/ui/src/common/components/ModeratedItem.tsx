@@ -7,7 +7,7 @@ import { useMember } from '@/memberships/hooks/useMembership'
 import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
 
 interface Props {
-  children: React.ReactNode | React.ReactNode[]
+  children?: React.ReactNode | React.ReactNode[]
   title: string
   reason?: string
   moderatorMemberId?: string
@@ -29,9 +29,11 @@ export const ModeratedItem = ({ children, title, reason, moderatorMemberId }: Pr
         <div>{reason}</div>
       </Moderated>
       {showOriginalContent ? children : null}
-      <ShowOriginalPostButton type="button" onClick={() => setShowOriginalContent((prev) => !prev)}>
-        {showOriginalContent ? 'Hide' : 'Show'} original content
-      </ShowOriginalPostButton>
+      {children && (
+        <ShowOriginalPostButton type="button" onClick={() => setShowOriginalContent((prev) => !prev)}>
+          {showOriginalContent ? 'Hide' : 'Show'} original content
+        </ShowOriginalPostButton>
+      )}
     </StyledModeratedPostWrapper>
   )
 }
