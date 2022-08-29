@@ -29,6 +29,7 @@ module.exports = (env, argv) => {
     new webpack.DefinePlugin({
       GIT_VERSION: JSON.stringify(version),
       IS_DEVELOPMENT: isDevelopment,
+      'process.env.blacklistedImages': JSON.stringify(env.blacklist ?? []),
       ...Object.fromEntries(envVariables),
     }),
     new CopyPlugin({
