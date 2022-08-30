@@ -31,6 +31,7 @@ import {
   ScrolledModalContainer,
   TransactionInfoContainer,
 } from '@/common/components/Modal'
+import { SmallFileUpload } from '@/common/components/SmallFileUpload'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
@@ -73,7 +74,7 @@ export interface MemberFormFields {
   name: string
   handle: string
   about: string
-  avatarUri: string
+  avatarUri: File | null
   isReferred?: boolean
   referrer?: Member
   hasTerms?: boolean
@@ -84,7 +85,7 @@ const formDefaultValues = {
   name: '',
   handle: '',
   about: '',
-  avatarUri: '',
+  avatarUri: null,
   isReferred: false,
   referrer: undefined,
   hasTerms: false,
@@ -104,7 +105,6 @@ export const BuyMembershipForm = ({
   type,
 }: BuyMembershipFormProps) => {
   const { allAccounts } = useMyAccounts()
-
   const [formHandleMap, setFormHandleMap] = useState('')
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
 
@@ -213,22 +213,15 @@ export const BuyMembershipForm = ({
                 <InputTextarea id="member-about" placeholder="Type" name="about" />
               </InputComponent>
             </Row>
-            <Row>
-              <InputComponent
-                id="member-avatar"
-                required
-                label="Member Avatar"
-                validation={hasError('avatarUri') ? 'invalid' : undefined}
-                message={
-                  hasError('avatarUri')
-                    ? getErrorMessage('avatarUri')
-                    : 'Paste an URL of your avatar image. Text lorem ipsum.'
-                }
-                placeholder="Image URL"
-              >
-                <InputText id="member-avatar" name="avatarUri" />
-              </InputComponent>
-            </Row>
+            <TextMedium bold value>
+              Member avatar
+            </TextMedium>
+            <SmallFileUpload
+              name="avatarUri"
+              onUpload={(event) =>
+                form.setValue('avatarUri', event.target.files?.item(0) ?? null, { shouldValidate: true })
+              }
+            />
           </ScrolledModalContainer>
         </FormProvider>
       </ScrolledModalBody>

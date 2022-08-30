@@ -26,6 +26,15 @@ import { OnBoardingStatus, SetMembershipAccount } from '@/common/providers/onboa
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
 
+const uploadAvatarImage = async (image: File) => {
+  const body = new FormData()
+  body.append('file', image, image.name)
+  return fetch('https://atlas-services.joystream.org/avatars', {
+    method: 'POST',
+    body,
+  })
+}
+
 export const OnBoardingModal = () => {
   const { hideModal } = useModal()
   const { status: realStatus, membershipAccount, setMembershipAccount, isLoading } = useOnBoarding()
@@ -47,7 +56,9 @@ export const OnBoardingModal = () => {
         return (
           <OnBoardingMembership
             setMembershipAccount={setMembershipAccount as SetMembershipAccount}
-            onSubmit={(params: MemberFormFields) => send({ type: 'DONE', form: params })}
+            onSubmit={(params: MemberFormFields) => {
+              send({ type: 'DONE', form: params })
+            }}
             membershipAccount={membershipAccount as string}
           />
         )
@@ -59,11 +70,23 @@ export const OnBoardingModal = () => {
   useEffect(() => {
     async function submitNewMembership(form: MemberFormFields) {
       try {
+        let avatarMetadata = null
+        if (state.context.form?.avatarUri) {
+          if (typeof state.context.form.avatarUri === 'string') {
+            avatarMetadata = state.context.form.avatarUri
+          } else if (typeof state.context.form.avatarUri === 'object') {
+            const responseJson = await uploadAvatarImage(state.context.form.avatarUri).then((response) =>
+              response.json()
+            )
+            avatarMetadata = `https://atlas-services.joystream.org/avatars/${responseJson.fileName}`
+          }
+        }
+
         const membershipData = {
           account: membershipAccount,
           handle: form.handle,
           name: form.name,
-          avatar: form.avatarUri,
+          avatar: avatarMetadata,
           about: form.about,
         }
 
