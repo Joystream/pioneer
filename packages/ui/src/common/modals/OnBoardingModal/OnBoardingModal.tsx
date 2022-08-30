@@ -26,7 +26,7 @@ import { OnBoardingStatus, SetMembershipAccount } from '@/common/providers/onboa
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
 
-const uploadAvatarImage = async (image: File) => {
+export const uploadAvatarImage = async (image: File) => {
   const body = new FormData()
   body.append('file', image, image.name)
   return fetch('https://atlas-services.joystream.org/avatars', {

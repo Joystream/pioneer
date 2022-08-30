@@ -35,6 +35,7 @@ import { SmallFileUpload } from '@/common/components/SmallFileUpload'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
+import { uploadAvatarImage } from '@/common/modals/OnBoardingModal'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
@@ -52,6 +53,7 @@ interface BuyMembershipFormProps extends Omit<BuyMembershipFormModalProps, 'onCl
   type: 'onBoarding' | 'general'
   membershipAccount?: string
   changeMembershipAccount?: () => void
+  buttonText?: string
 }
 
 const CreateMemberSchema = Yup.object().shape({
@@ -74,7 +76,7 @@ export interface MemberFormFields {
   name: string
   handle: string
   about: string
-  avatarUri: File | null
+  avatarUri: File | string | null
   isReferred?: boolean
   referrer?: Member
   hasTerms?: boolean
@@ -103,6 +105,7 @@ export const BuyMembershipForm = ({
   membershipAccount,
   changeMembershipAccount,
   type,
+  buttonText,
 }: BuyMembershipFormProps) => {
   const { allAccounts } = useMyAccounts()
   const [formHandleMap, setFormHandleMap] = useState('')
@@ -272,7 +275,7 @@ export const BuyMembershipForm = ({
             </TransactionInfoContainer>
           )}
           <ButtonPrimary size="medium" onClick={onCreate} disabled={!form.formState.isValid}>
-            Create a Membership
+            {buttonText ?? 'Create a Membership'}
           </ButtonPrimary>
         </ModalFooterGroup>
       </ModalFooter>
@@ -281,10 +284,30 @@ export const BuyMembershipForm = ({
 }
 
 export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: BuyMembershipFormModalProps) => {
+  const [buttonText, setButtonText] = useState<string | undefined>(undefined)
+  const handleSubmit = async (fields: MemberFormFields) => {
+    try {
+      if (fields.avatarUri && fields.avatarUri instanceof File) {
+        setButtonText('Uploading avatar...')
+        const data = await uploadAvatarImage(fields.avatarUri).then((res) => res.json())
+        onSubmit({ ...fields, avatarUri: `https://atlas-services.joystream.org/avatars/${data.fileName}` })
+      } else {
+        onSubmit(fields)
+      }
+    } catch (e) {
+      onSubmit(fields)
+    }
+  }
+
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Add membership" />
-      <BuyMembershipForm type="general" membershipPrice={membershipPrice} onSubmit={onSubmit} />
+      <BuyMembershipForm
+        type="general"
+        membershipPrice={membershipPrice}
+        onSubmit={handleSubmit}
+        buttonText={buttonText}
+      />
     </ScrolledModal>
   )
 }
