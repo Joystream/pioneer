@@ -4,7 +4,7 @@ import { ProposalDetailsOf } from '@joystream/types/augment'
 import { WorkingGroupKey } from '@joystream/types/common'
 import { ProposalDetails } from '@joystream/types/src/proposals'
 
-import { Api } from '@/api/types'
+import { Api } from '@/api'
 import { BN_ZERO } from '@/common/constants'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { last } from '@/common/utils'

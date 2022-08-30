@@ -1,7 +1,7 @@
 import React, { ReactElement, useCallback, useMemo } from 'react'
 
+import { useApi } from '@/api/hooks/useApi'
 import { StatisticsThreeColumns } from '@/common/components/statistics'
-import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 import { Percentage } from '@/proposals/components/ProposalDetails/renderers/Percentage'
 import getDetailsRenderStructure, { RenderNode, RenderType } from '@/proposals/helpers/getDetailsRenderStructure'
