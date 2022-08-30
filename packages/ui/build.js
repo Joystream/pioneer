@@ -54,9 +54,11 @@ const receiveImageBlacklist = (parsedEnvFile) => {
 }
 
 async function build() {
+  console.log('Fetching image blacklist...')
   const parsedEnvFile = dotenv.config().parsed || {}
   let blacklist = await receiveImageBlacklist(parsedEnvFile)
 
+  console.log('Invoking Webpack...')
   webpack(webpackConfig({ blacklist }, { mode: 'production', progress: true }))
 }
 
