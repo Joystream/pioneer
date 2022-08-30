@@ -22,6 +22,7 @@ module.exports = (env, argv) => {
 
   const plugins = [
     ...shared.plugins,
+    new webpack.ProgressPlugin(),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: './src/index.html',

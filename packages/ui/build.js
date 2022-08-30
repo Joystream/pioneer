@@ -59,7 +59,11 @@ async function build() {
   let blacklist = await receiveImageBlacklist(parsedEnvFile)
 
   console.log('Invoking Webpack...')
-  webpack(webpackConfig({ blacklist }, { mode: 'production', progress: true }))
+  webpack(webpackConfig({ blacklist }, { mode: 'production' }), (err, stats) => {
+    if (err || stats.hasErrors()) {
+      console.error('Webpack error: ', err)
+    }
+  })
 }
 
 build()
