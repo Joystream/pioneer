@@ -129,6 +129,13 @@ fragment ForumPostWithoutReplyFields on ForumPost {
   }
   text
   authorId
+  forumthreadinitialPost {
+    createdInEvent {
+      createdAt,
+      inBlock,
+      network
+    }
+  }
   postaddedeventpost {
     createdAt
     inBlock

@@ -100,9 +100,6 @@ export const PostListItem = ({
         <ForumPostRow>
           <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
           {createdAtBlock && <BlockTime block={createdAtBlock} layout="reverse" />}
-          {createdAtBlock == undefined && (
-            <BlockTime block={{ timestamp: createdAt, number: 0, network: '' }} layout="reverse" />
-          )}
         </ForumPostRow>
         <MessageBody>
           <ModeratedPostWrapper post={post}>
