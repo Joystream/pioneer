@@ -16,6 +16,7 @@ import {
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { useKeyring } from '@/common/hooks/useKeyring'
+import { uploadAvatarImage } from '@/common/modals/OnBoardingModal'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { useGetMembersCountQuery } from '@/memberships/queries'
@@ -42,7 +43,7 @@ const formDefaultValues = {
   name: '',
   handle: '',
   about: '',
-  avatarUri: '',
+  avatarUri: null,
   hasTerms: false,
   invitor: undefined,
 }
@@ -51,6 +52,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
   const { active } = useMyMemberships()
   const keyring = useKeyring()
   const [formHandleMap, setFormHandleMap] = useState('')
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState<boolean>(false)
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
 
   const form = useForm<MemberFormFields>({
@@ -83,7 +85,20 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
     return active && form.setValue('invitor', active)
   }, [active])
 
-  const onCreate = () => onSubmit(form.getValues())
+  const onCreate = async () => {
+    const fields = form.getValues()
+    try {
+      if (fields.avatarUri && fields.avatarUri instanceof File) {
+        setIsUploadingAvatar(true)
+        const data = await uploadAvatarImage(fields.avatarUri).then((res) => res.json())
+        onSubmit({ ...fields, avatarUri: `https://atlas-services.joystream.org/avatars/${data.fileName}` })
+      } else {
+        onSubmit(fields)
+      }
+    } catch (e) {
+      onSubmit(fields)
+    }
+  }
 
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
@@ -193,7 +208,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
       </ScrolledModalBody>
       <ModalFooter>
         <ButtonPrimary size="medium" onClick={onCreate} disabled={!form.formState.isValid}>
-          Invite a Member
+          {isUploadingAvatar ? 'Uploading avatar...' : 'Invite a Member'}
         </ButtonPrimary>
       </ModalFooter>
     </ScrolledModal>
