@@ -16,7 +16,7 @@ export const AvatarURISchema = process.env.REACT_APP_AVATAR_UPLOAD_URL
   ? Yup.mixed()
       .test('fileSize', 'File size is too large', (value) => !value || value.size <= MAX_AVATAR_FILESIZE)
       .test('fileType', 'This file type is not allowed', (value) => !value || SUPPORTED_IMAGES.includes(value.type))
-  : Yup.string().url()
+  : Yup.string().url().nullable()
 
 export const HandleSchema = Yup.string().test('handle', 'This handle is already taken', (value, testContext) => {
   return testContext?.options?.context?.size ? testContext?.options?.context?.size === 0 : true
