@@ -14,12 +14,13 @@ import { Avatar } from '@/memberships/components/Avatar'
 interface SmallFileUploadProps {
   name: string
   onUpload: (event: ChangeEvent<HTMLInputElement>) => void
+  initialPreview?: string
 }
 
-export const SmallFileUpload = ({ onUpload, name }: SmallFileUploadProps) => {
+export const SmallFileUpload = ({ onUpload, name, initialPreview }: SmallFileUploadProps) => {
   const [localValue, setLocalValue] = useState<File | null>()
   const { formState } = useFormContext()
-  const [avatarPreview, setAvatarPreview] = useState<string>()
+  const [avatarPreview, setAvatarPreview] = useState<string>(initialPreview ?? '')
 
   useEffect(() => {
     if (localValue) {

@@ -1,4 +1,4 @@
-import { WithNullableValues } from '../../../common/types/form'
+import { WithNullableValues } from '@/common/types/form'
 
 export const hasAnyEdits = (form: Record<string, any>, initial: Record<string, any>) => {
   return !!getChangedFields(form, initial).length
@@ -8,7 +8,7 @@ export const getChangedFields = (form: Record<string, any>, initial: Record<stri
   const changedFields = []
 
   for (const key of Object.keys(form)) {
-    const initialValue = initial[key] || ''
+    const initialValue = initial[key === 'avatarUri' ? 'avatar' : key] || ''
     const formValue = form[key]?.address ?? (form[key] || '')
     if (initialValue !== formValue) {
       changedFields.push(key)

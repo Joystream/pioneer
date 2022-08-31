@@ -15,7 +15,10 @@ import {
   ScrolledModalBody,
   ScrolledModalContainer,
 } from '@/common/components/Modal'
+import { RowGapBlock } from '@/common/components/page/PageContent'
+import { SmallFileUpload } from '@/common/components/SmallFileUpload'
 import { TextMedium } from '@/common/components/typography'
+import { uploadAvatarImage } from '@/common/modals/OnBoardingModal'
 import { WithNullableValues } from '@/common/types/form'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 import { useGetMembersCountQuery } from '@/memberships/queries'
@@ -39,20 +42,27 @@ const UpdateMemberSchema = Yup.object().shape({
   }),
 })
 
+const getUpdateMemberFormInitial = (member: Member) => ({
+  id: member.id,
+  name: member.name || '',
+  handle: member.handle || '',
+  about: '',
+  avatarUri: process.env.REACT_APP_AVATAR_UPLOAD_URL ? '' : typeof member.avatar === 'string' ? member.avatar : '',
+  rootAccount: member.rootAccount,
+  controllerAccount: member.controllerAccount,
+})
+
 export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) => {
   const { allAccounts } = useMyAccounts()
   const [handleMap, setHandleMap] = useState<string>(member.handle)
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState<boolean>(false)
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: handleMap } } })
   const context = { size: data?.membershipsConnection.totalCount, isHandleChanged: handleMap !== member.handle }
 
   const form = useForm({
-    resolver: useYupValidationResolver(UpdateMemberSchema),
+    resolver: useYupValidationResolver<UpdateMemberForm>(UpdateMemberSchema),
     defaultValues: {
-      id: member.id,
-      name: member.name || '',
-      handle: member.handle || '',
-      about: '',
-      avatarUri: typeof member.avatar === 'string' ? member.avatar : '',
+      ...getUpdateMemberFormInitial(member),
       rootAccount: accountOrNamed(allAccounts, member.rootAccount, 'Root Account'),
       controllerAccount: accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account'),
     },
@@ -67,17 +77,34 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   }, [JSON.stringify(context)])
 
   useEffect(() => {
-    setHandleMap(handle)
+    handle && setHandleMap(handle)
   }, [handle])
 
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
 
-  const canUpdate = form.formState.isValid && hasAnyEdits(form.getValues(), member)
+  const canUpdate = form.formState.isValid && hasAnyEdits(form.getValues(), getUpdateMemberFormInitial(member))
 
-  const onCreate = () => {
+  const onCreate = async () => {
     if (canUpdate) {
-      onSubmit(changedOrNull<UpdateMemberForm>(form.getValues(), member))
+      const fields = form.getValues()
+      try {
+        if (fields.avatarUri && fields.avatarUri instanceof File) {
+          setIsUploadingAvatar(true)
+          const data = await uploadAvatarImage(fields.avatarUri).then((res) => res.json())
+          setIsUploadingAvatar(false)
+          onSubmit(
+            changedOrNull<UpdateMemberForm>(
+              { ...fields, avatarUri: `${process.env.REACT_APP_AVATAR_UPLOAD_URL}/${data.fileName}` },
+              getUpdateMemberFormInitial(member)
+            )
+          )
+        } else {
+          onSubmit(changedOrNull<UpdateMemberForm>(fields, getUpdateMemberFormInitial(member)))
+        }
+      } catch (e) {
+        onSubmit(changedOrNull<UpdateMemberForm>(fields, getUpdateMemberFormInitial(member)))
+      }
     }
   }
 
@@ -140,21 +167,46 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
             </Row>
 
             <Row>
-              <InputComponent
-                id="member-avatar"
-                label="Member Avatar"
-                required
-                validation={hasError('avatarUri') ? 'invalid' : undefined}
-                message={hasError('avatarUri') ? getErrorMessage('avatarUri') : 'Paste a URL of your avatar image.'}
-                placeholder="Image URL"
-              >
-                <InputText id="member-avatar" name="avatarUri" />
-              </InputComponent>
+              {process.env.REACT_APP_AVATAR_UPLOAD_URL ? (
+                <RowGapBlock gap={10}>
+                  <TextMedium bold value>
+                    Member avatar
+                  </TextMedium>
+                  <SmallFileUpload
+                    initialPreview={member.avatar}
+                    name="avatarUri"
+                    onUpload={(event) =>
+                      form.setValue('avatarUri', event.target.files?.item(0) ?? null, { shouldValidate: true })
+                    }
+                  />
+                </RowGapBlock>
+              ) : (
+                <InputComponent
+                  id="member-avatar"
+                  required
+                  label="Member Avatar"
+                  validation={hasError('avatarUri') ? 'invalid' : undefined}
+                  message={
+                    hasError('avatarUri')
+                      ? getErrorMessage('avatarUri')
+                      : 'Paste an URL of your avatar image. Text lorem ipsum.'
+                  }
+                  placeholder="Image URL"
+                >
+                  <InputText id="member-avatar" name="avatarUri" />
+                </InputComponent>
+              )}
             </Row>
           </FormProvider>
         </ScrolledModalContainer>
       </ScrolledModalBody>
-      <ModalTransactionFooter next={{ disabled: !canUpdate, label: 'Save changes', onClick: onCreate }} />
+      <ModalTransactionFooter
+        next={{
+          disabled: !canUpdate,
+          label: isUploadingAvatar ? 'Uploading avatar...' : 'Save changes',
+          onClick: onCreate,
+        }}
+      />
     </ScrolledModal>
   )
 }

@@ -1,10 +1,10 @@
-import { Account } from '../../../accounts/types'
+import { Account } from '@/accounts/types'
 
 export interface UpdateMemberForm {
   id: string
   name?: string
   handle?: string
-  avatarUri?: string
+  avatarUri?: File | null | string
   about?: string
   rootAccount?: Account
   controllerAccount?: Account
