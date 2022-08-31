@@ -52,11 +52,11 @@ export const Election = () => {
     [electionStage]
   )
 
-  useEffect(() => {
-    if (!isLoadingElectionStage && electionStage === 'inactive') {
-      history.replace(ElectionRoutes.pastElections)
-    }
-  }, [electionStage])
+  // useEffect(() => {
+  //   if (!isLoadingElectionStage && electionStage === 'inactive') {
+  //     history.replace(ElectionRoutes.pastElections)
+  //   }
+  // }, [electionStage])
 
   if (isLoadingElectionStage) {
     return <PageLayout header={null} main={<Loading />} />
@@ -74,7 +74,7 @@ export const Election = () => {
           >
             Copy link
           </CopyButtonTemplate>
-          {electionStage === 'announcing' && <AnnounceCandidacyButton />}
+          <AnnounceCandidacyButton />
           {(electionStage === 'voting' || electionStage === 'revealing') && (
             <>
               <BackupVotesButton cycleId={election?.cycleId} />
