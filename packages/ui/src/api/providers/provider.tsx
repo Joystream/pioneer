@@ -40,6 +40,12 @@ interface APIDisconnected extends BaseAPI {
 
 export type UseApi = APIConnecting | APIConnected | APIDisconnected
 
+const stringifyConsts = (consts: Api['consts'], ...modules: (keyof Api['consts'])[]) =>
+  modules.flatMap((module) => [
+    `\n${module}:\n`,
+    ...Object.entries(consts[module]).flatMap(([key, value]) => [key, ':', value.toHuman(), '\n']),
+  ])
+
 export const ApiContextProvider = ({ children }: Props) => {
   const [api, setApi] = useState<Api>()
   const [connectionState, setConnectionState] = useState<ConnectionState>('connecting')
@@ -53,6 +59,8 @@ export const ApiContextProvider = ({ children }: Props) => {
       setConnectionState('connected')
       api.on('connected', () => setConnectionState('connected'))
       api.on('disconnected', () => setConnectionState('disconnected'))
+      // eslint-disable-next-line no-console
+      console.log(...stringifyConsts(api.consts, 'council', 'referendum'))
     })
   }, [])
 

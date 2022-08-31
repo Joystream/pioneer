@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useMemo } from 'react'
 import { concatMap, EMPTY, merge, Observable, of } from 'rxjs'
 
@@ -18,6 +19,14 @@ export const useElectionStage = (): UseElectionStage => {
 
     const councilObservable = api.query.council.stage().pipe(
       concatMap(({ stage: councilStage }): Observable<ElectionStage> => {
+        console.log(
+          '\ncouncilStage:',
+          councilStage.registry.getClassName(councilStage.constructor as any),
+          '\n',
+          councilStage.toRawType(),
+          '\n',
+          JSON.stringify(councilStage.toJSON(), null, 2)
+        )
         if (councilStage.isIdle) {
           return of('inactive')
         } else if (councilStage.isAnnouncing) {
@@ -28,6 +37,14 @@ export const useElectionStage = (): UseElectionStage => {
     )
     const referendumObservable = api.query.referendum.stage().pipe(
       concatMap((referendumStage): Observable<ElectionStage> => {
+        console.log(
+          '\nreferendumStage:',
+          referendumStage.registry.getClassName(referendumStage.constructor as any),
+          '\n',
+          referendumStage.toRawType(),
+          '\n',
+          JSON.stringify(referendumStage.toJSON(), null, 2)
+        )
         if (referendumStage.isVoting) {
           return of('voting')
         } else if (referendumStage.isRevealing) {
