@@ -5,14 +5,14 @@ import { CountBadge } from '@/common/components/CountBadge'
 import { RepliesIcon } from '@/common/components/icons'
 import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
-import { Colors, Fonts, Overflow, Transitions, BorderRad } from '@/common/constants'
+import { Colors, Transitions, BorderRad } from '@/common/constants'
 import { relativeTime } from '@/common/model/relativeTime'
 import { ForumRoutes } from '@/forum/constant'
 import { useThreadOriginalPost } from '@/forum/hooks/useThreadOriginalPost'
 import { ForumThread } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
 
-import { ThreadItemContentProps, ThreadItemHeader, ThreadItemTime, ThreadItemTitle, ThreadItemText } from './ThreadItem'
+import { ThreadItemHeader, ThreadItemTime, ThreadItemTitle, ThreadItemText } from './ThreadItem'
 
 interface PopularThreadProps {
   thread: ForumThread

@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 
 import { PageHeaderRow, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { ButtonsGroup } from '@/common/components/buttons'
-import { SearchBox } from '@/common/components/forms/FilterBox/FilterSearchBox'
 import { useModal } from '@/common/hooks/useModal'
 
 interface ForumPageHeaderProps {
@@ -11,10 +10,6 @@ interface ForumPageHeaderProps {
   buttons?: React.ReactNode
 }
 export const ForumPageHeader = ({ title, children, buttons }: ForumPageHeaderProps) => {
-  const [search, setSearch] = useState('')
-
-  const { showModal } = useModal()
-
   return (
     <PageHeaderWrapper>
       <PageHeaderRow>

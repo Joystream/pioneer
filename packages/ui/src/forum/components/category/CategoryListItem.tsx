@@ -2,7 +2,7 @@ import React from 'react'
 import { generatePath } from 'react-router'
 import styled from 'styled-components'
 
-import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
+import { BlockTimeWrapper } from '@/common/components/BlockTime'
 import { LinkButtonInnerWrapper, LinkButtonLink } from '@/common/components/buttons/LinkButtons'
 import { ArrowRightIcon } from '@/common/components/icons'
 import { AnswerIcon } from '@/common/components/icons/AnswerIcon'
@@ -10,13 +10,12 @@ import { TableListItem, TableListItemAsLinkHover } from '@/common/components/Lis
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineExtraSmall, TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { Colors, Fonts, Overflow, Transitions } from '@/common/constants'
-import { intersperse } from '@/common/utils'
-import { categoriesColLayout, ForumRoutes } from '@/forum/constant'
-import { CategoryStatusType, ForumCategory } from '@/forum/types'
-import { MemberStack, MemberStackStyles, moderatorsSummary } from '@/memberships/components/MemberStack'
+import { ForumRoutes } from '@/forum/constant'
+import { ForumCategory } from '@/forum/types'
+import { MemberStackStyles } from '@/memberships/components/MemberStack'
 
-import { LatestPost, PostInfoStyles } from './LatestPost'
-import { PopularThread, ThreadInfoStyles } from './PopularThread'
+import { PostInfoStyles } from './LatestPost'
+import { ThreadInfoStyles } from './PopularThread'
 import { ThreadCount } from './ThreadCount'
 
 export interface CategoryListItemProps {
@@ -116,32 +115,6 @@ const Category = styled.div`
   }
   ${TextInlineExtraSmall} {
     ${Overflow.FullDots};
-  }
-`
-
-const CategoryLink = styled(LinkButtonLink)`
-  &,
-  &:visited {
-    display: inline-flex;
-    font-size: inherit;
-    line-height: 12px;
-    font-weight: inherit;
-    color: inherit;
-    border: none;
-
-    &:before {
-      bottom: 0;
-      background-color: ${Colors.Black[400]};
-      transform: translateX(calc(-100% - 2px));
-    }
-    ${LinkButtonInnerWrapper} {
-      transform: translateY(0);
-    }
-  }
-  &:hover {
-    &:before {
-      transform: translateX(0%);
-    }
   }
 `
 

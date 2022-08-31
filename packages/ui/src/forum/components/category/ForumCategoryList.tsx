@@ -1,10 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { List } from '@/common/components/List'
-import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
-import { RowGapBlock } from '@/common/components/page/PageContent'
-import { categoriesColLayout } from '@/forum/constant'
 import { ForumCategory } from '@/forum/types'
 
 import { CategoryListItem } from './CategoryListItem'

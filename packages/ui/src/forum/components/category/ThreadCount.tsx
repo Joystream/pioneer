@@ -1,5 +1,4 @@
 import React, { memo } from 'react'
-import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
 import { useForumCategoryThreadCount } from '@/forum/hooks/useForumCategoryThreadCount'
