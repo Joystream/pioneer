@@ -216,15 +216,35 @@ export const BuyMembershipForm = ({
                 <InputTextarea id="member-about" placeholder="Type" name="about" />
               </InputComponent>
             </Row>
-            <TextMedium bold value>
-              Member avatar
-            </TextMedium>
-            <SmallFileUpload
-              name="avatarUri"
-              onUpload={(event) =>
-                form.setValue('avatarUri', event.target.files?.item(0) ?? null, { shouldValidate: true })
-              }
-            />
+
+            {process.env.REACT_APP_AVATAR_UPLOAD_URL ? (
+              <>
+                <TextMedium bold value>
+                  Member avatar
+                </TextMedium>
+                <SmallFileUpload
+                  name="avatarUri"
+                  onUpload={(event) =>
+                    form.setValue('avatarUri', event.target.files?.item(0) ?? null, { shouldValidate: true })
+                  }
+                />
+              </>
+            ) : (
+              <InputComponent
+                id="member-avatar"
+                required
+                label="Member Avatar"
+                validation={hasError('avatarUri') ? 'invalid' : undefined}
+                message={
+                  hasError('avatarUri')
+                    ? getErrorMessage('avatarUri')
+                    : 'Paste an URL of your avatar image. Text lorem ipsum.'
+                }
+                placeholder="Image URL"
+              >
+                <InputText id="member-avatar" name="avatarUri" />
+              </InputComponent>
+            )}
           </ScrolledModalContainer>
         </FormProvider>
       </ScrolledModalBody>
@@ -290,7 +310,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: B
       if (fields.avatarUri && fields.avatarUri instanceof File) {
         setButtonText('Uploading avatar...')
         const data = await uploadAvatarImage(fields.avatarUri).then((res) => res.json())
-        onSubmit({ ...fields, avatarUri: `https://atlas-services.joystream.org/avatars/${data.fileName}` })
+        onSubmit({ ...fields, avatarUri: `${process.env.REACT_APP_AVATAR_UPLOAD_URL}/${data.fileName}` })
       } else {
         onSubmit(fields)
       }

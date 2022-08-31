@@ -29,7 +29,7 @@ import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipMod
 export const uploadAvatarImage = async (image: File) => {
   const body = new FormData()
   body.append('file', image, image.name)
-  return fetch('https://atlas-services.joystream.org/avatars', {
+  return fetch(process.env.REACT_APP_AVATAR_UPLOAD_URL ?? '', {
     method: 'POST',
     body,
   })
@@ -78,7 +78,7 @@ export const OnBoardingModal = () => {
             const responseJson = await uploadAvatarImage(state.context.form.avatarUri).then((response) =>
               response.json()
             )
-            avatarMetadata = `https://atlas-services.joystream.org/avatars/${responseJson.fileName}`
+            avatarMetadata = `${process.env.REACT_APP_AVATAR_UPLOAD_URL}/${responseJson.fileName}`
           }
         }
 

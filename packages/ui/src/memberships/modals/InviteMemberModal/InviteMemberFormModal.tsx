@@ -13,6 +13,8 @@ import {
   ScrolledModalContainer,
   Row,
 } from '@/common/components/Modal'
+import { RowGapBlock } from '@/common/components/page/PageContent'
+import { SmallFileUpload } from '@/common/components/SmallFileUpload'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { useKeyring } from '@/common/hooks/useKeyring'
@@ -91,7 +93,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
       if (fields.avatarUri && fields.avatarUri instanceof File) {
         setIsUploadingAvatar(true)
         const data = await uploadAvatarImage(fields.avatarUri).then((res) => res.json())
-        onSubmit({ ...fields, avatarUri: `https://atlas-services.joystream.org/avatars/${data.fileName}` })
+        onSubmit({ ...fields, avatarUri: `${process.env.REACT_APP_AVATAR_UPLOAD_URL}/${data.fileName}` })
       } else {
         onSubmit(fields)
       }
@@ -199,9 +201,23 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
             </Row>
 
             <Row>
-              <InputComponent id="member-avatar" label="Member Avatar" name="avatarUri" placeholder="Image URL">
-                <InputText id="member-avatar" name="avatarUri" />
-              </InputComponent>
+              {process.env.REACT_APP_AVATAR_UPLOAD_URL ? (
+                <RowGapBlock gap={10}>
+                  <TextMedium bold value>
+                    Member avatar
+                  </TextMedium>
+                  <SmallFileUpload
+                    name="avatarUri"
+                    onUpload={(event) =>
+                      form.setValue('avatarUri', event.target.files?.item(0) ?? null, { shouldValidate: true })
+                    }
+                  />
+                </RowGapBlock>
+              ) : (
+                <InputComponent id="member-avatar" label="Member Avatar" name="avatarUri" placeholder="Image URL">
+                  <InputText id="member-avatar" name="avatarUri" />
+                </InputComponent>
+              )}
             </Row>
           </ScrolledModalContainer>
         </FormProvider>
