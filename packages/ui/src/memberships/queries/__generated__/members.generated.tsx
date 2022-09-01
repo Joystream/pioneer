@@ -61,7 +61,9 @@ export type MemberWithDetailsFieldsFragment = {
     avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
   }
   entry:
+    | { __typename: 'MembershipEntryFoundingMemberCreated' }
     | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+    | { __typename: 'MembershipEntryGifted' }
     | {
         __typename: 'MembershipEntryInvited'
         memberInvitedEvent?: {
@@ -227,8 +229,21 @@ export type GetMembersWithDetailsQuery = {
     isCouncilMember: boolean
     inviteCount: number
     createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      externalResources?: Array<{
+        __typename: 'MembershipExternalResource'
+        type: Types.MembershipExternalResourceType
+        value: string
+      }> | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
     entry:
+      | { __typename: 'MembershipEntryFoundingMemberCreated' }
       | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+      | { __typename: 'MembershipEntryGifted' }
       | {
           __typename: 'MembershipEntryInvited'
           memberInvitedEvent?: {
@@ -313,12 +328,6 @@ export type GetMembersWithDetailsQuery = {
         account: string
       }> | null
     } | null
-    metadata: {
-      __typename: 'MemberMetadata'
-      name?: string | null
-      about?: string | null
-      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
-    }
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -375,7 +384,9 @@ export type GetMemberQuery = {
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     entry:
+      | { __typename: 'MembershipEntryFoundingMemberCreated' }
       | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+      | { __typename: 'MembershipEntryGifted' }
       | {
           __typename: 'MembershipEntryInvited'
           memberInvitedEvent?: {
@@ -460,7 +471,6 @@ export type GetMemberQuery = {
         account: string
       }> | null
     } | null
-
     roles: Array<{
       __typename: 'Worker'
       id: string
