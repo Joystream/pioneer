@@ -221,7 +221,23 @@ export interface ValidationHelpers {
   formValueGetter?: () => any
 }
 
-export const enhancedHasError = (errors: FieldErrors, depthPath?: string) => (field: string) =>
-  !!at(errors, `${depthPath ? depthPath + '.' : ''}${field}`)[0]
-export const enhancedGetErrorMessage = (errors: FieldErrors, depthPath?: string) => (field: string) =>
-  at(errors, `${depthPath ? depthPath + '.' : ''}${field}`)[0]?.message
+export const enhancedHasError = (errors: FieldErrors, depthPath?: string) => (field: string) => {
+  const error = at(errors, `${depthPath ? depthPath + '.' : ''}${field}`)[0]
+  if (error?.type === 'unknownStakingStatus') {
+    return false
+  }
+
+  return !!error
+}
+export const enhancedGetErrorMessage = (errors: FieldErrors, depthPath?: string) => (field: string) => {
+  const error = at(errors, `${depthPath ? depthPath + '.' : ''}${field}`)[0]
+  if (!error) {
+    return undefined
+  }
+
+  if (error.type === 'unknownStakingStatus') {
+    return 'Validating chosen staking account...'
+  }
+
+  return error?.message
+}
