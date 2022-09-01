@@ -83,8 +83,8 @@ export const BuyMembershipSignModal = ({
           <InputComponent
             label="Sending from account"
             inputSize="l"
-            validation={hasFunds && balance ? undefined : 'invalid'}
-            message={hasFunds && balance ? undefined : 'Insufficient funds to cover the membership creation.'}
+            validation={hasFunds !== false && balance ? undefined : 'invalid'}
+            message={hasFunds !== false && balance ? undefined : 'Insufficient funds to cover the membership creation.'}
           >
             {initialSigner ? (
               <SelectAccount selected={from} onChange={(account) => setFrom(account)} />
