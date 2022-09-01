@@ -2,12 +2,9 @@ import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { BalancesContext } from '@/accounts/providers/balances/context'
+import { ApiContext } from '@/api/providers/context'
 import { ContributeFundsModal } from '@/bounty/modals/ContributeFundsModal'
 import { FundingLimited } from '@/bounty/types/Bounty'
-import { BN_ZERO } from '@/common/constants'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -18,12 +15,15 @@ import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import {
+  stubAccounts,
   stubApi,
   stubBountyConstants,
+  stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 const [baseBounty] = bounties
 const bounty = {
@@ -34,14 +34,6 @@ const bounty = {
     maxAmount: new BN((baseBounty.fundingType as unknown as FundingLimited).maxAmount ?? 0),
     minAmount: new BN((baseBounty.fundingType as unknown as FundingLimited).minAmount ?? 0),
   },
-}
-
-const defaultBalance = {
-  total: BN_ZERO,
-  locked: BN_ZERO,
-  recoverable: BN_ZERO,
-  transferable: new BN(1000),
-  locks: [],
 }
 
 describe('UI: ContributeFundsModal', () => {
@@ -60,11 +52,6 @@ describe('UI: ContributeFundsModal', () => {
     },
   }
 
-  const useBalances = {
-    [getMember('bob').controllerAccount]: { ...defaultBalance },
-    [getMember('alice').controllerAccount]: defaultBalance,
-  }
-
   const useMembership = {
     isLoading: false,
     active: getMember('alice'),
@@ -76,14 +63,15 @@ describe('UI: ContributeFundsModal', () => {
     },
   }
 
-  const useAccounts = {
-    isLoading: false,
-    hasAccounts: true,
-    allAccounts: [bob, alice],
-  }
+  beforeAll(() => {
+    stubDefaultBalances()
+    stubAccounts([bob, alice])
+  })
 
   beforeEach(() => {
     transaction = stubTransaction(api, 'api.tx.bounty.fundBounty', fee)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(fee), canAfford: true }
+    mockedTransactionFee.transaction = transaction as any
     renderResult = render(<Modal />)
   })
 
@@ -92,7 +80,8 @@ describe('UI: ContributeFundsModal', () => {
   })
 
   it('Insufficient funds', async () => {
-    stubTransaction(api, 'api.tx.bounty.fundBounty', 99999)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
+
     renderResult.unmount()
     render(<Modal />)
 
@@ -105,20 +94,19 @@ describe('UI: ContributeFundsModal', () => {
 
   it('Displays correct transaction fee', () => {
     const expected = String(fee)
-    const valueContainer = screen.getByText('modals.common.transactionFee.label')?.nextSibling
+    const valueContainer = screen.getByText('modals.transactionFee.label')?.nextSibling
 
     expect(valueContainer?.textContent).toBe(expected)
   })
 
   it('Displays correct contribute amount', () => {
-    const value = 555
-    const expected = String(value)
+    const value = '555'
     const input = screen.getByLabelText('modals.contribute.selectAmount')
     fireEvent.input(input, { target: { value } })
 
     const valueContainer = screen.getByText('modals.common.contributeAmount')?.nextSibling
 
-    expect(valueContainer?.textContent).toBe(expected)
+    expect(valueContainer?.textContent).toBe(value)
   })
 
   describe('Transaction result', () => {
@@ -159,11 +147,7 @@ describe('UI: ContributeFundsModal', () => {
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>
             <MembershipContext.Provider value={useMembership}>
-              <AccountsContext.Provider value={useAccounts}>
-                <BalancesContext.Provider value={useBalances}>
-                  <ContributeFundsModal />
-                </BalancesContext.Provider>
-              </AccountsContext.Provider>
+              <ContributeFundsModal />
             </MembershipContext.Provider>
           </ApiContext.Provider>
         </MockKeyringProvider>

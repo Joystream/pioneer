@@ -1,26 +1,58 @@
 import React, { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { first } from 'rxjs'
 
-import { InlineToggleWrap, InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
+import { useApi } from '@/api/hooks/useApi'
+import { CurrencyName } from '@/app/constants/currency'
+import { InlineToggleWrap, InputComponent, TokenInput, Label, ToggleCheckbox } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
-import { TextInlineMedium, TextMedium } from '@/common/components/typography'
-import { BN_ZERO } from '@/common/constants'
+import { TextInlineMedium, TextMedium, TokenValue } from '@/common/components/typography'
 import { capitalizeFirstLetter } from '@/common/helpers'
-import { formatTokenValue } from '@/common/model/formatters'
+import { useObservable } from '@/common/hooks/useObservable'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 export const UpdateWorkingGroupBudget = () => {
-  const { setValue, watch } = useFormContext()
-  const [groupId] = watch(['updateWorkingGroupBudget.groupId'])
+  const { setValue, watch, setError, formState, clearErrors } = useFormContext()
+  const { api } = useApi()
+  const councilBudget = useObservable(api?.query.council.budget().pipe(first()), [!api])
+  const [groupId, isPositive, budgetUpdate] = watch([
+    'updateWorkingGroupBudget.groupId',
+    'updateWorkingGroupBudget.isPositive',
+    'updateWorkingGroupBudget.budgetUpdate',
+  ])
   const { group } = useWorkingGroup({ name: groupId })
 
   useEffect(() => {
-    setValue('updateWorkingGroupBudget.budgetUpdate', BN_ZERO, { shouldValidate: true })
-  }, [groupId])
+    if (group) {
+      setValue('updateWorkingGroupBudget.budgetUpdate', isPositive ? group.budget?.addn(1) : group.budget?.subn(1), {
+        shouldValidate: true,
+      })
+    }
+  }, [group?.id])
+
+  useEffect(() => {
+    if (!budgetUpdate || !councilBudget || !group || formState.isValidating || !formState.isValid) return
+
+    if (isPositive && budgetUpdate?.gte(councilBudget)) {
+      return setError('updateWorkingGroupBudget.budgetUpdate', {
+        type: 'execution',
+        message: 'Amount must be lower then current council budget from proposal to execute',
+      })
+    }
+
+    if (!isPositive && budgetUpdate?.gte(group.budget)) {
+      return setError('updateWorkingGroupBudget.budgetUpdate', {
+        type: 'execution',
+        message: 'Amount must be lower then current budget from proposal to execute',
+      })
+    }
+
+    return clearErrors('updateWorkingGroupBudget.budgetUpdate')
+  }, [budgetUpdate?.toString(), councilBudget?.toString(), formState.isValidating, isPositive])
 
   return (
     <RowGapBlock gap={24}>
@@ -51,7 +83,21 @@ export const UpdateWorkingGroupBudget = () => {
             <Info>
               <TextMedium>
                 Current budget for {capitalizeFirstLetter(group.name)} Working Group is{' '}
-                <TextInlineMedium bold>{formatTokenValue(group.budget)} tJOY</TextInlineMedium>.
+                <TextInlineMedium bold>
+                  <TokenValue value={group.budget} />
+                </TextInlineMedium>
+                .
+              </TextMedium>
+            </Info>
+          )}
+          {councilBudget && (
+            <Info>
+              <TextMedium>
+                Current budget for Council is{' '}
+                <TextInlineMedium bold>
+                  <TokenValue value={councilBudget} />
+                </TextInlineMedium>
+                .
               </TextMedium>
             </Info>
           )}
@@ -67,7 +113,7 @@ export const UpdateWorkingGroupBudget = () => {
           <InputComponent
             label="Budget Update"
             tight
-            units="tJOY"
+            units={CurrencyName.integerValue}
             inputWidth="s"
             tooltipText="Signed amount change in budget. If budget_update is non-negative, then this amount is reduced from the council budget and credited to the group budget, otherwise the reverse."
             required
@@ -75,11 +121,9 @@ export const UpdateWorkingGroupBudget = () => {
             message="Amount must be greater than zero"
             disabled={!group}
           >
-            <InputNumber
+            <TokenInput
               id="amount-input"
               name="updateWorkingGroupBudget.budgetUpdate"
-              isTokenValue
-              isInBN
               placeholder="0"
               disabled={!group}
             />

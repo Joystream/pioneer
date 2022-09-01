@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import BN from 'bn.js'
@@ -6,8 +5,8 @@ import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { ApiContext } from '@/common/providers/api/context'
+import { ApiContext } from '@/api/providers/context'
+import { createType } from '@/common/model/createType'
 import { InviteMemberModal } from '@/memberships/modals/InviteMemberModal'
 import { seedMembers } from '@/mocks/data'
 
@@ -18,6 +17,7 @@ import { alice, aliceStash, bobStash } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  stubAccounts,
   stubApi,
   stubBalances,
   stubDefaultBalances,
@@ -27,18 +27,6 @@ import {
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
 
-const useMyAccounts: UseAccounts = {
-  isLoading: false,
-  hasAccounts: false,
-  allAccounts: [],
-}
-
-jest.mock('@/accounts/hooks/useMyAccounts', () => {
-  return {
-    useMyAccounts: () => useMyAccounts,
-  }
-})
-
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
 }))
@@ -47,7 +35,7 @@ describe('UI: InviteMemberModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
-    useMyAccounts.allAccounts.push(alice, aliceStash)
+    stubAccounts([alice, aliceStash])
   })
 
   afterAll(() => {
@@ -60,7 +48,7 @@ describe('UI: InviteMemberModal', () => {
   let inviteMemberTx: any
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     stubQuery(api, 'membershipWorkingGroup.budget', createBalanceOf(1000))
     stubQuery(api, 'members.membershipPrice', createBalanceOf(100))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
@@ -162,12 +150,12 @@ describe('UI: InviteMemberModal', () => {
 
       expect(await screen.findByText('modals.authorizeTransaction.title')).toBeDefined()
       expect(await screen.findByText('You are inviting this member. You have 5 invites left.')).toBeDefined()
-      expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+      expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
       expect(await getButton(/^Sign and create/i)).toBeEnabled()
     })
 
     it('Validate funds', async () => {
-      stubBalances(api, { available: 0 })
+      stubBalances({ available: 0 })
       await fillFormAndProceed()
 
       expect(await getButton(/^Sign and create/i)).toBeDisabled()

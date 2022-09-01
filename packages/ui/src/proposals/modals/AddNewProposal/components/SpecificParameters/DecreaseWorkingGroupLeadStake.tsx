@@ -2,22 +2,25 @@ import BN from 'bn.js'
 import React, { useCallback, useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { CurrencyName } from '@/app/constants/currency'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { AmountButton, AmountButtons, Row, TransactionAmount } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextInlineMedium, TextMedium } from '@/common/components/typography'
+import { TextInlineMedium, TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { capitalizeFirstLetter } from '@/common/helpers'
-import { formatTokenValue } from '@/common/model/formatters'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 export const DecreaseWorkingGroupLeadStake = () => {
-  const { setValue, watch } = useFormContext()
-  const [groupId] = watch(['decreaseWorkingGroupLeadStake.groupId'])
+  const { setValue, watch, formState, setError, clearErrors } = useFormContext()
+  const [groupId, stakingAmount] = watch([
+    'decreaseWorkingGroupLeadStake.groupId',
+    'decreaseWorkingGroupLeadStake.stakingAmount',
+  ])
   const { group } = useWorkingGroup({ name: groupId })
   const { member: lead } = useMember(group?.leadId)
 
@@ -32,9 +35,24 @@ export const DecreaseWorkingGroupLeadStake = () => {
   const isDisabled = !group || (group && !group.leadId)
 
   useEffect(() => {
-    setStakingAmount(BN_ZERO)
-    setValue('decreaseWorkingGroupLeadStake.workerId', group?.leadWorker?.runtimeId)
-  }, [groupId, group?.leadWorker?.runtimeId])
+    if (group) {
+      setStakingAmount(group.leadWorker?.stake.divn(2) ?? BN_ZERO)
+      setValue('decreaseWorkingGroupLeadStake.workerId', group.leadWorker?.runtimeId)
+    }
+  }, [group?.id])
+
+  useEffect(() => {
+    if (!stakingAmount || !group || formState.isValidating || !formState.isValid) return
+
+    if (stakingAmount?.gte(group.leadWorker?.stake)) {
+      return setError('decreaseWorkingGroupLeadStake.stakingAmount', {
+        type: 'custom',
+        message: 'Amount must be lower than current lead reward',
+      })
+    }
+
+    return clearErrors('decreaseWorkingGroupLeadStake.stakingAmount')
+  }, [stakingAmount?.toString(), formState.isValidating])
 
   return (
     <RowGapBlock gap={24}>
@@ -65,7 +83,10 @@ export const DecreaseWorkingGroupLeadStake = () => {
             <Info>
               <TextMedium>
                 The actual stake for {capitalizeFirstLetter(group.name)} Working Group Lead is{' '}
-                <TextInlineMedium bold>{formatTokenValue(group.leadWorker?.stake)} tJOY</TextInlineMedium>.
+                <TextInlineMedium bold>
+                  <TokenValue value={group.leadWorker?.stake} />
+                </TextInlineMedium>
+                .
               </TextMedium>
             </Info>
           )}
@@ -73,19 +94,17 @@ export const DecreaseWorkingGroupLeadStake = () => {
             <InputComponent
               label="Decrease Stake Amount"
               tight
-              units="tJOY"
+              units={CurrencyName.integerValue}
               inputWidth="s"
               tooltipText="Amount by which to decrease stake."
               required
               disabled={isDisabled}
               name="decreaseWorkingGroupLeadStake.stakingAmount"
-              message="Amount must be greater than zero"
+              message="Amount must be greater than zero and less than current stake"
             >
-              <InputNumber
+              <TokenInput
                 id="amount-input"
                 name="decreaseWorkingGroupLeadStake.stakingAmount"
-                isTokenValue
-                isInBN
                 placeholder="0"
                 disabled={isDisabled}
               />

@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
@@ -6,9 +5,8 @@ import { set } from 'lodash'
 import React from 'react'
 
 import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { ApiContext } from '@/common/providers/api/context'
+import { ApiContext } from '@/api/providers/context'
+import { createType } from '@/common/model/createType'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -20,15 +18,16 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  stubAccounts,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 describe('UI: RecoverBalanceModal', () => {
-  let useAccounts: UseAccounts
   const api = stubApi()
   const server = setupMockServer({ noCleanupAfterEach: true })
   let tx: any
@@ -52,14 +51,12 @@ describe('UI: RecoverBalanceModal', () => {
   }
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    stubAccounts([alice, bob])
+    stubDefaultBalances()
     useMyMemberships.setActive(getMember('alice'))
     tx = stubTransaction(api, 'api.tx.council.releaseCandidacyStake')
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+    mockedTransactionFee.transaction = tx as any
     useModal = {
       hideModal: jest.fn(),
       showModal: jest.fn(),
@@ -76,7 +73,7 @@ describe('UI: RecoverBalanceModal', () => {
   })
 
   it('Insufficient funds', async () => {
-    tx = stubTransaction(api, 'api.tx.council.releaseCandidacyStake', 10_000)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
 
     renderModal()
 
@@ -145,11 +142,9 @@ describe('UI: RecoverBalanceModal', () => {
         <MockQueryNodeProviders>
           <MembershipContext.Provider value={useMyMemberships}>
             <ApiContext.Provider value={api}>
-              <AccountsContext.Provider value={useAccounts}>
-                <ModalContext.Provider value={useModal}>
-                  <RecoverBalanceModal />
-                </ModalContext.Provider>
-              </AccountsContext.Provider>
+              <ModalContext.Provider value={useModal}>
+                <RecoverBalanceModal />
+              </ModalContext.Provider>
             </ApiContext.Provider>
           </MembershipContext.Provider>
         </MockQueryNodeProviders>

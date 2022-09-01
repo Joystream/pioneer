@@ -1,11 +1,9 @@
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
 
 import { getDataFromEvent, metadataToBytes } from '../../../../src/common/model/JoystreamNode'
-import { GroupIdName } from '../../../../src/working-groups/types'
+import { GROUP, GroupIdName } from '../../consts'
 import { getSudoAccount } from '../../data/addresses'
 import { signAndSend, withApi } from '../../lib/api'
-
-const GROUP = 'membershipWorkingGroup' // TODO pass as a parameter
 
 export const addOpeningCommand = async ({ group = GROUP }: { group?: GroupIdName } = {}) => {
   const title = `Test ${group} opening`
@@ -27,7 +25,7 @@ export const addOpeningCommand = async ({ group = GROUP }: { group?: GroupIdName
     const tx = api.tx[group].addOpening(
       metadataToBytes(OpeningMetadata, openingMetadata),
       'Leader',
-      { stake_amount: api.consts[group].minimumApplicationStake, leaving_unstaking_period: 360_000 },
+      { stakeAmount: api.consts[group].minimumApplicationStake, leavingUnstakingPeriod: 360_000 },
       '1337'
     )
 

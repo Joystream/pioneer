@@ -1,14 +1,14 @@
-import { createType } from '@joystream/types'
 import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import { TypeRegistry } from '@polkadot/types'
 import BN from 'bn.js'
 
 import { lockTypes } from '@/accounts/model/lockTypes'
 import { LockType } from '@/accounts/types'
+import { createType } from '@/common/model/createType'
 
 const typeRegistry = new TypeRegistry()
 
-export const createBalanceOf = (balance: number) => typeRegistry.createType('BalanceOf', balance)
+export const createBalanceOf = (balance: number) => typeRegistry.createType('u128', balance)
 
 export const createRuntimeDispatchInfo = (fee: number) =>
   typeRegistry.createType('RuntimeDispatchInfo', {
@@ -17,7 +17,7 @@ export const createRuntimeDispatchInfo = (fee: number) =>
   })
 
 export const createBalance = (value: number) => {
-  return createType('Balance', new BN(value))
+  return createType('BalanceOf', new BN(value))
 }
 
 const asLockIdentifier = Object.fromEntries(
@@ -25,10 +25,10 @@ const asLockIdentifier = Object.fromEntries(
 )
 
 export const createBalanceLock = (amount: number, type: LockType = 'Bound Staking Account') =>
-  createType('BalanceLock', {
+  createType('PalletBalancesBalanceLock', {
     id: asLockIdentifier[type],
     amount: createBalance(amount),
-    reasons: createType('Reasons', 'all'),
+    reasons: createType('PalletBalancesReasons', 'all'),
   })
 
 export const EMPTY_BALANCES: DeriveBalancesAll = {
@@ -42,12 +42,12 @@ export const EMPTY_BALANCES: DeriveBalancesAll = {
   isVesting: false,
   lockedBalance: createBalance(0),
   lockedBreakdown: [],
+  namedReserves: [],
   reservedBalance: createBalance(0),
   vestedBalance: createBalance(0),
   vestedClaimable: createBalance(0),
-  vestingEndBlock: createType('BlockNumber', 1234),
+  vesting: [],
   vestingLocked: createBalance(0),
-  vestingPerBlock: createBalance(0),
   vestingTotal: createBalance(0),
   votingBalance: createBalance(0),
 }

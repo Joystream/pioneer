@@ -2,9 +2,8 @@ import { act, configure, fireEvent, render, screen, waitForElementToBeRemoved } 
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
+import { ApiContext } from '@/api/providers/context'
 import { Election } from '@/app/pages/Election/Election'
-import { ApiContext } from '@/common/providers/api/context'
 import { calculateCommitment } from '@/council/model/calculateCommitment'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
@@ -23,7 +22,7 @@ import { VOTE_DATA } from '../../_mocks/council'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { stubApi, stubCouncilAndReferendum } from '../../_mocks/transactions'
+import { stubAccounts, stubApi, stubCouncilAndReferendum, stubCouncilConstants } from '../../_mocks/transactions'
 
 configure({ testIdAttribute: 'id' })
 
@@ -125,6 +124,8 @@ describe('UI: Election page', () => {
 
     const commitment = '0x0000000000000000000000000000000000000000000000000000000000000000'
     seedCouncilVote({ ...VOTE_DATA, castBy: alice.address, commitment, electionRoundId: '0' }, mockServer.server)
+
+    stubCouncilConstants(api)
   })
 
   it('Inactive', async () => {
@@ -188,7 +189,7 @@ describe('UI: Election page', () => {
             })
 
             expect(queryAllByText(/newcomer/i).length).toBe(1)
-            expect(queryAllByText(/my stake/i).length).toBe(1)
+            expect(queryAllByText(/Staked/i).length).toBe(1)
             expect(await getButton(/^Withdraw Candidacy/)).toBeDefined()
           })
         })
@@ -298,17 +299,12 @@ describe('UI: Election page', () => {
         window.localStorage.clear()
       })
 
-      it('Displays no election round, no period remaining length', async () => {
-        const { queryAllByText } = await renderComponent()
+      it('Displays stage, remaining length, and no election round', async () => {
+        const { queryAllByText, queryByText } = await renderComponent()
 
-        // Except to see '-' in 2 places: Election stage and Period remaining length
-        expect(queryAllByText('-')).toHaveLength(2)
-      })
-
-      it('Displays stage', async () => {
-        const { queryByText } = await renderComponent()
-
-        expect(queryByText(/Revealing period/i)).not.toBeNull()
+        expect(queryByText(/Revealing period/i)).toBeInTheDocument()
+        expect(queryByText(/period remaining length/i)?.parentElement?.nextElementSibling).toHaveTextContent('< 1 min')
+        expect(queryAllByText('-')).toHaveLength(1)
       })
 
       describe('Votes count', () => {
@@ -338,29 +334,29 @@ describe('UI: Election page', () => {
   })
 
   async function renderComponent(accounts = [alice]) {
-    const rendered = render(
-      <MemoryRouter>
-        <ApiContext.Provider value={api}>
-          <MockQueryNodeProviders>
-            <MockKeyringProvider>
-              <AccountsContext.Provider
-                value={{ isLoading: false, hasAccounts: accounts.length > 0, allAccounts: accounts }}
-              >
+    stubAccounts(accounts)
+
+    await act(async () => {
+      render(
+        <MemoryRouter>
+          <ApiContext.Provider value={api}>
+            <MockQueryNodeProviders>
+              <MockKeyringProvider>
                 <MembershipContext.Provider value={useMyMemberships}>
                   <Election />
                 </MembershipContext.Provider>
-              </AccountsContext.Provider>
-            </MockKeyringProvider>
-          </MockQueryNodeProviders>
-        </ApiContext.Provider>
-      </MemoryRouter>
-    )
+              </MockKeyringProvider>
+            </MockQueryNodeProviders>
+          </ApiContext.Provider>
+        </MemoryRouter>
+      )
+    })
 
-    const loader = rendered.queryByText('Loading candidates...')
+    const loader = screen.queryByText('Loading candidates...')
     if (loader) {
       await waitForElementToBeRemoved(loader)
     }
 
-    return rendered
+    return screen
   }
 })

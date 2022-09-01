@@ -16,10 +16,8 @@ export interface TransactionContext {
 export type AnnounceCandidacyState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
-  | { value: 'requiredStakeVerification'; context: EmptyObject }
-  | { value: 'requiredStakeFailed'; context: EmptyObject }
   | { value: 'staking'; context: EmptyObject }
-  | { value: 'rewardAccount'; context: EmptyObject }
+  | { value: 'reward'; context: EmptyObject }
   | { value: 'candidateProfile'; context: EmptyObject }
   | { value: 'candidateProfile.titleAndBulletPoints'; context: EmptyObject }
   | { value: 'candidateProfile.summaryAndBanner'; context: EmptyObject }
@@ -48,28 +46,21 @@ export const announceCandidacyMachine = createMachine<
     requirementsVerification: {
       on: {
         FAIL: 'requirementsFailed',
-        NEXT: 'requiredStakeVerification',
-      },
-    },
-    requirementsFailed: { type: 'final' },
-    requiredStakeVerification: {
-      on: {
-        FAIL: 'requiredStakeFailed',
         NEXT: 'staking',
       },
     },
-    requiredStakeFailed: { type: 'final' },
+    requirementsFailed: { type: 'final' },
     staking: {
       id: 'staking',
       meta: { isStep: true, stepTitle: 'Staking' },
       on: {
         NEXT: {
-          target: 'rewardAccount',
+          target: 'reward',
         },
       },
     },
-    rewardAccount: {
-      id: 'rewardAccount',
+    reward: {
+      id: 'reward',
       meta: { isStep: true, stepTitle: 'Reward account' },
       on: {
         BACK: '#staking',
@@ -85,7 +76,7 @@ export const announceCandidacyMachine = createMachine<
         titleAndBulletPoints: {
           meta: { isStep: true, stepTitle: 'Title & Bullet points' },
           on: {
-            BACK: '#rewardAccount',
+            BACK: '#reward',
             NEXT: {
               target: 'summaryAndBanner',
             },

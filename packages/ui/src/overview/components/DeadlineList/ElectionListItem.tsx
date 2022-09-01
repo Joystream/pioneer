@@ -7,7 +7,7 @@ import { formatDuration } from '@/common/components/statistics'
 import { DurationValue } from '@/common/components/typography/DurationValue'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { isDefined } from '@/common/utils'
-import { useElectionRemainingPeriod } from '@/council/hooks/useElectionRemainingPeriod'
+import { useCouncilRemainingPeriod } from '@/council/hooks/useCouncilRemainingPeriod'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { useMyCastVotes } from '@/council/hooks/useMyCastVotes'
 import { useMyCurrentVotesCount } from '@/council/hooks/useMyCurrentVotesCount'
@@ -38,9 +38,9 @@ export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ h
   const { allAccounts } = useMyAccounts()
   const { votesTotal } = useMyCurrentVotesCount(election.cycleId)
   const canVote = isDefined(votesTotal) && allAccounts.length > votesTotal
-  const remainingPeriod = useElectionRemainingPeriod(electionStage)
+  const remainingPeriod = useCouncilRemainingPeriod()
   const { votes = [] } = useMyCastVotes(electionStage === 'revealing' ? election.cycleId : undefined)
-  const timeRemaining = formatDuration(remainingPeriod?.toNumber() || 0)
+  const timeRemaining = formatDuration(remainingPeriod ?? 0)
 
   const remainingCalculation = useMemo(() => {
     const dayChecker = timeRemaining[0][1] === 'd'

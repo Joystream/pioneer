@@ -26,7 +26,7 @@ interface Props {
 
 export const Option = ({ children, onClick, disabled }: Props) => (
   <OptionComponentContainer onClick={onClick} disabled={disabled}>
-    <OptionComponent>{children}</OptionComponent>
+    <OptionComponent disabled={disabled}>{children}</OptionComponent>
   </OptionComponentContainer>
 )
 
@@ -58,6 +58,7 @@ export const SelectedOption = styled.div`
   grid-template-rows: 1fr;
   align-items: center;
   padding: 0 4px 0 16px;
+  width: 100%;
 `
 
 export const EmptyOption = styled.input`
@@ -116,7 +117,6 @@ export const OptionComponentContainer = styled.li<{ disabled?: boolean }>`
     if (disabled) {
       return css`
         pointer-events: none;
-        opacity: 0.6;
         cursor: not-allowed;
       `
     }
@@ -131,7 +131,7 @@ export const OptionComponentContainer = styled.li<{ disabled?: boolean }>`
   }}
 `
 
-export const OptionComponent = styled.div`
+export const OptionComponent = styled.div<{ disabled?: boolean }>`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
@@ -139,7 +139,7 @@ export const OptionComponent = styled.div`
   width: 100%;
   height: 100%;
   border: none;
-  background-color: ${Colors.White};
+  background-color: ${({ disabled }) => (disabled ? Colors.Black[75] : Colors.White)};
   cursor: pointer;
   border-radius: ${BorderRad.s};
   transition: ${Transitions.all};
@@ -192,14 +192,6 @@ export const OptionsListComponent = styled.ul`
     border-right: none;
     border-radius: 0;
 
-    &:first-child {
-      border-top: none;
-    }
-
-    &:last-child {
-      border-bottom: none;
-    }
-
     ${OptionComponent} {
       border-radius: 0;
     }
@@ -237,6 +229,7 @@ export const OptionContainer = styled.div`
   cursor: pointer;
   text-transform: capitalize;
   transition: ${Transitions.all};
+  height: 48px;
 
   ${({ focus, selected }: OptionProps) => (selected || focus) && OptionFocused}
   &:hover {

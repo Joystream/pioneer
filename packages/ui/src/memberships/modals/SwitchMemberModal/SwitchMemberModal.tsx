@@ -1,20 +1,26 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { DetailsButton } from '@/common/components/buttons/DetailsButton'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
-import { Notification, NotificationComponent } from '@/common/components/Notification'
+import { MyProfileIcon } from '@/common/components/page/Sidebar/LinksIcons'
+import { DisconnectWalletIcon } from '@/common/components/page/Sidebar/LinksIcons/DisconnectWalletIcon'
+import { SignOutIcon } from '@/common/components/page/Sidebar/LinksIcons/SignOutIcon'
 import { BorderRad, Colors, RemoveScrollbar, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { DisconnectWalletModalCall } from '@/memberships/modals/DisconnectWalletModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal/types'
 
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '../../components'
-import { AddMembershipButtonSwitch } from '../../components/AddMembershipButtonSwitch'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
 import { Member } from '../../types'
 import { BuyMembershipModalCall } from '../BuyMembershipModal'
+import { SignOutModalCall } from '../SignOutModal'
 
 export const SwitchMemberModal = () => {
   const { members, setActive, active } = useMyMemberships()
+  const { wallet } = useMyAccounts()
   const { showModal, hideModal, modalData } = useModal<SwitchMemberModalCall>()
   const count = modalData?.membersToShow ? modalData.membersToShow.length : members.length
   const switchMember = (member: Member) => {
@@ -32,7 +38,6 @@ export const SwitchMemberModal = () => {
 
     return members
   }, [members, modalData?.membersToShow])
-
   return (
     <Modal modalSize="xs" modalHeight="s" isDark onClose={hideModal}>
       <SwitchModalHeader title="Select Membership" onClick={hideModal} modalHeaderSize="s" />
@@ -45,20 +50,50 @@ export const SwitchMemberModal = () => {
               onClick={() => switchMember(member)}
               isMemberActive={active?.handle === member.handle}
             >
-              <MemberInfo member={member} isOnDark={true} skipModal />
-              <Notification />
+              <MemberInfo member={member} isOnDark skipModal />
             </MemberItem>
           ))}
         </MembersList>
       </SwitchModalBody>
       {!modalData?.noCreateButton && (
         <SwitchModalFooter>
-          <AddMembershipButtonSwitch
+          <DetailsButton
+            withoutBackground
+            icon={<MyProfileIcon />}
             onClick={() => {
               hideModal()
               showModal<BuyMembershipModalCall>({ modal: 'BuyMembership' })
             }}
+            titleText="New Member"
+            subtitleText="Create a New Membership"
           />
+          {active ? (
+            <>
+              <DetailsButton
+                icon={<SignOutIcon />}
+                onClick={() => {
+                  hideModal()
+                  showModal<SignOutModalCall>({ modal: 'SignOut' })
+                }}
+                titleText="Sign Out"
+                subtitleText="Sign out of the active Membership"
+              />
+              <DisconnectWrapper />
+            </>
+          ) : null}
+          {wallet ? (
+            <DetailsButton
+              withoutBackground
+              dangerText
+              icon={<DisconnectWalletIcon />}
+              onClick={() => {
+                hideModal()
+                showModal<DisconnectWalletModalCall>({ modal: 'DisconnectWallet' })
+              }}
+              titleText="Disconnect Wallet"
+              subtitleText="Disconnect the active wallet"
+            />
+          ) : null}
         </SwitchModalFooter>
       )}
     </Modal>
@@ -85,11 +120,22 @@ const SwitchModalBody = styled(ModalBody)`
     transform: translateX(-50%);
   }
 `
-
+const DisconnectWrapper = styled.div`
+  position: relative;
+  grid-row-gap: 16px;
+  content: '';
+  width: 100%;
+  background-color: ${Colors.Black[700]};
+  transform: translateX(-50%);
+  left: 50%;
+  height: 1px;
+`
 const SwitchModalFooter = styled(ModalFooter)`
   width: 100%;
   height: auto;
   padding: 16px;
+  grid-auto-flow: row;
+  justify-items: start;
 `
 
 const MembersList = styled.ul<{ memberIndicatorOffset?: string }>`
@@ -124,9 +170,6 @@ const MemberItem = styled.li<{ isMemberActive: boolean }>`
     outline: none;
     background-color: ${Colors.Black[600]};
 
-    ${NotificationComponent} {
-      color: ${Colors.White};
-    }
     ${MemberDarkHover}
   }
 

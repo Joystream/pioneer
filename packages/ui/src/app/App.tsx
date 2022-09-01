@@ -3,10 +3,10 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 
 import '@/services/i18n'
 
+import { FMBanner } from '@/app/components/FMBanner'
 import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { CouncilModule } from '@/app/pages/Council/CouncilModule'
 import { NotFound } from '@/app/pages/NotFound'
-import { OverviewModule } from '@/app/pages/Overview/OverviewModule'
 import { GlobalStyle } from '@/app/providers/GlobalStyle'
 import { BountyRoutes } from '@/bounty/constants'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
@@ -16,11 +16,10 @@ import { NotificationsHolder } from '@/common/components/page/SideNotification'
 import { TransactionStatus } from '@/common/components/TransactionStatus/TransactionStatus'
 import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
 import { ForumRoutes } from '@/forum/constant'
-import { OverviewRoutes } from '@/overview/constants/routes'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
-import { ExtensionWarning } from './components/ExtensionWarning'
+import { ExtensionNotification } from './components/ExtensionWarning'
 import { SideBar } from './components/SideBar'
 import { MembersRoutes, ProfileRoutes, SettingsRoutes, TermsRoutes } from './constants/routes'
 import { GlobalModals } from './GlobalModals'
@@ -68,8 +67,9 @@ export const App = () => (
     <NotificationsHolder>
       <TransactionStatus />
       <ConnectionStatus />
-      <ExtensionWarning />
+      <ExtensionNotification />
     </NotificationsHolder>
+    <FMBanner />
   </Providers>
 )
 

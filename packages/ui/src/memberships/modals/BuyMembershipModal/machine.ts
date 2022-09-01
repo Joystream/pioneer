@@ -24,6 +24,7 @@ type BuyMembershipState =
   | { value: 'prepare'; context: EmptyObject }
   | { value: 'transaction'; context: { form: MemberFormFields } }
   | { value: 'success'; context: Required<BuyMembershipContext> }
+  | { value: 'canceled'; context: Required<BuyMembershipContext> }
   | { value: 'error'; context: { form: MemberFormFields; transactionEvents: EventRecord[] } }
 
 export type BuyMembershipEvent =

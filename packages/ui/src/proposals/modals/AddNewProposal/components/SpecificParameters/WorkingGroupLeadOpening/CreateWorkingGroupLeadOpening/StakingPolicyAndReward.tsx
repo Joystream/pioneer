@@ -1,7 +1,8 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { CurrencyName } from '@/app/constants/currency'
+import { InputComponent, InputNumber, TokenInput } from '@/common/components/forms'
 import { LinkSymbol } from '@/common/components/icons/symbols/LinkSymbol'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -27,17 +28,11 @@ export const StakingPolicyAndReward = () => {
             id="staking-amount"
             label="Staking amount *"
             tooltipText="Minimum staking requirement for all applicants to this role"
-            units="tJOY"
+            units={CurrencyName.integerValue}
             tight
             name="stakingPolicyAndReward.stakingAmount"
           >
-            <InputNumber
-              id="staking-amount"
-              isTokenValue
-              placeholder="0"
-              name="stakingPolicyAndReward.stakingAmount"
-              isInBN
-            />
+            <TokenInput id="staking-amount" placeholder="0" name="stakingPolicyAndReward.stakingAmount" />
           </InputComponent>
           <InputComponent
             id="leaving-unstaking-period"
@@ -67,18 +62,13 @@ export const StakingPolicyAndReward = () => {
           <InputComponent
             id="reward-per-block"
             label="Reward amount per Block"
-            units="tJOY"
-            tooltipText="Reward in tJOY tokens for the Working group lead"
+            units={CurrencyName.integerValue}
+            tooltipText={`Reward in ${CurrencyName.integerValue} tokens for the Working group lead`}
             tight
             name="stakingPolicyAndReward.rewardPerBlock"
             required
           >
-            <InputNumber
-              id="reward-per-block"
-              isTokenValue
-              name="stakingPolicyAndReward.rewardPerBlock"
-              placeholder="0"
-            />
+            <TokenInput id="reward-per-block" name="stakingPolicyAndReward.rewardPerBlock" placeholder="0" />
           </InputComponent>
         </RowGapBlock>
       </Row>

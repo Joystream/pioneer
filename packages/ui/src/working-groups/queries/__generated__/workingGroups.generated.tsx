@@ -18,9 +18,9 @@ export type WorkerFieldsFragment = {
   runtimeId: number
   applicationId: string
   isLead: boolean
-  rewardPerBlock: any
-  missingRewardAmount?: any | null
-  stake: any
+  rewardPerBlock: string
+  missingRewardAmount?: string | null
+  stake: string
   membership: {
     __typename: 'Membership'
     id: string
@@ -134,15 +134,15 @@ export type WorkerDetailedFieldsFragment = {
   runtimeId: number
   applicationId: string
   isLead: boolean
-  rewardPerBlock: any
-  missingRewardAmount?: any | null
-  stake: any
+  rewardPerBlock: string
+  missingRewardAmount?: string | null
+  stake: string
   entry: { __typename: 'OpeningFilledEvent'; inBlock: number; network: Types.Network; createdAt: any }
   application: {
     __typename: 'WorkingGroupApplication'
     id: string
     openingId: string
-    opening: { __typename: 'WorkingGroupOpening'; stakeAmount: any }
+    opening: { __typename: 'WorkingGroupOpening'; stakeAmount: string }
   }
   membership: {
     __typename: 'Membership'
@@ -189,7 +189,7 @@ export type WorkingGroupFieldsFragment = {
   __typename: 'WorkingGroup'
   id: string
   name: string
-  budget: any
+  budget: string
   metadata?: {
     __typename: 'WorkingGroupMetadata'
     about?: string | null
@@ -197,7 +197,7 @@ export type WorkingGroupFieldsFragment = {
     status?: string | null
     statusMessage?: string | null
   } | null
-  workers: Array<{ __typename: 'Worker'; stake: any }>
+  workers: Array<{ __typename: 'Worker'; stake: string }>
   leader?: { __typename: 'Worker'; membershipId: string; isActive: boolean } | null
 }
 
@@ -205,14 +205,14 @@ export type WorkingGroupDetailedFieldsFragment = {
   __typename: 'WorkingGroup'
   id: string
   name: string
-  budget: any
+  budget: string
   leader?: {
     __typename: 'Worker'
     id: string
     runtimeId: number
-    stake: any
+    stake: string
     membershipId: string
-    rewardPerBlock: any
+    rewardPerBlock: string
     isActive: boolean
   } | null
   metadata?: {
@@ -222,7 +222,7 @@ export type WorkingGroupDetailedFieldsFragment = {
     status?: string | null
     statusMessage?: string | null
   } | null
-  workers: Array<{ __typename: 'Worker'; stake: any }>
+  workers: Array<{ __typename: 'Worker'; stake: string }>
 }
 
 export type BudgetSpendingEventFieldsFragment = {
@@ -230,7 +230,7 @@ export type BudgetSpendingEventFieldsFragment = {
   id: string
   groupId: string
   reciever: string
-  amount: any
+  amount: string
   rationale?: string | null
 }
 
@@ -245,7 +245,7 @@ export type GetBudgetSpendingQuery = {
     id: string
     groupId: string
     reciever: string
-    amount: any
+    amount: string
     rationale?: string | null
   }>
 }
@@ -253,7 +253,7 @@ export type GetBudgetSpendingQuery = {
 export type RewardPaidEventFieldsFragment = {
   __typename: 'RewardPaidEvent'
   id: string
-  amount: any
+  amount: string
   rewardAccount: string
   createdAt: any
 }
@@ -266,7 +266,7 @@ export type GetWorkingGroupsQuery = {
     __typename: 'WorkingGroup'
     id: string
     name: string
-    budget: any
+    budget: string
     metadata?: {
       __typename: 'WorkingGroupMetadata'
       about?: string | null
@@ -274,7 +274,7 @@ export type GetWorkingGroupsQuery = {
       status?: string | null
       statusMessage?: string | null
     } | null
-    workers: Array<{ __typename: 'Worker'; stake: any }>
+    workers: Array<{ __typename: 'Worker'; stake: string }>
     leader?: { __typename: 'Worker'; membershipId: string; isActive: boolean } | null
   }>
 }
@@ -293,9 +293,9 @@ export type GetWorkersQuery = {
     runtimeId: number
     applicationId: string
     isLead: boolean
-    rewardPerBlock: any
-    missingRewardAmount?: any | null
-    stake: any
+    rewardPerBlock: string
+    missingRewardAmount?: string | null
+    stake: string
     membership: {
       __typename: 'Membership'
       id: string
@@ -435,15 +435,15 @@ export type GetDetailedWorkersQuery = {
     runtimeId: number
     applicationId: string
     isLead: boolean
-    rewardPerBlock: any
-    missingRewardAmount?: any | null
-    stake: any
+    rewardPerBlock: string
+    missingRewardAmount?: string | null
+    stake: string
     entry: { __typename: 'OpeningFilledEvent'; inBlock: number; network: Types.Network; createdAt: any }
     application: {
       __typename: 'WorkingGroupApplication'
       id: string
       openingId: string
-      opening: { __typename: 'WorkingGroupOpening'; stakeAmount: any }
+      opening: { __typename: 'WorkingGroupOpening'; stakeAmount: string }
     }
     membership: {
       __typename: 'Membership'
@@ -502,15 +502,15 @@ export type GetWorkerQuery = {
     runtimeId: number
     applicationId: string
     isLead: boolean
-    rewardPerBlock: any
-    missingRewardAmount?: any | null
-    stake: any
+    rewardPerBlock: string
+    missingRewardAmount?: string | null
+    stake: string
     entry: { __typename: 'OpeningFilledEvent'; inBlock: number; network: Types.Network; createdAt: any }
     application: {
       __typename: 'WorkingGroupApplication'
       id: string
       openingId: string
-      opening: { __typename: 'WorkingGroupOpening'; stakeAmount: any }
+      opening: { __typename: 'WorkingGroupOpening'; stakeAmount: string }
     }
     membership: {
       __typename: 'Membership'
@@ -560,7 +560,7 @@ export type GetGroupDebtQueryVariables = Types.Exact<{
 
 export type GetGroupDebtQuery = {
   __typename: 'Query'
-  workers: Array<{ __typename: 'Worker'; missingRewardAmount?: any | null }>
+  workers: Array<{ __typename: 'Worker'; missingRewardAmount?: string | null }>
 }
 
 export type GetRewardsQueryVariables = Types.Exact<{
@@ -572,7 +572,7 @@ export type GetRewardsQuery = {
   rewardPaidEvents: Array<{
     __typename: 'RewardPaidEvent'
     id: string
-    amount: any
+    amount: string
     rewardAccount: string
     createdAt: any
   }>
@@ -594,10 +594,10 @@ export type WorkingGroupOpeningFieldsFragment = {
   runtimeId: number
   groupId: string
   type: Types.WorkingGroupOpeningType
-  stakeAmount: any
-  rewardPerBlock: any
+  stakeAmount: string
+  rewardPerBlock: string
   unstakingPeriod: number
-  group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: string | null }
+  group: { __typename: 'WorkingGroup'; name: string; budget: string; leaderId?: string | null }
   createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
   metadata: {
     __typename: 'WorkingGroupOpeningMetadata'
@@ -625,8 +625,8 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
   runtimeId: number
   groupId: string
   type: Types.WorkingGroupOpeningType
-  stakeAmount: any
-  rewardPerBlock: any
+  stakeAmount: string
+  rewardPerBlock: string
   unstakingPeriod: number
   applications: Array<{
     __typename: 'WorkingGroupApplication'
@@ -671,7 +671,7 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
       }> | null
     }
   }>
-  group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: string | null }
+  group: { __typename: 'WorkingGroup'; name: string; budget: string; leaderId?: string | null }
   createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
   metadata: {
     __typename: 'WorkingGroupOpeningMetadata'
@@ -713,6 +713,7 @@ export type CountWorkingGroupWorkersQuery = {
 
 export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.WorkingGroupOpeningWhereInput>
+  order?: Types.InputMaybe<Array<Types.WorkingGroupOpeningOrderByInput> | Types.WorkingGroupOpeningOrderByInput>
   limit?: Types.InputMaybe<Types.Scalars['Int']>
   offset?: Types.InputMaybe<Types.Scalars['Int']>
 }>
@@ -725,10 +726,10 @@ export type GetWorkingGroupOpeningsQuery = {
     runtimeId: number
     groupId: string
     type: Types.WorkingGroupOpeningType
-    stakeAmount: any
-    rewardPerBlock: any
+    stakeAmount: string
+    rewardPerBlock: string
     unstakingPeriod: number
-    group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: string | null }
+    group: { __typename: 'WorkingGroup'; name: string; budget: string; leaderId?: string | null }
     createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
@@ -777,8 +778,8 @@ export type GetWorkingGroupOpeningQuery = {
     runtimeId: number
     groupId: string
     type: Types.WorkingGroupOpeningType
-    stakeAmount: any
-    rewardPerBlock: any
+    stakeAmount: string
+    rewardPerBlock: string
     unstakingPeriod: number
     applications: Array<{
       __typename: 'WorkingGroupApplication'
@@ -823,7 +824,7 @@ export type GetWorkingGroupOpeningQuery = {
         }> | null
       }
     }>
-    group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: string | null }
+    group: { __typename: 'WorkingGroup'; name: string; budget: string; leaderId?: string | null }
     createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
@@ -849,7 +850,7 @@ export type WorkingGroupOpeningMentionFieldsFragment = {
   __typename: 'WorkingGroupOpening'
   id: string
   type: Types.WorkingGroupOpeningType
-  rewardPerBlock: any
+  rewardPerBlock: string
   metadata: {
     __typename: 'WorkingGroupOpeningMetadata'
     title?: string | null
@@ -876,7 +877,7 @@ export type GetWorkingGroupOpeningMentionQuery = {
     __typename: 'WorkingGroupOpening'
     id: string
     type: Types.WorkingGroupOpeningType
-    rewardPerBlock: any
+    rewardPerBlock: string
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
       title?: string | null
@@ -1036,14 +1037,14 @@ export type GetWorkingGroupQuery = {
     __typename: 'WorkingGroup'
     id: string
     name: string
-    budget: any
+    budget: string
     leader?: {
       __typename: 'Worker'
       id: string
       runtimeId: number
-      stake: any
+      stake: string
       membershipId: string
-      rewardPerBlock: any
+      rewardPerBlock: string
       isActive: boolean
     } | null
     metadata?: {
@@ -1053,7 +1054,7 @@ export type GetWorkingGroupQuery = {
       status?: string | null
       statusMessage?: string | null
     } | null
-    workers: Array<{ __typename: 'Worker'; stake: any }>
+    workers: Array<{ __typename: 'Worker'; stake: string }>
   } | null
 }
 
@@ -1062,7 +1063,7 @@ export type WorkingGroupApplicationFieldsFragment = {
   id: string
   runtimeId: number
   stakingAccount: string
-  stake: any
+  stake: string
   answers: Array<{
     __typename: 'ApplicationFormQuestionAnswer'
     answer: string
@@ -1072,7 +1073,7 @@ export type WorkingGroupApplicationFieldsFragment = {
     __typename: 'WorkingGroupOpening'
     id: string
     type: Types.WorkingGroupOpeningType
-    rewardPerBlock: any
+    rewardPerBlock: string
     group: { __typename: 'WorkingGroup'; id: string; name: string }
     metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null }
   }
@@ -1129,7 +1130,7 @@ export type GetWorkingGroupApplicationsQuery = {
     id: string
     runtimeId: number
     stakingAccount: string
-    stake: any
+    stake: string
     answers: Array<{
       __typename: 'ApplicationFormQuestionAnswer'
       answer: string
@@ -1139,7 +1140,7 @@ export type GetWorkingGroupApplicationsQuery = {
       __typename: 'WorkingGroupOpening'
       id: string
       type: Types.WorkingGroupOpeningType
-      rewardPerBlock: any
+      rewardPerBlock: string
       group: { __typename: 'WorkingGroup'; id: string; name: string }
       metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null }
     }
@@ -1220,7 +1221,7 @@ export type GetWorkingGroupApplicationQuery = {
     id: string
     runtimeId: number
     stakingAccount: string
-    stake: any
+    stake: string
     answers: Array<{
       __typename: 'ApplicationFormQuestionAnswer'
       answer: string
@@ -1230,7 +1231,7 @@ export type GetWorkingGroupApplicationQuery = {
       __typename: 'WorkingGroupOpening'
       id: string
       type: Types.WorkingGroupOpeningType
-      rewardPerBlock: any
+      rewardPerBlock: string
       group: { __typename: 'WorkingGroup'; id: string; name: string }
       metadata: { __typename: 'WorkingGroupOpeningMetadata'; expectedEnding?: any | null }
     }
@@ -1311,9 +1312,9 @@ export type UpcomingWorkingGroupOpeningFieldsFragment = {
   id: string
   groupId: string
   expectedStart?: any | null
-  stakeAmount?: any | null
-  rewardPerBlock?: any | null
-  group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: string | null }
+  stakeAmount?: string | null
+  rewardPerBlock?: string | null
+  group: { __typename: 'WorkingGroup'; name: string; budget: string; leaderId?: string | null }
   createdInEvent: { __typename: 'StatusTextChangedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   metadata: {
     __typename: 'WorkingGroupOpeningMetadata'
@@ -1337,9 +1338,9 @@ export type GetUpcomingWorkingGroupOpeningQuery = {
     id: string
     groupId: string
     expectedStart?: any | null
-    stakeAmount?: any | null
-    rewardPerBlock?: any | null
-    group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: string | null }
+    stakeAmount?: string | null
+    rewardPerBlock?: string | null
+    group: { __typename: 'WorkingGroup'; name: string; budget: string; leaderId?: string | null }
     createdInEvent: { __typename: 'StatusTextChangedEvent'; createdAt: any; inBlock: number; network: Types.Network }
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
@@ -1366,9 +1367,9 @@ export type GetUpcomingWorkingGroupOpeningsQuery = {
     id: string
     groupId: string
     expectedStart?: any | null
-    stakeAmount?: any | null
-    rewardPerBlock?: any | null
-    group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: string | null }
+    stakeAmount?: string | null
+    rewardPerBlock?: string | null
+    group: { __typename: 'WorkingGroup'; name: string; budget: string; leaderId?: string | null }
     createdInEvent: { __typename: 'StatusTextChangedEvent'; createdAt: any; inBlock: number; network: Types.Network }
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
@@ -2193,8 +2194,13 @@ export type CountWorkingGroupWorkersQueryResult = Apollo.QueryResult<
   CountWorkingGroupWorkersQueryVariables
 >
 export const GetWorkingGroupOpeningsDocument = gql`
-  query GetWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput, $limit: Int, $offset: Int) {
-    workingGroupOpenings(where: $where, limit: $limit, offset: $offset) {
+  query GetWorkingGroupOpenings(
+    $where: WorkingGroupOpeningWhereInput
+    $order: [WorkingGroupOpeningOrderByInput!]
+    $limit: Int
+    $offset: Int
+  ) {
+    workingGroupOpenings(where: $where, limit: $limit, offset: $offset, orderBy: $order) {
       ...WorkingGroupOpeningFields
     }
   }
@@ -2214,6 +2220,7 @@ export const GetWorkingGroupOpeningsDocument = gql`
  * const { data, loading, error } = useGetWorkingGroupOpeningsQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      order: // value for 'order'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },

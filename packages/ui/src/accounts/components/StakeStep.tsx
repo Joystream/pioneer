@@ -3,15 +3,16 @@ import React, { ReactNode, useCallback } from 'react'
 import { Event, EventData } from 'xstate/lib/types'
 import { ValidationError } from 'yup'
 
-import { SelectAccount } from '@/accounts/components/SelectAccount'
-import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
-import { useMyBalances } from '@/accounts/hooks/useMyBalances'
+import { SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { Account, LockType } from '@/accounts/types'
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { CurrencyName } from '@/app/constants/currency'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
+import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium, ValueInJoys } from '@/common/components/typography'
+import { TooltipExternalLink } from '@/common/components/Tooltip'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { formatTokenValue } from '@/common/model/formatters'
 import { VoteForCouncilEvent, VoteForCouncilMachineState } from '@/council/modals/VoteForCouncil/machine'
 
@@ -36,25 +37,42 @@ export const StakeStep = ({
   state,
   errors,
 }: StakeStepProps) => {
-  const balances = useMyBalances()
-
   const selectAccountFilter = useCallback(
-    (account: Account) =>
-      (!accountsFilter || accountsFilter(account)) &&
-      filterByRequiredStake(state.context.stake ?? minStake, stakeLock, balances[account.address]),
-    [accountsFilter, state.context.stake?.toString(), JSON.stringify(balances)]
+    (account: Account) => !accountsFilter || accountsFilter(account),
+    [accountsFilter]
   )
+
   return (
     <RowGapBlock gap={24}>
       <Row>
         <RowGapBlock gap={20}>
           {accountText}
-          <InputComponent label="Select account for Staking" required inputSize="l">
-            <SelectAccount
+          <InputComponent
+            label="Select account for Staking"
+            required
+            inputSize="l"
+            tooltipText={
+              <>
+                If someone voted for a candidate in an election, they will and can recover their stake at a later time.
+                Importantly, a vote which was devoted to a losing candidate can be freed the moment the election cycle
+                is over, while a vote which was devoted to a winner can only be freed after the announcing period of the
+                next election begins. The idea behind this asymmetry is to more closely expose the winners to the
+                consequences of their decision.
+                <TooltipExternalLink
+                  href="https://joystream.gitbook.io/testnet-workspace/system/council"
+                  target="_blank"
+                >
+                  <TextMedium>More details</TextMedium> <LinkSymbol />
+                </TooltipExternalLink>
+              </>
+            }
+          >
+            <SelectStakingAccount
               id="account-select"
               onChange={(account) => send('SET_ACCOUNT', { account })}
               selected={state.context.account}
               minBalance={minStake}
+              lockType={stakeLock}
               filter={selectAccountFilter}
             />
           </InputComponent>
@@ -68,17 +86,16 @@ export const StakeStep = ({
             id="amount-input"
             label="Select amount for Staking"
             tight
-            units="tJOY"
+            units={CurrencyName.integerValue}
             validation={state.context.stake && hasError('stake', errors) ? 'invalid' : undefined}
             message={
               (state.context.stake && hasError('stake', errors) ? getErrorMessage('stake', errors) : undefined) || ' '
             }
             required
           >
-            <InputNumber
+            <TokenInput
               id="amount-input"
-              isTokenValue
-              value={state.context.stake?.toString()}
+              value={state.context.stake}
               placeholder={formatTokenValue(minStake)}
               onChange={(_, value) => send('SET_STAKE', { stake: new BN(value) })}
             />
@@ -99,7 +116,7 @@ const defaultAmountText = (minStake: BN) => (
   <RowGapBlock gap={8}>
     <h4>2. Stake</h4>
     <TextMedium light>
-      You must stake at least <ValueInJoys>{formatTokenValue(minStake)}</ValueInJoys>.
+      You must stake at least <TokenValue value={minStake} />.
     </TextMedium>
   </RowGapBlock>
 )

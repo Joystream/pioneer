@@ -6,12 +6,10 @@ import { AccountLockInfo, lockInfoLayout } from '@/accounts/components/AccountLo
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { RecoverableLock } from '@/accounts/modals/RecoverBalance/index'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
 import { EmptyListHeader, ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
-import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
+import { ModalBody, ModalTransactionFooter } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
@@ -31,7 +29,6 @@ export const RecoverBalanceSignModal = ({ onClose, service, transaction, address
     transaction,
     signer: signer,
     service,
-    skipQueryNode: true,
   })
   const { allAccounts } = useMyAccounts()
   const recoverAccount = accountOrNamed(allAccounts, address, 'Recover account')
@@ -53,18 +50,10 @@ export const RecoverBalanceSignModal = ({ onClose, service, transaction, address
           </InputComponent>
         </RowGapBlock>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title="Transaction fee:"
-            value={paymentInfo?.partialFee?.toBn()}
-            tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={sign} disabled={!isReady}>
-          Sign transaction and Transfer
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={paymentInfo?.partialFee?.toBn()}
+        next={{ disabled: !isReady, label: 'Sign transaction and Transfer', onClick: sign }}
+      />
     </TransactionModal>
   )
 }

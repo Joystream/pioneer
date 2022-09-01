@@ -4,7 +4,7 @@ import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import { ActorRef } from 'xstate'
 
-import { ButtonPrimary } from '@/common/components/buttons'
+import { useApi } from '@/api/hooks/useApi'
 import { ArrowDownExpandedIcon } from '@/common/components/icons'
 import {
   BalanceInfoInRow,
@@ -12,17 +12,15 @@ import {
   InfoValue,
   LockedAccount,
   ModalBody,
-  ModalFooter,
+  ModalTransactionFooter,
   Row,
   SignTransferContainer,
   TransactionAmountInfo,
   TransactionAmountInfoText,
-  TransactionInfoContainer,
 } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
-import { useApi } from '@/common/hooks/useApi'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 
@@ -97,21 +95,12 @@ export function TransferSignModal({ onClose, from, amount, to, service, transact
           </Row>
         </SignTransferContainer>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo title="Amount:" value={amount} />
-          <TransactionInfo
-            title="Transaction fee:"
-            value={paymentInfo?.partialFee?.toBn()}
-            tooltipText={
-              'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempora mollitia necessitatibus, eos recusandae obcaecati facilis sed maiores. Impedit iusto expedita natus perspiciatis, perferendis totam commodi ad, illo, veritatis omnis beatae. Facilis natus recusandae, magni saepe hic veniam aliquid tempore quia assumenda voluptatum reprehenderit. Officiis provident nam corrupti, incidunt, repudiandae accusantium porro libero ipsam illo quae ratione. Beatae itaque quo quidem.'
-            }
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={sign} disabled={isDisabled}>
-          Sign transaction and Transfer
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={paymentInfo?.partialFee?.toBn()}
+        next={{ disabled: isDisabled, label: 'Sign transaction and Transfer', onClick: sign }}
+      >
+        <TransactionInfo title="Amount:" value={amount} />
+      </ModalTransactionFooter>
     </TransactionModal>
   )
 }

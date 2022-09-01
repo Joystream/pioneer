@@ -1,14 +1,12 @@
-import { ApiRx } from '@polkadot/api'
 import BN from 'bn.js'
 
+import { GroupIdToGroupParam } from '@/working-groups/constants'
 import { getAverageStake } from '@/working-groups/model/getAverageStake'
 
 import { WorkingGroupDetailedFieldsFragment, WorkingGroupFieldsFragment } from '../queries'
 
-export type GroupIdName = Extract<
-  keyof ApiRx['consts'] & keyof ApiRx['tx'] & keyof ApiRx['query'],
-  `${string}WorkingGroup` | `${string}WorkingGroup${string}`
->
+export type GroupIdName = keyof typeof GroupIdToGroupParam
+
 export interface WorkingGroup {
   id: GroupIdName
   name: string

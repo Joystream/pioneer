@@ -1,7 +1,7 @@
 import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/client'
 import React, { ReactNode } from 'react'
 
-import { ApiContext } from '@/common/providers/api/context'
+import { ApiContext } from '@/api/providers/context'
 import { KeyringContext } from '@/common/providers/keyring/context'
 import { MembershipContextProvider } from '@/memberships/providers/membership/provider'
 

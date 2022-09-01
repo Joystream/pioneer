@@ -38,7 +38,8 @@ export const LockItemWrapper = React.memo((props: LockDetailsProps) => {
 
     case 'Invitation':
       return <InvitationLockItem {...props} />
-
+    case 'Vesting':
+      return null
     default:
       return WorkerLocks.includes(lockType as WorkerLockType) ? (
         <WorkingGroupLockItem {...props} />

@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, screen, waitFor } from '@testing-library/react'
 
 export const selectFromDropdown = async (label: string, name: string) => {
   const labelElement = await screen.findByText(new RegExp(`${label}`, 'i'))
@@ -18,14 +18,21 @@ const selectFromDropdownElement = async (element: HTMLElement, name: string) => 
   }
 
   const toggle = parentElement.querySelector('.ui-toggle')
-  toggle && fireEvent.click(toggle)
+  toggle &&
+    (await act(async () => {
+      fireEvent.click(toggle)
+    }))
 
-  let found
+  let found: Element | undefined
   await waitFor(() => {
-    const memberTitles = parentElement?.querySelectorAll('ul > li')
+    const optionsWrapper = document.getElementById('select-popper-wrapper')
+    const memberTitles = optionsWrapper?.querySelectorAll('ul > li')
     found = memberTitles && Array.from(memberTitles).find((li) => li.textContent?.match(name))
     expect(found).toBeDefined()
   }, {})
 
-  found && fireEvent.click(found)
+  found &&
+    (await act(async () => {
+      fireEvent.click(found as Element)
+    }))
 }

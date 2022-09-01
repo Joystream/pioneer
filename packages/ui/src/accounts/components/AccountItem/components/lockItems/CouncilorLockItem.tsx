@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react'
 import { generatePath } from 'react-router-dom'
 
-import { useApi } from '@/common/hooks/useApi'
+import { useApi } from '@/api/hooks/useApi'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { asBlock } from '@/common/types'
 import { CouncilRoutes } from '@/council/constants'
+import { useCouncilRemainingPeriod } from '@/council/hooks/useCouncilRemainingPeriod'
 import { useGetCouncilorElectionEventQuery } from '@/council/queries'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -30,18 +31,23 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockDetailsP
       createdAt: eventData.electedAtTime,
       network: eventData.electedAtNetwork,
     })
-
   const idlePeriodDuration = api?.consts.council.idlePeriodDuration.toNumber()
+  const remainingPeriod = useCouncilRemainingPeriod()
 
   const recoveryTime = useMemo(() => {
     if (!eventData || !idlePeriodDuration) {
-      return null
+      return
     }
     const startTime = Date.parse(eventData.electedAtTime)
     const idleDurationTime = idlePeriodDuration * MILLISECONDS_PER_BLOCK
-    const endDate = new Date(startTime + idleDurationTime).toISOString()
+    const councilEnd = startTime + idleDurationTime
 
-    return endDate
+    const endTime =
+      councilEnd > Date.now()
+        ? new Date(councilEnd).toISOString()
+        : new Date(Date.now() + (remainingPeriod ?? 0) * MILLISECONDS_PER_BLOCK).toISOString()
+
+    return { time: endTime, tooltipLabel: 'Recoverable after not re-elected' }
   }, [eventData?.electedAtTime, idlePeriodDuration])
 
   const councilId = eventData?.id
@@ -67,7 +73,7 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockDetailsP
       address={address}
       isRecoverable={isRecoverable}
       createdInEvent={createdInEvent}
-      recoveryTime={recoveryTime}
+      lockRecovery={recoveryTime}
       linkButtons={goToCouncilButton}
     />
   )

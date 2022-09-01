@@ -3,6 +3,7 @@ import { generatePath } from 'react-router-dom'
 
 import { asBlock } from '@/common/types'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
+import { useOpening } from '@/working-groups/hooks/useOpening'
 import { useGetWorkingGroupApplicationsQuery } from '@/working-groups/queries'
 
 import { LockItem } from '../LockItem'
@@ -21,15 +22,26 @@ export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockDetai
   const eventData = application?.createdInEvent
   const createdInEvent = eventData && asBlock(eventData)
 
-  const recoveryTime = application?.opening.metadata.expectedEnding
+  const { opening } = useOpening(application?.opening.id ?? '-1')
+
+  const recoveryTime = useMemo(() => {
+    if (opening?.status === 'OpeningStatusOpen') {
+      return { unrecoverableLabel: 'Based on hiring decision' }
+    } else {
+      if (application?.status.__typename === 'ApplicationStatusAccepted') {
+        return { unrecoverableLabel: 'Recoverable after released from role' }
+      }
+      return
+    }
+  }, [opening?.status, application?.status.__typename])
 
   const openingId = application?.opening.id
   const goToOpeningButton = useMemo(() => {
     if (!openingId) {
       return null
     }
-    const openingPath = generatePath(WorkingGroupsRoutes.openingById, { id: openingId })
-    return <LockLinkButton label="Show Opening" to={openingPath} />
+    const openingPath = generatePath(WorkingGroupsRoutes.myApplications)
+    return <LockLinkButton label="Show Openings" to={openingPath} />
   }, [openingId])
 
   return (
@@ -38,7 +50,7 @@ export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockDetai
       address={address}
       isRecoverable={isRecoverable}
       createdInEvent={createdInEvent}
-      recoveryTime={recoveryTime}
+      lockRecovery={recoveryTime}
       linkButtons={goToOpeningButton}
     />
   )

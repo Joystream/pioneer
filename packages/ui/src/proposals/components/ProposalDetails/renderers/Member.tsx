@@ -2,6 +2,7 @@ import React from 'react'
 
 import { Loading } from '@/common/components/Loading'
 import { StatisticItem } from '@/common/components/statistics'
+import { TextBig } from '@/common/components/typography'
 import { MemberInfo } from '@/memberships/components'
 import { useMember } from '@/memberships/hooks/useMembership'
 
@@ -15,7 +16,15 @@ export const Member = ({ label, value }: Props) => {
 
   return (
     <StatisticItem title={label}>
-      {isLoading || !member ? <Loading /> : <MemberInfo member={member} memberSize="m" />}
+      {isLoading ? (
+        <Loading />
+      ) : member ? (
+        <MemberInfo member={member} memberSize="m" />
+      ) : (
+        <TextBig bold value>
+          Unknown
+        </TextBig>
+      )}
     </StatisticItem>
   )
 }

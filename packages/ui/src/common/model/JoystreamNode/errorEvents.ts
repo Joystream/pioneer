@@ -1,4 +1,5 @@
-import { DispatchError, EventRecord } from '@polkadot/types/interfaces/system'
+import { EventRecord } from '@polkadot/types/interfaces/system'
+import { SpRuntimeDispatchError } from '@polkadot/types/lookup'
 
 import { isModuleEvent } from './isModuleEvent'
 
@@ -8,7 +9,7 @@ export const isErrorEvent = ({ event: { method } }: EventRecord) => {
 
 export const hasErrorEvent = (events: EventRecord[]) => !!events.find(isErrorEvent)
 
-const getErrorMeta = (error: DispatchError) => {
+const getErrorMeta = (error: SpRuntimeDispatchError) => {
   if (error.isModule) {
     return error.registry.findMetaError(error.asModule)
   }
@@ -16,12 +17,12 @@ const getErrorMeta = (error: DispatchError) => {
 
 export const toDispatchError = (event: EventRecord) => {
   if (isModuleEvent(event.event, 'utility', 'BatchInterrupted')) {
-    const [, error] = event.event.data
+    const error = event.event.data[1]
     return getErrorMeta(error)
   }
 
   if (isModuleEvent(event.event, 'system', 'ExtrinsicFailed')) {
-    const [error] = event.event.data
+    const error = event.event.data[0]
     return getErrorMeta(error)
   }
 }

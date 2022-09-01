@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { generatePath } from 'react-router-dom'
 
-import { useApi } from '@/common/hooks/useApi'
+import { useApi } from '@/api/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { asBlock } from '@/common/types'
@@ -36,13 +36,13 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockD
 
   const recoveryTime = useMemo(() => {
     if (!electionStart || !voteStageDuration || !revealStageDuration) {
-      return null
+      return
     }
     const startTime = Date.parse(electionStart)
     const durationTime = (voteStageDuration + revealStageDuration) * MILLISECONDS_PER_BLOCK
     const endDate = new Date(startTime + durationTime).toISOString()
 
-    return endDate
+    return { time: endDate }
   }, [electionStart, voteStageDuration, revealStageDuration])
 
   const goToCandidateButton = useMemo(() => {
@@ -78,7 +78,7 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockD
       address={address}
       isRecoverable={isRecoverable}
       createdInEvent={createdInEvent}
-      recoveryTime={recoveryTime}
+      lockRecovery={recoveryTime}
       linkButtons={linkButtons}
     />
   )

@@ -9,12 +9,12 @@ import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { GetSortProps } from '@/common/hooks/useSort'
 import { MemberSearchFilter } from '@/memberships/components/MemberListFilters'
 
-import { Member } from '../../types'
+import { MemberWithDetails } from '../../types'
 import { MemberListItem } from '../MemberListItem'
-import { colLayoutByType } from '../MemberListItem/Fileds'
+import { colLayoutByType } from '../MemberListItem/Fields'
 
 interface MemberListProps {
-  members: Member[]
+  members: MemberWithDetails[]
   isLoading?: boolean
   getSortProps: GetSortProps<MembershipOrderByInput>
   searchFilter: MemberSearchFilter
@@ -32,10 +32,10 @@ export const MemberList = ({ isLoading, members, getSortProps, searchFilter }: M
   return (
     <div>
       <ListHeaders $colLayout={colLayoutByType('Member')}>
-        <SortHeader {...getSortProps('createdAt')}>ID</SortHeader>
         <SortHeader {...getSortProps('handle')}>Memberships</SortHeader>
-        <ListHeader>Council Member</ListHeader>
         <ListHeader>Roles</ListHeader>
+        <ListHeader>Created</ListHeader>
+        <ListHeader>Referrer</ListHeader>
         <ListHeader>Slashed</ListHeader>
         <ListHeader>Terminated</ListHeader>
         <ListHeader>Total Balance</ListHeader>

@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
-import { InputComponent, InputNumber, ToggleCheckbox } from '@/common/components/forms'
+import { InputComponent, ToggleCheckbox, InputNumber } from '@/common/components/forms'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { inBlocksDate } from '@/common/model/inBlocksDate'

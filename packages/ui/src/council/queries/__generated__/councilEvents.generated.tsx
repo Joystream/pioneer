@@ -33,7 +33,7 @@ export type CouncilorRewardUpdatedEventFieldsFragment = {
   __typename: 'CouncilorRewardUpdatedEvent'
   id: string
   createdAt: any
-  rewardAmount: any
+  rewardAmount: string
 }
 
 export type NewCandidateEventFieldsFragment = {
@@ -107,9 +107,16 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'CategoryDeletedEvent' }
     | { __typename: 'CategoryMembershipOfModeratorUpdatedEvent' }
     | { __typename: 'CategoryStickyThreadUpdateEvent' }
-    | { __typename: 'CouncilorRewardUpdatedEvent'; id: string; createdAt: any; rewardAmount: any }
+    | { __typename: 'CommentCreatedEvent' }
+    | { __typename: 'CommentDeletedEvent' }
+    | { __typename: 'CommentModeratedEvent' }
+    | { __typename: 'CommentPinnedEvent' }
+    | { __typename: 'CommentReactedEvent' }
+    | { __typename: 'CommentTextUpdatedEvent' }
+    | { __typename: 'CouncilorRewardUpdatedEvent'; id: string; createdAt: any; rewardAmount: string }
     | { __typename: 'EnglishAuctionSettledEvent' }
     | { __typename: 'EnglishAuctionStartedEvent' }
+    | { __typename: 'FoundingMemberCreatedEvent' }
     | { __typename: 'InitialInvitationBalanceUpdatedEvent' }
     | { __typename: 'InitialInvitationCountUpdatedEvent' }
     | { __typename: 'InvitesTransferredEvent' }
@@ -117,11 +124,14 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'LeaderSetEvent' }
     | { __typename: 'LeaderUnsetEvent' }
     | { __typename: 'MemberAccountsUpdatedEvent' }
+    | { __typename: 'MemberBannedFromChannelEvent' }
     | { __typename: 'MemberInvitedEvent' }
     | { __typename: 'MemberProfileUpdatedEvent' }
     | { __typename: 'MemberVerificationStatusUpdatedEvent' }
     | { __typename: 'MembershipBoughtEvent' }
+    | { __typename: 'MembershipGiftedEvent' }
     | { __typename: 'MembershipPriceUpdatedEvent' }
+    | { __typename: 'MetaprotocolTransactionStatusEvent' }
     | {
         __typename: 'NewCandidateEvent'
         id: string
@@ -200,8 +210,9 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'ThreadMetadataUpdatedEvent' }
     | { __typename: 'ThreadModeratedEvent' }
     | { __typename: 'ThreadMovedEvent' }
+    | { __typename: 'VideoReactedEvent' }
+    | { __typename: 'VideoReactionsPreferenceEvent' }
     | { __typename: 'VoteCastEvent' }
-    | { __typename: 'VoteOnPollEvent' }
     | { __typename: 'VoteRevealedEvent' }
     | { __typename: 'VotingPeriodStartedEvent'; id: string; createdAt: any }
     | { __typename: 'WorkEntrantFundsWithdrawnEvent' }

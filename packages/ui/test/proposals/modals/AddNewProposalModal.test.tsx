@@ -1,5 +1,4 @@
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react'
 import BN from 'bn.js'
@@ -7,17 +6,18 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { ApiContext } from '@/api/providers/context'
+import { CurrencyName } from '@/app/constants/currency'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { camelCaseToText } from '@/common/helpers'
+import { createType } from '@/common/model/createType'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
+import { powerOf2 } from '@/common/utils/bn'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import {
@@ -47,6 +47,7 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  stubAccounts,
   stubApi,
   stubConst,
   stubDefaultBalances,
@@ -56,6 +57,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 const QUESTION_INPUT = OpeningMetadata.ApplicationFormQuestion.InputType
 
@@ -107,21 +109,21 @@ const APPLICATION_DATA = {
 describe('AddNewProposalModal types parameters', () => {
   describe('Specific parameters', () => {
     describe('createWorkingGroupLeadOpening', () => {
-      const result = createType('ProposalDetailsOf', {
+      const result = createType('PalletProposalsCodexProposalDetails', {
         CreateWorkingGroupLeadOpening: {
           description: 'Dolor deserunt adipisicing velit et.',
-          stake_policy: {
-            stake_amount: new BN(100),
-            leaving_unstaking_period: 10,
+          stakePolicy: {
+            stakeAmount: new BN(100),
+            leavingUnstakingPeriod: 10,
           },
-          reward_per_block: 10,
-          working_group: 'Forum',
+          rewardPerBlock: 10,
+          group: 'Forum',
         },
       })
 
       it('Stake policy', () => {
-        const stakePolicy = result.asCreateWorkingGroupLeadOpening.stake_policy.toJSON()
-        expect(stakePolicy).toEqual({ stake_amount: 100, leaving_unstaking_period: 10 })
+        const stakePolicy = result.asCreateWorkingGroupLeadOpening.stakePolicy.toJSON()
+        expect(stakePolicy).toEqual({ stakeAmount: 100, leavingUnstakingPeriod: 10 })
       })
     })
   })
@@ -147,7 +149,6 @@ describe('UI: AddNewProposalModal', () => {
   }
   const forumLeadId = workingGroups.find((group) => group.id === 'forumWorkingGroup')?.leadId
 
-  let useAccounts: UseAccounts
   let createProposalTx: any
   let batchTx: any
   let bindAccountTx: any
@@ -169,30 +170,27 @@ describe('UI: AddNewProposalModal', () => {
     seedApplication(APPLICATION_DATA, server.server)
     seedWorkers(server.server)
     updateWorkingGroups(server.server)
-
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
 
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     stubProposalConstants(api)
 
     createProposalTx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
-    createProposalTxMock = api.api.tx.proposalsCodex.createProposal as unknown as jest.Mock
+    createProposalTxMock = (api.api.tx.proposalsCodex.createProposal as unknown) as jest.Mock
 
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 25)
     stubQuery(
       api,
       'members.stakingAccountIdMemberStatus',
-      createType('StakingAccountMemberBinding', {
-        member_id: 0,
+      createType('PalletMembershipStakingAccountMemberBinding', {
+        memberId: 0,
         confirmed: false,
       })
     )
@@ -216,14 +214,6 @@ describe('UI: AddNewProposalModal', () => {
         modal: 'SwitchMember',
         data: { originalModalName: 'AddNewProposalModal' },
       })
-    })
-
-    it('Insufficient funds', async () => {
-      stubTransaction(api, 'api.tx.utility.batch', 10000)
-
-      const { findByText } = renderModal()
-
-      expect(await findByText('modals.insufficientFunds.title')).toBeDefined()
     })
   })
 
@@ -291,10 +281,20 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       it('Not enough funds', async () => {
-        stubProposalConstants(api, { requiredStake: 9999 })
+        const requiredStake = 9999
+        stubProposalConstants(api, { requiredStake })
         await finishProposalType()
 
-        expect(screen.queryByText('Creating new proposal')).toBeNull()
+        const moveFundsModalCall: MoveFundsModalCall = {
+          modal: 'MoveFundsModal',
+          data: {
+            requiredStake: new BN(requiredStake),
+            lock: 'Proposals',
+            isFeeOriented: false,
+          },
+        }
+
+        expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
       })
 
       it('Enough funds', async () => {
@@ -304,12 +304,12 @@ describe('UI: AddNewProposalModal', () => {
     })
 
     describe('General parameters', () => {
-      beforeEach(async () => {
-        await finishWarning()
-        await finishProposalType()
-      })
-
       describe('Staking account', () => {
+        beforeEach(async () => {
+          await finishWarning()
+          await finishProposalType()
+        })
+
         it('Not selected', async () => {
           const button = await getNextStepButton()
           expect(button).toBeDisabled()
@@ -325,6 +325,8 @@ describe('UI: AddNewProposalModal', () => {
 
       describe('Proposal details', () => {
         beforeEach(async () => {
+          await finishWarning()
+          await finishProposalType()
           await finishStakingAccount()
         })
 
@@ -342,8 +344,15 @@ describe('UI: AddNewProposalModal', () => {
       })
 
       describe('Proposal details validation', () => {
+        beforeEach(async () => {
+          stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 5))
+          stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 5))
+          await finishWarning()
+          await finishProposalType()
+        })
         it('Title too long', async () => {
           stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 5))
+
           await finishStakingAccount()
 
           await fillProposalDetails()
@@ -354,7 +363,6 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Description too long', async () => {
-          stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 5))
           await finishStakingAccount()
 
           await fillProposalDetails()
@@ -365,8 +373,6 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Both fields too long', async () => {
-          stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 5))
-          stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 5))
           await finishStakingAccount()
 
           await fillProposalDetails()
@@ -380,6 +386,8 @@ describe('UI: AddNewProposalModal', () => {
 
       describe('Trigger & Discussion', () => {
         beforeEach(async () => {
+          await finishWarning()
+          await finishProposalType()
           await finishStakingAccount()
           await finishProposalDetails()
         })
@@ -484,7 +492,7 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.Signal.fillSignal(signal)
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
-          const parameters = txSpecificParameters.asSignal.toJSON()
+          const parameters = txSpecificParameters.asSignal.toHuman()
           expect(parameters).toEqual(signal)
           const button = await getCreateButton()
           expect(button).toBeEnabled()
@@ -520,6 +528,15 @@ describe('UI: AddNewProposalModal', () => {
           expect(button).toBeDisabled()
         })
 
+        it('Invalid - amount exceeds max value of 10k', async () => {
+          await SpecificParameters.FundingRequest.selectRecipient('bob')
+          await SpecificParameters.fillAmount(100_000)
+
+          const button = await getCreateButton()
+          expect(screen.queryByText(/^Maximal amount allowed is*/)).toBeInTheDocument()
+          expect(button).toBeDisabled()
+        })
+
         it('Valid - everything filled', async () => {
           const amount = 100
           await SpecificParameters.fillAmount(amount)
@@ -530,7 +547,7 @@ describe('UI: AddNewProposalModal', () => {
           expect(parameters).toEqual([
             {
               account: getMember('bob').controllerAccount,
-              amount,
+              amount: amount,
             },
           ])
           const button = await getCreateButton()
@@ -603,14 +620,14 @@ describe('UI: AddNewProposalModal', () => {
           expect(button).toBeDisabled()
         })
 
-        it('Group selected', async () => {
+        it('Group selected, amount filled with half stake', async () => {
           await SpecificParameters.DecreaseWorkingGroupLeadStake.selectGroup('Forum')
           await waitFor(async () => expect(await getButton(/By half/i)).not.toBeDisabled())
 
           expect(screen.queryByText(/The actual stake for Forum Working Group Lead is /i)).not.toBeNull()
 
           const button = await getCreateButton()
-          expect(button).toBeDisabled()
+          expect(button).not.toBeDisabled()
         })
 
         it('Zero amount entered', async () => {
@@ -667,14 +684,14 @@ describe('UI: AddNewProposalModal', () => {
           expect(button).not.toBeDisabled()
 
           await triggerYes()
-          await SpecificParameters.fillAmount(100)
+          await SpecificParameters.fillAmount(slashingAmount)
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
           const parameters = txSpecificParameters.asTerminateWorkingGroupLead.toJSON()
           expect(parameters).toEqual({
-            slashing_amount: slashingAmount,
-            worker_id: Number(forumLeadId?.split('-')[1]),
-            working_group: group,
+            slashingAmount,
+            workerId: Number(forumLeadId?.split('-')[1]),
+            group,
           })
 
           expect(button).not.toBeDisabled()
@@ -777,12 +794,12 @@ describe('UI: AddNewProposalModal', () => {
 
           const { description: metadata, ...data } = txSpecificParameters.asCreateWorkingGroupLeadOpening.toJSON()
           expect(data).toEqual({
-            reward_per_block: step4.rewardPerBlock,
-            stake_policy: {
-              stake_amount: step4.stake,
-              leaving_unstaking_period: step4.unstakingPeriod,
+            rewardPerBlock: step4.rewardPerBlock,
+            stakePolicy: {
+              stakeAmount: step4.stake,
+              leavingUnstakingPeriod: step4.unstakingPeriod,
             },
-            working_group: step1.group,
+            group: step1.group,
           })
 
           expect(metadataFromBytes(OpeningMetadata, metadata)).toEqual({
@@ -809,7 +826,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Invalid form', async () => {
           expect(await screen.queryByLabelText(/^Working Group$/i, { selector: 'input' })).toHaveValue('')
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await getCreateButton()).toBeDisabled()
 
           await SpecificParameters.SetWorkingGroupLeadReward.fillRewardAmount(0)
@@ -899,7 +916,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid form', async () => {
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
           expect(await getCreateButton()).toBeDisabled()
 
@@ -908,8 +925,8 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Validate max value', async () => {
-          await SpecificParameters.fillAmount(Math.pow(2, 128))
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          await SpecificParameters.fillAmount(powerOf2(128))
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
           expect(await getCreateButton()).toBeDisabled()
         })
@@ -936,7 +953,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid form', async () => {
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await screen.queryByTestId('amount-input')).toBeEnabled()
           expect(await getCreateButton()).toBeDisabled()
 
@@ -977,9 +994,9 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Validate max value', async () => {
           await waitFor(async () => expect(await screen.queryByTestId('amount-input')).toBeEnabled())
-          await SpecificParameters.fillAmount(Math.pow(2, 32))
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
-          expect(await screen.queryByTestId('amount-input')).toBeEnabled()
+          await SpecificParameters.fillAmount(powerOf2(32))
+          expect(screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(screen.queryByTestId('amount-input')).toBeEnabled()
         })
 
         it('Valid form', async () => {
@@ -1016,9 +1033,9 @@ describe('UI: AddNewProposalModal', () => {
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
           const parameters = txSpecificParameters.asFillWorkingGroupLeadOpening.toJSON()
           expect(parameters).toEqual({
-            opening_id: 1337,
-            successful_application_id: 1337,
-            working_group: 'Forum',
+            openingId: 1337,
+            applicationId: 1337,
+            workingGroup: 'Forum',
           })
           expect(await getCreateButton()).toBeEnabled()
         })
@@ -1073,7 +1090,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Invalid form', async () => {
-          expect(await screen.queryByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.queryByTestId('amount-input')).toHaveValue('')
           expect(await getCreateButton()).toBeDisabled()
 
           await SpecificParameters.fillAmount(0)
@@ -1091,7 +1108,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Displays current balance', async () => {
-          expect(await screen.findByText('The current balance is 2137 tJOY.')).toBeDefined()
+          expect(await screen.queryByText(`The current balance is 2137 ${CurrencyName.integerValue}.`)).toBeDefined()
         })
       })
       describe('Type - Set Membership price', () => {
@@ -1103,14 +1120,13 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Default - Invalid', async () => {
-          expect(await screen.getByTestId('amount-input')).toHaveValue('0')
+          expect(await screen.getByTestId('amount-input')).toHaveValue('')
           expect(await getCreateButton()).toBeDisabled()
         })
 
         it('Valid', async () => {
           const price = 100
           await SpecificParameters.fillAmount(price)
-          expect(await screen.getByTestId('amount-input')).toHaveValue('100')
           expect(await getCreateButton()).toBeEnabled()
 
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
@@ -1121,6 +1137,7 @@ describe('UI: AddNewProposalModal', () => {
 
       describe('Type - Update Working Group Budget', () => {
         beforeEach(async () => {
+          stubQuery(api, 'council.budget', new BN(2500))
           await finishProposalType('updateWorkingGroupBudget')
           await finishStakingAccount()
           await finishProposalDetails()
@@ -1133,19 +1150,38 @@ describe('UI: AddNewProposalModal', () => {
           expect(await getCreateButton()).toBeDisabled()
         })
 
-        it('Invalid - group selected, amount not filled', async () => {
+        it('Invalid - group selected, positive amount bigger than current council budget', async () => {
           await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
           await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
+          await SpecificParameters.fillAmount(3000)
 
           expect(await getCreateButton()).toBeDisabled()
         })
 
-        it('Valid - group selected, positive amount filled', async () => {
+        it('Valid - group selected, amount automatically filled', async () => {
           await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
           await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
-          await SpecificParameters.fillAmount(100)
+          screen.logTestingPlaygroundURL()
+          expect(await getCreateButton()).not.toBeDisabled()
+        })
+
+        it('Valid - group selected, amount bigger than current stake filled', async () => {
+          await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
+          await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
+          await SpecificParameters.fillAmount(1000)
 
           expect(await getCreateButton()).toBeEnabled()
+        })
+
+        it('Invaild - group selected, negative amount bigger than current WG budget', async () => {
+          await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
+          await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
+
+          // Switch to 'Decrease budget', input will be handled as negative
+          await triggerYes()
+          await SpecificParameters.fillAmount(999999)
+
+          expect(await getCreateButton()).toBeDisabled()
         })
 
         it('Valid - group selected, negative amount filled', async () => {
@@ -1156,7 +1192,7 @@ describe('UI: AddNewProposalModal', () => {
 
           // Switch to 'Decrease budget', input will be handled as negative
           await triggerYes()
-          await SpecificParameters.fillAmount(100)
+          await SpecificParameters.fillAmount(amount)
 
           expect(await getCreateButton()).toBeEnabled()
 
@@ -1171,13 +1207,26 @@ describe('UI: AddNewProposalModal', () => {
       it('Fee fail before transaction', async () => {
         await finishWarning()
         await finishProposalType('fundingRequest')
+        const requiredStake = 10
+        stubProposalConstants(api, { requiredStake })
         stubTransaction(api, 'api.tx.utility.batch', 10000)
+        mockedTransactionFee.feeInfo = { transactionFee: new BN(10000), canAfford: false }
+
         await finishStakingAccount()
         await finishProposalDetails()
         await finishTriggerAndDiscussion()
         await SpecificParameters.FundingRequest.finish(100, 'bob')
 
-        expect(await screen.findByText('modals.insufficientFunds.title')).toBeInTheDocument()
+        const moveFundsModalCall: MoveFundsModalCall = {
+          modal: 'MoveFundsModal',
+          data: {
+            requiredStake: new BN(requiredStake),
+            lock: 'Proposals',
+            isFeeOriented: true,
+          },
+        }
+
+        expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
       })
 
       describe('Staking account not bound nor staking candidate', () => {
@@ -1192,7 +1241,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Bind account step', async () => {
           expect(await screen.findByText('You intend to bind account for staking')).toBeDefined()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('42')
+          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('42')
         })
 
         it('Bind account failure', async () => {
@@ -1213,7 +1262,7 @@ describe('UI: AddNewProposalModal', () => {
           })
 
           expect(await screen.findByText(/You intend to create a proposa/i)).toBeDefined()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
         })
 
         it('Create proposal success', async () => {
@@ -1250,8 +1299,8 @@ describe('UI: AddNewProposalModal', () => {
           stubQuery(
             api,
             'members.stakingAccountIdMemberStatus',
-            createType('StakingAccountMemberBinding', {
-              member_id: createType('MemberId', 0),
+            createType('PalletMembershipStakingAccountMemberBinding', {
+              memberId: createType('MemberId', 0),
               confirmed: createType('bool', false),
             })
           )
@@ -1267,7 +1316,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Create proposal step', async () => {
           expect(await screen.findByText(/You intend to create a proposa/i)).not.toBeNull()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
         })
 
         it('Create proposal success', async () => {
@@ -1296,8 +1345,8 @@ describe('UI: AddNewProposalModal', () => {
           stubQuery(
             api,
             'members.stakingAccountIdMemberStatus',
-            createType('StakingAccountMemberBinding', {
-              member_id: createType('MemberId', 0),
+            createType('PalletMembershipStakingAccountMemberBinding', {
+              memberId: createType('MemberId', 0),
               confirmed: createType('bool', true),
             })
           )
@@ -1313,7 +1362,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Create proposal step', async () => {
           expect(await screen.findByText(/You intend to create a proposa/i)).not.toBeNull()
-          expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
         })
 
         it('Create proposal success', async () => {
@@ -1365,8 +1414,8 @@ describe('UI: AddNewProposalModal', () => {
         stubQuery(
           api,
           'members.stakingAccountIdMemberStatus',
-          createType('StakingAccountMemberBinding', {
-            member_id: createType('MemberId', 0),
+          createType('PalletMembershipStakingAccountMemberBinding', {
+            memberId: createType('MemberId', 0),
             confirmed: createType('bool', true),
           })
         )
@@ -1376,8 +1425,7 @@ describe('UI: AddNewProposalModal', () => {
         await finishProposalType('fundingRequest')
         await finishStakingAccount()
         await finishProposalDetails()
-        await discussionClosed()
-        await finishTriggerAndDiscussion()
+        await finishTriggerAndDiscussion(true)
         await SpecificParameters.FundingRequest.finish(100, 'bob')
 
         await act(async () => {
@@ -1443,7 +1491,10 @@ describe('UI: AddNewProposalModal', () => {
     await clickNextButton()
   }
 
-  async function finishTriggerAndDiscussion() {
+  async function finishTriggerAndDiscussion(closeDiscussion = false) {
+    if (closeDiscussion) {
+      await discussionClosed()
+    }
     await clickNextButton()
   }
 
@@ -1508,15 +1559,15 @@ describe('UI: AddNewProposalModal', () => {
     await selectFromDropdown('^Application$', name)
   }
 
-  async function fillField(id: string, value: number | string) {
-    const amountInput = await screen.getByTestId(id)
+  async function fillField(id: string, value: number | BN | string) {
+    const amountInput = screen.getByTestId(id)
     act(() => {
-      fireEvent.change(amountInput, { target: { value } })
+      fireEvent.change(amountInput, { target: { value: String(value) } })
     })
   }
 
   const SpecificParameters = {
-    fillAmount: async (value: number) => await fillField('amount-input', value),
+    fillAmount: async (value: number | BN) => await fillField('amount-input', String(value)),
     Signal: {
       fillSignal: async (value: string) => await fillField('signal', value),
     },
@@ -1632,15 +1683,11 @@ describe('UI: AddNewProposalModal', () => {
         <ModalContext.Provider value={useModal}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
-              <AccountsContext.Provider value={useAccounts}>
-                <ApiContext.Provider value={api}>
-                  <BalancesContextProvider>
-                    <MembershipContext.Provider value={useMyMemberships}>
-                      <AddNewProposalModal />
-                    </MembershipContext.Provider>
-                  </BalancesContextProvider>
-                </ApiContext.Provider>
-              </AccountsContext.Provider>
+              <ApiContext.Provider value={api}>
+                <MembershipContext.Provider value={useMyMemberships}>
+                  <AddNewProposalModal />
+                </MembershipContext.Provider>
+              </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
         </ModalContext.Provider>

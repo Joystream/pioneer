@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { CurrencyName } from '@/app/constants/currency'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -14,15 +15,19 @@ import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 export const SlashWorkingGroupLead = () => {
   const { setValue, watch } = useFormContext()
-  const [groupId] = watch(['slashWorkingGroupLead.groupId'])
+  const groupId = watch('slashWorkingGroupLead.groupId')
   const { group } = useWorkingGroup({ name: groupId })
   const { member: lead } = useMember(group?.leadId)
   const isDisabled = !group || (group && !group.leadId)
 
   useEffect(() => {
-    setValue('slashWorkingGroupLead.slashingAmount', BN_ZERO, { shouldValidate: true })
-    setValue('slashWorkingGroupLead.workerId', group?.leadWorker?.runtimeId, { shouldValidate: true })
-  }, [groupId, group?.leadWorker?.runtimeId])
+    if (group) {
+      setValue('slashWorkingGroupLead.slashingAmount', group?.leadWorker?.stake.divn(2) ?? BN_ZERO, {
+        shouldValidate: true,
+      })
+      setValue('slashWorkingGroupLead.workerId', group?.leadWorker?.runtimeId, { shouldValidate: true })
+    }
+  }, [group?.id])
 
   return (
     <RowGapBlock gap={24}>
@@ -58,19 +63,17 @@ export const SlashWorkingGroupLead = () => {
           <InputComponent
             label="Decrease Stake Amount"
             tight
-            units="tJOY"
+            units={CurrencyName.integerValue}
             inputWidth="s"
             tooltipText="Amount to be slashed"
             name="slashWorkingGroupLead.slashingAmount"
-            message="Amount must be greater than zero"
+            message="On execution the WG Lead Stake will be slashed for the smaller of the Lead Stake or Amount provided here."
             required
             disabled={isDisabled}
           >
-            <InputNumber
+            <TokenInput
               id="amount-input"
               name="slashWorkingGroupLead.slashingAmount"
-              isTokenValue
-              isInBN
               placeholder="0"
               disabled={isDisabled}
             />

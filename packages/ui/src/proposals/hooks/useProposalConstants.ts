@@ -1,7 +1,9 @@
-import { ApiRx } from '@polkadot/api'
+import { u128, u32 } from '@polkadot/types'
+import { PalletProposalsEngineProposalParameters } from '@polkadot/types/lookup'
 import { useMemo } from 'react'
 
-import { useApi } from '@/common/hooks/useApi'
+import { Api } from '@/api'
+import { useApi } from '@/api/hooks/useApi'
 import { asProposalConstants, ProposalConstants } from '@/proposals/types/constants'
 
 import { ProposalType } from '../types'
@@ -21,20 +23,25 @@ export const useProposalConstants = (proposalType?: ProposalType): ProposalConst
     }
     const constants = api?.consts.proposalsCodex[constantKey]
 
-    return constants ? asProposalConstants(constants) : null
+    return constants && extendsProposalPallet(constants) ? asProposalConstants(constants) : null
   }, [proposalType, isConnected])
 }
 
-const proposalTypeToConstantKey = new Map<ProposalType, keyof ApiRx['consts']['proposalsCodex']>([
+const extendsProposalPallet = (
+  proposalType: PalletProposalsEngineProposalParameters | u32 | u128
+): proposalType is PalletProposalsEngineProposalParameters =>
+  !(proposalType instanceof u128 || proposalType instanceof u32)
+
+const proposalTypeToConstantKey = new Map<ProposalType, keyof Api['consts']['proposalsCodex']>([
   ['amendConstitution', 'amendConstitutionProposalParameters'],
   ['cancelWorkingGroupLeadOpening', 'cancelWorkingGroupLeadOpeningProposalParameters'],
-  ['createBlogPost', 'createBlogPostProposalParameters'],
+  // ['createBlogPost', 'createBlogPostProposalParameters'],
   ['createWorkingGroupLeadOpening', 'createWorkingGroupLeadOpeningProposalParameters'],
   ['decreaseWorkingGroupLeadStake', 'decreaseWorkingGroupLeadStakeProposalParameters'],
-  ['editBlogPost', 'editBlogPostProoposalParamters'],
+  // ['editBlogPost', 'editBlogPostProoposalParamters'],
   ['fillWorkingGroupLeadOpening', 'fillWorkingGroupOpeningProposalParameters'],
   ['fundingRequest', 'fundingRequestProposalParameters'],
-  ['lockBlogPost', 'lockBlogPostProposalParameters'],
+  // ['lockBlogPost', 'lockBlogPostProposalParameters'],
   ['runtimeUpgrade', 'runtimeUpgradeProposalParameters'],
   ['setCouncilBudgetIncrement', 'setCouncilBudgetIncrementProposalParameters'],
   ['setCouncilorReward', 'setCouncilorRewardProposalParameters'],
@@ -48,7 +55,7 @@ const proposalTypeToConstantKey = new Map<ProposalType, keyof ApiRx['consts']['p
   ['signal', 'signalProposalParameters'],
   ['slashWorkingGroupLead', 'slashWorkingGroupLeadProposalParameters'],
   ['terminateWorkingGroupLead', 'terminateWorkingGroupLeadProposalParameters'],
-  ['unlockBlogPost', 'unlockBlogPostProposalParameters'],
+  // ['unlockBlogPost', 'unlockBlogPostProposalParameters'],
   ['updateWorkingGroupBudget', 'updateWorkingGroupBudgetProposalParameters'],
   ['veto', 'vetoProposalProposalParameters'],
 ])

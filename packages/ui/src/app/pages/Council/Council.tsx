@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React, { useMemo, useState } from 'react'
 
 import { PageHeaderWithHint } from '@/app/components/PageHeaderWithHint'
@@ -7,7 +8,8 @@ import { MainPanel } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { BlockDurationStatistics, MultiValueStat, Statistics } from '@/common/components/statistics'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
-import { BN_ZERO } from '@/common/constants'
+import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { CouncilList, CouncilOrder } from '@/council/components/councilList'
 import { ViewElectionButton } from '@/council/components/ViewElectionButton'
 import { useCouncilActivities } from '@/council/hooks/useCouncilActivities'
@@ -20,15 +22,23 @@ import { Councilor } from '@/council/types'
 import { CouncilTabs } from './components/CouncilTabs'
 
 export const Council = () => {
-  const { council, isLoading } = useElectedCouncil()
-  const { idlePeriodRemaining, budget, reward } = useCouncilStatistics(council?.electedAt.number)
-  const { activities } = useCouncilActivities()
   const { stage: electionStage } = useElectionStage()
+
+  const isRefetched = useRefetchQueries(
+    { interval: MILLISECONDS_PER_BLOCK, include: ['GetElectedCouncil', 'GetCouncilEvents'] },
+    []
+  )
+
+  const { council, isLoading } = useElectedCouncil()
+  const { idlePeriodRemaining, budget, reward } = useCouncilStatistics()
+  const { activities } = useCouncilActivities()
+
   const [order, setOrder] = useState<CouncilOrder>({ key: 'member' })
-  const { councilors } = useCouncilorWithDetails(council)
+  const { councilors, isLoading: isLoadingCouncilors } = useCouncilorWithDetails(council)
   const sortedCouncilors = useMemo(() => councilors.sort(sortBy(order)), [councilors])
   const header = <PageHeaderWithHint title="Council" hintType="council" tabs={<CouncilTabs />} />
 
+  const isCouncilorLoading = !isRefetched && (isLoading || isLoadingCouncilors)
   const main = (
     <MainPanel>
       <Statistics>
@@ -53,10 +63,10 @@ export const Council = () => {
         />
       </Statistics>
 
-      {!isLoading && sortedCouncilors.length === 0 ? (
+      {!isCouncilorLoading && sortedCouncilors.length === 0 ? (
         <NotFoundText>There is no council member at the moment</NotFoundText>
       ) : (
-        <CouncilList councilors={sortedCouncilors} order={order} onSort={setOrder} isLoading={isLoading} />
+        <CouncilList councilors={sortedCouncilors} order={order} onSort={setOrder} isLoading={isCouncilorLoading} />
       )}
     </MainPanel>
   )
@@ -75,9 +85,7 @@ const sortBy = ({ key, isDescending }: CouncilOrder): ((a: Councilor, b: Council
   switch (key) {
     case 'member':
       return (a, b) => a.member.handle.localeCompare(b.member.handle) * direction
-    case 'voterStake':
-      return (a, b) => ((a[key] ?? BN_ZERO).gte(b[key] ?? BN_ZERO) ? 1 : -1 * direction)
     default:
-      return (a, b) => (a[key] - b[key]) * direction
+      return (a, b) => (new BN(a[key] ?? 0).gte(new BN(b[key] ?? 0)) ? 1 : -1) * direction
   }
 }

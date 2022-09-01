@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { CurrencyName } from '@/app/constants/currency'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -62,7 +63,7 @@ export const SetWorkingGroupLeadReward = () => {
           <InputComponent
             label="Reward Amount Per Block"
             tight
-            units="tJOY"
+            units={CurrencyName.integerValue}
             inputWidth="s"
             tooltipText="Reward per block amount that is awarded to working group lead’s reward account"
             name="setWorkingGroupLeadReward.rewardPerBlock"
@@ -70,11 +71,9 @@ export const SetWorkingGroupLeadReward = () => {
             required
             disabled={isDisabled}
           >
-            <InputNumber
+            <TokenInput
               id="amount-input"
               name="setWorkingGroupLeadReward.rewardPerBlock"
-              isInBN
-              isTokenValue
               placeholder="0"
               disabled={isDisabled}
             />

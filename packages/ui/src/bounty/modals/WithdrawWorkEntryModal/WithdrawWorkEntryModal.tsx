@@ -1,4 +1,5 @@
 import { useMachine } from '@xstate/react'
+import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -7,27 +8,24 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useApi } from '@/api/hooks/useApi'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { WithdrawWorkModalMachine, WithdrawWorkModalState } from '@/bounty/modals/WithdrawWorkEntryModal/machine'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer } from '@/common/components/forms'
 import { FileIcon } from '@/common/components/icons'
 import {
   Modal,
-  ModalFooter,
   ModalHeader,
+  ModalTransactionFooter,
   ScrolledModalBody,
   ScrolledModalContainer,
-  TransactionInfoContainer,
 } from '@/common/components/Modal'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
-import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextBig, TextMedium, TokenValue } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { Colors } from '@/common/constants'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -52,13 +50,15 @@ export const WithdrawWorkEntryModal = () => {
     [activeMember?.id]
   )
 
-  const transaction = useMemo(() => {
-    if (api && connectionState === 'connected' && activeMember && entry) {
-      return api.tx.bounty.withdrawWorkEntry(activeMember.id, bounty.id, entry.id)
-    }
-  }, [activeMember?.id, entry?.id, connectionState])
-
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { transaction, feeInfo } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => {
+      if (api && connectionState === 'connected' && activeMember && entry) {
+        return api.tx.bounty.withdrawWorkEntry(activeMember.id, bounty.id, entry.id)
+      }
+    },
+    [activeMember?.id, entry?.id, connectionState]
+  )
 
   useEffect(() => {
     if (state.matches(WithdrawWorkModalState.requirementsVerification)) {
@@ -178,22 +178,17 @@ export const WithdrawWorkEntryModal = () => {
             </Container>
           ))}
           <Container disabled label={t('modals.withdrawWorkEntry.stakeInput')} inputSize="l">
-            <TokenValue value={entry?.stake} size="s" />
+            <TokenValue value={entry?.stake ? new BN(entry.stake) : undefined} size="s" />
           </Container>
         </ScrolledModalContainer>
       </ScrolledModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title={t('modals.common.transactionFee.label')}
-            value={feeInfo.transactionFee}
-            tooltipText={t('modals.common.transactionFee.tooltip')}
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={() => send('NEXT')}>
-          {t('modals.withdrawWorkEntry.submitButton')}
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={feeInfo.transactionFee}
+        next={{
+          label: t('modals.withdrawWorkEntry.submitButton'),
+          onClick: () => send('NEXT'),
+        }}
+      />
     </Modal>
   )
 }

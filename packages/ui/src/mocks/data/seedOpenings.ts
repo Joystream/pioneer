@@ -38,6 +38,8 @@ export interface RawOpeningMock {
 export const getMockAsOpening = (index = 0) => {
   return asWorkingGroupOpening({
     ...rawOpenings[index],
+    stakeAmount: '5000',
+    rewardPerBlock: '200',
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata',
       ...rawOpenings[index].metadata,
@@ -58,7 +60,7 @@ export const getMockAsOpening = (index = 0) => {
     group: {
       leaderId: null,
       __typename: 'WorkingGroup',
-      budget: 10_000,
+      budget: '10_000',
       name: 'Storage',
     },
     unstakingPeriod: 14400,

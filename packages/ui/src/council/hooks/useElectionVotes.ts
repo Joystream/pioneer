@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { BN_ZERO } from '@/common/constants'
+import { Comparator } from '@/common/model/Comparator'
 import { sumStakes } from '@/common/utils/bn'
 
 import { useGetCouncilVotesQuery } from '../queries'
@@ -71,7 +72,8 @@ export const useElectionVotes = (election?: Election) => {
         }
       }
     })
-    return Object.values(candidateStats).sort((a, b) => b.totalStake.sub(a.totalStake).toNumber())
+
+    return Object.values(candidateStats).sort((a, b) => Comparator<CandidateStats>(true, 'totalStake').bigNumber(a, b))
   }, [votes?.length, myCastVotes?.length])
 
   const sumOfStakes = useMemo(() => votes && sumStakes(votes), [votes])

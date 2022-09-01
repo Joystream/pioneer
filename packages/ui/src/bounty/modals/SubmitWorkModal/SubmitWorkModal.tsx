@@ -1,7 +1,4 @@
 import { BountyWorkData } from '@joystream/metadata-protobuf'
-import { createType } from '@joystream/types'
-import { BountyId, EntryId } from '@joystream/types/bounty'
-import { MemberId } from '@joystream/types/common'
 import { useMachine } from '@xstate/react'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -11,7 +8,9 @@ import styled from 'styled-components'
 import * as Yup from 'yup'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useApi } from '@/api/hooks/useApi'
 import { BountyRoutes } from '@/bounty/constants'
 import { submitWorkMetadataFactory } from '@/bounty/modals/AddBountyModal/helpers'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
@@ -22,15 +21,14 @@ import {
 } from '@/bounty/modals/SubmitWorkModal/machine'
 import { SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal/types'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
-import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
 import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer, InputText } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import {
   Modal,
-  ModalFooter,
   ModalHeader,
+  ModalTransactionFooter,
   Row,
   ScrolledModalBody,
   ScrolledModalContainer,
@@ -38,9 +36,9 @@ import {
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
+import { createType } from '@/common/model/createType'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -74,13 +72,15 @@ export const SubmitWorkModal = () => {
   const transaction = useMemo(() => {
     if (api && isConnected && activeMember) {
       return api.tx.bounty.submitWork(
-        createType<MemberId, 'MemberId'>('MemberId', Number(activeMember?.id)),
-        createType<BountyId, 'BountyId'>('BountyId', Number(modalData.bounty.id)),
-        createType<EntryId, 'EntryId'>('EntryId', Number(entry?.id)),
+        createType('MemberId', Number(activeMember?.id)),
+        createType('BountyId', Number(modalData.bounty.id)),
+        createType('EntryId', Number(entry?.id)),
         metadataToBytes(BountyWorkData, submitWorkMetadataFactory(state as SubmitWorkModalMachineState))
       )
     }
   }, [activeMember?.id, isConnected, JSON.stringify(state.context)])
+
+  useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
 
   const goToCurrentBounties = useCallback(() => {
     hideModal()
@@ -214,13 +214,9 @@ export const SubmitWorkModal = () => {
           </RowGapBlock>
         </ScrolledModalContainer>
       </ScrolledModalBody>
-      <ModalFooter>
-        <ButtonsGroup align="right">
-          <ButtonPrimary disabled={!isValid} onClick={() => send('NEXT')} size="medium">
-            {t('modals.submitWork.button.submitWork')}
-          </ButtonPrimary>
-        </ButtonsGroup>
-      </ModalFooter>
+      <ModalTransactionFooter
+        next={{ disabled: !isValid, label: t('modals.submitWork.button.submitWork'), onClick: () => send('NEXT') }}
+      />
     </Modal>
   )
 }

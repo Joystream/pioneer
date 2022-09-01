@@ -1,5 +1,7 @@
 import BN from 'bn.js'
 
+import { BN_ZERO } from '@/common/constants'
+
 import { useGetBudgetSpendingQuery } from '../queries'
 
 export interface UseGroupSpending {
@@ -16,6 +18,6 @@ export const useGroupSpending = (groupId: string): UseGroupSpending => {
   }
 
   return {
-    spending: new BN(data.budgetSpendingEvents.reduce((a, b) => a + b.amount, 0)),
+    spending: new BN(data.budgetSpendingEvents.reduce((a, b) => a.add(new BN(b.amount)), BN_ZERO)),
   }
 }

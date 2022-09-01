@@ -1,7 +1,7 @@
 import { BN_TEN } from '@polkadot/util'
 import { Meta, Story } from '@storybook/react'
+import BN from 'bn.js'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { RolesList, RolesListProps } from '@/working-groups/components/Roles/RolesList'
@@ -12,11 +12,9 @@ export default {
 } as Meta
 
 const Template: Story<RolesListProps> = (args) => (
-  <MemoryRouter>
-    <MockApolloProvider>
-      <RolesList {...args} />
-    </MockApolloProvider>
-  </MemoryRouter>
+  <MockApolloProvider>
+    <RolesList {...args} />
+  </MockApolloProvider>
 )
 
 export const Default = Template.bind({})
@@ -29,9 +27,9 @@ Default.args = {
       membership: { id: '0', controllerAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY' },
       status: 'WorkerStatusActive',
       rewardPerBlock: BN_TEN,
-      stake: 1000,
+      stake: new BN(1000),
       isLead: false,
-      owedReward: 1000,
+      owedReward: new BN(1000),
     },
   ],
 }

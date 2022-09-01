@@ -19,6 +19,7 @@ export const BoundAccountLockItem = ({ lock, address, isRecoverable }: LockDetai
       address={address}
       isRecoverable={isRecoverable}
       createdInEvent={block}
+      lockRecovery={{ unrecoverableLabel: 'Unrecoverable' }}
       memberInfo={boundMembership}
     />
   )

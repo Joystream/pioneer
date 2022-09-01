@@ -1,4 +1,4 @@
-import { useApi } from '@/common/hooks/useApi'
+import { useApi } from '@/api/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 
 export type StakingStatus = 'unknown' | 'free' | 'other' | 'candidate' | 'confirmed'
@@ -23,7 +23,7 @@ export const useStakingAccountStatus = (address?: string, memberId?: string): St
     return 'free'
   }
 
-  if (!stakingAccountInfo.member_id.eq(parseInt(memberId ?? '-1'))) {
+  if (!stakingAccountInfo.memberId.eq(String(memberId ?? '-1'))) {
     return 'other'
   }
 

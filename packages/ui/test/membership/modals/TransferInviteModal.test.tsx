@@ -2,7 +2,7 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 
-import { ApiContext } from '@/common/providers/api/context'
+import { ApiContext } from '@/api/providers/context'
 import { TransferInviteModal } from '@/memberships/modals/TransferInviteModal'
 import { seedMembers } from '@/mocks/data'
 
@@ -30,7 +30,7 @@ describe('UI: TransferInviteModal', () => {
   })
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     stubTransaction(api, 'api.tx.members.transferInvites')
   })
 
@@ -47,7 +47,7 @@ describe('UI: TransferInviteModal', () => {
 
     const input = await screen.findByLabelText(/number of invites/i)
     expect(input).toBeDefined()
-    fireEvent.change(input, { target: { value: '1' } })
+    fireEvent.change(input, { target: { value: 1 } })
 
     await selectFromDropdown('^to', 'bob')
 

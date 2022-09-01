@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { Accounts } from '@/accounts/components/Accounts'
+import { ClaimVestingButton } from '@/accounts/components/ClaimVestingButton'
 import { useMyTotalBalances } from '@/accounts/hooks/useMyTotalBalances'
 import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -13,7 +14,8 @@ import { Colors } from '@/common/constants'
 import { MyProfileTabs } from './components/MyProfileTabs'
 
 export const MyAccounts = () => {
-  const { total, transferable, locked, recoverable } = useMyTotalBalances()
+  const { total, transferable, locked, recoverable, vestingTotal, vestedClaimable, vestingLocked } =
+    useMyTotalBalances()
 
   return (
     <PageLayout
@@ -23,7 +25,7 @@ export const MyAccounts = () => {
             <PageTitle>My Profile</PageTitle>
             <MyProfileTabs />
           </PageHeaderWrapper>
-          <Statistics>
+          <StyledStatistics>
             <TokenValueStat
               title="Total balance"
               tooltipText="Total balance from all connected accounts. This includes transferable and locked balance."
@@ -52,7 +54,12 @@ export const MyAccounts = () => {
               value={locked}
             />
             <TokenValueStat title="Total recoverable" tooltipText="Lorem ipsum..." value={recoverable} />
-          </Statistics>
+            <TokenValueStat title="Total initial vesting" tooltipText="Lorem ipsum..." value={vestingTotal} />
+            <TokenValueStat title="Total Locked in Vesting" tooltipText="Lorem ipsum..." value={vestingLocked} />
+            <TokenValueStat title="Total Vested Claimable" tooltipText="Lorem ipsum..." value={vestedClaimable} inline>
+              {vestedClaimable.gtn(0) && <ClaimVestingButton />}
+            </TokenValueStat>
+          </StyledStatistics>
         </RowGapBlock>
       }
       main={<Accounts />}
@@ -66,4 +73,11 @@ export const StyledLink = styled.a`
   line-height: 20px;
   color: ${Colors.Black[400]};
   text-decoration: underline;
+`
+
+const StyledStatistics = styled(Statistics)`
+  > * {
+    max-width: 35%;
+    flex-basis: 220px;
+  }
 `

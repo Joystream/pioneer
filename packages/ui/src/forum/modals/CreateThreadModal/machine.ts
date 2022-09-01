@@ -1,4 +1,4 @@
-import { ThreadId } from '@joystream/types/common'
+import { u64 } from '@polkadot/types'
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
@@ -19,7 +19,7 @@ interface DetailsContext {
 }
 
 interface TransactionContext extends Required<DetailsContext> {
-  newThreadId?: ThreadId
+  newThreadId?: u64
   transactionEvents?: EventRecord[]
 }
 

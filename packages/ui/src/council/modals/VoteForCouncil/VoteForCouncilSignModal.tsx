@@ -3,13 +3,11 @@ import React, { useMemo } from 'react'
 import { ActorRef, State } from 'xstate'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
-import { ButtonPrimary } from '@/common/components/buttons'
+import { useApi } from '@/api/hooks/useApi'
 import { InputComponent } from '@/common/components/forms'
-import { Arrow } from '@/common/components/icons'
-import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
+import { ModalBody, ModalTransactionFooter } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
@@ -58,21 +56,12 @@ export const VoteForCouncilSignModal = ({ state, service }: Props) => {
         </InputComponent>
       </ModalBody>
 
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo title="Stake:" value={stakingAmount} />
-          <TransactionInfo
-            title="Transaction fee:"
-            value={paymentInfo?.partialFee.toBn()}
-            tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
-          />
-        </TransactionInfoContainer>
-
-        <ButtonPrimary size="medium" disabled={!isReady || !isVoteStored} onClick={sign}>
-          Sign and send
-          <Arrow direction="right" />
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={paymentInfo?.partialFee.toBn()}
+        next={{ disabled: !isReady || !isVoteStored, label: 'Sign and send', onClick: sign }}
+      >
+        <TransactionInfo title="Stake:" value={stakingAmount} />
+      </ModalTransactionFooter>
     </TransactionModal>
   )
 }

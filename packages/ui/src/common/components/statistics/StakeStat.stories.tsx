@@ -1,4 +1,5 @@
 import { Meta, Story } from '@storybook/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { StakeStat, StakeStatProps } from '@/common/components/statistics/StakeStat'
@@ -16,7 +17,7 @@ const Template: Story<StakeStatProps> = (args) => (
       <StakeStat {...args} />
     </WhiteBlock>
     <WhiteBlock>
-      <StakeStat {...args} minStake={10000} />
+      <StakeStat {...args} minStake={new BN(10000)} />
     </WhiteBlock>
   </TemplateBlock>
 )
@@ -24,6 +25,6 @@ const Template: Story<StakeStatProps> = (args) => (
 export const Default = Template.bind({})
 
 Default.args = {
-  value: 1000,
-  minStake: 1000,
+  value: new BN(1000),
+  minStake: new BN(1000),
 }

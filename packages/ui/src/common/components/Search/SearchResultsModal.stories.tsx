@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { ModalContext } from '@/common/providers/modal/context'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
@@ -25,11 +24,9 @@ const Template: Story<Props> = ({ search, hideModal, showModal }) => {
   const modalData = { search }
   return (
     <MockApolloProvider members workers workingGroups forum>
-      <MemoryRouter>
-        <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
-          <SearchResultsModal />
-        </ModalContext.Provider>
-      </MemoryRouter>
+      <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
+        <SearchResultsModal />
+      </ModalContext.Provider>
     </MockApolloProvider>
   )
 }

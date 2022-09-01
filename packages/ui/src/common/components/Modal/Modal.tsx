@@ -12,23 +12,26 @@ interface ModalHeaderBasicProps {
   icon?: React.ReactElement | string
   modalHeaderSize?: 's' | 'm' | undefined
   className?: string
+  dark?: boolean
 }
 
 interface ModalHeaderProps extends ModalHeaderBasicProps {
-  title: string
+  title: string | React.ReactNode
 }
 
 interface ModalCustomHeaderProps extends ModalHeaderBasicProps {
   children?: React.ReactNode
 }
 
-export const ModalHeader = React.memo(({ onClick, title, icon, modalHeaderSize, className }: ModalHeaderProps) => (
-  <ModalTopBar columns={icon ? 3 : 2} modalHeaderSize={modalHeaderSize} className={className}>
-    {icon ? <ModalHeaderIcon>{icon}</ModalHeaderIcon> : null}
-    <ModalTitle>{title}</ModalTitle>
-    <CloseButton onClick={onClick} />
-  </ModalTopBar>
-))
+export const ModalHeader = React.memo(
+  ({ onClick, title, icon, modalHeaderSize, className, dark }: ModalHeaderProps) => (
+    <ModalTopBar columns={icon ? 3 : 2} modalHeaderSize={modalHeaderSize} className={className} dark={dark}>
+      {icon ? <ModalHeaderIcon>{icon}</ModalHeaderIcon> : null}
+      <ModalTitle>{title}</ModalTitle>
+      <CloseButton onClick={onClick} />
+    </ModalTopBar>
+  )
+)
 
 export const ModalCustomContentHeader = React.memo(
   ({ onClick, children, icon, modalHeaderSize, className }: ModalCustomHeaderProps) => (
@@ -95,13 +98,16 @@ export const ModalGlass = styled.div<ModalProps>`
       case 's':
         return '0px'
       case 'm':
-        return '120px'
+        return '60px'
       case 'l':
         return '44px'
       case 'xl':
         return '40px'
     }
   }};
+  @media only screen and (max-height: 700px) {
+    padding-top: 0;
+  }
   padding-bottom: ${({ modalHeight }) => {
     switch (modalHeight) {
       case 'xl':
@@ -122,6 +128,7 @@ interface TopBarProps extends ThemedStyledProps<any, any> {
   columns: number
   modalHeaderProps?: 's' | 'm' | undefined
   className?: string
+  dark?: boolean
 }
 
 export const ModalTopBar = styled.header<TopBarProps>`
@@ -129,6 +136,7 @@ export const ModalTopBar = styled.header<TopBarProps>`
   position: relative;
   grid-auto-flow: column;
   grid-area: modalheader;
+  background-color: ${(props) => (props.dark ? `${Colors.Black[800]}` : '')};
   grid-template-columns: ${(props) => (props.columns > 2 ? '24px 1fr 20px' : '1fr 20px')};
   justify-content: start;
   grid-column-gap: 8px;
@@ -161,6 +169,7 @@ export const ModalCustomTopBar = styled(ModalTopBar)`
 `
 
 export const ModalBody = styled.div`
+  overflow-y: auto;
   display: grid;
   grid-area: modalbody;
   grid-row-gap: 16px;
@@ -207,8 +216,11 @@ interface ModalWrapProps {
 
 export const ModalWrap = styled.section<ModalWrapProps>`
   display: grid;
+  @media only screen and (max-height: 700px) {
+    max-height: 100%;
+  }
   grid-template-columns: 1fr;
-  grid-template-rows: ${({ modalHeight }) => (modalHeight === 'xl' ? '56px 1fr 64px' : 'auto auto auto')};
+  grid-template-rows: ${({ modalHeight }) => (modalHeight === 'xl' ? '56px 1fr 64px' : 'auto 1fr auto')};
   grid-template-areas:
     'modalheader'
     'modalbody'
@@ -229,7 +241,16 @@ export const ModalWrap = styled.section<ModalWrapProps>`
         return '1240px'
     }
   }};
-  height: ${({ modalHeight }) => (modalHeight === 'xl' ? '100%' : 'min-content')};
+  height: ${({ modalHeight }) => {
+    switch (modalHeight) {
+      case 'xl':
+        return '100%'
+      case 'l':
+        return '40%'
+      default:
+        return 'min-content'
+    }
+  }};
   border-radius: ${BorderRad.s};
   box-shadow: ${Shadows.common};
   ${Animations.showModalBlock};

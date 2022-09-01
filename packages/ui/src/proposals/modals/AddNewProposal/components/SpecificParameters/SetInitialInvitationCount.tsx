@@ -1,10 +1,10 @@
 import React from 'react'
 
+import { useApi } from '@/api/hooks/useApi'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 
 export const SetInitialInvitationCount = () => {
@@ -28,13 +28,7 @@ export const SetInitialInvitationCount = () => {
             required
             id="count-input"
           >
-            <InputNumber
-              id="count-input"
-              isTokenValue
-              isInBN
-              name="setInitialInvitationCount.invitationCount"
-              placeholder="0"
-            />
+            <InputNumber id="count-input" isInBN name="setInitialInvitationCount.invitationCount" placeholder="0" />
           </InputComponent>
         </Row>
         <Row>

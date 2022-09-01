@@ -2,14 +2,13 @@ import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { BalancesContext } from '@/accounts/providers/balances/context'
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { ApiContext } from '@/api/providers/context'
 import { AnnounceWorkEntryModal } from '@/bounty/modals/AnnounceWorkEntryModal'
-import { BN_ZERO } from '@/common/constants'
 import { formatTokenValue } from '@/common/model/formatters'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
+import { Transaction, UseTransaction } from '@/common/providers/transactionFees/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import bounties from '@/mocks/data/raw/bounties.json'
 import { getMember } from '@/mocks/helpers'
@@ -18,22 +17,18 @@ import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import {
+  stubAccounts,
   stubApi,
+  stubBalances,
   stubBountyConstants,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
-const [bounty] = bounties
-
-const defaultBalance = {
-  total: BN_ZERO,
-  locked: BN_ZERO,
-  recoverable: BN_ZERO,
-  transferable: new BN(1000),
-  locks: [],
-}
+const [bountyMock] = bounties
+const bounty = { ...bountyMock, entrantStake: new BN(bountyMock.entrantStake) }
 
 describe('UI: AnnounceWorkEntryModal', () => {
   let renderResult: RenderResult
@@ -41,6 +36,14 @@ describe('UI: AnnounceWorkEntryModal', () => {
   stubBountyConstants(api)
   const fee = 888
   const transaction = stubTransaction(api, 'api.tx.bounty.announceWorkEntry', fee)
+  mockedTransactionFee.transaction = transaction as any
+
+  const useTransactionFee: UseTransaction = {
+    transaction: transaction as Transaction,
+    feeInfo: { transactionFee: new BN(fee), canAfford: true },
+    setTransaction: () => undefined,
+    setSigner: () => undefined,
+  }
 
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
@@ -49,11 +52,6 @@ describe('UI: AnnounceWorkEntryModal', () => {
     modalData: {
       bounty: { ...bounty },
     },
-  }
-
-  const useBalances = {
-    [getMember('bob').controllerAccount]: { ...defaultBalance },
-    [getMember('alice').controllerAccount]: defaultBalance,
   }
 
   const useMembership = {
@@ -67,16 +65,16 @@ describe('UI: AnnounceWorkEntryModal', () => {
     },
   }
 
-  const useAccounts = {
-    isLoading: false,
-    hasAccounts: true,
-    allAccounts: [bob, alice],
-  }
+  beforeAll(() => {
+    stubBalances({ available: +bountyMock.entrantStake + 1000 })
+    stubAccounts([alice, bob])
+  })
 
   beforeEach(() => {
     stubTransaction(api, 'api.tx.utility.batch', fee)
     stubTransaction(api, 'api.tx.members.addStakingAccountCandidate')
     stubTransaction(api, 'api.tx.members.confirmStakingAccount')
+    mockedTransactionFee.feeInfo = { canAfford: true, transactionFee: new BN(fee) }
 
     renderResult = render(<Modal />)
   })
@@ -89,12 +87,25 @@ describe('UI: AnnounceWorkEntryModal', () => {
     expect(screen.getByDisplayValue(bounty.title)).toBeInTheDocument()
   })
 
-  it('Insufficient funds', async () => {
-    stubTransaction(api, 'api.tx.utility.batch', 9999999)
+  it('Requirement failed', async () => {
+    const highFee = 9999999
+    mockedTransactionFee.feeInfo = { canAfford: false, transactionFee: new BN(highFee) }
+
+    stubTransaction(api, 'api.tx.utility.batch', highFee)
+    useTransactionFee.feeInfo = { transactionFee: new BN(highFee), canAfford: false }
     renderResult.unmount()
     render(<Modal />)
 
-    expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
+    const moveFundsModalCall: MoveFundsModalCall = {
+      modal: 'MoveFundsModal',
+      data: {
+        requiredStake: bounty.entrantStake,
+        lock: 'Bounties',
+      },
+    }
+
+    expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
+    useTransactionFee.feeInfo = { transactionFee: new BN(fee), canAfford: true }
   })
 
   it('Displays correct member', () => {
@@ -103,7 +114,7 @@ describe('UI: AnnounceWorkEntryModal', () => {
 
   it('Displays correct transaction fee', () => {
     const expected = String(fee)
-    const valueContainer = screen.getByText('modals.common.transactionFee.label')?.nextSibling
+    const valueContainer = screen.getByText('modals.transactionFee.label')?.nextSibling
 
     expect(valueContainer?.textContent).toBe(expected)
   })
@@ -153,11 +164,7 @@ describe('UI: AnnounceWorkEntryModal', () => {
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>
             <MembershipContext.Provider value={useMembership}>
-              <AccountsContext.Provider value={useAccounts}>
-                <BalancesContext.Provider value={useBalances}>
-                  <AnnounceWorkEntryModal />
-                </BalancesContext.Provider>
-              </AccountsContext.Provider>
+              <AnnounceWorkEntryModal />
             </MembershipContext.Provider>
           </ApiContext.Provider>
         </MockKeyringProvider>

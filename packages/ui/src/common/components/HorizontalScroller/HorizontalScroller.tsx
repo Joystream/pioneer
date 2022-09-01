@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { Children, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { ButtonGhost } from '@/common/components/buttons'
@@ -72,7 +72,7 @@ export const HorizontalScroller = React.memo(({ items, className, title, count }
         )}
       </HeaderWrapper>
       <ItemsWrapper ref={wrapperRef} className={className}>
-        {items}
+        {Children.toArray(items)}
       </ItemsWrapper>
     </Wrapper>
   )

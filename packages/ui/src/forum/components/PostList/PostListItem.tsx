@@ -22,6 +22,7 @@ import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
+import { ModeratedPostWrapper } from './ModeratedPost'
 import { PostContextMenu } from './PostContextMenu'
 import { PostEditor } from './PostEditor'
 
@@ -55,7 +56,7 @@ export const PostListItem = ({
   repliesToLink,
 }: PostListItemProps) => {
   const { active } = useMyMemberships()
-  const { createdAtBlock, lastEditedAt, author, text, repliesTo } = post
+  const { createdAtBlock, lastEditedAt, author, text, repliesTo, status } = post
   const [postText, setPostText] = useState<string>(text)
   const [postLastEditedAt, setPostLastEditedAt] = useState<string | undefined>(lastEditedAt)
 
@@ -101,29 +102,31 @@ export const PostListItem = ({
           {createdAtBlock && <BlockTime block={createdAtBlock} layout="reverse" />}
         </ForumPostRow>
         <MessageBody>
-          {repliesTo && (
-            <Reply>
-              <ReplyBadge>
-                <div>
-                  <ArrowReplyIcon />{' '}
-                  <Badge>
-                    <Link to={repliesToLink}>Replies to {repliesTo?.author?.handle}</Link>
-                  </Badge>
-                </div>
-              </ReplyBadge>
-              <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
-            </Reply>
-          )}
-          {editing ? (
-            <PostEditor
-              post={post}
-              onCancel={() => setEditing(false)}
-              type={type}
-              onSuccessfulEdit={onSuccessfulEdit}
-            />
-          ) : (
-            <MarkdownPreview markdown={postText} append={editionTime} size="s" />
-          )}
+          <ModeratedPostWrapper post={post}>
+            {repliesTo && (
+              <Reply>
+                <ReplyBadge>
+                  <div>
+                    <ArrowReplyIcon />{' '}
+                    <Badge>
+                      <Link to={repliesToLink}>Replies to {repliesTo?.author?.handle}</Link>
+                    </Badge>
+                  </div>
+                </ReplyBadge>
+                <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
+              </Reply>
+            )}
+            {editing ? (
+              <PostEditor
+                post={post}
+                onCancel={() => setEditing(false)}
+                type={type}
+                onSuccessfulEdit={onSuccessfulEdit}
+              />
+            ) : (
+              <MarkdownPreview markdown={postText} append={editionTime} size="m" />
+            )}
+          </ModeratedPostWrapper>
         </MessageBody>
         <ForumPostRow>
           {!editing && (
@@ -218,7 +221,7 @@ export const ForumPostStyles = styled.div`
   row-gap: 16px;
 `
 
-const ForumPostBlock = styled.div<Pick<PostListItemProps, 'isSelected' | 'isDiscussion'>>`
+export const ForumPostBlock = styled.div<Pick<PostListItemProps, 'isSelected' | 'isDiscussion'>>`
   ${({ isDiscussion }) =>
     !isDiscussion &&
     css`
@@ -228,7 +231,6 @@ const ForumPostBlock = styled.div<Pick<PostListItemProps, 'isSelected' | 'isDisc
       padding: 24px;
     `};
   scroll-margin: 48px;
-
   // Animate selection:
   &,
   ${Reply} {

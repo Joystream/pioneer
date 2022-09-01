@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React, { useMemo } from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { ForumThreadOrderByInput } from '@/common/api/queries'
 import { Loading } from '@/common/components/Loading'
@@ -47,9 +46,7 @@ const Template: Story = ({ isArchive }) => {
 
   return (
     <MockApolloProvider members workers forum>
-      <MemoryRouter>
-        {threads ? <ThreadList threads={threads} getSortProps={getSortProps} isArchive={isArchive} /> : <Loading />}
-      </MemoryRouter>
+      {threads ? <ThreadList threads={threads} getSortProps={getSortProps} isArchive={isArchive} /> : <Loading />}
     </MockApolloProvider>
   )
 }

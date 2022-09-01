@@ -5,9 +5,9 @@ import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 
+import { ApiContext } from '@/api/providers/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { MembershipExternalResourceType } from '@/common/api/queries'
-import { ApiContext } from '@/common/providers/api/context'
 import { last } from '@/common/utils'
 import { UpdateMembershipModal } from '@/memberships/modals/UpdateMembershipModal'
 import { MemberWithDetails } from '@/memberships/types'
@@ -20,24 +20,13 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  stubAccounts,
   stubApi,
   stubBatchTransactionFailure,
   stubBatchTransactionSuccess,
   stubDefaultBalances,
   stubTransaction,
 } from '../../_mocks/transactions'
-
-const useMyAccounts: UseAccounts = {
-  isLoading: false,
-  hasAccounts: true,
-  allAccounts: [],
-}
-
-jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
-  return {
-    useMyAccounts: () => useMyAccounts,
-  }
-})
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -49,7 +38,7 @@ describe('UI: UpdatedMembershipModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
-    useMyAccounts.allAccounts.push(alice, aliceStash, bob, bobStash)
+    stubAccounts([alice, aliceStash, bob, bobStash])
   })
 
   afterAll(() => {
@@ -64,7 +53,7 @@ describe('UI: UpdatedMembershipModal', () => {
   let member: MemberWithDetails
 
   beforeEach(() => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     set(api, 'api.query.members.membershipPrice', () => of(createBalanceOf(100)))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     stubTransaction(api, 'api.tx.members.updateProfile')
@@ -149,7 +138,7 @@ describe('UI: UpdatedMembershipModal', () => {
       expect(memberMetadata.includes(newMemberName)).toBe(true)
       expect(memberMetadata.includes(newMemberEmail)).toBe(true)
       expect(await screen.findByText('modals.authorizeTransaction.title')).toBeDefined()
-      expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+      expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
     })
 
     it('Success step', async () => {

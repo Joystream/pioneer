@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { CloseButton } from '@/common/components/buttons'
-import { InlineToggleWrap, InputComponent, InputNumber, Label, ToggleCheckbox } from '@/common/components/forms'
+import { InlineToggleWrap, InputComponent, Label, ToggleCheckbox, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
@@ -55,7 +55,7 @@ export const TriggerAndDiscussionStep = () => {
             units="block"
             inputSize="s"
             name="triggerAndDiscussion.triggerBlock"
-            message={triggerBlock && `≈ ${inBlocksDate(triggerBlock)}`}
+            message={triggerBlock ? `≈ ${inBlocksDate(triggerBlock)}` : ''}
           >
             <InputNumber
               id="triggerBlock"
@@ -80,7 +80,12 @@ export const TriggerAndDiscussionStep = () => {
               Closed mode: only the active council, the original proposer, or one among a set of whitelisted members can
               post.
             </TextMedium>
-            <InputComponent label="Add member to whitelist" required inputSize="l">
+            <InputComponent
+              name="triggerAndDiscussion.discussionWhitelist"
+              label="Add member to whitelist"
+              required
+              inputSize="l"
+            >
               <SelectMember
                 onChange={(member) => addMemberToWhitelist(member)}
                 filter={(member) =>

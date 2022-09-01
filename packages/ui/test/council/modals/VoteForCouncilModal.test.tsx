@@ -1,15 +1,14 @@
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { configure, findByText, fireEvent, queryByText, render, screen, waitFor } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { MemoryRouter } from 'react-router'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { ApiContext } from '@/api/providers/context'
 import { CKEditorProps } from '@/common/components/CKEditor'
-import { ApiContext } from '@/common/providers/api/context'
+import { createType } from '@/common/model/createType'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { VoteForCouncilModal } from '@/council/modals/VoteForCouncil'
@@ -31,6 +30,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import {
   currentStubErrorMessage,
+  stubAccounts,
   stubApi,
   stubCouncilConstants,
   stubDefaultBalances,
@@ -65,7 +65,6 @@ describe('UI: Vote for Council Modal', () => {
     },
   }
 
-  let useAccounts: UseAccounts
   let tx: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
@@ -75,7 +74,7 @@ describe('UI: Vote for Council Modal', () => {
     act(() => {
       fireEvent.click(accountSelector.children[0])
     })
-    return accountSelector
+    return await screen.findByTestId('select-popper-wrapper')
   }
 
   const selectAlice = async () => {
@@ -89,7 +88,7 @@ describe('UI: Vote for Council Modal', () => {
     await selectAlice()
     const input = await screen.findByLabelText(/Select amount for staking/i)
     act(() => {
-      fireEvent.change(input, { target: { value } })
+      fireEvent.change(input, { target: { value: value } })
     })
   }
 
@@ -110,26 +109,22 @@ describe('UI: Vote for Council Modal', () => {
     seedCouncilCandidates(server.server, [{ memberId: '0' }])
     resetVotes()
 
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
 
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     stubCouncilConstants(api, { minStake: 500 })
     tx = stubTransaction(api, 'api.tx.referendum.vote', 25)
 
     stubQuery(
       api,
       'members.stakingAccountIdMemberStatus',
-      createType('StakingAccountMemberBinding', {
-        member_id: 0,
+      createType('PalletMembershipStakingAccountMemberBinding', {
+        memberId: 0,
         confirmed: false,
       })
     )
@@ -152,11 +147,22 @@ describe('UI: Vote for Council Modal', () => {
     })
 
     it('Insufficient funds', async () => {
-      stubTransaction(api, 'api.tx.referendum.vote', 10_000)
+      const minStake = 10000
+      stubCouncilConstants(api, { minStake })
+      stubTransaction(api, 'api.tx.referendum.vote', 10)
 
       renderModal()
 
-      expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
+      const moveFundsModalCall: MoveFundsModalCall = {
+        modal: 'MoveFundsModal',
+        data: {
+          requiredStake: new BN(minStake),
+          lock: 'Voting',
+          isFeeOriented: false,
+        },
+      }
+
+      expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
   })
 
@@ -222,7 +228,7 @@ describe('UI: Vote for Council Modal', () => {
 
     expect(await screen.findByText(/^You intend to Vote and stake/i)).toBeDefined()
     expect(screen.getByText(/^Stake:/i)?.nextSibling?.textContent).toBe('500')
-    expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
+    expect(screen.getByText(/^modals.transactionFee.label/i)?.nextSibling?.textContent).toBe('25')
     expect(await getButton('Sign and send')).toBeDefined()
   })
 
@@ -255,15 +261,11 @@ describe('UI: Vote for Council Modal', () => {
         <ModalContext.Provider value={useModal}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
-              <AccountsContext.Provider value={useAccounts}>
-                <ApiContext.Provider value={api}>
-                  <BalancesContextProvider>
-                    <MembershipContext.Provider value={useMyMemberships}>
-                      <VoteForCouncilModal />
-                    </MembershipContext.Provider>
-                  </BalancesContextProvider>
-                </ApiContext.Provider>
-              </AccountsContext.Provider>
+              <ApiContext.Provider value={api}>
+                <MembershipContext.Provider value={useMyMemberships}>
+                  <VoteForCouncilModal />
+                </MembershipContext.Provider>
+              </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
         </ModalContext.Provider>

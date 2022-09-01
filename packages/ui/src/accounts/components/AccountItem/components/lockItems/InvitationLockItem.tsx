@@ -11,5 +11,13 @@ export const InvitationLockItem = ({ lock, address, isRecoverable }: LockDetails
   const eventData = data?.memberInvitedEvents[0]
   const createdInEvent = eventData && asBlock(eventData)
 
-  return <LockItem lock={lock} address={address} isRecoverable={isRecoverable} createdInEvent={createdInEvent} />
+  return (
+    <LockItem
+      lock={lock}
+      address={address}
+      isRecoverable={isRecoverable}
+      createdInEvent={createdInEvent}
+      lockRecovery={{ unrecoverableLabel: 'Unrecoverable' }}
+    />
+  )
 }

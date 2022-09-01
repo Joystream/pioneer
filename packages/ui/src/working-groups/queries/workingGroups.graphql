@@ -242,8 +242,13 @@ query CountWorkingGroupWorkers($groupId_eq: ID, $status_json: JSONObject) {
   }
 }
 
-query GetWorkingGroupOpenings($where: WorkingGroupOpeningWhereInput, $limit: Int, $offset: Int) {
-  workingGroupOpenings(where: $where, limit: $limit, offset: $offset) {
+query GetWorkingGroupOpenings(
+  $where: WorkingGroupOpeningWhereInput
+  $order: [WorkingGroupOpeningOrderByInput!]
+  $limit: Int
+  $offset: Int
+) {
+  workingGroupOpenings(where: $where, limit: $limit, offset: $offset, orderBy: $order) {
     ...WorkingGroupOpeningFields
   }
 }

@@ -26,7 +26,7 @@ const formatPeriodLength = (value?: BN | number) => {
   }
   const valueAsNumber = typeof value === 'number' ? value : value.toNumber()
   return (
-    <LengthText>
+    <LengthText as="div">
       Length: <DurationValue value={formatDuration(valueAsNumber)} tiny />
     </LengthText>
   )
