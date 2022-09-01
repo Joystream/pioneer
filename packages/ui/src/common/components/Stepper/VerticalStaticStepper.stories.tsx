@@ -18,8 +18,8 @@ const Template: Story<VerticalStaticStepperProps> = ({ steps }) => (
 export const VerticalStatic = Template.bind({})
 VerticalStatic.args = {
   steps: [
-    { title: 'Add Polkadot plugin', subtitle: ['test', 'test'] },
-    { title: 'Add Polkadot plugin', subtitle: ['test'] },
+    { title: 'Add Polkadot plugin', subtitle: 'test' },
+    { title: 'Add Polkadot plugin', subtitle: 'test' },
     { title: 'Add Polkadot plugin' },
   ],
 }

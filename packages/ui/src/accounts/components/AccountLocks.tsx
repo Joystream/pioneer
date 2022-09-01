@@ -23,11 +23,12 @@ import {
   GatewayWorkerIcon,
   MembershipWorkerIcon,
 } from '@/common/components/icons/locks'
+import { VestingLockIcon } from '@/common/components/icons/locks/VestingLockIcon'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 
 const locksMap: Record<LockType, ReactElement> = {
   Staking: <LockIcon />,
-  Vesting: <LockIcon />,
+  Vesting: <VestingLockIcon />,
   Voting: <VoteIcon />,
   'Council Candidate': <CouncilCandidateIcon />,
   Councilor: <CouncilorIcon />,
@@ -72,7 +73,7 @@ export const AccountLocks = ({ locks }: AccountLocksProps) => {
 
 export const AccountLocksWrapper = styled(ColumnGapBlock)`
   position: absolute;
-  top: 25px;
+  top: 15px;
   align-items: center;
 `
 

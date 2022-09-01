@@ -113,6 +113,39 @@ export type MemberWithDetailsFieldsFragment = {
       account: string
     }> | null
   }>
+  invitedBy?: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    isCouncilMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
+  } | null
   roles: Array<{
     __typename: 'Worker'
     id: string
@@ -150,6 +183,136 @@ export type GetMembersQuery = {
     isCouncilMember: boolean
     inviteCount: number
     createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
+  }>
+}
+
+export type GetMembersWithDetailsQueryVariables = Types.Exact<{
+  where?: Types.InputMaybe<Types.MembershipWhereInput>
+  orderBy?: Types.InputMaybe<Array<Types.MembershipOrderByInput> | Types.MembershipOrderByInput>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type GetMembersWithDetailsQuery = {
+  __typename: 'Query'
+  memberships: Array<{
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    isCouncilMember: boolean
+    inviteCount: number
+    createdAt: any
+    entry:
+      | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
+      | {
+          __typename: 'MembershipEntryInvited'
+          memberInvitedEvent?: {
+            __typename: 'MemberInvitedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+      | {
+          __typename: 'MembershipEntryPaid'
+          membershipBoughtEvent?: {
+            __typename: 'MembershipBoughtEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
+    invitees: Array<{
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      isCouncilMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
+    }>
+    invitedBy?: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      isCouncilMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
+    } | null
     metadata: {
       __typename: 'MemberMetadata'
       name?: string | null
@@ -264,6 +427,40 @@ export type GetMemberQuery = {
         account: string
       }> | null
     }>
+    invitedBy?: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      isCouncilMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
+    } | null
+
     roles: Array<{
       __typename: 'Worker'
       id: string
@@ -505,6 +702,9 @@ export const MemberWithDetailsFieldsFragmentDoc = gql`
     invitees {
       ...MemberFields
     }
+    invitedBy {
+      ...MemberFields
+    }
   }
   ${MemberFieldsFragmentDoc}
 `
@@ -549,6 +749,63 @@ export function useGetMembersLazyQuery(
 export type GetMembersQueryHookResult = ReturnType<typeof useGetMembersQuery>
 export type GetMembersLazyQueryHookResult = ReturnType<typeof useGetMembersLazyQuery>
 export type GetMembersQueryResult = Apollo.QueryResult<GetMembersQuery, GetMembersQueryVariables>
+export const GetMembersWithDetailsDocument = gql`
+  query GetMembersWithDetails(
+    $where: MembershipWhereInput
+    $orderBy: [MembershipOrderByInput!]
+    $offset: Int
+    $limit: Int
+  ) {
+    memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
+      ...MemberWithDetailsFields
+    }
+  }
+  ${MemberWithDetailsFieldsFragmentDoc}
+`
+
+/**
+ * __useGetMembersWithDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetMembersWithDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMembersWithDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMembersWithDetailsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetMembersWithDetailsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetMembersWithDetailsQuery, GetMembersWithDetailsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetMembersWithDetailsQuery, GetMembersWithDetailsQueryVariables>(
+    GetMembersWithDetailsDocument,
+    options
+  )
+}
+export function useGetMembersWithDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetMembersWithDetailsQuery, GetMembersWithDetailsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetMembersWithDetailsQuery, GetMembersWithDetailsQueryVariables>(
+    GetMembersWithDetailsDocument,
+    options
+  )
+}
+export type GetMembersWithDetailsQueryHookResult = ReturnType<typeof useGetMembersWithDetailsQuery>
+export type GetMembersWithDetailsLazyQueryHookResult = ReturnType<typeof useGetMembersWithDetailsLazyQuery>
+export type GetMembersWithDetailsQueryResult = Apollo.QueryResult<
+  GetMembersWithDetailsQuery,
+  GetMembersWithDetailsQueryVariables
+>
 export const GetMembersCountDocument = gql`
   query GetMembersCount($where: MembershipWhereInput) {
     membershipsConnection(where: $where) {

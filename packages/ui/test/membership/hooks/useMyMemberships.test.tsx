@@ -1,7 +1,6 @@
 import { act, renderHook } from '@testing-library/react-hooks'
 import React from 'react'
 
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { seedMembers } from '@/mocks/data'
 
@@ -9,6 +8,7 @@ import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { stubAccounts } from '../../_mocks/transactions'
 
 const renderUseMembership = () => {
   return renderHook(() => useMyMemberships(), {
@@ -16,29 +16,15 @@ const renderUseMembership = () => {
   })
 }
 
-const useMyAccounts: UseAccounts = {
-  isLoading: false,
-  hasAccounts: false,
-  allAccounts: [],
-}
-
-jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
-  return {
-    useMyAccounts: () => useMyAccounts,
-  }
-})
-
 describe('useMyMemberships', () => {
   const mockServer = setupMockServer()
 
   beforeEach(() => {
-    useMyAccounts.isLoading = false
-    useMyAccounts.hasAccounts = false
-    useMyAccounts.allAccounts.splice(0)
+    stubAccounts([])
   })
 
   it('Returns loading state', () => {
-    useMyAccounts.isLoading = true
+    stubAccounts([], { isLoading: true })
 
     const { result } = renderUseMembership()
 
@@ -64,9 +50,7 @@ describe('useMyMemberships', () => {
   it('Matched rootAccount', async () => {
     seedMembers(mockServer.server, 2)
     const aliceMember = getMember('alice')
-    useMyAccounts.hasAccounts = true
-    useMyAccounts.allAccounts.push(alice)
-    useMyAccounts.allAccounts.push(aliceStash)
+    stubAccounts([alice, aliceStash])
 
     const { result, waitForNextUpdate } = renderUseMembership()
     await waitForNextUpdate()
@@ -82,9 +66,7 @@ describe('useMyMemberships', () => {
   it('Matched controllerAccount', async () => {
     seedMembers(mockServer.server, 2)
     const bobMember = getMember('bob')
-    useMyAccounts.hasAccounts = true
-    useMyAccounts.allAccounts.push(bob)
-    useMyAccounts.allAccounts.push(bobStash)
+    stubAccounts([bob, bobStash])
 
     const { result, waitForNextUpdate } = renderUseMembership()
     await waitForNextUpdate()
@@ -100,9 +82,7 @@ describe('useMyMemberships', () => {
   it('Allows to set active member', async () => {
     seedMembers(mockServer.server, 2)
     const aliceMember = getMember('alice')
-    useMyAccounts.hasAccounts = true
-    useMyAccounts.allAccounts.push(alice)
-    useMyAccounts.allAccounts.push(aliceStash)
+    stubAccounts([alice, aliceStash])
 
     const { result, waitForNextUpdate } = renderUseMembership()
     await waitForNextUpdate()

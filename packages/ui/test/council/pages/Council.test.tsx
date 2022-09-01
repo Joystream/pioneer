@@ -22,7 +22,7 @@ describe('Council page', () => {
 
     await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
 
-    expect(screen.queryByText('There is no council member at the moment')).toBeDefined()
+    expect(screen.queryByText('There is no council member at the moment')).toBeInTheDocument()
   })
 
   it('Default', async () => {

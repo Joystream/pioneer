@@ -46,7 +46,7 @@ describe('useForumThreadPosts', () => {
 
   it('By page number', () => {
     const { rerender, result } = renderUseForumThreadPosts('0', { post: null, page: null })
-    const where = { thread: { id_eq: '0' }, isVisible_eq: true }
+    const where = { thread: { id_eq: '0' } }
 
     expect(mockedPostsCountQuery).toBeCalledWith({ variables: { where } })
     expect(getPostIds).not.toHaveBeenCalled()
@@ -62,7 +62,7 @@ describe('useForumThreadPosts', () => {
 
   it('By Post id', () => {
     const { rerender, result } = renderUseForumThreadPosts('0', { post: '8', page: null })
-    const where = { thread: { id_eq: '0' }, isVisible_eq: true }
+    const where = { thread: { id_eq: '0' } }
 
     rerender()
 

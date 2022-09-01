@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { ModalContext } from '@/common/providers/modal/context'
 
@@ -24,11 +23,9 @@ interface Props {
 const Template: Story<Props> = ({ voteForHandle, hideModal, showModal }) => {
   const modalData = { voteForHandle }
   return (
-    <MemoryRouter>
-      <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
-        <RevealVoteSuccessModal />
-      </ModalContext.Provider>
-    </MemoryRouter>
+    <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
+      <RevealVoteSuccessModal />
+    </ModalContext.Provider>
   )
 }
 

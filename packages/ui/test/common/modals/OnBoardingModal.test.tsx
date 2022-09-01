@@ -1,11 +1,9 @@
-import { cleanup, render } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { MemoryRouter } from 'react-router'
 
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { AddressToBalanceMap } from '@/accounts/types'
 import { Colors } from '@/common/constants'
 import { OnBoardingModal } from '@/common/modals/OnBoardingModal'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -13,14 +11,8 @@ import { UseModal } from '@/common/providers/modal/types'
 import { UseOnBoarding } from '@/common/providers/onboarding/types'
 
 import { MockApolloProvider } from '../../_mocks/providers'
-import { stubApi } from '../../_mocks/transactions'
-
-const mockUseMyAccounts: UseAccounts = {
-  isLoading: false,
-  hasAccounts: false,
-  allAccounts: [],
-  error: undefined,
-}
+import { stubAccounts, stubApi } from '../../_mocks/transactions'
+import { mockedMyBalances, zeroBalance } from '../../setup'
 
 const mockOnBoarding: UseOnBoarding = {
   status: 'installPlugin',
@@ -28,18 +20,21 @@ const mockOnBoarding: UseOnBoarding = {
   setMembershipAccount: jest.fn(),
 }
 
-let mockMyBalances: AddressToBalanceMap = {}
-
-jest.mock('@/accounts/hooks/useMyAccounts', () => ({
-  useMyAccounts: () => mockUseMyAccounts,
-}))
-
-jest.mock('@/accounts/hooks/useMyBalances', () => ({
-  useMyBalances: () => mockMyBalances,
-}))
-
 jest.mock('@/common/hooks/useOnBoarding', () => ({
   useOnBoarding: () => mockOnBoarding,
+}))
+const mockWallets = [
+  {
+    installUrl: 'extrawallet.com',
+    title: 'ExtraWallet',
+    logo: { alt: 'alt', src: '' },
+    installed: false,
+    extensionName: 'name',
+  },
+]
+jest.mock('injectweb3-connect', () => ({
+  getAllWallets: () => mockWallets,
+  getWalletBySource: () => undefined,
 }))
 
 describe('UI: OnBoardingModal', () => {
@@ -65,26 +60,29 @@ describe('UI: OnBoardingModal', () => {
   describe('Status: Install plugin', () => {
     beforeAll(() => {
       mockOnBoarding.isLoading = false
+      mockOnBoarding.status = 'installPlugin'
     })
 
     it('Stepper matches', () => {
       const { getByText } = renderModal()
 
-      const pluginStepCircle = getStepperStepCircle('Add Polkadot plugin', getByText)
-
+      const pluginStepCircle = getStepperStepCircle('Connect wallet', getByText)
       expect(pluginStepCircle).toHaveStyle(`background-color: ${Colors.Blue[500]}`)
     })
 
     it('Opens website', () => {
       const windowSpy = jest.spyOn(window, 'open').mockImplementation(jest.fn())
       const { getByText } = renderModal()
+      const extension = screen.getByText(mockWallets[0].title)
+      fireEvent.click(extension)
 
       const pluginButton = getByText('Install extension')
       expect(pluginButton).toBeDefined()
+      expect(pluginButton).toBeEnabled()
 
       act(() => pluginButton.click())
 
-      expect(windowSpy).toBeCalledWith('https://polkadot.js.org/extension/', '_blank')
+      expect(windowSpy).toBeCalledWith(mockWallets[0].installUrl, '_blank')
     })
   })
 
@@ -96,7 +94,7 @@ describe('UI: OnBoardingModal', () => {
     it('Stepper matches', () => {
       const { getByText } = renderModal()
 
-      const accountCircle = getStepperStepCircle('Connect a Polkadot account', getByText)
+      const accountCircle = getStepperStepCircle('Connect account', getByText)
 
       expect(accountCircle).toHaveStyle(`background-color: ${Colors.Blue[500]}`)
     })
@@ -111,8 +109,7 @@ describe('UI: OnBoardingModal', () => {
 
     describe('Pick account step', () => {
       beforeAll(() => {
-        mockUseMyAccounts.hasAccounts = true
-        mockUseMyAccounts.allAccounts = [
+        stubAccounts([
           {
             address: '123',
             name: 'Alice',
@@ -121,23 +118,16 @@ describe('UI: OnBoardingModal', () => {
             address: '321',
             name: 'Bob',
           },
-        ]
-        mockMyBalances = {
+        ])
+        mockedMyBalances.mockReturnValue({
           '123': {
+            ...zeroBalance,
             total: new BN(10),
-            locked: new BN(0),
-            recoverable: new BN(0),
-            transferable: new BN(0),
-            locks: [],
           },
           '321': {
-            total: new BN(0),
-            locked: new BN(0),
-            recoverable: new BN(0),
-            transferable: new BN(0),
-            locks: [],
+            ...zeroBalance,
           },
-        }
+        })
       })
 
       it('Shows correct screen', () => {
@@ -181,7 +171,7 @@ describe('UI: OnBoardingModal', () => {
     it('Step matches', () => {
       const { getByText } = renderModal()
 
-      const membershipCircle = getStepperStepCircle('Create membership for FREE', getByText)
+      const membershipCircle = getStepperStepCircle('Create free membership', getByText)
 
       expect(membershipCircle).toHaveStyle(`background-color: ${Colors.Blue[500]}`)
     })

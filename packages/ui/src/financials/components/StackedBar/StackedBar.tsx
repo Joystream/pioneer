@@ -3,11 +3,12 @@ import styled from 'styled-components'
 
 import { HorizontalStackedBar } from '@/common/components/HorizontalStackedBar'
 import { List } from '@/common/components/List'
-import { TextBig, TextMedium, TokenValue } from '@/common/components/typography'
+import { TextBig, TextMedium, ValueInJoys } from '@/common/components/typography'
+import { formatTokenValue } from '@/common/model/formatters'
 import { DataListItem } from '@/financials/components/StackedBar/components/DataListItem'
 import { chartColors } from '@/financials/types/constants'
 
-export type Data = Record<string, number>
+export type Data = Record<string, number> // NOTE Currently does not support JOY values
 
 export interface StackedBarProps {
   data: Data
@@ -18,10 +19,13 @@ export interface StackedBarProps {
   haveHover?: boolean
 }
 
+const TokenValue = ({ value, size }: { value: number; size?: 'l' }) => (
+  <ValueInJoys size={size}>{formatTokenValue(value)}</ValueInJoys>
+)
+
 export const StackedBar = ({ data, title, active, setActive, haveHover = true, barHeight = 50 }: StackedBarProps) => {
   const [preview, setPreview] = useState<number | string | null>(null)
-
-  const totalValue = useMemo(() => Object.entries(data).reduce((prev, next) => prev + next[1], 0), [data])
+  const totalValue = useMemo(() => Object.values(data).reduce((prev, next) => prev + next), [data])
 
   return (
     <>

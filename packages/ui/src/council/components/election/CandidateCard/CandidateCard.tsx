@@ -6,12 +6,11 @@ import { Arrow } from '@/common/components/icons'
 import { ListItem } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
-import { StatiscticContentColumn, StatsBlock, MultiColumnsStatistic } from '@/common/components/statistics'
-import { TextBig, ValueInJoys } from '@/common/components/typography'
+import { MultiColumnsStatistic, StatiscticContentColumn, StatsBlock } from '@/common/components/statistics'
+import { TextBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, BulletPoint, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
-import { formatTokenValue } from '@/common/model/formatters'
 import { isDefined } from '@/common/utils'
 import { VoteForCouncilButton } from '@/council/components/election/VoteForCouncilButton'
 import { WithdrawButton } from '@/council/components/election/WithdrawButton'
@@ -98,9 +97,9 @@ export const CandidateCard = ({
             {stake && (
               <CandidateCardStake>
                 <StatsValue>
-                  <ValueInJoys>{formatTokenValue(stake)}</ValueInJoys>
+                  <TokenValue value={stake} />
                 </StatsValue>
-                <Subscription>My stake</Subscription>
+                <Subscription>Staked</Subscription>
               </CandidateCardStake>
             )}
             {withdrawable && (

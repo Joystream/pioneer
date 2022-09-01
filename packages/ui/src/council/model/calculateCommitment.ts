@@ -1,5 +1,6 @@
-import { createType } from '@joystream/types'
 import { blake2AsHex } from '@polkadot/util-crypto'
+
+import { createType } from '../../common/model/createType'
 
 export function calculateCommitment(accountId: string, optionId: string, salt: string, cycleId: number) {
   // See https://github.com/Joystream/joystream/blob/db3885858a7812377a19390968bdbf65221f0270/tests/integration-tests/src/fixtures/council/ElectCouncilFixture.ts#L62

@@ -2,10 +2,10 @@ import { usePagination } from '@/common/hooks/usePagination'
 import { toQueryOrderByInput, SortOrder } from '@/common/hooks/useSort'
 import { error } from '@/common/logger'
 import { MemberListFilter } from '@/memberships/components/MemberListFilters'
-import { useGetMembersCountQuery, useGetMembersQuery } from '@/memberships/queries'
+import { useGetMembersCountQuery, useGetMembersWithDetailsQuery } from '@/memberships/queries'
 
 import { MembershipOrderByInput, MembershipWhereInput } from '../../common/api/queries'
-import { asMember } from '../types'
+import { asMemberWithDetails } from '../types'
 
 export const MEMBERS_PER_PAGE = 10
 
@@ -26,7 +26,7 @@ export const useMembers = ({ order, filter, perPage = 10 }: UseMemberProps) => {
     where,
     orderBy: toQueryOrderByInput<MembershipOrderByInput>(order),
   }
-  const { data, loading, error: err } = useGetMembersQuery({ variables })
+  const { data, loading, error: err } = useGetMembersWithDetailsQuery({ variables })
 
   if (err) {
     error(err)
@@ -34,7 +34,7 @@ export const useMembers = ({ order, filter, perPage = 10 }: UseMemberProps) => {
 
   return {
     isLoading: loading,
-    members: data?.memberships.map(asMember) ?? [],
+    members: data?.memberships.map(asMemberWithDetails) ?? [],
     totalCount,
     pagination,
   }
@@ -52,12 +52,11 @@ type FilterGqlInput = Pick<
   | 'isCouncilMember_eq'
 >
 
-const filterToGqlInput = ({ search, roles, council, onlyVerified, onlyFounder }: MemberListFilter): FilterGqlInput => ({
+const filterToGqlInput = ({ search, roles, onlyFounder, onlyCouncil }: MemberListFilter): FilterGqlInput => ({
   ...(search
     ? { OR: [{ controllerAccount_eq: search }, { rootAccount_eq: search }, { handle_contains: search }] }
     : {}),
   ...(roles.length ? { roles_some: { groupId_in: roles.map(toString) } } : {}),
-  ...(council === null ? {} : { isCouncilMember_eq: council }),
-  ...(onlyVerified ? { isVerified_eq: true } : {}),
   ...(onlyFounder ? { isFoundingMember_eq: true } : {}),
+  ...(onlyCouncil ? { isCouncilMember_eq: true } : {}),
 })

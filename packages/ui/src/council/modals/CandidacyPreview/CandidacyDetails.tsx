@@ -17,7 +17,7 @@ export const CandidacyDetails = ({ candidate }: Props) => {
   return (
     <Details gap={24}>
       <RowGapBlock gap={4}>
-        <h4>{candidate.info.title}</h4>
+        <Title>{candidate.info.title}</Title>
         {candidate.info.bannerUri && <HeaderImage src={candidate.info.bannerUri} />}
       </RowGapBlock>
       <RowGapBlock gap={4}>
@@ -48,4 +48,8 @@ const Details = styled(RowGapBlock)`
 
 const HeaderImage = styled.img`
   width: 100%;
+`
+
+const Title = styled.h4`
+  word-break: break-word;
 `

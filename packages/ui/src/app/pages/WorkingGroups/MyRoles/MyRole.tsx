@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React, { useCallback, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
@@ -53,7 +52,8 @@ export const MyRole = () => {
   const workerExcessValue = useMemo(() => {
     if (canMoveExcessTokens) {
       const excessValue = worker.stake.sub(worker.minStake)
-      return stakeBalance.transferable.gt(excessValue) ? new BN(excessValue) : stakeBalance.transferable
+
+      return stakeBalance.transferable.gte(excessValue) ? excessValue : stakeBalance.transferable
     }
   }, [worker, stakeBalance])
 

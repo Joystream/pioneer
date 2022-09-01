@@ -1,3 +1,4 @@
+import { DeriveBalancesVesting } from '@polkadot/api-derive/balances/types'
 import BN from 'bn.js'
 
 import { Address } from '@/common/types'
@@ -47,6 +48,11 @@ export interface Balances {
   recoverable: BN
   transferable: BN
   locks: BalanceLock[]
+  vesting: DeriveBalancesVesting[]
+  vestingTotal: BN
+  vestedClaimable: BN
+  vestedBalance: BN
+  vestingLocked: BN
 }
 
 export type AddressToBalanceMap = {

@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -15,7 +16,6 @@ export const BountiesTiles = ({ onlyContributed = false }: Props) => {
   const { t } = useTranslation('bounty')
   const { active } = useMyMemberships()
   const { statistics } = useUserBountiesStatistics(active?.id || '')
-
   const firstRow = useMemo(() => {
     const row: TileProps[] = []
     if (!onlyContributed) {
@@ -31,7 +31,7 @@ export const BountiesTiles = ({ onlyContributed = false }: Props) => {
         },
         {
           title: t('tiles.earned.title'),
-          content: <TokenValue value={statistics.amountEarned} size="l" />,
+          content: <TokenValue value={new BN(statistics.amountEarned ?? 0)} size="l" />,
           tooltipText: t('tiles.earned.tooltip'),
         }
       )

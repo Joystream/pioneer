@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React, { memo } from 'react'
 import styled from 'styled-components'
 
@@ -25,7 +24,7 @@ const actorsMapFunction = (el: BountyActorItem) => {
     return (
       <ValueText lighter>
         Contributed
-        <Amount value={new BN(el.amount)} />
+        <Amount value={el.amount} />
       </ValueText>
     )
   }
@@ -61,9 +60,9 @@ export const BountyActorsList = memo(({ title, elements, entrantResult, open = t
         <>
           {entrantResult && <Infobox result={entrantResult} />}
           {elements.map(
-            (el) =>
+            (el, index) =>
               el?.actor && (
-                <Wrapper key={el?.actor?.id}>
+                <Wrapper key={el?.actor?.id + '-tile-' + index}>
                   <MemberInfo member={el.actor} />
                   {actorsMapFunction(el)}
                 </Wrapper>

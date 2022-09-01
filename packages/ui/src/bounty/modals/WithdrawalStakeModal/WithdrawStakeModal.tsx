@@ -7,12 +7,12 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useApi } from '@/api/hooks/useApi'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { withdrawalStakeMachine, WithdrawalStakeStates } from '@/bounty/modals/WithdrawalStakeModal/machine'
 import { WithdrawSignModal } from '@/bounty/modals/WithdrawSignModal'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
@@ -33,13 +33,15 @@ export const WithdrawStakeModal = () => {
     [activeMember?.id]
   )
 
-  const transaction = useMemo(() => {
-    if (api && connectionState === 'connected' && activeMember && entry) {
-      return api.tx.bounty.withdrawWorkEntrantFunds(activeMember.id, modalData.bounty.id, entry.id)
-    }
-  }, [JSON.stringify(activeMember), connectionState])
-
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { transaction, feeInfo } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => {
+      if (api && connectionState === 'connected' && activeMember && entry) {
+        return api.tx.bounty.withdrawWorkEntrantFunds(activeMember.id, modalData.bounty.id, entry.id)
+      }
+    },
+    [JSON.stringify(activeMember), connectionState]
+  )
 
   useEffect(() => {
     if (state.matches(WithdrawalStakeStates.requirementsVerification)) {

@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { ModalContextProvider } from '@/common/providers/modal/provider'
 
@@ -14,11 +13,9 @@ export default {
 const Template: Story = () => {
   return (
     <>
-      <MemoryRouter>
-        <ModalContextProvider>
-          <WithdrawWarningModal onNext={() => undefined} onClose={() => undefined} />
-        </ModalContextProvider>
-      </MemoryRouter>
+      <ModalContextProvider>
+        <WithdrawWarningModal onNext={() => undefined} onClose={() => undefined} />
+      </ModalContextProvider>
     </>
   )
 }

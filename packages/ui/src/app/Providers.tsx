@@ -3,13 +3,13 @@ import { HashRouter } from 'react-router-dom'
 
 import { AccountsContextProvider } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import { ApiContextProvider } from '@/api/providers/provider'
 import { QueryNodeProvider } from '@/app/providers/QueryNodeProvider'
-import { ApiContextProvider } from '@/common/providers/api/provider'
 import { KeyringContextProvider } from '@/common/providers/keyring/provider'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { NetworkEndpointsProvider } from '@/common/providers/network-endpoints/provider'
 import { OnBoardingProvider } from '@/common/providers/onboarding/provider'
-import { TransactionContextProvider } from '@/common/providers/transaction/provider'
+import { TransactionStatusProvider } from '@/common/providers/transactionStatus/provider'
 import { MembershipContextProvider } from '@/memberships/providers/membership/provider'
 
 import { GlobalStyle } from './providers/GlobalStyle'
@@ -25,7 +25,7 @@ export const Providers = ({ children }: Props) => (
       <ApiContextProvider>
         <AccountsContextProvider>
           <QueryNodeProvider>
-            <TransactionContextProvider>
+            <TransactionStatusProvider>
               <BalancesContextProvider>
                 <MembershipContextProvider>
                   <HashRouter>
@@ -40,7 +40,7 @@ export const Providers = ({ children }: Props) => (
                   </HashRouter>
                 </MembershipContextProvider>
               </BalancesContextProvider>
-            </TransactionContextProvider>
+            </TransactionStatusProvider>
           </QueryNodeProvider>
         </AccountsContextProvider>
       </ApiContextProvider>

@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { getMember } from '../../../../test/_mocks/members'
 
@@ -12,9 +11,7 @@ export default {
 } as Meta
 
 const Template: Story<PreviewPostModalProps> = ({ author, text }) => (
-  <MemoryRouter>
-    <PreviewPostModal onClose={() => null} author={author} text={text} />
-  </MemoryRouter>
+  <PreviewPostModal onClose={() => null} author={author} text={text} />
 )
 
 export const Default = Template.bind({})

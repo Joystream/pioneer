@@ -59,9 +59,7 @@ const CreateMemberSchema = Yup.object().shape({
   rootAccount: AccountSchema.required('This field is required'),
   controllerAccount: AccountSchema.required('This field is required'),
   avatarUri: AvatarURISchema,
-  name: Yup.string()
-    .required('This field is required')
-    .matches(/^[a-zA-Z0-9_.-]*$/, 'Some of the characters are not allowed here '),
+  name: Yup.string().required('This field is required'),
   handle: HandleSchema.required('This field is required').matches(
     /^[a-zA-Z0-9_.-]*$/,
     'Some of the characters are not allowed here '
@@ -155,21 +153,23 @@ export const BuyMembershipForm = ({
       <ScrolledModalBody>
         <FormProvider {...form}>
           <ScrolledModalContainer>
-            <Row>
-              <InlineToggleWrap>
-                <Label>I was referred by a member: </Label>
-                <ToggleCheckbox trueLabel="Yes" falseLabel="No" name="isReferred" />
-              </InlineToggleWrap>
-              {isReferred && (
-                <InputComponent required inputSize="l">
-                  <SelectMember
-                    onChange={(member) => form.setValue('referrer', member, { shouldValidate: true })}
-                    disabled={!isReferred}
-                    selected={referrer}
-                  />
-                </InputComponent>
-              )}
-            </Row>
+            {type === 'general' && (
+              <Row>
+                <InlineToggleWrap>
+                  <Label>I was referred by a member: </Label>
+                  <ToggleCheckbox trueLabel="Yes" falseLabel="No" name="isReferred" />
+                </InlineToggleWrap>
+                {isReferred && (
+                  <InputComponent required inputSize="l">
+                    <SelectMember
+                      onChange={(member) => form.setValue('referrer', member, { shouldValidate: true })}
+                      disabled={!isReferred}
+                      selected={referrer}
+                    />
+                  </InputComponent>
+                )}
+              </Row>
+            )}
             <Row>
               <TextMedium dark>Please fill in all the details below.</TextMedium>
             </Row>

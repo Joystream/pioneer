@@ -1,12 +1,11 @@
 import React from 'react'
 
+import { useApi } from '@/api/hooks/useApi'
 import { LinkSymbol } from '@/common/components/icons/symbols'
+import { Modal, ModalBody, ModalHeader } from '@/common/components/Modal'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
-
-import { Modal, ModalBody, ModalHeader } from '../../../common/components/Modal'
-import { TextMedium, TokenValue } from '../../../common/components/typography'
-import { useApi } from '../../../common/hooks/useApi'
-import { useObservable } from '../../../common/hooks/useObservable'
+import { TextMedium, TokenValue } from '@/common/components/typography'
+import { useObservable } from '@/common/hooks/useObservable'
 
 interface Props {
   onClose: () => void
@@ -23,7 +22,8 @@ export const InviteMemberRequirementsModal = ({ onClose }: Props) => {
       <ModalBody>
         <TextMedium margin="s">
           Memberships Working Group budget has to be sufficient to cover new member invitations. Speak with the
-          Membership Working Group Lead on Discord to find out about the upcoming funding proposals for this group.
+          Membership Working Group Lead on Discord to find out about the upcoming "Update Working Group Budget" and "Set
+          Membership Lead Invitation Quota" proposals.
           <TooltipExternalLink
             href="https://joystream.gitbook.io/joystream-handbook/subsystems/membership#working-group"
             target="_blank"
@@ -35,7 +35,7 @@ export const InviteMemberRequirementsModal = ({ onClose }: Props) => {
           Current budget: <TokenValue value={workingGroupBudget?.toBn()} />
         </TextMedium>
         <TextMedium>
-          Working Group Dept: <TokenValue value={membershipPrice?.toBn()} />
+          Working Group Debt: <TokenValue value={membershipPrice?.toBn()} />
         </TextMedium>
       </ModalBody>
     </Modal>

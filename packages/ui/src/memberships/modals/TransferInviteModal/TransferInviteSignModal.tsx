@@ -5,15 +5,12 @@ import { ActorRef } from 'xstate'
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { ButtonPrimary } from '@/common/components/buttons'
+import { useApi } from '@/api/hooks/useApi'
 import { InputComponent } from '@/common/components/forms'
-import { ModalBody, ModalFooter, SignTransferContainer, TransactionInfoContainer } from '@/common/components/Modal'
-import { TransactionInfo } from '@/common/components/TransactionInfo'
-import { TextMedium } from '@/common/components/typography'
-import { useApi } from '@/common/hooks/useApi'
+import { ModalBody, ModalTransactionFooter, SignTransferContainer } from '@/common/components/Modal'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
-import { formatTokenValue } from '@/common/model/formatters'
 
 import { Member } from '../../types'
 
@@ -39,16 +36,15 @@ export const TransferInviteSignModal = ({ onClose, sourceMember, targetMember, a
     service,
   })
   const plural = amount.gt(new BN(1))
-  const name = targetMember.name
+  const handle = targetMember.handle
   const fee = paymentInfo?.partialFee.toBn()
-
   return (
     <TransactionModal service={service} onClose={onClose}>
       <ModalBody>
         <SignTransferContainer>
           <TextMedium margin="m">
-            You intend to transfer {amount.toString()} invite{plural && 's'} to {name}. A fee of {formatTokenValue(fee)}{' '}
-            tJOY will be applied to the transaction.
+            You intend to transfer {amount.toString()} invite{plural && 's'} to {handle}. Fee of{' '}
+            <TokenValue value={fee} /> will be applied to the transaction.
           </TextMedium>
           <InputComponent required inputSize="l" label="Fee paid by account" disabled borderless>
             <SelectedAccount
@@ -57,18 +53,10 @@ export const TransferInviteSignModal = ({ onClose, sourceMember, targetMember, a
           </InputComponent>
         </SignTransferContainer>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title="Transaction fee:"
-            value={fee}
-            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={sign} disabled={!isReady}>
-          Sign and Send
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={fee}
+        next={{ disabled: !isReady, label: 'Sign and Send', onClick: sign }}
+      />
     </TransactionModal>
   )
 }

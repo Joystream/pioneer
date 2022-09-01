@@ -11,44 +11,46 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useApi } from '@/api/hooks/useApi'
+import { CurrencyName } from '@/app/constants/currency'
 import { FundedRange } from '@/bounty/components/FundedRange'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
 import { BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal/index'
 import { contributeFundsMachine, ContributeFundStates } from '@/bounty/modals/ContributeFundsModal/machine'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { isFundingLimited } from '@/bounty/types/Bounty'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
-import { Input, InputComponent, InputNumber } from '@/common/components/forms'
+import { Input, InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import {
   AmountButton,
   AmountButtons,
   Modal,
-  ModalFooter,
   ModalHeader,
+  ModalTransactionFooter,
   Row,
   ScrolledModalBody,
   ScrolledModalContainer,
   TransactionAmount,
-  TransactionInfoContainer,
 } from '@/common/components/Modal'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO, Fonts } from '@/common/constants'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
 import { formatTokenValue } from '@/common/model/formatters'
+import { asBN } from '@/common/utils/bn'
 import { BNSchema, minContext } from '@/common/utils/validation'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
 const schema = Yup.object().shape({
-  amount: BNSchema.test(minContext('${min} tJOY is smallest allowed contribution', 'minAmount')),
+  amount: BNSchema.test(
+    minContext(`\${min}${CurrencyName.integerValue} is smallest allowed contribution`, 'minAmount')
+  ),
 })
 
 export const ContributeFundsModal = () => {
@@ -60,7 +62,7 @@ export const ContributeFundsModal = () => {
   } = useModal<BountyContributeFundsModalCall>()
   const { api, isConnected } = useApi()
   const [state, send] = useMachine(contributeFundsMachine)
-  const minFundingLimit = api?.consts.bounty.minFundingLimit ?? BN_ZERO
+  const minFundingLimit = asBN(api?.consts.bounty.minFundingLimit ?? 0)
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
   const balance = useBalance(activeMember?.controllerAccount)
@@ -88,13 +90,15 @@ export const ContributeFundsModal = () => {
     balance && setAmount(balance.transferable.divn(2))
   }, [balance])
 
-  const transaction = useMemo(() => {
-    if (api && isConnected && activeMember) {
-      return api.tx.bounty.fundBounty({ Member: activeMember.id }, bounty.id, state.context.amount ?? minFundingLimit)
-    }
-  }, [activeMember?.id, state.context.amount, isConnected, minFundingLimit.toString()])
-
-  const fee = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { transaction, feeInfo: fee } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => {
+      if (api && isConnected && activeMember) {
+        return api.tx.bounty.fundBounty({ Member: activeMember.id }, bounty.id, state.context.amount ?? minFundingLimit)
+      }
+    },
+    [activeMember?.id, state.context.amount, isConnected, minFundingLimit.toString()]
+  )
 
   const nextStep = useCallback(() => {
     send('NEXT')
@@ -241,7 +245,7 @@ export const ContributeFundsModal = () => {
                 id="amount-input"
                 required
                 inputWidth="s"
-                units="tJOY"
+                units={CurrencyName.integerValue}
                 validation={hasError('amount', errors) ? 'invalid' : undefined}
                 message={hasError('amount', errors) ? getErrorMessage('amount', errors) : ' '}
                 tooltipText={
@@ -257,12 +261,11 @@ export const ContributeFundsModal = () => {
                   </>
                 }
               >
-                <InputNumber
+                <TokenInput
                   id="amount-input"
-                  value={state.context.amount?.toString()}
-                  onChange={(_, value) => setAmount(new BN(value))}
+                  value={state.context.amount}
+                  onChange={(_, value) => setAmount(value)}
                   placeholder="0"
-                  isTokenValue
                 />
               </InputComponent>
               <StyledAmountButtons>
@@ -284,19 +287,12 @@ export const ContributeFundsModal = () => {
           </Row>
         </ScrolledModalContainer>
       </ScrolledModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo title={t('modals.common.contributeAmount')} value={state.context.amount} />
-          <TransactionInfo
-            title={t('modals.common.transactionFee.label')}
-            value={fee?.transactionFee}
-            tooltipText={t('modals.common.transactionFee.tooltip')}
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={!isValid} onClick={nextStep}>
-          {t('modals.contribute.nextButton')}
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={fee?.transactionFee}
+        next={{ disabled: !isValid, label: t('modals.contribute.nextButton'), onClick: nextStep }}
+      >
+        <TransactionInfo title={t('modals.common.contributeAmount')} value={state.context.amount} />
+      </ModalTransactionFooter>
     </Modal>
   )
 }

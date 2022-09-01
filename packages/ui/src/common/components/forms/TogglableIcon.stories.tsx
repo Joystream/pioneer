@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react'
 import React, { useState } from 'react'
 
-import { FounderMemberIcon, VerifiedMemberIcon } from '../icons'
+import { CouncilMemberIcon, FounderMemberIcon } from '../icons'
 import { Column, ModalBlock, Row, TemplateBlock } from '../storybookParts/previewStyles'
 
 import { TogglableIcon } from '.'
@@ -27,7 +27,7 @@ const Template: Story<Props> = ({ value, ...props }) => {
           </Column>
           <Column>
             <TogglableIcon {...props} value={v2} onChange={setV2}>
-              <VerifiedMemberIcon />
+              <CouncilMemberIcon />
             </TogglableIcon>
           </Column>
         </Row>

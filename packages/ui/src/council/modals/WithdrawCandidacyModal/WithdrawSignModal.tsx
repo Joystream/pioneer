@@ -1,12 +1,9 @@
 import React, { useMemo } from 'react'
 import { ActorRef, State } from 'xstate'
 
-import { ButtonPrimary } from '@/common/components/buttons'
-import { Arrow } from '@/common/components/icons'
-import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
-import { TransactionInfo } from '@/common/components/TransactionInfo'
+import { useApi } from '@/api/hooks/useApi'
+import { ModalBody, ModalTransactionFooter } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
-import { useApi } from '@/common/hooks/useApi'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { TransactionEvent } from '@/common/model/machines'
@@ -33,19 +30,10 @@ export const WithdrawSignModal = ({ onClose, service, member }: Props) => {
       <ModalBody>
         <TextMedium>You intend to withdraw your candidacy</TextMedium>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title="Transaction fee:"
-            value={paymentInfo?.partialFee.toBn()}
-            tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={!isReady} onClick={sign}>
-          Sign and send
-          <Arrow direction="right" />
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={paymentInfo?.partialFee.toBn()}
+        next={{ disabled: !isReady, label: 'Sign and send', onClick: sign }}
+      />
     </TransactionModal>
   )
 }

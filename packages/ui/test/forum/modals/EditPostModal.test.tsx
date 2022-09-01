@@ -1,10 +1,9 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { ApiContext } from '@/common/providers/api/context'
+import { ApiContext } from '@/api/providers/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { EditPostModal, EditPostModalCall } from '@/forum/modals/PostActionModal/EditPostModal'
@@ -22,12 +21,14 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import {
   currentStubErrorMessage,
+  stubAccounts,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -62,7 +63,6 @@ describe('UI: EditPostModal', () => {
       getMemberIdByBoundAccountAddress: () => undefined,
     },
   }
-  let useAccounts: UseAccounts
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -74,15 +74,12 @@ describe('UI: EditPostModal', () => {
     mockPosts.map((post) => seedForumPost(post, server.server))
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+    stubDefaultBalances()
     tx = stubTransaction(api, txPath)
     modalData.transaction = api.api.tx.forum.editPostText(1, 1, 1, 1, '')
   })
@@ -95,7 +92,8 @@ describe('UI: EditPostModal', () => {
   })
 
   it('Requirements failed', async () => {
-    tx = stubTransaction(api, txPath, 10000)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
+
     modalData.transaction = api.api.tx.forum.editPostText(1, 1, 1, 1, '')
     renderModal()
     expect(screen.queryByText('modals.insufficientFunds.title')).not.toBeNull()
@@ -124,13 +122,11 @@ describe('UI: EditPostModal', () => {
       <ModalContext.Provider value={useModal}>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
-            <AccountsContext.Provider value={useAccounts}>
-              <MembershipContext.Provider value={useMyMemberships}>
-                <ApiContext.Provider value={api}>
-                  <EditPostModal />
-                </ApiContext.Provider>
-              </MembershipContext.Provider>
-            </AccountsContext.Provider>
+            <MembershipContext.Provider value={useMyMemberships}>
+              <ApiContext.Provider value={api}>
+                <EditPostModal />
+              </ApiContext.Provider>
+            </MembershipContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
       </ModalContext.Provider>

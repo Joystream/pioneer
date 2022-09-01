@@ -28,7 +28,6 @@ export const HorizontalStepper = ({ steps }: HorizontalStepperProps) => {
 }
 
 const pastStepCss = css`
-  background-color: ${Colors.Black[500]};
   border-color: ${Colors.Black[500]};
   color: ${Colors.White};
 `

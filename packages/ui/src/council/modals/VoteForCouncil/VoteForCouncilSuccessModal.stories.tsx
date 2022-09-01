@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { ModalContext } from '@/common/providers/modal/context'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
@@ -25,13 +24,11 @@ interface Props {
 const Template: Story<Props> = ({ id, hideModal, showModal }) => {
   const modalData = { id }
   return (
-    <MemoryRouter>
-      <MockApolloProvider members council>
-        <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
-          <VoteForCouncilSuccessModal onClose={hideModal} candidateId={modalData.id} />
-        </ModalContext.Provider>
-      </MockApolloProvider>
-    </MemoryRouter>
+    <MockApolloProvider members council>
+      <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
+        <VoteForCouncilSuccessModal onClose={hideModal} candidateId={modalData.id} />
+      </ModalContext.Provider>
+    </MockApolloProvider>
   )
 }
 

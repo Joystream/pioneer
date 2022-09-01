@@ -102,7 +102,7 @@ const ListHeaders = styled.div`
   padding-right: 8px;
 `
 
-const ListHeader = styled.span`
+export const ListHeader = styled.span`
   display: flex;
   justify-content: flex-end;
   align-items: center;

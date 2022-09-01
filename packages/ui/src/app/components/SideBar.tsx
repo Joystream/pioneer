@@ -1,12 +1,11 @@
 import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion'
-import React, { useState } from 'react'
+import React from 'react'
 import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { MembersRoutes, ProfileRoutes, SettingsRoutes } from '@/app/constants/routes'
 import { BountyRoutes } from '@/bounty/constants'
 import { Arrow } from '@/common/components/icons'
-import { Notifications, NotificationsButton } from '@/common/components/Notifications'
 import { BandwidthIcon } from '@/common/components/page/Sidebar/LinksIcons/BandwidthIcon'
 import { BountyIcon } from '@/common/components/page/Sidebar/LinksIcons/BountyIcon'
 import { ConstitutionIcon } from '@/common/components/page/Sidebar/LinksIcons/ConstitutionIcon'
@@ -18,7 +17,6 @@ import { ForumIcon } from '@/common/components/page/Sidebar/LinksIcons/ForumIcon
 import { GatewaysIcon } from '@/common/components/page/Sidebar/LinksIcons/GatewaysIcon'
 import { MembersIcon } from '@/common/components/page/Sidebar/LinksIcons/MembersIcon'
 import { MyProfileIcon } from '@/common/components/page/Sidebar/LinksIcons/MyProfileIcon'
-import { OverviewIcon } from '@/common/components/page/Sidebar/LinksIcons/OverviewIcon'
 import { ProposalsIcon } from '@/common/components/page/Sidebar/LinksIcons/ProposalsIcon'
 import { SettingsIcon } from '@/common/components/page/Sidebar/LinksIcons/SettingsIcon'
 import { StorageIcon } from '@/common/components/page/Sidebar/LinksIcons/StorageIcon'
@@ -35,14 +33,11 @@ import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { ForumRoutes } from '@/forum/constant'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
-import { OverviewRoutes } from '@/overview/constants/routes'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
 export const SideBar = () => {
-  const [isNotificationsPanelOpen, setNotificationsPanelOpen] = useState(false)
   const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)
-  const onClose = () => setNotificationsPanelOpen(false)
   const { stage: electionStage } = useElectionStage()
   const electionLink = electionStage === 'inactive' ? ElectionRoutes.pastElections : ElectionRoutes.currentElection
 
@@ -51,10 +46,10 @@ export const SideBar = () => {
       <NavigationInnerWrapper>
         <NavigationHeader>
           <LogoLink />
-          <NotificationsButton
-            onClick={() => setNotificationsPanelOpen(!isNotificationsPanelOpen)}
-            isNotificationsPanelOpen={isNotificationsPanelOpen}
-          />
+          {/*<NotificationsButton*/}
+          {/*  onClick={() => setNotificationsPanelOpen(!isNotificationsPanelOpen)}*/}
+          {/*  isNotificationsPanelOpen={isNotificationsPanelOpen}*/}
+          {/*/>*/}
         </NavigationHeader>
         <AnimateSharedLayout>
           <NavigationLinks>
@@ -166,7 +161,7 @@ export const SideBar = () => {
         </AnimateSharedLayout>
         <ProfileComponent />
       </NavigationInnerWrapper>
-      <Notifications onClose={onClose} isNotificationsPanelOpen={isNotificationsPanelOpen} />
+      {/*<Notifications onClose={onClose} isNotificationsPanelOpen={isNotificationsPanelOpen} />*/}
     </Navigation>
   )
 }

@@ -2,18 +2,19 @@ import BN from 'bn.js'
 import React from 'react'
 import styled, { css } from 'styled-components'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { Skeleton } from '@/common/components/Skeleton'
-import { isDefined } from '@/common/utils'
 
 import { Colors, Fonts } from '../../constants'
-import { formatTokenValue } from '../../model/formatters'
+import { formatJoyValue } from '../../model/formatters'
+import { Tooltip } from '../Tooltip'
 
 interface ValueSizingProps {
   size?: 's' | 'm' | 'l'
 }
 
 interface ValueProps extends ValueSizingProps {
-  value?: BN | number | null
+  value?: BN | null
   className?: string
   isLoading?: boolean
 }
@@ -23,37 +24,39 @@ export const TokenValue = React.memo(({ className, value, size, isLoading }: Val
     return <Skeleton id="tokenValueSkeleton" variant="rect" height="32px" width="50%" />
   }
 
-  if (value === null || !isDefined(value)) {
+  if (!value) {
     return <span>-</span>
   }
-
   return (
-    <ValueInJoys className={className} size={size}>
-      {formatTokenValue(value)}
-    </ValueInJoys>
+    <Tooltip tooltipText={<JOYSuffix>{formatJoyValue(value)}</JOYSuffix>}>
+      <ValueInJoys className={className} size={size}>
+        {formatJoyValue(value, { precision: 2 })}
+      </ValueInJoys>
+    </Tooltip>
   )
 })
 
-export const ValueInJoys = styled.span<ValueSizingProps>`
+const JOYSuffix = styled.span`
   display: inline-grid;
-  position: relative;
   grid-auto-flow: column;
   grid-column-gap: 4px;
   align-items: baseline;
   width: fit-content;
   font-weight: 700;
-  color: ${Colors.Black[900]};
   font-family: ${Fonts.Grotesk};
 
   &:after {
-    content: 'tJOY';
+    content: '${CurrencyName.integerValue}';
     display: inline-block;
     font-size: 14px;
     line-height: 20px;
     font-weight: 400;
     color: ${Colors.Black[400]};
-    font-family: ${Fonts.Grotesk};
   }
+`
+
+export const ValueInJoys = styled(JOYSuffix)<ValueSizingProps>`
+  color: ${Colors.Black[900]};
 
   ${({ size }) => {
     switch (size) {

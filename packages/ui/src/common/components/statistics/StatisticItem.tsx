@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { TextSmall } from '@/common/components/typography'
 
@@ -11,12 +11,13 @@ import { StatisticHeader, StatisticHeaderProps } from './StatisticHeader'
 export interface StatisticItemProps extends StatisticHeaderProps, StatiscticBlockProps {
   className?: string
   counter?: number
+  inline?: boolean
 }
 
 export const StatisticItem: FC<StatisticItemProps> = ({ className, size, children, centered, ...headerProps }) => (
   <StatsBlock key={headerProps.title} className={className} size={size} centered={centered}>
     <StatisticHeader {...headerProps} />
-    <StatsContent>{children}</StatsContent>
+    <StatsContent inline={headerProps.inline}>{children}</StatsContent>
   </StatsBlock>
 )
 
@@ -49,8 +50,14 @@ export const StatsBlock = styled.div<StatiscticBlockProps>`
   box-shadow: ${Shadows.light};
 `
 
-export const StatsContent = styled.div`
+export const StatsContent = styled.div<{ inline?: boolean }>`
   margin-top: auto;
+  ${({ inline }) =>
+    inline &&
+    css`
+      display: flex;
+      justify-content: space-between;
+    `}
 `
 
 export const StatisticItemSpacedContent = styled.div`

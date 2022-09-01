@@ -1,5 +1,5 @@
 import { useMachine } from '@xstate/react'
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import * as Yup from 'yup'
@@ -12,29 +12,28 @@ import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatu
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useApi } from '@/api/hooks/useApi'
+import { CurrencyName } from '@/app/constants/currency'
 import { BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEntryModal/index'
 import { announceWorkEntryMachine, AnnounceWorkEntryStates } from '@/bounty/modals/AnnounceWorkEntryModal/machine'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
-import { Input, InputComponent, InputNumber } from '@/common/components/forms'
+import { Input, InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import {
   Modal,
-  ModalFooter,
   ModalHeader,
+  ModalTransactionFooter,
   Row,
   ScrolledModalBody,
   ScrolledModalContainer,
   TransactionAmount,
-  TransactionInfoContainer,
 } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO, Fonts } from '@/common/constants'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
 import { formatTokenValue } from '@/common/model/formatters'
@@ -65,7 +64,7 @@ export const AnnounceWorkEntryModal = () => {
   const [state, send] = useMachine(announceWorkEntryMachine)
   const balance = useBalance(state.context.stakingAccount?.address)
   const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
-  const { hasRequiredStake } = useHasRequiredStake(amount.toNumber() || 0, 'Bounties')
+  const { hasRequiredStake } = useHasRequiredStake(amount ?? BN_ZERO, 'Bounties')
 
   const { setContext, errors, isValid } = useSchema<IStakingAccountSchema>(
     { account: state.context.stakingAccount },
@@ -84,20 +83,26 @@ export const AnnounceWorkEntryModal = () => {
     }
   }, [JSON.stringify(balance), amount, stakingStatus])
 
-  const transaction = useMemo(() => {
-    if (api && isConnected && activeMember) {
-      if (stakingStatus === 'confirmed') {
-        return api.tx.bounty.announceWorkEntry(activeMember.id, bounty.id, state.context.stakingAccount?.address ?? '')
+  const { transaction, feeInfo: fee } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => {
+      if (api && isConnected && activeMember) {
+        if (stakingStatus === 'confirmed') {
+          return api.tx.bounty.announceWorkEntry(
+            activeMember.id,
+            bounty.id,
+            state.context.stakingAccount?.address ?? ''
+          )
+        }
+
+        return api.tx.utility.batch([
+          api.tx.members.confirmStakingAccount(activeMember.id, state.context.stakingAccount?.address ?? ''),
+          api.tx.bounty.announceWorkEntry(activeMember.id, bounty.id, state.context.stakingAccount?.address ?? ''),
+        ])
       }
-
-      return api.tx.utility.batch([
-        api.tx.members.confirmStakingAccount(activeMember.id, state.context.stakingAccount?.address ?? ''),
-        api.tx.bounty.announceWorkEntry(activeMember.id, bounty.id, state.context.stakingAccount?.address ?? ''),
-      ])
-    }
-  }, [activeMember?.id, state.context.stakingAccount?.address, isConnected, stakingStatus])
-
-  const fee = useTransactionFee(activeMember?.controllerAccount, transaction)
+    },
+    [activeMember?.id, state.context.stakingAccount?.address, isConnected, stakingStatus]
+  )
 
   const nextStep = useCallback(() => {
     send('NEXT')
@@ -267,29 +272,22 @@ export const AnnounceWorkEntryModal = () => {
                 id="amount-input"
                 required
                 inputWidth="s"
-                units="tJOY"
+                units={CurrencyName.integerValue}
                 disabled
                 tooltipText={t('modals.announceWorkEntry.selectAmountTooltip')}
               >
-                <InputNumber id="amount-input" value={amount.toString()} isTokenValue disabled />
+                <TokenInput id="amount-input" value={amount} disabled />
               </InputComponent>
             </TransactionAmount>
           </Row>
         </ScrolledModalContainer>
       </ScrolledModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo title={t('modals.common.contributeAmount')} value={amount} />
-          <TransactionInfo
-            title={t('modals.common.transactionFee.label')}
-            value={fee?.transactionFee}
-            tooltipText={t('modals.common.transactionFee.tooltip')}
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={!isValid} onClick={nextStep}>
-          {t('modals.announceWorkEntry.nextButton')}
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={fee?.transactionFee}
+        next={{ disabled: !isValid, label: t('modals.announceWorkEntry.nextButton'), onClick: nextStep }}
+      >
+        <TransactionInfo title={t('modals.common.contributeAmount')} value={amount} />
+      </ModalTransactionFooter>
     </Modal>
   )
 }

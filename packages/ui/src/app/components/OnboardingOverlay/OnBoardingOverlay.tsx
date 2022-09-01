@@ -1,6 +1,8 @@
+import { Wallet } from 'injectweb3-connect'
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { BenefitsTable } from '@/app/components/OnboardingOverlay/components/BenefitsTable'
 import { DrawerContainer } from '@/app/components/OnboardingOverlay/components/DrawerContainer'
 import { ButtonPrimary } from '@/common/components/buttons'
@@ -12,25 +14,25 @@ import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper
 import { VerticalStaticStepper } from '@/common/components/Stepper/VerticalStaticStepper'
 import { TextHuge, TextSmall } from '@/common/components/typography'
 import { Colors, ZIndex } from '@/common/constants'
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { useToggle } from '@/common/hooks/useToggle'
-import { OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
 import { OnBoardingStatus } from '@/common/providers/onboarding/types'
 
 export const onBoardingSteps: StepperStep[] = [
   {
-    title: 'Add Polkadot plugin',
+    title: 'Connect wallet',
     type: 'next',
     id: 'installPlugin',
   },
   {
-    title: 'Connect a Polkadot account',
+    title: 'Connect account',
     type: 'next',
     id: 'addAccount',
   },
   {
-    title: 'Create membership for FREE',
+    title: 'Create free membership',
     type: 'next',
     id: 'createMembership',
   },
@@ -38,19 +40,23 @@ export const onBoardingSteps: StepperStep[] = [
 
 const innerStaticStepperSteps = [
   {
-    title: 'Install Polkadot extension',
-    subtitle: ['and create account', 'then connect it to your joystream membership'],
+    title: 'Connect wallet',
+    subtitle: 'Select or install a free browser wallet extension. Popular with Joystream community:',
   },
   {
-    title: 'Create or select a Polkadot account',
+    title: 'Connect account',
+    subtitle: 'Select a wallet account to connect your Joystream membership with.',
+    walletIcon: false,
   },
   {
-    title: 'Create membership for FREE',
+    title: 'Create a free membership',
+    subtitle: 'Set up a free Joystream membership.',
+    walletIcon: false,
   },
 ]
 
 export const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus): StepperStep[] => {
-  const activeIndex = steps.findIndex((step) => step?.id === status)
+  const activeIndex = steps.findIndex((step) => step.id === status)
   if (activeIndex === -1) return steps.map((step) => ({ ...step, type: 'next' }))
 
   return steps.map((step, index) => {
@@ -65,18 +71,19 @@ export const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus
 }
 
 export const OnBoardingOverlay = () => {
-  const { showModal } = useModal<OnBoardingModalCall>()
+  const { showModal } = useModal()
+  const { wallet } = useMyAccounts()
+  const [selectedWallet] = useLocalStorage<Wallet | undefined>('recentWallet')
   const { isLoading, status } = useOnBoarding()
   const [isOpen, toggle] = useToggle()
+
   const openOnBoardingModal = useCallback(() => {
     showModal({ modal: 'OnBoardingModal' })
-  }, [])
+  }, [wallet, selectedWallet])
 
   if (isLoading || !status || status === 'finished') {
     return null
   }
-
-  const steps = asOnBoardingSteps(onBoardingSteps, status)
 
   return (
     <>
@@ -88,23 +95,29 @@ export const OnBoardingOverlay = () => {
             <TextSmall onClick={toggle}>Show how {!isOpen ? <ArrowDownIcon /> : <ArrowUpExpandedIcon />}</TextSmall>
           </TextContainer>
           <StepperContainer>
-            <HorizontalStepper steps={steps} />
+            <HorizontalStepper steps={onBoardingSteps} />
           </StepperContainer>
           <ButtonContainer>
             <ButtonPrimary size="large" onClick={openOnBoardingModal}>
-              Join now
+              {!wallet ? 'Connect Wallet' : 'Join Now'}
             </ButtonPrimary>
           </ButtonContainer>
         </Wrapper>
         <StyledDropDown isDropped={isOpen}>
           <DropdownContent>
-            <DrawerContainer title="What are the benefits?">
+            <DrawerContainer
+              title="What are the benefits?"
+              subtitle="Becoming a Joystream member allows you to contribute to the project."
+            >
               <BenefitsTable />
             </DrawerContainer>
-            <DrawerContainer title="How to become a member?">
+            <DrawerContainer
+              title="How to become a member?"
+              subtitle="Joining the community is as simple as one-two-three!"
+            >
               <VerticalStaticStepper steps={innerStaticStepperSteps} />
               <ButtonPrimary onClick={openOnBoardingModal} size="large">
-                Continue
+                {!wallet ? 'Connect Wallet' : 'Join Now'}
               </ButtonPrimary>
             </DrawerContainer>
           </DropdownContent>
@@ -127,7 +140,7 @@ const MainWrapper = styled.div`
 `
 
 const StyledDropDown = styled(DropDownToggle)`
-  background-color: ${Colors.Black[700]};
+  background-color: ${Colors.Black[800]};
   position: absolute;
   z-index: ${ZIndex.navbarInner};
 `
@@ -135,7 +148,7 @@ const StyledDropDown = styled(DropDownToggle)`
 const DropdownContent = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  padding: 40px;
+  padding: 33px 24px 33px 33px;
 
   > *:first-child {
     padding-right: 10%;
@@ -144,15 +157,11 @@ const DropdownContent = styled.div`
   > *:nth-child(2) {
     justify-self: center;
   }
-
-  button {
-    margin-left: 30%;
-  }
 `
 
 const Wrapper = styled.div`
   width: 100%;
-  background-color: ${Colors.Black[700]};
+  background-color: ${Colors.Black[800]};
   color: ${Colors.White};
   height: 85px;
   display: flex;
@@ -190,7 +199,7 @@ const TextContainer = styled.div`
   }
 `
 
-const StepperContainer = styled.div`
+export const StepperContainer = styled.div`
   display: flex;
   flex: 3;
   align-items: center;

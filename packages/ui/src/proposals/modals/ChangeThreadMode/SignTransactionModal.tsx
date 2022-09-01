@@ -1,15 +1,12 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { ActorRef } from 'xstate'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
-import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { ButtonPrimary } from '@/common/components/buttons'
-import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
-import { TransactionInfo } from '@/common/components/TransactionInfo'
+import { ModalBody, ModalTransactionFooter, Row } from '@/common/components/Modal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal, TransactionStep } from '@/common/modals/TransactionModal'
@@ -26,19 +23,9 @@ interface SignTransactionModalProps {
 export const SignTransactionModal = ({ onClose, transaction, signer, service, steps }: SignTransactionModalProps) => {
   const { allAccounts } = useMyAccounts()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
-  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({ transaction, signer, service })
-  const [hasFunds, setHasFunds] = useState(false)
-  const balance = useBalance(signer)
-  const transferable = balance?.transferable
+  const { paymentInfo, sign, isReady, canAfford } = useSignAndSendTransaction({ transaction, signer, service })
   const partialFee = paymentInfo?.partialFee
-
-  useEffect(() => {
-    if (transferable && partialFee) {
-      setHasFunds(transferable.gte(partialFee))
-    }
-  }, [partialFee?.toString(), transferable?.toString()])
-
-  const signDisabled = !isReady || !hasFunds
+  const signDisabled = !isReady || !canAfford
 
   return (
     <TransactionModal onClose={onClose} service={service} useMultiTransaction={steps && { steps, active: 2 }}>
@@ -51,18 +38,10 @@ export const SignTransactionModal = ({ onClose, transaction, signer, service, st
           <SelectedAccount account={signerAccount} />
         </Row>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title="Transaction fee:"
-            value={partialFee?.toBn()}
-            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={sign} disabled={signDisabled}>
-          Sign transaction and change mode
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={partialFee?.toBn()}
+        next={{ disabled: signDisabled, label: 'Sign transaction and change mode', onClick: sign }}
+      />
     </TransactionModal>
   )
 }

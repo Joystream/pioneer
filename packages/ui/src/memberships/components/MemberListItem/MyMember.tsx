@@ -17,7 +17,7 @@ import {
   MemberItemWrap,
   MemberModalTrigger,
   MemberRolesColumn,
-} from './Fileds'
+} from './Fields'
 
 export const MyMemberListItem = ({ member }: { member: Member }) => {
   const { slashed, terminated, invited } = useMemberActions(member)

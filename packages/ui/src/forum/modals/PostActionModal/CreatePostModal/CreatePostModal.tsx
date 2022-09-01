@@ -7,12 +7,12 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useApi } from '@/api/hooks/useApi'
 import { FailureModal } from '@/common/components/FailureModal'
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO } from '@/common/constants'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -38,7 +38,7 @@ export const CreatePostModal = () => {
   const { api } = useApi()
 
   const postDeposit = api?.consts[module].postDeposit.toBn()
-  const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
+  const { feeInfo } = useTransactionFee(active?.controllerAccount, () => transaction)
   const requiredAmount = useMemo(
     () => feeInfo && api && feeInfo.transactionFee.add(postDeposit ?? BN_ZERO),
     [feeInfo, postDeposit]

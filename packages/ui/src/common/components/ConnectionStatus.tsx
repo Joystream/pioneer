@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
-import { useApi } from '../hooks/useApi'
+import { useApi } from '../../api/hooks/useApi'
 
 import { SideNotification } from './page/SideNotification'
 

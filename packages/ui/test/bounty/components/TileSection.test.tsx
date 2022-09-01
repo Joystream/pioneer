@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { TileSection } from '@/bounty/components/TileSection'
@@ -41,11 +42,11 @@ describe('TileSection', () => {
   const secondRow = [
     {
       title: 'Funded',
-      content: <TokenValue value={9999} size="l" />,
+      content: <TokenValue value={new BN(9999)} size="l" />,
     },
     {
       title: 'Cherry',
-      content: <TokenValue value={9999} size="l" />,
+      content: <TokenValue value={new BN(9999)} size="l" />,
     },
     {
       title: 'Works',

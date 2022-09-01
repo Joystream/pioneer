@@ -6,13 +6,11 @@ import { ActorRef } from 'xstate'
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { Api } from '@/api/types'
-import { ButtonPrimary } from '@/common/components/buttons'
+import { Api } from '@/api'
+import { useApi } from '@/api/hooks/useApi'
 import { Label } from '@/common/components/forms'
-import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
-import { TransactionInfo } from '@/common/components/TransactionInfo'
+import { ModalBody, ModalTransactionFooter, Row } from '@/common/components/Modal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
-import { useApi } from '@/common/hooks/useApi'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
@@ -97,20 +95,10 @@ export const UpdateMembershipSignModal = ({ onClose, transactionParams, member, 
           <SelectedAccount account={signer} />
         </Row>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title="Transaction fee:"
-            value={paymentInfo?.partialFee.toBn()}
-            tooltipText={
-              'Transaction fee covers the cost of processing the update and storing the record on the chain.'
-            }
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={sign} disabled={!isReady}>
-          Sign and update a member
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={paymentInfo?.partialFee.toBn()}
+        next={{ disabled: !isReady, label: 'Sign and update a member', onClick: sign }}
+      />
     </TransactionModal>
   )
 }

@@ -1,18 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { FounderMemberIcon, VerifiedMemberIcon, LeadMemberIcon } from '@/common/components/icons'
-import { Colors } from '@/common/constants'
-import { isString } from '@/common/utils'
-import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
-
+import { FounderMemberIcon, LeadMemberIcon, CouncilMemberIcon } from '@/common/components/icons'
 import {
   DarkTooltipInnerItemProps,
   DefaultTooltip,
   DefaultTooltipProps,
   Tooltip,
   TooltipComponent,
-} from '../../common/components/Tooltip'
+} from '@/common/components/Tooltip'
+import { TextInlineSmall } from '@/common/components/typography'
+import { Colors, Fonts } from '@/common/constants'
+import { isString } from '@/common/utils'
+import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
+
 import { Member } from '../types'
 
 import { Avatar } from './Avatar'
@@ -36,6 +37,7 @@ export interface MemberInfoContainerProps {
   maxRoles?: number
   avatarSmall?: boolean
   skipModal?: boolean
+  withID?: boolean
 }
 
 export type MemberInfoProps = MemberInfoContainerProps & MemberInfoWrapProps & { hideGroup?: boolean }
@@ -54,6 +56,7 @@ export const MemberInfo = React.memo(
     isLead,
     skipModal,
     avatarSmall,
+    withID,
   }: MemberInfoProps) => {
     const roleSize = size === 's' ? 'm' : size
     const showMemberModal = useShowMemberModal(member.id)
@@ -82,33 +85,48 @@ export const MemberInfo = React.memo(
             )}
           </MemberPhotoContainer>
         </MemberPhoto>
-        <MemberHead>
-          <MemberHandle>{member.handle}</MemberHandle>
-          {(member.isVerified || member.isFoundingMember) && (
-            <MemberIcons>
-              {member.isVerified && (
-                <Tooltip tooltipText="This member is verified">
-                  <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'tooltipondark' : 'tooltiponlight'}>
-                    <VerifiedMemberIcon />
-                  </MemberStatusTooltip>
-                </Tooltip>
-              )}
-              {member.isFoundingMember && (
-                <Tooltip tooltipText="This member is founder">
-                  <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'tooltipondark' : 'tooltiponlight'}>
-                    <FounderMemberIcon />
-                  </MemberStatusTooltip>
-                </Tooltip>
-              )}
-            </MemberIcons>
+        <div>
+          <MemberHead>
+            <MemberHandle>{member.handle}</MemberHandle>
+            {(member.isFoundingMember || member.isCouncilMember) && (
+              <MemberIcons>
+                {member.isFoundingMember && (
+                  <Tooltip tooltipText="This member is founder">
+                    <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'tooltipondark' : 'tooltiponlight'}>
+                      <FounderMemberIcon />
+                    </MemberStatusTooltip>
+                  </Tooltip>
+                )}
+                {member.isCouncilMember && (
+                  <Tooltip tooltipText="Council Member">
+                    <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'tooltipondark' : 'tooltiponlight'}>
+                      <CouncilMemberIcon />
+                    </MemberStatusTooltip>
+                  </Tooltip>
+                )}
+              </MemberIcons>
+            )}
+          </MemberHead>
+          {withID && (
+            <IdHeader>
+              <span>Member ID: </span>
+              {member.id}
+            </IdHeader>
           )}
-        </MemberHead>
+        </div>
         {showRoles && <MemberRoles roles={member.roles} size={roleSize} max={maxRoles} />}
         {showId && <MemberId>{isString(showIdOrText) ? showIdOrText : `Member ID: ${member.id}`}</MemberId>}
       </MemberInfoWrap>
     )
   }
 )
+
+const IdHeader = styled(TextInlineSmall)`
+  > span {
+    color: ${Colors.Black[400]};
+    font-family: ${Fonts.Inter};
+  }
+`
 
 export const MemberInfoList = styled.ul`
   display: flex;

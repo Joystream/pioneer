@@ -1,23 +1,19 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { ActorRef } from 'xstate'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
-import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
-import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
-import { TransactionInfo } from '@/common/components/TransactionInfo'
+import { ModalBody, ModalTransactionFooter, Row } from '@/common/components/Modal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { Address } from '@/common/types'
 
 import { MemberFormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
-import { getMessage } from '../utils'
 
 interface SignProps {
   onClose: () => void
@@ -30,23 +26,13 @@ interface SignProps {
 export const InviteMemberSignModal = ({ onClose, formData, transaction, signer, service }: SignProps) => {
   const { allAccounts } = useMyAccounts()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
-  const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
+  const { paymentInfo, sign, isReady, canAfford } = useSignAndSendTransaction({
     transaction,
     signer: signer,
     service,
   })
-  const [hasFunds, setHasFunds] = useState(false)
-  const balance = useBalance(signer)
-  const transferable = balance?.transferable
   const partialFee = paymentInfo?.partialFee
-
-  useEffect(() => {
-    if (transferable && partialFee) {
-      setHasFunds(transferable.gte(partialFee))
-    }
-  }, [partialFee?.toString(), transferable?.toString()])
-
-  const signDisabled = !isReady || !hasFunds
+  const signDisabled = !isReady || !canAfford
 
   return (
     <TransactionModal onClose={onClose} service={service}>
@@ -62,25 +48,17 @@ export const InviteMemberSignModal = ({ onClose, formData, transaction, signer, 
           <InputComponent
             label="Sending from account"
             inputSize="l"
-            validation={hasFunds ? undefined : 'invalid'}
-            message={hasFunds ? undefined : getMessage(partialFee)}
+            validation={!canAfford ? 'invalid' : undefined}
+            message={!canAfford ? 'Insufficient funds to cover the membership creation.' : undefined}
           >
             <SelectedAccount account={signerAccount} />
           </InputComponent>
         </Row>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title="Transaction fee:"
-            value={partialFee?.toBn()}
-            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={sign} disabled={signDisabled}>
-          Sign and create a member
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={partialFee?.toBn()}
+        next={{ disabled: signDisabled, label: 'Sign and create a member', onClick: sign }}
+      />
     </TransactionModal>
   )
 }

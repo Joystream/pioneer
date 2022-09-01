@@ -1,3 +1,4 @@
+import { ForumThreadMetadata } from '@joystream/metadata-protobuf'
 import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -7,9 +8,10 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useApi } from '@/api/hooks/useApi'
 import { FailureModal } from '@/common/components/FailureModal'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
+import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { useForumCategoryBreadcrumbs } from '@/forum/hooks/useForumCategoryBreadcrumbs'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -31,25 +33,38 @@ export const CreateThreadModal = () => {
   const { allAccounts } = useMyAccounts()
   const { showModal, hideModal, modalData } = useModal<CreateThreadModalCall>()
   const [state, send] = useMachine(createThreadMachine)
-  const { api } = useApi()
+  const { api, isConnected } = useApi()
   const { breadcrumbs } = useForumCategoryBreadcrumbs(modalData.categoryId)
   const balance = useBalance(member?.controllerAccount)
 
   const postDeposit = useMemo(() => api?.consts.forum.postDeposit.toBn(), [api])
   const threadDeposit = useMemo(() => api?.consts.forum.threadDeposit.toBn(), [api])
 
-  const baseTransaction = api?.tx.forum.createThread(member?.id ?? 0, modalData.categoryId, '', '', null)
-  const baseTransactionFee = useTransactionFee(member?.controllerAccount, baseTransaction)
-  const minimumTransactionCost = useMemo(
-    () => postDeposit && threadDeposit && baseTransactionFee?.transactionFee.add(postDeposit).add(threadDeposit),
-    [postDeposit, threadDeposit, baseTransactionFee?.transactionFee.toString()]
-  )
-
   const form = useForm<ThreadFormFields>({
     resolver: useYupValidationResolver(CreateThreadSchema),
     mode: 'onChange',
     defaultValues: formDefaultValues,
   })
+
+  const { feeInfo } = useTransactionFee(
+    member?.controllerAccount,
+    () =>
+      api?.tx.forum.createThread(
+        member?.id ?? 0,
+        modalData.categoryId,
+        metadataToBytes(ForumThreadMetadata, {
+          tags: [''],
+          title: '',
+        }),
+        ''
+      ),
+    [member?.id, modalData.categoryId, isConnected, JSON.stringify(form.getValues())]
+  )
+
+  const minimumTransactionCost = useMemo(
+    () => postDeposit && threadDeposit && feeInfo?.transactionFee.add(postDeposit).add(threadDeposit),
+    [postDeposit, threadDeposit, feeInfo?.transactionFee.toString()]
+  )
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
@@ -85,7 +100,15 @@ export const CreateThreadModal = () => {
   if (state.matches('transaction') && api && postDeposit && threadDeposit) {
     const { topic, description } = form.getValues()
     const { memberId, categoryId, controllerAccount } = state.context
-    const transaction = api.tx.forum.createThread(memberId, categoryId, topic, description, null)
+    const transaction = api.tx.forum.createThread(
+      memberId,
+      categoryId,
+      metadataToBytes(ForumThreadMetadata, {
+        tags: [''],
+        title: topic,
+      }),
+      description
+    )
     const service = state.children.transaction
     return (
       <CreateThreadSignModal

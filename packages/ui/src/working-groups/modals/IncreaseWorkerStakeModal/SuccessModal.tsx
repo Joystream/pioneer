@@ -9,7 +9,7 @@ import { TextMedium, TokenValue } from '@/common/components/typography'
 
 interface SuccessModalProps {
   onClose: () => void
-  amount: string
+  amount: BN
 }
 
 export const SuccessModal = ({ onClose, amount }: SuccessModalProps) => {
@@ -19,7 +19,7 @@ export const SuccessModal = ({ onClose, amount }: SuccessModalProps) => {
       <ModalBody>
         <Info>
           <TextMedium light>
-            You have just successfully increased you stake by <TokenValue value={new BN(amount)} />.
+            You have just successfully increased you stake by <TokenValue value={amount} />.
           </TextMedium>
         </Info>
       </ModalBody>

@@ -42,7 +42,7 @@ const defaultGroups: WorkingGroup[] = [
   },
   {
     id: 'gatewayWorkingGroup',
-    name: 'Gateway',
+    name: 'Gateways',
   },
   {
     id: 'distributionWorkingGroup',

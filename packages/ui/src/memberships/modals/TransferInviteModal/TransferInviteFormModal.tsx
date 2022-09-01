@@ -31,7 +31,7 @@ const TransferInviteSchema = Yup.object().shape({
   from: AccountSchema.required('This field is required'),
   amount: Yup.number()
     .min(1, 'Number of invitation has to be greater than 0')
-    .test(maxContext('You only have ${max} invites left.', 'inviteCount'))
+    .test(maxContext('You only have ${max} invites left.', 'inviteCount', false))
     .required('This field is required'),
   to: AccountSchema.required('This field is required'),
 })

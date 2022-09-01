@@ -6,11 +6,10 @@ import { AnySchema } from 'yup'
 import { filterAccount, SelectAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent, InputText, InputTextarea } from '@/common/components/forms'
 import {
-  ModalFooter,
   ModalHeader,
+  ModalTransactionFooter,
   Row,
   ScrolledModal,
   ScrolledModalBody,
@@ -173,11 +172,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
           </FormProvider>
         </ScrolledModalContainer>
       </ScrolledModalBody>
-      <ModalFooter>
-        <ButtonPrimary size="medium" onClick={onCreate} disabled={!canUpdate}>
-          Save changes
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter next={{ disabled: !canUpdate, label: 'Save changes', onClick: onCreate }} />
     </ScrolledModal>
   )
 }

@@ -1,65 +1,49 @@
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
-import { createType } from '@joystream/types'
-import { ProposalDetailsOf } from '@joystream/types/augment'
-import { WorkingGroupKey } from '@joystream/types/common'
-import { ProposalDetails } from '@joystream/types/src/proposals'
 
-import { Api } from '@/api/types'
+import { Api } from '@/api'
 import { BN_ZERO } from '@/common/constants'
+import { createType } from '@/common/model/createType'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { last } from '@/common/utils'
 import { AddNewProposalForm } from '@/proposals/modals/AddNewProposal/helpers'
+import { GroupIdToGroupParam } from '@/working-groups/constants'
 import { GroupIdName } from '@/working-groups/types'
-
-const GroupIdToGroupParam: Record<GroupIdName, WorkingGroupKey> = {
-  contentWorkingGroup: 'Content',
-  forumWorkingGroup: 'Forum',
-  gatewayWorkingGroup: 'Gateway',
-  membershipWorkingGroup: 'Membership',
-  distributionWorkingGroup: 'Distribution',
-  storageWorkingGroup: 'Storage',
-  operationsWorkingGroupAlpha: 'OperationsAlpha',
-  operationsWorkingGroupBeta: 'OperationsBeta',
-  operationsWorkingGroupGamma: 'OperationsGamma',
-}
 
 const idToRuntimeId = (id: string): number => Number(last(id.split('-')))
 
-const getWorkingGroupParam = (groupId: GroupIdName | undefined) => {
-  if (!groupId) return undefined
+const getWorkingGroupParam = (groupId: GroupIdName | undefined) => groupId && GroupIdToGroupParam[groupId]
 
-  return GroupIdToGroupParam[groupId]
-}
 export const getSpecificParameters = (
   api: Api,
   specifics: Omit<AddNewProposalForm, 'triggerAndDiscussion' | 'stakingAccount' | 'proposalDetails'>
-): ProposalDetailsOf => {
+) => {
   if (!specifics.proposalType.type) {
-    return createType('ProposalDetailsOf', { Signal: '' })
+    return createType('PalletProposalsCodexProposalDetails', { Signal: '' })
   }
 
   switch (specifics.proposalType.type) {
     case 'signal': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+      return createType('PalletProposalsCodexProposalDetails', {
         Signal: createType('Text', specifics.signal?.signal ?? ''),
       })
     }
     case 'fundingRequest': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+      return createType('PalletProposalsCodexProposalDetails', {
         FundingRequest: [
           { amount: specifics?.fundingRequest?.amount, account: specifics?.fundingRequest?.account?.address },
         ],
       })
     }
     case 'runtimeUpgrade': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
-        RuntimeUpgrade: createType('Bytes', [
-          specifics?.runtimeUpgrade?.runtime ? new Uint8Array(specifics.runtimeUpgrade.runtime) : new Uint8Array(),
-        ]),
+      const u8a = specifics?.runtimeUpgrade?.runtime
+        ? new Uint8Array(specifics.runtimeUpgrade.runtime)
+        : new Uint8Array()
+      return createType('PalletProposalsCodexProposalDetails', {
+        RuntimeUpgrade: createType('Bytes', u8a),
       })
     }
     case 'createWorkingGroupLeadOpening': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+      return createType('PalletProposalsCodexProposalDetails', {
         CreateWorkingGroupLeadOpening: {
           description: metadataToBytes(OpeningMetadata, {
             title: specifics?.workingGroupAndDescription?.title,
@@ -75,17 +59,17 @@ export const getSpecificParameters = (
               type: OpeningMetadata.ApplicationFormQuestion.InputType[shortValue ? 'TEXT' : 'TEXTAREA'],
             })),
           }),
-          stake_policy: {
-            stake_amount: specifics?.stakingPolicyAndReward?.stakingAmount,
-            leaving_unstaking_period: specifics?.stakingPolicyAndReward?.leavingUnstakingPeriod,
+          stakePolicy: {
+            stakeAmount: specifics?.stakingPolicyAndReward?.stakingAmount,
+            leavingUnstakingPeriod: specifics?.stakingPolicyAndReward?.leavingUnstakingPeriod,
           },
-          reward_per_block: specifics?.stakingPolicyAndReward?.rewardPerBlock,
-          working_group: getWorkingGroupParam(specifics?.workingGroupAndDescription?.groupId),
+          rewardPerBlock: specifics?.stakingPolicyAndReward?.rewardPerBlock,
+          group: getWorkingGroupParam(specifics?.workingGroupAndDescription?.groupId),
         },
       })
     }
     case 'decreaseWorkingGroupLeadStake': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+      return createType('PalletProposalsCodexProposalDetails', {
         DecreaseWorkingGroupLeadStake: [
           specifics?.decreaseWorkingGroupLeadStake?.workerId ?? 0,
           specifics?.decreaseWorkingGroupLeadStake?.stakingAmount ?? BN_ZERO,
@@ -94,7 +78,7 @@ export const getSpecificParameters = (
       })
     }
     case 'slashWorkingGroupLead': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+      return createType('PalletProposalsCodexProposalDetails', {
         SlashWorkingGroupLead: [
           specifics?.slashWorkingGroupLead?.workerId ?? 0,
           specifics?.slashWorkingGroupLead?.slashingAmount ?? BN_ZERO,
@@ -103,16 +87,16 @@ export const getSpecificParameters = (
       })
     }
     case 'terminateWorkingGroupLead': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+      return createType('PalletProposalsCodexProposalDetails', {
         TerminateWorkingGroupLead: {
-          worker_id: specifics?.terminateWorkingGroupLead?.workerId,
-          working_group: getWorkingGroupParam(specifics?.terminateWorkingGroupLead?.groupId),
-          slashing_amount: specifics?.terminateWorkingGroupLead?.slashingAmount,
+          workerId: specifics?.terminateWorkingGroupLead?.workerId,
+          group: getWorkingGroupParam(specifics?.terminateWorkingGroupLead?.groupId),
+          slashingAmount: specifics?.terminateWorkingGroupLead?.slashingAmount,
         },
       })
     }
     case 'setWorkingGroupLeadReward': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+      return createType('PalletProposalsCodexProposalDetails', {
         SetWorkingGroupLeadReward: [
           specifics?.setWorkingGroupLeadReward?.workerId ?? 0,
           specifics?.setWorkingGroupLeadReward?.rewardPerBlock,
@@ -121,7 +105,7 @@ export const getSpecificParameters = (
       })
     }
     case 'cancelWorkingGroupLeadOpening': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+      return createType('PalletProposalsCodexProposalDetails', {
         CancelWorkingGroupLeadOpening: [
           specifics?.cancelWorkingGroupLeadOpening?.openingId
             ? idToRuntimeId(specifics.cancelWorkingGroupLeadOpening?.openingId)
@@ -131,30 +115,31 @@ export const getSpecificParameters = (
       })
     }
     case 'setCouncilorReward': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+      return createType('PalletProposalsCodexProposalDetails', {
         SetCouncilorReward: specifics?.setCouncilorReward?.amount ?? BN_ZERO,
       })
     }
     case 'setCouncilBudgetIncrement': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+      return createType('PalletProposalsCodexProposalDetails', {
         SetCouncilBudgetIncrement: specifics?.setCouncilBudgetIncrement?.amount ?? BN_ZERO,
       })
     }
     case 'fillWorkingGroupLeadOpening': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+      return createType('PalletProposalsCodexProposalDetails', {
         FillWorkingGroupLeadOpening: {
-          opening_id: specifics?.fillWorkingGroupLeadOpening?.openingId
+          openingId: specifics?.fillWorkingGroupLeadOpening?.openingId
             ? idToRuntimeId(specifics.fillWorkingGroupLeadOpening?.openingId)
             : 0,
-          successful_application_id: specifics?.fillWorkingGroupLeadOpening?.applicationId
+          applicationId: specifics?.fillWorkingGroupLeadOpening?.applicationId
             ? idToRuntimeId(specifics.fillWorkingGroupLeadOpening?.applicationId)
             : 0,
-          working_group: getWorkingGroupParam(specifics?.fillWorkingGroupLeadOpening?.groupId),
+          // Looks like name for wg parameter on fill wg lead opening differ for the rest, hance the change
+          workingGroup: getWorkingGroupParam(specifics?.fillWorkingGroupLeadOpening?.groupId),
         },
       })
     }
     case 'updateWorkingGroupBudget': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+      return createType('PalletProposalsCodexProposalDetails', {
         UpdateWorkingGroupBudget: [
           specifics?.updateWorkingGroupBudget?.budgetUpdate ?? BN_ZERO,
           getWorkingGroupParam(specifics?.updateWorkingGroupBudget?.groupId) ?? 'Distribution',
@@ -163,36 +148,36 @@ export const getSpecificParameters = (
       })
     }
     case 'setMembershipLeadInvitationQuota': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+      return createType('PalletProposalsCodexProposalDetails', {
         SetMembershipLeadInvitationQuota: specifics?.setMembershipLeadInvitationQuota?.amount ?? BN_ZERO,
       })
     }
     case 'setReferralCut': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+      return createType('PalletProposalsCodexProposalDetails', {
         SetReferralCut: specifics?.setReferralCut?.referralCut ?? 0,
       })
     }
     case 'setInitialInvitationBalance': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+      return createType('PalletProposalsCodexProposalDetails', {
         SetInitialInvitationBalance: specifics?.setInitialInvitationBalance?.amount ?? BN_ZERO,
       })
     }
     case 'setInitialInvitationCount': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+      return createType('PalletProposalsCodexProposalDetails', {
         SetInitialInvitationCount: specifics?.setInitialInvitationCount?.invitationCount ?? BN_ZERO,
       })
     }
     case 'setMaxValidatorCount': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
+      return createType('PalletProposalsCodexProposalDetails', {
         SetMaxValidatorCount: specifics?.setMaxValidatorCount?.validatorCount?.toNumber() ?? 0,
       })
     }
     case 'setMembershipPrice': {
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', {
-        SetMembershipPrice: specifics?.setMembershipPrice?.amount?.toNumber() ?? 0,
+      return createType('PalletProposalsCodexProposalDetails', {
+        SetMembershipPrice: specifics?.setMembershipPrice?.amount ?? 0,
       })
     }
     default:
-      return createType<ProposalDetails, 'ProposalDetails'>('ProposalDetails', { Signal: '' })
+      return createType('PalletProposalsCodexProposalDetails', { Signal: '' })
   }
 }
