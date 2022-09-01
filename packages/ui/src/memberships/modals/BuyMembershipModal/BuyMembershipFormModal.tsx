@@ -1,3 +1,4 @@
+import HCaptcha from '@hcaptcha/react-hcaptcha'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import React, { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -78,6 +79,7 @@ export interface MemberFormFields {
   referrer?: Member
   hasTerms?: boolean
   invitor?: Member
+  captchaToken?: string
 }
 
 const formDefaultValues = {
@@ -104,6 +106,7 @@ export const BuyMembershipForm = ({
   type,
 }: BuyMembershipFormProps) => {
   const { allAccounts } = useMyAccounts()
+  const [captchaToken, setCaptchaToken] = useState<string | undefined>()
 
   const [formHandleMap, setFormHandleMap] = useState('')
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
@@ -135,7 +138,7 @@ export const BuyMembershipForm = ({
 
   const hasError = enhancedHasError(form.formState.errors)
   const getErrorMessage = enhancedGetErrorMessage(form.formState.errors)
-  const onCreate = () => onSubmit(form.getValues())
+  const onCreate = () => onSubmit({ ...form.getValues(), captchaToken })
 
   return (
     <>
@@ -229,6 +232,16 @@ export const BuyMembershipForm = ({
                 <InputText id="member-avatar" name="avatarUri" />
               </InputComponent>
             </Row>
+            {type === 'onBoarding' && (
+              <Row>
+                <HCaptcha
+                  sitekey={process.env.REACT_APP_CAPTCHA_SITE_KEY ?? '10000000-ffff-ffff-ffff-000000000001'}
+                  theme="dark"
+                  languageOverride="en"
+                  onVerify={setCaptchaToken}
+                />
+              </Row>
+            )}
           </ScrolledModalContainer>
         </FormProvider>
       </ScrolledModalBody>
@@ -241,7 +254,7 @@ export const BuyMembershipForm = ({
             </ButtonGhost>
           )}
           <Checkbox
-            id={'privacy-policy-agreement'}
+            id="privacy-policy-agreement"
             onChange={(hasTerms) => form.setValue('hasTerms', hasTerms, { shouldValidate: true })}
           >
             <TextMedium colorInherit>
@@ -278,7 +291,11 @@ export const BuyMembershipForm = ({
               />
             </TransactionInfoContainer>
           )}
-          <ButtonPrimary size="medium" onClick={onCreate} disabled={!form.formState.isValid}>
+          <ButtonPrimary
+            size="medium"
+            onClick={onCreate}
+            disabled={type === 'general' ? !form.formState.isValid : !captchaToken || !form.formState.isValid}
+          >
             Create a Membership
           </ButtonPrimary>
         </ModalFooterGroup>

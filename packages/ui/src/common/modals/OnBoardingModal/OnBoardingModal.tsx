@@ -65,6 +65,7 @@ export const OnBoardingModal = () => {
           name: form.name,
           avatar: form.avatarUri,
           about: form.about,
+          captchaToken: form.captchaToken,
         }
 
         const response = await fetch(endpoints.membershipFaucetEndpoint, {
