@@ -5,7 +5,6 @@ import { error } from '@/common/logger'
 import { MemberListFilter } from '@/memberships/components/MemberListFilters'
 import { useGetMembersCountQuery, useGetMembersWithDetailsQuery } from '@/memberships/queries'
 
-import { MembershipOrderByInput, MembershipWhereInput } from '../../common/api/queries'
 import { asMemberWithDetails } from '../types'
 
 export const MEMBERS_PER_PAGE = 10
@@ -51,7 +50,7 @@ type FilterGqlInput = Pick<
   | 'controllerAccount_eq'
   | 'rootAccount_eq'
   | 'isCouncilMember_eq'
-  | 'metadata'
+  | 'externalResources_some'
 >
 
 const filterToGqlInput = ({
@@ -61,9 +60,6 @@ const filterToGqlInput = ({
   onlyFounder,
   searchFilter,
 }: MemberListFilter): FilterGqlInput => ({
-  ...(search
-    ? { OR: [{ controllerAccount_eq: search }, { rootAccount_eq: search }, { handle_contains: search }] }
-    : {}),
   ...(roles.length ? { roles_some: { groupId_in: roles.map(toString) } } : {}),
   ...(onlyFounder ? { isFoundingMember_eq: true } : {}),
   ...(searchFilter ? searchFilterToGqlInput(searchFilter, search) : {}),
@@ -76,15 +72,15 @@ const searchFilterToGqlInput = (
 ): MembershipWhereInput => {
   if (searchFilter === 'Membership') {
     return {
-      handle_contains: search,
+      ...(search
+        ? { OR: [{ controllerAccount_eq: search }, { rootAccount_eq: search }, { handle_contains: search }] }
+        : {}),
     }
   } else {
     return {
-      metadata: {
-        externalResources_some: {
-          type_eq: MembershipExternalResourceType[searchFilter as keyof typeof MembershipExternalResourceType],
-          value_contains: search,
-        },
+      externalResources_some: {
+        type_eq: MembershipExternalResourceType[searchFilter as keyof typeof MembershipExternalResourceType],
+        value_contains: search,
       },
     }
   }

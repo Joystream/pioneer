@@ -12,6 +12,7 @@ import {
   SidePaneLabel,
   EmptyBody,
 } from '@/common/components/SidePane'
+import { capitalizeFirstLetter } from '@/common/helpers'
 import { useIsMyMembership } from '@/memberships/hooks/useIsMyMembership'
 import { useMemberExtraInfo } from '@/memberships/hooks/useMemberExtraInfo'
 
@@ -130,7 +131,7 @@ export const MemberDetails = React.memo(({ member }: Props) => {
       {memberDetails?.externalResources &&
         memberDetails.externalResources.map((externalResource) => (
           <SidePaneRow>
-            <SidePaneLabel text={externalResource.source} />
+            <SidePaneLabel text={capitalizeFirstLetter(externalResource.source.toLowerCase())} />
             <SidePaneText>{externalResource.value}</SidePaneText>
           </SidePaneRow>
         ))}

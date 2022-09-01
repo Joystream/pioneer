@@ -7,10 +7,10 @@ import { BorderRad, Fonts, Sizes, Transitions, Colors } from '@/common/constants
 type MemberItemKind = 'Member' | 'MyMember' | 'MemberWithExternal'
 export const colLayoutByType = (kind: MemberItemKind) => {
   const name = 190
-  const roles = kind === 'Member' ? 136 : 164
+  const roles = kind !== 'MyMember' ? 136 : 164
   const created = 90
   const referrer = 50
-  const count = kind === 'Member' ? 20 : 76
+  const count = kind !== 'MyMember' ? 20 : 76
   const total = 120
 
   switch (kind) {

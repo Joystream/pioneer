@@ -30,7 +30,7 @@ export const MemberListItem = ({ member, searchFilter }: MemberListItemProps) =>
 
   return (
     <Wrapper>
-      <MemberItemWrap kind={searchFilter ? 'MemberWithExternal' : 'Member'}>
+      <MemberItemWrap onClick={showMemberModal} kind={searchFilter ? 'MemberWithExternal' : 'Member'}>
         <MemberColumn>
           <MemberInfo member={member} hideGroup withID />
         </MemberColumn>
@@ -66,7 +66,8 @@ export const MemberListItem = ({ member, searchFilter }: MemberListItemProps) =>
       {searchFilter && searchFilter !== 'Membership' && (
         <ExternalInfo>
           {socialToIcon[searchFilter.toUpperCase() as Socials]}
-          {searchFilter}
+          {member.externalResources?.find((externalResource) => externalResource.source === searchFilter.toUpperCase())
+            ?.value ?? searchFilter}
         </ExternalInfo>
       )}
     </Wrapper>
