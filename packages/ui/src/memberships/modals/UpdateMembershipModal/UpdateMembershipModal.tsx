@@ -27,7 +27,7 @@ export const UpdateMembershipModal = ({ onClose, member }: MembershipModalProps)
       />
     )
   }
-  // console.debug(state.context.form, ' context form')
+
   if (state.matches('transaction')) {
     const transactionService = state.children.transaction
 

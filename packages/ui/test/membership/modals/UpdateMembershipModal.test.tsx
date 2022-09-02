@@ -59,10 +59,10 @@ describe('UI: UpdatedMembershipModal', () => {
     stubTransaction(api, 'api.tx.members.updateAccounts')
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
     stubTransaction(api, 'api.tx.members.updateProfile')
-    profileTxMock = api.api.tx.members.updateProfile as unknown as jest.Mock
+    profileTxMock = (api.api.tx.members.updateProfile as unknown) as jest.Mock
     member = {
       ...getMember('alice'),
-      externalResources: [{ source: MembershipExternalResourceType.Email, value: 'empty' }],
+      externalResources: [{ source: MembershipExternalResourceType.Twitter, value: 'empty' }],
     } as MemberWithDetails
   })
 
@@ -83,7 +83,7 @@ describe('UI: UpdatedMembershipModal', () => {
 
     expect(await getButton(/^Save changes$/i)).toBeDisabled()
 
-    fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'joystream@mail.com' } })
+    fireEvent.change(screen.getByTestId('twitter-input'), { target: { value: 'joystream@mail.com' } })
 
     expect(await getButton(/^Save changes$/i)).toBeEnabled()
   })
@@ -124,7 +124,7 @@ describe('UI: UpdatedMembershipModal', () => {
     async function changeNameAndSave() {
       renderModal(member)
       fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: newMemberName } })
-      fireEvent.change(screen.getByTestId('email-input'), { target: { value: newMemberEmail } })
+      fireEvent.change(screen.getByTestId('twitter-input'), { target: { value: newMemberEmail } })
 
       fireEvent.click(await screen.findByText(/^Save changes$/i))
     }
