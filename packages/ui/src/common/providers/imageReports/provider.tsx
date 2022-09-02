@@ -1,6 +1,7 @@
 import React, { ReactNode, useCallback, useState } from 'react'
 
 import { ReportNotificationType } from '@/app/components/ImageReportNotification'
+import { error } from '@/common/logger'
 import { ImageReportContext } from '@/common/providers/imageReports/context'
 import { ImageSafetyApi } from '@/common/utils/ImageSafetyApi'
 
@@ -10,26 +11,28 @@ interface Props {
 
 export const ImageReportProvider = (props: Props) => {
   const [showNotification, setShowNotification] = useState<ReportNotificationType>('empty')
-  const [sessionUserReports, setUserReports] = useState<string[]>([])
+  const [userReportedImages, setUserReported] = useState<string[]>([])
 
   const sendReport = useCallback(
-    (src: string) => {
+    async (src: string) => {
       setShowNotification('empty')
-      if (sessionUserReports.includes(src)) {
-        setShowNotification('block')
-        return
+      if (userReportedImages.includes(src)) {
+        return setShowNotification('block')
       }
 
-      ImageSafetyApi.report(src).then((res: Response) => {
+      try {
+        const res = await ImageSafetyApi.report(src)
         if (res.status === 200) {
-          setUserReports((prev) => [...prev, src])
-          setShowNotification('new')
-        } else {
-          setShowNotification('error')
+          setUserReported((prev) => [...prev, src])
+          return setShowNotification('new')
         }
-      })
+      } catch (err) {
+        error(err)
+      }
+
+      setShowNotification('error')
     },
-    [sessionUserReports]
+    [userReportedImages]
   )
 
   return (
@@ -37,6 +40,7 @@ export const ImageReportProvider = (props: Props) => {
       value={{
         sendReport: process.env.REACT_APP_IMAGE_REPORT_ENABLED === 'true' ? sendReport : undefined,
         blacklistedImages: JSON.parse(process.env.REACT_APP_BLACKLISTED_IMAGES ?? '[]') as string[],
+        userReportedImages,
         notificationStatus: showNotification,
         hideNotification: () => setShowNotification('empty'),
       }}

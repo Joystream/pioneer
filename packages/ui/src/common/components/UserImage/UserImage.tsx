@@ -1,19 +1,23 @@
-import React, { ImgHTMLAttributes, useMemo, useRef } from 'react'
+import React, { ImgHTMLAttributes, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ReportIcon } from '@/common/components/icons/ReportIcon'
 import { ModeratedItem } from '@/common/components/ModeratedItem'
 import { Tooltip } from '@/common/components/Tooltip'
 import { useImageReport } from '@/common/hooks/useImageReport'
+import { useModal } from '@/common/hooks/useModal'
+import { ReportContentModalCall } from '@/common/modals/ReportContentModal'
 
 export interface UserImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   customFallbackComponent?: React.ReactNode
 }
 
 export const UserImage = (props: UserImageProps) => {
-  const wrapperRef = useRef<HTMLDivElement>(null)
   const { blacklistedImages, sendReport } = useImageReport()
-  const blacklistImage = useMemo(() => blacklistedImages.find((url) => url === props.src), [blacklistedImages.length])
+  const { showModal } = useModal()
+
+  const src = props.src
+  const blacklistImage = useMemo(() => blacklistedImages.some((url) => url === src), [blacklistedImages.length])
 
   return (
     <>
@@ -24,12 +28,16 @@ export const UserImage = (props: UserImageProps) => {
           <ModeratedItem title="This image was removed by a moderator" />
         )
       ) : (
-        <Wrapper ref={wrapperRef}>
+        <Wrapper>
           <Image {...props} />
-          {sendReport && (
-            <ButtonWrapper id="report-btn-wrapper">
+          {sendReport && src && (
+            <ButtonWrapper>
               <Tooltip hideOnComponentLeave offset={[0, 5]} tooltipText="Report image">
-                <Button onClick={() => sendReport(props.src ?? '')}>
+                <Button
+                  onClick={() =>
+                    showModal<ReportContentModalCall>({ modal: 'ReportContentModal', data: { report: src } })
+                  }
+                >
                   <StyledReportIcon />
                 </Button>
               </Tooltip>

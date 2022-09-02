@@ -25,6 +25,7 @@ import { WaitModal } from '@/common/components/WaitModal'
 import { useModal } from '@/common/hooks/useModal'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
+import { ReportContentModal, ReportContentModalCall } from '@/common/modals/ReportContentModal'
 import { ModalName } from '@/common/providers/modal/types'
 import { TransactionFeesProvider } from '@/common/providers/transactionFees/provider'
 import { AnnounceCandidacyModal, AnnounceCandidateModalCall } from '@/council/modals/AnnounceCandidacy'
@@ -106,6 +107,7 @@ export type ModalNames =
   | ModalName<SignOutModalCall>
   | ModalName<DisconnectWalletModalCall>
   | ModalName<ClaimVestingModalCall>
+  | ModalName<ReportContentModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -151,6 +153,7 @@ const modals: Record<ModalNames, ReactElement> = {
   SignOut: <SignOutModal />,
   DisconnectWallet: <DisconnectWalletModal />,
   ClaimVestingModal: <ClaimVestingModal />,
+  ReportContentModal: <ReportContentModal />,
 }
 
 export const GlobalModals = () => {

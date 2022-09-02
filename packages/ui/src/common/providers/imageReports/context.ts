@@ -4,13 +4,15 @@ import { ReportNotificationType } from '@/app/components/ImageReportNotification
 
 interface UseImageReports {
   blacklistedImages: string[]
-  sendReport?: (src: string) => void
+  userReportedImages: string[]
+  sendReport?: (src: string) => Promise<void>
   notificationStatus: ReportNotificationType
   hideNotification: () => void
 }
 
 export const ImageReportContext = createContext<UseImageReports>({
   blacklistedImages: [],
+  userReportedImages: [],
   notificationStatus: 'empty',
   hideNotification: () => undefined,
 })
