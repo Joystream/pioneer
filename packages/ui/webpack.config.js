@@ -30,8 +30,8 @@ module.exports = (env, argv) => {
     new webpack.DefinePlugin({
       GIT_VERSION: JSON.stringify(version),
       IS_DEVELOPMENT: isDevelopment,
-      'process.env.BLACKLISTED_IMAGES': JSON.stringify(env.blacklist ?? []),
-      'process.env.IMAGE_REPORT_ENABLED': JSON.stringify(env.isReportApiSet ?? false),
+      'process.env.REACT_APP_BLACKLISTED_IMAGES': JSON.stringify(env.blacklist ?? []),
+      'process.env.REACT_APP_IMAGE_REPORT_ENABLED': JSON.stringify(env.isReportApiSet ?? false),
       ...Object.fromEntries(envVariables),
     }),
     new CopyPlugin({
