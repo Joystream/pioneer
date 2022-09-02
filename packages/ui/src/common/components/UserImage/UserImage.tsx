@@ -26,13 +26,15 @@ export const UserImage = (props: UserImageProps) => {
       ) : (
         <Wrapper ref={wrapperRef}>
           <Image {...props} />
-          <ButtonWrapper id="report-btn-wrapper">
-            <Tooltip hideOnComponentLeave offset={[0, 5]} tooltipText="Report image">
-              <Button onClick={() => sendReport(props.src ?? '')}>
-                <StyledReportIcon />
-              </Button>
-            </Tooltip>
-          </ButtonWrapper>
+          {sendReport && (
+            <ButtonWrapper id="report-btn-wrapper">
+              <Tooltip hideOnComponentLeave offset={[0, 5]} tooltipText="Report image">
+                <Button onClick={() => sendReport(props.src ?? '')}>
+                  <StyledReportIcon />
+                </Button>
+              </Tooltip>
+            </ButtonWrapper>
+          )}
         </Wrapper>
       )}
     </>

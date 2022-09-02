@@ -35,7 +35,7 @@ export const ImageReportProvider = (props: Props) => {
   return (
     <ImageReportContext.Provider
       value={{
-        sendReport,
+        sendReport: process.env.IMAGE_REPORT_ENABLED ? sendReport : undefined,
         blacklistedImages: (process.env.BLACKLISTED_IMAGES ?? []) as string[],
         notificationStatus: showNotification,
         hideNotification: () => setShowNotification('empty'),
