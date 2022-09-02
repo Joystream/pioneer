@@ -45,6 +45,7 @@ const formDefaultValues = {
   avatarUri: '',
   hasTerms: false,
   invitor: undefined,
+  externalResources: {},
 }
 
 export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
