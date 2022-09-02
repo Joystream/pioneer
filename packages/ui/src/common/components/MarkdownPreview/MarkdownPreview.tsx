@@ -67,11 +67,6 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
     }
   }, [markdown, append])
 
-  const MarkdownImage = styled(UserImage)`
-    max-width: 100%;
-    max-height: 400px;
-  `
-
   const stripBackslashes = (text: string) => text.replace(/\\(.)/gm, '$1')
   return (
     <div className="markdown-preview">
@@ -83,6 +78,11 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
     </div>
   )
 }
+
+const MarkdownImage = styled(UserImage)`
+  max-width: 100%;
+  max-height: 400px;
+`
 
 const mentionTypesMap: Record<string, MentionType> = {
   'member-id': 'member',

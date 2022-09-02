@@ -26,7 +26,7 @@ export const ModeratedItem = ({ children, title, reason, moderatorMemberId }: Pr
       </InfoContainer>
       <Moderated>
         {moderator && <Moderator onClick={() => showMemberModal()}>{moderator.handle}:</Moderator>}
-        <div>{reason}</div>
+        <span>{reason}</span>
       </Moderated>
       {showOriginalContent ? children : null}
       {children && (
@@ -38,7 +38,7 @@ export const ModeratedItem = ({ children, title, reason, moderatorMemberId }: Pr
   )
 }
 
-const InfoContainer = styled.div`
+const InfoContainer = styled.span`
   display: flex;
   align-items: center;
   gap: 4px;
@@ -48,18 +48,19 @@ const InfoContainer = styled.div`
   font-family: ${Fonts.Grotesk};
 `
 
-const Moderator = styled.div`
+const Moderator = styled.span`
+  display: block;
   &:hover {
     cursor: pointer;
     color: ${Colors.Blue[400]};
   }
 `
 
-const Moderated = styled.div`
+const Moderated = styled.span`
   font-family: ${Fonts.Inter};
   font-style: normal;
   font-weight: 400;
-  div {
+  span {
     &:first-child {
       font-size: 12px;
       line-height: 18px;
@@ -73,7 +74,7 @@ const Moderated = styled.div`
   }
 `
 
-const StyledModeratedPostWrapper = styled.div`
+const StyledModeratedPostWrapper = styled.span`
   display: flex;
   flex-direction: column;
   align-items: flex-start;

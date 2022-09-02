@@ -49,11 +49,19 @@ export const UserImage = (props: UserImageProps) => {
   )
 }
 
-const Wrapper = styled.div`
+const ButtonWrapper = styled.span`
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  display: none;
+`
+
+const Wrapper = styled.span`
+  display: block;
   position: relative;
   width: fit-content;
 
-  :hover #report-btn-wrapper {
+  :hover ${ButtonWrapper} {
     display: block;
   }
 `
@@ -64,13 +72,6 @@ const Image = styled.img`
 
 const StyledReportIcon = styled(ReportIcon)`
   pointer-events: none;
-`
-
-const ButtonWrapper = styled.div`
-  position: absolute;
-  right: 8px;
-  top: 8px;
-  display: none;
 `
 
 const Button = styled.button`
