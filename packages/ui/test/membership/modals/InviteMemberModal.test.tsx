@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
@@ -26,6 +26,8 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+
+configure({ testIdAttribute: 'id' })
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -74,17 +76,9 @@ describe('UI: InviteMemberModal', () => {
     renderModal()
     const submitButton = await getButton(/^Invite a member$/i)
     expect(submitButton).toBeDisabled()
+    await fillForm()
 
-    await selectFromDropdown('Inviting member', 'alice')
-    fireEvent.change(getInput(/Root account/i), {
-      target: { value: bobStash.address },
-    })
-    fireEvent.change(getInput(/Controller account/i), {
-      target: { value: controllerAddress },
-    })
-    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
     fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'alice' } })
-
     await waitFor(() => expect(submitButton).not.toBeEnabled())
   })
 
@@ -92,37 +86,20 @@ describe('UI: InviteMemberModal', () => {
     renderModal()
     const submitButton = await getButton(/^Invite a member$/i)
     expect(submitButton).toBeDisabled()
-
-    await selectFromDropdown('Inviting member', 'alice')
-    fireEvent.change(getInput(/Root account/i), {
-      target: { value: bobStash.address },
-    })
-    fireEvent.change(getInput(/Controller account/i), {
-      target: { value: controllerAddress },
-    })
-    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
-    fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
+    await fillForm()
 
     await waitFor(() => expect(submitButton).toBeEnabled())
   })
 
   it('Disables button when one of addresses is invalid', async () => {
     seedMembers(server.server, 2)
-
     renderModal()
-
     expect(await getButton(/^Invite a member$/i)).toBeDisabled()
+    await fillForm()
 
-    await selectFromDropdown('Inviting member', 'alice')
-    fireEvent.change(getInput(/Root account/i), {
-      target: { value: bobStash.address },
-    })
     fireEvent.change(getInput(/Controller account/i), {
       target: { value: 'AAa' },
     })
-    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
-    fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
-
     expect(await getButton(/^Invite a member$/i)).toBeDisabled()
   })
 
@@ -130,17 +107,7 @@ describe('UI: InviteMemberModal', () => {
     async function fillFormAndProceed(invitor = 'alice') {
       seedMembers(server.server, 2)
       renderModal()
-      await getButton(/^Invite a member$/i)
-      await selectFromDropdown('Inviting member', invitor)
-      fireEvent.change(getInput(/Root account/i), {
-        target: { value: bobStash.address },
-      })
-      fireEvent.change(getInput(/Controller account/i), {
-        target: { value: controllerAddress },
-      })
-      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
-      fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
-
+      await fillForm(invitor)
       expect(await screen.findByRole('button', { name: /^Invite a member$/i })).toBeEnabled()
       fireEvent.click(await getButton(/^Invite a member$/i))
     }
@@ -181,6 +148,19 @@ describe('UI: InviteMemberModal', () => {
       expect(await screen.findByText('Failure')).toBeDefined()
     })
   })
+
+  async function fillForm(invitor = 'alice') {
+    await getButton(/^Invite a member$/i)
+    await selectFromDropdown('Inviting member', invitor)
+    fireEvent.change(getInput(/Root account/i), {
+      target: { value: bobStash.address },
+    })
+    fireEvent.change(getInput(/Controller account/i), {
+      target: { value: controllerAddress },
+    })
+    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+    fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
+  }
 
   function getInput(labelText: string | RegExp) {
     return screen.getByLabelText(labelText, { selector: 'input' })

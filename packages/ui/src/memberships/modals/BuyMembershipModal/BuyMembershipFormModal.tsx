@@ -40,7 +40,13 @@ import { SocialMediaSelector } from '@/memberships/components/SocialMediaSelecto
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
 import { SelectMember } from '../../components/SelectMember'
-import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../model/validation'
+import {
+  AccountSchema,
+  AvatarURISchema,
+  ExternalResourcesSchema,
+  HandleSchema,
+  ReferrerSchema,
+} from '../../model/validation'
 import { Member } from '../../types'
 
 interface BuyMembershipFormModalProps {
@@ -67,10 +73,7 @@ const CreateMemberSchema = Yup.object().shape({
   hasTerms: Yup.boolean().required().oneOf([true]),
   isReferred: Yup.boolean(),
   referrer: ReferrerSchema,
-  externalResources: Yup.object().shape({
-    EMAIL: Yup.string().email('Field has to be a valid email address'),
-    HYPERLINK: Yup.string().url('Invalid hyperlink format'),
-  }),
+  externalResources: ExternalResourcesSchema,
 })
 
 export interface MemberFormFields {

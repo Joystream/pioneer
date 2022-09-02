@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
@@ -27,6 +27,7 @@ import {
 } from '../../_mocks/transactions'
 
 const mockCallback = jest.fn()
+configure({ testIdAttribute: 'id' })
 
 jest.mock('@/common/hooks/useModal', () => {
   return {
@@ -67,20 +68,23 @@ describe('UI: BuyMembershipModal', () => {
     expect((await screen.findByText('Creation fee:'))?.parentNode?.textContent).toMatch(/^Creation fee:100/i)
   })
 
+  it('Disables button on incorrect email address', async () => {
+    await renderModal()
+    const submitButton = await findSubmitButton()
+    await fillForm()
+    fireEvent.click(screen.getByTestId('email-tile'))
+    await act(() => {
+      fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'invalid email' } })
+    })
+    expect(submitButton).toBeDisabled()
+  })
+
   it('Enables button when valid form', async () => {
     await renderModal()
     const submitButton = await findSubmitButton()
 
     expect(submitButton).toBeDisabled()
-
-    await selectFromDropdown('Root account', 'bob')
-    await selectFromDropdown('Controller account', 'alice')
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'BobbyBob' } })
-      fireEvent.change(screen.getByLabelText(/Membership handle/i), { target: { value: 'realbobbybob' } })
-      fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
-    })
-
+    await fillForm()
     expect(submitButton).not.toBeDisabled()
   })
 
@@ -90,13 +94,8 @@ describe('UI: BuyMembershipModal', () => {
     const submitButton = await findSubmitButton()
     expect(submitButton).toBeDisabled()
 
-    await selectFromDropdown('Root account', 'bob')
-    await selectFromDropdown('Controller account', 'alice')
+    await fillForm()
     await act(async () => {
-      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'BobbyBob' } })
-      fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
-      fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
-
       fireEvent.change(screen.getByLabelText(/member avatar/i), { target: { value: 'avatar' } })
     })
     expect(submitButton).toBeDisabled()
@@ -110,20 +109,9 @@ describe('UI: BuyMembershipModal', () => {
   describe('Authorize step', () => {
     const renderAuthorizeStep = async () => {
       await renderModal()
+      await fillForm()
 
-      await selectFromDropdown('Root account', 'bob')
-      await selectFromDropdown('Controller account', 'alice')
-      await act(async () => {
-        fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'BobbyBob' } })
-        fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
-        fireEvent.change(screen.getByLabelText(/about member/i), { target: { value: "I'm Bob" } })
-        fireEvent.change(screen.getByLabelText(/member avatar/i), {
-          target: { value: 'http://example.com/example.jpg' },
-        })
-        fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
-
-        fireEvent.click(await findSubmitButton())
-      })
+      fireEvent.click(await findSubmitButton())
     }
 
     it('Renders authorize transaction', async () => {
@@ -187,6 +175,16 @@ describe('UI: BuyMembershipModal', () => {
       })
     })
   })
+
+  async function fillForm() {
+    await selectFromDropdown('Root account', 'bob')
+    await selectFromDropdown('Controller account', 'alice')
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'BobbyBob' } })
+      fireEvent.change(screen.getByLabelText(/Membership handle/i), { target: { value: 'realbobbybob' } })
+      fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
+    })
+  }
 
   async function findSubmitButton() {
     return await getButton(/^Create a membership$/i)

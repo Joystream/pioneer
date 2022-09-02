@@ -38,7 +38,9 @@ export const SocialMediaSelector = ({ initialSocials }: Props) => {
         setChosenSocial((prev) => [...prev, social])
       })
       if (wrapperRef.current && chosenSocial.length === 0) {
-        wrapperRef.current.lastElementChild?.scrollIntoView({ behavior: 'smooth' })
+        // this check is required for test to not fail, looks like flushSync is not supported by RTL
+        'scrollIntoView' in (wrapperRef.current.lastElementChild ?? {}) &&
+          wrapperRef.current.lastElementChild?.scrollIntoView({ behavior: 'smooth' })
       }
     },
     [wrapperRef.current, chosenSocial.length]
@@ -64,6 +66,7 @@ export const SocialMediaSelector = ({ initialSocials }: Props) => {
             <SocialMediaTile
               active={isActive}
               social={social}
+              id={`${social.toLowerCase()}-tile`}
               key={'social' + index}
               onClick={!isActive ? selectSocial(social) : removeSocial(social)}
             />

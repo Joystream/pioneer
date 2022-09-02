@@ -13,6 +13,11 @@ export const MemberSchema = Yup.object()
 
 export const AvatarURISchema = Yup.string().url('Invalid url address')
 
+export const ExternalResourcesSchema = Yup.object().shape({
+  EMAIL: Yup.string().email('Field has to be a valid email address'),
+  HYPERLINK: Yup.string().url('Invalid hyperlink format'),
+})
+
 export const HandleSchema = Yup.string().test('handle', 'This handle is already taken', (value, testContext) => {
   return testContext?.options?.context?.size ? testContext?.options?.context?.size === 0 : true
 })

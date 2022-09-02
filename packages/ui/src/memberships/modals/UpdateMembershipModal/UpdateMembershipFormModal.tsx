@@ -22,7 +22,7 @@ import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } f
 import { SocialMediaSelector } from '@/memberships/components/SocialMediaSelector'
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
-import { AvatarURISchema, HandleSchema } from '../../model/validation'
+import { AvatarURISchema, ExternalResourcesSchema, HandleSchema } from '../../model/validation'
 import { MemberWithDetails } from '../../types'
 
 import { UpdateMemberForm } from './types'
@@ -39,10 +39,7 @@ const UpdateMemberSchema = Yup.object().shape({
   handle: Yup.string().when('$isHandleChanged', (isHandleChanged: boolean, schema: AnySchema) => {
     return isHandleChanged ? HandleSchema : schema
   }),
-  externalResources: Yup.object().shape({
-    EMAIL: Yup.string().email('Field has to be a valid email address'),
-    HYPERLINK: Yup.string().url('Invalid hyperlink format'),
-  }),
+  externalResources: ExternalResourcesSchema,
 })
 
 export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) => {

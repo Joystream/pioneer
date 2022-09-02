@@ -42,11 +42,12 @@ export interface SocialMediaTileProps {
   social: Socials
   onClick?: () => void
   active?: boolean
+  id: string
 }
 
-export const SocialMediaTile = React.memo(({ social, onClick, active }: SocialMediaTileProps) => {
+export const SocialMediaTile = React.memo(({ social, onClick, active, id }: SocialMediaTileProps) => {
   return (
-    <Wrapper onClick={onClick} active={active}>
+    <Wrapper id={id} onClick={onClick} active={active}>
       <RowGapBlock align="center" gap={2}>
         {socialToIcon[social]}
         <TextMedium value>{capitalizeFirstLetter(social.toLowerCase())}</TextMedium>
