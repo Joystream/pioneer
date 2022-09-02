@@ -26,13 +26,21 @@ import { OnBoardingStatus, SetMembershipAccount } from '@/common/providers/onboa
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
 
-export const uploadAvatarImage = async (image: File) => {
-  const body = new FormData()
-  body.append('file', image, image.name)
-  return fetch(process.env.REACT_APP_AVATAR_UPLOAD_URL ?? '', {
-    method: 'POST',
-    body,
-  })
+export const uploadAvatarImage = async (image?: File | string | null): Promise<string> => {
+  if (!image || !(image instanceof File)) return image ?? ''
+  try {
+    const body = new FormData()
+    body.append('file', image, image.name)
+    const data = await fetch(process.env.REACT_APP_AVATAR_UPLOAD_URL ?? '', {
+      method: 'POST',
+      body,
+    }).then((res) => res.json())
+    return `${process.env.REACT_APP_AVATAR_UPLOAD_URL}/${data.fileName}`
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('Error while uploading the avatar:', err)
+    return ''
+  }
 }
 
 export const OnBoardingModal = () => {
@@ -70,23 +78,11 @@ export const OnBoardingModal = () => {
   useEffect(() => {
     async function submitNewMembership(form: MemberFormFields) {
       try {
-        let avatarMetadata = null
-        if (state.context.form?.avatarUri) {
-          if (typeof state.context.form.avatarUri === 'string') {
-            avatarMetadata = state.context.form.avatarUri
-          } else if (typeof state.context.form.avatarUri === 'object') {
-            const responseJson = await uploadAvatarImage(state.context.form.avatarUri).then((response) =>
-              response.json()
-            )
-            avatarMetadata = `${process.env.REACT_APP_AVATAR_UPLOAD_URL}/${responseJson.fileName}`
-          }
-        }
-
         const membershipData = {
           account: membershipAccount,
           handle: form.handle,
           name: form.name,
-          avatar: avatarMetadata,
+          avatar: form.avatarUri,
           about: form.about,
         }
 

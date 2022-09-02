@@ -21,6 +21,7 @@ import {
 } from '@/common/components/forms'
 import { Arrow } from '@/common/components/icons'
 import { LinkSymbol } from '@/common/components/icons/symbols'
+import { Loading } from '@/common/components/Loading'
 import {
   ModalFooter,
   ModalFooterGroup,
@@ -31,12 +32,12 @@ import {
   ScrolledModalContainer,
   TransactionInfoContainer,
 } from '@/common/components/Modal'
-import { SmallFileUpload } from '@/common/components/SmallFileUpload'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
-import { uploadAvatarImage } from '@/common/modals/OnBoardingModal'
-import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
+import { useYupValidationResolver } from '@/common/utils/validation'
+import { AvatarInput } from '@/memberships/components/AvatarInput'
+import { useUploadAvatarAndSubmit } from '@/memberships/hooks/useUploadAvatarAndSubmit'
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
 import { SelectMember } from '../../components/SelectMember'
@@ -53,7 +54,6 @@ interface BuyMembershipFormProps extends Omit<BuyMembershipFormModalProps, 'onCl
   type: 'onBoarding' | 'general'
   membershipAccount?: string
   changeMembershipAccount?: () => void
-  buttonText?: string
 }
 
 const CreateMemberSchema = Yup.object().shape({
@@ -105,12 +105,11 @@ export const BuyMembershipForm = ({
   membershipAccount,
   changeMembershipAccount,
   type,
-  buttonText,
 }: BuyMembershipFormProps) => {
   const { allAccounts } = useMyAccounts()
   const [formHandleMap, setFormHandleMap] = useState('')
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
-
+  const { isUploading, uploadAvatarAndSubmit } = useUploadAvatarAndSubmit(onSubmit)
   const form = useForm<MemberFormFields>({
     resolver: useYupValidationResolver(CreateMemberSchema),
     context: { size: data?.membershipsConnection.totalCount },
@@ -135,10 +134,6 @@ export const BuyMembershipForm = ({
       form.trigger('handle')
     }
   }, [data?.membershipsConnection.totalCount])
-
-  const hasError = enhancedHasError(form.formState.errors)
-  const getErrorMessage = enhancedGetErrorMessage(form.formState.errors)
-  const onCreate = () => onSubmit(form.getValues())
 
   return (
     <>
@@ -190,24 +185,12 @@ export const BuyMembershipForm = ({
               </>
             )}
             <Row>
-              <InputComponent
-                id="member-name"
-                label="Member Name"
-                required
-                validation={hasError('name') ? 'invalid' : undefined}
-                message={hasError('name') ? getErrorMessage('name') : ''}
-              >
+              <InputComponent id="member-name" label="Member Name" required name="name">
                 <InputText id="member-name" placeholder="Type" name="name" />
               </InputComponent>
             </Row>
             <Row>
-              <InputComponent
-                id="membership-handle"
-                label="Membership handle"
-                required
-                validation={hasError('handle') ? 'invalid' : undefined}
-                message={hasError('handle') ? getErrorMessage('handle') : ''}
-              >
+              <InputComponent id="membership-handle" label="Membership handle" required name="handle">
                 <InputText id="membership-handle" placeholder="Type" name="handle" />
               </InputComponent>
             </Row>
@@ -217,34 +200,7 @@ export const BuyMembershipForm = ({
               </InputComponent>
             </Row>
 
-            {process.env.REACT_APP_AVATAR_UPLOAD_URL ? (
-              <>
-                <TextMedium bold value>
-                  Member avatar
-                </TextMedium>
-                <SmallFileUpload
-                  name="avatarUri"
-                  onUpload={(event) =>
-                    form.setValue('avatarUri', event.target.files?.item(0) ?? null, { shouldValidate: true })
-                  }
-                />
-              </>
-            ) : (
-              <InputComponent
-                id="member-avatar"
-                required
-                label="Member Avatar"
-                validation={hasError('avatarUri') ? 'invalid' : undefined}
-                message={
-                  hasError('avatarUri')
-                    ? getErrorMessage('avatarUri')
-                    : 'Paste an URL of your avatar image. Text lorem ipsum.'
-                }
-                placeholder="Image URL"
-              >
-                <InputText id="member-avatar" name="avatarUri" />
-              </InputComponent>
-            )}
+            <AvatarInput />
           </ScrolledModalContainer>
         </FormProvider>
       </ScrolledModalBody>
@@ -257,7 +213,7 @@ export const BuyMembershipForm = ({
             </ButtonGhost>
           )}
           <Checkbox
-            id={'privacy-policy-agreement'}
+            id="privacy-policy-agreement"
             onChange={(hasTerms) => form.setValue('hasTerms', hasTerms, { shouldValidate: true })}
           >
             <TextMedium colorInherit>
@@ -294,8 +250,12 @@ export const BuyMembershipForm = ({
               />
             </TransactionInfoContainer>
           )}
-          <ButtonPrimary size="medium" onClick={onCreate} disabled={!form.formState.isValid}>
-            {buttonText ?? 'Create a Membership'}
+          <ButtonPrimary
+            size="medium"
+            onClick={() => uploadAvatarAndSubmit(form.getValues())}
+            disabled={!form.formState.isValid || isUploading}
+          >
+            {isUploading ? <Loading text="Uploading avatar" /> : 'Create a Membership'}
           </ButtonPrimary>
         </ModalFooterGroup>
       </ModalFooter>
@@ -304,30 +264,10 @@ export const BuyMembershipForm = ({
 }
 
 export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: BuyMembershipFormModalProps) => {
-  const [buttonText, setButtonText] = useState<string | undefined>(undefined)
-  const handleSubmit = async (fields: MemberFormFields) => {
-    try {
-      if (fields.avatarUri && fields.avatarUri instanceof File) {
-        setButtonText('Uploading avatar...')
-        const data = await uploadAvatarImage(fields.avatarUri).then((res) => res.json())
-        onSubmit({ ...fields, avatarUri: `${process.env.REACT_APP_AVATAR_UPLOAD_URL}/${data.fileName}` })
-      } else {
-        onSubmit(fields)
-      }
-    } catch (e) {
-      onSubmit(fields)
-    }
-  }
-
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Add membership" />
-      <BuyMembershipForm
-        type="general"
-        membershipPrice={membershipPrice}
-        onSubmit={handleSubmit}
-        buttonText={buttonText}
-      />
+      <BuyMembershipForm type="general" membershipPrice={membershipPrice} onSubmit={onSubmit} />
     </ScrolledModal>
   )
 }

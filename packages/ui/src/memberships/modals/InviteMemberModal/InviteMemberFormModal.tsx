@@ -5,6 +5,7 @@ import * as Yup from 'yup'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent, InputText, InputTextarea } from '@/common/components/forms'
 import { LinkSymbol } from '@/common/components/icons/symbols'
+import { Loading } from '@/common/components/Loading'
 import {
   ModalFooter,
   ModalHeader,
@@ -13,14 +14,13 @@ import {
   ScrolledModalContainer,
   Row,
 } from '@/common/components/Modal'
-import { RowGapBlock } from '@/common/components/page/PageContent'
-import { SmallFileUpload } from '@/common/components/SmallFileUpload'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { useKeyring } from '@/common/hooks/useKeyring'
-import { uploadAvatarImage } from '@/common/modals/OnBoardingModal'
 import { useYupValidationResolver } from '@/common/utils/validation'
+import { AvatarInput } from '@/memberships/components/AvatarInput'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { useUploadAvatarAndSubmit } from '@/memberships/hooks/useUploadAvatarAndSubmit'
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
 import { SelectMember } from '../../components/SelectMember'
@@ -53,8 +53,8 @@ const formDefaultValues = {
 export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
   const { active } = useMyMemberships()
   const keyring = useKeyring()
+  const { uploadAvatarAndSubmit, isUploading } = useUploadAvatarAndSubmit(onSubmit)
   const [formHandleMap, setFormHandleMap] = useState('')
-  const [isUploadingAvatar, setIsUploadingAvatar] = useState<boolean>(false)
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
 
   const form = useForm<MemberFormFields>({
@@ -86,21 +86,6 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
   useEffect(() => {
     return active && form.setValue('invitor', active)
   }, [active])
-
-  const onCreate = async () => {
-    const fields = form.getValues()
-    try {
-      if (fields.avatarUri && fields.avatarUri instanceof File) {
-        setIsUploadingAvatar(true)
-        const data = await uploadAvatarImage(fields.avatarUri).then((res) => res.json())
-        onSubmit({ ...fields, avatarUri: `${process.env.REACT_APP_AVATAR_UPLOAD_URL}/${data.fileName}` })
-      } else {
-        onSubmit(fields)
-      }
-    } catch (e) {
-      onSubmit(fields)
-    }
-  }
 
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
@@ -200,31 +185,17 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
               </InputComponent>
             </Row>
 
-            <Row>
-              {process.env.REACT_APP_AVATAR_UPLOAD_URL ? (
-                <RowGapBlock gap={10}>
-                  <TextMedium bold value>
-                    Member avatar
-                  </TextMedium>
-                  <SmallFileUpload
-                    name="avatarUri"
-                    onUpload={(event) =>
-                      form.setValue('avatarUri', event.target.files?.item(0) ?? null, { shouldValidate: true })
-                    }
-                  />
-                </RowGapBlock>
-              ) : (
-                <InputComponent id="member-avatar" label="Member Avatar" name="avatarUri" placeholder="Image URL">
-                  <InputText id="member-avatar" name="avatarUri" />
-                </InputComponent>
-              )}
-            </Row>
+            <AvatarInput />
           </ScrolledModalContainer>
         </FormProvider>
       </ScrolledModalBody>
       <ModalFooter>
-        <ButtonPrimary size="medium" onClick={onCreate} disabled={!form.formState.isValid}>
-          {isUploadingAvatar ? 'Uploading avatar...' : 'Invite a Member'}
+        <ButtonPrimary
+          size="medium"
+          onClick={() => uploadAvatarAndSubmit(form.getValues())}
+          disabled={!form.formState.isValid || isUploading}
+        >
+          {isUploading ? <Loading text="Uploading avatar" /> : 'Invite a Member'}
         </ButtonPrimary>
       </ModalFooter>
     </ScrolledModal>

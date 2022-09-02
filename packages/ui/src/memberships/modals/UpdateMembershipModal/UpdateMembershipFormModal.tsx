@@ -7,6 +7,7 @@ import { filterAccount, SelectAccount } from '@/accounts/components/SelectAccoun
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { InputComponent, InputText, InputTextarea } from '@/common/components/forms'
+import { Loading } from '@/common/components/Loading'
 import {
   ModalHeader,
   ModalTransactionFooter,
@@ -15,12 +16,11 @@ import {
   ScrolledModalBody,
   ScrolledModalContainer,
 } from '@/common/components/Modal'
-import { RowGapBlock } from '@/common/components/page/PageContent'
-import { SmallFileUpload } from '@/common/components/SmallFileUpload'
 import { TextMedium } from '@/common/components/typography'
 import { uploadAvatarImage } from '@/common/modals/OnBoardingModal'
 import { WithNullableValues } from '@/common/types/form'
-import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
+import { useYupValidationResolver } from '@/common/utils/validation'
+import { AvatarInput } from '@/memberships/components/AvatarInput'
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
 import { AvatarURISchema, HandleSchema } from '../../model/validation'
@@ -91,11 +91,11 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
       try {
         if (fields.avatarUri && fields.avatarUri instanceof File) {
           setIsUploadingAvatar(true)
-          const data = await uploadAvatarImage(fields.avatarUri).then((res) => res.json())
+          const avatarUri = await uploadAvatarImage(fields.avatarUri)
           setIsUploadingAvatar(false)
           onSubmit(
             changedOrNull<UpdateMemberForm>(
-              { ...fields, avatarUri: `${process.env.REACT_APP_AVATAR_UPLOAD_URL}/${data.fileName}` },
+              { ...fields, avatarUri: `${process.env.REACT_APP_AVATAR_UPLOAD_URL}/${avatarUri}` },
               getUpdateMemberFormInitial(member)
             )
           )
@@ -108,8 +108,6 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     }
   }
 
-  const hasError = enhancedHasError(form.formState.errors)
-  const getErrorMessage = enhancedGetErrorMessage(form.formState.errors)
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Edit membership" />
@@ -149,13 +147,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
             </Row>
 
             <Row>
-              <InputComponent
-                id="member-handle"
-                label="Membership handle"
-                required
-                validation={hasError('handle') ? 'invalid' : undefined}
-                message={hasError('handle') ? getErrorMessage('handle') : 'Do not use same handles'}
-              >
+              <InputComponent id="member-handle" label="Membership handle" name="handle" required>
                 <InputText id="member-handle" placeholder="Type" name="handle" />
               </InputComponent>
             </Row>
@@ -166,44 +158,14 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
               </InputComponent>
             </Row>
 
-            <Row>
-              {process.env.REACT_APP_AVATAR_UPLOAD_URL ? (
-                <RowGapBlock gap={10}>
-                  <TextMedium bold value>
-                    Member avatar
-                  </TextMedium>
-                  <SmallFileUpload
-                    initialPreview={member.avatar}
-                    name="avatarUri"
-                    onUpload={(event) =>
-                      form.setValue('avatarUri', event.target.files?.item(0) ?? null, { shouldValidate: true })
-                    }
-                  />
-                </RowGapBlock>
-              ) : (
-                <InputComponent
-                  id="member-avatar"
-                  required
-                  label="Member Avatar"
-                  validation={hasError('avatarUri') ? 'invalid' : undefined}
-                  message={
-                    hasError('avatarUri')
-                      ? getErrorMessage('avatarUri')
-                      : 'Paste an URL of your avatar image. Text lorem ipsum.'
-                  }
-                  placeholder="Image URL"
-                >
-                  <InputText id="member-avatar" name="avatarUri" />
-                </InputComponent>
-              )}
-            </Row>
+            <AvatarInput />
           </FormProvider>
         </ScrolledModalContainer>
       </ScrolledModalBody>
       <ModalTransactionFooter
         next={{
-          disabled: !canUpdate,
-          label: isUploadingAvatar ? 'Uploading avatar...' : 'Save changes',
+          disabled: !canUpdate || isUploadingAvatar,
+          label: isUploadingAvatar ? <Loading text="Uploading avatar" /> : 'Save changes',
           onClick: onCreate,
         }}
       />
