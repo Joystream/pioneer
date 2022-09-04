@@ -1,12 +1,13 @@
 import { useCallback, useState } from 'react'
 
 import { uploadAvatarImage } from '@/common/modals/OnBoardingModal'
-import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 
-export const useUploadAvatarAndSubmit = (onSubmit: (fields: MemberFormFields) => void) => {
+export const useUploadAvatarAndSubmit = <T extends { avatarUri?: string | File | null }>(
+  onSubmit: (fields: T) => void
+) => {
   const [isUploading, setIsUploading] = useState(false)
   const uploadAvatarAndSubmit = useCallback(
-    async (fields: MemberFormFields) => {
+    async (fields: T) => {
       setIsUploading(true)
       const avatarUri = await uploadAvatarImage(fields.avatarUri)
       setIsUploading(false)
