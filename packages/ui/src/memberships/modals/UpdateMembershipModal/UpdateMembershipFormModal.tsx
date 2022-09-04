@@ -17,10 +17,10 @@ import {
   ScrolledModalContainer,
 } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
-import { uploadAvatarImage } from '@/common/modals/OnBoardingModal'
 import { WithNullableValues } from '@/common/types/form'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { AvatarInput } from '@/memberships/components/AvatarInput'
+import { useUploadAvatarAndSubmit } from '@/memberships/hooks/useUploadAvatarAndSubmit'
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
 import { AvatarURISchema, HandleSchema } from '../../model/validation'
@@ -55,10 +55,11 @@ const getUpdateMemberFormInitial = (member: Member) => ({
 export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) => {
   const { allAccounts } = useMyAccounts()
   const [handleMap, setHandleMap] = useState<string>(member.handle)
-  const [isUploadingAvatar, setIsUploadingAvatar] = useState<boolean>(false)
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: handleMap } } })
   const context = { size: data?.membershipsConnection.totalCount, isHandleChanged: handleMap !== member.handle }
-
+  const { uploadAvatarAndSubmit, isUploading } = useUploadAvatarAndSubmit((fields) =>
+    onSubmit(changedOrNull(fields, getUpdateMemberFormInitial(member)))
+  )
   const form = useForm({
     resolver: useYupValidationResolver<UpdateMemberForm>(UpdateMemberSchema),
     defaultValues: {
@@ -84,29 +85,6 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
 
   const canUpdate = form.formState.isValid && hasAnyEdits(form.getValues(), getUpdateMemberFormInitial(member))
-
-  const onCreate = async () => {
-    if (canUpdate) {
-      const fields = form.getValues()
-      try {
-        if (fields.avatarUri && fields.avatarUri instanceof File) {
-          setIsUploadingAvatar(true)
-          const avatarUri = await uploadAvatarImage(fields.avatarUri)
-          setIsUploadingAvatar(false)
-          onSubmit(
-            changedOrNull<UpdateMemberForm>(
-              { ...fields, avatarUri: `${process.env.REACT_APP_AVATAR_UPLOAD_URL}/${avatarUri}` },
-              getUpdateMemberFormInitial(member)
-            )
-          )
-        } else {
-          onSubmit(changedOrNull<UpdateMemberForm>(fields, getUpdateMemberFormInitial(member)))
-        }
-      } catch (e) {
-        onSubmit(changedOrNull<UpdateMemberForm>(fields, getUpdateMemberFormInitial(member)))
-      }
-    }
-  }
 
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
@@ -164,9 +142,9 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
       </ScrolledModalBody>
       <ModalTransactionFooter
         next={{
-          disabled: !canUpdate || isUploadingAvatar,
-          label: isUploadingAvatar ? <Loading text="Uploading avatar" /> : 'Save changes',
-          onClick: onCreate,
+          disabled: !canUpdate || isUploading,
+          label: isUploading ? <Loading text="Uploading avatar" /> : 'Save changes',
+          onClick: () => uploadAvatarAndSubmit(form.getValues()),
         }}
       />
     </ScrolledModal>
