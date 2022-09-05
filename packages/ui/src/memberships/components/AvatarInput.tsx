@@ -2,7 +2,7 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { InputComponent, InputText } from '@/common/components/forms'
-import { SmallFileUpload } from '@/common/components/SmallFileUpload'
+import { SmallFileUpload } from '@/common/components/SmallFileUpload/SmallFileUpload'
 import { TextMedium } from '@/common/components/typography'
 
 export const AvatarInput = () => {

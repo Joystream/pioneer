@@ -10,6 +10,7 @@ import { TextMedium } from '@/common/components/typography'
 import { BorderRad } from '@/common/constants'
 import { enhancedGetErrorMessage, enhancedHasError } from '@/common/utils/validation'
 import { Avatar } from '@/memberships/components/Avatar'
+import { SUPPORTED_IMAGES } from '@/memberships/model/validation'
 
 interface SmallFileUploadProps {
   name: string
@@ -23,7 +24,7 @@ export const SmallFileUpload = ({ onUpload, name, initialPreview }: SmallFileUpl
   const [avatarPreview, setAvatarPreview] = useState<string>(initialPreview ?? '')
 
   useEffect(() => {
-    if (localValue) {
+    if (localValue && SUPPORTED_IMAGES.includes(localValue.type)) {
       const objectUrl = URL.createObjectURL(localValue)
       setAvatarPreview(objectUrl)
       return () => URL.revokeObjectURL(objectUrl)

@@ -11,7 +11,7 @@ export const AccountSchema = Yup.object()
 
 const MAX_AVATAR_FILESIZE = 1048576
 export const MemberSchema = Yup.object()
-const SUPPORTED_IMAGES = ['image/png', 'image/jpg', 'image/jpeg', 'image/webp', 'image/avif']
+export const SUPPORTED_IMAGES = ['image/png', 'image/jpg', 'image/jpeg', 'image/webp', 'image/avif']
 export const AvatarURISchema = process.env.REACT_APP_AVATAR_UPLOAD_URL
   ? Yup.mixed()
       .test('fileSize', 'File size is too large', (value) => !value || value.size <= MAX_AVATAR_FILESIZE)
