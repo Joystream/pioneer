@@ -12,7 +12,7 @@ module.exports = {
       })
 
       if (res.headers.get('Content-Type') === 'application/json') {
-        return jsonPath.query(await res.json(), '$BLACKLIST_JSON_PATH$').filter((item) => typeof item === 'string')
+        return jsonPath.query(await res.json(), '$BLACKLIST_JSON_PATH$').filter((item) => item && typeof item === 'string')
       } else {
         return (await res.text()).split('\n')
       }

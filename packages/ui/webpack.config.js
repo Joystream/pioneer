@@ -18,7 +18,7 @@ module.exports = (env, argv) => {
   const parsedEnvFile = dotenv.config().parsed || {}
   const envVariables = [...Object.entries(parsedEnvFile), ...Object.entries(process.env)]
     .filter(([key]) => key.startsWith('REACT_APP_'))
-    .map(([key, value]) => [`process.env.${key}`, JSON.stringify(value)])
+    .map(([key, value]) => [`process.env.${key}`, value])
 
   const plugins = [
     ...shared.plugins,
