@@ -19,7 +19,7 @@ import { TextMedium } from '@/common/components/typography'
 import { WithNullableValues } from '@/common/types/form'
 import { definedValues } from '@/common/utils'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
-import { SocialMediaSelector } from '@/memberships/components/SocialMediaSelector'
+import { SocialMediaSelector } from '@/memberships/components/SocialMediaSelector/SocialMediaSelector'
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
 import { AvatarURISchema, ExternalResourcesSchema, HandleSchema } from '../../model/validation'
