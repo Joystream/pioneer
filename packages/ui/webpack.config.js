@@ -18,7 +18,7 @@ module.exports = (env, argv) => {
   const parsedEnvFile = dotenv.config().parsed || {}
   const envVariables = [...Object.entries(parsedEnvFile), ...Object.entries(process.env)]
     .filter(([key]) => key.startsWith('REACT_APP_'))
-    .map(([key, value]) => [`process.env.${key}`, value])
+    .map(([key, value]) => [`process.env.${key}`, JSON.stringify(value)])
 
   const plugins = [
     ...shared.plugins,
@@ -30,8 +30,8 @@ module.exports = (env, argv) => {
     new webpack.DefinePlugin({
       GIT_VERSION: JSON.stringify(version),
       IS_DEVELOPMENT: isDevelopment,
-      'process.env.REACT_APP_BLACKLISTED_IMAGES': JSON.stringify(env.blacklist ?? []),
-      'process.env.REACT_APP_IMAGE_REPORT_ENABLED': JSON.stringify(env.isReportApiSet ?? false),
+      'process.env.REACT_APP_BLACKLISTED_IMAGES': `'${JSON.stringify(env.blacklist ?? [])}'`,
+      'process.env.REACT_APP_IMAGE_REPORT_ENABLED': `'${JSON.stringify(env.isReportApiSet ?? false)}'`,
       ...Object.fromEntries(envVariables),
     }),
     new CopyPlugin({
