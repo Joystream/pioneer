@@ -24,7 +24,7 @@ export const SmallFileUpload = ({ onUpload, name, initialPreview }: SmallFileUpl
   const [avatarPreview, setAvatarPreview] = useState<string>(initialPreview ?? '')
 
   useEffect(() => {
-    if (localValue && SUPPORTED_IMAGES.includes(localValue.type)) {
+    if (localValue && SUPPORTED_IMAGES?.includes(localValue.type)) {
       const objectUrl = URL.createObjectURL(localValue)
       setAvatarPreview(objectUrl)
       return () => URL.revokeObjectURL(objectUrl)

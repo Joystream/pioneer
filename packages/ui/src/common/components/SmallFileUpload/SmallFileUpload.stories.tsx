@@ -3,7 +3,7 @@ import React from 'react'
 import { SmallFileUpload } from '@/common/components/SmallFileUpload/SmallFileUpload'
 
 export default {
-  title: 'Form/SmallFileUpload',
+  title: 'Common/Forms/SmallFileUpload',
   components: SmallFileUpload,
 }
 
