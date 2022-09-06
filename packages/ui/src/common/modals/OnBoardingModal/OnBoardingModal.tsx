@@ -26,23 +26,6 @@ import { OnBoardingStatus, SetMembershipAccount } from '@/common/providers/onboa
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
 
-export const uploadAvatarImage = async (image?: File | string | null): Promise<string> => {
-  if (!image || !(image instanceof File)) return image ?? ''
-  try {
-    const body = new FormData()
-    body.append('file', image, image.name)
-    const data = await fetch(process.env.REACT_APP_AVATAR_UPLOAD_URL ?? '', {
-      method: 'POST',
-      body,
-    }).then((res) => res.json())
-    return `${process.env.REACT_APP_AVATAR_UPLOAD_URL}/${data.fileName}`
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error('Error while uploading the avatar:', err)
-    return ''
-  }
-}
-
 export const OnBoardingModal = () => {
   const { hideModal } = useModal()
   const { status: realStatus, membershipAccount, setMembershipAccount, isLoading } = useOnBoarding()
