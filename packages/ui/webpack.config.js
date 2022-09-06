@@ -20,6 +20,11 @@ module.exports = (env, argv) => {
     .filter(([key]) => key.startsWith('REACT_APP_'))
     .map(([key, value]) => [`process.env.${key}`, JSON.stringify(value)])
 
+  const imageBlacklist = [
+    ...env.blacklist ?? [],
+    ...process.env.REACT_APP_BLACKLISTED_IMAGES?.split(',') ?? []
+  ]
+
   const plugins = [
     ...shared.plugins,
     new webpack.ProgressPlugin(),
@@ -30,9 +35,9 @@ module.exports = (env, argv) => {
     new webpack.DefinePlugin({
       GIT_VERSION: JSON.stringify(version),
       IS_DEVELOPMENT: isDevelopment,
-      'process.env.REACT_APP_BLACKLISTED_IMAGES': `'${JSON.stringify(env.blacklist ?? [])}'`,
       'process.env.REACT_APP_IMAGE_REPORT_ENABLED': `'${JSON.stringify(env.isReportApiSet ?? false)}'`,
       ...Object.fromEntries(envVariables),
+      'process.env.REACT_APP_BLACKLISTED_IMAGES': `'${imageBlacklist.join(',')}'`,
     }),
     new CopyPlugin({
       patterns: [

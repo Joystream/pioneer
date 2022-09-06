@@ -51,7 +51,7 @@ export const ImageReportProvider = (props: Props) => {
       value={{
         sendReport: isImageReportEnabled ? sendReport : undefined,
         reportFormUrl: formUrlTemplate ? reportFormUrl : undefined,
-        blacklistedImages: JSON.parse(process.env.REACT_APP_BLACKLISTED_IMAGES ?? '[]') as string[],
+        blacklistedImages: process.env.REACT_APP_BLACKLISTED_IMAGES?.split(',') ?? [],
         userReportedImages,
         notificationStatus: showNotification,
         hideNotification: () => setShowNotification('empty'),
