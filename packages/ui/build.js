@@ -22,15 +22,16 @@ const buildImageSafetyApi = async () => {
   let hasCustomApi = await fs.promises.access(IMAGE_REPORTING_PATH.customEntry).then(() => true).catch(() => false)
 
   const blacklistEndpoint = parsedEnvFile.IMAGE_SAFETY_BLACKLIST_ENDPOINT ?? parsedEnvFile.IMAGE_SAFETY_ENDPOINT
-  const reportEndpoint = parsedEnvFile.IMAGE_SAFETY_REPORT_ENDPOINT ?? parsedEnvFile.IMAGE_SAFETY_ENDPOINT
+  const reportEndpoint = parsedEnvFile.IMAGE_REPORT_API_URL ?? parsedEnvFile.IMAGE_SAFETY_ENDPOINT
   const blacklistAlreadySet = 'REACT_APP_BLACKLISTED_IMAGES' in parsedEnvFile
   const isBlacklistApiSet = !(!hasCustomApi && !blacklistEndpoint)
+  const isReportFormSet = 'IMAGE_REPORT_FORM_URL' in parsedEnvFile
   const isReportApiSet = !(!hasCustomApi && !reportEndpoint)
 
   if(blacklistAlreadySet) {
     console.warn('Skipping image blacklist because the "REACT_APP_BLACKLISTED_IMAGES" environnement variables is set')
   } else if (!isBlacklistApiSet) {
-    const missing = [!blacklistEndpoint && 'IMAGE_SAFETY_BLACKLIST_ENDPOINT', !reportEndpoint && 'IMAGE_SAFETY_REPORT_ENDPOINT']
+    const missing = [!blacklistEndpoint && 'IMAGE_SAFETY_BLACKLIST_ENDPOINT', !reportEndpoint && 'IMAGE_REPORT_API_URL']
     console.warn('Skipping image blacklist because the following environnement variables:', missing.flatMap(name => name ?? []).join(), 'are missing')
   }
 
@@ -47,7 +48,10 @@ const buildImageSafetyApi = async () => {
     await fs.promises.writeFile(IMAGE_REPORTING_PATH.output, code, 'utf8')
   }
 
-  return { isBlacklistApiSet: isBlacklistApiSet && !blacklistAlreadySet, isReportApiSet }
+  return {
+    isBlacklistApiSet: isBlacklistApiSet && !blacklistAlreadySet,
+    isReportApiSet: isReportApiSet && !isReportFormSet,
+  }
 }
 
 const imageBlacklist = async () => {

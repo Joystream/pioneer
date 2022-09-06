@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { ButtonPrimary } from '@/common/components/buttons'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
+import { BasicLinkButtonPrimaryStyles } from '@/common/components/buttons/LinkButtons'
 import { InputComponent, InputText } from '@/common/components/forms'
 import { AlertSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
@@ -21,7 +22,7 @@ export const ReportContentModal = () => {
   const { t } = useTranslation()
   const [isOpen, toggle] = useToggle()
   const [isReporting, setIsReporting] = useState(false)
-  const { sendReport, userReportedImages } = useImageReport()
+  const { reportFormUrl, sendReport, userReportedImages } = useImageReport()
   const {
     hideModal,
     modalData: { report },
@@ -59,9 +60,15 @@ export const ReportContentModal = () => {
         </Preview>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimary onClick={onReporting} size="medium" disabled={isReporting || isAlreadyReported}>
-          {isReporting ? <Loading /> : t('modals.reportContent.proceedButton')}
-        </ButtonPrimary>
+        {reportFormUrl ? (
+          <ExternalLinkButtonPrimary size="medium" href={reportFormUrl(report)} target="_blank">
+            {t('modals.reportContent.proceedButton')}
+          </ExternalLinkButtonPrimary>
+        ) : (
+          <ButtonPrimary size="medium" onClick={onReporting} disabled={isReporting || isAlreadyReported}>
+            {isReporting ? <Loading /> : t('modals.reportContent.proceedButton')}
+          </ButtonPrimary>
+        )}
       </ModalFooter>
     </Modal>
   )
@@ -79,4 +86,7 @@ const Image = styled.img`
   align-self: flex-start;
   max-width: 100%;
   object-fit: contain;
+`
+const ExternalLinkButtonPrimary = styled.a`
+  ${BasicLinkButtonPrimaryStyles}
 `

@@ -12,6 +12,17 @@ interface Props {
 export const ImageReportProvider = (props: Props) => {
   const [showNotification, setShowNotification] = useState<ReportNotificationType>('empty')
   const [userReportedImages, setUserReported] = useState<string[]>([])
+  const formUrlTemplate = process.env.REACT_APP_IMAGE_REPORT_FORM_URL ?? ''
+  const isImageReportEnabled = !formUrlTemplate && process.env.REACT_APP_IMAGE_REPORT_ENABLED === 'true'
+
+  const reportFormUrl = useCallback(
+    (src: string) => {
+      const image = encodeURIComponent(src)
+      const page = encodeURIComponent(location.href)
+      return formUrlTemplate.replace('{image}', image).replace('{page}', page)
+    },
+    [formUrlTemplate]
+  )
 
   const sendReport = useCallback(
     async (src: string) => {
@@ -38,7 +49,8 @@ export const ImageReportProvider = (props: Props) => {
   return (
     <ImageReportContext.Provider
       value={{
-        sendReport: process.env.REACT_APP_IMAGE_REPORT_ENABLED === 'true' ? sendReport : undefined,
+        sendReport: isImageReportEnabled ? sendReport : undefined,
+        reportFormUrl: formUrlTemplate ? reportFormUrl : undefined,
         blacklistedImages: JSON.parse(process.env.REACT_APP_BLACKLISTED_IMAGES ?? '[]') as string[],
         userReportedImages,
         notificationStatus: showNotification,

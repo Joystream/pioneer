@@ -13,7 +13,7 @@ export interface UserImageProps extends ImgHTMLAttributes<HTMLImageElement> {
 }
 
 export const UserImage = (props: UserImageProps) => {
-  const { blacklistedImages, sendReport } = useImageReport()
+  const { blacklistedImages, reportFormUrl, sendReport } = useImageReport()
   const { showModal } = useModal()
 
   const src = props.src
@@ -30,7 +30,7 @@ export const UserImage = (props: UserImageProps) => {
       ) : (
         <Wrapper>
           <Image {...props} />
-          {sendReport && src && (
+          {(reportFormUrl || sendReport) && src && (
             <ButtonWrapper>
               <Tooltip hideOnComponentLeave offset={[0, 5]} tooltipText="Report image">
                 <Button
