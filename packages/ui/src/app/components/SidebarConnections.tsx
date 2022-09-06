@@ -8,6 +8,7 @@ import { Colors } from '@/common/constants'
 import { BalanceTitle } from '@/memberships/components/ProfileComponent'
 
 const REPOSITORY_URL = 'https://github.com/Joystream/pioneer'
+const JOYSTREAM_URL = 'https://www.joystream.org/'
 
 export const SidebarConnections = () => {
   return (
@@ -15,9 +16,9 @@ export const SidebarConnections = () => {
       <BalanceTitle>Powered By</BalanceTitle>
       <div>
         <LinksContainer>
-          <SmallJoystreamLogo />
+          <SmallJoystreamLogo onClick={() => window.open(JOYSTREAM_URL, '_blank')} />
           <div className="separator" />
-          <GithubLogo className="github-logo" onClick={() => window.open(REPOSITORY_URL, '_blank')} />
+          <GithubLogo onClick={() => window.open(REPOSITORY_URL, '_blank')} />
         </LinksContainer>
         <ConnectionStatusDot />
       </div>

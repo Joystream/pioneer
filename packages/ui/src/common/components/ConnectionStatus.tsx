@@ -40,12 +40,8 @@ export const ConnectionStatus = () => {
     return () => clearTimeout(timeout)
   }, [showNotification, connectionState])
 
-  if (!showNotification) {
+  if (!showNotification || connectionState === 'connecting') {
     return null
-  }
-
-  if (connectionState === 'connecting') {
-    return <SideNotification showClose onClick={hide} title="Connecting to Joystream node" />
   }
 
   if (connectionState === 'connected') {
