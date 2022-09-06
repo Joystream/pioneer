@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
@@ -152,14 +152,16 @@ describe('UI: InviteMemberModal', () => {
   async function fillForm(invitor = 'alice') {
     await getButton(/^Invite a member$/i)
     await selectFromDropdown('Inviting member', invitor)
-    fireEvent.change(getInput(/Root account/i), {
-      target: { value: bobStash.address },
+    await act(async () => {
+      fireEvent.change(getInput(/Root account/i), {
+        target: { value: bobStash.address },
+      })
+      fireEvent.change(getInput(/Controller account/i), {
+        target: { value: controllerAddress },
+      })
+      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
+      fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
     })
-    fireEvent.change(getInput(/Controller account/i), {
-      target: { value: controllerAddress },
-    })
-    fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
-    fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'bobby1' } })
   }
 
   function getInput(labelText: string | RegExp) {

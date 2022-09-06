@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { configure, fireEvent, render, screen } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
@@ -83,7 +83,9 @@ describe('UI: UpdatedMembershipModal', () => {
 
     expect(await getButton(/^Save changes$/i)).toBeDisabled()
 
-    fireEvent.change(screen.getByTestId('twitter-input'), { target: { value: 'joystream@mail.com' } })
+    await act(async () => {
+      fireEvent.change(screen.getByTestId('twitter-input'), { target: { value: 'joystream@mail.com' } })
+    })
 
     expect(await getButton(/^Save changes$/i)).toBeEnabled()
   })
@@ -123,10 +125,12 @@ describe('UI: UpdatedMembershipModal', () => {
     const newMemberEmail = 'joystream@mail.com'
     async function changeNameAndSave() {
       renderModal(member)
-      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: newMemberName } })
-      fireEvent.change(screen.getByTestId('twitter-input'), { target: { value: newMemberEmail } })
+      await act(async () => {
+        fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: newMemberName } })
+        fireEvent.change(screen.getByTestId('twitter-input'), { target: { value: newMemberEmail } })
 
-      fireEvent.click(await screen.findByText(/^Save changes$/i))
+        fireEvent.click(await screen.findByText(/^Save changes$/i))
+      })
     }
 
     it('Authorize step', async () => {
