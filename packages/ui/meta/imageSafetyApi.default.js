@@ -1,14 +1,12 @@
-const BlackListBearer = '$BLACKLIST_BEARER$'
-const ReportBearer = '$REPORT_BEARER$'
+const BlackListHeaders = parseHeaders('$BLACKLIST_HEADERS$')
+const ReportHeaders = parseHeaders('$REPORT_HEADERS$')
 
 module.exports = {
   ImageSafetyApi: {
     blacklist: async (jsonPath) => {
       const res = await fetch('$BLACKLIST_ENDPOINT$', {
-        headers: {
-          ...BlackListBearer ? { Authorization: `Bearer ${BlackListBearer}` } : {},
-        },
         method: 'GET',
+        headers: BlackListHeaders,
       })
 
       if (!res.headers.get('Content-Type').includes('application/json')) {
@@ -23,12 +21,18 @@ module.exports = {
       return jsonPath.query(jsonRes, '$BLACKLIST_JSON_PATH$').filter((item) => item && typeof item === 'string')
     },
     report: async (image) => fetch('$REPORT_ENDPOINT$', {
-      headers: {
-        'Content-Type': 'application/json',
-        ...ReportBearer ? { Authorization: `Bearer ${ReportBearer}` } : {},
-      },
       method: 'POST',
+      headers: ReportHeaders,
       body: '$REPORT_BODY$'.replace('{image}', image).replace('{page}', window.location.href),
     })
   }
+}
+
+function parseHeaders (headers) {
+  return Object.fromEntries(
+    headers.split('\n').flatMap((header) => {
+      const [, key, value] = header.match(/(\w[^\s:]+)\s*:\s*(.+)/)
+      return (!key || !value) ? [] : [[key, value]]
+    })
+  )
 }

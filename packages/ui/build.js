@@ -39,10 +39,10 @@ const buildImageSafetyApi = async () => {
     const template = await fs.promises.readFile(IMAGE_REPORTING_PATH[hasCustomApi ? 'customEntry' : 'defaultEntry'], 'utf8')
     const code = template
       .replace(/\$BLACKLIST_ENDPOINT\$/, sanitize(blacklistEndpoint))
-      .replace(/\$BLACKLIST_BEARER\$/, sanitize(parsedEnvFile.IMAGE_SAFETY_BLACKLIST_BEARER ?? parsedEnvFile.IMAGE_SAFETY_BEARER))
+      .replace(/\$BLACKLIST_HEADERS\$/, sanitize(parsedEnvFile.IMAGE_SAFETY_BLACKLIST_HEADERS ?? parsedEnvFile.IMAGE_SAFETY_HEADERS))
       .replace(/\$BLACKLIST_JSON_PATH\$/, sanitize(parsedEnvFile.IMAGE_SAFETY_BLACKLIST_JSON_PATH ?? '*').replace(/^(?!\$)/, '$..'))
       .replace(/\$REPORT_ENDPOINT\$/, sanitize(reportEndpoint))
-      .replace(/\$REPORT_BEARER\$/, sanitize(parsedEnvFile.IMAGE_SAFETY_REPORT_BEARER ?? parsedEnvFile.IMAGE_SAFETY_BEARER))
+      .replace(/\$REPORT_HEADERS\$/, sanitize(parsedEnvFile.IMAGE_SAFETY_REPORT_HEADERS ?? parsedEnvFile.IMAGE_SAFETY_HEADERS))
       .replace(/\$REPORT_BODY\$/, sanitize(parsedEnvFile.IMAGE_SAFETY_REPORT_BODY_TEMPLATE) ?? '{value}')
 
     await fs.promises.writeFile(IMAGE_REPORTING_PATH.output, code, 'utf8')
