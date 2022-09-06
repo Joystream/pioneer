@@ -13,7 +13,7 @@ interface ProposalStatisticsProps {
   constants: ProposalConstants | null
 }
 export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsProps) => {
-  const { approve, slash, total, remain } = voteCount
+  const { approve, slash, total, remain, abstain } = voteCount
   const councilSize = isDefined(remain) ? total + remain : undefined
   const {
     approvalQuorumPercentage = undefined,
@@ -31,9 +31,12 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
   const approvalQuorum = councilSize && approvalQuorumRatio && Math.ceil(councilSize * approvalQuorumRatio)
   const slashingQuorum = councilSize && slashingQuorumRatio && Math.ceil(councilSize * slashingQuorumRatio)
 
-  const quorumRatio = councilSize ? total / councilSize : 0
-  const approvalRatio = total && approve / total
-  const slashingRatio = total && slash / total
+  const quorumRatio = councilSize ? (total - abstain) / councilSize : 0
+  const abstainRatio = councilSize ? abstain / councilSize : 0
+  const remainRatio = councilSize ? (isDefined(remain) ? remain : 0) / councilSize : 0
+
+  const approvalRatio = total - abstain && approve / (total - abstain)
+  const slashingRatio = total - abstain && slash / (total - abstain)
 
   return (
     <Statistics>
@@ -44,8 +47,8 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
           tooltipLinkURL={tooltipLinkURL}
           value={quorumRatio}
           threshold={approvalQuorumRatio}
-          numerator={total}
-          denominator={`${approvalQuorum ?? '-'} vote${plural(approvalQuorum)}`}
+          numerator={total - abstain}
+          denominator={`${councilSize ?? '-'} vote${plural(approvalQuorum)}`}
         />
         <StatisticBar
           title="Approval Threshold"
@@ -65,8 +68,8 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
           tooltipLinkURL={tooltipLinkURL}
           value={quorumRatio}
           threshold={slashingQuorumRatio}
-          numerator={total}
-          denominator={`max ${slashingQuorum ?? '-'} vote${plural(slashingQuorum)}`}
+          numerator={total - abstain}
+          denominator={`${councilSize ?? '-'} vote${plural(slashingQuorum)}`}
         />
         <StatisticBar
           title="Slashing Threshold"
@@ -75,7 +78,25 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
           value={slashingRatio}
           threshold={slashingThresholdRatio}
           numerator={`${Math.floor(slashingRatio * 100)}%`}
-          denominator={`max ${slashingThresholdRatio?.toLocaleString('en', { style: 'percent' }) ?? '-'}`}
+          denominator={`${slashingThresholdRatio?.toLocaleString('en', { style: 'percent' }) ?? '-'}`}
+        />
+      </TwoRowStatistic>
+      <TwoRowStatistic>
+        <StatisticBar
+          title="Abstained"
+          tooltipText="Number of votes abstained"
+          tooltipLinkURL={tooltipLinkURL}
+          value={abstainRatio}
+          numerator={abstain}
+          denominator={`${councilSize ?? '-'} vote${plural(slashingQuorum)}`}
+        />
+        <StatisticBar
+          title="Remained"
+          tooltipText="Remained votes"
+          tooltipLinkURL={tooltipLinkURL}
+          value={remainRatio}
+          numerator={remain}
+          denominator={`${councilSize ?? '-'} vote${plural(slashingQuorum)}`}
         />
       </TwoRowStatistic>
     </Statistics>

@@ -70,6 +70,7 @@ Default.args = {
   approve: 2,
   reject: 2,
   slash: 0,
+  abstain: 3,
   councilSize: 20,
   unknownConstants: false,
   approvalQuorumPercentage: 30,
