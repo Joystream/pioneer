@@ -11,11 +11,16 @@ module.exports = {
         method: 'GET',
       })
 
-      if (res.headers.get('Content-Type') === 'application/json') {
-        return jsonPath.query(await res.json(), '$BLACKLIST_JSON_PATH$').filter((item) => item && typeof item === 'string')
-      } else {
+      if (!res.headers.get('Content-Type').includes('application/json')) {
         return (await res.text()).split('\n')
       }
+
+      const jsonRes = await res.json()
+      if (jsonRes.error) {
+        throw jsonRes.error
+      }
+
+      return jsonPath.query(jsonRes, '$BLACKLIST_JSON_PATH$').filter((item) => item && typeof item === 'string')
     },
     report: async (image) => fetch('$REPORT_ENDPOINT$', {
       headers: {

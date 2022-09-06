@@ -63,7 +63,7 @@ const imageBlacklist = async () => {
   try {
     const blacklist = await ImageSafetyApi.blacklist(jsonPath)
     if (blacklist.length) {
-      console.log('Image blacklist fetched successfully !')
+      console.log('Image blacklist fetched successfully:', ...blacklist.map(src => '\n\t' + src))
     } else {
       console.warn('The retrieved image blacklist is empty')
     }
