@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { useApi } from '@/api/hooks/useApi'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
-import { useObservable } from '@/common/hooks/useObservable'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { Address } from '@/common/types'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
@@ -19,9 +19,12 @@ interface MembershipModalProps {
 }
 
 export function InviteMemberModal({ onClose }: MembershipModalProps) {
-  const { api, connectionState } = useApi()
-  const workingGroupBudget = useObservable(api?.query.membershipWorkingGroup.budget(), [connectionState])
-  const membershipPrice = useObservable(api?.query.members.membershipPrice(), [connectionState])
+  const { api } = useApi()
+  const workingGroupBudget = useFirstObservableValue(
+    () => api?.query.membershipWorkingGroup.budget(),
+    [api?.isConnected]
+  )
+  const membershipPrice = useFirstObservableValue(() => api?.query.members.membershipPrice(), [api?.isConnected])
   const [state, send] = useMachine(inviteMemberMachine)
 
   useEffect(() => {

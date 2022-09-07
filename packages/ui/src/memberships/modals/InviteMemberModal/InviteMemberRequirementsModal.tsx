@@ -5,7 +5,7 @@ import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Modal, ModalBody, ModalHeader } from '@/common/components/Modal'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium, TokenValue } from '@/common/components/typography'
-import { useObservable } from '@/common/hooks/useObservable'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 
 interface Props {
   onClose: () => void
@@ -13,8 +13,11 @@ interface Props {
 
 export const InviteMemberRequirementsModal = ({ onClose }: Props) => {
   const { api } = useApi()
-  const workingGroupBudget = useObservable(api?.query.membershipWorkingGroup.budget(), [api])
-  const membershipPrice = useObservable(api?.query.members.membershipPrice(), [api])
+  const workingGroupBudget = useFirstObservableValue(
+    () => api?.query.membershipWorkingGroup.budget(),
+    [api?.isConnected]
+  )
+  const membershipPrice = useFirstObservableValue(() => api?.query.members.membershipPrice(), [api?.isConnected])
 
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>

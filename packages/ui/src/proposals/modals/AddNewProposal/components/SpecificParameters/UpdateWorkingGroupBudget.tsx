@@ -11,14 +11,14 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextInlineMedium, TextMedium, TokenValue } from '@/common/components/typography'
 import { capitalizeFirstLetter } from '@/common/helpers'
-import { useObservable } from '@/common/hooks/useObservable'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 export const UpdateWorkingGroupBudget = () => {
   const { setValue, watch, setError, formState, clearErrors } = useFormContext()
   const { api } = useApi()
-  const councilBudget = useObservable(api?.query.council.budget().pipe(first()), [!api])
+  const councilBudget = useFirstObservableValue(() => api?.query.council.budget().pipe(first()), [api?.isConnected])
   const [groupId, isPositive, budgetUpdate] = watch([
     'updateWorkingGroupBudget.groupId',
     'updateWorkingGroupBudget.isPositive',

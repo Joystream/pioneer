@@ -2,12 +2,12 @@ import { useMemo } from 'react'
 import { map } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
-import { useObservable } from '@/common/hooks/useObservable'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 
 import { useCouncilRemainingPeriod } from './useCouncilRemainingPeriod'
 
 export const useCouncilStatistics = () => {
-  const { api, connectionState } = useApi()
+  const { api } = useApi()
   const idlePeriodRemaining = useCouncilRemainingPeriod()
 
   const councilSize = api?.consts.council.councilSize
@@ -15,8 +15,8 @@ export const useCouncilStatistics = () => {
     () => api?.query.council.councilorReward().pipe(map((councilorReward) => councilSize?.mul(councilorReward))),
     [councilSize]
   )
-  const budgetAmount = useObservable(api?.query.council.budget(), [connectionState])
-  const rewardAmount = useObservable(reward, [connectionState])
+  const budgetAmount = useFirstObservableValue(() => api?.query.council.budget(), [api?.isConnected])
+  const rewardAmount = useFirstObservableValue(() => reward, [api?.isConnected])
 
   return {
     idlePeriodRemaining,
