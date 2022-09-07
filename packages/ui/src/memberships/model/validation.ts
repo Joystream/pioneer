@@ -57,7 +57,7 @@ export const StakingAccountSchema = Yup.object()
     const { stakingStatus } = context.options.context as IStakingAccountSchema
     return stakingStatus !== 'other'
   })
-  .test('unknownStatus', '', (value, context) => {
+  .test('unknownStakingStatus', '', (value, context) => {
     const { stakingStatus } = context.options.context as IStakingAccountSchema
     return stakingStatus !== 'unknown'
   })
