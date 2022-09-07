@@ -49,7 +49,9 @@ export const OnBoardingModal = () => {
         return (
           <OnBoardingMembership
             setMembershipAccount={setMembershipAccount as SetMembershipAccount}
-            onSubmit={(params: MemberFormFields) => send({ type: 'DONE', form: params })}
+            onSubmit={(params: MemberFormFields) => {
+              send({ type: 'DONE', form: params })
+            }}
             membershipAccount={membershipAccount as string}
           />
         )

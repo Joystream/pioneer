@@ -9,9 +9,14 @@ import { Balances, LockType } from '@/accounts/types'
 
 export const AccountSchema = Yup.object()
 
+const MAX_AVATAR_FILESIZE = 1048576
 export const MemberSchema = Yup.object()
-
-export const AvatarURISchema = Yup.string().url('Invalid url address')
+export const SUPPORTED_IMAGES = ['image/png', 'image/jpg', 'image/jpeg', 'image/webp', 'image/avif']
+export const AvatarURISchema = process.env.REACT_APP_AVATAR_UPLOAD_URL
+  ? Yup.mixed()
+      .test('fileSize', 'File size is too large', (value) => !value || value.size <= MAX_AVATAR_FILESIZE)
+      .test('fileType', 'This file type is not allowed', (value) => !value || SUPPORTED_IMAGES.includes(value.type))
+  : Yup.string().url().nullable()
 
 export const ExternalResourcesSchema = Yup.object().shape({
   EMAIL: Yup.string().email('Field has to be a valid email address'),
@@ -57,7 +62,7 @@ export const StakingAccountSchema = Yup.object()
     const { stakingStatus } = context.options.context as IStakingAccountSchema
     return stakingStatus !== 'other'
   })
-  .test('unknownStatus', '', (value, context) => {
+  .test('unknownStakingStatus', '', (value, context) => {
     const { stakingStatus } = context.options.context as IStakingAccountSchema
     return stakingStatus !== 'unknown'
   })

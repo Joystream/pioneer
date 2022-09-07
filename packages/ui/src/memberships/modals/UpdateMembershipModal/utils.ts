@@ -9,12 +9,11 @@ export const getChangedFields = (form: Record<string, any>, initial: Record<stri
   const changedFields = []
 
   for (const key of Object.keys(form)) {
-    const initialValue = initial[key] || ''
+    const initialValue = initial[key === 'avatarUri' ? 'avatar' : key] || ''
     const formValue = form[key]?.address ?? (form[key] || '')
     if (initialValue !== formValue) {
       if (key === 'externalResources') {
-        const convertedInitialValue = membershipExternalResourceToObject(initialValue)
-        if (JSON.stringify(convertedInitialValue) !== JSON.stringify(formValue)) changedFields.push(key)
+        if (JSON.stringify(initialValue) !== JSON.stringify(formValue)) changedFields.push(key)
       } else {
         changedFields.push(key)
       }

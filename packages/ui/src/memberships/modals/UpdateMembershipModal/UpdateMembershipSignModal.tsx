@@ -43,14 +43,14 @@ function createBatch(transactionParams: WithNullableValues<UpdateMemberForm>, ap
     return
   }
 
-  if (hasProfileEdits) {
+  if (hasProfileEdits && !(transactionParams.avatarUri instanceof File)) {
     const updateProfile = api.tx.members.updateProfile(
       member.id,
       transactionParams.handle ?? null,
       metadataToBytes(MembershipMetadata, {
         about: transactionParams.about ?? null,
         name: transactionParams.name ?? null,
-        avatarUri: transactionParams.avatarUri ?? '',
+        avatarUri: transactionParams.avatarUri ?? null,
         externalResources: transactionParams.externalResources
           ? toExternalResources(definedValues(transactionParams.externalResources))
           : null,

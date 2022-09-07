@@ -21,6 +21,7 @@ import {
 } from '@/common/components/forms'
 import { Arrow } from '@/common/components/icons'
 import { LinkSymbol } from '@/common/components/icons/symbols'
+import { Loading } from '@/common/components/Loading'
 import {
   ModalFooter,
   ModalFooterGroup,
@@ -35,8 +36,10 @@ import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { definedValues } from '@/common/utils'
-import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
+import { useYupValidationResolver } from '@/common/utils/validation'
+import { AvatarInput } from '@/memberships/components/AvatarInput'
 import { SocialMediaSelector } from '@/memberships/components/SocialMediaSelector/SocialMediaSelector'
+import { useUploadAvatarAndSubmit } from '@/memberships/hooks/useUploadAvatarAndSubmit'
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
 import { SelectMember } from '../../components/SelectMember'
@@ -82,7 +85,7 @@ export interface MemberFormFields {
   name: string
   handle: string
   about: string
-  avatarUri: string
+  avatarUri: File | string | null
   isReferred?: boolean
   referrer?: Member
   hasTerms?: boolean
@@ -94,7 +97,7 @@ const formDefaultValues = {
   name: '',
   handle: '',
   about: '',
-  avatarUri: '',
+  avatarUri: null,
   isReferred: false,
   referrer: undefined,
   hasTerms: false,
@@ -115,10 +118,9 @@ export const BuyMembershipForm = ({
   type,
 }: BuyMembershipFormProps) => {
   const { allAccounts } = useMyAccounts()
-
   const [formHandleMap, setFormHandleMap] = useState('')
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
-
+  const { isUploading, uploadAvatarAndSubmit } = useUploadAvatarAndSubmit(onSubmit)
   const form = useForm<MemberFormFields>({
     resolver: useYupValidationResolver(CreateMemberSchema),
     context: { size: data?.membershipsConnection.totalCount },
@@ -143,13 +145,6 @@ export const BuyMembershipForm = ({
       form.trigger('handle')
     }
   }, [data?.membershipsConnection.totalCount])
-
-  const hasError = enhancedHasError(form.formState.errors)
-  const getErrorMessage = enhancedGetErrorMessage(form.formState.errors)
-  const onCreate = () => {
-    const values = form.getValues()
-    onSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
-  }
 
   return (
     <>
@@ -201,24 +196,12 @@ export const BuyMembershipForm = ({
               </>
             )}
             <Row>
-              <InputComponent
-                id="member-name"
-                label="Member Name"
-                required
-                validation={hasError('name') ? 'invalid' : undefined}
-                message={hasError('name') ? getErrorMessage('name') : ''}
-              >
+              <InputComponent id="member-name" label="Member Name" required name="name">
                 <InputText id="member-name" placeholder="Type" name="name" />
               </InputComponent>
             </Row>
             <Row>
-              <InputComponent
-                id="membership-handle"
-                label="Membership handle"
-                required
-                validation={hasError('handle') ? 'invalid' : undefined}
-                message={hasError('handle') ? getErrorMessage('handle') : ''}
-              >
+              <InputComponent id="membership-handle" label="Membership handle" required name="handle">
                 <InputText id="membership-handle" placeholder="Type" name="handle" />
               </InputComponent>
             </Row>
@@ -227,22 +210,9 @@ export const BuyMembershipForm = ({
                 <InputTextarea id="member-about" placeholder="Type" name="about" />
               </InputComponent>
             </Row>
-            <Row>
-              <InputComponent
-                id="member-avatar"
-                required
-                label="Member Avatar"
-                validation={hasError('avatarUri') ? 'invalid' : undefined}
-                message={
-                  hasError('avatarUri')
-                    ? getErrorMessage('avatarUri')
-                    : 'Paste an URL of your avatar image. Text lorem ipsum.'
-                }
-                placeholder="Image URL"
-              >
-                <InputText id="member-avatar" name="avatarUri" />
-              </InputComponent>
-            </Row>
+
+            <AvatarInput />
+
             <SocialMediaSelector />
           </ScrolledModalContainer>
         </FormProvider>
@@ -256,7 +226,7 @@ export const BuyMembershipForm = ({
             </ButtonGhost>
           )}
           <Checkbox
-            id={'privacy-policy-agreement'}
+            id="privacy-policy-agreement"
             onChange={(hasTerms) => form.setValue('hasTerms', hasTerms, { shouldValidate: true })}
           >
             <TextMedium colorInherit>
@@ -293,8 +263,15 @@ export const BuyMembershipForm = ({
               />
             </TransactionInfoContainer>
           )}
-          <ButtonPrimary size="medium" onClick={onCreate} disabled={!form.formState.isValid}>
-            Create a Membership
+          <ButtonPrimary
+            size="medium"
+            onClick={() => {
+              const values = form.getValues()
+              uploadAvatarAndSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
+            }}
+            disabled={!form.formState.isValid || isUploading}
+          >
+            {isUploading ? <Loading text="Uploading avatar" /> : 'Create a Membership'}
           </ButtonPrimary>
         </ModalFooterGroup>
       </ModalFooter>
