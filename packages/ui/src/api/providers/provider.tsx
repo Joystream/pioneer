@@ -3,8 +3,7 @@ import { firstValueFrom } from 'rxjs'
 
 import { Api } from '@/api'
 import { useApiBenchmarking } from '@/api/hooks/useApiBenchmarking'
-
-import { useNetworkEndpoints } from '../../common/hooks/useNetworkEndpoints'
+import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 
 import { ApiContext } from './context'
 
@@ -12,12 +11,14 @@ interface Props {
   children: ReactNode
 }
 
-type ConnectionState = 'connecting' | 'connected' | 'disconnected'
+export type ConnectionState = 'connecting' | 'connected' | 'disconnected' | 'error'
 
 interface BaseAPI {
   api?: Api
   isConnected: boolean
   connectionState: ConnectionState
+  qnConnectionState: ConnectionState
+  setQnConnectionState: (state: ConnectionState) => void
 }
 
 interface APIConnecting extends BaseAPI {
@@ -43,6 +44,7 @@ export type UseApi = APIConnecting | APIConnected | APIDisconnected
 export const ApiContextProvider = ({ children }: Props) => {
   const [api, setApi] = useState<Api>()
   const [connectionState, setConnectionState] = useState<ConnectionState>('connecting')
+  const [qnConnectionState, setQnConnectionState] = useState<ConnectionState>('connecting')
   const [endpoints] = useNetworkEndpoints()
 
   useApiBenchmarking(api)
@@ -63,6 +65,8 @@ export const ApiContextProvider = ({ children }: Props) => {
           isConnected: false,
           api: undefined,
           connectionState,
+          qnConnectionState,
+          setQnConnectionState: setQnConnectionState,
         }}
       >
         {children}
@@ -77,6 +81,8 @@ export const ApiContextProvider = ({ children }: Props) => {
           isConnected: true,
           api: api as Api,
           connectionState,
+          qnConnectionState,
+          setQnConnectionState: setQnConnectionState,
         }}
       >
         {children}
@@ -91,6 +97,8 @@ export const ApiContextProvider = ({ children }: Props) => {
           isConnected: false,
           api: api as Api,
           connectionState,
+          qnConnectionState,
+          setQnConnectionState: setQnConnectionState,
         }}
       >
         {children}
