@@ -53,10 +53,9 @@ export const CreatePostSignModal = ({
 
   const hasFunds = useMemo(() => {
     if (balance?.transferable && paymentInfo?.partialFee) {
-      if (isEditable) {
-        return balance.transferable.gte(paymentInfo.partialFee.add(postDeposit))
-      }
-      return getFeeSpendableBalance(balance).gte(paymentInfo.partialFee)
+      return getFeeSpendableBalance(balance).gte(
+        isEditable ? paymentInfo.partialFee.add(postDeposit) : paymentInfo.partialFee
+      )
     }
     return false
   }, [controllerAccount.address, balance?.transferable, paymentInfo?.partialFee, isEditable])
