@@ -1,3 +1,4 @@
+import { RegistryError } from '@polkadot/types-codec/types'
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { SpRuntimeDispatchError } from '@polkadot/types/lookup'
 
@@ -15,7 +16,13 @@ const getErrorMeta = (error: SpRuntimeDispatchError) => {
   }
 }
 
-export const toDispatchError = (event: EventRecord) => {
+export type DispatchedError = Pick<RegistryError, 'section' | 'name' | 'docs'>
+export const toDispatchError = (event: EventRecord): DispatchedError | undefined => {
+  const errorData = event.event.data.find((data) => (data as any).error)
+  if (errorData) {
+    return (errorData as any).error as DispatchedError
+  }
+
   if (isModuleEvent(event.event, 'utility', 'BatchInterrupted')) {
     const error = event.event.data[1]
     return getErrorMeta(error)
