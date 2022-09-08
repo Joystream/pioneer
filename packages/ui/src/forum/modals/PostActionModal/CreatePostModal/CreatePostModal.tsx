@@ -15,6 +15,7 @@ import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
+import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { CreatePostModalCall } from '.'
@@ -50,7 +51,7 @@ export const CreatePostModal = () => {
     }
 
     if (state.matches('requirementsVerification')) {
-      if (isEditable ? balance.transferable.gte(requiredAmount) : feeInfo.canAfford) {
+      if (isEditable ? getFeeSpendableBalance(balance).gte(requiredAmount) : feeInfo.canAfford) {
         send('PASS')
       } else {
         send('FAIL')
@@ -58,7 +59,7 @@ export const CreatePostModal = () => {
     }
 
     if (state.matches('beforeTransaction')) {
-      if (isEditable ? balance.transferable.gte(requiredAmount) : feeInfo.canAfford) {
+      if (isEditable ? getFeeSpendableBalance(balance).gte(requiredAmount) : feeInfo.canAfford) {
         send('PASS')
       } else {
         send('FAIL')

@@ -16,7 +16,7 @@ interface Props {
   post: ForumPost
   onCancel: () => void
   type: PostListItemType
-  onSuccessfulEdit: (newText: string) => void
+  onSuccessfulEdit: () => void
 }
 
 export const PostEditor = ({ post, onCancel, type, onSuccessfulEdit }: Props) => {
