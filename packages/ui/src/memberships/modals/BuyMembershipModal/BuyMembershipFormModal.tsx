@@ -232,10 +232,10 @@ export const BuyMembershipForm = ({
                 <InputText id="member-avatar" name="avatarUri" />
               </InputComponent>
             </Row>
-            {type === 'onBoarding' && (
+            {process.env.REACT_APP_CAPTCHA_SITE_KEY && type === 'onBoarding' && (
               <Row>
                 <HCaptcha
-                  sitekey={process.env.REACT_APP_CAPTCHA_SITE_KEY ?? '10000000-ffff-ffff-ffff-000000000001'}
+                  sitekey={process.env.REACT_APP_CAPTCHA_SITE_KEY}
                   theme="dark"
                   languageOverride="en"
                   onVerify={setCaptchaToken}
