@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import React from 'react'
+import { useLocation } from 'react-router'
 import { NavLink, useRouteMatch } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
@@ -11,24 +12,36 @@ interface NavigationLinkProps extends DisabledNavigationLinkProps {
   indicate?: boolean
   exact?: boolean
   className?: string
-  to: string
+  to?: string
+  onClick?: () => void
 }
 
 interface DisabledNavigationLinkProps {
   disabled?: boolean
 }
 
-export const NavigationLink = ({ icon, children, indicate, exact, className, to, disabled }: NavigationLinkProps) => {
-  const match = useRouteMatch(to)
+export const NavigationLink = ({
+  icon,
+  children,
+  indicate,
+  exact,
+  className,
+  to,
+  disabled,
+  onClick,
+}: NavigationLinkProps) => {
+  const location = useLocation()
+  const match = useRouteMatch(to ?? location.pathname)
 
   return (
     <NavigationItemLink
       exact={exact}
-      to={to}
+      to={to ?? location.pathname}
       className={className}
       disabled={disabled}
       activeClassName="active-page"
       onClick={(event) => {
+        onClick?.()
         if (disabled) {
           event.preventDefault()
         }
@@ -100,6 +113,10 @@ const NavigationItemLinkChildren = styled.div`
   color: inherit;
   z-index: 20;
   ${Overflow.FullDots};
+
+  svg {
+    width: 20px;
+  }
 `
 
 const NavigationItemLinkIndicator = styled.div`

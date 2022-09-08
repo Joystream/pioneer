@@ -9,6 +9,7 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { ArrowDownIcon } from '@/common/components/icons/ArrowDownIcon'
 import { ArrowUpExpandedIcon } from '@/common/components/icons/ArrowUpExpandedIcon'
+import { PolkadotAppInfo } from '@/common/components/PolkadotAppInfo'
 import { StepperStep } from '@/common/components/Stepper'
 import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper'
 import { VerticalStaticStepper } from '@/common/components/Stepper/VerticalStaticStepper'
@@ -16,6 +17,7 @@ import { TextHuge, TextSmall } from '@/common/components/typography'
 import { Colors, ZIndex } from '@/common/constants'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
+import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { useToggle } from '@/common/hooks/useToggle'
 import { OnBoardingStatus } from '@/common/providers/onboarding/types'
@@ -76,6 +78,7 @@ export const OnBoardingOverlay = () => {
   const [selectedWallet] = useLocalStorage<Wallet | undefined>('recentWallet')
   const { isLoading, status } = useOnBoarding()
   const [isOpen, toggle] = useToggle()
+  const [endpoints] = useNetworkEndpoints()
 
   const openOnBoardingModal = useCallback(() => {
     showModal({ modal: 'OnBoardingModal' })
@@ -120,12 +123,24 @@ export const OnBoardingOverlay = () => {
                 {!wallet ? 'Connect Wallet' : 'Join Now'}
               </ButtonPrimary>
             </DrawerContainer>
+            <HorizontalSeparator className="twoColumns" />
+            <OnBoardingPolkadotAppInfo className="twoColumns" rpcUrl={endpoints.nodeRpcEndpoint} />
           </DropdownContent>
         </StyledDropDown>
       </MainWrapper>
     </>
   )
 }
+
+const OnBoardingPolkadotAppInfo = styled(PolkadotAppInfo)`
+  background-color: ${Colors.Black[600]};
+  color: white;
+`
+const HorizontalSeparator = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: ${Colors.Black[600]};
+`
 
 const TopSpace = styled.div`
   width: calc(100% - 226px);
@@ -149,6 +164,7 @@ const DropdownContent = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   padding: 33px 24px 33px 33px;
+  grid-row-gap: 30px;
 
   > *:first-child {
     padding-right: 10%;
@@ -156,6 +172,10 @@ const DropdownContent = styled.div`
 
   > *:nth-child(2) {
     justify-self: center;
+  }
+
+  .twoColumns {
+    grid-column: 1 / 3;
   }
 `
 

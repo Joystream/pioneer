@@ -9,11 +9,11 @@ export const Animations = css`
       overflow: hidden;
     }
     &-enter-active {
-      max-height: 500px;
+      max-height: 100vh;
       overflow: hidden;
     }
     &-exit {
-      max-height: 500px;
+      max-height: 100vh;
       overflow: hidden;
     }
     &-exit-active {
