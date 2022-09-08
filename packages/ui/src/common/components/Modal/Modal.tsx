@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import styled, { ThemedStyledProps } from 'styled-components'
 
+import { ConnectionStatusDot } from '@/app/components/ConnectionStatusDot'
 import { useEscape } from '@/common/hooks/useEscape'
 
 import { Animations, BorderRad, Colors, Fonts, RemoveScrollbar, Shadows, ZIndex } from '../../constants'
@@ -179,10 +180,25 @@ export const ModalBody = styled.div`
   border-bottom: 1px solid ${Colors.Black[200]};
 `
 
-export const ModalFooter = styled.footer<{ twoColumns?: boolean }>`
+interface ModalFooterProps {
+  twoColumns?: boolean
+  children?: ReactNode
+  className?: string
+}
+
+export const ModalFooter = ({ twoColumns = false, children, className }: ModalFooterProps) => {
+  return (
+    <ModalFooterComponent twoColumns={twoColumns} className={className}>
+      {children}
+      <ConnectionStatusDot onlyPerformance />
+    </ModalFooterComponent>
+  )
+}
+
+export const ModalFooterComponent = styled.footer<{ twoColumns?: boolean }>`
   display: inline-grid;
   grid-area: modalfooter;
-  grid-template-columns: ${({ twoColumns }) => (twoColumns ? '1fr auto' : '1fr')};
+  grid-template-columns: ${({ twoColumns }) => (twoColumns ? '1fr auto auto' : '1fr auto')};
   grid-template-rows: 1fr;
   grid-auto-flow: column;
   grid-column-gap: 40px;
@@ -255,7 +271,7 @@ export const ModalWrap = styled.section<ModalWrapProps>`
   box-shadow: ${Shadows.common};
   ${Animations.showModalBlock};
   &,
-  ${ModalBody}, ${ModalTopBar}, ${ModalFooter} {
+  ${ModalBody}, ${ModalTopBar}, ${ModalFooterComponent} {
     ${({ isDark }) => {
       switch (isDark) {
         case true:

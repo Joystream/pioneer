@@ -6,14 +6,39 @@ import { useApi } from '@/api/hooks/useApi'
 import { Tooltip } from '@/common/components/Tooltip'
 import { Colors } from '@/common/constants'
 import { Rotate } from '@/common/constants/animations'
+import { useObservable } from '@/common/hooks/useObservable'
+import { useQueryNodeStateSubscription } from '@/common/hooks/useQueryNode'
 
-export const ConnectionStatusDot = () => {
-  const { connectionState, qnConnectionState } = useApi()
+const MAX_INDEXER_BLOCKS_BEHIND_NODE_HEAD = 20
+
+export const ConnectionStatusDot = ({ onlyPerformance = false }) => {
+  const { api, connectionState, qnConnectionState } = useApi()
+  const { queryNodeState } = useQueryNodeStateSubscription()
+  const header = useObservable(api?.rpc.chain.subscribeNewHeads(), [api?.isConnected])
+
+  const isQnLate = useMemo(() => {
+    if (queryNodeState && header) {
+      return (
+        (header.toJSON().number as number) - Number(queryNodeState.indexerHead) > MAX_INDEXER_BLOCKS_BEHIND_NODE_HEAD
+      )
+    }
+  }, [header, queryNodeState])
 
   const [tooltipText, DotElement] = useMemo((): [
     string,
-    StyledComponent<ForwardRefComponent<HTMLDivElement, HTMLMotionProps<'div'>>, any>
+    StyledComponent<ForwardRefComponent<HTMLDivElement, HTMLMotionProps<'div'>>, any> | null
   ] => {
+    if (isQnLate) {
+      return [
+        'Pioneer is currently experiencing connection issues with the Joystream node and may not work properly. We recommend you refrain from creating proposals, forum posts, etc., until Pioneer is fully operational.',
+        ErrorDot,
+      ]
+    }
+
+    if (onlyPerformance) {
+      return ['', null]
+    }
+
     if (connectionState === 'connecting' || qnConnectionState === 'connecting') {
       return ['Connecting...', ConnectingDot]
     }
@@ -30,11 +55,14 @@ export const ConnectionStatusDot = () => {
     }
 
     return [
-      // 'Pioneer is currently experiencing connection issues with the Joystream node and may not work properly. We recommend you refrain from creating proposals, forum posts, etc., until Pioneer is fully operational.',
       'Pioneer failed to connect to the chain node. This will impact chain oriented feature like execution of transactions. Try to refresh the page or contact maintainer if it does not help.',
       ErrorDot,
     ]
-  }, [connectionState, qnConnectionState])
+  }, [connectionState, qnConnectionState, isQnLate])
+
+  if (!DotElement) {
+    return <span />
+  }
 
   return (
     <Tooltip tooltipText={tooltipText}>
@@ -89,7 +117,7 @@ const ErrorDot = styled(motion.div)`
     display: block;
     color: white;
     text-align: center;
-    width: 90%;
+    width: 96%;
     font-family: fantasy;
   }
 `
