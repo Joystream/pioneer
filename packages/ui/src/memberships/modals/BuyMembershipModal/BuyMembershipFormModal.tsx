@@ -35,13 +35,21 @@ import {
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
+import { definedValues } from '@/common/utils'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { AvatarInput } from '@/memberships/components/AvatarInput'
+import { SocialMediaSelector } from '@/memberships/components/SocialMediaSelector/SocialMediaSelector'
 import { useUploadAvatarAndSubmit } from '@/memberships/hooks/useUploadAvatarAndSubmit'
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
 import { SelectMember } from '../../components/SelectMember'
-import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../model/validation'
+import {
+  AccountSchema,
+  AvatarURISchema,
+  ExternalResourcesSchema,
+  HandleSchema,
+  ReferrerSchema,
+} from '../../model/validation'
 import { Member } from '../../types'
 
 interface BuyMembershipFormModalProps {
@@ -68,6 +76,7 @@ const CreateMemberSchema = Yup.object().shape({
   hasTerms: Yup.boolean().required().oneOf([true]),
   isReferred: Yup.boolean(),
   referrer: ReferrerSchema,
+  externalResources: ExternalResourcesSchema,
 })
 
 export interface MemberFormFields {
@@ -81,6 +90,7 @@ export interface MemberFormFields {
   referrer?: Member
   hasTerms?: boolean
   invitor?: Member
+  externalResources: Record<string, string>
 }
 
 const formDefaultValues = {
@@ -91,6 +101,7 @@ const formDefaultValues = {
   isReferred: false,
   referrer: undefined,
   hasTerms: false,
+  externalResources: {},
 }
 
 export interface InviteMembershipFormFields {
@@ -201,6 +212,8 @@ export const BuyMembershipForm = ({
             </Row>
 
             <AvatarInput />
+
+            <SocialMediaSelector />
           </ScrolledModalContainer>
         </FormProvider>
       </ScrolledModalBody>
@@ -252,7 +265,10 @@ export const BuyMembershipForm = ({
           )}
           <ButtonPrimary
             size="medium"
-            onClick={() => uploadAvatarAndSubmit(form.getValues())}
+            onClick={() => {
+              const values = form.getValues()
+              uploadAvatarAndSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
+            }}
             disabled={!form.formState.isValid || isUploading}
           >
             {isUploading ? <Loading text="Uploading avatar" /> : 'Create a Membership'}

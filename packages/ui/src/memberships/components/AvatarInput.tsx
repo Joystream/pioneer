@@ -5,7 +5,7 @@ import { InputComponent, InputText } from '@/common/components/forms'
 import { SmallFileUpload } from '@/common/components/SmallFileUpload/SmallFileUpload'
 import { TextMedium } from '@/common/components/typography'
 
-export const AvatarInput = () => {
+export const AvatarInput = ({ initialPreview }: { initialPreview?: string }) => {
   const formContext = useFormContext()
 
   return process.env.REACT_APP_AVATAR_UPLOAD_URL ? (
@@ -15,6 +15,7 @@ export const AvatarInput = () => {
       </TextMedium>
       <SmallFileUpload
         name="avatarUri"
+        initialPreview={initialPreview}
         onUpload={(event) =>
           formContext.setValue('avatarUri', event.target.files?.item(0) ?? null, { shouldValidate: true })
         }

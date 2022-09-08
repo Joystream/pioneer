@@ -15,6 +15,8 @@ import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransact
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { WithNullableValues } from '@/common/types/form'
+import { definedValues } from '@/common/utils'
+import { toExternalResources } from '@/memberships/modals/utils'
 
 import { Member } from '../../types'
 
@@ -32,7 +34,7 @@ const hasEdits = (object: Record<string, any>, fields: string[]) => {
 }
 
 function createBatch(transactionParams: WithNullableValues<UpdateMemberForm>, api: Api | undefined, member: Member) {
-  const hasProfileEdits = hasEdits(transactionParams, ['about', 'handle', 'avatarUri', 'name'])
+  const hasProfileEdits = hasEdits(transactionParams, ['about', 'handle', 'avatarUri', 'name', 'externalResources'])
   const hasAccountsEdits = hasEdits(transactionParams, ['rootAccount', 'controllerAccount'])
 
   const transactions: SubmittableExtrinsic<'rxjs'>[] = []
@@ -48,7 +50,10 @@ function createBatch(transactionParams: WithNullableValues<UpdateMemberForm>, ap
       metadataToBytes(MembershipMetadata, {
         about: transactionParams.about ?? null,
         name: transactionParams.name ?? null,
-        avatarUri: transactionParams.avatarUri ?? '',
+        avatarUri: transactionParams.avatarUri ?? null,
+        externalResources: transactionParams.externalResources
+          ? toExternalResources(definedValues(transactionParams.externalResources))
+          : null,
       })
     )
     transactions.push(updateProfile)

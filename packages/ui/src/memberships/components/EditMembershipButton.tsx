@@ -1,10 +1,11 @@
 import React, { ReactNode, useState } from 'react'
 import ReactDOM from 'react-dom'
 
+import { ButtonProps } from '@/common/components/buttons'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
+import { useMember } from '@/memberships/hooks/useMembership'
 
-import { ButtonProps } from '../../common/components/buttons'
 import { UpdateMembershipModal } from '../modals/UpdateMembershipModal'
 import { Member } from '../types'
 
@@ -17,6 +18,7 @@ interface Props extends ButtonProps {
 export const EditMembershipButton = ({ className, children, member }: Props) => {
   const [isOpen, toggleIsOpen] = useState(false)
   const { isTransactionPending } = useTransactionStatus()
+  const { member: memberWithDetails } = useMember(member.id)
 
   return (
     <>
@@ -34,8 +36,9 @@ export const EditMembershipButton = ({ className, children, member }: Props) => 
         {children}
       </TransactionButton>
       {isOpen &&
+        memberWithDetails &&
         ReactDOM.createPortal(
-          <UpdateMembershipModal onClose={() => toggleIsOpen(!isOpen)} member={member} />,
+          <UpdateMembershipModal onClose={() => toggleIsOpen(!isOpen)} member={memberWithDetails} />,
           document.body
         )}
     </>

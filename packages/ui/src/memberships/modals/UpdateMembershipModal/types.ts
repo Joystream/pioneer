@@ -8,4 +8,5 @@ export interface UpdateMemberForm {
   about?: string
   rootAccount?: Account
   controllerAccount?: Account
+  externalResources: Record<string, string>
 }

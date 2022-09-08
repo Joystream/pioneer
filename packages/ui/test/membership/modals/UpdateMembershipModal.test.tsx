@@ -1,13 +1,15 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 
 import { ApiContext } from '@/api/providers/context'
+import { MembershipExternalResourceType } from '@/common/api/queries'
+import { last } from '@/common/utils'
 import { UpdateMembershipModal } from '@/memberships/modals/UpdateMembershipModal'
-import { Member } from '@/memberships/types'
+import { MemberWithDetails } from '@/memberships/types'
 
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
@@ -29,6 +31,8 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
+configure({ testIdAttribute: 'id' })
+
 describe('UI: UpdatedMembershipModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
@@ -44,7 +48,8 @@ describe('UI: UpdatedMembershipModal', () => {
 
   const api = stubApi()
   let batchTx: any
-  let member: Member
+  let profileTxMock: jest.Mock
+  let member: MemberWithDetails
 
   beforeEach(() => {
     stubDefaultBalances()
@@ -53,13 +58,36 @@ describe('UI: UpdatedMembershipModal', () => {
     stubTransaction(api, 'api.tx.members.updateProfile')
     stubTransaction(api, 'api.tx.members.updateAccounts')
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
-    member = getMember('alice')
+    stubTransaction(api, 'api.tx.members.updateProfile')
+    profileTxMock = (api.api.tx.members.updateProfile as unknown) as jest.Mock
+    member = {
+      ...getMember('alice'),
+      externalResources: [{ source: MembershipExternalResourceType.Twitter, value: 'empty' }],
+    } as MemberWithDetails
   })
 
   it('Renders a modal', async () => {
     renderModal(member)
 
     expect(await screen.findByText('Edit membership')).toBeDefined()
+  })
+
+  it('Is initially disabled', async () => {
+    renderModal(member)
+
+    expect(await getButton(/^Save changes$/i)).toBeDisabled()
+  })
+
+  it('Enables button on external resources change', async () => {
+    renderModal(member)
+
+    expect(await getButton(/^Save changes$/i)).toBeDisabled()
+
+    await act(async () => {
+      fireEvent.change(screen.getByTestId('twitter-input'), { target: { value: 'joystream@mail.com' } })
+    })
+
+    expect(await getButton(/^Save changes$/i)).toBeEnabled()
   })
 
   it('Enables button on member field change', async () => {
@@ -93,15 +121,25 @@ describe('UI: UpdatedMembershipModal', () => {
   })
 
   describe('Authorize - member field', () => {
+    const newMemberName = 'Bobby Bob'
+    const newMemberEmail = 'joystream@mail.com'
     async function changeNameAndSave() {
       renderModal(member)
-      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
-      fireEvent.click(await screen.findByText(/^Save changes$/i))
+      await act(async () => {
+        fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: newMemberName } })
+        fireEvent.change(screen.getByTestId('twitter-input'), { target: { value: newMemberEmail } })
+
+        fireEvent.click(await screen.findByText(/^Save changes$/i))
+      })
     }
 
     it('Authorize step', async () => {
       await changeNameAndSave()
+      const txCall = profileTxMock.mock.calls[0]
+      const memberMetadata = Buffer.from(last(txCall) as Uint8Array).toString('utf8')
 
+      expect(memberMetadata.includes(newMemberName)).toBe(true)
+      expect(memberMetadata.includes(newMemberEmail)).toBe(true)
       expect(await screen.findByText('modals.authorizeTransaction.title')).toBeDefined()
       expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
     })
@@ -125,7 +163,7 @@ describe('UI: UpdatedMembershipModal', () => {
     })
   })
 
-  function renderModal(member: Member) {
+  function renderModal(member: MemberWithDetails) {
     render(
       <MockQueryNodeProviders>
         <MockKeyringProvider>

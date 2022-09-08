@@ -18,6 +18,11 @@ export const AvatarURISchema = process.env.REACT_APP_AVATAR_UPLOAD_URL
       .test('fileType', 'This file type is not allowed', (value) => !value || SUPPORTED_IMAGES.includes(value.type))
   : Yup.string().url().nullable()
 
+export const ExternalResourcesSchema = Yup.object().shape({
+  EMAIL: Yup.string().email('Field has to be a valid email address'),
+  HYPERLINK: Yup.string().url('Invalid hyperlink format'),
+})
+
 export const HandleSchema = Yup.string().test('handle', 'This handle is already taken', (value, testContext) => {
   return testContext?.options?.context?.size ? testContext?.options?.context?.size === 0 : true
 })

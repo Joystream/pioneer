@@ -3,7 +3,7 @@ import React from 'react'
 
 import { FailureModal } from '@/common/components/FailureModal'
 
-import { Member } from '../../types'
+import { MemberWithDetails } from '../../types'
 
 import { updateMembershipMachine } from './machine'
 import { UpdateMembershipFormModal } from './UpdateMembershipFormModal'
@@ -11,7 +11,7 @@ import { UpdateMembershipSignModal } from './UpdateMembershipSignModal'
 import { UpdateMembershipSuccessModal } from './UpdateMembershipSuccessModal'
 
 interface MembershipModalProps {
-  member: Member
+  member: MemberWithDetails
   onClose: () => void
 }
 
