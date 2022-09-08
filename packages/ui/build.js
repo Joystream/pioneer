@@ -14,44 +14,45 @@ const IMAGE_REPORTING_PATH = {
   output: './src/common/utils/ImageSafetyApi/index.js',
 }
 
-// Just to prevent user error
-const sanitize = (text = '') => text.replace(/\n/g, '').replace(/'/g, "\\'")
+build()
 
-const buildImageSafetyApi = async () => {
+async function build() {
+  const blacklist = await initializeImageSafety()
+
+  console.log('Invoking Webpack...')
+  webpack(webpackConfig({ blacklist }, { mode: 'production' }), (err, stats) => {
+    if (err || stats.hasErrors()) {
+      console.error('Webpack error: ', err)
+    }
+  })
+}
+
+async function initializeImageSafety () {
   const parsedEnvFile = dotenv.config().parsed ?? {}
   let hasCustomApi = await fs.promises.access(IMAGE_REPORTING_PATH.customEntry).then(() => true).catch(() => false)
 
-  const blacklistEndpoint = parsedEnvFile.IMAGE_SAFETY_BLACKLIST_ENDPOINT ?? parsedEnvFile.IMAGE_SAFETY_ENDPOINT
-  const reportEndpoint = parsedEnvFile.IMAGE_REPORT_API_URL ?? parsedEnvFile.IMAGE_SAFETY_ENDPOINT
-  const isBlacklistApiSet = !(!hasCustomApi && !blacklistEndpoint)
+  const blacklistUrl = parsedEnvFile.IMAGE_SAFETY_BLACKLIST_URL
+  const reportUrl = parsedEnvFile.IMAGE_REPORT_API_URL
+  const isBlacklistApiSet = hasCustomApi || blacklistUrl
   const isReportFormSet = 'IMAGE_REPORT_FORM_URL' in parsedEnvFile
-  const isReportApiSet = !(!hasCustomApi && !reportEndpoint)
+  const isReportApiSet = !isReportFormSet && (hasCustomApi || reportUrl)
 
   if (!isBlacklistApiSet) {
-    const missing = [!blacklistEndpoint && 'IMAGE_SAFETY_BLACKLIST_ENDPOINT', !reportEndpoint && 'IMAGE_REPORT_API_URL']
+    const missing = [!blacklistUrl && 'IMAGE_SAFETY_BLACKLIST_URL', !reportUrl && 'IMAGE_REPORT_API_URL']
     console.warn('Skip remote fetching of the image blacklist because the following environnement variables:', missing.flatMap(name => name ?? []).join(), 'are missing')
   }
 
-  if ((isBlacklistApiSet) || isReportApiSet) {
-    const template = await fs.promises.readFile(IMAGE_REPORTING_PATH[hasCustomApi ? 'customEntry' : 'defaultEntry'], 'utf8')
-    const code = template
-      .replace(/\$BLACKLIST_ENDPOINT\$/, sanitize(blacklistEndpoint))
-      .replace(/\$BLACKLIST_HEADERS\$/, sanitize(parsedEnvFile.IMAGE_SAFETY_BLACKLIST_HEADERS ?? parsedEnvFile.IMAGE_SAFETY_HEADERS))
-      .replace(/\$BLACKLIST_JSON_PATH\$/, sanitize(parsedEnvFile.IMAGE_SAFETY_BLACKLIST_JSON_PATH ?? '*').replace(/^(?!\$)/, '$..'))
-      .replace(/\$REPORT_ENDPOINT\$/, sanitize(reportEndpoint))
-      .replace(/\$REPORT_HEADERS\$/, sanitize(parsedEnvFile.IMAGE_SAFETY_REPORT_HEADERS ?? parsedEnvFile.IMAGE_SAFETY_HEADERS))
-      .replace(/\$REPORT_BODY\$/, sanitize(parsedEnvFile.IMAGE_SAFETY_REPORT_BODY_TEMPLATE) ?? '{value}')
-
+  if (isBlacklistApiSet || isReportApiSet) {
+    const code = await fs.promises.readFile(IMAGE_REPORTING_PATH[hasCustomApi ? 'customEntry' : 'defaultEntry'], 'utf8')
     await fs.promises.writeFile(IMAGE_REPORTING_PATH.output, code, 'utf8')
   }
 
-  return {
-    isBlacklistApiSet: isBlacklistApiSet,
-    isReportApiSet: isReportApiSet && !isReportFormSet,
+  if (!isBlacklistApiSet) {
+    return []
   }
-}
 
-const imageBlacklist = async () => {
+  console.log('Fetching image blacklist...')
+
   if (!global.fetch) {
     global.fetch = require('node-fetch')
   }
@@ -67,21 +68,7 @@ const imageBlacklist = async () => {
     return blacklist
   } catch (err) {
     console.error('Error fetching the image blacklist: ', err)
-    return []
   }
+
+  return []
 }
-
-async function build() {
-  const { isBlacklistApiSet, isReportApiSet } = await buildImageSafetyApi()
-  isBlacklistApiSet && console.log('Fetching image blacklist...')
-  const blacklist = isBlacklistApiSet ? await imageBlacklist() : []
-
-  console.log('Invoking Webpack...')
-  webpack(webpackConfig({ blacklist, isReportApiSet }, { mode: 'production' }), (err, stats) => {
-    if (err || stats.hasErrors()) {
-      console.error('Webpack error: ', err)
-    }
-  })
-}
-
-build()

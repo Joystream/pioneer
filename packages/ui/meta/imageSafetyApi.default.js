@@ -1,12 +1,9 @@
-const BlackListHeaders = parseHeaders('$BLACKLIST_HEADERS$')
-const ReportHeaders = parseHeaders('$REPORT_HEADERS$')
-
 module.exports = {
   ImageSafetyApi: {
     blacklist: async (jsonPath) => {
-      const res = await fetch('$BLACKLIST_ENDPOINT$', {
+      const res = await fetch(process.env.IMAGE_SAFETY_BLACKLIST_URL, {
         method: 'GET',
-        headers: BlackListHeaders,
+        headers: parseHeaders(process.env.IMAGE_SAFETY_BLACKLIST_HEADERS),
       })
 
       if (!res.headers.get('Content-Type').includes('application/json')) {
@@ -18,12 +15,14 @@ module.exports = {
         throw jsonRes.error
       }
 
-      return jsonPath.query(jsonRes, '$BLACKLIST_JSON_PATH$').filter((item) => item && typeof item === 'string')
+      const path = (process.env.IMAGE_SAFETY_BLACKLIST_JSON_PATH ?? '*').replace(/^(?!\$)/, '$..')
+      return jsonPath.query(jsonRes, path).filter((item) => item && typeof item === 'string')
     },
-    report: async (image) => fetch('$REPORT_ENDPOINT$', {
+    report: async (image) => fetch(process.env.REACT_APP_IMAGE_REPORT_API_URL, {
       method: 'POST',
-      headers: ReportHeaders,
-      body: '$REPORT_BODY$'.replace('{image}', image).replace('{page}', window.location.href),
+      headers: parseHeaders(process.env.REACT_APP_IMAGE_SAFETY_REPORT_HEADERS),
+      body: (process.env.REACT_APP_IMAGE_SAFETY_REPORT_BODY_TEMPLATE ?? '{image}')
+        .replace('{image}', image).replace('{context}', window.location.href),
     })
   }
 }

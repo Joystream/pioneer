@@ -13,13 +13,14 @@ export const ImageReportProvider = (props: Props) => {
   const [showNotification, setShowNotification] = useState<ReportNotificationType>('empty')
   const [userReportedImages, setUserReported] = useState<string[]>([])
   const formUrlTemplate = process.env.REACT_APP_IMAGE_REPORT_FORM_URL ?? ''
-  const isImageReportEnabled = !formUrlTemplate && process.env.REACT_APP_IMAGE_REPORT_ENABLED === 'true'
+  const isImageReportEnabled = !formUrlTemplate && !!process.env.REACT_APP_IMAGE_REPORT_API_URL
 
   const reportFormUrl = useCallback(
     (src: string) => {
       const image = encodeURIComponent(src)
-      const page = encodeURIComponent(location.href)
-      return formUrlTemplate.replace('{image}', image).replace('{page}', page)
+      const context = encodeURIComponent(location.href)
+      const href = encodeURI(formUrlTemplate)
+      return href.replace('%7Bimage%7D', image).replace('%7Bcontext%7D', context)
     },
     [formUrlTemplate]
   )
