@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { ButtonPrimary } from '@/common/components/buttons'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
-import { BasicLinkButtonPrimaryStyles } from '@/common/components/buttons/LinkButtons'
+import { ExternalLinkButtonPrimary } from '@/common/components/buttons/LinkButtons'
 import { InputComponent, InputText } from '@/common/components/forms'
 import { AlertSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
@@ -61,7 +61,12 @@ export const ReportContentModal = () => {
       </ModalBody>
       <ModalFooter>
         {reportFormUrl ? (
-          <ExternalLinkButtonPrimary size="medium" href={reportFormUrl(report)} target="_blank">
+          <ExternalLinkButtonPrimary
+            size="medium"
+            href={reportFormUrl(report)}
+            target="_blank"
+            disabled={isAlreadyReported}
+          >
             {t('modals.reportContent.proceedButton')}
           </ExternalLinkButtonPrimary>
         ) : (
@@ -86,7 +91,4 @@ const Image = styled.img`
   align-self: flex-start;
   max-width: 100%;
   object-fit: contain;
-`
-const ExternalLinkButtonPrimary = styled.a`
-  ${BasicLinkButtonPrimaryStyles}
 `

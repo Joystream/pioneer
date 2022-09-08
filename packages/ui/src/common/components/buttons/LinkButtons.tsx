@@ -79,6 +79,15 @@ export function LinkButtonLink({ className, children, square, disabled, to }: Li
   )
 }
 
+type ExternalLinkButtonProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+  disabled: boolean
+  size: LinkButtonSize
+}
+
+export const ExternalLinkButtonPrimary = ({ disabled, ...props }: ExternalLinkButtonProps) => (
+  <ExternalLinkButtonPrimaryStyles {...props} href={disabled ? undefined : props.href} $disabled={disabled} />
+)
+
 export const LinkButtonInnerWrapper = styled.span<LinkButtonSizingProps>`
   display: grid;
   grid-auto-flow: column;
@@ -95,9 +104,10 @@ export const LinkButtonInnerWrapper = styled.span<LinkButtonSizingProps>`
 
 interface LinkButtonStyleProps extends Omit<LinkButtonProps, 'square'> {
   $square?: LinkButtonProps['square']
+  $disabled?: boolean
 }
 
-export type BasicLinkButtonStylesProps = Pick<LinkButtonStyleProps, '$square' | 'size'>
+export type BasicLinkButtonStylesProps = Pick<LinkButtonStyleProps, '$square' | '$disabled' | 'size'>
 
 export const BasicLinkButtonStyles = css<BasicLinkButtonStylesProps>`
   &,
@@ -169,6 +179,23 @@ export const BasicLinkButtonStyles = css<BasicLinkButtonStylesProps>`
         transform: translate(-50%, -50%);
       }
     }
+
+    ${(props) =>
+      props.$disabled &&
+      css`
+        cursor: not-allowed;
+
+        &:hover,
+        &:focus,
+        &:active {
+          transform: scale(1);
+
+          &:after,
+          &:before {
+            transform: translate(-150%, -50%);
+          }
+        }
+      `}
   }
 `
 
@@ -201,11 +228,22 @@ export const BasicLinkButtonPrimaryStyles = css<BasicLinkButtonStylesProps>`
     &:active {
       border-color: ${Colors.Blue[700]};
     }
+
+    ${(props) =>
+      props.$disabled &&
+      css`
+        background-color: ${Colors.Blue[100]};
+        border-color: ${Colors.Blue[100]};
+      `}
   }
 `
 
 export const LinkButtonPrimaryStyles = styled(Link)<LinkButtonStyleProps>`
   ${BasicLinkButtonPrimaryStyles};
+`
+
+const ExternalLinkButtonPrimaryStyles = styled.a`
+  ${BasicLinkButtonPrimaryStyles}
 `
 
 export const LinkButtonSecondaryStyles = styled(Link)<LinkButtonStyleProps>`
