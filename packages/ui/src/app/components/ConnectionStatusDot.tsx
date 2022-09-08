@@ -78,7 +78,9 @@ export const ConnectionStatusDot = ({ onlyPerformance = false }) => {
   )
 }
 
-const ConnectingDot = styled(motion.div)`
+const ConnectingDot = styled(motion.div).attrs({
+  id: 'connecting-dot',
+})`
   height: 15px;
   width: 15px;
   background-color: transparent;
@@ -97,7 +99,9 @@ const ConnectingDot = styled(motion.div)`
   }
 `
 
-const ConnectedDot = styled(motion.div)`
+const ConnectedDot = styled(motion.div).attrs({
+  id: 'connected-dot',
+})`
   height: 6px;
   width: 7px;
   margin: 7px;
@@ -106,7 +110,9 @@ const ConnectedDot = styled(motion.div)`
   box-shadow: 0 0 3px 6px ${Colors.Green[400]}51, 0 0 3px 6px ${Colors.Green[400]}31;
 `
 
-const ErrorDot = styled(motion.div)`
+const ErrorDot = styled(motion.div).attrs({
+  id: 'error-dot',
+})`
   height: 17px;
   width: 17px;
   border-radius: 50%;
