@@ -7,6 +7,8 @@ import { of } from 'rxjs'
 
 import { ApiContext } from '@/api/providers/context'
 import { MembershipExternalResourceType } from '@/common/api/queries'
+import { ModalContext } from '@/common/providers/modal/context'
+import { UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
 import { UpdateMembershipModal } from '@/memberships/modals/UpdateMembershipModal'
 import { MemberWithDetails } from '@/memberships/types'
@@ -40,6 +42,19 @@ describe('UI: UpdatedMembershipModal', () => {
     stubAccounts([alice, aliceStash, bob, bobStash])
   })
 
+  // todo: replace with mockUseModalCall after merge of #3567
+  const useModal: UseModal<any> = {
+    showModal: () => undefined,
+    modalData: {
+      member: {
+        ...getMember('alice'),
+        externalResources: [{ source: MembershipExternalResourceType.Twitter, value: 'empty' }],
+      } as MemberWithDetails,
+    },
+    hideModal: () => undefined,
+    modal: null,
+  }
+
   afterAll(() => {
     jest.restoreAllMocks()
   })
@@ -49,7 +64,6 @@ describe('UI: UpdatedMembershipModal', () => {
   const api = stubApi()
   let batchTx: any
   let profileTxMock: jest.Mock
-  let member: MemberWithDetails
 
   beforeEach(() => {
     stubDefaultBalances()
@@ -59,28 +73,19 @@ describe('UI: UpdatedMembershipModal', () => {
     stubTransaction(api, 'api.tx.members.updateAccounts')
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
     stubTransaction(api, 'api.tx.members.updateProfile')
-    profileTxMock = (api.api.tx.members.updateProfile as unknown) as jest.Mock
-    member = {
-      ...getMember('alice'),
-      externalResources: [{ source: MembershipExternalResourceType.Twitter, value: 'empty' }],
-    } as MemberWithDetails
+    profileTxMock = api.api.tx.members.updateProfile as unknown as jest.Mock
+    renderModal()
   })
 
   it('Renders a modal', async () => {
-    renderModal(member)
-
     expect(await screen.findByText('Edit membership')).toBeDefined()
   })
 
   it('Is initially disabled', async () => {
-    renderModal(member)
-
     expect(await getButton(/^Save changes$/i)).toBeDisabled()
   })
 
   it('Enables button on external resources change', async () => {
-    renderModal(member)
-
     expect(await getButton(/^Save changes$/i)).toBeDisabled()
 
     await act(async () => {
@@ -91,8 +96,6 @@ describe('UI: UpdatedMembershipModal', () => {
   })
 
   it('Enables button on member field change', async () => {
-    renderModal(member)
-
     expect(await getButton(/^Save changes$/i)).toBeDisabled()
 
     fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
@@ -101,16 +104,12 @@ describe('UI: UpdatedMembershipModal', () => {
   })
 
   it('Enables save button on account change', async () => {
-    renderModal(member)
-
     await selectFromDropdown('root account', 'bob')
 
     expect(await getButton(/^Save changes$/i)).toBeEnabled()
   })
 
   it('Disables button when invalid avatar URL', async () => {
-    renderModal(member)
-
     fireEvent.change(await screen.findByLabelText(/member avatar/i), { target: { value: 'avatar' } })
     expect(await getButton(/^Save changes$/i)).toBeDisabled()
 
@@ -124,7 +123,6 @@ describe('UI: UpdatedMembershipModal', () => {
     const newMemberName = 'Bobby Bob'
     const newMemberEmail = 'joystream@mail.com'
     async function changeNameAndSave() {
-      renderModal(member)
       await act(async () => {
         fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: newMemberName } })
         fireEvent.change(screen.getByTestId('twitter-input'), { target: { value: newMemberEmail } })
@@ -163,15 +161,17 @@ describe('UI: UpdatedMembershipModal', () => {
     })
   })
 
-  function renderModal(member: MemberWithDetails) {
+  function renderModal() {
     render(
-      <MockQueryNodeProviders>
-        <MockKeyringProvider>
-          <ApiContext.Provider value={api}>
-            <UpdateMembershipModal onClose={() => undefined} member={member} />
-          </ApiContext.Provider>
-        </MockKeyringProvider>
-      </MockQueryNodeProviders>
+      <ModalContext.Provider value={useModal}>
+        <MockQueryNodeProviders>
+          <MockKeyringProvider>
+            <ApiContext.Provider value={api}>
+              <UpdateMembershipModal />
+            </ApiContext.Provider>
+          </MockKeyringProvider>
+        </MockQueryNodeProviders>
+      </ModalContext.Provider>
     )
   }
 })
