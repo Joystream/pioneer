@@ -93,6 +93,7 @@ module.exports = (env, argv) => {
     output: {
       filename: '[name].[contenthash].js',
       path: path.resolve(__dirname, 'build'),
+      clean: true,
       globalObject: 'this',
       pathinfo: false,
     },
