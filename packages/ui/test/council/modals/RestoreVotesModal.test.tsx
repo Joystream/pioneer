@@ -8,6 +8,7 @@ import { VotingAttempt } from '@/council/hooks/useCommitment'
 import { RestoreVotesModal } from '@/council/modals/RestoreVotes'
 
 import { expectToBeDefined } from '../../_helpers/expectToBeDefined'
+import { MockQueryNodeProviders } from '../../_mocks/providers'
 
 const cycleId = 1
 const key = `votes:${cycleId}`
@@ -96,9 +97,11 @@ describe('UI: Restore Votes Modal', () => {
 
   const displayModal = () =>
     render(
-      <ModalContext.Provider value={useModal}>
-        <RestoreVotesModal />
-      </ModalContext.Provider>
+      <MockQueryNodeProviders>
+        <ModalContext.Provider value={useModal}>
+          <RestoreVotesModal />
+        </ModalContext.Provider>
+      </MockQueryNodeProviders>
     )
 })
 
