@@ -96,10 +96,6 @@ IMAGE_SAFETY_BLACKLIST_URL="https://api.airtable.com/v0/appXYZ/tableXYZ?api_key=
 
 Will result in blacklisting `https://example.com/x.png` and `https://example.com/z.png`
 
-#### Additional option
-
-The request logic can also be overridden by adding a file at: `packages/ui/meta/imageSafetyApi.override.js`
-
 ## Help Pioneer users to report images
 
 Pioneer supports an image reporting user interface, which can be enable in two ways:
@@ -158,7 +154,3 @@ Will allow users to report image urls and the page they were reported from, into
 
 > **Warning**
 > Because this is making `tableXYZ` public by making `keyXYZ` accessible to anyone. The actually blacklisted url, should probably be stored somewhere else (where `tableXYZ` cannot write). Otherwise this would allow anyone to blacklist any image.
-
-#### Additional option
-
-Here too, the request logic can also be overridden by adding a file at: `packages/ui/meta/imageSafetyApi.override.js`

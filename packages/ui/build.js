@@ -1,18 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-console */
-const fs = require('fs')
-
 const dotenv = require('dotenv')
 const jsonPath = require('jsonpath')
 const webpack = require('webpack')
 
 const webpackConfig = require('./webpack.config')
-
-const IMAGE_REPORTING_PATH = {
-  defaultEntry: './meta/imageSafetyApi.default.js',
-  customEntry: './meta/imageSafetyApi.override.js',
-  output: './src/common/utils/ImageSafetyApi/index.js',
-}
 
 build()
 
@@ -20,51 +12,34 @@ async function build() {
   const blacklist = await initializeImageSafety()
 
   console.log('Invoking Webpack...')
+
   webpack(webpackConfig({ blacklist }, { mode: 'production' }), (err, stats) => {
     if (err) {
       return console.error(err);
     }
 
-    console.log(stats.toString({
-      chunks: false,  // Makes the build much quieter
-      colors: true    // Shows colors in the console
-    }))
+    console.log(stats.toString({ chunks: false, colors: true }))
   })
 }
 
 async function initializeImageSafety () {
   const parsedEnvFile = dotenv.config().parsed ?? {}
-  let hasCustomApi = await fs.promises.access(IMAGE_REPORTING_PATH.customEntry).then(() => true).catch(() => false)
-
   const blacklistUrl = parsedEnvFile.IMAGE_SAFETY_BLACKLIST_URL
-  const reportUrl = parsedEnvFile.IMAGE_REPORT_API_URL
-  const isBlacklistApiSet = hasCustomApi || blacklistUrl
-  const isReportFormSet = 'IMAGE_REPORT_FORM_URL' in parsedEnvFile
-  const isReportApiSet = !isReportFormSet && (hasCustomApi || reportUrl)
 
-  if (!isBlacklistApiSet) {
-    const missing = [!blacklistUrl && 'IMAGE_SAFETY_BLACKLIST_URL', !reportUrl && 'IMAGE_REPORT_API_URL']
-    console.warn('Skip remote fetching of the image blacklist because the following environnement variables:', missing.flatMap(name => name ?? []).join(), 'are missing')
-  }
-
-  if (isBlacklistApiSet || isReportApiSet) {
-    const code = await fs.promises.readFile(IMAGE_REPORTING_PATH[hasCustomApi ? 'customEntry' : 'defaultEntry'], 'utf8')
-    await fs.promises.writeFile(IMAGE_REPORTING_PATH.output, code, 'utf8')
-  }
-
-  if (!isBlacklistApiSet) {
+  if (!blacklistUrl) {
+    console.warn('Skip remote fetching of the image blacklist because IMAGE_SAFETY_BLACKLIST_URL is not defined')
     return []
   }
 
   console.log('Fetching image blacklist...')
 
-  if (!global.fetch) {
-    global.fetch = require('node-fetch')
-  }
-  const { ImageSafetyApi } = require(IMAGE_REPORTING_PATH.output)
+  const {
+    IMAGE_SAFETY_BLACKLIST_JSON_PATH: imgsPath,
+    IMAGE_SAFETY_BLACKLIST_HEADERS: headerText = '',
+  } = parsedEnvFile
 
   try {
-    const blacklist = await ImageSafetyApi.blacklist(jsonPath)
+    const blacklist = await fetchBlacklist(blacklistUrl, headerText, imgsPath)
     if (blacklist.length) {
       console.log('Image blacklist fetched successfully:', ...blacklist.map(src => '\n\t' + src))
     } else {
@@ -76,4 +51,45 @@ async function initializeImageSafety () {
   }
 
   return []
+}
+
+function fetchBlacklist (url, headersText = '', imgsPath = '*') {
+  const protocol = url.startsWith('http://') ? 'http' : 'https'
+  const headers = Object.fromEntries(
+    headersText.split('\n').flatMap((header) => {
+      const [, key, value] = header.match(/(\w[^\s:]+)\s*:\s*(.+)/)
+      return (!key || !value) ? [] : [[key, value]]
+    })
+  )
+
+  return new Promise((resolve, reject) => {
+    require(protocol).get(url, { headers }, (res) => {
+      const resolveIf200 = (resolved) => {
+        if (res.statusCode !== 200) {
+          return reject(new Error(`Request Failed. Status ${res.statusCode}: ${res.statusMessage}`))
+        }
+        return resolve(resolved)
+      }
+
+      let text = ''
+      res
+        .on('error', reject)
+        .on('data', (chunk) => text += chunk)
+        .on('end', () => {
+          if (!res.headers['content-type'].includes('application/json')) {
+            return resolveIf200(text.split('\n'))
+          }
+
+          const data = JSON.parse(text)
+
+          if ('error' in data) {
+            return reject(data.error)
+          }
+
+          const path = imgsPath.replace(/^(?!\$)/, '$..')
+          const onlyStrings = (item) => item && typeof item === 'string'
+          return resolveIf200(jsonPath.query(data, path).filter(onlyStrings))
+        })
+    })
+  })
 }

@@ -3,7 +3,7 @@ import React, { ReactNode, useCallback, useState } from 'react'
 import { ReportNotificationType } from '@/app/components/ImageReportNotification'
 import { error } from '@/common/logger'
 import { ImageReportContext } from '@/common/providers/imageReports/context'
-import { ImageSafetyApi } from '@/common/utils/ImageSafetyApi'
+import { report } from '@/common/utils/ImageSafetyApi'
 
 interface Props {
   children: ReactNode
@@ -33,8 +33,8 @@ export const ImageReportProvider = (props: Props) => {
       }
 
       try {
-        const res = await ImageSafetyApi.report(src)
-        if (res.status === 200) {
+        const res = await report(src)
+        if (res?.status === 200) {
           setUserReported((prev) => [...prev, src])
           return setShowNotification('new')
         }

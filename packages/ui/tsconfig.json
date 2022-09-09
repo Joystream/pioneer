@@ -8,5 +8,5 @@
       "@polkadot/types/augment": ["../types/augment/augment-types.ts"]
     },
   },
-  "include": ["dev", "meta", "src", "test", "./build.js"],
+  "include": ["dev", "src", "test", "./build.js"],
 }
