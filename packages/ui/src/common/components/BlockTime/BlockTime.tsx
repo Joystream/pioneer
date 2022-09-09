@@ -44,6 +44,7 @@ export const BlockTimeWrapper = styled.div<BlockTimeLayoutProps>`
   display: grid;
   width: fit-content;
   height: fit-content;
+  justify-items: right;
 
   ${({ layout }) => {
     switch (layout) {
