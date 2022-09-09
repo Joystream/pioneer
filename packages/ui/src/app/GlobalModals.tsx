@@ -49,6 +49,7 @@ import { SignOutModal } from '@/memberships/modals/SignOutModal/SignOutModal'
 import { SignOutModalCall } from '@/memberships/modals/SignOutModal/types'
 import { SwitchMemberModal, SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { TransferInviteModal, TransferInvitesModalCall } from '@/memberships/modals/TransferInviteModal'
+import { UpdateMembershipModal, UpdateMembershipModalCall } from '@/memberships/modals/UpdateMembershipModal'
 import { AddNewProposalModal, AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'
 import { VoteForProposalModal, VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
@@ -106,6 +107,7 @@ export type ModalNames =
   | ModalName<SignOutModalCall>
   | ModalName<DisconnectWalletModalCall>
   | ModalName<ClaimVestingModalCall>
+  | ModalName<UpdateMembershipModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -151,6 +153,7 @@ const modals: Record<ModalNames, ReactElement> = {
   SignOut: <SignOutModal />,
   DisconnectWallet: <DisconnectWalletModal />,
   ClaimVestingModal: <ClaimVestingModal />,
+  UpdateMembershipModal: <UpdateMembershipModal />,
 }
 
 export const GlobalModals = () => {
