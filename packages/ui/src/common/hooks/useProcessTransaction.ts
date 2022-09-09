@@ -71,9 +71,30 @@ const observeTransaction = (
     }
   }
 
-  const errorHandler = () => {
+  const errorHandler = (e: any) => {
     subscription.unsubscribe()
-    send({ type: 'CANCELED', events: [] })
+    send({
+      type: e === 'Canceled' ? 'CANCELED' : 'ERROR',
+      events:
+        e === 'Canceled'
+          ? []
+          : [
+              {
+                event: {
+                  method: 'ExtrinsicFailed',
+                  data: [
+                    {
+                      error: {
+                        docs: 'Insufficient funds to cover fees. Transaction has been canceled.',
+                        section: 'transaction',
+                        name: 'Fees',
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+    })
   }
 
   const subscription = transaction.subscribe({
