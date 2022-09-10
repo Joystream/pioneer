@@ -3,7 +3,6 @@ import { generatePath } from 'react-router'
 import styled from 'styled-components'
 
 import { BlockTimeWrapper } from '@/common/components/BlockTime'
-import { LinkButtonInnerWrapper, LinkButtonLink } from '@/common/components/buttons/LinkButtons'
 import { ArrowRightIcon } from '@/common/components/icons'
 import { AnswerIcon } from '@/common/components/icons/AnswerIcon'
 import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
@@ -31,7 +30,6 @@ export const CategoryListItem = ({ category, isArchive = false }: CategoryListIt
         </CategoryListItemTitle>
         <TextMedium light>{category.description}</TextMedium>
       </Category>
-
       <InfoWrapper>
         <Info>
           <StyledAnswerIcon />

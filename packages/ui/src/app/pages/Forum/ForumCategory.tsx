@@ -2,10 +2,8 @@ import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { PageHeaderWrapper } from '@/app/components/PageLayout'
 import { ForumThreadOrderByInput } from '@/common/api/queries'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
-import { SearchBox } from '@/common/components/forms/FilterBox/FilterSearchBox'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
 import { ItemCount } from '@/common/components/ItemCount'
 import { Loading } from '@/common/components/Loading'
@@ -30,7 +28,6 @@ import { ForumPageLayout } from './components/ForumPageLayout'
 
 export const ForumCategory = () => {
   const [page, setPage] = useState<number>(1)
-  const [search, setSearch] = useState('')
   const { id, type } = useParams<{ id: string; type?: 'archive' }>()
   const isArchive = type === 'archive'
 
@@ -83,16 +80,9 @@ export const ForumCategory = () => {
             </TransactionButton>
           }
         >
-          <PageHeaderWrapper>
-            <ModeratorsContainer>
-              Moderators: <MemberStack members={moderatorsSummary(category.moderators)} max={5} />
-            </ModeratorsContainer>
-            <SearchBox
-              value={search}
-              onChange={setSearch}
-              onApply={() => showModal({ modal: 'SearchResults', data: { search } })}
-            />
-          </PageHeaderWrapper>
+          <ModeratorsContainer>
+            Moderators: <MemberStack members={moderatorsSummary(category.moderators)} max={5} />
+          </ModeratorsContainer>
         </ForumPageHeader>
       }
       main={

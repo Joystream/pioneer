@@ -44,9 +44,8 @@ const PageHeader = styled.header`
 export const PageHeaderWrapper = styled.section`
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   position: relative;
-  flex-wrap: wrap;
-  justify-content: space-between;
   gap: 16px 8px;
 `
 
