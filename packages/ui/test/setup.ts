@@ -5,7 +5,26 @@ import BN from 'bn.js'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { AddressToBalanceMap, Balances } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
+import { UseModal } from '@/common/providers/modal/types'
 import { UseTransaction } from '@/common/providers/transactionFees/context'
+
+export const mockUseModalCall = (props: Partial<UseModal<any>>) => {
+  mockUseModal.mockReturnValue({ ...mockUseModal(), ...props })
+}
+
+const mockUseModal = jest.fn<UseModal<any>, []>(() => ({
+  hideModal: jest.fn(),
+  showModal: jest.fn(),
+  modal: null,
+  modalData: null,
+}))
+
+jest.mock('@/common/hooks/useModal', () => ({
+  useModal: () => ({
+    ...jest.requireActual('@/common/hooks/useModal').useModal(),
+    ...mockUseModal(),
+  }),
+}))
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',

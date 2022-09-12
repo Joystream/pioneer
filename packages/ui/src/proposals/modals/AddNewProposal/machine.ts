@@ -372,7 +372,7 @@ export const addNewProposalMachine = createMachine<
       },
     },
     success: { type: 'final' },
-    error: { type: 'final' },
+    error: { type: 'final', meta: { message: 'There was a problem while creating proposal.' } },
     canceled: { type: 'final' },
   },
 })

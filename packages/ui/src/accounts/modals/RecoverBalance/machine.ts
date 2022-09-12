@@ -54,7 +54,7 @@ export const recoverBalanceMachine = createMachine<Context, RecoverBalanceEvent,
     },
     requirementsFailed: { type: 'final' },
     success: { type: 'final' },
-    error: { type: 'final' },
+    error: { type: 'final', meta: { message: 'There was a problem with recovering balance.' } },
     canceled: { type: 'final' },
   },
 })

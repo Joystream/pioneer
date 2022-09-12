@@ -1,5 +1,4 @@
 import { ForumThreadMetadata } from '@joystream/metadata-protobuf'
-import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
@@ -9,9 +8,10 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
-import { FailureModal } from '@/common/components/FailureModal'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
+import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { useForumCategoryBreadcrumbs } from '@/forum/hooks/useForumCategoryBreadcrumbs'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -77,7 +77,7 @@ export const CreateThreadModal = () => {
           },
         })
       } else if (balance && minimumTransactionCost) {
-        const canAfford = balance.transferable.gte(minimumTransactionCost)
+        const canAfford = getFeeSpendableBalance(balance).gte(minimumTransactionCost)
         const controllerAccount = accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account')
         canAfford && send({ type: 'PASS', memberId: member.id, categoryId: modalData.categoryId, controllerAccount })
         canAfford || send('FAIL')
@@ -85,7 +85,7 @@ export const CreateThreadModal = () => {
     }
 
     if (state.matches('beforeTransaction') && balance && minimumTransactionCost) {
-      const canAfford = balance.transferable.gte(minimumTransactionCost)
+      const canAfford = getFeeSpendableBalance(balance).gte(minimumTransactionCost)
       send(canAfford ? 'PASS' : 'FAIL')
     }
   }, [state.value, member?.id, minimumTransactionCost, balance])
@@ -123,14 +123,6 @@ export const CreateThreadModal = () => {
 
   if (state.matches('success')) {
     return <CreateThreadSuccessModal newThreadId={state.context.newThreadId.toString()} />
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem with creating your forum thread.
-      </FailureModal>
-    )
   }
 
   if (state.matches('requirementsFailed') && member && minimumTransactionCost) {

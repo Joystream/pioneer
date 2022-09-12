@@ -1,13 +1,13 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 
-import { ModalContext } from '@/common/providers/modal/context'
-import { UseModal } from '@/common/providers/modal/types'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { VotesBackup } from '@/council/components/election/BackupVotesButton'
 import { VotingAttempt } from '@/council/hooks/useCommitment'
 import { RestoreVotesModal } from '@/council/modals/RestoreVotes'
 
 import { expectToBeDefined } from '../../_helpers/expectToBeDefined'
+import { mockUseModalCall } from '../../setup'
 
 const cycleId = 1
 const key = `votes:${cycleId}`
@@ -25,12 +25,9 @@ const attempts: VotingAttempt[] = salts.map((salt) => ({
 const validBackup: VotesBackup = { cycleId, votingAttempts: [attempts[0], attempts[1]] }
 
 describe('UI: Restore Votes Modal', () => {
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData: { cycleId },
-  }
+  beforeAll(() => {
+    mockUseModalCall({ modalData: { cycleId } })
+  })
 
   beforeEach(() => {
     window.localStorage.clear()
@@ -96,9 +93,9 @@ describe('UI: Restore Votes Modal', () => {
 
   const displayModal = () =>
     render(
-      <ModalContext.Provider value={useModal}>
+      <ModalContextProvider>
         <RestoreVotesModal />
-      </ModalContext.Provider>
+      </ModalContextProvider>
     )
 })
 

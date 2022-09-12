@@ -1,4 +1,3 @@
-import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -15,6 +14,7 @@ import { Modal, ModalBody, ModalHeader, ModalTransactionFooter } from '@/common/
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { transactionMachine } from '@/common/model/machines'
@@ -40,15 +40,11 @@ export const ClaimVestingModal = () => {
 
   const transaction = useMemo(() => api?.tx.vesting.vest(), [])
 
-  const { isReady, sign, paymentInfo } = useSignAndSendTransaction({
+  const { isReady, sign, paymentInfo, canAfford } = useSignAndSendTransaction({
     transaction,
     signer: selectedAccount?.address ?? '',
     service: service as any,
   })
-
-  if (state.matches('canceled')) {
-    return <FailureModal onClose={hideModal}>Transaction was cancelled</FailureModal>
-  }
 
   if (state.matches('error')) {
     return (
@@ -83,7 +79,11 @@ export const ClaimVestingModal = () => {
                 <Header>Unlocking</Header>
                 <Header>Total claimable</Header>
               </ItemHeaders>
-              <InputComponent inputSize="l">
+              <InputComponent
+                inputSize="l"
+                validation={canAfford ? undefined : 'invalid'}
+                message={canAfford ? '' : 'Insufficient balance to cover fee.'}
+              >
                 <SelectVestingAccount selected={selectedAccount} onChange={setSelectedAccount} />
               </InputComponent>
             </RowGapBlock>
@@ -91,7 +91,7 @@ export const ClaimVestingModal = () => {
         </ModalBody>
         <ModalTransactionFooter
           transactionFee={paymentInfo?.partialFee}
-          next={{ onClick: () => sign(), label: 'Sign transaction and claim', disabled: !isReady }}
+          next={{ onClick: () => sign(), label: 'Sign transaction and claim', disabled: !isReady || !canAfford }}
         />
       </Modal>
     )

@@ -111,7 +111,7 @@ export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRo
       },
     },
     success: { type: 'final' },
-    error: { type: 'final' },
+    error: { type: 'final', meta: { message: 'There was a problem with applying for an opening.' } },
     canceled: { type: 'final' },
   },
 })

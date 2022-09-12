@@ -6,13 +6,12 @@ import { MemoryRouter } from 'react-router'
 
 import { ApiContext } from '@/api/providers/context'
 import { CKEditorProps } from '@/common/components/CKEditor'
-import { ModalContext } from '@/common/providers/modal/context'
-import { ModalCallData, UseModal } from '@/common/providers/modal/types'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers, seedProposal } from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
-import { VoteForProposalModal, VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal'
+import { VoteForProposalModal } from '@/proposals/modals/VoteForProposal'
 
 import { getButton } from '../../_helpers/getButton'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
@@ -29,7 +28,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
@@ -43,12 +42,6 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 
 describe('UI: Vote for Proposal Modal', () => {
   const api = stubApi()
-  const useModal: UseModal<ModalCallData<VoteForProposalModalCall>> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData: { id: '0' },
-  }
   const useMyMemberships: MyMemberships = {
     active: getMember('alice'),
     members: [getMember('alice')],
@@ -65,6 +58,7 @@ describe('UI: Vote for Proposal Modal', () => {
   let tx: any
 
   beforeAll(async () => {
+    mockUseModalCall({ modalData: { id: '0' } })
     await cryptoWaitReady()
     seedMembers(server.server, 2)
     seedProposal(PROPOSAL_DATA, server.server)
@@ -202,7 +196,7 @@ describe('UI: Vote for Proposal Modal', () => {
   async function renderModal(skipWait?: boolean) {
     await render(
       <MemoryRouter>
-        <ModalContext.Provider value={useModal}>
+        <ModalContextProvider>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <ApiContext.Provider value={api}>
@@ -212,7 +206,7 @@ describe('UI: Vote for Proposal Modal', () => {
               </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
-        </ModalContext.Provider>
+        </ModalContextProvider>
       </MemoryRouter>
     )
 

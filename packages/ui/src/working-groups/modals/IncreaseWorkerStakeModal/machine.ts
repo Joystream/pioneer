@@ -56,6 +56,7 @@ export const increaseStakeMachine = createMachine<IncreaseStakeContext, Increase
       },
     },
     success: { type: 'final' },
-    error: { type: 'final' },
+    error: { type: 'final', meta: { message: 'There was an problem with increasing the stake.' } },
+    canceled: { type: 'final' },
   },
 })

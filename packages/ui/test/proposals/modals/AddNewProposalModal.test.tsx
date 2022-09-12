@@ -9,13 +9,13 @@ import { interpret } from 'xstate'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { ApiContext } from '@/api/providers/context'
 import { CurrencyName } from '@/app/constants/currency'
+import { GlobalModals } from '@/app/GlobalModals'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { camelCaseToText } from '@/common/helpers'
 import { createType } from '@/common/model/createType'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
-import { ModalContext } from '@/common/providers/modal/context'
-import { UseModal } from '@/common/providers/modal/types'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { last } from '@/common/utils'
 import { powerOf2 } from '@/common/utils/bn'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -57,7 +57,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 const QUESTION_INPUT = OpeningMetadata.ApplicationFormQuestion.InputType
 
@@ -131,12 +131,7 @@ describe('AddNewProposalModal types parameters', () => {
 
 describe('UI: AddNewProposalModal', () => {
   const api = stubApi()
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData: undefined,
-  }
+
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -148,7 +143,7 @@ describe('UI: AddNewProposalModal', () => {
     },
   }
   const forumLeadId = workingGroups.find((group) => group.id === 'forumWorkingGroup')?.leadId
-
+  const showModal = jest.fn()
   let createProposalTx: any
   let batchTx: any
   let bindAccountTx: any
@@ -159,7 +154,7 @@ describe('UI: AddNewProposalModal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
-
+    mockUseModalCall({ showModal })
     seedMembers(server.server)
     seedWorkingGroups(server.server)
     seedOpeningStatuses(server.server)
@@ -183,7 +178,7 @@ describe('UI: AddNewProposalModal', () => {
     stubProposalConstants(api)
 
     createProposalTx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
-    createProposalTxMock = (api.api.tx.proposalsCodex.createProposal as unknown) as jest.Mock
+    createProposalTxMock = api.api.tx.proposalsCodex.createProposal as unknown as jest.Mock
 
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 25)
     stubQuery(
@@ -210,7 +205,7 @@ describe('UI: AddNewProposalModal', () => {
 
       renderModal()
 
-      expect(useModal.showModal).toBeCalledWith({
+      expect(showModal).toBeCalledWith({
         modal: 'SwitchMember',
         data: { originalModalName: 'AddNewProposalModal' },
       })
@@ -294,7 +289,7 @@ describe('UI: AddNewProposalModal', () => {
           },
         }
 
-        expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
+        expect(showModal).toBeCalledWith({ ...moveFundsModalCall })
       })
 
       it('Enough funds', async () => {
@@ -1226,7 +1221,7 @@ describe('UI: AddNewProposalModal', () => {
           },
         }
 
-        expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
+        expect(showModal).toBeCalledWith({ ...moveFundsModalCall })
       })
 
       describe('Staking account not bound nor staking candidate', () => {
@@ -1680,17 +1675,18 @@ describe('UI: AddNewProposalModal', () => {
   function renderModal() {
     return render(
       <MemoryRouter>
-        <ModalContext.Provider value={useModal}>
+        <ModalContextProvider>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <ApiContext.Provider value={api}>
                 <MembershipContext.Provider value={useMyMemberships}>
+                  <GlobalModals />
                   <AddNewProposalModal />
                 </MembershipContext.Provider>
               </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
-        </ModalContext.Provider>
+        </ModalContextProvider>
       </MemoryRouter>
     )
   }

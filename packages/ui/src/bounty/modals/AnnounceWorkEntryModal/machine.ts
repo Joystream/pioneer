@@ -115,8 +115,14 @@ export const announceWorkEntryMachine = createMachine<
         ],
       },
     },
-    [AnnounceWorkEntryStates.success]: { type: 'final' },
-    [AnnounceWorkEntryStates.error]: { type: 'final' },
+    [AnnounceWorkEntryStates.success]: {
+      type: 'final',
+      meta: { message: 'You have just successfully announced work entry!' },
+    },
+    [AnnounceWorkEntryStates.error]: {
+      type: 'final',
+      meta: { message: 'There was problem while creating your work entry' },
+    },
     [AnnounceWorkEntryStates.cancel]: { type: 'final' },
   },
 })

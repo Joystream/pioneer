@@ -74,7 +74,7 @@ export const bountyCancelMachine = createMachine<BountyCancelContext, BountyCanc
       },
     },
     [BountyCancelStates.success]: { type: 'final' },
-    [BountyCancelStates.error]: { type: 'final' },
+    [BountyCancelStates.error]: { type: 'final', meta: { message: 'There was a problem while canceling the bounty.' } },
     [BountyCancelStates.cancel]: { type: 'final' },
   },
 })

@@ -4,7 +4,8 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { ApiContext } from '@/api/providers/context'
-import { ModalContext } from '@/common/providers/modal/context'
+import { GlobalModals } from '@/app/GlobalModals'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
 import { DeleteThreadModal, DeleteThreadModalCall } from '@/forum/modals/DeleteThreadModal'
@@ -36,29 +37,38 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
+const modalData: ModalCallData<DeleteThreadModalCall> = {
+  thread: {
+    id: '1',
+    title: 'Example Thread',
+    categoryId: '1',
+    authorId: '0',
+    isSticky: false,
+    createdInBlock: randomBlock(),
+    tags: [],
+    visiblePostsCount: 5,
+    status: { __typename: 'ThreadStatusActive' },
+  },
+}
+
+const mockUseModal: UseModal<any> = {
+  hideModal: jest.fn(),
+  showModal: jest.fn(),
+  modal: null,
+  modalData,
+}
+
+jest.mock('@/common/hooks/useModal', () => ({
+  useModal: () => ({
+    ...jest.requireActual('@/common/hooks/useModal').useModal(),
+    ...mockUseModal,
+  }),
+}))
+
 describe('UI: DeleteThreadModal', () => {
   const api = stubApi()
   const txPath = 'api.tx.forum.deleteThread'
-  const modalData: ModalCallData<DeleteThreadModalCall> = {
-    thread: {
-      id: '1',
-      title: 'Example Thread',
-      categoryId: '1',
-      authorId: '0',
-      isSticky: false,
-      createdInBlock: randomBlock(),
-      tags: [],
-      visiblePostsCount: 5,
-      status: { __typename: 'ThreadStatusActive' },
-    },
-  }
 
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData,
-  }
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -128,21 +138,22 @@ describe('UI: DeleteThreadModal', () => {
       fireEvent.click(await getButton('modals.deleteThread.buttonLabel'))
     })
 
-    expect(await screen.findByText('modals.deleteThread.success')).toBeDefined()
+    expect(await screen.findByText('Your thread has been deleted.')).toBeDefined()
   })
 
   const renderModal = () =>
     render(
-      <ModalContext.Provider value={useModal}>
+      <ModalContextProvider>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
             <MembershipContext.Provider value={useMyMemberships}>
               <ApiContext.Provider value={api}>
+                <GlobalModals />
                 <DeleteThreadModal />
               </ApiContext.Provider>
             </MembershipContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
-      </ModalContext.Provider>
+      </ModalContextProvider>
     )
 })

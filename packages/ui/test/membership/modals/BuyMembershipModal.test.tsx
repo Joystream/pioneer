@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
@@ -7,7 +7,9 @@ import { MemoryRouter } from 'react-router'
 import { of } from 'rxjs'
 
 import { ApiContext } from '@/api/providers/context'
+import { GlobalModals } from '@/app/GlobalModals'
 import { createType } from '@/common/model/createType'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { BuyMembershipModal } from '@/memberships/modals/BuyMembershipModal'
 
 import { getButton } from '../../_helpers/getButton'
@@ -25,17 +27,9 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockUseModalCall } from '../../setup'
 
-const mockCallback = jest.fn()
-
-jest.mock('@/common/hooks/useModal', () => {
-  return {
-    useModal: () => ({
-      showModal: mockCallback,
-      hideModal: () => null,
-    }),
-  }
-})
+configure({ testIdAttribute: 'id' })
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -44,11 +38,13 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 describe('UI: BuyMembershipModal', () => {
   const api = stubApi()
   let transaction: any
+  const showModal = jest.fn()
 
   setupMockServer()
 
   beforeAll(async () => {
     await cryptoWaitReady()
+    mockUseModalCall({ showModal })
     jest.spyOn(console, 'log').mockImplementation()
     stubAccounts([alice, bob])
   })
@@ -67,20 +63,23 @@ describe('UI: BuyMembershipModal', () => {
     expect((await screen.findByText('Creation fee:'))?.parentNode?.textContent).toMatch(/^Creation fee:100/i)
   })
 
+  it('Disables button on incorrect email address', async () => {
+    await renderModal()
+    const submitButton = await findSubmitButton()
+    await fillForm()
+    fireEvent.click(screen.getByTestId('email-tile'))
+    await act(() => {
+      fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'invalid email' } })
+    })
+    expect(submitButton).toBeDisabled()
+  })
+
   it('Enables button when valid form', async () => {
     await renderModal()
     const submitButton = await findSubmitButton()
 
     expect(submitButton).toBeDisabled()
-
-    await selectFromDropdown('Root account', 'bob')
-    await selectFromDropdown('Controller account', 'alice')
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'BobbyBob' } })
-      fireEvent.change(screen.getByLabelText(/Membership handle/i), { target: { value: 'realbobbybob' } })
-      fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
-    })
-
+    await fillForm()
     expect(submitButton).not.toBeDisabled()
   })
 
@@ -90,13 +89,8 @@ describe('UI: BuyMembershipModal', () => {
     const submitButton = await findSubmitButton()
     expect(submitButton).toBeDisabled()
 
-    await selectFromDropdown('Root account', 'bob')
-    await selectFromDropdown('Controller account', 'alice')
+    await fillForm()
     await act(async () => {
-      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'BobbyBob' } })
-      fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
-      fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
-
       fireEvent.change(screen.getByLabelText(/member avatar/i), { target: { value: 'avatar' } })
     })
     expect(submitButton).toBeDisabled()
@@ -110,20 +104,9 @@ describe('UI: BuyMembershipModal', () => {
   describe('Authorize step', () => {
     const renderAuthorizeStep = async () => {
       await renderModal()
+      await fillForm()
 
-      await selectFromDropdown('Root account', 'bob')
-      await selectFromDropdown('Controller account', 'alice')
-      await act(async () => {
-        fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'BobbyBob' } })
-        fireEvent.change(screen.getByLabelText(/membership handle/i), { target: { value: 'realbobbybob' } })
-        fireEvent.change(screen.getByLabelText(/about member/i), { target: { value: "I'm Bob" } })
-        fireEvent.change(screen.getByLabelText(/member avatar/i), {
-          target: { value: 'http://example.com/example.jpg' },
-        })
-        fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
-
-        fireEvent.click(await findSubmitButton())
-      })
+      fireEvent.click(await findSubmitButton())
     }
 
     it('Renders authorize transaction', async () => {
@@ -170,7 +153,7 @@ describe('UI: BuyMembershipModal', () => {
         await act(async () => {
           fireEvent.click(button)
         })
-        expect(mockCallback.mock.calls[0][0]).toEqual({ modal: 'Member', data: { id: '12' } })
+        expect(showModal.mock.calls[0][0]).toEqual({ modal: 'Member', data: { id: '12' } })
       })
     })
 
@@ -188,6 +171,16 @@ describe('UI: BuyMembershipModal', () => {
     })
   })
 
+  async function fillForm() {
+    await selectFromDropdown('Root account', 'bob')
+    await selectFromDropdown('Controller account', 'alice')
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'BobbyBob' } })
+      fireEvent.change(screen.getByLabelText(/Membership handle/i), { target: { value: 'realbobbybob' } })
+      fireEvent.click(screen.getByLabelText(/I agree to the terms/i))
+    })
+  }
+
   async function findSubmitButton() {
     return await getButton(/^Create a membership$/i)
   }
@@ -199,7 +192,10 @@ describe('UI: BuyMembershipModal', () => {
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <ApiContext.Provider value={api}>
-                <BuyMembershipModal />
+                <ModalContextProvider>
+                  <GlobalModals />
+                  <BuyMembershipModal />
+                </ModalContextProvider>
               </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
