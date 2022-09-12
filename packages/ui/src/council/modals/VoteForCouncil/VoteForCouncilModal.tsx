@@ -10,7 +10,6 @@ import { useModal } from '@/common/hooks/useModal'
 import { isDefined } from '@/common/utils'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
 import { VoteForCouncilMachine, VoteForCouncilMachineState } from './machine'
 import { VoteForCouncilModalCall } from './types'
@@ -40,15 +39,6 @@ export const VoteForCouncilModal = () => {
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
-      if (!activeMember) {
-        showModal<SwitchMemberModalCall>({
-          modal: 'SwitchMember',
-          data: {
-            originalModalName: 'VoteForCouncil',
-            originalModalData: modalData,
-          },
-        })
-      }
       if (feeInfo && isDefined(hasRequiredStake)) {
         const areFundsSufficient = feeInfo.canAfford && hasRequiredStake
         send(areFundsSufficient ? 'PASS' : 'FAIL')

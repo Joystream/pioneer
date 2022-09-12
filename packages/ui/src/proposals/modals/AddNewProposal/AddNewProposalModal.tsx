@@ -34,7 +34,6 @@ import { useYupValidationResolver } from '@/common/utils/validation'
 import { machineStateConverter } from '@/council/modals/AnnounceCandidacy/helpers'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { IStakingAccountSchema } from '@/memberships/model/validation'
 import { useMinimumValidatorCount } from '@/proposals/hooks/useMinimumValidatorCount'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
@@ -176,15 +175,6 @@ export const AddNewProposalModal = () => {
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
-      if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({
-          modal: 'SwitchMember',
-          data: {
-            originalModalName: 'AddNewProposalModal',
-          },
-        })
-      }
-
       if (feeInfo && feeInfo.canAfford) {
         return send('NEXT')
       }

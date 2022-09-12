@@ -41,7 +41,6 @@ import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/mac
 import { CandidacyStatus, ElectionCandidateWithDetails } from '@/council/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { IStakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
 import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
@@ -194,15 +193,6 @@ export const AnnounceCandidacyModal = () => {
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
-      if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({
-          modal: 'SwitchMember',
-          data: {
-            originalModalName: 'AnnounceCandidateModal',
-          },
-        })
-      }
-
       if (feeInfo && isDefined(hasRequiredStake)) {
         const areFundsSufficient = feeInfo.canAfford && hasRequiredStake
         send(areFundsSufficient ? 'NEXT' : 'FAIL')
