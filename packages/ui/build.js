@@ -9,37 +9,34 @@ const webpackConfig = require('./webpack.config')
 build()
 
 async function build() {
+  dotenv.config()
+
   const blacklist = await initializeImageSafety()
 
   console.log('Invoking Webpack...')
-
   webpack(webpackConfig({ blacklist }, { mode: 'production' }), (err, stats) => {
     if (err) {
       return console.error(err);
     }
-
     console.log(stats.toString({ chunks: false, colors: true }))
   })
 }
 
 async function initializeImageSafety () {
-  const parsedEnvFile = dotenv.config().parsed ?? {}
-  const blacklistUrl = parsedEnvFile.IMAGE_SAFETY_BLACKLIST_URL
 
-  if (!blacklistUrl) {
+  if (!process.env.IMAGE_SAFETY_BLACKLIST_URL) {
     console.warn('Skip remote fetching of the image blacklist because IMAGE_SAFETY_BLACKLIST_URL is not defined')
     return []
   }
 
   console.log('Fetching image blacklist...')
 
-  const {
-    IMAGE_SAFETY_BLACKLIST_JSON_PATH: imgsPath,
-    IMAGE_SAFETY_BLACKLIST_HEADERS: headerText = '',
-  } = parsedEnvFile
-
   try {
-    const blacklist = await fetchBlacklist(blacklistUrl, headerText, imgsPath)
+    const blacklist = await fetchBlacklist(
+      process.env.IMAGE_SAFETY_BLACKLIST_URL,
+      process.env.IMAGE_SAFETY_BLACKLIST_HEADERS,
+      process.env.IMAGE_SAFETY_BLACKLIST_JSON_PATH
+    )
     if (blacklist.length) {
       console.log('Image blacklist fetched successfully:', ...blacklist.map(src => '\n\t' + src))
     } else {

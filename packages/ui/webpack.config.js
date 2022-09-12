@@ -4,7 +4,6 @@ const path = require('path')
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
-const dotenv = require('dotenv')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
@@ -15,8 +14,7 @@ const version = cp.execSync('git rev-parse --short HEAD').toString().trim()
 
 module.exports = (env, argv) => {
   const isDevelopment = argv.mode === 'development'
-  const parsedEnvFile = dotenv.config().parsed || {}
-  const envVariables = [...Object.entries(parsedEnvFile), ...Object.entries(process.env)]
+  const envVariables = Object.entries(process.env)
     .filter(([key]) => key.startsWith('REACT_APP_'))
     .map(([key, value]) => [`process.env.${key}`, JSON.stringify(value)])
 
@@ -50,6 +48,7 @@ module.exports = (env, argv) => {
   ]
 
   return {
+    mode: argv.mode,
     entry: './src',
     devtool: 'source-map',
     plugins: plugins,
