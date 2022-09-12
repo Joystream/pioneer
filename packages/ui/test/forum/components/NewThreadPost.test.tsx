@@ -4,9 +4,7 @@ import { MemoryRouter } from 'react-router-dom'
 
 import { ApiContext } from '@/api/providers/context'
 import { CKEditorProps } from '@/common/components/CKEditor'
-import { ModalContext } from '@/common/providers/modal/context'
-import { isModalWithData } from '@/common/providers/modal/provider'
-import { UseModal } from '@/common/providers/modal/types'
+import { isModalWithData, ModalContextProvider } from '@/common/providers/modal/provider'
 import { NewPostProps, NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { ForumPost } from '@/forum/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -17,6 +15,7 @@ import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi, stubTransaction } from '../../_mocks/transactions'
+import { mockUseModalCall } from '../../setup'
 
 jest.mock('@/common/components/CKEditor', () => ({
   BaseCKEditor: (props: CKEditorProps) => mockCKEditor(props),
@@ -26,11 +25,20 @@ describe('UI: Add new post', () => {
   const ref = React.createRef<HTMLDivElement>()
   let replyTo: ForumPost | undefined
 
+  const useModal = {
+    modal: null,
+    modalData: {} as any,
+    hideModal: () => null,
+    showModal: (call: any) => {
+      useModal.modal = call.modal
+      if (isModalWithData(call)) {
+        useModal.modalData = call.data
+      }
+    },
+  }
   const api = stubApi()
   stubTransaction(api, 'api.tx.forum.addPost')
   stubTransaction(api, 'api.tx.proposalsDiscussion.addPost')
-
-  let useModal: UseModal<any>
 
   const useMyMemberships: MyMemberships = {
     active: undefined,
@@ -44,18 +52,8 @@ describe('UI: Add new post', () => {
   }
 
   beforeEach(() => {
-    useModal = {
-      modal: null,
-      modalData: undefined,
-      hideModal: () => null,
-      showModal: (call) => {
-        useModal.modal = call.modal
-        if (isModalWithData(call)) {
-          useModal.modalData = call.data
-        }
-      },
-    }
     useMyMemberships.active = undefined
+    mockUseModalCall(useModal)
   })
 
   const props: NewPostProps = {
@@ -121,7 +119,7 @@ describe('UI: Add new post', () => {
   const renderEditor = (props: NewPostProps) =>
     render(
       <MemoryRouter>
-        <ModalContext.Provider value={useModal}>
+        <ModalContextProvider>
           <MockKeyringProvider>
             <MembershipContext.Provider value={useMyMemberships}>
               <ApiContext.Provider value={api}>
@@ -129,7 +127,7 @@ describe('UI: Add new post', () => {
               </ApiContext.Provider>
             </MembershipContext.Provider>
           </MockKeyringProvider>
-        </ModalContext.Provider>
+        </ModalContextProvider>
       </MemoryRouter>
     )
 })

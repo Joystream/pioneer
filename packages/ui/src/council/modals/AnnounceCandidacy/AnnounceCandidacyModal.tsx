@@ -1,5 +1,4 @@
 import { CouncilCandidacyNoteMetadata } from '@joystream/metadata-protobuf'
-import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
@@ -11,10 +10,10 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
 import { useApi } from '@/api/hooks/useApi'
-import { FailureModal } from '@/common/components/FailureModal'
 import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
 import { BN_ZERO } from '@/common/constants'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
@@ -289,14 +288,6 @@ export const AnnounceCandidacyModal = () => {
 
   if (state.matches('success')) {
     return <SuccessModal onClose={hideModal} memberId={activeMember.id} />
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem while announcing candidacy.
-      </FailureModal>
-    )
   }
 
   return (

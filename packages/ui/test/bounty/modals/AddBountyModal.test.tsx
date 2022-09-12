@@ -5,13 +5,13 @@ import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
 
 import { ApiContext } from '@/api/providers/context'
+import { GlobalModals } from '@/app/GlobalModals'
 import { AddBountyModal } from '@/bounty/modals/AddBountyModal'
 import { addBountyMachine } from '@/bounty/modals/AddBountyModal/machine'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
 import { getSteps } from '@/common/model/machines/getSteps'
-import { ModalContext } from '@/common/providers/modal/context'
-import { UseModal } from '@/common/providers/modal/types'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedForumCategories, seedMembers } from '@/mocks/data'
@@ -33,6 +33,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockUseModalCall } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
@@ -50,12 +51,7 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 
 describe('UI: AddNewBountyModal', () => {
   const api = stubApi()
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData: undefined,
-  }
+  const showModal = jest.fn()
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -74,7 +70,7 @@ describe('UI: AddNewBountyModal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
-
+    mockUseModalCall({ showModal })
     seedMembers(server.server, 2)
     seedForumCategories(server.server, [
       { parentId: null, status: { __typename: 'CategoryStatusActive' }, moderatorIds: [] },
@@ -100,7 +96,7 @@ describe('UI: AddNewBountyModal', () => {
 
       renderModal()
 
-      expect(useModal.showModal).toBeCalledWith({
+      expect(showModal).toBeCalledWith({
         modal: 'SwitchMember',
         data: {
           originalModalName: 'AddBounty',
@@ -434,17 +430,18 @@ describe('UI: AddNewBountyModal', () => {
   function renderModal() {
     return render(
       <MemoryRouter>
-        <ModalContext.Provider value={useModal}>
+        <ModalContextProvider>
           <MockKeyringProvider>
             <ApiContext.Provider value={api}>
               <MembershipContext.Provider value={useMyMemberships}>
                 <MockApolloProvider>
+                  <GlobalModals />
                   <AddBountyModal />
                 </MockApolloProvider>
               </MembershipContext.Provider>
             </ApiContext.Provider>
           </MockKeyringProvider>
-        </ModalContext.Provider>
+        </ModalContextProvider>
       </MemoryRouter>
     )
   }

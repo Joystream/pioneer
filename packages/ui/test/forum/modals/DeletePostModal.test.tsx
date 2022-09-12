@@ -4,9 +4,10 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { ApiContext } from '@/api/providers/context'
+import { GlobalModals } from '@/app/GlobalModals'
 import { createType } from '@/common/model/createType'
-import { ModalContext } from '@/common/providers/modal/context'
-import { ModalCallData, UseModal } from '@/common/providers/modal/types'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { ModalCallData } from '@/common/providers/modal/types'
 import { DeletePostModal, DeletePostModalCall } from '@/forum/modals/PostActionModal/DeletePostModal'
 import { postsToDeleteMap } from '@/forum/model/postsToDeleteMap'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -30,7 +31,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -59,12 +60,6 @@ describe('UI: DeletePostModal', () => {
     },
   }
 
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData,
-  }
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -80,6 +75,7 @@ describe('UI: DeletePostModal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
+    mockUseModalCall({ modalData })
     rawMembers.slice(0, 2).map((member) => seedMember(member, server.server))
     seedForumCategory(mockCategories[0], server.server)
     seedForumThread(mockThreads[0], server.server)
@@ -133,16 +129,17 @@ describe('UI: DeletePostModal', () => {
 
   const renderModal = () =>
     render(
-      <ModalContext.Provider value={useModal}>
+      <ModalContextProvider>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
             <MembershipContext.Provider value={useMyMemberships}>
               <ApiContext.Provider value={api}>
+                <GlobalModals />
                 <DeletePostModal />
               </ApiContext.Provider>
             </MembershipContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
-      </ModalContext.Provider>
+      </ModalContextProvider>
     )
 })

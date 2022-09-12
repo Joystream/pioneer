@@ -8,8 +8,7 @@ import { RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { ApiContext } from '@/api/providers/context'
 import { GlobalModals } from '@/app/GlobalModals'
 import { MyAccounts } from '@/app/pages/Profile/MyAccounts'
-import { ModalContext } from '@/common/providers/modal/context'
-import { UseModal } from '@/common/providers/modal/types'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
@@ -21,6 +20,7 @@ import { MockQueryNodeProviders } from '../../../_mocks/providers'
 import { setupMockServer } from '../../../_mocks/server'
 import { MEMBER_ALICE_DATA } from '../../../_mocks/server/seeds'
 import { stubAccounts, stubApi, stubBalances, stubDefaultBalances } from '../../../_mocks/transactions'
+import { mockUseModalCall } from '../../../setup'
 
 const testStatisticItem = (header: HTMLElement, labelMatcher: RegExp, expected: RegExp) => {
   const label = within(header).getByText(labelMatcher)
@@ -42,20 +42,14 @@ describe('Page: MyAccounts', () => {
     },
   }
 
-  let useModal: UseModal<any>
-
+  const showModal = jest.fn()
   beforeAll(async () => {
+    mockUseModalCall({ showModal })
     await cryptoWaitReady()
     seedMembers(server.server, 2)
   })
 
   beforeEach(() => {
-    useModal = {
-      hideModal: jest.fn(),
-      modal: null,
-      modalData: undefined,
-      showModal: jest.fn(),
-    }
     useMyMemberships.members = []
 
     stubAccounts([alice, bob])
@@ -137,7 +131,7 @@ describe('Page: MyAccounts', () => {
           memberId: MEMBER_ALICE_DATA.id,
         },
       }
-      expect(useModal.showModal).toBeCalledWith(expected)
+      expect(showModal).toBeCalledWith(expected)
     })
 
     it('Nonrecoverable', async () => {
@@ -159,7 +153,7 @@ describe('Page: MyAccounts', () => {
     render(
       <Router history={history}>
         <ApiContext.Provider value={api}>
-          <ModalContext.Provider value={useModal}>
+          <ModalContextProvider>
             <MockQueryNodeProviders>
               <MembershipContext.Provider value={useMyMemberships}>
                 <Switch>
@@ -168,7 +162,7 @@ describe('Page: MyAccounts', () => {
                 <GlobalModals />
               </MembershipContext.Provider>
             </MockQueryNodeProviders>
-          </ModalContext.Provider>
+          </ModalContextProvider>
         </ApiContext.Provider>
       </Router>
     )

@@ -7,7 +7,9 @@ import { MemoryRouter } from 'react-router'
 import { of } from 'rxjs'
 
 import { ApiContext } from '@/api/providers/context'
+import { GlobalModals } from '@/app/GlobalModals'
 import { createType } from '@/common/model/createType'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { BuyMembershipModal } from '@/memberships/modals/BuyMembershipModal'
 
 import { getButton } from '../../_helpers/getButton'
@@ -25,18 +27,9 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockUseModalCall } from '../../setup'
 
-const mockCallback = jest.fn()
 configure({ testIdAttribute: 'id' })
-
-jest.mock('@/common/hooks/useModal', () => {
-  return {
-    useModal: () => ({
-      showModal: mockCallback,
-      hideModal: () => null,
-    }),
-  }
-})
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -45,11 +38,13 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 describe('UI: BuyMembershipModal', () => {
   const api = stubApi()
   let transaction: any
+  const showModal = jest.fn()
 
   setupMockServer()
 
   beforeAll(async () => {
     await cryptoWaitReady()
+    mockUseModalCall({ showModal })
     jest.spyOn(console, 'log').mockImplementation()
     stubAccounts([alice, bob])
   })
@@ -158,7 +153,7 @@ describe('UI: BuyMembershipModal', () => {
         await act(async () => {
           fireEvent.click(button)
         })
-        expect(mockCallback.mock.calls[0][0]).toEqual({ modal: 'Member', data: { id: '12' } })
+        expect(showModal.mock.calls[0][0]).toEqual({ modal: 'Member', data: { id: '12' } })
       })
     })
 
@@ -197,7 +192,10 @@ describe('UI: BuyMembershipModal', () => {
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <ApiContext.Provider value={api}>
-                <BuyMembershipModal />
+                <ModalContextProvider>
+                  <GlobalModals />
+                  <BuyMembershipModal />
+                </ModalContextProvider>
               </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>

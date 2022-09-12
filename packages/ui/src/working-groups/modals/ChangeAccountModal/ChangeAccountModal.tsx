@@ -1,11 +1,11 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
-import { useMachine } from '@xstate/react'
 import React from 'react'
 
 import { Account } from '@/accounts/types'
 import { Api } from '@/api'
 import { useApi } from '@/api/hooks/useApi'
 import { FailureModal } from '@/common/components/FailureModal'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { Address } from '@/common/types'
 import { useWorker } from '@/working-groups/hooks/useWorker'

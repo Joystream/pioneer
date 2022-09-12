@@ -1,4 +1,3 @@
-import { useMachine } from '@xstate/react'
 import React, { useEffect } from 'react'
 
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
@@ -6,6 +5,7 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { useApi } from '@/api/hooks/useApi'
 import { FailureModal } from '@/common/components/FailureModal'
 import { TextInlineMedium } from '@/common/components/typography'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { useProposal } from '@/proposals/hooks/useProposal'

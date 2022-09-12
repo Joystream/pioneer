@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router'
 
 import { ApiContext } from '@/api/providers/context'
 import { CKEditorProps } from '@/common/components/CKEditor'
-import { ModalContext } from '@/common/providers/modal/context'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { WithdrawCandidacyModal } from '@/council/modals/WithdrawCandidacyModal'
 import { Member } from '@/memberships/types'
 import { seedMembers } from '@/mocks/data'
@@ -26,6 +26,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockUseModalCall } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
@@ -89,16 +90,10 @@ describe('UI: Withdraw Candidacy Modal', () => {
   })
 
   function renderModal(member: Member) {
+    mockUseModalCall({ modalData: { member } })
     return render(
       <MemoryRouter>
-        <ModalContext.Provider
-          value={{
-            modal: 'WithdrawCandidacy',
-            modalData: { member },
-            hideModal: () => undefined,
-            showModal: () => undefined,
-          }}
-        >
+        <ModalContextProvider>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <ApiContext.Provider value={api}>
@@ -106,7 +101,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
               </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
-        </ModalContext.Provider>
+        </ModalContextProvider>
       </MemoryRouter>
     )
   }

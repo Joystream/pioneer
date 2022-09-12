@@ -66,7 +66,7 @@ export const RevealVoteMachine = createMachine<Partial<RevealVoteContext>, Revea
       },
     },
     success: { type: 'final' },
-    error: { type: 'final' },
+    error: { type: 'final', meta: { message: 'There was a problem revealing your vote.' } },
     canceled: { type: 'final' },
   },
 })

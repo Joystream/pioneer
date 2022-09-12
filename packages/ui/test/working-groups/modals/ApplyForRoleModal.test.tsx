@@ -9,10 +9,11 @@ import { interpret } from 'xstate'
 
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { ApiContext } from '@/api/providers/context'
+import { GlobalModals } from '@/app/GlobalModals'
 import { createType } from '@/common/model/createType'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
-import { ModalContext } from '@/common/providers/modal/context'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -57,15 +58,22 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
+const mockUseModal: UseModal<any> = {
+  hideModal: jest.fn(),
+  showModal: jest.fn(),
+  modal: null,
+  modalData: undefined,
+}
+
+jest.mock('@/common/hooks/useModal', () => ({
+  useModal: () => ({
+    ...jest.requireActual('@/common/hooks/useModal').useModal(),
+    ...mockUseModal,
+  }),
+}))
+
 describe('UI: ApplyForRoleModal', () => {
   const api = stubApi()
-
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData: undefined,
-  }
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -101,7 +109,7 @@ describe('UI: ApplyForRoleModal', () => {
     fields.stakeAmount = '2000'
     fields.openingfilledeventopening = []
     const opening: WorkingGroupOpening = asWorkingGroupOpening(fields)
-    useModal.modalData = { opening }
+    mockUseModal.modalData = { opening }
     useMyMemberships.setActive(getMember('alice'))
 
     stubConst(api, 'forumWorkingGroup.rewardPeriod', createType('u32', 14410))
@@ -109,7 +117,7 @@ describe('UI: ApplyForRoleModal', () => {
 
     stubBalances({ available: 3000 })
     applyTransaction = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
-    applyOnOpeningTxMock = (api.api.tx.forumWorkingGroup.applyOnOpening as unknown) as jest.Mock
+    applyOnOpeningTxMock = api.api.tx.forumWorkingGroup.applyOnOpening as unknown as jest.Mock
 
     stubTransaction(api, 'api.tx.members.confirmStakingAccount')
     stubQuery(
@@ -142,10 +150,10 @@ describe('UI: ApplyForRoleModal', () => {
 
       await renderModal()
 
-      expect(useModal.showModal).toBeCalledWith({
+      expect(mockUseModal.showModal).toBeCalledWith({
         modal: 'SwitchMember',
         data: {
-          originalModalData: useModal.modalData,
+          originalModalData: mockUseModal.modalData,
           originalModalName: 'ApplyForRoleModal',
         },
       })
@@ -159,7 +167,7 @@ describe('UI: ApplyForRoleModal', () => {
       fields.stakeAmount = requiredStake
       fields.openingfilledeventopening = []
       const opening: WorkingGroupOpening = asWorkingGroupOpening(fields)
-      useModal.modalData = { opening }
+      mockUseModal.modalData = { opening }
       batchTx = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening', 10_000)
       mockedTransactionFee.feeInfo = { canAfford: false, transactionFee: new BN(10000) }
       await renderModal()
@@ -173,7 +181,7 @@ describe('UI: ApplyForRoleModal', () => {
         },
       }
 
-      expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
+      expect(mockUseModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
   })
 
@@ -488,17 +496,18 @@ describe('UI: ApplyForRoleModal', () => {
     await act(async () => {
       render(
         <MemoryRouter>
-          <ModalContext.Provider value={useModal}>
+          <ModalContextProvider>
             <MockQueryNodeProviders>
               <MockKeyringProvider>
                 <ApiContext.Provider value={api}>
                   <MembershipContext.Provider value={useMyMemberships}>
+                    <GlobalModals />
                     <ApplyForRoleModal />
                   </MembershipContext.Provider>
                 </ApiContext.Provider>
               </MockKeyringProvider>
             </MockQueryNodeProviders>
-          </ModalContext.Provider>
+          </ModalContextProvider>
         </MemoryRouter>
       )
     })
