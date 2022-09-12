@@ -14,7 +14,6 @@ import { TransactionModal } from '@/common/modals/TransactionModal'
 import { Address } from '@/common/types'
 
 import { MemberFormFields } from '../BuyMembershipModal/BuyMembershipFormModal'
-import { getMessage } from '../utils'
 
 interface SignProps {
   onClose: () => void
@@ -50,7 +49,7 @@ export const InviteMemberSignModal = ({ onClose, formData, transaction, signer, 
             label="Sending from account"
             inputSize="l"
             validation={!canAfford ? 'invalid' : undefined}
-            message={!canAfford ? getMessage(partialFee) : undefined}
+            message={!canAfford ? 'Insufficient funds to cover the membership creation.' : undefined}
           >
             <SelectedAccount account={signerAccount} />
           </InputComponent>

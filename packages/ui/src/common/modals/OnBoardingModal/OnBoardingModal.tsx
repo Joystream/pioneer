@@ -23,8 +23,10 @@ import { OnBoardingAccount } from '@/common/modals/OnBoardingModal/OnBoardingAcc
 import { OnBoardingMembership } from '@/common/modals/OnBoardingModal/OnBoardingMembership'
 import { OnBoardingPlugin } from '@/common/modals/OnBoardingModal/OnBoardingPlugin'
 import { OnBoardingStatus, SetMembershipAccount } from '@/common/providers/onboarding/types'
+import { definedValues } from '@/common/utils'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
+import { toExternalResources } from '@/memberships/modals/utils'
 
 export const OnBoardingModal = () => {
   const { hideModal } = useModal()
@@ -47,7 +49,9 @@ export const OnBoardingModal = () => {
         return (
           <OnBoardingMembership
             setMembershipAccount={setMembershipAccount as SetMembershipAccount}
-            onSubmit={(params: MemberFormFields) => send({ type: 'DONE', form: params })}
+            onSubmit={(params: MemberFormFields) => {
+              send({ type: 'DONE', form: params })
+            }}
             membershipAccount={membershipAccount as string}
           />
         )
@@ -65,6 +69,7 @@ export const OnBoardingModal = () => {
           name: form.name,
           avatar: form.avatarUri,
           about: form.about,
+          externalResources: toExternalResources(definedValues(form.externalResources)),
         }
 
         const response = await fetch(endpoints.membershipFaucetEndpoint, {

@@ -2,7 +2,7 @@ import React from 'react'
 
 import { useMachine } from '@/common/hooks/useMachine'
 
-import { Member } from '../../types'
+import { MemberWithDetails } from '../../types'
 
 import { updateMembershipMachine } from './machine'
 import { UpdateMembershipFormModal } from './UpdateMembershipFormModal'
@@ -10,7 +10,7 @@ import { UpdateMembershipSignModal } from './UpdateMembershipSignModal'
 import { UpdateMembershipSuccessModal } from './UpdateMembershipSuccessModal'
 
 interface MembershipModalProps {
-  member: Member
+  member: MemberWithDetails
   onClose: () => void
 }
 

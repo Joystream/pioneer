@@ -35,7 +35,7 @@ export const EditPostModal = () => {
 
   const hideModalWithAction = (isSuccess?: boolean) => {
     if (isSuccess) {
-      onSuccess(postText)
+      onSuccess()
     } else {
       onFail()
     }

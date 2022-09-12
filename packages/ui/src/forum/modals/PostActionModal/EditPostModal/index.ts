@@ -13,7 +13,7 @@ export type EditPostModalCall = ModalWithDataCall<
     postText: string
     replyTo?: ForumPost
     transaction?: SubmittableExtrinsic<'rxjs', ISubmittableResult>
-    onSuccess: (newText: string) => void
+    onSuccess: () => void
     onFail: () => void
   }
 >

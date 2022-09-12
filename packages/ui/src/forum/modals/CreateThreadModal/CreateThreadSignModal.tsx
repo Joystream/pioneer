@@ -15,6 +15,7 @@ import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
+import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
 
 import { getMessage } from './utils'
 
@@ -43,8 +44,8 @@ export const CreateThreadSignModal = ({
   const fullAmount = paymentInfo?.partialFee.add(postDeposit).add(threadDeposit)
 
   const hasFunds = useMemo(() => {
-    if (balance?.transferable && fullAmount) {
-      return balance.transferable.gte(fullAmount)
+    if (balance && fullAmount) {
+      return getFeeSpendableBalance(balance).gte(fullAmount)
     }
     return false
   }, [controllerAccount.address, balance?.transferable, paymentInfo?.partialFee])
