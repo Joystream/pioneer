@@ -34,10 +34,10 @@ Undesirable images can be moderated in the following ways:
 
 ### Method 1: Define `REACT_APP_BLACKLISTED_IMAGES`
 
-The most straight forward way is to simply define `REACT_APP_BLACKLISTED_IMAGES` with comma separated image urls.
+The most straight forward way is to simply define `REACT_APP_BLACKLISTED_IMAGES` with whitespace (e.g " ", "\n", "\t", ...) separated image urls.
 
 ```shell
-REACT_APP_BLACKLISTED_IMAGES="https://example.com/x.png,https://example.com/y.png"
+REACT_APP_BLACKLISTED_IMAGES="https://example.com/x.png https://example.com/y.png"
 ```
 
 Pioneer instances build with this configuration will not display: `https://example.com/x.png` nor `https://example.com/y.png`.
