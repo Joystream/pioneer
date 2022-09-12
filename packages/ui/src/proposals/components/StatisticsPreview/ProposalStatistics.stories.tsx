@@ -14,6 +14,7 @@ export default {
     approve: voteControl,
     reject: voteControl,
     slash: voteControl,
+    abstain: voteControl,
     councilSize: { control: { type: 'range', min: 0, max: 20 } },
     approvalQuorumPercentage: percentageControl,
     approvalThresholdPercentage: percentageControl,

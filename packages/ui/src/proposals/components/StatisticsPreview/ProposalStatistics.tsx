@@ -32,9 +32,6 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
   const slashingQuorum = councilSize && slashingQuorumRatio && Math.ceil(councilSize * slashingQuorumRatio)
 
   const quorumRatio = councilSize ? (total - abstain) / councilSize : 0
-  const abstainRatio = councilSize ? abstain / councilSize : 0
-  const remainRatio = councilSize ? (isDefined(remain) ? remain : 0) / councilSize : 0
-
   const approvalRatio = total - abstain && approve / (total - abstain)
   const slashingRatio = total - abstain && slash / (total - abstain)
 
@@ -79,24 +76,6 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
           threshold={slashingThresholdRatio}
           numerator={`${Math.floor(slashingRatio * 100)}%`}
           denominator={`${slashingThresholdRatio?.toLocaleString('en', { style: 'percent' }) ?? '-'}`}
-        />
-      </TwoRowStatistic>
-      <TwoRowStatistic>
-        <StatisticBar
-          title="Abstained"
-          tooltipText="Number of votes abstained"
-          tooltipLinkURL={tooltipLinkURL}
-          value={abstainRatio}
-          numerator={abstain}
-          denominator={`${councilSize ?? '-'} vote${plural(slashingQuorum)}`}
-        />
-        <StatisticBar
-          title="Remained"
-          tooltipText="Remained votes"
-          tooltipLinkURL={tooltipLinkURL}
-          value={remainRatio}
-          numerator={remain}
-          denominator={`${councilSize ?? '-'} vote${plural(slashingQuorum)}`}
         />
       </TwoRowStatistic>
     </Statistics>
