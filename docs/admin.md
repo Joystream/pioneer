@@ -32,7 +32,7 @@
 
 Undesirable images can be moderated in the following ways:
 
-### Method 1: Define `REACT_APP_BLACKLISTED_IMAGES`
+### Blacklist method 1: Set an environment variable
 
 The most straight forward way is to simply define `REACT_APP_BLACKLISTED_IMAGES` with whitespace (e.g " ", "\n", "\t", ...) separated image urls.
 
@@ -43,7 +43,7 @@ REACT_APP_BLACKLISTED_IMAGES="https://example.com/x.png https://example.com/y.pn
 Pioneer instances build with this configuration will not display: `https://example.com/x.png` nor `https://example.com/y.png`.
 
 
-### Method 2: Fetch the blacklist from a url
+### Blacklist method 2: Fetch from a url
 
 However even with a small amount of images this method becomes tedious.
 A longer term solution is to fetch a blacklist from a url. This url can be defined in `IMAGE_SAFETY_BLACKLIST_URL`. The supported response types are:
@@ -94,13 +94,13 @@ IMAGE_SAFETY_BLACKLIST_JSON_PATH=image
 IMAGE_SAFETY_BLACKLIST_URL="https://api.airtable.com/v0/appXYZ/tableXYZ?api_key=keyXYZ&filterByFormula={blacklisted}"
 ```
 
-Will result in blacklisting `https://example.com/x.png` and `https://example.com/z.png`
+will result in blacklisting `https://example.com/x.png` and `https://example.com/z.png` on future builds.
 
 ## Help Pioneer users to report images
 
 Pioneer supports an image reporting user interface, which can be enable in two ways:
 
-### Method 1: hyperlink (Recommended)
+### Report method 1: hyperlink (Recommended)
 
 This is the easiest and safer method. Just define a url in `REACT_APP_IMAGE_REPORT_FORM_URL`. Users will follow it to report images on an external service (form, instant messaging, email, etc...).
 
@@ -122,7 +122,7 @@ Importantly the reported image url and the page it was reported on can be set in
 
 In both example above `{image}` and `{context}` will be substituted with the actual url of the reported image and the page it was reported on.
 
-### Method 2: post to an api endpoint
+### Report method 2: post to an api endpoint
 
 However to avoid taking users out of Pioneer. A url where to POST a image urls to report, can be set in `REACT_APP_IMAGE_REPORT_API_URL`. In most cases the structure of the body of the request should also be defined in `REACT_APP_IMAGE_SAFETY_REPORT_BODY_TEMPLATE`. Otherwise the image url will be post.
 

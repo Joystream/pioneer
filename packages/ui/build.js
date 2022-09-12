@@ -50,11 +50,11 @@ async function initializeImageSafety () {
   return []
 }
 
-function fetchBlacklist (url, headersText = '', imgsPath = '*') {
+function fetchBlacklist (url, headersText, imgsPath = '*') {
   const protocol = url.startsWith('http://') ? 'http' : 'https'
-  const headers = Object.fromEntries(
+  const headers = !headersText ? {} : Object.fromEntries(
     headersText.split('\n').flatMap((header) => {
-      const [, key, value] = header.match(/(\w[^\s:]+)\s*:\s*(.+)/)
+      const [, key, value] = header.match(/(\w[^\s:]+)\s*:\s*(.+)/) ?? []
       return (!key || !value) ? [] : [[key, value]]
     })
   )
