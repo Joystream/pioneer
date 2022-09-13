@@ -241,6 +241,13 @@ export const Animations = {
 }
 
 export const Overflow = {
+  DotsNLines: (n: number) => css`
+    display: -webkit-box;
+    -webkit-line-clamp: ${n};
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    overflow: hidden;
+  `,
   DotsTwoLine: `
     display: -webkit-box;
     -webkit-line-clamp: 2;

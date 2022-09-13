@@ -91,10 +91,8 @@ const ThreadItemTime = styled(TextInlineExtraSmall)`
 `
 
 const ThreadItemText = styled(TextMedium)`
-  display: -webkit-box;
   max-height: 100%;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  overflow: ${Overflow.DotsNLines(4)};
 `
 
 export const ThreadItemWrapper = styled.a<{ $halfSize?: boolean }>`

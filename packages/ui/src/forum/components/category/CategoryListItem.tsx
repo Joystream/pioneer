@@ -3,18 +3,16 @@ import { generatePath } from 'react-router'
 import styled from 'styled-components'
 
 import { BlockTimeWrapper } from '@/common/components/BlockTime'
-import { ArrowRightIcon } from '@/common/components/icons'
-import { AnswerIcon } from '@/common/components/icons/AnswerIcon'
+import { ArrowRightIcon, AnswerIcon } from '@/common/components/icons'
 import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineExtraSmall, TextInlineMedium, TextMedium } from '@/common/components/typography'
-import { Colors, Fonts, Overflow, Transitions } from '@/common/constants'
+import { Colors, Fonts, Overflow, Transitions, BorderRad } from '@/common/constants'
+import { ThreadItemWrapper } from '@/forum/components/threads/ThreadItem'
 import { ForumRoutes } from '@/forum/constant'
 import { ForumCategory } from '@/forum/types'
 import { MemberStackStyles } from '@/memberships/components/MemberStack'
 
-import { PostInfoStyles } from './LatestPost'
-import { ThreadInfoStyles } from './PopularThread'
 import { ThreadCount } from './ThreadCount'
 
 export interface CategoryListItemProps {
@@ -70,16 +68,21 @@ const CategoryListItemTitle = styled.h5`
   }
 `
 
-export const CategoryListItemStyles = styled(TableListItem)`
-  position: relative;
+const CategoryListItemStyles = styled(ThreadItemWrapper)`
+  flex-direction: row;
   align-items: center;
   height: 128px;
   padding: 14px 24px;
-  display: flex;
   justify-content: space-between;
-  width: 100%;
-
+  border: 1px solid ${Colors.Black[100]};
+  border-radius: ${BorderRad.s};
   ${TableListItemAsLinkHover};
+
+  & + & {
+    &:before {
+      content: unset;
+    }
+  }
 
   & > * {
     margin-top: 8px;
@@ -95,10 +98,8 @@ export const CategoryListItemStyles = styled(TableListItem)`
 
   ${TextMedium},
   ${TextInlineExtraSmall},
-  ${TextInlineMedium},
-  ${PostInfoStyles},
-  ${BlockTimeWrapper},
-  ${ThreadInfoStyles},
+  
+  
   ${MemberStackStyles} {
     z-index: 2;
   }
