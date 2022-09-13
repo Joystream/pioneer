@@ -1,17 +1,14 @@
 import { Meta, Story } from '@storybook/react'
-import { lorem } from 'faker'
-import React, { useMemo } from 'react'
+import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Network } from '@/common/api/queries'
 import { WhiteBlock } from '@/common/components/storybookParts/previewStyles'
-import { asArray, last, repeat } from '@/common/utils'
-import { asStorybookPost } from '@/forum/helpers/storybook'
 import { ForumThreadFieldsFragment } from '@/forum/queries'
 import { asForumThread } from '@/forum/types'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
-import { RawForumCategoryMock, RawForumThreadMock } from '@/mocks/data/seedForum'
+import { RawForumThreadMock } from '@/mocks/data/seedForum'
 
 import { ThreadItem } from './ThreadItem'
 
