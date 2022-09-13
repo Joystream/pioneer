@@ -92,7 +92,7 @@ const ThreadItemTime = styled(TextInlineExtraSmall)`
 
 const ThreadItemText = styled(TextMedium)`
   max-height: 100%;
-  overflow: ${Overflow.DotsNLines(4)};
+  ${Overflow.DotsNLines(4)}
 `
 
 export const ThreadItemWrapper = styled.a<{ $halfSize?: boolean }>`
