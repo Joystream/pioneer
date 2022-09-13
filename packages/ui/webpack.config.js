@@ -20,7 +20,7 @@ module.exports = (env, argv) => {
 
   const imageBlacklist = [
     ...env.blacklist ?? [],
-    ...process.env.REACT_APP_BLACKLISTED_IMAGES?.split(',') ?? []
+    ...process.env.REACT_APP_BLACKLISTED_IMAGES?.split(/\s+/) ?? []
   ]
 
   const plugins = [
@@ -34,7 +34,7 @@ module.exports = (env, argv) => {
       GIT_VERSION: JSON.stringify(version),
       IS_DEVELOPMENT: isDevelopment,
       ...Object.fromEntries(envVariables),
-      'process.env.REACT_APP_BLACKLISTED_IMAGES': `'${imageBlacklist.join(',')}'`,
+      'process.env.REACT_APP_BLACKLISTED_IMAGES': `'${imageBlacklist.join(' ')}'`,
     }),
     new CopyPlugin({
       patterns: [
