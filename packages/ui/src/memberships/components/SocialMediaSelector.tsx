@@ -55,9 +55,10 @@ export const SocialMediaSelector = ({ initialSocials }: Props) => {
           const isActive = chosenSocial.some((chosen) => chosen === social)
           return (
             <SocialMediaTile
+              id={`${social.toLowerCase()}-tile`}
               active={isActive}
               social={social}
-              key={'social' + index}
+              key={'social-tile' + index}
               onClick={!isActive ? selectSocial(social) : removeSocial(social)}
             />
           )
@@ -65,7 +66,7 @@ export const SocialMediaSelector = ({ initialSocials }: Props) => {
       </div>
       {chosenSocial.map((social, index) => (
         <InputComponent
-          key={'social' + index}
+          key={'social-input' + index}
           id={social + 1}
           inputSize="m"
           label={capitalizeFirstLetter(social.toLowerCase())}
