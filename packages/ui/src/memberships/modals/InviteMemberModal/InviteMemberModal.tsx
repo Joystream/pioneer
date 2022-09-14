@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
-import { WaitModal } from '@/common/components/WaitModal'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useObservable } from '@/common/hooks/useObservable'
 import { Address } from '@/common/types'
@@ -29,10 +28,6 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
       send(isBudgetOK ? 'PASS' : 'FAIL')
     }
   }, [workingGroupBudget, membershipPrice])
-
-  if (state.matches('requirementsVerification')) {
-    return <WaitModal onClose={onClose} title="Loading..." description="" />
-  }
 
   if (state.matches('requirementsFailed')) {
     return <InviteMemberRequirementsModal onClose={onClose} />

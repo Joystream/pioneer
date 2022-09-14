@@ -7,7 +7,6 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
-import { WaitModal } from '@/common/components/WaitModal'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { createType } from '@/common/model/createType'
@@ -67,10 +66,6 @@ export const DeleteThreadModal = () => {
       send(feeInfo?.canAfford ? 'PASS' : 'FAIL')
     }
   }, [state.value, activeMember, transaction, feeInfo?.canAfford])
-
-  if (state.matches('requirementsVerification')) {
-    return <WaitModal onClose={hideModal} requirementsCheck />
-  }
 
   if (state.matches('transaction') && transaction && activeMember) {
     const service = state.children.transaction

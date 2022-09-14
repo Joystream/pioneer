@@ -32,10 +32,10 @@ export const PastCouncilListItem = ({ council }: Props) => {
     >
       <Info>#{council.id}</Info>
       <BlockTime block={council.endedAt} layout="reverse-start" lessInfo />
-      {isLoading ? <Loader /> : <TokenValue value={totalSpent} />}
-      {isLoading ? <Loader /> : <TokenValue value={spentOnProposals} />}
-      {isLoading ? <Loader /> : <CountInfo count={proposalsApproved} />}
-      {isLoading ? <Loader /> : <CountInfo count={proposalsRejected} />}
+      {isLoading ? <Loader withoutMargin /> : <TokenValue value={totalSpent} />}
+      {isLoading ? <Loader withoutMargin /> : <TokenValue value={spentOnProposals} />}
+      {isLoading ? <Loader withoutMargin /> : <CountInfo count={proposalsApproved} />}
+      {isLoading ? <Loader withoutMargin /> : <CountInfo count={proposalsRejected} />}
     </PastCouncilTableListItem>
   )
 }

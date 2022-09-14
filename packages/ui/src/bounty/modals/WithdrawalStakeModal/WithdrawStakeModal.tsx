@@ -1,6 +1,5 @@
 import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
@@ -9,7 +8,6 @@ import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
 import { withdrawalStakeMachine, WithdrawalStakeStates } from '@/bounty/modals/WithdrawalStakeModal/machine'
 import { WithdrawSignModal } from '@/bounty/modals/WithdrawSignModal'
-import { WaitModal } from '@/common/components/WaitModal'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -18,7 +16,6 @@ import { WithdrawStakeModalCall } from '.'
 
 export const WithdrawStakeModal = () => {
   const { api, connectionState } = useApi()
-  const { t } = useTranslation('bounty')
   const { hideModal, modalData } = useModal<WithdrawStakeModalCall>()
 
   const [state, send] = useMachine(withdrawalStakeMachine)
@@ -49,23 +46,6 @@ export const WithdrawStakeModal = () => {
       }
     }
   }, [state.value, transaction, feeInfo?.canAfford, entry])
-
-  if (state.matches(WithdrawalStakeStates.requirementsVerification)) {
-    return (
-      <WaitModal
-        title={t('common:modals.wait.title')}
-        description={t('common:modals.wait.description')}
-        onClose={hideModal}
-        requirements={[
-          { name: 'API', state: !!api },
-          { name: 'Loading member', state: !!activeMember },
-          { name: 'Creating transaction', state: !!transaction },
-          { name: 'Calculating fee', state: !!feeInfo },
-          { name: 'Fetching entry', state: !!entry },
-        ]}
-      />
-    )
-  }
 
   if (!api || !activeMember || !transaction || !feeInfo || !entry) {
     return null

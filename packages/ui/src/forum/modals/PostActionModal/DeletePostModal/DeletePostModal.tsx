@@ -4,7 +4,6 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { WaitModal } from '@/common/components/WaitModal'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
@@ -42,10 +41,6 @@ export const DeletePostModal = () => {
       send(feeInfo?.canAfford ? 'PASS' : 'FAIL')
     }
   }, [state.value, transaction, feeInfo?.canAfford])
-
-  if (state.matches('requirementsVerification')) {
-    return <WaitModal onClose={hideModal} requirementsCheck />
-  }
 
   if (state.matches('transaction') && transaction) {
     const service = state.children.transaction

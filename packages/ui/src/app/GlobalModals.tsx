@@ -1,17 +1,18 @@
 import { get } from 'lodash'
 import React, { memo, ReactElement, useMemo } from 'react'
 import ReactDOM from 'react-dom'
+import styled from 'styled-components'
 
 import { ClaimVestingModalCall } from '@/accounts/modals/ClaimVestingModal'
 import { ClaimVestingModal } from '@/accounts/modals/ClaimVestingModal/ClaimVestingModal'
 import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'
-import { AddBountyModalCall, AddBountyModal } from '@/bounty/modals/AddBountyModal'
+import { AddBountyModal, AddBountyModalCall } from '@/bounty/modals/AddBountyModal'
 import { AnnounceWorkEntryModal, BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEntryModal'
 import { BountyCancelModal, BountyCancelModalCall } from '@/bounty/modals/CancelBountyModal'
 import { ClaimRewardModal, ClaimRewardModalCall } from '@/bounty/modals/ClaimRewardModal'
-import { ContributeFundsModal, BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal'
+import { BountyContributeFundsModalCall, ContributeFundsModal } from '@/bounty/modals/ContributeFundsModal'
 import { SubmitJudgementModal, SubmitJudgementModalCall } from '@/bounty/modals/SubmitJudgementModal'
 import { SubmitWorkModal, SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal'
 import { WithdrawStakeModal } from '@/bounty/modals/WithdrawalStakeModal'
@@ -22,9 +23,10 @@ import {
 } from '@/bounty/modals/WithdrawContributionModal'
 import { BountyWithdrawWorkEntryModalCall, WithdrawWorkEntryModal } from '@/bounty/modals/WithdrawWorkEntryModal'
 import { FailureModal } from '@/common/components/FailureModal'
+import { Loader } from '@/common/components/icons'
+import { ModalGlass } from '@/common/components/Modal'
 import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/Search/SearchResultsModal'
 import { SuccessModal } from '@/common/components/SuccessModal'
-import { WaitModal } from '@/common/components/WaitModal'
 import { useModal } from '@/common/hooks/useModal'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
@@ -168,7 +170,7 @@ export const GlobalModals = () => {
       <TransactionFeesProvider>
         {potentialFallback}
         {Modal && <Modal />}
-        {status === 'loadingFees' && <WaitModal onClose={hideModal} requirementsCheck />}
+        {status === 'loadingFees' && <LoaderModal onClose={hideModal} />}
       </TransactionFeesProvider>,
       document.body
     )
@@ -176,6 +178,18 @@ export const GlobalModals = () => {
 
   return null
 }
+
+export const LoaderModal = ({ onClose }: { onClose: () => void }) => (
+  <SpinnerGlass modalSize="l" isDark onClick={onClose} onClose={onClose}>
+    <Loader />
+  </SpinnerGlass>
+)
+
+const SpinnerGlass = styled(ModalGlass)`
+  display: grid;
+  place-items: center;
+  background-color: transparent;
+`
 
 const useGlobalModalHandler = (machine: UnknownMachine<any, any, any> | undefined, hideModal: () => void) => {
   if (!machine) return null
@@ -195,6 +209,10 @@ const useGlobalModalHandler = (machine: UnknownMachine<any, any, any> | undefine
 
   if (state.matches('success') && get(state.meta, ['(machine).success', 'message'])) {
     return <SuccessModal onClose={hideModal} text={get(state.meta, ['(machine).success', 'message'])} />
+  }
+
+  if (state.matches('requirementsVerification')) {
+    return <LoaderModal onClose={hideModal} />
   }
 
   return null

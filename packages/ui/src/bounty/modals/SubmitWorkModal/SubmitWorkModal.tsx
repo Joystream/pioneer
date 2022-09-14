@@ -8,6 +8,7 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
+import { LoaderModal } from '@/app/GlobalModals'
 import { submitWorkMetadataFactory } from '@/bounty/modals/AddBountyModal/helpers'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
 import {
@@ -29,7 +30,6 @@ import {
 } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig } from '@/common/components/typography'
-import { WaitModal } from '@/common/components/WaitModal'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
@@ -83,18 +83,7 @@ export const SubmitWorkModal = () => {
   }, [entry])
 
   if (!activeMember || !transaction || !api) {
-    return (
-      <WaitModal
-        title={t('common:modals.wait.title')}
-        description={t('common:modals.wait.description')}
-        onClose={hideModal}
-        requirements={[
-          { name: 'Initializing server connection', state: !!api },
-          { name: 'Loading member', state: !!activeMember },
-          { name: 'Creating transaction', state: !!transaction },
-        ]}
-      />
-    )
+    return <LoaderModal onClose={hideModal} />
   }
 
   if (state.matches(SubmitWorkStates.transaction)) {

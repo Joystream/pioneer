@@ -28,7 +28,6 @@ import { InputComponent, InputContainer, Label, ToggleCheckbox } from '@/common/
 import { Modal, ModalDivider, ModalHeader, ModalTransactionFooter, ScrolledModalBody } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextHuge, TextMedium } from '@/common/components/typography'
-import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO } from '@/common/constants'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
@@ -209,21 +208,6 @@ export const SubmitJudgementModal = () => {
       })
     })
   }, [state.context.winners?.length])
-
-  if (state.matches(SubmitJudgementStates.requirementsVerification)) {
-    return (
-      <WaitModal
-        title={t('common:modals.wait.title')}
-        description={t('common:modals.wait.description')}
-        onClose={hideModal}
-        requirements={[
-          { name: 'Initializing server connection', state: !!api },
-          { name: 'Loading member', state: !!activeMember },
-          { name: 'Creating transaction', state: !!transaction },
-        ]}
-      />
-    )
-  }
 
   if (!activeMember || !transaction || !api) {
     return null

@@ -1,7 +1,6 @@
 import { BountyMetadata, ForumThreadMetadata } from '@joystream/metadata-protobuf'
 import React, { useEffect } from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
+import { FormProvider, useForm } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
@@ -27,7 +26,6 @@ import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionM
 import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
 import { TokenValue } from '@/common/components/typography'
-import { WaitModal } from '@/common/components/WaitModal'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
@@ -41,7 +39,6 @@ import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 const transactionSteps = [{ title: 'Create Thread' }, { title: 'Create Bounty' }]
 
 export const AddBountyModal = () => {
-  const { t } = useTranslation()
   const { threadCategory, isLoading: isThreadCategoryLoading } = useBountyForumCategory()
   const { hideModal, showModal } = useModal()
   const { active: activeMember } = useMyMemberships()
@@ -95,20 +92,6 @@ export const AddBountyModal = () => {
       }
     }
   }, [activeMember, state, threadCategory?.id])
-
-  if (state.matches(AddBountyStates.requirementsVerification)) {
-    return (
-      <WaitModal
-        title={t('common:modals.wait.title')}
-        description={t('common:modals.wait.description')}
-        onClose={hideModal}
-        requirements={[
-          { name: 'Initializing server connection', state: !!api },
-          { name: 'Loading member', state: !!activeMember },
-        ]}
-      />
-    )
-  }
 
   if (!activeMember || !api) {
     return null

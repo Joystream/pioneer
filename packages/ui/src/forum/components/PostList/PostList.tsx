@@ -2,7 +2,7 @@ import React, { RefObject, useCallback, useEffect, useMemo } from 'react'
 import { generatePath, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { Loading } from '@/common/components/Loading'
+import { Loader } from '@/common/components/icons'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { Colors } from '@/common/constants'
@@ -51,7 +51,7 @@ export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost, isD
   const Wrapper: typeof RowGapBlock = useMemo(() => (isDiscussion ? DiscussionWrapper : RowGapBlock), [isDiscussion])
 
   if (!isReady) {
-    return <Loading text={isLoading ? 'Loading thread...' : 'Loading posts...'} />
+    return <Loader />
   }
 
   return (

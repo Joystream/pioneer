@@ -3,9 +3,14 @@ import styled from 'styled-components'
 
 import { BorderRad, Colors } from '../../constants'
 
-export function Loader({ className }: { className?: string }) {
+interface LoaderProps {
+  className?: string
+  withoutMargin?: boolean
+}
+
+export function Loader({ className, withoutMargin }: LoaderProps) {
   return (
-    <LoaderComponent viewBox="0 0 24 24" fill="none" className={className}>
+    <LoaderComponent viewBox="0 0 24 24" fill="none" withoutMargin={withoutMargin} className={className}>
       <path
         d="M22.9092 11.4546H18.5455C17.9431 11.4546 17.4546 11.9431 17.4546 12.5455C17.4546 13.1479 17.9431 13.6364 18.5455 13.6364H22.9092C23.5116 13.6364 24.0001 13.1479 24.0001 12.5455C24.0001 11.9431 23.5117 11.4546 22.9092 11.4546Z"
         fill={Colors.Black[500]}
@@ -43,14 +48,14 @@ export function Loader({ className }: { className?: string }) {
   )
 }
 
-export const LoaderComponent = styled.svg`
+export const LoaderComponent = styled.svg<LoaderProps>`
   width: 100%;
   height: 24px;
   border-radius: ${BorderRad.round};
   animation: spinLoader 1s infinite linear;
   justify-self: start;
   place-self: center;
-  margin: 100px 0;
+  margin: ${({ withoutMargin }) => (withoutMargin ? '0' : '100px 0')};
 
   @keyframes spinLoader {
     0% {
