@@ -9,6 +9,7 @@ import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow, Transitions, BorderRad } from '@/common/constants'
 import { relativeTime } from '@/common/model/relativeTime'
+import { CardItem } from '@/forum/components/CardItem'
 import { ForumRoutes } from '@/forum/constant'
 import { useThreadOriginalPost } from '@/forum/hooks/useThreadOriginalPost'
 import { ForumThread } from '@/forum/types'
@@ -95,11 +96,8 @@ const ThreadItemText = styled(TextMedium)`
   ${Overflow.DotsNLines(4)}
 `
 
-export const ThreadItemWrapper = styled.a<{ $halfSize?: boolean }>`
-  display: flex;
+export const ThreadItemWrapper = styled(CardItem)<{ $halfSize?: boolean }>`
   position: relative;
-  flex-direction: column;
-  gap: 16px;
   width: 100%;
   height: fit-content;
   padding: 16px 0;
@@ -121,14 +119,6 @@ export const ThreadItemWrapper = styled.a<{ $halfSize?: boolean }>`
   ${ThreadItemText} {
     -webkit-line-clamp: ${({ $halfSize }) => ($halfSize ? '3' : '14')};
   }
-
-  &:hover,
-  &:focus,
-  &:focus-within {
-    ${ThreadItemTitle} {
-      color: ${Colors.Blue[500]};
-    }
-  }
 `
 
 const StyledThreadItem = styled.a`
@@ -146,9 +136,5 @@ const StyledThreadItem = styled.a`
     ${ThreadItemTitle} {
       color: ${Colors.Blue[500]};
     }
-  }
-
-  & + & {
-    margin-top: -1px;
   }
 `

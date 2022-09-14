@@ -2,13 +2,12 @@ import React from 'react'
 import { generatePath } from 'react-router'
 import styled from 'styled-components'
 
-import { BlockTimeWrapper } from '@/common/components/BlockTime'
 import { ArrowRightIcon, AnswerIcon } from '@/common/components/icons'
-import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
+import { TableListItemAsLinkHover } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
-import { TextInlineExtraSmall, TextInlineMedium, TextMedium } from '@/common/components/typography'
+import { TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
 import { Colors, Fonts, Overflow, Transitions, BorderRad } from '@/common/constants'
-import { ThreadItemWrapper } from '@/forum/components/threads/ThreadItem'
+import { CardItem } from '@/forum/components/CardItem'
 import { ForumRoutes } from '@/forum/constant'
 import { ForumCategory } from '@/forum/types'
 import { MemberStackStyles } from '@/memberships/components/MemberStack'
@@ -68,7 +67,8 @@ const CategoryListItemTitle = styled.h5`
   }
 `
 
-const CategoryListItemStyles = styled(ThreadItemWrapper)`
+const CategoryListItemStyles = styled(CardItem)`
+  position: relative;
   flex-direction: row;
   align-items: center;
   height: 128px;
@@ -78,22 +78,16 @@ const CategoryListItemStyles = styled(ThreadItemWrapper)`
   border-radius: ${BorderRad.s};
   ${TableListItemAsLinkHover};
 
-  & + & {
-    &:before {
-      content: unset;
-    }
-  }
-
-  & > * {
-    margin-top: 8px;
-  }
-
   &:hover,
   &:focus,
   &:focus-within {
     ${CategoryListItemTitle} {
       color: ${Colors.Blue[500]};
     }
+  }
+
+  & > * {
+    margin-top: 8px;
   }
 
   ${TextMedium},
@@ -131,11 +125,6 @@ const InfoWrapper = styled.div`
   gap: 20px;
   svg {
     color: ${Colors.Black[300]};
-    &:hover {
-      ${CategoryListItemTitle} {
-        color: ${Colors.Blue[500]};
-      }
-    }
   }
 `
 

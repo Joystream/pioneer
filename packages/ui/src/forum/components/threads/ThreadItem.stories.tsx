@@ -23,6 +23,7 @@ export default {
 interface Props {
   containerSize: 's' | 'm' | 'l' | 'auto'
   thread: RawForumThreadMock & ForumThreadFieldsFragment
+  postText: string
   empty: boolean
 }
 const Template: Story<Props> = ({ containerSize, thread, empty }) => {
@@ -59,6 +60,8 @@ Default.args = {
     __typename: 'ForumThread',
   },
   empty: false,
+  postText:
+    'asperiores accusamus et et similique tempora odit a non maxime harum blanditiis magnam blanditiis libero ab quo inventore ipsum quo deserunt et esse et ea recusandae rerum beatae cumque non error quae et distinctio eligendi reprehenderit provident quis accusamus hic sapiente impedit natus et et sunt eligendi repudiandae sed assumenda quibusdam praesentium aut dignissimos sint qui quidem eum assumenda a repellendus et odio reprehenderit',
 }
 
 const Container = styled(WhiteBlock)<{ size: Props['containerSize'] }>`
