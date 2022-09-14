@@ -8,8 +8,7 @@ import { of } from 'rxjs'
 import { ApiContext } from '@/api/providers/context'
 import { GlobalModals } from '@/app/GlobalModals'
 import { MembershipExternalResourceType } from '@/common/api/queries'
-import { ModalContext } from '@/common/providers/modal/context'
-import { UseModal } from '@/common/providers/modal/types'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { last } from '@/common/utils'
 import { UpdateMembershipModal } from '@/memberships/modals/UpdateMembershipModal'
 import { MemberWithDetails } from '@/memberships/types'
@@ -29,6 +28,7 @@ import {
   stubDefaultBalances,
   stubTransaction,
 } from '../../_mocks/transactions'
+import { mockUseModalCall } from '../../setup'
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -43,19 +43,14 @@ describe('UI: UpdatedMembershipModal', () => {
     stubAccounts([alice, aliceStash, bob, bobStash])
   })
 
-  // todo: replace with mockUseModalCall after merge of #3567
-  console.log("do todo")
-  const useModal: UseModal<any> = {
-    showModal: () => undefined,
+  mockUseModalCall({
     modalData: {
       member: {
         ...getMember('alice'),
         externalResources: [{ source: MembershipExternalResourceType.Twitter, value: 'empty' }],
       } as MemberWithDetails,
     },
-    hideModal: () => undefined,
-    modal: null,
-  }
+  })
 
   afterAll(() => {
     jest.restoreAllMocks()
@@ -165,7 +160,7 @@ describe('UI: UpdatedMembershipModal', () => {
 
   function renderModal() {
     render(
-      <ModalContext.Provider value={useModal}>
+      <ModalContextProvider>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
             <ApiContext.Provider value={api}>
@@ -174,7 +169,7 @@ describe('UI: UpdatedMembershipModal', () => {
             </ApiContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
-      </ModalContext.Provider>
+      </ModalContextProvider>
     )
   }
 })
