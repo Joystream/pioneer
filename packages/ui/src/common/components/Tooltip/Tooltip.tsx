@@ -23,11 +23,13 @@ export interface TooltipPopupProps {
   tooltipLinkText?: React.ReactNode
   tooltipLinkURL?: string
   popupContent?: React.ReactNode
+  offset?: [number, number]
   popUpHandlers: {
     onMouseEnter: () => void
     onMouseLeave: () => void
   }
   forBig?: boolean
+  hideOnComponentLeave?: boolean
 }
 
 export interface DarkTooltipInnerItemProps {
@@ -46,6 +48,8 @@ export const Tooltip = ({
   popupContent,
   className,
   forBig,
+  offset,
+  hideOnComponentLeave,
 }: TooltipProps) => {
   const [isTooltipActive, setTooltipActive] = useState(tooltipOpen)
   const [referenceElementRef, setReferenceElementRef] = useState<HTMLElement | null>(null)
@@ -56,7 +60,7 @@ export const Tooltip = ({
       {
         name: 'offset',
         options: {
-          offset: [0, 0],
+          offset: offset ?? [0, 0],
         },
       },
     ],
@@ -86,7 +90,7 @@ export const Tooltip = ({
     onPointerLeave: mouseLeft,
   }
   const popUpHandlers = {
-    onPointerEnter: mouseIsOver,
+    onPointerEnter: hideOnComponentLeave ? mouseLeft : mouseIsOver,
     onPointerLeave: mouseLeft,
   }
 
@@ -329,7 +333,7 @@ export const TooltipComponent = styled.i<{ maxWidth?: boolean }>`
   }
 `
 
-export const TooltipContainer = styled.div<{ absolute?: boolean; maxWidth?: boolean }>`
+export const TooltipContainer = styled.span<{ absolute?: boolean; maxWidth?: boolean }>`
   display: inline-flex;
   position: ${({ absolute }) => (absolute ? 'absolute' : 'relative')};
   right: ${({ absolute }) => (absolute ? '-24px' : 'auto')};
