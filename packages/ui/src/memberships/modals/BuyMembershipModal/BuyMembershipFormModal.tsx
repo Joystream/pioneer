@@ -151,7 +151,8 @@ export const BuyMembershipForm = ({
   }, [data?.membershipsConnection.totalCount])
 
   const isFormValid = !isUploading && form.formState.isValid
-  const isDisabled = type === 'general' ? !isFormValid : !captchaToken || !isFormValid
+  const isDisabled =
+    type === 'onBoarding' && process.env.REACT_APP_CAPTCHA_SITE_KEY ? !captchaToken || !isFormValid : !isFormValid
 
   return (
     <>
