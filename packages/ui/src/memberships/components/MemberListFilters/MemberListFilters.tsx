@@ -87,6 +87,7 @@ const searchFilterOptions: MemberSearchFilter[] = [
   'Twitter',
   'Membership',
   'Youtube',
+  'Hyperlink',
 ]
 
 export interface MemberListFiltersProps {

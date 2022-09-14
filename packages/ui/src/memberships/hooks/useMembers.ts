@@ -70,12 +70,10 @@ const searchFilterToGqlInput = (
   searchFilter: NonNullable<MemberListFilter['searchFilter']>,
   search: MemberListFilter['search']
 ): MembershipWhereInput => {
-  if (searchFilter === 'Membership') {
-    return {
-      ...(search
-        ? { OR: [{ controllerAccount_eq: search }, { rootAccount_eq: search }, { handle_contains: search }] }
-        : {}),
-    }
+  if (!search) {
+    return {}
+  } else if (searchFilter === 'Membership') {
+    return { OR: [{ controllerAccount_eq: search }, { rootAccount_eq: search }, { handle_contains: search }] }
   } else {
     return {
       externalResources_some: {
