@@ -49,6 +49,7 @@ export const LoaderComponent = styled.svg`
   border-radius: ${BorderRad.round};
   animation: spinLoader 1s infinite linear;
   justify-self: start;
+  place-self: center;
 
   @keyframes spinLoader {
     0% {
