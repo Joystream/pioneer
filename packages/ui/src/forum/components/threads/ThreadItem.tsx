@@ -7,7 +7,7 @@ import { Loading } from '@/common/components/Loading'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
-import { Colors, Overflow, Transitions, BorderRad } from '@/common/constants'
+import { Overflow, Transitions } from '@/common/constants'
 import { relativeTime } from '@/common/model/relativeTime'
 import { CardItem } from '@/forum/components/CardItem'
 import { ForumRoutes } from '@/forum/constant'
@@ -34,13 +34,13 @@ export const ThreadItem = ({ thread, empty }: ThreadItemContentProps) => {
 
   if (isLoading) {
     return (
-      <StyledThreadItem>
+      <CardItem>
         <Loading />
-      </StyledThreadItem>
+      </CardItem>
     )
   }
   return (
-    <StyledThreadItem as={GhostRouterLink} to={threadAddress}>
+    <CardItem as={GhostRouterLink} to={threadAddress}>
       <ThreadItemHeader align="center">
         {originalPost && <MemberInfo member={originalPost.author} size="s" memberSize="s" hideGroup />}
         <ThreadItemTime lighter>{relativeTime(thread.createdInBlock.timestamp)}</ThreadItemTime>
@@ -55,7 +55,7 @@ export const ThreadItem = ({ thread, empty }: ThreadItemContentProps) => {
         <RepliesIcon />
         <CountBadge count={repliesCount} />
       </Replies>
-    </StyledThreadItem>
+    </CardItem>
   )
 }
 
@@ -67,11 +67,11 @@ const Replies = styled.div`
 `
 
 export const EmptyThreadItem = ({ text }: { text: string }) => (
-  <ThreadItemWrapper>
+  <CardItem>
     <ThreadItemHeader align="center">
       <ThreadItemTitle empty>{text}</ThreadItemTitle>
     </ThreadItemHeader>
-  </ThreadItemWrapper>
+  </CardItem>
 )
 
 const ThreadItemHeader = styled(ColumnGapBlock)`
@@ -94,47 +94,4 @@ const ThreadItemTime = styled(TextInlineExtraSmall)`
 const ThreadItemText = styled(TextMedium)`
   max-height: 100%;
   ${Overflow.DotsNLines(4)}
-`
-
-export const ThreadItemWrapper = styled(CardItem)<{ $halfSize?: boolean }>`
-  position: relative;
-  width: 100%;
-  height: fit-content;
-  padding: 16px 0;
-  overflow: hidden;
-
-  & + & {
-    &:before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 1px;
-      background-color: ${Colors.Black[100]};
-      transition: ${Transitions.all};
-    }
-  }
-
-  ${ThreadItemText} {
-    -webkit-line-clamp: ${({ $halfSize }) => ($halfSize ? '3' : '14')};
-  }
-`
-
-const StyledThreadItem = styled.a`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  border: 1px solid ${Colors.Black[100]};
-  border-radius: ${BorderRad.s};
-  background-color: ${Colors.White};
-  transition: ${Transitions.all};
-  padding: 24px;
-  &:hover,
-  &:focus,
-  &:focus-within {
-    ${ThreadItemTitle} {
-      color: ${Colors.Blue[500]};
-    }
-  }
 `

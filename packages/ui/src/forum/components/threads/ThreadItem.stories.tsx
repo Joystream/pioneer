@@ -1,14 +1,17 @@
 import { Meta, Story } from '@storybook/react'
-import React from 'react'
+import { lorem } from 'faker'
+import React, { useMemo } from 'react'
 import { MemoryRouter } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Network } from '@/common/api/queries'
 import { WhiteBlock } from '@/common/components/storybookParts/previewStyles'
+import { asArray, last, repeat } from '@/common/utils'
+import { asStorybookPost } from '@/forum/helpers/storybook'
 import { ForumThreadFieldsFragment } from '@/forum/queries'
 import { asForumThread } from '@/forum/types'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
-import { RawForumThreadMock } from '@/mocks/data/seedForum'
+import { RawForumCategoryMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 
 import { ThreadItem } from './ThreadItem'
 
@@ -17,6 +20,7 @@ export default {
   component: ThreadItem,
   argTypes: {
     containerSize: { control: { type: 'radio' }, options: ['s', 'm', 'l', 'auto'] },
+    breadcrumbs: { control: { type: 'range', min: 1, max: 10 } },
   },
 } as Meta
 
@@ -24,13 +28,36 @@ interface Props {
   containerSize: 's' | 'm' | 'l' | 'auto'
   thread: RawForumThreadMock & ForumThreadFieldsFragment
   postText: string
+  breadcrumbs: number
   empty: boolean
 }
-const Template: Story<Props> = ({ containerSize, thread, empty }) => {
-  const forumthread = asForumThread(thread)
+
+const categoryId = 'ThreadItem-category-story'
+const getCategory = (index: number): RawForumCategoryMock => ({
+  id: `${categoryId}-${index}`,
+  title: lorem.words(4),
+  ...(index > 0 ? { parentId: `${categoryId}-${index - 1}` } : {}),
+  description: '',
+  moderatorIds: [],
+  status: { __typename: 'CategoryStatusActive' },
+})
+
+const Template: Story<Props> = ({ containerSize, breadcrumbs, thread, empty, postText }) => {
+  const categories = useMemo(() => repeat(getCategory, breadcrumbs), [breadcrumbs])
+
+  const rawThread = { ...thread, categoryId: last(categories).id }
+
+  const forum = {
+    categories,
+    threads: [rawThread],
+    posts: asArray(asStorybookPost(postText, rawThread.id)),
+  }
+  const forumthread = {
+    ...asForumThread(rawThread),
+  }
 
   return (
-    <MockApolloProvider members>
+    <MockApolloProvider members forum={forum}>
       <MemoryRouter>
         <Container size={containerSize}>
           <ThreadItem thread={forumthread} empty={empty} />
@@ -43,6 +70,7 @@ const Template: Story<Props> = ({ containerSize, thread, empty }) => {
 export const Default = Template.bind({})
 Default.args = {
   containerSize: 'm',
+  breadcrumbs: 6,
   thread: {
     id: 'ThreadItem-story',
     categoryId: '',
