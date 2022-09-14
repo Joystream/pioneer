@@ -54,7 +54,7 @@ export const machine = createMachine<WithdrawCandidacyContext, WithdrawCandidacy
       },
     },
     success: { type: 'final' },
-    error: { type: 'final' },
+    error: { type: 'final', meta: { message: 'There was a problem while withdrawing your candidacy.' } },
     canceled: { type: 'final' },
   },
 })

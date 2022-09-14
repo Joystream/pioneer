@@ -130,7 +130,7 @@ export const MemberDetails = React.memo(({ member }: Props) => {
       </SidePaneRow>
       {memberDetails?.externalResources &&
         memberDetails.externalResources.map((externalResource) => (
-          <SidePaneRow>
+          <SidePaneRow key={`${externalResource.source}-externalResources`}>
             <SidePaneLabel text={capitalizeFirstLetter(externalResource.source.toLowerCase())} />
             <SidePaneText>{externalResource.value}</SidePaneText>
           </SidePaneRow>

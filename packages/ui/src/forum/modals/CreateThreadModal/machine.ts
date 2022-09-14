@@ -95,7 +95,7 @@ export const createThreadMachine = createMachine<CreateThreadContext, CreateThre
       },
     },
     success: { type: 'final' },
-    error: { type: 'final' },
+    error: { type: 'final', meta: { message: 'There was a problem with creating your forum thread.' } },
     canceled: { type: 'final' },
   },
 })

@@ -1,13 +1,11 @@
-import { useMachine } from '@xstate/react'
 import React, { useEffect } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { FailureModal } from '@/common/components/FailureModal'
-import { SuccessModal } from '@/common/components/SuccessModal'
 import { WaitModal } from '@/common/components/WaitModal'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -22,7 +20,10 @@ export const DeletePostModal = () => {
     hideModal,
   } = useModal<DeletePostModalCall>()
 
-  const [state, send] = useMachine(defaultTransactionModalMachine, { context: { validateBeforeTransaction: true } })
+  const [state, send] = useMachine(
+    defaultTransactionModalMachine('There was a problem deleting your post.', 'Your post has been deleted.'),
+    { context: { validateBeforeTransaction: true } }
+  )
 
   const { active } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
@@ -57,18 +58,6 @@ export const DeletePostModal = () => {
         controllerAccount={controllerAccount}
         action="delete"
       />
-    )
-  }
-
-  if (state.matches('success')) {
-    return <SuccessModal onClose={hideModal} text="Your post has been deleted." />
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem deleting your post.
-      </FailureModal>
     )
   }
 

@@ -3,8 +3,7 @@ import React from 'react'
 
 import { ApiContext } from '@/api/providers/context'
 import { BountyCancelModal } from '@/bounty/modals/CancelBountyModal'
-import { ModalContext } from '@/common/providers/modal/context'
-import { UseModal } from '@/common/providers/modal/types'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import bounties from '@/mocks/data/raw/bounties.json'
 import { getMember } from '@/mocks/helpers'
 
@@ -18,26 +17,21 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockUseModalCall } from '../../setup'
 
 const bounty = bounties[0]
 const creator = getMember('alice')
 
 describe('UI: BountyCancelModal', () => {
   const api = stubApi()
-
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData: {
-      bounty: { ...bounty },
-      creator: { ...creator },
-    },
+  let transaction: any
+  const modalData = {
+    bounty: { ...bounty },
+    creator: { ...creator },
   }
 
-  let transaction: any
-
   beforeAll(() => {
+    mockUseModalCall({ modalData })
     transaction = stubTransaction(api, 'api.tx.bounty.cancelBounty', 100)
     stubAccounts([alice, bob])
   })
@@ -52,13 +46,13 @@ describe('UI: BountyCancelModal', () => {
   it('Displays correct bounty', () => {
     renderModal()
 
-    expect(screen.queryByText(useModal.modalData.bounty.title)).toBeDefined()
+    expect(screen.queryByText(modalData.bounty.title)).toBeDefined()
   })
 
   it('Displays correct member', () => {
     renderModal()
 
-    expect(screen.queryByText(useModal.modalData.creator.handle)).toBeDefined()
+    expect(screen.queryByText(modalData.creator.handle)).toBeDefined()
   })
 
   describe('AuthorizeModal', () => {
@@ -129,13 +123,13 @@ describe('UI: BountyCancelModal', () => {
   const renderModal = () => {
     render(
       <MockApolloProvider>
-        <ModalContext.Provider value={useModal}>
+        <ModalContextProvider>
           <MockKeyringProvider>
             <ApiContext.Provider value={api}>
               <BountyCancelModal />
             </ApiContext.Provider>
           </MockKeyringProvider>
-        </ModalContext.Provider>
+        </ModalContextProvider>
       </MockApolloProvider>
     )
   }

@@ -1,4 +1,3 @@
-import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -7,10 +6,9 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
-import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { WithdrawSignModal } from '@/bounty/modals/WithdrawSignModal'
-import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -25,7 +23,12 @@ export const ClaimRewardModal = () => {
     hideModal,
   } = useModal<ClaimRewardModalCall>()
 
-  const [state, send] = useMachine(defaultTransactionModalMachine)
+  const [state, send] = useMachine(
+    defaultTransactionModalMachine(
+      'There was a problem while claiming your reward.',
+      'You have successfully claimed your reward!'
+    )
+  )
 
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
@@ -90,25 +93,6 @@ export const ClaimRewardModal = () => {
         stake={entry.stake}
         amount={entry.reward.add(entry.stake)}
       />
-    )
-  }
-
-  if (state.matches('success')) {
-    return (
-      <SuccessTransactionModal
-        onClose={hideModal}
-        onButtonClick={hideModal}
-        message={t('modals.withdraw.reward.success')}
-        buttonLabel={t('modals.withdrawContribution.successButton')}
-      />
-    )
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        {t('modals.withdraw.reward.error')}
-      </FailureModal>
     )
   }
 

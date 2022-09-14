@@ -1,4 +1,3 @@
-import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -19,7 +18,6 @@ import { BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsM
 import { contributeFundsMachine, ContributeFundStates } from '@/bounty/modals/ContributeFundsModal/machine'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { isFundingLimited } from '@/bounty/types/Bounty'
-import { FailureModal } from '@/common/components/FailureModal'
 import { Input, InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { LinkSymbol } from '@/common/components/icons/symbols'
@@ -39,6 +37,7 @@ import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO, Fonts } from '@/common/constants'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
 import { formatTokenValue } from '@/common/model/formatters'
@@ -177,18 +176,6 @@ export const ContributeFundsModal = () => {
         message={t('modals.contribute.success', { bounty: bounty.title })}
       />
     )
-  }
-
-  if (state.matches(ContributeFundStates.error)) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        {t('modals.contribute.error')}
-      </FailureModal>
-    )
-  }
-
-  if (state.matches(ContributeFundStates.cancel)) {
-    return <FailureModal onClose={hideModal}>{t('common:modals.transactionCanceled')}</FailureModal>
   }
 
   if (state.matches(ContributeFundStates.transaction) && state.context.amount) {

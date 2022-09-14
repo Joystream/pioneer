@@ -82,7 +82,7 @@ export const transferInvitesMachine = createMachine<Context, TransferInvitesEven
       },
     },
     success: { type: 'final' },
-    error: { type: 'final' },
+    error: { type: 'final', meta: { message: 'There was a problem transferring your invites.' } },
     canceled: { type: 'final' },
   },
 })

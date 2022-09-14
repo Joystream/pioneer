@@ -11,9 +11,10 @@ import { InputComponent } from '@/common/components/forms'
 import { ModalBody, ModalTransactionFooter } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
+import { BN_ZERO } from '@/common/constants'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { MultiTransactionConfig, TransactionModal } from '@/common/modals/TransactionModal'
-import { formatTokenValue } from '@/common/model/formatters'
+import { formatJoyValue, formatTokenValue } from '@/common/model/formatters'
 
 export interface Props {
   onClose: () => void
@@ -55,7 +56,9 @@ export const AuthorizeTransactionModal = ({
             {description}
           </TextMedium>
           <TextMedium light>
-            {t('modals.authorizeTransaction.feeInfo', { value: paymentInfo?.partialFee.toString() ?? '-' })}
+            {t('modals.authorizeTransaction.feeInfo', {
+              value: formatJoyValue(paymentInfo?.partialFee ?? BN_ZERO, { precision: 2 }) ?? '-',
+            })}
           </TextMedium>
         </div>
         <InputComponent

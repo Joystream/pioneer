@@ -1,13 +1,14 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { configure, fireEvent, render, screen } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 
 import { ApiContext } from '@/api/providers/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { GlobalModals } from '@/app/GlobalModals'
 import { MembershipExternalResourceType } from '@/common/api/queries'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { last } from '@/common/utils'
 import { UpdateMembershipModal } from '@/memberships/modals/UpdateMembershipModal'
 import { MemberWithDetails } from '@/memberships/types'
@@ -60,10 +61,10 @@ describe('UI: UpdatedMembershipModal', () => {
     stubTransaction(api, 'api.tx.members.updateAccounts')
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
     stubTransaction(api, 'api.tx.members.updateProfile')
-    profileTxMock = api.api.tx.members.updateProfile as unknown as jest.Mock
+    profileTxMock = (api.api.tx.members.updateProfile as unknown) as jest.Mock
     member = {
       ...getMember('alice'),
-      externalResources: [{ source: MembershipExternalResourceType.Email, value: 'empty' }],
+      externalResources: [{ source: MembershipExternalResourceType.Twitter, value: 'empty' }],
     } as MemberWithDetails
   })
 
@@ -84,7 +85,9 @@ describe('UI: UpdatedMembershipModal', () => {
 
     expect(await getButton(/^Save changes$/i)).toBeDisabled()
 
-    fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'joystream@mail.com' } })
+    await act(async () => {
+      fireEvent.change(screen.getByTestId('twitter-input'), { target: { value: 'joystream@mail.com' } })
+    })
 
     expect(await getButton(/^Save changes$/i)).toBeEnabled()
   })
@@ -124,10 +127,12 @@ describe('UI: UpdatedMembershipModal', () => {
     const newMemberEmail = 'joystream@mail.com'
     async function changeNameAndSave() {
       renderModal(member)
-      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: newMemberName } })
-      fireEvent.change(screen.getByTestId('email-input'), { target: { value: newMemberEmail } })
+      await act(async () => {
+        fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: newMemberName } })
+        fireEvent.change(screen.getByTestId('twitter-input'), { target: { value: newMemberEmail } })
 
-      fireEvent.click(await screen.findByText(/^Save changes$/i))
+        fireEvent.click(await screen.findByText(/^Save changes$/i))
+      })
     }
 
     it('Authorize step', async () => {
@@ -165,7 +170,10 @@ describe('UI: UpdatedMembershipModal', () => {
       <MockQueryNodeProviders>
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>
-            <UpdateMembershipModal onClose={() => undefined} member={member} />
+            <ModalContextProvider>
+              <GlobalModals />
+              <UpdateMembershipModal onClose={() => undefined} member={member} />
+            </ModalContextProvider>
           </ApiContext.Provider>
         </MockKeyringProvider>
       </MockQueryNodeProviders>

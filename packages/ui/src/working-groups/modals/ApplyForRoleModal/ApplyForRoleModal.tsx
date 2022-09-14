@@ -1,7 +1,6 @@
 import { ApplicationMetadata } from '@joystream/metadata-protobuf'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { BN_ZERO } from '@polkadot/util'
-import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
@@ -14,7 +13,6 @@ import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
 import { Api } from '@/api'
 import { useApi } from '@/api/hooks/useApi'
-import { FailureModal } from '@/common/components/FailureModal'
 import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import {
   StepDescriptionColumn,
@@ -23,6 +21,7 @@ import {
   StepperModalBody,
   StepperModalWrapper,
 } from '@/common/components/StepperModal'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { getDataFromEvent, metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
@@ -245,18 +244,6 @@ export const ApplyForRoleModal = () => {
         steps={getSteps(service)}
       />
     )
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem with applying for an opening.
-      </FailureModal>
-    )
-  }
-
-  if (state.matches('canceled')) {
-    return <FailureModal onClose={hideModal}>Transaction was canceled</FailureModal>
   }
 
   return (

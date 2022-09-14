@@ -198,8 +198,14 @@ export const submitJudgementMachine = createMachine<SubmitJudgementContext, Subm
           ],
         },
       },
-      [SubmitJudgementStates.success]: { type: 'final' },
-      [SubmitJudgementStates.error]: { type: 'final' },
+      [SubmitJudgementStates.success]: {
+        type: 'final',
+        meta: { message: 'You have successfully submitted your judgement' },
+      },
+      [SubmitJudgementStates.error]: {
+        type: 'final',
+        meta: { message: 'There has been an error while submitting judgement.' },
+      },
       [SubmitJudgementStates.canceled]: { type: 'final' },
     },
   }

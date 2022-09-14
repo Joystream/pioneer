@@ -34,7 +34,7 @@ const hasEdits = (object: Record<string, any>, fields: string[]) => {
 }
 
 function createBatch(transactionParams: WithNullableValues<UpdateMemberForm>, api: Api | undefined, member: Member) {
-  const hasProfileEdits = hasEdits(transactionParams, ['about', 'handle', 'avatarUri', 'name'])
+  const hasProfileEdits = hasEdits(transactionParams, ['about', 'handle', 'avatarUri', 'name', 'externalResources'])
   const hasAccountsEdits = hasEdits(transactionParams, ['rootAccount', 'controllerAccount'])
 
   const transactions: SubmittableExtrinsic<'rxjs'>[] = []
@@ -43,14 +43,14 @@ function createBatch(transactionParams: WithNullableValues<UpdateMemberForm>, ap
     return
   }
 
-  if (hasProfileEdits) {
+  if (hasProfileEdits && !(transactionParams.avatarUri instanceof File)) {
     const updateProfile = api.tx.members.updateProfile(
       member.id,
       transactionParams.handle ?? null,
       metadataToBytes(MembershipMetadata, {
         about: transactionParams.about ?? null,
         name: transactionParams.name ?? null,
-        avatarUri: transactionParams.avatarUri ?? '',
+        avatarUri: transactionParams.avatarUri ?? null,
         externalResources: transactionParams.externalResources
           ? toExternalResources(definedValues(transactionParams.externalResources))
           : null,

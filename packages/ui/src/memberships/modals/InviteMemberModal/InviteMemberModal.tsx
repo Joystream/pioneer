@@ -1,9 +1,8 @@
-import { useMachine } from '@xstate/react'
 import React, { useEffect } from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
-import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useObservable } from '@/common/hooks/useObservable'
 import { Address } from '@/common/types'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
@@ -60,14 +59,6 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
 
   if (state.matches('success')) {
     return <InviteMemberSuccessModal onClose={onClose} formData={state.context.form} />
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={onClose} events={state.context.transactionEvents}>
-        There was a problem with creating a membership for {state.context.form.name}.
-      </FailureModal>
-    )
   }
 
   return null

@@ -10,7 +10,7 @@ import { TransactionFee } from '../TransactionFee'
 
 interface ButtonState {
   disabled?: boolean
-  label?: string
+  label?: ReactNode
   onClick: () => void
 }
 
