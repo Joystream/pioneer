@@ -4,7 +4,7 @@ import { useLocation } from 'react-router'
 import { NavLink, useRouteMatch } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
-import { BorderRad, Colors, Transitions, Overflow } from '../../../constants'
+import { BorderRad, Colors, Overflow, Transitions } from '../../../constants'
 
 interface NavigationLinkProps extends DisabledNavigationLinkProps {
   icon?: React.ReactElement
@@ -12,7 +12,7 @@ interface NavigationLinkProps extends DisabledNavigationLinkProps {
   indicate?: boolean
   exact?: boolean
   className?: string
-  to?: string
+  to: string
   onClick?: () => void
 }
 
@@ -32,15 +32,19 @@ export const NavigationLink = ({
 }: NavigationLinkProps) => {
   const location = useLocation()
   const match = useRouteMatch(to ?? location.pathname)
+  const isExternal = to.includes('http')
+  const Component = (isExternal ? NavigationItemAnchor : NavigationItemLink) as React.ElementType
 
   return (
-    <NavigationItemLink
+    <Component
       exact={exact}
-      to={to ?? location.pathname}
+      to={to}
+      href={to}
+      target={isExternal ? '_blank' : undefined}
       className={className}
       disabled={disabled}
       activeClassName="active-page"
-      onClick={(event) => {
+      onClick={(event: Event) => {
         onClick?.()
         if (disabled) {
           event.preventDefault()
@@ -60,7 +64,7 @@ export const NavigationLink = ({
         {children}
         {indicate && <NavigationItemLinkIndicator />}
       </NavigationItemLinkChildren>
-    </NavigationItemLink>
+    </Component>
   )
 }
 
@@ -129,7 +133,7 @@ const NavigationItemLinkIndicator = styled.div`
   transform: translateY(-6px);
 `
 
-const NavigationItemLink = styled(NavLink)<DisabledNavigationLinkProps>`
+const NavigationItemLinkStyles = css<DisabledNavigationLinkProps>`
   display: flex;
   position: relative;
   justify-content: start;
@@ -207,4 +211,12 @@ const NavigationItemLink = styled(NavLink)<DisabledNavigationLinkProps>`
   @media (max-height: 768px) {
     height: 38px;
   }
+`
+
+const NavigationItemLink = styled(NavLink)<DisabledNavigationLinkProps>`
+  ${NavigationItemLinkStyles}
+`
+
+const NavigationItemAnchor = styled.a<DisabledNavigationLinkProps>`
+  ${NavigationItemLinkStyles}
 `

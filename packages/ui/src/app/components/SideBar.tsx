@@ -107,9 +107,7 @@ export const SideBar = () => {
             <NavigationLinksItem>
               <NavigationLink
                 icon={<PolkadotSymbol />}
-                onClick={() =>
-                  window.open(`https://polkadot.js.org/apps/?rpc=${endpoints.nodeRpcEndpoint}#/explorer`, '_blank')
-                }
+                to={`https://polkadot.js.org/apps/?rpc=${endpoints.nodeRpcEndpoint}#/explorer`}
               >
                 Explorer
                 <LinkSymbol color={Colors.Black[500]} />

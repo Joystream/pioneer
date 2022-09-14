@@ -17,10 +17,11 @@ export interface BlockTimeProps extends BlockTimeLayoutProps {
 
 interface BlockTimeLayoutProps {
   layout?: 'row' | 'column' | 'reverse' | 'reverse-start'
+  position?: 'start' | 'end'
 }
 
-export const BlockTime = React.memo(({ block, layout, dateLabel, lessInfo }: BlockTimeProps) => (
-  <BlockTimeWrapper layout={layout}>
+export const BlockTime = React.memo(({ block, layout, dateLabel, lessInfo, position = 'start' }: BlockTimeProps) => (
+  <BlockTimeWrapper layout={layout} position={position}>
     <AboutText>
       {dateLabel && layout == 'row' && dateLabel + ': '}
       {formatDateString(block.timestamp, layout === 'column' ? 's' : 'l')}
@@ -44,7 +45,7 @@ export const BlockTimeWrapper = styled.div<BlockTimeLayoutProps>`
   display: grid;
   width: fit-content;
   height: fit-content;
-  justify-items: right;
+  justify-items: ${({ position }) => position ?? 'start'};
 
   ${({ layout }) => {
     switch (layout) {

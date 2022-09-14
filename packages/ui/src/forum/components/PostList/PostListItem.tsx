@@ -5,15 +5,15 @@ import styled, { css } from 'styled-components'
 import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
 import {
   ButtonGhost,
-  ButtonsGroup,
   ButtonInnerWrapper,
   ButtonLink,
+  ButtonsGroup,
   CopyButtonTemplate,
 } from '@/common/components/buttons'
 import { ArrowReplyIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge } from '@/common/components/typography'
-import { Colors, Fonts, BorderRad, Shadows } from '@/common/constants'
+import { BorderRad, Colors, Fonts, Shadows } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
@@ -97,7 +97,7 @@ export const PostListItem = ({
       <ForumPostStyles>
         <ForumPostRow>
           <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
-          {createdAtBlock && <BlockTime block={createdAtBlock} layout="reverse" />}
+          {createdAtBlock && <BlockTime block={createdAtBlock} layout="reverse" position="end" />}
         </ForumPostRow>
         <MessageBody>
           <ModeratedPostWrapper post={post}>
