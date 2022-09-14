@@ -12,5 +12,5 @@ export function useFirstObservableValue<T>(observableFactory: () => Observable<T
     }
   }, [observable])
 
-  return useMemo(() => data, [JSON.stringify(data)])
+  return data
 }
