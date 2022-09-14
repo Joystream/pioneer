@@ -28,6 +28,7 @@ import {
   stubDefaultBalances,
   stubTransaction,
 } from '../../_mocks/transactions'
+import { mockUseModalCall } from '../../setup'
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -42,6 +43,15 @@ describe('UI: UpdatedMembershipModal', () => {
     stubAccounts([alice, aliceStash, bob, bobStash])
   })
 
+  mockUseModalCall({
+    modalData: {
+      member: {
+        ...getMember('alice'),
+        externalResources: [{ source: MembershipExternalResourceType.Twitter, value: 'empty' }],
+      } as MemberWithDetails,
+    },
+  })
+
   afterAll(() => {
     jest.restoreAllMocks()
   })
@@ -51,7 +61,6 @@ describe('UI: UpdatedMembershipModal', () => {
   const api = stubApi()
   let batchTx: any
   let profileTxMock: jest.Mock
-  let member: MemberWithDetails
 
   beforeEach(() => {
     stubDefaultBalances()
@@ -62,27 +71,18 @@ describe('UI: UpdatedMembershipModal', () => {
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
     stubTransaction(api, 'api.tx.members.updateProfile')
     profileTxMock = api.api.tx.members.updateProfile as unknown as jest.Mock
-    member = {
-      ...getMember('alice'),
-      externalResources: [{ source: MembershipExternalResourceType.Twitter, value: 'empty' }],
-    } as MemberWithDetails
+    renderModal()
   })
 
   it('Renders a modal', async () => {
-    renderModal(member)
-
     expect(await screen.findByText('Edit membership')).toBeDefined()
   })
 
   it('Is initially disabled', async () => {
-    renderModal(member)
-
     expect(await getButton(/^Save changes$/i)).toBeDisabled()
   })
 
   it('Enables button on external resources change', async () => {
-    renderModal(member)
-
     expect(await getButton(/^Save changes$/i)).toBeDisabled()
 
     await act(async () => {
@@ -93,8 +93,6 @@ describe('UI: UpdatedMembershipModal', () => {
   })
 
   it('Enables button on member field change', async () => {
-    renderModal(member)
-
     expect(await getButton(/^Save changes$/i)).toBeDisabled()
 
     fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
@@ -103,16 +101,12 @@ describe('UI: UpdatedMembershipModal', () => {
   })
 
   it('Enables save button on account change', async () => {
-    renderModal(member)
-
     await selectFromDropdown('root account', 'bob')
 
     expect(await getButton(/^Save changes$/i)).toBeEnabled()
   })
 
   it('Disables button when invalid avatar URL', async () => {
-    renderModal(member)
-
     fireEvent.change(await screen.findByLabelText(/member avatar/i), { target: { value: 'avatar' } })
     expect(await getButton(/^Save changes$/i)).toBeDisabled()
 
@@ -126,7 +120,6 @@ describe('UI: UpdatedMembershipModal', () => {
     const newMemberName = 'Bobby Bob'
     const newMemberEmail = 'joystream@mail.com'
     async function changeNameAndSave() {
-      renderModal(member)
       await act(async () => {
         fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: newMemberName } })
         fireEvent.change(screen.getByTestId('twitter-input'), { target: { value: newMemberEmail } })
@@ -165,18 +158,18 @@ describe('UI: UpdatedMembershipModal', () => {
     })
   })
 
-  function renderModal(member: MemberWithDetails) {
+  function renderModal() {
     render(
-      <MockQueryNodeProviders>
-        <MockKeyringProvider>
-          <ApiContext.Provider value={api}>
-            <ModalContextProvider>
+      <ModalContextProvider>
+        <MockQueryNodeProviders>
+          <MockKeyringProvider>
+            <ApiContext.Provider value={api}>
               <GlobalModals />
-              <UpdateMembershipModal onClose={() => undefined} member={member} />
-            </ModalContextProvider>
-          </ApiContext.Provider>
-        </MockKeyringProvider>
-      </MockQueryNodeProviders>
+              <UpdateMembershipModal />
+            </ApiContext.Provider>
+          </MockKeyringProvider>
+        </MockQueryNodeProviders>
+      </ModalContextProvider>
     )
   }
 })

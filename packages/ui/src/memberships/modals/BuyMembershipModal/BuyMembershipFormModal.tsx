@@ -1,3 +1,4 @@
+import HCaptcha from '@hcaptcha/react-hcaptcha'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import React, { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -90,6 +91,7 @@ export interface MemberFormFields {
   referrer?: Member
   hasTerms?: boolean
   invitor?: Member
+  captchaToken?: string
   externalResources: Record<string, string>
 }
 
@@ -118,9 +120,11 @@ export const BuyMembershipForm = ({
   type,
 }: BuyMembershipFormProps) => {
   const { allAccounts } = useMyAccounts()
+  const [captchaToken, setCaptchaToken] = useState<string | undefined>()
   const [formHandleMap, setFormHandleMap] = useState('')
-  const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
   const { isUploading, uploadAvatarAndSubmit } = useUploadAvatarAndSubmit(onSubmit)
+  const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
+
   const form = useForm<MemberFormFields>({
     resolver: useYupValidationResolver(CreateMemberSchema),
     context: { size: data?.membershipsConnection.totalCount },
@@ -145,6 +149,10 @@ export const BuyMembershipForm = ({
       form.trigger('handle')
     }
   }, [data?.membershipsConnection.totalCount])
+
+  const isFormValid = !isUploading && form.formState.isValid
+  const isDisabled =
+    type === 'onBoarding' && process.env.REACT_APP_CAPTCHA_SITE_KEY ? !captchaToken || !isFormValid : !isFormValid
 
   return (
     <>
@@ -214,6 +222,17 @@ export const BuyMembershipForm = ({
             <AvatarInput />
 
             <SocialMediaSelector />
+
+            {process.env.REACT_APP_CAPTCHA_SITE_KEY && type === 'onBoarding' && (
+              <Row>
+                <HCaptcha
+                  sitekey={process.env.REACT_APP_CAPTCHA_SITE_KEY}
+                  theme="dark"
+                  languageOverride="en"
+                  onVerify={setCaptchaToken}
+                />
+              </Row>
+            )}
           </ScrolledModalContainer>
         </FormProvider>
       </ScrolledModalBody>
@@ -269,7 +288,7 @@ export const BuyMembershipForm = ({
               const values = form.getValues()
               uploadAvatarAndSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
             }}
-            disabled={!form.formState.isValid || isUploading}
+            disabled={isDisabled}
           >
             {isUploading ? <Loading text="Uploading avatar" /> : 'Create a Membership'}
           </ButtonPrimary>

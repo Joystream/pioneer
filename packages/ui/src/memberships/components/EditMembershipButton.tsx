@@ -1,12 +1,12 @@
-import React, { ReactNode, useState } from 'react'
-import ReactDOM from 'react-dom'
+import React, { ReactNode } from 'react'
 
 import { ButtonProps } from '@/common/components/buttons'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
+import { useModal } from '@/common/hooks/useModal'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { useMember } from '@/memberships/hooks/useMembership'
 
-import { UpdateMembershipModal } from '../modals/UpdateMembershipModal'
+import { UpdateMembershipModalCall } from '../modals/UpdateMembershipModal'
 import { Member } from '../types'
 
 interface Props extends ButtonProps {
@@ -16,31 +16,28 @@ interface Props extends ButtonProps {
 }
 
 export const EditMembershipButton = ({ className, children, member }: Props) => {
-  const [isOpen, toggleIsOpen] = useState(false)
   const { isTransactionPending } = useTransactionStatus()
+  const { showModal } = useModal()
   const { member: memberWithDetails } = useMember(member.id)
 
   return (
-    <>
-      <TransactionButton
-        style="ghost"
-        size="small"
-        onClick={(event: React.MouseEvent<HTMLElement>) => {
-          event.stopPropagation()
-          toggleIsOpen(!isOpen)
-        }}
-        className={className}
-        square
-        disabled={isTransactionPending}
-      >
-        {children}
-      </TransactionButton>
-      {isOpen &&
-        memberWithDetails &&
-        ReactDOM.createPortal(
-          <UpdateMembershipModal onClose={() => toggleIsOpen(!isOpen)} member={memberWithDetails} />,
-          document.body
-        )}
-    </>
+    <TransactionButton
+      style="ghost"
+      size="small"
+      onClick={(event: React.MouseEvent<HTMLElement>) => {
+        event.stopPropagation()
+        if (memberWithDetails) {
+          showModal<UpdateMembershipModalCall>({
+            modal: 'UpdateMembershipModal',
+            data: { member: memberWithDetails },
+          })
+        }
+      }}
+      className={className}
+      square
+      disabled={isTransactionPending || !memberWithDetails}
+    >
+      {children}
+    </TransactionButton>
   )
 }
