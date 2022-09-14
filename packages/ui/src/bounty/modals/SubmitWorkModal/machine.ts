@@ -110,8 +110,8 @@ export const submitWorkMachine = createMachine<SubmitWorkContext, SubmitWorkEven
         ],
       },
     },
-    [SubmitWorkStates.success]: { type: 'final' },
-    [SubmitWorkStates.error]: { type: 'final' },
+    [SubmitWorkStates.success]: { type: 'final', meta: { message: 'You have just successfully submitted a work!' } },
+    [SubmitWorkStates.error]: { type: 'final', meta: { message: 'There was a problem submitting your work.' } },
     [SubmitWorkStates.cancel]: { type: 'final' },
   },
 })

@@ -85,7 +85,7 @@ export const VoteForCouncilMachine = createMachine<Partial<VoteContext>, VoteFor
       },
     },
     success: { type: 'final' },
-    error: { type: 'final' },
+    error: { type: 'final', meta: { message: 'There was a problem casting your vote.' } },
     canceled: { type: 'final' },
   },
 })

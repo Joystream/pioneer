@@ -1,4 +1,3 @@
-import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect } from 'react'
 import * as Yup from 'yup'
@@ -7,11 +6,11 @@ import { useBalance } from '@/accounts/hooks/useBalance'
 import { useApi } from '@/api/hooks/useApi'
 import { CurrencyName } from '@/app/constants/currency'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
-import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { BN_ZERO } from '@/common/constants'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
 import { formatTokenValue } from '@/common/model/formatters'
@@ -73,14 +72,6 @@ export const IncreaseWorkerStakeModal = () => {
 
   if (state.matches('success')) {
     return <SuccessModal onClose={hideModal} amount={state.context.stake ?? BN_ZERO} />
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was an problem with increasing the stake
-      </FailureModal>
-    )
   }
 
   return (

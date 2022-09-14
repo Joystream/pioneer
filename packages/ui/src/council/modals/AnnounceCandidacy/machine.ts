@@ -172,7 +172,7 @@ export const announceCandidacyMachine = createMachine<
       },
     },
     success: { type: 'final' },
-    error: { type: 'final' },
+    error: { type: 'final', meta: { message: 'There was a problem while announcing candidacy.' } },
     canceled: { type: 'final' },
   },
 })

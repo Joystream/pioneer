@@ -1,7 +1,6 @@
-import { useMachine } from '@xstate/react'
 import React from 'react'
 
-import { FailureModal } from '@/common/components/FailureModal'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { UpdateMembershipModalCall } from '@/memberships/modals/UpdateMembershipModal/index'
 
@@ -42,14 +41,6 @@ export const UpdateMembershipModal = () => {
 
   if (state.matches('success')) {
     return <UpdateMembershipSuccessModal onClose={hideModal} member={member} />
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem updating membership for {member.name}.
-      </FailureModal>
-    )
   }
 
   return null

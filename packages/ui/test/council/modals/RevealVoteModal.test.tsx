@@ -4,8 +4,9 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { ApiContext } from '@/api/providers/context'
-import { ModalContext } from '@/common/providers/modal/context'
-import { ModalCallData, UseModal } from '@/common/providers/modal/types'
+import { GlobalModals } from '@/app/GlobalModals'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { ModalCallData } from '@/common/providers/modal/types'
 import { RevealVoteModal, RevealVoteModalCall } from '@/council/modals/RevealVote'
 
 import { getButton } from '../../_helpers/getButton'
@@ -19,34 +20,25 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 describe('UI: RevealVoteModal', () => {
   const api = stubApi()
   const txPath = 'api.tx.referendum.revealVote'
   let tx: any
-
-  stubTransaction(api, txPath)
-
   const voteData = {
     salt: '0x7a0c114de774424abcd5d60fc58658a35341c9181b09e94a16dfff7ba2192206',
     accountId: alice.address,
     optionId: '1',
   }
-
   const modalData: ModalCallData<RevealVoteModalCall> = {
     votes: [voteData],
     voteForHandle: 'Dave',
   }
-
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData,
-  }
+  stubTransaction(api, txPath)
 
   beforeAll(async () => {
+    mockUseModalCall({ modalData })
     stubAccounts([
       { ...alice, name: 'Alice Account' },
       { ...bob, name: 'Bob Account' },
@@ -113,13 +105,14 @@ describe('UI: RevealVoteModal', () => {
   const renderModal = () =>
     render(
       <MockApolloProvider>
-        <ModalContext.Provider value={useModal}>
+        <ModalContextProvider>
           <MockKeyringProvider>
             <ApiContext.Provider value={api}>
+              <GlobalModals />
               <RevealVoteModal />
             </ApiContext.Provider>
           </MockKeyringProvider>
-        </ModalContext.Provider>
+        </ModalContextProvider>
       </MockApolloProvider>
     )
 })

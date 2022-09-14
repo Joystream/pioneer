@@ -6,6 +6,7 @@ import React from 'react'
 import { of } from 'rxjs'
 
 import { ApiContext } from '@/api/providers/context'
+import { GlobalModals } from '@/app/GlobalModals'
 import { MembershipExternalResourceType } from '@/common/api/queries'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
@@ -43,6 +44,7 @@ describe('UI: UpdatedMembershipModal', () => {
   })
 
   // todo: replace with mockUseModalCall after merge of #3567
+  console.log("do todo")
   const useModal: UseModal<any> = {
     showModal: () => undefined,
     modalData: {
@@ -167,6 +169,7 @@ describe('UI: UpdatedMembershipModal', () => {
         <MockQueryNodeProviders>
           <MockKeyringProvider>
             <ApiContext.Provider value={api}>
+              <GlobalModals />
               <UpdateMembershipModal />
             </ApiContext.Provider>
           </MockKeyringProvider>

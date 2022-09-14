@@ -1,5 +1,4 @@
 import { BountyMetadata, ForumThreadMetadata } from '@joystream/metadata-protobuf'
-import { useMachine } from '@xstate/react'
 import React, { useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -25,11 +24,11 @@ import {
 } from '@/bounty/modals/AddBountyModal/helpers'
 import { addBountyMachine, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
-import { FailureModal } from '@/common/components/FailureModal'
 import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
 import { TokenValue } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
@@ -174,18 +173,6 @@ export const AddBountyModal = () => {
 
   if (state.matches(AddBountyStates.success)) {
     return <SuccessModal onClose={hideModal} bountyId={state.context.bountyId} />
-  }
-
-  if (state.matches(AddBountyStates.error)) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem while creating bounty.
-      </FailureModal>
-    )
-  }
-
-  if (state.matches(AddBountyStates.canceled)) {
-    return <FailureModal onClose={hideModal}>Transaction has been canceled.</FailureModal>
   }
 
   return (

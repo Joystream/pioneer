@@ -1,4 +1,3 @@
-import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -8,11 +7,10 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
-import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { withdrawalStakeMachine, WithdrawalStakeStates } from '@/bounty/modals/WithdrawalStakeModal/machine'
 import { WithdrawSignModal } from '@/bounty/modals/WithdrawSignModal'
-import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
@@ -87,24 +85,7 @@ export const WithdrawStakeModal = () => {
       />
     )
   }
-  if (state.matches(WithdrawalStakeStates.success)) {
-    return (
-      <SuccessTransactionModal
-        onClose={hideModal}
-        onButtonClick={hideModal}
-        message={t('modals.withdrawContribution.success')}
-        buttonLabel={t('modals.withdrawContribution.successButton')}
-      />
-    )
-  }
 
-  if (state.matches(WithdrawalStakeStates.error)) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        {t('common:modals.failed.description')}
-      </FailureModal>
-    )
-  }
   if (state.matches(WithdrawalStakeStates.requirementsFailed)) {
     return (
       <InsufficientFundsModal

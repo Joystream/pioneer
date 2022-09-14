@@ -1,3 +1,4 @@
+import { get } from 'lodash'
 import React, { memo, ReactElement, useMemo } from 'react'
 import ReactDOM from 'react-dom'
 
@@ -20,12 +21,14 @@ import {
   WithdrawContributionModal,
 } from '@/bounty/modals/WithdrawContributionModal'
 import { BountyWithdrawWorkEntryModalCall, WithdrawWorkEntryModal } from '@/bounty/modals/WithdrawWorkEntryModal'
+import { FailureModal } from '@/common/components/FailureModal'
 import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/Search/SearchResultsModal'
+import { SuccessModal } from '@/common/components/SuccessModal'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useModal } from '@/common/hooks/useModal'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
-import { ModalName } from '@/common/providers/modal/types'
+import { ModalName, UnknownMachine } from '@/common/providers/modal/types'
 import { TransactionFeesProvider } from '@/common/providers/transactionFees/provider'
 import { AnnounceCandidacyModal, AnnounceCandidateModalCall } from '@/council/modals/AnnounceCandidacy'
 import { CandidacyPreview } from '@/council/modals/CandidacyPreview/CandidacyPreview'
@@ -157,18 +160,44 @@ const modals: Record<ModalNames, ReactElement> = {
 }
 
 export const GlobalModals = () => {
-  const { modal, hideModal } = useModal()
+  const { modal, hideModal, currentModalMachine } = useModal()
   const { status } = useTransactionStatus()
   const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
 
-  if (Modal) {
+  const potentialFallback = useGlobalModalHandler(currentModalMachine, hideModal)
+
+  if (Modal || potentialFallback) {
     return ReactDOM.createPortal(
       <TransactionFeesProvider>
-        <Modal />
+        {potentialFallback}
+        {Modal && <Modal />}
         {status === 'loadingFees' && <WaitModal onClose={hideModal} requirementsCheck />}
       </TransactionFeesProvider>,
       document.body
     )
+  }
+
+  return null
+}
+
+const useGlobalModalHandler = (machine: UnknownMachine<any, any, any> | undefined, hideModal: () => void) => {
+  if (!machine) return null
+
+  const [state] = machine
+
+  if (state.matches('canceled')) {
+    hideModal()
+  }
+  if (state.matches('error') && get(state.meta, ['(machine).error', 'message'])) {
+    return (
+      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
+        {get(state.meta, ['(machine).error', 'message'])}
+      </FailureModal>
+    )
+  }
+
+  if (state.matches('success') && get(state.meta, ['(machine).success', 'message'])) {
+    return <SuccessModal onClose={hideModal} text={get(state.meta, ['(machine).success', 'message'])} />
   }
 
   return null
