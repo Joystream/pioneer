@@ -7,10 +7,10 @@ import { MemoryRouter } from 'react-router'
 
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { ApiContext } from '@/api/providers/context'
+import { GlobalModals } from '@/app/GlobalModals'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
-import { ModalContext } from '@/common/providers/modal/context'
-import { UseModal } from '@/common/providers/modal/types'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { VoteForCouncilModal } from '@/council/modals/VoteForCouncil'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
@@ -39,6 +39,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockUseModalCall } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
@@ -48,12 +49,7 @@ jest.mock('@/common/components/CKEditor', () => ({
 
 describe('UI: Vote for Council Modal', () => {
   const api = stubApi()
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData: { id: '0-0' },
-  }
+
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -64,6 +60,8 @@ describe('UI: Vote for Council Modal', () => {
       getMemberIdByBoundAccountAddress: () => undefined,
     },
   }
+  const showModal = jest.fn()
+  const modalData = { id: '0-0' }
 
   let tx: any
 
@@ -103,6 +101,7 @@ describe('UI: Vote for Council Modal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
+    mockUseModalCall({ showModal, modalData })
     seedMembers(server.server, 2)
     seedElectedCouncils(server.server, [{}, {}])
     seedCouncilElections(server.server, [{}, {}])
@@ -137,7 +136,7 @@ describe('UI: Vote for Council Modal', () => {
 
       renderModal()
 
-      expect(useModal.showModal).toBeCalledWith({
+      expect(showModal).toBeCalledWith({
         modal: 'SwitchMember',
         data: {
           originalModalData: { id: '0-0' },
@@ -162,7 +161,7 @@ describe('UI: Vote for Council Modal', () => {
         },
       }
 
-      expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
+      expect(showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
   })
 
@@ -258,17 +257,18 @@ describe('UI: Vote for Council Modal', () => {
   function renderModal() {
     return render(
       <MemoryRouter>
-        <ModalContext.Provider value={useModal}>
+        <ModalContextProvider>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
               <ApiContext.Provider value={api}>
                 <MembershipContext.Provider value={useMyMemberships}>
+                  <GlobalModals />
                   <VoteForCouncilModal />
                 </MembershipContext.Provider>
               </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
-        </ModalContext.Provider>
+        </ModalContextProvider>
       </MemoryRouter>
     )
   }

@@ -9,7 +9,7 @@ import { TransferModal } from '@/accounts/modals/TransferModal'
 import { Account } from '@/accounts/types'
 import { ApiContext } from '@/api/providers/context'
 import { createType } from '@/common/model/createType'
-import { ModalContext } from '@/common/providers/modal/context'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
@@ -24,6 +24,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockUseModalCall } from '../../setup'
 
 interface ModalData {
   from?: Account
@@ -49,13 +50,6 @@ describe('UI: TransferModal', () => {
 
   const api = stubApi()
   let transfer: any
-
-  const mockModalContext = (data: ModalData) => ({
-    hideModal: () => null,
-    modalData: data,
-    modal: null,
-    showModal: () => null,
-  })
 
   beforeEach(async () => {
     stubDefaultBalances()
@@ -215,14 +209,15 @@ describe('UI: TransferModal', () => {
     fireEvent.change(input, { target: { value: value } })
   }
 
-  function renderModal(data: ModalData) {
+  function renderModal(modalData: ModalData) {
+    mockUseModalCall({ modalData })
     return render(
       <MockKeyringProvider>
         <ApiContext.Provider value={api}>
           <MockQueryNodeProviders>
-            <ModalContext.Provider value={mockModalContext(data)}>
+            <ModalContextProvider>
               <TransferModal />
-            </ModalContext.Provider>
+            </ModalContextProvider>
           </MockQueryNodeProviders>
         </ApiContext.Provider>
       </MockKeyringProvider>

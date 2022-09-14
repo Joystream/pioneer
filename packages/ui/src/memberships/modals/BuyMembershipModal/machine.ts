@@ -70,7 +70,7 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
       },
     },
     success: { type: 'final' },
-    error: { type: 'final' },
+    error: { type: 'final', meta: { message: 'There was a problem with creating a membership.' } },
     canceled: { type: 'final' },
   },
 })

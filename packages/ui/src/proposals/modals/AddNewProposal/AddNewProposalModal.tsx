@@ -1,4 +1,3 @@
-import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
@@ -12,7 +11,6 @@ import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
 import { Api } from '@/api'
 import { useApi } from '@/api/hooks/useApi'
-import { FailureModal } from '@/common/components/FailureModal'
 import { Checkbox } from '@/common/components/forms'
 import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import {
@@ -26,6 +24,7 @@ import { BN_ZERO } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { createType } from '@/common/model/createType'
@@ -306,14 +305,6 @@ export const AddNewProposalModal = () => {
         proposalType={proposalType.type as ProposalType}
         proposalTitle={proposalDetails.title as string}
       />
-    )
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem while creating proposal.
-      </FailureModal>
     )
   }
 

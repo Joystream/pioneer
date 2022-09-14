@@ -85,8 +85,14 @@ export const WithdrawWorkModalMachine = createMachine<WithdrawWorkContext, Withd
         ],
       },
     },
-    [WithdrawWorkModalState.success]: { type: 'final' },
-    [WithdrawWorkModalState.error]: { type: 'final' },
+    [WithdrawWorkModalState.success]: {
+      type: 'final',
+      meta: { message: 'Your work entry has been successfully withdrawn!' },
+    },
+    [WithdrawWorkModalState.error]: {
+      type: 'final',
+      meta: { message: 'There was a problem while withdrawing your work entry.' },
+    },
     [WithdrawWorkModalState.canceled]: { type: 'final' },
   },
 })

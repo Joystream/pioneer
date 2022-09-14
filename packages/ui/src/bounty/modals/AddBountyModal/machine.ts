@@ -156,7 +156,7 @@ export const addBountyMachine = createMachine<TransactionContext, AddBountyEvent
       },
     },
     [AddBountyStates.success]: { type: 'final' },
-    [AddBountyStates.error]: { type: 'final' },
+    [AddBountyStates.error]: { type: 'final', meta: { message: 'There was a problem while creating bounty.' } },
     [AddBountyStates.canceled]: { type: 'final' },
   },
 })

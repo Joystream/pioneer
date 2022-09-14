@@ -1,12 +1,11 @@
-import { useMachine } from '@xstate/react'
 import React, { useEffect } from 'react'
 
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { useApi } from '@/api/hooks/useApi'
-import { FailureModal } from '@/common/components/FailureModal'
 import { BN_ZERO } from '@/common/constants'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { isDefined } from '@/common/utils'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
@@ -59,12 +58,6 @@ export const VoteForCouncilModal = () => {
 
   if (state.matches('success')) {
     return <VoteForCouncilSuccessModal onClose={hideModal} candidateId={modalData.id} />
-  } else if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem casting your vote.
-      </FailureModal>
-    )
   }
 
   if (!activeMember || !feeInfo || !minStake) {

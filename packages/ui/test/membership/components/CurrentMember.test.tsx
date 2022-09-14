@@ -19,6 +19,10 @@ jest.mock('@/common/hooks/useLocalStorage', () => ({
   useLocalStorage: () => [undefined, jest.fn()],
 }))
 
+jest.mock('@/common/hooks/useModal', () => ({
+  useModal: jest.requireActual('@/common/hooks/useModal').useModal,
+}))
+
 describe('UI: CurrentMember component', () => {
   const mockServer = setupMockServer()
 

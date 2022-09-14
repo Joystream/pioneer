@@ -58,20 +58,12 @@ export const PostActionSignModal = ({
   replyTo,
   onClose,
 }: PostActionSignModalProps) => {
-  const { isReady, paymentInfo, sign } = useSignAndSendTransaction({
+  const { isReady, paymentInfo, sign, canAfford } = useSignAndSendTransaction({
     transaction,
     signer: controllerAccount.address,
     service,
   })
-  const balance = useBalance(controllerAccount.address)
-
-  const hasFunds = useMemo(() => {
-    if (balance?.transferable && paymentInfo?.partialFee) {
-      return balance.transferable.gte(paymentInfo.partialFee)
-    }
-    return false
-  }, [controllerAccount.address, balance?.transferable, paymentInfo?.partialFee])
-  const signDisabled = !isReady || !hasFunds
+  const signDisabled = !isReady || !canAfford
 
   return (
     <>

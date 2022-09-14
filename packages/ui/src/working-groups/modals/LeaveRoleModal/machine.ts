@@ -64,8 +64,8 @@ export const leaveRoleMachine = createMachine<Context, LeaveRoleEvent, LeaveRole
         ],
       },
     },
-    success: { type: 'final' },
-    error: { type: 'final' },
+    success: { type: 'final', meta: { message: 'You have successfully left the role.' } },
+    error: { type: 'final', meta: { message: 'There was a problem leaving the role.' } },
     canceled: { type: 'final' },
   },
 })

@@ -1,5 +1,4 @@
 import { useApolloClient } from '@apollo/client'
-import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
@@ -14,6 +13,7 @@ import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { Colors } from '@/common/constants'
 import { useDebounce } from '@/common/hooks/useDebounce'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
@@ -23,8 +23,10 @@ import { OnBoardingAccount } from '@/common/modals/OnBoardingModal/OnBoardingAcc
 import { OnBoardingMembership } from '@/common/modals/OnBoardingModal/OnBoardingMembership'
 import { OnBoardingPlugin } from '@/common/modals/OnBoardingModal/OnBoardingPlugin'
 import { OnBoardingStatus, SetMembershipAccount } from '@/common/providers/onboarding/types'
+import { definedValues } from '@/common/utils'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
+import { toExternalResources } from '@/memberships/modals/utils'
 
 export const OnBoardingModal = () => {
   const { hideModal } = useModal()
@@ -66,6 +68,7 @@ export const OnBoardingModal = () => {
           avatar: form.avatarUri,
           about: form.about,
           captchaToken: form.captchaToken,
+          externalResources: toExternalResources(definedValues(form.externalResources)),
         }
 
         const response = await fetch(endpoints.membershipFaucetEndpoint, {

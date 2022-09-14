@@ -56,8 +56,7 @@ export const PostListItem = ({
   repliesToLink,
 }: PostListItemProps) => {
   const { active } = useMyMemberships()
-  const { createdAtBlock, lastEditedAt, author, text, repliesTo, status } = post
-  const [postText, setPostText] = useState<string>(text)
+  const { createdAtBlock, lastEditedAt, author, text, repliesTo } = post
   const [postLastEditedAt, setPostLastEditedAt] = useState<string | undefined>(lastEditedAt)
 
   const { showModal } = useModal()
@@ -83,9 +82,8 @@ export const PostListItem = ({
     )
   }, [postLastEditedAt])
 
-  const onSuccessfulEdit = useCallback((newText: string) => {
+  const onSuccessfulEdit = useCallback(() => {
     setEditing(false)
-    setPostText(newText)
     setPostLastEditedAt(new Date().toISOString())
   }, [])
 
@@ -124,7 +122,7 @@ export const PostListItem = ({
                 onSuccessfulEdit={onSuccessfulEdit}
               />
             ) : (
-              <MarkdownPreview markdown={postText} append={editionTime} size="m" />
+              <MarkdownPreview markdown={text} append={editionTime} size="m" />
             )}
           </ModeratedPostWrapper>
         </MessageBody>
@@ -146,7 +144,7 @@ export const PostListItem = ({
                   </ButtonGhost>
                   <PostContextMenu
                     isFirstItem={isFirstItem}
-                    post={{ ...post, text: postText }}
+                    post={{ ...post, text }}
                     onEdit={() => setEditing(true)}
                     type={type}
                   />
