@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Loading } from '@/common/components/Loading'
+import { Loader } from '@/common/components/icons'
 import { TextHuge, TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 
@@ -16,7 +16,7 @@ export const OverviewInfoElement = ({ value, label, isLoading }: Props) => {
     <Wrapper>
       {isLoading ? (
         <LoadingBox>
-          <Loading />
+          <Loader />
         </LoadingBox>
       ) : (
         <Value black bold value as="div">

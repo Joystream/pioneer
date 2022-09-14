@@ -6,7 +6,7 @@ import { BountyMain } from '@/app/pages/Bounty/components/BountyMain'
 import { BountyPreviewHeader } from '@/bounty/components/BountyPreviewHeader/BountyPreviewHeader'
 import { BountyRouteParams } from '@/bounty/constants'
 import { useBounty } from '@/bounty/hooks/useBounty'
-import { Loading } from '@/common/components/Loading'
+import { Loader } from '@/common/components/icons'
 import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 
@@ -22,7 +22,7 @@ export const Bounty = () => {
 
   if (!bounty) {
     if (!isLoading) history.replace('/404')
-    return <Loading />
+    return <Loader />
   }
 
   return <PageLayout main={<BountyMain bounty={bounty} />} header={<BountyPreviewHeader bounty={bounty} />} />

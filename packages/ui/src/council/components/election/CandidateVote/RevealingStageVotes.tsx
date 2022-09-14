@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 import React from 'react'
 
-import { Loading } from '@/common/components/Loading'
+import { Loader } from '@/common/components/icons'
 import { NoData } from '@/common/components/NoData'
 import { BN_ZERO } from '@/common/constants'
 import { CandidateStats } from '@/council/hooks/useElectionVotes'
@@ -19,7 +19,7 @@ export const RevealingStageVotes = ({ votesPerCandidate, totalStake, onlyMyVotes
   const votesToDisplay = onlyMyVotes ? votesPerCandidate.filter((vote) => vote.myVotes.length) : votesPerCandidate
 
   if (isLoading) {
-    return <Loading />
+    return <Loader />
   }
 
   if (!votesPerCandidate.length) {

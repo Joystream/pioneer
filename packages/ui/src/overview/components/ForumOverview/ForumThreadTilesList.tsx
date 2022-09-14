@@ -4,8 +4,8 @@ import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
 import { HorizontalScroller } from '@/common/components/HorizontalScroller/HorizontalScroller'
+import { Loader } from '@/common/components/icons'
 import { AnswerIcon } from '@/common/components/icons/AnswerIcon'
-import { Loading } from '@/common/components/Loading'
 import { Badge, TextBig, TextExtraSmall } from '@/common/components/typography'
 import { BorderRad, Colors, Shadows, Transitions } from '@/common/constants'
 import { ForumThread } from '@/forum/types'
@@ -44,7 +44,7 @@ export const ForumThreadTilesList = React.memo(({ threads }: ListProps) => {
     <ForumThreadTile key={thread.id} title={thread.title} answersCount={thread.visiblePostsCount} />
   ))
   return !tiles ? (
-    <Loading />
+    <Loader />
   ) : (
     <ScrollerWrapper>
       <Scroller title={t('forum.latestThreads')} count={tiles.length} items={tiles} />

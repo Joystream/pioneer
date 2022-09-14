@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import { CloseButton } from '@/common/components/buttons'
-import { Loading } from '@/common/components/Loading'
+import { Loader } from '@/common/components/icons'
 import {
   SidePane,
   SidePaneBody,
@@ -72,7 +72,7 @@ export const ApplicationDetailsModal = React.memo(() => {
         <SidePaneBody>
           {isLoading && (
             <SidePaneTable>
-              <Loading />
+              <Loader />
             </SidePaneTable>
           )}
           {!isLoading && application && currentTab === 'GENERAL' && <GeneralDetails application={application} />}

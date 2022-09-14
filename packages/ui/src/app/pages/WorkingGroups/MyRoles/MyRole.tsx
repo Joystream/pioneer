@@ -10,7 +10,7 @@ import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
-import { Loading } from '@/common/components/Loading'
+import { Loader } from '@/common/components/icons'
 import { ContentWithTabs, MainPanel, PageFooter, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
@@ -105,7 +105,7 @@ export const MyRole = () => {
   }
 
   if (isLoading || !worker) {
-    return <Loading />
+    return <Loader />
   }
 
   return (

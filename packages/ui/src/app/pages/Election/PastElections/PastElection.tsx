@@ -4,8 +4,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
-import { LinkIcon } from '@/common/components/icons'
-import { Loading } from '@/common/components/Loading'
+import { LinkIcon, Loader } from '@/common/components/icons'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
@@ -64,7 +63,7 @@ export const PastElection = () => {
   const displayMain = () => {
     return (
       <MainPanel>
-        {isLoading && <Loading />}
+        {isLoading && <Loader />}
         {!isLoading && election && (
           <>
             <PastElectionStats {...election} />

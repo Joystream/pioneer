@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import React, { useMemo } from 'react'
 
 import { ForumThreadOrderByInput } from '@/common/api/queries'
-import { Loading } from '@/common/components/Loading'
+import { Loader } from '@/common/components/icons'
 import { useSort } from '@/common/hooks/useSort'
 import { ForumThreadWithDetails } from '@/forum/types'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
@@ -46,7 +46,7 @@ const Template: Story = ({ isArchive }) => {
 
   return (
     <MockApolloProvider members workers forum>
-      {threads ? <ThreadList threads={threads} getSortProps={getSortProps} isArchive={isArchive} /> : <Loading />}
+      {threads ? <ThreadList threads={threads} getSortProps={getSortProps} isArchive={isArchive} /> : <Loader />}
     </MockApolloProvider>
   )
 }

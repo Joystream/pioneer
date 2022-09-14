@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { InputComponent, InputComponentProps, InputContainer } from '@/common/components/forms'
-import { Loading } from '@/common/components/Loading'
+import { Loader } from '@/common/components/icons'
 import { MemberInfo, MemberInfoProps } from '@/memberships/components/MemberInfo'
 import { Member } from '@/memberships/types'
 
@@ -23,11 +23,7 @@ const BasedSelectedMember = ({
   tooltipText,
 }: BaseSelectedMemberProps) => (
   <Container label={label} inputSize={size === 'm' ? 'l' : 'xl'} disabled={disabled} tooltipText={tooltipText}>
-    {member ? (
-      <MemberInfo member={member} memberSize={size} size={size} hideGroup={hideGroup} skipModal />
-    ) : (
-      <Loading />
-    )}
+    {member ? <MemberInfo member={member} memberSize={size} size={size} hideGroup={hideGroup} skipModal /> : <Loader />}
   </Container>
 )
 

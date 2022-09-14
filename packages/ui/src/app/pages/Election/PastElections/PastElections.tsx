@@ -3,9 +3,9 @@ import styled from 'styled-components'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ElectionRoundOrderByInput } from '@/common/api/queries'
+import { Loader } from '@/common/components/icons'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { SortHeader } from '@/common/components/List/SortHeader'
-import { Loading } from '@/common/components/Loading'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Pagination } from '@/common/components/Pagination'
@@ -34,7 +34,7 @@ export const PastElections = () => {
     if (isLoading) {
       return (
         <MainPanel>
-          <Loading />
+          <Loader />
         </MainPanel>
       )
     }

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { Loading } from '@/common/components/Loading'
+import { Loader } from '@/common/components/icons'
 import { NoAccountStep } from '@/common/modals/OnBoardingModal/components/NoAccountStep'
 import { SelectAccountStep } from '@/common/modals/OnBoardingModal/components/SelectAccountStep'
 
@@ -21,7 +21,7 @@ export const OnBoardingAccount = ({ onAccountSelect }: Props) => {
   }, [hasAccounts])
 
   if (isLoading) {
-    return <Loading />
+    return <Loader />
   }
 
   return step

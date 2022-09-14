@@ -7,9 +7,8 @@ import { BountyWorkListItem } from '@/bounty/components/BountyWorkListItem/Bount
 import { BountyRoutes } from '@/bounty/constants'
 import { useBountyWorks } from '@/bounty/hooks/useBountyWorks'
 import { InputComponent, InputText } from '@/common/components/forms'
-import { CrossIcon } from '@/common/components/icons'
+import { CrossIcon, Loader } from '@/common/components/icons'
 import { List } from '@/common/components/List'
-import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { TextExtraSmall } from '@/common/components/typography'
@@ -98,7 +97,7 @@ export const WorkTab = ({ bountyId, wasSearched, setWasSearched }: Props) => {
           </div>
         </FilterContainer>
       )}
-      {isLoading ? <Loading /> : worksComponents}
+      {isLoading ? <Loader /> : worksComponents}
     </RowGapBlock>
   )
 }

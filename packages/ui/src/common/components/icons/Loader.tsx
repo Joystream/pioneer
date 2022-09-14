@@ -44,12 +44,13 @@ export function Loader({ className }: { className?: string }) {
 }
 
 export const LoaderComponent = styled.svg`
-  width: 24px;
+  width: 100%;
   height: 24px;
   border-radius: ${BorderRad.round};
   animation: spinLoader 1s infinite linear;
   justify-self: start;
   place-self: center;
+  margin: 100px 0;
 
   @keyframes spinLoader {
     0% {

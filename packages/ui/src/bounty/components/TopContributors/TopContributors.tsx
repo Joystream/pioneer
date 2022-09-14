@@ -5,8 +5,8 @@ import styled from 'styled-components'
 
 import { useBountyContributions } from '@/bounty/hooks/useBountyContributions'
 import { HorizontalScroller } from '@/common/components/HorizontalScroller/HorizontalScroller'
+import { Loader } from '@/common/components/icons'
 import { CommunityTile } from '@/common/components/icons/CommunityTile'
-import { Loading } from '@/common/components/Loading'
 import { StatisticItem } from '@/common/components/statistics'
 import { TextBig, TextExtraHuge, TextSmall, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
@@ -36,7 +36,7 @@ export const TopContributors = () => {
     }
 
     if (isLoading) {
-      return <Loading />
+      return <Loader />
     }
 
     return (

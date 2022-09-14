@@ -1,10 +1,10 @@
 import React from 'react'
 
 import { ElectedCouncilOrderByInput } from '@/common/api/queries'
+import { Loader } from '@/common/components/icons'
 import { List } from '@/common/components/List'
 import { ListHeader } from '@/common/components/List/ListHeader'
 import { SortHeader } from '@/common/components/List/SortHeader'
-import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
@@ -19,7 +19,7 @@ export const PastCouncilsList = () => {
   const { isLoading, councils, pagination } = usePastCouncils({ order })
 
   if (isLoading) {
-    return <Loading />
+    return <Loader />
   }
 
   if (!councils?.length) {

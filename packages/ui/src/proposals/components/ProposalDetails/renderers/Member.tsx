@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Loading } from '@/common/components/Loading'
+import { Loader } from '@/common/components/icons'
 import { StatisticItem } from '@/common/components/statistics'
 import { TextBig } from '@/common/components/typography'
 import { MemberInfo } from '@/memberships/components'
@@ -17,7 +17,7 @@ export const Member = ({ label, value }: Props) => {
   return (
     <StatisticItem title={label}>
       {isLoading ? (
-        <Loading />
+        <Loader />
       ) : member ? (
         <MemberInfo member={member} memberSize="m" />
       ) : (

@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 import { CurrencyName } from '@/app/constants/currency'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
-import { Loading } from '@/common/components/Loading'
+import { Loader } from '@/common/components/icons'
 import { TextMedium, TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { cutText } from '@/common/helpers'
@@ -82,7 +82,7 @@ export const OpeningTooltip = ({ onMount, mention, urlAddress }: OpeningTooltipP
           </Footer>
         </>
       ) : (
-        <Loading />
+        <Loader />
       )}
     </Container>
   )

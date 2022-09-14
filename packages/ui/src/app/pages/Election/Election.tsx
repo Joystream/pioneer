@@ -3,9 +3,8 @@ import { useHistory } from 'react-router-dom'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
-import { LinkIcon } from '@/common/components/icons'
+import { LinkIcon, Loader } from '@/common/components/icons'
 import { LinkSymbol } from '@/common/components/icons/symbols'
-import { Loading } from '@/common/components/Loading'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { BlockDurationStatistics, StatisticItem, Statistics } from '@/common/components/statistics'
@@ -59,7 +58,7 @@ export const Election = () => {
   }, [electionStage])
 
   if (isLoadingElectionStage) {
-    return <PageLayout header={null} main={<Loading />} />
+    return <PageLayout header={null} main={<Loader />} />
   }
 
   const header = (

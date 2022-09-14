@@ -2,10 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { ForumThreadOrderByInput } from '@/common/api/queries'
+import { Loader } from '@/common/components/icons'
 import { List } from '@/common/components/List'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { SortHeader } from '@/common/components/List/SortHeader'
-import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
@@ -53,7 +53,7 @@ export const ThreadList = ({
       </ListHeaders>
 
       {isLoading ? (
-        <Loading />
+        <Loader />
       ) : (
         <List as="div" isArchive={isArchive}>
           {setPage && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}

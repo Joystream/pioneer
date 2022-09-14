@@ -2,7 +2,7 @@ import React from 'react'
 import { generatePath } from 'react-router'
 
 import { BlockTime } from '@/common/components/BlockTime'
-import { Loading } from '@/common/components/Loading'
+import { Loader } from '@/common/components/icons'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TokenValue } from '@/common/components/typography'
 import {
@@ -32,10 +32,10 @@ export const PastCouncilListItem = ({ council }: Props) => {
     >
       <Info>#{council.id}</Info>
       <BlockTime block={council.endedAt} layout="reverse-start" lessInfo />
-      {isLoading ? <Loading /> : <TokenValue value={totalSpent} />}
-      {isLoading ? <Loading /> : <TokenValue value={spentOnProposals} />}
-      {isLoading ? <Loading /> : <CountInfo count={proposalsApproved} />}
-      {isLoading ? <Loading /> : <CountInfo count={proposalsRejected} />}
+      {isLoading ? <Loader /> : <TokenValue value={totalSpent} />}
+      {isLoading ? <Loader /> : <TokenValue value={spentOnProposals} />}
+      {isLoading ? <Loader /> : <CountInfo count={proposalsApproved} />}
+      {isLoading ? <Loader /> : <CountInfo count={proposalsRejected} />}
     </PastCouncilTableListItem>
   )
 }

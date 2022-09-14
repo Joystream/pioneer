@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
-import { CheckboxIcon } from '@/common/components/icons'
-import { Loading } from '@/common/components/Loading'
+import { CheckboxIcon, Loader } from '@/common/components/icons'
 import { formatDuration } from '@/common/components/statistics/BlockDurationStatistics'
 import { TextBig, TextInlineMedium, TextInlineSmall, TextSmall } from '@/common/components/typography'
 import { DurationValue } from '@/common/components/typography/DurationValue'
@@ -37,7 +36,7 @@ export const ProposalTile = React.memo(({ proposalId }: TileProps) => {
   }, [proposal?.status])
 
   if (isLoading || !proposal) {
-    return <Loading />
+    return <Loader />
   }
   return (
     <Wrapper>
@@ -129,10 +128,10 @@ const TimeLabel = styled(TextSmall)`
     grid-column-gap: 2px;
     font-size: 12px;
     font-weight: 700;
-    color: ${Colors.Black[500]}
+    color: ${Colors.Black[500]};
   }
   & span {
-    margin 0 2px 0 0;
+    margin: 0 2px 0 0;
   }
 `
 

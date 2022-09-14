@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { Loading } from '@/common/components/Loading'
+import { Loader } from '@/common/components/icons'
 import { Pagination } from '@/common/components/Pagination'
 import { TextBig } from '@/common/components/typography'
 import { OpeningsList } from '@/working-groups/components/OpeningsList/OpeningsList'
@@ -14,7 +14,7 @@ export const OpeningsPagination = (props: Props) => {
   const { isLoading, openings, pageCount } = useOpeningsPagination({ ...props, page })
 
   if (isLoading) {
-    return <Loading />
+    return <Loader />
   }
   if (openings.length === 0) {
     return <TextBig>No openings found</TextBig>

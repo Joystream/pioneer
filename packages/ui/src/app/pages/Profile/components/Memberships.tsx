@@ -1,18 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Loading } from '../../../../common/components/Loading'
-import { MainPanel, RowGapBlock } from '../../../../common/components/page/PageContent'
-import { TextMedium } from '../../../../common/components/typography'
-import { AddMembershipButton } from '../../../../memberships/components/AddMembershipButton'
-import { MembersSection } from '../../../../memberships/components/MembersSection'
-import { useMyMemberships } from '../../../../memberships/hooks/useMyMemberships'
+import { Loader } from '@/common/components/icons'
+import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
+import { TextMedium } from '@/common/components/typography'
+import { AddMembershipButton } from '@/memberships/components/AddMembershipButton'
+import { MembersSection } from '@/memberships/components/MembersSection'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 export function Memberships() {
   const { isLoading, members, active, hasMembers } = useMyMemberships()
 
   if (isLoading) {
-    return <Loading />
+    return <Loader />
   }
 
   if (!hasMembers) {

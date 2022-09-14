@@ -2,8 +2,8 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { Loader } from '@/common/components/icons'
 import { List } from '@/common/components/List'
-import { Loading } from '@/common/components/Loading'
 import { Colors } from '@/common/constants'
 import { Member } from '@/memberships/types'
 import { ElectionListItem } from '@/overview/components/DeadlineList/ElectionListItem'
@@ -24,7 +24,7 @@ export const DeadlineList: React.FC<DeadlineListProps> = React.memo(({ workingGr
   const { isLoading, deadlines, hideForStorage, count } = useDeadlines({ groupId: workingGroup?.id, member: member })
 
   if (isLoading) {
-    return <Loading />
+    return <Loader />
   }
 
   return (

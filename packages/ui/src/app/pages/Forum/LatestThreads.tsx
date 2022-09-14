@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { PageLayout } from '@/app/components/PageLayout'
-import { Loading } from '@/common/components/Loading'
+import { Loader } from '@/common/components/icons'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
@@ -22,7 +22,7 @@ export const LatestThreads = () => {
       }
       main={
         isLoading ? (
-          <Loading />
+          <Loader />
         ) : (
           <ThreadList
             threads={threads}

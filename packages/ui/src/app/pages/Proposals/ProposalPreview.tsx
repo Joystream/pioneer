@@ -7,8 +7,8 @@ import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/P
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { CopyButtonTemplate } from '@/common/components/buttons'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
+import { Loader } from '@/common/components/icons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
-import { Loading } from '@/common/components/Loading'
 import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
@@ -97,7 +97,7 @@ export const ProposalPreview = () => {
         main={
           <RowGapBlock gap={24}>
             <ContentWithSidePanel>
-              <Loading />
+              <Loader />
             </ContentWithSidePanel>
           </RowGapBlock>
         }

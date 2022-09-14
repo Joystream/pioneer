@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Loading } from '@/common/components/Loading'
+import { Loader } from '@/common/components/icons'
 import { VoteDisplay } from '@/proposals/constants'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { useProposalVotesByMember } from '@/proposals/hooks/useProposalVotesByMember'
@@ -32,7 +32,7 @@ export const ProposalItemVoteDetails = ({ proposal, memberId, isCouncilMember }:
           <VoteForProposalButton id={proposal.id}>Vote</VoteForProposalButton>
         </span>
       )}
-      {isLoading ? <Loading /> : votes?.map(getVoteDisplay(constitutionality))}
+      {isLoading ? <Loader /> : votes?.map(getVoteDisplay(constitutionality))}
     </>
   )
 }

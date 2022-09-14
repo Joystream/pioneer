@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { HorizontalScroller } from '@/common/components/HorizontalScroller/HorizontalScroller'
-import { Loading } from '@/common/components/Loading'
+import { Loader } from '@/common/components/icons'
 import { Proposal } from '@/proposals/types/proposals'
 
 import { ProposalTile } from './ProposalTile'
@@ -17,7 +17,7 @@ export const ProposalsTilesList = React.memo(({ proposals, isLoading }: ListProp
   const { t } = useTranslation('overview')
   const tiles = proposals.map((proposal) => <ProposalTile key={proposal.id} proposalId={proposal.id} />)
   return isLoading ? (
-    <Loading />
+    <Loader />
   ) : (
     <ScrollerWrapper>
       <Scroller title={t('proposals.title')} count={proposals.length} items={tiles} />

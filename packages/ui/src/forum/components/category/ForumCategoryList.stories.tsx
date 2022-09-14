@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react'
 import React, { useState } from 'react'
 
-import { Loading } from '@/common/components/Loading'
+import { Loader } from '@/common/components/icons'
 import {
   ForumCategoryFieldsFragment,
   GetForumCategoriesDocument,
@@ -34,7 +34,7 @@ const Template: Story = ({ isArchive }) => {
         }}
       />
 
-      {!categories.length ? <Loading /> : <ForumCategoryList categories={categories} isArchive={isArchive} />}
+      {!categories.length ? <Loader /> : <ForumCategoryList categories={categories} isArchive={isArchive} />}
     </MockApolloProvider>
   )
 }

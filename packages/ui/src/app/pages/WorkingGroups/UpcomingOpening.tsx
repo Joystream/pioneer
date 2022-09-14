@@ -5,8 +5,8 @@ import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/P
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons/Buttons'
+import { Loader } from '@/common/components/icons'
 import { BellIcon } from '@/common/components/icons/BellIcon'
-import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { ContentWithSidePanel, MainPanel, PageFooter, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
@@ -32,7 +32,7 @@ export const UpcomingOpening = () => {
         main={
           <RowGapBlock gap={24}>
             <ContentWithSidePanel>
-              <Loading />
+              <Loader />
             </ContentWithSidePanel>
           </RowGapBlock>
         }

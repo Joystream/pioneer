@@ -3,7 +3,7 @@ import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { Loading } from '@/common/components/Loading'
+import { Loader } from '@/common/components/icons'
 import { TextMedium, TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { cutText } from '@/common/helpers'
@@ -54,7 +54,7 @@ export const ApplicationTooltip = React.memo(({ mention, onMount, urlAddress }: 
           </Footer>
         </>
       ) : (
-        <Loading />
+        <Loader />
       )}
     </Container>
   )

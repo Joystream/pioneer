@@ -8,8 +8,8 @@ import { BlockTime } from '@/common/components/BlockTime'
 import { CopyButtonTemplate } from '@/common/components/buttons'
 import { ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
+import { Loader } from '@/common/components/icons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
-import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { ContentWithSidePanel, MainPanel, PageFooter, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
@@ -70,7 +70,7 @@ export const WorkingGroupOpening = () => {
         main={
           <RowGapBlock gap={24}>
             <ContentWithSidePanel>
-              <Loading />
+              <Loader />
             </ContentWithSidePanel>
           </RowGapBlock>
         }

@@ -2,8 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { BlockTime } from '@/common/components/BlockTime'
+import { Loader } from '@/common/components/icons'
 import { TransferSymbol } from '@/common/components/icons/symbols'
-import { Loading } from '@/common/components/Loading'
 import {
   SidePaneTable,
   SidePaneColumn,
@@ -39,7 +39,7 @@ export const MemberDetails = React.memo(({ member }: Props) => {
   if (isLoading || !memberDetails) {
     return (
       <EmptyBody>
-        <Loading />
+        <Loader />
       </EmptyBody>
     )
   }

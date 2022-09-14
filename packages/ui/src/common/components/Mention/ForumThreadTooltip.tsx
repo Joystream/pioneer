@@ -2,8 +2,8 @@ import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { Loader } from '@/common/components/icons'
 import { ItemCount } from '@/common/components/ItemCount'
-import { Loading } from '@/common/components/Loading'
 import { ForumIcon } from '@/common/components/page/Sidebar/LinksIcons'
 import { TextExtraSmall, TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
@@ -44,7 +44,7 @@ export const ForumThreadTooltip = ({ onMount, mention, urlAddress }: ForumThread
           </Footer>
         </>
       ) : (
-        <Loading />
+        <Loader />
       )}
     </Container>
   )

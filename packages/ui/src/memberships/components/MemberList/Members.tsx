@@ -1,10 +1,10 @@
 import React from 'react'
 
 import { MembershipOrderByInput } from '@/common/api/queries'
+import { Loader } from '@/common/components/icons'
 import { List, ListItem } from '@/common/components/List'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { SortHeader } from '@/common/components/List/SortHeader'
-import { Loading } from '@/common/components/Loading'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { GetSortProps } from '@/common/hooks/useSort'
 
@@ -20,7 +20,7 @@ interface MemberListProps {
 
 export const MemberList = ({ isLoading, members, getSortProps }: MemberListProps) => {
   if (isLoading) {
-    return <Loading />
+    return <Loader />
   }
 
   if (members.length < 1) {
