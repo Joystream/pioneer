@@ -24,6 +24,14 @@ export default {
   },
 } as Meta
 
+interface Props {
+  containerSize: 's' | 'm' | 'l' | 'auto'
+  thread: RawForumThreadMock & ForumThreadFieldsFragment
+  postText: string
+  breadcrumbs: number
+  empty: boolean
+}
+
 const categoryId = 'ThreadItem-category-story'
 const getCategory = (index: number): RawForumCategoryMock => ({
   id: `${categoryId}-${index}`,
@@ -34,16 +42,7 @@ const getCategory = (index: number): RawForumCategoryMock => ({
   status: { __typename: 'CategoryStatusActive' },
 })
 
-interface Props {
-  containerSize: 's' | 'm' | 'l' | 'auto'
-  breadcrumbs: number
-  thread: RawForumThreadMock & ForumThreadFieldsFragment
-  halfSize: boolean
-  empty: boolean
-  postText: string
-  tags: string[]
-}
-const Template: Story<Props> = ({ containerSize, breadcrumbs, thread, halfSize, empty, postText, tags }) => {
+const Template: Story<Props> = ({ containerSize, breadcrumbs, thread, empty, postText }) => {
   const categories = useMemo(() => repeat(getCategory, breadcrumbs), [breadcrumbs])
 
   const rawThread = { ...thread, categoryId: last(categories).id }
@@ -55,19 +54,13 @@ const Template: Story<Props> = ({ containerSize, breadcrumbs, thread, halfSize, 
   }
   const forumthread = {
     ...asForumThread(rawThread),
-    tags: tags.map((title, index) => ({ id: String(index), title, threads: [], visibleThreadsCount: 0 })),
   }
 
   return (
     <MockApolloProvider members forum={forum}>
       <MemoryRouter>
         <Container size={containerSize}>
-          <ThreadItem
-            thread={forumthread}
-            badges={tags.map((badge) => ({ badge }))}
-            halfSize={halfSize}
-            empty={empty}
-          />
+          <ThreadItem thread={forumthread} empty={empty} />
         </Container>
       </MemoryRouter>
     </MockApolloProvider>
@@ -94,11 +87,9 @@ Default.args = {
     visiblePostsCount: 11,
     __typename: 'ForumThread',
   },
-  halfSize: false,
   empty: false,
   postText:
     'asperiores accusamus et et similique tempora odit a non maxime harum blanditiis magnam blanditiis libero ab quo inventore ipsum quo deserunt et esse et ea recusandae rerum beatae cumque non error quae et distinctio eligendi reprehenderit provident quis accusamus hic sapiente impedit natus et et sunt eligendi repudiandae sed assumenda quibusdam praesentium aut dignissimos sint qui quidem eum assumenda a repellendus et odio reprehenderit',
-  tags: ['Governance Budget', 'Election #6'],
 }
 
 const Container = styled(WhiteBlock)<{ size: Props['containerSize'] }>`

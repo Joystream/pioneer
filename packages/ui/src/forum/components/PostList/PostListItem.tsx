@@ -56,7 +56,7 @@ export const PostListItem = ({
   repliesToLink,
 }: PostListItemProps) => {
   const { active } = useMyMemberships()
-  const { createdAtBlock, lastEditedAt, author, text, repliesTo, status } = post
+  const { createdAtBlock, lastEditedAt, author, text, repliesTo } = post
   const [postText, setPostText] = useState<string>(text)
   const [postLastEditedAt, setPostLastEditedAt] = useState<string | undefined>(lastEditedAt)
 
