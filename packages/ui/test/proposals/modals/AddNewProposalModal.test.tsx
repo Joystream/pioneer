@@ -1680,7 +1680,6 @@ describe('UI: AddNewProposalModal', () => {
               <MembershipContext.Provider value={useMyMemberships}>
                 <ModalContextProvider>
                   <GlobalModals />
-                  {/*<AddNewProposalModal />*/}
                 </ModalContextProvider>
               </MembershipContext.Provider>
             </ApiContext.Provider>

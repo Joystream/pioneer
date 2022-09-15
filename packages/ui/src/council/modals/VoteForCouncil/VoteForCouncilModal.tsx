@@ -32,7 +32,7 @@ export const VoteForCouncilModal = () => {
   const { hasRequiredStake } = useHasRequiredStake(requiredStake, 'Voting')
 
   const { feeInfo } = useTransactionFee(
-    activeMember?.controllerAccount,
+    state.context.account?.address,
     () => api?.tx.referendum.vote('', requiredStake),
     [requiredStake]
   )
@@ -50,7 +50,7 @@ export const VoteForCouncilModal = () => {
     return <VoteForCouncilSuccessModal onClose={hideModal} candidateId={modalData.id} />
   }
 
-  if (!activeMember || !feeInfo || !minStake) {
+  if (!feeInfo || !minStake) {
     return null
   }
 
