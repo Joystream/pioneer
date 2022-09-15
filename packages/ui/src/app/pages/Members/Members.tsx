@@ -30,7 +30,15 @@ export const Members = () => {
       header={<PageHeader title="Members" />}
       main={
         <MainPanel>
-          <MemberListFilters memberCount={totalCount} onApply={setFilter} />
+          <MemberListFilters
+            memberCount={totalCount}
+            onApply={(filters) => {
+              if (!filters.search) {
+                return setFilter({ ...filters, searchFilter: 'Membership' })
+              }
+              setFilter(filters)
+            }}
+          />
           <MemberList
             isLoading={isLoading}
             members={members}

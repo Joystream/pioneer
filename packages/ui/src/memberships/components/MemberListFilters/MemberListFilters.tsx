@@ -16,7 +16,11 @@ import { MemberRole } from '@/memberships/types'
 
 import { SelectMemberRoles } from '../SelectMemberRoles'
 
-export type MemberSearchFilter = keyof typeof MembershipExternalResourceType | 'Membership'
+export type MemberSearchFilter =
+  | keyof typeof MembershipExternalResourceType
+  | 'Membership'
+  | 'Account_Address'
+  | 'Membership_ID'
 
 export interface MemberListFilter {
   search: string
@@ -40,6 +44,9 @@ const filterReducer = (filters: MemberListFilter, action: Action): MemberListFil
       return MemberListEmptyFilter
 
     case 'change':
+      if (action.field !== 'search' && !filters.search) {
+        return { ...filters, searchFilter: 'Membership', [action.field]: action.value }
+      }
       return { ...filters, [action.field]: action.value }
   }
   return filters
@@ -56,20 +63,22 @@ export const MemberListEmptyFilter: MemberListFilter = {
 const memberListIcons = {
   ...socialToIcon,
   MEMBERSHIP: <MyProfileIcon />,
+  MEMBERSHIP_ID: <MyProfileIcon />,
+  ACCOUNT_ADDRESS: <MyProfileIcon />,
 }
 
 const renderSocialOption = (option: MemberSearchFilter, props?: OptionProps, key?: any) =>
   props ? (
     <StyledOptionContainer key={key} {...props}>
       {memberListIcons[option.toUpperCase() as keyof typeof memberListIcons] ?? <span />}
-      <TextInlineMedium>{option}</TextInlineMedium>
+      <TextInlineMedium>{option.replace(/_/, ' ')}</TextInlineMedium>
       {props.selected && <CheckboxIcon />}
     </StyledOptionContainer>
   ) : (
     <SelectedOptionWrapper gap={10} align="center">
       {memberListIcons[option.toUpperCase() as keyof typeof memberListIcons]}
       <TextInlineMedium value bold>
-        {option}
+        {option.replace(/_/, ' ')}
       </TextInlineMedium>
     </SelectedOptionWrapper>
   )
@@ -77,17 +86,19 @@ const renderSocialOption = (option: MemberSearchFilter, props?: OptionProps, key
 const isFilterEmpty = objectEquals(MemberListEmptyFilter, { depth: 2 })
 
 const searchFilterOptions: MemberSearchFilter[] = [
-  'Facebook',
-  'Email',
+  'Membership',
+  'Membership_ID',
+  'Account_Address',
   'Discord',
+  'Email',
+  'Facebook',
   'Irc',
+  'Hyperlink',
   'Telegram',
+  'Twitter',
   'Wechat',
   'Whatsapp',
-  'Twitter',
-  'Membership',
   'Youtube',
-  'Hyperlink',
 ]
 
 export interface MemberListFiltersProps {
@@ -182,7 +193,7 @@ const Wrapper = styled.div`
 
   > *:first-child {
     display: flex;
-    width: 400px;
+    width: 440px;
     flex-direction: row-reverse;
 
     label {

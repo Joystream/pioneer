@@ -72,14 +72,24 @@ const searchFilterToGqlInput = (
 ): MembershipWhereInput => {
   if (!search) {
     return {}
-  } else if (searchFilter === 'Membership') {
-    return { OR: [{ controllerAccount_eq: search }, { rootAccount_eq: search }, { handle_contains: search }] }
-  } else {
-    return {
-      externalResources_some: {
-        type_eq: MembershipExternalResourceType[searchFilter as keyof typeof MembershipExternalResourceType],
-        value_contains: search,
-      },
+  }
+  if (searchFilter === 'Membership') {
+    return { handle_contains: search }
+  }
+
+  if (searchFilter === 'Membership_ID') {
+    return { id_eq: search }
+  }
+
+  if (searchFilter)
+    if (searchFilter === 'Account_Address') {
+      return { OR: [{ controllerAccount_eq: search }, { rootAccount_eq: search }] }
     }
+
+  return {
+    externalResources_some: {
+      type_eq: MembershipExternalResourceType[searchFilter as keyof typeof MembershipExternalResourceType],
+      value_contains: search,
+    },
   }
 }

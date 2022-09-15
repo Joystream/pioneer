@@ -23,6 +23,8 @@ interface MemberListItemProps {
   searchFilter?: MemberSearchFilter
 }
 
+const EMPTY_SEARCH_FILTERS: MemberSearchFilter[] = ['Membership', 'Membership_ID', 'Account_Address']
+
 export const MemberListItem = ({ member, searchFilter }: MemberListItemProps) => {
   const balance = useBalance(member.controllerAccount)
   const { slashed, terminated } = useMemberRowWorkDetails(member)
@@ -63,7 +65,7 @@ export const MemberListItem = ({ member, searchFilter }: MemberListItemProps) =>
           <AccountLocks locks={balance?.locks} />
         </MemberColumn>
       </MemberItemWrap>
-      {searchFilter && searchFilter !== 'Membership' && (
+      {searchFilter && !EMPTY_SEARCH_FILTERS.includes(searchFilter) && (
         <ExternalInfo>
           {socialToIcon[searchFilter.toUpperCase() as Socials]}
           {member.externalResources?.find((externalResource) => externalResource.source === searchFilter.toUpperCase())
