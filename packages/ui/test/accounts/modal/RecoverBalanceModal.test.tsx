@@ -4,11 +4,11 @@ import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
 
-import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
+import { RecoverBalanceModal } from '@/accounts/modals/RecoverBalance'
 import { ApiContext } from '@/api/providers/context'
+import { GlobalModals } from '@/app/GlobalModals'
 import { createType } from '@/common/model/createType'
-import { ModalContext } from '@/common/providers/modal/context'
-import { ModalCallData, UseModal } from '@/common/providers/modal/types'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
@@ -25,19 +25,26 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 describe('UI: RecoverBalanceModal', () => {
   const api = stubApi()
   const server = setupMockServer({ noCleanupAfterEach: true })
   let tx: any
+  const modalData = {
+    lock: {
+      amount: new BN(300),
+      type: 'Council Candidate',
+    },
+    address: alice.address,
+    memberId: '0',
+  }
 
   beforeAll(async () => {
+    mockUseModalCall({ modalData })
     await cryptoWaitReady()
     seedMembers(server.server, 2)
   })
-
-  let useModal: UseModal<ModalCallData<RecoverBalanceModalCall>>
 
   const useMyMemberships: MyMemberships = {
     active: undefined,
@@ -57,19 +64,6 @@ describe('UI: RecoverBalanceModal', () => {
     tx = stubTransaction(api, 'api.tx.council.releaseCandidacyStake')
     mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
     mockedTransactionFee.transaction = tx as any
-    useModal = {
-      hideModal: jest.fn(),
-      showModal: jest.fn(),
-      modal: 'RecoverBalance',
-      modalData: {
-        lock: {
-          amount: new BN(300),
-          type: 'Council Candidate',
-        },
-        address: alice.address,
-        memberId: '0',
-      },
-    }
   })
 
   it('Insufficient funds', async () => {
@@ -82,7 +76,7 @@ describe('UI: RecoverBalanceModal', () => {
 
   it('Transaction summary', async () => {
     renderModal()
-
+    screen.findByText(/^sign transaction and transfer$/i)
     expect(await screen.findByRole('heading', { name: 'Recover balances' })).toBeDefined()
   })
 
@@ -106,7 +100,7 @@ describe('UI: RecoverBalanceModal', () => {
     })
 
     it('Voting', async () => {
-      useModal.modalData.lock = {
+      modalData.lock = {
         amount: new BN(300),
         type: 'Voting',
       }
@@ -120,6 +114,15 @@ describe('UI: RecoverBalanceModal', () => {
 
   it('Success', async () => {
     stubTransactionSuccess(tx, 'council', 'CandidacyStakeRelease', [createType('MemberId', 0)])
+    mockUseModalCall({
+      modalData: {
+        ...modalData,
+        lock: {
+          amount: new BN(300),
+          type: 'Council Candidate',
+        },
+      },
+    })
 
     renderModal()
     fireEvent.click(await screen.findByText(/^sign transaction and transfer$/i))
@@ -139,15 +142,16 @@ describe('UI: RecoverBalanceModal', () => {
   function renderModal() {
     render(
       <MockKeyringProvider>
-        <MockQueryNodeProviders>
-          <MembershipContext.Provider value={useMyMemberships}>
-            <ApiContext.Provider value={api}>
-              <ModalContext.Provider value={useModal}>
+        <ModalContextProvider>
+          <MockQueryNodeProviders>
+            <MembershipContext.Provider value={useMyMemberships}>
+              <ApiContext.Provider value={api}>
+                <GlobalModals />
                 <RecoverBalanceModal />
-              </ModalContext.Provider>
-            </ApiContext.Provider>
-          </MembershipContext.Provider>
-        </MockQueryNodeProviders>
+              </ApiContext.Provider>
+            </MembershipContext.Provider>
+          </MockQueryNodeProviders>
+        </ModalContextProvider>
       </MockKeyringProvider>
     )
   }

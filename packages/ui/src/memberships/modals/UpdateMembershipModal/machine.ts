@@ -67,7 +67,7 @@ export const updateMembershipMachine = createMachine<Context, UpdateMembershipEv
       },
     },
     success: { type: 'final' },
-    error: { type: 'final' },
+    error: { type: 'final', meta: { message: 'There was a problem updating membership.' } },
     canceled: { type: 'final' },
   },
 })

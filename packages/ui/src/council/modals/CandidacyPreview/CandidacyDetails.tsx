@@ -6,6 +6,7 @@ import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePaneLabel, SidePaneRow, SidePaneText } from '@/common/components/SidePane'
 import { TokenValue } from '@/common/components/typography'
+import { UserImage } from '@/common/components/UserImage/UserImage'
 import { CandidateStatistics } from '@/council/components/candidate/CandidateStatistics'
 import { ElectionCandidateWithDetails } from '@/council/types'
 
@@ -18,7 +19,7 @@ export const CandidacyDetails = ({ candidate }: Props) => {
     <Details gap={24}>
       <RowGapBlock gap={4}>
         <Title>{candidate.info.title}</Title>
-        {candidate.info.bannerUri && <HeaderImage src={candidate.info.bannerUri} />}
+        {candidate.info.bannerUri && <HeaderImage src={candidate.info.bannerUri} customFallbackComponent={<div />} />}
       </RowGapBlock>
       <RowGapBlock gap={4}>
         <h6>Past elections results</h6>
@@ -46,7 +47,7 @@ const Details = styled(RowGapBlock)`
   padding: 24px;
 `
 
-const HeaderImage = styled.img`
+const HeaderImage = styled(UserImage)`
   width: 100%;
 `
 

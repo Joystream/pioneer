@@ -1,4 +1,3 @@
-import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -10,9 +9,7 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
-import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { WithdrawWorkModalMachine, WithdrawWorkModalState } from '@/bounty/modals/WithdrawWorkEntryModal/machine'
-import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer } from '@/common/components/forms'
 import { FileIcon } from '@/common/components/icons'
 import {
@@ -26,6 +23,7 @@ import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextMedium, TokenValue } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { Colors } from '@/common/constants'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -117,25 +115,6 @@ export const WithdrawWorkEntryModal = () => {
         description={t('modals.withdrawWorkEntry.authorizeDescription')}
         buttonLabel={t('modals.withdrawWorkEntry.submitButton')}
       />
-    )
-  }
-
-  if (state.matches(WithdrawWorkModalState.success)) {
-    return (
-      <SuccessTransactionModal
-        onClose={hideModal}
-        onButtonClick={hideModal}
-        message={t('modals.withdrawWorkEntry.success')}
-        buttonLabel={t('modals.withdrawWorkEntry.successButton')}
-      />
-    )
-  }
-
-  if (state.matches(WithdrawWorkModalState.error)) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        {t('modals.withdrawWorkEntry.error')}
-      </FailureModal>
     )
   }
 

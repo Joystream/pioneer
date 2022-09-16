@@ -45,8 +45,8 @@ export const editThreadTitleMachine = createMachine<Context, EditThreadTitleEven
         ],
       },
     },
-    success: { type: 'final' },
-    error: { type: 'final' },
+    success: { type: 'final', meta: { message: 'You have just successfully edited thread title.' } },
+    error: { type: 'final', meta: { message: 'There was a problem while saving thread title.' } },
     canceled: { type: 'final' },
   },
 })

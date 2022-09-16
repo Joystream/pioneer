@@ -5,10 +5,10 @@ import { generatePath, MemoryRouter, Route } from 'react-router-dom'
 
 import { ApiContext } from '@/api/providers/context'
 import { CurrencyName } from '@/app/constants/currency'
+import { GlobalModals } from '@/app/GlobalModals'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
-import { ModalContext } from '@/common/providers/modal/context'
-import { UseModal } from '@/common/providers/modal/types'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { ForumRoutes } from '@/forum/constant'
 import { CreateThreadModal } from '@/forum/modals/CreateThreadModal'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -29,7 +29,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
@@ -50,12 +50,11 @@ describe('CreateThreadModal', () => {
     stubConst(api, 'forum.threadDeposit', createBalanceOf(values?.thread ?? 10))
   }
 
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
+  const useModal = {
     showModal: jest.fn(),
-    modal: null,
     modalData: { categoryId: '0' },
   }
+
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -69,6 +68,7 @@ describe('CreateThreadModal', () => {
 
   beforeAll(() => {
     stubAccounts([alice])
+    mockUseModalCall(useModal)
   })
 
   beforeEach(async () => {
@@ -231,10 +231,11 @@ describe('CreateThreadModal', () => {
     return render(
       <MemoryRouter initialEntries={['/forum']}>
         <ApiContext.Provider value={api}>
-          <ModalContext.Provider value={useModal}>
+          <ModalContextProvider>
             <MockKeyringProvider>
               <MembershipContext.Provider value={useMyMemberships}>
                 <MockApolloProvider>
+                  <GlobalModals />
                   <CreateThreadModal />
                   <Route
                     path="*"
@@ -246,7 +247,7 @@ describe('CreateThreadModal', () => {
                 </MockApolloProvider>
               </MembershipContext.Provider>
             </MockKeyringProvider>
-          </ModalContext.Provider>
+          </ModalContextProvider>
         </ApiContext.Provider>
       </MemoryRouter>
     )

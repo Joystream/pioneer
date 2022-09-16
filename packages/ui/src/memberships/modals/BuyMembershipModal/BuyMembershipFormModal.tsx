@@ -1,3 +1,4 @@
+import HCaptcha from '@hcaptcha/react-hcaptcha'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import React, { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -35,13 +36,21 @@ import {
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
+import { definedValues } from '@/common/utils'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { AvatarInput } from '@/memberships/components/AvatarInput'
+import { SocialMediaSelector } from '@/memberships/components/SocialMediaSelector/SocialMediaSelector'
 import { useUploadAvatarAndSubmit } from '@/memberships/hooks/useUploadAvatarAndSubmit'
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
 import { SelectMember } from '../../components/SelectMember'
-import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../model/validation'
+import {
+  AccountSchema,
+  AvatarURISchema,
+  ExternalResourcesSchema,
+  HandleSchema,
+  ReferrerSchema,
+} from '../../model/validation'
 import { Member } from '../../types'
 
 interface BuyMembershipFormModalProps {
@@ -68,6 +77,7 @@ const CreateMemberSchema = Yup.object().shape({
   hasTerms: Yup.boolean().required().oneOf([true]),
   isReferred: Yup.boolean(),
   referrer: ReferrerSchema,
+  externalResources: ExternalResourcesSchema,
 })
 
 export interface MemberFormFields {
@@ -81,6 +91,8 @@ export interface MemberFormFields {
   referrer?: Member
   hasTerms?: boolean
   invitor?: Member
+  captchaToken?: string
+  externalResources: Record<string, string>
 }
 
 const formDefaultValues = {
@@ -91,6 +103,7 @@ const formDefaultValues = {
   isReferred: false,
   referrer: undefined,
   hasTerms: false,
+  externalResources: {},
 }
 
 export interface InviteMembershipFormFields {
@@ -107,9 +120,11 @@ export const BuyMembershipForm = ({
   type,
 }: BuyMembershipFormProps) => {
   const { allAccounts } = useMyAccounts()
+  const [captchaToken, setCaptchaToken] = useState<string | undefined>()
   const [formHandleMap, setFormHandleMap] = useState('')
-  const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
   const { isUploading, uploadAvatarAndSubmit } = useUploadAvatarAndSubmit(onSubmit)
+  const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
+
   const form = useForm<MemberFormFields>({
     resolver: useYupValidationResolver(CreateMemberSchema),
     context: { size: data?.membershipsConnection.totalCount },
@@ -134,6 +149,10 @@ export const BuyMembershipForm = ({
       form.trigger('handle')
     }
   }, [data?.membershipsConnection.totalCount])
+
+  const isFormValid = !isUploading && form.formState.isValid
+  const isDisabled =
+    type === 'onBoarding' && process.env.REACT_APP_CAPTCHA_SITE_KEY ? !captchaToken || !isFormValid : !isFormValid
 
   return (
     <>
@@ -201,6 +220,19 @@ export const BuyMembershipForm = ({
             </Row>
 
             <AvatarInput />
+
+            <SocialMediaSelector />
+
+            {process.env.REACT_APP_CAPTCHA_SITE_KEY && type === 'onBoarding' && (
+              <Row>
+                <HCaptcha
+                  sitekey={process.env.REACT_APP_CAPTCHA_SITE_KEY}
+                  theme="dark"
+                  languageOverride="en"
+                  onVerify={setCaptchaToken}
+                />
+              </Row>
+            )}
           </ScrolledModalContainer>
         </FormProvider>
       </ScrolledModalBody>
@@ -252,8 +284,11 @@ export const BuyMembershipForm = ({
           )}
           <ButtonPrimary
             size="medium"
-            onClick={() => uploadAvatarAndSubmit(form.getValues())}
-            disabled={!form.formState.isValid || isUploading}
+            onClick={() => {
+              const values = form.getValues()
+              uploadAvatarAndSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
+            }}
+            disabled={isDisabled}
           >
             {isUploading ? <Loading text="Uploading avatar" /> : 'Create a Membership'}
           </ButtonPrimary>

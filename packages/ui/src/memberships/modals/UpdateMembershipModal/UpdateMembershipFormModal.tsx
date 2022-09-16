@@ -18,21 +18,23 @@ import {
 } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
 import { WithNullableValues } from '@/common/types/form'
+import { definedValues } from '@/common/utils'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { AvatarInput } from '@/memberships/components/AvatarInput'
+import { SocialMediaSelector } from '@/memberships/components/SocialMediaSelector/SocialMediaSelector'
 import { useUploadAvatarAndSubmit } from '@/memberships/hooks/useUploadAvatarAndSubmit'
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
-import { AvatarURISchema, HandleSchema } from '../../model/validation'
-import { Member } from '../../types'
+import { AvatarURISchema, ExternalResourcesSchema, HandleSchema } from '../../model/validation'
+import { MemberWithDetails } from '../../types'
 
 import { UpdateMemberForm } from './types'
-import { changedOrNull, hasAnyEdits } from './utils'
+import { changedOrNull, hasAnyEdits, membershipExternalResourceToObject } from './utils'
 
 interface Props {
   onClose: () => void
   onSubmit: (params: WithNullableValues<UpdateMemberForm>) => void
-  member: Member
+  member: MemberWithDetails
 }
 
 const UpdateMemberSchema = Yup.object().shape({
@@ -40,9 +42,10 @@ const UpdateMemberSchema = Yup.object().shape({
   handle: Yup.string().when('$isHandleChanged', (isHandleChanged: boolean, schema: AnySchema) => {
     return isHandleChanged ? HandleSchema : schema
   }),
+  externalResources: ExternalResourcesSchema,
 })
 
-const getUpdateMemberFormInitial = (member: Member) => ({
+const getUpdateMemberFormInitial = (member: MemberWithDetails) => ({
   id: member.id,
   name: member.name || '',
   handle: member.handle || '',
@@ -50,6 +53,7 @@ const getUpdateMemberFormInitial = (member: Member) => ({
   avatarUri: process.env.REACT_APP_AVATAR_UPLOAD_URL ? '' : typeof member.avatar === 'string' ? member.avatar : '',
   rootAccount: member.rootAccount,
   controllerAccount: member.controllerAccount,
+  externalResources: membershipExternalResourceToObject(member.externalResources) ?? {},
 })
 
 export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) => {
@@ -57,9 +61,15 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const [handleMap, setHandleMap] = useState<string>(member.handle)
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: handleMap } } })
   const context = { size: data?.membershipsConnection.totalCount, isHandleChanged: handleMap !== member.handle }
-  const { uploadAvatarAndSubmit, isUploading } = useUploadAvatarAndSubmit((fields) =>
-    onSubmit(changedOrNull(fields, getUpdateMemberFormInitial(member)))
+  const { uploadAvatarAndSubmit, isUploading } = useUploadAvatarAndSubmit<UpdateMemberForm>((fields) =>
+    onSubmit(
+      changedOrNull(
+        { ...fields, externalResources: { ...definedValues(fields.externalResources) } },
+        getUpdateMemberFormInitial(member)
+      )
+    )
   )
+
   const form = useForm({
     resolver: useYupValidationResolver<UpdateMemberForm>(UpdateMemberSchema),
     defaultValues: {
@@ -136,7 +146,13 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
               </InputComponent>
             </Row>
 
-            <AvatarInput />
+            <AvatarInput initialPreview={member.avatar} />
+
+            <SocialMediaSelector
+              initialSocials={
+                member.externalResources ? member.externalResources.map((resource) => resource.source) : []
+              }
+            />
           </FormProvider>
         </ScrolledModalContainer>
       </ScrolledModalBody>

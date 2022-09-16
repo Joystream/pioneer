@@ -1,4 +1,3 @@
-import { useMachine } from '@xstate/react'
 import React, { useLayoutEffect, useMemo } from 'react'
 
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
@@ -6,8 +5,7 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { isCouncilCandidateData, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance/index'
 import { recoverBalanceMachine } from '@/accounts/modals/RecoverBalance/machine'
 import { useApi } from '@/api/hooks/useApi'
-import { FailureModal } from '@/common/components/FailureModal'
-import { TextMedium } from '@/common/components/typography'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { isDefined } from '@/common/utils'
 import { useMember } from '@/memberships/hooks/useMembership'
@@ -70,14 +68,6 @@ export const RecoverBalanceModal = () => {
 
   if (state.matches('success')) {
     return <RecoverBalanceSuccessModal onClose={hideModal} />
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        <TextMedium>There was a problem with recovering balance.</TextMedium>
-      </FailureModal>
-    )
   }
 
   return null

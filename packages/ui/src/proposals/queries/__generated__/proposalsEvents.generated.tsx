@@ -160,6 +160,7 @@ export type GetProposalsEventsQuery = {
     | { __typename: 'CouncilorRewardUpdatedEvent' }
     | { __typename: 'EnglishAuctionSettledEvent' }
     | { __typename: 'EnglishAuctionStartedEvent' }
+    | { __typename: 'FoundingMemberCreatedEvent' }
     | { __typename: 'InitialInvitationBalanceUpdatedEvent' }
     | { __typename: 'InitialInvitationCountUpdatedEvent' }
     | { __typename: 'InvitesTransferredEvent' }
@@ -172,6 +173,7 @@ export type GetProposalsEventsQuery = {
     | { __typename: 'MemberProfileUpdatedEvent' }
     | { __typename: 'MemberVerificationStatusUpdatedEvent' }
     | { __typename: 'MembershipBoughtEvent' }
+    | { __typename: 'MembershipGiftedEvent' }
     | { __typename: 'MembershipPriceUpdatedEvent' }
     | { __typename: 'MetaprotocolTransactionStatusEvent' }
     | { __typename: 'NewCandidateEvent' }
@@ -328,7 +330,6 @@ export type GetProposalsEventsQuery = {
     | { __typename: 'VideoReactedEvent' }
     | { __typename: 'VideoReactionsPreferenceEvent' }
     | { __typename: 'VoteCastEvent' }
-    | { __typename: 'VoteOnPollEvent' }
     | { __typename: 'VoteRevealedEvent' }
     | { __typename: 'VotingPeriodStartedEvent' }
     | { __typename: 'WorkEntrantFundsWithdrawnEvent' }
