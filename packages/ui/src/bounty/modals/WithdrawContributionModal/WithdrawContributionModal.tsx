@@ -1,4 +1,3 @@
-import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -8,11 +7,10 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
-import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { WithdrawSignModal } from '@/bounty/modals/WithdrawSignModal'
-import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO } from '@/common/constants'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { createType } from '@/common/model/createType'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
@@ -28,7 +26,12 @@ export const WithdrawContributionModal = () => {
     hideModal,
   } = useModal<BountyWithdrawContributionModalCall>()
 
-  const [state, send] = useMachine(defaultTransactionModalMachine)
+  const [state, send] = useMachine(
+    defaultTransactionModalMachine(
+      'There was a problem while withdrawing your contribution.',
+      'Your contribution has been successfully withdrawn.'
+    )
+  )
 
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
@@ -95,25 +98,6 @@ export const WithdrawContributionModal = () => {
         bounty={bounty}
         isContributor
       />
-    )
-  }
-
-  if (state.matches('success')) {
-    return (
-      <SuccessTransactionModal
-        onClose={hideModal}
-        onButtonClick={hideModal}
-        message={t('modals.withdrawContribution.success')}
-        buttonLabel={t('modals.withdrawContribution.successButton')}
-      />
-    )
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        {t('modals.withdrawContribution.error')}
-      </FailureModal>
     )
   }
 

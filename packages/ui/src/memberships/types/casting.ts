@@ -63,4 +63,10 @@ export const asMemberWithDetails = (fields: MemberWithDetailsFieldsFragment): Me
     }
   }),
   invitedBy: fields.invitedBy ? asMember(fields.invitedBy) : undefined,
+  externalResources: fields.metadata.externalResources
+    ? fields.metadata.externalResources.map((resource) => ({
+        source: resource.type,
+        value: resource.value,
+      }))
+    : undefined,
 })

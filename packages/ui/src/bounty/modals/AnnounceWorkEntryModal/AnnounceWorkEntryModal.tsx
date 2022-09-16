@@ -1,4 +1,3 @@
-import { useMachine } from '@xstate/react'
 import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -17,8 +16,6 @@ import { CurrencyName } from '@/app/constants/currency'
 import { BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEntryModal/index'
 import { announceWorkEntryMachine, AnnounceWorkEntryStates } from '@/bounty/modals/AnnounceWorkEntryModal/machine'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
-import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
-import { FailureModal } from '@/common/components/FailureModal'
 import { Input, InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import {
@@ -34,6 +31,7 @@ import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO, Fonts } from '@/common/constants'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
 import { formatTokenValue } from '@/common/model/formatters'
@@ -159,28 +157,6 @@ export const AnnounceWorkEntryModal = () => {
     })
 
     return null
-  }
-
-  if (state.matches(AnnounceWorkEntryStates.success)) {
-    return (
-      <SuccessTransactionModal
-        buttonLabel={t('modals.announceWorkEntry.successButton')}
-        onClose={hideModal}
-        onButtonClick={hideModal}
-        message={t('modals.announceWorkEntry.success', { bounty: bounty.title })}
-      />
-    )
-  }
-  if (state.matches(AnnounceWorkEntryStates.error)) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        {t('modals.contribute.error')}
-      </FailureModal>
-    )
-  }
-
-  if (state.matches(AnnounceWorkEntryStates.cancel)) {
-    return <FailureModal onClose={hideModal}>{t('common:modals.transactionCanceled')}</FailureModal>
   }
 
   if (state.matches(AnnounceWorkEntryStates.bindStakingAccount)) {

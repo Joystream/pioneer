@@ -11,7 +11,18 @@ export const toMemberTransactionParams = (formData: MemberFormFields) => ({
   metadata: metadataToBytes(MembershipMetadata, {
     name: formData.name,
     about: formData.about,
-    avatarUri: formData.avatarUri,
+    ...(formData.externalResources ? { externalResources: toExternalResources(formData.externalResources) } : {}),
+    avatarUri: formData.avatarUri instanceof File ? null : formData.avatarUri,
   }),
   referrerId: formData.referrer?.id,
 })
+
+export const toExternalResources = (
+  resources: MemberFormFields['externalResources']
+): MembershipMetadata.IExternalResource[] =>
+  Object.entries(resources).map(([social, value]) => ({
+    type: MembershipMetadata.ExternalResource.ResourceType[
+      social.toUpperCase() as keyof typeof MembershipMetadata.ExternalResource.ResourceType
+    ],
+    value,
+  }))

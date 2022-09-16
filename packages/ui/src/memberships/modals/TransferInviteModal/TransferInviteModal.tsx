@@ -1,13 +1,12 @@
-import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useEffect } from 'react'
 
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { useApi } from '@/api/hooks/useApi'
-import { FailureModal } from '@/common/components/FailureModal'
 import { TransferIcon } from '@/common/components/icons'
 import { WaitModal } from '@/common/components/WaitModal'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 
 import { useMember } from '../../hooks/useMembership'
@@ -84,18 +83,6 @@ export function TransferInviteModal() {
         memberId={member.id}
       />
     )
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem transferring your invites.
-      </FailureModal>
-    )
-  }
-
-  if (state.matches('canceled')) {
-    hideModal()
   }
 
   return null

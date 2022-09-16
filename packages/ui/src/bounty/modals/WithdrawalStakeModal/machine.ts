@@ -81,8 +81,11 @@ export const withdrawalStakeMachine = createMachine<
       },
     },
     [WithdrawalStakeStates.requirementsFailed]: { type: 'final' },
-    [WithdrawalStakeStates.success]: { type: 'final' },
-    [WithdrawalStakeStates.error]: { type: 'final' },
+    [WithdrawalStakeStates.success]: {
+      type: 'final',
+      meta: { message: 'Your contribution has been successfully withdrawn!' },
+    },
+    [WithdrawalStakeStates.error]: { type: 'final', meta: { message: 'There was a problem with withdrawing stake.' } },
     [WithdrawalStakeStates.cancel]: { type: 'final' },
   },
 })

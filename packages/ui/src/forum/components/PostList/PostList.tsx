@@ -57,21 +57,23 @@ export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost, isD
   return (
     <Wrapper gap={24}>
       {!isDiscussion && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
-      {posts.map((post, index) => (
-        <PostListItem
-          isFirstItem={index === 0 && page === 1}
-          key={post.id}
-          post={post}
-          insertRef={getInsertRef(post.id)}
-          isSelected={post.id === navigation.post}
-          isThreadActive={isThreadActive}
-          type="forum"
-          replyToPost={() => replyToPost({ ...post, repliesTo: undefined })}
-          link={getUrl({ route: ForumRoutes.thread, params: { id: threadId }, query: { post: post.id } })}
-          repliesToLink={`${generatePath(ForumRoutes.thread, { id: threadId })}?post=${post.repliesTo?.id}`}
-          isDiscussion={isDiscussion}
-        />
-      ))}
+      {posts
+        .filter((post) => post.status !== 'PostStatusRemoved')
+        .map((post, index) => (
+          <PostListItem
+            isFirstItem={index === 0 && page === 1}
+            key={post.id}
+            post={post}
+            insertRef={getInsertRef(post.id)}
+            isSelected={post.id === navigation.post}
+            isThreadActive={isThreadActive}
+            type="forum"
+            replyToPost={() => replyToPost({ ...post, repliesTo: undefined })}
+            link={getUrl({ route: ForumRoutes.thread, params: { id: threadId }, query: { post: post.id } })}
+            repliesToLink={`${generatePath(ForumRoutes.thread, { id: threadId })}?post=${post.repliesTo?.id}`}
+            isDiscussion={isDiscussion}
+          />
+        ))}
       <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
     </Wrapper>
   )

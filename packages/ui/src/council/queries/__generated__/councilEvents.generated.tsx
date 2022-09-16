@@ -116,6 +116,7 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'CouncilorRewardUpdatedEvent'; id: string; createdAt: any; rewardAmount: string }
     | { __typename: 'EnglishAuctionSettledEvent' }
     | { __typename: 'EnglishAuctionStartedEvent' }
+    | { __typename: 'FoundingMemberCreatedEvent' }
     | { __typename: 'InitialInvitationBalanceUpdatedEvent' }
     | { __typename: 'InitialInvitationCountUpdatedEvent' }
     | { __typename: 'InvitesTransferredEvent' }
@@ -128,6 +129,7 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'MemberProfileUpdatedEvent' }
     | { __typename: 'MemberVerificationStatusUpdatedEvent' }
     | { __typename: 'MembershipBoughtEvent' }
+    | { __typename: 'MembershipGiftedEvent' }
     | { __typename: 'MembershipPriceUpdatedEvent' }
     | { __typename: 'MetaprotocolTransactionStatusEvent' }
     | {
@@ -211,7 +213,6 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'VideoReactedEvent' }
     | { __typename: 'VideoReactionsPreferenceEvent' }
     | { __typename: 'VoteCastEvent' }
-    | { __typename: 'VoteOnPollEvent' }
     | { __typename: 'VoteRevealedEvent' }
     | { __typename: 'VotingPeriodStartedEvent'; id: string; createdAt: any }
     | { __typename: 'WorkEntrantFundsWithdrawnEvent' }

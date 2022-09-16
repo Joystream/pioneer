@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { ImagePlaceholder } from '@/common/components/ImagePlaceholder'
+import { UserImage } from '@/common/components/UserImage/UserImage'
 import { Colors, Transitions } from '@/common/constants'
 
 interface CandidateCardImageProps {
@@ -12,12 +13,20 @@ interface CandidateCardImageProps {
 export const CandidateCardImage = React.memo(({ imageUrl, className }: CandidateCardImageProps) => {
   return (
     <CandidateCardImageContainer>
-      {imageUrl ? <CardImage src={imageUrl} className={className} /> : <ImagePlaceholder className={className} />}
+      {imageUrl ? (
+        <CardImage
+          src={imageUrl}
+          className={className}
+          customFallbackComponent={<ImagePlaceholder className={className} />}
+        />
+      ) : (
+        <ImagePlaceholder className={className} />
+      )}
     </CandidateCardImageContainer>
   )
 })
 
-const CardImage = styled.img`
+const CardImage = styled(UserImage)`
   width: 100%;
   height: 100%;
   object-fit: cover;

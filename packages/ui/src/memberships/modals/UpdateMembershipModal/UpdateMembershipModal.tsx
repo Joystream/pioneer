@@ -1,27 +1,25 @@
-import { useMachine } from '@xstate/react'
 import React from 'react'
 
-import { FailureModal } from '@/common/components/FailureModal'
-
-import { Member } from '../../types'
+import { useMachine } from '@/common/hooks/useMachine'
+import { useModal } from '@/common/hooks/useModal'
+import { UpdateMembershipModalCall } from '@/memberships/modals/UpdateMembershipModal/index'
 
 import { updateMembershipMachine } from './machine'
 import { UpdateMembershipFormModal } from './UpdateMembershipFormModal'
 import { UpdateMembershipSignModal } from './UpdateMembershipSignModal'
 import { UpdateMembershipSuccessModal } from './UpdateMembershipSuccessModal'
 
-interface MembershipModalProps {
-  member: Member
-  onClose: () => void
-}
-
-export const UpdateMembershipModal = ({ onClose, member }: MembershipModalProps) => {
+export const UpdateMembershipModal = () => {
+  const {
+    hideModal,
+    modalData: { member },
+  } = useModal<UpdateMembershipModalCall>()
   const [state, send] = useMachine(updateMembershipMachine)
 
   if (state.matches('prepare')) {
     return (
       <UpdateMembershipFormModal
-        onClose={onClose}
+        onClose={hideModal}
         onSubmit={(params) => send('DONE', { form: params })}
         member={member}
       />
@@ -33,7 +31,7 @@ export const UpdateMembershipModal = ({ onClose, member }: MembershipModalProps)
 
     return (
       <UpdateMembershipSignModal
-        onClose={onClose}
+        onClose={hideModal}
         transactionParams={state.context.form}
         member={member}
         service={transactionService}
@@ -42,15 +40,7 @@ export const UpdateMembershipModal = ({ onClose, member }: MembershipModalProps)
   }
 
   if (state.matches('success')) {
-    return <UpdateMembershipSuccessModal onClose={onClose} member={member} />
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={onClose} events={state.context.transactionEvents}>
-        There was a problem updating membership for {member.name}.
-      </FailureModal>
-    )
+    return <UpdateMembershipSuccessModal onClose={hideModal} member={member} />
   }
 
   return null

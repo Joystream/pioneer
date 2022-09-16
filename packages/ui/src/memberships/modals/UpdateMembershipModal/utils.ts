@@ -1,4 +1,5 @@
-import { WithNullableValues } from '../../../common/types/form'
+import { WithNullableValues } from '@/common/types/form'
+import { MemberWithDetails } from '@/memberships/types'
 
 export const hasAnyEdits = (form: Record<string, any>, initial: Record<string, any>) => {
   return !!getChangedFields(form, initial).length
@@ -8,10 +9,14 @@ export const getChangedFields = (form: Record<string, any>, initial: Record<stri
   const changedFields = []
 
   for (const key of Object.keys(form)) {
-    const initialValue = initial[key] || ''
+    const initialValue = initial[key === 'avatarUri' ? 'avatar' : key] || ''
     const formValue = form[key]?.address ?? (form[key] || '')
     if (initialValue !== formValue) {
-      changedFields.push(key)
+      if (key === 'externalResources') {
+        if (JSON.stringify(initialValue) !== JSON.stringify(formValue)) changedFields.push(key)
+      } else {
+        changedFields.push(key)
+      }
     }
   }
 
@@ -31,3 +36,9 @@ export const changedOrNull = <T extends any>(
     }
   }, {} as WithNullableValues<T>)
 }
+
+export const membershipExternalResourceToObject = (externalResources: MemberWithDetails['externalResources']) =>
+  externalResources?.reduce((prev, next) => {
+    const source = next.source.toString()
+    return { ...prev, [source]: next.value }
+  }, {})

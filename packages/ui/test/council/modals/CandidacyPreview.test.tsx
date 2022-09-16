@@ -1,27 +1,24 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 
-import { ModalContext } from '@/common/providers/modal/context'
-import { UseModal } from '@/common/providers/modal/types'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { CandidacyPreview } from '@/council/modals/CandidacyPreview/CandidacyPreview'
 import { seedCouncilCandidate, seedCouncilElection, seedElectedCouncil, seedMember, seedMembers } from '@/mocks/data'
 
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA } from '../../_mocks/server/seeds'
+import { mockUseModalCall } from '../../setup'
 
 describe('UI: CandidacyPreview', () => {
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData: {
-      id: '0',
-    },
-  }
   const server = setupMockServer({ noCleanupAfterEach: true })
-
+  const modalData = {
+    id: '0',
+  }
   beforeAll(async () => {
+    mockUseModalCall({
+      modalData,
+    })
     seedMembers(server.server, 2)
     seedMember({ ...MEMBER_ALICE_DATA, id: '2', handle: 'Cindy' }, server.server)
     seedElectedCouncil(
@@ -71,7 +68,7 @@ describe('UI: CandidacyPreview', () => {
 
   describe('Cycle candidates', () => {
     it('First in list', async () => {
-      useModal.modalData.id = '0'
+      modalData.id = '0'
       displayModal()
       expect(await screen.findByText(/alice/i)).toBeDefined()
       expect(await screen.findByText(/candidate 1 of 3/i)).toBeDefined()
@@ -86,7 +83,7 @@ describe('UI: CandidacyPreview', () => {
     })
 
     it('Second in list', async () => {
-      useModal.modalData.id = '1'
+      modalData.id = '1'
       displayModal()
       expect(await screen.findByText(/bob/i)).toBeDefined()
       expect(await screen.findByText(/candidate 2 of 3/i)).toBeDefined()
@@ -95,7 +92,7 @@ describe('UI: CandidacyPreview', () => {
     })
 
     it('Last in list', async () => {
-      useModal.modalData.id = '2'
+      modalData.id = '2'
       displayModal()
       expect(await screen.findByText(/cindy/i)).toBeDefined()
       expect(await screen.findByText(/candidate 3 of 3/i)).toBeDefined()
@@ -112,10 +109,10 @@ describe('UI: CandidacyPreview', () => {
 
   const displayModal = () =>
     render(
-      <ModalContext.Provider value={useModal}>
+      <ModalContextProvider>
         <MockQueryNodeProviders>
           <CandidacyPreview />
         </MockQueryNodeProviders>
-      </ModalContext.Provider>
+      </ModalContextProvider>
     )
 })

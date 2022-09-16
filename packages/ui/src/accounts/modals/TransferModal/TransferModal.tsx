@@ -1,9 +1,9 @@
-import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React from 'react'
 
 import { FailureModal } from '@/common/components/FailureModal'
 import { TokenValue } from '@/common/components/typography'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 
 import { Account } from '../../types'

@@ -5,15 +5,15 @@ import styled, { css } from 'styled-components'
 import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
 import {
   ButtonGhost,
-  ButtonsGroup,
   ButtonInnerWrapper,
   ButtonLink,
+  ButtonsGroup,
   CopyButtonTemplate,
 } from '@/common/components/buttons'
 import { ArrowReplyIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge } from '@/common/components/typography'
-import { Colors, Fonts, BorderRad, Shadows } from '@/common/constants'
+import { BorderRad, Colors, Fonts, Shadows } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
@@ -56,8 +56,7 @@ export const PostListItem = ({
   repliesToLink,
 }: PostListItemProps) => {
   const { active } = useMyMemberships()
-  const { createdAtBlock, lastEditedAt, author, text, repliesTo, status } = post
-  const [postText, setPostText] = useState<string>(text)
+  const { createdAtBlock, lastEditedAt, author, text, repliesTo } = post
   const [postLastEditedAt, setPostLastEditedAt] = useState<string | undefined>(lastEditedAt)
 
   const { showModal } = useModal()
@@ -83,9 +82,8 @@ export const PostListItem = ({
     )
   }, [postLastEditedAt])
 
-  const onSuccessfulEdit = useCallback((newText: string) => {
+  const onSuccessfulEdit = useCallback(() => {
     setEditing(false)
-    setPostText(newText)
     setPostLastEditedAt(new Date().toISOString())
   }, [])
 
@@ -99,7 +97,7 @@ export const PostListItem = ({
       <ForumPostStyles>
         <ForumPostRow>
           <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
-          {createdAtBlock && <BlockTime block={createdAtBlock} layout="reverse" />}
+          {createdAtBlock && <BlockTime block={createdAtBlock} layout="reverse" position="end" />}
         </ForumPostRow>
         <MessageBody>
           <ModeratedPostWrapper post={post}>
@@ -124,7 +122,7 @@ export const PostListItem = ({
                 onSuccessfulEdit={onSuccessfulEdit}
               />
             ) : (
-              <MarkdownPreview markdown={postText} append={editionTime} size="m" />
+              <MarkdownPreview markdown={text} append={editionTime} size="m" />
             )}
           </ModeratedPostWrapper>
         </MessageBody>
@@ -146,7 +144,7 @@ export const PostListItem = ({
                   </ButtonGhost>
                   <PostContextMenu
                     isFirstItem={isFirstItem}
-                    post={{ ...post, text: postText }}
+                    post={{ ...post, text }}
                     onEdit={() => setEditing(true)}
                     type={type}
                   />

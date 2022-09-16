@@ -1,4 +1,3 @@
-import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -24,15 +23,14 @@ import {
   SubmitJudgementStates,
 } from '@/bounty/modals/SubmitJudgementModal/machine'
 import { SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal'
-import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { CKEditor } from '@/common/components/CKEditor'
-import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer, Label, ToggleCheckbox } from '@/common/components/forms'
 import { Modal, ModalDivider, ModalHeader, ModalTransactionFooter, ScrolledModalBody } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextHuge, TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO } from '@/common/constants'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
 import { createType } from '@/common/model/createType'
@@ -245,29 +243,6 @@ export const SubmitJudgementModal = () => {
         buttonLabel={t('modals.submitJudgement.authorizeModal.button')}
       />
     )
-  }
-
-  if (state.matches(SubmitJudgementStates.success)) {
-    return (
-      <SuccessTransactionModal
-        onClose={hideModal}
-        onButtonClick={hideModal}
-        message={t('modals.submitJudgement.successModal.message')}
-        buttonLabel={t('modals.submitJudgement.successModal.button')}
-      />
-    )
-  }
-
-  if (state.matches(SubmitJudgementStates.error)) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        {t('modals.submitJudgement.failedModal')}
-      </FailureModal>
-    )
-  }
-
-  if (state.matches(SubmitJudgementStates.canceled)) {
-    return <FailureModal onClose={hideModal}>{t('modals.submitJudgement.canceledModal')}</FailureModal>
   }
 
   return (

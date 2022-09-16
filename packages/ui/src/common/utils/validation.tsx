@@ -1,13 +1,14 @@
 import { isBn } from '@polkadot/util'
 import BN from 'bn.js'
 import { at, get } from 'lodash'
-import { useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { FieldErrors, FieldValues, Resolver } from 'react-hook-form'
 import * as Yup from 'yup'
 import { AnyObjectSchema, ValidationError } from 'yup'
 import Reference from 'yup/lib/Reference'
 import { AnyObject } from 'yup/lib/types'
 
+import { Loading } from '@/common/components/Loading'
 import { formatJoyValue } from '@/common/model/formatters'
 
 export const BNSchema = Yup.mixed()
@@ -221,7 +222,23 @@ export interface ValidationHelpers {
   formValueGetter?: () => any
 }
 
-export const enhancedHasError = (errors: FieldErrors, depthPath?: string) => (field: string) =>
-  !!at(errors, `${depthPath ? depthPath + '.' : ''}${field}`)[0]
-export const enhancedGetErrorMessage = (errors: FieldErrors, depthPath?: string) => (field: string) =>
-  at(errors, `${depthPath ? depthPath + '.' : ''}${field}`)[0]?.message
+export const enhancedHasError = (errors: FieldErrors, depthPath?: string) => (field: string) => {
+  const error = at(errors, `${depthPath ? depthPath + '.' : ''}${field}`)[0]
+  if (error?.type === 'unknownStakingStatus') {
+    return false
+  }
+
+  return !!error
+}
+export const enhancedGetErrorMessage = (errors: FieldErrors, depthPath?: string) => (field: string) => {
+  const error = at(errors, `${depthPath ? depthPath + '.' : ''}${field}`)[0]
+  if (!error) {
+    return undefined
+  }
+
+  if (error.type === 'unknownStakingStatus') {
+    return <Loading text="Validating staking account" />
+  }
+
+  return error?.message
+}

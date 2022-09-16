@@ -4,7 +4,7 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { ApiContext } from '@/api/providers/context'
-import { ModalContext } from '@/common/providers/modal/context'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { IncreaseWorkerStakeModal } from '@/working-groups/modals/IncreaseWorkerStakeModal'
 
 import { getButton } from '../../_helpers/getButton'
@@ -18,6 +18,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockUseModalCall } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
@@ -25,26 +26,22 @@ describe('UI: IncreaseWorkerStakeModal', () => {
   const api = stubApi()
   let transfer: any
 
-  const mockModalContext = {
-    hideModal: jest.fn(),
-    modalData: {
-      worker: {
-        minStake: new BN(300),
-        stake: new BN(100),
-        roleAccount: alice.address,
-        id: 'workerId',
-        group: {
-          id: 'storageWorkingGroup',
-        },
-        runtimeId: 88,
-      },
-    },
-    modal: null,
-    showModal: jest.fn(),
-  }
-
   beforeAll(async () => {
     await cryptoWaitReady()
+    mockUseModalCall({
+      modalData: {
+        worker: {
+          minStake: new BN(300),
+          stake: new BN(100),
+          roleAccount: alice.address,
+          id: 'workerId',
+          group: {
+            id: 'storageWorkingGroup',
+          },
+          runtimeId: 88,
+        },
+      },
+    })
     stubAccounts([alice, bob])
   })
 
@@ -156,9 +153,9 @@ describe('UI: IncreaseWorkerStakeModal', () => {
       <MockApolloProvider>
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>
-            <ModalContext.Provider value={mockModalContext}>
+            <ModalContextProvider>
               <IncreaseWorkerStakeModal />
-            </ModalContext.Provider>
+            </ModalContextProvider>
           </ApiContext.Provider>
         </MockKeyringProvider>
       </MockApolloProvider>
