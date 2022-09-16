@@ -11,7 +11,12 @@ import { useQueryNodeStateSubscription } from '@/common/hooks/useQueryNode'
 
 const MAX_INDEXER_BLOCKS_BEHIND_NODE_HEAD = 20
 
-export const ConnectionStatusDot = ({ onlyPerformance = false }) => {
+interface ConnectionStatusDotProps {
+  onlyPerformance?: boolean
+  className?: string
+}
+
+export const ConnectionStatusDot = ({ onlyPerformance = false, className }: ConnectionStatusDotProps) => {
   const { api, connectionState, qnConnectionState } = useApi()
   const { queryNodeState } = useQueryNodeStateSubscription()
   const header = useObservable(api?.rpc.chain.subscribeNewHeads(), [api?.isConnected])
@@ -61,20 +66,22 @@ export const ConnectionStatusDot = ({ onlyPerformance = false }) => {
   }, [connectionState, qnConnectionState, isQnLate])
 
   if (!DotElement) {
-    return <span />
+    return null
   }
 
   return (
-    <Tooltip tooltipText={tooltipText}>
-      <AnimatePresence>
-        <DotElement
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-        />
-      </AnimatePresence>
-    </Tooltip>
+    <span className={className}>
+      <Tooltip tooltipText={tooltipText}>
+        <AnimatePresence>
+          <DotElement
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          />
+        </AnimatePresence>
+      </Tooltip>
+    </span>
   )
 }
 

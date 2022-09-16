@@ -190,15 +190,21 @@ export const ModalFooter = ({ twoColumns = false, children, className }: ModalFo
   return (
     <ModalFooterComponent twoColumns={twoColumns} className={className}>
       {children}
-      <ConnectionStatusDot onlyPerformance />
+      <ModalConnectionStatusDot onlyPerformance />
     </ModalFooterComponent>
   )
 }
 
+const ModalConnectionStatusDot = styled(ConnectionStatusDot)`
+  position: absolute;
+  right: 5px;
+  top: calc(50% - 10px);
+`
+
 export const ModalFooterComponent = styled.footer<{ twoColumns?: boolean }>`
   display: inline-grid;
   grid-area: modalfooter;
-  grid-template-columns: ${({ twoColumns }) => (twoColumns ? '1fr auto auto' : '1fr auto')};
+  grid-template-columns: ${({ twoColumns }) => (twoColumns ? '1fr auto' : '1fr')};
   grid-template-rows: 1fr;
   grid-auto-flow: column;
   grid-column-gap: 40px;
@@ -208,8 +214,9 @@ export const ModalFooterComponent = styled.footer<{ twoColumns?: boolean }>`
   align-items: center;
   width: 100%;
   height: 64px;
-  padding: 12px 24px;
+  padding: 12px 34px 12px 24px;
   border-radius: 0 0 2px 2px;
+  position: relative;
 `
 
 export const ModalFooterGroup = styled.div<{ left?: boolean }>`

@@ -16,9 +16,13 @@ export const SidebarConnections = () => {
       <BalanceTitle>Powered By</BalanceTitle>
       <div>
         <LinksContainer>
-          <SmallJoystreamLogo onClick={() => window.open(JOYSTREAM_URL, '_blank')} />
+          <a href={JOYSTREAM_URL} target="_blank">
+            <SmallJoystreamLogo />
+          </a>
           <div className="separator" />
-          <GithubLogo onClick={() => window.open(REPOSITORY_URL, '_blank')} />
+          <a href={REPOSITORY_URL} target="_blank">
+            <GithubLogo />
+          </a>
         </LinksContainer>
         <ConnectionStatusDot />
       </div>
@@ -31,6 +35,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   row-gap: 5px;
   padding: 10px 16px;
+  margin: 6px 0 12px 0;
 
   > div {
     display: flex;
@@ -46,7 +51,8 @@ const LinksContainer = styled.div`
   align-items: center;
   column-gap: 5px;
 
-  > svg {
+  > svg,
+  a {
     cursor: pointer;
     color: ${Colors.Black[400]};
     :hover {
