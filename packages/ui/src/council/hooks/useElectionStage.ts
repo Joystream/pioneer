@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { concatMap, EMPTY, merge, Observable, of } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
@@ -13,7 +12,7 @@ interface UseElectionStage {
 export const useElectionStage = (): UseElectionStage => {
   const { api } = useApi()
 
-  const stageObservable = useMemo(() => {
+  const stageObservable = () => {
     if (!api) return
 
     const councilObservable = api.query.council.stage().pipe(
@@ -37,9 +36,8 @@ export const useElectionStage = (): UseElectionStage => {
       })
     )
     return merge(councilObservable, referendumObservable)
-  }, [api])
-
-  const stage = useObservable(stageObservable, [stageObservable])
+  }
+  const stage = useObservable(stageObservable, [api?.isConnected])
 
   return { isLoading: !stage, stage: stage ?? 'inactive' }
 }

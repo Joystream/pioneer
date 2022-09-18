@@ -19,12 +19,10 @@ export const BalancesContextProvider = (props: Props) => {
   const { api } = useApi()
 
   const addresses = allAccounts.map((account) => account.address)
-
-  const balancesObs = useMemo(
-    () => (api ? addresses.map((address) => api.derive.balances.all(address).pipe(map(toBalances))) : []),
-    [!api, JSON.stringify(addresses)]
+  const result = useObservable(
+    () => combineLatest(api ? addresses.map((address) => api.derive.balances.all(address).pipe(map(toBalances))) : []),
+    [api?.isConnected, JSON.stringify(addresses)]
   )
-  const result = useObservable(combineLatest(balancesObs), [balancesObs])
 
   const balances = useMemo(() => {
     if (!isLoading && result)

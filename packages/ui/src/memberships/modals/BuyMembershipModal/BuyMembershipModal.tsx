@@ -1,9 +1,9 @@
 import React from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
-import { useObservable } from '@/common/hooks/useObservable'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
 import { BuyMembershipFormModal, MemberFormFields } from './BuyMembershipFormModal'
@@ -13,9 +13,9 @@ import { buyMembershipMachine } from './machine'
 
 export const BuyMembershipModal = () => {
   const { hideModal } = useModal()
-  const { api, connectionState } = useApi()
+  const { api } = useApi()
 
-  const membershipPrice = useObservable(api?.query.members.membershipPrice(), [connectionState])
+  const membershipPrice = useFirstObservableValue(() => api?.query.members.membershipPrice(), [api?.isConnected])
   const [state, send] = useMachine(buyMembershipMachine)
 
   if (state.matches('prepare')) {

@@ -6,11 +6,14 @@ import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TokenValue } from '@/common/components/typography'
-import { useObservable } from '@/common/hooks/useObservable'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 
 export const SetInitialInvitationBalance = () => {
   const { api } = useApi()
-  const currentBalance = useObservable(api?.query.members.initialInvitationBalance(), [])
+  const currentBalance = useFirstObservableValue(
+    () => api?.query.members.initialInvitationBalance(),
+    [api?.isConnected]
+  )
 
   return (
     <RowGapBlock gap={24}>
