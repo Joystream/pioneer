@@ -1,4 +1,4 @@
-import { act, configure, fireEvent, render, screen } from '@testing-library/react'
+import { act, configure, render, screen } from '@testing-library/react'
 import EventEmitter from 'eventemitter3'
 import { set } from 'lodash'
 import React from 'react'
@@ -28,7 +28,7 @@ describe('UI: Connection status component', () => {
   beforeEach(() => {
     eventEmitter = new EventEmitter()
     useApi.connectionState = 'connected'
-    useApi.api = eventEmitter as unknown as Api
+    useApi.api = (eventEmitter as unknown) as Api
     set(useApi.api, 'api.rpc.chain.subscribeNewHeads', () => of(10))
   })
 
@@ -51,16 +51,6 @@ describe('UI: Connection status component', () => {
     expect(await screen.findByText(/^Disconnected from/i)).toBeDefined()
   })
 
-  it('Connected', async () => {
-    renderComponent()
-
-    act(() => {
-      eventEmitter.emit('connected')
-    })
-
-    expect(await screen.findByText(/^Connected to/i)).toBeDefined()
-  })
-
   it('Auto-close', async () => {
     renderComponent()
 
@@ -70,22 +60,6 @@ describe('UI: Connection status component', () => {
 
     act(() => {
       jest.runOnlyPendingTimers()
-    })
-
-    expect(screen.queryByText(/connected/i)).toBeNull()
-  })
-
-  it('Close permanently', async () => {
-    renderComponent()
-
-    act(() => {
-      eventEmitter.emit('disconnected')
-    })
-
-    fireEvent.click(await screen.findByRole('button'))
-
-    act(() => {
-      eventEmitter.emit('disconnected')
     })
 
     expect(screen.queryByText(/connected/i)).toBeNull()
