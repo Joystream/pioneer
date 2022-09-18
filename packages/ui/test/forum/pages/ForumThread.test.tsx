@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { generatePath, Route, Switch } from 'react-router-dom'
@@ -19,6 +19,7 @@ import { getMember } from '../../_mocks/members'
 import { MockApiProvider, MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubAccounts } from '../../_mocks/transactions'
+import { loaderSelector } from '../../setup'
 
 let mockThread: { isLoading: boolean; thread: ForumThread | null }
 let mockSuggestedThreads: { isLoading: boolean; threads: ForumThread[] }
@@ -81,7 +82,7 @@ describe('UI: Forum Thread Page', () => {
     mockThread.isLoading = true
     renderPage()
 
-    expect(screen.queryByText('Loading thread...')).not.toBeNull()
+    expect(loaderSelector()).not.toBeNull()
 
     expect(screen.queryByText(/copy link/i)).toBeNull()
     expect(screen.queryByText(/watch thread/i)).toBeNull()
@@ -91,7 +92,7 @@ describe('UI: Forum Thread Page', () => {
     mockThread.thread = forumThread
     renderPage()
 
-    expect(screen.queryByText('Loading thread...')).toBeNull()
+    waitForElementToBeRemoved(loaderSelector())
 
     expect(screen.queryByText(/copy link/i)).not.toBeNull()
     expect(screen.queryByText(/watch thread/i)).not.toBeNull()

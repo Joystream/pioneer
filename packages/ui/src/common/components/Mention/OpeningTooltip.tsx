@@ -39,7 +39,7 @@ export const OpeningTooltip = ({ onMount, mention, urlAddress }: OpeningTooltipP
   }, [])
 
   return (
-    <Container data-testid="opening-tooltip">
+    <Container id="opening-tooltip">
       {mention ? (
         <>
           <TextSmall lighter>

@@ -13,6 +13,7 @@ import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { PROPOSAL_DATA } from '../../_mocks/server/seeds'
 import { stubApi, stubConst, stubQuery } from '../../_mocks/transactions'
+import { loaderSelector } from '../../setup'
 
 const proposalData: Proposal = {
   id: '0',
@@ -121,7 +122,7 @@ describe('UI: ProposalListItem', () => {
 
       renderComponent({ proposal: { ...proposalData, status: 'dormant' }, memberId: '0' })
 
-      await waitForElementToBeRemoved(await screen.findByText(/loading/i))
+      await waitForElementToBeRemoved(loaderSelector())
       expect(screen.queryByText('Approved')).toBeNull()
     })
 

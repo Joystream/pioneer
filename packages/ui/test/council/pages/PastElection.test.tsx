@@ -24,6 +24,7 @@ import { alice } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubAccounts, stubApi } from '../../_mocks/transactions'
+import { loaderSelector } from '../../setup'
 
 const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
   {
@@ -196,7 +197,7 @@ describe('UI: Past Election page', () => {
       </MemoryRouter>
     )
 
-    await waitForElementToBeRemoved(() => rendered.getByText('Loading...'))
+    await waitForElementToBeRemoved(() => loaderSelector())
 
     return rendered
   }

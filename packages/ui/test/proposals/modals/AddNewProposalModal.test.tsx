@@ -57,7 +57,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee, mockUseModalCall } from '../../setup'
+import { loaderSelector, mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 const QUESTION_INPUT = OpeningMetadata.ApplicationFormQuestion.InputType
 
@@ -178,7 +178,7 @@ describe('UI: AddNewProposalModal', () => {
     stubProposalConstants(api)
 
     createProposalTx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
-    createProposalTxMock = api.api.tx.proposalsCodex.createProposal as unknown as jest.Mock
+    createProposalTxMock = (api.api.tx.proposalsCodex.createProposal as unknown) as jest.Mock
 
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 25)
     stubQuery(
@@ -832,7 +832,7 @@ describe('UI: AddNewProposalModal', () => {
           const group = 'Forum'
           const amount = 100
           await SpecificParameters.SetWorkingGroupLeadReward.selectGroup(group)
-          await waitForElementToBeRemoved(() => screen.queryByText('Loading...'), { timeout: 300 })
+          await waitForElementToBeRemoved(() => loaderSelector(), { timeout: 300 })
           await SpecificParameters.SetWorkingGroupLeadReward.fillRewardAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
 

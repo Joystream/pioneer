@@ -1,5 +1,6 @@
 import { BN_THOUSAND } from '@polkadot/util'
 import '@testing-library/jest-dom'
+import { configure, screen } from '@testing-library/react'
 import BN from 'bn.js'
 
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
@@ -7,6 +8,11 @@ import { AddressToBalanceMap, Balances } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
 import { UseModal } from '@/common/providers/modal/types'
 import { UseTransaction } from '@/common/providers/transactionFees/context'
+
+configure({ testIdAttribute: 'id' })
+
+export const loaderSelector = (multiple = false) =>
+  multiple ? screen.getAllByTestId('loading-spinner') : screen.queryByTestId('loading-spinner')
 
 export const mockUseModalCall = (props: Partial<UseModal<any>>) => {
   mockUseModal.mockReturnValue({ ...mockUseModal(), ...props })

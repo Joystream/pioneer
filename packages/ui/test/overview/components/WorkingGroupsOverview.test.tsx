@@ -19,6 +19,7 @@ import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { APPLICATION_DATA, OPENING_DATA, WORKER_DATA } from '../../_mocks/server/seeds'
 import { stubApi, stubConst } from '../../_mocks/transactions'
+import { loaderSelector } from '../../setup'
 
 const formatAmount = (text?: string | null) => (text ? text?.replace(/,/g, '') : 'No value')
 
@@ -46,7 +47,7 @@ describe('UI: Working groups overview', () => {
     beforeEach(async () => {
       stubConst(api, 'forumWorkingGroup.maxWorkerNumberLimit', createType('u32', 10))
       renderComponent()
-      await waitForElementToBeRemoved(() => screen.queryAllByText('Loading...'), { timeout: 300 })
+      await waitForElementToBeRemoved(() => loaderSelector(true), { timeout: 300 })
     })
 
     it('Displays number of working groups', async () => {
@@ -83,7 +84,7 @@ describe('UI: Working groups overview', () => {
     })
 
     it('Displays openings number', async () => {
-      await waitForElementToBeRemoved(() => screen.queryAllByText('Loading...'), { timeout: 300 })
+      await waitForElementToBeRemoved(() => loaderSelector(true), { timeout: 300 })
       expect((await screen.findByText('workingGroups.openings')).lastChild?.textContent).toBe('1')
     })
 
