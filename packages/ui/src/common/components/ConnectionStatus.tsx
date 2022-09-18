@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
-import { useApi } from '../../api/hooks/useApi'
+import { useApi } from '@/api/hooks/useApi'
 
 import { SideNotification } from './page/SideNotification'
 
@@ -11,21 +11,15 @@ export const ConnectionStatus = () => {
   const [showNotification, setShowNotification] = useState(true)
   const show = useCallback(() => setShowNotification(true), [])
   const hide = useCallback(() => setShowNotification(false), [])
-  const onConnected = useCallback(() => {
-    api?.once('disconnected', onDisconnected)
-    show()
-  }, [api])
+
   const onDisconnected = useCallback(() => {
-    api?.once('connected', onConnected)
     show()
   }, [api])
 
   useEffect(() => {
     api?.once('disconnected', onDisconnected)
-    api?.once('connected', onConnected)
 
     return () => {
-      api?.off('connected', onConnected)
       api?.off('disconnected', onDisconnected)
     }
   }, [api])
@@ -40,12 +34,8 @@ export const ConnectionStatus = () => {
     return () => clearTimeout(timeout)
   }, [showNotification, connectionState])
 
-  if (!showNotification || connectionState === 'connecting') {
+  if (!showNotification || connectionState === 'connecting' || connectionState === 'connected') {
     return null
-  }
-
-  if (connectionState === 'connected') {
-    return <SideNotification showClose onClick={hide} title="Connected to Joystream node" />
   }
 
   return <SideNotification isError showClose onClick={hide} title="Disconnected from Joystream node" />
