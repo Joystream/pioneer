@@ -3,7 +3,7 @@ import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { TextMedium, TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { cutText } from '@/common/helpers'
@@ -61,7 +61,7 @@ export const ProposalTooltip = React.memo(({ mention, onMount, urlAddress }: Pro
           {description && <TextMedium lighter>{description}</TextMedium>}
         </>
       ) : (
-        <Loader />
+        <Loading />
       )}
     </Container>
   )

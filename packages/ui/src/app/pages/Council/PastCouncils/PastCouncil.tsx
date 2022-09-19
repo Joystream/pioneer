@@ -5,7 +5,8 @@ import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/P
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
-import { LinkIcon, Loader } from '@/common/components/icons'
+import { LinkIcon } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
@@ -63,7 +64,7 @@ export const PastCouncil = () => {
   const displayMain = () => {
     return (
       <MainPanel>
-        {isLoading && <Loader />}
+        {isLoading && <Loading />}
         {!isLoading && council && (
           <>
             <PastCouncilStats {...council} />

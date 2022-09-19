@@ -3,9 +3,9 @@ import { generatePath } from 'react-router'
 import styled, { css } from 'styled-components'
 
 import { BlockTime } from '@/common/components/BlockTime'
-import { Loader } from '@/common/components/icons'
 import { PinIcon } from '@/common/components/icons/PinIcon'
 import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
+import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextBig, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow } from '@/common/constants'
@@ -44,7 +44,7 @@ export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
 
       <LatestActivity threadId={thread.id} />
 
-      {author ? <MemberInfo member={author} size="s" memberSize="s" hideGroup /> : <Loader withoutMargin />}
+      {author ? <MemberInfo member={author} size="s" memberSize="s" hideGroup /> : <Loading withoutMargin />}
 
       {block && <BlockTime block={block} layout="column" />}
     </ThreadListItemStyles>

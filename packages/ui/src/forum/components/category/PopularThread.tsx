@@ -2,7 +2,7 @@ import React, { memo } from 'react'
 import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextExtraSmall, TextMedium } from '@/common/components/typography'
 import { Overflow, Fonts, Transitions, Colors } from '@/common/constants'
@@ -16,7 +16,7 @@ import { CategoryItemFieldProps } from './CategoryListItem'
 export const PopularThread = memo(({ categoryId }: CategoryItemFieldProps) => {
   const { isLoading, threads } = useForumPopularThreads({ categoryId })
 
-  if (isLoading) return <Loader />
+  if (isLoading) return <Loading />
   else if (!threads?.[0]) return <TextMedium>-</TextMedium>
 
   const thread = threads[0]

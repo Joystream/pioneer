@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { Loader } from '@/common/components/icons'
 import { List, ListItem } from '@/common/components/List'
 import { ListHeader } from '@/common/components/List/ListHeader'
+import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PastCouncilProposalsItem } from '@/council/components/pastCouncil/PastCouncilProposals/PastCouncilProposalsItem'
 import { PastCouncilTabsHeaders } from '@/council/components/pastCouncil/PastCouncilTabs'
@@ -16,7 +16,7 @@ export const PastCouncilProposals = ({ councilId }: Props) => {
   const { isLoading, proposals } = usePastCouncilProposals(councilId)
 
   if (isLoading) {
-    return <Loader />
+    return <Loading />
   }
 
   return (

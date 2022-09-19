@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 
 import { PageLayout } from '@/app/components/PageLayout'
 import { ForumThreadOrderByInput } from '@/common/api/queries'
-import { Loader } from '@/common/components/icons'
 import { ItemCount } from '@/common/components/ItemCount'
+import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { useSort } from '@/common/hooks/useSort'
@@ -40,7 +40,7 @@ export const ForumArchived = () => {
           <RowGapBlock gap={24}>
             <ItemCount count={forumCategories?.length}>Archived Categories</ItemCount>
             {isLoadingCategories ? (
-              <Loader />
+              <Loading />
             ) : (
               forumCategories &&
               forumCategories.length > 0 && <ForumCategoryList categories={forumCategories} isArchive />

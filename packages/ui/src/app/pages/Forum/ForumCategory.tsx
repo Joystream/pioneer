@@ -4,9 +4,9 @@ import styled from 'styled-components'
 
 import { ForumThreadOrderByInput } from '@/common/api/queries'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
-import { Loader } from '@/common/components/icons'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
 import { ItemCount } from '@/common/components/ItemCount'
+import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
@@ -48,7 +48,7 @@ export const ForumCategory = () => {
   const { showModal } = useModal()
 
   if (!category) {
-    return <Loader />
+    return <Loading />
   }
 
   return (

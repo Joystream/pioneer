@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 
 import { CandidateCardProps, CandidateCard, CandidateCardCandidate } from './CandidateCard'
 import { NoCandidates } from './NoCandidates'
@@ -18,7 +18,7 @@ interface CandidatesListProps extends Pick<CandidateCardProps, 'canVote' | 'isPr
 
 export const CandidateCardList = ({ candidates = [], isLoading, canVote }: CandidatesListProps) => {
   if (isLoading) {
-    return <Loader />
+    return <Loading />
   }
 
   if (!candidates.length) {

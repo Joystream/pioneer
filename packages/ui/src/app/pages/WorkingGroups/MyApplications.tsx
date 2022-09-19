@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 
 import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Label } from '@/common/components/typography'
@@ -23,7 +23,7 @@ export const MyApplications = () => {
 
   const displayLoadingOrEmptyState = () => {
     if (isLoading) {
-      return <Loader />
+      return <Loading />
     }
 
     return applications?.length || pastApplications?.length ? null : <NotFoundText>No applications found</NotFoundText>

@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
-import { Loader } from '@/common/components/icons'
 import { List } from '@/common/components/List'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
+import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
 import { CouncilColLayout } from '@/council/constants/styles'
@@ -48,7 +48,7 @@ export const CouncilList = ({ councilors, order, onSort, isLoading }: CouncilLis
       </ListHeaders>
 
       {isLoading ? (
-        <Loader />
+        <Loading />
       ) : (
         <List>
           {councilors.map((councilor, index) => (

@@ -6,7 +6,7 @@ import { BountiesList } from '@/bounty/components/BountiesList'
 import { BountyStatus, QueryExtraFilter, useBounties } from '@/bounty/hooks/useBounties'
 import { BountyOrderByInput } from '@/common/api/queries'
 import { EmptyTab } from '@/common/components/EmptyTab'
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { useSort } from '@/common/hooks/useSort'
@@ -40,11 +40,11 @@ export const BountiesLayout = ({ tilesComponent, extraFilter, bountyStatus = 'ac
           <MainPanel>
             {tilesComponent}
             {isInitialLoading ? (
-              <Loader />
+              <Loading />
             ) : (
               <>
                 <BountyFilters searchSlot={searchSlot} onApply={setFilters} periodFilter />
-                {isLoading ? <Loader /> : <BountiesList getSortProps={getSortProps} bounties={bounties} />}
+                {isLoading ? <Loading /> : <BountiesList getSortProps={getSortProps} bounties={bounties} />}
                 <Pagination {...pagination} />
               </>
             )}

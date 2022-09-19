@@ -1,9 +1,9 @@
 import React from 'react'
 
 import { ProposalOrderByInput } from '@/common/api/queries'
-import { Loader } from '@/common/components/icons'
 import { List } from '@/common/components/List'
 import { SortHeader } from '@/common/components/List/SortHeader'
+import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { GetSortProps } from '@/common/hooks/useSort'
@@ -25,7 +25,7 @@ export const ProposalList = ({ proposals, getSortProps, isPast, isLoading }: Pro
   const isCouncilMember = active?.isCouncilMember
 
   if (isLoading) {
-    return <Loader />
+    return <Loading />
   }
 
   if (!proposals.length) {

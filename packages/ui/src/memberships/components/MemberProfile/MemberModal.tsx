@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { CloseButton } from '@/common/components/buttons'
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { ModalFooter } from '@/common/components/Modal'
 import {
   SidePane,
@@ -52,7 +52,7 @@ export const MemberModal = React.memo(
           <SidePane>
             <SidePaneBody>
               <EmptyBody>
-                <Loader />
+                <Loading />
               </EmptyBody>
             </SidePaneBody>
           </SidePane>

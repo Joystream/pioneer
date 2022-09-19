@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 
 import { MembersRoutes } from '@/app/constants/routes'
 import { CopyButtonTemplate } from '@/common/components/buttons'
-import { Loader } from '@/common/components/icons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { EditSymbol } from '@/common/components/icons/symbols'
+import { Loading } from '@/common/components/Loading'
 import { SidePaneTopButtonsGroup } from '@/common/components/SidePane'
 import { useModal } from '@/common/hooks/useModal'
 import { getUrl } from '@/common/utils/getUrl'
@@ -56,7 +56,7 @@ export const MemberProfile = React.memo(() => {
       }
     >
       {!member ? (
-        <Loader />
+        <Loading />
       ) : (
         <>
           {activeTab === 'DETAILS' && <MemberDetails member={member} />}

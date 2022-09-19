@@ -1,34 +1,35 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Colors } from '../constants'
+import { Loader } from '@/common/components/icons'
 
-import { LoadingAnimation } from './LoadingAnimation'
 import { TextInlineSmall } from './typography'
 
 interface Props {
   text?: string
+  withoutMargin?: boolean
 }
 
-export const Loading = ({ text }: Props) => {
+export const Loading = ({ text, withoutMargin }: Props) => {
   return (
-    <LoadingWrapper>
-      <LoadingAnimation />
-      <LoadingText italic inter>
-        {text ?? 'Loading...'}
-      </LoadingText>
+    <LoadingWrapper withoutMargin={withoutMargin}>
+      <Loader />
+      {text && (
+        <TextInlineSmall italic inter lighter>
+          {text}
+        </TextInlineSmall>
+      )}
     </LoadingWrapper>
   )
 }
 
-const LoadingText = styled(TextInlineSmall)`
-  color: ${Colors.Blue[300]};
-`
-
-const LoadingWrapper = styled.div`
+const LoadingWrapper = styled.div<Props>`
   display: flex;
   width: fit-content;
   height: fit-content;
   align-items: center;
   column-gap: 8px;
+  justify-self: start;
+  place-self: center;
+  margin: ${({ withoutMargin }) => (withoutMargin ? 'auto auto' : '100px auto')};
 `

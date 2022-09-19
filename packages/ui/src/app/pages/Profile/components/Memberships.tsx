@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { AddMembershipButton } from '@/memberships/components/AddMembershipButton'
@@ -12,7 +12,7 @@ export function Memberships() {
   const { isLoading, members, active, hasMembers } = useMyMemberships()
 
   if (isLoading) {
-    return <Loader />
+    return <Loading />
   }
 
   if (!hasMembers) {

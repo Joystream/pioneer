@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import styled from 'styled-components'
 
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { ScrollableModalColumn } from '@/common/components/Modal'
 import { TokenValueStat } from '@/common/components/statistics'
 import { TextMedium } from '@/common/components/typography'
@@ -20,7 +20,7 @@ export const CandidacyReview = memo(({ candidate, minStake }: CandidacyReviewPro
   if (!candidate) {
     return (
       <CandidatePreviewColumn>
-        <Loader />
+        <Loading />
       </CandidatePreviewColumn>
     )
   }

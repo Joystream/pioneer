@@ -61,7 +61,6 @@ export const LoaderComponent = styled.svg<LoaderProps>`
   animation: spinLoader 1s infinite linear;
   justify-self: start;
   place-self: center;
-  margin: ${({ withoutMargin }) => (withoutMargin ? '0' : '100px 0')};
 
   @keyframes spinLoader {
     0% {

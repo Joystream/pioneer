@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
@@ -32,21 +32,21 @@ export const AboutTab = ({ workingGroup }: Props) => {
           />
         ) : (
           <StatisticItem centered>
-            <Loader />
+            <Loading />
           </StatisticItem>
         )}
         {isDefined(statistics.totalHired) ? (
           <NumericValueStat title="Total hired" value={statistics.totalHired} />
         ) : (
           <StatisticItem centered>
-            <Loader />
+            <Loading />
           </StatisticItem>
         )}
         {isDefined(statistics.totalFired) ? (
           <NumericValueStat title="Total fired" value={statistics.totalFired} />
         ) : (
           <StatisticItem centered>
-            <Loader />
+            <Loading />
           </StatisticItem>
         )}
       </Statistics>

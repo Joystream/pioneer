@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
 
@@ -17,7 +17,7 @@ export const MemberTooltip = ({ mention, onMount }: MemberTooltipProps) => {
 
   return (
     <Container>
-      {mention ? <MemberInfo member={mention} size="s" memberSize="s" hideGroup isOnDark /> : <Loader />}
+      {mention ? <MemberInfo member={mention} size="s" memberSize="s" hideGroup isOnDark /> : <Loading />}
     </Container>
   )
 }

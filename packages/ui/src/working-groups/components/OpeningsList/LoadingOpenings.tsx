@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { OpeningsList } from '@/working-groups/components/OpeningsList/OpeningsList'
 import { UpcomingWorkingGroupOpening, WorkingGroupOpening } from '@/working-groups/types'
@@ -12,7 +12,7 @@ export interface LoadingOpeningsProps {
 
 export const LoadingOpenings = ({ isLoading, openings }: LoadingOpeningsProps) => {
   if (isLoading) {
-    return <Loader />
+    return <Loading />
   }
 
   if (!openings.length) {

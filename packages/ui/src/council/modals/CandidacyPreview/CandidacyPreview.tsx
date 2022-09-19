@@ -3,8 +3,9 @@ import { useHistory } from 'react-router'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { ButtonGhost, ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
-import { Arrow, Loader } from '@/common/components/icons'
+import { Arrow } from '@/common/components/icons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
+import { Loading } from '@/common/components/Loading'
 import { SidePaneTopButtonsGroup } from '@/common/components/SidePane'
 import { useModal } from '@/common/hooks/useModal'
 import { isDefined, whenDefined } from '@/common/utils'
@@ -111,7 +112,7 @@ export const CandidacyPreview = React.memo(() => {
       closeModal={closeModal}
     >
       {!candidate ? (
-        <Loader />
+        <Loading />
       ) : (
         <>
           {activeTab === 'CANDIDACY' && <CandidacyDetails candidate={candidate} />}

@@ -3,7 +3,7 @@ import React from 'react'
 
 import { StatusBadge } from '@/app/pages/WorkingGroups/components/StatusBadges'
 import { CloseButton } from '@/common/components/buttons'
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import {
   EmptyBody,
   SidePane,
@@ -65,7 +65,7 @@ export const StakeChangedModal = ({ onClose, amount, eventType, id }: StakeChang
             </SidePaneTable>
           ) : (
             <EmptyBody>
-              <Loader />
+              <Loading />
             </EmptyBody>
           )}
         </SidePaneBody>

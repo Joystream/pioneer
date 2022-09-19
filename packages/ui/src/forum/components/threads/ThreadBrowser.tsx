@@ -3,7 +3,8 @@ import styled from 'styled-components'
 
 import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
 import { CountBadge } from '@/common/components/CountBadge'
-import { Arrow, Loader } from '@/common/components/icons'
+import { Arrow } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { Label } from '@/common/components/typography'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
@@ -60,7 +61,7 @@ export const ThreadBrowser = ({
       </ThreadBrowserHeader>
       <ThreadBrowserItems>
         {isLoading ? (
-          <Loader />
+          <Loading />
         ) : (
           threads?.map((thread) => <ThreadItem key={thread.id} thread={thread} halfSize={threads.length > 1} />)
         )}

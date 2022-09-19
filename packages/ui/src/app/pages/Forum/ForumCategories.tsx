@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { PageLayout } from '@/app/components/PageLayout'
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
@@ -23,7 +23,7 @@ export const ForumCategories = () => {
           <ForumForumTabs categoryCount={forumCategories?.length} />
         </ForumPageHeader>
       }
-      main={!isRefetched && isLoading ? <Loader /> : <ForumCategoryList categories={forumCategories ?? []} />}
+      main={!isRefetched && isLoading ? <Loading /> : <ForumCategoryList categories={forumCategories ?? []} />}
     />
   )
 }

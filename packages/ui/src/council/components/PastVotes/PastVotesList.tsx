@@ -1,10 +1,10 @@
 import React from 'react'
 
 import { CastVoteOrderByInput } from '@/common/api/queries'
-import { Loader } from '@/common/components/icons'
 import { List } from '@/common/components/List'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { SortHeader } from '@/common/components/List/SortHeader'
+import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
@@ -21,7 +21,7 @@ export const PastVotesList = () => {
   const { election: latestElection } = useLatestElection()
 
   if (isLoading) {
-    return <Loader />
+    return <Loading />
   }
   if (!votes?.length) {
     return <NotFoundText>You have no past votes.</NotFoundText>

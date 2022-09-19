@@ -5,7 +5,8 @@ import styled from 'styled-components'
 
 import { Close, CloseButton } from '@/common/components/buttons'
 import { Input, InputComponent, InputIcon, InputText } from '@/common/components/forms'
-import { SearchIcon, Loader } from '@/common/components/icons'
+import { SearchIcon } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SearchResultItem } from '@/common/components/Search/SearchResultItem'
 import { SidePane, SidePaneBody, SidePaneGlass } from '@/common/components/SidePane'
@@ -74,7 +75,7 @@ export const SearchResultsModal = () => {
             />
 
             {isLoading ? (
-              <Loader />
+              <Loading />
             ) : activeTab === 'FORUM' ? (
               forum.map(({ id, text, thread }, index) => (
                 <SearchResultItem

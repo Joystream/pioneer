@@ -23,7 +23,7 @@ import {
 } from '@/bounty/modals/WithdrawContributionModal'
 import { BountyWithdrawWorkEntryModalCall, WithdrawWorkEntryModal } from '@/bounty/modals/WithdrawWorkEntryModal'
 import { FailureModal } from '@/common/components/FailureModal'
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { ModalGlass } from '@/common/components/Modal'
 import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/Search/SearchResultsModal'
 import { SuccessModal } from '@/common/components/SuccessModal'
@@ -181,7 +181,7 @@ export const GlobalModals = () => {
 
 export const LoaderModal = ({ onClose }: { onClose: () => void }) => (
   <SpinnerGlass modalSize="l" isDark onClick={onClose} onClose={onClose}>
-    <Loader />
+    <Loading />
   </SpinnerGlass>
 )
 

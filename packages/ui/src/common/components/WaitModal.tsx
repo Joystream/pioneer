@@ -2,9 +2,9 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 
-import { Loader } from './icons'
 import { WaitingIcon } from './icons/WaitingIcon'
 import { Modal, ModalHeader, ModalTitle, ResultModalBody, ResultTextWhite } from './Modal'
 
@@ -33,7 +33,7 @@ export const WaitModal = ({
   const description = requirementsCheck ? t('modals.wait.description') : baseDescription
   return (
     <Modal modalSize="xs" modalHeight="s" isDark onClose={onClose}>
-      <ModalHeader icon={<Loader />} title="" onClick={onClose} modalHeaderSize="s" />
+      <ModalHeader icon={<Loading />} title="" onClick={onClose} modalHeaderSize="s" />
       <ResultModalBody>
         <WaitingIcon />
         <ModalTitle as="h4">{title}</ModalTitle>

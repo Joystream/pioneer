@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Tabs } from '@/common/components/Tabs'
@@ -31,7 +31,7 @@ export function WorkingGroup() {
 
   const displayTabsContent = () => {
     if (isLoading || !group) {
-      return <Loader />
+      return <Loading />
     }
 
     return (

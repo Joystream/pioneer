@@ -1,9 +1,9 @@
 import React from 'react'
 
 import { WorkerOrderByInput } from '@/common/api/queries'
-import { Loader } from '@/common/components/icons'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
 import { SortHeader } from '@/common/components/List/SortHeader'
+import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { TextBig } from '@/common/components/typography'
@@ -19,7 +19,7 @@ export const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => 
   })
 
   if (loadingWorkers && loadingCount) {
-    return <Loader />
+    return <Loading />
   }
 
   if (!workers?.length && !loadingWorkers) {
@@ -34,7 +34,7 @@ export const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => 
           <SortHeader {...getSortProps('createdAt')}>Date Started</SortHeader>
           <SortHeader {...getSortProps('updatedAt')}>Date Finished</SortHeader>
         </ListHeaders>
-        {loadingWorkers ? <Loader /> : <PastWorkersList workers={workers} />}
+        {loadingWorkers ? <Loading /> : <PastWorkersList workers={workers} />}
       </RowGapBlock>
       <Pagination {...pagination} />
     </>

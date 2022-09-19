@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { useElectionVotes } from '@/council/hooks/useElectionVotes'
 import { useMyCurrentVotesCount } from '@/council/hooks/useMyCurrentVotesCount'
 import { Election } from '@/council/types/Election'
@@ -21,7 +21,7 @@ export const RevealingStage = ({ election, isLoading }: Props) => {
   const { votesPerCandidate, sumOfStakes: totalStake, isLoading: votesLoading } = useElectionVotes(election)
 
   if (isLoading) {
-    return <Loader />
+    return <Loading />
   }
 
   return (

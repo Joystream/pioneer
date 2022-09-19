@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
-import { CheckboxIcon, Loader } from '@/common/components/icons'
+import { CheckboxIcon } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { formatDuration } from '@/common/components/statistics/BlockDurationStatistics'
 import { TextBig, TextInlineMedium, TextInlineSmall, TextSmall } from '@/common/components/typography'
 import { DurationValue } from '@/common/components/typography/DurationValue'
@@ -36,7 +37,7 @@ export const ProposalTile = React.memo(({ proposalId }: TileProps) => {
   }, [proposal?.status])
 
   if (isLoading || !proposal) {
-    return <Loader />
+    return <Loading />
   }
   return (
     <Wrapper>

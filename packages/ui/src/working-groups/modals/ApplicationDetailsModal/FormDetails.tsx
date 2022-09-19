@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import {
   SidePaneColumn,
@@ -23,7 +23,7 @@ export const FormDetails = React.memo(({ applicationId }: Props) => {
   if (isLoading)
     return (
       <SidePaneTable>
-        <Loader />
+        <Loading />
       </SidePaneTable>
     )
 

@@ -61,7 +61,7 @@ describe('UI: UpdatedMembershipModal', () => {
     stubTransaction(api, 'api.tx.members.updateAccounts')
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
     stubTransaction(api, 'api.tx.members.updateProfile')
-    profileTxMock = (api.api.tx.members.updateProfile as unknown) as jest.Mock
+    profileTxMock = api.api.tx.members.updateProfile as unknown as jest.Mock
     member = {
       ...getMember('alice'),
       externalResources: [{ source: MembershipExternalResourceType.Twitter, value: 'empty' }],

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Label } from '@/common/components/typography'
@@ -19,7 +19,7 @@ export const Member = ({ label, value }: Props) => {
     <Row>
       <RowGapBlock gap={4}>
         <Label>{label}</Label>
-        {isLoading || !member ? <Loader /> : <MemberInfo member={member} memberSize="s" skipModal />}
+        {isLoading || !member ? <Loading /> : <MemberInfo member={member} memberSize="s" skipModal />}
       </RowGapBlock>
     </Row>
   )

@@ -3,8 +3,8 @@ import styled from 'styled-components'
 
 import { BlockTime } from '@/common/components/BlockTime'
 import { CloseButton, CopyButtonTemplate } from '@/common/components/buttons'
-import { Loader } from '@/common/components/icons'
 import { LinkIcon } from '@/common/components/icons/LinkIcon'
+import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import {
   SidePane,
@@ -50,7 +50,7 @@ export const VoteRationale = React.memo(() => {
   if (isLoading || !vote) {
     return (
       <EmptyBody>
-        <Loader />
+        <Loading />
       </EmptyBody>
     )
   }

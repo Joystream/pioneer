@@ -2,8 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
-import { Loader } from '@/common/components/icons'
 import { AnswerIcon } from '@/common/components/icons/AnswerIcon'
+import { Loading } from '@/common/components/Loading'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { Label, TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
@@ -36,7 +36,7 @@ export const ThreadItem = ({ thread, badges, halfSize, empty }: ThreadItemConten
   if (isLoading) {
     return (
       <ThreadItemWrapper>
-        <Loader />
+        <Loading />
       </ThreadItemWrapper>
     )
   }

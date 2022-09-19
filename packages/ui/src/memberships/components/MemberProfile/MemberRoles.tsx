@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { useMemberRoles } from '@/memberships/hooks/useMemberRoles'
@@ -15,7 +15,7 @@ export const MemberSideRoles = ({ member }: { member: Member }) => {
 
   const displayRoles = () => {
     if (isLoading) {
-      return <Loader />
+      return <Loading />
     }
 
     const activeRoles = (workers && workers.filter((worker) => worker.status === 'WorkerStatusActive')) || []

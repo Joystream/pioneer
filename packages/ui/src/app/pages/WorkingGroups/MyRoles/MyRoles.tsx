@@ -2,7 +2,7 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
@@ -23,7 +23,7 @@ export const MyRoles = () => {
 
   const displayRoles = () => {
     if (isLoading) {
-      return <Loader />
+      return <Loading />
     }
 
     const currentStatuses = ['WorkerStatusActive', 'WorkerStatusLeaving']

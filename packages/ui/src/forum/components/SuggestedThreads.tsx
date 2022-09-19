@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs } from '@/common/components/page/PageContent'
 import { Label } from '@/common/components/typography'
 import { ThreadItem, ThreadItemWrapper } from '@/forum/components/threads/ThreadItem'
@@ -12,7 +12,7 @@ export const SuggestedThreads = () => {
 
   const displayThreads = () => {
     if (isLoading) {
-      return <Loader />
+      return <Loading />
     }
 
     return (

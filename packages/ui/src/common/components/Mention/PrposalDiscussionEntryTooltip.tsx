@@ -3,7 +3,7 @@ import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { Loader } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { TextMedium, TextSmall } from '@/common/components/typography'
 import { cutText } from '@/common/helpers'
 import { MemberInfo } from '@/memberships/components'
@@ -34,7 +34,7 @@ export const ProposalDiscussionEntryTooltip = ({ mention, onMount }: ProposalDis
           {description && <TextMedium lighter>{description}</TextMedium>}
         </>
       ) : (
-        <Loader />
+        <Loading />
       )}
     </Container>
   )
