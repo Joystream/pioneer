@@ -1,6 +1,7 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -171,8 +172,10 @@ export const announceCandidacyMachine = createMachine<
         ],
       },
     },
-    success: { type: 'final' },
-    error: { type: 'final', meta: { message: 'There was a problem while announcing candidacy.' } },
-    canceled: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      metaMessages: {
+        error: 'There was a problem while announcing candidacy.',
+      },
+    }),
   },
 })

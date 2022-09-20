@@ -3,6 +3,7 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import { getDataFromEvent } from '@/common/model/JoystreamNode'
 import {
   isTransactionCanceled,
@@ -69,8 +70,10 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
         ],
       },
     },
-    success: { type: 'final' },
-    error: { type: 'final', meta: { message: 'There was a problem with creating a membership.' } },
-    canceled: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      metaMessages: {
+        error: 'There was a problem with creating a membership.',
+      },
+    }),
   },
 })

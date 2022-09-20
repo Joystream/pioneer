@@ -1,6 +1,7 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -53,8 +54,10 @@ export const recoverBalanceMachine = createMachine<Context, RecoverBalanceEvent,
       },
     },
     requirementsFailed: { type: 'final' },
-    success: { type: 'final' },
-    error: { type: 'final', meta: { message: 'There was a problem with recovering balance.' } },
-    canceled: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      metaMessages: {
+        error: 'There was a problem with recovering balance.',
+      },
+    }),
   },
 })

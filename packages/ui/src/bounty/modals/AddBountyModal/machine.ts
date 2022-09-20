@@ -3,6 +3,7 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine, State, Typestate } from 'xstate'
 import { StateSchema } from 'xstate/lib/types'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import { getDataFromEvent } from '@/common/model/JoystreamNode'
 import {
   isTransactionCanceled,
@@ -155,8 +156,6 @@ export const addBountyMachine = createMachine<TransactionContext, AddBountyEvent
         ],
       },
     },
-    [AddBountyStates.success]: { type: 'final' },
-    [AddBountyStates.error]: { type: 'final', meta: { message: 'There was a problem while creating bounty.' } },
-    [AddBountyStates.canceled]: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({ metaMessages: { error: 'There was a problem while creating bounty.' } }),
   },
 })
