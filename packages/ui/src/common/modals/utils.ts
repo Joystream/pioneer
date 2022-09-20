@@ -9,12 +9,29 @@ interface TransactionModalFinalStatusesFactory {
     success?: string
     error?: string
   }
+  cancel?: {
+    target: string
+    action: string
+  }
 }
 
 export const transactionModalFinalStatusesFactory = (props?: TransactionModalFinalStatusesFactory) => {
   return {
     success: { type: 'final', meta: { message: props?.metaMessages?.success } },
     error: { type: 'final', meta: { message: props?.metaMessages?.error } },
-    canceled: { type: 'final' },
+    canceled: {
+      ...(props?.cancel
+        ? {
+            on: {
+              [props.cancel.action]: props.cancel.target,
+            },
+            meta: {
+              backTarget: props.cancel.action,
+            },
+          }
+        : {
+            type: 'final' as const,
+          }),
+    },
   } as const
 }

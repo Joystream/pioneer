@@ -5,7 +5,7 @@ import { SpRuntimeDispatchError } from '@polkadot/types/lookup'
 import { isModuleEvent } from './isModuleEvent'
 
 export const isErrorEvent = ({ event: { method } }: EventRecord) => {
-  return method === 'ExtrinsicFailed' || method === 'BatchInterrupted'
+  return method === 'ExtrinsicFailed' || method === 'BatchInterrupted' || method === 'TransactionCanceled'
 }
 
 export const hasErrorEvent = (events: EventRecord[]) => !!events.find(isErrorEvent)
