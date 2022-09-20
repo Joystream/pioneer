@@ -3,6 +3,7 @@ import React from 'react'
 import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { SidebarConnections } from '@/app/components/SidebarConnections'
 import { MembersRoutes, ProfileRoutes, SettingsRoutes } from '@/app/constants/routes'
 import { BountyRoutes } from '@/bounty/constants'
 import { Arrow } from '@/common/components/icons'
@@ -174,6 +175,7 @@ export const SideBar = () => {
           </NavigationLinks>
         </AnimateSharedLayout>
         <ProfileComponent />
+        <SidebarConnections />
       </NavigationInnerWrapper>
       {/*<Notifications onClose={onClose} isNotificationsPanelOpen={isNotificationsPanelOpen} />*/}
     </Navigation>
