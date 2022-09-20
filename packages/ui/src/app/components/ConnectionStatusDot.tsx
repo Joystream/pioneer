@@ -19,7 +19,7 @@ interface ConnectionStatusDotProps {
 export const ConnectionStatusDot = ({ onlyPerformance = false, className }: ConnectionStatusDotProps) => {
   const { api, connectionState, qnConnectionState } = useApi()
   const { queryNodeState } = useQueryNodeStateSubscription()
-  const header = useObservable(api?.rpc.chain.subscribeNewHeads(), [api?.isConnected])
+  const header = useObservable(() => api?.rpc.chain.subscribeNewHeads(), [api?.isConnected])
 
   const isQnLate = useMemo(() => {
     if (queryNodeState && header) {
