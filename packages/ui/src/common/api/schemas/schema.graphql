@@ -305,10 +305,7 @@ type ForumCategory implements BaseGraphQLObject {
   threadmovedeventnewCategory: [ThreadMovedEvent!]
 }
 
-union CategoryStatus =
-    CategoryStatusActive
-  | CategoryStatusArchived
-  | CategoryStatusRemoved
+union CategoryStatus = CategoryStatusActive | CategoryStatusArchived | CategoryStatusRemoved
 
 type ForumPostReaction implements BaseGraphQLObject {
   id: ID!
@@ -332,10 +329,7 @@ enum PostReaction {
   LIKE
 }
 
-union PostReactionResult =
-    PostReactionResultCancel
-  | PostReactionResultValid
-  | PostReactionResultInvalid
+union PostReactionResult = PostReactionResultCancel | PostReactionResultValid | PostReactionResultInvalid
 
 type ForumPost implements BaseGraphQLObject {
   id: ID!
@@ -375,11 +369,7 @@ type ForumPost implements BaseGraphQLObject {
   postreactedeventpost: [PostReactedEvent!]
 }
 
-union PostStatus =
-    PostStatusActive
-  | PostStatusLocked
-  | PostStatusModerated
-  | PostStatusRemoved
+union PostStatus = PostStatusActive | PostStatusLocked | PostStatusModerated | PostStatusRemoved
 
 union PostOrigin = PostOriginThreadInitial | PostOriginThreadReply
 
@@ -439,11 +429,7 @@ type ForumThread implements BaseGraphQLObject {
   threadmoderatedeventthread: [ThreadModeratedEvent!]
 }
 
-union ThreadStatus =
-    ThreadStatusActive
-  | ThreadStatusLocked
-  | ThreadStatusModerated
-  | ThreadStatusRemoved
+union ThreadStatus = ThreadStatusActive | ThreadStatusLocked | ThreadStatusModerated | ThreadStatusRemoved
 
 type BountyContribution implements BaseGraphQLObject {
   id: ID!
@@ -686,10 +672,7 @@ type DistributionBucketFamilyGeographicArea implements BaseGraphQLObject {
   distributionBucketFamilyMetadataId: String!
 }
 
-union GeographicalArea =
-    GeographicalAreaContinent
-  | GeographicalAreaCountry
-  | GeographicalAreaSubdivistion
+union GeographicalArea = GeographicalAreaContinent | GeographicalAreaCountry | GeographicalAreaSubdivistion
 
 type DistributionBucketFamilyMetadata implements BaseGraphQLObject {
   id: ID!
@@ -1704,11 +1687,7 @@ type CouncilStageUpdate implements BaseGraphQLObject {
   electionProblem: ElectionProblem
 }
 
-union CouncilStage =
-    CouncilStageAnnouncing
-  | CouncilStageElection
-  | CouncilStageIdle
-  | VariantNone
+union CouncilStage = CouncilStageAnnouncing | CouncilStageElection | CouncilStageIdle | VariantNone
 
 enum ElectionProblem {
   NOT_ENOUGH_CANDIDATES
@@ -1900,9 +1879,7 @@ union ProposalDiscussionPostStatus =
   | ProposalDiscussionPostStatusLocked
   | ProposalDiscussionPostStatusRemoved
 
-union ProposalDiscussionThreadMode =
-    ProposalDiscussionThreadModeOpen
-  | ProposalDiscussionThreadModeClosed
+union ProposalDiscussionThreadMode = ProposalDiscussionThreadModeOpen | ProposalDiscussionThreadModeClosed
 
 type ProposalDiscussionThread implements BaseGraphQLObject {
   id: ID!
@@ -1922,10 +1899,7 @@ type ProposalDiscussionThread implements BaseGraphQLObject {
   modeChanges: [ProposalDiscussionThreadModeChangedEvent!]!
 }
 
-union ProposalIntermediateStatus =
-    ProposalStatusDeciding
-  | ProposalStatusGracing
-  | ProposalStatusDormant
+union ProposalIntermediateStatus = ProposalStatusDeciding | ProposalStatusGracing | ProposalStatusDormant
 
 enum ProposalVoteKind {
   APPROVE
@@ -1944,9 +1918,7 @@ union ProposalDecisionStatus =
   | ProposalStatusCancelled
   | ProposalStatusCanceledByRuntime
 
-union ProposalExecutionStatus =
-    ProposalStatusExecuted
-  | ProposalStatusExecutionFailed
+union ProposalExecutionStatus = ProposalStatusExecuted | ProposalStatusExecutionFailed
 
 type Proposal implements BaseGraphQLObject {
   id: ID!
@@ -2079,10 +2051,7 @@ enum WorkingGroupOpeningType {
   LEADER
 }
 
-union WorkingGroupOpeningStatus =
-    OpeningStatusOpen
-  | OpeningStatusFilled
-  | OpeningStatusCancelled
+union WorkingGroupOpeningStatus = OpeningStatusOpen | OpeningStatusFilled | OpeningStatusCancelled
 
 type ApplicationFormQuestionAnswer implements BaseGraphQLObject {
   id: ID!
@@ -2363,11 +2332,7 @@ type Worker implements BaseGraphQLObject {
   workinggroupleader: [WorkingGroup!]
 }
 
-union WorkerStatus =
-    WorkerStatusActive
-  | WorkerStatusLeaving
-  | WorkerStatusLeft
-  | WorkerStatusTerminated
+union WorkerStatus = WorkerStatusActive | WorkerStatusLeaving | WorkerStatusLeft | WorkerStatusTerminated
 
 type WorkingGroup implements BaseGraphQLObject {
   id: ID!
@@ -4042,9 +4007,7 @@ type EnglishAuctionStartedEventConnection {
   pageInfo: PageInfo!
 }
 
-union MetaprotocolTransactionStatus =
-    MetaprotocolTransactionSuccessful
-  | MetaprotocolTransactionErrored
+union MetaprotocolTransactionStatus = MetaprotocolTransactionSuccessful | MetaprotocolTransactionErrored
 
 type ForumCategoryEdge {
   node: ForumCategory!
@@ -26653,9 +26616,7 @@ type Query {
     where: ApplicationFormQuestionWhereInput
     orderBy: [ApplicationFormQuestionOrderByInput!]
   ): [ApplicationFormQuestion!]!
-  applicationFormQuestionByUniqueInput(
-    where: ApplicationFormQuestionWhereUniqueInput!
-  ): ApplicationFormQuestion
+  applicationFormQuestionByUniqueInput(where: ApplicationFormQuestionWhereUniqueInput!): ApplicationFormQuestion
   applicationFormQuestionsConnection(
     first: Int
     after: String
@@ -26670,9 +26631,7 @@ type Query {
     where: ApplicationWithdrawnEventWhereInput
     orderBy: [ApplicationWithdrawnEventOrderByInput!]
   ): [ApplicationWithdrawnEvent!]!
-  applicationWithdrawnEventByUniqueInput(
-    where: ApplicationWithdrawnEventWhereUniqueInput!
-  ): ApplicationWithdrawnEvent
+  applicationWithdrawnEventByUniqueInput(where: ApplicationWithdrawnEventWhereUniqueInput!): ApplicationWithdrawnEvent
   applicationWithdrawnEventsConnection(
     first: Int
     after: String
@@ -26687,9 +26646,7 @@ type Query {
     where: AppliedOnOpeningEventWhereInput
     orderBy: [AppliedOnOpeningEventOrderByInput!]
   ): [AppliedOnOpeningEvent!]!
-  appliedOnOpeningEventByUniqueInput(
-    where: AppliedOnOpeningEventWhereUniqueInput!
-  ): AppliedOnOpeningEvent
+  appliedOnOpeningEventByUniqueInput(where: AppliedOnOpeningEventWhereUniqueInput!): AppliedOnOpeningEvent
   appliedOnOpeningEventsConnection(
     first: Int
     after: String
@@ -26704,9 +26661,7 @@ type Query {
     where: AuctionBidCanceledEventWhereInput
     orderBy: [AuctionBidCanceledEventOrderByInput!]
   ): [AuctionBidCanceledEvent!]!
-  auctionBidCanceledEventByUniqueInput(
-    where: AuctionBidCanceledEventWhereUniqueInput!
-  ): AuctionBidCanceledEvent
+  auctionBidCanceledEventByUniqueInput(where: AuctionBidCanceledEventWhereUniqueInput!): AuctionBidCanceledEvent
   auctionBidCanceledEventsConnection(
     first: Int
     after: String
@@ -26721,9 +26676,7 @@ type Query {
     where: AuctionBidMadeEventWhereInput
     orderBy: [AuctionBidMadeEventOrderByInput!]
   ): [AuctionBidMadeEvent!]!
-  auctionBidMadeEventByUniqueInput(
-    where: AuctionBidMadeEventWhereUniqueInput!
-  ): AuctionBidMadeEvent
+  auctionBidMadeEventByUniqueInput(where: AuctionBidMadeEventWhereUniqueInput!): AuctionBidMadeEvent
   auctionBidMadeEventsConnection(
     first: Int
     after: String
@@ -26738,9 +26691,7 @@ type Query {
     where: AuctionCanceledEventWhereInput
     orderBy: [AuctionCanceledEventOrderByInput!]
   ): [AuctionCanceledEvent!]!
-  auctionCanceledEventByUniqueInput(
-    where: AuctionCanceledEventWhereUniqueInput!
-  ): AuctionCanceledEvent
+  auctionCanceledEventByUniqueInput(where: AuctionCanceledEventWhereUniqueInput!): AuctionCanceledEvent
   auctionCanceledEventsConnection(
     first: Int
     after: String
@@ -26749,12 +26700,7 @@ type Query {
     where: AuctionCanceledEventWhereInput
     orderBy: [AuctionCanceledEventOrderByInput!]
   ): AuctionCanceledEventConnection!
-  auctions(
-    offset: Int
-    limit: Int = 50
-    where: AuctionWhereInput
-    orderBy: [AuctionOrderByInput!]
-  ): [Auction!]!
+  auctions(offset: Int, limit: Int = 50, where: AuctionWhereInput, orderBy: [AuctionOrderByInput!]): [Auction!]!
   auctionByUniqueInput(where: AuctionWhereUniqueInput!): Auction
   auctionsConnection(
     first: Int
@@ -26781,12 +26727,7 @@ type Query {
     where: BidMadeCompletingAuctionEventWhereInput
     orderBy: [BidMadeCompletingAuctionEventOrderByInput!]
   ): BidMadeCompletingAuctionEventConnection!
-  bids(
-    offset: Int
-    limit: Int = 50
-    where: BidWhereInput
-    orderBy: [BidOrderByInput!]
-  ): [Bid!]!
+  bids(offset: Int, limit: Int = 50, where: BidWhereInput, orderBy: [BidOrderByInput!]): [Bid!]!
   bidByUniqueInput(where: BidWhereUniqueInput!): Bid
   bidsConnection(
     first: Int
@@ -26802,9 +26743,7 @@ type Query {
     where: BountyCanceledEventWhereInput
     orderBy: [BountyCanceledEventOrderByInput!]
   ): [BountyCanceledEvent!]!
-  bountyCanceledEventByUniqueInput(
-    where: BountyCanceledEventWhereUniqueInput!
-  ): BountyCanceledEvent
+  bountyCanceledEventByUniqueInput(where: BountyCanceledEventWhereUniqueInput!): BountyCanceledEvent
   bountyCanceledEventsConnection(
     first: Int
     after: String
@@ -26819,9 +26758,7 @@ type Query {
     where: BountyContributionWhereInput
     orderBy: [BountyContributionOrderByInput!]
   ): [BountyContribution!]!
-  bountyContributionByUniqueInput(
-    where: BountyContributionWhereUniqueInput!
-  ): BountyContribution
+  bountyContributionByUniqueInput(where: BountyContributionWhereUniqueInput!): BountyContribution
   bountyContributionsConnection(
     first: Int
     after: String
@@ -26836,9 +26773,7 @@ type Query {
     where: BountyCreatedEventWhereInput
     orderBy: [BountyCreatedEventOrderByInput!]
   ): [BountyCreatedEvent!]!
-  bountyCreatedEventByUniqueInput(
-    where: BountyCreatedEventWhereUniqueInput!
-  ): BountyCreatedEvent
+  bountyCreatedEventByUniqueInput(where: BountyCreatedEventWhereUniqueInput!): BountyCreatedEvent
   bountyCreatedEventsConnection(
     first: Int
     after: String
@@ -26870,9 +26805,7 @@ type Query {
     where: BountyEntrantWhitelistWhereInput
     orderBy: [BountyEntrantWhitelistOrderByInput!]
   ): [BountyEntrantWhitelist!]!
-  bountyEntrantWhitelistByUniqueInput(
-    where: BountyEntrantWhitelistWhereUniqueInput!
-  ): BountyEntrantWhitelist
+  bountyEntrantWhitelistByUniqueInput(where: BountyEntrantWhitelistWhereUniqueInput!): BountyEntrantWhitelist
   bountyEntrantWhitelistsConnection(
     first: Int
     after: String
@@ -26902,9 +26835,7 @@ type Query {
     where: BountyFundedEventWhereInput
     orderBy: [BountyFundedEventOrderByInput!]
   ): [BountyFundedEvent!]!
-  bountyFundedEventByUniqueInput(
-    where: BountyFundedEventWhereUniqueInput!
-  ): BountyFundedEvent
+  bountyFundedEventByUniqueInput(where: BountyFundedEventWhereUniqueInput!): BountyFundedEvent
   bountyFundedEventsConnection(
     first: Int
     after: String
@@ -26953,9 +26884,7 @@ type Query {
     where: BountyRemovedEventWhereInput
     orderBy: [BountyRemovedEventOrderByInput!]
   ): [BountyRemovedEvent!]!
-  bountyRemovedEventByUniqueInput(
-    where: BountyRemovedEventWhereUniqueInput!
-  ): BountyRemovedEvent
+  bountyRemovedEventByUniqueInput(where: BountyRemovedEventWhereUniqueInput!): BountyRemovedEvent
   bountyRemovedEventsConnection(
     first: Int
     after: String
@@ -26970,9 +26899,7 @@ type Query {
     where: BountyVetoedEventWhereInput
     orderBy: [BountyVetoedEventOrderByInput!]
   ): [BountyVetoedEvent!]!
-  bountyVetoedEventByUniqueInput(
-    where: BountyVetoedEventWhereUniqueInput!
-  ): BountyVetoedEvent
+  bountyVetoedEventByUniqueInput(where: BountyVetoedEventWhereUniqueInput!): BountyVetoedEvent
   bountyVetoedEventsConnection(
     first: Int
     after: String
@@ -26981,12 +26908,7 @@ type Query {
     where: BountyVetoedEventWhereInput
     orderBy: [BountyVetoedEventOrderByInput!]
   ): BountyVetoedEventConnection!
-  bounties(
-    offset: Int
-    limit: Int = 50
-    where: BountyWhereInput
-    orderBy: [BountyOrderByInput!]
-  ): [Bounty!]!
+  bounties(offset: Int, limit: Int = 50, where: BountyWhereInput, orderBy: [BountyOrderByInput!]): [Bounty!]!
   bountyByUniqueInput(where: BountyWhereUniqueInput!): Bounty
   bountiesConnection(
     first: Int
@@ -27002,9 +26924,7 @@ type Query {
     where: BudgetBalanceSetEventWhereInput
     orderBy: [BudgetBalanceSetEventOrderByInput!]
   ): [BudgetBalanceSetEvent!]!
-  budgetBalanceSetEventByUniqueInput(
-    where: BudgetBalanceSetEventWhereUniqueInput!
-  ): BudgetBalanceSetEvent
+  budgetBalanceSetEventByUniqueInput(where: BudgetBalanceSetEventWhereUniqueInput!): BudgetBalanceSetEvent
   budgetBalanceSetEventsConnection(
     first: Int
     after: String
@@ -27036,9 +26956,7 @@ type Query {
     where: BudgetRefillEventWhereInput
     orderBy: [BudgetRefillEventOrderByInput!]
   ): [BudgetRefillEvent!]!
-  budgetRefillEventByUniqueInput(
-    where: BudgetRefillEventWhereUniqueInput!
-  ): BudgetRefillEvent
+  budgetRefillEventByUniqueInput(where: BudgetRefillEventWhereUniqueInput!): BudgetRefillEvent
   budgetRefillEventsConnection(
     first: Int
     after: String
@@ -27053,9 +26971,7 @@ type Query {
     where: BudgetRefillPlannedEventWhereInput
     orderBy: [BudgetRefillPlannedEventOrderByInput!]
   ): [BudgetRefillPlannedEvent!]!
-  budgetRefillPlannedEventByUniqueInput(
-    where: BudgetRefillPlannedEventWhereUniqueInput!
-  ): BudgetRefillPlannedEvent
+  budgetRefillPlannedEventByUniqueInput(where: BudgetRefillPlannedEventWhereUniqueInput!): BudgetRefillPlannedEvent
   budgetRefillPlannedEventsConnection(
     first: Int
     after: String
@@ -27070,9 +26986,7 @@ type Query {
     where: BudgetSetEventWhereInput
     orderBy: [BudgetSetEventOrderByInput!]
   ): [BudgetSetEvent!]!
-  budgetSetEventByUniqueInput(
-    where: BudgetSetEventWhereUniqueInput!
-  ): BudgetSetEvent
+  budgetSetEventByUniqueInput(where: BudgetSetEventWhereUniqueInput!): BudgetSetEvent
   budgetSetEventsConnection(
     first: Int
     after: String
@@ -27087,9 +27001,7 @@ type Query {
     where: BudgetSpendingEventWhereInput
     orderBy: [BudgetSpendingEventOrderByInput!]
   ): [BudgetSpendingEvent!]!
-  budgetSpendingEventByUniqueInput(
-    where: BudgetSpendingEventWhereUniqueInput!
-  ): BudgetSpendingEvent
+  budgetSpendingEventByUniqueInput(where: BudgetSpendingEventWhereUniqueInput!): BudgetSpendingEvent
   budgetSpendingEventsConnection(
     first: Int
     after: String
@@ -27104,9 +27016,7 @@ type Query {
     where: BudgetUpdatedEventWhereInput
     orderBy: [BudgetUpdatedEventOrderByInput!]
   ): [BudgetUpdatedEvent!]!
-  budgetUpdatedEventByUniqueInput(
-    where: BudgetUpdatedEventWhereUniqueInput!
-  ): BudgetUpdatedEvent
+  budgetUpdatedEventByUniqueInput(where: BudgetUpdatedEventWhereUniqueInput!): BudgetUpdatedEvent
   budgetUpdatedEventsConnection(
     first: Int
     after: String
@@ -27121,9 +27031,7 @@ type Query {
     where: BuyNowCanceledEventWhereInput
     orderBy: [BuyNowCanceledEventOrderByInput!]
   ): [BuyNowCanceledEvent!]!
-  buyNowCanceledEventByUniqueInput(
-    where: BuyNowCanceledEventWhereUniqueInput!
-  ): BuyNowCanceledEvent
+  buyNowCanceledEventByUniqueInput(where: BuyNowCanceledEventWhereUniqueInput!): BuyNowCanceledEvent
   buyNowCanceledEventsConnection(
     first: Int
     after: String
@@ -27138,9 +27046,7 @@ type Query {
     where: BuyNowPriceUpdatedEventWhereInput
     orderBy: [BuyNowPriceUpdatedEventOrderByInput!]
   ): [BuyNowPriceUpdatedEvent!]!
-  buyNowPriceUpdatedEventByUniqueInput(
-    where: BuyNowPriceUpdatedEventWhereUniqueInput!
-  ): BuyNowPriceUpdatedEvent
+  buyNowPriceUpdatedEventByUniqueInput(where: BuyNowPriceUpdatedEventWhereUniqueInput!): BuyNowPriceUpdatedEvent
   buyNowPriceUpdatedEventsConnection(
     first: Int
     after: String
@@ -27155,9 +27061,7 @@ type Query {
     where: CandidacyNoteMetadataWhereInput
     orderBy: [CandidacyNoteMetadataOrderByInput!]
   ): [CandidacyNoteMetadata!]!
-  candidacyNoteMetadataByUniqueInput(
-    where: CandidacyNoteMetadataWhereUniqueInput!
-  ): CandidacyNoteMetadata
+  candidacyNoteMetadataByUniqueInput(where: CandidacyNoteMetadataWhereUniqueInput!): CandidacyNoteMetadata
   candidacyNoteMetadataConnection(
     first: Int
     after: String
@@ -27172,9 +27076,7 @@ type Query {
     where: CandidacyNoteSetEventWhereInput
     orderBy: [CandidacyNoteSetEventOrderByInput!]
   ): [CandidacyNoteSetEvent!]!
-  candidacyNoteSetEventByUniqueInput(
-    where: CandidacyNoteSetEventWhereUniqueInput!
-  ): CandidacyNoteSetEvent
+  candidacyNoteSetEventByUniqueInput(where: CandidacyNoteSetEventWhereUniqueInput!): CandidacyNoteSetEvent
   candidacyNoteSetEventsConnection(
     first: Int
     after: String
@@ -27206,9 +27108,7 @@ type Query {
     where: CandidacyWithdrawEventWhereInput
     orderBy: [CandidacyWithdrawEventOrderByInput!]
   ): [CandidacyWithdrawEvent!]!
-  candidacyWithdrawEventByUniqueInput(
-    where: CandidacyWithdrawEventWhereUniqueInput!
-  ): CandidacyWithdrawEvent
+  candidacyWithdrawEventByUniqueInput(where: CandidacyWithdrawEventWhereUniqueInput!): CandidacyWithdrawEvent
   candidacyWithdrawEventsConnection(
     first: Int
     after: String
@@ -27217,12 +27117,7 @@ type Query {
     where: CandidacyWithdrawEventWhereInput
     orderBy: [CandidacyWithdrawEventOrderByInput!]
   ): CandidacyWithdrawEventConnection!
-  candidates(
-    offset: Int
-    limit: Int = 50
-    where: CandidateWhereInput
-    orderBy: [CandidateOrderByInput!]
-  ): [Candidate!]!
+  candidates(offset: Int, limit: Int = 50, where: CandidateWhereInput, orderBy: [CandidateOrderByInput!]): [Candidate!]!
   candidateByUniqueInput(where: CandidateWhereUniqueInput!): Candidate
   candidatesConnection(
     first: Int
@@ -27232,12 +27127,7 @@ type Query {
     where: CandidateWhereInput
     orderBy: [CandidateOrderByInput!]
   ): CandidateConnection!
-  castVotes(
-    offset: Int
-    limit: Int = 50
-    where: CastVoteWhereInput
-    orderBy: [CastVoteOrderByInput!]
-  ): [CastVote!]!
+  castVotes(offset: Int, limit: Int = 50, where: CastVoteWhereInput, orderBy: [CastVoteOrderByInput!]): [CastVote!]!
   castVoteByUniqueInput(where: CastVoteWhereUniqueInput!): CastVote
   castVotesConnection(
     first: Int
@@ -27270,9 +27160,7 @@ type Query {
     where: CategoryCreatedEventWhereInput
     orderBy: [CategoryCreatedEventOrderByInput!]
   ): [CategoryCreatedEvent!]!
-  categoryCreatedEventByUniqueInput(
-    where: CategoryCreatedEventWhereUniqueInput!
-  ): CategoryCreatedEvent
+  categoryCreatedEventByUniqueInput(where: CategoryCreatedEventWhereUniqueInput!): CategoryCreatedEvent
   categoryCreatedEventsConnection(
     first: Int
     after: String
@@ -27287,9 +27175,7 @@ type Query {
     where: CategoryDeletedEventWhereInput
     orderBy: [CategoryDeletedEventOrderByInput!]
   ): [CategoryDeletedEvent!]!
-  categoryDeletedEventByUniqueInput(
-    where: CategoryDeletedEventWhereUniqueInput!
-  ): CategoryDeletedEvent
+  categoryDeletedEventByUniqueInput(where: CategoryDeletedEventWhereUniqueInput!): CategoryDeletedEvent
   categoryDeletedEventsConnection(
     first: Int
     after: String
@@ -27372,9 +27258,7 @@ type Query {
     where: ChannelNftCollectorsWhereInput
     orderBy: [ChannelNftCollectorsOrderByInput!]
   ): [ChannelNftCollectors!]!
-  channelNftCollectorsByUniqueInput(
-    where: ChannelNftCollectorsWhereUniqueInput!
-  ): ChannelNftCollectors
+  channelNftCollectorsByUniqueInput(where: ChannelNftCollectorsWhereUniqueInput!): ChannelNftCollectors
   channelNftCollectorsConnection(
     first: Int
     after: String
@@ -27383,12 +27267,7 @@ type Query {
     where: ChannelNftCollectorsWhereInput
     orderBy: [ChannelNftCollectorsOrderByInput!]
   ): ChannelNftCollectorsConnection!
-  channels(
-    offset: Int
-    limit: Int = 50
-    where: ChannelWhereInput
-    orderBy: [ChannelOrderByInput!]
-  ): [Channel!]!
+  channels(offset: Int, limit: Int = 50, where: ChannelWhereInput, orderBy: [ChannelOrderByInput!]): [Channel!]!
   channelByUniqueInput(where: ChannelWhereUniqueInput!): Channel
   channelsConnection(
     first: Int
@@ -27404,9 +27283,7 @@ type Query {
     where: CommentCreatedEventWhereInput
     orderBy: [CommentCreatedEventOrderByInput!]
   ): [CommentCreatedEvent!]!
-  commentCreatedEventByUniqueInput(
-    where: CommentCreatedEventWhereUniqueInput!
-  ): CommentCreatedEvent
+  commentCreatedEventByUniqueInput(where: CommentCreatedEventWhereUniqueInput!): CommentCreatedEvent
   commentCreatedEventsConnection(
     first: Int
     after: String
@@ -27421,9 +27298,7 @@ type Query {
     where: CommentDeletedEventWhereInput
     orderBy: [CommentDeletedEventOrderByInput!]
   ): [CommentDeletedEvent!]!
-  commentDeletedEventByUniqueInput(
-    where: CommentDeletedEventWhereUniqueInput!
-  ): CommentDeletedEvent
+  commentDeletedEventByUniqueInput(where: CommentDeletedEventWhereUniqueInput!): CommentDeletedEvent
   commentDeletedEventsConnection(
     first: Int
     after: String
@@ -27438,9 +27313,7 @@ type Query {
     where: CommentModeratedEventWhereInput
     orderBy: [CommentModeratedEventOrderByInput!]
   ): [CommentModeratedEvent!]!
-  commentModeratedEventByUniqueInput(
-    where: CommentModeratedEventWhereUniqueInput!
-  ): CommentModeratedEvent
+  commentModeratedEventByUniqueInput(where: CommentModeratedEventWhereUniqueInput!): CommentModeratedEvent
   commentModeratedEventsConnection(
     first: Int
     after: String
@@ -27455,9 +27328,7 @@ type Query {
     where: CommentPinnedEventWhereInput
     orderBy: [CommentPinnedEventOrderByInput!]
   ): [CommentPinnedEvent!]!
-  commentPinnedEventByUniqueInput(
-    where: CommentPinnedEventWhereUniqueInput!
-  ): CommentPinnedEvent
+  commentPinnedEventByUniqueInput(where: CommentPinnedEventWhereUniqueInput!): CommentPinnedEvent
   commentPinnedEventsConnection(
     first: Int
     after: String
@@ -27472,9 +27343,7 @@ type Query {
     where: CommentReactedEventWhereInput
     orderBy: [CommentReactedEventOrderByInput!]
   ): [CommentReactedEvent!]!
-  commentReactedEventByUniqueInput(
-    where: CommentReactedEventWhereUniqueInput!
-  ): CommentReactedEvent
+  commentReactedEventByUniqueInput(where: CommentReactedEventWhereUniqueInput!): CommentReactedEvent
   commentReactedEventsConnection(
     first: Int
     after: String
@@ -27489,9 +27358,7 @@ type Query {
     where: CommentReactionWhereInput
     orderBy: [CommentReactionOrderByInput!]
   ): [CommentReaction!]!
-  commentReactionByUniqueInput(
-    where: CommentReactionWhereUniqueInput!
-  ): CommentReaction
+  commentReactionByUniqueInput(where: CommentReactionWhereUniqueInput!): CommentReaction
   commentReactionsConnection(
     first: Int
     after: String
@@ -27523,9 +27390,7 @@ type Query {
     where: CommentTextUpdatedEventWhereInput
     orderBy: [CommentTextUpdatedEventOrderByInput!]
   ): [CommentTextUpdatedEvent!]!
-  commentTextUpdatedEventByUniqueInput(
-    where: CommentTextUpdatedEventWhereUniqueInput!
-  ): CommentTextUpdatedEvent
+  commentTextUpdatedEventByUniqueInput(where: CommentTextUpdatedEventWhereUniqueInput!): CommentTextUpdatedEvent
   commentTextUpdatedEventsConnection(
     first: Int
     after: String
@@ -27534,12 +27399,7 @@ type Query {
     where: CommentTextUpdatedEventWhereInput
     orderBy: [CommentTextUpdatedEventOrderByInput!]
   ): CommentTextUpdatedEventConnection!
-  comments(
-    offset: Int
-    limit: Int = 50
-    where: CommentWhereInput
-    orderBy: [CommentOrderByInput!]
-  ): [Comment!]!
+  comments(offset: Int, limit: Int = 50, where: CommentWhereInput, orderBy: [CommentOrderByInput!]): [Comment!]!
   commentByUniqueInput(where: CommentWhereUniqueInput!): Comment
   commentsConnection(
     first: Int
@@ -27555,9 +27415,7 @@ type Query {
     where: CouncilMemberWhereInput
     orderBy: [CouncilMemberOrderByInput!]
   ): [CouncilMember!]!
-  councilMemberByUniqueInput(
-    where: CouncilMemberWhereUniqueInput!
-  ): CouncilMember
+  councilMemberByUniqueInput(where: CouncilMemberWhereUniqueInput!): CouncilMember
   councilMembersConnection(
     first: Int
     after: String
@@ -27572,9 +27430,7 @@ type Query {
     where: CouncilStageUpdateWhereInput
     orderBy: [CouncilStageUpdateOrderByInput!]
   ): [CouncilStageUpdate!]!
-  councilStageUpdateByUniqueInput(
-    where: CouncilStageUpdateWhereUniqueInput!
-  ): CouncilStageUpdate
+  councilStageUpdateByUniqueInput(where: CouncilStageUpdateWhereUniqueInput!): CouncilStageUpdate
   councilStageUpdatesConnection(
     first: Int
     after: String
@@ -27615,12 +27471,7 @@ type Query {
     where: CuratorGroupWhereInput
     orderBy: [CuratorGroupOrderByInput!]
   ): CuratorGroupConnection!
-  curators(
-    offset: Int
-    limit: Int = 50
-    where: CuratorWhereInput
-    orderBy: [CuratorOrderByInput!]
-  ): [Curator!]!
+  curators(offset: Int, limit: Int = 50, where: CuratorWhereInput, orderBy: [CuratorOrderByInput!]): [Curator!]!
   curatorByUniqueInput(where: CuratorWhereUniqueInput!): Curator
   curatorsConnection(
     first: Int
@@ -27670,9 +27521,7 @@ type Query {
     where: DistributionBucketFamilyWhereInput
     orderBy: [DistributionBucketFamilyOrderByInput!]
   ): [DistributionBucketFamily!]!
-  distributionBucketFamilyByUniqueInput(
-    where: DistributionBucketFamilyWhereUniqueInput!
-  ): DistributionBucketFamily
+  distributionBucketFamilyByUniqueInput(where: DistributionBucketFamilyWhereUniqueInput!): DistributionBucketFamily
   distributionBucketFamiliesConnection(
     first: Int
     after: String
@@ -27721,9 +27570,7 @@ type Query {
     where: DistributionBucketWhereInput
     orderBy: [DistributionBucketOrderByInput!]
   ): [DistributionBucket!]!
-  distributionBucketByUniqueInput(
-    where: DistributionBucketWhereUniqueInput!
-  ): DistributionBucket
+  distributionBucketByUniqueInput(where: DistributionBucketWhereUniqueInput!): DistributionBucket
   distributionBucketsConnection(
     first: Int
     after: String
@@ -27738,9 +27585,7 @@ type Query {
     where: ElectedCouncilWhereInput
     orderBy: [ElectedCouncilOrderByInput!]
   ): [ElectedCouncil!]!
-  electedCouncilByUniqueInput(
-    where: ElectedCouncilWhereUniqueInput!
-  ): ElectedCouncil
+  electedCouncilByUniqueInput(where: ElectedCouncilWhereUniqueInput!): ElectedCouncil
   electedCouncilsConnection(
     first: Int
     after: String
@@ -27755,9 +27600,7 @@ type Query {
     where: ElectionRoundWhereInput
     orderBy: [ElectionRoundOrderByInput!]
   ): [ElectionRound!]!
-  electionRoundByUniqueInput(
-    where: ElectionRoundWhereUniqueInput!
-  ): ElectionRound
+  electionRoundByUniqueInput(where: ElectionRoundWhereUniqueInput!): ElectionRound
   electionRoundsConnection(
     first: Int
     after: String
@@ -27800,21 +27643,14 @@ type Query {
     where: EnglishAuctionStartedEventWhereInput
     orderBy: [EnglishAuctionStartedEventOrderByInput!]
   ): EnglishAuctionStartedEventConnection!
-  events(
-    offset: Int
-    limit: Int = 50
-    where: EventWhereInput
-    orderBy: [EventOrderByInput!]
-  ): [Event!]!
+  events(offset: Int, limit: Int = 50, where: EventWhereInput, orderBy: [EventOrderByInput!]): [Event!]!
   forumCategories(
     offset: Int
     limit: Int = 50
     where: ForumCategoryWhereInput
     orderBy: [ForumCategoryOrderByInput!]
   ): [ForumCategory!]!
-  forumCategoryByUniqueInput(
-    where: ForumCategoryWhereUniqueInput!
-  ): ForumCategory
+  forumCategoryByUniqueInput(where: ForumCategoryWhereUniqueInput!): ForumCategory
   forumCategoriesConnection(
     first: Int
     after: String
@@ -27829,9 +27665,7 @@ type Query {
     where: ForumPostReactionWhereInput
     orderBy: [ForumPostReactionOrderByInput!]
   ): [ForumPostReaction!]!
-  forumPostReactionByUniqueInput(
-    where: ForumPostReactionWhereUniqueInput!
-  ): ForumPostReaction
+  forumPostReactionByUniqueInput(where: ForumPostReactionWhereUniqueInput!): ForumPostReaction
   forumPostReactionsConnection(
     first: Int
     after: String
@@ -27840,12 +27674,7 @@ type Query {
     where: ForumPostReactionWhereInput
     orderBy: [ForumPostReactionOrderByInput!]
   ): ForumPostReactionConnection!
-  forumPosts(
-    offset: Int
-    limit: Int = 50
-    where: ForumPostWhereInput
-    orderBy: [ForumPostOrderByInput!]
-  ): [ForumPost!]!
+  forumPosts(offset: Int, limit: Int = 50, where: ForumPostWhereInput, orderBy: [ForumPostOrderByInput!]): [ForumPost!]!
   forumPostByUniqueInput(where: ForumPostWhereUniqueInput!): ForumPost
   forumPostsConnection(
     first: Int
@@ -27861,9 +27690,7 @@ type Query {
     where: ForumThreadTagWhereInput
     orderBy: [ForumThreadTagOrderByInput!]
   ): [ForumThreadTag!]!
-  forumThreadTagByUniqueInput(
-    where: ForumThreadTagWhereUniqueInput!
-  ): ForumThreadTag
+  forumThreadTagByUniqueInput(where: ForumThreadTagWhereUniqueInput!): ForumThreadTag
   forumThreadTagsConnection(
     first: Int
     after: String
@@ -27910,9 +27737,7 @@ type Query {
     where: FundingRequestDestinationWhereInput
     orderBy: [FundingRequestDestinationOrderByInput!]
   ): [FundingRequestDestination!]!
-  fundingRequestDestinationByUniqueInput(
-    where: FundingRequestDestinationWhereUniqueInput!
-  ): FundingRequestDestination
+  fundingRequestDestinationByUniqueInput(where: FundingRequestDestinationWhereUniqueInput!): FundingRequestDestination
   fundingRequestDestinationsConnection(
     first: Int
     after: String
@@ -27944,9 +27769,7 @@ type Query {
     where: GeoCoordinatesWhereInput
     orderBy: [GeoCoordinatesOrderByInput!]
   ): [GeoCoordinates!]!
-  geoCoordinatesByUniqueInput(
-    where: GeoCoordinatesWhereUniqueInput!
-  ): GeoCoordinates
+  geoCoordinatesByUniqueInput(where: GeoCoordinatesWhereUniqueInput!): GeoCoordinates
   geoCoordinatesConnection(
     first: Int
     after: String
@@ -27995,9 +27818,7 @@ type Query {
     where: InvitesTransferredEventWhereInput
     orderBy: [InvitesTransferredEventOrderByInput!]
   ): [InvitesTransferredEvent!]!
-  invitesTransferredEventByUniqueInput(
-    where: InvitesTransferredEventWhereUniqueInput!
-  ): InvitesTransferredEvent
+  invitesTransferredEventByUniqueInput(where: InvitesTransferredEventWhereUniqueInput!): InvitesTransferredEvent
   invitesTransferredEventsConnection(
     first: Int
     after: String
@@ -28006,12 +27827,7 @@ type Query {
     where: InvitesTransferredEventWhereInput
     orderBy: [InvitesTransferredEventOrderByInput!]
   ): InvitesTransferredEventConnection!
-  languages(
-    offset: Int
-    limit: Int = 50
-    where: LanguageWhereInput
-    orderBy: [LanguageOrderByInput!]
-  ): [Language!]!
+  languages(offset: Int, limit: Int = 50, where: LanguageWhereInput, orderBy: [LanguageOrderByInput!]): [Language!]!
   languageByUniqueInput(where: LanguageWhereUniqueInput!): Language
   languagesConnection(
     first: Int
@@ -28044,9 +27860,7 @@ type Query {
     where: LeaderSetEventWhereInput
     orderBy: [LeaderSetEventOrderByInput!]
   ): [LeaderSetEvent!]!
-  leaderSetEventByUniqueInput(
-    where: LeaderSetEventWhereUniqueInput!
-  ): LeaderSetEvent
+  leaderSetEventByUniqueInput(where: LeaderSetEventWhereUniqueInput!): LeaderSetEvent
   leaderSetEventsConnection(
     first: Int
     after: String
@@ -28061,9 +27875,7 @@ type Query {
     where: LeaderUnsetEventWhereInput
     orderBy: [LeaderUnsetEventOrderByInput!]
   ): [LeaderUnsetEvent!]!
-  leaderUnsetEventByUniqueInput(
-    where: LeaderUnsetEventWhereUniqueInput!
-  ): LeaderUnsetEvent
+  leaderUnsetEventByUniqueInput(where: LeaderUnsetEventWhereUniqueInput!): LeaderUnsetEvent
   leaderUnsetEventsConnection(
     first: Int
     after: String
@@ -28072,12 +27884,7 @@ type Query {
     where: LeaderUnsetEventWhereInput
     orderBy: [LeaderUnsetEventOrderByInput!]
   ): LeaderUnsetEventConnection!
-  licenses(
-    offset: Int
-    limit: Int = 50
-    where: LicenseWhereInput
-    orderBy: [LicenseOrderByInput!]
-  ): [License!]!
+  licenses(offset: Int, limit: Int = 50, where: LicenseWhereInput, orderBy: [LicenseOrderByInput!]): [License!]!
   licenseByUniqueInput(where: LicenseWhereUniqueInput!): License
   licensesConnection(
     first: Int
@@ -28127,9 +27934,7 @@ type Query {
     where: MemberInvitedEventWhereInput
     orderBy: [MemberInvitedEventOrderByInput!]
   ): [MemberInvitedEvent!]!
-  memberInvitedEventByUniqueInput(
-    where: MemberInvitedEventWhereUniqueInput!
-  ): MemberInvitedEvent
+  memberInvitedEventByUniqueInput(where: MemberInvitedEventWhereUniqueInput!): MemberInvitedEvent
   memberInvitedEventsConnection(
     first: Int
     after: String
@@ -28144,9 +27949,7 @@ type Query {
     where: MemberMetadataWhereInput
     orderBy: [MemberMetadataOrderByInput!]
   ): [MemberMetadata!]!
-  memberMetadataByUniqueInput(
-    where: MemberMetadataWhereUniqueInput!
-  ): MemberMetadata
+  memberMetadataByUniqueInput(where: MemberMetadataWhereUniqueInput!): MemberMetadata
   memberMetadataConnection(
     first: Int
     after: String
@@ -28161,9 +27964,7 @@ type Query {
     where: MemberProfileUpdatedEventWhereInput
     orderBy: [MemberProfileUpdatedEventOrderByInput!]
   ): [MemberProfileUpdatedEvent!]!
-  memberProfileUpdatedEventByUniqueInput(
-    where: MemberProfileUpdatedEventWhereUniqueInput!
-  ): MemberProfileUpdatedEvent
+  memberProfileUpdatedEventByUniqueInput(where: MemberProfileUpdatedEventWhereUniqueInput!): MemberProfileUpdatedEvent
   memberProfileUpdatedEventsConnection(
     first: Int
     after: String
@@ -28195,9 +27996,7 @@ type Query {
     where: MembershipBoughtEventWhereInput
     orderBy: [MembershipBoughtEventOrderByInput!]
   ): [MembershipBoughtEvent!]!
-  membershipBoughtEventByUniqueInput(
-    where: MembershipBoughtEventWhereUniqueInput!
-  ): MembershipBoughtEvent
+  membershipBoughtEventByUniqueInput(where: MembershipBoughtEventWhereUniqueInput!): MembershipBoughtEvent
   membershipBoughtEventsConnection(
     first: Int
     after: String
@@ -28229,9 +28028,7 @@ type Query {
     where: MembershipGiftedEventWhereInput
     orderBy: [MembershipGiftedEventOrderByInput!]
   ): [MembershipGiftedEvent!]!
-  membershipGiftedEventByUniqueInput(
-    where: MembershipGiftedEventWhereUniqueInput!
-  ): MembershipGiftedEvent
+  membershipGiftedEventByUniqueInput(where: MembershipGiftedEventWhereUniqueInput!): MembershipGiftedEvent
   membershipGiftedEventsConnection(
     first: Int
     after: String
@@ -28263,9 +28060,7 @@ type Query {
     where: MembershipSystemSnapshotWhereInput
     orderBy: [MembershipSystemSnapshotOrderByInput!]
   ): [MembershipSystemSnapshot!]!
-  membershipSystemSnapshotByUniqueInput(
-    where: MembershipSystemSnapshotWhereUniqueInput!
-  ): MembershipSystemSnapshot
+  membershipSystemSnapshotByUniqueInput(where: MembershipSystemSnapshotWhereUniqueInput!): MembershipSystemSnapshot
   membershipSystemSnapshotsConnection(
     first: Int
     after: String
@@ -28312,9 +28107,7 @@ type Query {
     where: NewCandidateEventWhereInput
     orderBy: [NewCandidateEventOrderByInput!]
   ): [NewCandidateEvent!]!
-  newCandidateEventByUniqueInput(
-    where: NewCandidateEventWhereUniqueInput!
-  ): NewCandidateEvent
+  newCandidateEventByUniqueInput(where: NewCandidateEventWhereUniqueInput!): NewCandidateEvent
   newCandidateEventsConnection(
     first: Int
     after: String
@@ -28329,9 +28122,7 @@ type Query {
     where: NewCouncilElectedEventWhereInput
     orderBy: [NewCouncilElectedEventOrderByInput!]
   ): [NewCouncilElectedEvent!]!
-  newCouncilElectedEventByUniqueInput(
-    where: NewCouncilElectedEventWhereUniqueInput!
-  ): NewCouncilElectedEvent
+  newCouncilElectedEventByUniqueInput(where: NewCouncilElectedEventWhereUniqueInput!): NewCouncilElectedEvent
   newCouncilElectedEventsConnection(
     first: Int
     after: String
@@ -28346,9 +28137,7 @@ type Query {
     where: NewCouncilNotElectedEventWhereInput
     orderBy: [NewCouncilNotElectedEventOrderByInput!]
   ): [NewCouncilNotElectedEvent!]!
-  newCouncilNotElectedEventByUniqueInput(
-    where: NewCouncilNotElectedEventWhereUniqueInput!
-  ): NewCouncilNotElectedEvent
+  newCouncilNotElectedEventByUniqueInput(where: NewCouncilNotElectedEventWhereUniqueInput!): NewCouncilNotElectedEvent
   newCouncilNotElectedEventsConnection(
     first: Int
     after: String
@@ -28380,9 +28169,7 @@ type Query {
     where: NftBoughtEventWhereInput
     orderBy: [NftBoughtEventOrderByInput!]
   ): [NftBoughtEvent!]!
-  nftBoughtEventByUniqueInput(
-    where: NftBoughtEventWhereUniqueInput!
-  ): NftBoughtEvent
+  nftBoughtEventByUniqueInput(where: NftBoughtEventWhereUniqueInput!): NftBoughtEvent
   nftBoughtEventsConnection(
     first: Int
     after: String
@@ -28397,9 +28184,7 @@ type Query {
     where: NftIssuedEventWhereInput
     orderBy: [NftIssuedEventOrderByInput!]
   ): [NftIssuedEvent!]!
-  nftIssuedEventByUniqueInput(
-    where: NftIssuedEventWhereUniqueInput!
-  ): NftIssuedEvent
+  nftIssuedEventByUniqueInput(where: NftIssuedEventWhereUniqueInput!): NftIssuedEvent
   nftIssuedEventsConnection(
     first: Int
     after: String
@@ -28414,9 +28199,7 @@ type Query {
     where: NftSellOrderMadeEventWhereInput
     orderBy: [NftSellOrderMadeEventOrderByInput!]
   ): [NftSellOrderMadeEvent!]!
-  nftSellOrderMadeEventByUniqueInput(
-    where: NftSellOrderMadeEventWhereUniqueInput!
-  ): NftSellOrderMadeEvent
+  nftSellOrderMadeEventByUniqueInput(where: NftSellOrderMadeEventWhereUniqueInput!): NftSellOrderMadeEvent
   nftSellOrderMadeEventsConnection(
     first: Int
     after: String
@@ -28448,9 +28231,7 @@ type Query {
     where: NodeLocationMetadataWhereInput
     orderBy: [NodeLocationMetadataOrderByInput!]
   ): [NodeLocationMetadata!]!
-  nodeLocationMetadataByUniqueInput(
-    where: NodeLocationMetadataWhereUniqueInput!
-  ): NodeLocationMetadata
+  nodeLocationMetadataByUniqueInput(where: NodeLocationMetadataWhereUniqueInput!): NodeLocationMetadata
   nodeLocationMetadataConnection(
     first: Int
     after: String
@@ -28465,9 +28246,7 @@ type Query {
     where: NotEnoughCandidatesEventWhereInput
     orderBy: [NotEnoughCandidatesEventOrderByInput!]
   ): [NotEnoughCandidatesEvent!]!
-  notEnoughCandidatesEventByUniqueInput(
-    where: NotEnoughCandidatesEventWhereUniqueInput!
-  ): NotEnoughCandidatesEvent
+  notEnoughCandidatesEventByUniqueInput(where: NotEnoughCandidatesEventWhereUniqueInput!): NotEnoughCandidatesEvent
   notEnoughCandidatesEventsConnection(
     first: Int
     after: String
@@ -28482,9 +28261,7 @@ type Query {
     where: OfferAcceptedEventWhereInput
     orderBy: [OfferAcceptedEventOrderByInput!]
   ): [OfferAcceptedEvent!]!
-  offerAcceptedEventByUniqueInput(
-    where: OfferAcceptedEventWhereUniqueInput!
-  ): OfferAcceptedEvent
+  offerAcceptedEventByUniqueInput(where: OfferAcceptedEventWhereUniqueInput!): OfferAcceptedEvent
   offerAcceptedEventsConnection(
     first: Int
     after: String
@@ -28499,9 +28276,7 @@ type Query {
     where: OfferCanceledEventWhereInput
     orderBy: [OfferCanceledEventOrderByInput!]
   ): [OfferCanceledEvent!]!
-  offerCanceledEventByUniqueInput(
-    where: OfferCanceledEventWhereUniqueInput!
-  ): OfferCanceledEvent
+  offerCanceledEventByUniqueInput(where: OfferCanceledEventWhereUniqueInput!): OfferCanceledEvent
   offerCanceledEventsConnection(
     first: Int
     after: String
@@ -28516,9 +28291,7 @@ type Query {
     where: OfferStartedEventWhereInput
     orderBy: [OfferStartedEventOrderByInput!]
   ): [OfferStartedEvent!]!
-  offerStartedEventByUniqueInput(
-    where: OfferStartedEventWhereUniqueInput!
-  ): OfferStartedEvent
+  offerStartedEventByUniqueInput(where: OfferStartedEventWhereUniqueInput!): OfferStartedEvent
   offerStartedEventsConnection(
     first: Int
     after: String
@@ -28550,9 +28323,7 @@ type Query {
     where: OpenAuctionStartedEventWhereInput
     orderBy: [OpenAuctionStartedEventOrderByInput!]
   ): [OpenAuctionStartedEvent!]!
-  openAuctionStartedEventByUniqueInput(
-    where: OpenAuctionStartedEventWhereUniqueInput!
-  ): OpenAuctionStartedEvent
+  openAuctionStartedEventByUniqueInput(where: OpenAuctionStartedEventWhereUniqueInput!): OpenAuctionStartedEvent
   openAuctionStartedEventsConnection(
     first: Int
     after: String
@@ -28567,9 +28338,7 @@ type Query {
     where: OpeningAddedEventWhereInput
     orderBy: [OpeningAddedEventOrderByInput!]
   ): [OpeningAddedEvent!]!
-  openingAddedEventByUniqueInput(
-    where: OpeningAddedEventWhereUniqueInput!
-  ): OpeningAddedEvent
+  openingAddedEventByUniqueInput(where: OpeningAddedEventWhereUniqueInput!): OpeningAddedEvent
   openingAddedEventsConnection(
     first: Int
     after: String
@@ -28584,9 +28353,7 @@ type Query {
     where: OpeningCanceledEventWhereInput
     orderBy: [OpeningCanceledEventOrderByInput!]
   ): [OpeningCanceledEvent!]!
-  openingCanceledEventByUniqueInput(
-    where: OpeningCanceledEventWhereUniqueInput!
-  ): OpeningCanceledEvent
+  openingCanceledEventByUniqueInput(where: OpeningCanceledEventWhereUniqueInput!): OpeningCanceledEvent
   openingCanceledEventsConnection(
     first: Int
     after: String
@@ -28601,9 +28368,7 @@ type Query {
     where: OpeningFilledEventWhereInput
     orderBy: [OpeningFilledEventOrderByInput!]
   ): [OpeningFilledEvent!]!
-  openingFilledEventByUniqueInput(
-    where: OpeningFilledEventWhereUniqueInput!
-  ): OpeningFilledEvent
+  openingFilledEventByUniqueInput(where: OpeningFilledEventWhereUniqueInput!): OpeningFilledEvent
   openingFilledEventsConnection(
     first: Int
     after: String
@@ -28629,12 +28394,7 @@ type Query {
     where: OracleJudgmentSubmittedEventWhereInput
     orderBy: [OracleJudgmentSubmittedEventOrderByInput!]
   ): OracleJudgmentSubmittedEventConnection!
-  ownedNfts(
-    offset: Int
-    limit: Int = 50
-    where: OwnedNftWhereInput
-    orderBy: [OwnedNftOrderByInput!]
-  ): [OwnedNft!]!
+  ownedNfts(offset: Int, limit: Int = 50, where: OwnedNftWhereInput, orderBy: [OwnedNftOrderByInput!]): [OwnedNft!]!
   ownedNftByUniqueInput(where: OwnedNftWhereUniqueInput!): OwnedNft
   ownedNftsConnection(
     first: Int
@@ -28650,9 +28410,7 @@ type Query {
     where: PostAddedEventWhereInput
     orderBy: [PostAddedEventOrderByInput!]
   ): [PostAddedEvent!]!
-  postAddedEventByUniqueInput(
-    where: PostAddedEventWhereUniqueInput!
-  ): PostAddedEvent
+  postAddedEventByUniqueInput(where: PostAddedEventWhereUniqueInput!): PostAddedEvent
   postAddedEventsConnection(
     first: Int
     after: String
@@ -28667,9 +28425,7 @@ type Query {
     where: PostDeletedEventWhereInput
     orderBy: [PostDeletedEventOrderByInput!]
   ): [PostDeletedEvent!]!
-  postDeletedEventByUniqueInput(
-    where: PostDeletedEventWhereUniqueInput!
-  ): PostDeletedEvent
+  postDeletedEventByUniqueInput(where: PostDeletedEventWhereUniqueInput!): PostDeletedEvent
   postDeletedEventsConnection(
     first: Int
     after: String
@@ -28684,9 +28440,7 @@ type Query {
     where: PostModeratedEventWhereInput
     orderBy: [PostModeratedEventOrderByInput!]
   ): [PostModeratedEvent!]!
-  postModeratedEventByUniqueInput(
-    where: PostModeratedEventWhereUniqueInput!
-  ): PostModeratedEvent
+  postModeratedEventByUniqueInput(where: PostModeratedEventWhereUniqueInput!): PostModeratedEvent
   postModeratedEventsConnection(
     first: Int
     after: String
@@ -28701,9 +28455,7 @@ type Query {
     where: PostReactedEventWhereInput
     orderBy: [PostReactedEventOrderByInput!]
   ): [PostReactedEvent!]!
-  postReactedEventByUniqueInput(
-    where: PostReactedEventWhereUniqueInput!
-  ): PostReactedEvent
+  postReactedEventByUniqueInput(where: PostReactedEventWhereUniqueInput!): PostReactedEvent
   postReactedEventsConnection(
     first: Int
     after: String
@@ -28718,9 +28470,7 @@ type Query {
     where: PostTextUpdatedEventWhereInput
     orderBy: [PostTextUpdatedEventOrderByInput!]
   ): [PostTextUpdatedEvent!]!
-  postTextUpdatedEventByUniqueInput(
-    where: PostTextUpdatedEventWhereUniqueInput!
-  ): PostTextUpdatedEvent
+  postTextUpdatedEventByUniqueInput(where: PostTextUpdatedEventWhereUniqueInput!): PostTextUpdatedEvent
   postTextUpdatedEventsConnection(
     first: Int
     after: String
@@ -28735,9 +28485,7 @@ type Query {
     where: ProposalCancelledEventWhereInput
     orderBy: [ProposalCancelledEventOrderByInput!]
   ): [ProposalCancelledEvent!]!
-  proposalCancelledEventByUniqueInput(
-    where: ProposalCancelledEventWhereUniqueInput!
-  ): ProposalCancelledEvent
+  proposalCancelledEventByUniqueInput(where: ProposalCancelledEventWhereUniqueInput!): ProposalCancelledEvent
   proposalCancelledEventsConnection(
     first: Int
     after: String
@@ -28752,9 +28500,7 @@ type Query {
     where: ProposalCreatedEventWhereInput
     orderBy: [ProposalCreatedEventOrderByInput!]
   ): [ProposalCreatedEvent!]!
-  proposalCreatedEventByUniqueInput(
-    where: ProposalCreatedEventWhereUniqueInput!
-  ): ProposalCreatedEvent
+  proposalCreatedEventByUniqueInput(where: ProposalCreatedEventWhereUniqueInput!): ProposalCreatedEvent
   proposalCreatedEventsConnection(
     first: Int
     after: String
@@ -28769,9 +28515,7 @@ type Query {
     where: ProposalDecisionMadeEventWhereInput
     orderBy: [ProposalDecisionMadeEventOrderByInput!]
   ): [ProposalDecisionMadeEvent!]!
-  proposalDecisionMadeEventByUniqueInput(
-    where: ProposalDecisionMadeEventWhereUniqueInput!
-  ): ProposalDecisionMadeEvent
+  proposalDecisionMadeEventByUniqueInput(where: ProposalDecisionMadeEventWhereUniqueInput!): ProposalDecisionMadeEvent
   proposalDecisionMadeEventsConnection(
     first: Int
     after: String
@@ -28837,9 +28581,7 @@ type Query {
     where: ProposalDiscussionPostWhereInput
     orderBy: [ProposalDiscussionPostOrderByInput!]
   ): [ProposalDiscussionPost!]!
-  proposalDiscussionPostByUniqueInput(
-    where: ProposalDiscussionPostWhereUniqueInput!
-  ): ProposalDiscussionPost
+  proposalDiscussionPostByUniqueInput(where: ProposalDiscussionPostWhereUniqueInput!): ProposalDiscussionPost
   proposalDiscussionPostsConnection(
     first: Int
     after: String
@@ -28871,9 +28613,7 @@ type Query {
     where: ProposalDiscussionThreadWhereInput
     orderBy: [ProposalDiscussionThreadOrderByInput!]
   ): [ProposalDiscussionThread!]!
-  proposalDiscussionThreadByUniqueInput(
-    where: ProposalDiscussionThreadWhereUniqueInput!
-  ): ProposalDiscussionThread
+  proposalDiscussionThreadByUniqueInput(where: ProposalDiscussionThreadWhereUniqueInput!): ProposalDiscussionThread
   proposalDiscussionThreadsConnection(
     first: Int
     after: String
@@ -28905,9 +28645,7 @@ type Query {
     where: ProposalExecutedEventWhereInput
     orderBy: [ProposalExecutedEventOrderByInput!]
   ): [ProposalExecutedEvent!]!
-  proposalExecutedEventByUniqueInput(
-    where: ProposalExecutedEventWhereUniqueInput!
-  ): ProposalExecutedEvent
+  proposalExecutedEventByUniqueInput(where: ProposalExecutedEventWhereUniqueInput!): ProposalExecutedEvent
   proposalExecutedEventsConnection(
     first: Int
     after: String
@@ -28939,9 +28677,7 @@ type Query {
     where: ProposalVotedEventWhereInput
     orderBy: [ProposalVotedEventOrderByInput!]
   ): [ProposalVotedEvent!]!
-  proposalVotedEventByUniqueInput(
-    where: ProposalVotedEventWhereUniqueInput!
-  ): ProposalVotedEvent
+  proposalVotedEventByUniqueInput(where: ProposalVotedEventWhereUniqueInput!): ProposalVotedEvent
   proposalVotedEventsConnection(
     first: Int
     after: String
@@ -28950,12 +28686,7 @@ type Query {
     where: ProposalVotedEventWhereInput
     orderBy: [ProposalVotedEventOrderByInput!]
   ): ProposalVotedEventConnection!
-  proposals(
-    offset: Int
-    limit: Int = 50
-    where: ProposalWhereInput
-    orderBy: [ProposalOrderByInput!]
-  ): [Proposal!]!
+  proposals(offset: Int, limit: Int = 50, where: ProposalWhereInput, orderBy: [ProposalOrderByInput!]): [Proposal!]!
   proposalByUniqueInput(where: ProposalWhereUniqueInput!): Proposal
   proposalsConnection(
     first: Int
@@ -28965,12 +28696,7 @@ type Query {
     where: ProposalWhereInput
     orderBy: [ProposalOrderByInput!]
   ): ProposalConnection!
-  commentText(
-    whereComment: CommentWhereInput
-    skip: Int = 0
-    limit: Int = 5
-    text: String!
-  ): [CommentTextFTSOutput!]!
+  commentText(whereComment: CommentWhereInput, skip: Int = 0, limit: Int = 5, text: String!): [CommentTextFTSOutput!]!
   membersByHandle(
     whereMembership: MembershipWhereInput
     skip: Int = 0
@@ -29014,9 +28740,7 @@ type Query {
     where: ReferendumFinishedEventWhereInput
     orderBy: [ReferendumFinishedEventOrderByInput!]
   ): [ReferendumFinishedEvent!]!
-  referendumFinishedEventByUniqueInput(
-    where: ReferendumFinishedEventWhereUniqueInput!
-  ): ReferendumFinishedEvent
+  referendumFinishedEventByUniqueInput(where: ReferendumFinishedEventWhereUniqueInput!): ReferendumFinishedEvent
   referendumFinishedEventsConnection(
     first: Int
     after: String
@@ -29031,9 +28755,7 @@ type Query {
     where: ReferendumStageRevealingWhereInput
     orderBy: [ReferendumStageRevealingOrderByInput!]
   ): [ReferendumStageRevealing!]!
-  referendumStageRevealingByUniqueInput(
-    where: ReferendumStageRevealingWhereUniqueInput!
-  ): ReferendumStageRevealing
+  referendumStageRevealingByUniqueInput(where: ReferendumStageRevealingWhereUniqueInput!): ReferendumStageRevealing
   referendumStageRevealingsConnection(
     first: Int
     after: String
@@ -29048,9 +28770,7 @@ type Query {
     where: ReferendumStageVotingWhereInput
     orderBy: [ReferendumStageVotingOrderByInput!]
   ): [ReferendumStageVoting!]!
-  referendumStageVotingByUniqueInput(
-    where: ReferendumStageVotingWhereUniqueInput!
-  ): ReferendumStageVoting
+  referendumStageVotingByUniqueInput(where: ReferendumStageVotingWhereUniqueInput!): ReferendumStageVoting
   referendumStageVotingsConnection(
     first: Int
     after: String
@@ -29065,9 +28785,7 @@ type Query {
     where: ReferendumStartedEventWhereInput
     orderBy: [ReferendumStartedEventOrderByInput!]
   ): [ReferendumStartedEvent!]!
-  referendumStartedEventByUniqueInput(
-    where: ReferendumStartedEventWhereUniqueInput!
-  ): ReferendumStartedEvent
+  referendumStartedEventByUniqueInput(where: ReferendumStartedEventWhereUniqueInput!): ReferendumStartedEvent
   referendumStartedEventsConnection(
     first: Int
     after: String
@@ -29099,9 +28817,7 @@ type Query {
     where: ReferralCutUpdatedEventWhereInput
     orderBy: [ReferralCutUpdatedEventOrderByInput!]
   ): [ReferralCutUpdatedEvent!]!
-  referralCutUpdatedEventByUniqueInput(
-    where: ReferralCutUpdatedEventWhereUniqueInput!
-  ): ReferralCutUpdatedEvent
+  referralCutUpdatedEventByUniqueInput(where: ReferralCutUpdatedEventWhereUniqueInput!): ReferralCutUpdatedEvent
   referralCutUpdatedEventsConnection(
     first: Int
     after: String
@@ -29116,9 +28832,7 @@ type Query {
     where: RequestFundedEventWhereInput
     orderBy: [RequestFundedEventOrderByInput!]
   ): [RequestFundedEvent!]!
-  requestFundedEventByUniqueInput(
-    where: RequestFundedEventWhereUniqueInput!
-  ): RequestFundedEvent
+  requestFundedEventByUniqueInput(where: RequestFundedEventWhereUniqueInput!): RequestFundedEvent
   requestFundedEventsConnection(
     first: Int
     after: String
@@ -29150,9 +28864,7 @@ type Query {
     where: RewardPaidEventWhereInput
     orderBy: [RewardPaidEventOrderByInput!]
   ): [RewardPaidEvent!]!
-  rewardPaidEventByUniqueInput(
-    where: RewardPaidEventWhereUniqueInput!
-  ): RewardPaidEvent
+  rewardPaidEventByUniqueInput(where: RewardPaidEventWhereUniqueInput!): RewardPaidEvent
   rewardPaidEventsConnection(
     first: Int
     after: String
@@ -29167,9 +28879,7 @@ type Query {
     where: RewardPaymentEventWhereInput
     orderBy: [RewardPaymentEventOrderByInput!]
   ): [RewardPaymentEvent!]!
-  rewardPaymentEventByUniqueInput(
-    where: RewardPaymentEventWhereUniqueInput!
-  ): RewardPaymentEvent
+  rewardPaymentEventByUniqueInput(where: RewardPaymentEventWhereUniqueInput!): RewardPaymentEvent
   rewardPaymentEventsConnection(
     first: Int
     after: String
@@ -29184,9 +28894,7 @@ type Query {
     where: RuntimeWasmBytecodeWhereInput
     orderBy: [RuntimeWasmBytecodeOrderByInput!]
   ): [RuntimeWasmBytecode!]!
-  runtimeWasmBytecodeByUniqueInput(
-    where: RuntimeWasmBytecodeWhereUniqueInput!
-  ): RuntimeWasmBytecode
+  runtimeWasmBytecodeByUniqueInput(where: RuntimeWasmBytecodeWhereUniqueInput!): RuntimeWasmBytecode
   runtimeWasmBytecodesConnection(
     first: Int
     after: String
@@ -29201,9 +28909,7 @@ type Query {
     where: StakeDecreasedEventWhereInput
     orderBy: [StakeDecreasedEventOrderByInput!]
   ): [StakeDecreasedEvent!]!
-  stakeDecreasedEventByUniqueInput(
-    where: StakeDecreasedEventWhereUniqueInput!
-  ): StakeDecreasedEvent
+  stakeDecreasedEventByUniqueInput(where: StakeDecreasedEventWhereUniqueInput!): StakeDecreasedEvent
   stakeDecreasedEventsConnection(
     first: Int
     after: String
@@ -29218,9 +28924,7 @@ type Query {
     where: StakeIncreasedEventWhereInput
     orderBy: [StakeIncreasedEventOrderByInput!]
   ): [StakeIncreasedEvent!]!
-  stakeIncreasedEventByUniqueInput(
-    where: StakeIncreasedEventWhereUniqueInput!
-  ): StakeIncreasedEvent
+  stakeIncreasedEventByUniqueInput(where: StakeIncreasedEventWhereUniqueInput!): StakeIncreasedEvent
   stakeIncreasedEventsConnection(
     first: Int
     after: String
@@ -29235,9 +28939,7 @@ type Query {
     where: StakeReleasedEventWhereInput
     orderBy: [StakeReleasedEventOrderByInput!]
   ): [StakeReleasedEvent!]!
-  stakeReleasedEventByUniqueInput(
-    where: StakeReleasedEventWhereUniqueInput!
-  ): StakeReleasedEvent
+  stakeReleasedEventByUniqueInput(where: StakeReleasedEventWhereUniqueInput!): StakeReleasedEvent
   stakeReleasedEventsConnection(
     first: Int
     after: String
@@ -29252,9 +28954,7 @@ type Query {
     where: StakeSlashedEventWhereInput
     orderBy: [StakeSlashedEventOrderByInput!]
   ): [StakeSlashedEvent!]!
-  stakeSlashedEventByUniqueInput(
-    where: StakeSlashedEventWhereUniqueInput!
-  ): StakeSlashedEvent
+  stakeSlashedEventByUniqueInput(where: StakeSlashedEventWhereUniqueInput!): StakeSlashedEvent
   stakeSlashedEventsConnection(
     first: Int
     after: String
@@ -29269,9 +28969,7 @@ type Query {
     where: StakingAccountAddedEventWhereInput
     orderBy: [StakingAccountAddedEventOrderByInput!]
   ): [StakingAccountAddedEvent!]!
-  stakingAccountAddedEventByUniqueInput(
-    where: StakingAccountAddedEventWhereUniqueInput!
-  ): StakingAccountAddedEvent
+  stakingAccountAddedEventByUniqueInput(where: StakingAccountAddedEventWhereUniqueInput!): StakingAccountAddedEvent
   stakingAccountAddedEventsConnection(
     first: Int
     after: String
@@ -29320,9 +29018,7 @@ type Query {
     where: StatusTextChangedEventWhereInput
     orderBy: [StatusTextChangedEventOrderByInput!]
   ): [StatusTextChangedEvent!]!
-  statusTextChangedEventByUniqueInput(
-    where: StatusTextChangedEventWhereUniqueInput!
-  ): StatusTextChangedEvent
+  statusTextChangedEventByUniqueInput(where: StatusTextChangedEventWhereUniqueInput!): StatusTextChangedEvent
   statusTextChangedEventsConnection(
     first: Int
     after: String
@@ -29369,9 +29065,7 @@ type Query {
     where: StorageBucketWhereInput
     orderBy: [StorageBucketOrderByInput!]
   ): [StorageBucket!]!
-  storageBucketByUniqueInput(
-    where: StorageBucketWhereUniqueInput!
-  ): StorageBucket
+  storageBucketByUniqueInput(where: StorageBucketWhereUniqueInput!): StorageBucket
   storageBucketsConnection(
     first: Int
     after: String
@@ -29386,9 +29080,7 @@ type Query {
     where: StorageDataObjectWhereInput
     orderBy: [StorageDataObjectOrderByInput!]
   ): [StorageDataObject!]!
-  storageDataObjectByUniqueInput(
-    where: StorageDataObjectWhereUniqueInput!
-  ): StorageDataObject
+  storageDataObjectByUniqueInput(where: StorageDataObjectWhereUniqueInput!): StorageDataObject
   storageDataObjectsConnection(
     first: Int
     after: String
@@ -29403,9 +29095,7 @@ type Query {
     where: StorageSystemParametersWhereInput
     orderBy: [StorageSystemParametersOrderByInput!]
   ): [StorageSystemParameters!]!
-  storageSystemParametersByUniqueInput(
-    where: StorageSystemParametersWhereUniqueInput!
-  ): StorageSystemParameters
+  storageSystemParametersByUniqueInput(where: StorageSystemParametersWhereUniqueInput!): StorageSystemParameters
   storageSystemParametersConnection(
     first: Int
     after: String
@@ -29420,9 +29110,7 @@ type Query {
     where: TerminatedLeaderEventWhereInput
     orderBy: [TerminatedLeaderEventOrderByInput!]
   ): [TerminatedLeaderEvent!]!
-  terminatedLeaderEventByUniqueInput(
-    where: TerminatedLeaderEventWhereUniqueInput!
-  ): TerminatedLeaderEvent
+  terminatedLeaderEventByUniqueInput(where: TerminatedLeaderEventWhereUniqueInput!): TerminatedLeaderEvent
   terminatedLeaderEventsConnection(
     first: Int
     after: String
@@ -29437,9 +29125,7 @@ type Query {
     where: TerminatedWorkerEventWhereInput
     orderBy: [TerminatedWorkerEventOrderByInput!]
   ): [TerminatedWorkerEvent!]!
-  terminatedWorkerEventByUniqueInput(
-    where: TerminatedWorkerEventWhereUniqueInput!
-  ): TerminatedWorkerEvent
+  terminatedWorkerEventByUniqueInput(where: TerminatedWorkerEventWhereUniqueInput!): TerminatedWorkerEvent
   terminatedWorkerEventsConnection(
     first: Int
     after: String
@@ -29454,9 +29140,7 @@ type Query {
     where: ThreadCreatedEventWhereInput
     orderBy: [ThreadCreatedEventOrderByInput!]
   ): [ThreadCreatedEvent!]!
-  threadCreatedEventByUniqueInput(
-    where: ThreadCreatedEventWhereUniqueInput!
-  ): ThreadCreatedEvent
+  threadCreatedEventByUniqueInput(where: ThreadCreatedEventWhereUniqueInput!): ThreadCreatedEvent
   threadCreatedEventsConnection(
     first: Int
     after: String
@@ -29471,9 +29155,7 @@ type Query {
     where: ThreadDeletedEventWhereInput
     orderBy: [ThreadDeletedEventOrderByInput!]
   ): [ThreadDeletedEvent!]!
-  threadDeletedEventByUniqueInput(
-    where: ThreadDeletedEventWhereUniqueInput!
-  ): ThreadDeletedEvent
+  threadDeletedEventByUniqueInput(where: ThreadDeletedEventWhereUniqueInput!): ThreadDeletedEvent
   threadDeletedEventsConnection(
     first: Int
     after: String
@@ -29505,9 +29187,7 @@ type Query {
     where: ThreadModeratedEventWhereInput
     orderBy: [ThreadModeratedEventOrderByInput!]
   ): [ThreadModeratedEvent!]!
-  threadModeratedEventByUniqueInput(
-    where: ThreadModeratedEventWhereUniqueInput!
-  ): ThreadModeratedEvent
+  threadModeratedEventByUniqueInput(where: ThreadModeratedEventWhereUniqueInput!): ThreadModeratedEvent
   threadModeratedEventsConnection(
     first: Int
     after: String
@@ -29522,9 +29202,7 @@ type Query {
     where: ThreadMovedEventWhereInput
     orderBy: [ThreadMovedEventOrderByInput!]
   ): [ThreadMovedEvent!]!
-  threadMovedEventByUniqueInput(
-    where: ThreadMovedEventWhereUniqueInput!
-  ): ThreadMovedEvent
+  threadMovedEventByUniqueInput(where: ThreadMovedEventWhereUniqueInput!): ThreadMovedEvent
   threadMovedEventsConnection(
     first: Int
     after: String
@@ -29539,9 +29217,7 @@ type Query {
     where: TransactionalStatusUpdateWhereInput
     orderBy: [TransactionalStatusUpdateOrderByInput!]
   ): [TransactionalStatusUpdate!]!
-  transactionalStatusUpdateByUniqueInput(
-    where: TransactionalStatusUpdateWhereUniqueInput!
-  ): TransactionalStatusUpdate
+  transactionalStatusUpdateByUniqueInput(where: TransactionalStatusUpdateWhereUniqueInput!): TransactionalStatusUpdate
   transactionalStatusUpdatesConnection(
     first: Int
     after: String
@@ -29590,9 +29266,7 @@ type Query {
     where: VideoCategoryWhereInput
     orderBy: [VideoCategoryOrderByInput!]
   ): [VideoCategory!]!
-  videoCategoryByUniqueInput(
-    where: VideoCategoryWhereUniqueInput!
-  ): VideoCategory
+  videoCategoryByUniqueInput(where: VideoCategoryWhereUniqueInput!): VideoCategory
   videoCategoriesConnection(
     first: Int
     after: String
@@ -29624,9 +29298,7 @@ type Query {
     where: VideoDeletedEventWhereInput
     orderBy: [VideoDeletedEventOrderByInput!]
   ): [VideoDeletedEvent!]!
-  videoDeletedEventByUniqueInput(
-    where: VideoDeletedEventWhereUniqueInput!
-  ): VideoDeletedEvent
+  videoDeletedEventByUniqueInput(where: VideoDeletedEventWhereUniqueInput!): VideoDeletedEvent
   videoDeletedEventsConnection(
     first: Int
     after: String
@@ -29641,9 +29313,7 @@ type Query {
     where: VideoMediaEncodingWhereInput
     orderBy: [VideoMediaEncodingOrderByInput!]
   ): [VideoMediaEncoding!]!
-  videoMediaEncodingByUniqueInput(
-    where: VideoMediaEncodingWhereUniqueInput!
-  ): VideoMediaEncoding
+  videoMediaEncodingByUniqueInput(where: VideoMediaEncodingWhereUniqueInput!): VideoMediaEncoding
   videoMediaEncodingsConnection(
     first: Int
     after: String
@@ -29658,9 +29328,7 @@ type Query {
     where: VideoMediaMetadataWhereInput
     orderBy: [VideoMediaMetadataOrderByInput!]
   ): [VideoMediaMetadata!]!
-  videoMediaMetadataByUniqueInput(
-    where: VideoMediaMetadataWhereUniqueInput!
-  ): VideoMediaMetadata
+  videoMediaMetadataByUniqueInput(where: VideoMediaMetadataWhereUniqueInput!): VideoMediaMetadata
   videoMediaMetadataConnection(
     first: Int
     after: String
@@ -29675,9 +29343,7 @@ type Query {
     where: VideoReactedEventWhereInput
     orderBy: [VideoReactedEventOrderByInput!]
   ): [VideoReactedEvent!]!
-  videoReactedEventByUniqueInput(
-    where: VideoReactedEventWhereUniqueInput!
-  ): VideoReactedEvent
+  videoReactedEventByUniqueInput(where: VideoReactedEventWhereUniqueInput!): VideoReactedEvent
   videoReactedEventsConnection(
     first: Int
     after: String
@@ -29692,9 +29358,7 @@ type Query {
     where: VideoReactionWhereInput
     orderBy: [VideoReactionOrderByInput!]
   ): [VideoReaction!]!
-  videoReactionByUniqueInput(
-    where: VideoReactionWhereUniqueInput!
-  ): VideoReaction
+  videoReactionByUniqueInput(where: VideoReactionWhereUniqueInput!): VideoReaction
   videoReactionsConnection(
     first: Int
     after: String
@@ -29743,9 +29407,7 @@ type Query {
     where: VideoSubtitleWhereInput
     orderBy: [VideoSubtitleOrderByInput!]
   ): [VideoSubtitle!]!
-  videoSubtitleByUniqueInput(
-    where: VideoSubtitleWhereUniqueInput!
-  ): VideoSubtitle
+  videoSubtitleByUniqueInput(where: VideoSubtitleWhereUniqueInput!): VideoSubtitle
   videoSubtitlesConnection(
     first: Int
     after: String
@@ -29771,12 +29433,7 @@ type Query {
     where: VideoVisibilitySetByModeratorEventWhereInput
     orderBy: [VideoVisibilitySetByModeratorEventOrderByInput!]
   ): VideoVisibilitySetByModeratorEventConnection!
-  videos(
-    offset: Int
-    limit: Int = 50
-    where: VideoWhereInput
-    orderBy: [VideoOrderByInput!]
-  ): [Video!]!
+  videos(offset: Int, limit: Int = 50, where: VideoWhereInput, orderBy: [VideoOrderByInput!]): [Video!]!
   videoByUniqueInput(where: VideoWhereUniqueInput!): Video
   videosConnection(
     first: Int
@@ -29792,9 +29449,7 @@ type Query {
     where: VoteCastEventWhereInput
     orderBy: [VoteCastEventOrderByInput!]
   ): [VoteCastEvent!]!
-  voteCastEventByUniqueInput(
-    where: VoteCastEventWhereUniqueInput!
-  ): VoteCastEvent
+  voteCastEventByUniqueInput(where: VoteCastEventWhereUniqueInput!): VoteCastEvent
   voteCastEventsConnection(
     first: Int
     after: String
@@ -29809,9 +29464,7 @@ type Query {
     where: VoteRevealedEventWhereInput
     orderBy: [VoteRevealedEventOrderByInput!]
   ): [VoteRevealedEvent!]!
-  voteRevealedEventByUniqueInput(
-    where: VoteRevealedEventWhereUniqueInput!
-  ): VoteRevealedEvent
+  voteRevealedEventByUniqueInput(where: VoteRevealedEventWhereUniqueInput!): VoteRevealedEvent
   voteRevealedEventsConnection(
     first: Int
     after: String
@@ -29826,9 +29479,7 @@ type Query {
     where: VotingPeriodStartedEventWhereInput
     orderBy: [VotingPeriodStartedEventOrderByInput!]
   ): [VotingPeriodStartedEvent!]!
-  votingPeriodStartedEventByUniqueInput(
-    where: VotingPeriodStartedEventWhereUniqueInput!
-  ): VotingPeriodStartedEvent
+  votingPeriodStartedEventByUniqueInput(where: VotingPeriodStartedEventWhereUniqueInput!): VotingPeriodStartedEvent
   votingPeriodStartedEventsConnection(
     first: Int
     after: String
@@ -29860,9 +29511,7 @@ type Query {
     where: WorkEntryAnnouncedEventWhereInput
     orderBy: [WorkEntryAnnouncedEventOrderByInput!]
   ): [WorkEntryAnnouncedEvent!]!
-  workEntryAnnouncedEventByUniqueInput(
-    where: WorkEntryAnnouncedEventWhereUniqueInput!
-  ): WorkEntryAnnouncedEvent
+  workEntryAnnouncedEventByUniqueInput(where: WorkEntryAnnouncedEventWhereUniqueInput!): WorkEntryAnnouncedEvent
   workEntryAnnouncedEventsConnection(
     first: Int
     after: String
@@ -29877,9 +29526,7 @@ type Query {
     where: WorkEntrySlashedEventWhereInput
     orderBy: [WorkEntrySlashedEventOrderByInput!]
   ): [WorkEntrySlashedEvent!]!
-  workEntrySlashedEventByUniqueInput(
-    where: WorkEntrySlashedEventWhereUniqueInput!
-  ): WorkEntrySlashedEvent
+  workEntrySlashedEventByUniqueInput(where: WorkEntrySlashedEventWhereUniqueInput!): WorkEntrySlashedEvent
   workEntrySlashedEventsConnection(
     first: Int
     after: String
@@ -29894,9 +29541,7 @@ type Query {
     where: WorkEntryWithdrawnEventWhereInput
     orderBy: [WorkEntryWithdrawnEventOrderByInput!]
   ): [WorkEntryWithdrawnEvent!]!
-  workEntryWithdrawnEventByUniqueInput(
-    where: WorkEntryWithdrawnEventWhereUniqueInput!
-  ): WorkEntryWithdrawnEvent
+  workEntryWithdrawnEventByUniqueInput(where: WorkEntryWithdrawnEventWhereUniqueInput!): WorkEntryWithdrawnEvent
   workEntryWithdrawnEventsConnection(
     first: Int
     after: String
@@ -29911,9 +29556,7 @@ type Query {
     where: WorkSubmittedEventWhereInput
     orderBy: [WorkSubmittedEventOrderByInput!]
   ): [WorkSubmittedEvent!]!
-  workSubmittedEventByUniqueInput(
-    where: WorkSubmittedEventWhereUniqueInput!
-  ): WorkSubmittedEvent
+  workSubmittedEventByUniqueInput(where: WorkSubmittedEventWhereUniqueInput!): WorkSubmittedEvent
   workSubmittedEventsConnection(
     first: Int
     after: String
@@ -29928,9 +29571,7 @@ type Query {
     where: WorkerExitedEventWhereInput
     orderBy: [WorkerExitedEventOrderByInput!]
   ): [WorkerExitedEvent!]!
-  workerExitedEventByUniqueInput(
-    where: WorkerExitedEventWhereUniqueInput!
-  ): WorkerExitedEvent
+  workerExitedEventByUniqueInput(where: WorkerExitedEventWhereUniqueInput!): WorkerExitedEvent
   workerExitedEventsConnection(
     first: Int
     after: String
@@ -29996,9 +29637,7 @@ type Query {
     where: WorkerStartedLeavingEventWhereInput
     orderBy: [WorkerStartedLeavingEventOrderByInput!]
   ): [WorkerStartedLeavingEvent!]!
-  workerStartedLeavingEventByUniqueInput(
-    where: WorkerStartedLeavingEventWhereUniqueInput!
-  ): WorkerStartedLeavingEvent
+  workerStartedLeavingEventByUniqueInput(where: WorkerStartedLeavingEventWhereUniqueInput!): WorkerStartedLeavingEvent
   workerStartedLeavingEventsConnection(
     first: Int
     after: String
@@ -30007,12 +29646,7 @@ type Query {
     where: WorkerStartedLeavingEventWhereInput
     orderBy: [WorkerStartedLeavingEventOrderByInput!]
   ): WorkerStartedLeavingEventConnection!
-  workers(
-    offset: Int
-    limit: Int = 50
-    where: WorkerWhereInput
-    orderBy: [WorkerOrderByInput!]
-  ): [Worker!]!
+  workers(offset: Int, limit: Int = 50, where: WorkerWhereInput, orderBy: [WorkerOrderByInput!]): [Worker!]!
   workerByUniqueInput(where: WorkerWhereUniqueInput!): Worker
   workersConnection(
     first: Int
@@ -30028,9 +29662,7 @@ type Query {
     where: WorkingGroupApplicationWhereInput
     orderBy: [WorkingGroupApplicationOrderByInput!]
   ): [WorkingGroupApplication!]!
-  workingGroupApplicationByUniqueInput(
-    where: WorkingGroupApplicationWhereUniqueInput!
-  ): WorkingGroupApplication
+  workingGroupApplicationByUniqueInput(where: WorkingGroupApplicationWhereUniqueInput!): WorkingGroupApplication
   workingGroupApplicationsConnection(
     first: Int
     after: String
@@ -30045,9 +29677,7 @@ type Query {
     where: WorkingGroupMetadataWhereInput
     orderBy: [WorkingGroupMetadataOrderByInput!]
   ): [WorkingGroupMetadata!]!
-  workingGroupMetadataByUniqueInput(
-    where: WorkingGroupMetadataWhereUniqueInput!
-  ): WorkingGroupMetadata
+  workingGroupMetadataByUniqueInput(where: WorkingGroupMetadataWhereUniqueInput!): WorkingGroupMetadata
   workingGroupMetadataConnection(
     first: Int
     after: String
@@ -30079,9 +29709,7 @@ type Query {
     where: WorkingGroupOpeningWhereInput
     orderBy: [WorkingGroupOpeningOrderByInput!]
   ): [WorkingGroupOpening!]!
-  workingGroupOpeningByUniqueInput(
-    where: WorkingGroupOpeningWhereUniqueInput!
-  ): WorkingGroupOpening
+  workingGroupOpeningByUniqueInput(where: WorkingGroupOpeningWhereUniqueInput!): WorkingGroupOpening
   workingGroupOpeningsConnection(
     first: Int
     after: String

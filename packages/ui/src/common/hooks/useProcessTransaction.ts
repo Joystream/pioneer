@@ -105,7 +105,7 @@ export const useProcessTransaction = ({
   setBlockHash,
 }: UseSignAndSendTransactionParams) => {
   const [state, send] = useActor(service)
-  const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
+  const paymentInfo = useObservable(() => transaction?.paymentInfo(signer), [transaction, signer])
   const { setService } = useTransactionStatus()
   const [endpoints] = useNetworkEndpoints()
   const { allAccounts, wallet } = useMyAccounts()

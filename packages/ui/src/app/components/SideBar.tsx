@@ -3,9 +3,12 @@ import React from 'react'
 import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { SidebarConnections } from '@/app/components/SidebarConnections'
 import { MembersRoutes, ProfileRoutes, SettingsRoutes } from '@/app/constants/routes'
 import { BountyRoutes } from '@/bounty/constants'
 import { Arrow } from '@/common/components/icons'
+import { LinkSymbol } from '@/common/components/icons/symbols'
+import { PolkadotSymbol } from '@/common/components/icons/symbols/PolkadotSymbol'
 import { BandwidthIcon } from '@/common/components/page/Sidebar/LinksIcons/BandwidthIcon'
 import { BountyIcon } from '@/common/components/page/Sidebar/LinksIcons/BountyIcon'
 import { ConstitutionIcon } from '@/common/components/page/Sidebar/LinksIcons/ConstitutionIcon'
@@ -27,7 +30,8 @@ import { Navigation, NavigationInnerWrapper } from '@/common/components/page/Sid
 import { NavigationExpandButton } from '@/common/components/page/Sidebar/NavigationExpandButton'
 import { NavigationHeader } from '@/common/components/page/Sidebar/NavigationHeader'
 import { NavigationLink } from '@/common/components/page/Sidebar/NavigationLink'
-import { RemoveScrollbar } from '@/common/constants'
+import { Colors, RemoveScrollbar } from '@/common/constants'
+import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { useToggle } from '@/common/hooks/useToggle'
 import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
@@ -39,6 +43,8 @@ import { WorkingGroupsRoutes } from '@/working-groups/constants'
 export const SideBar = () => {
   const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)
   const { stage: electionStage } = useElectionStage()
+  const [endpoints] = useNetworkEndpoints()
+
   const electionLink = electionStage === 'inactive' ? ElectionRoutes.pastElections : ElectionRoutes.currentElection
 
   return (
@@ -97,6 +103,15 @@ export const SideBar = () => {
             <NavigationLinksItem>
               <NavigationLink to={generatePath(MembersRoutes.members)} icon={<MembersIcon />}>
                 Members
+              </NavigationLink>
+            </NavigationLinksItem>
+            <NavigationLinksItem>
+              <NavigationLink
+                icon={<PolkadotSymbol />}
+                to={`https://polkadot.js.org/apps/?rpc=${endpoints.nodeRpcEndpoint}#/explorer`}
+              >
+                Explorer
+                <LinkSymbol color={Colors.Black[500]} />
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
@@ -160,6 +175,7 @@ export const SideBar = () => {
           </NavigationLinks>
         </AnimateSharedLayout>
         <ProfileComponent />
+        <SidebarConnections />
       </NavigationInnerWrapper>
       {/*<Notifications onClose={onClose} isNotificationsPanelOpen={isNotificationsPanelOpen} />*/}
     </Navigation>

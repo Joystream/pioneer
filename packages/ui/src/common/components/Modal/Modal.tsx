@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import styled, { ThemedStyledProps } from 'styled-components'
 
+import { ConnectionStatusDot } from '@/app/components/ConnectionStatusDot'
 import { useEscape } from '@/common/hooks/useEscape'
 
 import { Animations, BorderRad, Colors, Fonts, RemoveScrollbar, Shadows, ZIndex } from '../../constants'
@@ -179,7 +180,28 @@ export const ModalBody = styled.div`
   border-bottom: 1px solid ${Colors.Black[200]};
 `
 
-export const ModalFooter = styled.footer<{ twoColumns?: boolean }>`
+interface ModalFooterProps {
+  twoColumns?: boolean
+  children?: ReactNode
+  className?: string
+}
+
+export const ModalFooter = ({ twoColumns = false, children, className }: ModalFooterProps) => {
+  return (
+    <ModalFooterComponent twoColumns={twoColumns} className={className}>
+      {children}
+      <ModalConnectionStatusDot onlyPerformance />
+    </ModalFooterComponent>
+  )
+}
+
+const ModalConnectionStatusDot = styled(ConnectionStatusDot)`
+  position: absolute;
+  right: 5px;
+  top: calc(50% - 10px);
+`
+
+export const ModalFooterComponent = styled.footer<{ twoColumns?: boolean }>`
   display: inline-grid;
   grid-area: modalfooter;
   grid-template-columns: ${({ twoColumns }) => (twoColumns ? '1fr auto' : '1fr')};
@@ -192,8 +214,9 @@ export const ModalFooter = styled.footer<{ twoColumns?: boolean }>`
   align-items: center;
   width: 100%;
   height: 64px;
-  padding: 12px 24px;
+  padding: 12px 26px 12px 24px;
   border-radius: 0 0 2px 2px;
+  position: relative;
 `
 
 export const ModalFooterGroup = styled.div<{ left?: boolean }>`
@@ -255,7 +278,7 @@ export const ModalWrap = styled.section<ModalWrapProps>`
   box-shadow: ${Shadows.common};
   ${Animations.showModalBlock};
   &,
-  ${ModalBody}, ${ModalTopBar}, ${ModalFooter} {
+  ${ModalBody}, ${ModalTopBar}, ${ModalFooterComponent} {
     ${({ isDark }) => {
       switch (isDark) {
         case true:

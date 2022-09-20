@@ -27,7 +27,7 @@ export const TransactionFeesProvider: FC = ({ children }) => {
   const [signer, setSigner] = useState<string>()
 
   const paymentInfo = useObservable(
-    whenDefined(signer, (signer) => transaction?.paymentInfo(signer)),
+    () => whenDefined(signer, (signer) => transaction?.paymentInfo(signer)),
     [signer, transaction]
   )
   const transactionFee = useDefaultAfterTimeout<BN>(paymentInfo?.partialFee, 3000, BN_ZERO)

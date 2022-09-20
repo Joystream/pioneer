@@ -12,6 +12,8 @@ import { WebSocketLink } from '@apollo/client/link/ws'
 import { getMainDefinition } from '@apollo/client/utilities'
 import React, { ReactNode, useEffect, useState } from 'react'
 
+import { useApi } from '@/api/hooks/useApi'
+import { ConnectionState } from '@/api/providers/provider'
 import { Loading } from '@/common/components/Loading'
 import { useNetwork } from '@/common/hooks/useNetwork'
 import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
@@ -26,10 +28,13 @@ interface Props {
 export const QueryNodeProvider = ({ children }: Props) => {
   const { network } = useNetwork()
   const [endpoints] = useNetworkEndpoints()
+  const { setQnConnectionState } = useApi()
   const [apolloClient, setApolloClient] = useState<ApolloClient<NormalizedCacheObject>>()
 
   useEffect(() => {
-    setApolloClient(getApolloClient(endpoints.queryNodeEndpoint, endpoints.queryNodeEndpointSubscription))
+    setApolloClient(
+      getApolloClient(endpoints.queryNodeEndpoint, endpoints.queryNodeEndpointSubscription, setQnConnectionState)
+    )
   }, [endpoints.queryNodeEndpointSubscription, endpoints.queryNodeEndpoint])
 
   if (!apolloClient) {
@@ -47,13 +52,19 @@ export const QueryNodeProvider = ({ children }: Props) => {
   return <ApolloProvider client={apolloClient}>{children}</ApolloProvider>
 }
 
-const getApolloClient = (queryNodeEndpoint: string, queryNodeEndpointSubscription: string) => {
+const getApolloClient = (
+  queryNodeEndpoint: string,
+  queryNodeEndpointSubscription: string,
+  stateCallback: (state: ConnectionState) => void
+) => {
   const httpLink = new HttpLink({
     uri: queryNodeEndpoint,
   })
-
+  let hasConnectionError = false
   const errorLink = onError((errorResponse) => {
     if (errorResponse.networkError) {
+      stateCallback('error')
+      hasConnectionError = true
       error('Error connecting to query node')
     }
 
@@ -61,6 +72,10 @@ const getApolloClient = (queryNodeEndpoint: string, queryNodeEndpointSubscriptio
       error('GraphQL error', errorResponse.graphQLErrors)
     }
   })
+
+  if (!hasConnectionError) {
+    stateCallback('connected')
+  }
 
   const queryLink = from([errorLink, httpLink])
   const subscriptionLink = new WebSocketLink({

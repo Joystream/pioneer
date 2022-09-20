@@ -153,9 +153,11 @@ export const stubConst = <T>(api: UseApi, constSubPath: string, value: T) => {
 
 export const stubApi = () => {
   const api: UseApi = {
-    api: ({} as unknown) as Api,
+    api: {} as unknown as Api,
     isConnected: true,
     connectionState: 'connected',
+    setQnConnectionState: () => undefined,
+    qnConnectionState: 'connected',
   }
 
   set(api, 'api.query.council.councilMembers', () => from([]))
