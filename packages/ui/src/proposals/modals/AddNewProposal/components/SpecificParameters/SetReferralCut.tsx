@@ -7,12 +7,12 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium, TokenValue } from '@/common/components/typography'
-import { useObservable } from '@/common/hooks/useObservable'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 
 export const SetReferralCut = () => {
-  const { api, connectionState } = useApi()
+  const { api } = useApi()
   const maximumReferralCut = api?.consts.members.referralCutMaximumPercent
-  const membershipPrice = useObservable(api?.query.members.membershipPrice(), [connectionState])
+  const membershipPrice = useFirstObservableValue(() => api?.query.members.membershipPrice(), [api?.isConnected])
 
   return (
     <RowGapBlock gap={24}>

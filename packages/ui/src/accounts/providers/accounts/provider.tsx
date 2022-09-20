@@ -141,11 +141,12 @@ export const AccountsContextProvider = (props: Props) => {
   }, [isExtensionLoaded, selectedWallet])
 
   const accounts = useObservable(
-    keyring.accounts.subject.asObservable().pipe(
-      debounceTime(20),
-      filter((accounts) => !!accounts),
-      skip(1)
-    ),
+    () =>
+      keyring.accounts.subject.asObservable().pipe(
+        debounceTime(20),
+        filter((accounts) => !!accounts),
+        skip(1)
+      ),
     [keyring]
   )
   const allAccounts: Account[] = []
