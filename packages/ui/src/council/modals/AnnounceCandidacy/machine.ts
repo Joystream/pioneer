@@ -176,6 +176,10 @@ export const announceCandidacyMachine = createMachine<
       metaMessages: {
         error: 'There was a problem while announcing candidacy.',
       },
+      cancel: {
+        target: 'staking',
+        action: 'BACK',
+      },
     }),
   },
 })

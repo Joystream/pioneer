@@ -1,7 +1,7 @@
 import { CouncilCandidacyNoteMetadata } from '@joystream/metadata-protobuf'
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
@@ -86,7 +86,9 @@ export const AnnounceCandidacyModal = () => {
     'Council Candidate'
   )
   const [stakingAccountMap, setStakingAccount] = useState<Account | undefined>(undefined)
-  const stakingStatus = useStakingAccountStatus(stakingAccountMap?.address, activeMember?.id)
+  const stakingStatus = useStakingAccountStatus(stakingAccountMap?.address, activeMember?.id, [
+    state.matches('announceCandidacyTransaction'),
+  ])
   const balance = useBalance(stakingAccountMap?.address)
 
   // TODO add transaction fees here

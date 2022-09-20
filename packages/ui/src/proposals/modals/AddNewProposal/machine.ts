@@ -376,6 +376,10 @@ export const addNewProposalMachine = createMachine<
       metaMessages: {
         error: 'There was a problem while creating proposal.',
       },
+      cancel: {
+        target: 'specificParameters',
+        action: 'BACK',
+      },
     }),
   },
 })

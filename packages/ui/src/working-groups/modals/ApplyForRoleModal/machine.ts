@@ -115,6 +115,10 @@ export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRo
       metaMessages: {
         error: 'There was a problem with applying for an opening.',
       },
+      cancel: {
+        target: 'stake',
+        action: 'PREV',
+      },
     }),
   },
 })

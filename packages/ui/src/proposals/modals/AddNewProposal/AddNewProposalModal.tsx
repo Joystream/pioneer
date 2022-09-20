@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
@@ -87,7 +87,7 @@ export const AddNewProposalModal = () => {
   const constants = useProposalConstants(formMap[1])
   const { hasRequiredStake } = useHasRequiredStake(constants?.requiredStake || BN_ZERO, 'Proposals')
   const balance = useBalance(formMap[0]?.address)
-  const stakingStatus = useStakingAccountStatus(formMap[0]?.address, activeMember?.id)
+  const stakingStatus = useStakingAccountStatus(formMap[0]?.address, activeMember?.id, [state.matches('transaction')])
   const schema = useMemo(() => schemaFactory(api), [!api])
 
   const form = useForm<AddNewProposalForm>({

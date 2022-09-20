@@ -79,6 +79,11 @@ export const VoteForProposalMachine = createMachine<Partial<FinalContext>, VoteF
       },
     },
     requirementsFailed: { type: 'final' },
-    ...transactionModalFinalStatusesFactory(),
+    ...transactionModalFinalStatusesFactory({
+      cancel: {
+        target: 'vote',
+        action: 'NEXT',
+      },
+    }),
   },
 })

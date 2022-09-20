@@ -3,7 +3,7 @@ import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { BN_ZERO } from '@polkadot/util'
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
@@ -70,7 +70,9 @@ export const ApplyForRoleModal = () => {
   }, [questions.length])
 
   const balance = useBalance(stakingAccountMap?.address)
-  const stakingStatus = useStakingAccountStatus(stakingAccountMap?.address, activeMember?.id)
+  const stakingStatus = useStakingAccountStatus(stakingAccountMap?.address, activeMember?.id, [
+    state.matches('transaction'),
+  ])
 
   const boundingLock = api?.consts.members.candidateStake ?? BN_ZERO
   // TODO add transaction fees here
