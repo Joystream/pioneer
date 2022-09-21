@@ -115,7 +115,7 @@ export const OnBoardingModal = () => {
     return <BuyMembershipSuccessModal onClose={hideModal} member={form} memberId={membershipData?.id} />
   }
 
-  if (state.matches('transaction') && transactionStatus === 'rejected') {
+  if (state.matches('transaction') && transactionStatus !== 'confirmed') {
     return (
       <WaitModal
         onClose={hideModal}
