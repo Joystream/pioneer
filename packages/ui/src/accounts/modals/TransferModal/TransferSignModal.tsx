@@ -20,9 +20,9 @@ import {
 } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
-import { BN_ZERO } from '@/common/constants'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
+import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
 
 import { AccountInfo } from '../../components/AccountInfo'
 import { useBalance } from '../../hooks/useBalance'
@@ -55,7 +55,15 @@ export function TransferSignModal({ onClose, from, amount, to, service, transact
     skipQueryNode: true,
   })
 
-  const isDisabled = !isReady || balanceFrom?.transferable.lt(amount.add(paymentInfo?.partialFee || BN_ZERO))
+  // temporary solution
+  const getIfCanAfford = (): boolean => {
+    if (!balanceFrom || !paymentInfo) return false
+    if (!balanceFrom.transferable.gte(amount)) return false
+
+    return getFeeSpendableBalance(balanceFrom).gte(paymentInfo.partialFee)
+  }
+
+  const isDisabled = !isReady || !getIfCanAfford()
 
   return (
     <TransactionModal service={service} onClose={onClose}>
