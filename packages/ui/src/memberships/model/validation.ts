@@ -19,8 +19,8 @@ export const AvatarURISchema = process.env.REACT_APP_AVATAR_UPLOAD_URL
   : Yup.string().url().nullable()
 
 export const ExternalResourcesSchema = Yup.object().shape({
-  EMAIL: Yup.string().email('Field has to be a valid email address'),
-  HYPERLINK: Yup.string().url('Invalid hyperlink format'),
+  EMAIL: Yup.string().email('Field has to be a valid email address').nullable(),
+  HYPERLINK: Yup.string().url('Invalid hyperlink format').nullable(),
 })
 
 export const HandleSchema = Yup.string().test('handle', 'This handle is already taken', (value, testContext) => {
