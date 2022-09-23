@@ -19,7 +19,14 @@ import { alice, bob } from '../../../_mocks/keyring'
 import { MockQueryNodeProviders } from '../../../_mocks/providers'
 import { setupMockServer } from '../../../_mocks/server'
 import { MEMBER_ALICE_DATA } from '../../../_mocks/server/seeds'
-import { stubAccounts, stubApi, stubBalances, stubDefaultBalances } from '../../../_mocks/transactions'
+import {
+  stubAccounts,
+  stubApi,
+  stubBalances,
+  stubCouncilAndReferendum,
+  stubCouncilConstants,
+  stubDefaultBalances,
+} from '../../../_mocks/transactions'
 import { mockUseModalCall } from '../../../setup'
 
 const testStatisticItem = (header: HTMLElement, labelMatcher: RegExp, expected: RegExp) => {
@@ -47,6 +54,8 @@ describe('Page: MyAccounts', () => {
     mockUseModalCall({ showModal })
     await cryptoWaitReady()
     seedMembers(server.server, 2)
+    stubCouncilAndReferendum(api, 'Announcing', 'Inactive')
+    stubCouncilConstants(api)
   })
 
   beforeEach(() => {
