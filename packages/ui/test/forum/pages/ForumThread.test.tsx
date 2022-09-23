@@ -88,6 +88,12 @@ describe('UI: Forum Thread Page', () => {
     expect(screen.queryByText(/watch thread/i)).toBeNull()
   })
 
+  it('Not Found - no such thread', () => {
+    renderPage()
+
+    expect(screen.queryByText(/not found/i)).toBeInTheDocument()
+  })
+
   it('Renders', () => {
     mockThread.thread = forumThread
     renderPage()
@@ -97,12 +103,6 @@ describe('UI: Forum Thread Page', () => {
     expect(screen.queryByText(/copy link/i)).not.toBeNull()
     expect(screen.queryByText(/watch thread/i)).not.toBeNull()
     expect(screen.queryByText(forumThread.title)).not.toBeNull()
-  })
-
-  it('Not Found - no such thread', () => {
-    renderPage()
-
-    expect(screen.queryByText(/not found/i)).not.toBeNull()
   })
 
   function renderPage() {
