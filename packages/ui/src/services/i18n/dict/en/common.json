@@ -4,6 +4,14 @@
     "authorizeTransaction": {
       "title": "Authorize transaction"
     },
+    "reportContent": {
+      "title": "Report an image",
+      "alreadyReported": "You already reported this image",
+      "content": "You are about to report the following image:",
+      "label": "Image to report",
+      "preview": "Show image",
+      "proceedButton": "Proceed"
+    },
     "transactionFee": {
       "label": "Transaction fee:",
       "tooltipText": "Lorem ipsum",

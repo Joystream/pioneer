@@ -4,6 +4,7 @@ import { Colors, Transitions } from '@/common/constants'
 
 export interface SymbolProps {
   className?: string
+  color?: string
 }
 
 export const Symbol = styled.svg`

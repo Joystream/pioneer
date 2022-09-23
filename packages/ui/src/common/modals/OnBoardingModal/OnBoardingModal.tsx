@@ -49,9 +49,7 @@ export const OnBoardingModal = () => {
         return (
           <OnBoardingMembership
             setMembershipAccount={setMembershipAccount as SetMembershipAccount}
-            onSubmit={(params: MemberFormFields) => {
-              send({ type: 'DONE', form: params })
-            }}
+            onSubmit={(params: MemberFormFields) => send({ type: 'DONE', form: params })}
             membershipAccount={membershipAccount as string}
           />
         )
@@ -69,6 +67,7 @@ export const OnBoardingModal = () => {
           name: form.name,
           avatar: form.avatarUri,
           about: form.about,
+          captchaToken: form.captchaToken,
           externalResources: toExternalResources(definedValues(form.externalResources)),
         }
 
@@ -116,7 +115,7 @@ export const OnBoardingModal = () => {
     return <BuyMembershipSuccessModal onClose={hideModal} member={form} memberId={membershipData?.id} />
   }
 
-  if (state.matches('transaction') && transactionStatus === 'rejected') {
+  if (state.matches('transaction') && transactionStatus !== 'confirmed') {
     return (
       <WaitModal
         onClose={hideModal}

@@ -1,24 +1,23 @@
 import React, { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { first } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
 import { CurrencyName } from '@/app/constants/currency'
-import { InlineToggleWrap, InputComponent, TokenInput, Label, ToggleCheckbox } from '@/common/components/forms'
+import { InlineToggleWrap, InputComponent, Label, ToggleCheckbox, TokenInput } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextInlineMedium, TextMedium, TokenValue } from '@/common/components/typography'
 import { capitalizeFirstLetter } from '@/common/helpers'
-import { useObservable } from '@/common/hooks/useObservable'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 export const UpdateWorkingGroupBudget = () => {
   const { setValue, watch, setError, formState, clearErrors } = useFormContext()
   const { api } = useApi()
-  const councilBudget = useObservable(api?.query.council.budget().pipe(first()), [!api])
+  const councilBudget = useFirstObservableValue(() => api?.query.council.budget(), [api?.isConnected])
   const [groupId, isPositive, budgetUpdate] = watch([
     'updateWorkingGroupBudget.groupId',
     'updateWorkingGroupBudget.isPositive',

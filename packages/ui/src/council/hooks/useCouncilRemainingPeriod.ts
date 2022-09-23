@@ -1,5 +1,4 @@
 import BN from 'bn.js'
-import { useMemo } from 'react'
 import { map, combineLatest, concatMap, EMPTY, merge, Observable, of } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
@@ -8,7 +7,7 @@ import { useObservable } from '@/common/hooks/useObservable'
 export const useCouncilRemainingPeriod = () => {
   const { api } = useApi()
 
-  const remainingPeriod = useMemo(() => {
+  const remainingPeriod = () => {
     if (!api) return
 
     const councilStageEnd = api.query.council.stage().pipe(
@@ -44,7 +43,7 @@ export const useCouncilRemainingPeriod = () => {
     return combineLatest([periodEnd, currentBlock]).pipe(
       map(([periodEnd, currentBlock]) => Math.max(0, periodEnd - currentBlock))
     )
-  }, [api])
+  }
 
-  return useObservable(remainingPeriod, [remainingPeriod])
+  return useObservable(remainingPeriod, [api?.isConnected])
 }

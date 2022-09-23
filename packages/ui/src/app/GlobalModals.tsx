@@ -30,6 +30,7 @@ import { SuccessModal } from '@/common/components/SuccessModal'
 import { useModal } from '@/common/hooks/useModal'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
+import { ReportContentModal, ReportContentModalCall } from '@/common/modals/ReportContentModal'
 import { ModalName, UnknownMachine } from '@/common/providers/modal/types'
 import { TransactionFeesProvider } from '@/common/providers/transactionFees/provider'
 import { AnnounceCandidacyModal, AnnounceCandidateModalCall } from '@/council/modals/AnnounceCandidacy'
@@ -54,6 +55,7 @@ import { SignOutModal } from '@/memberships/modals/SignOutModal/SignOutModal'
 import { SignOutModalCall } from '@/memberships/modals/SignOutModal/types'
 import { SwitchMemberModal, SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { TransferInviteModal, TransferInvitesModalCall } from '@/memberships/modals/TransferInviteModal'
+import { UpdateMembershipModal, UpdateMembershipModalCall } from '@/memberships/modals/UpdateMembershipModal'
 import { AddNewProposalModal, AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'
 import { VoteForProposalModal, VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
@@ -111,6 +113,8 @@ export type ModalNames =
   | ModalName<SignOutModalCall>
   | ModalName<DisconnectWalletModalCall>
   | ModalName<ClaimVestingModalCall>
+  | ModalName<UpdateMembershipModalCall>
+  | ModalName<ReportContentModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -156,6 +160,8 @@ const modals: Record<ModalNames, ReactElement> = {
   SignOut: <SignOutModal />,
   DisconnectWallet: <DisconnectWalletModal />,
   ClaimVestingModal: <ClaimVestingModal />,
+  UpdateMembershipModal: <UpdateMembershipModal />,
+  ReportContentModal: <ReportContentModal />,
 }
 
 export const GlobalModals = () => {

@@ -156,6 +156,8 @@ export const stubApi = () => {
     api: {} as unknown as Api,
     isConnected: true,
     connectionState: 'connected',
+    setQnConnectionState: () => undefined,
+    qnConnectionState: 'connected',
   }
 
   set(api, 'api.query.council.councilMembers', () => from([]))

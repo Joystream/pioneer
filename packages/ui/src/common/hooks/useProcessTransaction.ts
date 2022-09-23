@@ -71,9 +71,25 @@ const observeTransaction = (
     }
   }
 
-  const errorHandler = () => {
+  const errorHandler = (e: string | unknown) => {
     subscription.unsubscribe()
-    send({ type: 'CANCELED', events: [] })
+    if (e === 'Canceled') {
+      send({ type: 'CANCELED', events: [] })
+    } else {
+      const error = {
+        method: 'TransactionCanceled',
+        data: [
+          {
+            error: {
+              docs: 'Insufficient funds to cover fees. Transaction has been canceled.',
+              section: 'transaction',
+              name: 'Fees',
+            },
+          },
+        ],
+      }
+      send({ type: 'ERROR', events: [error] })
+    }
   }
 
   const subscription = transaction.subscribe({
@@ -89,7 +105,7 @@ export const useProcessTransaction = ({
   setBlockHash,
 }: UseSignAndSendTransactionParams) => {
   const [state, send] = useActor(service)
-  const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
+  const paymentInfo = useObservable(() => transaction?.paymentInfo(signer), [transaction, signer])
   const { setService } = useTransactionStatus()
   const [endpoints] = useNetworkEndpoints()
   const { allAccounts, wallet } = useMyAccounts()

@@ -2,7 +2,7 @@ import React, { ReactElement, useCallback, useMemo } from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
 import { StatisticsThreeColumns } from '@/common/components/statistics'
-import { useObservable } from '@/common/hooks/useObservable'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { Percentage } from '@/proposals/components/ProposalDetails/renderers/Percentage'
 import getDetailsRenderStructure, { RenderNode, RenderType } from '@/proposals/helpers/getDetailsRenderStructure'
 import { ProposalWithDetails } from '@/proposals/types'
@@ -46,7 +46,7 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
 
 export const ProposalDetails = ({ proposalDetails }: Props) => {
   const { api } = useApi()
-  const membershipPrice = useObservable(api?.query.members.membershipPrice(), [api])
+  const membershipPrice = useFirstObservableValue(() => api?.query.members.membershipPrice(), [api?.isConnected])
   const renderProposalDetail = useCallback((detail: RenderNode, index: number) => {
     const Component = renderTypeMapper[detail.renderType]
     if (Component) {

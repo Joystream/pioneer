@@ -1,18 +1,18 @@
 import { useApi } from '@/api/hooks/useApi'
-import { useObservable } from '@/common/hooks/useObservable'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 
 export type StakingStatus = 'unknown' | 'free' | 'other' | 'candidate' | 'confirmed'
 
 export const useStakingAccountStatus = (address?: string, memberId?: string): StakingStatus => {
   const { api } = useApi()
 
-  const stakingAccountInfoSize = useObservable(
-    address ? api?.query.members.stakingAccountIdMemberStatus.size(address) : undefined,
-    [api, address]
+  const stakingAccountInfoSize = useFirstObservableValue(
+    () => (address ? api?.query.members.stakingAccountIdMemberStatus.size(address) : undefined),
+    [api?.isConnected, address]
   )
-  const stakingAccountInfo = useObservable(
-    address ? api?.query.members.stakingAccountIdMemberStatus(address) : undefined,
-    [api, address]
+  const stakingAccountInfo = useFirstObservableValue(
+    () => (address ? api?.query.members.stakingAccountIdMemberStatus(address) : undefined),
+    [api?.isConnected, address]
   )
 
   if (!stakingAccountInfoSize || !stakingAccountInfo) {

@@ -20,6 +20,8 @@ const useApi = {
   isConnected: true,
   api: undefined,
   connectionState: 'connecting',
+  qnConnectionState: 'connecting',
+  setQnConnectionState: () => undefined,
 }
 
 const useMyAccounts: UseAccounts = {

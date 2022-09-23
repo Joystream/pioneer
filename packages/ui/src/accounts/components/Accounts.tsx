@@ -2,11 +2,14 @@ import React, { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { AccountItemLoading } from '@/accounts/components/AccountItem/AccountItemLoading'
+import { ButtonPrimary } from '@/common/components/buttons'
+import { EmptyPagePlaceholder } from '@/common/components/EmptyPagePlaceholder/EmptyPagePlaceholder'
 import { List, ListItem } from '@/common/components/List'
 import { ContentWithTabs } from '@/common/components/page/PageContent'
 import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
 import { Tabs } from '@/common/components/Tabs'
 import { Colors } from '@/common/constants'
+import { useModal } from '@/common/hooks/useModal'
 
 import { useMyAccounts } from '../hooks/useMyAccounts'
 import { useMyBalances } from '../hooks/useMyBalances'
@@ -16,7 +19,8 @@ import { setOrder, sortAccounts, SortKey } from '../model/sortAccounts'
 import { AccountItem } from './AccountItem/AccountItem'
 
 export function Accounts() {
-  const { allAccounts, hasAccounts, isLoading } = useMyAccounts()
+  const { allAccounts, hasAccounts, isLoading, wallet } = useMyAccounts()
+  const { showModal } = useModal()
   const [isDisplayAll, setIsDisplayAll] = useState(true)
   const balances = useMyBalances()
   const [sortBy, setSortBy] = useState<SortKey>('name')
@@ -47,6 +51,20 @@ export function Accounts() {
     { title: 'All accounts', onClick: () => !isDisplayAll && setIsDisplayAll(true), active: isDisplayAll },
     { title: 'Transferable balance', onClick: () => isDisplayAll && setIsDisplayAll(false), active: !isDisplayAll },
   ]
+
+  if (!hasAccounts && !isLoading) {
+    return (
+      <EmptyPagePlaceholder
+        title="Connect your wallet or create an account"
+        copy="A Polkadot wallet is required to see a breakdown of all your connected wallet account balances."
+        button={
+          <ButtonPrimary size="large" onClick={() => showModal({ modal: 'OnBoardingModal' })}>
+            {!wallet ? 'Connect Wallet' : 'Join Now'}
+          </ButtonPrimary>
+        }
+      />
+    )
+  }
 
   return (
     <ContentWithTabs>

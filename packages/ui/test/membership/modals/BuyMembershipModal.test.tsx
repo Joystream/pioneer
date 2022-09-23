@@ -67,8 +67,8 @@ describe('UI: BuyMembershipModal', () => {
     await renderModal()
     const submitButton = await findSubmitButton()
     await fillForm()
-    fireEvent.click(screen.getByTestId('email-tile'))
     await act(() => {
+      fireEvent.click(screen.getByTestId('email-tile'))
       fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'invalid email' } })
     })
     expect(submitButton).toBeDisabled()

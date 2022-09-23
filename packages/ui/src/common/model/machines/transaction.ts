@@ -57,6 +57,12 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
       on: {
         PENDING: 'pending',
         CANCELED: 'canceled',
+        ERROR: {
+          target: 'error',
+          actions: assign({
+            events: (_, event) => event.events,
+          }),
+        },
       },
     },
     pending: {
