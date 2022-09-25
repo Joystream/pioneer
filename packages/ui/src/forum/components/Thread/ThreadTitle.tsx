@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useMemo } from 'react'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
@@ -27,11 +27,13 @@ interface TitleFormFields {
 const FormSchema = Yup.object().shape({})
 
 export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
-  const { members: myMembers } = useMyMemberships()
+  const { members: myMembers, active } = useMyMemberships()
   const [isEditTitle, setEditTitle] = useState<boolean>(false)
   const { showModal } = useModal<EditThreadTitleModalCall>()
 
-  const isMyThread = thread && myMembers.find((member) => member.id === thread.authorId)
+  const isMyThread = useMemo(() => {
+    return thread && active && thread.authorId === active.id
+  }, [thread, active])
 
   const formInitializer: TitleFormFields = {
     title: thread.title,
