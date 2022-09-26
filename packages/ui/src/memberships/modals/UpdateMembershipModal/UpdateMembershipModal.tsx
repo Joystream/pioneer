@@ -1,15 +1,19 @@
 import React from 'react'
 
+import { useApi } from '@/api/hooks/useApi'
+import { TextMedium } from '@/common/components/typography'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { UpdateMembershipModalCall } from '@/memberships/modals/UpdateMembershipModal/index'
+import { createBatch } from '@/memberships/modals/UpdateMembershipModal/utils'
 
 import { updateMembershipMachine } from './machine'
 import { UpdateMembershipFormModal } from './UpdateMembershipFormModal'
-import { UpdateMembershipSignModal } from './UpdateMembershipSignModal'
 import { UpdateMembershipSuccessModal } from './UpdateMembershipSuccessModal'
 
 export const UpdateMembershipModal = () => {
+  const { api } = useApi()
   const {
     hideModal,
     modalData: { member },
@@ -27,14 +31,14 @@ export const UpdateMembershipModal = () => {
   }
 
   if (state.matches('transaction')) {
-    const transactionService = state.children.transaction
-
     return (
-      <UpdateMembershipSignModal
+      <SignTransactionModal
+        buttonText="Sign and update a member"
+        textContent={<TextMedium>You intend to update your membership.</TextMedium>}
+        transaction={createBatch(state.context.form, api, member)}
+        signer={member.controllerAccount}
         onClose={hideModal}
-        transactionParams={state.context.form}
-        member={member}
-        service={transactionService}
+        service={state.children.transaction}
       />
     )
   }
