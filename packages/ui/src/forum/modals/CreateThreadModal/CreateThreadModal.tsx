@@ -8,8 +8,10 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
+import { TextMedium } from '@/common/components/typography'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
 import { useYupValidationResolver } from '@/common/utils/validation'
@@ -24,7 +26,6 @@ import {
   formDefaultValues,
   ThreadFormFields,
 } from './CreateThreadDetailsModal'
-import { CreateThreadSignModal } from './CreateThreadSignModal'
 import { CreateThreadSuccessModal } from './CreateThreadSuccessModal'
 import { createThreadMachine } from './machine'
 
@@ -97,7 +98,7 @@ export const CreateThreadModal = () => {
     )
   }
 
-  if (state.matches('transaction') && api && postDeposit && threadDeposit) {
+  if (state.matches('transaction') && api && postDeposit && threadDeposit && balance) {
     const { topic, description } = form.getValues()
     const { memberId, categoryId, controllerAccount } = state.context
     const transaction = api.tx.forum.createThread(
@@ -109,14 +110,19 @@ export const CreateThreadModal = () => {
       }),
       description
     )
-    const service = state.children.transaction
+    const hasFunds = getFeeSpendableBalance(balance).gte(postDeposit.add(threadDeposit))
     return (
-      <CreateThreadSignModal
+      <SignTransactionModal
+        buttonText="Sign and send"
+        textContent={<TextMedium>You intend to create a thread.</TextMedium>}
         transaction={transaction}
-        service={service}
-        controllerAccount={controllerAccount}
-        postDeposit={postDeposit}
-        threadDeposit={threadDeposit}
+        signer={controllerAccount.address}
+        onClose={hideModal}
+        service={state.children.transaction}
+        additionalTransactionInfo={[
+          { title: 'Thread creation and initial post deposit:', value: postDeposit.add(threadDeposit) },
+        ]}
+        disabled={!hasFunds}
       />
     )
   }
