@@ -27,6 +27,7 @@ export interface SignTransactionModalProps extends Omit<TransactionModalProps, '
   additionalAmountInfo?: SignModalAccountProps['amountInfo']
   skipQueryNode?: boolean
   disabled?: boolean
+  extraButtons: React.ReactNode
 }
 
 export const SignTransactionModal = ({
@@ -38,6 +39,7 @@ export const SignTransactionModal = ({
   skipQueryNode,
   signer,
   disabled,
+  extraButtons,
   ...transactionModalProps
 }: SignTransactionModalProps) => {
   const { allAccounts } = useMyAccounts()
@@ -62,6 +64,7 @@ export const SignTransactionModal = ({
       </ModalBody>
       <ModalTransactionFooter
         transactionFee={paymentInfo?.partialFee?.toBn()}
+        extraButtons={extraButtons}
         next={{ disabled: signDisabled, label: buttonText, onClick: sign }}
       >
         {additionalTransactionInfo?.map((props) => (

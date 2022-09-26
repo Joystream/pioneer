@@ -2,22 +2,21 @@ import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
-import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO } from '@/common/constants'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
+import { PreviewPostButton } from '@/forum/components/PreviewPostButton'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { CreatePostModalCall } from '.'
-import { CreatePostSignModal } from './CreatePostSignModal'
 
 export const CreatePostModal = () => {
   const { t } = useTranslation('accounts')
@@ -30,7 +29,6 @@ export const CreatePostModal = () => {
   )
 
   const { active } = useMyMemberships()
-  const { allAccounts } = useMyAccounts()
   const balance = useBalance(active?.controllerAccount)
   const { api } = useApi()
 
@@ -72,18 +70,34 @@ export const CreatePostModal = () => {
   }
 
   if (state.matches('transaction') && transaction && active && postDeposit) {
-    const service = state.children.transaction
-    const controllerAccount = accountOrNamed(allAccounts, active.controllerAccount, 'Controller Account')
     return (
-      <CreatePostSignModal
+      <SignTransactionModal
+        buttonText={replyTo ? 'Sign and reply' : 'Sign and post'}
+        textContent={
+          <>
+            <TextMedium>You intend to post in a thread.</TextMedium>
+            {isEditable && (
+              <TextMedium>
+                <TokenValue value={postDeposit} /> will be deposited to make the post editable.
+              </TextMedium>
+            )}
+          </>
+        }
         transaction={transaction}
-        service={service}
-        controllerAccount={controllerAccount}
-        author={active}
-        postText={postText}
-        replyTo={replyTo}
-        isEditable={isEditable}
-        postDeposit={postDeposit}
+        signer={active.controllerAccount}
+        onClose={hideModal}
+        service={state.children.transaction}
+        additionalTransactionInfo={
+          isEditable
+            ? [
+                {
+                  value: postDeposit,
+                  title: 'Post deposit:',
+                },
+              ]
+            : undefined
+        }
+        extraButtons={<PreviewPostButton author={active} postText={postText} replyTo={replyTo} />}
       />
     )
   }
