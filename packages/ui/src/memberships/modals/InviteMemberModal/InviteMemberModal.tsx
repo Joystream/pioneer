@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
+import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useMachine } from '@/common/hooks/useMachine'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { Address } from '@/common/types'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
 import { InviteMemberFormModal } from './InviteMemberFormModal'
 import { InviteMemberRequirementsModal } from './InviteMemberRequirementsModal'
-import { InviteMemberSignModal } from './InviteMemberSignModal'
 import { InviteMemberSuccessModal } from './InviteMemberSuccessModal'
 import { inviteMemberMachine } from './machine'
 
@@ -47,15 +48,15 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
 
   if (state.matches('transaction') && api) {
     const transaction = api.tx.members.inviteMember(toMemberTransactionParams(state.context.form))
-    const transactionService = state.children.transaction
 
     return (
-      <InviteMemberSignModal
-        onClose={onClose}
-        formData={state.context.form}
-        signer={state.context.form.invitor?.controllerAccount as Address}
-        service={transactionService}
+      <SignTransactionModal
+        buttonText="Sign and create a member"
+        textContent={<TextMedium>You intend to create a new membership.</TextMedium>}
         transaction={transaction}
+        signer={state.context.form.invitor?.controllerAccount as Address}
+        onClose={onClose}
+        service={state.children.transaction}
       />
     )
   }
