@@ -27,7 +27,7 @@ interface TitleFormFields {
 const FormSchema = Yup.object().shape({})
 
 export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
-  const { members: myMembers, active } = useMyMemberships()
+  const { active } = useMyMemberships()
   const [isEditTitle, setEditTitle] = useState<boolean>(false)
   const { showModal } = useModal<EditThreadTitleModalCall>()
 
