@@ -25,6 +25,7 @@ export interface SignTransactionModalProps extends Omit<TransactionModalProps, '
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
   signer: Address
   additionalAmountInfo?: SignModalAccountProps['amountInfo']
+  skipQueryNode?: boolean
 }
 
 export const SignTransactionModal = ({
@@ -33,6 +34,7 @@ export const SignTransactionModal = ({
   textContent,
   buttonText,
   transaction,
+  skipQueryNode,
   signer,
   ...transactionModalProps
 }: SignTransactionModalProps) => {
@@ -41,6 +43,7 @@ export const SignTransactionModal = ({
   const { paymentInfo, sign, isReady, canAfford } = useSignAndSendTransaction({
     transaction,
     signer,
+    skipQueryNode,
     service: transactionModalProps.service,
   })
   const signDisabled = !isReady || !canAfford
