@@ -5,9 +5,11 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { useApi } from '@/api/hooks/useApi'
 import { TransferIcon } from '@/common/components/icons'
+import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 
 import { useMember } from '../../hooks/useMembership'
 import { Member } from '../../types'
@@ -15,7 +17,6 @@ import { Member } from '../../types'
 import { TransferInvitesModalCall } from '.'
 import { transferInvitesMachine } from './machine'
 import { TransferInviteFormModal } from './TransferInviteFormModal'
-import { TransferInviteSignModal } from './TransferInviteSignModal'
 import { TransferInviteSuccessModal } from './TransferInviteSuccessModal'
 
 export function TransferInviteModal() {
@@ -62,13 +63,21 @@ export function TransferInviteModal() {
 
   if (state.matches('transaction')) {
     const { targetMember, numberOfInvites } = state.context
+    const transaction = api?.tx?.members?.transferInvites(member.id, targetMember.id, numberOfInvites)
+    const plural = numberOfInvites.gt(new BN(1))
+    const handle = targetMember.handle
     return (
-      <TransferInviteSignModal
+      <SignTransactionModal
+        buttonText="Sign and Send"
+        textContent={
+          <TextMedium margin="m">
+            You intend to transfer {numberOfInvites.toString()} invite{plural && 's'} to {handle}.
+          </TextMedium>
+        }
+        transaction={transaction}
+        signer={member.controllerAccount}
         onClose={hideModal}
-        sourceMember={member}
-        targetMember={targetMember}
-        amount={numberOfInvites}
-        service={state.children.transaction}
+        service={state.children['transaction']}
       />
     )
   }
