@@ -26,6 +26,7 @@ export interface SignTransactionModalProps extends Omit<TransactionModalProps, '
   signer: Address
   additionalAmountInfo?: SignModalAccountProps['amountInfo']
   skipQueryNode?: boolean
+  disabled?: boolean
 }
 
 export const SignTransactionModal = ({
@@ -36,6 +37,7 @@ export const SignTransactionModal = ({
   transaction,
   skipQueryNode,
   signer,
+  disabled,
   ...transactionModalProps
 }: SignTransactionModalProps) => {
   const { allAccounts } = useMyAccounts()
@@ -46,7 +48,7 @@ export const SignTransactionModal = ({
     skipQueryNode,
     service: transactionModalProps.service,
   })
-  const signDisabled = !isReady || !canAfford
+  const signDisabled = !isReady || !canAfford || disabled
 
   return (
     <TransactionModal {...transactionModalProps}>
