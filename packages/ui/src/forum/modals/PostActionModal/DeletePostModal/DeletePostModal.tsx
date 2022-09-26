@@ -1,16 +1,14 @@
 import React, { useEffect } from 'react'
 
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
-import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-
-import { PostActionSignModal } from '../PostActionSignModal'
 
 import { DeletePostModalCall } from '.'
 
@@ -19,15 +17,11 @@ export const DeletePostModal = () => {
     modalData: { post, transaction },
     hideModal,
   } = useModal<DeletePostModalCall>()
-
   const [state, send] = useMachine(
     defaultTransactionModalMachine('There was a problem deleting your post.', 'Your post has been deleted.'),
     { context: { validateBeforeTransaction: true } }
   )
-
   const { active } = useMyMemberships()
-  const { allAccounts } = useMyAccounts()
-
   const { feeInfo } = useTransactionFee(active?.controllerAccount, () => transaction)
 
   useEffect(() => {
@@ -48,15 +42,14 @@ export const DeletePostModal = () => {
   }
 
   if (state.matches('transaction') && transaction) {
-    const service = state.children.transaction
-    const controllerAccount = accountOrNamed(allAccounts, post.author.controllerAccount, 'Controller Account')
     return (
-      <PostActionSignModal
-        onClose={hideModal}
+      <SignTransactionModal
+        buttonText="Sign and delete"
+        textContent={<TextMedium>You intend to delete your post.</TextMedium>}
         transaction={transaction}
-        service={service}
-        controllerAccount={controllerAccount}
-        action="delete"
+        signer={post.author.controllerAccount}
+        onClose={hideModal}
+        service={state.children.transaction}
       />
     )
   }

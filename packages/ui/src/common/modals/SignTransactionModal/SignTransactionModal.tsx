@@ -27,7 +27,7 @@ export interface SignTransactionModalProps extends Omit<TransactionModalProps, '
   additionalAmountInfo?: SignModalAccountProps['amountInfo']
   skipQueryNode?: boolean
   disabled?: boolean
-  extraButtons: React.ReactNode
+  extraButtons?: React.ReactNode
 }
 
 export const SignTransactionModal = ({

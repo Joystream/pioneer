@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react'
 
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
-import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
+import { PreviewPostButton } from '@/forum/components/PreviewPostButton'
+import { ForumPost } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-
-import { PostActionSignModal } from '../PostActionSignModal'
+import { Member } from '@/memberships/types'
 
 import { EditPostModalCall } from '.'
 
@@ -29,7 +30,6 @@ export const EditPostModal = () => {
   )
 
   const { active } = useMyMemberships()
-  const { allAccounts } = useMyAccounts()
 
   const { feeInfo } = useTransactionFee(active?.controllerAccount, () => transaction)
 
@@ -61,18 +61,21 @@ export const EditPostModal = () => {
   }
 
   if (state.matches('transaction') && transaction) {
-    const service = state.children.transaction
-    const controllerAccount = accountOrNamed(allAccounts, postAuthor.controllerAccount, 'Controller Account')
     return (
-      <PostActionSignModal
-        onClose={() => hideModalWithAction()}
+      <SignTransactionModal
+        buttonText="Sign and edit"
+        textContent={<TextMedium>You intend to edit your post.</TextMedium>}
         transaction={transaction}
-        service={service}
-        controllerAccount={controllerAccount}
-        action="edit"
-        author={postAuthor}
-        newText={postText}
-        replyTo={replyTo}
+        signer={postAuthor.controllerAccount}
+        onClose={hideModal}
+        service={state.children.transaction}
+        extraButtons={
+          <PreviewPostButton
+            author={postAuthor as Member}
+            postText={postText as string}
+            replyTo={replyTo as ForumPost}
+          />
+        }
       />
     )
   }
