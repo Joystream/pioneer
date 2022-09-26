@@ -27,7 +27,7 @@ export interface Props {
   useMultiTransaction?: MultiTransactionConfig
   skipQueryNodeCheck?: boolean
 }
-
+// todo should be removed
 export const AuthorizeTransactionModal = ({
   onClose,
   transaction,
