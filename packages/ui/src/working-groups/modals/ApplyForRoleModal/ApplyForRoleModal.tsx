@@ -3,7 +3,7 @@ import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { BN_ZERO } from '@polkadot/util'
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
@@ -21,8 +21,10 @@ import {
   StepperModalBody,
   StepperModalWrapper,
 } from '@/common/components/StepperModal'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { getDataFromEvent, metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
@@ -38,7 +40,6 @@ import { StakeStep } from '@/working-groups/modals/ApplyForRoleModal/StakeStep'
 
 import { groupToLockId } from '../../types'
 
-import { ApplyForRoleSignModal } from './ApplyForRoleSignModal'
 import { ApplyForRoleSuccessModal } from './ApplyForRoleSuccessModal'
 import { applyForRoleMachine } from './machine'
 
@@ -220,13 +221,26 @@ export const ApplyForRoleModal = () => {
     }
 
     return (
-      <ApplyForRoleSignModal
-        onClose={hideModal}
+      <SignTransactionModal
+        buttonText="Sign transaction and Stake"
+        textContent={
+          <>
+            <TextMedium>You intend to apply for a role.</TextMedium>
+            <TextMedium>
+              You intend to stake <TokenValue value={new BN(stake.amount)} />.
+            </TextMedium>
+          </>
+        }
         transaction={transaction}
         signer={signer}
-        stake={new BN(stake.amount)}
+        onClose={hideModal}
         service={transactionService}
-        steps={transactionsSteps}
+        additionalTransactionInfo={[
+          {
+            title: 'Stake:',
+            value: new BN(stake.amount),
+          },
+        ]}
       />
     )
   }
