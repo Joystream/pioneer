@@ -35,6 +35,10 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
     return thread && active && thread.authorId === active.id
   }, [thread, active])
 
+  const isRemovedThread = useMemo(() => {
+    return thread.status.__typename === 'ThreadStatusRemoved'
+  }, [thread.status.__typename])
+
   const formInitializer: TitleFormFields = {
     title: thread.title,
     initialTitle: thread.title,
@@ -74,7 +78,7 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
 
   return (
     <>
-      {!isEditTitle && <PageTitle>{fields.initialTitle}</PageTitle>}
+      {!isEditTitle && <PageTitle $isRemovedThread={isRemovedThread}>{fields.initialTitle}</PageTitle>}
       {isEditTitle && (
         <EditTitleWrapper>
           <EditTitleInputComponent inputSize="m" onSubmit={() => submitTitle(fields.title)}>
@@ -100,12 +104,12 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
           </EditTitleInputComponent>
         </EditTitleWrapper>
       )}
-      {isMyThread && !isEditTitle && (
+      {isMyThread && !isEditTitle && !isRemovedThread && (
         <ActionButtonWrapper onClick={toggleEditTitle} size="small" square>
           <EditSymbol />
         </ActionButtonWrapper>
       )}
-      {isMyThread && (
+      {isMyThread && !isRemovedThread && (
         <ActionButtonWrapper onClick={() => deleteThread()} size="small" square>
           <DeleteIcon />
         </ActionButtonWrapper>
