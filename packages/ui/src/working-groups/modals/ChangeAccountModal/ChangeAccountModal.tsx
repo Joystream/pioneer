@@ -5,8 +5,10 @@ import { Account } from '@/accounts/types'
 import { Api } from '@/api'
 import { useApi } from '@/api/hooks/useApi'
 import { FailureModal } from '@/common/components/FailureModal'
+import { TextMedium } from '@/common/components/typography'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { Address } from '@/common/types'
 import { useWorker } from '@/working-groups/hooks/useWorker'
 import { getGroup } from '@/working-groups/model/getGroup'
@@ -15,7 +17,6 @@ import { WorkerWithDetails } from '../../types'
 
 import { ChangeAccountModalCall } from '.'
 import { ChangeAccountSelectModal } from './ChangeAccountSelectModal'
-import { ChangeAccountSignModal } from './ChangeAccountSignModal'
 import { ChangeAccountSuccessModal } from './ChangeAccountSuccessModal'
 import { ModalTypes } from './constants'
 import { changeAccountMachine } from './machine'
@@ -59,17 +60,19 @@ export const ChangeAccountModal = () => {
     const transaction = getTransaction(worker, api, modalType, state.context.selectedAddress)
 
     return (
-      <ChangeAccountSignModal
-        transaction={transaction}
-        onClose={hideModal}
-        service={state.children.transaction}
-        worker={worker}
-        title="The transaction can only be signed with the membership's controller account."
-        buttonLabel={
+      <SignTransactionModal
+        buttonText={
           modalType === ModalTypes.CHANGE_ROLE_ACCOUNT
             ? 'Sign and change role account'
             : 'Sign and change reward account'
         }
+        textContent={
+          <TextMedium>The transaction can only be signed with the membership's controller account.</TextMedium>
+        }
+        transaction={transaction}
+        signer={worker.membership.controllerAccount}
+        onClose={hideModal}
+        service={state.children.transaction}
       />
     )
   }
