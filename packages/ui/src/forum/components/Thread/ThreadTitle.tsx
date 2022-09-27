@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useMemo } from 'react'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
@@ -27,11 +27,17 @@ interface TitleFormFields {
 const FormSchema = Yup.object().shape({})
 
 export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
-  const { members: myMembers } = useMyMemberships()
+  const { active } = useMyMemberships()
   const [isEditTitle, setEditTitle] = useState<boolean>(false)
   const { showModal } = useModal<EditThreadTitleModalCall>()
 
-  const isMyThread = thread && myMembers.find((member) => member.id === thread.authorId)
+  const isMyThread = useMemo(() => {
+    return thread && active && thread.authorId === active.id
+  }, [thread, active])
+
+  const isRemovedThread = useMemo(() => {
+    return thread.status.__typename === 'ThreadStatusRemoved'
+  }, [thread.status.__typename])
 
   const formInitializer: TitleFormFields = {
     title: thread.title,
@@ -72,7 +78,7 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
 
   return (
     <>
-      {!isEditTitle && <PageTitle>{fields.initialTitle}</PageTitle>}
+      {!isEditTitle && <PageTitle $isRemovedThread={isRemovedThread}>{fields.initialTitle}</PageTitle>}
       {isEditTitle && (
         <EditTitleWrapper>
           <EditTitleInputComponent inputSize="m" onSubmit={() => submitTitle(fields.title)}>
@@ -98,12 +104,12 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
           </EditTitleInputComponent>
         </EditTitleWrapper>
       )}
-      {isMyThread && !isEditTitle && (
+      {isMyThread && !isEditTitle && !isRemovedThread && (
         <ActionButtonWrapper onClick={toggleEditTitle} size="small" square>
           <EditSymbol />
         </ActionButtonWrapper>
       )}
-      {isMyThread && (
+      {isMyThread && !isRemovedThread && (
         <ActionButtonWrapper onClick={() => deleteThread()} size="small" square>
           <DeleteIcon />
         </ActionButtonWrapper>
