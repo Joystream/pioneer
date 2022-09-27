@@ -42,6 +42,7 @@ interface SearchBoxProps extends ControlProps<string> {
 export const SearchBox = React.memo(({ value, onApply, onChange, label, displayReset }: SearchBoxProps) => {
   const change = onChange && (({ target }: ChangeEvent<HTMLInputElement>) => onChange(target.value))
   const keyDown = onApply && (({ key }: React.KeyboardEvent) => key === 'Enter' && onApply())
+  const isValid = () => !value || value.length === 0 || value.length > 1
   const reset =
     onChange &&
     onApply &&
@@ -52,7 +53,11 @@ export const SearchBox = React.memo(({ value, onApply, onChange, label, displayR
   return (
     <SearchBoxWrapper>
       <FilterLabel>{label}</FilterLabel>
-      <SearchInput inputSize={label ? 'xs' : 's'}>
+      <SearchInput
+        inputSize={label ? 'xs' : 's'}
+        validation={isValid() ? undefined : 'invalid'}
+        message={isValid() ? '' : 'Minimum of 3 characters is required'}
+      >
         <InputText placeholder="Search" value={value} onChange={change} onKeyDown={keyDown} />
         {displayReset && value && (
           <ClearButton onClick={reset} size="small" borderless>
@@ -84,6 +89,8 @@ const SearchInput = styled(InputComponent).attrs({
   & + div {
     border: 1px solid ${Colors.Black[200]};
   }
+  padding-bottom: ${({ validation }) => (validation === undefined ? '22px;' : '0;')};
+  min-width: 220px;
 `
 
 const ClearButton = styled(ButtonLink)`
