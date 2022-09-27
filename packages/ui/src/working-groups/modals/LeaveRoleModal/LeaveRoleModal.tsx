@@ -1,14 +1,15 @@
 import React from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
+import { TextMedium } from '@/common/components/typography'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { useWorker } from '@/working-groups/hooks/useWorker'
 
 import { getGroup } from '../../model/getGroup'
 
 import { LeaveRolePrepareModal } from './LeaveRolePrepareModal'
-import { LeaveRoleSignModal } from './LeaveRoleSignModal'
 import { leaveRoleMachine } from './machine'
 import { LeaveRoleModalCall } from './types'
 
@@ -36,10 +37,14 @@ export const LeaveRoleModal = () => {
     const transaction = getGroup(api, worker.group.id).leaveRole(worker.runtimeId, state.context.rationale)
 
     return (
-      <LeaveRoleSignModal
-        onClose={hideModal}
+      <SignTransactionModal
+        buttonText="Sign and leave role"
+        textContent={
+          <TextMedium>The transaction can only be signed with the membership's controller account.</TextMedium>
+        }
         transaction={transaction}
-        worker={worker}
+        signer={worker.roleAccount}
+        onClose={hideModal}
         service={state.children.transaction}
       />
     )
