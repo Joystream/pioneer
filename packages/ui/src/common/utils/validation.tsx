@@ -99,7 +99,7 @@ export const minMixed = (
 })
 
 export const lessThanMixed = (
-  less: Reference<number | BN> | number | undefined,
+  less: Reference<number | BN> | BN | number | undefined,
   message: string,
   isJoyValue = true
 ): Yup.TestConfig<any, AnyObject> => ({

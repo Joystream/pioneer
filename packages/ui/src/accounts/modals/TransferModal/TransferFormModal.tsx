@@ -20,7 +20,7 @@ import {
 } from '@/common/components/Modal'
 import { BN_ZERO } from '@/common/constants'
 import { useForm } from '@/common/hooks/useForm'
-import { BNSchema, maxMixed, minMixed } from '@/common/utils/validation'
+import { BNSchema, lessThanMixed, maxMixed, minMixed } from '@/common/utils/validation'
 
 import { filterAccount, SelectAccount, SelectedAccount } from '../../components/SelectAccount'
 import { Account } from '../../types'
@@ -47,11 +47,15 @@ const schemaFactory = (maxValue?: BN, minValue?: BN, senderBalance?: BN) => {
 
   if (senderBalance) {
     schema.fields.amount = schema.fields.amount.test(maxMixed(senderBalance, 'Maximum amount allowed is ${max}'))
+    schema.fields.amount = schema.fields.amount.test(
+      lessThanMixed(senderBalance, 'Insufficient funds to cover tx fees, adjust the transferable amount')
+    )
   }
 
   if (maxValue && senderBalance && senderBalance.gt(maxValue)) {
     schema.fields.amount = schema.fields.amount.test(maxMixed(maxValue, 'Maximum amount allowed is ${max}'))
   }
+
   if (minValue) {
     schema.fields.amount = schema.fields.amount.test(minMixed(minValue, 'Minimum amount allowed is ${min}'))
   }
