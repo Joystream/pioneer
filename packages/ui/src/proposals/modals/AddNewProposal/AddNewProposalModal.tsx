@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
@@ -20,12 +20,14 @@ import {
   StepperModalBody,
   StepperModalWrapper,
 } from '@/common/components/StepperModal'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { createType } from '@/common/model/createType'
 import { getMaxBlock } from '@/common/model/getMaxBlock'
@@ -42,7 +44,6 @@ import { ExecutionRequirementsWarning } from '@/proposals/modals/AddNewProposal/
 import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
 import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
-import { SignTransactionModal } from '@/proposals/modals/AddNewProposal/components/SignTransactionModal'
 import { SpecificParametersStep } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { StakingAccountStep } from '@/proposals/modals/AddNewProposal/components/StakingAccountStep'
 import { SuccessModal } from '@/proposals/modals/AddNewProposal/components/SuccessModal'
@@ -59,8 +60,6 @@ import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index
 import { addNewProposalMachine, AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalType } from '@/proposals/types'
 import { GroupIdName } from '@/working-groups/types'
-
-import { SignTransactionModal as SignModeChangeTransaction } from '../ChangeThreadMode/SignTransactionModal'
 
 export type BaseProposalParams = Exclude<
   Parameters<Api['tx']['proposalsCodex']['createProposal']>[0],
@@ -262,12 +261,20 @@ export const AddNewProposalModal = () => {
   if (state.matches('transaction')) {
     return (
       <SignTransactionModal
-        onClose={hideModal}
+        buttonText="Sign transaction and Create"
+        textContent={
+          <>
+            <TextMedium>You intend to create a proposal.</TextMedium>
+            <TextMedium>
+              Also you intend to stake <TokenValue value={constants?.requiredStake as BN} />.
+            </TextMedium>
+          </>
+        }
         transaction={transaction}
         signer={activeMember.controllerAccount}
-        stake={constants?.requiredStake as BN}
-        service={state.children['transaction']}
-        steps={transactionsSteps}
+        onClose={hideModal}
+        service={state.children.transaction}
+        useMultiTransaction={{ steps: transactionsSteps, active: 1 }}
       />
     )
   }
@@ -286,12 +293,14 @@ export const AddNewProposalModal = () => {
     )
 
     return (
-      <SignModeChangeTransaction
-        onClose={hideModal}
+      <SignTransactionModal
+        buttonText="Sign transaction and change mode"
+        textContent={<TextMedium>You intend to change the proposal discussion thread mode.</TextMedium>}
         transaction={transaction}
         signer={activeMember.controllerAccount}
+        onClose={hideModal}
         service={state.children.discussionTransaction}
-        steps={transactionsSteps}
+        useMultiTransaction={{ steps: transactionsSteps, active: 2 }}
       />
     )
   }
