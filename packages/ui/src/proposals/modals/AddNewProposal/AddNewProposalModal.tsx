@@ -275,6 +275,12 @@ export const AddNewProposalModal = () => {
         onClose={hideModal}
         service={state.children.transaction}
         useMultiTransaction={{ steps: transactionsSteps, active: 1 }}
+        additionalTransactionInfo={[
+          {
+            title: 'Stake:',
+            value: constants?.requiredStake as BN,
+          },
+        ]}
       />
     )
   }
