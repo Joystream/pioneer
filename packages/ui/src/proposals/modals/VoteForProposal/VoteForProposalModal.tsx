@@ -4,15 +4,15 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { useApi } from '@/api/hooks/useApi'
 import { FailureModal } from '@/common/components/FailureModal'
-import { TextInlineMedium } from '@/common/components/typography'
+import { TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { useProposal } from '@/proposals/hooks/useProposal'
 import { SuccessModal } from '@/proposals/modals/VoteForProposal/components/SuccessModal'
 import { VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal/types'
 import { VoteForProposalModalForm } from '@/proposals/modals/VoteForProposal/VoteForProposalModalForm'
-import { VoteForProposalSignModal } from '@/proposals/modals/VoteForProposal/VoteForProposalSignModal'
 
 import { VoteForProposalMachine as machine } from './machine'
 
@@ -56,16 +56,20 @@ export const VoteForProposalModal = () => {
     const status = state.context.voteStatus
     const rationale = state.context.rationale
     const proposalId = modalData.id
-    const signer = active.controllerAccount
     const transaction = api.tx.proposalsEngine.vote(active.id, proposalId, status, rationale)
 
     return (
-      <VoteForProposalSignModal
-        proposalTitle={proposal.title}
-        voteStatus={state.context.voteStatus}
-        service={state.children.transaction}
-        signer={signer}
+      <SignTransactionModal
+        buttonText="Sign transaction and Vote"
+        textContent={
+          <TextMedium>
+            You intend to <TextInlineMedium bold>{status}</TextInlineMedium> the Proposal "{proposal.title}".
+          </TextMedium>
+        }
         transaction={transaction}
+        signer={active.controllerAccount}
+        onClose={hideModal}
+        service={state.children.transaction}
       />
     )
   }
