@@ -81,10 +81,9 @@ const searchFilterToGqlInput = (
     return { id_eq: search }
   }
 
-  if (searchFilter)
-    if (searchFilter === 'Account_Address') {
-      return { OR: [{ controllerAccount_eq: search }, { rootAccount_eq: search }] }
-    }
+  if (searchFilter === 'Account_Address') {
+    return { OR: [{ controllerAccount_eq: search }, { rootAccount_eq: search }] }
+  }
 
   return {
     externalResources_some: {
