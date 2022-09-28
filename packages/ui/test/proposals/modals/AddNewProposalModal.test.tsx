@@ -33,7 +33,6 @@ import {
   updateWorkingGroups,
 } from '@/mocks/data'
 import workingGroups from '@/mocks/data/raw/workingGroups.json'
-import { AddNewProposalModal } from '@/proposals/modals/AddNewProposal'
 import { addNewProposalMachine } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalType } from '@/proposals/types'
 
@@ -154,7 +153,7 @@ describe('UI: AddNewProposalModal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
-    mockUseModalCall({ showModal })
+    mockUseModalCall({ showModal, modal: 'AddNewProposalModal' })
     seedMembers(server.server)
     seedWorkingGroups(server.server)
     seedOpeningStatuses(server.server)
@@ -207,7 +206,7 @@ describe('UI: AddNewProposalModal', () => {
 
       expect(showModal).toBeCalledWith({
         modal: 'SwitchMember',
-        data: { originalModalName: 'AddNewProposalModal' },
+        data: { originalModalName: 'AddNewProposalModal', originalModalData: null },
       })
     })
   })
@@ -832,7 +831,7 @@ describe('UI: AddNewProposalModal', () => {
           const group = 'Forum'
           const amount = 100
           await SpecificParameters.SetWorkingGroupLeadReward.selectGroup(group)
-          await waitForElementToBeRemoved(() => screen.queryByText('Loading...'), { timeout: 300 })
+          await waitForElementToBeRemoved(() => screen.queryByText('Loading...'))
           await SpecificParameters.SetWorkingGroupLeadReward.fillRewardAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
 
@@ -1675,18 +1674,17 @@ describe('UI: AddNewProposalModal', () => {
   function renderModal() {
     return render(
       <MemoryRouter>
-        <ModalContextProvider>
-          <MockQueryNodeProviders>
-            <MockKeyringProvider>
-              <ApiContext.Provider value={api}>
-                <MembershipContext.Provider value={useMyMemberships}>
+        <MockQueryNodeProviders>
+          <MockKeyringProvider>
+            <ApiContext.Provider value={api}>
+              <MembershipContext.Provider value={useMyMemberships}>
+                <ModalContextProvider>
                   <GlobalModals />
-                  <AddNewProposalModal />
-                </MembershipContext.Provider>
-              </ApiContext.Provider>
-            </MockKeyringProvider>
-          </MockQueryNodeProviders>
-        </ModalContextProvider>
+                </ModalContextProvider>
+              </MembershipContext.Provider>
+            </ApiContext.Provider>
+          </MockKeyringProvider>
+        </MockQueryNodeProviders>
       </MemoryRouter>
     )
   }

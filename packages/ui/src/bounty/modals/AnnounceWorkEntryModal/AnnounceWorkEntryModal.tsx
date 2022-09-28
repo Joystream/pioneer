@@ -38,7 +38,6 @@ import { formatTokenValue } from '@/common/model/formatters'
 import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { IStakingAccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 
 const transactionSteps = [{ title: 'Bind staking account' }, { title: 'Announce Work' }]
@@ -107,15 +106,6 @@ export const AnnounceWorkEntryModal = () => {
   }, [])
   useEffect(() => {
     if (state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
-      if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({
-          modal: 'SwitchMember',
-          data: {
-            originalModalName: 'BountyAnnounceWorkEntryModal',
-            originalModalData: { bounty },
-          },
-        })
-      }
       if (fee) {
         const areFundsSufficient = fee.canAfford && hasRequiredStake
         send(areFundsSufficient ? 'NEXT' : 'FAIL')

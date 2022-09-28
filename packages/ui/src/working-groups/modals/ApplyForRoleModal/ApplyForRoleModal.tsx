@@ -28,7 +28,6 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { OpeningFormPreview } from '@/working-groups/components/OpeningFormPreview'
 import { useOpeningQuestions } from '@/working-groups/hooks/useOpeningQuestions'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
@@ -132,16 +131,6 @@ export const ApplyForRoleModal = () => {
 
     if (!state.matches('requirementsVerification')) {
       return
-    }
-
-    if (!activeMember) {
-      showModal<SwitchMemberModalCall>({
-        modal: 'SwitchMember',
-        data: {
-          originalModalName: 'ApplyForRoleModal',
-          originalModalData: modalData,
-        },
-      })
     }
 
     if (feeInfo) {

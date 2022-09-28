@@ -36,14 +36,13 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { asBN } from '@/common/utils/bn'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
 const transactionSteps = [{ title: 'Create Thread' }, { title: 'Create Bounty' }]
 
 export const AddBountyModal = () => {
   const { t } = useTranslation()
   const { threadCategory, isLoading: isThreadCategoryLoading } = useBountyForumCategory()
-  const { hideModal, showModal } = useModal()
+  const { hideModal } = useModal()
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
   const [state, send, service] = useMachine(addBountyMachine)
@@ -74,14 +73,6 @@ export const AddBountyModal = () => {
 
   useEffect(() => {
     if (state.matches(AddBountyStates.requirementsVerification)) {
-      if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({
-          modal: 'SwitchMember',
-          data: {
-            originalModalName: 'AddBounty',
-          },
-        })
-      }
       if (activeMember && api) {
         send('NEXT')
       }

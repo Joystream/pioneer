@@ -47,6 +47,7 @@ import { DeletePostModal, DeletePostModalCall } from '@/forum/modals/PostActionM
 import { EditPostModal, EditPostModalCall } from '@/forum/modals/PostActionModal/EditPostModal'
 import { PostHistoryModal, PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { MemberModalCall, MemberProfile } from '@/memberships/components/MemberProfile'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals/BuyMembershipModal'
 import { DisconnectWalletModal, DisconnectWalletModalCall } from '@/memberships/modals/DisconnectWalletModal'
 import { SignOutModal } from '@/memberships/modals/SignOutModal/SignOutModal'
@@ -162,12 +163,40 @@ const modals: Record<ModalNames, ReactElement> = {
   ReportContentModal: <ReportContentModal />,
 }
 
+const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
+  'BuyMembership',
+  'OnBoardingModal',
+  'SwitchMember',
+  'VoteForCouncil',
+  'Member',
+  'TransferTokens',
+  'ApplicationDetails',
+  'SearchResults',
+  'CandidacyPreview',
+  'RevealVote',
+  'RecoverBalance',
+  'DisconnectWallet',
+  'ClaimVestingModal',
+]
+
 export const GlobalModals = () => {
-  const { modal, hideModal, currentModalMachine } = useModal()
+  const { modal, hideModal, currentModalMachine, showModal, modalData } = useModal()
+  const { active: activeMember } = useMyMemberships()
   const { status } = useTransactionStatus()
   const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
 
   const potentialFallback = useGlobalModalHandler(currentModalMachine, hideModal)
+
+  if (modal && !GUEST_ACCESSIBLE_MODALS.includes(modal as ModalNames) && !activeMember) {
+    showModal<SwitchMemberModalCall>({
+      modal: 'SwitchMember',
+      data: {
+        originalModalName: modal as ModalNames,
+        originalModalData: modalData,
+      },
+    })
+    return null
+  }
 
   if (Modal || potentialFallback) {
     return ReactDOM.createPortal(
@@ -191,6 +220,7 @@ const useGlobalModalHandler = (machine: UnknownMachine<any, any, any> | undefine
   if (state.matches('canceled')) {
     hideModal()
   }
+
   if (state.matches('error') && get(state.meta, ['(machine).error', 'message'])) {
     return (
       <FailureModal onClose={hideModal} events={state.context.transactionEvents}>

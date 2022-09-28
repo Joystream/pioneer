@@ -14,13 +14,11 @@ import { createType } from '@/common/model/createType'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
-import { UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers, seedOpening, seedOpeningStatuses } from '@/mocks/data'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
-import { ApplyForRoleModal } from '@/working-groups/modals/ApplyForRoleModal'
 import { applyForRoleMachine } from '@/working-groups/modals/ApplyForRoleModal/machine'
 import { WorkingGroupOpeningFieldsFragment } from '@/working-groups/queries'
 import { asWorkingGroupOpening, WorkingGroupOpening } from '@/working-groups/types'
@@ -42,7 +40,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 const useHasRequiredStake = { hasRequiredStake: true }
 
@@ -56,20 +54,6 @@ jest.mock('../../../src/accounts/hooks/useHasRequiredStake', () => {
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
-}))
-
-const mockUseModal: UseModal<any> = {
-  hideModal: jest.fn(),
-  showModal: jest.fn(),
-  modal: null,
-  modalData: undefined,
-}
-
-jest.mock('@/common/hooks/useModal', () => ({
-  useModal: () => ({
-    ...jest.requireActual('@/common/hooks/useModal').useModal(),
-    ...mockUseModal,
-  }),
 }))
 
 describe('UI: ApplyForRoleModal', () => {
@@ -89,6 +73,8 @@ describe('UI: ApplyForRoleModal', () => {
   let bindAccountTx: any
   let applyTransaction: any
   let applyOnOpeningTxMock: jest.Mock
+  const showModal = jest.fn()
+  let modalData: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -109,7 +95,9 @@ describe('UI: ApplyForRoleModal', () => {
     fields.stakeAmount = '2000'
     fields.openingfilledeventopening = []
     const opening: WorkingGroupOpening = asWorkingGroupOpening(fields)
-    mockUseModal.modalData = { opening }
+    modalData = { opening }
+    mockUseModalCall({ modalData, showModal, modal: 'ApplyForRoleModal' })
+
     useMyMemberships.setActive(getMember('alice'))
 
     stubConst(api, 'forumWorkingGroup.rewardPeriod', createType('u32', 14410))
@@ -150,13 +138,14 @@ describe('UI: ApplyForRoleModal', () => {
 
       await renderModal()
 
-      expect(mockUseModal.showModal).toBeCalledWith({
+      expect(showModal).toBeCalledWith({
         modal: 'SwitchMember',
         data: {
-          originalModalData: mockUseModal.modalData,
+          originalModalData: modalData,
           originalModalName: 'ApplyForRoleModal',
         },
       })
+      showModal.mockClear()
     })
 
     it('Insufficient funds', async () => {
@@ -167,7 +156,8 @@ describe('UI: ApplyForRoleModal', () => {
       fields.stakeAmount = requiredStake
       fields.openingfilledeventopening = []
       const opening: WorkingGroupOpening = asWorkingGroupOpening(fields)
-      mockUseModal.modalData = { opening }
+      modalData = { opening }
+      mockUseModalCall({ modalData, showModal, modal: 'ApplyForRoleModal' })
       batchTx = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening', 10_000)
       mockedTransactionFee.feeInfo = { canAfford: false, transactionFee: new BN(10000) }
       await renderModal()
@@ -175,13 +165,13 @@ describe('UI: ApplyForRoleModal', () => {
       const moveFundsModalCall: MoveFundsModalCall = {
         modal: 'MoveFundsModal',
         data: {
-          requiredStake: new BN(requiredStake),
+          requiredStake: new BN(opening.stake),
           lock: 'Forum Worker',
           isFeeOriented: true,
         },
       }
 
-      expect(mockUseModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
+      expect(showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
   })
 
@@ -502,7 +492,6 @@ describe('UI: ApplyForRoleModal', () => {
                 <ApiContext.Provider value={api}>
                   <MembershipContext.Provider value={useMyMemberships}>
                     <GlobalModals />
-                    <ApplyForRoleModal />
                   </MembershipContext.Provider>
                 </ApiContext.Provider>
               </MockKeyringProvider>
