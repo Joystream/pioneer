@@ -2,6 +2,7 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -92,11 +93,10 @@ export const contributeFundsMachine = createMachine<
         ],
       },
     },
-    [ContributeFundStates.success]: { type: 'final' },
-    [ContributeFundStates.error]: {
-      type: 'final',
-      meta: { message: 'There was a problem while performing the contribution.' },
-    },
-    [ContributeFundStates.cancel]: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      metaMessages: {
+        error: 'There was a problem while performing the contribution.',
+      },
+    }),
   },
 })

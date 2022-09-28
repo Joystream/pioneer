@@ -2,6 +2,7 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -73,8 +74,10 @@ export const bountyCancelMachine = createMachine<BountyCancelContext, BountyCanc
         ],
       },
     },
-    [BountyCancelStates.success]: { type: 'final' },
-    [BountyCancelStates.error]: { type: 'final', meta: { message: 'There was a problem while canceling the bounty.' } },
-    [BountyCancelStates.cancel]: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      metaMessages: {
+        error: 'There was a problem while canceling the bounty.',
+      },
+    }),
   },
 })

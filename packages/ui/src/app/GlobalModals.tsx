@@ -7,11 +7,11 @@ import { ClaimVestingModal } from '@/accounts/modals/ClaimVestingModal/ClaimVest
 import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'
-import { AddBountyModalCall, AddBountyModal } from '@/bounty/modals/AddBountyModal'
+import { AddBountyModal, AddBountyModalCall } from '@/bounty/modals/AddBountyModal'
 import { AnnounceWorkEntryModal, BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEntryModal'
 import { BountyCancelModal, BountyCancelModalCall } from '@/bounty/modals/CancelBountyModal'
 import { ClaimRewardModal, ClaimRewardModalCall } from '@/bounty/modals/ClaimRewardModal'
-import { ContributeFundsModal, BountyContributeFundsModalCall } from '@/bounty/modals/ContributeFundsModal'
+import { BountyContributeFundsModalCall, ContributeFundsModal } from '@/bounty/modals/ContributeFundsModal'
 import { SubmitJudgementModal, SubmitJudgementModalCall } from '@/bounty/modals/SubmitJudgementModal'
 import { SubmitWorkModal, SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal'
 import { WithdrawStakeModal } from '@/bounty/modals/WithdrawalStakeModal'
@@ -215,10 +215,11 @@ export const GlobalModals = () => {
 const useGlobalModalHandler = (machine: UnknownMachine<any, any, any> | undefined, hideModal: () => void) => {
   if (!machine) return null
 
-  const [state] = machine
+  const [state, send] = machine
 
   if (state.matches('canceled')) {
-    hideModal()
+    const backTarget = state.meta?.['(machine).canceled']?.backTarget
+    backTarget ? send(backTarget) : hideModal()
   }
 
   if (state.matches('error') && get(state.meta, ['(machine).error', 'message'])) {
