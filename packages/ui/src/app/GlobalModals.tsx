@@ -1,6 +1,7 @@
 import { get } from 'lodash'
 import React, { memo, ReactElement, useMemo } from 'react'
 import ReactDOM from 'react-dom'
+import styled from 'styled-components'
 
 import { ClaimVestingModalCall } from '@/accounts/modals/ClaimVestingModal'
 import { ClaimVestingModal } from '@/accounts/modals/ClaimVestingModal/ClaimVestingModal'
@@ -22,9 +23,10 @@ import {
 } from '@/bounty/modals/WithdrawContributionModal'
 import { BountyWithdrawWorkEntryModalCall, WithdrawWorkEntryModal } from '@/bounty/modals/WithdrawWorkEntryModal'
 import { FailureModal } from '@/common/components/FailureModal'
+import { Loading } from '@/common/components/Loading'
+import { ModalGlass } from '@/common/components/Modal'
 import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/Search/SearchResultsModal'
 import { SuccessModal } from '@/common/components/SuccessModal'
-import { WaitModal } from '@/common/components/WaitModal'
 import { useModal } from '@/common/hooks/useModal'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
@@ -203,7 +205,7 @@ export const GlobalModals = () => {
       <TransactionFeesProvider>
         {potentialFallback}
         {Modal && <Modal />}
-        {status === 'loadingFees' && <WaitModal onClose={hideModal} requirementsCheck />}
+        {status === 'loadingFees' && <LoaderModal onClose={hideModal} />}
       </TransactionFeesProvider>,
       document.body
     )
@@ -211,6 +213,18 @@ export const GlobalModals = () => {
 
   return null
 }
+
+export const LoaderModal = ({ onClose }: { onClose: () => void }) => (
+  <SpinnerGlass modalSize="l" isDark onClick={onClose} onClose={onClose}>
+    <Loading />
+  </SpinnerGlass>
+)
+
+const SpinnerGlass = styled(ModalGlass)`
+  display: grid;
+  place-items: center;
+  background-color: transparent;
+`
 
 const useGlobalModalHandler = (machine: UnknownMachine<any, any, any> | undefined, hideModal: () => void) => {
   if (!machine) return null
@@ -232,6 +246,10 @@ const useGlobalModalHandler = (machine: UnknownMachine<any, any, any> | undefine
 
   if (state.matches('success') && get(state.meta, ['(machine).success', 'message'])) {
     return <SuccessModal onClose={hideModal} text={get(state.meta, ['(machine).success', 'message'])} />
+  }
+
+  if (state.matches('requirementsVerification')) {
+    return <LoaderModal onClose={hideModal} />
   }
 
   return null

@@ -8,7 +8,6 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
 import { TextMedium, TokenValue } from '@/common/components/typography'
-import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO } from '@/common/constants'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
@@ -66,10 +65,6 @@ export const CreatePostModal = () => {
       onSuccess()
     }
   }, [state.value, JSON.stringify(feeInfo), postDeposit, balance])
-
-  if (state.matches('requirementsVerification')) {
-    return <WaitModal onClose={hideModal} requirementsCheck />
-  }
 
   if (state.matches('transaction') && transaction && active && postDeposit) {
     const service = state.children.transaction

@@ -19,7 +19,7 @@ interface CandidatesListProps extends Pick<CandidateCardProps, 'canVote' | 'isPr
 
 export const CandidateCardList = ({ candidates = [], isLoading, canVote }: CandidatesListProps) => {
   if (isLoading) {
-    return <Loading text="Loading candidates..." />
+    return <Loading />
   }
 
   if (!candidates.length) {

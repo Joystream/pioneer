@@ -8,6 +8,7 @@ import { seedCouncilMember, seedMember, seedElectedCouncils } from '@/mocks/data
 import { mockMembers, mockCouncils, mockCouncilors } from '../../_mocks/council'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { loaderSelector } from '../../setup'
 
 describe('Council page', () => {
   const server = setupMockServer({ noCleanupAfterEach: true })
@@ -20,7 +21,7 @@ describe('Council page', () => {
   it('Empty state', async () => {
     renderPage()
 
-    await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
+    await waitForElementToBeRemoved(() => loaderSelector())
 
     expect(screen.queryByText('There is no council member at the moment')).toBeInTheDocument()
   })
@@ -30,7 +31,7 @@ describe('Council page', () => {
 
     renderPage()
 
-    await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
+    await waitForElementToBeRemoved(() => loaderSelector())
 
     expect(await screen.findByText('Council member A')).toBeDefined()
     expect(screen.queryByText('Council member B')).toBeNull()

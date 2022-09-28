@@ -56,7 +56,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee, mockUseModalCall } from '../../setup'
+import { loaderSelector, mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 const QUESTION_INPUT = OpeningMetadata.ApplicationFormQuestion.InputType
 
@@ -831,7 +831,7 @@ describe('UI: AddNewProposalModal', () => {
           const group = 'Forum'
           const amount = 100
           await SpecificParameters.SetWorkingGroupLeadReward.selectGroup(group)
-          await waitForElementToBeRemoved(() => screen.queryByText('Loading...'))
+          await waitForElementToBeRemoved(() => loaderSelector(), { timeout: 300 })
           await SpecificParameters.SetWorkingGroupLeadReward.fillRewardAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
 

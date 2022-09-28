@@ -23,6 +23,7 @@ import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubAccounts, stubApi, stubCouncilAndReferendum, stubCouncilConstants } from '../../_mocks/transactions'
+import { loaderSelector } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
@@ -300,11 +301,11 @@ describe('UI: Election page', () => {
       })
 
       it('Displays stage, remaining length, and no election round', async () => {
-        const { queryAllByText, queryByText } = await renderComponent()
+        const { queryByText } = await renderComponent()
 
         expect(queryByText(/Revealing period/i)).toBeInTheDocument()
         expect(queryByText(/period remaining length/i)?.parentElement?.nextElementSibling).toHaveTextContent('< 1 min')
-        expect(queryAllByText('-')).toHaveLength(1)
+        expect(loaderSelector(true)).toHaveLength(1)
       })
 
       describe('Votes count', () => {
@@ -352,7 +353,7 @@ describe('UI: Election page', () => {
       )
     })
 
-    const loader = screen.queryByText('Loading candidates...')
+    const loader = loaderSelector()
     if (loader) {
       await waitForElementToBeRemoved(loader)
     }

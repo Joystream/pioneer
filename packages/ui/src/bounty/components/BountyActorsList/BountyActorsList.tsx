@@ -51,7 +51,7 @@ export const BountyActorsList = memo(({ title, elements, entrantResult, open = t
           {title}{' '}
         </TitleText>
         <CountBadge count={elements.length} />
-        <ArrowWrapper data-testid={`${title}-EXPAND`} onClick={toggleVisibility}>
+        <ArrowWrapper id={`${title}-EXPAND`} onClick={toggleVisibility}>
           {isVisible ? <ArrowUpExpandedIcon /> : <ArrowDownIcon />}
         </ArrowWrapper>
       </Header>

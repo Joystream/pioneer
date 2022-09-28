@@ -32,7 +32,7 @@ export const ProposalItemVoteDetails = ({ proposal, memberId, isCouncilMember }:
           <VoteForProposalButton id={proposal.id}>Vote</VoteForProposalButton>
         </span>
       )}
-      {isLoading ? <Loading /> : votes?.map(getVoteDisplay(constitutionality))}
+      {isLoading ? <Loading withoutMargin /> : votes?.map(getVoteDisplay(constitutionality))}
     </>
   )
 }

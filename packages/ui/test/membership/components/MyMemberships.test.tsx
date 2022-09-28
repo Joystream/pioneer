@@ -11,6 +11,7 @@ import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubAccounts } from '../../_mocks/transactions'
+import { loaderSelector } from '../../setup'
 
 describe('UI: Memberships list', () => {
   beforeAll(async () => {
@@ -30,7 +31,7 @@ describe('UI: Memberships list', () => {
     seedMembers(mockServer.server, 2)
     const { getByText } = renderMemberships()
 
-    await waitForElementToBeRemoved(() => getByText('Loading...'))
+    await waitForElementToBeRemoved(() => loaderSelector())
 
     expect(getByText(/alice/i)).toBeDefined()
     expect(getByText(/bob/i)).toBeDefined()

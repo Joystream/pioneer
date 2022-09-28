@@ -21,7 +21,6 @@ import {
 } from '@/common/components/Modal'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextMedium, TokenValue } from '@/common/components/typography'
-import { WaitModal } from '@/common/components/WaitModal'
 import { Colors } from '@/common/constants'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
@@ -77,19 +76,7 @@ export const WithdrawWorkEntryModal = () => {
     !feeInfo ||
     state.matches(WithdrawWorkModalState.requirementsVerification)
   ) {
-    return (
-      <WaitModal
-        title={t('common:modals.wait.title')}
-        description={t('common:modals.wait.description')}
-        onClose={hideModal}
-        requirements={[
-          { name: 'API', state: !!api },
-          { name: 'Loading member', state: !!activeMember },
-          { name: 'Creating transaction', state: !!transaction },
-          { name: 'Calculating fee', state: !!feeInfo },
-        ]}
-      />
-    )
+    return null
   }
 
   if (state.matches(WithdrawWorkModalState.requirementsFailed)) {

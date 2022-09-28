@@ -29,7 +29,7 @@ export const BountyDiscussion = React.memo(({ discussionThreadId }: BountyDiscus
   )
 
   return (
-    <Container data-testid="bounty-discussion">
+    <Container id="bounty-discussion">
       <TextMedium black bold>
         {t('discussionThread.title')}
       </TextMedium>

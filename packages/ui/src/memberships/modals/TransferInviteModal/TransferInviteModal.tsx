@@ -5,7 +5,6 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { useApi } from '@/api/hooks/useApi'
 import { TransferIcon } from '@/common/components/icons'
-import { WaitModal } from '@/common/components/WaitModal'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 
@@ -40,10 +39,6 @@ export function TransferInviteModal() {
 
   if (isLoading || !member) {
     return null
-  }
-
-  if (state.matches('requirementsVerification')) {
-    return <WaitModal onClose={hideModal} title="Loading..." description="" />
   }
 
   if (state.matches('requirementsFailed') && feeInfo) {
