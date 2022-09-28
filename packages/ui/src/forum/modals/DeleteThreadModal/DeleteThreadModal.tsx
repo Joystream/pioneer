@@ -12,7 +12,6 @@ import { useModal } from '@/common/hooks/useModal'
 import { createType } from '@/common/model/createType'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
 import { DeleteThreadModalCall } from '.'
 
@@ -20,7 +19,6 @@ export const DeleteThreadModal = () => {
   const { t } = useTranslation('forum')
   const {
     modalData: { thread },
-    showModal,
     hideModal,
   } = useModal<DeleteThreadModalCall>()
 
@@ -47,15 +45,6 @@ export const DeleteThreadModal = () => {
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
-      if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({
-          modal: 'SwitchMember',
-          data: {
-            originalModalName: 'DeleteThreadModal',
-            originalModalData: { thread },
-          },
-        })
-      }
       if (transaction && feeInfo) {
         feeInfo.canAfford && send('PASS')
         !feeInfo.canAfford && send('FAIL')

@@ -3,6 +3,7 @@ import BN from 'bn.js'
 import { assign, createMachine, State, StateSchema, Typestate } from 'xstate'
 
 import { Account } from '@/accounts/types'
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -84,8 +85,10 @@ export const VoteForCouncilMachine = createMachine<Partial<VoteContext>, VoteFor
         ],
       },
     },
-    success: { type: 'final' },
-    error: { type: 'final', meta: { message: 'There was a problem casting your vote.' } },
-    canceled: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      metaMessages: {
+        error: 'There was a problem casting your vote.',
+      },
+    }),
   },
 })

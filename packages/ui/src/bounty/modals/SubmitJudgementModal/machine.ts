@@ -4,6 +4,7 @@ import { assign, createMachine, State, Typestate } from 'xstate'
 import { StateSchema } from 'xstate/lib/types'
 
 import { BN_ZERO } from '@/common/constants'
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -198,15 +199,12 @@ export const submitJudgementMachine = createMachine<SubmitJudgementContext, Subm
           ],
         },
       },
-      [SubmitJudgementStates.success]: {
-        type: 'final',
-        meta: { message: 'You have successfully submitted your judgement' },
-      },
-      [SubmitJudgementStates.error]: {
-        type: 'final',
-        meta: { message: 'There has been an error while submitting judgement.' },
-      },
-      [SubmitJudgementStates.canceled]: { type: 'final' },
+      ...transactionModalFinalStatusesFactory({
+        metaMessages: {
+          error: 'There has been an error while submitting judgement.',
+          success: 'You have successfully submitted your judgement',
+        },
+      }),
     },
   }
 )

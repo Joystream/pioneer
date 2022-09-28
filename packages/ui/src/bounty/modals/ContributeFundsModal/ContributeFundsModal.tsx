@@ -43,7 +43,6 @@ import { formatTokenValue } from '@/common/model/formatters'
 import { asBN } from '@/common/utils/bn'
 import { BNSchema, minContext } from '@/common/utils/validation'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
 const schema = Yup.object().shape({
   amount: BNSchema.test(
@@ -56,7 +55,6 @@ export const ContributeFundsModal = () => {
   const {
     modalData: { bounty },
     hideModal,
-    showModal,
   } = useModal<BountyContributeFundsModalCall>()
   const { api, isConnected } = useApi()
   const [state, send] = useMachine(contributeFundsMachine)
@@ -116,16 +114,6 @@ export const ContributeFundsModal = () => {
 
   useEffect(() => {
     if (state.matches(ContributeFundStates.requirementsVerification)) {
-      if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({
-          modal: 'SwitchMember',
-          data: {
-            originalModalName: 'BountyContributeFundsModal',
-            originalModalData: { bounty },
-          },
-        })
-      }
-
       if (fee && fee.canAfford) {
         nextStep()
       }

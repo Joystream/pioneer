@@ -1,14 +1,14 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
-import { EmptyObject } from '@/common/types'
-
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
   isTransactionSuccess,
   transactionMachine,
-} from '../../../common/model/machines'
+} from '@/common/model/machines'
+import { EmptyObject } from '@/common/types'
 
 import { UpdateMemberForm } from './types'
 
@@ -66,8 +66,10 @@ export const updateMembershipMachine = createMachine<Context, UpdateMembershipEv
         ],
       },
     },
-    success: { type: 'final' },
-    error: { type: 'final', meta: { message: 'There was a problem updating membership.' } },
-    canceled: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      metaMessages: {
+        error: 'There was a problem updating membership.',
+      },
+    }),
   },
 })

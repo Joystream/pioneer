@@ -3,6 +3,7 @@ import BN from 'bn.js'
 import { assign, createMachine, State, Typestate } from 'xstate'
 import { StateSchema } from 'xstate/lib/types'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -110,8 +111,11 @@ export const submitWorkMachine = createMachine<SubmitWorkContext, SubmitWorkEven
         ],
       },
     },
-    [SubmitWorkStates.success]: { type: 'final', meta: { message: 'You have just successfully submitted a work!' } },
-    [SubmitWorkStates.error]: { type: 'final', meta: { message: 'There was a problem submitting your work.' } },
-    [SubmitWorkStates.cancel]: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      metaMessages: {
+        error: 'There was a problem submitting your work.',
+        success: 'You have just successfully submitted a work!',
+      },
+    }),
   },
 })

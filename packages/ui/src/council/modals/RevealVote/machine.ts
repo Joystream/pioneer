@@ -1,6 +1,7 @@
 import { EventRecord } from '@polkadot/types/interfaces'
 import { assign, createMachine, State } from 'xstate'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import { isTransactionError, isTransactionSuccess, transactionMachine } from '@/common/model/machines'
 import { VotingAttempt } from '@/council/hooks/useCommitment'
 
@@ -65,8 +66,10 @@ export const RevealVoteMachine = createMachine<Partial<RevealVoteContext>, Revea
         ],
       },
     },
-    success: { type: 'final' },
-    error: { type: 'final', meta: { message: 'There was a problem revealing your vote.' } },
-    canceled: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      metaMessages: {
+        error: 'There was a problem revealing your vote.',
+      },
+    }),
   },
 })

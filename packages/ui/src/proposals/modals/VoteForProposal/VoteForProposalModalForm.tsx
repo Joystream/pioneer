@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { EventData, Event } from 'xstate/lib/types'
+import { Event, EventData } from 'xstate/lib/types'
 import * as Yup from 'yup'
 
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
@@ -107,6 +107,7 @@ export const VoteForProposalModalForm = ({ proposal, send, context }: Props) => 
               <InputComponent label="Rationale" required inputSize="auto" id="field-rationale">
                 <CKEditor
                   id="field-rationale"
+                  onReady={(editor) => context.rationale && editor.setData(context.rationale)}
                   onChange={(_, editor) => send('SET_RATIONALE', { rationale: editor.getData() })}
                 />
               </InputComponent>

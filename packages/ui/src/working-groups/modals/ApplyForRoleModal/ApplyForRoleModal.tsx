@@ -3,7 +3,7 @@ import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { BN_ZERO } from '@polkadot/util'
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
@@ -28,7 +28,6 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { OpeningFormPreview } from '@/working-groups/components/OpeningFormPreview'
 import { useOpeningQuestions } from '@/working-groups/hooks/useOpeningQuestions'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
@@ -70,7 +69,9 @@ export const ApplyForRoleModal = () => {
   }, [questions.length])
 
   const balance = useBalance(stakingAccountMap?.address)
-  const stakingStatus = useStakingAccountStatus(stakingAccountMap?.address, activeMember?.id)
+  const stakingStatus = useStakingAccountStatus(stakingAccountMap?.address, activeMember?.id, [
+    state.matches('transaction'),
+  ])
 
   const boundingLock = api?.consts.members.candidateStake ?? BN_ZERO
   // TODO add transaction fees here
@@ -132,16 +133,6 @@ export const ApplyForRoleModal = () => {
 
     if (!state.matches('requirementsVerification')) {
       return
-    }
-
-    if (!activeMember) {
-      showModal<SwitchMemberModalCall>({
-        modal: 'SwitchMember',
-        data: {
-          originalModalName: 'ApplyForRoleModal',
-          originalModalData: modalData,
-        },
-      })
     }
 
     if (feeInfo) {
