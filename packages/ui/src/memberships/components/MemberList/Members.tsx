@@ -7,6 +7,7 @@ import { SortHeader } from '@/common/components/List/SortHeader'
 import { Loading } from '@/common/components/Loading'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { GetSortProps } from '@/common/hooks/useSort'
+import { MemberSearchFilter } from '@/memberships/components/MemberListFilters'
 
 import { MemberWithDetails } from '../../types'
 import { MemberListItem } from '../MemberListItem'
@@ -16,9 +17,10 @@ interface MemberListProps {
   members: MemberWithDetails[]
   isLoading?: boolean
   getSortProps: GetSortProps<MembershipOrderByInput>
+  searchFilter: MemberSearchFilter
 }
 
-export const MemberList = ({ isLoading, members, getSortProps }: MemberListProps) => {
+export const MemberList = ({ isLoading, members, getSortProps, searchFilter }: MemberListProps) => {
   if (isLoading) {
     return <Loading />
   }
@@ -42,7 +44,7 @@ export const MemberList = ({ isLoading, members, getSortProps }: MemberListProps
       <List>
         {members.map((member) => (
           <ListItem key={member.handle} borderless>
-            <MemberListItem member={member} />
+            <MemberListItem member={member} searchFilter={searchFilter} />
           </ListItem>
         ))}
       </List>
