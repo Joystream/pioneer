@@ -94,6 +94,12 @@ export const VoteForCouncilModal = () => {
         onClose={hideModal}
         service={state.children.transaction}
         disabled={!isVoteStored}
+        additionalTransactionInfo={[
+          {
+            title: 'Stake:',
+            value: state.context.stake,
+          },
+        ]}
       />
     )
   }

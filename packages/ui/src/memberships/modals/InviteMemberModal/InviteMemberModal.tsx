@@ -52,7 +52,14 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
     return (
       <SignTransactionModal
         buttonText="Sign and create a member"
-        textContent={<TextMedium>You intend to create a new membership.</TextMedium>}
+        textContent={
+          <>
+            <TextMedium>You intend to create a new membership.</TextMedium>
+            <TextMedium>
+              You are inviting this member. You have {state.context.form.invitor?.inviteCount.toString()} invites left.
+            </TextMedium>
+          </>
+        }
         transaction={transaction}
         signer={state.context.form.invitor?.controllerAccount as Address}
         onClose={onClose}

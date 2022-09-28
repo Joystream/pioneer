@@ -9,8 +9,9 @@ import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
+import { AlertSymbol } from '@/common/components/icons/symbols'
 import { BalanceInfoInRow, InfoTitle, InfoValue, ModalBody, ModalTransactionFooter } from '@/common/components/Modal'
-import { RowGapBlock } from '@/common/components/page/PageContent'
+import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo, TransactionInfoProps } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Sizes } from '@/common/constants'
@@ -28,6 +29,7 @@ export interface SignTransactionModalProps extends Omit<TransactionModalProps, '
   skipQueryNode?: boolean
   disabled?: boolean
   extraButtons?: React.ReactNode
+  extraCosts?: BN
 }
 
 export const SignTransactionModal = ({
@@ -40,6 +42,7 @@ export const SignTransactionModal = ({
   signer,
   disabled,
   extraButtons,
+  extraCosts,
   ...transactionModalProps
 }: SignTransactionModalProps) => {
   const { allAccounts } = useMyAccounts()
@@ -48,6 +51,7 @@ export const SignTransactionModal = ({
     transaction,
     signer,
     skipQueryNode,
+    extraCosts,
     service: transactionModalProps.service,
   })
   const signDisabled = !isReady || !canAfford || disabled
@@ -61,6 +65,10 @@ export const SignTransactionModal = ({
           <TokenValue value={paymentInfo?.partialFee} /> will be applied to the transaction.
         </TextMedium>
         <SignModalAccount account={signerAccount} amountInfo={additionalAmountInfo} />
+        <StyledErrorContainer gap={1}>
+          <AlertSymbol />
+          <TextMedium>Insufficient funds to cover transaction costs</TextMedium>
+        </StyledErrorContainer>
       </ModalBody>
       <ModalTransactionFooter
         transactionFee={paymentInfo?.partialFee?.toBn()}
@@ -74,6 +82,14 @@ export const SignTransactionModal = ({
     </TransactionModal>
   )
 }
+
+const StyledErrorContainer = styled(ColumnGapBlock)`
+  align-items: center;
+  color: ${Colors.Red[400]};
+  path {
+    fill: ${Colors.Red[400]}!important;
+  }
+`
 
 interface SignModalAccountProps {
   account: Account

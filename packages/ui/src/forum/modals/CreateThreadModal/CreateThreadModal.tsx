@@ -110,7 +110,6 @@ export const CreateThreadModal = () => {
       }),
       description
     )
-    const hasFunds = getFeeSpendableBalance(balance).gte(postDeposit.add(threadDeposit))
     return (
       <SignTransactionModal
         buttonText="Sign and send"
@@ -122,7 +121,7 @@ export const CreateThreadModal = () => {
         additionalTransactionInfo={[
           { title: 'Thread creation and initial post deposit:', value: postDeposit.add(threadDeposit) },
         ]}
-        disabled={!hasFunds}
+        extraCosts={postDeposit.add(threadDeposit)}
       />
     )
   }
