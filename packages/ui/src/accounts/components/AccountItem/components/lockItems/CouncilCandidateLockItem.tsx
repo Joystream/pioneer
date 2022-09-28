@@ -39,7 +39,7 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockD
 
   const recoveryTime = useMemo(() => {
     if (!voteStageDuration || !revealStageDuration || !remainingPeriod) {
-      return { unrecoverableLabel: 'Recoverable after failed election' }
+      return { unrecoverableLabel: 'Recoverable after lost election or end of the council term' }
     }
     const startTime = Date.now()
     const getBlocksToEnd = () => {
@@ -58,7 +58,7 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockD
 
     return {
       time: endDate,
-      unrecoverableLabel: 'Recoverable after failed election',
+      unrecoverableLabel: 'Recoverable after lost election or end of the council term',
       tooltipLabel: 'Estimated time is calculated for complete election with each stage.',
     }
   }, [voteStageDuration, revealStageDuration, remainingPeriod])
