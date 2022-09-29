@@ -14,24 +14,27 @@ import { useMember } from '@/memberships/hooks/useMembership'
 
 interface ThreadCardProps {
   thread: ForumThread
+  className?: string
 }
 
-export const ThreadCard = ({ thread }: ThreadCardProps) => {
+export const ThreadCard = ({ thread, className }: ThreadCardProps) => {
   const { member: author } = useMember(thread.authorId)
 
   if (!author) return null
 
   return (
-    <Box>
+    <Box className={className}>
       <div>
         <MemberInfo size="s" hideGroup onlyTop member={author} />
         <div>
           <TextExtraSmall inter lighter>
             {relativeIfRecent(thread.createdInBlock.timestamp)}
           </TextExtraSmall>
-          {thread.tags.map((tag) => (
-            <BadgeStatus size="m">{tag.title.toUpperCase()}</BadgeStatus>
-          ))}
+          <ColumnGapBlock gap={4}>
+            {thread.tags.map((tag) => (
+              <BadgeStatus size="m">{tag.title.toUpperCase()}</BadgeStatus>
+            ))}
+          </ColumnGapBlock>
         </div>
       </div>
       <TextBig bold value>
@@ -42,7 +45,7 @@ export const ThreadCard = ({ thread }: ThreadCardProps) => {
       </TextMedium>
       <ColumnGapBlock gap={8}>
         <ReplyIcon />
-        <CountBadge count={2} />
+        <CountBadge count={thread.visiblePostsCount} />
       </ColumnGapBlock>
     </Box>
   )
