@@ -23,6 +23,7 @@ const forumThread: ForumThreadWithDetails = {
   title: 'Example Thread',
   categoryId: '1',
   authorId: '0',
+  initialPostText: '',
   isSticky: false,
   createdInBlock: randomBlock(),
   tags: [],
