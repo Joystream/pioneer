@@ -10,7 +10,7 @@ import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
 import { useMyThreads } from '@/forum/hooks/useMyThreads'
 
-import { ForumForumTabs, ForumTabs } from './components/ForumTabs'
+import { ForumTabs } from './components/ForumTabs'
 
 export const ForumMyThreads = () => {
   const [page, setPage] = useState(1)
@@ -31,7 +31,6 @@ export const ForumMyThreads = () => {
       header={
         <ForumPageHeader title={<PageTitle>My threads</PageTitle>}>
           <ForumTabs />
-          <ForumForumTabs />
         </ForumPageHeader>
       }
       main={displayThreads()}

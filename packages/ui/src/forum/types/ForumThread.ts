@@ -15,6 +15,7 @@ interface ThreadStatus extends Pick<ForumThreadFieldsFragment['status'], '__type
 export interface ForumThread {
   id: string
   title: string
+  initialPostText: string
   authorId: string
   createdInBlock: Block
   isSticky: boolean
@@ -52,6 +53,7 @@ export const asForumThread = (fields: ForumThreadFieldsFragment): ForumThread =>
   tags: [],
   visiblePostsCount: fields.visiblePostsCount,
   status: asForumThreadStatus(fields.status),
+  initialPostText: fields.initialPost?.text ?? 'No initial post available',
 })
 
 export const asForumThreadWithDetails = (fields: ForumThreadDetailedFieldsFragment): ForumThreadWithDetails => ({
