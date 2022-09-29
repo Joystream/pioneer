@@ -1,8 +1,9 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
+import * as Apollo from '@apollo/client'
 import { gql } from '@apollo/client'
 import { MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
-import * as Apollo from '@apollo/client'
+
 const defaultOptions = {} as const
 export type ForumBaseCategoryFieldsFragment = {
   __typename: 'ForumCategory'
@@ -220,6 +221,7 @@ export type ForumThreadFieldsFragment = {
   title: string
   authorId: string
   visiblePostsCount: number
+  initialPost?: { __typename: 'ForumPost'; text: string } | null
   createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   status:
     | { __typename: 'ThreadStatusActive' }
@@ -522,6 +524,7 @@ export type ForumThreadDetailedFieldsFragment = {
   title: string
   authorId: string
   visiblePostsCount: number
+  initialPost?: { __typename: 'ForumPost'; text: string } | null
   createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   status:
     | { __typename: 'ThreadStatusActive' }
@@ -874,6 +877,7 @@ export type GetForumThreadsQuery = {
     title: string
     authorId: string
     visiblePostsCount: number
+    initialPost?: { __typename: 'ForumPost'; text: string } | null
     createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
     status:
       | { __typename: 'ThreadStatusActive' }
@@ -921,6 +925,7 @@ export type GetForumThreadQuery = {
     title: string
     authorId: string
     visiblePostsCount: number
+    initialPost?: { __typename: 'ForumPost'; text: string } | null
     createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
     status:
       | { __typename: 'ThreadStatusActive' }
@@ -1473,6 +1478,9 @@ export const ForumThreadFieldsFragmentDoc = gql`
     isSticky
     categoryId
     title
+    initialPost {
+      text
+    }
     authorId
     createdInEvent {
       createdAt

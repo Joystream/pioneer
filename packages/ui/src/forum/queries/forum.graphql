@@ -94,6 +94,9 @@ fragment ForumThreadFields on ForumThread {
   isSticky
   categoryId
   title
+  initialPost {
+    text
+  }
   authorId
   createdInEvent {
     createdAt
