@@ -12,11 +12,11 @@ import { asForumCategory, ForumCategory } from '@/forum/types'
 import { MockApolloProvider, Query } from '@/mocks/components/storybook/MockApolloProvider'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
 
-import { ForumCategoryList } from './ForumCategoryList'
+import { ForumMain } from './ForumMain'
 
 export default {
   title: 'Forum/Categories/ForumCategoryList',
-  component: ForumCategoryList,
+  component: ForumMain,
 } as Meta
 
 const Template: Story = ({ isArchive }) => {
@@ -34,7 +34,11 @@ const Template: Story = ({ isArchive }) => {
         }}
       />
 
-      {!categories.length ? <Loading /> : <ForumCategoryList categories={categories} isArchive={isArchive} />}
+      {!categories.length ? (
+        <Loading />
+      ) : (
+        <ForumMain categories={categories} isArchive={isArchive} latestThreads={[]} />
+      )}
     </MockApolloProvider>
   )
 }
