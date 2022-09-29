@@ -13,7 +13,7 @@ import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Label } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { useSort } from '@/common/hooks/useSort'
-import { ForumCategoryList } from '@/forum/components/category'
+import { ForumMain } from '@/forum/components/category'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
@@ -84,7 +84,7 @@ export const ForumCategory = () => {
               <ItemCount count={category.subcategories.length}>
                 {isArchive ? 'Archived categories' : 'Categories'}
               </ItemCount>
-              <ForumCategoryList categories={category.subcategories} isArchive={isArchive} />
+              <ForumMain categories={category.subcategories} isArchive={isArchive} latestThreads={[]} />
             </RowGapBlock>
           )}
 

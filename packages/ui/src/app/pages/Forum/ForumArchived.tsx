@@ -7,7 +7,7 @@ import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { useSort } from '@/common/hooks/useSort'
-import { ForumCategoryList } from '@/forum/components/category'
+import { ForumMain } from '@/forum/components/category'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
@@ -43,7 +43,7 @@ export const ForumArchived = () => {
               <Loading />
             ) : (
               forumCategories &&
-              forumCategories.length > 0 && <ForumCategoryList categories={forumCategories} isArchive />
+              forumCategories.length > 0 && <ForumMain categories={forumCategories} isArchive latestThreads={[]} />
             )}
           </RowGapBlock>
 
