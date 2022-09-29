@@ -7,34 +7,38 @@ import { Arrow } from '@/common/components/icons'
 import { AnswerIcon } from '@/common/components/icons/AnswerIcon'
 import { TextBig, TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
+import { ForumCategory } from '@/forum/types'
 
-const categories = ['forum', 'content', 'builders']
+interface CategoryCardProps {
+  category: ForumCategory
+  className?: string
+}
 
 // In case of different onClick event for message icon and box as whole, remember to stop propagation of msg onClick event
-export const CategoryCard = () => {
+export const CategoryCard = ({ className, category }: CategoryCardProps) => {
   const [isHovered, setIsHovered] = useState<boolean>(false)
 
   const hoverComponent = useMemo(() => {
     return (
       <CategoriesBox>
-        {categories.map((category) => (
-          <BadgeStatus>{category}</BadgeStatus>
+        {category.subcategories.map((category) => (
+          <BadgeStatus>{category.title}</BadgeStatus>
         ))}
       </CategoriesBox>
     )
   }, [])
 
   return (
-    <Box onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+    <Box className={className} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
       <div>
         <TextBig bold value>
-          Working Groups
+          {category.title}
         </TextBig>
         {isHovered ? (
           hoverComponent
         ) : (
           <TextMedium normalWeight inter lighter>
-            In this category you can find or post the information, questions about all the Working Groups
+            {category.description}
           </TextMedium>
         )}
       </div>
@@ -50,7 +54,6 @@ export const CategoryCard = () => {
 const Box = styled.div`
   display: flex;
   column-gap: 15px;
-  width: 500px;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
   padding: 21px;
