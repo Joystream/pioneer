@@ -58,6 +58,7 @@ export const SelectedOption = styled.div`
   grid-template-rows: 1fr;
   align-items: center;
   padding: 0 4px 0 16px;
+  width: 100%;
 `
 
 export const EmptyOption = styled.input`
@@ -215,6 +216,9 @@ export const Selected = styled.div`
 
 const OptionFocused = css`
   color: ${Colors.Blue[500]};
+  path {
+    fill: ${Colors.Blue[500]};
+  }
 `
 export const OptionContainer = styled.div`
   display: grid;
@@ -225,6 +229,7 @@ export const OptionContainer = styled.div`
   cursor: pointer;
   text-transform: capitalize;
   transition: ${Transitions.all};
+  height: 48px;
 
   ${({ focus, selected }: OptionProps) => (selected || focus) && OptionFocused}
   &:hover {

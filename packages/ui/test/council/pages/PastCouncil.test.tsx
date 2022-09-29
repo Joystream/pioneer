@@ -27,6 +27,7 @@ import { testProposals } from '../../_mocks/proposals'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { APPLICATION_DATA, OPENING_DATA, WORKER_DATA } from '../../_mocks/server/seeds'
+import { loaderSelector } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
@@ -418,7 +419,7 @@ describe('UI: Past Council page', () => {
 
     component.getByText(tabName).click()
 
-    await waitForElementToBeRemoved(() => component.getByText('Loading...'))
+    await waitForElementToBeRemoved(() => loaderSelector())
 
     return component
   }
@@ -448,7 +449,7 @@ describe('UI: Past Council page', () => {
       </MemoryRouter>
     )
 
-    await waitForElementToBeRemoved(() => rendered.getByText('Loading...'))
+    await waitForElementToBeRemoved(() => loaderSelector())
 
     return rendered
   }

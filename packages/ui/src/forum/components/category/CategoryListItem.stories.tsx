@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { ForumCategoryFieldsFragment } from '@/forum/queries'
 import { asForumCategory } from '@/forum/types'
@@ -25,9 +24,7 @@ const Template: Story<Props> = ({ category: rawCategory, isArchive }) => {
   }
   return (
     <MockApolloProvider members>
-      <MemoryRouter>
-        <CategoryListItem category={category} isArchive={isArchive} />
-      </MemoryRouter>
+      <CategoryListItem category={category} isArchive={isArchive} />
     </MockApolloProvider>
   )
 }

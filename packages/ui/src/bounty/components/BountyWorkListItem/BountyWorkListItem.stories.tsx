@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { BountyWorkListItem, BountyWorkListItemProps } from '@/bounty/components/BountyWorkListItem/BountyWorkListItem'
 import { Member } from '@/memberships/types'
@@ -13,11 +12,7 @@ export default {
 } as Meta
 
 const Template: Story<BountyWorkListItemProps> = (args) => {
-  return (
-    <MemoryRouter>
-      <BountyWorkListItem {...args} />
-    </MemoryRouter>
-  )
+  return <BountyWorkListItem {...args} />
 }
 
 export const Default = Template.bind({})

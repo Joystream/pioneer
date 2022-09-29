@@ -39,6 +39,22 @@ fragment MemberFields on Membership {
 
 fragment MemberWithDetailsFields on Membership {
   ...MemberFields
+  metadata {
+    name
+    about
+    externalResources {
+      type
+      value
+    }
+    avatar {
+      __typename
+      ... on AvatarUri {
+        avatarUri
+      }
+      # ...on AvatarObject {} - Should be fetched from the Storage system.
+      # See https://github.com/Joystream/pioneer/issues/54
+    }
+  }
   entry {
     ... on MembershipEntryInvited {
       memberInvitedEvent {
@@ -83,7 +99,12 @@ query GetMembers($where: MembershipWhereInput, $orderBy: [MembershipOrderByInput
   }
 }
 
-query GetMembersWithDetails($where: MembershipWhereInput, $orderBy: [MembershipOrderByInput!], $offset: Int, $limit: Int) {
+query GetMembersWithDetails(
+  $where: MembershipWhereInput
+  $orderBy: [MembershipOrderByInput!]
+  $offset: Int
+  $limit: Int
+) {
   memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
     ...MemberWithDetailsFields
   }

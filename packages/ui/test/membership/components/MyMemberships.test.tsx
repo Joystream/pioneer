@@ -3,7 +3,6 @@ import { render, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
-import { Account } from '@/accounts/types'
 import { Memberships } from '@/app/pages/Profile/components/Memberships'
 import { MembershipContextProvider } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
@@ -11,22 +10,13 @@ import { seedMembers } from '@/mocks/data'
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-
-const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
-  hasAccounts: true,
-  allAccounts: [],
-}
-
-jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
-  return {
-    useMyAccounts: () => useMyAccounts,
-  }
-})
+import { stubAccounts } from '../../_mocks/transactions'
+import { loaderSelector } from '../../setup'
 
 describe('UI: Memberships list', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
-    useMyAccounts.allAccounts.push(alice, aliceStash, bob, bobStash)
+    stubAccounts([alice, aliceStash, bob, bobStash])
   })
 
   const mockServer = setupMockServer()
@@ -41,7 +31,7 @@ describe('UI: Memberships list', () => {
     seedMembers(mockServer.server, 2)
     const { getByText } = renderMemberships()
 
-    await waitForElementToBeRemoved(() => getByText('Loading...'))
+    await waitForElementToBeRemoved(() => loaderSelector())
 
     expect(getByText(/alice/i)).toBeDefined()
     expect(getByText(/bob/i)).toBeDefined()

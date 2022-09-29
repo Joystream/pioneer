@@ -1,15 +1,19 @@
 import React from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { CurrencyName } from '@/app/constants/currency'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium } from '@/common/components/typography'
-import { useObservable } from '@/common/hooks/useObservable'
+import { TextMedium, TokenValue } from '@/common/components/typography'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 
 export const SetInitialInvitationBalance = () => {
   const { api } = useApi()
-  const currentBalance = useObservable(api?.query.members.initialInvitationBalance(), [])
+  const currentBalance = useFirstObservableValue(
+    () => api?.query.members.initialInvitationBalance(),
+    [api?.isConnected]
+  )
 
   return (
     <RowGapBlock gap={24}>
@@ -25,19 +29,15 @@ export const SetInitialInvitationBalance = () => {
             name="setInitialInvitationBalance.amount"
             label="Invitation Balance"
             tight
-            units="tJOY"
+            units={CurrencyName.integerValue}
             required
           >
-            <InputNumber
-              id="amount-input"
-              name="setInitialInvitationBalance.amount"
-              isTokenValue
-              isInBN
-              placeholder="0"
-            />
+            <TokenInput id="amount-input" name="setInitialInvitationBalance.amount" placeholder="0" />
           </InputComponent>
           <Row>
-            <TextMedium lighter>The current balance is {currentBalance?.toString()} tJOY.</TextMedium>
+            <TextMedium lighter>
+              The current balance is <TokenValue value={currentBalance ?? null} />.
+            </TextMedium>
           </Row>
         </RowGapBlock>
       </Row>

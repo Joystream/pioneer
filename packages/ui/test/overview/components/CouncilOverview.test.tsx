@@ -18,6 +18,7 @@ import { mockMembers, mockCouncils, mockCouncilors, CANDIDATE_DATA, VOTE_DATA } 
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubCouncilAndReferendum, stubCouncilConstants } from '../../_mocks/transactions'
+import { loaderSelector } from '../../setup'
 
 describe('UI: Council overview', () => {
   const server = setupMockServer({ noCleanupAfterEach: true })
@@ -46,7 +47,7 @@ describe('UI: Council overview', () => {
     })
 
     it('Displays time to Next Election', async () => {
-      await waitForElementToBeRemoved(() => screen.queryByText('Loading...'), { timeout: 3000 })
+      await waitForElementToBeRemoved(() => loaderSelector(), { timeout: 3000 })
 
       // idlePeriodDuration is set to 100 which eqauls to ~600 seconds
       expect(screen.queryByText('council.nextElectionIn')?.previousSibling?.textContent).toEqual('10 min')
@@ -70,7 +71,7 @@ describe('UI: Council overview', () => {
       )
       seedCouncilCandidate(CANDIDATE_DATA, server.server)
       renderComponent()
-      await waitForElementToBeRemoved(() => screen.queryByText('Loading...'), { timeout: 300 })
+      await waitForElementToBeRemoved(() => loaderSelector(), { timeout: 300 })
     })
 
     it('Displays proper stage', () => {
@@ -125,7 +126,7 @@ describe('UI: Council overview', () => {
     })
 
     it('Displays time to Next Election', async () => {
-      await waitForElementToBeRemoved(() => screen.queryByText('Loading...'), { timeout: 300 })
+      await waitForElementToBeRemoved(() => loaderSelector(), { timeout: 300 })
       // idlePeriodDuration is set to 100 which eqauls to ~600 seconds
       expect(screen.queryByText('council.nextElectionIn')?.previousSibling?.textContent).toEqual('10 min')
     })

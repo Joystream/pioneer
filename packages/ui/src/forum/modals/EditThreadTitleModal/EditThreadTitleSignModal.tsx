@@ -7,15 +7,14 @@ import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
-import { ButtonPrimary } from '@/common/components/buttons'
+import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent } from '@/common/components/forms'
-import { Arrow } from '@/common/components/icons'
-import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
+import { ModalBody, ModalTransactionFooter } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
+import { formatJoyValue } from '@/common/model/formatters'
 import { ForumThreadWithDetails } from '@/forum/types'
 import { useMember } from '@/memberships/hooks/useMembership'
 
@@ -55,7 +54,9 @@ export const EditThreadTitleSignModal = ({ thread, newTitle, service, onClose }:
   const signDisabled = !isReady || !hasFunds
 
   const getMessage = (fee?: BN) => {
-    return `Insufficient funds to cover the title edition. You need at least ${fee?.toString()} tJOY on your account for this action.`
+    return `Insufficient funds to cover the title edition. You need at least ${fee ? formatJoyValue(fee) : '-'} ${
+      CurrencyName.integerValue
+    } on your account for this action.`
   }
 
   if (!threadAuthor || !controllerAccount) {
@@ -83,19 +84,10 @@ export const EditThreadTitleSignModal = ({ thread, newTitle, service, onClose }:
           </InputComponent>
         </RowGapBlock>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title="Transaction fee:"
-            value={paymentInfo?.partialFee.toBn()}
-            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={signDisabled} onClick={sign}>
-          Sign and save title
-          <Arrow direction="right" />
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={paymentInfo?.partialFee.toBn()}
+        next={{ disabled: signDisabled, label: 'Sign and save title', onClick: sign }}
+      />
     </TransactionModal>
   )
 }

@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { Stepper, StepDescriptionColumn, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
 import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
@@ -14,19 +13,17 @@ export default {
 
 const Template: Story = () => {
   return (
-    <MemoryRouter>
-      <StepperModalBody>
-        <StepperProposalWrapper>
-          <Stepper steps={[]} />
-          <StepDescriptionColumn>
-            <ProposalConstantsWrapper constants={null} />
-          </StepDescriptionColumn>
-          <StepperBody>
-            <ProposalTypeStep />
-          </StepperBody>
-        </StepperProposalWrapper>
-      </StepperModalBody>
-    </MemoryRouter>
+    <StepperModalBody>
+      <StepperProposalWrapper>
+        <Stepper steps={[]} />
+        <StepDescriptionColumn>
+          <ProposalConstantsWrapper constants={null} />
+        </StepDescriptionColumn>
+        <StepperBody>
+          <ProposalTypeStep />
+        </StepperBody>
+      </StepperProposalWrapper>
+    </StepperModalBody>
   )
 }
 

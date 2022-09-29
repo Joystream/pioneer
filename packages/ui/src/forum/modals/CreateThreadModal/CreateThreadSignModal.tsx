@@ -7,16 +7,15 @@ import { ActorRef } from 'xstate'
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { Account } from '@/accounts/types'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
-import { Arrow } from '@/common/components/icons'
-import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
+import { ModalBody, ModalTransactionFooter } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
+import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
 
 import { getMessage } from './utils'
 
@@ -45,8 +44,8 @@ export const CreateThreadSignModal = ({
   const fullAmount = paymentInfo?.partialFee.add(postDeposit).add(threadDeposit)
 
   const hasFunds = useMemo(() => {
-    if (balance?.transferable && fullAmount) {
-      return balance.transferable.gte(fullAmount)
+    if (balance && fullAmount) {
+      return getFeeSpendableBalance(balance).gte(fullAmount)
     }
     return false
   }, [controllerAccount.address, balance?.transferable, paymentInfo?.partialFee])
@@ -73,24 +72,16 @@ export const CreateThreadSignModal = ({
           </InputComponent>
         </RowGapBlock>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title="Thread creation and initial post deposit:"
-            value={postDeposit.add(threadDeposit)}
-            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
-          />
-          <TransactionInfo
-            title="Transaction fee:"
-            value={paymentInfo?.partialFee.toBn()}
-            tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={signDisabled} onClick={sign}>
-          Sign and send
-          <Arrow direction="right" />
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={paymentInfo?.partialFee.toBn()}
+        next={{ disabled: signDisabled, label: 'Sign and send', onClick: sign }}
+      >
+        <TransactionInfo
+          title="Thread creation and initial post deposit:"
+          value={postDeposit.add(threadDeposit)}
+          tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+        />
+      </ModalTransactionFooter>
     </TransactionModal>
   )
 }

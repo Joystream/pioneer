@@ -1,13 +1,14 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
   isTransactionSuccess,
   transactionMachine,
-} from '../../../common/model/machines'
-import { Address, EmptyObject } from '../../../common/types'
+} from '@/common/model/machines'
+import { Address, EmptyObject } from '@/common/types'
 
 interface ChangeAccountContext {
   selectedAddress?: Address
@@ -65,8 +66,6 @@ export const changeAccountMachine = createMachine<Context, ChangeAccountEvent, C
         ],
       },
     },
-    success: { type: 'final' },
-    canceled: { type: 'final' },
-    error: { type: 'final' },
+    ...transactionModalFinalStatusesFactory(),
   },
 })

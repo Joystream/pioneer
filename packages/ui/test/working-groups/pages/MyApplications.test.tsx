@@ -4,10 +4,12 @@ import faker from 'faker'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
-import { MyApplications } from '../../../src/app/pages/WorkingGroups/MyApplications'
-import { Block } from '../../../src/common/types'
-import { WorkingGroupApplication } from '../../../src/working-groups/types/WorkingGroupApplication'
+import { MyApplications } from '@/app/pages/WorkingGroups/MyApplications'
+import { Block } from '@/common/types'
+import { WorkingGroupApplication } from '@/working-groups/types/WorkingGroupApplication'
+
 import { getMember } from '../../_mocks/members'
+import { loaderSelector } from '../../setup'
 
 let mockApplications: { isLoading: boolean; applications: WorkingGroupApplication[] }
 
@@ -71,7 +73,7 @@ describe('UI: MyApplications', () => {
     mockApplications.isLoading = true
     renderPage()
 
-    expect(screen.getByText('Loading...')).toBeDefined()
+    expect(loaderSelector()).toBeInTheDocument()
     expect(screen.queryByText(/no applications found/i)).toBeNull()
 
     expect(screen.queryByText(/current applications/i)).toBeNull()
@@ -82,7 +84,7 @@ describe('UI: MyApplications', () => {
     renderPage()
 
     expect(screen.getByText(/no applications found/i)).toBeDefined()
-    expect(screen.queryByText('Loading...')).toBeNull()
+    expect(loaderSelector()).toBeNull()
 
     expect(screen.queryByText(/current applications/i)).toBeNull()
     expect(screen.queryByText(/past applications/i)).toBeNull()
@@ -92,7 +94,7 @@ describe('UI: MyApplications', () => {
     mockApplications.applications.push(currentApplication)
     renderPage()
 
-    expect(screen.queryByText('Loading...')).toBeNull()
+    expect(loaderSelector()).toBeNull()
     expect(screen.queryByText(/no applications found/i)).toBeNull()
 
     expect(screen.getByText(/current applications/i)).toBeDefined()
@@ -104,7 +106,7 @@ describe('UI: MyApplications', () => {
     mockApplications.applications.push(pastApplication)
     renderPage()
 
-    expect(screen.queryByText('Loading...')).toBeNull()
+    expect(loaderSelector()).toBeNull()
     expect(screen.queryByText(/no applications found/i)).toBeNull()
 
     expect(screen.getByText(/past applications/i)).toBeDefined()
@@ -117,7 +119,7 @@ describe('UI: MyApplications', () => {
     mockApplications.applications.push(pastApplication)
     renderPage()
 
-    expect(screen.queryByText('Loading...')).toBeNull()
+    expect(loaderSelector()).toBeNull()
     expect(screen.queryByText(/no applications found/i)).toBeNull()
 
     expect(screen.getByText(/current applications/i)).toBeDefined()

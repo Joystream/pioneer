@@ -1,10 +1,9 @@
-import { useMachine } from '@xstate/react'
 import React from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
-import { FailureModal } from '@/common/components/FailureModal'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
-import { useObservable } from '@/common/hooks/useObservable'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
 import { BuyMembershipFormModal, MemberFormFields } from './BuyMembershipFormModal'
@@ -14,9 +13,9 @@ import { buyMembershipMachine } from './machine'
 
 export const BuyMembershipModal = () => {
   const { hideModal } = useModal()
-  const { api, connectionState } = useApi()
+  const { api } = useApi()
 
-  const membershipPrice = useObservable(api?.query.members.membershipPrice(), [connectionState])
+  const membershipPrice = useFirstObservableValue(() => api?.query.members.membershipPrice(), [api?.isConnected])
   const [state, send] = useMachine(buyMembershipMachine)
 
   if (state.matches('prepare')) {
@@ -45,18 +44,6 @@ export const BuyMembershipModal = () => {
   if (state.matches('success')) {
     const { form, memberId } = state.context
     return <BuyMembershipSuccessModal onClose={hideModal} member={form} memberId={memberId?.toString()} />
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem with creating a membership for {state.context.form.name}.
-      </FailureModal>
-    )
-  }
-
-  if (state.matches('canceled')) {
-    hideModal()
   }
 
   return null

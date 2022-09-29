@@ -1,10 +1,10 @@
+import { MembershipExternalResourceType, MembershipOrderByInput, MembershipWhereInput } from '@/common/api/queries'
 import { usePagination } from '@/common/hooks/usePagination'
-import { toQueryOrderByInput, SortOrder } from '@/common/hooks/useSort'
+import { SortOrder, toQueryOrderByInput } from '@/common/hooks/useSort'
 import { error } from '@/common/logger'
 import { MemberListFilter } from '@/memberships/components/MemberListFilters'
 import { useGetMembersCountQuery, useGetMembersWithDetailsQuery } from '@/memberships/queries'
 
-import { MembershipOrderByInput, MembershipWhereInput } from '../../common/api/queries'
 import { asMemberWithDetails } from '../types'
 
 export const MEMBERS_PER_PAGE = 10
@@ -50,14 +50,45 @@ type FilterGqlInput = Pick<
   | 'controllerAccount_eq'
   | 'rootAccount_eq'
   | 'isCouncilMember_eq'
+  | 'externalResources_some'
 >
 
-const filterToGqlInput = ({ search, roles, council, onlyVerified, onlyFounder }: MemberListFilter): FilterGqlInput => ({
-  ...(search
-    ? { OR: [{ controllerAccount_eq: search }, { rootAccount_eq: search }, { handle_contains: search }] }
-    : {}),
+const filterToGqlInput = ({
+  search,
+  roles,
+  onlyCouncil,
+  onlyFounder,
+  searchFilter,
+}: MemberListFilter): FilterGqlInput => ({
   ...(roles.length ? { roles_some: { groupId_in: roles.map(toString) } } : {}),
-  ...(council === null ? {} : { isCouncilMember_eq: council }),
-  ...(onlyVerified ? { isVerified_eq: true } : {}),
   ...(onlyFounder ? { isFoundingMember_eq: true } : {}),
+  ...(searchFilter ? searchFilterToGqlInput(searchFilter, search) : {}),
+  ...(onlyCouncil ? { isCouncilMember_eq: true } : {}),
 })
+
+const searchFilterToGqlInput = (
+  searchFilter: NonNullable<MemberListFilter['searchFilter']>,
+  search: MemberListFilter['search']
+): MembershipWhereInput => {
+  if (!search) {
+    return {}
+  }
+  if (searchFilter === 'Membership') {
+    return { handle_contains: search }
+  }
+
+  if (searchFilter === 'Membership_ID') {
+    return { id_eq: search }
+  }
+
+  if (searchFilter === 'Account_Address') {
+    return { OR: [{ controllerAccount_eq: search }, { rootAccount_eq: search }] }
+  }
+
+  return {
+    externalResources_some: {
+      type_eq: MembershipExternalResourceType[searchFilter as keyof typeof MembershipExternalResourceType],
+      value_contains: search,
+    },
+  }
+}

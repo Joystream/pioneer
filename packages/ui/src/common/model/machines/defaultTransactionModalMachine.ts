@@ -1,6 +1,7 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -26,57 +27,61 @@ type PostActionState =
 
 export type ActionEvents = { type: 'FAIL' } | { type: 'PASS' }
 
-export const defaultTransactionModalMachine = createMachine<TransactionContext, ActionEvents, PostActionState>({
-  initial: 'requirementsVerification',
-  context: {
-    validateBeforeTransaction: false,
-  },
-  states: {
-    requirementsVerification: {
-      on: {
-        PASS: [
-          {
-            target: 'beforeTransaction',
-            cond: (context) => context.validateBeforeTransaction,
-          },
-          {
-            target: 'transaction',
-            cond: (context) => !context.validateBeforeTransaction,
-          },
-        ],
-        FAIL: 'requirementsFailed',
-      },
+export const defaultTransactionModalMachine = (errorMessage?: string, successMessage?: string) =>
+  createMachine<TransactionContext, ActionEvents, PostActionState>({
+    initial: 'requirementsVerification',
+    context: {
+      validateBeforeTransaction: false,
     },
-    beforeTransaction: {
-      on: {
-        PASS: 'transaction',
-        FAIL: 'requirementsFailed',
+    states: {
+      requirementsVerification: {
+        on: {
+          PASS: [
+            {
+              target: 'beforeTransaction',
+              cond: (context) => context.validateBeforeTransaction,
+            },
+            {
+              target: 'transaction',
+              cond: (context) => !context.validateBeforeTransaction,
+            },
+          ],
+          FAIL: 'requirementsFailed',
+        },
       },
-    },
-    transaction: {
-      invoke: {
-        id: 'transaction',
-        src: transactionMachine,
-        onDone: [
-          {
-            target: 'success',
-            cond: isTransactionSuccess,
-          },
-          {
-            target: 'error',
-            cond: isTransactionError,
-            actions: assign({ transactionEvents: (context, event) => event.data.events }),
-          },
-          {
-            target: 'canceled',
-            cond: isTransactionCanceled,
-          },
-        ],
+      beforeTransaction: {
+        on: {
+          PASS: 'transaction',
+          FAIL: 'requirementsFailed',
+        },
       },
+      transaction: {
+        invoke: {
+          id: 'transaction',
+          src: transactionMachine,
+          onDone: [
+            {
+              target: 'success',
+              cond: isTransactionSuccess,
+            },
+            {
+              target: 'error',
+              cond: isTransactionError,
+              actions: assign({ transactionEvents: (context, event) => event.data.events }),
+            },
+            {
+              target: 'canceled',
+              cond: isTransactionCanceled,
+            },
+          ],
+        },
+      },
+      requirementsFailed: { type: 'final' },
+      ...transactionModalFinalStatusesFactory({
+        metaMessages: {
+          error: errorMessage,
+          success: successMessage,
+        },
+      }),
     },
-    requirementsFailed: { type: 'final' },
-    success: { type: 'final' },
-    error: { type: 'final' },
-    canceled: { type: 'final' },
-  },
-})
+  })

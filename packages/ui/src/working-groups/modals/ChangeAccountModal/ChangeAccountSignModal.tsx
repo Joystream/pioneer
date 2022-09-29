@@ -5,10 +5,8 @@ import { ActorRef } from 'xstate'
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
-import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
-import { TransactionInfo } from '@/common/components/TransactionInfo'
+import { ModalBody, ModalTransactionFooter, Row } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
@@ -42,14 +40,10 @@ export const ChangeAccountSignModal: FC<Props> = ({ onClose, worker, service, tr
           <SelectedAccount account={signer} />
         </InputComponent>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo title="Transaction fee:" value={paymentInfo?.partialFee.toBn()} />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={sign} disabled={!signer || !isReady}>
-          {buttonLabel}
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={paymentInfo?.partialFee.toBn()}
+        next={{ disabled: !signer || !isReady, label: buttonLabel, onClick: sign }}
+      />
     </TransactionModal>
   )
 }

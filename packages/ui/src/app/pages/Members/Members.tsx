@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
+import { PageHeader } from '@/app/components/PageHeader'
 import { PageLayout } from '@/app/components/PageLayout'
 import { MembershipOrderByInput } from '@/common/api/queries'
-import { FilterPageHeader } from '@/common/components/forms/FilterBox'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { useModal } from '@/common/hooks/useModal'
@@ -22,17 +22,29 @@ export const Members = () => {
 
   const [filter, setFilter] = useState(MemberListEmptyFilter)
   const { order, getSortProps } = useSort<MembershipOrderByInput>('createdAt')
-  const searchSlot = useRef<HTMLDivElement>(null)
 
   const { members, isLoading, totalCount, pagination } = useMembers({ order, filter })
 
   return (
     <PageLayout
-      header={<FilterPageHeader ref={searchSlot} title="Members" />}
+      header={<PageHeader title="Members" />}
       main={
         <MainPanel>
-          <MemberListFilters searchSlot={searchSlot} memberCount={totalCount} onApply={setFilter} />
-          <MemberList isLoading={isLoading} members={members} getSortProps={getSortProps} />
+          <MemberListFilters
+            memberCount={totalCount}
+            onApply={(filters) => {
+              if (!filters.search) {
+                return setFilter({ ...filters, searchFilter: 'Membership' })
+              }
+              setFilter(filters)
+            }}
+          />
+          <MemberList
+            isLoading={isLoading}
+            members={members}
+            getSortProps={getSortProps}
+            searchFilter={filter.searchFilter}
+          />
           <Pagination {...pagination} />
         </MainPanel>
       }

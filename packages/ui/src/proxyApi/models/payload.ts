@@ -1,13 +1,14 @@
 import { createType } from '@joystream/types'
 import { TypeRegistry } from '@polkadot/types'
 import { EventRecord } from '@polkadot/types/interfaces'
+import { SpRuntimeDispatchError } from '@polkadot/types/lookup'
 import { AnyTuple, Codec } from '@polkadot/types/types'
-import { Constructor } from '@polkadot/util/types'
 import BN from 'bn.js'
-import { get, isArray, isFunction, merge, uniqueId } from 'lodash'
+import { get, isArray, isFunction, merge, startCase, uniqueId } from 'lodash'
 import { filter, firstValueFrom, map, Observable } from 'rxjs'
 
 import { error } from '@/common/logger'
+import { DispatchedError } from '@/common/model/JoystreamNode'
 import { AnyObject } from '@/common/types'
 import { recursiveProxy } from '@/common/utils/proxy'
 
@@ -61,7 +62,7 @@ export const serializePayload = (
     } else if (value.kind === 'SubmittableExtrinsicProxy') {
       return { kind: value.kind, txId: value.txId }
     } else if (isSigner(value)) {
-      return serializeProxy(value, {}, 'signer', messages, postMessage)
+      return serializeProxy(value, {}, ['signPayload'], 'signer', messages, postMessage)
     } else {
       const result = isArray(value) ? [...value] : { ...value }
       stack.push(result)
@@ -88,7 +89,9 @@ export const deserializePayload = (
       }
     } else {
       for (const key of Object.keys(current)) {
-        current[key] = deserializeValue(current[key])
+        if ('value' in (Object.getOwnPropertyDescriptor(current, key) ?? {})) {
+          current[key] = deserializeValue(current[key])
+        }
       }
     }
   }
@@ -104,10 +107,12 @@ export const deserializePayload = (
           return deserializeCodec(value)
         case 'BN':
           return new BN(value.value)
+        case 'extended-codec':
+          return deserializeExtendedCodec(value)
         case 'SubmittableExtrinsicProxy':
           return transactionsRecord?.[value.txId]
         case 'proxy':
-          return deserializeProxy(value.json, value.proxyId, messages, postMessage)
+          return deserializeProxy(value.json, value.methods, value.proxyId, messages, postMessage)
       }
     }
 
@@ -124,6 +129,7 @@ export const deserializeMessage =
 const serializeProxy = (
   obj: AnyObject,
   json: AnyObject = {},
+  methods: string[] = [],
   name = '',
   messages?: Observable<WorkerProxyMessage>,
   postMessage?: PostMessage<ClientProxyMessage>
@@ -142,11 +148,12 @@ const serializeProxy = (
       postMessage({ messageType: 'proxy', proxyId, payload: { error } })
     }
   })
-  return { kind: 'proxy', proxyId, json }
+  return { kind: 'proxy', proxyId, json, methods }
 }
 
 const deserializeProxy = (
   json: any,
+  methods: string[],
   proxyId: string,
   messages?: Observable<ClientProxyMessage>,
   postMessage?: PostMessage<WorkerProxyMessage>
@@ -157,59 +164,83 @@ const deserializeProxy = (
 
   return new Proxy(json, {
     get(json, prop: string) {
-      return prop in json
-        ? json[prop]
-        : async (...params: AnyTuple) => {
-            postMessage({ messageType: 'proxy', proxyId, method: prop, payload: params })
-            const { payload } = await firstValueFrom(messages.pipe(filter((message) => message.proxyId === proxyId)))
-            return payload.error ? Promise.reject(payload.error) : payload.result
-          }
+      if (prop in json) {
+        return json[prop]
+      } else if (methods.includes(prop)) {
+        return async (...params: AnyTuple) => {
+          postMessage({ messageType: 'proxy', proxyId, method: prop, payload: params })
+          const { payload } = await firstValueFrom(messages.pipe(filter((message) => message.proxyId === proxyId)))
+          return payload.error ? Promise.reject(payload.error) : payload.result
+        }
+      }
     },
   })
 }
 
 interface SerializedCodec {
-  kind: 'codec'
+  kind: 'codec' | 'extended-codec'
   type: string
   value: any
 }
 
-const serializeCodec = (codec: Codec) => {
-  const type =
-    (codec as any).meta?.type ?? codec.registry.getClassName(codec.constructor as Constructor) ?? codec.toRawType()
+const serializeCodec = (codec: Codec): SerializedCodec => {
+  const type = codec.toRawType()
 
   if (!type) {
     error('Unrecognized codec object', codec, codec.toHuman())
   }
 
-  if (isEventRecord(type, codec)) {
-    const { meta, method, section, typeDef } = codec.event
-    const json = merge(codec.toJSON(), { event: { meta: meta.toJSON(), method, section, typeDef } })
-    return { kind: 'codec', type, value: json }
+  if (isEventRecord(codec)) {
+    const { data, index, meta, method, section, typeDef } = codec.event
+    const serializedData = data.map((data) => {
+      const result = serializeCodec(data)
+      if (isDispatchError(data)) {
+        const error = serializePayload(findMetaError(data))
+        return { ...result, kind: 'extended-codec', value: { ...result.value, error } }
+      }
+      return result
+    })
+    const event = {
+      data: serializedData,
+      index: index.toJSON(),
+      meta: meta.toJSON(),
+      method,
+      section,
+      typeDef,
+    }
+    return { kind: 'extended-codec', type, value: merge(codec.toJSON(), { event }) }
   }
 
   return { kind: 'codec', type, value: codec.toJSON() }
 }
 
-const isCodec = (obj: any): obj is Codec => typeof obj?.registry === 'object' && obj.registry instanceof TypeRegistry
-
-const isEventRecord = (type: string, codec: Codec): codec is EventRecord => type === 'EventRecord'
-
-const deserializeCodec = (serialized: SerializedCodec) => {
-  const codec = createType(serialized.type, serialized.value)
-
-  if (serialized.type === 'EventRecord') {
-    return recursiveProxy(codec, {
-      get: (target, path) =>
-        bindIfFunction(get(target, path) ?? get(serialized.value, path), () =>
-          path.length > 1 ? get(target, path.slice(0, -1)) : target
-        ),
-    })
-  }
-
-  return codec
+const isDispatchError = (data: Codec): data is SpRuntimeDispatchError => {
+  const error = data as SpRuntimeDispatchError
+  const methods = ['isBadOrigin', 'isModule'] as const
+  return error.type && methods.every((method) => typeof error[method] === 'boolean')
 }
 
-const bindIfFunction = (value: any, getContext: () => any) => (isFunction(value) ? value.bind(getContext()) : value)
+const findMetaError = (data: SpRuntimeDispatchError): DispatchedError => {
+  type ValidGetters = 'asModule' | 'asToken' | 'asArithmetic' | 'asTransactional'
+  const getter: `as${SpRuntimeDispatchError['type']}` = `as${data.type}`
+  const errorIndex = getter in data && data[getter as ValidGetters]
+  return errorIndex && !errorIndex.isEmpty
+    ? data.registry.findMetaError(errorIndex.toU8a())
+    : { section: 'Error', name: data.type, docs: [`${startCase(data.type)} error`] }
+}
+
+const isCodec = (obj: any): obj is Codec => typeof obj?.registry === 'object' && obj.registry instanceof TypeRegistry
+
+const isEventRecord = (codec: Codec): codec is EventRecord => 'event' in codec
+
+const deserializeCodec = (serialized: SerializedCodec) => createType(serialized.type, serialized.value) as Codec
+
+const deserializeExtendedCodec = (serialized: SerializedCodec) =>
+  recursiveProxy(deserializeCodec(serialized), {
+    get: ({ value, property }) => bindIfFunction(value[property], value),
+    default: ({ path }) => deserializePayload(get(serialized.value, path)),
+  })
+
+const bindIfFunction = (value: any, context: any) => (isFunction(value) ? value.bind(context) : value)
 
 const isSigner = (obj: any) => typeof obj.signPayload === 'function' && typeof obj.signRaw === 'function'

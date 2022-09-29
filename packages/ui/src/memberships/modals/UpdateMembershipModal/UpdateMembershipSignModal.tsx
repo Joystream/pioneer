@@ -8,15 +8,15 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Api } from '@/api'
 import { useApi } from '@/api/hooks/useApi'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { Label } from '@/common/components/forms'
-import { ModalBody, ModalFooter, Row, TransactionInfoContainer } from '@/common/components/Modal'
-import { TransactionInfo } from '@/common/components/TransactionInfo'
+import { ModalBody, ModalTransactionFooter, Row } from '@/common/components/Modal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { WithNullableValues } from '@/common/types/form'
+import { definedValues } from '@/common/utils'
+import { toExternalResources } from '@/memberships/modals/utils'
 
 import { Member } from '../../types'
 
@@ -34,7 +34,7 @@ const hasEdits = (object: Record<string, any>, fields: string[]) => {
 }
 
 function createBatch(transactionParams: WithNullableValues<UpdateMemberForm>, api: Api | undefined, member: Member) {
-  const hasProfileEdits = hasEdits(transactionParams, ['about', 'handle', 'avatarUri', 'name'])
+  const hasProfileEdits = hasEdits(transactionParams, ['about', 'handle', 'avatarUri', 'name', 'externalResources'])
   const hasAccountsEdits = hasEdits(transactionParams, ['rootAccount', 'controllerAccount'])
 
   const transactions: SubmittableExtrinsic<'rxjs'>[] = []
@@ -43,14 +43,17 @@ function createBatch(transactionParams: WithNullableValues<UpdateMemberForm>, ap
     return
   }
 
-  if (hasProfileEdits) {
+  if (hasProfileEdits && !(transactionParams.avatarUri instanceof File)) {
     const updateProfile = api.tx.members.updateProfile(
       member.id,
       transactionParams.handle ?? null,
       metadataToBytes(MembershipMetadata, {
         about: transactionParams.about ?? null,
         name: transactionParams.name ?? null,
-        avatarUri: transactionParams.avatarUri ?? '',
+        avatarUri: transactionParams.avatarUri ?? null,
+        externalResources: transactionParams.externalResources
+          ? toExternalResources(definedValues(transactionParams.externalResources))
+          : null,
       })
     )
     transactions.push(updateProfile)
@@ -92,20 +95,10 @@ export const UpdateMembershipSignModal = ({ onClose, transactionParams, member, 
           <SelectedAccount account={signer} />
         </Row>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title="Transaction fee:"
-            value={paymentInfo?.partialFee.toBn()}
-            tooltipText={
-              'Transaction fee covers the cost of processing the update and storing the record on the chain.'
-            }
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={sign} disabled={!isReady}>
-          Sign and update a member
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={paymentInfo?.partialFee.toBn()}
+        next={{ disabled: !isReady, label: 'Sign and update a member', onClick: sign }}
+      />
     </TransactionModal>
   )
 }

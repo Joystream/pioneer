@@ -36,7 +36,6 @@ export const FailureModal = ({ children, onClose, events }: FailureModalProps) =
 
 const EventErrorMessage = ({ event }: EventErrorMessageProps) => {
   const registryError = toDispatchError(event)
-
   if (!registryError) {
     return null
   }

@@ -2,6 +2,7 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -81,8 +82,11 @@ export const withdrawalStakeMachine = createMachine<
       },
     },
     [WithdrawalStakeStates.requirementsFailed]: { type: 'final' },
-    [WithdrawalStakeStates.success]: { type: 'final' },
-    [WithdrawalStakeStates.error]: { type: 'final' },
-    [WithdrawalStakeStates.cancel]: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      metaMessages: {
+        error: 'There was a problem with withdrawing stake.',
+        success: 'Your contribution has been successfully withdrawn!',
+      },
+    }),
   },
 })

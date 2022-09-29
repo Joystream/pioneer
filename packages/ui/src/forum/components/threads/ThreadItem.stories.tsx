@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import { lorem } from 'faker'
 import React, { useMemo } from 'react'
-import { MemoryRouter } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Network } from '@/common/api/queries'
@@ -58,11 +57,9 @@ const Template: Story<Props> = ({ containerSize, breadcrumbs, thread, empty, pos
 
   return (
     <MockApolloProvider members forum={forum}>
-      <MemoryRouter>
-        <Container size={containerSize}>
-          <ThreadItem thread={forumthread} empty={empty} />
-        </Container>
-      </MemoryRouter>
+      <Container size={containerSize}>
+        <ThreadItem thread={forumthread} empty={empty} />
+      </Container>
     </MockApolloProvider>
   )
 }

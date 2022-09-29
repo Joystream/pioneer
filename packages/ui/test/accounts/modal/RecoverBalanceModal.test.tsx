@@ -1,16 +1,14 @@
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
 
-import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { RecoverBalanceModal } from '@/accounts/modals/RecoverBalance'
 import { ApiContext } from '@/api/providers/context'
-import { ModalContext } from '@/common/providers/modal/context'
-import { ModalCallData, UseModal } from '@/common/providers/modal/types'
+import { GlobalModals } from '@/app/GlobalModals'
+import { createType } from '@/common/model/createType'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
@@ -20,25 +18,33 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  stubAccounts,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 describe('UI: RecoverBalanceModal', () => {
-  let useAccounts: UseAccounts
   const api = stubApi()
   const server = setupMockServer({ noCleanupAfterEach: true })
   let tx: any
+  const modalData = {
+    lock: {
+      amount: new BN(300),
+      type: 'Council Candidate',
+    },
+    address: alice.address,
+    memberId: '0',
+  }
 
   beforeAll(async () => {
+    mockUseModalCall({ modalData })
     await cryptoWaitReady()
     seedMembers(server.server, 2)
   })
-
-  let useModal: UseModal<ModalCallData<RecoverBalanceModalCall>>
 
   const useMyMemberships: MyMemberships = {
     active: undefined,
@@ -52,31 +58,16 @@ describe('UI: RecoverBalanceModal', () => {
   }
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    stubAccounts([alice, bob])
+    stubDefaultBalances()
     useMyMemberships.setActive(getMember('alice'))
     tx = stubTransaction(api, 'api.tx.council.releaseCandidacyStake')
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
-    useModal = {
-      hideModal: jest.fn(),
-      showModal: jest.fn(),
-      modal: 'RecoverBalance',
-      modalData: {
-        lock: {
-          amount: new BN(300),
-          type: 'Council Candidate',
-        },
-        address: alice.address,
-        memberId: '0',
-      },
-    }
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+    mockedTransactionFee.transaction = tx as any
   })
 
   it('Insufficient funds', async () => {
-    tx = stubTransaction(api, 'api.tx.council.releaseCandidacyStake', 10_000)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
 
     renderModal()
 
@@ -85,7 +76,7 @@ describe('UI: RecoverBalanceModal', () => {
 
   it('Transaction summary', async () => {
     renderModal()
-
+    screen.findByText(/^sign transaction and transfer$/i)
     expect(await screen.findByRole('heading', { name: 'Recover balances' })).toBeDefined()
   })
 
@@ -109,7 +100,7 @@ describe('UI: RecoverBalanceModal', () => {
     })
 
     it('Voting', async () => {
-      useModal.modalData.lock = {
+      modalData.lock = {
         amount: new BN(300),
         type: 'Voting',
       }
@@ -123,6 +114,15 @@ describe('UI: RecoverBalanceModal', () => {
 
   it('Success', async () => {
     stubTransactionSuccess(tx, 'council', 'CandidacyStakeRelease', [createType('MemberId', 0)])
+    mockUseModalCall({
+      modalData: {
+        ...modalData,
+        lock: {
+          amount: new BN(300),
+          type: 'Council Candidate',
+        },
+      },
+    })
 
     renderModal()
     fireEvent.click(await screen.findByText(/^sign transaction and transfer$/i))
@@ -142,17 +142,16 @@ describe('UI: RecoverBalanceModal', () => {
   function renderModal() {
     render(
       <MockKeyringProvider>
-        <MockQueryNodeProviders>
-          <MembershipContext.Provider value={useMyMemberships}>
-            <ApiContext.Provider value={api}>
-              <AccountsContext.Provider value={useAccounts}>
-                <ModalContext.Provider value={useModal}>
-                  <RecoverBalanceModal />
-                </ModalContext.Provider>
-              </AccountsContext.Provider>
-            </ApiContext.Provider>
-          </MembershipContext.Provider>
-        </MockQueryNodeProviders>
+        <ModalContextProvider>
+          <MockQueryNodeProviders>
+            <MembershipContext.Provider value={useMyMemberships}>
+              <ApiContext.Provider value={api}>
+                <GlobalModals />
+                <RecoverBalanceModal />
+              </ApiContext.Provider>
+            </MembershipContext.Provider>
+          </MockQueryNodeProviders>
+        </ModalContextProvider>
       </MockKeyringProvider>
     )
   }

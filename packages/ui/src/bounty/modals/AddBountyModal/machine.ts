@@ -1,8 +1,9 @@
-import { ThreadId } from '@joystream/types/common'
+import { U64 } from '@polkadot/types'
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine, State, Typestate } from 'xstate'
 import { StateSchema } from 'xstate/lib/types'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import { getDataFromEvent } from '@/common/model/JoystreamNode'
 import {
   isTransactionCanceled,
@@ -20,7 +21,7 @@ interface JudgingPeriodContext {
 interface TransactionContext extends JudgingPeriodContext {
   transactionEvents?: EventRecord[]
   bountyId?: number
-  newThreadId?: ThreadId
+  newThreadId?: U64
 }
 
 export enum AddBountyStates {
@@ -139,7 +140,7 @@ export const addBountyMachine = createMachine<TransactionContext, AddBountyEvent
           {
             target: [AddBountyStates.success],
             actions: assign({
-              bountyId: (_, event) => Number(getDataFromEvent(event.data.events, 'bounty', 'BountyCreated') ?? -1),
+              // bountyId: (_, event) => Number(getDataFromEvent(event.data.events, 'bounty', 'BountyCreated') ?? -1),
             }),
             cond: (context, event) => isTransactionSuccess(context, event),
           },
@@ -155,8 +156,6 @@ export const addBountyMachine = createMachine<TransactionContext, AddBountyEvent
         ],
       },
     },
-    [AddBountyStates.success]: { type: 'final' },
-    [AddBountyStates.error]: { type: 'final' },
-    [AddBountyStates.canceled]: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({ metaMessages: { error: 'There was a problem while creating bounty.' } }),
   },
 })

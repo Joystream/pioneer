@@ -60,7 +60,7 @@ const MemberBalance = styled.div`
   padding-left: 8px;
 `
 
-const BalanceTitle = styled.span`
+export const BalanceTitle = styled.span`
   grid-area: balancetitle;
   font-size: 10px;
   line-height: 16px;

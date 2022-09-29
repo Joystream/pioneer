@@ -1,9 +1,9 @@
-import { createType } from '@joystream/types'
 import { render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
 import { ApiContext } from '@/api/providers/context'
+import { createType } from '@/common/model/createType'
 import { seedMembers, seedProposal } from '@/mocks/data'
 import { ProposalListItem, ProposalListItemProps } from '@/proposals/components/ProposalList/ProposalListItem'
 import { Proposal } from '@/proposals/types'
@@ -13,6 +13,7 @@ import { MockApolloProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { PROPOSAL_DATA } from '../../_mocks/server/seeds'
 import { stubApi, stubConst, stubQuery } from '../../_mocks/transactions'
+import { loaderSelector } from '../../setup'
 
 const proposalData: Proposal = {
   id: '0',
@@ -121,7 +122,7 @@ describe('UI: ProposalListItem', () => {
 
       renderComponent({ proposal: { ...proposalData, status: 'dormant' }, memberId: '0' })
 
-      await waitForElementToBeRemoved(await screen.findByText(/loading/i))
+      await waitForElementToBeRemoved(loaderSelector())
       expect(screen.queryByText('Approved')).toBeNull()
     })
 

@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Loading } from '../../../../common/components/Loading'
-import { MainPanel, RowGapBlock } from '../../../../common/components/page/PageContent'
-import { TextMedium } from '../../../../common/components/typography'
-import { AddMembershipButton } from '../../../../memberships/components/AddMembershipButton'
-import { MembersSection } from '../../../../memberships/components/MembersSection'
-import { useMyMemberships } from '../../../../memberships/hooks/useMyMemberships'
+import { EmptyPagePlaceholder } from '@/common/components/EmptyPagePlaceholder/EmptyPagePlaceholder'
+import { Loading } from '@/common/components/Loading'
+import { MainPanel } from '@/common/components/page/PageContent'
+import { AddMembershipButton } from '@/memberships/components/AddMembershipButton'
+import { MembersSection } from '@/memberships/components/MembersSection'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 export function Memberships() {
   const { isLoading, members, active, hasMembers } = useMyMemberships()
@@ -17,16 +17,12 @@ export function Memberships() {
 
   if (!hasMembers) {
     return (
-      <MainPanel>
-        <NoMemberships gap={16}>
-          <h3>You have no active memberships</h3>
-          <TextMedium>
-            Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
-            velit mollit. Exercitation veniam consequat sunt nostrud amet.
-          </TextMedium>
-          <NoMembershipButton size="medium">Create a membership</NoMembershipButton>
-        </NoMemberships>
-      </MainPanel>
+      <EmptyPagePlaceholder
+        title="You have no active memberships"
+        copy="Membership is required for participation in the DAO activities and beneficial for accumulating the stats and
+            reputation within the community"
+        button={<NoMembershipButton size="medium">Create a membership</NoMembershipButton>}
+      />
     )
   }
 
@@ -43,15 +39,6 @@ export function Memberships() {
 const NoMembershipButton = styled(AddMembershipButton)`
   grid-area: unset;
   width: fit-content;
-`
-
-const NoMemberships = styled(RowGapBlock)`
-  place-self: center;
-  justify-items: center;
-  width: 420px;
-  height: fit-content;
-  margin-top: 172px;
-  text-align: center;
 `
 
 const MembershipsTable = styled(MainPanel)`

@@ -1,12 +1,11 @@
-import { createType } from '@joystream/types'
-import { useMachine } from '@xstate/react'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect } from 'react'
 
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { useApi } from '@/api/hooks/useApi'
-import { FailureModal } from '@/common/components/FailureModal'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { createType } from '@/common/model/createType'
 
 import { RevealVoteModalCall } from '.'
 import { RevealVoteMachine } from './machine'
@@ -23,11 +22,11 @@ export const RevealVoteModal = () => {
 
   const vote = state.context.vote
 
-  const transaction = useMemo(
+  const { transaction, feeInfo } = useTransactionFee(
+    vote?.accountId,
     () => vote && api?.tx.referendum.revealVote(vote.salt, createType('MemberId', parseInt(vote.optionId))),
     [vote?.salt, vote?.optionId]
   )
-  const feeInfo = useTransactionFee(vote?.accountId, transaction)
 
   useEffect(() => {
     if (state.matches('voteChoice') && votes.length === 1) {
@@ -47,13 +46,6 @@ export const RevealVoteModal = () => {
   }
   if (state.matches('success')) {
     return <RevealVoteSuccessModal />
-  }
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem revealing your vote.
-      </FailureModal>
-    )
   }
 
   if (!feeInfo || !transaction || !vote) {

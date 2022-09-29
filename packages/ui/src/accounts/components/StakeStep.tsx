@@ -5,13 +5,14 @@ import { ValidationError } from 'yup'
 
 import { SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { Account, LockType } from '@/accounts/types'
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { CurrencyName } from '@/app/constants/currency'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
-import { TextMedium, ValueInJoys } from '@/common/components/typography'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { formatTokenValue } from '@/common/model/formatters'
 import { VoteForCouncilEvent, VoteForCouncilMachineState } from '@/council/modals/VoteForCouncil/machine'
 
@@ -85,17 +86,16 @@ export const StakeStep = ({
             id="amount-input"
             label="Select amount for Staking"
             tight
-            units="tJOY"
+            units={CurrencyName.integerValue}
             validation={state.context.stake && hasError('stake', errors) ? 'invalid' : undefined}
             message={
               (state.context.stake && hasError('stake', errors) ? getErrorMessage('stake', errors) : undefined) || ' '
             }
             required
           >
-            <InputNumber
+            <TokenInput
               id="amount-input"
-              isTokenValue
-              value={state.context.stake?.toString()}
+              value={state.context.stake}
               placeholder={formatTokenValue(minStake)}
               onChange={(_, value) => send('SET_STAKE', { stake: new BN(value) })}
             />
@@ -116,7 +116,7 @@ const defaultAmountText = (minStake: BN) => (
   <RowGapBlock gap={8}>
     <h4>2. Stake</h4>
     <TextMedium light>
-      You must stake at least <ValueInJoys>{formatTokenValue(minStake)}</ValueInJoys>.
+      You must stake at least <TokenValue value={minStake} />.
     </TextMedium>
   </RowGapBlock>
 )

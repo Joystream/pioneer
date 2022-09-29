@@ -3,8 +3,8 @@ import React, { useCallback } from 'react'
 import { useApi } from '@/api/hooks/useApi'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useModal } from '@/common/hooks/useModal'
-import { useObservable } from '@/common/hooks/useObservable'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'
 
 export const AddProposalButton = () => {
@@ -17,7 +17,10 @@ export const AddProposalButton = () => {
 
   const { api } = useApi()
   const maxProposals = api?.consts.proposalsEngine.maxActiveProposalLimit
-  const currentProposals = useObservable(api?.query.proposalsEngine.activeProposalCount(), [api?.isConnected])
+  const currentProposals = useFirstObservableValue(
+    () => api?.query.proposalsEngine.activeProposalCount(),
+    [api?.isConnected]
+  )
   const areProposalSlotsAvailable = api && maxProposals && currentProposals?.lt(maxProposals)
 
   return (

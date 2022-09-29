@@ -1,6 +1,7 @@
 import { EventRecord } from '@polkadot/types/interfaces'
 import { assign, createMachine } from 'xstate'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -78,8 +79,11 @@ export const VoteForProposalMachine = createMachine<Partial<FinalContext>, VoteF
       },
     },
     requirementsFailed: { type: 'final' },
-    success: { type: 'final' },
-    error: { type: 'final' },
-    canceled: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      cancel: {
+        target: 'vote',
+        action: 'NEXT',
+      },
+    }),
   },
 })

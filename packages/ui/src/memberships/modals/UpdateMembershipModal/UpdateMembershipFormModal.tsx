@@ -6,11 +6,11 @@ import { AnySchema } from 'yup'
 import { filterAccount, SelectAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent, InputText, InputTextarea } from '@/common/components/forms'
+import { Loading } from '@/common/components/Loading'
 import {
-  ModalFooter,
   ModalHeader,
+  ModalTransactionFooter,
   Row,
   ScrolledModal,
   ScrolledModalBody,
@@ -18,19 +18,23 @@ import {
 } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
 import { WithNullableValues } from '@/common/types/form'
-import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
+import { definedValues } from '@/common/utils'
+import { useYupValidationResolver } from '@/common/utils/validation'
+import { AvatarInput } from '@/memberships/components/AvatarInput'
+import { SocialMediaSelector } from '@/memberships/components/SocialMediaSelector/SocialMediaSelector'
+import { useUploadAvatarAndSubmit } from '@/memberships/hooks/useUploadAvatarAndSubmit'
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
-import { AvatarURISchema, HandleSchema } from '../../model/validation'
-import { Member } from '../../types'
+import { AvatarURISchema, ExternalResourcesSchema, HandleSchema } from '../../model/validation'
+import { MemberWithDetails } from '../../types'
 
 import { UpdateMemberForm } from './types'
-import { changedOrNull, hasAnyEdits } from './utils'
+import { changedOrNull, hasAnyEdits, membershipExternalResourceToObject } from './utils'
 
 interface Props {
   onClose: () => void
   onSubmit: (params: WithNullableValues<UpdateMemberForm>) => void
-  member: Member
+  member: MemberWithDetails
 }
 
 const UpdateMemberSchema = Yup.object().shape({
@@ -38,6 +42,18 @@ const UpdateMemberSchema = Yup.object().shape({
   handle: Yup.string().when('$isHandleChanged', (isHandleChanged: boolean, schema: AnySchema) => {
     return isHandleChanged ? HandleSchema : schema
   }),
+  externalResources: ExternalResourcesSchema,
+})
+
+const getUpdateMemberFormInitial = (member: MemberWithDetails) => ({
+  id: member.id,
+  name: member.name || '',
+  handle: member.handle || '',
+  about: '',
+  avatarUri: process.env.REACT_APP_AVATAR_UPLOAD_URL ? '' : typeof member.avatar === 'string' ? member.avatar : '',
+  rootAccount: member.rootAccount,
+  controllerAccount: member.controllerAccount,
+  externalResources: membershipExternalResourceToObject(member.externalResources) ?? {},
 })
 
 export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) => {
@@ -45,15 +61,19 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const [handleMap, setHandleMap] = useState<string>(member.handle)
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: handleMap } } })
   const context = { size: data?.membershipsConnection.totalCount, isHandleChanged: handleMap !== member.handle }
+  const { uploadAvatarAndSubmit, isUploading } = useUploadAvatarAndSubmit<UpdateMemberForm>((fields) =>
+    onSubmit(
+      changedOrNull(
+        { ...fields, externalResources: { ...definedValues(fields.externalResources) } },
+        getUpdateMemberFormInitial(member)
+      )
+    )
+  )
 
   const form = useForm({
-    resolver: useYupValidationResolver(UpdateMemberSchema),
+    resolver: useYupValidationResolver<UpdateMemberForm>(UpdateMemberSchema),
     defaultValues: {
-      id: member.id,
-      name: member.name || '',
-      handle: member.handle || '',
-      about: '',
-      avatarUri: typeof member.avatar === 'string' ? member.avatar : '',
+      ...getUpdateMemberFormInitial(member),
       rootAccount: accountOrNamed(allAccounts, member.rootAccount, 'Root Account'),
       controllerAccount: accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account'),
     },
@@ -68,22 +88,14 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   }, [JSON.stringify(context)])
 
   useEffect(() => {
-    setHandleMap(handle)
+    handle && setHandleMap(handle)
   }, [handle])
 
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
 
-  const canUpdate = form.formState.isValid && hasAnyEdits(form.getValues(), member)
+  const canUpdate = form.formState.isValid && hasAnyEdits(form.getValues(), getUpdateMemberFormInitial(member))
 
-  const onCreate = () => {
-    if (canUpdate) {
-      onSubmit(changedOrNull<UpdateMemberForm>(form.getValues(), member))
-    }
-  }
-
-  const hasError = enhancedHasError(form.formState.errors)
-  const getErrorMessage = enhancedGetErrorMessage(form.formState.errors)
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Edit membership" />
@@ -123,13 +135,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
             </Row>
 
             <Row>
-              <InputComponent
-                id="member-handle"
-                label="Membership handle"
-                required
-                validation={hasError('handle') ? 'invalid' : undefined}
-                message={hasError('handle') ? getErrorMessage('handle') : 'Do not use same handles'}
-              >
+              <InputComponent id="member-handle" label="Membership handle" name="handle" required>
                 <InputText id="member-handle" placeholder="Type" name="handle" />
               </InputComponent>
             </Row>
@@ -140,26 +146,23 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
               </InputComponent>
             </Row>
 
-            <Row>
-              <InputComponent
-                id="member-avatar"
-                label="Member Avatar"
-                required
-                validation={hasError('avatarUri') ? 'invalid' : undefined}
-                message={hasError('avatarUri') ? getErrorMessage('avatarUri') : 'Paste a URL of your avatar image.'}
-                placeholder="Image URL"
-              >
-                <InputText id="member-avatar" name="avatarUri" />
-              </InputComponent>
-            </Row>
+            <AvatarInput initialPreview={member.avatar} />
+
+            <SocialMediaSelector
+              initialSocials={
+                member.externalResources ? member.externalResources.map((resource) => resource.source) : []
+              }
+            />
           </FormProvider>
         </ScrolledModalContainer>
       </ScrolledModalBody>
-      <ModalFooter>
-        <ButtonPrimary size="medium" onClick={onCreate} disabled={!canUpdate}>
-          Save changes
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        next={{
+          disabled: !canUpdate || isUploading,
+          label: isUploading ? <Loading text="Uploading avatar" /> : 'Save changes',
+          onClick: () => uploadAvatarAndSubmit(form.getValues()),
+        }}
+      />
     </ScrolledModal>
   )
 }

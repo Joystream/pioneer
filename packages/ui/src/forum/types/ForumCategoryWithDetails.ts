@@ -8,5 +8,8 @@ export interface ForumCategoryWithDetails extends Omit<ForumCategory, 'subcatego
 
 export const asCategoryWithDetails = (fields: ForumCategoryWithDetailsFieldsFragment): ForumCategoryWithDetails => ({
   ...asBaseForumCategory(fields),
-  subcategories: fields.forumcategoryparent?.map(asForumCategory) ?? [],
+  subcategories:
+    fields.forumcategoryparent
+      ?.filter((subcategory) => subcategory.status.__typename !== 'CategoryStatusRemoved')
+      .map(asForumCategory) ?? [],
 })

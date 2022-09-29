@@ -96,6 +96,7 @@ export const ZIndex = {
   select: 60,
   contextMenu: 55,
   tooltip: 100,
+  popover: 95,
   sideNotification: 90,
 }
 

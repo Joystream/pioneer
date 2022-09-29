@@ -1,13 +1,19 @@
-import { AugmentedConst } from '@polkadot/api/types'
-import { u32 } from '@polkadot/types'
 import BN from 'bn.js'
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { CloseButton } from '@/common/components/buttons'
-import { InputNumber, ToggleCheckbox, InlineToggleWrap, InputComponent, Label } from '@/common/components/forms'
+import {
+  TokenInput,
+  ToggleCheckbox,
+  InlineToggleWrap,
+  InputComponent,
+  Label,
+  InputNumber,
+} from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
@@ -20,7 +26,7 @@ import { SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 
 interface Props extends ValidationHelpers {
-  whitelistLimit?: u32 & AugmentedConst<'rxjs'>
+  whitelistLimit?: number
   minEntrantStake?: BN
 }
 
@@ -80,15 +86,15 @@ export const WorkingDetailsStep = ({ whitelistLimit, minEntrantStake, errorCheck
       {!isWorkingPeriodOpen && (
         <RowGapBlock gap={10}>
           <TextMedium bold>Whitelist</TextMedium>
-          <TextMedium>Maximum {whitelistLimit?.toHuman() || 0} members.</TextMedium>
+          <TextMedium>Maximum {whitelistLimit ?? 0} members.</TextMedium>
           <InputComponent
-            disabled={+(whitelistLimit?.toHuman() || 0) === workingPeriodWhitelist.length}
+            disabled={+(whitelistLimit ?? 0) === workingPeriodWhitelist.length}
             tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
             inputSize="l"
           >
             <SelectMember
               id="select-whitelist"
-              disabled={+(whitelistLimit?.toHuman() || 0) === workingPeriodWhitelist.length}
+              disabled={+(whitelistLimit ?? 0) === workingPeriodWhitelist.length}
               filter={whitelistFilter}
               onChange={onMemberAdd}
             />
@@ -121,24 +127,18 @@ export const WorkingDetailsStep = ({ whitelistLimit, minEntrantStake, errorCheck
       <InputComponent
         id="field-periodStake"
         label="Entrant stake"
-        units="tJOY"
+        units={CurrencyName.integerValue}
         inputSize="m"
         tight
         required
         message={
           errorChecker('workingPeriodStake')
             ? errorMessageGetter('workingPeriodStake')
-            : `Minimal entrant stake is ${minEntrantStake?.toNumber() ?? 0} tJOY`
+            : `Minimal entrant stake is ${minEntrantStake?.toNumber() ?? 0} ${CurrencyName.integerValue}`
         }
         validation={errorChecker('workingPeriodStake') ? 'invalid' : undefined}
       >
-        <InputNumber
-          isInBN
-          name="workingPeriodDetails.workingPeriodStake"
-          isTokenValue
-          id="field-periodStake"
-          placeholder="0"
-        />
+        <TokenInput name="workingPeriodDetails.workingPeriodStake" id="field-periodStake" placeholder="0" />
       </InputComponent>
     </RowGapBlock>
   )

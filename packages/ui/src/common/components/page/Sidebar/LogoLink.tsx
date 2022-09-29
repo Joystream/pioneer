@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Logo } from './Logo'
+import PioneerLogo from '@/app/assets/images/PioneerLogo.png'
 
 export function LogoLink() {
   return (
     <Link href="#">
-      <Logo />
+      <img src={PioneerLogo} alt="Pioneer Logo" />
     </Link>
   )
 }
@@ -14,4 +14,9 @@ export function LogoLink() {
 const Link = styled.a`
   display: flex;
   max-height: 24px;
+
+  img {
+    object-fit: contain;
+    max-width: 100px;
+  }
 `

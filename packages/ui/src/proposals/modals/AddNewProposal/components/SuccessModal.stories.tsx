@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { info } from '@/common/logger'
 import { SuccessModal } from '@/proposals/modals/AddNewProposal/components/SuccessModal'
@@ -12,14 +11,12 @@ export default {
 
 const Template: Story = () => {
   return (
-    <MemoryRouter>
-      <SuccessModal
-        onClose={() => info('close')}
-        proposalId={1}
-        proposalType="fundingRequest"
-        proposalTitle="Lorem ipsum..."
-      />
-    </MemoryRouter>
+    <SuccessModal
+      onClose={() => info('close')}
+      proposalId={1}
+      proposalType="fundingRequest"
+      proposalTitle="Lorem ipsum..."
+    />
   )
 }
 

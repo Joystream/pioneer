@@ -1,12 +1,14 @@
 import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion'
-import React, { useState } from 'react'
+import React from 'react'
 import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { SidebarConnections } from '@/app/components/SidebarConnections'
 import { MembersRoutes, ProfileRoutes, SettingsRoutes } from '@/app/constants/routes'
 import { BountyRoutes } from '@/bounty/constants'
 import { Arrow } from '@/common/components/icons'
-import { Notifications, NotificationsButton } from '@/common/components/Notifications'
+import { LinkSymbol } from '@/common/components/icons/symbols'
+import { PolkadotSymbol } from '@/common/components/icons/symbols/PolkadotSymbol'
 import { BandwidthIcon } from '@/common/components/page/Sidebar/LinksIcons/BandwidthIcon'
 import { BountyIcon } from '@/common/components/page/Sidebar/LinksIcons/BountyIcon'
 import { ConstitutionIcon } from '@/common/components/page/Sidebar/LinksIcons/ConstitutionIcon'
@@ -18,7 +20,6 @@ import { ForumIcon } from '@/common/components/page/Sidebar/LinksIcons/ForumIcon
 import { GatewaysIcon } from '@/common/components/page/Sidebar/LinksIcons/GatewaysIcon'
 import { MembersIcon } from '@/common/components/page/Sidebar/LinksIcons/MembersIcon'
 import { MyProfileIcon } from '@/common/components/page/Sidebar/LinksIcons/MyProfileIcon'
-import { OverviewIcon } from '@/common/components/page/Sidebar/LinksIcons/OverviewIcon'
 import { ProposalsIcon } from '@/common/components/page/Sidebar/LinksIcons/ProposalsIcon'
 import { SettingsIcon } from '@/common/components/page/Sidebar/LinksIcons/SettingsIcon'
 import { StorageIcon } from '@/common/components/page/Sidebar/LinksIcons/StorageIcon'
@@ -29,21 +30,21 @@ import { Navigation, NavigationInnerWrapper } from '@/common/components/page/Sid
 import { NavigationExpandButton } from '@/common/components/page/Sidebar/NavigationExpandButton'
 import { NavigationHeader } from '@/common/components/page/Sidebar/NavigationHeader'
 import { NavigationLink } from '@/common/components/page/Sidebar/NavigationLink'
-import { RemoveScrollbar } from '@/common/constants'
+import { Colors, RemoveScrollbar } from '@/common/constants'
+import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { useToggle } from '@/common/hooks/useToggle'
 import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { ForumRoutes } from '@/forum/constant'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
-import { OverviewRoutes } from '@/overview/constants/routes'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
 export const SideBar = () => {
-  const [isNotificationsPanelOpen, setNotificationsPanelOpen] = useState(false)
   const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)
-  const onClose = () => setNotificationsPanelOpen(false)
   const { stage: electionStage } = useElectionStage()
+  const [endpoints] = useNetworkEndpoints()
+
   const electionLink = electionStage === 'inactive' ? ElectionRoutes.pastElections : ElectionRoutes.currentElection
 
   return (
@@ -51,10 +52,10 @@ export const SideBar = () => {
       <NavigationInnerWrapper>
         <NavigationHeader>
           <LogoLink />
-          <NotificationsButton
-            onClick={() => setNotificationsPanelOpen(!isNotificationsPanelOpen)}
-            isNotificationsPanelOpen={isNotificationsPanelOpen}
-          />
+          {/*<NotificationsButton*/}
+          {/*  onClick={() => setNotificationsPanelOpen(!isNotificationsPanelOpen)}*/}
+          {/*  isNotificationsPanelOpen={isNotificationsPanelOpen}*/}
+          {/*/>*/}
         </NavigationHeader>
         <AnimateSharedLayout>
           <NavigationLinks>
@@ -102,6 +103,15 @@ export const SideBar = () => {
             <NavigationLinksItem>
               <NavigationLink to={generatePath(MembersRoutes.members)} icon={<MembersIcon />}>
                 Members
+              </NavigationLink>
+            </NavigationLinksItem>
+            <NavigationLinksItem>
+              <NavigationLink
+                icon={<PolkadotSymbol />}
+                to={`https://polkadot.js.org/apps/?rpc=${endpoints.nodeRpcEndpoint}#/explorer`}
+              >
+                Explorer
+                <LinkSymbol color={Colors.Black[500]} />
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
@@ -165,8 +175,9 @@ export const SideBar = () => {
           </NavigationLinks>
         </AnimateSharedLayout>
         <ProfileComponent />
+        <SidebarConnections />
       </NavigationInnerWrapper>
-      <Notifications onClose={onClose} isNotificationsPanelOpen={isNotificationsPanelOpen} />
+      {/*<Notifications onClose={onClose} isNotificationsPanelOpen={isNotificationsPanelOpen} />*/}
     </Navigation>
   )
 }

@@ -3,9 +3,10 @@ import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { BountyWinner } from '@/bounty/modals/SubmitJudgementModal/machine'
 import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { FileIcon } from '@/common/components/icons'
 import { AmountButton, AmountButtons, TransactionAmount } from '@/common/components/Modal'
 import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
@@ -49,20 +50,20 @@ export const WinnersSelection = ({
   )
 
   const handleRewardEdit = useCallback(
-    (id: number) => (_: any, value: number) => {
+    (id: number) => (_: any, value: BN) => {
       editWinner(id, { reward: value })
     },
     [editWinner]
   )
 
   const handleEqualDistribution = useCallback(() => {
-    const rewardMod = bountyFunding.toNumber() % winners.length
-    const reward = Math.floor(bountyFunding.toNumber() / winners.length)
+    const rewardMod = bountyFunding.modn(winners.length)
+    const reward = bountyFunding.divn(winners.length)
 
     winners.forEach((winner, index) => {
-      editWinner(winner.id, { reward: index === 0 ? reward + rewardMod : reward })
+      editWinner(winner.id, { reward: index === 0 ? bountyFunding : reward })
     })
-  }, [winners.length, bountyFunding.toNumber()])
+  }, [winners.length, bountyFunding.toString()])
 
   return (
     <>
@@ -73,13 +74,10 @@ export const WinnersSelection = ({
               {t('modals.submitJudgement.progressBar.distributed')}
               <TokenValue size="s" value={amountDistributed} />
             </DistributedText>
-            <ProgressBar
-              size="big"
-              end={!amountDistributed ? 0 : amountDistributed.toNumber() / bountyFunding.toNumber()}
-            />
+            <ProgressBar size="big" end={!amountDistributed ? 0 : amountDistributed.div(bountyFunding).toNumber()} />
             <RowGapBlock gap={5}>
               <TextSmall light>{t('modals.submitJudgement.progressBar.totalReward')}</TextSmall>
-              <TokenValue size="s" value={bountyFunding.toNumber()} />
+              <TokenValue size="s" value={bountyFunding} />
             </RowGapBlock>
             <ButtonGhost size="small" onClick={handleEqualDistribution}>
               {t('modals.submitJudgement.progressBar.distributeEqually')}
@@ -111,26 +109,22 @@ export const WinnersSelection = ({
               inputWidth="s"
               label={t('modals.submitJudgement.winner.reward')}
               required
-              units="tJOY"
+              units={CurrencyName.integerValue}
               tight
             >
-              <InputNumber
+              <TokenInput
                 id={`winnerRewardInput${index + 1}`}
-                isTokenValue
-                value={String(winner.reward)}
+                value={winner.reward}
                 onChange={handleRewardEdit(winner.id)}
               />
             </InputComponent>
             <AmountButtons>
               {winners.length > 1 && (
-                <AmountButton
-                  size="small"
-                  onClick={() => editWinner(winner.id, { reward: Math.floor(bountyFunding.toNumber() / 2) })}
-                >
+                <AmountButton size="small" onClick={() => editWinner(winner.id, { reward: bountyFunding.divn(2) })}>
                   {t('modals.submitJudgement.amountButtons.useHalf')}
                 </AmountButton>
               )}
-              <AmountButton size="small" onClick={() => editWinner(winner.id, { reward: bountyFunding.toNumber() })}>
+              <AmountButton size="small" onClick={() => editWinner(winner.id, { reward: bountyFunding })}>
                 {t('modals.submitJudgement.amountButtons.useMax')}
               </AmountButton>
             </AmountButtons>

@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -37,13 +36,11 @@ const Template: Story<Props> = ({ votes, hideModal, showModal }) => {
   const modalData = { voteForHandle: 'Dave' }
   const send = (() => undefined) as unknown as SendVotePicked
   return (
-    <MemoryRouter>
-      <AccountsContext.Provider value={useAccounts}>
-        <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
-          <PickVoteModal send={send} votes={votes} />
-        </ModalContext.Provider>
-      </AccountsContext.Provider>
-    </MemoryRouter>
+    <AccountsContext.Provider value={useAccounts}>
+      <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
+        <PickVoteModal send={send} votes={votes} />
+      </ModalContext.Provider>
+    </AccountsContext.Provider>
   )
 }
 

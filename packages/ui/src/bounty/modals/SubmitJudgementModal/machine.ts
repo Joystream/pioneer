@@ -1,7 +1,10 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
+import BN from 'bn.js'
 import { assign, createMachine, State, Typestate } from 'xstate'
 import { StateSchema } from 'xstate/lib/types'
 
+import { BN_ZERO } from '@/common/constants'
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -13,7 +16,7 @@ import { Member } from '@/memberships/types'
 
 export interface BountyWinner {
   id: number
-  reward?: number
+  reward?: BN
   winner?: Member
 }
 
@@ -88,7 +91,7 @@ export const submitJudgementMachine = createMachine<SubmitJudgementContext, Subm
       winners: [
         {
           id: 0,
-          reward: 0,
+          reward: BN_ZERO,
         },
       ],
       rejected: [],
@@ -110,7 +113,7 @@ export const submitJudgementMachine = createMachine<SubmitJudgementContext, Subm
           ADD_WINNER: {
             actions: assign({
               winners: (context) =>
-                context.winners ? [...context.winners, { id: context.winners.length, reward: 0 }] : [{ id: 0 }],
+                context.winners ? [...context.winners, { id: context.winners.length, reward: BN_ZERO }] : [{ id: 0 }],
             }),
           },
           CLEAN_WINNERS: {
@@ -196,9 +199,12 @@ export const submitJudgementMachine = createMachine<SubmitJudgementContext, Subm
           ],
         },
       },
-      [SubmitJudgementStates.success]: { type: 'final' },
-      [SubmitJudgementStates.error]: { type: 'final' },
-      [SubmitJudgementStates.canceled]: { type: 'final' },
+      ...transactionModalFinalStatusesFactory({
+        metaMessages: {
+          error: 'There has been an error while submitting judgement.',
+          success: 'You have successfully submitted your judgement',
+        },
+      }),
     },
   }
 )

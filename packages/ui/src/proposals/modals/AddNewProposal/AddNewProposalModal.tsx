@@ -1,8 +1,6 @@
-import { createType } from '@joystream/types'
-import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useForm, FormProvider, FieldError } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
@@ -13,11 +11,8 @@ import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
 import { Api } from '@/api'
 import { useApi } from '@/api/hooks/useApi'
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
-import { FailureModal } from '@/common/components/FailureModal'
 import { Checkbox } from '@/common/components/forms'
-import { Arrow } from '@/common/components/icons'
-import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import {
   StepDescriptionColumn,
   Stepper,
@@ -29,15 +24,16 @@ import { BN_ZERO } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
+import { createType } from '@/common/model/createType'
 import { getMaxBlock } from '@/common/model/getMaxBlock'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { machineStateConverter } from '@/council/modals/AnnounceCandidacy/helpers'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { IStakingAccountSchema } from '@/memberships/model/validation'
 import { useMinimumValidatorCount } from '@/proposals/hooks/useMinimumValidatorCount'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
@@ -52,7 +48,12 @@ import { SuccessModal } from '@/proposals/modals/AddNewProposal/components/Succe
 import { TriggerAndDiscussionStep } from '@/proposals/modals/AddNewProposal/components/TriggerAndDiscussionStep'
 import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
 import { getSpecificParameters } from '@/proposals/modals/AddNewProposal/getSpecificParameters'
-import { AddNewProposalForm, defaultProposalValues, schemaFactory } from '@/proposals/modals/AddNewProposal/helpers'
+import {
+  AddNewProposalForm,
+  checkForExecutionWarning,
+  defaultProposalValues,
+  schemaFactory,
+} from '@/proposals/modals/AddNewProposal/helpers'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
 import { addNewProposalMachine, AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalType } from '@/proposals/types'
@@ -83,17 +84,13 @@ export const AddNewProposalModal = () => {
   const [isExecutionError, setIsExecutionError] = useState<boolean>(false)
 
   const constants = useProposalConstants(formMap[1])
-  const { hasRequiredStake } = useHasRequiredStake(constants?.requiredStake.toNumber() || 0, 'Proposals')
+  const { hasRequiredStake } = useHasRequiredStake(constants?.requiredStake || BN_ZERO, 'Proposals')
   const balance = useBalance(formMap[0]?.address)
-  const stakingStatus = useStakingAccountStatus(formMap[0]?.address, activeMember?.id)
+  const stakingStatus = useStakingAccountStatus(formMap[0]?.address, activeMember?.id, [state.matches('transaction')])
+  const schema = useMemo(() => schemaFactory(api), [!api])
+
   const form = useForm<AddNewProposalForm>({
-    resolver: useYupValidationResolver<AddNewProposalForm>(
-      schemaFactory(
-        api?.consts.proposalsEngine.titleMaxLength.toNumber() ?? 0,
-        api?.consts.proposalsEngine.descriptionMaxLength.toNumber() ?? 0
-      ),
-      machineStateConverter(state.value)
-    ),
+    resolver: useYupValidationResolver<AddNewProposalForm>(schema, machineStateConverter(state.value)),
     mode: 'onChange',
     context: {
       minimumValidatorCount,
@@ -139,24 +136,7 @@ export const AddNewProposalModal = () => {
   }, [machineStateConverter(state.value)])
 
   useEffect(() => {
-    if (machineStateConverter(state.value) === 'stakingPolicyAndReward') {
-      if (
-        form.formState.errors.stakingPolicyAndReward?.leavingUnstakingPeriod?.type === 'minContext' ||
-        (form.formState.errors.stakingPolicyAndReward?.stakingAmount as FieldError)?.type === 'minContext'
-      ) {
-        setIsExecutionError(true)
-      } else {
-        setIsExecutionError(false)
-      }
-    }
-
-    if (machineStateConverter(state.value) === 'setReferralCut') {
-      if (form.formState.errors.setReferralCut?.referralCut?.type === 'maxContext') {
-        setIsExecutionError(true)
-      } else {
-        setIsExecutionError(false)
-      }
-    }
+    checkForExecutionWarning(machineStateConverter(state.value), form.formState.errors, setIsExecutionError)
   }, [JSON.stringify(form.formState.errors)])
 
   const transactionsSteps = useMemo(
@@ -171,11 +151,11 @@ export const AddNewProposalModal = () => {
         form.getValues() as AddNewProposalForm
 
       const txBaseParams: BaseProposalParams = {
-        member_id: activeMember?.id,
+        memberId: activeMember?.id,
         title: proposalDetails?.title,
         description: proposalDetails?.rationale,
-        ...(stakingAccount.stakingAccount ? { staking_account_id: stakingAccount.stakingAccount.address } : {}),
-        ...(triggerAndDiscussion.triggerBlock ? { exact_execution_block: triggerAndDiscussion.triggerBlock } : {}),
+        ...(stakingAccount.stakingAccount ? { stakingAccountId: stakingAccount.stakingAccount.address } : {}),
+        ...(triggerAndDiscussion.triggerBlock ? { exactExecutionBlock: triggerAndDiscussion.triggerBlock } : {}),
       }
 
       const txSpecificParameters = getSpecificParameters(api, specifics)
@@ -191,19 +171,10 @@ export const AddNewProposalModal = () => {
     }
   }, [state.value, connectionState, stakingStatus, form.formState.isValidating])
 
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
-      if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({
-          modal: 'SwitchMember',
-          data: {
-            originalModalName: 'AddNewProposalModal',
-          },
-        })
-      }
-
       if (feeInfo && feeInfo.canAfford) {
         return send('NEXT')
       }
@@ -250,8 +221,9 @@ export const AddNewProposalModal = () => {
     showModal<MoveFundsModalCall>({
       modal: 'MoveFundsModal',
       data: {
-        requiredStake: constants?.requiredStake as BN,
+        requiredStake: constants?.requiredStake ?? BN_ZERO,
         lock: 'Proposals',
+        isFeeOriented: state.matches('requirementsFailed') && !feeInfo.canAfford,
       },
     })
 
@@ -292,7 +264,7 @@ export const AddNewProposalModal = () => {
 
   if (state.matches('discussionTransaction')) {
     const { triggerAndDiscussion } = form.getValues() as AddNewProposalForm
-    const threadMode = createType('ThreadMode', {
+    const threadMode = createType('PalletProposalsDiscussionThreadMode', {
       closed: triggerAndDiscussion.discussionWhitelist?.map((member) =>
         createType('MemberId', Number.parseInt(member.id))
       ),
@@ -326,14 +298,6 @@ export const AddNewProposalModal = () => {
     )
   }
 
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem while creating proposal.
-      </FailureModal>
-    )
-  }
-
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader
@@ -362,27 +326,21 @@ export const AddNewProposalModal = () => {
           </StyledStepperBody>
         </StepperProposalWrapper>
       </StepperModalBody>
-      <ModalFooter twoColumns>
-        <StyledButtonsGroup align="left">
-          {!state.matches('proposalType') && (
-            <ButtonGhost onClick={goToPrevious} size="medium">
-              <Arrow direction="left" />
-              Previous step
-            </ButtonGhost>
-          )}
-        </StyledButtonsGroup>
-        <ButtonsGroup align="right">
-          {isExecutionError && (
-            <Checkbox isRequired onChange={setWarningAccepted} id="execution-requirement">
-              I understand the implications of overriding the execution constraints validation.
-            </Checkbox>
-          )}
-          <ButtonPrimary disabled={shouldDisableNext} onClick={() => send('NEXT')} size="medium">
-            {isLastStepActive(getSteps(service)) ? 'Create proposal' : 'Next step'}
-            <Arrow direction="right" />
-          </ButtonPrimary>
-        </ButtonsGroup>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={isLastStepActive(getSteps(service)) ? feeInfo.transactionFee : undefined}
+        prev={{ disabled: state.matches('proposalType'), onClick: goToPrevious }}
+        next={{
+          disabled: shouldDisableNext,
+          label: isLastStepActive(getSteps(service)) ? 'Create proposal' : 'Next step',
+          onClick: () => send('NEXT'),
+        }}
+      >
+        {isExecutionError && (
+          <Checkbox isRequired onChange={setWarningAccepted} id="execution-requirement">
+            I understand the implications of overriding the execution constraints validation.
+          </Checkbox>
+        )}
+      </ModalTransactionFooter>
     </Modal>
   )
 }
@@ -394,8 +352,4 @@ export const StepperProposalWrapper = styled(StepperModalWrapper)`
 const StyledStepperBody = styled(StepperBody)`
   flex-direction: column;
   row-gap: 20px;
-`
-
-const StyledButtonsGroup = styled(ButtonsGroup)`
-  min-width: max-content;
 `

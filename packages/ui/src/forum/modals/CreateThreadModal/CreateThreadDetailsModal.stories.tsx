@@ -1,5 +1,5 @@
 import { Meta, Story } from '@storybook/react'
-import React, { useState } from 'react'
+import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
 import { ModalContext } from '@/common/providers/modal/context'

@@ -19,6 +19,10 @@ import { setupMockServer } from '../../_mocks/server'
 
 const seededMembers = mockMembers.slice(0, 10)
 
+jest.mock('@/common/hooks/useModal', () => ({
+  useModal: jest.requireActual('@/common/hooks/useModal').useModal,
+}))
+
 describe('Members', () => {
   const server = setupMockServer({ noCleanupAfterEach: true })
 

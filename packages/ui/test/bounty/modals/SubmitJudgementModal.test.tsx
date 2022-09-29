@@ -3,11 +3,6 @@ import { configure, fireEvent, render, screen, waitFor } from '@testing-library/
 import BN from 'bn.js'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { BalancesContext } from '@/accounts/providers/balances/context'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
-import { AddressToBalanceMap } from '@/accounts/types'
 import { ApiContext } from '@/api/providers/context'
 import { SubmitJudgementModal } from '@/bounty/modals/SubmitJudgementModal'
 import { CKEditorProps } from '@/common/components/CKEditor'
@@ -27,6 +22,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import {
   currentStubErrorMessage,
+  stubAccounts,
   stubApi,
   stubBountyConstants,
   stubDefaultBalances,
@@ -69,13 +65,6 @@ describe('UI: SubmitJudgementModal', () => {
     },
   }
 
-  const useMyAccounts: UseAccounts = {
-    isLoading: false,
-    hasAccounts: false,
-    allAccounts: [alice, bob],
-    error: undefined,
-  }
-
   const useMyMemberships = {
     active: getMember('alice'),
     setActive: () => undefined,
@@ -87,16 +76,6 @@ describe('UI: SubmitJudgementModal', () => {
     },
   }
 
-  const useMyBalances: AddressToBalanceMap = {
-    [useMyAccounts.allAccounts[0].address]: {
-      total: new BN(10000),
-      locked: new BN(0),
-      recoverable: new BN(0),
-      transferable: new BN(10000),
-      locks: [],
-    },
-  }
-
   let transaction: any
   let txMock: jest.Mock
 
@@ -105,12 +84,14 @@ describe('UI: SubmitJudgementModal', () => {
   stubBountyConstants(api)
 
   beforeAll(async () => {
+    stubDefaultBalances()
+    stubAccounts([alice, bob])
     await cryptoWaitReady()
     seedMembers(server.server)
   })
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     stubBountyConstants(api)
     transaction = stubTransaction(api, 'api.tx.bounty.submitOracleJudgment', 100)
     txMock = api.api.tx.bounty.submitOracleJudgment as unknown as jest.Mock
@@ -358,15 +339,9 @@ describe('UI: SubmitJudgementModal', () => {
         <MockQueryNodeProviders>
           <MockKeyringProvider>
             <ApiContext.Provider value={api}>
-              <AccountsContext.Provider value={useMyAccounts}>
-                <BalancesContext.Provider value={useMyBalances}>
-                  <BalancesContextProvider>
-                    <MembershipContext.Provider value={useMyMemberships}>
-                      <SubmitJudgementModal />
-                    </MembershipContext.Provider>
-                  </BalancesContextProvider>
-                </BalancesContext.Provider>
-              </AccountsContext.Provider>
+              <MembershipContext.Provider value={useMyMemberships}>
+                <SubmitJudgementModal />
+              </MembershipContext.Provider>
             </ApiContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>

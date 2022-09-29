@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { DetailsButton } from '@/common/components/buttons/DetailsButton'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
-import { Notification, NotificationComponent } from '@/common/components/Notification'
 import { MyProfileIcon } from '@/common/components/page/Sidebar/LinksIcons'
 import { DisconnectWalletIcon } from '@/common/components/page/Sidebar/LinksIcons/DisconnectWalletIcon'
 import { SignOutIcon } from '@/common/components/page/Sidebar/LinksIcons/SignOutIcon'
@@ -51,8 +50,7 @@ export const SwitchMemberModal = () => {
               onClick={() => switchMember(member)}
               isMemberActive={active?.handle === member.handle}
             >
-              <MemberInfo member={member} isOnDark={true} skipModal />
-              <Notification />
+              <MemberInfo member={member} isOnDark skipModal />
             </MemberItem>
           ))}
         </MembersList>
@@ -172,9 +170,6 @@ const MemberItem = styled.li<{ isMemberActive: boolean }>`
     outline: none;
     background-color: ${Colors.Black[600]};
 
-    ${NotificationComponent} {
-      color: ${Colors.White};
-    }
     ${MemberDarkHover}
   }
 

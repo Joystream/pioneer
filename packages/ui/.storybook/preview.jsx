@@ -4,6 +4,7 @@ import { Colors } from '@/common/constants'
 import { I18nextProvider } from 'react-i18next'
 import { i18next } from '../src/services/i18n'
 import { useForm, FormProvider } from 'react-hook-form'
+import { MemoryRouter } from 'react-router'
 
 const stylesWrapperDecorator = (styleFn) => (
   <div>
@@ -31,7 +32,9 @@ const RHFDecorator = (Story) => {
   )
 }
 
-export const decorators = [stylesWrapperDecorator, i18nextDecorator, RHFDecorator]
+const RouterDecorator = (Story) => <MemoryRouter><Story /></MemoryRouter>
+
+export const decorators = [stylesWrapperDecorator, i18nextDecorator, RHFDecorator, RouterDecorator]
 window.jest = {
   fn: (callback) => callback,
 }

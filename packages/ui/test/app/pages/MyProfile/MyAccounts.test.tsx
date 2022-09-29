@@ -5,14 +5,10 @@ import React from 'react'
 import { Route, Router, Switch } from 'react-router-dom'
 
 import { RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { ApiContext } from '@/api/providers/context'
 import { GlobalModals } from '@/app/GlobalModals'
 import { MyAccounts } from '@/app/pages/Profile/MyAccounts'
-import { ModalContext } from '@/common/providers/modal/context'
-import { UseModal } from '@/common/providers/modal/types'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
@@ -23,7 +19,8 @@ import { alice, bob } from '../../../_mocks/keyring'
 import { MockQueryNodeProviders } from '../../../_mocks/providers'
 import { setupMockServer } from '../../../_mocks/server'
 import { MEMBER_ALICE_DATA } from '../../../_mocks/server/seeds'
-import { stubApi, stubBalances, stubDefaultBalances } from '../../../_mocks/transactions'
+import { stubAccounts, stubApi, stubBalances, stubDefaultBalances } from '../../../_mocks/transactions'
+import { mockUseModalCall } from '../../../setup'
 
 const testStatisticItem = (header: HTMLElement, labelMatcher: RegExp, expected: RegExp) => {
   const label = within(header).getByText(labelMatcher)
@@ -32,7 +29,6 @@ const testStatisticItem = (header: HTMLElement, labelMatcher: RegExp, expected: 
 }
 
 describe('Page: MyAccounts', () => {
-  let useAccounts: UseAccounts
   const server = setupMockServer({ noCleanupAfterEach: true })
   const api = stubApi()
   const useMyMemberships: MyMemberships = {
@@ -46,28 +42,18 @@ describe('Page: MyAccounts', () => {
     },
   }
 
-  let useModal: UseModal<any>
-
+  const showModal = jest.fn()
   beforeAll(async () => {
+    mockUseModalCall({ showModal })
     await cryptoWaitReady()
     seedMembers(server.server, 2)
   })
 
   beforeEach(() => {
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
-    useModal = {
-      hideModal: jest.fn(),
-      modal: null,
-      modalData: undefined,
-      showModal: jest.fn(),
-    }
     useMyMemberships.members = []
 
-    stubDefaultBalances(api)
+    stubAccounts([alice, bob])
+    stubDefaultBalances()
   })
 
   it('Accounts List', async () => {
@@ -88,7 +74,7 @@ describe('Page: MyAccounts', () => {
   })
 
   it('Locked balance', () => {
-    stubBalances(api, { locked: 250, available: 10_000 })
+    stubBalances({ locked: 250, available: 10_000 })
 
     renderPage()
 
@@ -100,7 +86,7 @@ describe('Page: MyAccounts', () => {
   })
 
   it('Recoverable locked balance', () => {
-    stubBalances(api, { locked: 250, available: 10_000, lockId: 'Council Candidate' })
+    stubBalances({ locked: 250, available: 10_000, lockId: 'Council Candidate' })
 
     renderPage()
 
@@ -114,7 +100,7 @@ describe('Page: MyAccounts', () => {
 
   describe('Recover balance button', () => {
     it('Recoverable', async () => {
-      stubBalances(api, { locked: 250, available: 10_000, lockId: 'Council Candidate' })
+      stubBalances({ locked: 250, available: 10_000, lockId: 'Council Candidate' })
 
       renderPage()
 
@@ -125,7 +111,7 @@ describe('Page: MyAccounts', () => {
     })
 
     it('Opens modal', async () => {
-      stubBalances(api, { locked: 250, available: 10_000, lockId: 'Council Candidate' })
+      stubBalances({ locked: 250, available: 10_000, lockId: 'Council Candidate' })
 
       renderPage()
 
@@ -145,11 +131,11 @@ describe('Page: MyAccounts', () => {
           memberId: MEMBER_ALICE_DATA.id,
         },
       }
-      expect(useModal.showModal).toBeCalledWith(expected)
+      expect(showModal).toBeCalledWith(expected)
     })
 
     it('Nonrecoverable', async () => {
-      stubBalances(api, { locked: 250, available: 10_000, lockId: 'Bound Staking Account' })
+      stubBalances({ locked: 250, available: 10_000, lockId: 'Bound Staking Account' })
 
       renderPage()
 
@@ -166,22 +152,18 @@ describe('Page: MyAccounts', () => {
 
     render(
       <Router history={history}>
-        <AccountsContext.Provider value={useAccounts}>
-          <ApiContext.Provider value={api}>
-            <BalancesContextProvider>
-              <ModalContext.Provider value={useModal}>
-                <MockQueryNodeProviders>
-                  <MembershipContext.Provider value={useMyMemberships}>
-                    <Switch>
-                      <Route path="/profile" component={MyAccounts} />
-                    </Switch>
-                    <GlobalModals />
-                  </MembershipContext.Provider>
-                </MockQueryNodeProviders>
-              </ModalContext.Provider>
-            </BalancesContextProvider>
-          </ApiContext.Provider>
-        </AccountsContext.Provider>
+        <ApiContext.Provider value={api}>
+          <ModalContextProvider>
+            <MockQueryNodeProviders>
+              <MembershipContext.Provider value={useMyMemberships}>
+                <Switch>
+                  <Route path="/profile" component={MyAccounts} />
+                </Switch>
+                <GlobalModals />
+              </MembershipContext.Provider>
+            </MockQueryNodeProviders>
+          </ModalContextProvider>
+        </ApiContext.Provider>
       </Router>
     )
   }

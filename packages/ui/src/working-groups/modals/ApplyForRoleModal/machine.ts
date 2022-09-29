@@ -1,6 +1,7 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -110,8 +111,14 @@ export const applyForRoleMachine = createMachine<ApplyForRoleContext, ApplyForRo
         ],
       },
     },
-    success: { type: 'final' },
-    error: { type: 'final' },
-    canceled: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      metaMessages: {
+        error: 'There was a problem with applying for an opening.',
+      },
+      cancel: {
+        target: 'stake',
+        action: 'PREV',
+      },
+    }),
   },
 })

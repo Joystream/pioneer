@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { ArrowInsideIcon } from '../icons'
 import { Row, TemplateBlock } from '../storybookParts/previewStyles'
@@ -13,43 +12,41 @@ export default {
 } as Meta
 
 const Template: Story<DownloadLinkProps> = (args) => (
-  <MemoryRouter>
-    <TemplateBlock>
-      <Row>
-        <DownloadButtonGhost {...args} size="large">
-          <ArrowInsideIcon />
-          Large download button
-        </DownloadButtonGhost>
+  <TemplateBlock>
+    <Row>
+      <DownloadButtonGhost {...args} size="large">
+        <ArrowInsideIcon />
+        Large download button
+      </DownloadButtonGhost>
 
-        <DownloadButtonGhost {...args} size="large" $square>
-          <ArrowInsideIcon />
-        </DownloadButtonGhost>
+      <DownloadButtonGhost {...args} size="large" $square>
+        <ArrowInsideIcon />
+      </DownloadButtonGhost>
 
-        <DownloadButtonGhost {...args} size="medium">
-          <ArrowInsideIcon />
-          Medium download button
-        </DownloadButtonGhost>
+      <DownloadButtonGhost {...args} size="medium">
+        <ArrowInsideIcon />
+        Medium download button
+      </DownloadButtonGhost>
 
-        <DownloadButtonGhost {...args} size="medium" $square>
-          <ArrowInsideIcon />
-        </DownloadButtonGhost>
+      <DownloadButtonGhost {...args} size="medium" $square>
+        <ArrowInsideIcon />
+      </DownloadButtonGhost>
 
-        <DownloadButtonGhost {...args} size="small">
-          <ArrowInsideIcon />
-          Small download button
-        </DownloadButtonGhost>
+      <DownloadButtonGhost {...args} size="small">
+        <ArrowInsideIcon />
+        Small download button
+      </DownloadButtonGhost>
 
-        <DownloadButtonGhost {...args} size="small" $square>
-          <ArrowInsideIcon />
-        </DownloadButtonGhost>
-      </Row>
-      <Row>
-        <DownloadLink {...args}>
-          <ArrowInsideIcon /> Not styled Download link
-        </DownloadLink>
-      </Row>
-    </TemplateBlock>
-  </MemoryRouter>
+      <DownloadButtonGhost {...args} size="small" $square>
+        <ArrowInsideIcon />
+      </DownloadButtonGhost>
+    </Row>
+    <Row>
+      <DownloadLink {...args}>
+        <ArrowInsideIcon /> Not styled Download link
+      </DownloadLink>
+    </Row>
+  </TemplateBlock>
 )
 
 export const Defaults = Template.bind({})

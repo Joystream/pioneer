@@ -4,8 +4,10 @@ import { Position } from 'react-markdown/lib/ast-to-react'
 import { PluggableList } from 'react-markdown/lib/react-markdown'
 import { Root } from 'react-markdown/lib/rehype-filter'
 import remarkGfm from 'remark-gfm'
+import styled from 'styled-components'
 
 import { Mention, MentionType } from '@/common/components/Mention'
+import { UserImage } from '@/common/components/UserImage/UserImage'
 
 import { MarkdownPreviewStyles, MarkdownPreviewStylesProps } from './MarkdownPreviewStyles'
 
@@ -60,7 +62,7 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
           </a>
         )
       },
-      img: (props) => <img src={props.src} style={{ maxWidth: '100%', maxHeight: '400px' }} />,
+      img: (props) => <MarkdownImage src={props.src} />,
       code: ({ children, inline }) => <code className={inline ? 'inline-code' : 'in-block-code'}>{children}</code>,
     }
   }, [markdown, append])
@@ -76,6 +78,11 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
     </div>
   )
 }
+
+const MarkdownImage = styled(UserImage)`
+  max-width: 100%;
+  max-height: 400px;
+`
 
 const mentionTypesMap: Record<string, MentionType> = {
   'member-id': 'member',
