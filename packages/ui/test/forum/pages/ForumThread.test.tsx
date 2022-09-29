@@ -54,6 +54,7 @@ describe('UI: Forum Thread Page', () => {
     id: '1',
     title: 'Example Thread',
     categoryId: '1',
+    initialPostText: '',
     authorId: '0',
     isSticky: false,
     createdInBlock: randomBlock(),
