@@ -125,7 +125,7 @@ export const MemberDetails = React.memo(({ member }: Props) => {
         <SidePaneText>{initiatingLeaving}</SidePaneText>
       </SidePaneRow>
       <SidePaneRow>
-        <SidePaneLabel text="Blog posts" />
+        <SidePaneLabel text="Forum posts" />
         <SidePaneText>{blogPosts}</SidePaneText>
       </SidePaneRow>
       {memberDetails?.externalResources &&
