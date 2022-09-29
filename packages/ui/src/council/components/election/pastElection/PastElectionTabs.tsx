@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React, { useMemo, useState } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
@@ -15,12 +16,12 @@ const getMyVote = (votingResult: ElectionVotingResult, myAccounts: Account[]) =>
   return votingResult.votes.find((vote) => myAccounts.find((account) => account.address === vote.castBy))
 }
 
-const electionVotingResultComparator = (votingResult1: ElectionVotingResult, votingResult2: ElectionVotingResult) => {
-  const stakeOutcome = Comparator<PastElectionWithDetails['votingResults'][number]>(true, 'totalStake').bigNumber(
-    votingResult1,
-    votingResult2
-  )
-  return stakeOutcome === 0 ? applyOrder(votingResult1.votes.length - votingResult2.votes.length, true) : stakeOutcome
+export const electionVotingResultComparator = <T extends { totalStake: BN; votesNumber: number }>(
+  votingResult1: T,
+  votingResult2: T
+) => {
+  const stakeOutcome = Comparator<T>(true, 'totalStake').bigNumber(votingResult1, votingResult2)
+  return stakeOutcome === 0 ? applyOrder(votingResult1.votesNumber - votingResult2.votesNumber, true) : stakeOutcome
 }
 
 export const PastElectionTabs = ({ election }: PastElectionTabsProps) => {
@@ -28,7 +29,9 @@ export const PastElectionTabs = ({ election }: PastElectionTabsProps) => {
   const [tab, setTab] = useState<'votingResults' | 'myVotes'>('votingResults')
 
   const sortedVotingResults = useMemo(() => {
-    return election.votingResults.sort(electionVotingResultComparator)
+    return election.votingResults
+      .map((votingResult) => ({ ...votingResult, votesNumber: votingResult.votes.length }))
+      .sort(electionVotingResultComparator)
   }, [election.votingResults.length])
 
   const myVotes = useMemo(() => {
