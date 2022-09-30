@@ -3,8 +3,8 @@ import React, { useMemo, useState } from 'react'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { Account } from '@/accounts/types'
 import { TabProps, Tabs } from '@/common/components/Tabs'
-import { Comparator } from '@/common/model/Comparator'
 import { CandidateVoteList } from '@/council/components/election/CandidateVote/CandidateVoteList'
+import { electionVotingResultComparator } from '@/council/model/electionVotingResultComparator'
 import { ElectionVotingResult, PastElectionWithDetails } from '@/council/types/PastElection'
 
 interface PastElectionTabsProps {
@@ -18,10 +18,11 @@ const getMyVote = (votingResult: ElectionVotingResult, myAccounts: Account[]) =>
 export const PastElectionTabs = ({ election }: PastElectionTabsProps) => {
   const { allAccounts } = useMyAccounts()
   const [tab, setTab] = useState<'votingResults' | 'myVotes'>('votingResults')
+
   const sortedVotingResults = useMemo(() => {
-    return election.votingResults.sort(
-      Comparator<PastElectionWithDetails['votingResults'][number]>(true, 'totalStake').bigNumber
-    )
+    return election.votingResults
+      .map((votingResult) => ({ ...votingResult, votesNumber: votingResult.votes.length }))
+      .sort(electionVotingResultComparator)
   }, [election.votingResults.length])
 
   const myVotes = useMemo(() => {
