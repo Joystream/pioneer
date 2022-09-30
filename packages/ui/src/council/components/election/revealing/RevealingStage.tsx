@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react'
 
 import { Loading } from '@/common/components/Loading'
-import { electionVotingResultComparator } from '@/council/components/election/pastElection/PastElectionTabs'
 import { useElectionVotes } from '@/council/hooks/useElectionVotes'
 import { useMyCurrentVotesCount } from '@/council/hooks/useMyCurrentVotesCount'
+import { electionVotingResultComparator } from '@/council/model/electionVotingResultComparator'
 import { Election } from '@/council/types/Election'
 
 import { CandidateCardList } from '../CandidateCard/CandidateCardList'

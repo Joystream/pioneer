@@ -1,11 +1,10 @@
-import BN from 'bn.js'
 import React, { useMemo, useState } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { Account } from '@/accounts/types'
 import { TabProps, Tabs } from '@/common/components/Tabs'
-import { applyOrder, Comparator } from '@/common/model/Comparator'
 import { CandidateVoteList } from '@/council/components/election/CandidateVote/CandidateVoteList'
+import { electionVotingResultComparator } from '@/council/model/electionVotingResultComparator'
 import { ElectionVotingResult, PastElectionWithDetails } from '@/council/types/PastElection'
 
 interface PastElectionTabsProps {
@@ -14,14 +13,6 @@ interface PastElectionTabsProps {
 
 const getMyVote = (votingResult: ElectionVotingResult, myAccounts: Account[]) => {
   return votingResult.votes.find((vote) => myAccounts.find((account) => account.address === vote.castBy))
-}
-
-export const electionVotingResultComparator = <T extends { totalStake: BN; votesNumber: number }>(
-  votingResult1: T,
-  votingResult2: T
-) => {
-  const stakeOutcome = Comparator<T>(true, 'totalStake').bigNumber(votingResult1, votingResult2)
-  return stakeOutcome === 0 ? applyOrder(votingResult1.votesNumber - votingResult2.votesNumber, true) : stakeOutcome
 }
 
 export const PastElectionTabs = ({ election }: PastElectionTabsProps) => {
