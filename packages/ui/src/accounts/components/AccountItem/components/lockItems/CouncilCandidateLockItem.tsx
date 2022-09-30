@@ -7,6 +7,8 @@ import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { asBlock } from '@/common/types'
 import { ElectionRoutes } from '@/council/constants'
 import { useCandidateIdByMember } from '@/council/hooks/useCandidateIdByMember'
+import { useCouncilRemainingPeriod } from '@/council/hooks/useCouncilRemainingPeriod'
+import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
 import { useGetNewCandidateEventsQuery } from '@/council/queries/__generated__/councilEvents.generated'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -25,26 +27,41 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockD
   const memberId = useMemo(() => getMemberIdByBoundAccountAddress(address), [address])
   const { candidateId } = useCandidateIdByMember(memberId || '-1')
   const { data } = useGetNewCandidateEventsQuery({ variables: { lockAccount: address } })
+  const { stage: electionStage } = useElectionStage()
+  const remainingPeriod = useCouncilRemainingPeriod()
 
   const eventData = data?.newCandidateEvents[0]
   const createdInEvent = eventData && asBlock(eventData)
 
   const electionId = eventData?.candidate.electionRoundId
-  const electionStart = eventData?.candidate.electionRound.referendumStageVoting?.createdAt
   const voteStageDuration = api?.consts.referendum?.voteStageDuration.toNumber()
   const revealStageDuration = api?.consts.referendum?.revealStageDuration.toNumber()
 
   const recoveryTime = useMemo(() => {
-    if (!electionStart || !voteStageDuration || !revealStageDuration) {
-      return
+    if (!voteStageDuration || !revealStageDuration || !remainingPeriod) {
+      return { unrecoverableLabel: 'Recoverable after lost election or end of the council term' }
     }
-    const startTime = Date.parse(electionStart)
-    const durationTime = (voteStageDuration + revealStageDuration) * MILLISECONDS_PER_BLOCK
+    const startTime = Date.now()
+    const getBlocksToEnd = () => {
+      if (electionStage === 'announcing') {
+        return remainingPeriod + revealStageDuration + voteStageDuration
+      }
+      if (electionStage === 'voting') {
+        return remainingPeriod + revealStageDuration
+      }
+
+      return remainingPeriod
+    }
+    const durationTime = getBlocksToEnd() * MILLISECONDS_PER_BLOCK
+
     const endDate = new Date(startTime + durationTime).toISOString()
 
-    return { time: endDate }
-  }, [electionStart, voteStageDuration, revealStageDuration])
-
+    return {
+      time: endDate,
+      unrecoverableLabel: 'Recoverable after lost election or end of the council term',
+      tooltipLabel: 'Estimated time is calculated for complete election with each stage.',
+    }
+  }, [voteStageDuration, revealStageDuration, remainingPeriod])
   const goToCandidateButton = useMemo(() => {
     if (!candidateId) {
       return null
