@@ -2,19 +2,16 @@ import React from 'react'
 import { generatePath } from 'react-router'
 import styled from 'styled-components'
 
-import { BlockTime, BlockTimeWrapper } from '@/common/components/BlockTime'
-import { LinkButtonInnerWrapper, LinkButtonLink } from '@/common/components/buttons/LinkButtons'
-import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
+import { ArrowRightIcon, AnswerIcon } from '@/common/components/icons'
+import { TableListItemAsLinkHover } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
-import { TextInlineExtraSmall, TextInlineMedium, TextMedium } from '@/common/components/typography'
-import { Colors, Fonts, Overflow, Transitions } from '@/common/constants'
-import { intersperse } from '@/common/utils'
-import { categoriesColLayout, ForumRoutes } from '@/forum/constant'
-import { CategoryStatusType, ForumCategory } from '@/forum/types'
-import { MemberStack, MemberStackStyles, moderatorsSummary } from '@/memberships/components/MemberStack'
+import { TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
+import { Colors, Fonts, Overflow, Transitions, BorderRad } from '@/common/constants'
+import { CardItem } from '@/forum/components/CardItem'
+import { ForumRoutes } from '@/forum/constant'
+import { ForumCategory } from '@/forum/types'
+import { MemberStackStyles } from '@/memberships/components/MemberStack'
 
-import { LatestPost, PostInfoStyles } from './LatestPost'
-import { PopularThread, ThreadInfoStyles } from './PopularThread'
 import { ThreadCount } from './ThreadCount'
 
 export interface CategoryListItemProps {
@@ -22,42 +19,21 @@ export interface CategoryListItemProps {
   isArchive?: boolean
 }
 export const CategoryListItem = ({ category, isArchive = false }: CategoryListItemProps) => {
-  const block = category.status.categoryArchivalStatusUpdatedEvent
-
-  const expectedStatus: CategoryStatusType = isArchive ? 'CategoryStatusArchived' : 'CategoryStatusActive'
-  const subcategories = category.subcategories
-    .filter(({ status }) => status === expectedStatus)
-    .map(({ id, title }) => (
-      <SubcategoryLink key={id} to={categoryLink(id, isArchive)} size="small">
-        {title}
-      </SubcategoryLink>
-    ))
-
   return (
-    <CategoryListItemStyles $colLayout={categoriesColLayout(isArchive)}>
+    <CategoryListItemStyles>
       <Category>
         <CategoryListItemTitle as={GhostRouterLink} to={categoryLink(category.id, isArchive)}>
           {category.title}
         </CategoryListItemTitle>
         <TextMedium light>{category.description}</TextMedium>
-
-        {subcategories.length > 0 && (
-          <TextInlineExtraSmall lighter>Subcategories: {intersperse(subcategories, () => ', ')}</TextInlineExtraSmall>
-        )}
       </Category>
-
-      <ThreadCount categoryId={category.id} isArchive={isArchive} />
-
-      <LatestPost categoryId={category.id} />
-
-      {isArchive ? (
-        block && <BlockTime block={block} layout="column" />
-      ) : (
-        <>
-          <PopularThread categoryId={category.id} />
-          <MemberStack members={moderatorsSummary(category.moderators)} max={5} />
-        </>
-      )}
+      <InfoWrapper>
+        <Info>
+          <StyledAnswerIcon />
+          <ThreadCount categoryId={category.id} isArchive={isArchive} />
+        </Info>
+        <ArrowRightIcon />
+      </InfoWrapper>
     </CategoryListItemStyles>
   )
 }
@@ -91,17 +67,16 @@ const CategoryListItemTitle = styled.h5`
   }
 `
 
-export const CategoryListItemStyles = styled(TableListItem)`
+const CategoryListItemStyles = styled(CardItem)`
   position: relative;
-  align-items: start;
+  flex-direction: row;
+  align-items: center;
   height: 128px;
   padding: 14px 24px;
-
+  justify-content: space-between;
+  border: 1px solid ${Colors.Black[100]};
+  border-radius: ${BorderRad.s};
   ${TableListItemAsLinkHover};
-
-  & > * {
-    margin-top: 8px;
-  }
 
   &:hover,
   &:focus,
@@ -111,12 +86,14 @@ export const CategoryListItemStyles = styled(TableListItem)`
     }
   }
 
+  & > * {
+    margin-top: 8px;
+  }
+
   ${TextMedium},
   ${TextInlineExtraSmall},
-  ${TextInlineMedium},
-  ${PostInfoStyles},
-  ${BlockTimeWrapper},
-  ${ThreadInfoStyles},
+  
+  
   ${MemberStackStyles} {
     z-index: 2;
   }
@@ -134,28 +111,23 @@ const Category = styled.div`
   }
 `
 
-const SubcategoryLink = styled(LinkButtonLink)`
-  &,
-  &:visited {
-    display: inline-flex;
-    font-size: inherit;
-    line-height: 12px;
-    font-weight: inherit;
-    color: inherit;
-    border: none;
+const Info = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+`
 
-    &:before {
-      bottom: 0;
-      background-color: ${Colors.Black[400]};
-      transform: translateX(calc(-100% - 2px));
-    }
-    ${LinkButtonInnerWrapper} {
-      transform: translateY(0);
-    }
+const InfoWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  svg {
+    color: ${Colors.Black[300]};
   }
-  &:hover {
-    &:before {
-      transform: translateX(0%);
-    }
-  }
+`
+
+const StyledAnswerIcon = styled(AnswerIcon)`
+  color: ${Colors.Black[300]};
 `

@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { BalanceLock } from '@/accounts/types'
 import { Address } from '@/common/types'
 
@@ -10,5 +12,5 @@ export interface LockDetailsProps {
 export interface LockRecoveryTimeProps {
   time?: string | null
   unrecoverableLabel?: string
-  tooltipLabel?: string
+  tooltipLabel?: string | React.ReactElement
 }

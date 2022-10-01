@@ -12,22 +12,18 @@ interface ForumPageHeaderProps {
 }
 export const ForumPageHeader = ({ title, children, buttons }: ForumPageHeaderProps) => {
   const [search, setSearch] = useState('')
-
   const { showModal } = useModal()
-
   return (
     <PageHeaderWrapper>
       <PageHeaderRow>
         {title}
-        <ButtonsGroup>
-          <SearchBox
-            value={search}
-            onChange={setSearch}
-            onApply={() => showModal({ modal: 'SearchResults', data: { search } })}
-          />
-          {buttons}
-        </ButtonsGroup>
+        <ButtonsGroup>{buttons}</ButtonsGroup>
       </PageHeaderRow>
+      <SearchBox
+        value={search}
+        onChange={setSearch}
+        onApply={() => showModal({ modal: 'SearchResults', data: { search } })}
+      />
       {children}
     </PageHeaderWrapper>
   )

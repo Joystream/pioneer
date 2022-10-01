@@ -32,7 +32,7 @@ export const OpeningDescriptionPreview = ({ onClose, description }: DescriptionP
       <SidePane topSize="s">
         <SidePaneHeader>
           <SidePanelTop>
-            <SidePaneTitle>Opening Description</SidePaneTitle>
+            <SidePaneTitle>Signal Description</SidePaneTitle>
             <CloseButton onClick={onClose} />
           </SidePanelTop>
         </SidePaneHeader>

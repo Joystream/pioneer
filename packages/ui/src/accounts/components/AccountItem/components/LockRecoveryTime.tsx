@@ -10,10 +10,6 @@ import { LockRecoveryTimeProps } from './types'
 
 export const LockRecoveryTime = ({ time, unrecoverableLabel, tooltipLabel }: LockRecoveryTimeProps) => {
   const timeValue = useMemo(() => {
-    if (unrecoverableLabel) {
-      return <UnrecoverableLabel lighter>{unrecoverableLabel}</UnrecoverableLabel>
-    }
-
     if (time) {
       const duration = Date.parse(time) - Date.now()
 
@@ -22,6 +18,10 @@ export const LockRecoveryTime = ({ time, unrecoverableLabel, tooltipLabel }: Loc
       }
 
       return <DurationValue value={formatDurationDate(duration)} />
+    }
+
+    if (unrecoverableLabel) {
+      return <UnrecoverableLabel lighter>{unrecoverableLabel}</UnrecoverableLabel>
     }
 
     return null

@@ -62,7 +62,7 @@ const getApolloClient = (
   })
   let hasConnectionError = false
   const errorLink = onError((errorResponse) => {
-    if (errorResponse.networkError) {
+    if (errorResponse.networkError && !errorResponse.graphQLErrors) {
       stateCallback('error')
       hasConnectionError = true
       error('Error connecting to query node')

@@ -6,12 +6,12 @@ import { Colors } from '../constants'
 import { Badge } from './typography'
 
 interface CountBadgeProps {
-  count: number
+  count?: number
   className?: string
 }
 
 export const CountBadge = React.memo(({ count, className }: CountBadgeProps) => (
-  <CountBadgeComponent className={className}>{count}</CountBadgeComponent>
+  <CountBadgeComponent className={className}>{count ?? '-'}</CountBadgeComponent>
 ))
 
 export const CountBadgeComponent = styled(Badge)`
