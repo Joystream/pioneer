@@ -1,4 +1,6 @@
 import React from 'react'
+import { generatePath } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
@@ -8,6 +10,7 @@ import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextExtraSmall, TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { relativeIfRecent } from '@/common/model/relativeIfRecent'
+import { ForumRoutes } from '@/forum/constant'
 import { ForumThread } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
 import { useMember } from '@/memberships/hooks/useMembership'
@@ -19,22 +22,19 @@ interface ThreadCardProps {
 
 export const ThreadCard = ({ thread, className }: ThreadCardProps) => {
   const { member: author } = useMember(thread.authorId)
+  const { push } = useHistory()
 
   if (!author) return null
 
   return (
-    <Box className={className}>
+    <Box onClick={() => push(generatePath(ForumRoutes.thread, { id: thread.id }))} className={className}>
       <div>
         <MemberInfo size="s" hideGroup onlyTop member={author} />
         <div>
           <TextExtraSmall inter lighter>
             {relativeIfRecent(thread.createdInBlock.timestamp)}
           </TextExtraSmall>
-          <ColumnGapBlock gap={4}>
-            {thread.tags.map((tag) => (
-              <BadgeStatus size="m">{tag.title.toUpperCase()}</BadgeStatus>
-            ))}
-          </ColumnGapBlock>
+          <BadgeStatus size="m">{thread.categoryTitle.toUpperCase()}</BadgeStatus>
         </div>
       </div>
       <TextBig bold value>
@@ -57,6 +57,11 @@ const Box = styled.div`
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
   padding: 24px;
+  cursor: pointer;
+
+  :hover {
+    border: 1px solid ${Colors.Blue[100]};
+  }
 
   > *:nth-child(3) {
     margin-top: -14px;
@@ -84,10 +89,6 @@ const Box = styled.div`
   > *:last-child {
     svg {
       color: ${Colors.Black[400]};
-      :hover {
-        color: ${Colors.LogoPurple};
-        cursor: pointer;
-      }
     }
   }
 `
