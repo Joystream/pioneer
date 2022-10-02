@@ -43,6 +43,7 @@ const modalData: ModalCallData<DeleteThreadModalCall> = {
     title: 'Example Thread',
     categoryId: '1',
     initialPostText: '',
+    categoryTitle: '',
     authorId: '0',
     isSticky: false,
     createdInBlock: randomBlock(),

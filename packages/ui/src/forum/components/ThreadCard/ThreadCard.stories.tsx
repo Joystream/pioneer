@@ -14,6 +14,7 @@ export default {
 const forumThread: ForumThreadWithDetails = {
   id: '1',
   title: 'Example Thread',
+  categoryTitle: '',
   categoryId: '1',
   authorId: '0',
   initialPostText: '',

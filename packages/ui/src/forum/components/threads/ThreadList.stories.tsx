@@ -24,6 +24,7 @@ const forumThread: ForumThreadWithDetails = {
   categoryId: '1',
   authorId: '0',
   initialPostText: '',
+  categoryTitle: '',
   isSticky: false,
   createdInBlock: randomBlock(),
   tags: [],

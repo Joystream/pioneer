@@ -73,6 +73,10 @@ Default.args = {
     categoryId: '',
     authorId: '0',
     isSticky: false,
+    category: {
+      __typename: 'ForumCategory',
+      title: 'Category',
+    },
     title: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint',
     createdInEvent: {
       inBlock: 3385,

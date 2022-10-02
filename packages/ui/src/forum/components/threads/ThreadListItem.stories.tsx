@@ -52,6 +52,10 @@ Default.args = {
   isArchive: false,
   rawThread: {
     id: 'ThreadListItem-story',
+    category: {
+      __typename: 'ForumCategory',
+      title: 'Category title',
+    },
     categoryId,
     authorId: '0',
     isSticky: false,
