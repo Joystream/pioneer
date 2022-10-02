@@ -25,6 +25,7 @@ export const LatestThreads = () => {
           <Loading />
         ) : (
           <ThreadList
+            type="list"
             threads={threads}
             getSortProps={() => ({ isActive: false, onSort: () => undefined, isDescending: false })}
           />

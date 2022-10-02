@@ -31,7 +31,7 @@ const forumThread: ForumThreadWithDetails = {
   status: { __typename: 'ThreadStatusActive' },
 }
 
-const Template: Story = ({ isArchive }) => {
+const Template: Story = ({ isArchive, type }) => {
   const threads = useMemo(
     () =>
       Array.from({ length: 5 }).map((_, index) => ({
@@ -47,7 +47,11 @@ const Template: Story = ({ isArchive }) => {
 
   return (
     <MockApolloProvider members workers forum>
-      {threads ? <ThreadList threads={threads} getSortProps={getSortProps} isArchive={isArchive} /> : <Loading />}
+      {threads ? (
+        <ThreadList threads={threads} type={type} getSortProps={getSortProps} isArchive={isArchive} />
+      ) : (
+        <Loading />
+      )}
     </MockApolloProvider>
   )
 }
@@ -55,4 +59,5 @@ const Template: Story = ({ isArchive }) => {
 export const Default = Template.bind({})
 Default.args = {
   isArchive: false,
+  type: 'list',
 }
