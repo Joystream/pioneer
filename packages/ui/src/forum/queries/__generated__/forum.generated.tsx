@@ -1,9 +1,8 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import * as Apollo from '@apollo/client'
 import { gql } from '@apollo/client'
 import { MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
-
+import * as Apollo from '@apollo/client'
 const defaultOptions = {} as const
 export type ForumBaseCategoryFieldsFragment = {
   __typename: 'ForumCategory'
@@ -221,6 +220,7 @@ export type ForumThreadFieldsFragment = {
   title: string
   authorId: string
   visiblePostsCount: number
+  category: { __typename: 'ForumCategory'; title: string }
   initialPost?: { __typename: 'ForumPost'; text: string } | null
   createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   status:
@@ -536,6 +536,7 @@ export type ForumThreadDetailedFieldsFragment = {
   title: string
   authorId: string
   visiblePostsCount: number
+  category: { __typename: 'ForumCategory'; title: string }
   initialPost?: { __typename: 'ForumPost'; text: string } | null
   createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   status:
@@ -889,6 +890,7 @@ export type GetForumThreadsQuery = {
     title: string
     authorId: string
     visiblePostsCount: number
+    category: { __typename: 'ForumCategory'; title: string }
     initialPost?: { __typename: 'ForumPost'; text: string } | null
     createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
     status:
@@ -937,6 +939,7 @@ export type GetForumThreadQuery = {
     title: string
     authorId: string
     visiblePostsCount: number
+    category: { __typename: 'ForumCategory'; title: string }
     initialPost?: { __typename: 'ForumPost'; text: string } | null
     createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
     status:
@@ -1504,6 +1507,9 @@ export const ForumThreadFieldsFragmentDoc = gql`
     id
     isSticky
     categoryId
+    category {
+      title
+    }
     title
     initialPost {
       text

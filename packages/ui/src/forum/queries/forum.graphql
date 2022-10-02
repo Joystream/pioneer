@@ -93,6 +93,9 @@ fragment ForumThreadFields on ForumThread {
   id
   isSticky
   categoryId
+  category {
+    title
+  }
   title
   initialPost {
     text
