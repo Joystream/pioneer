@@ -2,8 +2,7 @@ import React, { ImgHTMLAttributes, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { ModeratedItem } from '@/common/components/ModeratedItem'
-import { useImageReport } from '@/common/hooks/useImageReport'
-import { useModal } from '@/common/hooks/useModal'
+import { useIsImageBlacklisted } from '@/common/hooks/useIsImageBlacklisted'
 
 import { ReportImageButton } from './ReportImageButton'
 
@@ -11,9 +10,8 @@ export interface UserImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   customFallbackComponent?: React.ReactNode
 }
 
-export const UserImage = (props: UserImageProps) => {
-  const { blacklistedImages, reportFormUrl, sendReport } = useImageReport()
-  const { showModal } = useModal()
+export const UserImage = ({ src, customFallbackComponent, ...props }: UserImageProps) => {
+  const isBlacklisted = useIsImageBlacklisted(src)
 
   const src = props.src
   const blacklistImage = useMemo(() => blacklistedImages.some((url) => url === src), [blacklistedImages.length])
@@ -21,8 +19,8 @@ export const UserImage = (props: UserImageProps) => {
   return (
     <>
       {blacklistImage ? (
-        props.customFallbackComponent ? (
-          props.customFallbackComponent
+        customFallbackComponent ? (
+          customFallbackComponent
         ) : (
           <ModeratedItem title="This image was removed by a moderator" />
         )
