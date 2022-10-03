@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { CountBadge } from '@/common/components/CountBadge'
 import { ReplyIcon } from '@/common/components/icons'
+import { Loading } from '@/common/components/Loading'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextExtraSmall, TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
@@ -24,12 +25,10 @@ export const ThreadCard = ({ thread, className }: ThreadCardProps) => {
   const { member: author } = useMember(thread.authorId)
   const { push } = useHistory()
 
-  if (!author) return null
-
   return (
     <Box onClick={() => push(generatePath(ForumRoutes.thread, { id: thread.id }))} className={className}>
       <div>
-        <MemberInfo size="s" hideGroup onlyTop member={author} />
+        {author ? <MemberInfo size="s" hideGroup onlyTop member={author} /> : <Loading withoutMargin />}
         <div>
           <TextExtraSmall inter lighter>
             {relativeIfRecent(thread.createdInBlock.timestamp)}
@@ -51,7 +50,7 @@ export const ThreadCard = ({ thread, className }: ThreadCardProps) => {
   )
 }
 
-const Box = styled.div`
+export const Box = styled.div`
   display: grid;
   row-gap: 16px;
   border: 1px solid ${Colors.Black[100]};
@@ -90,5 +89,9 @@ const Box = styled.div`
     svg {
       color: ${Colors.Black[400]};
     }
+  }
+
+  ${TextMedium} {
+    max-height: 55px;
   }
 `

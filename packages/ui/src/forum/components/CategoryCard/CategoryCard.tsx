@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import { generatePath, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
@@ -7,34 +8,43 @@ import { Arrow } from '@/common/components/icons'
 import { AnswerIcon } from '@/common/components/icons/AnswerIcon'
 import { TextBig, TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
+import { ForumRoutes } from '@/forum/constant'
+import { ForumCategory } from '@/forum/types'
 
-const categories = ['forum', 'content', 'builders']
+interface CategoryCardProps {
+  category: ForumCategory
+  className?: string
+}
 
 // In case of different onClick event for message icon and box as whole, remember to stop propagation of msg onClick event
-export const CategoryCard = () => {
+export const CategoryCard = ({ className, category }: CategoryCardProps) => {
   const [isHovered, setIsHovered] = useState<boolean>(false)
-
+  const { push } = useHistory()
   const hoverComponent = useMemo(() => {
     return (
       <CategoriesBox>
-        {categories.map((category) => (
-          <BadgeStatus>{category}</BadgeStatus>
-        ))}
+        {category.subcategories.length
+          ? category.subcategories.map((subcategory) => (
+              <StyledBadge onClick={() => push(generatePath(ForumRoutes.category, { id: subcategory.id }))}>
+                {subcategory.title}
+              </StyledBadge>
+            ))
+          : 'No subcategories'}
       </CategoriesBox>
     )
   }, [])
 
   return (
-    <Box onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+    <Box className={className} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
       <div>
         <TextBig bold value>
-          Working Groups
+          {category.title}
         </TextBig>
         {isHovered ? (
           hoverComponent
         ) : (
           <TextMedium normalWeight inter lighter>
-            In this category you can find or post the information, questions about all the Working Groups
+            {category.description}
           </TextMedium>
         )}
       </div>
@@ -42,24 +52,29 @@ export const CategoryCard = () => {
         <AnswerIcon />
         <CountBadge count={1} />
       </div>
-      <Arrow direction="right" />
+      <span
+        onClick={(e) => {
+          e.stopPropagation()
+          push(generatePath(ForumRoutes.category, { id: category.id }))
+        }}
+      >
+        <Arrow direction="right" />
+      </span>
     </Box>
   )
 }
 
+const StyledBadge = styled(BadgeStatus)`
+  cursor: pointer;
+`
+
 const Box = styled.div`
   display: flex;
   column-gap: 15px;
-  width: 500px;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
   padding: 21px;
   height: 108px;
-  cursor: pointer;
-
-  :hover > *:last-child {
-    color: ${Colors.LogoPurple};
-  }
 
   > *:nth-child(1) {
     display: grid;
@@ -84,6 +99,10 @@ const Box = styled.div`
 
   > *:last-child {
     align-self: center;
+    cursor: pointer;
+    height: 100%;
+    display: flex;
+    align-items: center;
   }
 `
 
