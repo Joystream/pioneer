@@ -24,6 +24,7 @@ interface ThreadListProps {
   isLoading?: boolean
   isArchive?: boolean
   type: 'list' | 'card'
+  watchlistButton?: boolean
 }
 
 export const ThreadList = ({
@@ -35,6 +36,7 @@ export const ThreadList = ({
   setPage,
   type,
   getSortProps,
+  watchlistButton,
 }: ThreadListProps) => {
   if (threads.length <= 0 && !isLoading) {
     return <NotFoundText>No threads found</NotFoundText>
@@ -73,7 +75,7 @@ export const ThreadList = ({
     <List as="div" isArchive={isArchive}>
       <ThreadCardsStyles>
         {threads.map((thread) => (
-          <ThreadCard thread={thread} />
+          <ThreadCard thread={thread} watchlistButton={watchlistButton} />
         ))}
       </ThreadCardsStyles>
       {setPage && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
