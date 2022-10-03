@@ -1,12 +1,11 @@
 import React, { ImgHTMLAttributes, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { ReportIcon } from '@/common/components/icons/ReportIcon'
 import { ModeratedItem } from '@/common/components/ModeratedItem'
-import { Tooltip } from '@/common/components/Tooltip'
 import { useImageReport } from '@/common/hooks/useImageReport'
 import { useModal } from '@/common/hooks/useModal'
-import { ReportContentModalCall } from '@/common/modals/ReportContentModal'
+
+import { ReportImageButton } from './ReportImageButton'
 
 export interface UserImageProps extends ImgHTMLAttributes<HTMLImageElement> {
   customFallbackComponent?: React.ReactNode
@@ -29,20 +28,10 @@ export const UserImage = (props: UserImageProps) => {
         )
       ) : (
         <Wrapper>
-          <Image {...props} />
-          {(reportFormUrl || sendReport) && src && (
-            <ButtonWrapper>
-              <Tooltip hideOnComponentLeave offset={[0, 5]} tooltipText="Report image">
-                <Button
-                  onClick={() =>
-                    showModal<ReportContentModalCall>({ modal: 'ReportContentModal', data: { report: src } })
-                  }
-                >
-                  <StyledReportIcon />
-                </Button>
-              </Tooltip>
-            </ButtonWrapper>
-          )}
+          <Image src={src} {...props} />
+          <ButtonWrapper>
+            <ReportImageButton src={src} text="Report image" />
+          </ButtonWrapper>
         </Wrapper>
       )}
     </>
@@ -68,20 +57,4 @@ const Wrapper = styled.span`
 
 const Image = styled.img`
   position: relative;
-`
-
-const StyledReportIcon = styled(ReportIcon)`
-  pointer-events: none;
-`
-
-const Button = styled.button`
-  height: 30px;
-  width: 30px;
-  cursor: pointer;
-  border: none;
-  border-radius: 2px;
-  outline: none;
-  background-color: #fff;
-  display: grid;
-  place-items: center;
 `
