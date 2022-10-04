@@ -1,38 +1,33 @@
-import React, { ImgHTMLAttributes, useMemo } from 'react'
+import React, { ImgHTMLAttributes, ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { ModeratedItem } from '@/common/components/ModeratedItem'
 import { useIsImageBlacklisted } from '@/common/hooks/useIsImageBlacklisted'
 
 import { ReportImageButton } from './ReportImageButton'
 
 export interface UserImageProps extends ImgHTMLAttributes<HTMLImageElement> {
-  customFallbackComponent?: React.ReactNode
+  fallbackComponent?: ReactElement | null
+  noReportButton?: boolean
 }
 
-export const UserImage = ({ src, customFallbackComponent, ...props }: UserImageProps) => {
+export const UserImage = ({ src, fallbackComponent, noReportButton = false, ...props }: UserImageProps) => {
   const isBlacklisted = useIsImageBlacklisted(src)
 
-  const src = props.src
-  const blacklistImage = useMemo(() => blacklistedImages.some((url) => url === src), [blacklistedImages.length])
+  if (isBlacklisted) {
+    return fallbackComponent ?? null
+  }
+
+  if (noReportButton) {
+    return <Image src={src} {...props} />
+  }
 
   return (
-    <>
-      {blacklistImage ? (
-        customFallbackComponent ? (
-          customFallbackComponent
-        ) : (
-          <ModeratedItem title="This image was removed by a moderator" />
-        )
-      ) : (
-        <Wrapper>
-          <Image src={src} {...props} />
-          <ButtonWrapper>
-            <ReportImageButton src={src} text="Report image" />
-          </ButtonWrapper>
-        </Wrapper>
-      )}
-    </>
+    <Wrapper>
+      <Image src={src} {...props} />
+      <ButtonWrapper>
+        <ReportImageButton src={src} text="Report image" />
+      </ButtonWrapper>
+    </Wrapper>
   )
 }
 

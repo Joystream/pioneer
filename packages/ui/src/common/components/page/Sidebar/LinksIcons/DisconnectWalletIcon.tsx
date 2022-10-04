@@ -10,8 +10,8 @@ export const DisconnectWalletIcon = () => (
     />
     <path d="M10 7H13V9H10V7Z" fill="#FF3960" />
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M2 1C0.895431 1 0 1.89543 0 3V13C0 14.1046 0.89543 15 2 15H8C9.10457 15 10 14.1046 10 13V9H4.85714C4.30486 9 3.85714 8.55228 3.85714 8C3.85714 7.44772 4.30486 7 4.85714 7H10V3C10 1.89543 9.10457 1 8 1H2Z"
       fill="#FF3960"
     />
