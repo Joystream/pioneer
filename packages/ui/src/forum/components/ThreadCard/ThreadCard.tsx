@@ -71,6 +71,7 @@ export const Box = styled.div`
     justify-content: space-between;
     flex-wrap: wrap;
     align-items: center;
+    gap: 5px;
 
     > * {
       flex: 1;
@@ -78,10 +79,10 @@ export const Box = styled.div`
 
     > *:last-child {
       display: flex;
-      align-items: center;
+      flex-direction: column-reverse;
+      align-items: flex-end;
       justify-content: end;
       gap: 5px;
-      flex: 2;
     }
   }
 
