@@ -69,7 +69,7 @@ export const ForumMain = () => {
     </RowGapBlock>
   )
 }
-const CategoriesListWrapper = styled.div`
+export const CategoriesListWrapper = styled.div`
   display: grid;
   grid-gap: 20px;
   grid-template-columns: repeat(auto-fill, minmax(540px, 1fr));

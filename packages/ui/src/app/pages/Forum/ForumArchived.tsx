@@ -6,8 +6,10 @@ import { ItemCount } from '@/common/components/ItemCount'
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
+import { TextMedium } from '@/common/components/typography'
 import { useSort } from '@/common/hooks/useSort'
-import { ForumMain } from '@/forum/components/category'
+import { CategoriesListWrapper } from '@/forum/components/category'
+import { CategoryCard } from '@/forum/components/CategoryCard/CategoryCard'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
@@ -26,7 +28,7 @@ export const ForumArchived = () => {
     threads,
     threadCount,
     refresh,
-  } = useForumCategoryThreads({ isArchive: true, order }, { perPage: THREADS_PER_PAGE, page })
+  } = useForumCategoryThreads({ isArchive: false, order }, { perPage: THREADS_PER_PAGE, page })
 
   return (
     <PageLayout
@@ -38,8 +40,23 @@ export const ForumArchived = () => {
       main={
         <>
           <RowGapBlock gap={24}>
-            <ItemCount count={forumCategories?.length}>Archived Categories</ItemCount>
-            {isLoadingCategories ? <Loading /> : forumCategories && forumCategories.length > 0 && <ForumMain />}
+            {isLoadingCategories ? (
+              <Loading />
+            ) : (
+              forumCategories &&
+              forumCategories.length > 0 && (
+                <RowGapBlock gap={10}>
+                  <TextMedium value lighter>
+                    Archived Categories
+                  </TextMedium>
+                  <CategoriesListWrapper>
+                    {forumCategories.map((category) => (
+                      <CategoryCard archivedStyles category={category} />
+                    ))}
+                  </CategoriesListWrapper>
+                </RowGapBlock>
+              )
+            )}
           </RowGapBlock>
 
           <RowGapBlock gap={24}>
