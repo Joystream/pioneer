@@ -51,7 +51,7 @@ export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost, isD
   const Wrapper: typeof RowGapBlock = useMemo(() => (isDiscussion ? DiscussionWrapper : RowGapBlock), [isDiscussion])
 
   if (!isReady) {
-    return <Loading text={isLoading ? 'Loading thread...' : 'Loading posts...'} />
+    return <Loading />
   }
 
   return (

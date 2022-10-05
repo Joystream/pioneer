@@ -11,7 +11,6 @@ import { GlobalModals } from '@/app/GlobalModals'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
-import { VoteForCouncilModal } from '@/council/modals/VoteForCouncil'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import {
@@ -101,7 +100,7 @@ describe('UI: Vote for Council Modal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
-    mockUseModalCall({ showModal, modalData })
+    mockUseModalCall({ showModal, modalData, modal: 'VoteForCouncil' })
     seedMembers(server.server, 2)
     seedElectedCouncils(server.server, [{}, {}])
     seedCouncilElections(server.server, [{}, {}])
@@ -131,20 +130,6 @@ describe('UI: Vote for Council Modal', () => {
   })
 
   describe('Requirements', () => {
-    it('No active member', async () => {
-      useMyMemberships.active = undefined
-
-      renderModal()
-
-      expect(showModal).toBeCalledWith({
-        modal: 'SwitchMember',
-        data: {
-          originalModalData: { id: '0-0' },
-          originalModalName: 'VoteForCouncil',
-        },
-      })
-    })
-
     it('Insufficient funds', async () => {
       const minStake = 10000
       stubCouncilConstants(api, { minStake })
@@ -263,7 +248,7 @@ describe('UI: Vote for Council Modal', () => {
               <ApiContext.Provider value={api}>
                 <MembershipContext.Provider value={useMyMemberships}>
                   <GlobalModals />
-                  <VoteForCouncilModal />
+                  {/*<VoteForCouncilModal />*/}
                 </MembershipContext.Provider>
               </ApiContext.Provider>
             </MockKeyringProvider>

@@ -35,7 +35,6 @@ import {
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
-import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO, Fonts } from '@/common/constants'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
@@ -44,7 +43,6 @@ import { formatTokenValue } from '@/common/model/formatters'
 import { asBN } from '@/common/utils/bn'
 import { BNSchema, minContext } from '@/common/utils/validation'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
 const schema = Yup.object().shape({
   amount: BNSchema.test(
@@ -57,7 +55,6 @@ export const ContributeFundsModal = () => {
   const {
     modalData: { bounty },
     hideModal,
-    showModal,
   } = useModal<BountyContributeFundsModalCall>()
   const { api, isConnected } = useApi()
   const [state, send] = useMachine(contributeFundsMachine)
@@ -117,16 +114,6 @@ export const ContributeFundsModal = () => {
 
   useEffect(() => {
     if (state.matches(ContributeFundStates.requirementsVerification)) {
-      if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({
-          modal: 'SwitchMember',
-          data: {
-            originalModalName: 'BountyContributeFundsModal',
-            originalModalData: { bounty },
-          },
-        })
-      }
-
       if (fee && fee.canAfford) {
         nextStep()
       }
@@ -136,21 +123,6 @@ export const ContributeFundsModal = () => {
       }
     }
   }, [state, activeMember?.id, fee])
-
-  if (state.matches(ContributeFundStates.requirementsVerification)) {
-    return (
-      <WaitModal
-        title={t('common:modals.wait.title')}
-        description={t('common:modals.wait.description')}
-        onClose={hideModal}
-        requirements={[
-          { name: 'Initializing server connection', state: !!api },
-          { name: 'Loading member', state: !!activeMember },
-          { name: 'Creating transaction', state: !!transaction },
-        ]}
-      />
-    )
-  }
 
   if (!activeMember || !transaction || !api || !fee) {
     return null

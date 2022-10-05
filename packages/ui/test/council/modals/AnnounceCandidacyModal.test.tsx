@@ -17,7 +17,6 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { last } from '@/common/utils'
 import { ElectionRoutes } from '@/council/constants'
-import { AnnounceCandidacyModal } from '@/council/modals/AnnounceCandidacy'
 import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
@@ -79,7 +78,7 @@ describe('UI: Announce Candidacy Modal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
-    mockUseModalCall({ showModal })
+    mockUseModalCall({ showModal, modal: 'AnnounceCandidateModal' })
     seedMembers(server.server)
     stubAccounts([alice, bob])
   })
@@ -119,6 +118,7 @@ describe('UI: Announce Candidacy Modal', () => {
         modal: 'SwitchMember',
         data: {
           originalModalName: 'AnnounceCandidateModal',
+          originalModalData: null,
         },
       }
 
@@ -662,7 +662,6 @@ describe('UI: Announce Candidacy Modal', () => {
               <ApiContext.Provider value={api}>
                 <MembershipContext.Provider value={useMyMemberships}>
                   <GlobalModals />
-                  <AnnounceCandidacyModal />
                 </MembershipContext.Provider>
               </ApiContext.Provider>
             </MockKeyringProvider>

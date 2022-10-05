@@ -17,7 +17,6 @@ import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provi
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { useForumCategoryBreadcrumbs } from '@/forum/hooks/useForumCategoryBreadcrumbs'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
 import { CreateThreadModalCall } from '.'
 import {
@@ -32,7 +31,7 @@ import { createThreadMachine } from './machine'
 export const CreateThreadModal = () => {
   const { active: member } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
-  const { showModal, hideModal, modalData } = useModal<CreateThreadModalCall>()
+  const { hideModal, modalData } = useModal<CreateThreadModalCall>()
   const [state, send] = useMachine(createThreadMachine)
   const { api, isConnected } = useApi()
   const { breadcrumbs } = useForumCategoryBreadcrumbs(modalData.categoryId)
@@ -69,15 +68,7 @@ export const CreateThreadModal = () => {
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
-      if (!member) {
-        showModal<SwitchMemberModalCall>({
-          modal: 'SwitchMember',
-          data: {
-            originalModalData: modalData,
-            originalModalName: 'CreateThreadModal',
-          },
-        })
-      } else if (balance && minimumTransactionCost) {
+      if (member && balance && minimumTransactionCost) {
         const canAfford = getFeeSpendableBalance(balance).gte(minimumTransactionCost)
         const controllerAccount = accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account')
         canAfford && send({ type: 'PASS', memberId: member.id, categoryId: modalData.categoryId, controllerAccount })

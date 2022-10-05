@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
 import { TextMedium } from '@/common/components/typography'
-import { WaitModal } from '@/common/components/WaitModal'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useMachine } from '@/common/hooks/useMachine'
 import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
@@ -33,10 +32,6 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
       send(isBudgetOK ? 'PASS' : 'FAIL')
     }
   }, [workingGroupBudget, membershipPrice])
-
-  if (state.matches('requirementsVerification')) {
-    return <WaitModal onClose={onClose} title="Loading..." description="" />
-  }
 
   if (state.matches('requirementsFailed')) {
     return <InviteMemberRequirementsModal onClose={onClose} />

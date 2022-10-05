@@ -1,7 +1,6 @@
 import { BountyMetadata, ForumThreadMetadata } from '@joystream/metadata-protobuf'
 import React, { useEffect } from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
+import { FormProvider, useForm } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
@@ -27,7 +26,6 @@ import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionM
 import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
 import { TokenValue } from '@/common/components/typography'
-import { WaitModal } from '@/common/components/WaitModal'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
@@ -36,14 +34,12 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { asBN } from '@/common/utils/bn'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
 const transactionSteps = [{ title: 'Create Thread' }, { title: 'Create Bounty' }]
 
 export const AddBountyModal = () => {
-  const { t } = useTranslation()
   const { threadCategory, isLoading: isThreadCategoryLoading } = useBountyForumCategory()
-  const { hideModal, showModal } = useModal()
+  const { hideModal } = useModal()
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
   const [state, send, service] = useMachine(addBountyMachine)
@@ -74,14 +70,6 @@ export const AddBountyModal = () => {
 
   useEffect(() => {
     if (state.matches(AddBountyStates.requirementsVerification)) {
-      if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({
-          modal: 'SwitchMember',
-          data: {
-            originalModalName: 'AddBounty',
-          },
-        })
-      }
       if (activeMember && api) {
         send('NEXT')
       }
@@ -95,20 +83,6 @@ export const AddBountyModal = () => {
       }
     }
   }, [activeMember, state, threadCategory?.id])
-
-  if (state.matches(AddBountyStates.requirementsVerification)) {
-    return (
-      <WaitModal
-        title={t('common:modals.wait.title')}
-        description={t('common:modals.wait.description')}
-        onClose={hideModal}
-        requirements={[
-          { name: 'Initializing server connection', state: !!api },
-          { name: 'Loading member', state: !!activeMember },
-        ]}
-      />
-    )
-  }
 
   if (!activeMember || !api) {
     return null

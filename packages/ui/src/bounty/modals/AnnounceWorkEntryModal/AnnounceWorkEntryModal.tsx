@@ -29,7 +29,6 @@ import {
 } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
-import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO, Fonts } from '@/common/constants'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
@@ -38,7 +37,6 @@ import { formatTokenValue } from '@/common/model/formatters'
 import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { IStakingAccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 
 const transactionSteps = [{ title: 'Bind staking account' }, { title: 'Announce Work' }]
@@ -107,15 +105,6 @@ export const AnnounceWorkEntryModal = () => {
   }, [])
   useEffect(() => {
     if (state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
-      if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({
-          modal: 'SwitchMember',
-          data: {
-            originalModalName: 'BountyAnnounceWorkEntryModal',
-            originalModalData: { bounty },
-          },
-        })
-      }
       if (fee) {
         const areFundsSufficient = fee.canAfford && hasRequiredStake
         send(areFundsSufficient ? 'NEXT' : 'FAIL')
@@ -126,22 +115,6 @@ export const AnnounceWorkEntryModal = () => {
       fee?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
   }, [state, activeMember?.id, stakingStatus, JSON.stringify(fee), hasRequiredStake])
-
-  if (state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
-    return (
-      <WaitModal
-        title={t('common:modals.wait.title')}
-        description={t('common:modals.wait.description')}
-        onClose={hideModal}
-        requirements={[
-          { name: 'Initializing server connection', state: !!api },
-          { name: 'Loading member', state: !!activeMember },
-          { name: 'Creating transaction', state: !!transaction },
-          { name: 'Calculating fee', state: !!fee },
-        ]}
-      />
-    )
-  }
 
   if (!activeMember || !transaction || !api || !fee) {
     return null

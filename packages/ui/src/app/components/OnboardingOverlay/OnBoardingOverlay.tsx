@@ -135,9 +135,11 @@ export const OnBoardingOverlay = () => {
 const OnBoardingPolkadotAppInfo = styled(PolkadotAppInfo)`
   background-color: ${Colors.Black[600]};
   color: white;
+  height: fit-content;
 `
 const HorizontalSeparator = styled.div`
   width: 100%;
+  margin-top: 30px;
   height: 1px;
   background-color: ${Colors.Black[600]};
 `
@@ -155,9 +157,10 @@ const MainWrapper = styled.div`
 `
 
 const StyledDropDown = styled(DropDownToggle)`
-  background-color: ${Colors.Black[800]};
+  background-color: ${Colors.Black[700]};
   position: absolute;
   z-index: ${ZIndex.navbarInner};
+  height: calc(100vh - 85px);
 `
 
 const DropdownContent = styled.div`
@@ -177,11 +180,15 @@ const DropdownContent = styled.div`
   .twoColumns {
     grid-column: 1 / 3;
   }
+
+  button {
+    margin: 30px 0 0 50px;
+  }
 `
 
 const Wrapper = styled.div`
   width: 100%;
-  background-color: ${Colors.Black[800]};
+  background-color: ${Colors.Black[700]};
   color: ${Colors.White};
   height: 85px;
   display: flex;

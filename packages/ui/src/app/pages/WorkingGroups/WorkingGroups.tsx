@@ -9,12 +9,12 @@ import { WorkingGroup } from '@/working-groups/types'
 import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 
 export const WorkingGroups = () => {
-  const { groups = defaultGroups } = useWorkingGroups()
+  const { groups } = useWorkingGroups()
 
   return (
     <PageLayout
       header={<PageHeaderWithHint title="Working Groups" hintType="workingGroups" tabs={<WorkingGroupsTabs />} />}
-      main={<WorkingGroupsList groups={groups} />}
+      main={<WorkingGroupsList groups={groups.length ? groups : defaultGroups} />}
     />
   )
 }

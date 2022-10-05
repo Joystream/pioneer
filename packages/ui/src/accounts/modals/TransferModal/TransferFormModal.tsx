@@ -52,6 +52,7 @@ const schemaFactory = (maxValue?: BN, minValue?: BN, senderBalance?: BN) => {
   if (maxValue && senderBalance && senderBalance.gt(maxValue)) {
     schema.fields.amount = schema.fields.amount.test(maxMixed(maxValue, 'Maximum amount allowed is ${max}'))
   }
+
   if (minValue) {
     schema.fields.amount = schema.fields.amount.test(minMixed(minValue, 'Minimum amount allowed is ${min}'))
   }

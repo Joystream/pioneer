@@ -283,6 +283,10 @@ export type ForumPostFieldsFragment = {
         account: string
       }> | null
     }
+    forumthreadinitialPost?: Array<{
+      __typename: 'ForumThread'
+      createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+    }> | null
     postaddedeventpost?: Array<{
       __typename: 'PostAddedEvent'
       createdAt: any
@@ -368,6 +372,10 @@ export type ForumPostFieldsFragment = {
       account: string
     }> | null
   }
+  forumthreadinitialPost?: Array<{
+    __typename: 'ForumThread'
+    createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+  }> | null
   postaddedeventpost?: Array<{
     __typename: 'PostAddedEvent'
     createdAt: any
@@ -461,6 +469,10 @@ export type ForumPostWithoutReplyFieldsFragment = {
       account: string
     }> | null
   }
+  forumthreadinitialPost?: Array<{
+    __typename: 'ForumThread'
+    createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+  }> | null
   postaddedeventpost?: Array<{
     __typename: 'PostAddedEvent'
     createdAt: any
@@ -994,6 +1006,10 @@ export type GetForumPostsQuery = {
           account: string
         }> | null
       }
+      forumthreadinitialPost?: Array<{
+        __typename: 'ForumThread'
+        createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+      }> | null
       postaddedeventpost?: Array<{
         __typename: 'PostAddedEvent'
         createdAt: any
@@ -1079,6 +1095,10 @@ export type GetForumPostsQuery = {
         account: string
       }> | null
     }
+    forumthreadinitialPost?: Array<{
+      __typename: 'ForumThread'
+      createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+    }> | null
     postaddedeventpost?: Array<{
       __typename: 'PostAddedEvent'
       createdAt: any
@@ -1437,6 +1457,13 @@ export const ForumPostWithoutReplyFieldsFragmentDoc = gql`
     }
     text
     authorId
+    forumthreadinitialPost {
+      createdInEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
     postaddedeventpost {
       createdAt
       inBlock

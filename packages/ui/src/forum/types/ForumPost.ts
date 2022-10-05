@@ -27,7 +27,11 @@ export const asForumPost = (fields: ForumPostFieldsFragment): ForumPost => ({
   text: fields.text,
   ...(fields.repliesTo ? { repliesTo: asForumPost(fields.repliesTo) } : {}),
   createdAtBlock:
-    fields?.postaddedeventpost && fields.postaddedeventpost.length ? asBlock(fields.postaddedeventpost[0]) : undefined,
+    fields?.postaddedeventpost && fields.postaddedeventpost.length
+      ? asBlock(fields.postaddedeventpost[0])
+      : fields?.forumthreadinitialPost && fields.forumthreadinitialPost.length
+      ? asBlock(fields.forumthreadinitialPost[0].createdInEvent)
+      : undefined,
   moderator:
     fields?.postmoderatedeventpost && fields.postmoderatedeventpost.length
       ? asMember(fields.postmoderatedeventpost[0].actor.membership)

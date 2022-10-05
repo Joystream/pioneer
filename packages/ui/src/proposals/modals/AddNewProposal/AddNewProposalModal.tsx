@@ -36,7 +36,6 @@ import { useYupValidationResolver } from '@/common/utils/validation'
 import { machineStateConverter } from '@/council/modals/AnnounceCandidacy/helpers'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { IStakingAccountSchema } from '@/memberships/model/validation'
 import { useMinimumValidatorCount } from '@/proposals/hooks/useMinimumValidatorCount'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
@@ -86,7 +85,7 @@ export const AddNewProposalModal = () => {
   const constants = useProposalConstants(formMap[1])
   const { hasRequiredStake } = useHasRequiredStake(constants?.requiredStake || BN_ZERO, 'Proposals')
   const balance = useBalance(formMap[0]?.address)
-  const stakingStatus = useStakingAccountStatus(formMap[0]?.address, activeMember?.id)
+  const stakingStatus = useStakingAccountStatus(formMap[0]?.address, activeMember?.id, [state.matches('transaction')])
   const schema = useMemo(() => schemaFactory(api), [!api])
 
   const form = useForm<AddNewProposalForm>({
@@ -175,15 +174,6 @@ export const AddNewProposalModal = () => {
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
-      if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({
-          modal: 'SwitchMember',
-          data: {
-            originalModalName: 'AddNewProposalModal',
-          },
-        })
-      }
-
       if (feeInfo && feeInfo.canAfford) {
         return send('NEXT')
       }

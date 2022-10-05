@@ -3,7 +3,6 @@ import React, { useEffect } from 'react'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { TextMedium } from '@/common/components/typography'
-import { WaitModal } from '@/common/components/WaitModal'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
@@ -36,10 +35,6 @@ export const DeletePostModal = () => {
       send(feeInfo?.canAfford ? 'PASS' : 'FAIL')
     }
   }, [state.value, transaction, feeInfo?.canAfford])
-
-  if (state.matches('requirementsVerification')) {
-    return <WaitModal onClose={hideModal} requirementsCheck />
-  }
 
   if (state.matches('transaction') && transaction) {
     return (

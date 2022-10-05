@@ -1,6 +1,7 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -76,8 +77,11 @@ export const defaultTransactionModalMachine = (errorMessage?: string, successMes
         },
       },
       requirementsFailed: { type: 'final' },
-      success: { type: 'final', meta: { message: successMessage } },
-      error: { type: 'final', meta: { message: errorMessage } },
-      canceled: { type: 'final' },
+      ...transactionModalFinalStatusesFactory({
+        metaMessages: {
+          error: errorMessage,
+          success: successMessage,
+        },
+      }),
     },
   })

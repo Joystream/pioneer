@@ -19,6 +19,7 @@ import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA, PROPOSAL_DATA } from '../../_mocks/server/seeds'
 import { stubApi, stubConst, stubProposalConstants, stubQuery } from '../../_mocks/transactions'
+import { loaderSelector } from '../../setup'
 
 jest.mock('@/common/components/CKEditor', () => ({
   BaseCKEditor: (props: CKEditorProps) => mockCKEditor(props),
@@ -67,13 +68,13 @@ describe('ProposalPreview', () => {
   it('Loading', async () => {
     renderPage()
 
-    expect(await screen.findByText('Loading...')).toBeDefined()
+    expect(await loaderSelector()).toBeDefined()
   })
 
   it('Main content', async () => {
     renderPage()
 
-    await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
+    await waitForElementToBeRemoved(() => loaderSelector())
 
     expect(await screen.findByText(PROPOSAL_DATA.title, { selector: 'h2' })).toBeDefined()
 
@@ -91,7 +92,7 @@ describe('ProposalPreview', () => {
   it('Sidebar', async () => {
     renderPage()
 
-    await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
+    await waitForElementToBeRemoved(() => loaderSelector())
 
     const sideBar = await screen.findByRole('complementary')
     expect(sideBar).toBeDefined()

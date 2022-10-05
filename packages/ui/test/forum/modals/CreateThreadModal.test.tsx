@@ -9,7 +9,6 @@ import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { ForumRoutes } from '@/forum/constant'
-import { CreateThreadModal } from '@/forum/modals/CreateThreadModal'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 
@@ -52,6 +51,7 @@ describe('CreateThreadModal', () => {
   const useModal = {
     showModal: jest.fn(),
     modalData: { categoryId: '0' },
+    modal: 'CreateThreadModal',
   }
 
   const useMyMemberships: MyMemberships = {
@@ -227,7 +227,6 @@ describe('CreateThreadModal', () => {
               <MembershipContext.Provider value={useMyMemberships}>
                 <MockApolloProvider>
                   <GlobalModals />
-                  <CreateThreadModal />
                   <Route
                     path="*"
                     render={({ location }) => {

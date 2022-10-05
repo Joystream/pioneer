@@ -21,6 +21,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import { APPLICATION_DATA, OPENING_DATA, WORKER_DATA } from '../../_mocks/server/seeds'
 import { stubAccounts, stubApi, stubConst } from '../../_mocks/transactions'
+import { loaderSelector } from '../../setup'
 
 describe('UI: My Role Page', () => {
   const mockServer = setupMockServer()
@@ -44,9 +45,9 @@ describe('UI: My Role Page', () => {
   })
 
   it('Loading', () => {
-    const { getByText } = renderPage()
+    renderPage()
 
-    expect(getByText('Loading...')).toBeDefined()
+    expect(loaderSelector()).toBeInTheDocument()
   })
 
   describe('After loading', () => {
@@ -62,7 +63,7 @@ describe('UI: My Role Page', () => {
 
       const { getByText } = renderPage()
 
-      await waitForElementToBeRemoved(() => getByText('Loading...'))
+      await waitForElementToBeRemoved(() => loaderSelector())
 
       expect(getByText(`WORKER ID #${WORKER_DATA.id}`)).toBeDefined()
     })
@@ -73,16 +74,16 @@ describe('UI: My Role Page', () => {
 
         const { getByText } = renderPage()
 
-        await waitForElementToBeRemoved(() => getByText('Loading...'))
+        await waitForElementToBeRemoved(() => loaderSelector())
         expect(getByText('Minimal Stake:')).toBeDefined()
       })
 
       it('Higher than minimal', async () => {
         seedWorker({ ...WORKER_DATA, stake: 7000 }, mockServer.server)
 
-        const { getByText, queryByText } = renderPage()
+        const { queryByText } = renderPage()
 
-        await waitForElementToBeRemoved(() => getByText('Loading...'))
+        await waitForElementToBeRemoved(() => loaderSelector())
         expect(queryByText('Minimal Stake:')).toBeNull()
       })
     })
@@ -93,7 +94,7 @@ describe('UI: My Role Page', () => {
 
       renderPage()
 
-      await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
+      await waitForElementToBeRemoved(() => loaderSelector())
       expect(screen.queryByText(/leave this position/i)).toBeNull()
       expect(screen.queryByText(/change role account/i)).toBeNull()
       expect(screen.queryByText(/change reward account/i)).toBeNull()

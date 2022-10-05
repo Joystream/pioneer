@@ -1,6 +1,5 @@
 import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
@@ -8,7 +7,6 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
 import { WithdrawSignModal } from '@/bounty/modals/WithdrawSignModal'
-import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO } from '@/common/constants'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
@@ -19,7 +17,6 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BountyWithdrawContributionModalCall } from '.'
 
 export const WithdrawContributionModal = () => {
-  const { t } = useTranslation('bounty')
   const { api, connectionState } = useApi()
   const {
     modalData: { bounty },
@@ -61,23 +58,6 @@ export const WithdrawContributionModal = () => {
       }
     }
   }, [state.value, transaction, feeInfo?.canAfford, amount])
-
-  if (state.matches('requirementsVerification')) {
-    return (
-      <WaitModal
-        title={t('common:modals.wait.title')}
-        description={t('common:modals.wait.description')}
-        onClose={hideModal}
-        requirements={[
-          { name: 'API', state: !!api },
-          { name: 'Loading member', state: !!activeMember },
-          { name: 'Creating transaction', state: !!transaction },
-          { name: 'Calculating fee', state: !!feeInfo },
-          { name: 'Calculating amount', state: !!amount },
-        ]}
-      />
-    )
-  }
 
   if (!api || !activeMember || !transaction || !feeInfo || !amount) {
     return null

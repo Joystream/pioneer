@@ -4,21 +4,18 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { useApi } from '@/api/hooks/useApi'
 import { TextMedium } from '@/common/components/typography'
-import { WaitModal } from '@/common/components/WaitModal'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { createType } from '@/common/model/createType'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
 import { DeleteThreadModalCall } from '.'
 
 export const DeleteThreadModal = () => {
   const {
     modalData: { thread },
-    showModal,
     hideModal,
   } = useModal<DeleteThreadModalCall>()
 
@@ -44,15 +41,6 @@ export const DeleteThreadModal = () => {
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
-      if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({
-          modal: 'SwitchMember',
-          data: {
-            originalModalName: 'DeleteThreadModal',
-            originalModalData: { thread },
-          },
-        })
-      }
       if (transaction && feeInfo) {
         feeInfo.canAfford && send('PASS')
         !feeInfo.canAfford && send('FAIL')
@@ -63,10 +51,6 @@ export const DeleteThreadModal = () => {
       send(feeInfo?.canAfford ? 'PASS' : 'FAIL')
     }
   }, [state.value, activeMember, transaction, feeInfo?.canAfford])
-
-  if (state.matches('requirementsVerification')) {
-    return <WaitModal onClose={hideModal} requirementsCheck />
-  }
 
   if (state.matches('transaction') && transaction && activeMember) {
     return (

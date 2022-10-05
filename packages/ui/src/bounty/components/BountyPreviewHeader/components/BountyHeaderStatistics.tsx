@@ -1,9 +1,9 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { BountyHeaderButtonsProps } from '@/bounty/components/BountyPreviewHeader/types'
+import { Bounty } from '@/bounty/types/Bounty'
 
-export const BountyHeaderStatistics = React.memo(({ bounty }: BountyHeaderButtonsProps) => {
+export const BountyHeaderStatistics = React.memo(({ bounty }: { bounty: Bounty }) => {
   const { t } = useTranslation('bounty')
 
   return (

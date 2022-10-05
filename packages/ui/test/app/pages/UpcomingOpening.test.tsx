@@ -13,6 +13,7 @@ import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA, UPCOMING_OPENING } from '../../_mocks/server/seeds'
+import { loaderSelector } from '../../setup'
 
 describe('UpcomingWorkingGroupOpenings', () => {
   const mockServer = setupMockServer()
@@ -29,13 +30,13 @@ describe('UpcomingWorkingGroupOpenings', () => {
   it('Loading', async () => {
     renderPage()
 
-    expect(await screen.getByText('Loading...')).toBeDefined()
+    expect(await loaderSelector()).toBeDefined()
   })
 
   it('Opening loaded', async () => {
     renderPage()
 
-    await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
+    await waitForElementToBeRemoved(() => loaderSelector())
 
     expect(await screen.findByRole('heading', { name: UPCOMING_OPENING.metadata.title })).toBeDefined()
   })

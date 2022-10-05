@@ -8,6 +8,7 @@ import { seedElectedCouncil, seedMember } from '@/mocks/data'
 import { mockCouncils, mockMembers } from '../../_mocks/council'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { loaderSelector } from '../../setup'
 
 describe('Past Councils page', () => {
   const server = setupMockServer({ noCleanupAfterEach: true })
@@ -20,7 +21,7 @@ describe('Past Councils page', () => {
   it('Empty', async () => {
     renderPage()
 
-    await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
+    await waitForElementToBeRemoved(() => loaderSelector())
 
     expect(screen.queryByText('There are no past councils')).toBeDefined()
   })

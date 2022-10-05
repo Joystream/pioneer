@@ -13,7 +13,6 @@ import { isDefined } from '@/common/utils'
 import { useCommitment } from '@/council/hooks/useCommitment'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
 import { VoteForCouncilMachine, VoteForCouncilMachineState } from './machine'
 import { VoteForCouncilModalCall } from './types'
@@ -36,22 +35,13 @@ export const VoteForCouncilModal = () => {
   const { hasRequiredStake } = useHasRequiredStake(requiredStake, 'Voting')
 
   const { feeInfo } = useTransactionFee(
-    activeMember?.controllerAccount,
+    state.context.account?.address,
     () => api?.tx.referendum.vote('', requiredStake),
     [requiredStake]
   )
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
-      if (!activeMember) {
-        showModal<SwitchMemberModalCall>({
-          modal: 'SwitchMember',
-          data: {
-            originalModalName: 'VoteForCouncil',
-            originalModalData: modalData,
-          },
-        })
-      }
       if (feeInfo && isDefined(hasRequiredStake)) {
         const areFundsSufficient = feeInfo.canAfford && hasRequiredStake
         send(areFundsSufficient ? 'PASS' : 'FAIL')
@@ -63,7 +53,7 @@ export const VoteForCouncilModal = () => {
     return <VoteForCouncilSuccessModal onClose={hideModal} candidateId={modalData.id} />
   }
 
-  if (!activeMember || !feeInfo || !minStake) {
+  if (!feeInfo || !minStake) {
     return null
   }
 

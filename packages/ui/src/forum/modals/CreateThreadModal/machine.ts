@@ -3,6 +3,7 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
 import { Account } from '@/accounts/types'
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import { getDataFromEvent } from '@/common/model/JoystreamNode'
 import {
   isTransactionCanceled,
@@ -94,8 +95,10 @@ export const createThreadMachine = createMachine<CreateThreadContext, CreateThre
         ],
       },
     },
-    success: { type: 'final' },
-    error: { type: 'final', meta: { message: 'There was a problem with creating your forum thread.' } },
-    canceled: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      metaMessages: {
+        error: 'There was a problem with creating your forum thread.',
+      },
+    }),
   },
 })

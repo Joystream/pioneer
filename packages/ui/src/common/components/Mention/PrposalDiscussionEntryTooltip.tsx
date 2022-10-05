@@ -26,7 +26,7 @@ export const ProposalDiscussionEntryTooltip = ({ mention, onMount }: ProposalDis
   }, [])
 
   return (
-    <Container data-testid="proposal-discussion-entry-tooltip">
+    <Container id="proposal-discussion-entry-tooltip">
       {mention ? (
         <>
           <TextSmall lighter>{t('mentions.tooltips.forumPost.repliedOn', { date })}</TextSmall>

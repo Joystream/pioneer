@@ -23,6 +23,7 @@ import { WorkingGroupOpeningMention } from '@/working-groups/types'
 import { WorkingGroupApplicationMention } from '@/working-groups/types/WorkingGroupApplication'
 
 import { MockApolloProvider } from '../../_mocks/providers'
+import { loaderSelector } from '../../setup'
 
 jest.mock('@/proposals/hooks/useBlocksToProposalExecution', () => ({
   useBlocksToProposalExecution: jest.fn().mockReturnValue(1),
@@ -80,9 +81,8 @@ describe('UI: Mention', () => {
     })
 
     it('should mount loader when no mention was provided', () => {
-      const expected = 'Loading...'
       render(<ApplicationTooltip {...props} mention={undefined} />)
-      expect(screen.getByText(expected)).toBeInTheDocument()
+      expect(loaderSelector()).toBeInTheDocument()
     })
 
     it('should call onMount when no mention was provided', () => {
@@ -134,9 +134,8 @@ describe('UI: Mention', () => {
     })
 
     it('should mount loader when no mention was provided', () => {
-      const expected = 'Loading...'
       render(<ForumPostTooltip {...props} mention={undefined} />)
-      expect(screen.getByText(expected)).toBeInTheDocument()
+      expect(loaderSelector()).toBeInTheDocument()
     })
 
     it('should call onMount when no mention was provided', () => {
@@ -184,9 +183,8 @@ describe('UI: Mention', () => {
     })
 
     it('should mount loader when no mention was provided', () => {
-      const expected = 'Loading...'
       render(<ForumThreadTooltip {...props} mention={undefined} />)
-      expect(screen.getByText(expected)).toBeInTheDocument()
+      expect(loaderSelector()).toBeInTheDocument()
     })
 
     it('should call onMount when no mention was provided', () => {
@@ -246,9 +244,8 @@ describe('UI: Mention', () => {
     })
 
     it('should mount loader when no mention was provided', () => {
-      const expected = 'Loading...'
       render(<OpeningTooltip {...props} mention={undefined} />)
-      expect(screen.getByText(expected)).toBeInTheDocument()
+      expect(loaderSelector()).toBeInTheDocument()
     })
 
     it('should call onMount when no mention was provided', () => {
@@ -330,9 +327,8 @@ describe('UI: Mention', () => {
     })
 
     it('should mount loader when no mention was provided', () => {
-      const expected = 'Loading...'
       render(<ProposalTooltip {...props} mention={undefined} />)
-      expect(screen.getByText(expected)).toBeInTheDocument()
+      expect(loaderSelector()).toBeInTheDocument()
     })
 
     it('should call onMount when no mention was provided', () => {
@@ -385,9 +381,8 @@ describe('UI: Mention', () => {
     })
 
     it('should mount loader when no mention was provided', () => {
-      const expected = 'Loading...'
       render(<ProposalDiscussionEntryTooltip {...props} mention={undefined} />)
-      expect(screen.getByText(expected)).toBeInTheDocument()
+      expect(loaderSelector()).toBeInTheDocument()
     })
 
     it('should call onMount when no mention was provided', () => {
