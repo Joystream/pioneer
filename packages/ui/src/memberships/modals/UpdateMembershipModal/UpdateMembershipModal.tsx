@@ -34,12 +34,12 @@ export const UpdateMembershipModal = () => {
     return (
       <SignTransactionModal
         buttonText="Sign and update a member"
-        textContent={<TextMedium>You intend to update your membership.</TextMedium>}
         transaction={createBatch(state.context.form, api, member)}
         signer={member.controllerAccount}
-        onClose={hideModal}
         service={state.children.transaction}
-      />
+      >
+        <TextMedium>You intend to update your membership.</TextMedium>
+      </SignTransactionModal>
     )
   }
 

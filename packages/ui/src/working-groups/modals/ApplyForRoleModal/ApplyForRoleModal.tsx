@@ -223,17 +223,8 @@ export const ApplyForRoleModal = () => {
     return (
       <SignTransactionModal
         buttonText="Sign transaction and Stake"
-        textContent={
-          <>
-            <TextMedium>You intend to apply for a role.</TextMedium>
-            <TextMedium>
-              You intend to stake <TokenValue value={new BN(stake.amount)} />.
-            </TextMedium>
-          </>
-        }
         transaction={transaction}
         signer={signer}
-        onClose={hideModal}
         service={transactionService}
         additionalTransactionInfo={[
           {
@@ -241,7 +232,12 @@ export const ApplyForRoleModal = () => {
             value: new BN(stake.amount),
           },
         ]}
-      />
+      >
+        <TextMedium>You intend to apply for a role.</TextMedium>
+        <TextMedium>
+          You intend to stake <TokenValue value={new BN(stake.amount)} />.
+        </TextMedium>
+      </SignTransactionModal>
     )
   }
 

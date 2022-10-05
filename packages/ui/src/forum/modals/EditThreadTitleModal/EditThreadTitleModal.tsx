@@ -15,7 +15,6 @@ export const EditThreadTitleModal = () => {
   const [state] = useMachine(editThreadTitleMachine)
   const {
     modalData: { thread, newTitle, onSuccess },
-    hideModal,
   } = useModal<EditThreadTitleModalCall>()
   const { member: threadAuthor } = useMember(thread.authorId)
 
@@ -29,12 +28,12 @@ export const EditThreadTitleModal = () => {
     return (
       <SignTransactionModal
         buttonText="Sign and save"
-        textContent={<TextMedium>You intend to edit thread title.</TextMedium>}
         transaction={api?.tx.forum.editThreadMetadata(threadAuthor.id, thread.categoryId, thread.id, newTitle)}
         signer={threadAuthor.controllerAccount}
-        onClose={hideModal}
         service={state.children.transaction}
-      />
+      >
+        <TextMedium>You intend to edit thread title.</TextMedium>
+      </SignTransactionModal>
     )
   }
 

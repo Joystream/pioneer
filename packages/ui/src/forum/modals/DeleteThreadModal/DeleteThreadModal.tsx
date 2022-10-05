@@ -72,12 +72,12 @@ export const DeleteThreadModal = () => {
     return (
       <SignTransactionModal
         buttonText="Sign and delete"
-        textContent={<TextMedium>You intend to delete your thread.</TextMedium>}
         transaction={transaction}
         signer={activeMember.controllerAccount}
-        onClose={hideModal}
         service={state.children.transaction}
-      />
+      >
+        <TextMedium>You intend to delete your thread.</TextMedium>
+      </SignTransactionModal>
     )
   }
 

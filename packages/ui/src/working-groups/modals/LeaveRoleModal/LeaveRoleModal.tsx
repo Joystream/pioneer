@@ -39,14 +39,12 @@ export const LeaveRoleModal = () => {
     return (
       <SignTransactionModal
         buttonText="Sign and leave role"
-        textContent={
-          <TextMedium>The transaction can only be signed with the membership's controller account.</TextMedium>
-        }
         transaction={transaction}
         signer={worker.roleAccount}
-        onClose={hideModal}
         service={state.children.transaction}
-      />
+      >
+        <TextMedium>The transaction can only be signed with the membership's controller account.</TextMedium>
+      </SignTransactionModal>
     )
   }
 

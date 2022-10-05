@@ -64,10 +64,8 @@ export const EditPostModal = () => {
     return (
       <SignTransactionModal
         buttonText="Sign and edit"
-        textContent={<TextMedium>You intend to edit your post.</TextMedium>}
         transaction={transaction}
         signer={postAuthor.controllerAccount}
-        onClose={hideModal}
         service={state.children.transaction}
         extraButtons={
           <PreviewPostButton
@@ -76,7 +74,9 @@ export const EditPostModal = () => {
             replyTo={replyTo as ForumPost}
           />
         }
-      />
+      >
+        <TextMedium>You intend to edit your post.</TextMedium>
+      </SignTransactionModal>
     )
   }
 

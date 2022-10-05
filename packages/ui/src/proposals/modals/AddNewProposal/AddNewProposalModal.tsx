@@ -262,17 +262,8 @@ export const AddNewProposalModal = () => {
     return (
       <SignTransactionModal
         buttonText="Sign transaction and Create"
-        textContent={
-          <>
-            <TextMedium>You intend to create a proposal.</TextMedium>
-            <TextMedium>
-              Also you intend to stake <TokenValue value={constants?.requiredStake as BN} />.
-            </TextMedium>
-          </>
-        }
         transaction={transaction}
         signer={activeMember.controllerAccount}
-        onClose={hideModal}
         service={state.children.transaction}
         useMultiTransaction={{ steps: transactionsSteps, active: 1 }}
         additionalTransactionInfo={[
@@ -281,7 +272,12 @@ export const AddNewProposalModal = () => {
             value: constants?.requiredStake as BN,
           },
         ]}
-      />
+      >
+        <TextMedium>You intend to create a proposal.</TextMedium>
+        <TextMedium>
+          Also you intend to stake <TokenValue value={constants?.requiredStake as BN} />.
+        </TextMedium>
+      </SignTransactionModal>
     )
   }
 
@@ -301,13 +297,13 @@ export const AddNewProposalModal = () => {
     return (
       <SignTransactionModal
         buttonText="Sign transaction and change mode"
-        textContent={<TextMedium>You intend to change the proposal discussion thread mode.</TextMedium>}
         transaction={transaction}
         signer={activeMember.controllerAccount}
-        onClose={hideModal}
         service={state.children.discussionTransaction}
         useMultiTransaction={{ steps: transactionsSteps, active: 2 }}
-      />
+      >
+        <TextMedium>You intend to change the proposal discussion thread mode.</TextMedium>
+      </SignTransactionModal>
     )
   }
 

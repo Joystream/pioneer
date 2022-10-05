@@ -61,16 +61,14 @@ export const VoteForProposalModal = () => {
     return (
       <SignTransactionModal
         buttonText="Sign transaction and Vote"
-        textContent={
-          <TextMedium>
-            You intend to <TextInlineMedium bold>{status}</TextInlineMedium> the Proposal "{proposal.title}".
-          </TextMedium>
-        }
         transaction={transaction}
         signer={active.controllerAccount}
-        onClose={hideModal}
         service={state.children.transaction}
-      />
+      >
+        <TextMedium>
+          You intend to <TextInlineMedium bold>{status}</TextInlineMedium> the Proposal "{proposal.title}".
+        </TextMedium>
+      </SignTransactionModal>
     )
   }
 

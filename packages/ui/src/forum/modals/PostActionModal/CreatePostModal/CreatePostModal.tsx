@@ -73,19 +73,8 @@ export const CreatePostModal = () => {
     return (
       <SignTransactionModal
         buttonText={replyTo ? 'Sign and reply' : 'Sign and post'}
-        textContent={
-          <>
-            <TextMedium>You intend to post in a thread.</TextMedium>
-            {isEditable && (
-              <TextMedium>
-                <TokenValue value={postDeposit} /> will be deposited to make the post editable.
-              </TextMedium>
-            )}
-          </>
-        }
         transaction={transaction}
         signer={active.controllerAccount}
-        onClose={hideModal}
         service={state.children.transaction}
         additionalTransactionInfo={
           isEditable
@@ -98,7 +87,14 @@ export const CreatePostModal = () => {
             : undefined
         }
         extraButtons={<PreviewPostButton author={active} postText={postText} replyTo={replyTo} />}
-      />
+      >
+        <TextMedium>You intend to post in a thread.</TextMedium>
+        {isEditable && (
+          <TextMedium>
+            <TokenValue value={postDeposit} /> will be deposited to make the post editable.
+          </TextMedium>
+        )}
+      </SignTransactionModal>
     )
   }
 

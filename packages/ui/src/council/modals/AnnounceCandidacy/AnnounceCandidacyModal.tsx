@@ -265,21 +265,17 @@ export const AnnounceCandidacyModal = () => {
     return (
       <SignTransactionModal
         buttonText="Sign transaction and Announce"
-        textContent={
-          <>
-            <TextMedium>You intend to announce candidacy.</TextMedium>
-            <TextMedium>
-              Also you intend to stake <TokenValue value={form.watch('staking.amount') ?? BN_ZERO} />.
-            </TextMedium>
-          </>
-        }
         transaction={announceCandidacyTransaction}
         signer={activeMember.controllerAccount}
-        onClose={hideModal}
         service={state.children.announceCandidacyTransaction}
         useMultiTransaction={{ steps: transactionSteps, active: 1 }}
         skipQueryNode
-      />
+      >
+        <TextMedium>You intend to announce candidacy.</TextMedium>
+        <TextMedium>
+          Also you intend to stake <TokenValue value={form.watch('staking.amount') ?? BN_ZERO} />.
+        </TextMedium>
+      </SignTransactionModal>
     )
   }
 
@@ -287,13 +283,13 @@ export const AnnounceCandidacyModal = () => {
     return (
       <SignTransactionModal
         buttonText="Sign transaction and Set"
-        textContent={<TextMedium>You intend to set candidacy note.</TextMedium>}
         transaction={candidacyNoteTransaction}
         signer={activeMember.controllerAccount}
-        onClose={hideModal}
         service={state.children.candidacyNoteTransaction}
         useMultiTransaction={{ steps: transactionSteps, active: 2 }}
-      />
+      >
+        <TextMedium>You intend to set candidacy note.</TextMedium>
+      </SignTransactionModal>
     )
   }
 

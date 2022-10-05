@@ -112,17 +112,16 @@ export const CreateThreadModal = () => {
     )
     return (
       <SignTransactionModal
-        buttonText="Sign and send"
-        textContent={<TextMedium>You intend to create a thread.</TextMedium>}
         transaction={transaction}
         signer={controllerAccount.address}
-        onClose={hideModal}
         service={state.children.transaction}
         additionalTransactionInfo={[
           { title: 'Thread creation and initial post deposit:', value: postDeposit.add(threadDeposit) },
         ]}
         extraCosts={postDeposit.add(threadDeposit)}
-      />
+      >
+        <TextMedium>You intend to create a thread.</TextMedium>
+      </SignTransactionModal>
     )
   }
 

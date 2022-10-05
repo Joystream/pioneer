@@ -45,12 +45,12 @@ export const DeletePostModal = () => {
     return (
       <SignTransactionModal
         buttonText="Sign and delete"
-        textContent={<TextMedium>You intend to delete your post.</TextMedium>}
         transaction={transaction}
         signer={post.author.controllerAccount}
-        onClose={hideModal}
         service={state.children.transaction}
-      />
+      >
+        <TextMedium>You intend to delete your post.</TextMedium>
+      </SignTransactionModal>
     )
   }
 

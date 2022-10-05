@@ -66,14 +66,12 @@ export const ChangeAccountModal = () => {
             ? 'Sign and change role account'
             : 'Sign and change reward account'
         }
-        textContent={
-          <TextMedium>The transaction can only be signed with the membership's controller account.</TextMedium>
-        }
         transaction={transaction}
         signer={worker.membership.controllerAccount}
-        onClose={hideModal}
         service={state.children.transaction}
-      />
+      >
+        <TextMedium>The transaction can only be signed with the membership's controller account.</TextMedium>
+      </SignTransactionModal>
     )
   }
 

@@ -62,19 +62,15 @@ export const IncreaseWorkerStakeModal = () => {
     return (
       <SignTransactionModal
         buttonText="Sign transaction and Stake"
-        textContent={
-          <>
-            <TextMedium>You intend to increase the stake of worker with ID: {modalData.worker.id}</TextMedium>
-            <TextMedium>
-              Amount of increase: <TokenValue value={new BN(state.context.stake || 0)} />
-            </TextMedium>
-          </>
-        }
         transaction={transaction}
         signer={modalData.worker.roleAccount}
-        onClose={hideModal}
         service={state.children.transaction}
-      />
+      >
+        <TextMedium>You intend to increase the stake of worker with ID: {modalData.worker.id}</TextMedium>
+        <TextMedium>
+          Amount of increase: <TokenValue value={new BN(state.context.stake || 0)} />
+        </TextMedium>
+      </SignTransactionModal>
     )
   }
 

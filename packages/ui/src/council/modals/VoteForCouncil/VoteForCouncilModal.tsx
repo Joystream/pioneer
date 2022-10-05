@@ -83,15 +83,8 @@ export const VoteForCouncilModal = () => {
   } else if (state.matches('transaction') && state.context.account && commitment && state.context.stake) {
     return (
       <SignTransactionModal
-        buttonText="Sign and send"
-        textContent={
-          <TextMedium light>
-            You intend to Vote and stake <TokenValue value={state.context.stake} />.
-          </TextMedium>
-        }
         transaction={api?.tx.referendum.vote(commitment, state.context.stake)}
         signer={state.context.account.address}
-        onClose={hideModal}
         service={state.children.transaction}
         disabled={!isVoteStored}
         additionalTransactionInfo={[
@@ -100,7 +93,11 @@ export const VoteForCouncilModal = () => {
             value: state.context.stake,
           },
         ]}
-      />
+      >
+        <TextMedium light>
+          You intend to Vote and stake <TokenValue value={state.context.stake} />.
+        </TextMedium>
+      </SignTransactionModal>
     )
   }
 

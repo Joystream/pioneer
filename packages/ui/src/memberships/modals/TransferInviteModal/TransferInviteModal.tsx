@@ -68,17 +68,14 @@ export function TransferInviteModal() {
     const handle = targetMember.handle
     return (
       <SignTransactionModal
-        buttonText="Sign and Send"
-        textContent={
-          <TextMedium margin="m">
-            You intend to transfer {numberOfInvites.toString()} invite{plural && 's'} to {handle}.
-          </TextMedium>
-        }
         transaction={transaction}
         signer={member.controllerAccount}
-        onClose={hideModal}
         service={state.children['transaction']}
-      />
+      >
+        <TextMedium margin="m">
+          You intend to transfer {numberOfInvites.toString()} invite{plural && 's'} to {handle}.
+        </TextMedium>
+      </SignTransactionModal>
     )
   }
 

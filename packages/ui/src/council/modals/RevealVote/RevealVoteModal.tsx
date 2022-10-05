@@ -60,16 +60,14 @@ export const RevealVoteModal = () => {
     return (
       <SignTransactionModal
         buttonText="Sign and reveal"
-        textContent={
-          <TextMedium light>
-            You intend to reveal your vote for <TextInlineMedium bold>{modalData.voteForHandle}</TextInlineMedium>.
-          </TextMedium>
-        }
         transaction={transaction}
         signer={vote.accountId}
-        onClose={hideModal}
         service={state.children.transaction}
-      />
+      >
+        <TextMedium light>
+          You intend to reveal your vote for <TextInlineMedium bold>{modalData.voteForHandle}</TextInlineMedium>.
+        </TextMedium>
+      </SignTransactionModal>
     )
   }
 

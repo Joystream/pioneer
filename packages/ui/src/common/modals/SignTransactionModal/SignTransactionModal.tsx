@@ -15,14 +15,14 @@ import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageConten
 import { TransactionInfo, TransactionInfoProps } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Sizes } from '@/common/constants'
+import { useModal } from '@/common/hooks/useModal'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal, TransactionModalProps } from '@/common/modals/TransactionModal'
 import { Address } from '@/common/types'
 
-export interface SignTransactionModalProps extends Omit<TransactionModalProps, 'children'> {
+export interface SignTransactionModalProps extends Omit<TransactionModalProps, 'onClose'> {
   additionalTransactionInfo?: TransactionInfoProps[]
-  buttonText: string
-  textContent: React.ReactElement
+  buttonText?: string
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
   signer: Address
   additionalAmountInfo?: SignModalAccountProps['amountInfo']
@@ -35,17 +35,18 @@ export interface SignTransactionModalProps extends Omit<TransactionModalProps, '
 export const SignTransactionModal = ({
   additionalTransactionInfo,
   additionalAmountInfo,
-  textContent,
-  buttonText,
+  buttonText = 'Sign and Send',
   transaction,
   skipQueryNode,
   signer,
   disabled,
   extraButtons,
   extraCosts,
+  children,
   ...transactionModalProps
 }: SignTransactionModalProps) => {
   const { allAccounts } = useMyAccounts()
+  const { hideModal } = useModal()
   const signerAccount = accountOrNamed(allAccounts, signer, 'ControllerAccount')
   const { paymentInfo, sign, isReady, canAfford } = useSignAndSendTransaction({
     transaction,
@@ -57,9 +58,9 @@ export const SignTransactionModal = ({
   const signDisabled = !isReady || !canAfford || disabled
 
   return (
-    <TransactionModal {...transactionModalProps}>
+    <TransactionModal {...transactionModalProps} onClose={hideModal}>
       <ModalBody>
-        {textContent}
+        {children}
         <TextMedium>
           Fee of
           <TokenValue value={paymentInfo?.partialFee} /> will be applied to the transaction.

@@ -28,13 +28,12 @@ export const WithdrawCandidacyModal = () => {
   if (state.matches('transaction')) {
     return (
       <SignTransactionModal
-        buttonText="Sign and send"
-        textContent={<TextMedium>You intend to withdraw your candidacy.</TextMedium>}
         transaction={api?.tx.council.withdrawCandidacy(member.id)}
         signer={member.controllerAccount}
-        onClose={hideModal}
         service={state.children.transaction}
-      />
+      >
+        <TextMedium>You intend to withdraw your candidacy.</TextMedium>
+      </SignTransactionModal>
     )
   }
 
