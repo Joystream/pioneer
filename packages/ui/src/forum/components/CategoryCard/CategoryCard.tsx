@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { generatePath, useHistory } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { CountBadge } from '@/common/components/CountBadge'
@@ -14,10 +14,11 @@ import { ForumCategory } from '@/forum/types'
 interface CategoryCardProps {
   category: ForumCategory
   className?: string
+  archivedStyles?: boolean
 }
 
 // In case of different onClick event for message icon and box as whole, remember to stop propagation of msg onClick event
-export const CategoryCard = ({ className, category }: CategoryCardProps) => {
+export const CategoryCard = ({ className, category, archivedStyles }: CategoryCardProps) => {
   const [isHovered, setIsHovered] = useState<boolean>(false)
   const { push } = useHistory()
   const hoverComponent = useMemo(() => {
@@ -35,7 +36,12 @@ export const CategoryCard = ({ className, category }: CategoryCardProps) => {
   }, [])
 
   return (
-    <Box className={className} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+    <Box
+      className={className}
+      archivedStyles={archivedStyles}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div>
         <TextBig bold value>
           {category.title}
@@ -68,7 +74,7 @@ const StyledBadge = styled(BadgeStatus)`
   cursor: pointer;
 `
 
-const Box = styled.div`
+const Box = styled.div<{ archivedStyles?: boolean }>`
   display: flex;
   column-gap: 15px;
   border: 1px solid ${Colors.Black[100]};
@@ -104,6 +110,12 @@ const Box = styled.div`
     display: flex;
     align-items: center;
   }
+
+  ${({ archivedStyles }) =>
+    archivedStyles &&
+    css`
+      background-color: ${Colors.Black[50]};
+    `}
 `
 
 const CategoriesBox = styled.div`
