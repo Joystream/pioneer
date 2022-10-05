@@ -86,7 +86,7 @@ describe('Members', () => {
 
   it('Renders the page with Member Profile', async () => {
     renderPage('/members/1')
-    expect(await screen.findByText(/my profile/i)).toBeDefined()
+    expect(await screen.findByText(/profile/i)).toBeDefined()
     expect(await screen.findByText(/Member Details/i)).toBeDefined()
     expect(await screen.findByText(/Member Name/i)).toBeDefined()
     expect(
