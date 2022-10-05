@@ -56,7 +56,7 @@ describe('UI: Forum Thread Page', () => {
     categoryId: '1',
     initialPostText: '',
     categoryTitle: '',
-    authorId: '0',
+    author: getMember('alice'),
     isSticky: false,
     createdInBlock: randomBlock(),
     tags: [],

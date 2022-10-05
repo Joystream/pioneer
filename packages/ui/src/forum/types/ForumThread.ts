@@ -4,6 +4,7 @@ import {
   ForumThreadDetailedFieldsFragment,
   ForumThreadFieldsFragment,
 } from '@/forum/queries'
+import { asMember, Member } from '@/memberships/types'
 
 import { asCategoryBreadcrumbs, CategoryBreadcrumb } from './ForumCategory'
 
@@ -16,7 +17,7 @@ export interface ForumThread {
   id: string
   title: string
   initialPostText: string
-  authorId: string
+  author: Member
   createdInBlock: Block
   isSticky: boolean
   categoryId: string
@@ -48,7 +49,7 @@ export const asForumThread = (fields: ForumThreadFieldsFragment): ForumThread =>
   id: fields.id,
   title: fields.title,
   createdInBlock: asBlock(fields.createdInEvent),
-  authorId: fields.authorId,
+  author: asMember(fields.author),
   isSticky: fields.isSticky,
   categoryId: fields.categoryId,
   categoryTitle: fields.category.title,

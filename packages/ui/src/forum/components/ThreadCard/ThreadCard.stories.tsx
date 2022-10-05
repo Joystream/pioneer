@@ -1,9 +1,10 @@
-import { Meta } from '@storybook/react'
+import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
 import { ThreadCard } from '@/forum/components/ThreadCard/ThreadCard'
 import { ForumThreadWithDetails } from '@/forum/types'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+import { getMember } from '@/mocks/helpers'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 export default {
@@ -16,7 +17,7 @@ const forumThread: ForumThreadWithDetails = {
   title: 'Example Thread',
   categoryTitle: '',
   categoryId: '1',
-  authorId: '0',
+  author: getMember('alice'),
   initialPostText: '',
   isSticky: false,
   createdInBlock: randomBlock(),
@@ -25,8 +26,16 @@ const forumThread: ForumThreadWithDetails = {
   status: { __typename: 'ThreadStatusActive' },
 }
 
-export const Default = () => (
+const Template: Story = (args) => (
   <MockApolloProvider members>
-    <ThreadCard thread={forumThread} />
+    <ThreadCard thread={{ ...forumThread, ...args }} />
   </MockApolloProvider>
 )
+
+export const Default = Template.bind({})
+Default.args = {
+  initialPostText: '',
+  categoryTitle: '',
+  title: 'Example Thread',
+  visiblePostsCount: 5,
+}

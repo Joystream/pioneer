@@ -100,7 +100,9 @@ fragment ForumThreadFields on ForumThread {
   initialPost {
     text
   }
-  authorId
+  author {
+    ...MemberFields
+  }
   createdInEvent {
     createdAt
     inBlock

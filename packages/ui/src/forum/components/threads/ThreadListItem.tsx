@@ -12,7 +12,6 @@ import { Colors, Overflow } from '@/common/constants'
 import { ForumRoutes, ThreadsColLayout } from '@/forum/constant'
 import { ForumThread } from '@/forum/types'
 import { MemberInfo, MemberInfoWrap } from '@/memberships/components'
-import { useMember } from '@/memberships/hooks/useMembership'
 
 import { LatestActivity, LatestActivityRowGapBlock } from './LatestActivity'
 import { ThreadTags } from './ThreadTags'
@@ -22,8 +21,6 @@ interface ThreadListItemProps {
   isArchive?: boolean
 }
 export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
-  const { member: author } = useMember(thread.authorId)
-
   const { createdInBlock, status } = thread
   const block = isArchive ? status?.threadDeletedEvent : createdInBlock
 
@@ -44,7 +41,11 @@ export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
 
       <LatestActivity threadId={thread.id} />
 
-      {author ? <MemberInfo member={author} size="s" memberSize="s" hideGroup /> : <Loading withoutMargin />}
+      {thread.author ? (
+        <MemberInfo member={thread.author} size="s" memberSize="s" hideGroup />
+      ) : (
+        <Loading withoutMargin />
+      )}
 
       {block && <BlockTime block={block} layout="column" />}
     </ThreadListItemStyles>

@@ -7,6 +7,7 @@ import { asStorybookPost } from '@/forum/helpers/storybook'
 import { ForumThreadFieldsFragment } from '@/forum/queries'
 import { asForumThread } from '@/forum/types'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+import rawMembers from '@/mocks/data/raw/members.json'
 import { RawForumCategoryMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 
 import { ThreadListItem } from './ThreadListItem'
@@ -58,6 +59,7 @@ Default.args = {
     },
     categoryId,
     authorId: '0',
+    author: rawMembers[0] as any,
     isSticky: false,
     title: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint',
     createdInEvent: {
