@@ -6,6 +6,7 @@ import { InputComponent, InputText } from '@/common/components/forms'
 import { CrossIcon, SearchIcon } from '@/common/components/icons'
 import { Colors } from '@/common/constants'
 
+import { useDebounce } from '../../../hooks/useDebounce'
 import { ButtonLink } from '../../buttons'
 import { ControlProps } from '../types'
 
@@ -40,9 +41,10 @@ interface SearchBoxProps extends ControlProps<string> {
   displayReset?: boolean
 }
 export const SearchBox = React.memo(({ value, onApply, onChange, label, displayReset }: SearchBoxProps) => {
+  const debouncedValue = useDebounce(value, 300)
   const change = onChange && (({ target }: ChangeEvent<HTMLInputElement>) => onChange(target.value))
   const keyDown = onApply && (({ key }: React.KeyboardEvent) => key === 'Enter' && onApply())
-  const isValid = () => !value || value.length === 0 || value.length > 1
+  const isValid = () => !debouncedValue || debouncedValue.length === 0 || debouncedValue.length > 2
   const reset =
     onChange &&
     onApply &&
