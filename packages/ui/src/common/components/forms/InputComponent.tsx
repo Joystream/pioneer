@@ -76,7 +76,7 @@ export const InputComponent = React.memo(
     sublabel,
     required,
     validation,
-    validationStyles: validationProps,
+    validationStyles: validationStyles,
     disabled,
     inputDisabled,
     value,
@@ -152,7 +152,7 @@ export const InputComponent = React.memo(
           )}
         </InputContainer>
         {validationMessage && (
-          <InputNotification validation={validationStatus} validationStyles={validationProps}>
+          <InputNotification validation={validationStatus} validationStyles={validationStyles}>
             {validationStatus === 'invalid' && (
               <InputNotificationIcon>
                 <AlertSymbol />
@@ -479,21 +479,21 @@ export const InputNotification = styled.div<InputProps>`
   align-items: center;
   width: 100%;
   grid-template-columns: max-content;
-  position: ${({ validationStyles: validationProps }) => {
-    if (validationProps && validationProps.position) {
-      return validationProps.position
+  position: ${({ validationStyles }) => {
+    if (validationStyles && validationStyles.position) {
+      return validationStyles.position
     }
     return 'static'
   }};
-  top: ${({ validationStyles: validationProps }) => {
-    if (validationProps && validationProps.top) {
-      return validationProps.top
+  top: ${({ validationStyles }) => {
+    if (validationStyles && validationStyles.top) {
+      return validationStyles.top
     }
     return 'inherit'
   }};
-  left: ${({ validationStyles: validationProps }) => {
-    if (validationProps && validationProps.left) {
-      return validationProps.left
+  left: ${({ validationStyles }) => {
+    if (validationStyles && validationStyles.left) {
+      return validationStyles.left
     }
     return 'inherit'
   }};
