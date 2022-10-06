@@ -29,7 +29,7 @@ export const SearchResultsModal = () => {
   const [activeTab, setActiveTab] = useState<SearchKind>('FORUM')
   const { forum, forumPostCount, isLoading } = useSearch(search, activeTab)
   const pattern = useMemo(() => (search ? RegExp(escapeStringRegexp(search), 'ig') : null), [search])
-  const debouncedSearch = useDebounce(search, 300)
+  const debouncedSearch = useDebounce(search, 400)
   const isValid = () => !debouncedSearch || debouncedSearch.length === 0 || debouncedSearch.length > 2
   const history = useHistory()
   const [hasOverlay, setHasOverlay] = useState(true)
