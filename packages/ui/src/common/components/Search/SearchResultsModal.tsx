@@ -19,16 +19,18 @@ import { ModalWithDataCall } from '@/common/providers/modal/types'
 import { ThreadItemBreadcrumbs } from '@/forum/components/threads/ThreadItemBreadcrumbs'
 import { ForumRoutes } from '@/forum/constant'
 
+import { useDebounce } from '../../hooks/useDebounce'
+
 export type SearchResultsModalCall = ModalWithDataCall<'SearchResults', { search: string }>
 
 export const SearchResultsModal = () => {
   const { hideModal, modalData } = useModal<SearchResultsModalCall>()
-
   const [search, setSearch] = useState(modalData.search)
   const [activeTab, setActiveTab] = useState<SearchKind>('FORUM')
   const { forum, forumPostCount, isLoading } = useSearch(search, activeTab)
   const pattern = useMemo(() => (search ? RegExp(escapeStringRegexp(search), 'ig') : null), [search])
-
+  const debouncedSearch = useDebounce(search, 300)
+  const isValid = () => !debouncedSearch || debouncedSearch.length === 0 || debouncedSearch.length > 2
   const history = useHistory()
   const [hasOverlay, setHasOverlay] = useState(true)
   useEffect(
@@ -55,7 +57,15 @@ export const SearchResultsModal = () => {
       <SearchResultsSidePane>
         <SearchResultsHeader>
           <CloseButton onClick={hideModal} />
-          <SearchInput>
+          <SearchInput
+            validation={isValid() ? undefined : 'invalid'}
+            validationStyles={{
+              position: 'absolute',
+              top: '60px',
+              left: '41px',
+            }}
+            message={isValid() ? '' : 'Minimum of 3 characters is required'}
+          >
             <InputText placeholder="Search" value={search} onChange={(event) => setSearch(event.target.value)} />
           </SearchInput>
         </SearchResultsHeader>

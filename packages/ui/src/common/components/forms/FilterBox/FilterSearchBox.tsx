@@ -58,7 +58,10 @@ export const SearchBox = React.memo(({ value, onApply, onChange, label, displayR
       <SearchInput
         inputSize={label ? 'xs' : 's'}
         validation={isValid() ? undefined : 'invalid'}
-        validationMsgAbsolute={true}
+        validationStyles={{
+          position: 'absolute',
+          top: '42px',
+        }}
         message={isValid() ? '' : 'Minimum of 3 characters is required'}
       >
         <InputText placeholder="Search" value={value} onChange={change} onKeyDown={keyDown} />
