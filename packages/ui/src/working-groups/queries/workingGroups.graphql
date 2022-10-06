@@ -378,6 +378,7 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
     network
   }
   stake
+  roleAccount
 }
 
 query GetWorkingGroupApplications($where: WorkingGroupApplicationWhereInput) {

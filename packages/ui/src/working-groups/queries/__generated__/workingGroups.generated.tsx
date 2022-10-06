@@ -1,8 +1,9 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
+import * as Apollo from '@apollo/client'
 import { gql } from '@apollo/client'
 import { MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
-import * as Apollo from '@apollo/client'
+
 const defaultOptions = {} as const
 export type WorkingGroupMetadataFieldsFragment = {
   __typename: 'WorkingGroupMetadata'
@@ -1064,6 +1065,7 @@ export type WorkingGroupApplicationFieldsFragment = {
   runtimeId: number
   stakingAccount: string
   stake: string
+  roleAccount: string
   answers: Array<{
     __typename: 'ApplicationFormQuestionAnswer'
     answer: string
@@ -1131,6 +1133,7 @@ export type GetWorkingGroupApplicationsQuery = {
     runtimeId: number
     stakingAccount: string
     stake: string
+    roleAccount: string
     answers: Array<{
       __typename: 'ApplicationFormQuestionAnswer'
       answer: string
@@ -1222,6 +1225,7 @@ export type GetWorkingGroupApplicationQuery = {
     runtimeId: number
     stakingAccount: string
     stake: string
+    roleAccount: string
     answers: Array<{
       __typename: 'ApplicationFormQuestionAnswer'
       answer: string
@@ -1689,6 +1693,7 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
       network
     }
     stake
+    roleAccount
   }
   ${MemberFieldsFragmentDoc}
 `
