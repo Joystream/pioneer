@@ -179,6 +179,7 @@ const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
   'RecoverBalance',
   'DisconnectWallet',
   'ClaimVestingModal',
+  'ReportContentModal',
 ]
 
 export const GlobalModals = () => {

@@ -4,6 +4,7 @@ const path = require('path')
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
+const dotenv = require('dotenv')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
@@ -11,6 +12,8 @@ const webpack = require('webpack')
 const shared = require('./dev/webpack.shared')
 
 const version = cp.execSync('git rev-parse --short HEAD').toString().trim()
+
+dotenv.config()
 
 module.exports = (env, argv) => {
   const isDevelopment = argv.mode === 'development'
