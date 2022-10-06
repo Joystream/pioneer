@@ -476,11 +476,11 @@ export const InputNotification = styled.div<InputProps>`
     if (validationMsgAbsolute) {
       return 'absolute'
     }
-    return 'relative'
+    return 'static'
   }};
   top: ${({ validationMsgAbsolute }) => {
     if (validationMsgAbsolute) {
-      return '45px'
+      return '42px'
     }
     return '0'
   }};
