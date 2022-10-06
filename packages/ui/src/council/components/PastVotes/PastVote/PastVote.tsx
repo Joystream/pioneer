@@ -1,7 +1,8 @@
 import React from 'react'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
-import { useIsVoteStakeLocked } from '@/accounts/hooks/useIsVoteStakeLocked'
+import { useBalance } from '@/accounts/hooks/useBalance'
+import { useGroupLocks } from '@/accounts/hooks/useGroupLocks/useGroupLocks'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { RecoverBalanceModalCall, VotingData } from '@/accounts/modals/RecoverBalance'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
@@ -17,14 +18,15 @@ import { PastVoteTableListItem, StakeRecoveringButton } from '../styles'
 
 export interface PastVoteProps {
   vote: Vote
-  latestCycleId?: number
   $colLayout: string
 }
 
-export const PastVote = ({ vote, latestCycleId, $colLayout }: PastVoteProps) => {
+export const PastVote = ({ vote, $colLayout }: PastVoteProps) => {
   const { allAccounts } = useMyAccounts()
   const { showModal } = useModal()
   const { isTransactionPending } = useTransactionStatus()
+  const balance = useBalance(vote.castBy)
+
   const onClick = () => {
     showModal<RecoverBalanceModalCall>({
       modal: 'RecoverBalance',
@@ -39,8 +41,9 @@ export const PastVote = ({ vote, latestCycleId, $colLayout }: PastVoteProps) => 
   }
 
   // Reflects if the vote was cast in latest election
-  const isLatestElection = vote.cycleId === latestCycleId
-  const isVoteStakeLocked = useIsVoteStakeLocked(vote.voteFor, { isLatestElection })
+  const isVoteStakeLocked = useGroupLocks(vote.castBy, balance?.locks ?? []).unRecoverable.some(
+    (lock) => lock.type === 'Voting'
+  )
   // Reflects if the stake has been already released by the member.
   const isRecovered = !vote.stakeLocked
   const isDisabled = isVoteStakeLocked || isRecovered || isTransactionPending

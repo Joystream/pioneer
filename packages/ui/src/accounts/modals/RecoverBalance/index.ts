@@ -33,7 +33,7 @@ export interface VotingData extends RecoverableModalData {
   memberId: undefined
 }
 
-interface CouncilCandidateData extends RecoverableModalData {
+export interface CouncilCandidateData extends RecoverableModalData {
   address: Address
   lock: CouncilLock
   memberId: Member['id']
