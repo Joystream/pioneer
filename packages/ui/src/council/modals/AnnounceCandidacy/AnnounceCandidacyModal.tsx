@@ -6,18 +6,17 @@ import { useForm, FormProvider } from 'react-hook-form'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
-import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { Account } from '@/accounts/types'
+import { useApi } from '@/api/hooks/useApi'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
 import { BN_ZERO } from '@/common/constants'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
@@ -73,15 +72,14 @@ const transactionSteps = [
 ]
 
 interface Conditions extends IStakingAccountSchema {
+  extraFees: BN
   minStake: BN
-  stakingAccountBalance: BN
 }
 
 export const AnnounceCandidacyModal = () => {
   const { api, connectionState } = useApi()
   const boundingLock = api?.consts.members.candidateStake ?? BN_ZERO
   const { active: activeMember } = useMyMemberships()
-  const balances = useMyBalances()
   const { hideModal, showModal } = useModal()
   const [state, send, service] = useMachine(announceCandidacyMachine)
   const constants = useCouncilConstants()
@@ -94,21 +92,18 @@ export const AnnounceCandidacyModal = () => {
   const stakingStatus = useStakingAccountStatus(stakingAccountMap?.address, activeMember?.id)
   const balance = useBalance(stakingAccountMap?.address)
 
+  // TODO add transaction fees here
+  const extraFees = (stakingStatus === 'free' && boundingLock) || BN_ZERO
+
   const form = useForm({
     resolver: useYupValidationResolver<AnnounceCandidacyFrom>(baseSchema, machineStateConverter(state.value)),
     context: {
       stakingStatus,
-      requiredAmount:
-        (stakingStatus === 'free'
-          ? boundingLock.add(constants?.election.minCandidacyStake ?? BN_ZERO)
-          : constants?.election.minCandidacyStake) ?? BN_ZERO,
+      requiredAmount: extraFees.add(constants?.election.minCandidacyStake ?? BN_ZERO),
       stakeLock: 'Council Candidate',
       balances: balance,
+      extraFees,
       minStake: constants?.election.minCandidacyStake as BN,
-      stakingAccountBalance:
-        stakingStatus === 'free'
-          ? balances[stakingAccountMap?.address ?? '']?.transferable
-          : balances[stakingAccountMap?.address ?? '']?.transferable.add(boundingLock),
     } as Conditions,
     mode: 'onChange',
     defaultValues: getAnnounceCandidacyFormInitialState(constants?.election.minCandidacyStake ?? BN_ZERO),

@@ -4,7 +4,7 @@ import { ProposalMock } from 'dev/query-node-mocks/generators/generateProposals'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { ApiContext } from '@/common/providers/api/context'
+import { ApiContext } from '@/api/providers/context'
 import { seedMembers, seedProposal } from '@/mocks/data'
 import { ProposalsOverview } from '@/overview/components/ProposalsOverview/ProposalsOverview'
 

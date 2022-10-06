@@ -12,9 +12,9 @@ import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import { ApiContext } from '@/api/providers/context'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
@@ -111,8 +111,10 @@ describe('UI: ApplyForRoleModal', () => {
     useMyMemberships.setActive(getMember('alice'))
 
     stubConst(api, 'forumWorkingGroup.rewardPeriod', createType('u32', 14410))
+    stubConst(api, 'members.candidateStake', new BN(200))
+
     stubBalances(api, {
-      available: 2000,
+      available: 3000,
     })
     applyTransaction = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
     applyOnOpeningTxMock = api.api.tx.forumWorkingGroup.applyOnOpening as unknown as jest.Mock
@@ -146,7 +148,7 @@ describe('UI: ApplyForRoleModal', () => {
     it('No active member', async () => {
       useMyMemberships.active = undefined
 
-      renderModal()
+      await renderModal()
 
       expect(useModal.showModal).toBeCalledWith({
         modal: 'SwitchMember',
@@ -168,7 +170,7 @@ describe('UI: ApplyForRoleModal', () => {
       useModal.modalData = { opening }
       batchTx = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening', 10_000)
 
-      renderModal()
+      await renderModal()
 
       const moveFundsModalCall: MoveFundsModalCall = {
         modal: 'MoveFundsModal',
@@ -183,21 +185,21 @@ describe('UI: ApplyForRoleModal', () => {
   })
 
   it('Renders a modal', async () => {
-    renderModal()
+    await renderModal()
 
     expect(await screen.findByText('Applying for role')).toBeDefined()
   })
 
   describe('Stake step', () => {
     it('Empty fields', async () => {
-      renderModal()
+      await renderModal()
 
       const button = await getNextStepButton()
       expect(button).toBeDisabled()
     })
 
     it('Too low stake', async () => {
-      renderModal()
+      await renderModal()
 
       await selectFromDropdown('Select account for Staking', 'alice')
       await fillFieldByLabel(/Select amount for staking/i, '50')
@@ -207,7 +209,7 @@ describe('UI: ApplyForRoleModal', () => {
     })
 
     it('Valid fields', async () => {
-      renderModal()
+      await renderModal()
 
       await selectFromDropdown('Select account for Staking', 'alice')
       await fillFieldByLabel(/Select amount for staking/i, '2000')
@@ -460,7 +462,9 @@ describe('UI: ApplyForRoleModal', () => {
     await fillFieldByLabel(/Select amount for staking/i, '2000')
     await selectFromDropdownWithId('role-account', 'alice')
     await selectFromDropdownWithId('reward-account', 'alice')
-    fireEvent.click(await getNextStepButton())
+    await act(async () => {
+      fireEvent.click(await getNextStepButton())
+    })
     await screen.findByText('Application')
   }
 
@@ -471,34 +475,42 @@ describe('UI: ApplyForRoleModal', () => {
     await fillFieldByLabel(/Question 1/i, 'Foo bar baz')
     await fillFieldByLabel(/Question 2/i, 'Foo bar baz')
     await fillFieldByLabel(/Question 3/i, 'Foo bar baz')
-    fireEvent.click(await getNextStepButton())
+    await act(async () => {
+      fireEvent.click(await getNextStepButton())
+    })
   }
 
   async function fillFieldByLabel(label: string | RegExp, value: number | string) {
     const amountInput = await screen.findByLabelText(label)
-    fireEvent.change(amountInput, { target: { value } })
-    fireEvent.blur(amountInput)
+    await act(async () => {
+      fireEvent.change(amountInput, { target: { value } })
+    })
+    await act(async () => {
+      fireEvent.blur(amountInput)
+    })
   }
 
-  function renderModal() {
-    return render(
-      <MemoryRouter>
-        <ModalContext.Provider value={useModal}>
-          <MockQueryNodeProviders>
-            <MockKeyringProvider>
-              <ApiContext.Provider value={api}>
-                <AccountsContext.Provider value={useAccounts}>
-                  <MembershipContext.Provider value={useMyMemberships}>
-                    <BalancesContextProvider>
-                      <ApplyForRoleModal />
-                    </BalancesContextProvider>
-                  </MembershipContext.Provider>
-                </AccountsContext.Provider>
-              </ApiContext.Provider>
-            </MockKeyringProvider>
-          </MockQueryNodeProviders>
-        </ModalContext.Provider>
-      </MemoryRouter>
-    )
+  async function renderModal() {
+    await act(async () => {
+      render(
+        <MemoryRouter>
+          <ModalContext.Provider value={useModal}>
+            <MockQueryNodeProviders>
+              <MockKeyringProvider>
+                <ApiContext.Provider value={api}>
+                  <AccountsContext.Provider value={useAccounts}>
+                    <MembershipContext.Provider value={useMyMemberships}>
+                      <BalancesContextProvider>
+                        <ApplyForRoleModal />
+                      </BalancesContextProvider>
+                    </MembershipContext.Provider>
+                  </AccountsContext.Provider>
+                </ApiContext.Provider>
+              </MockKeyringProvider>
+            </MockQueryNodeProviders>
+          </ModalContext.Provider>
+        </MemoryRouter>
+      )
+    })
   }
 })

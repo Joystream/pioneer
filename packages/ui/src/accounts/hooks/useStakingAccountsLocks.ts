@@ -31,11 +31,10 @@ export const useStakingAccountsLocks = ({
   const accountsWithLocks = allAccounts.map((account) => {
     const optionLocks: OptionLock[] = []
     const accountAddress = account.address
-    const balance = balances[accountAddress]
+    const accountBalances = balances[accountAddress]
 
     const boundMembershipId = getMemberIdByBoundAccountAddress(accountAddress)
-
-    if (!balance.transferable.gte(requiredStake) && filterByBalance) {
+    if (accountBalances.total?.lt(requiredStake) && filterByBalance) {
       optionLocks.push('insufficientFunds')
     }
 
@@ -43,7 +42,7 @@ export const useStakingAccountsLocks = ({
       optionLocks.push('boundMembership')
     }
 
-    if (areLocksConflicting(lockType, balance.locks)) {
+    if (areLocksConflicting(lockType, accountBalances.locks)) {
       if (isRecoverable(lockType, recoveryConditions)) {
         optionLocks.push('recoverableLock')
       } else {

@@ -6,10 +6,10 @@ import { set } from 'lodash'
 import { from, of, asyncScheduler, scheduled, Observable } from 'rxjs'
 
 import { LockType } from '@/accounts/types'
-import { Api } from '@/api/types'
+import { Api } from '@/api'
+import { UseApi } from '@/api/providers/provider'
 import { BN_ZERO } from '@/common/constants'
 import { ExtractTuple } from '@/common/model/JoystreamNode'
-import { UseApi } from '@/common/providers/api/provider'
 import { proposalDetails } from '@/proposals/model/proposalDetails'
 
 import { createBalanceLock, createRuntimeDispatchInfo } from './chainTypes'
@@ -241,6 +241,7 @@ export const stubCouncilAndReferendum = (
     'council.stage',
     createType('CouncilStageUpdate', {
       stage: createType('CouncilStage', councilStage),
+      changed_at: BN_ZERO,
     })
   )
 }

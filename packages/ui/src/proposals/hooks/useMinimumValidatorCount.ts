@@ -1,4 +1,4 @@
-import { useApi } from '@/common/hooks/useApi'
+import { useApi } from '@/api/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 
 export const useMinimumValidatorCount = () => {
