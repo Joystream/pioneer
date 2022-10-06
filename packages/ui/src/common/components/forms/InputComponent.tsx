@@ -37,7 +37,6 @@ export type InputComponentProps = InputProps &
 export interface InputProps<Element extends HTMLElement = HTMLInputElement> extends React.InputHTMLAttributes<Element> {
   id?: string
   validation?: 'invalid' | 'valid' | 'warning' | undefined
-  validationStyles?: InputValidationProps | undefined
   required?: boolean
   value?: string
   placeholder?: string
@@ -52,8 +51,6 @@ export interface InputElementProps {
   copy?: boolean
   units?: string
   validation?: 'invalid' | 'valid' | 'warning' | undefined
-  validationStyles?: InputValidationProps | undefined
-  validationMsgAbsolute?: boolean | undefined
   borderless?: boolean
   inputWidth?: 'auto' | 's' | 'xs' | undefined
   tight?: boolean
@@ -63,12 +60,6 @@ interface DisabledInputProps {
   disabled?: boolean
 }
 
-interface InputValidationProps {
-  position?: string | undefined
-  top?: string | undefined
-  left?: string | undefined
-}
-
 export const InputComponent = React.memo(
   ({
     id,
@@ -76,7 +67,6 @@ export const InputComponent = React.memo(
     sublabel,
     required,
     validation,
-    validationStyles: validationStyles,
     disabled,
     inputDisabled,
     value,
@@ -152,7 +142,7 @@ export const InputComponent = React.memo(
           )}
         </InputContainer>
         {validationMessage && (
-          <InputNotification validation={validationStatus} validationStyles={validationStyles}>
+          <InputNotification validation={validationStatus}>
             {validationStatus === 'invalid' && (
               <InputNotificationIcon>
                 <AlertSymbol />
@@ -479,24 +469,6 @@ export const InputNotification = styled.div<InputProps>`
   align-items: center;
   width: 100%;
   grid-template-columns: max-content;
-  position: ${({ validationStyles }) => {
-    if (validationStyles && validationStyles.position) {
-      return validationStyles.position
-    }
-    return 'static'
-  }};
-  top: ${({ validationStyles }) => {
-    if (validationStyles && validationStyles.top) {
-      return validationStyles.top
-    }
-    return 'inherit'
-  }};
-  left: ${({ validationStyles }) => {
-    if (validationStyles && validationStyles.left) {
-      return validationStyles.left
-    }
-    return 'inherit'
-  }};
   color: ${({ validation }) => {
     switch (validation) {
       case 'invalid':

@@ -4,7 +4,7 @@ import { generatePath, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Close, CloseButton } from '@/common/components/buttons'
-import { Input, InputComponent, InputIcon, InputText } from '@/common/components/forms'
+import { Input, InputComponent, InputIcon, InputNotification, InputText } from '@/common/components/forms'
 import { SearchIcon } from '@/common/components/icons'
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -28,9 +28,12 @@ export const SearchResultsModal = () => {
   const [search, setSearch] = useState(modalData.search)
   const [activeTab, setActiveTab] = useState<SearchKind>('FORUM')
   const { forum, forumPostCount, isLoading } = useSearch(search, activeTab)
-  const pattern = useMemo(() => (search ? RegExp(escapeStringRegexp(search), 'ig') : null), [search])
-  const debouncedSearch = useDebounce(search, 400)
   const isValid = () => !debouncedSearch || debouncedSearch.length === 0 || debouncedSearch.length > 2
+  const debouncedSearch = useDebounce(search, 400)
+  const pattern = useMemo(
+    () => (isValid() && search ? RegExp(escapeStringRegexp(search), 'ig') : null),
+    [debouncedSearch]
+  )
   const history = useHistory()
   const [hasOverlay, setHasOverlay] = useState(true)
   useEffect(
@@ -59,11 +62,6 @@ export const SearchResultsModal = () => {
           <CloseButton onClick={hideModal} />
           <SearchInput
             validation={isValid() ? undefined : 'invalid'}
-            validationStyles={{
-              position: 'absolute',
-              top: '60px',
-              left: '41px',
-            }}
             message={isValid() ? '' : 'Minimum of 3 characters is required'}
           >
             <InputText placeholder="Search" value={search} onChange={(event) => setSearch(event.target.value)} />
@@ -134,6 +132,12 @@ const SearchInput = styled(InputComponent).attrs({
 
   ${InputIcon} {
     left: 40px;
+  }
+
+  ${InputNotification} {
+    position: absolute;
+    top: 60px;
+    left: 41px;
   }
 
   ${Input} {
