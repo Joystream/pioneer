@@ -1,6 +1,6 @@
 import { Story } from '@storybook/react'
 import { useMachine } from '@xstate/react'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { of } from 'rxjs'
 
 import {
@@ -18,7 +18,18 @@ export default {
   component: SignTransactionModal,
 }
 
-const Template: Story<SignTransactionModalProps> = (args) => {
+interface SignTransactionModalStoryProps extends SignTransactionModalProps {
+  transactionFee: number
+}
+
+const Template: Story<SignTransactionModalStoryProps> = ({ transactionFee, ...args }) => {
+  const transaction = useMemo(
+    () => ({
+      paymentInfo: () => of(createRuntimeDispatchInfo(transactionFee)) as any,
+    }),
+    [transactionFee]
+  )
+
   const [state, send] = useMachine(defaultTransactionModalMachine())
 
   if (state.matches('requirementsVerification')) {
@@ -27,7 +38,7 @@ const Template: Story<SignTransactionModalProps> = (args) => {
 
   return (
     <MockApolloProvider>
-      <SignTransactionModal {...args} service={state.children['transaction']}>
+      <SignTransactionModal {...args} transaction={transaction as any} service={state.children['transaction']}>
         {args.children}
       </SignTransactionModal>
     </MockApolloProvider>
@@ -37,10 +48,8 @@ const Template: Story<SignTransactionModalProps> = (args) => {
 export const Default = Template.bind({})
 Default.args = {
   signer: getMember('alice').controllerAccount,
-  transaction: {
-    paymentInfo: () => of(createRuntimeDispatchInfo(25)) as any,
-  } as any,
   buttonText: 'Sign Transaction',
   title: 'Generic sign transaction modal',
-  children: <>Text content of sign transaction modal</>,
+  transactionFee: 25,
+  children: 'Text content of sign transaction modal',
 }
