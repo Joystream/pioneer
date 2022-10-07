@@ -1,3 +1,4 @@
+import { last } from '@/common/utils'
 import { useLatestElection } from '@/council/hooks/useLatestElection'
 import { usePastElection } from '@/council/hooks/usePastElection'
 import { GetCouncilVotesQuery, useGetCouncilVotesQuery } from '@/council/queries'
@@ -41,7 +42,7 @@ export const useLockOrientedAddressInformation = (address: string) => {
   const { data: possibleApplications } = useGetWorkingGroupApplicationsQuery({
     variables: { where: { stakingAccount_eq: address } },
   })
-  const application = possibleApplications?.workingGroupApplications[0]
+  const application = last(possibleApplications?.workingGroupApplications ?? [])
   const { data: workerData } = useGetWorkerIdsQuery({ variables: { where: { stakeAccount_eq: address } } })
   const workerId = workerData?.workers[0]?.id
   const { unstakingPeriodEnd } = useWorkerUnstakingPeriodEnd(workerId)

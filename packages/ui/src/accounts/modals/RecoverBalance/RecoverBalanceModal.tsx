@@ -45,7 +45,9 @@ export const RecoverBalanceModal = () => {
       case 'Voting':
         return api.tx.referendum.releaseVoteStake()
       default:
-        return api.tx.forumWorkingGroup.withdrawApplication(possibleApplications?.workingGroupApplications[0].id ?? 0)
+        return api.tx[
+          possibleApplications?.workingGroupApplications[0].opening.group.id ?? 'forumWorkingGroup'
+        ].withdrawApplication(possibleApplications?.workingGroupApplications[0].runtimeId ?? 0)
     }
   }, [connectionState, modalData?.memberId, modalData.lock.type])
 

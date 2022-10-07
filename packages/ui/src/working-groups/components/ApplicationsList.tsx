@@ -5,11 +5,13 @@ import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { ButtonGhost } from '@/common/components/buttons'
 import { FileIcon } from '@/common/components/icons/FileIcon'
 import { List, ListItem } from '@/common/components/List'
+import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { isInFuture } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeTime } from '@/common/model/relativeTime'
+import { WithdrawApplicationButton } from '@/working-groups/components/WithdrawApplicationButton'
 
 import { openingTitle } from '../helpers'
 import { useRewardPeriod } from '../hooks/useRewardPeriod'
@@ -46,6 +48,7 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
   const showApplicationModal = useCallback(() => {
     showModal<ApplicationDetailsModalCall>({ modal: 'ApplicationDetails', data: { applicationId: application.id } })
   }, [application.id])
+
   const rewardPeriod = useRewardPeriod(opening.groupId)
   const isHired = application.status === 'ApplicationStatusAccepted'
 
@@ -91,9 +94,12 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
           <Subscription>{applicationStatus}</Subscription>
         </OpenItemSummaryColumn>
       </ToggleableItemSummary>
-      <ButtonGhost square size="medium" onClick={showApplicationModal}>
-        <FileIcon />
-      </ButtonGhost>
+      <ColumnGapBlock>
+        {!past && <WithdrawApplicationButton application={application} />}
+        <ButtonGhost square size="medium" onClick={showApplicationModal}>
+          <FileIcon />
+        </ButtonGhost>
+      </ColumnGapBlock>
     </ApplicationItemWrap>
   )
 }

@@ -18,7 +18,7 @@ type CouncilLock = {
 export type RecoverableLock = VotingLock | CouncilLock
 
 export const isRecoverableLock = (lock: BalanceLock): lock is RecoverableLock => {
-  return lock.type === 'Voting' || lock.type === 'Council Candidate'
+  return lock.type === 'Voting' || lock.type === 'Council Candidate' || lock.type.endsWith('Worker')
 }
 
 interface RecoverableModalData {
