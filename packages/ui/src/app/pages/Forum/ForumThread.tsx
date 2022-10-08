@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { useApi } from '@/api/hooks/useApi'
 import { PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
-import { BlockInfo } from '@/common/components/BlockTime/BlockInfo'
+import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons'
 import { PinIcon } from '@/common/components/icons/PinIcon'
@@ -98,7 +98,7 @@ export const ForumThread = () => {
                 {tag.title}
               </BadgeStatus>
             ))}
-            <BlockInfo block={thread.createdInBlock} />
+            <BlockTime block={thread.createdInBlock} />
           </BadgesRow>
         </RowGapBlock>
       </PageHeaderWrapper>
