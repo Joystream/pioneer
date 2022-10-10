@@ -12,15 +12,23 @@ export const MaintenanceScreen = () => {
       <GlobalStyle />
       <Container>
         <img src={MaintenanceLogo} alt="Logo of Pioneer application" />
-        <TextExtraHuge>We’ll be right back!</TextExtraHuge>
+        <TextExtraHuge value bold>
+          We’ll be right back!
+        </TextExtraHuge>
         <TextBig lighter>
           Pioneer is currently undergoing maintenance work in order to ensure the best features and performance for our
           users.
+        </TextBig>
+        <TextBig lighter>
+          We should be back shortly. In the meantime, feel free to
+          <br />
+          <a href="https://discord.gg/DE9UN3YpRP">connect with us on Discord.</a>
         </TextBig>
       </Container>
     </>
   )
 }
+// https://discord.gg/DE9UN3YpRP
 
 const Container = styled.div`
   min-height: 100vh;
@@ -29,20 +37,30 @@ const Container = styled.div`
   max-width: 100vw;
 
   display: grid;
-  gap: 20px;
+  gap: 8px;
   align-content: center;
   justify-items: center;
 
-  background-color: ${Colors.Black[850]};
+  background-color: ${Colors.Black[900]};
+
+  img {
+    max-width: max(30%, 400px);
+  }
 
   ${TextExtraHuge} {
     color: #fff;
     font-size: 32px;
-    margin-top: 100px;
+    margin: 100px 0 8px 0;
   }
 
   p {
     max-width: max(30%, 400px);
     text-align: center;
+    a {
+      color: ${Colors.Blue[400]};
+      :hover {
+        text-decoration: underline;
+      }
+    }
   }
 `
