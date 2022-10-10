@@ -99,7 +99,7 @@ describe('UI: DeleteThreadModal', () => {
     mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
     stubDefaultBalances()
     transaction = stubTransaction(api, txPath, 100)
-    txMock = api.api.tx.forum.deleteThread as unknown as jest.Mock
+    txMock = (api.api.tx.forum.deleteThread as unknown) as jest.Mock
   })
 
   it('Requirements passed', async () => {
@@ -126,7 +126,7 @@ describe('UI: DeleteThreadModal', () => {
     stubTransactionFailure(transaction)
     renderModal()
     await act(async () => {
-      fireEvent.click(await getButton('modals.deleteThread.buttonLabel'))
+      fireEvent.click(await getButton('Sign and delete'))
     })
     expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })
@@ -135,7 +135,7 @@ describe('UI: DeleteThreadModal', () => {
     stubTransactionSuccess(transaction, 'forum', 'ThreadDeleted')
     renderModal()
     await act(async () => {
-      fireEvent.click(await getButton('modals.deleteThread.buttonLabel'))
+      fireEvent.click(await getButton('Sign and delete'))
     })
 
     expect(await screen.findByText('Your thread has been deleted.')).toBeDefined()

@@ -12,9 +12,11 @@ import { Account } from '@/accounts/types'
 import { useApi } from '@/api/hooks/useApi'
 import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
@@ -28,8 +30,6 @@ import { StakeStep } from '@/council/modals/AnnounceCandidacy/components/StakeSt
 import { SuccessModal } from '@/council/modals/AnnounceCandidacy/components/Success'
 import { SummaryAndBannerStep } from '@/council/modals/AnnounceCandidacy/components/SummaryAndBannerStep'
 import { TitleAndBulletPointsStep } from '@/council/modals/AnnounceCandidacy/components/TitleAndBulletPointsStep'
-import { AnnounceCandidacyTransaction } from '@/council/modals/AnnounceCandidacy/components/transactions/AnnounceCandidacyTransaction'
-import { CandidacyNoteTransaction } from '@/council/modals/AnnounceCandidacy/components/transactions/CandidacyNoteTransaction'
 import {
   AnnounceCandidacyFrom,
   baseSchema,
@@ -255,26 +255,33 @@ export const AnnounceCandidacyModal = () => {
 
   if (state.matches('announceCandidacyTransaction')) {
     return (
-      <AnnounceCandidacyTransaction
-        onClose={hideModal}
+      <SignTransactionModal
+        buttonText="Sign transaction and Announce"
         transaction={announceCandidacyTransaction}
         signer={activeMember.controllerAccount}
-        stake={form.watch('staking.amount') ?? BN_ZERO}
         service={state.children.announceCandidacyTransaction}
-        steps={transactionSteps}
-      />
+        useMultiTransaction={{ steps: transactionSteps, active: 1 }}
+        skipQueryNode
+      >
+        <TextMedium>You intend to announce candidacy.</TextMedium>
+        <TextMedium>
+          Also you intend to stake <TokenValue value={form.watch('staking.amount') ?? BN_ZERO} />.
+        </TextMedium>
+      </SignTransactionModal>
     )
   }
 
   if (state.matches('candidacyNoteTransaction')) {
     return (
-      <CandidacyNoteTransaction
-        onClose={hideModal}
+      <SignTransactionModal
+        buttonText="Sign transaction and Set"
         transaction={candidacyNoteTransaction}
         signer={activeMember.controllerAccount}
         service={state.children.candidacyNoteTransaction}
-        steps={transactionSteps}
-      />
+        useMultiTransaction={{ steps: transactionSteps, active: 2 }}
+      >
+        <TextMedium>You intend to set candidacy note.</TextMedium>
+      </SignTransactionModal>
     )
   }
 
