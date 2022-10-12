@@ -25,6 +25,7 @@ export const WithdrawApplicationButton = ({ application }: WithdrawApplicationBu
           address: application.stakingAccount,
           lock: lock as RecoverableLock,
           memberId: application.applicant.id,
+          isWithdrawing: true,
         },
       })
     }

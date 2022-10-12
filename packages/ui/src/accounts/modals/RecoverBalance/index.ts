@@ -25,6 +25,7 @@ interface RecoverableModalData {
   address: Address
   lock: RecoverableLock
   memberId?: Member['id']
+  isWithdrawing?: boolean
 }
 
 export interface VotingData extends RecoverableModalData {
