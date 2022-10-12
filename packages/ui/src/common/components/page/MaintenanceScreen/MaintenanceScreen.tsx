@@ -28,7 +28,6 @@ export const MaintenanceScreen = () => {
     </>
   )
 }
-// https://discord.gg/DE9UN3YpRP
 
 const Container = styled.div`
   min-height: 100vh;
