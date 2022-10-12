@@ -62,14 +62,15 @@ export const SignTransactionModal = ({
       <ModalBody>
         {children}
         <TextMedium>
-          Fee of
-          <TokenValue value={paymentInfo?.partialFee} /> will be applied to the transaction.
+          Fee of <TokenValue value={paymentInfo?.partialFee} /> will be applied to the transaction.
         </TextMedium>
         <SignModalAccount account={signerAccount} amountInfo={additionalAmountInfo} />
-        <StyledErrorContainer gap={1}>
-          <AlertSymbol />
-          <TextMedium>Insufficient funds to cover transaction costs</TextMedium>
-        </StyledErrorContainer>
+        {!canAfford && paymentInfo?.partialFee && (
+          <StyledErrorContainer gap={1}>
+            <AlertSymbol />
+            <TextMedium>Insufficient funds to cover transaction costs</TextMedium>
+          </StyledErrorContainer>
+        )}
       </ModalBody>
       <ModalTransactionFooter
         transactionFee={paymentInfo?.partialFee?.toBn()}

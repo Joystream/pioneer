@@ -133,15 +133,8 @@ export const AnnounceCandidacyModal = () => {
     }
   }, [connectionState, activeMember?.id])
 
-  const confirmStakingAccountTransaction = useMemo(() => {
-    const formValues = form.getValues() as AnnounceCandidacyFrom
-    if (activeMember && api) {
-      return api.tx.members.confirmStakingAccount(activeMember.id, formValues.staking.account?.address ?? '')
-    }
-  }, [JSON.stringify(state.context), connectionState, activeMember?.id])
-
   const announceCandidacyTransaction = useMemo(() => {
-    if (activeMember && api && confirmStakingAccountTransaction) {
+    if (activeMember && api && stakingStatus) {
       const tx = api.tx.council.announceCandidacy(
         activeMember.id,
         stakingAccount?.address ?? '',
@@ -153,6 +146,11 @@ export const AnnounceCandidacyModal = () => {
         return tx
       }
 
+      const confirmStakingAccountTransaction = api.tx.members.confirmStakingAccount(
+        activeMember.id,
+        stakingAccount?.address ?? ''
+      )
+
       return api.tx.utility.batch([confirmStakingAccountTransaction, tx])
     }
   }, [
@@ -162,7 +160,6 @@ export const AnnounceCandidacyModal = () => {
     rewardAccount?.address,
     String(stakingAmount),
     stakingStatus,
-    confirmStakingAccountTransaction,
   ])
 
   useTransactionFee(activeMember?.controllerAccount, () => announceCandidacyTransaction, [announceCandidacyTransaction])
