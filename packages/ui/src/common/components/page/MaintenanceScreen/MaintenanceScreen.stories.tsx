@@ -4,7 +4,7 @@ import React from 'react'
 import { MaintenanceScreen } from '@/common/components/page/MaintenanceScreen/MaintenanceScreen'
 
 export default {
-  title: 'MaintenanceScreen',
+  title: 'Common/MaintenanceScreen',
   component: MaintenanceScreen,
   parameters: {
     backgrounds: {
