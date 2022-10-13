@@ -8,6 +8,7 @@ import { Row } from '@/common/components/Modal'
 import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { BorderRad } from '@/common/constants'
+import { resizeImageFile } from '@/common/helpers'
 import { enhancedGetErrorMessage, enhancedHasError } from '@/common/utils/validation'
 import { Avatar } from '@/memberships/components/Avatar'
 import { SUPPORTED_IMAGES } from '@/memberships/model/validation'
@@ -22,12 +23,13 @@ export const SmallFileUpload = ({ onUpload, name, initialPreview }: SmallFileUpl
   const [localValue, setLocalValue] = useState<File | null>()
   const { formState } = useFormContext()
   const [avatarPreview, setAvatarPreview] = useState<string>(initialPreview ?? '')
-
   useEffect(() => {
     if (localValue && SUPPORTED_IMAGES?.includes(localValue.type)) {
-      const objectUrl = URL.createObjectURL(localValue)
-      setAvatarPreview(objectUrl)
-      return () => URL.revokeObjectURL(objectUrl)
+      resizeImageFile(localValue, 192, 192, 'image/webp').then((blob) => {
+        const objectUrl = URL.createObjectURL(blob)
+        setAvatarPreview(objectUrl)
+        return () => URL.revokeObjectURL(objectUrl)
+      })
     }
   }, [localValue])
 
