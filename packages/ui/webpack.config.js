@@ -9,6 +9,8 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 
+dotenv.config()
+
 const shared = require('./dev/webpack.shared')
 
 const version = cp.execSync('git rev-parse --short HEAD').toString().trim()
@@ -21,10 +23,7 @@ module.exports = (env, argv) => {
     .filter(([key]) => key.startsWith('REACT_APP_'))
     .map(([key, value]) => [`process.env.${key}`, JSON.stringify(value)])
 
-  const imageBlacklist = [
-    ...env.blacklist ?? [],
-    ...process.env.REACT_APP_BLACKLISTED_IMAGES?.split(/\s+/) ?? []
-  ]
+  const imageBlacklist = [...(env.blacklist ?? []), ...(process.env.REACT_APP_BLACKLISTED_IMAGES?.split(/\s+/) ?? [])]
 
   const plugins = [
     ...shared.plugins,

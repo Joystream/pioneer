@@ -11,6 +11,7 @@ import { NotFound } from '@/app/pages/NotFound'
 import { GlobalStyle } from '@/app/providers/GlobalStyle'
 import { BountyRoutes } from '@/bounty/constants'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
+import { MaintenanceScreen } from '@/common/components/page/MaintenanceScreen/MaintenanceScreen'
 import { MobileView } from '@/common/components/page/MobileView/MobileView'
 import { Page, Screen } from '@/common/components/page/Page'
 import { NotificationsHolder } from '@/common/components/page/SideNotification'
@@ -36,44 +37,50 @@ import { PrivacyPolicy, TermsOfService } from './pages/Terms'
 import { WorkingGroupsModule } from './pages/WorkingGroups/WorkingGroupsModule'
 import { Providers } from './Providers'
 
-export const App = () => (
-  <Providers>
-    <Page>
-      <SideBar />
-      <Screen>
-        <OnBoardingOverlay />
-        <Switch>
-          {/*// Uncomment to see whole overview section*/}
-          {/*<Route path={OverviewRoutes.overview} component={OverviewModule} />*/}
-          <Route path={WorkingGroupsRoutes.groups} component={WorkingGroupsModule} />
-          <Route path={ProposalsRoutes.home} component={ProposalsModule} />
-          <Route path={CouncilRoutes.council} component={CouncilModule} />
-          <Route path={ElectionRoutes.currentElection} component={ElectionModule} />
-          <Route path={ForumRoutes.forum} component={ForumModule} />
-          <Route path={BountyRoutes.bounties} component={BountyModule} />
-          <Route exact path={ProfileRoutes.profile} component={MyAccounts} />
-          <Route exact path={ProfileRoutes.memberships} component={MyMemberships} />
-          <Route exact path={MembersRoutes.members} component={Members} />
-          <Route exact path={SettingsRoutes.settings} component={Settings} />
-          <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
-          <Route exact path={TermsRoutes.termsOfService} component={TermsOfService} />
-          <Route exact path="/404" component={NotFound} />
-          <Redirect exact from="/" to={WorkingGroupsRoutes.groups} />
-          <Redirect exact from={ProposalsRoutes.home} to={ProposalsRoutes.current} />
-          <Redirect from="*" to="/404" />
-        </Switch>
-      </Screen>
-    </Page>
-    <GlobalModals />
-    <NotificationsHolder>
-      <TransactionStatus />
-      <ConnectionStatus />
-      <ExtensionNotification />
-      <ImageReportNotification />
-    </NotificationsHolder>
-    <FMBanner />
-  </Providers>
-)
+export const App = () => {
+  if (process.env.REACT_APP_IS_UNDER_MAINTENANCE) {
+    return <MaintenanceScreen />
+  }
+
+  return (
+    <Providers>
+      <Page>
+        <SideBar />
+        <Screen>
+          <OnBoardingOverlay />
+          <Switch>
+            {/*// Uncomment to see whole overview section*/}
+            {/*<Route path={OverviewRoutes.overview} component={OverviewModule} />*/}
+            <Route path={WorkingGroupsRoutes.groups} component={WorkingGroupsModule} />
+            <Route path={ProposalsRoutes.home} component={ProposalsModule} />
+            <Route path={CouncilRoutes.council} component={CouncilModule} />
+            <Route path={ElectionRoutes.currentElection} component={ElectionModule} />
+            <Route path={ForumRoutes.forum} component={ForumModule} />
+            <Route path={BountyRoutes.bounties} component={BountyModule} />
+            <Route exact path={ProfileRoutes.profile} component={MyAccounts} />
+            <Route exact path={ProfileRoutes.memberships} component={MyMemberships} />
+            <Route exact path={MembersRoutes.members} component={Members} />
+            <Route exact path={SettingsRoutes.settings} component={Settings} />
+            <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
+            <Route exact path={TermsRoutes.termsOfService} component={TermsOfService} />
+            <Route exact path="/404" component={NotFound} />
+            <Redirect exact from="/" to={WorkingGroupsRoutes.groups} />
+            <Redirect exact from={ProposalsRoutes.home} to={ProposalsRoutes.current} />
+            <Redirect from="*" to="/404" />
+          </Switch>
+        </Screen>
+      </Page>
+      <GlobalModals />
+      <NotificationsHolder>
+        <TransactionStatus />
+        <ConnectionStatus />
+        <ExtensionNotification />
+        <ImageReportNotification />
+      </NotificationsHolder>
+      <FMBanner />
+    </Providers>
+  )
+}
 
 export const Mobile = () => (
   <>
