@@ -29,9 +29,11 @@
 
 ## Under maintenance screen
 
-A "maintenance screen" can temporarily replace the app, in order to occasionnaly prevent users from using Pioneer (like durring sensitive runtime uprade for example).
-To activate it: simply set the `REACT_APP_IS_UNDER_MAINTENANCE` environment variable to `true`, and rebuild Pioneer.
-To deactivate it: set the `REACT_APP_IS_UNDER_MAINTENANCE` environment variable back to `false` (or completely remove this variable), finally rebuild Pioneer.
+A "maintenance screen" can temporarily replace the app, in order to occasionally prevent users from using Pioneer (like during sensitive runtime uprade for example).
+
+To activate it: simply set the environment variable `REACT_APP_IS_UNDER_MAINTENANCE=true`, then rebuild Pioneer.
+
+To deactivate it: set the environment variable `REACT_APP_IS_UNDER_MAINTENANCE=false` (or completely remove this variable), finally rebuild Pioneer.
 
 ## Moderate images
 
