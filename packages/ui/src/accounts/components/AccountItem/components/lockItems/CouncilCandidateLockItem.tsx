@@ -78,7 +78,12 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockD
     if (!electionId) {
       return null
     }
-    const electionPath = generatePath(ElectionRoutes.pastElection, { id: electionId })
+
+    const pointsToPastElection = recoveryTime.time && Date.parse(recoveryTime.time) - Date.now() <= 0
+
+    const electionPath = pointsToPastElection
+      ? generatePath(ElectionRoutes.pastElection, { id: electionId })
+      : generatePath(ElectionRoutes.currentElection)
     return <LockLinkButton label="Show Election" to={electionPath} />
   }, [electionId])
 
