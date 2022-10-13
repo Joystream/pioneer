@@ -34,9 +34,9 @@ export const VoteForCouncilModal = () => {
 
   const { hasRequiredStake } = useHasRequiredStake(requiredStake, 'Voting')
 
-  const { feeInfo } = useTransactionFee(
+  const { feeInfo = { transactionFee: BN_ZERO, canAfford: true } } = useTransactionFee(
     state.context.account?.address,
-    () => api?.tx.referendum.vote('', requiredStake),
+    () => commitment && api?.tx.referendum.vote(commitment, requiredStake),
     [requiredStake]
   )
 
