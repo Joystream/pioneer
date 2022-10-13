@@ -1,3 +1,5 @@
+import { SUPPORTED_IMAGES } from '@/memberships/model/validation'
+
 export const capitalizeFirstLetter = <T extends string>(str: T) =>
   (str.charAt(0).toUpperCase() + str.slice(1)) as Capitalize<T>
 
@@ -52,4 +54,29 @@ export const subtitleMapping = (value: string) => {
     default:
       return value
   }
+}
+
+export const resizeImageFile = (file: File, width: number, height: number, type?: string): Promise<Blob | null> => {
+  return new Promise((resolve, reject) => {
+    if (!SUPPORTED_IMAGES.includes(file.type)) {
+      reject(new Error('Wrong file type'))
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const img = new Image()
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        canvas.height = height
+        canvas.width = width
+        const ctx = canvas.getContext('2d')
+
+        ctx?.drawImage(img, 0, 0, width, height)
+        ctx?.canvas.toBlob((blob) => resolve(blob), type ?? file.type)
+      }
+      img.src = event.target?.result as string
+    }
+    reader.readAsDataURL(file)
+  })
 }
