@@ -2,8 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { Arrow } from '@/common/components/icons'
+import { LinkSymbol } from '@/common/components/icons/symbols'
 import { TableListItem } from '@/common/components/List'
 import { GhostRouterLink, RouterLink } from '@/common/components/RouterLink'
+import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { nameMapping, subtitleMapping } from '@/common/helpers'
@@ -13,6 +15,7 @@ import { useMember } from '@/memberships/hooks/useMembership'
 import { useCountOpenings } from '@/working-groups/hooks/useCountOpenings'
 import { useCountWorkers } from '@/working-groups/hooks/useCountWorkers'
 
+import { workingGroupLinks } from '../constants'
 import { groupNameToURLParam } from '../model/workingGroupName'
 import { WorkingGroup } from '../types'
 
@@ -35,9 +38,20 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
       <GroupImageContainer as={GhostRouterLink} to={groupAddress}>
         <WorkingGroupImage groupName={group.name} />
       </GroupImageContainer>
-      <GroupContentBlock as={GhostRouterLink} to={groupAddress}>
-        <GroupTitle>{nameMapping(group.name)}</GroupTitle>
-        <GroupContent>{subtitleMapping(group.name)}</GroupContent>
+      <GroupContentBlock>
+        <Flex>
+          <GroupTitle as={GhostRouterLink} to={groupAddress}>
+            {nameMapping(group.name)}
+          </GroupTitle>
+          {workingGroupLinks[group.id] && (
+            <StyledTooltipExternalLink href={workingGroupLinks[group.id]} target="_blank">
+              <TextMedium>Learn more about this group</TextMedium> <LinkSymbol />
+            </StyledTooltipExternalLink>
+          )}
+        </Flex>
+        <GroupContent as={GhostRouterLink} to={groupAddress}>
+          {subtitleMapping(group.name)}
+        </GroupContent>
       </GroupContentBlock>
       <GroupStats>
         <StatsColumn>
@@ -70,6 +84,17 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
     </GroupItem>
   )
 }
+
+const Flex = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+`
+
+const StyledTooltipExternalLink = styled(TooltipExternalLink)`
+  margin-top: unset;
+`
 
 const GroupImageContainer = styled.div`
   display: flex;
