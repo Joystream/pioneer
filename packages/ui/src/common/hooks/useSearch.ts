@@ -15,7 +15,7 @@ export const useSearch = (search: string, kind: SearchKind) => {
   const searchDebounced = useDebounce(search, 400)
 
   useEffect(() => {
-    if (searchDebounced.length > 1)
+    if (searchDebounced.length > 2)
       searchForum({
         variables: {
           where: {

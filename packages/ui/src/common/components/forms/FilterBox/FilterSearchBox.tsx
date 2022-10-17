@@ -41,10 +41,13 @@ interface SearchBoxProps extends ControlProps<string> {
   displayReset?: boolean
 }
 export const SearchBox = React.memo(({ value, onApply, onChange, label, displayReset }: SearchBoxProps) => {
-  const debouncedValue = useDebounce(value, 400)
+  const debouncedValue = useDebounce(value, 300)
   const change = onChange && (({ target }: ChangeEvent<HTMLInputElement>) => onChange(target.value))
   const isValid = () => !debouncedValue || debouncedValue.length === 0 || debouncedValue.length > 2
-  const keyDown = !isValid || !onApply ? undefined : ({ key }: React.KeyboardEvent) => key === 'Enter' && onApply()
+  const keyDown =
+    !isValid() || !debouncedValue || !onApply
+      ? undefined
+      : ({ key }: React.KeyboardEvent) => key === 'Enter' && onApply()
   const reset =
     onChange &&
     onApply &&
