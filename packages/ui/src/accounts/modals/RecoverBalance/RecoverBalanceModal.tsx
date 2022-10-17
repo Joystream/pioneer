@@ -5,23 +5,28 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance/index'
 import { recoverBalanceMachine } from '@/accounts/modals/RecoverBalance/machine'
 import { useApi } from '@/api/hooks/useApi'
+import { WorkingGroupApplicationOrderByInput } from '@/common/api/queries'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { isDefined } from '@/common/utils'
 import { useMember } from '@/memberships/hooks/useMembership'
-import { useGetWorkingGroupApplicationsQuery } from '@/working-groups/queries'
+import { useApplications } from '@/working-groups/hooks/useApplications'
 
 import { RecoverBalanceSignModal } from './RecoverBalanceSignModal'
 import { RecoverBalanceSuccessModal } from './RecoverBalanceSuccessModal'
 
 export const RecoverBalanceModal = () => {
   const [state, send] = useMachine(recoverBalanceMachine)
-  const { api, connectionState } = useApi()
+  const { api } = useApi()
   const { hideModal, modalData } = useModal<RecoverBalanceModalCall>()
   const { member } = useMember(modalData?.memberId)
-  const { data: possibleApplications } = useGetWorkingGroupApplicationsQuery({
-    variables: { where: { stakingAccount_eq: modalData.address } },
+  const { applications: possibleApplications } = useApplications({
+    stakingAccount: modalData.address,
+    skip: !modalData.lock.type.endsWith('Worker'),
+    limit: 1,
+    orderBy: [WorkingGroupApplicationOrderByInput.CreatedAtDesc],
   })
+
   const signer = useMemo(() => {
     if (modalData.lock.type === 'Council Candidate') {
       return member?.controllerAccount ?? modalData.address
@@ -31,11 +36,11 @@ export const RecoverBalanceModal = () => {
       return modalData.address
     }
 
-    return possibleApplications?.workingGroupApplications[0].roleAccount ?? modalData.address
+    return possibleApplications[0]?.roleAccount
   }, [modalData.lock.type, modalData.address, member])
 
   const transaction = useMemo(() => {
-    if (!api) {
+    if (!api?.isConnected) {
       return
     }
 
@@ -45,11 +50,11 @@ export const RecoverBalanceModal = () => {
       case 'Voting':
         return api.tx.referendum.releaseVoteStake()
       default:
-        return api.tx[
-          possibleApplications?.workingGroupApplications[0].opening.group.id ?? 'forumWorkingGroup'
-        ].withdrawApplication(possibleApplications?.workingGroupApplications[0].runtimeId ?? 0)
+        return api.tx[possibleApplications[0].opening.groupId ?? 'forumWorkingGroup'].withdrawApplication(
+          possibleApplications[0].runtimeId ?? 0
+        )
     }
-  }, [connectionState, modalData?.memberId, modalData.lock.type])
+  }, [api?.isConnected, modalData?.memberId, modalData.lock.type])
 
   const { feeInfo } = useTransactionFee(signer, () => transaction, [transaction])
 

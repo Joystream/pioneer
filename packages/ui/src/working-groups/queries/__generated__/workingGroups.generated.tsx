@@ -1,9 +1,8 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import * as Apollo from '@apollo/client'
 import { gql } from '@apollo/client'
 import { MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
-
+import * as Apollo from '@apollo/client'
 const defaultOptions = {} as const
 export type WorkingGroupMetadataFieldsFragment = {
   __typename: 'WorkingGroupMetadata'
@@ -1123,6 +1122,10 @@ export type WorkingGroupApplicationFieldsFragment = {
 
 export type GetWorkingGroupApplicationsQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.WorkingGroupApplicationWhereInput>
+  orderBy?: Types.InputMaybe<
+    Array<Types.WorkingGroupApplicationOrderByInput> | Types.WorkingGroupApplicationOrderByInput
+  >
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetWorkingGroupApplicationsQuery = {
@@ -2581,8 +2584,12 @@ export type GetWorkingGroupQueryHookResult = ReturnType<typeof useGetWorkingGrou
 export type GetWorkingGroupLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupLazyQuery>
 export type GetWorkingGroupQueryResult = Apollo.QueryResult<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
 export const GetWorkingGroupApplicationsDocument = gql`
-  query GetWorkingGroupApplications($where: WorkingGroupApplicationWhereInput) {
-    workingGroupApplications(where: $where) {
+  query GetWorkingGroupApplications(
+    $where: WorkingGroupApplicationWhereInput
+    $orderBy: [WorkingGroupApplicationOrderByInput!]
+    $limit: Int
+  ) {
+    workingGroupApplications(where: $where, orderBy: $orderBy, limit: $limit) {
       ...WorkingGroupApplicationFields
     }
   }
@@ -2602,6 +2609,8 @@ export const GetWorkingGroupApplicationsDocument = gql`
  * const { data, loading, error } = useGetWorkingGroupApplicationsQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      limit: // value for 'limit'
  *   },
  * });
  */

@@ -2,7 +2,7 @@ import React from 'react'
 
 import { LockItemWrapper } from '@/accounts/components/AccountItem/components/LockItemWrapper'
 import { VestingLockListItem } from '@/accounts/components/AccountItem/components/VestingLockItem/VestingLockItem'
-import { useGroupLocks } from '@/accounts/hooks/useGroupLocks/useGroupLocks'
+import { useGroupLocks } from '@/accounts/hooks/useGroupLocks'
 import { Balances } from '@/accounts/types'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextMedium } from '@/common/components/typography'

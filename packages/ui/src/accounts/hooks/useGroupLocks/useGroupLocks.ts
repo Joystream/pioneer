@@ -1,8 +1,7 @@
 import {
-  isCandidateLockRecoverable,
-  isVoteLockRecoverable,
-  isWGLockRecoverable,
-  useLockOrientedAddressInformation,
+  useIsCandidateLockRecoverable,
+  useIsVoteLockRecoverable,
+  useIsWGLockRecoverable,
 } from '@/accounts/hooks/useGroupLocks/helpers'
 import { BalanceLock } from '@/accounts/types'
 
@@ -12,29 +11,28 @@ interface UseGroupLocks {
 }
 
 export const useGroupLocks = (address: string, locks: BalanceLock[]): UseGroupLocks => {
-  const { unstakingPeriodEnd, latestElection, voteElection, application, vote } =
-    useLockOrientedAddressInformation(address)
+  const hasWGLock = locks.some(({ type }) => type.endsWith('Worker'))
+  const hasCandidateLock = locks.some(({ type }) => type === 'Council Candidate')
+  const hasVoteLock = locks.some(({ type }) => type === 'Voting')
+
+  const isWGLockRecoverable = useIsWGLockRecoverable(hasWGLock, address)
+  const isCandidateLockRecoverable = useIsCandidateLockRecoverable(hasCandidateLock, address)
+  const isVoteLockRecoverable = useIsVoteLockRecoverable(hasVoteLock, address)
 
   return locks.reduce(
     (prev, lock) => {
       if (lock.type.endsWith('Worker')) {
-        prev[isWGLockRecoverable(application, unstakingPeriodEnd) ? 'recoverable' : 'unRecoverable'].push(lock)
+        prev[isWGLockRecoverable ? 'recoverable' : 'unRecoverable'].push(lock)
         return prev
       }
 
       if (lock.type === 'Council Candidate') {
-        prev[isCandidateLockRecoverable(latestElection?.candidates, address) ? 'recoverable' : 'unRecoverable'].push(
-          lock
-        )
+        prev[isCandidateLockRecoverable ? 'recoverable' : 'unRecoverable'].push(lock)
         return prev
       }
 
       if (lock.type === 'Voting') {
-        prev[
-          isVoteLockRecoverable(vote, latestElection?.cycleId === voteElection?.cycleId)
-            ? 'recoverable'
-            : 'unRecoverable'
-        ].push(lock)
+        prev[isVoteLockRecoverable ? 'recoverable' : 'unRecoverable'].push(lock)
         return prev
       }
 

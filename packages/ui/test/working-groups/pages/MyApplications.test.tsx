@@ -41,6 +41,7 @@ const currentApplication: WorkingGroupApplication = {
   status: 'ApplicationStatusPending',
   stakingAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
   stake: BN_TEN,
+  roleAccount: getMember('alice').controllerAccount,
 }
 
 const pastApplication: WorkingGroupApplication = {
@@ -60,6 +61,7 @@ const pastApplication: WorkingGroupApplication = {
   status: 'ApplicationStatusRejected',
   stakingAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
   stake: BN_TEN,
+  roleAccount: getMember('alice').controllerAccount,
 }
 
 describe('UI: MyApplications', () => {

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { useGroupLocks } from '@/accounts/hooks/useGroupLocks/useGroupLocks'
+import { useGroupLocks } from '@/accounts/hooks/useGroupLocks'
 import { RecoverableLock, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { ButtonSecondary } from '@/common/components/buttons'
 import { useModal } from '@/common/hooks/useModal'

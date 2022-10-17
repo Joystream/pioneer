@@ -2,7 +2,7 @@ import React from 'react'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { useGroupLocks } from '@/accounts/hooks/useGroupLocks/useGroupLocks'
+import { useIsVoteLockRecoverable } from '@/accounts/hooks/useGroupLocks'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { RecoverBalanceModalCall, VotingData } from '@/accounts/modals/RecoverBalance'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
@@ -41,12 +41,12 @@ export const PastVote = ({ vote, $colLayout }: PastVoteProps) => {
   }
 
   // Reflects if the vote was cast in latest election
-  const isVoteStakeLocked = useGroupLocks(vote.castBy, balance?.locks ?? []).unRecoverable.some(
-    (lock) => lock.type === 'Voting'
-  )
+  const hasVoteLock = balance?.locks.some(({ type }) => type === 'Voting') ?? false
+  const isVoteStakeRecoverable = useIsVoteLockRecoverable(hasVoteLock, vote.castBy)
+
   // Reflects if the stake has been already released by the member.
   const isRecovered = !vote.stakeLocked
-  const isDisabled = isVoteStakeLocked || isRecovered || isTransactionPending
+  const isDisabled = !isVoteStakeRecoverable || isRecovered || isTransactionPending
 
   return (
     <PastVoteTableListItem $isPast $colLayout={$colLayout}>

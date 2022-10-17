@@ -1,24 +1,30 @@
-import { last } from '@/common/utils'
+import { WorkingGroupApplicationOrderByInput } from '@/common/api/queries'
 import { useLatestElection } from '@/council/hooks/useLatestElection'
 import { usePastElection } from '@/council/hooks/usePastElection'
-import { GetCouncilVotesQuery, useGetCouncilVotesQuery } from '@/council/queries'
-import { LatestElection } from '@/council/types/LatestElection'
+import { useGetCouncilVotesQuery } from '@/council/queries'
+import { useApplications } from '@/working-groups/hooks/useApplications'
 import { useWorkerUnstakingPeriodEnd } from '@/working-groups/hooks/useWorkerUnstakingPeriodEnd'
-import {
-  GetWorkingGroupApplicationsQuery,
-  useGetWorkerIdsQuery,
-  useGetWorkingGroupApplicationsQuery,
-} from '@/working-groups/queries'
+import { useGetWorkerIdsQuery } from '@/working-groups/queries'
 
-export const isWGLockRecoverable = (
-  application?: GetWorkingGroupApplicationsQuery['workingGroupApplications'][number],
-  unstakingPeriodEnd?: string
-) => {
-  if (application?.status.__typename === 'ApplicationStatusPending') {
+export const useIsWGLockRecoverable = (hasWGLock: boolean, stakingAccount: string) => {
+  const { applications } = useApplications({
+    stakingAccount,
+    limit: 1,
+    orderBy: [WorkingGroupApplicationOrderByInput.CreatedAtDesc],
+    skip: !hasWGLock,
+  })
+  const { data: workerData } = useGetWorkerIdsQuery({
+    variables: { where: { stakeAccount_eq: stakingAccount } },
+    skip: !hasWGLock,
+  })
+  const workerId = workerData?.workers[0]?.id
+  const { unstakingPeriodEnd } = useWorkerUnstakingPeriodEnd(workerId)
+
+  if (applications[0]?.status === 'ApplicationStatusPending') {
     return true
   }
 
-  if (application?.status.__typename === 'ApplicationStatusAccepted') {
+  if (applications[0]?.status === 'ApplicationStatusAccepted') {
     if (unstakingPeriodEnd) {
       return Date.parse(unstakingPeriodEnd) > Date.now()
     }
@@ -28,34 +34,23 @@ export const isWGLockRecoverable = (
   return false
 }
 
-export const isCandidateLockRecoverable = (
-  latestElectionCandidates: LatestElection['candidates'] | undefined,
-  address: string
-) => latestElectionCandidates?.find((candidate) => candidate.stakingAccount === address)?.status !== 'ACTIVE'
+export const useIsCandidateLockRecoverable = (hasCandidateLock: boolean, stakingAccount: string) => {
+  const { election: latestElection } = useLatestElection({ skip: !hasCandidateLock })
 
-export const isVoteLockRecoverable = (
-  vote: GetCouncilVotesQuery['castVotes'][number] | undefined,
-  isLatestElection: boolean
-) => !(isLatestElection || vote?.voteFor?.member.isCouncilMember)
+  return (
+    latestElection?.candidates?.find((candidate) => candidate.stakingAccount === stakingAccount)?.status !== 'ACTIVE'
+  )
+}
 
-export const useLockOrientedAddressInformation = (address: string) => {
-  const { data: possibleApplications } = useGetWorkingGroupApplicationsQuery({
-    variables: { where: { stakingAccount_eq: address } },
+export const useIsVoteLockRecoverable = (hasVoteLock: boolean, stakingAccount: string) => {
+  const { election: latestElection } = useLatestElection({ skip: !hasVoteLock })
+  const { data: possibleVotes } = useGetCouncilVotesQuery({
+    variables: { where: { castBy_eq: stakingAccount } },
+    skip: !hasVoteLock,
   })
-  const application = last(possibleApplications?.workingGroupApplications ?? [])
-  const { data: workerData } = useGetWorkerIdsQuery({ variables: { where: { stakeAccount_eq: address } } })
-  const workerId = workerData?.workers[0]?.id
-  const { unstakingPeriodEnd } = useWorkerUnstakingPeriodEnd(workerId)
-  const { data: possibleVotes } = useGetCouncilVotesQuery({ variables: { where: { castBy_eq: address } } })
-  const { election: latestElection } = useLatestElection()
   const vote = possibleVotes?.castVotes.find((vote) => vote.stakeLocked)
   const { election: voteElection } = usePastElection(String(vote?.electionRound.cycleId ?? 0))
 
-  return {
-    latestElection,
-    voteElection,
-    application,
-    unstakingPeriodEnd,
-    vote,
-  }
+  const isInLatestElection = latestElection?.cycleId === voteElection?.cycleId
+  return !(isInLatestElection || vote?.voteFor?.member.isCouncilMember)
 }
