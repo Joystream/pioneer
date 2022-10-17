@@ -45,12 +45,6 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
     replyTo && newPostRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'end' })
   }, [replyTo])
 
-  useEffect(() => {
-    if (initialPost && postsRefs[initialPost]) {
-      postsRefs[initialPost].current?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
-    }
-  }, [postsRefs, initialPost])
-
   const discussionPosts = useMemo(
     () => thread.discussionPosts.filter((post) => post.status !== 'PostStatusRemoved'),
     [thread]
@@ -120,6 +114,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
             isDiscussion
             link={getUrl({ route: ProposalsRoutes.preview, params: { id: proposalId }, query: { post: post.id } })}
             repliesToLink={`${generatePath(ProposalsRoutes.preview, { id: proposalId })}?post=${post.repliesTo?.id}`}
+            clearSelection={() => location.replace(generatePath(ProposalsRoutes.preview, { id: proposalId }))}
           />
         )
       })}

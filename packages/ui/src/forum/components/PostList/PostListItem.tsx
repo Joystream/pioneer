@@ -40,6 +40,7 @@ interface PostListItemProps {
   link?: string
   isDiscussion?: boolean
   repliesToLink: string
+  clearSelection?: () => void
 }
 
 export const PostListItem = ({
@@ -54,6 +55,7 @@ export const PostListItem = ({
   replyToPost,
   isDiscussion,
   repliesToLink,
+  clearSelection,
 }: PostListItemProps) => {
   const { active } = useMyMemberships()
   const { createdAtBlock, lastEditedAt, author, text, repliesTo } = post
@@ -64,6 +66,20 @@ export const PostListItem = ({
   useEffect(() => {
     !!ref.current && insertRef && insertRef(ref)
   }, [ref.current])
+
+  useEffect(() => {
+    if (ref.current && isSelected) {
+      ref.current.scrollIntoView({ behavior: 'smooth', inline: 'start' })
+      const timeout = setTimeout(() => {
+        clearSelection?.()
+        // timeout to clear params after glow animation
+      }, 1500)
+
+      return () => {
+        clearTimeout(timeout)
+      }
+    }
+  }, [isSelected, ref.current])
 
   const [editing, setEditing] = useState(false)
   const editionTime = useMemo(() => {
