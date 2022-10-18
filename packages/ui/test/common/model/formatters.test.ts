@@ -174,14 +174,14 @@ describe('formatters', () => {
       expect(formatJoyValue(new BN('1 0150000000'), { precision: 2 })).toBe('1.02')
       expect(formatJoyValue(new BN('1 9950000000'), { precision: 2 })).toBe('2')
 
-      expect(formatJoyValue(new BN('1'), { precision: 2 })).toBe('> 0.01')
+      expect(formatJoyValue(new BN('1'), { precision: 2 })).toBe('< 0.01')
       expect(formatJoyValue(new BN('1'))).toBe('0.0000000001')
 
       expect(formatJoyValue(new BN('-1 0000000000'))).toBe('-1')
       expect(formatJoyValue(new BN('-1'))).toBe('-0.0000000001')
       expect(formatJoyValue(new BN('-1 0050000000'))).toBe('-1.005')
       expect(formatJoyValue(new BN('-1 0000000000'), { precision: 2 })).toBe('-1')
-      expect(formatJoyValue(new BN('-1'), { precision: 2 })).toBe('< -0.01')
+      expect(formatJoyValue(new BN('-1'), { precision: 2 })).toBe('> -0.01')
       expect(formatJoyValue(new BN('-1 0050000000'), { precision: 2 })).toBe('-1.01')
 
       expect(formatJoyValue(new BN('1 5000000000'), { precision: 0 })).toBe('2')
