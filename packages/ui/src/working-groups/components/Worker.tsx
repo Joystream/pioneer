@@ -18,6 +18,8 @@ export const Worker = ({ member, applicationId, isLead }: WorkerBaseInfo) => {
     })
   }, [applicationId])
 
+  if (isLead) return <div />
+
   return (
     <WorkerWrap>
       <MemberInfo member={member} isLead={isLead} />
