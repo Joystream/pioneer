@@ -9,6 +9,7 @@ export const Colors = {
 
   Black: {
     900: '#000000',
+    850: '#0E0E0E',
     800: '#131519',
     700: '#1F252E',
     600: '#404B5A',
@@ -242,13 +243,6 @@ export const Animations = {
 }
 
 export const Overflow = {
-  DotsNLines: (n: number) => css`
-    display: -webkit-box;
-    -webkit-line-clamp: ${n};
-    -webkit-box-orient: vertical;
-    -moz-box-orient: vertical;
-    overflow: hidden;
-  `,
   DotsTwoLine: `
     display: -webkit-box;
     -webkit-line-clamp: 2;

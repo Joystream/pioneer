@@ -3,14 +3,15 @@ import React, { useEffect } from 'react'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { useApi } from '@/api/hooks/useApi'
+import { TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { createType } from '@/common/model/createType'
 
 import { RevealVoteModalCall } from '.'
 import { RevealVoteMachine } from './machine'
 import { PickVoteModal } from './PickVoteModal'
-import { RevealVoteSignModal } from './RevealVoteSignModal'
 import { RevealVoteSuccessModal } from './RevealVoteSuccessModal'
 
 export const RevealVoteModal = () => {
@@ -56,7 +57,18 @@ export const RevealVoteModal = () => {
     return <InsufficientFundsModal onClose={hideModal} address={vote.accountId} amount={feeInfo.transactionFee} />
   }
   if (state.matches('transaction')) {
-    return <RevealVoteSignModal service={state.children.transaction} transaction={transaction} vote={vote} />
+    return (
+      <SignTransactionModal
+        buttonText="Sign and reveal"
+        transaction={transaction}
+        signer={vote.accountId}
+        service={state.children.transaction}
+      >
+        <TextMedium light>
+          You intend to reveal your vote for <TextInlineMedium bold>{modalData.voteForHandle}</TextInlineMedium>.
+        </TextMedium>
+      </SignTransactionModal>
+    )
   }
 
   return null

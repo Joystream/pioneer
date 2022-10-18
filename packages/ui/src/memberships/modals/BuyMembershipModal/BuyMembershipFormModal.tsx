@@ -227,7 +227,7 @@ export const BuyMembershipForm = ({
               <Row>
                 <HCaptcha
                   sitekey={process.env.REACT_APP_CAPTCHA_SITE_KEY}
-                  theme="dark"
+                  theme="light"
                   languageOverride="en"
                   onVerify={setCaptchaToken}
                 />

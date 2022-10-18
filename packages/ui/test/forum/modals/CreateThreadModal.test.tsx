@@ -4,7 +4,6 @@ import React from 'react'
 import { generatePath, MemoryRouter, Route } from 'react-router-dom'
 
 import { ApiContext } from '@/api/providers/context'
-import { CurrencyName } from '@/app/constants/currency'
 import { GlobalModals } from '@/app/GlobalModals'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
@@ -145,11 +144,7 @@ describe('CreateThreadModal', () => {
       fireEvent.click(next)
 
       expect(await getButton(/sign and send/i)).toBeDisabled()
-      expect(
-        await screen.findByText(
-          `Insufficient funds to cover the thread creation. You need at least 10,000 ${CurrencyName.integerValue} on your account for this action.`
-        )
-      ).toBeDefined()
+      expect(await screen.findByText('Insufficient funds to cover transaction costs')).toBeDefined()
     })
 
     it('Insufficient funds for fee + deposits', async () => {
@@ -161,11 +156,7 @@ describe('CreateThreadModal', () => {
       fireEvent.click(next)
 
       expect(await getButton(/sign and send/i)).toBeDisabled()
-      expect(
-        await screen.findByText(
-          `Insufficient funds to cover the thread creation. You need at least 1,200 ${CurrencyName.integerValue} on your account for this action.`
-        )
-      ).toBeDefined()
+      expect(await screen.findByText('Insufficient funds to cover transaction costs')).toBeDefined()
     })
 
     it('Displays deposit amount', async () => {

@@ -213,7 +213,7 @@ describe('UI: Vote for Council Modal', () => {
     expect(await screen.findByText(/^You intend to Vote and stake/i)).toBeDefined()
     expect(screen.getByText(/^Stake:/i)?.nextSibling?.textContent).toBe('500')
     expect(screen.getByText(/^modals.transactionFee.label/i)?.nextSibling?.textContent).toBe('25')
-    expect(await getButton('Sign and send')).toBeDefined()
+    expect(await getButton('Sign and Send')).toBeDefined()
   })
 
   it('Transaction success', async () => {
@@ -222,7 +222,7 @@ describe('UI: Vote for Council Modal', () => {
 
     await fillStakeStep(500)
     fireEvent.click(await getNextStepButton())
-    fireEvent.click(await getButton('Sign and send'))
+    fireEvent.click(await getButton('Sign and Send'))
 
     expect(await screen.findByText(/^You have just successfully voted for the Candidate/i)).toBeDefined()
     expect(await getButton('Back to Candidates')).toBeDefined()
@@ -234,7 +234,7 @@ describe('UI: Vote for Council Modal', () => {
 
     await fillStakeStep(500)
     fireEvent.click(await getNextStepButton())
-    fireEvent.click(await getButton('Sign and send'))
+    fireEvent.click(await getButton('Sign and Send'))
 
     expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })
