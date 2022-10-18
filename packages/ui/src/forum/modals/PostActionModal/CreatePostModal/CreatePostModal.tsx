@@ -21,7 +21,7 @@ import { CreatePostSignModal } from './CreatePostSignModal'
 export const CreatePostModal = () => {
   const { t } = useTranslation('accounts')
   const { modalData, hideModal } = useModal<CreatePostModalCall>()
-  const { module = 'forum', postText, replyTo, transaction, isEditable, onSuccess } = modalData
+  const { module = 'forum', postText, transaction, isEditable, onSuccess } = modalData
 
   const [state, send] = useMachine(
     defaultTransactionModalMachine('There was a problem posting your message.', 'Your post has been submitted.'),
@@ -76,7 +76,6 @@ export const CreatePostModal = () => {
         controllerAccount={controllerAccount}
         author={active}
         postText={postText}
-        replyTo={replyTo}
         isEditable={isEditable}
         postDeposit={postDeposit}
       />
