@@ -1,8 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { Arrow } from '@/common/components/icons'
-import { LinkSymbol } from '@/common/components/icons/symbols'
 import { TableListItem } from '@/common/components/List'
 import { GhostRouterLink, RouterLink } from '@/common/components/RouterLink'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
@@ -19,6 +18,7 @@ import { workingGroupLinks } from '../constants'
 import { groupNameToURLParam } from '../model/workingGroupName'
 import { WorkingGroup } from '../types'
 
+import { GroupTooltip } from './GroupTooltip'
 import { WorkingGroupImage, WorkingGroupImageTag } from './WorkingGroupImage'
 
 export interface WorkingGroupProps {
@@ -28,6 +28,7 @@ export interface WorkingGroupProps {
 export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   const { isLoading: loadingOpenings, openings } = useCountOpenings(group.id)
   const { isLoading: loadingWorkers, workers } = useCountWorkers(group.id)
+  const [showTooltip, setShowTooltip] = useState(false)
 
   const { member: lead } = useMember(group.leadId)
   const groupAddress = `/working-groups/${groupNameToURLParam(nameMapping(group.name))}`
@@ -38,16 +39,12 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
       <GroupImageContainer as={GhostRouterLink} to={groupAddress}>
         <WorkingGroupImage groupName={group.name} />
       </GroupImageContainer>
-      <GroupContentBlock>
+      <GroupContentBlock onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
         <Flex>
           <GroupTitle as={GhostRouterLink} to={groupAddress}>
             {nameMapping(group.name)}
           </GroupTitle>
-          {workingGroupLinks[group.id] && (
-            <StyledTooltipExternalLink href={workingGroupLinks[group.id]} target="_blank">
-              <TextMedium>Learn more about this group</TextMedium> <LinkSymbol />
-            </StyledTooltipExternalLink>
-          )}
+          <GroupTooltip link={workingGroupLinks[group.id]} show={showTooltip} />
         </Flex>
         <GroupContent as={GhostRouterLink} to={groupAddress}>
           {subtitleMapping(group.name)}
@@ -90,10 +87,6 @@ const Flex = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 1rem;
-`
-
-const StyledTooltipExternalLink = styled(TooltipExternalLink)`
-  margin-top: unset;
 `
 
 const GroupImageContainer = styled.div`

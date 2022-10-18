@@ -14,4 +14,6 @@ export const workingGroupLinks: OptionRequirements = {
   distributionWorkingGroup: 'https://joystream.gitbook.io/testnet-workspace/system/storage#distributor',
   membershipWorkingGroup:
     'https://joystream.gitbook.io/testnet-workspace/testnet/council-period-scoring/human-resources-score',
+  forumWorkingGroup: 'https://joystream.gitbook.io/testnet-workspace/system/forum',
+  gatewayWorkingGroup: 'https://joystream.gitbook.io/testnet-workspace/system/gateways',
 }
