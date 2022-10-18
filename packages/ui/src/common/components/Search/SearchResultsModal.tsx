@@ -30,10 +30,12 @@ export const SearchResultsModal = () => {
   const { forum, forumPostCount, isLoading } = useSearch(search, activeTab)
   const isValid = () => !debouncedSearch || debouncedSearch.length === 0 || debouncedSearch.length > 2
   const debouncedSearch = useDebounce(search, 400)
-  const pattern = useMemo(
-    () => (isValid() && search ? RegExp(escapeStringRegexp(search), 'ig') : null),
-    [debouncedSearch]
-  )
+  const [pattern, setPattern] = useState<RegExp | null>(null)
+  useEffect(() => {
+    if (isValid()) {
+      setPattern(RegExp(escapeStringRegexp(debouncedSearch), 'ig'))
+    }
+  }, [debouncedSearch])
   const history = useHistory()
   const [hasOverlay, setHasOverlay] = useState(true)
   useEffect(
