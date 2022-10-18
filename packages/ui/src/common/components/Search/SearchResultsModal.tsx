@@ -32,7 +32,7 @@ export const SearchResultsModal = () => {
   const debouncedSearch = useDebounce(search, 400)
   const [pattern, setPattern] = useState<RegExp | null>(null)
   useEffect(() => {
-    if (isValid()) {
+    if (debouncedSearch && isValid()) {
       setPattern(RegExp(escapeStringRegexp(debouncedSearch), 'ig'))
     }
   }, [debouncedSearch])
