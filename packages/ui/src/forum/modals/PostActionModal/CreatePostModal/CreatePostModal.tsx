@@ -1,26 +1,23 @@
 import React, { useEffect, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
-import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
+import { PostInsufficientFundsModal } from '@/forum/modals/PostActionModal/components/PostInsufficientFundsModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { CreatePostModalCall } from '.'
 import { CreatePostSignModal } from './CreatePostSignModal'
 
 export const CreatePostModal = () => {
-  const { t } = useTranslation('accounts')
-  const { modalData, hideModal } = useModal<CreatePostModalCall>()
+  const { modalData } = useModal<CreatePostModalCall>()
   const { module = 'forum', postText, transaction, isEditable, onSuccess } = modalData
 
   const [state, send] = useMachine(
@@ -83,25 +80,7 @@ export const CreatePostModal = () => {
   }
 
   if (state.matches('requirementsFailed') && feeInfo && requiredAmount && active) {
-    return (
-      <InsufficientFundsModal onClose={hideModal} address={active.controllerAccount} amount={requiredAmount}>
-        <TextMedium margin="s">
-          {t('modals.insufficientFunds.feeInfo1')}
-          {feeInfo.transactionFee.gtn(0) && (
-            <>
-              <TokenValue value={feeInfo.transactionFee} />
-              {t('modals.insufficientFunds.feeInfo2')}
-            </>
-          )}
-          {postDeposit?.gtn(0) && (
-            <>
-              {feeInfo.transactionFee.gtn(0) && <> and</>} <TokenValue value={postDeposit} /> available to deposit to
-              make the post editable
-            </>
-          )}
-        </TextMedium>
-      </InsufficientFundsModal>
-    )
+    return <PostInsufficientFundsModal postDeposit={postDeposit} feeInfo={feeInfo} requiredAmount={requiredAmount} />
   }
 
   return null

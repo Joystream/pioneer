@@ -18,8 +18,9 @@ interface TransactionContext extends PrepareContext {
   transactionEvents?: EventRecord[]
 }
 
-export type PostReplyContext = Partial<TransactionContext>
 export enum PostReplyStateName {
+  requirementsVerification = 'requirementsVerification',
+  requirementsFailed = 'requirementsFailed',
   prepare = 'prepare',
   transaction = 'transaction',
   success = 'success',
@@ -27,12 +28,12 @@ export enum PostReplyStateName {
 }
 
 type PostReplyState =
-  // | { value: 'requirementsVerification'; context: EmptyObject }
-  // | { value: 'requirementsFailed'; context: EmptyObject }
-  | { value: 'prepare'; context: TransactionContext }
-  | { value: 'transaction'; context: TransactionContext }
-  | { value: 'success'; context: Required<PostReplyContext> }
-  | { value: 'error'; context: PostReplyContext & { transactionEvents: EventRecord[] } }
+  | { value: PostReplyStateName.requirementsVerification; context: PrepareContext }
+  | { value: PostReplyStateName.requirementsFailed; context: PrepareContext }
+  | { value: PostReplyStateName.prepare; context: PrepareContext }
+  | { value: PostReplyStateName.transaction; context: TransactionContext }
+  | { value: PostReplyStateName.success; context: Required<TransactionContext> }
+  | { value: PostReplyStateName.error; context: Required<TransactionContext> }
 
 export type PostReplyEvent =
   | { type: 'FAIL' }
@@ -40,12 +41,22 @@ export type PostReplyEvent =
   | { type: 'SET_TEXT'; payload: string }
   | { type: 'SET_EDITABLE'; payload: boolean }
 
-export const postReplyMachine = createMachine<PostReplyContext, PostReplyEvent, PostReplyState>({
+export const postReplyMachine = createMachine<TransactionContext, PostReplyEvent, PostReplyState>({
   initial: 'prepare',
   context: {
     isEditable: false,
+    postText: '',
   },
   states: {
+    requirementsVerification: {
+      on: {
+        NEXT: 'prepare',
+        FAIL: 'requirementsFailed',
+      },
+    },
+    requirementsFailed: {
+      type: 'final',
+    },
     prepare: {
       on: {
         SET_TEXT: {

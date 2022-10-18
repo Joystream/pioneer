@@ -1,16 +1,21 @@
-import React from 'react'
+import React, { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
+import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
 import { CKEditor } from '@/common/components/CKEditor'
 import { Checkbox, InputComponent } from '@/common/components/forms'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Modal, ModalBody, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
+import { BN_ZERO } from '@/common/constants'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
 import { PreviewPostButton } from '@/forum/components/PreviewPostButton'
+import { PostInsufficientFundsModal } from '@/forum/modals/PostActionModal/components/PostInsufficientFundsModal'
 import { CreatePostSignModal } from '@/forum/modals/PostActionModal/CreatePostModal/CreatePostSignModal'
 import { transactionFactory } from '@/forum/modals/PostReplyModal/helpers'
 import { PostReplyModalCall } from '@/forum/modals/PostReplyModal/index'
@@ -25,9 +30,34 @@ export const PostReplyModal = () => {
   const { active } = useMyMemberships()
   const { api } = useApi()
   const { allAccounts } = useMyAccounts()
+  const balance = useBalance(active?.controllerAccount)
 
   const { replyTo, module = 'forum' } = modalData
   const postDeposit = api?.consts[module].postDeposit.toBn()
+  const transaction = useMemo(() => {
+    if (api && active) {
+      return transactionFactory(api, module, state.context.postText, state.context.isEditable, replyTo, active.id)
+    }
+  }, [api?.isConnected])
+  const { feeInfo } = useTransactionFee(active?.controllerAccount, () => transaction)
+  const requiredAmount = useMemo(
+    () => feeInfo && api && feeInfo.transactionFee.add(postDeposit ?? BN_ZERO),
+    [feeInfo, postDeposit]
+  )
+
+  useEffect(() => {
+    if (!(feeInfo && requiredAmount && active && balance)) {
+      return
+    }
+
+    if (state.matches(PostReplyStateName.requirementsVerification)) {
+      if (state.context.isEditable ? getFeeSpendableBalance(balance).gte(requiredAmount) : feeInfo.canAfford) {
+        send('NEXT')
+      } else {
+        send('FAIL')
+      }
+    }
+  }, [state.value, JSON.stringify(feeInfo), postDeposit, balance])
 
   if (state.matches(PostReplyStateName.prepare))
     return (
@@ -64,17 +94,10 @@ export const PostReplyModal = () => {
       </Modal>
     )
 
-  if (state.matches('transaction') && active && postDeposit && api) {
+  if (state.matches(PostReplyStateName.transaction) && transaction && active && postDeposit) {
     const service = state.children.transaction
     const controllerAccount = accountOrNamed(allAccounts, active.controllerAccount, 'Controller Account')
-    const transaction = transactionFactory(
-      api,
-      module,
-      state.context.postText,
-      state.context.isEditable,
-      replyTo,
-      active.id
-    )
+
     return (
       <CreatePostSignModal
         transaction={transaction}
@@ -87,6 +110,10 @@ export const PostReplyModal = () => {
         postDeposit={postDeposit}
       />
     )
+  }
+
+  if (state.matches(PostReplyStateName.requirementsFailed) && feeInfo && requiredAmount && active) {
+    return <PostInsufficientFundsModal postDeposit={postDeposit} feeInfo={feeInfo} requiredAmount={requiredAmount} />
   }
 
   return null
