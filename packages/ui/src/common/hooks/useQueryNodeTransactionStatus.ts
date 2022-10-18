@@ -18,6 +18,8 @@ export function useQueryNodeTransactionStatus(blockHash?: Hash | string, shouldS
       return
     }
     info('Failed to subscribe to query node state')
+    // temporary solution in case of error, it should be handled better in the future
+    setStatus('confirmed')
   }, [queryNodeStateError])
 
   useEffect(() => {
