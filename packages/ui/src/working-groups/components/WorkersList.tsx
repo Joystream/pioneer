@@ -27,9 +27,11 @@ export const WorkersList = ({ lead, workers }: WorkersListProps) => {
         </Label>
         {workers && (
           <ContentWithTabs>
-            {workers.map((worker, index) => (
-              <Worker key={index} member={worker.member} applicationId={worker.applicationId} />
-            ))}
+            {workers
+              .filter((w) => !w.isLead)
+              .map((worker, index) => (
+                <Worker key={index} member={worker.member} applicationId={worker.applicationId} />
+              ))}
           </ContentWithTabs>
         )}
       </ContentWithTabs>
