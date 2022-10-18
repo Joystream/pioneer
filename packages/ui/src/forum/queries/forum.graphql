@@ -154,6 +154,10 @@ fragment ForumPostWithoutReplyFields on ForumPost {
   edits {
     createdAt
   }
+  threadId
+  thread {
+     categoryId
+  }
 }
 
 fragment ForumThreadDetailedFields on ForumThread {
