@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-export const PageTitle = styled.h2<{ $isRemovedThread?: boolean }>`
+export const PageTitle = styled.h2<{ $isRemovedOrModerated?: boolean }>`
   margin-right: auto;
   text-transform: capitalize;
   display: -webkit-box;
@@ -8,12 +8,12 @@ export const PageTitle = styled.h2<{ $isRemovedThread?: boolean }>`
   -webkit-box-orient: vertical;
   -moz-box-orient: vertical;
   overflow: hidden;
-  ${({ $isRemovedThread }) =>
-    $isRemovedThread &&
+  ${({ $isRemovedOrModerated }) =>
+    $isRemovedOrModerated &&
     css`
       text-decoration-line: line-through;
     `}
 `
 PageTitle.defaultProps = {
-  $isRemovedThread: false,
+  $isRemovedOrModerated: false,
 }
