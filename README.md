@@ -43,6 +43,10 @@ yarn test
 
 For development documentation see [Dev Readme](docs/README.md)
 
+## Production
+
+To run a Pioneer instance check the [admin documentation](docs/admin.md)
+
 ## Packages
 
 The project's monorepo contains packages:

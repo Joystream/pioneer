@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { LeadMemberIcon } from '@/common/components/icons'
 import { Tooltip } from '@/common/components/Tooltip'
+import { UserImage } from '@/common/components/UserImage/UserImage'
 
 import { AvatarPlaceholder } from '../assets/images/AvatarPlaceholder'
 import { Member } from '../types'
@@ -43,6 +44,7 @@ export const Avatar = React.memo(({ avatarUri, className }: AvatarProps) => {
           onError={() => setAvatarStatus('error')}
           onLoad={() => setAvatarStatus('completed')}
           className={className}
+          noReportButton
         />
       )}
       {avatarStatus !== 'completed' && <AvatarPlaceholderImage />}
@@ -81,7 +83,7 @@ export const MemberInfoAvatar = React.memo(
   }
 )
 
-export const AvatarImg = styled.img<{ isLoading?: boolean }>`
+export const AvatarImg = styled(UserImage)<{ isLoading?: boolean }>`
   height: 100%;
   width: auto;
   max-width: 100%;
