@@ -38,7 +38,11 @@ export const VoteForProposalModal = () => {
     }
   }, [state.value, feeInfo?.canAfford])
 
-  if (isLoading || !proposal || !api || !active || !feeInfo) {
+  if (!proposal || !api || !active || !feeInfo) {
+    if (!isLoading) {
+      return <FailureModal onClose={hideModal}>Looks like we could not find this proposal</FailureModal>
+    }
+
     return null
   }
 
