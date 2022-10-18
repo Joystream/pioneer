@@ -1,6 +1,7 @@
 import { useLatestElection } from '@/council/hooks/useLatestElection'
 import { usePastElection } from '@/council/hooks/usePastElection'
 import { useGetCouncilVotesQuery } from '@/council/queries'
+import { CandidacyStatus } from '@/council/types'
 import { useApplications } from '@/working-groups/hooks/useApplications'
 import { useWorkerUnstakingPeriodEnd } from '@/working-groups/hooks/useWorkerUnstakingPeriodEnd'
 import { useGetWorkerIdsQuery } from '@/working-groups/queries'
@@ -41,14 +42,16 @@ export const useIsCandidateLockRecoverable = (hasCandidateLock: boolean, staking
 }
 
 export const useIsVoteLockRecoverable = (hasVoteLock: boolean, stakingAccount: string) => {
-  const { election: latestElection } = useLatestElection({ skip: !hasVoteLock })
-  const { data: possibleVotes } = useGetCouncilVotesQuery({
-    variables: { where: { castBy_eq: stakingAccount } },
+  const { data: { castVotes: [vote] } = { castVotes: [] } } = useGetCouncilVotesQuery({
+    variables: { where: { castBy_eq: stakingAccount, stakeLocked_eq: true } },
     skip: !hasVoteLock,
   })
-  const vote = possibleVotes?.castVotes.find((vote) => vote.stakeLocked)
   const { election: voteElection } = usePastElection(String(vote?.electionRound.cycleId ?? 0))
 
-  const isInLatestElection = latestElection?.cycleId === voteElection?.cycleId
-  return !(isInLatestElection || vote?.voteFor?.member.isCouncilMember)
+  const isElectionFinished = !!voteElection
+  const { election: latestElection } = useLatestElection({ skip: !hasVoteLock || !isElectionFinished })
+  const isInLatestElection = !isElectionFinished || latestElection?.cycleId === voteElection?.cycleId
+  // Always recoverable when the vote was not cast during the latest election
+  // Otherwise recoverable when the election is over and the voted for candidate was not elected
+  return !isInLatestElection || (isElectionFinished && vote?.voteFor?.status !== CandidacyStatus.Elected)
 }

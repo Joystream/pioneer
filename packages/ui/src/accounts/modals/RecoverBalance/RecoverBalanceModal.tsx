@@ -27,7 +27,7 @@ export const RecoverBalanceModal = () => {
 
   const signer = useMemo(() => {
     if (modalData.lock.type === 'Council Candidate') {
-      return member?.controllerAccount ?? modalData.address
+      return member?.controllerAccount
     }
 
     if (modalData.lock.type === 'Voting') {
@@ -62,7 +62,7 @@ export const RecoverBalanceModal = () => {
     }
   }, [feeInfo, state.value])
 
-  if (!transaction || !feeInfo) {
+  if (!transaction || !feeInfo || !signer) {
     return null
   }
 

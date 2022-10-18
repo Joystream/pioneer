@@ -41,11 +41,11 @@ export const PastVote = ({ vote, $colLayout }: PastVoteProps) => {
   }
 
   // Reflects if the vote was cast in latest election
-  const hasVoteLock = balance?.locks.some(({ type }) => type === 'Voting') ?? false
+  const isRecovered = !vote.stakeLocked
+  const hasVoteLock = (!isRecovered && balance?.locks.some(({ type }) => type === 'Voting')) ?? false
   const isVoteStakeRecoverable = useIsVoteLockRecoverable(hasVoteLock, vote.castBy)
 
   // Reflects if the stake has been already released by the member.
-  const isRecovered = !vote.stakeLocked
   const isDisabled = !isVoteStakeRecoverable || isRecovered || isTransactionPending
 
   return (
