@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { useGroupLocks } from '@/accounts/hooks/useGroupLocks'
+import { useIsWGLockRecoverable } from '@/accounts/hooks/useGroupLocks'
 import { RecoverableLock, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { ButtonSecondary } from '@/common/components/buttons'
 import { useModal } from '@/common/hooks/useModal'
@@ -14,11 +14,12 @@ interface WithdrawApplicationButtonProps {
 export const WithdrawApplicationButton = ({ application }: WithdrawApplicationButtonProps) => {
   const { showModal } = useModal()
   const stakingAccountBalance = useBalance(application.stakingAccount)
-  const { recoverable } = useGroupLocks(application.stakingAccount, stakingAccountBalance?.locks ?? [])
+  const hasWGLock = stakingAccountBalance?.locks.some(({ type }) => type.endsWith('Worker')) ?? false
+  const isWGLockRecoverable = useIsWGLockRecoverable(hasWGLock, application.stakingAccount)
 
   const withdrawApplication = useCallback(() => {
-    const lock = recoverable.find((lock) => lock.type.endsWith('Worker'))
-    if (lock) {
+    if (isWGLockRecoverable) {
+      const lock = stakingAccountBalance?.locks.find(({ type }) => type.endsWith('Worker'))
       showModal<RecoverBalanceModalCall>({
         modal: 'RecoverBalance',
         data: {
@@ -29,9 +30,9 @@ export const WithdrawApplicationButton = ({ application }: WithdrawApplicationBu
         },
       })
     }
-  }, [recoverable.length, showModal, application])
+  }, [isWGLockRecoverable, application])
 
-  if (!recoverable.some((lock) => lock.type.endsWith('Worker'))) {
+  if (!isWGLockRecoverable) {
     return null
   }
 

@@ -22,7 +22,14 @@ export const ApplicationStatusToTypename: Record<ApplicationStatus, ApplicationS
   withdrawn: 'ApplicationStatusWithdrawn',
 }
 
-export const useApplications = ({ applicationsStatus, openingId, stakingAccount, limit, skip, orderBy }: Props) => {
+export const useApplications = ({
+  applicationsStatus,
+  openingId,
+  stakingAccount,
+  limit,
+  skip,
+  orderBy = [WorkingGroupApplicationOrderByInput.CreatedAtDesc],
+}: Props) => {
   const { loading, data } = useGetWorkingGroupApplicationsQuery({
     skip,
     variables: {

@@ -5,7 +5,6 @@ import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal
 import { RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance/index'
 import { recoverBalanceMachine } from '@/accounts/modals/RecoverBalance/machine'
 import { useApi } from '@/api/hooks/useApi'
-import { WorkingGroupApplicationOrderByInput } from '@/common/api/queries'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { isDefined } from '@/common/utils'
@@ -24,7 +23,6 @@ export const RecoverBalanceModal = () => {
     stakingAccount: modalData.address,
     skip: !modalData.lock.type.endsWith('Worker'),
     limit: 1,
-    orderBy: [WorkingGroupApplicationOrderByInput.CreatedAtDesc],
   })
 
   const signer = useMemo(() => {

@@ -1,4 +1,3 @@
-import { WorkingGroupApplicationOrderByInput } from '@/common/api/queries'
 import { useLatestElection } from '@/council/hooks/useLatestElection'
 import { usePastElection } from '@/council/hooks/usePastElection'
 import { useGetCouncilVotesQuery } from '@/council/queries'
@@ -10,7 +9,6 @@ export const useIsWGLockRecoverable = (hasWGLock: boolean, stakingAccount: strin
   const { applications } = useApplications({
     stakingAccount,
     limit: 1,
-    orderBy: [WorkingGroupApplicationOrderByInput.CreatedAtDesc],
     skip: !hasWGLock,
   })
   const { data: workerData } = useGetWorkerIdsQuery({
