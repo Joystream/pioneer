@@ -12,6 +12,8 @@ export interface WorkersListProps {
   workers?: WorkerBaseInfo[]
 }
 
+const workersWithoutLead = (list: WorkerBaseInfo[], leadId: number) => list.filter((w) => +w.member.id !== leadId)
+
 export const WorkersList = ({ lead, workers }: WorkersListProps) => {
   return (
     <RowGapBlock gap={36}>
@@ -27,11 +29,9 @@ export const WorkersList = ({ lead, workers }: WorkersListProps) => {
         </Label>
         {workers && (
           <ContentWithTabs>
-            {workers
-              .filter((w) => !w.isLead)
-              .map((worker, index) => (
-                <Worker key={index} member={worker.member} applicationId={worker.applicationId} />
-              ))}
+            {workersWithoutLead(workers, +(lead?.member?.id || 0)).map((worker, index) => (
+              <Worker key={index} member={worker.member} applicationId={worker.applicationId} />
+            ))}
           </ContentWithTabs>
         )}
       </ContentWithTabs>
