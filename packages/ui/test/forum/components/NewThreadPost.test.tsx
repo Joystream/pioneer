@@ -58,8 +58,6 @@ describe('UI: Add new post', () => {
 
   const props: NewPostProps = {
     getTransaction: (text, isEditable) => api.api.tx.forum.addPost(1, 1, 1, text, isEditable),
-    removeReply: () => true,
-    replyToLink: '',
   }
 
   it('No selected membership', async () => {
@@ -93,14 +91,8 @@ describe('UI: Add new post', () => {
 
     it('With reply', async () => {
       useMyMemberships.setActive(getMember('alice'))
-      replyTo = {
-        id: '1',
-        author: getMember('bob'),
-        text: 'Some text',
-        status: 'PostStatusActive',
-        createdAt: new Date().toISOString(),
-      }
-      renderEditor({ ...props, replyTo })
+
+      renderEditor({ ...props })
       const editor = await screen.findByRole('textbox')
       act(() => {
         fireEvent.change(editor, { target: { value: 'I disagree' } })
