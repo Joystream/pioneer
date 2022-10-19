@@ -3,7 +3,7 @@ import { AugmentedEvents } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
-import { from, of, asyncScheduler, scheduled, Observable } from 'rxjs'
+import { asyncScheduler, from, Observable, of, scheduled } from 'rxjs'
 
 import { toBalances } from '@/accounts/model/toBalances'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
@@ -153,7 +153,9 @@ export const stubConst = <T>(api: UseApi, constSubPath: string, value: T) => {
 
 export const stubApi = () => {
   const api: UseApi = {
-    api: {} as unknown as Api,
+    api: ({
+      isConnected: true,
+    } as unknown) as Api,
     isConnected: true,
     connectionState: 'connected',
     setQnConnectionState: () => undefined,
@@ -262,7 +264,7 @@ export const stubBalances = ({ available, lockId, locked }: Balances) => {
   const availableBalance = new BN(available ?? 0)
   const lockedBalance = new BN(locked ?? 0)
 
-  const deriveBalances = {
+  const deriveBalances = ({
     availableBalance: createType('Balance', availableBalance),
     lockedBalance: createType('Balance', lockedBalance),
     accountId: createType('AccountId', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
@@ -281,7 +283,7 @@ export const stubBalances = ({ available, lockId, locked }: Balances) => {
     vestingTotal: new BN(0),
     votingBalance: new BN(0),
     vesting: [],
-  } as unknown as DeriveBalancesAll
+  } as unknown) as DeriveBalancesAll
 
   const balance = toBalances(deriveBalances)
   mockedBalances.mockReturnValue(balance)

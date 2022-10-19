@@ -10,7 +10,7 @@ import { LockItem } from '../LockItem'
 import { LockLinkButton } from '../LockLinkButton'
 import { LockDetailsProps } from '../types'
 
-export const WorkingGroupLockItem = ({ lock, address }: LockDetailsProps) => {
+export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
   const { data } = useGetWorkingGroupApplicationsQuery({
     variables: {
       where: {
@@ -48,7 +48,7 @@ export const WorkingGroupLockItem = ({ lock, address }: LockDetailsProps) => {
     <LockItem
       lock={lock}
       address={address}
-      isRecoverable={false}
+      isRecoverable={isRecoverable}
       createdInEvent={createdInEvent}
       lockRecovery={recoveryTime}
       linkButtons={goToOpeningButton}

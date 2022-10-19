@@ -4,7 +4,6 @@ import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
 
-import { RecoverBalanceModal } from '@/accounts/modals/RecoverBalance'
 import { ApiContext } from '@/api/providers/context'
 import { GlobalModals } from '@/app/GlobalModals'
 import { createType } from '@/common/model/createType'
@@ -41,7 +40,7 @@ describe('UI: RecoverBalanceModal', () => {
   }
 
   beforeAll(async () => {
-    mockUseModalCall({ modalData })
+    mockUseModalCall({ modalData, modal: 'RecoverBalance' })
     await cryptoWaitReady()
     seedMembers(server.server, 2)
   })
@@ -77,7 +76,15 @@ describe('UI: RecoverBalanceModal', () => {
   it('Transaction summary', async () => {
     renderModal()
     screen.findByText(/^sign transaction and transfer$/i)
-    expect(await screen.findByRole('heading', { name: 'Recover balances' })).toBeDefined()
+    expect(await screen.findByRole('heading', { name: 'Recover Stake' })).toBeDefined()
+  })
+
+  it('Transaction summary for withdraw application', async () => {
+    mockUseModalCall({ modalData: { ...modalData, isWithdrawing: true }, modal: 'RecoverBalance' })
+    renderModal()
+    screen.findByText(/^sign transaction and transfer$/i)
+    expect(await screen.findByRole('heading', { name: 'Withdraw Application' })).toBeDefined()
+    mockUseModalCall({ modalData, modal: 'RecoverBalance' })
   })
 
   describe('Transaction for lockType', () => {
@@ -147,7 +154,6 @@ describe('UI: RecoverBalanceModal', () => {
             <MembershipContext.Provider value={useMyMemberships}>
               <ApiContext.Provider value={api}>
                 <GlobalModals />
-                <RecoverBalanceModal />
               </ApiContext.Provider>
             </MembershipContext.Provider>
           </MockQueryNodeProviders>
