@@ -44,6 +44,7 @@ export const ForumThread = () => {
   }, [replyTo])
 
   const isThreadActive = !!(thread && thread.status.__typename === 'ThreadStatusActive')
+  const isThreadRemoved = !!(thread && thread.status.__typename === 'ThreadStatusRemoved')
 
   const getTransaction = (postText: string, isEditable: boolean) => {
     if (api && active && thread) {
@@ -59,7 +60,7 @@ export const ForumThread = () => {
   }
 
   useEffect(() => {
-    if (!isLoading && !thread) {
+    if (!isLoading && (!thread || isThreadRemoved)) {
       history.replace('/404')
     }
   }, [isLoading, thread])

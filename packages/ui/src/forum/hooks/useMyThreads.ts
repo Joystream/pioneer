@@ -22,7 +22,7 @@ export const useMyThreads = ({ page, threadsPerPage = 5, order }: UseMyThreadsPr
   const { members, active } = useMyMemberships()
 
   const status_json = {
-    isTypeOf_not: 'ThreadStatusModerated',
+    isTypeOf_not: 'ThreadStatusRemoved',
   }
   const variables = {
     where: { author: { id_in: whenDefined(active?.id, (id) => [id]) ?? members.map((m) => m.id) }, status_json },
