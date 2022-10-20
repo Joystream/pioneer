@@ -53,10 +53,9 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
           title="Avg stake"
           tooltipText={
             <>
-              If funds are insufficient over payout periods, the working group can incur a debt, which is owed to
-              workers.{' '}
+              Average stake size by members undertaking the roles of workers and the lead in this group.{' '}
               <TooltipExternalLink
-                href="https://joystream.gitbook.io/joystream-handbook/governance/working-groups#staking"
+                href="https://joystream.gitbook.io/testnet-workspace/system/working-groups?q=lock#staking"
                 target="_blank"
               >
                 <TextMedium>Link</TextMedium> <LinkSymbol />
