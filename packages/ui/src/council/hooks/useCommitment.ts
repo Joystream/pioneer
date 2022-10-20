@@ -32,11 +32,11 @@ export const useCommitment = (accountId: string | undefined, candidateId: string
   }, [accountId, candidate?.id])
 
   const [isVoteStored, setIsVoteStored] = useState(false)
-  const [votingAttempts, setVotingAttempts] = useLocalStorage<VotingAttempt[]>(vote?.key)
+  const [, updateVotingAttempts] = useLocalStorage<VotingAttempt[]>(vote?.key)
   useEffect(() => {
     if (!vote) return
 
-    setVotingAttempts([...(votingAttempts ?? []), vote.value])
+    updateVotingAttempts((attempts = []) => [...attempts, vote.value])
     setIsVoteStored(true)
   }, [vote?.key, vote?.value])
 
