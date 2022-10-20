@@ -28,14 +28,10 @@ export const useSearch = (search: string, kind: SearchKind) => {
   }, [searchDebounced, kind])
 
   const [forum, isLoadingPosts] = useMemo(() => {
-    if (searchDebounced.length > 2) {
-      const posts = [...(postResult.data?.forumPosts ?? [])]
-        .sort(byBestMatch(escapeStringRegexp(searchDebounced), [({ thread }) => thread.title, ({ text }) => text]))
-        .slice(0, MAX_RESULTS)
-      return [posts, postResult.loading]
-    } else {
-      return [postResult.data?.forumPosts ?? [], postResult.loading]
-    }
+    const posts = [...(postResult.data?.forumPosts ?? [])]
+      .sort(byBestMatch(escapeStringRegexp(searchDebounced), [({ thread }) => thread.title, ({ text }) => text]))
+      .slice(0, MAX_RESULTS)
+    return [posts, postResult.loading]
   }, [postResult])
 
   return {
@@ -56,8 +52,13 @@ const byBestMatch = <T extends Record<any, any>>(search: string, fields: ((x: T)
       for (const pattern of patterns) {
         const matchA = fieldA.match(pattern)?.length ?? 0
         const matchB = fieldB.match(pattern)?.length ?? 0
-
-        if (matchA !== matchB) return matchB - matchA
+        if (matchA > matchB) {
+          return -1
+        } else if (matchA < matchB) {
+          return 1
+        } else {
+          return 0
+        }
       }
     }
     return 0
