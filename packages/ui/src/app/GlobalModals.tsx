@@ -216,7 +216,7 @@ export const GlobalModals = () => {
 }
 
 export const LoaderModal = ({ onClose }: { onClose: () => void }) => (
-  <SpinnerGlass modalSize="l" isDark onClick={onClose} onClose={onClose}>
+  <SpinnerGlass onClick={onClose}>
     <Loading />
   </SpinnerGlass>
 )
