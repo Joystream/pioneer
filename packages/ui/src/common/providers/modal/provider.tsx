@@ -1,5 +1,7 @@
 import React, { ReactNode, useState } from 'react'
 
+import { MODAL_WITH_CLOSE_CONFIRMATION, ModalNames } from '@/app/GlobalModals'
+
 import { ModalContext } from './context'
 import { AnyModalCall, ModalWithDataCall, UnknownMachine, UseModal } from './types'
 
@@ -13,6 +15,7 @@ export const ModalContextProvider = (props: Props) => {
   const [modal, setModal] = useState<string | null>(null)
   const [modalData, setModalData] = useState<any>()
   const [currentModalMachine, setCurrentModalMachine] = useState<UnknownMachine<any, any, any> | undefined>(undefined)
+  const [isClosing, setIsClosing] = useState<boolean>(false)
   const modalApi: UseModal<AnyModalCall> = {
     showModal: (modalCall) => {
       setModal(modalCall.modal)
@@ -22,13 +25,20 @@ export const ModalContextProvider = (props: Props) => {
       }
     },
     hideModal: () => {
-      setModal(null)
-      setModalData(null)
-      setCurrentModalMachine(undefined)
+      if (isClosing || !MODAL_WITH_CLOSE_CONFIRMATION.includes((modal ?? '') as ModalNames)) {
+        setModal(null)
+        setModalData(null)
+        setCurrentModalMachine(undefined)
+        setIsClosing(false)
+      } else {
+        setIsClosing(true)
+      }
     },
     modal,
     modalData,
     currentModalMachine,
+    isClosing,
+    returnClosedModal: () => setIsClosing(false),
     setMachineState: setCurrentModalMachine,
   }
 
