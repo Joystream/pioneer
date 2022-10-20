@@ -28,10 +28,14 @@ export const useSearch = (search: string, kind: SearchKind) => {
   }, [searchDebounced, kind])
 
   const [forum, isLoadingPosts] = useMemo(() => {
-    const posts = [...(postResult.data?.forumPosts ?? [])]
-      .sort(byBestMatch(escapeStringRegexp(searchDebounced), [({ thread }) => thread.title, ({ text }) => text]))
-      .slice(0, MAX_RESULTS)
-    return [posts, postResult.loading]
+    if (searchDebounced.length > 2) {
+      const posts = [...(postResult.data?.forumPosts ?? [])]
+        .sort(byBestMatch(escapeStringRegexp(searchDebounced), [({ thread }) => thread.title, ({ text }) => text]))
+        .slice(0, MAX_RESULTS)
+      return [posts, postResult.loading]
+    } else {
+      return [postResult.data?.forumPosts ?? [], postResult.loading]
+    }
   }, [postResult])
 
   return {
