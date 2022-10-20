@@ -28,9 +28,11 @@ export interface WorkingGroupProps {
 export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   const { isLoading: loadingOpenings, openings } = useCountOpenings(group.id)
   const { isLoading: loadingWorkers, workers } = useCountWorkers(group.id)
-  const [showTooltip, setShowTooltip] = useState(false)
 
   const { member: lead } = useMember(group.leadId)
+
+  const wgNameMapped = nameMapping(group.name)
+  const wgLink = workingGroupLinks[group.id]
   const groupAddress = `/working-groups/${groupNameToURLParam(nameMapping(group.name))}`
   const isLeadActive = lead && group.isActive
 
@@ -39,12 +41,11 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
       <GroupImageContainer as={GhostRouterLink} to={groupAddress}>
         <WorkingGroupImage groupName={group.name} />
       </GroupImageContainer>
-      <GroupContentBlock onMouseEnter={() => setShowTooltip(true)} onMouseLeave={() => setShowTooltip(false)}>
+      <GroupContentBlock>
         <Flex>
           <GroupTitle as={GhostRouterLink} to={groupAddress}>
-            {nameMapping(group.name)}
+            {wgNameMapped} <GroupTooltip name={wgNameMapped} link={wgLink} />
           </GroupTitle>
-          <GroupTooltip link={workingGroupLinks[group.id]} show={true} />
         </Flex>
         <GroupContent as={GhostRouterLink} to={groupAddress}>
           {subtitleMapping(group.name)}
