@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Colors, Transitions } from '../../common/constants'
+import { Colors, Transitions } from '@/common/constants'
+
 import { GroupIdName } from '../types'
 
 export interface WorkingGroupImageProps {
@@ -363,14 +364,14 @@ export const WorkingGroupImage = ({ className, groupName }: WorkingGroupImagePro
         <WorkingGroupImageTag viewBox="0 0 108 108" fill="none" className={className}>
           <rect width="108" height="108" rx="2" fill="#F9FAFC" stroke="#E8EDF6" />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M17 24H69V64H17V24ZM23 28C23 29.1046 22.1046 30 21 30C19.8954 30 19 29.1046 19 28C19 26.8954 19.8954 26 21 26C22.1046 26 23 26.8954 23 28ZM29 28C29 29.1046 28.1046 30 27 30C25.8954 30 25 29.1046 25 28C25 26.8954 25.8954 26 27 26C28.1046 26 29 26.8954 29 28ZM33 30C34.1046 30 35 29.1046 35 28C35 26.8954 34.1046 26 33 26C31.8954 26 31 26.8954 31 28C31 29.1046 31.8954 30 33 30Z"
             fill="#5D6B80"
           />
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             d="M37 44H89V84H37V44ZM43 48C43 49.1046 42.1046 50 41 50C39.8954 50 39 49.1046 39 48C39 46.8954 39.8954 46 41 46C42.1046 46 43 46.8954 43 48ZM49 48C49 49.1046 48.1046 50 47 50C45.8954 50 45 49.1046 45 48C45 46.8954 45.8954 46 47 46C48.1046 46 49 46.8954 49 48ZM53 50C54.1046 50 55 49.1046 55 48C55 46.8954 54.1046 46 53 46C51.8954 46 51 46.8954 51 48C51 49.1046 51.8954 50 53 50Z"
             fill="#3F38FF"
           />
