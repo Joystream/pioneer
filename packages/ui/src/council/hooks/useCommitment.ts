@@ -12,11 +12,11 @@ export interface VotingAttempt {
   optionId: string
 }
 
-export const useCommitment = (accountId: string, candidateId: string) => {
+export const useCommitment = (accountId: string | undefined, candidateId: string) => {
   const { candidate } = useCandidate(candidateId)
 
   const vote = useMemo(() => {
-    if (!candidate) return
+    if (!accountId || !candidate) return
 
     // See https://polkadot.js.org/docs/util-crypto/examples/encrypt-decrypt
     const salt = randomAsHex()
