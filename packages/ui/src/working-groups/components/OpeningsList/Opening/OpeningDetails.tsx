@@ -24,6 +24,8 @@ import { groupNameToURLParam } from '@/working-groups/model/workingGroupName'
 export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps) => {
   const { showModal } = useModal()
   const rewardPeriod = useRewardPeriod(opening.groupId)
+  const groupName = groupNameToURLParam(nameMapping(opening.groupName))
+  const openingRoute = `/working-groups/openings/${groupName}-${opening.runtimeId}`
 
   return (
     <OpenedContainer onClick={onClick}>
@@ -68,10 +70,7 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
           </StatsBlock>
         </Statistics>
         <ButtonsGroup align="right">
-          <LinkButtonGhost
-            to={`/working-groups/openings/${groupNameToURLParam(nameMapping(opening.groupName))}-${opening.runtimeId}`}
-            size="medium"
-          >
+          <LinkButtonGhost to={openingRoute} size="medium">
             Learn more
           </LinkButtonGhost>
           {isOpeningOpen(opening) && (

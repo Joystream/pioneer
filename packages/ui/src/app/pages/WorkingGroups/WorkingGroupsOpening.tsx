@@ -44,7 +44,6 @@ export const WorkingGroupOpening = () => {
   const { id } = useParams<{ id: string }>()
   const { showModal } = useModal()
   const { active: activeMembership } = useMyMemberships()
-
   const { isLoading, opening } = useOpening(urlParamToOpeningId(id))
 
   const activeApplications = useMemo(() => {
