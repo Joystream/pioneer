@@ -1,10 +1,10 @@
-import React, { useMemo, useReducer } from 'react'
+import React, { useMemo, useReducer, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { DatePicker } from '@/common/components/forms/DatePicker'
 import { FilterBox } from '@/common/components/forms/FilterBox'
 import { camelCaseToText } from '@/common/helpers'
-import { PartialDateRange } from '@/common/types/Dates'
+import { PartialDateRange, DateRange } from '@/common/types/Dates'
 import { objectEquals } from '@/common/utils'
 import { SmallMemberSelect } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
@@ -28,7 +28,8 @@ type Clear = { type: 'clear' }
 type Change<K extends FilterKey = FilterKey> = K extends FilterKey // Use a conditional type in order to distribue the union type
   ? { type: 'change'; field: K; value: ProposalFiltersState[K] }
   : never
-type Action = Clear | Change
+type Update = { type: 'update'; value: ProposalFiltersState }
+type Action = Clear | Change | Update
 
 const filterReducer = (filters: ProposalFiltersState, action: Action): ProposalFiltersState => {
   switch (action.type) {
@@ -39,6 +40,19 @@ const filterReducer = (filters: ProposalFiltersState, action: Action): ProposalF
       return {
         ...filters,
         [action.field]: typeof action.value == 'string' ? toCamelCase(action.value) : action.value,
+      }
+
+    case 'update':
+      return {
+        search: toCamelCase(action.value.search) || '',
+        stage: toCamelCase(action.value.stage),
+        type: toCamelCase(action.value.type),
+        lifetime: action.value.lifetime &&
+          Object.entries(action.value.lifetime).reduce(
+            (prev, [key, dateString]) => ({ ...prev, [key]: new Date(dateString) }),
+            {} as DateRange
+          ),
+        proposer: action.value.proposer,
       }
   }
   return filters
@@ -77,6 +91,16 @@ export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onAppl
           },
     [onApply, filters]
   )
+
+  useEffect(() => {
+    const saved = localStorage.getItem('lastFilter')
+
+    if (filters === ProposalEmptyFilter && saved !== null) {
+      console.log('Saved : ', saved)
+      dispatch({ type: 'update', value: JSON.parse(saved)})
+      onApply({ ...JSON.parse(saved)})
+    }
+  }, [])
 
   return (
     <FilterBox

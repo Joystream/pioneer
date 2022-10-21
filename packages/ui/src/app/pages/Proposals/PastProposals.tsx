@@ -9,7 +9,7 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import { Pagination } from '@/common/components/Pagination'
 import { useSort } from '@/common/hooks/useSort'
 import { AddProposalButton } from '@/proposals/components/AddProposalButton'
-import { ProposalEmptyFilter, ProposalFilters } from '@/proposals/components/ProposalFilters'
+import { ProposalEmptyFilter, ProposalFilters, ProposalFiltersState } from '@/proposals/components/ProposalFilters'
 import { ProposalList } from '@/proposals/components/ProposalList'
 import { usePastProposals } from '@/proposals/hooks/usePastProposals'
 import { useProposals } from '@/proposals/hooks/useProposals'
@@ -29,6 +29,12 @@ export const PastProposals = () => {
 
   const { activities } = useProposalsActivities()
 
+  const onApplyFilter = (filter: ProposalFiltersState) => {
+    console.log('Saving : ', JSON.stringify(filter))
+    setFilters(filter)
+    localStorage.setItem('lastFilter', JSON.stringify(filter))
+  }
+
   return (
     <PageLayout
       header={
@@ -38,7 +44,7 @@ export const PastProposals = () => {
       }
       main={
         <MainPanel>
-          <ProposalFilters searchSlot={searchSlot} types={types} stages={stages} onApply={setFilters} />
+          <ProposalFilters searchSlot={searchSlot} types={types} stages={stages} onApply={onApplyFilter} />
           <ProposalList getSortProps={getSortProps} proposals={proposals} isLoading={isLoading} isPast />
           <Pagination {...pagination} />
         </MainPanel>
