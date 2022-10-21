@@ -46,13 +46,16 @@ export const OnBoardingModal = () => {
       case 'addAccount':
         return <OnBoardingAccount onAccountSelect={setMembershipAccount} />
       case 'createMembership':
-        return (
-          <OnBoardingMembership
-            setMembershipAccount={setMembershipAccount as SetMembershipAccount}
-            onSubmit={(params: MemberFormFields) => send({ type: 'DONE', form: params })}
-            membershipAccount={membershipAccount as string}
-          />
-        )
+        if (endpoints.membershipFaucetEndpoint) {
+          return (
+            <OnBoardingMembership
+              setMembershipAccount={setMembershipAccount as SetMembershipAccount}
+              onSubmit={(params: MemberFormFields) => send({ type: 'DONE', form: params })}
+              membershipAccount={membershipAccount as string}
+            />
+          )
+        }
+      // eslint-disable-next-line no-fallthrough
       default:
         return null
     }
@@ -60,6 +63,9 @@ export const OnBoardingModal = () => {
 
   useEffect(() => {
     async function submitNewMembership(form: MemberFormFields) {
+      if (!endpoints.membershipFaucetEndpoint) {
+        return send({ type: 'ERROR' })
+      }
       try {
         const membershipData = {
           account: membershipAccount,

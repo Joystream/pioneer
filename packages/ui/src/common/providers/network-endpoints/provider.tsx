@@ -1,16 +1,24 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import * as Yup from 'yup'
 
 import { DEFAULT_NETWORK, NetworkEndpoints, pickEndpoints } from '@/app/config'
 import { Loading } from '@/common/components/Loading'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useNetwork } from '@/common/hooks/useNetwork'
-import { isDefined, objectEquals } from '@/common/utils'
+import { objectEquals } from '@/common/utils'
 
 import { NetworkEndpointsContext } from './context'
 
 interface Props {
   children: ReactNode
 }
+
+const EndpointsSchema = Yup.object().shape({
+  nodeRpcEndpoint: Yup.string().required(),
+  queryNodeEndpoint: Yup.string().required(),
+  queryNodeEndpointSubscription: Yup.string(),
+  membershipFaucetEndpoint: Yup.string(),
+})
 
 export const NetworkEndpointsProvider = ({ children }: Props) => {
   const { network, setNetwork } = useNetwork()
@@ -84,4 +92,4 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
 }
 
 export const endpointsAreDefined = (endpoints: Partial<NetworkEndpoints> = {}): endpoints is NetworkEndpoints =>
-  Object.values(endpoints).length === 4 && Object.values(endpoints).every(isDefined)
+  EndpointsSchema.isValidSync(endpoints)
