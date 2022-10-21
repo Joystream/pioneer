@@ -54,7 +54,7 @@ export const QueryNodeProvider = ({ children }: Props) => {
 
 const getApolloClient = (
   queryNodeEndpoint: string,
-  queryNodeEndpointSubscription: string,
+  queryNodeEndpointSubscription: string | undefined,
   stateCallback: (state: ConnectionState) => void
 ) => {
   const httpLink = new HttpLink({
@@ -78,22 +78,26 @@ const getApolloClient = (
   }
 
   const queryLink = from([errorLink, httpLink])
-  const subscriptionLink = new WebSocketLink({
-    uri: queryNodeEndpointSubscription,
-    options: {
-      reconnect: true,
-      reconnectionAttempts: 5,
-    },
-  })
+  const subscriptionLink =
+    queryNodeEndpointSubscription &&
+    new WebSocketLink({
+      uri: queryNodeEndpointSubscription,
+      options: {
+        reconnect: true,
+        reconnectionAttempts: 5,
+      },
+    })
 
-  const splitLink = split(
-    ({ query }) => {
-      const definition = getMainDefinition(query)
-      return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
-    },
-    subscriptionLink,
-    queryLink
-  )
+  const splitLink = !subscriptionLink
+    ? queryLink
+    : split(
+        ({ query }) => {
+          const definition = getMainDefinition(query)
+          return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
+        },
+        subscriptionLink,
+        queryLink
+      )
 
   return new ApolloClient({
     link: splitLink,
