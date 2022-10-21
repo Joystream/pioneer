@@ -186,7 +186,7 @@ export const BuyMembershipForm = ({
                     label="Root account"
                     required
                     inputSize="l"
-                    tooltipText="Something about root accounts"
+                    tooltipText="Root account is the primary account associated with the membership. It cannot be changed. Root account is used to sign transactions of associating a controller account with the membership. While it is possible to use the same account as Root and Controller, it is not advisable to do so and for security purposes. Best practice is to keep it offline all the time unless your controller is compromise and you need to replace it."
                   >
                     <SelectAccount name="rootAccount" />
                   </InputComponent>
@@ -196,7 +196,7 @@ export const BuyMembershipForm = ({
                     label="Controller account"
                     required
                     inputSize="l"
-                    tooltipText="Something about controller account"
+                    tooltipText="Controller account is the account which is used to sign most of the transactions, such as bonding a staking account, posting to forum, creating proposals or making a simple transfer to a different account. Controller account can be changed, and this transaction can only be signed by membership root account."
                   >
                     <SelectAccount name="controllerAccount" />
                   </InputComponent>
