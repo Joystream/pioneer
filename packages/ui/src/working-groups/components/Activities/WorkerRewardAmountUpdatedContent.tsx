@@ -7,10 +7,10 @@ import { WorkerRewardAmountUpdatedActivity } from '@/working-groups/types'
 export const WorkerRewardAmountUpdatedContent: ActivityContentComponent<WorkerRewardAmountUpdatedActivity> = ({
   activity,
 }) => {
-  const { newAmount } = activity
+  const { newAmount, member, openingTitle } = activity
   return (
     <>
-      Your reward amount has been updated to <TokenValue value={newAmount} />.
+      {member.handle}'s reward for {openingTitle} changed to <TokenValue value={newAmount} /> joy per block.
     </>
   )
 }

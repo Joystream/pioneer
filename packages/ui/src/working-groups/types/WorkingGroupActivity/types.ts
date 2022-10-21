@@ -20,6 +20,7 @@ export type WorkingGroupActivity =
   | OpeningFilledActivity
   | OpeningAnnouncedActivity
   | WorkerTerminatedActivity
+  | WorkerRewardAmountUpdatedActivity
   | WorkerRewardAccountUpdatedActivity
   | WorkerRewardAmountUpdatedActivity
 
@@ -112,5 +113,7 @@ export interface WorkerRewardAccountUpdatedActivity extends BaseActivity {
 
 export interface WorkerRewardAmountUpdatedActivity extends BaseActivity {
   eventType: 'WorkerRewardAmountUpdatedEvent'
+  member: MemberDisplayFields
   newAmount: BN
+  openintTitle: string
 }
