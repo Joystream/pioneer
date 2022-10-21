@@ -33,7 +33,7 @@ export const SearchResultsModal = () => {
   const { forum, forumPostCount, isLoading } = useSearch(validSearch, activeTab)
   const pattern = useMemo(() => (validSearch ? RegExp(escapeStringRegexp(validSearch), 'ig') : null), [validSearch])
   useEffect(() => {
-    if (isValid()) {
+    if (isValid() && debouncedSearch.length !== 0) {
       setLastValidSearch(debouncedSearch)
     }
   }, [debouncedSearch])
