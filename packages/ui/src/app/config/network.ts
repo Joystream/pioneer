@@ -1,10 +1,10 @@
 export type NetworkType = 'local' | 'local-mocks' | 'joystream-testnet' | 'auto-conf'
 
 export interface NetworkEndpoints {
-  queryNodeEndpointSubscription: string
-  queryNodeEndpoint: string
-  membershipFaucetEndpoint: string
   nodeRpcEndpoint: string
+  queryNodeEndpoint: string
+  queryNodeEndpointSubscription?: string
+  membershipFaucetEndpoint?: string
 }
 
 const TESTNET_NODE_SOCKET = process.env.REACT_APP_TESTNET_NODE_SOCKET
@@ -42,10 +42,10 @@ const NODE_RPC_ENDPOINT: PredefinedEndpoint = {
 }
 
 export const pickEndpoints = (network: NetworkType): Partial<NetworkEndpoints> => ({
-  queryNodeEndpointSubscription: QUERY_NODE_ENDPOINT_SUBSCRIPTION[network],
-  queryNodeEndpoint: QUERY_NODE_ENDPOINT[network],
-  membershipFaucetEndpoint: MEMBERSHIP_FAUCET_ENDPOINT[network],
   nodeRpcEndpoint: NODE_RPC_ENDPOINT[network],
+  queryNodeEndpoint: QUERY_NODE_ENDPOINT[network],
+  queryNodeEndpointSubscription: QUERY_NODE_ENDPOINT_SUBSCRIPTION[network],
+  membershipFaucetEndpoint: MEMBERSHIP_FAUCET_ENDPOINT[network],
 })
 
 export const DEFAULT_NETWORK = (
