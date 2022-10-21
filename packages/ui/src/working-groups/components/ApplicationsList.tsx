@@ -50,7 +50,6 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
   }, [application.id])
 
   const rewardPeriod = useRewardPeriod(opening.groupId)
-  const isHired = application.status === 'ApplicationStatusAccepted'
 
   const applicationStatus = useMemo(() => {
     switch (application.status) {
@@ -90,8 +89,8 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
           <Subscription>Staked</Subscription>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
-          <TextInlineBig value>{isHired ? 'Yes' : 'No'}</TextInlineBig>
-          <Subscription>{applicationStatus}</Subscription>
+          <TextInlineBig value>{applicationStatus}</TextInlineBig>
+          <Subscription>Status</Subscription>
         </OpenItemSummaryColumn>
       </ToggleableItemSummary>
       <ColumnGapBlock>
