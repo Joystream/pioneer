@@ -30,7 +30,6 @@ export const PastProposals = () => {
   const { activities } = useProposalsActivities()
 
   const onApplyFilter = (filter: ProposalFiltersState) => {
-    console.log('Saving : ', JSON.stringify(filter))
     setFilters(filter)
     localStorage.setItem('lastFilter', JSON.stringify(filter))
   }

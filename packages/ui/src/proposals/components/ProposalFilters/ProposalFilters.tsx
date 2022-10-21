@@ -96,7 +96,6 @@ export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onAppl
     const saved = localStorage.getItem('lastFilter')
 
     if (filters === ProposalEmptyFilter && saved !== null) {
-      console.log('Saved : ', saved)
       dispatch({ type: 'update', value: JSON.parse(saved)})
       onApply({ ...JSON.parse(saved)})
     }
