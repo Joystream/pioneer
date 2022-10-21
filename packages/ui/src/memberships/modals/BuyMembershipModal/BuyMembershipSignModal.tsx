@@ -97,8 +97,10 @@ export const BuyMembershipSignModal = ({
           <Row>
             <Info>
               <TextMedium>
-                Tokens subject to Vesting and Invitation locks do not cover membership creation fees, and cannot be used
-                to purchase new memberships.
+                Invitation lock can be spent on transaction fees and staking for proposals, voting and working groups
+                applications. JOY tokens subject to this lock cannot be transferred to any other accounts. This lock is
+                unrecoverable. NB: Transaction fees will first be taken from your transferable balance if it is
+                positive.
               </TextMedium>
             </Info>
           </Row>
@@ -111,7 +113,7 @@ export const BuyMembershipSignModal = ({
         <TransactionInfo
           title="Creation fee:"
           value={membershipPrice?.toBn()}
-          tooltipText={'Lorem ipsum dolor sit amet consectetur, adipisicing elit.'}
+          tooltipText={'The price to create a membership.'}
         />
       </ModalTransactionFooter>
     </TransactionModal>
