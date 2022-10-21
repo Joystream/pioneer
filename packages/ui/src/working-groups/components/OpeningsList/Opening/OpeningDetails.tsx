@@ -23,6 +23,8 @@ import { isOpeningOpen } from '@/working-groups/model/isOpeningOpen'
 export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps) => {
   const { showModal } = useModal()
   const rewardPeriod = useRewardPeriod(opening.groupId)
+  const { applicants, hiring } = opening
+  const withdrawnApplications = hiring.current > applicants ? ` / (${hiring.current - applicants})` : ''
 
   return (
     <OpenedContainer onClick={onClick}>
@@ -46,14 +48,14 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
               {past && (
                 <StatiscticContentColumn>
                   <TextBig value bold>
-                    {opening.hiring.current}
+                    {applicants} {withdrawnApplications}
                   </TextBig>
                   <Subscription>Hired</Subscription>
                 </StatiscticContentColumn>
               )}
               <StatiscticContentColumn>
                 <TextBig value bold>
-                  {opening.hiring.limit}
+                  {hiring.limit}
                 </TextBig>
                 <Subscription>Target no. of Hires</Subscription>
               </StatiscticContentColumn>
