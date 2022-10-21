@@ -57,7 +57,21 @@ export const MyAccounts = () => {
                 }
                 value={locked}
               />
-              <TokenValueStat title="Total recoverable" tooltipText="Lorem ipsum..." value={recoverable} />
+              <TokenValueStat
+                title="Total recoverable"
+                tooltipText={
+                  <>
+                    <TooltipText>
+                      Recoverable balance encapsulates all tokens that can be recovered, following the termination of
+                      the process where they were previously staked. Example: Vote has been casted for a candidate in
+                      council elections. That candidate lost the election and now the stake that was put behind the
+                      voting power for such candidate can be recovered, meaning locked balance will be reduced by such
+                      amount, while transferable balance will increase for the amount of staking lock.
+                    </TooltipText>{' '}
+                  </>
+                }
+                value={recoverable}
+              />
               {vestingTotal.gtn(0) && (
                 <TokenValueStat title="Total initial vesting" tooltipText="Lorem ipsum..." value={vestingTotal} />
               )}

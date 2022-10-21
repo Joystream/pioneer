@@ -35,7 +35,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
               The budget is the root resource pool for all token minting in the working group, and the size of the pool
               is denoted by budget.
               <TooltipExternalLink
-                href="https://joystream.gitbook.io/joystream-handbook/governance/working-groups#budget"
+                href="https://joystream.gitbook.io/testnet-workspace/system/working-groups?q=lock#concepts"
                 target="_blank"
               >
                 <TextMedium>Link</TextMedium> <LinkSymbol />
@@ -55,7 +55,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
             <>
               Average stake size by members undertaking the roles of workers and the lead in this group.{' '}
               <TooltipExternalLink
-                href="https://joystream.gitbook.io/testnet-workspace/system/working-groups?q=lock#staking"
+                href="https://joystream.gitbook.io/testnet-workspace/system/working-groups?q=lock#concepts"
                 target="_blank"
               >
                 <TextMedium>Link</TextMedium> <LinkSymbol />

@@ -97,7 +97,7 @@ export const Election = () => {
               Elections occur periodically, and each one has a sequence of stages referred to as the election cycle.
               Stages are: announcing period, voting period and revealing period.{' '}
               <TooltipExternalLink
-                href="https://joystream.gitbook.io/joystream-handbook/governance/council#election"
+                href="https://joystream.gitbook.io/testnet-workspace/system/council?q=lock#election"
                 target="_blank"
               >
                 <TextMedium>More details</TextMedium> <LinkSymbol />
@@ -113,7 +113,7 @@ export const Election = () => {
             <>
               Remaining length of current period before the next one starts.{' '}
               <TooltipExternalLink
-                href="https://joystream.gitbook.io/joystream-handbook/governance/council#election"
+                href="https://joystream.gitbook.io/testnet-workspace/system/council?q=lock#election"
                 target="_blank"
               >
                 <TextMedium>Link</TextMedium> <LinkSymbol />
