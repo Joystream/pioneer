@@ -206,6 +206,9 @@ fragment WorkingGroupOpeningFields on WorkingGroupOpening {
   unstakingPeriod
   applications {
     id
+    status {
+      __typename
+    }
   }
   openingfilledeventopening {
     workersHired {
