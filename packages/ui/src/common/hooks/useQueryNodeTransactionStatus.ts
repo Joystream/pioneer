@@ -9,7 +9,13 @@ import { useQueryNodeStateSubscription } from './useQueryNode'
 type TransactionStatus = 'confirmed' | 'rejected' | 'unknown'
 
 export function useQueryNodeTransactionStatus(blockHash?: Hash | string, shouldSkipSubscription?: boolean) {
-  const { queryNodeState, error: queryNodeStateError } = useQueryNodeStateSubscription({ skip: shouldSkipSubscription })
+  const {
+    queryNodeState,
+    error: queryNodeStateError,
+    loading,
+  } = useQueryNodeStateSubscription({
+    skip: shouldSkipSubscription,
+  })
   const [status, setStatus] = useState<TransactionStatus>('unknown')
   const queryNodeBlockHash = useBlockHash(queryNodeState?.indexerHead)
 
@@ -19,6 +25,16 @@ export function useQueryNodeTransactionStatus(blockHash?: Hash | string, shouldS
     }
     info('Failed to subscribe to query node state')
   }, [queryNodeStateError])
+
+  useEffect(() => {
+    if (loading || queryNodeStateError) {
+      const timeout = setTimeout(() => {
+        setStatus('confirmed')
+      }, 10_000)
+
+      return () => clearTimeout(timeout)
+    }
+  }, [loading, queryNodeStateError])
 
   useEffect(() => {
     if (queryNodeState) {
