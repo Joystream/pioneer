@@ -3,8 +3,6 @@ import { useEffect, useMemo } from 'react'
 
 import { useSearchForumPostLazyQuery } from '@/forum/queries'
 
-import { useDebounce } from './useDebounce'
-
 export type SearchKind = 'FORUM'
 
 const MAX_RESULTS = 20
@@ -12,24 +10,22 @@ const MAX_RESULTS = 20
 export const useSearch = (search: string, kind: SearchKind) => {
   const [searchForum, postResult] = useSearchForumPostLazyQuery()
 
-  const searchDebounced = useDebounce(search, 400)
-
   useEffect(() => {
-    if (searchDebounced.length > 2)
+    if (search.length > 2)
       searchForum({
         variables: {
           where: {
             thread: { status_json: { isTypeOf_eq: 'ThreadStatusActive' } },
-            text_contains: searchDebounced,
+            text_contains: search,
           },
           limit: 500,
         },
       })
-  }, [searchDebounced, kind])
+  }, [search, kind])
 
   const [forum, isLoadingPosts] = useMemo(() => {
     const posts = [...(postResult.data?.forumPosts ?? [])]
-      .sort(byBestMatch(escapeStringRegexp(searchDebounced), [({ thread }) => thread.title, ({ text }) => text]))
+      .sort(byBestMatch(escapeStringRegexp(search), [({ thread }) => thread.title, ({ text }) => text]))
       .slice(0, MAX_RESULTS)
     return [posts, postResult.loading]
   }, [postResult])
@@ -56,8 +52,6 @@ const byBestMatch = <T extends Record<any, any>>(search: string, fields: ((x: T)
           return -1
         } else if (matchA < matchB) {
           return 1
-        } else {
-          return 0
         }
       }
     }

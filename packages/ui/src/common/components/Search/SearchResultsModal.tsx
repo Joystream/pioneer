@@ -27,13 +27,14 @@ export const SearchResultsModal = () => {
   const { hideModal, modalData } = useModal<SearchResultsModalCall>()
   const [search, setSearch] = useState(modalData.search)
   const [activeTab, setActiveTab] = useState<SearchKind>('FORUM')
-  const { forum, forumPostCount, isLoading } = useSearch(search, activeTab)
   const isValid = () => !debouncedSearch || debouncedSearch.length === 0 || debouncedSearch.length > 2
   const debouncedSearch = useDebounce(search, 400)
-  const [pattern, setPattern] = useState<RegExp | null>(null)
+  const [validSearch, setLastValidSearch] = useState(debouncedSearch)
+  const { forum, forumPostCount, isLoading } = useSearch(validSearch, activeTab)
+  const pattern = useMemo(() => (validSearch ? RegExp(escapeStringRegexp(validSearch), 'ig') : null), [validSearch])
   useEffect(() => {
-    if (debouncedSearch && isValid()) {
-      setPattern(RegExp(escapeStringRegexp(debouncedSearch), 'ig'))
+    if (isValid()) {
+      setLastValidSearch(debouncedSearch)
     }
   }, [debouncedSearch])
   const history = useHistory()
