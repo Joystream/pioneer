@@ -1,8 +1,10 @@
 import BN from 'bn.js'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState, useEffect } from 'react'
 import * as Yup from 'yup'
 
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
+import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
+import { useApi } from '@/api/hooks/useApi'
 import { CurrencyName } from '@/app/constants/currency'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent, TokenInput } from '@/common/components/forms'
@@ -87,12 +89,23 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
   const isTransferDisabled = !amount || amount.isZero() || isOverBalance || !recipient || !isValid
   const isValueDisabled = !sender
 
+  const { api } = useApi()
+  const [maxAmount, setMaxAmount] = useState(maxValue || transferableBalance || 0)
+  const maxFee = useTransactionFee(sender?.address, () =>
+    api?.tx.balances.transfer(recipient?.address || '', maxAmount)
+  )
+  useEffect(() => {
+    setMaxAmount(transferableBalance.sub(maxFee?.feeInfo?.transactionFee ?? BN_ZERO))
+  }, [maxFee?.feeInfo?.transactionFee])
+
   const setHalf = () => changeField('amount', transferableBalance.divn(2))
-  const onClick = () => {
+  const setMax = () => changeField('amount', maxAmount)
+  const onTransfer = () => {
     if (amount && recipient && sender) {
       onAccept(amount, sender, recipient)
     }
   }
+
   return (
     <Modal modalSize={'m'} onClose={onClose}>
       <ModalHeader onClick={onClose} title={title} icon={<PickedTransferIcon type={getIconType()} />} />
@@ -136,6 +149,9 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
             <AmountButton size="small" onClick={setHalf} disabled={isValueDisabled}>
               Use half
             </AmountButton>
+            <AmountButton size="small" onClick={setMax} disabled={isValueDisabled}>
+              Use max
+            </AmountButton>
           </AmountButtons>
         </TransactionAmount>
         <Row>
@@ -156,7 +172,7 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
         </Row>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimary size="medium" onClick={onClick} disabled={isTransferDisabled}>
+        <ButtonPrimary size="medium" onClick={onTransfer} disabled={isTransferDisabled}>
           Transfer tokens
         </ButtonPrimary>
       </ModalFooter>
