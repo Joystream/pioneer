@@ -10,6 +10,7 @@ import { KeyringContextProvider } from '@/common/providers/keyring/provider'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { NetworkEndpointsProvider } from '@/common/providers/network-endpoints/provider'
 import { OnBoardingProvider } from '@/common/providers/onboarding/provider'
+import { QueryNodeSubscriptionProvider } from '@/common/providers/querynodeSubscription/provider'
 import { TransactionStatusProvider } from '@/common/providers/transactionStatus/provider'
 import { MembershipContextProvider } from '@/memberships/providers/membership/provider'
 
@@ -31,14 +32,16 @@ export const Providers = ({ children }: Props) => (
                 <MembershipContextProvider>
                   <HashRouter>
                     <RouteActions>
-                      <ModalContextProvider>
-                        <OnBoardingProvider>
-                          <ImageReportProvider>
-                            <GlobalStyle />
-                            {children}
-                          </ImageReportProvider>
-                        </OnBoardingProvider>
-                      </ModalContextProvider>
+                      <QueryNodeSubscriptionProvider>
+                        <ModalContextProvider>
+                          <OnBoardingProvider>
+                            <ImageReportProvider>
+                              <GlobalStyle />
+                              {children}
+                            </ImageReportProvider>
+                          </OnBoardingProvider>
+                        </ModalContextProvider>
+                      </QueryNodeSubscriptionProvider>
                     </RouteActions>
                   </HashRouter>
                 </MembershipContextProvider>
