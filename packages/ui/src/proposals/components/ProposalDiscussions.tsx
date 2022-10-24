@@ -30,11 +30,11 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
   const { active, members } = useMyMemberships()
 
   const initialPost = query.get('post')
-  const isAbleToPost =
-    thread.mode === 'open' ||
-    (thread.mode === 'closed' && active && (thread.whitelistIds?.includes(active.id) || active.isCouncilMember))
-  const isInWhitelist = thread.mode === 'closed' && members.find((member) => thread.whitelistIds?.includes(member.id))
-  const hasCouncilMembership = thread.mode === 'closed' && members.find((member) => member.isCouncilMember)
+  const isClosed = thread.mode === 'closed'
+  const isAbleToPost = !isClosed || (active && (thread.whitelistIds?.includes(active.id) || active.isCouncilMember))
+  const whitelistedMember = isClosed ? members.find((member) => thread.whitelistIds?.includes(member.id)) : null
+  const hasCouncilMembership = isClosed && members.find((member) => member.isCouncilMember)
+  const whitelistedMembers = thread.whitelistIds?.map((id) => members.find((m) => m.id === id)?.handle || id) || []
   const [replyTo, setReplyTo] = useState<ForumPost | undefined>()
 
   const newPostRef = useRef<HTMLDivElement>(null)
@@ -84,13 +84,16 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
       return <TextBig>Please select your council membership to post in this thread.</TextBig>
     }
 
-    if (isInWhitelist) {
-      return <TextBig>Please select a whitelisted membership to post in this thread.</TextBig>
+    if (whitelistedMember) {
+      return <TextBig>Please select your {whitelistedMember.handle} memberships to post in this thread.</TextBig>
     }
 
     return (
       <TextBig>
-        The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.
+        The discussion of this proposal is limited to following whitelisted members:
+        {whitelistedMembers.map((m) => (
+          <div>{m}</div>
+        ))}
       </TextBig>
     )
   }
