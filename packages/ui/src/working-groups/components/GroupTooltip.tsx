@@ -5,17 +5,19 @@ import { LinkSymbol } from '@/common/components/icons/symbols'
 import { TooltipExternalLink, Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 
-export const GroupTooltip = ({ link, show }: { link?: string; show: boolean }) => {
-  if (!link || !show) return <></>
+export const GroupTooltip = ({ name, link }: { name: string; link?: string }) => {
+  if (!link) return <div />
+
+  const TooltipText = () => (
+    <StyledTooltipExternalLink href={link} target="_blank">
+      <TextMedium>{name}</TextMedium>
+      <TextMedium>Learn more about this group</TextMedium> <LinkSymbol />
+    </StyledTooltipExternalLink>
+  )
+
   return (
-    <Tooltip
-      tooltipText={
-        <StyledTooltipExternalLink href={link} target="_blank">
-          <TextMedium>Learn more about this group</TextMedium> <LinkSymbol />
-        </StyledTooltipExternalLink>
-      }
-    >
-      <TooltipDefault />
+    <Tooltip tooltipText={<TooltipText />}>
+      <LinkSymbol />
     </Tooltip>
   )
 }
