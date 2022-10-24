@@ -16,6 +16,7 @@ import { useProposals } from '@/proposals/hooks/useProposals'
 import { useProposalsActivities } from '@/proposals/hooks/useProposalsActivities'
 
 import { ProposalsTabs } from './components/ProposalsTabs'
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 
 export const PastProposals = () => {
   const searchSlot = useRef<HTMLDivElement>(null)
@@ -29,9 +30,11 @@ export const PastProposals = () => {
 
   const { activities } = useProposalsActivities()
 
+  const [, setLastFilter] = useLocalStorage<string>("lastFilter")
+
   const onApplyFilter = (filter: ProposalFiltersState) => {
     setFilters(filter)
-    localStorage.setItem('lastFilter', JSON.stringify(filter))
+    setLastFilter(JSON.stringify(filter))
   }
 
   return (

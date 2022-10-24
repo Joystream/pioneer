@@ -13,6 +13,7 @@ import { ProposalStatus } from '@/proposals/types'
 import { FilterTextSelect } from '../../../common/components/selects'
 
 import { toCamelCase } from './helpers'
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 
 export interface ProposalFiltersState {
   search: string
@@ -79,6 +80,7 @@ export interface ProposalFiltersProps {
 export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onApply }: ProposalFiltersProps) => {
   const [filters, dispatch] = useReducer(filterReducer, ProposalEmptyFilter)
   const { search, stage, type, lifetime, proposer } = filters
+  const [lastFilter] = useLocalStorage<string>("lastFilter")
 
   const apply = () => onApply(filters)
   const clear = useMemo(
@@ -93,11 +95,9 @@ export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onAppl
   )
 
   useEffect(() => {
-    const saved = localStorage.getItem('lastFilter')
-
-    if (filters === ProposalEmptyFilter && saved !== null) {
-      dispatch({ type: 'update', value: JSON.parse(saved)})
-      onApply({ ...JSON.parse(saved)})
+    if (filters === ProposalEmptyFilter && lastFilter !== undefined) {
+      dispatch({ type: 'update', value: JSON.parse(lastFilter)})
+      onApply({ ...JSON.parse(lastFilter)})
     }
   }, [])
 
