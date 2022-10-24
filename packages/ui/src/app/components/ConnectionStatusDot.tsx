@@ -7,7 +7,7 @@ import { Tooltip } from '@/common/components/Tooltip'
 import { Colors } from '@/common/constants'
 import { Rotate } from '@/common/constants/animations'
 import { useObservable } from '@/common/hooks/useObservable'
-import { useQueryNodeStateSubscription } from '@/common/hooks/useQueryNode'
+import { useQueryNodeState } from '@/common/hooks/useQueryNodeState'
 
 const MAX_INDEXER_BLOCKS_BEHIND_NODE_HEAD = 20
 
@@ -18,7 +18,7 @@ interface ConnectionStatusDotProps {
 
 export const ConnectionStatusDot = ({ onlyPerformance = false, className }: ConnectionStatusDotProps) => {
   const { api, connectionState, qnConnectionState } = useApi()
-  const { queryNodeState } = useQueryNodeStateSubscription()
+  const { queryNodeState } = useQueryNodeState()
   const header = useObservable(() => api?.rpc.chain.subscribeNewHeads(), [api?.isConnected])
 
   const isQnLate = useMemo(() => {
