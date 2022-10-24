@@ -11,8 +11,8 @@ configure({ testIdAttribute: 'id' })
 
 let mockIndexerHead = 98
 
-jest.mock('@/common/hooks/useQueryNode', () => ({
-  useQueryNodeStateSubscription: () => ({
+jest.mock('@/common/hooks/useQueryNodeState', () => ({
+  useQueryNodeState: () => ({
     queryNodeState: {
       indexerHead: mockIndexerHead,
     },
