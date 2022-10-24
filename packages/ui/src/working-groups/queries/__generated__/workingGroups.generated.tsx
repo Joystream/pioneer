@@ -612,7 +612,16 @@ export type WorkingGroupOpeningFieldsFragment = {
     | { __typename: 'OpeningStatusCancelled' }
     | { __typename: 'OpeningStatusFilled' }
     | { __typename: 'OpeningStatusOpen' }
-  applications: Array<{ __typename: 'WorkingGroupApplication'; id: string }>
+  applications: Array<{
+    __typename: 'WorkingGroupApplication'
+    id: string
+    status:
+      | { __typename: 'ApplicationStatusAccepted' }
+      | { __typename: 'ApplicationStatusCancelled' }
+      | { __typename: 'ApplicationStatusPending' }
+      | { __typename: 'ApplicationStatusRejected' }
+      | { __typename: 'ApplicationStatusWithdrawn' }
+  }>
   openingfilledeventopening?: Array<{
     __typename: 'OpeningFilledEvent'
     workersHired: Array<{ __typename: 'Worker'; id: string }>
@@ -744,7 +753,16 @@ export type GetWorkingGroupOpeningsQuery = {
       | { __typename: 'OpeningStatusCancelled' }
       | { __typename: 'OpeningStatusFilled' }
       | { __typename: 'OpeningStatusOpen' }
-    applications: Array<{ __typename: 'WorkingGroupApplication'; id: string }>
+    applications: Array<{
+      __typename: 'WorkingGroupApplication'
+      id: string
+      status:
+        | { __typename: 'ApplicationStatusAccepted' }
+        | { __typename: 'ApplicationStatusCancelled' }
+        | { __typename: 'ApplicationStatusPending' }
+        | { __typename: 'ApplicationStatusRejected' }
+        | { __typename: 'ApplicationStatusWithdrawn' }
+    }>
     openingfilledeventopening?: Array<{
       __typename: 'OpeningFilledEvent'
       workersHired: Array<{ __typename: 'Worker'; id: string }>
@@ -1588,6 +1606,9 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     unstakingPeriod
     applications {
       id
+      status {
+        __typename
+      }
     }
     openingfilledeventopening {
       workersHired {

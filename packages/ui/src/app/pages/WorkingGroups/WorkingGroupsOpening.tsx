@@ -2,7 +2,7 @@ import React, { memo, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
+import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { CopyButtonTemplate } from '@/common/components/buttons'
@@ -18,13 +18,13 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import {
   DurationStatistics,
   FractionValue,
+  MultiColumnsStatistic,
   NumericValue,
   StatiscticContentColumn,
   StatisticHeader,
   Statistics,
   StatsBlock,
   TokenValueStat,
-  MultiColumnsStatistic,
 } from '@/common/components/statistics'
 import { TextSmall } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
@@ -50,7 +50,7 @@ export const WorkingGroupOpening = () => {
     if (opening) {
       return opening.applications?.filter((application) => application.status !== 'ApplicationStatusWithdrawn')
     }
-  }, opening?.applications)
+  }, [opening?.applications])
 
   const hiringApplication = useMemo(() => {
     if (activeApplications) {
