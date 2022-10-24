@@ -9,10 +9,12 @@ export const GroupTooltip = ({ name, link }: { name: string; link?: string }) =>
   if (!link) return <div />
 
   const TooltipText = () => (
-    <StyledTooltipExternalLink href={link} target="_blank">
+    <div>
       <TextMedium>{name}</TextMedium>
-      <TextMedium>Learn more about this group</TextMedium> <LinkSymbol />
-    </StyledTooltipExternalLink>
+      <TooltipExternalLink href={link} target="_blank">
+        <TextMedium>Learn more about this group</TextMedium> <LinkSymbol />
+      </TooltipExternalLink>
+    </div>
   )
 
   return (
@@ -21,7 +23,3 @@ export const GroupTooltip = ({ name, link }: { name: string; link?: string }) =>
     </Tooltip>
   )
 }
-
-const StyledTooltipExternalLink = styled(TooltipExternalLink)`
-  margin-top: unset;
-`

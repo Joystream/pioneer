@@ -44,8 +44,9 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
       <GroupContentBlock>
         <Flex>
           <GroupTitle as={GhostRouterLink} to={groupAddress}>
-            {wgNameMapped} <GroupTooltip name={wgNameMapped} link={wgLink} />
+            {wgNameMapped}
           </GroupTitle>
+          <GroupTooltip name={wgNameMapped} link={wgLink} />
         </Flex>
         <GroupContent as={GhostRouterLink} to={groupAddress}>
           {subtitleMapping(group.name)}
