@@ -70,14 +70,14 @@ export const ThreadList = ({
   }
 
   return (
-    <List as="div" isArchive={isArchive}>
+    <RowGapBlock gap={10}>
       <ThreadCardsStyles>
         {threads.map((thread) => (
           <ThreadCard thread={thread} />
         ))}
       </ThreadCardsStyles>
       {setPage && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
-    </List>
+    </RowGapBlock>
   )
 }
 

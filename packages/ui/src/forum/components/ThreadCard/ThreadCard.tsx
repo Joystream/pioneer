@@ -1,20 +1,18 @@
 import React from 'react'
 import { generatePath } from 'react-router'
-import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { CountBadge } from '@/common/components/CountBadge'
 import { ReplyIcon } from '@/common/components/icons'
-import { Loading } from '@/common/components/Loading'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
+import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextBig, TextExtraSmall, TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { ForumRoutes } from '@/forum/constant'
 import { ForumThread } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
-import { useMember } from '@/memberships/hooks/useMembership'
 
 interface ThreadCardProps {
   thread: ForumThread
@@ -22,16 +20,17 @@ interface ThreadCardProps {
 }
 
 export const ThreadCard = ({ thread, className }: ThreadCardProps) => {
-  const { member: author } = useMember(thread.authorId)
-  const { push } = useHistory()
-
   return (
-    <Box onClick={() => push(generatePath(ForumRoutes.thread, { id: thread.id }))} className={className}>
+    <Box
+      to={generatePath(ForumRoutes.thread, { id: thread.id })}
+      className={className}
+      isArchived={thread.status.__typename === 'ThreadStatusRemoved'}
+    >
       <div>
-        {author ? <MemberInfo size="s" hideGroup onlyTop member={author} /> : <Loading withoutMargin />}
+        <MemberInfo size="s" hideGroup onlyTop member={thread.author} />
         <div>
           <TextExtraSmall inter lighter>
-            {relativeIfRecent(thread.createdInBlock.timestamp)}
+            {relativeIfRecent(thread.status.threadDeletedEvent?.timestamp ?? thread.createdInBlock.timestamp)}
           </TextExtraSmall>
           <BadgeStatus size="m">{thread.categoryTitle.toUpperCase()}</BadgeStatus>
         </div>
@@ -50,7 +49,8 @@ export const ThreadCard = ({ thread, className }: ThreadCardProps) => {
   )
 }
 
-export const Box = styled.div`
+const Box = styled(GhostRouterLink)<{ isArchived: boolean }>`
+  ${({ isArchived }) => (isArchived ? `background-color: ${Colors.Black[50]}` : '')};
   display: grid;
   row-gap: 16px;
   border: 1px solid ${Colors.Black[100]};
