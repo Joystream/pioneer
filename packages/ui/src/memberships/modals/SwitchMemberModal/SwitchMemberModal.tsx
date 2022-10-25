@@ -33,11 +33,11 @@ export const SwitchMemberModal = () => {
   }
 
   const filteredMembers = useMemo(() => {
+    const sortedMembers = members.sort(Comparator<Member>(false, 'handle'))
     if (modalData?.membersToShow) {
-      return members.filter((member) => modalData.membersToShow?.includes(member.id)).sort(Comparator(false, 'handle'))
+      return sortedMembers.filter((member) => modalData.membersToShow?.includes(member.id))
     }
-
-    return members.sort(Comparator(false, 'handle'))
+    return sortedMembers
   }, [members, modalData?.membersToShow])
   return (
     <Modal modalSize="xs" modalHeight="s" isDark onClose={hideModal}>
