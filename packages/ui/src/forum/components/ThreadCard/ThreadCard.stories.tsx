@@ -3,12 +3,11 @@ import React from 'react'
 
 import { ThreadCard } from '@/forum/components/ThreadCard/ThreadCard'
 import { ForumThreadWithDetails } from '@/forum/types'
-import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import { getMember } from '@/mocks/helpers'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 export default {
-  title: 'Forum/Facelift/ThreadCard',
+  title: 'Forum/Threads/ThreadCard',
   component: ThreadCard,
 } as Meta
 
@@ -26,16 +25,12 @@ const forumThread: ForumThreadWithDetails = {
   status: { __typename: 'ThreadStatusActive' },
 }
 
-const Template: Story = (args) => (
-  <MockApolloProvider members>
-    <ThreadCard thread={{ ...forumThread, ...args }} />
-  </MockApolloProvider>
-)
+const Template: Story = (args) => <ThreadCard thread={{ ...forumThread, ...args }} />
 
 export const Default = Template.bind({})
 Default.args = {
-  initialPostText: '',
-  categoryTitle: '',
+  initialPostText: 'Example Forum Thread Initial Text',
+  categoryTitle: 'Thread Category',
   title: 'Example Thread',
   visiblePostsCount: 5,
 }

@@ -40,7 +40,7 @@ const Template: Story<Props> = ({ tags, isSticky, isArchive, rawThread }) => {
   }
 
   return (
-    <MockApolloProvider members forum={forum}>
+    <MockApolloProvider forum={forum}>
       <ThreadListItem thread={thread} isArchive={isArchive} />
     </MockApolloProvider>
   )

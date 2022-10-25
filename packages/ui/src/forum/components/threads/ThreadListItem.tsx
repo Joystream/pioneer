@@ -5,7 +5,6 @@ import styled, { css } from 'styled-components'
 import { BlockTime } from '@/common/components/BlockTime'
 import { PinIcon } from '@/common/components/icons/PinIcon'
 import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
-import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextBig, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow } from '@/common/constants'
@@ -41,11 +40,7 @@ export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
 
       <LatestActivity threadId={thread.id} />
 
-      {thread.author ? (
-        <MemberInfo member={thread.author} size="s" memberSize="s" hideGroup />
-      ) : (
-        <Loading withoutMargin />
-      )}
+      <MemberInfo member={thread.author} size="s" memberSize="s" hideGroup />
 
       {block && <BlockTime block={block} layout="column" />}
     </ThreadListItemStyles>

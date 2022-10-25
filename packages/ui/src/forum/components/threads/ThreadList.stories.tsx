@@ -45,7 +45,7 @@ const Template: Story = ({ isArchive, type, initialPostText, categoryTitle, titl
         initialPostText,
         categoryTitle,
       })),
-    []
+    [initialPostText, categoryTitle, title]
   )
 
   const { getSortProps } = useSort<ForumThreadOrderByInput>('updatedAt')

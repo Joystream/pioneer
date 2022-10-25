@@ -25,14 +25,14 @@ interface EditThreadTitleSignModalProps {
 }
 
 export const EditThreadTitleSignModal = ({ thread, newTitle, service, onClose }: EditThreadTitleSignModalProps) => {
-  const { api, connectionState } = useApi()
+  const { api } = useApi()
   const { allAccounts: myAccounts } = useMyAccounts()
 
   const transaction = useMemo(() => {
-    if (thread.author && connectionState === 'connected' && api) {
+    if (api?.isConnected) {
       return api.tx.forum.editThreadMetadata(thread.author.id, thread.categoryId, thread.id, newTitle)
     }
-  }, [newTitle, thread.author, connectionState])
+  }, [newTitle, thread.author, api?.isConnected])
 
   const controllerAccount = accountOrNamed(myAccounts, thread.author?.controllerAccount as string, 'Controller Account')
 
@@ -55,10 +55,6 @@ export const EditThreadTitleSignModal = ({ thread, newTitle, service, onClose }:
     return `Insufficient funds to cover the title edition. You need at least ${fee ? formatJoyValue(fee) : '-'} ${
       CurrencyName.integerValue
     } on your account for this action.`
-  }
-
-  if (!thread.author || !controllerAccount) {
-    return null
   }
 
   return (
