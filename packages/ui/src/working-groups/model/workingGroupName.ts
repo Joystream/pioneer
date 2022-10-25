@@ -21,14 +21,6 @@ export const urlParamToWorkingGroupId = (name: string) => {
 
 export const groupNameToURLParam = (name: string) => name.toLowerCase().replace(/ /g, '-')
 
-/**
- *
- * @param name
- *  name has this shape workingGroupName-runtimeId
- * @returns
- *  workingGroupId
- */
-
 export const urlParamToOpeningId = (name: string) => {
   if (name.includes('operationsWorkingGroup')) return name
   const params = name.split('-')
