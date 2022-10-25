@@ -8,7 +8,7 @@ import { LinkIcon } from '@/common/components/icons'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { TableListItem } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
-import { Tooltip, TooltipDefault, TooltipExternalLink } from '@/common/components/Tooltip'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { TextSmall, TextMedium } from '@/common/components/typography/Text'
 import { Colors, Overflow } from '@/common/constants'
@@ -78,17 +78,8 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
       <StageField>
         <TextSmall bold>{camelCaseToText(proposal.status)}</TextSmall>
         <Tooltip
-          tooltipText={
-            <>
-              {checkStatus()}{' '}
-              <TooltipExternalLink
-                href="https://joystream.gitbook.io/testnet-workspace/system/proposal-system?q=lock#proposal"
-                target="_blank"
-              >
-                <TextMedium>Learn more</TextMedium> <LinkSymbol />
-              </TooltipExternalLink>
-            </>
-          }
+          tooltipText={checkStatus()}
+          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/proposal-system?q=lock#proposal"
         >
           <TooltipDefault />
         </Tooltip>
