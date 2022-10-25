@@ -81,7 +81,6 @@ export const CandidateVote = ({
               <>
                 <Tooltip tooltipText={tooltipLabel}>
                   <Subscription>My contributed votes</Subscription>
-                  <TooltipDefault />
                 </Tooltip>                
                 <StatsValue>
                   <TokenValue value={ownStake} />
