@@ -10,7 +10,6 @@ import { asWorkingGroupName, GroupIdName, WorkingGroup } from '@/working-groups/
 export interface WorkerBaseInfo {
   member: Member
   applicationId: string
-  isLead?: boolean
 }
 
 export interface Worker {

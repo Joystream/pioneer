@@ -9,7 +9,7 @@ import { Member } from '@/memberships/types'
 import { ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { WorkerBaseInfo } from '@/working-groups/types'
 
-export const Worker = ({ member, applicationId, isLead }: WorkerBaseInfo) => {
+export const Worker = ({ member, applicationId }: WorkerBaseInfo) => {
   const { showModal } = useModal()
   const showApplicationModal = useCallback(() => {
     showModal<ApplicationDetailsModalCall>({
@@ -18,11 +18,9 @@ export const Worker = ({ member, applicationId, isLead }: WorkerBaseInfo) => {
     })
   }, [applicationId])
 
-  if (isLead) return <div />
-
   return (
     <WorkerWrap>
-      <MemberInfo member={member} isLead={isLead} />
+      <MemberInfo member={member} isLead={false} />
       <ButtonGhost square size="small" onClick={showApplicationModal}>
         <FileIcon />
       </ButtonGhost>
