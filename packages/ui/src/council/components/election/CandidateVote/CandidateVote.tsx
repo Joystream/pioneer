@@ -19,6 +19,7 @@ import { Member } from '@/memberships/types'
 import { CandidateCardArrow, StatsValue } from '../CandidateCard/CandidateCard'
 
 import { RevealVoteButton } from './RevealVoteButton'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 
 export interface CandidateVoteProps {
   candidateId: string
@@ -53,6 +54,8 @@ export const CandidateVote = ({
   const hasOwnStake = ownStake && ownStake.gt(BN_ZERO)
   const hasMyVotes = myVotes.length > 0
   const allVotesRevealed = myVotes.every((vote) => vote.voteFor)
+  const tooltipLabel = "Vote for your own membership with the same account as used for council candidacy creation counts towards the progress. Please note, this will in a voting lock applied to this account, which may only be withdrawn in the end of the council period if you win the election and released immediately if your candidacy gets outvoted by others. Voting locks are non-rivalrous."
+
   return (
     <CandidateVoteWrapper onClick={showCandidate}>
       <VoteIndex lighter inter>
@@ -76,7 +79,10 @@ export const CandidateVote = ({
           <StakeAndVotesRow>
             {hasOwnStake && (
               <>
-                <Subscription>My Stake</Subscription>
+                <Tooltip tooltipText={tooltipLabel}>
+                  <Subscription>My contributed votes</Subscription>
+                  <TooltipDefault />
+                </Tooltip>                
                 <StatsValue>
                   <TokenValue value={ownStake} />
                 </StatsValue>
