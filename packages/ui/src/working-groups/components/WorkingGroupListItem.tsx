@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { Arrow } from '@/common/components/icons'
 import { TableListItem } from '@/common/components/List'
 import { GhostRouterLink, RouterLink } from '@/common/components/RouterLink'
-import { TooltipExternalLink } from '@/common/components/Tooltip'
+import { Tooltip } from '@/common/components/Tooltip'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { nameMapping, subtitleMapping } from '@/common/helpers'
@@ -18,7 +18,6 @@ import { workingGroupLinks } from '../constants'
 import { groupNameToURLParam } from '../model/workingGroupName'
 import { WorkingGroup } from '../types'
 
-import { GroupTooltip } from './GroupTooltip'
 import { WorkingGroupImage, WorkingGroupImageTag } from './WorkingGroupImage'
 
 export interface WorkingGroupProps {
@@ -42,12 +41,16 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
         <WorkingGroupImage groupName={group.name} />
       </GroupImageContainer>
       <GroupContentBlock>
-        <Flex>
+        <Tooltip
+          tooltipTitle={wgNameMapped}
+          tooltipText=""
+          tooltipLinkURL={wgLink}
+          tooltipLinkText="Learn more about this group"
+        >
           <GroupTitle as={GhostRouterLink} to={groupAddress}>
             {wgNameMapped}
           </GroupTitle>
-          <GroupTooltip name={wgNameMapped} link={wgLink} />
-        </Flex>
+        </Tooltip>
         <GroupContent as={GhostRouterLink} to={groupAddress}>
           {subtitleMapping(group.name)}
         </GroupContent>
