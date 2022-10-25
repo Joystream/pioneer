@@ -9,6 +9,7 @@ export const ForumTabs = () => {
   const tabs = usePageTabs([
     ['Overview', ForumRoutes.forumOverview],
     ['Forum', ForumRoutes.forum],
+    ['My Threads', ForumRoutes.myThreads],
     ['Archived', ForumRoutes.archived],
   ])
 
@@ -24,7 +25,7 @@ export const ForumForumTabs = ({ categoryCount }: ForumForumTabsProps) => {
     ['Categories', ForumRoutes.forum, { count: categoryCount }],
     ['Latest threads ', ForumRoutes.latestThreads],
     ['Top threads', ForumRoutes.topThreads],
-    ['My threads', ForumRoutes.myThreads],
+    // ['My threads', ForumRoutes.myThreads],
   ])
 
   return <ForumForumTabsStyles tabsSize="xs" tabs={tabs} />

@@ -62,6 +62,7 @@ export const ForumArchived = () => {
               page={page}
               pageCount={threadCount && Math.ceil(threadCount / THREADS_PER_PAGE)}
               setPage={setPage}
+              type="list"
             />
           </RowGapBlock>
         </>

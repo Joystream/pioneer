@@ -16,7 +16,6 @@ import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransact
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { formatJoyValue } from '@/common/model/formatters'
 import { ForumThreadWithDetails } from '@/forum/types'
-import { useMember } from '@/memberships/hooks/useMembership'
 
 interface EditThreadTitleSignModalProps {
   thread: ForumThreadWithDetails
@@ -26,17 +25,16 @@ interface EditThreadTitleSignModalProps {
 }
 
 export const EditThreadTitleSignModal = ({ thread, newTitle, service, onClose }: EditThreadTitleSignModalProps) => {
-  const { api, connectionState } = useApi()
-  const { member: threadAuthor } = useMember(thread.authorId)
+  const { api } = useApi()
   const { allAccounts: myAccounts } = useMyAccounts()
 
   const transaction = useMemo(() => {
-    if (threadAuthor && connectionState === 'connected' && api) {
-      return api.tx.forum.editThreadMetadata(threadAuthor.id, thread.categoryId, thread.id, newTitle)
+    if (api?.isConnected) {
+      return api.tx.forum.editThreadMetadata(thread.author.id, thread.categoryId, thread.id, newTitle)
     }
-  }, [newTitle, threadAuthor, connectionState])
+  }, [newTitle, thread.author, api?.isConnected])
 
-  const controllerAccount = accountOrNamed(myAccounts, threadAuthor?.controllerAccount as string, 'Controller Account')
+  const controllerAccount = accountOrNamed(myAccounts, thread.author?.controllerAccount as string, 'Controller Account')
 
   const { isReady, paymentInfo, sign } = useSignAndSendTransaction({
     transaction,
@@ -57,10 +55,6 @@ export const EditThreadTitleSignModal = ({ thread, newTitle, service, onClose }:
     return `Insufficient funds to cover the title edition. You need at least ${fee ? formatJoyValue(fee) : '-'} ${
       CurrencyName.integerValue
     } on your account for this action.`
-  }
-
-  if (!threadAuthor || !controllerAccount) {
-    return null
   }
 
   return (

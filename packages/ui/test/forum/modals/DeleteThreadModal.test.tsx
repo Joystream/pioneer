@@ -42,7 +42,9 @@ const modalData: ModalCallData<DeleteThreadModalCall> = {
     id: '1',
     title: 'Example Thread',
     categoryId: '1',
-    authorId: '0',
+    initialPostText: '',
+    categoryTitle: '',
+    author: getMember('alice'),
     isSticky: false,
     createdInBlock: randomBlock(),
     tags: [],
@@ -99,7 +101,7 @@ describe('UI: DeleteThreadModal', () => {
     mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
     stubDefaultBalances()
     transaction = stubTransaction(api, txPath, 100)
-    txMock = api.api.tx.forum.deleteThread as unknown as jest.Mock
+    txMock = (api.api.tx.forum.deleteThread as unknown) as jest.Mock
   })
 
   it('Requirements passed', async () => {
@@ -109,7 +111,7 @@ describe('UI: DeleteThreadModal', () => {
 
     const [userId, categoryId, threadId, hide] = last(txMock.mock.calls)
 
-    expect(userId.toJSON()).toBe(Number(modalData.thread.authorId))
+    expect(userId.toJSON()).toBe(Number(modalData.thread.author.id))
     expect(categoryId.toJSON()).toBe(Number(modalData.thread.categoryId))
     expect(threadId.toJSON()).toBe(Number(modalData.thread.id))
     expect(hide).toBe(true)

@@ -93,8 +93,16 @@ fragment ForumThreadFields on ForumThread {
   id
   isSticky
   categoryId
+  category {
+    title
+  }
   title
-  authorId
+  initialPost {
+    text
+  }
+  author {
+    ...MemberFields
+  }
   createdInEvent {
     createdAt
     inBlock
