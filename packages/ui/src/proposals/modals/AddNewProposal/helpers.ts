@@ -264,7 +264,7 @@ export const schemaFactory = (api?: ProxyApi) => {
         if (!context.parent.groupId) {
           return true
         }
-        return typeof value === 'undefined'
+        return typeof value !== 'undefined'
       }),
     }),
     updateWorkingGroupBudget: Yup.object().shape({

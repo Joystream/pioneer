@@ -130,8 +130,8 @@ export const AddNewProposalModal = () => {
   }, [machineStateConverter(state.value)])
 
   useEffect(() => {
-    setWarningAccepted(
-      Object.values((form.formState.errors as any)[machineStateConverter(state.value)]).some(
+    setIsExecutionError(
+      Object.values((form.formState.errors as any)[machineStateConverter(state.value)] ?? {}).some(
         (value) => (value as FieldError).type === 'execution'
       )
     )
@@ -206,9 +206,9 @@ export const AddNewProposalModal = () => {
 
   const shouldDisableNext = useMemo(() => {
     if (isExecutionError) {
-      const hasOtherError = Object.values((form.formState.errors as any)[machineStateConverter(state.value)]).some(
-        (value) => (value as FieldError).type !== 'execution'
-      )
+      const hasOtherError = Object.values(
+        (form.formState.errors as any)[machineStateConverter(state.value)] ?? {}
+      ).some((value) => (value as FieldError).type !== 'execution')
 
       if (!form.formState.isDirty) {
         return true

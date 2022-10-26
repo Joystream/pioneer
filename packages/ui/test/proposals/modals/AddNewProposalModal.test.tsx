@@ -1,6 +1,6 @@
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { act, configure, fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
@@ -56,7 +56,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { loaderSelector, mockedTransactionFee, mockUseModalCall } from '../../setup'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 const QUESTION_INPUT = OpeningMetadata.ApplicationFormQuestion.InputType
 
@@ -594,7 +594,7 @@ describe('UI: AddNewProposalModal', () => {
           const parameters = txSpecificParameters.asSetReferralCut.toJSON()
 
           expect(parameters).toEqual(amount)
-          expect(await getCreateButton()).toBeEnabled()
+          waitFor(async () => expect(await getCreateButton()).toBeEnabled())
         })
       })
 
@@ -831,7 +831,6 @@ describe('UI: AddNewProposalModal', () => {
           const group = 'Forum'
           const amount = 100
           await SpecificParameters.SetWorkingGroupLeadReward.selectGroup(group)
-          await waitForElementToBeRemoved(() => loaderSelector(), { timeout: 300 })
           await SpecificParameters.SetWorkingGroupLeadReward.fillRewardAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
 
