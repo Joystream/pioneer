@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { FieldError, FormProvider, useForm } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
@@ -49,12 +49,7 @@ import { SuccessModal } from '@/proposals/modals/AddNewProposal/components/Succe
 import { TriggerAndDiscussionStep } from '@/proposals/modals/AddNewProposal/components/TriggerAndDiscussionStep'
 import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
 import { getSpecificParameters } from '@/proposals/modals/AddNewProposal/getSpecificParameters'
-import {
-  AddNewProposalForm,
-  checkForExecutionWarning,
-  defaultProposalValues,
-  schemaFactory,
-} from '@/proposals/modals/AddNewProposal/helpers'
+import { AddNewProposalForm, defaultProposalValues, schemaFactory } from '@/proposals/modals/AddNewProposal/helpers'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
 import { addNewProposalMachine, AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalType } from '@/proposals/types'
@@ -135,8 +130,12 @@ export const AddNewProposalModal = () => {
   }, [machineStateConverter(state.value)])
 
   useEffect(() => {
-    checkForExecutionWarning(machineStateConverter(state.value), form.formState.errors, setIsExecutionError)
-  }, [JSON.stringify(form.formState.errors)])
+    setWarningAccepted(
+      Object.values((form.formState.errors as any)[machineStateConverter(state.value)]).some(
+        (value) => (value as FieldError).type === 'execution'
+      )
+    )
+  }, [JSON.stringify(form.formState.errors), machineStateConverter(state.value)])
 
   const transactionsSteps = useMemo(
     () =>
@@ -207,10 +206,28 @@ export const AddNewProposalModal = () => {
 
   const shouldDisableNext = useMemo(() => {
     if (isExecutionError) {
-      return !form.formState.isValid && !warningAccepted
+      const hasOtherError = Object.values((form.formState.errors as any)[machineStateConverter(state.value)]).some(
+        (value) => (value as FieldError).type !== 'execution'
+      )
+
+      if (!form.formState.isDirty) {
+        return true
+      }
+
+      if (!hasOtherError) {
+        return !warningAccepted
+      }
+
+      return !form.formState.isValid
     }
     return !form.formState.isValid
-  }, [form.formState.isValid, isExecutionError, warningAccepted])
+  }, [
+    form.formState.isValid,
+    isExecutionError,
+    warningAccepted,
+    JSON.stringify(form.getValues()),
+    JSON.stringify(form.formState.errors),
+  ])
 
   if (!api || !activeMember || !feeInfo || state.matches('requirementsVerification')) {
     return null
