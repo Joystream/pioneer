@@ -607,7 +607,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Default - not filled amount, no selected group', async () => {
-          expect(screen.queryByText('Working Group Lead')).not.toBeNull()
+          expect(screen.queryByText('Working Group Lead')).toBeNull()
           expect(await getButton(/By half/i)).toBeDisabled()
 
           const button = await getCreateButton()
