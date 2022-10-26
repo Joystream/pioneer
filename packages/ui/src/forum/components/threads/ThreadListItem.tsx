@@ -16,6 +16,7 @@ import { useMember } from '@/memberships/hooks/useMembership'
 
 import { LatestActivity, LatestActivityRowGapBlock } from './LatestActivity'
 import { ThreadTags } from './ThreadTags'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 
 interface ThreadListItemProps {
   thread: ForumThread
@@ -35,10 +36,12 @@ export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
     >
       {thread.isSticky && <ThreadPinIcon />}
 
-      <Thread>
-        <TextBig bold>{thread.title}</TextBig>
-        {thread.tags.length > 0 && <ThreadTags tags={thread.tags} />}
-      </Thread>
+      <Tooltip tooltipText={thread.title}>
+        <Thread>
+          <TextBig bold>{thread.title}</TextBig>
+          {thread.tags.length > 0 && <ThreadTags tags={thread.tags} />}
+        </Thread>
+      </Tooltip>
 
       <TextMedium bold>{thread.visiblePostsCount - 1}</TextMedium>
 
