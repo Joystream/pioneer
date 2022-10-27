@@ -38,7 +38,7 @@ import { WorkingGroupsModule } from './pages/WorkingGroups/WorkingGroupsModule'
 import { Providers } from './Providers'
 
 export const App = () => {
-  if (!process.env.REACT_APP_IS_UNDER_MAINTENANCE) {
+  if (process.env.REACT_APP_IS_UNDER_MAINTENANCE) {
     return <MaintenanceScreen />
   }
 
