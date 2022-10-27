@@ -71,22 +71,25 @@ const observeTransaction = (
     }
   }
 
-  const errorHandler = (error: string) => {
+  const errorHandler = (error: string | Error) => {
     subscription.unsubscribe()
 
     if (error === 'Cancelled') {
       return send({ type: 'CANCELED', events: [] })
     }
 
-    const errorEvent = error.startsWith('1010:')
-      ? {
-          docs: 'Insufficient funds to cover fees. Transaction has been canceled.',
-          section: 'transaction',
-          name: 'Fees',
-        }
-      : { docs: String(error), section: 'transaction', name: 'SignAndSend' }
+    const errorMessage = (error as any).message ?? String(error)
+    const errorData = {
+      error: errorMessage.startsWith('1010:')
+        ? {
+            docs: 'Insufficient funds to cover fees. Transaction has been canceled.',
+            section: 'transaction',
+            name: 'Fees',
+          }
+        : { docs: errorMessage, section: 'transaction', name: 'SignAndSend' },
+    }
 
-    send({ type: 'ERROR', events: [{ event: { method: 'TransactionCanceled', data: [{ error: errorEvent }] } }] })
+    send({ type: 'ERROR', events: [{ event: { method: 'TransactionCanceled', data: [errorData] } }] })
   }
 
   const subscription = transaction.subscribe({

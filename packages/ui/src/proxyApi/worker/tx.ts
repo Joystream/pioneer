@@ -30,7 +30,7 @@ export const tx = <ModuleKey extends TxModule>(
       .apply(transaction, message.payload)
       .pipe(
         map((result) => ({ result })),
-        catchError((error) => of({ error: error.message ?? error }))
+        catchError((error) => of({ error }))
       )
       .subscribe((payload) =>
         postMessage({
