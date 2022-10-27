@@ -20,7 +20,7 @@ export interface CategoryCardProps {
 export const CategoryCard = ({ className, category }: CategoryCardProps) => {
   const hoverComponent = useMemo(() => {
     return (
-      <CategoriesBox id="category-subcategories">
+      <CategoriesBox className="category-subcategories">
         {category.subcategories.length &&
           category.subcategories.map((subcategory) => (
             <StyledBadge key={subcategory.title} to={generatePath(ForumRoutes.category, { id: subcategory.id })}>
@@ -42,7 +42,7 @@ export const CategoryCard = ({ className, category }: CategoryCardProps) => {
           {category.title}
         </TextBig>
         {hoverComponent}
-        <TextMedium id="category-description" normalWeight inter lighter truncateLines={2}>
+        <TextMedium className="category-description" normalWeight inter lighter truncateLines={2}>
           {category.description}
         </TextMedium>
       </div>
@@ -102,7 +102,7 @@ const Box = styled(Link)<{ ignoreHover?: boolean }>`
     }
   }
 
-  #category-subcategories {
+  .category-subcategories {
     display: none;
   }
 
@@ -110,11 +110,11 @@ const Box = styled(Link)<{ ignoreHover?: boolean }>`
     !ignoreHover &&
     css`
       :hover {
-        #category-subcategories {
+        .category-subcategories {
           display: flex;
         }
 
-        #category-description {
+        .category-description {
           display: none;
         }
       }
