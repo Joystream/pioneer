@@ -1,6 +1,6 @@
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { act, configure, fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
@@ -56,7 +56,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { loaderSelector, mockedTransactionFee, mockUseModalCall } from '../../setup'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 const QUESTION_INPUT = OpeningMetadata.ApplicationFormQuestion.InputType
 
@@ -197,12 +197,14 @@ describe('UI: AddNewProposalModal', () => {
   })
 
   describe('Requirements', () => {
-    beforeEach(renderModal)
+    beforeEach(async () => {
+      await renderModal()
+    })
 
     it('No active member', async () => {
       useMyMemberships.active = undefined
 
-      renderModal()
+      await renderModal()
 
       expect(showModal).toBeCalledWith({
         modal: 'SwitchMember',
@@ -212,7 +214,9 @@ describe('UI: AddNewProposalModal', () => {
   })
 
   describe('Warning modal', () => {
-    beforeEach(renderModal)
+    beforeEach(async () => {
+      await renderModal()
+    })
     it('Not checked', async () => {
       const button = await getWarningNextButton()
       expect(await screen.queryByText('Do not show this message again.')).toBeDefined()
@@ -582,10 +586,11 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid with execution warning', async () => {
           const amount = 100
+          const button = await getCreateButton()
+
           await SpecificParameters.fillAmount(amount)
           expect(await screen.getByTestId('amount-input')).toHaveValue(String(amount))
-
-          expect(await getCreateButton()).toBeDisabled()
+          expect(button).toBeDisabled()
 
           const checkbox = screen.getByTestId('execution-requirement')
           fireEvent.click(checkbox)
@@ -594,7 +599,7 @@ describe('UI: AddNewProposalModal', () => {
           const parameters = txSpecificParameters.asSetReferralCut.toJSON()
 
           expect(parameters).toEqual(amount)
-          expect(await getCreateButton()).toBeEnabled()
+          expect(button).toBeEnabled()
         })
       })
 
@@ -607,7 +612,7 @@ describe('UI: AddNewProposalModal', () => {
         })
 
         it('Default - not filled amount, no selected group', async () => {
-          expect(screen.queryByText('Working Group Lead')).not.toBeNull()
+          expect(screen.queryByText('Working Group Lead')).toBeNull()
           expect(await getButton(/By half/i)).toBeDisabled()
 
           const button = await getCreateButton()
@@ -831,7 +836,6 @@ describe('UI: AddNewProposalModal', () => {
           const group = 'Forum'
           const amount = 100
           await SpecificParameters.SetWorkingGroupLeadReward.selectGroup(group)
-          await waitForElementToBeRemoved(() => loaderSelector(), { timeout: 300 })
           await SpecificParameters.SetWorkingGroupLeadReward.fillRewardAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
 
@@ -1671,8 +1675,8 @@ describe('UI: AddNewProposalModal', () => {
     },
   }
 
-  function renderModal() {
-    return render(
+  async function renderModal() {
+    return await render(
       <MemoryRouter>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
