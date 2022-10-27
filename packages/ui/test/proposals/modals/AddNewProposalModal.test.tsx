@@ -197,12 +197,14 @@ describe('UI: AddNewProposalModal', () => {
   })
 
   describe('Requirements', () => {
-    beforeEach(renderModal)
+    beforeEach(async () => {
+      await renderModal()
+    })
 
     it('No active member', async () => {
       useMyMemberships.active = undefined
 
-      renderModal()
+      await renderModal()
 
       expect(showModal).toBeCalledWith({
         modal: 'SwitchMember',
@@ -212,7 +214,9 @@ describe('UI: AddNewProposalModal', () => {
   })
 
   describe('Warning modal', () => {
-    beforeEach(renderModal)
+    beforeEach(async () => {
+      await renderModal()
+    })
     it('Not checked', async () => {
       const button = await getWarningNextButton()
       expect(await screen.queryByText('Do not show this message again.')).toBeDefined()
@@ -582,10 +586,11 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid with execution warning', async () => {
           const amount = 100
+          const button = await getCreateButton()
+
           await SpecificParameters.fillAmount(amount)
           expect(await screen.getByTestId('amount-input')).toHaveValue(String(amount))
-
-          expect(await getCreateButton()).toBeDisabled()
+          expect(button).toBeDisabled()
 
           const checkbox = screen.getByTestId('execution-requirement')
           fireEvent.click(checkbox)
@@ -594,7 +599,7 @@ describe('UI: AddNewProposalModal', () => {
           const parameters = txSpecificParameters.asSetReferralCut.toJSON()
 
           expect(parameters).toEqual(amount)
-          waitFor(async () => expect(await getCreateButton()).toBeEnabled())
+          expect(button).toBeEnabled()
         })
       })
 
@@ -1670,8 +1675,8 @@ describe('UI: AddNewProposalModal', () => {
     },
   }
 
-  function renderModal() {
-    return render(
+  async function renderModal() {
+    return await render(
       <MemoryRouter>
         <MockQueryNodeProviders>
           <MockKeyringProvider>

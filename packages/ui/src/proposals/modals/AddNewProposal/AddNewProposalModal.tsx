@@ -220,6 +220,7 @@ export const AddNewProposalModal = () => {
 
       return !form.formState.isValid
     }
+
     return !form.formState.isValid
   }, [
     form.formState.isValid,
