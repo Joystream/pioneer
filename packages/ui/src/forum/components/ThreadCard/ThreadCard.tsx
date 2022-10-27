@@ -71,6 +71,7 @@ const Box = styled(GhostRouterLink)<{ isArchived: boolean }>`
     justify-content: space-between;
     flex-wrap: wrap;
     align-items: center;
+    gap: 5px;
 
     > * {
       flex: 1;
@@ -78,10 +79,10 @@ const Box = styled(GhostRouterLink)<{ isArchived: boolean }>`
 
     > *:last-child {
       display: flex;
-      align-items: center;
+      flex-direction: column-reverse;
+      align-items: flex-end;
       justify-content: end;
       gap: 5px;
-      flex: 2;
     }
   }
 
@@ -89,5 +90,9 @@ const Box = styled(GhostRouterLink)<{ isArchived: boolean }>`
     svg {
       color: ${Colors.Black[400]};
     }
+  }
+
+  ${TextMedium} {
+    max-height: 55px;
   }
 `
