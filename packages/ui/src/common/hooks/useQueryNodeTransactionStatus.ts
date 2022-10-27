@@ -7,20 +7,20 @@ import { useBlockHash } from './useBlockHash'
 
 type TransactionStatus = 'confirmed' | 'rejected' | 'unknown'
 
-export function useQueryNodeTransactionStatus(blockHash?: Hash | string) {
+export function useQueryNodeTransactionStatus(isProcessing: boolean, blockHash?: Hash | string) {
   const { queryNodeState } = useQueryNodeState()
   const [status, setStatus] = useState<TransactionStatus>('unknown')
   const queryNodeBlockHash = useBlockHash(queryNodeState?.indexerHead)
 
   useEffect(() => {
-    if (!queryNodeState) {
+    if (!queryNodeState && isProcessing) {
       const timeout = setTimeout(() => {
         setStatus('confirmed')
       }, 10_000)
 
       return () => clearTimeout(timeout)
     }
-  }, [!queryNodeState])
+  }, [!queryNodeState, isProcessing])
 
   useEffect(() => {
     if (queryNodeState) {
