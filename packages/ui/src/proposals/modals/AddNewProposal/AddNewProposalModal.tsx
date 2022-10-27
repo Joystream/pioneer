@@ -351,7 +351,7 @@ export const AddNewProposalModal = () => {
               {state.matches('specificParameters') && (
                 <SpecificParametersStep matches={state.matches as AddNewProposalMachineState['matches']} />
               )}
-              {isExecutionError && <ExecutionRequirementsWarning />}
+              {isExecutionError && <ExecutionRequirementsWarning currentState={machineStateConverter(state.value)} />}
             </FormProvider>
           </StyledStepperBody>
         </StepperProposalWrapper>

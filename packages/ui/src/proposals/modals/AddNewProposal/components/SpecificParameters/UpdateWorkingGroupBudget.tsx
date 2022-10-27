@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react'
+import BN from 'bn.js'
+import React, { useEffect, useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { map } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
 import { CurrencyName } from '@/app/constants/currency'
@@ -7,23 +9,40 @@ import { InlineToggleWrap, InputComponent, Label, ToggleCheckbox, TokenInput } f
 import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
+import { formatDurationDate } from '@/common/components/statistics'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextInlineMedium, TextMedium, TokenValue } from '@/common/components/typography'
+import { DurationValue } from '@/common/components/typography/DurationValue'
 import { capitalizeFirstLetter } from '@/common/helpers'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
+import { useObservable } from '@/common/hooks/useObservable'
+import { formatTokenValue, MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
+import { useCouncilStatistics } from '@/council/hooks/useCouncilStatistics'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 export const UpdateWorkingGroupBudget = () => {
   const { setValue, watch, setError, formState, clearErrors } = useFormContext()
   const { api } = useApi()
-  const councilBudget = useFirstObservableValue(() => api?.query.council.budget(), [api?.isConnected])
+  const { budget, reward } = useCouncilStatistics()
+  const nextPaymentBlock = useFirstObservableValue(() => api?.query.council.nextRewardPayments(), [api?.isConnected])
   const [groupId, isPositive, budgetUpdate] = watch([
     'updateWorkingGroupBudget.groupId',
     'updateWorkingGroupBudget.isPositive',
     'updateWorkingGroupBudget.budgetUpdate',
   ])
+  const currentBlock = useObservable(
+    () => api?.rpc.chain.subscribeNewHeads().pipe(map(({ number }) => number.toNumber())),
+    [api?.isConnected]
+  )
   const { group } = useWorkingGroup({ name: groupId })
+
+  const milisecondsLeft = useMemo(() => {
+    if (currentBlock && nextPaymentBlock) {
+      const blockToGo = nextPaymentBlock.toNumber() - currentBlock
+      return new Date(Date.now() + blockToGo * MILLISECONDS_PER_BLOCK).getTime() - Date.now()
+    }
+  }, [currentBlock, nextPaymentBlock])
 
   useEffect(() => {
     if (group) {
@@ -34,24 +53,26 @@ export const UpdateWorkingGroupBudget = () => {
   }, [group?.id])
 
   useEffect(() => {
-    if (!budgetUpdate || !councilBudget || !group || formState.isValidating || !formState.isValid) return
+    if (!budgetUpdate || !budget.amount || !group || formState.isValidating || !formState.isValid) return
 
-    if (isPositive && budgetUpdate?.gte(councilBudget)) {
+    if (isPositive && budgetUpdate?.gte(budget.amount)) {
       return setError('updateWorkingGroupBudget.budgetUpdate', {
         type: 'execution',
-        message: 'Amount must be lower then current council budget from proposal to execute',
+        message:
+          'Unless the Councils budget is increased between now and attempted execution, this proposal will fail to execute, and the budget size will not be changed.',
       })
     }
 
     if (!isPositive && budgetUpdate?.gte(group.budget)) {
       return setError('updateWorkingGroupBudget.budgetUpdate', {
         type: 'execution',
-        message: 'Amount must be lower then current budget from proposal to execute',
+        message:
+          'Unless the budget is increase between now and attempted execution, this proposal will fail to execute, and the budget size will not be changed',
       })
     }
 
     return clearErrors('updateWorkingGroupBudget.budgetUpdate')
-  }, [budgetUpdate?.toString(), councilBudget?.toString(), formState.isValidating, isPositive])
+  }, [budgetUpdate?.toString(), budget.amount?.toString(), formState.isValidating, isPositive])
 
   return (
     <RowGapBlock gap={24}>
@@ -89,17 +110,44 @@ export const UpdateWorkingGroupBudget = () => {
               </TextMedium>
             </Info>
           )}
-          {councilBudget && (
+          {budget.amount && (
             <Info>
               <TextMedium>
                 Current budget for Council is{' '}
                 <TextInlineMedium bold>
-                  <TokenValue value={councilBudget} />
+                  <TokenValue value={budget.amount} />
                 </TextInlineMedium>
                 .
               </TextMedium>
             </Info>
           )}
+          {nextPaymentBlock && milisecondsLeft && (
+            <>
+              <Info>
+                <TextMedium>
+                  Next Council payment is in <DurationValue value={formatDurationDate(milisecondsLeft)} /> at block
+                  number <TextInlineMedium bold>{formatTokenValue(nextPaymentBlock as BN)}</TextInlineMedium>. With
+                  amount <TokenValue value={reward.amount} />{' '}
+                  <Tooltip tooltipText="Expected payouts can be impacted by hiring and firing decisions made before the date of payout.">
+                    <TooltipDefault />
+                  </Tooltip>
+                </TextMedium>
+              </Info>
+              <Info>
+                <TextMedium>
+                  Expected payouts can be impacted by hiring and firing decisions made before the date of payout.
+                </TextMedium>
+              </Info>
+            </>
+          )}
+
+          <Info>
+            <TextMedium>
+              {isPositive
+                ? 'If the Councils budget is less than this amount at attempted execution, this proposal will fail to execute, and the budget size will not be changed.'
+                : 'If the budget is less than this amount at attempted execution, this proposal will fail to execute, and the budget size will not be changed'}
+            </TextMedium>
+          </Info>
 
           <InlineToggleWrap>
             <Label>Decrease budget: </Label>
