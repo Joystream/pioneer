@@ -224,6 +224,7 @@ export const AddNewProposalModal = () => {
     return !form.formState.isValid
   }, [
     form.formState.isValid,
+    form.formState.isDirty,
     isExecutionError,
     warningAccepted,
     JSON.stringify(form.getValues()),
