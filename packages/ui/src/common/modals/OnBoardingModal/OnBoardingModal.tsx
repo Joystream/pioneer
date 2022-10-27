@@ -34,7 +34,7 @@ export const OnBoardingModal = () => {
   const status = useDebounce(realStatus, 50)
   const [state, send] = useMachine(onBoardingMachine)
   const [membershipData, setMembershipData] = useState<{ id: string; blockHash: string }>()
-  const transactionStatus = useQueryNodeTransactionStatus(membershipData?.blockHash)
+  const transactionStatus = useQueryNodeTransactionStatus(!!membershipData?.blockHash, membershipData?.blockHash)
   const apolloClient = useApolloClient()
   const [endpoints] = useNetworkEndpoints()
   const statusRef = useRef<OnBoardingStatus>()
