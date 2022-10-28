@@ -67,7 +67,7 @@ export const UpdateWorkingGroupBudget = () => {
       return setError('updateWorkingGroupBudget.budgetUpdate', {
         type: 'execution',
         message:
-          'Unless the budget is increase between now and attempted execution, this proposal will fail to execute, and the budget size will not be changed',
+          'Unless the budget is increased between now and attempted execution, this proposal will fail to execute, and the budget size will not be changed',
       })
     }
 
@@ -122,30 +122,20 @@ export const UpdateWorkingGroupBudget = () => {
             </Info>
           )}
           {nextPaymentBlock && milisecondsLeft && (
-            <>
-              <Info>
-                <TextMedium>
-                  Next Council payment is in <DurationValue value={formatDurationDate(milisecondsLeft)} /> at block
-                  number <TextInlineMedium bold>{formatTokenValue(nextPaymentBlock as BN)}</TextInlineMedium>. With
-                  amount <TokenValue value={reward.amount} />{' '}
-                  <Tooltip tooltipText="Expected payouts can be impacted by hiring and firing decisions made before the date of payout.">
-                    <TooltipDefault />
-                  </Tooltip>
-                </TextMedium>
-              </Info>
-              <Info>
-                <TextMedium>
-                  Expected payouts can be impacted by hiring and firing decisions made before the date of payout.
-                </TextMedium>
-              </Info>
-            </>
+            <Info>
+              <TextMedium>
+                Next Council payment is in <DurationValue value={formatDurationDate(milisecondsLeft)} /> at block number{' '}
+                <TextInlineMedium bold>{formatTokenValue(nextPaymentBlock as BN)}</TextInlineMedium>. With amount{' '}
+                <TokenValue value={reward.amount} />. Expected payouts can be impacted by hiring and firing decisions
+                made before the date of payout.
+              </TextMedium>
+            </Info>
           )}
-
           <Info>
             <TextMedium>
               {isPositive
-                ? 'If the Councils budget is less than this amount at attempted execution, this proposal will fail to execute, and the budget size will not be changed.'
-                : 'If the budget is less than this amount at attempted execution, this proposal will fail to execute, and the budget size will not be changed'}
+                ? 'If the Councils budget is less than provided amount at attempted execution, this proposal will fail to execute, and the budget size will not be changed.'
+                : 'If the budget is less than provided amount at attempted execution, this proposal will fail to execute and the budget size will not be changed'}
             </TextMedium>
           </Info>
 
