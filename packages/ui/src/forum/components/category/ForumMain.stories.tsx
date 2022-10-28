@@ -6,14 +6,14 @@ import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvi
 import { ForumMain } from './ForumMain'
 
 export default {
-  title: 'Forum/Categories/ForumCategoryList',
+  title: 'Forum/ForumMain',
   component: ForumMain,
 } as Meta
 
-const Template: Story = () => {
+const Template: Story = (args) => {
   return (
     <MockApolloProvider members workers forum>
-      <ForumMain />
+      <ForumMain {...args} />
     </MockApolloProvider>
   )
 }
