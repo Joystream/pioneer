@@ -10,6 +10,7 @@ import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextBig, TextExtraSmall, TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { relativeIfRecent } from '@/common/model/relativeIfRecent'
+import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
 import { ForumRoutes } from '@/forum/constant'
 import { ForumThread } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
@@ -17,9 +18,10 @@ import { MemberInfo } from '@/memberships/components'
 interface ThreadCardProps {
   thread: ForumThread
   className?: string
+  watchlistButton?: boolean
 }
 
-export const ThreadCard = ({ thread, className }: ThreadCardProps) => {
+export const ThreadCard = ({ thread, className, watchlistButton }: ThreadCardProps) => {
   return (
     <Box
       to={generatePath(ForumRoutes.thread, { id: thread.id })}
@@ -41,9 +43,12 @@ export const ThreadCard = ({ thread, className }: ThreadCardProps) => {
       <TextMedium light truncateLines={3}>
         {thread.initialPostText}
       </TextMedium>
-      <ColumnGapBlock gap={8}>
-        <ReplyIcon />
-        <CountBadge count={thread.visiblePostsCount} />
+      <ColumnGapBlock justify="space-between" align="center">
+        <ColumnGapBlock gap={8}>
+          <ReplyIcon />
+          <CountBadge count={thread.visiblePostsCount} />
+        </ColumnGapBlock>
+        {watchlistButton && <WatchlistButton threadId={thread.id} />}
       </ColumnGapBlock>
     </Box>
   )
@@ -87,6 +92,7 @@ const Box = styled(GhostRouterLink)<{ isArchived: boolean }>`
   }
 
   > *:last-child {
+    width: auto;
     svg {
       color: ${Colors.Black[400]};
     }
