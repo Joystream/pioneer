@@ -1,79 +1,71 @@
-import React, { useMemo, useState } from 'react'
-import { generatePath, useHistory } from 'react-router-dom'
-import styled from 'styled-components'
+import React, { useMemo } from 'react'
+import { generatePath, Link } from 'react-router-dom'
+import styled, { css } from 'styled-components'
 
-import { BadgeStatus } from '@/common/components/BadgeStatus'
+import { BadgeStatusCss } from '@/common/components/BadgeStatus'
 import { CountBadge } from '@/common/components/CountBadge'
 import { Arrow } from '@/common/components/icons'
 import { AnswerIcon } from '@/common/components/icons/AnswerIcon'
 import { TextBig, TextMedium } from '@/common/components/typography'
-import { BorderRad, Colors } from '@/common/constants'
+import { BorderRad, Colors, RemoveScrollbar } from '@/common/constants'
 import { ForumRoutes } from '@/forum/constant'
 import { ForumCategory } from '@/forum/types'
 
-interface CategoryCardProps {
+export interface CategoryCardProps {
   category: ForumCategory
   className?: string
 }
 
 // In case of different onClick event for message icon and box as whole, remember to stop propagation of msg onClick event
 export const CategoryCard = ({ className, category }: CategoryCardProps) => {
-  const [isHovered, setIsHovered] = useState<boolean>(false)
-  const { push } = useHistory()
   const hoverComponent = useMemo(() => {
     return (
-      <CategoriesBox>
-        {category.subcategories.length
-          ? category.subcategories.map((subcategory) => (
-              <StyledBadge onClick={() => push(generatePath(ForumRoutes.category, { id: subcategory.id }))}>
-                {subcategory.title}
-              </StyledBadge>
-            ))
-          : 'No subcategories'}
+      <CategoriesBox className="category-subcategories">
+        {category.subcategories.length &&
+          category.subcategories.map((subcategory) => (
+            <StyledBadge key={subcategory.title} to={generatePath(ForumRoutes.category, { id: subcategory.id })}>
+              {subcategory.title}
+            </StyledBadge>
+          ))}
       </CategoriesBox>
     )
-  }, [])
+  }, [category.subcategories.length])
 
   return (
-    <Box className={className} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+    <Box
+      className={className}
+      to={generatePath(ForumRoutes.category, { id: category.id })}
+      ignoreHover={!category.subcategories.length}
+    >
       <div>
-        <TextBig bold value>
+        <TextBig bold value black>
           {category.title}
         </TextBig>
-        {isHovered ? (
-          hoverComponent
-        ) : (
-          <TextMedium normalWeight inter lighter>
-            {category.description}
-          </TextMedium>
-        )}
+        {hoverComponent}
+        <TextMedium className="category-description" normalWeight inter lighter truncateLines={2}>
+          {category.description}
+        </TextMedium>
       </div>
       <div>
         <AnswerIcon />
-        <CountBadge count={1} />
+        <CountBadge count={category.subcategories.length} />
       </div>
-      <span
-        onClick={(e) => {
-          e.stopPropagation()
-          push(generatePath(ForumRoutes.category, { id: category.id }))
-        }}
-      >
-        <Arrow direction="right" />
-      </span>
+      <Arrow direction="right" />
     </Box>
   )
 }
 
-const StyledBadge = styled(BadgeStatus)`
-  cursor: pointer;
+const StyledBadge = styled(Link)`
+  ${BadgeStatusCss}
 `
 
-const Box = styled.div`
+const Box = styled(Link)<{ ignoreHover?: boolean }>`
+  text-decoration: none;
   display: flex;
   column-gap: 15px;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
-  padding: 21px;
+  padding: 19px;
   height: 108px;
 
   > *:nth-child(1) {
@@ -103,11 +95,37 @@ const Box = styled.div`
     height: 100%;
     display: flex;
     align-items: center;
+    color: ${Colors.Black[300]};
+
+    :hover {
+      color: ${Colors.LogoPurple};
+    }
   }
+
+  .category-subcategories {
+    display: none;
+  }
+
+  ${({ ignoreHover }) =>
+    !ignoreHover &&
+    css`
+      :hover {
+        .category-subcategories {
+          display: flex;
+        }
+
+        .category-description {
+          display: none;
+        }
+      }
+    `}
 `
 
 const CategoriesBox = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+
+  overflow-y: auto;
+  ${RemoveScrollbar}
 `

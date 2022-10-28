@@ -13,13 +13,6 @@ import { ThreadCard } from '@/forum/components/ThreadCard/ThreadCard'
 import { ThreadCardSkeleton } from '@/forum/components/ThreadCard/ThreadCardSkeleton'
 import { useForumCategories } from '@/forum/hooks/useForumCategories'
 import { useLatestForumThreads } from '@/forum/hooks/useLatestForumThreads'
-import { ForumCategory, ForumThread } from '@/forum/types'
-
-export interface ForumCategoryListProps {
-  categories: ForumCategory[]
-  latestThreads: ForumThread[]
-  isArchive?: boolean
-}
 
 export const ForumMain = () => {
   const { isLoading: isLoadingCategories, forumCategories } = useForumCategories({ isRoot: true })

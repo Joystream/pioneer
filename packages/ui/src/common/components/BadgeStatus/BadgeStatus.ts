@@ -12,9 +12,7 @@ export interface BadgeStatusProps {
   color?: string
 }
 
-export const BadgeStatus = styled.span.attrs((props) => ({
-  title: props.children,
-}))<BadgeStatusProps>`
+export const BadgeStatusCss = css<BadgeStatusProps>`
   display: inline-block;
   justify-content: center;
   align-items: center;
@@ -65,4 +63,10 @@ export const BadgeStatus = styled.span.attrs((props) => ({
         background-color: ${color || Colors.Blue[200]};
       `
   }}
+`
+
+export const BadgeStatus = styled.span.attrs((props) => ({
+  title: props.children,
+}))<BadgeStatusProps>`
+  ${BadgeStatusCss}
 `
