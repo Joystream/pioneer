@@ -19,7 +19,7 @@ export const nameMapping = (value: string) => {
     case 'Operations Alpha':
       return 'Builders'
     case 'Gateway':
-      return 'Gateways'
+      return 'Apps'
     case 'Operations Beta':
       return 'HR'
     case 'Operations Gamma':
@@ -29,27 +29,66 @@ export const nameMapping = (value: string) => {
   }
 }
 
-export const subtitleMapping = (value: string) => {
+export const wgListItemMappings = (value: string) => {
   switch (value) {
     case 'Operations Alpha':
-      return 'A diverse set of contributors, such as Developers, Designers and Product Managers, responsible for development of infrastructure and user facing applications.'
+      return {
+        subtitle:
+          'A diverse set of contributors, such as Developers, Designers and Product Managers, responsible for development of infrastructure and user facing applications.',
+        tooltipLink: undefined,
+      }
     case 'Storage':
-      return 'Broadly responsible for ensuring storage infrastructure uptime, namely running complete and up-to-date copy of the content directory and accept inbound uploads from end users.'
+      return {
+        subtitle:
+          'Broadly responsible for ensuring storage infrastructure uptime, namely running complete and up-to-date copy of the content directory and accept inbound uploads from end users.',
+        tooltipLink: undefined,
+      }
     case 'Content':
-      return 'Monitor publishing of the new content into the content directory, respond to the reported publications and adjudicate possible dispute processes.'
+      return {
+        subtitle:
+          'Monitor publishing of the new content into the content directory, respond to the reported publications and adjudicate possible dispute processes.',
+        tooltipLink: undefined,
+      }
     case 'Distribution':
-      return 'Run and maintain distributor nodes that deliver large volumes of upstream data to a large number of simultaneous end users.'
+      return {
+        subtitle:
+          'Run and maintain distributor nodes that deliver large volumes of upstream data to a large number of simultaneous end users.',
+        tooltipLink: undefined,
+      }
     case 'Gateway':
-      return 'Gateway group is responsible for maintaining content directory and query node providing infrastructure for multiple consumer applications powered by the same chain.'
+      return {
+        subtitle:
+          'Apps group runs multiple video streaming apps working on Joystream blockchain and provides support to all external app operators.',
+        tooltipLink: 'https://joystream.gitbook.io/testnet-workspace/system/gateways',
+      }
     case 'Operations Beta':
-      return 'Human Resources working group is responsible for integrating new members greeting, onboarding, catalyzing and nurturing, as well as managing bounties.'
+      return {
+        subtitle:
+          'Human Resources working group is responsible for integrating new members greeting, onboarding, catalyzing and nurturing, as well as managing bounties.',
+        tooltipLink: undefined,
+      }
     case 'Operations Gamma':
-      return 'Marketing group is responsible for increasing the outreach, sharing the content from the platform with the world, spreading the news about platform development, new members acquisition and overall growth.'
+      return {
+        subtitle:
+          'Marketing group is responsible for increasing the outreach, sharing the content from the platform with the world, spreading the news about platform development, new members acquisition and overall growth.',
+        tooltipLink: undefined,
+      }
     case 'Membership':
-      return 'Membership group is responsible for new memberships invitations, referral rewards for existing members and overall process of adding more members via referral scheme.'
+      return {
+        subtitle:
+          'Membership group is responsible for new memberships invitations, referral rewards for existing members and overall process of adding more members via referral scheme.',
+        tooltipLink: undefined,
+      }
     case 'Forum':
-      return 'Monitor and supervise public communication channels for compliance with usage policies as decided through the governance system.'
+      return {
+        subtitle:
+          'Monitor and supervise public communication channels for compliance with usage policies as decided through the governance system.',
+        tooltipLink: undefined,
+      }
     default:
-      return value
+      return {
+        subtitle: value,
+        tooltipLink: undefined,
+      }
   }
 }
