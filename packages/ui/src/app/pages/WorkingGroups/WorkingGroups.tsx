@@ -14,7 +14,7 @@ export const WorkingGroups = () => {
 
   const sortedGroups = useMemo(
     () =>
-      !groups
+      !groups.length
         ? defaultGroups
         : concat(
             ...defaultGroups.reduce(
