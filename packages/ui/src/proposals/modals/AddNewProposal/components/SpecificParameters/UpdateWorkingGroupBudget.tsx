@@ -13,7 +13,7 @@ import { formatDurationDate } from '@/common/components/statistics'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextInlineMedium, TextMedium, TokenValue } from '@/common/components/typography'
 import { DurationValue } from '@/common/components/typography/DurationValue'
-import { capitalizeFirstLetter } from '@/common/helpers'
+import { nameMapping } from '@/common/helpers'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useObservable } from '@/common/hooks/useObservable'
 import { formatTokenValue, MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
@@ -102,7 +102,7 @@ export const UpdateWorkingGroupBudget = () => {
           {group && (
             <Info>
               <TextMedium>
-                Current budget for {capitalizeFirstLetter(group.name)} Working Group is{' '}
+                Current budget for {nameMapping(group.name)} Working Group is{' '}
                 <TextInlineMedium bold>
                   <TokenValue value={group.budget} />
                 </TextInlineMedium>
