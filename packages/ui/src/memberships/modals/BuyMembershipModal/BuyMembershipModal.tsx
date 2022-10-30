@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
+import { FailureModal } from '@/common/components/FailureModal'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
@@ -39,6 +40,10 @@ export const BuyMembershipModal = () => {
         service={service}
       />
     )
+  }
+
+  if (state.matches('canceled')) {
+    return <FailureModal onClose={hideModal}>Transaction was canceled</FailureModal>
   }
 
   if (state.matches('success')) {

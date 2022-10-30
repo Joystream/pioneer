@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
+import { FailureModal } from '@/common/components/FailureModal'
 import { TextMedium } from '@/common/components/typography'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
@@ -41,6 +42,10 @@ export const UpdateMembershipModal = () => {
         <TextMedium>You intend to update your membership.</TextMedium>
       </SignTransactionModal>
     )
+  }
+
+  if (state.matches('canceled')) {
+    return <FailureModal onClose={hideModal}>Transaction was canceled</FailureModal>
   }
 
   if (state.matches('success')) {

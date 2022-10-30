@@ -26,6 +26,7 @@ type UpdateMembershipState =
   | { value: 'prepare'; context: EmptyObject }
   | { value: 'transaction'; context: Required<UpdateMembershipContext> }
   | { value: 'success'; context: Required<UpdateMembershipContext> }
+  | { value: 'canceled'; context: Required<UpdateMembershipContext> }
   | { value: 'error'; context: Required<Context> }
 
 export type UpdateMembershipEvent =

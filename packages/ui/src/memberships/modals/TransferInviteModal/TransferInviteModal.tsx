@@ -4,6 +4,7 @@ import React, { useEffect } from 'react'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { useApi } from '@/api/hooks/useApi'
+import { FailureModal } from '@/common/components/FailureModal'
 import { TransferIcon } from '@/common/components/icons'
 import { TextMedium } from '@/common/components/typography'
 import { useMachine } from '@/common/hooks/useMachine'
@@ -72,6 +73,10 @@ export function TransferInviteModal() {
         </TextMedium>
       </SignTransactionModal>
     )
+  }
+
+  if (state.matches('canceled')) {
+    return <FailureModal onClose={hideModal}>Transaction was canceled</FailureModal>
   }
 
   if (state.matches('success')) {
