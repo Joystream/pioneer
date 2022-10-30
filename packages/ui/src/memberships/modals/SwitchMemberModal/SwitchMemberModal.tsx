@@ -9,9 +9,9 @@ import { DisconnectWalletIcon } from '@/common/components/page/Sidebar/LinksIcon
 import { SignOutIcon } from '@/common/components/page/Sidebar/LinksIcons/SignOutIcon'
 import { BorderRad, Colors, RemoveScrollbar, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
-import { Comparator } from '@/common/model/Comparator'
 import { DisconnectWalletModalCall } from '@/memberships/modals/DisconnectWalletModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal/types'
+import { sortMemberships } from '@/memberships/model/sortMemberships'
 
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '../../components'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
@@ -33,7 +33,7 @@ export const SwitchMemberModal = () => {
   }
 
   const filteredMembers = useMemo(() => {
-    const sortedMembers = members.sort(Comparator<Member>(false, 'handle'))
+    const sortedMembers = sortMemberships(members, 'handle', false)
     if (modalData?.membersToShow) {
       return sortedMembers.filter((member) => modalData.membersToShow?.includes(member.id))
     }
