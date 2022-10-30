@@ -207,18 +207,8 @@ export const ContributeFundsModal = () => {
                 units={CurrencyName.integerValue}
                 validation={hasError('amount', errors) ? 'invalid' : undefined}
                 message={hasError('amount', errors) ? getErrorMessage('amount', errors) : ' '}
-                tooltipText={
-                  <>
-                    If a contribution is made that brings the cumulative funding equal to or above the upper bound, then
-                    the difference is returned, and the bounty proceeds to the Working Period stage.
-                    <TooltipExternalLink
-                      href="https://joystream.gitbook.io/testnet-workspace/system/bounties#stage"
-                      target="_blank"
-                    >
-                      <TextMedium>Learn more</TextMedium> <LinkSymbol />
-                    </TooltipExternalLink>
-                  </>
-                }
+                tooltipText="If a contribution is made that brings the cumulative funding equal to or above the upper bound, then the difference is returned, and the bounty proceeds to the Working Period stage."
+                tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/bounties#stage"
               >
                 <TokenInput
                   id="amount-input"

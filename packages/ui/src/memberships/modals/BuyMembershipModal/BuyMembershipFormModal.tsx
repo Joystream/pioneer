@@ -279,18 +279,8 @@ export const BuyMembershipForm = ({
               <TransactionInfo
                 title="Creation fee:"
                 value={membershipPrice?.toBn()}
-                tooltipText={
-                  <>
-                    Creation fee is the price of membership, it is managed by council through the proposal system. It is
-                    inclusive of transaction fee.
-                    <TooltipExternalLink
-                      href="https://joystream.gitbook.io/joystream-handbook/governance/proposals"
-                      target="_blank"
-                    >
-                      <TextMedium>Link</TextMedium> <LinkSymbol />
-                    </TooltipExternalLink>
-                  </>
-                }
+                tooltipText="Creation fee is the price of membership, it is managed by council through the proposal system. It is inclusive of transaction fee."
+                tooltipLinkURL="https://joystream.gitbook.io/joystream-handbook/governance/proposals"
               />
             </TransactionInfoContainer>
           )}

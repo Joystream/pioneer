@@ -40,19 +40,8 @@ export const StakingPolicyAndReward = () => {
             sublabel="Period where candidate remains in the role with full access after resigning"
             units="blocks"
             inputSize="s"
-            tooltipText={
-              <>
-                Role cooldown period, also referred to as "unstaking period" sets a block count, during which the most
-                recent member is retained in the role, but staking status is set to unstaking - where final removal of
-                worker and staking lock occurs after leaving unstaking period{' '}
-                <TooltipExternalLink
-                  href="https://joystream.gitbook.io/testnet-workspace/system/working-groups#leave-worker-role"
-                  target="_blank"
-                >
-                  <TextMedium>Learn more</TextMedium> <LinkSymbol />
-                </TooltipExternalLink>
-              </>
-            }
+            tooltipText='Role cooldown period, also referred to as "unstaking period" sets a block count, during which the most recent member is retained in the role, but staking status is set to unstaking - where final removal of worker and staking lock occurs after leaving unstaking period'
+            tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/working-groups#leave-worker-role"
             message={leavingUnstakingPeriod ? `≈ ${formatBlocksToDuration(leavingUnstakingPeriod)}` : ' '}
             name="stakingPolicyAndReward.leavingUnstakingPeriod"
             tight
