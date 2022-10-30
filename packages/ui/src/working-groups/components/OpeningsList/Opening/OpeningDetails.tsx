@@ -56,7 +56,7 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
               )}
               <StatiscticContentColumn>
                 <TextBig value bold>
-                  {opening.hiring.limit}
+                  {opening.hiring.limit || 1}
                 </TextBig>
                 <Subscription>Target no. of Hires</Subscription>
               </StatiscticContentColumn>

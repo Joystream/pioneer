@@ -209,7 +209,7 @@ const ApplicationStats = ({
       ) : (
         <StatiscticContentColumn>
           <StatisticHeader title="Hiring limit" />
-          <NumericValue>{hiring.limit}</NumericValue>
+          <NumericValue>{hiring.limit || 1}</NumericValue>
         </StatiscticContentColumn>
       )}
     </MultiColumnsStatistic>
