@@ -3,7 +3,7 @@ import { AugmentedEvents } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
-import { from, of, asyncScheduler, scheduled, Observable } from 'rxjs'
+import { asyncScheduler, from, Observable, of, scheduled } from 'rxjs'
 
 import { toBalances } from '@/accounts/model/toBalances'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
@@ -254,6 +254,9 @@ export const stubCouncilAndReferendum = (
       changedAt: BN_ZERO,
     })
   )
+  stubQuery(api, 'council.councilorReward', new BN(100))
+  stubQuery(api, 'council.budget', new BN(10000))
+  stubQuery(api, 'council.nextRewardPayments', new BN(1000))
 }
 
 type Balances = { available?: number; locked?: number; lockId?: LockType }
