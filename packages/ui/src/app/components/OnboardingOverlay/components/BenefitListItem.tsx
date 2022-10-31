@@ -3,10 +3,9 @@ import styled from 'styled-components'
 
 import { BenefitsTableLayout } from '@/app/components/OnboardingOverlay/components/BenefitsTable'
 import { CheckboxIcon } from '@/common/components/icons'
-import { CrossIcon } from '@/common/components/icons/CrossIcon'
 import { TableListItem } from '@/common/components/List'
 import { TextMedium } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
+import { BorderRad, Colors } from '@/common/constants'
 
 interface Props {
   text: string
@@ -25,14 +24,11 @@ const Item = styled(TableListItem)`
   border: none;
   height: 44px;
   background-color: ${Colors.Black[600]};
-  //opacity: 0.5;
-  border-radius: 0;
+  border-radius: ${BorderRad.s};
+  width: fit-content;
+  padding: 12px;
   display: flex;
   justify-content: flex-start;
-
-  &:not(:last-child) {
-    margin-bottom: 5px;
-  }
 
   > *:not(:first-child) {
     text-align: center;

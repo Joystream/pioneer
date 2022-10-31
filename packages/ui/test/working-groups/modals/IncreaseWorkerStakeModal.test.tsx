@@ -3,64 +3,50 @@ import { configure, fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 
-import { Account } from '@/accounts/types'
 import { ApiContext } from '@/api/providers/context'
-import { ModalContext } from '@/common/providers/modal/context'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { IncreaseWorkerStakeModal } from '@/working-groups/modals/IncreaseWorkerStakeModal'
 
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import {
+  stubAccounts,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockUseModalCall } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
-
-const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
-  hasAccounts: true,
-  allAccounts: [],
-}
-
-jest.mock('@/accounts/hooks/useMyAccounts', () => {
-  return {
-    useMyAccounts: () => useMyAccounts,
-  }
-})
 
 describe('UI: IncreaseWorkerStakeModal', () => {
   const api = stubApi()
   let transfer: any
 
-  const mockModalContext = {
-    hideModal: jest.fn(),
-    modalData: {
-      worker: {
-        minStake: new BN(300),
-        stake: new BN(100),
-        roleAccount: alice.address,
-        id: 'workerId',
-        group: {
-          id: 'storageWorkingGroup',
-        },
-        runtimeId: 88,
-      },
-    },
-    modal: null,
-    showModal: jest.fn(),
-  }
-
   beforeAll(async () => {
     await cryptoWaitReady()
-    useMyAccounts.allAccounts.push(alice, bob)
+    mockUseModalCall({
+      modalData: {
+        worker: {
+          minStake: new BN(300),
+          stake: new BN(100),
+          roleAccount: alice.address,
+          id: 'workerId',
+          group: {
+            id: 'storageWorkingGroup',
+          },
+          runtimeId: 88,
+        },
+      },
+    })
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     transfer = stubTransaction(api, 'api.tx.storageWorkingGroup.increaseStake')
   })
 
@@ -116,12 +102,10 @@ describe('UI: IncreaseWorkerStakeModal', () => {
       const input = await getStakeInput()
       const submitButton = await getButton('Increase Stake')
 
-      fireEvent.change(input, { target: { value: '1000' } })
+      fireEvent.change(input, { target: { value: '1' } })
       fireEvent.click(submitButton)
 
-      const signButton = await getButton('Sign transaction and Stake')
-
-      expect(signButton).toBeDisabled()
+      expect(submitButton).toBeDisabled()
     })
 
     describe('Success', () => {
@@ -169,9 +153,9 @@ describe('UI: IncreaseWorkerStakeModal', () => {
       <MockApolloProvider>
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>
-            <ModalContext.Provider value={mockModalContext}>
+            <ModalContextProvider>
               <IncreaseWorkerStakeModal />
-            </ModalContext.Provider>
+            </ModalContextProvider>
           </ApiContext.Provider>
         </MockKeyringProvider>
       </MockApolloProvider>

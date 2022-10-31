@@ -1,10 +1,8 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { generatePath, Route, Switch } from 'react-router-dom'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { ForumThread as ForumThreadPage } from '@/app/pages/Forum/ForumThread'
 import { NotFound } from '@/app/pages/NotFound'
 import { CKEditorProps } from '@/common/components/CKEditor'
@@ -20,6 +18,8 @@ import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockApiProvider, MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { stubAccounts } from '../../_mocks/transactions'
+import { loaderSelector } from '../../setup'
 
 let mockThread: { isLoading: boolean; thread: ForumThread | null }
 let mockSuggestedThreads: { isLoading: boolean; threads: ForumThread[] }
@@ -39,11 +39,6 @@ jest.mock('@/common/components/CKEditor', () => ({
 describe('UI: Forum Thread Page', () => {
   const mockServer = setupMockServer()
 
-  const useAccounts: UseAccounts = {
-    isLoading: false,
-    hasAccounts: true,
-    allAccounts: [alice, bob],
-  }
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [getMember('alice'), getMember('bob')],
@@ -68,6 +63,7 @@ describe('UI: Forum Thread Page', () => {
   }
 
   beforeAll(() => {
+    stubAccounts([alice, bob])
     seedMembers(mockServer.server, 2)
   })
 
@@ -86,27 +82,27 @@ describe('UI: Forum Thread Page', () => {
     mockThread.isLoading = true
     renderPage()
 
-    expect(screen.queryByText('Loading thread...')).not.toBeNull()
+    expect(loaderSelector()).not.toBeNull()
 
     expect(screen.queryByText(/copy link/i)).toBeNull()
     expect(screen.queryByText(/watch thread/i)).toBeNull()
+  })
+
+  it('Not Found - no such thread', () => {
+    renderPage()
+
+    expect(screen.queryByText(/not found/i)).toBeInTheDocument()
   })
 
   it('Renders', () => {
     mockThread.thread = forumThread
     renderPage()
 
-    expect(screen.queryByText('Loading thread...')).toBeNull()
+    waitForElementToBeRemoved(loaderSelector())
 
     expect(screen.queryByText(/copy link/i)).not.toBeNull()
     expect(screen.queryByText(/watch thread/i)).not.toBeNull()
     expect(screen.queryByText(forumThread.title)).not.toBeNull()
-  })
-
-  it('Not Found - no such thread', () => {
-    renderPage()
-
-    expect(screen.queryByText(/not found/i)).not.toBeNull()
   })
 
   function renderPage() {
@@ -115,14 +111,12 @@ describe('UI: Forum Thread Page', () => {
         <MemoryRouter initialEntries={[generatePath(ForumRoutes.thread, { id: '1' })]}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
-              <AccountsContext.Provider value={useAccounts}>
-                <MembershipContext.Provider value={useMyMemberships}>
-                  <Switch>
-                    <Route path={ForumRoutes.thread} component={ForumThreadPage} />
-                    <Route path="/404" component={NotFound} />
-                  </Switch>
-                </MembershipContext.Provider>
-              </AccountsContext.Provider>
+              <MembershipContext.Provider value={useMyMemberships}>
+                <Switch>
+                  <Route path={ForumRoutes.thread} component={ForumThreadPage} />
+                  <Route path="/404" component={NotFound} />
+                </Switch>
+              </MembershipContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
         </MemoryRouter>

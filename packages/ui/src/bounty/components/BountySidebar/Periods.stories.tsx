@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
@@ -18,11 +17,9 @@ export default {
 } as Meta
 
 const Template: Story<PeriodsProps> = (args) => (
-  <MemoryRouter>
-    <MockApolloProvider>
-      <Periods {...args} />
-    </MockApolloProvider>
-  </MemoryRouter>
+  <MockApolloProvider>
+    <Periods {...args} />
+  </MockApolloProvider>
 )
 
 export const Default = Template.bind({})

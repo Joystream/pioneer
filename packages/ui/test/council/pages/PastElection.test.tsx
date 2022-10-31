@@ -3,8 +3,6 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { generatePath, Route, Switch } from 'react-router-dom'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { ApiContext } from '@/api/providers/context'
 import { PastElection } from '@/app/pages/Election/PastElections/PastElection'
 import { NotFound } from '@/app/pages/NotFound'
@@ -25,7 +23,8 @@ import { randomRawBlock } from '@/mocks/helpers/randomBlock'
 import { alice } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
-import { stubApi } from '../../_mocks/transactions'
+import { stubAccounts, stubApi } from '../../_mocks/transactions'
+import { loaderSelector } from '../../setup'
 
 const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
   {
@@ -81,11 +80,6 @@ describe('UI: Past Election page', () => {
   const api = stubApi()
   let pageElectionId = 1
 
-  const useAccounts: UseAccounts = {
-    isLoading: false,
-    hasAccounts: true,
-    allAccounts: [alice],
-  }
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [getMember('alice')],
@@ -96,6 +90,10 @@ describe('UI: Past Election page', () => {
       getMemberIdByBoundAccountAddress: () => undefined,
     },
   }
+
+  beforeAll(() => {
+    stubAccounts([alice])
+  })
 
   beforeEach(() => {
     pageElectionId = 1
@@ -187,21 +185,19 @@ describe('UI: Past Election page', () => {
         <ApiContext.Provider value={api}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
-              <AccountsContext.Provider value={useAccounts}>
-                <MembershipContext.Provider value={useMyMemberships}>
-                  <Switch>
-                    <Route path={ElectionRoutes.pastElection} component={PastElection} />
-                    <Route path="/404" component={NotFound} />
-                  </Switch>
-                </MembershipContext.Provider>
-              </AccountsContext.Provider>
+              <MembershipContext.Provider value={useMyMemberships}>
+                <Switch>
+                  <Route path={ElectionRoutes.pastElection} component={PastElection} />
+                  <Route path="/404" component={NotFound} />
+                </Switch>
+              </MembershipContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
         </ApiContext.Provider>
       </MemoryRouter>
     )
 
-    await waitForElementToBeRemoved(() => rendered.getByText('Loading...'))
+    await waitForElementToBeRemoved(() => loaderSelector())
 
     return rendered
   }

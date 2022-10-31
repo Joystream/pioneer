@@ -1,12 +1,14 @@
+import BN from 'bn.js'
 import React from 'react'
 
 import { SelectAccount, SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { Account } from '@/accounts/types'
-import { InputComponent, InputNumber } from '@/common/components/forms'
+import { CurrencyName } from '@/app/constants/currency'
+import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium, ValueInJoys } from '@/common/components/typography'
-import { formatTokenValue } from '@/common/model/formatters'
+import { TextMedium, TokenValue } from '@/common/components/typography'
+import { formatJoyValue } from '@/common/model/formatters'
 import { ValidationHelpers } from '@/common/utils/validation'
 
 import { groupToLockId, WorkingGroupOpening } from '../../types'
@@ -17,7 +19,7 @@ interface StakeStepProps extends ValidationHelpers {
 
 export interface StakeStepFormFields {
   account?: Account
-  amount?: string
+  amount?: BN
   rewardAccount?: Account
   roleAccount?: Account
 }
@@ -48,9 +50,9 @@ export function StakeStep({ opening, errorChecker, errorMessageGetter }: StakeSt
           <RowGapBlock gap={8}>
             <h4>2. Stake</h4>
             <TextMedium>
-              You must stake at least <ValueInJoys>{formatTokenValue(minStake)}</ValueInJoys> to apply for this role.
-              This stake will be returned to you when the hiring process is complete, whether or not you are hired, and
-              will also be used to rank applications.
+              You must stake at least <TokenValue value={minStake} /> to apply for this role. This stake will be
+              returned to you when the hiring process is complete, whether or not you are hired, and will also be used
+              to rank applications.
             </TextMedium>
           </RowGapBlock>
 
@@ -58,12 +60,12 @@ export function StakeStep({ opening, errorChecker, errorMessageGetter }: StakeSt
             id="amount-input"
             label="Select amount for Staking"
             tight
-            units="tJOY"
+            units={CurrencyName.integerValue}
             validation={errorChecker('amount') ? 'invalid' : undefined}
             message={(errorChecker('amount') ? errorMessageGetter('amount') : undefined) || ' '}
             required
           >
-            <InputNumber id="amount-input" name="stake.amount" placeholder={minStake.toString()} isTokenValue isInBN />
+            <TokenInput id="amount-input" name="stake.amount" placeholder={formatJoyValue(minStake)} />
           </InputComponent>
 
           <h4>3. Select Role Account</h4>

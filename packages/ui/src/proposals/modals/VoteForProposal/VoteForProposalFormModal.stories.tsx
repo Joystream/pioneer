@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 import rawProposals from '@/mocks/data/raw/proposals.json'
@@ -18,15 +17,9 @@ export default {
 
 const Template: Story = ({ send }) => {
   return (
-    <MemoryRouter>
-      <MockApolloProvider>
-        <VoteForProposalModalForm
-          context={{}}
-          send={send}
-          proposal={rawProposals[0] as unknown as ProposalWithDetails}
-        />
-      </MockApolloProvider>
-    </MemoryRouter>
+    <MockApolloProvider>
+      <VoteForProposalModalForm context={{}} send={send} proposal={rawProposals[0] as unknown as ProposalWithDetails} />
+    </MockApolloProvider>
   )
 }
 

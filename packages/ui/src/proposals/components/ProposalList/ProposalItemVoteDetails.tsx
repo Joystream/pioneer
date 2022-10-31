@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { Loading } from '@/common/components/Loading'
 import { VoteDisplay } from '@/proposals/constants'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { useProposalVotesByMember } from '@/proposals/hooks/useProposalVotesByMember'
@@ -16,7 +15,7 @@ export interface ProposalItemVoteDetailsProps {
 }
 
 export const ProposalItemVoteDetails = ({ proposal, memberId, isCouncilMember }: ProposalItemVoteDetailsProps) => {
-  const { votes, isLoading } = useProposalVotesByMember(proposal.id, memberId)
+  const { votes } = useProposalVotesByMember(proposal.id, memberId)
   const constants = useProposalConstants(proposal.type)
   const constitutionality = constants?.constitutionality
   const canVote =
@@ -32,7 +31,7 @@ export const ProposalItemVoteDetails = ({ proposal, memberId, isCouncilMember }:
           <VoteForProposalButton id={proposal.id}>Vote</VoteForProposalButton>
         </span>
       )}
-      {isLoading ? <Loading /> : votes?.map(getVoteDisplay(constitutionality))}
+      {votes?.map(getVoteDisplay(constitutionality))}
     </>
   )
 }

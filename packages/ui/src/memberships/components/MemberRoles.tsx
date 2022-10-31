@@ -316,7 +316,6 @@ export const MemberRolesWrapper = styled.div`
   width: fit-content;
   max-width: 100%;
   align-items: center;
-  width: fit-content;
 `
 
 export const MemberRolesWrapperWrapable = styled(MemberRolesWrapper)`

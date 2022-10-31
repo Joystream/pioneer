@@ -1,15 +1,13 @@
-import { createType } from '@joystream/types'
-import { PostId, ThreadId } from '@joystream/types/common'
-import { CategoryId } from '@joystream/types/forum'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { ApiContext } from '@/api/providers/context'
-import { ModalContext } from '@/common/providers/modal/context'
-import { ModalCallData, UseModal } from '@/common/providers/modal/types'
+import { GlobalModals } from '@/app/GlobalModals'
+import { createType } from '@/common/model/createType'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { ModalCallData } from '@/common/providers/modal/types'
 import { DeletePostModal, DeletePostModalCall } from '@/forum/modals/PostActionModal/DeletePostModal'
 import { postsToDeleteMap } from '@/forum/model/postsToDeleteMap'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -26,12 +24,14 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import {
   currentStubErrorMessage,
+  stubAccounts,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -42,9 +42,9 @@ describe('UI: DeletePostModal', () => {
   const txPath = 'api.tx.forum.deletePosts'
   const postId = 1
   const deleteMap = postsToDeleteMap(
-    createType<PostId, 'PostId'>('PostId', postId),
-    createType<ThreadId, 'ThreadId'>('ThreadId', 2),
-    createType<CategoryId, 'CategoryId'>('CategoryId', 3)
+    createType('PostId', postId),
+    createType('ThreadId', 2),
+    createType('CategoryId', 3)
   )
 
   let tx: any
@@ -60,12 +60,6 @@ describe('UI: DeletePostModal', () => {
     },
   }
 
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData,
-  }
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -76,27 +70,25 @@ describe('UI: DeletePostModal', () => {
       getMemberIdByBoundAccountAddress: () => undefined,
     },
   }
-  let useAccounts: UseAccounts
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
   beforeAll(async () => {
     await cryptoWaitReady()
+    mockUseModalCall({ modalData })
     rawMembers.slice(0, 2).map((member) => seedMember(member, server.server))
     seedForumCategory(mockCategories[0], server.server)
     seedForumThread(mockThreads[0], server.server)
     mockPosts.map((post) => seedForumPost(post, server.server))
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+
+    stubDefaultBalances()
     tx = stubTransaction(api, txPath)
     modalData.transaction = api.api.tx.forum.deletePosts(useMyMemberships.active?.id ?? 1, deleteMap, '')
   })
@@ -109,7 +101,7 @@ describe('UI: DeletePostModal', () => {
   })
 
   it('Requirements failed', async () => {
-    tx = stubTransaction(api, txPath, 10000)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
     modalData.transaction = api.api.tx.forum.deletePosts(useMyMemberships.active?.id ?? 1, deleteMap, '')
     renderModal()
     expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
@@ -137,18 +129,17 @@ describe('UI: DeletePostModal', () => {
 
   const renderModal = () =>
     render(
-      <ModalContext.Provider value={useModal}>
+      <ModalContextProvider>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
-            <AccountsContext.Provider value={useAccounts}>
-              <MembershipContext.Provider value={useMyMemberships}>
-                <ApiContext.Provider value={api}>
-                  <DeletePostModal />
-                </ApiContext.Provider>
-              </MembershipContext.Provider>
-            </AccountsContext.Provider>
+            <MembershipContext.Provider value={useMyMemberships}>
+              <ApiContext.Provider value={api}>
+                <GlobalModals />
+                <DeletePostModal />
+              </ApiContext.Provider>
+            </MembershipContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
-      </ModalContext.Provider>
+      </ModalContextProvider>
     )
 })

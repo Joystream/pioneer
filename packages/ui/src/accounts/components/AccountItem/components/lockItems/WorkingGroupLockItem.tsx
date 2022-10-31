@@ -10,7 +10,7 @@ import { LockItem } from '../LockItem'
 import { LockLinkButton } from '../LockLinkButton'
 import { LockDetailsProps } from '../types'
 
-export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
+export const WorkingGroupLockItem = ({ lock, address }: LockDetailsProps) => {
   const { data } = useGetWorkingGroupApplicationsQuery({
     variables: {
       where: {
@@ -26,10 +26,10 @@ export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockDetai
 
   const recoveryTime = useMemo(() => {
     if (opening?.status === 'OpeningStatusOpen') {
-      return { unrecoverableLabel: 'Based on hiring decision' }
+      return { unrecoverableLabel: 'Automatically recovered after withdrawing from application' }
     } else {
       if (application?.status.__typename === 'ApplicationStatusAccepted') {
-        return { unrecoverableLabel: 'Recoverable after released from role' }
+        return { unrecoverableLabel: 'Automatically recovered after being released from role' }
       }
       return
     }
@@ -40,15 +40,15 @@ export const WorkingGroupLockItem = ({ lock, address, isRecoverable }: LockDetai
     if (!openingId) {
       return null
     }
-    const openingPath = generatePath(WorkingGroupsRoutes.openingById, { id: openingId })
-    return <LockLinkButton label="Show Opening" to={openingPath} />
+    const openingPath = generatePath(WorkingGroupsRoutes.myApplications)
+    return <LockLinkButton label="Show Openings" to={openingPath} />
   }, [openingId])
 
   return (
     <LockItem
       lock={lock}
       address={address}
-      isRecoverable={isRecoverable}
+      isRecoverable={false}
       createdInEvent={createdInEvent}
       lockRecovery={recoveryTime}
       linkButtons={goToOpeningButton}

@@ -1,20 +1,17 @@
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { ApiContext } from '@/api/providers/context'
+import { GlobalModals } from '@/app/GlobalModals'
 import { AddBountyModal } from '@/bounty/modals/AddBountyModal'
 import { addBountyMachine } from '@/bounty/modals/AddBountyModal/machine'
 import { CKEditorProps } from '@/common/components/CKEditor'
+import { createType } from '@/common/model/createType'
 import { getSteps } from '@/common/model/machines/getSteps'
-import { ModalContext } from '@/common/providers/modal/context'
-import { UseModal } from '@/common/providers/modal/types'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedForumCategories, seedMembers } from '@/mocks/data'
@@ -28,6 +25,7 @@ import { getMember } from '../../_mocks/members'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  stubAccounts,
   stubApi,
   stubBountyConstants,
   stubDefaultBalances,
@@ -35,6 +33,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockUseModalCall } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
@@ -52,12 +51,7 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 
 describe('UI: AddNewBountyModal', () => {
   const api = stubApi()
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData: undefined,
-  }
+  const showModal = jest.fn()
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -69,7 +63,6 @@ describe('UI: AddNewBountyModal', () => {
     },
   }
 
-  let useAccounts: UseAccounts
   let createTransaction: any
   let forumThreadTransaction: any
 
@@ -77,24 +70,19 @@ describe('UI: AddNewBountyModal', () => {
 
   beforeAll(async () => {
     await cryptoWaitReady()
-
+    mockUseModalCall({ showModal })
     seedMembers(server.server, 2)
     seedForumCategories(server.server, [
       { parentId: null, status: { __typename: 'CategoryStatusActive' }, moderatorIds: [] },
     ])
-
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
 
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     stubBountyConstants(api)
     createTransaction = stubTransaction(api, 'api.tx.bounty.createBounty', 100)
     forumThreadTransaction = stubTransaction(api, 'api.tx.forum.createThread', 100)
@@ -108,7 +96,7 @@ describe('UI: AddNewBountyModal', () => {
 
       renderModal()
 
-      expect(useModal.showModal).toBeCalledWith({
+      expect(showModal).toBeCalledWith({
         modal: 'SwitchMember',
         data: {
           originalModalName: 'AddBounty',
@@ -442,21 +430,18 @@ describe('UI: AddNewBountyModal', () => {
   function renderModal() {
     return render(
       <MemoryRouter>
-        <ModalContext.Provider value={useModal}>
+        <ModalContextProvider>
           <MockKeyringProvider>
-            <AccountsContext.Provider value={useAccounts}>
-              <ApiContext.Provider value={api}>
-                <BalancesContextProvider>
-                  <MembershipContext.Provider value={useMyMemberships}>
-                    <MockApolloProvider>
-                      <AddBountyModal />
-                    </MockApolloProvider>
-                  </MembershipContext.Provider>
-                </BalancesContextProvider>
-              </ApiContext.Provider>
-            </AccountsContext.Provider>
+            <ApiContext.Provider value={api}>
+              <MembershipContext.Provider value={useMyMemberships}>
+                <MockApolloProvider>
+                  <GlobalModals />
+                  <AddBountyModal />
+                </MockApolloProvider>
+              </MembershipContext.Provider>
+            </ApiContext.Provider>
           </MockKeyringProvider>
-        </ModalContext.Provider>
+        </ModalContextProvider>
       </MemoryRouter>
     )
   }

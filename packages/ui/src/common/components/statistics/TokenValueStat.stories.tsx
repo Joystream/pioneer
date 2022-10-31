@@ -1,4 +1,5 @@
 import { Meta, Story } from '@storybook/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { BlackBlock, ModalBlock, TemplateBlock, WhiteBlock } from '../storybookParts/previewStyles'
@@ -29,7 +30,7 @@ export const TokenValue = Template.bind({})
 TokenValue.args = {
   title: 'Statistic title',
   tooltipText: 'Text to help',
-  value: 100000,
+  value: new BN(100000),
   tooltipTitle: 'Title to help',
   tooltipLinkText: 'More info',
   tooltipLinkURL: 'http://example.com/',

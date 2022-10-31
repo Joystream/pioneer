@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
@@ -13,10 +12,8 @@ export default {
 
 export const Default: Story = () => {
   return (
-    <MemoryRouter>
-      <MockApolloProvider members workers forum>
-        <ForumThreadsOverview />
-      </MockApolloProvider>
-    </MemoryRouter>
+    <MockApolloProvider members workers forum>
+      <ForumThreadsOverview />
+    </MockApolloProvider>
   )
 }

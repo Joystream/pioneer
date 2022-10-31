@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
@@ -7,10 +6,10 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { TransferModal } from '@/accounts/modals/TransferModal'
-import { Account, Balances } from '@/accounts/types'
+import { Account } from '@/accounts/types'
 import { ApiContext } from '@/api/providers/context'
-import { BN_ZERO } from '@/common/constants'
-import { ModalContext } from '@/common/providers/modal/context'
+import { createType } from '@/common/model/createType'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
@@ -18,29 +17,14 @@ import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  stubAccounts,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-
-const useMyAccounts: { hasAccounts: boolean; allAccounts: Account[] } = {
-  hasAccounts: true,
-  allAccounts: [],
-}
-
-const useMyBalances: { [k: string]: Balances } = {}
-
-jest.mock('@/accounts/hooks/useMyAccounts', () => {
-  return {
-    useMyAccounts: () => useMyAccounts,
-  }
-})
-
-jest.mock('@/accounts/hooks/useMyBalances', () => ({
-  useMyBalances: () => useMyBalances,
-}))
+import { mockUseModalCall } from '../../setup'
 
 interface ModalData {
   from?: Account
@@ -51,27 +35,11 @@ interface ModalData {
   transactionFactory?: (amount: BN) => SubmittableExtrinsic<'rxjs', ISubmittableResult>
 }
 
-const BN_BALANCE = new BN(1000)
-
 describe('UI: TransferModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
-    useMyAccounts.allAccounts.push(alice, bob)
-    useMyBalances[alice.address] = {
-      total: BN_BALANCE,
-      locked: BN_ZERO,
-      recoverable: BN_BALANCE,
-      transferable: BN_BALANCE,
-      locks: [],
-    }
-    useMyBalances[bob.address] = {
-      total: BN_BALANCE,
-      locked: BN_ZERO,
-      recoverable: BN_BALANCE,
-      transferable: BN_BALANCE,
-      locks: [],
-    }
+    stubAccounts([alice, bob])
   })
 
   afterAll(() => {
@@ -83,15 +51,8 @@ describe('UI: TransferModal', () => {
   const api = stubApi()
   let transfer: any
 
-  const mockModalContext = (data: ModalData) => ({
-    hideModal: () => null,
-    modalData: data,
-    modal: null,
-    showModal: () => null,
-  })
-
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     transfer = stubTransaction(api, 'api.tx.balances.transfer')
   })
 
@@ -118,33 +79,31 @@ describe('UI: TransferModal', () => {
 
   it('Disables when under min value', async () => {
     renderModal({ minValue: new BN(500), to: alice, from: bob })
-
-    const input = await screen.findByLabelText(/number of tokens/i)
     const submitButton = await getButton(/transfer tokens/i)
+    await fillAmount(100)
 
-    fireEvent.change(input, { target: { value: '100' } })
     expect(submitButton).toBeDisabled()
 
-    fireEvent.change(input, { target: { value: '600' } })
+    await fillAmount(600)
+
     expect(submitButton).not.toBeDisabled()
   })
 
   it('Disables when exceeds max value', async () => {
     renderModal({ maxValue: new BN(500), to: alice, from: bob })
 
-    const input = await screen.findByLabelText(/number of tokens/i)
     const submitButton = await getButton(/transfer tokens/i)
-
-    fireEvent.change(input, { target: { value: '100' } })
+    await fillAmount(100)
 
     expect(submitButton).not.toBeDisabled()
 
-    fireEvent.change(input, { target: { value: '600' } })
+    await fillAmount(600)
 
     expect(submitButton).toBeDisabled()
   })
 
   it('Sets up initial value', async () => {
+    // renderModal({ initialValue: new BN(500 * DECIMAL_NUMBER), to: alice, from: bob })
     renderModal({ initialValue: new BN(500), to: alice, from: bob })
 
     const input = await screen.findByLabelText<HTMLInputElement>(/number of tokens/i)
@@ -155,10 +114,8 @@ describe('UI: TransferModal', () => {
   it('Renders an Authorize transaction step', async () => {
     renderModal({ from: alice, to: bob })
 
-    const input = await screen.findByLabelText('Number of tokens')
     expect(await getButton('Transfer tokens')).toBeDisabled()
-
-    fireEvent.change(input, { target: { value: '1' } })
+    await fillAmount(1)
 
     const button = await getButton(/transfer tokens/i)
     expect(button).not.toBeDisabled()
@@ -166,7 +123,9 @@ describe('UI: TransferModal', () => {
     fireEvent.click(button)
 
     expect(await screen.findByText(/modals.authorizeTransaction.title/i)).toBeDefined()
-    expect((await screen.findByText(/Transaction fee:/i))?.parentNode?.textContent).toMatch(/^Transaction fee:25/)
+    expect((await screen.findByText(/modals.transactionFee.label/i))?.parentNode?.textContent).toMatch(
+      /^modals.transactionFee.label25/
+    )
   })
 
   it('Calls transaction from factory', async () => {
@@ -179,9 +138,8 @@ describe('UI: TransferModal', () => {
 
     renderModal({ from: alice, to: bob, transactionFactory: factory })
 
-    const input = await screen.findByLabelText('Number of tokens')
     expect(await getButton('Transfer tokens')).toBeDisabled()
-    fireEvent.change(input, { target: { value: '100' } })
+    await fillAmount(100)
 
     const button = await getButton(/transfer tokens/i)
 
@@ -200,7 +158,7 @@ describe('UI: TransferModal', () => {
     async function renderAndSign() {
       renderModal({ from: alice, to: bob })
 
-      fireEvent.change(await screen.findByLabelText('Number of tokens'), { target: { value: '50' } })
+      await fillAmount(50)
 
       await act(async () => {
         fireEvent.click(await screen.findByText('Transfer tokens'))
@@ -246,14 +204,20 @@ describe('UI: TransferModal', () => {
     })
   })
 
-  function renderModal(data: ModalData) {
+  const fillAmount = async (value: number) => {
+    const input = await screen.findByLabelText('Number of tokens')
+    fireEvent.change(input, { target: { value: value } })
+  }
+
+  function renderModal(modalData: ModalData) {
+    mockUseModalCall({ modalData })
     return render(
       <MockKeyringProvider>
         <ApiContext.Provider value={api}>
           <MockQueryNodeProviders>
-            <ModalContext.Provider value={mockModalContext(data)}>
+            <ModalContextProvider>
               <TransferModal />
-            </ModalContext.Provider>
+            </ModalContextProvider>
           </MockQueryNodeProviders>
         </ApiContext.Provider>
       </MockKeyringProvider>

@@ -4,8 +4,7 @@ import styled from 'styled-components'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs } from '@/common/components/page/PageContent'
 import { Label } from '@/common/components/typography'
-import { CardItem } from '@/forum/components/CardItem'
-import { ThreadItem } from '@/forum/components/threads/ThreadItem'
+import { ThreadItem, ThreadItemWrapper } from '@/forum/components/threads/ThreadItem'
 import { useForumSuggestedThreads } from '@/forum/hooks/useForumSuggestedThreads'
 
 export const SuggestedThreads = () => {
@@ -41,7 +40,7 @@ export const ThreadsList = styled.div`
 export const SuggestedThreadsWrapper = styled(ContentWithTabs)`
   margin-top: 12px;
 
-  ${CardItem} {
+  ${ThreadItemWrapper} {
     &:before {
       content: unset;
     }

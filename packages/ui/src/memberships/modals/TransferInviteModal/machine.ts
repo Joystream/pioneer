@@ -2,6 +2,7 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -30,6 +31,7 @@ type TransferInvitesState =
   | { value: 'transaction'; context: Required<TransferInvitesContext> }
   | { value: 'success'; context: Required<TransferInvitesContext> }
   | { value: 'error'; context: Required<Context> }
+  | { value: 'canceled'; context: Required<Context> }
 
 export type TransferInvitesEvent =
   | { type: 'PASS' }
@@ -80,8 +82,10 @@ export const transferInvitesMachine = createMachine<Context, TransferInvitesEven
         ],
       },
     },
-    success: { type: 'final' },
-    error: { type: 'final' },
-    canceled: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      metaMessages: {
+        error: 'There was a problem transferring your invites.',
+      },
+    }),
   },
 })

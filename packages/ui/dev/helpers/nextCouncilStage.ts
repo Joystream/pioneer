@@ -32,7 +32,7 @@ export const nextCouncilStageCommand = async (api: ApiPromise) => {
       const type = currentCouncilStage.stage.type as 'Idle' | 'Announcing'
       const periodName = type === 'Idle' ? 'idlePeriodDuration' : 'announcingPeriodDuration'
       const duration = api.consts.council[periodName]
-      const started = currentCouncilStage.changed_at
+      const started = currentCouncilStage.changedAt
       return started.add(duration).toNumber()
     }
   }

@@ -2,27 +2,28 @@ import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
 import React, { useMemo } from 'react'
+import styled from 'styled-components'
 import { ActorRef } from 'xstate'
 
 import { useApi } from '@/api/hooks/useApi'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { ArrowDownExpandedIcon } from '@/common/components/icons'
+import { AlertSymbol } from '@/common/components/icons/symbols'
 import {
   BalanceInfoInRow,
   InfoTitle,
   InfoValue,
   LockedAccount,
   ModalBody,
-  ModalFooter,
+  ModalTransactionFooter,
   Row,
   SignTransferContainer,
   TransactionAmountInfo,
   TransactionAmountInfoText,
-  TransactionInfoContainer,
 } from '@/common/components/Modal'
+import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
-import { BN_ZERO } from '@/common/constants'
+import { BN_ZERO, Colors } from '@/common/constants'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 
@@ -56,8 +57,8 @@ export function TransferSignModal({ onClose, from, amount, to, service, transact
     service,
     skipQueryNode: true,
   })
-
-  const isDisabled = !isReady || balanceFrom?.transferable.lt(amount.add(paymentInfo?.partialFee || BN_ZERO))
+  const canAfford = balanceFrom?.transferable.gte(amount.add(paymentInfo?.partialFee || BN_ZERO))
+  const isDisabled = !isReady || !canAfford || !paymentInfo?.partialFee
 
   return (
     <TransactionModal service={service} onClose={onClose}>
@@ -95,23 +96,32 @@ export function TransferSignModal({ onClose, from, amount, to, service, transact
               </BalanceInfoInRow>
             </LockedAccount>
           </Row>
+          {!canAfford && (
+            <ErrorBox gap={5}>
+              <AlertSymbol />
+              <TextMedium error>Insufficient funds to cover transaction fees.</TextMedium>
+            </ErrorBox>
+          )}
         </SignTransferContainer>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo title="Amount:" value={amount} />
-          <TransactionInfo
-            title="Transaction fee:"
-            value={paymentInfo?.partialFee?.toBn()}
-            tooltipText={
-              'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Tempora mollitia necessitatibus, eos recusandae obcaecati facilis sed maiores. Impedit iusto expedita natus perspiciatis, perferendis totam commodi ad, illo, veritatis omnis beatae. Facilis natus recusandae, magni saepe hic veniam aliquid tempore quia assumenda voluptatum reprehenderit. Officiis provident nam corrupti, incidunt, repudiandae accusantium porro libero ipsam illo quae ratione. Beatae itaque quo quidem.'
-            }
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={sign} disabled={isDisabled}>
-          Sign transaction and Transfer
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={paymentInfo?.partialFee?.toBn()}
+        next={{ disabled: isDisabled, label: 'Sign transaction and Transfer', onClick: sign }}
+      >
+        <TransactionInfo title="Amount:" value={amount} />
+      </ModalTransactionFooter>
     </TransactionModal>
   )
 }
+
+const ErrorBox = styled(ColumnGapBlock)`
+  background-color: ${Colors.Blue[50]};
+  position: relative;
+  padding: 16px;
+  width: auto;
+  align-items: center;
+  justify-content: flex-start;
+  path {
+    fill: ${Colors.Red[500]}!important;
+  }
+`

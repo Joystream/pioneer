@@ -2,6 +2,7 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import BN from 'bn.js'
 import { assign, createMachine } from 'xstate'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -85,8 +86,11 @@ export const WithdrawWorkModalMachine = createMachine<WithdrawWorkContext, Withd
         ],
       },
     },
-    [WithdrawWorkModalState.success]: { type: 'final' },
-    [WithdrawWorkModalState.error]: { type: 'final' },
-    [WithdrawWorkModalState.canceled]: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      metaMessages: {
+        error: 'There was a problem while withdrawing your work entry.',
+        success: 'Your work entry has been successfully withdrawn!',
+      },
+    }),
   },
 })

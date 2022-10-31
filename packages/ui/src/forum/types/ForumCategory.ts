@@ -70,13 +70,17 @@ export const asForumCategory = (fields: ForumCategoryFields): ForumCategory => (
   ...asBaseForumCategory(fields),
   moderators: fields.moderators?.map(({ id, membership }) => ({ id, handle: membership.handle })) ?? [],
   subcategories:
-    fields.forumcategoryparent?.map((fields) => ({ ...asSubCategory(fields), status: fields.status.__typename })) ?? [],
+    fields.forumcategoryparent
+      ?.filter((fields) => fields.status.__typename !== 'CategoryStatusRemoved')
+      .map((fields) => ({ ...asSubCategory(fields), status: fields.status.__typename })) ?? [],
 })
 
 export const asArchivedForumCategory = (fields: ArchivedForumCategoryFields): ForumCategory => ({
   ...asBaseArchivedForumCategory(fields),
   subcategories:
-    fields.forumcategoryparent?.map((fields) => ({ ...asSubCategory(fields), status: fields.status.__typename })) ?? [],
+    fields.forumcategoryparent
+      ?.filter((subcategory) => subcategory.status.__typename !== 'CategoryStatusRemoved')
+      .map((fields) => ({ ...asSubCategory(fields), status: fields.status.__typename })) ?? [],
 })
 
 export const asSubCategory = (fields: ForumSubCategoryFieldsFragment): ForumSubCategory => ({

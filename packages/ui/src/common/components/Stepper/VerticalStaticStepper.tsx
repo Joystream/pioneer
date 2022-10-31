@@ -56,7 +56,7 @@ const StepNumber = styled.div`
   align-items: center;
   justify-self: center;
   border-radius: ${BorderRad.round};
-  background-color: ${Colors.Black[800]};
+  background-color: ${Colors.Black[700]};
   font-weight: 700;
 `
 

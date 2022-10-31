@@ -1,4 +1,3 @@
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { render, screen, waitForElementToBeRemoved, within } from '@testing-library/react'
 import { createMemoryHistory } from 'history'
@@ -8,6 +7,7 @@ import { Route, Router } from 'react-router-dom'
 import { ApiContext } from '@/api/providers/context'
 import { ProposalPreview } from '@/app/pages/Proposals/ProposalPreview'
 import { CKEditorProps } from '@/common/components/CKEditor'
+import { createType } from '@/common/model/createType'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers, seedProposal } from '@/mocks/data'
@@ -19,6 +19,7 @@ import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA, PROPOSAL_DATA } from '../../_mocks/server/seeds'
 import { stubApi, stubConst, stubProposalConstants, stubQuery } from '../../_mocks/transactions'
+import { loaderSelector } from '../../setup'
 
 jest.mock('@/common/components/CKEditor', () => ({
   BaseCKEditor: (props: CKEditorProps) => mockCKEditor(props),
@@ -67,13 +68,13 @@ describe('ProposalPreview', () => {
   it('Loading', async () => {
     renderPage()
 
-    expect(await screen.findByText('Loading...')).toBeDefined()
+    expect(await loaderSelector()).toBeDefined()
   })
 
   it('Main content', async () => {
     renderPage()
 
-    await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
+    await waitForElementToBeRemoved(() => loaderSelector())
 
     expect(await screen.findByText(PROPOSAL_DATA.title, { selector: 'h2' })).toBeDefined()
 
@@ -91,7 +92,7 @@ describe('ProposalPreview', () => {
   it('Sidebar', async () => {
     renderPage()
 
-    await waitForElementToBeRemoved(() => screen.getByText('Loading...'))
+    await waitForElementToBeRemoved(() => loaderSelector())
 
     const sideBar = await screen.findByRole('complementary')
     expect(sideBar).toBeDefined()

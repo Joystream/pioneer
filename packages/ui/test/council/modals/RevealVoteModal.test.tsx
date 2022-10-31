@@ -1,11 +1,12 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { ApiContext } from '@/api/providers/context'
-import { ModalContext } from '@/common/providers/modal/context'
-import { ModalCallData, UseModal } from '@/common/providers/modal/types'
+import { GlobalModals } from '@/app/GlobalModals'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { ModalCallData } from '@/common/providers/modal/types'
 import { RevealVoteModal, RevealVoteModalCall } from '@/council/modals/RevealVote'
 
 import { getButton } from '../../_helpers/getButton'
@@ -13,56 +14,47 @@ import { alice, bob } from '../../_mocks/keyring'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import {
   currentStubErrorMessage,
+  stubAccounts,
   stubApi,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 describe('UI: RevealVoteModal', () => {
   const api = stubApi()
   const txPath = 'api.tx.referendum.revealVote'
   let tx: any
-
-  stubTransaction(api, txPath)
-
   const voteData = {
     salt: '0x7a0c114de774424abcd5d60fc58658a35341c9181b09e94a16dfff7ba2192206',
     accountId: alice.address,
     optionId: '1',
   }
-
   const modalData: ModalCallData<RevealVoteModalCall> = {
     votes: [voteData],
     voteForHandle: 'Dave',
   }
-
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData,
-  }
-
-  const useAccounts = {
-    isLoading: false,
-    allAccounts: [
-      { ...alice, name: 'Alice Account' },
-      { ...bob, name: 'Bob Account' },
-    ],
-    hasAccounts: true,
-  }
+  stubTransaction(api, txPath)
 
   beforeAll(async () => {
+    mockUseModalCall({ modalData })
+    stubAccounts([
+      { ...alice, name: 'Alice Account' },
+      { ...bob, name: 'Bob Account' },
+    ])
     await cryptoWaitReady()
   })
 
   beforeEach(() => {
     modalData.votes = [voteData]
+    tx = stubTransaction(api, txPath, 10)
+    mockedTransactionFee.transaction = tx as any
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }
   })
 
   it('Requirements check failed', async () => {
-    tx = stubTransaction(api, txPath, 10000)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(10000), canAfford: false }
     renderModal()
     expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
   })
@@ -113,15 +105,14 @@ describe('UI: RevealVoteModal', () => {
   const renderModal = () =>
     render(
       <MockApolloProvider>
-        <ModalContext.Provider value={useModal}>
+        <ModalContextProvider>
           <MockKeyringProvider>
-            <AccountsContext.Provider value={useAccounts}>
-              <ApiContext.Provider value={api}>
-                <RevealVoteModal />
-              </ApiContext.Provider>
-            </AccountsContext.Provider>
+            <ApiContext.Provider value={api}>
+              <GlobalModals />
+              <RevealVoteModal />
+            </ApiContext.Provider>
           </MockKeyringProvider>
-        </ModalContext.Provider>
+        </ModalContextProvider>
       </MockApolloProvider>
     )
 })

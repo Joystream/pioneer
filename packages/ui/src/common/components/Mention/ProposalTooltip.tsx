@@ -42,7 +42,7 @@ export const ProposalTooltip = React.memo(({ mention, onMount, urlAddress }: Pro
   }, [])
 
   return (
-    <Container data-testid="proposal-tooltip">
+    <Container id="proposal-tooltip">
       {mention ? (
         <>
           <TextSmall lighter>

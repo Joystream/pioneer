@@ -5,14 +5,14 @@ import React from 'react'
 import { Route, Router, Switch } from 'react-router-dom'
 
 import { WorkingGroup } from '@/app/pages/WorkingGroups/WorkingGroup'
-import { seedMember } from '@/mocks/data'
+import { seedMember, seedOpening, seedOpeningStatuses } from '@/mocks/data'
 import { seedUpcomingOpening } from '@/mocks/data/seedUpcomingOpening'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 
-import { seedOpening, seedOpeningStatuses } from '../../../src/mocks/data/seedOpenings'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA, OPENING_DATA, UPCOMING_OPENING } from '../../_mocks/server/seeds'
+import { loaderSelector } from '../../setup'
 
 describe('WorkingGroup', () => {
   const mockServer = setupMockServer({ noCleanupAfterEach: true })
@@ -30,7 +30,7 @@ describe('WorkingGroup', () => {
   it('Loads working group by url param', async () => {
     renderPage()
 
-    await waitForElementToBeRemoved(() => screen.getAllByText('Loading...')[0], {})
+    await waitForElementToBeRemoved(() => loaderSelector(true), {})
 
     expect(await screen.findByText(/forum/i, { selector: 'h2' })).toBeDefined()
     expect(await screen.findByText(/current budget/i)).toBeDefined()
@@ -38,14 +38,14 @@ describe('WorkingGroup', () => {
 
   it('Loads working group by url param with a hyphen', async () => {
     renderPage('/working-groups/content')
-    await waitForElementToBeRemoved(() => screen.getAllByText('Loading...')[0], {})
+    await waitForElementToBeRemoved(() => loaderSelector(true), {})
 
     expect(await screen.findByText(/current budget/i)).toBeDefined()
   })
 
   it('Openings tab', async () => {
     renderPage()
-    await waitForElementToBeRemoved(() => screen.getAllByText('Loading...')[0], {})
+    await waitForElementToBeRemoved(() => loaderSelector(true), {})
 
     expect(await screen.findAllByText(OPENING_DATA.metadata.title)).toHaveLength(2)
     expect(await screen.findAllByText(UPCOMING_OPENING.metadata.title)).toHaveLength(2)

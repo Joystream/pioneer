@@ -1,39 +1,33 @@
-import { createType } from '@joystream/types'
-import { useMachine } from '@xstate/react'
 import React, { useEffect, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
 
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
-import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
-import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
-import { FailureModal } from '@/common/components/FailureModal'
-import { SuccessModal } from '@/common/components/SuccessModal'
-import { WaitModal } from '@/common/components/WaitModal'
+import { TextMedium } from '@/common/components/typography'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
+import { createType } from '@/common/model/createType'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
 import { DeleteThreadModalCall } from '.'
 
 export const DeleteThreadModal = () => {
-  const { t } = useTranslation('forum')
   const {
     modalData: { thread },
-    showModal,
     hideModal,
   } = useModal<DeleteThreadModalCall>()
 
-  const [state, send] = useMachine(defaultTransactionModalMachine, { context: { validateBeforeTransaction: true } })
-  const { api, connectionState } = useApi()
+  const [state, send] = useMachine(
+    defaultTransactionModalMachine('There was a problem deleting your thread.', 'Your thread has been deleted.'),
+    { context: { validateBeforeTransaction: true } }
+  )
+  const { api, isConnected } = useApi()
   const { active: activeMember } = useMyMemberships()
-  const { allAccounts } = useMyAccounts()
 
   const transaction = useMemo(() => {
-    if (api && connectionState === 'connected') {
+    if (api && isConnected) {
       return api.tx.forum.deleteThread(
         createType('ForumUserId', Number.parseInt(thread.authorId)),
         createType('CategoryId', Number.parseInt(thread.categoryId)),
@@ -41,21 +35,12 @@ export const DeleteThreadModal = () => {
         true
       )
     }
-  }, [api, connectionState])
+  }, [thread.authorId, thread.categoryId, thread.id, isConnected])
 
-  const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
+  const { feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
-      if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({
-          modal: 'SwitchMember',
-          data: {
-            originalModalName: 'DeleteThreadModal',
-            originalModalData: { thread },
-          },
-        })
-      }
       if (transaction && feeInfo) {
         feeInfo.canAfford && send('PASS')
         !feeInfo.canAfford && send('FAIL')
@@ -67,34 +52,16 @@ export const DeleteThreadModal = () => {
     }
   }, [state.value, activeMember, transaction, feeInfo?.canAfford])
 
-  if (state.matches('requirementsVerification')) {
-    return <WaitModal onClose={hideModal} requirementsCheck />
-  }
-
   if (state.matches('transaction') && transaction && activeMember) {
-    const service = state.children.transaction
-    const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
     return (
-      <AuthorizeTransactionModal
-        onClose={hideModal}
+      <SignTransactionModal
+        buttonText="Sign and delete"
         transaction={transaction}
-        service={service}
-        controllerAccount={controllerAccount}
-        description={t('modals.deleteThread.description')}
-        buttonLabel={t('modals.deleteThread.buttonLabel')}
-      />
-    )
-  }
-
-  if (state.matches('success')) {
-    return <SuccessModal onClose={hideModal} text={t('modals.deleteThread.success')} />
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        {t('modals.deleteThread.error')}
-      </FailureModal>
+        signer={activeMember.controllerAccount}
+        service={state.children.transaction}
+      >
+        <TextMedium>You intend to delete your thread.</TextMedium>
+      </SignTransactionModal>
     )
   }
 

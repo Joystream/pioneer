@@ -1,44 +1,38 @@
-import { useMachine } from '@xstate/react'
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
-import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
-import { FailureModal } from '@/common/components/FailureModal'
-import { SuccessModal } from '@/common/components/SuccessModal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
-import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO } from '@/common/constants'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
+import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
+import { PreviewPostButton } from '@/forum/components/PreviewPostButton'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { CreatePostModalCall } from '.'
-import { CreatePostSignModal } from './CreatePostSignModal'
 
 export const CreatePostModal = () => {
   const { t } = useTranslation('accounts')
   const { modalData, hideModal } = useModal<CreatePostModalCall>()
   const { module = 'forum', postText, replyTo, transaction, isEditable, onSuccess } = modalData
 
-  const hideModalAfterSuccess = useCallback(() => {
-    onSuccess()
-    hideModal()
-  }, [])
-
-  const [state, send] = useMachine(defaultTransactionModalMachine, { context: { validateBeforeTransaction: true } })
+  const [state, send] = useMachine(
+    defaultTransactionModalMachine('There was a problem posting your message.', 'Your post has been submitted.'),
+    { context: { validateBeforeTransaction: true } }
+  )
 
   const { active } = useMyMemberships()
-  const { allAccounts } = useMyAccounts()
   const balance = useBalance(active?.controllerAccount)
   const { api } = useApi()
 
   const postDeposit = api?.consts[module].postDeposit.toBn()
-  const feeInfo = useTransactionFee(active?.controllerAccount, transaction)
+  const { feeInfo } = useTransactionFee(active?.controllerAccount, () => transaction)
   const requiredAmount = useMemo(
     () => feeInfo && api && feeInfo.transactionFee.add(postDeposit ?? BN_ZERO),
     [feeInfo, postDeposit]
@@ -50,7 +44,7 @@ export const CreatePostModal = () => {
     }
 
     if (state.matches('requirementsVerification')) {
-      if (isEditable ? balance.transferable.gte(requiredAmount) : feeInfo.canAfford) {
+      if (isEditable ? getFeeSpendableBalance(balance).gte(requiredAmount) : feeInfo.canAfford) {
         send('PASS')
       } else {
         send('FAIL')
@@ -58,45 +52,45 @@ export const CreatePostModal = () => {
     }
 
     if (state.matches('beforeTransaction')) {
-      if (isEditable ? balance.transferable.gte(requiredAmount) : feeInfo.canAfford) {
+      if (isEditable ? getFeeSpendableBalance(balance).gte(requiredAmount) : feeInfo.canAfford) {
         send('PASS')
       } else {
         send('FAIL')
       }
     }
+
+    if (state.matches('success')) {
+      onSuccess()
+    }
   }, [state.value, JSON.stringify(feeInfo), postDeposit, balance])
 
-  if (state.matches('requirementsVerification')) {
-    return <WaitModal onClose={hideModal} requirementsCheck />
-  }
-
   if (state.matches('transaction') && transaction && active && postDeposit) {
-    const service = state.children.transaction
-    const controllerAccount = accountOrNamed(allAccounts, active.controllerAccount, 'Controller Account')
     return (
-      <CreatePostSignModal
+      <SignTransactionModal
+        buttonText={replyTo ? 'Sign and reply' : 'Sign and post'}
         transaction={transaction}
-        service={service}
-        controllerAccount={controllerAccount}
-        author={active}
-        postText={postText}
-        replyTo={replyTo}
-        isEditable={isEditable}
-        postDeposit={postDeposit}
-      />
+        signer={active.controllerAccount}
+        service={state.children.transaction}
+        additionalTransactionInfo={
+          isEditable
+            ? [
+                {
+                  value: postDeposit,
+                  title: 'Post deposit:',
+                },
+              ]
+            : undefined
+        }
+        extraButtons={<PreviewPostButton author={active} postText={postText} replyTo={replyTo} />}
+      >
+        <TextMedium>You intend to post in a thread.</TextMedium>
+        {isEditable && (
+          <TextMedium>
+            <TokenValue value={postDeposit} /> will be deposited to make the post editable.
+          </TextMedium>
+        )}
+      </SignTransactionModal>
     )
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem posting your message.
-      </FailureModal>
-    )
-  }
-
-  if (state.matches('success')) {
-    return <SuccessModal onClose={hideModalAfterSuccess} text="Your post has been submitted." />
   }
 
   if (state.matches('requirementsFailed') && feeInfo && requiredAmount && active) {

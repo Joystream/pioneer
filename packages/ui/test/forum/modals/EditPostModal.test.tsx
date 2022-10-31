@@ -1,12 +1,12 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { ApiContext } from '@/api/providers/context'
-import { ModalContext } from '@/common/providers/modal/context'
-import { ModalCallData, UseModal } from '@/common/providers/modal/types'
+import { GlobalModals } from '@/app/GlobalModals'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { ModalCallData } from '@/common/providers/modal/types'
 import { EditPostModal, EditPostModalCall } from '@/forum/modals/PostActionModal/EditPostModal'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
@@ -22,12 +22,14 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import {
   currentStubErrorMessage,
+  stubAccounts,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -46,12 +48,6 @@ describe('UI: EditPostModal', () => {
     onFail: () => true,
   }
 
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData,
-  }
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -62,29 +58,25 @@ describe('UI: EditPostModal', () => {
       getMemberIdByBoundAccountAddress: () => undefined,
     },
   }
-  let useAccounts: UseAccounts
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
   beforeAll(async () => {
     await cryptoWaitReady()
+    mockUseModalCall({ modalData })
     rawMembers.slice(0, 2).map((member) => seedMember(member, server.server))
     seedForumCategory(mockCategories[0], server.server)
     seedForumThread(mockThreads[0], server.server)
     mockPosts.map((post) => seedForumPost(post, server.server))
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+    stubDefaultBalances()
     tx = stubTransaction(api, txPath)
-    modalData.transaction = api.api.tx.forum.editPostText(1, 1, 1, 1, '')
   })
 
   it('Requirements passed', async () => {
@@ -95,14 +87,16 @@ describe('UI: EditPostModal', () => {
   })
 
   it('Requirements failed', async () => {
-    tx = stubTransaction(api, txPath, 10000)
-    modalData.transaction = api.api.tx.forum.editPostText(1, 1, 1, 1, '')
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
+
     renderModal()
     expect(screen.queryByText('modals.insufficientFunds.title')).not.toBeNull()
   })
 
   it('Transaction failed', async () => {
     stubTransactionFailure(tx)
+    mockUseModalCall({ modalData: { ...modalData, transaction: api.api.tx.forum.editPostText(1, 1, 1, 1, '') } })
+
     renderModal()
     await act(async () => {
       fireEvent.click(await getButton(/Sign and edit/i))
@@ -112,6 +106,8 @@ describe('UI: EditPostModal', () => {
 
   it('Transaction success', async () => {
     stubTransactionSuccess(tx, 'forum', 'PostTextUpdated')
+    mockUseModalCall({ modalData: { ...modalData, transaction: api.api.tx.forum.editPostText(1, 1, 1, 1, '') } })
+
     renderModal()
     await act(async () => {
       fireEvent.click(await getButton(/Sign and edit/i))
@@ -121,18 +117,17 @@ describe('UI: EditPostModal', () => {
 
   const renderModal = () =>
     render(
-      <ModalContext.Provider value={useModal}>
+      <ModalContextProvider>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
-            <AccountsContext.Provider value={useAccounts}>
-              <MembershipContext.Provider value={useMyMemberships}>
-                <ApiContext.Provider value={api}>
-                  <EditPostModal />
-                </ApiContext.Provider>
-              </MembershipContext.Provider>
-            </AccountsContext.Provider>
+            <MembershipContext.Provider value={useMyMemberships}>
+              <ApiContext.Provider value={api}>
+                <GlobalModals />
+                <EditPostModal />
+              </ApiContext.Provider>
+            </MembershipContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
-      </ModalContext.Provider>
+      </ModalContextProvider>
     )
 })

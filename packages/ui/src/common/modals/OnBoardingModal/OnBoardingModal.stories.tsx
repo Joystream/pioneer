@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
@@ -14,6 +13,8 @@ import { OnBoardingProvider } from '@/common/providers/onboarding/provider'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+
+import { mockDefaultBalance } from '../../../../test/setup'
 
 export default {
   title: 'App/OnBoardingModal',
@@ -38,18 +39,12 @@ const useMyAccounts: UseAccounts = {
 
 const useMyBalances: AddressToBalanceMap = {
   [useMyAccounts.allAccounts[0].address]: {
+    ...mockDefaultBalance,
     total: new BN(10000),
-    locked: new BN(0),
-    recoverable: new BN(0),
-    transferable: new BN(0),
-    locks: [],
   },
   [useMyAccounts.allAccounts[1].address]: {
+    ...mockDefaultBalance,
     total: new BN(10000),
-    locked: new BN(0),
-    recoverable: new BN(0),
-    transferable: new BN(0),
-    locks: [],
   },
 }
 
@@ -106,23 +101,21 @@ const Template: Story<Props> = ({ extension = false, account = false, accountPic
   }, [account, extension, accountPick])
 
   return (
-    <MemoryRouter>
-      <MockApolloProvider members>
-        <ApiContext.Provider value={state.useApi}>
-          <AccountsContext.Provider value={state.useMyAccounts}>
-            <MembershipContext.Provider value={state.useMyMemberships}>
-              <BalancesContext.Provider value={useMyBalances}>
-                <OnBoardingProvider>
-                  <TemplateBlock>
-                    <OnBoardingModal />
-                  </TemplateBlock>
-                </OnBoardingProvider>
-              </BalancesContext.Provider>
-            </MembershipContext.Provider>
-          </AccountsContext.Provider>
-        </ApiContext.Provider>
-      </MockApolloProvider>
-    </MemoryRouter>
+    <MockApolloProvider members>
+      <ApiContext.Provider value={state.useApi}>
+        <AccountsContext.Provider value={state.useMyAccounts}>
+          <MembershipContext.Provider value={state.useMyMemberships}>
+            <BalancesContext.Provider value={useMyBalances}>
+              <OnBoardingProvider>
+                <TemplateBlock>
+                  <OnBoardingModal />
+                </TemplateBlock>
+              </OnBoardingProvider>
+            </BalancesContext.Provider>
+          </MembershipContext.Provider>
+        </AccountsContext.Provider>
+      </ApiContext.Provider>
+    </MockApolloProvider>
   )
 }
 

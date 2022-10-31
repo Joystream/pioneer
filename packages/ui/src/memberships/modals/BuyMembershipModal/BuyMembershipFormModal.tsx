@@ -1,3 +1,4 @@
+import HCaptcha from '@hcaptcha/react-hcaptcha'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import React, { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -21,6 +22,7 @@ import {
 } from '@/common/components/forms'
 import { Arrow } from '@/common/components/icons'
 import { LinkSymbol } from '@/common/components/icons/symbols'
+import { Loading } from '@/common/components/Loading'
 import {
   ModalFooter,
   ModalFooterGroup,
@@ -34,11 +36,21 @@ import {
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
-import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
+import { definedValues } from '@/common/utils'
+import { useYupValidationResolver } from '@/common/utils/validation'
+import { AvatarInput } from '@/memberships/components/AvatarInput'
+import { SocialMediaSelector } from '@/memberships/components/SocialMediaSelector/SocialMediaSelector'
+import { useUploadAvatarAndSubmit } from '@/memberships/hooks/useUploadAvatarAndSubmit'
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
 import { SelectMember } from '../../components/SelectMember'
-import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../model/validation'
+import {
+  AccountSchema,
+  AvatarURISchema,
+  ExternalResourcesSchema,
+  HandleSchema,
+  ReferrerSchema,
+} from '../../model/validation'
 import { Member } from '../../types'
 
 interface BuyMembershipFormModalProps {
@@ -57,9 +69,7 @@ const CreateMemberSchema = Yup.object().shape({
   rootAccount: AccountSchema.required('This field is required'),
   controllerAccount: AccountSchema.required('This field is required'),
   avatarUri: AvatarURISchema,
-  name: Yup.string()
-    .required('This field is required')
-    .matches(/^[a-zA-Z0-9_.-]*$/, 'Some of the characters are not allowed here '),
+  name: Yup.string().required('This field is required'),
   handle: HandleSchema.required('This field is required').matches(
     /^[a-zA-Z0-9_.-]*$/,
     'Some of the characters are not allowed here '
@@ -67,6 +77,7 @@ const CreateMemberSchema = Yup.object().shape({
   hasTerms: Yup.boolean().required().oneOf([true]),
   isReferred: Yup.boolean(),
   referrer: ReferrerSchema,
+  externalResources: ExternalResourcesSchema,
 })
 
 export interface MemberFormFields {
@@ -75,21 +86,24 @@ export interface MemberFormFields {
   name: string
   handle: string
   about: string
-  avatarUri: string
+  avatarUri: File | string | null
   isReferred?: boolean
   referrer?: Member
   hasTerms?: boolean
   invitor?: Member
+  captchaToken?: string
+  externalResources: Record<string, string>
 }
 
 const formDefaultValues = {
   name: '',
   handle: '',
   about: '',
-  avatarUri: '',
+  avatarUri: null,
   isReferred: false,
   referrer: undefined,
   hasTerms: false,
+  externalResources: {},
 }
 
 export interface InviteMembershipFormFields {
@@ -106,8 +120,9 @@ export const BuyMembershipForm = ({
   type,
 }: BuyMembershipFormProps) => {
   const { allAccounts } = useMyAccounts()
-
+  const [captchaToken, setCaptchaToken] = useState<string | undefined>()
   const [formHandleMap, setFormHandleMap] = useState('')
+  const { isUploading, uploadAvatarAndSubmit } = useUploadAvatarAndSubmit(onSubmit)
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
 
   const form = useForm<MemberFormFields>({
@@ -135,30 +150,32 @@ export const BuyMembershipForm = ({
     }
   }, [data?.membershipsConnection.totalCount])
 
-  const hasError = enhancedHasError(form.formState.errors)
-  const getErrorMessage = enhancedGetErrorMessage(form.formState.errors)
-  const onCreate = () => onSubmit(form.getValues())
+  const isFormValid = !isUploading && form.formState.isValid
+  const isDisabled =
+    type === 'onBoarding' && process.env.REACT_APP_CAPTCHA_SITE_KEY ? !captchaToken || !isFormValid : !isFormValid
 
   return (
     <>
       <ScrolledModalBody>
         <FormProvider {...form}>
           <ScrolledModalContainer>
-            <Row>
-              <InlineToggleWrap>
-                <Label>I was referred by a member: </Label>
-                <ToggleCheckbox trueLabel="Yes" falseLabel="No" name="isReferred" />
-              </InlineToggleWrap>
-              {isReferred && (
-                <InputComponent required inputSize="l">
-                  <SelectMember
-                    onChange={(member) => form.setValue('referrer', member, { shouldValidate: true })}
-                    disabled={!isReferred}
-                    selected={referrer}
-                  />
-                </InputComponent>
-              )}
-            </Row>
+            {type === 'general' && (
+              <Row>
+                <InlineToggleWrap>
+                  <Label>I was referred by a member: </Label>
+                  <ToggleCheckbox trueLabel="Yes" falseLabel="No" name="isReferred" />
+                </InlineToggleWrap>
+                {isReferred && (
+                  <InputComponent required inputSize="l">
+                    <SelectMember
+                      onChange={(member) => form.setValue('referrer', member, { shouldValidate: true })}
+                      disabled={!isReferred}
+                      selected={referrer}
+                    />
+                  </InputComponent>
+                )}
+              </Row>
+            )}
             <Row>
               <TextMedium dark>Please fill in all the details below.</TextMedium>
             </Row>
@@ -169,7 +186,7 @@ export const BuyMembershipForm = ({
                     label="Root account"
                     required
                     inputSize="l"
-                    tooltipText="Something about root accounts"
+                    tooltipText="Root account is the primary account associated with the membership. It cannot be changed. Root account is used to sign transactions of associating a controller account with the membership. While it is possible to use the same account as Root and Controller, it is not advisable to do so and for security purposes. Best practice is to keep it offline all the time unless your controller is compromise and you need to replace it."
                   >
                     <SelectAccount name="rootAccount" />
                   </InputComponent>
@@ -179,7 +196,7 @@ export const BuyMembershipForm = ({
                     label="Controller account"
                     required
                     inputSize="l"
-                    tooltipText="Something about controller account"
+                    tooltipText="Controller account is the account which is used to sign most of the transactions, such as bonding a staking account, posting to forum, creating proposals or making a simple transfer to a different account. Controller account can be changed, and this transaction can only be signed by membership root account."
                   >
                     <SelectAccount name="controllerAccount" />
                   </InputComponent>
@@ -187,24 +204,12 @@ export const BuyMembershipForm = ({
               </>
             )}
             <Row>
-              <InputComponent
-                id="member-name"
-                label="Member Name"
-                required
-                validation={hasError('name') ? 'invalid' : undefined}
-                message={hasError('name') ? getErrorMessage('name') : ''}
-              >
+              <InputComponent id="member-name" label="Member Name" required name="name">
                 <InputText id="member-name" placeholder="Type" name="name" />
               </InputComponent>
             </Row>
             <Row>
-              <InputComponent
-                id="membership-handle"
-                label="Membership handle"
-                required
-                validation={hasError('handle') ? 'invalid' : undefined}
-                message={hasError('handle') ? getErrorMessage('handle') : ''}
-              >
+              <InputComponent id="membership-handle" label="Membership handle" required name="handle">
                 <InputText id="membership-handle" placeholder="Type" name="handle" />
               </InputComponent>
             </Row>
@@ -213,22 +218,21 @@ export const BuyMembershipForm = ({
                 <InputTextarea id="member-about" placeholder="Type" name="about" />
               </InputComponent>
             </Row>
-            <Row>
-              <InputComponent
-                id="member-avatar"
-                required
-                label="Member Avatar"
-                validation={hasError('avatarUri') ? 'invalid' : undefined}
-                message={
-                  hasError('avatarUri')
-                    ? getErrorMessage('avatarUri')
-                    : 'Paste an URL of your avatar image. Text lorem ipsum.'
-                }
-                placeholder="Image URL"
-              >
-                <InputText id="member-avatar" name="avatarUri" />
-              </InputComponent>
-            </Row>
+
+            <AvatarInput />
+
+            <SocialMediaSelector />
+
+            {process.env.REACT_APP_CAPTCHA_SITE_KEY && type === 'onBoarding' && (
+              <Row>
+                <HCaptcha
+                  sitekey={process.env.REACT_APP_CAPTCHA_SITE_KEY}
+                  theme="light"
+                  languageOverride="en"
+                  onVerify={setCaptchaToken}
+                />
+              </Row>
+            )}
           </ScrolledModalContainer>
         </FormProvider>
       </ScrolledModalBody>
@@ -241,7 +245,7 @@ export const BuyMembershipForm = ({
             </ButtonGhost>
           )}
           <Checkbox
-            id={'privacy-policy-agreement'}
+            id="privacy-policy-agreement"
             onChange={(hasTerms) => form.setValue('hasTerms', hasTerms, { shouldValidate: true })}
           >
             <TextMedium colorInherit>
@@ -278,8 +282,15 @@ export const BuyMembershipForm = ({
               />
             </TransactionInfoContainer>
           )}
-          <ButtonPrimary size="medium" onClick={onCreate} disabled={!form.formState.isValid}>
-            Create a Membership
+          <ButtonPrimary
+            size="medium"
+            onClick={() => {
+              const values = form.getValues()
+              uploadAvatarAndSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
+            }}
+            disabled={isDisabled}
+          >
+            {isUploading ? <Loading text="Uploading avatar" /> : 'Create a Membership'}
           </ButtonPrimary>
         </ModalFooterGroup>
       </ModalFooter>

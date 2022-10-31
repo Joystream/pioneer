@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { percentageControl, voteControl } from '@/common/components/storybookParts/previewStyles'
 import { ProposalConstants } from '@/proposals/types'
@@ -60,11 +59,7 @@ export const Default: Story<Args> = ({
   const total = approve + slash + reject + abstain
   const remain = councilSize ? councilSize - total : undefined
 
-  return (
-    <MemoryRouter>
-      <ProposalStatistics constants={constants} voteCount={{ approve, slash, reject, abstain, total, remain }} />
-    </MemoryRouter>
-  )
+  return <ProposalStatistics constants={constants} voteCount={{ approve, slash, reject, abstain, total, remain }} />
 }
 
 Default.args = {

@@ -13,15 +13,19 @@ const shared = require('./dev/webpack.shared')
 
 const version = cp.execSync('git rev-parse --short HEAD').toString().trim()
 
+dotenv.config()
+
 module.exports = (env, argv) => {
   const isDevelopment = argv.mode === 'development'
-  const parsedEnvFile = dotenv.config().parsed || {}
-  const envVariables = [...Object.entries(parsedEnvFile), ...Object.entries(process.env)]
+  const envVariables = Object.entries(process.env)
     .filter(([key]) => key.startsWith('REACT_APP_'))
     .map(([key, value]) => [`process.env.${key}`, JSON.stringify(value)])
 
+  const imageBlacklist = [...(env.blacklist ?? []), ...(process.env.REACT_APP_BLACKLISTED_IMAGES?.split(/\s+/) ?? [])]
+
   const plugins = [
     ...shared.plugins,
+    new webpack.ProgressPlugin(),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: './src/index.html',
@@ -30,6 +34,7 @@ module.exports = (env, argv) => {
       GIT_VERSION: JSON.stringify(version),
       IS_DEVELOPMENT: isDevelopment,
       ...Object.fromEntries(envVariables),
+      'process.env.REACT_APP_BLACKLISTED_IMAGES': `'${imageBlacklist.join(' ')}'`,
     }),
     new CopyPlugin({
       patterns: [
@@ -43,6 +48,7 @@ module.exports = (env, argv) => {
   ]
 
   return {
+    mode: argv.mode,
     entry: './src',
     devtool: 'source-map',
     plugins: plugins,
@@ -86,6 +92,7 @@ module.exports = (env, argv) => {
     output: {
       filename: '[name].[contenthash].js',
       path: path.resolve(__dirname, 'build'),
+      clean: true,
       globalObject: 'this',
       pathinfo: false,
     },

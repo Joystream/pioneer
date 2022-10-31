@@ -12,7 +12,7 @@ import { TableListItemAsLinkHover } from '@/common/components/List'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Skeleton } from '@/common/components/Skeleton'
 import { TokenValue } from '@/common/components/typography'
-import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
+import { BN_ZERO, BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 import { isDefined } from '@/common/utils'
 
 import { LocksDetails } from './components/LocksDetails'
@@ -24,7 +24,6 @@ interface AccountItemDataProps {
 export const AccountItem = ({ account }: AccountItemDataProps) => {
   const address = account.address
   const balance = useBalance(address)
-
   const isSendDisabled = !balance?.transferable || !balance.transferable.gt(new BN(0))
 
   const [isDropped, setDropped] = useState(false)
@@ -38,7 +37,10 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
           <TokenValue value={balance?.locked} isLoading={!isDefined(balance?.locked)} />
           <AccountLocks locks={balance?.locks} />
         </ValueAndLocks>
-        <TokenValue value={balance?.recoverable} isLoading={!isDefined(balance?.recoverable)} />
+        <TokenValue
+          value={balance?.recoverable?.add(balance?.vestedClaimable ?? BN_ZERO)}
+          isLoading={!isDefined(balance?.recoverable)}
+        />
         <TokenValue value={balance?.transferable} isLoading={!isDefined(balance?.transferable)} />
         <AccountControls>
           <TransferButton to={account} />

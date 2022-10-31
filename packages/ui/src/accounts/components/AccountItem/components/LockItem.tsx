@@ -16,9 +16,9 @@ import {
   AccountDetailsWrap,
   ButtonsCell,
   DetailLabel,
-  LockWrapper,
   DetailsName,
   LocksButtons,
+  LockWrapper,
   StyledDropDown,
   TitleCell,
   ValueCell,
@@ -49,11 +49,6 @@ export const LockItem = ({
 
   const memberId = useMemo(() => getMemberIdByBoundAccountAddress(address), [address])
 
-  const recoverButton = useMemo(
-    () => <RecoverButton memberId={memberId} lock={lock} address={address} isRecoverable={isRecoverable} />,
-    [memberId, lock, address, isRecoverable]
-  )
-
   return (
     <LockWrapper>
       <AccountDetailsWrap onClick={() => setDropped(!isDropped)}>
@@ -67,7 +62,9 @@ export const LockItem = ({
           </ValueCell>
         )}
         <ButtonsCell>
-          {!isDropped && recoverButton}
+          {!isDropped && (
+            <RecoverButton memberId={memberId} lock={lock} address={address} isRecoverable={isRecoverable} isSmall />
+          )}
           <DropDownButton onClick={() => setDropped(!isDropped)} isDropped={isDropped} />
         </ButtonsCell>
       </AccountDetailsWrap>
@@ -94,7 +91,7 @@ export const LockItem = ({
         )}
         <LocksButtons>
           {linkButtons}
-          {recoverButton}
+          <RecoverButton memberId={memberId} lock={lock} address={address} isRecoverable={isRecoverable} />
         </LocksButtons>
       </StyledDropDown>
     </LockWrapper>

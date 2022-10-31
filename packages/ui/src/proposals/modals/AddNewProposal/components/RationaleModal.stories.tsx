@@ -1,6 +1,5 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 
 import { info } from '@/common/logger'
 import { RationaleModal } from '@/proposals/modals/AddNewProposal/components/RationaleModal'
@@ -11,11 +10,7 @@ export default {
 } as Meta
 
 const Template: Story = () => {
-  return (
-    <MemoryRouter>
-      <RationaleModal closeModal={() => info('close')} />
-    </MemoryRouter>
-  )
+  return <RationaleModal closeModal={() => info('close')} />
 }
 
 export const Default = Template.bind({})

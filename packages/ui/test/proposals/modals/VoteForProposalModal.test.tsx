@@ -1,20 +1,17 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { ApiContext } from '@/api/providers/context'
 import { CKEditorProps } from '@/common/components/CKEditor'
-import { ModalContext } from '@/common/providers/modal/context'
-import { ModalCallData, UseModal } from '@/common/providers/modal/types'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers, seedProposal } from '@/mocks/data'
 import { getMember } from '@/mocks/helpers'
-import { VoteForProposalModal, VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal'
+import { VoteForProposalModal } from '@/proposals/modals/VoteForProposal'
 
 import { getButton } from '../../_helpers/getButton'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
@@ -24,12 +21,14 @@ import { setupMockServer } from '../../_mocks/server'
 import { PROPOSAL_DATA } from '../../_mocks/server/seeds'
 import {
   currentStubErrorMessage,
+  stubAccounts,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
@@ -43,12 +42,6 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 
 describe('UI: Vote for Proposal Modal', () => {
   const api = stubApi()
-  const useModal: UseModal<ModalCallData<VoteForProposalModalCall>> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData: { id: '0' },
-  }
   const useMyMemberships: MyMemberships = {
     active: getMember('alice'),
     members: [getMember('alice')],
@@ -60,31 +53,27 @@ describe('UI: Vote for Proposal Modal', () => {
     },
   }
 
-  let useAccounts: UseAccounts
-
   const server = setupMockServer({ noCleanupAfterEach: true })
 
   let tx: any
 
   beforeAll(async () => {
+    mockUseModalCall({ modalData: { id: '0' } })
     await cryptoWaitReady()
     seedMembers(server.server, 2)
     seedProposal(PROPOSAL_DATA, server.server)
-
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(() => {
     tx = stubTransaction(api, 'api.tx.proposalsEngine.vote', 100)
-    stubDefaultBalances(api)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+    stubDefaultBalances()
   })
 
   it('Requirements verification', async () => {
     tx = stubTransaction(api, 'api.tx.proposalsEngine.vote', 10_000)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
 
     await renderModal(true)
 
@@ -207,21 +196,17 @@ describe('UI: Vote for Proposal Modal', () => {
   async function renderModal(skipWait?: boolean) {
     await render(
       <MemoryRouter>
-        <ModalContext.Provider value={useModal}>
+        <ModalContextProvider>
           <MockQueryNodeProviders>
             <MockKeyringProvider>
-              <AccountsContext.Provider value={useAccounts}>
-                <ApiContext.Provider value={api}>
-                  <BalancesContextProvider>
-                    <MembershipContext.Provider value={useMyMemberships}>
-                      <VoteForProposalModal />
-                    </MembershipContext.Provider>
-                  </BalancesContextProvider>
-                </ApiContext.Provider>
-              </AccountsContext.Provider>
+              <ApiContext.Provider value={api}>
+                <MembershipContext.Provider value={useMyMemberships}>
+                  <VoteForProposalModal />
+                </MembershipContext.Provider>
+              </ApiContext.Provider>
             </MockKeyringProvider>
           </MockQueryNodeProviders>
-        </ModalContext.Provider>
+        </ModalContextProvider>
       </MemoryRouter>
     )
 

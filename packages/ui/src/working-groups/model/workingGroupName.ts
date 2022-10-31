@@ -1,4 +1,4 @@
-const exceptionWorkingGroupNames = ['hr', 'marketing', 'builders']
+const exceptionWorkingGroupNames = ['hr', 'marketing', 'builders', 'gateways']
 
 export const urlParamToWorkingGroupId = (name: string) => {
   if (exceptionWorkingGroupNames.includes(name)) {
@@ -9,6 +9,8 @@ export const urlParamToWorkingGroupId = (name: string) => {
         return 'operationsWorkingGroupBeta'
       case 'marketing':
         return 'operationsWorkingGroupGamma'
+      case 'gateways':
+        return 'gatewayWorkingGroup'
       default:
         return name
     }
@@ -18,3 +20,9 @@ export const urlParamToWorkingGroupId = (name: string) => {
 }
 
 export const groupNameToURLParam = (name: string) => name.toLowerCase().replace(/ /g, '-')
+
+export const urlParamToOpeningId = (name: string) => {
+  if (name.includes('operationsWorkingGroup')) return name
+  const params = name.split('-')
+  return `${urlParamToWorkingGroupId(params[0])}-${params[1]}`
+}

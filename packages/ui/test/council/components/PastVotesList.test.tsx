@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { PastVotesList } from '@/council/components/PastVotes/PastVotesList'
 import {
   RawCouncilElectionMock,
@@ -15,15 +14,14 @@ import { CANDIDATE_DATA, VOTE_DATA } from '../../_mocks/council'
 import { alice } from '../../_mocks/keyring'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
+import { stubAccounts } from '../../_mocks/transactions'
 
 describe('UI: PastVotesList', () => {
   const server = setupMockServer()
 
-  const useAccounts = {
-    isLoading: false,
-    hasAccounts: true,
-    allAccounts: [{ name: 'account', address: alice.address }],
-  }
+  beforeAll(() => {
+    stubAccounts([{ name: 'account', address: alice.address }])
+  })
 
   beforeEach(() => {
     seedMembers(server.server, 2)
@@ -80,10 +78,8 @@ describe('UI: PastVotesList', () => {
 
   const renderComponent = () =>
     render(
-      <AccountsContext.Provider value={useAccounts}>
-        <MockQueryNodeProviders>
-          <PastVotesList />
-        </MockQueryNodeProviders>
-      </AccountsContext.Provider>
+      <MockQueryNodeProviders>
+        <PastVotesList />
+      </MockQueryNodeProviders>
     )
 })

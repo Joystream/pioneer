@@ -10,5 +10,6 @@ export type MoveFundsModalCall = ModalWithDataCall<
   {
     requiredStake: BN
     lock: LockType
+    isFeeOriented?: boolean
   }
 >

@@ -1,9 +1,9 @@
-import { useApi } from '../../api/hooks/useApi'
+import { useApi } from '@/api/hooks/useApi'
 
 import { useObservable } from './useObservable'
 
 export function useCurrentBlockNumber() {
-  const { api, connectionState } = useApi()
+  const { api } = useApi()
 
-  return useObservable(api?.rpc.chain.subscribeNewHeads(), [connectionState])?.number.toBn()
+  return useObservable(() => api?.rpc.chain.subscribeNewHeads(), [api?.isConnected])?.number.toBn()
 }

@@ -1,16 +1,15 @@
-import { useMachine } from '@xstate/react'
 import React, { useEffect } from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
-import { FailureModal } from '@/common/components/FailureModal'
-import { WaitModal } from '@/common/components/WaitModal'
-import { useObservable } from '@/common/hooks/useObservable'
+import { TextMedium } from '@/common/components/typography'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
+import { useMachine } from '@/common/hooks/useMachine'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { Address } from '@/common/types'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
 import { InviteMemberFormModal } from './InviteMemberFormModal'
 import { InviteMemberRequirementsModal } from './InviteMemberRequirementsModal'
-import { InviteMemberSignModal } from './InviteMemberSignModal'
 import { InviteMemberSuccessModal } from './InviteMemberSuccessModal'
 import { inviteMemberMachine } from './machine'
 
@@ -19,9 +18,12 @@ interface MembershipModalProps {
 }
 
 export function InviteMemberModal({ onClose }: MembershipModalProps) {
-  const { api, connectionState } = useApi()
-  const workingGroupBudget = useObservable(api?.query.membershipWorkingGroup.budget(), [connectionState])
-  const membershipPrice = useObservable(api?.query.members.membershipPrice(), [connectionState])
+  const { api } = useApi()
+  const workingGroupBudget = useFirstObservableValue(
+    () => api?.query.membershipWorkingGroup.budget(),
+    [api?.isConnected]
+  )
+  const membershipPrice = useFirstObservableValue(() => api?.query.members.membershipPrice(), [api?.isConnected])
   const [state, send] = useMachine(inviteMemberMachine)
 
   useEffect(() => {
@@ -30,10 +32,6 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
       send(isBudgetOK ? 'PASS' : 'FAIL')
     }
   }, [workingGroupBudget, membershipPrice])
-
-  if (state.matches('requirementsVerification')) {
-    return <WaitModal onClose={onClose} title="Loading..." description="" />
-  }
 
   if (state.matches('requirementsFailed')) {
     return <InviteMemberRequirementsModal onClose={onClose} />
@@ -45,29 +43,24 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
 
   if (state.matches('transaction') && api) {
     const transaction = api.tx.members.inviteMember(toMemberTransactionParams(state.context.form))
-    const transactionService = state.children.transaction
 
     return (
-      <InviteMemberSignModal
-        onClose={onClose}
-        formData={state.context.form}
-        signer={state.context.form.invitor?.controllerAccount as Address}
-        service={transactionService}
+      <SignTransactionModal
+        buttonText="Sign and create a member"
         transaction={transaction}
-      />
+        signer={state.context.form.invitor?.controllerAccount as Address}
+        service={state.children.transaction}
+      >
+        <TextMedium>You intend to create a new membership.</TextMedium>
+        <TextMedium>
+          You are inviting this member. You have {state.context.form.invitor?.inviteCount.toString()} invites left.
+        </TextMedium>
+      </SignTransactionModal>
     )
   }
 
   if (state.matches('success')) {
     return <InviteMemberSuccessModal onClose={onClose} formData={state.context.form} />
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={onClose} events={state.context.transactionEvents}>
-        There was a problem with creating a membership for {state.context.form.name}.
-      </FailureModal>
-    )
   }
 
   return null

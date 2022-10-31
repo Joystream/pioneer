@@ -1,8 +1,6 @@
-import { BountyMetadata } from '@joystream/metadata-protobuf'
-import { useMachine } from '@xstate/react'
+import { BountyMetadata, ForumThreadMetadata } from '@joystream/metadata-protobuf'
 import React, { useEffect } from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
+import { FormProvider, useForm } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
@@ -25,27 +23,23 @@ import {
 } from '@/bounty/modals/AddBountyModal/helpers'
 import { addBountyMachine, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
-import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
-import { FailureModal } from '@/common/components/FailureModal'
-import { Arrow } from '@/common/components/icons'
-import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import { Stepper, StepperBody, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
 import { TokenValue } from '@/common/components/typography'
-import { WaitModal } from '@/common/components/WaitModal'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
+import { asBN } from '@/common/utils/bn'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
 const transactionSteps = [{ title: 'Create Thread' }, { title: 'Create Bounty' }]
 
 export const AddBountyModal = () => {
-  const { t } = useTranslation()
   const { threadCategory, isLoading: isThreadCategoryLoading } = useBountyForumCategory()
-  const { hideModal, showModal } = useModal()
+  const { hideModal } = useModal()
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
   const [state, send, service] = useMachine(addBountyMachine)
@@ -76,14 +70,6 @@ export const AddBountyModal = () => {
 
   useEffect(() => {
     if (state.matches(AddBountyStates.requirementsVerification)) {
-      if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({
-          modal: 'SwitchMember',
-          data: {
-            originalModalName: 'AddBounty',
-          },
-        })
-      }
       if (activeMember && api) {
         send('NEXT')
       }
@@ -98,20 +84,6 @@ export const AddBountyModal = () => {
     }
   }, [activeMember, state, threadCategory?.id])
 
-  if (state.matches(AddBountyStates.requirementsVerification)) {
-    return (
-      <WaitModal
-        title={t('common:modals.wait.title')}
-        description={t('common:modals.wait.description')}
-        onClose={hideModal}
-        requirements={[
-          { name: 'Initializing server connection', state: !!api },
-          { name: 'Loading member', state: !!activeMember },
-        ]}
-      />
-    )
-  }
-
   if (!activeMember || !api) {
     return null
   }
@@ -123,9 +95,11 @@ export const AddBountyModal = () => {
     const transaction = api.tx.forum.createThread(
       activeMember.id,
       threadCategory.id,
-      `${title} by ${creator?.handle}`,
-      `This is the description thread for ${title}`,
-      null
+      metadataToBytes(ForumThreadMetadata, {
+        tags: [''],
+        title: `${title} by ${creator?.handle}`,
+      }),
+      `This is the description thread for ${title}`
     )
     const service = state.children.createThread
     const controllerAccount = accountOrNamed(allAccounts, activeMember.controllerAccount, 'Controller Account')
@@ -175,18 +149,6 @@ export const AddBountyModal = () => {
     return <SuccessModal onClose={hideModal} bountyId={state.context.bountyId} />
   }
 
-  if (state.matches(AddBountyStates.error)) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        There was a problem while creating bounty.
-      </FailureModal>
-    )
-  }
-
-  if (state.matches(AddBountyStates.canceled)) {
-    return <FailureModal onClose={hideModal}>Transaction has been canceled.</FailureModal>
-  }
-
   return (
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader title="Creating New Bounty" onClick={hideModal} />
@@ -205,15 +167,15 @@ export const AddBountyModal = () => {
 
               {state.matches(AddBountyStates.fundingPeriodDetails) && (
                 <FundingDetailsStep
-                  minCherryLimit={bountyApi?.minCherryLimit.toNumber() || 0}
+                  minCherryLimit={asBN(bountyApi?.minCherryLimit ?? 0)}
                   errorChecker={enhancedHasError(form.formState.errors, state.value as string)}
                   errorMessageGetter={enhancedGetErrorMessage(form.formState.errors, state.value as string)}
                 />
               )}
               {state.matches(AddBountyStates.workingPeriodDetails) && (
                 <WorkingDetailsStep
-                  minEntrantStake={bountyApi?.minWorkEntrantStake}
-                  whitelistLimit={bountyApi?.closedContractSizeLimit}
+                  minEntrantStake={asBN(bountyApi?.minWorkEntrantStake ?? 0)}
+                  whitelistLimit={bountyApi?.closedContractSizeLimit && Number(bountyApi?.closedContractSizeLimit)}
                   errorChecker={enhancedHasError(form.formState.errors, state.value as string)}
                   errorMessageGetter={enhancedGetErrorMessage(form.formState.errors, state.value as string)}
                 />
@@ -223,21 +185,14 @@ export const AddBountyModal = () => {
           </StepperBody>
         </AddBountyModalWrapper>
       </StepperModalBody>
-      <ModalFooter>
-        <ButtonsGroup align="left">
-          {!state.matches(AddBountyStates.generalParameters) && (
-            <ButtonGhost onClick={() => send('BACK')} size="medium">
-              <Arrow direction="left" />
-              Previous step
-            </ButtonGhost>
-          )}
-        </ButtonsGroup>
-        <ButtonsGroup align="right">
-          <ButtonPrimary disabled={!form.formState.isValid} onClick={() => send('NEXT')} size="medium">
-            {isLastStepActive(getSteps(service)) ? 'Create bounty' : 'Next step'}
-          </ButtonPrimary>
-        </ButtonsGroup>
-      </ModalFooter>
+      <ModalTransactionFooter
+        prev={{ disabled: state.matches(AddBountyStates.generalParameters), onClick: () => send('BACK') }}
+        next={{
+          disabled: !form.formState.isValid,
+          label: isLastStepActive(getSteps(service)) ? 'Create bounty' : 'Next step',
+          onClick: () => send('NEXT'),
+        }}
+      />
     </Modal>
   )
 }

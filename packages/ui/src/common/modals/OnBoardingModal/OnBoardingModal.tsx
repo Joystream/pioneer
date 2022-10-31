@@ -1,4 +1,4 @@
-import { useMachine } from '@xstate/react'
+import { useApolloClient } from '@apollo/client'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
@@ -13,6 +13,7 @@ import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { Colors } from '@/common/constants'
 import { useDebounce } from '@/common/hooks/useDebounce'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
@@ -22,8 +23,10 @@ import { OnBoardingAccount } from '@/common/modals/OnBoardingModal/OnBoardingAcc
 import { OnBoardingMembership } from '@/common/modals/OnBoardingModal/OnBoardingMembership'
 import { OnBoardingPlugin } from '@/common/modals/OnBoardingModal/OnBoardingPlugin'
 import { OnBoardingStatus, SetMembershipAccount } from '@/common/providers/onboarding/types'
+import { definedValues } from '@/common/utils'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
+import { toExternalResources } from '@/memberships/modals/utils'
 
 export const OnBoardingModal = () => {
   const { hideModal } = useModal()
@@ -32,6 +35,7 @@ export const OnBoardingModal = () => {
   const [state, send] = useMachine(onBoardingMachine)
   const [membershipData, setMembershipData] = useState<{ id: string; blockHash: string }>()
   const transactionStatus = useQueryNodeTransactionStatus(membershipData?.blockHash)
+  const apolloClient = useApolloClient()
   const [endpoints] = useNetworkEndpoints()
   const statusRef = useRef<OnBoardingStatus>()
 
@@ -63,6 +67,8 @@ export const OnBoardingModal = () => {
           name: form.name,
           avatar: form.avatarUri,
           about: form.about,
+          captchaToken: form.captchaToken,
+          externalResources: toExternalResources(definedValues(form.externalResources)),
         }
 
         const response = await fetch(endpoints.membershipFaucetEndpoint, {
@@ -100,6 +106,7 @@ export const OnBoardingModal = () => {
   useEffect(() => {
     if (membershipData?.blockHash && transactionStatus === 'confirmed') {
       send('SUCCESS')
+      apolloClient.refetchQueries({ include: 'active' })
     }
   }, [JSON.stringify(membershipData), transactionStatus])
 
@@ -108,7 +115,7 @@ export const OnBoardingModal = () => {
     return <BuyMembershipSuccessModal onClose={hideModal} member={form} memberId={membershipData?.id} />
   }
 
-  if (state.matches('transaction') && transactionStatus === 'rejected') {
+  if (state.matches('transaction') && transactionStatus !== 'confirmed') {
     return (
       <WaitModal
         onClose={hideModal}

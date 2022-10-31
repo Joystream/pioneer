@@ -12,6 +12,7 @@ import { baseMock, testProposals } from '../../_mocks/proposals'
 import { MockApolloProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubProposalConstants } from '../../_mocks/transactions'
+import { loaderSelector } from '../../setup'
 
 const decidingProposalMock: ProposalMock = {
   ...baseMock,
@@ -96,7 +97,7 @@ describe('UI: Proposals overview', () => {
     seedProposal(dormantProposalMock, mockServer.server)
 
     renderComponent()
-    await waitForElementToBeRemoved(() => screen.queryAllByText('Loading...'))
+    await waitForElementToBeRemoved(() => loaderSelector(true))
 
     expect((await screen.findByText('proposals.new')).previousSibling?.textContent).toBe('1')
     expect((await screen.findByText('proposals.approved')).previousSibling?.textContent).toBe('3')

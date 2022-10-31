@@ -1,8 +1,3 @@
-import { createType } from '@joystream/types'
-import { OracleJudgment } from '@joystream/types/augment'
-import { BountyId, EntryId, OracleWorkEntryJudgment } from '@joystream/types/bounty'
-import { MemberId } from '@joystream/types/common'
-import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -10,6 +5,7 @@ import styled from 'styled-components'
 import * as Yup from 'yup'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
 import {
@@ -27,18 +23,16 @@ import {
   SubmitJudgementStates,
 } from '@/bounty/modals/SubmitJudgementModal/machine'
 import { SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal'
-import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
-import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer, Label, ToggleCheckbox } from '@/common/components/forms'
-import { Modal, ModalDivider, ModalFooter, ModalHeader, ScrolledModalBody } from '@/common/components/Modal'
+import { Modal, ModalDivider, ModalHeader, ModalTransactionFooter, ScrolledModalBody } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextHuge, TextMedium } from '@/common/components/typography'
-import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO } from '@/common/constants'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
+import { createType } from '@/common/model/createType'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { Member } from '@/memberships/types'
 
@@ -97,7 +91,7 @@ export const SubmitJudgementModal = () => {
   const { errors, isValid, setContext } = useSchema<ISchema>({ ...state.context }, schema)
 
   const amountDistributed = useMemo(
-    () => state.context.winners?.reduce((prev, current) => prev.addn(current.reward ?? 0), BN_ZERO) ?? BN_ZERO,
+    () => state.context.winners?.reduce((prev, current) => prev.add(current.reward ?? BN_ZERO), BN_ZERO) ?? BN_ZERO,
     [state.context.winners]
   )
 
@@ -159,11 +153,8 @@ export const SubmitJudgementModal = () => {
       const winnersApi = validWinners.map(
         ({ winner, reward }) =>
           [
-            createType<EntryId, 'EntryId'>(
-              'EntryId',
-              Number(bounty.entries?.find((entry) => entry.worker.id === winner.id)?.id) ?? 0
-            ),
-            createType<OracleWorkEntryJudgment, 'OracleWorkEntryJudgment'>('OracleWorkEntryJudgment', {
+            createType('EntryId', Number(bounty.entries?.find((entry) => entry.worker.id === winner.id)?.id) ?? 0),
+            createType('OracleWorkEntryJudgment', {
               Winner: { reward: createType('u128', reward) },
             }),
           ] as const
@@ -175,11 +166,11 @@ export const SubmitJudgementModal = () => {
       const rejectedApi = validRejections.map(
         (loser) =>
           [
-            createType<EntryId, 'EntryId'>(
+            createType(
               'EntryId',
               Number(bounty.entries?.find((entry) => entry.worker.id === loser.rejected.id)?.id) ?? 0
             ),
-            createType<OracleWorkEntryJudgment, 'OracleWorkEntryJudgment'>('OracleWorkEntryJudgment', {
+            createType('OracleWorkEntryJudgment', {
               Rejected: null,
             }),
           ] as const
@@ -188,13 +179,15 @@ export const SubmitJudgementModal = () => {
       const judgments = [...winnersApi, ...rejectedApi]
 
       return api?.tx.bounty.submitOracleJudgment(
-        { Member: createType<MemberId, 'MemberId'>('MemberId', Number(activeMember?.id || 0)) },
-        createType<BountyId, 'BountyId'>('BountyId', Number(bounty.id || 0)),
-        createType<OracleJudgment, 'OracleJudgment'>('OracleJudgment', new Map(judgments)),
+        { Member: createType('MemberId', Number(activeMember?.id || 0)) },
+        createType('BountyId', Number(bounty.id || 0)),
+        createType('OracleJudgment', new Map(judgments)),
         state.context.rationale ?? ''
       )
     }
   }, [api, isConnected, bounty, state.context])
+
+  useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
 
   useEffect(() => {
     if (api && transaction && activeMember && state.matches(SubmitJudgementStates.requirementsVerification)) {
@@ -216,21 +209,6 @@ export const SubmitJudgementModal = () => {
     })
   }, [state.context.winners?.length])
 
-  if (state.matches(SubmitJudgementStates.requirementsVerification)) {
-    return (
-      <WaitModal
-        title={t('common:modals.wait.title')}
-        description={t('common:modals.wait.description')}
-        onClose={hideModal}
-        requirements={[
-          { name: 'Initializing server connection', state: !!api },
-          { name: 'Loading member', state: !!activeMember },
-          { name: 'Creating transaction', state: !!transaction },
-        ]}
-      />
-    )
-  }
-
   if (!activeMember || !transaction || !api) {
     return null
   }
@@ -249,29 +227,6 @@ export const SubmitJudgementModal = () => {
         buttonLabel={t('modals.submitJudgement.authorizeModal.button')}
       />
     )
-  }
-
-  if (state.matches(SubmitJudgementStates.success)) {
-    return (
-      <SuccessTransactionModal
-        onClose={hideModal}
-        onButtonClick={hideModal}
-        message={t('modals.submitJudgement.successModal.message')}
-        buttonLabel={t('modals.submitJudgement.successModal.button')}
-      />
-    )
-  }
-
-  if (state.matches(SubmitJudgementStates.error)) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        {t('modals.submitJudgement.failedModal')}
-      </FailureModal>
-    )
-  }
-
-  if (state.matches(SubmitJudgementStates.canceled)) {
-    return <FailureModal onClose={hideModal}>{t('modals.submitJudgement.canceledModal')}</FailureModal>
   }
 
   return (
@@ -342,11 +297,13 @@ export const SubmitJudgementModal = () => {
           </InputComponent>
         </ModalContainer>
       </ScrolledModalBody>
-      <ModalFooter>
-        <ButtonPrimary disabled={!isValid} size="medium" onClick={() => send('NEXT')}>
-          {t('modals.submitJudgement.authorizeTransaction')}
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        next={{
+          disabled: !isValid,
+          onClick: () => send('NEXT'),
+          label: t('modals.submitJudgement.authorizeTransaction'),
+        }}
+      />
     </Modal>
   )
 }

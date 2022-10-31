@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useStakingAccountsLocks } from '@/accounts/hooks/useStakingAccountsLocks'
@@ -34,17 +34,17 @@ const actionNameMapper = (lock?: LockType) => {
 export const MoveFundsModal = () => {
   const {
     hideModal,
-    modalData: { requiredStake, lock },
+    modalData: { requiredStake, lock, isFeeOriented },
   } = useModal<MoveFundsModalCall>()
 
   const { active } = useMyMemberships()
   const balances = useMyBalances()
 
   const allAccounts = useStakingAccountsLocks({ requiredStake, lockType: lock, filterByBalance: false })
-  const accountsWithTransferableBalance = Object.entries(balances).filter(([, balances]) =>
+  const addressesWithTransferableBalance = Object.entries(balances ?? []).filter(([, balances]) =>
     balances.transferable.gt(BN_ZERO)
   )
-  const transferableTotal = accountsWithTransferableBalance.reduce(
+  const transferableTotal = addressesWithTransferableBalance.reduce(
     (sum, [, { transferable }]) => sum.add(transferable),
     BN_ZERO
   )
@@ -53,20 +53,37 @@ export const MoveFundsModal = () => {
   const freeAccounts = allAccounts.filter((account) => (account.optionLocks ? account.optionLocks.length === 0 : true))
   const noFreeAccounts = freeAccounts.length === 0
 
-  const memberAccounts = allAccounts.filter((account) => active?.boundAccounts.includes(account.address))
+  const displayedAccounts = useMemo(() => {
+    const memberAccounts = allAccounts.filter((account) => active?.boundAccounts.includes(account.address))
 
-  // When all accounts are locked, display only accounts per selected-member
-  const displayedAccounts = noFreeAccounts ? memberAccounts : allAccounts
+    if (isFeeOriented) {
+      const transferableBalanceAddresses = addressesWithTransferableBalance.map(([address]) => address)
+      return allAccounts.filter((account) => transferableBalanceAddresses.includes(account.address))
+    }
 
+    // When all accounts are locked, display only accounts per selected-member
+    return noFreeAccounts ? memberAccounts : allAccounts
+  }, [])
   return (
     <Modal modalSize="m" modalHeight="s" onClose={hideModal}>
       <ModalHeader onClick={hideModal} title="Your accounts" />
       <ModalBody>
         <RowGapBlock gap={32}>
           <TextMedium>
-            Unfortunately, you don’t have any accounts suitable for {actionNameMapper(lock)}. You need at least{' '}
-            <TokenValue value={requiredStake} /> on the balances free from{' '}
-            <a href="https://joystream.gitbook.io/joystream-handbook/key-concepts/staking#locks-1">rivalrous locks.</a>
+            {isFeeOriented ? (
+              <>
+                Unfortunately, you don’t have enough balance to cover minimal fee. You need at least{' '}
+                <TokenValue value={requiredStake} /> as transferable balance.
+              </>
+            ) : (
+              <>
+                Unfortunately, you don’t have any accounts suitable for {actionNameMapper(lock)}. You need at least{' '}
+                <TokenValue value={requiredStake} /> on the balances free from{' '}
+                <a href="https://joystream.gitbook.io/joystream-handbook/key-concepts/staking#locks-1">
+                  rivalrous locks.
+                </a>
+              </>
+            )}
           </TextMedium>
           <RowGapBlock gap={4}>
             <TextMedium bold>Accounts with transferable balances:</TextMedium>

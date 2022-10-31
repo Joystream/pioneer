@@ -1,14 +1,15 @@
 import React from 'react'
 
-import { Loading } from '../../../common/components/Loading'
-import { MarkdownPreview } from '../../../common/components/MarkdownPreview'
+import { Loading } from '@/common/components/Loading'
+import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import {
   SidePaneColumn,
   SidePaneLabel,
   SidePaneWideRow,
   SidePaneTable,
   SidePaneText,
-} from '../../../common/components/SidePane'
+} from '@/common/components/SidePane'
+
 import { useApplicationQuestionAnswers } from '../../hooks/useApplicationQuestionAnswers'
 import { ApplicationQuestionAnswer } from '../../types/ApplicationQuestionAnswer'
 

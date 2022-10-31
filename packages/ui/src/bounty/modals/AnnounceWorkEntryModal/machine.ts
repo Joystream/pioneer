@@ -2,6 +2,7 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
 import { Account } from '@/accounts/types'
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -115,8 +116,11 @@ export const announceWorkEntryMachine = createMachine<
         ],
       },
     },
-    [AnnounceWorkEntryStates.success]: { type: 'final' },
-    [AnnounceWorkEntryStates.error]: { type: 'final' },
-    [AnnounceWorkEntryStates.cancel]: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      metaMessages: {
+        error: 'There was a problem while creating bounty.',
+        success: 'You have just successfully announced work entry!',
+      },
+    }),
   },
 })

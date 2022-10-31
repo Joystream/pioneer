@@ -4,7 +4,6 @@ import styled from 'styled-components'
 
 import { CopyComponent } from '@/common/components/CopyComponent'
 import { WarnedIcon } from '@/common/components/icons/activities'
-import { Info } from '@/common/components/Info'
 import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 
@@ -20,24 +19,22 @@ const NetworkInfo: React.FC<NetworkInfoProps> = React.memo(
     const { t } = useTranslation('settings')
     return (
       <NetworkDetailsWrapper>
-        <Info>
-          <DetailsItemWrapper>
-            <WarnedIcon />
-            <StyledDetailsText bold>{detailsTitle}</StyledDetailsText>
-          </DetailsItemWrapper>
-          <DetailsItemWrapper>
-            <TextMedium lighter>{t('networkAddress')}</TextMedium>
-            <CopyText copyText={networkAddress} />
-          </DetailsItemWrapper>
-          <DetailsItemWrapper>
-            <TextMedium lighter>{t('QueryNodeAddress')}</TextMedium>
-            <CopyText copyText={queryNodeAddress} />
-          </DetailsItemWrapper>
-          <DetailsItemWrapper>
-            <TextMedium lighter>{t('url')}</TextMedium>
-            <CopyText copyText={urlAddress} />
-          </DetailsItemWrapper>
-        </Info>
+        <DetailsItemWrapper>
+          <WarnedIcon />
+          <StyledDetailsText bold>{detailsTitle}</StyledDetailsText>
+        </DetailsItemWrapper>
+        <DetailsItemWrapper>
+          <TextMedium lighter>{t('networkAddress')}</TextMedium>
+          <CopyText copyText={networkAddress} />
+        </DetailsItemWrapper>
+        <DetailsItemWrapper>
+          <TextMedium lighter>{t('QueryNodeAddress')}</TextMedium>
+          <CopyText copyText={queryNodeAddress} />
+        </DetailsItemWrapper>
+        <DetailsItemWrapper>
+          <TextMedium lighter>{t('url')}</TextMedium>
+          <CopyText copyText={urlAddress} />
+        </DetailsItemWrapper>
       </NetworkDetailsWrapper>
     )
   }
@@ -49,6 +46,7 @@ export default NetworkInfo
 
 export const NetworkDetailsWrapper = styled.div`
   background-color: ${Colors.Blue[50]};
+  padding: 16px;
 `
 
 export const DetailsItemWrapper = styled.div`
@@ -56,7 +54,7 @@ export const DetailsItemWrapper = styled.div`
 `
 
 export const StyledDetailsText = styled(TextMedium)`
-  margin-left: 15px;
+  margin: 0 0 8px 8px;
 `
 
 export const CopyText = styled(CopyComponent)`

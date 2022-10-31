@@ -3,8 +3,8 @@ import React from 'react'
 import { ProposalOrderByInput } from '@/common/api/queries'
 import { List } from '@/common/components/List'
 import { SortHeader } from '@/common/components/List/SortHeader'
+import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { SearchProcess } from '@/common/components/page/SearchProcess'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { GetSortProps } from '@/common/hooks/useSort'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -25,12 +25,7 @@ export const ProposalList = ({ proposals, getSortProps, isPast, isLoading }: Pro
   const isCouncilMember = active?.isCouncilMember
 
   if (isLoading) {
-    return (
-      <SearchProcess
-        title="Searching"
-        description="We are searching through all past proposals to find what your are looking for. "
-      />
-    )
+    return <Loading />
   }
 
   if (!proposals.length) {

@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -22,7 +23,7 @@ export const SetMembershipLeadInvitationQuota = () => {
           <InputComponent
             label="Lead Invitation Quota Amount"
             tight
-            units="tJOY"
+            units={CurrencyName.integerValue}
             required
             disabled={isLoading || !group?.leadId}
             name="setMembershipLeadInvitationQuota.amount"
@@ -35,7 +36,6 @@ export const SetMembershipLeadInvitationQuota = () => {
             <InputNumber
               id="amount-input"
               name="setMembershipLeadInvitationQuota.amount"
-              isTokenValue
               isInBN
               placeholder="0"
               maxAllowedValue={Math.pow(2, 32) - 1}

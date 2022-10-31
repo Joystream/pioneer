@@ -1,13 +1,13 @@
-import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { ApiContext } from '@/api/providers/context'
-import { ModalContext } from '@/common/providers/modal/context'
+import { GlobalModals } from '@/app/GlobalModals'
+import { createType } from '@/common/model/createType'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMembers } from '@/mocks/data'
@@ -24,6 +24,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import { APPLICATION_DATA, OPENING_DATA, WORKER_DATA } from '../../_mocks/server/seeds'
 import {
+  stubAccounts,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -34,6 +35,20 @@ import { WORKER } from '../../_mocks/working-groups'
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
+}))
+
+const mockUseModal: UseModal<any> = {
+  modal: null,
+  modalData: { workerId: 'forumWorkingGroup-1' },
+  showModal: () => null,
+  hideModal: () => null,
+}
+
+jest.mock('@/common/hooks/useModal', () => ({
+  useModal: () => ({
+    ...jest.requireActual('@/common/hooks/useModal').useModal(),
+    ...mockUseModal,
+  }),
 }))
 
 describe('UI: LeaveRoleModal', () => {
@@ -50,7 +65,6 @@ describe('UI: LeaveRoleModal', () => {
     },
   }
 
-  let useAccounts: UseAccounts
   let transaction: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
@@ -65,17 +79,12 @@ describe('UI: LeaveRoleModal', () => {
     seedOpening(OPENING_DATA, server.server)
     seedApplication(APPLICATION_DATA, server.server)
     seedWorker(WORKER_DATA, server.server)
-
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice],
-    }
+    stubAccounts([alice])
   })
 
   beforeEach(async () => {
     useMyMemberships.setActive(getMember('alice'))
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     transaction = stubTransaction(api, 'api.tx.forumWorkingGroup.leaveRole')
   })
 
@@ -111,26 +120,18 @@ describe('UI: LeaveRoleModal', () => {
   })
 
   function renderModal() {
-    const modalContext = {
-      modal: 'LeaveRole',
-      modalData: { workerId: 'forumWorkingGroup-1' },
-      showModal: () => null,
-      hideModal: () => null,
-    }
-
     return render(
       <MemoryRouter>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
-            <AccountsContext.Provider value={useAccounts}>
-              <MembershipContext.Provider value={useMyMemberships}>
-                <ApiContext.Provider value={api}>
-                  <ModalContext.Provider value={modalContext}>
-                    <LeaveRoleModal />
-                  </ModalContext.Provider>
-                </ApiContext.Provider>
-              </MembershipContext.Provider>
-            </AccountsContext.Provider>
+            <MembershipContext.Provider value={useMyMemberships}>
+              <ApiContext.Provider value={api}>
+                <ModalContextProvider>
+                  <GlobalModals />
+                  <LeaveRoleModal />
+                </ModalContextProvider>
+              </ApiContext.Provider>
+            </MembershipContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
       </MemoryRouter>

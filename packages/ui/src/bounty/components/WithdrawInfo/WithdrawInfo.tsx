@@ -25,7 +25,7 @@ export const WithdrawInfo = React.memo(({ account, amountTitle, rows }: Withdraw
   const { t } = useTranslation()
 
   return (
-    <Wrapper data-testid="withdraw-info">
+    <Wrapper id="withdraw-info">
       <LockedAccount>
         <AccountInfo account={account} />
         <BalanceInfoInRow>

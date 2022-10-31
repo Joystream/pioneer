@@ -5,6 +5,7 @@ import * as Yup from 'yup'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent, InputText, InputTextarea } from '@/common/components/forms'
 import { LinkSymbol } from '@/common/components/icons/symbols'
+import { Loading } from '@/common/components/Loading'
 import {
   ModalFooter,
   ModalHeader,
@@ -17,7 +18,9 @@ import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { useKeyring } from '@/common/hooks/useKeyring'
 import { useYupValidationResolver } from '@/common/utils/validation'
+import { AvatarInput } from '@/memberships/components/AvatarInput'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { useUploadAvatarAndSubmit } from '@/memberships/hooks/useUploadAvatarAndSubmit'
 import { useGetMembersCountQuery } from '@/memberships/queries'
 
 import { SelectMember } from '../../components/SelectMember'
@@ -42,14 +45,16 @@ const formDefaultValues = {
   name: '',
   handle: '',
   about: '',
-  avatarUri: '',
+  avatarUri: null,
   hasTerms: false,
   invitor: undefined,
+  externalResources: {},
 }
 
 export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
   const { active } = useMyMemberships()
   const keyring = useKeyring()
+  const { uploadAvatarAndSubmit, isUploading } = useUploadAvatarAndSubmit(onSubmit)
   const [formHandleMap, setFormHandleMap] = useState('')
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
 
@@ -82,8 +87,6 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
   useEffect(() => {
     return active && form.setValue('invitor', active)
   }, [active])
-
-  const onCreate = () => onSubmit(form.getValues())
 
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
@@ -183,17 +186,17 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
               </InputComponent>
             </Row>
 
-            <Row>
-              <InputComponent id="member-avatar" label="Member Avatar" name="avatarUri" placeholder="Image URL">
-                <InputText id="member-avatar" name="avatarUri" />
-              </InputComponent>
-            </Row>
+            <AvatarInput />
           </ScrolledModalContainer>
         </FormProvider>
       </ScrolledModalBody>
       <ModalFooter>
-        <ButtonPrimary size="medium" onClick={onCreate} disabled={!form.formState.isValid}>
-          Invite a Member
+        <ButtonPrimary
+          size="medium"
+          onClick={() => uploadAvatarAndSubmit(form.getValues())}
+          disabled={!form.formState.isValid || isUploading}
+        >
+          {isUploading ? <Loading text="Uploading avatar" /> : 'Invite a Member'}
         </ButtonPrimary>
       </ModalFooter>
     </ScrolledModal>

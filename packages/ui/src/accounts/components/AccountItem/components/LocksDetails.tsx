@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { LockItemWrapper } from '@/accounts/components/AccountItem/components/LockItemWrapper'
+import { VestingLockListItem } from '@/accounts/components/AccountItem/components/VestingLockItem/VestingLockItem'
 import { useRecoveryConditions } from '@/accounts/hooks/useRecoveryConditions'
 import { isRecoverable } from '@/accounts/model/lockTypes'
 import { Balances } from '@/accounts/types'
@@ -21,23 +22,30 @@ export const LocksDetails = ({ balance, address }: LocksDetailsProps) => {
   }
 
   const allLocks = balance.locks
-  const recoverable = allLocks.filter(({ type }) =>
-    isRecoverable(type, { isActiveCandidate, isVoteStakeLocked, isWorkerStakeLocked })
-  )
-  const nonRecoverable = allLocks.filter(
-    ({ type }) => !isRecoverable(type, { isActiveCandidate, isVoteStakeLocked, isWorkerStakeLocked })
-  )
+  const recoverable =
+    allLocks?.filter(({ type }) =>
+      isRecoverable(type, { isActiveCandidate, isVoteStakeLocked, isWorkerStakeLocked })
+    ) ?? []
+  const nonRecoverable =
+    allLocks?.filter(
+      ({ type }) => !isRecoverable(type, { isActiveCandidate, isVoteStakeLocked, isWorkerStakeLocked })
+    ) ?? []
 
   return (
     <>
       <RowGapBlock gap={8}>
+        {(balance?.vesting.length ?? -1) > 0 && <Label>Vesting Locks:</Label>}
+        {balance?.vesting.map((vesting, index) => (
+          <VestingLockListItem {...vesting} key={`vesting-lock-${index}`} />
+        ))}
+
         {nonRecoverable.length > 0 && <Label>Account Locks:</Label>}
-        {nonRecoverable.map((lock, index) => (
+        {nonRecoverable?.map((lock, index) => (
           <LockItemWrapper key={index} lock={lock} address={address} />
         ))}
 
         {recoverable.length > 0 && <Label>Recoverable Locks:</Label>}
-        {recoverable.map((lock, index) => (
+        {recoverable?.map((lock, index) => (
           <LockItemWrapper key={index} lock={lock} address={address} isRecoverable />
         ))}
       </RowGapBlock>
