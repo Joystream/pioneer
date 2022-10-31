@@ -94,7 +94,7 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
         </OpenItemSummaryColumn>
       </ToggleableItemSummary>
       <ColumnGapBlock>
-        {!past && <WithdrawApplicationButton application={application} />}
+        <WithdrawApplicationButton application={application} />
         <ButtonGhost square size="medium" onClick={showApplicationModal}>
           <FileIcon />
         </ButtonGhost>
