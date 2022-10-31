@@ -43,7 +43,7 @@ export const useSignAndSendTransaction = ({
     service,
     setBlockHash,
   })
-  const queryNodeStatus = useQueryNodeTransactionStatus(isProcessing, blockHash)
+  const queryNodeStatus = useQueryNodeTransactionStatus(isProcessing, blockHash, skipQueryNode)
 
   const sign = useCallback(() => send('SIGN'), [service])
 
