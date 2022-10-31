@@ -23,6 +23,7 @@ import { groupNameToURLParam } from '@/working-groups/model/workingGroupName'
 
 export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps) => {
   const { showModal } = useModal()
+  const { applicants, hiring } = opening
   const rewardPeriod = useRewardPeriod(opening.groupId)
   const groupName = groupNameToURLParam(nameMapping(opening.groupName))
   const openingRoute = `/working-groups/openings/${groupName}-${opening.runtimeId}`
@@ -49,7 +50,7 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
               {past && (
                 <StatiscticContentColumn>
                   <TextBig value bold>
-                    {opening.hiring.current}
+                    {applicants} {hiring.current > applicants && <> ({hiring.current - applicants}</>}
                   </TextBig>
                   <Subscription>Hired</Subscription>
                 </StatiscticContentColumn>

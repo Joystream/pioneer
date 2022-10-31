@@ -26,6 +26,7 @@ export type OpeningListItemProps = {
 
 export const OpeningListItem = ({ opening, past, onClick }: OpeningListItemProps) => {
   const rewardPeriod = useRewardPeriod(opening.groupId)
+  const { applicants, hiring } = opening
 
   return (
     <ToggleableItemWrap past={past} onClick={onClick}>
@@ -48,7 +49,9 @@ export const OpeningListItem = ({ opening, past, onClick }: OpeningListItemProps
           <ToggleableSubscriptionWide>Reward per {rewardPeriod?.toString()} blocks.</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
-          <TextBig>{opening.applicants}</TextBig>
+          <TextBig>
+            {applicants} {hiring.current > applicants && <> ({hiring.current - applicants}</>}
+          </TextBig>
           <Subscription>Applications</Subscription>
         </OpenItemSummaryColumn>
         {past ? (

@@ -199,7 +199,9 @@ const ApplicationStats = ({
     <MultiColumnsStatistic>
       <StatiscticContentColumn>
         <StatisticHeader title="Applicants" />
-        <NumericValue>{applicants}</NumericValue>
+        <NumericValue>
+          {applicants} {hiring.current > applicants && <> ({hiring.current - applicants}</>}
+        </NumericValue>
       </StatiscticContentColumn>
       {status === OpeningStatuses.FILLED || status === OpeningStatuses.CANCELLED ? (
         <StatiscticContentColumn>
