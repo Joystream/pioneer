@@ -33,7 +33,7 @@ export const maxContext = (
     }
 
     const validationValue = new BN(get(this.options.context, contextPath))
-    if (validationValue && validationValue.lte(new BN(value))) {
+    if (validationValue && validationValue.lt(new BN(value))) {
       return this.createError({
         message: msg,
         params: {
@@ -63,7 +63,7 @@ export const minContext = (
     }
 
     const validationValue = new BN(get(this.options.context, contextPath))
-    if (validationValue && validationValue.gte(new BN(value))) {
+    if (validationValue && validationValue.gt(new BN(value))) {
       return this.createError({
         message: msg,
         params: {
