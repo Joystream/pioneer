@@ -95,7 +95,12 @@ export const AccountLockTooltip = ({ address, locks, children }: Props) => {
   }, [JSON.stringify(locks)])
 
   return (
-    <Tooltip tooltipText={tooltipTexts} maxWidth>
+    <Tooltip
+      tooltipText={tooltipTexts}
+      tooltipLinkText="Review all account locks"
+      tooltipLinkURL={`/profile/accounts/${address}`}
+      maxWidth
+    >
       {children}
     </Tooltip>
   )
