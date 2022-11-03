@@ -98,7 +98,7 @@ export const RestoreVotesModal = () => {
       <ModalBody>
         <p>
           In case of browser storage loss or when switching devices, restoring your votes from a backup file may be
-          necessary to reveal them. Upload your votes backup to the browser storage file here.
+          necessary to reveal them. Upload your votes backup file to the browser storage here.
         </p>
 
         <FileInput
