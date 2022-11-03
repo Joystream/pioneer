@@ -8,14 +8,15 @@ import { Arrow } from '../icons'
 interface PreviousPageProps {
   children?: React.ReactNode
   showOverflow?: boolean
+  customLink?: string
 }
 
-export const PreviousPage = ({ children, showOverflow }: PreviousPageProps) => {
+export const PreviousPage = ({ children, showOverflow, customLink }: PreviousPageProps) => {
   const history = useHistory()
   return (
     <PreviousPageBlock showOverflow={showOverflow}>
       <PreviousPageButtonContainer>
-        <PreviousPageButton onClick={() => history.goBack()} size="small" square>
+        <PreviousPageButton onClick={() => customLink ? history.push(customLink) : history.goBack()} size="small" square>
           <BackArrow direction="left" />
         </PreviousPageButton>
       </PreviousPageButtonContainer>
