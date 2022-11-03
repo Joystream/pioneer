@@ -281,6 +281,7 @@ export const BuyMembershipForm = ({
                 value={membershipPrice?.toBn()}
                 tooltipText="Creation fee is the price of membership, it is managed by council through the proposal system. It is inclusive of transaction fee."
                 tooltipLinkURL="https://joystream.gitbook.io/joystream-handbook/governance/proposals"
+                tooltipLinkText="Learn more"
               />
             </TransactionInfoContainer>
           )}

@@ -32,9 +32,7 @@ import {
   ScrolledModalContainer,
   TransactionAmount,
 } from '@/common/components/Modal'
-import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
-import { TextMedium } from '@/common/components/typography'
 import { BN_ZERO, Fonts } from '@/common/constants'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
@@ -209,6 +207,7 @@ export const ContributeFundsModal = () => {
                 message={hasError('amount', errors) ? getErrorMessage('amount', errors) : ' '}
                 tooltipText="If a contribution is made that brings the cumulative funding equal to or above the upper bound, then the difference is returned, and the bounty proceeds to the Working Period stage."
                 tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/bounties#stage"
+                tooltipLinkText="Learn more"
               >
                 <TokenInput
                   id="amount-input"

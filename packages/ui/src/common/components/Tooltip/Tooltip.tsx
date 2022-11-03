@@ -8,6 +8,7 @@ import { BorderRad, Colors, Fonts, Transitions, ZIndex } from '../../constants'
 import { LinkSymbol, LinkSymbolStyle } from '../icons/symbols'
 
 import { DefaultTooltip } from './TooltipDefault'
+import { TextMedium } from '@/common/components/typography'
 
 export interface TooltipProps extends Omit<TooltipPopupProps, 'popUpHandlers' | 'position'> {
   absolute?: boolean
@@ -153,13 +154,11 @@ export const Tooltip = ({
                 {tooltipLinkURL &&
                   (isExternalLink() ? (
                     <TooltipExternalLink href={tooltipLinkURL} target="_blank">
-                      {tooltipLinkText ?? 'Link'}
-                      <LinkSymbol />
+                      <TextMedium>{tooltipLinkText ?? 'Link'}</TextMedium> <LinkSymbol />
                     </TooltipExternalLink>
                   ) : (
                     <TooltipLink to={tooltipLinkURL} target="_blank">
-                      {tooltipLinkText ?? 'Link'}
-                      <LinkSymbol />
+                      <TextMedium>{tooltipLinkText ?? 'Link'}</TextMedium> <LinkSymbol />
                     </TooltipLink>
                   ))}
               </TooltipPopupContainer>,

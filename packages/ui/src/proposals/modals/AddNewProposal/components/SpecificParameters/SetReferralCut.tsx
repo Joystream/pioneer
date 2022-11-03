@@ -36,6 +36,7 @@ export const SetReferralCut = () => {
             required
             tooltipText="When purchasing a membership, another member, called a reference, can be referenced, resulting in a portion of the burned funds being credited to the reference. This portion is a mutable parameter denoted as referral_cut and defined as the membership fee percentage. Currently, there is a limit of 50% for the referral cut."
             tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/memberships#buying-a-membership"
+            tooltipLinkText="Learn more"
           >
             <InputNumber
               id="amount-input"

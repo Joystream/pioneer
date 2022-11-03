@@ -158,6 +158,7 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                 required
                 tooltipText="Membership handle is the primary way of how members are displayed throughout all interfaces of the platform. Membership handle can be updated any time by the account holder."
                 tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/memberships#membership"
+                tooltipLinkText="Learn more"
                 name="handle"
               >
                 <InputText id="member-handle" placeholder="Type" name="handle" />
