@@ -1,6 +1,9 @@
 export const ProfileRoutes = {
   profile: '/profile',
   memberships: '/profile/memberships',
+  accounts: '/profile/accounts',
+  account: '/profile/accounts/:accountId',
+  lock: '/profile/accounts/:accountId/locks/:lockId',
 } as const
 
 export const SettingsRoutes = {

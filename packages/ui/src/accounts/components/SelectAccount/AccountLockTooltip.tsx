@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { TransferModalCall } from '@/accounts/modals/TransferModal'
@@ -13,12 +14,14 @@ import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { OptionLock } from '../../types'
 
 interface Props {
+  address: string
   locks?: OptionLock[]
   children: React.ReactNode
 }
 
-export const AccountLockTooltip = ({ locks, children }: Props) => {
+export const AccountLockTooltip = ({ address, locks, children }: Props) => {
   const { modal: originalModalName, modalData: originalModalData, showModal } = useModal()
+
   const tooltipTexts = useMemo(() => {
     const texts: React.ReactElement[] = []
 
@@ -48,9 +51,9 @@ export const AccountLockTooltip = ({ locks, children }: Props) => {
     if (locks?.includes('rivalrousLock')) {
       texts.push(
         <li className="tooltipLink" key="rivalrousLock">
-          You cannot select this account because it has a lock preventing its usage for staking. Role stake can be
-          recovered after the role is terminated, while proposal locks get recovered automatically, when proposals get
-          executed.{' '}
+          You cannot select this account because it has a 'rivalrous lock' preventing its usage for other staking
+          purposes. Role stakes can be recovered after the role ended. Proposal locks are recovered automatically on
+          proposal execution. <Link to={`/profile/accounts/${address}/locks`}>View lock details</Link>
           <InlineExternalLink
             href="https://joystream.gitbook.io/testnet-workspace/system/accounts-and-staking#locks-1"
             target="_blank"
@@ -65,7 +68,7 @@ export const AccountLockTooltip = ({ locks, children }: Props) => {
     if (locks?.includes('recoverableLock')) {
       texts.push(
         <li className="tooltipLink" key="recoverableLock">
-          You cannot select this account because it contains lock.{' '}
+          You cannot select this account because it is locked.{' '}
           <TooltipLink to={ProfileRoutes.profile} target="_self">
             Recover this lock
           </TooltipLink>{' '}
