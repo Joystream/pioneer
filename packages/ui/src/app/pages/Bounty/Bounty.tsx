@@ -11,7 +11,7 @@ import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 
 export const Bounty = () => {
-  const { id } = useParams<BountyRouteParams>()
+  const { id, tab } = useParams<BountyRouteParams>()
   const history = useHistory()
   const { isLoading, bounty } = useBounty(id)
 

@@ -13,6 +13,7 @@ type BountyRoutesType = typeof BountyRoutes
 
 export interface BountyRouteParams {
   id: string
+  tab?: string
 }
 
 declare module '@/app/constants/routes' {

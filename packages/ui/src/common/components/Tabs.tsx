@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import { Link } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Transitions } from '../constants'
@@ -46,7 +47,9 @@ export const TabsContainer: FC<Omit<TabsProps, 'tabs'>> = ({ className, tabsSize
 
 const Tab = ({ active, onClick, title, count, changes }: TabProps) => (
   <TabContainer active={active} onClick={onClick}>
-    {title} {count !== undefined && <CountBadge count={count} />} {changes && <ChangesIndicator />}
+    <Link to={`/bounties/${title}`}>
+      {title} {count !== undefined && <CountBadge count={count} />} {changes && <ChangesIndicator />}
+    </Link>
   </TabContainer>
 )
 
