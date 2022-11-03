@@ -29,8 +29,7 @@ import { BountyModule } from './pages/Bounty/BountyModule'
 import { ElectionModule } from './pages/Election/ElectionModule'
 import { ForumModule } from './pages/Forum'
 import { Members } from './pages/Members/Members'
-import { MyAccounts } from './pages/Profile/MyAccounts'
-import { MyMemberships } from './pages/Profile/MyMemberships'
+import { ProfileModule } from './pages/Profile/ProfileModule'
 import { ProposalsModule } from './pages/Proposals/ProposalsModule'
 import { Settings } from './pages/Settings/Settings'
 import { PrivacyPolicy, TermsOfService } from './pages/Terms'
@@ -57,8 +56,7 @@ export const App = () => {
             <Route path={ElectionRoutes.currentElection} component={ElectionModule} />
             <Route path={ForumRoutes.forum} component={ForumModule} />
             <Route path={BountyRoutes.bounties} component={BountyModule} />
-            <Route exact path={ProfileRoutes.profile} component={MyAccounts} />
-            <Route exact path={ProfileRoutes.memberships} component={MyMemberships} />
+            <Route path={ProfileRoutes.profile} component={ProfileModule} />
             <Route exact path={MembersRoutes.members} component={Members} />
             <Route exact path={SettingsRoutes.settings} component={Settings} />
             <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
