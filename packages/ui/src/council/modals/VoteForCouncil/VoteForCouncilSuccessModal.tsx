@@ -33,8 +33,7 @@ export const VoteForCouncilSuccessModal = ({ onClose, candidateId }: Props) => {
         <TextMedium margin="l" light>
           You have just successfully voted for the Candidate. This is a good time to backup your votes.
         </TextMedium>
-        <BackupVotesButton cycleId={candidate?.cycleId} />
-        ￼
+        <BackupVotesButton cycleId={candidate?.cycleId} /> ￼
         <SelectedMember size="l" member={candidate?.member} hideGroup />
       </SuccessModalBody>
 
