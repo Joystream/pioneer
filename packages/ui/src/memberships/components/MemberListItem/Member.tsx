@@ -26,7 +26,7 @@ interface MemberListItemProps {
 const EMPTY_SEARCH_FILTERS: MemberSearchFilter[] = ['Membership', 'Membership_ID', 'Account_Address']
 
 export const MemberListItem = ({ member, searchFilter }: MemberListItemProps) => {
-  const balance = useBalance(member.controllerAccount)
+  const balance = useBalance(member.controllerAccount) // better root?
   const { slashed, terminated } = useMemberRowWorkDetails(member)
   const showMemberModal = useShowMemberModal(member.id)
 
@@ -62,7 +62,7 @@ export const MemberListItem = ({ member, searchFilter }: MemberListItemProps) =>
 
         <MemberColumn>
           <TokenValue value={balance?.locked} />
-          <AccountLocks locks={balance?.locks} />
+          <AccountLocks address={member.rootAccount} locks={balance?.locks} />
         </MemberColumn>
       </MemberItemWrap>
       {searchFilter && !EMPTY_SEARCH_FILTERS.includes(searchFilter) && (

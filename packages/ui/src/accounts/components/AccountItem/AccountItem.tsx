@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React, { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
@@ -21,12 +22,18 @@ interface AccountItemDataProps {
   account: Account
 }
 
+interface ParamTypes {
+  accountId?: string
+  lockId?: string
+}
+
 export const AccountItem = ({ account }: AccountItemDataProps) => {
+  const { accountId, lockId } = useParams<ParamTypes>()
   const address = account.address
   const balance = useBalance(address)
   const isSendDisabled = !balance?.transferable || !balance.transferable.gt(new BN(0))
 
-  const [isDropped, setDropped] = useState(false)
+  const [isDropped, setDropped] = useState(accountId === address)
 
   return (
     <AccountItemWrapper>
@@ -35,7 +42,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
         <TokenValue value={balance?.total} isLoading={!isDefined(balance?.total)} />
         <ValueAndLocks align={balance?.locked && 'end'}>
           <TokenValue value={balance?.locked} isLoading={!isDefined(balance?.locked)} />
-          <AccountLocks locks={balance?.locks} />
+          <AccountLocks address={address} locks={balance?.locks} />
         </ValueAndLocks>
         <TokenValue
           value={balance?.recoverable?.add(balance?.vestedClaimable ?? BN_ZERO)}

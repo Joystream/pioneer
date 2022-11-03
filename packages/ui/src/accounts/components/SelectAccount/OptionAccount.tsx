@@ -18,8 +18,7 @@ export const OptionAccount = ({ option, isForStaking }: Props) => {
   const balances = useBalance(option.address)
   const balance = isForStaking ? balances?.total : balances?.transferable
   const balanceType = isForStaking ? 'Total' : 'Transferable'
-  const locks = option.optionLocks
-  const isLocked = !!locks?.length
+  const isLocked = !!option.optionLocks?.length
 
   return (
     <>
@@ -28,7 +27,7 @@ export const OptionAccount = ({ option, isForStaking }: Props) => {
         <InfoTitle>{balanceType} balance</InfoTitle>
         <InfoValueWithLocks>
           <Value value={balance} locked={isLocked} />
-          <AccountLocks locks={balances?.locks} />
+          <AccountLocks address={option.address} locks={balances?.locks} />
         </InfoValueWithLocks>
       </BalanceInfoInRow>
     </>

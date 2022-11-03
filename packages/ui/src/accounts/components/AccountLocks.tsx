@@ -52,6 +52,7 @@ const locksMap: Record<LockType, ReactElement> = {
 export const lockIcon = (type: LockType) => locksMap[type] ?? <QuestionIcon />
 
 export interface AccountLocksProps {
+  address: string
   locks?: BalanceLock[]
 }
 
@@ -62,8 +63,8 @@ export const AccountLocks = ({ locks }: AccountLocksProps) => {
 
   return (
     <AccountLocksWrapper gap={4}>
-      {locks.map((lock, index) => (
-        <AccountLockIconWrapper key={index} title={lock.type ?? 'Unknown lock'}>
+      {locks.map((lock, id) => (
+        <AccountLockIconWrapper key={id} title={lock.type ?? 'Unknown lock'}>
           {lockIcon(lock.type)}
         </AccountLockIconWrapper>
       ))}
