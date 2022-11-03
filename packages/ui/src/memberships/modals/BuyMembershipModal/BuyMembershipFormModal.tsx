@@ -33,7 +33,8 @@ import {
   ScrolledModalContainer,
   TransactionInfoContainer,
 } from '@/common/components/Modal'
-import { TooltipExternalLink } from '@/common/components/Tooltip'
+import { TooltipExternalLink, Tooltip } from '@/common/components/Tooltip'
+import { TooltipDefault } from '@/common/components/Tooltip/TooltipDefault'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { definedValues } from '@/common/utils'
@@ -205,11 +206,23 @@ export const BuyMembershipForm = ({
             <Row>
               <InputComponent id="member-name" label="Member Name" required name="name">
                 <InputText id="member-name" placeholder="Type" name="name" />
+                <Tooltip
+                  tooltipText="This is your name, which is separate to your handle. It will only be displayed on the membership details pages. SomeDAO participants choose to use their real names, while others choose to use their nicknames. Name does not have to be unique."
+                  tooltipTitle="Name"
+                >
+                  <TooltipDefault />
+                </Tooltip>
               </InputComponent>
             </Row>
             <Row>
               <InputComponent id="membership-handle" label="Membership handle" required name="handle">
                 <InputText id="membership-handle" placeholder="Type" name="handle" />
+                <Tooltip
+                  tooltipText="This is your username that will be displayed in most of the places where you perform actions that others see, such as forum posts, present yourself as council candidate or create a new proposal. Think of it as a public name. Handles are unique."
+                  tooltipTitle="Handle"
+                >
+                  <TooltipDefault />
+                </Tooltip>
               </InputComponent>
             </Row>
             <Row>
