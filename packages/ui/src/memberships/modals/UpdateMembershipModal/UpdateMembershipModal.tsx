@@ -16,7 +16,7 @@ import { UpdateMembershipSuccessModal } from './UpdateMembershipSuccessModal'
 
 export const UpdateMembershipModal = () => {
   const { api } = useApi()
-  const { members, setActive, active } = useMyMemberships()
+  const { setActive } = useMyMemberships()
   const {
     hideModal,
     modalData: { member },
