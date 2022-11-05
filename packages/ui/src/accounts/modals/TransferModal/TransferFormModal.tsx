@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useCallback, useMemo, useState, useEffect } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import * as Yup from 'yup'
 
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
