@@ -5,7 +5,7 @@ import * as Yup from 'yup'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { useApi } from '@/api/hooks/useApi'
-import { CurrencyName } from '@/app/constants/currency'
+import { BN_ZERO, CurrencyName, ED } from '@/app/constants/currency'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
@@ -20,7 +20,6 @@ import {
   Row,
   TransactionAmount,
 } from '@/common/components/Modal'
-import { BN_ZERO } from '@/common/constants'
 import { useForm } from '@/common/hooks/useForm'
 import { BNSchema, maxMixed, minMixed } from '@/common/utils/validation'
 
@@ -62,49 +61,42 @@ const schemaFactory = (maxValue?: BN, minValue?: BN, senderBalance?: BN) => {
 }
 
 export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue, minValue, initialValue }: Props) {
-  const [recipient, setRecipient] = useState<Account | undefined>(to)
+  const { api } = useApi()
   const [sender, setSender] = useState<Account | undefined>(from)
+  const [recipient, setRecipient] = useState<Account | undefined>(to)
   const balances = useMyBalances()
-  const filterSender = useCallback(
-    ({ address }: Account) => address !== recipient?.address && !!balances?.[address]?.transferable.gt(BN_ZERO),
-    [recipient, balances]
-  )
+
   const schema = useMemo(
     () => schemaFactory(maxValue, minValue, balances?.[sender?.address as string]?.transferable),
     [maxValue, minValue, balances, sender]
   )
 
-  const {
-    changeField,
-    validation,
-    fields: { amount },
-  } = useForm<TransferTokensFormField>({ amount: initialValue }, schema)
-  const { isValid, errors } = validation
-
   const transferableBalance = balances?.[sender?.address as string]?.transferable ?? BN_ZERO
-  const filterRecipient = useCallback(filterAccount(sender), [sender])
-  const getIconType = () => (!from ? (!to ? 'transfer' : 'receive') : 'send')
+  const [maxAmount, setMaxAmount] = useState<BN>(maxValue ?? transferableBalance)
+  const tx = () => api?.tx.balances.transfer(recipient?.address || '', transferableBalance)
+  const fee = useTransactionFee(sender?.address, tx)
 
+  useEffect(() => {
+    setMaxAmount(transferableBalance.sub(fee?.feeInfo?.transactionFee ?? ED))
+  }, [fee?.feeInfo?.transactionFee])
+
+  const { changeField, validation, fields } = useForm<TransferTokensFormField>({ amount: initialValue }, schema)
+  const { isValid, errors } = validation
+  const { amount } = fields
   const isOverBalance = amount?.gt(maxValue || transferableBalance || 0)
   const isTransferDisabled = !amount || amount.isZero() || isOverBalance || !recipient || !isValid
   const isValueDisabled = !sender
 
-  const { api } = useApi()
-  const [maxAmount, setMaxAmount] = useState(maxValue || transferableBalance || 0)
-  const maxFee = useTransactionFee(sender?.address, () =>
-    api?.tx.balances.transfer(recipient?.address || '', maxAmount)
-  )
-  useEffect(() => {
-    setMaxAmount(transferableBalance.sub(maxFee?.feeInfo?.transactionFee ?? BN_ZERO))
-  }, [maxFee?.feeInfo?.transactionFee])
-
   const setHalf = () => changeField('amount', transferableBalance.divn(2))
-  const setMax = () => changeField('amount', maxAmount)
-  const onTransfer = () => {
-    if (amount && recipient && sender) {
-      onAccept(amount, sender, recipient)
-    }
-  }
+  const setMax = () => changeField('amount', maxAmount.sub(fee?.feeInfo?.transactionFee ?? ED))
+  const getIconType = () => (!from ? (!to ? 'transfer' : 'receive') : 'send')
+  const onTransfer = () => amount && recipient && sender && onAccept(amount, sender, recipient)
+  const filterRecipient = useCallback(filterAccount(sender), [sender])
+
+  const filterSender = useCallback(
+    ({ address }: Account) => address !== recipient?.address && !!balances?.[address]?.transferable.gt(BN_ZERO),
+    [recipient, balances]
+  )
 
   return (
     <Modal modalSize={'m'} onClose={onClose}>
@@ -119,9 +111,7 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
             disabled={!!from}
             borderless={!!from}
           >
-            {from ? (
-              <SelectedAccount account={from} />
-            ) : (
+            {(from && <SelectedAccount account={from} />) || (
               <SelectAccount filter={filterSender} onChange={setSender} selected={sender} />
             )}
           </InputComponent>
@@ -163,9 +153,7 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
             disabled={!!to}
             borderless={!!to}
           >
-            {to ? (
-              <SelectedAccount account={to} />
-            ) : (
+            {(to && <SelectedAccount account={to} />) || (
               <SelectAccount filter={filterRecipient} onChange={setRecipient} selected={recipient} />
             )}
           </InputComponent>
