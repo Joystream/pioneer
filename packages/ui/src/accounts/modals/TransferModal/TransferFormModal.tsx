@@ -71,14 +71,12 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
 
   const fee = useTransactionFee(sender?.address, tx)
   const maxFee = fee?.feeInfo?.transactionFee ?? ED
+  const limit: BN = transferable.sub(maxFee) ?? BN_ZERO
 
   const { changeField, validation, fields } = useForm<TransferTokensFormField>({ amount: initialValue }, schema)
   const setHalf = () => changeField('amount', transferable.divn(2))
   const setMax = () => changeField('amount', transferable)
-
   const { amount } = fields
-  const limit: BN = transferable.sub(maxFee) ?? BN_ZERO
-  const isOverBalance = amount?.add(maxFee).gt(transferable)
   const { isValid, errors } = validation
   const isTransferDisabled = !amount || amount.isZero() || !recipient || !isValid
   const isValueDisabled = !sender
