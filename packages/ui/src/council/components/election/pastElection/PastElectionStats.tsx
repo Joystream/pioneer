@@ -21,11 +21,16 @@ export const PastElectionStats = ({
   totalVotes,
 }: PastElectionStatsProps) => (
   <Statistics>
-    <StatisticItem title="Ended at">
+    <StatisticItem title="Started at">
       {finishedAtBlock ? formatDateString(finishedAtBlock.timestamp) : '-'}
     </StatisticItem>
-    <StatisticItem title="Election round" tooltipText="Lorem ipsum...">
-      <TextHuge bold>{cycleId} round</TextHuge>
+    <StatisticItem
+      title="Election round"
+      tooltipText="Refers to the on-chain election cycle enumeration."
+      tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council#election"
+      tooltipLinkText="Read about election cycles"
+    >
+      <TextHuge bold>{cycleId}</TextHuge>
     </StatisticItem>
     <NumericValueStat title="Total candidates" value={totalCandidates} />
     <StatsBlock>

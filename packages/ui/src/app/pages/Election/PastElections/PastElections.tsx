@@ -48,7 +48,7 @@ export const PastElections = () => {
             <>
               <PastElectionsListHeaders $colLayout={PastElectionsColLayout}>
                 <SortHeader {...getSortProps('cycleId')}>Round</SortHeader>
-                <SortHeader {...getSortProps('updatedAt')}>Election ended at</SortHeader>
+                <SortHeader {...getSortProps('updatedAt')}>Election started at</SortHeader>
                 <ListHeader>Total staked</ListHeader>
                 <ListHeader>Revealed votes</ListHeader>
                 <ListHeader>Total candidates</ListHeader>
