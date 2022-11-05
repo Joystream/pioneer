@@ -77,13 +77,13 @@ export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue
   const setMax = () => changeField('amount', transferable)
 
   const { amount } = fields
-  const limit = transferable.sub(maxFee)
+  const limit: BN = transferable.sub(maxFee) ?? BN_ZERO
   const isOverBalance = amount?.add(maxFee).gt(transferable)
   const { isValid, errors } = validation
   const isTransferDisabled = !amount || amount.isZero() || !recipient || !isValid
   const isValueDisabled = !sender
 
-  const finalAmount = amount?.gt(limit) ? limit.sub(ED) : amount
+  const finalAmount: BN = (amount?.gt(limit) ? limit.sub(ED) : amount) ?? BN_ZERO
   const onTransfer = () => amount && recipient && sender && onAccept(finalAmount, sender, recipient)
 
   const getIconType = () => (!from ? (!to ? 'transfer' : 'receive') : 'send')
