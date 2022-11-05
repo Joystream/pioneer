@@ -13,10 +13,23 @@ export interface BlockInfoProp {
   block: Block
   lessInfo?: boolean
   inline?: boolean
+  noLink?: boolean
 }
 
-export const BlockInfo = ({ block, lessInfo, inline }: BlockInfoProp) => {
+export const BlockInfo = ({ block, lessInfo, inline, noLink }: BlockInfoProp) => {
   const [endpoints] = useNetworkEndpoints()
+
+  // TODO UN-DRY
+  if (noLink)
+    return (
+      <BlockInfoContainer lessInfo={lessInfo} inline={inline}>
+        <BlockIcon />
+        <span>
+          {lessInfo && 'Block'} {formatTokenValue(block.number)}
+        </span>
+      </BlockInfoContainer>
+    )
+
   return (
     <BlockLink
       href={`https://polkadot.js.org/apps/?rpc=${endpoints.nodeRpcEndpoint}/ws-rpc#/explorer/query/${block.number}`}

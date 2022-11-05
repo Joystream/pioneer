@@ -13,6 +13,7 @@ export interface BlockTimeProps extends BlockTimeLayoutProps {
   block: Block
   dateLabel?: string
   lessInfo?: boolean
+  noLink?: boolean
 }
 
 interface BlockTimeLayoutProps {
@@ -20,16 +21,18 @@ interface BlockTimeLayoutProps {
   position?: 'start' | 'end'
 }
 
-export const BlockTime = React.memo(({ block, layout, dateLabel, lessInfo, position = 'start' }: BlockTimeProps) => (
-  <BlockTimeWrapper layout={layout} position={position}>
-    <AboutText>
-      {dateLabel && layout == 'row' && dateLabel + ': '}
-      {formatDateString(block.timestamp, layout === 'column' ? 's' : 'l')}
-    </AboutText>
-    {layout == 'row' && <Separator>{' | '}</Separator>}
-    <BlockInfo block={block} lessInfo={lessInfo} />
-  </BlockTimeWrapper>
-))
+export const BlockTime = React.memo(
+  ({ block, layout, dateLabel, lessInfo, noLink, position = 'start' }: BlockTimeProps) => (
+    <BlockTimeWrapper layout={layout} position={position}>
+      <AboutText>
+        {dateLabel && layout == 'row' && dateLabel + ': '}
+        {formatDateString(block.timestamp, layout === 'column' ? 's' : 'l')}
+      </AboutText>
+      {layout == 'row' && <Separator>{' | '}</Separator>}
+      <BlockInfo block={block} lessInfo={lessInfo} noLink={noLink} />
+    </BlockTimeWrapper>
+  )
+)
 
 const Separator = styled.span`
   font-size: inherit;
