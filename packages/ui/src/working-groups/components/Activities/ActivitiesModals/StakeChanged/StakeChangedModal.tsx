@@ -29,6 +29,7 @@ interface StakeChangedModalProps {
 
 export const StakeChangedModal = ({ onClose, amount, eventType, id }: StakeChangedModalProps) => {
   useEscape(() => onClose())
+  const slashingRationaleInfo = '' // hidden until needed
 
   return (
     <SidePaneGlass onClick={onClose}>
@@ -54,14 +55,12 @@ export const StakeChangedModal = ({ onClose, amount, eventType, id }: StakeChang
                   <TokenValue value={amount} />
                 </SidePaneText>
               </SidePaneRow>
-              <SidePaneRow>
-                <SidePaneLabel text="rationale" />
-                <SidePaneText>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam, deleniti, dolor voluptatibus nisi
-                  iusto molestiae quo explicabo illo cum nostrum corrupti suscipit a atque aperiam aliquam nobis quidem,
-                  architecto vitae?
-                </SidePaneText>
-              </SidePaneRow>
+              {false && (
+                <SidePaneRow>
+                  <SidePaneLabel text="rationale" />
+                  <SidePaneText>{slashingRationaleInfo}</SidePaneText>
+                </SidePaneRow>
+              )}
             </SidePaneTable>
           ) : (
             <EmptyBody>

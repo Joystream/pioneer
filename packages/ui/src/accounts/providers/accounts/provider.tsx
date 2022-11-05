@@ -151,7 +151,7 @@ export const AccountsContextProvider = (props: Props) => {
   )
   const allAccounts: Account[] = []
 
-  if (accounts) {
+  if (accounts && selectedWallet) {
     allAccounts.push(
       ...Object.values(accounts).map((account) => {
         const publicKey = decodeAddress(account.json.address)
