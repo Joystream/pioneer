@@ -37,9 +37,9 @@ export const PastElectionStats = ({
       <StatisticBar
         title="Revealed votes"
         tooltipText="Votes are kept anonymous and get revealed during the reveal period, after voting is complete. Only revealed votes are counted."
-        value={revealedVotes / totalVotes}
-        numerator={revealedVotes}
-        denominator={totalVotes + ' votes'}
+        value={revealedVotes ?? 0 / totalVotes ?? 0}
+        numerator={revealedVotes ?? 0}
+        denominator={totalVotes ?? 0 + ' votes'}
       />
     </StatsBlock>
   </Statistics>
