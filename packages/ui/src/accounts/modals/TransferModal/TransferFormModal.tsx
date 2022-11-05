@@ -62,37 +62,32 @@ const schemaFactory = (maxValue?: BN, minValue?: BN, senderBalance?: BN) => {
 
 export function TransferFormModal({ from, to, onClose, onAccept, title, maxValue, minValue, initialValue }: Props) {
   const { api } = useApi()
-  const [sender, setSender] = useState<Account | undefined>(from)
   const [recipient, setRecipient] = useState<Account | undefined>(to)
+  const [sender, setSender] = useState<Account | undefined>(from)
   const balances = useMyBalances()
+  const transferable = balances?.[sender?.address as string]?.transferable ?? BN_ZERO
+  const tx = () => api?.tx.balances.transfer(recipient?.address || '', transferable)
+  const schema = useMemo(() => schemaFactory(maxValue, minValue, transferable), [maxValue, minValue, balances, sender])
 
-  const schema = useMemo(
-    () => schemaFactory(maxValue, minValue, balances?.[sender?.address as string]?.transferable),
-    [maxValue, minValue, balances, sender]
-  )
-
-  const transferableBalance = balances?.[sender?.address as string]?.transferable ?? BN_ZERO
-  const [maxAmount, setMaxAmount] = useState<BN>(maxValue ?? transferableBalance)
-  const tx = () => api?.tx.balances.transfer(recipient?.address || '', transferableBalance)
   const fee = useTransactionFee(sender?.address, tx)
-
-  useEffect(() => {
-    setMaxAmount(transferableBalance.sub(fee?.feeInfo?.transactionFee ?? ED))
-  }, [fee?.feeInfo?.transactionFee])
+  const maxFee = fee?.feeInfo?.transactionFee ?? ED
 
   const { changeField, validation, fields } = useForm<TransferTokensFormField>({ amount: initialValue }, schema)
-  const { isValid, errors } = validation
+  const setHalf = () => changeField('amount', transferable.divn(2))
+  const setMax = () => changeField('amount', transferable)
+
   const { amount } = fields
-  const isOverBalance = amount?.gt(maxValue || transferableBalance || 0)
-  const isTransferDisabled = !amount || amount.isZero() || isOverBalance || !recipient || !isValid
+  const limit = transferable.sub(maxFee)
+  const isOverBalance = amount?.add(maxFee).gt(transferable)
+  const { isValid, errors } = validation
+  const isTransferDisabled = !amount || amount.isZero() || !recipient || !isValid
   const isValueDisabled = !sender
 
-  const setHalf = () => changeField('amount', transferableBalance.divn(2))
-  const setMax = () => changeField('amount', maxAmount.sub(fee?.feeInfo?.transactionFee ?? ED))
-  const getIconType = () => (!from ? (!to ? 'transfer' : 'receive') : 'send')
-  const onTransfer = () => amount && recipient && sender && onAccept(amount, sender, recipient)
-  const filterRecipient = useCallback(filterAccount(sender), [sender])
+  const finalAmount = amount?.gt(limit) ? limit.sub(ED) : amount
+  const onTransfer = () => amount && recipient && sender && onAccept(finalAmount, sender, recipient)
 
+  const getIconType = () => (!from ? (!to ? 'transfer' : 'receive') : 'send')
+  const filterRecipient = useCallback(filterAccount(sender), [sender])
   const filterSender = useCallback(
     ({ address }: Account) => address !== recipient?.address && !!balances?.[address]?.transferable.gt(BN_ZERO),
     [recipient, balances]
