@@ -65,18 +65,14 @@ export const WorkingGroupOpening = () => {
   const rewardPeriod = useRewardPeriod(opening?.groupId)
 
   if (isLoading || !opening) {
-    return (
-      <PageLayout
-        lastBreadcrumb={id}
-        main={
-          <RowGapBlock gap={24}>
-            <ContentWithSidePanel>
-              <Loading />
-            </ContentWithSidePanel>
-          </RowGapBlock>
-        }
-      />
+    const Main = () => (
+      <RowGapBlock gap={24}>
+        <ContentWithSidePanel>
+          <Loading />
+        </ContentWithSidePanel>
+      </RowGapBlock>
     )
+    return <PageLayout lastBreadcrumb={id} main={Main} />
   }
 
   const StatusBadge = memo(() => {
@@ -176,7 +172,6 @@ export const WorkingGroupOpening = () => {
             myApplication={myApplication}
             hired={hiringApplication}
             hiringComplete={opening.status !== OpeningStatuses.OPEN}
-            leadId={opening.leadId}
           />
           {opening.status === OpeningStatuses.OPEN && !activeApplications?.length && <ApplicationStatus />}
         </SidePanel>
