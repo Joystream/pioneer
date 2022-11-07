@@ -4,7 +4,6 @@ import * as Yup from 'yup'
 
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent, InputText, InputTextarea } from '@/common/components/forms'
-import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
 import {
   ModalFooter,
@@ -14,7 +13,6 @@ import {
   ScrolledModalContainer,
   Row,
 } from '@/common/components/Modal'
-import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { useKeyring } from '@/common/hooks/useKeyring'
 import { useYupValidationResolver } from '@/common/utils/validation'

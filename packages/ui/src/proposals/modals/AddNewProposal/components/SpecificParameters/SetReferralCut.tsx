@@ -2,10 +2,8 @@ import React from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
 import { InputComponent, InputNumber } from '@/common/components/forms'
-import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 

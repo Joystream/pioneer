@@ -20,7 +20,6 @@ import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal
 import { isFundingLimited } from '@/bounty/types/Bounty'
 import { Input, InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
-import { LinkSymbol } from '@/common/components/icons/symbols'
 import {
   AmountButton,
   AmountButtons,
