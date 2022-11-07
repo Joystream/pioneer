@@ -4,10 +4,12 @@ import { map, combineLatest, concatMap, EMPTY, merge, Observable, of } from 'rxj
 import { useApi } from '@/api/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 
-export const useCouncilRemainingPeriod = () => {
+import { electionStageObservable } from './useElectionStage'
+
+export const useCouncilRemainingPeriod = (until: 'stageEnd' | 'electionEnd' = 'stageEnd') => {
   const { api } = useApi()
 
-  const remainingPeriod = () => {
+  return useObservable(() => {
     if (!api) return
 
     const councilStageEnd = api.query.council.stage().pipe(
@@ -37,13 +39,33 @@ export const useCouncilRemainingPeriod = () => {
       })
     )
 
-    const periodEnd = merge(councilStageEnd, referendumStageEnd).pipe(map((end) => end.toNumber()))
+    const stageEnd = merge(councilStageEnd, referendumStageEnd).pipe(map((end) => end.toNumber()))
+    const periodEnd =
+      until === 'electionEnd'
+        ? stageEnd
+        : combineLatest([stageEnd, electionStageObservable(api)]).pipe(
+            map(([end, stage]) => {
+              const announcingPeriodDuration = Number(api.consts.council.announcingPeriodDuration)
+              const voteStageDuration = Number(api.consts.referendum.voteStageDuration)
+              const revealStageDuration = Number(api.consts.referendum.revealStageDuration)
+
+              switch (stage) {
+                case 'inactive':
+                  return end + announcingPeriodDuration + voteStageDuration + revealStageDuration
+                case 'announcing':
+                  return end + voteStageDuration + revealStageDuration
+                case 'voting':
+                  return end + revealStageDuration
+                case 'revealing':
+                  return end
+              }
+            })
+          )
+
     const currentBlock = api.rpc.chain.subscribeNewHeads().pipe(map(({ number }) => number.toNumber()))
 
     return combineLatest([periodEnd, currentBlock]).pipe(
       map(([periodEnd, currentBlock]) => Math.max(0, periodEnd - currentBlock))
     )
-  }
-
-  return useObservable(remainingPeriod, [api?.isConnected])
+  }, [api?.isConnected])
 }
