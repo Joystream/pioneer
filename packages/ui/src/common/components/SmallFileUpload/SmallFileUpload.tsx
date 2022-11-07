@@ -25,11 +25,15 @@ export const SmallFileUpload = ({ onUpload, name, initialPreview }: SmallFileUpl
   const [avatarPreview, setAvatarPreview] = useState<string>(initialPreview ?? '')
   useEffect(() => {
     if (localValue && SUPPORTED_IMAGES?.includes(localValue.type)) {
-      resizeImageFile(localValue, 192, 192, 'image/webp').then((blob) => {
-        const objectUrl = URL.createObjectURL(blob)
+      let objectUrl: string
+      resizeImageFile(localValue, 192, 192, 'image/webp').then((blob: Blob | null) => {
+        objectUrl = URL.createObjectURL(blob)
         setAvatarPreview(objectUrl)
-        return () => URL.revokeObjectURL(objectUrl)
       })
+
+      return () => {
+        objectUrl && URL.revokeObjectURL(objectUrl)
+      }
     }
   }, [localValue])
 
