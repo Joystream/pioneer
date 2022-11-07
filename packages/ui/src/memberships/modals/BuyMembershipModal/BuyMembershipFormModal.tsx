@@ -32,6 +32,7 @@ import {
   ScrolledModalContainer,
   TransactionInfoContainer,
 } from '@/common/components/Modal'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { definedValues } from '@/common/utils'
