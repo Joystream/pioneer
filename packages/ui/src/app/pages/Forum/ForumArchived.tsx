@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { Children, useState } from 'react'
+import styled from 'styled-components'
 
 import { PageLayout } from '@/app/components/PageLayout'
 import { ForumThreadOrderByInput } from '@/common/api/queries'
@@ -6,7 +7,7 @@ import { ItemCount } from '@/common/components/ItemCount'
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
-import { TextMedium } from '@/common/components/typography'
+import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { useSort } from '@/common/hooks/useSort'
 import { CategoriesListWrapper } from '@/forum/components/category'
 import { CategoryCard } from '@/forum/components/CategoryCard/CategoryCard'
@@ -28,7 +29,7 @@ export const ForumArchived = () => {
     threads,
     threadCount,
     refresh,
-  } = useForumCategoryThreads({ isArchive: false, order }, { perPage: THREADS_PER_PAGE, page })
+  } = useForumCategoryThreads({ isArchive: true, order }, { perPage: THREADS_PER_PAGE, page })
 
   return (
     <PageLayout
@@ -40,22 +41,21 @@ export const ForumArchived = () => {
       main={
         <>
           <RowGapBlock gap={24}>
+            <StyledItemCount count={forumCategories?.length ?? 0} size="xs">
+              Archived Categories
+            </StyledItemCount>
             {isLoadingCategories ? (
               <Loading />
+            ) : forumCategories && forumCategories.length > 0 ? (
+              <RowGapBlock gap={10}>
+                <CategoriesListWrapper>
+                  {Children.toArray(
+                    forumCategories.map((category) => <CategoryCard archivedStyles category={category} />)
+                  )}
+                </CategoriesListWrapper>
+              </RowGapBlock>
             ) : (
-              forumCategories &&
-              forumCategories.length > 0 && (
-                <RowGapBlock gap={10}>
-                  <TextMedium value lighter>
-                    Archived Categories
-                  </TextMedium>
-                  <CategoriesListWrapper>
-                    {forumCategories.map((category) => (
-                      <CategoryCard archivedStyles category={category} />
-                    ))}
-                  </CategoriesListWrapper>
-                </RowGapBlock>
-              )
+              <NotFoundText>No categories found</NotFoundText>
             )}
           </RowGapBlock>
 
@@ -82,3 +82,7 @@ export const ForumArchived = () => {
     />
   )
 }
+
+export const StyledItemCount = styled(ItemCount)`
+  padding: 0 16px;
+`

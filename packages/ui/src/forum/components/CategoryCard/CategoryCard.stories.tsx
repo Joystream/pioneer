@@ -10,8 +10,10 @@ export default {
   component: CategoryCard,
 } as Meta
 
-interface Props extends Omit<CategoryCardProps['category'], 'id' | 'status' | 'moderators' | 'subcategories'> {
+interface Props {
+  category: Omit<CategoryCardProps['category'], 'id' | 'status' | 'moderators' | 'subcategories'>
   subcategories: string[]
+  archivedStyles: boolean
 }
 
 const Template: Story<Props> = (args) => {
@@ -19,7 +21,7 @@ const Template: Story<Props> = (args) => {
     <div style={{ height: '540px' }}>
       <CategoryCard
         category={{
-          ...args,
+          ...args.category,
           id: '12',
           status: 'CategoryStatusActive' as unknown as CategoryStatus,
           subcategories: args.subcategories.map((title, id) => ({
@@ -29,6 +31,7 @@ const Template: Story<Props> = (args) => {
           })),
           moderators: [getMember('alice')],
         }}
+        archivedStyles={args.archivedStyles}
       />
     </div>
   )
@@ -36,7 +39,10 @@ const Template: Story<Props> = (args) => {
 
 export const Default = Template.bind({})
 Default.args = {
-  title: 'Discussions',
-  description: 'This category contains different kinds of discussions: general, meta, media, off-topic...',
+  category: {
+    title: 'Discussions',
+    description: 'This category contains different kinds of discussions: general, meta, media, off-topic...',
+  },
   subcategories: ['topic A', 'topic B', 'topic C'],
+  archivedStyles: false,
 }
