@@ -198,7 +198,7 @@ export const TooltipPopupContainer = styled.div<{ isTooltipActive?: boolean; for
       clip-path: polygon(100% 0, 0 0, 0 100%);
     }
   }
-  &[data-popper-reference-hidden] {
+  &[data-popper-reference-hidden='true'] {
     visibility: hidden;
     pointer-events: none;
   }
