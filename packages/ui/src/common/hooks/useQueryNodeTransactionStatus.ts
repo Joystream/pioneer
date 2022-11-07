@@ -6,8 +6,8 @@ import { useQueryNodeStateSubscription } from './useQueryNode'
 
 type TransactionStatus = 'confirmed' | 'rejected' | 'unknown'
 
-export function useQueryNodeTransactionStatus(isProcessing: boolean, blockHash?: Hash | string) {
-  const { queryNodeState } = useQueryNodeStateSubscription()
+export function useQueryNodeTransactionStatus(isProcessing: boolean, blockHash?: Hash | string, skip?: boolean) {
+  const { queryNodeState } = useQueryNodeStateSubscription({ shouldResubscribe: true, skip })
   const [status, setStatus] = useState<TransactionStatus>('unknown')
   const queryNodeBlockHash = useBlockHash(queryNodeState?.indexerHead)
   useEffect(() => {
