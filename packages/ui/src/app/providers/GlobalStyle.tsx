@@ -1,7 +1,8 @@
 import { createGlobalStyle } from 'styled-components'
 
-import { Colors, Fonts } from '../../common/constants'
-import { Animations } from '../../common/constants/animations'
+import { Colors, Fonts } from '@/common/constants'
+import { Animations } from '@/common/constants/animations'
+
 import InterBold from '../assets/fonts/Inter-Bold.woff2'
 import InterRegular from '../assets/fonts/Inter-Regular.woff2'
 import GroteskBold from '../assets/fonts/Px-Grotesk-Bold.woff2'
@@ -59,7 +60,6 @@ export const GlobalStyle = createGlobalStyle`
   body > #app {
     height: 100%;
     overflow-x: hidden;
-    overflow-y: scroll;
   }
   button {
     font-family: ${Fonts.Grotesk};
