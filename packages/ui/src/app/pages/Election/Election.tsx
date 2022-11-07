@@ -91,7 +91,7 @@ export const Election = () => {
         <StatisticItem
           title="Stage"
           tooltipText="Elections occur periodically. Each has a sequence of stages referred to as the election cycle. Stages are: announcing period, voting period and revealing period."
-          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council?q=lock#election"
+          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council#election"
         >
           <TextHuge bold>{camelCaseToText(electionStage)} Period</TextHuge>
         </StatisticItem>
@@ -99,7 +99,7 @@ export const Election = () => {
           title="Period remaining length"
           value={remainingPeriod}
           tooltipText="Remaining length of current period before the next one starts."
-          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council?q=lock#election"
+          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council#election"
         />
         <StatisticItem
           title="Election round"

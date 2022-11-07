@@ -78,7 +78,7 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
         <TextSmall bold>{camelCaseToText(proposal.status)}</TextSmall>
         <Tooltip
           tooltipText={checkStatus()}
-          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/proposal-system?q=lock#proposal"
+          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/proposal-system#proposal"
         >
           <TooltipDefault />
         </Tooltip>
