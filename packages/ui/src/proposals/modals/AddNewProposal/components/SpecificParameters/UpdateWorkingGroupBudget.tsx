@@ -1,7 +1,6 @@
 import BN from 'bn.js'
 import React, { useEffect, useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { map } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
 import { CurrencyName } from '@/app/constants/currency'
@@ -14,8 +13,8 @@ import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextInlineMedium, TextMedium, TokenValue } from '@/common/components/typography'
 import { DurationValue } from '@/common/components/typography/DurationValue'
 import { nameMapping } from '@/common/helpers'
+import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
-import { useObservable } from '@/common/hooks/useObservable'
 import { formatTokenValue, MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { useCouncilStatistics } from '@/council/hooks/useCouncilStatistics'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
@@ -31,16 +30,12 @@ export const UpdateWorkingGroupBudget = () => {
     'updateWorkingGroupBudget.isPositive',
     'updateWorkingGroupBudget.budgetUpdate',
   ])
-  const currentBlock = useObservable(
-    () => api?.rpc.chain.subscribeNewHeads().pipe(map(({ number }) => number.toNumber())),
-    [api?.isConnected]
-  )
+  const currentBlock = useCurrentBlockNumber()
   const { group } = useWorkingGroup({ name: groupId })
 
   const milisecondsLeft = useMemo(() => {
     if (currentBlock && nextPaymentBlock) {
-      const blockToGo = nextPaymentBlock.toNumber() - currentBlock
-      return new Date(Date.now() + blockToGo * MILLISECONDS_PER_BLOCK).getTime() - Date.now()
+      return (Number(nextPaymentBlock) - currentBlock.toNumber()) * MILLISECONDS_PER_BLOCK
     }
   }, [currentBlock, nextPaymentBlock])
 
@@ -121,7 +116,7 @@ export const UpdateWorkingGroupBudget = () => {
               </TextMedium>
             </Info>
           )}
-          {nextPaymentBlock && milisecondsLeft && (
+          {nextPaymentBlock && !!milisecondsLeft && (
             <Info>
               <TextMedium>
                 Next Council payment is in <DurationValue value={formatDurationDate(milisecondsLeft)} /> at block number{' '}
