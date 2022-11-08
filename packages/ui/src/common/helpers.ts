@@ -1,3 +1,5 @@
+import { SUPPORTED_IMAGES } from '@/memberships/model/validation'
+
 export const capitalizeFirstLetter = <T extends string>(str: T) =>
   (str.charAt(0).toUpperCase() + str.slice(1)) as Capitalize<T>
 
@@ -91,4 +93,38 @@ export const wgListItemMappings = (value: string) => {
         tooltipLink: undefined,
       }
   }
+}
+
+export const resizeImageFile = (file: File, width: number, height: number, type?: string): Promise<Blob | null> => {
+  return new Promise((resolve, reject) => {
+    if (!SUPPORTED_IMAGES.includes(file.type)) {
+      reject(new Error('Wrong file type'))
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const img = new Image()
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        canvas.height = height
+        canvas.width = width
+        const ctx = canvas.getContext('2d')
+
+        const dW = img.width - width
+        const dH = img.height - height
+        const [clippedWidth, clippedHeight] =
+          Math.abs(dW) > Math.abs(dH)
+            ? [Math.floor((img.width / img.height) * width), img.height]
+            : [img.width, Math.floor((img.height / img.width) * height)]
+        const x = Math.floor(img.width / 2 - clippedWidth / 2)
+        const y = Math.floor(img.height / 2 - clippedHeight / 2)
+
+        ctx?.drawImage(img, x, y, clippedWidth, clippedHeight, 0, 0, width, height)
+        ctx?.canvas.toBlob((blob) => resolve(blob), type ?? file.type)
+      }
+      img.src = event.target?.result as string
+    }
+    reader.readAsDataURL(file)
+  })
 }
