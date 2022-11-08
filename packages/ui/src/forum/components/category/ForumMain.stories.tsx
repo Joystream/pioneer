@@ -6,7 +6,7 @@ import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvi
 import { ForumMain } from './ForumMain'
 
 export default {
-  title: 'Forum/Categories/ForumCategoryList',
+  title: 'Forum/ForumMain',
   component: ForumMain,
 } as Meta
 
@@ -19,6 +19,3 @@ const Template: Story = () => {
 }
 
 export const Default = Template.bind({})
-Default.args = {
-  isArchive: false,
-}

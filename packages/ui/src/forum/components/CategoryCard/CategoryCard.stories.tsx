@@ -1,47 +1,48 @@
-import { Meta } from '@storybook/react'
-import React, { useState } from 'react'
+import { Meta, Story } from '@storybook/react'
+import React from 'react'
 
-import { Loading } from '@/common/components/Loading'
-import { CategoryCard } from '@/forum/components/CategoryCard/CategoryCard'
-import {
-  ForumCategoryFieldsFragment,
-  GetForumCategoriesDocument,
-  GetForumCategoriesQuery,
-  GetForumCategoriesQueryVariables,
-} from '@/forum/queries'
-import { asForumCategory, ForumCategory } from '@/forum/types'
-import { MockApolloProvider, Query } from '@/mocks/components/storybook/MockApolloProvider'
-import { randomBlock } from '@/mocks/helpers/randomBlock'
+import { CategoryCard, CategoryCardProps } from '@/forum/components/CategoryCard/CategoryCard'
+import { CategoryStatus } from '@/forum/types'
+import { getMember } from '@/mocks/helpers'
 
 export default {
-  title: 'Forum/Facelift/CategoryCard',
+  title: 'Forum/Categories/CategoryCard',
   component: CategoryCard,
 } as Meta
 
-export const Default = () => {
-  const [categories, setCategories] = useState<ForumCategory[]>([])
+interface Props {
+  category: Omit<CategoryCardProps['category'], 'id' | 'status' | 'moderators' | 'subcategories'>
+  subcategories: string[]
+  archivedStyles: boolean
+}
 
+const Template: Story<Props> = (args) => {
   return (
-    <MockApolloProvider members workers forum>
-      <Query
-        call={async (client) => {
-          const { data } = await client.query<GetForumCategoriesQuery, GetForumCategoriesQueryVariables>({
-            query: GetForumCategoriesDocument,
-            variables: { where: { id_in: ['0'] } },
-          })
-          setCategories(data.forumCategories.map(asCategory))
+    <div style={{ height: '540px' }}>
+      <CategoryCard
+        category={{
+          ...args.category,
+          id: '12',
+          status: 'CategoryStatusActive' as unknown as CategoryStatus,
+          subcategories: args.subcategories.map((title, id) => ({
+            id: title + id,
+            title,
+            status: 'CategoryStatusActive',
+          })),
+          moderators: [getMember('alice')],
         }}
+        archivedStyles={args.archivedStyles}
       />
-
-      {!categories.length ? <Loading /> : <CategoryCard category={categories[0]} />}
-    </MockApolloProvider>
+    </div>
   )
 }
 
-const asCategory = (category: ForumCategoryFieldsFragment): ForumCategory => ({
-  ...asForumCategory(category),
-  status: {
-    __typename: 'CategoryStatusArchived',
-    categoryArchivalStatusUpdatedEvent: randomBlock(),
+export const Default = Template.bind({})
+Default.args = {
+  category: {
+    title: 'Discussions',
+    description: 'This category contains different kinds of discussions: general, meta, media, off-topic...',
   },
-})
+  subcategories: ['topic A', 'topic B', 'topic C'],
+  archivedStyles: false,
+}

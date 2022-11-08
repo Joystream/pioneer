@@ -44,7 +44,7 @@ const modalData: ModalCallData<DeleteThreadModalCall> = {
     categoryId: '1',
     initialPostText: '',
     categoryTitle: '',
-    authorId: '0',
+    author: getMember('alice'),
     isSticky: false,
     createdInBlock: randomBlock(),
     tags: [],
@@ -111,7 +111,7 @@ describe('UI: DeleteThreadModal', () => {
 
     const [userId, categoryId, threadId, hide] = last(txMock.mock.calls)
 
-    expect(userId.toJSON()).toBe(Number(modalData.thread.authorId))
+    expect(userId.toJSON()).toBe(Number(modalData.thread.author.id))
     expect(categoryId.toJSON()).toBe(Number(modalData.thread.categoryId))
     expect(threadId.toJSON()).toBe(Number(modalData.thread.id))
     expect(hide).toBe(true)
