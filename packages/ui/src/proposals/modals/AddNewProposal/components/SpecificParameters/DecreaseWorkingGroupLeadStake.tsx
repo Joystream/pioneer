@@ -78,7 +78,7 @@ export const DecreaseWorkingGroupLeadStake = () => {
               disableNoLead
             />
           </InputComponent>
-          <SelectedMember label="Working Group Lead" member={lead} disabled />
+          {lead && <SelectedMember label="Working Group Lead" member={lead} disabled />}
           {group && (
             <Info>
               <TextMedium>

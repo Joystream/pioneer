@@ -21,9 +21,10 @@ export const SetWorkingGroupLeadReward = () => {
   const isDisabled = !group || (group && !group.leadId)
 
   useEffect(() => {
-    setValue('setWorkingGroupLeadReward.workerId', group?.leadWorker?.runtimeId, { shouldValidate: true })
-  }, [groupId, group?.leadWorker?.runtimeId])
-
+    if (group) {
+      setValue('setWorkingGroupLeadReward.workerId', group?.leadWorker?.runtimeId, { shouldValidate: true })
+    }
+  }, [group?.leadWorker?.runtimeId])
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -50,7 +51,7 @@ export const SetWorkingGroupLeadReward = () => {
               disableNoLead
             />
           </InputComponent>
-          <SelectedMember label="Working Group Lead" member={lead} disabled />
+          {lead && <SelectedMember label="Working Group Lead" member={lead} disabled />}
           {group && (
             <Info>
               <TextMedium>
