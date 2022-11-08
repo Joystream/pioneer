@@ -6,7 +6,6 @@ import { LinkSymbol } from '@/common/components/icons/symbols'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
-import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { Label, TextMedium } from '@/common/components/typography'
 import { LoadingOpenings } from '@/working-groups/components/OpeningsList'
 import { WorkersList } from '@/working-groups/components/WorkersList'
@@ -30,18 +29,8 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
       <Statistics>
         <TokenValueStat
           title="Current budget"
-          tooltipText={
-            <>
-              The budget is the root resource pool for all token minting in the working group, and the size of the pool
-              is denoted by budget.
-              <TooltipExternalLink
-                href="https://joystream.gitbook.io/joystream-handbook/governance/working-groups#budget"
-                target="_blank"
-              >
-                <TextMedium>Link</TextMedium> <LinkSymbol />
-              </TooltipExternalLink>
-            </>
-          }
+          tooltipText="The budget is the root resource pool for all token minting in the working group, and the size of the pool is denoted by budget."
+          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/working-groups?q=lock#concepts"
           value={workingGroup.budget}
         />
         <TokenValueStat
@@ -51,19 +40,9 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
         />
         <TokenValueStat
           title="Avg stake"
-          tooltipText={
-            <>
-              If funds are insufficient over payout periods, the working group can incur a debt, which is owed to
-              workers.{' '}
-              <TooltipExternalLink
-                href="https://joystream.gitbook.io/joystream-handbook/governance/working-groups#staking"
-                target="_blank"
-              >
-                <TextMedium>Link</TextMedium> <LinkSymbol />
-              </TooltipExternalLink>
-            </>
-          }
           value={workingGroup.averageStake}
+          tooltipText="Average stake size by members undertaking the roles of workers and the lead in this group."
+          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/working-groups?q=lock#concepts"
         />
       </Statistics>
 

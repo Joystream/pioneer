@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { FieldError, FormProvider, useForm } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
@@ -20,12 +20,14 @@ import {
   StepperModalBody,
   StepperModalWrapper,
 } from '@/common/components/StepperModal'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { createType } from '@/common/model/createType'
 import { getMaxBlock } from '@/common/model/getMaxBlock'
@@ -41,25 +43,17 @@ import { ExecutionRequirementsWarning } from '@/proposals/modals/AddNewProposal/
 import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
 import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
-import { SignTransactionModal } from '@/proposals/modals/AddNewProposal/components/SignTransactionModal'
 import { SpecificParametersStep } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 import { StakingAccountStep } from '@/proposals/modals/AddNewProposal/components/StakingAccountStep'
 import { SuccessModal } from '@/proposals/modals/AddNewProposal/components/SuccessModal'
 import { TriggerAndDiscussionStep } from '@/proposals/modals/AddNewProposal/components/TriggerAndDiscussionStep'
 import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
 import { getSpecificParameters } from '@/proposals/modals/AddNewProposal/getSpecificParameters'
-import {
-  AddNewProposalForm,
-  checkForExecutionWarning,
-  defaultProposalValues,
-  schemaFactory,
-} from '@/proposals/modals/AddNewProposal/helpers'
+import { AddNewProposalForm, defaultProposalValues, schemaFactory } from '@/proposals/modals/AddNewProposal/helpers'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
 import { addNewProposalMachine, AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalType } from '@/proposals/types'
 import { GroupIdName } from '@/working-groups/types'
-
-import { SignTransactionModal as SignModeChangeTransaction } from '../ChangeThreadMode/SignTransactionModal'
 
 export type BaseProposalParams = Exclude<
   Parameters<Api['tx']['proposalsCodex']['createProposal']>[0],
@@ -136,8 +130,12 @@ export const AddNewProposalModal = () => {
   }, [machineStateConverter(state.value)])
 
   useEffect(() => {
-    checkForExecutionWarning(machineStateConverter(state.value), form.formState.errors, setIsExecutionError)
-  }, [JSON.stringify(form.formState.errors)])
+    setIsExecutionError(
+      Object.values((form.formState.errors as any)[machineStateConverter(state.value)] ?? {}).some(
+        (value) => (value as FieldError).type === 'execution'
+      )
+    )
+  }, [JSON.stringify(form.formState.errors), machineStateConverter(state.value)])
 
   const transactionsSteps = useMemo(
     () =>
@@ -208,10 +206,30 @@ export const AddNewProposalModal = () => {
 
   const shouldDisableNext = useMemo(() => {
     if (isExecutionError) {
-      return !form.formState.isValid && !warningAccepted
+      const hasOtherError = Object.values(
+        (form.formState.errors as any)[machineStateConverter(state.value)] ?? {}
+      ).some((value) => (value as FieldError).type !== 'execution')
+
+      if (!form.formState.isDirty) {
+        return true
+      }
+
+      if (!hasOtherError) {
+        return !warningAccepted
+      }
+
+      return !form.formState.isValid
     }
+
     return !form.formState.isValid
-  }, [form.formState.isValid, isExecutionError, warningAccepted])
+  }, [
+    form.formState.isValid,
+    form.formState.isDirty,
+    isExecutionError,
+    warningAccepted,
+    JSON.stringify(form.getValues()),
+    JSON.stringify(form.formState.errors),
+  ])
 
   if (!api || !activeMember || !feeInfo || state.matches('requirementsVerification')) {
     return null
@@ -252,13 +270,23 @@ export const AddNewProposalModal = () => {
   if (state.matches('transaction')) {
     return (
       <SignTransactionModal
-        onClose={hideModal}
+        buttonText="Sign transaction and Create"
         transaction={transaction}
         signer={activeMember.controllerAccount}
-        stake={constants?.requiredStake as BN}
-        service={state.children['transaction']}
-        steps={transactionsSteps}
-      />
+        service={state.children.transaction}
+        useMultiTransaction={{ steps: transactionsSteps, active: 1 }}
+        additionalTransactionInfo={[
+          {
+            title: 'Stake:',
+            value: constants?.requiredStake as BN,
+          },
+        ]}
+      >
+        <TextMedium>You intend to create a proposal.</TextMedium>
+        <TextMedium>
+          Also you intend to stake <TokenValue value={constants?.requiredStake as BN} />.
+        </TextMedium>
+      </SignTransactionModal>
     )
   }
 
@@ -276,13 +304,15 @@ export const AddNewProposalModal = () => {
     )
 
     return (
-      <SignModeChangeTransaction
-        onClose={hideModal}
+      <SignTransactionModal
+        buttonText="Sign transaction and change mode"
         transaction={transaction}
         signer={activeMember.controllerAccount}
         service={state.children.discussionTransaction}
-        steps={transactionsSteps}
-      />
+        useMultiTransaction={{ steps: transactionsSteps, active: 2 }}
+      >
+        <TextMedium>You intend to change the proposal discussion thread mode.</TextMedium>
+      </SignTransactionModal>
     )
   }
 

@@ -8,9 +8,13 @@ import * as Yup from 'yup'
 import { StakeStep } from '@/accounts/components/StakeStep'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { Account } from '@/accounts/types'
-import { ButtonPrimary } from '@/common/components/buttons'
-import { Arrow } from '@/common/components/icons'
-import { Modal, ModalFooter, ModalHeader, ScrollableModalColumn, ScrolledModalBody } from '@/common/components/Modal'
+import {
+  Modal,
+  ModalHeader,
+  ModalTransactionFooter,
+  ScrollableModalColumn,
+  ScrolledModalBody,
+} from '@/common/components/Modal'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
 import { BNSchema, validStakingAmount } from '@/common/utils/validation'
@@ -81,12 +85,7 @@ export const VoteForCouncilFormModal = ({ minStake, send, state }: VoteForCounci
           />
         </ScrollableModalColumn>
       </VoteForCouncilModalBody>
-      <ModalFooter>
-        <ButtonPrimary disabled={!isValid} onClick={() => send('PASS')} size="medium">
-          Next step
-          <Arrow direction="right" />
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter next={{ disabled: !isValid, label: 'Next step', onClick: () => send('PASS') }} />
     </Modal>
   )
 }

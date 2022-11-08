@@ -1,23 +1,26 @@
 import React, { useEffect } from 'react'
 
+import { useApi } from '@/api/hooks/useApi'
+import { TextMedium } from '@/common/components/typography'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
-import { EditThreadTitleSignModal } from '@/forum/modals/EditThreadTitleModal/EditThreadTitleSignModal'
 import { EditThreadTitleModalCall } from '@/forum/modals/EditThreadTitleModal/index'
+import { useMember } from '@/memberships/hooks/useMembership'
 
 export const EditThreadTitleModal = () => {
+  const { api } = useApi()
   const [state, send] = useMachine(
     defaultTransactionModalMachine(
       'There was a problem while saving thread title.',
       'You have just successfully edited thread title.'
     )
   )
-
   const {
     modalData: { thread, newTitle, onSuccess },
-    hideModal,
   } = useModal<EditThreadTitleModalCall>()
+  const { member: threadAuthor } = useMember(thread.authorId)
 
   useEffect(() => {
     if (state.matches('success')) {
@@ -29,11 +32,16 @@ export const EditThreadTitleModal = () => {
     }
   }, [state.value])
 
-  if (state.matches('transaction')) {
-    const transactionService = state.children.transaction
-
+  if (state.matches('transaction') && threadAuthor) {
     return (
-      <EditThreadTitleSignModal onClose={hideModal} thread={thread} newTitle={newTitle} service={transactionService} />
+      <SignTransactionModal
+        buttonText="Sign and save"
+        transaction={api?.tx.forum.editThreadMetadata(threadAuthor.id, thread.categoryId, thread.id, newTitle)}
+        signer={threadAuthor.controllerAccount}
+        service={state.children.transaction}
+      >
+        <TextMedium>You intend to edit thread title.</TextMedium>
+      </SignTransactionModal>
     )
   }
 

@@ -1,13 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { ButtonGhost } from '@/common/components/buttons/Buttons'
+import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
+import { CountBadge } from '@/common/components/CountBadge'
 import { Arrow } from '@/common/components/icons'
 import { Loading } from '@/common/components/Loading'
+import { ColumnGapBlock } from '@/common/components/page/PageContent'
+import { Label } from '@/common/components/typography'
+import { BorderRad, Colors, Transitions } from '@/common/constants'
 import { isDefined } from '@/common/utils'
 import { ForumThread } from '@/forum/types'
 
-import { ThreadItem, EmptyThreadItem } from './ThreadItem'
+import { ThreadItem, ThreadItemWrapper, EmptyThreadItem } from './ThreadItem'
+import { ThreadsLayoutSpacing } from './ThreadsLayout'
 
 export interface ThreadBrowserProps {
   label: string
@@ -23,56 +28,85 @@ export interface ThreadBrowserProps {
 export const ThreadBrowser = ({
   label,
   threads,
-  isLoading,
-  emptyText,
   pageCount,
+  totalCount,
+  isLoading,
   currentPage,
   setCurrentPage,
+  emptyText,
 }: ThreadBrowserProps) => {
   const onPrevClick = () => setCurrentPage(currentPage - 1)
   const onNextClick = () => setCurrentPage(currentPage + 1)
 
   return (
-    <>
-      {label}
-      <StyledList>
-        {threads?.map((thread) => (
-          <ThreadItem key={thread.id} thread={thread} />
-        ))}
-        {isLoading && <Loading />}
+    <ThreadBrowserStyles>
+      <ThreadBrowserHeader align="center" gap={16}>
+        <Label>
+          {label} {!!totalCount && <CountBadge count={totalCount} />}
+        </Label>
+        <ButtonsGroup>
+          <ButtonGhost size="small" square onClick={onPrevClick} disabled={currentPage <= 1} title="Browse previous">
+            <Arrow direction="left" />
+          </ButtonGhost>
+          <ButtonGhost
+            size="small"
+            square
+            onClick={onNextClick}
+            disabled={isDefined(pageCount) ? currentPage >= pageCount : !isDefined(threads)}
+            title="Browse next"
+          >
+            <Arrow direction="right" />
+          </ButtonGhost>
+        </ButtonsGroup>
+      </ThreadBrowserHeader>
+      <ThreadBrowserItems>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          threads?.map((thread) => <ThreadItem key={thread.id} thread={thread} halfSize={threads.length > 1} />)
+        )}
         {!isLoading && !threads?.length && <EmptyThreadItem text={emptyText} />}
-        <PrevButton size="small" square onClick={onPrevClick} disabled={currentPage <= 1} title="Browse previous">
-          <Arrow direction="left" />
-        </PrevButton>
-        <NextButton
-          size="small"
-          square
-          onClick={onNextClick}
-          disabled={isDefined(pageCount) ? currentPage >= pageCount : !isDefined(threads)}
-          title="Browse next"
-        >
-          <Arrow direction="right" />
-        </NextButton>
-      </StyledList>
-    </>
+      </ThreadBrowserItems>
+    </ThreadBrowserStyles>
   )
 }
 
-const StyledList = styled.div`
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+const ThreadBrowserStyles = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-basis: calc(50% - (${ThreadsLayoutSpacing} / 2));
+  flex-shrink: 0;
+  flex-grow: 1;
+  max-width: 100%;
+  min-height: 330px;
+  max-height: 472px;
+  padding: 16px;
+  border: 1px solid ${Colors.Black[100]};
+  border-radius: ${BorderRad.s};
+  overflow: hidden;
+  transition: ${Transitions.all};
+
+  &:hover,
+  &:focus,
+  &:focus-within {
+    border-color: ${Colors.Blue[100]};
+    ${ThreadItemWrapper} {
+      &:before {
+        background-color: ${Colors.Blue[100]};
+      }
+    }
+  }
 `
 
-const PrevButton = styled(ButtonGhost)`
-  position: absolute;
-  top: 50%;
-  left: 20px;
+const ThreadBrowserHeader = styled(ColumnGapBlock)`
+  justify-content: space-between;
+  width: 100%;
 `
 
-const NextButton = styled(ButtonGhost)`
-  position: absolute;
-  top: 50%;
-  right: 20px;
+const ThreadBrowserItems = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 100%;
+  overflow: hidden;
 `

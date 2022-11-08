@@ -31,7 +31,7 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
   const approvalQuorum = councilSize && approvalQuorumRatio && Math.ceil(councilSize * approvalQuorumRatio)
   const slashingQuorum = councilSize && slashingQuorumRatio && Math.ceil(councilSize * slashingQuorumRatio)
 
-  const quorumRatio = councilSize ? (total - abstain) / councilSize : 0
+  const quorumRatio = councilSize ? total / councilSize : 0
   const approvalRatio = total - abstain && approve / (total - abstain)
   const slashingRatio = total - abstain && slash / (total - abstain)
 
@@ -44,7 +44,7 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
           tooltipLinkURL={tooltipLinkURL}
           value={quorumRatio}
           threshold={approvalQuorumRatio}
-          numerator={total - abstain}
+          numerator={total}
           denominator={`${councilSize ?? '-'} vote${plural(approvalQuorum)}`}
         />
         <StatisticBar
@@ -65,7 +65,7 @@ export const ProposalStatistics = ({ voteCount, constants }: ProposalStatisticsP
           tooltipLinkURL={tooltipLinkURL}
           value={quorumRatio}
           threshold={slashingQuorumRatio}
-          numerator={total - abstain}
+          numerator={total}
           denominator={`${councilSize ?? '-'} vote${plural(slashingQuorum)}`}
         />
         <StatisticBar

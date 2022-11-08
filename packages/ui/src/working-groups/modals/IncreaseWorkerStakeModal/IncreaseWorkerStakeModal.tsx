@@ -9,13 +9,14 @@ import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { formatTokenValue } from '@/common/model/formatters'
 import { BNSchema, maxContext, minContext } from '@/common/utils/validation'
-import { IncreaseWorkerStakeSignModal } from '@/working-groups/modals/IncreaseWorkerStakeModal/IncreaseWorkerStakeSignModal'
 import { increaseStakeMachine } from '@/working-groups/modals/IncreaseWorkerStakeModal/machine'
 import { SuccessModal } from '@/working-groups/modals/IncreaseWorkerStakeModal/SuccessModal'
 import { IncreaseWorkerStakeModalCall } from '@/working-groups/modals/IncreaseWorkerStakeModal/types'
@@ -59,14 +60,17 @@ export const IncreaseWorkerStakeModal = () => {
     const workerGroup = api && getGroup(api, group.id)
     const transaction = workerGroup?.increaseStake(runtimeId, new BN(state.context.stake || 0))
     return (
-      <IncreaseWorkerStakeSignModal
-        onClose={hideModal}
-        service={state.children.transaction}
-        amount={new BN(state.context.stake || 0)}
+      <SignTransactionModal
+        buttonText="Sign transaction and Stake"
         transaction={transaction}
-        worker={modalData.worker}
-        workerBalance={balance?.transferable}
-      />
+        signer={modalData.worker.roleAccount}
+        service={state.children.transaction}
+      >
+        <TextMedium>You intend to increase the stake of worker with ID: {modalData.worker.id}</TextMedium>
+        <TextMedium>
+          Amount of increase: <TokenValue value={new BN(state.context.stake || 0)} />
+        </TextMedium>
+      </SignTransactionModal>
     )
   }
 
