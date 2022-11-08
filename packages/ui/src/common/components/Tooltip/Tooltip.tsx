@@ -206,11 +206,6 @@ export const TooltipPopupContainer = styled.div<{ isTooltipActive?: boolean; for
     z-index: -1;
   }
 
-  &[data-popper-reference-hidden='true'] {
-    visibility: hidden;
-    pointer-events: none;
-  }
-
   &[data-popper-placement^='top'] {
     &:after {
       bottom: -4px;
