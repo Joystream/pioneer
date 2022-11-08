@@ -7,6 +7,7 @@ import { PinIcon } from '@/common/components/icons/PinIcon'
 import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextBig, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow } from '@/common/constants'
 import { ForumRoutes, ThreadsColLayout } from '@/forum/constant'
@@ -16,7 +17,6 @@ import { useMember } from '@/memberships/hooks/useMembership'
 
 import { LatestActivity, LatestActivityRowGapBlock } from './LatestActivity'
 import { ThreadTags } from './ThreadTags'
-import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 
 interface ThreadListItemProps {
   thread: ForumThread
