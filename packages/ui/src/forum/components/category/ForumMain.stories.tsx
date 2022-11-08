@@ -10,15 +10,12 @@ export default {
   component: ForumMain,
 } as Meta
 
-const Template: Story = (args) => {
+const Template: Story = () => {
   return (
     <MockApolloProvider members workers forum>
-      <ForumMain {...args} />
+      <ForumMain />
     </MockApolloProvider>
   )
 }
 
 export const Default = Template.bind({})
-Default.args = {
-  isArchive: false,
-}

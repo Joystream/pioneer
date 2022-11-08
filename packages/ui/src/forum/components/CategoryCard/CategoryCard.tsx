@@ -14,10 +14,10 @@ import { ForumCategory } from '@/forum/types'
 export interface CategoryCardProps {
   category: ForumCategory
   className?: string
+  archivedStyles?: boolean
 }
 
-// In case of different onClick event for message icon and box as whole, remember to stop propagation of msg onClick event
-export const CategoryCard = ({ className, category }: CategoryCardProps) => {
+export const CategoryCard = ({ className, category, archivedStyles }: CategoryCardProps) => {
   const hoverComponent = useMemo(() => {
     return (
       <CategoriesBox className="category-subcategories">
@@ -34,6 +34,7 @@ export const CategoryCard = ({ className, category }: CategoryCardProps) => {
   return (
     <Box
       className={className}
+      archivedStyles={archivedStyles}
       to={generatePath(ForumRoutes.category, { id: category.id })}
       ignoreHover={!category.subcategories.length}
     >
@@ -59,8 +60,7 @@ const StyledBadge = styled(Link)`
   ${BadgeStatusCss}
 `
 
-const Box = styled(Link)<{ ignoreHover?: boolean }>`
-  text-decoration: none;
+const Box = styled(Link)<{ archivedStyles?: boolean; ignoreHover?: boolean }>`
   display: flex;
   column-gap: 15px;
   border: 1px solid ${Colors.Black[100]};
@@ -101,6 +101,12 @@ const Box = styled(Link)<{ ignoreHover?: boolean }>`
       color: ${Colors.LogoPurple};
     }
   }
+
+  ${({ archivedStyles }) =>
+    archivedStyles &&
+    css`
+      background-color: ${Colors.Black[50]};
+    `}
 
   .category-subcategories {
     display: none;
