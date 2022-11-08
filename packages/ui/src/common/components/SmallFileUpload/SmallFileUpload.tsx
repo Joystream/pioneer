@@ -9,6 +9,7 @@ import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageConten
 import { TextMedium } from '@/common/components/typography'
 import { BorderRad } from '@/common/constants'
 import { resizeImageFile } from '@/common/helpers'
+import { info } from '@/common/logger'
 import { enhancedGetErrorMessage, enhancedHasError } from '@/common/utils/validation'
 import { Avatar } from '@/memberships/components/Avatar'
 import { SUPPORTED_IMAGES } from '@/memberships/model/validation'
@@ -27,7 +28,7 @@ export const SmallFileUpload = ({ onUpload, name, initialPreview }: SmallFileUpl
   const { formState } = useFormContext()
   const [avatarPreview, setAvatarPreview] = useState<string>(initialPreview ?? '')
   useEffect(() => {
-    if (localValue.blob && SUPPORTED_IMAGES?.includes(localValue.file?.type ?? '')) {
+    if (localValue.blob && SUPPORTED_IMAGES.includes(localValue.file?.type ?? '')) {
       const objectUrl = URL.createObjectURL(localValue.blob)
       setAvatarPreview(objectUrl)
 
@@ -41,17 +42,18 @@ export const SmallFileUpload = ({ onUpload, name, initialPreview }: SmallFileUpl
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.item(0) ?? null
 
-      if (file) {
+      if (file && SUPPORTED_IMAGES.includes(file.type)) {
         try {
           resizeImageFile(file, 192, 192, 'image/webp').then((blob) => {
             setLocalValue({ blob, file })
-            onUpload(event, blob)
+            return onUpload(event, blob)
           })
         } catch (e) {
-          setLocalValue({ blob: null, file })
-          onUpload(event, file)
+          info(e)
         }
       }
+      setLocalValue({ blob: null, file })
+      onUpload(event, file)
     },
     [onUpload]
   )
