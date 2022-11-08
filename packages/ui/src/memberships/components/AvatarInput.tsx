@@ -4,21 +4,14 @@ import { useFormContext } from 'react-hook-form'
 import { InputComponent, InputText } from '@/common/components/forms'
 import { SmallFileUpload } from '@/common/components/SmallFileUpload/SmallFileUpload'
 import { TextMedium } from '@/common/components/typography'
-import { resizeImageFile } from '@/common/helpers'
 
 export const AvatarInput = ({ initialPreview }: { initialPreview?: string }) => {
   const formContext = useFormContext()
 
   const onUpload = useCallback(
-    async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.item(0) ?? null
-      if (file) {
-        try {
-          const fileBlob = await resizeImageFile(file, 192, 192, 'image/webp')
-          formContext.setValue('avatarUri', fileBlob, { shouldValidate: true })
-        } catch (e) {
-          formContext.setValue('avatarUri', file, { shouldValidate: true })
-        }
+    async (event: React.ChangeEvent<HTMLInputElement>, resizedImage?: Blob | null | File) => {
+      if (resizedImage) {
+        formContext.setValue('avatarUri', resizedImage, { shouldValidate: true })
       }
     },
     [formContext.setValue]

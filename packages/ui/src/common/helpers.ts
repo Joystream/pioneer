@@ -72,7 +72,16 @@ export const resizeImageFile = (file: File, width: number, height: number, type?
         canvas.width = width
         const ctx = canvas.getContext('2d')
 
-        ctx?.drawImage(img, 0, 0, width, height)
+        const dW = img.width - width
+        const dH = img.height - height
+        const [clippedWidth, clippedHeight] =
+          Math.abs(dW) > Math.abs(dH)
+            ? [Math.floor((img.width / img.height) * width), img.height]
+            : [img.width, Math.floor((img.height / img.width) * height)]
+        const x = Math.floor(img.width / 2 - clippedWidth / 2)
+        const y = Math.floor(img.height / 2 - clippedHeight / 2)
+
+        ctx?.drawImage(img, x, y, clippedWidth, clippedHeight, 0, 0, width, height)
         ctx?.canvas.toBlob((blob) => resolve(blob), type ?? file.type)
       }
       img.src = event.target?.result as string

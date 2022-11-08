@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
@@ -15,27 +15,46 @@ import { SUPPORTED_IMAGES } from '@/memberships/model/validation'
 
 interface SmallFileUploadProps {
   name: string
-  onUpload: (event: ChangeEvent<HTMLInputElement>) => void
+  onUpload: (event: ChangeEvent<HTMLInputElement>, resizedImage?: Blob | null | File) => void
   initialPreview?: string
 }
 
 export const SmallFileUpload = ({ onUpload, name, initialPreview }: SmallFileUploadProps) => {
-  const [localValue, setLocalValue] = useState<File | null>()
+  const [localValue, setLocalValue] = useState<{ blob: Blob | null; file: File | null }>({
+    blob: null,
+    file: null,
+  })
   const { formState } = useFormContext()
   const [avatarPreview, setAvatarPreview] = useState<string>(initialPreview ?? '')
   useEffect(() => {
-    if (localValue && SUPPORTED_IMAGES?.includes(localValue.type)) {
-      let objectUrl: string
-      resizeImageFile(localValue, 192, 192, 'image/webp').then((blob: Blob | null) => {
-        objectUrl = URL.createObjectURL(blob)
-        setAvatarPreview(objectUrl)
-      })
+    if (localValue.blob && SUPPORTED_IMAGES?.includes(localValue.file?.type ?? '')) {
+      const objectUrl = URL.createObjectURL(localValue.blob)
+      setAvatarPreview(objectUrl)
 
       return () => {
         objectUrl && URL.revokeObjectURL(objectUrl)
       }
     }
   }, [localValue])
+
+  const onChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.item(0) ?? null
+
+      if (file) {
+        try {
+          resizeImageFile(file, 192, 192, 'image/webp').then((blob) => {
+            setLocalValue({ blob, file })
+            onUpload(event, blob)
+          })
+        } catch (e) {
+          setLocalValue({ blob: null, file })
+          onUpload(event, file)
+        }
+      }
+    },
+    [onUpload]
+  )
 
   return (
     <RowGapBlock gap={10}>
@@ -48,16 +67,9 @@ export const SmallFileUpload = ({ onUpload, name, initialPreview }: SmallFileUpl
       )}
       <UpdateButtonWrapper>
         <BrowseButton size="small">
-          Browse for file{' '}
-          <input
-            type="file"
-            onChange={(event) => {
-              setLocalValue(event.target.files?.item(0) ?? null)
-              onUpload(event)
-            }}
-          />
+          Browse for file <input type="file" onChange={onChange} />
         </BrowseButton>
-        <TextMedium>{localValue?.name}</TextMedium>
+        <TextMedium>{localValue.file?.name}</TextMedium>
       </UpdateButtonWrapper>
       {enhancedHasError(formState.errors)(name) && (
         <AvatarErrorMessage gap={4}>
