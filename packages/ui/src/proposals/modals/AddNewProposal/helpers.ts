@@ -129,6 +129,7 @@ export interface AddNewProposalForm {
   }
   setMembershipLeadInvitationQuota: {
     amount?: BN
+    leadId?: string
   }
   setInitialInvitationBalance: {
     amount?: BN
@@ -292,6 +293,7 @@ export const schemaFactory = (api?: ProxyApi) => {
     }),
     setMembershipLeadInvitationQuota: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
+      leadId: Yup.string().test('execution', (value) => !!value),
     }),
     setInitialInvitationBalance: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),

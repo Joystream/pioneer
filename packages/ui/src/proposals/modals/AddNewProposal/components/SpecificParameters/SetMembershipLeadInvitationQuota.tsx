@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, InputNumber } from '@/common/components/forms'
@@ -9,6 +10,13 @@ import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 export const SetMembershipLeadInvitationQuota = () => {
   const { isLoading, group } = useWorkingGroup({ name: 'membershipWorkingGroup' })
+  const { setValue } = useFormContext()
+
+  useEffect(() => {
+    if (!isLoading) {
+      setValue('setMembershipLeadInvitationQuota.leadId', group?.leadId, { shouldValidate: true })
+    }
+  }, [isLoading, group?.leadId])
 
   return (
     <RowGapBlock gap={24}>
