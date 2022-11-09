@@ -19,7 +19,7 @@ export const Forum = () => {
           title={<PageTitle>Forum</PageTitle>}
           buttons={
             <ButtonGhost size="medium" onClick={toggle}>
-              Test
+              Forum Activities
             </ButtonGhost>
           }
         >
