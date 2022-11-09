@@ -114,7 +114,6 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
             isDiscussion
             link={getUrl({ route: ProposalsRoutes.preview, params: { id: proposalId }, query: { post: post.id } })}
             repliesToLink={`${generatePath(ProposalsRoutes.preview, { id: proposalId })}?post=${post.repliesTo?.id}`}
-            clearSelection={() => location.replace(generatePath(ProposalsRoutes.preview, { id: proposalId }))}
           />
         )
       })}

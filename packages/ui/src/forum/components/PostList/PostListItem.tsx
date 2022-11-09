@@ -14,6 +14,7 @@ import { ArrowReplyIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge } from '@/common/components/typography'
 import { BorderRad, Colors, Fonts, Shadows } from '@/common/constants'
+import { useLocation } from '@/common/hooks/useLocation'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
@@ -40,7 +41,6 @@ interface PostListItemProps {
   link?: string
   isDiscussion?: boolean
   repliesToLink: string
-  clearSelection?: () => void
 }
 
 export const PostListItem = ({
@@ -55,12 +55,11 @@ export const PostListItem = ({
   replyToPost,
   isDiscussion,
   repliesToLink,
-  clearSelection,
 }: PostListItemProps) => {
   const { active } = useMyMemberships()
   const { createdAtBlock, lastEditedAt, author, text, repliesTo } = post
   const [postLastEditedAt, setPostLastEditedAt] = useState<string | undefined>(lastEditedAt)
-
+  const location = useLocation()
   const { showModal } = useModal()
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -70,16 +69,8 @@ export const PostListItem = ({
   useEffect(() => {
     if (ref.current && isSelected) {
       ref.current.scrollIntoView({ behavior: 'smooth', inline: 'start' })
-      const timeout = setTimeout(() => {
-        clearSelection?.()
-        // timeout to clear params after glow animation
-      }, 1500)
-
-      return () => {
-        clearTimeout(timeout)
-      }
     }
-  }, [isSelected, ref.current])
+  }, [location, ref.current])
 
   const [editing, setEditing] = useState(false)
   const editionTime = useMemo(() => {

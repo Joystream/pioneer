@@ -65,7 +65,6 @@ export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost, isD
             link={getUrl({ route: ForumRoutes.thread, params: { id: threadId }, query: { post: post.id } })}
             repliesToLink={`${generatePath(ForumRoutes.thread, { id: threadId })}?post=${post.repliesTo?.id}`}
             isDiscussion={isDiscussion}
-            clearSelection={() => history.replace(generatePath(ForumRoutes.thread, { id: threadId }))}
           />
         ))}
       <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
