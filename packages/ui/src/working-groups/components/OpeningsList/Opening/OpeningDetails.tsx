@@ -9,6 +9,7 @@ import { Subscription } from '@/common/components/typography/Subscription'
 import { isInFuture, nameMapping } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeTime } from '@/common/model/relativeTime'
+import { Withdrawn } from '@/working-groups/components/Applications/Withdrawn'
 import { OpeningListItemProps } from '@/working-groups/components/OpeningsList/Opening/OpeningListItem'
 import {
   OpenedContainer,
@@ -50,7 +51,7 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
               {past && (
                 <StatiscticContentColumn>
                   <TextBig value bold>
-                    {applicants} {hiring.current > applicants && <> ({hiring.current - applicants}</>}
+                    {hiring.current} <Withdrawn current={hiring.current} total={applicants} />
                   </TextBig>
                   <Subscription>Hired</Subscription>
                 </StatiscticContentColumn>

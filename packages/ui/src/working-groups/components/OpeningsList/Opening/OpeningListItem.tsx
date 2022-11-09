@@ -6,6 +6,7 @@ import { Fraction } from '@/common/components/typography/Fraction'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { isInFuture } from '@/common/helpers'
 import { relativeTime } from '@/common/model/relativeTime'
+import { Withdrawn } from '@/working-groups/components/Applications/Withdrawn'
 import {
   ToggleableItemInfo,
   ToggleableItemInfoTop,
@@ -50,7 +51,7 @@ export const OpeningListItem = ({ opening, past, onClick }: OpeningListItemProps
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextBig>
-            {applicants} {hiring.current > applicants && <> ({hiring.current - applicants}</>}
+            {hiring.current} <Withdrawn current={hiring.current} total={applicants} />
           </TextBig>
           <Subscription>Applications</Subscription>
         </OpenItemSummaryColumn>

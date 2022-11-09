@@ -31,6 +31,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { getUrl } from '@/common/utils/getUrl'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ApplicantsList } from '@/working-groups/components/ApplicantsList'
+import { Withdrawn } from '@/working-groups/components/Applications/Withdrawn'
 import { ApplicationStatusWrapper } from '@/working-groups/components/ApplicationStatusWrapper'
 import { OpeningIcon } from '@/working-groups/components/OpeningIcon'
 import { MappedStatuses, OpeningStatuses, WorkingGroupsRoutes } from '@/working-groups/constants'
@@ -46,22 +47,18 @@ export const WorkingGroupOpening = () => {
   const { active: activeMembership } = useMyMemberships()
   const { isLoading, opening } = useOpening(urlParamToOpeningId(id))
 
-  const activeApplications = useMemo(() => {
-    if (opening) {
-      return opening.applications?.filter((application) => application.status !== 'ApplicationStatusWithdrawn')
-    }
-  }, opening?.applications)
-
-  const hiringApplication = useMemo(() => {
-    if (activeApplications) {
-      return activeApplications.find(({ status }) => status === 'ApplicationStatusAccepted')
-    }
-  }, [opening?.id])
-  const myApplication = useMemo(() => {
-    if (activeApplications) {
-      return activeApplications.find(({ id }) => id === activeMembership?.id)
-    }
-  }, [opening?.id, activeMembership?.id])
+  const activeApplications = useMemo(
+    () => opening?.applications?.filter((application) => application.status !== 'ApplicationStatusWithdrawn'),
+    [opening?.applications]
+  )
+  const hiringApplication = useMemo(
+    () => activeApplications?.find(({ status }) => status === 'ApplicationStatusAccepted'),
+    [opening?.id]
+  )
+  const myApplication = useMemo(
+    () => activeApplications?.find(({ id }) => id === activeMembership?.id),
+    [opening?.id, activeMembership?.id]
+  )
   const rewardPeriod = useRewardPeriod(opening?.groupId)
 
   if (isLoading || !opening) {
@@ -200,7 +197,7 @@ const ApplicationStats = ({
       <StatiscticContentColumn>
         <StatisticHeader title="Applicants" />
         <NumericValue>
-          {applicants} {hiring.current > applicants && <> ({hiring.current - applicants}</>}
+          {hiring.current} <Withdrawn current={hiring.current} total={applicants} />
         </NumericValue>
       </StatiscticContentColumn>
       {status === OpeningStatuses.FILLED || status === OpeningStatuses.CANCELLED ? (
