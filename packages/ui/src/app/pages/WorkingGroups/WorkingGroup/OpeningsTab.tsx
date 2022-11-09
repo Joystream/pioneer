@@ -55,7 +55,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
             <>
               Average stake size by members undertaking the roles of workers and the lead in this group.{' '}
               <TooltipExternalLink
-                href="https://joystream.gitbook.io/testnet-workspace/system/working-groups?q=lock#staking"
+                href="https://joystream.gitbook.io/testnet-workspace/system/working-groups#staking"
                 target="_blank"
               >
                 <TextMedium>Link</TextMedium> <LinkSymbol />
