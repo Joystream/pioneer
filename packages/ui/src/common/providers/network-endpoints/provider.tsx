@@ -35,6 +35,7 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
         queryNodeEndpoint: config['graphql_server'],
         membershipFaucetEndpoint: config['member_faucet'],
         nodeRpcEndpoint: config['websocket_rpc'],
+        configEndpoint,
       }
 
       if (!endpointsAreDefined(newAutoConfEndpoints)) {
@@ -83,5 +84,8 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
   )
 }
 
-export const endpointsAreDefined = (endpoints: Partial<NetworkEndpoints> = {}): endpoints is NetworkEndpoints =>
-  Object.values(endpoints).length === 4 && Object.values(endpoints).every(isDefined)
+export const endpointsAreDefined = (endpoints: Partial<NetworkEndpoints> = {}): endpoints is NetworkEndpoints => {
+  const endpointsCopy = { ...endpoints }
+  delete endpointsCopy.configEndpoint
+  return Object.values(endpointsCopy).length === 4 && Object.values(endpointsCopy).every(isDefined)
+}
