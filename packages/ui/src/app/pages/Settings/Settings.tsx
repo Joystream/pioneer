@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { NetworkType } from '@/app/config'
+import { ButtonPrimary } from '@/common/components/buttons'
 import { LanguageSelect } from '@/common/components/LanguageSelect'
 import NetworkInfo from '@/common/components/NetworkInfo/NetworkInfo'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
@@ -19,7 +20,7 @@ type Tab = 'SETTINGS' | 'LANGUAGE'
 export const Settings = () => {
   const { network, setNetwork, networks } = useNetwork()
   const { t } = useTranslation('settings')
-  const [endpoints] = useNetworkEndpoints()
+  const [endpoints, fetchNetworkEndpoints] = useNetworkEndpoints()
   const [currentTab, setCurrentTab] = useState<Tab>('SETTINGS')
   const tabs = [
     { title: t('network'), active: currentTab === 'SETTINGS', onClick: () => setCurrentTab('SETTINGS') },
@@ -53,6 +54,14 @@ export const Settings = () => {
                     onChange={switchNetwork}
                     selectSize="l"
                   />
+                  {endpoints?.configEndpoint && (
+                    <ButtonPrimary
+                      onClick={() => fetchNetworkEndpoints(endpoints.configEndpoint as string)}
+                      size="medium"
+                    >
+                      Refresh config
+                    </ButtonPrimary>
+                  )}
                   <NetworkInfo
                     detailsTitle={t('networkDetails')}
                     urlAddress={endpoints.membershipFaucetEndpoint}
