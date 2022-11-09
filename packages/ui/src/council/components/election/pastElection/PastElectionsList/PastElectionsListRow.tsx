@@ -25,7 +25,7 @@ export const PastElectionsListRow = ({ election }: PastElectionsListRowProps) =>
     >
       <Info>#{election.cycleId}</Info>
       {election.finishedAtBlock ? (
-        <BlockTime block={election.finishedAtBlock} layout="reverse-start" lessInfo noLink />
+        <BlockTime block={election.finishedAtBlock} layout="reverse-start" lessInfo />
       ) : (
         <></>
       )}
