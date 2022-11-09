@@ -46,7 +46,11 @@ export const TriggerAndDiscussionStep = () => {
         <InlineToggleWrap>
           <Label>Trigger: </Label>
           <ToggleCheckbox falseLabel="No" trueLabel="Yes" name="triggerAndDiscussion.trigger" />
-          <Tooltip tooltipText="Trigger">
+          <Tooltip
+            tooltipTitle="Trigger"
+            tooltipText="Optional tooltipTitle='Trigger' trigger block for executing proposal. If trigger is provided, it must be no less than current block plus combined duration of GRACING_LIMIT and DECIDING_PERIOD."
+            tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/proposal-system#submit-proposal"
+          >
             <TooltipDefault />
           </Tooltip>
         </InlineToggleWrap>
@@ -70,7 +74,11 @@ export const TriggerAndDiscussionStep = () => {
         <InlineToggleWrap>
           <Label>Discussion mode: </Label>
           <ToggleCheckbox falseLabel="Open" trueLabel="Closed" name="triggerAndDiscussion.isDiscussionClosed" />
-          <Tooltip tooltipText="Discussion Mode">
+          <Tooltip
+            tooltipTitle="Discussion Mode"
+            tooltipText="Proposal thread is created as part of the process to enable discussion before voting. In open mode, any member can post a message, while in closed mode, only the active council, proposer and whitelisted members can post. Mode can be changed by member or council member at any time."
+            tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/proposal-system#discussion"
+          >
             <TooltipDefault />
           </Tooltip>
         </InlineToggleWrap>

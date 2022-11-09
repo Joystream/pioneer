@@ -19,8 +19,13 @@ export const BNSchema = Yup.mixed()
  *   lessThanMixed and moreThanMixed are methods for BN working same
  *   as the ones on Yup.number
  */
-export const maxContext = (msg: string, contextPath: string, isJoyValue = true): Yup.TestConfig<any, AnyObject> => ({
-  name: 'maxContext',
+export const maxContext = (
+  msg: string,
+  contextPath: string,
+  isJoyValue = true,
+  type?: string
+): Yup.TestConfig<any, AnyObject> => ({
+  name: type ?? 'maxContext',
   exclusive: false,
   test(value: number | BN) {
     if (!value) {
@@ -44,8 +49,13 @@ export const maxContext = (msg: string, contextPath: string, isJoyValue = true):
   },
 })
 
-export const minContext = (msg: string, contextPath: string, isJoyValue = true): Yup.TestConfig<any, AnyObject> => ({
-  name: 'minContext',
+export const minContext = (
+  msg: string,
+  contextPath: string,
+  isJoyValue = true,
+  type?: string
+): Yup.TestConfig<any, AnyObject> => ({
+  name: type ?? 'minContext',
   exclusive: false,
   test(value: number | BN) {
     if (!value) {

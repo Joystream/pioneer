@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
@@ -54,6 +54,7 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
   }, [isEditTitle, fields.initialTitle])
 
   const submitTitle = useCallback((newTitle: string) => {
+    setEditTitle(false)
     showModal<EditThreadTitleModalCall>({
       modal: 'EditThreadTitleModal',
       data: {
@@ -78,8 +79,9 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
 
   return (
     <>
-      {!isEditTitle && <PageTitle $isRemovedThread={isRemovedThread}>{fields.initialTitle}</PageTitle>}
-      {isEditTitle && (
+      {!isEditTitle ? (
+        <PageTitle $isRemovedThread={isRemovedThread}>{fields.initialTitle}</PageTitle>
+      ) : (
         <EditTitleWrapper>
           <EditTitleInputComponent inputSize="m" onSubmit={() => submitTitle(fields.title)}>
             <InputText

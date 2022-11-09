@@ -27,7 +27,7 @@ export const AboutTab = ({ workingGroup }: Props) => {
         {statistics.spending ? (
           <TokenValueStat
             title="Spending"
-            tooltipText="Total spending of the working group in"
+            tooltipText="Total spending of the working group during the council term."
             value={statistics.spending}
           />
         ) : (

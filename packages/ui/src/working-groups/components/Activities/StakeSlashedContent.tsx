@@ -9,13 +9,13 @@ export const StakeSlashedContent: ActivityContentComponent<StakeSlashedActivity>
   const { member, groupName } = activity
 
   if (isOwn) {
-    return <>You have been slashed by the {groupName} Working Group Lead.</>
+    return <>Your stake was reduced by the {groupName} Working Group Lead.</>
   }
 
   return (
     <>
       <MemberModalLink call={{ modal: 'Member', data: { id: member.id } }}>{member.handle}</MemberModalLink> has been
-      slashed by the {groupName} Working Group Lead.{' '}
+      reduced by the {groupName} Working Group Lead.{' '}
       <ButtonLink size="small" inline>
         Read more
       </ButtonLink>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
 import { Link } from 'react-router-dom'
@@ -30,6 +30,7 @@ export interface TooltipPopupProps {
   }
   forBig?: boolean
   hideOnComponentLeave?: boolean
+  boundaryClassName?: string
 }
 
 export interface DarkTooltipInnerItemProps {
@@ -50,10 +51,13 @@ export const Tooltip = ({
   forBig,
   offset,
   hideOnComponentLeave,
+  boundaryClassName,
 }: TooltipProps) => {
   const [isTooltipActive, setTooltipActive] = useState(tooltipOpen)
   const [referenceElementRef, setReferenceElementRef] = useState<HTMLElement | null>(null)
   const [popperElementRef, setPopperElementRef] = useState<HTMLDivElement | null>(null)
+  const [boundaryElement, setBoundaryElement] = useState<HTMLElement | null>(null)
+
   const { styles, attributes } = usePopper(referenceElementRef, popperElementRef, {
     placement: 'bottom-start',
     modifiers: [
@@ -63,8 +67,24 @@ export const Tooltip = ({
           offset: offset ?? [0, 0],
         },
       },
+      {
+        name: 'flip',
+        options: {
+          fallbackPlacements: ['top-start'],
+          boundary: boundaryElement ?? 'clippingParents',
+        },
+      },
     ],
   })
+
+  useEffect(() => {
+    if (boundaryClassName) {
+      const boundary = Array.from(document.getElementsByClassName(boundaryClassName))
+      if (boundary.length) {
+        setBoundaryElement(boundary[0] as HTMLDivElement)
+      }
+    }
+  }, [boundaryClassName])
 
   const mouseIsOver = () => {
     if (!tooltipOpen) {
@@ -197,6 +217,10 @@ export const TooltipPopupContainer = styled.div<{ isTooltipActive?: boolean; for
       top: -4px;
       clip-path: polygon(100% 0, 0 0, 0 100%);
     }
+  }
+  &[data-popper-reference-hidden='true'] {
+    visibility: hidden;
+    pointer-events: none;
   }
   &[data-popper-placement='top-start']:after,
   &[data-popper-placement='bottom-start']:after {
