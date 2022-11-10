@@ -33,9 +33,7 @@ import {
 } from '../../_mocks/transactions'
 import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
-}))
+
 
 describe('UI: CreatePostModal', () => {
   const api = stubApi()

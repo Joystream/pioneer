@@ -27,9 +27,7 @@ import {
 } from '../../_mocks/transactions'
 import { mockedTransactionFee } from '../../setup'
 
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
-}))
+
 
 describe('UI: ClaimRewardModal', () => {
   const reward = new BN(100_000)

@@ -36,10 +36,6 @@ jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
 }))
 
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
-}))
-
 describe('UI: Vote for Proposal Modal', () => {
   const api = stubApi()
   const useMyMemberships: MyMemberships = {

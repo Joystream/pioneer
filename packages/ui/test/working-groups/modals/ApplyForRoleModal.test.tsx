@@ -52,9 +52,7 @@ jest.mock('../../../src/accounts/hooks/useHasRequiredStake', () => {
   }
 })
 
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
-}))
+
 
 describe('UI: ApplyForRoleModal', () => {
   const api = stubApi()

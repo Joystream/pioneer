@@ -31,9 +31,7 @@ import {
 } from '../../_mocks/transactions'
 import { mockedTransactionFee } from '../../setup'
 
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
-}))
+
 
 describe('UI: WithdrawContributionModal', () => {
   const contributor: Contributor = {

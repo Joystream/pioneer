@@ -70,9 +70,7 @@ jest.mock('@/common/hooks/useCurrentBlockNumber', () => ({
   useCurrentBlockNumber: () => mockUseCurrentBlockNumber(),
 }))
 
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
-}))
+
 
 const OPENING_DATA = {
   id: 'forumWorkingGroup-1337',
