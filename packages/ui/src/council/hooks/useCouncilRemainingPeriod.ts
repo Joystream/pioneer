@@ -41,7 +41,7 @@ export const useCouncilRemainingPeriod = (until: 'stageEnd' | 'electionEnd' = 's
 
     const stageEnd = merge(councilStageEnd, referendumStageEnd).pipe(map((end) => end.toNumber()))
     const periodEnd =
-      until === 'electionEnd'
+      until === 'stageEnd'
         ? stageEnd
         : combineLatest([stageEnd, electionStageObservable(api)]).pipe(
             map(([end, stage]) => {
