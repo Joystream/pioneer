@@ -19,10 +19,12 @@ export const DeleteThreadModal = () => {
     hideModal,
   } = useModal<DeleteThreadModalCall>()
 
-  const [state, send] = useMachine(
-    defaultTransactionModalMachine('There was a problem deleting your thread.', 'Your thread has been deleted.'),
-    { context: { validateBeforeTransaction: true } }
+  const machine = useMemo(
+    () => defaultTransactionModalMachine('There was a problem deleting your thread.', 'Your thread has been deleted.'),
+    []
   )
+
+  const [state, send] = useMachine(machine, { context: { validateBeforeTransaction: true } })
   const { api, isConnected } = useApi()
   const { active: activeMember } = useMyMemberships()
 
