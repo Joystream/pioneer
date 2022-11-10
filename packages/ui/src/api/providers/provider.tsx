@@ -1,4 +1,5 @@
-import React, { ReactNode, useEffect, useState } from 'react'
+import { debounce } from 'lodash'
+import React, { ReactNode, useEffect, useState, useMemo } from 'react'
 import { firstValueFrom } from 'rxjs'
 
 import { Api } from '@/api'
@@ -11,6 +12,12 @@ interface Props {
   children: ReactNode
 }
 
+export interface LogItem {
+  state: string
+  time: Date
+  provider: string
+}
+
 export type ConnectionState = 'connecting' | 'connected' | 'disconnected' | 'error'
 
 interface BaseAPI {
@@ -19,6 +26,8 @@ interface BaseAPI {
   connectionState: ConnectionState
   qnConnectionState: ConnectionState
   setQnConnectionState: (state: ConnectionState) => void
+  history?: LogItem[]
+  message?: string
 }
 
 interface APIConnecting extends BaseAPI {
@@ -39,72 +48,78 @@ interface APIDisconnected extends BaseAPI {
   connectionState: 'disconnected'
 }
 
-export type UseApi = APIConnecting | APIConnected | APIDisconnected
+interface APIError extends BaseAPI {
+  isConnected: false
+  connectionState: 'error'
+  message?: string
+}
+
+export type UseApi = APIConnecting | APIConnected | APIDisconnected | APIError
 
 export const ApiContextProvider = ({ children }: Props) => {
-  const [api, setApi] = useState<Api>()
-  const [connectionState, setConnectionState] = useState<ConnectionState>('connecting')
-  const [qnConnectionState, setQnConnectionState] = useState<ConnectionState>('connecting')
   const [endpoints] = useNetworkEndpoints()
+  const provider = useMemo(() => endpoints.nodeRpcEndpoint, [endpoints])
+  const [api, setApi] = useState<Api>()
+  const [connectionState, setApiState] = useState<ConnectionState>('connecting')
+  const [qnConnectionState, setQnConnectionState] = useState<ConnectionState>('connecting')
+  const [history, setLog] = useState<LogItem[]>([])
+  const [lastChange, setLastChange] = useState<Date>(new Date())
+  useApiBenchmarking(api) // benchmarks max possible queries for 1s every 6s, disabled per default
 
-  useApiBenchmarking(api)
+  const baseState = {
+    isConnected: false,
+    api: undefined,
+    connectionState,
+    qnConnectionState,
+    setQnConnectionState,
+    history,
+  }
+  const states = {
+    connecting: { ...baseState, isConnected: false } as APIConnecting,
+    connected: { ...baseState, isConnected: true, api: api as Api } as APIConnected,
+    disconnected: { ...baseState, isConnected: false, api: api as Api } as APIDisconnected,
+    error: { ...baseState, isConnected: false, api: api as Api, message: 'TODO' } as APIError,
+  }
 
-  useEffect(() => {
-    firstValueFrom(Api.create(endpoints.nodeRpcEndpoint)).then((api) => {
+  const log = (state: string, time: Date = new Date()) => {
+    setLog(history.concat({ state, time, provider }))
+    setLastChange(time)
+  }
+
+  const handleStatus = (state: ConnectionState) => {
+    setApiState(state)
+    log(state)
+  }
+
+  const connectApi = () => {
+    firstValueFrom(Api.create(provider)).then((api) => {
       setApi(api)
-      setConnectionState('connected')
-      api.on('connected', () => setConnectionState('connected'))
-      api.on('disconnected', () => setConnectionState('disconnected'))
+      handleStatus('connected')
+      api.on('connected', () => handleStatus('connected'))
+      api.on('disconnected', () => handleStatus('disconnected'))
     })
-  }, [])
-
-  if (connectionState === 'connecting') {
-    return (
-      <ApiContext.Provider
-        value={{
-          isConnected: false,
-          api: undefined,
-          connectionState,
-          qnConnectionState,
-          setQnConnectionState: setQnConnectionState,
-        }}
-      >
-        {children}
-      </ApiContext.Provider>
-    )
   }
 
-  if (connectionState === 'connected') {
-    return (
-      <ApiContext.Provider
-        value={{
-          isConnected: true,
-          api: api as Api,
-          connectionState,
-          qnConnectionState,
-          setQnConnectionState: setQnConnectionState,
-        }}
-      >
-        {children}
-      </ApiContext.Provider>
-    )
+  const handleReconnect = (api?: Api) => {
+    const age = new Date().valueOf() - lastChange.valueOf()
+    const info = ` ${connectionState} ${age}ms ago`
+    if (connectionState === 'connected' || age < 59_000) return log('skipping api reconnect' + info)
+
+    log('resetting api connection' + info)
+    // TODO not implemented in ProxyAPI: api?.disconnect() // possible leak? api#3026 api#2257 wasm#17
+    connectApi()
   }
 
-  if (connectionState === 'disconnected') {
-    return (
-      <ApiContext.Provider
-        value={{
-          isConnected: false,
-          api: api as Api,
-          connectionState,
-          qnConnectionState,
-          setQnConnectionState: setQnConnectionState,
-        }}
-      >
-        {children}
-      </ApiContext.Provider>
-    )
-  }
+  useMemo(() => {
+    // TODO factor out time constants in network providers
+    const scheduleReconnect = (api?: Api) => debounce(() => handleReconnect(api), 60_000)
 
-  return null
+    // api's supposed to handle reconnects automatically.
+    // https://polkadot.js.org/docs/api/start/create#failures
+    // IFF that fails however reset api after grace period.
+    if (connectionState === 'disconnected') scheduleReconnect(api)
+  }, [connectionState])
+
+  useEffect(connectApi, [])
+  return <ApiContext.Provider value={states[connectionState]}>{children}</ApiContext.Provider>
 }

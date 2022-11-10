@@ -70,4 +70,6 @@ export class ProxyApi extends Events {
 
     // TODO emit errors too
   }
+
+  //disconnect() {} // TODO
 }

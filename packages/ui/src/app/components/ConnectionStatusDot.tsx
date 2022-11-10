@@ -17,26 +17,31 @@ interface ConnectionStatusDotProps {
 }
 
 export const ConnectionStatusDot = ({ onlyPerformance = false, className }: ConnectionStatusDotProps) => {
-  const { api, connectionState, qnConnectionState } = useApi()
+  const { api, connectionState, qnConnectionState, history } = useApi()
   const { queryNodeState } = useQueryNodeStateSubscription()
   const header = useObservable(() => api?.rpc.chain.subscribeNewHeads(), [api?.isConnected])
 
-  const isQnLate = useMemo(() => {
+  const qn = useMemo(() => {
     if (queryNodeState && header) {
-      return (
-        (header.toJSON().number as number) - Number(queryNodeState.indexerHead) > MAX_INDEXER_BLOCKS_BEHIND_NODE_HEAD
-      )
-    }
+      const head = header.toJSON().number as number
+      const indexerHead = Number(queryNodeState.indexerHead)
+      const delay = head - indexerHead
+      const isLate = delay > MAX_INDEXER_BLOCKS_BEHIND_NODE_HEAD
+      const status = isLate ? 'delayed' : 'connected'
+      return { ...queryNodeState, delay, isLate, status, maxDelay: MAX_INDEXER_BLOCKS_BEHIND_NODE_HEAD }
+    } else return { ...queryNodeState, status: 'connecting' }
   }, [header, queryNodeState])
 
   const [tooltipText, DotElement] = useMemo((): [
     string,
     StyledComponent<ForwardRefComponent<HTMLDivElement, HTMLMotionProps<'div'>>, any> | null
   ] => {
-    if (isQnLate) {
+    if (qn.status === 'late') {
+      // We should not infer connection issues from indexer delays. => add 'warning' state with yellow dot
+      // to signal that values could be outdated and finalized blocks may be picked up late.
       return [
         'Pioneer is currently experiencing connection issues with the Joystream node and may not work properly. We recommend you refrain from creating proposals, forum posts, etc., until Pioneer is fully operational.',
-        ErrorDot,
+        ErrorDot, // WarningDot
       ]
     }
 
@@ -45,7 +50,7 @@ export const ConnectionStatusDot = ({ onlyPerformance = false, className }: Conn
     }
 
     if (connectionState === 'connecting' || qnConnectionState === 'connecting') {
-      return ['Connecting...', ConnectingDot]
+      return ['Api: Connecting...', ConnectingDot]
     }
 
     if (connectionState === 'connected' && qnConnectionState === 'connected') {
@@ -63,15 +68,29 @@ export const ConnectionStatusDot = ({ onlyPerformance = false, className }: Conn
       'Pioneer failed to connect to the chain node. This will impact chain oriented feature like execution of transactions. Try to refresh the page or contact maintainer if it does not help.',
       ErrorDot,
     ]
-  }, [connectionState, qnConnectionState, isQnLate])
+  }, [connectionState, qnConnectionState, qn])
 
   if (!DotElement) {
     return null
   }
 
+  const QNStatus = () => <div>QN: {qn.indexerHead ? qn.indexerHead + ` (${qn.status})` : qn.status}</div>
+
+  const formattedStatus = (
+    <>
+      <div>{tooltipText}</div>
+      <QNStatus />
+      {history?.slice(0, 9).map(({ time, state }, i) => (
+        <div key={`log-item-${i}`}>
+          {time.getHours()}:{time.getMinutes()} api {state}
+        </div>
+      ))}
+    </>
+  )
+
   return (
     <span className={className}>
-      <Tooltip tooltipText={tooltipText}>
+      <Tooltip tooltipText={formattedStatus}>
         <AnimatePresence>
           <DotElement
             initial={{ opacity: 0 }}
