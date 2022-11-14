@@ -7,3 +7,4 @@ build-storybook
 .DS_Store
 packages/ui/.env
 packages/ui/src/services/i18n/utils/csv
+yarn.lock
