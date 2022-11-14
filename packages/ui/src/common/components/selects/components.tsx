@@ -24,9 +24,11 @@ interface Props {
   disabled?: boolean
 }
 
-export const Option = ({ children, onClick, disabled }: Props) => (
+export const Option = ({ children, onClick, disabled, ...props }: Props) => (
   <OptionComponentContainer onClick={onClick} disabled={disabled}>
-    <OptionComponent disabled={disabled}>{children}</OptionComponent>
+    <OptionComponent disabled={disabled} {...props}>
+      {children}
+    </OptionComponent>
   </OptionComponentContainer>
 )
 

@@ -35,6 +35,7 @@ export const SelectWorkingGroupOpeningBase = ({
   className,
   groupId,
   openingsPositionType,
+  ...props
 }: Props) => {
   const { openings } = useOpenings({ type: 'open', groupId, openingsPositionType })
   const selectedOpening = useMemo(
@@ -58,6 +59,7 @@ export const SelectWorkingGroupOpeningBase = ({
       renderList={(onOptionClick) => <OptionsListWorkingGroupOpening allOpenings={openings} onChange={onOptionClick} />}
       className={className}
       onSearch={() => undefined}
+      {...props}
     />
   )
 }
@@ -70,35 +72,6 @@ const renderSelected = (opening: WorkingGroupOpening) => (
 
 export const SelectWorkingGroupOpening = styled(SelectWorkingGroupOpeningBase)`
   ${SelectedOption} {
-    grid-template-columns: 1fr;
-  }
-  ${OptionComponent} {
-    grid-template-columns: 1fr;
-    padding: 10px 16px;
-
-    &:hover,
-    &:focus,
-    &:focus-within {
-      ${OptionWorkingGroupTitle} {
-        color: ${Colors.Blue[500]};
-      }
-    }
-    &:active {
-      ${OptionWorkingGroupTitle} {
-        color: ${Colors.Blue[600]};
-      }
-    }
-    &:disabled {
-      cursor: not-allowed;
-      background-color: ${Colors.Black[50]};
-      z-index: 0;
-
-      ${OptionWorkingGroupTitle} {
-        color: ${Colors.Black[500]};
-      }
-      ${TextMedium} {
-        color: ${Colors.Black[400]};
-      }
-    }
+    grid-template-columns: 1fr !important;
   }
 `
