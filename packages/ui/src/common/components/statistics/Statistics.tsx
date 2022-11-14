@@ -6,10 +6,9 @@ interface StatisticsLayoutProps {
 }
 
 export const Statistics = styled.div<StatisticsLayoutProps>`
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: ${({ gapSize }) => (gapSize === 's' ? '16px' : '24px')};
-  justify-items: flex-start;
   width: 100%;
   max-width: 100%;
   ${({ withMargin }) => (withMargin ? 'margin-top: 8px;' : null)};
