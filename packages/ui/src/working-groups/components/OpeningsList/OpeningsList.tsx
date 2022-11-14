@@ -10,7 +10,7 @@ export interface OpeningsListProps {
   past?: boolean
 }
 
-export const OpeningsList = ({ openings, past }: OpeningsListProps) => {
+export const OpeningsList = ({ openings, past = true }: OpeningsListProps) => {
   return (
     <List>
       {openings.map((opening: any) => (
