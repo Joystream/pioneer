@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 
+import { isDefined } from '@/common/utils'
 import { useGetLatestElectionLazyQuery } from '@/council/queries'
 import { asLatestElection } from '@/council/types/LatestElection'
 
@@ -15,7 +16,7 @@ export const useLatestElection = ({ skip }: Props) => {
   const rawElection = data?.electionRounds[0]
 
   useEffect(() => {
-    if (!skip && changedAt && (!data || stage === 'announcing')) {
+    if (!skip && isDefined(changedAt) && (!data || stage === 'announcing')) {
       fetch()
     }
   }, [changedAt])
