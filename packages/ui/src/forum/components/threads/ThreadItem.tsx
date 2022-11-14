@@ -2,18 +2,19 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
-import { RepliesIcon } from '@/common/components/icons'
+import { AnswerIcon } from '@/common/components/icons/AnswerIcon'
 import { Loading } from '@/common/components/Loading'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { GhostRouterLink } from '@/common/components/RouterLink'
-import { TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
-import { Overflow, Transitions } from '@/common/constants'
+import { Label, TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
+import { Colors, Overflow, Transitions } from '@/common/constants'
 import { relativeTime } from '@/common/model/relativeTime'
-import { CardItem } from '@/forum/components/CardItem'
 import { ForumRoutes } from '@/forum/constant'
 import { useThreadOriginalPost } from '@/forum/hooks/useThreadOriginalPost'
 import { ForumThread } from '@/forum/types'
-import { MemberInfo } from '@/memberships/components'
+
+import { ThreadItemBreadcrumbs } from './ThreadItemBreadcrumbs'
+import { ThreadTags } from './ThreadTags'
 
 interface ThreadBadgeProps {
   badge?: string
@@ -26,7 +27,7 @@ export interface ThreadItemContentProps {
   empty?: boolean
 }
 
-export const ThreadItem = ({ thread, empty }: ThreadItemContentProps) => {
+export const ThreadItem = ({ thread, badges, halfSize, empty }: ThreadItemContentProps) => {
   const { originalPost, isLoading } = useThreadOriginalPost(thread.id)
   const repliesCount = thread.visiblePostsCount - 1
   const content = originalPost?.text
@@ -34,44 +35,54 @@ export const ThreadItem = ({ thread, empty }: ThreadItemContentProps) => {
 
   if (isLoading) {
     return (
-      <CardItem>
+      <ThreadItemWrapper>
         <Loading />
-      </CardItem>
+      </ThreadItemWrapper>
     )
   }
   return (
-    <CardItem as={GhostRouterLink} to={threadAddress}>
+    <ThreadItemWrapper $halfSize={halfSize} as={GhostRouterLink} to={threadAddress}>
       <ThreadItemHeader align="center">
-        {originalPost && <MemberInfo member={originalPost.author} size="s" memberSize="s" hideGroup />}
+        <ThreadItemTitle empty={empty}>{thread.title}</ThreadItemTitle>
         <ThreadItemTime lighter>{relativeTime(thread.createdInBlock.timestamp)}</ThreadItemTime>
       </ThreadItemHeader>
-      <ThreadItemTitle empty={empty}>{thread.title}</ThreadItemTitle>
+
+      <ThreadItemBreadcrumbs id={thread.categoryId} nonInteractive />
+
       {content && (
         <ThreadItemText light value>
           {content}
         </ThreadItemText>
       )}
-      <Replies>
-        <RepliesIcon />
-        <CountBadge count={repliesCount} />
-      </Replies>
-    </CardItem>
+      {(badges || !!repliesCount) && (
+        <ThreadItemFooter>
+          {badges && (
+            <ThreadTags
+              tags={badges.flatMap(({ badge }, index) => ({
+                id: String(index),
+                title: badge as string,
+                threads: [],
+                visibleThreadsCount: 0,
+              }))}
+            />
+          )}
+          {!!repliesCount && (
+            <Label>
+              <StyledAnswerIcon /> Replies <CountBadge count={repliesCount} />
+            </Label>
+          )}
+        </ThreadItemFooter>
+      )}
+    </ThreadItemWrapper>
   )
 }
 
-const Replies = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-`
-
 export const EmptyThreadItem = ({ text }: { text: string }) => (
-  <CardItem>
+  <ThreadItemWrapper>
     <ThreadItemHeader align="center">
       <ThreadItemTitle empty>{text}</ThreadItemTitle>
     </ThreadItemHeader>
-  </CardItem>
+  </ThreadItemWrapper>
 )
 
 const ThreadItemHeader = styled(ColumnGapBlock)`
@@ -92,6 +103,56 @@ const ThreadItemTime = styled(TextInlineExtraSmall)`
 `
 
 const ThreadItemText = styled(TextMedium)`
+  display: -webkit-box;
   max-height: 100%;
-  ${Overflow.DotsNLines(4)}
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+`
+
+const ThreadItemFooter = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 100%;
+  overflow: hidden;
+`
+
+const StyledAnswerIcon = styled(AnswerIcon)`
+  color: ${Colors.Black[300]};
+`
+
+export const ThreadItemWrapper = styled.a<{ $halfSize?: boolean }>`
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  height: fit-content;
+  padding: 16px 0;
+  overflow: hidden;
+
+  & + & {
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 1px;
+      background-color: ${Colors.Black[100]};
+      transition: ${Transitions.all};
+    }
+  }
+
+  ${ThreadItemText} {
+    -webkit-line-clamp: ${({ $halfSize }) => ($halfSize ? '3' : '14')};
+  }
+
+  &:hover,
+  &:focus,
+  &:focus-within {
+    ${ThreadItemTitle} {
+      color: ${Colors.Blue[500]};
+    }
+  }
 `

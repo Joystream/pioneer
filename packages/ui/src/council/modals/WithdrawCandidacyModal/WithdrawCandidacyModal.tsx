@@ -1,17 +1,19 @@
 import React, { useCallback } from 'react'
 
+import { useApi } from '@/api/hooks/useApi'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Modal, ModalBody, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { WithdrawCandidacyModalCall } from '@/council/modals/WithdrawCandidacyModal/types'
-import { WithdrawSignModal } from '@/council/modals/WithdrawCandidacyModal/WithdrawSignModal'
 import { WithdrawWarningModal } from '@/council/modals/WithdrawCandidacyModal/WithdrawWarningModal'
 
 import { machine } from './machine'
 
 export const WithdrawCandidacyModal = () => {
+  const { api } = useApi()
   const { hideModal, modalData } = useModal<WithdrawCandidacyModalCall>()
   const { member } = modalData
   const onClose = hideModal
@@ -24,7 +26,15 @@ export const WithdrawCandidacyModal = () => {
   }
 
   if (state.matches('transaction')) {
-    return <WithdrawSignModal onClose={onClose} service={state.children.transaction} member={member} />
+    return (
+      <SignTransactionModal
+        transaction={api?.tx.council.withdrawCandidacy(member.id)}
+        signer={member.controllerAccount}
+        service={state.children.transaction}
+      >
+        <TextMedium>You intend to withdraw your candidacy.</TextMedium>
+      </SignTransactionModal>
+    )
   }
 
   if (state.matches('success')) {

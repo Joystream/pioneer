@@ -4,6 +4,7 @@ const path = require('path')
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
+const dotenv = require('dotenv')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
@@ -12,16 +13,15 @@ const shared = require('./dev/webpack.shared')
 
 const version = cp.execSync('git rev-parse --short HEAD').toString().trim()
 
+dotenv.config()
+
 module.exports = (env, argv) => {
   const isDevelopment = argv.mode === 'development'
   const envVariables = Object.entries(process.env)
     .filter(([key]) => key.startsWith('REACT_APP_'))
     .map(([key, value]) => [`process.env.${key}`, JSON.stringify(value)])
 
-  const imageBlacklist = [
-    ...env.blacklist ?? [],
-    ...process.env.REACT_APP_BLACKLISTED_IMAGES?.split(/\s+/) ?? []
-  ]
+  const imageBlacklist = [...(env.blacklist ?? []), ...(process.env.REACT_APP_BLACKLISTED_IMAGES?.split(/\s+/) ?? [])]
 
   const plugins = [
     ...shared.plugins,

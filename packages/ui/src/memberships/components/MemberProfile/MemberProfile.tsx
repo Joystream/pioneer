@@ -6,6 +6,8 @@ import { LinkIcon } from '@/common/components/icons/LinkIcon'
 import { EditSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
 import { SidePaneTopButtonsGroup } from '@/common/components/SidePane'
+import { ReportImageButton } from '@/common/components/UserImage/ReportImageButton'
+import { useIsImageBlacklisted } from '@/common/hooks/useIsImageBlacklisted'
 import { useModal } from '@/common/hooks/useModal'
 import { getUrl } from '@/common/utils/getUrl'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -28,10 +30,11 @@ export const MemberProfile = React.memo(() => {
   const { members } = useMyMemberships()
   const isMyMember = !!members.find((m) => m.id == member?.id)
   const isDetailsTab = activeTab === 'DETAILS'
+  const isAvatarBlacklisted = useIsImageBlacklisted(member?.avatar)
 
   return (
     <MemberModal
-      title="My Profile"
+      title={isMyMember ? 'My Profile' : 'Profile'}
       tabs={[
         { title: 'Member details', active: activeTab === 'DETAILS', onClick: () => setActiveTab('DETAILS') },
         { title: 'Accounts', active: activeTab === 'ACCOUNTS', onClick: () => setActiveTab('ACCOUNTS') },
@@ -46,6 +49,7 @@ export const MemberProfile = React.memo(() => {
               <EditSymbol />
             </EditMembershipButton>
           )}
+          {!isMyMember && !isAvatarBlacklisted && <ReportImageButton text="Report avatar" src={member?.avatar} />}
           <CopyButtonTemplate
             square
             size="small"

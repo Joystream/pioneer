@@ -15,13 +15,11 @@ import { useModal } from '@/common/hooks/useModal'
 import { useSort } from '@/common/hooks/useSort'
 import { ForumCategoryList } from '@/forum/components/category/ForumCategoryList'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
-import { ThreadBrowser } from '@/forum/components/threads/ThreadBrowser'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
 import { THREADS_PER_PAGE } from '@/forum/constant'
 import { useForumCategory } from '@/forum/hooks/useForumCategory'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
-import { useForumPopularThreads } from '@/forum/hooks/useForumPopularThreads'
 import { MemberStack, moderatorsSummary } from '@/memberships/components/MemberStack'
 
 import { ForumPageLayout } from './components/ForumPageLayout'
@@ -46,12 +44,6 @@ export const ForumCategory = () => {
     },
     { perPage: THREADS_PER_PAGE, page }
   )
-
-  const [popularThreadsCurrentPage, setPopularThreadsCurrentPage] = useState(1)
-  const { threads: popularThreads, isLoading: popularThreadIsLoading } = useForumPopularThreads({
-    page: popularThreadsCurrentPage,
-    threadsPerPage: 3,
-  })
 
   const { showModal } = useModal()
 
@@ -86,40 +78,35 @@ export const ForumCategory = () => {
         </ForumPageHeader>
       }
       main={
-        <RowGapBlock gap={24}>
-          <ThreadBrowser
-            label="Popular Threads"
-            threads={popularThreads}
-            isLoading={popularThreadIsLoading}
-            currentPage={popularThreadsCurrentPage}
-            setCurrentPage={setPopularThreadsCurrentPage}
-            emptyText="No Popular threads"
-          />
-
+        <>
           {!!category.subcategories.length && (
-            <>
-              {isArchive ? 'Archived categories' : 'Categories'}
+            <RowGapBlock gap={24}>
+              <ItemCount count={category.subcategories.length}>
+                {isArchive ? 'Archived categories' : 'Categories'}
+              </ItemCount>
               <ForumCategoryList categories={category.subcategories} isArchive={isArchive} />
-            </>
+            </RowGapBlock>
           )}
 
-          <ThreadFilters onApply={(filters) => refresh({ filters })} isArchive={isArchive}>
-            <ItemCount count={threadCount} size="xs">
-              {isArchive ? 'Archived Threads' : 'Threads'}
-            </ItemCount>
-          </ThreadFilters>
+          <RowGapBlock gap={24}>
+            <ThreadFilters onApply={(filters) => refresh({ filters })} isArchive={isArchive}>
+              <ItemCount count={threadCount} size="xs">
+                {isArchive ? 'Archived Threads' : 'Threads'}
+              </ItemCount>
+            </ThreadFilters>
 
-          <ThreadList
-            threads={threads}
-            getSortProps={getSortProps}
-            isLoading={isLoadingThreads}
-            isArchive={isArchive}
-            page={page}
-            pageCount={threadCount && Math.ceil(threadCount / THREADS_PER_PAGE)}
-            setPage={setPage}
-            type="list"
-          />
-        </RowGapBlock>
+            <ThreadList
+              threads={threads}
+              getSortProps={getSortProps}
+              isLoading={isLoadingThreads}
+              isArchive={isArchive}
+              page={page}
+              pageCount={threadCount && Math.ceil(threadCount / THREADS_PER_PAGE)}
+              setPage={setPage}
+              type="list"
+            />
+          </RowGapBlock>
+        </>
       }
     />
   )
@@ -127,5 +114,4 @@ export const ForumCategory = () => {
 
 const ModeratorsContainer = styled(Label)`
   align-items: center;
-  flex-direction: column;
 `

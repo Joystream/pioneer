@@ -19,8 +19,13 @@ export const BNSchema = Yup.mixed()
  *   lessThanMixed and moreThanMixed are methods for BN working same
  *   as the ones on Yup.number
  */
-export const maxContext = (msg: string, contextPath: string, isJoyValue = true): Yup.TestConfig<any, AnyObject> => ({
-  name: 'maxContext',
+export const maxContext = (
+  msg: string,
+  contextPath: string,
+  isJoyValue = true,
+  type?: string
+): Yup.TestConfig<any, AnyObject> => ({
+  name: type ?? 'maxContext',
   exclusive: false,
   test(value: number | BN) {
     if (!value) {
@@ -44,8 +49,13 @@ export const maxContext = (msg: string, contextPath: string, isJoyValue = true):
   },
 })
 
-export const minContext = (msg: string, contextPath: string, isJoyValue = true): Yup.TestConfig<any, AnyObject> => ({
-  name: 'minContext',
+export const minContext = (
+  msg: string,
+  contextPath: string,
+  isJoyValue = true,
+  type?: string
+): Yup.TestConfig<any, AnyObject> => ({
+  name: type ?? 'minContext',
   exclusive: false,
   test(value: number | BN) {
     if (!value) {
@@ -99,7 +109,7 @@ export const minMixed = (
 })
 
 export const lessThanMixed = (
-  less: Reference<number | BN> | number | undefined,
+  less: Reference<number | BN> | BN | number | undefined,
   message: string,
   isJoyValue = true
 ): Yup.TestConfig<any, AnyObject> => ({
@@ -151,17 +161,8 @@ export const validStakingAmount = (): Yup.TestConfig<any, AnyObject> => ({
     const extraFees = new BN(this.options.context?.extraFees ?? 0)
     const totalFee = stake.add(extraFees)
     if (totalBalance && totalBalance.lt(new BN(totalFee))) {
-      return this.createError({
-        message: `Insufficient funds to cover staking \${max} tJoy ${
-          extraFees.isZero() ? '' : ' + extra ${extra} tJoy'
-        }`,
-        params: {
-          max: formatJoyValue(totalBalance),
-          extra: formatJoyValue(extraFees),
-        },
-      })
+      return this.createError({ message: 'Insufficient funds to cover staking amount.' })
     }
-
     return true
   },
 })

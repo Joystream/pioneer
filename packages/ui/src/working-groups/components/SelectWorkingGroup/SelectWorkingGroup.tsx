@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { OptionComponent, Select, SelectedOption } from '@/common/components/selects'
 import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
+import { nameMapping } from '@/common/helpers'
 import {
   OptionWorkingGroup,
   OptionWorkingGroupTitle,
@@ -23,7 +24,7 @@ const filterByText = (options: WorkingGroup[], text: string) => {
   }
 
   const searchBy = text.toLocaleLowerCase()
-  return options.filter(({ name }) => name?.toLocaleLowerCase().includes(searchBy))
+  return options.filter(({ name }) => nameMapping(name)?.toLocaleLowerCase().includes(searchBy))
 }
 
 interface Props {

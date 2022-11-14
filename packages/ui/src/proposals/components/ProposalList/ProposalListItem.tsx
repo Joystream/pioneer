@@ -5,11 +5,12 @@ import styled from 'styled-components'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons'
+import { LinkSymbol } from '@/common/components/icons/symbols'
 import { TableListItem } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Subscription } from '@/common/components/typography/Subscription'
-import { TextSmall } from '@/common/components/typography/Text'
+import { TextSmall, TextMedium } from '@/common/components/typography/Text'
 import { Colors, Overflow } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { toDDMMYY } from '@/common/utils/dates'
@@ -44,6 +45,8 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
         return 'Proposal was approved by current council, but requires further approvals to satisfy constitutionality requirement, which is a minimum number of consecutive council votes. Transitions to deciding stage when next council is elected.'
       case 'gracing':
         return 'Proposal was approved by current council, but requires further approvals to satisfy constitutionality requirement, which is a minimum number of consecutive council votes. Transitions to deciding stage when next council is elected.'
+      case 'expired':
+        return 'This proposal expired, meaning it was not executed due to council not voting on it during its term.'
       case 'vetoed':
         return 'Was halted by SUDO, nothing further can happen. This will be removed at mainnet.'
       case 'slashed':
@@ -74,7 +77,10 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
       </ToggleableItemInfo>
       <StageField>
         <TextSmall bold>{camelCaseToText(proposal.status)}</TextSmall>
-        <Tooltip tooltipText={checkStatus()}>
+        <Tooltip
+          tooltipText={checkStatus()}
+          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/proposal-system?q=lock#proposal"
+        >
           <TooltipDefault />
         </Tooltip>
       </StageField>

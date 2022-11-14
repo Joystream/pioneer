@@ -128,7 +128,7 @@ describe('UI: DeleteThreadModal', () => {
     stubTransactionFailure(transaction)
     renderModal()
     await act(async () => {
-      fireEvent.click(await getButton('modals.deleteThread.buttonLabel'))
+      fireEvent.click(await getButton('Sign and delete'))
     })
     expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })
@@ -137,7 +137,7 @@ describe('UI: DeleteThreadModal', () => {
     stubTransactionSuccess(transaction, 'forum', 'ThreadDeleted')
     renderModal()
     await act(async () => {
-      fireEvent.click(await getButton('modals.deleteThread.buttonLabel'))
+      fireEvent.click(await getButton('Sign and delete'))
     })
 
     expect(await screen.findByText('Your thread has been deleted.')).toBeDefined()

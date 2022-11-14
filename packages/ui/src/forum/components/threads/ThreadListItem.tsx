@@ -6,6 +6,7 @@ import { BlockTime } from '@/common/components/BlockTime'
 import { PinIcon } from '@/common/components/icons/PinIcon'
 import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextBig, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow } from '@/common/constants'
 import { ForumRoutes, ThreadsColLayout } from '@/forum/constant'
@@ -31,10 +32,12 @@ export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
     >
       {thread.isSticky && <ThreadPinIcon />}
 
-      <Thread>
-        <TextBig bold>{thread.title}</TextBig>
-        {thread.tags.length > 0 && <ThreadTags tags={thread.tags} />}
-      </Thread>
+      <Tooltip tooltipText={thread.title}>
+        <Thread>
+          <TextBig bold>{thread.title}</TextBig>
+          {thread.tags.length > 0 && <ThreadTags tags={thread.tags} />}
+        </Thread>
+      </Tooltip>
 
       <TextMedium bold>{thread.visiblePostsCount - 1}</TextMedium>
 

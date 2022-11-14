@@ -1,5 +1,4 @@
 import BN from 'bn.js'
-import { FieldError, FieldErrors } from 'react-hook-form'
 import * as Yup from 'yup'
 
 import { Account } from '@/accounts/types'
@@ -130,6 +129,7 @@ export interface AddNewProposalForm {
   }
   setMembershipLeadInvitationQuota: {
     amount?: BN
+    leadId?: string
   }
   setInitialInvitationBalance: {
     amount?: BN
@@ -231,10 +231,15 @@ export const schemaFactory = (api?: ProxyApi) => {
     }),
     stakingPolicyAndReward: Yup.object().shape({
       stakingAmount: BNSchema.test(
-        minContext('Input must be greater than ${min} for proposal to execute', 'leaderOpeningStake')
+        minContext('Input must be greater than ${min} for proposal to execute', 'leaderOpeningStake', true, 'execution')
       ).required('Field is required'),
       leavingUnstakingPeriod: BNSchema.test(
-        minContext('Input must be greater than ${min} for proposal to execute', 'minUnstakingPeriodLimit', false)
+        minContext(
+          'Input must be greater than ${min} for proposal to execute',
+          'minUnstakingPeriodLimit',
+          false,
+          'execution'
+        )
       ).required('Field is required'),
       rewardPerBlock: BNSchema.test(moreThanMixed(1, 'Amount must be greater than zero')).required('Field is required'),
     }),
@@ -256,7 +261,12 @@ export const schemaFactory = (api?: ProxyApi) => {
     setWorkingGroupLeadReward: Yup.object().shape({
       rewardPerBlock: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
       groupId: Yup.string().required('Field is required'),
-      workerId: Yup.number().required('Field is required'),
+      workerId: Yup.number().test('execution', (value, context) => {
+        if (!context.parent.groupId) {
+          return true
+        }
+        return typeof value !== 'undefined'
+      }),
     }),
     updateWorkingGroupBudget: Yup.object().shape({
       isPositive: Yup.boolean(),
@@ -271,13 +281,19 @@ export const schemaFactory = (api?: ProxyApi) => {
     setReferralCut: Yup.object().shape({
       referralCut: Yup.number()
         .test(
-          maxContext('Input must be equal or less than ${max}% for proposal to execute', 'maximumReferralCut', false)
+          maxContext(
+            'Input must be equal or less than ${max}% for proposal to execute',
+            'maximumReferralCut',
+            false,
+            'execution'
+          )
         )
         .max(100, 'Value exceed maximal percentage')
         .required('Field is required'),
     }),
     setMembershipLeadInvitationQuota: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
+      leadId: Yup.string().test('execution', (value) => !!value),
     }),
     setInitialInvitationBalance: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
@@ -297,32 +313,4 @@ export const schemaFactory = (api?: ProxyApi) => {
       amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
     }),
   })
-}
-
-export const checkForExecutionWarning = (
-  step: string,
-  errors: FieldErrors<AddNewProposalForm>,
-  errorController: (isError: boolean) => void
-) => {
-  switch (step) {
-    case 'stakingPolicyAndReward': {
-      if (
-        errors.stakingPolicyAndReward?.leavingUnstakingPeriod?.type === 'minContext' ||
-        (errors.stakingPolicyAndReward?.stakingAmount as FieldError)?.type === 'minContext'
-      ) {
-        errorController(true)
-      } else {
-        errorController(false)
-      }
-      break
-    }
-    case 'setReferralCut': {
-      errorController(errors.setReferralCut?.referralCut?.type === 'maxContext')
-      break
-    }
-    case 'updateWorkingGroupBudget': {
-      errorController((errors.updateWorkingGroupBudget?.budgetUpdate as FieldError)?.type === 'execution')
-      break
-    }
-  }
 }
