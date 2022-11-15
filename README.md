@@ -29,6 +29,9 @@ yarn
 ## Build all the sub-packages
 yarn build
 
+## To update types switching between branches:
+yarn --frozen-lockfile && yarn workspace @joystream/types clean && yarn build
+
 ## To start local development server
 yarn start
 
