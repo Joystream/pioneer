@@ -31,16 +31,11 @@ export const FMBanner = () => {
             allocation of our mainnet token $JOY (which will come to life upon mainnet launch).
           </TextMedium>
           <TextMedium>
-            $tJOY can be <StyledLink href="https://www.joystream.org/cashout/">converted</StyledLink> to BCH, (Bitcoin
-            cash cryptocurrency) immediately, whereas $JOY will be allocated shortly after mainnet launch, assuming the
-            contributor has reached the{' '}
+            $JOY will be allocated shortly after mainnet launch, assuming the contributor has reached the{' '}
             <StyledLink href="https://joystream.gitbook.io/testnet-workspace/testnet/founding-member-program#stages">
               Founding Member
             </StyledLink>{' '}
-            status, by accruing $15k USD worth of $JOY.
-          </TextMedium>
-          <TextMedium>
-            $tJOY balances have no relationship to mainnet $JOY balances, there will be no conversion of any kind.
+            threshold and completed the verification process.
           </TextMedium>
           <TextMedium>
             <USFlag />
