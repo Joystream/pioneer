@@ -7,7 +7,7 @@ import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
 import { useLatestForumThreads } from '@/forum/hooks/useLatestForumThreads'
 
-import { ForumForumTabs, ForumTabs } from './components/ForumTabs'
+import { ForumTabs } from './components/ForumTabs'
 
 export const LatestThreads = () => {
   const { threads, isLoading } = useLatestForumThreads(5)
@@ -17,7 +17,6 @@ export const LatestThreads = () => {
       header={
         <ForumPageHeader title={<PageTitle>Latest threads</PageTitle>}>
           <ForumTabs />
-          <ForumForumTabs />
         </ForumPageHeader>
       }
       main={
@@ -25,6 +24,7 @@ export const LatestThreads = () => {
           <Loading />
         ) : (
           <ThreadList
+            type="list"
             threads={threads}
             getSortProps={() => ({ isActive: false, onSort: () => undefined, isDescending: false })}
           />

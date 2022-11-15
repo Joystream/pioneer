@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { DatePicker } from '@/common/components/forms/DatePicker'
 import { FilterBox } from '@/common/components/forms/FilterBox'
 import { camelCaseToText } from '@/common/helpers'
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { PartialDateRange, DateRange } from '@/common/types/Dates'
 import { objectEquals } from '@/common/utils'
 import { SmallMemberSelect } from '@/memberships/components/SelectMember'
@@ -13,7 +14,6 @@ import { ProposalStatus } from '@/proposals/types'
 import { FilterTextSelect } from '../../../common/components/selects'
 
 import { toCamelCase } from './helpers'
-import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 
 export interface ProposalFiltersState {
   search: string
@@ -48,7 +48,8 @@ const filterReducer = (filters: ProposalFiltersState, action: Action): ProposalF
         search: toCamelCase(action.value.search) || '',
         stage: toCamelCase(action.value.stage),
         type: toCamelCase(action.value.type),
-        lifetime: action.value.lifetime &&
+        lifetime:
+          action.value.lifetime &&
           Object.entries(action.value.lifetime).reduce(
             (prev, [key, dateString]) => ({ ...prev, [key]: new Date(dateString) }),
             {} as DateRange
@@ -80,7 +81,7 @@ export interface ProposalFiltersProps {
 export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onApply }: ProposalFiltersProps) => {
   const [filters, dispatch] = useReducer(filterReducer, ProposalEmptyFilter)
   const { search, stage, type, lifetime, proposer } = filters
-  const [lastFilter] = useLocalStorage<string>("lastFilter")
+  const [lastFilter] = useLocalStorage<string>('lastFilter')
 
   const apply = () => onApply(filters)
   const clear = useMemo(
@@ -96,8 +97,8 @@ export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onAppl
 
   useEffect(() => {
     if (filters === ProposalEmptyFilter && lastFilter !== undefined) {
-      dispatch({ type: 'update', value: JSON.parse(lastFilter)})
-      onApply({ ...JSON.parse(lastFilter)})
+      dispatch({ type: 'update', value: JSON.parse(lastFilter) })
+      onApply({ ...JSON.parse(lastFilter) })
     }
   }, [])
 

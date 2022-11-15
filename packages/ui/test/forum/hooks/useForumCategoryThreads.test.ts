@@ -73,7 +73,9 @@ describe('useForumCategoryThreads', () => {
         where: {
           category: { id_eq: categoryId },
           status_json: { isTypeOf_eq: 'ThreadStatusActive' },
-          author_eq: author.id,
+          author: {
+            id_eq: author.id,
+          },
           createdAt_gte: start,
           createdAt_lte: end,
         },

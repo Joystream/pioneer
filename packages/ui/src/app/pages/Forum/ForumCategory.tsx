@@ -13,7 +13,7 @@ import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Label } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { useSort } from '@/common/hooks/useSort'
-import { ForumCategoryList } from '@/forum/components/category'
+import { ForumCategoryList } from '@/forum/components/category/ForumCategoryList'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
@@ -103,6 +103,7 @@ export const ForumCategory = () => {
               page={page}
               pageCount={threadCount && Math.ceil(threadCount / THREADS_PER_PAGE)}
               setPage={setPage}
+              type="list"
             />
           </RowGapBlock>
         </>
