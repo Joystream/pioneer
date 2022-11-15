@@ -7,6 +7,7 @@ import { FilterPageHeader } from '@/common/components/forms/FilterBox'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Pagination } from '@/common/components/Pagination'
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useSort } from '@/common/hooks/useSort'
 import { AddProposalButton } from '@/proposals/components/AddProposalButton'
 import { ProposalEmptyFilter, ProposalFilters, ProposalFiltersState } from '@/proposals/components/ProposalFilters'
@@ -16,7 +17,6 @@ import { useProposals } from '@/proposals/hooks/useProposals'
 import { useProposalsActivities } from '@/proposals/hooks/useProposalsActivities'
 
 import { ProposalsTabs } from './components/ProposalsTabs'
-import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 
 export const PastProposals = () => {
   const searchSlot = useRef<HTMLDivElement>(null)
@@ -30,7 +30,7 @@ export const PastProposals = () => {
 
   const { activities } = useProposalsActivities()
 
-  const [, setLastFilter] = useLocalStorage<string>("lastFilter")
+  const [, setLastFilter] = useLocalStorage<string>('lastFilter')
 
   const onApplyFilter = (filter: ProposalFiltersState) => {
     setFilters(filter)
