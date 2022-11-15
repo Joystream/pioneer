@@ -16,14 +16,18 @@ interface MoveFundsModalItemProps {
 export const MoveFundsModalButtons = ({ insufficientBalances, noFreeAccounts }: MoveFundsModalItemProps) => {
   const { showModal, hideModal } = useModal()
 
+  const BountiesButton = (
+    <div onClick={() => hideModal()}>
+      <LinkButtonPrimary size="medium" to={BountyRoutes.currentBounties}>
+        Bounties
+      </LinkButtonPrimary>
+    </div>
+  )
+
   if (insufficientBalances) {
     return (
       <>
-        <div onClick={() => hideModal()}>
-          <LinkButtonPrimary size="medium" to={BountyRoutes.currentBounties}>
-            Bounties
-          </LinkButtonPrimary>
-        </div>
+        {false && <BountiesButton />}
         <div onClick={() => hideModal()}>
           <LinkButtonPrimary size="medium" to={WorkingGroupsRoutes.groups}>
             Working groups
