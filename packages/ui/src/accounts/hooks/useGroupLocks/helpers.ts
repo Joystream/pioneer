@@ -1,5 +1,4 @@
 import { useLatestElection } from '@/council/hooks/useLatestElection'
-import { usePastElection } from '@/council/hooks/usePastElection'
 import { useGetCouncilVotesQuery } from '@/council/queries'
 import { CandidacyStatus } from '@/council/types'
 import { useApplications } from '@/working-groups/hooks/useApplications'
@@ -19,6 +18,8 @@ export const useIsWGLockRecoverable = (hasWGLock: boolean, stakingAccount: strin
   const workerId = workerData?.workers[0]?.id
   const { unstakingPeriodEnd } = useWorkerUnstakingPeriodEnd(workerId)
 
+  if (!hasWGLock) return
+
   if (applications[0]?.status === 'ApplicationStatusPending') {
     return true
   }
@@ -36,6 +37,8 @@ export const useIsWGLockRecoverable = (hasWGLock: boolean, stakingAccount: strin
 export const useIsCandidateLockRecoverable = (hasCandidateLock: boolean, stakingAccount: string) => {
   const { election: latestElection } = useLatestElection({ skip: !hasCandidateLock })
 
+  if (!hasCandidateLock) return
+
   return (
     latestElection?.candidates?.find((candidate) => candidate.stakingAccount === stakingAccount)?.status !== 'ACTIVE'
   )
@@ -46,12 +49,12 @@ export const useIsVoteLockRecoverable = (hasVoteLock: boolean, stakingAccount: s
     variables: { where: { castBy_eq: stakingAccount, stakeLocked_eq: true } },
     skip: !hasVoteLock,
   })
-  const { election: voteElection } = usePastElection(String(vote?.electionRound.cycleId ?? 0))
+  const { election: latestElection } = useLatestElection({ skip: !hasVoteLock })
 
-  const isElectionFinished = !!voteElection
-  const { election: latestElection } = useLatestElection({ skip: !hasVoteLock || !isElectionFinished })
-  const isInLatestElection = !isElectionFinished || latestElection?.cycleId === voteElection?.cycleId
+  if (!hasVoteLock || !vote || !latestElection) return
+
   // Always recoverable when the vote was not cast during the latest election
   // Otherwise recoverable when the election is over and the voted for candidate was not elected
-  return !isInLatestElection || (isElectionFinished && vote?.voteFor?.status !== CandidacyStatus.Elected)
+  const isInLatestElection = latestElection.cycleId === vote.electionRound.cycleId
+  return !isInLatestElection || (latestElection.isFinished && vote.voteFor?.status !== CandidacyStatus.Elected)
 }
