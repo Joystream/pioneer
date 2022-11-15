@@ -56,7 +56,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee, mockUseModalCall } from '../../setup'
+import { mockTransactionFee, mockUseModalCall } from '../../setup'
 
 const QUESTION_INPUT = OpeningMetadata.ApplicationFormQuestion.InputType
 
@@ -69,8 +69,6 @@ jest.mock('@/common/components/CKEditor', () => ({
 jest.mock('@/common/hooks/useCurrentBlockNumber', () => ({
   useCurrentBlockNumber: () => mockUseCurrentBlockNumber(),
 }))
-
-
 
 const OPENING_DATA = {
   id: 'forumWorkingGroup-1337',
@@ -166,7 +164,7 @@ describe('UI: AddNewProposalModal', () => {
   })
 
   beforeEach(async () => {
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(100), canAfford: true } })
 
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
@@ -1206,7 +1204,7 @@ describe('UI: AddNewProposalModal', () => {
         const requiredStake = 10
         stubProposalConstants(api, { requiredStake })
         stubTransaction(api, 'api.tx.utility.batch', 10000)
-        mockedTransactionFee.feeInfo = { transactionFee: new BN(10000), canAfford: false }
+        mockTransactionFee({ feeInfo: { transactionFee: new BN(10000), canAfford: false } })
 
         await finishStakingAccount()
         await finishProposalDetails()

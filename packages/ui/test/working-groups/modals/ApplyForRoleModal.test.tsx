@@ -40,7 +40,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee, mockUseModalCall } from '../../setup'
+import { mockTransactionFee, mockUseModalCall } from '../../setup'
 
 const useHasRequiredStake = { hasRequiredStake: true }
 
@@ -51,8 +51,6 @@ jest.mock('../../../src/accounts/hooks/useHasRequiredStake', () => {
     useHasRequiredStake: () => useHasRequiredStake,
   }
 })
-
-
 
 describe('UI: ApplyForRoleModal', () => {
   const api = stubApi()
@@ -87,7 +85,7 @@ describe('UI: ApplyForRoleModal', () => {
   })
 
   beforeEach(async () => {
-    mockedTransactionFee.feeInfo = { canAfford: true, transactionFee: new BN(10) }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(10), canAfford: true } })
 
     const fields = adaptRecord(server.server?.schema.first('WorkingGroupOpening')) as WorkingGroupOpeningFieldsFragment
     fields.stakeAmount = '2000'
@@ -157,7 +155,7 @@ describe('UI: ApplyForRoleModal', () => {
       modalData = { opening }
       mockUseModalCall({ modalData, showModal, modal: 'ApplyForRoleModal' })
       batchTx = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening', 10_000)
-      mockedTransactionFee.feeInfo = { canAfford: false, transactionFee: new BN(10000) }
+      mockTransactionFee({ feeInfo: { transactionFee: new BN(10000), canAfford: false } })
       await renderModal()
 
       const moveFundsModalCall: MoveFundsModalCall = {

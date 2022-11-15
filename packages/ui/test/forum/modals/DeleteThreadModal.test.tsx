@@ -4,10 +4,8 @@ import React from 'react'
 
 import { ApiContext } from '@/api/providers/context'
 import { GlobalModals } from '@/app/GlobalModals'
-import { BN_ZERO } from '@/common/constants'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { ModalCallData } from '@/common/providers/modal/types'
-import { UseTransaction } from '@/common/providers/transactionFees/context'
 import { last } from '@/common/utils'
 import { DeleteThreadModalCall } from '@/forum/modals/DeleteThreadModal'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -28,7 +26,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockUseModalCall } from '../../setup'
+import { mockTransactionFee, mockUseModalCall } from '../../setup'
 
 const modalData: ModalCallData<DeleteThreadModalCall> = {
   thread: {
@@ -43,17 +41,6 @@ const modalData: ModalCallData<DeleteThreadModalCall> = {
     status: { __typename: 'ThreadStatusActive' },
   },
 }
-
-export const mockedTransactionFee: UseTransaction = {
-  transaction: undefined,
-  setTransaction: () => undefined,
-  setSigner: () => undefined,
-  feeInfo: { transactionFee: BN_ZERO, canAfford: true },
-}
-
-jest.mock('@/accounts/hooks/useTransactionFee', () => ({
-  useTransactionFee: jest.fn(() => mockedTransactionFee),
-}))
 
 describe('UI: DeleteThreadModal', () => {
   const api = stubApi()
@@ -83,7 +70,7 @@ describe('UI: DeleteThreadModal', () => {
   })
 
   beforeEach(async () => {
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(100), canAfford: true } })
     stubDefaultBalances()
     transaction = stubTransaction(api, txPath, 100)
     txMock = api.api.tx.forum.deleteThread as unknown as jest.Mock
@@ -103,7 +90,7 @@ describe('UI: DeleteThreadModal', () => {
   })
 
   it('Requirements failed', async () => {
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(100), canAfford: false } })
 
     renderModal()
     expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()

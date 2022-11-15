@@ -5,7 +5,7 @@ import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { ApiContext } from '@/api/providers/context'
-import { ClaimRewardModalCall, ClaimRewardModal } from '@/bounty/modals/ClaimRewardModal'
+import { ClaimRewardModal, ClaimRewardModalCall } from '@/bounty/modals/ClaimRewardModal'
 import { formatTokenValue } from '@/common/model/formatters'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
@@ -25,9 +25,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
-
-
+import { mockTransactionFee } from '../../setup'
 
 describe('UI: ClaimRewardModal', () => {
   const reward = new BN(100_000)
@@ -69,8 +67,7 @@ describe('UI: ClaimRewardModal', () => {
     useMyMemberships.setActive(getMember('alice'))
     stubDefaultBalances()
     tx = stubTransaction(api, txPath)
-    mockedTransactionFee.transaction = tx as any
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }
+    mockTransactionFee({ transaction: tx as any, feeInfo: { transactionFee: new BN(10), canAfford: true } })
   })
 
   it('Requirements passed', async () => {
@@ -82,7 +79,7 @@ describe('UI: ClaimRewardModal', () => {
   })
 
   it('Requirements failed', async () => {
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: false }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(10), canAfford: false } })
     renderModal()
 
     expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
