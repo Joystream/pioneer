@@ -58,7 +58,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
             ) : (
               <PlaceholderWrapper>
                 <AvatarPlaceholder />
-                <MemberHandle>No Leader</MemberHandle>
+                <MemberHandle>No Lead</MemberHandle>
               </PlaceholderWrapper>
             )}
           </StatsValue>
