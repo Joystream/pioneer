@@ -19,7 +19,7 @@
         "label": "Fee sending from account",
         "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
       },
-      "feeInfo": "Fees of {{value}} tJOY will be applied to the transaction"
+      "feeInfo": "Fees of {{value}} JOY will be applied to the transaction"
     },
     "contribute": {
       "title": "Contribute",
@@ -35,8 +35,8 @@
         "tooltip": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
       },
       "selectAmount": "Select amount for contributing",
-      "selectAmountSubtitle": "You must contribute at least {{value}} tJOY.",
-      "authorizeDescription": "You contribute {{value}} tJOY",
+      "selectAmountSubtitle": "You must contribute at least {{value}} JOY.",
+      "authorizeDescription": "You contribute {{value}} JOY",
       "error": "Something went wrong",
       "success": "You have just successfully contribute {{bounty}}”.",
       "successButton": "Back to bounty"
@@ -60,7 +60,7 @@
       "selectAmount": "Entrant stake",
       "selectAmountSubtitle": "Entrant stake is returned to your account automatically, when bounty is finished.",
       "selectAmountTooltip": "Minimum entrant stake is defined by the bounty creator.",
-      "authorizeDescription": "You intend to Apply for a bounty. You intend to stake {{value}} tJOY.",
+      "authorizeDescription": "You intend to Apply for a bounty. You intend to stake {{value}} JOY.",
       "error": "Something went wrong",
       "success": "You have just successfully announce work entry for ”{{bounty}}”.",
       "successButton": "Back to bounty"
@@ -83,7 +83,7 @@
         "title": "Authorize transaction",
         "informationBox": {
           "info1": "You are canceling your bounty",
-          "info2": "Fees of {{fee}} tJOY will be applied to the transaction."
+          "info2": "Fees of {{fee}} JOY will be applied to the transaction."
         },
         "accountInput": {
           "label": "Fee sending from account",
@@ -123,11 +123,11 @@
       "error": "There was a problem submitting your work."
     },
     "withdraw": {
-      "extraDescription": "Cherry of {{amount}} tJOY is added to your original contribution.",
+      "extraDescription": "Cherry of {{amount}} JOY is added to your original contribution.",
       "extraTooltipInformation": "This bounty was created with a cherry, which gets split among all contributors equally in the case when bounty fails",
       "contribution": {
         "title": "Withdraw Contribution",
-        "description": "You intend to withdraw {{value}} tJOY from stake lock and cherry from account.",
+        "description": "You intend to withdraw {{value}} JOY from stake lock and cherry from account.",
         "button": "Withdraw Contribution",
         "stakingFrom": "Staking from bounty",
         "amountTitle": "Contribution amount"

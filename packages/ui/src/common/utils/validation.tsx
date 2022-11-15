@@ -9,6 +9,7 @@ import Reference from 'yup/lib/Reference'
 import { AnyObject } from 'yup/lib/types'
 
 import { Loading } from '@/common/components/Loading'
+import { TokenValue } from '@/common/components/typography'
 import { formatJoyValue } from '@/common/model/formatters'
 
 export const BNSchema = Yup.mixed()
@@ -152,7 +153,7 @@ export const validStakingAmount = (): Yup.TestConfig<any, AnyObject> => ({
     const minStake: BN | undefined = this.options.context?.minStake
     if (minStake && minStake.gt(stake)) {
       return this.createError({
-        message: 'Minimal stake amount is ${min} tJOY',
+        message: 'Minimal stake amount is ' + <TokenValue value={minStake} />,
         params: { min: formatJoyValue(minStake) },
       })
     }
