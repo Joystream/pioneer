@@ -1,8 +1,9 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
+import * as Apollo from '@apollo/client'
 import { gql } from '@apollo/client'
 import { MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
-import * as Apollo from '@apollo/client'
+
 const defaultOptions = {} as const
 export type ForumBaseCategoryFieldsFragment = {
   __typename: 'ForumCategory'
@@ -218,8 +219,42 @@ export type ForumThreadFieldsFragment = {
   isSticky: boolean
   categoryId: string
   title: string
-  authorId: string
   visiblePostsCount: number
+  category: { __typename: 'ForumCategory'; title: string }
+  initialPost?: { __typename: 'ForumPost'; text: string } | null
+  author: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    isCouncilMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
+  }
   createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   status:
     | { __typename: 'ThreadStatusActive' }
@@ -532,8 +567,42 @@ export type ForumThreadDetailedFieldsFragment = {
   isSticky: boolean
   categoryId: string
   title: string
-  authorId: string
   visiblePostsCount: number
+  category: { __typename: 'ForumCategory'; title: string }
+  initialPost?: { __typename: 'ForumPost'; text: string } | null
+  author: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    isCouncilMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
+  }
   createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
   status:
     | { __typename: 'ThreadStatusActive' }
@@ -884,8 +953,42 @@ export type GetForumThreadsQuery = {
     isSticky: boolean
     categoryId: string
     title: string
-    authorId: string
     visiblePostsCount: number
+    category: { __typename: 'ForumCategory'; title: string }
+    initialPost?: { __typename: 'ForumPost'; text: string } | null
+    author: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      isCouncilMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
+    }
     createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
     status:
       | { __typename: 'ThreadStatusActive' }
@@ -931,8 +1034,42 @@ export type GetForumThreadQuery = {
     isSticky: boolean
     categoryId: string
     title: string
-    authorId: string
     visiblePostsCount: number
+    category: { __typename: 'ForumCategory'; title: string }
+    initialPost?: { __typename: 'ForumPost'; text: string } | null
+    author: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      isCouncilMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
+    }
     createdInEvent: { __typename: 'ThreadCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
     status:
       | { __typename: 'ThreadStatusActive' }
@@ -1499,8 +1636,16 @@ export const ForumThreadFieldsFragmentDoc = gql`
     id
     isSticky
     categoryId
+    category {
+      title
+    }
     title
-    authorId
+    initialPost {
+      text
+    }
+    author {
+      ...MemberFields
+    }
     createdInEvent {
       createdAt
       inBlock
@@ -1518,6 +1663,7 @@ export const ForumThreadFieldsFragmentDoc = gql`
     }
     visiblePostsCount
   }
+  ${MemberFieldsFragmentDoc}
 `
 export const ForumThreadDetailedFieldsFragmentDoc = gql`
   fragment ForumThreadDetailedFields on ForumThread {

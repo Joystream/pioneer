@@ -6,14 +6,14 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { useSort } from '@/common/hooks/useSort'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
-import { useMyThreads } from '@/forum/hooks/useMyThreads'
+import { useWatchlistedThreads } from '@/forum/hooks/useWatchlistedThreads'
 
 import { ForumTabs } from './components/ForumTabs'
 
-export const ForumMyThreads = () => {
-  const [page, setPage] = useState(1)
-  const { order, getSortProps } = useSort<ForumThreadOrderByInput>('updatedAt')
-  const { threads, pageCount, isLoading } = useMyThreads({ page, threadsPerPage: 15, order })
+export const ForumWatchlist = () => {
+  const { getSortProps } = useSort<ForumThreadOrderByInput>('updatedAt')
+  const [currentPage, setCurrentPage] = useState(1)
+  const { threads, pageCount, isLoading } = useWatchlistedThreads({ page: currentPage, threadsPerPage: 2 })
 
   const displayThreads = () => {
     return (
@@ -23,15 +23,16 @@ export const ForumMyThreads = () => {
         getSortProps={getSortProps}
         type="card"
         pageCount={pageCount}
-        setPage={setPage}
-        page={page}
+        setPage={setCurrentPage}
+        page={currentPage}
+        watchlistButton
       />
     )
   }
   return (
     <PageLayout
       header={
-        <ForumPageHeader title={<PageTitle>My threads</PageTitle>}>
+        <ForumPageHeader title={<PageTitle>Watchlist</PageTitle>}>
           <ForumTabs />
         </ForumPageHeader>
       }

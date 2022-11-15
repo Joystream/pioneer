@@ -10,6 +10,7 @@ import { asStorybookPost } from '@/forum/helpers/storybook'
 import { ForumThreadFieldsFragment } from '@/forum/queries'
 import { asForumThread } from '@/forum/types'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+import rawMembers from '@/mocks/data/raw/members.json'
 import { RawForumCategoryMock, RawForumThreadMock } from '@/mocks/data/seedForum'
 
 import { ThreadItem } from './ThreadItem'
@@ -74,7 +75,12 @@ Default.args = {
     id: 'ThreadItem-story',
     categoryId: '',
     authorId: '0',
+    author: rawMembers[0] as any,
     isSticky: false,
+    category: {
+      __typename: 'ForumCategory',
+      title: 'Category',
+    },
     title: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint',
     createdInEvent: {
       inBlock: 3385,
