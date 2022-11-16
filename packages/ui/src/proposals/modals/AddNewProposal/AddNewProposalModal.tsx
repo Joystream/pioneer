@@ -30,6 +30,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { createType } from '@/common/model/createType'
+// import { createType } from '@joystream/types'
 import { getMaxBlock } from '@/common/model/getMaxBlock'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useYupValidationResolver } from '@/common/utils/validation'
@@ -292,11 +293,12 @@ export const AddNewProposalModal = () => {
 
   if (state.matches('discussionTransaction')) {
     const { triggerAndDiscussion } = form.getValues() as AddNewProposalForm
-    const threadMode = createType('PalletProposalsDiscussionThreadMode', {
+    const threadMode = createType('PalletProposalsDiscussionThreadModeBTreeSet', {
       closed: triggerAndDiscussion.discussionWhitelist?.map((member) =>
         createType('MemberId', Number.parseInt(member.id))
       ),
     })
+
     const transaction = api.tx.proposalsDiscussion.changeThreadMode(
       activeMember.id,
       state.context.discussionId,

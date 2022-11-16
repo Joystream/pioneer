@@ -3,7 +3,7 @@ import { AugmentedEvents } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
-import { from, of, asyncScheduler, scheduled, Observable } from 'rxjs'
+import { asyncScheduler, from, Observable, of, scheduled } from 'rxjs'
 
 import { toBalances } from '@/accounts/model/toBalances'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
@@ -217,7 +217,7 @@ export const stubProposalConstants = (api: UseApi, constants?: { requiredStake: 
     })
   }
   set(api, 'api.consts.members.referralCutMaximumPercent', new BN(50))
-  set(api, 'api.consts.proposalsCodex.fundingRequestProposalMaxAmount', new BN(10_000))
+  set(api, 'api.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount', new BN(10_000))
   set(api, 'api.consts.proposalsCodex.setMaxValidatorCountProposalMaxValidators', new BN(300))
   set(
     api,
