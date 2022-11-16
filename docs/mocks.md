@@ -11,16 +11,16 @@ To test most of the extrinsics requires existing on-chain data. To create some o
 
 Available commands:
 
-- `yarn workspace ui node-mocks council:announce` - Announce enough candidacies to start the voting stage when the announcing stage ends
-- `yarn workspace ui node-mocks council:vote` - Vote for the announced by the previous command candidate to start the revealing stage next
-- `yarn workspace ui node-mocks council:reveal` - Reveal the votes casted by the previous command to start elect a new council and start the idle stage next
-- `yarn workspace ui node-mocks members:create` - generate memberships using query-node mocks data
-- `yarn workspace ui node-mocks set-budget` - Set membership Working Group budget
-- `yarn workspace ui node-mocks opening:create` - Create an opening
-- `yarn workspace ui node-mocks opening:fill` - Fill existing opening
-- `yarn workspace ui node-mocks upcoming-opening:create` - Create an upcoming opening
-- `yarn workspace ui node-mocks forumCategory:create` - Create a forum category
-- `yarn workspace ui node-mocks transfer` - Transfer tokens between accounts
+- `yarn workspace @joystream/pioneer node-mocks council:announce` - Announce enough candidacies to start the voting stage when the announcing stage ends
+- `yarn workspace @joystream/pioneer node-mocks council:vote` - Vote for the announced by the previous command candidate to start the revealing stage next
+- `yarn workspace @joystream/pioneer node-mocks council:reveal` - Reveal the votes casted by the previous command to start elect a new council and start the idle stage next
+- `yarn workspace @joystream/pioneer node-mocks members:create` - generate memberships using query-node mocks data
+- `yarn workspace @joystream/pioneer node-mocks set-budget` - Set membership Working Group budget
+- `yarn workspace @joystream/pioneer node-mocks opening:create` - Create an opening
+- `yarn workspace @joystream/pioneer node-mocks opening:fill` - Fill existing opening
+- `yarn workspace @joystream/pioneer node-mocks upcoming-opening:create` - Create an upcoming opening
+- `yarn workspace @joystream/pioneer node-mocks forumCategory:create` - Create a forum category
+- `yarn workspace @joystream/pioneer node-mocks transfer` - Transfer tokens between accounts
 
 To show help:
 
@@ -29,8 +29,8 @@ yarn node-mocks --help
 ```
 
 Shortcuts:
-- `yarn workspace ui node-mocks:announce-vote` - Announce candidacies, wait, then vote on them
-- `yarn workspace ui node-mocks:announce-vote-reveal` - Announce candidacies, wait, vote on them, wait, then reveal these votes
+- `yarn workspace @joystream/pioneer node-mocks:announce-vote` - Announce candidacies, wait, then vote on them
+- `yarn workspace @joystream/pioneer node-mocks:announce-vote-reveal` - Announce candidacies, wait, vote on them, wait, then reveal these votes
 
 #### Chain spec
 
@@ -44,7 +44,7 @@ Another way to influence the on-chain state for testing purpose, is to provide a
       ```
 
 2. _(optional)_ Change the starting Council/Referendum stage (the default is `Announcing`):
-   - Run `yarn workspace ui helpers setChainSpec -s <stage> [-d <duration>]`
+   - Run `yarn workspace @joystream/pioneer helpers setChainSpec -s <stage> [-d <duration>]`
       - The `stage` parameter (required) can be either `idle`, `announcing`, `voting`, or `revealing` (these should be lowercase)
       - The `duration` parameter (optional) set the number of blocks this stage will last.
 
@@ -55,8 +55,8 @@ Another way to influence the on-chain state for testing purpose, is to provide a
       <path to the runtime> --tmp --alice --validator --unsafe-ws-external --unsafe-rpc-external --rpc-cors=all --chain packages/ui/dev/chain-spec/data/chain-spec.json --log runtime
       ```
 ### Other helper commands
-- `yarn workspace ui run helpers commitment -s <salt> [-a <accountId>] [-o <optionId>] [-c <cycleId>]` - Calculate a commitment
-- `yarn workspace ui run helpers nextCouncilStage` - Wait until the next council stage start
+- `yarn workspace @joystream/pioneer run helpers commitment -s <salt> [-a <accountId>] [-o <optionId>] [-c <cycleId>]` - Calculate a commitment
+- `yarn workspace @joystream/pioneer run helpers nextCouncilStage` - Wait until the next council stage start
 
 ### Polkadot apps
 

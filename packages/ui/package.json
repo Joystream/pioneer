@@ -1,6 +1,6 @@
 {
-  "name": "ui",
-  "version": "0.0.1",
+  "name": "@joystream/pioneer",
+  "version": "0.1.0",
   "license": "GPL-3.0-only",
   "scripts": {
     "build": "node --max_old_space_size=4096 ./build.js",
@@ -25,7 +25,7 @@
   "dependencies": {
     "@apollo/client": "3.5.7",
     "@hcaptcha/react-hcaptcha": "^1.4.4",
-    "@joystream/markdown-editor": "^0.0.1",
+    "@joystream/markdown-editor": "^0.1.0",
     "@joystream/metadata-protobuf": "^2.0.0",
     "@joystream/types": "^0.20.2",
     "@nivo/bar": "^0.79.1",
