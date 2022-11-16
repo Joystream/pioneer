@@ -219,7 +219,7 @@ export const stubProposalConstants = (api: UseApi, constants?: { requiredStake: 
     })
   }
   set(api, 'api.consts.members.referralCutMaximumPercent', new BN(50))
-  set(api, 'api.consts.proposalsCodex.fundingRequestProposalMaxAmount', new BN(10_000))
+  set(api, 'api.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount', new BN(10_000))
   set(api, 'api.consts.proposalsCodex.setMaxValidatorCountProposalMaxValidators', new BN(300))
   set(
     api,

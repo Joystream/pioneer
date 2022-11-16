@@ -101,7 +101,7 @@ describe('UI: DeleteThreadModal', () => {
     mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
     stubDefaultBalances()
     transaction = stubTransaction(api, txPath, 100)
-    txMock = (api.api.tx.forum.deleteThread as unknown) as jest.Mock
+    txMock = api.api.tx.forum.deleteThread as unknown as jest.Mock
   })
 
   it('Requirements passed', async () => {

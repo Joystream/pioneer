@@ -180,7 +180,10 @@ export const schemaFactory = (api?: ProxyApi) => {
     }),
     fundingRequest: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, ''))
-        .test(maxMixed(api?.consts.proposalsCodex.fundingRequestProposalMaxAmount, 'Maximal amount allowed is ${max}'))
+        // todo: change funding request to allow upload request in file
+        .test(
+          maxMixed(api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount, 'Maximal amount allowed is ${max}')
+        )
         .required('Field is required'),
       account: AccountSchema.required('Field is required'),
     }),
