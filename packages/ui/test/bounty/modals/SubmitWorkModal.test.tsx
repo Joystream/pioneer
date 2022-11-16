@@ -1,13 +1,9 @@
 import { BountyWorkData } from '@joystream/metadata-protobuf'
 import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
-import BN from 'bn.js'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { BalancesContext } from '@/accounts/providers/balances/context'
 import { ApiContext } from '@/api/providers/context'
 import { SubmitWorkModal } from '@/bounty/modals/SubmitWorkModal'
-import { BN_ZERO } from '@/common/constants'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
@@ -21,20 +17,14 @@ import { alice, bob } from '../../_mocks/keyring'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  stubAccounts,
   stubApi,
   stubBountyConstants,
+  stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-
-const defaultBalance = {
-  total: BN_ZERO,
-  locked: BN_ZERO,
-  recoverable: BN_ZERO,
-  transferable: new BN(1000),
-  locks: [],
-}
 
 describe('UI: BountySubmitModal', () => {
   const mockServer = setupMockServer({ noCleanupAfterEach: true })
@@ -70,11 +60,6 @@ describe('UI: BountySubmitModal', () => {
     }
   })
 
-  const useBalances = {
-    [getMember('bob').controllerAccount]: { ...defaultBalance },
-    [getMember('alice').controllerAccount]: defaultBalance,
-  }
-
   const useMembership = {
     isLoading: false,
     active: getMember('bob'),
@@ -86,11 +71,10 @@ describe('UI: BountySubmitModal', () => {
     },
   }
 
-  const useAccounts = {
-    isLoading: false,
-    hasAccounts: true,
-    allAccounts: [bob, alice],
-  }
+  beforeAll(() => {
+    stubDefaultBalances()
+    stubAccounts([bob, alice])
+  })
 
   beforeEach(() => {
     renderResult = render(<RenderModal />)
@@ -167,11 +151,7 @@ describe('UI: BountySubmitModal', () => {
         <MockKeyringProvider>
           <ApiContext.Provider value={api}>
             <MembershipContext.Provider value={useMembership}>
-              <AccountsContext.Provider value={useAccounts}>
-                <BalancesContext.Provider value={useBalances}>
-                  <SubmitWorkModal />
-                </BalancesContext.Provider>
-              </AccountsContext.Provider>
+              <SubmitWorkModal />
             </MembershipContext.Provider>
           </ApiContext.Provider>
         </MockKeyringProvider>

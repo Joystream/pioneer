@@ -9,8 +9,8 @@ import { RowGapBlock } from './page/PageContent'
 import { TextMedium } from './typography'
 
 export interface WarningProps {
-  title: string
-  content: ReactNode
+  title?: string
+  content?: ReactNode
   isClosable?: boolean
 }
 
@@ -24,8 +24,8 @@ export const Warning = ({ title, content, isClosable }: WarningProps) => {
   return (
     <WarningBlock gap={8}>
       {isClosable !== false && <StyledCloseButton onClick={toggleOpen} />}
-      <h5>{title}</h5>
-      <TextMedium light>{content}</TextMedium>
+      {title && <h5>{title}</h5>}
+      {content && <TextMedium light>{content}</TextMedium>}
     </WarningBlock>
   )
 }

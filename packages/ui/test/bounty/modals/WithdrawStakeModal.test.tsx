@@ -1,4 +1,5 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -21,6 +22,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 const bounty = bounties[0]
 
@@ -65,6 +67,8 @@ describe('UI: WithdrawStakeModal', () => {
 
   beforeEach(() => {
     transaction = stubTransaction(api, 'api.tx.bounty.withdrawWorkEntrantFunds', fee)
+    mockedTransactionFee.transaction = transaction as any
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }
   })
 
   it('Requirements passed', async () => {
@@ -74,7 +78,7 @@ describe('UI: WithdrawStakeModal', () => {
   })
 
   it('Insufficient funds', async () => {
-    stubTransaction(api, 'api.tx.bounty.withdrawWorkEntrantFunds', 999999)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(9999), canAfford: false }
 
     const { findByText } = renderModal()
 
@@ -102,7 +106,7 @@ describe('UI: WithdrawStakeModal', () => {
     })
 
     it('Requirements failed', async () => {
-      stubTransaction(api, 'api.tx.bounty.withdrawWorkEntrantFunds', 99999)
+      mockedTransactionFee.feeInfo = { transactionFee: new BN(99999), canAfford: false }
       renderModal()
 
       expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()

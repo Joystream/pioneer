@@ -1,5 +1,6 @@
 import { assign, createMachine } from 'xstate'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import { EmptyObject } from '@/common/types'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 
@@ -36,7 +37,6 @@ export const onBoardingMachine = createMachine<OnBoardingModalContext, OnBoardin
         },
       },
     },
-    success: { type: 'final' },
-    error: { type: 'final' },
+    ...transactionModalFinalStatusesFactory(),
   },
 })

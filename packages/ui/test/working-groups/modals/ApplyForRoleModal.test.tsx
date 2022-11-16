@@ -1,5 +1,4 @@
 import { ApplicationMetadata } from '@joystream/metadata-protobuf'
-import { createType } from '@joystream/types'
 import { adaptRecord } from '@miragejs/graphql/dist/orm/records'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
@@ -9,25 +8,21 @@ import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
 
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { ApiContext } from '@/api/providers/context'
+import { GlobalModals } from '@/app/GlobalModals'
+import { createType } from '@/common/model/createType'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
-import { ModalContext } from '@/common/providers/modal/context'
-import { UseModal } from '@/common/providers/modal/types'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { last } from '@/common/utils'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
-import { seedMembers } from '@/mocks/data'
+import { seedMembers, seedOpening, seedOpeningStatuses } from '@/mocks/data'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
-import { ApplyForRoleModal } from '@/working-groups/modals/ApplyForRoleModal'
 import { applyForRoleMachine } from '@/working-groups/modals/ApplyForRoleModal/machine'
 import { WorkingGroupOpeningFieldsFragment } from '@/working-groups/queries'
 import { asWorkingGroupOpening, WorkingGroupOpening } from '@/working-groups/types'
 
-import { seedOpening, seedOpeningStatuses } from '../../../src/mocks/data/seedOpenings'
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown, selectFromDropdownWithId } from '../../_helpers/selectFromDropdown'
 import { alice, bob } from '../../_mocks/keyring'
@@ -36,6 +31,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import { OPENING_DATA } from '../../_mocks/server/seeds'
 import {
+  stubAccounts,
   stubApi,
   stubBalances,
   stubConst,
@@ -44,6 +40,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 const useHasRequiredStake = { hasRequiredStake: true }
 
@@ -61,13 +58,6 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 
 describe('UI: ApplyForRoleModal', () => {
   const api = stubApi()
-
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData: undefined,
-  }
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -79,11 +69,12 @@ describe('UI: ApplyForRoleModal', () => {
     },
   }
 
-  let useAccounts: UseAccounts
   let batchTx: any
   let bindAccountTx: any
   let applyTransaction: any
   let applyOnOpeningTxMock: jest.Mock
+  const showModal = jest.fn()
+  let modalData: any
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -94,28 +85,25 @@ describe('UI: ApplyForRoleModal', () => {
     seedWorkingGroups(server.server)
     seedOpeningStatuses(server.server)
     seedOpening(OPENING_DATA, server.server)
-
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
+    mockedTransactionFee.feeInfo = { canAfford: true, transactionFee: new BN(10) }
+
     const fields = adaptRecord(server.server?.schema.first('WorkingGroupOpening')) as WorkingGroupOpeningFieldsFragment
     fields.stakeAmount = '2000'
     fields.openingfilledeventopening = []
     const opening: WorkingGroupOpening = asWorkingGroupOpening(fields)
-    useModal.modalData = { opening }
+    modalData = { opening }
+    mockUseModalCall({ modalData, showModal, modal: 'ApplyForRoleModal' })
+
     useMyMemberships.setActive(getMember('alice'))
 
     stubConst(api, 'forumWorkingGroup.rewardPeriod', createType('u32', 14410))
     stubConst(api, 'members.candidateStake', new BN(200))
 
-    stubBalances(api, {
-      available: 3000,
-    })
+    stubBalances({ available: 3000 })
     applyTransaction = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
     applyOnOpeningTxMock = api.api.tx.forumWorkingGroup.applyOnOpening as unknown as jest.Mock
 
@@ -123,8 +111,8 @@ describe('UI: ApplyForRoleModal', () => {
     stubQuery(
       api,
       'members.stakingAccountIdMemberStatus',
-      createType('StakingAccountMemberBinding', {
-        member_id: 0,
+      createType('PalletMembershipStakingAccountMemberBinding', {
+        memberId: 0,
         confirmed: false,
       })
     )
@@ -150,13 +138,14 @@ describe('UI: ApplyForRoleModal', () => {
 
       await renderModal()
 
-      expect(useModal.showModal).toBeCalledWith({
+      expect(showModal).toBeCalledWith({
         modal: 'SwitchMember',
         data: {
-          originalModalData: useModal.modalData,
+          originalModalData: modalData,
           originalModalName: 'ApplyForRoleModal',
         },
       })
+      showModal.mockClear()
     })
 
     it('Insufficient funds', async () => {
@@ -167,20 +156,22 @@ describe('UI: ApplyForRoleModal', () => {
       fields.stakeAmount = requiredStake
       fields.openingfilledeventopening = []
       const opening: WorkingGroupOpening = asWorkingGroupOpening(fields)
-      useModal.modalData = { opening }
+      modalData = { opening }
+      mockUseModalCall({ modalData, showModal, modal: 'ApplyForRoleModal' })
       batchTx = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening', 10_000)
-
+      mockedTransactionFee.feeInfo = { canAfford: false, transactionFee: new BN(10000) }
       await renderModal()
 
       const moveFundsModalCall: MoveFundsModalCall = {
         modal: 'MoveFundsModal',
         data: {
-          requiredStake: new BN(requiredStake),
+          requiredStake: new BN(opening.stake),
           lock: 'Forum Worker',
+          isFeeOriented: true,
         },
       }
 
-      expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
+      expect(showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
   })
 
@@ -253,7 +244,7 @@ describe('UI: ApplyForRoleModal', () => {
         await fillSteps()
 
         expect(await screen.findByText('You intend to bind account for staking')).toBeDefined()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('42')
+        expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('42')
       })
 
       it('Bind account failure', async () => {
@@ -261,7 +252,7 @@ describe('UI: ApplyForRoleModal', () => {
         await fillSteps()
 
         await act(async () => {
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          fireEvent.click(screen.getByText(/^Sign transaction and Bind Staking Account/i))
         })
 
         expect(await screen.findByText('Failure')).toBeDefined()
@@ -272,11 +263,11 @@ describe('UI: ApplyForRoleModal', () => {
         await fillSteps()
 
         await act(async () => {
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          fireEvent.click(screen.getByText(/^Sign transaction and Bind Staking Account/i))
         })
 
         expect(await screen.findByText(/You intend to apply for a role/i)).toBeDefined()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+        expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
       })
 
       it('Apply on opening success', async () => {
@@ -287,7 +278,7 @@ describe('UI: ApplyForRoleModal', () => {
         ])
         await fillSteps()
         await act(async () => {
-          fireEvent.click(await screen.findByText(/^Sign transaction/i))
+          fireEvent.click(await screen.findByText(/^Sign transaction and Bind Staking Account/i))
         })
 
         await waitFor(async () => await screen.findByText(/You intend to apply for a role/i))
@@ -304,14 +295,15 @@ describe('UI: ApplyForRoleModal', () => {
         stubTransactionSuccess(bindAccountTx, 'members', 'StakingAccountAdded')
         stubTransactionFailure(batchTx)
         await fillSteps()
+
         await act(async () => {
-          fireEvent.click(await screen.findByText(/^Sign transaction/i))
+          fireEvent.click(await screen.findByText(/^Sign transaction and Bind Staking Account/i))
         })
 
         await waitFor(async () => await screen.findByText(/You intend to apply for a role/i))
 
         await act(async () => {
-          fireEvent.click(await screen.findByText(/^Sign transaction/i))
+          fireEvent.click(await screen.findByText(/^Sign transaction and Stake/i))
         })
 
         expect(await screen.findByText('Failure')).toBeDefined()
@@ -323,8 +315,8 @@ describe('UI: ApplyForRoleModal', () => {
         stubQuery(
           api,
           'members.stakingAccountIdMemberStatus',
-          createType('StakingAccountMemberBinding', {
-            member_id: createType('MemberId', 0),
+          createType('PalletMembershipStakingAccountMemberBinding', {
+            memberId: createType('MemberId', 0),
             confirmed: createType('bool', false),
           })
         )
@@ -335,7 +327,7 @@ describe('UI: ApplyForRoleModal', () => {
         await fillSteps()
 
         expect(await screen.findByText(/You intend to apply for a role/i)).toBeDefined()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+        expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
       })
 
       it('Apply on opening success', async () => {
@@ -345,7 +337,7 @@ describe('UI: ApplyForRoleModal', () => {
         ])
         await fillSteps()
         await act(async () => {
-          fireEvent.click(screen.getByText(/^Sign transaction/i))
+          fireEvent.click(screen.getByText(/^Sign transaction and Stake/i))
         })
 
         expect(await screen.findByText('Application submitted!')).toBeDefined()
@@ -369,8 +361,8 @@ describe('UI: ApplyForRoleModal', () => {
         stubQuery(
           api,
           'members.stakingAccountIdMemberStatus',
-          createType('StakingAccountMemberBinding', {
-            member_id: createType('MemberId', 0),
+          createType('PalletMembershipStakingAccountMemberBinding', {
+            memberId: createType('MemberId', 0),
             confirmed: createType('bool', true),
           })
         )
@@ -381,7 +373,7 @@ describe('UI: ApplyForRoleModal', () => {
         await fillSteps()
 
         expect(await screen.findByText(/You intend to apply for a role/i)).toBeDefined()
-        expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+        expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
       })
 
       it('Apply on opening success', async () => {
@@ -418,35 +410,35 @@ describe('UI: ApplyForRoleModal', () => {
     await fillSteps('bob')
 
     await act(async () => {
-      fireEvent.click(screen.getByText(/^Sign transaction/i))
+      fireEvent.click(screen.getByText(/^Sign transaction and Bind Staking Account/i))
     })
 
     await waitFor(async () => await screen.findByText(/You intend to apply for a role/i))
 
     const [beforeTransactionParam] = last(applyOnOpeningTxMock.mock.calls)
-    expect(beforeTransactionParam.opening_id).toBe(1)
+    expect(beforeTransactionParam.openingId).toBe(1)
 
-    expect(beforeTransactionParam.member_id).toBe(useMyMemberships.active?.id)
-    expect(beforeTransactionParam.role_account_id).toBe(alice.address)
-    expect(beforeTransactionParam.reward_account_id).toBe(alice.address)
+    expect(beforeTransactionParam.memberId).toBe(useMyMemberships.active?.id)
+    expect(beforeTransactionParam.roleAccountId).toBe(alice.address)
+    expect(beforeTransactionParam.rewardAccountId).toBe(alice.address)
 
-    expect(beforeTransactionParam.stake_parameters.staking_account_id).toBe(bob.address)
-    expect(beforeTransactionParam.stake_parameters.stake.toString()).toBe('2000')
+    expect(beforeTransactionParam.stakeParameters.stakingAccountId).toBe(bob.address)
+    expect(beforeTransactionParam.stakeParameters.stake.toString()).toBe('2000')
 
     await act(async () => {
-      fireEvent.click(await screen.findByText(/^Sign transaction/i))
+      fireEvent.click(await screen.findByText(/^Sign transaction and stake/i))
     })
 
     const [transactionParam] = last(applyOnOpeningTxMock.mock.calls)
 
-    expect(transactionParam.opening_id).toBe(1)
+    expect(transactionParam.openingId).toBe(1)
 
-    expect(transactionParam.member_id).toBe(useMyMemberships.active?.id)
-    expect(transactionParam.role_account_id).toBe(alice.address)
-    expect(transactionParam.reward_account_id).toBe(alice.address)
+    expect(transactionParam.memberId).toBe(useMyMemberships.active?.id)
+    expect(transactionParam.roleAccountId).toBe(alice.address)
+    expect(transactionParam.rewardAccountId).toBe(alice.address)
 
-    expect(transactionParam.stake_parameters.staking_account_id).toBe(bob.address)
-    expect(transactionParam.stake_parameters.stake.toString()).toBe('2000')
+    expect(transactionParam.stakeParameters.stakingAccountId).toBe(bob.address)
+    expect(transactionParam.stakeParameters.stake.toString()).toBe('2000')
 
     expect(metadataFromBytes(ApplicationMetadata, transactionParam.description)).toEqual({
       answers: ['Foo bar baz', 'Foo bar baz', 'Foo bar baz'],
@@ -494,21 +486,17 @@ describe('UI: ApplyForRoleModal', () => {
     await act(async () => {
       render(
         <MemoryRouter>
-          <ModalContext.Provider value={useModal}>
+          <ModalContextProvider>
             <MockQueryNodeProviders>
               <MockKeyringProvider>
                 <ApiContext.Provider value={api}>
-                  <AccountsContext.Provider value={useAccounts}>
-                    <MembershipContext.Provider value={useMyMemberships}>
-                      <BalancesContextProvider>
-                        <ApplyForRoleModal />
-                      </BalancesContextProvider>
-                    </MembershipContext.Provider>
-                  </AccountsContext.Provider>
+                  <MembershipContext.Provider value={useMyMemberships}>
+                    <GlobalModals />
+                  </MembershipContext.Provider>
                 </ApiContext.Provider>
               </MockKeyringProvider>
             </MockQueryNodeProviders>
-          </ModalContext.Provider>
+          </ModalContextProvider>
         </MemoryRouter>
       )
     })

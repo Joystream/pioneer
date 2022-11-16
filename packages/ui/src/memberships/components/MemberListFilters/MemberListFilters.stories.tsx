@@ -24,7 +24,7 @@ export const Default: Story<Pick<MemberListFiltersProps, 'onApply'>> = (props) =
       <MembershipContextProvider>
         <TemplateBlock>
           <FilterPageHeader ref={searchSlot} title="Members" />
-          <MemberListFilters {...props} searchSlot={searchSlot} memberCount={648} />
+          <MemberListFilters {...props} memberCount={648} />
         </TemplateBlock>
       </MembershipContextProvider>
     </MockApolloProvider>

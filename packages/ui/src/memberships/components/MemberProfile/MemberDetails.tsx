@@ -1,12 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { useIsMyMembership } from '@/memberships/hooks/useIsMyMembership'
-import { useMemberExtraInfo } from '@/memberships/hooks/useMemberExtraInfo'
-
-import { BlockTime } from '../../../common/components/BlockTime'
-import { TransferSymbol } from '../../../common/components/icons/symbols'
-import { Loading } from '../../../common/components/Loading'
+import { BlockTime } from '@/common/components/BlockTime'
+import { TransferSymbol } from '@/common/components/icons/symbols'
+import { Loading } from '@/common/components/Loading'
 import {
   SidePaneTable,
   SidePaneColumn,
@@ -14,7 +11,11 @@ import {
   SidePaneRow,
   SidePaneLabel,
   EmptyBody,
-} from '../../../common/components/SidePane'
+} from '@/common/components/SidePane'
+import { capitalizeFirstLetter } from '@/common/helpers'
+import { useIsMyMembership } from '@/memberships/hooks/useIsMyMembership'
+import { useMemberExtraInfo } from '@/memberships/hooks/useMemberExtraInfo'
+
 import { useMember } from '../../hooks/useMembership'
 import { Member } from '../../types'
 import { MemberInfo } from '../MemberInfo'
@@ -124,9 +125,16 @@ export const MemberDetails = React.memo(({ member }: Props) => {
         <SidePaneText>{initiatingLeaving}</SidePaneText>
       </SidePaneRow>
       <SidePaneRow>
-        <SidePaneLabel text="Blog posts" />
+        <SidePaneLabel text="Forum posts" />
         <SidePaneText>{blogPosts}</SidePaneText>
       </SidePaneRow>
+      {memberDetails?.externalResources &&
+        memberDetails.externalResources.map((externalResource) => (
+          <SidePaneRow key={`${externalResource.source}-externalResources`}>
+            <SidePaneLabel text={capitalizeFirstLetter(externalResource.source.toLowerCase())} />
+            <SidePaneText>{externalResource.value}</SidePaneText>
+          </SidePaneRow>
+        ))}
     </SidePaneTable>
   )
 })

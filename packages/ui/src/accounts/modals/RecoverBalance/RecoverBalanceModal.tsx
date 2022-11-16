@@ -1,43 +1,60 @@
-import { useMachine } from '@xstate/react'
 import React, { useLayoutEffect, useMemo } from 'react'
 
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
-import { isCouncilCandidateData, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance/index'
+import { RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance/index'
 import { recoverBalanceMachine } from '@/accounts/modals/RecoverBalance/machine'
 import { useApi } from '@/api/hooks/useApi'
-import { FailureModal } from '@/common/components/FailureModal'
-import { TextMedium } from '@/common/components/typography'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { isDefined } from '@/common/utils'
 import { useMember } from '@/memberships/hooks/useMembership'
+import { useApplications } from '@/working-groups/hooks/useApplications'
 
 import { RecoverBalanceSignModal } from './RecoverBalanceSignModal'
 import { RecoverBalanceSuccessModal } from './RecoverBalanceSuccessModal'
 
 export const RecoverBalanceModal = () => {
   const [state, send] = useMachine(recoverBalanceMachine)
-  const { api, connectionState } = useApi()
+  const { api } = useApi()
   const { hideModal, modalData } = useModal<RecoverBalanceModalCall>()
-  const transaction = useMemo(() => {
-    if (!api) {
-      return
-    }
-    return isCouncilCandidateData(modalData)
-      ? api.tx.council.releaseCandidacyStake(modalData.memberId)
-      : api.tx.referendum.releaseVoteStake()
-  }, [connectionState, modalData?.memberId, modalData.lock.type])
-
   const { member } = useMember(modalData?.memberId)
+  const { applications: possibleApplications } = useApplications({
+    stakingAccount: modalData.address,
+    skip: !modalData.lock.type.endsWith('Worker'),
+    limit: 1,
+  })
 
   const signer = useMemo(() => {
+    if (modalData.lock.type === 'Council Candidate') {
+      return member?.controllerAccount
+    }
+
     if (modalData.lock.type === 'Voting') {
       return modalData.address
     }
-    return member?.controllerAccount ?? modalData.address
+
+    return possibleApplications[0]?.roleAccount
   }, [modalData.lock.type, modalData.address, member])
 
-  const feeInfo = useTransactionFee(signer, transaction)
+  const transaction = useMemo(() => {
+    if (!api?.isConnected) {
+      return
+    }
+
+    switch (modalData.lock.type) {
+      case 'Council Candidate':
+        return api.tx.council.releaseCandidacyStake(modalData.memberId as any)
+      case 'Voting':
+        return api.tx.referendum.releaseVoteStake()
+      default:
+        return api.tx[possibleApplications[0].opening.groupId ?? 'forumWorkingGroup'].withdrawApplication(
+          possibleApplications[0].runtimeId ?? 0
+        )
+    }
+  }, [api?.isConnected, modalData?.memberId, modalData.lock.type])
+
+  const { feeInfo } = useTransactionFee(signer, () => transaction, [transaction])
 
   useLayoutEffect(() => {
     if (state.matches('requirementsVerification') && isDefined(feeInfo?.canAfford)) {
@@ -45,7 +62,7 @@ export const RecoverBalanceModal = () => {
     }
   }, [feeInfo, state.value])
 
-  if (!transaction || !feeInfo) {
+  if (!transaction || !feeInfo || !signer) {
     return null
   }
 
@@ -70,14 +87,6 @@ export const RecoverBalanceModal = () => {
 
   if (state.matches('success')) {
     return <RecoverBalanceSuccessModal onClose={hideModal} />
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        <TextMedium>There was a problem with recovering balance.</TextMedium>
-      </FailureModal>
-    )
   }
 
   return null

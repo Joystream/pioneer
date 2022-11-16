@@ -1,5 +1,6 @@
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types'
 import { Keyring } from '@polkadot/ui-keyring'
+import { decodeAddress, encodeAddress } from '@polkadot/util-crypto'
 import { getWalletBySource, Wallet } from 'injectweb3-connect'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { debounceTime, filter, skip } from 'rxjs/operators'
@@ -22,6 +23,8 @@ export interface UseAccounts {
   wallet?: Wallet
   setWallet?: (wallet: Wallet | undefined) => void
 }
+
+const JOYSTREAM_SS58_PREFIX = 126
 
 interface Props {
   children: ReactNode
@@ -138,22 +141,26 @@ export const AccountsContextProvider = (props: Props) => {
   }, [isExtensionLoaded, selectedWallet])
 
   const accounts = useObservable(
-    keyring.accounts.subject.asObservable().pipe(
-      debounceTime(20),
-      filter((accounts) => !!accounts),
-      skip(1)
-    ),
+    () =>
+      keyring.accounts.subject.asObservable().pipe(
+        debounceTime(20),
+        filter((accounts) => !!accounts),
+        skip(1)
+      ),
     [keyring]
   )
   const allAccounts: Account[] = []
 
   if (accounts) {
     allAccounts.push(
-      ...Object.values(accounts).map((account) => ({
-        address: account.json.address,
-        name: account.json.meta.name,
-        source: account.json.meta.source as string,
-      }))
+      ...Object.values(accounts).map((account) => {
+        const publicKey = decodeAddress(account.json.address)
+        return {
+          address: encodeAddress(publicKey, JOYSTREAM_SS58_PREFIX),
+          name: account.json.meta.name,
+          source: account.json.meta.source as string,
+        }
+      })
     )
   }
 

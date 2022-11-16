@@ -14,7 +14,6 @@ export const Default: Story<TransactionFeeProps> = (args) => <TransactionFee {..
 Default.args = {
   title: 'Transaction Fee',
   value: new BN(6.43535),
-  fullValue: '2.43535',
   tooltipTitle: 'Blockchain Transaction',
   tooltipText: 'This action requires a blockchain transaction, which comes with a fee',
 }

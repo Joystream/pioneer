@@ -1,7 +1,7 @@
 import { useApi } from '@/api/hooks/useApi'
-import { useObservable } from '@/common/hooks/useObservable'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 
 export const useMinimumValidatorCount = () => {
   const { api } = useApi()
-  return useObservable(api?.query?.staking?.minimumValidatorCount(), [])
+  return useFirstObservableValue(() => api?.query?.staking?.minimumValidatorCount(), [api?.isConnected])
 }

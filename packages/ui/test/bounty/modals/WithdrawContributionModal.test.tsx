@@ -11,7 +11,7 @@ import {
 } from '@/bounty/modals/WithdrawContributionModal'
 import { Bounty, Contributor } from '@/bounty/types/Bounty'
 import { BN_ZERO } from '@/common/constants'
-import { formatTokenValue } from '@/common/model/formatters'
+import { formatJoyValue, formatTokenValue } from '@/common/model/formatters'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -29,6 +29,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -84,8 +85,10 @@ describe('UI: WithdrawContributionModal', () => {
   })
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     tx = stubTransaction(api, txPath)
+    mockedTransactionFee.transaction = tx as any
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }
   })
 
   it('Requirements passed', async () => {
@@ -107,7 +110,7 @@ describe('UI: WithdrawContributionModal', () => {
         ?.amount ?? BN_ZERO
 
     const amountFromCherry = bounty.cherry.mul(activeMemberContribute.div(bounty.totalFunding))
-    const expected = formatTokenValue(activeMemberContribute.toNumber() + amountFromCherry.toNumber())
+    const expected = formatJoyValue(activeMemberContribute.add(amountFromCherry))
 
     bounty.stage = 'failed'
     renderModal()
@@ -125,7 +128,7 @@ describe('UI: WithdrawContributionModal', () => {
   })
 
   it('Requirements failed', async () => {
-    tx = stubTransaction(api, txPath, 10000)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(10000), canAfford: false }
     renderModal()
 
     expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()

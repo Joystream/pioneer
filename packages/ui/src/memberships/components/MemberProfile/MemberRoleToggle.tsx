@@ -11,14 +11,13 @@ import { SidePaneColumn, SidePaneLabel, SidePaneRow, SidePaneTable, SidePaneText
 import { TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { useToggle } from '@/common/hooks/useToggle'
 import { Member } from '@/memberships/types'
 import { workerRoleTitle } from '@/working-groups/helpers'
 import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { useWorkerEarnings } from '@/working-groups/hooks/useWorkerEarnings'
 import { ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { WorkerWithDetails } from '@/working-groups/types'
-
-import { useToggle } from '../../../common/hooks/useToggle'
 
 export interface MemberRoleToggleProps {
   member: Member
@@ -33,7 +32,7 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
       data: { applicationId: role.applicationId },
     })
   }, [role])
-  const { earnings } = useWorkerEarnings(role.id)
+  const { earnings, currentDayEarnings } = useWorkerEarnings(role.id)
   const rewardPeriod = useRewardPeriod(role.group.id)
   const [isOpen, toggleOpen] = useToggle()
 
@@ -72,7 +71,7 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
                 <SidePaneLabel text="Earned in 24h" />
                 <SidePaneColumn>
                   <SidePaneText>
-                    <TokenValue value={1000} />
+                    <TokenValue value={currentDayEarnings} />
                   </SidePaneText>
                 </SidePaneColumn>
               </SidePaneRow>

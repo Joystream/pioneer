@@ -9,7 +9,6 @@ import { ActorRef, Sender } from 'xstate'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 
-import { createBalanceOf } from '../../../test/_mocks/chainTypes'
 import { error, info } from '../logger'
 import { hasErrorEvent } from '../model/JoystreamNode'
 import { Address } from '../types'
@@ -72,9 +71,25 @@ const observeTransaction = (
     }
   }
 
-  const errorHandler = () => {
+  const errorHandler = (error: string | Error) => {
     subscription.unsubscribe()
-    send({ type: 'CANCELED', events: [] })
+
+    if (error === 'Cancelled') {
+      return send({ type: 'CANCELED', events: [] })
+    }
+
+    const errorMessage = (error as any).message ?? String(error)
+    const errorData = {
+      error: errorMessage.startsWith('1010:')
+        ? {
+            docs: 'Insufficient funds to cover fees. Transaction has been canceled.',
+            section: 'transaction',
+            name: 'Fees',
+          }
+        : { docs: errorMessage, section: 'transaction', name: 'SignAndSend' },
+    }
+
+    send({ type: 'ERROR', events: [{ event: { method: 'TransactionCanceled', data: [errorData] } }] })
   }
 
   const subscription = transaction.subscribe({
@@ -90,7 +105,7 @@ export const useProcessTransaction = ({
   setBlockHash,
 }: UseSignAndSendTransactionParams) => {
   const [state, send] = useActor(service)
-  const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
+  const paymentInfo = useObservable(() => transaction?.paymentInfo(signer), [transaction, signer])
   const { setService } = useTransactionStatus()
   const [endpoints] = useNetworkEndpoints()
   const { allAccounts, wallet } = useMyAccounts()
@@ -121,7 +136,7 @@ export const useProcessTransaction = ({
 
   return {
     send,
-    paymentInfo: paymentInfo ?? { partialFee: createBalanceOf(0) },
+    paymentInfo,
     isReady: state.matches('prepare'),
     isProcessing: state.matches('processing'),
   }

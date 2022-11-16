@@ -1,13 +1,13 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { Arrow } from '@/common/components/icons'
 import { TableListItem } from '@/common/components/List'
 import { GhostRouterLink, RouterLink } from '@/common/components/RouterLink'
-import { TextMedium, ValueInJoys } from '@/common/components/typography'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
-import { nameMapping, subtitleMapping } from '@/common/helpers'
+import { nameMapping, wgListItemMappings } from '@/common/helpers'
 import { MemberHandle, MemberInfo } from '@/memberships/components'
 import { AvatarPlaceholderImage } from '@/memberships/components/Avatar'
 import { useMember } from '@/memberships/hooks/useMembership'
@@ -28,21 +28,32 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   const { isLoading: loadingWorkers, workers } = useCountWorkers(group.id)
 
   const { member: lead } = useMember(group.leadId)
-  // const groupAddress = `/working-groups/${groupNameToURLParam(group.name)}`
   const groupAddress = `/working-groups/${groupNameToURLParam(nameMapping(group.name))}`
   const isLeadActive = lead && group.isActive
-  //TODO this validation has to be deleted when Gateway working group will be ready
-  if (group.name === 'Gateway') {
-    return null
-  }
+  const { subtitle, tooltipLink, groupName } = useMemo(
+    () => ({ ...wgListItemMappings(group.name), groupName: nameMapping(group.name) }),
+    [group.name]
+  )
+
   return (
     <GroupItem>
       <GroupImageContainer as={GhostRouterLink} to={groupAddress}>
         <WorkingGroupImage groupName={group.name} />
       </GroupImageContainer>
       <GroupContentBlock as={GhostRouterLink} to={groupAddress}>
-        <GroupTitle>{nameMapping(group.name)}</GroupTitle>
-        <GroupContent>{subtitleMapping(group.name)}</GroupContent>
+        <GroupTitle>
+          {groupName}{' '}
+          {tooltipLink && (
+            <Tooltip
+              tooltipTitle={groupName}
+              tooltipLinkText="Learn more about this group"
+              tooltipLinkURL={tooltipLink}
+            >
+              <TooltipDefault />
+            </Tooltip>
+          )}
+        </GroupTitle>
+        <GroupContent>{subtitle}</GroupContent>
       </GroupContentBlock>
       <GroupStats>
         <StatsColumn>
@@ -50,7 +61,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
         </StatsColumn>
         <StatsColumn>
           <StatsValue>
-            <ValueInJoys>{group?.budget?.toString()}</ValueInJoys>
+            <TokenValue value={group?.budget ?? null} />
           </StatsValue>
         </StatsColumn>
         <StatsColumn>

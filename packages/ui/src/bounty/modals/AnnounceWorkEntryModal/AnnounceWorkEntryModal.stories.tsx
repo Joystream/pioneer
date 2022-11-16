@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
@@ -14,6 +13,7 @@ import { MembershipContext } from '@/memberships/providers/membership/context'
 import { getMember } from '../../../../test/_mocks/members'
 import { MockApolloProvider } from '../../../../test/_mocks/providers'
 import { stubApi, stubBountyConstants, stubTransaction } from '../../../../test/_mocks/transactions'
+import { mockDefaultBalance } from '../../../../test/setup'
 
 import { AnnounceWorkEntryModal } from './AnnounceWorkEntryModal'
 
@@ -43,18 +43,13 @@ const accounts = {
 
 const balance: AddressToBalanceMap = {
   [accounts.allAccounts[0].address]: {
+    ...mockDefaultBalance,
     total: new BN(10000),
-    locked: new BN(0),
-    recoverable: new BN(0),
-    transferable: new BN(0),
-    locks: [],
   },
   [accounts.allAccounts[1].address]: {
+    ...mockDefaultBalance,
     total: new BN(10000),
-    locked: new BN(0),
-    recoverable: new BN(0),
     transferable: new BN(2001),
-    locks: [],
   },
 }
 
@@ -75,30 +70,28 @@ stubTransaction(api, 'api.tx.bounty.announceWorkEntry', 888)
 
 const Template: Story = (args) => {
   return (
-    <MemoryRouter>
-      <MockApolloProvider>
-        <ApiContext.Provider value={api}>
-          <MembershipContext.Provider value={membership}>
-            <AccountsContext.Provider value={accounts}>
-              <BalancesContext.Provider value={balance}>
-                <ModalContext.Provider
-                  value={{
-                    modalData: {
-                      bounty,
-                    },
-                    modal: 'foo',
-                    hideModal: () => undefined,
-                    showModal: () => undefined,
-                  }}
-                >
-                  <AnnounceWorkEntryModal {...args} />
-                </ModalContext.Provider>
-              </BalancesContext.Provider>
-            </AccountsContext.Provider>
-          </MembershipContext.Provider>
-        </ApiContext.Provider>
-      </MockApolloProvider>
-    </MemoryRouter>
+    <MockApolloProvider>
+      <ApiContext.Provider value={api}>
+        <MembershipContext.Provider value={membership}>
+          <AccountsContext.Provider value={accounts}>
+            <BalancesContext.Provider value={balance}>
+              <ModalContext.Provider
+                value={{
+                  modalData: {
+                    bounty,
+                  },
+                  modal: 'foo',
+                  hideModal: () => undefined,
+                  showModal: () => undefined,
+                }}
+              >
+                <AnnounceWorkEntryModal {...args} />
+              </ModalContext.Provider>
+            </BalancesContext.Provider>
+          </AccountsContext.Provider>
+        </MembershipContext.Provider>
+      </ApiContext.Provider>
+    </MockApolloProvider>
   )
 }
 

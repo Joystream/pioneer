@@ -1,19 +1,14 @@
 import { BountyWorkData } from '@joystream/metadata-protobuf'
-import { createType } from '@joystream/types'
-import { BountyId, EntryId } from '@joystream/types/bounty'
-import { MemberId } from '@joystream/types/common'
-import { useMachine } from '@xstate/react'
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { generatePath } from 'react-router'
-import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
-import { BountyRoutes } from '@/bounty/constants'
+import { LoaderModal } from '@/app/GlobalModals'
 import { submitWorkMetadataFactory } from '@/bounty/modals/AddBountyModal/helpers'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
 import {
@@ -22,25 +17,23 @@ import {
   SubmitWorkStates,
 } from '@/bounty/modals/SubmitWorkModal/machine'
 import { SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal/types'
-import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
-import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { CKEditor } from '@/common/components/CKEditor'
-import { FailureModal } from '@/common/components/FailureModal'
 import { InputComponent, InputContainer, InputText } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import {
   Modal,
-  ModalFooter,
   ModalHeader,
+  ModalTransactionFooter,
   Row,
   ScrolledModalBody,
   ScrolledModalContainer,
 } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig } from '@/common/components/typography'
-import { WaitModal } from '@/common/components/WaitModal'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
+import { createType } from '@/common/model/createType'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -55,7 +48,6 @@ export const SubmitWorkModal = () => {
   const { active: activeMember } = useMyMemberships()
   const { t } = useTranslation('bounty')
   const [state, send, service] = useMachine(submitWorkMachine)
-  const history = useHistory()
   const { allAccounts } = useMyAccounts()
   const { api, isConnected } = useApi()
 
@@ -74,18 +66,15 @@ export const SubmitWorkModal = () => {
   const transaction = useMemo(() => {
     if (api && isConnected && activeMember) {
       return api.tx.bounty.submitWork(
-        createType<MemberId, 'MemberId'>('MemberId', Number(activeMember?.id)),
-        createType<BountyId, 'BountyId'>('BountyId', Number(modalData.bounty.id)),
-        createType<EntryId, 'EntryId'>('EntryId', Number(entry?.id)),
+        createType('MemberId', Number(activeMember?.id)),
+        createType('BountyId', Number(modalData.bounty.id)),
+        createType('EntryId', Number(entry?.id)),
         metadataToBytes(BountyWorkData, submitWorkMetadataFactory(state as SubmitWorkModalMachineState))
       )
     }
   }, [activeMember?.id, isConnected, JSON.stringify(state.context)])
 
-  const goToCurrentBounties = useCallback(() => {
-    hideModal()
-    history.push(generatePath(BountyRoutes.currentBounties))
-  }, [])
+  useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
 
   useEffect(() => {
     if (!entry && activeMember?.id) {
@@ -94,18 +83,7 @@ export const SubmitWorkModal = () => {
   }, [entry])
 
   if (!activeMember || !transaction || !api) {
-    return (
-      <WaitModal
-        title={t('common:modals.wait.title')}
-        description={t('common:modals.wait.description')}
-        onClose={hideModal}
-        requirements={[
-          { name: 'Initializing server connection', state: !!api },
-          { name: 'Loading member', state: !!activeMember },
-          { name: 'Creating transaction', state: !!transaction },
-        ]}
-      />
-    )
+    return <LoaderModal onClose={hideModal} />
   }
 
   if (state.matches(SubmitWorkStates.transaction)) {
@@ -122,29 +100,6 @@ export const SubmitWorkModal = () => {
         buttonLabel={t('modals.submitWork.button.submitWork')}
       />
     )
-  }
-
-  if (state.matches(SubmitWorkStates.success)) {
-    return (
-      <SuccessTransactionModal
-        buttonLabel={t('modals.submitWork.success.button')}
-        message={t('modals.submitWork.success.message')}
-        onButtonClick={goToCurrentBounties}
-        onClose={hideModal}
-      />
-    )
-  }
-
-  if (state.matches(SubmitWorkStates.error)) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        {t('modals.submitWork.error')}
-      </FailureModal>
-    )
-  }
-
-  if (state.matches(SubmitWorkStates.cancel)) {
-    return <FailureModal onClose={hideModal}>{t('common:modals.transactionCanceled')}</FailureModal>
   }
 
   return (
@@ -214,13 +169,9 @@ export const SubmitWorkModal = () => {
           </RowGapBlock>
         </ScrolledModalContainer>
       </ScrolledModalBody>
-      <ModalFooter>
-        <ButtonsGroup align="right">
-          <ButtonPrimary disabled={!isValid} onClick={() => send('NEXT')} size="medium">
-            {t('modals.submitWork.button.submitWork')}
-          </ButtonPrimary>
-        </ButtonsGroup>
-      </ModalFooter>
+      <ModalTransactionFooter
+        next={{ disabled: !isValid, label: t('modals.submitWork.button.submitWork'), onClick: () => send('NEXT') }}
+      />
     </Modal>
   )
 }

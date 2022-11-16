@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { BountyActorsList } from '@/bounty/components/BountyActorsList/BountyActorsList'
 
 import { getMember } from '../../_mocks/members'
@@ -12,7 +13,7 @@ describe('BountyActorsList', () => {
     const contributorsList = [{ actor: getMember('alice'), amount: new BN(1000) }]
     render(<BountyActorsList title={title} elements={contributorsList} />)
     expect(screen.queryByText('CONTRIBUTORS')).toBeDefined()
-    expect(screen.queryByText('1,000 tJOY')).toBeDefined()
+    expect(screen.queryByText(`1,000 ${CurrencyName.integerValue}`)).toBeDefined()
   })
   it('should display proper title and count for entrants', () => {
     const title = 'ENTRANTS'

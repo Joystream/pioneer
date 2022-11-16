@@ -1,4 +1,4 @@
-import { useMachine } from '@xstate/react'
+import { useApolloClient } from '@apollo/client'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
@@ -13,6 +13,7 @@ import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { Colors } from '@/common/constants'
 import { useDebounce } from '@/common/hooks/useDebounce'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
@@ -22,8 +23,10 @@ import { OnBoardingAccount } from '@/common/modals/OnBoardingModal/OnBoardingAcc
 import { OnBoardingMembership } from '@/common/modals/OnBoardingModal/OnBoardingMembership'
 import { OnBoardingPlugin } from '@/common/modals/OnBoardingModal/OnBoardingPlugin'
 import { OnBoardingStatus, SetMembershipAccount } from '@/common/providers/onboarding/types'
+import { definedValues } from '@/common/utils'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
+import { toExternalResources } from '@/memberships/modals/utils'
 
 export const OnBoardingModal = () => {
   const { hideModal } = useModal()
@@ -31,7 +34,8 @@ export const OnBoardingModal = () => {
   const status = useDebounce(realStatus, 50)
   const [state, send] = useMachine(onBoardingMachine)
   const [membershipData, setMembershipData] = useState<{ id: string; blockHash: string }>()
-  const transactionStatus = useQueryNodeTransactionStatus(membershipData?.blockHash)
+  const transactionStatus = useQueryNodeTransactionStatus(!!membershipData?.blockHash, membershipData?.blockHash)
+  const apolloClient = useApolloClient()
   const [endpoints] = useNetworkEndpoints()
   const statusRef = useRef<OnBoardingStatus>()
 
@@ -42,13 +46,16 @@ export const OnBoardingModal = () => {
       case 'addAccount':
         return <OnBoardingAccount onAccountSelect={setMembershipAccount} />
       case 'createMembership':
-        return (
-          <OnBoardingMembership
-            setMembershipAccount={setMembershipAccount as SetMembershipAccount}
-            onSubmit={(params: MemberFormFields) => send({ type: 'DONE', form: params })}
-            membershipAccount={membershipAccount as string}
-          />
-        )
+        if (endpoints.membershipFaucetEndpoint) {
+          return (
+            <OnBoardingMembership
+              setMembershipAccount={setMembershipAccount as SetMembershipAccount}
+              onSubmit={(params: MemberFormFields) => send({ type: 'DONE', form: params })}
+              membershipAccount={membershipAccount as string}
+            />
+          )
+        }
+      // eslint-disable-next-line no-fallthrough
       default:
         return null
     }
@@ -56,6 +63,9 @@ export const OnBoardingModal = () => {
 
   useEffect(() => {
     async function submitNewMembership(form: MemberFormFields) {
+      if (!endpoints.membershipFaucetEndpoint) {
+        return send({ type: 'ERROR' })
+      }
       try {
         const membershipData = {
           account: membershipAccount,
@@ -63,6 +73,8 @@ export const OnBoardingModal = () => {
           name: form.name,
           avatar: form.avatarUri,
           about: form.about,
+          captchaToken: form.captchaToken,
+          externalResources: toExternalResources(definedValues(form.externalResources)),
         }
 
         const response = await fetch(endpoints.membershipFaucetEndpoint, {
@@ -100,6 +112,7 @@ export const OnBoardingModal = () => {
   useEffect(() => {
     if (membershipData?.blockHash && transactionStatus === 'confirmed') {
       send('SUCCESS')
+      apolloClient.refetchQueries({ include: 'active' })
     }
   }, [JSON.stringify(membershipData), transactionStatus])
 
@@ -108,7 +121,7 @@ export const OnBoardingModal = () => {
     return <BuyMembershipSuccessModal onClose={hideModal} member={form} memberId={membershipData?.id} />
   }
 
-  if (state.matches('transaction') && transactionStatus === 'rejected') {
+  if (state.matches('transaction') && transactionStatus !== 'confirmed') {
     return (
       <WaitModal
         onClose={hideModal}

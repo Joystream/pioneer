@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 
-import { TransactionContext } from '../providers/transaction/context'
+import { TransactionStatusContext } from '../providers/transactionStatus/context'
 
 export function useTransactionStatus() {
-  return useContext(TransactionContext)
+  return useContext(TransactionStatusContext)
 }

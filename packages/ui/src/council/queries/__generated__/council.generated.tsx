@@ -73,13 +73,10 @@ export type PastCouncilProposalsFieldsFragment = {
     details:
       | { __typename: 'AmendConstitutionProposalDetails' }
       | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
-      | { __typename: 'CreateBlogPostProposalDetails' }
       | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
-      | { __typename: 'EditBlogPostProposalDetails' }
       | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'FundingRequestProposalDetails' }
-      | { __typename: 'LockBlogPostProposalDetails' }
       | { __typename: 'RuntimeUpgradeProposalDetails' }
       | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
       | { __typename: 'SetCouncilorRewardProposalDetails' }
@@ -93,7 +90,6 @@ export type PastCouncilProposalsFieldsFragment = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
-      | { __typename: 'UnlockBlogPostProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
     creator: {
@@ -567,10 +563,8 @@ export type FundingRequestApprovedFragment = {
     details:
       | { __typename: 'AmendConstitutionProposalDetails' }
       | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
-      | { __typename: 'CreateBlogPostProposalDetails' }
       | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
-      | { __typename: 'EditBlogPostProposalDetails' }
       | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
       | {
           __typename: 'FundingRequestProposalDetails'
@@ -579,7 +573,6 @@ export type FundingRequestApprovedFragment = {
             destinations: Array<{ __typename: 'FundingRequestDestination'; amount: string; account: string }>
           } | null
         }
-      | { __typename: 'LockBlogPostProposalDetails' }
       | { __typename: 'RuntimeUpgradeProposalDetails' }
       | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
       | { __typename: 'SetCouncilorRewardProposalDetails' }
@@ -593,7 +586,6 @@ export type FundingRequestApprovedFragment = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
-      | { __typename: 'UnlockBlogPostProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
   }
@@ -718,10 +710,8 @@ export type GetPastCouncilQuery = {
       details:
         | { __typename: 'AmendConstitutionProposalDetails' }
         | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
-        | { __typename: 'CreateBlogPostProposalDetails' }
         | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
         | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
-        | { __typename: 'EditBlogPostProposalDetails' }
         | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
         | {
             __typename: 'FundingRequestProposalDetails'
@@ -730,7 +720,6 @@ export type GetPastCouncilQuery = {
               destinations: Array<{ __typename: 'FundingRequestDestination'; amount: string; account: string }>
             } | null
           }
-        | { __typename: 'LockBlogPostProposalDetails' }
         | { __typename: 'RuntimeUpgradeProposalDetails' }
         | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
         | { __typename: 'SetCouncilorRewardProposalDetails' }
@@ -744,7 +733,6 @@ export type GetPastCouncilQuery = {
         | { __typename: 'SignalProposalDetails' }
         | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
         | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
-        | { __typename: 'UnlockBlogPostProposalDetails' }
         | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
         | { __typename: 'VetoProposalDetails' }
     }
@@ -822,13 +810,10 @@ export type GetPastCouncilMembersQuery = {
       details:
         | { __typename: 'AmendConstitutionProposalDetails' }
         | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
-        | { __typename: 'CreateBlogPostProposalDetails' }
         | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
         | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
-        | { __typename: 'EditBlogPostProposalDetails' }
         | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
         | { __typename: 'FundingRequestProposalDetails' }
-        | { __typename: 'LockBlogPostProposalDetails' }
         | { __typename: 'RuntimeUpgradeProposalDetails' }
         | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
         | { __typename: 'SetCouncilorRewardProposalDetails' }
@@ -842,7 +827,6 @@ export type GetPastCouncilMembersQuery = {
         | { __typename: 'SignalProposalDetails' }
         | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
         | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
-        | { __typename: 'UnlockBlogPostProposalDetails' }
         | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
         | { __typename: 'VetoProposalDetails' }
       creator: {
@@ -912,13 +896,10 @@ export type GetPastCouncilProposalsQuery = {
     details:
       | { __typename: 'AmendConstitutionProposalDetails' }
       | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
-      | { __typename: 'CreateBlogPostProposalDetails' }
       | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
-      | { __typename: 'EditBlogPostProposalDetails' }
       | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'FundingRequestProposalDetails' }
-      | { __typename: 'LockBlogPostProposalDetails' }
       | { __typename: 'RuntimeUpgradeProposalDetails' }
       | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
       | { __typename: 'SetCouncilorRewardProposalDetails' }
@@ -932,7 +913,6 @@ export type GetPastCouncilProposalsQuery = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
-      | { __typename: 'UnlockBlogPostProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
     creator: {
@@ -1423,10 +1403,8 @@ export type GetPastCouncilStatsQuery = {
       details:
         | { __typename: 'AmendConstitutionProposalDetails' }
         | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
-        | { __typename: 'CreateBlogPostProposalDetails' }
         | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
         | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
-        | { __typename: 'EditBlogPostProposalDetails' }
         | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
         | {
             __typename: 'FundingRequestProposalDetails'
@@ -1435,7 +1413,6 @@ export type GetPastCouncilStatsQuery = {
               destinations: Array<{ __typename: 'FundingRequestDestination'; amount: string; account: string }>
             } | null
           }
-        | { __typename: 'LockBlogPostProposalDetails' }
         | { __typename: 'RuntimeUpgradeProposalDetails' }
         | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
         | { __typename: 'SetCouncilorRewardProposalDetails' }
@@ -1449,7 +1426,6 @@ export type GetPastCouncilStatsQuery = {
         | { __typename: 'SignalProposalDetails' }
         | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
         | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
-        | { __typename: 'UnlockBlogPostProposalDetails' }
         | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
         | { __typename: 'VetoProposalDetails' }
     }

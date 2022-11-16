@@ -1,9 +1,10 @@
 import BN from 'bn.js'
 
-import { AN_HOUR, A_DAY, A_MINUTE, A_SECOND, SECONDS_PER_BLOCK } from '../constants'
+import { AN_HOUR, A_DAY, A_MINUTE, A_SECOND, JOY_DECIMAL_PLACES, SECONDS_PER_BLOCK } from '../constants'
 import { isDefined, isNumber } from '../utils'
+import { powerOf10 } from '../utils/bn'
 
-const NUMBER_SEPARATOR_REG_EXP = /\B(?=(\d{3})+(?!\d))/g
+export const NUMBER_SEPARATOR_REG_EXP = /\B(?=(\d{3})+(?!\d))/g
 
 export const formatTokenValue = (value: BN | number | string | undefined | null) => {
   if (!isDefined(value) || value === null || Number.isNaN(value)) {
@@ -23,7 +24,7 @@ export function shortenAddress(address: string, length = 18) {
         address.substring(address.length - Math.floor(length / 2), address.length)
 }
 
-const DefaultDateFormatter = Intl.DateTimeFormat('en', {
+export const DefaultDateFormatter = Intl.DateTimeFormat('en-GB', {
   year: 'numeric',
   month: '2-digit',
   day: '2-digit',
@@ -33,11 +34,15 @@ const DefaultDateFormatter = Intl.DateTimeFormat('en', {
   timeZoneName: 'short',
 })
 
-export const formatDateString = (timestamp: string, size: 's' | 'l' = 'l') => {
+export const formatDateString = (timestamp: string | number | undefined, size: 's' | 'l' = 'l') => {
+  if (!isDefined(timestamp)) {
+    return '-'
+  }
+
   const defaultFormat = DefaultDateFormatter.format(new Date(timestamp))
   switch (size) {
-    case 's':
-      return defaultFormat.replace(/ ([AP]M)/, (_, preriod: string) => preriod.toLocaleLowerCase())
+    case 'l':
+      return defaultFormat.replace(/ ([AP]M)/i, (_, period: string) => period.toUpperCase())
     default:
       return defaultFormat
   }
@@ -74,3 +79,39 @@ export const splitDuration =
     const amount = Math.floor(duration / unitValue)
     return [[amount, unitName], ...splitDuration(submultiples)(duration - amount * unitValue)]
   }
+
+interface JOYFormatOption {
+  precision?: number
+  formatInt?: (value: BN) => string
+  formatDec?: (value: BN, size: number) => string
+}
+const defaultJOYFormatOption = {
+  precision: 10,
+  formatInt: formatTokenValue,
+  formatDec: (value: BN, length: number) => String(value).padStart(length, '0').replace(/0+$/, ''),
+}
+export const formatJoyValue = (
+  value: BN,
+  {
+    precision = defaultJOYFormatOption.precision,
+    formatInt = defaultJOYFormatOption.formatInt,
+    formatDec = defaultJOYFormatOption.formatDec,
+  }: JOYFormatOption = defaultJOYFormatOption
+) => {
+  if (value.isZero()) {
+    return '0'
+  }
+
+  const safePrecision = Math.min(JOY_DECIMAL_PLACES, precision)
+  const roundedValue = value.abs().divRound(powerOf10(JOY_DECIMAL_PLACES - safePrecision))
+
+  if (roundedValue.isZero()) {
+    return `${value.isNeg() ? '> -' : '< '}${Math.pow(10, -safePrecision)}`
+  }
+
+  const sign = value.isNeg() ? '-' : ''
+  const intPart = formatInt(roundedValue.div(powerOf10(safePrecision)))
+  const decPart = formatDec(roundedValue.mod(powerOf10(safePrecision)), safePrecision)
+
+  return `${sign}${intPart}.${decPart}`.replace(/\.$/, '')
+}

@@ -151,7 +151,7 @@ const { loading, data } = useGetMembersQuery()
 
 Some GraphQL related tools use code generation to scaffold types and react hooks from GraphQL schemas and queries.
 
-After updating `packages/ui/src/api` any of `*.graphql` files run `yarn queries:generated` script in the UI package.
+After updating `packages/ui/src/api` any of `*.graphql` files run `yarn queries:generated` script in the `@joystream/pioneer` package.
 
 # Tips & Tricks
 

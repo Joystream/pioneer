@@ -1,7 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React from 'react'
-import { MemoryRouter } from 'react-router'
 import styled from 'styled-components'
 
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
@@ -18,20 +17,18 @@ export default {
 } as Meta
 
 const Template: Story<ActivitiesProps> = (args) => (
-  <MemoryRouter>
-    <ModalContext.Provider
-      value={{
-        showModal: () => null,
-        hideModal: () => null,
-        modal: '',
-        modalData: {},
-      }}
-    >
-      <TemplateScroll>
-        <ActivitiesBlock {...args} />
-      </TemplateScroll>
-    </ModalContext.Provider>
-  </MemoryRouter>
+  <ModalContext.Provider
+    value={{
+      showModal: () => null,
+      hideModal: () => null,
+      modal: '',
+      modalData: {},
+    }}
+  >
+    <TemplateScroll>
+      <ActivitiesBlock {...args} />
+    </TemplateScroll>
+  </ModalContext.Provider>
 )
 
 const TemplateScroll = styled(TemplateBlock)`
@@ -257,7 +254,7 @@ const activities: Activity[] = [
     id: '20',
     createdAt: '2021-05-25T10:28:04.155Z',
     eventType: 'CouncilorRewardUpdatedEvent',
-    newReward: '1000',
+    newReward: new BN('1000'),
   },
   {
     id: '21',

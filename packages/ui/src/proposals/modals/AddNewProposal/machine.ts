@@ -2,6 +2,7 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine, State, Typestate } from 'xstate'
 import { StateSchema } from 'xstate/lib/types'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import { getDataFromEvent } from '@/common/model/JoystreamNode'
 import {
   isTransactionCanceled,
@@ -10,6 +11,7 @@ import {
   transactionMachine,
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
+import { defaultProposalValues } from '@/proposals/modals/AddNewProposal/helpers'
 import { ProposalType } from '@/proposals/types'
 
 interface ProposalTypeContext {
@@ -114,6 +116,9 @@ export const addNewProposalMachine = createMachine<
   AddNewProposalState
 >({
   initial: 'requirementsVerification',
+  context: {
+    discussionMode: defaultProposalValues.triggerAndDiscussion.isDiscussionClosed ? 'closed' : 'open',
+  },
   states: {
     requirementsVerification: {
       on: {
@@ -367,8 +372,14 @@ export const addNewProposalMachine = createMachine<
         ],
       },
     },
-    success: { type: 'final' },
-    error: { type: 'final' },
-    canceled: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      metaMessages: {
+        error: 'There was a problem while creating proposal.',
+      },
+      cancel: {
+        target: 'specificParameters',
+        action: 'BACK',
+      },
+    }),
   },
 })

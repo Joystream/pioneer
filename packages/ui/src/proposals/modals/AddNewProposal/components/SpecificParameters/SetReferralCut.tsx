@@ -6,13 +6,13 @@ import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
-import { TextMedium } from '@/common/components/typography'
-import { useObservable } from '@/common/hooks/useObservable'
+import { TextMedium, TokenValue } from '@/common/components/typography'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 
 export const SetReferralCut = () => {
-  const { api, connectionState } = useApi()
+  const { api } = useApi()
   const maximumReferralCut = api?.consts.members.referralCutMaximumPercent
-  const membershipPrice = useObservable(api?.query.members.membershipPrice(), [connectionState])
+  const membershipPrice = useFirstObservableValue(() => api?.query.members.membershipPrice(), [api?.isConnected])
 
   return (
     <RowGapBlock gap={24}>
@@ -21,8 +21,8 @@ export const SetReferralCut = () => {
           <h4>Specific parameters</h4>
           <TextMedium lighter>
             {' '}
-            Set referral cut as % from price of creating new membership, currently set as {membershipPrice?.toString()}{' '}
-            tJOY
+            Set referral cut as % from price of creating new membership, currently set as{' '}
+            <TokenValue value={membershipPrice ?? null} />
           </TextMedium>
         </RowGapBlock>
       </Row>
@@ -52,7 +52,6 @@ export const SetReferralCut = () => {
           >
             <InputNumber
               id="amount-input"
-              isTokenValue
               name="setReferralCut.referralCut"
               placeholder="0"
               maxAllowedValue={Math.pow(2, 8)}

@@ -25,7 +25,8 @@ const selectFromDropdownElement = async (element: HTMLElement, name: string) => 
 
   let found: Element | undefined
   await waitFor(() => {
-    const memberTitles = parentElement?.querySelectorAll('ul > li')
+    const optionsWrapper = document.getElementById('select-popper-wrapper')
+    const memberTitles = optionsWrapper?.querySelectorAll('ul > li')
     found = memberTitles && Array.from(memberTitles).find((li) => li.textContent?.match(name))
     expect(found).toBeDefined()
   }, {})

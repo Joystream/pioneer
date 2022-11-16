@@ -7,11 +7,9 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { Account } from '@/accounts/types'
 import { useApi } from '@/api/hooks/useApi'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
-import { Modal, ModalBody, ModalFooter, ModalHeader, TransactionInfoContainer } from '@/common/components/Modal'
+import { Modal, ModalBody, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
@@ -46,24 +44,22 @@ export const AuthorizationModal = ({ onClose, creator, bountyId, service }: Prop
 
   const accountsWithValidAmount = useMemo(
     () =>
-      Object.entries(balances).map(([address, balance]) => {
-        if (balance.transferable.gte(paymentInfo?.partialFee || BN_ZERO)) {
-          return address
-        }
-      }),
+      Object.entries(balances ?? []).flatMap(([address, balance]) =>
+        balance.transferable.gte(paymentInfo?.partialFee || BN_ZERO) ? address : []
+      ),
     [balances, paymentInfo?.partialFee]
   )
 
   const accountsFilter = useCallback(
-    (acc: Account) => accountsWithValidAmount.includes(acc.address),
+    ({ address }: Account) => accountsWithValidAmount.includes(address),
     [accountsWithValidAmount.length]
   )
 
   useEffect(() => {
     if (selectedAccount && paymentInfo?.partialFee) {
-      setHasFunds(balances[selectedAccount.address].transferable.gte(paymentInfo.partialFee))
+      setHasFunds(!!balances?.[selectedAccount.address]?.transferable.gte(paymentInfo.partialFee))
     }
-  }, [selectedAccount, paymentInfo?.partialFee])
+  }, [balances, selectedAccount, paymentInfo?.partialFee])
 
   return (
     <Modal onClose={onClose} modalSize="l">
@@ -92,18 +88,10 @@ export const AuthorizationModal = ({ onClose, creator, bountyId, service }: Prop
           </InputComponent>
         </RowGapBlock>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title={t('common:modals.transactionFee.label')}
-            value={paymentInfo?.partialFee}
-            tooltipText={t('common:modals.transactionFee.tooltipText')}
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary disabled={!hasFunds || !isReady} onClick={sign} size="medium">
-          {t('common:authorizeTransaction')}
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={paymentInfo?.partialFee}
+        next={{ disabled: !hasFunds || !isReady, label: t('common:authorizeTransaction'), onClick: sign }}
+      />
     </Modal>
   )
 }

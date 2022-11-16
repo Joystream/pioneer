@@ -4,6 +4,7 @@ import React, { useEffect, useMemo } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { Loading } from '@/common/components/Loading'
 import { TextMedium, TextSmall } from '@/common/components/typography'
@@ -38,7 +39,7 @@ export const OpeningTooltip = ({ onMount, mention, urlAddress }: OpeningTooltipP
   }, [])
 
   return (
-    <Container data-testid="opening-tooltip">
+    <Container id="opening-tooltip">
       {mention ? (
         <>
           <TextSmall lighter>
@@ -60,7 +61,7 @@ export const OpeningTooltip = ({ onMount, mention, urlAddress }: OpeningTooltipP
               <Trans t={t} i18nKey="mentions.tooltips.opening.reward">
                 <TextSmall lighter>''</TextSmall>
                 <TextMedium bold>{{ value: reward }}</TextMedium>
-                <TextMedium bold>tJOY</TextMedium>
+                <TextMedium bold>{CurrencyName.integerValue}</TextMedium>
               </Trans>
             </FooterRow>
             <FooterRow>

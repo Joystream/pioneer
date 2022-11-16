@@ -1,27 +1,29 @@
-import { useMachine } from '@xstate/react'
 import React from 'react'
 
-import { FailureModal } from '@/common/components/FailureModal'
-
-import { Member } from '../../types'
+import { useApi } from '@/api/hooks/useApi'
+import { TextMedium } from '@/common/components/typography'
+import { useMachine } from '@/common/hooks/useMachine'
+import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
+import { UpdateMembershipModalCall } from '@/memberships/modals/UpdateMembershipModal/index'
+import { createBatch } from '@/memberships/modals/UpdateMembershipModal/utils'
 
 import { updateMembershipMachine } from './machine'
 import { UpdateMembershipFormModal } from './UpdateMembershipFormModal'
-import { UpdateMembershipSignModal } from './UpdateMembershipSignModal'
 import { UpdateMembershipSuccessModal } from './UpdateMembershipSuccessModal'
 
-interface MembershipModalProps {
-  member: Member
-  onClose: () => void
-}
-
-export const UpdateMembershipModal = ({ onClose, member }: MembershipModalProps) => {
+export const UpdateMembershipModal = () => {
+  const { api } = useApi()
+  const {
+    hideModal,
+    modalData: { member },
+  } = useModal<UpdateMembershipModalCall>()
   const [state, send] = useMachine(updateMembershipMachine)
 
   if (state.matches('prepare')) {
     return (
       <UpdateMembershipFormModal
-        onClose={onClose}
+        onClose={hideModal}
         onSubmit={(params) => send('DONE', { form: params })}
         member={member}
       />
@@ -29,28 +31,20 @@ export const UpdateMembershipModal = ({ onClose, member }: MembershipModalProps)
   }
 
   if (state.matches('transaction')) {
-    const transactionService = state.children.transaction
-
     return (
-      <UpdateMembershipSignModal
-        onClose={onClose}
-        transactionParams={state.context.form}
-        member={member}
-        service={transactionService}
-      />
+      <SignTransactionModal
+        buttonText="Sign and update a member"
+        transaction={createBatch(state.context.form, api, member)}
+        signer={member.controllerAccount}
+        service={state.children.transaction}
+      >
+        <TextMedium>You intend to update your membership.</TextMedium>
+      </SignTransactionModal>
     )
   }
 
   if (state.matches('success')) {
-    return <UpdateMembershipSuccessModal onClose={onClose} member={member} />
-  }
-
-  if (state.matches('error')) {
-    return (
-      <FailureModal onClose={onClose} events={state.context.transactionEvents}>
-        There was a problem updating membership for {member.name}.
-      </FailureModal>
-    )
+    return <UpdateMembershipSuccessModal onClose={hideModal} member={member} />
   }
 
   return null

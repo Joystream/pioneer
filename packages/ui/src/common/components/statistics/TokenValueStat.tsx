@@ -9,7 +9,7 @@ import { TokenValue } from '../typography'
 import { StatisticItem, StatisticItemProps } from './StatisticItem'
 
 export interface TokenValueStatProps extends StatisticItemProps {
-  value?: number | BN | null
+  value?: BN | null
   isLoading?: boolean
   textColor?: string
 }
@@ -17,7 +17,7 @@ export interface TokenValueStatProps extends StatisticItemProps {
 export const TokenValueStat: FC<TokenValueStatProps> = (props) => {
   return (
     <StatisticItem {...props}>
-      <TotalValue value={props.value} textColor={props.textColor} isLoading={props.isLoading} />
+      <TotalValue value={new BN(props.value ?? 0)} textColor={props.textColor} isLoading={props.isLoading} />
       {props.children}
     </StatisticItem>
   )

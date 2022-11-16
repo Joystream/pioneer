@@ -1,11 +1,10 @@
 import React from 'react'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-
-export const MAX_VALIDATOR_COUNT = 300
 
 export const SetMaxValidatorCount = () => {
   return (
@@ -23,16 +22,10 @@ export const SetMaxValidatorCount = () => {
             name="setMaxValidatorCount.validatorCount"
             label="Amount"
             tight
-            units="tJOY"
+            units={CurrencyName.integerValue}
             required
           >
-            <InputNumber
-              id="amount-input"
-              name="setMaxValidatorCount.validatorCount"
-              isTokenValue
-              isInBN
-              placeholder="0"
-            />
+            <InputNumber id="amount-input" name="setMaxValidatorCount.validatorCount" isInBN placeholder="0" />
           </InputComponent>
         </RowGapBlock>
       </Row>

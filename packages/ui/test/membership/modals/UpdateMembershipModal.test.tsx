@@ -1,14 +1,17 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, configure, fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
 import { of } from 'rxjs'
 
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { ApiContext } from '@/api/providers/context'
+import { GlobalModals } from '@/app/GlobalModals'
+import { MembershipExternalResourceType } from '@/common/api/queries'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { last } from '@/common/utils'
 import { UpdateMembershipModal } from '@/memberships/modals/UpdateMembershipModal'
-import { Member } from '@/memberships/types'
+import { MemberWithDetails } from '@/memberships/types'
 
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
@@ -18,34 +21,35 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  stubAccounts,
   stubApi,
   stubBatchTransactionFailure,
   stubBatchTransactionSuccess,
   stubDefaultBalances,
   stubTransaction,
 } from '../../_mocks/transactions'
-
-const useMyAccounts: UseAccounts = {
-  isLoading: false,
-  hasAccounts: true,
-  allAccounts: [],
-}
-
-jest.mock('../../../src/accounts/hooks/useMyAccounts', () => {
-  return {
-    useMyAccounts: () => useMyAccounts,
-  }
-})
+import { mockUseModalCall } from '../../setup'
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
+configure({ testIdAttribute: 'id' })
+
 describe('UI: UpdatedMembershipModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
     jest.spyOn(console, 'log').mockImplementation()
-    useMyAccounts.allAccounts.push(alice, aliceStash, bob, bobStash)
+    stubAccounts([alice, aliceStash, bob, bobStash])
+  })
+
+  mockUseModalCall({
+    modalData: {
+      member: {
+        ...getMember('alice'),
+        externalResources: [{ source: MembershipExternalResourceType.Twitter, value: 'empty' }],
+      } as MemberWithDetails,
+    },
   })
 
   afterAll(() => {
@@ -56,27 +60,39 @@ describe('UI: UpdatedMembershipModal', () => {
 
   const api = stubApi()
   let batchTx: any
-  let member: Member
+  let profileTxMock: jest.Mock
 
   beforeEach(() => {
-    stubDefaultBalances(api)
+    stubDefaultBalances()
     set(api, 'api.query.members.membershipPrice', () => of(createBalanceOf(100)))
     set(api, 'api.query.members.memberIdByHandleHash.size', () => of(new BN(0)))
     stubTransaction(api, 'api.tx.members.updateProfile')
     stubTransaction(api, 'api.tx.members.updateAccounts')
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
-    member = getMember('alice')
+    stubTransaction(api, 'api.tx.members.updateProfile')
+    profileTxMock = api.api.tx.members.updateProfile as unknown as jest.Mock
+    renderModal()
   })
 
   it('Renders a modal', async () => {
-    renderModal(member)
-
     expect(await screen.findByText('Edit membership')).toBeDefined()
   })
 
-  it('Enables button on member field change', async () => {
-    renderModal(member)
+  it('Is initially disabled', async () => {
+    expect(await getButton(/^Save changes$/i)).toBeDisabled()
+  })
 
+  it('Enables button on external resources change', async () => {
+    expect(await getButton(/^Save changes$/i)).toBeDisabled()
+
+    await act(async () => {
+      fireEvent.change(screen.getByTestId('twitter-input'), { target: { value: 'joystream@mail.com' } })
+    })
+
+    expect(await getButton(/^Save changes$/i)).toBeEnabled()
+  })
+
+  it('Enables button on member field change', async () => {
     expect(await getButton(/^Save changes$/i)).toBeDisabled()
 
     fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
@@ -85,16 +101,12 @@ describe('UI: UpdatedMembershipModal', () => {
   })
 
   it('Enables save button on account change', async () => {
-    renderModal(member)
-
     await selectFromDropdown('root account', 'bob')
 
     expect(await getButton(/^Save changes$/i)).toBeEnabled()
   })
 
   it('Disables button when invalid avatar URL', async () => {
-    renderModal(member)
-
     fireEvent.change(await screen.findByLabelText(/member avatar/i), { target: { value: 'avatar' } })
     expect(await getButton(/^Save changes$/i)).toBeDisabled()
 
@@ -105,17 +117,26 @@ describe('UI: UpdatedMembershipModal', () => {
   })
 
   describe('Authorize - member field', () => {
+    const newMemberName = 'Bobby Bob'
+    const newMemberEmail = 'joystream@mail.com'
     async function changeNameAndSave() {
-      renderModal(member)
-      fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
-      fireEvent.click(await screen.findByText(/^Save changes$/i))
+      await act(async () => {
+        fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: newMemberName } })
+        fireEvent.change(screen.getByTestId('twitter-input'), { target: { value: newMemberEmail } })
+
+        fireEvent.click(await screen.findByText(/^Save changes$/i))
+      })
     }
 
     it('Authorize step', async () => {
       await changeNameAndSave()
+      const txCall = profileTxMock.mock.calls[0]
+      const memberMetadata = Buffer.from(last(txCall) as Uint8Array).toString('utf8')
 
+      expect(memberMetadata.includes(newMemberName)).toBe(true)
+      expect(memberMetadata.includes(newMemberEmail)).toBe(true)
       expect(await screen.findByText('modals.authorizeTransaction.title')).toBeDefined()
-      expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('25')
+      expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
     })
 
     it('Success step', async () => {
@@ -137,15 +158,18 @@ describe('UI: UpdatedMembershipModal', () => {
     })
   })
 
-  function renderModal(member: Member) {
+  function renderModal() {
     render(
-      <MockQueryNodeProviders>
-        <MockKeyringProvider>
-          <ApiContext.Provider value={api}>
-            <UpdateMembershipModal onClose={() => undefined} member={member} />
-          </ApiContext.Provider>
-        </MockKeyringProvider>
-      </MockQueryNodeProviders>
+      <ModalContextProvider>
+        <MockQueryNodeProviders>
+          <MockKeyringProvider>
+            <ApiContext.Provider value={api}>
+              <GlobalModals />
+              <UpdateMembershipModal />
+            </ApiContext.Provider>
+          </MockKeyringProvider>
+        </MockQueryNodeProviders>
+      </ModalContextProvider>
     )
   }
 })

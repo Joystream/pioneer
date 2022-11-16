@@ -4,15 +4,14 @@ import { ActorRef } from 'xstate'
 
 import { AccountLockInfo, lockInfoLayout } from '@/accounts/components/AccountLockInfo'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { RecoverableLock } from '@/accounts/modals/RecoverBalance/index'
+import { RecoverableLock, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance/index'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
 import { EmptyListHeader, ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
-import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
+import { ModalBody, ModalTransactionFooter } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
+import { useModal } from '@/common/hooks/useModal'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 import { Address } from '@/common/types'
@@ -27,6 +26,7 @@ interface Props {
 }
 
 export const RecoverBalanceSignModal = ({ onClose, service, transaction, address, signer, lock }: Props) => {
+  const { modalData } = useModal<RecoverBalanceModalCall>()
   const { paymentInfo, sign, isReady } = useSignAndSendTransaction({
     transaction,
     signer: signer,
@@ -36,7 +36,11 @@ export const RecoverBalanceSignModal = ({ onClose, service, transaction, address
   const recoverAccount = accountOrNamed(allAccounts, address, 'Recover account')
 
   return (
-    <TransactionModal service={service} onClose={onClose} title="Recover balances">
+    <TransactionModal
+      service={service}
+      onClose={onClose}
+      title={modalData.isWithdrawing ? 'Withdraw Application' : 'Recover Stake'}
+    >
       <ModalBody>
         <TextMedium>
           You intend to recover <TokenValue value={lock.amount} /> stake.
@@ -52,18 +56,10 @@ export const RecoverBalanceSignModal = ({ onClose, service, transaction, address
           </InputComponent>
         </RowGapBlock>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo
-            title="Transaction fee:"
-            value={paymentInfo?.partialFee?.toBn()}
-            tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" onClick={sign} disabled={!isReady}>
-          Sign transaction and Transfer
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={paymentInfo?.partialFee?.toBn()}
+        next={{ disabled: !isReady, label: 'Sign transaction and Transfer', onClick: sign }}
+      />
     </TransactionModal>
   )
 }

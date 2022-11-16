@@ -1,8 +1,11 @@
 import { cleanup, render, screen } from '@testing-library/react'
+import { Wallet } from 'injectweb3-connect'
 import React from 'react'
 
 import { OnBoardingOverlay, onBoardingSteps } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { UseOnBoarding } from '@/common/providers/onboarding/types'
+
+import { mockedUseMyAccounts } from '../setup'
 
 const mockOnBoarding: UseOnBoarding = {
   status: 'installPlugin',
@@ -12,14 +15,6 @@ const mockOnBoarding: UseOnBoarding = {
 
 jest.mock('@/common/hooks/useOnBoarding', () => ({
   useOnBoarding: () => mockOnBoarding,
-}))
-
-const mockMyAccounts: Record<string, unknown> = {
-  wallet: undefined,
-}
-
-jest.mock('@/accounts/hooks/useMyAccounts', () => ({
-  useMyAccounts: () => mockMyAccounts,
 }))
 
 describe('OnBoardingOverlay', () => {
@@ -45,7 +40,12 @@ describe('OnBoardingOverlay', () => {
     })
 
     it('After wallet is selected', () => {
-      mockMyAccounts.wallet = {}
+      mockedUseMyAccounts.mockReturnValue({
+        allAccounts: [],
+        hasAccounts: false,
+        isLoading: true,
+        wallet: {} as Wallet,
+      })
       renderComponent()
 
       expect(screen.queryByText('Connect Wallet')).not.toBeInTheDocument()

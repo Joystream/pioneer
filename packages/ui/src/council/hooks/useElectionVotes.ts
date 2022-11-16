@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { BN_ZERO } from '@/common/constants'
+import { Comparator } from '@/common/model/Comparator'
 import { sumStakes } from '@/common/utils/bn'
 
 import { useGetCouncilVotesQuery } from '../queries'
@@ -30,7 +31,7 @@ export const useElectionVotes = (election?: Election) => {
   const { data, loading } = useGetCouncilVotesQuery({
     variables: { where: { electionRound: { cycleId_eq: election?.cycleId } } },
   })
-  const votes = useMemo(() => data?.castVotes.map(asVote), [data?.castVotes.length])
+  const votes = useMemo(() => data?.castVotes.map(asVote), [data?.castVotes])
 
   const myVotingAttempts = useMyVotingAttempts(election?.cycleId)
   const myCastVotes = useMemo(() => {
@@ -47,7 +48,7 @@ export const useElectionVotes = (election?: Election) => {
 
         return attempt ? { ...vote, optionId: attempt.optionId, attempt } : []
       })
-  }, [allAccounts?.length, votes?.length, myVotingAttempts?.length])
+  }, [allAccounts?.length, votes, myVotingAttempts?.length])
 
   const votesPerCandidate = useMemo(() => {
     const candidateStats: Record<string, CandidateStats> = {}
@@ -71,8 +72,9 @@ export const useElectionVotes = (election?: Election) => {
         }
       }
     })
-    return Object.values(candidateStats).sort((a, b) => b.totalStake.sub(a.totalStake).toNumber())
-  }, [votes?.length, myCastVotes?.length])
+
+    return Object.values(candidateStats).sort((a, b) => Comparator<CandidateStats>(true, 'totalStake').bigNumber(a, b))
+  }, [votes, myCastVotes?.length])
 
   const sumOfStakes = useMemo(() => votes && sumStakes(votes), [votes])
 

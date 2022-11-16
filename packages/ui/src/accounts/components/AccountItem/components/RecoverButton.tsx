@@ -10,9 +10,10 @@ interface Props {
   lock: BalanceLock
   address: string
   isRecoverable?: boolean
+  isSmall?: boolean
 }
 
-export const RecoverButton = React.memo(({ memberId, lock, address, isRecoverable }: Props) => {
+export const RecoverButton = React.memo(({ memberId, lock, address, isRecoverable, isSmall }: Props) => {
   const { showModal } = useModal()
   const onClick = useCallback(() => {
     if (!memberId) return
@@ -30,7 +31,7 @@ export const RecoverButton = React.memo(({ memberId, lock, address, isRecoverabl
   }
 
   return (
-    <TransactionButton style="primary" size="small" onClick={onClick}>
+    <TransactionButton style="primary" size={isSmall ? 'small' : 'medium'} onClick={onClick}>
       Recover
     </TransactionButton>
   )

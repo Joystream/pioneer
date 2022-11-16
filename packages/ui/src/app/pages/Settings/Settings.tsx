@@ -8,6 +8,7 @@ import { LanguageSelect } from '@/common/components/LanguageSelect'
 import NetworkInfo from '@/common/components/NetworkInfo/NetworkInfo'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
+import { PolkadotAppInfo } from '@/common/components/PolkadotAppInfo'
 import { SimpleSelect } from '@/common/components/selects'
 import { Tabs } from '@/common/components/Tabs'
 import { useNetwork } from '@/common/hooks/useNetwork'
@@ -54,10 +55,11 @@ export const Settings = () => {
                   />
                   <NetworkInfo
                     detailsTitle={t('networkDetails')}
-                    urlAddress={endpoints.membershipFaucetEndpoint}
                     networkAddress={endpoints.nodeRpcEndpoint}
                     queryNodeAddress={endpoints.queryNodeEndpoint}
+                    faucetAddress={endpoints.membershipFaucetEndpoint}
                   />
+                  <PolkadotAppInfo rpcUrl={endpoints.nodeRpcEndpoint} />
                 </>
               )}
             </RowGapBlock>

@@ -9,6 +9,7 @@ export const Colors = {
 
   Black: {
     900: '#000000',
+    850: '#0E0E0E',
     800: '#131519',
     700: '#1F252E',
     600: '#404B5A',
@@ -96,6 +97,7 @@ export const ZIndex = {
   select: 60,
   contextMenu: 55,
   tooltip: 100,
+  popover: 95,
   sideNotification: 90,
 }
 

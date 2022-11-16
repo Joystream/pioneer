@@ -1,12 +1,11 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { ApiContext } from '@/api/providers/context'
-import { ModalContext } from '@/common/providers/modal/context'
+import { GlobalModals } from '@/app/GlobalModals'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
 import { DeleteThreadModal, DeleteThreadModalCall } from '@/forum/modals/DeleteThreadModal'
@@ -25,40 +24,51 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import {
   currentStubErrorMessage,
+  stubAccounts,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee } from '../../setup'
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
+const modalData: ModalCallData<DeleteThreadModalCall> = {
+  thread: {
+    id: '1',
+    title: 'Example Thread',
+    categoryId: '1',
+    authorId: '0',
+    isSticky: false,
+    createdInBlock: randomBlock(),
+    tags: [],
+    visiblePostsCount: 5,
+    status: { __typename: 'ThreadStatusActive' },
+  },
+}
+
+const mockUseModal: UseModal<any> = {
+  hideModal: jest.fn(),
+  showModal: jest.fn(),
+  modal: null,
+  modalData,
+}
+
+jest.mock('@/common/hooks/useModal', () => ({
+  useModal: () => ({
+    ...jest.requireActual('@/common/hooks/useModal').useModal(),
+    ...mockUseModal,
+  }),
+}))
+
 describe('UI: DeleteThreadModal', () => {
   const api = stubApi()
   const txPath = 'api.tx.forum.deleteThread'
-  const modalData: ModalCallData<DeleteThreadModalCall> = {
-    thread: {
-      id: '1',
-      title: 'Example Thread',
-      categoryId: '1',
-      authorId: '0',
-      isSticky: false,
-      createdInBlock: randomBlock(),
-      tags: [],
-      visiblePostsCount: 5,
-      status: { __typename: 'ThreadStatusActive' },
-    },
-  }
 
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData,
-  }
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -70,7 +80,6 @@ describe('UI: DeleteThreadModal', () => {
     },
   }
 
-  let useAccounts: UseAccounts
   let transaction: any
   let txMock: jest.Mock
 
@@ -83,17 +92,14 @@ describe('UI: DeleteThreadModal', () => {
     seedForumThread(mockThreads[0], server.server)
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+    stubDefaultBalances()
     transaction = stubTransaction(api, txPath, 100)
-    txMock = api.api.tx.forum.deleteThread as unknown as jest.Mock
+    txMock = (api.api.tx.forum.deleteThread as unknown) as jest.Mock
   })
 
   it('Requirements passed', async () => {
@@ -110,7 +116,8 @@ describe('UI: DeleteThreadModal', () => {
   })
 
   it('Requirements failed', async () => {
-    stubTransaction(api, txPath, 10000)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
+
     renderModal()
     expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
   })
@@ -119,7 +126,7 @@ describe('UI: DeleteThreadModal', () => {
     stubTransactionFailure(transaction)
     renderModal()
     await act(async () => {
-      fireEvent.click(await getButton('modals.deleteThread.buttonLabel'))
+      fireEvent.click(await getButton('Sign and delete'))
     })
     expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })
@@ -128,28 +135,25 @@ describe('UI: DeleteThreadModal', () => {
     stubTransactionSuccess(transaction, 'forum', 'ThreadDeleted')
     renderModal()
     await act(async () => {
-      fireEvent.click(await getButton('modals.deleteThread.buttonLabel'))
+      fireEvent.click(await getButton('Sign and delete'))
     })
 
-    expect(await screen.findByText('modals.deleteThread.success')).toBeDefined()
+    expect(await screen.findByText('Your thread has been deleted.')).toBeDefined()
   })
 
   const renderModal = () =>
     render(
-      <ModalContext.Provider value={useModal}>
+      <ModalContextProvider>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
-            <AccountsContext.Provider value={useAccounts}>
-              <MembershipContext.Provider value={useMyMemberships}>
-                <ApiContext.Provider value={api}>
-                  <BalancesContextProvider>
-                    <DeleteThreadModal />
-                  </BalancesContextProvider>
-                </ApiContext.Provider>
-              </MembershipContext.Provider>
-            </AccountsContext.Provider>
+            <MembershipContext.Provider value={useMyMemberships}>
+              <ApiContext.Provider value={api}>
+                <GlobalModals />
+                <DeleteThreadModal />
+              </ApiContext.Provider>
+            </MembershipContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
-      </ModalContext.Provider>
+      </ModalContextProvider>
     )
 })

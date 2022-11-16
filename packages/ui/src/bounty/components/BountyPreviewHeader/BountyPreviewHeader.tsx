@@ -2,23 +2,12 @@ import React, { useMemo } from 'react'
 
 import { PageHeader } from '@/app/components/PageHeader'
 import { BountyHeaderStatistics } from '@/bounty/components/BountyPreviewHeader/components/BountyHeaderStatistics'
-import { BountyNotifyButton } from '@/bounty/components/BountyPreviewHeader/components/BountyNotifyButton'
 import {
   BountyHeaderButtonsProps,
   BountyMembershipsStatistics,
   ButtonTypes,
 } from '@/bounty/components/BountyPreviewHeader/types'
-import {
-  AnnounceWorkEntryButton,
-  CancelBountyButton,
-  ClaimRewardButton,
-  ContributeFundsButton,
-  SubmitWorkButton,
-  WithdrawStakeButton,
-  WithdrawWorkEntryButton,
-  SubmitJudgementButton,
-  WithdrawContributionButton,
-} from '@/bounty/components/modalsButtons'
+import { BountyHeaderButton } from '@/bounty/components/modalsButtons'
 import { Bounty, isFundingLimited, WorkEntry } from '@/bounty/types/Bounty'
 import { BadgesRow } from '@/common/components/BadgeStatus/BadgesRow'
 import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
@@ -26,21 +15,58 @@ import { BN_ZERO } from '@/common/constants'
 import { isDefined } from '@/common/utils'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
-const bountyButtonsMapper: Record<
-  ButtonTypes,
-  React.MemoExoticComponent<(props: BountyHeaderButtonsProps) => React.ReactElement>
-> = {
-  announceWorkEntry: AnnounceWorkEntryButton,
-  cancelBounty: CancelBountyButton,
-  claimReward: ClaimRewardButton,
-  contributeFunds: ContributeFundsButton,
-  submitWork: SubmitWorkButton,
-  withdrawWorkEntry: WithdrawWorkEntryButton,
-  withdrawEntryStake: WithdrawStakeButton,
-  withdrawContribution: WithdrawContributionButton,
-  submitJudgement: SubmitJudgementButton,
-  statistics: BountyHeaderStatistics,
-  notify: BountyNotifyButton,
+const bountyButtonsPropsFactory = (
+  type: ButtonTypes
+): Omit<BountyHeaderButtonsProps<any>, 'validMemberIds' | 'modalData'> | undefined => {
+  switch (type) {
+    case 'announceWorkEntry':
+      return {
+        text: 'buttons.announceEntry',
+        modal: 'BountyAnnounceWorkEntryModal',
+      }
+    case 'cancelBounty':
+      return {
+        text: 'buttons.cancelBounty',
+        modal: 'BountyCancel',
+      }
+    case 'claimReward':
+      return {
+        text: 'buttons.claimReward',
+        modal: 'ClaimReward',
+      }
+    case 'contributeFunds':
+      return {
+        text: 'buttons.contributeFunds',
+        modal: 'BountyContributeFundsModal',
+      }
+    case 'submitWork':
+      return {
+        text: 'buttons.submitWork',
+        modal: 'SubmitWork',
+      }
+    case 'withdrawWorkEntry':
+      return {
+        text: 'buttons.withdrawWorkEntry',
+        modal: 'BountyWithdrawWorkEntryModal',
+      }
+    case 'withdrawEntryStake':
+      return {
+        text: 'buttons.loserWithdrawStake',
+        modal: 'WithdrawStakeModal',
+      }
+    case 'withdrawContribution':
+      return {
+        text: 'buttons.contributorWithdrawStake',
+        modal: 'BountyWithdrawContributionModal',
+      }
+    case 'submitJudgement':
+      return {
+        text: 'buttons.submitJudgement',
+        modal: 'SubmitJudgementModal',
+      }
+    default:
+      return undefined
+  }
 }
 
 const buttonValidMembersMapper: Record<ButtonTypes, keyof BountyMembershipsStatistics> = {
@@ -97,7 +123,7 @@ export const getMembershipsStatistics = (membershipsIdArray: string[], bounty?: 
 }
 
 const bountyHeaderButtonsFactory = (bounty: Bounty, membershipsStatistics: BountyMembershipsStatistics) => {
-  const buttons: (keyof typeof bountyButtonsMapper)[] = []
+  const buttons: ButtonTypes[] = []
 
   const {
     idsWithContribution,
@@ -175,20 +201,23 @@ export const BountyPreviewHeader = React.memo(({ bounty, badgeNames }: Props) =>
   )
 
   const compiledButtons = useMemo(() => {
-    if (!bounty) {
-      return null
-    }
+    if (!bounty) return null
+    const buttonsTypes = bountyHeaderButtonsFactory(bounty, membershipsBountyStatistics)
 
-    const buttons = bountyHeaderButtonsFactory(bounty, membershipsBountyStatistics)
+    return buttonsTypes.map((buttonType) => {
+      if (buttonType === 'statistics') {
+        return <BountyHeaderStatistics bounty={bounty} />
+      }
+      const buttonProps = bountyButtonsPropsFactory(buttonType)
 
-    return buttons.map((button) => {
-      const Component = bountyButtonsMapper[button]
+      if (!buttonProps) return null
 
       return (
-        <Component
-          key={button}
-          bounty={bounty}
-          validMemberIds={membershipsBountyStatistics[buttonValidMembersMapper[button]]}
+        <BountyHeaderButton
+          {...buttonProps}
+          modalData={{ bounty, creator: bounty.creator }}
+          key={buttonType}
+          validMemberIds={membershipsBountyStatistics[buttonValidMembersMapper[buttonType]]}
         />
       )
     })

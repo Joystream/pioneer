@@ -1,10 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { EmptyPagePlaceholder } from '@/common/components/EmptyPagePlaceholder/EmptyPagePlaceholder'
 import { Loading } from '@/common/components/Loading'
+import { AnnounceCandidacyButton } from '@/council/components/election/announcing/AnnounceCandidacyButton'
 
 import { CandidateCardProps, CandidateCard, CandidateCardCandidate } from './CandidateCard'
-import { NoCandidates } from './NoCandidates'
 
 interface CandidateCardListCandidate extends CandidateCardCandidate {
   isMyCandidate?: boolean
@@ -18,11 +19,17 @@ interface CandidatesListProps extends Pick<CandidateCardProps, 'canVote' | 'isPr
 
 export const CandidateCardList = ({ candidates = [], isLoading, canVote }: CandidatesListProps) => {
   if (isLoading) {
-    return <Loading text="Loading candidates..." />
+    return <Loading />
   }
 
   if (!candidates.length) {
-    return <NoCandidates />
+    return (
+      <EmptyPagePlaceholder
+        title="There are no candidates yet"
+        copy="Be the first one to announce your candidacy."
+        button={<AnnounceCandidacyButton />}
+      />
+    )
   }
 
   return (

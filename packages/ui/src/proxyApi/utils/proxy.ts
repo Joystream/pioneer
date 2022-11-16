@@ -7,4 +7,4 @@ import { ApiKinds } from '../types'
 
 type ApiPath<K extends ApiKinds> = [keyof ProxyApi[K], ...string[]]
 export const apiInterfaceProxy = <K extends ApiKinds>(method: (...path: ApiPath<K>) => (...params: AnyTuple) => any) =>
-  recursiveProxy({} as ProxyApi[K], { get: (_, path) => method(...(path as ApiPath<K>)) })
+  recursiveProxy({} as ProxyApi[K], { get: ({ path }) => method(...(path as ApiPath<K>)) })

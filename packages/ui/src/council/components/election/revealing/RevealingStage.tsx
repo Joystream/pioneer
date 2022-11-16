@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { Loading } from '@/common/components/Loading'
 import { useElectionVotes } from '@/council/hooks/useElectionVotes'
 import { useMyCurrentVotesCount } from '@/council/hooks/useMyCurrentVotesCount'
+import { electionVotingResultComparator } from '@/council/model/electionVotingResultComparator'
 import { Election } from '@/council/types/Election'
 
 import { CandidateCardList } from '../CandidateCard/CandidateCardList'
@@ -20,6 +21,11 @@ export const RevealingStage = ({ election, isLoading }: Props) => {
 
   const { votesPerCandidate, sumOfStakes: totalStake, isLoading: votesLoading } = useElectionVotes(election)
 
+  const sortedVotesPerCandidate = useMemo(
+    () => votesPerCandidate.sort(electionVotingResultComparator),
+    [votesPerCandidate]
+  )
+
   if (isLoading) {
     return <Loading />
   }
@@ -36,11 +42,13 @@ export const RevealingStage = ({ election, isLoading }: Props) => {
         <RevealingStageVotes
           isLoading={votesLoading}
           totalStake={totalStake}
-          votesPerCandidate={votesPerCandidate}
+          votesPerCandidate={sortedVotesPerCandidate}
           onlyMyVotes={tab === 'myVotes'}
         />
       )}
-      {election && tab === 'candidates' && <CandidateCardList candidates={election.candidates} isLoading={isLoading} />}
+      {election && tab === 'candidates' && (
+        <CandidateCardList candidates={sortedVotesPerCandidate.map((votes) => votes.candidate)} isLoading={isLoading} />
+      )}
     </>
   )
 }

@@ -44,7 +44,7 @@ export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
 
       <LatestActivity threadId={thread.id} />
 
-      {author ? <MemberInfo member={author} size="s" memberSize="s" hideGroup /> : <Loading />}
+      {author ? <MemberInfo member={author} size="s" memberSize="s" hideGroup /> : <Loading withoutMargin />}
 
       {block && <BlockTime block={block} layout="column" />}
     </ThreadListItemStyles>

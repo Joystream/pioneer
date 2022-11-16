@@ -5,7 +5,7 @@ import { BalanceInfoNarrow, InfoTitle, InfoValue } from './Modal'
 import { Tooltip, TooltipDefault } from './Tooltip'
 import { TokenValue } from './typography'
 
-interface TransactionInfoProps {
+export interface TransactionInfoProps {
   title: string
   value?: BN
   tooltipText?: React.ReactNode

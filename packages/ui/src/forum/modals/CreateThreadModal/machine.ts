@@ -1,8 +1,9 @@
-import { ThreadId } from '@joystream/types/common'
+import { u64 } from '@polkadot/types'
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
 import { Account } from '@/accounts/types'
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import { getDataFromEvent } from '@/common/model/JoystreamNode'
 import {
   isTransactionCanceled,
@@ -19,7 +20,7 @@ interface DetailsContext {
 }
 
 interface TransactionContext extends Required<DetailsContext> {
-  newThreadId?: ThreadId
+  newThreadId?: u64
   transactionEvents?: EventRecord[]
 }
 
@@ -94,8 +95,10 @@ export const createThreadMachine = createMachine<CreateThreadContext, CreateThre
         ],
       },
     },
-    success: { type: 'final' },
-    error: { type: 'final' },
-    canceled: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      metaMessages: {
+        error: 'There was a problem with creating your forum thread.',
+      },
+    }),
   },
 })

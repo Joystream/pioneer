@@ -1,21 +1,20 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import BN from 'bn.js'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ActorRef } from 'xstate'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
-import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { Account } from '@/accounts/types'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent } from '@/common/components/forms'
-import { ModalBody, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
+import { ModalBody, ModalTransactionFooter } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
+import { BN_ZERO } from '@/common/constants'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { MultiTransactionConfig, TransactionModal } from '@/common/modals/TransactionModal'
-import { formatTokenValue } from '@/common/model/formatters'
+import { formatJoyValue, formatTokenValue } from '@/common/model/formatters'
 
 export interface Props {
   onClose: () => void
@@ -28,7 +27,7 @@ export interface Props {
   useMultiTransaction?: MultiTransactionConfig
   skipQueryNodeCheck?: boolean
 }
-
+// todo should be removed
 export const AuthorizeTransactionModal = ({
   onClose,
   transaction,
@@ -41,21 +40,13 @@ export const AuthorizeTransactionModal = ({
   skipQueryNodeCheck,
 }: Props) => {
   const { t } = useTranslation('bounty')
-  const [hasFunds, setHasFunds] = useState<boolean>(false)
-  const balances = useMyBalances()
-
-  const { sign, isReady, paymentInfo } = useSignAndSendTransaction({
+  const { sign, isReady, paymentInfo, canAfford } = useSignAndSendTransaction({
     service,
     transaction,
     signer: controllerAccount.address,
     skipQueryNode: skipQueryNodeCheck,
   })
-
-  useEffect(() => {
-    if (controllerAccount && paymentInfo?.partialFee) {
-      setHasFunds(balances[controllerAccount.address]?.transferable.gte(paymentInfo.partialFee))
-    }
-  }, [controllerAccount, paymentInfo?.partialFee])
+  const signDisabled = !isReady || !canAfford
 
   return (
     <TransactionModal onClose={onClose} service={service} useMultiTransaction={useMultiTransaction}>
@@ -65,7 +56,9 @@ export const AuthorizeTransactionModal = ({
             {description}
           </TextMedium>
           <TextMedium light>
-            {t('modals.authorizeTransaction.feeInfo', { value: paymentInfo?.partialFee.toString() ?? '-' })}
+            {t('modals.authorizeTransaction.feeInfo', {
+              value: formatJoyValue(paymentInfo?.partialFee ?? BN_ZERO, { precision: 2 }) ?? '-',
+            })}
           </TextMedium>
         </div>
         <InputComponent
@@ -77,24 +70,17 @@ export const AuthorizeTransactionModal = ({
           <SelectedAccount account={controllerAccount} />
         </InputComponent>
       </ModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          {contributeAmount && (
-            <TransactionInfo
-              title={t('modals.common.contributeAmount', { value: formatTokenValue(contributeAmount) })}
-              value={contributeAmount}
-            />
-          )}
+      <ModalTransactionFooter
+        transactionFee={paymentInfo?.partialFee}
+        next={{ disabled: signDisabled, label: buttonLabel, onClick: sign }}
+      >
+        {contributeAmount && (
           <TransactionInfo
-            title={t('modals.common.transactionFee.label')}
-            value={paymentInfo?.partialFee}
-            tooltipText={t('modals.common.transactionFee.tooltip')}
+            title={t('modals.common.contributeAmount', { value: formatTokenValue(contributeAmount) })}
+            value={contributeAmount}
           />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={!hasFunds || !isReady} onClick={sign}>
-          {buttonLabel}
-        </ButtonPrimary>
-      </ModalFooter>
+        )}
+      </ModalTransactionFooter>
     </TransactionModal>
   )
 }

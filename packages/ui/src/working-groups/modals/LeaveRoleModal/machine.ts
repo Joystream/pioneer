@@ -1,14 +1,14 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
-import { EmptyObject } from '@/common/types'
-
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
   isTransactionSuccess,
   transactionMachine,
-} from '../../../common/model/machines'
+} from '@/common/model/machines'
+import { EmptyObject } from '@/common/types'
 
 interface LeaveRoleContext {
   rationale?: string
@@ -64,8 +64,11 @@ export const leaveRoleMachine = createMachine<Context, LeaveRoleEvent, LeaveRole
         ],
       },
     },
-    success: { type: 'final' },
-    error: { type: 'final' },
-    canceled: { type: 'final' },
+    ...transactionModalFinalStatusesFactory({
+      metaMessages: {
+        success: 'You have successfully left the role.',
+        error: 'There was a problem leaving the role.',
+      },
+    }),
   },
 })

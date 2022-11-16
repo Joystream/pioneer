@@ -1,6 +1,7 @@
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -63,8 +64,6 @@ export const withdrawContributionModalMachine = createMachine<TransactionContext
       },
     },
     [WithdrawContributionModalState.requirementsFailed]: { type: 'final' },
-    [WithdrawContributionModalState.success]: { type: 'final' },
-    [WithdrawContributionModalState.error]: { type: 'final' },
-    [WithdrawContributionModalState.canceled]: { type: 'final' },
+    ...transactionModalFinalStatusesFactory(),
   },
 })

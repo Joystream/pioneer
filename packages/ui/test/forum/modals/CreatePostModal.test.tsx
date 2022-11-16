@@ -1,12 +1,12 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
-import { AccountsContext } from '@/accounts/providers/accounts/context'
-import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { ApiContext } from '@/api/providers/context'
-import { ModalContext } from '@/common/providers/modal/context'
-import { ModalCallData, UseModal } from '@/common/providers/modal/types'
+import { GlobalModals } from '@/app/GlobalModals'
+import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { ModalCallData } from '@/common/providers/modal/types'
 import { CreatePostModal, CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
@@ -23,6 +23,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import {
   currentStubErrorMessage,
+  stubAccounts,
   stubApi,
   stubConst,
   stubDefaultBalances,
@@ -30,6 +31,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
+import { mockedTransactionFee, mockUseModalCall } from '../../setup'
 
 jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
   useQueryNodeTransactionStatus: () => 'confirmed',
@@ -47,12 +49,6 @@ describe('UI: CreatePostModal', () => {
     onSuccess: () => true,
   }
 
-  const useModal: UseModal<any> = {
-    hideModal: jest.fn(),
-    showModal: jest.fn(),
-    modal: null,
-    modalData,
-  }
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -63,27 +59,25 @@ describe('UI: CreatePostModal', () => {
       getMemberIdByBoundAccountAddress: () => undefined,
     },
   }
-  let useAccounts: UseAccounts
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
   beforeAll(async () => {
     await cryptoWaitReady()
+    mockUseModalCall({ modalData })
     rawMembers.slice(0, 2).map((member) => seedMember(member, server.server))
     seedForumCategory(mockCategories[0], server.server)
     seedForumThread(mockThreads[0], server.server)
     mockPosts.map((post) => seedForumPost(post, server.server))
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
-    useAccounts = {
-      isLoading: false,
-      hasAccounts: true,
-      allAccounts: [alice, bob],
-    }
+    stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
-    stubDefaultBalances(api)
+    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+
+    stubDefaultBalances()
     tx = stubTransaction(api, txPath, 25)
     stubConst(api, 'forum.postDeposit', createBalanceOf(10))
     modalData.isEditable = false
@@ -92,7 +86,8 @@ describe('UI: CreatePostModal', () => {
 
   describe('Requirements failed', () => {
     it('Cannot afford transaction fee', async () => {
-      tx = stubTransaction(api, txPath, 10000)
+      mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
+
       modalData.transaction = api.api.tx.forum.addPost(1, 1, 1, '', false)
       renderModal()
       expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
@@ -133,23 +128,22 @@ describe('UI: CreatePostModal', () => {
     modalData.isEditable = true
     renderModal()
     expect(screen.getByText(/^Post deposit:/i)?.nextSibling?.textContent).toBe('101')
-    expect(screen.getByText(/^Transaction fee:/i)?.nextSibling?.textContent).toBe('25')
+    expect(screen.getByText(/^modals.transactionFee.label/i)?.nextSibling?.textContent).toBe('25')
   })
 
   const renderModal = () =>
     render(
-      <ModalContext.Provider value={useModal}>
+      <ModalContextProvider>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
-            <AccountsContext.Provider value={useAccounts}>
-              <MembershipContext.Provider value={useMyMemberships}>
-                <ApiContext.Provider value={api}>
-                  <CreatePostModal />
-                </ApiContext.Provider>
-              </MembershipContext.Provider>
-            </AccountsContext.Provider>
+            <MembershipContext.Provider value={useMyMemberships}>
+              <ApiContext.Provider value={api}>
+                <GlobalModals />
+                <CreatePostModal />
+              </ApiContext.Provider>
+            </MembershipContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
-      </ModalContext.Provider>
+      </ModalContextProvider>
     )
 })

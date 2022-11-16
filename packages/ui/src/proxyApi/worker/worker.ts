@@ -1,8 +1,5 @@
-import { registry, types } from '@joystream/types'
-import '@joystream/types/augment/augment-api'
-import '@joystream/types/augment/augment-types'
+import '@joystream/types'
 import { ApiRx, WsProvider } from '@polkadot/api'
-import rpc from '@polkadot/types/interfaces/jsonrpc'
 import { BehaviorSubject, filter, first, fromEvent, share } from 'rxjs'
 
 import { isDefined } from '@/common/utils'
@@ -33,7 +30,7 @@ messages.subscribe(({ data }) => {
 
   if (message.messageType === 'init') {
     const provider = new WsProvider(message.payload)
-    ApiRx.create({ provider, rpc, types, registry })
+    ApiRx.create({ provider })
       .pipe(first())
       .subscribe((api) => {
         postMessage({ messageType: 'init', payload: { consts: api.consts } })

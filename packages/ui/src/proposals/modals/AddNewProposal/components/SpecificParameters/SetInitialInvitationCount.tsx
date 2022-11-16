@@ -5,11 +5,11 @@ import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { useObservable } from '@/common/hooks/useObservable'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 
 export const SetInitialInvitationCount = () => {
   const { api } = useApi()
-  const currentCount = useObservable(api?.query.members.initialInvitationCount(), [])
+  const currentCount = useFirstObservableValue(() => api?.query.members.initialInvitationCount(), [api?.isConnected])
 
   return (
     <RowGapBlock gap={24}>
@@ -28,13 +28,7 @@ export const SetInitialInvitationCount = () => {
             required
             id="count-input"
           >
-            <InputNumber
-              id="count-input"
-              isTokenValue
-              isInBN
-              name="setInitialInvitationCount.invitationCount"
-              placeholder="0"
-            />
+            <InputNumber id="count-input" isInBN name="setInitialInvitationCount.invitationCount" placeholder="0" />
           </InputComponent>
         </Row>
         <Row>

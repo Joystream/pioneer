@@ -80,13 +80,13 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={earnings} />
+            <TokenValue value={worker.rewardPerBlock} />
           </TextInlineBig>
           <ToggleableSubscriptionWide>Earned total</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={new BN(2396000)} />
+            <TokenValue value={earnings} />
           </TextInlineBig>
           <ToggleableSubscriptionWide>Next payment in</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>

@@ -1,5 +1,4 @@
-import { useMachine } from '@xstate/react'
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import * as Yup from 'yup'
@@ -13,35 +12,31 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
+import { CurrencyName } from '@/app/constants/currency'
 import { BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEntryModal/index'
 import { announceWorkEntryMachine, AnnounceWorkEntryStates } from '@/bounty/modals/AnnounceWorkEntryModal/machine'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
-import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
-import { ButtonPrimary } from '@/common/components/buttons'
-import { FailureModal } from '@/common/components/FailureModal'
-import { Input, InputComponent, InputNumber } from '@/common/components/forms'
+import { Input, InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import {
   Modal,
-  ModalFooter,
   ModalHeader,
+  ModalTransactionFooter,
   Row,
   ScrolledModalBody,
   ScrolledModalContainer,
   TransactionAmount,
-  TransactionInfoContainer,
 } from '@/common/components/Modal'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
-import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO, Fonts } from '@/common/constants'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
 import { formatTokenValue } from '@/common/model/formatters'
 import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { IStakingAccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 
 const transactionSteps = [{ title: 'Bind staking account' }, { title: 'Announce Work' }]
@@ -65,7 +60,7 @@ export const AnnounceWorkEntryModal = () => {
   const [state, send] = useMachine(announceWorkEntryMachine)
   const balance = useBalance(state.context.stakingAccount?.address)
   const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
-  const { hasRequiredStake } = useHasRequiredStake(amount.toNumber() || 0, 'Bounties')
+  const { hasRequiredStake } = useHasRequiredStake(amount ?? BN_ZERO, 'Bounties')
 
   const { setContext, errors, isValid } = useSchema<IStakingAccountSchema>(
     { account: state.context.stakingAccount },
@@ -84,35 +79,32 @@ export const AnnounceWorkEntryModal = () => {
     }
   }, [JSON.stringify(balance), amount, stakingStatus])
 
-  const transaction = useMemo(() => {
-    if (api && isConnected && activeMember) {
-      if (stakingStatus === 'confirmed') {
-        return api.tx.bounty.announceWorkEntry(activeMember.id, bounty.id, state.context.stakingAccount?.address ?? '')
+  const { transaction, feeInfo: fee } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => {
+      if (api && isConnected && activeMember) {
+        if (stakingStatus === 'confirmed') {
+          return api.tx.bounty.announceWorkEntry(
+            activeMember.id,
+            bounty.id,
+            state.context.stakingAccount?.address ?? ''
+          )
+        }
+
+        return api.tx.utility.batch([
+          api.tx.members.confirmStakingAccount(activeMember.id, state.context.stakingAccount?.address ?? ''),
+          api.tx.bounty.announceWorkEntry(activeMember.id, bounty.id, state.context.stakingAccount?.address ?? ''),
+        ])
       }
-
-      return api.tx.utility.batch([
-        api.tx.members.confirmStakingAccount(activeMember.id, state.context.stakingAccount?.address ?? ''),
-        api.tx.bounty.announceWorkEntry(activeMember.id, bounty.id, state.context.stakingAccount?.address ?? ''),
-      ])
-    }
-  }, [activeMember?.id, state.context.stakingAccount?.address, isConnected, stakingStatus])
-
-  const fee = useTransactionFee(activeMember?.controllerAccount, transaction)
+    },
+    [activeMember?.id, state.context.stakingAccount?.address, isConnected, stakingStatus]
+  )
 
   const nextStep = useCallback(() => {
     send('NEXT')
   }, [])
   useEffect(() => {
     if (state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
-      if (!activeMember) {
-        return showModal<SwitchMemberModalCall>({
-          modal: 'SwitchMember',
-          data: {
-            originalModalName: 'BountyAnnounceWorkEntryModal',
-            originalModalData: { bounty },
-          },
-        })
-      }
       if (fee) {
         const areFundsSufficient = fee.canAfford && hasRequiredStake
         send(areFundsSufficient ? 'NEXT' : 'FAIL')
@@ -123,22 +115,6 @@ export const AnnounceWorkEntryModal = () => {
       fee?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
   }, [state, activeMember?.id, stakingStatus, JSON.stringify(fee), hasRequiredStake])
-
-  if (state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
-    return (
-      <WaitModal
-        title={t('common:modals.wait.title')}
-        description={t('common:modals.wait.description')}
-        onClose={hideModal}
-        requirements={[
-          { name: 'Initializing server connection', state: !!api },
-          { name: 'Loading member', state: !!activeMember },
-          { name: 'Creating transaction', state: !!transaction },
-          { name: 'Calculating fee', state: !!fee },
-        ]}
-      />
-    )
-  }
 
   if (!activeMember || !transaction || !api || !fee) {
     return null
@@ -154,28 +130,6 @@ export const AnnounceWorkEntryModal = () => {
     })
 
     return null
-  }
-
-  if (state.matches(AnnounceWorkEntryStates.success)) {
-    return (
-      <SuccessTransactionModal
-        buttonLabel={t('modals.announceWorkEntry.successButton')}
-        onClose={hideModal}
-        onButtonClick={hideModal}
-        message={t('modals.announceWorkEntry.success', { bounty: bounty.title })}
-      />
-    )
-  }
-  if (state.matches(AnnounceWorkEntryStates.error)) {
-    return (
-      <FailureModal onClose={hideModal} events={state.context.transactionEvents}>
-        {t('modals.contribute.error')}
-      </FailureModal>
-    )
-  }
-
-  if (state.matches(AnnounceWorkEntryStates.cancel)) {
-    return <FailureModal onClose={hideModal}>{t('common:modals.transactionCanceled')}</FailureModal>
   }
 
   if (state.matches(AnnounceWorkEntryStates.bindStakingAccount)) {
@@ -267,29 +221,22 @@ export const AnnounceWorkEntryModal = () => {
                 id="amount-input"
                 required
                 inputWidth="s"
-                units="tJOY"
+                units={CurrencyName.integerValue}
                 disabled
                 tooltipText={t('modals.announceWorkEntry.selectAmountTooltip')}
               >
-                <InputNumber id="amount-input" value={amount.toString()} isTokenValue disabled />
+                <TokenInput id="amount-input" value={amount} disabled />
               </InputComponent>
             </TransactionAmount>
           </Row>
         </ScrolledModalContainer>
       </ScrolledModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionInfo title={t('modals.common.contributeAmount')} value={amount} />
-          <TransactionInfo
-            title={t('modals.common.transactionFee.label')}
-            value={fee?.transactionFee}
-            tooltipText={t('modals.common.transactionFee.tooltip')}
-          />
-        </TransactionInfoContainer>
-        <ButtonPrimary size="medium" disabled={!isValid} onClick={nextStep}>
-          {t('modals.announceWorkEntry.nextButton')}
-        </ButtonPrimary>
-      </ModalFooter>
+      <ModalTransactionFooter
+        transactionFee={fee?.transactionFee}
+        next={{ disabled: !isValid, label: t('modals.announceWorkEntry.nextButton'), onClick: nextStep }}
+      >
+        <TransactionInfo title={t('modals.common.contributeAmount')} value={amount} />
+      </ModalTransactionFooter>
     </Modal>
   )
 }
