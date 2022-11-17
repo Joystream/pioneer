@@ -29,6 +29,7 @@ import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { useModal } from '@/common/hooks/useModal'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
+import { ConfirmModal } from '@/common/modals/ConfirmModal/ConfirmModal'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
 import { ReportContentModal, ReportContentModalCall } from '@/common/modals/ReportContentModal'
 import { ModalName, UnknownMachine } from '@/common/providers/modal/types'
@@ -182,8 +183,17 @@ const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
   'ReportContentModal',
 ]
 
+export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [
+  'AddNewProposalModal',
+  'AnnounceCandidateModal',
+  'CreatePost',
+  'CreateThreadModal',
+  'ApplyForRoleModal',
+  'VoteForProposalModal',
+]
+
 export const GlobalModals = () => {
-  const { modal, hideModal, currentModalMachine, showModal, modalData } = useModal()
+  const { modal, hideModal, currentModalMachine, showModal, modalData, isClosing } = useModal()
   const { active: activeMember } = useMyMemberships()
   const { status } = useTransactionStatus()
   const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
@@ -206,6 +216,7 @@ export const GlobalModals = () => {
       <TransactionFeesProvider>
         {potentialFallback}
         {Modal && <Modal />}
+        {isClosing && <ConfirmModal />}
         {status === 'loadingFees' && <LoaderModal onClose={hideModal} />}
       </TransactionFeesProvider>,
       document.body
@@ -216,7 +227,7 @@ export const GlobalModals = () => {
 }
 
 export const LoaderModal = ({ onClose }: { onClose: () => void }) => (
-  <SpinnerGlass modalSize="l" isDark onClick={onClose} onClose={onClose}>
+  <SpinnerGlass onClick={onClose}>
     <Loading />
   </SpinnerGlass>
 )
