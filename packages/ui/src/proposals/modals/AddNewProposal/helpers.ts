@@ -234,11 +234,11 @@ export const schemaFactory = (api?: ProxyApi) => {
     }),
     stakingPolicyAndReward: Yup.object().shape({
       stakingAmount: BNSchema.test(
-        minContext('Input must be greater than ${min} for proposal to execute', 'leaderOpeningStake', true, 'execution')
+        minContext('Input must be at least ${min} for proposal to execute', 'leaderOpeningStake', true, 'execution')
       ).required('Field is required'),
       leavingUnstakingPeriod: BNSchema.test(
         minContext(
-          'Input must be greater than ${min} for proposal to execute',
+          'Input must be at least ${min} for proposal to execute',
           'minUnstakingPeriodLimit',
           false,
           'execution'
