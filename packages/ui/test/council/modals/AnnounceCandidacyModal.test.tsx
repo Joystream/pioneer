@@ -214,7 +214,7 @@ describe('UI: Announce Candidacy Modal', () => {
           await fillStakingStep('alice', 9999999, false)
 
           expect(await getNextStepButton()).toBeDisabled()
-          expect(includesTextWithMarkup(getByText, 'Insufficient funds to cover staking')).toBeInTheDocument()
+          expect(includesTextWithMarkup(getByText, 'Selected amount exceeds account balance.')).toBeInTheDocument()
         })
       })
 
