@@ -116,7 +116,7 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
       : 0,
     hiring: {
       current: fields.openingfilledeventopening?.reduce((total, event) => total + event.workersHired.length, 0) ?? 0,
-      limit: fields.metadata?.hiringLimit ?? 1,
+      limit: fields.metadata?.hiringLimit ?? 2,
     },
     unstakingPeriod: fields.unstakingPeriod,
   }
