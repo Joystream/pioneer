@@ -14,7 +14,7 @@ export const WorkerLocks = [
   'Content Directory Worker',
   'Forum Worker',
   'Membership Worker',
-  'Gateway Worker',
+  'Apps Worker',
   'Builders Worker',
   'HR Worker',
   'Marketing Worker',
