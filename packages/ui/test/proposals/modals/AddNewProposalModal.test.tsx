@@ -49,6 +49,8 @@ import {
   stubAccounts,
   stubApi,
   stubConst,
+  stubCouncilAndReferendum,
+  stubCouncilConstants,
   stubDefaultBalances,
   stubProposalConstants,
   stubQuery,
@@ -175,6 +177,8 @@ describe('UI: AddNewProposalModal', () => {
 
     stubDefaultBalances()
     stubProposalConstants(api)
+    stubCouncilConstants(api)
+    stubCouncilAndReferendum(api, 'Announcing', 'Inactive')
 
     createProposalTx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
     createProposalTxMock = api.api.tx.proposalsCodex.createProposal as unknown as jest.Mock
