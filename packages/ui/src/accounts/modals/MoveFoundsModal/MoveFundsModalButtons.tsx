@@ -13,26 +13,29 @@ interface MoveFundsModalItemProps {
   noFreeAccounts: boolean
 }
 
+interface LinkButtonProps {
+  to: string
+  label: string
+  onClick: () => void
+  hide?: boolean
+}
+
+const LinkButton = ({ to, label, onClick, hide = false }: LinkButtonProps) => (
+  <div onClick={onClick}>
+    <LinkButtonPrimary size="medium" to={to}>
+      {label}
+    </LinkButtonPrimary>
+  </div>
+)
+
 export const MoveFundsModalButtons = ({ insufficientBalances, noFreeAccounts }: MoveFundsModalItemProps) => {
   const { showModal, hideModal } = useModal()
-
-  const BountiesButton = (
-    <div onClick={() => hideModal()}>
-      <LinkButtonPrimary size="medium" to={BountyRoutes.currentBounties}>
-        Bounties
-      </LinkButtonPrimary>
-    </div>
-  )
 
   if (insufficientBalances) {
     return (
       <>
-        {false && <BountiesButton />}
-        <div onClick={() => hideModal()}>
-          <LinkButtonPrimary size="medium" to={WorkingGroupsRoutes.groups}>
-            Working groups
-          </LinkButtonPrimary>
-        </div>
+        <LinkButton to={BountyRoutes.currentBounties} label="Bounties" onClick={hideModal} hide />
+        <LinkButton to={WorkingGroupsRoutes.groups} label="Working groups" onClick={hideModal} />
       </>
     )
   }
