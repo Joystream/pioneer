@@ -103,9 +103,6 @@ describe('UI: Election page', () => {
     },
   }
 
-  global.URL.createObjectURL = jest.fn((blob: any): string => 'mockURL')
-  global.URL.revokeObjectURL = jest.fn((url: string): void => {})
-
   const castVote = (
     castBy: string,
     optionId: string,
