@@ -29,9 +29,6 @@ yarn
 ## Build all the sub-packages
 yarn build
 
-## To update types switching between branches:
-yarn --frozen-lockfile && yarn workspace @joystream/types clean && yarn build
-
 ## To start local development server
 yarn start
 
@@ -45,6 +42,14 @@ yarn test
 ## Development
 
 For development documentation see [Dev Readme](docs/README.md)
+
+Hint: Switching branches or merging can require to reset types:
+```
+yarn --frozen-lockfile && \
+yarn workspace @joystream/types clean && \
+yarn workspace @joystream/types build && \
+yarn build
+```
 
 ## Production
 
