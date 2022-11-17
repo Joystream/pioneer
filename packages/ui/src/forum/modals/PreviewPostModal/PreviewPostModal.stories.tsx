@@ -1,6 +1,8 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
+import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+
 import { getMember } from '../../../../test/_mocks/members'
 
 import { PreviewPostModal, PreviewPostModalProps } from './PreviewPostModal'
@@ -11,7 +13,9 @@ export default {
 } as Meta
 
 const Template: Story<PreviewPostModalProps> = ({ author, text }) => (
-  <PreviewPostModal onClose={() => null} author={author} text={text} />
+  <MockApolloProvider>
+    <PreviewPostModal onClose={() => null} author={author} text={text} />
+  </MockApolloProvider>
 )
 
 export const Default = Template.bind({})
