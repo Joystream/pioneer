@@ -168,7 +168,13 @@ export const AddNewProposalModal = () => {
         api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
       ])
     }
-  }, [state.value, connectionState, stakingStatus, form.formState.isValidating])
+  }, [
+    state.value,
+    connectionState,
+    stakingStatus,
+    form.formState.isValidating,
+    JSON.stringify(form.getValues()?.[machineStateConverter(state.value) as keyof AddNewProposalForm]),
+  ])
 
   const { feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
 
