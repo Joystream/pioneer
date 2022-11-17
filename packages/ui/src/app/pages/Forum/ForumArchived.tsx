@@ -8,7 +8,9 @@ import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
+import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { useSort } from '@/common/hooks/useSort'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { CategoriesListWrapper } from '@/forum/components/category'
 import { CategoryCard } from '@/forum/components/CategoryCard/CategoryCard'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
@@ -30,6 +32,10 @@ export const ForumArchived = () => {
     threadCount,
     refresh,
   } = useForumCategoryThreads({ isArchive: true, order }, { perPage: THREADS_PER_PAGE, page })
+  const isRefetched = useRefetchQueries({
+    interval: MILLISECONDS_PER_BLOCK,
+    include: ['GetForumThreads', 'GetForumThreadsCount', 'GetArchivedForumCategories'],
+  })
 
   return (
     <PageLayout
@@ -44,7 +50,7 @@ export const ForumArchived = () => {
             <StyledItemCount count={forumCategories?.length ?? 0} size="xs">
               Archived Categories
             </StyledItemCount>
-            {isLoadingCategories ? (
+            {isLoadingCategories && !isRefetched ? (
               <Loading />
             ) : forumCategories && forumCategories.length > 0 ? (
               <RowGapBlock gap={10}>
@@ -69,7 +75,7 @@ export const ForumArchived = () => {
             <ThreadList
               threads={threads}
               getSortProps={getSortProps}
-              isLoading={isLoadingThreads}
+              isLoading={isLoadingThreads && !isRefetched}
               isArchive
               page={page}
               pageCount={threadCount && Math.ceil(threadCount / THREADS_PER_PAGE)}
