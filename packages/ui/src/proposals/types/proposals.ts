@@ -56,6 +56,7 @@ export type ProposalType =
   | 'lockBlogPost'
   | 'unlockBlogPost'
   | 'veto'
+  | 'channelIncentivesPayout'
 
 export interface Proposal {
   id: string

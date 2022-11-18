@@ -33,6 +33,7 @@ const extendsProposalPallet = (
   !(proposalType instanceof u128 || proposalType instanceof u32)
 
 const proposalTypeToConstantKey = new Map<ProposalType, keyof Api['consts']['proposalsCodex']>([
+  ['channelIncentivesPayout', 'updateChannelPayoutsProposalParameters'],
   ['amendConstitution', 'amendConstitutionProposalParameters'],
   ['cancelWorkingGroupLeadOpening', 'cancelWorkingGroupLeadOpeningProposalParameters'],
   // ['createBlogPost', 'createBlogPostProposalParameters'],

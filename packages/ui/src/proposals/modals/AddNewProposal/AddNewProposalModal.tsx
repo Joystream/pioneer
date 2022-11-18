@@ -157,7 +157,7 @@ export const AddNewProposalModal = () => {
         ...(triggerAndDiscussion.triggerBlock ? { exactExecutionBlock: triggerAndDiscussion.triggerBlock } : {}),
       }
 
-      const txSpecificParameters = getSpecificParameters(api, specifics)
+      const txSpecificParameters = getSpecificParameters(api, specifics, activeMember)
 
       if (stakingStatus === 'confirmed') {
         return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)

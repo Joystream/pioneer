@@ -32,6 +32,9 @@ export const defaultProposalValues = {
   durationAndProcess: {
     isLimited: false,
   },
+  channelIncentivesPayout: {
+    cashoutEnabled: true,
+  },
 }
 
 export interface AddNewProposalForm {
@@ -139,6 +142,15 @@ export interface AddNewProposalForm {
   }
   setMembershipPrice: {
     amount?: BN
+  }
+  channelIncentivesPayout: {
+    objectCreationParamsSize?: number
+    objectCreationParamsContent?: string
+    minimumCashoutAllowed?: BN
+    maximumCashoutAllowed?: BN
+    cashoutEnabled?: boolean
+    expectedDataSizeFee?: BN
+    expectedDataObjectStateBloatBond?: BN
   }
 }
 
@@ -315,5 +327,6 @@ export const schemaFactory = (api?: ProxyApi) => {
     setMembershipPrice: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
     }),
+    channelIncentivesPayout: Yup.object().shape({}),
   })
 }
