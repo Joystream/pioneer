@@ -17,7 +17,7 @@ export const CandidateCardImage = React.memo(({ imageUrl, className }: Candidate
         <CardImage
           src={imageUrl}
           className={className}
-          customFallbackComponent={<ImagePlaceholder className={className} />}
+          fallbackComponent={<ImagePlaceholder className={className} />}
         />
       ) : (
         <ImagePlaceholder className={className} />

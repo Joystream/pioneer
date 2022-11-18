@@ -34,7 +34,7 @@ export const OnBoardingModal = () => {
   const status = useDebounce(realStatus, 50)
   const [state, send] = useMachine(onBoardingMachine)
   const [membershipData, setMembershipData] = useState<{ id: string; blockHash: string }>()
-  const transactionStatus = useQueryNodeTransactionStatus(membershipData?.blockHash)
+  const transactionStatus = useQueryNodeTransactionStatus(!!membershipData?.blockHash, membershipData?.blockHash)
   const apolloClient = useApolloClient()
   const [endpoints] = useNetworkEndpoints()
   const statusRef = useRef<OnBoardingStatus>()
@@ -46,13 +46,16 @@ export const OnBoardingModal = () => {
       case 'addAccount':
         return <OnBoardingAccount onAccountSelect={setMembershipAccount} />
       case 'createMembership':
-        return (
-          <OnBoardingMembership
-            setMembershipAccount={setMembershipAccount as SetMembershipAccount}
-            onSubmit={(params: MemberFormFields) => send({ type: 'DONE', form: params })}
-            membershipAccount={membershipAccount as string}
-          />
-        )
+        if (endpoints.membershipFaucetEndpoint) {
+          return (
+            <OnBoardingMembership
+              setMembershipAccount={setMembershipAccount as SetMembershipAccount}
+              onSubmit={(params: MemberFormFields) => send({ type: 'DONE', form: params })}
+              membershipAccount={membershipAccount as string}
+            />
+          )
+        }
+      // eslint-disable-next-line no-fallthrough
       default:
         return null
     }
@@ -60,6 +63,9 @@ export const OnBoardingModal = () => {
 
   useEffect(() => {
     async function submitNewMembership(form: MemberFormFields) {
+      if (!endpoints.membershipFaucetEndpoint) {
+        return send({ type: 'ERROR' })
+      }
       try {
         const membershipData = {
           account: membershipAccount,

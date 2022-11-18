@@ -23,11 +23,11 @@ const addBalances = (a: Balances, b: Balances) => ({
   transferable: a.transferable.add(b.transferable),
   total: a.total.add(b.total),
   locks: a.locks.concat(b.locks),
-  vestingTotal: a.vestingTotal.add(b.vestingTotal),
-  vestedClaimable: a.vestedClaimable.add(b.vestedClaimable),
-  vestedBalance: a.vestedBalance.add(b.vestedBalance),
-  vesting: a.vesting.concat(b.vesting),
-  vestingLocked: a.vestingLocked.add(b.vestingLocked),
+  vestingTotal: a.vestingTotal?.add(b.vestingTotal) ?? BN_ZERO,
+  vestedClaimable: a.vestedClaimable?.add(b.vestedClaimable) ?? BN_ZERO,
+  vestedBalance: a.vestedBalance?.add(b.vestedBalance) ?? BN_ZERO,
+  vesting: a.vesting?.concat(b.vesting) ?? [],
+  vestingLocked: a.vestingLocked?.add(b.vestingLocked) ?? BN_ZERO,
 })
 
 export function useMyTotalBalances(): Balances {

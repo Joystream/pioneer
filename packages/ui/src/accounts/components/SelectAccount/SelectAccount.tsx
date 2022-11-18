@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
-import { useFormContext, Controller } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useStakingAccountsLocks } from '@/accounts/hooks/useStakingAccountsLocks'
@@ -70,7 +70,12 @@ export const BaseSelectAccount = React.memo(
         renderSelected={renderSelected(isForStaking)}
         placeholder="Select account or paste account address"
         renderList={(onOptionClick) => (
-          <OptionListAccount onChange={onOptionClick} options={filteredOptions} isForStaking={isForStaking} />
+          <OptionListAccount
+            className="select-account-boundary"
+            onChange={onOptionClick}
+            options={filteredOptions}
+            isForStaking={isForStaking}
+          />
         )}
         onSearch={(search) => setSearch(search)}
       />

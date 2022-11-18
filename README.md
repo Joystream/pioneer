@@ -43,6 +43,10 @@ yarn test
 
 For development documentation see [Dev Readme](docs/README.md)
 
+## Production
+
+To run a Pioneer instance check the [admin documentation](docs/admin.md)
+
 ## Packages
 
 The project's monorepo contains packages:
@@ -55,6 +59,9 @@ The project's monorepo contains packages:
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for details
+
+For community development board view this [Public board](https://github.com/orgs/Joystream/projects/55), managed by DAO Builders Working Group
+To participate, reach out to Builders Working Group Lead on Discord
 
 
 ## License

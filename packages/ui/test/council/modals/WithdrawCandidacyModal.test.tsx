@@ -56,7 +56,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
   it('Warning', async () => {
     renderModal(getMember('alice'))
 
-    expect(await screen.findByText(/^Please remember that this action is irreversible/i)).toBeDefined()
+    expect(await screen.findByText(/^Caution, this action is irreversible/i)).toBeDefined()
   })
 
   it('Transaction sign', async () => {
@@ -65,7 +65,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
     fireEvent.click(await getButton('Withdraw Candidacy'))
 
     expect(await screen.findByText(/^You intend to withdraw your candidacy/i)).toBeDefined()
-    expect(await getButton('Sign and send')).toBeDefined()
+    expect(await getButton('Sign and Send')).toBeDefined()
     expect(screen.getByText(/^modals.transactionFee.label/i)?.nextSibling?.textContent).toBe('25')
   })
 
@@ -74,7 +74,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
     renderModal(getMember('alice'))
 
     fireEvent.click(await getButton('Withdraw Candidacy'))
-    fireEvent.click(await getButton('Sign and send'))
+    fireEvent.click(await getButton('Sign and Send'))
 
     expect(await screen.findByText(/^You have successfully withdrawn your candidacy/i)).toBeDefined()
   })
@@ -84,7 +84,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
     renderModal(getMember('alice'))
 
     fireEvent.click(await getButton('Withdraw Candidacy'))
-    fireEvent.click(await getButton('Sign and send'))
+    fireEvent.click(await getButton('Sign and Send'))
 
     expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })

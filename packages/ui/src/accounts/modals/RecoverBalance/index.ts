@@ -18,13 +18,14 @@ type CouncilLock = {
 export type RecoverableLock = VotingLock | CouncilLock
 
 export const isRecoverableLock = (lock: BalanceLock): lock is RecoverableLock => {
-  return lock.type === 'Voting' || lock.type === 'Council Candidate'
+  return lock.type === 'Voting' || lock.type === 'Council Candidate' || lock.type.endsWith('Worker')
 }
 
 interface RecoverableModalData {
   address: Address
   lock: RecoverableLock
   memberId?: Member['id']
+  isWithdrawing?: boolean
 }
 
 export interface VotingData extends RecoverableModalData {
@@ -33,7 +34,7 @@ export interface VotingData extends RecoverableModalData {
   memberId: undefined
 }
 
-interface CouncilCandidateData extends RecoverableModalData {
+export interface CouncilCandidateData extends RecoverableModalData {
   address: Address
   lock: CouncilLock
   memberId: Member['id']

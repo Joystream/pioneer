@@ -1,5 +1,5 @@
 import { ForumPostMetadata } from '@joystream/metadata-protobuf'
-import React, { RefObject, useEffect, useMemo, useRef } from 'react'
+import React, { RefObject, useMemo, useRef } from 'react'
 import { generatePath } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
@@ -38,12 +38,6 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
   const newPostRef = useRef<HTMLDivElement>(null)
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
-
-  useEffect(() => {
-    if (initialPost && postsRefs[initialPost]) {
-      postsRefs[initialPost].current?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
-    }
-  }, [postsRefs, initialPost])
 
   const discussionPosts = useMemo(
     () => thread.discussionPosts.filter((post) => post.status !== 'PostStatusRemoved'),

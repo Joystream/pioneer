@@ -66,7 +66,7 @@ export const PostEditor = ({ post, onCancel, type, onSuccessfulEdit }: Props) =>
         </ButtonGhost>
         <ButtonPrimary
           size="medium"
-          onClick={() =>
+          onClick={() => {
             showModal<EditPostModalCall>({
               modal: 'EditPost',
               data: {
@@ -78,7 +78,8 @@ export const PostEditor = ({ post, onCancel, type, onSuccessfulEdit }: Props) =>
                 onFail: onFailedEdit,
               },
             })
-          }
+            onCancel()
+          }}
           disabled={!isTextChanged}
         >
           Save

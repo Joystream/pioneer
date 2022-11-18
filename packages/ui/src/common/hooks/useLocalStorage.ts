@@ -1,3 +1,4 @@
+import { isFunction } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 
 const getItem = (key?: string) => {
@@ -32,21 +33,22 @@ const setItem = (key?: string, value?: any) => {
 }
 
 export const useLocalStorage = <T>(key?: string) => {
-  const [value, setValue] = useState<T | undefined>(() => {
+  const [state, setState] = useState<T | undefined>(() => {
     return getItem(key)
   })
 
   useEffect(() => {
-    setValue(getItem(key))
+    setState(getItem(key))
   }, [key])
 
-  const set = useCallback(
-    (value: T) => {
-      setValue(value)
+  const dispatch = useCallback(
+    (setStateAction: T | ((prevState?: T) => T)) => {
+      const value = isFunction(setStateAction) ? setStateAction(getItem(key)) : setStateAction
+      setState(value)
       setItem(key, value)
     },
     [key]
   )
 
-  return [value, set] as const
+  return [state, dispatch] as const
 }

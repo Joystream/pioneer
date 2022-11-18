@@ -15,9 +15,10 @@ import { OptionLock } from '../../types'
 interface Props {
   locks?: OptionLock[]
   children: React.ReactNode
+  boundaryClassName?: string
 }
 
-export const AccountLockTooltip = ({ locks, children }: Props) => {
+export const AccountLockTooltip = ({ locks, children, boundaryClassName }: Props) => {
   const { modal: originalModalName, modalData: originalModalData, showModal } = useModal()
   const tooltipTexts = useMemo(() => {
     const texts: React.ReactElement[] = []
@@ -92,7 +93,7 @@ export const AccountLockTooltip = ({ locks, children }: Props) => {
   }, [JSON.stringify(locks)])
 
   return (
-    <Tooltip tooltipText={tooltipTexts} maxWidth>
+    <Tooltip boundaryClassName={boundaryClassName} tooltipText={tooltipTexts} maxWidth>
       {children}
     </Tooltip>
   )

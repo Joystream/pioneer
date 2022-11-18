@@ -4,7 +4,6 @@ import React from 'react'
 import { generatePath, MemoryRouter, Route } from 'react-router-dom'
 
 import { ApiContext } from '@/api/providers/context'
-import { CurrencyName } from '@/app/constants/currency'
 import { GlobalModals } from '@/app/GlobalModals'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { createType } from '@/common/model/createType'
@@ -28,14 +27,10 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee, mockUseModalCall } from '../../setup'
+import { mockTransactionFee, mockUseModalCall } from '../../setup'
 
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
-}))
-
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
 describe('CreateThreadModal', () => {
@@ -75,7 +70,7 @@ describe('CreateThreadModal', () => {
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
     tx = stubTransaction(api, txPath)
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(10), canAfford: true } })
 
     stubDeposits()
   })
@@ -94,7 +89,7 @@ describe('CreateThreadModal', () => {
     })
 
     it('Insufficient funds for minimum fee', async () => {
-      mockedTransactionFee.feeInfo = { transactionFee: new BN(10000), canAfford: false }
+      mockTransactionFee({ feeInfo: { transactionFee: new BN(10000), canAfford: false } })
       renderModal()
       expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
     })
@@ -145,11 +140,7 @@ describe('CreateThreadModal', () => {
       fireEvent.click(next)
 
       expect(await getButton(/sign and send/i)).toBeDisabled()
-      expect(
-        await screen.findByText(
-          `Insufficient funds to cover the thread creation. You need at least 10,000 ${CurrencyName.integerValue} on your account for this action.`
-        )
-      ).toBeDefined()
+      expect(await screen.findByText('Insufficient funds to cover transaction costs')).toBeDefined()
     })
 
     it('Insufficient funds for fee + deposits', async () => {
@@ -161,11 +152,7 @@ describe('CreateThreadModal', () => {
       fireEvent.click(next)
 
       expect(await getButton(/sign and send/i)).toBeDisabled()
-      expect(
-        await screen.findByText(
-          `Insufficient funds to cover the thread creation. You need at least 1,200 ${CurrencyName.integerValue} on your account for this action.`
-        )
-      ).toBeDefined()
+      expect(await screen.findByText('Insufficient funds to cover transaction costs')).toBeDefined()
     })
 
     it('Displays deposit amount', async () => {
