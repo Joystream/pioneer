@@ -2,11 +2,11 @@ import { useCallback, useState } from 'react'
 
 import { error } from '@/common/logger'
 
-const uploadAvatarImage = async (image?: File | string | null): Promise<string> => {
-  if (!image || !(image instanceof File)) return image ?? ''
+const uploadAvatarImage = async (image?: File | Blob | string | null): Promise<string> => {
+  if (!image || (!(image instanceof File) && !(image instanceof Blob))) return image ?? ''
   try {
     const body = new FormData()
-    body.append('file', image, image.name)
+    body.append('file', image, `upload.${image?.type === 'image/webp' ? 'webp' : 'jpg'}`)
     const data = await fetch(process.env.REACT_APP_AVATAR_UPLOAD_URL ?? '', {
       method: 'POST',
       body,
