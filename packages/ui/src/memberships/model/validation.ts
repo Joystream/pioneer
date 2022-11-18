@@ -14,7 +14,7 @@ const BYTES_PER_MEGABYTE = 1048576
 export const bytesToMegabytes = (bytes: number) => bytes / BYTES_PER_MEGABYTE
 
 export const MemberSchema = Yup.object()
-export const SUPPORTED_IMAGES = ['image/png', 'image/jpg', 'image/jpeg', 'image/webp', 'image/avif', 'image/svg+xml']
+export const SUPPORTED_IMAGES = ['image/png', 'image/jpg', 'image/jpeg', 'image/webp', 'image/avif']
 export const AvatarURISchema = process.env.REACT_APP_AVATAR_UPLOAD_URL
   ? Yup.mixed()
       .test(
