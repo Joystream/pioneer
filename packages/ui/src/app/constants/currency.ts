@@ -1,3 +1,3 @@
 export const CurrencyName = {
-  integerValue: 'tJOY',
+  integerValue: 'JOY',
 } as const
