@@ -22,7 +22,7 @@ jest.mock('@/common/components/CKEditor', () => {
 })
 
 const strings = {
-  isClosed: 'The discussion of this proposal is limited to following whitelisted members:',
+  isClosed: 'The discussion is limited to following whitelisted members:',
   selectCouncilor: 'Please select your council membership to post in this thread.',
   selectWhitelisted: 'Please select your other membership to post in this thread:',
 }
@@ -60,27 +60,27 @@ describe('UI: Proposal discussion', () => {
     it('Non-whitelisted member', async () => {
       useMyMemberships.setActive(alice)
       renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['111', '13'] })
-      expect(await screen.findByText(strings.isClosed)).toBeDefined()
+      expect(await screen.queryByText(/${strings.isClosed}/i)).toBeDefined()
     })
 
     it('Whitelisted member', async () => {
       useMyMemberships.setActive(alice)
       renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['111', '13', '0'] })
-      expect(screen.queryByText(strings.isClosed)).toBeDefined()
-      expect(screen.queryByText(strings.selectCouncilor)).toBeNull()
+      expect(await screen.queryByText(/${strings.isClosed}/i)).toBeNull()
+      expect(await screen.queryByText(strings.selectCouncilor)).toBeNull()
       expect(await getButton('Create post')).toBeDefined()
     })
 
     it('Whitelisted member not selected', async () => {
       renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['111', '13', '0'] })
-      expect(screen.queryByText(strings.isClosed)).toBeNull()
+      expect(await screen.queryByText(/${strings.isClosed}/i)).toBeNull()
       expect(await screen.queryByText(/${strings.selectWhitelisted}/i)).toBeDefined()
     })
 
     it('Council member', async () => {
       useMyMemberships.setActive(councillor)
       renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['111'] })
-      expect(screen.queryByText(strings.isClosed)).toBeNull()
+      expect(screen.queryByText(/${strings.isClosed}/i)).toBeNull()
       expect(screen.queryByText(strings.selectCouncilor)).toBeNull()
       expect(await getButton('Create post')).toBeDefined()
     })
@@ -96,7 +96,7 @@ describe('UI: Proposal discussion', () => {
         useMyMemberships.members = [alice, councillor]
         useMyMemberships.setActive(councillor)
         renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['0'] })
-        expect(screen.queryByText(strings.isClosed)).toBeNull()
+        expect(screen.queryByText(/${strings.isClosed}/i)).toBeNull()
         expect(screen.queryByText(strings.selectCouncilor)).toBeNull()
         expect(await getButton('Create post')).toBeDefined()
       })
@@ -113,7 +113,7 @@ describe('UI: Proposal discussion', () => {
       it('Neither member selected', async () => {
         useMyMemberships.members = [alice, councillor]
         renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['0'] })
-        expect(screen.queryByText(strings.isClosed)).toBeNull()
+        expect(screen.queryByText(/${strings.isClosed}/i)).toBeNull()
         expect(await screen.findByText(strings.selectCouncilor)).toBeDefined()
         expect(screen.queryByText('Create post')).toBeNull()
       })
@@ -124,7 +124,7 @@ describe('UI: Proposal discussion', () => {
     it('Member selected', async () => {
       useMyMemberships.setActive(alice)
       renderComponent({ ...baseThread })
-      expect(screen.queryByText(strings.isClosed)).toBeNull()
+      expect(screen.queryByText(/${strings.isClosed}/i)).toBeNull()
       expect(await getButton('Create post')).toBeDefined()
     })
 

@@ -94,7 +94,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
 
     return (
       <>
-        <TextBig>The discussion of this proposal is limited to following whitelisted members:</TextBig>
+        <TextBig>The discussion is limited to following whitelisted members:</TextBig>
         {thread.whitelistIds?.join(' ') ?? ''}
       </>
     )
