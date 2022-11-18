@@ -64,7 +64,7 @@ const defaultMockedTransactionFee: UseTransaction = {
 const mockedTransactionFee = jest.fn(() => defaultMockedTransactionFee)
 
 export const mockTransactionFee = (value: Partial<UseTransaction>) => {
-  mockedTransactionFee.mockReturnValue({ ...defaultMockedTransactionFee, ...value })
+  mockedTransactionFee.mockReturnValue({ ...mockedTransactionFee(), ...value })
 }
 
 jest.mock('@/accounts/hooks/useTransactionFee', () => ({

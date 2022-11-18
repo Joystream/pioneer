@@ -124,7 +124,7 @@ describe('UI: Announce Candidacy Modal', () => {
     it('Transaction fee', async () => {
       const minStake = 10
       stubCouncilConstants(api, { minStake })
-      mockTransactionFee({ transaction: batchTx as any, feeInfo: { transactionFee: new BN(10000), canAfford: false } })
+      mockTransactionFee({ feeInfo: { transactionFee: new BN(10000), canAfford: false } })
 
       renderModal()
 
