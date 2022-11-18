@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { CurrencyName } from '@/app/constants/currency'
-import { InlineToggleWrap, InputComponent, TokenInput, Label, ToggleCheckbox } from '@/common/components/forms'
+import { InlineToggleWrap, InputComponent, Label, ToggleCheckbox, TokenInput } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
-import { BN_ZERO } from '@/common/constants'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
@@ -24,9 +23,21 @@ export const TerminateWorkingGroupLead = () => {
   const [showSlash, setShowSlash] = useState(false)
 
   useEffect(() => {
-    setValue('terminateWorkingGroupLead.slashingAmount', BN_ZERO, { shouldValidate: true })
-    setValue('terminateWorkingGroupLead.workerId', group?.leadWorker?.runtimeId, { shouldValidate: true })
-  }, [groupId, group?.leadWorker?.runtimeId])
+    if (group) {
+      setValue('terminateWorkingGroupLead.slashingAmount', undefined, { shouldValidate: true })
+      setValue('terminateWorkingGroupLead.workerId', group.leadWorker?.runtimeId, {
+        shouldValidate: true,
+      })
+    }
+  }, [!group])
+
+  const handleSwitchChange = useCallback(
+    (value: boolean) => {
+      setShowSlash(value)
+      setValue('terminateWorkingGroupLead.slashingAmount', undefined, { shouldValidate: true })
+    },
+    [setValue]
+  )
 
   return (
     <RowGapBlock gap={24}>
@@ -58,12 +69,7 @@ export const TerminateWorkingGroupLead = () => {
 
           <InlineToggleWrap>
             <Label>Slash: </Label>
-            <ToggleCheckbox
-              falseLabel="No"
-              trueLabel="Yes"
-              checked={showSlash}
-              onChange={(isSet) => setShowSlash(isSet)}
-            />
+            <ToggleCheckbox falseLabel="No" trueLabel="Yes" checked={showSlash} onChange={handleSwitchChange} />
             <Tooltip tooltipText="Lorem ipsum...">
               <TooltipDefault />
             </Tooltip>
@@ -76,6 +82,7 @@ export const TerminateWorkingGroupLead = () => {
               units={CurrencyName.integerValue}
               inputWidth="s"
               tooltipText="Optional amount to be slashed"
+              name="terminateWorkingGroupLead.slashingAmount"
               disabled={isDisabled}
             >
               <TokenInput

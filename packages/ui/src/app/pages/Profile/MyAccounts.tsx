@@ -1,5 +1,4 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import { Accounts } from '@/accounts/components/Accounts'
 import { ClaimVestingButton } from '@/accounts/components/ClaimVestingButton'
@@ -9,8 +8,6 @@ import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
-import { TooltipText } from '@/common/components/Tooltip'
-import { Colors } from '@/common/constants'
 
 import { MyProfileTabs } from './components/MyProfileTabs'
 
@@ -29,7 +26,7 @@ export const MyAccounts = () => {
             <MyProfileTabs />
           </PageHeaderWrapper>
           {!shouldHideStatistics && (
-            <StyledStatistics>
+            <Statistics>
               <TokenValueStat
                 title="Total balance"
                 tooltipText="Total balance from all connected accounts. This includes transferable and locked balance."
@@ -67,7 +64,7 @@ export const MyAccounts = () => {
                   {vestedClaimable.gtn(0) && <ClaimVestingButton />}
                 </TokenValueStat>
               )}
-            </StyledStatistics>
+            </Statistics>
           )}
         </RowGapBlock>
       }
@@ -75,18 +72,3 @@ export const MyAccounts = () => {
     />
   )
 }
-
-export const StyledLink = styled.a`
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  color: ${Colors.Black[400]};
-  text-decoration: underline;
-`
-
-const StyledStatistics = styled(Statistics)`
-  > * {
-    max-width: 35%;
-    flex-basis: 220px;
-  }
-`

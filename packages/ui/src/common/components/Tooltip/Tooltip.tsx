@@ -281,8 +281,7 @@ export const TooltipLink = styled(Link)<{ to: string; target: string }>`
     width: 12px;
     height: 12px;
 
-    .blackPart,
-    .primaryPart {
+    path {
       fill: ${Colors.Black[300]};
     }
   }
@@ -291,8 +290,7 @@ export const TooltipLink = styled(Link)<{ to: string; target: string }>`
     color: ${Colors.Blue[500]};
 
     ${LinkSymbolStyle} {
-      .blackPart,
-      .primaryPart {
+      path {
         fill: ${Colors.Blue[500]};
       }
     }
@@ -317,8 +315,7 @@ export const TooltipExternalLink = styled.a<{ href: string | undefined; target: 
     width: 12px;
     height: 12px;
 
-    .blackPart,
-    .primaryPart {
+    path {
       fill: ${Colors.Black[300]};
     }
   }
@@ -327,8 +324,7 @@ export const TooltipExternalLink = styled.a<{ href: string | undefined; target: 
     color: ${Colors.Blue[500]};
 
     ${LinkSymbolStyle} {
-      .blackPart,
-      .primaryPart {
+      path {
         fill: ${Colors.Blue[500]};
       }
     }

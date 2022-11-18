@@ -2,10 +2,11 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import styled from 'styled-components'
 
-import { InputComponent, InputText } from '@/common/components/forms'
+import { InputComponent, InputNotification, InputText } from '@/common/components/forms'
 import { CrossIcon, SearchIcon } from '@/common/components/icons'
 import { Colors } from '@/common/constants'
 
+import { useDebounce } from '../../../hooks/useDebounce'
 import { ButtonLink } from '../../buttons'
 import { ControlProps } from '../types'
 
@@ -40,8 +41,13 @@ interface SearchBoxProps extends ControlProps<string> {
   displayReset?: boolean
 }
 export const SearchBox = React.memo(({ value, onApply, onChange, label, displayReset }: SearchBoxProps) => {
+  const debouncedValue = useDebounce(value, 300)
   const change = onChange && (({ target }: ChangeEvent<HTMLInputElement>) => onChange(target.value))
-  const keyDown = onApply && (({ key }: React.KeyboardEvent) => key === 'Enter' && onApply())
+  const isValid = () => !debouncedValue || debouncedValue.length === 0 || debouncedValue.length > 2
+  const keyDown =
+    !isValid() || !debouncedValue || !onApply
+      ? undefined
+      : ({ key }: React.KeyboardEvent) => key === 'Enter' && onApply()
   const reset =
     onChange &&
     onApply &&
@@ -52,7 +58,11 @@ export const SearchBox = React.memo(({ value, onApply, onChange, label, displayR
   return (
     <SearchBoxWrapper>
       <FilterLabel>{label}</FilterLabel>
-      <SearchInput inputSize={label ? 'xs' : 's'}>
+      <SearchInput
+        inputSize={label ? 'xs' : 's'}
+        validation={isValid() ? undefined : 'invalid'}
+        message={isValid() ? '' : 'Minimum of 3 characters is required'}
+      >
         <InputText placeholder="Search" value={value} onChange={change} onKeyDown={keyDown} />
         {displayReset && value && (
           <ClearButton onClick={reset} size="small" borderless>
@@ -83,6 +93,12 @@ const SearchInput = styled(InputComponent).attrs({
   width: 100%;
   & + div {
     border: 1px solid ${Colors.Black[200]};
+  }
+  min-width: 220px;
+
+  ${InputNotification} {
+    position: absolute;
+    top: 42px;
   }
 `
 

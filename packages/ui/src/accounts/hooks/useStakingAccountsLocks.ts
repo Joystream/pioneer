@@ -2,8 +2,8 @@ import BN from 'bn.js'
 
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
-import { RecoveryConditions, isRecoverable, areLocksConflicting } from '../model/lockTypes'
-import { LockType, OptionLock, AccountOption } from '../types'
+import { areLocksConflicting, isRecoverable, RecoveryConditions } from '../model/lockTypes'
+import { AccountOption, LockType, OptionLock } from '../types'
 
 import { useMyAccounts } from './useMyAccounts'
 import { useMyBalances } from './useMyBalances'
@@ -38,7 +38,7 @@ export const useStakingAccountsLocks = ({
       optionLocks.push('insufficientFunds')
     }
 
-    if (boundMembershipId && boundMembershipId !== activeMember?.id) {
+    if (boundMembershipId && boundMembershipId !== activeMember?.id && lockType !== 'Voting') {
       optionLocks.push('boundMembership')
     }
 

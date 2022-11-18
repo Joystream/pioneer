@@ -121,7 +121,6 @@ export const BuyMembershipForm = ({
   type,
 }: BuyMembershipFormProps) => {
   const { allAccounts } = useMyAccounts()
-  const [captchaToken, setCaptchaToken] = useState<string | undefined>()
   const [formHandleMap, setFormHandleMap] = useState('')
   const { isUploading, uploadAvatarAndSubmit } = useUploadAvatarAndSubmit(onSubmit)
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
@@ -137,7 +136,7 @@ export const BuyMembershipForm = ({
     },
   })
 
-  const [handle, isReferred, referrer] = form.watch(['handle', 'isReferred', 'referrer'])
+  const [handle, isReferred, referrer, captchaToken] = form.watch(['handle', 'isReferred', 'referrer', 'captchaToken'])
 
   useEffect(() => {
     if (handle) {
@@ -242,7 +241,7 @@ export const BuyMembershipForm = ({
                   sitekey={process.env.REACT_APP_CAPTCHA_SITE_KEY}
                   theme="light"
                   languageOverride="en"
-                  onVerify={setCaptchaToken}
+                  onVerify={(token) => form.setValue('captchaToken', token)}
                 />
               </Row>
             )}

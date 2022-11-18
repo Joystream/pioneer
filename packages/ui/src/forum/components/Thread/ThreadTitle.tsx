@@ -32,7 +32,7 @@ export const ThreadTitle = ({ thread }: ThreadTitleProps) => {
   const { showModal } = useModal<EditThreadTitleModalCall>()
 
   const isMyThread = useMemo(() => {
-    return thread && active && thread.authorId === active.id
+    return thread && active && thread.author.id === active.id
   }, [thread, active])
 
   const isRemovedThread = useMemo(() => {

@@ -9,7 +9,6 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { useSort } from '@/common/hooks/useSort'
-import { useLatestElection } from '@/council/hooks/useLatestElection'
 import { useMyPastVotes } from '@/council/hooks/useMyPastVotes'
 
 import { PastVote } from './PastVote/PastVote'
@@ -18,7 +17,6 @@ import { PastVoteColumns } from './styles'
 export const PastVotesList = () => {
   const { order, getSortProps } = useSort<CastVoteOrderByInput>('createdAt')
   const { votes, isLoading, pagination } = useMyPastVotes({ order })
-  const { election: latestElection } = useLatestElection()
 
   if (isLoading) {
     return <Loading />
@@ -40,7 +38,7 @@ export const PastVotesList = () => {
       </ListHeaders>
       <List>
         {votes.map((vote) => (
-          <PastVote vote={vote} key={vote.id} latestCycleId={latestElection?.cycleId} $colLayout={PastVoteColumns} />
+          <PastVote vote={vote} key={vote.id} $colLayout={PastVoteColumns} />
         ))}
       </List>
       <Pagination {...pagination} />

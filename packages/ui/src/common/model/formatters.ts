@@ -106,7 +106,7 @@ export const formatJoyValue = (
   const roundedValue = value.abs().divRound(powerOf10(JOY_DECIMAL_PLACES - safePrecision))
 
   if (roundedValue.isZero()) {
-    return `${value.isNeg() ? '< -' : '> '}${Math.pow(10, -safePrecision)}`
+    return `${value.isNeg() ? '> -' : '< '}${Math.pow(10, -safePrecision)}`
   }
 
   const sign = value.isNeg() ? '-' : ''

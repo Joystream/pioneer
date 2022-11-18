@@ -1,4 +1,5 @@
-import React from 'react'
+import { concat, partition } from 'lodash'
+import React, { useMemo } from 'react'
 
 import { PageHeaderWithHint } from '@/app/components/PageHeaderWithHint'
 import { PageLayout } from '@/app/components/PageLayout'
@@ -11,10 +12,26 @@ import { WorkingGroupsTabs } from './components/WorkingGroupsTabs'
 export const WorkingGroups = () => {
   const { groups } = useWorkingGroups()
 
+  const sortedGroups = useMemo(
+    () =>
+      !groups.length
+        ? defaultGroups
+        : concat(
+            ...defaultGroups.reduce(
+              ([sorted, remaining], { id }) => {
+                const [current, others] = partition(remaining, { id })
+                return [[...sorted, ...current], others]
+              },
+              [[], groups]
+            )
+          ),
+    [groups.length]
+  )
+
   return (
     <PageLayout
       header={<PageHeaderWithHint title="Working Groups" hintType="workingGroups" tabs={<WorkingGroupsTabs />} />}
-      main={<WorkingGroupsList groups={groups.length ? groups : defaultGroups} />}
+      main={<WorkingGroupsList groups={sortedGroups} />}
     />
   )
 }
@@ -42,7 +59,7 @@ const defaultGroups: WorkingGroup[] = [
   },
   {
     id: 'gatewayWorkingGroup',
-    name: 'Gateways',
+    name: 'Gateway',
   },
   {
     id: 'distributionWorkingGroup',
