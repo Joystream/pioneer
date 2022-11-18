@@ -111,12 +111,11 @@ export const resizeImageFile = (file: File, width: number, height: number, type?
         canvas.width = width
         const ctx = canvas.getContext('2d')
 
-        const dW = img.width - width
-        const dH = img.height - height
+        const ratio = width / height
         const [clippedWidth, clippedHeight] =
-          Math.abs(dW) > Math.abs(dH)
-            ? [Math.floor((img.width / img.height) * width), img.height]
-            : [img.width, Math.floor((img.height / img.width) * height)]
+          Math.abs(img.width - width) > Math.abs(img.height - height)
+            ? [Math.floor(img.height * ratio), img.height]
+            : [img.width, Math.floor(img.width / ratio)]
         const x = Math.floor(img.width / 2 - clippedWidth / 2)
         const y = Math.floor(img.height / 2 - clippedHeight / 2)
 
