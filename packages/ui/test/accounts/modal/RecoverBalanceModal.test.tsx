@@ -4,7 +4,6 @@ import BN from 'bn.js'
 import { set } from 'lodash'
 import React from 'react'
 
-import { RecoverBalanceModal } from '@/accounts/modals/RecoverBalance'
 import { ApiContext } from '@/api/providers/context'
 import { GlobalModals } from '@/app/GlobalModals'
 import { createType } from '@/common/model/createType'
@@ -25,7 +24,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee, mockUseModalCall } from '../../setup'
+import { mockTransactionFee, mockUseModalCall } from '../../setup'
 
 describe('UI: RecoverBalanceModal', () => {
   const api = stubApi()
@@ -41,7 +40,7 @@ describe('UI: RecoverBalanceModal', () => {
   }
 
   beforeAll(async () => {
-    mockUseModalCall({ modalData })
+    mockUseModalCall({ modalData, modal: 'RecoverBalance' })
     await cryptoWaitReady()
     seedMembers(server.server, 2)
   })
@@ -62,12 +61,11 @@ describe('UI: RecoverBalanceModal', () => {
     stubDefaultBalances()
     useMyMemberships.setActive(getMember('alice'))
     tx = stubTransaction(api, 'api.tx.council.releaseCandidacyStake')
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
-    mockedTransactionFee.transaction = tx as any
+    mockTransactionFee({ transaction: tx as any, feeInfo: { transactionFee: new BN(100), canAfford: true } })
   })
 
   it('Insufficient funds', async () => {
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(100), canAfford: false } })
 
     renderModal()
 
@@ -77,7 +75,15 @@ describe('UI: RecoverBalanceModal', () => {
   it('Transaction summary', async () => {
     renderModal()
     screen.findByText(/^sign transaction and transfer$/i)
-    expect(await screen.findByRole('heading', { name: 'Recover balances' })).toBeDefined()
+    expect(await screen.findByRole('heading', { name: 'Recover Stake' })).toBeDefined()
+  })
+
+  it('Transaction summary for withdraw application', async () => {
+    mockUseModalCall({ modalData: { ...modalData, isWithdrawing: true }, modal: 'RecoverBalance' })
+    renderModal()
+    screen.findByText(/^sign transaction and transfer$/i)
+    expect(await screen.findByRole('heading', { name: 'Withdraw Application' })).toBeDefined()
+    mockUseModalCall({ modalData, modal: 'RecoverBalance' })
   })
 
   describe('Transaction for lockType', () => {
@@ -147,7 +153,6 @@ describe('UI: RecoverBalanceModal', () => {
             <MembershipContext.Provider value={useMyMemberships}>
               <ApiContext.Provider value={api}>
                 <GlobalModals />
-                <RecoverBalanceModal />
               </ApiContext.Provider>
             </MembershipContext.Provider>
           </MockQueryNodeProviders>

@@ -1,4 +1,4 @@
-import { WorkingGroupApplicationStatus } from '@/common/api/queries'
+import { WorkingGroupApplicationOrderByInput, WorkingGroupApplicationStatus } from '@/common/api/queries'
 import { useGetWorkingGroupApplicationsQuery } from '@/working-groups/queries'
 
 import { asApplication } from '../types/WorkingGroupApplication'
@@ -6,6 +6,10 @@ import { asApplication } from '../types/WorkingGroupApplication'
 export interface Props {
   applicationsStatus?: ApplicationStatus
   openingId?: string
+  stakingAccount?: string
+  limit?: number
+  skip?: boolean
+  orderBy?: WorkingGroupApplicationOrderByInput[]
 }
 
 export type ApplicationStatus = 'accepted' | 'rejected' | 'cancelled' | 'pending' | 'withdrawn'
@@ -18,10 +22,21 @@ export const ApplicationStatusToTypename: Record<ApplicationStatus, ApplicationS
   withdrawn: 'ApplicationStatusWithdrawn',
 }
 
-export const useApplications = ({ applicationsStatus, openingId }: Props) => {
+export const useApplications = ({
+  applicationsStatus,
+  openingId,
+  stakingAccount,
+  limit,
+  skip,
+  orderBy = [WorkingGroupApplicationOrderByInput.CreatedAtDesc],
+}: Props) => {
   const { loading, data } = useGetWorkingGroupApplicationsQuery({
+    skip,
     variables: {
+      limit,
+      orderBy,
       where: {
+        stakingAccount_eq: stakingAccount,
         opening: { id_eq: openingId },
         status_json: { isTypeOf_eq: applicationsStatus ? ApplicationStatusToTypename[applicationsStatus] : undefined },
       },

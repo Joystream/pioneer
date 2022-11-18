@@ -5,22 +5,29 @@ import { TextMedium } from '@/common/components/typography'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
+import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { EditThreadTitleModalCall } from '@/forum/modals/EditThreadTitleModal/index'
-import { useMember } from '@/memberships/hooks/useMembership'
-
-import { editThreadTitleMachine } from './machine'
 
 export const EditThreadTitleModal = () => {
   const { api } = useApi()
-  const [state] = useMachine(editThreadTitleMachine)
+  const [state, send] = useMachine(
+    defaultTransactionModalMachine(
+      'There was a problem while saving thread title.',
+      'You have just successfully edited thread title.'
+    )
+  )
   const {
     modalData: { thread, newTitle, onSuccess },
   } = useModal<EditThreadTitleModalCall>()
-  const { member: threadAuthor } = useMember(thread.authorId)
+  const threadAuthor = thread.author
 
   useEffect(() => {
     if (state.matches('success')) {
       onSuccess(newTitle)
+    }
+
+    if (state.matches('requirementsVerification')) {
+      send('PASS')
     }
   }, [state.value])
 

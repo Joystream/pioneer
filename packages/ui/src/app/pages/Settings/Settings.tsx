@@ -55,9 +55,9 @@ export const Settings = () => {
                   />
                   <NetworkInfo
                     detailsTitle={t('networkDetails')}
-                    urlAddress={endpoints.membershipFaucetEndpoint}
                     networkAddress={endpoints.nodeRpcEndpoint}
                     queryNodeAddress={endpoints.queryNodeEndpoint}
+                    faucetAddress={endpoints.membershipFaucetEndpoint}
                   />
                   <PolkadotAppInfo rpcUrl={endpoints.nodeRpcEndpoint} />
                 </>

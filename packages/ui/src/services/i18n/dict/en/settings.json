@@ -5,5 +5,5 @@
   "networkDetails": "Network Details",
   "networkAddress": "Network: ",
   "QueryNodeAddress": "Query Node: ",
-  "url": "Faucet: "
+  "faucet": "Faucet: "
 }

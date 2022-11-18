@@ -29,11 +29,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
-
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
-}))
+import { mockTransactionFee } from '../../setup'
 
 describe('UI: WithdrawContributionModal', () => {
   const contributor: Contributor = {
@@ -87,8 +83,7 @@ describe('UI: WithdrawContributionModal', () => {
   beforeEach(async () => {
     stubDefaultBalances()
     tx = stubTransaction(api, txPath)
-    mockedTransactionFee.transaction = tx as any
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }
+    mockTransactionFee({ transaction: tx as any, feeInfo: { transactionFee: new BN(10), canAfford: true } })
   })
 
   it('Requirements passed', async () => {
@@ -128,7 +123,7 @@ describe('UI: WithdrawContributionModal', () => {
   })
 
   it('Requirements failed', async () => {
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(10000), canAfford: false }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(10000), canAfford: false } })
     renderModal()
 
     expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()

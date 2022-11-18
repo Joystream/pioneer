@@ -4,7 +4,7 @@ import { generatePath } from 'react-router-dom'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { asBlock } from '@/common/types'
 import { ElectionRoutes } from '@/council/constants'
-import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
+import { useCouncilRemainingPeriod } from '@/council/hooks/useCouncilRemainingPeriod'
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { useGetCouncilVotesQuery } from '@/council/queries'
 import { asMember } from '@/memberships/types'
@@ -14,7 +14,6 @@ import { LockLinkButton } from '../LockLinkButton'
 import { LockDetailsProps } from '../types'
 
 export const VoteLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
-  const constants = useCouncilConstants()
   const { election } = useCurrentElection()
   const { data } = useGetCouncilVotesQuery({ variables: { where: { castBy_eq: address } } })
   const vote = data?.castVotes[0]
@@ -24,20 +23,18 @@ export const VoteLockItem = ({ lock, address, isRecoverable }: LockDetailsProps)
   const voteFor = vote?.voteFor?.member
   const voteForMember = voteFor && asMember(voteFor)
 
-  const recoveryTime = useMemo(() => {
-    const votingPeriod = constants?.election.votingPeriod
-    const revealingPeriod = constants?.election.revealingPeriod
-    const idlePeriod = constants?.idlePeriod
-
-    if (!votingPeriod || !revealingPeriod || !idlePeriod) {
-      return
-    }
-
-    const duration = votingPeriod + revealingPeriod + idlePeriod * MILLISECONDS_PER_BLOCK
-    const endTime = new Date(Date.now() + duration).toISOString()
-
-    return { time: endTime, tooltipLabel: 'Depends on election results' }
-  }, [JSON.stringify(constants)])
+  const remainingPeriod = useCouncilRemainingPeriod('electionEnd')
+  const recoveryTime = useMemo(
+    () =>
+      !remainingPeriod
+        ? { unrecoverableLabel: 'Depends on election results' }
+        : {
+            time: new Date(Date.now() + remainingPeriod * MILLISECONDS_PER_BLOCK).toISOString(),
+            unrecoverableLabel: 'Depends on election results',
+            tooltipLabel: 'Estimated time is calculated for complete election with each stage.',
+          },
+    [remainingPeriod]
+  )
 
   const electionId = vote?.electionRound.id
 

@@ -10,7 +10,7 @@ export const Page = styled.div`
   max-width: 100vw;
   min-height: 100vh;
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 `
 

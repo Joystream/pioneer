@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import { ControlProps } from '@/common/components/forms'
 import { SimpleSelect } from '@/common/components/selects'
@@ -21,30 +21,15 @@ export const SmallMemberSelect = ({ value, onChange, title = 'Member' }: SmallMe
   const data = useSearchMembers({
     search: searchDebounced,
     limit: DISPLAYED_OPTION_LIMIT - (searchDebounced ? 0 : 1),
+    skip: !searchDebounced,
   })
-
-  const [members, setMembers] = useState({ isSearch: data.isSearch, options: data.members ?? [] })
-  useEffect(() => {
-    const { isSearch, members } = data
-    if (!members) {
-      return
-    } else if (isSearch || !value || members.some(({ id }) => id === value.id)) {
-      setMembers({ isSearch, options: members })
-    } else {
-      setMembers({ isSearch, options: [...members.slice(0, DISPLAYED_OPTION_LIMIT - 2), value] })
-    }
-  }, [data.members?.map(({ id }) => id).toString(), value?.id])
-
-  useEffect(() => {
-    search && setSearch('')
-  }, [value])
 
   return (
     <SimpleSelect
       title={title}
-      options={members.options}
+      options={data.members ?? []}
       renderOption={({ handle }) => handle}
-      emptyOption={members.isSearch ? undefined : 'All'}
+      emptyOption="All"
       optionEquals={memberEquals}
       value={value}
       onChange={onChange}
