@@ -24,6 +24,11 @@ interface Props {
   proposalId: string
 }
 
+const hints = {
+  open: 'This is an unmoderated discussioon, everyone can comment.',
+  closed: 'This discussion is closed. Only selected members and the council can comment.',
+}
+
 export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
   const query = useRouteQuery()
   const { api } = useApi()
@@ -101,7 +106,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
         <h4>Discussion</h4>
         <Badge>
           {`${thread.mode} `}
-          <Tooltip tooltipText="Dolore magna anim eu nisi qui.">
+          <Tooltip tooltipText={hints[thread.mode]}>
             <TooltipDefault />
           </Tooltip>
         </Badge>
