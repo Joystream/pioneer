@@ -34,7 +34,6 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
   const isAbleToPost = !isClosed || (active && (thread.whitelistIds?.includes(active.id) || active.isCouncilMember))
   const whitelistedMember = isClosed ? members.find((member) => thread.whitelistIds?.includes(member.id)) : null
   const hasCouncilMembership = isClosed && members.find((member) => member.isCouncilMember)
-  const whitelistedMembers = thread.whitelistIds?.map((id) => members.find((m) => m.id === id)?.handle || id) || []
   const [replyTo, setReplyTo] = useState<ForumPost | undefined>()
 
   const newPostRef = useRef<HTMLDivElement>(null)
@@ -85,16 +84,14 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
     }
 
     if (whitelistedMember) {
-      return <TextBig>Please select your {whitelistedMember.handle} memberships to post in this thread.</TextBig>
+      return <TextBig>Please select your other membership to post in this thread: {whitelistedMember.handle}</TextBig>
     }
 
     return (
-      <TextBig>
-        The discussion of this proposal is limited to following whitelisted members:
-        {whitelistedMembers.map((m) => (
-          <div>{m}</div>
-        ))}
-      </TextBig>
+      <>
+        <TextBig>The discussion of this proposal is limited to following whitelisted members:</TextBig>
+        {thread.whitelistIds?.join(' ') ?? ''}
+      </>
     )
   }
 
