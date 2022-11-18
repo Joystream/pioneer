@@ -26,6 +26,7 @@ export type OpeningListItemProps = {
 
 export const OpeningListItem = ({ opening, past, onClick }: OpeningListItemProps) => {
   const rewardPeriod = useRewardPeriod(opening.groupId)
+  const hiringTarget = opening.hiring.limit || 1
 
   return (
     <ToggleableItemWrap past={past} onClick={onClick}>
@@ -53,12 +54,12 @@ export const OpeningListItem = ({ opening, past, onClick }: OpeningListItemProps
         </OpenItemSummaryColumn>
         {past ? (
           <OpenItemSummaryColumn>
-            <Fraction numerator={opening.hiring.current} denominator={opening.hiring.limit} />
+            <Fraction numerator={opening.hiring.current} denominator={hiringTarget} />
             <Subscription>Hired</Subscription>
           </OpenItemSummaryColumn>
         ) : (
           <OpenItemSummaryColumn>
-            <TextBig bold>{opening.hiring.limit}</TextBig>
+            <TextBig bold>{hiringTarget}</TextBig>
             <Subscription>Hiring</Subscription>
           </OpenItemSummaryColumn>
         )}

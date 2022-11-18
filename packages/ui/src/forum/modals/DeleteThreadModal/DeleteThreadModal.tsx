@@ -19,23 +19,25 @@ export const DeleteThreadModal = () => {
     hideModal,
   } = useModal<DeleteThreadModalCall>()
 
-  const [state, send] = useMachine(
-    defaultTransactionModalMachine('There was a problem deleting your thread.', 'Your thread has been deleted.'),
-    { context: { validateBeforeTransaction: true } }
+  const machine = useMemo(
+    () => defaultTransactionModalMachine('There was a problem deleting your thread.', 'Your thread has been deleted.'),
+    []
   )
+
+  const [state, send] = useMachine(machine, { context: { validateBeforeTransaction: true } })
   const { api, isConnected } = useApi()
   const { active: activeMember } = useMyMemberships()
 
   const transaction = useMemo(() => {
     if (api && isConnected) {
       return api.tx.forum.deleteThread(
-        createType('ForumUserId', Number.parseInt(thread.authorId)),
+        createType('ForumUserId', Number.parseInt(thread.author.id)),
         createType('CategoryId', Number.parseInt(thread.categoryId)),
         createType('ThreadId', Number.parseInt(thread.id)),
         true
       )
     }
-  }, [thread.authorId, thread.categoryId, thread.id, isConnected])
+  }, [thread.author.id, thread.categoryId, thread.id, isConnected])
 
   const { feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
 

@@ -17,7 +17,7 @@ import { getMember } from '@/mocks/helpers'
 import { generateWork } from '../../../dev/query-node-mocks/generators/generateBounties'
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
-import { MockKeyringProvider, MockApolloProvider } from '../../_mocks/providers'
+import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
 import {
   stubAccounts,
   stubApi,
@@ -26,7 +26,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
+import { mockTransactionFee } from '../../setup'
 
 const bounty = bounties[0]
 const baseEntry = entries[1]
@@ -67,8 +67,7 @@ describe('UI: WithdrawWorkEntryModal', () => {
   beforeEach(async () => {
     stubDefaultBalances()
     tx = stubTransaction(api, txPath)
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
-    mockedTransactionFee.transaction = tx as any
+    mockTransactionFee({ transaction: tx as any, feeInfo: { transactionFee: new BN(100), canAfford: true } })
   })
 
   it('Renders', async () => {
@@ -79,7 +78,7 @@ describe('UI: WithdrawWorkEntryModal', () => {
   })
 
   it('Insufficient funds', async () => {
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(100), canAfford: false } })
 
     renderModal()
 

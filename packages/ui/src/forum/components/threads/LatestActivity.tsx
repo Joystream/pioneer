@@ -14,7 +14,7 @@ export interface LatestActivitydProps {
 export const LatestActivity = memo(({ threadId }: LatestActivitydProps) => {
   const { post } = useThreadLatestPost(threadId)
 
-  if (!post) return <Loading />
+  if (!post) return <Loading withoutMargin />
 
   return (
     <LatestActivityRowGapBlock>

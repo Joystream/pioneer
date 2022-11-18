@@ -20,3 +20,9 @@ export const urlParamToWorkingGroupId = (name: string) => {
 }
 
 export const groupNameToURLParam = (name: string) => name.toLowerCase().replace(/ /g, '-')
+
+export const urlParamToOpeningId = (name: string) => {
+  if (name.includes('operationsWorkingGroup')) return name
+  const params = name.split('-')
+  return `${urlParamToWorkingGroupId(params[0])}-${params[1]}`
+}
