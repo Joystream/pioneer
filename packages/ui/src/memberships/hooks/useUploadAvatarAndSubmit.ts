@@ -2,11 +2,17 @@ import { useCallback, useState } from 'react'
 
 import { error } from '@/common/logger'
 
+const extensions: Record<any, string | undefined> = {
+  'image/webp': 'webp',
+  'image/svg+xml': 'svg',
+}
+
 const uploadAvatarImage = async (image?: File | Blob | string | null): Promise<string> => {
   if (!image || (!(image instanceof File) && !(image instanceof Blob))) return image ?? ''
   try {
     const body = new FormData()
-    body.append('file', image, `upload.${image?.type === 'image/webp' ? 'webp' : 'jpg'}`)
+    const extension = extensions[image?.type] ?? 'jpg'
+    body.append('file', image, `upload.${extension}`)
     const data = await fetch(process.env.REACT_APP_AVATAR_UPLOAD_URL ?? '', {
       method: 'POST',
       body,
