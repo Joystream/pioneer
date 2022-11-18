@@ -42,8 +42,11 @@ export const useOpenings = ({ groupId: group_eq, type, openingsPositionType }: U
     () => data?.workingGroupOpenings.map((opening) => asWorkingGroupOpening(opening)) ?? [],
     [loading, data]
   )
+
+  const sorts = openings.slice().sort((a, b) => a.date - b.date);
+
   return {
-    openings,
+    sorts,
     isLoading: loading,
   }
 }
