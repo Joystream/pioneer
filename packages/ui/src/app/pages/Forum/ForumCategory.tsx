@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { ForumThreadOrderByInput } from '@/common/api/queries'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
+import { EmptyPagePlaceholder } from '@/common/components/EmptyPagePlaceholder/EmptyPagePlaceholder'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
 import { ItemCount } from '@/common/components/ItemCount'
 import { Loading } from '@/common/components/Loading'
@@ -12,7 +13,9 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Label } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { useSort } from '@/common/hooks/useSort'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { ForumCategoryList } from '@/forum/components/category/ForumCategoryList'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
@@ -44,11 +47,19 @@ export const ForumCategory = () => {
     },
     { perPage: THREADS_PER_PAGE, page }
   )
+  const isRefetched = useRefetchQueries({
+    interval: MILLISECONDS_PER_BLOCK,
+    include: ['GetForumThreads', 'GetForumThreadsCount'],
+  })
 
   const { showModal } = useModal()
 
-  if (!category) {
+  if (isLoadingThreads && !isRefetched) {
     return <Loading />
+  }
+
+  if (!category) {
+    return <EmptyPagePlaceholder title="There is no any data in the category" copy="" button={null} />
   }
 
   return (
@@ -98,7 +109,7 @@ export const ForumCategory = () => {
             <ThreadList
               threads={threads}
               getSortProps={getSortProps}
-              isLoading={isLoadingThreads}
+              isLoading={isLoadingThreads && !isRefetched}
               isArchive={isArchive}
               page={page}
               pageCount={threadCount && Math.ceil(threadCount / THREADS_PER_PAGE)}

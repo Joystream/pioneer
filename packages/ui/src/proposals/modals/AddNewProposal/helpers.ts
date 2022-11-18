@@ -257,17 +257,18 @@ export const schemaFactory = (api?: ProxyApi) => {
       workerId: Yup.number().required('Field is required'),
     }),
     terminateWorkingGroupLead: Yup.object().shape({
-      slashingAmount: BNSchema,
+      slashingAmount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')),
       groupId: Yup.string().required('Field is required'),
-      workerId: Yup.number().required('Field is required'),
+      workerId: Yup.number().test('execution', (value, schema) => {
+        if (!schema.parent.groupId) return true
+        return typeof value !== 'undefined'
+      }),
     }),
     setWorkingGroupLeadReward: Yup.object().shape({
       rewardPerBlock: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
       groupId: Yup.string().required('Field is required'),
       workerId: Yup.number().test('execution', (value, context) => {
-        if (!context.parent.groupId) {
-          return true
-        }
+        if (!context.parent.groupId) return true
         return typeof value !== 'undefined'
       }),
     }),
