@@ -54,15 +54,21 @@ export const mockDefaultBalance = {
   total: BN_THOUSAND,
 }
 
-export const mockedTransactionFee: UseTransaction = {
+const defaultMockedTransactionFee: UseTransaction = {
   transaction: undefined,
   setTransaction: () => undefined,
   setSigner: () => undefined,
   feeInfo: { transactionFee: BN_ZERO, canAfford: true },
 }
 
+const mockedTransactionFee = jest.fn(() => defaultMockedTransactionFee)
+
+export const mockTransactionFee = (value: Partial<UseTransaction>) => {
+  mockedTransactionFee.mockReturnValue({ ...mockedTransactionFee(), ...value })
+}
+
 jest.mock('@/accounts/hooks/useTransactionFee', () => ({
-  useTransactionFee: jest.fn(() => mockedTransactionFee),
+  useTransactionFee: mockedTransactionFee,
 }))
 
 export const mockedUseMyAccounts = jest.fn<UseAccounts, []>(() => ({

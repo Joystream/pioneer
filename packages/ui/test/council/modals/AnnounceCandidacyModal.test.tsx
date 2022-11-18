@@ -41,16 +41,12 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee, mockUseModalCall } from '../../setup'
+import { mockTransactionFee, mockUseModalCall } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
-}))
-
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
 describe('UI: Announce Candidacy Modal', () => {
@@ -95,8 +91,7 @@ describe('UI: Announce Candidacy Modal', () => {
     txMock = api.api.tx.council.announceCandidacy as unknown as jest.Mock
     candidacyNoteTx = stubTransaction(api, 'api.tx.council.setCandidacyNote', 30)
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
-    mockedTransactionFee.transaction = batchTx as any
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }
+    mockTransactionFee({ transaction: batchTx as any, feeInfo: { transactionFee: new BN(10), canAfford: true } })
     stubQuery(
       api,
       'members.stakingAccountIdMemberStatus',
@@ -129,7 +124,7 @@ describe('UI: Announce Candidacy Modal', () => {
     it('Transaction fee', async () => {
       const minStake = 10
       stubCouncilConstants(api, { minStake })
-      mockedTransactionFee.feeInfo = { transactionFee: new BN(10000), canAfford: false }
+      mockTransactionFee({ feeInfo: { transactionFee: new BN(10000), canAfford: false } })
 
       renderModal()
 
@@ -142,7 +137,7 @@ describe('UI: Announce Candidacy Modal', () => {
         },
       }
 
-      expect(showModal).toBeCalledWith({ ...moveFundsModalCall })
+      await waitFor(() => expect(showModal).toBeCalledWith({ ...moveFundsModalCall }))
     })
 
     it('Required stake', async () => {

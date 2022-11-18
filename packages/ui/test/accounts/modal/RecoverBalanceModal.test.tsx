@@ -24,7 +24,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee, mockUseModalCall } from '../../setup'
+import { mockTransactionFee, mockUseModalCall } from '../../setup'
 
 describe('UI: RecoverBalanceModal', () => {
   const api = stubApi()
@@ -61,12 +61,11 @@ describe('UI: RecoverBalanceModal', () => {
     stubDefaultBalances()
     useMyMemberships.setActive(getMember('alice'))
     tx = stubTransaction(api, 'api.tx.council.releaseCandidacyStake')
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
-    mockedTransactionFee.transaction = tx as any
+    mockTransactionFee({ transaction: tx as any, feeInfo: { transactionFee: new BN(100), canAfford: true } })
   })
 
   it('Insufficient funds', async () => {
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(100), canAfford: false } })
 
     renderModal()
 
