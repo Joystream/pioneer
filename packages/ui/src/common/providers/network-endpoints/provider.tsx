@@ -35,7 +35,7 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
         queryNodeEndpoint: config['graphql_server'],
         membershipFaucetEndpoint: config['member_faucet'],
         nodeRpcEndpoint: config['websocket_rpc'],
-        configEndpoint,
+        configEndpoint: config['config'],
       }
 
       if (!endpointsAreDefined(newAutoConfEndpoints)) {
