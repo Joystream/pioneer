@@ -201,7 +201,7 @@ describe('UI: Announce Candidacy Modal', () => {
           const { getByText } = renderModal()
 
           await fillStakingStep('alice', 1, false)
-
+          screen.logTestingPlaygroundURL()
           expect(await getNextStepButton()).toBeDisabled()
           expect(
             includesTextWithMarkup(getByText, `Minimal stake amount is 10 ${CurrencyName.integerValue}`)
