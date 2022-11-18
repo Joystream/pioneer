@@ -24,7 +24,7 @@ export const useIsWGLockRecoverable = (hasWGLock: boolean, stakingAccount: strin
     if (unstakingPeriodEnd) {
       return Date.parse(unstakingPeriodEnd) > Date.now()
     }
-    return true
+    return false
   }
 
   return !!(status && status !== 'ApplicationStatusWithdrawn')
