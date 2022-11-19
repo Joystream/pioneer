@@ -140,7 +140,7 @@ export const ProposalPreview = () => {
             <BadgeAndTime>
               <BadgeStatus
                 ended={proposalPastStatuses.includes(proposal.status)}
-                succeeded={proposal.status === 'executed'}
+                succeeded={proposal.status == 'executed'}
                 inverted
                 size="l"
               >
