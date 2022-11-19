@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
@@ -16,7 +16,8 @@ import { Member } from '@/memberships/types'
 
 export const TriggerAndDiscussionStep = () => {
   const { watch, setValue } = useFormContext()
-  const [selected, setSelected] = useState(false)
+  const [ selected, setSelected ] = useState(false)
+  const [ count, setCount ] = useState(0)
   const [discussionWhitelist, isDiscussionClosed, trigger, triggerBlock] = watch([
     'triggerAndDiscussion.discussionWhitelist',
     'triggerAndDiscussion.isDiscussionClosed',
@@ -25,8 +26,9 @@ export const TriggerAndDiscussionStep = () => {
   ])
 
   const addMemberToWhitelist = (member: Member) => {
-    if (watch < 20){
+    if (count < 20){
       setValue('triggerAndDiscussion.discussionWhitelist', [...discussionWhitelist, member], { shouldValidate: true })
+      setCount(count+1)
     }else{
       setSelected(true)
     }
