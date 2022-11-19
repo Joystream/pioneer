@@ -31,11 +31,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee, mockUseModalCall } from '../../setup'
-
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
-}))
+import { mockTransactionFee, mockUseModalCall } from '../../setup'
 
 describe('UI: DeletePostModal', () => {
   const api = stubApi()
@@ -86,7 +82,7 @@ describe('UI: DeletePostModal', () => {
   })
 
   beforeEach(async () => {
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(100), canAfford: true } })
 
     stubDefaultBalances()
     tx = stubTransaction(api, txPath)
@@ -101,7 +97,7 @@ describe('UI: DeletePostModal', () => {
   })
 
   it('Requirements failed', async () => {
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(100), canAfford: false } })
     modalData.transaction = api.api.tx.forum.deletePosts(useMyMemberships.active?.id ?? 1, deleteMap, '')
     renderModal()
     expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()

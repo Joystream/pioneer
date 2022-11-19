@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { Arrow } from '@/common/components/icons'
@@ -7,14 +7,13 @@ import { GhostRouterLink, RouterLink } from '@/common/components/RouterLink'
 import { Tooltip } from '@/common/components/Tooltip'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
-import { nameMapping, subtitleMapping } from '@/common/helpers'
+import { nameMapping, wgListItemMappings } from '@/common/helpers'
 import { MemberHandle, MemberInfo } from '@/memberships/components'
 import { AvatarPlaceholderImage } from '@/memberships/components/Avatar'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { useCountOpenings } from '@/working-groups/hooks/useCountOpenings'
 import { useCountWorkers } from '@/working-groups/hooks/useCountWorkers'
 
-import { workingGroupLinks } from '../constants'
 import { groupNameToURLParam } from '../model/workingGroupName'
 import { WorkingGroup } from '../types'
 
@@ -30,10 +29,12 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
 
   const { member: lead } = useMember(group.leadId)
 
-  const wgNameMapped = nameMapping(group.name)
-  const wgLink = workingGroupLinks[group.id]
   const groupAddress = `/working-groups/${groupNameToURLParam(nameMapping(group.name))}`
   const isLeadActive = lead && group.isActive
+  const { subtitle, tooltipLink, groupName } = useMemo(
+    () => ({ ...wgListItemMappings(group.name), groupName: nameMapping(group.name) }),
+    [group.name]
+  )
 
   return (
     <GroupItem>
@@ -42,17 +43,17 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
       </GroupImageContainer>
       <GroupContentBlock>
         <Tooltip
-          tooltipTitle={wgNameMapped}
+          tooltipTitle={groupName}
           tooltipText=""
-          tooltipLinkURL={wgLink}
+          tooltipLinkURL={tooltipLink}
           tooltipLinkText="Learn more about this group"
         >
           <GroupTitle as={GhostRouterLink} to={groupAddress}>
-            {wgNameMapped}
+            {groupName}
           </GroupTitle>
         </Tooltip>
         <GroupContent as={GhostRouterLink} to={groupAddress}>
-          {subtitleMapping(group.name)}
+          {subtitle}
         </GroupContent>
       </GroupContentBlock>
       <GroupStats>

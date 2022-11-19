@@ -39,7 +39,7 @@ describe('Settings', () => {
     expect(await screen.findByText('networkDetails')).toBeDefined()
     expect(await screen.findByText('networkAddress')).toBeDefined()
     expect(await screen.findByText('QueryNodeAddress')).toBeDefined()
-    expect(await screen.findByText('url')).toBeDefined()
+    expect(await screen.findByText('faucet')).toBeDefined()
     expect(await screen.findByText(mockUseNetworkEndpoints[0].queryNodeEndpoint)).toBeDefined()
     expect(await screen.findAllByText(mockUseNetworkEndpoints[0].membershipFaucetEndpoint)).toBeDefined()
   })

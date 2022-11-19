@@ -9,6 +9,8 @@ import styled from 'styled-components'
 import { Mention, MentionType } from '@/common/components/Mention'
 import { UserImage } from '@/common/components/UserImage/UserImage'
 
+import { ModeratedItem } from '../ModeratedItem'
+
 import { MarkdownPreviewStyles, MarkdownPreviewStylesProps } from './MarkdownPreviewStyles'
 
 export interface MarkdownPreviewProps extends MarkdownPreviewStylesProps {
@@ -62,7 +64,12 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
           </a>
         )
       },
-      img: (props) => <MarkdownImage src={props.src} />,
+      img: (props) => (
+        <MarkdownImage
+          src={props.src}
+          fallbackComponent={<ModeratedItem title="This image was removed by a moderator" />}
+        />
+      ),
       code: ({ children, inline }) => <code className={inline ? 'inline-code' : 'in-block-code'}>{children}</code>,
     }
   }, [markdown, append])

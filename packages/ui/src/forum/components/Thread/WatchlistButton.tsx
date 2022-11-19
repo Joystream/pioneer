@@ -11,9 +11,18 @@ interface Props {
 
 export const WatchlistButton = ({ threadId }: Props) => {
   const [watchlist, setWatchlist] = useLocalStorage<string[]>(FORUM_WATCHLIST)
-  const addToWatchlist = useCallback(() => setWatchlist(watchlist ? [...watchlist, threadId] : [threadId]), [watchlist])
+  const addToWatchlist = useCallback(
+    (e) => {
+      e.stopPropagation()
+      setWatchlist(watchlist ? [...watchlist, threadId] : [threadId])
+    },
+    [watchlist]
+  )
   const removeFromWatchlist = useCallback(
-    () => setWatchlist(watchlist?.filter((id) => id !== threadId) ?? []),
+    (e) => {
+      e.preventDefault()
+      setWatchlist(watchlist?.filter((id) => id !== threadId) ?? [])
+    },
     [watchlist]
   )
 

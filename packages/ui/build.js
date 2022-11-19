@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-console */
-const dotenv = require('dotenv')
 const jsonPath = require('jsonpath')
 const webpack = require('webpack')
 
@@ -9,8 +8,6 @@ const webpackConfig = require('./webpack.config')
 build()
 
 async function build() {
-  dotenv.config()
-
   const blacklist = await initializeImageSafety()
 
   console.log('Invoking Webpack...')

@@ -8,20 +8,20 @@ import { ClaimVestingModal } from '@/accounts/modals/ClaimVestingModal/ClaimVest
 import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'
-import { AddBountyModal, AddBountyModalCall } from '@/bounty/modals/AddBountyModal'
-import { AnnounceWorkEntryModal, BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEntryModal'
-import { BountyCancelModal, BountyCancelModalCall } from '@/bounty/modals/CancelBountyModal'
-import { ClaimRewardModal, ClaimRewardModalCall } from '@/bounty/modals/ClaimRewardModal'
-import { BountyContributeFundsModalCall, ContributeFundsModal } from '@/bounty/modals/ContributeFundsModal'
-import { SubmitJudgementModal, SubmitJudgementModalCall } from '@/bounty/modals/SubmitJudgementModal'
-import { SubmitWorkModal, SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal'
-import { WithdrawStakeModal } from '@/bounty/modals/WithdrawalStakeModal'
-import { WithdrawStakeModalCall } from '@/bounty/modals/WithdrawalStakeModal/types'
-import {
-  BountyWithdrawContributionModalCall,
-  WithdrawContributionModal,
-} from '@/bounty/modals/WithdrawContributionModal'
-import { BountyWithdrawWorkEntryModalCall, WithdrawWorkEntryModal } from '@/bounty/modals/WithdrawWorkEntryModal'
+// import { AddBountyModal, AddBountyModalCall } from '@/bounty/modals/AddBountyModal'
+// import { AnnounceWorkEntryModal, BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEntryModal'
+// import { BountyCancelModal, BountyCancelModalCall } from '@/bounty/modals/CancelBountyModal'
+// import { ClaimRewardModal, ClaimRewardModalCall } from '@/bounty/modals/ClaimRewardModal'
+// import { BountyContributeFundsModalCall, ContributeFundsModal } from '@/bounty/modals/ContributeFundsModal'
+// import { SubmitJudgementModal, SubmitJudgementModalCall } from '@/bounty/modals/SubmitJudgementModal'
+// import { SubmitWorkModal, SubmitWorkModalCall } from '@/bounty/modals/SubmitWorkModal'
+// import { WithdrawStakeModal } from '@/bounty/modals/WithdrawalStakeModal'
+// import { WithdrawStakeModalCall } from '@/bounty/modals/WithdrawalStakeModal/types'
+// import {
+//   BountyWithdrawContributionModalCall,
+//   WithdrawContributionModal,
+// } from '@/bounty/modals/WithdrawContributionModal'
+// import { BountyWithdrawWorkEntryModalCall, WithdrawWorkEntryModal } from '@/bounty/modals/WithdrawWorkEntryModal'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Loading } from '@/common/components/Loading'
 import { ModalGlass } from '@/common/components/Modal'
@@ -29,6 +29,7 @@ import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { useModal } from '@/common/hooks/useModal'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
+import { ConfirmModal } from '@/common/modals/ConfirmModal/ConfirmModal'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
 import { ReportContentModal, ReportContentModalCall } from '@/common/modals/ReportContentModal'
 import { ModalName, UnknownMachine } from '@/common/providers/modal/types'
@@ -101,16 +102,16 @@ export type ModalNames =
   | ModalName<IncreaseWorkerStakeModalCall>
   | ModalName<OnBoardingModalCall>
   | ModalName<RestoreVotesModalCall>
-  | ModalName<AddBountyModalCall>
-  | ModalName<BountyWithdrawContributionModalCall>
-  | ModalName<BountyContributeFundsModalCall>
-  | ModalName<BountyCancelModalCall>
-  | ModalName<WithdrawStakeModalCall>
-  | ModalName<SubmitWorkModalCall>
-  | ModalName<BountyAnnounceWorkEntryModalCall>
-  | ModalName<ClaimRewardModalCall>
-  | ModalName<SubmitJudgementModalCall>
-  | ModalName<BountyWithdrawWorkEntryModalCall>
+  // | ModalName<AddBountyModalCall>
+  // | ModalName<BountyWithdrawContributionModalCall>
+  // | ModalName<BountyContributeFundsModalCall>
+  // | ModalName<BountyCancelModalCall>
+  // | ModalName<WithdrawStakeModalCall>
+  // | ModalName<SubmitWorkModalCall>
+  // | ModalName<BountyAnnounceWorkEntryModalCall>
+  // | ModalName<ClaimRewardModalCall>
+  // | ModalName<SubmitJudgementModalCall>
+  // | ModalName<BountyWithdrawWorkEntryModalCall>
   | ModalName<SignOutModalCall>
   | ModalName<DisconnectWalletModalCall>
   | ModalName<ClaimVestingModalCall>
@@ -148,16 +149,16 @@ const modals: Record<ModalNames, ReactElement> = {
   IncreaseWorkerStake: <IncreaseWorkerStakeModal />,
   OnBoardingModal: <OnBoardingModal />,
   RestoreVotes: <RestoreVotesModal />,
-  AddBounty: <AddBountyModal />,
-  BountyWithdrawContributionModal: <WithdrawContributionModal />,
-  BountyCancel: <BountyCancelModal />,
-  SubmitWork: <SubmitWorkModal />,
-  BountyContributeFundsModal: <ContributeFundsModal />,
-  ClaimReward: <ClaimRewardModal />,
-  BountyAnnounceWorkEntryModal: <AnnounceWorkEntryModal />,
-  BountyWithdrawWorkEntryModal: <WithdrawWorkEntryModal />,
-  WithdrawStakeModal: <WithdrawStakeModal />,
-  SubmitJudgementModal: <SubmitJudgementModal />,
+  // AddBounty: <AddBountyModal />,
+  // BountyWithdrawContributionModal: <WithdrawContributionModal />,
+  // BountyCancel: <BountyCancelModal />,
+  // SubmitWork: <SubmitWorkModal />,
+  // BountyContributeFundsModal: <ContributeFundsModal />,
+  // ClaimReward: <ClaimRewardModal />,
+  // BountyAnnounceWorkEntryModal: <AnnounceWorkEntryModal />,
+  // BountyWithdrawWorkEntryModal: <WithdrawWorkEntryModal />,
+  // WithdrawStakeModal: <WithdrawStakeModal />,
+  // SubmitJudgementModal: <SubmitJudgementModal />,
   SignOut: <SignOutModal />,
   DisconnectWallet: <DisconnectWalletModal />,
   ClaimVestingModal: <ClaimVestingModal />,
@@ -179,10 +180,20 @@ const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
   'RecoverBalance',
   'DisconnectWallet',
   'ClaimVestingModal',
+  'ReportContentModal',
+]
+
+export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [
+  'AddNewProposalModal',
+  'AnnounceCandidateModal',
+  'CreatePost',
+  'CreateThreadModal',
+  'ApplyForRoleModal',
+  'VoteForProposalModal',
 ]
 
 export const GlobalModals = () => {
-  const { modal, hideModal, currentModalMachine, showModal, modalData } = useModal()
+  const { modal, hideModal, currentModalMachine, showModal, modalData, isClosing } = useModal()
   const { active: activeMember } = useMyMemberships()
   const { status } = useTransactionStatus()
   const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
@@ -205,6 +216,7 @@ export const GlobalModals = () => {
       <TransactionFeesProvider>
         {potentialFallback}
         {Modal && <Modal />}
+        {isClosing && <ConfirmModal />}
         {status === 'loadingFees' && <LoaderModal onClose={hideModal} />}
       </TransactionFeesProvider>,
       document.body
@@ -215,7 +227,7 @@ export const GlobalModals = () => {
 }
 
 export const LoaderModal = ({ onClose }: { onClose: () => void }) => (
-  <SpinnerGlass modalSize="l" isDark onClick={onClose} onClose={onClose}>
+  <SpinnerGlass onClick={onClose}>
     <Loading />
   </SpinnerGlass>
 )

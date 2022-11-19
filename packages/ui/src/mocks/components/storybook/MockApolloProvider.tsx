@@ -1,4 +1,4 @@
-import { useApolloClient } from '@apollo/client'
+import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache, useApolloClient } from '@apollo/client'
 import React, { FC, useEffect, useState } from 'react'
 
 import { NetworkEndpoints, pickEndpoints } from '@/app/config'
@@ -33,8 +33,6 @@ import {
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
 import { fixAssociations, makeServer } from '@/mocks/server'
 
-import { MockApolloProvider as TestMockApolloProvider } from '../../../../test/_mocks/providers'
-
 interface ForumSeed {
   categories: RawForumCategoryMock[]
   threads: RawForumThreadMock[]
@@ -51,6 +49,11 @@ interface Seeds {
   council?: boolean
   bounty?: boolean
 }
+
+const link = new HttpLink({
+  uri: 'http://localhost:8081/graphql',
+  fetch: (uri, options) => fetch(uri, options),
+})
 
 // NOTE Use the global context instead of a hook for performance (otherwise hot reloads take too long)
 declare let MockServer: Seeds & { server: ReturnType<typeof makeServer> }
@@ -122,7 +125,11 @@ export const MockApolloProvider: FC<Seeds> = ({ children, ...toSeed }) => {
     setReady(true)
   }, [])
 
-  return <TestMockApolloProvider>{ready ? children : <h3>Starting mock server...</h3>}</TestMockApolloProvider>
+  return (
+    <ApolloProvider client={new ApolloClient({ link, cache: new InMemoryCache() })}>
+      {ready ? children : <h3>Starting mock server...</h3>}
+    </ApolloProvider>
+  )
 }
 
 interface QueryProps {

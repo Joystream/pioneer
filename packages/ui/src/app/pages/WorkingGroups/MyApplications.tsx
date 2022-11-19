@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
+import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { Loading } from '@/common/components/Loading'
 import { ContentWithTabs, MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
@@ -21,13 +21,30 @@ export const MyApplications = () => {
     [applications, isLoading]
   )
 
-  const displayLoadingOrEmptyState = () => {
+  const displayLoadingOrCurrentState = useMemo(() => {
     if (isLoading) {
       return <Loading />
     }
 
-    return applications?.length || pastApplications?.length ? null : <NotFoundText>No applications found</NotFoundText>
-  }
+    return applications?.length ? (
+      <>
+        {currentApplications?.length ? (
+          <ContentWithTabs>
+            <Label>Current applications</Label>
+            <ApplicationsList applications={currentApplications} />
+          </ContentWithTabs>
+        ) : null}
+        {pastApplications?.length ? (
+          <ContentWithTabs>
+            <Label>Past applications</Label>
+            <ApplicationsList applications={pastApplications} pastApplications />
+          </ContentWithTabs>
+        ) : null}
+      </>
+    ) : (
+      <NotFoundText>No applications found</NotFoundText>
+    )
+  }, [isLoading, pastApplications?.length, currentApplications?.length])
 
   return (
     <PageLayout
@@ -37,23 +54,7 @@ export const MyApplications = () => {
           <WorkingGroupsTabs />
         </PageHeaderWrapper>
       }
-      main={
-        <MainPanel>
-          {displayLoadingOrEmptyState()}
-          {currentApplications?.length ? (
-            <ContentWithTabs>
-              <Label>Current applications</Label>
-              <ApplicationsList applications={currentApplications} />
-            </ContentWithTabs>
-          ) : null}
-          {pastApplications?.length ? (
-            <ContentWithTabs>
-              <Label>Past applications</Label>
-              <ApplicationsList applications={pastApplications} pastApplications />
-            </ContentWithTabs>
-          ) : null}
-        </MainPanel>
-      }
+      main={<MainPanel>{displayLoadingOrCurrentState}</MainPanel>}
     />
   )
 }

@@ -2,7 +2,7 @@ import React, { memo, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
+import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { CopyButtonTemplate } from '@/common/components/buttons'
@@ -18,13 +18,13 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import {
   DurationStatistics,
   FractionValue,
+  MultiColumnsStatistic,
   NumericValue,
   StatiscticContentColumn,
   StatisticHeader,
   Statistics,
   StatsBlock,
   TokenValueStat,
-  MultiColumnsStatistic,
 } from '@/common/components/statistics'
 import { TextSmall } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
@@ -37,19 +37,20 @@ import { MappedStatuses, OpeningStatuses, WorkingGroupsRoutes } from '@/working-
 import { useOpening } from '@/working-groups/hooks/useOpening'
 import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
+import { urlParamToOpeningId } from '@/working-groups/model/workingGroupName'
 import { WorkingGroupOpening as WorkingGroupOpeningType } from '@/working-groups/types'
 
 export const WorkingGroupOpening = () => {
   const { id } = useParams<{ id: string }>()
   const { showModal } = useModal()
   const { active: activeMembership } = useMyMemberships()
-  const { isLoading, opening } = useOpening(id)
+  const { isLoading, opening } = useOpening(urlParamToOpeningId(id))
 
   const activeApplications = useMemo(() => {
     if (opening) {
       return opening.applications?.filter((application) => application.status !== 'ApplicationStatusWithdrawn')
     }
-  }, opening?.applications)
+  }, [opening?.applications])
 
   const hiringApplication = useMemo(() => {
     if (activeApplications) {
@@ -153,7 +154,11 @@ export const WorkingGroupOpening = () => {
                 title={`Reward per ${rewardPeriod?.toString()} blocks`}
                 value={rewardPeriod?.mul(opening.rewardPerBlock)}
               />
-              <TokenValueStat title="Minimal stake" tooltipText="Lorem ipsum..." value={opening.stake} />
+              <TokenValueStat
+                title="Minimal stake"
+                tooltipText="Minimal amount of tokens required to be staked for any applicant to such role."
+                value={opening.stake}
+              />
               <ApplicationStats applicants={opening.applicants} hiring={opening.hiring} status={opening.status} />
             </Statistics>
           </RowGapBlock>
@@ -204,7 +209,7 @@ const ApplicationStats = ({
       ) : (
         <StatiscticContentColumn>
           <StatisticHeader title="Hiring limit" />
-          <NumericValue>{hiring.limit}</NumericValue>
+          <NumericValue>{hiring.limit || 1}</NumericValue>
         </StatiscticContentColumn>
       )}
     </MultiColumnsStatistic>

@@ -64,11 +64,23 @@ export const serializePayload = (
     } else if (isSigner(value)) {
       return serializeProxy(value, {}, ['signPayload'], 'signer', messages, postMessage)
     } else {
-      const result = isArray(value) ? [...value] : { ...value }
+      const result = isArray(value) ? [...value] : serializeObject(value)
       stack.push(result)
       return result
     }
   }
+}
+
+const serializeObject = (value: Record<any, any>): Record<string, any> => {
+  try {
+    const properties = Object.getOwnPropertyNames(value)
+    if (properties.length > Object.keys(value).length) {
+      return Object.fromEntries(properties.map((key) => [key, value[key]]))
+    }
+  } catch (err) {
+    // Nothing
+  }
+  return { ...value }
 }
 
 // WARNING this mutate the serialized payload

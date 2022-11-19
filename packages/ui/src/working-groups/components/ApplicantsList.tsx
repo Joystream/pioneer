@@ -22,11 +22,7 @@ export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComp
       {myApplication && (
         <ContentWithTabs>
           <Label>My application</Label>
-          <Worker
-            member={myApplication.member}
-            applicationId={myApplication.id}
-            isLead={myApplication.member.id === leadId}
-          />
+          <Worker member={myApplication.member} applicationId={myApplication.id} />
         </ContentWithTabs>
       )}
       {hiringComplete && myApplication && !hired && (
@@ -40,7 +36,7 @@ export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComp
       {hired && (
         <ContentWithTabs>
           <Label>Hired</Label>
-          <Worker member={hired.member} applicationId={hired.id} isLead={hired.member.id === leadId} />
+          <Worker member={hired.member} applicationId={hired.id} />
         </ContentWithTabs>
       )}
       <ContentWithTabs>
@@ -50,12 +46,7 @@ export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComp
         {allApplicants && (
           <ContentWithTabs>
             {allApplicants.map((application, index) => (
-              <Worker
-                key={index}
-                member={application.member}
-                applicationId={application.id}
-                isLead={application.member.id === leadId}
-              />
+              <Worker key={index} member={application.member} applicationId={application.id} />
             ))}
           </ContentWithTabs>
         )}

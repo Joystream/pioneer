@@ -1,51 +1,33 @@
-import React, { ImgHTMLAttributes, useMemo } from 'react'
+import React, { ImgHTMLAttributes, ReactElement } from 'react'
 import styled from 'styled-components'
 
-import { ReportIcon } from '@/common/components/icons/ReportIcon'
-import { ModeratedItem } from '@/common/components/ModeratedItem'
-import { Tooltip } from '@/common/components/Tooltip'
-import { useImageReport } from '@/common/hooks/useImageReport'
-import { useModal } from '@/common/hooks/useModal'
-import { ReportContentModalCall } from '@/common/modals/ReportContentModal'
+import { useIsImageBlacklisted } from '@/common/hooks/useIsImageBlacklisted'
+
+import { ReportImageButton } from './ReportImageButton'
 
 export interface UserImageProps extends ImgHTMLAttributes<HTMLImageElement> {
-  customFallbackComponent?: React.ReactNode
+  fallbackComponent?: ReactElement | null
+  noReportButton?: boolean
 }
 
-export const UserImage = (props: UserImageProps) => {
-  const { blacklistedImages, reportFormUrl, sendReport } = useImageReport()
-  const { showModal } = useModal()
+export const UserImage = ({ src, fallbackComponent, noReportButton = false, ...props }: UserImageProps) => {
+  const isBlacklisted = useIsImageBlacklisted(src)
 
-  const src = props.src
-  const blacklistImage = useMemo(() => blacklistedImages.some((url) => url === src), [blacklistedImages.length])
+  if (isBlacklisted) {
+    return fallbackComponent ?? null
+  }
+
+  if (noReportButton) {
+    return <Image src={src} {...props} />
+  }
 
   return (
-    <>
-      {blacklistImage ? (
-        props.customFallbackComponent ? (
-          props.customFallbackComponent
-        ) : (
-          <ModeratedItem title="This image was removed by a moderator" />
-        )
-      ) : (
-        <Wrapper>
-          <Image {...props} />
-          {(reportFormUrl || sendReport) && src && (
-            <ButtonWrapper>
-              <Tooltip hideOnComponentLeave offset={[0, 5]} tooltipText="Report image">
-                <Button
-                  onClick={() =>
-                    showModal<ReportContentModalCall>({ modal: 'ReportContentModal', data: { report: src } })
-                  }
-                >
-                  <StyledReportIcon />
-                </Button>
-              </Tooltip>
-            </ButtonWrapper>
-          )}
-        </Wrapper>
-      )}
-    </>
+    <Wrapper>
+      <Image src={src} {...props} />
+      <ButtonWrapper>
+        <ReportImageButton src={src} text="Report image" />
+      </ButtonWrapper>
+    </Wrapper>
   )
 }
 
@@ -68,20 +50,4 @@ const Wrapper = styled.span`
 
 const Image = styled.img`
   position: relative;
-`
-
-const StyledReportIcon = styled(ReportIcon)`
-  pointer-events: none;
-`
-
-const Button = styled.button`
-  height: 30px;
-  width: 30px;
-  cursor: pointer;
-  border: none;
-  border-radius: 2px;
-  outline: none;
-  background-color: #fff;
-  display: grid;
-  place-items: center;
 `
