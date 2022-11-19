@@ -16,6 +16,7 @@ import { Member } from '@/memberships/types'
 
 export const TriggerAndDiscussionStep = () => {
   const { watch, setValue } = useFormContext()
+  const [selected, setSelected] = useState(false)
   const [discussionWhitelist, isDiscussionClosed, trigger, triggerBlock] = watch([
     'triggerAndDiscussion.discussionWhitelist',
     'triggerAndDiscussion.isDiscussionClosed',
@@ -24,7 +25,11 @@ export const TriggerAndDiscussionStep = () => {
   ])
 
   const addMemberToWhitelist = (member: Member) => {
-    setValue('triggerAndDiscussion.discussionWhitelist', [...discussionWhitelist, member], { shouldValidate: true })
+    if (watch < 20){
+      setValue('triggerAndDiscussion.discussionWhitelist', [...discussionWhitelist, member], { shouldValidate: true })
+    }else{
+      setSelected(true)
+    }
   }
   const removeMemberFromWhitelist = (member: Member) => {
     setValue(
@@ -100,6 +105,14 @@ export const TriggerAndDiscussionStep = () => {
                   !discussionWhitelist.find((whitelistMember: Member) => whitelistMember.id === member.id)
                 }
               />
+
+            {selected ? (
+								<div style={{ color: 'blue', fontSize: '12px' }}>
+									Maximum whitelist size of 20 members is reached.
+								</div>
+							) : (
+								''
+							)}
             </InputComponent>
             <WhitelistContainer>
               {discussionWhitelist.map((member: Member) => (
