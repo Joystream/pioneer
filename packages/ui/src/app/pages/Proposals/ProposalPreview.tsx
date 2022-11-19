@@ -134,13 +134,12 @@ export const ProposalPreview = () => {
             </ButtonsGroup>
           </PageHeaderRow>
 
-          {
-          proposal.status === 'executed' ? "" :
+
           <RowGapBlock gap={24}>
             <BadgeAndTime>
               <BadgeStatus
                 ended={proposalPastStatuses.includes(proposal.status)}
-                succeeded={proposal.status == 'executed'}
+                succeeded={proposal.status === 'executed'}
                 inverted
                 size="l"
               >
@@ -159,7 +158,7 @@ export const ProposalPreview = () => {
               )}
             </BadgeAndTime>
           </RowGapBlock>
-          }
+
 
           {(proposal.status === 'dormant' || votingRounds.length > 1) && (
             <ProposalStages
