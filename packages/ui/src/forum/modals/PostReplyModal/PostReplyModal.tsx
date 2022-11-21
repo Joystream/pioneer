@@ -2,21 +2,20 @@ import React, { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { useApi } from '@/api/hooks/useApi'
 import { CKEditor } from '@/common/components/CKEditor'
 import { Checkbox, InputComponent } from '@/common/components/forms'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Modal, ModalBody, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
 import { PreviewPostButton } from '@/forum/components/PreviewPostButton'
 import { PostInsufficientFundsModal } from '@/forum/modals/PostActionModal/components/PostInsufficientFundsModal'
-import { CreatePostSignModal } from '@/forum/modals/PostActionModal/CreatePostModal/CreatePostSignModal'
 import { transactionFactory } from '@/forum/modals/PostReplyModal/helpers'
 import { PostReplyModalCall } from '@/forum/modals/PostReplyModal/index'
 import { postReplyMachine, PostReplyStateName } from '@/forum/modals/PostReplyModal/machine'
@@ -29,7 +28,6 @@ export const PostReplyModal = () => {
   const [state, send] = useMachine(postReplyMachine)
   const { active } = useMyMemberships()
   const { api } = useApi()
-  const { allAccounts } = useMyAccounts()
   const balance = useBalance(active?.controllerAccount)
 
   const { replyTo, module = 'forum' } = modalData
@@ -95,20 +93,31 @@ export const PostReplyModal = () => {
     )
 
   if (state.matches(PostReplyStateName.transaction) && transaction && active && postDeposit) {
-    const service = state.children.transaction
-    const controllerAccount = accountOrNamed(allAccounts, active.controllerAccount, 'Controller Account')
-
     return (
-      <CreatePostSignModal
+      <SignTransactionModal
+        buttonText="Sign and post"
         transaction={transaction}
-        service={service}
-        controllerAccount={controllerAccount}
-        author={active}
-        postText={state.context.postText}
-        replyTo={replyTo}
-        isEditable={state.context.isEditable}
-        postDeposit={postDeposit}
-      />
+        signer={active.controllerAccount}
+        service={state.children.transaction}
+        additionalTransactionInfo={
+          state.context.isEditable
+            ? [
+                {
+                  value: postDeposit,
+                  title: 'Post deposit:',
+                },
+              ]
+            : undefined
+        }
+        extraButtons={<PreviewPostButton author={active} postText={state.context.postText} replyTo={replyTo} />}
+      >
+        <TextMedium>You intend to post in a thread.</TextMedium>
+        {state.context.isEditable && (
+          <TextMedium>
+            <TokenValue value={postDeposit} /> will be deposited to make the post editable.
+          </TextMedium>
+        )}
+      </SignTransactionModal>
     )
   }
 
