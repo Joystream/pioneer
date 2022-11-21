@@ -35,6 +35,7 @@
     "@polkadot/keyring": "9.5.1",
     "@polkadot/react-identicon": "2.5.1",
     "@polkadot/types": "8.9.1",
+    "@polkadot/types-known": "^9.9.1",
     "@polkadot/ui-keyring": "2.5.1",
     "@polkadot/util": "9.5.1",
     "@polkadot/util-crypto": "9.5.1",
