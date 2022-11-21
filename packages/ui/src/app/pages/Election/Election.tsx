@@ -11,6 +11,7 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { BlockDurationStatistics, StatisticItem, Statistics } from '@/common/components/statistics'
 import { TextHuge, TextMedium } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
+import { useCustomEvent } from '@/common/hooks/useCustomEvent'
 import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { getUrl } from '@/common/utils/getUrl'
@@ -56,6 +57,14 @@ export const Election = () => {
       history.replace(ElectionRoutes.pastElections)
     }
   }, [electionStage])
+
+  const { onceEvent } = useCustomEvent()
+
+  useEffect(() => {
+    onceEvent('RefreshElectionPageEvent', () => {
+      history.go(0)
+    })
+  }, [])
 
   if (isLoadingElectionStage) {
     return <PageLayout header={null} main={<Loading />} />

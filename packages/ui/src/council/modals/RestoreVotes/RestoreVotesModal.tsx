@@ -4,6 +4,7 @@ import * as Yup from 'yup'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { FileEntry, FileInput } from '@/common/components/forms/FileInput'
 import { Modal, ModalBody, ModalHeader, ModalFooter } from '@/common/components/Modal'
+import { useCustomEvent } from '@/common/hooks/useCustomEvent'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
 import { dedupeObjects } from '@/common/utils'
@@ -67,6 +68,7 @@ export const RestoreVotesModal = () => {
   } = useModal<RestoreVotesModalCall>()
   const [votingAttempts, setVotingAttempts] = useLocalStorage<VotingAttempt[]>(`votes:${cycleId}`)
   const [value, dispatch] = useReducer(valueReducer(cycleId), undefined)
+  const { triggerEvent } = useCustomEvent()
 
   const onUpload = useCallback(async ([file]: File[]) => {
     if (!file) return
@@ -82,6 +84,7 @@ export const RestoreVotesModal = () => {
     try {
       VotingAttemptsSchema.validateSync(votingAttempts)
       setVotingAttempts(dedupeObjects([...(votingAttempts ?? []), ...content.votingAttempts]))
+      triggerEvent('RefreshElectionPageEvent', {})
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         setVotingAttempts(content.votingAttempts)
