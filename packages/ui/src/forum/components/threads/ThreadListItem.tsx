@@ -5,26 +5,22 @@ import styled, { css } from 'styled-components'
 import { BlockTime } from '@/common/components/BlockTime'
 import { PinIcon } from '@/common/components/icons/PinIcon'
 import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
-import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextBig, TextMedium } from '@/common/components/typography'
 import { Colors, Overflow } from '@/common/constants'
 import { ForumRoutes, ThreadsColLayout } from '@/forum/constant'
 import { ForumThread } from '@/forum/types'
 import { MemberInfo, MemberInfoWrap } from '@/memberships/components'
-import { useMember } from '@/memberships/hooks/useMembership'
 
 import { LatestActivity, LatestActivityRowGapBlock } from './LatestActivity'
 import { ThreadTags } from './ThreadTags'
-import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 
 interface ThreadListItemProps {
   thread: ForumThread
   isArchive?: boolean
 }
 export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
-  const { member: author } = useMember(thread.authorId)
-
   const { createdInBlock, status } = thread
   const block = isArchive ? status?.threadDeletedEvent : createdInBlock
 
@@ -47,7 +43,7 @@ export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
 
       <LatestActivity threadId={thread.id} />
 
-      {author ? <MemberInfo member={author} size="s" memberSize="s" hideGroup /> : <Loading withoutMargin />}
+      <MemberInfo member={thread.author} size="s" memberSize="s" hideGroup />
 
       {block && <BlockTime block={block} layout="column" />}
     </ThreadListItemStyles>

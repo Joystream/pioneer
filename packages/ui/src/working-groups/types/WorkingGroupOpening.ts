@@ -111,7 +111,9 @@ export const asWorkingGroupOpening = (fields: WorkingGroupOpeningFieldsFragment)
     type: type as WorkingGroupOpeningType,
     status: fields.status.__typename,
     leadId: fields.group.leaderId,
-    applicants: fields.applications?.length || 0,
+    applicants: fields.applications?.length
+      ? fields.applications.filter((applicant) => applicant.status.__typename !== 'ApplicationStatusWithdrawn').length
+      : 0,
     hiring: {
       current: fields.openingfilledeventopening?.reduce((total, event) => total + event.workersHired.length, 0) ?? 0,
       limit: fields.metadata?.hiringLimit ?? 0,

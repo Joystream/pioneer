@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react'
 import { generatePath } from 'react-router-dom'
 
-import { useApi } from '@/api/hooks/useApi'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { asBlock } from '@/common/types'
 import { CouncilRoutes } from '@/council/constants'
@@ -15,7 +14,6 @@ import { LockLinkButton } from '../LockLinkButton'
 import { LockDetailsProps } from '../types'
 
 export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
-  const { api } = useApi()
   const {
     helpers: { getMemberIdByBoundAccountAddress },
   } = useMyMemberships()
@@ -31,24 +29,15 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockDetailsP
       createdAt: eventData.electedAtTime,
       network: eventData.electedAtNetwork,
     })
-  const idlePeriodDuration = api?.consts.council.idlePeriodDuration.toNumber()
-  const remainingPeriod = useCouncilRemainingPeriod()
 
+  const remainingPeriod = useCouncilRemainingPeriod('electionEnd')
   const recoveryTime = useMemo(() => {
-    if (!eventData || !idlePeriodDuration) {
-      return
-    }
-    const startTime = Date.parse(eventData.electedAtTime)
-    const idleDurationTime = idlePeriodDuration * MILLISECONDS_PER_BLOCK
-    const councilEnd = startTime + idleDurationTime
-
-    const endTime =
-      councilEnd > Date.now()
-        ? new Date(councilEnd).toISOString()
-        : new Date(Date.now() + (remainingPeriod ?? 0) * MILLISECONDS_PER_BLOCK).toISOString()
-
-    return { time: endTime, tooltipLabel: 'Recoverable after not re-elected' }
-  }, [eventData?.electedAtTime, idlePeriodDuration])
+    if (remainingPeriod)
+      return {
+        time: new Date(Date.now() + remainingPeriod * MILLISECONDS_PER_BLOCK).toISOString(),
+        tooltipLabel: 'Recoverable after not re-elected',
+      }
+  }, [remainingPeriod])
 
   const councilId = eventData?.id
   const councilPath = useMemo(() => {

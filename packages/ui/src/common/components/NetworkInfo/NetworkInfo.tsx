@@ -9,13 +9,13 @@ import { Colors } from '@/common/constants'
 
 export interface NetworkInfoProps {
   detailsTitle: string
-  urlAddress: string
   networkAddress: string
   queryNodeAddress: string
+  faucetAddress?: string
 }
 
 const NetworkInfo: React.FC<NetworkInfoProps> = React.memo(
-  ({ detailsTitle, urlAddress, networkAddress, queryNodeAddress }) => {
+  ({ detailsTitle, networkAddress, queryNodeAddress, faucetAddress }) => {
     const { t } = useTranslation('settings')
     return (
       <NetworkDetailsWrapper>
@@ -32,8 +32,8 @@ const NetworkInfo: React.FC<NetworkInfoProps> = React.memo(
           <CopyText copyText={queryNodeAddress} />
         </DetailsItemWrapper>
         <DetailsItemWrapper>
-          <TextMedium lighter>{t('url')}</TextMedium>
-          <CopyText copyText={urlAddress} />
+          <TextMedium lighter>{t('faucet')}</TextMedium>
+          <CopyText copyText={faucetAddress ?? 'none'} disabled={!faucetAddress} />
         </DetailsItemWrapper>
       </NetworkDetailsWrapper>
     )

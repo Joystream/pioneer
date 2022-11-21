@@ -38,6 +38,7 @@ export const ContentWithTabs = styled(MainPanel)`
 interface GapBlockProps {
   gap?: number
   align?: 'end' | 'center'
+  justify?: 'space-between'
 }
 
 export const RowGapBlock = styled.div<GapBlockProps>`
@@ -69,7 +70,8 @@ export const ColumnGapBlock = styled.div<GapBlockProps>`
   grid-auto-flow: column;
   grid-column-gap: ${({ gap }) => (gap ? gap + 'px' : '16px')};
   width: fit-content;
-  align-items: ${({ align }) => (align == 'center' ? 'center' : 'start')};
+  align-items: ${({ align }) => (align === 'center' ? 'center' : 'start')};
+  justify-content: ${({ justify }) => (justify === 'space-between' ? 'space-between' : 'start')};
 `
 
 export const PageFooter = styled.div`

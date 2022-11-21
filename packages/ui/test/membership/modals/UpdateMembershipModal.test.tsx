@@ -30,10 +30,6 @@ import {
 } from '../../_mocks/transactions'
 import { mockUseModalCall } from '../../setup'
 
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
-}))
-
 configure({ testIdAttribute: 'id' })
 
 describe('UI: UpdatedMembershipModal', () => {

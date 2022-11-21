@@ -4,8 +4,7 @@ import styled from 'styled-components'
 import { ButtonGhost } from '@/common/components/buttons'
 import { CountBadge } from '@/common/components/CountBadge'
 import { Arrow } from '@/common/components/icons'
-import { TextExtraSmall } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
+import { TextMedium } from '@/common/components/typography'
 
 interface Props {
   items: React.ReactNode[] | React.ReactNode
@@ -81,7 +80,7 @@ export const HorizontalScroller = React.memo(({ items, className, title, count }
 const Wrapper = styled.div`
   width: 100%;
   overflow: hidden;
-  padding: 10px 18px;
+  padding: 10px 0;
 `
 
 const HeaderWrapper = styled.div`
@@ -97,6 +96,7 @@ const ItemsWrapper = styled.div`
   height: min-content;
   width: 100%;
   padding: 10px 0;
+  overflow-x: hidden;
 `
 
 const ButtonWrapper = styled.div`
@@ -105,9 +105,7 @@ const ButtonWrapper = styled.div`
   padding-right: 16px;
 `
 
-const Title = styled(TextExtraSmall)`
-  text-transform: uppercase;
-  color: ${Colors.Black[500]};
+const Title = styled(TextMedium)`
   display: flex;
 
   > *:last-child {

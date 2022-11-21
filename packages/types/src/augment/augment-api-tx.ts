@@ -5,7 +5,7 @@ import type { ApiTypes } from '@polkadot/api-base/types';
 import type { BTreeMap, BTreeSet, Bytes, Compact, Option, U8aFixed, Vec, WrapperKeepOpaque, bool, u128, u16, u32, u64, u8 } from '@polkadot/types-codec';
 import type { AnyNumber, IMethod, ITuple } from '@polkadot/types-codec/types';
 import type { AccountId32, Call, H256, Perbill, Percent, Permill } from '@polkadot/types/interfaces/runtime';
-import type { JoystreamNodeRuntimeOriginCaller, JoystreamNodeRuntimeSessionKeys, PalletCommonBalanceKind, PalletCommonFundingRequestParameters, PalletCommonWorkingGroup, PalletContentChannelActionPermission, PalletContentChannelCreationParametersRecord, PalletContentChannelOwner, PalletContentChannelUpdateParametersRecord, PalletContentInitTransferParameters, PalletContentNftLimitPeriod, PalletContentNftTypesEnglishAuctionParamsRecord, PalletContentNftTypesNftIssuanceParametersRecord, PalletContentNftTypesOpenAuctionParamsRecord, PalletContentPermissionsContentActor, PalletContentPermissionsCuratorGroupContentModerationAction, PalletContentPermissionsCuratorGroupPausableChannelFeature, PalletContentProofElementRecord, PalletContentPullPaymentElement, PalletContentTransferCommitmentParameters, PalletContentUpdateChannelPayoutsParametersRecord, PalletContentVideoCreationParametersRecord, PalletContentVideoUpdateParametersRecord, PalletElectionProviderMultiPhaseRawSolution, PalletElectionProviderMultiPhaseSolutionOrSnapshotSize, PalletForumExtendedPostIdObject, PalletForumPrivilegedActor, PalletImOnlineHeartbeat, PalletImOnlineSr25519AppSr25519Signature, PalletMembershipBuyMembershipParameters, PalletMembershipCreateFoundingMemberParameters, PalletMembershipGiftMembershipParameters, PalletMembershipInviteMembershipParameters, PalletMultisigTimepoint, PalletProjectTokenMerkleProof, PalletProjectTokenTokenIssuanceParameters, PalletProjectTokenTokenSaleParams, PalletProjectTokenTransfersPayment, PalletProjectTokenTransfersPaymentWithVesting, PalletProposalsCodexGeneralProposalParams, PalletProposalsCodexProposalDetails, PalletProposalsDiscussionThreadMode, PalletProposalsEngineVoteKind, PalletStakingPalletConfigOpPerbill, PalletStakingPalletConfigOpPercent, PalletStakingPalletConfigOpU128, PalletStakingPalletConfigOpU32, PalletStakingRewardDestination, PalletStakingValidatorPrefs, PalletStorageBagIdType, PalletStorageDistributionBucketIdRecord, PalletStorageDynBagCreationParametersRecord, PalletStorageDynamicBagType, PalletStorageUploadParametersRecord, PalletVestingVestingInfo, PalletWorkingGroupApplyOnOpeningParams, PalletWorkingGroupOpeningType, PalletWorkingGroupStakePolicy, SpConsensusBabeDigestsNextConfigDescriptor, SpConsensusSlotsEquivocationProof, SpFinalityGrandpaEquivocationProof, SpNposElectionsElectionScore, SpNposElectionsSupport, SpRuntimeHeader, SpSessionMembershipProof } from '@polkadot/types/lookup';
+import type { JoystreamNodeRuntimeOriginCaller, JoystreamNodeRuntimeSessionKeys, PalletBountyBountyActor, PalletBountyBountyParametersBTreeSet, PalletBountyOracleWorkEntryJudgment, PalletCommonBalanceKind, PalletCommonFundingRequestParameters, PalletCommonMerkleTreeProofElementRecord, PalletCommonWorkingGroupIterableEnumsWorkingGroup, PalletContentChannelBagWitness, PalletContentChannelCreationParametersRecord, PalletContentChannelOwner, PalletContentChannelUpdateParametersRecord, PalletContentInitTransferParameters, PalletContentIterableEnumsChannelActionPermission, PalletContentNftLimitPeriod, PalletContentNftTypesEnglishAuctionParamsRecord, PalletContentNftTypesNftIssuanceParametersRecord, PalletContentNftTypesOpenAuctionParamsRecord, PalletContentPermissionsContentActor, PalletContentPermissionsCuratorGroupIterableEnumsContentModerationAction, PalletContentPermissionsCuratorGroupIterableEnumsPausableChannelFeature, PalletContentPullPaymentElement, PalletContentTransferCommitmentParametersBTreeMap, PalletContentUpdateChannelPayoutsParametersRecord, PalletContentVideoCreationParametersRecord, PalletContentVideoUpdateParametersRecord, PalletElectionProviderMultiPhaseRawSolution, PalletElectionProviderMultiPhaseSolutionOrSnapshotSize, PalletForumExtendedPostIdObject, PalletForumPrivilegedActor, PalletImOnlineHeartbeat, PalletImOnlineSr25519AppSr25519Signature, PalletMembershipBuyMembershipParameters, PalletMembershipCreateMemberParameters, PalletMembershipGiftMembershipParameters, PalletMembershipInviteMembershipParameters, PalletMultisigTimepoint, PalletProjectTokenMerkleProof, PalletProjectTokenTokenIssuanceParameters, PalletProjectTokenTokenSaleParams, PalletProjectTokenTransfersPayment, PalletProjectTokenTransfersPaymentWithVesting, PalletProposalsCodexGeneralProposalParams, PalletProposalsCodexProposalDetails, PalletProposalsDiscussionThreadModeBTreeSet, PalletProposalsEngineVoteKind, PalletStakingPalletConfigOpPerbill, PalletStakingPalletConfigOpPercent, PalletStakingPalletConfigOpU128, PalletStakingPalletConfigOpU32, PalletStakingRewardDestination, PalletStakingValidatorPrefs, PalletStorageBagIdType, PalletStorageDistributionBucketIdRecord, PalletStorageDynamicBagType, PalletStorageUploadParametersRecord, PalletVestingVestingInfo, PalletWorkingGroupApplyOnOpeningParams, PalletWorkingGroupOpeningType, PalletWorkingGroupStakePolicy, SpConsensusBabeDigestsNextConfigDescriptor, SpConsensusSlotsEquivocationProof, SpFinalityGrandpaEquivocationProof, SpNposElectionsElectionScore, SpNposElectionsSupport, SpRuntimeHeader, SpSessionMembershipProof } from '@polkadot/types/lookup';
 
 declare module '@polkadot/api-base/types/submittable' {
   export interface AugmentedSubmittables<ApiType extends ApiTypes> {
@@ -153,6 +153,198 @@ declare module '@polkadot/api-base/types/submittable' {
        **/
       transferKeepAlive: AugmentedSubmittable<(dest: AccountId32 | string | Uint8Array, value: Compact<u128> | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [AccountId32, Compact<u128>]>;
     };
+    bounty: {
+      /**
+       * Announce work entry for a successful bounty.
+       * # <weight>
+       * 
+       * ## weight
+       * `O (W + M)` where:
+       * - `W` is the work_description size in kilobytes.
+       * - `M` is closed contract member list length.
+       * - db:
+       * - `O(1)` doesn't depend on the state or parameters
+       * # </weight>
+       **/
+      announceWorkEntry: AugmentedSubmittable<(memberId: u64 | AnyNumber | Uint8Array, bountyId: u64 | AnyNumber | Uint8Array, stakingAccountId: AccountId32 | string | Uint8Array, workDescription: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, u64, AccountId32, Bytes]>;
+      /**
+       * Bounty Contributor made a remark
+       * 
+       * # <weight>
+       * 
+       * ## weight
+       * `O (N)`
+       * - `N` is msg size in kilobytes
+       * - db:
+       * - `O(1)` doesn't depend on the state or parameters
+       * # </weight>
+       **/
+      contributorRemark: AugmentedSubmittable<(contributor: PalletBountyBountyActor | { Council: any } | { Member: any } | string | Uint8Array, bountyId: u64 | AnyNumber | Uint8Array, msg: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletBountyBountyActor, u64, Bytes]>;
+      /**
+       * Creates a bounty. Metadata stored in the transaction log but discarded after that.
+       * <weight>
+       * 
+       * ## Weight
+       * `O (W)` where:
+       * - `W` is the _metadata size in kilobytes.
+       * - `M` is closed contract member list length.
+       * - DB:
+       * - O(M) (O(1) on open contract)
+       * # </weight>
+       **/
+      createBounty: AugmentedSubmittable<(params: PalletBountyBountyParametersBTreeSet | { oracle?: any; contractType?: any; creator?: any; cherry?: any; oracleReward?: any; entrantStake?: any; fundingType?: any } | string | Uint8Array, metadata: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletBountyBountyParametersBTreeSet, Bytes]>;
+      /**
+       * Bounty Oracle made a remark
+       * 
+       * # <weight>
+       * 
+       * ## weight
+       * `O (N)`
+       * - `N` is msg size in kilobytes
+       * - db:
+       * - `O(1)` doesn't depend on the state or parameters
+       * # </weight>
+       **/
+      creatorRemark: AugmentedSubmittable<(creator: PalletBountyBountyActor | { Council: any } | { Member: any } | string | Uint8Array, bountyId: u64 | AnyNumber | Uint8Array, msg: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletBountyBountyActor, u64, Bytes]>;
+      /**
+       * end bounty working period.
+       * # <weight>
+       * 
+       * ## weight
+       * `O (1)`
+       * - db:
+       * - `O(1)` doesn't depend on the state or parameters
+       * # </weight>
+       **/
+      endWorkingPeriod: AugmentedSubmittable<(bountyId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64]>;
+      /**
+       * Bounty Entrant Worker made a remark
+       * 
+       * # <weight>
+       * 
+       * ## weight
+       * `O (N)`
+       * - `N` is msg size in kilobytes
+       * - db:
+       * - `O(1)` doesn't depend on the state or parameters
+       * # </weight>
+       **/
+      entrantRemark: AugmentedSubmittable<(entrantId: u64 | AnyNumber | Uint8Array, bountyId: u64 | AnyNumber | Uint8Array, entryId: u64 | AnyNumber | Uint8Array, msg: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, u64, u64, Bytes]>;
+      /**
+       * Provides bounty funding.
+       * # <weight>
+       * 
+       * ## weight
+       * `O (1)`
+       * - db:
+       * - `O(1)` doesn't depend on the state or parameters
+       * # </weight>
+       **/
+      fundBounty: AugmentedSubmittable<(funder: PalletBountyBountyActor | { Council: any } | { Member: any } | string | Uint8Array, bountyId: u64 | AnyNumber | Uint8Array, amount: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletBountyBountyActor, u64, u128]>;
+      /**
+       * Bounty Oracle made a remark
+       * 
+       * # <weight>
+       * 
+       * ## weight
+       * `O (N)`
+       * - `N` is msg size in kilobytes
+       * - db:
+       * - `O(1)` doesn't depend on the state or parameters
+       * # </weight>
+       **/
+      oracleRemark: AugmentedSubmittable<(oracle: PalletBountyBountyActor | { Council: any } | { Member: any } | string | Uint8Array, bountyId: u64 | AnyNumber | Uint8Array, msg: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletBountyBountyActor, u64, Bytes]>;
+      /**
+       * Submits an oracle judgment for a bounty, slashing the entries rejected
+       * by an arbitrary percentage and rewarding the winners by an arbitrary amount
+       * (not surpassing the total fund amount)
+       * # <weight>
+       * 
+       * ## weight
+       * `O (J + K + W + R)`
+       * - `J` is rationale size in kilobytes,
+       * - `K` is the sum of all action_justification sizes (in kilobytes) inside OracleJudgment,
+       * - `W` is number of winner judgment entries,
+       * - `R` is number of rejected judgment entries,
+       * - db:
+       * - `O(W + R)`
+       * # </weight>
+       **/
+      submitOracleJudgment: AugmentedSubmittable<(bountyId: u64 | AnyNumber | Uint8Array, judgment: BTreeMap<u64, PalletBountyOracleWorkEntryJudgment>, rationale: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, BTreeMap<u64, PalletBountyOracleWorkEntryJudgment>, Bytes]>;
+      /**
+       * Submit work for a bounty.
+       * # <weight>
+       * 
+       * ## weight
+       * `O (N)`
+       * - `N` is the work_data size in kilobytes,
+       * - db:
+       * - `O(1)` doesn't depend on the state or parameters
+       * # </weight>
+       **/
+      submitWork: AugmentedSubmittable<(memberId: u64 | AnyNumber | Uint8Array, bountyId: u64 | AnyNumber | Uint8Array, entryId: u64 | AnyNumber | Uint8Array, workData: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, u64, u64, Bytes]>;
+      /**
+       * Oracle switches himself to a new one
+       * # <weight>
+       * 
+       * ## weight
+       * `O (1)`
+       * - db:
+       * - `O(1)` doesn't depend on the state or parameters
+       * # </weight>
+       * 
+       **/
+      switchOracle: AugmentedSubmittable<(newOracle: PalletBountyBountyActor | { Council: any } | { Member: any } | string | Uint8Array, bountyId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletBountyBountyActor, u64]>;
+      /**
+       * Terminates a bounty in funding, funding expired,
+       * worksubmission, judging period.
+       * # <weight>
+       * 
+       * ## weight
+       * `O (1)`
+       * - db:
+       * - `O(1)` doesn't depend on the state or parameters
+       * # </weight>
+       **/
+      terminateBounty: AugmentedSubmittable<(bountyId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64]>;
+      /**
+       * Unlocks the stake related to a work entry
+       * After the oracle makes the judgment or the council terminates the bounty by calling terminate_bounty(...),
+       * each worker whose entry has not been judged, can unlock the totality of their stake.
+       * # <weight>
+       * 
+       * ## weight
+       * `O (1)`
+       * - db:
+       * - `O(1)` doesn't depend on the state or parameters
+       * # </weight>
+       **/
+      withdrawEntrantStake: AugmentedSubmittable<(memberId: u64 | AnyNumber | Uint8Array, bountyId: u64 | AnyNumber | Uint8Array, entryId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, u64, u64]>;
+      /**
+       * Withdraw bounty funding by a member or a council.
+       * # <weight>
+       * 
+       * ## weight
+       * `O (1)`
+       * - db:
+       * - `O(1)` doesn't depend on the state or parameters
+       * # </weight>
+       **/
+      withdrawFunding: AugmentedSubmittable<(funder: PalletBountyBountyActor | { Council: any } | { Member: any } | string | Uint8Array, bountyId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletBountyBountyActor, u64]>;
+      /**
+       * Withraws the oracle reward to oracle
+       * If bounty is successfully, Failed or Cancelled oracle must call this
+       * extrinsic to withdraw the oracle reward,
+       * # <weight>
+       * 
+       * ## weight
+       * `O (1)`
+       * - db:
+       * - `O(1)` doesn't depend on the state or parameters
+       * # </weight>
+       **/
+      withdrawOracleReward: AugmentedSubmittable<(bountyId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64]>;
+    };
     constitution: {
       /**
        * Sets the current constitution hash. Requires root origin.
@@ -168,203 +360,787 @@ declare module '@polkadot/api-base/types/submittable' {
       /**
        * Accepts channel transfer.
        * `commitment_params` is required to prevent changing the transfer conditions.
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A)` where:
+       * - `A` is the number of entries in `commitment_params.new_collaborators` map
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
        **/
-      acceptChannelTransfer: AugmentedSubmittable<(channelId: u64 | AnyNumber | Uint8Array, commitmentParams: PalletContentTransferCommitmentParameters | { newCollaborators?: any; price?: any; transferId?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, PalletContentTransferCommitmentParameters]>;
+      acceptChannelTransfer: AugmentedSubmittable<(channelId: u64 | AnyNumber | Uint8Array, commitmentParams: PalletContentTransferCommitmentParametersBTreeMap | { newCollaborators?: any; price?: any; transferId?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, PalletContentTransferCommitmentParametersBTreeMap]>;
       /**
        * Accept incoming Nft offer
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
        **/
       acceptIncomingOffer: AugmentedSubmittable<(videoId: u64 | AnyNumber | Uint8Array, witnessPrice: Option<u128> | null | object | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, Option<u128>]>;
       /**
        * Add curator to curator group under given `curator_group_id`
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
        **/
-      addCuratorToGroup: AugmentedSubmittable<(curatorGroupId: u64 | AnyNumber | Uint8Array, curatorId: u64 | AnyNumber | Uint8Array, permissions: BTreeSet<PalletContentChannelActionPermission>) => SubmittableExtrinsic<ApiType>, [u64, u64, BTreeSet<PalletContentChannelActionPermission>]>;
+      addCuratorToGroup: AugmentedSubmittable<(curatorGroupId: u64 | AnyNumber | Uint8Array, curatorId: u64 | AnyNumber | Uint8Array, permissions: BTreeSet<PalletContentIterableEnumsChannelActionPermission>) => SubmittableExtrinsic<ApiType>, [u64, u64, BTreeSet<PalletContentIterableEnumsChannelActionPermission>]>;
       /**
        * Buy Nft
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
        **/
       buyNft: AugmentedSubmittable<(videoId: u64 | AnyNumber | Uint8Array, participantId: u64 | AnyNumber | Uint8Array, witnessPrice: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, u64, u128]>;
       /**
        * Cancel Nft sell order
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * </weight>
        **/
       cancelBuyNow: AugmentedSubmittable<(ownerId: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64]>;
       /**
        * cancel channel transfer
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
        **/
       cancelChannelTransfer: AugmentedSubmittable<(channelId: u64 | AnyNumber | Uint8Array, actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, PalletContentPermissionsContentActor]>;
+      /**
+       * Cancel video nft english auction
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
+       **/
       cancelEnglishAuction: AugmentedSubmittable<(ownerId: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64]>;
       /**
        * Cancel Nft offer
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
        **/
       cancelOffer: AugmentedSubmittable<(ownerId: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64]>;
+      /**
+       * Cancel video nft open auction
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
+       **/
       cancelOpenAuction: AugmentedSubmittable<(ownerId: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64]>;
       /**
        * Cancel open auction bid
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
        **/
       cancelOpenAuctionBid: AugmentedSubmittable<(participantId: u64 | AnyNumber | Uint8Array, videoId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, u64]>;
       /**
        * Channel collaborator remark
+       * <weight>
+       * 
+       * ## Weight
+       * `O (B)`
+       * - DB:
+       * - O(1)
+       * where:
+       * - B is the byte lenght of `msg`
+       * # </weight>
        **/
       channelAgentRemark: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, msg: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, Bytes]>;
       /**
        * Channel owner remark
+       * <weight>
+       * 
+       * ## Weight
+       * `O (B)`
+       * - DB:
+       * - O(1)
+       * where:
+       * - B is the kilobyte lenght of `msg`
+       * # </weight>
        **/
       channelOwnerRemark: AugmentedSubmittable<(channelId: u64 | AnyNumber | Uint8Array, msg: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, Bytes]>;
-      claimAndWithdrawChannelReward: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, proof: Vec<PalletContentProofElementRecord> | (PalletContentProofElementRecord | { hash_?: any; side?: any } | string | Uint8Array)[], item: PalletContentPullPaymentElement | { channelId?: any; cumulativeRewardEarned?: any; reason?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, Vec<PalletContentProofElementRecord>, PalletContentPullPaymentElement]>;
-      claimChannelReward: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, proof: Vec<PalletContentProofElementRecord> | (PalletContentProofElementRecord | { hash_?: any; side?: any } | string | Uint8Array)[], item: PalletContentPullPaymentElement | { channelId?: any; cumulativeRewardEarned?: any; reason?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, Vec<PalletContentProofElementRecord>, PalletContentPullPaymentElement]>;
+      /**
+       * Claim and withdraw reward in JOY from channel account
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (H)` where:
+       * - `H` is the lenght of the provided merkle `proof`
+       * - DB:
+       * - O(1)
+       * # </weight>
+       **/
+      claimAndWithdrawChannelReward: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, proof: Vec<PalletCommonMerkleTreeProofElementRecord> | (PalletCommonMerkleTreeProofElementRecord | { hash_?: any; side?: any } | string | Uint8Array)[], item: PalletContentPullPaymentElement | { channelId?: any; cumulativeRewardEarned?: any; reason?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, Vec<PalletCommonMerkleTreeProofElementRecord>, PalletContentPullPaymentElement]>;
+      /**
+       * Claim reward in JOY from channel account
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (H)` where:
+       * - `H` is the lenght of the provided merkle `proof`
+       * - DB:
+       * - O(1)
+       * # </weight>
+       **/
+      claimChannelReward: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, proof: Vec<PalletCommonMerkleTreeProofElementRecord> | (PalletCommonMerkleTreeProofElementRecord | { hash_?: any; side?: any } | string | Uint8Array)[], item: PalletContentPullPaymentElement | { channelId?: any; cumulativeRewardEarned?: any; reason?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, Vec<PalletCommonMerkleTreeProofElementRecord>, PalletContentPullPaymentElement]>;
       /**
        * Claim channel's creator token patronage credit
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
        **/
       claimCreatorTokenPatronageCredit: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64]>;
+      /**
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A + B + C + D + E)` where:
+       * - `A` is the number of entries in `params.collaborators`
+       * - `B` is the number of items in `params.storage_buckets`
+       * - `C` is the number of items in `params.distribution_buckets`
+       * - `D` is the number of items in `params.assets.object_creation_list`
+       * - `E` is the size of  `params.meta` in kilobytes
+       * - DB:
+       * - `O(A + B + C + D)` - from the the generated weights
+       * # </weight>
+       **/
       createChannel: AugmentedSubmittable<(channelOwner: PalletContentChannelOwner | { Member: any } | { CuratorGroup: any } | string | Uint8Array, params: PalletContentChannelCreationParametersRecord | { assets?: any; meta?: any; collaborators?: any; storageBuckets?: any; distributionBuckets?: any; expectedChannelStateBloatBond?: any; expectedDataObjectStateBloatBond?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentChannelOwner, PalletContentChannelCreationParametersRecord]>;
       /**
        * Add new curator group to runtime storage
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A)` where:
+       * - `A` is the number of entries in `permissions_by_level` map
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
        **/
-      createCuratorGroup: AugmentedSubmittable<(isActive: bool | boolean | Uint8Array, permissionsByLevel: BTreeMap<u8, BTreeSet<PalletContentPermissionsCuratorGroupContentModerationAction>>) => SubmittableExtrinsic<ApiType>, [bool, BTreeMap<u8, BTreeSet<PalletContentPermissionsCuratorGroupContentModerationAction>>]>;
-      createVideo: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, params: PalletContentVideoCreationParametersRecord | { assets?: any; meta?: any; autoIssueNft?: any; expectedVideoStateBloatBond?: any; expectedDataObjectStateBloatBond?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, PalletContentVideoCreationParametersRecord]>;
+      createCuratorGroup: AugmentedSubmittable<(isActive: bool | boolean | Uint8Array, permissionsByLevel: BTreeMap<u8, BTreeSet<PalletContentPermissionsCuratorGroupIterableEnumsContentModerationAction>>) => SubmittableExtrinsic<ApiType>, [bool, BTreeMap<u8, BTreeSet<PalletContentPermissionsCuratorGroupIterableEnumsContentModerationAction>>]>;
+      /**
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A + B + C + D)` where:
+       * - `A` is the number of items in `params.assets.object_creation_list`
+       * - `B` is `params.storage_buckets_num_witness`
+       * - `C` is the length of open auction / english auction whitelist (if provided)
+       * - `D` is the size of `params.meta` in kilobytes (if provided)
+       * - DB:
+       * - `O(A + B + C)` - from the the generated weights
+       * # </weight>
+       **/
+      createVideo: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, params: PalletContentVideoCreationParametersRecord | { assets?: any; meta?: any; autoIssueNft?: any; expectedVideoStateBloatBond?: any; expectedDataObjectStateBloatBond?: any; storageBucketsNumWitness?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, PalletContentVideoCreationParametersRecord]>;
       /**
        * Perform transfer of tokens as creator token issuer
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A + B)` where:
+       * - `A` is the number of entries in `outputs`
+       * - `B` is the size of the `metadata` in kilobytes
+       * - DB:
+       * - `O(A)` - from the the generated weights
+       * # </weight>
        **/
-      creatorTokenIssuerTransfer: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, outputs: PalletProjectTokenTransfersPaymentWithVesting) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, PalletProjectTokenTransfersPaymentWithVesting]>;
+      creatorTokenIssuerTransfer: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, outputs: PalletProjectTokenTransfersPaymentWithVesting, metadata: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, PalletProjectTokenTransfersPaymentWithVesting, Bytes]>;
       /**
        * Deissue channel's creator token
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
        **/
       deissueCreatorToken: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64]>;
-      deleteChannel: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, numObjectsToDelete: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, u64]>;
-      deleteChannelAsModerator: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, numObjectsToDelete: u64 | AnyNumber | Uint8Array, rationale: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, u64, Bytes]>;
-      deleteChannelAssetsAsModerator: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, assetsToRemove: BTreeSet<u64>, rationale: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, BTreeSet<u64>, Bytes]>;
-      deleteVideo: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array, numObjectsToDelete: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, u64]>;
-      deleteVideoAsModerator: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array, numObjectsToDelete: u64 | AnyNumber | Uint8Array, rationale: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, u64, Bytes]>;
-      deleteVideoAssetsAsModerator: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array, assetsToRemove: BTreeSet<u64>, rationale: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, BTreeSet<u64>, Bytes]>;
+      /**
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A + B + C)` where:
+       * - `A` is `num_objects_to_delete`
+       * - `B` is `channel_bag_witness.storage_buckets_num`
+       * - `C` is `channel_bag_witness.distribution_buckets_num`
+       * - DB:
+       * - `O(A + B + C)` - from the the generated weights
+       * # </weight>
+       **/
+      deleteChannel: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, channelBagWitness: PalletContentChannelBagWitness | { storageBucketsNum?: any; distributionBucketsNum?: any } | string | Uint8Array, numObjectsToDelete: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, PalletContentChannelBagWitness, u64]>;
+      deleteChannelAsModerator: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, channelBagWitness: PalletContentChannelBagWitness | { storageBucketsNum?: any; distributionBucketsNum?: any } | string | Uint8Array, numObjectsToDelete: u64 | AnyNumber | Uint8Array, rationale: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, PalletContentChannelBagWitness, u64, Bytes]>;
+      /**
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A + B + C)` where:
+       * - `A` is the length of `assets_to_remove`
+       * - `B` is the value of `storage_buckets_num_witness`
+       * - `C` is the size of `rationale` in kilobytes
+       * - DB:
+       * - `O(A + B)` - from the the generated weights
+       * # </weight>
+       **/
+      deleteChannelAssetsAsModerator: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, assetsToRemove: BTreeSet<u64>, storageBucketsNumWitness: u32 | AnyNumber | Uint8Array, rationale: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, BTreeSet<u64>, u32, Bytes]>;
+      /**
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A + B)` where:
+       * - `A` is num_objects_to_delete
+       * - `B` is `params.storage_buckets_num_witness` (if provided)
+       * - DB:
+       * - `O(A + B)` - from the the generated weights
+       * # </weight>
+       **/
+      deleteVideo: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array, numObjectsToDelete: u64 | AnyNumber | Uint8Array, storageBucketsNumWitness: Option<u32> | null | object | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, u64, Option<u32>]>;
+      /**
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A + B + C)` where:
+       * - `A` is the value of `num_objects_to_delete`
+       * - `B` is the value of `storage_buckets_num_witness`
+       * - `C` is the size of `rationale` in kilobytes
+       * - DB:
+       * - `O(A + B)` - from the the generated weights
+       * # </weight>
+       **/
+      deleteVideoAsModerator: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array, storageBucketsNumWitness: Option<u32> | null | object | string | Uint8Array, numObjectsToDelete: u64 | AnyNumber | Uint8Array, rationale: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, Option<u32>, u64, Bytes]>;
+      /**
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A + B + C)` where:
+       * - `A` is the length of `assets_to_remove`
+       * - `B` is the value of `storage_buckets_num_witness`
+       * - `C` is the size of `rationale` in kilobytes
+       * - DB:
+       * - `O(A + B)` - from the the generated weights
+       * # </weight>
+       **/
+      deleteVideoAssetsAsModerator: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array, storageBucketsNumWitness: u32 | AnyNumber | Uint8Array, assetsToRemove: BTreeSet<u64>, rationale: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, u32, BTreeSet<u64>, Bytes]>;
       /**
        * Destroy NFT
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
        **/
       destroyNft: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64]>;
       /**
        * Finalize an ended creator token sale
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
        **/
       finalizeCreatorTokenSale: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64]>;
       /**
        * Finalize an ended revenue split
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
        **/
       finalizeRevenueSplit: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64]>;
       /**
        * Initialize creator token sale
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A)` where:
+       * - `A` is the size of `params.metadata` in kilobytes (or 0 if not provided)
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
        **/
       initCreatorTokenSale: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, params: PalletProjectTokenTokenSaleParams | { unitPrice?: any; upperBoundQuantity?: any; startsAt?: any; duration?: any; vestingScheduleParams?: any; capPerMember?: any; metadata?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, PalletProjectTokenTokenSaleParams]>;
       /**
        * Start a channel transfer with specified characteristics
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A)` where:
+       * - `A` is the number of entries in `transfer_params.new_collaborators` map
+       * - DB:
+       * - O(A) - from the the generated weights
+       * # </weight>
        **/
       initializeChannelTransfer: AugmentedSubmittable<(channelId: u64 | AnyNumber | Uint8Array, actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, transferParams: PalletContentInitTransferParameters | { newCollaborators?: any; price?: any; newOwner?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, PalletContentPermissionsContentActor, PalletContentInitTransferParameters]>;
       /**
        * Issue creator token
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A)` where:
+       * - `A` is the number of entries in `params.initial_allocation` map
+       * - DB:
+       * - `O(A)` - from the the generated weights
+       * # </weight>
        **/
       issueCreatorToken: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, params: PalletProjectTokenTokenIssuanceParameters | { initialAllocation?: any; symbol?: any; transferPolicy?: any; patronageRate?: any; revenueSplitRate?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, PalletProjectTokenTokenIssuanceParameters]>;
       /**
        * Issue NFT
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (W + B)`
+       * - DB:
+       * - O(W)
+       * where:
+       * - W : member whitelist length in case nft initial status is auction
+       * - B : size of metadata parameter in kilobytes
+       * # </weight>
        **/
       issueNft: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array, params: PalletContentNftTypesNftIssuanceParametersRecord | { royalty?: any; nftMetadata?: any; nonChannelOwner?: any; initTransactionalStatus?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, PalletContentNftTypesNftIssuanceParametersRecord]>;
       /**
        * Issue revenue split for a channel
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
        **/
       issueRevenueSplit: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, start: Option<u32> | null | object | string | Uint8Array, duration: u32 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, Option<u32>, u32]>;
       /**
        * Make channel's creator token permissionless
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
        **/
       makeCreatorTokenPermissionless: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64]>;
       /**
-       * Make auction bid
+       * Make english auction bid
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
        **/
       makeEnglishAuctionBid: AugmentedSubmittable<(participantId: u64 | AnyNumber | Uint8Array, videoId: u64 | AnyNumber | Uint8Array, bidAmount: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, u64, u128]>;
       /**
        * Make auction bid
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
        **/
       makeOpenAuctionBid: AugmentedSubmittable<(participantId: u64 | AnyNumber | Uint8Array, videoId: u64 | AnyNumber | Uint8Array, bidAmount: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, u64, u128]>;
       /**
        * NFT owner remark
+       * <weight>
+       * 
+       * ## Weight
+       * `O (B)`
+       * - DB:
+       * - O(1)
+       * where:
+       * - B is the byte lenght of `msg`
+       * # </weight>
        **/
       nftOwnerRemark: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array, msg: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, Bytes]>;
       /**
        * Offer Nft
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
        **/
       offerNft: AugmentedSubmittable<(videoId: u64 | AnyNumber | Uint8Array, ownerId: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, to: u64 | AnyNumber | Uint8Array, price: Option<u128> | null | object | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, PalletContentPermissionsContentActor, u64, Option<u128>]>;
       /**
        * Accept open auction bid
        * Should only be called by auctioneer
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
        **/
       pickOpenAuctionWinner: AugmentedSubmittable<(ownerId: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array, winnerId: u64 | AnyNumber | Uint8Array, commit: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, u64, u128]>;
       /**
        * Reduce channel's creator token patronage rate to given value
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
        **/
       reduceCreatorTokenPatronageRateTo: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, targetRate: Permill | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, Permill]>;
       /**
        * Remove curator from a given curator group
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
        **/
       removeCuratorFromGroup: AugmentedSubmittable<(curatorGroupId: u64 | AnyNumber | Uint8Array, curatorId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, u64]>;
       /**
        * Sell Nft
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
        **/
       sellNft: AugmentedSubmittable<(videoId: u64 | AnyNumber | Uint8Array, ownerId: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, price: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, PalletContentPermissionsContentActor, u128]>;
-      setChannelPausedFeaturesAsModerator: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, newPausedFeatures: BTreeSet<PalletContentPermissionsCuratorGroupPausableChannelFeature>, rationale: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, BTreeSet<PalletContentPermissionsCuratorGroupPausableChannelFeature>, Bytes]>;
+      /**
+       * Extrinsic for pausing/re-enabling channel features
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A)` where:
+       * - `A` is the size of `rationale` in kilobytes
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
+       **/
+      setChannelPausedFeaturesAsModerator: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, newPausedFeatures: BTreeSet<PalletContentPermissionsCuratorGroupIterableEnumsPausableChannelFeature>, rationale: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, BTreeSet<PalletContentPermissionsCuratorGroupIterableEnumsPausableChannelFeature>, Bytes]>;
+      /**
+       * Extrinsic for setting channel visibility status (hidden/visible) by moderator
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A)` where:
+       * - `A` is the size of `rationale` in kilobytes
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
+       **/
       setChannelVisibilityAsModerator: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, isHidden: bool | boolean | Uint8Array, rationale: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, bool, Bytes]>;
       /**
        * Set `is_active` status for curator group under given `curator_group_id`
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
        **/
       setCuratorGroupStatus: AugmentedSubmittable<(curatorGroupId: u64 | AnyNumber | Uint8Array, isActive: bool | boolean | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, bool]>;
       /**
        * Claim won english auction
        * Can be called by anyone
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
        **/
       settleEnglishAuction: AugmentedSubmittable<(videoId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64]>;
+      /**
+       * Extrinsic for video visibility status (hidden/visible) setting by moderator
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A)` where:
+       * - `A` is the size of `rationale` in kilobytes
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
+       **/
       setVideoVisibilityAsModerator: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array, isHidden: bool | boolean | Uint8Array, rationale: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, bool, Bytes]>;
       /**
        * Return Nft back to the original artist at no cost
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
        **/
       slingNftBack: AugmentedSubmittable<(videoId: u64 | AnyNumber | Uint8Array, ownerId: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, PalletContentPermissionsContentActor]>;
       /**
        * Start video nft english auction
+       * <weight>
+       * 
+       * ## Weight
+       * `O (W)` where:
+       * - W : whitelist member list length
+       * - DB:
+       * - O(W)
+       * # </weight>
        **/
       startEnglishAuction: AugmentedSubmittable<(ownerId: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array, auctionParams: PalletContentNftTypesEnglishAuctionParamsRecord | { startingPrice?: any; buyNowPrice?: any; whitelist?: any; startsAt?: any; duration?: any; extensionPeriod?: any; minBidStep?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, PalletContentNftTypesEnglishAuctionParamsRecord]>;
       /**
        * Start video nft open auction
+       * <weight>
+       * 
+       * ## Weight
+       * `O (W)` where:
+       * - W : member whitelist length
+       * - DB:
+       * - O(W)
+       * # </weight>
        **/
       startOpenAuction: AugmentedSubmittable<(ownerId: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array, auctionParams: PalletContentNftTypesOpenAuctionParamsRecord | { startingPrice?: any; buyNowPrice?: any; startsAt?: any; whitelist?: any; bidLockDuration?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, PalletContentNftTypesOpenAuctionParamsRecord]>;
       /**
        * Only Council can toggle nft issuance limits constraints
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
        **/
       toggleNftLimits: AugmentedSubmittable<(enabled: bool | boolean | Uint8Array) => SubmittableExtrinsic<ApiType>, [bool]>;
       /**
        * Update Buy now nft price
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
        **/
       updateBuyNowPrice: AugmentedSubmittable<(ownerId: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array, newPrice: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, u128]>;
-      updateChannel: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, params: PalletContentChannelUpdateParametersRecord | { assetsToUpload?: any; newMeta?: any; assetsToRemove?: any; collaborators?: any; expectedDataObjectStateBloatBond?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, PalletContentChannelUpdateParametersRecord]>;
+      /**
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A + B + C + D + E)` where:
+       * - `A` is the number of entries in `params.collaborators`
+       * - `B` is the number of items in `params.assets_to_upload.object_creation_list` (if provided)
+       * - `C` is the number of items in `params.assets_to_remove`
+       * - `D` is the size of `params.new_meta` in kilobytes
+       * - `E` is `params.storage_buckets_num_witness` (if provided)
+       * - DB:
+       * - `O(A + B + C + E)` - from the the generated weights
+       * # </weight>
+       **/
+      updateChannel: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, params: PalletContentChannelUpdateParametersRecord | { assetsToUpload?: any; newMeta?: any; assetsToRemove?: any; collaborators?: any; expectedDataObjectStateBloatBond?: any; storageBucketsNumWitness?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, PalletContentChannelUpdateParametersRecord]>;
       /**
        * Updates channel's NFT limit.
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
        **/
       updateChannelNftLimit: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, nftLimitPeriod: PalletContentNftLimitPeriod | 'Daily' | 'Weekly' | number | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, limit: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, PalletContentNftLimitPeriod, u64, u64]>;
+      /**
+       * Update channel payouts
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)` where:
+       * - DB:
+       * - O(1)
+       * # </weight>
+       **/
       updateChannelPayouts: AugmentedSubmittable<(params: PalletContentUpdateChannelPayoutsParametersRecord | { commitment?: any; payload?: any; minCashoutAllowed?: any; maxCashoutAllowed?: any; channelCashoutsEnabled?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentUpdateChannelPayoutsParametersRecord]>;
+      /**
+       * Extrinsic for updating channel privilege level (requires lead access)
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
+       **/
       updateChannelPrivilegeLevel: AugmentedSubmittable<(channelId: u64 | AnyNumber | Uint8Array, newPrivilegeLevel: u8 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, u8]>;
       /**
        * Updates channel state bloat bond value.
        * Only lead can upload this value
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
        **/
       updateChannelStateBloatBond: AugmentedSubmittable<(newChannelStateBloatBond: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u128]>;
       /**
        * Update existing curator group's permissions
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A)` where:
+       * - `A` is the number of entries in `permissions_by_level` map
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
        **/
-      updateCuratorGroupPermissions: AugmentedSubmittable<(curatorGroupId: u64 | AnyNumber | Uint8Array, permissionsByLevel: BTreeMap<u8, BTreeSet<PalletContentPermissionsCuratorGroupContentModerationAction>>) => SubmittableExtrinsic<ApiType>, [u64, BTreeMap<u8, BTreeSet<PalletContentPermissionsCuratorGroupContentModerationAction>>]>;
+      updateCuratorGroupPermissions: AugmentedSubmittable<(curatorGroupId: u64 | AnyNumber | Uint8Array, permissionsByLevel: BTreeMap<u8, BTreeSet<PalletContentPermissionsCuratorGroupIterableEnumsContentModerationAction>>) => SubmittableExtrinsic<ApiType>, [u64, BTreeMap<u8, BTreeSet<PalletContentPermissionsCuratorGroupIterableEnumsContentModerationAction>>]>;
       /**
-       * Updates global NFT limit.
+       * Updates global NFT limit
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
        **/
       updateGlobalNftLimit: AugmentedSubmittable<(nftLimitPeriod: PalletContentNftLimitPeriod | 'Daily' | 'Weekly' | number | Uint8Array, limit: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentNftLimitPeriod, u64]>;
       /**
        * Update upcoming creator token sale
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1) doesn't depend on the state or parameters
+       * # </weight>
        **/
       updateUpcomingCreatorTokenSale: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, newStartBlock: Option<u32> | null | object | string | Uint8Array, newDuration: Option<u32> | null | object | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, Option<u32>, Option<u32>]>;
-      updateVideo: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array, params: PalletContentVideoUpdateParametersRecord | { assetsToUpload?: any; newMeta?: any; assetsToRemove?: any; autoIssueNft?: any; expectedDataObjectStateBloatBond?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, PalletContentVideoUpdateParametersRecord]>;
+      /**
+       * <weight>
+       * 
+       * ## Weight
+       * `O (A + B + C + D + E)` where:
+       * - `A` is params.assets_to_upload.object_creation_list.len() (if provided)
+       * - `B` is params.assets_to_remove.len()
+       * - `C` is `params.storage_buckets_num_witness` (if provided)
+       * - `D` is the length of open auction / english auction whitelist (if provided)
+       * - `E` is the size of `params.new_meta` in kilobytes (if provided)
+       * - DB:
+       * - `O(A + B + C + D)` - from the the generated weights
+       * # </weight>
+       **/
+      updateVideo: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, videoId: u64 | AnyNumber | Uint8Array, params: PalletContentVideoUpdateParametersRecord | { assetsToUpload?: any; newMeta?: any; assetsToRemove?: any; autoIssueNft?: any; expectedDataObjectStateBloatBond?: any; storageBucketsNumWitness?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, PalletContentVideoUpdateParametersRecord]>;
       /**
        * Updates video state bloat bond value.
        * Only lead can upload this value
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
        **/
       updateVideoStateBloatBond: AugmentedSubmittable<(newVideoStateBloatBond: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u128]>;
+      /**
+       * Withdraw JOY from channel account
+       * 
+       * <weight>
+       * 
+       * ## Weight
+       * `O (1)`
+       * - DB:
+       * - O(1)
+       * # </weight>
+       **/
       withdrawFromChannelBalance: AugmentedSubmittable<(actor: PalletContentPermissionsContentActor | { Curator: any } | { Member: any } | { Lead: any } | string | Uint8Array, channelId: u64 | AnyNumber | Uint8Array, amount: u128 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletContentPermissionsContentActor, u64, u128]>;
     };
     contentWorkingGroup: {
@@ -376,7 +1152,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (D)` where:
-       * - `D` is the length of `description`
+       * - `D` is the size of `description` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -389,7 +1165,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (D)` where:
-       * - `D` is the length of `p.description`
+       * - `D` is the size of `p.description` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -466,7 +1242,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (M)` where:
+       * - `M` is the size of `msg` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -477,7 +1254,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (R)` where:
+       * - `R` is the size of `rationale` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -504,7 +1282,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (S)` where:
-       * - `S` is the length of the contents of `status_text` when it is not none
+       * - `S` is the size of the contents of `status_text` in kilobytes when it is not none
        * 
        * - DB:
        * - O(1) doesn't depend on the state or parameters
@@ -519,7 +1297,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (P)` where:
-       * - `P` is the length of `penality.slashing_text`
+       * - `P` is the size of `penality.slashing_text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -545,7 +1323,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (P)` where:
-       * - `P` is the length of `penalty.slashing_text`
+       * - `P` is the size `penalty.slashing_text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -589,10 +1367,6 @@ declare module '@polkadot/api-base/types/submittable' {
        **/
       updateRoleAccount: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, newRoleAccountId: AccountId32 | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, AccountId32]>;
       /**
-       * Update the associated role storage.
-       **/
-      updateRoleStorage: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, storage: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, Bytes]>;
-      /**
        * Withdraw the worker application. Can be done by the worker only.
        * 
        * # <weight>
@@ -610,7 +1384,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (M)` where:
+       * - `M` is the size of `msg` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -733,7 +1508,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## weight
        * `O (N)` where:
-       * `N` is the length of `note`
+       * `N` is the size of `note` in kilobytes
        * - db:
        * - `O(1)` doesn't depend on the state or parameters
        * # </weight>
@@ -773,7 +1548,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (D)` where:
-       * - `D` is the length of `description`
+       * - `D` is the size of `description` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -786,7 +1561,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (D)` where:
-       * - `D` is the length of `p.description`
+       * - `D` is the size of `p.description` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -863,7 +1638,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (M)` where:
+       * - `M` is the size of `msg` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -874,7 +1650,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (R)` where:
+       * - `R` is the size of `rationale` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -901,7 +1678,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (S)` where:
-       * - `S` is the length of the contents of `status_text` when it is not none
+       * - `S` is the size of the contents of `status_text` in kilobytes when it is not none
        * 
        * - DB:
        * - O(1) doesn't depend on the state or parameters
@@ -916,7 +1693,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (P)` where:
-       * - `P` is the length of `penality.slashing_text`
+       * - `P` is the size of `penality.slashing_text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -942,7 +1719,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (P)` where:
-       * - `P` is the length of `penalty.slashing_text`
+       * - `P` is the size `penalty.slashing_text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -986,10 +1763,6 @@ declare module '@polkadot/api-base/types/submittable' {
        **/
       updateRoleAccount: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, newRoleAccountId: AccountId32 | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, AccountId32]>;
       /**
-       * Update the associated role storage.
-       **/
-      updateRoleStorage: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, storage: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, Bytes]>;
-      /**
        * Withdraw the worker application. Can be done by the worker only.
        * 
        * # <weight>
@@ -1007,7 +1780,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (M)` where:
+       * - `M` is the size of `msg` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -1080,7 +1854,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * ## Weight
        * `O (W + V)` where:
        * - `W` is the category depth,
-       * - `V` is the length of the text
+       * - `V` is the size of the text in kilobytes
        * - DB:
        * - O(W)
        * # </weight>
@@ -1094,8 +1868,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * ## Weight
        * `O (W + V + X)` where:
        * - `W` is the category depth
-       * - `V` is the length of the category title.
-       * - `X` is the length of the category description.
+       * - `V` is the size of the category title in kilobytes.
+       * - `X` is the size of the category description in kilobytes.
        * - DB:
        * - O(W)
        * # </weight>
@@ -1109,8 +1883,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * ## Weight
        * `O (W + V + X)` where:
        * - `W` is the category depth
-       * - `V` is the length of the thread title.
-       * - `X` is the length of the thread text.
+       * - `V` is the size of the thread title in kilobytes.
+       * - `X` is the size of the thread text in kilobytes.
        * - DB:
        * - O(W)
        * # </weight>
@@ -1138,7 +1912,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * ## Weight
        * `O (W + V + P)` where:
        * - `W` is the category depth,
-       * - `V` is the length of the rationale
+       * - `V` is the size of the rationale in kilobytes
        * - `P` is the number of posts to delete
        * - DB:
        * - O(W + P)
@@ -1166,7 +1940,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * ## Weight
        * `O (W + V)` where:
        * - `W` is the category depth,
-       * - `V` is the length of the new text
+       * - `V` is the size of the new text in kilobytes
        * - DB:
        * - O(W)
        * # </weight>
@@ -1180,7 +1954,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * ## Weight
        * `O (W + V)` where:
        * - `W` is the category depth
-       * - `V` is the length of the thread metadata.
+       * - `V` is the size of the thread metadata in kilobytes.
        * - DB:
        * - O(W)
        * # </weight>
@@ -1194,7 +1968,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * ## Weight
        * `O (W + V)` where:
        * - `W` is the category depth,
-       * - `V` is the length of the rationale
+       * - `V` is the size of the rationale in kilobytes
        * - DB:
        * - O(W)
        * # </weight>
@@ -1209,7 +1983,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * `O (W + V + X)` where:
        * - `W` is the category depth,
        * - `V` is the number of thread posts,
-       * - `X` is the length of the rationale
+       * - `X` is the size of the rationale in kilobytes
        * - DB:
        * - O(W + V)
        * # </weight>
@@ -1229,19 +2003,6 @@ declare module '@polkadot/api-base/types/submittable' {
        **/
       moveThreadToCategory: AugmentedSubmittable<(actor: PalletForumPrivilegedActor | { Lead: any } | { Moderator: any } | string | Uint8Array, categoryId: u64 | AnyNumber | Uint8Array, threadId: u64 | AnyNumber | Uint8Array, newCategoryId: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletForumPrivilegedActor, u64, u64, u64]>;
       /**
-       * Like or unlike a post.
-       * 
-       * <weight>
-       * 
-       * ## Weight
-       * `O (W)` where:
-       * - `W` is the category depth,
-       * - DB:
-       * - O(W)
-       * # </weight>
-       **/
-      reactPost: AugmentedSubmittable<(forumUserId: u64 | AnyNumber | Uint8Array, categoryId: u64 | AnyNumber | Uint8Array, threadId: u64 | AnyNumber | Uint8Array, postId: u64 | AnyNumber | Uint8Array, react: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, u64, u64, u64, u64]>;
-      /**
        * Set stickied threads for category
        * 
        * <weight>
@@ -1254,7 +2015,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * - O(W + V)
        * # </weight>
        **/
-      setStickiedThreads: AugmentedSubmittable<(actor: PalletForumPrivilegedActor | { Lead: any } | { Moderator: any } | string | Uint8Array, categoryId: u64 | AnyNumber | Uint8Array, stickiedIds: Vec<u64> | (u64 | AnyNumber | Uint8Array)[]) => SubmittableExtrinsic<ApiType>, [PalletForumPrivilegedActor, u64, Vec<u64>]>;
+      setStickiedThreads: AugmentedSubmittable<(actor: PalletForumPrivilegedActor | { Lead: any } | { Moderator: any } | string | Uint8Array, categoryId: u64 | AnyNumber | Uint8Array, stickiedIds: BTreeSet<u64>) => SubmittableExtrinsic<ApiType>, [PalletForumPrivilegedActor, u64, BTreeSet<u64>]>;
       /**
        * Update archival status
        * 
@@ -1276,7 +2037,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * ## Weight
        * `O (W)` where:
        * - `W` is the category depth
-       * - `V` is the length of the category description.
+       * - `V` is the size of the category description in kilobytes.
        * - DB:
        * - O(W)
        * # </weight>
@@ -1302,7 +2063,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * ## Weight
        * `O (W + V)` where:
        * - `W` is the category depth
-       * - `V` is the length of the category title.
+       * - `V` is the size of the category title in kilobytes.
        * - DB:
        * - O(W)
        * # </weight>
@@ -1318,7 +2079,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (D)` where:
-       * - `D` is the length of `description`
+       * - `D` is the size of `description` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -1331,7 +2092,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (D)` where:
-       * - `D` is the length of `p.description`
+       * - `D` is the size of `p.description` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -1408,7 +2169,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (M)` where:
+       * - `M` is the size of `msg` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -1419,7 +2181,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (R)` where:
+       * - `R` is the size of `rationale` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -1446,7 +2209,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (S)` where:
-       * - `S` is the length of the contents of `status_text` when it is not none
+       * - `S` is the size of the contents of `status_text` in kilobytes when it is not none
        * 
        * - DB:
        * - O(1) doesn't depend on the state or parameters
@@ -1461,7 +2224,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (P)` where:
-       * - `P` is the length of `penality.slashing_text`
+       * - `P` is the size of `penality.slashing_text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -1487,7 +2250,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (P)` where:
-       * - `P` is the length of `penalty.slashing_text`
+       * - `P` is the size `penalty.slashing_text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -1531,10 +2294,6 @@ declare module '@polkadot/api-base/types/submittable' {
        **/
       updateRoleAccount: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, newRoleAccountId: AccountId32 | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, AccountId32]>;
       /**
-       * Update the associated role storage.
-       **/
-      updateRoleStorage: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, storage: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, Bytes]>;
-      /**
        * Withdraw the worker application. Can be done by the worker only.
        * 
        * # <weight>
@@ -1552,7 +2311,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (M)` where:
+       * - `M` is the size of `msg` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -1568,7 +2328,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (D)` where:
-       * - `D` is the length of `description`
+       * - `D` is the size of `description` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -1581,7 +2341,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (D)` where:
-       * - `D` is the length of `p.description`
+       * - `D` is the size of `p.description` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -1658,7 +2418,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (M)` where:
+       * - `M` is the size of `msg` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -1669,7 +2430,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (R)` where:
+       * - `R` is the size of `rationale` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -1696,7 +2458,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (S)` where:
-       * - `S` is the length of the contents of `status_text` when it is not none
+       * - `S` is the size of the contents of `status_text` in kilobytes when it is not none
        * 
        * - DB:
        * - O(1) doesn't depend on the state or parameters
@@ -1711,7 +2473,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (P)` where:
-       * - `P` is the length of `penality.slashing_text`
+       * - `P` is the size of `penality.slashing_text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -1737,7 +2499,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (P)` where:
-       * - `P` is the length of `penalty.slashing_text`
+       * - `P` is the size `penalty.slashing_text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -1781,10 +2543,6 @@ declare module '@polkadot/api-base/types/submittable' {
        **/
       updateRoleAccount: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, newRoleAccountId: AccountId32 | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, AccountId32]>;
       /**
-       * Update the associated role storage.
-       **/
-      updateRoleStorage: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, storage: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, Bytes]>;
-      /**
        * Withdraw the worker application. Can be done by the worker only.
        * 
        * # <weight>
@@ -1802,7 +2560,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (M)` where:
+       * - `M` is the size of `msg` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -1886,7 +2645,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (S)` where:
-       * - `S` is the length of the signal
+       * - `S` is the size of the signal in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -1902,7 +2661,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
        **/
-      updateWorkingGroupBudget: AugmentedSubmittable<(workingGroup: PalletCommonWorkingGroup | 'Forum' | 'Storage' | 'Content' | 'OperationsAlpha' | 'Gateway' | 'Distribution' | 'OperationsBeta' | 'OperationsGamma' | 'Membership' | number | Uint8Array, amount: u128 | AnyNumber | Uint8Array, balanceKind: PalletCommonBalanceKind | 'Positive' | 'Negative' | number | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletCommonWorkingGroup, u128, PalletCommonBalanceKind]>;
+      updateWorkingGroupBudget: AugmentedSubmittable<(workingGroup: PalletCommonWorkingGroupIterableEnumsWorkingGroup | 'Forum' | 'Storage' | 'Content' | 'OperationsAlpha' | 'Gateway' | 'Distribution' | 'OperationsBeta' | 'OperationsGamma' | 'Membership' | number | Uint8Array, amount: u128 | AnyNumber | Uint8Array, balanceKind: PalletCommonBalanceKind | 'Positive' | 'Negative' | number | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletCommonWorkingGroupIterableEnumsWorkingGroup, u128, PalletCommonBalanceKind]>;
     };
     members: {
       /**
@@ -1924,13 +2683,11 @@ declare module '@polkadot/api-base/types/submittable' {
        * <weight>
        * 
        * ## Weight
-       * `O (W + V + X + Y)` where:
-       * - `W` is the member name
-       * - `V` is the member handle
-       * - `X` is the member avatar uri
-       * - `Y` is the member about
+       * `O (W + M)` where:
+       * - `W` is the handle size in kilobytes
+       * - `M` is the metadata size in kilobytes
        * - DB:
-       * - O(V)
+       * - O(1)
        * # </weight>
        **/
       buyMembership: AugmentedSubmittable<(params: PalletMembershipBuyMembershipParameters | { rootAccount?: any; controllerAccount?: any; handle?: any; metadata?: any; referrerId?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletMembershipBuyMembershipParameters]>;
@@ -1947,19 +2704,19 @@ declare module '@polkadot/api-base/types/submittable' {
        **/
       confirmStakingAccount: AugmentedSubmittable<(memberId: u64 | AnyNumber | Uint8Array, stakingAccountId: AccountId32 | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, AccountId32]>;
       /**
-       * Create a founding member profile as root.
+       * Create a member profile as root.
        * 
        * <weight>
        * 
        * ## Weight
        * `O (I + J)` where:
-       * - `I` is the length of the handle
-       * - `J` is the length of the metadata
+       * - `I` is the handle size in kilobytes
+       * - `J` is the metadata size in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
        **/
-      createFoundingMember: AugmentedSubmittable<(params: PalletMembershipCreateFoundingMemberParameters | { rootAccount?: any; controllerAccount?: any; handle?: any; metadata?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletMembershipCreateFoundingMemberParameters]>;
+      createMember: AugmentedSubmittable<(params: PalletMembershipCreateMemberParameters | { rootAccount?: any; controllerAccount?: any; handle?: any; metadata?: any; isFoundingMember?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletMembershipCreateMemberParameters]>;
       /**
        * Gift a membership using own funds. Gifter does not need to be a member.
        * Can optinally apply a lock on a portion of the funds transferred to root and controller
@@ -1972,13 +2729,11 @@ declare module '@polkadot/api-base/types/submittable' {
        * <weight>
        * 
        * ## Weight
-       * `O (W + V + X + Y)` where:
-       * - `W` is the member name
-       * - `V` is the member handle
-       * - `X` is the member avatar uri
-       * - `Y` is the member about
+       * `O (W + M)` where:
+       * - `W` is the handle size in kilobytes
+       * - `M` is the metadata size in kilobytes
        * - DB:
-       * - O(V)
+       * - O(1)
        * # </weight>
        **/
       inviteMember: AugmentedSubmittable<(params: PalletMembershipInviteMembershipParameters | { invitingMemberId?: any; rootAccount?: any; controllerAccount?: any; handle?: any; metadata?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletMembershipInviteMembershipParameters]>;
@@ -2099,10 +2854,11 @@ declare module '@polkadot/api-base/types/submittable' {
        * <weight>
        * 
        * ## Weight
-       * `O (W)` where:
-       * - `W` is the handle length
+       * `O (W + M)` where:
+       * - `W` is the handle size in kilobytes
+       * - `M` is the metadata size in kilobytes
        * - DB:
-       * - O(W)
+       * - O(1)
        * # </weight>
        **/
       updateProfile: AugmentedSubmittable<(memberId: u64 | AnyNumber | Uint8Array, handle: Option<Bytes> | null | object | string | Uint8Array, metadata: Option<Bytes> | null | object | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, Option<Bytes>, Option<Bytes>]>;
@@ -2128,7 +2884,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (D)` where:
-       * - `D` is the length of `description`
+       * - `D` is the size of `description` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2141,7 +2897,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (D)` where:
-       * - `D` is the length of `p.description`
+       * - `D` is the size of `p.description` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2218,7 +2974,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (M)` where:
+       * - `M` is the size of `msg` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2229,7 +2986,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (R)` where:
+       * - `R` is the size of `rationale` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2256,7 +3014,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (S)` where:
-       * - `S` is the length of the contents of `status_text` when it is not none
+       * - `S` is the size of the contents of `status_text` in kilobytes when it is not none
        * 
        * - DB:
        * - O(1) doesn't depend on the state or parameters
@@ -2271,7 +3029,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (P)` where:
-       * - `P` is the length of `penality.slashing_text`
+       * - `P` is the size of `penality.slashing_text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2297,7 +3055,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (P)` where:
-       * - `P` is the length of `penalty.slashing_text`
+       * - `P` is the size `penalty.slashing_text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2341,10 +3099,6 @@ declare module '@polkadot/api-base/types/submittable' {
        **/
       updateRoleAccount: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, newRoleAccountId: AccountId32 | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, AccountId32]>;
       /**
-       * Update the associated role storage.
-       **/
-      updateRoleStorage: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, storage: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, Bytes]>;
-      /**
        * Withdraw the worker application. Can be done by the worker only.
        * 
        * # <weight>
@@ -2362,7 +3116,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (M)` where:
+       * - `M` is the size of `msg` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2514,7 +3269,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (D)` where:
-       * - `D` is the length of `description`
+       * - `D` is the size of `description` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2527,7 +3282,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (D)` where:
-       * - `D` is the length of `p.description`
+       * - `D` is the size of `p.description` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2604,7 +3359,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (M)` where:
+       * - `M` is the size of `msg` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2615,7 +3371,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (R)` where:
+       * - `R` is the size of `rationale` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2642,7 +3399,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (S)` where:
-       * - `S` is the length of the contents of `status_text` when it is not none
+       * - `S` is the size of the contents of `status_text` in kilobytes when it is not none
        * 
        * - DB:
        * - O(1) doesn't depend on the state or parameters
@@ -2657,7 +3414,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (P)` where:
-       * - `P` is the length of `penality.slashing_text`
+       * - `P` is the size of `penality.slashing_text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2683,7 +3440,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (P)` where:
-       * - `P` is the length of `penalty.slashing_text`
+       * - `P` is the size `penalty.slashing_text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2727,10 +3484,6 @@ declare module '@polkadot/api-base/types/submittable' {
        **/
       updateRoleAccount: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, newRoleAccountId: AccountId32 | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, AccountId32]>;
       /**
-       * Update the associated role storage.
-       **/
-      updateRoleStorage: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, storage: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, Bytes]>;
-      /**
        * Withdraw the worker application. Can be done by the worker only.
        * 
        * # <weight>
@@ -2748,7 +3501,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (M)` where:
+       * - `M` is the size of `msg` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2764,7 +3518,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (D)` where:
-       * - `D` is the length of `description`
+       * - `D` is the size of `description` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2777,7 +3531,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (D)` where:
-       * - `D` is the length of `p.description`
+       * - `D` is the size of `p.description` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2854,7 +3608,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (M)` where:
+       * - `M` is the size of `msg` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2865,7 +3620,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (R)` where:
+       * - `R` is the size of `rationale` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2892,7 +3648,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (S)` where:
-       * - `S` is the length of the contents of `status_text` when it is not none
+       * - `S` is the size of the contents of `status_text` in kilobytes when it is not none
        * 
        * - DB:
        * - O(1) doesn't depend on the state or parameters
@@ -2907,7 +3663,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (P)` where:
-       * - `P` is the length of `penality.slashing_text`
+       * - `P` is the size of `penality.slashing_text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2933,7 +3689,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (P)` where:
-       * - `P` is the length of `penalty.slashing_text`
+       * - `P` is the size `penalty.slashing_text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -2977,10 +3733,6 @@ declare module '@polkadot/api-base/types/submittable' {
        **/
       updateRoleAccount: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, newRoleAccountId: AccountId32 | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, AccountId32]>;
       /**
-       * Update the associated role storage.
-       **/
-      updateRoleStorage: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, storage: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, Bytes]>;
-      /**
        * Withdraw the worker application. Can be done by the worker only.
        * 
        * # <weight>
@@ -2998,7 +3750,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (M)` where:
+       * - `M` is the size of `msg` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -3014,7 +3767,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (D)` where:
-       * - `D` is the length of `description`
+       * - `D` is the size of `description` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -3027,7 +3780,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (D)` where:
-       * - `D` is the length of `p.description`
+       * - `D` is the size of `p.description` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -3104,7 +3857,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (M)` where:
+       * - `M` is the size of `msg` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -3115,7 +3869,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (R)` where:
+       * - `R` is the size of `rationale` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -3142,7 +3897,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (S)` where:
-       * - `S` is the length of the contents of `status_text` when it is not none
+       * - `S` is the size of the contents of `status_text` in kilobytes when it is not none
        * 
        * - DB:
        * - O(1) doesn't depend on the state or parameters
@@ -3157,7 +3912,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (P)` where:
-       * - `P` is the length of `penality.slashing_text`
+       * - `P` is the size of `penality.slashing_text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -3183,7 +3938,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (P)` where:
-       * - `P` is the length of `penalty.slashing_text`
+       * - `P` is the size `penalty.slashing_text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -3227,10 +3982,6 @@ declare module '@polkadot/api-base/types/submittable' {
        **/
       updateRoleAccount: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, newRoleAccountId: AccountId32 | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, AccountId32]>;
       /**
-       * Update the associated role storage.
-       **/
-      updateRoleStorage: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, storage: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, Bytes]>;
-      /**
        * Withdraw the worker application. Can be done by the worker only.
        * 
        * # <weight>
@@ -3248,7 +3999,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (M)` where:
+       * - `M` is the size of `msg` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -3302,6 +4054,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * Postconditions:
        * - Account information for `token_id` x `member_id` removed from storage
        * - bloat bond refunded to `member_id` controller account
+       * (or `bloat_bond.repayment_restricted_to` account)
        * 
        * <weight>
        * 
@@ -3467,13 +4220,14 @@ declare module '@polkadot/api-base/types/submittable' {
        * <weight>
        * 
        * ## Weight
-       * `O (T)` where:
+       * `O (T + M)` where:
        * - `T` is the length of `outputs`
+       * - `M` is the size of `metadata` in kilobytes
        * - DB:
        * - `O(T)` - from the the generated weights
        * # </weight>
        **/
-      transfer: AugmentedSubmittable<(srcMemberId: u64 | AnyNumber | Uint8Array, tokenId: u64 | AnyNumber | Uint8Array, outputs: PalletProjectTokenTransfersPayment) => SubmittableExtrinsic<ApiType>, [u64, u64, PalletProjectTokenTransfersPayment]>;
+      transfer: AugmentedSubmittable<(srcMemberId: u64 | AnyNumber | Uint8Array, tokenId: u64 | AnyNumber | Uint8Array, outputs: PalletProjectTokenTransfersPayment, metadata: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, u64, PalletProjectTokenTransfersPayment, Bytes]>;
     };
     proposalsCodex: {
       /**
@@ -3483,9 +4237,10 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (T + D + I)` where:
-       * - `T` is the length of the title
-       * - `D` is the length of the description
-       * - `I` is the length of any parameter in `proposal_details`
+       * - `T` is the title size in kilobytes
+       * - `D` is the description size in kilobytes
+       * - `I` is the size of any parameter in `proposal_details`
+       * (in kilobytes if it's metadata)
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -3500,7 +4255,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (L)` where:
-       * - `L` is the length of `text`
+       * - `L` is the size of `text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -3518,7 +4273,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
        **/
-      changeThreadMode: AugmentedSubmittable<(memberId: u64 | AnyNumber | Uint8Array, threadId: u64 | AnyNumber | Uint8Array, mode: PalletProposalsDiscussionThreadMode | { Open: any } | { Closed: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, u64, PalletProposalsDiscussionThreadMode]>;
+      changeThreadMode: AugmentedSubmittable<(memberId: u64 | AnyNumber | Uint8Array, threadId: u64 | AnyNumber | Uint8Array, mode: PalletProposalsDiscussionThreadModeBTreeSet | { Open: any } | { Closed: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, u64, PalletProposalsDiscussionThreadModeBTreeSet]>;
       /**
        * Remove post from storage, with the last parameter indicating whether to also hide it
        * in the UI.
@@ -3539,7 +4294,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (L)` where:
-       * - `L` is the length of `text`
+       * - `L` is the size of `text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -3591,7 +4346,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (R)` where:
-       * - `R` is the length of `rationale`
+       * - `R` is the size of `rationale` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or paraemters
        * # </weight>
@@ -4205,7 +4960,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (W)` where:
-       * - `W` is length of the `message`
+       * - `W` is size of `message` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -4261,7 +5016,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (W)` where:
-       * - `W` is length of the `metadata`
+       * - `W` is size of `metadata` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -4273,7 +5028,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (W)` where:
-       * - `W` is length of the `metadata`
+       * - `W` is size of `metadata` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -4296,7 +5051,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (W)` where:
-       * - `W` is length of the `metadata`
+       * - `W` is size of `metadata` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -4308,16 +5063,12 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (W)` where:
-       * - `W` is length of the `message`
+       * - `W` is size of `message` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
        **/
       storageOperatorRemark: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, storageBucketId: u64 | AnyNumber | Uint8Array, msg: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, u64, Bytes]>;
-      /**
-       * Create a dynamic bag. Development mode.
-       **/
-      sudoCreateDynamicBag: AugmentedSubmittable<(params: PalletStorageDynBagCreationParametersRecord | { bagId?: any; objectCreationList?: any; stateBloatBondSourceAccountId?: any; expectedDataSizeFee?: any; expectedDataObjectStateBloatBond?: any; storageBuckets?: any; distributionBuckets?: any } | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletStorageDynBagCreationParametersRecord]>;
       /**
        * Upload new data objects. Development mode.
        **/
@@ -4391,7 +5142,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
        **/
-      updateDistributionBucketsPerBagLimit: AugmentedSubmittable<(newLimit: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64]>;
+      updateDistributionBucketsPerBagLimit: AugmentedSubmittable<(newLimit: u32 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32]>;
       /**
        * Updates a distribution bucket 'accepts new bags' flag.
        * <weight>
@@ -4426,7 +5177,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
        **/
-      updateNumberOfStorageBucketsInDynamicBagCreationPolicy: AugmentedSubmittable<(dynamicBagType: PalletStorageDynamicBagType | 'Member' | 'Channel' | number | Uint8Array, numberOfStorageBuckets: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletStorageDynamicBagType, u64]>;
+      updateNumberOfStorageBucketsInDynamicBagCreationPolicy: AugmentedSubmittable<(dynamicBagType: PalletStorageDynamicBagType | 'Member' | 'Channel' | number | Uint8Array, numberOfStorageBuckets: u32 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [PalletStorageDynamicBagType, u32]>;
       /**
        * Updates storage buckets for a bag.
        * <weight>
@@ -4450,7 +5201,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
        **/
-      updateStorageBucketsPerBagLimit: AugmentedSubmittable<(newLimit: u64 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64]>;
+      updateStorageBucketsPerBagLimit: AugmentedSubmittable<(newLimit: u32 | AnyNumber | Uint8Array) => SubmittableExtrinsic<ApiType>, [u32]>;
       /**
        * Update whether new bags are being accepted for storage.
        * <weight>
@@ -4494,7 +5245,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (D)` where:
-       * - `D` is the length of `description`
+       * - `D` is the size of `description` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -4507,7 +5258,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (D)` where:
-       * - `D` is the length of `p.description`
+       * - `D` is the size of `p.description` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -4584,7 +5335,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (M)` where:
+       * - `M` is the size of `msg` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -4595,7 +5347,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (R)` where:
+       * - `R` is the size of `rationale` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -4622,7 +5375,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (S)` where:
-       * - `S` is the length of the contents of `status_text` when it is not none
+       * - `S` is the size of the contents of `status_text` in kilobytes when it is not none
        * 
        * - DB:
        * - O(1) doesn't depend on the state or parameters
@@ -4637,7 +5390,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (P)` where:
-       * - `P` is the length of `penality.slashing_text`
+       * - `P` is the size of `penality.slashing_text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -4663,7 +5416,7 @@ declare module '@polkadot/api-base/types/submittable' {
        * 
        * ## Weight
        * `O (P)` where:
-       * - `P` is the length of `penalty.slashing_text`
+       * - `P` is the size `penalty.slashing_text` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>
@@ -4707,10 +5460,6 @@ declare module '@polkadot/api-base/types/submittable' {
        **/
       updateRoleAccount: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, newRoleAccountId: AccountId32 | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, AccountId32]>;
       /**
-       * Update the associated role storage.
-       **/
-      updateRoleStorage: AugmentedSubmittable<(workerId: u64 | AnyNumber | Uint8Array, storage: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, Bytes]>;
-      /**
        * Withdraw the worker application. Can be done by the worker only.
        * 
        * # <weight>
@@ -4728,7 +5477,8 @@ declare module '@polkadot/api-base/types/submittable' {
        * # <weight>
        * 
        * ## Weight
-       * `O (1)`
+       * `O (M)` where:
+       * - `M` is the size of `msg` in kilobytes
        * - DB:
        * - O(1) doesn't depend on the state or parameters
        * # </weight>

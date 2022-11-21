@@ -26,4 +26,6 @@ config.rules['import/no-restricted-paths'] = [
   },
 ]
 
+config.ignorePatterns = [...config.ignorePatterns, 'src/bounty/**/*', 'test/bounty/**/*']
+
 module.exports = config
