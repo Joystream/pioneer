@@ -546,7 +546,7 @@ export type CastVoteFieldsFragment = {
       description?: string | null
     }
   } | null
-  electionRound: { __typename: 'ElectionRound'; cycleId: number }
+  electionRound: { __typename: 'ElectionRound'; cycleId: number; id: string }
   castEvent?: Array<{ __typename: 'VoteCastEvent'; inBlock: number; network: Types.Network; createdAt: any }> | null
 }
 
@@ -1330,7 +1330,7 @@ export type GetCouncilVotesQuery = {
         description?: string | null
       }
     } | null
-    electionRound: { __typename: 'ElectionRound'; cycleId: number }
+    electionRound: { __typename: 'ElectionRound'; cycleId: number; id: string }
     castEvent?: Array<{ __typename: 'VoteCastEvent'; inBlock: number; network: Types.Network; createdAt: any }> | null
   }>
 }
@@ -1628,6 +1628,7 @@ export const CastVoteFieldsFragmentDoc = gql`
     }
     electionRound {
       cycleId
+      id
     }
     castEvent: votecasteventcastVote {
       inBlock
