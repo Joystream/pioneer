@@ -8,7 +8,7 @@ import { Row } from '@/common/components/Modal'
 import { ColumnGapBlock, RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { BorderRad } from '@/common/constants'
-import { resizeImageFile } from '@/common/helpers'
+import { fileToDataUrl, resizeImageFile } from '@/common/helpers'
 import { info } from '@/common/logger'
 import { enhancedGetErrorMessage, enhancedHasError } from '@/common/utils/validation'
 import { Avatar } from '@/memberships/components/Avatar'
@@ -21,17 +21,14 @@ interface SmallFileUploadProps {
 }
 
 export const SmallFileUpload = ({ onUpload, name, initialPreview }: SmallFileUploadProps) => {
-  const [localValue, setLocalValue] = useState<{ blob: Blob | null; file: File | null }>({
-    blob: null,
-    file: null,
-  })
+  const [localValue, setLocalValue] = useState<{ blob?: Blob; url?: string; file?: File }>({})
   const { formState } = useFormContext()
-  const [avatarPreview, setAvatarPreview] = useState<string>(initialPreview ?? '')
+  const [filePreview, setFilePreview] = useState<string>(initialPreview ?? '')
   useEffect(() => {
-    if (localValue.blob && SUPPORTED_IMAGES.includes(localValue.file?.type ?? '')) {
-      const objectUrl = URL.createObjectURL(localValue.blob)
-      setAvatarPreview(objectUrl)
-
+    const objectUrl = localValue.blob && URL.createObjectURL(localValue.blob)
+    const previewUrl = objectUrl || localValue.url
+    if (previewUrl) {
+      setFilePreview(previewUrl)
       return () => {
         objectUrl && URL.revokeObjectURL(objectUrl)
       }
@@ -43,16 +40,23 @@ export const SmallFileUpload = ({ onUpload, name, initialPreview }: SmallFileUpl
       const file = event.target.files?.item(0) ?? null
 
       if (file && SUPPORTED_IMAGES.includes(file.type)) {
-        try {
-          resizeImageFile(file, 192, 192, 'image/webp').then((blob) => {
-            setLocalValue({ blob, file })
-            return onUpload(event, blob)
+        if (file.type !== 'image/svg+xml') {
+          try {
+            return resizeImageFile(file, 192, 192, 'image/webp').then((blob) => {
+              setLocalValue({ blob: blob ?? undefined, file })
+              onUpload(event, blob)
+            })
+          } catch (e) {
+            info(e)
+          }
+        } else if (file.size < 50_000) {
+          return fileToDataUrl(file).then((url) => {
+            setLocalValue({ url, file })
+            onUpload(event, file)
           })
-        } catch (e) {
-          info(e)
         }
       }
-      setLocalValue({ blob: null, file })
+      setLocalValue({ file: file ?? undefined })
       onUpload(event, file)
     },
     [onUpload]
@@ -60,10 +64,10 @@ export const SmallFileUpload = ({ onUpload, name, initialPreview }: SmallFileUpl
 
   return (
     <RowGapBlock gap={10}>
-      {avatarPreview && (
+      {filePreview && (
         <Row>
           <AvatarPreviewContainer>
-            <Avatar avatarUri={avatarPreview} />
+            <Avatar avatarUri={filePreview} />
           </AvatarPreviewContainer>
         </Row>
       )}
