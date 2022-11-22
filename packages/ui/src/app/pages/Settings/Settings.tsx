@@ -1,12 +1,9 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { useApi } from '@/api/hooks/useApi'
 import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { NetworkType } from '@/app/config'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { LanguageSelect } from '@/common/components/LanguageSelect'
 import NetworkInfo from '@/common/components/NetworkInfo/NetworkInfo'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
@@ -16,16 +13,11 @@ import { SimpleSelect } from '@/common/components/selects'
 import { Tabs } from '@/common/components/Tabs'
 import { useNetwork } from '@/common/hooks/useNetwork'
 import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
-import { useToggle } from '@/common/hooks/useToggle'
-import { error } from '@/common/logger'
 
 type Tab = 'SETTINGS' | 'LANGUAGE'
 
 export const Settings = () => {
-  const [isUpdatingMetadata, toggleMetadataUpdate] = useToggle(false)
   const { network, setNetwork, networks } = useNetwork()
-  const { api } = useApi()
-  const { wallet } = useMyAccounts()
   const { t } = useTranslation('settings')
   const [endpoints] = useNetworkEndpoints()
   const [currentTab, setCurrentTab] = useState<Tab>('SETTINGS')
@@ -39,16 +31,6 @@ export const Settings = () => {
       window.location.reload()
     }
   }
-
-  const updateMD = useCallback(() => {
-    if (api && wallet) {
-      toggleMetadataUpdate()
-      wallet
-        .updateMetadata(api.chainInfo)
-        .catch(error)
-        .finally(() => toggleMetadataUpdate())
-    }
-  }, [!wallet, !api])
 
   return (
     <Container>
@@ -81,9 +63,6 @@ export const Settings = () => {
                   <PolkadotAppInfo rpcUrl={endpoints.nodeRpcEndpoint} />
                 </>
               )}
-              <ButtonPrimary size="medium" disabled={isUpdatingMetadata} onClick={updateMD}>
-                Update extension metadata
-              </ButtonPrimary>
             </RowGapBlock>
           </MainPanel>
         }
