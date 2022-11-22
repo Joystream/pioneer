@@ -5,7 +5,14 @@ import { distinctUntilChanged, filter, fromEvent, map, Observable, share } from 
 import { firstWhere } from '@/common/utils/rx'
 
 import { deserializeMessage, serializePayload, WorkerProxyMessage } from '../models/payload'
-import { ClientMessage, PostMessage, RawWorkerMessageEvent, WorkerConnectMessage, WorkerInitMessage } from '../types'
+import {
+  ClientMessage,
+  MetadataDef,
+  PostMessage,
+  RawWorkerMessageEvent,
+  WorkerConnectMessage,
+  WorkerInitMessage,
+} from '../types'
 import { workerApi as launchWorker } from '../worker'
 
 import { query } from './query'
@@ -19,6 +26,7 @@ export class ProxyApi extends Events {
   rpc: ApiRx['rpc']
   tx: ApiRx['tx']
   consts: ApiRx['consts']
+  chainInfo: MetadataDef
 
   static create(providerEndpoint: string) {
     const worker = launchWorker()
@@ -38,7 +46,7 @@ export class ProxyApi extends Events {
     return messages.pipe(
       firstWhere(({ data }) => data.messageType === 'init'),
       deserializeMessage<WorkerInitMessage>(),
-      map(({ payload }) => new ProxyApi(messages, postMessage, payload.consts)),
+      map(({ payload }) => new ProxyApi(messages, postMessage, payload.consts, payload.chainInfo)),
       share()
     )
   }
@@ -46,7 +54,8 @@ export class ProxyApi extends Events {
   constructor(
     messages: Observable<RawWorkerMessageEvent>,
     postMessage: PostMessage<ClientMessage>,
-    consts: ProxyApi['consts']
+    consts: ProxyApi['consts'],
+    chainInfo: MetadataDef
   ) {
     super()
     {
@@ -55,6 +64,7 @@ export class ProxyApi extends Events {
       this.query = query('query', messages, postMessage)
       this.rpc = query('rpc', messages, postMessage)
       this.tx = tx(messages, postMessage)
+      this.chainInfo = chainInfo
     }
 
     messages

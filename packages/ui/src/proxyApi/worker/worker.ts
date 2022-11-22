@@ -1,5 +1,6 @@
 import '@joystream/types'
 import { ApiRx, WsProvider } from '@polkadot/api'
+import { getPolkadotApiChainInfo } from 'injectweb3-connect'
 import { BehaviorSubject, filter, first, fromEvent, share } from 'rxjs'
 
 import { isDefined } from '@/common/utils'
@@ -32,10 +33,12 @@ messages.subscribe(({ data }) => {
     const provider = new WsProvider(message.payload)
     ApiRx.create({ provider })
       .pipe(first())
-      .subscribe((api) => {
-        postMessage({ messageType: 'init', payload: { consts: api.consts } })
+      .subscribe(async (api) => {
+        postMessage({
+          messageType: 'init',
+          payload: { consts: api.consts, chainInfo: await getPolkadotApiChainInfo(api) },
+        })
         postMessage({ messageType: 'isConnected', payload: true })
-
         api.on('connected', () => self.postMessage({ messageType: 'isConnected', payload: true }))
         api.on('disconnected', () => self.postMessage({ messageType: 'isConnected', payload: false }))
 

@@ -1,4 +1,7 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
+import { getPolkadotApiChainInfo } from 'injectweb3-connect'
+
+import { Awaited } from '@/common/utils'
 
 import { ProxyApi } from '.'
 import { ClientQueryMessage, WorkerQueryMessage } from './client/query'
@@ -28,7 +31,7 @@ export type RawClientMessageEvent = MessageEvent<{
 
 export type RawMessageEvent = RawWorkerMessageEvent | RawClientMessageEvent
 
-export type WorkerInitMessage = { messageType: 'init'; payload: { consts: ProxyApi['consts'] } }
+export type WorkerInitMessage = { messageType: 'init'; payload: { consts: ProxyApi['consts']; chainInfo: MetadataDef } }
 export type ClientInitMessage = { messageType: 'init'; payload: string }
 export type WorkerConnectMessage = { messageType: 'isConnected'; payload: boolean }
 
@@ -42,3 +45,5 @@ export type WorkerMessage =
 export type ClientMessage = ClientInitMessage | ClientQueryMessage | ClientTxMessage | ClientProxyMessage
 
 export type AnyMessage = WorkerMessage | ClientMessage
+
+export type MetadataDef = Awaited<ReturnType<typeof getPolkadotApiChainInfo>>
