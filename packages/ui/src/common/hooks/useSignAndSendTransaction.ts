@@ -6,6 +6,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { ActorRef } from 'xstate'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { useApi } from '@/api/hooks/useApi'
 import { BN_ZERO } from '@/common/constants'
 import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
 
@@ -44,8 +46,15 @@ export const useSignAndSendTransaction = ({
     setBlockHash,
   })
   const queryNodeStatus = useQueryNodeTransactionStatus(isProcessing, blockHash, skipQueryNode)
+  const { wallet } = useMyAccounts()
+  const { api } = useApi()
 
-  const sign = useCallback(() => send('SIGN'), [service])
+  const sign = useCallback(() => {
+    if (wallet && api) {
+      return wallet.updateMetadata(api.chainInfo).then(() => send('SIGN'))
+    }
+    send('SIGN')
+  }, [service, wallet])
 
   useEffect(() => {
     if (skipQueryNode && isProcessing) {
