@@ -1,10 +1,12 @@
 import { render, screen } from '@testing-library/react'
-import React from 'react'
+import React, { useMemo } from 'react'
 
+import { BN_ZERO } from '@/common/constants'
 import { RevealingStageVotes } from '@/council/components/election/CandidateVote/RevealingStageVotes'
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
-import { useElectionVotes } from '@/council/hooks/useElectionVotes'
+import { CandidateWithMyVotes, useMyCastVotes } from '@/council/hooks/useMyCastVotes'
 import { calculateCommitment } from '@/council/model/calculateCommitment'
+import { electionVotingResultComparator } from '@/council/model/electionVotingResultComparator'
 import {
   RawCouncilElectionMock,
   seedCouncilCandidate,
@@ -21,12 +23,27 @@ import { stubAccounts } from '../../_mocks/transactions'
 
 const Results = ({ onlyMyVotes }: { onlyMyVotes: boolean }) => {
   const { election } = useCurrentElection()
-  const { votesPerCandidate, sumOfStakes: totalStake, isLoading: votesLoading } = useElectionVotes(election)
+  const { votes, isLoading: votesLoading } = useMyCastVotes(election?.cycleId)
+  const sortedCandidatesWithVotes = useMemo((): CandidateWithMyVotes[] => {
+    if (!election) return []
+
+    return election.candidates
+      .map((candidate) => {
+        const myVotesForCandidate = votes?.filter((vote) => vote.voteFor?.id === candidate.id) ?? []
+
+        return {
+          ...candidate,
+          myVotes: myVotesForCandidate,
+          ownStake: myVotesForCandidate.reduce((prev, next) => prev.add(next.stake), BN_ZERO),
+        }
+      })
+      .sort(electionVotingResultComparator)
+  }, [votes, election])
   return election ? (
     <RevealingStageVotes
       isLoading={votesLoading}
-      totalStake={totalStake}
-      votesPerCandidate={votesPerCandidate}
+      totalStake={election.totalElectionStake}
+      candidateWithVotes={sortedCandidatesWithVotes}
       onlyMyVotes={onlyMyVotes}
     />
   ) : null

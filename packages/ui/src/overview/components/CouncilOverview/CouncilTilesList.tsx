@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { HorizontalScroller } from '@/common/components/HorizontalScroller/HorizontalScroller'
+import { BN_ZERO } from '@/common/constants'
 import { Comparator } from '@/common/model/Comparator'
 import { useElectedCouncil } from '@/council/hooks/useElectedCouncil'
-import { useElectionVotes } from '@/council/hooks/useElectionVotes'
 import { ElectionCandidate } from '@/council/types'
 import { Election } from '@/council/types/Election'
 
@@ -44,7 +44,7 @@ export const CouncilAnnouncingTiles = ({ election }: Props) => {
 }
 
 export const CouncilRevealingTiles = ({ election }: Props) => {
-  const { sumOfStakes: totalStake } = useElectionVotes(election)
+  const totalStake = election.candidates.reduce((prev, next) => prev.add(next.totalStake), BN_ZERO)
   const candidates = election?.candidates
   const councilTiles = useMemo(
     () =>
