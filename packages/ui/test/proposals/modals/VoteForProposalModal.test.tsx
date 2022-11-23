@@ -6,8 +6,8 @@ import { MemoryRouter } from 'react-router'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import { ApiContext } from '@/api/providers/context'
 import { CKEditorProps } from '@/common/components/CKEditor'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -17,13 +17,13 @@ import { getMember } from '@/mocks/helpers'
 import { VoteForProposalModal, VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal'
 
 import { getButton } from '../../_helpers/getButton'
-import { includesTextWithMarkup } from '../../_helpers/includesTextWithMarkup'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { PROPOSAL_DATA } from '../../_mocks/server/seeds'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -108,6 +108,24 @@ describe('UI: Vote for Proposal Modal', () => {
       expect(await getButton(/^Abstain/i)).toBeDefined()
     })
 
+    it('No rationale', async () => {
+      await renderModal()
+
+      await act(async () => {
+        fireEvent.click(await getButton(/^Approve/i))
+      })
+
+      expect(await getButton(/^sign transaction and vote/i)).toBeDisabled()
+    })
+
+    it('No vote type selected', async () => {
+      await renderModal()
+
+      await fillRationale()
+
+      expect(await getButton(/^sign transaction and vote/i)).toBeDisabled()
+    })
+
     it('Filled', async () => {
       await renderModal()
 
@@ -163,7 +181,7 @@ describe('UI: Vote for Proposal Modal', () => {
       })
 
       expect(await screen.findByText('Success')).toBeDefined()
-      expect(await getButton(/See my proposal/i)).toBeDefined()
+      expect(await getButton(/Back to proposals/i)).toBeDefined()
     })
 
     it('Error', async () => {
@@ -175,9 +193,7 @@ describe('UI: Vote for Proposal Modal', () => {
       })
 
       expect(await screen.findByText('Failure')).toBeDefined()
-      expect(
-        includesTextWithMarkup(screen.getByText, `There was a problem while Approve proposal "${PROPOSAL_DATA.title}".`)
-      ).toBeInTheDocument()
+      expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
     })
   })
 

@@ -3,6 +3,7 @@ import { createType } from '@joystream/types'
 import { BountyCreationParameters } from '@joystream/types/augment'
 import { AssuranceContractType_Closed } from '@joystream/types/bounty'
 import { MemberId } from '@joystream/types/common'
+import { ThreadId } from '@joystream/types/src/common'
 import { AugmentedConst } from '@polkadot/api/types'
 import { u32 } from '@polkadot/types'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
@@ -10,12 +11,13 @@ import BN from 'bn.js'
 import Long from 'long'
 import * as Yup from 'yup'
 
-import { AddBountyModalMachineState, AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
+import { AddBountyStates } from '@/bounty/modals/AddBountyModal/machine'
 import { SubmitWorkModalMachineState } from '@/bounty/modals/SubmitWorkModal/machine'
 import { BN_ZERO } from '@/common/constants'
 import { whenDefined } from '@/common/utils'
 import { BNSchema, minContext, maxContext, moreThanMixed, lessThanMixed } from '@/common/utils/validation'
 import { MemberSchema } from '@/memberships/model/validation'
+import { Member } from '@/memberships/types'
 
 export interface Conditions {
   isThreadCategoryLoading?: boolean
@@ -24,43 +26,64 @@ export interface Conditions {
   minFundingLimit?: BalanceOf & AugmentedConst<'rxjs'>
   maxWhitelistSize?: u32 & AugmentedConst<'rxjs'>
   minWorkEntrantStake?: BalanceOf & AugmentedConst<'rxjs'>
-  isLimited: boolean
 }
 
-export const isUrlValid = (value: string) => {
-  return Yup.string().required().url().isValidSync(value)
-}
-
-export const getSchemaFields = (state: AddBountyModalMachineState) => ({
+export interface AddBountyFrom {
   [AddBountyStates.generalParameters]: {
-    title: state.context.title,
-    coverPhotoLink: state.context.coverPhotoLink,
-    creator: state.context.creator,
-    description: state.context.description,
+    creator?: Member
+    title?: string
+    coverPhotoLink?: string
+    description?: string
+  }
+  [AddBountyStates.fundingPeriodDetails]: {
+    isPerpetual: boolean
+    cherry?: BN
+    fundingPeriodLength?: BN
+    fundingMinimalRange?: BN
+    fundingMaximalRange?: BN
+  }
+  [AddBountyStates.workingPeriodDetails]: {
+    isWorkingPeriodOpen: boolean
+    workingPeriodWhitelist: Member[]
+    workingPeriodLength?: BN
+    workingPeriodStake?: BN
+  }
+  [AddBountyStates.judgingPeriodDetails]: {
+    oracle?: Member
+    judgingPeriodLength?: BN
+  }
+}
+
+export const formDefaultValues: AddBountyFrom = {
+  [AddBountyStates.generalParameters]: {
+    creator: undefined,
+    title: undefined,
+    coverPhotoLink: undefined,
+    description: undefined,
   },
   [AddBountyStates.fundingPeriodDetails]: {
-    cherry: state.context.cherry,
-    fundingMaximalRange: state.context.fundingMaximalRange,
-    fundingMinimalRange: state.context.fundingMinimalRange,
-    fundingPeriodLength: state.context.fundingPeriodLength?.toNumber(),
-    fundingPeriodType: state.context.fundingPeriodType,
+    isPerpetual: true,
+    cherry: undefined,
+    fundingPeriodLength: undefined,
+    fundingMinimalRange: undefined,
+    fundingMaximalRange: undefined,
   },
   [AddBountyStates.workingPeriodDetails]: {
-    workingPeriodLength: state.context.workingPeriodLength?.toNumber(),
-    workingPeriodWhitelist: state.context.workingPeriodWhitelist,
-    workingPeriodType: state.context.workingPeriodType,
-    workingPeriodStake: state.context.workingPeriodStake,
+    isWorkingPeriodOpen: true,
+    workingPeriodWhitelist: [],
+    workingPeriodLength: undefined,
+    workingPeriodStake: undefined,
   },
   [AddBountyStates.judgingPeriodDetails]: {
-    oracle: state.context.oracle,
-    judgingPeriodLength: state.context.judgingPeriodLength?.toNumber(),
+    oracle: undefined,
+    judgingPeriodLength: undefined,
   },
-})
+}
 
 export const addBountyModalSchema = Yup.object().shape({
   [AddBountyStates.generalParameters]: Yup.object().shape({
-    title: Yup.string().max(70, 'Max length is 70 characters').required(''),
-    coverPhotoLink: Yup.string().url('Invalid URL').required(''),
+    title: Yup.string().max(70, 'Max length is 70 characters').required('Bounty title is required'),
+    coverPhotoLink: Yup.string().url('Invalid URL'),
     creator: MemberSchema.required(),
     description: Yup.string().required(),
   }),
@@ -69,39 +92,34 @@ export const addBountyModalSchema = Yup.object().shape({
       .test(maxContext('Cherry of ${max} JOY exceeds your balance', 'maxCherryLimit'))
       .required(''),
     fundingMaximalRange: BNSchema.test(moreThanMixed(0, 'Value must be greater than zero')).required(''),
-    fundingMinimalRange: BNSchema.test('required', 'Minimal range is now required', (value, context) => {
-      return !(context.parent.fundingPeriodType === 'limited' && !value)
-    })
-      .test(lessThanMixed(Yup.ref('fundingMaximalRange'), 'Minimal range cannot be greater than maximal'))
-      .test(minContext('Minimal range must be bigger than ${min}', 'minFundingLimit')),
-    fundingPeriodLength: Yup.number().test((value, context) => {
-      if (context.parent.fundingPeriodType !== 'limited') {
-        return true
-      }
-      if (!value) {
-        return context.createError({ message: 'Funding period length is required' })
-      }
-      return true
+    fundingMinimalRange: BNSchema.when('isPerpetual', {
+      is: false,
+      then: BNSchema.test(minContext('Minimal range must be bigger than ${min}', 'minFundingLimit'))
+        .test(lessThanMixed(Yup.ref('fundingMaximalRange'), 'Minimal range cannot be greater than maximal'))
+        .required(''),
     }),
-    fundingPeriodType: Yup.string(),
+    fundingPeriodLength: Yup.number().when('isPerpetual', {
+      is: false,
+      then: Yup.number().min(1).required(),
+    }),
+    isPerpetual: Yup.boolean(),
   }),
   [AddBountyStates.workingPeriodDetails]: Yup.object().shape({
     workingPeriodStake: BNSchema.test(
-      minContext('Entrant stake must be greater than minimum of ${min} JOY', 'minWorkEntrantStake')
+      minContext('Minimum Entrant stake must be greater than ${min} JOY', 'minWorkEntrantStake')
     ).required(''),
     workingPeriodLength: Yup.number().min(1, 'Value must be greater than zero').required(),
-    workingPeriodType: Yup.string(),
-    workingPeriodWhitelist: Yup.array().test((value, context) => {
-      if (!value) {
-        return true
-      }
+    isWorkingPeriodOpen: Yup.boolean(),
+    workingPeriodWhitelist: Yup.array().when('isWorkingPeriodOpen', {
+      is: false,
+      then: Yup.array().test((value, context) => {
+        if (!value) {
+          return true
+        }
 
-      const validationContext = context.options.context as Conditions
-      if (context.parent.workingPeriodType === 'closed') {
+        const validationContext = context.options.context as Conditions
         return value.length > 0 && (validationContext.maxWhitelistSize ?? BN_ZERO).gten(value.length)
-      }
-
-      return true
+      }),
     }),
   }),
   [AddBountyStates.judgingPeriodDetails]: Yup.object().shape({
@@ -110,32 +128,38 @@ export const addBountyModalSchema = Yup.object().shape({
   }),
 })
 
-export const createBountyParametersFactory = (state: AddBountyModalMachineState): BountyCreationParameters =>
+export const createBountyParametersFactory = (state: AddBountyFrom): BountyCreationParameters =>
   createType<BountyCreationParameters, 'BountyCreationParameters'>('BountyCreationParameters', {
     oracle: createType('BountyActor', {
-      Member: createType<MemberId, 'MemberId'>('MemberId', Number(state.context.oracle?.id || 0)),
+      Member: createType<MemberId, 'MemberId'>(
+        'MemberId',
+        Number((state.judgingPeriodDetails.oracle as any as Member)?.id || 0)
+      ),
     }),
     contract_type: createType('AssuranceContractType', contractTypeFactory(state)),
     creator: createType('BountyActor', {
-      Member: createType<MemberId, 'MemberId'>('MemberId', Number(state.context.creator?.id || 0)),
+      Member: createType<MemberId, 'MemberId'>(
+        'MemberId',
+        Number((state.generalParameters.creator as any as Member)?.id || 0)
+      ),
     }),
-    cherry: createType('u128', state.context.cherry || 0),
-    entrant_stake: createType('u128', state.context.workingPeriodStake || 0),
+    cherry: createType('u128', state.fundingPeriodDetails.cherry || 0),
+    entrant_stake: createType('u128', state.workingPeriodDetails.workingPeriodStake || 0),
     funding_type: createType('FundingType', fundingTypeFactory(state)),
-    work_period: createType('u32', state.context.workingPeriodLength || 0),
-    judging_period: createType('u32', state.context.judgingPeriodLength || 0),
+    work_period: createType('u32', state.workingPeriodDetails.workingPeriodLength || 0),
+    judging_period: createType('u32', state.judgingPeriodDetails.judgingPeriodLength || 0),
   })
 
-const contractTypeFactory = (state: AddBountyModalMachineState) => {
-  if (state.context.workingPeriodType === 'open') {
+const contractTypeFactory = (state: AddBountyFrom) => {
+  if (state.workingPeriodDetails.isWorkingPeriodOpen) {
     return {
       Open: null,
     }
   }
 
   const whiteList =
-    state.context.workingPeriodWhitelist?.map((memberId) =>
-      createType<MemberId, 'MemberId'>('MemberId', Number(memberId))
+    state.workingPeriodDetails.workingPeriodWhitelist?.map((member) =>
+      createType<MemberId, 'MemberId'>('MemberId', Number(member.id))
     ) ?? []
   return {
     Closed: createType<AssuranceContractType_Closed, 'AssuranceContractType_Closed'>(
@@ -145,29 +169,29 @@ const contractTypeFactory = (state: AddBountyModalMachineState) => {
   }
 }
 
-const fundingTypeFactory = (state: AddBountyModalMachineState) => {
-  if (state.context.fundingPeriodType === 'perpetual') {
+const fundingTypeFactory = (state: AddBountyFrom) => {
+  if (state.fundingPeriodDetails.isPerpetual) {
     return {
       Perpetual: createType('FundingType_Perpetual', {
-        target: createType('u128', state.context.fundingMaximalRange || 0),
+        target: createType('u128', state.fundingPeriodDetails.fundingMaximalRange || 0),
       }),
     }
   }
 
   return {
     Limited: createType('FundingType_Limited', {
-      min_funding_amount: createType('u128', state.context.fundingMinimalRange || 0),
-      max_funding_amount: createType('u128', state.context.fundingMaximalRange || 0),
-      funding_period: createType('u32', state.context.fundingPeriodLength || 0),
+      min_funding_amount: createType('u128', state.fundingPeriodDetails.fundingMinimalRange || 0),
+      max_funding_amount: createType('u128', state.fundingPeriodDetails.fundingMaximalRange || 0),
+      funding_period: createType('u32', state.fundingPeriodDetails.fundingPeriodLength || 0),
     }),
   }
 }
 
-export const createBountyMetadataFactory = (state: AddBountyModalMachineState): IBountyMetadata => ({
-  title: state.context.title,
-  description: state.context.description,
-  bannerImageUri: state.context.coverPhotoLink,
-  discussionThread: whenDefined(state.context.newThreadId, (id) => Long.fromString(String(id))),
+export const createBountyMetadataFactory = (state: AddBountyFrom, newThreadId: ThreadId): IBountyMetadata => ({
+  title: state.generalParameters.title,
+  description: state.generalParameters.description,
+  bannerImageUri: state.generalParameters.coverPhotoLink,
+  discussionThread: whenDefined(newThreadId, (id) => Long.fromString(String(id))),
 })
 
 export const submitWorkMetadataFactory = (state: SubmitWorkModalMachineState): IBountyWorkData => ({

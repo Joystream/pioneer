@@ -19,13 +19,17 @@ import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { ForumPost } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 
+import { ModeratedPostWrapper } from './ModeratedPost'
 import { PostContextMenu } from './PostContextMenu'
 import { PostEditor } from './PostEditor'
 
 export type PostListItemType = 'forum' | 'proposal'
 
 interface PostListItemProps {
+  isFirstItem: boolean
   post: ForumPost
   isSelected?: boolean
   isPreview?: boolean
@@ -39,6 +43,7 @@ interface PostListItemProps {
 }
 
 export const PostListItem = ({
+  isFirstItem,
   post,
   isSelected,
   isPreview,
@@ -50,7 +55,8 @@ export const PostListItem = ({
   isDiscussion,
   repliesToLink,
 }: PostListItemProps) => {
-  const { createdAtBlock, lastEditedAt, author, text, repliesTo } = post
+  const { active } = useMyMemberships()
+  const { createdAtBlock, lastEditedAt, author, text, repliesTo, status } = post
   const [postText, setPostText] = useState<string>(text)
   const [postLastEditedAt, setPostLastEditedAt] = useState<string | undefined>(lastEditedAt)
 
@@ -83,6 +89,11 @@ export const PostListItem = ({
     setPostLastEditedAt(new Date().toISOString())
   }, [])
 
+  const onReply = (): void => {
+    if (!active) showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
+    return replyToPost()
+  }
+
   return (
     <ForumPostBlock ref={ref} isSelected={isSelected} isDiscussion={isDiscussion}>
       <ForumPostStyles>
@@ -91,29 +102,31 @@ export const PostListItem = ({
           {createdAtBlock && <BlockTime block={createdAtBlock} layout="reverse" />}
         </ForumPostRow>
         <MessageBody>
-          {repliesTo && (
-            <Reply>
-              <ReplyBadge>
-                <div>
-                  <ArrowReplyIcon />{' '}
-                  <Badge>
-                    <Link to={repliesToLink}>Replies to {repliesTo?.author?.handle}</Link>
-                  </Badge>
-                </div>
-              </ReplyBadge>
-              <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
-            </Reply>
-          )}
-          {editing ? (
-            <PostEditor
-              post={post}
-              onCancel={() => setEditing(false)}
-              type={type}
-              onSuccessfulEdit={onSuccessfulEdit}
-            />
-          ) : (
-            <MarkdownPreview markdown={postText} append={editionTime} size="s" />
-          )}
+          <ModeratedPostWrapper post={post}>
+            {repliesTo && (
+              <Reply>
+                <ReplyBadge>
+                  <div>
+                    <ArrowReplyIcon />{' '}
+                    <Badge>
+                      <Link to={repliesToLink}>Replies to {repliesTo?.author?.handle}</Link>
+                    </Badge>
+                  </div>
+                </ReplyBadge>
+                <MarkdownPreview markdown={repliesTo.text} size="s" isReply />
+              </Reply>
+            )}
+            {editing ? (
+              <PostEditor
+                post={post}
+                onCancel={() => setEditing(false)}
+                type={type}
+                onSuccessfulEdit={onSuccessfulEdit}
+              />
+            ) : (
+              <MarkdownPreview markdown={postText} append={editionTime} size="m" />
+            )}
+          </ModeratedPostWrapper>
         </MessageBody>
         <ForumPostRow>
           {!editing && (
@@ -128,10 +141,15 @@ export const PostListItem = ({
               />
               {isThreadActive && (
                 <>
-                  <ButtonGhost square disabled={isPreview} size="small" title="Reply" onClick={replyToPost}>
+                  <ButtonGhost square disabled={isPreview} size="small" title="Reply" onClick={onReply}>
                     <ReplyIcon />
                   </ButtonGhost>
-                  <PostContextMenu post={{ ...post, text: postText }} onEdit={() => setEditing(true)} type={type} />
+                  <PostContextMenu
+                    isFirstItem={isFirstItem}
+                    post={{ ...post, text: postText }}
+                    onEdit={() => setEditing(true)}
+                    type={type}
+                  />
                 </>
               )}
             </ButtonsGroup>
@@ -203,7 +221,7 @@ export const ForumPostStyles = styled.div`
   row-gap: 16px;
 `
 
-const ForumPostBlock = styled.div<Pick<PostListItemProps, 'isSelected' | 'isDiscussion'>>`
+export const ForumPostBlock = styled.div<Pick<PostListItemProps, 'isSelected' | 'isDiscussion'>>`
   ${({ isDiscussion }) =>
     !isDiscussion &&
     css`
@@ -213,7 +231,6 @@ const ForumPostBlock = styled.div<Pick<PostListItemProps, 'isSelected' | 'isDisc
       padding: 24px;
     `};
   scroll-margin: 48px;
-
   // Animate selection:
   &,
   ${Reply} {

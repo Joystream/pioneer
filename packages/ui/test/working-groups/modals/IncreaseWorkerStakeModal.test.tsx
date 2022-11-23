@@ -1,9 +1,10 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { configure, fireEvent, render, screen } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 
 import { Account } from '@/accounts/types'
-import { ApiContext } from '@/common/providers/api/context'
+import { ApiContext } from '@/api/providers/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { IncreaseWorkerStakeModal } from '@/working-groups/modals/IncreaseWorkerStakeModal'
 
@@ -39,8 +40,8 @@ describe('UI: IncreaseWorkerStakeModal', () => {
     hideModal: jest.fn(),
     modalData: {
       worker: {
-        minStake: 300,
-        stake: 100,
+        minStake: new BN(300),
+        stake: new BN(100),
         roleAccount: alice.address,
         id: 'workerId',
         group: {
@@ -75,7 +76,6 @@ describe('UI: IncreaseWorkerStakeModal', () => {
 
       const input = await getStakeInput()
       const submitButton = await getButton('Increase Stake')
-
       expect(input?.value).toBe('200')
       expect(submitButton).not.toBeDisabled()
     })

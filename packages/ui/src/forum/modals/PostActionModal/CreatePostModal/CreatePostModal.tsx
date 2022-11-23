@@ -7,12 +7,12 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useApi } from '@/api/hooks/useApi'
 import { FailureModal } from '@/common/components/FailureModal'
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO } from '@/common/constants'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -30,7 +30,7 @@ export const CreatePostModal = () => {
     hideModal()
   }, [])
 
-  const [state, send] = useMachine(defaultTransactionModalMachine)
+  const [state, send] = useMachine(defaultTransactionModalMachine, { context: { validateBeforeTransaction: true } })
 
   const { active } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
@@ -45,7 +45,19 @@ export const CreatePostModal = () => {
   )
 
   useEffect(() => {
-    if (state.matches('requirementsVerification') && feeInfo && requiredAmount && active && balance) {
+    if (!(feeInfo && requiredAmount && active && balance)) {
+      return
+    }
+
+    if (state.matches('requirementsVerification')) {
+      if (isEditable ? balance.transferable.gte(requiredAmount) : feeInfo.canAfford) {
+        send('PASS')
+      } else {
+        send('FAIL')
+      }
+    }
+
+    if (state.matches('beforeTransaction')) {
       if (isEditable ? balance.transferable.gte(requiredAmount) : feeInfo.canAfford) {
         send('PASS')
       } else {

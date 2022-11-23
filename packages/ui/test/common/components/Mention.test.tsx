@@ -221,7 +221,7 @@ describe('UI: Mention', () => {
     const mention: WorkingGroupOpeningMention = {
       id: '1',
       type: 'test-type',
-      rewardPerBlock: 200,
+      rewardPerBlock: new BN(200),
       applicants: 12,
       shortDescription: 'test-short-desc',
       description: 'test-desc',
@@ -312,7 +312,7 @@ describe('UI: Mention', () => {
       status: 'deciding',
       type: 'signal',
       description: 'test-desc',
-      exactExecutionBlock: mockBlock,
+      exactExecutionBlock: mockBlock.number,
       statusSetAtBlock: mockBlock,
     }
     const props: ProposalTooltipProps = {

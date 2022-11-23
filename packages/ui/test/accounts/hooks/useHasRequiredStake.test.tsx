@@ -6,7 +6,7 @@ import React, { ReactNode } from 'react'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { AccountsContextProvider } from '@/accounts/providers/accounts/provider'
 import { Account, AddressToBalanceMap, LockType } from '@/accounts/types'
-import { ApiContext } from '@/common/providers/api/context'
+import { ApiContext } from '@/api/providers/context'
 
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
 import { MockKeyringProvider } from '../../_mocks/providers'
@@ -129,12 +129,12 @@ describe('useHasRequiredStake', () => {
         locks: [
           {
             amount: new BN(100),
-            type: 'Voting',
+            type: 'Storage Worker',
           },
         ],
       },
     }
-    const { result } = renderUseTotalBalances(1000, 'Voting')
+    const { result } = renderUseTotalBalances(1000, 'Storage Worker')
     expect(result.current).toStrictEqual({
       hasRequiredStake: false,
       accountsWithTransferableBalance: null,

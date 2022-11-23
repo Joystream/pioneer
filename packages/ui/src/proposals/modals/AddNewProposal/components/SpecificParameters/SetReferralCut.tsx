@@ -1,55 +1,18 @@
-import React, { useEffect, useMemo } from 'react'
-import * as Yup from 'yup'
+import React from 'react'
 
+import { useApi } from '@/api/hooks/useApi'
 import { InputComponent, InputNumber } from '@/common/components/forms'
-import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
-import { useApi } from '@/common/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
-import { useSchema } from '@/common/hooks/useSchema'
-import { ExecutionProps } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
 
-export interface SetReferralCutParameters {
-  referralCut?: number
-}
-
-interface Props extends SetReferralCutParameters, ExecutionProps {
-  setReferralCut: (amount: number) => void
-}
-
-const baseSchema = Yup.object().shape({
-  referralCut: Yup.number(),
-})
-
-export const SetReferralCut = ({ referralCut, setReferralCut, setIsExecutionError }: Props) => {
+export const SetReferralCut = () => {
   const { api, connectionState } = useApi()
   const maximumReferralCut = api?.consts.members.referralCutMaximumPercent
   const membershipPrice = useObservable(api?.query.members.membershipPrice(), [connectionState])
-
-  const schema = useMemo(() => {
-    if (maximumReferralCut) {
-      baseSchema.fields.referralCut = baseSchema.fields.referralCut.max(
-        maximumReferralCut.toNumber(),
-        'Input must be equal or less than ${max}% for proposal to execute'
-      )
-    }
-
-    return baseSchema
-  }, [maximumReferralCut])
-
-  const { errors } = useSchema({ referralCut }, schema)
-
-  useEffect(() => setIsExecutionError(!!errors.length), [errors.length])
-
-  const onChange = (_: any, value: number) => {
-    if (Number(value) > 100) return
-
-    setReferralCut(value)
-  }
 
   return (
     <RowGapBlock gap={24}>
@@ -69,12 +32,8 @@ export const SetReferralCut = ({ referralCut, setReferralCut, setIsExecutionErro
             label="Referral Cut"
             tight
             units="%"
-            validation={hasError('referralCut', errors) ? 'invalid' : undefined}
-            message={
-              hasError('referralCut', errors)
-                ? getErrorMessage('referralCut', errors)
-                : `Enter value below ${maximumReferralCut ? maximumReferralCut.toNumber() + 1 : 100}%`
-            }
+            message={`Enter value below ${maximumReferralCut ? maximumReferralCut.toNumber() + 1 : 100}%`}
+            name="setReferralCut.referralCut"
             required
             tooltipText={
               <TextMedium>
@@ -94,9 +53,9 @@ export const SetReferralCut = ({ referralCut, setReferralCut, setIsExecutionErro
             <InputNumber
               id="amount-input"
               isTokenValue
-              value={referralCut?.toString()}
+              name="setReferralCut.referralCut"
               placeholder="0"
-              onChange={onChange}
+              maxAllowedValue={Math.pow(2, 8)}
             />
           </InputComponent>
         </RowGapBlock>

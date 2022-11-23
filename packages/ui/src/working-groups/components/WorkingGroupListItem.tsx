@@ -1,14 +1,15 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Arrow } from '@/common/components/icons'
 import { TableListItem } from '@/common/components/List'
-import { GhostRouterLink } from '@/common/components/RouterLink'
+import { GhostRouterLink, RouterLink } from '@/common/components/RouterLink'
 import { TextMedium, ValueInJoys } from '@/common/components/typography'
-import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { nameMapping, subtitleMapping } from '@/common/helpers'
-import { MemberInfoAvatar } from '@/memberships/components/Avatar'
+import { MemberHandle, MemberInfo } from '@/memberships/components'
+import { AvatarPlaceholderImage } from '@/memberships/components/Avatar'
 import { useMember } from '@/memberships/hooks/useMembership'
 import { useCountOpenings } from '@/working-groups/hooks/useCountOpenings'
 import { useCountWorkers } from '@/working-groups/hooks/useCountWorkers'
@@ -35,37 +36,42 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
     return null
   }
   return (
-    <GroupItem as={GhostRouterLink} to={groupAddress}>
-      <GroupImageContainer>
+    <GroupItem>
+      <GroupImageContainer as={GhostRouterLink} to={groupAddress}>
         <WorkingGroupImage groupName={group.name} />
       </GroupImageContainer>
-      <GroupContentBlock>
+      <GroupContentBlock as={GhostRouterLink} to={groupAddress}>
         <GroupTitle>{nameMapping(group.name)}</GroupTitle>
         <GroupContent>{subtitleMapping(group.name)}</GroupContent>
       </GroupContentBlock>
       <GroupStats>
         <StatsColumn>
           <StatsValue>{loadingWorkers ? '-' : workers}</StatsValue>
-          <Subscription>Workers</Subscription>
         </StatsColumn>
         <StatsColumn>
           <StatsValue>
             <ValueInJoys>{group?.budget?.toString()}</ValueInJoys>
           </StatsValue>
-          <Subscription>Current budget</Subscription>
         </StatsColumn>
         <StatsColumn>
           <StatsValue>{loadingOpenings ? '-' : openings}</StatsValue>
-          <Subscription>Openings</Subscription>
         </StatsColumn>
         <StatsColumn>
           <StatsValue>
-            {isLeadActive ? <MemberInfoAvatar avatarUri={lead.avatar} small noArea member={lead} /> : 'None'}
+            {isLeadActive ? (
+              <MemberInfo member={lead} memberSize="m" />
+            ) : (
+              <PlaceholderWrapper>
+                <AvatarPlaceholder />
+                <MemberHandle>No Leader</MemberHandle>
+              </PlaceholderWrapper>
+            )}
           </StatsValue>
-          <Subscription>{isLeadActive ? 'WG Lead' : 'No leader'}</Subscription>
         </StatsColumn>
       </GroupStats>
-      <Arrow direction="right" className="WorkingGroupArrow" />
+      <StyledRouterLink to={groupAddress}>
+        <Arrow direction="right" className="WorkingGroupArrow" />
+      </StyledRouterLink>
     </GroupItem>
   )
 }
@@ -82,7 +88,9 @@ const GroupImageContainer = styled.div`
   cursor: pointer;
   transition: ${Transitions.all};
 `
-
+const StyledRouterLink = styled(RouterLink)`
+  color: ${Colors.Black[600]};
+`
 const GroupContentBlock = styled.article`
   display: grid;
   grid-template-rows: 24px 40px;
@@ -102,7 +110,6 @@ const GroupTitle = styled.h5`
 `
 
 const GroupContent = styled(TextMedium)`
-  hyphens: auto;
   height: fit-content;
   max-height: 100%;
   max-width: 100%;
@@ -112,7 +119,7 @@ const GroupContent = styled(TextMedium)`
 
 const GroupStats = styled.div`
   display: grid;
-  grid-template-columns: 64px 116px 64px 64px;
+  grid-template-columns: 64px 116px 30px 140px;
   justify-content: space-between;
   width: 100%;
   grid-column-gap: 8px;
@@ -173,4 +180,14 @@ const GroupItem = styled(TableListItem)`
       color: ${Colors.Blue[500]};
     }
   }
+`
+const PlaceholderWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`
+const AvatarPlaceholder = styled(AvatarPlaceholderImage)`
+  border-radius: 50%;
+  max-width: 40px;
+  max-height: 40px;
+  margin-right: 5px;
 `

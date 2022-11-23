@@ -1,10 +1,10 @@
 import { createType } from '@joystream/types'
 import React, { MutableRefObject, Ref, useCallback, useMemo, useRef, useState } from 'react'
 
+import { useApi } from '@/api/hooks/useApi'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
-import { CKEditor } from '@/common/components/CKEditor'
+import { BaseCKEditor } from '@/common/components/CKEditor'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { PostListItemType } from '@/forum/components/PostList/PostListItem'
 import { useForumPostParents } from '@/forum/hooks/useForumPostParents'
@@ -42,7 +42,7 @@ export const PostEditor = ({ post, onCancel, type, onSuccessfulEdit }: Props) =>
           )
         }
         if (type === 'proposal' && proposalPostData.threadId) {
-          return api.tx.proposalsDiscussion.updatePost(post.id, proposalPostData.threadId, text)
+          return api.tx.proposalsDiscussion.updatePost(proposalPostData.threadId, post.id, text)
         }
       }
     },
@@ -95,7 +95,7 @@ interface MemoEditorProps {
 }
 
 const EditorMemo = React.memo(({ setNewText, initialText, editorRef }: MemoEditorProps) => (
-  <CKEditor
+  <BaseCKEditor
     ref={editorRef}
     inline
     id="editor"

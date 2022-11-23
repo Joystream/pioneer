@@ -3,6 +3,7 @@ import { asMember, Member } from '@/memberships/types'
 import { typenameToProposalDetails } from '@/proposals/model/proposalDetails'
 import { isProposalActive, typenameToProposalStatus } from '@/proposals/model/proposalStatus'
 import {
+  GetLatestProposalByMemberIdQuery,
   ProposalDiscussionPostMentionFieldsFragment,
   ProposalFieldsFragment,
   ProposalMentionFieldsFragment,
@@ -22,6 +23,12 @@ export type ProposalStatus =
   | 'expired'
   | 'cancelled'
   | 'canceledByRuntime'
+
+type CurrentProposalStatus = Extract<ProposalStatus, 'deciding' | 'gracing' | 'dormant'>
+const currentProposalStatusArray: CurrentProposalStatus[] = ['deciding', 'dormant', 'gracing']
+
+export const isActiveProposalStatus = (status: ProposalStatus): status is CurrentProposalStatus =>
+  currentProposalStatusArray.includes(status as CurrentProposalStatus)
 
 export type ProposalType =
   | 'signal'
@@ -59,6 +66,7 @@ export interface Proposal {
   createdAt: string
   endedAt?: string
   councilApprovals: number
+  exactExecutionBlock?: number
 }
 
 export const asProposal = (fields: ProposalFieldsFragment): Proposal => {
@@ -70,6 +78,7 @@ export const asProposal = (fields: ProposalFieldsFragment): Proposal => {
     proposer: asMember(fields.creator),
     createdAt: fields.createdAt,
     councilApprovals: fields.councilApprovals,
+    exactExecutionBlock: fields.exactExecutionBlock ?? undefined,
   }
 
   if (!isProposalActive(proposal.status)) {
@@ -98,7 +107,7 @@ export const asVoteWithDetails = (voteFields: VoteWithDetailsFieldsFragment): Pr
 
 export type ProposalMention = Pick<Proposal, 'id' | 'title' | 'status' | 'type'> & {
   description: string
-  exactExecutionBlock: Block | undefined
+  exactExecutionBlock?: number
   statusSetAtBlock: Block
 }
 
@@ -113,13 +122,7 @@ export const asProposalMention = (fields: ProposalMentionFieldsFragment): Propos
     createdAt: fields.statusSetAtTime,
     network: fields.createdInEvent.network,
   }),
-  exactExecutionBlock: fields.exactExecutionBlock
-    ? asBlock({
-        inBlock: fields.exactExecutionBlock,
-        network: fields.createdInEvent.network,
-        createdAt: fields.createdAt,
-      })
-    : undefined,
+  exactExecutionBlock: fields.exactExecutionBlock ?? undefined,
 })
 
 export interface ProposalDiscussionPostMention {
@@ -136,4 +139,27 @@ export const asProposalDiscussionPostMention = (
   text: fields.text,
   author: asMember(fields.author),
   createdAt: fields.createdAt,
+})
+
+export type LatestProposal = Pick<Proposal, 'id' | 'status' | 'type'> & {
+  createdInEvent: Block
+  statusSetAtBlock: Block
+  exactExecutionBlock?: number
+}
+
+export const asLatestProposal = (fields: GetLatestProposalByMemberIdQuery['proposals'][0]): LatestProposal => ({
+  id: fields.id,
+  status: typenameToProposalStatus(fields.status.__typename),
+  type: typenameToProposalDetails(fields.details.__typename),
+  createdInEvent: asBlock({
+    inBlock: fields.createdInEvent.inBlock,
+    createdAt: fields.createdInEvent.createdAt,
+    network: fields.createdInEvent.network,
+  }),
+  statusSetAtBlock: asBlock({
+    inBlock: fields.statusSetAtBlock,
+    createdAt: fields.statusSetAtTime,
+    network: fields.createdInEvent.network,
+  }),
+  exactExecutionBlock: fields.exactExecutionBlock ?? undefined,
 })

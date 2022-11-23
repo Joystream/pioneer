@@ -12,11 +12,6 @@ export const BenefitsTableLayout = '1fr 100px 100px'
 export const BenefitsTable = () => {
   return (
     <RowGapBlock gap={4}>
-      <BenefitsTableHeaders $colLayout={BenefitsTableLayout}>
-        <BenefitsTableHeader />
-        <BenefitsTableHeader>Non-Member</BenefitsTableHeader>
-        <BenefitsTableHeader>Member</BenefitsTableHeader>
-      </BenefitsTableHeaders>
       <List>
         <BenefitListItem text="Join Working Groups" />
         <BenefitListItem text="Create Proposals" />

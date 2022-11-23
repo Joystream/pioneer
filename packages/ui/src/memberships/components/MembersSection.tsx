@@ -9,7 +9,7 @@ import { setOrder, SortKey, sortMemberships } from '../model/sortMemberships'
 import { Member } from '../types'
 
 import { MyMemberListItem } from './MemberListItem'
-import { colLayoutByType } from './MemberListItem/Fileds'
+import { colLayoutByType } from './MemberListItem/Fields'
 
 interface MembersSectionProps {
   title: string

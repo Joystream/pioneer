@@ -1,5 +1,5 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
-import { render, screen, waitForElementToBeRemoved } from '@testing-library/react'
+import { configure, render, screen, waitForElementToBeRemoved } from '@testing-library/react'
 import { startOfToday, subDays } from 'date-fns'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
@@ -17,6 +17,8 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { APPLICATION_DATA, MEMBER_ALICE_DATA, OPENING_DATA, WORKER_DATA } from '../../_mocks/server/seeds'
+
+configure({ testIdAttribute: 'id' })
 
 describe('MyEarningsStat', () => {
   const mockServer = setupMockServer()

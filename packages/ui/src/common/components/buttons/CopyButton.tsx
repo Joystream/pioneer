@@ -24,6 +24,7 @@ export function CopyButton({ textToCopy, className, disabled, title }: CopyButto
       title={title ?? 'Copy'}
       disabled={disabled}
       onClick={(evt) => {
+        evt.preventDefault()
         evt.stopPropagation()
         if (textToCopy && !disabled) {
           copyValue(textToCopy)
@@ -81,6 +82,7 @@ export function CopyButtonTemplate({
       square={square}
       disabled={disabled}
       onClick={(evt) => {
+        evt.preventDefault()
         evt.stopPropagation()
         if (textToCopy && !disabled) {
           copyValue(textToCopy)

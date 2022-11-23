@@ -69,6 +69,7 @@ const generateBaseMember = () => ({
   rootAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
   controllerAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
   boundAccounts: [],
+  boundAccountsEvents: [],
   handle: `${faker.lorem.word()}_${faker.lorem.word()}_${nextId}`,
   metadata: {
     name: faker.lorem.words(2),

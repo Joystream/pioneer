@@ -1,3 +1,4 @@
+import { EventRecord } from '@polkadot/types/interfaces/system'
 import { createContext } from 'react'
 import { ActorRef, State } from 'xstate'
 
@@ -6,6 +7,7 @@ import { TransactionEvent, TransactionContext as TxContext, TransactionStateValu
 export interface UseTransaction {
   isTransactionPending: boolean
   status: TransactionStateValue | null
+  transactionEvents: EventRecord[] | null
   setStatus: (status: TransactionStateValue | null) => void
   setService: (service: ActorRef<TransactionEvent, State<TxContext>>) => void
 }
@@ -13,6 +15,7 @@ export interface UseTransaction {
 export const TransactionContext = createContext<UseTransaction>({
   isTransactionPending: false,
   status: null,
+  transactionEvents: null,
   setStatus: () => undefined,
   setService: () => undefined,
 })

@@ -1,5 +1,6 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen, waitForElementToBeRemoved, within } from '@testing-library/react'
+import { BaseDotsamaWallet } from 'injectweb3-connect'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -14,6 +15,10 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA } from '../../_mocks/server/seeds'
 
+jest.mock('@/common/hooks/useLocalStorage', () => ({
+  useLocalStorage: () => [undefined, jest.fn()],
+}))
+
 describe('UI: CurrentMember component', () => {
   const mockServer = setupMockServer()
 
@@ -25,7 +30,7 @@ describe('UI: CurrentMember component', () => {
     it('Displays create button', async () => {
       renderComponent()
 
-      expect(await getButton(/join now/i)).toBeDefined()
+      expect(await getButton(/Join Now/i)).toBeDefined()
     })
   })
 
@@ -95,6 +100,7 @@ describe('UI: CurrentMember component', () => {
                 name: 'BobStash',
               },
             ],
+            wallet: new BaseDotsamaWallet({ title: 'ExtraWallet' }),
           }}
         >
           <MockQueryNodeProviders>
@@ -111,6 +117,6 @@ describe('UI: CurrentMember component', () => {
   async function renderAndWait() {
     renderComponent()
 
-    await waitForElementToBeRemoved(() => screen.getByText(/join now/i))
+    await waitForElementToBeRemoved(() => screen.getByText(/Join Now/i))
   }
 })

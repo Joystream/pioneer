@@ -18,7 +18,7 @@ export const OverviewSidebar = () => {
   const { t } = useTranslation('overview')
   const { active } = useMyMemberships()
   const { informations } = useOverviewSidebarInformation(active?.id)
-  const { proposals } = useProposals({ status: 'active', filters: { stage: 'deciding' } })
+  const { allCount } = useProposals({ status: 'active', filters: { stage: 'deciding' } })
 
   return (
     <Container>
@@ -28,7 +28,7 @@ export const OverviewSidebar = () => {
             items={
               <>
                 {informations?.isCouncil && (
-                  <MyRoleTile role={t('sidebar.roles.council')} isLead={false} pendingProposals={proposals.length} />
+                  <MyRoleTile role={t('sidebar.roles.council')} isLead={false} pendingProposals={allCount} />
                 )}
                 {informations?.roles.map((role) => (
                   <MyRoleTile key={role.role} {...role} />

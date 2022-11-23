@@ -3,10 +3,10 @@ import { Redirect, Route, Switch } from 'react-router-dom'
 
 import '@/services/i18n'
 
+import { FMBanner } from '@/app/components/FMBanner'
 import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { CouncilModule } from '@/app/pages/Council/CouncilModule'
 import { NotFound } from '@/app/pages/NotFound'
-import { OverviewModule } from '@/app/pages/Overview/OverviewModule'
 import { GlobalStyle } from '@/app/providers/GlobalStyle'
 import { BountyRoutes } from '@/bounty/constants'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
@@ -16,11 +16,10 @@ import { NotificationsHolder } from '@/common/components/page/SideNotification'
 import { TransactionStatus } from '@/common/components/TransactionStatus/TransactionStatus'
 import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
 import { ForumRoutes } from '@/forum/constant'
-import { OverviewRoutes } from '@/overview/constants/routes'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
-import { ExtensionWarning } from './components/ExtensionWarning'
+import { ExtensionNotification } from './components/ExtensionWarning'
 import { SideBar } from './components/SideBar'
 import { MembersRoutes, ProfileRoutes, SettingsRoutes, TermsRoutes } from './constants/routes'
 import { GlobalModals } from './GlobalModals'
@@ -43,7 +42,8 @@ export const App = () => (
       <Screen>
         <OnBoardingOverlay />
         <Switch>
-          <Route path={OverviewRoutes.overview} component={OverviewModule} />
+          {/*// Uncomment to see whole overview section*/}
+          {/*<Route path={OverviewRoutes.overview} component={OverviewModule} />*/}
           <Route path={WorkingGroupsRoutes.groups} component={WorkingGroupsModule} />
           <Route path={ProposalsRoutes.home} component={ProposalsModule} />
           <Route path={CouncilRoutes.council} component={CouncilModule} />
@@ -57,7 +57,7 @@ export const App = () => (
           <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
           <Route exact path={TermsRoutes.termsOfService} component={TermsOfService} />
           <Route exact path="/404" component={NotFound} />
-          <Redirect exact from="/" to={OverviewRoutes.overview} />
+          <Redirect exact from="/" to={WorkingGroupsRoutes.groups} />
           <Redirect exact from={ProposalsRoutes.home} to={ProposalsRoutes.current} />
           <Redirect from="*" to="/404" />
         </Switch>
@@ -67,8 +67,9 @@ export const App = () => (
     <NotificationsHolder>
       <TransactionStatus />
       <ConnectionStatus />
-      <ExtensionWarning />
+      <ExtensionNotification />
     </NotificationsHolder>
+    <FMBanner />
   </Providers>
 )
 

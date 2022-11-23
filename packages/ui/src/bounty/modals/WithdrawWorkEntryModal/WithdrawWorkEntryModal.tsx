@@ -1,11 +1,13 @@
 import { useMachine } from '@xstate/react'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
+import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useApi } from '@/api/hooks/useApi'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { WithdrawWorkModalMachine, WithdrawWorkModalState } from '@/bounty/modals/WithdrawWorkEntryModal/machine'
@@ -15,18 +17,17 @@ import { InputComponent, InputContainer } from '@/common/components/forms'
 import { FileIcon } from '@/common/components/icons'
 import {
   Modal,
-  ModalHeader,
   ModalFooter,
-  TransactionInfoContainer,
+  ModalHeader,
   ScrolledModalBody,
   ScrolledModalContainer,
+  TransactionInfoContainer,
 } from '@/common/components/Modal'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
-import { TextMedium, TextBig, TokenValue } from '@/common/components/typography'
+import { TextBig, TextMedium, TokenValue } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { Colors } from '@/common/constants'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -59,7 +60,25 @@ export const WithdrawWorkEntryModal = () => {
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
-  if (!api || !activeMember || !transaction || !feeInfo) {
+  useEffect(() => {
+    if (state.matches(WithdrawWorkModalState.requirementsVerification)) {
+      if (feeInfo && feeInfo.canAfford) {
+        send('NEXT')
+      }
+
+      if (feeInfo && !feeInfo.canAfford) {
+        send('FAIL')
+      }
+    }
+  }, [feeInfo, state])
+
+  if (
+    !api ||
+    !activeMember ||
+    !transaction ||
+    !feeInfo ||
+    state.matches(WithdrawWorkModalState.requirementsVerification)
+  ) {
     return (
       <WaitModal
         title={t('common:modals.wait.title')}
@@ -71,6 +90,16 @@ export const WithdrawWorkEntryModal = () => {
           { name: 'Creating transaction', state: !!transaction },
           { name: 'Calculating fee', state: !!feeInfo },
         ]}
+      />
+    )
+  }
+
+  if (state.matches(WithdrawWorkModalState.requirementsFailed)) {
+    return (
+      <InsufficientFundsModal
+        onClose={hideModal}
+        address={activeMember.controllerAccount}
+        amount={feeInfo.transactionFee}
       />
     )
   }
@@ -111,7 +140,7 @@ export const WithdrawWorkEntryModal = () => {
   }
 
   return (
-    <Modal onClose={hideModal} modalSize="l">
+    <Modal onClose={hideModal} modalSize="m">
       <ModalHeader title={t('modals.withdrawWorkEntry.title')} onClick={hideModal} />
       <ScrolledModalBody>
         <ScrolledModalContainer>

@@ -4,6 +4,7 @@ import BN from 'bn.js'
 import React, { useMemo } from 'react'
 import { ActorRef } from 'xstate'
 
+import { useApi } from '@/api/hooks/useApi'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ArrowDownExpandedIcon } from '@/common/components/icons'
 import {
@@ -22,7 +23,6 @@ import {
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
-import { useApi } from '@/common/hooks/useApi'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal } from '@/common/modals/TransactionModal'
 

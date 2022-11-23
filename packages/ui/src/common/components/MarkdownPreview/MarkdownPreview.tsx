@@ -3,6 +3,7 @@ import ReactMarkdown, { Components } from 'react-markdown'
 import { Position } from 'react-markdown/lib/ast-to-react'
 import { PluggableList } from 'react-markdown/lib/react-markdown'
 import { Root } from 'react-markdown/lib/rehype-filter'
+import remarkGfm from 'remark-gfm'
 
 import { Mention, MentionType } from '@/common/components/Mention'
 
@@ -54,19 +55,22 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
             {children}
           </Mention>
         ) : (
-          <a href={href}>{children}</a>
+          <a style={{ overflowWrap: 'break-word' }} href={href}>
+            {children}
+          </a>
         )
       },
-
+      img: (props) => <img src={props.src} style={{ maxWidth: '100%', maxHeight: '400px' }} />,
       code: ({ children, inline }) => <code className={inline ? 'inline-code' : 'in-block-code'}>{children}</code>,
     }
   }, [markdown, append])
 
+  const stripBackslashes = (text: string) => text.replace(/\\(.)/gm, '$1')
   return (
     <div className="markdown-preview">
       <MarkdownPreviewStyles {...styleProps} />
-      <ReactMarkdown rehypePlugins={rehypePlugins} components={components} rawSourcePos>
-        {markdown}
+      <ReactMarkdown rehypePlugins={rehypePlugins} remarkPlugins={[remarkGfm]} components={components} rawSourcePos>
+        {stripBackslashes(markdown)}
       </ReactMarkdown>
       {appendAfter && <p>{append}</p>}
     </div>

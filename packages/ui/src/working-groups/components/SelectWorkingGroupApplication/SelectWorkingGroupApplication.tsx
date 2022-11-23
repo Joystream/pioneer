@@ -13,6 +13,7 @@ import { WorkingGroupApplication } from '@/working-groups/types/WorkingGroupAppl
 interface Props {
   onChange: (selected: WorkingGroupApplication) => void
   selectedApplicationId?: string
+  placeholder: string
   applicationsStatus?: ApplicationStatus
   disabled?: boolean
   className?: string
@@ -24,6 +25,7 @@ const SelectWorkingGroupApplicationBase = ({
   id,
   onChange,
   selectedApplicationId,
+  placeholder,
   disabled,
   className,
   openingId,
@@ -46,7 +48,7 @@ const SelectWorkingGroupApplicationBase = ({
       onChange={change}
       disabled={disabled}
       renderSelected={renderSelected}
-      placeholder="Select Working Group or type group name"
+      placeholder={placeholder}
       renderList={(onOptionClick) => (
         <OptionsListWorkingGroupApplication allWorkingGroupApplications={applications} onChange={onOptionClick} />
       )}

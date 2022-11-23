@@ -48,6 +48,8 @@ export const MemberId = styled(TextInlineSmall)`
 interface MemberPhotoProps {
   small?: boolean
   noArea?: boolean
+  fixedSize?: boolean
+  big?: boolean
 }
 
 export const MemberPhoto = styled.div<MemberPhotoProps>`
@@ -55,8 +57,24 @@ export const MemberPhoto = styled.div<MemberPhotoProps>`
   position: relative;
   justify-content: center;
   align-items: center;
-  max-width: ${({ small }) => (small ? '24px' : '40px')};
-  max-height: ${({ small }) => (small ? '24px' : '40px')};
+  ${({ big, small }) => {
+    if (big) {
+      return css`
+        max-width: 80px;
+        max-height: 80px;
+      `
+    } else if (small) {
+      return css`
+        max-width: 24px;
+        max-height: 24px;
+      `
+    } else {
+      return css`
+        max-width: 40px;
+        max-height: 40px;
+      `
+    }
+  }}
   ${({ noArea }) =>
     !noArea &&
     css`
@@ -79,12 +97,12 @@ export const MemberPhoto = styled.div<MemberPhotoProps>`
   }
 `
 
-export const MemberPhotoContainer = styled.div`
+export const MemberPhotoContainer = styled.div<MemberPhotoProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
+  width: ${({ fixedSize }) => (fixedSize ? '24px' : '100%')};
+  height: ${({ fixedSize }) => (fixedSize ? '24px' : '100%')};
   border-radius: ${BorderRad.round};
   overflow: hidden;
 `

@@ -3,16 +3,18 @@ import { createType } from '@joystream/types'
 import { adaptRecord } from '@miragejs/graphql/dist/orm/records'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import BN from 'bn.js'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
 
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import { ApiContext } from '@/api/providers/context'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
@@ -102,15 +104,17 @@ describe('UI: ApplyForRoleModal', () => {
 
   beforeEach(async () => {
     const fields = adaptRecord(server.server?.schema.first('WorkingGroupOpening')) as WorkingGroupOpeningFieldsFragment
-    fields.stakeAmount = 2000
+    fields.stakeAmount = '2000'
     fields.openingfilledeventopening = []
     const opening: WorkingGroupOpening = asWorkingGroupOpening(fields)
     useModal.modalData = { opening }
     useMyMemberships.setActive(getMember('alice'))
 
     stubConst(api, 'forumWorkingGroup.rewardPeriod', createType('u32', 14410))
+    stubConst(api, 'members.candidateStake', new BN(200))
+
     stubBalances(api, {
-      available: 2000,
+      available: 3000,
     })
     applyTransaction = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening')
     applyOnOpeningTxMock = api.api.tx.forumWorkingGroup.applyOnOpening as unknown as jest.Mock
@@ -144,7 +148,7 @@ describe('UI: ApplyForRoleModal', () => {
     it('No active member', async () => {
       useMyMemberships.active = undefined
 
-      renderModal()
+      await renderModal()
 
       expect(useModal.showModal).toBeCalledWith({
         modal: 'SwitchMember',
@@ -156,45 +160,59 @@ describe('UI: ApplyForRoleModal', () => {
     })
 
     it('Insufficient funds', async () => {
+      const requiredStake = '10_000'
+      const fields = adaptRecord(
+        server.server?.schema.first('WorkingGroupOpening')
+      ) as WorkingGroupOpeningFieldsFragment
+      fields.stakeAmount = requiredStake
+      fields.openingfilledeventopening = []
+      const opening: WorkingGroupOpening = asWorkingGroupOpening(fields)
+      useModal.modalData = { opening }
       batchTx = stubTransaction(api, 'api.tx.forumWorkingGroup.applyOnOpening', 10_000)
 
-      renderModal()
+      await renderModal()
 
-      expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
+      const moveFundsModalCall: MoveFundsModalCall = {
+        modal: 'MoveFundsModal',
+        data: {
+          requiredStake: new BN(requiredStake),
+          lock: 'Forum Worker',
+        },
+      }
+
+      expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
   })
 
   it('Renders a modal', async () => {
-    renderModal()
+    await renderModal()
 
     expect(await screen.findByText('Applying for role')).toBeDefined()
   })
 
   describe('Stake step', () => {
     it('Empty fields', async () => {
-      renderModal()
+      await renderModal()
 
       const button = await getNextStepButton()
       expect(button).toBeDisabled()
     })
 
     it('Too low stake', async () => {
-      renderModal()
+      await renderModal()
 
       await selectFromDropdown('Select account for Staking', 'alice')
-      const input = await screen.findByLabelText(/Select amount for staking/i)
-      fireEvent.change(input, { target: { value: '50' } })
+      await fillFieldByLabel(/Select amount for staking/i, '50')
 
       const button = await getNextStepButton()
       expect(button).toBeDisabled()
     })
 
     it('Valid fields', async () => {
-      renderModal()
+      await renderModal()
 
       await selectFromDropdown('Select account for Staking', 'alice')
-      const input = await screen.findByLabelText(/Select amount for staking/i)
-      fireEvent.change(input, { target: { value: '2000' } })
+      await fillFieldByLabel(/Select amount for staking/i, '2000')
       await selectFromDropdownWithId('role-account', 'alice')
       await selectFromDropdownWithId('reward-account', 'bob')
 
@@ -220,9 +238,9 @@ describe('UI: ApplyForRoleModal', () => {
     })
 
     it('Valid fields', async () => {
-      fireEvent.change(await screen.findByLabelText(/Question 1/i), { target: { value: 'Foo bar baz' } })
-      fireEvent.change(await screen.findByLabelText(/Question 2/i), { target: { value: 'Foo bar baz' } })
-      fireEvent.change(await screen.findByLabelText(/Question 3/i), { target: { value: 'Foo bar baz' } })
+      await fillFieldByLabel(/Question 1/i, 'Foo bar baz')
+      await fillFieldByLabel(/Question 2/i, 'Foo bar baz')
+      await fillFieldByLabel(/Question 3/i, 'Foo bar baz')
 
       const button = await getNextStepButton()
       expect(button).not.toBeDisabled()
@@ -413,7 +431,7 @@ describe('UI: ApplyForRoleModal', () => {
     expect(beforeTransactionParam.reward_account_id).toBe(alice.address)
 
     expect(beforeTransactionParam.stake_parameters.staking_account_id).toBe(bob.address)
-    expect(beforeTransactionParam.stake_parameters.stake).toBe('2000')
+    expect(beforeTransactionParam.stake_parameters.stake.toString()).toBe('2000')
 
     await act(async () => {
       fireEvent.click(await screen.findByText(/^Sign transaction/i))
@@ -428,7 +446,7 @@ describe('UI: ApplyForRoleModal', () => {
     expect(transactionParam.reward_account_id).toBe(alice.address)
 
     expect(transactionParam.stake_parameters.staking_account_id).toBe(bob.address)
-    expect(transactionParam.stake_parameters.stake).toBe('2000')
+    expect(transactionParam.stake_parameters.stake.toString()).toBe('2000')
 
     expect(metadataFromBytes(ApplicationMetadata, transactionParam.description)).toEqual({
       answers: ['Foo bar baz', 'Foo bar baz', 'Foo bar baz'],
@@ -441,11 +459,12 @@ describe('UI: ApplyForRoleModal', () => {
 
   async function fillAndSubmitStakeStep(stakingAccount = 'alice') {
     await selectFromDropdown('Select account for Staking', stakingAccount)
-    const input = await screen.findByLabelText(/Select amount for staking/i)
-    fireEvent.change(input, { target: { value: '2000' } })
+    await fillFieldByLabel(/Select amount for staking/i, '2000')
     await selectFromDropdownWithId('role-account', 'alice')
     await selectFromDropdownWithId('reward-account', 'alice')
-    fireEvent.click(await getNextStepButton())
+    await act(async () => {
+      fireEvent.click(await getNextStepButton())
+    })
     await screen.findByText('Application')
   }
 
@@ -453,31 +472,45 @@ describe('UI: ApplyForRoleModal', () => {
     await renderModal()
     await fillAndSubmitStakeStep(stakingAccount)
 
-    fireEvent.change(await screen.findByLabelText(/Question 1/i), { target: { value: 'Foo bar baz' } })
-    fireEvent.change(await screen.findByLabelText(/Question 2/i), { target: { value: 'Foo bar baz' } })
-    fireEvent.change(await screen.findByLabelText(/Question 3/i), { target: { value: 'Foo bar baz' } })
-    fireEvent.click(await getNextStepButton())
+    await fillFieldByLabel(/Question 1/i, 'Foo bar baz')
+    await fillFieldByLabel(/Question 2/i, 'Foo bar baz')
+    await fillFieldByLabel(/Question 3/i, 'Foo bar baz')
+    await act(async () => {
+      fireEvent.click(await getNextStepButton())
+    })
   }
 
-  function renderModal() {
-    return render(
-      <MemoryRouter>
-        <ModalContext.Provider value={useModal}>
-          <MockQueryNodeProviders>
-            <MockKeyringProvider>
-              <ApiContext.Provider value={api}>
-                <AccountsContext.Provider value={useAccounts}>
-                  <MembershipContext.Provider value={useMyMemberships}>
-                    <BalancesContextProvider>
-                      <ApplyForRoleModal />
-                    </BalancesContextProvider>
-                  </MembershipContext.Provider>
-                </AccountsContext.Provider>
-              </ApiContext.Provider>
-            </MockKeyringProvider>
-          </MockQueryNodeProviders>
-        </ModalContext.Provider>
-      </MemoryRouter>
-    )
+  async function fillFieldByLabel(label: string | RegExp, value: number | string) {
+    const amountInput = await screen.findByLabelText(label)
+    await act(async () => {
+      fireEvent.change(amountInput, { target: { value } })
+    })
+    await act(async () => {
+      fireEvent.blur(amountInput)
+    })
+  }
+
+  async function renderModal() {
+    await act(async () => {
+      render(
+        <MemoryRouter>
+          <ModalContext.Provider value={useModal}>
+            <MockQueryNodeProviders>
+              <MockKeyringProvider>
+                <ApiContext.Provider value={api}>
+                  <AccountsContext.Provider value={useAccounts}>
+                    <MembershipContext.Provider value={useMyMemberships}>
+                      <BalancesContextProvider>
+                        <ApplyForRoleModal />
+                      </BalancesContextProvider>
+                    </MembershipContext.Provider>
+                  </AccountsContext.Provider>
+                </ApiContext.Provider>
+              </MockKeyringProvider>
+            </MockQueryNodeProviders>
+          </ModalContext.Provider>
+        </MemoryRouter>
+      )
+    })
   }
 })

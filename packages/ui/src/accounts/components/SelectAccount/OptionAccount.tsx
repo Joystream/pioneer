@@ -1,34 +1,43 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { AccountLocks, AccountLocksWrapper } from '@/accounts/components/AccountLocks'
-
-import { BalanceInfoInRow, InfoTitle, InfoValue } from '../../../common/components/Modal'
-import { TokenValue } from '../../../common/components/typography'
-import { useBalance } from '../../hooks/useBalance'
-import { Account } from '../../types'
-import { AccountInfo } from '../AccountInfo'
+import { useBalance } from '@/accounts/hooks/useBalance'
+import { AccountOption } from '@/accounts/types'
+import { BalanceInfoInRow, InfoTitle, InfoValue } from '@/common/components/Modal'
+import { TokenValue } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
 
 interface Props {
-  option: Account
+  option: AccountOption
+  isForStaking?: boolean
 }
 
-export const OptionAccount = ({ option }: Props) => {
-  const balance = useBalance(option.address)
+export const OptionAccount = ({ option, isForStaking }: Props) => {
+  const balances = useBalance(option.address)
+  const balance = isForStaking ? balances?.total : balances?.transferable
+  const balanceType = isForStaking ? 'Total' : 'Transferable'
+  const locks = option.optionLocks
+  const isLocked = !!locks?.length
 
   return (
     <>
-      <AccountInfo account={option} />
+      <AccountInfo account={option} locked={isLocked} />
       <BalanceInfoInRow>
-        <InfoTitle>Transferable balance</InfoTitle>
+        <InfoTitle>{balanceType} balance</InfoTitle>
         <InfoValueWithLocks>
-          <TokenValue value={balance?.transferable} />
-          <AccountLocks locks={balance?.locks} />
+          <Value value={balance} locked={isLocked} />
+          <AccountLocks locks={balances?.locks} />
         </InfoValueWithLocks>
       </BalanceInfoInRow>
     </>
   )
 }
+
+const Value = styled(TokenValue)<{ locked?: boolean }>`
+  color: ${({ locked }) => (locked ? Colors.Black[500] : 'default')};
+`
 
 const InfoValueWithLocks = styled(InfoValue)`
   ${AccountLocksWrapper} {

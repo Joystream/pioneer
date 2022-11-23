@@ -7,11 +7,11 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useApi } from '@/api/hooks/useApi'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
 import { FailureModal } from '@/common/components/FailureModal'
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { WaitModal } from '@/common/components/WaitModal'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -27,7 +27,7 @@ export const DeleteThreadModal = () => {
     hideModal,
   } = useModal<DeleteThreadModalCall>()
 
-  const [state, send] = useMachine(defaultTransactionModalMachine)
+  const [state, send] = useMachine(defaultTransactionModalMachine, { context: { validateBeforeTransaction: true } })
   const { api, connectionState } = useApi()
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
@@ -46,21 +46,24 @@ export const DeleteThreadModal = () => {
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, transaction)
 
   useEffect(() => {
-    if (!state.matches('requirementsVerification')) {
-      return
+    if (state.matches('requirementsVerification')) {
+      if (!activeMember) {
+        return showModal<SwitchMemberModalCall>({
+          modal: 'SwitchMember',
+          data: {
+            originalModalName: 'DeleteThreadModal',
+            originalModalData: { thread },
+          },
+        })
+      }
+      if (transaction && feeInfo) {
+        feeInfo.canAfford && send('PASS')
+        !feeInfo.canAfford && send('FAIL')
+      }
     }
-    if (!activeMember) {
-      return showModal<SwitchMemberModalCall>({
-        modal: 'SwitchMember',
-        data: {
-          originalModalName: 'DeleteThreadModal',
-          originalModalData: { thread },
-        },
-      })
-    }
-    if (transaction && feeInfo) {
-      feeInfo.canAfford && send('PASS')
-      !feeInfo.canAfford && send('FAIL')
+
+    if (state.matches('beforeTransaction')) {
+      send(feeInfo?.canAfford ? 'PASS' : 'FAIL')
     }
   }, [state.value, activeMember, transaction, feeInfo?.canAfford])
 

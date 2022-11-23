@@ -4,6 +4,7 @@ import BN from 'bn.js'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
+import { ApiContext } from '@/api/providers/context'
 import {
   BountyWithdrawContributionModalCall,
   WithdrawContributionModal,
@@ -11,7 +12,6 @@ import {
 import { Bounty, Contributor } from '@/bounty/types/Bounty'
 import { BN_ZERO } from '@/common/constants'
 import { formatTokenValue } from '@/common/model/formatters'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -22,6 +22,7 @@ import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -36,7 +37,7 @@ jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
 describe('UI: WithdrawContributionModal', () => {
   const contributor: Contributor = {
     actor: getMember('alice'),
-    amount: new BN('10000'),
+    amount: new BN(10000),
     hasWithdrawn: false,
   }
 
@@ -137,7 +138,7 @@ describe('UI: WithdrawContributionModal', () => {
     await act(async () => {
       fireEvent.click(await getButton('modals.withdraw.contribution.button'))
     })
-    expect(await screen.findByText('modals.withdrawContribution.error')).toBeDefined()
+    expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })
 
   it('Transaction success', async () => {

@@ -1,26 +1,19 @@
 import BN from 'bn.js'
-import React, { ReactNode, useCallback, useEffect, useMemo } from 'react'
-import * as Yup from 'yup'
+import React, { ReactNode, useCallback } from 'react'
+import { Event, EventData } from 'xstate/lib/types'
+import { ValidationError } from 'yup'
 
-import { SelectAccount } from '@/accounts/components/SelectAccount'
-import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
-import { useMyBalances } from '@/accounts/hooks/useMyBalances'
+import { SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { Account, LockType } from '@/accounts/types'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
+import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
+import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium, ValueInJoys } from '@/common/components/typography'
-import { useForm } from '@/common/hooks/useForm'
-import { useNumberInput } from '@/common/hooks/useNumberInput'
 import { formatTokenValue } from '@/common/model/formatters'
-import { AccountSchema } from '@/memberships/model/validation'
-import { StakeStepFormFields } from '@/working-groups/modals/ApplyForRoleModal/StakeStep'
-
-const StakeStepFormSchema = Yup.object().shape({
-  account: AccountSchema.required(),
-  amount: Yup.number().required(),
-})
+import { VoteForCouncilEvent, VoteForCouncilMachineState } from '@/council/modals/VoteForCouncil/machine'
 
 export interface StakeStepProps {
   stakeLock: LockType
@@ -28,7 +21,9 @@ export interface StakeStepProps {
   accountsFilter?: (option: Account) => boolean
   accountText?: ReactNode
   amountText?: ReactNode
-  onChange: (isValid: boolean, fields: StakeStepFormFields) => void
+  send: (event: Event<VoteForCouncilEvent>, payload?: EventData | undefined) => void
+  state: VoteForCouncilMachineState
+  errors: ValidationError[]
 }
 
 export const StakeStep = ({
@@ -37,46 +32,46 @@ export const StakeStep = ({
   accountsFilter,
   accountText = defaultAccountText,
   amountText = defaultAmountText(minStake),
-  onChange,
+  send,
+  state,
+  errors,
 }: StakeStepProps) => {
-  const balances = useMyBalances()
-  const [amount, setAmount] = useNumberInput(0, minStake)
-  const schema = useMemo(() => {
-    StakeStepFormSchema.fields.amount = StakeStepFormSchema.fields.amount.min(
-      minStake.toNumber(),
-      'You need at least ${min} stake'
-    )
-    return StakeStepFormSchema
-  }, [minStake])
-
-  const { changeField, validation, fields } = useForm<StakeStepFormFields>({}, schema)
-  const { isValid, errors } = validation
-
-  useEffect(() => {
-    changeField('amount', amount)
-  }, [amount])
-
-  const stake = new BN(fields.amount ?? minStake)
   const selectAccountFilter = useCallback(
-    (account: Account) =>
-      (!accountsFilter || accountsFilter(account)) &&
-      filterByRequiredStake(stake, stakeLock, balances[account.address]),
-    [accountsFilter, stake.toString(), JSON.stringify(balances)]
+    (account: Account) => !accountsFilter || accountsFilter(account),
+    [accountsFilter]
   )
-
-  useEffect(() => onChange(isValid, fields), [isValid, JSON.stringify(fields)])
 
   return (
     <RowGapBlock gap={24}>
       <Row>
         <RowGapBlock gap={20}>
           {accountText}
-          <InputComponent label="Select account for Staking" required inputSize="l">
-            <SelectAccount
+          <InputComponent
+            label="Select account for Staking"
+            required
+            inputSize="l"
+            tooltipText={
+              <>
+                If someone voted for a candidate in an election, they will and can recover their stake at a later time.
+                Importantly, a vote which was devoted to a losing candidate can be freed the moment the election cycle
+                is over, while a vote which was devoted to a winner can only be freed after the announcing period of the
+                next election begins. The idea behind this asymmetry is to more closely expose the winners to the
+                consequences of their decision.
+                <TooltipExternalLink
+                  href="https://joystream.gitbook.io/testnet-workspace/system/council"
+                  target="_blank"
+                >
+                  <TextMedium>More details</TextMedium> <LinkSymbol />
+                </TooltipExternalLink>
+              </>
+            }
+          >
+            <SelectStakingAccount
               id="account-select"
-              onChange={(account) => changeField('account', account)}
-              selected={fields.account}
+              onChange={(account) => send('SET_ACCOUNT', { account })}
+              selected={state.context.account}
               minBalance={minStake}
+              lockType={stakeLock}
               filter={selectAccountFilter}
             />
           </InputComponent>
@@ -91,15 +86,18 @@ export const StakeStep = ({
             label="Select amount for Staking"
             tight
             units="tJOY"
-            validation={amount && hasError('amount', errors) ? 'invalid' : undefined}
-            message={(amount && hasError('amount', errors) ? getErrorMessage('amount', errors) : undefined) || ' '}
+            validation={state.context.stake && hasError('stake', errors) ? 'invalid' : undefined}
+            message={
+              (state.context.stake && hasError('stake', errors) ? getErrorMessage('stake', errors) : undefined) || ' '
+            }
             required
           >
             <InputNumber
               id="amount-input"
-              value={formatTokenValue(amount)}
+              isTokenValue
+              value={state.context.stake?.toString()}
               placeholder={formatTokenValue(minStake)}
-              onChange={(event) => setAmount(event.target.value)}
+              onChange={(_, value) => send('SET_STAKE', { stake: new BN(value) })}
             />
           </InputComponent>
         </RowGapBlock>

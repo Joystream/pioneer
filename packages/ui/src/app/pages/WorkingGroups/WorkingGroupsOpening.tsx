@@ -44,14 +44,21 @@ export const WorkingGroupOpening = () => {
   const { showModal } = useModal()
   const { active: activeMembership } = useMyMemberships()
   const { isLoading, opening } = useOpening(id)
-  const hiringApplication = useMemo(() => {
+
+  const activeApplications = useMemo(() => {
     if (opening) {
-      return opening.applications.find(({ status }) => status === 'ApplicationStatusAccepted')
+      return opening.applications?.filter((application) => application.status !== 'ApplicationStatusWithdrawn')
+    }
+  }, opening?.applications)
+
+  const hiringApplication = useMemo(() => {
+    if (activeApplications) {
+      return activeApplications.find(({ status }) => status === 'ApplicationStatusAccepted')
     }
   }, [opening?.id])
   const myApplication = useMemo(() => {
-    if (opening) {
-      return opening.applications.find(({ id }) => id === activeMembership?.id)
+    if (activeApplications) {
+      return activeApplications.find(({ id }) => id === activeMembership?.id)
     }
   }, [opening?.id, activeMembership?.id])
   const rewardPeriod = useRewardPeriod(opening?.groupId)
@@ -146,7 +153,7 @@ export const WorkingGroupOpening = () => {
                 title={`Reward per ${rewardPeriod?.toString()} blocks`}
                 value={rewardPeriod?.mul(opening.rewardPerBlock)}
               />
-              <TokenValueStat title="Minimal stake" tooltipText="Lorem ipsum..." value={opening.budget} />
+              <TokenValueStat title="Minimal stake" tooltipText="Lorem ipsum..." value={opening.stake} />
               <ApplicationStats applicants={opening.applicants} hiring={opening.hiring} status={opening.status} />
             </Statistics>
           </RowGapBlock>
@@ -160,13 +167,13 @@ export const WorkingGroupOpening = () => {
       sidebar={
         <SidePanel scrollable>
           <ApplicantsList
-            allApplicants={opening.applications}
+            allApplicants={activeApplications}
             myApplication={myApplication}
             hired={hiringApplication}
             hiringComplete={opening.status !== OpeningStatuses.OPEN}
             leadId={opening.leadId}
           />
-          {opening.status === OpeningStatuses.OPEN && !opening.applications.length && <ApplicationStatus />}
+          {opening.status === OpeningStatuses.OPEN && !activeApplications?.length && <ApplicationStatus />}
         </SidePanel>
       }
       footer={

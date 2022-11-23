@@ -41,11 +41,11 @@ export const BountiesLayout = ({ tilesComponent, extraFilter, bountyStatus = 'ac
           <EmptyTab />
         ) : (
           <MainPanel>
+            {tilesComponent}
             {isInitialLoading ? (
               <Loading />
             ) : (
               <>
-                {tilesComponent}
                 <BountyFilters searchSlot={searchSlot} onApply={setFilters} periodFilter />
                 {isLoading ? (
                   <SearchProcess title={t('list.searching')} description={t('list.searchingText')} />

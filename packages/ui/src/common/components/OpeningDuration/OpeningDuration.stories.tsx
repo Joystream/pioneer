@@ -1,5 +1,5 @@
 import { Meta, Story } from '@storybook/react'
-import React, { useState } from 'react'
+import React from 'react'
 
 import { OpeningDuration, OpeningDurationProps } from '@/common/components/OpeningDuration/OpeningDuration'
 
@@ -9,8 +9,7 @@ export default {
 } as Meta
 
 const Template: Story<OpeningDurationProps> = (args) => {
-  const [isLimited, setIsLimited] = useState<OpeningDurationProps['value']>({ isLimited: true, length: 43200 })
-  return <OpeningDuration {...args} value={isLimited} onChange={setIsLimited} />
+  return <OpeningDuration {...args} />
 }
 export const Default = Template.bind({})
 Default.args = {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { LeadMemberIcon } from '@/common/components/icons'
@@ -18,6 +18,8 @@ interface MemberAvatarProps extends AvatarProps {
   small?: boolean
   noArea?: boolean
   isLead?: boolean
+  fixedSize?: boolean
+  big?: boolean
 }
 
 export interface MemberInfoAvatarProps extends MemberAvatarProps {
@@ -27,12 +29,30 @@ export interface MemberInfoAvatarProps extends MemberAvatarProps {
 }
 
 export const Avatar = React.memo(({ avatarUri, className }: AvatarProps) => {
-  return avatarUri ? <AvatarImg src={avatarUri} className={className} /> : <AvatarPlaceholderImage />
+  const [avatarStatus, setAvatarStatus] = useState<'loading' | 'error' | 'completed'>('loading')
+  if (!avatarUri) {
+    return <AvatarPlaceholderImage />
+  }
+
+  return (
+    <>
+      {avatarStatus !== 'error' && (
+        <AvatarImg
+          isLoading={avatarStatus === 'loading'}
+          src={avatarUri}
+          onError={() => setAvatarStatus('error')}
+          onLoad={() => setAvatarStatus('completed')}
+          className={className}
+        />
+      )}
+      {avatarStatus !== 'completed' && <AvatarPlaceholderImage />}
+    </>
+  )
 })
 
-export const MemberAvatar = React.memo(({ isLead, avatarUri, className, small, noArea }: MemberAvatarProps) => {
+export const MemberAvatar = React.memo(({ isLead, avatarUri, className, small, noArea, big }: MemberAvatarProps) => {
   return (
-    <MemberPhoto small={small} noArea={noArea}>
+    <MemberPhoto small={small} noArea={noArea} big={big}>
       <MemberPhotoContainer>
         <Avatar avatarUri={avatarUri} className={className} />
         {isLead && (
@@ -48,11 +68,11 @@ export const MemberAvatar = React.memo(({ isLead, avatarUri, className, small, n
 })
 
 export const MemberInfoAvatar = React.memo(
-  ({ avatarUri, className, small, noArea, member, isLead, forBig }: MemberInfoAvatarProps) => {
+  ({ avatarUri, className, small, noArea, member, isLead, forBig, fixedSize }: MemberInfoAvatarProps) => {
     return (
       <Tooltip forBig={forBig} popupContent={<MemberInfo member={member} isOnDark isLead={isLead} />}>
         <MemberPhoto small={small} noArea={noArea}>
-          <MemberPhotoContainer>
+          <MemberPhotoContainer fixedSize={fixedSize}>
             <Avatar avatarUri={avatarUri} className={className} />
           </MemberPhotoContainer>
         </MemberPhoto>
@@ -61,11 +81,12 @@ export const MemberInfoAvatar = React.memo(
   }
 )
 
-export const AvatarImg = styled.img`
+export const AvatarImg = styled.img<{ isLoading?: boolean }>`
   height: 100%;
   width: auto;
   max-width: 100%;
   object-fit: cover;
+  display: ${({ isLoading }) => isLoading && 'none'};
 `
 
 export const AvatarPlaceholderImage = styled(AvatarPlaceholder)`

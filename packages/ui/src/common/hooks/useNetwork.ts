@@ -8,13 +8,15 @@ import { useLocalStorage } from './useLocalStorage'
 export const useNetwork = () => {
   const [network = DEFAULT_NETWORK.type, setNetwork] = useLocalStorage<NetworkType>('network')
 
+  const showMocks = typeof IS_DEVELOPMENT === 'boolean' && IS_DEVELOPMENT
   const [autoConfEndpoints] = useLocalStorage<NetworkEndpoints>('auto_network_config')
+
   const networks = useMemo<NetworkType[]>(
     () => [
       'local',
-      'local-mocks',
+      ...(showMocks ? ['local-mocks' as const] : []),
       ...(endpointsAreDefined(autoConfEndpoints) ? ['auto-conf' as const] : []),
-      ...(IS_TESTNET_DEFINED ? ['olympia-testnet' as const] : []),
+      ...(IS_TESTNET_DEFINED ? ['joystream-testnet' as const] : []),
     ],
     [autoConfEndpoints]
   )

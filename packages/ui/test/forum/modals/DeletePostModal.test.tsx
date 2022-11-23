@@ -7,7 +7,7 @@ import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { ApiContext } from '@/common/providers/api/context'
+import { ApiContext } from '@/api/providers/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { ModalCallData, UseModal } from '@/common/providers/modal/types'
 import { DeletePostModal, DeletePostModalCall } from '@/forum/modals/PostActionModal/DeletePostModal'
@@ -25,6 +25,7 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -121,7 +122,7 @@ describe('UI: DeletePostModal', () => {
       fireEvent.click(await getButton(/Sign and delete/i))
     })
 
-    expect(await screen.findByText('There was a problem deleting your post.')).toBeDefined()
+    expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })
 
   it('Transaction success', async () => {

@@ -16,6 +16,7 @@ export type WorkerProposalDetailsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -31,6 +32,13 @@ export type WorkerProposalDetailsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
@@ -41,6 +49,7 @@ export type ProposalFieldsFragment = {
   statusSetAtTime: any
   createdAt: any
   councilApprovals: number
+  exactExecutionBlock?: number | null
   status:
     | { __typename: 'ProposalStatusCanceledByRuntime' }
     | { __typename: 'ProposalStatusCancelled' }
@@ -88,6 +97,7 @@ export type ProposalFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -103,6 +113,13 @@ export type ProposalFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
@@ -120,6 +137,7 @@ export type VoteFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -135,6 +153,13 @@ export type VoteFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
@@ -157,6 +182,7 @@ export type VoteWithDetailsFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -172,6 +198,13 @@ export type VoteWithDetailsFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
@@ -185,6 +218,7 @@ export type ProposalWithDetailsFieldsFragment = {
   statusSetAtTime: any
   createdAt: any
   councilApprovals: number
+  exactExecutionBlock?: number | null
   votes: Array<{
     __typename: 'ProposalVotedEvent'
     id: string
@@ -199,6 +233,7 @@ export type ProposalWithDetailsFieldsFragment = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -214,6 +249,13 @@ export type ProposalWithDetailsFieldsFragment = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   }>
   createdInEvent: { __typename: 'ProposalCreatedEvent'; inBlock: number; createdAt: any; network: Types.Network }
@@ -241,15 +283,15 @@ export type ProposalWithDetailsFieldsFragment = {
     | { __typename: 'CreateBlogPostProposalDetails' }
     | {
         __typename: 'CreateWorkingGroupLeadOpeningProposalDetails'
-        stakeAmount: number
+        stakeAmount: string
         unstakingPeriod: number
-        rewardPerBlock: number
+        rewardPerBlock: string
         metadata?: { __typename: 'WorkingGroupOpeningMetadata'; description?: string | null } | null
         group?: { __typename: 'WorkingGroup'; id: string; name: string } | null
       }
     | {
         __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails'
-        amount: number
+        amount: string
         lead?: {
           __typename: 'Worker'
           createdAt: any
@@ -263,6 +305,7 @@ export type ProposalWithDetailsFieldsFragment = {
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
+            isCouncilMember: boolean
             inviteCount: number
             createdAt: any
             metadata: {
@@ -278,6 +321,13 @@ export type ProposalWithDetailsFieldsFragment = {
               isLead: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
           }
         } | null
       }
@@ -300,6 +350,7 @@ export type ProposalWithDetailsFieldsFragment = {
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
+            isCouncilMember: boolean
             inviteCount: number
             createdAt: any
             metadata: {
@@ -315,6 +366,13 @@ export type ProposalWithDetailsFieldsFragment = {
               isLead: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
           }
         } | null
       }
@@ -322,7 +380,7 @@ export type ProposalWithDetailsFieldsFragment = {
         __typename: 'FundingRequestProposalDetails'
         destinationsList?: {
           __typename: 'FundingRequestDestinationsList'
-          destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
+          destinations: Array<{ __typename: 'FundingRequestDestination'; amount: string; account: string }>
         } | null
       }
     | { __typename: 'LockBlogPostProposalDetails' }
@@ -330,17 +388,17 @@ export type ProposalWithDetailsFieldsFragment = {
         __typename: 'RuntimeUpgradeProposalDetails'
         newRuntimeBytecode?: { __typename: 'RuntimeWasmBytecode'; id: string } | null
       }
-    | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: number }
-    | { __typename: 'SetCouncilorRewardProposalDetails'; newRewardPerBlock: number }
-    | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: number }
+    | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: string }
+    | { __typename: 'SetCouncilorRewardProposalDetails'; newRewardPerBlock: string }
+    | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: string }
     | { __typename: 'SetInitialInvitationCountProposalDetails'; newInitialInvitationsCount: number }
     | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
     | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
-    | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: number }
+    | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: string }
     | { __typename: 'SetReferralCutProposalDetails'; newReferralCut: number }
     | {
         __typename: 'SetWorkingGroupLeadRewardProposalDetails'
-        newRewardPerBlock: number
+        newRewardPerBlock: string
         lead?: {
           __typename: 'Worker'
           group: { __typename: 'WorkingGroup'; id: string; name: string }
@@ -353,6 +411,7 @@ export type ProposalWithDetailsFieldsFragment = {
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
+            isCouncilMember: boolean
             inviteCount: number
             createdAt: any
             metadata: {
@@ -368,13 +427,20 @@ export type ProposalWithDetailsFieldsFragment = {
               isLead: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
           }
         } | null
       }
     | { __typename: 'SignalProposalDetails'; text: string }
     | {
         __typename: 'SlashWorkingGroupLeadProposalDetails'
-        amount: number
+        amount: string
         lead?: {
           __typename: 'Worker'
           createdAt: any
@@ -388,6 +454,7 @@ export type ProposalWithDetailsFieldsFragment = {
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
+            isCouncilMember: boolean
             inviteCount: number
             createdAt: any
             metadata: {
@@ -403,12 +470,19 @@ export type ProposalWithDetailsFieldsFragment = {
               isLead: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
           }
         } | null
       }
     | {
         __typename: 'TerminateWorkingGroupLeadProposalDetails'
-        slashingAmount?: number | null
+        slashingAmount?: string | null
         lead?: {
           __typename: 'Worker'
           group: { __typename: 'WorkingGroup'; id: string; name: string }
@@ -421,6 +495,7 @@ export type ProposalWithDetailsFieldsFragment = {
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
+            isCouncilMember: boolean
             inviteCount: number
             createdAt: any
             metadata: {
@@ -436,13 +511,20 @@ export type ProposalWithDetailsFieldsFragment = {
               isLead: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
           }
         } | null
       }
     | { __typename: 'UnlockBlogPostProposalDetails' }
     | {
         __typename: 'UpdateWorkingGroupBudgetProposalDetails'
-        amount: number
+        amount: string
         group?: { __typename: 'WorkingGroup'; id: string; name: string } | null
       }
     | { __typename: 'VetoProposalDetails'; proposal?: { __typename: 'Proposal'; id: string; title: string } | null }
@@ -476,6 +558,7 @@ export type ProposalWithDetailsFieldsFragment = {
           handle: string
           isVerified: boolean
           isFoundingMember: boolean
+          isCouncilMember: boolean
           inviteCount: number
           createdAt: any
           metadata: {
@@ -491,7 +574,18 @@ export type ProposalWithDetailsFieldsFragment = {
             isLead: boolean
             group: { __typename: 'WorkingGroup'; name: string }
           }>
+          stakingaccountaddedeventmember?: Array<{
+            __typename: 'StakingAccountAddedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+            account: string
+          }> | null
         }
+        status:
+          | { __typename: 'ProposalDiscussionPostStatusActive' }
+          | { __typename: 'ProposalDiscussionPostStatusLocked' }
+          | { __typename: 'ProposalDiscussionPostStatusRemoved' }
       } | null
       createdInEvent: {
         __typename: 'ProposalDiscussionPostCreatedEvent'
@@ -508,6 +602,7 @@ export type ProposalWithDetailsFieldsFragment = {
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
+        isCouncilMember: boolean
         inviteCount: number
         createdAt: any
         metadata: {
@@ -523,7 +618,18 @@ export type ProposalWithDetailsFieldsFragment = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       }
+      status:
+        | { __typename: 'ProposalDiscussionPostStatusActive' }
+        | { __typename: 'ProposalDiscussionPostStatusLocked' }
+        | { __typename: 'ProposalDiscussionPostStatusRemoved' }
     }>
     mode:
       | {
@@ -556,6 +662,7 @@ export type ProposalWithDetailsFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -571,6 +678,13 @@ export type ProposalWithDetailsFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
@@ -601,6 +715,7 @@ export type DiscussionPostFieldsFragment = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -616,7 +731,18 @@ export type DiscussionPostFieldsFragment = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
+    status:
+      | { __typename: 'ProposalDiscussionPostStatusActive' }
+      | { __typename: 'ProposalDiscussionPostStatusLocked' }
+      | { __typename: 'ProposalDiscussionPostStatusRemoved' }
   } | null
   createdInEvent: {
     __typename: 'ProposalDiscussionPostCreatedEvent'
@@ -633,6 +759,7 @@ export type DiscussionPostFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -648,7 +775,18 @@ export type DiscussionPostFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
+  status:
+    | { __typename: 'ProposalDiscussionPostStatusActive' }
+    | { __typename: 'ProposalDiscussionPostStatusLocked' }
+    | { __typename: 'ProposalDiscussionPostStatusRemoved' }
 }
 
 export type DiscussionPostWithoutReplyFieldsFragment = {
@@ -672,6 +810,7 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -687,7 +826,18 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
+  status:
+    | { __typename: 'ProposalDiscussionPostStatusActive' }
+    | { __typename: 'ProposalDiscussionPostStatusLocked' }
+    | { __typename: 'ProposalDiscussionPostStatusRemoved' }
 }
 
 export type ProposalPostParentsFragment = { __typename: 'ProposalDiscussionPost'; discussionThreadId: string }
@@ -756,6 +906,7 @@ export type ProposalDiscussionPostMentionFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -771,11 +922,21 @@ export type ProposalDiscussionPostMentionFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
 }
 
 export type GetProposalsQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.ProposalWhereInput>
+  orderBy?: Types.InputMaybe<Array<Types.ProposalOrderByInput> | Types.ProposalOrderByInput>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+  offset?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetProposalsQuery = {
@@ -787,6 +948,7 @@ export type GetProposalsQuery = {
     statusSetAtTime: any
     createdAt: any
     councilApprovals: number
+    exactExecutionBlock?: number | null
     status:
       | { __typename: 'ProposalStatusCanceledByRuntime' }
       | { __typename: 'ProposalStatusCancelled' }
@@ -834,6 +996,7 @@ export type GetProposalsQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -849,6 +1012,13 @@ export type GetProposalsQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   }>
 }
@@ -878,6 +1048,7 @@ export type GetProposalQuery = {
     statusSetAtTime: any
     createdAt: any
     councilApprovals: number
+    exactExecutionBlock?: number | null
     votes: Array<{
       __typename: 'ProposalVotedEvent'
       id: string
@@ -892,6 +1063,7 @@ export type GetProposalQuery = {
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
+        isCouncilMember: boolean
         inviteCount: number
         createdAt: any
         metadata: {
@@ -907,6 +1079,13 @@ export type GetProposalQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       }
     }>
     createdInEvent: { __typename: 'ProposalCreatedEvent'; inBlock: number; createdAt: any; network: Types.Network }
@@ -934,15 +1113,15 @@ export type GetProposalQuery = {
       | { __typename: 'CreateBlogPostProposalDetails' }
       | {
           __typename: 'CreateWorkingGroupLeadOpeningProposalDetails'
-          stakeAmount: number
+          stakeAmount: string
           unstakingPeriod: number
-          rewardPerBlock: number
+          rewardPerBlock: string
           metadata?: { __typename: 'WorkingGroupOpeningMetadata'; description?: string | null } | null
           group?: { __typename: 'WorkingGroup'; id: string; name: string } | null
         }
       | {
           __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails'
-          amount: number
+          amount: string
           lead?: {
             __typename: 'Worker'
             createdAt: any
@@ -956,6 +1135,7 @@ export type GetProposalQuery = {
               handle: string
               isVerified: boolean
               isFoundingMember: boolean
+              isCouncilMember: boolean
               inviteCount: number
               createdAt: any
               metadata: {
@@ -971,6 +1151,13 @@ export type GetProposalQuery = {
                 isLead: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
+              stakingaccountaddedeventmember?: Array<{
+                __typename: 'StakingAccountAddedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+                account: string
+              }> | null
             }
           } | null
         }
@@ -993,6 +1180,7 @@ export type GetProposalQuery = {
               handle: string
               isVerified: boolean
               isFoundingMember: boolean
+              isCouncilMember: boolean
               inviteCount: number
               createdAt: any
               metadata: {
@@ -1008,6 +1196,13 @@ export type GetProposalQuery = {
                 isLead: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
+              stakingaccountaddedeventmember?: Array<{
+                __typename: 'StakingAccountAddedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+                account: string
+              }> | null
             }
           } | null
         }
@@ -1015,7 +1210,7 @@ export type GetProposalQuery = {
           __typename: 'FundingRequestProposalDetails'
           destinationsList?: {
             __typename: 'FundingRequestDestinationsList'
-            destinations: Array<{ __typename: 'FundingRequestDestination'; amount: any; account: string }>
+            destinations: Array<{ __typename: 'FundingRequestDestination'; amount: string; account: string }>
           } | null
         }
       | { __typename: 'LockBlogPostProposalDetails' }
@@ -1023,17 +1218,17 @@ export type GetProposalQuery = {
           __typename: 'RuntimeUpgradeProposalDetails'
           newRuntimeBytecode?: { __typename: 'RuntimeWasmBytecode'; id: string } | null
         }
-      | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: number }
-      | { __typename: 'SetCouncilorRewardProposalDetails'; newRewardPerBlock: number }
-      | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: number }
+      | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: string }
+      | { __typename: 'SetCouncilorRewardProposalDetails'; newRewardPerBlock: string }
+      | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: string }
       | { __typename: 'SetInitialInvitationCountProposalDetails'; newInitialInvitationsCount: number }
       | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
       | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
-      | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: number }
+      | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: string }
       | { __typename: 'SetReferralCutProposalDetails'; newReferralCut: number }
       | {
           __typename: 'SetWorkingGroupLeadRewardProposalDetails'
-          newRewardPerBlock: number
+          newRewardPerBlock: string
           lead?: {
             __typename: 'Worker'
             group: { __typename: 'WorkingGroup'; id: string; name: string }
@@ -1046,6 +1241,7 @@ export type GetProposalQuery = {
               handle: string
               isVerified: boolean
               isFoundingMember: boolean
+              isCouncilMember: boolean
               inviteCount: number
               createdAt: any
               metadata: {
@@ -1061,13 +1257,20 @@ export type GetProposalQuery = {
                 isLead: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
+              stakingaccountaddedeventmember?: Array<{
+                __typename: 'StakingAccountAddedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+                account: string
+              }> | null
             }
           } | null
         }
       | { __typename: 'SignalProposalDetails'; text: string }
       | {
           __typename: 'SlashWorkingGroupLeadProposalDetails'
-          amount: number
+          amount: string
           lead?: {
             __typename: 'Worker'
             createdAt: any
@@ -1081,6 +1284,7 @@ export type GetProposalQuery = {
               handle: string
               isVerified: boolean
               isFoundingMember: boolean
+              isCouncilMember: boolean
               inviteCount: number
               createdAt: any
               metadata: {
@@ -1096,12 +1300,19 @@ export type GetProposalQuery = {
                 isLead: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
+              stakingaccountaddedeventmember?: Array<{
+                __typename: 'StakingAccountAddedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+                account: string
+              }> | null
             }
           } | null
         }
       | {
           __typename: 'TerminateWorkingGroupLeadProposalDetails'
-          slashingAmount?: number | null
+          slashingAmount?: string | null
           lead?: {
             __typename: 'Worker'
             group: { __typename: 'WorkingGroup'; id: string; name: string }
@@ -1114,6 +1325,7 @@ export type GetProposalQuery = {
               handle: string
               isVerified: boolean
               isFoundingMember: boolean
+              isCouncilMember: boolean
               inviteCount: number
               createdAt: any
               metadata: {
@@ -1129,13 +1341,20 @@ export type GetProposalQuery = {
                 isLead: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
+              stakingaccountaddedeventmember?: Array<{
+                __typename: 'StakingAccountAddedEvent'
+                createdAt: any
+                inBlock: number
+                network: Types.Network
+                account: string
+              }> | null
             }
           } | null
         }
       | { __typename: 'UnlockBlogPostProposalDetails' }
       | {
           __typename: 'UpdateWorkingGroupBudgetProposalDetails'
-          amount: number
+          amount: string
           group?: { __typename: 'WorkingGroup'; id: string; name: string } | null
         }
       | { __typename: 'VetoProposalDetails'; proposal?: { __typename: 'Proposal'; id: string; title: string } | null }
@@ -1169,6 +1388,7 @@ export type GetProposalQuery = {
             handle: string
             isVerified: boolean
             isFoundingMember: boolean
+            isCouncilMember: boolean
             inviteCount: number
             createdAt: any
             metadata: {
@@ -1184,7 +1404,18 @@ export type GetProposalQuery = {
               isLead: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
+            stakingaccountaddedeventmember?: Array<{
+              __typename: 'StakingAccountAddedEvent'
+              createdAt: any
+              inBlock: number
+              network: Types.Network
+              account: string
+            }> | null
           }
+          status:
+            | { __typename: 'ProposalDiscussionPostStatusActive' }
+            | { __typename: 'ProposalDiscussionPostStatusLocked' }
+            | { __typename: 'ProposalDiscussionPostStatusRemoved' }
         } | null
         createdInEvent: {
           __typename: 'ProposalDiscussionPostCreatedEvent'
@@ -1201,6 +1432,7 @@ export type GetProposalQuery = {
           handle: string
           isVerified: boolean
           isFoundingMember: boolean
+          isCouncilMember: boolean
           inviteCount: number
           createdAt: any
           metadata: {
@@ -1216,7 +1448,18 @@ export type GetProposalQuery = {
             isLead: boolean
             group: { __typename: 'WorkingGroup'; name: string }
           }>
+          stakingaccountaddedeventmember?: Array<{
+            __typename: 'StakingAccountAddedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+            account: string
+          }> | null
         }
+        status:
+          | { __typename: 'ProposalDiscussionPostStatusActive' }
+          | { __typename: 'ProposalDiscussionPostStatusLocked' }
+          | { __typename: 'ProposalDiscussionPostStatusRemoved' }
       }>
       mode:
         | {
@@ -1249,6 +1492,7 @@ export type GetProposalQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -1264,6 +1508,13 @@ export type GetProposalQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   } | null
 }
@@ -1318,6 +1569,7 @@ export type GetVoteWithDetailsQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -1333,6 +1585,13 @@ export type GetVoteWithDetailsQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   } | null
 }
@@ -1376,6 +1635,7 @@ export type GetProposalVotesQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -1391,6 +1651,13 @@ export type GetProposalVotesQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   }>
 }
@@ -1472,6 +1739,7 @@ export type GetProposalDiscussionPostMentionQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -1487,8 +1755,70 @@ export type GetProposalDiscussionPostMentionQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
   } | null
+}
+
+export type GetLatestProposalByMemberIdQueryVariables = Types.Exact<{
+  lockAccount?: Types.InputMaybe<Types.Scalars['String']>
+}>
+
+export type GetLatestProposalByMemberIdQuery = {
+  __typename: 'Query'
+  proposals: Array<{
+    __typename: 'Proposal'
+    id: string
+    exactExecutionBlock?: number | null
+    statusSetAtBlock: number
+    statusSetAtTime: any
+    createdAt: any
+    createdInEvent: { __typename: 'ProposalCreatedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+    status:
+      | { __typename: 'ProposalStatusCanceledByRuntime' }
+      | { __typename: 'ProposalStatusCancelled' }
+      | { __typename: 'ProposalStatusDeciding' }
+      | { __typename: 'ProposalStatusDormant' }
+      | { __typename: 'ProposalStatusExecuted' }
+      | { __typename: 'ProposalStatusExecutionFailed' }
+      | { __typename: 'ProposalStatusExpired' }
+      | { __typename: 'ProposalStatusGracing' }
+      | { __typename: 'ProposalStatusRejected' }
+      | { __typename: 'ProposalStatusSlashed' }
+      | { __typename: 'ProposalStatusVetoed' }
+    details:
+      | { __typename: 'AmendConstitutionProposalDetails' }
+      | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'CreateBlogPostProposalDetails' }
+      | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
+      | { __typename: 'EditBlogPostProposalDetails' }
+      | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'FundingRequestProposalDetails' }
+      | { __typename: 'LockBlogPostProposalDetails' }
+      | { __typename: 'RuntimeUpgradeProposalDetails' }
+      | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+      | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
+      | { __typename: 'SetInitialInvitationCountProposalDetails' }
+      | { __typename: 'SetMaxValidatorCountProposalDetails' }
+      | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+      | { __typename: 'SetMembershipPriceProposalDetails' }
+      | { __typename: 'SetReferralCutProposalDetails' }
+      | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+      | { __typename: 'SignalProposalDetails' }
+      | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
+      | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UnlockBlogPostProposalDetails' }
+      | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+      | { __typename: 'VetoProposalDetails' }
+  }>
 }
 
 export const VoteFieldsFragmentDoc = gql`
@@ -1529,6 +1859,7 @@ export const ProposalFieldsFragmentDoc = gql`
     }
     createdAt
     councilApprovals
+    exactExecutionBlock
   }
   ${MemberFieldsFragmentDoc}
 `
@@ -1558,6 +1889,9 @@ export const DiscussionPostWithoutReplyFieldsFragmentDoc = gql`
       ...MemberFields
     }
     text
+    status {
+      __typename
+    }
   }
   ${MemberFieldsFragmentDoc}
 `
@@ -1769,8 +2103,8 @@ export const ProposalDiscussionPostMentionFieldsFragmentDoc = gql`
   ${MemberFieldsFragmentDoc}
 `
 export const GetProposalsDocument = gql`
-  query getProposals($where: ProposalWhereInput) {
-    proposals(where: $where) {
+  query getProposals($where: ProposalWhereInput, $orderBy: [ProposalOrderByInput!], $limit: Int, $offset: Int) {
+    proposals(where: $where, orderBy: $orderBy, limit: $limit, offset: $offset) {
       ...ProposalFields
     }
   }
@@ -1790,6 +2124,9 @@ export const GetProposalsDocument = gql`
  * const { data, loading, error } = useGetProposalsQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
  *   },
  * });
  */
@@ -2286,4 +2623,67 @@ export type GetProposalDiscussionPostMentionLazyQueryHookResult = ReturnType<
 export type GetProposalDiscussionPostMentionQueryResult = Apollo.QueryResult<
   GetProposalDiscussionPostMentionQuery,
   GetProposalDiscussionPostMentionQueryVariables
+>
+export const GetLatestProposalByMemberIdDocument = gql`
+  query GetLatestProposalByMemberId($lockAccount: String) {
+    proposals(where: { stakingAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
+      id
+      createdInEvent {
+        createdAt
+        inBlock
+        network
+      }
+      status {
+        __typename
+      }
+      details {
+        __typename
+      }
+      exactExecutionBlock
+      statusSetAtBlock
+      statusSetAtTime
+      createdAt
+    }
+  }
+`
+
+/**
+ * __useGetLatestProposalByMemberIdQuery__
+ *
+ * To run a query within a React component, call `useGetLatestProposalByMemberIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLatestProposalByMemberIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLatestProposalByMemberIdQuery({
+ *   variables: {
+ *      lockAccount: // value for 'lockAccount'
+ *   },
+ * });
+ */
+export function useGetLatestProposalByMemberIdQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetLatestProposalByMemberIdQuery, GetLatestProposalByMemberIdQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetLatestProposalByMemberIdQuery, GetLatestProposalByMemberIdQueryVariables>(
+    GetLatestProposalByMemberIdDocument,
+    options
+  )
+}
+export function useGetLatestProposalByMemberIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetLatestProposalByMemberIdQuery, GetLatestProposalByMemberIdQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetLatestProposalByMemberIdQuery, GetLatestProposalByMemberIdQueryVariables>(
+    GetLatestProposalByMemberIdDocument,
+    options
+  )
+}
+export type GetLatestProposalByMemberIdQueryHookResult = ReturnType<typeof useGetLatestProposalByMemberIdQuery>
+export type GetLatestProposalByMemberIdLazyQueryHookResult = ReturnType<typeof useGetLatestProposalByMemberIdLazyQuery>
+export type GetLatestProposalByMemberIdQueryResult = Apollo.QueryResult<
+  GetLatestProposalByMemberIdQuery,
+  GetLatestProposalByMemberIdQueryVariables
 >

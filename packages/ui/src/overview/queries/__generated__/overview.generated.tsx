@@ -18,9 +18,9 @@ export type GetSidebarInfoQuery = {
     __typename: 'Worker'
     isLead: boolean
     group: { __typename: 'WorkingGroup'; name: string }
-    payouts: Array<{ __typename: 'RewardPaidEvent'; amount: any }>
+    payouts: Array<{ __typename: 'RewardPaidEvent'; amount: string }>
   }>
-  councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: any; id: string }>
+  councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: string; id: string }>
   workingGroupApplications: Array<{
     __typename: 'WorkingGroupApplication'
     opening: {
@@ -42,7 +42,9 @@ export type GetSidebarInfoQuery = {
 }
 
 export type GetAllDeadLinesQueryVariables = Types.Exact<{
+  proposalCreator?: Types.InputMaybe<Types.MembershipWhereInput>
   group?: Types.InputMaybe<Types.WorkingGroupWhereInput>
+  isLead: Types.Scalars['Boolean']
 }>
 
 export type GetAllDeadLinesQuery = {
@@ -53,7 +55,7 @@ export type GetAllDeadLinesQuery = {
     candidates: Array<{
       __typename: 'Candidate'
       id: string
-      stake: any
+      stake: string
       status: Types.CandidacyStatus
       stakingAccountId: string
       member: {
@@ -65,6 +67,7 @@ export type GetAllDeadLinesQuery = {
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
+        isCouncilMember: boolean
         inviteCount: number
         createdAt: any
         metadata: {
@@ -80,6 +83,13 @@ export type GetAllDeadLinesQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       }
       noteMetadata: {
         __typename: 'CandidacyNoteMetadata'
@@ -91,14 +101,14 @@ export type GetAllDeadLinesQuery = {
     }>
   }>
   proposals: Array<{ __typename: 'Proposal'; updatedAt?: any | null; id: string; title: string }>
-  upcomingWorkingGroupOpenings: Array<{
+  upcomingWorkingGroupOpenings?: Array<{
     __typename: 'UpcomingWorkingGroupOpening'
     id: string
     groupId: string
     expectedStart?: any | null
-    stakeAmount?: any | null
-    rewardPerBlock?: any | null
-    group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: string | null }
+    stakeAmount?: string | null
+    rewardPerBlock?: string | null
+    group: { __typename: 'WorkingGroup'; name: string; budget: string; leaderId?: string | null }
     createdInEvent: { __typename: 'StatusTextChangedEvent'; createdAt: any; inBlock: number; network: Types.Network }
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
@@ -110,16 +120,16 @@ export type GetAllDeadLinesQuery = {
       expectedEnding?: any | null
     }
   }>
-  workingGroupOpenings: Array<{
+  workingGroupOpenings?: Array<{
     __typename: 'WorkingGroupOpening'
     id: string
     runtimeId: number
     groupId: string
     type: Types.WorkingGroupOpeningType
-    stakeAmount: any
-    rewardPerBlock: any
+    stakeAmount: string
+    rewardPerBlock: string
     unstakingPeriod: number
-    group: { __typename: 'WorkingGroup'; name: string; budget: any; leaderId?: string | null }
+    group: { __typename: 'WorkingGroup'; name: string; budget: string; leaderId?: string | null }
     createdInEvent: { __typename: 'OpeningAddedEvent'; inBlock: number; network: Types.Network; createdAt: any }
     metadata: {
       __typename: 'WorkingGroupOpeningMetadata'
@@ -219,22 +229,29 @@ export type GetSidebarInfoQueryHookResult = ReturnType<typeof useGetSidebarInfoQ
 export type GetSidebarInfoLazyQueryHookResult = ReturnType<typeof useGetSidebarInfoLazyQuery>
 export type GetSidebarInfoQueryResult = Apollo.QueryResult<GetSidebarInfoQuery, GetSidebarInfoQueryVariables>
 export const GetAllDeadLinesDocument = gql`
-  query GetAllDeadLines($group: WorkingGroupWhereInput) {
+  query GetAllDeadLines($proposalCreator: MembershipWhereInput, $group: WorkingGroupWhereInput, $isLead: Boolean!) {
     electionRounds(where: { isFinished_eq: false }) {
       cycleId
       candidates {
         ...ElectionCandidateFields
       }
     }
-    proposals(where: { status_json: { isTypeOf_eq: "ProposalStatusDeciding" } }) {
+    proposals(
+      where: {
+        creator: $proposalCreator
+        isFinalized_eq: false
+        status_json: { isTypeOf_eq: "ProposalStatusDeciding" }
+      }
+    ) {
       updatedAt
       id
       title
     }
-    upcomingWorkingGroupOpenings(where: { group: $group }) {
+    upcomingWorkingGroupOpenings(where: { group: $group }) @include(if: $isLead) {
       ...UpcomingWorkingGroupOpeningFields
     }
-    workingGroupOpenings(where: { group: $group, status_json: { isTypeOf_eq: "OpeningStatusOpen" } }) {
+    workingGroupOpenings(where: { group: $group, status_json: { isTypeOf_eq: "OpeningStatusOpen" } })
+      @include(if: $isLead) {
       ...WorkingGroupOpeningFields
     }
   }
@@ -255,12 +272,14 @@ export const GetAllDeadLinesDocument = gql`
  * @example
  * const { data, loading, error } = useGetAllDeadLinesQuery({
  *   variables: {
+ *      proposalCreator: // value for 'proposalCreator'
  *      group: // value for 'group'
+ *      isLead: // value for 'isLead'
  *   },
  * });
  */
 export function useGetAllDeadLinesQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetAllDeadLinesQuery, GetAllDeadLinesQueryVariables>
+  baseOptions: Apollo.QueryHookOptions<GetAllDeadLinesQuery, GetAllDeadLinesQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<GetAllDeadLinesQuery, GetAllDeadLinesQueryVariables>(GetAllDeadLinesDocument, options)

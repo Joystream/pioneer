@@ -2,6 +2,11 @@ import { Address, Block } from '../../common/types'
 
 type ID = string
 
+export interface BoundAccountEvent {
+  createdAtBlock: Block
+  account: Address
+}
+
 export interface MemberRole {
   id: string
   groupName: string
@@ -22,9 +27,8 @@ export interface Member {
   isVerified: boolean
   isFoundingMember: boolean
   isCouncilMember: boolean
-  invitedBy?: ID
-  referredBy?: ID
   createdAt: string
+  boundAccountsEvents?: BoundAccountEvent[]
 }
 
 export type GenesisEntry = {
@@ -47,6 +51,7 @@ export type InvitedMember = Member // & { entry: InvitedEntry }
 
 export interface MemberWithDetails extends Member {
   about?: string
+  invitedBy?: Member
   entry: MemberEntry
   invitees: InvitedMember[]
 }

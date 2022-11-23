@@ -11,10 +11,10 @@ export const AccountSchema = Yup.object()
 
 export const MemberSchema = Yup.object()
 
-export const AvatarURISchema = Yup.string().url()
+export const AvatarURISchema = Yup.string().url('Invalid url address')
 
 export const HandleSchema = Yup.string().test('handle', 'This handle is already taken', (value, testContext) => {
-  return testContext?.options?.context?.size?.lte(new BN(0)) ?? false
+  return testContext?.options?.context?.size ? testContext?.options?.context?.size === 0 : true
 })
 
 export const ReferrerSchema = Yup.object().when('isReferred', (isReferred: boolean, schema: AnySchema) => {
@@ -34,11 +34,8 @@ export const StakingAccountSchema = Yup.object()
       return true
     }
 
-    const validationContext = context.options.context as IStakingAccountSchema
-    return (
-      !!validationContext?.balances &&
-      (validationContext.balances as Balances).transferable.gte(validationContext.requiredAmount)
-    )
+    const { requiredAmount, balances } = context.options.context as IStakingAccountSchema
+    return !!balances.total?.gte(requiredAmount)
   })
   .test('locks', 'This account has conflicting locks', (value, context) => {
     if (!value) {
@@ -64,7 +61,7 @@ export const NewAddressSchema = (which: string) =>
   Yup.object()
     .shape({
       name: Yup.string(),
-      address: Yup.string().required(),
+      address: Yup.string().required('This field is required'),
     })
     .test(which, 'Address is invalid', (value, testContext) => {
       const keyring = testContext?.options?.context?.keyring

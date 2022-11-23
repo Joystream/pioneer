@@ -8,27 +8,33 @@ import { Address } from '@/common/types'
 type PolkadotStakingLock = 'Staking'
 type PolkadotVestingLock = 'Vesting'
 
+export const WorkerLocks = [
+  'Storage Worker',
+  'Content Directory Worker',
+  'Forum Worker',
+  'Membership Worker',
+  'Gateway Worker',
+  'Builders Worker',
+  'HR Worker',
+  'Marketing Worker',
+  'Distribution Worker',
+] as const
+
+export type WorkerLockType = typeof WorkerLocks[number]
+
 export type LockType =
   | PolkadotStakingLock
   | PolkadotVestingLock
+  | WorkerLockType
   | 'Voting'
   | 'Council Candidate'
   | 'Councilor'
   | 'Validation'
   | 'Nomination'
   | 'Proposals'
-  | 'Storage Worker'
-  | 'Content Directory Worker'
-  | 'Forum Worker'
-  | 'Membership Worker'
   | 'Invitation'
   | 'Bound Staking Account'
   | 'Bounties'
-  | 'Gateway Worker'
-  | 'Builders Worker'
-  | 'HR Worker'
-  | 'Marketing Worker'
-  | 'Distribution Worker'
 
 export interface BalanceLock {
   amount: BN

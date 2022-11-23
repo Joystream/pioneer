@@ -5,10 +5,10 @@ import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
+import { ApiContext } from '@/api/providers/context'
 import { WithdrawWorkEntryModal } from '@/bounty/modals/WithdrawWorkEntryModal'
 import { BN_ZERO } from '@/common/constants'
 import { formatTokenValue } from '@/common/model/formatters'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -92,6 +92,14 @@ describe('UI: WithdrawWorkEntryModal', () => {
 
     expect(screen.getByText('modals.withdrawWorkEntry.title')).not.toBeNull()
     expect(await getButton('modals.withdrawWorkEntry.submitButton')).not.toBeNull()
+  })
+
+  it('Insufficient funds', async () => {
+    stubTransaction(api, txPath, 99999)
+
+    renderModal()
+
+    expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
   })
 
   it('Displays correct bounty', () => {

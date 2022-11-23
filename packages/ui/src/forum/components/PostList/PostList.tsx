@@ -57,8 +57,9 @@ export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost, isD
   return (
     <Wrapper gap={24}>
       {!isDiscussion && <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />}
-      {posts.map((post) => (
+      {posts.map((post, index) => (
         <PostListItem
+          isFirstItem={index === 0 && page === 1}
           key={post.id}
           post={post}
           insertRef={getInsertRef(post.id)}

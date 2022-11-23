@@ -1,5 +1,6 @@
 import { ForumThreadOrderByInput } from '@/common/api/queries'
 import { toQueryOrderByInput, SortOrder } from '@/common/hooks/useSort'
+import { whenDefined } from '@/common/utils'
 import { useGetForumThreadsCountQuery, useGetForumThreadsQuery } from '@/forum/queries/__generated__/forum.generated'
 import { asForumThread, ForumThread } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -18,10 +19,13 @@ interface UseMyThreads {
 }
 
 export const useMyThreads = ({ page, threadsPerPage = 5, order }: UseMyThreadsProps): UseMyThreads => {
-  const { members } = useMyMemberships()
+  const { members, active } = useMyMemberships()
 
+  const status_json = {
+    isTypeOf_not: 'ThreadStatusModerated',
+  }
   const variables = {
-    where: { author: { id_in: members.map((m) => m.id) } },
+    where: { author: { id_in: whenDefined(active?.id, (id) => [id]) ?? members.map((m) => m.id) }, status_json },
     limit: threadsPerPage,
     offset: (page - 1) * threadsPerPage,
     orderBy: [ForumThreadOrderByInput.IsStickyDesc, toQueryOrderByInput<ForumThreadOrderByInput>(order)],

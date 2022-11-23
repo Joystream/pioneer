@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { ProgressBar } from '@/common/components/Progress'
 import { TextBig, TextSmall } from '@/common/components/typography'
-import { BorderRad, Shadows } from '@/common/constants'
+import { BorderRad, Overflow, Shadows } from '@/common/constants'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
 
@@ -42,7 +42,7 @@ const Wrapper = styled.div`
 
 const Label = styled(TextBig)`
   margin-top: 20px;
-  white-space: nowrap;
+  ${Overflow.DotsTwoLine};
 `
 
 const ProgressWrapper = styled.div`

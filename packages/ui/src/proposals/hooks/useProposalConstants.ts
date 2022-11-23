@@ -1,7 +1,7 @@
-import { ApiRx } from '@polkadot/api'
 import { useMemo } from 'react'
 
-import { useApi } from '@/common/hooks/useApi'
+import { Api } from '@/api'
+import { useApi } from '@/api/hooks/useApi'
 import { asProposalConstants, ProposalConstants } from '@/proposals/types/constants'
 
 import { ProposalType } from '../types'
@@ -25,7 +25,7 @@ export const useProposalConstants = (proposalType?: ProposalType): ProposalConst
   }, [proposalType, isConnected])
 }
 
-const proposalTypeToConstantKey = new Map<ProposalType, keyof ApiRx['consts']['proposalsCodex']>([
+const proposalTypeToConstantKey = new Map<ProposalType, keyof Api['consts']['proposalsCodex']>([
   ['amendConstitution', 'amendConstitutionProposalParameters'],
   ['cancelWorkingGroupLeadOpening', 'cancelWorkingGroupLeadOpeningProposalParameters'],
   ['createBlogPost', 'createBlogPostProposalParameters'],

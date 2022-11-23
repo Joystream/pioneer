@@ -1,10 +1,11 @@
-import { ApiRx } from '@polkadot/api'
 import { BN_MILLION, BN_ZERO } from '@polkadot/util'
 import BN from 'bn.js'
 
+import { Api } from '@/api'
+
 import { Worker } from '../types'
 
-export function getNextPayout(workers: Pick<Worker, 'group'>[], blockNumber: BN, api?: ApiRx) {
+export function getNextPayout(workers: Pick<Worker, 'group'>[], blockNumber: BN, api?: Api) {
   const blocksUntilNext = (interval?: BN) => interval?.sub(blockNumber.mod(interval))
 
   const userGroups = [...new Set(workers.map((worker) => worker.group.id))]

@@ -27,18 +27,18 @@ interface InfoboxFields {
 export const entrantResultMapper: Record<EntrantResult, InfoboxFields> = {
   winner: {
     color: Colors.Green[50],
-    title: 'You are a winner',
-    text: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
+    title: 'You won the bounty!',
+    text: 'Oracle judgement chose your work as winning. You can now recover your stake and claim reward!',
   },
   loser: {
     color: Colors.Blue[50],
-    title: 'You can withdrawn stake',
-    text: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
+    title: 'Your submission did not win.',
+    text: 'You can withdraw your stake now and try next time!',
   },
   slashed: {
     color: Colors.Red[50],
-    title: 'You are slashed',
-    text: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.',
+    title: 'You got slashed!',
+    text: 'Your stake is now burned.',
   },
 }
 
@@ -65,10 +65,12 @@ export const statusToEntrantResult = (status: BountyEntryStatus): EntrantResult 
     case 'BountyEntryStatusWinner':
       return 'winner'
 
-    case 'BountyEntryStatusPassed':
+    case 'BountyEntryStatusRejected':
       return 'slashed'
 
     default:
       return 'loser'
   }
 }
+
+export const getSecondsPast = (createdAt: string) => (new Date().getTime() - new Date(createdAt).getTime()) / 1000

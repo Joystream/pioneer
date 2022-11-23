@@ -2,8 +2,11 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TileSection } from '@/bounty/components/TileSection'
+import { getFundingPeriodLength } from '@/bounty/helpers'
 import { Bounty, isFundingLimited } from '@/bounty/types/Bounty'
+import { formatDuration } from '@/common/components/statistics'
 import { TextHuge, TokenValue } from '@/common/components/typography'
+import { DurationValue } from '@/common/components/typography/DurationValue'
 import { MemberInfo } from '@/memberships/components'
 
 interface Props {
@@ -12,7 +15,7 @@ interface Props {
 
 export const FundingTiles = React.memo(({ bounty }: Props) => {
   const { t } = useTranslation('bounty')
-
+  const fundingPeriod = getFundingPeriodLength(bounty.fundingType) ?? 0
   const firstRow = useMemo(
     () => [
       {
@@ -28,10 +31,23 @@ export const FundingTiles = React.memo(({ bounty }: Props) => {
         title: t('tiles.periodLength.title'),
         content: (
           <TextHuge value bold>
-            {isFundingLimited(bounty.fundingType) ? t('bountyFields.limited') : t('bountyFields.perpetual')}
+            {isFundingLimited(bounty.fundingType) ? (
+              <DurationValue value={formatDuration(fundingPeriod)} blocksLeft={bounty.periodTimeLeft} />
+            ) : (
+              t('bountyFields.perpetual')
+            )}
           </TextHuge>
         ),
         tooltipText: t('tiles.periodLength.tooltip'),
+      },
+      {
+        title: t('tiles.duration.title'),
+        content: (
+          <TextHuge value bold>
+            {!isFundingLimited(bounty.fundingType) ? t('tiles.duration.value') : '-'}
+          </TextHuge>
+        ),
+        tooltipText: t('tiles.duration.tooltip'),
       },
       {
         title: t('tiles.bountyCreator.title'),

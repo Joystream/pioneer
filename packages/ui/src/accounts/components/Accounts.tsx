@@ -1,12 +1,13 @@
 import React, { ReactNode, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
-import { List, ListItem } from '../../common/components/List'
-import { Loading } from '../../common/components/Loading'
-import { ContentWithTabs } from '../../common/components/page/PageContent'
-import { HeaderText, SortIconDown, SortIconUp } from '../../common/components/SortedListHeaders'
-import { Tabs } from '../../common/components/Tabs'
-import { Colors } from '../../common/constants'
+import { AccountItemLoading } from '@/accounts/components/AccountItem/AccountItemLoading'
+import { List, ListItem } from '@/common/components/List'
+import { ContentWithTabs } from '@/common/components/page/PageContent'
+import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
+import { Tabs } from '@/common/components/Tabs'
+import { Colors } from '@/common/constants'
+
 import { useMyAccounts } from '../hooks/useMyAccounts'
 import { useMyBalances } from '../hooks/useMyBalances'
 import { filterAccounts } from '../model/filterAccounts'
@@ -15,7 +16,7 @@ import { setOrder, sortAccounts, SortKey } from '../model/sortAccounts'
 import { AccountItem } from './AccountItem/AccountItem'
 
 export function Accounts() {
-  const { allAccounts, hasAccounts } = useMyAccounts()
+  const { allAccounts, hasAccounts, isLoading } = useMyAccounts()
   const [isDisplayAll, setIsDisplayAll] = useState(true)
   const balances = useMyBalances()
   const [sortBy, setSortBy] = useState<SortKey>('name')
@@ -28,10 +29,6 @@ export function Accounts() {
     () => sortAccounts(visibleAccounts, balances, sortBy, isDescending),
     [visibleAccounts, balances, sortBy, isDescending]
   )
-
-  if (!hasAccounts) {
-    return <Loading />
-  }
 
   const getOnSort = (key: SortKey) => () => setOrder(key, sortBy, setSortBy, isDescending, setDescending)
 
@@ -63,11 +60,15 @@ export function Accounts() {
           <Header sortKey="transferable">Transferable balance</Header>
         </ListHeaders>
         <List>
-          {sortedAccounts.map((account) => (
-            <ListItem key={account.address} borderless>
-              <AccountItem account={account} />
-            </ListItem>
-          ))}
+          {!isLoading ? (
+            sortedAccounts.map((account) => (
+              <ListItem key={account.address} borderless>
+                <AccountItem account={account} />
+              </ListItem>
+            ))
+          ) : (
+            <AccountItemLoading count={5} />
+          )}
         </List>
       </AccountsWrap>
     </ContentWithTabs>

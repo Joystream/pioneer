@@ -2,8 +2,8 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
+import { ApiContext } from '@/api/providers/context'
 import { CKEditorProps } from '@/common/components/CKEditor'
-import { ApiContext } from '@/common/providers/api/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { ProposalDiscussions } from '@/proposals/components/ProposalDiscussions'
@@ -16,7 +16,7 @@ import { MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi, stubTransaction } from '../../_mocks/transactions'
 
 jest.mock('@/common/components/CKEditor', () => ({
-  CKEditor: (props: CKEditorProps) => mockCKEditor(props),
+  BaseCKEditor: (props: CKEditorProps) => mockCKEditor(props),
 }))
 
 describe('UI: Proposal discussion', () => {

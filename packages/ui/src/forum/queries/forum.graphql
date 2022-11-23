@@ -129,10 +129,24 @@ fragment ForumPostWithoutReplyFields on ForumPost {
   }
   text
   authorId
+  forumthreadinitialPost {
+    createdInEvent {
+      createdAt,
+      inBlock,
+      network
+    }
+  }
   postaddedeventpost {
     createdAt
     inBlock
     network
+  }
+  postmoderatedeventpost {
+    actor {
+      membership {
+        ...MemberFields
+      }
+    }
   }
   status {
     __typename

@@ -16,6 +16,7 @@ export const MEMBER_ALICE_DATA: MockMember = {
   },
   isVerified: true,
   isFoundingMember: true,
+  isCouncilMember: false,
   inviteCount: 5,
   boundAccounts: [accountsMap.alice, accountsMap.alice_stash],
   entry: {

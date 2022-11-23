@@ -6,8 +6,8 @@ import { MemoryRouter } from 'react-router-dom'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { AddressToBalanceMap } from '@/accounts/types'
+import { ApiContext } from '@/api/providers/context'
 import { Bounty, Contributor } from '@/bounty/types/Bounty'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 
@@ -30,7 +30,7 @@ const accounts = {
 
 const contributor: Contributor = {
   actor: getMember('alice'),
-  amount: new BN('10000'),
+  amount: new BN(10000),
   hasWithdrawn: false,
 }
 

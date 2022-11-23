@@ -2,8 +2,8 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router-dom'
 
+import { ApiContext } from '@/api/providers/context'
 import { CKEditorProps } from '@/common/components/CKEditor'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { isModalWithData } from '@/common/providers/modal/provider'
 import { UseModal } from '@/common/providers/modal/types'
@@ -19,7 +19,7 @@ import { MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi, stubTransaction } from '../../_mocks/transactions'
 
 jest.mock('@/common/components/CKEditor', () => ({
-  CKEditor: (props: CKEditorProps) => mockCKEditor(props),
+  BaseCKEditor: (props: CKEditorProps) => mockCKEditor(props),
 }))
 
 describe('UI: Add new post', () => {
@@ -89,7 +89,7 @@ describe('UI: Add new post', () => {
       })
       expect(useModal.modal).toEqual('CreatePost')
       expect(useModal.modalData.postText).toEqual('I disagree')
-      expect(useModal.modalData.isEditable).toEqual(false)
+      expect(useModal.modalData.isEditable).toEqual(true)
       expect(useModal.modalData.replyTo).toEqual(replyTo)
     })
 
@@ -113,7 +113,7 @@ describe('UI: Add new post', () => {
       })
       expect(useModal.modal).toEqual('CreatePost')
       expect(useModal.modalData.postText).toEqual('I disagree')
-      expect(useModal.modalData.isEditable).toEqual(false)
+      expect(useModal.modalData.isEditable).toEqual(true)
       expect(useModal.modalData.replyTo).toEqual(replyTo)
     })
   })

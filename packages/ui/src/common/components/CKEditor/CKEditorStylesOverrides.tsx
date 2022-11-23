@@ -11,6 +11,10 @@ export const CKEditorStylesOverrides = createGlobalStyle<{ minRows: number; maxR
     width: 100%;
   }
 
+  .ckeditor-anchor:not(.ck-content) {
+    display: none;
+  }
+
   .ck.ck-content {
     line-height: ${EDITOR_LINE_HEIGHT}em;
     width: 100%;
@@ -83,6 +87,9 @@ export const CKEditorStylesOverrides = createGlobalStyle<{ minRows: number; maxR
   }
   .ck.ck-list__item .ck-button:hover:not(.ck-disabled) {
     background-color: ${Colors.White};
+  }
+  img {
+      max-height: 400px;
   }
 
   :root {
