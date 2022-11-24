@@ -31,12 +31,7 @@ describe('UI: TransactionButton', () => {
 
   beforeAll(async () => {
     const wallet = new BaseDotsamaWallet({ title: 'ExtraWallet' })
-    wallet._extension = {
-      metadata: {
-        get: () => [],
-        provide: () => Promise.resolve(),
-      },
-    } as any
+    wallet.updateMetadata = () => Promise.resolve(true)
     stubAccounts([{ ...alice, name: 'Alice Account' }], {
       wallet,
     })
