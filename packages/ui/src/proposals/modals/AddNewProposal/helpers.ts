@@ -171,7 +171,7 @@ export const schemaFactory = (api?: ProxyApi) => {
       }),
       isDiscussionClosed: Yup.boolean(),
       discussionWhitelist: Yup.array().when('isDiscussionClosed', {
-        is: true,
+        is: Yup.array().length() < 20,
         then: Yup.array().required('Field is required'),
       }),
     }),
