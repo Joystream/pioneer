@@ -278,6 +278,7 @@ export const TooltipLink = styled(Link)<{ to: string; target: string }>`
   font-weight: 400;
   color: ${Colors.Black[400]};
   transition: ${Transitions.all};
+  transition: opacity 0s;
   text-transform: capitalize;
 
   ${LinkSymbolStyle} {
@@ -312,6 +313,7 @@ export const TooltipExternalLink = styled.a<{ href: string | undefined; target: 
   font-weight: 400;
   color: ${Colors.Black[400]};
   transition: ${Transitions.all};
+  transition: opacity 0s;
   text-transform: capitalize;
 
   ${LinkSymbolStyle} {
