@@ -4,7 +4,18 @@ import { asWorkingGroupName } from '@/working-groups/types'
 
 import { MemberFieldsFragment, MemberWithDetailsFieldsFragment } from '../queries'
 
-import { Member, MemberEntry, MemberRole, MemberWithDetails } from './Member'
+import { BoundAccountEvent, Member, MemberEntry, MemberRole, MemberWithDetails } from './Member'
+
+const asBoundAccountsEvent = (
+  fields: NonNullable<MemberFieldsFragment['stakingaccountaddedeventmember']>[0]
+): BoundAccountEvent => ({
+  createdAtBlock: asBlock({
+    createdAt: fields.createdAt,
+    inBlock: fields.inBlock,
+    network: fields.network,
+  }),
+  account: fields.account,
+})
 
 export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member => ({
   id: data.id,
@@ -13,12 +24,12 @@ export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member
   avatar: castQueryResult(data.metadata.avatar, 'AvatarUri')?.avatarUri,
   inviteCount: data.inviteCount,
   isFoundingMember: data.isFoundingMember,
-  // See https://github.com/Joystream/pioneer/issues/1536
-  isCouncilMember: false, // data.isCouncilMember,
+  isCouncilMember: data.isCouncilMember,
   isVerified: data.isVerified,
   rootAccount: data.rootAccount,
   controllerAccount: data.controllerAccount,
   boundAccounts: [...data?.boundAccounts],
+  boundAccountsEvents: data.stakingaccountaddedeventmember?.map(asBoundAccountsEvent) ?? [],
   roles: data.roles.map(asMemberRole),
   createdAt: data.createdAt,
 })
@@ -43,7 +54,6 @@ const asMemberEntry = (entry: MemberWithDetailsFieldsFragment['entry']): MemberE
 export const asMemberWithDetails = (fields: MemberWithDetailsFieldsFragment): MemberWithDetails => ({
   ...asMember(fields),
   about: fields.metadata.about ?? undefined,
-  invitedBy: '',
   entry: asMemberEntry(fields.entry),
   invitees: fields.invitees.map((fields) => {
     return {
@@ -52,4 +62,5 @@ export const asMemberWithDetails = (fields: MemberWithDetailsFieldsFragment): Me
       // entry: asMemberEntry(fields.entry) as InvitedEntry,
     }
   }),
+  invitedBy: fields.invitedBy ? asMember(fields.invitedBy) : undefined,
 })

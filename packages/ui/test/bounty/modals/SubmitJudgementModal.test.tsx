@@ -8,9 +8,9 @@ import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { AddressToBalanceMap } from '@/accounts/types'
+import { ApiContext } from '@/api/providers/context'
 import { SubmitJudgementModal } from '@/bounty/modals/SubmitJudgementModal'
 import { CKEditorProps } from '@/common/components/CKEditor'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { last } from '@/common/utils'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -26,6 +26,7 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubBountyConstants,
   stubDefaultBalances,
@@ -291,8 +292,7 @@ describe('UI: SubmitJudgementModal', () => {
 
       const button = await getButton('modals.submitJudgement.authorizeModal.button')
       fireEvent.click(button)
-
-      await waitFor(() => expect(screen.queryByText('modals.submitJudgement.failedModal')).toBeInTheDocument())
+      await waitFor(() => expect(screen.queryByText(currentStubErrorMessage)).toBeInTheDocument())
     })
 
     it('Disabled when no funds for fee', async () => {

@@ -21,6 +21,7 @@ export const Select = <T extends any, V extends any = T>({
   renderSelected,
   renderList,
   className,
+  onBlur,
 }: SelectProps<T, V>) => {
   const [filterInput, setFilterInput] = useState('')
   const search = filterInput
@@ -36,6 +37,7 @@ export const Select = <T extends any, V extends any = T>({
     (option: T) => {
       onChange(option, () => {
         toggleOpen()
+        onBlur?.()
         setFilterInput('')
       })
     },
@@ -44,8 +46,17 @@ export const Select = <T extends any, V extends any = T>({
 
   useEffect(() => {
     const clickListener = (event: MouseEvent) => {
+      // for enabling links in tooltips in AccountLockTooltip:
+      const tooltipLinks = document.getElementsByClassName('tooltipLink')
+      const shouldToggle =
+        tooltipLinks.length > 0
+          ? !event.composedPath().some((path) => Array.from(tooltipLinks).includes(path as Element))
+          : true
+
       if (isOpen && selectNode.current && !event.composedPath().includes(selectNode.current)) {
-        toggleOpen()
+        if (shouldToggle) {
+          toggleOpen()
+        }
         setFilterInput('')
       }
     }

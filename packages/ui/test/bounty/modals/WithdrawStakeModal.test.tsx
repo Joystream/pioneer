@@ -2,9 +2,9 @@ import { act, fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
+import { ApiContext } from '@/api/providers/context'
 import { WithdrawStakeModal } from '@/bounty/modals/WithdrawalStakeModal'
 import { formatTokenValue } from '@/common/model/formatters'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -14,14 +14,20 @@ import { getMember } from '@/mocks/helpers'
 import { getButton } from '../../_helpers/getButton'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockApolloProvider, MockKeyringProvider } from '../../_mocks/providers'
-import { stubApi, stubTransaction, stubTransactionFailure, stubTransactionSuccess } from '../../_mocks/transactions'
+import {
+  currentStubErrorMessage,
+  stubApi,
+  stubTransaction,
+  stubTransactionFailure,
+  stubTransactionSuccess,
+} from '../../_mocks/transactions'
 
 const bounty = bounties[0]
 
 describe('UI: WithdrawStakeModal', () => {
   const api = stubApi()
   const fee = 100
-  const transaction = stubTransaction(api, 'api.tx.bounty.withdrawWorkEntrantFunds', fee)
+  let transaction = stubTransaction(api, 'api.tx.bounty.withdrawWorkEntrantFunds', fee)
 
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
@@ -57,10 +63,22 @@ describe('UI: WithdrawStakeModal', () => {
     allAccounts: [alice, bob],
   }
 
+  beforeEach(() => {
+    transaction = stubTransaction(api, 'api.tx.bounty.withdrawWorkEntrantFunds', fee)
+  })
+
   it('Requirements passed', async () => {
     renderModal()
     expect(await screen.queryByText(`modals.withdraw.stake.description ${formatTokenValue(100)}`)).toBeInTheDocument()
     expect(await screen.queryByText('modals.withdraw.stake.button')).toBeInTheDocument()
+  })
+
+  it('Insufficient funds', async () => {
+    stubTransaction(api, 'api.tx.bounty.withdrawWorkEntrantFunds', 999999)
+
+    const { findByText } = renderModal()
+
+    expect(await findByText('modals.insufficientFunds.title')).toBeDefined()
   })
 
   describe('Transaction result', () => {
@@ -80,7 +98,7 @@ describe('UI: WithdrawStakeModal', () => {
       await act(async () => {
         fireEvent.click(await getButton(/^modals.withdraw.stake.button$/))
       })
-      expect(await screen.findByText('common:modals.failed.description')).toBeDefined()
+      expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
     })
 
     it('Requirements failed', async () => {

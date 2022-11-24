@@ -6,7 +6,7 @@ import { randomMarkdown, randomFromRange } from './utils'
 export const WORKING_GROUPS = [
   'forumWorkingGroup',
   'storageWorkingGroup',
-  'contentDirectoryWorkingGroup',
+  'contentWorkingGroup',
   'membershipWorkingGroup',
 ]
 

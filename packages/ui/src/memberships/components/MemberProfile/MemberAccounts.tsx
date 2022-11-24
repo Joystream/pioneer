@@ -21,6 +21,17 @@ export const MemberAccounts = ({ member }: { member: Member }) => (
         <UnknownAccountInfo address={member.controllerAccount} placeholderName="Controller Account" />
       </AccountRow>
     )}
+
+    {!!member.boundAccounts.length && (
+      <>
+        <SidePaneLabel text="Bound accounts" />
+        {member.boundAccounts.map((account) => (
+          <AccountRow key={account}>
+            <UnknownAccountInfo address={account} placeholderName="Bound Account" />
+          </AccountRow>
+        ))}
+      </>
+    )}
   </AccountsDisplay>
 )
 

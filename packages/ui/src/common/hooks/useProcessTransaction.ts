@@ -1,5 +1,4 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
-import { web3FromAddress } from '@polkadot/extension-dapp'
 import { Hash } from '@polkadot/types/interfaces/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import { useActor } from '@xstate/react'
@@ -8,6 +7,9 @@ import { Dispatch, SetStateAction, useEffect } from 'react'
 import { Observable } from 'rxjs'
 import { ActorRef, Sender } from 'xstate'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+
+import { createBalanceOf } from '../../../test/_mocks/chainTypes'
 import { error, info } from '../logger'
 import { hasErrorEvent } from '../model/JoystreamNode'
 import { Address } from '../types'
@@ -52,7 +54,7 @@ const observeTransaction = (
 
       if (hasErrorEvent(events)) {
         subscription.unsubscribe()
-        send('ERROR')
+        send({ type: 'ERROR', events })
         error('Transaction error:', transactionInfo)
       } else {
         send({ type: 'FINALIZING', fee })
@@ -91,33 +93,35 @@ export const useProcessTransaction = ({
   const paymentInfo = useObservable(transaction?.paymentInfo(signer), [transaction, signer])
   const { setService } = useTransactionStatus()
   const [endpoints] = useNetworkEndpoints()
+  const { allAccounts, wallet } = useMyAccounts()
 
   useEffect(() => {
     setService(service)
   }, [])
 
   useEffect(() => {
-    if (!state.matches('signing') || !transaction || !paymentInfo) {
+    const hasSigner = allAccounts.find((acc) => acc.address === signer)
+
+    if (!state.matches('signing') || !transaction || !paymentInfo || !hasSigner) {
       return
     }
 
     const fee = paymentInfo.partialFee.toBn()
 
-    web3FromAddress(signer).then((extension) => {
-      observeTransaction(
-        transaction.signAndSend(signer, { signer: extension.signer }),
-        send,
-        fee,
-        endpoints.nodeRpcEndpoint,
-        setBlockHash
-      )
-    })
+    observeTransaction(
+      transaction.signAndSend(signer, { signer: wallet?.signer }),
+      send,
+      fee,
+      endpoints.nodeRpcEndpoint,
+      setBlockHash
+    )
+
     send('SIGN_EXTERNAL')
-  }, [state.value.toString(), paymentInfo])
+  }, [state.value.toString(), paymentInfo, wallet])
 
   return {
     send,
-    paymentInfo,
+    paymentInfo: paymentInfo ?? { partialFee: createBalanceOf(0) },
     isReady: state.matches('prepare'),
     isProcessing: state.matches('processing'),
   }

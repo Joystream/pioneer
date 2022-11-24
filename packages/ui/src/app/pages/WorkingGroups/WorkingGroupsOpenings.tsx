@@ -7,6 +7,8 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics } from '@/common/components/statistics'
 import { Tabs } from '@/common/components/Tabs'
+import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { MyEarningsStat } from '@/working-groups/components/MyEarningsStat'
 import { MyRolesStat } from '@/working-groups/components/MyRolesStat'
 import { MyStakeStat } from '@/working-groups/components/MyStakeStat'
@@ -24,6 +26,14 @@ export const WorkingGroupsOpenings = () => {
   const { isLoading: currentLoading, openings } = useOpenings({ type: 'open' })
   const { activities } = useOpeningsActivities()
   const [activeTab, setActiveTab] = useState<OpeningsTabs>('OPENINGS')
+
+  const isRefetched = useRefetchQueries(
+    {
+      interval: MILLISECONDS_PER_BLOCK,
+      include: activeTab === 'OPENINGS' ? ['GetWorkingGroupOpenings'] : ['GetUpcomingWorkingGroupOpenings'],
+    },
+    [activeTab]
+  )
 
   const openingsTabs = [
     {
@@ -57,8 +67,12 @@ export const WorkingGroupsOpenings = () => {
           </Statistics>
           <ContentWithTabs>
             <Tabs tabsSize="xs" tabs={openingsTabs} />
-            {activeTab === 'OPENINGS' && <LoadingOpenings isLoading={currentLoading} openings={openings} />}
-            {activeTab === 'UPCOMING' && <LoadingOpenings isLoading={upcomingLoading} openings={upcomingOpenings} />}
+            {activeTab === 'OPENINGS' && (
+              <LoadingOpenings isLoading={!isRefetched && currentLoading} openings={openings} />
+            )}
+            {activeTab === 'UPCOMING' && (
+              <LoadingOpenings isLoading={!isRefetched && upcomingLoading} openings={upcomingOpenings} />
+            )}
           </ContentWithTabs>
         </MainPanel>
       }

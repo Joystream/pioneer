@@ -11,6 +11,8 @@ import {
 import { EmptyObject } from '@/common/types'
 
 export enum WithdrawWorkModalState {
+  requirementsVerification = 'requirementsVerification',
+  requirementsFailed = 'requirementsFailed',
   info = 'info',
   transaction = 'transaction',
   success = 'success',
@@ -23,6 +25,8 @@ interface WithdrawWorkContext {
 }
 
 type WithdrawWorkState =
+  | { value: WithdrawWorkModalState.requirementsVerification; context: EmptyObject }
+  | { value: WithdrawWorkModalState.requirementsFailed; context: EmptyObject }
   | { value: WithdrawWorkModalState.info; context: EmptyObject }
   | { value: WithdrawWorkModalState.transaction; context: EmptyObject }
   | { value: WithdrawWorkModalState.success; context: Required<WithdrawWorkContext> }
@@ -41,11 +45,20 @@ type ErrorEvent = {
   fee: BN
 }
 
-export type WithdrawWorkEvents = { type: 'NEXT' } | SuccessEvent | ErrorEvent
+export type WithdrawWorkEvents = { type: 'NEXT' } | { type: 'FAIL' } | SuccessEvent | ErrorEvent
 
 export const WithdrawWorkModalMachine = createMachine<WithdrawWorkContext, WithdrawWorkEvents, WithdrawWorkState>({
-  initial: WithdrawWorkModalState.info,
+  initial: WithdrawWorkModalState.requirementsVerification,
   states: {
+    [WithdrawWorkModalState.requirementsVerification]: {
+      on: {
+        NEXT: WithdrawWorkModalState.info,
+        FAIL: WithdrawWorkModalState.requirementsFailed,
+      },
+    },
+    [WithdrawWorkModalState.requirementsFailed]: {
+      type: 'final',
+    },
     [WithdrawWorkModalState.info]: {
       on: {
         NEXT: WithdrawWorkModalState.transaction,

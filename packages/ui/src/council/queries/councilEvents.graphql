@@ -37,10 +37,18 @@ fragment CouncilorRewardUpdatedEventFields on CouncilorRewardUpdatedEvent {
 fragment NewCandidateEventFields on NewCandidateEvent {
   id
   createdAt
+  inBlock
+  network
   candidate {
     member {
       id
       handle
+    }
+    electionRoundId
+    electionRound {
+      referendumStageVoting {
+        createdAt
+      }
     }
   }
 }
@@ -95,5 +103,11 @@ query GetCouncilEvents {
     ... on RevealingStageStartedEvent {
       ...RevealingStageStartedEventFields
     }
+  }
+}
+
+query GetNewCandidateEvents($lockAccount: String) {
+  newCandidateEvents(where: { stakingAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
+    ...NewCandidateEventFields
   }
 }

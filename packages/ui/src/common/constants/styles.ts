@@ -5,6 +5,7 @@ export const Colors = {
   Grey: '#8C96A6',
   LightGrey: '#A7AEB7',
   LogoPurple: '#4038FF',
+  SkeletonGrey: '#ECEEEE',
 
   Black: {
     900: '#000000',

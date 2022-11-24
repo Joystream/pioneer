@@ -23,6 +23,7 @@ fragment ProposalFields on Proposal {
   }
   createdAt
   councilApprovals
+  exactExecutionBlock
 }
 
 fragment VoteFields on ProposalVotedEvent {
@@ -219,6 +220,9 @@ fragment DiscussionPostWithoutReplyFields on ProposalDiscussionPost {
     ...MemberFields
   }
   text
+  status {
+    __typename
+  }
 }
 
 fragment ProposalPostParents on ProposalDiscussionPost {
@@ -253,8 +257,8 @@ fragment ProposalDiscussionPostMentionFields on ProposalDiscussionPost {
   }
 }
 
-query getProposals($where: ProposalWhereInput) {
-  proposals(where: $where) {
+query getProposals($where: ProposalWhereInput, $orderBy: [ProposalOrderByInput!], $limit: Int, $offset: Int) {
+  proposals(where: $where, orderBy: $orderBy, limit: $limit, offset: $offset) {
     ...ProposalFields
   }
 }
@@ -320,5 +324,26 @@ query GetProposalMention($id: ID!) {
 query GetProposalDiscussionPostMention($id: ID!) {
   proposalPost: proposalDiscussionPostByUniqueInput(where: { id: $id }) {
     ...ProposalDiscussionPostMentionFields
+  }
+}
+
+query GetLatestProposalByMemberId($lockAccount: String) {
+  proposals(where: { stakingAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
+    id
+    createdInEvent {
+      createdAt
+      inBlock
+      network
+    }
+    status {
+      __typename
+    }
+    details {
+      __typename
+    }
+    exactExecutionBlock
+    statusSetAtBlock
+    statusSetAtTime
+    createdAt
   }
 }

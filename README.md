@@ -3,20 +3,20 @@
 
 # Pioneer
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/d870546e-6452-42d6-81d2-7a625637d6a4/deploy-status)](https://app.netlify.com/sites/pioneer-2/deploys)
 [![CI](https://github.com/Joystream/pioneer/actions/workflows/CI.yml/badge.svg)](https://github.com/Joystream/pioneer/actions/workflows/CI.yml)
 
 Governance application for the Joystream DAO platform.
 
-## Preview build
+## Deployed version
 
-The preview build, deployed from the main branch, is available on [https://pioneer-2.netlify.app/](https://pioneer-2.netlify.app/).
-Components preview and testing from main branch, is available on [https://pioneer-2-storybook.netlify.app/](https://pioneer-2-storybook.netlify.app/).
+- The live production is available on [https://dao.joystream.org/](https://dao.joystream.org/)
+- The preview build, deployed from the `dev` branch, is available on [https://pioneer-2.vercel.app/](https://pioneer-2.vercel.app/).
+- Components preview and testing from `dev` branch, is available on [https://pioneer-2-storybook.vercel.app/](https://pioneer-2-storybook.vercel.app/).
 
 The deployed version can interact with two backends:
 
-- Olympia testnet – A deployed Olympia testnet.
-- Local – A local a Joystream node and a mocked version of the query-node.
+- Joystream testnet – A deployed testnet.
+- Local – [A Joystream ecosystem running locally](docs/testenv.md).
 
 ## Quickstart
 
@@ -48,8 +48,8 @@ For development documentation see [Dev Readme](docs/README.md)
 The project's monorepo contains packages:
 
 - [packages/ui](packages/ui) – The main Pioneer 2.0 package
-- [packages/types](packages/types) – A copy of [@joystream/types](https://github.com/Joystream/joystream/tree/olympia/types) checked out from an Olympia dev branch.
-- [packages/metadata-protobuf](packages/metadata-protobuf) – A copy [@joystream/metadata-protobuf](https://github.com/Joystream/joystream/tree/olympia/metadata-protobuf) checked out from an Olympia dev branch.
+- [packages/types](packages/types) – A copy of [@joystream/types](https://github.com/Joystream/joystream/tree/master/types) checked out from the `master` branch.
+- [packages/metadata-protobuf](packages/metadata-protobuf) – A copy [@joystream/metadata-protobuf](https://github.com/Joystream/joystream/tree/master/metadata-protobuf) checked out from an `master` branch.
 - [packages/markdown-editor](packages/markdown-editor) – A CKEditor 5 build used as Markdown editor.
 
 ## Contributing

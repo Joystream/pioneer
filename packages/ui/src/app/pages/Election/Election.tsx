@@ -12,6 +12,8 @@ import { BlockDurationStatistics, StatisticItem, Statistics } from '@/common/com
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextHuge, TextMedium } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
+import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { getUrl } from '@/common/utils/getUrl'
 import { AnnounceCandidacyButton } from '@/council/components/election/announcing/AnnounceCandidacyButton'
 import { AnnouncingStage } from '@/council/components/election/announcing/AnnouncingStage'
@@ -21,8 +23,8 @@ import { RevealingStage } from '@/council/components/election/revealing/Revealin
 import { VotingStage } from '@/council/components/election/voting/VotingStage'
 import { ElectionRoutes } from '@/council/constants'
 import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidatePreviewViaUrlParameter'
+import { useCouncilRemainingPeriod } from '@/council/hooks/useCouncilRemainingPeriod'
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
-import { useElectionRemainingPeriod } from '@/council/hooks/useElectionRemainingPeriod'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { Election as ElectionType } from '@/council/types/Election'
 
@@ -40,9 +42,15 @@ export const Election = () => {
   const { isLoading: isLoadingElection, election } = useCurrentElection()
 
   const { isLoading: isLoadingElectionStage, stage: electionStage } = useElectionStage()
-  const remainingPeriod = useElectionRemainingPeriod(electionStage)
+  const remainingPeriod = useCouncilRemainingPeriod()
   const history = useHistory()
   useCandidatePreviewViaUrlParameter()
+
+  useRefetchQueries({ after: electionStage === 'announcing' }, [electionStage])
+  const isRefetched = useRefetchQueries(
+    { when: electionStage === 'announcing', interval: MILLISECONDS_PER_BLOCK, include: ['GetCurrentElection'] },
+    [electionStage]
+  )
 
   useEffect(() => {
     if (!isLoadingElectionStage && electionStage === 'inactive') {
@@ -123,7 +131,9 @@ export const Election = () => {
           </TextHuge>
         </StatisticItem>
       </Statistics>
-      {electionStage === 'announcing' && <AnnouncingStage election={election} isLoading={isLoadingElection} />}
+      {electionStage === 'announcing' && (
+        <AnnouncingStage election={election} isLoading={!isRefetched && isLoadingElection} />
+      )}
       {electionStage === 'voting' && <VotingStage election={election} isLoading={isLoadingElection} />}
       {electionStage === 'revealing' && <RevealingStage election={election} isLoading={isLoadingElection} />}
     </MainPanel>

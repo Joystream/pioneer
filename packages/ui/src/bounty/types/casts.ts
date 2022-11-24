@@ -1,6 +1,8 @@
 import BN from 'bn.js'
 
+import { getFundingPeriodLength, getSecondsPast } from '@/bounty/helpers'
 import { BountyFundingType, BountyStage as SchemaBountyStage } from '@/common/api/queries'
+import { SECONDS_PER_BLOCK } from '@/common/constants'
 import { lowerFirstLetter } from '@/common/helpers'
 import { asBlock, maybeAsBlock } from '@/common/types'
 import { asMember } from '@/memberships/types'
@@ -15,13 +17,13 @@ import {
 
 import {
   Bounty,
+  BountyContribution,
   BountyPeriod,
   BountyStage,
-  WorkEntry,
-  FundingType,
-  Contributor,
   BountyWork,
-  BountyContribution,
+  Contributor,
+  FundingType,
+  WorkEntry,
   WorkInfo,
 } from './Bounty'
 
@@ -42,7 +44,7 @@ export const asPeriod = (stage: BountyStage): BountyPeriod => {
   }
 }
 
-const asFunding = (field: BountyFundingType): FundingType => {
+export const asBountyFunding = (field: BountyFundingType): FundingType => {
   if (field.__typename === 'BountyFundingPerpetual') {
     return { target: new BN(field.target) }
   }
@@ -87,7 +89,7 @@ export const asContributor = ({
   withdrawnInEvent,
 }: BountyContributionFieldsFragment): Contributor => ({
   hasWithdrawn: !!withdrawnInEvent?.id,
-  amount,
+  amount: new BN(amount),
   actor: contributor ? asMember(contributor) : undefined,
 })
 
@@ -102,6 +104,49 @@ export const asBountyWork =
     inBlock: asBlock(fields),
   })
 
+export const periodBlockLeft = (fields: BountyFieldsFragment) => {
+  const blockSinceCreation = getSecondsPast(fields.createdAt) / SECONDS_PER_BLOCK
+  switch (fields.stage) {
+    case 'WorkSubmission': {
+      if (fields.maxFundingReachedEvent?.createdAt) {
+        return fields.workPeriod - getSecondsPast(fields.maxFundingReachedEvent.createdAt) / SECONDS_PER_BLOCK
+      }
+
+      if (fields.fundingType.__typename === 'BountyFundingLimited') {
+        return (
+          fields.workPeriod + (getFundingPeriodLength(asBountyFunding(fields.fundingType)) ?? 0) - blockSinceCreation
+        )
+      }
+
+      return undefined
+    }
+    case 'Judgment': {
+      if (fields.maxFundingReachedEvent?.createdAt) {
+        return (
+          fields.workPeriod +
+          fields.judgingPeriod -
+          getSecondsPast(fields.maxFundingReachedEvent.createdAt) / SECONDS_PER_BLOCK
+        )
+      }
+
+      if (fields.fundingType.__typename === 'BountyFundingLimited') {
+        return (
+          fields.workPeriod +
+          (getFundingPeriodLength(asBountyFunding(fields.fundingType)) ?? 0) +
+          fields.judgingPeriod -
+          blockSinceCreation
+        )
+      }
+
+      return undefined
+    }
+    case 'Funding': {
+      const fundingPeriodTime = getFundingPeriodLength(asBountyFunding(fields.fundingType))
+      return fundingPeriodTime ? fundingPeriodTime - blockSinceCreation : undefined
+    }
+  }
+}
+
 export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   id: fields.id,
   title: fields.title ?? '',
@@ -115,7 +160,7 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
   // undefined creator/oracle means that it's council, not member
   creator: fields.creator ? asMember(fields.creator) : undefined,
   oracle: fields.oracle ? asMember(fields.oracle) : undefined,
-  fundingType: asFunding(fields.fundingType),
+  fundingType: asBountyFunding(fields.fundingType),
   workPeriod: fields.workPeriod,
   judgingPeriod: fields.judgingPeriod,
   stage: asStage(fields.stage),
@@ -128,6 +173,7 @@ export const asBounty = (fields: BountyFieldsFragment): Bounty => ({
     inBlock: maybeAsBlock(fields.judgment?.inBlock, fields.judgment?.createdAt, fields.judgment?.network),
     rationale: fields.judgment?.rationale,
   },
+  periodTimeLeft: periodBlockLeft(fields),
 })
 
 export const asContribution = (fields: BountyContributionFieldsFragment): BountyContribution => ({

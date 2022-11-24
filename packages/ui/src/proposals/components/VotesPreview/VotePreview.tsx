@@ -12,15 +12,18 @@ import { useModal } from '@/common/hooks/useModal'
 import { useToggle } from '@/common/hooks/useToggle'
 import { isDefined } from '@/common/utils'
 import { MemberInfo } from '@/memberships/components'
+import { Member } from '@/memberships/types'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
-import { ProposalVote } from '@/proposals/types'
 
 const { Approve, Reject, Slash, Abstain } = ProposalVoteKind
 
 interface VotePreviewProps {
   kind: string
   count?: number
-  votes?: ProposalVote[]
+  votes?: {
+    id?: string
+    voter: Member
+  }[]
 }
 
 export const VotePreview = ({ kind, count, votes }: VotePreviewProps) => {
@@ -35,7 +38,7 @@ export const VotePreview = ({ kind, count, votes }: VotePreviewProps) => {
           <TextInlineMedium bold>{isDefined(count) ? count : '-'}</TextInlineMedium>{' '}
           <TextInlineMedium lighter>vote{plural(count)}</TextInlineMedium>
         </div>
-        <DropDownButton isDropped={isOpen} onClick={toggle} />
+        {!!votes?.length && <DropDownButton isDropped={isOpen} onClick={toggle} />}
       </VoteTypeHeader>
 
       <DropDownToggle isDropped={isOpen}>
@@ -43,12 +46,14 @@ export const VotePreview = ({ kind, count, votes }: VotePreviewProps) => {
           <VoteListItem key={index}>
             <MemberInfo key={index} member={voter} memberSize="s" />
 
-            <ButtonGhost
-              size="small"
-              onClick={() => showModal<VoteRationaleModalCall>({ modal: 'VoteRationaleModal', data: { id } })}
-            >
-              <FileIcon />
-            </ButtonGhost>
+            {id && (
+              <ButtonGhost
+                size="small"
+                onClick={() => showModal<VoteRationaleModalCall>({ modal: 'VoteRationaleModal', data: { id } })}
+              >
+                <FileIcon />
+              </ButtonGhost>
+            )}
           </VoteListItem>
         ))}
       </DropDownToggle>

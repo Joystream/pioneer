@@ -1,19 +1,23 @@
 import { createType } from '@joystream/types'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import BN from 'bn.js'
 import { createMemoryHistory, MemoryHistory } from 'history'
+import { set } from 'lodash'
 import React from 'react'
 import { Router } from 'react-router'
 import { interpret } from 'xstate'
 
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import { ApiContext } from '@/api/providers/context'
 import { CKEditorProps } from '@/common/components/CKEditor'
 import { getSteps } from '@/common/model/machines/getSteps'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
+import { last } from '@/common/utils'
 import { ElectionRoutes } from '@/council/constants'
 import { AnnounceCandidacyModal } from '@/council/modals/AnnounceCandidacy'
 import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
@@ -58,6 +62,7 @@ describe('UI: Announce Candidacy Modal', () => {
     modal: null,
     modalData: undefined,
   }
+  set(api, 'api.consts.members.candidateStake', new BN(200))
   const useMyMemberships: MyMemberships = {
     active: undefined,
     members: [],
@@ -74,6 +79,7 @@ describe('UI: Announce Candidacy Modal', () => {
   let announceCandidacyTx: any
   let bindAccountTx: any
   let candidacyNoteTx: any
+  let txMock: jest.Mock
 
   const server = setupMockServer({ noCleanupAfterEach: true })
 
@@ -97,6 +103,7 @@ describe('UI: Announce Candidacy Modal', () => {
     stubTransaction(api, 'api.tx.members.confirmStakingAccount', 5)
     bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 10)
     announceCandidacyTx = stubTransaction(api, 'api.tx.council.announceCandidacy', 20)
+    txMock = api.api.tx.council.announceCandidacy as unknown as jest.Mock
     candidacyNoteTx = stubTransaction(api, 'api.tx.council.setCandidacyNote', 30)
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
     stubQuery(
@@ -128,19 +135,36 @@ describe('UI: Announce Candidacy Modal', () => {
     })
 
     it('Transaction fee', async () => {
+      const minStake = 10
+      stubCouncilConstants(api, { minStake })
       stubTransaction(api, 'api.tx.utility.batch', 10000)
+      renderModal()
 
-      const { queryByText } = renderModal()
+      const moveFundsModalCall: MoveFundsModalCall = {
+        modal: 'MoveFundsModal',
+        data: {
+          requiredStake: new BN(minStake),
+          lock: 'Council Candidate',
+        },
+      }
 
-      expect(queryByText('modals.insufficientFunds.title')).not.toBeNull()
+      expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
 
     it('Required stake', async () => {
-      stubCouncilConstants(api, { minStake: 9999 })
+      const minStake = 9999
+      stubCouncilConstants(api, { minStake })
+      renderModal()
 
-      const { queryByText } = renderModal()
+      const moveFundsModalCall: MoveFundsModalCall = {
+        modal: 'MoveFundsModal',
+        data: {
+          requiredStake: new BN(minStake),
+          lock: 'Council Candidate',
+        },
+      }
 
-      expect(queryByText(/^announce candidacy/i)).toBeNull()
+      expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
     })
 
     it('All passed', async () => {
@@ -182,21 +206,19 @@ describe('UI: Announce Candidacy Modal', () => {
         it('Lower than minimal stake', async () => {
           const { getByText } = renderModal()
 
-          await fillStakingAmount(2)
+          await fillStakingStep('alice', 2, false)
 
           expect(await getNextStepButton()).toBeDisabled()
-          expect(includesTextWithMarkup(getByText, 'Minimum stake amount is 10 tJOY')).toBeInTheDocument()
+          expect(includesTextWithMarkup(getByText, 'Minimal stake amount is 10 tJOY')).toBeInTheDocument()
         })
 
         it('Higher than maximal balance', async () => {
           const { getByText } = renderModal()
 
-          await fillStakingAmount(10000)
+          await fillStakingStep('alice', 9999999, false)
 
           expect(await getNextStepButton()).toBeDisabled()
-          expect(
-            includesTextWithMarkup(getByText, 'You have no 10,000 tJOY on any of your accounts.')
-          ).toBeInTheDocument()
+          expect(includesTextWithMarkup(getByText, 'Insufficient funds to cover staking')).toBeInTheDocument()
         })
       })
 
@@ -217,12 +239,19 @@ describe('UI: Announce Candidacy Modal', () => {
 
       it('Not selected', async () => {
         expect(await getNextStepButton()).toBeDisabled()
+
+        const [, , rewardAccount] = last(txMock.mock.calls)
+        expect(rewardAccount).toBe('')
       })
 
       it('Selected', async () => {
-        await fillRewardAccountStep('alice')
+        await fillRewardAccountStep('bob')
 
+        screen.logTestingPlaygroundURL()
         expect(await getNextStepButton()).not.toBeDisabled()
+
+        const [, , rewardAccount] = last(txMock.mock.calls)
+        expect(rewardAccount).toBe(bob.address)
       })
     })
 
@@ -250,6 +279,7 @@ describe('UI: Announce Candidacy Modal', () => {
         await fillBulletPoint(
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua!Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
         )
+
         expect(screen.queryByText(/^maximum length is \d+ symbols/i)).not.toBeNull()
         expect(await getNextStepButton()).toBeDisabled()
       })
@@ -383,12 +413,18 @@ describe('UI: Announce Candidacy Modal', () => {
 
         renderModal()
         await fillStakingStep('alice', 15, true)
-        await fillRewardAccountStep('alice', true)
+        await fillRewardAccountStep('bob', true)
         await fillTitleAndBulletPointsStep('Some title', 'Some bullet point', true)
         await fillSummary(true)
 
         expect(await screen.findByText(/You intend to announce candidacy/i)).toBeDefined()
         expect((await screen.findByText(/^Transaction fee:/i))?.nextSibling?.textContent).toBe('20')
+
+        const [memberId, stakingAccount, rewardAccount, stakingAmount] = last(txMock.mock.calls)
+        expect(memberId).toBe(getMember('alice').id)
+        expect(stakingAccount).toBe(alice.address)
+        expect(rewardAccount).toBe(bob.address)
+        expect(String(stakingAmount)).toBe('15')
       })
     })
 
@@ -574,7 +610,7 @@ describe('UI: Announce Candidacy Modal', () => {
   async function fillTitle(value: string) {
     const titleInput = await screen.getByTestId('title')
 
-    act(() => {
+    await act(() => {
       fireEvent.change(titleInput, { target: { value } })
     })
   }
@@ -582,7 +618,7 @@ describe('UI: Announce Candidacy Modal', () => {
   async function fillBulletPoint(value: string) {
     const bulletPointInput = await screen.getByTestId('bulletPoint1')
 
-    act(() => {
+    await act(() => {
       fireEvent.change(bulletPointInput, { target: { value } })
     })
   }
@@ -599,7 +635,7 @@ describe('UI: Announce Candidacy Modal', () => {
   async function fillSummary(goNext?: boolean) {
     const summaryInput = await screen.findByLabelText(/Summary/i)
 
-    act(() => {
+    await act(() => {
       fireEvent.change(summaryInput, { target: { value: 'Some summary' } })
     })
 
@@ -615,7 +651,7 @@ describe('UI: Announce Candidacy Modal', () => {
   async function clickNextButton() {
     const button = await getNextStepButton()
 
-    act(() => {
+    await act(() => {
       fireEvent.click(button as HTMLElement)
     })
   }

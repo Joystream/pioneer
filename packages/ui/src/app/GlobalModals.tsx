@@ -19,7 +19,9 @@ import {
 } from '@/bounty/modals/WithdrawContributionModal'
 import { BountyWithdrawWorkEntryModalCall, WithdrawWorkEntryModal } from '@/bounty/modals/WithdrawWorkEntryModal'
 import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/Search/SearchResultsModal'
+import { WaitModal } from '@/common/components/WaitModal'
 import { useModal } from '@/common/hooks/useModal'
+import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
 import { ModalName } from '@/common/providers/modal/types'
 import { AnnounceCandidacyModal, AnnounceCandidateModalCall } from '@/council/modals/AnnounceCandidacy'
@@ -39,6 +41,9 @@ import { EditPostModal, EditPostModalCall } from '@/forum/modals/PostActionModal
 import { PostHistoryModal, PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
 import { MemberModalCall, MemberProfile } from '@/memberships/components/MemberProfile'
 import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals/BuyMembershipModal'
+import { DisconnectWalletModal, DisconnectWalletModalCall } from '@/memberships/modals/DisconnectWalletModal'
+import { SignOutModal } from '@/memberships/modals/SignOutModal/SignOutModal'
+import { SignOutModalCall } from '@/memberships/modals/SignOutModal/types'
 import { SwitchMemberModal, SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { TransferInviteModal, TransferInvitesModalCall } from '@/memberships/modals/TransferInviteModal'
 import { AddNewProposalModal, AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'
@@ -95,6 +100,8 @@ export type ModalNames =
   | ModalName<ClaimRewardModalCall>
   | ModalName<SubmitJudgementModalCall>
   | ModalName<BountyWithdrawWorkEntryModalCall>
+  | ModalName<SignOutModalCall>
+  | ModalName<DisconnectWalletModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -137,14 +144,23 @@ const modals: Record<ModalNames, ReactElement> = {
   BountyWithdrawWorkEntryModal: <WithdrawWorkEntryModal />,
   WithdrawStakeModal: <WithdrawStakeModal />,
   SubmitJudgementModal: <SubmitJudgementModal />,
+  SignOut: <SignOutModal />,
+  DisconnectWallet: <DisconnectWalletModal />,
 }
 
 export const GlobalModals = () => {
-  const { modal } = useModal()
+  const { modal, hideModal } = useModal()
+  const { status } = useTransactionStatus()
   const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
 
   if (Modal) {
-    return ReactDOM.createPortal(<Modal />, document.body)
+    return ReactDOM.createPortal(
+      <>
+        <Modal />
+        {status === 'loadingFees' && <WaitModal onClose={hideModal} requirementsCheck />}
+      </>,
+      document.body
+    )
   }
 
   return null

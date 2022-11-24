@@ -32,6 +32,7 @@ export const formatDuration = (duration: number): [string | number, string][] =>
 interface BlockDurationStatisticsProps extends StatisticItemProps {
   value?: number | BN
   hideBlockNumber?: boolean
+  dynamicBlockCount?: number
 }
 
 export const BlockDurationStatistics = (props: BlockDurationStatisticsProps) => {
@@ -48,7 +49,7 @@ export const BlockDurationStatistics = (props: BlockDurationStatisticsProps) => 
   return (
     <MultiStatisticItem {...props}>
       <ItemRow>
-        <DurationValue value={formatDuration(duration)} />
+        <DurationValue value={formatDuration(duration)} blocksLeft={props.dynamicBlockCount} />
       </ItemRow>
 
       {!props.hideBlockNumber && (
@@ -65,15 +66,15 @@ export const BlockDurationStatistics = (props: BlockDurationStatisticsProps) => 
   )
 }
 
-const BlocksInfo = styled(ColumnGapBlock)`
+export const BlocksInfo = styled(ColumnGapBlock)`
   margin-top: 2px;
 `
 
-const ItemRow = styled(StatisticItemSpacedContent)`
+export const ItemRow = styled(StatisticItemSpacedContent)`
   justify-content: start;
 `
 
-const NumberOfBlocks = styled(TextInlineSmall)`
+export const NumberOfBlocks = styled(TextInlineSmall)`
   font-family: ${Fonts.Grotesk};
   ${BlockIconStyles} {
     vertical-align: middle;

@@ -1,12 +1,12 @@
-import { ApiRx } from '@polkadot/api'
 import BN from 'bn.js'
 
+import { Api } from '@/api'
 import { getAverageStake } from '@/working-groups/model/getAverageStake'
 
 import { WorkingGroupDetailedFieldsFragment, WorkingGroupFieldsFragment } from '../queries'
 
 export type GroupIdName = Extract<
-  keyof ApiRx['consts'] & keyof ApiRx['tx'] & keyof ApiRx['query'],
+  keyof Api['consts'] & keyof Api['tx'] & keyof Api['query'],
   `${string}WorkingGroup` | `${string}WorkingGroup${string}`
 >
 export interface WorkingGroup {
@@ -18,9 +18,9 @@ export interface WorkingGroup {
   status?: string
   description?: string
   statusMessage?: string
-  budget: BN
-  averageStake: BN
-  isActive: boolean
+  budget?: BN
+  averageStake?: BN
+  isActive?: boolean
 }
 
 export interface DetailedWorkingGroup extends WorkingGroup {
@@ -28,6 +28,7 @@ export interface DetailedWorkingGroup extends WorkingGroup {
     id: string
     runtimeId: number
     stake: BN
+    rewardPerBlock: BN
   }
 }
 
@@ -55,6 +56,7 @@ export const asDetailedWorkingGroup = (group: WorkingGroupDetailedFieldsFragment
           id: group.leader.id,
           runtimeId: group.leader.runtimeId,
           stake: new BN(group.leader.stake),
+          rewardPerBlock: new BN(group.leader.rewardPerBlock),
         },
       }
     : {}),

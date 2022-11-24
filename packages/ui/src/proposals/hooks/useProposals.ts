@@ -1,8 +1,10 @@
 import { useMemo } from 'react'
 
-import { ProposalWhereInput } from '@/common/api/queries'
+import { ProposalOrderByInput, ProposalWhereInput } from '@/common/api/queries'
+import { usePagination } from '@/common/hooks/usePagination'
+import { SortOrder, toQueryOrderByInput } from '@/common/hooks/useSort'
 import { proposalStatusToTypename } from '@/proposals/model/proposalStatus'
-import { useGetProposalsQuery } from '@/proposals/queries'
+import { useGetProposalsCountQuery, useGetProposalsQuery } from '@/proposals/queries'
 import { asProposal, Proposal, ProposalStatus } from '@/proposals/types'
 
 import { ProposalFiltersState } from '../components/ProposalFilters'
@@ -10,17 +12,30 @@ import { ProposalFiltersState } from '../components/ProposalFilters'
 type UseProposalsStatus = 'active' | 'past'
 
 export interface UseProposalsProps {
+  order?: SortOrder<ProposalOrderByInput>
   status: UseProposalsStatus
   filters?: Partial<ProposalFiltersState>
+  perPage?: number
+  fetchAll?: boolean
 }
 
 interface UseProposals {
   isLoading: boolean
   proposals: Proposal[]
+  pagination: ReturnType<typeof usePagination>['pagination']
+  allCount?: number
 }
 
-export const useProposals = ({ status, filters }: UseProposalsProps): UseProposals => {
-  const variables = useMemo(() => {
+export const useProposals = ({
+  order,
+  status,
+  filters,
+  perPage = 10,
+  fetchAll = false,
+}: UseProposalsProps): UseProposals => {
+  const orderBy = order ? toQueryOrderByInput<ProposalOrderByInput>(order) : ProposalOrderByInput.CreatedAtDesc
+
+  const where = useMemo(() => {
     const where: ProposalWhereInput = filters?.stage
       ? { status_json: { isTypeOf_eq: proposalStatusToTypename(filters.stage as ProposalStatus) } }
       : { isFinalized_eq: status === 'past' }
@@ -51,13 +66,17 @@ export const useProposals = ({ status, filters }: UseProposalsProps): UseProposa
         where.createdAt_lte = lifetime.end
       }
     }
-    return { where }
+    return where
   }, [status, JSON.stringify(filters)])
-
-  const { loading, data } = useGetProposalsQuery({ variables })
+  const { data: proposalCount } = useGetProposalsCountQuery({ variables: { where } })
+  const { offset, pagination } = usePagination(perPage, proposalCount?.proposalsConnection.totalCount ?? 0, [])
+  const paginationVariables = fetchAll ? {} : { offset, limit: perPage }
+  const { loading, data } = useGetProposalsQuery({ variables: { ...paginationVariables, where, orderBy } })
 
   return {
     isLoading: loading,
+    pagination,
     proposals: data && data.proposals ? data.proposals.map(asProposal) : [],
+    allCount: proposalCount?.proposalsConnection.totalCount,
   }
 }

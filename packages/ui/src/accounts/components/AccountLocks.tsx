@@ -4,44 +4,48 @@ import styled from 'styled-components'
 import { BalanceLock, LockType } from '@/accounts/types'
 import { QuestionIcon } from '@/common/components/icons'
 import {
-  EnvelopeIcon,
-  LabelIcon,
+  DistributionWorkerIcon,
+  InvitationIcon,
+  MarketingWorkerIcon,
+  HRWorkerIcon,
   LockIcon,
   VoteIcon,
   StorageWorkerIcon,
   ProposalIcon,
-  OperationsWorkerIcon,
   CouncilCandidateIcon,
   ForumWorkerIcon,
   BountiesIcon,
   ValidationIcon,
   ContentDirectoryWorkerIcon,
-  StakingIcon,
+  BoundStakingIcon,
   CouncilorIcon,
+  BuilderWorkerIcon,
+  GatewayWorkerIcon,
+  MembershipWorkerIcon,
 } from '@/common/components/icons/locks'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 
 const locksMap: Record<LockType, ReactElement> = {
   Staking: <LockIcon />,
-  Vesting: <LockIcon />, // TODO this might need a different icon
+  Vesting: <LockIcon />,
   Voting: <VoteIcon />,
   'Council Candidate': <CouncilCandidateIcon />,
   Councilor: <CouncilorIcon />,
   Validation: <ValidationIcon />,
-  Nomination: <LockIcon />,
+  Nomination: <ValidationIcon />,
   Proposals: <ProposalIcon />,
   'Storage Worker': <StorageWorkerIcon />,
   'Content Directory Worker': <ContentDirectoryWorkerIcon />,
   'Forum Worker': <ForumWorkerIcon />,
-  'Membership Worker': <LabelIcon />,
-  Invitation: <EnvelopeIcon />,
-  'Bound Staking Account': <StakingIcon />,
+  'Membership Worker': <MembershipWorkerIcon />,
+  Invitation: <InvitationIcon />,
+  'Bound Staking Account': <BoundStakingIcon />,
   Bounties: <BountiesIcon />,
-  'Gateway Worker': <OperationsWorkerIcon />,
-  'Builders Worker': <OperationsWorkerIcon />,
-  'HR Worker': <OperationsWorkerIcon />,
-  'Marketing Worker': <OperationsWorkerIcon />,
-  'Distribution Worker': <LockIcon />, // TODO this might need a different icon
+  'Gateway Worker': <GatewayWorkerIcon />,
+  'Builders Worker': <BuilderWorkerIcon />,
+  'HR Worker': <HRWorkerIcon />,
+  'Marketing Worker': <MarketingWorkerIcon />,
+  'Distribution Worker': <DistributionWorkerIcon />,
 }
 
 export const lockIcon = (type: LockType) => locksMap[type] ?? <QuestionIcon />
@@ -68,7 +72,7 @@ export const AccountLocks = ({ locks }: AccountLocksProps) => {
 
 export const AccountLocksWrapper = styled(ColumnGapBlock)`
   position: absolute;
-  top: 20px;
+  top: 15px;
   align-items: center;
 `
 

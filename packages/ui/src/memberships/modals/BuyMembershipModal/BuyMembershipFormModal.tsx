@@ -1,6 +1,6 @@
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
-import { blake2AsHex } from '@polkadot/util-crypto'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
@@ -19,7 +19,6 @@ import {
   LabelLink,
   ToggleCheckbox,
 } from '@/common/components/forms'
-import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Arrow } from '@/common/components/icons'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import {
@@ -35,9 +34,8 @@ import {
 import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
-import { useApi } from '@/common/hooks/useApi'
-import { useForm } from '@/common/hooks/useForm'
-import { useObservable } from '@/common/hooks/useObservable'
+import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
+import { useGetMembersCountQuery } from '@/memberships/queries'
 
 import { SelectMember } from '../../components/SelectMember'
 import { AccountSchema, AvatarURISchema, HandleSchema, ReferrerSchema } from '../../model/validation'
@@ -56,11 +54,16 @@ interface BuyMembershipFormProps extends Omit<BuyMembershipFormModalProps, 'onCl
 }
 
 const CreateMemberSchema = Yup.object().shape({
-  rootAccount: AccountSchema.required(),
-  controllerAccount: AccountSchema.required(),
+  rootAccount: AccountSchema.required('This field is required'),
+  controllerAccount: AccountSchema.required('This field is required'),
   avatarUri: AvatarURISchema,
-  name: Yup.string().required(),
-  handle: HandleSchema.required(),
+  name: Yup.string()
+    .required('This field is required')
+    .matches(/^[a-zA-Z0-9_.-]*$/, 'Some of the characters are not allowed here '),
+  handle: HandleSchema.required('This field is required').matches(
+    /^[a-zA-Z0-9_.-]*$/,
+    'Some of the characters are not allowed here '
+  ),
   hasTerms: Yup.boolean().required().oneOf([true]),
   isReferred: Yup.boolean(),
   referrer: ReferrerSchema,
@@ -79,6 +82,22 @@ export interface MemberFormFields {
   invitor?: Member
 }
 
+const formDefaultValues = {
+  name: '',
+  handle: '',
+  about: '',
+  avatarUri: '',
+  isReferred: false,
+  referrer: undefined,
+  hasTerms: false,
+}
+
+export interface InviteMembershipFormFields {
+  to: Member
+  from?: Member
+  amount: number
+}
+
 export const BuyMembershipForm = ({
   onSubmit,
   membershipPrice,
@@ -86,145 +105,132 @@ export const BuyMembershipForm = ({
   changeMembershipAccount,
   type,
 }: BuyMembershipFormProps) => {
-  const { api, connectionState } = useApi()
   const { allAccounts } = useMyAccounts()
 
-  const initializer = {
-    name: '',
-    rootAccount: membershipAccount ? accountOrNamed(allAccounts, membershipAccount, 'Account') : undefined,
-    controllerAccount: membershipAccount ? accountOrNamed(allAccounts, membershipAccount, 'Account') : undefined,
-    handle: '',
-    about: '',
-    avatarUri: '',
-    isReferred: false,
-    referrer: undefined,
-    hasTerms: false,
-  }
-  const { fields, changeField, validation } = useForm<MemberFormFields>(initializer, CreateMemberSchema)
-  const { isValid, errors, setContext } = validation
-  const { rootAccount, controllerAccount, handle, name, isReferred, avatarUri, about, referrer } = fields
+  const [formHandleMap, setFormHandleMap] = useState('')
+  const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
 
-  const handleHash = blake2AsHex(handle)
-  const potentialMemberIdSize = useObservable(api?.query.members.memberIdByHandleHash.size(handleHash), [
-    handle,
-    connectionState,
-  ])
+  const form = useForm<MemberFormFields>({
+    resolver: useYupValidationResolver(CreateMemberSchema),
+    context: { size: data?.membershipsConnection.totalCount },
+    mode: 'onChange',
+    defaultValues: {
+      ...formDefaultValues,
+      rootAccount: membershipAccount ? accountOrNamed(allAccounts, membershipAccount, 'Account') : undefined,
+      controllerAccount: membershipAccount ? accountOrNamed(allAccounts, membershipAccount, 'Account') : undefined,
+    },
+  })
+
+  const [handle, isReferred, referrer] = form.watch(['handle', 'isReferred', 'referrer'])
 
   useEffect(() => {
-    setContext({ size: potentialMemberIdSize })
-  }, [potentialMemberIdSize?.toString()])
-
-  const onCreate = () => {
-    if (!controllerAccount || !rootAccount) {
-      return
+    if (handle) {
+      setFormHandleMap(handle)
     }
+  }, [handle])
 
-    onSubmit(fields)
-  }
+  useEffect(() => {
+    if (formHandleMap && (data?.membershipsConnection.totalCount || form.formState.errors.handle)) {
+      form.trigger('handle')
+    }
+  }, [data?.membershipsConnection.totalCount])
+
+  const hasError = enhancedHasError(form.formState.errors)
+  const getErrorMessage = enhancedGetErrorMessage(form.formState.errors)
+  const onCreate = () => onSubmit(form.getValues())
 
   return (
     <>
       <ScrolledModalBody>
-        <ScrolledModalContainer>
-          {type === 'general' && (
+        <FormProvider {...form}>
+          <ScrolledModalContainer>
             <Row>
               <InlineToggleWrap>
                 <Label>I was referred by a member: </Label>
-                <ToggleCheckbox
-                  trueLabel="Yes"
-                  falseLabel="No"
-                  onChange={(isSet) => changeField('isReferred', isSet)}
-                  checked={isReferred ?? false}
-                />
+                <ToggleCheckbox trueLabel="Yes" falseLabel="No" name="isReferred" />
               </InlineToggleWrap>
               {isReferred && (
                 <InputComponent required inputSize="l">
                   <SelectMember
-                    onChange={(member) => changeField('referrer', member)}
+                    onChange={(member) => form.setValue('referrer', member, { shouldValidate: true })}
                     disabled={!isReferred}
                     selected={referrer}
                   />
                 </InputComponent>
               )}
             </Row>
-          )}
-          <Row>
-            <TextMedium dark>Please fill in all the details below.</TextMedium>
-          </Row>
-          {type === 'general' && (
-            <>
-              <Row>
-                <InputComponent label="Root account" required inputSize="l" tooltipText="Something about root accounts">
-                  <SelectAccount onChange={(account) => changeField('rootAccount', account)} selected={rootAccount} />
-                </InputComponent>
-              </Row>
-              <Row>
-                <InputComponent
-                  label="Controller account"
-                  required
-                  inputSize="l"
-                  tooltipText="Something about controller account"
-                >
-                  <SelectAccount
-                    onChange={(account) => changeField('controllerAccount', account)}
-                    selected={controllerAccount}
-                  />
-                </InputComponent>
-              </Row>
-            </>
-          )}
-          <Row>
-            <InputComponent id="member-name" label="Member Name" required>
-              <InputText
+            <Row>
+              <TextMedium dark>Please fill in all the details below.</TextMedium>
+            </Row>
+            {type === 'general' && (
+              <>
+                <Row>
+                  <InputComponent
+                    label="Root account"
+                    required
+                    inputSize="l"
+                    tooltipText="Something about root accounts"
+                  >
+                    <SelectAccount name="rootAccount" />
+                  </InputComponent>
+                </Row>
+                <Row>
+                  <InputComponent
+                    label="Controller account"
+                    required
+                    inputSize="l"
+                    tooltipText="Something about controller account"
+                  >
+                    <SelectAccount name="controllerAccount" />
+                  </InputComponent>
+                </Row>
+              </>
+            )}
+            <Row>
+              <InputComponent
                 id="member-name"
-                placeholder="Type"
-                value={name}
-                onChange={(event) => changeField('name', event.target.value)}
-              />
-            </InputComponent>
-          </Row>
-          <Row>
-            <InputComponent id="membership-handle" label="Membership handle" required>
-              <InputText
+                label="Member Name"
+                required
+                validation={hasError('name') ? 'invalid' : undefined}
+                message={hasError('name') ? getErrorMessage('name') : ''}
+              >
+                <InputText id="member-name" placeholder="Type" name="name" />
+              </InputComponent>
+            </Row>
+            <Row>
+              <InputComponent
                 id="membership-handle"
-                placeholder="Type"
-                value={handle}
-                onChange={(event) => changeField('handle', event.target.value)}
-              />
-            </InputComponent>
-          </Row>
-          <Row>
-            <InputComponent id="member-about" label="About member" inputSize="l">
-              <InputTextarea
-                id="member-about"
-                value={about}
-                placeholder="Type"
-                onChange={(event) => changeField('about', event.target.value)}
-              />
-            </InputComponent>
-          </Row>
-          <Row>
-            <InputComponent
-              id="member-avatar"
-              label="Member Avatar"
-              required
-              value={avatarUri}
-              validation={hasError('avatarUri', errors) ? 'invalid' : undefined}
-              message={
-                hasError('avatarUri', errors)
-                  ? getErrorMessage('avatarUri', errors)
-                  : 'Paste an URL of your avatar image. Text lorem ipsum.'
-              }
-              placeholder="Image URL"
-            >
-              <InputText
+                label="Membership handle"
+                required
+                validation={hasError('handle') ? 'invalid' : undefined}
+                message={hasError('handle') ? getErrorMessage('handle') : ''}
+              >
+                <InputText id="membership-handle" placeholder="Type" name="handle" />
+              </InputComponent>
+            </Row>
+            <Row>
+              <InputComponent id="member-about" label="About member" inputSize="l">
+                <InputTextarea id="member-about" placeholder="Type" name="about" />
+              </InputComponent>
+            </Row>
+            <Row>
+              <InputComponent
                 id="member-avatar"
-                value={avatarUri}
-                onChange={(event) => changeField('avatarUri', event.target.value)}
-              />
-            </InputComponent>
-          </Row>
-        </ScrolledModalContainer>
+                required
+                label="Member Avatar"
+                validation={hasError('avatarUri') ? 'invalid' : undefined}
+                message={
+                  hasError('avatarUri')
+                    ? getErrorMessage('avatarUri')
+                    : 'Paste an URL of your avatar image. Text lorem ipsum.'
+                }
+                placeholder="Image URL"
+              >
+                <InputText id="member-avatar" name="avatarUri" />
+              </InputComponent>
+            </Row>
+          </ScrolledModalContainer>
+        </FormProvider>
       </ScrolledModalBody>
       <ModalFooter twoColumns>
         <ModalFooterGroup left>
@@ -234,7 +240,10 @@ export const BuyMembershipForm = ({
               Change account
             </ButtonGhost>
           )}
-          <Checkbox id={'privacy-policy-agreement'} onChange={(value) => changeField('hasTerms', value)}>
+          <Checkbox
+            id={'privacy-policy-agreement'}
+            onChange={(hasTerms) => form.setValue('hasTerms', hasTerms, { shouldValidate: true })}
+          >
             <TextMedium colorInherit>
               I agree to the{' '}
               <LabelLink to={TermsRoutes.termsOfService} target="_blank">
@@ -269,7 +278,7 @@ export const BuyMembershipForm = ({
               />
             </TransactionInfoContainer>
           )}
-          <ButtonPrimary size="medium" onClick={onCreate} disabled={!isValid}>
+          <ButtonPrimary size="medium" onClick={onCreate} disabled={!form.formState.isValid}>
             Create a Membership
           </ButtonPrimary>
         </ModalFooterGroup>

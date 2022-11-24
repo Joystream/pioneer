@@ -25,13 +25,12 @@ export const CommonTiles = React.memo(({ bounty, period }: Props) => {
       },
     },
   })
-
   const periodLength = useMemo(() => {
     switch (period) {
       case 'working':
-        return <DurationValue value={formatDuration(bounty.workPeriod)} />
+        return <DurationValue value={formatDuration(bounty.workPeriod)} blocksLeft={bounty.periodTimeLeft} />
       case 'judgement':
-        return <DurationValue value={formatDuration(bounty.judgingPeriod)} />
+        return <DurationValue value={formatDuration(bounty.judgingPeriod)} blocksLeft={bounty.periodTimeLeft} />
       case 'expired':
       case 'terminated':
         return t('tiles.periodLength.closed')

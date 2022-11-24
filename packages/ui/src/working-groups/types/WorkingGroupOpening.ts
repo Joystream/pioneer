@@ -27,7 +27,7 @@ export interface BaseOpening {
   details: string
   createdAtBlock: Block
   stake: BN
-  budget: number
+  budget: BN
   rewardPerBlock: BN
 }
 
@@ -45,7 +45,7 @@ export interface WorkingGroupOpeningApplication {
 export interface WorkingGroupOpening extends BaseOpening {
   runtimeId: number
   leadId?: string | null
-  budget: number
+  budget: BN
   type: WorkingGroupOpeningType
   status: Status
   applicants: number
@@ -81,14 +81,14 @@ const asBaseOpening = (fields: UpcomingWorkingGroupOpeningFieldsFragment | Worki
     title: fields.metadata?.title ?? `${groupName} Working Group`,
     groupId: fields.groupId as GroupIdName,
     groupName: groupName,
-    budget: fields.group.budget,
+    budget: new BN(fields.group.budget),
     createdAtBlock: asBlock(fields.createdInEvent),
-    rewardPerBlock: new BN(fields.rewardPerBlock),
+    rewardPerBlock: new BN(fields.rewardPerBlock ?? 0),
     expectedEnding: fields.metadata.expectedEnding,
     shortDescription: fields.metadata.shortDescription || '',
     description: fields.metadata?.description ?? '',
     details: fields.metadata?.applicationDetails ?? '',
-    stake: new BN(fields.stakeAmount),
+    stake: new BN(fields.stakeAmount ?? 0),
   }
 }
 
@@ -152,7 +152,7 @@ export const asApplicationQuestion = (opening: ApplicationQuestionFieldsFragment
 export interface WorkingGroupOpeningMention {
   id: string
   type: string
-  rewardPerBlock: number
+  rewardPerBlock: BN
   applicants: number
   shortDescription?: string | undefined | null
   description?: string | undefined | null
@@ -168,7 +168,7 @@ export const asWorkingGroupOpeningMention = (
 ): WorkingGroupOpeningMention => ({
   id: fields.id,
   type: fields.type as WorkingGroupOpeningType,
-  rewardPerBlock: fields.rewardPerBlock,
+  rewardPerBlock: new BN(fields.rewardPerBlock),
   shortDescription: fields.metadata?.shortDescription,
   description: fields.metadata?.description,
   expectedEnding: fields.metadata?.expectedEnding,

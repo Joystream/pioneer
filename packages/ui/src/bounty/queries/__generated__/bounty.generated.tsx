@@ -11,13 +11,13 @@ export type BountyFieldsFragment = {
   title?: string | null
   bannerImageUri?: string | null
   description?: string | null
-  cherry: any
-  entrantStake: any
+  cherry: string
+  entrantStake: string
   workPeriod: number
   judgingPeriod: number
   stage: Types.BountyStage
   isTerminated: boolean
-  totalFunding: any
+  totalFunding: string
   discussionThreadId?: string | null
   creator?: {
     __typename: 'Membership'
@@ -28,6 +28,7 @@ export type BountyFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -43,6 +44,13 @@ export type BountyFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   } | null
   oracle?: {
     __typename: 'Membership'
@@ -53,6 +61,7 @@ export type BountyFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -68,10 +77,14 @@ export type BountyFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   } | null
-  fundingType:
-    | { __typename: 'BountyFundingLimited'; minFundingAmount: number; maxFundingAmount: number; fundingPeriod: number }
-    | { __typename: 'BountyFundingPerpetual'; target: number }
   entrantWhitelist?: {
     __typename: 'BountyEntrantWhitelist'
     members: Array<{ __typename: 'Membership'; id: string }>
@@ -79,7 +92,7 @@ export type BountyFieldsFragment = {
   contributions?: Array<{
     __typename: 'BountyContribution'
     id: string
-    amount: any
+    amount: string
     withdrawnInEvent?: { __typename: 'BountyFundingWithdrawalEvent'; id: string } | null
     contributor?: {
       __typename: 'Membership'
@@ -90,6 +103,7 @@ export type BountyFieldsFragment = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -105,6 +119,13 @@ export type BountyFieldsFragment = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     } | null
   }> | null
   entries?: Array<{
@@ -126,6 +147,7 @@ export type BountyFieldsFragment = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -141,11 +163,18 @@ export type BountyFieldsFragment = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
     status:
       | { __typename: 'BountyEntryStatusPassed' }
       | { __typename: 'BountyEntryStatusRejected' }
-      | { __typename: 'BountyEntryStatusWinner'; reward: number }
+      | { __typename: 'BountyEntryStatusWinner'; reward: string }
       | { __typename: 'BountyEntryStatusWithdrawn' }
       | { __typename: 'BountyEntryStatusWorking' }
     withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
@@ -158,6 +187,17 @@ export type BountyFieldsFragment = {
     createdAt: any
     network: Types.Network
   } | null
+  maxFundingReachedEvent?: { __typename: 'BountyMaxFundingReachedEvent'; createdAt: any } | null
+  fundingType:
+    | { __typename: 'BountyFundingLimited'; minFundingAmount: string; maxFundingAmount: string; fundingPeriod: number }
+    | { __typename: 'BountyFundingPerpetual'; target: string }
+}
+
+export type BountyFundingTypeFieldsFragment = {
+  __typename: 'Bounty'
+  fundingType:
+    | { __typename: 'BountyFundingLimited'; minFundingAmount: string; maxFundingAmount: string; fundingPeriod: number }
+    | { __typename: 'BountyFundingPerpetual'; target: string }
 }
 
 export type BountyEntryFieldsFragment = {
@@ -173,6 +213,7 @@ export type BountyEntryFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -188,11 +229,18 @@ export type BountyEntryFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
   status:
     | { __typename: 'BountyEntryStatusPassed' }
     | { __typename: 'BountyEntryStatusRejected' }
-    | { __typename: 'BountyEntryStatusWinner'; reward: number }
+    | { __typename: 'BountyEntryStatusWinner'; reward: string }
     | { __typename: 'BountyEntryStatusWithdrawn' }
     | { __typename: 'BountyEntryStatusWorking' }
   withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
@@ -217,6 +265,7 @@ export type BountyEntryWithDetailsFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -232,11 +281,18 @@ export type BountyEntryWithDetailsFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
   status:
     | { __typename: 'BountyEntryStatusPassed' }
     | { __typename: 'BountyEntryStatusRejected' }
-    | { __typename: 'BountyEntryStatusWinner'; reward: number }
+    | { __typename: 'BountyEntryStatusWinner'; reward: string }
     | { __typename: 'BountyEntryStatusWithdrawn' }
     | { __typename: 'BountyEntryStatusWorking' }
   withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
@@ -271,6 +327,7 @@ export type BountyWorkWithDetailsFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -286,11 +343,18 @@ export type BountyWorkWithDetailsFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   }
   status:
     | { __typename: 'BountyEntryStatusPassed' }
     | { __typename: 'BountyEntryStatusRejected' }
-    | { __typename: 'BountyEntryStatusWinner'; reward: number }
+    | { __typename: 'BountyEntryStatusWinner'; reward: string }
     | { __typename: 'BountyEntryStatusWithdrawn' }
     | { __typename: 'BountyEntryStatusWorking' }
   withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
@@ -299,7 +363,7 @@ export type BountyWorkWithDetailsFieldsFragment = {
 export type BountyContributionFieldsFragment = {
   __typename: 'BountyContribution'
   id: string
-  amount: any
+  amount: string
   withdrawnInEvent?: { __typename: 'BountyFundingWithdrawalEvent'; id: string } | null
   contributor?: {
     __typename: 'Membership'
@@ -310,6 +374,7 @@ export type BountyContributionFieldsFragment = {
     handle: string
     isVerified: boolean
     isFoundingMember: boolean
+    isCouncilMember: boolean
     inviteCount: number
     createdAt: any
     metadata: {
@@ -325,6 +390,13 @@ export type BountyContributionFieldsFragment = {
       isLead: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
   } | null
 }
 
@@ -344,13 +416,13 @@ export type GetBountiesQuery = {
     title?: string | null
     bannerImageUri?: string | null
     description?: string | null
-    cherry: any
-    entrantStake: any
+    cherry: string
+    entrantStake: string
     workPeriod: number
     judgingPeriod: number
     stage: Types.BountyStage
     isTerminated: boolean
-    totalFunding: any
+    totalFunding: string
     discussionThreadId?: string | null
     creator?: {
       __typename: 'Membership'
@@ -361,6 +433,7 @@ export type GetBountiesQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -376,6 +449,13 @@ export type GetBountiesQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     } | null
     oracle?: {
       __typename: 'Membership'
@@ -386,6 +466,7 @@ export type GetBountiesQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -401,15 +482,14 @@ export type GetBountiesQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     } | null
-    fundingType:
-      | {
-          __typename: 'BountyFundingLimited'
-          minFundingAmount: number
-          maxFundingAmount: number
-          fundingPeriod: number
-        }
-      | { __typename: 'BountyFundingPerpetual'; target: number }
     entrantWhitelist?: {
       __typename: 'BountyEntrantWhitelist'
       members: Array<{ __typename: 'Membership'; id: string }>
@@ -417,7 +497,7 @@ export type GetBountiesQuery = {
     contributions?: Array<{
       __typename: 'BountyContribution'
       id: string
-      amount: any
+      amount: string
       withdrawnInEvent?: { __typename: 'BountyFundingWithdrawalEvent'; id: string } | null
       contributor?: {
         __typename: 'Membership'
@@ -428,6 +508,7 @@ export type GetBountiesQuery = {
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
+        isCouncilMember: boolean
         inviteCount: number
         createdAt: any
         metadata: {
@@ -443,6 +524,13 @@ export type GetBountiesQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       } | null
     }> | null
     entries?: Array<{
@@ -464,6 +552,7 @@ export type GetBountiesQuery = {
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
+        isCouncilMember: boolean
         inviteCount: number
         createdAt: any
         metadata: {
@@ -479,11 +568,18 @@ export type GetBountiesQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       }
       status:
         | { __typename: 'BountyEntryStatusPassed' }
         | { __typename: 'BountyEntryStatusRejected' }
-        | { __typename: 'BountyEntryStatusWinner'; reward: number }
+        | { __typename: 'BountyEntryStatusWinner'; reward: string }
         | { __typename: 'BountyEntryStatusWithdrawn' }
         | { __typename: 'BountyEntryStatusWorking' }
       withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
@@ -496,6 +592,15 @@ export type GetBountiesQuery = {
       createdAt: any
       network: Types.Network
     } | null
+    maxFundingReachedEvent?: { __typename: 'BountyMaxFundingReachedEvent'; createdAt: any } | null
+    fundingType:
+      | {
+          __typename: 'BountyFundingLimited'
+          minFundingAmount: string
+          maxFundingAmount: string
+          fundingPeriod: number
+        }
+      | { __typename: 'BountyFundingPerpetual'; target: string }
   }>
 }
 
@@ -521,13 +626,13 @@ export type GetBountyQuery = {
     title?: string | null
     bannerImageUri?: string | null
     description?: string | null
-    cherry: any
-    entrantStake: any
+    cherry: string
+    entrantStake: string
     workPeriod: number
     judgingPeriod: number
     stage: Types.BountyStage
     isTerminated: boolean
-    totalFunding: any
+    totalFunding: string
     discussionThreadId?: string | null
     creator?: {
       __typename: 'Membership'
@@ -538,6 +643,7 @@ export type GetBountyQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -553,6 +659,13 @@ export type GetBountyQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     } | null
     oracle?: {
       __typename: 'Membership'
@@ -563,6 +676,7 @@ export type GetBountyQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -578,15 +692,14 @@ export type GetBountyQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     } | null
-    fundingType:
-      | {
-          __typename: 'BountyFundingLimited'
-          minFundingAmount: number
-          maxFundingAmount: number
-          fundingPeriod: number
-        }
-      | { __typename: 'BountyFundingPerpetual'; target: number }
     entrantWhitelist?: {
       __typename: 'BountyEntrantWhitelist'
       members: Array<{ __typename: 'Membership'; id: string }>
@@ -594,7 +707,7 @@ export type GetBountyQuery = {
     contributions?: Array<{
       __typename: 'BountyContribution'
       id: string
-      amount: any
+      amount: string
       withdrawnInEvent?: { __typename: 'BountyFundingWithdrawalEvent'; id: string } | null
       contributor?: {
         __typename: 'Membership'
@@ -605,6 +718,7 @@ export type GetBountyQuery = {
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
+        isCouncilMember: boolean
         inviteCount: number
         createdAt: any
         metadata: {
@@ -620,6 +734,13 @@ export type GetBountyQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       } | null
     }> | null
     entries?: Array<{
@@ -641,6 +762,7 @@ export type GetBountyQuery = {
         handle: string
         isVerified: boolean
         isFoundingMember: boolean
+        isCouncilMember: boolean
         inviteCount: number
         createdAt: any
         metadata: {
@@ -656,11 +778,18 @@ export type GetBountyQuery = {
           isLead: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
+        stakingaccountaddedeventmember?: Array<{
+          __typename: 'StakingAccountAddedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+          account: string
+        }> | null
       }
       status:
         | { __typename: 'BountyEntryStatusPassed' }
         | { __typename: 'BountyEntryStatusRejected' }
-        | { __typename: 'BountyEntryStatusWinner'; reward: number }
+        | { __typename: 'BountyEntryStatusWinner'; reward: string }
         | { __typename: 'BountyEntryStatusWithdrawn' }
         | { __typename: 'BountyEntryStatusWorking' }
       withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
@@ -673,6 +802,15 @@ export type GetBountyQuery = {
       createdAt: any
       network: Types.Network
     } | null
+    maxFundingReachedEvent?: { __typename: 'BountyMaxFundingReachedEvent'; createdAt: any } | null
+    fundingType:
+      | {
+          __typename: 'BountyFundingLimited'
+          minFundingAmount: string
+          maxFundingAmount: string
+          fundingPeriod: number
+        }
+      | { __typename: 'BountyFundingPerpetual'; target: string }
   } | null
 }
 
@@ -707,6 +845,7 @@ export type GetBountyWorksQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -722,11 +861,18 @@ export type GetBountyWorksQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     }
     status:
       | { __typename: 'BountyEntryStatusPassed' }
       | { __typename: 'BountyEntryStatusRejected' }
-      | { __typename: 'BountyEntryStatusWinner'; reward: number }
+      | { __typename: 'BountyEntryStatusWinner'; reward: string }
       | { __typename: 'BountyEntryStatusWithdrawn' }
       | { __typename: 'BountyEntryStatusWorking' }
     withdrawnInEvent?: { __typename: 'WorkEntryWithdrawnEvent'; inBlock: number } | null
@@ -753,18 +899,18 @@ export type GetUserBountyStatisticsQuery = {
     status:
       | { __typename: 'BountyEntryStatusPassed' }
       | { __typename: 'BountyEntryStatusRejected' }
-      | { __typename: 'BountyEntryStatusWinner'; reward: number }
+      | { __typename: 'BountyEntryStatusWinner'; reward: string }
       | { __typename: 'BountyEntryStatusWithdrawn' }
       | { __typename: 'BountyEntryStatusWorking' }
   }>
-  bountyContributions: Array<{ __typename: 'BountyContribution'; amount: any }>
+  bountyContributions: Array<{ __typename: 'BountyContribution'; amount: string }>
 }
 
-export type GetUserBountyTabsInformationsQueryVariables = Types.Exact<{
+export type GetUserBountyTabsInformationQueryVariables = Types.Exact<{
   memberIds?: Types.InputMaybe<Array<Types.Scalars['ID']> | Types.Scalars['ID']>
 }>
 
-export type GetUserBountyTabsInformationsQuery = {
+export type GetUserBountyTabsInformationQuery = {
   __typename: 'Query'
   bountiesConnection: { __typename: 'BountyConnection'; totalCount: number }
   bountyContributionsConnection: { __typename: 'BountyContributionConnection'; totalCount: number }
@@ -783,7 +929,7 @@ export type GetBountyContributorsQuery = {
   bountyContributions: Array<{
     __typename: 'BountyContribution'
     id: string
-    amount: any
+    amount: string
     withdrawnInEvent?: { __typename: 'BountyFundingWithdrawalEvent'; id: string } | null
     contributor?: {
       __typename: 'Membership'
@@ -794,6 +940,7 @@ export type GetBountyContributorsQuery = {
       handle: string
       isVerified: boolean
       isFoundingMember: boolean
+      isCouncilMember: boolean
       inviteCount: number
       createdAt: any
       metadata: {
@@ -809,10 +956,60 @@ export type GetBountyContributorsQuery = {
         isLead: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
     } | null
   }>
 }
 
+export type GetLatestBountyEntryQueryVariables = Types.Exact<{
+  lockAccount?: Types.InputMaybe<Types.Scalars['String']>
+}>
+
+export type GetLatestBountyEntryQuery = {
+  __typename: 'Query'
+  bountyEntries: Array<{
+    __typename: 'BountyEntry'
+    id: string
+    bountyId: string
+    bounty: {
+      __typename: 'Bounty'
+      createdAt: any
+      workPeriod: number
+      judgingPeriod: number
+      maxFundingReachedEvent?: { __typename: 'BountyMaxFundingReachedEvent'; createdAt: any } | null
+      fundingType:
+        | {
+            __typename: 'BountyFundingLimited'
+            minFundingAmount: string
+            maxFundingAmount: string
+            fundingPeriod: number
+          }
+        | { __typename: 'BountyFundingPerpetual'; target: string }
+    }
+    announcedInEvent: { __typename: 'WorkEntryAnnouncedEvent'; createdAt: any; inBlock: number; network: Types.Network }
+  }>
+}
+
+export const BountyFundingTypeFieldsFragmentDoc = gql`
+  fragment BountyFundingTypeFields on Bounty {
+    fundingType {
+      ... on BountyFundingLimited {
+        minFundingAmount
+        maxFundingAmount
+        fundingPeriod
+      }
+      ... on BountyFundingPerpetual {
+        target
+      }
+    }
+  }
+`
 export const BountyContributionFieldsFragmentDoc = gql`
   fragment BountyContributionFields on BountyContribution {
     id
@@ -876,16 +1073,7 @@ export const BountyFieldsFragmentDoc = gql`
     oracle {
       ...MemberFields
     }
-    fundingType {
-      ... on BountyFundingLimited {
-        minFundingAmount
-        maxFundingAmount
-        fundingPeriod
-      }
-      ... on BountyFundingPerpetual {
-        target
-      }
-    }
+    ...BountyFundingTypeFields
     entrantWhitelist {
       members {
         id
@@ -912,8 +1100,12 @@ export const BountyFieldsFragmentDoc = gql`
       createdAt
       network
     }
+    maxFundingReachedEvent {
+      createdAt
+    }
   }
   ${MemberFieldsFragmentDoc}
+  ${BountyFundingTypeFieldsFragmentDoc}
   ${BountyContributionFieldsFragmentDoc}
   ${BountyEntryWithDetailsFieldsFragmentDoc}
 `
@@ -1196,8 +1388,8 @@ export type GetUserBountyStatisticsQueryResult = Apollo.QueryResult<
   GetUserBountyStatisticsQuery,
   GetUserBountyStatisticsQueryVariables
 >
-export const GetUserBountyTabsInformationsDocument = gql`
-  query GetUserBountyTabsInformations($memberIds: [ID!]) {
+export const GetUserBountyTabsInformationDocument = gql`
+  query GetUserBountyTabsInformation($memberIds: [ID!]) {
     bountiesConnection(where: { creator: { id_in: $memberIds } }) {
       totalCount
     }
@@ -1211,49 +1403,49 @@ export const GetUserBountyTabsInformationsDocument = gql`
 `
 
 /**
- * __useGetUserBountyTabsInformationsQuery__
+ * __useGetUserBountyTabsInformationQuery__
  *
- * To run a query within a React component, call `useGetUserBountyTabsInformationsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUserBountyTabsInformationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetUserBountyTabsInformationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserBountyTabsInformationQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetUserBountyTabsInformationsQuery({
+ * const { data, loading, error } = useGetUserBountyTabsInformationQuery({
  *   variables: {
  *      memberIds: // value for 'memberIds'
  *   },
  * });
  */
-export function useGetUserBountyTabsInformationsQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetUserBountyTabsInformationsQuery, GetUserBountyTabsInformationsQueryVariables>
+export function useGetUserBountyTabsInformationQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetUserBountyTabsInformationQuery, GetUserBountyTabsInformationQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetUserBountyTabsInformationsQuery, GetUserBountyTabsInformationsQueryVariables>(
-    GetUserBountyTabsInformationsDocument,
+  return Apollo.useQuery<GetUserBountyTabsInformationQuery, GetUserBountyTabsInformationQueryVariables>(
+    GetUserBountyTabsInformationDocument,
     options
   )
 }
-export function useGetUserBountyTabsInformationsLazyQuery(
+export function useGetUserBountyTabsInformationLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetUserBountyTabsInformationsQuery,
-    GetUserBountyTabsInformationsQueryVariables
+    GetUserBountyTabsInformationQuery,
+    GetUserBountyTabsInformationQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetUserBountyTabsInformationsQuery, GetUserBountyTabsInformationsQueryVariables>(
-    GetUserBountyTabsInformationsDocument,
+  return Apollo.useLazyQuery<GetUserBountyTabsInformationQuery, GetUserBountyTabsInformationQueryVariables>(
+    GetUserBountyTabsInformationDocument,
     options
   )
 }
-export type GetUserBountyTabsInformationsQueryHookResult = ReturnType<typeof useGetUserBountyTabsInformationsQuery>
-export type GetUserBountyTabsInformationsLazyQueryHookResult = ReturnType<
-  typeof useGetUserBountyTabsInformationsLazyQuery
+export type GetUserBountyTabsInformationQueryHookResult = ReturnType<typeof useGetUserBountyTabsInformationQuery>
+export type GetUserBountyTabsInformationLazyQueryHookResult = ReturnType<
+  typeof useGetUserBountyTabsInformationLazyQuery
 >
-export type GetUserBountyTabsInformationsQueryResult = Apollo.QueryResult<
-  GetUserBountyTabsInformationsQuery,
-  GetUserBountyTabsInformationsQueryVariables
+export type GetUserBountyTabsInformationQueryResult = Apollo.QueryResult<
+  GetUserBountyTabsInformationQuery,
+  GetUserBountyTabsInformationQueryVariables
 >
 export const GetBountyContributorsDocument = gql`
   query GetBountyContributors(
@@ -1311,4 +1503,68 @@ export type GetBountyContributorsLazyQueryHookResult = ReturnType<typeof useGetB
 export type GetBountyContributorsQueryResult = Apollo.QueryResult<
   GetBountyContributorsQuery,
   GetBountyContributorsQueryVariables
+>
+export const GetLatestBountyEntryDocument = gql`
+  query GetLatestBountyEntry($lockAccount: String) {
+    bountyEntries(where: { stakingAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
+      id
+      bountyId
+      bounty {
+        createdAt
+        ...BountyFundingTypeFields
+        workPeriod
+        judgingPeriod
+        maxFundingReachedEvent {
+          createdAt
+        }
+      }
+      announcedInEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+  }
+  ${BountyFundingTypeFieldsFragmentDoc}
+`
+
+/**
+ * __useGetLatestBountyEntryQuery__
+ *
+ * To run a query within a React component, call `useGetLatestBountyEntryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLatestBountyEntryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLatestBountyEntryQuery({
+ *   variables: {
+ *      lockAccount: // value for 'lockAccount'
+ *   },
+ * });
+ */
+export function useGetLatestBountyEntryQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetLatestBountyEntryQuery, GetLatestBountyEntryQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetLatestBountyEntryQuery, GetLatestBountyEntryQueryVariables>(
+    GetLatestBountyEntryDocument,
+    options
+  )
+}
+export function useGetLatestBountyEntryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetLatestBountyEntryQuery, GetLatestBountyEntryQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetLatestBountyEntryQuery, GetLatestBountyEntryQueryVariables>(
+    GetLatestBountyEntryDocument,
+    options
+  )
+}
+export type GetLatestBountyEntryQueryHookResult = ReturnType<typeof useGetLatestBountyEntryQuery>
+export type GetLatestBountyEntryLazyQueryHookResult = ReturnType<typeof useGetLatestBountyEntryLazyQuery>
+export type GetLatestBountyEntryQueryResult = Apollo.QueryResult<
+  GetLatestBountyEntryQuery,
+  GetLatestBountyEntryQueryVariables
 >

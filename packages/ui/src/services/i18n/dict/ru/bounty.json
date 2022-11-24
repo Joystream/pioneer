@@ -92,7 +92,7 @@
       },
       "success": {
         "message": "Баунти успешно отменена",
-        "button": "Перейти к текущим баунти"
+        "button": "OK подтверждено"
       },
       "error": "Ошибка при попытке отменить баунти"
     },
@@ -103,8 +103,9 @@
         "bountyId": "ID баунти",
         "memberId": "ID пользователя",
         "workTitle": "Название",
+        "workSubtitle": "Не забудьте добавить ссылку на сделанное задание",
         "workTitlePlaceholder": "Тип",
-        "entryDescription": "Описание"
+        "entryDescription": "Описание выполненного задания"
       },
       "button": {
         "submitWork": "Отправить"

@@ -4,14 +4,15 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
-import { SelectAccount } from '@/accounts/components/SelectAccount'
-import { filterByRequiredStake } from '@/accounts/components/SelectAccount/helpers'
+import { SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { useBalance } from '@/accounts/hooks/useBalance'
+import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { useMyBalances } from '@/accounts/hooks/useMyBalances'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useApi } from '@/api/hooks/useApi'
 import { BountyAnnounceWorkEntryModalCall } from '@/bounty/modals/AnnounceWorkEntryModal/index'
 import { announceWorkEntryMachine, AnnounceWorkEntryStates } from '@/bounty/modals/AnnounceWorkEntryModal/machine'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal/AuthorizeTransactionModal'
@@ -34,7 +35,6 @@ import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
 import { BN_ZERO, Fonts } from '@/common/constants'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
 import { formatTokenValue } from '@/common/model/formatters'
@@ -61,11 +61,11 @@ export const AnnounceWorkEntryModal = () => {
   const boundingLock = api?.consts.members.candidateStake ?? BN_ZERO
   const { active: activeMember } = useMyMemberships()
   const { allAccounts } = useMyAccounts()
-  const balances = useMyBalances()
   const amount = bounty.entrantStake
   const [state, send] = useMachine(announceWorkEntryMachine)
   const balance = useBalance(state.context.stakingAccount?.address)
   const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
+  const { hasRequiredStake } = useHasRequiredStake(amount.toNumber() || 0, 'Bounties')
 
   const { setContext, errors, isValid } = useSchema<IStakingAccountSchema>(
     { account: state.context.stakingAccount },
@@ -102,7 +102,6 @@ export const AnnounceWorkEntryModal = () => {
   const nextStep = useCallback(() => {
     send('NEXT')
   }, [])
-
   useEffect(() => {
     if (state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
       if (!activeMember) {
@@ -113,15 +112,17 @@ export const AnnounceWorkEntryModal = () => {
             originalModalData: { bounty },
           },
         })
-      } else if (api && transaction) {
-        nextStep()
+      }
+      if (fee) {
+        const areFundsSufficient = fee.canAfford && hasRequiredStake
+        send(areFundsSufficient ? 'NEXT' : 'FAIL')
       }
     }
 
     if (state.matches(AnnounceWorkEntryStates.beforeTransaction)) {
-      send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND')
+      fee?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
-  }, [state, activeMember?.id, stakingStatus])
+  }, [state, activeMember?.id, stakingStatus, JSON.stringify(fee), hasRequiredStake])
 
   if (state.matches(AnnounceWorkEntryStates.requirementsVerification)) {
     return (
@@ -133,12 +134,25 @@ export const AnnounceWorkEntryModal = () => {
           { name: 'Initializing server connection', state: !!api },
           { name: 'Loading member', state: !!activeMember },
           { name: 'Creating transaction', state: !!transaction },
+          { name: 'Calculating fee', state: !!fee },
         ]}
       />
     )
   }
 
-  if (!activeMember || !transaction || !api) {
+  if (!activeMember || !transaction || !api || !fee) {
+    return null
+  }
+
+  if (state.matches(AnnounceWorkEntryStates.requirementsFailed)) {
+    showModal<MoveFundsModalCall>({
+      modal: 'MoveFundsModal',
+      data: {
+        requiredStake: amount,
+        lock: 'Bounties',
+      },
+    })
+
     return null
   }
 
@@ -198,7 +212,7 @@ export const AnnounceWorkEntryModal = () => {
   }
 
   return (
-    <Modal onClose={hideModal} modalSize="l">
+    <Modal onClose={hideModal} modalSize="m">
       <ModalHeader title={t('modals.announceWorkEntry.title')} onClick={hideModal} />
       <ScrolledModalBody>
         <ScrolledModalContainer>
@@ -210,7 +224,7 @@ export const AnnounceWorkEntryModal = () => {
               required
               inputDisabled
             >
-              <ReadOnlyInput value={bounty.id} readOnly />
+              <ReadOnlyInput value={bounty.title} readOnly />
             </InputComponent>
           </Row>
           <Row>
@@ -236,10 +250,12 @@ export const AnnounceWorkEntryModal = () => {
               validation={hasError('account', errors) ? 'invalid' : undefined}
               message={getErrorMessage('account', errors) ?? ''}
             >
-              <SelectAccount
+              <SelectStakingAccount
+                name="workEntry.stakingAccount"
                 onChange={(account) => send('SET_STAKING_ACCOUNT', { account })}
                 selected={state.context.stakingAccount}
-                filter={(account) => filterByRequiredStake(amount, 'Bounties', balances[account.address])}
+                minBalance={amount}
+                lockType="Bounties"
               />
             </InputComponent>
           </Row>
@@ -253,6 +269,7 @@ export const AnnounceWorkEntryModal = () => {
                 inputWidth="s"
                 units="tJOY"
                 disabled
+                tooltipText={t('modals.announceWorkEntry.selectAmountTooltip')}
               >
                 <InputNumber id="amount-input" value={amount.toString()} isTokenValue disabled />
               </InputComponent>

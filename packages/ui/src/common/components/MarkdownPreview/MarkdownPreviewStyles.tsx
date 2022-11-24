@@ -77,6 +77,7 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     line-height: 1.5;
     font-weight: 400;
     color: ${normalColor};
+    word-break: break-word;
   }
 
   .markdown-preview li {
@@ -110,6 +111,10 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
   .markdown-preview ol li {
     counter-increment: ol-list-counter;
   }
+  
+  .markdown-preview ol li p {
+    margin-top: 0;
+  }
 
   .markdown-preview ol li::before {
     content: counter(ol-list-counter)'.';
@@ -117,7 +122,6 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     left: -20px;
     font-family: ${Fonts.Grotesk};
     font-size: ${normalFontSize};
-    line-height: 24px;
     font-weight: 700;
     color: ${normalColor};
   }
@@ -165,17 +169,50 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
   }
 
   .markdown-preview ul > li:before {
-    content: url('data:image/svg+xml;charset=UTF-8, <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="16" width="16" viewBox="0 0 16 16"><path d="M8.13804 9.3253L3.67065 4.85791L2.66669 5.86187L8.13804 11.3332L13.6094 5.86187L12.6054 4.85791L8.13804 9.3253Z" fill="rgb(64, 75, 90)"></path></svg>');
+    content: '• ';
     position: absolute;
-    top: 50%;
-    left: -26px;
+    left: -14px;
     width: 16px;
     height: 16px;
-    transform: translateY(-50%) rotate(-90deg);
+    top: -1px;
   }
+
   .markdown-preview blockquote {
     margin: 0;
     padding: 0;
+    padding: 0 1em;
+    color: #6a737d;
+    border-left: 0.25em solid #dfe2e5;
+  }
+
+  .markdown-preview table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow: auto;
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  .markdown-preview table th {
+    font-weight: 600;
+  }
+  
+  .markdown-preview table th,
+  .markdown-preview table td {
+    padding: 6px 13px;
+    border: 1px solid #d0d7de;
+  }
+  
+  .markdown-preview table tr {
+    background-color: #ffffff;
+    border-top: 1px solid hsla(210,18%,87%,1);
+  }
+  
+  .markdown-preview table tr:nth-child(2n) {
+    background-color: #f6f8fa;
   }
 `
 

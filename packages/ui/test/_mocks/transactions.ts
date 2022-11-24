@@ -1,5 +1,4 @@
 import { createType } from '@joystream/types'
-import { ApiRx } from '@polkadot/api'
 import { AugmentedEvents } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
@@ -7,9 +6,10 @@ import { set } from 'lodash'
 import { from, of, asyncScheduler, scheduled, Observable } from 'rxjs'
 
 import { LockType } from '@/accounts/types'
+import { Api } from '@/api'
+import { UseApi } from '@/api/providers/provider'
 import { BN_ZERO } from '@/common/constants'
 import { ExtractTuple } from '@/common/model/JoystreamNode'
-import { UseApi } from '@/common/providers/api/provider'
 import { proposalDetails } from '@/proposals/model/proposalDetails'
 
 import { createBalanceLock, createRuntimeDispatchInfo } from './chainTypes'
@@ -25,12 +25,20 @@ const createSuccessEvents = (data: any[], section: string, method: string) => [
   },
 ]
 
+export const currentStubErrorMessage = 'Balance too low to send value.'
+const findMetaError = () => ({
+  docs: [currentStubErrorMessage],
+})
+
 const createErrorEvents = () => [
   {
     phase: { ApplyExtrinsic: 2 },
     event: {
       index: '0x0001',
-      data: [{ Module: { index: 5, error: 3 } }, { weight: 190949000, class: 'Normal', paysFee: 'Yes' }],
+      data: [
+        { Module: { index: new BN(5), error: new BN(3) }, isModule: true, registry: { findMetaError } },
+        { weight: 190949000, class: 'Normal', paysFee: 'Yes' },
+      ],
       section: 'system',
       method: 'ExtrinsicFailed',
     },
@@ -135,7 +143,7 @@ export const stubConst = <T>(api: UseApi, constSubPath: string, value: T) => {
 
 export const stubApi = () => {
   const api: UseApi = {
-    api: {} as unknown as ApiRx,
+    api: {} as unknown as Api,
     isConnected: true,
     connectionState: 'connected',
   }
@@ -233,6 +241,7 @@ export const stubCouncilAndReferendum = (
     'council.stage',
     createType('CouncilStageUpdate', {
       stage: createType('CouncilStage', councilStage),
+      changed_at: BN_ZERO,
     })
   )
 }

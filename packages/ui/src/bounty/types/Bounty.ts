@@ -28,7 +28,6 @@ export type BountyEntryStatus =
   | 'BountyEntryStatusWinner'
   | 'BountyEntryStatusPassed'
   | 'BountyEntryStatusRejected'
-  | 'BountyEntryStatusCashedOut'
 
 export interface Contributor {
   hasWithdrawn: boolean
@@ -145,4 +144,5 @@ export interface Bounty {
     inBlock?: Block
     rationale?: string | null
   }
+  periodTimeLeft?: number
 }

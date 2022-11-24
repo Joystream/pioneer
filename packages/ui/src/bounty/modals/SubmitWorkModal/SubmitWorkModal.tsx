@@ -12,6 +12,7 @@ import * as Yup from 'yup'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useApi } from '@/api/hooks/useApi'
 import { BountyRoutes } from '@/bounty/constants'
 import { submitWorkMetadataFactory } from '@/bounty/modals/AddBountyModal/helpers'
 import { AuthorizeTransactionModal } from '@/bounty/modals/AuthorizeTransactionModal'
@@ -38,7 +39,6 @@ import {
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useSchema } from '@/common/hooks/useSchema'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
@@ -148,7 +148,7 @@ export const SubmitWorkModal = () => {
   }
 
   return (
-    <Modal onClose={hideModal} modalSize="l">
+    <Modal onClose={hideModal} modalSize="m">
       <ModalHeader title={t('modals.submitWork.title')} onClick={hideModal} />
       <ScrolledModalBody>
         <ScrolledModalContainer>
@@ -197,6 +197,7 @@ export const SubmitWorkModal = () => {
                 <InputComponent
                   id="field-description"
                   label={t('modals.submitWork.submitWorkInput.entryDescription')}
+                  sublabel={t('modals.submitWork.submitWorkInput.workSubtitle')}
                   inputSize="auto"
                   required
                 >

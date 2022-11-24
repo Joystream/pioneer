@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react'
+import React, { Children, memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -24,15 +24,13 @@ interface Props {
 export const BountiesList = memo(({ bounties, getSortProps }: Props) => {
   const { t } = useTranslation('bounty')
   const { onSort, isDescending } = getSortProps?.('createdAt') || {}
-  const bountiesComponents = useMemo(() => {
-    return bounties?.length ? (
-      <StyledList as="div">
-        {bounties.map((bounty) => {
-          return <BountyListItem {...bounty} />
-        })}
-      </StyledList>
-    ) : null
-  }, [bounties])
+  const bountiesComponents = useMemo(
+    () =>
+      bounties?.length ? (
+        <StyledList as="div">{Children.toArray(bounties.map((bounty) => <BountyListItem {...bounty} />))}</StyledList>
+      ) : null,
+    [bounties]
+  )
 
   if (!bounties.length) {
     return (

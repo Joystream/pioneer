@@ -8,7 +8,7 @@ import {
   transactionMachine,
 } from '@/common/model/machines'
 
-interface VoteContext {
+export interface VoteContext {
   voteStatus?: VoteStatus
   rationale?: string
 }
@@ -19,6 +19,7 @@ interface FinalContext extends Required<VoteContext> {
 
 type VoteForProposalState =
   | { value: 'vote'; context: VoteContext }
+  | { value: 'requirementsVerification'; context: VoteContext }
   | { value: 'requirementsFailed'; context: VoteContext }
   | { value: 'transaction'; context: FinalContext }
   | { value: 'success'; context: FinalContext }
@@ -26,13 +27,20 @@ type VoteForProposalState =
 
 type PassEvent = { type: 'PASS' }
 type SetRationaleEvent = { type: 'SET_RATIONALE'; rationale: string }
-type VoteForProposalEvent = PassEvent | SetRationaleEvent | SetVoteStatus
+type VerificationEvent = { type: 'NEXT' } | { type: 'FAIL' }
+export type VoteForProposalEvent = PassEvent | SetRationaleEvent | SetVoteStatus | VerificationEvent
 export type VoteStatus = 'Approve' | 'Reject' | 'Slash' | 'Abstain'
 type SetVoteStatus = { type: 'SET_VOTE_STATUS'; status: VoteStatus }
 
 export const VoteForProposalMachine = createMachine<Partial<FinalContext>, VoteForProposalEvent, VoteForProposalState>({
-  initial: 'vote',
+  initial: 'requirementsVerification',
   states: {
+    requirementsVerification: {
+      on: {
+        NEXT: 'vote',
+        FAIL: 'requirementsFailed',
+      },
+    },
     vote: {
       on: {
         SET_VOTE_STATUS: {

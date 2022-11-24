@@ -1,11 +1,10 @@
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
-import { Block } from '@/common/types'
-import { ProposalWithDetails, ProposalConstants, ProposalMention } from '@/proposals/types'
+import { ProposalWithDetails, ProposalConstants, ProposalMention, LatestProposal } from '@/proposals/types'
 
 const estimableStatus = ['gracing', 'deciding']
 
 export const useBlocksToProposalExecution = (
-  proposal: ProposalWithDetails | ProposalMention | null | undefined,
+  proposal: ProposalWithDetails | ProposalMention | LatestProposal | null | undefined,
   constants: ProposalConstants | null
 ) => {
   const currentBlockNumber = useCurrentBlockNumber()
@@ -14,13 +13,13 @@ export const useBlocksToProposalExecution = (
     return
   }
 
-  const blocksUntil = ({ number }: Block) => number - currentBlockNumber.toNumber()
+  const blocksUntil = (number: number) => number - currentBlockNumber.toNumber()
 
   if (proposal.exactExecutionBlock) {
     return blocksUntil(proposal.exactExecutionBlock)
   } else if (constants) {
     const periodKey = proposal.status === 'deciding' ? 'votingPeriod' : 'gracePeriod'
     const period = constants[periodKey]
-    return blocksUntil(proposal.statusSetAtBlock) + period
+    return blocksUntil(proposal.statusSetAtBlock.number) + period
   }
 }

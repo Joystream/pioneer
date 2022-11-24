@@ -1,23 +1,27 @@
 import { CouncilCandidacyNoteMetadata } from '@joystream/metadata-protobuf'
 import { useMachine } from '@xstate/react'
 import BN from 'bn.js'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import { useForm, FormProvider } from 'react-hook-form'
 
+import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { Account } from '@/accounts/types'
+import { useApi } from '@/api/hooks/useApi'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Arrow } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
-import { useApi } from '@/common/hooks/useApi'
+import { BN_ZERO } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
+import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { AnnounceCandidacyConstantsWrapper } from '@/council/modals/AnnounceCandidacy/components/AnnounceCandidacyConstantsWrapper'
 import { PreviewButtons } from '@/council/modals/AnnounceCandidacy/components/PreviewButtons'
@@ -28,27 +32,32 @@ import { SummaryAndBannerStep } from '@/council/modals/AnnounceCandidacy/compone
 import { TitleAndBulletPointsStep } from '@/council/modals/AnnounceCandidacy/components/TitleAndBulletPointsStep'
 import { AnnounceCandidacyTransaction } from '@/council/modals/AnnounceCandidacy/components/transactions/AnnounceCandidacyTransaction'
 import { CandidacyNoteTransaction } from '@/council/modals/AnnounceCandidacy/components/transactions/CandidacyNoteTransaction'
-import { announceCandidacyMachine, FinalAnnounceCandidacyContext } from '@/council/modals/AnnounceCandidacy/machine'
+import {
+  AnnounceCandidacyFrom,
+  baseSchema,
+  getAnnounceCandidacyFormInitialState,
+  getBulletPoints,
+  machineStateConverter,
+} from '@/council/modals/AnnounceCandidacy/helpers'
+import { announceCandidacyMachine } from '@/council/modals/AnnounceCandidacy/machine'
 import { CandidacyStatus, ElectionCandidateWithDetails } from '@/council/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
+import { IStakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
 import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
 
-const getCandidateForPreview = (
-  context: FinalAnnounceCandidacyContext,
-  member: Member
-): ElectionCandidateWithDetails => ({
+const getCandidateForPreview = (context: AnnounceCandidacyFrom, member: Member): ElectionCandidateWithDetails => ({
   id: '0',
-  stakingAccount: context.stakingAccount.address,
-  rewardAccount: context.rewardAccount.address,
-  stake: context.stakingAmount,
+  stakingAccount: context.staking.account?.address ?? '',
+  rewardAccount: context.reward.account?.address ?? '',
+  stake: context.staking.amount ?? BN_ZERO,
   info: {
-    title: context.title,
-    summary: context.summary,
-    bulletPoints: context.bulletPoints,
-    bannerUri: context.banner,
+    title: context.titleAndBulletPoints.title ?? '',
+    summary: context.summaryAndBanner.summary ?? '',
+    bulletPoints: getBulletPoints(context),
+    bannerUri: context.summaryAndBanner.banner ?? '',
   },
   member,
   cycleId: 0,
@@ -62,18 +71,63 @@ const transactionSteps = [
   { title: 'Set candidacy note' },
 ]
 
+interface Conditions extends IStakingAccountSchema {
+  extraFees: BN
+  minStake: BN
+}
+
 export const AnnounceCandidacyModal = () => {
   const { api, connectionState } = useApi()
+  const boundingLock = api?.consts.members.candidateStake ?? BN_ZERO
   const { active: activeMember } = useMyMemberships()
   const { hideModal, showModal } = useModal()
   const [state, send, service] = useMachine(announceCandidacyMachine)
-
   const constants = useCouncilConstants()
-  const { hasRequiredStake, accountsWithTransferableBalance, accountsWithCompatibleLocks } = useHasRequiredStake(
+  // TODO: minCandidacyStake should be BN after https://github.com/Joystream/pioneer/pull/3265 is merged
+  const { hasRequiredStake } = useHasRequiredStake(
     constants?.election.minCandidacyStake.toNumber() || 0,
     'Council Candidate'
   )
-  const stakingStatus = useStakingAccountStatus(state.context.stakingAccount?.address, activeMember?.id)
+  const [stakingAccountMap, setStakingAccount] = useState<Account | undefined>(undefined)
+  const stakingStatus = useStakingAccountStatus(stakingAccountMap?.address, activeMember?.id)
+  const balance = useBalance(stakingAccountMap?.address)
+
+  // TODO add transaction fees here
+  const extraFees = (stakingStatus === 'free' && boundingLock) || BN_ZERO
+
+  const form = useForm({
+    resolver: useYupValidationResolver<AnnounceCandidacyFrom>(baseSchema, machineStateConverter(state.value)),
+    context: {
+      stakingStatus,
+      requiredAmount: extraFees.add(constants?.election.minCandidacyStake ?? BN_ZERO),
+      stakeLock: 'Council Candidate',
+      balances: balance,
+      extraFees,
+      minStake: constants?.election.minCandidacyStake as BN,
+    } as Conditions,
+    mode: 'onChange',
+    defaultValues: getAnnounceCandidacyFormInitialState(constants?.election.minCandidacyStake ?? BN_ZERO),
+  })
+  const [stakingAccount, rewardAccount, stakingAmount] = form.watch([
+    'staking.account',
+    'reward.account',
+    'staking.amount',
+  ])
+
+  useEffect(() => {
+    setStakingAccount(stakingAccount)
+  }, [stakingAccount])
+
+  useEffect(() => {
+    form.trigger(machineStateConverter(state.value) as keyof AnnounceCandidacyFrom)
+  }, [machineStateConverter(state.value)])
+
+  useEffect(() => {
+    if (state.matches('staking')) {
+      form.trigger('staking.amount')
+      form.trigger('staking.account')
+    }
+  }, [Boolean(constants?.election.minCandidacyStake), stakingStatus, Boolean(balance)])
 
   const addStakingAccountCandidateTransaction = useMemo(() => {
     if (activeMember && api) {
@@ -82,8 +136,9 @@ export const AnnounceCandidacyModal = () => {
   }, [connectionState, activeMember?.id])
 
   const confirmStakingAccountTransaction = useMemo(() => {
+    const formValues = form.getValues() as AnnounceCandidacyFrom
     if (activeMember && api) {
-      return api.tx.members.confirmStakingAccount(activeMember.id, state?.context?.stakingAccount?.address ?? '')
+      return api.tx.members.confirmStakingAccount(activeMember.id, formValues.staking.account?.address ?? '')
     }
   }, [JSON.stringify(state.context), connectionState, activeMember?.id])
 
@@ -91,9 +146,9 @@ export const AnnounceCandidacyModal = () => {
     if (activeMember && api && confirmStakingAccountTransaction) {
       const tx = api.tx.council.announceCandidacy(
         activeMember.id,
-        state.context.stakingAccount?.address ?? '',
-        state.context.rewardAccount?.address ?? '',
-        state.context.stakingAmount ?? 0
+        stakingAccount?.address ?? '',
+        rewardAccount?.address ?? '',
+        stakingAmount ?? BN_ZERO
       )
 
       if (stakingStatus === 'confirmed') {
@@ -102,17 +157,27 @@ export const AnnounceCandidacyModal = () => {
 
       return api.tx.utility.batch([confirmStakingAccountTransaction, tx])
     }
-  }, [connectionState, activeMember?.id, stakingStatus, confirmStakingAccountTransaction])
+  }, [
+    connectionState,
+    activeMember?.id,
+    stakingAccount?.address,
+    rewardAccount?.address,
+    String(stakingAmount),
+    stakingStatus,
+    confirmStakingAccountTransaction,
+  ])
 
   const candidacyNoteTransaction = useMemo(() => {
+    const formValues = form.getValues() as AnnounceCandidacyFrom
+
     if (activeMember && api) {
       return api.tx.council.setCandidacyNote(
         activeMember.id,
         metadataToBytes(CouncilCandidacyNoteMetadata, {
-          header: state.context.title,
-          bulletPoints: state.context.bulletPoints,
-          bannerImageUri: state.context.banner,
-          description: state.context.summary,
+          header: formValues.titleAndBulletPoints.title,
+          bulletPoints: getBulletPoints(formValues),
+          bannerImageUri: formValues.summaryAndBanner.banner,
+          description: formValues.summaryAndBanner.summary,
         })
       )
     }
@@ -126,30 +191,6 @@ export const AnnounceCandidacyModal = () => {
 
   const feeInfo = useTransactionFee(activeMember?.controllerAccount, feeTransaction)
 
-  const isValidNext = useMemo(() => {
-    if (
-      state.matches('staking') &&
-      !!state.context.stakingAccount &&
-      state.context.stakingAmount &&
-      stakingStatus !== 'unknown' &&
-      stakingStatus !== 'other'
-    ) {
-      return true
-    } else if (state.matches('rewardAccount') && state.context.rewardAccount) {
-      return true
-    } else if (
-      state.matches('candidateProfile.titleAndBulletPoints') &&
-      state.context.title &&
-      state.context.bulletPoints.length
-    ) {
-      return true
-    } else if (state.matches('candidateProfile.summaryAndBanner') && state.context.summary) {
-      return true
-    }
-
-    return false
-  }, [JSON.stringify(state.value), JSON.stringify(state.context), activeMember?.id, stakingStatus])
-
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
       if (!activeMember) {
@@ -162,12 +203,9 @@ export const AnnounceCandidacyModal = () => {
       }
 
       if (feeInfo) {
-        return send(feeInfo.canAfford ? 'NEXT' : 'FAIL')
+        const areFundsSufficient = feeInfo.canAfford && hasRequiredStake
+        send(areFundsSufficient ? 'NEXT' : 'FAIL')
       }
-    }
-
-    if (state.matches('requiredStakeVerification')) {
-      return send(hasRequiredStake ? 'NEXT' : 'FAIL')
     }
 
     if (state.matches('beforeTransaction')) {
@@ -188,8 +226,7 @@ export const AnnounceCandidacyModal = () => {
       //
       // stakingStatus === "other"
       // wrong account
-
-      return send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND')
+      return feeInfo?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
   }, [state, activeMember?.id, JSON.stringify(feeInfo), hasRequiredStake, stakingStatus])
 
@@ -198,22 +235,10 @@ export const AnnounceCandidacyModal = () => {
   }
 
   if (state.matches('requirementsFailed')) {
-    return (
-      <InsufficientFundsModal
-        onClose={hideModal}
-        address={activeMember.controllerAccount}
-        amount={feeInfo.transactionFee}
-      />
-    )
-  }
-
-  if (state.matches('requiredStakeFailed')) {
     showModal<MoveFundsModalCall>({
       modal: 'MoveFundsModal',
       data: {
-        accountsWithCompatibleLocks,
-        accountsWithTransferableBalance,
-        requiredStake: (constants?.election.minCandidacyStake as BN).toNumber(),
+        requiredStake: constants?.election.minCandidacyStake as BN,
         lock: 'Council Candidate',
       },
     })
@@ -226,7 +251,7 @@ export const AnnounceCandidacyModal = () => {
       <BindStakingAccountModal
         onClose={hideModal}
         transaction={addStakingAccountCandidateTransaction}
-        signer={state.context.stakingAccount.address}
+        signer={stakingAccount?.address ?? ''}
         service={state.children.bindStakingAccountTransaction}
         memberId={activeMember.id}
         steps={transactionSteps}
@@ -240,7 +265,7 @@ export const AnnounceCandidacyModal = () => {
         onClose={hideModal}
         transaction={announceCandidacyTransaction}
         signer={activeMember.controllerAccount}
-        stake={state.context.stakingAmount}
+        stake={form.watch('staking.amount') ?? BN_ZERO}
         service={state.children.announceCandidacyTransaction}
         steps={transactionSteps}
       />
@@ -281,38 +306,30 @@ export const AnnounceCandidacyModal = () => {
             <AnnounceCandidacyConstantsWrapper constants={constants} />
           </StepDescriptionColumn>
           <StepperBody>
-            {state.matches('staking') && (
-              <StakeStep
-                candidacyMember={activeMember}
-                minStake={constants?.election.minCandidacyStake as BN}
-                stake={state.context.stakingAmount}
-                setStake={(amount) => send('SET_AMOUNT', { amount })}
-                account={state.context.stakingAccount}
-                setAccount={(account) => send('SET_ACCOUNT', { account })}
-              />
-            )}
-            {state.matches('rewardAccount') && (
-              <RewardAccountStep
-                account={state.context.rewardAccount}
-                setAccount={(account) => send('SET_ACCOUNT', { account })}
-              />
-            )}
-            {state.matches('candidateProfile.titleAndBulletPoints') && (
-              <TitleAndBulletPointsStep
-                title={state.context.title}
-                setTitle={(title) => send('SET_TITLE', { title })}
-                bulletPoints={state.context.bulletPoints}
-                setBulletPoints={(bulletPoints) => send('SET_BULLET_POINTS', { bulletPoints })}
-              />
-            )}
-            {state.matches('candidateProfile.summaryAndBanner') && (
-              <SummaryAndBannerStep
-                summary={state.context.summary}
-                setSummary={(summary) => send('SET_SUMMARY', { summary })}
-                banner={state.context.banner}
-                setBanner={(banner) => send('SET_BANNER', { banner })}
-              />
-            )}
+            <FormProvider {...form}>
+              {state.matches('staking') && (
+                <StakeStep
+                  candidacyMember={activeMember}
+                  minStake={constants?.election.minCandidacyStake as BN}
+                  errorChecker={enhancedHasError(form.formState.errors, machineStateConverter(state.value))}
+                  errorMessageGetter={enhancedGetErrorMessage(
+                    form.formState.errors,
+                    machineStateConverter(state.value)
+                  )}
+                />
+              )}
+              {state.matches('reward') && <RewardAccountStep />}
+              {state.matches('candidateProfile.titleAndBulletPoints') && (
+                <TitleAndBulletPointsStep
+                  errorChecker={enhancedHasError(form.formState.errors, machineStateConverter(state.value))}
+                  errorMessageGetter={enhancedGetErrorMessage(
+                    form.formState.errors,
+                    machineStateConverter(state.value)
+                  )}
+                />
+              )}
+              {state.matches('candidateProfile.summaryAndBanner') && <SummaryAndBannerStep />}
+            </FormProvider>
           </StepperBody>
         </StepperProposalWrapper>
       </StepperModalBody>
@@ -328,11 +345,11 @@ export const AnnounceCandidacyModal = () => {
         <ButtonsGroup align="right">
           {state.matches('candidateProfile.summaryAndBanner') && (
             <PreviewButtons
-              candidate={getCandidateForPreview(state.context as FinalAnnounceCandidacyContext, activeMember)}
-              disabled={!isValidNext}
+              candidate={getCandidateForPreview(form.getValues() as AnnounceCandidacyFrom, activeMember)}
+              disabled={!form.formState.isValid}
             />
           )}
-          <ButtonPrimary disabled={!isValidNext} onClick={() => send('NEXT')} size="medium">
+          <ButtonPrimary disabled={!form.formState.isValid} onClick={() => send('NEXT')} size="medium">
             {isLastStepActive(getSteps(service)) ? 'Announce candidacy' : 'Next step'}
             <Arrow direction="right" />
           </ButtonPrimary>

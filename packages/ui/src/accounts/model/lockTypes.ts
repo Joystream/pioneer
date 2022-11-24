@@ -1,6 +1,7 @@
 import { LockIdentifier } from '@polkadot/types/interfaces'
 
-import { BalanceLock, LockType } from '@/accounts/types'
+// NOTE can't run the `node-mocks` script with the `@/...` aliases here
+import { BalanceLock, LockType, WorkerLocks, WorkerLockType } from '../types'
 
 // Mapping from:
 // - [/runtime/src/constants.rs:104](https://github.com/Joystream/joystream/blob/5a153fa18351a8fefd919a7d5230b911f180e13d/runtime/src/constants.rs#L104)
@@ -43,40 +44,48 @@ const RIVALROUS: LockType[] = [
   'Distribution Worker',
 ]
 
-const RECOVERABLE: LockType[] = ['Voting', 'Council Candidate']
-
-const isRivalrous = (lockType: LockType) => RIVALROUS.includes(lockType)
+export const isRivalrous = (lockType: LockType) => RIVALROUS.includes(lockType)
 const asLockTypes = (locks: BalanceLock[]): LockType[] => locks.flatMap((lock) => lock.type ?? [])
 const isConflictingWith = (lockTypeA: LockType): ((lockTypeB: LockType) => boolean) => {
   if (!lockTypeA) {
-    return () => false // Don't block transactions based on unknown locks
-  } else if (isRivalrous(lockTypeA)) {
+    // Don't block transactions based on unknown locks
+    return () => false
+  }
+
+  if (isRivalrous(lockTypeA)) {
     return isRivalrous
-  } else {
-    return (lockTypeB) => lockTypeA === lockTypeB
+  }
+
+  return (lockTypeB) => {
+    if (lockTypeA === 'Voting' && lockTypeB === 'Voting') {
+      // Vote stake should be reusable in next elections
+      return false
+    }
+
+    return lockTypeA === lockTypeB
   }
 }
 
-type RecoverStakeConditions = {
+export type RecoveryConditions = {
   isActiveCandidate: boolean
   isVoteStakeLocked: boolean
+  isWorkerStakeLocked: boolean
 }
 
-export const isRecoverable = (type: LockType, recoverConditions?: RecoverStakeConditions): boolean => {
-  if (!RECOVERABLE.includes(type)) {
-    return false
+export const isRecoverable = (type: LockType, recoveryConditions?: RecoveryConditions): boolean => {
+  if (WorkerLocks.includes(type as WorkerLockType)) {
+    return !recoveryConditions?.isWorkerStakeLocked
   }
 
-  switch (type) {
-    case 'Council Candidate':
-      return !recoverConditions?.isActiveCandidate
-
-    case 'Voting':
-      return !recoverConditions?.isVoteStakeLocked
-
-    default:
-      return true
+  if (type === 'Council Candidate') {
+    return !recoveryConditions?.isActiveCandidate
   }
+
+  if (type === 'Voting') {
+    return !recoveryConditions?.isVoteStakeLocked
+  }
+
+  return false
 }
 
 export const areLocksConflicting = (lockType: LockType, existingLocks: BalanceLock[]) =>

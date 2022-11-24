@@ -14,21 +14,21 @@ interface Props {
 
 export const BenefitListItem = ({ text }: Props) => (
   <Item $colLayout={BenefitsTableLayout}>
-    <TextMedium>{text}</TextMedium>
-    <Circle color={Colors.Black[600]}>
-      <CrossIcon />
-    </Circle>
     <Circle color={Colors.Green[500]}>
       <CheckboxIcon />
     </Circle>
+    <StyledText bold>{text}</StyledText>
   </Item>
 )
 
 const Item = styled(TableListItem)`
   border: none;
   height: 44px;
-  background-color: ${Colors.Black[400]}22;
+  background-color: ${Colors.Black[600]};
+  //opacity: 0.5;
   border-radius: 0;
+  display: flex;
+  justify-content: flex-start;
 
   &:not(:last-child) {
     margin-bottom: 5px;
@@ -40,7 +40,6 @@ const Item = styled(TableListItem)`
 
   > *:first-child {
     text-align: right;
-    color: ${Colors.Black[300]};
   }
 `
 
@@ -57,4 +56,9 @@ const Circle = styled.span<{ color: string }>`
   svg {
     color: ${Colors.White};
   }
+`
+
+const StyledText = styled(TextMedium)`
+  padding-left: 8px;
+  color: ${Colors.White};
 `

@@ -18,8 +18,7 @@ fragment MemberFields on Membership {
   }
   isVerified
   isFoundingMember
-  # isCouncilMember
-  # See https://github.com/Joystream/pioneer/issues/1536
+  isCouncilMember
   inviteCount
   roles {
     id
@@ -30,6 +29,12 @@ fragment MemberFields on Membership {
     isLead
   }
   createdAt
+  stakingaccountaddedeventmember {
+    createdAt
+    inBlock
+    network
+    account
+  }
 }
 
 fragment MemberWithDetailsFields on Membership {
@@ -67,11 +72,20 @@ fragment MemberWithDetailsFields on Membership {
     #      }
     #    }
   }
+  invitedBy {
+    ...MemberFields
+  }
 }
 
 query GetMembers($where: MembershipWhereInput, $orderBy: [MembershipOrderByInput!], $offset: Int, $limit: Int) {
   memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
     ...MemberFields
+  }
+}
+
+query GetMembersWithDetails($where: MembershipWhereInput, $orderBy: [MembershipOrderByInput!], $offset: Int, $limit: Int) {
+  memberships(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
+    ...MemberWithDetailsFields
   }
 }
 
@@ -154,5 +168,13 @@ query GetMemberActionDetails($workerId_in: [ID!]!) {
   }
   memberInvitedEventsConnection(where: { invitingMember: { id_in: $workerId_in } }) {
     totalCount
+  }
+}
+
+query GetMemberInvitedEvents($lockAccount: String) {
+  memberInvitedEvents(where: { controllerAccount_eq: $lockAccount }, orderBy: [createdAt_DESC], limit: 1) {
+    createdAt
+    inBlock
+    network
   }
 }

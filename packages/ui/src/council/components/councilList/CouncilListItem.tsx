@@ -9,11 +9,10 @@ import { MemberInfo } from '@/memberships/components'
 import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
 
 export interface CouncilListItemProps {
-  councilor: Pick<Councilor, 'unpaidReward' | 'stake' | 'member' | 'numberOfTerms'>
+  councilor: Pick<Councilor, 'unpaidReward' | 'stake' | 'member' | 'numberOfTerms' | 'voterStake'>
 }
 export const CouncilListItem = ({ councilor }: CouncilListItemProps) => {
   const showMemberModal = useShowMemberModal(councilor.member.id)
-
   return (
     <CouncilListItemStyles onClick={showMemberModal}>
       <MemberInfo member={councilor.member} />
@@ -23,7 +22,7 @@ export const CouncilListItem = ({ councilor }: CouncilListItemProps) => {
       </TextBig>
 
       <TextBig as="h5" bold>
-        <TokenValue value={councilor.stake} />
+        <TokenValue value={councilor.voterStake} />
       </TextBig>
 
       <TextBig as="h5" bold>

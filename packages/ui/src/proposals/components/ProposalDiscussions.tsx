@@ -1,13 +1,13 @@
 import { ForumPostMetadata } from '@joystream/metadata-protobuf'
 import { createType } from '@joystream/types'
-import React, { RefObject, useEffect, useRef, useState } from 'react'
+import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react'
 import { generatePath } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
+import { useApi } from '@/api/hooks/useApi'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Badge, TextBig } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
-import { useApi } from '@/common/hooks/useApi'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { AnyKeys } from '@/common/types'
@@ -50,6 +50,11 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
       postsRefs[initialPost].current?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
     }
   }, [postsRefs, initialPost])
+
+  const discussionPosts = useMemo(
+    () => thread.discussionPosts.filter((post) => post.status !== 'PostStatusRemoved'),
+    [thread]
+  )
 
   const getTransaction = (postText: string, isEditable: boolean) => {
     if (api && active && thread) {
@@ -101,10 +106,11 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
           </Tooltip>
         </Badge>
       </DiscussionsHeader>
-      {thread.discussionPosts.map((post, index) => {
+      {discussionPosts.map((post, index) => {
         return (
           <PostListItem
-            key={index}
+            isFirstItem={index === 0}
+            key={post.id}
             insertRef={getInsertRef(post.id)}
             isSelected={post.id === initialPost}
             isThreadActive={true}

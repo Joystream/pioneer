@@ -6,8 +6,8 @@ import { MemoryRouter } from 'react-router'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
+import { ApiContext } from '@/api/providers/context'
 import { CKEditorProps } from '@/common/components/CKEditor'
-import { ApiContext } from '@/common/providers/api/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { WithdrawCandidacyModal } from '@/council/modals/WithdrawCandidacyModal'
 import { Member } from '@/memberships/types'
@@ -20,6 +20,7 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubCouncilConstants,
   stubDefaultBalances,
@@ -92,7 +93,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
     fireEvent.click(await getButton('Withdraw Candidacy'))
     fireEvent.click(await getButton('Sign and send'))
 
-    expect(await screen.findByText(/^There was a problem while withdrawing your candidacy/i)).toBeDefined()
+    expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
   })
 
   function renderModal(member: Member) {

@@ -2,6 +2,7 @@ import BN from 'bn.js'
 import React from 'react'
 import styled, { css } from 'styled-components'
 
+import { Skeleton } from '@/common/components/Skeleton'
 import { isDefined } from '@/common/utils'
 
 import { Colors, Fonts } from '../../constants'
@@ -14,9 +15,14 @@ interface ValueSizingProps {
 interface ValueProps extends ValueSizingProps {
   value?: BN | number | null
   className?: string
+  isLoading?: boolean
 }
 
-export const TokenValue = React.memo(({ className, value, size }: ValueProps) => {
+export const TokenValue = React.memo(({ className, value, size, isLoading }: ValueProps) => {
+  if (isLoading) {
+    return <Skeleton id="tokenValueSkeleton" variant="rect" height="32px" width="50%" />
+  }
+
   if (value === null || !isDefined(value)) {
     return <span>-</span>
   }

@@ -7,12 +7,12 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { useApi } from '@/api/hooks/useApi'
 import { SuccessTransactionModal } from '@/bounty/modals/SuccessTransactionModal'
 import { withdrawalStakeMachine, WithdrawalStakeStates } from '@/bounty/modals/WithdrawalStakeModal/machine'
 import { WithdrawSignModal } from '@/bounty/modals/WithdrawSignModal'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WaitModal } from '@/common/components/WaitModal'
-import { useApi } from '@/common/hooks/useApi'
 import { useModal } from '@/common/hooks/useModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
@@ -43,11 +43,9 @@ export const WithdrawStakeModal = () => {
 
   useEffect(() => {
     if (state.matches(WithdrawalStakeStates.requirementsVerification)) {
-      if (transaction && feeInfo && activeMember) {
-        if (transaction && feeInfo && activeMember && entry) {
-          feeInfo.canAfford && send('NEXT')
-          !feeInfo.canAfford && send('ERROR')
-        }
+      if (transaction && feeInfo && activeMember && entry) {
+        feeInfo.canAfford && send('NEXT')
+        !feeInfo.canAfford && send('ERROR')
       }
     }
   }, [state.value, transaction, feeInfo?.canAfford, entry])

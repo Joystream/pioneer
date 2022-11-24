@@ -6,7 +6,7 @@ import { MemoryRouter } from 'react-router'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { ApiContext } from '@/common/providers/api/context'
+import { ApiContext } from '@/api/providers/context'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
@@ -26,6 +26,7 @@ import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/provid
 import { setupMockServer } from '../../_mocks/server'
 import { APPLICATION_DATA, OPENING_DATA, WORKER_DATA } from '../../_mocks/server/seeds'
 import {
+  currentStubErrorMessage,
   stubApi,
   stubDefaultBalances,
   stubTransaction,
@@ -110,7 +111,7 @@ describe('UI: ChangeRoleModal', () => {
       await renderSignStep()
       stubTransactionFailure(transaction)
       fireEvent.click(await getButton('Sign and change role account'))
-      expect(await screen.findByText('There was a problem changing the role account.')).toBeDefined()
+      expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
     })
   })
 
@@ -138,7 +139,7 @@ describe('UI: ChangeRoleModal', () => {
       await renderSignStep()
       stubTransactionFailure(transaction)
       fireEvent.click(await getButton('Sign and change reward account'))
-      expect(await screen.findByText('There was a problem changing the reward account.')).toBeDefined()
+      expect(await screen.findByText(currentStubErrorMessage)).toBeDefined()
     })
   })
 
