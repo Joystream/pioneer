@@ -76,7 +76,7 @@ export const Tooltip = ({
       const refBox = referenceElementRef.getBoundingClientRect()
       const boundaryBox = boundaryElement.getBoundingClientRect()
 
-      setIsDetached(boundaryBox.bottom + boundaryBox.y < refBox.bottom + refBox.y)
+      setIsDetached(boundaryBox.bottom + boundaryBox.y < refBox.bottom + refBox.y + boundaryBox.height)
     }
   }, [!state, !boundaryElement])
 
