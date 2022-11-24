@@ -57,9 +57,10 @@ export const Tooltip = ({
   const [referenceElementRef, setReferenceElementRef] = useState<HTMLElement | null>(null)
   const [popperElementRef, setPopperElementRef] = useState<HTMLDivElement | null>(null)
   const [boundaryElement, setBoundaryElement] = useState<HTMLElement | null>(null)
+  const [isDetached, setIsDetached] = useState(false)
 
-  const { styles, attributes } = usePopper(referenceElementRef, popperElementRef, {
-    placement: 'bottom-start',
+  const { styles, attributes, state } = usePopper(referenceElementRef, popperElementRef, {
+    placement: isDetached ? 'top-start' : 'bottom-start',
     modifiers: [
       {
         name: 'offset',
@@ -67,15 +68,17 @@ export const Tooltip = ({
           offset: offset ?? [0, 0],
         },
       },
-      {
-        name: 'flip',
-        options: {
-          fallbackPlacements: ['top-start'],
-          boundary: boundaryElement ?? 'clippingParents',
-        },
-      },
     ],
   })
+
+  useEffect(() => {
+    if (referenceElementRef && boundaryElement) {
+      const refBox = referenceElementRef.getBoundingClientRect()
+      const boundaryBox = boundaryElement.getBoundingClientRect()
+
+      setIsDetached(boundaryBox.bottom + boundaryBox.y < refBox.bottom + refBox.y)
+    }
+  }, [!state, !boundaryElement])
 
   useEffect(() => {
     if (boundaryClassName) {
