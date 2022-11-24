@@ -2,13 +2,16 @@ import { render, screen } from '@testing-library/react'
 import React, { useMemo } from 'react'
 
 import { BN_ZERO } from '@/common/constants'
+import { repeat } from '@/common/utils'
 import { RevealingStageVotes } from '@/council/components/election/CandidateVote/RevealingStageVotes'
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { CandidateWithMyVotes, useMyCastVotes } from '@/council/hooks/useMyCastVotes'
 import { calculateCommitment } from '@/council/model/calculateCommitment'
 import { electionVotingResultComparator } from '@/council/model/electionVotingResultComparator'
 import {
+  RawCouncilCandidateMock,
   RawCouncilElectionMock,
+  RawCouncilVoteMock,
   seedCouncilCandidate,
   seedCouncilElection,
   seedCouncilVote,
@@ -29,7 +32,7 @@ const Results = ({ onlyMyVotes }: { onlyMyVotes: boolean }) => {
 
     return election.candidates
       .map((candidate) => {
-        const myVotesForCandidate = votes?.filter((vote) => vote.voteFor?.id === candidate.id) ?? []
+        const myVotesForCandidate = votes?.filter((vote) => vote.optionId === candidate.member.id) ?? []
 
         return {
           ...candidate,
@@ -39,6 +42,7 @@ const Results = ({ onlyMyVotes }: { onlyMyVotes: boolean }) => {
       })
       .sort(electionVotingResultComparator)
   }, [votes, election])
+
   return election ? (
     <RevealingStageVotes
       isLoading={votesLoading}
@@ -47,6 +51,32 @@ const Results = ({ onlyMyVotes }: { onlyMyVotes: boolean }) => {
       onlyMyVotes={onlyMyVotes}
     />
   ) : null
+}
+
+interface ExtendedRawCouncilCandidateMock extends RawCouncilCandidateMock {
+  votesNumber?: number
+}
+
+interface MockElectionData {
+  votes?: Partial<RawCouncilVoteMock>[]
+  candidate?: Partial<ExtendedRawCouncilCandidateMock>[]
+}
+
+const seedInformations = (server: any, data: MockElectionData) => {
+  data.votes?.forEach((vote) => {
+    seedCouncilVote({ ...VOTE_DATA, ...vote }, server)
+  })
+  data.candidate?.forEach((candidate, index) => {
+    seedCouncilCandidate(
+      {
+        ...CANDIDATE_DATA,
+        ...candidate,
+        votesReceived: repeat(() => VOTE_DATA, candidate.votesNumber ?? 0),
+        id: String(index),
+      },
+      server
+    )
+  })
 }
 
 describe('UI: RevealingStageVotes', () => {
@@ -67,8 +97,6 @@ describe('UI: RevealingStageVotes', () => {
   })
 
   it('No votes revealed', async () => {
-    seedCouncilVote(VOTE_DATA, server.server)
-
     renderComponent()
 
     expect(await screen.findByText(/alice/i)).toBeDefined()
@@ -77,7 +105,14 @@ describe('UI: RevealingStageVotes', () => {
   })
 
   it('Vote revealed', async () => {
-    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 1337 }, server.server)
+    seedInformations(server.server, {
+      candidate: [
+        {
+          votePower: '1337',
+          votesNumber: 1,
+        },
+      ],
+    })
 
     renderComponent()
 
@@ -87,23 +122,9 @@ describe('UI: RevealingStageVotes', () => {
   })
 
   it('Multiple revealed votes', async () => {
-    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 2000 }, server.server)
-    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 900 }, server.server)
-    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 45 }, server.server)
-
-    renderComponent()
-
-    expect(await screen.findByText(/alice/i)).toBeDefined()
-    expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('2,945')
-    expect((await screen.findByText(/revealed votes/i)).nextSibling?.textContent).toEqual('3')
-  })
-
-  it('Multiple revealed votes, unrevealed votes', async () => {
-    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 2000 }, server.server)
-    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 900 }, server.server)
-    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 45 }, server.server)
-    seedCouncilVote({ ...VOTE_DATA, stake: 7000 }, server.server)
-    seedCouncilVote({ ...VOTE_DATA, stake: 3000 }, server.server)
+    seedInformations(server.server, {
+      candidate: [{ votePower: '2945', votesNumber: 3 }],
+    })
 
     renderComponent()
 
@@ -113,10 +134,12 @@ describe('UI: RevealingStageVotes', () => {
   })
 
   it('Multiple candidates, ordered by votes number', async () => {
-    seedCouncilCandidate({ ...CANDIDATE_DATA, id: '1', memberId: '1' }, server.server)
-    seedCouncilVote({ ...VOTE_DATA, voteForId: '1', stake: 2000 }, server.server)
-    seedCouncilVote({ ...VOTE_DATA, voteForId: '1', stake: 900 }, server.server)
-    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 1337 }, server.server)
+    seedInformations(server.server, {
+      candidate: [
+        { memberId: '0', votePower: '2900', votesNumber: 2 },
+        { memberId: '1', votePower: '1337', votesNumber: 1 },
+      ],
+    })
 
     renderComponent()
 
@@ -131,8 +154,10 @@ describe('UI: RevealingStageVotes', () => {
   })
 
   it('Own stake', async () => {
-    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 1000 }, server.server)
-    seedCouncilVote({ ...VOTE_DATA, voteForId: '0', stake: 2000, castBy: bob.address }, server.server)
+    seedInformations(server.server, {
+      votes: [{ voteForId: '0', stake: 2000, castBy: bob.address }],
+      candidate: [{ memberId: '0', votePower: '3000', votesNumber: 2 }],
+    })
 
     renderComponent()
 
