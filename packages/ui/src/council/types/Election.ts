@@ -1,4 +1,4 @@
-import { BN } from '@polkadot/util'
+import BN from 'bn.js'
 
 import { BN_ZERO } from '@/common/constants'
 import { ElectionRoundFieldsFragment } from '@/council/queries'

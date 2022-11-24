@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { HorizontalScroller } from '@/common/components/HorizontalScroller/HorizontalScroller'
-import { BN_ZERO } from '@/common/constants'
 import { Comparator } from '@/common/model/Comparator'
 import { useElectedCouncil } from '@/council/hooks/useElectedCouncil'
 import { ElectionCandidate } from '@/council/types'
@@ -44,15 +43,16 @@ export const CouncilAnnouncingTiles = ({ election }: Props) => {
 }
 
 export const CouncilRevealingTiles = ({ election }: Props) => {
-  const totalStake = election.candidates.reduce((prev, next) => prev.add(next.totalStake), BN_ZERO)
   const candidates = election?.candidates
   const councilTiles = useMemo(
     () =>
       candidates?.sort(Comparator<ElectionCandidate>(true, 'stake').bigNumber).map((candidate) => {
-        const stakePercent = totalStake ? candidate.stake.muln(100).div(totalStake).toNumber() / 100 : 0
+        const stakePercent = !election.totalElectionStake.isZero()
+          ? candidate.stake.muln(100).div(election.totalElectionStake).toNumber() / 100
+          : 0
         return <CouncilTile key={candidate.id} member={candidate.member} stakePercent={stakePercent} />
       }),
-    [candidates, totalStake]
+    [candidates, election.totalElectionStake.toString()]
   )
 
   return <Scroller items={councilTiles} />

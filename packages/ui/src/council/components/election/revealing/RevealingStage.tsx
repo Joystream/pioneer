@@ -27,7 +27,7 @@ export const RevealingStage = ({ election, isLoading }: Props) => {
 
     return election.candidates
       .map((candidate) => {
-        const myVotesForCandidate = votes?.filter((vote) => vote.voteFor?.id === candidate.member.id) ?? []
+        const myVotesForCandidate = votes?.filter((vote) => vote.optionId === candidate.member.id) ?? []
 
         return {
           ...candidate,
