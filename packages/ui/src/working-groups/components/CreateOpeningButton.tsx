@@ -6,7 +6,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { CreateOpeningModalCall } from '@/working-groups/modals/CreateOpening/types'
 import { GroupIdName } from '@/working-groups/types'
 
-interface CreateOpeningButtonProps {
+export interface CreateOpeningButtonProps {
   group: GroupIdName
 }
 
@@ -20,7 +20,7 @@ export const CreateOpeningButton = ({ group }: CreateOpeningButtonProps) => {
   return (
     <TransactionButton style="primary" size="medium" onClick={createOpening}>
       <PlusIcon />
-      Add new opening
+      Add opening
     </TransactionButton>
   )
 }
