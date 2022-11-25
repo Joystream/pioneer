@@ -1,18 +1,17 @@
-// TODO duplicates RestoreVotesModal
 import React, { useEffect, useCallback, useReducer } from 'react'
 import * as Yup from 'yup'
 
-import { ButtonPrimary } from '@/common/components/buttons'
 import { FileEntry, FileInput } from '@/common/components/forms/FileInput'
 
-import { Opening, OpeningSchema } from './CreateOpening'
+import { CreateOpeningForm, OpeningSchema } from '../types'
 
-type Value = FileEntry & { content?: Opening }
+// TODO duplicates RestoreVotesModal
+type Value = FileEntry & { content?: CreateOpeningForm }
 type Action = { type: 'set-file'; value: File } | { type: 'set-content'; value: string }
 
 const parseContent = (contentJson: any): Pick<Value, 'errors' | 'content'> => {
   try {
-    const content: Opening = JSON.parse(contentJson)
+    const content: CreateOpeningForm = JSON.parse(contentJson)
     OpeningSchema.validateSync(content)
     return { content, errors: [] }
   } catch (error) {
@@ -37,7 +36,7 @@ const valueReducer = (value: undefined | Value, action: Action): undefined | Val
 }
 
 export interface ImportOpeningProps {
-  handleChange: (o: Opening) => void
+  handleChange: (o: CreateOpeningForm) => void
   onHide: () => void
 }
 
