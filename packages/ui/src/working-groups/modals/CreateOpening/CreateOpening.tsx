@@ -7,27 +7,47 @@ import { DownloadButtonGhost } from '@/common/components/buttons/DownloadButtons
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { useModal } from '@/common/hooks/useModal'
 import { useYupValidationResolver } from '@/common/utils/validation'
+import { getSpecificParameters } from '@/proposals/modals/AddNewProposal/getSpecificParameters'
 import { CreateOpeningModalCall } from '@/working-groups/modals/CreateOpening/types'
 
 import { CreateOpeningForm } from './CreateOpeningForm'
 import { ImportOpening } from './ImportOpening'
 
+export interface ApplicationQuestion {
+  text: string
+  type: 'TEXT' | 'TEXTAREA'
+}
 export interface Opening {
   target: number
   title: string
   description: string
+  applicationDetails?: string
+  shortDescription?: string
+  stakingPolicy?: { amount: number; unstakingPeriod: number }
+  rewardPerBlock: number
+  applicationFormQuestions: ApplicationQuestion[]
 }
 
 export const OpeningSchema = Yup.object().shape({
-  topic: Yup.string().required('topic is required.'),
-  description: Yup.string().required('description is required.'),
   target: Yup.number().optional(),
+  title: Yup.string().required('topic is required.'),
+  description: Yup.string().required('description is required.'),
+  applicationDetails: Yup.string().optional(),
+  shortDescription: Yup.string().optional(),
+  applicationFormQuestions: Yup.array().optional(),
+  stakingPolicy: Yup.object().optional(),
+  rewardPerBlock: Yup.number().optional(),
 })
 
 const defaultValues = {
   target: 1,
-  title: 'Topic',
-  description: 'Text here',
+  title: '',
+  description: '',
+  applicationDetails: '',
+  shortDescription: '',
+  stakingPolicy: { amount: 50000, unstakingPeriod: 14400 },
+  rewardPerBlock: 1,
+  applicationFormQuestions: [],
 }
 
 export const CreateOpeningModal = () => {
