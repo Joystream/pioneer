@@ -10,11 +10,6 @@ export interface OpeningModalData {
 
 export type CreateOpeningModalCall = ModalWithDataCall<'CreateOpening', OpeningModalData>
 
-export interface ApplicationQuestion {
-  text: string
-  type: 'TEXT' | 'TEXTAREA'
-}
-
 export const OpeningSchema = Yup.object().shape({
   target: Yup.number().optional(),
   applicationForm: Yup.array().required('applicationForm is required'),
@@ -26,24 +21,36 @@ export const OpeningSchema = Yup.object().shape({
 export const defaultValues = {
   target: 1,
   applicationForm: { questions: [] },
-  durationAndProcess: { details: '', duration: 100000, isLimited: false },
-  stakingPolicyAndReward: { stakingAmount: 50000, leavingUnstakingPeriod: 14400, rewardPerBlock: 1 },
-  workingGroupAndDescription: { title: '', description: '', shortDescription: '' },
+  durationAndProcess: {
+    details: '',
+    duration: 100000,
+    isLimited: false,
+  },
+  stakingPolicyAndReward: {
+    stakingAmount: 50000,
+    leavingUnstakingPeriod: 14400,
+    rewardPerBlock: 1,
+  },
+  workingGroupAndDescription: {
+    title: '',
+    description: '',
+    shortDescription: '',
+  },
 }
 
 export interface CreateOpeningForm {
   target: number
-
-  applicationForm: {
-    questions?: QuestionValueProps[]
-  }
-
+  applicationForm: { questions?: QuestionValueProps[] }
   durationAndProcess: {
     details?: string
     duration?: number
     isLimited: boolean
   }
-  stakingPolicyAndReward: { stakingAmount: number; leavingUnstakingPeriod: number; rewardPerBlock: number }
+  stakingPolicyAndReward: {
+    stakingAmount: number
+    leavingUnstakingPeriod: number
+    rewardPerBlock: number
+  }
   workingGroupAndDescription: {
     title?: string
     description?: string

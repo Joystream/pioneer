@@ -3,7 +3,7 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine, State, Typestate } from 'xstate'
 import { StateSchema } from 'xstate/lib/types'
 
-import { createType } from '@/common/model/createType'
+import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 import { metadataToBytes, getDataFromEvent } from '@/common/model/JoystreamNode'
 import {
   isTransactionCanceled,
@@ -12,27 +12,14 @@ import {
   transactionMachine,
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
-import { defaultProposalValues } from '@/proposals/modals/AddNewProposal/helpers'
-import { ProposalType } from '@/proposals/types'
 import { GroupIdToGroupParam } from '@/working-groups/constants'
 import { GroupIdName } from '@/working-groups/types'
 
 import { CreateOpeningForm } from './types'
 
-interface ProposalTypeContext {
-  type?: ProposalType
-}
-
-export type ProposalDiscussionMode = 'open' | 'closed'
-
-export interface TriggerAndDiscussionContext extends Required<ProposalTypeContext> {
-  discussionMode?: ProposalDiscussionMode
-}
-
-export interface TransactionContext extends Required<TriggerAndDiscussionContext> {
+export interface TransactionContext extends CreateOpeningForm {
   transactionEvents?: EventRecord[]
-  proposalId?: number
-  discussionId?: number
+  openingId?: number
 }
 
 /** @joystream/types/augment/augment-api-tx.d.ts
@@ -84,41 +71,30 @@ export type CreateOpeningState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'warning'; context: EmptyObject }
-  | { value: 'specificParameters'; context: Required<TriggerAndDiscussionContext> }
   | {
       value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndDescription' } }
-      context: Required<TriggerAndDiscussionContext>
+      context: Required<CreateOpeningForm>
     }
   | {
       value: { specificParameters: { createWorkingGroupLeadOpening: 'durationAndProcess' } }
-      context: Required<TriggerAndDiscussionContext>
+      context: Required<CreateOpeningForm>
     }
   | {
       value: { specificParameters: { createWorkingGroupLeadOpening: 'applicationForm' } }
-      context: Required<TriggerAndDiscussionContext>
+      context: Required<CreateOpeningForm>
     }
   | {
       value: { specificParameters: { createWorkingGroupLeadOpening: 'stakingPolicyAndReward' } }
-      context: Required<TriggerAndDiscussionContext>
+      context: Required<CreateOpeningForm>
     }
-  | { value: 'beforeTransaction'; context: Required<TriggerAndDiscussionContext> }
+  | { value: 'beforeTransaction'; context: Required<CreateOpeningForm> }
   | { value: 'transaction'; context: Required<TransactionContext> }
   | { value: 'success'; context: Required<TransactionContext> }
   | { value: 'error'; context: TransactionContext }
 
-type SetTypeEvent = { type: 'SET_TYPE'; proposalType: ProposalType }
-type SetDiscussionModeEvent = { type: 'SET_DISCUSSION_MODE'; mode: ProposalDiscussionMode }
-
 const isType = (type: string) => (context: any) => type === context?.type
 
-export type CreateOpeningEvent =
-  | { type: 'FAIL' }
-  | { type: 'BACK' }
-  | { type: 'NEXT' }
-  | SetTypeEvent
-  | SetDiscussionModeEvent
-  | { type: 'BOUND' }
-  | { type: 'REQUIRES_STAKING_CANDIDATE' }
+export type CreateOpeningEvent = { type: 'FAIL' } | { type: 'BACK' } | { type: 'NEXT' }
 
 export type CreateOpeningMachineState = State<
   Partial<TransactionContext>,
@@ -129,62 +105,17 @@ export type CreateOpeningMachineState = State<
 
 export const createOpeningMachine = createMachine<Partial<TransactionContext>, CreateOpeningEvent, CreateOpeningState>({
   initial: 'requirementsVerification',
-  context: {
-    discussionMode: defaultProposalValues.triggerAndDiscussion.isDiscussionClosed ? 'closed' : 'open',
-  },
+  context: {},
   states: {
-    requirementsVerification: {
-      on: {
-        FAIL: 'requirementsFailed',
-        NEXT: 'warning',
-      },
-    },
+    requirementsVerification: { on: { FAIL: 'requirementsFailed', NEXT: 'generalParameters' } },
     requirementsFailed: { type: 'final' },
-    warning: {
-      on: {
-        NEXT: 'proposalType',
-      },
-    },
     generalParameters: {
-      initial: 'importOpening',
-      meta: { isStep: true, stepTitle: 'General parameters' },
-      states: {
-        stakingAccount: {
-          meta: { isStep: true, stepTitle: 'Staking account' },
-          on: {
-            BACK: '#proposalType',
-            NEXT: 'proposalDetails',
-          },
-        },
-        proposalDetails: {
-          meta: { isStep: true, stepTitle: 'Proposal details' },
-          on: {
-            BACK: 'stakingAccount',
-            NEXT: 'triggerAndDiscussion',
-          },
-        },
-        triggerAndDiscussion: {
-          meta: { isStep: true, stepTitle: 'Trigger & Discussion' },
-          on: {
-            BACK: 'proposalDetails',
-            NEXT: 'finishGeneralParameters',
-            SET_DISCUSSION_MODE: {
-              actions: assign({
-                discussionMode: (context, event) => (event as SetDiscussionModeEvent).mode,
-              }),
-            },
-          },
-        },
-        finishGeneralParameters: {
-          type: 'final',
-        },
-      },
-      onDone: 'specificParameters',
+      on: { NEXT: 'specificParameters' },
     },
     specificParameters: {
       meta: { isStep: true, stepTitle: 'Specific parameters' },
       on: {
-        BACK: 'generalParameters.triggerAndDiscussion',
+        BACK: 'generalParameters',
         NEXT: 'beforeTransaction',
       },
       initial: 'entry',
@@ -244,31 +175,7 @@ export const createOpeningMachine = createMachine<Partial<TransactionContext>, C
     beforeTransaction: {
       id: 'beforeTransaction',
       on: {
-        BOUND: 'transaction',
-        REQUIRES_STAKING_CANDIDATE: 'bindStakingAccount',
         FAIL: 'requirementsFailed',
-      },
-    },
-    bindStakingAccount: {
-      invoke: {
-        id: 'bindStakingAccount',
-        src: transactionMachine,
-        onDone: [
-          {
-            target: 'transaction',
-            actions: assign({ transactionEvents: (context, event) => event.data.events }),
-            cond: isTransactionSuccess,
-          },
-          {
-            target: 'error',
-            actions: assign({ transactionEvents: (context, event) => event.data.events }),
-            cond: isTransactionError,
-          },
-          {
-            target: 'canceled',
-            cond: isTransactionCanceled,
-          },
-        ],
       },
     },
     transaction: {
@@ -279,20 +186,10 @@ export const createOpeningMachine = createMachine<Partial<TransactionContext>, C
           {
             target: 'success',
             actions: assign({
-              proposalId: (_, event) =>
-                Number(getDataFromEvent(event.data.events, 'proposalsCodex', 'ProposalCreated') ?? -1),
+              openingId: (_, event) =>
+                Number(getDataFromEvent(event.data.events, event.data.section, 'OpeningCreated') ?? -1),
             }),
-            cond: (context, event) => isTransactionSuccess(context, event) && context.discussionMode !== 'closed',
-          },
-          {
-            target: 'discussionTransaction',
-            actions: assign({
-              transactionEvents: (context, event) => event.data.events,
-              discussionId: (_, event) => {
-                return parseInt(getDataFromEvent(event.data.events, 'forum', 'ThreadCreated', 0)?.toString() ?? '-1')
-              },
-            }),
-            cond: (context, event) => isTransactionSuccess(context, event) && context.discussionMode === 'closed',
+            cond: (context, event) => isTransactionSuccess(context, event),
           },
           {
             target: 'error',
@@ -306,5 +203,6 @@ export const createOpeningMachine = createMachine<Partial<TransactionContext>, C
         ],
       },
     },
+    ...transactionModalFinalStatusesFactory(),
   },
 })
