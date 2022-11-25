@@ -35,7 +35,17 @@ export const CreateOpeningModal = () => {
   const [showFileInput, setShowFileInput] = useState<boolean>()
   const resolver = useYupValidationResolver<CreateOpeningForm>(OpeningSchema, machineStateConverter(state.value))
   const form = useForm<CreateOpeningForm>({ resolver, mode: 'onChange', defaultValues })
-  //const [] = form.watch([])
+  const [stakingPolicyAndRewardRewardPerBlock] = form.watch([
+    'applicationForm.questions',
+    'workingGroupAndDescription.title',
+    'workingGroupAndDescription.shortDescription',
+    'workingGroupAndDescription.description',
+    'durationAndProcess.details',
+    'durationAndProcess.duration',
+    'stakingPolicyAndReward.stakingAmount',
+    'stakingPolicyAndReward.leavingUnstakingPeriod',
+    'stakingPolicyAndReward.rewardPerBlock',
+  ])
 
   useEffect(() => {
     form.trigger(machineStateConverter(state.value) as keyof CreateOpeningForm)
@@ -44,9 +54,8 @@ export const CreateOpeningModal = () => {
   const createOpeningTx = useMemo(() => {
     if (api) {
       const { ...specifics } = form.getValues() as CreateOpeningForm
-      const params = getTxParams(group, specifics)
-      //return api.tx[group].addOpening(description, openingType, stakingPolicyAndReward, '1')
-      return api.tx.system.remark('wen mainnet') // TODO dummy
+      const { description, stakePolicy, rewardPerBlock } = getTxParams(group, specifics)
+      return api.tx[group].addOpening(description, 'Regular', stakePolicy, String(rewardPerBlock))
     }
   }, [connectionState, activeMember?.id])
 
