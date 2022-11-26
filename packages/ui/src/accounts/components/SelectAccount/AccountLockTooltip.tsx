@@ -17,6 +17,7 @@ interface Props {
   address: string
   locks?: OptionLock[]
   children: React.ReactNode
+  boundaryClassName?: string
 }
 
 export const AccountLockTooltip = ({ address, locks, children }: Props) => {
