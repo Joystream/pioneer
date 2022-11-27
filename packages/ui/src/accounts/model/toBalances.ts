@@ -43,7 +43,7 @@ export const toBalances = (balances: DeriveBalancesAll): Balances => {
   return {
     locked,
     locks,
-    recoverable,
+    recoverable: recoverable.add(vestedClaimable),
     total,
     transferable,
     vesting,
