@@ -35,12 +35,8 @@ const valueReducer = (value: undefined | Value, action: Action): undefined | Val
   }
 }
 
-export interface ImportOpeningProps {
-  handleChange: (o: CreateOpeningForm) => void
-  onHide: () => void
-}
-
-export const ImportOpening = ({ handleChange, onHide }: ImportOpeningProps) => {
+export const ImportOpening = () => {
+  // TODO useFormhContext
   const [value, dispatch] = useReducer(valueReducer, undefined)
 
   const onUpload = useCallback(async ([file]: File[]) => {
@@ -50,12 +46,14 @@ export const ImportOpening = ({ handleChange, onHide }: ImportOpeningProps) => {
     dispatch({ type: 'set-content', value: contentJson })
   }, [])
 
+  /**
   useEffect(() => {
     if (value?.content) {
       handleChange(value.content)
       onHide()
     }
   }, [value])
+**/
 
   return (
     <>

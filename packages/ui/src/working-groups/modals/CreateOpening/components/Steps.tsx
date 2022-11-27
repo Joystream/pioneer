@@ -9,6 +9,8 @@ import {
 
 import { CreateOpeningMachineState } from '../machine'
 
+import { ImportOpening } from './Import'
+
 export interface CreateOpeningStepProps {
   matches: CreateOpeningMachineState['matches']
 }
@@ -28,6 +30,6 @@ export const CreateOpeningSteps = ({ matches }: CreateOpeningStepProps) => {
       return <StakingPolicyAndReward />
 
     default:
-      return null
+      return <ImportOpening />
   }
 }

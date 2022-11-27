@@ -1,5 +1,4 @@
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
-import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine, State, Typestate } from 'xstate'
 import { StateSchema } from 'xstate/lib/types'
 
@@ -12,15 +11,9 @@ import {
   transactionMachine,
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
-import { GroupIdToGroupParam } from '@/working-groups/constants'
 import { GroupIdName } from '@/working-groups/types'
 
-import { CreateOpeningForm } from './types'
-
-export interface TransactionContext extends CreateOpeningForm {
-  transactionEvents?: EventRecord[]
-  openingId?: number
-}
+import { CreateOpeningForm, TransactionContext } from './types'
 
 /** @joystream/types/augment/augment-api-tx.d.ts
 
@@ -64,7 +57,7 @@ export const getTxParams = (group: GroupIdName, specifics: CreateOpeningForm) =>
     leavingUnstakingPeriod: specifics?.stakingPolicyAndReward?.leavingUnstakingPeriod,
   },
   rewardPerBlock: specifics?.stakingPolicyAndReward?.rewardPerBlock,
-  group: GroupIdToGroupParam[group],
+  group,
 })
 
 export type CreateOpeningState =
@@ -103,9 +96,10 @@ export type CreateOpeningMachineState = State<
   Typestate<Partial<TransactionContext>>
 >
 
-export const createOpeningMachine = createMachine<Partial<TransactionContext>, CreateOpeningEvent, CreateOpeningState>({
-  initial: 'requirementsVerification',
-  context: {},
+type Context = CreateOpeningForm & TransactionContext
+
+export const createOpeningMachine = createMachine<Context, CreateOpeningEvent, CreateOpeningState>({
+  initial: 'specificParameters',
   states: {
     requirementsVerification: { on: { FAIL: 'requirementsFailed', NEXT: 'generalParameters' } },
     requirementsFailed: { type: 'final' },

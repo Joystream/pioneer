@@ -1,3 +1,5 @@
+import { EventRecord } from '@polkadot/types/interfaces/system'
+import BN from 'bn.js'
 import * as Yup from 'yup'
 
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
@@ -10,7 +12,20 @@ export interface OpeningModalData {
 
 export type CreateOpeningModalCall = ModalWithDataCall<'CreateOpening', OpeningModalData>
 
+// TODO research runtime constraints
+export interface OpeningConditions {
+  group: GroupIdName
+  minStake: BN
+  hiringTarget: number
+}
+
+export interface TransactionContext extends OpeningConditions {
+  transactionEvents?: EventRecord[]
+  openingId?: number
+}
+
 export const OpeningSchema = Yup.object().shape({
+  group: Yup.number().optional(),
   target: Yup.number().optional(),
   applicationForm: Yup.array().required('applicationForm is required'),
   durationAndProcess: Yup.object().required('durationAndProcess is required'),
@@ -39,6 +54,7 @@ export const defaultValues = {
 }
 
 export interface CreateOpeningForm {
+  group?: GroupIdName
   target: number
   applicationForm: { questions?: QuestionValueProps[] }
   durationAndProcess: {
