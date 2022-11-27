@@ -6,6 +6,7 @@ import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { AccountLocks } from '@/accounts/components/AccountLocks'
 import { TransferButton } from '@/accounts/components/TransferButton'
 import { useBalance } from '@/accounts/hooks/useBalance'
+import { addClaimable } from '@/accounts/model/sortAccounts'
 import { Account } from '@/accounts/types'
 import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { TableListItemAsLinkHover } from '@/common/components/List'
@@ -23,7 +24,7 @@ interface AccountItemDataProps {
 
 export const AccountItem = ({ account }: AccountItemDataProps) => {
   const address = account.address
-  const balance = useBalance(address)
+  const balance = addClaimable(useBalance(address))
   const isSendDisabled = !balance?.transferable || !balance.transferable.gt(new BN(0))
 
   const [isDropped, setDropped] = useState(false)
@@ -37,10 +38,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
           <TokenValue value={balance?.locked} isLoading={!isDefined(balance?.locked)} />
           <AccountLocks locks={balance?.locks} />
         </ValueAndLocks>
-        <TokenValue
-          value={balance?.recoverable?.add(balance?.vestedClaimable ?? BN_ZERO)}
-          isLoading={!isDefined(balance?.recoverable)}
-        />
+        <TokenValue value={balance?.recoverable} isLoading={!isDefined(balance?.recoverable)} />
         <TokenValue value={balance?.transferable} isLoading={!isDefined(balance?.transferable)} />
         <AccountControls>
           <TransferButton to={account} />

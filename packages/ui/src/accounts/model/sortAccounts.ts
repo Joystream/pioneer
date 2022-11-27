@@ -19,6 +19,25 @@ export function sortAccounts(
     : accounts
 }
 
+export const addClaimable = (b: Balances | null) => {
+  if (b?.recoverable && b?.vestedClaimable) {
+    return { ...b, recoverable: b.recoverable.add(b.vestedClaimable) }
+  }
+  return b
+}
+
+export function updateRecoverable(a2b: AddressToBalanceMap | undefined) {
+  if (!a2b) return
+  const updated: AddressToBalanceMap = {}
+  Object.keys(a2b).forEach((key) => {
+    const newBalances = addClaimable(a2b[key])
+    if (newBalances) {
+      updated[key] = newBalances
+    }
+  })
+  return updated
+}
+
 export function setOrder(
   key: SortKey,
   sortBy: SortKey,
