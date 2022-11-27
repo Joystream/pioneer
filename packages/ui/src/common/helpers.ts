@@ -94,6 +94,7 @@ export const wgListItemMappings = (value: string) => {
       }
   }
 }
+
 export const fileToDataUrl = (file: File) => {
   return new Promise<string>((resolve, reject) => {
     const reader = new FileReader()
@@ -107,6 +108,7 @@ export const fileToDataUrl = (file: File) => {
     reader.readAsDataURL(file)
   })
 }
+
 export const resizeImageFile = async (
   file: File,
   width: number,
