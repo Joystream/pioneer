@@ -37,10 +37,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
           <TokenValue value={balance?.locked} isLoading={!isDefined(balance?.locked)} />
           <AccountLocks locks={balance?.locks} />
         </ValueAndLocks>
-        <TokenValue
-          value={balance?.recoverable?.add(balance?.vestedClaimable ?? BN_ZERO)}
-          isLoading={!isDefined(balance?.recoverable)}
-        />
+        <TokenValue value={balance?.recoverable} isLoading={!isDefined(balance?.recoverable)} />
         <TokenValue value={balance?.transferable} isLoading={!isDefined(balance?.transferable)} />
         <AccountControls>
           <TransferButton to={account} />
