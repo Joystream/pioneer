@@ -14,7 +14,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { useMyAccounts } from '../hooks/useMyAccounts'
 import { useMyBalances } from '../hooks/useMyBalances'
 import { filterAccounts } from '../model/filterAccounts'
-import { setOrder, sortAccounts, SortKey, updateRecoverable } from '../model/sortAccounts'
+import { setOrder, sortAccounts, SortKey } from '../model/sortAccounts'
 
 import { AccountItem } from './AccountItem/AccountItem'
 
@@ -22,7 +22,7 @@ export function Accounts() {
   const { allAccounts, hasAccounts, isLoading, wallet } = useMyAccounts()
   const { showModal } = useModal()
   const [isDisplayAll, setIsDisplayAll] = useState(true)
-  const balances = updateRecoverable(useMyBalances())
+  const balances = useMyBalances()
   const [sortBy, setSortBy] = useState<SortKey>('name')
   const [isDescending, setDescending] = useState(false)
   const visibleAccounts = useMemo(
