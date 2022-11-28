@@ -12,14 +12,17 @@
   },
   "typesVersions": {
     "*": {
-      "lib/index.d.ts": ["lib/index.d.ts"],
-      "*": [ "lib/*" ]
+      "lib/index.d.ts": [
+        "lib/index.d.ts"
+      ],
+      "*": [
+        "lib/*"
+      ]
     }
   },
   "repository": "https://github.com/joystream/joystream",
   "author": "Joystream Contributors",
   "license": "MIT",
-  "private": false,
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -42,14 +45,14 @@
     "README.md"
   ],
   "dependencies": {
-    "google-protobuf": "^3.14.0",
-    "long": "^4.0.0",
+    "@types/iso-3166-2": "^1.0.0",
     "@types/long": "^4.0.1",
+    "google-protobuf": "^3.14.0",
     "i18n-iso-countries": "^6.8.0",
-    "iso-639-1": "^2.1.9",
-    "protobufjs": "^6.11.2",
     "iso-3166-2": "^1.0.0",
-    "@types/iso-3166-2": "^1.0.0"
+    "iso-639-1": "^2.1.9",
+    "long": "^4.0.0",
+    "protobufjs": "^6.11.2"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",
