@@ -44,11 +44,12 @@ export const toBalances = (balances: DeriveBalancesAll): Balances => {
   //const recoverable = recoverableLockMax.lte(nonRecoverableMax) ? BN_ZERO : recoverableLockMax.sub(nonRecoverableMax)
 
   // totals being lower than vesting causes confusing UI
+  // this does not affect the total amount on `AccountItem`. Why?
   return {
-    locked: vestingLocked > locked ? vestingLocked : locked,
+    locked: vestingLocked.gt(locked) ? vestingLocked : locked,
     locks,
     recoverable: recoverableLockMax.add(vestedClaimable),
-    total: vestingTotal > total ? vestingTotal : total,
+    total: vestingTotal.gt(total) ? vestingTotal : total,
     transferable,
     vesting,
     vestingTotal,
