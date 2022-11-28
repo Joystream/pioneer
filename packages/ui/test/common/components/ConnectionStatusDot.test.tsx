@@ -26,13 +26,7 @@ describe('UI: Connection status component', () => {
     connectionState: 'connecting',
     qnConnectionState: 'connecting',
   }
-  set(useApi.api, 'rpc.chain.subscribeNewHeads', () =>
-    of({
-      toJSON: () => ({
-        number: 100,
-      }),
-    })
-  )
+  set(useApi.api, 'rpc.chain.subscribeNewHeads', () => of({ number: 100 }))
 
   beforeEach(() => {
     mockIndexerHead = 98

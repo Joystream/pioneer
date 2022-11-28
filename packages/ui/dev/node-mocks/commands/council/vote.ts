@@ -10,9 +10,11 @@ const SALT = '0x0000000000000000000000000000000000000000000000000000000000000001
 export const castVotesCommand = async (api: ApiPromise) => {
   const stage = await api.query.referendum.stage()
   const cycleId = stage.asVoting.currentCycleId.toNumber()
+  const votingStake = api.consts.referendum.minimumStake
+
   await mapP(votes(api), async ({ accountId, optionsId, salt }) => {
     const commitment = calculateCommitment(accountId, optionsId, salt, cycleId)
-    await signAndSend(api.tx.referendum.vote(commitment, 10_000), accountId)
+    await signAndSend(api.tx.referendum.vote(commitment, votingStake), accountId)
   })
 }
 

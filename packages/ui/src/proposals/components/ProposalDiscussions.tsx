@@ -45,12 +45,6 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
     replyTo && newPostRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'end' })
   }, [replyTo])
 
-  useEffect(() => {
-    if (initialPost && postsRefs[initialPost]) {
-      postsRefs[initialPost].current?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
-    }
-  }, [postsRefs, initialPost])
-
   const discussionPosts = useMemo(
     () => thread.discussionPosts.filter((post) => post.status !== 'PostStatusRemoved'),
     [thread]

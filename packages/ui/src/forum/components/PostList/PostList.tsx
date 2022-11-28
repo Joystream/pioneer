@@ -1,4 +1,4 @@
-import React, { RefObject, useCallback, useEffect, useMemo } from 'react'
+import React, { RefObject, useCallback, useMemo } from 'react'
 import { generatePath, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -40,13 +40,6 @@ export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost, isD
 
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
-
-  useEffect(() => {
-    posts &&
-      navigation.post &&
-      postsRefs[navigation.post]?.current &&
-      postsRefs[navigation.post].current.scrollIntoView({ behavior: 'smooth', inline: 'start' })
-  }, [postsRefs, navigation.post])
 
   const Wrapper: typeof RowGapBlock = useMemo(() => (isDiscussion ? DiscussionWrapper : RowGapBlock), [isDiscussion])
 

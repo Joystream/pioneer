@@ -10,5 +10,5 @@ export interface Election {
 
 export const asElection = (fields: ElectionRoundFieldsFragment): Election => ({
   cycleId: fields.cycleId,
-  candidates: fields.candidates.map(asElectionCandidate),
+  candidates: fields.candidates.filter((candidate) => candidate.status !== 'WITHDRAWN').map(asElectionCandidate),
 })

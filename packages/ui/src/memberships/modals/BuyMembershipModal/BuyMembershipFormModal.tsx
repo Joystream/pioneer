@@ -66,14 +66,15 @@ interface BuyMembershipFormProps extends Omit<BuyMembershipFormModalProps, 'onCl
   changeMembershipAccount?: () => void
 }
 
+const isRequired = 'This field is required.'
 const CreateMemberSchema = Yup.object().shape({
-  rootAccount: AccountSchema.required('This field is required'),
-  controllerAccount: AccountSchema.required('This field is required'),
+  rootAccount: AccountSchema.required(isRequired),
+  controllerAccount: AccountSchema.required(isRequired),
   avatarUri: AvatarURISchema,
-  name: Yup.string().required('This field is required'),
-  handle: HandleSchema.required('This field is required').matches(
+  name: Yup.string().required(isRequired),
+  handle: HandleSchema.required(isRequired).matches(
     /^[a-zA-Z0-9_.-]*$/,
-    'Some of the characters are not allowed here '
+    'Spaces and special characters are not supported.'
   ),
   hasTerms: Yup.boolean().required().oneOf([true]),
   isReferred: Yup.boolean(),
@@ -121,7 +122,6 @@ export const BuyMembershipForm = ({
   type,
 }: BuyMembershipFormProps) => {
   const { allAccounts } = useMyAccounts()
-  const [captchaToken, setCaptchaToken] = useState<string | undefined>()
   const [formHandleMap, setFormHandleMap] = useState('')
   const { isUploading, uploadAvatarAndSubmit } = useUploadAvatarAndSubmit(onSubmit)
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
@@ -137,7 +137,7 @@ export const BuyMembershipForm = ({
     },
   })
 
-  const [handle, isReferred, referrer] = form.watch(['handle', 'isReferred', 'referrer'])
+  const [handle, isReferred, referrer, captchaToken] = form.watch(['handle', 'isReferred', 'referrer', 'captchaToken'])
 
   useEffect(() => {
     if (handle) {
@@ -242,7 +242,7 @@ export const BuyMembershipForm = ({
                   sitekey={process.env.REACT_APP_CAPTCHA_SITE_KEY}
                   theme="light"
                   languageOverride="en"
-                  onVerify={setCaptchaToken}
+                  onVerify={(token) => form.setValue('captchaToken', token)}
                 />
               </Row>
             )}

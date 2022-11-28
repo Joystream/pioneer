@@ -4,7 +4,7 @@ import { generatePath, useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { useApi } from '@/api/hooks/useApi'
-import { PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
+import { PageHeaderRow, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
@@ -13,7 +13,9 @@ import { PinIcon } from '@/common/components/icons/PinIcon'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Colors } from '@/common/constants'
+import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { createType } from '@/common/model/createType'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getUrl } from '@/common/utils/getUrl'
 import { PostList } from '@/forum/components/PostList/PostList'
@@ -30,7 +32,12 @@ import { ForumPageLayout } from './components/ForumPageLayout'
 
 export const ForumThread = () => {
   const { id } = useParams<{ id: string }>()
-  const { isLoading, thread } = useForumThread(id)
+  const { isLoading: isLoadingThread, thread } = useForumThread(id)
+  const isRefetched = useRefetchQueries({
+    interval: MILLISECONDS_PER_BLOCK,
+    include: ['GetForumThreads'],
+  })
+  const isLoading = isLoadingThread && !isRefetched
   const { api } = useApi()
   const { active } = useMyMemberships()
 

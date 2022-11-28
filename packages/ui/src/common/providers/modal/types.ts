@@ -1,4 +1,4 @@
-import { Interpreter, State, EventObject, Typestate } from 'xstate'
+import { EventObject, Interpreter, State, Typestate } from 'xstate'
 
 export interface ModalCall<M> {
   modal: M
@@ -47,4 +47,6 @@ export interface UseModal<Data> {
     value: UnknownMachine<TContext, TEvent, TTypestate>
   ) => void
   currentModalMachine?: UnknownMachine<unknown, any, any>
+  isClosing?: boolean
+  returnClosedModal?: () => void
 }

@@ -247,11 +247,11 @@ export const schemaFactory = (api?: ProxyApi) => {
     }),
     stakingPolicyAndReward: Yup.object().shape({
       stakingAmount: BNSchema.test(
-        minContext('Input must be greater than ${min} for proposal to execute', 'leaderOpeningStake', true, 'execution')
+        minContext('Input must be at least ${min} for proposal to execute', 'leaderOpeningStake', true, 'execution')
       ).required('Field is required'),
       leavingUnstakingPeriod: BNSchema.test(
         minContext(
-          'Input must be greater than ${min} for proposal to execute',
+          'Input must be at least ${min} for proposal to execute',
           'minUnstakingPeriodLimit',
           false,
           'execution'
@@ -270,17 +270,18 @@ export const schemaFactory = (api?: ProxyApi) => {
       workerId: Yup.number().required('Field is required'),
     }),
     terminateWorkingGroupLead: Yup.object().shape({
-      slashingAmount: BNSchema,
+      slashingAmount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')),
       groupId: Yup.string().required('Field is required'),
-      workerId: Yup.number().required('Field is required'),
+      workerId: Yup.number().test('execution', (value, schema) => {
+        if (!schema.parent.groupId) return true
+        return typeof value !== 'undefined'
+      }),
     }),
     setWorkingGroupLeadReward: Yup.object().shape({
       rewardPerBlock: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
       groupId: Yup.string().required('Field is required'),
       workerId: Yup.number().test('execution', (value, context) => {
-        if (!context.parent.groupId) {
-          return true
-        }
+        if (!context.parent.groupId) return true
         return typeof value !== 'undefined'
       }),
     }),

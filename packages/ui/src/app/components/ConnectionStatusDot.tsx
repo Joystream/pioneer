@@ -1,5 +1,5 @@
 import { AnimatePresence, ForwardRefComponent, HTMLMotionProps, motion } from 'framer-motion'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled, { StyledComponent } from 'styled-components'
 
 import { useApi } from '@/api/hooks/useApi'
@@ -18,16 +18,16 @@ interface ConnectionStatusDotProps {
 
 export const ConnectionStatusDot = ({ onlyPerformance = false, className }: ConnectionStatusDotProps) => {
   const { api, connectionState, qnConnectionState } = useApi()
-  const { queryNodeState } = useQueryNodeStateSubscription()
+  const { queryNodeState } = useQueryNodeStateSubscription({ shouldResubscribe: true })
   const header = useObservable(() => api?.rpc.chain.subscribeNewHeads(), [api?.isConnected])
+  const [isQnLate, setIsQnLate] = useState(false)
 
-  const isQnLate = useMemo(() => {
+  useEffect(() => {
     if (queryNodeState && header) {
-      return (
-        (header.toJSON().number as number) - Number(queryNodeState.indexerHead) > MAX_INDEXER_BLOCKS_BEHIND_NODE_HEAD
-      )
+      const processorDelay = Number(header.number) - Number(queryNodeState.indexerHead)
+      setIsQnLate(processorDelay > MAX_INDEXER_BLOCKS_BEHIND_NODE_HEAD)
     }
-  }, [header, queryNodeState])
+  }, [queryNodeState])
 
   const [tooltipText, DotElement] = useMemo((): [
     string,

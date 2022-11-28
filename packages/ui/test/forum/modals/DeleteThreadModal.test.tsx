@@ -1,4 +1,3 @@
-import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
@@ -6,18 +5,14 @@ import React from 'react'
 import { ApiContext } from '@/api/providers/context'
 import { GlobalModals } from '@/app/GlobalModals'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
-import { ModalCallData, UseModal } from '@/common/providers/modal/types'
+import { ModalCallData } from '@/common/providers/modal/types'
 import { last } from '@/common/utils'
-import { DeleteThreadModal, DeleteThreadModalCall } from '@/forum/modals/DeleteThreadModal'
+import { DeleteThreadModalCall } from '@/forum/modals/DeleteThreadModal'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
-import { seedMember } from '@/mocks/data'
-import rawMembers from '@/mocks/data/raw/members.json'
-import { seedForumCategory, seedForumThread } from '@/mocks/data/seedForum'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
 
 import { getButton } from '../../_helpers/getButton'
-import { mockCategories, mockThreads } from '../../_mocks/forum'
 import { alice, bob } from '../../_mocks/keyring'
 import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
@@ -31,11 +26,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
-
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
-}))
+import { mockTransactionFee, mockUseModalCall } from '../../setup'
 
 const modalData: ModalCallData<DeleteThreadModalCall> = {
   thread: {
@@ -52,20 +43,6 @@ const modalData: ModalCallData<DeleteThreadModalCall> = {
     status: { __typename: 'ThreadStatusActive' },
   },
 }
-
-const mockUseModal: UseModal<any> = {
-  hideModal: jest.fn(),
-  showModal: jest.fn(),
-  modal: null,
-  modalData,
-}
-
-jest.mock('@/common/hooks/useModal', () => ({
-  useModal: () => ({
-    ...jest.requireActual('@/common/hooks/useModal').useModal(),
-    ...mockUseModal,
-  }),
-}))
 
 describe('UI: DeleteThreadModal', () => {
   const api = stubApi()
@@ -85,20 +62,17 @@ describe('UI: DeleteThreadModal', () => {
   let transaction: any
   let txMock: jest.Mock
 
-  const server = setupMockServer({ noCleanupAfterEach: true })
+  setupMockServer({ noCleanupAfterEach: true })
 
   beforeAll(async () => {
-    await cryptoWaitReady()
-    rawMembers.slice(0, 2).map((member) => seedMember(member, server.server))
-    seedForumCategory(mockCategories[0], server.server)
-    seedForumThread(mockThreads[0], server.server)
+    mockUseModalCall({ modalData, modal: 'DeleteThreadModal' })
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
     stubAccounts([alice, bob])
   })
 
   beforeEach(async () => {
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(100), canAfford: true } })
     stubDefaultBalances()
     transaction = stubTransaction(api, txPath, 100)
     txMock = api.api.tx.forum.deleteThread as unknown as jest.Mock
@@ -118,7 +92,7 @@ describe('UI: DeleteThreadModal', () => {
   })
 
   it('Requirements failed', async () => {
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(100), canAfford: false } })
 
     renderModal()
     expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
@@ -151,7 +125,6 @@ describe('UI: DeleteThreadModal', () => {
             <MembershipContext.Provider value={useMyMemberships}>
               <ApiContext.Provider value={api}>
                 <GlobalModals />
-                <DeleteThreadModal />
               </ApiContext.Provider>
             </MembershipContext.Provider>
           </MockKeyringProvider>
