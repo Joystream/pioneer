@@ -6,7 +6,7 @@ const GROUP_TO_LOCK_ID: Record<GroupIdName, LockType> = {
   contentWorkingGroup: 'Content Directory Worker',
   membershipWorkingGroup: 'Membership Worker',
   storageWorkingGroup: 'Storage Worker',
-  appWorkingGroup: 'Gateway Worker',
+  gatewayWorkingGroup: 'Gateway Worker',
   distributionWorkingGroup: 'Distribution Worker',
   operationsWorkingGroupGamma: 'Builders Worker',
   operationsWorkingGroupBeta: 'HR Worker',

@@ -4,7 +4,7 @@ export * from './routes'
 export const GroupIdToGroupParam = {
   contentWorkingGroup: 'Content',
   forumWorkingGroup: 'Forum',
-  appWorkingGroup: 'Gateway',
+  gatewayWorkingGroup: 'Gateway',
   membershipWorkingGroup: 'Membership',
   distributionWorkingGroup: 'Distribution',
   storageWorkingGroup: 'Storage',
