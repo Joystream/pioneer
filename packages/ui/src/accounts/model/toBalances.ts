@@ -36,15 +36,19 @@ export const toBalances = (balances: DeriveBalancesAll): Balances => {
   const locked = lockedBalance.toBn()
   const total = freeBalance.toBn().add(reservedBalance)
 
+  // case: 1M recoverable vote stake, 2M locked nomination => user recovers 1M to vote 2M next time.
   const recoverableLockMax = locks.filter(({ type }) => isRecoverable(type)).reduce(max, BN_ZERO)
-  const nonRecoverableMax = locks.filter(({ type }) => !isRecoverable(type)).reduce(max, BN_ZERO)
-  const recoverable = recoverableLockMax.lte(nonRecoverableMax) ? BN_ZERO : recoverableLockMax.sub(nonRecoverableMax)
+  //const nonRecoverableMax = locks.filter(({ type }) => !isRecoverable(type)).reduce(max, BN_ZERO)
+  // The 1M is recoverable in full despite the nomination not just BN_ZERO,
+  // however not transferable after recovering due to the nomination lock. Was this the idea behind:
+  //const recoverable = recoverableLockMax.lte(nonRecoverableMax) ? BN_ZERO : recoverableLockMax.sub(nonRecoverableMax)
 
+  // totals being lower than vesting causes confusing UI
   return {
-    locked,
+    locked: vestingLocked > locked ? vestingLocked : locked,
     locks,
-    recoverable: recoverable.add(vestedClaimable),
-    total,
+    recoverable: recoverableLockMax.add(vestedClaimable),
+    total: vestingTotal > total ? vestingTotal : total,
     transferable,
     vesting,
     vestingTotal,
