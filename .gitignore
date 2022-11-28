@@ -7,3 +7,9 @@ build-storybook
 .DS_Store
 packages/ui/.env
 packages/ui/src/services/i18n/utils/csv
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
