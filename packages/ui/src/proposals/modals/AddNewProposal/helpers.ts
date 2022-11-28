@@ -144,6 +144,7 @@ export interface AddNewProposalForm {
     amount?: BN
   }
   channelIncentivesPayout: {
+    commitment?: string
     objectCreationParamsSize?: number
     objectCreationParamsContent?: string
     minimumCashoutAllowed?: BN
@@ -327,6 +328,12 @@ export const schemaFactory = (api?: ProxyApi) => {
     setMembershipPrice: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
     }),
-    channelIncentivesPayout: Yup.object().shape({}),
+    channelIncentivesPayout: Yup.object().shape({
+      objectCreationParamsSize: Yup.number().required(),
+      minimumCashoutAllowed: BNSchema.required(),
+      maximumCashoutAllowed: BNSchema.required(),
+      channelCashoutsEnabled: Yup.boolean(),
+      commitment: Yup.string().required(),
+    }),
   })
 }

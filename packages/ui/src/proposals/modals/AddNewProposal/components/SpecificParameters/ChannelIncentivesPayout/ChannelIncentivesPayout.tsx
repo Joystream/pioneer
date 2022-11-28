@@ -1,3 +1,5 @@
+import { generateJsonPayloadFromPayoutsVector, generateSerializedPayload } from '@joystream/js/content'
+import * as multihash from 'multihashes'
 import React, { useCallback, useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
@@ -15,8 +17,10 @@ import {
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { useObservable } from '@/common/hooks/useObservable'
-import { calculateFileHash } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/ChannelIncentivesPayout/helpers'
-import { getValidatedFiles } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
+import {
+  channelPayoutsFileValidator,
+  getChannelPayoutsValidatedFiles,
+} from '@/proposals/modals/AddNewProposal/components/SpecificParameters/ChannelIncentivesPayout/helpers'
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024
 
@@ -39,10 +43,16 @@ export const ChannelIncentivesPayout = () => {
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       if (acceptedFiles.length) {
-        const fileHash = await calculateFileHash(acceptedFiles[0])
-        setValue('channelIncentivesPayout.objectCreationParamsSize', acceptedFiles[0].size)
-        setValue('channelIncentivesPayout.objectCreationParamsContent', fileHash)
-        setValue('channelIncentivesPayout.test', acceptedFiles[0])
+        const json = JSON.parse(await acceptedFiles[0].text())
+        const [commitment, channelPayouts] = generateJsonPayloadFromPayoutsVector(json)
+        // console.log('proof', channelPayouts)
+        const serializedPayload = generateSerializedPayload(channelPayouts)
+        setValue('channelIncentivesPayout.objectCreationParamsSize', serializedPayload.length)
+        setValue('channelIncentivesPayout.commitment', commitment)
+        setValue(
+          'channelIncentivesPayout.objectCreationParamsContent',
+          multihash.toB58String(multihash.encode(serializedPayload, 'blake3'))
+        )
       }
     },
     [setValue]
@@ -57,13 +67,13 @@ export const ChannelIncentivesPayout = () => {
         <FileDropzone
           title="Channel Incentives Payout Payload"
           subtitle="Upload Payout Payload document produced by respective CLI service here"
-          // accept="application/wasm"
+          accept="application/json"
           maxFiles={1}
           maxSize={MAX_FILE_SIZE}
           multiple={false}
-          getFilesFromEvent={getValidatedFiles}
-          // validator={validator}
+          getFilesFromEvent={getChannelPayoutsValidatedFiles}
           onDrop={onDrop}
+          validator={channelPayoutsFileValidator}
         />
       </Row>
 
@@ -75,12 +85,6 @@ export const ChannelIncentivesPayout = () => {
           name="channelIncentivesPayout.link"
         >
           <InputText id="amount-input" name="channelIncentivesPayout.link" placeholder="Add link" />
-        </InputComponent>
-      </Row>
-
-      <Row>
-        <InputComponent label="Payload Hash String" tight name="channelIncentivesPayout.hash">
-          <InputText id="amount-input" name="channelIncentivesPayout.hash" placeholder="Payload Hash String" />
         </InputComponent>
       </Row>
 
@@ -117,16 +121,16 @@ export const ChannelIncentivesPayout = () => {
         </InputComponent>
       </Row>
 
-      <Row>
-        <InputComponent
-          label="Credit Content WG Budget by"
-          tight
-          units={CurrencyName.integerValue}
-          name="channelIncentivesPayout.creditContentBudgetBy"
-        >
-          <TokenInput id="amount-input" name="channelIncentivesPayout.creditContentBudgetBy" placeholder="0" />
-        </InputComponent>
-      </Row>
+      {/*<Row>*/}
+      {/*  <InputComponent*/}
+      {/*    label="Credit Content WG Budget by"*/}
+      {/*    tight*/}
+      {/*    units={CurrencyName.integerValue}*/}
+      {/*    name="channelIncentivesPayout.creditContentBudgetBy"*/}
+      {/*  >*/}
+      {/*    <TokenInput id="amount-input" name="channelIncentivesPayout.creditContentBudgetBy" placeholder="0" />*/}
+      {/*  </InputComponent>*/}
+      {/*</Row>*/}
     </RowGapBlock>
   )
 }

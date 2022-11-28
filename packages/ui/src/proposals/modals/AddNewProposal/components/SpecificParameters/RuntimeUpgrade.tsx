@@ -13,8 +13,8 @@ interface ValidatedFile extends File {
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024
 
-const isDragEvent = (event: any): event is React.DragEvent<HTMLElement> => !!event?.dataTransfer
-const isChangeEvent = (event: any): event is React.ChangeEvent<HTMLInputElement> => !!event?.target?.files
+export const isDragEvent = (event: any): event is React.DragEvent<HTMLElement> => !!event?.dataTransfer
+export const isChangeEvent = (event: any): event is React.ChangeEvent<HTMLInputElement> => !!event?.target?.files
 
 export const getValidatedFiles = async (event: DropEvent): Promise<ValidatedFile[]> => {
   const files = []

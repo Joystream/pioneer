@@ -196,6 +196,7 @@ export const getSpecificParameters = (
           minCashoutAllowed: specifics?.channelIncentivesPayout.minimumCashoutAllowed,
           maxCashoutAllowed: specifics?.channelIncentivesPayout.maximumCashoutAllowed,
           channelCashoutsEnabled: specifics.channelIncentivesPayout.cashoutEnabled ?? false,
+          commitment: specifics.channelIncentivesPayout.commitment ?? null,
         }),
       })
     }
