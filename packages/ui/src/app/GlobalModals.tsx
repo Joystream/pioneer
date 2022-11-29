@@ -49,6 +49,7 @@ import { CreatePostModal, CreatePostModalCall } from '@/forum/modals/PostActionM
 import { DeletePostModal, DeletePostModalCall } from '@/forum/modals/PostActionModal/DeletePostModal'
 import { EditPostModal, EditPostModalCall } from '@/forum/modals/PostActionModal/EditPostModal'
 import { PostHistoryModal, PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
+import { PostReplyModal, PostReplyModalCall } from '@/forum/modals/PostReplyModal'
 import { MemberModalCall, MemberProfile } from '@/memberships/components/MemberProfile'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals/BuyMembershipModal'
@@ -117,6 +118,7 @@ export type ModalNames =
   | ModalName<ClaimVestingModalCall>
   | ModalName<UpdateMembershipModalCall>
   | ModalName<ReportContentModalCall>
+  | ModalName<PostReplyModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -164,6 +166,7 @@ const modals: Record<ModalNames, ReactElement> = {
   ClaimVestingModal: <ClaimVestingModal />,
   UpdateMembershipModal: <UpdateMembershipModal />,
   ReportContentModal: <ReportContentModal />,
+  PostReplyModal: <PostReplyModal />,
 }
 
 const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [

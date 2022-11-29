@@ -1,5 +1,5 @@
 import { ForumPostMetadata } from '@joystream/metadata-protobuf'
-import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react'
+import React, { RefObject, useMemo, useRef } from 'react'
 import { generatePath } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
@@ -14,7 +14,6 @@ import { AnyKeys } from '@/common/types'
 import { getUrl } from '@/common/utils/getUrl'
 import { ForumPostStyles, PostListItem } from '@/forum/components/PostList/PostListItem'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
-import { ForumPost } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { ProposalDiscussionThread } from '@/proposals/types'
@@ -35,15 +34,10 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
     (thread.mode === 'closed' && active && (thread.whitelistIds?.includes(active.id) || active.isCouncilMember))
   const isInWhitelist = thread.mode === 'closed' && members.find((member) => thread.whitelistIds?.includes(member.id))
   const hasCouncilMembership = thread.mode === 'closed' && members.find((member) => member.isCouncilMember)
-  const [replyTo, setReplyTo] = useState<ForumPost | undefined>()
 
   const newPostRef = useRef<HTMLDivElement>(null)
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
-
-  useEffect(() => {
-    replyTo && newPostRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'end' })
-  }, [replyTo])
 
   const discussionPosts = useMemo(
     () => thread.discussionPosts.filter((post) => post.status !== 'PostStatusRemoved'),
@@ -55,7 +49,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
       return api.tx.proposalsDiscussion.addPost(
         createType('MemberId', Number.parseInt(active.id)),
         thread.id,
-        metadataToBytes(ForumPostMetadata, { text: postText, repliesTo: replyTo ? Number(replyTo.id) : undefined }),
+        metadataToBytes(ForumPostMetadata, { text: postText, repliesTo: undefined }),
         isEditable
       )
     }
@@ -63,15 +57,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
 
   const getPostForm = () => {
     if (isAbleToPost) {
-      return (
-        <NewThreadPost
-          ref={newPostRef}
-          replyTo={replyTo}
-          getTransaction={getTransaction}
-          removeReply={() => setReplyTo(undefined)}
-          replyToLink={`${generatePath(ProposalsRoutes.preview, { id: proposalId })}?post=${replyTo?.id}`}
-        />
-      )
+      return <NewThreadPost ref={newPostRef} getTransaction={getTransaction} />
     }
 
     if (hasCouncilMembership) {
@@ -109,7 +95,6 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
             isSelected={post.id === initialPost}
             isThreadActive={true}
             post={post}
-            replyToPost={() => setReplyTo(post)}
             type="proposal"
             isDiscussion
             link={getUrl({ route: ProposalsRoutes.preview, params: { id: proposalId }, query: { post: post.id } })}
