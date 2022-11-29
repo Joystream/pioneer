@@ -60,6 +60,8 @@ const getCandidateForPreview = (context: AnnounceCandidacyFrom, member: Member):
   cycleId: 0,
   cycleFinished: false,
   status: CandidacyStatus.Active,
+  totalStake: BN_ZERO,
+  votesNumber: 0,
 })
 
 const transactionSteps = [
