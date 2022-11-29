@@ -1,19 +1,14 @@
 import { generateJsonPayloadFromPayoutsVector, generateSerializedPayload } from '@joystream/js/content'
 import * as multihash from 'multihashes'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
+import styled from 'styled-components'
 
 import { useApi } from '@/api/hooks/useApi'
 import { CurrencyName } from '@/app/constants/currency'
 import { FileDropzone } from '@/common/components/FileDropzone'
-import {
-  InlineToggleWrap,
-  InputComponent,
-  InputText,
-  Label,
-  ToggleCheckbox,
-  TokenInput,
-} from '@/common/components/forms'
+import { InlineToggleWrap, InputComponent, Label, ToggleCheckbox, TokenInput } from '@/common/components/forms'
+import { Loading } from '@/common/components/Loading'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { useObservable } from '@/common/hooks/useObservable'
@@ -26,6 +21,7 @@ const MAX_FILE_SIZE = 3 * 1024 * 1024
 
 export const ChannelIncentivesPayout = () => {
   const { api } = useApi()
+  const [isProcessingFile, setIsProcessingFile] = useState<boolean>(false)
   const { setValue } = useFormContext()
   const expectedDataSizeFee = useObservable(() => api?.query.storage.dataObjectPerMegabyteFee(), [api?.isConnected])
   const expectedDataObjectStateBloatBond = useObservable(
@@ -43,16 +39,18 @@ export const ChannelIncentivesPayout = () => {
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       if (acceptedFiles.length) {
+        setIsProcessingFile(true)
         const json = JSON.parse(await acceptedFiles[0].text())
         const [commitment, channelPayouts] = generateJsonPayloadFromPayoutsVector(json)
-        // console.log('proof', channelPayouts)
         const serializedPayload = generateSerializedPayload(channelPayouts)
-        setValue('channelIncentivesPayout.objectCreationParamsSize', serializedPayload.length)
-        setValue('channelIncentivesPayout.commitment', commitment)
+        setValue('channelIncentivesPayout.objectCreationParamsSize', serializedPayload.length, { shouldValidate: true })
+        setValue('channelIncentivesPayout.commitment', commitment, { shouldValidate: true })
         setValue(
           'channelIncentivesPayout.objectCreationParamsContent',
-          multihash.toB58String(multihash.encode(serializedPayload, 'blake3'))
+          multihash.toB58String(multihash.encode(serializedPayload, 'blake3')),
+          { shouldValidate: true }
         )
+        setIsProcessingFile(false)
       }
     },
     [setValue]
@@ -75,18 +73,23 @@ export const ChannelIncentivesPayout = () => {
           onDrop={onDrop}
           validator={channelPayoutsFileValidator}
         />
+        {!isProcessingFile && (
+          <Box>
+            <Loading text="Processing your file..." withoutMargin />
+          </Box>
+        )}
       </Row>
 
-      <Row>
-        <InputComponent
-          label="Link to Incentives Details"
-          sublabel="Add the link to the Payout Incentives Payload details from the external tool"
-          tight
-          name="channelIncentivesPayout.link"
-        >
-          <InputText id="amount-input" name="channelIncentivesPayout.link" placeholder="Add link" />
-        </InputComponent>
-      </Row>
+      {/*<Row>*/}
+      {/*  <InputComponent*/}
+      {/*    label="Link to Incentives Details"*/}
+      {/*    sublabel="Add the link to the Payout Incentives Payload details from the external tool"*/}
+      {/*    tight*/}
+      {/*    name="channelIncentivesPayout.link"*/}
+      {/*  >*/}
+      {/*    <InputText id="amount-input" name="channelIncentivesPayout.link" placeholder="Add link" />*/}
+      {/*  </InputComponent>*/}
+      {/*</Row>*/}
 
       <Row>
         <InlineToggleWrap>
@@ -134,3 +137,10 @@ export const ChannelIncentivesPayout = () => {
     </RowGapBlock>
   )
 }
+
+const Box = styled.div`
+  > div {
+    width: 100%;
+    margin: 10px 0;
+  }
+`

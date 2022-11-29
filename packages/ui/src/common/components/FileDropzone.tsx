@@ -22,14 +22,7 @@ const MEGABYTE = 1024 * 1024
 
 export const FileDropzone = ({ title, subtitle, ...dropzoneOptions }: FileDropzoneProps) => {
   const { isDragActive, isDragAccept, isDragReject, getRootProps, getInputProps, acceptedFiles, fileRejections } =
-    useDropzone({
-      ...dropzoneOptions,
-      // accept: 'application/wasm',
-      // maxFiles: 1,
-      // multiple: false,
-      // getFilesFromEvent: getValidatedFiles,
-      // validator,
-    })
+    useDropzone(dropzoneOptions)
 
   return (
     <RowGapBlock gap={32}>

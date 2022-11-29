@@ -332,7 +332,9 @@ export const schemaFactory = (api?: ProxyApi) => {
     channelIncentivesPayout: Yup.object().shape({
       objectCreationParamsSize: Yup.number().required(),
       minimumCashoutAllowed: BNSchema.required(),
-      maximumCashoutAllowed: BNSchema.required(),
+      maximumCashoutAllowed: BNSchema.test(
+        moreThanMixed(Yup.ref('minimumCashoutAllowed'), 'Maximum cashout cannot be lower than minimum')
+      ).required(),
       channelCashoutsEnabled: Yup.boolean(),
       commitment: Yup.string().required(),
     }),
