@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter } from '@/common/helpers'
+import { capitalizeFirstLetter, nameMapping } from '@/common/helpers'
 
 import { MemberRole } from './types'
 
@@ -7,7 +7,7 @@ export function memberRoleAbbreviation(role: MemberRole) {
     return 'M'
   }
 
-  return `${role.groupName.charAt(0).toUpperCase()}${role.isLead ? 'L' : 'W'}`
+  return `${nameMapping(role.groupName).charAt(0).toUpperCase()}${role.isLead ? 'L' : 'W'}`
 }
 
 export function memberRoleTitle(role: MemberRole) {
@@ -16,7 +16,7 @@ export function memberRoleTitle(role: MemberRole) {
   }
 
   const position = role.isLead ? 'Lead' : 'Worker'
-  const group = capitalizeFirstLetter(role.groupName)
+  const group = capitalizeFirstLetter(nameMapping(role.groupName))
 
   return `${group} ${position}`
 }
