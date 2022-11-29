@@ -58,6 +58,7 @@ export type GetAllDeadLinesQuery = {
       stake: string
       status: Types.CandidacyStatus
       stakingAccountId: string
+      votePower: string
       member: {
         __typename: 'Membership'
         id: string
@@ -98,6 +99,7 @@ export type GetAllDeadLinesQuery = {
         bannerImageUri?: string | null
         description?: string | null
       }
+      votesReceived: Array<{ __typename: 'CastVote'; id: string }>
     }>
   }>
   proposals: Array<{ __typename: 'Proposal'; updatedAt?: any | null; id: string; title: string }>
