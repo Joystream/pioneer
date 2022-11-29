@@ -36,17 +36,18 @@ export const useMyCastVotes = (cycleId?: number) => {
     }
   }, [cycleId])
 
-  const votes = useMemo(() => {
-    if (!data?.castVotes) return
+  const votes = useMemo(
+    () =>
+      data?.castVotes.map((voteData) => {
+        const vote = asVote(voteData)
+        const attempt = vote.voteFor
+          ? undefined
+          : myVotingAttempts?.find(({ commitment }) => commitment === vote.commitment)
 
-    return data.castVotes.map(asVote).flatMap<MyCastVote>((vote) => {
-      if (vote.voteFor) return { ...vote, optionId: vote.voteFor.id }
-
-      const attempt = myVotingAttempts?.find(({ commitment }) => commitment === vote.commitment)
-
-      return attempt ? { ...vote, optionId: attempt.optionId, attempt } : { ...vote, optionId: '', attempt: undefined }
-    })
-  }, [allAccounts?.length, data?.castVotes, myVotingAttempts?.length])
+        return { ...vote, optionId: vote.voteFor?.id ?? attempt?.optionId ?? '', attempt }
+      }),
+    [allAccounts?.length, data?.castVotes, myVotingAttempts?.length]
+  )
 
   return { votes, isLoading: loading }
 }
