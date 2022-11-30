@@ -26,7 +26,7 @@ export const PastCouncilStats = ({
       title="Total missed rewards"
       value={totalMissedRewards}
       tooltipText="Total rewards missed. Missed rewards are unallocated rewards from the council budget."
-      tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council?q=lock#budget"
+      tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council#budget"
     />
     <TokenValueStat
       title="Total paid rewards"
