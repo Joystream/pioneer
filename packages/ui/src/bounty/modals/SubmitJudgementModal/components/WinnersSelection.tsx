@@ -57,7 +57,6 @@ export const WinnersSelection = ({
   )
 
   const handleEqualDistribution = useCallback(() => {
-    const rewardMod = bountyFunding.modn(winners.length)
     const reward = bountyFunding.divn(winners.length)
 
     winners.forEach((winner, index) => {

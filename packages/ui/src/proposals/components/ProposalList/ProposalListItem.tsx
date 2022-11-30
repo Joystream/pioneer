@@ -5,12 +5,11 @@ import styled from 'styled-components'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons'
-import { LinkSymbol } from '@/common/components/icons/symbols'
 import { TableListItem } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Subscription } from '@/common/components/typography/Subscription'
-import { TextSmall, TextMedium } from '@/common/components/typography/Text'
+import { TextSmall } from '@/common/components/typography/Text'
 import { Colors, Overflow } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { toDDMMYY } from '@/common/utils/dates'
@@ -79,7 +78,7 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
         <TextSmall bold>{camelCaseToText(proposal.status)}</TextSmall>
         <Tooltip
           tooltipText={checkStatus()}
-          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/proposal-system?q=lock#proposal"
+          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/proposal-system#proposal"
         >
           <TooltipDefault />
         </Tooltip>

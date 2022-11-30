@@ -2,11 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
-import { LinkSymbol } from '@/common/components/icons/symbols'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
-import { Label, TextMedium } from '@/common/components/typography'
+import { Label } from '@/common/components/typography'
 import { LoadingOpenings } from '@/working-groups/components/OpeningsList'
 import { WorkersList } from '@/working-groups/components/WorkersList'
 import { useGroupDebt } from '@/working-groups/hooks/useGroupDebt'
@@ -30,19 +29,20 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
         <TokenValueStat
           title="Current budget"
           tooltipText="The budget is the root resource pool for all token minting in the working group, and the size of the pool is denoted by budget."
-          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/working-groups?q=lock#concepts"
+          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/working-groups#concepts"
           value={workingGroup.budget}
         />
         <TokenValueStat
           title="Working Group Debt"
-          tooltipText="If funds are insufficient over payout periods, the working group can incur a debt, which is owed to workers. "
+          tooltipText="If funds are insufficient over payout periods, the working group can incur a debt, which is owed to workers."
+          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/working-groups#concepts"
           value={debt}
         />
         <TokenValueStat
           title="Avg stake"
           value={workingGroup.averageStake}
           tooltipText="Average stake size by members undertaking the roles of workers and the lead in this group."
-          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/working-groups#staking"
+          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/working-groups#concepts"
         />
       </Statistics>
 
