@@ -2,6 +2,7 @@ import React from 'react'
 import { DropzoneOptions, useDropzone } from 'react-dropzone'
 import styled, { css } from 'styled-components'
 
+import { getFilesFromRawEvent } from '@/common/components/FileDropzone/helpers'
 import { Label } from '@/common/components/forms'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TextSmall } from '@/common/components/typography'
@@ -13,16 +14,20 @@ interface DragResponseProps {
   isDragReject?: boolean
 }
 
-interface FileDropzoneProps extends DropzoneOptions {
+interface FileDropzoneProps extends Omit<DropzoneOptions, 'getFilesFromEvent'> {
   title: string
   subtitle: string
+  getFilesFromEvent: (file: File[]) => Promise<File[]>
 }
 
 const MEGABYTE = 1024 * 1024
 
-export const FileDropzone = ({ title, subtitle, ...dropzoneOptions }: FileDropzoneProps) => {
+export const FileDropzone = ({ title, subtitle, getFilesFromEvent, ...dropzoneOptions }: FileDropzoneProps) => {
   const { isDragActive, isDragAccept, isDragReject, getRootProps, getInputProps, acceptedFiles, fileRejections } =
-    useDropzone(dropzoneOptions)
+    useDropzone({
+      ...dropzoneOptions,
+      getFilesFromEvent: (event) => getFilesFromEvent(getFilesFromRawEvent(event)),
+    })
 
   return (
     <RowGapBlock gap={32}>

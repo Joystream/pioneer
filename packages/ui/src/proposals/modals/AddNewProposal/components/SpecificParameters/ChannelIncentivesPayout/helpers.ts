@@ -1,12 +1,8 @@
-import { DropEvent, FileError } from 'react-dropzone'
+import { FileError } from 'react-dropzone'
 import { FieldErrors } from 'react-hook-form'
 import * as Yup from 'yup'
 
 import { convertYupErrorVectorToFieldErrors } from '@/common/utils/validation'
-import {
-  isChangeEvent,
-  isDragEvent,
-} from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
 
 const ChannelPayoutsSchema = Yup.array().of(
   Yup.object().shape({
@@ -50,32 +46,20 @@ interface ValidatedFile extends File {
   parsedText?: string
 }
 
-export const getChannelPayoutsValidatedFiles = async (event: DropEvent): Promise<ValidatedFile[]> => {
-  const files = []
+export const getChannelPayoutsValidatedFiles = async (files: File[]): Promise<ValidatedFile[]> => {
+  const transformedFiles = []
 
-  let fileList: FileList | null = null
-
-  if (isDragEvent(event)) {
-    fileList = event.dataTransfer.files
-  } else if (isChangeEvent(event)) {
-    fileList = event.target.files
-  }
-
-  if (!fileList) {
-    return []
-  }
-
-  for (let i = 0; i < fileList.length; i++) {
-    const file = fileList.item(i)
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i]
     if (file) {
       const text = await file.text()
       const isValidJSON = validateJSON(text)
       Object.assign(file, { isValidJSON, parsedText: text })
-      files.push(file)
+      transformedFiles.push(file)
     }
   }
 
-  return files
+  return transformedFiles
 }
 
 const validateJSON = (text: string): boolean => {

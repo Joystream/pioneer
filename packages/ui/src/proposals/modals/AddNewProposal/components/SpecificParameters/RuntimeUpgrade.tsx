@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react'
-import { DropEvent } from 'react-dropzone'
 import { useFormContext } from 'react-hook-form'
 
-import { FileDropzone } from '@/common/components/FileDropzone'
+import { FileDropzone } from '@/common/components/FileDropzone/FileDropzone'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
@@ -13,34 +12,17 @@ interface ValidatedFile extends File {
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024
 
-export const isDragEvent = (event: any): event is React.DragEvent<HTMLElement> => !!event?.dataTransfer
-export const isChangeEvent = (event: any): event is React.ChangeEvent<HTMLInputElement> => !!event?.target?.files
-
-export const getValidatedFiles = async (event: DropEvent): Promise<ValidatedFile[]> => {
-  const files = []
-
-  let fileList: FileList | null = null
-
-  if (isDragEvent(event)) {
-    fileList = event.dataTransfer.files
-  } else if (isChangeEvent(event)) {
-    fileList = event.target.files
-  }
-
-  if (!fileList) {
-    return []
-  }
-
-  for (let i = 0; i < fileList.length; i++) {
-    const file = fileList.item(i)
+export const getValidatedFiles = async (files: File[]): Promise<ValidatedFile[]> => {
+  const transformedFiles: ValidatedFile[] = []
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i]
     if (file) {
-      const isValidWASM = await WebAssembly.validate(await file.arrayBuffer())
+      const isValidWASM = WebAssembly.validate(await file.arrayBuffer())
       Object.assign(file, { isValidWASM })
-      files.push(file)
+      transformedFiles.push(file as ValidatedFile)
     }
   }
-
-  return files
+  return transformedFiles
 }
 
 export const validator = (file: ValidatedFile) => {

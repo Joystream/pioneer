@@ -6,7 +6,7 @@ import styled from 'styled-components'
 
 import { useApi } from '@/api/hooks/useApi'
 import { CurrencyName } from '@/app/constants/currency'
-import { FileDropzone } from '@/common/components/FileDropzone'
+import { FileDropzone } from '@/common/components/FileDropzone/FileDropzone'
 import { InlineToggleWrap, InputComponent, Label, ToggleCheckbox, TokenInput } from '@/common/components/forms'
 import { Loading } from '@/common/components/Loading'
 import { Row } from '@/common/components/Modal'
