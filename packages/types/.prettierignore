@@ -1,4 +1,0 @@
-**/*.js
-**/*.d.ts
-src/augment
-!.eslintrc.js

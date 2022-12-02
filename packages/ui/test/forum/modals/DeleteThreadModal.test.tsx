@@ -80,8 +80,8 @@ describe('UI: DeleteThreadModal', () => {
 
   it('Requirements passed', async () => {
     renderModal()
-    expect(screen.findByText('modals.deleteThread.description')).toBeDefined()
-    expect(screen.findByText('modals.deleteThread.buttonLabel')).toBeDefined()
+    expect(await screen.findByText('You intend to delete your thread.')).toBeDefined()
+    expect(await screen.findByText('Sign and delete')).toBeDefined()
 
     const [userId, categoryId, threadId, hide] = last(txMock.mock.calls)
 
