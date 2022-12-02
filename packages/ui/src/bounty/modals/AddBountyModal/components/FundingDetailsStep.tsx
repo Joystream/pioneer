@@ -49,20 +49,8 @@ export const FundingDetailsStep = ({ minCherryLimit, errorMessageGetter, errorCh
           tight
           units={CurrencyName.integerValue}
           required
-          tooltipText={
-            <>
-              Bounty creator has to put up an initial bounty, called a cherry, which is split among all contributors
-              pro-rata in case bounty fails. This cherry generates an incentive for contributors, as even when the
-              funding fails, they get a benefit. In case bounty succeeds, cherry is returned to the creator in full at
-              the time, when Oracle submits judgement.{' '}
-              <TooltipExternalLink
-                href="https://joystream.gitbook.io/testnet-workspace/system/bounties#assurance-contracts-and-dominant-assurance-contracts"
-                target="_blank"
-              >
-                <TextMedium>Learn more</TextMedium> <LinkSymbol />
-              </TooltipExternalLink>
-            </>
-          }
+          tooltipText="Bounty creator has to put up an initial bounty, called a cherry, which is split among all contributors pro-rata in case bounty fails. This cherry generates an incentive for contributors, as even when the funding fails, they get a benefit. In case bounty succeeds, cherry is returned to the creator in full at the time, when Oracle submits judgement."
+          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/bounties#assurance-contracts-and-dominant-assurance-contracts"
           message={
             errorChecker('cherry')
               ? errorMessageGetter('cherry')

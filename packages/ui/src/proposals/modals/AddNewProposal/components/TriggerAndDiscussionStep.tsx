@@ -48,7 +48,7 @@ export const TriggerAndDiscussionStep = () => {
           <ToggleCheckbox falseLabel="No" trueLabel="Yes" name="triggerAndDiscussion.trigger" />
           <Tooltip
             tooltipTitle="Trigger"
-            tooltipText="Optional tooltipTitle='Trigger' trigger block for executing proposal. If trigger is provided, it must be no less than current block plus combined duration of GRACING_LIMIT and DECIDING_PERIOD."
+            tooltipText="Optional trigger block for executing proposal. If trigger is provided, it must be no less than current block plus combined duration of GRACING_LIMIT and DECIDING_PERIOD."
             tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/proposal-system#submit-proposal"
           >
             <TooltipDefault />
