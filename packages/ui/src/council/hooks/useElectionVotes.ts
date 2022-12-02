@@ -29,7 +29,7 @@ export interface CandidateStats {
 export const useElectionVotes = (election?: Election) => {
   const { allAccounts } = useMyAccounts()
   const { data, loading } = useGetCouncilVotesQuery({
-    variables: { where: { electionRound: { cycleId_eq: election?.cycleId } }, limit: 500 },
+    variables: { where: { electionRound: { cycleId_eq: election?.cycleId } } },
   })
   const votes = useMemo(() => data?.castVotes.map(asVote), [data?.castVotes])
 
