@@ -28,16 +28,12 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee, mockUseModalCall } from '../../setup'
+import { mockTransactionFee, mockUseModalCall } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
-}))
-
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
 describe('UI: Vote for Proposal Modal', () => {
@@ -67,13 +63,13 @@ describe('UI: Vote for Proposal Modal', () => {
 
   beforeEach(() => {
     tx = stubTransaction(api, 'api.tx.proposalsEngine.vote', 100)
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(100), canAfford: true } })
     stubDefaultBalances()
   })
 
   it('Requirements verification', async () => {
     tx = stubTransaction(api, 'api.tx.proposalsEngine.vote', 10_000)
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(100), canAfford: false } })
 
     await renderModal(true)
 

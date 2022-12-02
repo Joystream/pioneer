@@ -86,11 +86,6 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink to={BountyRoutes.bounties} icon={<BountyIcon />}>
-                Bounty
-              </NavigationLink>
-            </NavigationLinksItem>
-            <NavigationLinksItem>
               <NavigationLink to={electionLink} icon={<ElectionIcon />} indicate={false}>
                 Election
               </NavigationLink>
@@ -134,11 +129,15 @@ export const SideBar = () => {
                   transition={{ duration: 0.25 }}
                 >
                   <NavigationLinksItem>
+                    <NavigationLink to={BountyRoutes.bounties} icon={<BountyIcon />}>
+                      Bounty
+                    </NavigationLink>
+                  </NavigationLinksItem>
+                  <NavigationLinksItem>
                     <NavigationLink to="/inexisting" icon={<ConstitutionIcon />} disabled>
                       Constitution
                     </NavigationLink>
                   </NavigationLinksItem>
-
                   <NavigationLinksItem>
                     <NavigationLink to="/inexisting" icon={<FinancialsIcon />} disabled>
                       Financials

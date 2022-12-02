@@ -4,13 +4,11 @@ import { useHistory } from 'react-router-dom'
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons'
-import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { BlockDurationStatistics, StatisticItem, Statistics } from '@/common/components/statistics'
-import { TooltipExternalLink } from '@/common/components/Tooltip'
-import { TextHuge, TextMedium } from '@/common/components/typography'
+import { TextHuge } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
 import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
@@ -92,35 +90,16 @@ export const Election = () => {
       <Statistics>
         <StatisticItem
           title="Stage"
-          tooltipText={
-            <>
-              Elections occur periodically, and each one has a sequence of stages referred to as the election cycle.
-              Stages are: announcing period, voting period and revealing period.{' '}
-              <TooltipExternalLink
-                href="https://joystream.gitbook.io/joystream-handbook/governance/council#election"
-                target="_blank"
-              >
-                <TextMedium>More details</TextMedium> <LinkSymbol />
-              </TooltipExternalLink>
-            </>
-          }
+          tooltipText="Elections occur periodically. Each has a sequence of stages referred to as the election cycle. Stages are: announcing period, voting period and revealing period."
+          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council#election"
         >
           <TextHuge bold>{camelCaseToText(electionStage)} Period</TextHuge>
         </StatisticItem>
         <BlockDurationStatistics
           title="Period remaining length"
-          tooltipText={
-            <>
-              Remaining length of current period before the next one starts.{' '}
-              <TooltipExternalLink
-                href="https://joystream.gitbook.io/joystream-handbook/governance/council#election"
-                target="_blank"
-              >
-                <TextMedium>Link</TextMedium> <LinkSymbol />
-              </TooltipExternalLink>
-            </>
-          }
           value={remainingPeriod}
+          tooltipText="Remaining length of current period before the next one starts."
+          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council#election"
         />
         <StatisticItem
           title="Election round"

@@ -1,3 +1,5 @@
+import { SUPPORTED_IMAGES } from '@/memberships/model/validation'
+
 export const capitalizeFirstLetter = <T extends string>(str: T) =>
   (str.charAt(0).toUpperCase() + str.slice(1)) as Capitalize<T>
 
@@ -91,4 +93,50 @@ export const wgListItemMappings = (value: string) => {
         tooltipLink: undefined,
       }
   }
+}
+export const fileToDataUrl = (file: File) => {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const result = event.target?.result
+      if (typeof result !== 'string') {
+        return reject(new Error('Unable to read the file'))
+      }
+      resolve(result)
+    }
+    reader.readAsDataURL(file)
+  })
+}
+export const resizeImageFile = async (
+  file: File,
+  width: number,
+  height: number,
+  type?: string
+): Promise<Blob | null> => {
+  if (!SUPPORTED_IMAGES.filter((type) => type !== 'image/svg+xml').includes(file.type)) {
+    throw new Error('Wrong file type')
+  }
+
+  const dataUrl = await fileToDataUrl(file)
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.onload = () => {
+      const canvas = document.createElement('canvas')
+      canvas.height = height
+      canvas.width = width
+      const ctx = canvas.getContext('2d')
+
+      const ratio = width / height
+      const [clippedWidth, clippedHeight] =
+        Math.abs(img.width - width) > Math.abs(img.height - height)
+          ? [Math.floor(img.height * ratio), img.height]
+          : [img.width, Math.floor(img.width / ratio)]
+      const x = Math.floor(img.width / 2 - clippedWidth / 2)
+      const y = Math.floor(img.height / 2 - clippedHeight / 2)
+
+      ctx?.drawImage(img, x, y, clippedWidth, clippedHeight, 0, 0, width, height)
+      ctx?.canvas.toBlob((blob) => resolve(blob), type ?? file.type)
+    }
+    img.src = dataUrl
+  })
 }

@@ -21,7 +21,6 @@ import {
   ToggleCheckbox,
 } from '@/common/components/forms'
 import { Arrow } from '@/common/components/icons'
-import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
 import {
   ModalFooter,
@@ -33,7 +32,7 @@ import {
   ScrolledModalContainer,
   TransactionInfoContainer,
 } from '@/common/components/Modal'
-import { TooltipExternalLink } from '@/common/components/Tooltip'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { definedValues } from '@/common/utils'
@@ -65,14 +64,15 @@ interface BuyMembershipFormProps extends Omit<BuyMembershipFormModalProps, 'onCl
   changeMembershipAccount?: () => void
 }
 
+const isRequired = 'This field is required.'
 const CreateMemberSchema = Yup.object().shape({
-  rootAccount: AccountSchema.required('This field is required'),
-  controllerAccount: AccountSchema.required('This field is required'),
+  rootAccount: AccountSchema.required(isRequired),
+  controllerAccount: AccountSchema.required(isRequired),
   avatarUri: AvatarURISchema,
-  name: Yup.string().required('This field is required'),
-  handle: HandleSchema.required('This field is required').matches(
+  name: Yup.string().required(isRequired),
+  handle: HandleSchema.required(isRequired).matches(
     /^[a-zA-Z0-9_.-]*$/,
-    'Some of the characters are not allowed here '
+    'Spaces and special characters are not supported.'
   ),
   hasTerms: Yup.boolean().required().oneOf([true]),
   isReferred: Yup.boolean(),
@@ -185,7 +185,7 @@ export const BuyMembershipForm = ({
                     label="Root account"
                     required
                     inputSize="l"
-                    tooltipText="Something about root accounts"
+                    tooltipText="Root account is the primary account associated with the membership. It cannot be changed. Root account is used to sign transactions of associating a controller account with the membership. While it is possible to use the same account as Root and Controller, it is not advisable to do so and for security purposes. Best practice is to keep it offline all the time unless your controller is compromise and you need to replace it."
                   >
                     <SelectAccount name="rootAccount" />
                   </InputComponent>
@@ -195,7 +195,7 @@ export const BuyMembershipForm = ({
                     label="Controller account"
                     required
                     inputSize="l"
-                    tooltipText="Something about controller account"
+                    tooltipText="Controller account is the account which is used to sign most of the transactions, such as bonding a staking account, posting to forum, creating proposals or making a simple transfer to a different account. Controller account can be changed, and this transaction can only be signed by membership root account."
                   >
                     <SelectAccount name="controllerAccount" />
                   </InputComponent>
@@ -205,11 +205,23 @@ export const BuyMembershipForm = ({
             <Row>
               <InputComponent id="member-name" label="Member Name" required name="name">
                 <InputText id="member-name" placeholder="Type" name="name" />
+                <Tooltip
+                  tooltipText="This is your name, which is separate to your handle. It will only be displayed on the membership details pages. SomeDAO participants choose to use their real names, while others choose to use their nicknames. Name does not have to be unique."
+                  tooltipTitle="Name"
+                >
+                  <TooltipDefault />
+                </Tooltip>
               </InputComponent>
             </Row>
             <Row>
               <InputComponent id="membership-handle" label="Membership handle" required name="handle">
                 <InputText id="membership-handle" placeholder="Type" name="handle" />
+                <Tooltip
+                  tooltipText="This is your username that will be displayed in most of the places where you perform actions that others see, such as forum posts, present yourself as council candidate or create a new proposal. Think of it as a public name. Handles are unique."
+                  tooltipTitle="Handle"
+                >
+                  <TooltipDefault />
+                </Tooltip>
               </InputComponent>
             </Row>
             <Row>
@@ -266,18 +278,9 @@ export const BuyMembershipForm = ({
               <TransactionInfo
                 title="Creation fee:"
                 value={membershipPrice?.toBn()}
-                tooltipText={
-                  <>
-                    Creation fee is the price of membership, it is managed by council through the proposal system. It is
-                    inclusive of transaction fee.
-                    <TooltipExternalLink
-                      href="https://joystream.gitbook.io/joystream-handbook/governance/proposals"
-                      target="_blank"
-                    >
-                      <TextMedium>Link</TextMedium> <LinkSymbol />
-                    </TooltipExternalLink>
-                  </>
-                }
+                tooltipText="Creation fee is the price of membership, it is managed by council through the proposal system. It is inclusive of transaction fee."
+                tooltipLinkURL="https://joystream.gitbook.io/joystream-handbook/governance/proposals"
+                tooltipLinkText="Learn more"
               />
             </TransactionInfoContainer>
           )}

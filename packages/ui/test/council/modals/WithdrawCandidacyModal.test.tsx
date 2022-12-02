@@ -56,7 +56,7 @@ describe('UI: Withdraw Candidacy Modal', () => {
   it('Warning', async () => {
     renderModal(getMember('alice'))
 
-    expect(await screen.findByText(/^Please remember that this action is irreversible/i)).toBeDefined()
+    expect(await screen.findByText(/^Caution, this action is irreversible/i)).toBeDefined()
   })
 
   it('Transaction sign', async () => {
