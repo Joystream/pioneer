@@ -67,7 +67,7 @@ describe('UI: BuyMembershipModal', () => {
       fireEvent.click(screen.getByTestId('email-tile'))
       fireEvent.change(screen.getByTestId('email-input'), { target: { value: 'invalid email' } })
     })
-    Expect(submitButton).toBeDisabled()
+    expect(submitButton).toBeDisabled()
   })
 
   it('Enables button when valid form', async () => {
