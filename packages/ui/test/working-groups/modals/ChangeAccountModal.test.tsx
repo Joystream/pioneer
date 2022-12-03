@@ -34,8 +34,6 @@ import {
 import { WORKER as worker } from '../../_mocks/working-groups'
 import { mockUseModalCall } from '../../setup'
 
-
-
 describe('UI: ChangeRoleModal', () => {
   const api = stubApi()
 
