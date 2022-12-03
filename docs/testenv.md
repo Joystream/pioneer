@@ -27,14 +27,6 @@ In the `.env` file at the root of the `joystream` repo, find the line which cont
 
 All the below commands should be run inside `joystream` repo.
 
-### 0. Rebuild the packages
-
-In order to build required packages run the below command. This step is only needed after updating the branch.
-
-```shell
-yarn run build:packages
-```
-
 ### 1. Run the joystream node image
 
 ```shell

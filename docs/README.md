@@ -66,9 +66,6 @@ For code quality & standards we rely on ESLint and Prettier. To run both checks 
 ```shell
 ## Run linter
 yarn lint
-
-## Run lint & apply automatic fixes
-yarn lint:fix
 ```
 
 ## Testing
