@@ -75,6 +75,16 @@ export const ProposalDetails = ({ proposalDetails }: Props) => {
       ] as RenderNode[]
     }
 
+    if (proposalDetails?.type === 'setMembershipLeadInvitationQuota') {
+      return [
+        {
+          renderType: 'Amount',
+          label: 'Lead invitation quota',
+          value: Amount ?? 0,
+        },
+      ] as RenderNode[]
+    }
+
     if (proposalDetails?.type === 'updateWorkingGroupBudget') {
       return [
         {

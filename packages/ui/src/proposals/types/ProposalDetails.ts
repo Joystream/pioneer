@@ -110,6 +110,8 @@ export type SignalDetails = ProposalDetailsNew<'signal', SignalTextDetail>
 
 export type SetMembershipPriceDetails = ProposalDetailsNew<'setMembershipPrice', AmountDetail>
 
+export type SetMembershipLeadInvitationQuota = ProposalDetailsNew<'setMembershipLeadInvitationQuota', AmountDetail>
+
 export type SetCouncilBudgetIncrementDetails = ProposalDetailsNew<'setCouncilBudgetIncrement', AmountDetail>
 
 export type CancelWorkingGroupLeadOpeningDetails = ProposalDetailsNew<
@@ -140,6 +142,7 @@ export type ProposalDetails =
   | SetWorkingGroupLeadRewardDetails
   | TerminateWorkingGroupLeadDetails
   | SetMembershipPriceDetails
+  | SetMembershipLeadInvitationQuota
   | SetCouncilBudgetIncrementDetails
   | SignalDetails
   | CancelWorkingGroupLeadOpeningDetails
