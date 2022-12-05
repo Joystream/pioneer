@@ -4,14 +4,12 @@ import { useHistory } from 'react-router-dom'
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons'
-import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { BlockDurationStatistics, StatisticItem, Statistics } from '@/common/components/statistics'
-import { TextHuge, TextMedium } from '@/common/components/typography'
+import { TextHuge } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
-import { useCustomEvent } from '@/common/hooks/useCustomEvent'
 import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { getUrl } from '@/common/utils/getUrl'
@@ -57,14 +55,6 @@ export const Election = () => {
       history.replace(ElectionRoutes.pastElections)
     }
   }, [electionStage])
-
-  const { onceEvent } = useCustomEvent()
-
-  useEffect(() => {
-    onceEvent('RefreshElectionPageEvent', () => {
-      history.go(0)
-    })
-  }, [])
 
   if (isLoadingElectionStage) {
     return <PageLayout header={null} main={<Loading />} />
