@@ -69,7 +69,7 @@ export const MyAccounts = () => {
               <TokenValueStat {...hints.locked} value={locked} />
               <TokenValueStat {...hints.recoverable} value={recoverable} />
               {vestingTotal.gtn(0) && <TokenValueStat {...hints.vestingTotal} value={vestingTotal} />}
-              {vestingTotal.gtn(0) && <TokenValueStat {...hints.vestingLocked} value={vestingLocked} />}              
+              {vestingTotal.gtn(0) && <TokenValueStat {...hints.vestingLocked} value={vestingLocked} />}
               {vestingTotal.gtn(0) && (
                 <TokenValueStat {...hints.claimable} value={vestedClaimable} inline>
                   {vestedClaimable.gtn(0) && <ClaimVestingButton />}
