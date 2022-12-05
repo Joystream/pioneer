@@ -7,7 +7,6 @@ import { useModal } from '@/common/hooks/useModal'
 import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { EditThreadTitleModalCall } from '@/forum/modals/EditThreadTitleModal/index'
-import { useMember } from '@/memberships/hooks/useMembership'
 
 export const EditThreadTitleModal = () => {
   const { api } = useApi()
@@ -20,7 +19,7 @@ export const EditThreadTitleModal = () => {
   const {
     modalData: { thread, newTitle, onSuccess },
   } = useModal<EditThreadTitleModalCall>()
-  const { member: threadAuthor } = useMember(thread.authorId)
+  const threadAuthor = thread.author
 
   useEffect(() => {
     if (state.matches('success')) {

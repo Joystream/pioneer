@@ -21,7 +21,7 @@ export const nameMapping = (value: string) => {
     case 'Operations Alpha':
       return 'Builders'
     case 'Gateway':
-      return 'Gateways'
+      return 'Apps'
     case 'Operations Beta':
       return 'HR'
     case 'Operations Gamma':
@@ -31,61 +31,112 @@ export const nameMapping = (value: string) => {
   }
 }
 
-export const subtitleMapping = (value: string) => {
+export const wgListItemMappings = (value: string) => {
   switch (value) {
     case 'Operations Alpha':
-      return 'A diverse set of contributors, such as Developers, Designers and Product Managers, responsible for development of infrastructure and user facing applications.'
+      return {
+        subtitle:
+          'A diverse set of contributors, such as Developers, Designers and Product Managers, responsible for development of infrastructure and user facing applications.',
+        tooltipLink: undefined,
+      }
     case 'Storage':
-      return 'Broadly responsible for ensuring storage infrastructure uptime, namely running complete and up-to-date copy of the content directory and accept inbound uploads from end users.'
+      return {
+        subtitle:
+          'Broadly responsible for ensuring storage infrastructure uptime, namely running complete and up-to-date copy of the content directory and accept inbound uploads from end users.',
+        tooltipLink: undefined,
+      }
     case 'Content':
-      return 'Monitor publishing of the new content into the content directory, respond to the reported publications and adjudicate possible dispute processes.'
+      return {
+        subtitle:
+          'Monitor publishing of the new content into the content directory, respond to the reported publications and adjudicate possible dispute processes.',
+        tooltipLink: undefined,
+      }
     case 'Distribution':
-      return 'Run and maintain distributor nodes that deliver large volumes of upstream data to a large number of simultaneous end users.'
+      return {
+        subtitle:
+          'Run and maintain distributor nodes that deliver large volumes of upstream data to a large number of simultaneous end users.',
+        tooltipLink: undefined,
+      }
     case 'Gateway':
-      return 'Gateway group is responsible for maintaining content directory and query node providing infrastructure for multiple consumer applications powered by the same chain.'
+      return {
+        subtitle:
+          'Apps group runs multiple video streaming apps working on Joystream blockchain and provides support to all external app operators.',
+        tooltipLink: 'https://joystream.gitbook.io/testnet-workspace/system/gateways',
+      }
     case 'Operations Beta':
-      return 'Human Resources working group is responsible for integrating new members greeting, onboarding, catalyzing and nurturing, as well as managing bounties.'
+      return {
+        subtitle:
+          'Human Resources working group is responsible for integrating new members greeting, onboarding, catalyzing and nurturing, as well as managing bounties.',
+        tooltipLink: undefined,
+      }
     case 'Operations Gamma':
-      return 'Marketing group is responsible for increasing the outreach, sharing the content from the platform with the world, spreading the news about platform development, new members acquisition and overall growth.'
+      return {
+        subtitle:
+          'Marketing group is responsible for increasing the outreach, sharing the content from the platform with the world, spreading the news about platform development, new members acquisition and overall growth.',
+        tooltipLink: undefined,
+      }
     case 'Membership':
-      return 'Membership group is responsible for new memberships invitations, referral rewards for existing members and overall process of adding more members via referral scheme.'
+      return {
+        subtitle:
+          'Membership group is responsible for new memberships invitations, referral rewards for existing members and overall process of adding more members via referral scheme.',
+        tooltipLink: undefined,
+      }
     case 'Forum':
-      return 'Monitor and supervise public communication channels for compliance with usage policies as decided through the governance system.'
+      return {
+        subtitle:
+          'Monitor and supervise public communication channels for compliance with usage policies as decided through the governance system.',
+        tooltipLink: undefined,
+      }
     default:
-      return value
+      return {
+        subtitle: value,
+        tooltipLink: undefined,
+      }
   }
 }
-
-export const resizeImageFile = (file: File, width: number, height: number, type?: string): Promise<Blob | null> => {
-  return new Promise((resolve, reject) => {
-    if (!SUPPORTED_IMAGES.includes(file.type)) {
-      reject(new Error('Wrong file type'))
-      return
-    }
-
+export const fileToDataUrl = (file: File) => {
+  return new Promise<string>((resolve, reject) => {
     const reader = new FileReader()
     reader.onload = (event) => {
-      const img = new Image()
-      img.onload = () => {
-        const canvas = document.createElement('canvas')
-        canvas.height = height
-        canvas.width = width
-        const ctx = canvas.getContext('2d')
-
-        const dW = img.width - width
-        const dH = img.height - height
-        const [clippedWidth, clippedHeight] =
-          Math.abs(dW) > Math.abs(dH)
-            ? [Math.floor((img.width / img.height) * width), img.height]
-            : [img.width, Math.floor((img.height / img.width) * height)]
-        const x = Math.floor(img.width / 2 - clippedWidth / 2)
-        const y = Math.floor(img.height / 2 - clippedHeight / 2)
-
-        ctx?.drawImage(img, x, y, clippedWidth, clippedHeight, 0, 0, width, height)
-        ctx?.canvas.toBlob((blob) => resolve(blob), type ?? file.type)
+      const result = event.target?.result
+      if (typeof result !== 'string') {
+        return reject(new Error('Unable to read the file'))
       }
-      img.src = event.target?.result as string
+      resolve(result)
     }
     reader.readAsDataURL(file)
+  })
+}
+export const resizeImageFile = async (
+  file: File,
+  width: number,
+  height: number,
+  type?: string
+): Promise<Blob | null> => {
+  if (!SUPPORTED_IMAGES.filter((type) => type !== 'image/svg+xml').includes(file.type)) {
+    throw new Error('Wrong file type')
+  }
+
+  const dataUrl = await fileToDataUrl(file)
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.onload = () => {
+      const canvas = document.createElement('canvas')
+      canvas.height = height
+      canvas.width = width
+      const ctx = canvas.getContext('2d')
+
+      const ratio = width / height
+      const [clippedWidth, clippedHeight] =
+        Math.abs(img.width - width) > Math.abs(img.height - height)
+          ? [Math.floor(img.height * ratio), img.height]
+          : [img.width, Math.floor(img.width / ratio)]
+      const x = Math.floor(img.width / 2 - clippedWidth / 2)
+      const y = Math.floor(img.height / 2 - clippedHeight / 2)
+
+      ctx?.drawImage(img, x, y, clippedWidth, clippedHeight, 0, 0, width, height)
+      ctx?.canvas.toBlob((blob) => resolve(blob), type ?? file.type)
+    }
+    img.src = dataUrl
   })
 }

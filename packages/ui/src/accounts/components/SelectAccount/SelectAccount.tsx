@@ -132,7 +132,7 @@ export const SelectStakingAccount = ({
   })
 
   if (!form || !name) {
-    return <BaseSelectAccount {...props} accounts={accountsWithLocks} />
+    return <BaseSelectAccount {...props} accounts={accountsWithLocks} isForStaking={lockType === 'Voting'} />
   }
 
   return (
