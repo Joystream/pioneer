@@ -34,7 +34,7 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
         config = await (await fetch(configEndpoint)).json()
       } catch (err) {
         setIsLoading(false)
-        const errMsg = `Failed to fetch the network configuration from ${configEndpoint}.`
+        const errMsg = `Failed to fetch the network configuration from ${configEndpoint}.\n${String(err)}`
         throw new Error(`${errMsg}`)
       }
 
@@ -43,6 +43,7 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
         queryNodeEndpoint: config['graphql_server'],
         membershipFaucetEndpoint: config['member_faucet'],
         nodeRpcEndpoint: config['websocket_rpc'],
+        configEndpoint: config['config'],
       }
 
       if (!endpointsAreDefined(newAutoConfEndpoints)) {
