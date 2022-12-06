@@ -9,7 +9,7 @@ interface Options {
   hasChanges?: boolean
 }
 
-export type TabsDefinition = [string, Path] | [string, Path, number] | [string, Path, Options]
+export type TabsDefinition = [string, Path] | [string, Path, number | undefined] | [string, Path, Options]
 
 export const usePageTabs = (tabs: TabsDefinition[]) => {
   const history = useHistory()
