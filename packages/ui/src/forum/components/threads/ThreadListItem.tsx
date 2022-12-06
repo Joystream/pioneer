@@ -39,7 +39,7 @@ export const ThreadListItem = ({ thread, isArchive }: ThreadListItemProps) => {
         </Thread>
       </Tooltip>
 
-      <TextMedium bold>{thread.visiblePostsCount - 1}</TextMedium>
+      <TextMedium bold>{ thread.visiblePostsCount > 0 ? thread.visiblePostsCount - 1 : thread.visiblePostsCount }</TextMedium>
 
       <LatestActivity threadId={thread.id} />
 
