@@ -38,6 +38,7 @@ const mockUseModal: UseModal<any> = {
   modalData: { workerId: 'forumWorkingGroup-1' },
   showModal: () => null,
   hideModal: () => null,
+  hideModalWithoutConfirmModal: () => null,
 }
 
 jest.mock('@/common/hooks/useModal', () => ({

@@ -71,8 +71,9 @@ export const AddNewProposalModal = () => {
   const minCashoutAllowed = api?.consts.content.minimumCashoutAllowedLimit
   const maxCashoutAllowed = api?.consts.content.maximumCashoutAllowedLimit
   const currentBlock = useCurrentBlockNumber()
-  const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
+  const { hideModal: _hideModal, hideModalWithoutConfirmModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
+  const hideModal = state.matches('success') ? hideModalWithoutConfirmModal : _hideModal
   const [isHidingCaution] = useLocalStorage<boolean>('proposalCaution')
   const [formMap, setFormMap] = useState<Partial<[Account, ProposalType, GroupIdName, boolean]>>([])
   const workingGroupConsts = api?.consts[formMap[2] as GroupIdName]
@@ -339,7 +340,7 @@ export const AddNewProposalModal = () => {
     const { proposalDetails, proposalType } = form.getValues() as AddNewProposalForm
     return (
       <SuccessModal
-        onClose={hideModal}
+        onClose={hideModalWithoutConfirmModal}
         proposalId={state.context.proposalId}
         proposalType={proposalType.type as ProposalType}
         proposalTitle={proposalDetails.title as string}

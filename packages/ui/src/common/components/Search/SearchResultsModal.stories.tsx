@@ -19,12 +19,13 @@ interface Props {
   search: string
   hideModal: () => void
   showModal: () => void
+  hideModalWithoutConfirmModal: () => void
 }
-const Template: Story<Props> = ({ search, hideModal, showModal }) => {
+const Template: Story<Props> = ({ search, hideModal, showModal, hideModalWithoutConfirmModal }) => {
   const modalData = { search }
   return (
     <MockApolloProvider members workers workingGroups forum>
-      <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
+      <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal, hideModalWithoutConfirmModal }}>
         <SearchResultsModal />
       </ModalContext.Provider>
     </MockApolloProvider>

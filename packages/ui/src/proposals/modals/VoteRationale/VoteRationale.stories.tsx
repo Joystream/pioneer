@@ -23,6 +23,7 @@ export const Default: StoryObj<() => ReactElement> = {
           },
           modal: 'Foo',
           hideModal: () => undefined,
+          hideModalWithoutConfirmModal: () => undefined,
           showModal: () => undefined,
         }}
       >

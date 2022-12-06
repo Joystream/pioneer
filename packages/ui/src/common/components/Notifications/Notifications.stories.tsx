@@ -19,6 +19,7 @@ const Template: Story = () => (
       value={{
         showModal: () => null,
         hideModal: () => null,
+        hideModalWithoutConfirmModal: () => null,
         modal: '',
         modalData: {},
       }}

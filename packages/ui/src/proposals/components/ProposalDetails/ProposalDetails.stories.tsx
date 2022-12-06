@@ -25,6 +25,7 @@ const Template: Story<Props> = (args) => (
         modalData: null,
         showModal: () => undefined,
         hideModal: () => undefined,
+        hideModalWithoutConfirmModal: () => undefined,
       }}
     >
       <RowGapBlock gap={24}>

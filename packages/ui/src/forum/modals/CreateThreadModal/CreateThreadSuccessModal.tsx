@@ -12,16 +12,16 @@ interface Props {
 }
 
 export const CreateThreadSuccessModal = ({ newThreadId }: Props) => {
-  const { hideModal } = useModal()
+  const { hideModalWithoutConfirmModal } = useModal()
   const history = useHistory()
   const goToThread = () => {
     history.push(generatePath(ForumRoutes.thread, { id: newThreadId }))
-    hideModal()
+    hideModalWithoutConfirmModal()
   }
 
   return (
-    <Modal onClose={hideModal} modalSize="m">
-      <ModalHeader onClick={hideModal} title="Success!" />
+    <Modal onClose={hideModalWithoutConfirmModal} modalSize="m">
+      <ModalHeader onClick={hideModalWithoutConfirmModal} title="Success!" />
       <ModalBody>
         <TextMedium>You have successfully created a thread.</TextMedium>
       </ModalBody>
