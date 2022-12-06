@@ -122,13 +122,13 @@ export interface AddNewProposalForm {
     groupId?: GroupIdName
   }
   setInitialInvitationCount: {
-    invitationCount?: BN
+    invitationCount?: number
   }
   setReferralCut: {
     referralCut?: number
   }
   setMembershipLeadInvitationQuota: {
-    amount?: BN
+    count?: number
     leadId?: string
   }
   setInitialInvitationBalance: {

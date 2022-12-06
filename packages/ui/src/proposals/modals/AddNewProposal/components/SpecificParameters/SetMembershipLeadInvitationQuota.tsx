@@ -31,7 +31,6 @@ export const SetMembershipLeadInvitationQuota = () => {
           <InputComponent
             label="Lead Invitation Quota Amount"
             tight
-            units={CurrencyName.integerValue}
             required
             disabled={isLoading || !group?.leadId}
             name="setMembershipLeadInvitationQuota.amount"
