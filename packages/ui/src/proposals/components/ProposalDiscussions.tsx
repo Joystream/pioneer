@@ -8,12 +8,14 @@ import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Badge, TextBig } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
+import { Comparator } from '@/common/model/Comparator'
 import { createType } from '@/common/model/createType'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { AnyKeys } from '@/common/types'
 import { getUrl } from '@/common/utils/getUrl'
 import { ForumPostStyles, PostListItem } from '@/forum/components/PostList/PostListItem'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
+import { ForumPost } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { ProposalDiscussionThread } from '@/proposals/types'
@@ -86,7 +88,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
           </Tooltip>
         </Badge>
       </DiscussionsHeader>
-      {discussionPosts.map((post, index) => {
+      {discussionPosts.sort(Comparator<ForumPost>(true, 'createdAtBlock').string).map((post, index) => {
         return (
           <PostListItem
             isFirstItem={index === 0}

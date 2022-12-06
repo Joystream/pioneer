@@ -19,7 +19,7 @@ const hints = {
   transferable: {
     title: 'Total transferable balance',
     tooltipText:
-      'Total balance without locked balances. Transferable balance can be used for signing transactions on the network.',
+      'Total Balance less locked balance. Transferable balance can be used for signing transactions on the network.',
   },
   locked: {
     title: 'Total locked balance',
@@ -28,7 +28,7 @@ const hints = {
       'Staking, or bonding, is the act of locking up funds under some terms so that they are not transferable and otherwise not entirely usable as they otherwise would be. The terms, referred to as unstaking terms describe the circumstances under which the funds may begin to cease being staked. The way staking is implemented is with the use of account.',
   },
   recoverable: {
-    title: 'Total recoverable',
+    title: 'Total recoverable balance',
     tooltipText:
       'Recoverable balance encapsulates all tokens that can be recovered, following the termination of the process where they were previously staked. Example: Vote has been casted for a candidate in council elections. That candidate lost the election and now the stake that was put behind the voting power for such candidate can be recovered, meaning locked balance will be reduced by such amount, while transferable balance will increase for the amount of staking lock.',
   },
