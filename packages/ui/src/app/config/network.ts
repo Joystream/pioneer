@@ -1,4 +1,4 @@
-export type NetworkType = 'local' | 'local-mocks' | 'joystream-testnet' | 'auto-conf' | 'mainnet'
+export type NetworkType = 'mainnet' | 'local' | 'testnet' | 'auto-conf' | 'local-mocks'
 
 export interface NetworkEndpoints {
   nodeRpcEndpoint: string
@@ -27,31 +27,31 @@ export const IS_MAINNET_DEFINED =
 type PredefinedEndpoint = { [K in NetworkType]?: string }
 
 const QUERY_NODE_ENDPOINT_SUBSCRIPTION: PredefinedEndpoint = {
-  local: 'ws://localhost:8081/graphql',
-  'local-mocks': 'ws://localhost:8081/graphql',
-  'joystream-testnet': TESTNET_QUERY_NODE_SOCKET,
   mainnet: MAINNET_QUERY_NODE_SOCKET,
+  local: 'ws://localhost:8081/graphql',
+  testnet: TESTNET_QUERY_NODE_SOCKET,
+  'local-mocks': 'ws://localhost:8081/graphql',
 }
 
 const QUERY_NODE_ENDPOINT: PredefinedEndpoint = {
-  local: 'http://localhost:8081/graphql',
-  'local-mocks': 'http://localhost:8081/graphql',
-  'joystream-testnet': TESTNET_QUERY_NODE,
   mainnet: MAINNET_QUERY_NODE,
+  local: 'http://localhost:8081/graphql',
+  testnet: TESTNET_QUERY_NODE,
+  'local-mocks': 'http://localhost:8081/graphql',
 }
 
 const MEMBERSHIP_FAUCET_ENDPOINT: PredefinedEndpoint = {
-  local: 'http://localhost:3002/register',
-  'local-mocks': 'http://localhost:3002/register',
-  'joystream-testnet': TESTNET_MEMBERSHIP_FAUCET_URL,
   mainnet: MAINNET_MEMBERSHIP_FAUCET_URL,
+  local: 'http://localhost:3002/register',
+  testnet: TESTNET_MEMBERSHIP_FAUCET_URL,
+  'local-mocks': 'http://localhost:3002/register',
 }
 
 const NODE_RPC_ENDPOINT: PredefinedEndpoint = {
-  local: 'ws://127.0.0.1:9944',
-  'local-mocks': 'ws://127.0.0.1:9944',
-  'joystream-testnet': TESTNET_NODE_SOCKET,
   mainnet: MAINNET_NODE_SOCKET,
+  local: 'ws://127.0.0.1:9944',
+  testnet: TESTNET_NODE_SOCKET,
+  'local-mocks': 'ws://127.0.0.1:9944',
 }
 
 export const pickEndpoints = (network: NetworkType): Partial<NetworkEndpoints> => ({
@@ -69,7 +69,7 @@ export const DEFAULT_NETWORK = (
         endpoints: pickEndpoints('mainnet'),
       }
     : IS_TESTNET_DEFINED
-    ? { type: 'joystream-testnet', endpoints: pickEndpoints('joystream-testnet') }
+    ? { type: 'testnet', endpoints: pickEndpoints('testnet') }
     : { type: 'local', endpoints: pickEndpoints('local') }
 ) as {
   type: NetworkType
