@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Arrow } from '@/common/components/icons'
 import { TableListItem } from '@/common/components/List'
 import { GhostRouterLink, RouterLink } from '@/common/components/RouterLink'
-import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
+import { Tooltip } from '@/common/components/Tooltip'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { nameMapping, wgListItemMappings } from '@/common/helpers'
@@ -28,6 +28,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
   const { isLoading: loadingWorkers, workers } = useCountWorkers(group.id)
 
   const { member: lead } = useMember(group.leadId)
+
   const groupAddress = `/working-groups/${groupNameToURLParam(nameMapping(group.name))}`
   const isLeadActive = lead && group.isActive
   const { subtitle, tooltipLink, groupName } = useMemo(
@@ -40,20 +41,20 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
       <GroupImageContainer as={GhostRouterLink} to={groupAddress}>
         <WorkingGroupImage groupName={group.name} />
       </GroupImageContainer>
-      <GroupContentBlock as={GhostRouterLink} to={groupAddress}>
-        <GroupTitle>
-          {groupName}{' '}
-          {tooltipLink && (
-            <Tooltip
-              tooltipTitle={groupName}
-              tooltipLinkText="Learn more about this group"
-              tooltipLinkURL={tooltipLink}
-            >
-              <TooltipDefault />
-            </Tooltip>
-          )}
-        </GroupTitle>
-        <GroupContent>{subtitle}</GroupContent>
+      <GroupContentBlock>
+        <Tooltip
+          tooltipTitle={groupName}
+          tooltipText=""
+          tooltipLinkURL={tooltipLink}
+          tooltipLinkText="Learn more about this group"
+        >
+          <GroupTitle as={GhostRouterLink} to={groupAddress}>
+            {groupName}
+          </GroupTitle>
+        </Tooltip>
+        <GroupContent as={GhostRouterLink} to={groupAddress}>
+          {subtitle}
+        </GroupContent>
       </GroupContentBlock>
       <GroupStats>
         <StatsColumn>
