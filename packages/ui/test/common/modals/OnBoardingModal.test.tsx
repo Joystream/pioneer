@@ -4,6 +4,7 @@ import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { MemoryRouter } from 'react-router'
 
+import { ApiContext } from '@/api/providers/context'
 import { Colors } from '@/common/constants'
 import { OnBoardingModal } from '@/common/modals/OnBoardingModal'
 import { ModalContext } from '@/common/providers/modal/context'
@@ -38,7 +39,7 @@ jest.mock('injectweb3-connect', () => ({
 }))
 
 describe('UI: OnBoardingModal', () => {
-  stubApi()
+  const api = stubApi()
 
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
@@ -190,9 +191,11 @@ describe('UI: OnBoardingModal', () => {
     render(
       <MemoryRouter>
         <MockApolloProvider>
-          <ModalContext.Provider value={useModal}>
-            <OnBoardingModal />
-          </ModalContext.Provider>
+          <ApiContext.Provider value={api}>
+            <ModalContext.Provider value={useModal}>
+              <OnBoardingModal />
+            </ModalContext.Provider>
+          </ApiContext.Provider>
         </MockApolloProvider>
       </MemoryRouter>
     )

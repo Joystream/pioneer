@@ -5,7 +5,6 @@ import { ButtonGhost } from '@/common/components/buttons'
 import { FileIcon } from '@/common/components/icons/FileIcon'
 import { useModal } from '@/common/hooks/useModal'
 import { MemberInfo } from '@/memberships/components'
-import { Member } from '@/memberships/types'
 import { ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { WorkerBaseInfo } from '@/working-groups/types'
 

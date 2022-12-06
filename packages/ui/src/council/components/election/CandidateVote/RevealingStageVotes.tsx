@@ -4,25 +4,25 @@ import React from 'react'
 import { Loading } from '@/common/components/Loading'
 import { NoData } from '@/common/components/NoData'
 import { BN_ZERO } from '@/common/constants'
-import { CandidateStats } from '@/council/hooks/useElectionVotes'
+import { CandidateWithMyVotes } from '@/council/hooks/useMyCastVotes'
 
 import { CandidateVoteList } from './CandidateVoteList'
 
 interface Props {
   onlyMyVotes?: boolean
-  votesPerCandidate: CandidateStats[]
+  candidateWithVotes: CandidateWithMyVotes[]
   totalStake?: BN
   isLoading: boolean
 }
 
-export const RevealingStageVotes = ({ votesPerCandidate, totalStake, onlyMyVotes, isLoading }: Props) => {
-  const votesToDisplay = onlyMyVotes ? votesPerCandidate.filter((vote) => vote.myVotes.length) : votesPerCandidate
+export const RevealingStageVotes = ({ candidateWithVotes, totalStake, onlyMyVotes, isLoading }: Props) => {
+  const votesToDisplay = onlyMyVotes ? candidateWithVotes.filter((vote) => vote.myVotes.length) : candidateWithVotes
 
   if (isLoading) {
     return <Loading />
   }
 
-  if (!votesPerCandidate.length) {
+  if (!candidateWithVotes.length) {
     return <NoData>No votes have been cast yet.</NoData>
   }
 
@@ -32,15 +32,15 @@ export const RevealingStageVotes = ({ votesPerCandidate, totalStake, onlyMyVotes
 
   return (
     <CandidateVoteList
-      votes={votesToDisplay.map((candidateStats, index) => ({
-        candidateId: candidateStats.candidate.id,
+      votes={votesToDisplay.map((candidate, index) => ({
+        candidateId: candidate.id,
         index: index + 1,
-        member: candidateStats.candidate.member,
-        sumOfAllStakes: candidateStats.totalStake,
+        member: candidate.member,
+        sumOfAllStakes: candidate.totalStake,
         totalStake: totalStake ?? BN_ZERO,
-        votes: candidateStats.votesNumber,
-        ownStake: candidateStats.ownStake,
-        myVotes: candidateStats.myVotes,
+        votes: candidate.votesNumber,
+        ownStake: candidate.ownStake,
+        myVotes: candidate.myVotes,
       }))}
     />
   )

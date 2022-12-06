@@ -6,6 +6,7 @@ import { ButtonGhost } from '@/common/components/buttons'
 import { SuccessIcon } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader, SuccessModalBody } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
+import { BackupVotesButton } from '@/council/components/election/BackupVotesButton'
 import { ElectionRoutes } from '@/council/constants'
 import { useCandidate } from '@/council/hooks/useCandidate'
 import { SelectedMember } from '@/memberships/components/SelectMember'
@@ -30,9 +31,9 @@ export const VoteForCouncilSuccessModal = ({ onClose, candidateId }: Props) => {
 
       <SuccessModalBody>
         <TextMedium margin="l" light>
-          You have just successfully voted for the Candidate
+          You have just successfully voted for the Candidate. This is a good time to backup your votes.
         </TextMedium>
-
+        <BackupVotesButton cycleId={candidate?.cycleId} /> ￼
         <SelectedMember size="l" member={candidate?.member} hideGroup />
       </SuccessModalBody>
 

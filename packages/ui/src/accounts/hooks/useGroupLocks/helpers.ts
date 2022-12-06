@@ -17,21 +17,18 @@ export const useIsWGLockRecoverable = (hasWGLock: boolean, stakingAccount: strin
   })
   const workerId = workerData?.workers[0]?.id
   const { unstakingPeriodEnd } = useWorkerUnstakingPeriodEnd(workerId)
+  const status = applications[0]?.status
 
   if (!hasWGLock) return
 
-  if (applications[0]?.status === 'ApplicationStatusPending') {
-    return true
-  }
-
-  if (applications[0]?.status === 'ApplicationStatusAccepted') {
+  if (status === 'ApplicationStatusAccepted') {
     if (unstakingPeriodEnd) {
       return Date.parse(unstakingPeriodEnd) > Date.now()
     }
-    return true
+    return false
   }
 
-  return false
+  return !!(status && status !== 'ApplicationStatusWithdrawn')
 }
 
 export const useIsCandidateLockRecoverable = (hasCandidateLock: boolean, stakingAccount: string) => {

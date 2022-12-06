@@ -21,7 +21,6 @@ import {
   ToggleCheckbox,
 } from '@/common/components/forms'
 import { Arrow } from '@/common/components/icons'
-import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
 import {
   ModalFooter,
@@ -33,8 +32,7 @@ import {
   ScrolledModalContainer,
   TransactionInfoContainer,
 } from '@/common/components/Modal'
-import { TooltipExternalLink, Tooltip } from '@/common/components/Tooltip'
-import { TooltipDefault } from '@/common/components/Tooltip/TooltipDefault'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextMedium } from '@/common/components/typography'
 import { definedValues } from '@/common/utils'
@@ -66,14 +64,15 @@ interface BuyMembershipFormProps extends Omit<BuyMembershipFormModalProps, 'onCl
   changeMembershipAccount?: () => void
 }
 
+const isRequired = 'This field is required.'
 const CreateMemberSchema = Yup.object().shape({
-  rootAccount: AccountSchema.required('This field is required'),
-  controllerAccount: AccountSchema.required('This field is required'),
+  rootAccount: AccountSchema.required(isRequired),
+  controllerAccount: AccountSchema.required(isRequired),
   avatarUri: AvatarURISchema,
-  name: Yup.string().required('This field is required'),
-  handle: HandleSchema.required('This field is required').matches(
+  name: Yup.string().required(isRequired),
+  handle: HandleSchema.required(isRequired).matches(
     /^[a-zA-Z0-9_.-]*$/,
-    'Some of the characters are not allowed here '
+    'Spaces and special characters are not supported.'
   ),
   hasTerms: Yup.boolean().required().oneOf([true]),
   isReferred: Yup.boolean(),
@@ -279,18 +278,9 @@ export const BuyMembershipForm = ({
               <TransactionInfo
                 title="Creation fee:"
                 value={membershipPrice?.toBn()}
-                tooltipText={
-                  <>
-                    Creation fee is the price of membership, it is managed by council through the proposal system. It is
-                    inclusive of transaction fee.
-                    <TooltipExternalLink
-                      href="https://joystream.gitbook.io/joystream-handbook/governance/proposals"
-                      target="_blank"
-                    >
-                      <TextMedium>Link</TextMedium> <LinkSymbol />
-                    </TooltipExternalLink>
-                  </>
-                }
+                tooltipText="Creation fee is the price of membership, it is managed by council through the proposal system. It is inclusive of transaction fee."
+                tooltipLinkURL="https://joystream.gitbook.io/joystream-handbook/governance/proposals"
+                tooltipLinkText="Learn more"
               />
             </TransactionInfoContainer>
           )}
