@@ -21,7 +21,7 @@ export const PastElectionsListRow = ({ election }: PastElectionsListRowProps) =>
     <PastElectionsListRowItem
       $colLayout={PastElectionsColLayout}
       as={GhostRouterLink}
-      to={generatePath(ElectionRoutes.pastElection, { id: election.id })}
+      to={generatePath(ElectionRoutes.pastElection, { cycleId: election.cycleId })}
     >
       <Info>#{election.cycleId}</Info>
       {election.finishedAtBlock ? (

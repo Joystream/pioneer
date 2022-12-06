@@ -37,8 +37,8 @@ export const PastCouncilsList = () => {
         <ListHeader>Proposals Rejected</ListHeader>
       </PastCouncilListHeaders>
       <List>
-        {councils.map((council) => (
-          <PastCouncilListItem key={council.id} council={council} />
+        {councils.map((council, i) => (
+          <PastCouncilListItem key={`council${i}`} council={council} />
         ))}
       </List>
       <Pagination {...pagination} />

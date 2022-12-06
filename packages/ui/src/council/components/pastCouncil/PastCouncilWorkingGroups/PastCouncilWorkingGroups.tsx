@@ -8,13 +8,10 @@ import { BN_ZERO } from '@/common/constants'
 import { PastCouncilTabsHeaders } from '@/council/components/pastCouncil/PastCouncilTabs'
 import { PastCouncilWorkingGroupsItem } from '@/council/components/pastCouncil/PastCouncilWorkingGroups/PastCouncilWorkingGroupsItem'
 import { usePastCouncilWorkingGroups } from '@/council/hooks/usePastCouncilWorkingGroups'
+import { PastCouncilProps as Props } from '@/council/types'
 
-interface Props {
-  councilId: string
-}
-
-export const PastCouncilWorkingGroups = ({ councilId }: Props) => {
-  const { isLoading, workingGroups } = usePastCouncilWorkingGroups(councilId)
+export const PastCouncilWorkingGroups = ({ cycleId }: Props) => {
+  const { isLoading, workingGroups } = usePastCouncilWorkingGroups(cycleId)
 
   const totalBudget = workingGroups?.reduce((a, b) => a.add(b.budget), BN_ZERO) ?? BN_ZERO
 

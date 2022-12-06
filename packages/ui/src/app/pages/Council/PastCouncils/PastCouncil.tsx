@@ -19,8 +19,8 @@ import { usePastCouncil } from '@/council/hooks/usePastCouncil'
 export const PastCouncil = () => {
   const history = useHistory()
 
-  const { id } = useParams<{ id: string }>()
-  const { isLoading, council } = usePastCouncil(id)
+  const { cycleId } = useParams<{ cycleId: string }>()
+  const { isLoading, council } = usePastCouncil(+cycleId)
 
   useEffect(() => {
     if (!isLoading && !council) {
@@ -37,12 +37,12 @@ export const PastCouncil = () => {
       <PageHeaderWrapper>
         <PageHeaderRow showOverflow>
           <PreviousPage showOverflow>
-            <PageTitle>Council #{council.id}</PageTitle>
+            <PageTitle>Council #{council.cycleId}</PageTitle>
           </PreviousPage>
           <ButtonsGroup>
             <CopyButtonTemplate
               size="medium"
-              textToCopy={getUrl({ route: CouncilRoutes.pastCouncil, params: { id: council.id } })}
+              textToCopy={getUrl({ route: CouncilRoutes.pastCouncil, params: { cycleId: council.cycleId } })}
               icon={<LinkIcon />}
             >
               Copy link
@@ -75,5 +75,5 @@ export const PastCouncil = () => {
     )
   }
 
-  return <PageLayout header={displayHeader()} main={displayMain()} lastBreadcrumb={'Council #' + id} />
+  return <PageLayout header={displayHeader()} main={displayMain()} lastBreadcrumb={'Council #' + cycleId} />
 }

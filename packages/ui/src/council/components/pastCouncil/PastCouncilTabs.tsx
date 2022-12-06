@@ -8,7 +8,8 @@ import { PastCouncilProposals } from '@/council/components/pastCouncil/PastCounc
 import { PastCouncilWorkingGroups } from '@/council/components/pastCouncil/PastCouncilWorkingGroups/PastCouncilWorkingGroups'
 import { PastCouncilWithDetails } from '@/council/types/PastCouncil'
 
-export const PastCouncilTabs = ({ id }: PastCouncilWithDetails) => {
+export const PastCouncilTabs = (council: PastCouncilWithDetails) => {
+  const cycleId = +council?.cycleId
   const [tab, setTab] = useState<'councilMembers' | 'proposals' | 'workingGroups'>('councilMembers')
 
   const tabs: TabProps[] = [
@@ -32,9 +33,9 @@ export const PastCouncilTabs = ({ id }: PastCouncilWithDetails) => {
   return (
     <>
       <Tabs tabs={tabs} tabsSize="xs" />
-      {tab === 'councilMembers' && <PastCouncilMembers councilId={id} />}
-      {tab === 'proposals' && <PastCouncilProposals councilId={id} />}
-      {tab === 'workingGroups' && <PastCouncilWorkingGroups councilId={id} />}
+      {tab === 'councilMembers' && <PastCouncilMembers cycleId={cycleId} />}
+      {tab === 'proposals' && <PastCouncilProposals cycleId={cycleId} />}
+      {tab === 'workingGroups' && <PastCouncilWorkingGroups cycleId={cycleId} />}
     </>
   )
 }

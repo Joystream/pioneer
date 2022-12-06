@@ -11,8 +11,12 @@ import {
 } from '@/council/queries'
 import { asProposalDetails, DetailsFragment, FundingRequestDetails } from '@/proposals/types'
 
-export interface PastCouncil {
-  id: string
+export interface PastCouncilProps {
+  cycleId: number
+}
+
+export interface PastCouncil extends PastCouncilProps {
+  id?: string
   endedAt: Block
 }
 
@@ -25,6 +29,7 @@ export interface PastCouncilWithDetails extends PastCouncil {
 
 export const asPastCouncil = (fields: PastCouncilFieldsFragment): PastCouncil => ({
   id: fields.id,
+  cycleId: fields.councilElections[0]?.cycleId,
   endedAt: asBlock({
     createdAt: fields.endedAtTime,
     inBlock: fields.endedAtBlock ?? -1,

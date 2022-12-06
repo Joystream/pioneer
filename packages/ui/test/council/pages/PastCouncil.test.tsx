@@ -33,10 +33,10 @@ configure({ testIdAttribute: 'id' })
 
 describe('UI: Past Council page', () => {
   const mockServer = setupMockServer()
-  let pageCouncilId = 1
+  let cycleId = 1
 
   beforeEach(() => {
-    pageCouncilId = 1
+    cycleId = 1
     seedMembers(mockServer.server, 2)
     seedWorkingGroups(mockServer.server)
     seedElectedCouncil(
@@ -408,7 +408,7 @@ describe('UI: Past Council page', () => {
   })
 
   it('Council not found', async () => {
-    pageCouncilId = 2
+    cycleId = 2
     const { queryByText } = await renderComponent()
 
     expect(queryByText(/not found/i)).not.toBeNull()
@@ -437,7 +437,7 @@ describe('UI: Past Council page', () => {
 
   async function renderComponent() {
     const rendered = await render(
-      <MemoryRouter initialEntries={[generatePath(CouncilRoutes.pastCouncil, { id: pageCouncilId })]}>
+      <MemoryRouter initialEntries={[generatePath(CouncilRoutes.pastCouncil, { cycleId })]}>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
             <Switch>

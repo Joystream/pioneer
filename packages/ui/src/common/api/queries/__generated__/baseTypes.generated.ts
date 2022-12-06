@@ -9472,7 +9472,7 @@ export type ElectedCouncilWhereInput = {
 }
 
 export type ElectedCouncilWhereUniqueInput = {
-  id: Scalars['ID']
+  cycleId: Scalars['ID']
 }
 
 export enum ElectionProblem {

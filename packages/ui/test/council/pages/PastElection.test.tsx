@@ -55,7 +55,7 @@ const TEST_VOTE = {
 describe('UI: Past Election page', () => {
   const mockServer = setupMockServer()
   const api = stubApi()
-  let pageElectionId = 1
+  let cycleId = 1
 
   const useMyMemberships: MyMemberships = {
     active: undefined,
@@ -73,7 +73,7 @@ describe('UI: Past Election page', () => {
   })
 
   beforeEach(() => {
-    pageElectionId = 1
+    cycleId = 1
     seedMembers(mockServer.server, 2)
     seedElectedCouncil(
       {
@@ -109,7 +109,7 @@ describe('UI: Past Election page', () => {
   })
 
   it('No such election', async () => {
-    pageElectionId = 2
+    cycleId = 2
     const { queryByText } = await renderComponent()
 
     expect(queryByText(/not found/i)).not.toBeNull()
@@ -158,7 +158,7 @@ describe('UI: Past Election page', () => {
 
   async function renderComponent() {
     const rendered = await render(
-      <MemoryRouter initialEntries={[generatePath(ElectionRoutes.pastElection, { id: pageElectionId })]}>
+      <MemoryRouter initialEntries={[generatePath(ElectionRoutes.pastElection, { cycleId })]}>
         <ApiContext.Provider value={api}>
           <MockQueryNodeProviders>
             <MockKeyringProvider>

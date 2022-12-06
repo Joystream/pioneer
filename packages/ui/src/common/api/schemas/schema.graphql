@@ -15599,7 +15599,7 @@ input ElectedCouncilWhereInput {
 }
 
 input ElectedCouncilWhereUniqueInput {
-  id: ID!
+  cycleId: ID!
 }
 
 input ElectedCouncilCreateInput {

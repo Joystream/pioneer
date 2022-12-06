@@ -28,7 +28,7 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockD
   const eventData = data?.newCandidateEvents[0]
   const createdInEvent = eventData && asBlock(eventData)
 
-  const electionId = eventData?.candidate.electionRoundId
+  const cycleId = eventData?.candidate.electionRoundId // TODO update candidate query
 
   const remainingPeriod = useCouncilRemainingPeriod('electionEnd')
   const recoveryTime = useMemo(
@@ -56,17 +56,17 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockD
   }, [candidateId])
 
   const goToElectionButton = useMemo(() => {
-    if (!electionId) {
+    if (!cycleId) {
       return null
     }
 
     const pointsToPastElection = recoveryTime.time && Date.parse(recoveryTime.time) - Date.now() <= 0
 
     const electionPath = pointsToPastElection
-      ? generatePath(ElectionRoutes.pastElection, { id: electionId })
+      ? generatePath(ElectionRoutes.pastElection, { cycleId })
       : generatePath(ElectionRoutes.currentElection)
     return <LockLinkButton label="Show Election" to={electionPath} />
-  }, [electionId])
+  }, [cycleId])
 
   const linkButtons = (
     <>

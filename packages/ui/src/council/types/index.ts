@@ -1,4 +1,6 @@
 export * from './ElectedCouncil'
+export * from './PastCouncil'
+export * from './PastCouncilWorkingGroup'
 export * from './Councilor'
 export * from './Candidate'
 export * from './Vote'

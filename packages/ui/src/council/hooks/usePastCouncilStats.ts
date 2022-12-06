@@ -1,13 +1,9 @@
 import { useGetCouncilBlockRangeQuery, useGetPastCouncilStatsQuery } from '@/council/queries'
 import { getSpentOnProposals, getTotalSpent } from '@/council/types/PastCouncil'
 
-export const usePastCouncilStats = (id: string) => {
+export const usePastCouncilStats = (cycleId: number) => {
   const { loading: loadingRange, data: rangeData } = useGetCouncilBlockRangeQuery({
-    variables: {
-      where: {
-        id,
-      },
-    },
+    variables: { where: { cycleId } },
   })
 
   const council = rangeData?.electedCouncilByUniqueInput

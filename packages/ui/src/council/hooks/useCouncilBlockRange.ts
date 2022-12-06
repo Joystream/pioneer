@@ -2,11 +2,9 @@ import { useMemo } from 'react'
 
 import { useGetCouncilBlockRangeQuery } from '@/council/queries'
 
-export const useCouncilBlockRange = (id: string) => {
+export const useCouncilBlockRange = (cycleId: number) => {
   const { loading: loadingRange, data: rangeData } = useGetCouncilBlockRangeQuery({
-    variables: {
-      where: { id },
-    },
+    variables: { where: { cycleId } },
   })
 
   const { fromBlock, toBlock } = useMemo(() => {

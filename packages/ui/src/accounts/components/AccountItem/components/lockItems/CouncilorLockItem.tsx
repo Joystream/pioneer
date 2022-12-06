@@ -39,22 +39,22 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockDetailsP
       }
   }, [remainingPeriod])
 
-  const councilId = eventData?.id
+  const cycleId = eventData?.id // TODO update councilor query
   const councilPath = useMemo(() => {
     if (member?.isCouncilMember) {
       return CouncilRoutes.council
     }
-    if (councilId) {
-      return generatePath(CouncilRoutes.pastCouncils, { id: councilId })
+    if (cycleId) {
+      return generatePath(CouncilRoutes.pastCouncils, { cycleId })
     }
-  }, [councilId, member?.isCouncilMember])
+  }, [cycleId, member?.isCouncilMember])
 
   const goToCouncilButton = useMemo(() => {
     if (!councilPath) {
       return null
     }
     return <LockLinkButton label="Show Council" to={councilPath} />
-  }, [councilId, member?.isCouncilMember])
+  }, [cycleId, member?.isCouncilMember])
 
   return (
     <LockItem

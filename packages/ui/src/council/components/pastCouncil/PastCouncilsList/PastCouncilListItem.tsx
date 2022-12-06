@@ -19,18 +19,17 @@ interface Props {
 }
 
 export const PastCouncilListItem = ({ council }: Props) => {
-  const { isLoading, proposalsApproved, proposalsRejected, totalSpent, spentOnProposals } = usePastCouncilStats(
-    council.id
-  )
+  const cycleId = council.cycleId ?? 1
+  const { isLoading, proposalsApproved, proposalsRejected, totalSpent, spentOnProposals } = usePastCouncilStats(cycleId)
 
   return (
     <PastCouncilTableListItem
       $colLayout={PastCouncilColLayout}
       $isPast
       as={GhostRouterLink}
-      to={generatePath(CouncilRoutes.pastCouncil, { id: council.id })}
+      to={generatePath(CouncilRoutes.pastCouncil, { cycleId })}
     >
-      <Info>#{council.id}</Info>
+      <Info>#{council.cycleId}</Info>
       <BlockTime block={council.endedAt} layout="reverse-start" lessInfo />
       {isLoading ? <Loading withoutMargin /> : <TokenValue value={totalSpent} />}
       {isLoading ? <Loading withoutMargin /> : <TokenValue value={spentOnProposals} />}

@@ -6,13 +6,10 @@ import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PastCouncilMembersItem } from '@/council/components/pastCouncil/PastCouncilMembers/PastCouncilMembersItem'
 import { usePastCouncilMembers } from '@/council/hooks/usePastCouncilMembers'
+import { PastCouncilProps as Props } from '@/council/types'
 
-interface Props {
-  councilId: string
-}
-
-export const PastCouncilMembers = ({ councilId }: Props) => {
-  const { isLoading, councilMembers } = usePastCouncilMembers(councilId)
+export const PastCouncilMembers = ({ cycleId }: Props) => {
+  const { isLoading, councilMembers } = usePastCouncilMembers(cycleId)
 
   if (isLoading) {
     return <Loading />

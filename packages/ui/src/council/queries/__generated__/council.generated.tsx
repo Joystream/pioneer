@@ -204,6 +204,7 @@ export type PastCouncilFieldsFragment = {
   endedAtBlock?: number | null
   endedAtNetwork?: Types.Network | null
   endedAtTime?: any | null
+  councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
 }
 
 export type PastCouncilDetailedFieldsFragment = {
@@ -213,6 +214,7 @@ export type PastCouncilDetailedFieldsFragment = {
   endedAtNetwork?: Types.Network | null
   endedAtTime?: any | null
   councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: string; unpaidReward: string }>
+  councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
 }
 
 export type ElectionCandidateFieldsFragment = {
@@ -610,6 +612,7 @@ export type GetElectedCouncilQuery = {
   electedCouncils: Array<{
     __typename: 'ElectedCouncil'
     id: string
+    cycleId: number
     electedAtBlock: number
     electedAtTime: any
     electedAtNetwork: Types.Network
@@ -684,6 +687,7 @@ export type GetPastCouncilsQuery = {
     endedAtBlock?: number | null
     endedAtNetwork?: Types.Network | null
     endedAtTime?: any | null
+    councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
   }>
 }
 
@@ -695,7 +699,7 @@ export type GetPastCouncilsCountQuery = {
 }
 
 export type GetPastCouncilQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']
+  cycleId: Types.Scalars['Int']
   fromBlock: Types.Scalars['Int']
   toBlock: Types.Scalars['Int']
 }>
@@ -709,6 +713,7 @@ export type GetPastCouncilQuery = {
     endedAtNetwork?: Types.Network | null
     endedAtTime?: any | null
     councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: string; unpaidReward: string }>
+    councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
   } | null
   budgetSpendingEvents: Array<{
     __typename: 'BudgetSpendingEvent'
@@ -752,7 +757,7 @@ export type GetPastCouncilQuery = {
 }
 
 export type GetPastCouncilMembersQueryVariables = Types.Exact<{
-  councilId: Types.Scalars['ID']
+  cycleId: Types.Scalars['Int']
   fromBlock: Types.Scalars['Int']
   toBlock: Types.Scalars['Int']
 }>
@@ -1546,6 +1551,9 @@ export const ElectedCouncilFieldsFragmentDoc = gql`
 export const PastCouncilFieldsFragmentDoc = gql`
   fragment PastCouncilFields on ElectedCouncil {
     id
+    councilElections {
+      cycleId
+    }
     endedAtBlock
     endedAtNetwork
     endedAtTime
@@ -1870,8 +1878,8 @@ export type GetPastCouncilsCountQueryResult = Apollo.QueryResult<
   GetPastCouncilsCountQueryVariables
 >
 export const GetPastCouncilDocument = gql`
-  query GetPastCouncil($id: ID!, $fromBlock: Int!, $toBlock: Int!) {
-    electedCouncilByUniqueInput(where: { id: $id }) {
+  query GetPastCouncil($cycleId: ID!, $fromBlock: Int!, $toBlock: Int!) {
+    electedCouncilByUniqueInput(where: { cycleId: $cycleId }) {
       ...PastCouncilDetailedFields
     }
     budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
@@ -1904,7 +1912,7 @@ export const GetPastCouncilDocument = gql`
  * @example
  * const { data, loading, error } = useGetPastCouncilQuery({
  *   variables: {
- *      id: // value for 'id'
+ *      cycleId: // value for 'cycleId'
  *      fromBlock: // value for 'fromBlock'
  *      toBlock: // value for 'toBlock'
  *   },
@@ -1926,8 +1934,8 @@ export type GetPastCouncilQueryHookResult = ReturnType<typeof useGetPastCouncilQ
 export type GetPastCouncilLazyQueryHookResult = ReturnType<typeof useGetPastCouncilLazyQuery>
 export type GetPastCouncilQueryResult = Apollo.QueryResult<GetPastCouncilQuery, GetPastCouncilQueryVariables>
 export const GetPastCouncilMembersDocument = gql`
-  query GetPastCouncilMembers($councilId: ID!, $fromBlock: Int!, $toBlock: Int!) {
-    councilMembers(where: { electedInCouncil: { id_eq: $councilId } }) {
+  query GetPastCouncilMembers($cycleId: ID!, $fromBlock: Int!, $toBlock: Int!) {
+    councilMembers(where: { electedInCouncil: { councilElections_some: { cycleId_eq: 1 } } }) {
       member {
         ...MemberFields
       }
@@ -1952,7 +1960,7 @@ export const GetPastCouncilMembersDocument = gql`
  * @example
  * const { data, loading, error } = useGetPastCouncilMembersQuery({
  *   variables: {
- *      councilId: // value for 'councilId'
+ *      cycleId: // value for 'cycleId'
  *      fromBlock: // value for 'fromBlock'
  *      toBlock: // value for 'toBlock'
  *   },

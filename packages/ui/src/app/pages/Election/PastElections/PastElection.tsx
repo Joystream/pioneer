@@ -20,8 +20,8 @@ export const PastElection = () => {
   useCandidatePreviewViaUrlParameter()
   const history = useHistory()
 
-  const { id } = useParams<{ id: string }>()
-  const { isLoading, election } = usePastElection(id)
+  const { cycleId } = useParams<{ cycleId: string }>()
+  const { isLoading, election } = usePastElection(cycleId)
 
   useEffect(() => {
     if (!isLoading && !election) {
@@ -43,7 +43,7 @@ export const PastElection = () => {
           <ButtonsGroup>
             <CopyButtonTemplate
               size="medium"
-              textToCopy={getUrl({ route: ElectionRoutes.pastElection, params: { id: election.id } })}
+              textToCopy={getUrl({ route: ElectionRoutes.pastElection, params: { cycleId: election.cycleId } })}
               icon={<LinkIcon />}
             >
               Copy link
@@ -75,5 +75,5 @@ export const PastElection = () => {
     )
   }
 
-  return <PageLayout header={displayHeader()} main={displayMain()} lastBreadcrumb={'Election #' + id} />
+  return <PageLayout header={displayHeader()} main={displayMain()} lastBreadcrumb={'Election #' + cycleId} />
 }

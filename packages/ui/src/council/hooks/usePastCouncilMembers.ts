@@ -3,9 +3,9 @@ import { useMemo } from 'react'
 import { useGetCouncilBlockRangeQuery, useGetPastCouncilMembersQuery } from '@/council/queries'
 import { asPastCouncilMember } from '@/council/types/PastCouncilMember'
 
-export const usePastCouncilMembers = (councilId: string) => {
+export const usePastCouncilMembers = (cycleId: number) => {
   const { loading: loadingRange, data: rangeData } = useGetCouncilBlockRangeQuery({
-    variables: { where: { id: councilId } },
+    variables: { where: { councilElections_some: { cycleId } } },
   })
   const { fromBlock, toBlock } = useMemo(() => {
     return {
@@ -15,11 +15,7 @@ export const usePastCouncilMembers = (councilId: string) => {
   }, [loadingRange, JSON.stringify(rangeData)])
 
   const { loading: loadingCouncilData, data } = useGetPastCouncilMembersQuery({
-    variables: {
-      councilId,
-      fromBlock,
-      toBlock,
-    },
+    variables: { cycleId, fromBlock, toBlock },
   })
 
   return {

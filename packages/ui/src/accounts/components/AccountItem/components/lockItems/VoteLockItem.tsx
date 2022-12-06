@@ -36,20 +36,20 @@ export const VoteLockItem = ({ lock, address, isRecoverable }: LockDetailsProps)
     [remainingPeriod]
   )
 
-  const electionId = vote?.electionRound.id
+  const cycleId = vote?.electionRound.cycleId
 
   const goToElectionButton = useMemo(() => {
-    if (!electionId || !election) {
+    if (!cycleId || !election) {
       return null
     }
 
-    const pointsToPastElection = election.cycleId !== vote.electionRound.cycleId
+    const pointsToPastElection = election.cycleId !== cycleId
 
     const electionPath = pointsToPastElection
-      ? generatePath(ElectionRoutes.pastElection, { id: electionId })
+      ? generatePath(ElectionRoutes.pastElection, { cycleId: String(cycleId) })
       : generatePath(ElectionRoutes.currentElection)
     return <LockLinkButton label="Show Election" to={electionPath} />
-  }, [electionId, election?.cycleId, vote?.electionRound.cycleId])
+  }, [cycleId, election?.cycleId, vote?.electionRound.cycleId])
 
   return (
     <LockItem

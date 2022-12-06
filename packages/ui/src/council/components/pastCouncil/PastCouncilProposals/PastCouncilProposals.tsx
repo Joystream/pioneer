@@ -7,13 +7,10 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PastCouncilProposalsItem } from '@/council/components/pastCouncil/PastCouncilProposals/PastCouncilProposalsItem'
 import { PastCouncilTabsHeaders } from '@/council/components/pastCouncil/PastCouncilTabs'
 import { usePastCouncilProposals } from '@/council/hooks/usePastCouncilProposals'
+import { PastCouncilProps as Props } from '@/council/types'
 
-interface Props {
-  councilId: string
-}
-
-export const PastCouncilProposals = ({ councilId }: Props) => {
-  const { isLoading, proposals } = usePastCouncilProposals(councilId)
+export const PastCouncilProposals = ({ cycleId }: Props) => {
+  const { isLoading, proposals } = usePastCouncilProposals(cycleId)
 
   if (isLoading) {
     return <Loading />

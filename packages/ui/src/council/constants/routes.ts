@@ -1,7 +1,7 @@
 export const CouncilRoutes = {
   council: '/council',
   pastCouncils: '/council/past-councils',
-  pastCouncil: '/council/past-councils/:id',
+  pastCouncil: '/council/past-councils/:cycleId',
 } as const
 
 type CouncilRoutesType = typeof CouncilRoutes
@@ -10,7 +10,7 @@ export const ElectionRoutes = {
   currentElection: '/election',
   myVotes: '/election/my-votes',
   pastElections: '/election/past-elections',
-  pastElection: '/election/past-elections/:id',
+  pastElection: '/election/past-elections/:cycleId',
   pastVotes: '/election/past-votes',
 } as const
 

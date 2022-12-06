@@ -54,6 +54,9 @@ fragment ElectedCouncilFields on ElectedCouncil {
 
 fragment PastCouncilFields on ElectedCouncil {
   id
+  councilElections {
+    cycleId
+  }
   endedAtBlock
   endedAtNetwork
   endedAtTime
@@ -204,8 +207,8 @@ query GetPastCouncilsCount {
   }
 }
 
-query GetPastCouncil($id: ID!, $fromBlock: Int!, $toBlock: Int!) {
-  electedCouncilByUniqueInput(where: { id: $id }) {
+query GetPastCouncil($cycleId: ID!, $fromBlock: Int!, $toBlock: Int!) {
+  electedCouncilByUniqueInput(where: { cycleId: $cycleId }) {
     ...PastCouncilDetailedFields
   }
   budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
@@ -222,8 +225,8 @@ query GetPastCouncil($id: ID!, $fromBlock: Int!, $toBlock: Int!) {
   }
 }
 
-query GetPastCouncilMembers($councilId: ID!, $fromBlock: Int!, $toBlock: Int!) {
-  councilMembers(where: { electedInCouncil: { id_eq: $councilId } }) {
+query GetPastCouncilMembers($cycleId: ID!, $fromBlock: Int!, $toBlock: Int!) {
+  councilMembers(where: { electedInCouncil: { councilElections_some: { cycleId_eq: 1 } } }) {
     member {
       ...MemberFields
     }
