@@ -10,7 +10,7 @@ export const urlParamToWorkingGroupId = (name: string) => {
       case 'marketing':
         return 'operationsWorkingGroupGamma'
       case 'apps':
-        return 'gatewayWorkingGroup'
+        return 'appWorkingGroup'
       default:
         return name
     }
