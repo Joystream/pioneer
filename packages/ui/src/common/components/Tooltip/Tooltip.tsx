@@ -4,6 +4,8 @@ import { usePopper } from 'react-popper'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { TextMedium } from '@/common/components/typography'
+
 import { BorderRad, Colors, Fonts, Transitions, ZIndex } from '../../constants'
 import { LinkSymbol, LinkSymbolStyle } from '../icons/symbols'
 
@@ -149,19 +151,21 @@ export const Tooltip = ({
                 forBig={forBig}
               >
                 {tooltipTitle && <TooltipPopupTitle>{tooltipTitle}</TooltipPopupTitle>}
-                <TooltipText>{tooltipText}</TooltipText>
-                {tooltipLinkURL &&
-                  (isExternalLink() ? (
-                    <TooltipExternalLink href={tooltipLinkURL} target="_blank">
-                      {tooltipLinkText ?? 'Link'}
-                      <LinkSymbol />
-                    </TooltipExternalLink>
-                  ) : (
-                    <TooltipLink to={tooltipLinkURL} target="_blank">
-                      {tooltipLinkText ?? 'Link'}
-                      <LinkSymbol />
-                    </TooltipLink>
-                  ))}
+                <TooltipText>
+                  {tooltipText}
+                  {tooltipLinkURL &&
+                    (isExternalLink() ? (
+                      <TooltipExternalLink href={tooltipLinkURL} target="_blank">
+                        <TextMedium>{tooltipLinkText ?? 'Link'}</TextMedium>
+                        <LinkSymbol />
+                      </TooltipExternalLink>
+                    ) : (
+                      <TooltipLink to={tooltipLinkURL} target="_blank">
+                        <TextMedium>{tooltipLinkText ?? 'Link'}</TextMedium>
+                        <LinkSymbol />
+                      </TooltipLink>
+                    ))}
+                </TooltipText>
               </TooltipPopupContainer>,
               document.body
             ))}

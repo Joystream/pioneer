@@ -1,6 +1,6 @@
 import { ForumPostMetadata } from '@joystream/metadata-protobuf'
-import React, { useEffect, useRef, useState } from 'react'
-import { generatePath, useHistory, useParams } from 'react-router-dom'
+import React, { useEffect, useRef } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { useApi } from '@/api/hooks/useApi'
@@ -25,7 +25,6 @@ import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
 import { ForumRoutes } from '@/forum/constant'
 import { useForumThread } from '@/forum/hooks/useForumThread'
-import { ForumPost } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { ForumPageLayout } from './components/ForumPageLayout'
@@ -44,11 +43,6 @@ export const ForumThread = () => {
   const sideNeighborRef = useRef<HTMLDivElement>(null)
   const newPostRef = useRef<HTMLDivElement>(null)
   const history = useHistory()
-  const [replyTo, setReplyTo] = useState<ForumPost | undefined>()
-
-  useEffect(() => {
-    replyTo && newPostRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'end' })
-  }, [replyTo])
 
   const isThreadActive = !!(thread && thread.status.__typename === 'ThreadStatusActive')
 
@@ -59,7 +53,7 @@ export const ForumThread = () => {
         createType('ForumUserId', Number.parseInt(active.id)),
         categoryId,
         threadId,
-        metadataToBytes(ForumPostMetadata, { text: postText, repliesTo: replyTo ? Number(replyTo.id) : undefined }),
+        metadataToBytes(ForumPostMetadata, { text: postText, repliesTo: undefined }),
         isEditable
       )
     }
@@ -114,16 +108,8 @@ export const ForumThread = () => {
 
   const displayMain = () => (
     <ThreadPanel ref={sideNeighborRef}>
-      <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} replyToPost={setReplyTo} />
-      {thread && isThreadActive && (
-        <NewThreadPost
-          ref={newPostRef}
-          replyTo={replyTo}
-          removeReply={() => setReplyTo(undefined)}
-          getTransaction={getTransaction}
-          replyToLink={`${generatePath(ForumRoutes.thread, { id: thread.id })}?post=${replyTo?.id}`}
-        />
-      )}
+      <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} />
+      {thread && isThreadActive && <NewThreadPost ref={newPostRef} getTransaction={getTransaction} />}
     </ThreadPanel>
   )
 

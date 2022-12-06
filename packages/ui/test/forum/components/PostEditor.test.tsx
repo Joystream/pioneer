@@ -8,6 +8,7 @@ import { isModalWithData } from '@/common/providers/modal/provider'
 import { UseModal } from '@/common/providers/modal/types'
 import { PostEditor } from '@/forum/components/PostList/PostEditor'
 import { ForumPost } from '@/forum/types'
+import { forumPostMock } from '@/mocks/data/commonMocks'
 
 import { getButton } from '../../_helpers/getButton'
 import { mockCKEditor } from '../../_mocks/components/CKEditor'
@@ -20,6 +21,7 @@ jest.mock('@/common/components/CKEditor', () => ({
 }))
 
 const post: ForumPost = {
+  ...forumPostMock,
   id: '1:1',
   createdAt: new Date().toISOString(),
   author: getMember('alice'),
