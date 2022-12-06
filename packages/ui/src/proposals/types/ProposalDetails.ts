@@ -298,6 +298,13 @@ const asSetReferralCut: DetailsCast<'SetReferralCutProposalDetails'> = (fragment
   amount: new BN(fragment.newReferralCut),
 })
 
+const asSetMembershipLeadInvitationQuota: DetailsCast<'SetMembershipLeadInvitationQuotaProposalDetails'> = (
+  fragment
+): SetMembershipLeadInvitationQuota => ({
+  type: 'setMembershipLeadInvitationQuota',
+  amount: new BN(fragment.newLeadInvitationQuota),
+})
+
 const asSetInitialInvitationBalance: DetailsCast<'SetInitialInvitationBalanceProposalDetails'> = (
   fragment
 ): SetInitialInvitationBalanceDetails => ({
@@ -348,6 +355,7 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   SetInitialInvitationCountProposalDetails: asSetInitialInvitationCount,
   SetCouncilorRewardProposalDetails: asSetCouncilorReward,
   VetoProposalDetails: asVeto,
+  SetMembershipLeadInvitationQuotaProposalDetails: asSetMembershipLeadInvitationQuota,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {
