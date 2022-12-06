@@ -3382,7 +3382,7 @@ __metadata:
     "@jest/types": ^27.2.5
     "@joystream/markdown-editor": ^0.1.0
     "@joystream/metadata-protobuf": ^2.0.0
-    "@joystream/types": 0.20.3
+    "@joystream/types": 0.20.5
     "@miragejs/graphql": ^0.1.13
     "@nivo/bar": ^0.79.1
     "@nivo/core": ^0.79.0
@@ -3483,9 +3483,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joystream/types@npm:0.20.3":
-  version: 0.20.3
-  resolution: "@joystream/types@npm:0.20.3"
+"@joystream/types@npm:0.20.5":
+  version: 0.20.5
+  resolution: "@joystream/types@npm:0.20.5"
   dependencies:
     "@polkadot/api": 8.9.1
     "@polkadot/keyring": 9.5.1
@@ -3495,7 +3495,7 @@ __metadata:
     ajv: ^6.11.0
     lodash: ^4.17.15
     moment: ^2.24.0
-  checksum: 3e41b6923b0b1a1caf34eb35ca781b1d44c688151b06626b6a900e9eee1561e4d8cdbbb0a69078e8208e7891c4a96a6a8e2d11b026b20c1e3c6029a3fd938b6a
+  checksum: a3e310f358d7aa6d51a39d639f6ceec5052959abd38bc3ef34339a3c411ea91647d4fe50d09361d2aecd7d254da5d90b774e44dc67656cf1a5cd72aa89b0ba7b
   languageName: node
   linkType: hard
 
