@@ -34,6 +34,12 @@ export const ModalContextProvider = (props: Props) => {
         setIsClosing(true)
       }
     },
+    hideModalWithoutConfirmModal: () => {
+      setModal(null)
+      setModalData(null)
+      setCurrentModalMachine(undefined)
+      setIsClosing(false)
+    },
     modal,
     modalData,
     currentModalMachine,

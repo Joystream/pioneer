@@ -39,6 +39,7 @@ describe('UI: PostEditor', () => {
       modal: null,
       modalData: undefined,
       hideModal: () => null,
+      hideModalWithoutConfirmModal: () => null,
       showModal: (call) => {
         useModal.modal = call.modal
         if (isModalWithData(call)) {

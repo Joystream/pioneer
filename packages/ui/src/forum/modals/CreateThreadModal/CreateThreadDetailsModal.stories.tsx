@@ -24,6 +24,7 @@ const Template: Story = ({ breadcrumbs, send }) => {
               modalData: {},
               showModal: () => undefined,
               hideModal: () => undefined,
+              hideModalWithoutConfirmModal: () => undefined,
               modal: null,
             }}
           >

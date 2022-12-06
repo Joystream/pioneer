@@ -17,6 +17,7 @@ const Template: Story = (args) => {
       <ModalContext.Provider
         value={{
           hideModal: () => undefined,
+          hideModalWithoutConfirmModal: () => undefined,
           modal: 'foo',
           showModal: () => undefined,
           modalData: {

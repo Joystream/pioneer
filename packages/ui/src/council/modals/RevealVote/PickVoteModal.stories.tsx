@@ -20,6 +20,7 @@ export default {
 interface Props {
   votes: VotingAttempt[]
   hideModal: () => void
+  hideModalWithoutConfirmModal: () => void
   showModal: () => void
 }
 
@@ -32,12 +33,12 @@ const useAccounts = {
   hasAccounts: true,
 }
 
-const Template: Story<Props> = ({ votes, hideModal, showModal }) => {
+const Template: Story<Props> = ({ votes, hideModal, showModal, hideModalWithoutConfirmModal }) => {
   const modalData = { voteForHandle: 'Dave' }
   const send = (() => undefined) as unknown as SendVotePicked
   return (
     <AccountsContext.Provider value={useAccounts}>
-      <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
+      <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal, hideModalWithoutConfirmModal }}>
         <PickVoteModal send={send} votes={votes} />
       </ModalContext.Provider>
     </AccountsContext.Provider>

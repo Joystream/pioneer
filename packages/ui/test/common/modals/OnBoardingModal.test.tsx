@@ -43,6 +43,7 @@ describe('UI: OnBoardingModal', () => {
 
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
+    hideModalWithoutConfirmModal: jest.fn(),
     showModal: jest.fn(),
     modal: null,
     modalData: undefined,

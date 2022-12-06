@@ -20,6 +20,7 @@ export const mockUseModalCall = (props: Partial<UseModal<any>>) => {
 
 const mockUseModal = jest.fn<UseModal<any>, []>(() => ({
   hideModal: jest.fn(),
+  hideModalWithoutConfirmModal: jest.fn(),
   showModal: jest.fn(),
   modal: null,
   modalData: null,

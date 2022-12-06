@@ -33,13 +33,12 @@ import {
 } from '../../_mocks/transactions'
 import { WORKER } from '../../_mocks/working-groups'
 
-
-
 const mockUseModal: UseModal<any> = {
   modal: null,
   modalData: { workerId: 'forumWorkingGroup-1' },
   showModal: () => null,
   hideModal: () => null,
+  hideModalWithoutConfirmModal: () => null,
 }
 
 jest.mock('@/common/hooks/useModal', () => ({
