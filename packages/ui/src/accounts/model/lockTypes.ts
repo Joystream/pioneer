@@ -20,7 +20,7 @@ export const lockTypes: { [key: string]: LockType } = {
   ['invitemb']: 'Invitation',
   ['boundsta']: 'Bound Staking Account',
   ['bounty  ']: 'Bounties',
-  ['wg-gatew']: 'Apps Worker',
+  ['wg-appli']: 'Apps Worker',
   ['wg-opera']: 'Builders Worker',
   ['wg-operb']: 'HR Worker',
   ['wg-operg']: 'Marketing Worker',
