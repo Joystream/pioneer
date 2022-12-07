@@ -9,7 +9,7 @@ export function getNextPayout(workers: Pick<Worker, 'group'>[], blockNumber: BN,
   const blocksUntilNext = (interval?: BN) => interval?.sub(blockNumber.mod(interval))
 
   const userGroups = [...new Set(workers.map((worker) => worker.group.id))]
-  const nextPayoutPerGroup = userGroups.map((name) => api?.consts[name].rewardPeriod.toBn()).map(blocksUntilNext)
+  const nextPayoutPerGroup = userGroups.map((name) => api?.consts[name].rewardPeriod as BN).map(blocksUntilNext)
 
   if (nextPayoutPerGroup.length) {
     return nextPayoutPerGroup.reduce((closest, time) => (closest = BN.min(closest ?? BN_ZERO, time ?? BN_MILLION)))
