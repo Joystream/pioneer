@@ -36,7 +36,11 @@ The common and domain specific code is split by functionality:
 * `model` - Contains business logic like validation, helpers, etc.
 * `queries` - Contains domain specific queries
 * `types` - TypeScript types
+
+### Providers and Services
+* `api/proxyApi` - Abstaction to `@polkadot/api`
 * `providers` - React context providers
+* `services/i18n` - Internationalization (see #1989)
 
 ## Concepts
 
