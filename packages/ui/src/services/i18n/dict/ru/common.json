@@ -1,4 +1,50 @@
 {
+  "lorem": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "modals": {
+    "authorizeTransaction": {
+      "title": "Authorize transaction"
+    },
+    "reportContent": {
+      "title": "Report an image",
+      "alreadyReported": "You already reported this image",
+      "content": "You are about to report the following image:",
+      "label": "Image to report",
+      "preview": "Show image",
+      "proceedButton": "Proceed"
+    },
+    "transactionFee": {
+      "label": "Transaction fee:",
+      "tooltipText": "Lorem ipsum",
+      "feeSending": "Fee sending from account"
+    },
+    "wait": {
+      "title": "Please wait...",
+      "description": "Checking requirements"
+    },
+    "failed": {
+      "desxcription": "There was a problem while withdrawing your contribution."
+    },
+    "transactionCanceled": "Transaction has been cancelled."
+  },
+  "authorizeTransaction": "Authorize Transaction",
+  "success": "Success",
+  "buttons": {
+    "withdraw": "Withdraw",
+    "withdrawStake": "Withdraw Stake",
+    "claim": "Claim",
+    "claimReward": "Claim Reward",
+    "contribute": "Contribute",
+    "notifyAboutChanges": "Notify me about changes"
+  },
+  "created": "Created",
+  "council": "Council",
+  "forms": {
+    "clearAllFilters": "Clear all filters",
+    "noResults": "No results found"
+  },
+  "signInInfo": "Sign in with your Polkadot wallet to view your account-specific information.",
+  "withdrawing": "Withdrawing",
+  "none": "None",
   "languages": {
     "title": "Выберите язык",
     "en": "английский",
@@ -6,5 +52,40 @@
     "en-UK": "английский",
     "ru": "русский",
     "ru-RU": "русский"
+  },
+  "mentions": {
+    "name": "name",
+    "type": {
+      "member": "member",
+      "proposal": "proposal",
+      "proposal_post": "proposal post",
+      "forum_thread": "forum thread",
+      "forum_post": "forum post",
+      "opening": "opening",
+      "application": "application"
+    },
+    "tooltips": {
+      "proposal": {
+        "timeLeft": "Time Left: {{time}}",
+        "past": "Past Proposal"
+      },
+      "forumThread": {
+        "answers": "Answers"
+      },
+      "forumPost": {
+        "repliedOn": "Replied on: {{date}}"
+      },
+      "opening": {
+        "duration": "Duration: {{time}}",
+        "past": "Past Opening",
+        "reward": "<0>Reward per 3600 blocks</0><1>{{value}}</1><2>tJOY</2>",
+        "applications": "<0>Applications</0><1>{{current}}</1>",
+        "hired": "<0>Hired</0><1>{{current}}</1><2>/ {{limit}}</2>"
+      },
+      "application": {
+        "appliedOn": "Applied on: {{date}}",
+        "application": "Application"
+      }
+    }
   }
 }

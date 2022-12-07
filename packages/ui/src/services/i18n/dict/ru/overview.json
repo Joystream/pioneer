@@ -1,0 +1,121 @@
+{
+  "council": {
+    "title": "Council",
+    "stage": {
+      "label": "Stage",
+      "normal": "Normal",
+      "announcing": "Announcing",
+      "revealing": "Revealing"
+    },
+    "round": "Round",
+    "nextElectionIn": "Next election in",
+    "councilMember": "Council member"
+  },
+  "sidebar": {
+    "sections": {
+      "myRoles": "My roles",
+      "myApplications": "My applications",
+      "myThreads": "My threads",
+      "myCandidacies": "My candidacies",
+      "myProposals": "My proposals",
+      "proposals": "Proposals",
+      "candidacies": "Candidacies",
+      "applications": "Applications"
+    },
+    "roles": {
+      "council": "Council",
+      "forum": "Forum",
+      "storage": "Storage",
+      "content": "Content Directory",
+      "membership": "Membership",
+      "lead": "LEAD",
+      "pendingProposals": "Pending proposals",
+      "reward": "Reward"
+    },
+    "thread": {
+      "new": "New",
+      "answers": "Answers"
+    },
+    "periodLength": "Period length",
+    "emptyStates": {
+      "application": {
+        "buttonLabel": "Go to Working Groups",
+        "title": "Working Groups",
+        "description": "Join a working group and become an active member lorem ipsum dolor adipiscing elit neque massa, dignissim a finibus a, egestas",
+        "type": "Applications"
+      },
+      "candidacies": {
+        "buttonLabel": "Go to Council",
+        "title": "Governance",
+        "description": "Nominate yourself or vote for a candidates lorem ipsum dolor sit amet, adipiscing elit neque massa, dignissim a finibus a, egestas ",
+        "type": "Candidacies"
+      },
+      "proposals": {
+        "buttonLabel": "Go to Proposals",
+        "title": "Share your ideas",
+        "description": "Submit or vote a proposals to have an impact on the future of the platform",
+        "type": "Proposals"
+      },
+      "forum": {
+        "buttonLabel": "Go to Forum",
+        "title": "Be part of our community",
+        "description": "A forum is a place where lorem ipsum dolor sit amet, consectetur adipiscing elit neque massa, dignissim a finibus a, egestas",
+        "type": "Forum"
+      }
+    }
+  },
+  "forum": {
+    "title": "Forum",
+    "newThreads": "New threads this week",
+    "new": "New",
+    "answers": "Answers",
+    "latestThreads": "Latest Threads"
+  },
+  "workingGroups": {
+    "title": "Working Groups",
+    "workingGroups": "Working Groups",
+    "workers": "Workers",
+    "totalBudget": "Total budget",
+    "openings": "Openings",
+    "timeLeft": "Time left",
+    "rewardPerBlock": "Rewards per {{value}} blocks",
+    "applicants": "Applicants"
+  },
+  "proposals": {
+    "title": "Proposals",
+    "new": "New proposals",
+    "approved": "Proposals approved",
+    "rejected": "Proposals rejected",
+    "timeLeft": "Time left",
+    "approvedVotes": "Approved",
+    "rejectedVotes": "Rejected",
+    "waiting": "Waiting",
+    "vote": "vote",
+    "votes": "votes"
+  },
+  "welcome": "Hi, ",
+  "guest": "Stranger",
+  "totalEarned": "Total earned this month",
+  "totalOwed": "Total owed reward this month",
+  "deadline": {
+    "remainingTime": "Remaining time: ",
+    "proposal": "Proposal",
+    "election": "Election",
+    "proposalMessage": "Proposal decision period for {{proposalName}} ending soon, ",
+    "proposalLink": "cast your vote",
+    "announcingPeriod": "Announcing period is ending soon, ",
+    "announcingLink": "Announce candidacy",
+    "votingPeriod": "Voting period is ending soon, ",
+    "votingLink": "View candidates",
+    "revealingPeriod": "Revealing period is ending soon,",
+    "revealingLink": "Reveal your votes",
+    "upcomingOpenings": "Upcoming Openings",
+    "opening": "Opening",
+    "upcomingOpeningsMessage": "Upcoming openings",
+    "openingMessage": "The opening for {{openingName}} by {{workerGroupName}} is going to be active soon, ",
+    "openingLink": " apply",
+    "startInFuture": "Start in the future",
+    "deadlinesTitle": "Deadlines",
+    "emptyState": "You don't have any deadlines"
+  }
+}

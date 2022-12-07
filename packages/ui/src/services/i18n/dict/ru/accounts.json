@@ -1,0 +1,11 @@
+{
+  "modals": {
+    "insufficientFunds": {
+      "title": "Insufficient Funds",
+      "feeInfo1": "Un1fortunately, you don't have enough Tokens on your Controller account. You need at least ",
+      "feeInfo2": " for the transaction fee",
+      "transferable": "Transferable balance",
+      "addJoy": "Add tJOY to Controller Account"
+    }
+  }
+}
