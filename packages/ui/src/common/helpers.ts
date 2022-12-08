@@ -20,7 +20,7 @@ export const nameMapping = (value: string) => {
   switch (value) {
     case 'Operations Alpha':
       return 'Builders'
-    case 'Gateway':
+    case 'App':
       return 'Apps'
     case 'Operations Beta':
       return 'HR'
@@ -57,7 +57,7 @@ export const wgListItemMappings = (value: string) => {
           'Run and maintain distributor nodes that deliver large volumes of upstream data to a large number of simultaneous end users.',
         tooltipLink: 'https://joystream.gitbook.io/testnet-workspace/system/storage#distributor',
       }
-    case 'Gateway':
+    case 'App':
       return {
         subtitle:
           'Apps group runs multiple video streaming apps working on Joystream blockchain and provides support to all external app operators.',
