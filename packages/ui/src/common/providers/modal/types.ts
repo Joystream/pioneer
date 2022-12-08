@@ -35,8 +35,7 @@ export interface UseModal<Data> {
   modal: string | null
   modalData: Data
   showModal: <Call extends AnyModalCall>(call: Call) => void
-  hideModal: () => void
-  hideModalWithoutConfirmModal: () => void
+  hideModal: (showConfirmOrAny?: boolean | any) => void
   setMachineState?: <
     TContext,
     TEvent extends EventObject,

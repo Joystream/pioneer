@@ -23,7 +23,6 @@ const Template: Story = (args) => {
             author: getMember('alice'),
           },
           hideModal: () => undefined,
-          hideModalWithoutConfirmModal: () => undefined,
           showModal: () => undefined,
           modal: 'PostHistoryModal',
         }}

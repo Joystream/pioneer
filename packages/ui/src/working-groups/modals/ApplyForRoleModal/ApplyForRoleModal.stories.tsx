@@ -28,7 +28,6 @@ const Template: Story = () => {
             },
             showModal: () => undefined,
             hideModal: () => undefined,
-            hideModalWithoutConfirmModal: () => undefined,
             modal: null,
           }}
         >

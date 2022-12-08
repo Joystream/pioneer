@@ -24,8 +24,9 @@ export const ModalContextProvider = (props: Props) => {
         setModalData(modalCall.data)
       }
     },
-    hideModal: () => {
-      if (isClosing || !MODAL_WITH_CLOSE_CONFIRMATION.includes((modal ?? '') as ModalNames)) {
+    hideModal: (showConfirmOrAny = false) => {
+      const preferShowConfirm = typeof showConfirmOrAny === 'boolean' ? showConfirmOrAny : false
+      if (!preferShowConfirm || isClosing || !MODAL_WITH_CLOSE_CONFIRMATION.includes((modal ?? '') as ModalNames)) {
         setModal(null)
         setModalData(null)
         setCurrentModalMachine(undefined)
@@ -33,12 +34,6 @@ export const ModalContextProvider = (props: Props) => {
       } else {
         setIsClosing(true)
       }
-    },
-    hideModalWithoutConfirmModal: () => {
-      setModal(null)
-      setModalData(null)
-      setCurrentModalMachine(undefined)
-      setIsClosing(false)
     },
     modal,
     modalData,

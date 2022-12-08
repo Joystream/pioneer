@@ -22,16 +22,15 @@ interface Props extends Omit<VoteForCouncilFormModalProps, 'minStake'> {
   id: string
   minStake: number
   hideModal: () => void
-  hideModalWithoutConfirmModal: () => void
   showModal: () => void
   state: VoteForCouncilMachineState
 }
 
-const Template: Story<Props> = ({ minStake, id, send, hideModal, hideModalWithoutConfirmModal, showModal, state }) => {
+const Template: Story<Props> = ({ minStake, id, send, hideModal, showModal, state }) => {
   const modalData = { id }
   return (
     <MockApolloProvider members council>
-      <ModalContext.Provider value={{ modalData, modal: null, hideModal, hideModalWithoutConfirmModal, showModal }}>
+      <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
         <VoteForCouncilFormModal minStake={new BN(minStake)} send={send} state={state} />
       </ModalContext.Provider>
     </MockApolloProvider>

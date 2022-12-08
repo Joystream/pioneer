@@ -21,7 +21,6 @@ export const Default: Story = () => {
           },
           modal: 'Foo',
           hideModal: () => undefined,
-          hideModalWithoutConfirmModal: () => undefined,
           showModal: () => undefined,
         }}
       >

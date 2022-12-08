@@ -21,7 +21,6 @@ const Template: Story<ActivitiesProps> = (args) => (
     value={{
       showModal: () => null,
       hideModal: () => null,
-      hideModalWithoutConfirmModal: () => null,
       modal: '',
       modalData: {},
     }}

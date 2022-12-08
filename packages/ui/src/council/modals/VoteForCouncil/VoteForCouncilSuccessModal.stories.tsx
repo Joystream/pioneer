@@ -18,15 +18,14 @@ export default {
 interface Props {
   id: string
   hideModal: () => void
-  hideModalWithoutConfirmModal: () => void
   showModal: () => void
 }
 
-const Template: Story<Props> = ({ id, hideModal, hideModalWithoutConfirmModal, showModal }) => {
+const Template: Story<Props> = ({ id, hideModal, showModal }) => {
   const modalData = { id }
   return (
     <MockApolloProvider members council>
-      <ModalContext.Provider value={{ modalData, modal: null, hideModal, hideModalWithoutConfirmModal, showModal }}>
+      <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
         <VoteForCouncilSuccessModal onClose={hideModal} candidateId={modalData.id} />
       </ModalContext.Provider>
     </MockApolloProvider>

@@ -16,7 +16,6 @@ const Template: Story = ({ report, reportFormUrl, userReportedImages }) => (
     value={{
       modal: 'ReportContentModal',
       hideModal: () => undefined,
-      hideModalWithoutConfirmModal: () => undefined,
       showModal: () => undefined,
       modalData: { report },
     }}
