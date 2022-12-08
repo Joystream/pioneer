@@ -41,7 +41,7 @@ export const AddProposalButton = () => {
   if (!areProposalSlotsAvailable)
     return (
       <Tooltip
-        tooltipTitle="MAX_ACTIVE_PROPOSALS"
+        tooltipTitle="Max active proposals limit reached"
         tooltipText="The creation of new proposals is currently disabled because the number of deciding or gracing proposals is restricted to 20."
         tooltipLinkText="Proposal System Constants"
         tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/proposal-system#constants"
