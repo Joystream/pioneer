@@ -42,7 +42,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
 
   const discussionPosts = useMemo(
-    () => thread.discussionPosts.filter((post) => post.status !== 'PostStatusRemoved'),
+    () => thread?.discussionPosts.filter((post) => post.status !== 'PostStatusRemoved') ?? [],
     [thread]
   )
 
