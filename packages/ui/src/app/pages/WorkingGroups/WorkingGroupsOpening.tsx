@@ -26,8 +26,7 @@ import {
   StatsBlock,
   TokenValueStat,
 } from '@/common/components/statistics'
-import { TooltipExternalLink } from '@/common/components/Tooltip'
-import { TextSmall, TextMedium } from '@/common/components/typography'
+import { TextSmall } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { getUrl } from '@/common/utils/getUrl'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -157,19 +156,7 @@ export const WorkingGroupOpening = () => {
               />
               <TokenValueStat
                 title="Minimal stake"
-                tooltipText={
-                  <>
-                    Minimum tokens required to be free from{' '}
-                    <TooltipExternalLink
-                      href="https://joystream.gitbook.io/testnet-workspace/system/accounts-and-staking#locks"
-                      target="_blank"
-                      displayInline
-                    >
-                      <TextMedium>rivalrous locks</TextMedium>
-                    </TooltipExternalLink>{' '}
-                    to be able to stake for the application to this role.
-                  </>
-                }
+                tooltipText="Minimum tokens free of rivalrous locks required as application stake to this role."
                 tooltipLinkText="Learn more"
                 tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/working-groups#staking"
                 value={opening.stake}

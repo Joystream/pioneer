@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
 import { Link } from 'react-router-dom'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { TextMedium } from '@/common/components/typography'
 
@@ -304,21 +304,11 @@ export const TooltipLink = styled(Link)<{ to: string; target: string }>`
 export const TooltipExternalLink = styled.a<{
   href: string | undefined
   target: string
-  displayInline?: boolean
 }>`
-  ${({ displayInline }) => {
-    if (displayInline)
-      return css`
-        display: inline-block;
-      `
-    return css`
-      display: grid;
-      grid-auto-flow: column;
-      grid-column-gap: 8px;
-      margin-top: 10px;
-    `
-  }}
-
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 8px;
+  margin-top: 10px;
   align-items: center;
   width: fit-content;
   font-size: 12px;
@@ -347,9 +337,6 @@ export const TooltipExternalLink = styled.a<{
     }
   }
 `
-TooltipExternalLink.defaultProps = {
-  displayInline: false,
-}
 
 export const TooltipComponent = styled.i<{ maxWidth?: boolean }>`
   display: flex;
