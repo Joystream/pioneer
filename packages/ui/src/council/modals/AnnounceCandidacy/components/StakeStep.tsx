@@ -52,7 +52,7 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
             validation={errorChecker('account') ? 'invalid' : undefined}
             tooltipText={
               <>
-                When losing an election the candidacy lock is released and your stake becomes immediately recoverable.
+                When loosing an election the candidacy lock is released and your stake becomes immediately recoverable.
                 If elected the lock is automatically replaced with a council specific lock of the same amount. The
                 councilor lock is released with the next successful election should you not get re-elected.
               </>
