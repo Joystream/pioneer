@@ -1,3 +1,5 @@
+import { TextDecoder, TextEncoder } from 'util'
+
 import { BN_THOUSAND } from '@polkadot/util'
 import '@testing-library/jest-dom'
 import { configure, screen } from '@testing-library/react'
@@ -132,3 +134,7 @@ expect.extend({
     }
   },
 })
+
+// multihases requires both TextEncoder and TextDecoder but is having trouble with resoving them
+global.TextEncoder = TextEncoder
+global.TextDecoder = TextDecoder as any
