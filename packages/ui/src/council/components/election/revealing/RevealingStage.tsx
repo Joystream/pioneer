@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react'
 
 import { Loading } from '@/common/components/Loading'
-import { useElectionVotes } from '@/council/hooks/useElectionVotes'
+import { BN_ZERO } from '@/common/constants'
+import { CandidateWithMyVotes, useMyCastVotes } from '@/council/hooks/useMyCastVotes'
 import { useMyCurrentVotesCount } from '@/council/hooks/useMyCurrentVotesCount'
 import { electionVotingResultComparator } from '@/council/model/electionVotingResultComparator'
 import { Election } from '@/council/types/Election'
@@ -19,12 +20,23 @@ export const RevealingStage = ({ election, isLoading }: Props) => {
   const [tab, setTab] = useState<RevealingStageTab>('results')
   const { votesTotal } = useMyCurrentVotesCount(election?.cycleId)
 
-  const { votesPerCandidate, sumOfStakes: totalStake, isLoading: votesLoading } = useElectionVotes(election)
+  const { votes, isLoading: votesLoading } = useMyCastVotes(election?.cycleId)
 
-  const sortedVotesPerCandidate = useMemo(
-    () => votesPerCandidate.sort(electionVotingResultComparator),
-    [votesPerCandidate]
-  )
+  const sortedCandidatesWithVotes = useMemo((): CandidateWithMyVotes[] => {
+    if (!election) return []
+
+    return election.candidates
+      .map((candidate) => {
+        const myVotesForCandidate = votes?.filter((vote) => vote.optionId === candidate.member.id) ?? []
+
+        return {
+          ...candidate,
+          myVotes: myVotesForCandidate,
+          ownStake: myVotesForCandidate.reduce((prev, next) => prev.add(next.stake), BN_ZERO),
+        }
+      })
+      .sort(electionVotingResultComparator)
+  }, [votes, election])
 
   if (isLoading) {
     return <Loading />
@@ -41,13 +53,13 @@ export const RevealingStage = ({ election, isLoading }: Props) => {
       {election && ['results', 'myVotes'].includes(tab) && (
         <RevealingStageVotes
           isLoading={votesLoading}
-          totalStake={totalStake}
-          votesPerCandidate={sortedVotesPerCandidate}
+          totalStake={election.totalElectionStake}
+          candidateWithVotes={sortedCandidatesWithVotes}
           onlyMyVotes={tab === 'myVotes'}
         />
       )}
       {election && tab === 'candidates' && (
-        <CandidateCardList candidates={sortedVotesPerCandidate.map((votes) => votes.candidate)} isLoading={isLoading} />
+        <CandidateCardList candidates={sortedCandidatesWithVotes} isLoading={isLoading} />
       )}
     </>
   )

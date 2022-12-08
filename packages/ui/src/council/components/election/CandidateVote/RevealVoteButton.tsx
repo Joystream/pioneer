@@ -2,7 +2,7 @@ import React, { MouseEventHandler, useCallback } from 'react'
 
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { useModal } from '@/common/hooks/useModal'
-import { MyCastVote } from '@/council/hooks/useElectionVotes'
+import { MyCastVote } from '@/council/hooks/useMyCastVotes'
 import { RevealVoteModalCall } from '@/council/modals/RevealVote'
 
 interface Props {

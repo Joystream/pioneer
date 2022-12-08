@@ -9,7 +9,9 @@ import {
 export const useQueryNodeStateSubscription = (
   opts?: SubscriptionHookOptions<GetQueryNodeStateSubscription, GetQueryNodeStateSubscriptionVariables>
 ) => {
-  const { data, ...rest } = useGetQueryNodeStateSubscription(opts)
+  const { data, ...rest } = useGetQueryNodeStateSubscription({ ...opts })
+  // todo: in future implement query to poll the state instead of subscription
+
   return {
     queryNodeState: data?.stateSubscription,
     ...rest,

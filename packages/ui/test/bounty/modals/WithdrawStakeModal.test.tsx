@@ -22,7 +22,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
+import { mockTransactionFee } from '../../setup'
 
 const bounty = bounties[0]
 
@@ -67,8 +67,7 @@ describe('UI: WithdrawStakeModal', () => {
 
   beforeEach(() => {
     transaction = stubTransaction(api, 'api.tx.bounty.withdrawWorkEntrantFunds', fee)
-    mockedTransactionFee.transaction = transaction as any
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }
+    mockTransactionFee({ transaction: transaction as any, feeInfo: { transactionFee: new BN(10), canAfford: true } })
   })
 
   it('Requirements passed', async () => {
@@ -78,7 +77,7 @@ describe('UI: WithdrawStakeModal', () => {
   })
 
   it('Insufficient funds', async () => {
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(9999), canAfford: false }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(9999), canAfford: false } })
 
     const { findByText } = renderModal()
 
@@ -106,7 +105,8 @@ describe('UI: WithdrawStakeModal', () => {
     })
 
     it('Requirements failed', async () => {
-      mockedTransactionFee.feeInfo = { transactionFee: new BN(99999), canAfford: false }
+      mockTransactionFee({ feeInfo: { transactionFee: new BN(99999), canAfford: false } })
+
       renderModal()
 
       expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()

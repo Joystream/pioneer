@@ -44,6 +44,8 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
         return 'Proposal was approved by current council, but requires further approvals to satisfy constitutionality requirement, which is a minimum number of consecutive council votes. Transitions to deciding stage when next council is elected.'
       case 'gracing':
         return 'Proposal was approved by current council, but requires further approvals to satisfy constitutionality requirement, which is a minimum number of consecutive council votes. Transitions to deciding stage when next council is elected.'
+      case 'expired':
+        return 'This proposal expired, meaning it was not executed due to council not voting on it during its term.'
       case 'vetoed':
         return 'Was halted by SUDO, nothing further can happen. This will be removed at mainnet.'
       case 'slashed':
@@ -74,7 +76,10 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
       </ToggleableItemInfo>
       <StageField>
         <TextSmall bold>{camelCaseToText(proposal.status)}</TextSmall>
-        <Tooltip tooltipText={checkStatus()}>
+        <Tooltip
+          tooltipText={checkStatus()}
+          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/proposal-system#proposal"
+        >
           <TooltipDefault />
         </Tooltip>
       </StageField>

@@ -8,7 +8,6 @@ import { AnnounceWorkEntryModal } from '@/bounty/modals/AnnounceWorkEntryModal'
 import { formatTokenValue } from '@/common/model/formatters'
 import { ModalContext } from '@/common/providers/modal/context'
 import { UseModal } from '@/common/providers/modal/types'
-import { Transaction, UseTransaction } from '@/common/providers/transactionFees/context'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import bounties from '@/mocks/data/raw/bounties.json'
 import { getMember } from '@/mocks/helpers'
@@ -25,7 +24,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
+import { mockTransactionFee } from '../../setup'
 
 const [bountyMock] = bounties
 const bounty = { ...bountyMock, entrantStake: new BN(bountyMock.entrantStake) }
@@ -36,14 +35,6 @@ describe('UI: AnnounceWorkEntryModal', () => {
   stubBountyConstants(api)
   const fee = 888
   const transaction = stubTransaction(api, 'api.tx.bounty.announceWorkEntry', fee)
-  mockedTransactionFee.transaction = transaction as any
-
-  const useTransactionFee: UseTransaction = {
-    transaction: transaction as Transaction,
-    feeInfo: { transactionFee: new BN(fee), canAfford: true },
-    setTransaction: () => undefined,
-    setSigner: () => undefined,
-  }
 
   const useModal: UseModal<any> = {
     hideModal: jest.fn(),
@@ -74,7 +65,7 @@ describe('UI: AnnounceWorkEntryModal', () => {
     stubTransaction(api, 'api.tx.utility.batch', fee)
     stubTransaction(api, 'api.tx.members.addStakingAccountCandidate')
     stubTransaction(api, 'api.tx.members.confirmStakingAccount')
-    mockedTransactionFee.feeInfo = { canAfford: true, transactionFee: new BN(fee) }
+    mockTransactionFee({ transaction: transaction as any, feeInfo: { transactionFee: new BN(fee), canAfford: true } })
 
     renderResult = render(<Modal />)
   })
@@ -89,10 +80,9 @@ describe('UI: AnnounceWorkEntryModal', () => {
 
   it('Requirement failed', async () => {
     const highFee = 9999999
-    mockedTransactionFee.feeInfo = { canAfford: false, transactionFee: new BN(highFee) }
-
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(highFee), canAfford: false } })
     stubTransaction(api, 'api.tx.utility.batch', highFee)
-    useTransactionFee.feeInfo = { transactionFee: new BN(highFee), canAfford: false }
+
     renderResult.unmount()
     render(<Modal />)
 
@@ -105,7 +95,7 @@ describe('UI: AnnounceWorkEntryModal', () => {
     }
 
     expect(useModal.showModal).toBeCalledWith({ ...moveFundsModalCall })
-    useTransactionFee.feeInfo = { transactionFee: new BN(fee), canAfford: true }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(fee), canAfford: true } })
   })
 
   it('Displays correct member', () => {

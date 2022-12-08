@@ -27,14 +27,10 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee, mockUseModalCall } from '../../setup'
+import { mockTransactionFee, mockUseModalCall } from '../../setup'
 
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
-}))
-
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
 describe('CreateThreadModal', () => {
@@ -74,7 +70,7 @@ describe('CreateThreadModal', () => {
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
     tx = stubTransaction(api, txPath)
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(10), canAfford: true }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(10), canAfford: true } })
 
     stubDeposits()
   })
@@ -93,7 +89,7 @@ describe('CreateThreadModal', () => {
     })
 
     it('Insufficient funds for minimum fee', async () => {
-      mockedTransactionFee.feeInfo = { transactionFee: new BN(10000), canAfford: false }
+      mockTransactionFee({ feeInfo: { transactionFee: new BN(10000), canAfford: false } })
       renderModal()
       expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
     })

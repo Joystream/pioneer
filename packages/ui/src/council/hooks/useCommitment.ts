@@ -12,11 +12,11 @@ export interface VotingAttempt {
   optionId: string
 }
 
-export const useCommitment = (accountId: string, candidateId: string) => {
+export const useCommitment = (accountId: string | undefined, candidateId: string) => {
   const { candidate } = useCandidate(candidateId)
 
   const vote = useMemo(() => {
-    if (!candidate) return
+    if (!accountId || !candidate) return
 
     // See https://polkadot.js.org/docs/util-crypto/examples/encrypt-decrypt
     const salt = randomAsHex()
@@ -32,11 +32,11 @@ export const useCommitment = (accountId: string, candidateId: string) => {
   }, [accountId, candidate?.id])
 
   const [isVoteStored, setIsVoteStored] = useState(false)
-  const [votingAttempts, setVotingAttempts] = useLocalStorage<VotingAttempt[]>(vote?.key)
+  const [, updateVotingAttempts] = useLocalStorage<VotingAttempt[]>(vote?.key)
   useEffect(() => {
     if (!vote) return
 
-    setVotingAttempts([...(votingAttempts ?? []), vote.value])
+    updateVotingAttempts((attempts = []) => [...attempts, vote.value])
     setIsVoteStored(true)
   }, [vote?.key, vote?.value])
 

@@ -108,7 +108,7 @@ describe('UI: Post list item', () => {
       <MemoryRouter initialEntries={[generatePath(ForumRoutes.thread, { id: '0' })]}>
         <MembershipContext.Provider value={useMyMemberships}>
           <MockApolloProvider>
-            <PostList threadId="0" replyToPost={() => true} isThreadActive={isThreadActive} />
+            <PostList threadId="0" isThreadActive={isThreadActive} />
           </MockApolloProvider>
         </MembershipContext.Provider>
       </MemoryRouter>

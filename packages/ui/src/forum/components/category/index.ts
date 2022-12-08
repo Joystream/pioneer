@@ -1,1 +1,1 @@
-export * from './ForumCategoryList'
+export * from './ForumMain'

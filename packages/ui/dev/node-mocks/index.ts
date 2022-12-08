@@ -1,6 +1,6 @@
 import yargs from 'yargs'
 
-import { createBountyModule } from './commands/bounty/create'
+// import { createBountyModule } from './commands/bounty/create'
 import { announceCandidaciesModule } from './commands/council/announce'
 import { electCouncilModule } from './commands/council/elect'
 import { revealVotesModule } from './commands/council/reveal'
@@ -17,7 +17,7 @@ import { createUpcomingOpeningModule } from './commands/upcomingOpening/create'
 yargs(process.argv.slice(2))
   .usage('yarn node-mocks <command>')
   .scriptName('')
-  .command(createBountyModule)
+  // .command(createBountyModule)
   .command(createProposalModule)
   .command(announceCandidaciesModule)
   .command(castVotesModule)

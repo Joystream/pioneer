@@ -13,6 +13,7 @@ import { postsToDeleteMap } from '@/forum/model/postsToDeleteMap'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMember } from '@/mocks/data'
+import { forumPostMock } from '@/mocks/data/commonMocks'
 import rawMembers from '@/mocks/data/raw/members.json'
 import { seedForumCategory, seedForumPost, seedForumThread } from '@/mocks/data/seedForum'
 
@@ -31,11 +32,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee, mockUseModalCall } from '../../setup'
-
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
-}))
+import { mockTransactionFee, mockUseModalCall } from '../../setup'
 
 describe('UI: DeletePostModal', () => {
   const api = stubApi()
@@ -52,6 +49,7 @@ describe('UI: DeletePostModal', () => {
 
   const modalData: ModalCallData<DeletePostModalCall> = {
     post: {
+      ...forumPostMock,
       id: '0',
       author: getMember('alice'),
       createdAt: '2021-07-02T04:22:13.523Z',
@@ -86,7 +84,7 @@ describe('UI: DeletePostModal', () => {
   })
 
   beforeEach(async () => {
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(100), canAfford: true } })
 
     stubDefaultBalances()
     tx = stubTransaction(api, txPath)
@@ -101,7 +99,7 @@ describe('UI: DeletePostModal', () => {
   })
 
   it('Requirements failed', async () => {
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(100), canAfford: false } })
     modalData.transaction = api.api.tx.forum.deletePosts(useMyMemberships.active?.id ?? 1, deleteMap, '')
     renderModal()
     expect(await screen.findByText('modals.insufficientFunds.title')).toBeDefined()
