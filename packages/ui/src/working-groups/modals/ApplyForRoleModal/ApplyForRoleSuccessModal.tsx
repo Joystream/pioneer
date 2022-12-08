@@ -32,17 +32,17 @@ interface Props {
 }
 
 export const ApplyForRoleSuccessModal = ({ stake, stakeAccount, applicationId, steps }: Props) => {
-  const { hideModalWithoutConfirmModal, modalData } = useModal<ApplyForRoleModalCall>()
+  const { hideModal, modalData } = useModal<ApplyForRoleModalCall>()
   const { push } = useHistory()
 
   const viewApplications = useCallback(async () => {
     push(WorkingGroupsRoutes.myApplications)
-    hideModalWithoutConfirmModal()
+    hideModal()
   }, [])
 
   return (
-    <Modal onClose={hideModalWithoutConfirmModal} modalSize="l" modalHeight="xl">
-      <ModalHeader onClick={hideModalWithoutConfirmModal} title="Applying for role" />
+    <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
+      <ModalHeader onClick={hideModal} title="Applying for role" />
       <StepperModalBody>
         <StepperModalWrapper>
           <Stepper steps={steps} />

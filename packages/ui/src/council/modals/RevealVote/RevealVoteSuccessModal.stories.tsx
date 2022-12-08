@@ -17,14 +17,13 @@ export default {
 interface Props {
   voteForHandle: string
   hideModal: () => void
-  hideModalWithoutConfirmModal: () => void
   showModal: () => void
 }
 
-const Template: Story<Props> = ({ voteForHandle, hideModal, hideModalWithoutConfirmModal, showModal }) => {
+const Template: Story<Props> = ({ voteForHandle, hideModal, showModal }) => {
   const modalData = { voteForHandle }
   return (
-    <ModalContext.Provider value={{ modalData, modal: null, hideModal, hideModalWithoutConfirmModal, showModal }}>
+    <ModalContext.Provider value={{ modalData, modal: null, hideModal, showModal }}>
       <RevealVoteSuccessModal />
     </ModalContext.Provider>
   )
