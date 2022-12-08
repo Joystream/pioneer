@@ -50,7 +50,7 @@ export const StakeChangedModal = ({ onClose, amount, eventType, id }: StakeChang
                 <StatusBadge>{eventType === 'StakeDecreasedEvent' ? 'reduce' : 'increase'}</StatusBadge>
               </SidePaneRow>
               <SidePaneRow>
-                <SidePaneLabel text="slashed by" />
+                <SidePaneLabel text={eventType === 'StakeDecreasedEvent' ? 'reduced by' : 'increased by'} />
                 <SidePaneText>
                   <TokenValue value={amount} />
                 </SidePaneText>
