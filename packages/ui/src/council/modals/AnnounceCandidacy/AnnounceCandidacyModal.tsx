@@ -60,6 +60,8 @@ const getCandidateForPreview = (context: AnnounceCandidacyFrom, member: Member):
   cycleId: 0,
   cycleFinished: false,
   status: CandidacyStatus.Active,
+  totalStake: BN_ZERO,
+  votesNumber: 0,
 })
 
 const transactionSteps = [
@@ -251,8 +253,11 @@ export const AnnounceCandidacyModal = () => {
   }
 
   if (state.matches('announceCandidacyTransaction')) {
+    const tooltipText =
+      'Signing this transaction will result in the specified amount of JOY tokens staked for the chosen purpose, resulting in a rivalrous lock applied to this amount until the stake gets recovered.'
     return (
       <SignTransactionModal
+        additionalTransactionInfo={[{ title: 'Add Stake', tooltipText }]}
         buttonText="Sign transaction and Announce"
         transaction={announceCandidacyTransaction}
         signer={activeMember.controllerAccount}

@@ -23,7 +23,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee } from '../../setup'
+import { mockTransactionFee } from '../../setup'
 
 const [baseBounty] = bounties
 const bounty = {
@@ -70,8 +70,7 @@ describe('UI: ContributeFundsModal', () => {
 
   beforeEach(() => {
     transaction = stubTransaction(api, 'api.tx.bounty.fundBounty', fee)
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(fee), canAfford: true }
-    mockedTransactionFee.transaction = transaction as any
+    mockTransactionFee({ transaction: transaction as any, feeInfo: { transactionFee: new BN(fee), canAfford: true } })
     renderResult = render(<Modal />)
   })
 
@@ -80,7 +79,7 @@ describe('UI: ContributeFundsModal', () => {
   })
 
   it('Insufficient funds', async () => {
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(100), canAfford: false } })
 
     renderResult.unmount()
     render(<Modal />)

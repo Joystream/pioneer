@@ -1,7 +1,7 @@
 import { Reducer, useEffect, useMemo, useReducer } from 'react'
 
 import { ForumThreadOrderByInput } from '@/common/api/queries'
-import { toQueryOrderByInput, SortOrder } from '@/common/hooks/useSort'
+import { SortOrder, toQueryOrderByInput } from '@/common/hooks/useSort'
 import { merge } from '@/common/utils'
 import { ThreadEmptyFilters, ThreadFiltersState } from '@/forum/components/threads/ThreadFilters'
 import { useGetForumThreadsCountQuery, useGetForumThreadsQuery } from '@/forum/queries'
@@ -64,7 +64,7 @@ const where = ({ author, date }: ThreadFiltersState, categoryId?: string, isArch
   }
   return {
     ...(categoryId ? { category: { id_eq: categoryId } } : {}),
-    ...(author ? { author_eq: author?.id } : {}),
+    ...(author ? { author: { id_eq: author?.id } } : {}),
     ...(date && !isArchive ? dateFilter : {}),
     status_json: {
       isTypeOf_eq: isArchive ? 'ThreadStatusLocked' : 'ThreadStatusActive',

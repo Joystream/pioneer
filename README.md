@@ -60,6 +60,9 @@ The project's monorepo contains packages:
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for details
 
+For community development board view this [Public board](https://github.com/orgs/Joystream/projects/55), managed by DAO Builders Working Group
+To participate, reach out to Builders Working Group Lead on Discord
+
 
 ## License
 

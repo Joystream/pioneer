@@ -90,6 +90,8 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
     rewardAccountId: member.rootAccount,
     status: isFinished ? pastCandidacyStatusType() : candidacyStatus[0],
     note: faker.lorem.words(10),
+    votePower: '0',
+    votesReceived: [],
     noteMetadata: {
       header: faker.lorem.words(4),
       bulletPoints: Array.from({ length: 3 }).map(() => faker.lorem.words(8)),

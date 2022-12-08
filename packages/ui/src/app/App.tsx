@@ -16,6 +16,7 @@ import { MobileView } from '@/common/components/page/MobileView/MobileView'
 import { Page, Screen } from '@/common/components/page/Page'
 import { NotificationsHolder } from '@/common/components/page/SideNotification'
 import { TransactionStatus } from '@/common/components/TransactionStatus/TransactionStatus'
+import { parseEnv } from '@/common/utils/env'
 import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
 import { ForumRoutes } from '@/forum/constant'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
@@ -38,7 +39,7 @@ import { WorkingGroupsModule } from './pages/WorkingGroups/WorkingGroupsModule'
 import { Providers } from './Providers'
 
 export const App = () => {
-  if (process.env.REACT_APP_IS_UNDER_MAINTENANCE) {
+  if (parseEnv(process.env.REACT_APP_IS_UNDER_MAINTENANCE)) {
     return <MaintenanceScreen />
   }
 

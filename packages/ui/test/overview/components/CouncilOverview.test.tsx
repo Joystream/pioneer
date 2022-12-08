@@ -4,17 +4,16 @@ import { MemoryRouter } from 'react-router'
 
 import { ApiContext } from '@/api/providers/context'
 import {
-  seedCouncilMember,
-  seedMember,
-  seedElectedCouncils,
-  seedCouncilElection,
   RawCouncilElectionMock,
   seedCouncilCandidate,
-  seedCouncilVote,
+  seedCouncilElection,
+  seedCouncilMember,
+  seedElectedCouncils,
+  seedMember,
 } from '@/mocks/data'
 import { CouncilOverview } from '@/overview/components/CouncilOverview/CouncilOverview'
 
-import { mockMembers, mockCouncils, mockCouncilors, CANDIDATE_DATA, VOTE_DATA } from '../../_mocks/council'
+import { CANDIDATE_DATA, mockCouncilors, mockCouncils, mockMembers } from '../../_mocks/council'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { stubApi, stubCouncilAndReferendum, stubCouncilConstants } from '../../_mocks/transactions'
@@ -112,7 +111,7 @@ describe('UI: Council overview', () => {
         } as RawCouncilElectionMock,
         server.server
       )
-      seedCouncilCandidate(CANDIDATE_DATA, server.server)
+      seedCouncilCandidate({ ...CANDIDATE_DATA, votePower: '1200' }, server.server)
       renderComponent()
     })
 
@@ -140,7 +139,6 @@ describe('UI: Council overview', () => {
     })
 
     it('Displays candidates votes result as percent', async () => {
-      seedCouncilVote({ ...VOTE_DATA, voteForId: '0' }, server.server)
       expect(await screen.findByText('83%')).toBeDefined()
     })
   })

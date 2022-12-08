@@ -1,5 +1,4 @@
 import React from 'react'
-import styled from 'styled-components'
 
 import { Accounts } from '@/accounts/components/Accounts'
 import { ClaimVestingButton } from '@/accounts/components/ClaimVestingButton'
@@ -9,8 +8,6 @@ import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
-import { TooltipText } from '@/common/components/Tooltip'
-import { Colors } from '@/common/constants'
 
 import { MyProfileTabs } from './components/MyProfileTabs'
 
@@ -29,7 +26,7 @@ export const MyAccounts = () => {
             <MyProfileTabs />
           </PageHeaderWrapper>
           {!shouldHideStatistics && (
-            <StyledStatistics>
+            <Statistics>
               <TokenValueStat
                 title="Total balance"
                 tooltipText="Total balance from all connected accounts. This includes transferable and locked balance."
@@ -43,11 +40,11 @@ export const MyAccounts = () => {
               <TokenValueStat
                 title="Total locked balance"
                 tooltipText="Staking, or bonding, is the act of locking up funds under some terms so that they are not transferable and otherwise not entirely usable as they otherwise would be. The terms, referred to as unstaking terms describe the circumstances under which the funds may begin to cease being staked. The way staking is implemented is with the use of account."
-                tooltipLinkURL="https://joystream.gitbook.io/joystream-handbook/key-concepts/staking#locks"
+                tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/accounts-and-staking#locks"
                 value={locked}
               />
               <TokenValueStat
-                title="Total recoverable"
+                title="Total recoverable balance"
                 tooltipText="Recoverable balance encapsulates all tokens that can be recovered, following the termination of the process where they were previously staked. Example: Vote has been casted for a candidate in council elections. That candidate lost the election and now the stake that was put behind the voting power for such candidate can be recovered, meaning locked balance will be reduced by such amount, while transferable balance will increase for the amount of staking lock."
                 value={recoverable}
               />
@@ -67,7 +64,7 @@ export const MyAccounts = () => {
                   {vestedClaimable.gtn(0) && <ClaimVestingButton />}
                 </TokenValueStat>
               )}
-            </StyledStatistics>
+            </Statistics>
           )}
         </RowGapBlock>
       }
@@ -75,18 +72,3 @@ export const MyAccounts = () => {
     />
   )
 }
-
-export const StyledLink = styled.a`
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  color: ${Colors.Black[400]};
-  text-decoration: underline;
-`
-
-const StyledStatistics = styled(Statistics)`
-  > * {
-    max-width: 35%;
-    flex-basis: 220px;
-  }
-`
