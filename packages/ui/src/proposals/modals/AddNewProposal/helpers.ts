@@ -296,7 +296,7 @@ export const schemaFactory = (api?: ProxyApi) => {
         .required('Field is required'),
     }),
     setMembershipLeadInvitationQuota: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
+      count: BNSchema.test(moreThanMixed(0, 'Quota must be greater than zero')).required('Field is required'),
       leadId: Yup.string().test('execution', (value) => !!value),
     }),
     setInitialInvitationBalance: Yup.object().shape({
