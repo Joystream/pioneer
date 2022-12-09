@@ -17,6 +17,7 @@ interface PastElectionsListRowProps {
 }
 
 export const PastElectionsListRow = ({ election }: PastElectionsListRowProps) => {
+  const endedAt = election.finishedAtBlock
   return (
     <PastElectionsListRowItem
       $colLayout={PastElectionsColLayout}
@@ -24,11 +25,7 @@ export const PastElectionsListRow = ({ election }: PastElectionsListRowProps) =>
       to={generatePath(ElectionRoutes.pastElection, { id: election.id })}
     >
       <Info>#{election.cycleId}</Info>
-      {election.finishedAtBlock ? (
-        <BlockTime block={election.finishedAtBlock} layout="reverse-start" lessInfo />
-      ) : (
-        <></>
-      )}
+      {endedAt ? <BlockTime block={endedAt} layout="reverse-start" lessInfo /> : <></>}
       <TokenValue value={election.totalStake} />
       <Fraction numerator={election.revealedVotes} denominator={election.totalVotes} sameSize />
       <CountInfo count={election.totalCandidates} />
