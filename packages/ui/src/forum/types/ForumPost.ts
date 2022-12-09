@@ -16,6 +16,8 @@ export interface ForumPost {
   reaction?: PostReaction[]
   moderator?: Member
   status: PostStatusTypename
+  threadId: string
+  categoryId: string
 }
 
 export const asForumPost = (fields: ForumPostFieldsFragment): ForumPost => ({
@@ -37,6 +39,8 @@ export const asForumPost = (fields: ForumPostFieldsFragment): ForumPost => ({
       ? asMember(fields.postmoderatedeventpost[0].actor.membership)
       : undefined,
   status: fields.status.__typename,
+  categoryId: fields.thread.categoryId,
+  threadId: fields.threadId,
 })
 
 export interface PostEdit {

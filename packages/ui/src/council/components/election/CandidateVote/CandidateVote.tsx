@@ -11,7 +11,7 @@ import { TextInlineBig, TextInlineSmall, TokenValue } from '@/common/components/
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BN_ZERO, Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
-import { MyCastVote } from '@/council/hooks/useElectionVotes'
+import { MyCastVote } from '@/council/hooks/useMyCastVotes'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'

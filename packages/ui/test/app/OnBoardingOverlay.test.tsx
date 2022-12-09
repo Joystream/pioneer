@@ -17,6 +17,14 @@ jest.mock('@/common/hooks/useOnBoarding', () => ({
   useOnBoarding: () => mockOnBoarding,
 }))
 
+jest.mock('@/api/hooks/useApi', () => ({
+  useApi: () => ({
+    api: {
+      isConnected: true,
+    },
+  }),
+}))
+
 describe('OnBoardingOverlay', () => {
   afterEach(cleanup)
 

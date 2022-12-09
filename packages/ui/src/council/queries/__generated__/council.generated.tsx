@@ -221,6 +221,7 @@ export type ElectionCandidateFieldsFragment = {
   stake: string
   status: Types.CandidacyStatus
   stakingAccountId: string
+  votePower: string
   member: {
     __typename: 'Membership'
     id: string
@@ -261,6 +262,7 @@ export type ElectionCandidateFieldsFragment = {
     bannerImageUri?: string | null
     description?: string | null
   }
+  votesReceived: Array<{ __typename: 'CastVote'; id: string }>
 }
 
 export type ElectionRoundFieldsFragment = {
@@ -272,6 +274,7 @@ export type ElectionRoundFieldsFragment = {
     stake: string
     status: Types.CandidacyStatus
     stakingAccountId: string
+    votePower: string
     member: {
       __typename: 'Membership'
       id: string
@@ -312,6 +315,7 @@ export type ElectionRoundFieldsFragment = {
       bannerImageUri?: string | null
       description?: string | null
     }
+    votesReceived: Array<{ __typename: 'CastVote'; id: string }>
   }>
 }
 
@@ -325,6 +329,7 @@ export type LatestElectionRoundFieldsFragment = {
     stake: string
     status: Types.CandidacyStatus
     stakingAccountId: string
+    votePower: string
     member: {
       __typename: 'Membership'
       id: string
@@ -365,6 +370,7 @@ export type LatestElectionRoundFieldsFragment = {
       bannerImageUri?: string | null
       description?: string | null
     }
+    votesReceived: Array<{ __typename: 'CastVote'; id: string }>
   }>
 }
 
@@ -392,6 +398,7 @@ export type PastElectionRoundDetailedFieldsFragment = {
     id: string
     status: Types.CandidacyStatus
     stakingAccountId: string
+    votePower: string
     member: {
       __typename: 'Membership'
       id: string
@@ -432,6 +439,7 @@ export type PastElectionRoundDetailedFieldsFragment = {
       bannerImageUri?: string | null
       description?: string | null
     }
+    votesReceived: Array<{ __typename: 'CastVote'; id: string }>
   }>
   castVotes: Array<{
     __typename: 'CastVote'
@@ -449,6 +457,7 @@ export type ElectionCandidateDetailedFieldsFragment = {
   id: string
   stake: string
   status: Types.CandidacyStatus
+  votePower: string
   electionRound: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
   member: {
     __typename: 'Membership'
@@ -490,6 +499,7 @@ export type ElectionCandidateDetailedFieldsFragment = {
     bannerImageUri?: string | null
     description?: string | null
   }
+  votesReceived: Array<{ __typename: 'CastVote'; id: string }>
 }
 
 export type CastVoteFieldsFragment = {
@@ -505,6 +515,7 @@ export type CastVoteFieldsFragment = {
     stake: string
     status: Types.CandidacyStatus
     stakingAccountId: string
+    votePower: string
     member: {
       __typename: 'Membership'
       id: string
@@ -545,6 +556,7 @@ export type CastVoteFieldsFragment = {
       bannerImageUri?: string | null
       description?: string | null
     }
+    votesReceived: Array<{ __typename: 'CastVote'; id: string }>
   } | null
   electionRound: { __typename: 'ElectionRound'; cycleId: number; id: string }
   castEvent?: Array<{ __typename: 'VoteCastEvent'; inBlock: number; network: Types.Network; createdAt: any }> | null
@@ -982,6 +994,7 @@ export type GetCurrentElectionQuery = {
       stake: string
       status: Types.CandidacyStatus
       stakingAccountId: string
+      votePower: string
       member: {
         __typename: 'Membership'
         id: string
@@ -1022,6 +1035,7 @@ export type GetCurrentElectionQuery = {
         bannerImageUri?: string | null
         description?: string | null
       }
+      votesReceived: Array<{ __typename: 'CastVote'; id: string }>
     }>
   }>
 }
@@ -1040,6 +1054,7 @@ export type GetLatestElectionQuery = {
       stake: string
       status: Types.CandidacyStatus
       stakingAccountId: string
+      votePower: string
       member: {
         __typename: 'Membership'
         id: string
@@ -1080,6 +1095,7 @@ export type GetLatestElectionQuery = {
         bannerImageUri?: string | null
         description?: string | null
       }
+      votesReceived: Array<{ __typename: 'CastVote'; id: string }>
     }>
   }>
 }
@@ -1130,6 +1146,7 @@ export type GetPastElectionQuery = {
       id: string
       status: Types.CandidacyStatus
       stakingAccountId: string
+      votePower: string
       member: {
         __typename: 'Membership'
         id: string
@@ -1170,6 +1187,7 @@ export type GetPastElectionQuery = {
         bannerImageUri?: string | null
         description?: string | null
       }
+      votesReceived: Array<{ __typename: 'CastVote'; id: string }>
     }>
     castVotes: Array<{
       __typename: 'CastVote'
@@ -1194,6 +1212,7 @@ export type GetCandidateQuery = {
     id: string
     stake: string
     status: Types.CandidacyStatus
+    votePower: string
     electionRound: { __typename: 'ElectionRound'; cycleId: number; isFinished: boolean }
     member: {
       __typename: 'Membership'
@@ -1235,6 +1254,7 @@ export type GetCandidateQuery = {
       bannerImageUri?: string | null
       description?: string | null
     }
+    votesReceived: Array<{ __typename: 'CastVote'; id: string }>
   } | null
 }
 
@@ -1289,6 +1309,7 @@ export type GetCouncilVotesQuery = {
       stake: string
       status: Types.CandidacyStatus
       stakingAccountId: string
+      votePower: string
       member: {
         __typename: 'Membership'
         id: string
@@ -1329,6 +1350,7 @@ export type GetCouncilVotesQuery = {
         bannerImageUri?: string | null
         description?: string | null
       }
+      votesReceived: Array<{ __typename: 'CastVote'; id: string }>
     } | null
     electionRound: { __typename: 'ElectionRound'; cycleId: number; id: string }
     castEvent?: Array<{ __typename: 'VoteCastEvent'; inBlock: number; network: Types.Network; createdAt: any }> | null
@@ -1554,6 +1576,10 @@ export const ElectionCandidateFieldsFragmentDoc = gql`
     }
     status
     stakingAccountId
+    votePower
+    votesReceived {
+      id
+    }
   }
   ${MemberFieldsFragmentDoc}
 `

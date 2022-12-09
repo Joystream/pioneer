@@ -4,12 +4,11 @@ import { useHistory } from 'react-router-dom'
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons'
-import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { BlockDurationStatistics, StatisticItem, Statistics } from '@/common/components/statistics'
-import { TextHuge, TextMedium } from '@/common/components/typography'
+import { TextHuge } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
 import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
@@ -92,7 +91,7 @@ export const Election = () => {
         <StatisticItem
           title="Stage"
           tooltipText="Elections occur periodically. Each has a sequence of stages referred to as the election cycle. Stages are: announcing period, voting period and revealing period."
-          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council?q=lock#election"
+          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council#election"
         >
           <TextHuge bold>{camelCaseToText(electionStage)} Period</TextHuge>
         </StatisticItem>
@@ -100,7 +99,7 @@ export const Election = () => {
           title="Period remaining length"
           value={remainingPeriod}
           tooltipText="Remaining length of current period before the next one starts."
-          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council?q=lock#election"
+          tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council#election"
         />
         <StatisticItem
           title="Election round"

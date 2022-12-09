@@ -223,6 +223,9 @@ fragment DiscussionPostWithoutReplyFields on ProposalDiscussionPost {
   status {
     __typename
   }
+  discussionThread {
+    id
+  }
 }
 
 fragment ProposalPostParents on ProposalDiscussionPost {
