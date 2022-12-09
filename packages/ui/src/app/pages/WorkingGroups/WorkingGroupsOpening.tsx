@@ -146,7 +146,7 @@ export const WorkingGroupOpening = () => {
               <BadgeStatus inverted size="l" separated>
                 {opening.type}
               </BadgeStatus>
-              <StatusBadge />
+              {StatusBadge}
             </BadgesRow>
             <Statistics>
               {
