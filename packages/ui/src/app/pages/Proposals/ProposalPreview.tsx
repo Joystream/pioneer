@@ -2,6 +2,10 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
+import { TokenValueStat } from '@/common/components/statistics'//
+import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'//
+import { useOpening } from '@/working-groups/hooks/useOpening'//
+
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
@@ -51,6 +55,9 @@ export const ProposalPreview = () => {
 
   const votingRounds = useVotingRounds(proposal?.votes, proposal?.proposalStatusUpdates)
   const [currentVotingRound, setVotingRound] = useState(0)
+
+  const { isLoading, opening } = useOpening(urlParamToOpeningId(id))//
+  const rewardPeriod = useRewardPeriod(opening?.groupId)//
 
   const votes = votingRounds[currentVotingRound] ?? votingRounds[0]
   useRefetchQueries({ interval: MILLISECONDS_PER_BLOCK, include: ['getProposal', 'GetProposalVotes'] }, [proposal])
@@ -153,6 +160,15 @@ export const ProposalPreview = () => {
                   <TextInlineMedium lighter>Time left:</TextInlineMedium>{' '}
                   <TextInlineMedium bold>{formatBlocksToDuration(blocksToProposalExecution)}</TextInlineMedium>{' '}
                   <TextInlineMedium lighter>({formatTokenValue(blocksToProposalExecution)} blocks)</TextInlineMedium>
+                  <TokenValueStat
+                    title={`Reward per ${rewardPeriod?.toString()} blocks`}
+                    value={rewardPeriod?.mul(opening.rewardPerBlock)}
+                  />
+                  <TokenValueStat
+                    title="Minimal stake"
+                    tooltipText="Minimal amount of tokens required to be staked for any applicant to such role."
+                    value={opening.stake}
+                  />
                 </TextMedium>
               )}
             </BadgeAndTime>
