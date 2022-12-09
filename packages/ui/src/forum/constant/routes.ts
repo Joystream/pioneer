@@ -2,11 +2,8 @@ export const ForumRoutes = {
   forum: '/forum',
   category: '/forum/category/:id/:type?',
   archived: '/forum/archived',
+  watchlist: '/forum/watchlist',
   thread: '/forum/thread/:id',
-  popularThread: '/forum/thread',
-  forumOverview: '/forum/overview',
-  latestThreads: '/forum/latest-threads',
-  topThreads: '/forum/top-threads',
   myThreads: '/forum/my-threads',
 } as const
 

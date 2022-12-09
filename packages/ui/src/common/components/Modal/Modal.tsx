@@ -66,55 +66,23 @@ export const Modal = ({ onClose, modalHeight = 'm', children, modalSize, isDark,
   useEscape(() => onClose())
 
   return (
-    <ModalGlass
-      modalHeight={modalHeight}
-      modalSize={modalSize}
-      isDark={isDark}
-      onClick={onBackgroundClick}
-      onClose={onClose}
-    >
+    <>
+      <ModalGlass onClick={onBackgroundClick} />
       <ModalWrap modalMaxSize={modalSize} modalHeight={modalHeight} isDark={isDark} role="modal" className={className}>
         {children}
       </ModalWrap>
-    </ModalGlass>
+    </>
   )
 }
 
-export const ModalGlass = styled.div<ModalProps>`
+export const ModalGlass = styled.div`
   display: flex;
   justify-content: center;
-  align-items: ${({ modalHeight }) => {
-    switch (modalHeight) {
-      case 's':
-        return 'center'
-    }
-  }};
   position: fixed;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  padding-top: ${({ modalHeight }) => {
-    switch (modalHeight) {
-      case 's':
-        return '0px'
-      case 'm':
-        return '60px'
-      case 'l':
-        return '44px'
-      case 'xl':
-        return '40px'
-    }
-  }};
-  @media only screen and (max-height: 700px) {
-    padding-top: 0;
-  }
-  padding-bottom: ${({ modalHeight }) => {
-    switch (modalHeight) {
-      case 'xl':
-        return '40px'
-    }
-  }};
   background-color: ${Colors.Black[700.85]};
   color: ${Colors.Black[900]};
   z-index: ${ZIndex.modal};
@@ -238,6 +206,10 @@ interface ModalWrapProps {
 }
 
 export const ModalWrap = styled.section<ModalWrapProps>`
+  z-index: ${ZIndex.modal};
+  position: absolute;
+  inset: 0;
+  margin: auto auto;
   display: grid;
   @media only screen and (max-height: 700px) {
     max-height: 100%;
@@ -249,7 +221,6 @@ export const ModalWrap = styled.section<ModalWrapProps>`
     'modalbody'
     'modalfooter';
   grid-area: modal;
-  position: relative;
   background-color: ${Colors.White};
   width: 100%;
   max-width: ${({ modalMaxSize }) => {
@@ -264,19 +235,10 @@ export const ModalWrap = styled.section<ModalWrapProps>`
         return '1240px'
     }
   }};
-  height: ${({ modalHeight }) => {
-    switch (modalHeight) {
-      case 'xl':
-        return '100%'
-      case 'l':
-        return '40%'
-      default:
-        return 'min-content'
-    }
-  }};
+  height: ${({ modalHeight }) => (modalHeight === 'xl' ? '90vh' : 'min-content')};
   border-radius: ${BorderRad.s};
   box-shadow: ${Shadows.common};
-  ${Animations.showModalBlock};
+  // ${Animations.showModalBlock};
   &,
   ${ModalBody}, ${ModalTopBar}, ${ModalFooterComponent} {
     ${({ isDark }) => {

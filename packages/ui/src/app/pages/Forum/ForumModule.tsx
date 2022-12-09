@@ -1,28 +1,24 @@
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
+import { Forum } from '@/app/pages/Forum/Forum'
 import { ForumArchived } from '@/app/pages/Forum/ForumArchived'
-import { ForumCategories } from '@/app/pages/Forum/ForumCategories'
 import { ForumCategory } from '@/app/pages/Forum/ForumCategory'
 import { ForumThread } from '@/app/pages/Forum/ForumThread'
+import { ForumWatchlist } from '@/app/pages/Forum/ForumWatchlist'
 import { ForumRoutes } from '@/forum/constant'
 
 import { ForumMyThreads } from './ForumMyThreads'
-import { ForumOverview } from './ForumOverview'
-import { LatestThreads } from './LatestThreads'
-import { TopThreads } from './TopThreads'
 
 export const ForumModule = () => {
   return (
     <Switch>
-      <Route path={ForumRoutes.forum} exact component={ForumCategories} />
-      <Route path={ForumRoutes.category} exact component={ForumCategory} />
-      <Route path={ForumRoutes.archived} exact component={ForumArchived} />
-      <Route path={ForumRoutes.thread} exact component={ForumThread} />
-      <Route path={ForumRoutes.forumOverview} exact component={ForumOverview} />
-      <Route path={ForumRoutes.latestThreads} exact component={LatestThreads} />
+      <Route path={ForumRoutes.forum} exact component={Forum} />
       <Route path={ForumRoutes.myThreads} exact component={ForumMyThreads} />
-      <Route path={ForumRoutes.topThreads} exact component={TopThreads} />
+      <Route path={ForumRoutes.watchlist} exact component={ForumWatchlist} />
+      <Route path={ForumRoutes.archived} exact component={ForumArchived} />
+      <Route path={ForumRoutes.category} exact component={ForumCategory} />
+      <Route path={ForumRoutes.thread} exact component={ForumThread} />
       <Redirect from="/forum/*" to={ForumRoutes.forum} />
     </Switch>
   )

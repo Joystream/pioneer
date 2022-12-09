@@ -162,16 +162,10 @@ export const validStakingAmount = (): Yup.TestConfig<any, AnyObject> => ({
     const totalFee = stake.add(extraFees)
     if (totalBalance && totalBalance.lt(new BN(totalFee))) {
       return this.createError({
-        message: `Insufficient funds to cover staking \${max} tJoy ${
-          extraFees.isZero() ? '' : ' + extra ${extra} tJoy'
-        }`,
-        params: {
-          max: formatJoyValue(totalBalance),
-          extra: formatJoyValue(extraFees),
-        },
+        message: 'Selected amount exceeds account balance.',
+        params: { max: formatJoyValue(totalBalance), extra: formatJoyValue(extraFees) },
       })
     }
-
     return true
   },
 })

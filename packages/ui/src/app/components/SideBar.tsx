@@ -150,7 +150,7 @@ export const SideBar = () => {
                   </NavigationLinksItem>
                   <NavigationLinksItem>
                     <NavigationLink to="/inexisting" icon={<GatewaysIcon />} disabled>
-                      Gateways
+                      Apps
                     </NavigationLink>
                   </NavigationLinksItem>
                   <NavigationLinksItem>

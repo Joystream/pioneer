@@ -93,6 +93,7 @@ export const Colors = {
 export const ZIndex = {
   navbar: 70,
   navbarInner: 75,
+  dropdown: 80,
   modal: 85,
   select: 60,
   contextMenu: 55,

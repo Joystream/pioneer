@@ -37,6 +37,8 @@ export interface RawCouncilCandidateMock {
   rewardAccountId: string
   status?: string
   note?: string
+  votePower: string
+  votesReceived?: RawCouncilVoteMock[]
   noteMetadata: {
     header: string
     bulletPoints: string[]
@@ -85,11 +87,18 @@ export const seedCouncilElections = seedOverridableEntities(rawElections, seedCo
 
 export const seedCouncilCandidate = (data: RawCouncilCandidateMock, server: any) => {
   const noteMetadata = server.schema.create('CandidacyNoteMetadata', { ...data.noteMetadata })
-
+  const votesReceived = data?.votesReceived
+    ? data.votesReceived.map((vote) =>
+        server.schema.create('CastVote', {
+          ...vote,
+        })
+      )
+    : []
   return server.schema.create('Candidate', {
     status: 'ACTIVE',
     ...data,
     noteMetadata,
+    votesReceived,
   })
 }
 

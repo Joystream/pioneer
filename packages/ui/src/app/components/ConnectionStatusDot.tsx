@@ -1,5 +1,5 @@
 import { AnimatePresence, ForwardRefComponent, HTMLMotionProps, motion } from 'framer-motion'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled, { StyledComponent } from 'styled-components'
 
 import { useApi } from '@/api/hooks/useApi'
@@ -18,25 +18,27 @@ interface ConnectionStatusDotProps {
 
 export const ConnectionStatusDot = ({ onlyPerformance = false, className }: ConnectionStatusDotProps) => {
   const { api, connectionState, qnConnectionState } = useApi()
-  const { queryNodeState } = useQueryNodeStateSubscription()
+  const { queryNodeState } = useQueryNodeStateSubscription({ shouldResubscribe: true })
   const header = useObservable(() => api?.rpc.chain.subscribeNewHeads(), [api?.isConnected])
+  const [isQnLate, setIsQnLate] = useState(false)
 
-  const isQnLate = useMemo(() => {
+  useEffect(() => {
     if (queryNodeState && header) {
-      return (
-        (header.toJSON().number as number) - Number(queryNodeState.indexerHead) > MAX_INDEXER_BLOCKS_BEHIND_NODE_HEAD
-      )
+      const processorDelay = Number(header.number) - Number(queryNodeState.indexerHead)
+      setIsQnLate(processorDelay > MAX_INDEXER_BLOCKS_BEHIND_NODE_HEAD)
     }
-  }, [header, queryNodeState])
+  }, [queryNodeState])
 
   const [tooltipText, DotElement] = useMemo((): [
     string,
     StyledComponent<ForwardRefComponent<HTMLDivElement, HTMLMotionProps<'div'>>, any> | null
   ] => {
-    if (isQnLate) {
+    if (isQnLate && queryNodeState && header) {
       return [
-        'Pioneer is currently experiencing connection issues with the Joystream node and may not work properly. We recommend you refrain from creating proposals, forum posts, etc., until Pioneer is fully operational.',
-        ErrorDot,
+        `Warning: The UI is currently ${
+          Number(header.number) - Number(queryNodeState.indexerHead)
+        } blocks behind. Try refreshing your browser window. View details in Settings`,
+        WarningDot,
       ]
     }
 
@@ -124,6 +126,23 @@ const ErrorDot = styled(motion.div).attrs({
   width: 17px;
   border-radius: 50%;
   background-color: ${Colors.Negative[500]};
+
+  ::after {
+    content: '!';
+    display: block;
+    color: white;
+    text-align: center;
+    width: 96%;
+    font-family: fantasy;
+  }
+`
+const WarningDot = styled(motion.div).attrs({
+  id: 'error-dot',
+})`
+  height: 17px;
+  width: 17px;
+  border-radius: 50%;
+  background-color: ${Colors.Orange[400]};
 
   ::after {
     content: '!';
