@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
@@ -9,6 +9,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'
 
 export const AddProposalButton = () => {
+  const { api } = useApi()
   const { showModal } = useModal()
   const addNewProposalModal = useCallback(() => {
     showModal<AddNewProposalModalCall>({
@@ -16,13 +17,12 @@ export const AddProposalButton = () => {
     })
   }, [])
 
-  const { api } = useApi()
-  const maxProposals = api?.consts.proposalsEngine.maxActiveProposalLimit
+  const maxProposals = useMemo(() => api?.consts.proposalsEngine.maxActiveProposalLimit, [api?.isConnected])
   const currentProposals = useFirstObservableValue(
     () => api?.query.proposalsEngine.activeProposalCount(),
-    [api?.isConnected]
+    [api?.isConnected, maxProposals]
   )
-  const areProposalSlotsAvailable = api && maxProposals && currentProposals?.lt(maxProposals)
+  const areProposalSlotsAvailable = useMemo(() => currentProposals?.lt(maxProposals), [currentProposals, maxProposals])
 
   const txButton = () => (
     <TransactionButton
@@ -36,7 +36,7 @@ export const AddProposalButton = () => {
     </TransactionButton>
   )
 
-  if (!api) return <Tooltip tooltipText="Connecting to api">{txButton()}</Tooltip>
+  if (!api?.isConnected) return <Tooltip tooltipText="Connecting to api">{txButton()}</Tooltip>
 
   if (!areProposalSlotsAvailable)
     return (
