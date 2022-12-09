@@ -11,45 +11,34 @@ import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'
 export const AddProposalButton = () => {
   const { api } = useApi()
   const { showModal } = useModal()
-  const addNewProposalModal = useCallback(() => {
-    showModal<AddNewProposalModalCall>({
-      modal: 'AddNewProposalModal',
-    })
-  }, [])
+  const addProposalModal = useCallback(() => showModal<AddNewProposalModalCall>({ modal: 'AddNewProposalModal' }), [])
 
   const maxProposals = useMemo(() => api?.consts.proposalsEngine.maxActiveProposalLimit, [api?.isConnected])
-  const currentProposals = useFirstObservableValue(
-    () => api?.query.proposalsEngine.activeProposalCount(),
-    [api?.isConnected, maxProposals]
+  const proposals = useFirstObservableValue(() => api?.query.proposalsEngine.activeProposalCount(), [api?.isConnected])
+  const areProposalSlotsAvailable = useMemo(() => proposals?.lt(maxProposals), [proposals, maxProposals])
+
+  const tooltipProps = useMemo(() => {
+    if (!api?.isConnected) return { tooltipText: 'Connecting to api' }
+    if (!areProposalSlotsAvailable)
+      return {
+        tooltipTitle: 'Max active proposals limit reached',
+        tooltipText: `The creation of proposals is currently disabled because the number of deciding or gracing proposals reached the limit of ${maxProposals}.`,
+        tooltipLinkText: 'Proposal System Constants',
+        tooltipLinkURL: 'https://joystream.gitbook.io/testnet-workspace/system/proposal-system#constants',
+      }
+    return {
+      tooltipText: 'Use the proposal engine to suggest a change to the Council.',
+      tooltipLinkText: 'Learn about the Proposal System',
+      tooltipLinkURL: 'https://joystream.gitbook.io/testnet-workspace/system/proposal-system',
+    }
+  }, [api?.isConnected, areProposalSlotsAvailable])
+
+  return (
+    <Tooltip placement="bottom-end" {...tooltipProps}>
+      <TransactionButton style="primary" size="medium" onClick={addProposalModal} disabled={!areProposalSlotsAvailable}>
+        <PlusIcon />
+        Add new proposal
+      </TransactionButton>
+    </Tooltip>
   )
-  const areProposalSlotsAvailable = useMemo(() => currentProposals?.lt(maxProposals), [currentProposals, maxProposals])
-
-  const txButton = () => (
-    <TransactionButton
-      style="primary"
-      size="medium"
-      onClick={addNewProposalModal}
-      disabled={!areProposalSlotsAvailable}
-    >
-      <PlusIcon />
-      Add new proposal
-    </TransactionButton>
-  )
-
-  if (!api?.isConnected) return <Tooltip tooltipText="Connecting to api">{txButton()}</Tooltip>
-
-  if (!areProposalSlotsAvailable)
-    return (
-      <Tooltip
-        tooltipTitle="Max active proposals limit reached"
-        tooltipText="The creation of new proposals is currently disabled because the number of deciding or gracing proposals is restricted to 20."
-        tooltipLinkText="Proposal System Constants"
-        tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/proposal-system#constants"
-        placement="bottom-end"
-      >
-        {txButton()}
-      </Tooltip>
-    )
-
-  return txButton()
 }
