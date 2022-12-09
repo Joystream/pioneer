@@ -134,33 +134,31 @@ export const ProposalPreview = () => {
             </ButtonsGroup>
           </PageHeaderRow>
 
-          {
-          proposal.status == "executed" &&
-          <RowGapBlock gap={24}>
-            <BadgeAndTime>
-              <BadgeStatus
-                ended={proposalPastStatuses.includes(proposal.status)}
-                succeeded={proposal.status === 'executed'}
-                inverted
-                size="l"
-              >
-                {camelCaseToText(proposal.status)}
-              </BadgeStatus>
-              <TextMedium>
-                <TextInlineMedium lighter>ID: </TextInlineMedium>
-                <TextInlineMedium bold>{proposal.id}</TextInlineMedium>{' '}
-              </TextMedium>
-              {blocksToProposalExecution && (
+          {proposal.status == 'executed' && (
+            <RowGapBlock gap={24}>
+              <BadgeAndTime>
+                <BadgeStatus
+                  ended={proposalPastStatuses.includes(proposal.status)}
+                  succeeded={proposal.status === 'executed'}
+                  inverted
+                  size="l"
+                >
+                  {camelCaseToText(proposal.status)}
+                </BadgeStatus>
                 <TextMedium>
-                  <TextInlineMedium lighter>Time left:</TextInlineMedium>{' '}
-                  <TextInlineMedium bold>{formatBlocksToDuration(blocksToProposalExecution)}</TextInlineMedium>{' '}
-                  <TextInlineMedium lighter>({formatTokenValue(blocksToProposalExecution)} blocks)</TextInlineMedium>
+                  <TextInlineMedium lighter>ID: </TextInlineMedium>
+                  <TextInlineMedium bold>{proposal.id}</TextInlineMedium>{' '}
                 </TextMedium>
-              )}
-            </BadgeAndTime>
-          </RowGapBlock>
-          }
-
+                {blocksToProposalExecution && (
+                  <TextMedium>
+                    <TextInlineMedium lighter>Time left:</TextInlineMedium>{' '}
+                    <TextInlineMedium bold>{formatBlocksToDuration(blocksToProposalExecution)}</TextInlineMedium>{' '}
+                    <TextInlineMedium lighter>({formatTokenValue(blocksToProposalExecution)} blocks)</TextInlineMedium>
+                  </TextMedium>
+                )}
+              </BadgeAndTime>
+            </RowGapBlock>
+          )}
 
           {(proposal.status === 'dormant' || votingRounds.length > 1) && (
             <ProposalStages
