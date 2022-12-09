@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { TokenValueStat } from '@/common/components/statistics'//
 import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'//
 import { useOpening } from '@/working-groups/hooks/useOpening'//
-
+import { urlParamToOpeningId } from '@/working-groups/model/workingGroupName'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
@@ -56,7 +56,7 @@ export const ProposalPreview = () => {
   const votingRounds = useVotingRounds(proposal?.votes, proposal?.proposalStatusUpdates)
   const [currentVotingRound, setVotingRound] = useState(0)
 
-  const { isLoading, opening } = useOpening(urlParamToOpeningId(id))//
+  const { opening } = useOpening(urlParamToOpeningId(id))//
   const rewardPeriod = useRewardPeriod(opening?.groupId)//
 
   const votes = votingRounds[currentVotingRound] ?? votingRounds[0]
