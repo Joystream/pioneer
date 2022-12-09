@@ -34,7 +34,7 @@ export const Settings = () => {
   const [currentTab, setCurrentTab] = useState<Tab>('SETTINGS')
   const tabs = [
     { title: t('network'), active: currentTab === 'SETTINGS', onClick: () => setCurrentTab('SETTINGS') },
-    { title: t('language'), active: currentTab === 'LANGUAGE', onClick: () => setCurrentTab('LANGUAGE') },
+    //{ title: t('language'), active: currentTab === 'LANGUAGE', onClick: () => setCurrentTab('LANGUAGE') },
   ]
   const switchNetwork = (network: NetworkType | null) => {
     if (network) {
@@ -54,7 +54,7 @@ export const Settings = () => {
           <MainPanel>
             <RowGapBlock gap={32}>
               <Tabs tabsSize="xs" tabs={tabs} />
-              {currentTab === 'LANGUAGE' && <LanguageSelect />}
+              {/**currentTab === 'LANGUAGE' && <LanguageSelect />**/}
               {currentTab === 'SETTINGS' && (
                 <>
                   <SimpleSelect
