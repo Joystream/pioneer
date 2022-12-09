@@ -46,7 +46,7 @@ import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
   const history = useHistory()
-  const { proposal } = useProposal(id)
+  const { isLoading, proposal } = useProposal(id)
   const { council } = useElectedCouncil()
   const constants = useProposalConstants(proposal?.details.type)
   const loc = useLocation()
@@ -56,7 +56,7 @@ export const ProposalPreview = () => {
   const votingRounds = useVotingRounds(proposal?.votes, proposal?.proposalStatusUpdates)
   const [currentVotingRound, setVotingRound] = useState(0)
 
-  const { isLoading, opening } = useOpening(urlParamToOpeningId(id))//
+  const { opening } = useOpening(urlParamToOpeningId(id))//
   const rewardPeriod = useRewardPeriod(opening?.groupId)//
 
   const votes = votingRounds[currentVotingRound] ?? votingRounds[0]
@@ -94,7 +94,7 @@ export const ProposalPreview = () => {
   const myVote = proposal?.votes.find((vote) => vote.voter.id === active?.id && vote.votingRound === currentVotingRound)
   const myVoteStatus = myVote?.voteKind
 
-  if (!proposal || !votes) {
+  if (!proposal || !votes || !opening) {
     if (!proposal && !isLoading) {
       history.replace('/404')
     }
