@@ -9472,7 +9472,7 @@ export type ElectedCouncilWhereInput = {
 }
 
 export type ElectedCouncilWhereUniqueInput = {
-  cycleId: Scalars['ID']
+  cycleId: Scalars['Int']
 }
 
 export enum ElectionProblem {
@@ -9514,7 +9514,7 @@ export type ElectionRoundConnection = {
 }
 
 export type ElectionRoundCreateInput = {
-  cycleId: Scalars['Float']
+  cycleId: Scalars['Int']
   electedCouncil: Scalars['ID']
   endedAtBlock?: InputMaybe<Scalars['Float']>
   endedAtNetwork?: InputMaybe<Network>
@@ -9553,7 +9553,7 @@ export enum ElectionRoundOrderByInput {
 }
 
 export type ElectionRoundUpdateInput = {
-  cycleId?: InputMaybe<Scalars['Float']>
+  cycleId?: Maybe<Scalars['Int']>
   electedCouncil?: InputMaybe<Scalars['ID']>
   endedAtBlock?: InputMaybe<Scalars['Float']>
   endedAtNetwork?: InputMaybe<Network>

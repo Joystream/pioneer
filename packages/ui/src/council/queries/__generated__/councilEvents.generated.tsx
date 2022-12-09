@@ -246,6 +246,7 @@ export type GetNewCandidateEventsQuery = {
       member: { __typename: 'Membership'; id: string; handle: string }
       electionRound: {
         __typename: 'ElectionRound'
+        cycleId: number
         referendumStageVoting?: { __typename: 'ReferendumStageVoting'; createdAt: any } | null
       }
     }

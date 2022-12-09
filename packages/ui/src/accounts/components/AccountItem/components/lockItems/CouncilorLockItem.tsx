@@ -39,7 +39,7 @@ export const CouncilorLockItem = ({ lock, address, isRecoverable }: LockDetailsP
       }
   }, [remainingPeriod])
 
-  const cycleId = eventData?.id // TODO update councilor query
+  const cycleId = eventData?.cycleId
   const councilPath = useMemo(() => {
     if (member?.isCouncilMember) {
       return CouncilRoutes.council

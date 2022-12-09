@@ -1477,6 +1477,7 @@ export type GetCouncilorElectionEventQuery = {
     electedInCouncil: {
       __typename: 'ElectedCouncil'
       id: string
+      cycleId: number
       electedAtBlock: number
       electedAtTime: any
       electedAtNetwork: Types.Network

@@ -28,7 +28,7 @@ export const CouncilCandidateLockItem = ({ lock, address, isRecoverable }: LockD
   const eventData = data?.newCandidateEvents[0]
   const createdInEvent = eventData && asBlock(eventData)
 
-  const cycleId = eventData?.candidate.electionRoundId // TODO update candidate query
+  const cycleId = eventData?.candidate.electionRound.cycleId
 
   const remainingPeriod = useCouncilRemainingPeriod('electionEnd')
   const recoveryTime = useMemo(

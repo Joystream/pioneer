@@ -207,9 +207,12 @@ query GetPastCouncilsCount {
   }
 }
 
-query GetPastCouncil($cycleId: ID!, $fromBlock: Int!, $toBlock: Int!) {
-  electedCouncilByUniqueInput(where: { cycleId: $cycleId }) {
-    ...PastCouncilDetailedFields
+query GetPastCouncil($cycleId: Int!, $fromBlock: Int!, $toBlock: Int!) {
+  electedCouncilByUniqueInput(where: { councilElections_some: { cycleId: $cycleId } }) {
+    id
+    councilElections {
+      ...PastCouncilDetailedFields
+    }
   }
   budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
     ...CouncilSpendingEventFields
@@ -225,7 +228,7 @@ query GetPastCouncil($cycleId: ID!, $fromBlock: Int!, $toBlock: Int!) {
   }
 }
 
-query GetPastCouncilMembers($cycleId: ID!, $fromBlock: Int!, $toBlock: Int!) {
+query GetPastCouncilMembers($cycleId: Int!, $fromBlock: Int!, $toBlock: Int!) {
   councilMembers(where: { electedInCouncil: { councilElections_some: { cycleId_eq: 1 } } }) {
     member {
       ...MemberFields
