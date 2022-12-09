@@ -79,7 +79,7 @@ export const WorkingGroupOpening = () => {
     )
   }
 
-  const StatusBadge = memo(() => {
+  const StatusBadge = useMemo(() => {
     const { status } = opening
     const label = MappedStatuses[opening.status]
     return status === OpeningStatuses.CANCELLED ? (
@@ -91,7 +91,7 @@ export const WorkingGroupOpening = () => {
         {label}
       </BadgeStatus>
     )
-  })
+  },[opening])
 
   const ApplyButton = memo(() => (
     <TransactionButton
@@ -149,7 +149,10 @@ export const WorkingGroupOpening = () => {
               <StatusBadge />
             </BadgesRow>
             <Statistics>
-              <DurationStatistics title="Time Left" value={opening.expectedEnding} />
+              {
+                OpeningStatuses.CANCELLED ? "" :
+                <DurationStatistics title="Time Left" value={opening.expectedEnding} />
+              }
               <TokenValueStat
                 title={`Reward per ${rewardPeriod?.toString()} blocks`}
                 value={rewardPeriod?.mul(opening.rewardPerBlock)}
