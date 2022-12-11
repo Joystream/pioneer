@@ -83,7 +83,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
         <h4>Discussion</h4>
         <Badge>
           {`${thread.mode} `}
-          <Tooltip tooltipText="Dolore magna anim eu nisi qui.">
+          <Tooltip tooltipText="Open discussion is open for every member to comment on, while closed would only be available for council members, white-listed members and creator of the proposal.">
             <TooltipDefault />
           </Tooltip>
         </Badge>
