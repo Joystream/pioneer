@@ -14,6 +14,7 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
+import { TokenValue } from '@/common/components/typography/TokenValue'
 import { camelCaseToText } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
 import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
@@ -194,6 +195,8 @@ export const ProposalPreview = () => {
             <RowGapBlock gap={16}>
               <Label>Proposer</Label>
               <MemberInfo member={proposal.proposer} />
+              <Label>Stake</Label>
+              {constants ? <TokenValue value={constants.requiredStake} /> : 'Loading...'}
             </RowGapBlock>
           </RowGapBlock>
         </SidePanel>
