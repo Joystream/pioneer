@@ -16,8 +16,7 @@ import { CategoryItemFieldProps } from './CategoryListItem'
 export const PopularThread = memo(({ categoryId }: CategoryItemFieldProps) => {
   const { isLoading, threads } = useForumPopularThreads({ categoryId })
 
-  if (isLoading) return <Loading />
-  else if (!threads?.[0]) return <TextMedium>-</TextMedium>
+  if (!threads?.[0]) return <TextMedium>-</TextMedium>
 
   const thread = threads[0]
 
