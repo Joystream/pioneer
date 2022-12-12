@@ -99,7 +99,7 @@ export const ForumThread = () => {
                 {tag.title}
               </BadgeStatus>
             ))}
-            <BlockTime block={thread.createdInBlock} />
+            <BlockTime block={thread.createdInBlock} layout="reverse" position="end" />
           </BadgesRow>
         </RowGapBlock>
       </PageHeaderWrapper>
