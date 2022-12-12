@@ -21,9 +21,8 @@ export const ProposalHistory = ({ proposal }: ProposalHistoryProps) => {
     const steps = [createdStatus, ...updates, ...(endStatus || [])]
 
     return steps.map(({ status, inBlock }, index) => ({
-      title: status,
+      title: `${status} in block ${inBlock.number}`,
       type: index === steps.length - 1 ? 'active' : 'past',
-      details: <BlockHistoryLine block={inBlock} />,
     }))
   }, [proposal.id])
 
