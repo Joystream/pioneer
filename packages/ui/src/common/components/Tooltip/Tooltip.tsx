@@ -301,13 +301,16 @@ export const TooltipLink = styled(Link)<{ to: string; target: string }>`
   }
 `
 
-export const TooltipExternalLink = styled.a<{ href: string | undefined; target: string }>`
+export const TooltipExternalLink = styled.a<{
+  href: string | undefined
+  target: string
+}>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
+  margin-top: 10px;
   align-items: center;
   width: fit-content;
-  margin-top: 10px;
   font-size: 12px;
   line-height: 18px;
   font-weight: 400;

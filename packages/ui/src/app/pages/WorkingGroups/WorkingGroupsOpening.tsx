@@ -156,7 +156,9 @@ export const WorkingGroupOpening = () => {
               />
               <TokenValueStat
                 title="Minimal stake"
-                tooltipText="Minimal amount of tokens required to be staked for any applicant to such role."
+                tooltipText="Minimum tokens free of rivalrous locks required as application stake to this role."
+                tooltipLinkText="Learn more"
+                tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/working-groups#staking"
                 value={opening.stake}
               />
               <ApplicationStats applicants={opening.applicants} hiring={opening.hiring} status={opening.status} />
