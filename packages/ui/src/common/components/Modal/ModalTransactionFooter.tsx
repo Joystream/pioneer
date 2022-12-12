@@ -20,10 +20,12 @@ interface Props {
   next: ButtonState
   className?: string
   extraButtons?: ReactNode
+  extraLeftButtons?: ReactNode
 }
 
 export const ModalTransactionFooter: FC<Props> = ({
   extraButtons,
+  extraLeftButtons,
   transactionFee,
   prev,
   next,
@@ -34,6 +36,7 @@ export const ModalTransactionFooter: FC<Props> = ({
   return (
     <ModalFooter className={className} twoColumns>
       <ButtonsGroup align="left">
+        {extraLeftButtons}
         {prev && !prev.disabled && (
           <ButtonGhost onClick={prev.onClick} size="medium">
             <Arrow direction="left" />

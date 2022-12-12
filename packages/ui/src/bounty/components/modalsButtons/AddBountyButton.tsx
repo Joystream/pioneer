@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AddBountyModalCall } from '@/bounty/modals/AddBountyModal'
+// import { AddBountyModalCall } from '@/bounty/modals/AddBountyModal'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
 import { useModal } from '@/common/hooks/useModal'
@@ -10,7 +10,7 @@ export const AddBountyButton = () => {
   const { t } = useTranslation('bounty')
   const { showModal } = useModal()
   const addBountyModal = useCallback(() => {
-    showModal<AddBountyModalCall>({
+    showModal({
       modal: 'AddBounty',
     })
   }, [])

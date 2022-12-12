@@ -18,7 +18,14 @@ import { getMember } from '../../_mocks/members'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA, PROPOSAL_DATA } from '../../_mocks/server/seeds'
-import { stubApi, stubConst, stubProposalConstants, stubQuery } from '../../_mocks/transactions'
+import {
+  stubApi,
+  stubConst,
+  stubCouncilAndReferendum,
+  stubCouncilConstants,
+  stubProposalConstants,
+  stubQuery,
+} from '../../_mocks/transactions'
 import { loaderSelector } from '../../setup'
 
 jest.mock('@/common/components/CKEditor', () => ({
@@ -60,6 +67,9 @@ describe('ProposalPreview', () => {
 
   beforeEach(() => {
     stubProposalConstants(api)
+    stubCouncilConstants(api)
+    stubCouncilAndReferendum(api, 'Announcing', 'Inactive')
+
     seedMembers(mockServer.server, 2)
     seedProposal(PROPOSAL_DATA, mockServer.server)
     stubQuery(api, 'proposalsEngine.voteExistsByProposalByVoter.size', createType('u64', 0))

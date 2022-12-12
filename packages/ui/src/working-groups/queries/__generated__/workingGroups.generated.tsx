@@ -612,7 +612,16 @@ export type WorkingGroupOpeningFieldsFragment = {
     | { __typename: 'OpeningStatusCancelled' }
     | { __typename: 'OpeningStatusFilled' }
     | { __typename: 'OpeningStatusOpen' }
-  applications: Array<{ __typename: 'WorkingGroupApplication'; id: string }>
+  applications: Array<{
+    __typename: 'WorkingGroupApplication'
+    id: string
+    status:
+      | { __typename: 'ApplicationStatusAccepted' }
+      | { __typename: 'ApplicationStatusCancelled' }
+      | { __typename: 'ApplicationStatusPending' }
+      | { __typename: 'ApplicationStatusRejected' }
+      | { __typename: 'ApplicationStatusWithdrawn' }
+  }>
   openingfilledeventopening?: Array<{
     __typename: 'OpeningFilledEvent'
     workersHired: Array<{ __typename: 'Worker'; id: string }>
@@ -744,7 +753,16 @@ export type GetWorkingGroupOpeningsQuery = {
       | { __typename: 'OpeningStatusCancelled' }
       | { __typename: 'OpeningStatusFilled' }
       | { __typename: 'OpeningStatusOpen' }
-    applications: Array<{ __typename: 'WorkingGroupApplication'; id: string }>
+    applications: Array<{
+      __typename: 'WorkingGroupApplication'
+      id: string
+      status:
+        | { __typename: 'ApplicationStatusAccepted' }
+        | { __typename: 'ApplicationStatusCancelled' }
+        | { __typename: 'ApplicationStatusPending' }
+        | { __typename: 'ApplicationStatusRejected' }
+        | { __typename: 'ApplicationStatusWithdrawn' }
+    }>
     openingfilledeventopening?: Array<{
       __typename: 'OpeningFilledEvent'
       workersHired: Array<{ __typename: 'Worker'; id: string }>
@@ -1064,6 +1082,7 @@ export type WorkingGroupApplicationFieldsFragment = {
   runtimeId: number
   stakingAccount: string
   stake: string
+  roleAccount: string
   answers: Array<{
     __typename: 'ApplicationFormQuestionAnswer'
     answer: string
@@ -1121,6 +1140,10 @@ export type WorkingGroupApplicationFieldsFragment = {
 
 export type GetWorkingGroupApplicationsQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.WorkingGroupApplicationWhereInput>
+  orderBy?: Types.InputMaybe<
+    Array<Types.WorkingGroupApplicationOrderByInput> | Types.WorkingGroupApplicationOrderByInput
+  >
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
 }>
 
 export type GetWorkingGroupApplicationsQuery = {
@@ -1131,6 +1154,7 @@ export type GetWorkingGroupApplicationsQuery = {
     runtimeId: number
     stakingAccount: string
     stake: string
+    roleAccount: string
     answers: Array<{
       __typename: 'ApplicationFormQuestionAnswer'
       answer: string
@@ -1222,6 +1246,7 @@ export type GetWorkingGroupApplicationQuery = {
     runtimeId: number
     stakingAccount: string
     stake: string
+    roleAccount: string
     answers: Array<{
       __typename: 'ApplicationFormQuestionAnswer'
       answer: string
@@ -1581,6 +1606,9 @@ export const WorkingGroupOpeningFieldsFragmentDoc = gql`
     unstakingPeriod
     applications {
       id
+      status {
+        __typename
+      }
     }
     openingfilledeventopening {
       workersHired {
@@ -1689,6 +1717,7 @@ export const WorkingGroupApplicationFieldsFragmentDoc = gql`
       network
     }
     stake
+    roleAccount
   }
   ${MemberFieldsFragmentDoc}
 `
@@ -2576,8 +2605,12 @@ export type GetWorkingGroupQueryHookResult = ReturnType<typeof useGetWorkingGrou
 export type GetWorkingGroupLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupLazyQuery>
 export type GetWorkingGroupQueryResult = Apollo.QueryResult<GetWorkingGroupQuery, GetWorkingGroupQueryVariables>
 export const GetWorkingGroupApplicationsDocument = gql`
-  query GetWorkingGroupApplications($where: WorkingGroupApplicationWhereInput) {
-    workingGroupApplications(where: $where) {
+  query GetWorkingGroupApplications(
+    $where: WorkingGroupApplicationWhereInput
+    $orderBy: [WorkingGroupApplicationOrderByInput!]
+    $limit: Int
+  ) {
+    workingGroupApplications(where: $where, orderBy: $orderBy, limit: $limit) {
       ...WorkingGroupApplicationFields
     }
   }
@@ -2597,6 +2630,8 @@ export const GetWorkingGroupApplicationsDocument = gql`
  * const { data, loading, error } = useGetWorkingGroupApplicationsQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      limit: // value for 'limit'
  *   },
  * });
  */

@@ -2,7 +2,7 @@ import React, { memo, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
+import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { CopyButtonTemplate } from '@/common/components/buttons'
@@ -18,13 +18,13 @@ import { SidePanel } from '@/common/components/page/SidePanel'
 import {
   DurationStatistics,
   FractionValue,
+  MultiColumnsStatistic,
   NumericValue,
   StatiscticContentColumn,
   StatisticHeader,
   Statistics,
   StatsBlock,
   TokenValueStat,
-  MultiColumnsStatistic,
 } from '@/common/components/statistics'
 import { TextSmall } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
@@ -50,7 +50,7 @@ export const WorkingGroupOpening = () => {
     if (opening) {
       return opening.applications?.filter((application) => application.status !== 'ApplicationStatusWithdrawn')
     }
-  }, opening?.applications)
+  }, [opening?.applications])
 
   const hiringApplication = useMemo(() => {
     if (activeApplications) {
@@ -156,7 +156,9 @@ export const WorkingGroupOpening = () => {
               />
               <TokenValueStat
                 title="Minimal stake"
-                tooltipText="Minimal amount of tokens required to be staked for any applicant to such role."
+                tooltipText="Minimum tokens free of rivalrous locks required as application stake to this role."
+                tooltipLinkText="Learn more"
+                tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/working-groups#staking"
                 value={opening.stake}
               />
               <ApplicationStats applicants={opening.applicants} hiring={opening.hiring} status={opening.status} />
@@ -176,7 +178,6 @@ export const WorkingGroupOpening = () => {
             myApplication={myApplication}
             hired={hiringApplication}
             hiringComplete={opening.status !== OpeningStatuses.OPEN}
-            leadId={opening.leadId}
           />
           {opening.status === OpeningStatuses.OPEN && !activeApplications?.length && <ApplicationStatus />}
         </SidePanel>
@@ -209,7 +210,7 @@ const ApplicationStats = ({
       ) : (
         <StatiscticContentColumn>
           <StatisticHeader title="Hiring limit" />
-          <NumericValue>{hiring.limit}</NumericValue>
+          <NumericValue>{hiring.limit || 1}</NumericValue>
         </StatiscticContentColumn>
       )}
     </MultiColumnsStatistic>

@@ -122,13 +122,14 @@ export interface AddNewProposalForm {
     groupId?: GroupIdName
   }
   setInitialInvitationCount: {
-    invitationCount?: BN
+    invitationCount?: number
   }
   setReferralCut: {
     referralCut?: number
   }
   setMembershipLeadInvitationQuota: {
-    amount?: BN
+    count?: number
+    leadId?: string
   }
   setInitialInvitationBalance: {
     amount?: BN
@@ -179,7 +180,10 @@ export const schemaFactory = (api?: ProxyApi) => {
     }),
     fundingRequest: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, ''))
-        .test(maxMixed(api?.consts.proposalsCodex.fundingRequestProposalMaxAmount, 'Maximal amount allowed is ${max}'))
+        // todo: change funding request to allow upload request in file
+        .test(
+          maxMixed(api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount, 'Maximal amount allowed is ${max}')
+        )
         .required('Field is required'),
       account: AccountSchema.required('Field is required'),
     }),
@@ -230,11 +234,11 @@ export const schemaFactory = (api?: ProxyApi) => {
     }),
     stakingPolicyAndReward: Yup.object().shape({
       stakingAmount: BNSchema.test(
-        minContext('Input must be greater than ${min} for proposal to execute', 'leaderOpeningStake', true, 'execution')
+        minContext('Input must be at least ${min} for proposal to execute', 'leaderOpeningStake', true, 'execution')
       ).required('Field is required'),
       leavingUnstakingPeriod: BNSchema.test(
         minContext(
-          'Input must be greater than ${min} for proposal to execute',
+          'Input must be at least ${min} for proposal to execute',
           'minUnstakingPeriodLimit',
           false,
           'execution'
@@ -253,17 +257,18 @@ export const schemaFactory = (api?: ProxyApi) => {
       workerId: Yup.number().required('Field is required'),
     }),
     terminateWorkingGroupLead: Yup.object().shape({
-      slashingAmount: BNSchema,
+      slashingAmount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')),
       groupId: Yup.string().required('Field is required'),
-      workerId: Yup.number().required('Field is required'),
+      workerId: Yup.number().test('execution', (value, schema) => {
+        if (!schema.parent.groupId) return true
+        return typeof value !== 'undefined'
+      }),
     }),
     setWorkingGroupLeadReward: Yup.object().shape({
       rewardPerBlock: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
       groupId: Yup.string().required('Field is required'),
       workerId: Yup.number().test('execution', (value, context) => {
-        if (!context.parent.groupId) {
-          return true
-        }
+        if (!context.parent.groupId) return true
         return typeof value !== 'undefined'
       }),
     }),
@@ -291,7 +296,8 @@ export const schemaFactory = (api?: ProxyApi) => {
         .required('Field is required'),
     }),
     setMembershipLeadInvitationQuota: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
+      count: BNSchema.test(moreThanMixed(0, 'Quota must be greater than zero')).required('Field is required'),
+      leadId: Yup.string().test('execution', (value) => !!value),
     }),
     setInitialInvitationBalance: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),

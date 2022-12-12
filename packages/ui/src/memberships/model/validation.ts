@@ -10,11 +10,18 @@ import { Balances, LockType } from '@/accounts/types'
 export const AccountSchema = Yup.object()
 
 const MAX_AVATAR_FILESIZE = 1048576
+const BYTES_PER_MEGABYTE = 1048576
+export const bytesToMegabytes = (bytes: number) => bytes / BYTES_PER_MEGABYTE
+
 export const MemberSchema = Yup.object()
 export const SUPPORTED_IMAGES = ['image/png', 'image/jpg', 'image/jpeg', 'image/webp', 'image/avif']
 export const AvatarURISchema = process.env.REACT_APP_AVATAR_UPLOAD_URL
   ? Yup.mixed()
-      .test('fileSize', 'File size is too large', (value) => !value || value.size <= MAX_AVATAR_FILESIZE)
+      .test(
+        'fileSize',
+        `Maximum file size is ${bytesToMegabytes(MAX_AVATAR_FILESIZE)}MB`,
+        (value) => !value || value.size <= MAX_AVATAR_FILESIZE
+      )
       .test('fileType', 'This file type is not allowed', (value) => !value || SUPPORTED_IMAGES.includes(value.type))
   : Yup.string().url().nullable()
 

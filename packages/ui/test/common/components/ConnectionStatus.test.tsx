@@ -28,7 +28,7 @@ describe('UI: Connection status component', () => {
   beforeEach(() => {
     eventEmitter = new EventEmitter()
     useApi.connectionState = 'connected'
-    useApi.api = (eventEmitter as unknown) as Api
+    useApi.api = eventEmitter as unknown as Api
     set(useApi.api, 'api.rpc.chain.subscribeNewHeads', () => of(10))
   })
 

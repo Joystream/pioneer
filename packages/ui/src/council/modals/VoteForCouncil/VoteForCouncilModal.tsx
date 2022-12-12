@@ -22,7 +22,7 @@ import { VoteForCouncilSuccessModal } from './VoteForCouncilSuccessModal'
 export const VoteForCouncilModal = () => {
   const [state, send] = useMachine(VoteForCouncilMachine)
   const { showModal, hideModal, modalData } = useModal<VoteForCouncilModalCall>()
-  const { commitment, isVoteStored } = useCommitment(state.context.account?.address ?? '', modalData.id)
+  const { commitment, isVoteStored } = useCommitment(state.context.account?.address, modalData.id)
 
   const { api } = useApi()
 
