@@ -79,7 +79,7 @@ export interface StakeSlashedActivity extends BaseActivity {
 }
 
 export interface StakeChangedActivity extends BaseActivity {
-  eventType: 'StakeIncreasedEvent' | 'StakeDecreasedEvent'
+  eventType: 'StakeIncreasedEvent' | 'StakeDecreasedEvent' | 'StakeSlashedEvent'
   member: MemberDisplayFields
   amount: BN
 }

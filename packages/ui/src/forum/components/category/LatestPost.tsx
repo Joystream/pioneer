@@ -16,8 +16,6 @@ import { CategoryItemFieldProps } from './CategoryListItem'
 export const LatestPost = memo(({ categoryId }: CategoryItemFieldProps) => {
   const { post, thread, isLoading } = useCategoryLatestPost(categoryId)
 
-  if (isLoading) return <Loading />
-
   if (!post) return <TextMedium>-</TextMedium>
 
   return (
