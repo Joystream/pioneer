@@ -10,7 +10,7 @@ export const WorkerRewardAmountUpdatedContent: ActivityContentComponent<WorkerRe
   const { newAmount, member, openingTitle } = activity
   return (
     <>
-      {member.handle}'s reward for {openingTitle} changed to <TokenValue value={newAmount} /> joy per block.
+      {member.handle}'s reward for {openingTitle} changed to <TokenValue value={newAmount} /> per block.
     </>
   )
 }
