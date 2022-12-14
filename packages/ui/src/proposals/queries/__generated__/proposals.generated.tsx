@@ -1,9 +1,8 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import * as Apollo from '@apollo/client'
 import { gql } from '@apollo/client'
 import { MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
-
+import * as Apollo from '@apollo/client'
 const defaultOptions = {} as const
 export type WorkerProposalDetailsFragment = {
   __typename: 'Worker'
