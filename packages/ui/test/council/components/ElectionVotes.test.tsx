@@ -37,7 +37,7 @@ const Results = ({ onlyMyVotes }: { onlyMyVotes: boolean }) => {
         return {
           ...candidate,
           myVotes: myVotesForCandidate,
-          ownStake: myVotesForCandidate.reduce((prev, next) => prev.add(next.stake), BN_ZERO),
+          myStake: myVotesForCandidate.reduce((prev, next) => prev.add(next.stake), BN_ZERO),
         }
       })
       .sort(electionVotingResultComparator)
@@ -153,7 +153,7 @@ describe('UI: RevealingStageVotes', () => {
     expect(voteNumbers[1].nextSibling?.textContent).toEqual('1')
   })
 
-  it('Own stake', async () => {
+  it('My stake', async () => {
     seedInformations(server.server, {
       votes: [{ voteForId: '0', stake: 2000, castBy: bob.address }],
       candidate: [{ memberId: '0', votePower: '3000', votesNumber: 2 }],

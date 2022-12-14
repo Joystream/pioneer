@@ -32,7 +32,7 @@ export const RevealingStage = ({ election, isLoading }: Props) => {
         return {
           ...candidate,
           myVotes: myVotesForCandidate,
-          ownStake: myVotesForCandidate.reduce((prev, next) => prev.add(next.stake), BN_ZERO),
+          myStake: myVotesForCandidate.reduce((prev, next) => prev.add(next.stake), BN_ZERO),
         }
       })
       .sort(electionVotingResultComparator)

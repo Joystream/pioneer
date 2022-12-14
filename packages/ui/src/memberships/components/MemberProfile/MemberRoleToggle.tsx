@@ -67,14 +67,14 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
                   </SidePaneText>
                 </SidePaneColumn>
               </SidePaneRow>
-              <SidePaneRow>
-                <SidePaneLabel text="Earned in 24h" />
+              {/** TODO fix calculation <SidePaneRow>
+                <SidePaneLabel text="Earned in 7 days" />
                 <SidePaneColumn>
                   <SidePaneText>
                     <TokenValue value={currentDayEarnings} />
                   </SidePaneText>
                 </SidePaneColumn>
-              </SidePaneRow>
+              </SidePaneRow>**/}
               <SidePaneRow>
                 <SidePaneLabel text="Role account" />
                 <SidePaneColumn>

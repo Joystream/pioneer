@@ -26,9 +26,9 @@ export const PastElectionStats = ({
     </StatisticItem>
     <StatisticItem
       title="Election round"
-      tooltipText="Refers to the on-chain election cycle enumeration."
+      tooltipText="Ordinal number of the election round since the genesis block of the network."
+      tooltipLinkText="Learn more"
       tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council#election"
-      tooltipLinkText="Read about election cycles"
     >
       <TextHuge bold>{cycleId}</TextHuge>
     </StatisticItem>

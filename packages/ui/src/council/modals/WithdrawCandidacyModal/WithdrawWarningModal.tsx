@@ -17,9 +17,8 @@ export const WithdrawWarningModal = ({ onNext, onClose }: Props) => {
       <ModalHeader onClick={onClose} title="Caution" icon={<AlertSymbol />} />
       <ModalBody>
         <TextMedium margin="s">
-          Caution, this action is irreversible. Once you withdraw your candidacy, you will not be able to apply again
-          with this account in the same election cycle, while still incurring the transaction costs for applying and
-          withdrawing candidacy.
+          Withdrawing a candidacy is irreversible however you can announce another one with the same account afterwards.
+          This is currently the only way to edit bullet points and agenda.
         </TextMedium>
       </ModalBody>
       <ModalFooter>
