@@ -3,6 +3,7 @@ import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { useApi } from '@/api/hooks/useApi'
 import { BenefitsTable } from '@/app/components/OnboardingOverlay/components/BenefitsTable'
 import { DrawerContainer } from '@/app/components/OnboardingOverlay/components/DrawerContainer'
 import { ButtonPrimary } from '@/common/components/buttons'
@@ -73,6 +74,7 @@ export const asOnBoardingSteps = (steps: StepperStep[], status: OnBoardingStatus
 }
 
 export const OnBoardingOverlay = () => {
+  const { api } = useApi()
   const { showModal } = useModal()
   const { wallet } = useMyAccounts()
   const [selectedWallet] = useLocalStorage<Wallet | undefined>('recentWallet')
@@ -84,7 +86,7 @@ export const OnBoardingOverlay = () => {
     showModal({ modal: 'OnBoardingModal' })
   }, [wallet, selectedWallet])
 
-  if (isLoading || !status || status === 'finished') {
+  if (isLoading || !status || status === 'finished' || !api?.isConnected) {
     return null
   }
 

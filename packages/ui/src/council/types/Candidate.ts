@@ -18,6 +18,8 @@ export interface ElectionCandidate {
   }
   status: CandidacyStatus
   stakingAccount: string
+  votesNumber: number
+  totalStake: BN
 }
 
 export interface ElectionCandidateWithDetails extends ElectionCandidate {
@@ -39,6 +41,8 @@ export const asElectionCandidate = (fields: ElectionCandidateFieldsFragment): El
   },
   status: fields.status,
   stakingAccount: fields.stakingAccountId,
+  totalStake: new BN(fields.votePower),
+  votesNumber: fields.votesReceived.length,
 })
 
 export const asElectionCandidateWithDetails = (

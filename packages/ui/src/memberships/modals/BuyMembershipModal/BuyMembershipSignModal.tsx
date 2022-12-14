@@ -113,7 +113,7 @@ export const BuyMembershipSignModal = ({
         <TransactionInfo
           title="Creation fee:"
           value={membershipPrice?.toBn()}
-          tooltipText={'The price to create a membership.'}
+          tooltipText="The price to create a membership."
         />
       </ModalTransactionFooter>
     </TransactionModal>

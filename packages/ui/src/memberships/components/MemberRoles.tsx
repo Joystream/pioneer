@@ -13,6 +13,7 @@ import {
   TooltipText,
 } from '@/common/components/Tooltip'
 import { Colors, Fonts } from '@/common/constants'
+import { nameMapping } from '@/common/helpers'
 import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
 import { groupNameToURLParam } from '@/working-groups/model/workingGroupName'
 
@@ -131,7 +132,7 @@ export const MemberRolePopupContent = ({ roles }: MemberRolePopupContentProps) =
         </PopupRoleItem>
       ))}
       <PopupGroupLink to={groupAddress} target="_blank">
-        {roles[0].groupName} Group
+        {nameMapping(roles[0].groupName)} Group
         <LinkSymbol />
       </PopupGroupLink>
     </>

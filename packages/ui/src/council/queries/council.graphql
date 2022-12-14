@@ -81,6 +81,10 @@ fragment ElectionCandidateFields on Candidate {
   }
   status
   stakingAccountId
+  votePower
+  votesReceived {
+    id
+  }
 }
 
 fragment ElectionRoundFields on ElectionRound {

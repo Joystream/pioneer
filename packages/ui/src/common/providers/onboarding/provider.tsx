@@ -3,7 +3,6 @@ import React from 'react'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useMyTotalBalances } from '@/accounts/hooks/useMyTotalBalances'
 import { Account } from '@/accounts/types'
-import { useApi } from '@/api/hooks/useApi'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { OnBoardingContext } from '@/common/providers/onboarding/context'
 import { UseOnBoarding } from '@/common/providers/onboarding/types'
@@ -22,7 +21,6 @@ const hasAccount = (allAccounts: Account[], address: string) => {
 }
 
 const useOnBoarding = (): UseOnBoarding => {
-  const { isConnected } = useApi()
   const { isLoading: isLoadingAccounts, error: accountsError, hasAccounts, allAccounts, wallet } = useMyAccounts()
   const { total: totalBalance } = useMyTotalBalances()
   const { isLoading: isLoadingMembers, hasMembers } = useMyMemberships()
@@ -32,7 +30,7 @@ const useOnBoarding = (): UseOnBoarding => {
     return { isLoading: false, status: 'finished' }
   }
 
-  if (!isConnected || isLoadingAccounts || isLoadingMembers) {
+  if (isLoadingAccounts || isLoadingMembers) {
     return { isLoading: true }
   }
 

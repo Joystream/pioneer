@@ -8,10 +8,8 @@ import { Account, LockType } from '@/accounts/types'
 import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, TokenInput } from '@/common/components/forms'
 import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
-import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { formatTokenValue } from '@/common/model/formatters'
 import { VoteForCouncilEvent, VoteForCouncilMachineState } from '@/council/modals/VoteForCouncil/machine'
@@ -51,21 +49,8 @@ export const StakeStep = ({
             label="Select account for Staking"
             required
             inputSize="l"
-            tooltipText={
-              <>
-                If someone voted for a candidate in an election, they will and can recover their stake at a later time.
-                Importantly, a vote which was devoted to a losing candidate can be freed the moment the election cycle
-                is over, while a vote which was devoted to a winner can only be freed after the announcing period of the
-                next election begins. The idea behind this asymmetry is to more closely expose the winners to the
-                consequences of their decision.
-                <TooltipExternalLink
-                  href="https://joystream.gitbook.io/testnet-workspace/system/council"
-                  target="_blank"
-                >
-                  <TextMedium>More details</TextMedium> <LinkSymbol />
-                </TooltipExternalLink>
-              </>
-            }
+            tooltipText="If someone voted for a candidate in an election, they will and can recover their stake at a later time.\n\nImportantly, a vote which was devoted to a losing candidate can be freed the moment the election cycle is over, while a vote which was devoted to a winner can only be freed after the announcing period of the next election begins. The idea behind this asymmetry is to more closely expose the winners to the consequences of their decision."
+            tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council"
           >
             <SelectStakingAccount
               id="account-select"

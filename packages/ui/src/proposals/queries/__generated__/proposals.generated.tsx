@@ -1,8 +1,9 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
+import * as Apollo from '@apollo/client'
 import { gql } from '@apollo/client'
 import { MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
-import * as Apollo from '@apollo/client'
+
 const defaultOptions = {} as const
 export type WorkerProposalDetailsFragment = {
   __typename: 'Worker'
@@ -578,6 +579,7 @@ export type ProposalWithDetailsFieldsFragment = {
           | { __typename: 'ProposalDiscussionPostStatusActive' }
           | { __typename: 'ProposalDiscussionPostStatusLocked' }
           | { __typename: 'ProposalDiscussionPostStatusRemoved' }
+        discussionThread: { __typename: 'ProposalDiscussionThread'; id: string }
       } | null
       createdInEvent: {
         __typename: 'ProposalDiscussionPostCreatedEvent'
@@ -622,6 +624,7 @@ export type ProposalWithDetailsFieldsFragment = {
         | { __typename: 'ProposalDiscussionPostStatusActive' }
         | { __typename: 'ProposalDiscussionPostStatusLocked' }
         | { __typename: 'ProposalDiscussionPostStatusRemoved' }
+      discussionThread: { __typename: 'ProposalDiscussionThread'; id: string }
     }>
     mode:
       | {
@@ -735,6 +738,7 @@ export type DiscussionPostFieldsFragment = {
       | { __typename: 'ProposalDiscussionPostStatusActive' }
       | { __typename: 'ProposalDiscussionPostStatusLocked' }
       | { __typename: 'ProposalDiscussionPostStatusRemoved' }
+    discussionThread: { __typename: 'ProposalDiscussionThread'; id: string }
   } | null
   createdInEvent: {
     __typename: 'ProposalDiscussionPostCreatedEvent'
@@ -779,6 +783,7 @@ export type DiscussionPostFieldsFragment = {
     | { __typename: 'ProposalDiscussionPostStatusActive' }
     | { __typename: 'ProposalDiscussionPostStatusLocked' }
     | { __typename: 'ProposalDiscussionPostStatusRemoved' }
+  discussionThread: { __typename: 'ProposalDiscussionThread'; id: string }
 }
 
 export type DiscussionPostWithoutReplyFieldsFragment = {
@@ -830,6 +835,7 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
     | { __typename: 'ProposalDiscussionPostStatusActive' }
     | { __typename: 'ProposalDiscussionPostStatusLocked' }
     | { __typename: 'ProposalDiscussionPostStatusRemoved' }
+  discussionThread: { __typename: 'ProposalDiscussionThread'; id: string }
 }
 
 export type ProposalPostParentsFragment = { __typename: 'ProposalDiscussionPost'; discussionThreadId: string }
@@ -1396,6 +1402,7 @@ export type GetProposalQuery = {
             | { __typename: 'ProposalDiscussionPostStatusActive' }
             | { __typename: 'ProposalDiscussionPostStatusLocked' }
             | { __typename: 'ProposalDiscussionPostStatusRemoved' }
+          discussionThread: { __typename: 'ProposalDiscussionThread'; id: string }
         } | null
         createdInEvent: {
           __typename: 'ProposalDiscussionPostCreatedEvent'
@@ -1440,6 +1447,7 @@ export type GetProposalQuery = {
           | { __typename: 'ProposalDiscussionPostStatusActive' }
           | { __typename: 'ProposalDiscussionPostStatusLocked' }
           | { __typename: 'ProposalDiscussionPostStatusRemoved' }
+        discussionThread: { __typename: 'ProposalDiscussionThread'; id: string }
       }>
       mode:
         | {
@@ -1863,6 +1871,9 @@ export const DiscussionPostWithoutReplyFieldsFragmentDoc = gql`
     text
     status {
       __typename
+    }
+    discussionThread {
+      id
     }
   }
   ${MemberFieldsFragmentDoc}

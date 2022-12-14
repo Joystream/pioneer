@@ -176,7 +176,6 @@ export const WorkingGroupOpening = () => {
             myApplication={myApplication}
             hired={hiringApplication}
             hiringComplete={opening.status !== OpeningStatuses.OPEN}
-            leadId={opening.leadId}
           />
           {opening.status === OpeningStatuses.OPEN && !activeApplications?.length && <ApplicationStatus />}
         </SidePanel>
