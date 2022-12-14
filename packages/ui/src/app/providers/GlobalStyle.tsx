@@ -59,7 +59,7 @@ export const GlobalStyle = createGlobalStyle`
   body > #app {
     height: 100%;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: hidden;
   }
   button {
     font-family: ${Fonts.Grotesk};

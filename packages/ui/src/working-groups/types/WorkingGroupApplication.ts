@@ -30,6 +30,7 @@ export interface WorkingGroupApplication {
   status?: string
   createdAtBlock: Block
   answers: ApplicationAnswer[]
+  roleAccount: string
 }
 
 export const asApplication = (fields: WorkingGroupApplicationFieldsFragment): WorkingGroupApplication => ({
@@ -49,6 +50,7 @@ export const asApplication = (fields: WorkingGroupApplicationFieldsFragment): Wo
   })),
   status: fields.status.__typename,
   stakingAccount: fields.stakingAccount,
+  roleAccount: fields.roleAccount,
   stake: new BN(fields.stake),
   applicant: asMember(fields.applicant),
   createdAtBlock: asBlock(fields.createdInEvent),

@@ -1,9 +1,9 @@
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useState } from 'react'
-import { useFormContext, Controller } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 import NumberFormat, { NumberFormatValues, SourceInfo } from 'react-number-format'
 
-import { BN_ZERO, JOY_DECIMAL_PLACES } from '@/common/constants'
+import { JOY_DECIMAL_PLACES } from '@/common/constants'
 import { formatJoyValue } from '@/common/model/formatters'
 import { powerOf2 } from '@/common/utils/bn'
 
@@ -17,7 +17,7 @@ export interface BaseTokenInputProps extends Omit<InputProps, 'type' | 'defaultV
 }
 
 const BasedTokenInput = React.memo(
-  ({ id, onChange, value: joyValue = BN_ZERO, maxAllowedValue = powerOf2(128), ...props }: BaseTokenInputProps) => {
+  ({ id, onChange, value: joyValue, maxAllowedValue = powerOf2(128), ...props }: BaseTokenInputProps) => {
     const [inputValue, setInputValue] = useState('')
 
     const onInputChange = useCallback(
@@ -25,7 +25,7 @@ const BasedTokenInput = React.memo(
         if (inputValue !== value) {
           setInputValue(value)
           const newJOYValue = stringToJoyValue(value)
-          if (!newJOYValue.eq(joyValue)) {
+          if (!joyValue || !newJOYValue.eq(joyValue)) {
             onChange?.(event, newJOYValue)
           }
         }
@@ -39,7 +39,7 @@ const BasedTokenInput = React.memo(
     )
 
     useEffect(() => {
-      if (!stringToJoyValue(inputValue).eq(joyValue)) {
+      if (joyValue && !stringToJoyValue(inputValue).eq(joyValue)) {
         setInputValue(formatJoyValue(joyValue, { formatInt: String }))
       }
     }, [String(joyValue)])

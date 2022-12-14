@@ -9,4 +9,6 @@ export const ModalContext = createContext<UseModal<any>>({
   hideModal: () => undefined,
   setMachineState: () => undefined,
   currentModalMachine: undefined,
+  isClosing: false,
+  returnClosedModal: () => undefined,
 })

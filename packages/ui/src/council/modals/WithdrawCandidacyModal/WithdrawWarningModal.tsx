@@ -17,8 +17,8 @@ export const WithdrawWarningModal = ({ onNext, onClose }: Props) => {
       <ModalHeader onClick={onClose} title="Caution" icon={<AlertSymbol />} />
       <ModalBody>
         <TextMedium margin="s">
-          Please remember that this action is irreversible. Amet minim mollit non deserunt ullamco est sit aliqua dolor
-          do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
+          Withdrawing a candidacy is irreversible however you can announce another one with the same account afterwards.
+          This is currently the only way to edit bullet points and agenda.
         </TextMedium>
       </ModalBody>
       <ModalFooter>

@@ -20,6 +20,7 @@ import {
 import { getMember } from '@/mocks/helpers'
 import { randomRawBlock } from '@/mocks/helpers/randomBlock'
 
+import { CANDIDATE_DATA } from '../../_mocks/council'
 import { alice } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -28,40 +29,16 @@ import { loaderSelector } from '../../setup'
 
 const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
   {
+    ...CANDIDATE_DATA,
     id: '1',
     electionRoundId: '1',
     memberId: getMember('alice').id,
-    stake: 1000,
-    stakingAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-    rewardAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-    noteMetadata: {
-      header: 'molestiae in dolore eveniet',
-      bulletPoints: [
-        'exercitationem nihil autem sint architecto id neque ipsum',
-        'voluptas autem esse mollitia aspernatur labore est modi',
-        'veniam et officia culpa consequuntur non odit iure',
-      ],
-      bannerImageUri: 'https://picsum.photos/500/300',
-      description: 'ipsum aliquam qui repudiandae aliquid aliquam veritatis officia corporis molestiae',
-    },
   },
   {
+    ...CANDIDATE_DATA,
     id: '2',
     electionRoundId: '1',
     memberId: getMember('bob').id,
-    stake: 1000,
-    stakingAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-    rewardAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-    noteMetadata: {
-      header: 'molestiae in dolore eveniet',
-      bulletPoints: [
-        'exercitationem nihil autem sint architecto id neque ipsum',
-        'voluptas autem esse mollitia aspernatur labore est modi',
-        'veniam et officia culpa consequuntur non odit iure',
-      ],
-      bannerImageUri: 'https://picsum.photos/500/300',
-      description: 'ipsum aliquam qui repudiandae aliquid aliquam veritatis officia corporis molestiae',
-    },
   },
 ]
 

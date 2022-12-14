@@ -9,6 +9,7 @@ import { Block } from '@/common/types'
 import { WorkingGroupApplication } from '@/working-groups/types/WorkingGroupApplication'
 
 import { getMember } from '../../_mocks/members'
+import { MockApolloProvider } from '../../_mocks/providers'
 import { loaderSelector } from '../../setup'
 
 let mockApplications: { isLoading: boolean; applications: WorkingGroupApplication[] }
@@ -40,6 +41,7 @@ const currentApplication: WorkingGroupApplication = {
   status: 'ApplicationStatusPending',
   stakingAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
   stake: BN_TEN,
+  roleAccount: getMember('alice').controllerAccount,
 }
 
 const pastApplication: WorkingGroupApplication = {
@@ -59,6 +61,7 @@ const pastApplication: WorkingGroupApplication = {
   status: 'ApplicationStatusRejected',
   stakingAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
   stake: BN_TEN,
+  roleAccount: getMember('alice').controllerAccount,
 }
 
 describe('UI: MyApplications', () => {
@@ -131,7 +134,9 @@ describe('UI: MyApplications', () => {
   function renderPage() {
     return render(
       <HashRouter>
-        <MyApplications />
+        <MockApolloProvider>
+          <MyApplications />
+        </MockApolloProvider>
       </HashRouter>
     )
   }

@@ -58,6 +58,7 @@ export type GetAllDeadLinesQuery = {
       stake: string
       status: Types.CandidacyStatus
       stakingAccountId: string
+      votePower: string
       member: {
         __typename: 'Membership'
         id: string
@@ -98,6 +99,7 @@ export type GetAllDeadLinesQuery = {
         bannerImageUri?: string | null
         description?: string | null
       }
+      votesReceived: Array<{ __typename: 'CastVote'; id: string }>
     }>
   }>
   proposals: Array<{ __typename: 'Proposal'; updatedAt?: any | null; id: string; title: string }>
@@ -144,7 +146,16 @@ export type GetAllDeadLinesQuery = {
       | { __typename: 'OpeningStatusCancelled' }
       | { __typename: 'OpeningStatusFilled' }
       | { __typename: 'OpeningStatusOpen' }
-    applications: Array<{ __typename: 'WorkingGroupApplication'; id: string }>
+    applications: Array<{
+      __typename: 'WorkingGroupApplication'
+      id: string
+      status:
+        | { __typename: 'ApplicationStatusAccepted' }
+        | { __typename: 'ApplicationStatusCancelled' }
+        | { __typename: 'ApplicationStatusPending' }
+        | { __typename: 'ApplicationStatusRejected' }
+        | { __typename: 'ApplicationStatusWithdrawn' }
+    }>
     openingfilledeventopening?: Array<{
       __typename: 'OpeningFilledEvent'
       workersHired: Array<{ __typename: 'Worker'; id: string }>
