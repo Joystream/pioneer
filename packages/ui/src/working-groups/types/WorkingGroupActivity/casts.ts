@@ -230,6 +230,7 @@ export const asWorkerRewardAmountUpdatedActivity: GroupActivityCast<
   member: asMemberDisplayFields(fragment.worker.membership),
   newAmount: new BN(fragment.newRewardPerBlock),
   openingTitle: fragment.worker.application.opening.metadata.title,
+  groupId: fragment.worker.application.opening.groupId,
 })
 
 type WorkingGroupEventFields =

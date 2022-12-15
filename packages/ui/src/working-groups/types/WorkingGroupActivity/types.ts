@@ -116,4 +116,5 @@ export interface WorkerRewardAmountUpdatedActivity extends BaseActivity {
   member: MemberDisplayFields
   newAmount: BN
   openintTitle: string
+  groupId: string
 }
