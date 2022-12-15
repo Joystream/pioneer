@@ -154,6 +154,8 @@ export type WorkerRewardAmountUpdatedEventFragment = {
   id: string
   createdAt: any
   newRewardPerBlock: string
+  openingTitle: string
+  groupId: string
 }
 
 export type WorkerRewardAccountUpdatedEventFragment = {
@@ -260,6 +262,17 @@ export type GetMemberRoleEventsQuery = {
     id: string
     createdAt: any
     newRewardPerBlock: string
+    worker: {
+      __typename: 'Worker'
+      application: {
+        __typename: 'WorkingGroupApplication'
+        opening: {
+          __typename: 'WorkingGroupOpening'
+          groupId: string
+          metadata: { __typename: 'WorkingGroupOpeningMetadata'; title: string }
+        }
+      }
+    }
   }>
 }
 
@@ -946,6 +959,16 @@ export const WorkerRewardAmountUpdatedEventFragmentDoc = gql`
     id
     createdAt
     newRewardPerBlock
+    worker {
+      application {
+        opening {
+          groupId
+          metadata {
+            title
+          }
+        }
+      }
+    }
   }
 `
 export const WorkerRewardAccountUpdatedEventFragmentDoc = gql`
