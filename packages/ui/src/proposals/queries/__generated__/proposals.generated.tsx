@@ -386,7 +386,7 @@ export type ProposalWithDetailsFieldsFragment = {
     | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: string }
     | { __typename: 'SetInitialInvitationCountProposalDetails'; newInitialInvitationsCount: number }
     | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
-    | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+    | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails'; newLeadInvitationQuota: number }
     | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: string }
     | { __typename: 'SetReferralCutProposalDetails'; newReferralCut: number }
     | {
@@ -578,6 +578,7 @@ export type ProposalWithDetailsFieldsFragment = {
           | { __typename: 'ProposalDiscussionPostStatusActive' }
           | { __typename: 'ProposalDiscussionPostStatusLocked' }
           | { __typename: 'ProposalDiscussionPostStatusRemoved' }
+        discussionThread: { __typename: 'ProposalDiscussionThread'; id: string }
       } | null
       createdInEvent: {
         __typename: 'ProposalDiscussionPostCreatedEvent'
@@ -622,6 +623,7 @@ export type ProposalWithDetailsFieldsFragment = {
         | { __typename: 'ProposalDiscussionPostStatusActive' }
         | { __typename: 'ProposalDiscussionPostStatusLocked' }
         | { __typename: 'ProposalDiscussionPostStatusRemoved' }
+      discussionThread: { __typename: 'ProposalDiscussionThread'; id: string }
     }>
     mode:
       | {
@@ -735,6 +737,7 @@ export type DiscussionPostFieldsFragment = {
       | { __typename: 'ProposalDiscussionPostStatusActive' }
       | { __typename: 'ProposalDiscussionPostStatusLocked' }
       | { __typename: 'ProposalDiscussionPostStatusRemoved' }
+    discussionThread: { __typename: 'ProposalDiscussionThread'; id: string }
   } | null
   createdInEvent: {
     __typename: 'ProposalDiscussionPostCreatedEvent'
@@ -779,6 +782,7 @@ export type DiscussionPostFieldsFragment = {
     | { __typename: 'ProposalDiscussionPostStatusActive' }
     | { __typename: 'ProposalDiscussionPostStatusLocked' }
     | { __typename: 'ProposalDiscussionPostStatusRemoved' }
+  discussionThread: { __typename: 'ProposalDiscussionThread'; id: string }
 }
 
 export type DiscussionPostWithoutReplyFieldsFragment = {
@@ -830,6 +834,7 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
     | { __typename: 'ProposalDiscussionPostStatusActive' }
     | { __typename: 'ProposalDiscussionPostStatusLocked' }
     | { __typename: 'ProposalDiscussionPostStatusRemoved' }
+  discussionThread: { __typename: 'ProposalDiscussionThread'; id: string }
 }
 
 export type ProposalPostParentsFragment = { __typename: 'ProposalDiscussionPost'; discussionThreadId: string }
@@ -1204,7 +1209,7 @@ export type GetProposalQuery = {
       | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: string }
       | { __typename: 'SetInitialInvitationCountProposalDetails'; newInitialInvitationsCount: number }
       | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
-      | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+      | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails'; newLeadInvitationQuota: number }
       | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: string }
       | { __typename: 'SetReferralCutProposalDetails'; newReferralCut: number }
       | {
@@ -1396,6 +1401,7 @@ export type GetProposalQuery = {
             | { __typename: 'ProposalDiscussionPostStatusActive' }
             | { __typename: 'ProposalDiscussionPostStatusLocked' }
             | { __typename: 'ProposalDiscussionPostStatusRemoved' }
+          discussionThread: { __typename: 'ProposalDiscussionThread'; id: string }
         } | null
         createdInEvent: {
           __typename: 'ProposalDiscussionPostCreatedEvent'
@@ -1440,6 +1446,7 @@ export type GetProposalQuery = {
           | { __typename: 'ProposalDiscussionPostStatusActive' }
           | { __typename: 'ProposalDiscussionPostStatusLocked' }
           | { __typename: 'ProposalDiscussionPostStatusRemoved' }
+        discussionThread: { __typename: 'ProposalDiscussionThread'; id: string }
       }>
       mode:
         | {
@@ -1864,6 +1871,9 @@ export const DiscussionPostWithoutReplyFieldsFragmentDoc = gql`
     status {
       __typename
     }
+    discussionThread {
+      id
+    }
   }
   ${MemberFieldsFragmentDoc}
 `
@@ -1992,6 +2002,9 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       }
       ... on SetCouncilBudgetIncrementProposalDetails {
         newAmount
+      }
+      ... on SetMembershipLeadInvitationQuotaProposalDetails {
+        newLeadInvitationQuota
       }
       ... on SignalProposalDetails {
         text

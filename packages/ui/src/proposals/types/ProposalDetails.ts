@@ -58,7 +58,7 @@ export type GroupNameDetail = {
 }
 
 export type CountDetail = {
-  count: BN
+  count: number
 }
 
 export type ProposalDetail = {
@@ -110,6 +110,8 @@ export type SignalDetails = ProposalDetailsNew<'signal', SignalTextDetail>
 
 export type SetMembershipPriceDetails = ProposalDetailsNew<'setMembershipPrice', AmountDetail>
 
+export type SetMembershipLeadInvitationQuota = ProposalDetailsNew<'setMembershipLeadInvitationQuota', CountDetail>
+
 export type SetCouncilBudgetIncrementDetails = ProposalDetailsNew<'setCouncilBudgetIncrement', AmountDetail>
 
 export type CancelWorkingGroupLeadOpeningDetails = ProposalDetailsNew<
@@ -140,6 +142,7 @@ export type ProposalDetails =
   | SetWorkingGroupLeadRewardDetails
   | TerminateWorkingGroupLeadDetails
   | SetMembershipPriceDetails
+  | SetMembershipLeadInvitationQuota
   | SetCouncilBudgetIncrementDetails
   | SignalDetails
   | CancelWorkingGroupLeadOpeningDetails
@@ -230,7 +233,7 @@ const asSetMaxValidatorCount: DetailsCast<'SetMaxValidatorCountProposalDetails'>
   fragment
 ): MaxValidatorCountDetails => ({
   type: 'setMaxValidatorCount',
-  count: new BN(fragment.newMaxValidatorCount),
+  count: fragment.newMaxValidatorCount,
 })
 
 const asFillGroupLeadOpening: DetailsCast<'FillWorkingGroupLeadOpeningProposalDetails'> = (
@@ -295,6 +298,13 @@ const asSetReferralCut: DetailsCast<'SetReferralCutProposalDetails'> = (fragment
   amount: new BN(fragment.newReferralCut),
 })
 
+const asSetMembershipLeadInvitationQuota: DetailsCast<'SetMembershipLeadInvitationQuotaProposalDetails'> = (
+  fragment
+): SetMembershipLeadInvitationQuota => ({
+  type: 'setMembershipLeadInvitationQuota',
+  count: fragment.newLeadInvitationQuota,
+})
+
 const asSetInitialInvitationBalance: DetailsCast<'SetInitialInvitationBalanceProposalDetails'> = (
   fragment
 ): SetInitialInvitationBalanceDetails => ({
@@ -306,7 +316,7 @@ const asSetInitialInvitationCount: DetailsCast<'SetInitialInvitationCountProposa
   fragment
 ): SetInitialInvitationCountDetails => ({
   type: 'setInitialInvitationCount',
-  count: new BN(fragment.newInitialInvitationsCount),
+  count: fragment.newInitialInvitationsCount,
 })
 
 const asSetCouncilorReward: DetailsCast<'SetCouncilorRewardProposalDetails'> = (
@@ -345,6 +355,7 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   SetInitialInvitationCountProposalDetails: asSetInitialInvitationCount,
   SetCouncilorRewardProposalDetails: asSetCouncilorReward,
   VetoProposalDetails: asVeto,
+  SetMembershipLeadInvitationQuotaProposalDetails: asSetMembershipLeadInvitationQuota,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {

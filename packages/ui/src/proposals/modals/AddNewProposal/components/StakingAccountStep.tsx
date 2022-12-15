@@ -3,10 +3,8 @@ import React from 'react'
 
 import { SelectStakingAccount } from '@/accounts/components/SelectAccount'
 import { InputComponent } from '@/common/components/forms'
-import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 
 interface StakingAccountStepProps {
@@ -34,18 +32,9 @@ export const StakingAccountStep = ({ requiredStake }: StakingAccountStepProps) =
           </RowGapBlock>
           <InputComponent
             label="Select account for Staking"
-            tooltipText={
-              <>
-                The budget is the root resource pool for all token minting in the working group, and the size of the
-                pool is denoted by budget.
-                <TooltipExternalLink
-                  href="https://joystream.gitbook.io/joystream-handbook/key-concepts/staking#locks-1"
-                  target="_blank"
-                >
-                  <TextMedium>Link</TextMedium> <LinkSymbol />
-                </TooltipExternalLink>
-              </>
-            }
+            tooltipText="The budget is the root resource pool for all token minting in the working group, and the size of the pool is denoted by budget."
+            tooltipLinkURL="https://joystream.gitbook.io/joystream-handbook/key-concepts/staking#locks-1"
+            tooltipLinkText="Learn more"
             inputSize="l"
             required
             name="stakingAccount.stakingAccount"

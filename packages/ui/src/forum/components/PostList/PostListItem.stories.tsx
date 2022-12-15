@@ -10,6 +10,7 @@ import { PostListItem } from '@/forum/components/PostList/PostListItem'
 import { ForumPost } from '@/forum/types'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+import { forumPostMock } from '@/mocks/data/commonMocks'
 import { getMember } from '@/mocks/helpers'
 
 export default {
@@ -60,7 +61,6 @@ const Template: Story<Props> = ({ post, text, edited = -1, likes = -1, replyText
             post={{ ...post, lastEditedAt, text, reaction, repliesTo }}
             isThreadActive={isThreadActive}
             type="forum"
-            replyToPost={() => true}
             link="#"
             repliesToLink=""
           />
@@ -80,30 +80,7 @@ consequat sunt nostrud.`,
   replyText: `Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
 Velit officia consequat duis enim velit mollit.
 Exercitation veniam consequat sunt nostrud amet.`,
-  post: {
-    id: '0',
-    createdAt: new Date().toISOString(),
-    createdAtBlock: {
-      number: 1000,
-      network: 'OLYMPIA',
-      timestamp: '2012-01-26T13:51:50.417-07:00',
-    },
-    author: {
-      id: '0',
-      name: 'Alice member',
-      rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-      controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-      handle: 'alice',
-      isVerified: false,
-      isFoundingMember: false,
-      isCouncilMember: false,
-      roles: [],
-      boundAccounts: [],
-      inviteCount: 0,
-      createdAt: '',
-    },
-    status: 'PostStatusActive',
-  },
+  post: forumPostMock,
   isThreadActive: true,
 }
 
@@ -118,27 +95,7 @@ consequat sunt nostrud.`,
 Velit officia consequat duis enim velit mollit.
 Exercitation veniam consequat sunt nostrud amet.`,
   post: {
-    id: '0',
-    createdAt: new Date().toISOString(),
-    createdAtBlock: {
-      number: 1000,
-      network: 'OLYMPIA',
-      timestamp: '2012-01-26T13:51:50.417-07:00',
-    },
-    author: {
-      id: '0',
-      name: 'Alice member',
-      rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-      controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-      handle: 'alice',
-      isVerified: false,
-      isFoundingMember: false,
-      isCouncilMember: false,
-      roles: [],
-      boundAccounts: [],
-      inviteCount: 0,
-      createdAt: '',
-    },
+    ...forumPostMock,
     moderator: {
       id: '0',
       name: 'Alice member',

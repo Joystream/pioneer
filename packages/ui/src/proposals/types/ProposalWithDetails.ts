@@ -92,4 +92,6 @@ const asForumComment = (fields: DiscussionPostFieldsFragment): ForumPost => ({
   text: fields.text,
   ...(fields.repliesTo ? { repliesTo: asForumComment(fields.repliesTo) } : {}),
   status: asDiscussionPostStatus(fields.status.__typename),
+  categoryId: '1',
+  threadId: fields.discussionThread.id,
 })

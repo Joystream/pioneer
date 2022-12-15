@@ -18,6 +18,7 @@ import { useLocation } from '@/common/hooks/useLocation'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
+import { PostReplyModalCall } from '@/forum/modals/PostReplyModal'
 import { ForumPost } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -37,7 +38,6 @@ interface PostListItemProps {
   isThreadActive?: boolean
   insertRef?: (ref: RefObject<HTMLDivElement>) => void
   type: PostListItemType
-  replyToPost: () => void
   link?: string
   isDiscussion?: boolean
   repliesToLink: string
@@ -52,7 +52,6 @@ export const PostListItem = ({
   insertRef,
   type,
   link,
-  replyToPost,
   isDiscussion,
   repliesToLink,
 }: PostListItemProps) => {
@@ -96,7 +95,13 @@ export const PostListItem = ({
 
   const onReply = (): void => {
     if (!active) showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
-    return replyToPost()
+    showModal<PostReplyModalCall>({
+      modal: 'PostReplyModal',
+      data: {
+        replyTo: post,
+        module: type === 'forum' ? type : 'proposalsDiscussion',
+      },
+    })
   }
 
   return (
