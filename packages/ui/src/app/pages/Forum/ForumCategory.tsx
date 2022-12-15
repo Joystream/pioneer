@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { ForumThreadOrderByInput } from '@/common/api/queries'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { EmptyPagePlaceholder } from '@/common/components/EmptyPagePlaceholder/EmptyPagePlaceholder'
+import { HorizontalScroller } from '@/common/components/HorizontalScroller/HorizontalScroller'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
 import { ItemCount } from '@/common/components/ItemCount'
 import { Loading } from '@/common/components/Loading'
@@ -17,6 +18,7 @@ import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { useSort } from '@/common/hooks/useSort'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { ForumCategoryList } from '@/forum/components/category/ForumCategoryList'
+import { CategoryCard } from '@/forum/components/CategoryCard/CategoryCard'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
@@ -99,13 +101,15 @@ export const ForumCategory = () => {
         <>
           {!!category.subcategories.length && (
             <RowGapBlock gap={24}>
-              <ItemCount count={category.subcategories.length}>
-                {isArchive ? 'Archived categories' : 'Categories'}
-              </ItemCount>
-              <ForumCategoryList categories={category.subcategories} isArchive={isArchive} />
+              <HorizontalScroller
+                title={isArchive ? 'Archived categories' : 'Categories'}
+                items={category.subcategories.map((category) => (
+                  <CategoryCard key={category.id} category={category} />
+                ))}
+                count={category.subcategories.length}
+              />
             </RowGapBlock>
           )}
-
           <RowGapBlock gap={24}>
             <ThreadFilters onApply={(filters) => refresh({ filters })} isArchive={isArchive}>
               <ItemCount count={threadCount} size="xs">
