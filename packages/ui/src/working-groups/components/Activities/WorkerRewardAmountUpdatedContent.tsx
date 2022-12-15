@@ -9,7 +9,7 @@ export const WorkerRewardAmountUpdatedContent: ActivityContentComponent<WorkerRe
   activity,
 }) => {
   const { newAmount, member, openingTitle, groupId } = activity
-  const group = GroupIdToGroupParam(groupId)
+  const group = GroupIdToGroupParam[groupId]
   return (
     <>
       {member?.handle}'s reward for {openingTitle} in {group} changed to <TokenValue value={newAmount} /> per block.

@@ -154,8 +154,7 @@ export type WorkerRewardAmountUpdatedEventFragment = {
   id: string
   createdAt: any
   newRewardPerBlock: string
-  openingTitle: string
-  groupId: string
+  worker: any
 }
 
 export type WorkerRewardAccountUpdatedEventFragment = {
@@ -354,6 +353,23 @@ export type GetGroupEventsQuery = {
     opening: { __typename: 'WorkingGroupOpening'; id: string; type: Types.WorkingGroupOpeningType }
     group: { __typename: 'WorkingGroup'; name: string }
     workersHired: Array<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }>
+  }>
+  workerRewardAmountUpdatedEvents: Array<{
+    __typename: 'WorkerRewardAmountUpdatedEvent'
+    id: string
+    createdAt: any
+    newRewardPerBlock: string
+    worker: {
+      __typename: 'Worker'
+      application: {
+        __typename: 'WorkingGroupApplication'
+        opening: {
+          __typename: 'WorkingGroupOpening'
+          groupId: string
+          metadata: { __typename: 'WorkingGroupOpeningMetadata'; title: string }
+        }
+      }
+    }
   }>
   workerExitedEvents: Array<{
     __typename: 'WorkerExitedEvent'
