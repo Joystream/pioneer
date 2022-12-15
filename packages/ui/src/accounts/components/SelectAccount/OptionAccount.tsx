@@ -23,14 +23,14 @@ export const OptionAccount = ({ option, isForStaking }: Props) => {
 
   return (
     <>
-    <AccountInfo account={option} locked={isLocked} />
-       {/* <BalanceInfoInRow>
+      <AccountInfo account={option} locked={isLocked} />
+      <BalanceInfoInRow>
         <InfoTitle>{balanceType} balance</InfoTitle>
         <InfoValueWithLocks>
           <Value value={balance} locked={isLocked} />
           <AccountLocks locks={balances?.locks} />
         </InfoValueWithLocks>
-      </BalanceInfoInRow>// Address info commented out */}
+      </BalanceInfoInRow>
     </>
   )
 }
