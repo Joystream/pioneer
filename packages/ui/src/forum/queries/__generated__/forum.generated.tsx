@@ -278,6 +278,7 @@ export type ForumPostFieldsFragment = {
   updatedAt?: any | null
   text: string
   authorId: string
+  threadId: string
   repliesTo?: {
     __typename: 'ForumPost'
     id: string
@@ -285,6 +286,7 @@ export type ForumPostFieldsFragment = {
     updatedAt?: any | null
     text: string
     authorId: string
+    threadId: string
     author: {
       __typename: 'Membership'
       id: string
@@ -373,6 +375,7 @@ export type ForumPostFieldsFragment = {
       | { __typename: 'PostStatusModerated' }
       | { __typename: 'PostStatusRemoved' }
     edits: Array<{ __typename: 'PostTextUpdatedEvent'; createdAt: any }>
+    thread: { __typename: 'ForumThread'; categoryId: string }
   } | null
   author: {
     __typename: 'Membership'
@@ -462,6 +465,7 @@ export type ForumPostFieldsFragment = {
     | { __typename: 'PostStatusModerated' }
     | { __typename: 'PostStatusRemoved' }
   edits: Array<{ __typename: 'PostTextUpdatedEvent'; createdAt: any }>
+  thread: { __typename: 'ForumThread'; categoryId: string }
 }
 
 export type ForumPostWithoutReplyFieldsFragment = {
@@ -471,6 +475,7 @@ export type ForumPostWithoutReplyFieldsFragment = {
   updatedAt?: any | null
   text: string
   authorId: string
+  threadId: string
   author: {
     __typename: 'Membership'
     id: string
@@ -559,6 +564,7 @@ export type ForumPostWithoutReplyFieldsFragment = {
     | { __typename: 'PostStatusModerated' }
     | { __typename: 'PostStatusRemoved' }
   edits: Array<{ __typename: 'PostTextUpdatedEvent'; createdAt: any }>
+  thread: { __typename: 'ForumThread'; categoryId: string }
 }
 
 export type ForumThreadDetailedFieldsFragment = {
@@ -1103,6 +1109,7 @@ export type GetForumPostsQuery = {
     updatedAt?: any | null
     text: string
     authorId: string
+    threadId: string
     repliesTo?: {
       __typename: 'ForumPost'
       id: string
@@ -1110,6 +1117,7 @@ export type GetForumPostsQuery = {
       updatedAt?: any | null
       text: string
       authorId: string
+      threadId: string
       author: {
         __typename: 'Membership'
         id: string
@@ -1198,6 +1206,7 @@ export type GetForumPostsQuery = {
         | { __typename: 'PostStatusModerated' }
         | { __typename: 'PostStatusRemoved' }
       edits: Array<{ __typename: 'PostTextUpdatedEvent'; createdAt: any }>
+      thread: { __typename: 'ForumThread'; categoryId: string }
     } | null
     author: {
       __typename: 'Membership'
@@ -1287,6 +1296,7 @@ export type GetForumPostsQuery = {
       | { __typename: 'PostStatusModerated' }
       | { __typename: 'PostStatusRemoved' }
     edits: Array<{ __typename: 'PostTextUpdatedEvent'; createdAt: any }>
+    thread: { __typename: 'ForumThread'; categoryId: string }
   }>
 }
 
@@ -1618,6 +1628,10 @@ export const ForumPostWithoutReplyFieldsFragmentDoc = gql`
     }
     edits {
       createdAt
+    }
+    threadId
+    thread {
+      categoryId
     }
   }
   ${MemberFieldsFragmentDoc}

@@ -52,7 +52,7 @@ export const ForumMain = () => {
           </TextMedium>
           <CategoriesListWrapper>
             {forumCategories.map((category) => (
-              <CategoryCard category={category} />
+              <CategoryCard key={category.id} category={category} />
             ))}
           </CategoriesListWrapper>
         </RowGapBlock>

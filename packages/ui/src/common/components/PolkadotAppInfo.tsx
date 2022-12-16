@@ -2,11 +2,7 @@ import React from 'react'
 
 import { PolkadotSymbol } from '@/common/components/icons/symbols/PolkadotSymbol'
 import { Link } from '@/common/components/Link'
-import {
-  DetailsItemWrapper,
-  NetworkDetailsWrapper,
-  StyledDetailsText,
-} from '@/common/components/NetworkInfo/NetworkInfo'
+import { SettingsInformation } from '@/common/components/SettingsInformation'
 import { TextMedium } from '@/common/components/typography'
 
 interface PolkadotAppInfoProps {
@@ -14,17 +10,13 @@ interface PolkadotAppInfoProps {
   className?: string
 }
 
-export const PolkadotAppInfo = ({ rpcUrl, className }: PolkadotAppInfoProps) => {
+export const PolkadotAppInfo = ({ rpcUrl }: PolkadotAppInfoProps) => {
   return (
-    <NetworkDetailsWrapper className={className}>
-      <DetailsItemWrapper>
-        <PolkadotSymbol />
-        <StyledDetailsText bold>Polkadot Explorer</StyledDetailsText>
-      </DetailsItemWrapper>
+    <SettingsInformation icon={<PolkadotSymbol />} title="Polkadot Explorer">
       <TextMedium>
         Some operations for nomination and validation are only supported via Polkadot.js app.{' '}
         <Link href={`https://polkadot.js.org/apps/?rpc=${rpcUrl}#/explorer`}>Check Joystream network explorer</Link>
       </TextMedium>
-    </NetworkDetailsWrapper>
+    </SettingsInformation>
   )
 }

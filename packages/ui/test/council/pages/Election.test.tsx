@@ -18,7 +18,7 @@ import {
 import { getMember } from '@/mocks/helpers'
 
 import { getButton } from '../../_helpers/getButton'
-import { VOTE_DATA } from '../../_mocks/council'
+import { CANDIDATE_DATA, VOTE_DATA } from '../../_mocks/council'
 import { alice, bob } from '../../_mocks/keyring'
 import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
@@ -48,40 +48,16 @@ const bobCandidateId = bobMemberId
 
 const TEST_CANDIDATES: RawCouncilCandidateMock[] = [
   {
+    ...CANDIDATE_DATA,
     id: aliceCandidateId,
     electionRoundId: '1',
     memberId: aliceMemberId,
-    stake: 1000,
-    stakingAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-    rewardAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-    noteMetadata: {
-      header: 'molestiae in dolore eveniet',
-      bulletPoints: [
-        'exercitationem nihil autem sint architecto id neque ipsum',
-        'voluptas autem esse mollitia aspernatur labore est modi',
-        'veniam et officia culpa consequuntur non odit iure',
-      ],
-      bannerImageUri: 'https://picsum.photos/500/300',
-      description: 'ipsum aliquam qui repudiandae aliquid aliquam veritatis officia corporis molestiae',
-    },
   },
   {
+    ...CANDIDATE_DATA,
     id: bobCandidateId,
     electionRoundId: '1',
     memberId: bobMemberId,
-    stake: 1000,
-    stakingAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-    rewardAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-    noteMetadata: {
-      header: 'molestiae in dolore eveniet',
-      bulletPoints: [
-        'exercitationem nihil autem sint architecto id neque ipsum',
-        'voluptas autem esse mollitia aspernatur labore est modi',
-        'veniam et officia culpa consequuntur non odit iure',
-      ],
-      bannerImageUri: 'https://picsum.photos/500/300',
-      description: 'ipsum aliquam qui repudiandae aliquid aliquam veritatis officia corporis molestiae',
-    },
   },
 ]
 

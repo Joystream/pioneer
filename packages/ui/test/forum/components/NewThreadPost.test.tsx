@@ -36,6 +36,7 @@ describe('UI: Add new post', () => {
       }
     },
   }
+
   const api = stubApi()
   stubTransaction(api, 'api.tx.forum.addPost')
   stubTransaction(api, 'api.tx.proposalsDiscussion.addPost')
@@ -58,8 +59,6 @@ describe('UI: Add new post', () => {
 
   const props: NewPostProps = {
     getTransaction: (text, isEditable) => api.api.tx.forum.addPost(1, 1, 1, text, isEditable),
-    removeReply: () => true,
-    replyToLink: '',
   }
 
   it('No selected membership', async () => {
@@ -90,33 +89,9 @@ describe('UI: Add new post', () => {
       expect(useModal.modalData.isEditable).toEqual(true)
       expect(useModal.modalData.replyTo).toEqual(replyTo)
     })
-
-    it('With reply', async () => {
-      useMyMemberships.setActive(getMember('alice'))
-      replyTo = {
-        id: '1',
-        author: getMember('bob'),
-        text: 'Some text',
-        status: 'PostStatusActive',
-        createdAt: new Date().toISOString(),
-      }
-      renderEditor({ ...props, replyTo })
-      const editor = await screen.findByRole('textbox')
-      act(() => {
-        fireEvent.change(editor, { target: { value: 'I disagree' } })
-      })
-      await waitFor(async () => expect(await getButton('Post a reply')).not.toBeDisabled())
-      await act(async () => {
-        fireEvent.click(await getButton('Post a reply'))
-      })
-      expect(useModal.modal).toEqual('CreatePost')
-      expect(useModal.modalData.postText).toEqual('I disagree')
-      expect(useModal.modalData.isEditable).toEqual(true)
-      expect(useModal.modalData.replyTo).toEqual(replyTo)
-    })
   })
 
-  const renderEditor = (props: NewPostProps) =>
+  const renderEditor = (props: NewPostProps) => {
     render(
       <MemoryRouter>
         <ModalContextProvider>
@@ -130,4 +105,5 @@ describe('UI: Add new post', () => {
         </ModalContextProvider>
       </MemoryRouter>
     )
+  }
 })

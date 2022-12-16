@@ -58,8 +58,8 @@ const defaultGroups: WorkingGroup[] = [
     name: 'Operations Alpha',
   },
   {
-    id: 'gatewayWorkingGroup',
-    name: 'Gateway',
+    id: 'appWorkingGroup',
+    name: 'App',
   },
   {
     id: 'distributionWorkingGroup',

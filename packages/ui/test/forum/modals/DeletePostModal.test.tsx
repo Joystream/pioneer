@@ -13,6 +13,7 @@ import { postsToDeleteMap } from '@/forum/model/postsToDeleteMap'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { seedMember } from '@/mocks/data'
+import { forumPostMock } from '@/mocks/data/commonMocks'
 import rawMembers from '@/mocks/data/raw/members.json'
 import { seedForumCategory, seedForumPost, seedForumThread } from '@/mocks/data/seedForum'
 
@@ -48,6 +49,7 @@ describe('UI: DeletePostModal', () => {
 
   const modalData: ModalCallData<DeletePostModalCall> = {
     post: {
+      ...forumPostMock,
       id: '0',
       author: getMember('alice'),
       createdAt: '2021-07-02T04:22:13.523Z',
