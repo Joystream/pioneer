@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0]
+## [1.0.0] - 2022-12-16
 
 ### Added
 - Mainnet network in the setting.
@@ -38,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - On boarding flow before connecting to the RPC node.
 - Some CI false positive.
 
-## [0.1.1]
+## [0.1.1] - 2022-12-02
 
 [unreleased]: https://github.com/Joystream/pioneer/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/Joystream/pioneer/compare/v0.1.1...v1.0.0
