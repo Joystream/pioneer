@@ -32,7 +32,7 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
       data: { applicationId: role.applicationId },
     })
   }, [role])
-  const { earnings, currentDayEarnings } = useWorkerEarnings(role.id)
+  const { earnings } = useWorkerEarnings(role.id)
   const rewardPeriod = useRewardPeriod(role.group.id)
   const [isOpen, toggleOpen] = useToggle()
 
