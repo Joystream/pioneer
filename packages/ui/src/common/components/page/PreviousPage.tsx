@@ -11,7 +11,7 @@ interface PreviousPageProps {
   showOverflow?: boolean
   customLink?: string
 }
-const setPrevHistory = (history: History<unknown>, customLink: string) => {
+const setPrevHistory = (history: History<unknown>, customLink?: string) => {
   if (history.action === 'POP' && customLink) {
     history.push(customLink)
   } else {
@@ -23,7 +23,7 @@ export const PreviousPage = ({ children, showOverflow, customLink }: PreviousPag
   return (
     <PreviousPageBlock showOverflow={showOverflow}>
       <PreviousPageButtonContainer>
-        <PreviousPageButton onClick={() => setPrevHistory(history, customLink!)} size="small" square>
+        <PreviousPageButton onClick={() => setPrevHistory(history, customLink)} size="small" square>
           <BackArrow direction="left" />
         </PreviousPageButton>
       </PreviousPageButtonContainer>
