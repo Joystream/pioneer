@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { PageHeaderRow, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { ButtonsGroup } from '@/common/components/buttons'
 import { SearchBox } from '@/common/components/forms/FilterBox/FilterSearchBox'
-import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 
 interface ForumPageHeaderProps {
