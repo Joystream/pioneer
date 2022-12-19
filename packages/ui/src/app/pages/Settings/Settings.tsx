@@ -83,11 +83,11 @@ export const Settings = () => {
               )}
               <SettingsInformation icon={<WarnedIcon />} title={t('chainInfo')}>
                 <ColumnGapBlock gap={5}>
-                  <TextMedium lighter>t('rpcBlockheight')</TextMedium>
+                  <TextMedium lighter>{t('rpcBlockheight')}</TextMedium>
                   <TextMedium lighter>{formatTokenValue(header?.number.toNumber())}</TextMedium>
                 </ColumnGapBlock>
                 <ColumnGapBlock gap={5}>
-                  <TextMedium lighter>t('qnBlockheight')</TextMedium>
+                  <TextMedium lighter>{t('qnBlockheight')}</TextMedium>
                   <TextMedium lighter>{formatTokenValue(queryNodeState?.indexerHead)}</TextMedium>
                 </ColumnGapBlock>
               </SettingsInformation>
