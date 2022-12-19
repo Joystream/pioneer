@@ -1,9 +1,7 @@
 import React, { useEffect, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { useApi } from '@/api/hooks/useApi'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
@@ -13,14 +11,14 @@ import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignT
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
 import { PreviewPostButton } from '@/forum/components/PreviewPostButton'
+import { PostInsufficientFundsModal } from '@/forum/modals/PostActionModal/components/PostInsufficientFundsModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { CreatePostModalCall } from '.'
 
 export const CreatePostModal = () => {
-  const { t } = useTranslation('accounts')
-  const { modalData, hideModal } = useModal<CreatePostModalCall>()
-  const { module = 'forum', postText, replyTo, transaction, isEditable, onSuccess } = modalData
+  const { modalData } = useModal<CreatePostModalCall>()
+  const { module = 'forum', postText, transaction, isEditable, onSuccess } = modalData
 
   const [state, send] = useMachine(
     defaultTransactionModalMachine('There was a problem posting your message.', 'Your post has been submitted.'),
@@ -67,7 +65,7 @@ export const CreatePostModal = () => {
   if (state.matches('transaction') && transaction && active && postDeposit) {
     return (
       <SignTransactionModal
-        buttonText={replyTo ? 'Sign and reply' : 'Sign and post'}
+        buttonText="Sign and post"
         transaction={transaction}
         signer={active.controllerAccount}
         service={state.children.transaction}
@@ -81,7 +79,7 @@ export const CreatePostModal = () => {
               ]
             : undefined
         }
-        extraButtons={<PreviewPostButton author={active} postText={postText} replyTo={replyTo} />}
+        extraButtons={<PreviewPostButton author={active} postText={postText} />}
       >
         <TextMedium>You intend to post in a thread.</TextMedium>
         {isEditable && (
@@ -94,25 +92,7 @@ export const CreatePostModal = () => {
   }
 
   if (state.matches('requirementsFailed') && feeInfo && requiredAmount && active) {
-    return (
-      <InsufficientFundsModal onClose={hideModal} address={active.controllerAccount} amount={requiredAmount}>
-        <TextMedium margin="s">
-          {t('modals.insufficientFunds.feeInfo1')}
-          {feeInfo.transactionFee.gtn(0) && (
-            <>
-              <TokenValue value={feeInfo.transactionFee} />
-              {t('modals.insufficientFunds.feeInfo2')}
-            </>
-          )}
-          {postDeposit?.gtn(0) && (
-            <>
-              {feeInfo.transactionFee.gtn(0) && <> and</>} <TokenValue value={postDeposit} /> available to deposit to
-              make the post editable
-            </>
-          )}
-        </TextMedium>
-      </InsufficientFundsModal>
-    )
+    return <PostInsufficientFundsModal postDeposit={postDeposit} feeInfo={feeInfo} requiredAmount={requiredAmount} />
   }
 
   return null

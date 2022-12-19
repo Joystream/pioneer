@@ -5,6 +5,7 @@ import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { CandidacyPreview } from '@/council/modals/CandidacyPreview/CandidacyPreview'
 import { seedCouncilCandidate, seedCouncilElection, seedElectedCouncil, seedMember, seedMembers } from '@/mocks/data'
 
+import { CANDIDATE_DATA } from '../../_mocks/council'
 import { MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA } from '../../_mocks/server/seeds'
@@ -43,23 +44,9 @@ describe('UI: CandidacyPreview', () => {
     ;['0', '1', '2'].forEach((id) =>
       seedCouncilCandidate(
         {
+          ...CANDIDATE_DATA,
           id,
           memberId: id,
-          electionRoundId: '0',
-          stake: 1000,
-          stakingAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-          rewardAccountId: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-          note: 'alias est velit ut expedita aliquam itaque eos eaque aliquid',
-          noteMetadata: {
-            header: 'molestiae in dolore eveniet',
-            bulletPoints: [
-              'exercitationem nihil autem sint architecto id neque ipsum',
-              'voluptas autem esse mollitia aspernatur labore est modi',
-              'veniam et officia culpa consequuntur non odit iure',
-            ],
-            bannerImageUri: 'https://picsum.photos/500/300',
-            description: 'ipsum aliquam qui repudiandae aliquid aliquam veritatis officia corporis molestiae',
-          },
         },
         server.server
       )

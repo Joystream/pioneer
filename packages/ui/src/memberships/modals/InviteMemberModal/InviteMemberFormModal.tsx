@@ -4,7 +4,6 @@ import * as Yup from 'yup'
 
 import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent, InputText, InputTextarea } from '@/common/components/forms'
-import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
 import {
   ModalFooter,
@@ -14,7 +13,6 @@ import {
   ScrolledModalContainer,
   Row,
 } from '@/common/components/Modal'
-import { TooltipExternalLink } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { useKeyring } from '@/common/hooks/useKeyring'
 import { useYupValidationResolver } from '@/common/utils/validation'
@@ -156,18 +154,9 @@ export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
                 id="member-handle"
                 label="Membership handle"
                 required
-                tooltipText={
-                  <>
-                    Membership handle is the primary way of how members are displayed throughout all interfaces of the
-                    platform. Membership handle can be updated any time by the account holder.
-                    <TooltipExternalLink
-                      target="_blank"
-                      href="https://joystream.gitbook.io/testnet-workspace/system/memberships#membership"
-                    >
-                      Learn more <LinkSymbol />
-                    </TooltipExternalLink>
-                  </>
-                }
+                tooltipText="Membership handle is the primary way of how members are displayed throughout all interfaces of the platform. Membership handle can be updated any time by the account holder."
+                tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/memberships#membership"
+                tooltipLinkText="Learn more"
                 name="handle"
               >
                 <InputText id="member-handle" placeholder="Type" name="handle" />

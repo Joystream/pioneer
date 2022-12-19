@@ -151,7 +151,7 @@ export const getSpecificParameters = (
     }
     case 'setMembershipLeadInvitationQuota': {
       return createType('PalletProposalsCodexProposalDetails', {
-        SetMembershipLeadInvitationQuota: specifics?.setMembershipLeadInvitationQuota?.amount ?? BN_ZERO,
+        SetMembershipLeadInvitationQuota: specifics?.setMembershipLeadInvitationQuota?.count ?? 0,
       })
     }
     case 'setReferralCut': {
@@ -166,7 +166,7 @@ export const getSpecificParameters = (
     }
     case 'setInitialInvitationCount': {
       return createType('PalletProposalsCodexProposalDetails', {
-        SetInitialInvitationCount: specifics?.setInitialInvitationCount?.invitationCount ?? BN_ZERO,
+        SetInitialInvitationCount: specifics?.setInitialInvitationCount?.invitationCount ?? 0,
       })
     }
     case 'setMaxValidatorCount': {
