@@ -12,6 +12,7 @@ import { Loading } from '@/common/components/Loading'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { useObservable } from '@/common/hooks/useObservable'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import {
   channelPayoutsFileValidator,
   getChannelPayoutsValidatedFiles,
@@ -21,8 +22,13 @@ const MAX_FILE_SIZE = 3 * 1024 * 1024
 
 export const ChannelIncentivesPayout = () => {
   const { api } = useApi()
+  const { active } = useMyMemberships()
   const [isProcessingFile, setIsProcessingFile] = useState<boolean>(false)
-  const { setValue } = useFormContext()
+  const { setValue, watch } = useFormContext()
+  const [objectCreationParamsSize, objectCreationParamsContent] = watch([
+    'channelIncentivesPayout.objectCreationParamsSize',
+    'channelIncentivesPayout.objectCreationParamsContent',
+  ])
   const expectedDataSizeFee = useObservable(() => api?.query.storage.dataObjectPerMegabyteFee(), [api?.isConnected])
   const expectedDataObjectStateBloatBond = useObservable(
     () => api?.query.storage.dataObjectStateBloatBondValue(),
@@ -30,11 +36,15 @@ export const ChannelIncentivesPayout = () => {
   )
 
   useEffect(() => {
-    if (expectedDataSizeFee && expectedDataObjectStateBloatBond) {
-      setValue('channelIncentivesPayout.expectedDataSizeFee', expectedDataSizeFee)
-      setValue('channelIncentivesPayout.expectedDataObjectStateBloatBond', expectedDataObjectStateBloatBond)
+    if (active && objectCreationParamsContent && expectedDataSizeFee && expectedDataObjectStateBloatBond) {
+      setValue('channelIncentivesPayout.payload', {
+        uploaderAccount: active.controllerAccount,
+        objectCreationParams: { size_: objectCreationParamsSize, ipfsContentId: objectCreationParamsContent },
+        expectedDataSizeFee: expectedDataSizeFee,
+        expectedDataObjectStateBloatBond: expectedDataObjectStateBloatBond,
+      })
     }
-  }, [!expectedDataObjectStateBloatBond && !expectedDataSizeFee])
+  }, [active, objectCreationParamsContent, !expectedDataObjectStateBloatBond && !expectedDataSizeFee])
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {

@@ -3,6 +3,7 @@ import * as Yup from 'yup'
 
 import { Account } from '@/accounts/types'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
+import { Address } from '@/common/types'
 import { BNSchema, lessThanMixed, maxContext, maxMixed, minContext, moreThanMixed } from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
@@ -150,8 +151,12 @@ export interface AddNewProposalForm {
     minimumCashoutAllowed?: BN
     maximumCashoutAllowed?: BN
     cashoutEnabled?: boolean
-    expectedDataSizeFee?: BN
-    expectedDataObjectStateBloatBond?: BN
+    payload: {
+      uploaderAccount: Address
+      objectCreationParams: { size_: BN; ipfsContentId: any /* Bytes */ }
+      expectedDataSizeFee: BN
+      expectedDataObjectStateBloatBond: BN
+    }
   }
 }
 

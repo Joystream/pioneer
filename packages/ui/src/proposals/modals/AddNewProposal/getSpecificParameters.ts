@@ -5,7 +5,6 @@ import { BN_ZERO } from '@/common/constants'
 import { createType } from '@/common/model/createType'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { last } from '@/common/utils'
-import { Member } from '@/memberships/types'
 import { AddNewProposalForm } from '@/proposals/modals/AddNewProposal/helpers'
 import { GroupIdToGroupParam } from '@/working-groups/constants'
 import { GroupIdName } from '@/working-groups/types'
@@ -16,8 +15,7 @@ const getWorkingGroupParam = (groupId: GroupIdName | undefined) => groupId && Gr
 
 export const getSpecificParameters = (
   api: Api,
-  specifics: Omit<AddNewProposalForm, 'triggerAndDiscussion' | 'stakingAccount' | 'proposalDetails'>,
-  creator: Member
+  specifics: Omit<AddNewProposalForm, 'triggerAndDiscussion' | 'stakingAccount' | 'proposalDetails'>
 ) => {
   if (!specifics.proposalType.type) {
     return createType('PalletProposalsCodexProposalDetails', { Signal: '' })
@@ -182,17 +180,7 @@ export const getSpecificParameters = (
     case 'channelIncentivesPayout': {
       return createType('PalletProposalsCodexProposalDetails', {
         UpdateChannelPayouts: createType('PalletContentUpdateChannelPayoutsParametersRecord', {
-          payload: specifics?.channelIncentivesPayout.objectCreationParamsContent
-            ? {
-                uploaderAccount: creator.controllerAccount,
-                objectCreationParams: {
-                  size_: specifics.channelIncentivesPayout.objectCreationParamsSize,
-                  ipfsContentId: specifics.channelIncentivesPayout.objectCreationParamsContent,
-                },
-                expectedDataSizeFee: specifics.channelIncentivesPayout.expectedDataSizeFee,
-                expectedDataObjectStateBloatBond: specifics.channelIncentivesPayout.expectedDataObjectStateBloatBond,
-              }
-            : null,
+          payload: specifics?.channelIncentivesPayout.payload ?? null,
           minCashoutAllowed: specifics?.channelIncentivesPayout.minimumCashoutAllowed,
           maxCashoutAllowed: specifics?.channelIncentivesPayout.maximumCashoutAllowed,
           channelCashoutsEnabled: specifics.channelIncentivesPayout.cashoutEnabled ?? false,
