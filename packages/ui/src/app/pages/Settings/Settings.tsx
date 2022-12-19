@@ -81,17 +81,13 @@ export const Settings = () => {
                   <PolkadotAppInfo rpcUrl={endpoints.nodeRpcEndpoint} />
                 </>
               )}
-              <SettingsInformation icon={<WarnedIcon />} title="Chain Informations">
+              <SettingsInformation icon={<WarnedIcon />} title={t('chainInfo')}>
                 <ColumnGapBlock gap={5}>
-                  <TextMedium lighter bold>
-                    RPC blockheight:{' '}
-                  </TextMedium>
+                  <TextMedium lighter>t('rpcBlockheight')</TextMedium>
                   <TextMedium lighter>{formatTokenValue(header?.number.toNumber())}</TextMedium>
                 </ColumnGapBlock>
                 <ColumnGapBlock gap={5}>
-                  <TextMedium lighter bold>
-                    QueryNode blockheight:{' '}
-                  </TextMedium>
+                  <TextMedium lighter>t('qnBlockheight')</TextMedium>
                   <TextMedium lighter>{formatTokenValue(queryNodeState?.indexerHead)}</TextMedium>
                 </ColumnGapBlock>
               </SettingsInformation>
