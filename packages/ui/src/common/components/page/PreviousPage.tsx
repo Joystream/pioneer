@@ -1,3 +1,4 @@
+import { History } from 'history'
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
@@ -8,14 +9,21 @@ import { Arrow } from '../icons'
 interface PreviousPageProps {
   children?: React.ReactNode
   showOverflow?: boolean
+  customLink?: string
 }
-
-export const PreviousPage = ({ children, showOverflow }: PreviousPageProps) => {
+const setPrevHistory = (history: History<unknown>, customLink?: string) => {
+  if (history.action === 'POP' && customLink) {
+    history.push(customLink)
+  } else {
+    history.goBack()
+  }
+}
+export const PreviousPage = ({ children, showOverflow, customLink }: PreviousPageProps) => {
   const history = useHistory()
   return (
     <PreviousPageBlock showOverflow={showOverflow}>
       <PreviousPageButtonContainer>
-        <PreviousPageButton onClick={() => history.goBack()} size="small" square>
+        <PreviousPageButton onClick={() => setPrevHistory(history, customLink)} size="small" square>
           <BackArrow direction="left" />
         </PreviousPageButton>
       </PreviousPageButtonContainer>

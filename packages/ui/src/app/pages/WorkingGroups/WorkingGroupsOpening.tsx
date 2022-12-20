@@ -122,7 +122,7 @@ export const WorkingGroupOpening = () => {
       header={
         <PageHeaderWrapper>
           <PageHeaderRow>
-            <PreviousPage>
+            <PreviousPage customLink={WorkingGroupsRoutes.openings}>
               <PageTitle>{opening.title}</PageTitle>
             </PreviousPage>
             <ButtonsGroup>
