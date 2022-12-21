@@ -33,10 +33,6 @@ import {
 } from '../../_mocks/transactions'
 import { WORKER } from '../../_mocks/working-groups'
 
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
-}))
-
 const mockUseModal: UseModal<any> = {
   modal: null,
   modalData: { workerId: 'forumWorkingGroup-1' },

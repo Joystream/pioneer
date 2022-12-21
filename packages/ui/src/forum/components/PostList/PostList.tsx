@@ -1,4 +1,4 @@
-import React, { RefObject, useCallback, useEffect, useMemo } from 'react'
+import React, { RefObject, useCallback, useMemo } from 'react'
 import { generatePath, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -12,7 +12,6 @@ import { AnyKeys } from '@/common/types'
 import { getUrl } from '@/common/utils/getUrl'
 import { ForumRoutes } from '@/forum/constant'
 import { useForumThreadPosts } from '@/forum/hooks/useForumThreadPosts'
-import { ForumPost } from '@/forum/types'
 
 import { ForumPostStyles, PostListItem } from './PostListItem'
 
@@ -20,11 +19,10 @@ interface PostListProps {
   threadId: string
   isThreadActive?: boolean
   isLoading?: boolean
-  replyToPost: (post: ForumPost) => void
   isDiscussion?: boolean
 }
 
-export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost, isDiscussion }: PostListProps) => {
+export const PostList = ({ threadId, isThreadActive, isLoading, isDiscussion }: PostListProps) => {
   const history = useHistory()
   const { pathname } = useLocation()
   const query = useRouteQuery()
@@ -40,13 +38,6 @@ export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost, isD
 
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
-
-  useEffect(() => {
-    posts &&
-      navigation.post &&
-      postsRefs[navigation.post]?.current &&
-      postsRefs[navigation.post].current.scrollIntoView({ behavior: 'smooth', inline: 'start' })
-  }, [postsRefs, navigation.post])
 
   const Wrapper: typeof RowGapBlock = useMemo(() => (isDiscussion ? DiscussionWrapper : RowGapBlock), [isDiscussion])
 
@@ -68,7 +59,6 @@ export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost, isD
             isSelected={post.id === navigation.post}
             isThreadActive={isThreadActive}
             type="forum"
-            replyToPost={() => replyToPost({ ...post, repliesTo: undefined })}
             link={getUrl({ route: ForumRoutes.thread, params: { id: threadId }, query: { post: post.id } })}
             repliesToLink={`${generatePath(ForumRoutes.thread, { id: threadId })}?post=${post.repliesTo?.id}`}
             isDiscussion={isDiscussion}

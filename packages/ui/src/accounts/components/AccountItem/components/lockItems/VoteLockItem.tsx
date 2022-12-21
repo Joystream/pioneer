@@ -5,6 +5,7 @@ import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { asBlock } from '@/common/types'
 import { ElectionRoutes } from '@/council/constants'
 import { useCouncilRemainingPeriod } from '@/council/hooks/useCouncilRemainingPeriod'
+import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { useGetCouncilVotesQuery } from '@/council/queries'
 import { asMember } from '@/memberships/types'
 
@@ -13,6 +14,7 @@ import { LockLinkButton } from '../LockLinkButton'
 import { LockDetailsProps } from '../types'
 
 export const VoteLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
+  const { election } = useCurrentElection()
   const { data } = useGetCouncilVotesQuery({ variables: { where: { castBy_eq: address } } })
   const vote = data?.castVotes[0]
   const eventData = vote?.castEvent?.[0]
@@ -34,14 +36,20 @@ export const VoteLockItem = ({ lock, address, isRecoverable }: LockDetailsProps)
     [remainingPeriod]
   )
 
-  const electionId = vote?.electionRound.cycleId
+  const electionId = vote?.electionRound.id
+
   const goToElectionButton = useMemo(() => {
-    if (!electionId) {
+    if (!electionId || !election) {
       return null
     }
-    const electionPath = generatePath(ElectionRoutes.pastElection, { id: electionId })
+
+    const pointsToPastElection = election.cycleId !== vote.electionRound.cycleId
+
+    const electionPath = pointsToPastElection
+      ? generatePath(ElectionRoutes.pastElection, { id: electionId })
+      : generatePath(ElectionRoutes.currentElection)
     return <LockLinkButton label="Show Election" to={electionPath} />
-  }, [electionId])
+  }, [electionId, election?.cycleId, vote?.electionRound.cycleId])
 
   return (
     <LockItem

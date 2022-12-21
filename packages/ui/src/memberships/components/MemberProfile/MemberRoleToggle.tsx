@@ -32,7 +32,7 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
       data: { applicationId: role.applicationId },
     })
   }, [role])
-  const { earnings, currentDayEarnings } = useWorkerEarnings(role.id)
+  const { earnings } = useWorkerEarnings(role.id)
   const rewardPeriod = useRewardPeriod(role.group.id)
   const [isOpen, toggleOpen] = useToggle()
 
@@ -67,14 +67,14 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
                   </SidePaneText>
                 </SidePaneColumn>
               </SidePaneRow>
-              <SidePaneRow>
-                <SidePaneLabel text="Earned in 24h" />
+              {/** TODO fix calculation <SidePaneRow>
+                <SidePaneLabel text="Earned in 7 days" />
                 <SidePaneColumn>
                   <SidePaneText>
                     <TokenValue value={currentDayEarnings} />
                   </SidePaneText>
                 </SidePaneColumn>
-              </SidePaneRow>
+              </SidePaneRow>**/}
               <SidePaneRow>
                 <SidePaneLabel text="Role account" />
                 <SidePaneColumn>

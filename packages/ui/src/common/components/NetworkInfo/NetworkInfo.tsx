@@ -4,8 +4,9 @@ import styled from 'styled-components'
 
 import { CopyComponent } from '@/common/components/CopyComponent'
 import { WarnedIcon } from '@/common/components/icons/activities'
+import { ColumnGapBlock } from '@/common/components/page/PageContent'
+import { SettingsInformation } from '@/common/components/SettingsInformation'
 import { TextMedium } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
 
 export interface NetworkInfoProps {
   detailsTitle: string
@@ -18,24 +19,20 @@ const NetworkInfo: React.FC<NetworkInfoProps> = React.memo(
   ({ detailsTitle, networkAddress, queryNodeAddress, faucetAddress }) => {
     const { t } = useTranslation('settings')
     return (
-      <NetworkDetailsWrapper>
-        <DetailsItemWrapper>
-          <WarnedIcon />
-          <StyledDetailsText bold>{detailsTitle}</StyledDetailsText>
-        </DetailsItemWrapper>
-        <DetailsItemWrapper>
+      <SettingsInformation title={detailsTitle} icon={<WarnedIcon />}>
+        <ColumnGapBlock gap={3}>
           <TextMedium lighter>{t('networkAddress')}</TextMedium>
           <CopyText copyText={networkAddress} />
-        </DetailsItemWrapper>
-        <DetailsItemWrapper>
+        </ColumnGapBlock>
+        <ColumnGapBlock gap={3}>
           <TextMedium lighter>{t('QueryNodeAddress')}</TextMedium>
           <CopyText copyText={queryNodeAddress} />
-        </DetailsItemWrapper>
-        <DetailsItemWrapper>
+        </ColumnGapBlock>
+        <ColumnGapBlock gap={3}>
           <TextMedium lighter>{t('faucet')}</TextMedium>
           <CopyText copyText={faucetAddress ?? 'none'} disabled={!faucetAddress} />
-        </DetailsItemWrapper>
-      </NetworkDetailsWrapper>
+        </ColumnGapBlock>
+      </SettingsInformation>
     )
   }
 )
@@ -43,19 +40,6 @@ const NetworkInfo: React.FC<NetworkInfoProps> = React.memo(
 NetworkInfo.displayName = 'NetworkInfo'
 
 export default NetworkInfo
-
-export const NetworkDetailsWrapper = styled.div`
-  background-color: ${Colors.Blue[50]};
-  padding: 16px;
-`
-
-export const DetailsItemWrapper = styled.div`
-  display: flex;
-`
-
-export const StyledDetailsText = styled(TextMedium)`
-  margin: 0 0 8px 8px;
-`
 
 export const CopyText = styled(CopyComponent)`
   font-size: 14px;

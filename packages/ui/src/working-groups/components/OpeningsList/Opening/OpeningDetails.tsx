@@ -1,12 +1,14 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { ButtonsGroup } from '@/common/components/buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { StatiscticContentColumn, Statistics, StatsBlock, MultiColumnsStatistic } from '@/common/components/statistics'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
-import { isInFuture } from '@/common/helpers'
+import { isInFuture, nameMapping } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeTime } from '@/common/model/relativeTime'
 import { OpeningListItemProps } from '@/working-groups/components/OpeningsList/Opening/OpeningListItem'
@@ -19,10 +21,13 @@ import {
 import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { isOpeningOpen } from '@/working-groups/model/isOpeningOpen'
+import { groupNameToURLParam } from '@/working-groups/model/workingGroupName'
 
 export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps) => {
   const { showModal } = useModal()
   const rewardPeriod = useRewardPeriod(opening.groupId)
+  const groupName = groupNameToURLParam(nameMapping(opening.groupName))
+  const openingRoute = `/working-groups/openings/${groupName}-${opening.runtimeId}`
 
   return (
     <OpenedContainer onClick={onClick}>
@@ -53,7 +58,7 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
               )}
               <StatiscticContentColumn>
                 <TextBig value bold>
-                  {opening.hiring.limit}
+                  {opening.hiring.limit || 1}
                 </TextBig>
                 <Subscription>Target no. of Hires</Subscription>
               </StatiscticContentColumn>
@@ -63,11 +68,20 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
             <TextBig>
               <TokenValue value={opening.stake} />
             </TextBig>
-            <Subscription>Minimum Stake Required</Subscription>
+            <MinStake>
+              Minimum Stake Required{' '}
+              <Tooltip
+                tooltipText="Minimum tokens free of rivalrous locks required as application stake to this role."
+                tooltipLinkText="Learn more"
+                tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/working-groups#staking"
+              >
+                <TooltipDefault />
+              </Tooltip>
+            </MinStake>
           </StatsBlock>
         </Statistics>
         <ButtonsGroup align="right">
-          <LinkButtonGhost to={`/working-groups/openings/${opening.id}`} size="medium">
+          <LinkButtonGhost to={openingRoute} size="medium">
             Learn more
           </LinkButtonGhost>
           {isOpeningOpen(opening) && (
@@ -84,3 +98,9 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
     </OpenedContainer>
   )
 }
+
+const MinStake = styled(Subscription)`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`

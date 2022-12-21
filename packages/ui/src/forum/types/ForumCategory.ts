@@ -1,11 +1,11 @@
 import { CategoryStatus as CategoryStatusSchema } from '@/common/api/queries'
 import { asBlock, Block } from '@/common/types'
 import {
+  ArchivedForumCategoryFieldsFragment,
+  ForumBaseCategoryFieldsFragment,
   ForumCategoryBreadcrumbsFieldsFragment,
   ForumCategoryFieldsFragment,
-  ArchivedForumCategoryFieldsFragment,
   ForumSubCategoryFieldsFragment,
-  ForumBaseCategoryFieldsFragment,
 } from '@/forum/queries'
 
 export interface ForumCategory {
@@ -18,7 +18,7 @@ export interface ForumCategory {
 }
 
 export type CategoryStatusType = CategoryStatusSchema['__typename']
-interface CategoryStatus extends Pick<CategoryStatusSchema, '__typename'> {
+export interface CategoryStatus extends Pick<CategoryStatusSchema, '__typename'> {
   categoryArchivalStatusUpdatedEvent?: Block
 }
 

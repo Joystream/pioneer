@@ -4,6 +4,7 @@ import {
   ForumThreadDetailedFieldsFragment,
   ForumThreadFieldsFragment,
 } from '@/forum/queries'
+import { asMember, Member } from '@/memberships/types'
 
 import { asCategoryBreadcrumbs, CategoryBreadcrumb } from './ForumCategory'
 
@@ -15,10 +16,12 @@ interface ThreadStatus extends Pick<ForumThreadFieldsFragment['status'], '__type
 export interface ForumThread {
   id: string
   title: string
-  authorId: string
+  initialPostText: string
+  author: Member
   createdInBlock: Block
   isSticky: boolean
   categoryId: string
+  categoryTitle: string
   tags: ForumThreadTag[]
   visiblePostsCount: number
   status: ThreadStatus
@@ -46,12 +49,14 @@ export const asForumThread = (fields: ForumThreadFieldsFragment): ForumThread =>
   id: fields.id,
   title: fields.title,
   createdInBlock: asBlock(fields.createdInEvent),
-  authorId: fields.authorId,
+  author: asMember(fields.author),
   isSticky: fields.isSticky,
   categoryId: fields.categoryId,
+  categoryTitle: fields.category.title,
   tags: [],
   visiblePostsCount: fields.visiblePostsCount,
   status: asForumThreadStatus(fields.status),
+  initialPostText: fields.initialPost?.text ?? 'No initial post available',
 })
 
 export const asForumThreadWithDetails = (fields: ForumThreadDetailedFieldsFragment): ForumThreadWithDetails => ({

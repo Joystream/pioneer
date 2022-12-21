@@ -23,45 +23,51 @@ import { useEscape } from '@/common/hooks/useEscape'
 interface StakeChangedModalProps {
   onClose: () => void
   amount?: BN
-  eventType?: 'StakeIncreasedEvent' | 'StakeDecreasedEvent'
+  eventType?: 'StakeIncreasedEvent' | 'StakeDecreasedEvent' | 'StakeSlashedEvent'
   id?: string
+}
+
+const actions = {
+  StakeIncreasedEvent: { past: 'increased', badge: 'increase' },
+  StakeDecreasedEvent: { past: 'decreased', badge: 'decrease' },
+  StakeSlashedEvent: { past: 'slashed', badge: 'slash' },
 }
 
 export const StakeChangedModal = ({ onClose, amount, eventType, id }: StakeChangedModalProps) => {
   useEscape(() => onClose())
+  const slashingRationaleInfo = '' // hidden until needed
+  const action = eventType ? actions[eventType] : { past: 'changes', badge: 'change' }
 
   return (
     <SidePaneGlass onClick={onClose}>
       <SidePane topSize="xs">
         <SidePaneHeader>
           <SidePanelTop>
-            <SidePaneTitle>
-              Stake has been {eventType === 'StakeDecreasedEvent' ? 'reduced' : 'increased'}
-            </SidePaneTitle>
+            <SidePaneTitle>Stake has been {action.past}</SidePaneTitle>
             <CloseButton onClick={onClose} />
           </SidePanelTop>
         </SidePaneHeader>
         <SidePaneBody>
-          {amount && eventType && id ? (
+          {eventType && id ? (
             <SidePaneTable>
               <SidePaneRow>
-                <SidePaneLabel text="status" />
-                <StatusBadge>{eventType === 'StakeDecreasedEvent' ? 'reduce' : 'increase'}</StatusBadge>
+                <SidePaneLabel text="action" />
+                <StatusBadge>{action.badge}</StatusBadge>
               </SidePaneRow>
-              <SidePaneRow>
-                <SidePaneLabel text="slashed by" />
-                <SidePaneText>
-                  <TokenValue value={amount} />
-                </SidePaneText>
-              </SidePaneRow>
-              <SidePaneRow>
-                <SidePaneLabel text="rationale" />
-                <SidePaneText>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam, deleniti, dolor voluptatibus nisi
-                  iusto molestiae quo explicabo illo cum nostrum corrupti suscipit a atque aperiam aliquam nobis quidem,
-                  architecto vitae?
-                </SidePaneText>
-              </SidePaneRow>
+              {amount && (
+                <SidePaneRow>
+                  <SidePaneLabel text="amount" />
+                  <SidePaneText>
+                    <TokenValue value={amount} />
+                  </SidePaneText>
+                </SidePaneRow>
+              )}
+              {slashingRationaleInfo.length > 0 && (
+                <SidePaneRow>
+                  <SidePaneLabel text="rationale" />
+                  <SidePaneText>{slashingRationaleInfo}</SidePaneText>
+                </SidePaneRow>
+              )}
             </SidePaneTable>
           ) : (
             <EmptyBody>

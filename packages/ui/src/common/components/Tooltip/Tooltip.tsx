@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+
+import { TextMedium } from '@/common/components/typography'
 
 import { BorderRad, Colors, Fonts, Transitions, ZIndex } from '../../constants'
 import { LinkSymbol, LinkSymbolStyle } from '../icons/symbols'
@@ -30,6 +32,7 @@ export interface TooltipPopupProps {
   }
   forBig?: boolean
   hideOnComponentLeave?: boolean
+  boundaryClassName?: string
 }
 
 export interface DarkTooltipInnerItemProps {
@@ -50,10 +53,13 @@ export const Tooltip = ({
   forBig,
   offset,
   hideOnComponentLeave,
+  boundaryClassName,
 }: TooltipProps) => {
   const [isTooltipActive, setTooltipActive] = useState(tooltipOpen)
   const [referenceElementRef, setReferenceElementRef] = useState<HTMLElement | null>(null)
   const [popperElementRef, setPopperElementRef] = useState<HTMLDivElement | null>(null)
+  const [boundaryElement, setBoundaryElement] = useState<HTMLElement | null>(null)
+
   const { styles, attributes } = usePopper(referenceElementRef, popperElementRef, {
     placement: 'bottom-start',
     modifiers: [
@@ -63,8 +69,24 @@ export const Tooltip = ({
           offset: offset ?? [0, 0],
         },
       },
+      {
+        name: 'flip',
+        options: {
+          fallbackPlacements: ['top-start'],
+          boundary: boundaryElement ?? 'clippingParents',
+        },
+      },
     ],
   })
+
+  useEffect(() => {
+    if (boundaryClassName) {
+      const boundary = Array.from(document.getElementsByClassName(boundaryClassName))
+      if (boundary.length) {
+        setBoundaryElement(boundary[0] as HTMLDivElement)
+      }
+    }
+  }, [boundaryClassName])
 
   const mouseIsOver = () => {
     if (!tooltipOpen) {
@@ -129,19 +151,21 @@ export const Tooltip = ({
                 forBig={forBig}
               >
                 {tooltipTitle && <TooltipPopupTitle>{tooltipTitle}</TooltipPopupTitle>}
-                <TooltipText>{tooltipText}</TooltipText>
-                {tooltipLinkURL &&
-                  (isExternalLink() ? (
-                    <TooltipExternalLink href={tooltipLinkURL} target="_blank">
-                      {tooltipLinkText ?? 'Link'}
-                      <LinkSymbol />
-                    </TooltipExternalLink>
-                  ) : (
-                    <TooltipLink to={tooltipLinkURL} target="_blank">
-                      {tooltipLinkText ?? 'Link'}
-                      <LinkSymbol />
-                    </TooltipLink>
-                  ))}
+                <TooltipText>
+                  {tooltipText}
+                  {tooltipLinkURL &&
+                    (isExternalLink() ? (
+                      <TooltipExternalLink href={tooltipLinkURL} target="_blank">
+                        <TextMedium>{tooltipLinkText ?? 'Link'}</TextMedium>
+                        <LinkSymbol />
+                      </TooltipExternalLink>
+                    ) : (
+                      <TooltipLink to={tooltipLinkURL} target="_blank">
+                        <TextMedium>{tooltipLinkText ?? 'Link'}</TextMedium>
+                        <LinkSymbol />
+                      </TooltipLink>
+                    ))}
+                </TooltipText>
               </TooltipPopupContainer>,
               document.body
             ))}
@@ -197,6 +221,10 @@ export const TooltipPopupContainer = styled.div<{ isTooltipActive?: boolean; for
       top: -4px;
       clip-path: polygon(100% 0, 0 0, 0 100%);
     }
+  }
+  &[data-popper-reference-hidden='true'] {
+    visibility: hidden;
+    pointer-events: none;
   }
   &[data-popper-placement='top-start']:after,
   &[data-popper-placement='bottom-start']:after {
@@ -273,13 +301,16 @@ export const TooltipLink = styled(Link)<{ to: string; target: string }>`
   }
 `
 
-export const TooltipExternalLink = styled.a<{ href: string | undefined; target: string }>`
+export const TooltipExternalLink = styled.a<{
+  href: string | undefined
+  target: string
+}>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
+  margin-top: 10px;
   align-items: center;
   width: fit-content;
-  margin-top: 10px;
   font-size: 12px;
   line-height: 18px;
   font-weight: 400;

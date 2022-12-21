@@ -31,11 +31,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee, mockUseModalCall } from '../../setup'
-
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
-}))
+import { mockTransactionFee, mockUseModalCall } from '../../setup'
 
 describe('UI: CreatePostModal', () => {
   const api = stubApi()
@@ -75,7 +71,7 @@ describe('UI: CreatePostModal', () => {
   })
 
   beforeEach(async () => {
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(100), canAfford: true } })
 
     stubDefaultBalances()
     tx = stubTransaction(api, txPath, 25)
@@ -86,7 +82,7 @@ describe('UI: CreatePostModal', () => {
 
   describe('Requirements failed', () => {
     it('Cannot afford transaction fee', async () => {
-      mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: false }
+      mockTransactionFee({ feeInfo: { transactionFee: new BN(100), canAfford: false } })
 
       modalData.transaction = api.api.tx.forum.addPost(1, 1, 1, '', false)
       renderModal()

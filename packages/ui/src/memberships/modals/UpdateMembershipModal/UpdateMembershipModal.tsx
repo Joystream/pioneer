@@ -8,12 +8,15 @@ import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignT
 import { UpdateMembershipModalCall } from '@/memberships/modals/UpdateMembershipModal/index'
 import { createBatch } from '@/memberships/modals/UpdateMembershipModal/utils'
 
+import { useMyMemberships } from '../../hooks/useMyMemberships'
+
 import { updateMembershipMachine } from './machine'
 import { UpdateMembershipFormModal } from './UpdateMembershipFormModal'
 import { UpdateMembershipSuccessModal } from './UpdateMembershipSuccessModal'
 
 export const UpdateMembershipModal = () => {
   const { api } = useApi()
+  const { active } = useMyMemberships()
   const {
     hideModal,
     modalData: { member },
@@ -43,8 +46,8 @@ export const UpdateMembershipModal = () => {
     )
   }
 
-  if (state.matches('success')) {
-    return <UpdateMembershipSuccessModal onClose={hideModal} member={member} />
+  if (active && state.matches('success')) {
+    return <UpdateMembershipSuccessModal onClose={hideModal} member={active} />
   }
 
   return null

@@ -11,7 +11,7 @@ import { TextInlineBig, TextInlineSmall, TokenValue } from '@/common/components/
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BN_ZERO, Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
-import { MyCastVote } from '@/council/hooks/useElectionVotes'
+import { MyCastVote } from '@/council/hooks/useMyCastVotes'
 import { CandidacyPreviewModalCall } from '@/council/modals/CandidacyPreview/types'
 import { MemberInfo } from '@/memberships/components'
 import { Member } from '@/memberships/types'
@@ -19,26 +19,33 @@ import { Member } from '@/memberships/types'
 import { CandidateCardArrow, StatsValue } from '../CandidateCard/CandidateCard'
 
 import { RevealVoteButton } from './RevealVoteButton'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 
 export interface CandidateVoteProps {
   candidateId: string
   member: Member
   sumOfAllStakes: BN
   totalStake: BN
-  ownStake?: BN
   votes: number
   index: number
   myVotes: MyCastVote[]
+  myStake?: BN
 }
+
+const AllRevealedButton = (
+  <ButtonPrimary size="medium" disabled>
+    Revealed
+  </ButtonPrimary>
+)
 
 export const CandidateVote = ({
   candidateId,
   member,
   sumOfAllStakes,
   totalStake,
-  ownStake,
   votes,
   index,
+  myStake,
   myVotes,
 }: CandidateVoteProps) => {
   const { showModal } = useModal()
@@ -50,9 +57,12 @@ export const CandidateVote = ({
   }, [showModal])
 
   const roundedPercentage = totalStake.gt(BN_ZERO) ? sumOfAllStakes.muln(100).divRound(totalStake).toNumber() : 0
-  const hasOwnStake = ownStake && ownStake.gt(BN_ZERO)
-  const hasMyVotes = myVotes.length > 0
+  const userVoted = myVotes.length > 0
   const allVotesRevealed = myVotes.every((vote) => vote.voteFor)
+  const tooltipLabel = "Vote for your own membership with the same account as used for council candidacy creation counts towards the progress. Please note, this will in a voting lock applied to this account, which may only be withdrawn in the end of the council period if you win the election and released immediately if your candidacy gets outvoted by others. Voting locks are non-rivalrous."
+  const tooltipLinkURL = "https://joystream.gitbook.io/testnet-workspace/system/council#candidacy"
+  const RevealButton = <RevealVoteButton myVotes={myVotes} voteForHandle={member.handle} />
+
   return (
     <CandidateVoteWrapper onClick={showCandidate}>
       <VoteIndex lighter inter>
@@ -74,11 +84,13 @@ export const CandidateVote = ({
             </StatsValue>
           </StakeAndVotesRow>
           <StakeAndVotesRow>
-            {hasOwnStake && (
+            {myStake?.gt(BN_ZERO) && (
               <>
-                <Subscription>My Stake</Subscription>
+                <Tooltip tooltipText={tooltipLabel} tooltipLinkURL={tooltipLinkURL}>
+                  <Subscription>My contributed votes</Subscription>
+                </Tooltip>                
                 <StatsValue>
-                  <TokenValue value={ownStake} />
+                  <TokenValue value={myStake} />
                 </StatsValue>
               </>
             )}
@@ -91,16 +103,7 @@ export const CandidateVote = ({
           </StakeAndVotesRow>
         </StakeAndVotesGroup>
       </VoteIndicatorWrapper>
-      <ButtonsGroup>
-        {hasMyVotes &&
-          (allVotesRevealed ? (
-            <ButtonPrimary size="medium" disabled>
-              Revealed
-            </ButtonPrimary>
-          ) : (
-            <RevealVoteButton myVotes={myVotes} voteForHandle={member.handle} />
-          ))}
-      </ButtonsGroup>
+      <ButtonsGroup>{userVoted && (allVotesRevealed ? AllRevealedButton : RevealButton)}</ButtonsGroup>
       <CandidateCardArrow>
         <Arrow direction="right" />
       </CandidateCardArrow>

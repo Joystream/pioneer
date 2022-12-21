@@ -8,6 +8,7 @@ import { AnyObjectSchema, ValidationError } from 'yup'
 import Reference from 'yup/lib/Reference'
 import { AnyObject } from 'yup/lib/types'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { Loading } from '@/common/components/Loading'
 import { formatJoyValue } from '@/common/model/formatters'
 
@@ -19,8 +20,13 @@ export const BNSchema = Yup.mixed()
  *   lessThanMixed and moreThanMixed are methods for BN working same
  *   as the ones on Yup.number
  */
-export const maxContext = (msg: string, contextPath: string, isJoyValue = true): Yup.TestConfig<any, AnyObject> => ({
-  name: 'maxContext',
+export const maxContext = (
+  msg: string,
+  contextPath: string,
+  isJoyValue = true,
+  type?: string
+): Yup.TestConfig<any, AnyObject> => ({
+  name: type ?? 'maxContext',
   exclusive: false,
   test(value: number | BN) {
     if (!value) {
@@ -44,8 +50,13 @@ export const maxContext = (msg: string, contextPath: string, isJoyValue = true):
   },
 })
 
-export const minContext = (msg: string, contextPath: string, isJoyValue = true): Yup.TestConfig<any, AnyObject> => ({
-  name: 'minContext',
+export const minContext = (
+  msg: string,
+  contextPath: string,
+  isJoyValue = true,
+  type?: string
+): Yup.TestConfig<any, AnyObject> => ({
+  name: type ?? 'minContext',
   exclusive: false,
   test(value: number | BN) {
     if (!value) {
@@ -142,7 +153,7 @@ export const validStakingAmount = (): Yup.TestConfig<any, AnyObject> => ({
     const minStake: BN | undefined = this.options.context?.minStake
     if (minStake && minStake.gt(stake)) {
       return this.createError({
-        message: 'Minimal stake amount is ${min} tJOY',
+        message: 'Minimal stake amount is ${min} ' + CurrencyName.integerValue,
         params: { min: formatJoyValue(minStake) },
       })
     }
@@ -152,16 +163,10 @@ export const validStakingAmount = (): Yup.TestConfig<any, AnyObject> => ({
     const totalFee = stake.add(extraFees)
     if (totalBalance && totalBalance.lt(new BN(totalFee))) {
       return this.createError({
-        message: `Insufficient funds to cover staking \${max} tJoy ${
-          extraFees.isZero() ? '' : ' + extra ${extra} tJoy'
-        }`,
-        params: {
-          max: formatJoyValue(totalBalance),
-          extra: formatJoyValue(extraFees),
-        },
+        message: 'Selected amount exceeds account balance.',
+        params: { max: formatJoyValue(totalBalance), extra: formatJoyValue(extraFees) },
       })
     }
-
     return true
   },
 })

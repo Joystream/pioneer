@@ -31,10 +31,6 @@ import { mockUseModalCall } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
-}))
-
 describe('UI: BuyMembershipModal', () => {
   const api = stubApi()
   let transaction: any

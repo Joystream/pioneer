@@ -1,5 +1,5 @@
 import { ForumPostMetadata } from '@joystream/metadata-protobuf'
-import React, { RefObject, useEffect, useMemo, useRef, useState } from 'react'
+import React, { RefObject, useMemo, useRef } from 'react'
 import { generatePath } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
@@ -8,6 +8,7 @@ import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Badge, TextBig } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
+import { Comparator } from '@/common/model/Comparator'
 import { createType } from '@/common/model/createType'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { AnyKeys } from '@/common/types'
@@ -24,32 +25,25 @@ interface Props {
   proposalId: string
 }
 
+const hints = {
+  open: 'This is an unmoderated discussioon, everyone can comment.',
+  closed: 'This discussion is closed. Only selected members and the council can comment.',
+}
+
 export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
   const query = useRouteQuery()
   const { api } = useApi()
   const { active, members } = useMyMemberships()
 
   const initialPost = query.get('post')
-  const isAbleToPost =
-    thread.mode === 'open' ||
-    (thread.mode === 'closed' && active && (thread.whitelistIds?.includes(active.id) || active.isCouncilMember))
-  const isInWhitelist = thread.mode === 'closed' && members.find((member) => thread.whitelistIds?.includes(member.id))
-  const hasCouncilMembership = thread.mode === 'closed' && members.find((member) => member.isCouncilMember)
-  const [replyTo, setReplyTo] = useState<ForumPost | undefined>()
+  const isClosed = thread.mode === 'closed'
+  const isAbleToPost = !isClosed || (active && (thread.whitelistIds?.includes(active.id) || active.isCouncilMember))
+  const whitelistedMember = isClosed ? members.find((member) => thread.whitelistIds?.includes(member.id)) : null
+  const hasCouncilMembership = isClosed && members.find((member) => member.isCouncilMember)
 
   const newPostRef = useRef<HTMLDivElement>(null)
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
-
-  useEffect(() => {
-    replyTo && newPostRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'end' })
-  }, [replyTo])
-
-  useEffect(() => {
-    if (initialPost && postsRefs[initialPost]) {
-      postsRefs[initialPost].current?.scrollIntoView({ behavior: 'smooth', inline: 'start' })
-    }
-  }, [postsRefs, initialPost])
 
   const discussionPosts = useMemo(
     () => thread.discussionPosts.filter((post) => post.status !== 'PostStatusRemoved'),
@@ -61,7 +55,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
       return api.tx.proposalsDiscussion.addPost(
         createType('MemberId', Number.parseInt(active.id)),
         thread.id,
-        metadataToBytes(ForumPostMetadata, { text: postText, repliesTo: replyTo ? Number(replyTo.id) : undefined }),
+        metadataToBytes(ForumPostMetadata, { text: postText, repliesTo: undefined }),
         isEditable
       )
     }
@@ -69,29 +63,22 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
 
   const getPostForm = () => {
     if (isAbleToPost) {
-      return (
-        <NewThreadPost
-          ref={newPostRef}
-          replyTo={replyTo}
-          getTransaction={getTransaction}
-          removeReply={() => setReplyTo(undefined)}
-          replyToLink={`${generatePath(ProposalsRoutes.preview, { id: proposalId })}?post=${replyTo?.id}`}
-        />
-      )
+      return <NewThreadPost ref={newPostRef} getTransaction={getTransaction} />
     }
 
     if (hasCouncilMembership) {
       return <TextBig>Please select your council membership to post in this thread.</TextBig>
     }
 
-    if (isInWhitelist) {
-      return <TextBig>Please select a whitelisted membership to post in this thread.</TextBig>
+    if (whitelistedMember) {
+      return <TextBig>Please select your other membership to post in this thread: {whitelistedMember.handle}</TextBig>
     }
 
     return (
-      <TextBig>
-        The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.
-      </TextBig>
+      <>
+        <TextBig>The discussion is limited to following whitelisted members:</TextBig>
+        {thread.whitelistIds?.join(' ') ?? ''}
+      </>
     )
   }
 
@@ -101,12 +88,12 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
         <h4>Discussion</h4>
         <Badge>
           {`${thread.mode} `}
-          <Tooltip tooltipText="Dolore magna anim eu nisi qui.">
+          <Tooltip tooltipText={hints[thread.mode]}>
             <TooltipDefault />
           </Tooltip>
         </Badge>
       </DiscussionsHeader>
-      {discussionPosts.map((post, index) => {
+      {discussionPosts.sort(Comparator<ForumPost>(true, 'createdAt').string).map((post, index) => {
         return (
           <PostListItem
             isFirstItem={index === 0}
@@ -115,7 +102,6 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
             isSelected={post.id === initialPost}
             isThreadActive={true}
             post={post}
-            replyToPost={() => setReplyTo(post)}
             type="proposal"
             isDiscussion
             link={getUrl({ route: ProposalsRoutes.preview, params: { id: proposalId }, query: { post: post.id } })}

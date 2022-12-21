@@ -153,9 +153,9 @@ export const stubConst = <T>(api: UseApi, constSubPath: string, value: T) => {
 
 export const stubApi = () => {
   const api: UseApi = {
-    api: ({
+    api: {
       isConnected: true,
-    } as unknown) as Api,
+    } as unknown as Api,
     isConnected: true,
     connectionState: 'connected',
     setQnConnectionState: () => undefined,
@@ -219,7 +219,7 @@ export const stubProposalConstants = (api: UseApi, constants?: { requiredStake: 
     })
   }
   set(api, 'api.consts.members.referralCutMaximumPercent', new BN(50))
-  set(api, 'api.consts.proposalsCodex.fundingRequestProposalMaxAmount', new BN(10_000))
+  set(api, 'api.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount', new BN(10_000))
   set(api, 'api.consts.proposalsCodex.setMaxValidatorCountProposalMaxValidators', new BN(300))
   set(
     api,
@@ -256,6 +256,9 @@ export const stubCouncilAndReferendum = (
       changedAt: BN_ZERO,
     })
   )
+  stubQuery(api, 'council.councilorReward', new BN(100))
+  stubQuery(api, 'council.budget', new BN(10000))
+  stubQuery(api, 'council.nextRewardPayments', new BN(1000))
 }
 
 type Balances = { available?: number; locked?: number; lockId?: LockType }
@@ -264,7 +267,7 @@ export const stubBalances = ({ available, lockId, locked }: Balances) => {
   const availableBalance = new BN(available ?? 0)
   const lockedBalance = new BN(locked ?? 0)
 
-  const deriveBalances = ({
+  const deriveBalances = {
     availableBalance: createType('Balance', availableBalance),
     lockedBalance: createType('Balance', lockedBalance),
     accountId: createType('AccountId', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
@@ -283,7 +286,7 @@ export const stubBalances = ({ available, lockId, locked }: Balances) => {
     vestingTotal: new BN(0),
     votingBalance: new BN(0),
     vesting: [],
-  } as unknown) as DeriveBalancesAll
+  } as unknown as DeriveBalancesAll
 
   const balance = toBalances(deriveBalances)
   mockedBalances.mockReturnValue(balance)

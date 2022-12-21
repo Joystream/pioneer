@@ -31,10 +31,6 @@ import {
 
 configure({ testIdAttribute: 'id' })
 
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
-}))
-
 describe('UI: InviteMemberModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()

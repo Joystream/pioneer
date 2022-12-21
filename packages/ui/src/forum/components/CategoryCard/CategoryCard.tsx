@@ -1,65 +1,72 @@
-import React, { useMemo, useState } from 'react'
-import styled from 'styled-components'
+import React, { useMemo } from 'react'
+import { generatePath, Link } from 'react-router-dom'
+import styled, { css } from 'styled-components'
 
-import { BadgeStatus } from '@/common/components/BadgeStatus'
+import { BadgeStatusCss } from '@/common/components/BadgeStatus'
 import { CountBadge } from '@/common/components/CountBadge'
 import { Arrow } from '@/common/components/icons'
 import { AnswerIcon } from '@/common/components/icons/AnswerIcon'
 import { TextBig, TextMedium } from '@/common/components/typography'
-import { BorderRad, Colors } from '@/common/constants'
+import { BorderRad, Colors, RemoveScrollbar } from '@/common/constants'
+import { ForumRoutes } from '@/forum/constant'
+import { ForumCategory } from '@/forum/types'
 
-const categories = ['forum', 'content', 'builders']
+export interface CategoryCardProps {
+  category: ForumCategory
+  className?: string
+  archivedStyles?: boolean
+}
 
-// In case of different onClick event for message icon and box as whole, remember to stop propagation of msg onClick event
-export const CategoryCard = () => {
-  const [isHovered, setIsHovered] = useState<boolean>(false)
-
+export const CategoryCard = ({ className, category, archivedStyles }: CategoryCardProps) => {
   const hoverComponent = useMemo(() => {
     return (
-      <CategoriesBox>
-        {categories.map((category) => (
-          <BadgeStatus>{category}</BadgeStatus>
-        ))}
+      <CategoriesBox className="category-subcategories">
+        {category.subcategories.length &&
+          category.subcategories.map((subcategory) => (
+            <StyledBadge key={subcategory.title} to={generatePath(ForumRoutes.category, { id: subcategory.id })}>
+              {subcategory.title}
+            </StyledBadge>
+          ))}
       </CategoriesBox>
     )
-  }, [])
+  }, [category.subcategories.length])
 
   return (
-    <Box onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+    <Box
+      className={className}
+      archivedStyles={archivedStyles}
+      to={generatePath(ForumRoutes.category, { id: category.id })}
+      ignoreHover={!category.subcategories.length}
+    >
       <div>
-        <TextBig bold value>
-          Working Groups
+        <TextBig bold value black>
+          {category.title}
         </TextBig>
-        {isHovered ? (
-          hoverComponent
-        ) : (
-          <TextMedium normalWeight inter lighter>
-            In this category you can find or post the information, questions about all the Working Groups
-          </TextMedium>
-        )}
+        {hoverComponent}
+        <TextMedium className="category-description" normalWeight inter lighter truncateLines={2}>
+          {category.description}
+        </TextMedium>
       </div>
       <div>
         <AnswerIcon />
-        <CountBadge count={1} />
+        <CountBadge count={category.subcategories.length} />
       </div>
       <Arrow direction="right" />
     </Box>
   )
 }
 
-const Box = styled.div`
+const StyledBadge = styled(Link)`
+  ${BadgeStatusCss}
+`
+
+const Box = styled(Link)<{ archivedStyles?: boolean; ignoreHover?: boolean }>`
   display: flex;
   column-gap: 15px;
-  width: 500px;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
-  padding: 21px;
+  padding: 19px;
   height: 108px;
-  cursor: pointer;
-
-  :hover > *:last-child {
-    color: ${Colors.LogoPurple};
-  }
 
   > *:nth-child(1) {
     display: grid;
@@ -84,11 +91,47 @@ const Box = styled.div`
 
   > *:last-child {
     align-self: center;
+    cursor: pointer;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: ${Colors.Black[300]};
+
+    :hover {
+      color: ${Colors.LogoPurple};
+    }
   }
+
+  ${({ archivedStyles }) =>
+    archivedStyles &&
+    css`
+      background-color: ${Colors.Black[50]};
+    `}
+
+  .category-subcategories {
+    display: none;
+  }
+
+  ${({ ignoreHover }) =>
+    !ignoreHover &&
+    css`
+      :hover {
+        .category-subcategories {
+          display: flex;
+        }
+
+        .category-description {
+          display: none;
+        }
+      }
+    `}
 `
 
 const CategoriesBox = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+
+  overflow-y: auto;
+  ${RemoveScrollbar}
 `

@@ -37,13 +37,14 @@ import { MappedStatuses, OpeningStatuses, WorkingGroupsRoutes } from '@/working-
 import { useOpening } from '@/working-groups/hooks/useOpening'
 import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
+import { urlParamToOpeningId } from '@/working-groups/model/workingGroupName'
 import { WorkingGroupOpening as WorkingGroupOpeningType } from '@/working-groups/types'
 
 export const WorkingGroupOpening = () => {
   const { id } = useParams<{ id: string }>()
   const { showModal } = useModal()
   const { active: activeMembership } = useMyMemberships()
-  const { isLoading, opening } = useOpening(id)
+  const { isLoading, opening } = useOpening(urlParamToOpeningId(id))
 
   const activeApplications = useMemo(() => {
     if (opening) {
@@ -121,7 +122,7 @@ export const WorkingGroupOpening = () => {
       header={
         <PageHeaderWrapper>
           <PageHeaderRow>
-            <PreviousPage>
+            <PreviousPage customLink={WorkingGroupsRoutes.openings}>
               <PageTitle>{opening.title}</PageTitle>
             </PreviousPage>
             <ButtonsGroup>
@@ -153,7 +154,13 @@ export const WorkingGroupOpening = () => {
                 title={`Reward per ${rewardPeriod?.toString()} blocks`}
                 value={rewardPeriod?.mul(opening.rewardPerBlock)}
               />
-              <TokenValueStat title="Minimal stake" tooltipText="Lorem ipsum..." value={opening.stake} />
+              <TokenValueStat
+                title="Minimal stake"
+                tooltipText="Minimum tokens free of rivalrous locks required as application stake to this role."
+                tooltipLinkText="Learn more"
+                tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/working-groups#staking"
+                value={opening.stake}
+              />
               <ApplicationStats applicants={opening.applicants} hiring={opening.hiring} status={opening.status} />
             </Statistics>
           </RowGapBlock>
@@ -171,7 +178,6 @@ export const WorkingGroupOpening = () => {
             myApplication={myApplication}
             hired={hiringApplication}
             hiringComplete={opening.status !== OpeningStatuses.OPEN}
-            leadId={opening.leadId}
           />
           {opening.status === OpeningStatuses.OPEN && !activeApplications?.length && <ApplicationStatus />}
         </SidePanel>
@@ -204,7 +210,7 @@ const ApplicationStats = ({
       ) : (
         <StatiscticContentColumn>
           <StatisticHeader title="Hiring limit" />
-          <NumericValue>{hiring.limit}</NumericValue>
+          <NumericValue>{hiring.limit || 1}</NumericValue>
         </StatiscticContentColumn>
       )}
     </MultiColumnsStatistic>

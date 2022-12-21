@@ -1,48 +1,71 @@
 import React from 'react'
+import { generatePath } from 'react-router'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { CountBadge } from '@/common/components/CountBadge'
 import { ReplyIcon } from '@/common/components/icons'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
+import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextBig, TextExtraSmall, TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
+import { relativeIfRecent } from '@/common/model/relativeIfRecent'
+import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
+import { ForumRoutes } from '@/forum/constant'
+import { ForumThread } from '@/forum/types'
 import { MemberInfo } from '@/memberships/components'
 
-export const ThreadCard = () => {
+interface ThreadCardProps {
+  thread: ForumThread
+  className?: string
+  watchlistButton?: boolean
+}
+
+export const ThreadCard = ({ thread, className, watchlistButton }: ThreadCardProps) => {
   return (
-    <Box>
+    <Box
+      to={generatePath(ForumRoutes.thread, { id: thread.id })}
+      className={className}
+      isArchived={thread.status.__typename === 'ThreadStatusRemoved'}
+    >
       <div>
-        <MemberInfo size="s" hideGroup onlyTop member={DevMember} />
+        <MemberInfo size="s" hideGroup onlyTop member={thread.author} />
         <div>
           <TextExtraSmall inter lighter>
-            20 mins ago
+            {relativeIfRecent(thread.status.threadDeletedEvent?.timestamp ?? thread.createdInBlock.timestamp)}
           </TextExtraSmall>
-          <BadgeStatus size="m">BOUNTIES</BadgeStatus>
+          <BadgeStatus size="m">{thread.categoryTitle.toUpperCase()}</BadgeStatus>
         </div>
       </div>
       <TextBig bold value>
-        Welcome and Forum Guidelines Second line of text
+        {thread.title}
       </TextBig>
       <TextMedium light truncateLines={3}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-        magna
+        {thread.initialPostText}
       </TextMedium>
-      <ColumnGapBlock gap={8}>
-        <ReplyIcon />
-        <CountBadge count={2} />
+      <ColumnGapBlock justify="space-between" align="center">
+        <ColumnGapBlock gap={8}>
+          <ReplyIcon />
+          <CountBadge count={thread.visiblePostsCount} />
+        </ColumnGapBlock>
+        {watchlistButton && <WatchlistButton threadId={thread.id} />}
       </ColumnGapBlock>
     </Box>
   )
 }
 
-const Box = styled.div`
+const Box = styled(GhostRouterLink)<{ isArchived: boolean }>`
+  ${({ isArchived }) => (isArchived ? `background-color: ${Colors.Black[50]}` : '')};
   display: grid;
   row-gap: 16px;
-  max-width: 332px;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
   padding: 24px;
+  cursor: pointer;
+
+  :hover {
+    border: 1px solid ${Colors.Blue[100]};
+  }
 
   > *:nth-child(3) {
     margin-top: -14px;
@@ -53,6 +76,7 @@ const Box = styled.div`
     justify-content: space-between;
     flex-wrap: wrap;
     align-items: center;
+    gap: 5px;
 
     > * {
       flex: 1;
@@ -60,59 +84,21 @@ const Box = styled.div`
 
     > *:last-child {
       display: flex;
-      align-items: center;
+      flex-direction: column-reverse;
+      align-items: flex-end;
       justify-content: end;
       gap: 5px;
-      flex: 2;
     }
   }
 
   > *:last-child {
+    width: auto;
     svg {
       color: ${Colors.Black[400]};
-      :hover {
-        color: ${Colors.LogoPurple};
-        cursor: pointer;
-      }
     }
   }
-`
 
-const DevMember = {
-  id: '0',
-  rootAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
-  controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-  boundAccounts: [
-    '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-    '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
-  ],
-  boundAccountsEvents: [],
-  handle: 'alice',
-  metadata: {
-    name: 'nesciunt ea',
-    about:
-      'Hic qui esse ea error eum enim recusandae nisi a. Sit consequatur expedita quo repellat rem facere itaque quia. Et maiores nobis et ut nihil. Id est soluta sunt necessitatibus tempora vitae quas labore possimus. Ullam necessitatibus corporis omnis quod dolore recusandae. Nesciunt at tempora odio ipsum ipsam consequatur velit.\n \rLaboriosam ut minima. Veritatis omnis quam quo saepe. Ut dolorum id. Sint dicta earum maiores et. Ipsum hic optio sunt magnam neque rerum ut possimus et. Adipisci sed officiis rerum inventore omnis rem rerum provident.',
-  },
-  isVerified: false,
-  isFoundingMember: false,
-  isCouncilMember: false,
-  inviteCount: 5,
-  avatar: 'https://raw.githubusercontent.com/Joystream/founding-members/main/avatars/primary-avatar/15.png',
-  entry: {
-    __typename: 'MembershipEntryPaid',
-    membershipBoughtEvent: {
-      inBlock: 19471,
-      createdAt: '2021-12-12T11:57:16.322Z',
-      network: 'OLYMPIA',
-    },
-  },
-  createdAt: 'asd',
-  roles: [
-    {
-      id: '1',
-      groupName: 'forumWorkingGroup',
-      createdAt: undefined,
-      isLead: true,
-    },
-  ],
-}
+  ${TextMedium} {
+    max-height: 55px;
+  }
+`

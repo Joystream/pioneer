@@ -45,7 +45,7 @@ export const UpcomingOpening = () => {
       <OpeningIcon />
       <RowGapBlock gap={16}>
         <h4>The opening hasn't started yet</h4>
-        <TextSmall>Lorem ipsum dolor sit amet.Lorem ipsum dolor sit amet.</TextSmall>
+        <TextSmall>This opening becomes available for applications when at the set block.</TextSmall>
       </RowGapBlock>
     </ApplicationStatusWrapper>
   ))

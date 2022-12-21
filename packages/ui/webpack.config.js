@@ -9,8 +9,6 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 
-dotenv.config()
-
 const shared = require('./dev/webpack.shared')
 
 const version = cp.execSync('git rev-parse --short HEAD').toString().trim()

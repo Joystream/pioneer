@@ -96,7 +96,10 @@ export const RestoreVotesModal = () => {
       <ModalHeader title="Restore Votes" onClick={hideModal} />
 
       <ModalBody>
-        <p>Lorem ipsum dolor sit amet enim</p>
+        <p>
+          In case of browser storage loss or when switching devices, restoring your votes from a backup file may be
+          necessary to reveal them. Upload your votes backup file to the browser storage here.
+        </p>
 
         <FileInput
           title="Drag and drop file here to restore"

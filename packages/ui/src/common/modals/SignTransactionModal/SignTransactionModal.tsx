@@ -108,8 +108,8 @@ const SignModalAccount = ({ account, amountInfo = [] }: SignModalAccountProps) =
     <Wrapper>
       <AccountInfo account={account} />
       <RowGapBlock>
-        {[...amountInfo, { name: 'Total balance', value: total }].map(({ name, value }) => (
-          <BalanceInfoInRow>
+        {[...amountInfo, { name: 'Total balance', value: total }].map(({ name, value }, index) => (
+          <BalanceInfoInRow key={name + index}>
             <InfoTitle>{name}</InfoTitle>
             <InfoValue>
               <TokenValue value={value} />
