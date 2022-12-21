@@ -4,6 +4,8 @@ type ProposalDescriptions = {
   [key in ProposalType]: string
 }
 export const proposalDescriptions: ProposalDescriptions = {
+  channelIncentivesPayout:
+    'Proposal to submit the Channel Incentives Payload, defining how much JOYs can be minted by each channel within payout period and related parameters.',
   signal:
     'Think of signal as the what, whereas rationale parameter in other proposals would be the why. Signal proposal does not effect any platform parameters when accepted. ',
   runtimeUpgrade: 'Proposal to upgrade version to the new runtime.',

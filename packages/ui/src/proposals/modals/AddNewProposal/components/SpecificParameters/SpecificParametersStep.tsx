@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { ChannelIncentivesPayout } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/ChannelIncentivesPayout/ChannelIncentivesPayout'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
@@ -77,6 +78,9 @@ export const SpecificParametersStep = ({ matches }: SpecificParametersStepProps)
       return <SetMaxValidatorCount />
     case matches('specificParameters.setMembershipPrice'): {
       return <SetMembershipPrice />
+    }
+    case matches('specificParameters.channelIncentivesPayout'): {
+      return <ChannelIncentivesPayout />
     }
     default:
       return null

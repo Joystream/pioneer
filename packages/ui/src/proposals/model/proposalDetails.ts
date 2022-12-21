@@ -27,9 +27,11 @@ export const proposalDetails: ProposalType[] = [
   'lockBlogPost',
   'unlockBlogPost',
   'veto',
+  'channelIncentivesPayout',
 ]
 
 export const enabledProposals: ProposalType[] = [
+  'channelIncentivesPayout',
   'signal',
   'runtimeUpgrade',
   'fundingRequest',

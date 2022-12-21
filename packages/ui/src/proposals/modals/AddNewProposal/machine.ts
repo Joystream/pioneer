@@ -44,6 +44,7 @@ export type AddNewProposalState =
   | { value: 'generalParameters.finishGeneralParameters'; context: Required<TriggerAndDiscussionContext> }
   | { value: 'specificParameters'; context: Required<TriggerAndDiscussionContext> }
   | { value: { specificParameters: 'signal' }; context: Required<TriggerAndDiscussionContext> }
+  | { value: { specificParameters: 'channelIncentivesPayout' }; context: Required<TriggerAndDiscussionContext> }
   | { value: { specificParameters: 'fundingRequest' }; context: Required<TriggerAndDiscussionContext> }
   | { value: { specificParameters: 'runtimeUpgrade' }; context: Required<TriggerAndDiscussionContext> }
   | { value: { specificParameters: 'setReferralCut' }; context: Required<TriggerAndDiscussionContext> }
@@ -216,8 +217,10 @@ export const addNewProposalMachine = createMachine<
             { target: 'setInitialInvitationBalance', cond: isType('setInitialInvitationBalance') },
             { target: 'setMembershipPrice', cond: isType('setMembershipPrice') },
             { target: 'setInitialInvitationCount', cond: isType('setInitialInvitationCount') },
+            { target: 'channelIncentivesPayout', cond: isType('channelIncentivesPayout') },
           ],
         },
+        channelIncentivesPayout: {},
         signal: {},
         setMaxValidatorCount: {},
         setReferralCut: {},

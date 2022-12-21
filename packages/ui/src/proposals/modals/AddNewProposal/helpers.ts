@@ -3,6 +3,7 @@ import * as Yup from 'yup'
 
 import { Account } from '@/accounts/types'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
+import { Address } from '@/common/types'
 import { BNSchema, lessThanMixed, maxContext, maxMixed, minContext, moreThanMixed } from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
@@ -31,6 +32,9 @@ export const defaultProposalValues = {
   },
   durationAndProcess: {
     isLimited: false,
+  },
+  channelIncentivesPayout: {
+    cashoutEnabled: true,
   },
 }
 
@@ -139,6 +143,20 @@ export interface AddNewProposalForm {
   }
   setMembershipPrice: {
     amount?: BN
+  }
+  channelIncentivesPayout: {
+    commitment?: string
+    objectCreationParamsSize?: number
+    objectCreationParamsContent?: string
+    minimumCashoutAllowed?: BN
+    maximumCashoutAllowed?: BN
+    cashoutEnabled?: boolean
+    payload: {
+      uploaderAccount: Address
+      objectCreationParams: { size_: BN; ipfsContentId: any /* Bytes */ }
+      expectedDataSizeFee: BN
+      expectedDataObjectStateBloatBond: BN
+    }
   }
 }
 
@@ -315,6 +333,15 @@ export const schemaFactory = (api?: ProxyApi) => {
     }),
     setMembershipPrice: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
+    }),
+    channelIncentivesPayout: Yup.object().shape({
+      objectCreationParamsSize: Yup.number().required(),
+      minimumCashoutAllowed: BNSchema.required(),
+      maximumCashoutAllowed: BNSchema.test(
+        moreThanMixed(Yup.ref('minimumCashoutAllowed'), 'Maximum cashout cannot be lower than minimum')
+      ).required(),
+      channelCashoutsEnabled: Yup.boolean(),
+      commitment: Yup.string().required(),
     }),
   })
 }
