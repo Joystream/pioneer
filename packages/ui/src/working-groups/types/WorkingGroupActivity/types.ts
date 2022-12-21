@@ -20,7 +20,6 @@ export type WorkingGroupActivity =
   | OpeningFilledActivity
   | OpeningAnnouncedActivity
   | WorkerTerminatedActivity
-  | WorkerRewardAmountUpdatedActivity
   | WorkerRewardAccountUpdatedActivity
   | WorkerRewardAmountUpdatedActivity
 
