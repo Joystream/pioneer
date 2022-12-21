@@ -162,7 +162,7 @@ describe('UI: RevealingStageVotes', () => {
     renderComponent()
 
     expect((await screen.findByText(/total stake/i)).nextSibling?.textContent).toEqual('3,000')
-    expect((await screen.findByText(/my stake/i)).nextSibling?.textContent).toEqual('2,000')
+    expect((await screen.findByText(/My contributed votes/i)).parentNode?.parentNode?.nextSibling?.textContent).toEqual('2,000')
   })
 
   describe('Votes that can be revealed', () => {
