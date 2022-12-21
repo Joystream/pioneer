@@ -32,7 +32,7 @@ export const ProposalTypeStep = () => {
       </RowGapBlock>
       <Row>
         <List>
-          {Object.entries(proposalDescriptions).map(([type, description]) => (
+          {Object.entries(proposalDescriptions).map(([type, description], i) => (
             <TypeListItem
               key={type}
               onClick={() => selectType(type as ProposalType)}
@@ -41,7 +41,9 @@ export const ProposalTypeStep = () => {
             >
               <TypeItemWrap>
                 <h5>{camelCaseToText(type)}</h5>
-                <TextMedium light>{description}</TextMedium>
+                <TextMedium light>
+                  ({i}) {description}
+                </TextMedium>
                 <CSSTransition
                   in={type === chosenType}
                   classNames="ActiveTypeIcon"
