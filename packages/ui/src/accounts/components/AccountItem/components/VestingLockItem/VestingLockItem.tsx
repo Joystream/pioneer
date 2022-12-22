@@ -9,7 +9,6 @@ import {
   DetailsName,
   LockWrapper,
   TitleCell,
-  ValueCell,
   VestingStyledDropDown,
 } from '@/accounts/components/AccountItem/components/styles'
 import { lockIcon } from '@/accounts/components/AccountLocks'
@@ -38,9 +37,11 @@ export const VestingLockListItem = ({
           <DetailsName>Vesting</DetailsName>
         </TitleCell>
         {!isDropped && (
-          <ValueCell>
+          <>
+            <TokenValue value={locked.add(vested)} />
             <TokenValue value={locked} />
-          </ValueCell>
+            <TokenValue value={vested} />
+          </>
         )}
         <ButtonsCell>
           <DropDownButton onClick={() => setDropped(!isDropped)} isDropped={isDropped} />
