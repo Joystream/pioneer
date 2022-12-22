@@ -1,5 +1,5 @@
 import { ForumPostMetadata } from '@joystream/metadata-protobuf'
-import React, { RefObject, useMemo, useRef } from 'react'
+import React, { RefObject, useMemo, useRef, useEffect, useState } from 'react'
 import { generatePath } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
@@ -34,8 +34,19 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
   const query = useRouteQuery()
   const { api } = useApi()
   const { active, members } = useMyMemberships()
+  const [selectedPost, setSelectedPost] = useState('')
+  const [prevRefreshCount, setPrevRefreshCount] = useState(0)
 
-  const initialPost = query.get('post')
+  const initialPost = query.get('post') ?? ''
+  useEffect(() => {
+    setSelectedPost(initialPost)
+  }, [initialPost])
+
+  const refreshCount = parseInt(query.get('c') ?? '0')
+  useEffect(() => {
+    setPrevRefreshCount(refreshCount)
+  }, [refreshCount])
+
   const isClosed = thread.mode === 'closed'
   const isAbleToPost = !isClosed || (active && (thread.whitelistIds?.includes(active.id) || active.isCouncilMember))
   const whitelistedMember = isClosed ? members.find((member) => thread.whitelistIds?.includes(member.id)) : null
@@ -99,13 +110,15 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
             isFirstItem={index === 0}
             key={post.id}
             insertRef={getInsertRef(post.id)}
-            isSelected={post.id === initialPost}
+            isSelected={post.id === initialPost && !(initialPost === selectedPost && refreshCount === prevRefreshCount)}
             isThreadActive={true}
             post={post}
             type="proposal"
             isDiscussion
             link={getUrl({ route: ProposalsRoutes.preview, params: { id: proposalId }, query: { post: post.id } })}
-            repliesToLink={`${generatePath(ProposalsRoutes.preview, { id: proposalId })}?post=${post.repliesTo?.id}`}
+            repliesToLink={`${generatePath(ProposalsRoutes.preview, { id: proposalId })}?post=${post.repliesTo?.id}&c=${
+              (prevRefreshCount + 1) % 2
+            }`}
           />
         )
       })}
