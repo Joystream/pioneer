@@ -12,6 +12,8 @@ import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { last } from '@/common/utils'
 import { UpdateMembershipModal } from '@/memberships/modals/UpdateMembershipModal'
 import { MemberWithDetails } from '@/memberships/types'
+import { MyMemberships } from '@/memberships/providers/membership/provider'
+import { MembershipContext } from '@/memberships/providers/membership/context'
 
 import { getButton } from '../../_helpers/getButton'
 import { selectFromDropdown } from '../../_helpers/selectFromDropdown'
@@ -58,6 +60,17 @@ describe('UI: UpdatedMembershipModal', () => {
   let batchTx: any
   let profileTxMock: jest.Mock
 
+  const useMyMemberships: MyMemberships = {
+    active: undefined,
+    members: [],
+    setActive: (member) => (useMyMemberships.active = member),
+    isLoading: false,
+    hasMembers: true,
+    helpers: {
+      getMemberIdByBoundAccountAddress: () => undefined,
+    },
+  }
+
   beforeEach(() => {
     stubDefaultBalances()
     set(api, 'api.query.members.membershipPrice', () => of(createBalanceOf(100)))
@@ -67,42 +80,57 @@ describe('UI: UpdatedMembershipModal', () => {
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
     stubTransaction(api, 'api.tx.members.updateProfile')
     profileTxMock = api.api.tx.members.updateProfile as unknown as jest.Mock
-    renderModal()
+    useMyMemberships.members = [getMember('alice'), getMember('bob')]
+    useMyMemberships.setActive(getMember('bob'))
   })
 
   it('Renders a modal', async () => {
+    act(() => {
+      renderModal()
+    })
     expect(await screen.findByText('Edit membership')).toBeDefined()
   })
 
   it('Is initially disabled', async () => {
+    act(() => {
+      renderModal()
+    })
     expect(await getButton(/^Save changes$/i)).toBeDisabled()
   })
 
   it('Enables button on external resources change', async () => {
-    expect(await getButton(/^Save changes$/i)).toBeDisabled()
-
-    await act(async () => {
-      fireEvent.change(screen.getByTestId('twitter-input'), { target: { value: 'joystream@mail.com' } })
+    act(() => {
+      renderModal()
     })
+    expect(await getButton(/^Save changes$/i)).toBeDisabled()
+    fireEvent.change(screen.getByTestId('twitter-input'), { target: { value: 'joystream@mail.com' } })
 
     expect(await getButton(/^Save changes$/i)).toBeEnabled()
   })
 
   it('Enables button on member field change', async () => {
+    act(() => {
+      renderModal()
+    })
     expect(await getButton(/^Save changes$/i)).toBeDisabled()
-
     fireEvent.change(screen.getByLabelText(/member name/i), { target: { value: 'Bobby Bob' } })
 
     expect(await getButton(/^Save changes$/i)).toBeEnabled()
   })
 
   it('Enables save button on account change', async () => {
+    act(() => {
+      renderModal()
+    })
     await selectFromDropdown('root account', 'bob')
-
     expect(await getButton(/^Save changes$/i)).toBeEnabled()
   })
 
   it('Disables button when invalid avatar URL', async () => {
+    act(() => {
+      renderModal()
+    })
+
     fireEvent.change(await screen.findByLabelText(/member avatar/i), { target: { value: 'avatar' } })
     expect(await getButton(/^Save changes$/i)).toBeDisabled()
 
@@ -125,6 +153,10 @@ describe('UI: UpdatedMembershipModal', () => {
     }
 
     it('Authorize step', async () => {
+      act(() => {
+        renderModal()
+      })
+
       await changeNameAndSave()
       const txCall = profileTxMock.mock.calls[0]
       const memberMetadata = Buffer.from(last(txCall) as Uint8Array).toString('utf8')
@@ -137,14 +169,19 @@ describe('UI: UpdatedMembershipModal', () => {
 
     it('Success step', async () => {
       stubBatchTransactionSuccess(batchTx)
-      await changeNameAndSave()
-
+      await act(async () => {
+        renderModal()
+        await changeNameAndSave()
+      })
       fireEvent.click(screen.getByText(/^sign and update a member$/i))
-
       expect(await screen.findByText('Success')).toBeDefined()
     })
 
     it('Failure step', async () => {
+      act(() => {
+        renderModal()
+      })
+
       stubBatchTransactionFailure(batchTx)
       await changeNameAndSave()
 
@@ -159,10 +196,12 @@ describe('UI: UpdatedMembershipModal', () => {
       <ModalContextProvider>
         <MockQueryNodeProviders>
           <MockKeyringProvider>
-            <ApiContext.Provider value={api}>
-              <GlobalModals />
-              <UpdateMembershipModal />
-            </ApiContext.Provider>
+            <MembershipContext.Provider value={useMyMemberships}>
+              <ApiContext.Provider value={api}>
+                <GlobalModals />
+                <UpdateMembershipModal />
+              </ApiContext.Provider>
+            </MembershipContext.Provider>
           </MockKeyringProvider>
         </MockQueryNodeProviders>
       </ModalContextProvider>

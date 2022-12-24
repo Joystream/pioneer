@@ -31,8 +31,6 @@ import { mockUseModalCall } from '../../setup'
 
 configure({ testIdAttribute: 'id' })
 
-
-
 describe('UI: BuyMembershipModal', () => {
   const api = stubApi()
   let transaction: any

@@ -16,7 +16,7 @@ import { UpdateMembershipSuccessModal } from './UpdateMembershipSuccessModal'
 
 export const UpdateMembershipModal = () => {
   const { api } = useApi()
-  const { setActive } = useMyMemberships()
+  const { active } = useMyMemberships()
   const {
     hideModal,
     modalData: { member },
@@ -46,9 +46,8 @@ export const UpdateMembershipModal = () => {
     )
   }
 
-  if (state.matches('success')) {
-    setActive(member)
-    return <UpdateMembershipSuccessModal onClose={hideModal} member={member} />
+  if (active && state.matches('success')) {
+    return <UpdateMembershipSuccessModal onClose={hideModal} member={active} />
   }
 
   return null

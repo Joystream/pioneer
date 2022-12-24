@@ -384,7 +384,11 @@ fragment WorkingGroupApplicationFields on WorkingGroupApplication {
   roleAccount
 }
 
-query GetWorkingGroupApplications($where: WorkingGroupApplicationWhereInput, $orderBy: [WorkingGroupApplicationOrderByInput!], $limit: Int) {
+query GetWorkingGroupApplications(
+  $where: WorkingGroupApplicationWhereInput
+  $orderBy: [WorkingGroupApplicationOrderByInput!]
+  $limit: Int
+) {
   workingGroupApplications(where: $where, orderBy: $orderBy, limit: $limit) {
     ...WorkingGroupApplicationFields
   }

@@ -13,7 +13,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Skeleton } from '@/common/components/Skeleton'
 import { TokenValue } from '@/common/components/typography'
 import { BN_ZERO, BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
-import { isDefined } from '@/common/utils'
+import { isDefined, sumBN } from '@/common/utils'
 
 import { LocksDetails } from './components/LocksDetails'
 
@@ -38,7 +38,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
           <AccountLocks locks={balance?.locks} />
         </ValueAndLocks>
         <TokenValue
-          value={balance?.recoverable?.add(balance?.vestedClaimable ?? BN_ZERO)}
+          value={sumBN(balance?.recoverable, balance?.vestedClaimable)}
           isLoading={!isDefined(balance?.recoverable)}
         />
         <TokenValue value={balance?.transferable} isLoading={!isDefined(balance?.transferable)} />

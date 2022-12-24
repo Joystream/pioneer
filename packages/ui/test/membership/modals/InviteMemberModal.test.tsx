@@ -31,8 +31,6 @@ import {
 
 configure({ testIdAttribute: 'id' })
 
-
-
 describe('UI: InviteMemberModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
