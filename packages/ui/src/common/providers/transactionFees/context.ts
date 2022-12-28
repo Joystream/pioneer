@@ -7,9 +7,12 @@ import { Address } from '@/common/types'
 
 export type Transaction = SubmittableExtrinsic<'rxjs', ISubmittableResult>
 
-export interface UseTransaction {
+export interface Fee {
   transaction?: Transaction
   feeInfo?: { transactionFee: BN; canAfford: boolean }
+}
+
+export interface UseTransaction extends Fee {
   setTransaction: (tx: Transaction | undefined) => void
   setSigner: (signer: Address) => void
 }
