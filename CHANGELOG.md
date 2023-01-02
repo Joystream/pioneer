@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 
+
+### Added
+- Description in the forum category headers.
+- Creation date/time on forum thread.
+- Whitelist on proposal "closed" discussions.
+- Invitation lock tooltip.
+
+### Changed
+- Renames "Own Stake" to "My Stake".
+
+### Removed
+- Language tab from settings.
+
+### Fixed
+- The edit membership about section.
+- Stake info on announce candidacy sign-in modal.
+- Back button on WG openings.
+- Set Membership Lead Invitation Quota Proposal preview.
+- Blockheight info labels (in the settings).
+- Replaced/Removed some more lorem ipsum.
+- Better prevent localstorage overwrites from the forum tread watchlist.
+- The hire limit on single postion openings.
+- The temporary "Insufficient balance to cover fee" message on the vesting claim modal.
+
 ## [1.0.0] - 2022-12-16
 
 ### Added
@@ -40,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v1.0.0...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/Joystream/pioneer/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/Joystream/pioneer/compare/v0.1.1...v1.0.0
 [0.1.1]: https://github.com/Joystream/pioneer/commits/v0.1.1
