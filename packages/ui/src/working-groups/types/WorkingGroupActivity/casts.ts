@@ -93,7 +93,7 @@ export const asBudgetSpendingActivity: GroupActivityCast<
   eventType: fragment.__typename,
   ...asBaseActivity(fragment),
   groupName: fragment.group.name,
-  amount: new BN(fragment.amount),
+  amount: new BN(fragment.amount ?? 0),
 })
 
 type StakeChangedFragment = StakeDecreasedEventFieldsFragment | StakeIncreasedEventFieldsFragment
@@ -104,7 +104,7 @@ export const asStakeChangedActivity: GroupActivityCast<StakeChangedFragment, Sta
   eventType: fragment.__typename,
   ...asBaseActivity(fragment),
   member: asMemberDisplayFields(fragment.worker.membership),
-  amount: new BN(fragment.amount),
+  amount: new BN(fragment.amount  ?? 0),
 })
 
 export const asStakeSlashedActivity: GroupActivityCast<StakeSlashedEventFieldsFragment, StakeSlashedActivity> = (
@@ -200,7 +200,7 @@ export const asBudgetSetActivity: GroupActivityCast<BudgetSetEventFieldsFragment
   eventType: fragment.__typename,
   ...asBaseActivity(fragment),
   groupName: asWorkingGroupName(fragment.group.name),
-  newBudget: new BN(fragment.newBudget),
+  newBudget: new BN(fragment.newBudget ?? 0),
 })
 
 export const asWorkerTerminatedActivity: GroupActivityCast<
