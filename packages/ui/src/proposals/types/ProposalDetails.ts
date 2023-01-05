@@ -219,7 +219,7 @@ const asUpdateWorkingGroupBudget: DetailsCast<'UpdateWorkingGroupBudgetProposalD
   fragment
 ): UpdateGroupBudgetDetails => ({
   type: 'updateWorkingGroupBudget',
-  amount: new BN(fragment.amount),
+  amount: new BN(String(fragment.amount)),
   group: {
     id: fragment.group?.id as GroupIdName,
     name: asWorkingGroupName(fragment.group?.name ?? 'Unknown'),
