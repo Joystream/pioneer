@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.1.0] - 
+## [1.1.0] - 2023-01-06
 
 ### Added
 - Description in the forum category headers.
@@ -31,6 +31,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Better prevent localstorage overwrites from the forum tread watchlist.
 - The hire limit on single postion openings.
 - The temporary "Insufficient balance to cover fee" message on the vesting claim modal.
+
+## [1.0.1] - 2023-01-05
+
+### Fixed
+- Proposal view crashing due to high amounts of JOY
 
 ## [1.0.0] - 2022-12-16
 
@@ -66,6 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.1] - 2022-12-02
 
 [unreleased]: https://github.com/Joystream/pioneer/compare/v1.1.0...HEAD
-[1.1.0]: https://github.com/Joystream/pioneer/compare/v1.0.0...v1.1.0
+[1.1.0]: https://github.com/Joystream/pioneer/compare/v1.0.1...v1.1.0
+[1.0.1]: https://github.com/Joystream/pioneer/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Joystream/pioneer/compare/v0.1.1...v1.0.0
 [0.1.1]: https://github.com/Joystream/pioneer/commits/v0.1.1
