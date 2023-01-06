@@ -9,8 +9,9 @@ interface ForumPageHeaderProps {
   title: React.ReactNode
   children?: React.ReactNode
   buttons?: React.ReactNode
+  description?: React.ReactNode
 }
-export const ForumPageHeader = ({ title, children, buttons }: ForumPageHeaderProps) => {
+export const ForumPageHeader = ({ title, children, buttons, description }: ForumPageHeaderProps) => {
   const [search, setSearch] = useState('')
 
   const { showModal } = useModal()
@@ -28,6 +29,7 @@ export const ForumPageHeader = ({ title, children, buttons }: ForumPageHeaderPro
           {buttons}
         </ButtonsGroup>
       </PageHeaderRow>
+      {description && <PageHeaderRow>{description}</PageHeaderRow>}
       {children}
     </PageHeaderWrapper>
   )

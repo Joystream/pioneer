@@ -11,7 +11,7 @@ import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
-import { Label } from '@/common/components/typography'
+import { Label, TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { useSort } from '@/common/hooks/useSort'
@@ -72,6 +72,11 @@ export const ForumCategory = () => {
             <PreviousPage>
               <PageTitle>{category.title}</PageTitle>
             </PreviousPage>
+          }
+          description={
+            <TextMedium className="category-description" normalWeight inter lighter truncateLines={2}>
+              {category.description}
+            </TextMedium>
           }
           buttons={
             <TransactionButton

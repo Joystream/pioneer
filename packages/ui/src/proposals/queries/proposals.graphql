@@ -160,6 +160,9 @@ fragment ProposalWithDetailsFields on Proposal {
     ... on SetCouncilBudgetIncrementProposalDetails {
       newAmount
     }
+    ... on SetMembershipLeadInvitationQuotaProposalDetails {
+      newLeadInvitationQuota
+    }
     ... on SignalProposalDetails {
       text
     }

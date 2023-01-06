@@ -45,8 +45,6 @@ jest.mock('@/common/hooks/useCurrentBlockNumber', () => ({
   useCurrentBlockNumber: () => mockUseCurrentBlockNumber(),
 }))
 
-
-
 describe('UI: AddNewBountyModal', () => {
   const api = stubApi()
   const showModal = jest.fn()
