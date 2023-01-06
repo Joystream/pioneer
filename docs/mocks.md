@@ -55,6 +55,37 @@ Another way to influence the on-chain state for testing purpose, is to provide a
       <path to the runtime> --tmp --alice --validator --unsafe-ws-external --unsafe-rpc-external --rpc-cors=all --chain packages/ui/dev/chain-spec/data/chain-spec.json --log runtime
       ```
 ### Other helper commands
+
+#### Decoding data from the chain:
+
+This command requires two arguments:
+- `-t`, `--type`: The expected type of the value to decode.
+- `-v`, `--value`: The hash or the string representation of the `Uint8Array` to decode.
+
+With `-t text` this command will simply decode encoded plaint text values. E.g:
+```shell
+> yarn workspace @joystream/pioneer run helpers decode -t text -v 0x4c6f72656d20697370756d
+Lorem ispum
+```
+
+Otherwhise the type options should refer to a metadata class. It can be the name of the class:
+```shell
+> yarn workspace @joystream/pioneer run helpers decode -t CouncilCandidacyNoteMetadata -v 0x0a0a616...
+CouncilCandidacyNoteMetadata {
+  ...
+}
+```
+
+Or it can be an alias:
+```shell
+> yarn workspace @joystream/pioneer run helpers decode -t candidacy -v 0x0a0a616...
+CouncilCandidacyNoteMetadata {
+  ...
+}
+```
+The available aliases are: `post`, `opening`, `thread`, `bounty`, `candidacy`, `candidate`, `application`, `member`, and `membership`.
+
+#### Others
 - `yarn workspace @joystream/pioneer run helpers commitment -s <salt> [-a <accountId>] [-o <optionId>] [-c <cycleId>]` - Calculate a commitment
 - `yarn workspace @joystream/pioneer run helpers nextCouncilStage` - Wait until the next council stage start
 

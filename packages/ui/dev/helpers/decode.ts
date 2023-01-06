@@ -20,7 +20,7 @@ const MetaClassAliases = {
 
 const options = {
   type: { type: 'string', alias: 't', example: ['text', 'post', 'ForumPostMetadata'], default: 'text' },
-  value: { type: 'string', alias: 'b', demand: true },
+  value: { type: 'string', alias: 'v', demand: true },
 } as const
 
 type CommandOptions = yargs.InferredOptionTypes<typeof options>
