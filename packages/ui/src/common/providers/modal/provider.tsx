@@ -16,6 +16,7 @@ export const ModalContextProvider = (props: Props) => {
   const [modalData, setModalData] = useState<any>()
   const [currentModalMachine, setCurrentModalMachine] = useState<UnknownMachine<any, any, any> | undefined>(undefined)
   const [isClosing, setIsClosing] = useState<boolean>(false)
+
   const modalApi: UseModal<AnyModalCall> = {
     showModal: (modalCall) => {
       setModal(modalCall.modal)
@@ -26,7 +27,14 @@ export const ModalContextProvider = (props: Props) => {
     },
     hideModal: (showConfirmOrAny = false) => {
       const preferShowConfirm = typeof showConfirmOrAny === 'boolean' ? showConfirmOrAny : false
-      if (!preferShowConfirm || isClosing || !MODAL_WITH_CLOSE_CONFIRMATION.includes((modal ?? '') as ModalNames)) {
+      const [state] = currentModalMachine ?? []
+      if (
+        !preferShowConfirm ||
+        isClosing ||
+        !MODAL_WITH_CLOSE_CONFIRMATION.includes((modal ?? '') as ModalNames) ||
+        state?.matches('success') ||
+        state?.matches('error')
+      ) {
         setModal(null)
         setModalData(null)
         setCurrentModalMachine(undefined)
