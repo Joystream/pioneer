@@ -57,7 +57,7 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
         return 'Hired'
       case 'ApplicationStatusWithdrawn':
         return 'Withdrawn'
-      case 'AppplicationStatusRejected':
+      case 'ApplicationStatusRejected':
         return 'Rejected'
       default:
         return 'Pending'
