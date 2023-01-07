@@ -9,9 +9,10 @@ import { isDefined } from '@/common/utils'
 interface ItemCountProps {
   count?: number
   size?: 's' | 'xs'
+  className?: string
 }
-export const ItemCount: FC<ItemCountProps> = ({ count, children, size = 's' }) => (
-  <ItemCountStyles as={size === 'xs' ? 'h6' : 'h5'} size={size}>
+export const ItemCount: FC<ItemCountProps> = ({ count, children, size = 's', className }) => (
+  <ItemCountStyles as={size === 'xs' ? 'h6' : 'h5'} size={size} className={className}>
     {children}
     {isDefined(count) && (
       <>

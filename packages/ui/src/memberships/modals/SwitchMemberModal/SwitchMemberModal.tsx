@@ -11,6 +11,7 @@ import { BorderRad, Colors, RemoveScrollbar, Transitions } from '@/common/consta
 import { useModal } from '@/common/hooks/useModal'
 import { DisconnectWalletModalCall } from '@/memberships/modals/DisconnectWalletModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal/types'
+import { sortMemberships } from '@/memberships/model/sortMemberships'
 
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '../../components'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
@@ -32,11 +33,11 @@ export const SwitchMemberModal = () => {
   }
 
   const filteredMembers = useMemo(() => {
+    const sortedMembers = sortMemberships(members, 'handle', false)
     if (modalData?.membersToShow) {
-      return members.filter((member) => modalData.membersToShow?.includes(member.id))
+      return sortedMembers.filter((member) => modalData.membersToShow?.includes(member.id))
     }
-
-    return members
+    return sortedMembers
   }, [members, modalData?.membersToShow])
   return (
     <Modal modalSize="xs" modalHeight="s" isDark onClose={hideModal}>
@@ -143,7 +144,7 @@ const MembersList = styled.ul<{ memberIndicatorOffset?: string }>`
   flex-direction: column;
   width: calc(100% + 16px);
   height: 100%;
-  max-height: 192px;
+  max-height: 316px;
   margin-left: -16px;
   padding-left: 16px;
   overflow: hidden;

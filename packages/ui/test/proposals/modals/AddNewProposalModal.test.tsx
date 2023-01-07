@@ -49,6 +49,8 @@ import {
   stubAccounts,
   stubApi,
   stubConst,
+  stubCouncilAndReferendum,
+  stubCouncilConstants,
   stubDefaultBalances,
   stubProposalConstants,
   stubQuery,
@@ -56,7 +58,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockedTransactionFee, mockUseModalCall } from '../../setup'
+import { mockTransactionFee, mockUseModalCall } from '../../setup'
 
 const QUESTION_INPUT = OpeningMetadata.ApplicationFormQuestion.InputType
 
@@ -68,10 +70,6 @@ jest.mock('@/common/components/CKEditor', () => ({
 
 jest.mock('@/common/hooks/useCurrentBlockNumber', () => ({
   useCurrentBlockNumber: () => mockUseCurrentBlockNumber(),
-}))
-
-jest.mock('@/common/hooks/useQueryNodeTransactionStatus', () => ({
-  useQueryNodeTransactionStatus: () => 'confirmed',
 }))
 
 const OPENING_DATA = {
@@ -168,13 +166,15 @@ describe('UI: AddNewProposalModal', () => {
   })
 
   beforeEach(async () => {
-    mockedTransactionFee.feeInfo = { transactionFee: new BN(100), canAfford: true }
+    mockTransactionFee({ feeInfo: { transactionFee: new BN(100), canAfford: true } })
 
     useMyMemberships.members = [getMember('alice'), getMember('bob')]
     useMyMemberships.setActive(getMember('alice'))
 
     stubDefaultBalances()
     stubProposalConstants(api)
+    stubCouncilConstants(api)
+    stubCouncilAndReferendum(api, 'Announcing', 'Inactive')
 
     createProposalTx = stubTransaction(api, 'api.tx.proposalsCodex.createProposal', 25)
     createProposalTxMock = api.api.tx.proposalsCodex.createProposal as unknown as jest.Mock
@@ -1208,7 +1208,7 @@ describe('UI: AddNewProposalModal', () => {
         const requiredStake = 10
         stubProposalConstants(api, { requiredStake })
         stubTransaction(api, 'api.tx.utility.batch', 10000)
-        mockedTransactionFee.feeInfo = { transactionFee: new BN(10000), canAfford: false }
+        mockTransactionFee({ feeInfo: { transactionFee: new BN(10000), canAfford: false } })
 
         await finishStakingAccount()
         await finishProposalDetails()

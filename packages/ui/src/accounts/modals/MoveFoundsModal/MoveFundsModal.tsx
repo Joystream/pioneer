@@ -72,8 +72,9 @@ export const MoveFundsModal = () => {
           <TextMedium>
             {isFeeOriented ? (
               <>
-                Unfortunately, you don’t have enough balance to cover minimal fee. You need at least{' '}
-                <TokenValue value={requiredStake} /> as transferable balance.
+                Unfortunately the account associated with the currently selected membership has insufficient balance to
+                cover the minimal fee. You need at least
+                <TokenValue value={requiredStake} /> transferable balance on this account.
               </>
             ) : (
               <>

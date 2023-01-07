@@ -4,6 +4,8 @@ import { usePopper } from 'react-popper'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { TextMedium } from '@/common/components/typography'
+
 import { BorderRad, Colors, Fonts, Transitions, ZIndex } from '../../constants'
 import { LinkSymbol, LinkSymbolStyle } from '../icons/symbols'
 
@@ -149,19 +151,21 @@ export const Tooltip = ({
                 forBig={forBig}
               >
                 {tooltipTitle && <TooltipPopupTitle>{tooltipTitle}</TooltipPopupTitle>}
-                <TooltipText>{tooltipText}</TooltipText>
-                {tooltipLinkURL &&
-                  (isExternalLink() ? (
-                    <TooltipExternalLink href={tooltipLinkURL} target="_blank">
-                      {tooltipLinkText ?? 'Link'}
-                      <LinkSymbol />
-                    </TooltipExternalLink>
-                  ) : (
-                    <TooltipLink to={tooltipLinkURL} target="_blank">
-                      {tooltipLinkText ?? 'Link'}
-                      <LinkSymbol />
-                    </TooltipLink>
-                  ))}
+                <TooltipText>
+                  {tooltipText}
+                  {tooltipLinkURL &&
+                    (isExternalLink() ? (
+                      <TooltipExternalLink href={tooltipLinkURL} target="_blank">
+                        <TextMedium>{tooltipLinkText ?? 'Link'}</TextMedium>
+                        <LinkSymbol />
+                      </TooltipExternalLink>
+                    ) : (
+                      <TooltipLink to={tooltipLinkURL} target="_blank">
+                        <TextMedium>{tooltipLinkText ?? 'Link'}</TextMedium>
+                        <LinkSymbol />
+                      </TooltipLink>
+                    ))}
+                </TooltipText>
               </TooltipPopupContainer>,
               document.body
             ))}
@@ -281,8 +285,7 @@ export const TooltipLink = styled(Link)<{ to: string; target: string }>`
     width: 12px;
     height: 12px;
 
-    .blackPart,
-    .primaryPart {
+    path {
       fill: ${Colors.Black[300]};
     }
   }
@@ -291,21 +294,23 @@ export const TooltipLink = styled(Link)<{ to: string; target: string }>`
     color: ${Colors.Blue[500]};
 
     ${LinkSymbolStyle} {
-      .blackPart,
-      .primaryPart {
+      path {
         fill: ${Colors.Blue[500]};
       }
     }
   }
 `
 
-export const TooltipExternalLink = styled.a<{ href: string | undefined; target: string }>`
+export const TooltipExternalLink = styled.a<{
+  href: string | undefined
+  target: string
+}>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
+  margin-top: 10px;
   align-items: center;
   width: fit-content;
-  margin-top: 10px;
   font-size: 12px;
   line-height: 18px;
   font-weight: 400;
@@ -317,8 +322,7 @@ export const TooltipExternalLink = styled.a<{ href: string | undefined; target: 
     width: 12px;
     height: 12px;
 
-    .blackPart,
-    .primaryPart {
+    path {
       fill: ${Colors.Black[300]};
     }
   }
@@ -327,8 +331,7 @@ export const TooltipExternalLink = styled.a<{ href: string | undefined; target: 
     color: ${Colors.Blue[500]};
 
     ${LinkSymbolStyle} {
-      .blackPart,
-      .primaryPart {
+      path {
         fill: ${Colors.Blue[500]};
       }
     }

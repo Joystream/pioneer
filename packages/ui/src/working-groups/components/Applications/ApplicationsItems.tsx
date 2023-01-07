@@ -6,7 +6,7 @@ import { Overflow } from '@/common/constants'
 import { ToggleableItemInfo, ToggleableItemWrap } from '../ToggleableItemStyledComponents'
 
 export const ApplicationItemWrap = styled(ToggleableItemWrap)`
-  grid-template-columns: 1fr 1fr 40px;
+  grid-template-columns: 1fr 1fr auto;
 `
 
 export const ApplicationItemInfo = styled(ToggleableItemInfo)`
