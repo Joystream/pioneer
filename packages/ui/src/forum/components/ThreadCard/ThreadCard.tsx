@@ -46,7 +46,7 @@ export const ThreadCard = ({ thread, className, watchlistButton }: ThreadCardPro
       <ColumnGapBlock justify="space-between" align="center">
         <ColumnGapBlock gap={8}>
           <ReplyIcon />
-          <CountBadge count={thread.visiblePostsCount} />
+          <CountBadge count={thread.visiblePostsCount - 1} />
         </ColumnGapBlock>
         {watchlistButton && <WatchlistButton threadId={thread.id} />}
       </ColumnGapBlock>
