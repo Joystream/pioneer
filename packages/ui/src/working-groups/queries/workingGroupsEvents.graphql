@@ -210,6 +210,8 @@ fragment WorkerRewardAmountUpdatedEvent on WorkerRewardAmountUpdatedEvent {
   id
   createdAt
   newRewardPerBlock
+  openingTitle
+  groupId
 }
 
 fragment WorkerRewardAccountUpdatedEvent on WorkerRewardAccountUpdatedEvent {

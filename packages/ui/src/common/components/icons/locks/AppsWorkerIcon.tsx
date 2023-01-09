@@ -4,7 +4,7 @@ import { Colors } from '@/common/constants'
 
 import { Icon, StyledIcon } from '../Icon'
 
-export const GatewayWorkerIcon = React.memo(({ className }: StyledIcon) => (
+export const AppsWorkerIcon = React.memo(({ className }: StyledIcon) => (
   <Icon
     size="20"
     viewBox="0 0 24 24"
