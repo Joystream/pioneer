@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.2] -
+
+### Added
+- Number on the proposal type selector.
+- Candidacy Staking and Vote Staking tooltips.
+- Role information On the reward activity notification.
+
+### Changed
+- Clarified the stake step tooltip.
+
+### Fixed
+- Moderators were not showing on the forum category pages.
+- Member profile hot update after editing it.
+- The reply counter used to show `-1` when all post were moderated.
+- App sometimes crashing due to empty vesting balances.
+- Typo on the slash stake activity notification.
+
+## [1.1.1] - 2023-01-09
+
+### Fixed
+- Replies to posts were always submitted to the chain without any text.
+
 ## [1.1.0] - 2023-01-06
 
 ### Added
@@ -70,7 +92,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v1.1.0...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/Joystream/pioneer/compare/v1.1.1...v1.2.0
+[1.1.1]: https://github.com/Joystream/pioneer/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/Joystream/pioneer/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/Joystream/pioneer/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/Joystream/pioneer/compare/v0.1.1...v1.0.0
