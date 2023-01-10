@@ -10,7 +10,7 @@ export const ProposalConstantsWrapper = ({ constants }: { constants: ProposalCon
   <RowGapBlock gap={24}>
     <Row>
       <RowGapBlock gap={8}>
-        <h4>Constants</h4>
+        <h4>Parameters</h4>
       </RowGapBlock>
     </Row>
     <Row>
