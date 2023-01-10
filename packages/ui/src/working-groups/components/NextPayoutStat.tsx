@@ -18,6 +18,7 @@ interface Props {
 export const NextPayoutStat = ({ workers }: Props) => {
   const blockNumber = useCurrentBlockNumber()
   const { api } = useApi()
+
   const nextPayout = useMemo(
     () => blockNumber && getNextPayout(workers, blockNumber, api),
     [workers.length, blockNumber?.toNumber()]

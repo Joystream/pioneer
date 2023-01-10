@@ -1,8 +1,9 @@
 import BN from 'bn.js'
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
+import { useApi } from '@/api/hooks/useApi'
 import { ContextMenu, ContextMenuContainer } from '@/common/components/ContextMenu'
 import { List, ListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
@@ -16,6 +17,9 @@ import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 import { Worker } from '@/working-groups/types'
 
+import { useCurrentBlockNumber } from '../../../common/hooks/useCurrentBlockNumber'
+import { getNextPayout } from '../../model/getNextPayout'
+import { BN_ZERO } from '../../../common/constants'
 import { workerRoleTitle } from '../../helpers'
 import {
   OpenItemSummaryColumn,
@@ -31,18 +35,28 @@ export interface RolesListProps {
   workers: Worker[]
 }
 
-export const RolesList = ({ workers }: RolesListProps) => (
-  <List>
-    {workers.map((worker) => (
-      <ListItem key={worker.id} borderless>
-        <RolesListItem worker={worker} />
-      </ListItem>
-    ))}
-  </List>
-)
+export const RolesList = ({ workers }: RolesListProps) => {
+  const blockNumber = useCurrentBlockNumber()
+  const { api } = useApi()
+  const nextPayout = useMemo(
+    () => blockNumber && getNextPayout(workers, blockNumber, api),
+    [workers.length, blockNumber?.toNumber()]
+  )
 
-const RolesListItem = ({ worker }: { worker: Worker }) => {
+  return (
+    <List>
+      {workers.map((worker) => (
+        <ListItem key={worker.id} borderless>
+          <RolesListItem worker={worker} payout={nextPayout} />
+        </ListItem>
+      ))}
+    </List>
+  )
+}
+
+const RolesListItem = ({ worker, payout }: { worker: Worker; payout: BN|undefined }) => {
   const { showModal } = useModal()
+
   const changeRewardCallback = useCallback(() => {
     showModal<ChangeAccountModalCall>({
       modal: 'ChangeAccountModal',
@@ -80,13 +94,13 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={worker.rewardPerBlock} />
+            <TokenValue value={earnings} />
           </TextInlineBig>
           <ToggleableSubscriptionWide>Earned total</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={earnings} />
+            <TokenValue value={payout} />
           </TextInlineBig>
           <ToggleableSubscriptionWide>Next payment in</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
