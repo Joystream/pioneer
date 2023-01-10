@@ -2,9 +2,9 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
-import { TokenValueStat } from '@/common/components/statistics'//
-import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'//
-import { useOpening } from '@/working-groups/hooks/useOpening'//
+import { TokenValueStat } from '@/common/components/statistics'
+import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
+import { useOpening } from '@/working-groups/hooks/useOpening'
 import { urlParamToOpeningId } from '@/working-groups/model/workingGroupName'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
