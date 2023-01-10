@@ -61,7 +61,6 @@ export type MemberWithDetailsFieldsFragment = {
     avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
   }
   entry:
-    | { __typename: 'MembershipEntryFoundingMemberCreated' }
     | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
     | { __typename: 'MembershipEntryGifted' }
     | {
@@ -73,6 +72,7 @@ export type MemberWithDetailsFieldsFragment = {
           network: Types.Network
         } | null
       }
+    | { __typename: 'MembershipEntryMemberCreated' }
     | {
         __typename: 'MembershipEntryPaid'
         membershipBoughtEvent?: {
@@ -241,7 +241,6 @@ export type GetMembersWithDetailsQuery = {
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     entry:
-      | { __typename: 'MembershipEntryFoundingMemberCreated' }
       | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
       | { __typename: 'MembershipEntryGifted' }
       | {
@@ -253,6 +252,7 @@ export type GetMembersWithDetailsQuery = {
             network: Types.Network
           } | null
         }
+      | { __typename: 'MembershipEntryMemberCreated' }
       | {
           __typename: 'MembershipEntryPaid'
           membershipBoughtEvent?: {
@@ -384,7 +384,6 @@ export type GetMemberQuery = {
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     entry:
-      | { __typename: 'MembershipEntryFoundingMemberCreated' }
       | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
       | { __typename: 'MembershipEntryGifted' }
       | {
@@ -396,6 +395,7 @@ export type GetMemberQuery = {
             network: Types.Network
           } | null
         }
+      | { __typename: 'MembershipEntryMemberCreated' }
       | {
           __typename: 'MembershipEntryPaid'
           membershipBoughtEvent?: {
