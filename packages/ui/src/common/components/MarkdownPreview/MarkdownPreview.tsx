@@ -81,7 +81,7 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
       <ReactMarkdown rehypePlugins={rehypePlugins} remarkPlugins={[remarkGfm]} components={components} rawSourcePos>
         {stripBackslashes(markdown)}
       </ReactMarkdown>
-      <div>{appendAfter && <p>{append}</p>}</div>
+      {/* {appendAfter && <p>{append}</p>} */}
     </div>
   )
 }
