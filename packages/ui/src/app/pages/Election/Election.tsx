@@ -26,6 +26,7 @@ import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { Election as ElectionType } from '@/council/types/Election'
 
+import { ElectionPeriod } from './components/ElectionPeriod'
 import { ElectionTabs } from './components/ElectionTabs'
 
 const displayElectionRound = (election: ElectionType | undefined): string => {
@@ -108,6 +109,15 @@ export const Election = () => {
           <TextHuge id="election-round-value" bold>
             {displayElectionRound(election)}
           </TextHuge>
+        </StatisticItem>
+      </Statistics>
+      <Statistics>
+        <StatisticItem
+          title="Election Period"
+          tooltipText="This shows the Election period detailed information"
+          size="s"
+        >
+          <ElectionPeriod />
         </StatisticItem>
       </Statistics>
       {electionStage === 'announcing' && (
