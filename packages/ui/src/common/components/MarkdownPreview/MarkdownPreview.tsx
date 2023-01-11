@@ -41,10 +41,10 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
       endsWithP.current && sourcePosition?.end?.offset === markdown.length
 
     const p: Components['p'] = ({ children, sourcePosition }) => (
-      <p>
+      <div>
         {children}
-        {shouldAppend(sourcePosition) && <div> {append}</div>}
-      </p>
+        {shouldAppend(sourcePosition) && <p> {append}</p>}
+      </div>
     )
 
     return {
