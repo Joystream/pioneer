@@ -33,7 +33,7 @@ export const ModalContextProvider = (props: Props) => {
         isClosing ||
         !MODAL_WITH_CLOSE_CONFIRMATION.includes((modal ?? '') as ModalNames) ||
         state?.matches('success') ||
-        state?.matches('error')
+        state?.matches('beforeTransaction')
       ) {
         setModal(null)
         setModalData(null)
