@@ -106,7 +106,7 @@ export const SideBar = () => {
                 to={`https://polkadot.js.org/apps/?rpc=${endpoints.nodeRpcEndpoint}#/explorer`}
               >
                 Explorer
-                <LinkSymbol color={Colors.Black[500]} />
+                <LinkSymbol color={Colors.Black[500]} className="sidebarLinkSymbol" />
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
@@ -197,4 +197,7 @@ const NavigationLinksItem = styled.li`
   display: flex;
   height: fit-content;
   width: 100%;
+  .sidebarLinkSymbol {
+    grid-column: 6 !important;
+  }
 `
