@@ -42,6 +42,9 @@ fragment ForumCategoryWithDetailsFields on ForumCategory {
   forumcategoryparent {
     ...ForumCategoryFields
   }
+  moderators {
+    ...ForumModeratorFields
+  }
 }
 
 fragment ForumModeratorFields on Worker {
@@ -164,7 +167,7 @@ fragment ForumPostWithoutReplyFields on ForumPost {
   }
   threadId
   thread {
-     categoryId
+    categoryId
   }
 }
 

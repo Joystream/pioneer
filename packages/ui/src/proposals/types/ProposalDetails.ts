@@ -1,6 +1,7 @@
 import BN from 'bn.js'
 
 import { KeysOfUnion } from '@/common/types/helpers'
+import { asBN } from '@/common/utils'
 import { asWorkingGroupName, GroupIdName } from '@/working-groups/types'
 
 import { asMember, Member } from '../../memberships/types'
@@ -159,7 +160,7 @@ const asFundingRequest: DetailsCast<'FundingRequestProposalDetails'> = (fragment
     type: 'fundingRequest',
     destinations: fragment.destinationsList?.destinations.map((d) => ({
       account: d.account,
-      amount: new BN(d.amount),
+      amount: asBN(d.amount),
     })),
   }
 }
@@ -181,9 +182,9 @@ const asCreateLeadOpening: DetailsCast<'CreateWorkingGroupLeadOpeningProposalDet
   return {
     type: 'createWorkingGroupLeadOpening',
     group,
-    stakeAmount: new BN(fragment.stakeAmount),
-    unstakingPeriod: new BN(fragment.unstakingPeriod),
-    rewardPerBlock: new BN(fragment.rewardPerBlock),
+    stakeAmount: asBN(fragment.stakeAmount),
+    unstakingPeriod: asBN(fragment.unstakingPeriod),
+    rewardPerBlock: asBN(fragment.rewardPerBlock),
     openingDescription: fragment.metadata?.description ?? undefined,
   }
 }
@@ -197,7 +198,7 @@ const asLeadStakeDetails = (
 ) => {
   return {
     ...asWorkerDetails(fragment.lead),
-    amount: new BN(fragment.amount),
+    amount: asBN(fragment.amount),
   }
 }
 
@@ -222,7 +223,7 @@ const asUpdateWorkingGroupBudget: DetailsCast<'UpdateWorkingGroupBudgetProposalD
   fragment
 ): UpdateGroupBudgetDetails => ({
   type: 'updateWorkingGroupBudget',
-  amount: new BN(fragment.amount),
+  amount: asBN(fragment.amount ?? 0),
   group: {
     id: fragment.group?.id as GroupIdName,
     name: asWorkingGroupName(fragment.group?.name ?? 'Unknown'),
@@ -255,7 +256,7 @@ const asSetWorkingGroupLeadReward: DetailsCast<'SetWorkingGroupLeadRewardProposa
 ): SetWorkingGroupLeadRewardDetails => ({
   type: 'setWorkingGroupLeadReward',
   ...asWorkerDetails(fragment.lead),
-  amount: new BN(fragment.newRewardPerBlock),
+  amount: asBN(fragment.newRewardPerBlock),
 })
 
 const asTerminateWorkingGroupLead: DetailsCast<'TerminateWorkingGroupLeadProposalDetails'> = (
@@ -263,21 +264,21 @@ const asTerminateWorkingGroupLead: DetailsCast<'TerminateWorkingGroupLeadProposa
 ): TerminateWorkingGroupLeadDetails => ({
   type: 'terminateWorkingGroupLead',
   ...asWorkerDetails(fragment.lead),
-  amount: new BN(fragment.slashingAmount ?? 0),
+  amount: asBN(fragment.slashingAmount ?? 0),
 })
 
 const asSetMembershipPrice: DetailsCast<'SetMembershipPriceProposalDetails'> = (
   fragment
 ): SetMembershipPriceDetails => ({
   type: 'setMembershipPrice',
-  amount: new BN(fragment.newPrice),
+  amount: asBN(fragment.newPrice),
 })
 
 const asSetCouncilBudgetIncrement: DetailsCast<'SetCouncilBudgetIncrementProposalDetails'> = (
   fragment
 ): SetCouncilBudgetIncrementDetails => ({
   type: 'setCouncilBudgetIncrement',
-  amount: new BN(fragment.newAmount),
+  amount: asBN(fragment.newAmount),
 })
 
 const asSignal: DetailsCast<'SignalProposalDetails'> = (fragment): SignalDetails => ({
@@ -295,7 +296,7 @@ const asCancelGroupOpening: DetailsCast<'CancelWorkingGroupLeadOpeningProposalDe
 
 const asSetReferralCut: DetailsCast<'SetReferralCutProposalDetails'> = (fragment): SetReferralCutDetails => ({
   type: 'setReferralCut',
-  amount: new BN(fragment.newReferralCut),
+  amount: asBN(fragment.newReferralCut),
 })
 
 const asSetMembershipLeadInvitationQuota: DetailsCast<'SetMembershipLeadInvitationQuotaProposalDetails'> = (
@@ -309,7 +310,7 @@ const asSetInitialInvitationBalance: DetailsCast<'SetInitialInvitationBalancePro
   fragment
 ): SetInitialInvitationBalanceDetails => ({
   type: 'setInitialInvitationBalance',
-  amount: new BN(fragment.newInitialInvitationBalance),
+  amount: asBN(fragment.newInitialInvitationBalance),
 })
 
 const asSetInitialInvitationCount: DetailsCast<'SetInitialInvitationCountProposalDetails'> = (
@@ -323,7 +324,7 @@ const asSetCouncilorReward: DetailsCast<'SetCouncilorRewardProposalDetails'> = (
   fragment
 ): SetCouncilorRewardDetails => ({
   type: 'setCouncilorReward',
-  amount: new BN(fragment.newRewardPerBlock),
+  amount: asBN(fragment.newRewardPerBlock),
 })
 
 const asVeto: DetailsCast<'VetoProposalDetails'> = (fragment): VetoDetails => ({

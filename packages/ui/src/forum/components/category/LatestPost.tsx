@@ -2,7 +2,6 @@ import React, { memo } from 'react'
 import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { Loading } from '@/common/components/Loading'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineExtraSmall, TextMedium } from '@/common/components/typography'
 import { Colors, Fonts, Overflow, Transitions } from '@/common/constants'
@@ -14,7 +13,7 @@ import { MemberInfo } from '@/memberships/components'
 import { CategoryItemFieldProps } from './CategoryListItem'
 
 export const LatestPost = memo(({ categoryId }: CategoryItemFieldProps) => {
-  const { post, thread, isLoading } = useCategoryLatestPost(categoryId)
+  const { post, thread } = useCategoryLatestPost(categoryId)
 
   if (!post) return <TextMedium>-</TextMedium>
 

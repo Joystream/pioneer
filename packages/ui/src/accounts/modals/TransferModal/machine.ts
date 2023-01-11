@@ -30,6 +30,7 @@ type TransferState =
   | { value: 'prepare'; context: EmptyObject }
   | { value: 'transaction'; context: Required<TransferDetailsContext> }
   | { value: 'success'; context: Required<TransferContext> }
+  | { value: 'canceled'; context: Required<TransferContext> }
   | { value: 'error'; context: Required<TransferContext> }
 
 type TransactionSuccessEvent = {

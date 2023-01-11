@@ -9,6 +9,7 @@ import { BountyRoutes } from '@/bounty/constants'
 import { Arrow } from '@/common/components/icons'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { PolkadotSymbol } from '@/common/components/icons/symbols/PolkadotSymbol'
+import { AppsIcon } from '@/common/components/page/Sidebar/LinksIcons/AppsIcon'
 import { BandwidthIcon } from '@/common/components/page/Sidebar/LinksIcons/BandwidthIcon'
 import { BountyIcon } from '@/common/components/page/Sidebar/LinksIcons/BountyIcon'
 import { ConstitutionIcon } from '@/common/components/page/Sidebar/LinksIcons/ConstitutionIcon'
@@ -17,7 +18,6 @@ import { CouncilIcon } from '@/common/components/page/Sidebar/LinksIcons/Council
 import { ElectionIcon } from '@/common/components/page/Sidebar/LinksIcons/ElectionIcon'
 import { FinancialsIcon } from '@/common/components/page/Sidebar/LinksIcons/FinancialsIcon'
 import { ForumIcon } from '@/common/components/page/Sidebar/LinksIcons/ForumIcon'
-import { GatewaysIcon } from '@/common/components/page/Sidebar/LinksIcons/GatewaysIcon'
 import { MembersIcon } from '@/common/components/page/Sidebar/LinksIcons/MembersIcon'
 import { MyProfileIcon } from '@/common/components/page/Sidebar/LinksIcons/MyProfileIcon'
 import { ProposalsIcon } from '@/common/components/page/Sidebar/LinksIcons/ProposalsIcon'
@@ -149,7 +149,7 @@ export const SideBar = () => {
                     </NavigationLink>
                   </NavigationLinksItem>
                   <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" icon={<GatewaysIcon />} disabled>
+                    <NavigationLink to="/inexisting" icon={<AppsIcon />} disabled>
                       Apps
                     </NavigationLink>
                   </NavigationLinksItem>

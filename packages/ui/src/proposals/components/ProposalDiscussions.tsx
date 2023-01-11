@@ -93,7 +93,7 @@ export const ProposalDiscussions = ({ thread, proposalId }: Props) => {
           </Tooltip>
         </Badge>
       </DiscussionsHeader>
-      {discussionPosts.sort(Comparator<ForumPost>(true, 'createdAtBlock').string).map((post, index) => {
+      {discussionPosts.sort(Comparator<ForumPost>(true, 'createdAt').string).map((post, index) => {
         return (
           <PostListItem
             isFirstItem={index === 0}

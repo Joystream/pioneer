@@ -52,10 +52,9 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
             validation={errorChecker('account') ? 'invalid' : undefined}
             tooltipText={
               <>
-                When losing an election, your candidacy lock is removed and your steak becomes immediately recoverable.
-                If you win and get elected, your candidacy lock will be automatically removed, and a council specific
-                lock will be applied, with the same amount locked. When that council is replaced, this lock is removed,
-                if you did not get re-elected
+                When loosing an election the candidacy lock is released and your stake becomes immediately recoverable.
+                If elected the lock is automatically replaced with a council specific lock of the same amount. The
+                councilor lock is released with the next successful election should you not get re-elected.
               </>
             }
           >

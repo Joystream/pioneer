@@ -8,6 +8,7 @@ import { AnyObjectSchema, ValidationError } from 'yup'
 import Reference from 'yup/lib/Reference'
 import { AnyObject } from 'yup/lib/types'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { Loading } from '@/common/components/Loading'
 import { formatJoyValue } from '@/common/model/formatters'
 
@@ -152,7 +153,7 @@ export const validStakingAmount = (): Yup.TestConfig<any, AnyObject> => ({
     const minStake: BN | undefined = this.options.context?.minStake
     if (minStake && minStake.gt(stake)) {
       return this.createError({
-        message: 'Minimal stake amount is ${min} tJOY',
+        message: 'Minimal stake amount is ${min} ' + CurrencyName.integerValue,
         params: { min: formatJoyValue(minStake) },
       })
     }

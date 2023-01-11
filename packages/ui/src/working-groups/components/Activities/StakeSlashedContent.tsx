@@ -14,7 +14,7 @@ export const StakeSlashedContent: ActivityContentComponent<StakeSlashedActivity>
   if (isOwn) {
     return (
       <>
-        Your stake have been slashed by the {groupName} lead.{' '}
+        Your stake has been slashed by the {groupName} lead.{' '}
         <ButtonLink size="small" inline onClick={() => setStakeSlashedModalOpen(!isStakeSlashedModalOpen)}>
           Read more
         </ButtonLink>

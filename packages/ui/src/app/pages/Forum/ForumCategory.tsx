@@ -88,11 +88,12 @@ export const ForumCategory = () => {
             </TransactionButton>
           }
         >
-          {category.moderators?.length > 0 && (
-            <ModeratorsContainer>
-              Moderators: <MemberStack members={moderatorsSummary(category.moderators)} max={5} />
-            </ModeratorsContainer>
-          )}
+          <ModeratorsContainer>
+            Moderators:
+            {category.moderators?.length > 0 && (
+              <MemberStack members={moderatorsSummary(category.moderators)} max={5} />
+            )}
+          </ModeratorsContainer>
         </ForumPageHeader>
       }
       main={
