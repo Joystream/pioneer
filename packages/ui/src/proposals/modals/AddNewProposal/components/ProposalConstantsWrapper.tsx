@@ -16,67 +16,51 @@ export const ProposalConstantsWrapper = ({ constants }: { constants: ProposalCon
     <Row>
       <RowGapBlock gap={4}>
         <Label>Voting period</Label>
-        <TextMedium lighter>
-          <TextInlineMedium dark>{formatTokenValue(constants?.votingPeriod)}</TextInlineMedium> blocks
-        </TextMedium>
+        <TextInlineMedium dark>{formatTokenValue(constants?.votingPeriod)} blocks</TextInlineMedium>
       </RowGapBlock>
     </Row>
     <Row>
       <RowGapBlock gap={4}>
         <Label>Gracing limit</Label>
-        <TextMedium lighter>
-          <TextInlineMedium dark>{formatTokenValue(constants?.gracePeriod)}</TextInlineMedium> blocks
-        </TextMedium>
+        <TextInlineMedium dark>{formatTokenValue(constants?.gracePeriod)} blocks</TextInlineMedium>
       </RowGapBlock>
     </Row>
     <Row>
       <RowGapBlock gap={4}>
         <Label>Approval quorum</Label>
-        <TextMedium lighter>
-          <TextInlineMedium dark>{formatTokenValue(constants?.approvalQuorumPercentage)}</TextInlineMedium>%
-        </TextMedium>
+        <TextInlineMedium dark>{formatTokenValue(constants?.approvalQuorumPercentage)}%</TextInlineMedium>
       </RowGapBlock>
     </Row>
     <Row>
       <RowGapBlock gap={4}>
         <Label>Approval threshold</Label>
-        <TextMedium lighter>
-          <TextInlineMedium dark>{formatTokenValue(constants?.approvalThresholdPercentage)}</TextInlineMedium>%
-        </TextMedium>
+        <TextInlineMedium dark>{formatTokenValue(constants?.approvalThresholdPercentage)}%</TextInlineMedium>
       </RowGapBlock>
     </Row>
     <Row>
       <RowGapBlock gap={4}>
         <Label>Slashing quorum</Label>
-        <TextMedium lighter>
-          <TextInlineMedium dark>{formatTokenValue(constants?.slashingQuorumPercentage)}</TextInlineMedium>%
-        </TextMedium>
+        <TextInlineMedium dark>{formatTokenValue(constants?.slashingQuorumPercentage)}%</TextInlineMedium>
       </RowGapBlock>
     </Row>
     <Row>
       <RowGapBlock gap={4}>
         <Label>Slashing threshold</Label>
-        <TextMedium lighter>
-          <TextInlineMedium dark>{formatTokenValue(constants?.slashingThresholdPercentage)}</TextInlineMedium>%
-        </TextMedium>
+        <TextInlineMedium dark>{formatTokenValue(constants?.slashingThresholdPercentage)}%</TextInlineMedium>
       </RowGapBlock>
     </Row>
     <Row>
       <RowGapBlock gap={4}>
         <Label>Required Stake</Label>
-        <TextMedium lighter>
-          <TextInlineMedium dark>
-            <TokenValue value={constants?.requiredStake} />
-          </TextInlineMedium>
-        </TextMedium>
+        <TextInlineMedium dark>
+          <TokenValue value={constants?.requiredStake} />
+        </TextInlineMedium>
       </RowGapBlock>
     </Row>
     <Row>
       <RowGapBlock gap={4}>
         <Label>Constitutionality</Label>
-        <TextMedium lighter>
-          <TextInlineMedium dark>{formatTokenValue(constants?.constitutionality)}</TextInlineMedium>
-        </TextMedium>
+        <TextInlineMedium dark>{formatTokenValue(constants?.constitutionality)}</TextInlineMedium>
       </RowGapBlock>
     </Row>
   </RowGapBlock>
