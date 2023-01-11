@@ -56,7 +56,7 @@ export const ProposalPreview = () => {
   const votingRounds = useVotingRounds(proposal?.votes, proposal?.proposalStatusUpdates)
   const [currentVotingRound, setVotingRound] = useState(0)
 
-  const { opening } = useOpening(urlParamToOpeningId(id))
+  var { opening } = useOpening(urlParamToOpeningId(id))
   const rewardPeriod = useRewardPeriod(opening?.groupId)
 
   const votes = votingRounds[currentVotingRound] ?? votingRounds[0]
@@ -94,7 +94,7 @@ export const ProposalPreview = () => {
   const myVote = proposal?.votes.find((vote) => vote.voter.id === active?.id && vote.votingRound === currentVotingRound)
   const myVoteStatus = myVote?.voteKind
 
-  if (!proposal || !votes ) {
+  if (!proposal || !votes || !opening) {
     if (!proposal && !isLoading) {
       history.replace('/404')
     }
@@ -151,6 +151,7 @@ export const ProposalPreview = () => {
               >
                 {camelCaseToText(proposal.status)}
               </BadgeStatus>
+
               <TextMedium>
                 <TextInlineMedium lighter>ID: </TextInlineMedium>
                 <TextInlineMedium bold>{proposal.id}</TextInlineMedium>{' '}
