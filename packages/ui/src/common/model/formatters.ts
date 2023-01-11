@@ -88,7 +88,7 @@ interface JOYFormatOption {
 const defaultJOYFormatOption = {
   precision: 10,
   formatInt: formatTokenValue,
-  formatDec: (value: BN, length: number) => String(value).padStart(length, '0').replace(/0+$/, ''),
+  formatDec: (value: BN, length: number) => String(value).padStart(length, '0'),
 }
 export const formatJoyValue = (
   value: BN,
@@ -99,14 +99,14 @@ export const formatJoyValue = (
   }: JOYFormatOption = defaultJOYFormatOption
 ) => {
   if (value.isZero()) {
-    return '0'
+    return '0.000'
   }
 
   const safePrecision = Math.min(JOY_DECIMAL_PLACES, precision)
   const roundedValue = value.abs().divRound(powerOf10(JOY_DECIMAL_PLACES - safePrecision))
 
   if (roundedValue.isZero()) {
-    return `${value.isNeg() ? '> -' : '< '}${Math.pow(10, -safePrecision)}.000`
+    return `${value.isNeg() ? '> -' : '< '}${Math.pow(10, -safePrecision)}`
   }
 
   const sign = value.isNeg() ? '-' : ''
