@@ -56,8 +56,8 @@ export const ProposalPreview = () => {
   const votingRounds = useVotingRounds(proposal?.votes, proposal?.proposalStatusUpdates)
   const [currentVotingRound, setVotingRound] = useState(0)
 
-  const { opening } = useOpening(urlParamToOpeningId(id))//
-  const rewardPeriod = useRewardPeriod(opening?.groupId)//
+  const { opening } = useOpening(urlParamToOpeningId(id))
+  const rewardPeriod = useRewardPeriod(opening?.groupId)
 
   const votes = votingRounds[currentVotingRound] ?? votingRounds[0]
   useRefetchQueries({ interval: MILLISECONDS_PER_BLOCK, include: ['getProposal', 'GetProposalVotes'] }, [proposal])
@@ -94,7 +94,7 @@ export const ProposalPreview = () => {
   const myVote = proposal?.votes.find((vote) => vote.voter.id === active?.id && vote.votingRound === currentVotingRound)
   const myVoteStatus = myVote?.voteKind
 
-  if (!proposal || !votes || !opening) {
+  if (!proposal || !votes ) {
     if (!proposal && !isLoading) {
       history.replace('/404')
     }
