@@ -16,8 +16,8 @@ interface Props {
   onChange: (option: WorkingGroupOpening) => void
 }
 
-export const OptionsListWorkingGroupOpening = React.memo(({ allOpenings, onChange, ...props }: Props) => (
-  <OptionsListComponent {...props}>
+export const OptionsListWorkingGroupOpening = React.memo(({ allOpenings, onChange }: Props) => (
+  <OptionsListComponent>
     {allOpenings.length ? (
       allOpenings.map((option) => (
         <StyledOption key={option.id} onClick={() => onChange(option)}>

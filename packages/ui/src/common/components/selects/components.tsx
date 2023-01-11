@@ -22,11 +22,12 @@ interface Props {
   children: ReactNode
   onClick: () => void
   disabled?: boolean
+  className?: string
 }
 
-export const Option = ({ children, onClick, disabled, ...props }: Props) => (
+export const Option = ({ children, onClick, disabled, className }: Props) => (
   <OptionComponentContainer onClick={onClick} disabled={disabled}>
-    <OptionComponent disabled={disabled} {...props}>
+    <OptionComponent disabled={disabled} className={className}>
       {children}
     </OptionComponent>
   </OptionComponentContainer>
