@@ -6,7 +6,7 @@ import { asForumThread, ForumThread } from '@/forum/types'
 import { FORUM_WATCHLIST } from '../constant'
 
 interface UseMyThreadsProps {
-  page: number
+  page?: number
   threadsPerPage?: number
 }
 
@@ -17,7 +17,7 @@ interface UseMyThreads {
   pageCount?: number
 }
 
-export const useWatchlistedThreads = ({ page, threadsPerPage = 5 }: UseMyThreadsProps): UseMyThreads => {
+export const useWatchlistedThreads = ({ page = 1, threadsPerPage = 5 }: UseMyThreadsProps): UseMyThreads => {
   const [watchlist] = useLocalStorage<string[]>(FORUM_WATCHLIST)
 
   const status_json = {
@@ -25,8 +25,8 @@ export const useWatchlistedThreads = ({ page, threadsPerPage = 5 }: UseMyThreads
   }
   const variables = {
     where: { id_in: watchlist ?? [], status_json },
-    limit: threadsPerPage,
-    offset: (page - 1) * threadsPerPage,
+    limit: threadsPerPage === -1 ? watchlist?.length || 5 : threadsPerPage,
+    offset: threadsPerPage === -1 ? 0 : (page - 1) * threadsPerPage,
     orderBy: [ForumThreadOrderByInput.IsStickyDesc, ForumThreadOrderByInput.UpdatedAtDesc],
   }
   const { loading: loadingPosts, data: threadsData } = useGetForumThreadsQuery({ variables })
