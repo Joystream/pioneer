@@ -74,7 +74,7 @@ export const ForumCategory = () => {
             </PreviousPage>
           }
           description={
-            <TextMedium className="category-description" normalWeight inter lighter truncateLines={2}>
+            <TextMedium className="category-description" normalWeight inter lighter>
               {category.description}
             </TextMedium>
           }
