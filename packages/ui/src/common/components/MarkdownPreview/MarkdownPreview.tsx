@@ -41,10 +41,10 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
       endsWithP.current && sourcePosition?.end?.offset === markdown.length
 
     const p: Components['p'] = ({ children, sourcePosition }) => (
-      <div>
+      <p>
         {children}
         {shouldAppend(sourcePosition) && <p> {append}</p>}
-      </div>
+      </p>
     )
 
     return {
@@ -79,7 +79,7 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
     <div className="markdown-preview">
       <MarkdownPreviewStyles {...styleProps} />
       <ReactMarkdown rehypePlugins={rehypePlugins} remarkPlugins={[remarkGfm]} components={components} rawSourcePos>
-        {stripBackslashes(markdown)}
+        {/* {stripBackslashes(markdown)} */}
       </ReactMarkdown>
       {appendAfter && <p>{append}</p>}
     </div>
