@@ -52,7 +52,7 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
             validation={errorChecker('account') ? 'invalid' : undefined}
             tooltipText="The account holding the stake for the candidate. After announcing the staking account will have locked up REQUIRED_CANDIDACY_STAKE under the relevant council lock. If the candidacy fails - either because the election cycle fails or the candidate receives too few votes, then this lock can be removed by the candidate, otherwise it remains on into the councilorship. Be aware that this stake contributed towards the candidacy does not contribute towards the final election outcome, hence exceeding the minimum bound would only be done for signaling or other social purposes."
             tooltipLinkText="Learn more"
-            tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council#candidacy"
+            tooltipLinkURL="https://handbook.joystream.org/system/council#candidacy"
           >
             <SelectStakingAccount name="staking.account" minBalance={minStake} lockType="Council Candidate" />
           </InputComponent>
