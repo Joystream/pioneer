@@ -59,9 +59,7 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
             {children}
           </Mention>
         ) : (
-          <a style={{ overflowWrap: 'break-word' }} href={href}>
-            {children}
-          </a>
+          <a href={href}>{children}</a>
         )
       },
       img: (props) => (
@@ -79,9 +77,7 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
     <div className="markdown-preview">
       <MarkdownPreviewStyles {...styleProps} />
       <ReactMarkdown rehypePlugins={rehypePlugins} remarkPlugins={[remarkGfm]} components={components} rawSourcePos>
-        {/* {stripBackslashes(markdown)} */}
-        testadfasd as as asdf asdf asdfa sdfas dfasdfasdf asdfasd fasdfasd asdf asdf asdf asdf asdfasdf asdfasdf asdf
-        asdf asdf asdf asdf asdf asdf asdf asf
+        {stripBackslashes(markdown)}
       </ReactMarkdown>
       {appendAfter && <p>{append}</p>}
     </div>
