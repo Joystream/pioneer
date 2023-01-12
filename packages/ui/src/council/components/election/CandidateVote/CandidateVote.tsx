@@ -87,7 +87,7 @@ export const CandidateVote = ({
                 <Tooltip
                   tooltipText="Vote for your own membership with the same account as used for council candidacy creation counts towards the progress. Please note, this will in a voting lock applied to this account, which may only be withdrawn in the end of the council period if you win the election and released immediately if your candidacy gets outvoted by others. Voting locks are non-rivalrous."
                   tooltipLinkText="Read more"
-                  tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council#vote"
+                  tooltipLinkURL="https://handbook.joystream.org/system/council#vote"
                 >
                   <Subscription>My contributed votes</Subscription>
                 </Tooltip>
