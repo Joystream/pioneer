@@ -59,7 +59,9 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
             {children}
           </Mention>
         ) : (
-          <a href={href}>{children}</a>
+          <a style={{ overflowWrap: 'anywhere' }} href={href}>
+            {children}
+          </a>
         )
       },
       img: (props) => (
