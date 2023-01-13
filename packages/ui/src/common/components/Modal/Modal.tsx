@@ -279,9 +279,8 @@ export const ModalHeaderIcon = styled.div`
 
 export const ScrolledModal = styled(Modal)`
   &${ModalWrap} {
-    max-height: calc(90% - 128px);
+    max-height: calc(100% - 128px);
     grid-template-rows: auto 1fr auto;
-    width: 80%;
     display: fixed;
   }
 `
