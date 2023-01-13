@@ -16,9 +16,7 @@ export const InviteMemberButton = ({ className, children, size }: InviteMemberBu
   const { showModal } = useModal()
   const { isTransactionPending } = useTransactionStatus()
 
-  const openModal = () => {
-    showModal({ modal: 'InviteMemberModal' })
-  }
+  const openModal = () => showModal({ modal: 'InviteMemberModal' })
 
   return (
     <>
