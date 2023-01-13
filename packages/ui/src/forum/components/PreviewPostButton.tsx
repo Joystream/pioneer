@@ -14,8 +14,6 @@ interface Props {
 export const PreviewPostButton = ({ author, postText, replyTo }: Props) => {
   const [previewVisible, setPreviewVisible] = useState(false)
 
-  console.log("postText", postText)
-
   return (
     <>
       <ButtonGhost size="medium" onClick={() => setPreviewVisible(true)}>
