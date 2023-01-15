@@ -31,6 +31,9 @@ import {
   ToggleableSubscriptionWide,
 } from '../ToggleableItemStyledComponents'
 
+import { NumericValue } from '../../../common/components/statistics/NumericValueStat'
+import { TextMedium } from '../../../common/components/typography'
+
 export interface RolesListProps {
   workers: Worker[]
 }
@@ -54,7 +57,7 @@ export const RolesList = ({ workers }: RolesListProps) => {
   )
 }
 
-const RolesListItem = ({ worker, payout }: { worker: Worker; payout: BN|undefined }) => {
+const RolesListItem = ({ worker, payout = BN_ZERO }: { worker: Worker; payout?: BN }) => {
   const { showModal } = useModal()
 
   const changeRewardCallback = useCallback(() => {
@@ -100,7 +103,8 @@ const RolesListItem = ({ worker, payout }: { worker: Worker; payout: BN|undefine
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={payout} />
+            <NumericValue>{payout?.gte(BN_ZERO) ? payout?.toString() + ' blocks' : '–'}</NumericValue>
+            {/* {payout && <TextMedium lighter>({payout && blocksToTime(payout)})</TextMedium>} */}
           </TextInlineBig>
           <ToggleableSubscriptionWide>Next payment in</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
