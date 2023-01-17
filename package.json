@@ -46,7 +46,7 @@
     "@joystream/js@^1.0.0": "patch:@joystream/js@npm%3A1.0.0#./.yarn/patches/@joystream-js-npm-1.0.0-b6846bd440.patch"
   },
   "engines": {
-    "node": ">=14.0.0",
+    "node": ">=14.18.0",
     "yarn": "^1.22.0"
   },
   "lint-staged": {

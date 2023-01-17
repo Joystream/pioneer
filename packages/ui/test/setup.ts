@@ -112,6 +112,17 @@ declare global {
 global.URL.createObjectURL = jest.fn()
 global.URL.revokeObjectURL = jest.fn()
 
+// Monkey patch `blob.arrayBuffer()` because despite what on the doc it appears to not be implemented in node 14
+if (!Blob.prototype.arrayBuffer) {
+  Blob.prototype.arrayBuffer = function (): Promise<ArrayBuffer> {
+    return new Promise<ArrayBuffer>((resolve) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve(reader.result as ArrayBuffer)
+      reader.readAsArrayBuffer(this)
+    })
+  }
+}
+
 expect.extend({
   toBeBN: (received: any, expected: BN) => {
     if (!BN.isBN(received)) {
