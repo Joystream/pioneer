@@ -1,5 +1,4 @@
-import { generateJsonPayloadFromPayoutsVector, generateSerializedPayload } from '@joystream/js/content'
-import * as multihash from 'multihashes'
+import { blake2AsHex } from '@polkadot/util-crypto'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
@@ -13,21 +12,19 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { useObservable } from '@/common/hooks/useObservable'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { channelPayoutsComitmentFromPayload } from '@/proposals/helpers/channelPayoutsComitmentFromPayload'
 import {
   channelPayoutsFileValidator,
   getChannelPayoutsValidatedFiles,
 } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/ChannelIncentivesPayout/helpers'
 
-const MAX_FILE_SIZE = 3 * 1024 * 1024
-
 export const ChannelIncentivesPayout = () => {
   const { api } = useApi()
   const { active } = useMyMemberships()
-  const [isProcessingFile, setIsProcessingFile] = useState<boolean>(false)
   const { setValue, watch } = useFormContext()
-  const [objectCreationParamsSize, objectCreationParamsContent] = watch([
-    'channelIncentivesPayout.objectCreationParamsSize',
-    'channelIncentivesPayout.objectCreationParamsContent',
+  const [payloadSize, payloadHash] = watch([
+    'channelIncentivesPayout.payloadSize',
+    'channelIncentivesPayout.payloadHash',
   ])
   const expectedDataSizeFee = useObservable(() => api?.query.storage.dataObjectPerMegabyteFee(), [api?.isConnected])
   const expectedDataObjectStateBloatBond = useObservable(
@@ -36,32 +33,25 @@ export const ChannelIncentivesPayout = () => {
   )
 
   useEffect(() => {
-    if (active && objectCreationParamsContent && expectedDataSizeFee && expectedDataObjectStateBloatBond) {
-      setValue('channelIncentivesPayout.payload', {
-        uploaderAccount: active.controllerAccount,
-        objectCreationParams: { size_: objectCreationParamsSize, ipfsContentId: objectCreationParamsContent },
-        expectedDataSizeFee: expectedDataSizeFee,
-        expectedDataObjectStateBloatBond: expectedDataObjectStateBloatBond,
-      })
-    }
-  }, [active, objectCreationParamsContent, !expectedDataObjectStateBloatBond && !expectedDataSizeFee])
+    if (!active || !payloadHash || !expectedDataSizeFee || !expectedDataObjectStateBloatBond) return
+    setValue('channelIncentivesPayout.payload', {
+      uploaderAccount: active.controllerAccount,
+      objectCreationParams: { size_: payloadSize, ipfsContentId: payloadHash },
+      expectedDataSizeFee: expectedDataSizeFee,
+      expectedDataObjectStateBloatBond: expectedDataObjectStateBloatBond,
+    })
+  }, [active, payloadHash, !expectedDataObjectStateBloatBond && !expectedDataSizeFee])
 
+  const [isProcessingFile, setIsProcessingFile] = useState<boolean>(false)
   const onDrop = useCallback(
-    async (acceptedFiles: File[]) => {
-      if (acceptedFiles.length) {
-        setIsProcessingFile(true)
-        const json = JSON.parse(await acceptedFiles[0].text())
-        const [commitment, channelPayouts] = generateJsonPayloadFromPayoutsVector(json)
-        const serializedPayload = generateSerializedPayload(channelPayouts)
-        setValue('channelIncentivesPayout.objectCreationParamsSize', serializedPayload.length, { shouldValidate: true })
-        setValue('channelIncentivesPayout.commitment', commitment, { shouldValidate: true })
-        setValue(
-          'channelIncentivesPayout.objectCreationParamsContent',
-          multihash.toB58String(multihash.encode(serializedPayload, 'blake3')),
-          { shouldValidate: true }
-        )
-        setIsProcessingFile(false)
-      }
+    async ([file]: File[]) => {
+      if (!file) return
+      setIsProcessingFile(true)
+      const [commitment, payload] = await Promise.all([channelPayoutsComitmentFromPayload(file), file.arrayBuffer()])
+      setValue('channelIncentivesPayout.payloadSize', payload.byteLength, { shouldValidate: true })
+      setValue('channelIncentivesPayout.payloadHash', blake2AsHex(new Uint8Array(payload)), { shouldValidate: true })
+      setValue('channelIncentivesPayout.commitment', commitment, { shouldValidate: true })
+      setIsProcessingFile(false)
     },
     [setValue]
   )
@@ -75,15 +65,14 @@ export const ChannelIncentivesPayout = () => {
         <FileDropzone
           title="Channel Incentives Payout Payload"
           subtitle="Upload Payout Payload document produced by respective CLI service here"
-          accept="application/json"
+          accept="application/octet-stream"
           maxFiles={1}
-          maxSize={MAX_FILE_SIZE}
           multiple={false}
           getFilesFromEvent={getChannelPayoutsValidatedFiles}
           onDrop={onDrop}
           validator={channelPayoutsFileValidator}
         />
-        {!isProcessingFile && (
+        {isProcessingFile && (
           <Box>
             <Loading text="Processing your file..." withoutMargin />
           </Box>
