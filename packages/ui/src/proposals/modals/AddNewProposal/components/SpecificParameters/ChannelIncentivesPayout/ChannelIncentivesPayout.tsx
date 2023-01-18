@@ -68,9 +68,9 @@ export const ChannelIncentivesPayout = () => {
           accept="application/octet-stream"
           maxFiles={1}
           multiple={false}
-          getFilesFromEvent={getChannelPayoutsValidatedFiles}
           onDrop={onDrop}
-          validator={channelPayoutsFileValidator}
+          // getFilesFromEvent={getChannelPayoutsValidatedFiles}
+          // validator={channelPayoutsFileValidator}
         />
         {isProcessingFile && (
           <Box>
