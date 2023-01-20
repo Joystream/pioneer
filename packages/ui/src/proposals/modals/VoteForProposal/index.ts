@@ -1,2 +1,2 @@
-export { VoteForProposalModalCall } from './types'
+export type { VoteForProposalModalCall } from './types'
 export * from './VoteForProposalModal'
