@@ -1,30 +1,34 @@
-import { blake2AsHex } from '@polkadot/util-crypto'
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { useApi } from '@/api/hooks/useApi'
 import { CurrencyName } from '@/app/constants/currency'
 import { FileDropzone } from '@/common/components/FileDropzone/FileDropzone'
-import { InlineToggleWrap, InputComponent, Label, ToggleCheckbox, TokenInput } from '@/common/components/forms'
+import {
+  InlineToggleWrap,
+  Input,
+  InputComponent,
+  InputNumber,
+  Label,
+  ToggleCheckbox,
+  TokenInput,
+} from '@/common/components/forms'
 import { Loading } from '@/common/components/Loading'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { useObservable } from '@/common/hooks/useObservable'
+import { channelPayoutsComitmentFromPayload, hashFile } from '@/common/utils/crypto/worker'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { channelPayoutsComitmentFromPayload } from '@/proposals/helpers/channelPayoutsComitmentFromPayload'
-import {
-  channelPayoutsFileValidator,
-  getChannelPayoutsValidatedFiles,
-} from '@/proposals/modals/AddNewProposal/components/SpecificParameters/ChannelIncentivesPayout/helpers'
 
 export const ChannelIncentivesPayout = () => {
   const { api } = useApi()
   const { active } = useMyMemberships()
   const { setValue, watch } = useFormContext()
-  const [payloadSize, payloadHash] = watch([
+  const [payloadSize, payloadHash, commitment] = watch([
     'channelIncentivesPayout.payloadSize',
     'channelIncentivesPayout.payloadHash',
+    'channelIncentivesPayout.commitment',
   ])
   const expectedDataSizeFee = useObservable(() => api?.query.storage.dataObjectPerMegabyteFee(), [api?.isConnected])
   const expectedDataObjectStateBloatBond = useObservable(
@@ -34,24 +38,42 @@ export const ChannelIncentivesPayout = () => {
 
   useEffect(() => {
     if (!active || !payloadHash || !expectedDataSizeFee || !expectedDataObjectStateBloatBond) return
-    setValue('channelIncentivesPayout.payload', {
+    const payload = {
       uploaderAccount: active.controllerAccount,
       objectCreationParams: { size_: payloadSize, ipfsContentId: payloadHash },
       expectedDataSizeFee: expectedDataSizeFee,
       expectedDataObjectStateBloatBond: expectedDataObjectStateBloatBond,
-    })
+    }
+    setValue('channelIncentivesPayout.payload', payload)
   }, [active, payloadHash, !expectedDataObjectStateBloatBond && !expectedDataSizeFee])
 
   const [isProcessingFile, setIsProcessingFile] = useState<boolean>(false)
-  const onDrop = useCallback(
-    async ([file]: File[]) => {
-      if (!file) return
+  const processPayload = useCallback(
+    async ([file]: File[]): Promise<File[]> => {
+      if (!file) return []
+
       setIsProcessingFile(true)
-      const [commitment, payload] = await Promise.all([channelPayoutsComitmentFromPayload(file), file.arrayBuffer()])
-      setValue('channelIncentivesPayout.payloadSize', payload.byteLength, { shouldValidate: true })
-      setValue('channelIncentivesPayout.payloadHash', blake2AsHex(new Uint8Array(payload)), { shouldValidate: true })
-      setValue('channelIncentivesPayout.commitment', commitment, { shouldValidate: true })
+
+      setValue('channelIncentivesPayout.payloadSize', file.size, { shouldValidate: true })
+
+      const hash = hashFile(file).then(
+        (hash) => {
+          setValue('channelIncentivesPayout.payloadHash', hash, { shouldValidate: true })
+        },
+        () => ((file as any).errors = [...((file as any).errors ?? []), 'Failure while generating hash'])
+      )
+
+      const commitment = channelPayoutsComitmentFromPayload(file).then(
+        (commitment) => {
+          setValue('channelIncentivesPayout.commitment', commitment, { shouldValidate: true })
+        },
+        () => ((file as any).errors = [...((file as any).errors ?? []), 'Failure while generating commitment'])
+      )
+
+      await Promise.all([commitment, hash])
       setIsProcessingFile(false)
+
+      return [file]
     },
     [setValue]
   )
@@ -61,16 +83,19 @@ export const ChannelIncentivesPayout = () => {
       <Row>
         <h4>Specific parameters</h4>
       </Row>
+
       <Row>
         <FileDropzone
           title="Channel Incentives Payout Payload"
           subtitle="Upload Payout Payload document produced by respective CLI service here"
-          accept="application/octet-stream"
+          accept={['', 'application/octet-stream']}
           maxFiles={1}
           multiple={false}
-          onDrop={onDrop}
-          // getFilesFromEvent={getChannelPayoutsValidatedFiles}
-          // validator={channelPayoutsFileValidator}
+          getFilesFromEvent={processPayload}
+          validator={(file) => {
+            const { errors } = file as { errors?: string[] }
+            return errors?.length ? { code: 'processing-failure', message: errors.join('\n') } : null
+          }}
         />
         {isProcessingFile && (
           <Box>
@@ -78,6 +103,27 @@ export const ChannelIncentivesPayout = () => {
           </Box>
         )}
       </Row>
+      {payloadSize && (
+        <Row>
+          <InputComponent label="Payload size" units="bytes" disabled>
+            <InputNumber value={payloadSize} disabled />
+          </InputComponent>
+        </Row>
+      )}
+      {commitment && (
+        <Row>
+          <InputComponent label="Commitment" disabled>
+            <Input value={commitment} disabled />
+          </InputComponent>
+        </Row>
+      )}
+      {payloadHash && (
+        <Row>
+          <InputComponent label="Payload hash" disabled>
+            <Input value={payloadHash} disabled />
+          </InputComponent>
+        </Row>
+      )}
 
       {/*<Row>*/}
       {/*  <InputComponent*/}

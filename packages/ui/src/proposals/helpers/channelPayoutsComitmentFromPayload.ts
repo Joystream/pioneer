@@ -2,13 +2,6 @@ import { verifyChannelPayoutProof } from '@joystream/js/content'
 import { ChannelPayoutsMetadata } from '@joystream/metadata-protobuf'
 import { Reader, Writer } from 'protobufjs'
 
-export const channelPayoutsComitmentFromPayload = (payload: Blob): Promise<string> => {
-  // It should be `end + 1` because the second parametter of `Blob.start() is the "the first byte that will *not* be included"
-  // (ref: https://developer.mozilla.org/en-US/docs/Web/API/Blob/slice#end)
-  const read = async (start: number, end: number) => new Uint8Array(await payload.slice(start, end + 1).arrayBuffer())
-  return generateCommitmentFromPayloadFile(read)
-}
-
 // TODO patch these changes in @joystream/js:
 
 type ReadBytes = (start: number, end: number) => Promise<Uint8Array>
@@ -18,7 +11,7 @@ type ReadBytes = (start: number, end: number) => Promise<Uint8Array>
  * @param read getter which returns the requested sequence of bytes
  * @returns merkle root of the cashout vector
  */
-async function generateCommitmentFromPayloadFile(read: ReadBytes): Promise<string> {
+export async function generateCommitmentFromPayloadFile(read: ReadBytes): Promise<string> {
   const serializedHeader = await serializedPayloadHeader(read)
   const header = ChannelPayoutsMetadata.Header.decode(serializedHeader)
 

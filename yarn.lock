@@ -3421,6 +3421,7 @@ __metadata:
     "@miragejs/graphql": ^0.1.13
     "@nivo/bar": ^0.79.1
     "@nivo/core": ^0.79.0
+    "@noble/hashes": ^1.1.5
     "@polkadot/api": 8.9.1
     "@polkadot/extension-dapp": 0.44.2-4
     "@polkadot/keyring": 9.5.1
@@ -3786,6 +3787,13 @@ __metadata:
   version: 1.1.1
   resolution: "@noble/hashes@npm:1.1.1"
   checksum: 3bd98d7a6dcc01c5e72478975073e12c79639636f4eb5710b665dd8ac462fcdff5b235d0c3b113ac83e7e56c43eee5ccba3759f9262964edc123bd1713dd2180
+  languageName: node
+  linkType: hard
+
+"@noble/hashes@npm:^1.1.5":
+  version: 1.1.5
+  resolution: "@noble/hashes@npm:1.1.5"
+  checksum: de3f095a7ac1cbf5b4b3d09f193288d4f2eec35fbadf2ed9fd7e47d8a3042fef410052ba62dc0296a185f994c11192f5357fdb1bd9178c905efd82e946c53b00
   languageName: node
   linkType: hard
 
