@@ -1,31 +1,33 @@
 import { uniqueId } from 'lodash'
 import { filter, firstValueFrom, fromEvent, Observable } from 'rxjs'
 
-import type { Request, RequestType, Response } from './worker'
+import { compute, WorkerRequest, WorkerRequestType, WorkerResponse } from './utils'
 
 let worker: Worker
-let messages: Observable<MessageEvent<Response>>
+let messages: Observable<MessageEvent<WorkerResponse>>
 
-const compute =
-  (type: RequestType) =>
+const computeInWorker =
+  (type: WorkerRequestType) =>
   async (file: Blob): Promise<string> => {
     if (!worker) {
-      worker = new Worker(new URL('./worker', import.meta.url), { type: 'module' })
-      messages = fromEvent<MessageEvent<Response>>(worker, 'message')
+      try {
+        worker = new Worker(new URL('./worker', import.meta.url), { type: 'module' })
+        messages = fromEvent<MessageEvent<WorkerResponse>>(worker, 'message')
+      } catch {
+        return compute(type, file)
+      }
     }
 
-    const request: Request = { type, id: uniqueId(), file }
+    const request: WorkerRequest = { type, id: uniqueId(), file }
     const result = messages.pipe(filter(({ data }) => data.id === request.id))
 
     worker.postMessage(request)
-    return firstValueFrom(result).then(({ data: { error, value } }) => {
-      if (error) {
-        throw Error(value)
-      }
-      return value
-    })
+
+    const { data } = await firstValueFrom(result)
+    if (data.error) throw Error(data.value)
+    return data.value
   }
 
-export const hashFile = compute('HASH_FILE')
+export const hashFile = computeInWorker('HASH_FILE')
 
-export const channelPayoutsComitmentFromPayload = compute('MERKLE_ROOT')
+export const channelPayoutsComitmentFromPayload = computeInWorker('MERKLE_ROOT')
