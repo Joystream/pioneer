@@ -4,10 +4,10 @@ import { merkleRoot, hashFile } from '@/common/utils/crypto'
 
 import ChannelPayoutsVector from '../../_mocks/proposals/ChannelPayoutsVector.json'
 
-describe('Crypto', () => {
+describe('Utils: Crypto', () => {
   const [commitment, channelPayouts] = generateJsonPayloadFromPayoutsVector(ChannelPayoutsVector)
   const serializedPayload = generateSerializedPayload(channelPayouts)
-  const file = new Blob([serializedPayload.buffer])
+  const file = new Blob([serializedPayload])
 
   it('Merkle root', async () => {
     expect(await merkleRoot(file)).toBe(commitment)

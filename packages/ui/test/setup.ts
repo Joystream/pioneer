@@ -112,7 +112,7 @@ declare global {
 global.URL.createObjectURL = jest.fn()
 global.URL.revokeObjectURL = jest.fn()
 
-// Monkey patch `blob.arrayBuffer()` because despite what on the doc it appears to not be implemented in node 14
+// Monkey patch `blob.arrayBuffer()` because despite what is on the doc it appears to not be implemented on the latest node 14
 if (!Blob.prototype.arrayBuffer) {
   Blob.prototype.arrayBuffer = function (): Promise<ArrayBuffer> {
     return new Promise<ArrayBuffer>((resolve) => {
