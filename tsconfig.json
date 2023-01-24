@@ -3,20 +3,16 @@
     "files": false
   },
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "esnext",
-    "moduleResolution": "node",
+    "target": "es2020",
+    "module": "commonjs",
     "sourceMap": true,
     "strict": true,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "jsx": "react-jsx",
-    "lib": ["dom", "dom.iterable", "esnext", "webworker"],
+    "jsx": "react",
+    "lib": ["DOM", "ESNext", "WebWorker"],
     "types": ["jest"],
-    "useUnknownInCatchVariables": false,
-    "allowSyntheticDefaultImports": true,
-    "isolatedModules": true,
     "baseUrl": "."
   },
   "exclude": ["**/node_modules"]
