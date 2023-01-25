@@ -18,10 +18,9 @@ import { WorkingGroupsTabs } from '../components/WorkingGroupsTabs'
 
 export const MyRoles = () => {
   const { isLoading, workers } = useMyWorkers();
-  
-  console.log(workers);
 
-  const owedReward = workers.reduce((a, b) => a.add(new BN(b.owedReward)), new BN(0))
+  const owedReward = workers.reduce((a, b) => a.add(new BN(b.owedReward)), new BN(0));
+
 
   const displayRoles = () => {
     if (isLoading) {

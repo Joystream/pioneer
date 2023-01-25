@@ -14,8 +14,10 @@ export const useMyWorkers = () => {
     },
   }
 
+  
   const { data, loading } = useGetWorkersQuery(params)
-
+  console.log(data);
+  
   const workers = useMemo(() => (data && data.workers.map(asWorker)) || [], [data, loading])
 
   return { workers, isLoading: loading }
