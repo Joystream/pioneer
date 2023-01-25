@@ -99,7 +99,7 @@ export const formatJoyValue = (
   }: JOYFormatOption = defaultJOYFormatOption
 ) => {
   if (value.isZero()) {
-    return '0.000'
+    return '0.00'
   }
 
   const safePrecision = Math.min(JOY_DECIMAL_PLACES, precision)

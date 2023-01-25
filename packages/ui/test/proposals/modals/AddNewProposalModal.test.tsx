@@ -192,7 +192,7 @@ describe('UI: AddNewProposalModal', () => {
     stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 1000))
     stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 1000))
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
-    bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 42.0)
+    bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 42)
     changeModeTx = stubTransaction(api, 'api.tx.proposalsDiscussion.changeThreadMode', 10)
   })
 
@@ -1239,7 +1239,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Bind account step', async () => {
           expect(await screen.findByText('You intend to bind account for staking')).toBeDefined()
-          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('42.0')
+          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('42')
         })
 
         it('Bind account failure', async () => {
