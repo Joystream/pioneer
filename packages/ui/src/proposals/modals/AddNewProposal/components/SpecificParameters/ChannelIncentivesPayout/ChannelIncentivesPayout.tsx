@@ -21,20 +21,6 @@ import { useObservable } from '@/common/hooks/useObservable'
 import { channelPayoutsComitmentFromPayload, hashFile } from '@/common/utils/crypto/worker'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
-const BINARY_MIME_TYPES = [
-  '',
-  'application/octet-stream',
-  'application/bin',
-  'application/binary',
-  'application/x-binary',
-  'application/macbinary',
-  'application/mac-binary',
-  'application/x-macbinary',
-  'application/x-msdownload',
-  'application/x-stuffit',
-  'application/x-tencore',
-]
-
 export const ChannelIncentivesPayout = () => {
   const { api } = useApi()
   const { active } = useMyMemberships()
@@ -102,7 +88,6 @@ export const ChannelIncentivesPayout = () => {
         <FileDropzone
           title="Channel Incentives Payout Payload"
           subtitle="Upload Payout Payload document produced by respective CLI service here"
-          accept={BINARY_MIME_TYPES}
           maxFiles={1}
           multiple={false}
           getFilesFromEvent={processPayload}
