@@ -163,8 +163,8 @@ describe('CreateThreadModal', () => {
       const next = await getButton(/next step/i)
       fireEvent.click(next)
 
-      expect(screen.getByText(/^Thread creation and initial post deposit:/i)?.nextSibling?.textContent).toBe('205')
-      expect(screen.getByText(/^modals.transactionFee.label/i)?.nextSibling?.textContent).toBe('101')
+      expect(screen.getByText(/^Thread creation and initial post deposit:/i)?.nextSibling?.textContent).toBe('205.0')
+      expect(screen.getByText(/^modals.transactionFee.label/i)?.nextSibling?.textContent).toBe('101.0')
     })
 
     it('Transaction failure', async () => {

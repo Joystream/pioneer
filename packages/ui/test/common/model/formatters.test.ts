@@ -24,7 +24,7 @@ describe('formatters', () => {
       expect(formatTokenValue(new BN('12345678912345679'))).toBe('12,345,678,912,345,679')
 
       expect(formatTokenValue(123456789)).toBe('123,456,789')
-      expect(formatTokenValue(0)).toBe('0')
+      expect(formatTokenValue(0)).toBe('0.00')
       expect(formatTokenValue(undefined)).toBe('-')
       expect(formatTokenValue(null)).toBe('-')
       expect(formatTokenValue(NaN)).toBe('-')

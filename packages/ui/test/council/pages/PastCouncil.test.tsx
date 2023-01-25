@@ -119,25 +119,25 @@ describe('UI: Past Council page', () => {
       it('Total spent', async () => {
         const { getByText } = await renderComponent()
 
-        expect(getByText(/^Total spent$/i).parentElement?.nextSibling?.textContent).toBe('300')
+        expect(getByText(/^Total spent$/i).parentElement?.nextSibling?.textContent).toBe('300.0')
       })
 
       it('Total missed rewards', async () => {
         const { getByText } = await renderComponent()
 
-        expect(getByText(/^Total missed rewards$/i).parentElement?.nextSibling?.textContent).toBe('-30')
+        expect(getByText(/^Total missed rewards$/i).parentElement?.nextSibling?.textContent).toBe('-30.0')
       })
 
       it('Total paid rewards', async () => {
         const { getByText } = await renderComponent()
 
-        expect(getByText(/^Total paid rewards$/i).parentElement?.nextSibling?.textContent).toBe('55')
+        expect(getByText(/^Total paid rewards$/i).parentElement?.nextSibling?.textContent).toBe('55.0')
       })
 
       it('Total spent on proposals', async () => {
         const { getByText } = await renderComponent()
 
-        expect(getByText(/^Total spent on proposals$/i).parentElement?.nextSibling?.textContent).toBe('5,000')
+        expect(getByText(/^Total spent on proposals$/i).parentElement?.nextSibling?.textContent).toBe('5,000.0')
       })
     })
 
@@ -398,9 +398,9 @@ describe('UI: Past Council page', () => {
           const workingGroupBudgetPercentage = workingGroupItem?.children.item(4)?.textContent
 
           expect(workingGroupName).toBe('Forum')
-          expect(workingGroupPaidRewards).toBe('6,050')
-          expect(workingGroupMissedRewards).toBe('3,145')
-          expect(workingGroupTotalBudget).toBe('80,000')
+          expect(workingGroupPaidRewards).toBe('6,050.0')
+          expect(workingGroupMissedRewards).toBe('3,145.0')
+          expect(workingGroupTotalBudget).toBe('80,000.0')
           expect(workingGroupBudgetPercentage).toBe('100%')
         })
       })
