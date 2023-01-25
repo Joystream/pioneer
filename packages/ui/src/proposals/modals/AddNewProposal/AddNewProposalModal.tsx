@@ -24,6 +24,7 @@ import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
@@ -68,6 +69,8 @@ export const AddNewProposalModal = () => {
   const { active: activeMember } = useMyMemberships()
   const minimumValidatorCount = useMinimumValidatorCount()
   const maximumReferralCut = api?.consts.members.referralCutMaximumPercent
+  const minCashoutAllowed = useFirstObservableValue(() => api?.query.content.minCashoutAllowed(), [])
+  const maxCashoutAllowed = useFirstObservableValue(() => api?.query.content.maxCashoutAllowed(), [])
   const currentBlock = useCurrentBlockNumber()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
@@ -90,6 +93,8 @@ export const AddNewProposalModal = () => {
     context: {
       minimumValidatorCount,
       maximumReferralCut,
+      minCashoutAllowed,
+      maxCashoutAllowed,
       leaderOpeningStake: workingGroupConsts?.leaderOpeningStake,
       minUnstakingPeriodLimit: workingGroupConsts?.minUnstakingPeriodLimit,
       stakeLock: 'Proposals',

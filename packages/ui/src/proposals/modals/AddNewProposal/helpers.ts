@@ -2,6 +2,7 @@ import BN from 'bn.js'
 import * as Yup from 'yup'
 
 import { Account } from '@/accounts/types'
+import { CurrencyName } from '@/app/constants/currency'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
 import { Address } from '@/common/types'
 import { BNSchema, lessThanMixed, maxContext, maxMixed, minContext, moreThanMixed } from '@/common/utils/validation'
@@ -336,10 +337,26 @@ export const schemaFactory = (api?: ProxyApi) => {
     }),
     channelIncentivesPayout: Yup.object().shape({
       payloadSize: Yup.number().required(),
-      minimumCashoutAllowed: BNSchema.required(),
+      minimumCashoutAllowed: BNSchema.test(
+        minContext(
+          `Input should be at least \${min}${CurrencyName.integerValue} for proposal to execute`,
+          'minCashoutAllowed',
+          true,
+          'execution'
+        )
+      ).required(),
       maximumCashoutAllowed: BNSchema.test(
         moreThanMixed(Yup.ref('minimumCashoutAllowed'), 'Maximum cashout cannot be lower than minimum')
-      ).required(),
+      )
+        .test(
+          maxContext(
+            `Input should be at most \${max}${CurrencyName.integerValue} for proposal to execute`,
+            'maxCashoutAllowed',
+            true,
+            'execution'
+          )
+        )
+        .required(),
       channelCashoutsEnabled: Yup.boolean(),
       commitment: Yup.string().required(),
     }),
