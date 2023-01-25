@@ -192,7 +192,7 @@ describe('UI: AddNewProposalModal', () => {
     stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 1000))
     stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 1000))
     batchTx = stubTransaction(api, 'api.tx.utility.batch')
-    bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 42)
+    bindAccountTx = stubTransaction(api, 'api.tx.members.addStakingAccountCandidate', 42.0)
     changeModeTx = stubTransaction(api, 'api.tx.proposalsDiscussion.changeThreadMode', 10)
   })
 
