@@ -159,7 +159,7 @@ export const ProposalPreview = () => {
             </BadgeAndTime>
           </RowGapBlock>
 
-          {votingRounds.length > 1 && (
+          {(proposal.status === 'dormant' || votingRounds.length > 1 ||proposal.status === 'deciding') && (
             <ProposalStages
               status={proposal.status}
               updates={proposal.proposalStatusUpdates}
