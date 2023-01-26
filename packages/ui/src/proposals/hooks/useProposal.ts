@@ -11,7 +11,7 @@ export const useProposal = (id: string): UseProposal => {
 
   const { loading, data } = useGetProposalQuery(params)
 
-  console.log(data);
+  console.log(data)
 
   return {
     isLoading: loading,
