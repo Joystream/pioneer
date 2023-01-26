@@ -13,6 +13,9 @@ import { UseTransaction } from '@/common/providers/transactionFees/context'
 
 configure({ testIdAttribute: 'id' })
 
+// Prevent jest from importing workers
+jest.mock('@/common/utils/crypto/worker', () => jest.requireActual('@/common/utils/crypto'))
+
 export const loaderSelector = (multiple = false) =>
   multiple ? screen.getAllByTestId('loading-spinner') : screen.queryByTestId('loading-spinner')
 
