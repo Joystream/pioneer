@@ -17,7 +17,6 @@ export interface ProposalStagesProps extends ControlProps<number> {
 }
 
 export const ProposalStages = ({ status, updates, constitutionality = '-', value, onChange }: ProposalStagesProps) => {
-
   const rounds = useMemo(() => {
     const decidingCount = updates.filter(({ status }) => status === 'deciding').length
     const lastUpdate = last(updates).status
@@ -27,7 +26,7 @@ export const ProposalStages = ({ status, updates, constitutionality = '-', value
     const isDeciding = onGoing && status === 'deciding'
     const isDormant = onGoing && status === 'dormant'
 
-    console.log(status);
+    console.log(status)
 
     return [
       ...repeat((round) => ({ icon: <CheckboxIcon />, onClick: () => onChange(round) }), decidingCount - 1),
@@ -42,7 +41,13 @@ export const ProposalStages = ({ status, updates, constitutionality = '-', value
   return (
     <TabsContainer>
       {rounds.map(({ icon, onClick }, round) => (
-        <Tooltip tooltipText={ round !==value ? "This proposal must undergo the voting of multiple consequent councils. The result of each council vote will be displayed in the separate tabs. For the proposal to be approved, each of the councils must approve it.":""}>
+        <Tooltip
+          tooltipText={
+            round !== value
+              ? 'This proposal must undergo the voting of multiple consequent councils. The result of each council vote will be displayed in the separate tabs. For the proposal to be approved, each of the councils must approve it.'
+              : ''
+          }
+        >
           <TabContainer key={round} active={round === value} disabled={!onClick} onClick={onClick}>
             {icon}
             <span>
@@ -54,4 +59,3 @@ export const ProposalStages = ({ status, updates, constitutionality = '-', value
     </TabsContainer>
   )
 }
-
