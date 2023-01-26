@@ -3329,6 +3329,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@joystream/js@patch:@joystream/js@npm%3A1.2.0#./.yarn/patches/@joystream-js-npm-1.2.0-a8795e7496.patch::locator=pioneer%40workspace%3A.":
+  version: 1.2.0
+  resolution: "@joystream/js@patch:@joystream/js@npm%3A1.2.0#./.yarn/patches/@joystream-js-npm-1.2.0-a8795e7496.patch::version=1.2.0&hash=089693&locator=pioneer%40workspace%3A."
+  dependencies:
+    "@joystream/metadata-protobuf": ^2.6.0
+    "@joystream/types": ~0.20.5
+    "@polkadot/util-crypto": 9.5.1
+    axios: ^1.2.1
+    buffer: ^6.0.3
+    lodash: ^4.17.21
+    long: ^5.2.1
+    merkletreejs: ^0.3.9
+    protobufjs: ^6.11.3
+  checksum: fabefdd3923443920e868ff0240df5337bc298e2e0f361dbb662a218dc1a16f6d11de48f1a352c45ec309686fee00d93ed898967f30a2ce6c6834808c66a5c96
+  languageName: node
+  linkType: hard
+
 "@joystream/markdown-editor@^0.1.0, @joystream/markdown-editor@workspace:packages/markdown-editor":
   version: 0.0.0-use.local
   resolution: "@joystream/markdown-editor@workspace:packages/markdown-editor"

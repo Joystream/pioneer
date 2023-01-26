@@ -1,7 +1,6 @@
+import { generateCommitmentFromPayloadFile } from '@joystream/js/content'
 import { blake3 } from '@noble/hashes/blake3'
 import { encode as encodeHash, toB58String } from 'multihashes'
-
-import { generateCommitmentFromPayloadFile } from '@/proposals/helpers/channelPayoutsComitmentFromPayload'
 
 // FROM Atlas 5e5f2fed Klaudiusz Dembler (2022-01-11 11:09): Giza: update content extrinsics, enable uploads (#1882)
 export const hashFile = async (file: Blob): Promise<string> => {

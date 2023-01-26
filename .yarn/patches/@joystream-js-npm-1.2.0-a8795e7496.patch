@@ -1,0 +1,353 @@
+diff --git a/lib/cjs/content/channelPayouts.js b/lib/cjs/content/channelPayouts.js
+index 55a4eea2057cf121e06552fcfd3a5b8beff289f9..fd022a311431c1f1c21783ec415b8fb087dbebfc 100644
+--- a/lib/cjs/content/channelPayouts.js
++++ b/lib/cjs/content/channelPayouts.js
+@@ -23,13 +23,13 @@ exports.hashFunc = util_crypto_1.blake2AsU8a;
+  */
+ function channelPayoutProof(context, pathOrUrl, channelId) {
+     return tslib_1.__awaiter(this, void 0, void 0, function* () {
+-        const serializedHeader = yield serializedPayloadHeader(context, pathOrUrl);
++        const serializedHeader = yield serializedPayloadHeader((0, utils_1.readBytesFromFile)(context, pathOrUrl));
+         const header = metadata_protobuf_1.ChannelPayoutsMetadata.Header.decode(serializedHeader);
+         const channelPayoutProofOffset = header.channelPayoutByteOffsets.find((o) => o.channelId === channelId);
+         if (!channelPayoutProofOffset) {
+             throw new Error(`No payout Proof exists for channel id ${channelId}`);
+         }
+-        return channelPayoutProofAtByteOffset(context, pathOrUrl, Number(channelPayoutProofOffset.byteOffset));
++        return channelPayoutProofAtByteOffset((0, utils_1.readBytesFromFile)(context, pathOrUrl), Number(channelPayoutProofOffset.byteOffset));
+     });
+ }
+ exports.channelPayoutProof = channelPayoutProof;
+@@ -84,16 +84,15 @@ function lengthOfVarintEncodedMessageSize(protobufMessageLength) {
+  * so we arbitrary read `n` bytes from the payload based on the assumption that the size of the header CAN BE
+  * encoded in `n` bytes. For reference, if serialized message is over 4 TB then its size information can be
+  * encoded in just 6 bytes
+- * @param context "PATH" | "URL"
+- * @param pathOrUrl path to protobuf serialized payload file
++ * @param read getter which returns the requested sequence of bytes
+  * @param messageOffset byte offset of message in serialized payload
+  * @returns length of serialized message in number of bytes
+  */
+-function lengthOfProtobufMessage(context, pathOrUrl, messageOffset) {
++function lengthOfProtobufMessage(read, messageOffset) {
+     return tslib_1.__awaiter(this, void 0, void 0, function* () {
+         // TODO: improve the implementation by reading size info byte by byte
+         // TODO: and checking most significant bit (msb) of each byte.
+-        const arbitraryBytes = yield (0, utils_1.readBytesFromFile)(context, pathOrUrl, messageOffset, messageOffset + 10);
++        const arbitraryBytes = yield read(messageOffset, messageOffset + 10);
+         const lengthOfMessage = protobufjs_1.Reader.create(arbitraryBytes).uint32();
+         return lengthOfMessage;
+     });
+@@ -115,32 +114,30 @@ function lengthOfHeader(numberOfChannels) {
+ }
+ /**
+  * Get serialized payload header from a local file.
+- * @param context "PATH" | "URL"
+- * @param pathOrUrl path to protobuf serialized payload file
++ * @param read getter which returns the requested sequence of bytes
+  * @return bytes of payload header
+  **/
+-function serializedPayloadHeader(context, pathOrUrl) {
++function serializedPayloadHeader(read) {
+     return tslib_1.__awaiter(this, void 0, void 0, function* () {
+         // skip the first byte which is the Tag(key) of `Header` message
+-        const lengthOfSerializedHeader = yield lengthOfProtobufMessage(context, pathOrUrl, 1);
++        const lengthOfSerializedHeader = yield lengthOfProtobufMessage(read, 1);
+         const lengthOfVarintEncodedHeaderSize = lengthOfVarintEncodedMessageSize(lengthOfSerializedHeader);
+-        const serializedHeader = yield (0, utils_1.readBytesFromFile)(context, pathOrUrl, 1 + lengthOfVarintEncodedHeaderSize, lengthOfVarintEncodedHeaderSize + lengthOfSerializedHeader);
++        const serializedHeader = yield read(1 + lengthOfVarintEncodedHeaderSize, lengthOfVarintEncodedHeaderSize + lengthOfSerializedHeader);
+         return serializedHeader;
+     });
+ }
+ exports.serializedPayloadHeader = serializedPayloadHeader;
+ /**
+  * Get channel payout Proof from local serialized payload file.
+- * @param context "PATH" | "URL"
+- * @param pathOrUrl path to protobuf serialized payload file
++ * @param read getter which returns the requested sequence of bytes
+  * @param byteOffset byte offset of channel payout Proof in serialized payload
+  * @return channel payout Proof
+  **/
+-function channelPayoutProofAtByteOffset(context, pathOrUrl, byteOffset) {
++function channelPayoutProofAtByteOffset(read, byteOffset) {
+     return tslib_1.__awaiter(this, void 0, void 0, function* () {
+-        const lengthOfSerializedProof = yield lengthOfProtobufMessage(context, pathOrUrl, byteOffset);
++        const lengthOfSerializedProof = yield lengthOfProtobufMessage(read, byteOffset);
+         const lengthOfVarintEncodedProofSize = lengthOfVarintEncodedMessageSize(lengthOfSerializedProof);
+-        const serializedPayoutProof = yield (0, utils_1.readBytesFromFile)(context, pathOrUrl, byteOffset + lengthOfVarintEncodedProofSize, byteOffset + lengthOfSerializedProof + 1);
++        const serializedPayoutProof = yield read(byteOffset + lengthOfVarintEncodedProofSize, byteOffset + lengthOfSerializedProof + 1);
+         const proof = metadata_protobuf_1.ChannelPayoutsMetadata.Body.ChannelPayoutProof.decode(serializedPayoutProof);
+         return proof;
+     });
+@@ -148,18 +145,18 @@ function channelPayoutProofAtByteOffset(context, pathOrUrl, byteOffset) {
+ exports.channelPayoutProofAtByteOffset = channelPayoutProofAtByteOffset;
+ /**
+  * Generate merkle root from the serialized payload
+- * @param context "PATH" | "URL"
+- * @param pathOrUrl path to protobuf serialized payload file
++ * @param read getter which returns the requested sequence of bytes
+  * @returns merkle root of the cashout vector
+  */
+-function generateCommitmentFromPayloadFile(context, pathOrUrl) {
++function generateCommitmentFromPayloadFile(read) {
++    var _a;
+     return tslib_1.__awaiter(this, void 0, void 0, function* () {
+-        const serializedHeader = yield serializedPayloadHeader(context, pathOrUrl);
++        const serializedHeader = yield serializedPayloadHeader(read);
+         const header = metadata_protobuf_1.ChannelPayoutsMetadata.Header.decode(serializedHeader);
+         // Any payout Proof can be used to generate the merkle root,
+         // here first Proof from channel payouts payload is used
+-        const ProofByteOffset = header.channelPayoutByteOffsets.shift().byteOffset.toNumber();
+-        const proof = yield channelPayoutProofAtByteOffset(context, pathOrUrl, ProofByteOffset);
++        const ProofByteOffset = Number((_a = header.channelPayoutByteOffsets.shift()) === null || _a === void 0 ? void 0 : _a.byteOffset);
++        const proof = yield channelPayoutProofAtByteOffset(read, ProofByteOffset);
+         return verifyChannelPayoutProof(proof);
+     });
+ }
+diff --git a/lib/cjs/utils/InputOutput.js b/lib/cjs/utils/InputOutput.js
+index 410f2d79b6bf54e59a65b049a90881bec9d9ce99..98876f85e78f2cd7a1ab593cba80c62442a70ff6 100644
+--- a/lib/cjs/utils/InputOutput.js
++++ b/lib/cjs/utils/InputOutput.js
+@@ -10,12 +10,10 @@ const fs_1 = tslib_1.__importDefault(require("fs"));
+  * provided path. Both `start` and `end` are inclusive
+  * @param context path to the file
+  * @param pathOrUrl
+- * @param start starting index of the range
+- * @param end ending index of the range
+- * @returns byte sequence
++ * @returns ReadBytes
+  */
+-function readBytesFromFile(context, pathOrUrl, start, end) {
+-    return tslib_1.__awaiter(this, void 0, void 0, function* () {
++function readBytesFromFile(context, pathOrUrl) {
++    return (start, end) => tslib_1.__awaiter(this, void 0, void 0, function* () {
+         try {
+             if (context === 'PATH') {
+                 return new Promise((resolve) => {
+diff --git a/lib/content/channelPayouts.d.ts b/lib/content/channelPayouts.d.ts
+index bb13b86dd2e999a197505a17f4a692b909ee99af..608ff257a43b026b1ddaac7d99740c757c862617 100644
+--- a/lib/content/channelPayouts.d.ts
++++ b/lib/content/channelPayouts.d.ts
+@@ -3,7 +3,7 @@ import { PalletCommonMerkleTreeProofElementRecord as ProofElement, PalletContent
+ import { blake2AsU8a } from '@polkadot/util-crypto';
+ import { ChannelPayoutProof } from '../../typings/ChannelPayoutsPayload.schema';
+ import { ChannelPayoutsVector } from '../../typings/ChannelPayoutsVector.schema';
+-import { ReadFileContext } from '../utils';
++import { ReadBytes, ReadFileContext } from '../utils';
+ export declare const hashFunc: typeof blake2AsU8a;
+ /**
+  * Get Payout Proof for given channel from
+@@ -27,26 +27,23 @@ export declare function prepareClaimChannelRewardExtrinsicArgs(payoutProof: Chan
+ };
+ /**
+  * Get serialized payload header from a local file.
+- * @param context "PATH" | "URL"
+- * @param pathOrUrl path to protobuf serialized payload file
++ * @param read getter which returns the requested sequence of bytes
+  * @return bytes of payload header
+  **/
+-export declare function serializedPayloadHeader(context: ReadFileContext, pathOrUrl: string): Promise<Uint8Array>;
++export declare function serializedPayloadHeader(read: ReadBytes): Promise<Uint8Array>;
+ /**
+  * Get channel payout Proof from local serialized payload file.
+- * @param context "PATH" | "URL"
+- * @param pathOrUrl path to protobuf serialized payload file
++ * @param read getter which returns the requested sequence of bytes
+  * @param byteOffset byte offset of channel payout Proof in serialized payload
+  * @return channel payout Proof
+  **/
+-export declare function channelPayoutProofAtByteOffset(context: ReadFileContext, pathOrUrl: string, byteOffset: number): Promise<ChannelPayoutsMetadata.Body.ChannelPayoutProof>;
++export declare function channelPayoutProofAtByteOffset(read: ReadBytes, byteOffset: number): Promise<ChannelPayoutsMetadata.Body.ChannelPayoutProof>;
+ /**
+  * Generate merkle root from the serialized payload
+- * @param context "PATH" | "URL"
+- * @param pathOrUrl path to protobuf serialized payload file
++ * @param read getter which returns the requested sequence of bytes
+  * @returns merkle root of the cashout vector
+  */
+-export declare function generateCommitmentFromPayloadFile(context: ReadFileContext, pathOrUrl: string): Promise<string>;
++export declare function generateCommitmentFromPayloadFile(read: ReadBytes): Promise<string>;
+ /**
+  * Generate merkle root from branch of a channel payout proof
+  * @param proof channel payout proof record
+diff --git a/lib/mjs/content/channelPayouts.js b/lib/mjs/content/channelPayouts.js
+index 4fae497208574a7f304efd7e91b54f0c09c02258..c066fc7a4a4633bc38fcc51bb810ed6d0ebaeb3a 100644
+--- a/lib/mjs/content/channelPayouts.js
++++ b/lib/mjs/content/channelPayouts.js
+@@ -18,13 +18,13 @@ export const hashFunc = blake2AsU8a;
+  * @returns payout proof record for given channel Id
+  */
+ export async function channelPayoutProof(context, pathOrUrl, channelId) {
+-    const serializedHeader = await serializedPayloadHeader(context, pathOrUrl);
++    const serializedHeader = await serializedPayloadHeader(readBytesFromFile(context, pathOrUrl));
+     const header = ChannelPayoutsMetadata.Header.decode(serializedHeader);
+     const channelPayoutProofOffset = header.channelPayoutByteOffsets.find((o) => o.channelId === channelId);
+     if (!channelPayoutProofOffset) {
+         throw new Error(`No payout Proof exists for channel id ${channelId}`);
+     }
+-    return channelPayoutProofAtByteOffset(context, pathOrUrl, Number(channelPayoutProofOffset.byteOffset));
++    return channelPayoutProofAtByteOffset(readBytesFromFile(context, pathOrUrl), Number(channelPayoutProofOffset.byteOffset));
+ }
+ /**
+  * Get Payout Proof for given channel from
+@@ -76,15 +76,14 @@ function lengthOfVarintEncodedMessageSize(protobufMessageLength) {
+  * so we arbitrary read `n` bytes from the payload based on the assumption that the size of the header CAN BE
+  * encoded in `n` bytes. For reference, if serialized message is over 4 TB then its size information can be
+  * encoded in just 6 bytes
+- * @param context "PATH" | "URL"
+- * @param pathOrUrl path to protobuf serialized payload file
++ * @param read getter which returns the requested sequence of bytes
+  * @param messageOffset byte offset of message in serialized payload
+  * @returns length of serialized message in number of bytes
+  */
+-async function lengthOfProtobufMessage(context, pathOrUrl, messageOffset) {
++async function lengthOfProtobufMessage(read, messageOffset) {
+     // TODO: improve the implementation by reading size info byte by byte
+     // TODO: and checking most significant bit (msb) of each byte.
+-    const arbitraryBytes = await readBytesFromFile(context, pathOrUrl, messageOffset, messageOffset + 10);
++    const arbitraryBytes = await read(messageOffset, messageOffset + 10);
+     const lengthOfMessage = Reader.create(arbitraryBytes).uint32();
+     return lengthOfMessage;
+ }
+@@ -105,44 +104,41 @@ function lengthOfHeader(numberOfChannels) {
+ }
+ /**
+  * Get serialized payload header from a local file.
+- * @param context "PATH" | "URL"
+- * @param pathOrUrl path to protobuf serialized payload file
++ * @param read getter which returns the requested sequence of bytes
+  * @return bytes of payload header
+  **/
+-export async function serializedPayloadHeader(context, pathOrUrl) {
++export async function serializedPayloadHeader(read) {
+     // skip the first byte which is the Tag(key) of `Header` message
+-    const lengthOfSerializedHeader = await lengthOfProtobufMessage(context, pathOrUrl, 1);
++    const lengthOfSerializedHeader = await lengthOfProtobufMessage(read, 1);
+     const lengthOfVarintEncodedHeaderSize = lengthOfVarintEncodedMessageSize(lengthOfSerializedHeader);
+-    const serializedHeader = await readBytesFromFile(context, pathOrUrl, 1 + lengthOfVarintEncodedHeaderSize, lengthOfVarintEncodedHeaderSize + lengthOfSerializedHeader);
++    const serializedHeader = await read(1 + lengthOfVarintEncodedHeaderSize, lengthOfVarintEncodedHeaderSize + lengthOfSerializedHeader);
+     return serializedHeader;
+ }
+ /**
+  * Get channel payout Proof from local serialized payload file.
+- * @param context "PATH" | "URL"
+- * @param pathOrUrl path to protobuf serialized payload file
++ * @param read getter which returns the requested sequence of bytes
+  * @param byteOffset byte offset of channel payout Proof in serialized payload
+  * @return channel payout Proof
+  **/
+-export async function channelPayoutProofAtByteOffset(context, pathOrUrl, byteOffset) {
+-    const lengthOfSerializedProof = await lengthOfProtobufMessage(context, pathOrUrl, byteOffset);
++export async function channelPayoutProofAtByteOffset(read, byteOffset) {
++    const lengthOfSerializedProof = await lengthOfProtobufMessage(read, byteOffset);
+     const lengthOfVarintEncodedProofSize = lengthOfVarintEncodedMessageSize(lengthOfSerializedProof);
+-    const serializedPayoutProof = await readBytesFromFile(context, pathOrUrl, byteOffset + lengthOfVarintEncodedProofSize, byteOffset + lengthOfSerializedProof + 1);
++    const serializedPayoutProof = await read(byteOffset + lengthOfVarintEncodedProofSize, byteOffset + lengthOfSerializedProof + 1);
+     const proof = ChannelPayoutsMetadata.Body.ChannelPayoutProof.decode(serializedPayoutProof);
+     return proof;
+ }
+ /**
+  * Generate merkle root from the serialized payload
+- * @param context "PATH" | "URL"
+- * @param pathOrUrl path to protobuf serialized payload file
++ * @param read getter which returns the requested sequence of bytes
+  * @returns merkle root of the cashout vector
+  */
+-export async function generateCommitmentFromPayloadFile(context, pathOrUrl) {
+-    const serializedHeader = await serializedPayloadHeader(context, pathOrUrl);
++export async function generateCommitmentFromPayloadFile(read) {
++    const serializedHeader = await serializedPayloadHeader(read);
+     const header = ChannelPayoutsMetadata.Header.decode(serializedHeader);
+     // Any payout Proof can be used to generate the merkle root,
+     // here first Proof from channel payouts payload is used
+-    const ProofByteOffset = header.channelPayoutByteOffsets.shift().byteOffset.toNumber();
+-    const proof = await channelPayoutProofAtByteOffset(context, pathOrUrl, ProofByteOffset);
++    const ProofByteOffset = Number(header.channelPayoutByteOffsets.shift()?.byteOffset);
++    const proof = await channelPayoutProofAtByteOffset(read, ProofByteOffset);
+     return verifyChannelPayoutProof(proof);
+ }
+ /**
+diff --git a/lib/mjs/utils/InputOutput.js b/lib/mjs/utils/InputOutput.js
+index 20f374c98624aec760d7b4d79e9655b19cfe8701..0283a136d0f959626361edd849c1ad65c6a7d595 100644
+--- a/lib/mjs/utils/InputOutput.js
++++ b/lib/mjs/utils/InputOutput.js
+@@ -6,31 +6,31 @@ import fs from 'fs';
+  * provided path. Both `start` and `end` are inclusive
+  * @param context path to the file
+  * @param pathOrUrl
+- * @param start starting index of the range
+- * @param end ending index of the range
+- * @returns byte sequence
++ * @returns ReadBytes
+  */
+-export async function readBytesFromFile(context, pathOrUrl, start, end) {
+-    try {
+-        if (context === 'PATH') {
+-            return new Promise((resolve) => {
+-                const a = fs.createReadStream(pathOrUrl, { start, end }).on('data', (data) => {
+-                    resolve(data);
+-                    a.close();
++export function readBytesFromFile(context, pathOrUrl) {
++    return async (start, end) => {
++        try {
++            if (context === 'PATH') {
++                return new Promise((resolve) => {
++                    const a = fs.createReadStream(pathOrUrl, { start, end }).on('data', (data) => {
++                        resolve(data);
++                        a.close();
++                    });
+                 });
++            }
++            const response = await axios.get(pathOrUrl, {
++                responseType: 'arraybuffer',
++                headers: {
++                    range: `bytes=${start}-${end}`,
++                },
+             });
++            return new Uint8Array(response.data);
+         }
+-        const response = await axios.get(pathOrUrl, {
+-            responseType: 'arraybuffer',
+-            headers: {
+-                range: `bytes=${start}-${end}`,
+-            },
+-        });
+-        return new Uint8Array(response.data);
+-    }
+-    catch (error) {
+-        throw new Error(`Failed to read input stream`);
+-    }
++        catch (error) {
++            throw new Error(`Failed to read input stream`);
++        }
++    };
+ }
+ export async function getInputJson(inputPath, schema) {
+     let content, jsonObj;
+diff --git a/lib/utils/InputOutput.d.ts b/lib/utils/InputOutput.d.ts
+index e91c7f13c817460906dc364980a1e33725b0c457..317e4f68aa8b88fb752e9556c25294d09fa56d07 100644
+--- a/lib/utils/InputOutput.d.ts
++++ b/lib/utils/InputOutput.d.ts
+@@ -1,13 +1,18 @@
+ export declare type ReadFileContext = 'PATH' | 'URL';
++/**
++ * Read sequence of bytes from arbitrary source. Both `start` and `end` are inclusive
++ * @param start starting indexj
++ * @param end ending index of the range
++ * @returns byte sequence
++ */
++export declare type ReadBytes = (start: number, end: number) => Promise<Uint8Array>;
+ /**
+  * Read sequence of bytes from the file or remote host
+  * provided path. Both `start` and `end` are inclusive
+  * @param context path to the file
+  * @param pathOrUrl
+- * @param start starting index of the range
+- * @param end ending index of the range
+- * @returns byte sequence
++ * @returns ReadBytes
+  */
+-export declare function readBytesFromFile(context: ReadFileContext, pathOrUrl: string, start: number, end: number): Promise<Uint8Array>;
++export declare function readBytesFromFile(context: ReadFileContext, pathOrUrl: string): ReadBytes;
+ export declare function getInputJson<T>(inputPath: string, schema?: unknown): Promise<T>;
+ export declare function validateInput(input: unknown, schema: unknown): Promise<void>;
