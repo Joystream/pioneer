@@ -107,7 +107,7 @@ const RolesListItem = ({ worker, payout = BN_ZERO }: { worker: Worker; payout?: 
           <TextInlineBig>
             <TokenValue value={myEarnings?.month} />
             {earnings}
-            {work.id}
+            {worker.id}
           </TextInlineBig>
           <ToggleableSubscriptionWide>Earned total</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
