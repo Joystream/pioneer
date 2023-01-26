@@ -91,7 +91,7 @@ export const WorkingGroupOpening = () => {
         {label}
       </BadgeStatus>
     )
-  },[opening])
+  },[opening?.status])
 
   const ApplyButton = memo(() => (
     <TransactionButton
