@@ -74,11 +74,11 @@ const RolesListItem = ({ worker, payout = BN_ZERO }: { worker: Worker; payout?: 
       modal: 'LeaveRole',
       data: { workerId: worker.id },
     })
-  }, [])
-
+  }, []);
+  
   const { earnings } = useWorkerEarnings(worker.id)
 
-  console.log(earnings)
+  console.log('main earnings:', earnings, 'worker.id:', worker.id, "groupid:", worker.group.id);
 
   const myEarnings = useMyEarnings()
 
