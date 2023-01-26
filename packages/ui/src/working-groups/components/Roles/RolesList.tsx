@@ -13,7 +13,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { useWorkerEarnings } from '@/working-groups/hooks/useWorkerEarnings'
 
-import { useMyEarnings } from '@/working-groups/hooks/useMyEarnings';
+import { useMyEarnings } from '@/working-groups/hooks/useMyEarnings'
 
 import { ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
 import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
@@ -75,9 +75,11 @@ const RolesListItem = ({ worker, payout = BN_ZERO }: { worker: Worker; payout?: 
       data: { workerId: worker.id },
     })
   }, [])
-  const { earnings } = useWorkerEarnings(worker.group.id);
-  console.log(earnings);
-  const myEarnings = useMyEarnings();
+  const { earnings } = useWorkerEarnings(worker.id)
+
+  console.log(earnings)
+
+  const myEarnings = useMyEarnings()
 
   const rewardPeriod = useRewardPeriod(worker.group.id)
 
