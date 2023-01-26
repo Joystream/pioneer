@@ -29,7 +29,15 @@ export const DurationStatistics = (props: DurationStatisticsProps) => {
   const duration = Date.parse(props.value) - (props.from ? Date.parse(props.from) : Date.now())
   return (
     <StatisticItem {...props}>
+<<<<<<< HEAD
       {duration > 0 ? <DurationValue value={formatDurationDate(duration)} /> : <></> }
+=======
+<<<<<<< HEAD
+      {duration > 0 ? <DurationValue value={formatDurationDate(duration)} /> : <></> }
+=======
+      {duration > 0 ? <DurationValue value={formatDurationDate(duration)} /> : <></>}
+>>>>>>> 41c69925efbc2a424cdd540aaf66282beb89ee13
+>>>>>>> 0eca37350b580e9a27ab91592c86fa5b0a7f4191
     </StatisticItem>
   )
 }
