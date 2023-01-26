@@ -6,6 +6,8 @@ import { TabContainer, TabsContainer } from '@/common/components/Tabs'
 import { last, repeat } from '@/common/utils'
 import { ProposalStatus, ProposalStatusUpdates } from '@/proposals/types'
 
+import { Tooltip } from ''
+
 import styled, { css } from 'styled-components'
 
 export interface ProposalStagesProps extends ControlProps<number> {
@@ -25,6 +27,8 @@ export const ProposalStages = ({ status, updates, constitutionality = '-', value
     const isDeciding = onGoing && status === 'deciding'
     const isDormant = onGoing && status === 'dormant'
 
+    console.log(status);
+
     return [
       ...repeat((round) => ({ icon: <CheckboxIcon />, onClick: () => onChange(round) }), decidingCount - 1),
       {
@@ -38,34 +42,16 @@ export const ProposalStages = ({ status, updates, constitutionality = '-', value
   return (
     <TabsContainer>
       {rounds.map(({ icon, onClick }, round) => (
-        <TabContainer key={round} active={round === value} disabled={!onClick} onClick={onClick}>
-          {icon}
-          <span>
-            Council approvals {round + 1}/{constitutionality}
-          </span>
-          <TooltipDisplay>
-            {round !==value ? "This proposal must undergo the voting of multiple consequent councils. The result of each council vote will be displayed in the separate tabs. For the proposal to be approved, each of the councils must approve it.":"value hest"}
-          </TooltipDisplay>
-        </TabContainer>
+        <Tooltip tooltipText={ round !==value ? "This proposal must undergo the voting of multiple consequent councils. The result of each council vote will be displayed in the separate tabs. For the proposal to be approved, each of the councils must approve it.":""}>
+          <TabContainer key={round} active={round === value} disabled={!onClick} onClick={onClick}>
+            {icon}
+            <span>
+              Council approvals {round + 1}/{constitutionality}
+            </span>
+          </TabContainer>
+        </Tooltip>
       ))}
     </TabsContainer>
   )
 }
 
-const TooltipDisplay = styled.span`
-
-  visibility: hidden;
-  width: 120px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
-
-  position: absolute;
-  z-index: 1;
-
-  &:hover{
-    visibility: visible;
-  }
-`
