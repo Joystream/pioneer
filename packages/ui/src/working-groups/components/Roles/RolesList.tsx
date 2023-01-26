@@ -36,6 +36,7 @@ import {
 
 import { NumericValue } from '../../../common/components/statistics/NumericValueStat'
 import { TextMedium } from '../../../common/components/typography'
+import { WorkingDetails } from '../../../bounty/components/BountyListItem/components/WorkingDetails'
 
 export interface RolesListProps {
   workers: Worker[]
@@ -74,11 +75,11 @@ const RolesListItem = ({ worker, payout = BN_ZERO }: { worker: Worker; payout?: 
       modal: 'LeaveRole',
       data: { workerId: worker.id },
     })
-  }, []);
-  
+  }, [])
+
   const { earnings } = useWorkerEarnings(worker.id)
 
-  console.log('main earnings:', earnings, 'worker.id:', worker.id, "groupid:", worker.group.id);
+  console.log(earnings)
 
   const myEarnings = useMyEarnings()
 
@@ -106,7 +107,7 @@ const RolesListItem = ({ worker, payout = BN_ZERO }: { worker: Worker; payout?: 
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={myEarnings?.month} />
+            <TokenValue value={earnings} />
           </TextInlineBig>
           <ToggleableSubscriptionWide>Earned total</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
