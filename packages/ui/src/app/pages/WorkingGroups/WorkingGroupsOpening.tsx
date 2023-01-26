@@ -149,10 +149,9 @@ export const WorkingGroupOpening = () => {
               {StatusBadge}
             </BadgesRow>
             <Statistics>
-              {
-                OpeningStatuses.CANCELLED ? "" :
+
                 <DurationStatistics title="Time Left" value={opening.expectedEnding} />
-              }
+
               <TokenValueStat
                 title={`Reward per ${rewardPeriod?.toString()} blocks`}
                 value={rewardPeriod?.mul(opening.rewardPerBlock)}
