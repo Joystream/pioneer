@@ -13,6 +13,11 @@ export interface ProposalStagesProps extends ControlProps<number> {
 }
 
 export const ProposalStages = ({ status, updates, constitutionality = '-', value, onChange }: ProposalStagesProps) => {
+  
+  console.log("status:", status);
+  console.log("updates:", updates);
+  console.log("value:", value);
+  
   const rounds = useMemo(() => {
     const decidingCount = updates.filter(({ status }) => status === 'deciding').length
     
@@ -23,8 +28,7 @@ export const ProposalStages = ({ status, updates, constitutionality = '-', value
     const isDeciding = onGoing && status === 'deciding'
     const isDormant = onGoing && status === 'dormant'
 
-    console.log(decidingCount, lastUpdate, onGoing, approved, rejected, isDeciding,isDormant);
-    return [
+   return [
       ...repeat((round) => ({ icon: <CheckboxIcon />, onClick: () => onChange(round) }), decidingCount - 1),
       {
         icon: !isDeciding && (rejected ? <CrossIcon /> : <CheckboxIcon />),
