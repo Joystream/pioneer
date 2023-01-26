@@ -163,7 +163,7 @@ export const ProposalPreview = () => {
           {(proposal.status === 'dormant' || votingRounds.length > 1) && (
             <ProposalStages
               status={proposal.status}
-              updates={proposal.proposalStatusUpdates}
+              updates={proposal.votes}
               constitutionality={constants?.constitutionality}
               value={currentVotingRound}
               onChange={setVotingRound}
