@@ -72,7 +72,6 @@ export const LocksButtons = styled.div`
   align-self: end;
   display: flex;
   column-gap: 10px;
-  align-items: center;
 `
 
 export const DetailLabel = styled(Label)`
