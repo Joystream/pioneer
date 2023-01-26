@@ -44,8 +44,6 @@ export const ProposalPreview = () => {
   const history = useHistory()
   const { isLoading, proposal } = useProposal(id)
 
-  console.log(proposal)
-
   const { council } = useElectedCouncil()
   const constants = useProposalConstants(proposal?.details.type)
   const loc = useLocation()
