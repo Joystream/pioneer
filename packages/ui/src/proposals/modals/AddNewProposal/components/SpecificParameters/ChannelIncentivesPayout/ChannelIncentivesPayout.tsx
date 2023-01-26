@@ -18,7 +18,7 @@ import { Loading } from '@/common/components/Loading'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { useObservable } from '@/common/hooks/useObservable'
-import { channelPayoutsComitmentFromPayload, hashFile } from '@/common/utils/crypto/worker'
+import { merkleRootFromBinary, hashFile } from '@/common/utils/crypto/worker'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 export const ChannelIncentivesPayout = () => {
@@ -56,19 +56,15 @@ export const ChannelIncentivesPayout = () => {
 
       setValue('channelIncentivesPayout.payloadSize', file.size, { shouldValidate: true })
 
-      const hash = hashFile(file).then(
-        (hash) => {
-          setValue('channelIncentivesPayout.payloadHash', hash, { shouldValidate: true })
-        },
-        () => ((file as any).errors = [...((file as any).errors ?? []), 'Failure while generating hash'])
-      )
+      const recordError = (message: string) => () => ((file as any).error = [...((file as any).errors ?? []), message])
 
-      const commitment = channelPayoutsComitmentFromPayload(file).then(
-        (commitment) => {
-          setValue('channelIncentivesPayout.commitment', commitment, { shouldValidate: true })
-        },
-        () => ((file as any).errors = [...((file as any).errors ?? []), 'Failure while generating commitment'])
-      )
+      const hash = hashFile(file).then((hash) => {
+        setValue('channelIncentivesPayout.payloadHash', hash, { shouldValidate: true })
+      }, recordError('Failure while generating hash'))
+
+      const commitment = merkleRootFromBinary(file).then((commitment) => {
+        setValue('channelIncentivesPayout.commitment', commitment, { shouldValidate: true })
+      }, recordError('Failure while generating commitment'))
 
       await Promise.all([commitment, hash])
       setIsProcessingFile(false)

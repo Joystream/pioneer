@@ -1,4 +1,4 @@
-import { merkleRoot, hashFile } from '..'
+import { merkleRootFromBinary, hashFile } from '..'
 
 export type WorkerRequestType = 'HASH_FILE' | 'MERKLE_ROOT'
 export type WorkerRequest = {
@@ -19,6 +19,6 @@ export const compute = async (type: WorkerRequestType, file: Blob): Promise<stri
     case 'HASH_FILE':
       return await hashFile(file)
     case 'MERKLE_ROOT':
-      return await merkleRoot(file)
+      return await merkleRootFromBinary(file)
   }
 }

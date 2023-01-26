@@ -6,9 +6,12 @@ import { compute, WorkerRequest, WorkerRequestType, WorkerResponse } from './uti
 let worker: Worker
 let messages: Observable<MessageEvent<WorkerResponse>>
 
-const computeInWorker =
-  (type: WorkerRequestType) =>
-  async (file: Blob): Promise<string> => {
+export const hashFile = computeInWorker('HASH_FILE')
+
+export const merkleRootFromBinary = computeInWorker('MERKLE_ROOT')
+
+function computeInWorker(type: WorkerRequestType) {
+  return async (file: Blob): Promise<string> => {
     if (!worker) {
       try {
         worker = new Worker(new URL('./worker', import.meta.url), { type: 'module' })
@@ -27,7 +30,4 @@ const computeInWorker =
     if (data.error) throw Error(data.value)
     return data.value
   }
-
-export const hashFile = computeInWorker('HASH_FILE')
-
-export const channelPayoutsComitmentFromPayload = computeInWorker('MERKLE_ROOT')
+}

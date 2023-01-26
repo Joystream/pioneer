@@ -10,7 +10,7 @@ export const hashFile = async (file: Blob): Promise<string> => {
   return toB58String(encodeHash(digest, 'blake3'))
 }
 
-export const merkleRoot = (file: Blob): Promise<string> => {
+export const merkleRootFromBinary = (file: Blob): Promise<string> => {
   // It should be `end + 1` because the second parametter of `Blob.start() is the "the first byte that will *not* be included"
   // (ref: https://developer.mozilla.org/en-US/docs/Web/API/Blob/slice#end)
   const read = async (start: number, end: number) => new Uint8Array(await file.slice(start, end + 1).arrayBuffer())
