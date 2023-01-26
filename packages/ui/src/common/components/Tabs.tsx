@@ -149,6 +149,7 @@ export const TabContainer = styled.button<TabActiveProps>`
       &:focus,
       &:focus-within {
         color: ${Colors.Grey};
+        border:solid 1px #000000
       }
     `}
 `

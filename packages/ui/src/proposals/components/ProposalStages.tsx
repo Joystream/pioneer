@@ -21,18 +21,16 @@ export const ProposalStages = ({ status, updates, constitutionality = '-', value
     const rejected = !onGoing && !approved
     const isDeciding = onGoing && status === 'deciding'
     const isDormant = onGoing && status === 'dormant'
-    
+
     return [
-      ...repeat((round) => ({ icon: <CheckboxIcon />, onClick: () => onChange(round) }), decidingCount - 1),
+      ...repeat((round) => ({ icon: <CheckboxIcon />, onClick: () => onChange(round) }), decidingCount),
       {
         icon: !isDeciding && (rejected ? <CrossIcon /> : <CheckboxIcon />),
-        onClick: () => onChange(decidingCount - 1),
+        onClick: () => onChange(decidingCount),
       },
       ...(isDormant ? [{ icon: false, onClick: undefined }] : []),
     ]
   }, [updates.length, status])
-
-  console.log(rounds);
 
   return (
     <TabsContainer>
@@ -42,7 +40,6 @@ export const ProposalStages = ({ status, updates, constitutionality = '-', value
           <span>
             Council approvals {round + 1}/{constitutionality}
           </span>
-
         </TabContainer>
       ))}
     </TabsContainer>
