@@ -146,12 +146,9 @@ export const TabContainer = styled.button<TabActiveProps>`
       cursor: not-allowed;
       &,
       &:focus,
+      &:hover,
       &:focus-within {
         color: ${Colors.Grey};
-      }
-      &:hover {
-        color: ${Colors.Grey};
-        border: solid 1px #000000;
       }
     `}
 `
