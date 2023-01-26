@@ -107,10 +107,12 @@ const RolesListItem = ({ worker, payout = BN_ZERO }: { worker: Worker; payout?: 
         <OpenItemSummaryColumn>
           <TextInlineBig>
             <TokenValue value={myEarnings?.month} />
+          </TextInlineBig>
+          <ToggleableSubscriptionWide>
             {earnings}
             {testid}
-          </TextInlineBig>
-          <ToggleableSubscriptionWide>Earned total</ToggleableSubscriptionWide>
+            Earned total
+          </ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
