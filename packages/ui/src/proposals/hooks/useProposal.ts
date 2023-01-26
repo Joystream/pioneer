@@ -11,8 +11,6 @@ export const useProposal = (id: string): UseProposal => {
 
   const { loading, data } = useGetProposalQuery(params)
 
-  console.log("data:",data);
-
   return {
     isLoading: loading,
     proposal: data && data.proposal ? asProposalWithDetails(data.proposal) : null,

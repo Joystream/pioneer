@@ -106,8 +106,8 @@ export const ProposalPreview = () => {
     )
   }
 
-  console.log(proposal.status);
-  
+  console.log(proposal.status)
+
   return (
     <PageLayout
       lastBreadcrumb={proposal.title}
@@ -162,7 +162,7 @@ export const ProposalPreview = () => {
             </BadgeAndTime>
           </RowGapBlock>
 
-          {(proposal.status === 'dormant' || votingRounds.length > 1 ||proposal.status === 'deciding') && (
+          {(proposal.status === 'dormant' || votingRounds.length > 1) && (
             <ProposalStages
               status={proposal.status}
               updates={proposal.proposalStatusUpdates}
