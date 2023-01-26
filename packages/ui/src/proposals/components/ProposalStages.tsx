@@ -6,7 +6,7 @@ import { TabContainer, TabsContainer } from '@/common/components/Tabs'
 import { last, repeat } from '@/common/utils'
 import { ProposalStatus, ProposalStatusUpdates } from '@/proposals/types'
 
-import { Tooltip } from '../../../common/components/Tooltip'
+import { Tooltip } from '@/common/components/Tooltip'
 
 import styled, { css } from 'styled-components'
 
