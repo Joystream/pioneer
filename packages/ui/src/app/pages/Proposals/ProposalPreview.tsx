@@ -149,7 +149,7 @@ export const ProposalPreview = () => {
                   <TextInlineMedium lighter>ID: </TextInlineMedium>
                   <TextInlineMedium bold>{proposal.id}</TextInlineMedium>{' '}
                 </TextMedium>
-                {blocksToProposalExecution && (
+                {blocksToProposalExecution && proposal.status === 'executed' && (
                   <TextMedium>
                     <TextInlineMedium lighter>Time left:</TextInlineMedium>{' '}
                     <TextInlineMedium bold>{formatBlocksToDuration(blocksToProposalExecution)}</TextInlineMedium>{' '}
