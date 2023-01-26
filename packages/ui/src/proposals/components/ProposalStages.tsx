@@ -13,9 +13,6 @@ export interface ProposalStagesProps extends ControlProps<number> {
 }
 
 export const ProposalStages = ({ status, updates, constitutionality = '-', value, onChange }: ProposalStagesProps) => {
-  console.log('status:', status)
-  console.log('updates:', updates)
-  console.log('value:', value)
 
   const rounds = useMemo(() => {
     const decidingCount = updates.filter(({ status }) => status === 'deciding').length
