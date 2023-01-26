@@ -42,7 +42,10 @@ import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
   const history = useHistory()
-  const { isLoading, proposal } = useProposal(id)
+  const { isLoading, proposal } = useProposal(id);
+
+  console.log(proposal);
+  
   const { council } = useElectedCouncil()
   const constants = useProposalConstants(proposal?.details.type)
   const loc = useLocation()
