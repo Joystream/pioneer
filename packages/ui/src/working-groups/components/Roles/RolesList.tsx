@@ -76,6 +76,7 @@ const RolesListItem = ({ worker, payout = BN_ZERO }: { worker: Worker; payout?: 
     })
   }, [])
   const { earnings } = useWorkerEarnings(worker.id)
+  const testid = worker.id
 
   console.log('main earnings:', earnings, 'worker.id:', worker.id)
 
@@ -107,7 +108,7 @@ const RolesListItem = ({ worker, payout = BN_ZERO }: { worker: Worker; payout?: 
           <TextInlineBig>
             <TokenValue value={myEarnings?.month} />
             {earnings}
-            {worker.id}
+            {testid}
           </TextInlineBig>
           <ToggleableSubscriptionWide>Earned total</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
