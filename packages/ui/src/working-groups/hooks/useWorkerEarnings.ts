@@ -12,8 +12,6 @@ export const useWorkerEarnings = (workerId: string) => {
   const { loading, data } = useGetRewardsQuery({ variables: { where: { worker: { id_eq: workerId } } } })
   const earnings = data?.rewardPaidEvents.reduce(accumulator, BN_ZERO)
 
-  console.log('workID:', workerId, 'earning:', earnings)
-
   const currentDayEarnings = data?.rewardPaidEvents
     .filter((event) => {
       // TODO use rewardPerBlock

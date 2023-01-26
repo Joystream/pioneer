@@ -79,10 +79,6 @@ const RolesListItem = ({ worker, payout = BN_ZERO }: { worker: Worker; payout?: 
 
   const { earnings } = useWorkerEarnings(worker.id)
 
-  console.log(earnings)
-
-  const myEarnings = useMyEarnings()
-
   const rewardPeriod = useRewardPeriod(worker.group.id)
 
   const roleRoute = `/working-groups/my-roles/${worker.id}`
