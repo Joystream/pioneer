@@ -77,7 +77,7 @@ const RolesListItem = ({ worker, payout = BN_ZERO }: { worker: Worker; payout?: 
   }, [])
   const { earnings } = useWorkerEarnings(worker.id)
 
-  // console.log(worker.id, worker.group.id)
+  console.log('main earnings:', earnings, 'worker.id:', worker.id)
 
   const myEarnings = useMyEarnings()
 

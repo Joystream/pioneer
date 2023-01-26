@@ -9,9 +9,13 @@ const DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 const accumulator = (prev: BN, next: GetRewardsQuery['rewardPaidEvents'][number]) => prev.add(new BN(next.amount))
 
 export const useWorkerEarnings = (workerId: string) => {
+
+  
   const { loading, data } = useGetRewardsQuery({ variables: { where: { worker: { id_eq: workerId } } } })
   const earnings = data?.rewardPaidEvents.reduce(accumulator, BN_ZERO)
-
+  
+  console.log("workID:",workerId,"earning:" earnings);
+  
   const currentDayEarnings = data?.rewardPaidEvents
     .filter((event) => {
       // TODO use rewardPerBlock
