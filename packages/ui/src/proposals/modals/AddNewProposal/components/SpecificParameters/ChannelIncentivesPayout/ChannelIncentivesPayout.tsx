@@ -55,20 +55,31 @@ export const ChannelIncentivesPayout = () => {
       setIsProcessingFile(true)
 
       setValue('channelIncentivesPayout.payloadSize', file.size, { shouldValidate: true })
+      setValue('channelIncentivesPayout.payloadHash', undefined, { shouldValidate: true })
+      setValue('channelIncentivesPayout.commitment', undefined, { shouldValidate: true })
 
-      const recordError = (message: string) => () => ((file as any).error = [...((file as any).errors ?? []), message])
+      const errors: string[] = []
 
-      const hash = hashFile(file).then((hash) => {
-        setValue('channelIncentivesPayout.payloadHash', hash, { shouldValidate: true })
-      }, recordError('Failure while generating hash'))
+      const hash = hashFile(file).then(
+        (hash) => {
+          setValue('channelIncentivesPayout.payloadHash', hash, { shouldValidate: true })
+        },
+        () => errors.push('Failure while generating hash')
+      )
 
-      const commitment = merkleRootFromBinary(file).then((commitment) => {
-        setValue('channelIncentivesPayout.commitment', commitment, { shouldValidate: true })
-      }, recordError('Failure while generating commitment'))
+      const commitment = merkleRootFromBinary(file).then(
+        (commitment) => {
+          setValue('channelIncentivesPayout.commitment', commitment, { shouldValidate: true })
+        },
+        () => errors.push('Failure while generating commitment')
+      )
 
       await Promise.all([commitment, hash])
-      setIsProcessingFile(false)
 
+      setIsProcessingFile(false)
+      if (errors.length > 0) {
+        Object.defineProperty(file, 'errors', { value: errors })
+      }
       return [file]
     },
     [setValue]
@@ -87,10 +98,9 @@ export const ChannelIncentivesPayout = () => {
           maxFiles={1}
           multiple={false}
           getFilesFromEvent={processPayload}
-          validator={(file) => {
-            const { errors } = file as { errors?: string[] }
-            return errors?.length ? { code: 'processing-failure', message: errors.join('\n') } : null
-          }}
+          validator={(file: File & { errors?: string[] }) =>
+            file.errors?.length ? { code: 'processing-failure', message: file.errors.join('\n') } : null
+          }
         />
         {isProcessingFile && (
           <Box>
