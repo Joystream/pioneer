@@ -7,7 +7,7 @@ import { Arrow } from '@/common/components/icons'
 import { ListItem } from '@/common/components/List'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { ProgressBar } from '@/common/components/Progress'
-import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
+import { Tooltip } from '@/common/components/Tooltip'
 import { TextInlineBig, TextInlineSmall, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BN_ZERO, Colors } from '@/common/constants'
@@ -59,7 +59,8 @@ export const CandidateVote = ({
   const roundedPercentage = totalStake.gt(BN_ZERO) ? sumOfAllStakes.muln(100).divRound(totalStake).toNumber() : 0
   const userVoted = myVotes.length > 0
   const allVotesRevealed = myVotes.every((vote) => vote.voteFor)
-  const tooltipLabel = 'Vote for your own membership with the same account as used for council candidacy creation counts towards the progress. Please note, this will in a voting lock applied to this account, which may only be withdrawn in the end of the council period if you win the election and released immediately if your candidacy gets outvoted by others. Voting locks are non-rivalrous.'
+  const tooltipLabel =
+    'Vote for your own membership with the same account as used for council candidacy creation counts towards the progress. Please note, this will in a voting lock applied to this account, which may only be withdrawn in the end of the council period if you win the election and released immediately if your candidacy gets outvoted by others. Voting locks are non-rivalrous.'
   const tooltipLinkURL = 'https://joystream.gitbook.io/testnet-workspace/system/council#candidacy'
   const RevealButton = <RevealVoteButton myVotes={myVotes} voteForHandle={member.handle} />
 
@@ -88,7 +89,7 @@ export const CandidateVote = ({
               <>
                 <Tooltip tooltipText={tooltipLabel} tooltipLinkURL={tooltipLinkURL}>
                   <Subscription>My contributed votes</Subscription>
-                </Tooltip>                
+                </Tooltip>
                 <StatsValue>
                   <TokenValue value={myStake} />
                 </StatsValue>

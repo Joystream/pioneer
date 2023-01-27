@@ -3,12 +3,9 @@ import React, { useMemo } from 'react'
 import { ControlProps } from '@/common/components/forms'
 import { CheckboxIcon, CrossIcon } from '@/common/components/icons'
 import { TabContainer, TabsContainer } from '@/common/components/Tabs'
+import { Tooltip } from '@/common/components/Tooltip'
 import { last, repeat } from '@/common/utils'
 import { ProposalStatus, ProposalStatusUpdates } from '@/proposals/types'
-
-import { Tooltip } from '@/common/components/Tooltip'
-
-import styled, { css } from 'styled-components'
 
 export interface ProposalStagesProps extends ControlProps<number> {
   status: ProposalStatus
