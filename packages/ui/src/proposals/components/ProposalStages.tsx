@@ -17,10 +17,11 @@ export interface ProposalStagesProps extends ControlProps<number> {
 }
 
 export const ProposalStages = ({ status, updates, constitutionality = '-', value, onChange }: ProposalStagesProps) => {
-
-  console.log(status, updates, constitutionality,value);
   const rounds = useMemo(() => {
     const decidingCount = updates.filter(({ status }) => status === 'deciding').length
+
+    const totalRoundCount = typeof constitutionality === 'string' ? undefined : constitutionality
+
     const lastUpdate = last(updates).status
     const onGoing = lastUpdate === status
     const approved = lastUpdate === 'gracing'
@@ -34,9 +35,14 @@ export const ProposalStages = ({ status, updates, constitutionality = '-', value
         icon: !isDeciding && (rejected ? <CrossIcon /> : <CheckboxIcon />),
         onClick: () => onChange(decidingCount - 1),
       },
-      ...(isDormant ? [{ icon: false, onClick: undefined }] : []),
+      ...(isDormant
+        ? repeat(
+            () => ({ icon: false, onClick: undefined }),
+            totalRoundCount !== undefined ? totalRoundCount - decidingCount - 1 : 1
+          )
+        : []),
     ]
-  }, [updates.length, status])
+  }, [updates.length, status, constitutionality])
 
   return (
     <TabsContainer>
