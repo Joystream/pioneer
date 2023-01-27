@@ -17,21 +17,17 @@ interface DragResponseProps {
 interface FileDropzoneProps extends Omit<DropzoneOptions, 'getFilesFromEvent'> {
   title: string
   subtitle: string
-  getFilesFromEvent?: (file: File[]) => Promise<File[]>
+  getFilesFromEvent: (file: File[]) => Promise<File[]>
 }
 
 const MEGABYTE = 1024 * 1024
 
 export const FileDropzone = ({ title, subtitle, getFilesFromEvent, ...dropzoneOptions }: FileDropzoneProps) => {
   const { isDragActive, isDragAccept, isDragReject, getRootProps, getInputProps, acceptedFiles, fileRejections } =
-    useDropzone(
-      getFilesFromEvent
-        ? {
-            ...dropzoneOptions,
-            getFilesFromEvent: (event) => getFilesFromEvent(getFilesFromRawEvent(event)),
-          }
-        : dropzoneOptions
-    )
+    useDropzone({
+      ...dropzoneOptions,
+      getFilesFromEvent: (event) => getFilesFromEvent(getFilesFromRawEvent(event)),
+    })
 
   return (
     <RowGapBlock gap={32}>
