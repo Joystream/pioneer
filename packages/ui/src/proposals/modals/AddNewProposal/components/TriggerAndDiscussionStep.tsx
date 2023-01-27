@@ -24,8 +24,12 @@ export const TriggerAndDiscussionStep = () => {
   ])
 
   const addMemberToWhitelist = (member: Member) => {
-    setValue('triggerAndDiscussion.discussionWhitelist', [...discussionWhitelist, member], { shouldValidate: true })
+    if (watch.length < 20)
+      setValue('triggerAndDiscussion.discussionWhitelist', [...discussionWhitelist, member], {
+        shouldValidate: true,
+      })
   }
+
   const removeMemberFromWhitelist = (member: Member) => {
     setValue(
       'triggerAndDiscussion.discussionWhitelist',
