@@ -110,21 +110,21 @@ export const ChannelIncentivesPayout = () => {
       </Row>
       {payloadSize && (
         <Row>
-          <InputComponent label="Payload size" units="bytes" disabled>
+          <InputComponent label="Payload size" units="bytes" textToCopy={payloadSize} copy>
             <InputNumber value={payloadSize} disabled />
           </InputComponent>
         </Row>
       )}
       {commitment && (
         <Row>
-          <InputComponent label="Commitment" disabled>
+          <InputComponent label="Commitment" textToCopy={commitment} copy>
             <Input value={commitment} disabled />
           </InputComponent>
         </Row>
       )}
       {payloadHash && (
         <Row>
-          <InputComponent label="Payload hash" disabled>
+          <InputComponent label="Payload hash" textToCopy={payloadHash} copy>
             <Input value={payloadHash} disabled />
           </InputComponent>
         </Row>
