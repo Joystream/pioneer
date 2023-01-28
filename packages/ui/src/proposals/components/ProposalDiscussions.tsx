@@ -26,7 +26,7 @@ interface Props {
 }
 
 const hints = {
-  open: 'This is an open discussion, everyone can comment.',
+  open: 'Open discussion is open for every member to comment on, while closed would only be available for council members, white-listed members and creator of the proposal.',
   closed: 'This discussion is closed. Only selected members and the council can comment.',
 }
 
