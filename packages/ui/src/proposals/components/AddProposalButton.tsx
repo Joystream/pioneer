@@ -19,17 +19,19 @@ export const AddProposalButton = () => {
 
   const tooltipProps = useMemo(() => {
     if (!api?.isConnected) return { tooltipText: 'Connecting to api' }
-    if (availableSlots ?? 0)
+    if (!api?.isConnected || availableSlots > 0) {
+      return {
+        tooltipText: 'Use the proposal engine to suggest a change to the Council.',
+        tooltipLinkText: 'Learn about the Proposal System',
+        tooltipLinkURL: 'https://joystream.gitbook.io/testnet-workspace/system/proposal-system',
+      }
+    } else {
       return {
         tooltipTitle: 'Max active proposals limit reached',
         tooltipText: `The creation of proposals is currently disabled because the number of deciding or gracing proposals reached the limit of ${maxProposals}.`,
         tooltipLinkText: 'Proposal System Constants',
         tooltipLinkURL: 'https://joystream.gitbook.io/testnet-workspace/system/proposal-system#constants',
       }
-    return {
-      tooltipText: 'Use the proposal engine to suggest a change to the Council.',
-      tooltipLinkText: 'Learn about the Proposal System',
-      tooltipLinkURL: 'https://joystream.gitbook.io/testnet-workspace/system/proposal-system',
     }
   }, [api?.isConnected, availableSlots])
 
