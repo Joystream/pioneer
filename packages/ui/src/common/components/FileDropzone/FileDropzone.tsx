@@ -17,12 +17,19 @@ interface DragResponseProps {
 interface FileDropzoneProps extends Omit<DropzoneOptions, 'getFilesFromEvent'> {
   title: string
   subtitle: string
+  isRequired?: boolean
   getFilesFromEvent: (file: File[]) => Promise<File[]>
 }
 
 const MEGABYTE = 1024 * 1024
 
-export const FileDropzone = ({ title, subtitle, getFilesFromEvent, ...dropzoneOptions }: FileDropzoneProps) => {
+export const FileDropzone = ({
+  title,
+  subtitle,
+  getFilesFromEvent,
+  isRequired,
+  ...dropzoneOptions
+}: FileDropzoneProps) => {
   const { isDragActive, isDragAccept, isDragReject, getRootProps, getInputProps, acceptedFiles, fileRejections } =
     useDropzone({
       ...dropzoneOptions,
@@ -34,7 +41,7 @@ export const FileDropzone = ({ title, subtitle, getFilesFromEvent, ...dropzoneOp
       <RowGapBlock gap={4}>
         <RowGapBlock gap={12}>
           <RowGapBlock gap={4}>
-            <Label isRequired>{title}</Label>
+            <Label isRequired={isRequired}>{title}</Label>
             <TextMedium lighter>{subtitle}</TextMedium>
           </RowGapBlock>
           <DropZone

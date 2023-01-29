@@ -5,7 +5,15 @@ import { Account } from '@/accounts/types'
 import { CurrencyName } from '@/app/constants/currency'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
 import { Address } from '@/common/types'
-import { BNSchema, lessThanMixed, maxContext, maxMixed, minContext, moreThanMixed } from '@/common/utils/validation'
+import {
+  BNSchema,
+  lessThanMixed,
+  maxContext,
+  maxMixed,
+  minContext,
+  moreThanMixed,
+  whenDefined,
+} from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
 import { ProposalType } from '@/proposals/types'
@@ -336,7 +344,9 @@ export const schemaFactory = (api?: ProxyApi) => {
       amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
     }),
     channelIncentivesPayout: Yup.object().shape({
-      payloadSize: Yup.number().required(),
+      payloadSize: Yup.number(),
+      payloadHash: whenDefined('payloadSize', Yup.string().required()),
+      commitment: whenDefined('payloadSize', Yup.string().required()),
       minimumCashoutAllowed: BNSchema.test(
         minContext(
           `Input should be at least \${min}${CurrencyName.integerValue} for proposal to execute`,
@@ -358,7 +368,6 @@ export const schemaFactory = (api?: ProxyApi) => {
         )
         .required(),
       channelCashoutsEnabled: Yup.boolean(),
-      commitment: Yup.string().required(),
     }),
   })
 }

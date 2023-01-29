@@ -16,6 +16,13 @@ import { formatJoyValue } from '@/common/model/formatters'
 
 export const BNSchema = Yup.mixed()
 
+export const whenDefined = (key: string, schema: Yup.AnySchema) =>
+  Yup.mixed().when(key, {
+    is: undefined,
+    then: Yup.mixed(),
+    otherwise: schema,
+  })
+
 /*
  *   Both maxContext and minContext allow you to check whether value is bigger or
  *   smaller than context value that has been provided to yup.

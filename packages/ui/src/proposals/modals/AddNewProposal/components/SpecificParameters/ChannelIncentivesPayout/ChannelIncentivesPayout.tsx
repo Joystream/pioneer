@@ -54,9 +54,11 @@ export const ChannelIncentivesPayout = () => {
 
       setIsProcessingFile(true)
 
-      setValue('channelIncentivesPayout.payloadSize', file.size, { shouldValidate: true })
+      setValue('channelIncentivesPayout.payload', undefined)
+      setValue('channelIncentivesPayout.payloadSize', file.size, { shouldValidate: true }) // Set it first for when no file was set before
       setValue('channelIncentivesPayout.payloadHash', undefined, { shouldValidate: true })
       setValue('channelIncentivesPayout.commitment', undefined, { shouldValidate: true })
+      setValue('channelIncentivesPayout.payloadSize', file.size, { shouldValidate: true }) // Set it again for when a valid file was set before
 
       const errors: string[] = []
 
