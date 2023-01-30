@@ -24,7 +24,6 @@ import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
-import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
@@ -33,6 +32,7 @@ import { isLastStepActive } from '@/common/modals/utils'
 import { createType } from '@/common/model/createType'
 import { getMaxBlock } from '@/common/model/getMaxBlock'
 import { getSteps } from '@/common/model/machines/getSteps'
+import { joy } from '@/common/utils'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { machineStateConverter } from '@/council/modals/AnnounceCandidacy/helpers'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -68,8 +68,8 @@ export const AddNewProposalModal = () => {
   const { active: activeMember } = useMyMemberships()
   const minimumValidatorCount = useMinimumValidatorCount()
   const maximumReferralCut = api?.consts.members.referralCutMaximumPercent
-  const minCashoutAllowed = useFirstObservableValue(() => api?.query.content.minCashoutAllowed(), [])
-  const maxCashoutAllowed = useFirstObservableValue(() => api?.query.content.maxCashoutAllowed(), [])
+  const minCashoutAllowed = joy(166, 6_666_666_660)
+  const maxCashoutAllowed = joy(16_666_66, 6_666_600_000)
   const currentBlock = useCurrentBlockNumber()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)

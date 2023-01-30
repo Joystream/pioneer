@@ -11,6 +11,7 @@ import {
   maxContext,
   maxMixed,
   minContext,
+  minMixed,
   moreThanMixed,
   whenDefined,
 } from '@/common/utils/validation'
@@ -356,7 +357,7 @@ export const schemaFactory = (api?: ProxyApi) => {
         )
       ).required(),
       maximumCashoutAllowed: BNSchema.test(
-        moreThanMixed(Yup.ref('minimumCashoutAllowed'), 'Maximum cashout cannot be lower than minimum')
+        minMixed(Yup.ref('minimumCashoutAllowed'), 'Maximum cashout cannot be lower than minimum')
       )
         .test(
           maxContext(
