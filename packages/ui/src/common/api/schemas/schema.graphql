@@ -2052,6 +2052,61 @@ type Collaborator implements BaseGraphQLObject {
   permissions: [String!]!
 }
 
+"""
+Direct channel payment by any member by-passing the council payouts
+"""
+type ChannelPaymentMadeEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+  payer: Membership!
+  payerId: String!
+
+  """
+  Amount of the payment
+  """
+  amount: BigInt!
+
+  """
+  Payment and payee context
+  """
+  paymentContext: PaymentContext
+  payeeChannel: Channel
+  payeeChannelId: String
+
+  """
+  Reason of the payment
+  """
+  rationale: String
+}
+
+union PaymentContext = PaymentContextVideo | PaymentContextChannel
+
 type Channel implements BaseGraphQLObject {
   id: ID!
   createdAt: DateTime!
@@ -2127,6 +2182,7 @@ type Channel implements BaseGraphQLObject {
   cumulativeRewardClaimed: BigInt
   claimedRewards: [ChannelRewardClaimedEvent!]!
   channelfundswithdrawneventchannel: [ChannelFundsWithdrawnEvent!]
+  channelpaymentmadeeventpayeeChannel: [ChannelPaymentMadeEvent!]
   channelrewardclaimedandwithdrawneventchannel: [ChannelRewardClaimedAndWithdrawnEvent!]
   commentcreatedeventvideoChannel: [CommentCreatedEvent!]
   commentdeletedeventvideoChannel: [CommentDeletedEvent!]
@@ -2805,6 +2861,7 @@ type Membership implements BaseGraphQLObject {
   bountyentryworker: [BountyEntry!]
   buynowcanceledeventownerMember: [BuyNowCanceledEvent!]
   buynowpriceupdatedeventownerMember: [BuyNowPriceUpdatedEvent!]
+  channelpaymentmadeeventpayer: [ChannelPaymentMadeEvent!]
   commentauthor: [Comment!]
   commentcreatedeventparentCommentAuthor: [CommentCreatedEvent!]
   commentreactedeventreactingMember: [CommentReactedEvent!]
@@ -3494,6 +3551,11 @@ type MetaprotocolTransactionSuccessful {
   ID of the delete video category (if any)
   """
   videoCategoryDeleted: Video
+
+  """
+  Payment made to channel by the member sending the remark action (if any)
+  """
+  channelPaid: Channel
 }
 
 type OpeningStatusCancelled {
@@ -3512,6 +3574,20 @@ type OpeningStatusFilled {
 
 type OpeningStatusOpen {
   phantom: Int
+}
+
+type PaymentContextChannel {
+  """
+  Channel for which the payment was made
+  """
+  channel: Channel
+}
+
+type PaymentContextVideo {
+  """
+  Video for which the payment was made
+  """
+  video: Video
 }
 
 type PostOriginThreadInitial {
@@ -3879,6 +3955,11 @@ type UpdateChannelPayoutsProposalDetails {
   Can channel cashout the rewards
   """
   channelCashoutsEnabled: Boolean
+
+  """
+  The hash of the channel payout payload file
+  """
+  payloadHash: String
 }
 
 type UpdateWorkingGroupBudgetProposalDetails {
@@ -4875,6 +4956,17 @@ type ChannelNftCollectorsEdge {
 type ChannelNftCollectorsConnection {
   totalCount: Int!
   edges: [ChannelNftCollectorsEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ChannelPaymentMadeEventEdge {
+  node: ChannelPaymentMadeEvent!
+  cursor: String!
+}
+
+type ChannelPaymentMadeEventConnection {
+  totalCount: Int!
+  edges: [ChannelPaymentMadeEventEdge!]!
   pageInfo: PageInfo!
 }
 
@@ -15886,6 +15978,97 @@ input ChannelFundsWithdrawnEventUpdateInput {
   actor: JSONObject
 }
 
+input ChannelPaymentMadeEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  amount_eq: BigInt
+  amount_gt: BigInt
+  amount_gte: BigInt
+  amount_lt: BigInt
+  amount_lte: BigInt
+  amount_in: [BigInt!]
+  paymentContext_json: JSONObject
+  rationale_eq: String
+  rationale_contains: String
+  rationale_startsWith: String
+  rationale_endsWith: String
+  rationale_in: [String!]
+  payer: MembershipWhereInput
+  payeeChannel: ChannelWhereInput
+  AND: [ChannelPaymentMadeEventWhereInput!]
+  OR: [ChannelPaymentMadeEventWhereInput!]
+  NOT: [ChannelPaymentMadeEventWhereInput!]
+}
+
+input ChannelPaymentMadeEventWhereUniqueInput {
+  id: ID!
+}
+
+input ChannelPaymentMadeEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  payer: ID!
+  amount: String!
+  paymentContext: JSONObject!
+  payeeChannel: ID
+  rationale: String
+}
+
+input ChannelPaymentMadeEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  payer: ID
+  amount: String
+  paymentContext: JSONObject
+  payeeChannel: ID
+  rationale: String
+}
+
 input ChannelRewardClaimedAndWithdrawnEventWhereInput {
   id_eq: ID
   id_in: [ID!]
@@ -16148,6 +16331,9 @@ input ChannelWhereInput {
   channelfundswithdrawneventchannel_none: ChannelFundsWithdrawnEventWhereInput
   channelfundswithdrawneventchannel_some: ChannelFundsWithdrawnEventWhereInput
   channelfundswithdrawneventchannel_every: ChannelFundsWithdrawnEventWhereInput
+  channelpaymentmadeeventpayeeChannel_none: ChannelPaymentMadeEventWhereInput
+  channelpaymentmadeeventpayeeChannel_some: ChannelPaymentMadeEventWhereInput
+  channelpaymentmadeeventpayeeChannel_every: ChannelPaymentMadeEventWhereInput
   channelrewardclaimedandwithdrawneventchannel_none: ChannelRewardClaimedAndWithdrawnEventWhereInput
   channelrewardclaimedandwithdrawneventchannel_some: ChannelRewardClaimedAndWithdrawnEventWhereInput
   channelrewardclaimedandwithdrawneventchannel_every: ChannelRewardClaimedAndWithdrawnEventWhereInput
@@ -19220,6 +19406,9 @@ input MembershipWhereInput {
   buynowpriceupdatedeventownerMember_none: BuyNowPriceUpdatedEventWhereInput
   buynowpriceupdatedeventownerMember_some: BuyNowPriceUpdatedEventWhereInput
   buynowpriceupdatedeventownerMember_every: BuyNowPriceUpdatedEventWhereInput
+  channelpaymentmadeeventpayer_none: ChannelPaymentMadeEventWhereInput
+  channelpaymentmadeeventpayer_some: ChannelPaymentMadeEventWhereInput
+  channelpaymentmadeeventpayer_every: ChannelPaymentMadeEventWhereInput
   commentauthor_none: CommentWhereInput
   commentauthor_some: CommentWhereInput
   commentauthor_every: CommentWhereInput
@@ -30268,6 +30457,21 @@ type Query {
     where: ChannelNftCollectorsWhereInput
     orderBy: [ChannelNftCollectorsOrderByInput!]
   ): ChannelNftCollectorsConnection!
+  channelPaymentMadeEvents(
+    offset: Int
+    limit: Int = 50
+    where: ChannelPaymentMadeEventWhereInput
+    orderBy: [ChannelPaymentMadeEventOrderByInput!]
+  ): [ChannelPaymentMadeEvent!]!
+  channelPaymentMadeEventByUniqueInput(where: ChannelPaymentMadeEventWhereUniqueInput!): ChannelPaymentMadeEvent
+  channelPaymentMadeEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: ChannelPaymentMadeEventWhereInput
+    orderBy: [ChannelPaymentMadeEventOrderByInput!]
+  ): ChannelPaymentMadeEventConnection!
   channelPayoutsUpdatedEvents(
     offset: Int
     limit: Int = 50
@@ -33784,6 +33988,31 @@ enum ChannelNftCollectorsOrderByInput {
   amount_DESC
   lastIncreaseAt_ASC
   lastIncreaseAt_DESC
+}
+
+enum ChannelPaymentMadeEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  payer_ASC
+  payer_DESC
+  amount_ASC
+  amount_DESC
+  payeeChannel_ASC
+  payeeChannel_DESC
+  rationale_ASC
+  rationale_DESC
 }
 
 enum ChannelPayoutsUpdatedEventOrderByInput {
