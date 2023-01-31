@@ -90,6 +90,7 @@ export type PastCouncilProposalsFieldsFragment = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
     creator: {
@@ -598,6 +599,7 @@ export type FundingRequestApprovedFragment = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
   }
@@ -745,6 +747,7 @@ export type GetPastCouncilQuery = {
         | { __typename: 'SignalProposalDetails' }
         | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
         | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+        | { __typename: 'UpdateChannelPayoutsProposalDetails' }
         | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
         | { __typename: 'VetoProposalDetails' }
     }
@@ -839,6 +842,7 @@ export type GetPastCouncilMembersQuery = {
         | { __typename: 'SignalProposalDetails' }
         | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
         | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+        | { __typename: 'UpdateChannelPayoutsProposalDetails' }
         | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
         | { __typename: 'VetoProposalDetails' }
       creator: {
@@ -925,6 +929,7 @@ export type GetPastCouncilProposalsQuery = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
     creator: {
@@ -1448,6 +1453,7 @@ export type GetPastCouncilStatsQuery = {
         | { __typename: 'SignalProposalDetails' }
         | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
         | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+        | { __typename: 'UpdateChannelPayoutsProposalDetails' }
         | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
         | { __typename: 'VetoProposalDetails' }
     }

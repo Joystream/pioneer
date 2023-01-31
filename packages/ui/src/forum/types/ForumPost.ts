@@ -1,8 +1,12 @@
-import { Network, PostReaction } from '@/common/api/queries'
+import { Network } from '@/common/api/queries'
 import { PostStatus as PostStatusSchema } from '@/common/api/queries/__generated__/baseTypes.generated'
 import { asBlock, Block } from '@/common/types/Block'
 import { ForumPostFieldsFragment } from '@/forum/queries/__generated__/forum.generated'
 import { asMember, Member } from '@/memberships/types'
+
+export enum PostReaction {
+  Like,
+}
 
 export interface ForumPost {
   id: string

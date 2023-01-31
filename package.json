@@ -24,8 +24,8 @@
     "wsrun": "^5.2.4"
   },
   "devDependencies": {
-    "@typescript-eslint/parser": "^5.19.0",
-    "eslint": "^7.29.0",
+    "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "@typescript-eslint/parser": "^5.50.0",
     "husky": ">=6",
     "lint-staged": ">=10"
   },
