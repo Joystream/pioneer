@@ -3440,7 +3440,6 @@ __metadata:
     "@testing-library/jest-dom": ^5.14.1
     "@testing-library/react": ^12.1.2
     "@testing-library/react-hooks": ^7.0.2
-    "@types/eslint": ^8
     "@types/faker": ^5.5.8
     "@types/jest": ^27.0.2
     "@types/mime": ^2.0.3
@@ -3466,7 +3465,6 @@ __metadata:
     date-fns: ^2.25.0
     dotenv: ^10.0.0
     escape-string-regexp: ^5.0.0
-    eslint: ^7.29.0
     eslint-plugin-react-hooks: ^4.2.0
     faker: ^5.5.3
     file-loader: ^6.2.0
@@ -6060,16 +6058,6 @@ __metadata:
     "@types/estree": "*"
     "@types/json-schema": "*"
   checksum: 18f37790afc57412c74c9a0ef9a8cc44c1237a3f3d70e3e4e3daad38ed501f1a70395ff3955d3e4b481a5d04e6819ad2c377cd287c7315b3b633f0f1bda7b4a2
-  languageName: node
-  linkType: hard
-
-"@types/eslint@npm:^8":
-  version: 8.4.10
-  resolution: "@types/eslint@npm:8.4.10"
-  dependencies:
-    "@types/estree": "*"
-    "@types/json-schema": "*"
-  checksum: 21e009ed9ed9bc8920fdafc6e11ff321c4538b4cc18a56fdd59dc5184ea7bbf363c71638c9bdb59fc1254dddcdd567485136ed68b0ee4750948d4e32cb79c689
   languageName: node
   linkType: hard
 
