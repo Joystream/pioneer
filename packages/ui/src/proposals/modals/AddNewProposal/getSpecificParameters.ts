@@ -177,7 +177,7 @@ export const getSpecificParameters = (
         SetMembershipPrice: specifics?.setMembershipPrice?.amount ?? 0,
       })
     }
-    case 'channelIncentivesPayout': {
+    case 'updateChannelPayouts': {
       return createType('PalletProposalsCodexProposalDetails', {
         UpdateChannelPayouts: createType('PalletContentUpdateChannelPayoutsParametersRecord', {
           payload: specifics?.channelIncentivesPayout.payload ?? null,

@@ -1,10 +1,10 @@
-import { ProposalType } from '@/proposals/types'
+import { DisabledProposal, ProposalType } from '@/proposals/types'
 
 type ProposalDescriptions = {
-  [key in ProposalType]: string
+  [key in ProposalType | DisabledProposal]: string
 }
 export const proposalDescriptions: ProposalDescriptions = {
-  channelIncentivesPayout:
+  updateChannelPayouts:
     'Proposal to submit the Channel Incentives Payload, defining how much JOYs can be minted by each channel within payout period and related parameters.',
   signal:
     'Think of signal as the what, whereas rationale parameter in other proposals would be the why. Signal proposal does not effect any platform parameters when accepted. ',
