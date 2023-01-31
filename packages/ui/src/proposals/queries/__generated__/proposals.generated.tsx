@@ -82,6 +82,7 @@ export type ProposalFieldsFragment = {
     | { __typename: 'SignalProposalDetails' }
     | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
     | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+    | { __typename: 'UpdateChannelPayoutsProposalDetails' }
     | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
     | { __typename: 'VetoProposalDetails' }
   creator: {
@@ -514,6 +515,7 @@ export type ProposalWithDetailsFieldsFragment = {
           }
         } | null
       }
+    | { __typename: 'UpdateChannelPayoutsProposalDetails' }
     | {
         __typename: 'UpdateWorkingGroupBudgetProposalDetails'
         amount: string
@@ -869,6 +871,7 @@ export type ProposalMentionFieldsFragment = {
     | { __typename: 'SignalProposalDetails' }
     | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
     | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+    | { __typename: 'UpdateChannelPayoutsProposalDetails' }
     | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
     | { __typename: 'VetoProposalDetails' }
   status:
@@ -974,6 +977,7 @@ export type GetProposalsQuery = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
     creator: {
@@ -1337,6 +1341,7 @@ export type GetProposalQuery = {
             }
           } | null
         }
+      | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | {
           __typename: 'UpdateWorkingGroupBudgetProposalDetails'
           amount: string
@@ -1685,6 +1690,7 @@ export type GetProposalMentionQuery = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
     status:
@@ -1795,6 +1801,7 @@ export type GetLatestProposalByMemberIdQuery = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
   }>
