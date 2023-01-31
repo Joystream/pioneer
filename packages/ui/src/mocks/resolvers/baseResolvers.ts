@@ -186,7 +186,7 @@ export const getConnectionResolver = <T extends QueryArgs, D extends Edge>(
     const schema = info.schema as GraphQLSchema
     const connectionType = schema.getType(typeName) as GraphQLObjectType
 
-    const { edges: edgesField } = connectionType?.getFields()
+    const { edges: edgesField } = connectionType?.getFields?.() ?? {}
     const { type: edgeType } = unwrapType(edgesField.type)
     const { type: nodeType } = unwrapType(edgeType.getFields().node.type)
     const { relayArgs } = getRelayArgs(args)
