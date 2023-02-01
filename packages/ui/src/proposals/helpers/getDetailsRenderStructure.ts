@@ -1,5 +1,6 @@
 import { omit } from 'lodash'
 
+import { TooltipContentProp } from '@/common/components/Tooltip'
 import { nameMapping } from '@/common/helpers'
 import { isDefined } from '@/common/utils'
 import {
@@ -38,9 +39,10 @@ export type RenderType =
   | 'Percentage'
 
 export interface RenderNode {
-  label?: string
-  value?: any
+  label: string
+  value: any
   renderType: RenderType
+  tooltip?: TooltipContentProp
 }
 
 type Mapper<Detail, Key extends keyof Detail> = (
@@ -63,6 +65,8 @@ const destinationsMapper: Mapper<DestinationsDetail, 'destinations'> = (value): 
       renderType: 'Address',
     })
     result.push({
+      label: '',
+      value: undefined,
       renderType: 'Divider',
     })
   })

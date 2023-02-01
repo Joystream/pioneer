@@ -3,6 +3,7 @@ import React, { ReactElement, useCallback, useMemo } from 'react'
 import { useApi } from '@/api/hooks/useApi'
 import { Info } from '@/common/components/Info'
 import { StatisticsThreeColumns } from '@/common/components/statistics'
+import { TooltipContentProp } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useCouncilStatistics } from '@/council/hooks/useCouncilStatistics'
@@ -30,7 +31,7 @@ interface Props {
 }
 
 export interface ProposalDetailContent {
-  (props: { label: string; value: any }): ReactElement
+  (props: { label: string; value: any; tooltip?: TooltipContentProp }): ReactElement
 }
 
 const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
@@ -56,7 +57,7 @@ export const ProposalDetails = ({ proposalDetails }: Props) => {
   const renderProposalDetail = useCallback((detail: RenderNode, index: number) => {
     const Component = renderTypeMapper[detail.renderType]
     if (Component) {
-      return <Component label={detail.label || ''} value={detail.value} key={index} />
+      return <Component key={index} {...detail} />
     }
 
     return null
