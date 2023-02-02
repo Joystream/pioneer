@@ -41,6 +41,8 @@ export const ProposalStages = ({ status, updates, constitutionality = '-', value
     ]
   }, [updates.length, status, constitutionality])
 
+  console.log(rounds);
+
   return (
     <TabsContainer>
       {rounds.map(({ icon, onClick }, round) => (
