@@ -172,7 +172,8 @@ export const schemaFactory = (api?: ProxyApi) => {
       isDiscussionClosed: Yup.boolean(),
       discussionWhitelist: Yup.array().when('isDiscussionClosed', {
         is: true,
-        then: Yup.array().required('Field is required'),
+        then: Yup.array().test(maxContext('The maximum block number is ${20}', 'maxTriggerBlock', false))
+          .required('Field is required')
       }),
     }),
     signal: Yup.object().shape({
