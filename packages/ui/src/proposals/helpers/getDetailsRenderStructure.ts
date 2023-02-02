@@ -264,7 +264,7 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
     tooltipText: 'This is the BLAKE3 hash fo the Executable payload file',
     tooltipLinkURL: 'https://github.com/BLAKE3-team/BLAKE3',
   }),
-  dataObjectId: textMapper('Data Object Id', {
+  payloadDataObjectId: textMapper('Data Object Id', {
     tooltipText:
       'This is the ID submitted to Chain for the Data Object (payout payload) to be further uploaded to the Storage. It will be displayed after proposal is executed.',
   }),
@@ -295,7 +295,7 @@ const getDetailsOrder = (proposalDetails: ProposalDetails): ProposalDetailsKeys[
       'minCashoutAllowed',
       'maxCashoutAllowed',
       'payloadHash',
-      'dataObjectId',
+      'payloadDataObjectId',
     ],
   }
 

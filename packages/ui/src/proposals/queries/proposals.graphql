@@ -359,3 +359,9 @@ query GetLatestProposalByMemberId($lockAccount: String) {
     createdAt
   }
 }
+
+query GetPayloadDataObjectId($inBlock: Int, $payloadHash: String) {
+  channelPayoutsUpdatedEvents(where: { inBlock_eq: $inBlock, payloadHash_eq: $payloadHash }, limit: 1) {
+    payloadDataObjectId
+  }
+}

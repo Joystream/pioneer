@@ -78,7 +78,7 @@ export type UpdateChannelPayoutsDetail = {
   minCashoutAllowed?: BN
   maxCashoutAllowed?: BN
   payloadHash?: string
-  dataObjectId?: string
+  payloadDataObjectId?: string
 }
 
 export type FundingRequestDetails = ProposalDetailsNew<'fundingRequest', DestinationsDetail>
@@ -165,6 +165,10 @@ export type ProposalDetails =
   | UpdateChannelPayoutsDetails
 
 export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
+
+export interface ProposalExtraDetails {
+  payloadDataObjectId?: string
+}
 
 const asFundingRequest: DetailsCast<'FundingRequestProposalDetails'> = (fragment): FundingRequestDetails => {
   return {
@@ -344,17 +348,19 @@ const asVeto: DetailsCast<'VetoProposalDetails'> = (fragment): VetoDetails => ({
 })
 
 const asUpdateChannelPayouts: DetailsCast<'UpdateChannelPayoutsProposalDetails'> = (
-  fragment
+  fragment,
+  extra
 ): UpdateChannelPayoutsDetails => ({
   type: 'updateChannelPayouts',
   minCashoutAllowed: asBN(fragment.minCashoutAllowed) ?? undefined,
   maxCashoutAllowed: asBN(fragment.maxCashoutAllowed) ?? undefined,
   channelCashoutsEnabled: fragment.channelCashoutsEnabled ?? undefined,
   payloadHash: fragment.payloadHash ?? undefined,
+  payloadDataObjectId: extra?.payloadDataObjectId,
 })
 
 interface DetailsCast<T extends ProposalDetailsTypename> {
-  (fragment: DetailsFragment & { __typename: T }): ProposalDetails
+  (fragment: DetailsFragment & { __typename: T }, extra?: ProposalExtraDetails): ProposalDetails
 }
 
 const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> = {
@@ -381,8 +387,8 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   UpdateChannelPayoutsProposalDetails: asUpdateChannelPayouts,
 }
 
-export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {
+export const asProposalDetails = (fragment: DetailsFragment, extra?: ProposalExtraDetails): ProposalDetails => {
   const type = fragment.__typename as ProposalDetailsTypename
-  const result = detailsCasts[type]?.(fragment)
+  const result = detailsCasts[type]?.(fragment, extra)
   return result ?? { type: undefined }
 }
