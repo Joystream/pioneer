@@ -6,7 +6,7 @@ import { Label, TextInlineMedium, TextMedium } from '@/common/components/typogra
 
 interface Props {
   label: string
-  value: string
+  value: string | undefined
 }
 
 export const Text = ({ label, value }: Props) => (
@@ -14,7 +14,7 @@ export const Text = ({ label, value }: Props) => (
     <RowGapBlock gap={4}>
       <Label>{label}</Label>
       <TextMedium lighter>
-        <TextInlineMedium dark>{value}</TextInlineMedium>
+        <TextInlineMedium dark>{value ?? '-'}</TextInlineMedium>
       </TextMedium>
     </RowGapBlock>
   </Row>

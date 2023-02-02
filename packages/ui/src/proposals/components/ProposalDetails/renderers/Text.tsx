@@ -6,14 +6,14 @@ import { TextInlineBig } from '@/common/components/typography'
 
 interface Props {
   label: string
-  value: string
+  value: string | undefined
   tooltip?: TooltipContentProp
 }
 
 export const Text = ({ label, value, tooltip = {} }: Props) => (
   <StatisticItem title={label} {...tooltip}>
     <TextInlineBig bold value>
-      {value}
+      {value ?? '-'}
     </TextInlineBig>
   </StatisticItem>
 )
