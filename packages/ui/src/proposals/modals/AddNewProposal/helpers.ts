@@ -162,7 +162,6 @@ export interface AddNewProposalForm {
     maximumCashoutAllowed?: BN
     cashoutEnabled?: boolean
     payload: {
-      uploaderAccount: Address
       objectCreationParams: { size_: BN; ipfsContentId: any /* Bytes */ }
       expectedDataSizeFee: BN
       expectedDataObjectStateBloatBond: BN

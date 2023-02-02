@@ -19,11 +19,9 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { useObservable } from '@/common/hooks/useObservable'
 import { merkleRootFromBinary, hashFile } from '@/common/utils/crypto/worker'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 export const ChannelIncentivesPayout = () => {
   const { api } = useApi()
-  const { active } = useMyMemberships()
   const { setValue, watch } = useFormContext()
   const [payloadSize, payloadHash, commitment] = watch([
     'channelIncentivesPayout.payloadSize',
@@ -37,15 +35,14 @@ export const ChannelIncentivesPayout = () => {
   )
 
   useEffect(() => {
-    if (!active || !payloadHash || !expectedDataSizeFee || !expectedDataObjectStateBloatBond) return
+    if (!payloadHash || !expectedDataSizeFee || !expectedDataObjectStateBloatBond) return
     const payload = {
-      uploaderAccount: active.controllerAccount,
       objectCreationParams: { size_: payloadSize, ipfsContentId: payloadHash },
       expectedDataSizeFee: expectedDataSizeFee,
       expectedDataObjectStateBloatBond: expectedDataObjectStateBloatBond,
     }
     setValue('channelIncentivesPayout.payload', payload)
-  }, [active, payloadHash, !expectedDataObjectStateBloatBond && !expectedDataSizeFee])
+  }, [payloadHash, !expectedDataObjectStateBloatBond && !expectedDataSizeFee])
 
   const [isProcessingFile, setIsProcessingFile] = useState<boolean>(false)
   const processPayload = useCallback(
