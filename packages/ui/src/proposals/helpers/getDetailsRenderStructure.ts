@@ -38,6 +38,7 @@ export type RenderType =
   | 'ProposalLink'
   | 'OpeningLink'
   | 'Percentage'
+  | 'Hash'
 
 export interface RenderNode {
   label: string
@@ -213,6 +214,13 @@ const countMapper: Mapper<CountDetail, 'count'> = (value, type) => {
     },
   ]
 }
+
+const hashMapper =
+  (label: string, tooltip?: TooltipContentProp): Mapper<UpdateChannelPayoutsDetail, 'payloadHash'> =>
+  (value) => {
+    return [{ label, value, tooltip, renderType: 'Hash' }]
+  }
+
 const proposalLinkMapper: Mapper<ProposalDetail, 'proposal'> = (value) => {
   return [
     {
@@ -252,7 +260,7 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
   channelCashoutsEnabled: booleanMapper,
   minCashoutAllowed: amountMapper('Minimal Cashout'),
   maxCashoutAllowed: amountMapper('Maximal Cashout'),
-  payloadHash: textMapper('payloadHash', {
+  payloadHash: hashMapper('payloadHash', {
     tooltipText: 'This is the BLAKE3 hash fo the Executable payload file',
     tooltipLinkURL: 'https://github.com/BLAKE3-team/BLAKE3',
   }),

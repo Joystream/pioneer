@@ -16,6 +16,7 @@ import {
   Address,
   Amount,
   Divider,
+  Hash,
   Markdown,
   Member,
   NumberOfBlocks,
@@ -47,6 +48,7 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   ProposalLink: ProposalLink,
   OpeningLink: OpeningLink,
   Percentage: Percentage,
+  Hash: Hash,
 }
 
 export const ProposalDetails = ({ proposalDetails }: Props) => {
