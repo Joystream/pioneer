@@ -20,13 +20,13 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { useObservable } from '@/common/hooks/useObservable'
 import { merkleRootFromBinary, hashFile } from '@/common/utils/crypto/worker'
 
-export const ChannelIncentivesPayout = () => {
+export const UpdateChannelPayouts = () => {
   const { api } = useApi()
   const { setValue, watch } = useFormContext()
   const [payloadSize, payloadHash, commitment] = watch([
-    'channelIncentivesPayout.payloadSize',
-    'channelIncentivesPayout.payloadHash',
-    'channelIncentivesPayout.commitment',
+    'updateChannelPayouts.payloadSize',
+    'updateChannelPayouts.payloadHash',
+    'updateChannelPayouts.commitment',
   ])
   const expectedDataSizeFee = useObservable(() => api?.query.storage.dataObjectPerMegabyteFee(), [api?.isConnected])
   const expectedDataObjectStateBloatBond = useObservable(
@@ -41,7 +41,7 @@ export const ChannelIncentivesPayout = () => {
       expectedDataSizeFee: expectedDataSizeFee,
       expectedDataObjectStateBloatBond: expectedDataObjectStateBloatBond,
     }
-    setValue('channelIncentivesPayout.payload', payload)
+    setValue('updateChannelPayouts.payload', payload)
   }, [payloadHash, !expectedDataObjectStateBloatBond && !expectedDataSizeFee])
 
   const [isProcessingFile, setIsProcessingFile] = useState<boolean>(false)
@@ -51,24 +51,24 @@ export const ChannelIncentivesPayout = () => {
 
       setIsProcessingFile(true)
 
-      setValue('channelIncentivesPayout.payload', undefined)
-      setValue('channelIncentivesPayout.payloadSize', file.size, { shouldValidate: true }) // Set it first for when no file was set before
-      setValue('channelIncentivesPayout.payloadHash', undefined, { shouldValidate: true })
-      setValue('channelIncentivesPayout.commitment', undefined, { shouldValidate: true })
-      setValue('channelIncentivesPayout.payloadSize', file.size, { shouldValidate: true }) // Set it again for when a valid file was set before
+      setValue('updateChannelPayouts.payload', undefined)
+      setValue('updateChannelPayouts.payloadSize', file.size, { shouldValidate: true }) // Set it first for when no file was set before
+      setValue('updateChannelPayouts.payloadHash', undefined, { shouldValidate: true })
+      setValue('updateChannelPayouts.commitment', undefined, { shouldValidate: true })
+      setValue('updateChannelPayouts.payloadSize', file.size, { shouldValidate: true }) // Set it again for when a valid file was set before
 
       const errors: string[] = []
 
       const hash = hashFile(file).then(
         (hash) => {
-          setValue('channelIncentivesPayout.payloadHash', hash, { shouldValidate: true })
+          setValue('updateChannelPayouts.payloadHash', hash, { shouldValidate: true })
         },
         () => errors.push('Failure while generating hash')
       )
 
       const commitment = merkleRootFromBinary(file).then(
         (commitment) => {
-          setValue('channelIncentivesPayout.commitment', commitment, { shouldValidate: true })
+          setValue('updateChannelPayouts.commitment', commitment, { shouldValidate: true })
         },
         () => errors.push('Failure while generating commitment')
       )
@@ -134,9 +134,9 @@ export const ChannelIncentivesPayout = () => {
       {/*    label="Link to Incentives Details"*/}
       {/*    sublabel="Add the link to the Payout Incentives Payload details from the external tool"*/}
       {/*    tight*/}
-      {/*    name="channelIncentivesPayout.link"*/}
+      {/*    name="updateChannelPayouts.link"*/}
       {/*  >*/}
-      {/*    <InputText id="amount-input" name="channelIncentivesPayout.link" placeholder="Add link" />*/}
+      {/*    <InputText id="amount-input" name="updateChannelPayouts.link" placeholder="Add link" />*/}
       {/*  </InputComponent>*/}
       {/*</Row>*/}
 
@@ -146,7 +146,7 @@ export const ChannelIncentivesPayout = () => {
           <ToggleCheckbox
             trueLabel="Cashouts enabled"
             falseLabel="Cashouts blocked"
-            name="channelIncentivesPayout.cashoutEnabled"
+            name="updateChannelPayouts.cashoutEnabled"
           />
         </InlineToggleWrap>
       </Row>
@@ -156,9 +156,9 @@ export const ChannelIncentivesPayout = () => {
           label="Minimum Cashout Allowed"
           tight
           units={CurrencyName.integerValue}
-          name="channelIncentivesPayout.minimumCashoutAllowed"
+          name="updateChannelPayouts.minimumCashoutAllowed"
         >
-          <TokenInput id="amount-input" name="channelIncentivesPayout.minimumCashoutAllowed" placeholder="0" />
+          <TokenInput id="amount-input" name="updateChannelPayouts.minimumCashoutAllowed" placeholder="0" />
         </InputComponent>
       </Row>
 
@@ -167,9 +167,9 @@ export const ChannelIncentivesPayout = () => {
           label="Maximum Cashout Allowed"
           tight
           units={CurrencyName.integerValue}
-          name="channelIncentivesPayout.maximumCashoutAllowed"
+          name="updateChannelPayouts.maximumCashoutAllowed"
         >
-          <TokenInput id="amount-input" name="channelIncentivesPayout.maximumCashoutAllowed" placeholder="0" />
+          <TokenInput id="amount-input" name="updateChannelPayouts.maximumCashoutAllowed" placeholder="0" />
         </InputComponent>
       </Row>
 
@@ -178,9 +178,9 @@ export const ChannelIncentivesPayout = () => {
       {/*    label="Credit Content WG Budget by"*/}
       {/*    tight*/}
       {/*    units={CurrencyName.integerValue}*/}
-      {/*    name="channelIncentivesPayout.creditContentBudgetBy"*/}
+      {/*    name="updateChannelPayouts.creditContentBudgetBy"*/}
       {/*  >*/}
-      {/*    <TokenInput id="amount-input" name="channelIncentivesPayout.creditContentBudgetBy" placeholder="0" />*/}
+      {/*    <TokenInput id="amount-input" name="updateChannelPayouts.creditContentBudgetBy" placeholder="0" />*/}
       {/*  </InputComponent>*/}
       {/*</Row>*/}
     </RowGapBlock>

@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { ChannelIncentivesPayout } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/ChannelIncentivesPayout/ChannelIncentivesPayout'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 import { FundingRequest } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/FundingRequest'
 import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
@@ -14,6 +13,7 @@ import { SetWorkingGroupLeadReward } from '@/proposals/modals/AddNewProposal/com
 import { Signal } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/Signal'
 import { SlashWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SlashWorkingGroupLead'
 import { TerminateWorkingGroupLead } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/TerminateWorkingGroupLead'
+import { UpdateChannelPayouts } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/UpdateChannelPayouts/UpdateChannelPayouts'
 import { UpdateWorkingGroupBudget } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/UpdateWorkingGroupBudget'
 import { CancelWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CancelWorkingGroupLeadOpening'
 import {
@@ -79,8 +79,8 @@ export const SpecificParametersStep = ({ matches }: SpecificParametersStepProps)
     case matches('specificParameters.setMembershipPrice'): {
       return <SetMembershipPrice />
     }
-    case matches('specificParameters.channelIncentivesPayout'): {
-      return <ChannelIncentivesPayout />
+    case matches('specificParameters.updateChannelPayouts'): {
+      return <UpdateChannelPayouts />
     }
     default:
       return null
