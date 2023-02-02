@@ -184,6 +184,12 @@ fragment ProposalWithDetailsFields on Proposal {
         title
       }
     }
+    ... on UpdateChannelPayoutsProposalDetails {
+      channelCashoutsEnabled
+      minCashoutAllowed
+      maxCashoutAllowed
+      payloadHash
+    }
   }
   discussionThread {
     id

@@ -73,6 +73,14 @@ export type OpeningLinkDetail = {
   openingId?: string
 }
 
+export type UpdateChannelPayoutsDetail = {
+  channelCashoutsEnabled?: boolean
+  minCashoutAllowed?: BN
+  maxCashoutAllowed?: BN
+  payloadHash?: string
+  dataObjectId?: string
+}
+
 export type FundingRequestDetails = ProposalDetailsNew<'fundingRequest', DestinationsDetail>
 export type CreateLeadOpeningDetails = ProposalDetailsNew<
   'createWorkingGroupLeadOpening',
@@ -130,6 +138,8 @@ export type SetCouncilorRewardDetails = ProposalDetailsNew<'setCouncilorReward',
 
 export type VetoDetails = ProposalDetailsNew<'veto', ProposalDetail>
 
+export type UpdateChannelPayoutsDetails = ProposalDetailsNew<'updateChannelPayouts', UpdateChannelPayoutsDetail>
+
 export type ProposalDetails =
   | BaseProposalDetails
   | FundingRequestDetails
@@ -152,6 +162,7 @@ export type ProposalDetails =
   | SetInitialInvitationCountDetails
   | SetCouncilorRewardDetails
   | VetoDetails
+  | UpdateChannelPayoutsDetails
 
 export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
 
@@ -332,6 +343,16 @@ const asVeto: DetailsCast<'VetoProposalDetails'> = (fragment): VetoDetails => ({
   proposal: fragment.proposal ?? undefined,
 })
 
+const asUpdateChannelPayouts: DetailsCast<'UpdateChannelPayoutsProposalDetails'> = (
+  fragment
+): UpdateChannelPayoutsDetails => ({
+  type: 'updateChannelPayouts',
+  minCashoutAllowed: asBN(fragment.minCashoutAllowed) ?? undefined,
+  maxCashoutAllowed: asBN(fragment.maxCashoutAllowed) ?? undefined,
+  channelCashoutsEnabled: fragment.channelCashoutsEnabled ?? undefined,
+  payloadHash: fragment.payloadHash ?? undefined,
+})
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }): ProposalDetails
 }
@@ -357,6 +378,7 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   SetCouncilorRewardProposalDetails: asSetCouncilorReward,
   VetoProposalDetails: asVeto,
   SetMembershipLeadInvitationQuotaProposalDetails: asSetMembershipLeadInvitationQuota,
+  UpdateChannelPayoutsProposalDetails: asUpdateChannelPayouts,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {

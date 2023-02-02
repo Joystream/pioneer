@@ -515,7 +515,13 @@ export type ProposalWithDetailsFieldsFragment = {
           }
         } | null
       }
-    | { __typename: 'UpdateChannelPayoutsProposalDetails' }
+    | {
+        __typename: 'UpdateChannelPayoutsProposalDetails'
+        channelCashoutsEnabled?: boolean | null
+        minCashoutAllowed?: string | null
+        maxCashoutAllowed?: string | null
+        payloadHash?: string | null
+      }
     | {
         __typename: 'UpdateWorkingGroupBudgetProposalDetails'
         amount: string
@@ -1341,7 +1347,13 @@ export type GetProposalQuery = {
             }
           } | null
         }
-      | { __typename: 'UpdateChannelPayoutsProposalDetails' }
+      | {
+          __typename: 'UpdateChannelPayoutsProposalDetails'
+          channelCashoutsEnabled?: boolean | null
+          minCashoutAllowed?: string | null
+          maxCashoutAllowed?: string | null
+          payloadHash?: string | null
+        }
       | {
           __typename: 'UpdateWorkingGroupBudgetProposalDetails'
           amount: string
@@ -2033,6 +2045,12 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
           id
           title
         }
+      }
+      ... on UpdateChannelPayoutsProposalDetails {
+        channelCashoutsEnabled
+        minCashoutAllowed
+        maxCashoutAllowed
+        payloadHash
       }
     }
     discussionThread {
