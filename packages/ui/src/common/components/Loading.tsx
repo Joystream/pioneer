@@ -28,6 +28,7 @@ const LoadingWrapper = styled.div<Props>`
   width: fit-content;
   height: fit-content;
   align-items: center;
+  justify-content: center;
   column-gap: 8px;
   justify-self: start;
   place-self: center;
