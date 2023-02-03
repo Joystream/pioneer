@@ -17,12 +17,29 @@ import {
 import { Loading } from '@/common/components/Loading'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useObservable } from '@/common/hooks/useObservable'
 import { merkleRootFromBinary, hashFile } from '@/common/utils/crypto/worker'
 
 export const UpdateChannelPayouts = () => {
   const { api } = useApi()
   const { setValue, watch } = useFormContext()
+
+  // Prepopulate the cashout limits with their current chain values
+  const minimumCashoutAllowed = useFirstObservableValue(
+    () => api?.query.content.minCashoutAllowed(),
+    [api?.isConnected]
+  )
+  const maximumCashoutAllowed = useFirstObservableValue(
+    () => api?.query.content.maxCashoutAllowed(),
+    [api?.isConnected]
+  )
+  useEffect(() => {
+    setValue('updateChannelPayouts.minimumCashoutAllowed', minimumCashoutAllowed)
+    setValue('updateChannelPayouts.maximumCashoutAllowed', maximumCashoutAllowed)
+  })
+
+  // Set the payload
   const [payloadSize, payloadHash, commitment] = watch([
     'updateChannelPayouts.payloadSize',
     'updateChannelPayouts.payloadHash',
@@ -33,7 +50,6 @@ export const UpdateChannelPayouts = () => {
     () => api?.query.storage.dataObjectStateBloatBondValue(),
     [api?.isConnected]
   )
-
   useEffect(() => {
     if (!payloadHash || !expectedDataSizeFee || !expectedDataObjectStateBloatBond) return
     const payload = {
