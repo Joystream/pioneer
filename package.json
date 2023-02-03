@@ -43,7 +43,8 @@
     "@polkadot/util": "9.5.1",
     "@polkadot/util-crypto": "9.5.1",
     "bn.js": "^4.11.9",
-    "@joystream/js@1.2.0": "patch:@joystream/js@npm%3A1.2.0#./.yarn/patches/@joystream-js-npm-1.2.0-a8795e7496.patch"
+    "@joystream/js@1.2.0": "patch:@joystream/js@npm%3A1.2.0#./.yarn/patches/@joystream-js-npm-1.2.0-a8795e7496.patch",
+    "@joystream/types@0.20.5": "patch:@joystream/types@npm%3A0.20.5#./.yarn/patches/@joystream-types-npm-0.20.5-c876cd34cf.patch"
   },
   "engines": {
     "node": ">=14.18.0",

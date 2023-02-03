@@ -1,0 +1,12 @@
+diff --git a/lib/mjs/augment/lookup.js b/lib/mjs/augment/lookup.js
+index b7d08dacbf84103b317b455aef87a91148380af9..accc45c4115a6a6747e97519914c038d185e51fd 100644
+--- a/lib/mjs/augment/lookup.js
++++ b/lib/mjs/augment/lookup.js
+@@ -1033,7 +1033,6 @@ export default {
+      * Lookup150: pallet_content::types::ChannelPayoutsPayloadParametersRecord<sp_core::crypto::AccountId32, Balance>
+      **/
+     PalletContentChannelPayoutsPayloadParametersRecord: {
+-        uploaderAccount: 'AccountId32',
+         objectCreationParams: 'PalletStorageDataObjectCreationParameters',
+         expectedDataSizeFee: 'u128',
+         expectedDataObjectStateBloatBond: 'u128'
