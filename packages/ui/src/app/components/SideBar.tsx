@@ -9,7 +9,7 @@ import { BountyRoutes } from '@/bounty/constants'
 import { Arrow } from '@/common/components/icons'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { PolkadotSymbol } from '@/common/components/icons/symbols/PolkadotSymbol'
-import { AppsIcon } from '@/common/components/page/Sidebar/LinksIcons/AppsIcon'
+import { AppIcon } from '@/common/components/page/Sidebar/LinksIcons/AppIcon'
 import { BandwidthIcon } from '@/common/components/page/Sidebar/LinksIcons/BandwidthIcon'
 import { BountyIcon } from '@/common/components/page/Sidebar/LinksIcons/BountyIcon'
 import { ConstitutionIcon } from '@/common/components/page/Sidebar/LinksIcons/ConstitutionIcon'
@@ -149,7 +149,7 @@ export const SideBar = () => {
                     </NavigationLink>
                   </NavigationLinksItem>
                   <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" icon={<AppsIcon />} disabled>
+                    <NavigationLink to="/inexisting" icon={<AppIcon />} disabled>
                       Apps
                     </NavigationLink>
                   </NavigationLinksItem>

@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Icon } from '../../../icons'
 
-export const AppsIcon = () => (
+export const AppIcon = () => (
   <Icon
     size="20"
     viewBox="0 0 20 20"
