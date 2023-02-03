@@ -4,7 +4,6 @@ import * as Yup from 'yup'
 import { Account } from '@/accounts/types'
 import { CurrencyName } from '@/app/constants/currency'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
-import { Address } from '@/common/types'
 import {
   BNSchema,
   lessThanMixed,
