@@ -13,6 +13,9 @@ import { UseTransaction } from '@/common/providers/transactionFees/context'
 
 configure({ testIdAttribute: 'id' })
 
+// Prevent jest from importing workers
+jest.mock('@/common/utils/crypto/worker', () => jest.requireActual('@/common/utils/crypto'))
+
 export const loaderSelector = (multiple = false) =>
   multiple ? screen.getAllByTestId('loading-spinner') : screen.queryByTestId('loading-spinner')
 
@@ -111,6 +114,17 @@ declare global {
 
 global.URL.createObjectURL = jest.fn()
 global.URL.revokeObjectURL = jest.fn()
+
+// Monkey patch `blob.arrayBuffer()` because despite what is on the doc it appears to not be implemented on the latest node 14
+if (!Blob.prototype.arrayBuffer) {
+  Blob.prototype.arrayBuffer = function (): Promise<ArrayBuffer> {
+    return new Promise<ArrayBuffer>((resolve) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve(reader.result as ArrayBuffer)
+      reader.readAsArrayBuffer(this)
+    })
+  }
+}
 
 expect.extend({
   toBeBN: (received: any, expected: BN) => {

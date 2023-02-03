@@ -2,9 +2,19 @@ import BN from 'bn.js'
 import * as Yup from 'yup'
 
 import { Account } from '@/accounts/types'
+import { CurrencyName } from '@/app/constants/currency'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
 import { Address } from '@/common/types'
-import { BNSchema, lessThanMixed, maxContext, maxMixed, minContext, moreThanMixed } from '@/common/utils/validation'
+import {
+  BNSchema,
+  lessThanMixed,
+  maxContext,
+  maxMixed,
+  minContext,
+  minMixed,
+  moreThanMixed,
+  whenDefined,
+} from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
 import { ProposalType } from '@/proposals/types'
@@ -146,13 +156,12 @@ export interface AddNewProposalForm {
   }
   channelIncentivesPayout: {
     commitment?: string
-    objectCreationParamsSize?: number
-    objectCreationParamsContent?: string
+    payloadSize?: number
+    payloadHash?: string
     minimumCashoutAllowed?: BN
     maximumCashoutAllowed?: BN
     cashoutEnabled?: boolean
     payload: {
-      uploaderAccount: Address
       objectCreationParams: { size_: BN; ipfsContentId: any /* Bytes */ }
       expectedDataSizeFee: BN
       expectedDataObjectStateBloatBond: BN
@@ -335,13 +344,30 @@ export const schemaFactory = (api?: ProxyApi) => {
       amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
     }),
     channelIncentivesPayout: Yup.object().shape({
-      objectCreationParamsSize: Yup.number().required(),
-      minimumCashoutAllowed: BNSchema.required(),
-      maximumCashoutAllowed: BNSchema.test(
-        moreThanMixed(Yup.ref('minimumCashoutAllowed'), 'Maximum cashout cannot be lower than minimum')
+      payloadSize: Yup.number(),
+      payloadHash: whenDefined('payloadSize', Yup.string().required()),
+      commitment: whenDefined('payloadSize', Yup.string().required()),
+      minimumCashoutAllowed: BNSchema.test(
+        minContext(
+          `Input should be at least \${min}${CurrencyName.integerValue} for proposal to execute`,
+          'minCashoutAllowed',
+          true,
+          'execution'
+        )
       ).required(),
+      maximumCashoutAllowed: BNSchema.test(
+        minMixed(Yup.ref('minimumCashoutAllowed'), 'Maximum cashout cannot be lower than minimum')
+      )
+        .test(
+          maxContext(
+            `Input should be at most \${max}${CurrencyName.integerValue} for proposal to execute`,
+            'maxCashoutAllowed',
+            true,
+            'execution'
+          )
+        )
+        .required(),
       channelCashoutsEnabled: Yup.boolean(),
-      commitment: Yup.string().required(),
     }),
   })
 }

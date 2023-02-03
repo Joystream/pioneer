@@ -1,3 +1,7 @@
+const path = require('path')
+
+const { merge } = require('lodash')
+
 const shared = require('./../dev/webpack.shared')
 
 module.exports = {
@@ -14,7 +18,14 @@ module.exports = {
       }
     })
 
-    config.resolve = shared.resolve
+    config.resolve = merge(
+      {
+        alias: {
+          '@/common/utils/crypto/worker$': path.resolve(__dirname, '../src/common/utils/crypto'),
+        },
+      },
+      shared.resolve
+    )
     config.plugins.push(...shared.plugins)
     config.module.rules.unshift(...shared.rules)
 

@@ -3,11 +3,11 @@ import styled from 'styled-components'
 
 import { LeadMemberIcon } from '@/common/components/icons'
 import { Tooltip } from '@/common/components/Tooltip'
-import { UserImage } from '@/common/components/UserImage/UserImage'
 
 import { AvatarPlaceholder } from '../assets/images/AvatarPlaceholder'
 import { Member } from '../types'
 
+import { AvatarImg } from '.'
 import { MemberPhoto, MemberPhotoContainer } from './components'
 import { AvatarStarTooltipContainer, MemberInfo } from './MemberInfo'
 
@@ -82,14 +82,6 @@ export const MemberInfoAvatar = React.memo(
     )
   }
 )
-
-export const AvatarImg = styled(UserImage)<{ isLoading?: boolean }>`
-  height: 100%;
-  width: auto;
-  max-width: 100%;
-  object-fit: cover;
-  display: ${({ isLoading }) => isLoading && 'none'};
-`
 
 export const AvatarPlaceholderImage = styled(AvatarPlaceholder)`
   width: 100%;

@@ -63,6 +63,7 @@ export const RuntimeUpgrade = () => {
           getFilesFromEvent={getValidatedFiles}
           validator={validator}
           onDrop={onDrop}
+          isRequired
         />
       </Row>
     </RowGapBlock>

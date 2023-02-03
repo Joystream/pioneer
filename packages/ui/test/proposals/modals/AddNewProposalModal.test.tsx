@@ -189,6 +189,8 @@ describe('UI: AddNewProposalModal', () => {
       })
     )
     stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 0))
+    stubQuery(api, 'content.minCashoutAllowed', new BN(5))
+    stubQuery(api, 'content.maxCashoutAllowed', new BN(5000))
     stubConst(api, 'proposalsEngine.titleMaxLength', createType('u32', 1000))
     stubConst(api, 'proposalsEngine.descriptionMaxLength', createType('u32', 1000))
     batchTx = stubTransaction(api, 'api.tx.utility.batch')

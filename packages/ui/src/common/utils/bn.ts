@@ -13,3 +13,6 @@ export const sumBN = (a: BN | undefined, b: BN | undefined): BN => new BN(a ?? 0
 export const powerOf10 = (value: any) => BN_TEN.pow(asBN(value))
 
 export const powerOf2 = (value: any) => BN_TWO.pow(asBN(value))
+
+const ONE_JOY = powerOf10(10)
+export const joy = (unit: number, decimal: number) => new BN(unit).mul(ONE_JOY).add(new BN(decimal))

@@ -3310,37 +3310,37 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@joystream/js@npm:1.0.0":
-  version: 1.0.0
-  resolution: "@joystream/js@npm:1.0.0"
+"@joystream/js@npm:1.2.0":
+  version: 1.2.0
+  resolution: "@joystream/js@npm:1.2.0"
   dependencies:
-    "@joystream/metadata-protobuf": 2.6.0
-    "@joystream/types": 0.20.3
-    "@polkadot/util-crypto": ^7.3.1
-    "@types/long": ^4.0.1
-    axios: ^0.21.1
-    lodash: 4.17.15
-    long: ^4.0.0
-    merkletreejs: ^0.2.31
-    protobufjs: ^6.11.2
-  checksum: 3441ddcff69f0cd358b248ff7fb67778da5a7c7d3d19458cfec2d6a18c0d9f2eb5ba8c1eb70760da498244ccf107eebd9dbd5e8a2678a3c109210a94bde11c2e
+    "@joystream/metadata-protobuf": ^2.6.0
+    "@joystream/types": ~0.20.5
+    "@polkadot/util-crypto": 9.5.1
+    axios: ^1.2.1
+    buffer: ^6.0.3
+    lodash: ^4.17.21
+    long: ^5.2.1
+    merkletreejs: ^0.3.9
+    protobufjs: ^6.11.3
+  checksum: d0762fc60c4f4ffe0a6804140fd2516b5b04beccd028f75cd16ba9e7c44658263f4fe6dc85ddf237c83f14445ed0b6d8d2f5c7b4f4efb457fd18a877376ed4a3
   languageName: node
   linkType: hard
 
-"@joystream/js@patch:@joystream/js@npm%3A1.0.0#./.yarn/patches/@joystream-js-npm-1.0.0-b6846bd440.patch::locator=pioneer%40workspace%3A.":
-  version: 1.0.0
-  resolution: "@joystream/js@patch:@joystream/js@npm%3A1.0.0#./.yarn/patches/@joystream-js-npm-1.0.0-b6846bd440.patch::version=1.0.0&hash=4b95d8&locator=pioneer%40workspace%3A."
+"@joystream/js@patch:@joystream/js@npm%3A1.2.0#./.yarn/patches/@joystream-js-npm-1.2.0-a8795e7496.patch::locator=pioneer%40workspace%3A.":
+  version: 1.2.0
+  resolution: "@joystream/js@patch:@joystream/js@npm%3A1.2.0#./.yarn/patches/@joystream-js-npm-1.2.0-a8795e7496.patch::version=1.2.0&hash=089693&locator=pioneer%40workspace%3A."
   dependencies:
-    "@joystream/metadata-protobuf": 2.6.0
-    "@joystream/types": 0.20.3
-    "@polkadot/util-crypto": ^7.3.1
-    "@types/long": ^4.0.1
-    axios: ^0.21.1
-    lodash: 4.17.15
-    long: ^4.0.0
-    merkletreejs: ^0.2.31
-    protobufjs: ^6.11.2
-  checksum: d7469d7bec96c83e5170807fb360bc26b8b1738a7756ce07549f1607ee18cde6fdf35b95a55197a3779745eac76336b8be73277ce43b3f175e43b591413f7434
+    "@joystream/metadata-protobuf": ^2.6.0
+    "@joystream/types": ~0.20.5
+    "@polkadot/util-crypto": 9.5.1
+    axios: ^1.2.1
+    buffer: ^6.0.3
+    lodash: ^4.17.21
+    long: ^5.2.1
+    merkletreejs: ^0.3.9
+    protobufjs: ^6.11.3
+  checksum: fabefdd3923443920e868ff0240df5337bc298e2e0f361dbb662a218dc1a16f6d11de48f1a352c45ec309686fee00d93ed898967f30a2ce6c6834808c66a5c96
   languageName: node
   linkType: hard
 
@@ -3380,7 +3380,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joystream/metadata-protobuf@npm:2.6.0, @joystream/metadata-protobuf@npm:^2.0.0":
+"@joystream/metadata-protobuf@npm:^2.0.0, @joystream/metadata-protobuf@npm:^2.6.0":
   version: 2.6.0
   resolution: "@joystream/metadata-protobuf@npm:2.6.0"
   dependencies:
@@ -3412,13 +3412,14 @@ __metadata:
     "@graphql-codegen/typescript-react-apollo": ^3.1.4
     "@hcaptcha/react-hcaptcha": ^1.4.4
     "@jest/types": ^27.2.5
-    "@joystream/js": ^1.0.0
+    "@joystream/js": 1.2.0
     "@joystream/markdown-editor": ^0.1.0
     "@joystream/metadata-protobuf": ^2.0.0
     "@joystream/types": 0.20.5
     "@miragejs/graphql": ^0.1.13
     "@nivo/bar": ^0.79.1
     "@nivo/core": ^0.79.0
+    "@noble/hashes": ^1.1.5
     "@polkadot/api": 8.9.1
     "@polkadot/extension-dapp": 0.44.2-4
     "@polkadot/keyring": 9.5.1
@@ -3520,23 +3521,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joystream/types@npm:0.20.3":
-  version: 0.20.3
-  resolution: "@joystream/types@npm:0.20.3"
-  dependencies:
-    "@polkadot/api": 8.9.1
-    "@polkadot/keyring": 9.5.1
-    "@polkadot/types": 8.9.1
-    "@types/lodash": ^4.14.157
-    "@types/vfile": ^4.0.0
-    ajv: ^6.11.0
-    lodash: ^4.17.15
-    moment: ^2.24.0
-  checksum: 3e41b6923b0b1a1caf34eb35ca781b1d44c688151b06626b6a900e9eee1561e4d8cdbbb0a69078e8208e7891c4a96a6a8e2d11b026b20c1e3c6029a3fd938b6a
-  languageName: node
-  linkType: hard
-
-"@joystream/types@npm:0.20.5":
+"@joystream/types@npm:0.20.5, @joystream/types@npm:~0.20.5":
   version: 0.20.5
   resolution: "@joystream/types@npm:0.20.5"
   dependencies:
@@ -3787,6 +3772,13 @@ __metadata:
   version: 1.1.1
   resolution: "@noble/hashes@npm:1.1.1"
   checksum: 3bd98d7a6dcc01c5e72478975073e12c79639636f4eb5710b665dd8ac462fcdff5b235d0c3b113ac83e7e56c43eee5ccba3759f9262964edc123bd1713dd2180
+  languageName: node
+  linkType: hard
+
+"@noble/hashes@npm:^1.1.5":
+  version: 1.1.5
+  resolution: "@noble/hashes@npm:1.1.5"
+  checksum: de3f095a7ac1cbf5b4b3d09f193288d4f2eec35fbadf2ed9fd7e47d8a3042fef410052ba62dc0296a185f994c11192f5357fdb1bd9178c905efd82e946c53b00
   languageName: node
   linkType: hard
 
@@ -8147,12 +8139,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.21.1":
-  version: 0.21.4
-  resolution: "axios@npm:0.21.4"
+"axios@npm:^1.2.1":
+  version: 1.2.5
+  resolution: "axios@npm:1.2.5"
   dependencies:
-    follow-redirects: ^1.14.0
-  checksum: 44245f24ac971e7458f3120c92f9d66d1fc695e8b97019139de5b0cc65d9b8104647db01e5f46917728edfc0cfd88eb30fc4c55e6053eef4ace76768ce95ff3c
+    follow-redirects: ^1.15.0
+    form-data: ^4.0.0
+    proxy-from-env: ^1.1.0
+  checksum: 3d7a3b029b9f46fb296bcecf84fbe4be32b09511aba2256d44fc5c1a75824f364d2ce22fd0ea61adfd564e1c353c6d2000b4cc340c65b27102528101557dd9db
   languageName: node
   linkType: hard
 
@@ -8984,7 +8978,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"buffer@npm:^6.0.1":
+"buffer@npm:^6.0.1, buffer@npm:^6.0.3":
   version: 6.0.3
   resolution: "buffer@npm:6.0.3"
   dependencies:
@@ -12934,7 +12928,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.14.0":
+"follow-redirects@npm:^1.15.0":
   version: 1.15.2
   resolution: "follow-redirects@npm:1.15.2"
   peerDependenciesMeta:
@@ -17174,13 +17168,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:4.17.15":
-  version: 4.17.15
-  resolution: "lodash@npm:4.17.15"
-  checksum: bb689bc88c0645b7002a045cdbe32292ae51d5d2a6f6a5272cb5a5ace9b06700bb3d30c6be6ecfae9a70f9c943f60e90765033fc7ff706cf9219374eeda314ad
-  languageName: node
-  linkType: hard
-
 "lodash@npm:^4.17.11, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.7.0, lodash@npm:~4.17.0":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
@@ -17234,6 +17221,13 @@ __metadata:
   version: 4.0.0
   resolution: "long@npm:4.0.0"
   checksum: 16afbe8f749c7c849db1f4de4e2e6a31ac6e617cead3bdc4f9605cb703cd20e1e9fc1a7baba674ffcca57d660a6e5b53a9e236d7b25a295d3855cca79cc06744
+  languageName: node
+  linkType: hard
+
+"long@npm:^5.2.1":
+  version: 5.2.1
+  resolution: "long@npm:5.2.1"
+  checksum: 9264da12d1b7df67e5aa6da4498144293caf1ad12e7f092efe4e9a2d32c53f0bbf7334f7cef997080a2a3af061142558ab366efa71698d98b1cdb883477445a7
   languageName: node
   linkType: hard
 
@@ -17765,16 +17759,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"merkletreejs@npm:^0.2.31":
-  version: 0.2.32
-  resolution: "merkletreejs@npm:0.2.32"
+"merkletreejs@npm:^0.3.9":
+  version: 0.3.9
+  resolution: "merkletreejs@npm:0.3.9"
   dependencies:
     bignumber.js: ^9.0.1
     buffer-reverse: ^1.0.1
     crypto-js: ^3.1.9-1
     treeify: ^1.1.0
     web3-utils: ^1.3.4
-  checksum: 041b235adde94de584fdf5ef60138baca8d6f16bb48b3b7f714b607eaa76e4207ed5fef501ee5967371c56c5876804c4ff6da4705707f8cc0362d5c1e0358425
+  checksum: a76ba14cb3e7ba342572b479956e8b159e498a101e79da796ee032ad4cb8d53bae1af38e8b70dfa64784e659b4a0bc9e75274517ab68788b1459bca8047f1f3f
   languageName: node
   linkType: hard
 
@@ -20800,6 +20794,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"protobufjs@npm:^6.11.3":
+  version: 6.11.3
+  resolution: "protobufjs@npm:6.11.3"
+  dependencies:
+    "@protobufjs/aspromise": ^1.1.2
+    "@protobufjs/base64": ^1.1.2
+    "@protobufjs/codegen": ^2.0.4
+    "@protobufjs/eventemitter": ^1.1.0
+    "@protobufjs/fetch": ^1.1.0
+    "@protobufjs/float": ^1.0.2
+    "@protobufjs/inquire": ^1.1.0
+    "@protobufjs/path": ^1.1.2
+    "@protobufjs/pool": ^1.1.0
+    "@protobufjs/utf8": ^1.1.0
+    "@types/long": ^4.0.1
+    "@types/node": ">=13.7.0"
+    long: ^4.0.0
+  bin:
+    pbjs: bin/pbjs
+    pbts: bin/pbts
+  checksum: 4a6ce1964167e4c45c53fd8a312d7646415c777dd31b4ba346719947b88e61654912326101f927da387d6b6473ab52a7ea4f54d6f15d63b31130ce28e2e15070
+  languageName: node
+  linkType: hard
+
 "proxy-addr@npm:~2.0.5":
   version: 2.0.7
   resolution: "proxy-addr@npm:2.0.7"
@@ -20807,6 +20825,13 @@ __metadata:
     forwarded: 0.2.0
     ipaddr.js: 1.9.1
   checksum: 29c6990ce9364648255454842f06f8c46fcd124d3e6d7c5066df44662de63cdc0bad032e9bf5a3d653ff72141cc7b6019873d685708ac8210c30458ad99f2b74
+  languageName: node
+  linkType: hard
+
+"proxy-from-env@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "proxy-from-env@npm:1.1.0"
+  checksum: ed7fcc2ba0a33404958e34d95d18638249a68c430e30fcb6c478497d72739ba64ce9810a24f53a7d921d0c065e5b78e3822759800698167256b04659366ca4d4
   languageName: node
   linkType: hard
 

@@ -30,9 +30,9 @@ import { useModal } from '@/common/hooks/useModal'
 import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { createType } from '@/common/model/createType'
-// import { createType } from '@joystream/types'
 import { getMaxBlock } from '@/common/model/getMaxBlock'
 import { getSteps } from '@/common/model/machines/getSteps'
+import { joy } from '@/common/utils'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { machineStateConverter } from '@/council/modals/AnnounceCandidacy/helpers'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -68,6 +68,8 @@ export const AddNewProposalModal = () => {
   const { active: activeMember } = useMyMemberships()
   const minimumValidatorCount = useMinimumValidatorCount()
   const maximumReferralCut = api?.consts.members.referralCutMaximumPercent
+  const minCashoutAllowed = joy(166, 6_666_666_660)
+  const maxCashoutAllowed = joy(1_666_666, 6_666_600_000)
   const currentBlock = useCurrentBlockNumber()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
@@ -90,6 +92,8 @@ export const AddNewProposalModal = () => {
     context: {
       minimumValidatorCount,
       maximumReferralCut,
+      minCashoutAllowed,
+      maxCashoutAllowed,
       leaderOpeningStake: workingGroupConsts?.leaderOpeningStake,
       minUnstakingPeriodLimit: workingGroupConsts?.minUnstakingPeriodLimit,
       stakeLock: 'Proposals',
