@@ -1,3 +1,29 @@
+diff --git a/lib/augment/augment-api-consts.d.ts b/lib/augment/augment-api-consts.d.ts
+index 97996898faac077e703e7197afb29953fc7fe84b..6d077a1833f19ca33c657661724b709cf421d9eb 100644
+--- a/lib/augment/augment-api-consts.d.ts
++++ b/lib/augment/augment-api-consts.d.ts
+@@ -157,6 +157,10 @@ declare module '@polkadot/api-base/types/consts' {
+              * Exports const - default global weekly NFT limit.
+              **/
+             defaultGlobalWeeklyNftLimit: PalletContentLimitPerPeriod & AugmentedConst<ApiType>;
++            /**
++             * Export const - max cashout allowed limits
++             **/
++            maximumCashoutAllowedLimit: u128 & AugmentedConst<ApiType>;
+             /**
+              * Exports const - max number of keys per curator_group.permissions_by_level map instance
+              **/
+@@ -169,6 +173,10 @@ declare module '@polkadot/api-base/types/consts' {
+              * Exports const - max number of curators per group
+              **/
+             maxNumberOfCuratorsPerGroup: u32 & AugmentedConst<ApiType>;
++            /**
++             * Export const - min cashout allowed limits
++             **/
++            minimumCashoutAllowedLimit: u128 & AugmentedConst<ApiType>;
+         };
+         contentWorkingGroup: {
+             /**
 diff --git a/lib/mjs/augment/lookup.js b/lib/mjs/augment/lookup.js
 index b7d08dacbf84103b317b455aef87a91148380af9..accc45c4115a6a6747e97519914c038d185e51fd 100644
 --- a/lib/mjs/augment/lookup.js

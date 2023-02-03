@@ -68,8 +68,8 @@ export const AddNewProposalModal = () => {
   const { active: activeMember } = useMyMemberships()
   const minimumValidatorCount = useMinimumValidatorCount()
   const maximumReferralCut = api?.consts.members.referralCutMaximumPercent
-  const minCashoutAllowed = joy(166, 6_666_666_660)
-  const maxCashoutAllowed = joy(1_666_666, 6_666_600_000)
+  const minCashoutAllowed = api?.consts.content.minimumCashoutAllowedLimit
+  const maxCashoutAllowed = api?.consts.content.maximumCashoutAllowedLimit
   const currentBlock = useCurrentBlockNumber()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
