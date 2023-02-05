@@ -5,8 +5,8 @@ import { ListHeaders, ListHeader } from '@/common/components/List/ListHeader'
 export const ProposalColLayout = '296px 148px 156px 60px 92px 1fr'
 
 export const ProposalsListHeaders = styled(ListHeaders)`
-  padding-right: 16px;
-  grid-column-gap: 36px;
+  padding-right: 0px;
+  grid-column-gap: 21px;
 `
 export const ProposalListHeader = styled(ListHeader)`
   &:last-child {
