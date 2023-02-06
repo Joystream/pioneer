@@ -1,1 +1,1 @@
-export const THREADS_PER_PAGE = 30
+export const THREADS_PER_PAGE = 10
