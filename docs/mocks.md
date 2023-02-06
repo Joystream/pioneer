@@ -58,8 +58,12 @@ Another way to influence the on-chain state for testing purpose, is to provide a
 
 #### Decoding data from the chain:
 
+```shell
+> yarn workspace @joystream/pioneer run helpers decode -t [TYPE] -v [VALUE]
+```
+
 This command requires two arguments:
-- `-t`, `--type`: The expected type of the value to decode.
+- `-t`, `--type`: The expected type of the value to decode. It can be `text`, or the name or alias of a [metadata class](https://github.com/Joystream/joystream/blob/master/metadata-protobuf/doc/index.md).
 - `-v`, `--value`: The hash or the string representation of the `Uint8Array` to decode.
 
 With `-t text` this command will simply decode encoded plaint text values. E.g:
@@ -68,7 +72,7 @@ With `-t text` this command will simply decode encoded plaint text values. E.g:
 Lorem ispum
 ```
 
-Otherwhise the type options should refer to a metadata class. It can be the name of the class:
+Otherwhise the type options should refer to a [metadata class](https://github.com/Joystream/joystream/blob/master/metadata-protobuf/doc/index.md). It can be the name of the class:
 ```shell
 > yarn workspace @joystream/pioneer run helpers decode -t CouncilCandidacyNoteMetadata -v 0x0a0a616...
 CouncilCandidacyNoteMetadata {
