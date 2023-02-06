@@ -1,3 +1,4 @@
+import { BN_ZERO } from '@polkadot/util'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
@@ -25,6 +26,14 @@ export const UpdateChannelPayouts = () => {
   const { api } = useApi()
   const { setValue, watch } = useFormContext()
 
+  const [minCashout, maxCashout, payloadSize, payloadHash, commitment] = watch([
+    'updateChannelPayouts.minimumCashoutAllowed',
+    'updateChannelPayouts.maximumCashoutAllowed',
+    'updateChannelPayouts.payloadSize',
+    'updateChannelPayouts.payloadHash',
+    'updateChannelPayouts.commitment',
+  ])
+
   // Prepopulate the cashout limits with their current chain values
   const minimumCashoutAllowed = useFirstObservableValue(
     () => api?.query.content.minCashoutAllowed(),
@@ -35,16 +44,15 @@ export const UpdateChannelPayouts = () => {
     [api?.isConnected]
   )
   useEffect(() => {
-    setValue('updateChannelPayouts.minimumCashoutAllowed', minimumCashoutAllowed)
-    setValue('updateChannelPayouts.maximumCashoutAllowed', maximumCashoutAllowed)
-  })
+    if (!minCashout?.gt(BN_ZERO)) {
+      setValue('updateChannelPayouts.minimumCashoutAllowed', minimumCashoutAllowed)
+    }
+    if (!maxCashout?.gt(BN_ZERO)) {
+      setValue('updateChannelPayouts.maximumCashoutAllowed', maximumCashoutAllowed)
+    }
+  }, [minCashout, maxCashout, minimumCashoutAllowed, maximumCashoutAllowed])
 
   // Set the payload
-  const [payloadSize, payloadHash, commitment] = watch([
-    'updateChannelPayouts.payloadSize',
-    'updateChannelPayouts.payloadHash',
-    'updateChannelPayouts.commitment',
-  ])
   const expectedDataSizeFee = useObservable(() => api?.query.storage.dataObjectPerMegabyteFee(), [api?.isConnected])
   const expectedDataObjectStateBloatBond = useObservable(
     () => api?.query.storage.dataObjectStateBloatBondValue(),
