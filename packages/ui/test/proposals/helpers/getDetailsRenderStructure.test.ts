@@ -29,6 +29,8 @@ describe('getDetailsRenderStructure()', () => {
           renderType: 'Address',
         },
         {
+          label: '',
+          value: undefined,
           renderType: 'Divider',
         },
       ],
@@ -68,6 +70,8 @@ describe('getDetailsRenderStructure()', () => {
           renderType: 'Address',
         },
         {
+          label: '',
+          value: undefined,
           renderType: 'Divider',
         },
         {
@@ -81,6 +85,8 @@ describe('getDetailsRenderStructure()', () => {
           renderType: 'Address',
         },
         {
+          label: '',
+          value: undefined,
           renderType: 'Divider',
         },
         {
@@ -94,6 +100,8 @@ describe('getDetailsRenderStructure()', () => {
           renderType: 'Address',
         },
         {
+          label: '',
+          value: undefined,
           renderType: 'Divider',
         },
       ],
