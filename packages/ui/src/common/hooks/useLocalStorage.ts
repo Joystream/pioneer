@@ -1,12 +1,12 @@
 import { isFunction } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 
-const getItem = (key?: string) => {
+const getItem = (key?: string, storage = localStorage) => {
   if (key === undefined) {
     return
   }
 
-  const item = window.localStorage.getItem(key)
+  const item = storage.getItem(key)
   let result
   if (item !== null) {
     try {
@@ -18,34 +18,34 @@ const getItem = (key?: string) => {
   return result
 }
 
-const setItem = (key?: string, value?: any) => {
+const setItem = (key?: string, value?: any, storage = localStorage) => {
   if (key === undefined) {
     return
   }
 
   if (value === undefined) {
-    window.localStorage.removeItem(key)
+    storage.removeItem(key)
   } else {
     const toStore = JSON.stringify(value)
-    window.localStorage.setItem(key, toStore)
+    storage.setItem(key, toStore)
     return JSON.parse(toStore)
   }
 }
 
-export const useLocalStorage = <T>(key?: string) => {
+export const useLocalStorage = <T>(key?: string, storage = localStorage) => {
   const [state, setState] = useState<T | undefined>(() => {
     return getItem(key)
   })
 
   useEffect(() => {
-    setState(getItem(key))
+    setState(getItem(key, storage))
   }, [key])
 
   const dispatch = useCallback(
     (setStateAction: T | ((prevState?: T) => T)) => {
       const value = isFunction(setStateAction) ? setStateAction(getItem(key)) : setStateAction
       setState(value)
-      setItem(key, value)
+      setItem(key, value, storage)
     },
     [key]
   )
