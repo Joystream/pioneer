@@ -4,7 +4,6 @@ import * as Yup from 'yup'
 import { Account } from '@/accounts/types'
 import { CurrencyName } from '@/app/constants/currency'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
-import { Address } from '@/common/types'
 import {
   BNSchema,
   lessThanMixed,
@@ -43,7 +42,7 @@ export const defaultProposalValues = {
   durationAndProcess: {
     isLimited: false,
   },
-  channelIncentivesPayout: {
+  updateChannelPayouts: {
     cashoutEnabled: true,
   },
 }
@@ -154,7 +153,7 @@ export interface AddNewProposalForm {
   setMembershipPrice: {
     amount?: BN
   }
-  channelIncentivesPayout: {
+  updateChannelPayouts: {
     commitment?: string
     payloadSize?: number
     payloadHash?: string
@@ -343,7 +342,7 @@ export const schemaFactory = (api?: ProxyApi) => {
     setMembershipPrice: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
     }),
-    channelIncentivesPayout: Yup.object().shape({
+    updateChannelPayouts: Yup.object().shape({
       payloadSize: Yup.number(),
       payloadHash: whenDefined('payloadSize', Yup.string().required()),
       commitment: whenDefined('payloadSize', Yup.string().required()),

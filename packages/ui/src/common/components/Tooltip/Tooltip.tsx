@@ -17,13 +17,16 @@ export interface TooltipProps extends Omit<TooltipPopupProps, 'popUpHandlers' | 
   children: React.ReactNode
 }
 
-export interface TooltipPopupProps {
-  className?: string
-  tooltipOpen?: boolean
+export interface TooltipContentProp {
   tooltipText?: React.ReactNode
   tooltipTitle?: string
   tooltipLinkText?: React.ReactNode
   tooltipLinkURL?: string
+}
+
+export interface TooltipPopupProps extends TooltipContentProp {
+  className?: string
+  tooltipOpen?: boolean
   popupContent?: React.ReactNode
   offset?: [number, number]
   popUpHandlers: {

@@ -33,16 +33,13 @@ const extendsProposalPallet = (
   !(proposalType instanceof u128 || proposalType instanceof u32)
 
 const proposalTypeToConstantKey = new Map<ProposalType, keyof Api['consts']['proposalsCodex']>([
-  ['channelIncentivesPayout', 'updateChannelPayoutsProposalParameters'],
+  ['updateChannelPayouts', 'updateChannelPayoutsProposalParameters'],
   ['amendConstitution', 'amendConstitutionProposalParameters'],
   ['cancelWorkingGroupLeadOpening', 'cancelWorkingGroupLeadOpeningProposalParameters'],
-  // ['createBlogPost', 'createBlogPostProposalParameters'],
   ['createWorkingGroupLeadOpening', 'createWorkingGroupLeadOpeningProposalParameters'],
   ['decreaseWorkingGroupLeadStake', 'decreaseWorkingGroupLeadStakeProposalParameters'],
-  // ['editBlogPost', 'editBlogPostProoposalParamters'],
   ['fillWorkingGroupLeadOpening', 'fillWorkingGroupOpeningProposalParameters'],
   ['fundingRequest', 'fundingRequestProposalParameters'],
-  // ['lockBlogPost', 'lockBlogPostProposalParameters'],
   ['runtimeUpgrade', 'runtimeUpgradeProposalParameters'],
   ['setCouncilBudgetIncrement', 'setCouncilBudgetIncrementProposalParameters'],
   ['setCouncilorReward', 'setCouncilorRewardProposalParameters'],
@@ -56,7 +53,6 @@ const proposalTypeToConstantKey = new Map<ProposalType, keyof Api['consts']['pro
   ['signal', 'signalProposalParameters'],
   ['slashWorkingGroupLead', 'slashWorkingGroupLeadProposalParameters'],
   ['terminateWorkingGroupLead', 'terminateWorkingGroupLeadProposalParameters'],
-  // ['unlockBlogPost', 'unlockBlogPostProposalParameters'],
   ['updateWorkingGroupBudget', 'updateWorkingGroupBudgetProposalParameters'],
   ['veto', 'vetoProposalProposalParameters'],
 ])

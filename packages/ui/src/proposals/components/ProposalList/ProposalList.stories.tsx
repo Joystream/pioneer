@@ -26,7 +26,7 @@ Default.args = {
     },
     {
       createdAt: '2021-05-31T03:15:57.037Z',
-      type: 'editBlogPost',
+      type: 'signal',
       id: '1',
       proposer: getMember('bob'),
       status: 'deciding',
@@ -52,7 +52,7 @@ Past.args = {
     {
       createdAt: '2021-05-31T03:15:57.037Z',
       endedAt: '2021-06-11T16:26:04.129Z',
-      type: 'editBlogPost',
+      type: 'signal',
       id: '1',
       proposer: getMember('bob'),
       status: 'vetoed',

@@ -73,6 +73,14 @@ export type OpeningLinkDetail = {
   openingId?: string
 }
 
+export type UpdateChannelPayoutsDetail = {
+  channelCashoutsEnabled?: boolean
+  minCashoutAllowed?: BN
+  maxCashoutAllowed?: BN
+  payloadHash?: string
+  payloadDataObjectId?: string
+}
+
 export type FundingRequestDetails = ProposalDetailsNew<'fundingRequest', DestinationsDetail>
 export type CreateLeadOpeningDetails = ProposalDetailsNew<
   'createWorkingGroupLeadOpening',
@@ -130,6 +138,8 @@ export type SetCouncilorRewardDetails = ProposalDetailsNew<'setCouncilorReward',
 
 export type VetoDetails = ProposalDetailsNew<'veto', ProposalDetail>
 
+export type UpdateChannelPayoutsDetails = ProposalDetailsNew<'updateChannelPayouts', UpdateChannelPayoutsDetail>
+
 export type ProposalDetails =
   | BaseProposalDetails
   | FundingRequestDetails
@@ -152,8 +162,13 @@ export type ProposalDetails =
   | SetInitialInvitationCountDetails
   | SetCouncilorRewardDetails
   | VetoDetails
+  | UpdateChannelPayoutsDetails
 
 export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
+
+export interface ProposalExtraDetails {
+  payloadDataObjectId?: string
+}
 
 const asFundingRequest: DetailsCast<'FundingRequestProposalDetails'> = (fragment): FundingRequestDetails => {
   return {
@@ -332,8 +347,20 @@ const asVeto: DetailsCast<'VetoProposalDetails'> = (fragment): VetoDetails => ({
   proposal: fragment.proposal ?? undefined,
 })
 
+const asUpdateChannelPayouts: DetailsCast<'UpdateChannelPayoutsProposalDetails'> = (
+  fragment,
+  extra
+): UpdateChannelPayoutsDetails => ({
+  type: 'updateChannelPayouts',
+  minCashoutAllowed: asBN(fragment.minCashoutAllowed) ?? undefined,
+  maxCashoutAllowed: asBN(fragment.maxCashoutAllowed) ?? undefined,
+  channelCashoutsEnabled: fragment.channelCashoutsEnabled ?? undefined,
+  payloadHash: fragment.payloadHash ?? undefined,
+  payloadDataObjectId: extra?.payloadDataObjectId,
+})
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
-  (fragment: DetailsFragment & { __typename: T }): ProposalDetails
+  (fragment: DetailsFragment & { __typename: T }, extra?: ProposalExtraDetails): ProposalDetails
 }
 
 const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> = {
@@ -357,10 +384,11 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   SetCouncilorRewardProposalDetails: asSetCouncilorReward,
   VetoProposalDetails: asVeto,
   SetMembershipLeadInvitationQuotaProposalDetails: asSetMembershipLeadInvitationQuota,
+  UpdateChannelPayoutsProposalDetails: asUpdateChannelPayouts,
 }
 
-export const asProposalDetails = (fragment: DetailsFragment): ProposalDetails => {
+export const asProposalDetails = (fragment: DetailsFragment, extra?: ProposalExtraDetails): ProposalDetails => {
   const type = fragment.__typename as ProposalDetailsTypename
-  const result = detailsCasts[type]?.(fragment)
+  const result = detailsCasts[type]?.(fragment, extra)
   return result ?? { type: undefined }
 }

@@ -3,16 +3,16 @@ import React from 'react'
 
 import { AddNewProposalTemplate } from '@/proposals/components/StorybookTemplates'
 
-import { ChannelIncentivesPayout } from './ChannelIncentivesPayout'
+import { UpdateChannelPayouts } from './UpdateChannelPayouts'
 
 export default {
-  title: 'Proposals/AddNewProposalModal/ChannelIncentivesPayout',
-  component: ChannelIncentivesPayout,
+  title: 'Proposals/AddNewProposalModal/UpdateChannelPayouts',
+  component: UpdateChannelPayouts,
 } as Meta
 
 const Template: Story = () => (
   <AddNewProposalTemplate title="Channel Update Payout">
-    <ChannelIncentivesPayout />
+    <UpdateChannelPayouts />
   </AddNewProposalTemplate>
 )
 

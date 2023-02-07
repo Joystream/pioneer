@@ -184,6 +184,12 @@ fragment ProposalWithDetailsFields on Proposal {
         title
       }
     }
+    ... on UpdateChannelPayoutsProposalDetails {
+      channelCashoutsEnabled
+      minCashoutAllowed
+      maxCashoutAllowed
+      payloadHash
+    }
   }
   discussionThread {
     id
@@ -351,5 +357,11 @@ query GetLatestProposalByMemberId($lockAccount: String) {
     statusSetAtBlock
     statusSetAtTime
     createdAt
+  }
+}
+
+query GetPayloadDataObjectId($inBlock: Int, $payloadHash: String) {
+  channelPayoutsUpdatedEvents(where: { inBlock_eq: $inBlock, payloadHash_eq: $payloadHash }, limit: 1) {
+    payloadDataObjectId
   }
 }
