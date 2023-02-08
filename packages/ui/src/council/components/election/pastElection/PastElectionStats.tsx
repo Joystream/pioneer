@@ -21,7 +21,7 @@ export const PastElectionStats = ({
   totalVotes,
 }: PastElectionStatsProps) => (
   <Statistics>
-    <StatisticItem title="Started at">
+    <StatisticItem title="Ended at">
       {finishedAtBlock ? formatDateString(finishedAtBlock.timestamp) : '-'}
     </StatisticItem>
     <StatisticItem
