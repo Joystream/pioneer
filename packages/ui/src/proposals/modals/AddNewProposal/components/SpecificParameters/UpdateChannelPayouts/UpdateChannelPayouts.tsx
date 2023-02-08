@@ -1,4 +1,3 @@
-import { BN_ZERO } from '@polkadot/util'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
@@ -44,10 +43,10 @@ export const UpdateChannelPayouts = () => {
     [api?.isConnected]
   )
   useEffect(() => {
-    if (!minCashout?.gt(BN_ZERO)) {
+    if (!minCashout) {
       setValue('updateChannelPayouts.minimumCashoutAllowed', minimumCashoutAllowed)
     }
-    if (!maxCashout?.gt(BN_ZERO)) {
+    if (!maxCashout) {
       setValue('updateChannelPayouts.maximumCashoutAllowed', maximumCashoutAllowed)
     }
   }, [minCashout, maxCashout, minimumCashoutAllowed, maximumCashoutAllowed])
