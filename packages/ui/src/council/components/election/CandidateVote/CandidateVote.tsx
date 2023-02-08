@@ -85,7 +85,7 @@ export const CandidateVote = ({
             {myStake?.gt(BN_ZERO) && (
               <>
                 <Tooltip
-                  tooltipText="Vote for your own membership with the same account as used for council candidacy creation counts towards the progress. Please note, this will result in a voting lock applied to this account, which may only be withdrawn in the end of the council period if you win the election and released immediately if your candidacy gets outvoted by others. Voting locks are non-rivalrous."
+                  tooltipText="Total stake of revealed votes from any of your accounts. Vote locks are non-rivalrous and may be recovered during the following announcing period in case the candidate got elected or are released immediately after revealing ends."
                   tooltipLinkText="Read more"
                   tooltipLinkURL="https://handbook.joystream.org/system/council#vote"
                 >
