@@ -2,7 +2,7 @@ import BN from 'bn.js'
 
 import { BaseActivity, MemberDisplayFields } from '@/common/types'
 
-import { WorkingGroupOpening } from '..'
+import { WorkingGroupOpening, GroupIdName } from '..'
 import { WorkerStatus } from '../../../common/api/queries/__generated__/baseTypes.generated'
 
 export type WorkingGroupActivity =
@@ -112,5 +112,8 @@ export interface WorkerRewardAccountUpdatedActivity extends BaseActivity {
 
 export interface WorkerRewardAmountUpdatedActivity extends BaseActivity {
   eventType: 'WorkerRewardAmountUpdatedEvent'
+  member: MemberDisplayFields
   newAmount: BN
+  openingTitle: string
+  groupId: GroupIdName
 }

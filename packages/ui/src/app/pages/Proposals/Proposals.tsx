@@ -51,7 +51,7 @@ export const Proposals = () => {
         )
       }
       sidebar={
-        proposals.length && (
+        proposals.length > 0 && (
           <SidePanel>
             <ActivitiesBlock activities={activities} label="Proposals Activities" />
           </SidePanel>
