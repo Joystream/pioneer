@@ -1,9 +1,13 @@
 export * from './App'
 export { WaitForAPI } from '@/app/components/WaitForAPI'
 
-const glob = window as any
-glob.Commands = {
-  ignoreValidation: (enabled: boolean) => {
-    sessionStorage.setItem('IgnoreValidation', String(enabled))
+// Define commands
+Object.defineProperty(global, 'PIONEER', {
+  value: {
+    get IgnoreValidation() {
+      const enabled = !JSON.parse(sessionStorage.getItem('IgnoreValidation') ?? 'false')
+      sessionStorage.setItem('IgnoreValidation', String(enabled))
+      return enabled ? 'Form validation is now ignored' : 'Form validation is no longer ignored'
+    },
   },
-}
+})
