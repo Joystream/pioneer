@@ -51,7 +51,7 @@ export const ProposalStages = ({ status, updates, constitutionality, value, onCh
           <Tooltip
             key={round}
             tooltipText={
-              isActive
+              !isActive
                 ? 'This proposal must undergo the voting of multiple consequent councils. The result of each council vote will be displayed in the separate tabs. For the proposal to be approved, each of the councils must approve it.'
                 : 'The number of councils in that must approve the proposal in a row before it has its intended effect is more than one. The overall execution of proposal will be triggered after the last council completes the voting. Outcomes of each council voting is displayed in a separate tab.'
             }
