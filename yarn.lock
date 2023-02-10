@@ -3537,22 +3537,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@joystream/types@patch:@joystream/types@npm%3A0.20.5#./.yarn/patches/@joystream-types-npm-0.20.5-c876cd34cf.patch::locator=pioneer%40workspace%3A.":
-  version: 0.20.5
-  resolution: "@joystream/types@patch:@joystream/types@npm%3A0.20.5#./.yarn/patches/@joystream-types-npm-0.20.5-c876cd34cf.patch::version=0.20.5&hash=a410d4&locator=pioneer%40workspace%3A."
-  dependencies:
-    "@polkadot/api": 8.9.1
-    "@polkadot/keyring": 9.5.1
-    "@polkadot/types": 8.9.1
-    "@types/lodash": ^4.14.157
-    "@types/vfile": ^4.0.0
-    ajv: ^6.11.0
-    lodash: ^4.17.15
-    moment: ^2.24.0
-  checksum: c0b239daf7feec556a63d70ed2828da82a9e644e4ba7a16b9290f3e161a72c5c12d0603c399a30b83b3318a5bf8d86540b4c751075c376de115f16246d18b425
-  languageName: node
-  linkType: hard
-
 "@mdx-js/loader@npm:^1.6.22":
   version: 1.6.22
   resolution: "@mdx-js/loader@npm:1.6.22"
