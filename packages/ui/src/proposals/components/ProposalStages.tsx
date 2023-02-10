@@ -10,10 +10,12 @@ import { ProposalStatus, ProposalStatusUpdates } from '@/proposals/types'
 export interface ProposalStagesProps extends ControlProps<number> {
   status: ProposalStatus
   updates: ProposalStatusUpdates[]
-  constitutionality?: number | string
+  constitutionality?: number
 }
 
-export const ProposalStages = ({ status, updates, constitutionality = '-', value, onChange }: ProposalStagesProps) => {
+const iconMap = { approved: <CheckboxIcon />, rejected: <CrossIcon />, deciding: undefined, disabled: undefined }
+
+export const ProposalStages = ({ status, updates, constitutionality, value, onChange }: ProposalStagesProps) => {
   const rounds = useMemo(() => {
     const decidingCount = updates.filter(({ status }) => status === 'deciding').length
 
@@ -41,25 +43,34 @@ export const ProposalStages = ({ status, updates, constitutionality = '-', value
     ]
   }, [updates.length, status, constitutionality])
 
+  console.log(status);
 
   return (
     <TabsContainer>
-      {rounds.map(({ icon, onClick }, round) => (
-        <Tooltip
-          tooltipText={
-            round !== value
-              ? 'This proposal must undergo the voting of multiple consequent councils. The result of each council vote will be displayed in the separate tabs. For the proposal to be approved, each of the councils must approve it.'
-              : 'The number of councils in that must approve the proposal in a row before it has its intended effect is more than one. The overall execution of proposal will be triggered after the last council completes the voting. Outcomes of each council voting is displayed in a separate tab.'
-          }
-        >
-          <TabContainer key={round} active={round === value} disabled={!onClick} onClick={onClick}>
-            {icon}
-            <span>
-              Council approvals {round + 1}/{constitutionality}
-            </span>
-          </TabContainer>
-        </Tooltip>
-      ))}
+      {rounds.map((status, round) => {
+        // const isDisabled = status === 'cancelled'
+        const isActive = round === value
+        const onClick = isActive ? undefined : () => onChange(round)
+        // const icon = iconMap[status]
+        return (
+
+          <Tooltip
+            key={round}
+            tooltipText={
+              isActive
+                ? 'This proposal must undergo the voting of multiple consequent councils. The result of each council vote will be displayed in the separate tabs. For the proposal to be approved, each of the councils must approve it.'
+                : 'The number of councils in that must approve the proposal in a row before it has its intended effect is more than one. The overall execution of proposal will be triggered after the last council completes the voting. Outcomes of each council voting is displayed in a separate tab.'
+            }
+          >
+            <TabContainer key={round} active={round === value} disabled={!onClick} onClick={onClick}>
+              {/* {icon} */}
+              <span>
+                Council approvals {round + 1}/{constitutionality}
+              </span>
+            </TabContainer>
+          </Tooltip>
+        )
+      })}
     </TabsContainer>
   )
 }
