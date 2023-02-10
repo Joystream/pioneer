@@ -9,6 +9,8 @@ import { Member } from '@/memberships/types'
 import { ProposalType } from '@/proposals/types'
 import { ProxyApi } from '@/proxyApi'
 import { GroupIdName } from '@/working-groups/types'
+import { BN_ZERO } from '@/common/constants'
+import { Conditions } from '../../../bounty/modals/AddBountyModal/helpers';
 
 export const defaultProposalValues = {
   groupId: undefined,
@@ -172,8 +174,7 @@ export const schemaFactory = (api?: ProxyApi) => {
       isDiscussionClosed: Yup.boolean(),
       discussionWhitelist: Yup.array().when('isDiscussionClosed', {
         is: true,
-        then: Yup.array().test(maxContext('The maximum block number is ${20}', 'maxTriggerBlock', false))
-          .required('Field is required')
+        then: Yup.array().test(maxContext('The whitelist is limited to ${max} members', 'maxTriggerBlock', false))
       }),
     }),
     signal: Yup.object().shape({
