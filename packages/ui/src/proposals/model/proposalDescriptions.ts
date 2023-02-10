@@ -34,7 +34,7 @@ export const proposalDescriptions: ProposalDescriptions = {
   setReferralCut:
     'Referrals, same as new membership invitations are incentivised by the platform. Referral cut entails the reward to the originator of invitation links which resulted in new memberships.',
   updateChannelPayouts:
-    'Proposal to submit the Channel Incentives Payload, defining how much JOYs can be minted by each channel within payout period and related parameters.',
+    'Proposal to submit the Channel Incentives Payout payload, update the min/max claimable amounts and block/allow claiming of awarded JOYs by channels.',
   createBlogPost: 'Council blog',
   editBlogPost: 'Unlocked blog post can be edited.',
   lockBlogPost: 'When a post is locked it can no longer be modified.',
