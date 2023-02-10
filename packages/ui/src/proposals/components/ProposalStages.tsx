@@ -13,7 +13,7 @@ export interface ProposalStagesProps extends ControlProps<number> {
   constitutionality?: number
 }
 
-const iconMap = { approved: <CheckboxIcon />, rejected: <CrossIcon />, deciding: undefined, disabled: undefined }
+const iconMap = { approved: <CheckboxIcon />, rejected: <CrossIcon />, deciding: undefined, dormant: undefined }
 
 export const ProposalStages = ({ status, updates, constitutionality, value, onChange }: ProposalStagesProps) => {
   const rounds = useMemo(() => {
@@ -29,15 +29,10 @@ export const ProposalStages = ({ status, updates, constitutionality, value, onCh
     const isDormant = onGoing && status === 'dormant'
 
     return [
-      ...repeat((round) => ({ icon: <CheckboxIcon />, onClick: () => onChange(round) }), decidingCount - 1),
-      {
-        icon: !isDeciding && (rejected ? <CrossIcon /> : <CheckboxIcon />),
-        onClick: () => onChange(decidingCount - 1),
-      },
       ...(isDormant
         ? repeat(
-          () => ({ icon: false, onClick: undefined }),
-          totalRoundCount !== undefined ? totalRoundCount - decidingCount - 1 : 1
+          () => (status),
+          constitutionality ?? 1
         )
         : []),
     ]
@@ -48,10 +43,10 @@ export const ProposalStages = ({ status, updates, constitutionality, value, onCh
   return (
     <TabsContainer>
       {rounds.map((status, round) => {
-        // const isDisabled = status === 'cancelled'
+        const isDisabled = status === 'dormant'
         const isActive = round === value
         const onClick = isActive ? undefined : () => onChange(round)
-        // const icon = iconMap[status]
+        const icon = iconMap[status]
         return (
 
           <Tooltip
@@ -63,7 +58,7 @@ export const ProposalStages = ({ status, updates, constitutionality, value, onCh
             }
           >
             <TabContainer key={round} active={round === value} disabled={!onClick} onClick={onClick}>
-              {/* {icon} */}
+              {icon}
               <span>
                 Council approvals {round + 1}/{constitutionality}
               </span>
