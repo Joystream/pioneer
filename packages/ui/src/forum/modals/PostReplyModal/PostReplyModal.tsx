@@ -36,7 +36,7 @@ export const PostReplyModal = () => {
     if (api && active) {
       return transactionFactory(api, module, state.context.postText, state.context.isEditable, replyTo, active.id)
     }
-  }, [api?.isConnected])
+  }, [api?.isConnected, state.context.postText, state.context.isEditable])
   const { feeInfo } = useTransactionFee(active?.controllerAccount, () => transaction)
   const requiredAmount = useMemo(
     () => feeInfo && api && feeInfo.transactionFee.add(postDeposit ?? BN_ZERO),
