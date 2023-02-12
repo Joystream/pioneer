@@ -68,7 +68,7 @@ export const TriggerAndDiscussionStep = () => {
               id="triggerBlock"
               placeholder="0"
               name="triggerAndDiscussion.triggerBlock"
-              maxAllowedValue={2}
+              maxAllowedValue={Math.pow(2, 32)}
             />
           </InputComponent>
         )}
