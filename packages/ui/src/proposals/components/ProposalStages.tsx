@@ -22,7 +22,6 @@ export const ProposalStages = ({ roundStatus, updates, constitutionality, value,
 
     const decidingCount = updates.filter(({ status }) => status === 'deciding').length
 
-
     const lastUpdate = last(updates).status
     const onGoing = lastUpdate === roundStatus
     const approved = lastUpdate === 'gracing'
@@ -30,6 +29,7 @@ export const ProposalStages = ({ roundStatus, updates, constitutionality, value,
     const isDormant = onGoing && roundStatus === 'dormant'
 
     return repeat((round) => {
+      console.log(round, decidingCount);
       if (round < decidingCount) {
         return `approved`
       } else if (round > decidingCount) {
