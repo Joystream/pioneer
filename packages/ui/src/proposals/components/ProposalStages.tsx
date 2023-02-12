@@ -18,18 +18,15 @@ const iconMap = { approved: <CheckboxIcon />, rejected: <CrossIcon />, deciding:
 
 export const ProposalStages = ({ roundStatus, updates, constitutionality, value, onChange }: ProposalStagesProps) => {
 
-  console.log(roundStatus, updates, constitutionality, value, onChange);
-
   const rounds: RoundState[] = useMemo(() => {
+
     const decidingCount = updates.filter(({ status }) => status === 'deciding').length
 
-    const totalRoundCount = typeof constitutionality === 'string' ? undefined : constitutionality
 
     const lastUpdate = last(updates).status
     const onGoing = lastUpdate === roundStatus
     const approved = lastUpdate === 'gracing'
     const rejected = !onGoing && !approved
-    const isDeciding = onGoing && roundStatus === 'deciding'
     const isDormant = onGoing && roundStatus === 'dormant'
 
     return repeat((round) => {
