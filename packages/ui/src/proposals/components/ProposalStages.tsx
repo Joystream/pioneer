@@ -8,44 +8,51 @@ import { last, repeat } from '@/common/utils'
 import { ProposalStatus, ProposalStatusUpdates } from '@/proposals/types'
 
 export interface ProposalStagesProps extends ControlProps<number> {
-  status: ProposalStatus
+  roundStatus: ProposalStatus
   updates: ProposalStatusUpdates[]
   constitutionality?: number
 }
 
-const iconMap = { approved: <CheckboxIcon />, rejected: <CrossIcon />, deciding: undefined, dormant: undefined }
+type RoundState = 'approved' | 'rejected' | 'deciding' | 'disabled'
+const iconMap = { approved: <CheckboxIcon />, rejected: <CrossIcon />, deciding: undefined, disabled: undefined }
 
-export const ProposalStages = ({ status, updates, constitutionality, value, onChange }: ProposalStagesProps) => {
-  const rounds = useMemo(() => {
+export const ProposalStages = ({ roundStatus, updates, constitutionality, value, onChange }: ProposalStagesProps) => {
+
+  const rounds: RoundState[] = useMemo(() => {
     const decidingCount = updates.filter(({ status }) => status === 'deciding').length
 
     const totalRoundCount = typeof constitutionality === 'string' ? undefined : constitutionality
 
     const lastUpdate = last(updates).status
-    const onGoing = lastUpdate === status
+    const onGoing = lastUpdate === roundStatus
     const approved = lastUpdate === 'gracing'
     const rejected = !onGoing && !approved
-    const isDeciding = onGoing && status === 'deciding'
-    const isDormant = onGoing && status === 'dormant'
+    const isDeciding = onGoing && roundStatus === 'deciding'
+    const isDormant = onGoing && roundStatus === 'dormant'
 
-    return [
-      ...(isDormant
-        ? repeat(
-          () => (status),
-          constitutionality ?? 1
-        )
-        : []),
-    ]
-  }, [updates.length, status, constitutionality])
+    return repeat((round) => {
+      if (round < decidingCount) {
+        return `approved`
+      } else if (round > decidingCount) {
+        return `disabled`
+      } else if (isDormant || approved) {
+        return `approved`
+      } else if (rejected) {
+        return `rejected`
+      } else {
+        return `deciding`
+      }
+    }, constitutionality ?? 1)
+  }, [updates.length, roundStatus, constitutionality])
 
 
   return (
     <TabsContainer>
-      {rounds.map((status, round) => {
-        const isDisabled = status === 'dormant'
+      {rounds.map((roundStatus, round) => {
+        const isDisabled = roundStatus === 'disabled'
         const isActive = round === value
         const onClick = isActive ? undefined : () => onChange(round)
-        const icon = iconMap[status]
+        const icon = iconMap[roundStatus]
         return (
 
           <Tooltip
