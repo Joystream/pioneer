@@ -29,7 +29,6 @@ export const ProposalStages = ({ roundStatus, updates, constitutionality, value,
     const isDormant = onGoing && roundStatus === 'dormant'
 
     return repeat((round) => {
-      console.log(round, decidingCount);
       if (round < decidingCount) {
         return `approved`
       } else if (round > decidingCount) {
