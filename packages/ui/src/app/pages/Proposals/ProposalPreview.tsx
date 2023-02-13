@@ -195,6 +195,9 @@ export const ProposalPreview = () => {
             <RowGapBlock gap={16}>
               <Label>Proposer</Label>
               <MemberInfo member={proposal.proposer} />
+            </RowGapBlock>
+
+            <RowGapBlock gap={16}>
               <Label>Stake</Label>
               {constants ? <TokenValue value={constants.requiredStake} /> : 'Loading...'}
             </RowGapBlock>
