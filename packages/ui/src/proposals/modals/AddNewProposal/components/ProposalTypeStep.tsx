@@ -42,7 +42,7 @@ export const ProposalTypeStep = () => {
               <TypeItemWrap>
                 <h5>{camelCaseToText(type)}</h5>
                 <TextMedium light>
-                  ({i}) {description}
+                  ({i + 1}) {description}
                 </TextMedium>
                 <CSSTransition
                   in={type === chosenType}

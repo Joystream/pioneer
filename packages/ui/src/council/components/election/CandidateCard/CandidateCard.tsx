@@ -56,7 +56,7 @@ export const CandidateCard = ({
       <CandidateCardImageWrapper>
         <CandidateCardImage imageUrl={info.bannerUri} />
       </CandidateCardImageWrapper>
-      <CandidateCardContentWrapper>
+      <CandidateCardContentWrapper title={member.handle}>
         <CandidateCardContent>
           <CandidateCardMemberInfoWrapper>
             <MemberInfo onlyTop member={member} skipModal={isPreview} />
