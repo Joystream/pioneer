@@ -49,7 +49,7 @@ export const ProposalStages = ({ roundStatus, updates, constitutionality, value,
       {rounds.map((roundStatus, round) => {
         const isDisabled = roundStatus === 'disabled'
         const isActive = round === value
-        const onClick = isDisabled ? undefined : () => { console.log(round); return onChange(round) }
+        const onClick = isDisabled ? undefined : () => { return onChange(round) }
         const icon = iconMap[roundStatus]
         return (
 
