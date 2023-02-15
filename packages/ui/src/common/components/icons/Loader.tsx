@@ -55,7 +55,6 @@ export function Loader({ className, withoutMargin }: LoaderProps) {
 }
 
 export const LoaderComponent = styled.svg<LoaderProps>`
-  width: 100%;
   height: 24px;
   border-radius: ${BorderRad.round};
   animation: spinLoader 1s infinite linear;

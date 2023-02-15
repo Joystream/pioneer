@@ -5,6 +5,7 @@ import NumberFormat, { NumberFormatValues, SourceInfo } from 'react-number-forma
 
 import { JOY_DECIMAL_PLACES } from '@/common/constants'
 import { formatJoyValue } from '@/common/model/formatters'
+import { joyValueFromString } from '@/common/model/joyValueFromString'
 import { powerOf2 } from '@/common/utils/bn'
 
 import { InputProps } from './InputComponent'
@@ -24,7 +25,7 @@ const BasedTokenInput = React.memo(
       ({ value }: NumberFormatValues, { event }: SourceInfo) => {
         if (inputValue !== value) {
           setInputValue(value)
-          const newJOYValue = stringToJoyValue(value)
+          const newJOYValue = joyValueFromString(value)
           if (!joyValue || !newJOYValue.eq(joyValue)) {
             onChange?.(event, newJOYValue)
           }
@@ -34,12 +35,12 @@ const BasedTokenInput = React.memo(
     )
 
     const isAllowed = useCallback(
-      ({ value }: NumberFormatValues) => stringToJoyValue(value).lt(maxAllowedValue),
+      ({ value }: NumberFormatValues) => joyValueFromString(value).lt(maxAllowedValue),
       [maxAllowedValue]
     )
 
     useEffect(() => {
-      if (joyValue && !stringToJoyValue(inputValue).eq(joyValue)) {
+      if (joyValue && !joyValueFromString(inputValue).eq(joyValue)) {
         setInputValue(formatJoyValue(joyValue, { formatInt: String }))
       }
     }, [String(joyValue)])
@@ -84,8 +85,3 @@ export const TokenInput = React.memo(({ name, ...props }: BaseTokenInputProps) =
     />
   )
 })
-
-const stringToJoyValue = (value: string) => {
-  const [integer = '0', decimal = ''] = value.split('.')
-  return new BN(integer + decimal.padEnd(JOY_DECIMAL_PLACES, '0'))
-}
