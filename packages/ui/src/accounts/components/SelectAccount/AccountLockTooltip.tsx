@@ -23,6 +23,15 @@ export const AccountLockTooltip = ({ locks, children, boundaryClassName }: Props
   const tooltipTexts = useMemo(() => {
     const texts: React.ReactElement[] = []
 
+    if (locks?.includes('optOutLock')) {
+      texts.push(
+        <li className="tooltipLink" key="optOutLock">
+          This account has permanently opted out from voting.
+          <br />
+        </li>
+      )
+    }
+
     if (locks?.includes('boundMembership')) {
       texts.push(
         <li className="tooltipLink" key="boundMembership">
