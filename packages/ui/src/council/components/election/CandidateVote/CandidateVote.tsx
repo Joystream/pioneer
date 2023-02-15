@@ -19,7 +19,7 @@ import { Member } from '@/memberships/types'
 import { CandidateCardArrow, StatsValue } from '../CandidateCard/CandidateCard'
 
 import { RevealVoteButton } from './RevealVoteButton'
-import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
+import { Tooltip } from '@/common/components/Tooltip'
 
 export interface CandidateVoteProps {
   candidateId: string
@@ -88,7 +88,7 @@ export const CandidateVote = ({
               <>
                 <Tooltip tooltipText={tooltipLabel} tooltipLinkURL={tooltipLinkURL}>
                   <Subscription>My contributed votes</Subscription>
-                </Tooltip>                
+                </Tooltip>
                 <StatsValue>
                   <TokenValue value={myStake} />
                 </StatsValue>
