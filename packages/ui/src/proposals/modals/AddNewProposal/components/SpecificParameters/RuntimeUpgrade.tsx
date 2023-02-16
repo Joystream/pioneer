@@ -2,6 +2,7 @@ import React, { useCallback } from 'react'
 import { useDropzone, DropEvent } from 'react-dropzone'
 import { useFormContext } from 'react-hook-form'
 import styled, { css } from 'styled-components'
+import zstd from 'zstandard-wasm'
 
 import { Label } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
@@ -24,6 +25,22 @@ const MAX_FILE_SIZE = 3 * 1024 * 1024
 const isDragEvent = (event: any): event is React.DragEvent<HTMLElement> => !!event?.dataTransfer
 const isChangeEvent = (event: any): event is React.ChangeEvent<HTMLInputElement> => !!event?.target?.files
 
+// https://github.com/paritytech/substrate/blob/master/primitives/maybe-compressed-blob/src/lib.rs
+// Look for 8 byte magic prefix in blob that indicates it is compressed with zstd algorithm
+// If is compressed, strips the prefix and decompresses remaining bytes, otherwise returns original blob
+const maybeDecompressRuntimeBlob = async (blob: ArrayBuffer): Promise<Buffer> => {
+  const ZSTD_PREFIX = Buffer.from([82, 188, 83, 118, 70, 219, 142, 5])
+  let wasm = Buffer.from(blob)
+  const prefix = wasm.slice(0, 8)
+  const isCompressed = Buffer.compare(prefix, ZSTD_PREFIX) === 0
+  if (isCompressed) {
+    await zstd.loadWASM()
+    // strip the prefix and decompress the rest
+    wasm = Buffer.from(zstd.decompress(wasm.subarray(8)))
+  }
+  return wasm
+}
+
 const getValidatedFiles = async (event: DropEvent): Promise<ValidatedFile[]> => {
   const files = []
 
@@ -42,7 +59,8 @@ const getValidatedFiles = async (event: DropEvent): Promise<ValidatedFile[]> => 
   for (let i = 0; i < fileList.length; i++) {
     const file = fileList.item(i)
     if (file) {
-      const isValidWASM = await WebAssembly.validate(await file.arrayBuffer())
+      const wasm = await maybeDecompressRuntimeBlob(await file.arrayBuffer())
+      const isValidWASM = await WebAssembly.validate(wasm)
       Object.assign(file, { isValidWASM })
       files.push(file)
     }

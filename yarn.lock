@@ -19487,6 +19487,7 @@ __metadata:
     husky: ">=6"
     lint-staged: ">=10"
     wsrun: ^5.2.4
+    zstandard-wasm: ^1.5.0-rev.5
   languageName: unknown
   linkType: soft
 
@@ -25796,6 +25797,13 @@ __metadata:
   version: 0.8.15
   resolution: "zen-observable@npm:0.8.15"
   checksum: b7289084bc1fc74a559b7259faa23d3214b14b538a8843d2b001a35e27147833f4107590b1b44bf5bc7f6dfe6f488660d3a3725f268e09b3925b3476153b7821
+  languageName: node
+  linkType: hard
+
+"zstandard-wasm@npm:^1.5.0-rev.5":
+  version: 1.5.0
+  resolution: "zstandard-wasm@npm:1.5.0"
+  checksum: 409dd162502a153ed2271e051959c40551a95f88c86ca8d47b96557c990a925b2870a53e930b893cb248723ec2dcd83dcfae6f50a052d3eda64e087400a8aefd
   languageName: node
   linkType: hard
 
