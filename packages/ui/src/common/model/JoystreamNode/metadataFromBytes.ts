@@ -1,8 +1,7 @@
 import { AnyMessage, AnyMetadataClass, DecodedMetadataObject } from '@joystream/metadata-protobuf/types'
+import { createType } from '@joystream/types'
 import { Bytes } from '@polkadot/types/primitive'
 import { isObject } from '@polkadot/util'
-
-import { createType } from '@/common/model/createType'
 
 function metaToObject<T>(metaClass: AnyMetadataClass<T>, value: AnyMessage<T>) {
   return metaClass.toObject(value, { arrays: false, longs: String }) as DecodedMetadataObject<T>

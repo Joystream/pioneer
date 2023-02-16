@@ -122,13 +122,13 @@ export interface AddNewProposalForm {
     groupId?: GroupIdName
   }
   setInitialInvitationCount: {
-    invitationCount?: BN
+    invitationCount?: number
   }
   setReferralCut: {
     referralCut?: number
   }
   setMembershipLeadInvitationQuota: {
-    amount?: BN
+    count?: number
     leadId?: string
   }
   setInitialInvitationBalance: {
@@ -154,8 +154,7 @@ export const schemaFactory = (api?: ProxyApi) => {
     proposalDetails: Yup.object().shape({
       title: Yup.string()
         .required('Field is required')
-        .max(api?.consts.proposalsEngine.titleMaxLength.toNumber() ?? 0, 'Title exceeds maximum length')
-        .matches(/^[\x20-\x7E]*$/, 'Title includes forbidden characters'),
+        .max(api?.consts.proposalsEngine.titleMaxLength.toNumber() ?? 0, 'Title exceeds maximum length'),
       rationale: Yup.string()
         .required('Field is required')
         .max(api?.consts.proposalsEngine.descriptionMaxLength.toNumber() ?? 0, 'Rationale exceeds maximum length'),
@@ -296,7 +295,7 @@ export const schemaFactory = (api?: ProxyApi) => {
         .required('Field is required'),
     }),
     setMembershipLeadInvitationQuota: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
+      count: BNSchema.test(moreThanMixed(0, 'Quota must be greater than zero')).required('Field is required'),
       leadId: Yup.string().test('execution', (value) => !!value),
     }),
     setInitialInvitationBalance: Yup.object().shape({

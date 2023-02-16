@@ -13,6 +13,7 @@ import {
   TooltipText,
 } from '@/common/components/Tooltip'
 import { Colors, Fonts } from '@/common/constants'
+import { nameMapping } from '@/common/helpers'
 import { memberRoleAbbreviation, memberRoleTitle } from '@/memberships/helpers'
 import { groupNameToURLParam } from '@/working-groups/model/workingGroupName'
 
@@ -23,12 +24,6 @@ export interface MemberRolesProps {
   size?: 'l' | 'm'
   roles: MemberRole[]
   wrapable?: boolean
-}
-
-const defaultRole = {
-  id: '0',
-  groupName: 'Member Role',
-  isLead: false,
 }
 
 export const rolesToMap = (roles: MemberRole[]): Map<string, MemberRole[]> => {
@@ -50,7 +45,7 @@ export const rolesToMap = (roles: MemberRole[]): Map<string, MemberRole[]> => {
 
 export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) => {
   if (!roles || !roles.length) {
-    roles = [defaultRole]
+    roles = []
   }
   const mapRoles = rolesToMap(roles)
   const rolesWithCount = [...mapRoles.entries()]
@@ -131,7 +126,7 @@ export const MemberRolePopupContent = ({ roles }: MemberRolePopupContentProps) =
         </PopupRoleItem>
       ))}
       <PopupGroupLink to={groupAddress} target="_blank">
-        {roles[0].groupName} Group
+        {nameMapping(roles[0].groupName)} Group
         <LinkSymbol />
       </PopupGroupLink>
     </>

@@ -107,6 +107,9 @@ declare global {
   }
 }
 
+global.URL.createObjectURL = jest.fn()
+global.URL.revokeObjectURL = jest.fn()
+
 expect.extend({
   toBeBN: (received: any, expected: BN) => {
     if (!BN.isBN(received)) {

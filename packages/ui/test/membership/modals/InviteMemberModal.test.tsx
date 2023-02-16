@@ -31,8 +31,6 @@ import {
 
 configure({ testIdAttribute: 'id' })
 
-
-
 describe('UI: InviteMemberModal', () => {
   beforeAll(async () => {
     await cryptoWaitReady()
@@ -175,7 +173,7 @@ describe('UI: InviteMemberModal', () => {
           <ApiContext.Provider value={api}>
             <ModalContextProvider>
               <GlobalModals />
-              <InviteMemberModal onClose={() => undefined} />
+              <InviteMemberModal />
             </ModalContextProvider>
           </ApiContext.Provider>
         </MockKeyringProvider>

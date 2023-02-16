@@ -1,4 +1,5 @@
 import { BN_ZERO } from '@/common/constants'
+import { sumBN } from '@/common/utils/bn'
 
 import { Balances } from '../types'
 
@@ -18,16 +19,16 @@ export const zeroBalance = {
 }
 
 const addBalances = (a: Balances, b: Balances) => ({
-  recoverable: a.recoverable.add(b.recoverable),
-  locked: a.locked.add(b.locked),
-  transferable: a.transferable.add(b.transferable),
-  total: a.total.add(b.total),
+  total: sumBN(a.total, b.total),
   locks: a.locks.concat(b.locks),
-  vestingTotal: a.vestingTotal?.add(b.vestingTotal) ?? BN_ZERO,
-  vestedClaimable: a.vestedClaimable?.add(b.vestedClaimable) ?? BN_ZERO,
-  vestedBalance: a.vestedBalance?.add(b.vestedBalance) ?? BN_ZERO,
-  vesting: a.vesting?.concat(b.vesting) ?? [],
-  vestingLocked: a.vestingLocked?.add(b.vestingLocked) ?? BN_ZERO,
+  locked: sumBN(a.locked, b.locked),
+  transferable: sumBN(a.transferable, b.transferable),
+  recoverable: sumBN(a.recoverable, b.recoverable),
+  vestingTotal: sumBN(a.vestingTotal, b.vestingTotal),
+  vestedClaimable: sumBN(a.vestedClaimable, b.vestedClaimable),
+  vestedBalance: sumBN(a.vestedBalance, b.vestedBalance),
+  vesting: a.vesting.concat(b.vesting),
+  vestingLocked: sumBN(a.vestingLocked, b.vestingLocked),
 })
 
 export function useMyTotalBalances(): Balances {

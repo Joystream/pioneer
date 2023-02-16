@@ -12,7 +12,6 @@ import { AnyKeys } from '@/common/types'
 import { getUrl } from '@/common/utils/getUrl'
 import { ForumRoutes } from '@/forum/constant'
 import { useForumThreadPosts } from '@/forum/hooks/useForumThreadPosts'
-import { ForumPost } from '@/forum/types'
 
 import { ForumPostStyles, PostListItem } from './PostListItem'
 
@@ -20,11 +19,10 @@ interface PostListProps {
   threadId: string
   isThreadActive?: boolean
   isLoading?: boolean
-  replyToPost: (post: ForumPost) => void
   isDiscussion?: boolean
 }
 
-export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost, isDiscussion }: PostListProps) => {
+export const PostList = ({ threadId, isThreadActive, isLoading, isDiscussion }: PostListProps) => {
   const history = useHistory()
   const { pathname } = useLocation()
   const query = useRouteQuery()
@@ -61,7 +59,6 @@ export const PostList = ({ threadId, isThreadActive, isLoading, replyToPost, isD
             isSelected={post.id === navigation.post}
             isThreadActive={isThreadActive}
             type="forum"
-            replyToPost={() => replyToPost({ ...post, repliesTo: undefined })}
             link={getUrl({ route: ForumRoutes.thread, params: { id: threadId }, query: { post: post.id } })}
             repliesToLink={`${generatePath(ForumRoutes.thread, { id: threadId })}?post=${post.repliesTo?.id}`}
             isDiscussion={isDiscussion}

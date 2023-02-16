@@ -28,7 +28,7 @@ export type InputComponentProps = InputProps &
     message?: React.ReactElement | string
     tooltipText?: React.ReactElement | string
     tooltipTitle?: string
-    tooltipLinkText?: React.ReactElement
+    tooltipLinkText?: React.ReactElement | string
     tooltipLinkURL?: string
     className?: string
     children: React.ReactNode

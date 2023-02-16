@@ -1,7 +1,6 @@
 {
   "name": "pioneer",
   "private": true,
-  "version": "0.1.0",
   "description": "Governance app for Joystream DAO",
   "repository": "git@github.com:Joystream/pioneer.git",
   "license": "GPL-3.0-only",
@@ -11,7 +10,8 @@
     ]
   },
   "scripts": {
-    "lint": "wsrun --package @joystream/pioneer -c lint:fix",
+    "lint": "wsrun --package @joystream/pioneer -c lint",
+    "lint:fix": "wsrun --package @joystream/pioneer -c lint:fix",
     "build": "wsrun --fast-exit --stages -c --exclude @joystream/markdown-editor build",
     "build:storybook": "wsrun --fast-exit --stages -c --exclude @joystream/pioneer --exclude-missing build && wsrun --package @joystream/pioneer -c build:storybook",
     "storybook": "wsrun --exclude-missing -c storybook",
@@ -54,5 +54,6 @@
       "eslint --fix",
       "prettier --write"
     ]
-  }
+  },
+  "packageManager": "yarn@3.3.0"
 }

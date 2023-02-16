@@ -13,10 +13,9 @@ export interface WorkersListProps {
   hired?: WorkingGroupOpeningApplication
   allApplicants?: WorkingGroupOpeningApplication[]
   hiringComplete: boolean
-  leadId?: string | null
 }
 
-export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComplete, leadId }: WorkersListProps) => {
+export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComplete }: WorkersListProps) => {
   return (
     <RowGapBlock gap={36}>
       {myApplication && (

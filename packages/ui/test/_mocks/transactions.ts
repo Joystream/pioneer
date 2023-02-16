@@ -153,9 +153,9 @@ export const stubConst = <T>(api: UseApi, constSubPath: string, value: T) => {
 
 export const stubApi = () => {
   const api: UseApi = {
-    api: ({
+    api: {
       isConnected: true,
-    } as unknown) as Api,
+    } as unknown as Api,
     isConnected: true,
     connectionState: 'connected',
     setQnConnectionState: () => undefined,
@@ -267,7 +267,7 @@ export const stubBalances = ({ available, lockId, locked }: Balances) => {
   const availableBalance = new BN(available ?? 0)
   const lockedBalance = new BN(locked ?? 0)
 
-  const deriveBalances = ({
+  const deriveBalances = {
     availableBalance: createType('Balance', availableBalance),
     lockedBalance: createType('Balance', lockedBalance),
     accountId: createType('AccountId', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
@@ -286,7 +286,7 @@ export const stubBalances = ({ available, lockId, locked }: Balances) => {
     vestingTotal: new BN(0),
     votingBalance: new BN(0),
     vesting: [],
-  } as unknown) as DeriveBalancesAll
+  } as unknown as DeriveBalancesAll
 
   const balance = toBalances(deriveBalances)
   mockedBalances.mockReturnValue(balance)

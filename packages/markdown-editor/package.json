@@ -4,7 +4,7 @@
   "license": "GPL-3.0-only",
   "private": true,
   "scripts": {
-    "build": "node --max_old_space_size=4096 ./node_modules/.bin/webpack --mode production --progress",
+    "build": "node --max_old_space_size=4096 ../../node_modules/.bin/webpack --mode production --progress",
     "lint": "yarn lint:prettier --check && yarn lint:eslint",
     "lint:fix": "yarn lint:eslint --fix && yarn lint:prettier --write",
     "lint:eslint": "eslint './{src,test}/**/*.{ts,tsx}'",
