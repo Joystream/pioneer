@@ -3,14 +3,15 @@ import * as Yup from 'yup'
 
 import { Account } from '@/accounts/types'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
+import { BN_ZERO } from '@/common/constants'
 import { BNSchema, lessThanMixed, maxContext, maxMixed, minContext, moreThanMixed } from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
 import { ProposalType } from '@/proposals/types'
 import { ProxyApi } from '@/proxyApi'
 import { GroupIdName } from '@/working-groups/types'
-import { BN_ZERO } from '@/common/constants'
-import { Conditions } from '../../../bounty/modals/AddBountyModal/helpers';
+
+import { Conditions } from '../../../bounty/modals/AddBountyModal/helpers'
 
 export const defaultProposalValues = {
   groupId: undefined,
@@ -174,7 +175,7 @@ export const schemaFactory = (api?: ProxyApi) => {
       isDiscussionClosed: Yup.boolean(),
       discussionWhitelist: Yup.array().when('isDiscussionClosed', {
         is: true,
-        then: Yup.array().required('Field is required')
+        then: Yup.array().required('Field is required'),
       }),
     }),
     signal: Yup.object().shape({
