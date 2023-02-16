@@ -2,12 +2,12 @@ import BN from 'bn.js'
 import * as Yup from 'yup'
 
 import { Account } from '@/accounts/types'
+import { Api } from '@/api'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
 import { BNSchema, lessThanMixed, maxContext, maxMixed, minContext, moreThanMixed } from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
 import { ProposalType } from '@/proposals/types'
-import { ProxyApi } from '@/proxyApi'
 import { GroupIdName } from '@/working-groups/types'
 
 export const defaultProposalValues = {
@@ -142,7 +142,7 @@ export interface AddNewProposalForm {
   }
 }
 
-export const schemaFactory = (api?: ProxyApi) => {
+export const schemaFactory = (api?: Api) => {
   return Yup.object().shape({
     groupId: Yup.string(),
     proposalType: Yup.object().shape({

@@ -1,12 +1,12 @@
 import { ForumPostMetadata } from '@joystream/metadata-protobuf'
 
+import { Api } from '@/api'
 import { createType } from '@/common/model/createType'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { ForumPost } from '@/forum/types'
-import { ProxyApi } from '@/proxyApi'
 
 export const transactionFactory = (
-  api: ProxyApi,
+  api: Api,
   module: 'forum' | 'proposalsDiscussion',
   text: string,
   isEditable: boolean,
