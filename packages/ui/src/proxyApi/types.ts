@@ -1,7 +1,4 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
-import { getPolkadotApiChainInfo } from 'injectweb3-connect'
-
-import { Awaited } from '@/common/utils'
 
 import { ProxyApi } from '.'
 import { ClientAsyncMessage, WorkerAsyncMessage } from './client/_async'
@@ -52,5 +49,3 @@ export type ClientMessage =
   | ClientAsyncMessage
 
 export type AnyMessage = WorkerMessage | ClientMessage
-
-export type MetadataDef = Awaited<ReturnType<typeof getPolkadotApiChainInfo>>

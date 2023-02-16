@@ -1,7 +1,9 @@
 import { filter, firstValueFrom, map, Observable } from 'rxjs'
 
+import { MetadataDef } from '@/api/types'
+
 import { deserializeMessage } from '../models/payload'
-import { MetadataDef, PostMessage, RawWorkerMessageEvent } from '../types'
+import { PostMessage, RawWorkerMessageEvent } from '../types'
 
 export type ClientAsyncMessage = {
   messageType: 'chain-metadata'

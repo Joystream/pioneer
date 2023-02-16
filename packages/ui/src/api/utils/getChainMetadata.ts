@@ -2,7 +2,8 @@ import { ApiRx } from '@polkadot/api'
 import { getPolkadotApiChainInfo } from 'injectweb3-connect'
 
 import { ProxyApi } from '@/proxyApi'
-import { MetadataDef } from '@/proxyApi/types'
+
+import { MetadataDef } from '../types'
 
 export const getChainMetadata = async (api: ProxyApi | ApiRx): Promise<MetadataDef> => {
   if ('_async' in api) {
