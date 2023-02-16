@@ -33,11 +33,8 @@ messages.subscribe(({ data }) => {
     const provider = new WsProvider(message.payload)
     ApiRx.create({ provider })
       .pipe(first())
-      .subscribe(async (api) => {
-        postMessage({
-          messageType: 'init',
-          payload: { consts: api.consts, chainInfo: await getPolkadotApiChainInfo(api) },
-        })
+      .subscribe((api) => {
+        postMessage({ messageType: 'init', payload: { consts: api.consts } })
         postMessage({ messageType: 'isConnected', payload: true })
         api.on('connected', () => self.postMessage({ messageType: 'isConnected', payload: true }))
         api.on('disconnected', () => self.postMessage({ messageType: 'isConnected', payload: false }))
@@ -45,7 +42,7 @@ messages.subscribe(({ data }) => {
         apiObserver.next(api)
       })
   } else {
-    apiObserver.pipe(firstWhere(isDefined)).subscribe((api) => {
+    apiObserver.pipe(firstWhere(isDefined)).subscribe(async (api) => {
       switch (message.messageType) {
         case 'derive':
           return query('derive', api as ApiRx, message, postMessage)
@@ -58,6 +55,9 @@ messages.subscribe(({ data }) => {
 
         case 'tx':
           return tx(api as ApiRx, message, postMessage)
+
+        case 'chain-metadata':
+          return postMessage({ messageType: 'chain-metadata', payload: await getPolkadotApiChainInfo(api as ApiRx) })
       }
     })
   }

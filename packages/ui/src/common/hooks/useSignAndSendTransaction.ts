@@ -8,6 +8,7 @@ import { ActorRef } from 'xstate'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useApi } from '@/api/hooks/useApi'
+import { getChainMetadata } from '@/api/utils/getChainMetadata'
 import { BN_ZERO } from '@/common/constants'
 import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
 
@@ -51,7 +52,10 @@ export const useSignAndSendTransaction = ({
 
   const sign = useCallback(() => {
     if (wallet && api) {
-      return wallet.updateMetadata(api.chainInfo).then(() => send('SIGN'))
+      getChainMetadata(api).then(async (metadata) => {
+        await wallet.updateMetadata(metadata)
+        send('SIGN')
+      })
     }
     send('SIGN')
   }, [service, wallet])
