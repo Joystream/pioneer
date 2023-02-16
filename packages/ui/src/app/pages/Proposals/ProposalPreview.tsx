@@ -95,7 +95,7 @@ export const ProposalPreview = () => {
   const myVoteStatus = myVote?.voteKind
 
   if (!proposal || !votes || !opening) {
-    if (!proposal && !isLoading && !opening) {
+    if (!proposal && !isLoading) {
       history.replace('/404')
     }
     return (
