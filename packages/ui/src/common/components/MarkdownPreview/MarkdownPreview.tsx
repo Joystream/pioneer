@@ -59,7 +59,7 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
             {children}
           </Mention>
         ) : (
-          <a style={{ overflowWrap: 'break-word' }} href={href}>
+          <a style={{ overflowWrap: 'break-word' }} href={href} rel="noopener noreferrer" target="_blank">
             {children}
           </a>
         )

@@ -49,8 +49,8 @@ export const StakeStep = ({
             label="Select account for Staking"
             required
             inputSize="l"
-            tooltipText="If someone voted for a candidate in an election, they will and can recover their stake at a later time.\n\nImportantly, a vote which was devoted to a losing candidate can be freed the moment the election cycle is over, while a vote which was devoted to a winner can only be freed after the announcing period of the next election begins. The idea behind this asymmetry is to more closely expose the winners to the consequences of their decision."
-            tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council"
+            tooltipText="If someone voted for a candidate in an election, they will and can recover their stake at a later time. Importantly, a vote which was devoted to a losing candidate can be freed the moment the election cycle is over, while a vote which was devoted to a winner can only be freed after the announcing period of the next election begins. The idea behind this asymmetry is to more closely expose the winners to the consequences of their decision."
+            tooltipLinkURL="https://handbook.joystream.org/system/council"
           >
             <SelectStakingAccount
               id="account-select"

@@ -281,6 +281,7 @@ export const ScrolledModal = styled(Modal)`
   &${ModalWrap} {
     max-height: calc(100% - 128px);
     grid-template-rows: auto 1fr auto;
+    position: fixed;
   }
 `
 
