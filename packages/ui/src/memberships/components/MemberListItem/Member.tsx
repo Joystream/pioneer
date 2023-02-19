@@ -62,7 +62,7 @@ export const MemberListItem = ({ member, searchFilter }: MemberListItemProps) =>
 
         <MemberColumn>
           <TokenValue value={balance?.locked} />
-          <AccountLocks address={member.rootAccount} locks={balance?.locks} />
+          <AccountLocks locks={balance?.locks} />
         </MemberColumn>
       </MemberItemWrap>
       {searchFilter && !EMPTY_SEARCH_FILTERS.includes(searchFilter) && (
