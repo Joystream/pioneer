@@ -99,7 +99,7 @@ export const AccountLockTooltip = ({ address, locks, children, boundaryClassName
     <Tooltip
       tooltipText={tooltipTexts}
       tooltipLinkText="Review all account locks"
-      tooltipLinkURL={`/profile/accounts/${address}`}
+      tooltipLinkURL={generatePath(ProfileRoutes.account { accountId: address })}
       maxWidth
     >
       {children}
