@@ -62,8 +62,8 @@ export const AccountLocks = ({ locks }: AccountLocksProps) => {
 
   return (
     <AccountLocksWrapper gap={4}>
-      {locks.map((lock, id) => (
-        <AccountLockIconWrapper key={id} title={lock.type ?? 'Unknown lock'}>
+      {locks.map((lock, index) => (
+        <AccountLockIconWrapper key={index} title={lock.type ?? 'Unknown lock'}>
           {lockIcon(lock.type)}
         </AccountLockIconWrapper>
       ))}
