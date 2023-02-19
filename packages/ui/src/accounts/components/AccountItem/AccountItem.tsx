@@ -41,7 +41,7 @@ export const AccountItem = ({ account }: AccountItemDataProps) => {
         <TokenValue value={balance?.total} isLoading={!isDefined(balance?.total)} />
         <ValueAndLocks align={balance?.locked && 'end'}>
           <TokenValue value={balance?.locked} isLoading={!isDefined(balance?.locked)} />
-          <AccountLocks address={address} locks={balance?.locks} />
+          <AccountLocks locks={balance?.locks} />
         </ValueAndLocks>
         <TokenValue
           value={balance?.recoverable?.add(balance?.vestedClaimable ?? BN_ZERO)}
