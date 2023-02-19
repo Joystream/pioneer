@@ -24,11 +24,10 @@ interface AccountItemDataProps {
 
 interface ParamTypes {
   accountId?: string
-  lockId?: string
 }
 
 export const AccountItem = ({ account }: AccountItemDataProps) => {
-  const { accountId, lockId } = useParams<ParamTypes>()
+  const { accountId } = useParams<ParamTypes>()
   const address = account.address
   const balance = useBalance(address)
   const isSendDisabled = !balance?.transferable || !balance.transferable.gt(new BN(0))
