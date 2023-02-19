@@ -275,9 +275,7 @@ export const schemaFactory = (api?: ProxyApi) => {
     updateWorkingGroupBudget: Yup.object().shape({
       isPositive: Yup.boolean(),
       groupId: Yup.string().required('Field is required'),
-      budgetUpdate: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero.'))
-        .test(maxMixed(new BN(999999999999999), 'Amount must be less than 99999.', true))
-        .required('Field is required'),
+      budgetUpdate: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero.')).required('Field is required'),
     }),
     setInitialInvitationCount: Yup.object().shape({
       invitationCount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero', false)).required(
