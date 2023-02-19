@@ -27,7 +27,7 @@ export const OptionAccount = ({ option, isForStaking }: Props) => {
         <InfoTitle>{balanceType} balance</InfoTitle>
         <InfoValueWithLocks>
           <Value value={balance} locked={isLocked} />
-          <AccountLocks address={option.address} locks={balances?.locks} />
+          <AccountLocks locks={balances?.locks} />
         </InfoValueWithLocks>
       </BalanceInfoInRow>
     </>
