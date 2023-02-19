@@ -20,13 +20,17 @@ interface LinkButtonProps {
   hide?: boolean
 }
 
-const LinkButton = ({ to, label, onClick, hide = false }: LinkButtonProps) => (
-  <div onClick={onClick}>
-    <LinkButtonPrimary size="medium" to={to}>
-      {label}
-    </LinkButtonPrimary>
-  </div>
-)
+const LinkButton = ({ to, label, onClick, hide = false }: LinkButtonProps) => {
+  if (hide) return <></>
+
+  return (
+    <div onClick={onClick}>
+      <LinkButtonPrimary size="medium" to={to}>
+        {label}
+      </LinkButtonPrimary>
+    </div>
+  )
+}
 
 export const MoveFundsModalButtons = ({ insufficientBalances, noFreeAccounts }: MoveFundsModalItemProps) => {
   const { showModal, hideModal } = useModal()
