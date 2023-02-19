@@ -26,7 +26,7 @@ interface MemberListItemProps {
 const EMPTY_SEARCH_FILTERS: MemberSearchFilter[] = ['Membership', 'Membership_ID', 'Account_Address']
 
 export const MemberListItem = ({ member, searchFilter }: MemberListItemProps) => {
-  const balance = useBalance(member.controllerAccount) // better root?
+  const balance = useBalance(member.controllerAccount)
   const { slashed, terminated } = useMemberRowWorkDetails(member)
   const showMemberModal = useShowMemberModal(member.id)
 
