@@ -20,7 +20,7 @@ interface Props {
   boundaryClassName?: string
 }
 
-export const AccountLockTooltip = ({ address, locks, children }: Props) => {
+export const AccountLockTooltip = ({ address, locks, children, boundaryClassName }: Props) => {
   const { modal: originalModalName, modalData: originalModalData, showModal } = useModal()
 
   const tooltipTexts = useMemo(() => {
