@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { HashRouter } from 'react-router-dom'
 
 import { AccountsContextProvider } from '@/accounts/providers/accounts/provider'
@@ -13,6 +14,7 @@ import { OnBoardingProvider } from '@/common/providers/onboarding/provider'
 import { TransactionStatusProvider } from '@/common/providers/transactionStatus/provider'
 import { MembershipContextProvider } from '@/memberships/providers/membership/provider'
 
+import ErrorFallback from './components/ErrorFallback'
 import { GlobalStyle } from './providers/GlobalStyle'
 import { RouteActions } from './RouteActions'
 
@@ -21,32 +23,39 @@ interface Props {
 }
 
 export const Providers = ({ children }: Props) => (
-  <KeyringContextProvider>
-    <NetworkEndpointsProvider>
-      <ApiContextProvider>
-        <AccountsContextProvider>
-          <QueryNodeProvider>
-            <TransactionStatusProvider>
-              <BalancesContextProvider>
-                <MembershipContextProvider>
-                  <HashRouter>
-                    <RouteActions>
-                      <ModalContextProvider>
-                        <OnBoardingProvider>
-                          <ImageReportProvider>
-                            <GlobalStyle />
-                            {children}
-                          </ImageReportProvider>
-                        </OnBoardingProvider>
-                      </ModalContextProvider>
-                    </RouteActions>
-                  </HashRouter>
-                </MembershipContextProvider>
-              </BalancesContextProvider>
-            </TransactionStatusProvider>
-          </QueryNodeProvider>
-        </AccountsContextProvider>
-      </ApiContextProvider>
-    </NetworkEndpointsProvider>
-  </KeyringContextProvider>
+  <ErrorBoundary
+    FallbackComponent={ErrorFallback}
+    onReset={() => {
+      // reset the state of your app so the error doesn't happen again
+    }}
+  >
+    <KeyringContextProvider>
+      <NetworkEndpointsProvider>
+        <ApiContextProvider>
+          <AccountsContextProvider>
+            <QueryNodeProvider>
+              <TransactionStatusProvider>
+                <BalancesContextProvider>
+                  <MembershipContextProvider>
+                    <HashRouter>
+                      <RouteActions>
+                        <ModalContextProvider>
+                          <OnBoardingProvider>
+                            <ImageReportProvider>
+                              <GlobalStyle />
+                              {children}
+                            </ImageReportProvider>
+                          </OnBoardingProvider>
+                        </ModalContextProvider>
+                      </RouteActions>
+                    </HashRouter>
+                  </MembershipContextProvider>
+                </BalancesContextProvider>
+              </TransactionStatusProvider>
+            </QueryNodeProvider>
+          </AccountsContextProvider>
+        </ApiContextProvider>
+      </NetworkEndpointsProvider>
+    </KeyringContextProvider>
+  </ErrorBoundary>
 )
