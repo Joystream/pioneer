@@ -17,9 +17,7 @@ type RoundState = 'approved' | 'rejected' | 'deciding' | 'disabled'
 const iconMap = { approved: <CheckboxIcon />, rejected: <CrossIcon />, deciding: undefined, disabled: undefined }
 
 export const ProposalStages = ({ roundStatus, updates, constitutionality, value, onChange }: ProposalStagesProps) => {
-
   const rounds: RoundState[] = useMemo(() => {
-
     const decidingCount = updates.filter(({ status }) => status === 'deciding').length
 
     const lastUpdate = last(updates).status
@@ -30,29 +28,31 @@ export const ProposalStages = ({ roundStatus, updates, constitutionality, value,
 
     return repeat((round) => {
       if (round < decidingCount) {
-        return `approved`
+        return 'approved'
       } else if (round > decidingCount) {
-        return `disabled`
+        return 'disabled'
       } else if (isDormant || approved) {
-        return `approved`
+        return 'approved'
       } else if (rejected) {
-        return `rejected`
+        return 'rejected'
       } else {
-        return `deciding`
+        return 'deciding'
       }
     }, constitutionality ?? 1)
   }, [updates.length, roundStatus, constitutionality])
-
 
   return (
     <TabsContainer>
       {rounds.map((roundStatus, round) => {
         const isDisabled = roundStatus === 'disabled'
         const isActive = round === value
-        const onClick = isDisabled ? undefined : () => { return onChange(round) }
+        const onClick = isDisabled
+          ? undefined
+          : () => {
+              return onChange(round)
+            }
         const icon = iconMap[roundStatus]
         return (
-
           <Tooltip
             key={round}
             tooltipText={
