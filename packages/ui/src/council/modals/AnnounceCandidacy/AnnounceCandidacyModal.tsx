@@ -79,9 +79,9 @@ export const AnnounceCandidacyModal = () => {
   const { api, connectionState } = useApi()
   const boundingLock = api?.consts.members.candidateStake ?? BN_ZERO
   const { active: activeMember } = useMyMemberships()
-  const { hideModal: _hideModal, showModal } = useModal()
+  const { hideModal, showModal } = useModal()
   const [state, send, service] = useMachine(announceCandidacyMachine)
-  const hideModal = state.matches('success') ? _hideModal : () => _hideModal(true)
+
   const constants = useCouncilConstants()
   const { hasRequiredStake } = useHasRequiredStake(
     constants?.election.minCandidacyStake || BN_ZERO,
