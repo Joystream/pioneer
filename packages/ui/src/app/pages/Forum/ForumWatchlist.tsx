@@ -15,7 +15,7 @@ import { useWatchlistedThreads } from '@/forum/hooks/useWatchlistedThreads'
 import { ForumTabs } from './components/ForumTabs'
 
 export const ForumWatchlist = () => {
-  const { threads, isLoading } = useWatchlistedThreads({ threadsPerPage: -1 })
+  const { threads, isLoading } = useWatchlistedThreads()
   const isRefetched = useRefetchQueries({
     interval: MILLISECONDS_PER_BLOCK,
     include: ['GetForumThreads', 'GetForumThreadsCount'],
