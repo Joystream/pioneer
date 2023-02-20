@@ -2481,6 +2481,7 @@ export function useGetWorkingGroupApplicationMentionQuery(
     options
   )
 }
+
 export function useGetWorkingGroupApplicationMentionLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
     GetWorkingGroupApplicationMentionQuery,
