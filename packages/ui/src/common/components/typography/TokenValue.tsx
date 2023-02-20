@@ -17,9 +17,10 @@ interface ValueProps extends ValueSizingProps {
   value?: BN | null
   className?: string
   isLoading?: boolean
+  maxWidth?: boolean
 }
 
-export const TokenValue = React.memo(({ className, value, size, isLoading }: ValueProps) => {
+export const TokenValue = React.memo(({ className, value, size, isLoading, maxWidth }: ValueProps) => {
   if (isLoading) {
     return <Skeleton id="tokenValueSkeleton" variant="rect" height="32px" width="50%" />
   }
@@ -28,7 +29,7 @@ export const TokenValue = React.memo(({ className, value, size, isLoading }: Val
     return <span>-</span>
   }
   return (
-    <Tooltip tooltipText={<JOYSuffix>{formatJoyValue(value)}</JOYSuffix>}>
+    <Tooltip tooltipText={<JOYSuffix>{formatJoyValue(value)}</JOYSuffix>} maxWidth={maxWidth}>
       <ValueInJoys className={className} size={size}>
         {formatJoyValue(value, { precision: 2 })}
       </ValueInJoys>

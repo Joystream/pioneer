@@ -18,7 +18,7 @@ export function ProfileComponent() {
       <MemberBalance>
         <BalanceTitle>Total Balance</BalanceTitle>
         <TotalBalance>
-          <TotalTokenValue value={total} />
+          <TotalTokenValue value={total} maxWidth />
         </TotalBalance>
         <TransferButtonStyled />
       </MemberBalance>
@@ -47,7 +47,7 @@ const Profile = styled.div`
 const MemberBalance = styled.div`
   display: grid;
   grid-area: memberbalance;
-  grid-template-columns: 1fr 32px;
+  grid-template-columns: 162px 32px;
   grid-template-rows: 16px 24px;
   grid-template-areas:
     'balancetitle balancetransfer'
@@ -79,8 +79,22 @@ const TotalBalance = styled.span`
   line-height: 24px;
   color: ${Colors.White};
   font-weight: 700;
+  max-width: 100%;
 `
 
 const TotalTokenValue = styled(TokenValue)`
+  position: relative;
+  display: block;
   color: ${Colors.White};
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  padding-right: 28px;
+  text-overflow: ellipsis;
+
+  &:after {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
 `
