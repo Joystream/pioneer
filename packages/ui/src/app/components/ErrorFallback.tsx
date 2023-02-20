@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { Modal, ModalBody, ModalFooterComponent, ModalHeader } from '@/common/components/Modal'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { FailureIcon } from '@/common/components/icons'
+import { Modal, ModalBody, ModalFooterComponent, ModalHeader } from '@/common/components/Modal'
 
 interface FallbackProps {
   error: Error
