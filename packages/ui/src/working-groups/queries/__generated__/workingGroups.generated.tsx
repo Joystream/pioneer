@@ -56,10 +56,10 @@ export type WorkerFieldsFragment = {
   }
   group: { __typename: 'WorkingGroup'; id: string; name: string }
   status:
-    | { __typename: 'WorkerStatusActive' }
-    | { __typename: 'WorkerStatusLeaving' }
-    | { __typename: 'WorkerStatusLeft' }
-    | { __typename: 'WorkerStatusTerminated' }
+  | { __typename: 'WorkerStatusActive' }
+  | { __typename: 'WorkerStatusLeaving' }
+  | { __typename: 'WorkerStatusLeft' }
+  | { __typename: 'WorkerStatusTerminated' }
 }
 
 export type PastWorkerFieldsFragment = {
@@ -102,26 +102,26 @@ export type PastWorkerFieldsFragment = {
     }> | null
   }
   status:
-    | { __typename: 'WorkerStatusActive' }
-    | { __typename: 'WorkerStatusLeaving' }
-    | {
-        __typename: 'WorkerStatusLeft'
-        workerExitedEvent?: {
-          __typename: 'WorkerExitedEvent'
-          createdAt: any
-          inBlock: number
-          network: Types.Network
-        } | null
-      }
-    | {
-        __typename: 'WorkerStatusTerminated'
-        terminatedWorkerEvent?: {
-          __typename: 'TerminatedWorkerEvent'
-          createdAt: any
-          inBlock: number
-          network: Types.Network
-        } | null
-      }
+  | { __typename: 'WorkerStatusActive' }
+  | { __typename: 'WorkerStatusLeaving' }
+  | {
+    __typename: 'WorkerStatusLeft'
+    workerExitedEvent?: {
+      __typename: 'WorkerExitedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+    } | null
+  }
+  | {
+    __typename: 'WorkerStatusTerminated'
+    terminatedWorkerEvent?: {
+      __typename: 'TerminatedWorkerEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+    } | null
+  }
   entry: { __typename: 'OpeningFilledEvent'; createdAt: any; inBlock: number; network: Types.Network }
 }
 
@@ -179,10 +179,10 @@ export type WorkerDetailedFieldsFragment = {
   }
   group: { __typename: 'WorkingGroup'; id: string; name: string }
   status:
-    | { __typename: 'WorkerStatusActive' }
-    | { __typename: 'WorkerStatusLeaving' }
-    | { __typename: 'WorkerStatusLeft' }
-    | { __typename: 'WorkerStatusTerminated' }
+  | { __typename: 'WorkerStatusActive' }
+  | { __typename: 'WorkerStatusLeaving' }
+  | { __typename: 'WorkerStatusLeft' }
+  | { __typename: 'WorkerStatusTerminated' }
 }
 
 export type WorkingGroupFieldsFragment = {
@@ -331,10 +331,10 @@ export type GetWorkersQuery = {
     }
     group: { __typename: 'WorkingGroup'; id: string; name: string }
     status:
-      | { __typename: 'WorkerStatusActive' }
-      | { __typename: 'WorkerStatusLeaving' }
-      | { __typename: 'WorkerStatusLeft' }
-      | { __typename: 'WorkerStatusTerminated' }
+    | { __typename: 'WorkerStatusActive' }
+    | { __typename: 'WorkerStatusLeaving' }
+    | { __typename: 'WorkerStatusLeft' }
+    | { __typename: 'WorkerStatusTerminated' }
   }>
 }
 
@@ -387,26 +387,26 @@ export type GetPastWorkersQuery = {
       }> | null
     }
     status:
-      | { __typename: 'WorkerStatusActive' }
-      | { __typename: 'WorkerStatusLeaving' }
-      | {
-          __typename: 'WorkerStatusLeft'
-          workerExitedEvent?: {
-            __typename: 'WorkerExitedEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
-      | {
-          __typename: 'WorkerStatusTerminated'
-          terminatedWorkerEvent?: {
-            __typename: 'TerminatedWorkerEvent'
-            createdAt: any
-            inBlock: number
-            network: Types.Network
-          } | null
-        }
+    | { __typename: 'WorkerStatusActive' }
+    | { __typename: 'WorkerStatusLeaving' }
+    | {
+      __typename: 'WorkerStatusLeft'
+      workerExitedEvent?: {
+        __typename: 'WorkerExitedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+      } | null
+    }
+    | {
+      __typename: 'WorkerStatusTerminated'
+      terminatedWorkerEvent?: {
+        __typename: 'TerminatedWorkerEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+      } | null
+    }
     entry: { __typename: 'OpeningFilledEvent'; createdAt: any; inBlock: number; network: Types.Network }
   }>
 }
@@ -480,10 +480,10 @@ export type GetDetailedWorkersQuery = {
     }
     group: { __typename: 'WorkingGroup'; id: string; name: string }
     status:
-      | { __typename: 'WorkerStatusActive' }
-      | { __typename: 'WorkerStatusLeaving' }
-      | { __typename: 'WorkerStatusLeft' }
-      | { __typename: 'WorkerStatusTerminated' }
+    | { __typename: 'WorkerStatusActive' }
+    | { __typename: 'WorkerStatusLeaving' }
+    | { __typename: 'WorkerStatusLeft' }
+    | { __typename: 'WorkerStatusTerminated' }
   }>
 }
 
@@ -547,10 +547,10 @@ export type GetWorkerQuery = {
     }
     group: { __typename: 'WorkingGroup'; id: string; name: string }
     status:
-      | { __typename: 'WorkerStatusActive' }
-      | { __typename: 'WorkerStatusLeaving' }
-      | { __typename: 'WorkerStatusLeft' }
-      | { __typename: 'WorkerStatusTerminated' }
+    | { __typename: 'WorkerStatusActive' }
+    | { __typename: 'WorkerStatusLeaving' }
+    | { __typename: 'WorkerStatusLeft' }
+    | { __typename: 'WorkerStatusTerminated' }
   } | null
 }
 
@@ -609,18 +609,18 @@ export type WorkingGroupOpeningFieldsFragment = {
     expectedEnding?: any | null
   }
   status:
-    | { __typename: 'OpeningStatusCancelled' }
-    | { __typename: 'OpeningStatusFilled' }
-    | { __typename: 'OpeningStatusOpen' }
+  | { __typename: 'OpeningStatusCancelled' }
+  | { __typename: 'OpeningStatusFilled' }
+  | { __typename: 'OpeningStatusOpen' }
   applications: Array<{
     __typename: 'WorkingGroupApplication'
     id: string
     status:
-      | { __typename: 'ApplicationStatusAccepted' }
-      | { __typename: 'ApplicationStatusCancelled' }
-      | { __typename: 'ApplicationStatusPending' }
-      | { __typename: 'ApplicationStatusRejected' }
-      | { __typename: 'ApplicationStatusWithdrawn' }
+    | { __typename: 'ApplicationStatusAccepted' }
+    | { __typename: 'ApplicationStatusCancelled' }
+    | { __typename: 'ApplicationStatusPending' }
+    | { __typename: 'ApplicationStatusRejected' }
+    | { __typename: 'ApplicationStatusWithdrawn' }
   }>
   openingfilledeventopening?: Array<{
     __typename: 'OpeningFilledEvent'
@@ -641,11 +641,11 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
     __typename: 'WorkingGroupApplication'
     id: string
     status:
-      | { __typename: 'ApplicationStatusAccepted' }
-      | { __typename: 'ApplicationStatusCancelled' }
-      | { __typename: 'ApplicationStatusPending' }
-      | { __typename: 'ApplicationStatusRejected' }
-      | { __typename: 'ApplicationStatusWithdrawn' }
+    | { __typename: 'ApplicationStatusAccepted' }
+    | { __typename: 'ApplicationStatusCancelled' }
+    | { __typename: 'ApplicationStatusPending' }
+    | { __typename: 'ApplicationStatusRejected' }
+    | { __typename: 'ApplicationStatusWithdrawn' }
     applicant: {
       __typename: 'Membership'
       id: string
@@ -692,9 +692,9 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
     expectedEnding?: any | null
   }
   status:
-    | { __typename: 'OpeningStatusCancelled' }
-    | { __typename: 'OpeningStatusFilled' }
-    | { __typename: 'OpeningStatusOpen' }
+  | { __typename: 'OpeningStatusCancelled' }
+  | { __typename: 'OpeningStatusFilled' }
+  | { __typename: 'OpeningStatusOpen' }
   openingfilledeventopening?: Array<{
     __typename: 'OpeningFilledEvent'
     workersHired: Array<{ __typename: 'Worker'; id: string }>
@@ -722,7 +722,7 @@ export type CountWorkingGroupWorkersQuery = {
 
 export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.WorkingGroupOpeningWhereInput>
-  order?: Types.InputMaybe<Array<Types.WorkingGroupOpeningOrderByInput> | Types.WorkingGroupOpeningOrderByInput>
+  order?: Types.InputMaybe<Types.WorkingGroupOpeningOrderByInput>
   limit?: Types.InputMaybe<Types.Scalars['Int']>
   offset?: Types.InputMaybe<Types.Scalars['Int']>
 }>
@@ -750,18 +750,18 @@ export type GetWorkingGroupOpeningsQuery = {
       expectedEnding?: any | null
     }
     status:
-      | { __typename: 'OpeningStatusCancelled' }
-      | { __typename: 'OpeningStatusFilled' }
-      | { __typename: 'OpeningStatusOpen' }
+    | { __typename: 'OpeningStatusCancelled' }
+    | { __typename: 'OpeningStatusFilled' }
+    | { __typename: 'OpeningStatusOpen' }
     applications: Array<{
       __typename: 'WorkingGroupApplication'
       id: string
       status:
-        | { __typename: 'ApplicationStatusAccepted' }
-        | { __typename: 'ApplicationStatusCancelled' }
-        | { __typename: 'ApplicationStatusPending' }
-        | { __typename: 'ApplicationStatusRejected' }
-        | { __typename: 'ApplicationStatusWithdrawn' }
+      | { __typename: 'ApplicationStatusAccepted' }
+      | { __typename: 'ApplicationStatusCancelled' }
+      | { __typename: 'ApplicationStatusPending' }
+      | { __typename: 'ApplicationStatusRejected' }
+      | { __typename: 'ApplicationStatusWithdrawn' }
     }>
     openingfilledeventopening?: Array<{
       __typename: 'OpeningFilledEvent'
@@ -803,11 +803,11 @@ export type GetWorkingGroupOpeningQuery = {
       __typename: 'WorkingGroupApplication'
       id: string
       status:
-        | { __typename: 'ApplicationStatusAccepted' }
-        | { __typename: 'ApplicationStatusCancelled' }
-        | { __typename: 'ApplicationStatusPending' }
-        | { __typename: 'ApplicationStatusRejected' }
-        | { __typename: 'ApplicationStatusWithdrawn' }
+      | { __typename: 'ApplicationStatusAccepted' }
+      | { __typename: 'ApplicationStatusCancelled' }
+      | { __typename: 'ApplicationStatusPending' }
+      | { __typename: 'ApplicationStatusRejected' }
+      | { __typename: 'ApplicationStatusWithdrawn' }
       applicant: {
         __typename: 'Membership'
         id: string
@@ -854,9 +854,9 @@ export type GetWorkingGroupOpeningQuery = {
       expectedEnding?: any | null
     }
     status:
-      | { __typename: 'OpeningStatusCancelled' }
-      | { __typename: 'OpeningStatusFilled' }
-      | { __typename: 'OpeningStatusOpen' }
+    | { __typename: 'OpeningStatusCancelled' }
+    | { __typename: 'OpeningStatusFilled' }
+    | { __typename: 'OpeningStatusOpen' }
     openingfilledeventopening?: Array<{
       __typename: 'OpeningFilledEvent'
       workersHired: Array<{ __typename: 'Worker'; id: string }>
@@ -1130,11 +1130,11 @@ export type WorkingGroupApplicationFieldsFragment = {
     }> | null
   }
   status:
-    | { __typename: 'ApplicationStatusAccepted' }
-    | { __typename: 'ApplicationStatusCancelled' }
-    | { __typename: 'ApplicationStatusPending' }
-    | { __typename: 'ApplicationStatusRejected' }
-    | { __typename: 'ApplicationStatusWithdrawn' }
+  | { __typename: 'ApplicationStatusAccepted' }
+  | { __typename: 'ApplicationStatusCancelled' }
+  | { __typename: 'ApplicationStatusPending' }
+  | { __typename: 'ApplicationStatusRejected' }
+  | { __typename: 'ApplicationStatusWithdrawn' }
   createdInEvent: { __typename: 'AppliedOnOpeningEvent'; createdAt: any; inBlock: number; network: Types.Network }
 }
 
@@ -1202,11 +1202,11 @@ export type GetWorkingGroupApplicationsQuery = {
       }> | null
     }
     status:
-      | { __typename: 'ApplicationStatusAccepted' }
-      | { __typename: 'ApplicationStatusCancelled' }
-      | { __typename: 'ApplicationStatusPending' }
-      | { __typename: 'ApplicationStatusRejected' }
-      | { __typename: 'ApplicationStatusWithdrawn' }
+    | { __typename: 'ApplicationStatusAccepted' }
+    | { __typename: 'ApplicationStatusCancelled' }
+    | { __typename: 'ApplicationStatusPending' }
+    | { __typename: 'ApplicationStatusRejected' }
+    | { __typename: 'ApplicationStatusWithdrawn' }
     createdInEvent: { __typename: 'AppliedOnOpeningEvent'; createdAt: any; inBlock: number; network: Types.Network }
   }>
 }
@@ -1294,11 +1294,11 @@ export type GetWorkingGroupApplicationQuery = {
       }> | null
     }
     status:
-      | { __typename: 'ApplicationStatusAccepted' }
-      | { __typename: 'ApplicationStatusCancelled' }
-      | { __typename: 'ApplicationStatusPending' }
-      | { __typename: 'ApplicationStatusRejected' }
-      | { __typename: 'ApplicationStatusWithdrawn' }
+    | { __typename: 'ApplicationStatusAccepted' }
+    | { __typename: 'ApplicationStatusCancelled' }
+    | { __typename: 'ApplicationStatusPending' }
+    | { __typename: 'ApplicationStatusRejected' }
+    | { __typename: 'ApplicationStatusWithdrawn' }
     createdInEvent: { __typename: 'AppliedOnOpeningEvent'; createdAt: any; inBlock: number; network: Types.Network }
   } | null
 }
@@ -1423,13 +1423,13 @@ export type GetWorkerUnstakingDetailsQuery = {
   workerByUniqueInput?: {
     __typename: 'Worker'
     status:
-      | { __typename: 'WorkerStatusActive' }
-      | {
-          __typename: 'WorkerStatusLeaving'
-          workerStartedLeavingEvent?: { __typename: 'WorkerStartedLeavingEvent'; createdAt: any } | null
-        }
-      | { __typename: 'WorkerStatusLeft' }
-      | { __typename: 'WorkerStatusTerminated' }
+    | { __typename: 'WorkerStatusActive' }
+    | {
+      __typename: 'WorkerStatusLeaving'
+      workerStartedLeavingEvent?: { __typename: 'WorkerStartedLeavingEvent'; createdAt: any } | null
+    }
+    | { __typename: 'WorkerStatusLeft' }
+    | { __typename: 'WorkerStatusTerminated' }
     application: {
       __typename: 'WorkingGroupApplication'
       opening: { __typename: 'WorkingGroupOpening'; unstakingPeriod: number }
