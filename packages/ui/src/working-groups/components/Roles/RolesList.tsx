@@ -2,28 +2,29 @@ import BN from 'bn.js'
 import React, { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { useApi } from '@/api/hooks/useApi'
+import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { ContextMenu, ContextMenuContainer } from '@/common/components/ContextMenu'
 import { List, ListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Transitions, Fonts, Colors, BorderRad } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { useMyEarnings } from '@/working-groups/hooks/useMyEarnings'
 import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { useWorkerEarnings } from '@/working-groups/hooks/useWorkerEarnings'
-
-import { useMyEarnings } from '@/working-groups/hooks/useMyEarnings'
-
 import { ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
 import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants'
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 import { Worker } from '@/working-groups/types'
 
-import { useCurrentBlockNumber } from '../../../common/hooks/useCurrentBlockNumber'
-import { getNextPayout } from '../../model/getNextPayout'
+import { WorkingDetails } from '../../../bounty/components/BountyListItem/components/WorkingDetails'
+import { NumericValue } from '../../../common/components/statistics/NumericValueStat'
+import { TextMedium } from '../../../common/components/typography'
 import { BN_ZERO } from '../../../common/constants'
+import { useCurrentBlockNumber } from '../../../common/hooks/useCurrentBlockNumber'
 import { workerRoleTitle } from '../../helpers'
+import { getNextPayout } from '../../model/getNextPayout'
 import {
   OpenItemSummaryColumn,
   ToggleableItemInfo,
@@ -33,10 +34,6 @@ import {
   ToggleableItemWrap,
   ToggleableSubscriptionWide,
 } from '../ToggleableItemStyledComponents'
-
-import { NumericValue } from '../../../common/components/statistics/NumericValueStat'
-import { TextMedium } from '../../../common/components/typography'
-import { WorkingDetails } from '../../../bounty/components/BountyListItem/components/WorkingDetails'
 
 export interface RolesListProps {
   workers: Worker[]
