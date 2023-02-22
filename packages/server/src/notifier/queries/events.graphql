@@ -1,0 +1,66 @@
+fragment PostFields on ForumPost {
+  id
+  authorId
+  createdAt
+  text
+  thread {
+    id
+    authorId
+    posts {
+      authorId
+      createdAt
+      text
+    }
+    category {
+      moderators {
+        membershipId
+      }
+    }
+  }
+}
+
+fragment ProposalDiscussionPostFields on ProposalDiscussionPost {
+  id
+  authorId
+  text
+  discussionThread {
+    id
+    proposal {
+      id
+      creatorId
+    }
+    posts {
+      authorId
+      text
+    }
+  }
+}
+
+fragment PostAddedEventFields on PostAddedEvent {
+  __typename
+  id
+  inBlock
+  post {
+    ...PostFields
+  }
+}
+
+fragment ProposalDiscussionPostCreatedEventFields on ProposalDiscussionPostCreatedEvent {
+  __typename
+  id
+  inBlock
+  post {
+    ...ProposalDiscussionPostFields
+  }
+}
+
+query GetNotificationEvents {
+  events(where: { type_in: [PostAddedEvent, PostTextUpdatedEvent] }, limit: 50, orderBy: [createdAt_DESC]) {
+    ... on PostAddedEvent {
+      ...PostAddedEventFields
+    }
+    ... on ProposalDiscussionPostCreatedEvent {
+      ...ProposalDiscussionPostCreatedEventFields
+    }
+  }
+}

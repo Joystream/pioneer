@@ -12,14 +12,14 @@ datasource db {
 
 model Member {
   id                Int            @id @default(autoincrement())
-  membershipId      String         @unique
+  chainMemberId     String         @unique
   controllerAccount String         @unique
   name              String
-  email             String?        @unique
+  email             String?
   isEmailVerified   Boolean        @default(false)
-  AccessToken       AccessToken[]
-  Subscription      Subscription[]
-  Notification      Notification[]
+  accessTokens      AccessToken[]
+  subscriptions     Subscription[]
+  notifications     Notification[]
 }
 
 model AccessToken {
@@ -35,25 +35,27 @@ model Subscription {
   id                  Int              @id @default(autoincrement())
   member              Member           @relation(fields: [memberId], references: [id])
   memberId            Int
+  memberRole          MemberRole       @default(MEMBER)
   notificationType    NotificationType
-  entityId            String?
-  isEnabled           Boolean
+  entityIds           String[]
+  shouldNotify        Boolean
   shouldNotifyByEmail Boolean
 
-  @@unique([notificationType, entityId, memberId])
+  @@unique([memberId, notificationType, memberRole])
 }
 
 model Notification {
   id               Int              @id @default(autoincrement())
   member           Member           @relation(fields: [memberId], references: [id])
   memberId         Int
+  memberRole       MemberRole       @default(MEMBER)
   notificationType NotificationType
   eventId          String
   entityId         String?
   isSent           Boolean          @default(false)
   isRead           Boolean          @default(false)
 
-  @@unique([notificationType, eventId, memberId])
+  @@unique([memberId, eventId])
 }
 
 model QueryNodeConsumer {
@@ -62,17 +64,36 @@ model QueryNodeConsumer {
 }
 
 enum NotificationType {
-  // Forum
-  FORUM_POST_MENTION
-  FORUM_POST_IN_CREATED_THREAD
-  FORUM_POST_IN_WATCHED_THREAD
-  FORUM_POST_IN_CONTIBUTED_THREAD
-  FORUM_POST_IN_MODERATED_CATEGORY
+  // ------------------
+  // General
+  // ------------------
 
-  // Proposal
-  PROPOSAL_POST_MENTION
-  PROPOSAL_POST_IN_CREATED_PROPOSAL
-  PROPOSAL_POST_IN_CONTRIBUTED_DISCUSSION
+  // Forum: ThreadCreatedEvent
+  FORUM_THREAD_ALL
+  FORUM_THREAD_MENTION
+
+  // Forum: PostAddedEvent
+  FORUM_POST_ALL
+  FORUM_POST_MENTION
+  FORUM_POST_REPLY
+  FORUM_THREAD_CREATOR
+  FORUM_THREAD_CONTIBUTOR
+
+  // Proposal: ProposalCreatedEvent
+  PROPOSAL_CREATED_ALL
+
+  // Proposal: ProposalStatusUpdatedEvent
+  PROPOSAL_STATUS_ALL
+  PROPOSAL_STATUS_CREATOR
+
+  // Proposal: ProposalVotedEvent
+  PROPOSAL_VOTE_ALL
+  PROPOSAL_VOTE_CREATOR
+
+  // Proposal: ProposalDiscussionPostCreatedEvent
+  PROPOSAL_DISCUSSION_MENTION
+  PROPOSAL_DISCUSSION_CREATOR
+  PROPOSAL_DISCUSSION_CONTRIBUTOR
 
   // Referendum
   ELECTION_ANNOUNCING_STARTED
@@ -80,7 +101,22 @@ enum NotificationType {
   ELECTION_REVEALING_STARTED
   ELECTION_COUNCIL_ELECTED
 
-  // Councilor only
-  COUNCILOR_PROPOSAL_CREATED
-  COUNCILOR_POST_PROPOSAL
+  // ------------------
+  // Entity specific
+  // ------------------
+  // Forum
+  FORUM_WATCHED_CATEGORY_POST
+  FORUM_WATCHED_CATEGORY_THREAD
+  FORUM_WATCHED_CATEGORY_SUBCATEGORY
+  FORUM_WATCHED_THREAD
+
+  // Proposal
+  PROPOSAL_WATCHED_STATUS
+  PROPOSAL_WATCHED_VOTE
+  PROPOSAL_WATCHED_DISCUSSION
+}
+
+enum MemberRole {
+  MEMBER
+  COUNCILOR
 }

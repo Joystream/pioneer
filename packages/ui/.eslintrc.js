@@ -2,6 +2,11 @@ const baseConfig = require('../../.eslintrc.json')
 
 const config = {
   ...baseConfig,
+  plugins: [...baseConfig.plugins, 'react-hooks'],
+  rules: {
+    ...config.rules,
+    'react-hooks/rules-of-hooks': 'error',
+  },
 }
 
 const domains = ['accounts', 'memberships', 'working-groups']
