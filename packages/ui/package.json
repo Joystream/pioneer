@@ -5,7 +5,7 @@
   "scripts": {
     "build": "node --max_old_space_size=4096 ./build.js",
     "build:storybook": "build-storybook -o build-storybook",
-    "lint": "yarn lint:prettier --check && yarn lint:eslint",
+    "lint": "yarn lint:prettier --check && yarn lint:eslint --max-warnings=0",
     "lint:eslint": "eslint \"./{src,test}/**/*.{ts,tsx}\"",
     "lint:fix": "yarn lint:eslint --fix && yarn lint:prettier --write --loglevel warn",
     "lint:prettier": "yarn prettier \"./{src,test}/**/*.{ts,tsx,html,graphql}\"",
