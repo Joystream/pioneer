@@ -970,6 +970,21 @@ export const TerminatedLeaderEventFieldsFragmentDoc = gql`
     }
   }
 `
+export const WorkerRewardAmountUpdatedEventFieldsFragmentDoc = gql`
+  fragment WorkerRewardAmountUpdatedEventFields on WorkerRewardAmountUpdatedEvent {
+    id
+    createdAt
+    group {
+      name
+    }
+    worker {
+      membership {
+        id
+        handle
+      }
+    }
+  }
+`
 export const WorkerRewardAmountUpdatedEventFragmentDoc = gql`
   fragment WorkerRewardAmountUpdatedEvent on WorkerRewardAmountUpdatedEvent {
     id
@@ -1128,6 +1143,9 @@ export const GetGroupEventsDocument = gql`
     terminatedLeaderEvents(where: { group: { id_eq: $group_eq } }) {
       ...TerminatedLeaderEventFields
     }
+    workerRewardAmountUpdatedEvents(where: { group: { id_eq: $group_eq } }) {
+      ...WorkerRewardAmountUpdatedEventFields
+    }
   }
   ${AppliedOnOpeningEventFieldsFragmentDoc}
   ${ApplicationWithdrawnEventFieldsFragmentDoc}
@@ -1143,6 +1161,7 @@ export const GetGroupEventsDocument = gql`
   ${StakeSlashedEventFieldsFragmentDoc}
   ${TerminatedWorkerEventFieldsFragmentDoc}
   ${TerminatedLeaderEventFieldsFragmentDoc}
+  ${WorkerRewardAmountUpdatedEventFieldsFragmentDoc}
 `
 
 /**
