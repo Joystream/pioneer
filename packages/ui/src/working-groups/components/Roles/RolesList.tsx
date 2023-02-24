@@ -55,7 +55,7 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
       data: { workerId: worker.id },
     })
   }, [])
-  const { currentDayEarnings } = useWorkerEarnings(worker.id)
+  const { earnings } = useWorkerEarnings(worker.id)
   const rewardPeriod = useRewardPeriod(worker.group.id)
 
   const roleRoute = `/working-groups/my-roles/${worker.id}`
@@ -86,7 +86,7 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={currentDayEarnings} />
+            <TokenValue value={earnings} />
           </TextInlineBig>
           <ToggleableSubscriptionWide>Next payment in</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
