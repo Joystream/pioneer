@@ -41,7 +41,7 @@ export const RolesList = ({ workers }: RolesListProps) => {
   const { api } = useApi()
   const nextPayout = useMemo(
     () => blockNumber && getNextPayout(workers, blockNumber, api),
-    [workers.length, blockNumber?.toNumber()]
+    [workers.length, blockNumber!]
   )
 
   return (
@@ -55,7 +55,7 @@ export const RolesList = ({ workers }: RolesListProps) => {
   )
 }
 
-const RolesListItem = ({ worker, payout = BN_ZERO }: { worker: Worker; payout?: BN }) => {
+const RolesListItem = ({ worker, payout = 0 }: { worker: Worker; payout?: number }) => {
   const { showModal } = useModal()
 
   const changeRewardCallback = useCallback(() => {
@@ -103,7 +103,7 @@ const RolesListItem = ({ worker, payout = BN_ZERO }: { worker: Worker; payout?: 
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <NumericValue>{payout?.gte(BN_ZERO) ? payout?.toString() + ' blocks' : '–'}</NumericValue>
+            <NumericValue>{payout ? payout?.toString() + ' blocks' : '–'}</NumericValue>
             {/* {payout && <TextMedium lighter>({payout && blocksToTime(payout)})</TextMedium>} */}
           </TextInlineBig>
           <ToggleableSubscriptionWide>Next payment in</ToggleableSubscriptionWide>

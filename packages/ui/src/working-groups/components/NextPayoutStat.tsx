@@ -21,13 +21,13 @@ export const NextPayoutStat = ({ workers }: Props) => {
 
   const nextPayout = useMemo(
     () => blockNumber && getNextPayout(workers, blockNumber, api),
-    [workers.length, blockNumber?.toNumber()]
+    [workers.length, blockNumber!]
   )
 
   return (
     <StatisticItem title="Next payout in">
-      <NumericValue>{nextPayout?.gte(BN_ZERO) ? nextPayout?.toString() + ' blocks' : '–'}</NumericValue>
-      {nextPayout && <TextMedium lighter>({nextPayout && blocksToTime(nextPayout)})</TextMedium>}
+      <NumericValue>{nextPayout ? nextPayout?.toString() + ' blocks' : '–'}</NumericValue>
+      {nextPayout && <TextMedium lighter>({nextPayout && nextPayout})</TextMedium>}
     </StatisticItem>
   )
 }

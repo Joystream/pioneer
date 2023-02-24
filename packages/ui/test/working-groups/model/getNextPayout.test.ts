@@ -15,27 +15,27 @@ describe('getNextPayout', () => {
   it('Single role', () => {
     const blockNumber = new BN(14400)
     const workers = ['forumWorkingGroup'].map(toWorkerFragment)
-    expect(getNextPayout(workers, blockNumber, api.api)?.toNumber()).toEqual(10)
+    expect(getNextPayout(workers, blockNumber, api.api)!).toEqual(10)
   })
 
   it('No roles', () => {
     const blockNumber = new BN(14400)
     const workers = [].map(toWorkerFragment)
-    expect(getNextPayout(workers, blockNumber, api.api)?.toNumber()).toEqual(-1)
+    expect(getNextPayout(workers, blockNumber, api.api)!).toEqual(-1)
   })
 
   it('Multiple roles', () => {
     const blockNumber = new BN(14400)
     const workers1 = ['forumWorkingGroup', 'storageWorkingGroup', 'contentWorkingGroup'].map(toWorkerFragment)
-    expect(getNextPayout(workers1, blockNumber, api.api)?.toNumber()).toEqual(10)
+    expect(getNextPayout(workers1, blockNumber, api.api)!).toEqual(10)
     const workers2 = ['storageWorkingGroup', 'contentWorkingGroup'].map(toWorkerFragment)
-    expect(getNextPayout(workers2, blockNumber, api.api)?.toNumber()).toEqual(20)
+    expect(getNextPayout(workers2, blockNumber, api.api)!).toEqual(20)
   })
 
   it('Later block', () => {
     const blockNumber = new BN(14400 * 2)
     const workers = ['forumWorkingGroup', 'storageWorkingGroup', 'contentWorkingGroup'].map(toWorkerFragment)
-    expect(getNextPayout(workers, blockNumber, api.api)?.toNumber()).toEqual(20)
+    expect(getNextPayout(workers, blockNumber, api.api)!).toEqual(20)
   })
 
   const toWorkerFragment = (groupName: string) => ({
