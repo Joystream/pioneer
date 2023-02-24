@@ -7,7 +7,7 @@ import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { ContextMenu, ContextMenuContainer } from '@/common/components/ContextMenu'
 import { List, ListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
-import { TextInlineBig, TokenValue, TextMedium } from '@/common/components/typography'
+import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Transitions, Fonts, Colors, BorderRad } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
@@ -29,7 +29,6 @@ import {
   ToggleableItemWrap,
   ToggleableSubscriptionWide,
 } from '../ToggleableItemStyledComponents'
-import { CurrencyName } from '@/app/constants/currency'
 
 export interface RolesListProps {
   workers: Worker[]
@@ -40,7 +39,7 @@ export const RolesList = ({ workers }: RolesListProps) => {
   const { api } = useApi()
   const nextPayout = useMemo(
     () => blockNumber && getNextPayout(workers, blockNumber, api),
-    [workers.length, blockNumber!]
+    [workers.length, blockNumber]
   )
 
   return (
@@ -102,7 +101,7 @@ const RolesListItem = ({ worker, payout = 0 }: { worker: Worker; payout?: number
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <NextPaymentValue >{payout ? payout?.toString() + ' blocks' : '–'}</NextPaymentValue>
+            <NextPaymentValue>{payout ? payout?.toString() + ' blocks' : '–'}</NextPaymentValue>
           </TextInlineBig>
           <ToggleableSubscriptionWide>Next payment in</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
@@ -169,13 +168,4 @@ const NextPaymentValue = styled.span`
   width: fit-content;
   font-weight: 700;
   font-family: ${Fonts.Grotesk};
-
-  &:after {
-    content: '${CurrencyName.integerValue}';
-    display: inline-block;
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: 400;
-    color: ${Colors.Black[400]};
-  }
 `

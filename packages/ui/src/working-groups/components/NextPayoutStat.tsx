@@ -5,9 +5,7 @@ import { useApi } from '@/api/hooks/useApi'
 import { StatisticItem } from '../../common/components/statistics'
 import { NumericValue } from '../../common/components/statistics/NumericValueStat'
 import { TextMedium } from '../../common/components/typography'
-import { BN_ZERO } from '../../common/constants'
 import { useCurrentBlockNumber } from '../../common/hooks/useCurrentBlockNumber'
-import { blocksToTime } from '../../common/model/blocksToTime'
 import { getNextPayout } from '../model/getNextPayout'
 import { Worker } from '../types'
 
@@ -21,7 +19,7 @@ export const NextPayoutStat = ({ workers }: Props) => {
 
   const nextPayout = useMemo(
     () => blockNumber && getNextPayout(workers, blockNumber, api),
-    [workers.length, blockNumber!]
+    [workers.length, blockNumber]
   )
 
   return (
