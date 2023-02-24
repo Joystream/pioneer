@@ -7,6 +7,7 @@ import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { ContextMenu, ContextMenuContainer } from '@/common/components/ContextMenu'
 import { List, ListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
+import { Tooltip } from '@/common/components/Tooltip'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Transitions, Fonts, Colors, BorderRad } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
@@ -18,7 +19,6 @@ import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 import { Worker } from '@/working-groups/types'
 
 import { BN_ZERO } from '../../../common/constants'
-import { Tooltip } from '@/common/components/Tooltip'
 import { useCurrentBlockNumber } from '../../../common/hooks/useCurrentBlockNumber'
 import { workerRoleTitle } from '../../helpers'
 import { getNextPayout } from '../../model/getNextPayout'
@@ -103,7 +103,11 @@ const RolesListItem = ({ worker, payout = BN_ZERO }: { worker: Worker; payout?: 
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <Tooltip tooltipText={<NextPaymentValue>{payout?.gte(BN_ZERO) ? payout?.toString() + ' blocks' : '–'}</NextPaymentValue>}>
+            <Tooltip
+              tooltipText={
+                <NextPaymentValue>{payout?.gte(BN_ZERO) ? payout?.toString() + ' blocks' : '–'}</NextPaymentValue>
+              }
+            >
               <NextPaymentValue>{payout?.gte(BN_ZERO) ? payout?.toString() + ' blocks' : '–'}</NextPaymentValue>
             </Tooltip>
           </TextInlineBig>
