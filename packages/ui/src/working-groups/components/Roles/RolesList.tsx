@@ -103,8 +103,7 @@ const RolesListItem = ({ worker, payout = 0 }: { worker: Worker; payout?: number
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            {/* <NumericValue>{payout ? payout?.toString() + ' blocks' : '–'}</NumericValue> */}
-            {payout && <TextMedium lighter>({payout?.toString() + ' blocks'})</TextMedium>}
+            <NumericValue >{payout ? payout?.toString() + ' blocks' : '–'}</NumericValue>
           </TextInlineBig>
           <ToggleableSubscriptionWide>Next payment in</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
