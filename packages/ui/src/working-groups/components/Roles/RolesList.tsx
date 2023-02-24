@@ -17,8 +17,6 @@ import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 import { Worker } from '@/working-groups/types'
 
-import { NumericValue } from '../../../common/components/statistics/NumericValueStat'
-import { BN_ZERO } from '../../../common/constants'
 import { useCurrentBlockNumber } from '../../../common/hooks/useCurrentBlockNumber'
 import { workerRoleTitle } from '../../helpers'
 import { getNextPayout } from '../../model/getNextPayout'
@@ -31,6 +29,7 @@ import {
   ToggleableItemWrap,
   ToggleableSubscriptionWide,
 } from '../ToggleableItemStyledComponents'
+import { CurrencyName } from '@/app/constants/currency'
 
 export interface RolesListProps {
   workers: Worker[]
@@ -103,7 +102,7 @@ const RolesListItem = ({ worker, payout = 0 }: { worker: Worker; payout?: number
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <NumericValue >{payout ? payout?.toString() + ' blocks' : '–'}</NumericValue>
+            <NextPaymentValue >{payout ? payout?.toString() + ' blocks' : '–'}</NextPaymentValue>
           </TextInlineBig>
           <ToggleableSubscriptionWide>Next payment in</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
@@ -160,5 +159,23 @@ const RoleTitle = styled(ToggleableItemTitle)`
   &:hover,
   &:focus {
     color: ${Colors.Blue[500]};
+  }
+`
+const NextPaymentValue = styled.span`
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-column-gap: 4px;
+  align-items: baseline;
+  width: fit-content;
+  font-weight: 700;
+  font-family: ${Fonts.Grotesk};
+
+  &:after {
+    content: '${CurrencyName.integerValue}';
+    display: inline-block;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    color: ${Colors.Black[400]};
   }
 `
