@@ -1,8 +1,8 @@
+import { ZstdInit } from '@oneidentity/zstd-js/decompress'
 import React, { useCallback } from 'react'
 import { useDropzone, DropEvent } from 'react-dropzone'
 import { useFormContext } from 'react-hook-form'
 import styled, { css } from 'styled-components'
-import zstd from 'zstandard-wasm'
 
 import { Label } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
@@ -34,9 +34,9 @@ const maybeDecompressRuntimeBlob = async (blob: ArrayBuffer): Promise<Buffer> =>
   const prefix = wasm.slice(0, 8)
   const isCompressed = Buffer.compare(prefix, ZSTD_PREFIX) === 0
   if (isCompressed) {
-    await zstd.loadWASM()
+    const { ZstdStream } = await ZstdInit()
     // strip the prefix and decompress the rest
-    wasm = Buffer.from(zstd.decompress(wasm.subarray(8)))
+    wasm = Buffer.from(ZstdStream.decompress(wasm.subarray(8)))
   }
   return wasm
 }
