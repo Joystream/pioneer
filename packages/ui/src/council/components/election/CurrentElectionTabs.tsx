@@ -34,11 +34,8 @@ export const CurrentElectionTabs = ({ stage, myCandidates, myVotes, tab, onSetTa
       active: tab === 'myCandidates',
       onClick: () => onSetTab('myCandidates'),
     })
-  }
-
-  if (stage === 'blacklist') {
     tabs.push({
-      title: 'BlackList',
+      title: 'Blacklisted Accounts',
       active: tab === 'blacklist',
       onClick: () => onSetTab('blacklist'),
     })
@@ -50,10 +47,25 @@ export const CurrentElectionTabs = ({ stage, myCandidates, myVotes, tab, onSetTa
       active: tab === 'results',
       onClick: () => onSetTab('results'),
     })
+    tabs.push({
+      title: 'Blacklisted Accounts',
+      active: tab === 'blacklist',
+      onClick: () => onSetTab('blacklist'),
+    })
   }
 
   if ((stage === 'voting' || stage === 'revealing') && typeof myVotes === 'number') {
-    tabs.push({ title: 'My votes', count: myVotes, active: tab === 'myVotes', onClick: () => onSetTab('myVotes') })
+    tabs.push({
+      title: 'My votes',
+      count: myVotes,
+      active: tab === 'myVotes',
+      onClick: () => onSetTab('myVotes'),
+    })
+    tabs.push({
+      title: 'Blacklisted Accounts',
+      active: tab === 'blacklist',
+      onClick: () => onSetTab('blacklist'),
+    })
   }
 
   return <Tabs tabs={tabs} tabsSize="xs" />

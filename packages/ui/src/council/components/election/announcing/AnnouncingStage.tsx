@@ -1,10 +1,16 @@
 import React, { useMemo, useState } from 'react'
 
 import { CandidateCardList } from '@/council/components/election/CandidateCard/CandidateCardList'
-import { AnnouncingStageTab, CurrentElectionTabs } from '@/council/components/election/CurrentElectionTabs'
+import {
+  AnnouncingStageTab,
+  CurrentElectionTabs,
+  BlackListStageTab,
+} from '@/council/components/election/CurrentElectionTabs'
 import { CandidacyStatus } from '@/council/types'
 import { Election } from '@/council/types/Election'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+
+import { BlackList } from '../blacklist/BlackListStage'
 
 interface AnnouncingStageProps {
   election: Election | undefined
@@ -12,7 +18,7 @@ interface AnnouncingStageProps {
 }
 
 export const AnnouncingStage = ({ election, isLoading }: AnnouncingStageProps) => {
-  const [tab, setTab] = useState<AnnouncingStageTab>('candidates')
+  const [tab, setTab] = useState<AnnouncingStageTab | BlackListStageTab>('candidates')
 
   const { members: myMembers = [] } = useMyMemberships()
   const myMemberIds = useMemo(() => myMembers.map(({ id }) => id), [myMembers.length])
@@ -35,9 +41,13 @@ export const AnnouncingStage = ({ election, isLoading }: AnnouncingStageProps) =
         stage="announcing"
         myCandidates={myCandidates?.length}
         tab={tab}
-        onSetTab={(tab) => setTab(tab as AnnouncingStageTab)}
+        onSetTab={(tab) => setTab(tab as AnnouncingStageTab | BlackListStageTab)}
       />
-      <CandidateCardList candidates={tab === 'candidates' ? allCandidates : myCandidates} isLoading={isLoading} />
+      {tab === 'blacklist' ? (
+        <BlackList />
+      ) : (
+        <CandidateCardList candidates={tab === 'candidates' ? allCandidates : myCandidates} isLoading={isLoading} />
+      )}
     </>
   )
 }

@@ -51,7 +51,7 @@ interface Seeds {
 }
 
 const link = new HttpLink({
-  uri: 'http://localhost:8081/graphql',
+  uri: 'https://joy-testnet.joystream.org/query-node/server/graphql',
   fetch: (uri, options) => fetch(uri, options),
 })
 

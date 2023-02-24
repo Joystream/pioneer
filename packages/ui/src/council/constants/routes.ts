@@ -12,12 +12,11 @@ export const ElectionRoutes = {
   pastElections: '/election/past-elections',
   pastElection: '/election/past-elections/:id',
   pastVotes: '/election/past-votes',
-  blackList: '/electoin/blacklist'
 } as const
 
 type ElectionRoutesType = typeof ElectionRoutes
 
 declare module '@/app/constants/routes' {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface Routes extends CouncilRoutesType, ElectionRoutesType { }
+  interface Routes extends CouncilRoutesType, ElectionRoutesType {}
 }
