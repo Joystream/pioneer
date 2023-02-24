@@ -10,6 +10,7 @@ import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Transitions, Fonts, Colors, BorderRad } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { useMyEarnings } from '@/working-groups/hooks/useMyEarnings'
 import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { useWorkerEarnings } from '@/working-groups/hooks/useWorkerEarnings'
 import { ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
@@ -17,7 +18,7 @@ import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 import { Worker } from '@/working-groups/types'
 
-import { Tooltip } from '../../../common/components/Tooltip/Tooltip'
+
 import { useCurrentBlockNumber } from '../../../common/hooks/useCurrentBlockNumber'
 import { workerRoleTitle } from '../../helpers'
 import { getNextPayout } from '../../model/getNextPayout'
