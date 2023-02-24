@@ -17,6 +17,7 @@ import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 import { Worker } from '@/working-groups/types'
 
+import { Tooltip } from '../../../common/components/Tooltip/Tooltip'
 import { useCurrentBlockNumber } from '../../../common/hooks/useCurrentBlockNumber'
 import { workerRoleTitle } from '../../helpers'
 import { getNextPayout } from '../../model/getNextPayout'
@@ -101,7 +102,9 @@ const RolesListItem = ({ worker, payout = 0 }: { worker: Worker; payout?: number
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <NextPaymentValue>{payout ? payout : '–'}</NextPaymentValue>
+            <Tooltip tooltipText={<NextPaymentValue>{payout ? payout : '–'}</NextPaymentValue>}>
+              <NextPaymentValue>{payout ? payout : '–'}</NextPaymentValue>
+            </Tooltip>
           </TextInlineBig>
           <ToggleableSubscriptionWide>Next payment in</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
@@ -169,7 +172,7 @@ const NextPaymentValue = styled.span`
   font-weight: 700;
   font-family: ${Fonts.Grotesk};
   &:after {
-    content: 'blocks';
+    content: 'BLOCKS';
     display: inline-block;
     font-size: 14px;
     line-height: 20px;
