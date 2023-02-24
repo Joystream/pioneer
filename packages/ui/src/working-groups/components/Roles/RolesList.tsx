@@ -169,7 +169,7 @@ const NextPaymentValue = styled.span`
   font-weight: 700;
   font-family: ${Fonts.Grotesk};
   &:after {
-    content: 'block';
+    content: 'blocks';
     display: inline-block;
     font-size: 14px;
     line-height: 20px;
