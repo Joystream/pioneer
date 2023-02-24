@@ -101,7 +101,7 @@ const RolesListItem = ({ worker, payout = 0 }: { worker: Worker; payout?: number
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <NextPaymentValue>{payout ? payout?.toString() + ' blocks' : '–'}</NextPaymentValue>
+            <NextPaymentValue>{payout ? payout : '–'}</NextPaymentValue>
           </TextInlineBig>
           <ToggleableSubscriptionWide>Next payment in</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
@@ -168,4 +168,12 @@ const NextPaymentValue = styled.span`
   width: fit-content;
   font-weight: 700;
   font-family: ${Fonts.Grotesk};
+  &:after {
+    content: 'block';
+    display: inline-block;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    color: ${Colors.Black[400]};
+  }
 `
