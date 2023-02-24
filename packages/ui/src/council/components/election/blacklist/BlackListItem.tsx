@@ -1,15 +1,10 @@
-import BN from 'bn.js'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
-import { AccountLocks } from '@/accounts/components/AccountLocks'
-import { TransferButton } from '@/accounts/components/TransferButton'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { Account } from '@/accounts/types'
-import { DropDownButton, DropDownToggle } from '@/common/components/buttons/DropDownToggle'
 import { TableListItemAsLinkHover } from '@/common/components/List'
-import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Skeleton } from '@/common/components/Skeleton'
 import { TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
@@ -92,15 +87,4 @@ export const BlackListItemWrap = styled.div`
     min-width: 100%;
     height: 1.2rem;
   }
-`
-
-const AccountControls = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 32px);
-  grid-template-rows: 32px;
-  grid-column-gap: 4px;
-`
-
-const ValueAndLocks = styled(RowGapBlock)`
-  position: relative;
 `

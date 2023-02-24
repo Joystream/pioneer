@@ -1,10 +1,9 @@
-import React, { ReactNode, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { AccountItemLoading } from '@/accounts/components/AccountItem/AccountItemLoading'
 import { List, ListItem } from '@/common/components/List'
 import { ContentWithTabs } from '@/common/components/page/PageContent'
-import { HeaderText } from '@/common/components/SortedListHeaders'
 import { Colors } from '@/common/constants'
 
 import { useMyAccounts } from '../../../../accounts/hooks/useMyAccounts'
@@ -15,18 +14,17 @@ import { sortAccounts, SortKey } from '../../../../accounts/model/sortAccounts'
 import { BlackListItem } from './BlackListItem'
 
 export function BlackList() {
-  const { allAccounts, hasAccounts, isLoading, wallet } = useMyAccounts()
+  const { allAccounts, hasAccounts, isLoading } = useMyAccounts()
   const [isDisplayAll, setIsDisplayAll] = useState(true)
   const balances = useMyBalances()
   const [sortBy, setSortBy] = useState<SortKey>('name')
-  const [isDescending, setDescending] = useState(false)
   const visibleAccounts = useMemo(
     () => filterAccounts(allAccounts, isDisplayAll, balances),
     [JSON.stringify(allAccounts), isDisplayAll, hasAccounts]
   )
   const sortedAccounts = useMemo(
-    () => sortAccounts(visibleAccounts, balances, sortBy, isDescending),
-    [visibleAccounts, balances, sortBy, isDescending]
+    () => sortAccounts(visibleAccounts, balances, sortBy),
+    [visibleAccounts, balances, sortBy]
   )
   return (
     <ContentWithTabs>
@@ -47,11 +45,6 @@ export function BlackList() {
   )
 }
 
-interface HeaderProps {
-  children: ReactNode
-  // sortKey: SortKey
-}
-
 const AccountsWrap = styled.div`
   display: grid;
   grid-template-columns: 1fr;
@@ -61,17 +54,6 @@ const AccountsWrap = styled.div`
     'accountslist';
   grid-row-gap: 4px;
   width: 100%;
-`
-
-const ListHeaders = styled.div`
-  display: grid;
-  grid-area: accountstablenav;
-  grid-template-rows: 1fr;
-  grid-template-columns: 276px repeat(4, 128px) 104px;
-  justify-content: space-between;
-  width: 100%;
-  padding-left: 16px;
-  padding-right: 8px;
 `
 
 export const ListHeader = styled.span`
