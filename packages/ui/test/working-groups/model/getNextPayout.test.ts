@@ -21,7 +21,7 @@ describe('getNextPayout', () => {
   it('No roles', () => {
     const blockNumber = new BN(14400)
     const workers = [].map(toWorkerFragment)
-    expect(getNextPayout(workers, blockNumber, api.api)!).toEqual(-1)
+    expect(getNextPayout(workers, blockNumber, api.api)!).toEqual(0)
   })
 
   it('Multiple roles', () => {
