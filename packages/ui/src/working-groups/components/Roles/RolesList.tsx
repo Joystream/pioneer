@@ -7,7 +7,7 @@ import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { ContextMenu, ContextMenuContainer } from '@/common/components/ContextMenu'
 import { List, ListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
-import { TextInlineBig, TokenValue } from '@/common/components/typography'
+import { TextInlineBig, TokenValue, TextMedium } from '@/common/components/typography'
 import { Transitions, Fonts, Colors, BorderRad } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
@@ -103,8 +103,8 @@ const RolesListItem = ({ worker, payout = 0 }: { worker: Worker; payout?: number
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <NumericValue>{payout ? payout?.toString() + ' blocks' : '–'}</NumericValue>
-            {/* {payout && <TextMedium lighter>({payout && blocksToTime(payout)})</TextMedium>} */}
+            {/* <NumericValue>{payout ? payout?.toString() + ' blocks' : '–'}</NumericValue> */}
+            {payout && <TextMedium lighter>({payout?.toString() + ' blocks'})</TextMedium>}
           </TextInlineBig>
           <ToggleableSubscriptionWide>Next payment in</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
