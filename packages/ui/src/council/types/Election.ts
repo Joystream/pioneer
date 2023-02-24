@@ -4,7 +4,7 @@ import { BN_ZERO } from '@/common/constants'
 import { ElectionRoundFieldsFragment } from '@/council/queries'
 import { asElectionCandidate, ElectionCandidate } from '@/council/types/Candidate'
 
-export type ElectionStage = 'announcing' | 'voting' | 'revealing' | 'inactive'
+export type ElectionStage = 'announcing' | 'voting' | 'revealing' | 'inactive' | 'blacklist'
 
 export interface Election {
   cycleId: number

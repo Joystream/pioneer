@@ -11,7 +11,7 @@ export type BlackListStageTab = 'blacklist'
 type ElectionTab = AnnouncingStageTab | VotingStageTab | RevealingStageTab | BlackListStageTab
 
 interface ElectionTabsProps {
-  stage: Exclude<ElectionStage, 'inactive'> | 'blacklist'
+  stage: Exclude<ElectionStage, 'inactive'>
   myCandidates?: number
   myVotes?: number | false
   tab: ElectionTab
@@ -36,7 +36,7 @@ export const CurrentElectionTabs = ({ stage, myCandidates, myVotes, tab, onSetTa
     })
   }
 
-  if (stage === 'blacklist' && myCandidates) {
+  if (stage === 'blacklist') {
     tabs.push({
       title: 'BlackList',
       count: myCandidates,
