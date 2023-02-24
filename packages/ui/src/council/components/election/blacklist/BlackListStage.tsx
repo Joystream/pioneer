@@ -12,6 +12,7 @@ interface AnnouncingStageProps {
 }
 
 export const BlackListStage = ({ election, isLoading }: AnnouncingStageProps) => {
+
   const [tab, setTab] = useState<AnnouncingStageTab>('candidates')
 
   const { members: myMembers = [] } = useMyMemberships()
