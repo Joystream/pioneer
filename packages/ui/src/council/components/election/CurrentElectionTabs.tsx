@@ -3,12 +3,12 @@ import React from 'react'
 import { TabProps, Tabs } from '@/common/components/Tabs'
 import { ElectionStage } from '@/council/types/Election'
 
-export type AnnouncingStageTab = 'candidates' | 'myCandidates'
+export type AnnouncingStageTab = 'candidates' | 'myCandidates' | 'blacklist'
 export type VotingStageTab = 'candidates' | 'myVotes'
 export type RevealingStageTab = 'results' | 'myVotes' | 'candidates'
-export type BlackListStageTab = 'blacklist'
 
-type ElectionTab = AnnouncingStageTab | VotingStageTab | RevealingStageTab | BlackListStageTab
+
+type ElectionTab = AnnouncingStageTab | VotingStageTab | RevealingStageTab
 
 interface ElectionTabsProps {
   stage: Exclude<ElectionStage, 'inactive'>
@@ -39,7 +39,6 @@ export const CurrentElectionTabs = ({ stage, myCandidates, myVotes, tab, onSetTa
   if (stage === 'blacklist') {
     tabs.push({
       title: 'BlackList',
-      count: myCandidates,
       active: tab === 'blacklist',
       onClick: () => onSetTab('blacklist'),
     })
