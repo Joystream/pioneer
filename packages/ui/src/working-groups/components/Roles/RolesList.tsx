@@ -18,7 +18,8 @@ import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 import { Worker } from '@/working-groups/types'
 
-
+import { NumericValue } from '../../../common/components/statistics/NumericValueStat'
+import { BN_ZERO } from '../../../common/constants'
 import { useCurrentBlockNumber } from '../../../common/hooks/useCurrentBlockNumber'
 import { workerRoleTitle } from '../../helpers'
 import { getNextPayout } from '../../model/getNextPayout'
