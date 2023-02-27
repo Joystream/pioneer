@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { AccountItemLoading } from '@/accounts/components/AccountItem/AccountItemLoading'
@@ -9,22 +9,21 @@ import { Colors } from '@/common/constants'
 import { useMyAccounts } from '../../../../accounts/hooks/useMyAccounts'
 import { useMyBalances } from '../../../../accounts/hooks/useMyBalances'
 import { filterAccounts } from '../../../../accounts/model/filterAccounts'
-import { sortAccounts, SortKey } from '../../../../accounts/model/sortAccounts'
+import { sortAccounts } from '../../../../accounts/model/sortAccounts'
 
 import { BlackListItem } from './BlackListItem'
 
 export function BlackList() {
   const { allAccounts, hasAccounts, isLoading } = useMyAccounts()
-  const [isDisplayAll, setIsDisplayAll] = useState(true)
   const balances = useMyBalances()
-  const [sortBy, setSortBy] = useState<SortKey>('name')
+
   const visibleAccounts = useMemo(
-    () => filterAccounts(allAccounts, isDisplayAll, balances),
-    [JSON.stringify(allAccounts), isDisplayAll, hasAccounts]
+    () => filterAccounts(allAccounts, true, balances),
+    [JSON.stringify(allAccounts), hasAccounts]
   )
   const sortedAccounts = useMemo(
-    () => sortAccounts(visibleAccounts, balances, sortBy),
-    [visibleAccounts, balances, sortBy]
+    () => sortAccounts(visibleAccounts, balances, 'name'),
+    [visibleAccounts, balances, 'name']
   )
   return (
     <ContentWithTabs>
