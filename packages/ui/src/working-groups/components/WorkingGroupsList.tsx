@@ -54,6 +54,9 @@ const HeaderColumnTitle = styled.div`
   color: ${Colors.Black[400]};
   text-transform: uppercase;
   text-align: left;
+  :nth-last-of-type() {
+    padding: 0;
+  }
 `
 
 const GroupList = styled.section`
@@ -62,6 +65,9 @@ const GroupList = styled.section`
   grid-auto-rows: 108px;
   grid-row-gap: 8px;
   width: 100%;
+  @media (max-width: 768px) {
+    grid-auto-rows: 1fr;
+  }
 `
 const WorkingGroupListStyles = styled(RowGapBlock)`
   ${ListHeaders} {

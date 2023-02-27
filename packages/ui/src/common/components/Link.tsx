@@ -23,6 +23,10 @@ export const LinkStyles = css<StyledLinkProps>`
   text-underline-offset: 1px;
   transition: ${Transitions.all};
   cursor: pointer;
+  @media (max-width: 768px) {
+    grid-column: 3 / 4;
+    grid-row: 2 / 3;
+  }
 
   &:hover,
   &:focus,

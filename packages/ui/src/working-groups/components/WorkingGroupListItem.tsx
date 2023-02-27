@@ -99,6 +99,10 @@ const GroupImageContainer = styled.div`
   overflow: hidden;
   cursor: pointer;
   transition: ${Transitions.all};
+  @media (max-width: 768px) {
+    grid-column: 1 / 2;
+    grid-row: 1 / -1;
+  }
 `
 const StyledRouterLink = styled(RouterLink)`
   color: ${Colors.Black[600]};
@@ -131,10 +135,15 @@ const GroupContent = styled(TextMedium)`
 
 const GroupStats = styled.div`
   display: grid;
-  grid-template-columns: 64px 116px 30px 140px;
+  // grid-template-columns: 64px 116px 30px 140px;
+  grid-template-columns: 1fr 1fr 1fr auto;
   justify-content: space-between;
   width: 100%;
   grid-column-gap: 8px;
+  @media (max-width: 768px) {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+  }
 `
 
 const StatsColumn = styled.div`
@@ -191,6 +200,10 @@ const GroupItem = styled(TableListItem)`
     .WorkingGroupArrow {
       color: ${Colors.Blue[500]};
     }
+  }
+  @media (max-width: 768px) {
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 108px 1fr auto;
   }
 `
 const PlaceholderWrapper = styled.div`

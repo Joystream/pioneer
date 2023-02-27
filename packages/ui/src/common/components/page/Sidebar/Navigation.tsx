@@ -4,7 +4,7 @@ import { Colors, ZIndex } from '../../../constants'
 
 export const Navigation = styled.nav`
   display: flex;
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   grid-area: navbar;

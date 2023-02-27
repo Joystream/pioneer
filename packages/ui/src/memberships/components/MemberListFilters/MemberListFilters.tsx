@@ -201,6 +201,12 @@ const Wrapper = styled.div`
         height: 100%;
       }
     }
+    @media (max-width: 768px) {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(2, 1fr);
+      width: 100%;
+    }
   }
 `
 

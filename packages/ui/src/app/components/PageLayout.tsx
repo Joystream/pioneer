@@ -57,6 +57,10 @@ export const PageHeaderRow = styled.div<{ showOverflow?: boolean }>`
   width: 100%;
   max-width: 100%;
   overflow: ${({ showOverflow }) => (showOverflow ? 'visible' : 'hidden')};
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, auto);
+  }
 `
 
 const PageMain = styled.main`
@@ -110,6 +114,14 @@ const PageLayoutWithSidebar = css`
   grid-template-areas:
     'header header'
     'main sidebar';
+  @media (max-width: 768px) {
+    grid-template-columns: auto;
+    grid-template-rows: repeat(3, auto);
+    grid-template-areas:
+      'header'
+      'main'
+      'sidebar';
+  }
 `
 
 const PageLayoutWithSidebarAndFooter = css`

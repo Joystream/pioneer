@@ -520,4 +520,9 @@ export const ButtonsGroup = styled.div<{ align?: 'left' | 'center' | 'right' }>`
         return 'end'
     }
   }};
+  @media (max-width: 768px) {
+    grid-template-columns: auto;
+    grid-template-rows: 1fr 1fr;
+    gap: 8px;
+  }
 `
