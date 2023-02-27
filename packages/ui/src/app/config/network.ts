@@ -33,8 +33,6 @@ const QUERY_NODE_ENDPOINT_SUBSCRIPTION: PredefinedEndpoint = {
   'local-mocks': 'wss://joy-testnet.joystream.org/query-node/server/graphql',
 }
 
-
-
 const QUERY_NODE_ENDPOINT: PredefinedEndpoint = {
   mainnet: MAINNET_QUERY_NODE,
   local: 'https://joy-testnet.joystream.org/query-node/server/graphql',
@@ -67,12 +65,12 @@ export const pickEndpoints = (network: NetworkType): Partial<NetworkEndpoints> =
 export const DEFAULT_NETWORK = (
   IS_MAINNET_DEFINED
     ? {
-      type: 'mainnet',
-      endpoints: pickEndpoints('mainnet'),
-    }
+        type: 'mainnet',
+        endpoints: pickEndpoints('mainnet'),
+      }
     : IS_TESTNET_DEFINED
-      ? { type: 'testnet', endpoints: pickEndpoints('testnet') }
-      : { type: 'local', endpoints: pickEndpoints('local') }
+    ? { type: 'testnet', endpoints: pickEndpoints('testnet') }
+    : { type: 'local', endpoints: pickEndpoints('local') }
 ) as {
   type: NetworkType
   endpoints: NetworkEndpoints
