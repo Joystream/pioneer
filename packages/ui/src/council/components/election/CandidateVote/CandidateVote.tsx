@@ -90,7 +90,6 @@ export const CandidateVote = ({
                   tooltipLinkText="Read more"
                   tooltipLinkURL="https://handbook.joystream.org/system/council#vote"
                 >
-                  tooltipLinkURL="https://handbook.joystream.org/system/council#vote"
                   <Subscription>My contributed votes</Subscription>
                 </Tooltip>
                 <StatsValue>

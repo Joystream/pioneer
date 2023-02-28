@@ -8,7 +8,7 @@ import { last, repeat } from '@/common/utils'
 import { ProposalStatus, ProposalStatusUpdates } from '@/proposals/types'
 
 export interface ProposalStagesProps extends ControlProps<number> {
-  roundStatus: ProposalStatus
+  status: ProposalStatus
   updates: ProposalStatusUpdates[]
   constitutionality?: number
 }
@@ -16,20 +16,20 @@ export interface ProposalStagesProps extends ControlProps<number> {
 type RoundState = 'approved' | 'rejected' | 'deciding' | 'disabled'
 const iconMap = { approved: <CheckboxIcon />, rejected: <CrossIcon />, deciding: undefined, disabled: undefined }
 
-export const ProposalStages = ({ roundStatus, updates, constitutionality, value, onChange }: ProposalStagesProps) => {
+export const ProposalStages = ({ status, updates, constitutionality, value, onChange }: ProposalStagesProps) => {
   const rounds: RoundState[] = useMemo(() => {
     const decidingCount = updates.filter(({ status }) => status === 'deciding').length
 
     const lastUpdate = last(updates).status
-    const onGoing = lastUpdate === roundStatus
+    const onGoing = lastUpdate === status
     const approved = lastUpdate === 'gracing'
     const rejected = !onGoing && !approved
-    const isDormant = onGoing && roundStatus === 'dormant'
+    const isDormant = onGoing && status === 'dormant'
 
     return repeat((round) => {
-      if (round < decidingCount) {
+      if (round < decidingCount - 1) {
         return 'approved'
-      } else if (round > decidingCount) {
+      } else if (round > decidingCount - 1) {
         return 'disabled'
       } else if (isDormant || approved) {
         return 'approved'
@@ -39,19 +39,19 @@ export const ProposalStages = ({ roundStatus, updates, constitutionality, value,
         return 'deciding'
       }
     }, constitutionality ?? 1)
-  }, [updates.length, roundStatus, constitutionality])
+  }, [updates.length, status, constitutionality])
 
   return (
     <TabsContainer>
-      {rounds.map((roundStatus, round) => {
-        const isDisabled = roundStatus === 'disabled'
+      {rounds.map((status, round) => {
+        const isDisabled = status === 'disabled'
         const isActive = round === value
         const onClick = isDisabled
           ? undefined
           : () => {
-              return onChange(round)
-            }
-        const icon = iconMap[roundStatus]
+            return onChange(round)
+          }
+        const icon = iconMap[status]
         return (
           <Tooltip
             key={round}
