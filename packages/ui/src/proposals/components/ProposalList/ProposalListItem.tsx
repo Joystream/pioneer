@@ -108,8 +108,8 @@ const CopyButton = styled(CopyButtonTemplate)`
 `
 
 const ProposalItem = styled(TableListItem)`
-  grid-column-gap: 20px;
-  padding-right: 0px;
+  grid-column-gap: 36px;
+  padding-right: 16px;
   background-color: ${({ $isPast }: { $isPast?: boolean }) => ($isPast ? Colors.Black[50] : Colors.White)};
   grid-template-rows: unset;
   height: 86px;
