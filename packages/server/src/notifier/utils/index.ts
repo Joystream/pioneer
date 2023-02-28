@@ -11,4 +11,4 @@ export const isOlderThan =
 
 // TODO improve this logic
 export const mentionedMembersIdsFromText = (text: string): string[] =>
-  unique(Array.from(text.matchAll(/\[@\w+\]\(#mention\?member-id=(\d+)\)/g)).map(([, id]) => id))
+  unique(Array.from(text.matchAll(/\[@\w+\]\(#mention\?member-id=([^)]+)\)/g)).map(([, id]) => id))

@@ -10,19 +10,17 @@ import { notificationEvents } from './model/notificationEvents'
 import { createNotifications } from './model/notifications'
 import { unique } from './utils'
 
-run()
-
-async function run() {
+export async function run() {
   await createAndSaveNotifications()
   await sendNotifications()
 }
 
-async function createAndSaveNotifications() {
+export async function createAndSaveNotifications() {
   // TODO request based on the lastConsumedBlock
   // Fetch events from the query node
   const qnData = await request(QUERY_NODE_ENDPOINT, GetNotificationEventsDocument)
 
-  // Genrate the potential notification based on the query nodes data
+  // Generate the potential notification based on the query nodes data
   const events = qnData.events.flatMap(notificationEvents)
 
   // Fetch subscription and members related to the events

@@ -18,9 +18,8 @@ export const createNotifications = (
   events: NotificationEvent[]
 ): Notification[] => {
   const eventsByMember = events.flatMap<EventByMember>(getEventsByMember(subscriptions, members))
-  const prioNotif = prioritizeNotifs(eventsByMember)
 
-  return prioNotif.map<Notification>(({ event, memberId }) => ({
+  return pickNotifs(eventsByMember).map<Notification>(({ event, memberId }) => ({
     notificationType: event.notificationType,
     eventId: event.eventId,
     entityId: event.entityId,
@@ -31,16 +30,15 @@ export const createNotifications = (
 const getEventsByMember =
   (subscriptions: Subscription[], members: Member[]) =>
   (event: NotificationEvent): EventByMember[] => {
-    const relatedSubscripion = subscriptions.filter(isEventRelatedToSubscription(event))
+    const relatedSubscripions = subscriptions.filter(isEventRelatedToSubscription(event))
     const doesEventRequiresSub = !event.isDefault && !event.relatedMemberIds
 
     return doesEventRequiresSub
-      ? relatedSubscripion.flatMap(({ member, shouldNotify }) =>
-          event.relatedEntityId && !shouldNotify ? [] : { event, memberId: member.id, shouldNotify }
-        )
+      ? relatedSubscripions.flatMap(({ member, shouldNotify }) => ({ event, memberId: member.id, shouldNotify }))
       : event.relatedMemberIds?.flatMap((chainMemberId) => {
-          const member = memberToNotify(chainMemberId, relatedSubscripion, members)
-          return member ? { event, memberId: member.id, shouldNotify: true } : []
+          const subcription = subscriptions.find(({ member }) => member.chainMemberId === chainMemberId)
+          const member = subcription?.member ?? members.find((member) => member.chainMemberId === chainMemberId)
+          return member ? { event, memberId: member.id, shouldNotify: subcription?.shouldNotify ?? true } : []
         }) ?? []
   }
 
@@ -56,17 +54,7 @@ const isEventRelatedToSubscription =
     }
   }
 
-const memberToNotify = (
-  chainMemberId: string,
-  subscriptions: Subscription[],
-  members: Member[]
-): Member | undefined => {
-  const subcription = subscriptions.find(({ member }) => member.chainMemberId === chainMemberId)
-  if (subcription && !subcription.shouldNotify) return
-  return subcription?.member ?? members.find((member) => member.chainMemberId === chainMemberId)
-}
-
-const prioritizeNotifs = (notifs: EventByMember[]) =>
+const pickNotifs = (notifs: EventByMember[]) =>
   notifs.filter(
     (A, indexA) =>
       A.shouldNotify &&
@@ -75,7 +63,12 @@ const prioritizeNotifs = (notifs: EventByMember[]) =>
           B === A ||
           B.event.eventId !== A.event.eventId ||
           B.memberId !== A.memberId ||
-          ((B.shouldNotify || !A.event.relatedEntityId) &&
-            (B.event.priority <= A.event.priority || (B.event.priority === A.event.priority && indexB > indexA)))
+          // Ignore `shouldNotify: false` events except for those with a related entity.
+          (!B.shouldNotify && !B.event.relatedEntityId) ||
+          // Regardless of priority, events with a related entity and `shouldNotify: false` should prevent
+          // other notifications from the same qn event and member id, except for other events with a related entity
+          // and a higher priority.
+          ((B.shouldNotify || A.event.relatedEntityId) &&
+            (B.event.priority < A.event.priority || (B.event.priority === A.event.priority && indexB > indexA)))
       )
   )

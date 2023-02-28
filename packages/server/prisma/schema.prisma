@@ -48,6 +48,7 @@ model Notification {
   id               Int              @id @default(autoincrement())
   member           Member           @relation(fields: [memberId], references: [id])
   memberId         Int
+  // In case the message should be different for councilors
   memberRole       MemberRole       @default(MEMBER)
   notificationType NotificationType
   eventId          String
