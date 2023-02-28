@@ -104,11 +104,9 @@ const RolesListItem = ({ worker, payout = BN_ZERO }: { worker: Worker; payout?: 
         <OpenItemSummaryColumn>
           <TextInlineBig>
             <Tooltip
-              tooltipText={
-                <NextPaymentValue>{payout?.gte(BN_ZERO) ? payout?.toString() + ' blocks' : '–'}</NextPaymentValue>
-              }
+              tooltipText={<NextPaymentValue>{payout?.gte(BN_ZERO) ? payout?.toString() : '–'}</NextPaymentValue>}
             >
-              <NextPaymentValue>{payout?.gte(BN_ZERO) ? payout?.toString() + ' blocks' : '–'}</NextPaymentValue>
+              <NextPaymentValue>{payout?.gte(BN_ZERO) ? payout?.toString() : '–'}</NextPaymentValue>
             </Tooltip>
           </TextInlineBig>
           <ToggleableSubscriptionWide>Next payment in</ToggleableSubscriptionWide>
