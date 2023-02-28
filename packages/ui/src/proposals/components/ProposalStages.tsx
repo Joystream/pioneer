@@ -49,8 +49,8 @@ export const ProposalStages = ({ status, updates, constitutionality, value, onCh
         const onClick = isDisabled
           ? undefined
           : () => {
-            return onChange(round)
-          }
+              return onChange(round)
+            }
         const icon = iconMap[status]
         return (
           <Tooltip
