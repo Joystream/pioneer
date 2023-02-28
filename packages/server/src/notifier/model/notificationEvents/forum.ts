@@ -1,6 +1,5 @@
-import { PostAddedEventFieldsFragmentDoc, PostFieldsFragmentDoc } from '../../../common/queries'
-import { useFragment } from '../../../common/queries/__generated__'
-import { isOlderThan, itemsExcept, mentionedMembersIdsFromText, unique } from '../../utils'
+import { PostAddedEventFieldsFragmentDoc, PostFieldsFragmentDoc, useFragment } from '@/common/queries'
+import { isOlderThan, itemsExcept, mentionedMembersIdsFromText, unique } from '@/notifier/model/utils'
 
 import { buildEvent, QNEvent, NotificationEvent } from '.'
 

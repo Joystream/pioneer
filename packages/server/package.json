@@ -3,7 +3,7 @@
   "version": "1.2.0",
   "license": "GPL-3.0-only",
   "scripts": {
-    "notify": "ts-node --transpile-only ./src/notifier",
+    "notify": "ts-node --transpile-only -r tsconfig-paths/register ./src/notifier",
     "prisma": "prisma",
     "codegen": "graphql-codegen",
     "start:db": "yarn docker up -d",
@@ -36,6 +36,7 @@
     "prettier": "^2.8.4",
     "prisma": "^4.10.1",
     "ts-node": "^10.9.1",
+    "tsconfig-paths": "^3.14.2",
     "typescript": "^4.9.5"
   }
 }

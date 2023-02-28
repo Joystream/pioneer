@@ -1,6 +1,6 @@
 import { NotificationType } from '@prisma/client'
 
-import { GetNotificationEventsQuery } from '../../../common/queries'
+import { GetNotificationEventsQuery } from '@/common/queries'
 
 import { fromPostAddedEvent } from './forum'
 

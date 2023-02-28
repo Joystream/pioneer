@@ -1,8 +1,9 @@
-import { prisma } from '../../src/common/prisma'
-import { createAndSaveNotifications } from '../../src/notifier/run'
-import { createMember } from '../_mocks/notifier/createMember'
-import { postAddedEvent } from '../_mocks/notifier/events'
-import { mockRequest } from '../setup'
+import { createMember } from '@test/_mocks/notifier/createMember'
+import { postAddedEvent } from '@test/_mocks/notifier/events'
+import { mockRequest } from '@test/setup'
+
+import { prisma } from '@/common/prisma'
+import { createAndSaveNotifications } from '@/notifier/run'
 
 describe('createAndSaveNotifications', () => {
   beforeEach(async () => {

@@ -1,6 +1,6 @@
 import { NotificationType } from '@prisma/client'
 
-import { prisma } from '../../../src/common/prisma'
+import { prisma } from '@/common/prisma'
 
 type MockedSubscription = { notificationType: NotificationType; entityIds?: string[]; shouldNotify?: boolean }
 export const createMember = (name: string, subscriptions?: MockedSubscription[]) =>

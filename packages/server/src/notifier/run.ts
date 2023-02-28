@@ -1,14 +1,14 @@
 import { Prisma } from '@prisma/client'
 import { request } from 'graphql-request'
 
-import { QUERY_NODE_ENDPOINT } from '../common/config'
-import { prisma } from '../common/prisma'
-import { GetNotificationEventsDocument } from '../common/queries'
+import { QUERY_NODE_ENDPOINT } from '@/common/config'
+import { prisma } from '@/common/prisma'
+import { GetNotificationEventsDocument } from '@/common/queries'
 
 import { createEmail } from './model/email'
 import { notificationEvents } from './model/notificationEvents'
 import { createNotifications } from './model/notifications'
-import { unique } from './utils'
+import { unique } from './model/utils'
 
 export async function run() {
   await createAndSaveNotifications()

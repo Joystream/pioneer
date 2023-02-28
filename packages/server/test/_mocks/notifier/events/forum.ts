@@ -1,9 +1,6 @@
-import {
-  GetNotificationEventsQuery,
-  PostAddedEventFieldsFragment,
-  PostFieldsFragment,
-} from '../../../../src/common/queries'
-import { maskFragment } from '../../utils'
+import { maskFragment } from '@test/_mocks/utils'
+
+import { GetNotificationEventsQuery, PostAddedEventFieldsFragment, PostFieldsFragment } from '@/common/queries'
 
 type PostAddedEventsMock = { threadAuthor?: string; text?: string }
 export const postAddedEvent = (
