@@ -4,7 +4,7 @@ const config = {
   ...baseConfig,
   plugins: [...baseConfig.plugins, 'react-hooks'],
   rules: {
-    ...config.rules,
+    ...baseConfig.rules,
     'react-hooks/rules-of-hooks': 'error',
   },
 }
