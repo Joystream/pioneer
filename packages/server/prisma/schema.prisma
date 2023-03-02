@@ -5,51 +5,44 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator nexusPrisma {
+  provider = "nexus-prisma"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Member {
-  id                Int            @id @default(autoincrement())
-  chainMemberId     String         @unique
-  controllerAccount String         @unique
-  name              String
-  email             String?
-  isEmailVerified   Boolean        @default(false)
-  accessTokens      AccessToken[]
-  subscriptions     Subscription[]
-  notifications     Notification[]
-}
+  id            Int            @id @default(autoincrement())
+  // Until controller accounts are verified chainMemberId shouldn't be @unique
+  chainMemberId String
+  name          String
+  email         String         @unique
+  password      String
+  subscriptions Subscription[]
+  notifications Notification[]
 
-model AccessToken {
-  id        Int      @id @default(autoincrement())
-  member    Member   @relation(fields: [memberId], references: [id])
-  memberId  Int
-  token     String
-  createdAt DateTime @default(now())
-  ttl       Int      @default(31536000000)
+  @@index(chainMemberId)
 }
 
 model Subscription {
   id                  Int              @id @default(autoincrement())
   member              Member           @relation(fields: [memberId], references: [id])
   memberId            Int
-  memberRole          MemberRole       @default(MEMBER)
   notificationType    NotificationType
   entityIds           String[]
   shouldNotify        Boolean
   shouldNotifyByEmail Boolean
 
-  @@unique([memberId, notificationType, memberRole])
+  @@unique([memberId, notificationType])
 }
 
 model Notification {
   id               Int              @id @default(autoincrement())
   member           Member           @relation(fields: [memberId], references: [id])
   memberId         Int
-  // In case the message should be different for councilors
-  memberRole       MemberRole       @default(MEMBER)
   notificationType NotificationType
   eventId          String
   entityId         String?
@@ -115,9 +108,4 @@ enum NotificationType {
   PROPOSAL_WATCHED_STATUS
   PROPOSAL_WATCHED_VOTE
   PROPOSAL_WATCHED_DISCUSSION
-}
-
-enum MemberRole {
-  MEMBER
-  COUNCILOR
 }
