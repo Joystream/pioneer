@@ -34,7 +34,7 @@ export const OpeningListItem = ({ opening, past, onClick }: OpeningListItemProps
         <ToggleableItemInfoTop>
           <Subscription title={`ID: ${opening.id}`}>ID: {opening.runtimeId}</Subscription>
           {isInFuture(opening.expectedEnding) && (
-            <Subscription>Ends {relativeTime(opening.expectedEnding)}</Subscription>
+            <Subscription>Ends in {relativeTime(opening.expectedEnding)}</Subscription>
           )}
           <BadgeStatus>{opening.groupName}</BadgeStatus>
           {opening.type === 'LEAD' ? <BadgeStatus>LEAD</BadgeStatus> : null}

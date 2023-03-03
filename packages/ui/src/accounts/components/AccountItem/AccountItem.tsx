@@ -12,7 +12,7 @@ import { TableListItemAsLinkHover } from '@/common/components/List'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Skeleton } from '@/common/components/Skeleton'
 import { TokenValue } from '@/common/components/typography'
-import { BN_ZERO, BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
+import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 import { isDefined, sumBN } from '@/common/utils'
 
 import { LocksDetails } from './components/LocksDetails'
