@@ -35,9 +35,6 @@ export const PostList = ({ threadId, isThreadActive, isLoading, isDiscussion }: 
     (page: number) => history.replace({ pathname, search: page > 1 ? `page=${page}` : '' }),
     []
   )
-  useMemo(() => {
-    if(isReady && !posts.length) history.replace({pathname, search: ''});
-  },[isReady, posts])
 
   const postsRefs: AnyKeys = {}
   const getInsertRef = (postId: string) => (ref: RefObject<HTMLDivElement>) => (postsRefs[postId] = ref)
