@@ -72,6 +72,18 @@ jest.mock('@/common/hooks/useCurrentBlockNumber', () => ({
   useCurrentBlockNumber: () => mockUseCurrentBlockNumber(),
 }))
 
+jest.mock('react-dropzone', () => {
+  const reactDropzone = jest.requireActual('react-dropzone')
+  return {
+    ...reactDropzone,
+    useDropzone: (props: any) =>
+      reactDropzone.useDropzone({
+        ...props,
+        getFilesFromEvent: (event: React.ChangeEvent<HTMLInputElement>) => event.target.files,
+      }),
+  }
+})
+
 const OPENING_DATA = {
   id: 'forumWorkingGroup-1337',
   runtimeId: 1337,
@@ -1197,6 +1209,30 @@ describe('UI: AddNewProposalModal', () => {
           const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
           const parameters = txSpecificParameters.asUpdateWorkingGroupBudget.toJSON()
           expect(parameters).toEqual([amount, group, 'Negative'])
+        })
+      })
+
+      describe('Type - Runtime Upgrade', () => {
+        beforeEach(async () => {
+          await finishProposalType('runtimeUpgrade')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+        })
+
+        it('Default - Invalid', async () => {
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid', async () => {
+          const file = new File([], 'upgrade.wasm', { type: 'application/wasm' })
+          Object.defineProperty(file, 'isValidWASM', { value: true })
+          Object.defineProperty(file, 'arrayBuffer', { value: () => Promise.resolve(new ArrayBuffer(1)) })
+          await act(async () => {
+            fireEvent.change(screen.getByTestId('runtime-upgrade-input'), { target: { files: [file] } })
+          })
+
+          expect(await getCreateButton()).toBeEnabled()
         })
       })
     })

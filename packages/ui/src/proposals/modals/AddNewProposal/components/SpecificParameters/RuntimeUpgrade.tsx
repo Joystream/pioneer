@@ -125,7 +125,7 @@ export const RuntimeUpgrade = () => {
                 isDragAccept={isDragAccept}
                 isDragReject={isDragReject}
               >
-                <input {...getInputProps()} />
+                <input id="runtime-upgrade-input" {...getInputProps()} />
                 <DropZoneText>
                   Drop your file here or <DropZoneTextUnderline>browse</DropZoneTextUnderline>
                 </DropZoneText>
