@@ -43,7 +43,6 @@ export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
   const history = useHistory()
   const { isLoading, proposal } = useProposal(id)
-
   const { council } = useElectedCouncil()
   const constants = useProposalConstants(proposal?.details.type)
   const loc = useLocation()
@@ -105,7 +104,6 @@ export const ProposalPreview = () => {
       />
     )
   }
-
   return (
     <PageLayout
       lastBreadcrumb={proposal.title}

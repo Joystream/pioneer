@@ -59,7 +59,6 @@ export const CandidateVote = ({
   const roundedPercentage = totalStake.gt(BN_ZERO) ? sumOfAllStakes.muln(100).divRound(totalStake).toNumber() : 0
   const userVoted = myVotes.length > 0
   const allVotesRevealed = myVotes.every((vote) => vote.voteFor)
-
   const RevealButton = <RevealVoteButton myVotes={myVotes} voteForHandle={member.handle} />
 
   return (
