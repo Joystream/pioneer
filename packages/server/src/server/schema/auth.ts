@@ -18,6 +18,24 @@ export interface SignUpArgs extends SignInArgs {
   name: string
 }
 
+export const signin = mutationField('signin', {
+  type: 'String',
+  args: {
+    email: nonNull(stringArg()),
+    password: nonNull(stringArg()),
+  },
+  resolve: async (_, { email, password }, { prisma }: Context) => {
+    await SignInArgsSchema.validate({ email, password })
+
+    const member = await prisma.member.findFirst({ where: { email } })
+    if (!member || !(await compare(password, member.password))) {
+      return null
+    }
+
+    return createAuthToken(member.id)
+  },
+})
+
 export const SignUpOutcome = enumType({
   name: 'SignUpOutcome',
   members: ['InvalidMemberArgument', 'EmailAlreadyRegistered', 'Success'],
@@ -47,24 +65,6 @@ export const signup = mutationField('signup', {
     console.log(`Send email:\nTo ${args.email}\nToken:${token}\nWith link to :${verificationUrl}`)
 
     return 'Success'
-  },
-})
-
-export const signin = mutationField('signin', {
-  type: 'String',
-  args: {
-    email: nonNull(stringArg()),
-    password: nonNull(stringArg()),
-  },
-  resolve: async (_, { email, password }, { prisma }: Context) => {
-    await SignInArgsSchema.validate({ email, password })
-
-    const member = await prisma.member.findFirst({ where: { email } })
-    if (!member || !(await compare(password, member.password))) {
-      return null
-    }
-
-    return createAuthToken(member.id)
   },
 })
 
