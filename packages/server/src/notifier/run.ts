@@ -1,4 +1,3 @@
-import { Prisma } from '@prisma/client'
 import { request } from 'graphql-request'
 
 import { QUERY_NODE_ENDPOINT } from '@/common/config'
@@ -8,6 +7,7 @@ import { GetNotificationEventsDocument } from '@/common/queries'
 import { createEmail } from './model/email'
 import { notificationEvents } from './model/notificationEvents'
 import { createNotifications } from './model/notifications'
+import { subscriptionFiltersFromEvent } from './model/subscriptionFiltersFromEvents'
 import { unique } from './model/utils'
 
 export async function run() {
@@ -24,25 +24,15 @@ export async function createAndSaveNotifications() {
   const events = qnData.events.flatMap(notificationEvents)
 
   // Fetch subscription and members related to the events
-  const subscriptionWhere: Prisma.SubscriptionWhereInput = {
-    member: { isEmailVerified: true },
-    OR: events.map(({ notificationType, relatedEntityId, relatedMemberIds }) => ({
-      notificationType,
-      entityIds: !relatedEntityId ? undefined : { has: relatedEntityId },
-      member: !relatedMemberIds?.length ? undefined : { chainMemberId: { in: relatedMemberIds } },
-    })),
-  }
+  const subscriptionFilter = { OR: subscriptionFiltersFromEvent(events) }
   const allMembershipIds = unique(events.flatMap(({ relatedMemberIds = [] }) => relatedMemberIds))
-
   const [subscriptions, members] = await Promise.all([
-    prisma.subscription.findMany({ where: subscriptionWhere, include: { member: true } }),
-    prisma.member.findMany({ where: { isEmailVerified: true, chainMemberId: { in: allMembershipIds } } }),
+    prisma.subscription.findMany({ where: subscriptionFilter, include: { member: true } }),
+    prisma.member.findMany({ where: { chainMemberId: { in: allMembershipIds } } }),
   ])
 
-  // Create the notifications
+  // Create and save new notifications
   const notifications = createNotifications(subscriptions, members, events)
-
-  // Save the notifications
   await prisma.notification.createMany({ data: notifications })
 
   // TODO update the lastConsumedBlock

@@ -35,11 +35,13 @@ const getEventsByMember =
 
     return doesEventRequiresSub
       ? relatedSubscripions.flatMap(({ member, shouldNotify }) => ({ event, memberId: member.id, shouldNotify }))
-      : event.relatedMemberIds?.flatMap((chainMemberId) => {
-          const subcription = subscriptions.find(({ member }) => member.chainMemberId === chainMemberId)
-          const member = subcription?.member ?? members.find((member) => member.chainMemberId === chainMemberId)
-          return member ? { event, memberId: member.id, shouldNotify: subcription?.shouldNotify ?? true } : []
-        }) ?? []
+      : (event.relatedMemberIds ?? []).flatMap((chainMemberId) =>
+          members.flatMap((member) => {
+            if (member.chainMemberId !== chainMemberId) return []
+            const subscription = subscriptions.find((subscription) => subscription.member.id === member.id)
+            return { event, memberId: member.id, shouldNotify: subscription?.shouldNotify ?? true }
+          })
+        )
   }
 
 const isEventRelatedToSubscription =

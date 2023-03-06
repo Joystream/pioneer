@@ -41,7 +41,6 @@ describe('createAndSaveNotifications', () => {
       entityId: 'post:1',
       isRead: false,
       isSent: false,
-      memberRole: 'MEMBER',
     })
     expect(notifications.find(({ eventId }) => eventId === 'event:2')).toMatchObject({
       memberId: alice.id,

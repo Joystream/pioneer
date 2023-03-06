@@ -29,14 +29,37 @@ export const notificationEvents = (event: AnyQNEvent): NotificationEvent[] => {
   }
 }
 
-export const buildEvent =
-  (eventId: string, entityId: string) =>
-  (
+type PartialEvent = Omit<NotificationEvent, 'priority'>
+interface EventBuilder {
+  generalEvent: (notificationType: NotificationType, isDefault?: boolean) => PartialEvent
+  entityEvent: (notificationType: NotificationType, relatedEntityId: string) => PartialEvent
+  memberEvent: (
     notificationType: NotificationType,
-    isDefault: boolean,
-    priority: number,
-    params: Pick<NotificationEvent, 'relatedEntityId' | 'relatedMemberIds'> = {}
-  ): NotificationEvent[] =>
-    params.relatedMemberIds?.length === 0
-      ? []
-      : [{ notificationType, isDefault, priority, entityId, eventId, ...params }]
+    relatedMemberIds: string[],
+    isDefault?: boolean
+  ) => PartialEvent | false
+}
+type BuildEvents = (b: EventBuilder) => (PartialEvent | false)[]
+export const buildEvents = (eventId: string, entityId: string, buildEvents: BuildEvents): NotificationEvent[] => {
+  const generalEvent: EventBuilder['generalEvent'] = (notificationType, isDefault = false) => ({
+    notificationType,
+    eventId,
+    entityId,
+    isDefault,
+  })
+
+  const entityEvent: EventBuilder['entityEvent'] = (notificationType, relatedEntityId) => ({
+    ...generalEvent(notificationType, false),
+    relatedEntityId,
+  })
+
+  const memberEvent: EventBuilder['memberEvent'] = (notificationType, relatedMemberIds, isDefault = true) =>
+    relatedMemberIds.length > 0 && {
+      ...generalEvent(notificationType, isDefault),
+      relatedMemberIds,
+    }
+
+  return buildEvents({ generalEvent, entityEvent, memberEvent }).flatMap((event, index, list) =>
+    !event ? [] : { ...event, priority: list.length - index }
+  )
+}

@@ -7,9 +7,9 @@ export const createMember = (name: string, subscriptions?: MockedSubscription[])
   prisma.member.create({
     data: {
       chainMemberId: `id:${name}`,
-      controllerAccount: `account:${name}`,
       name,
-      isEmailVerified: true,
+      email: `${name}@${name}.com`,
+      password: 'qwerty',
       subscriptions: subscriptions && {
         createMany: {
           data: subscriptions.map(({ notificationType, entityIds = [], shouldNotify = true }) => ({
