@@ -1,10 +1,8 @@
-import { Member, Prisma } from '@prisma/client'
+import { Member, Prisma, Subscription } from '@prisma/client'
 
 import { NotificationEvent } from './notificationEvents'
 
 type Notification = Prisma.NotificationCreateManyInput
-
-type Subscription = Prisma.SubscriptionGetPayload<{ include: { member: true } }>
 
 interface EventByMember {
   event: NotificationEvent
@@ -34,11 +32,11 @@ const getEventsByMember =
     const doesEventRequiresSub = !event.isDefault && !event.relatedMemberIds
 
     return doesEventRequiresSub
-      ? relatedSubscripions.flatMap(({ member, shouldNotify }) => ({ event, memberId: member.id, shouldNotify }))
-      : (event.relatedMemberIds ?? []).flatMap((chainMemberId) =>
+      ? relatedSubscripions.map(({ memberId, shouldNotify }) => ({ event, memberId, shouldNotify }))
+      : (event.relatedMemberIds ?? []).flatMap((relatedMemberId) =>
           members.flatMap((member) => {
-            if (member.chainMemberId !== chainMemberId) return []
-            const subscription = subscriptions.find((subscription) => subscription.member.id === member.id)
+            if (member.id !== relatedMemberId) return []
+            const subscription = subscriptions.find((subscription) => subscription.memberId === member.id)
             return { event, memberId: member.id, shouldNotify: subscription?.shouldNotify ?? true }
           })
         )
@@ -46,11 +44,11 @@ const getEventsByMember =
 
 const isEventRelatedToSubscription =
   (event: NotificationEvent) =>
-  ({ notificationType, member, entityIds }: Subscription): boolean => {
+  ({ notificationType, memberId, entityIds }: Subscription): boolean => {
     if (notificationType !== event.notificationType) {
       return false
     } else if (event.relatedMemberIds) {
-      return event.relatedMemberIds.includes(member.chainMemberId)
+      return event.relatedMemberIds.includes(memberId)
     } else {
       return !event.relatedEntityId || entityIds.includes(event.relatedEntityId)
     }

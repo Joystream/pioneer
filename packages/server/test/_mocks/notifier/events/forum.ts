@@ -2,7 +2,7 @@ import { maskFragment } from '@test/_mocks/utils'
 
 import { GetNotificationEventsQuery, PostAddedEventFieldsFragment, PostFieldsFragment } from '@/common/queries'
 
-type PostAddedEventsMock = { threadAuthor?: string; text?: string }
+type PostAddedEventsMock = { threadAuthor?: string | number; text?: string }
 export const postAddedEvent = (
   post: number,
   thread: number,
@@ -22,6 +22,6 @@ export const postAddedEvent = (
       authorId: `postAuthor:${post}`,
       createdAt: Date.now(),
       text,
-      thread: { id: `thread:${thread}`, authorId: threadAuthor, posts: [], category: { moderators: [] } },
+      thread: { id: `thread:${thread}`, authorId: String(threadAuthor), posts: [], category: { moderators: [] } },
     }),
   })

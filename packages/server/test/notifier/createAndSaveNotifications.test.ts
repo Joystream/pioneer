@@ -14,19 +14,19 @@ describe('createAndSaveNotifications', () => {
 
   it('forum', async () => {
     // - Alice is using the default behavior
-    const alice = await createMember('alice')
+    const alice = await createMember(1, 'alice')
 
     // - By default Bob should be notified of any new post
     // - Bob should not be notified of new post on thread:1 and thread:2
-    const bob = await createMember('bob', [
+    const bob = await createMember(2, 'bob', [
       { notificationType: 'FORUM_POST_ALL' },
       { notificationType: 'FORUM_WATCHED_THREAD', entityIds: ['thread:1', 'thread:2'], shouldNotify: false },
     ])
 
     mockRequest.mockReturnValue({
       events: [
-        postAddedEvent(1, 1, { threadAuthor: 'id:alice', text: 'Hi [@Bob](#mention?member-id=id:bob)' }),
-        postAddedEvent(2, 2, { threadAuthor: 'id:bob', text: 'Hi [@Alice](#mention?member-id=id:alice)' }),
+        postAddedEvent(1, 1, { threadAuthor: alice.id, text: `Hi [@Bob](#mention?member-id=${bob.id})` }),
+        postAddedEvent(2, 2, { threadAuthor: bob.id, text: `Hi [@Alice](#mention?member-id=${alice.id})` }),
         postAddedEvent(3, 3),
       ],
     })

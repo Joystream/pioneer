@@ -14,7 +14,7 @@ export interface NotificationEvent {
   entityId: string
   eventId: string
   relatedEntityId?: string
-  relatedMemberIds?: string[]
+  relatedMemberIds?: number[]
 }
 
 export const notificationEvents = (event: AnyQNEvent): NotificationEvent[] => {
@@ -35,7 +35,7 @@ interface EventBuilder {
   entityEvent: (notificationType: NotificationType, relatedEntityId: string) => PartialEvent
   memberEvent: (
     notificationType: NotificationType,
-    relatedMemberIds: string[],
+    relatedMemberIds: number[],
     isDefault?: boolean
   ) => PartialEvent | false
 }

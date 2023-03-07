@@ -5,7 +5,7 @@ import { NotificationEvent } from './notificationEvents'
 interface SubscriptionFilter {
   notificationType: NotificationType
   entityIds?: { hasSome: string[] }
-  member?: { chainMemberId: { in: string[] } }
+  memberId?: { in: number[] }
 }
 
 type FilterByNotifType = { [k in NotificationType]: SubscriptionFilter }
@@ -13,14 +13,14 @@ type FilterByNotifType = { [k in NotificationType]: SubscriptionFilter }
 export const subscriptionFiltersFromEvent = (events: NotificationEvent[]): Prisma.SubscriptionWhereInput[] => {
   const filtersByNotificationType = events.reduce<FilterByNotifType>(
     (filterByNotifType, { notificationType, relatedEntityId, relatedMemberIds }) => {
-      const currentFilter: { entityIds: string[]; memberIds: string[] } = {
+      const currentFilter: { entityIds: string[]; memberId: number[] } = {
         entityIds: filterByNotifType[notificationType]?.entityIds?.hasSome ?? [],
-        memberIds: filterByNotifType[notificationType]?.member?.chainMemberId.in ?? [],
+        memberId: filterByNotifType[notificationType]?.memberId?.in ?? [],
       }
       const mergedFilter = {
         notificationType,
         entityIds: relatedEntityId && { hasSome: [...currentFilter.entityIds, relatedEntityId] },
-        member: relatedMemberIds && { chainMemberId: { in: [...currentFilter.memberIds, ...relatedMemberIds] } },
+        memberId: relatedMemberIds && { in: [...currentFilter.memberId, ...relatedMemberIds] },
       }
       return { ...filterByNotifType, [notificationType]: mergedFilter }
     },

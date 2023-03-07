@@ -25,10 +25,10 @@ export async function createAndSaveNotifications() {
 
   // Fetch subscription and members related to the events
   const subscriptionFilter = { OR: subscriptionFiltersFromEvent(events) }
-  const allMembershipIds = unique(events.flatMap(({ relatedMemberIds = [] }) => relatedMemberIds))
+  const memberIds = unique(events.flatMap(({ relatedMemberIds = [] }) => relatedMemberIds))
   const [subscriptions, members] = await Promise.all([
-    prisma.subscription.findMany({ where: subscriptionFilter, include: { member: true } }),
-    prisma.member.findMany({ where: { chainMemberId: { in: allMembershipIds } } }),
+    prisma.subscription.findMany({ where: subscriptionFilter }),
+    prisma.member.findMany({ where: { id: { in: memberIds } } }),
   ])
 
   // Create and save new notifications
