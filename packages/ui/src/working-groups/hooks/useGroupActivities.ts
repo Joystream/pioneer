@@ -11,7 +11,6 @@ import {
   asStakeChangedActivity,
   asStakeSlashedActivity,
   asStatusTextChangedEventActivities,
-  asWorkerRewardAmountUpdatedActivity,
   asWorkerExitedActivity,
   asWorkerTerminatedActivity,
 } from '@/working-groups/types/WorkingGroupActivity'
@@ -32,7 +31,6 @@ export const useGroupActivities = (groupId: string) => {
             ...data.openingCanceledEvents.map(asOpeningActivity),
             ...data.openingFilledEvents.map(asOpeningFilledActivity),
             ...data.workerExitedEvents.map(asWorkerExitedActivity),
-            ...data.workerRewardAmountUpdatedEvents.map(asWorkerRewardAmountUpdatedActivity),
             ...data.statusTextChangedEvents.map(asStatusTextChangedEventActivities),
             ...data.budgetSetEvents.map(asBudgetSetActivity),
             ...data.terminatedLeaderEvents.map(asWorkerTerminatedActivity),
