@@ -17,7 +17,7 @@ export const MemberFields = objectType({
 
 export const MemberQuery = queryField('member', {
   type: Member.$name,
-  resolve(_, __, { prisma, req }: Context) {
+  resolve: async (_, __, { prisma, req }: Context) => {
     const id = authMemberId(req)
     if (!id) return null
 

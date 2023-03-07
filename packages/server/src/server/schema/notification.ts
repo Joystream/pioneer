@@ -27,7 +27,7 @@ export const notificationsQuery = queryField('notifications', {
     isSent: booleanArg(),
     isRead: booleanArg(),
   },
-  resolve(_, args, { prisma, req }: Context) {
+  resolve: async (_, args, { prisma, req }: Context) => {
     const memberId = authMemberId(req)
     if (!memberId) return null
 
