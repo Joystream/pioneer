@@ -15,16 +15,11 @@ datasource db {
 }
 
 model Member {
-  id            Int            @id @default(autoincrement())
-  // Until controller accounts are verified chainMemberId shouldn't be @unique
-  chainMemberId String
+  id            Int            @id
   name          String
-  email         String         @unique
-  password      String
+  email         String?
   subscriptions Subscription[]
   notifications Notification[]
-
-  @@index(chainMemberId)
 }
 
 model Subscription {

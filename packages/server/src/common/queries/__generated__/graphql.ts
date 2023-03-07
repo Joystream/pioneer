@@ -3539,6 +3539,162 @@ export type BudgetBalanceSetEventWhereUniqueInput = {
   id: Scalars['ID'];
 };
 
+export type BudgetFundedEvent = BaseGraphQlObject & Event & {
+  __typename?: 'BudgetFundedEvent';
+  /** Amount added to the current budget */
+  amount: Scalars['BigInt'];
+  createdAt: Scalars['DateTime'];
+  createdById: Scalars['ID'];
+  deletedAt?: Maybe<Scalars['DateTime']>;
+  deletedById?: Maybe<Scalars['ID']>;
+  group: WorkingGroup;
+  groupId: Scalars['String'];
+  id: Scalars['ID'];
+  /** Blocknumber of the block in which the event was emitted. */
+  inBlock: Scalars['Int'];
+  /** Hash of the extrinsic which caused the event to be emitted */
+  inExtrinsic?: Maybe<Scalars['String']>;
+  /** Index of event in block from which it was emitted. */
+  indexInBlock: Scalars['Int'];
+  member: Membership;
+  memberId: Scalars['String'];
+  /** Network the block was produced in */
+  network: Network;
+  /** Rationale provided by the member */
+  rationale: Scalars['String'];
+  /** Filtering options for interface implementers */
+  type?: Maybe<EventTypeOptions>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  updatedById?: Maybe<Scalars['ID']>;
+  version: Scalars['Int'];
+};
+
+export type BudgetFundedEventConnection = {
+  __typename?: 'BudgetFundedEventConnection';
+  edges: Array<BudgetFundedEventEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type BudgetFundedEventCreateInput = {
+  amount: Scalars['String'];
+  group: Scalars['ID'];
+  inBlock: Scalars['Float'];
+  inExtrinsic?: InputMaybe<Scalars['String']>;
+  indexInBlock: Scalars['Float'];
+  member: Scalars['ID'];
+  network: Network;
+  rationale: Scalars['String'];
+};
+
+export type BudgetFundedEventEdge = {
+  __typename?: 'BudgetFundedEventEdge';
+  cursor: Scalars['String'];
+  node: BudgetFundedEvent;
+};
+
+export enum BudgetFundedEventOrderByInput {
+  AmountAsc = 'amount_ASC',
+  AmountDesc = 'amount_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  DeletedAtAsc = 'deletedAt_ASC',
+  DeletedAtDesc = 'deletedAt_DESC',
+  GroupAsc = 'group_ASC',
+  GroupDesc = 'group_DESC',
+  InBlockAsc = 'inBlock_ASC',
+  InBlockDesc = 'inBlock_DESC',
+  InExtrinsicAsc = 'inExtrinsic_ASC',
+  InExtrinsicDesc = 'inExtrinsic_DESC',
+  IndexInBlockAsc = 'indexInBlock_ASC',
+  IndexInBlockDesc = 'indexInBlock_DESC',
+  MemberAsc = 'member_ASC',
+  MemberDesc = 'member_DESC',
+  NetworkAsc = 'network_ASC',
+  NetworkDesc = 'network_DESC',
+  RationaleAsc = 'rationale_ASC',
+  RationaleDesc = 'rationale_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC'
+}
+
+export type BudgetFundedEventUpdateInput = {
+  amount?: InputMaybe<Scalars['String']>;
+  group?: InputMaybe<Scalars['ID']>;
+  inBlock?: InputMaybe<Scalars['Float']>;
+  inExtrinsic?: InputMaybe<Scalars['String']>;
+  indexInBlock?: InputMaybe<Scalars['Float']>;
+  member?: InputMaybe<Scalars['ID']>;
+  network?: InputMaybe<Network>;
+  rationale?: InputMaybe<Scalars['String']>;
+};
+
+export type BudgetFundedEventWhereInput = {
+  AND?: InputMaybe<Array<BudgetFundedEventWhereInput>>;
+  NOT?: InputMaybe<Array<BudgetFundedEventWhereInput>>;
+  OR?: InputMaybe<Array<BudgetFundedEventWhereInput>>;
+  amount_eq?: InputMaybe<Scalars['BigInt']>;
+  amount_gt?: InputMaybe<Scalars['BigInt']>;
+  amount_gte?: InputMaybe<Scalars['BigInt']>;
+  amount_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  amount_lt?: InputMaybe<Scalars['BigInt']>;
+  amount_lte?: InputMaybe<Scalars['BigInt']>;
+  createdAt_eq?: InputMaybe<Scalars['DateTime']>;
+  createdAt_gt?: InputMaybe<Scalars['DateTime']>;
+  createdAt_gte?: InputMaybe<Scalars['DateTime']>;
+  createdAt_lt?: InputMaybe<Scalars['DateTime']>;
+  createdAt_lte?: InputMaybe<Scalars['DateTime']>;
+  createdById_eq?: InputMaybe<Scalars['ID']>;
+  createdById_in?: InputMaybe<Array<Scalars['ID']>>;
+  deletedAt_all?: InputMaybe<Scalars['Boolean']>;
+  deletedAt_eq?: InputMaybe<Scalars['DateTime']>;
+  deletedAt_gt?: InputMaybe<Scalars['DateTime']>;
+  deletedAt_gte?: InputMaybe<Scalars['DateTime']>;
+  deletedAt_lt?: InputMaybe<Scalars['DateTime']>;
+  deletedAt_lte?: InputMaybe<Scalars['DateTime']>;
+  deletedById_eq?: InputMaybe<Scalars['ID']>;
+  deletedById_in?: InputMaybe<Array<Scalars['ID']>>;
+  group?: InputMaybe<WorkingGroupWhereInput>;
+  id_eq?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  inBlock_eq?: InputMaybe<Scalars['Int']>;
+  inBlock_gt?: InputMaybe<Scalars['Int']>;
+  inBlock_gte?: InputMaybe<Scalars['Int']>;
+  inBlock_in?: InputMaybe<Array<Scalars['Int']>>;
+  inBlock_lt?: InputMaybe<Scalars['Int']>;
+  inBlock_lte?: InputMaybe<Scalars['Int']>;
+  inExtrinsic_contains?: InputMaybe<Scalars['String']>;
+  inExtrinsic_endsWith?: InputMaybe<Scalars['String']>;
+  inExtrinsic_eq?: InputMaybe<Scalars['String']>;
+  inExtrinsic_in?: InputMaybe<Array<Scalars['String']>>;
+  inExtrinsic_startsWith?: InputMaybe<Scalars['String']>;
+  indexInBlock_eq?: InputMaybe<Scalars['Int']>;
+  indexInBlock_gt?: InputMaybe<Scalars['Int']>;
+  indexInBlock_gte?: InputMaybe<Scalars['Int']>;
+  indexInBlock_in?: InputMaybe<Array<Scalars['Int']>>;
+  indexInBlock_lt?: InputMaybe<Scalars['Int']>;
+  indexInBlock_lte?: InputMaybe<Scalars['Int']>;
+  member?: InputMaybe<MembershipWhereInput>;
+  network_eq?: InputMaybe<Network>;
+  network_in?: InputMaybe<Array<Network>>;
+  rationale_contains?: InputMaybe<Scalars['String']>;
+  rationale_endsWith?: InputMaybe<Scalars['String']>;
+  rationale_eq?: InputMaybe<Scalars['String']>;
+  rationale_in?: InputMaybe<Array<Scalars['String']>>;
+  rationale_startsWith?: InputMaybe<Scalars['String']>;
+  updatedAt_eq?: InputMaybe<Scalars['DateTime']>;
+  updatedAt_gt?: InputMaybe<Scalars['DateTime']>;
+  updatedAt_gte?: InputMaybe<Scalars['DateTime']>;
+  updatedAt_lt?: InputMaybe<Scalars['DateTime']>;
+  updatedAt_lte?: InputMaybe<Scalars['DateTime']>;
+  updatedById_eq?: InputMaybe<Scalars['ID']>;
+  updatedById_in?: InputMaybe<Array<Scalars['ID']>>;
+};
+
+export type BudgetFundedEventWhereUniqueInput = {
+  id: Scalars['ID'];
+};
+
 export type BudgetIncrementUpdatedEvent = BaseGraphQlObject & Event & {
   __typename?: 'BudgetIncrementUpdatedEvent';
   /** Amount that is added to the budget each time it's refilled. */
@@ -10684,6 +10840,7 @@ export enum EventTypeOptions {
   BountyRemovedEvent = 'BountyRemovedEvent',
   BountyVetoedEvent = 'BountyVetoedEvent',
   BudgetBalanceSetEvent = 'BudgetBalanceSetEvent',
+  BudgetFundedEvent = 'BudgetFundedEvent',
   BudgetIncrementUpdatedEvent = 'BudgetIncrementUpdatedEvent',
   BudgetRefillEvent = 'BudgetRefillEvent',
   BudgetRefillPlannedEvent = 'BudgetRefillPlannedEvent',
@@ -13898,6 +14055,7 @@ export type Membership = BaseGraphQlObject & {
   bountycreator?: Maybe<Array<Bounty>>;
   bountyentryworker?: Maybe<Array<BountyEntry>>;
   bountyoracle?: Maybe<Array<Bounty>>;
+  budgetfundedeventmember?: Maybe<Array<BudgetFundedEvent>>;
   buynowcanceledeventownerMember?: Maybe<Array<BuyNowCanceledEvent>>;
   buynowpriceupdatedeventownerMember?: Maybe<Array<BuyNowPriceUpdatedEvent>>;
   channels: Array<Channel>;
@@ -14741,6 +14899,9 @@ export type MembershipWhereInput = {
   bountyoracle_every?: InputMaybe<BountyWhereInput>;
   bountyoracle_none?: InputMaybe<BountyWhereInput>;
   bountyoracle_some?: InputMaybe<BountyWhereInput>;
+  budgetfundedeventmember_every?: InputMaybe<BudgetFundedEventWhereInput>;
+  budgetfundedeventmember_none?: InputMaybe<BudgetFundedEventWhereInput>;
+  budgetfundedeventmember_some?: InputMaybe<BudgetFundedEventWhereInput>;
   buynowcanceledeventownerMember_every?: InputMaybe<BuyNowCanceledEventWhereInput>;
   buynowcanceledeventownerMember_none?: InputMaybe<BuyNowCanceledEventWhereInput>;
   buynowcanceledeventownerMember_some?: InputMaybe<BuyNowCanceledEventWhereInput>;
@@ -20797,6 +20958,9 @@ export type Query = {
   budgetBalanceSetEventByUniqueInput?: Maybe<BudgetBalanceSetEvent>;
   budgetBalanceSetEvents: Array<BudgetBalanceSetEvent>;
   budgetBalanceSetEventsConnection: BudgetBalanceSetEventConnection;
+  budgetFundedEventByUniqueInput?: Maybe<BudgetFundedEvent>;
+  budgetFundedEvents: Array<BudgetFundedEvent>;
+  budgetFundedEventsConnection: BudgetFundedEventConnection;
   budgetIncrementUpdatedEventByUniqueInput?: Maybe<BudgetIncrementUpdatedEvent>;
   budgetIncrementUpdatedEvents: Array<BudgetIncrementUpdatedEvent>;
   budgetIncrementUpdatedEventsConnection: BudgetIncrementUpdatedEventConnection;
@@ -21897,6 +22061,29 @@ export type QueryBudgetBalanceSetEventsConnectionArgs = {
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<BudgetBalanceSetEventOrderByInput>>;
   where?: InputMaybe<BudgetBalanceSetEventWhereInput>;
+};
+
+
+export type QueryBudgetFundedEventByUniqueInputArgs = {
+  where: BudgetFundedEventWhereUniqueInput;
+};
+
+
+export type QueryBudgetFundedEventsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<BudgetFundedEventOrderByInput>>;
+  where?: InputMaybe<BudgetFundedEventWhereInput>;
+};
+
+
+export type QueryBudgetFundedEventsConnectionArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<BudgetFundedEventOrderByInput>>;
+  where?: InputMaybe<BudgetFundedEventWhereInput>;
 };
 
 
@@ -34751,6 +34938,7 @@ export type WorkingGroup = BaseGraphQlObject & {
   appliedonopeningeventgroup?: Maybe<Array<AppliedOnOpeningEvent>>;
   /** Current working group budget (JOY) */
   budget: Scalars['BigInt'];
+  budgetfundedeventgroup?: Maybe<Array<BudgetFundedEvent>>;
   budgetseteventgroup?: Maybe<Array<BudgetSetEvent>>;
   budgetspendingeventgroup?: Maybe<Array<BudgetSpendingEvent>>;
   budgetupdatedeventgroup?: Maybe<Array<BudgetUpdatedEvent>>;
@@ -35500,6 +35688,9 @@ export type WorkingGroupWhereInput = {
   budget_in?: InputMaybe<Array<Scalars['BigInt']>>;
   budget_lt?: InputMaybe<Scalars['BigInt']>;
   budget_lte?: InputMaybe<Scalars['BigInt']>;
+  budgetfundedeventgroup_every?: InputMaybe<BudgetFundedEventWhereInput>;
+  budgetfundedeventgroup_none?: InputMaybe<BudgetFundedEventWhereInput>;
+  budgetfundedeventgroup_some?: InputMaybe<BudgetFundedEventWhereInput>;
   budgetseteventgroup_every?: InputMaybe<BudgetSetEventWhereInput>;
   budgetseteventgroup_none?: InputMaybe<BudgetSetEventWhereInput>;
   budgetseteventgroup_some?: InputMaybe<BudgetSetEventWhereInput>;
@@ -35630,7 +35821,7 @@ export type ProposalDiscussionPostCreatedEventFieldsFragment = { __typename: 'Pr
 export type GetNotificationEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetNotificationEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'AnnouncingPeriodStartedEvent' } | { __typename?: 'ApplicationWithdrawnEvent' } | { __typename?: 'AppliedOnOpeningEvent' } | { __typename?: 'AuctionBidCanceledEvent' } | { __typename?: 'AuctionBidMadeEvent' } | { __typename?: 'AuctionCanceledEvent' } | { __typename?: 'BidMadeCompletingAuctionEvent' } | { __typename?: 'BountyCanceledEvent' } | { __typename?: 'BountyCreatedEvent' } | { __typename?: 'BountyCreatorCherryWithdrawalEvent' } | { __typename?: 'BountyFundedEvent' } | { __typename?: 'BountyFundingWithdrawalEvent' } | { __typename?: 'BountyMaxFundingReachedEvent' } | { __typename?: 'BountyRemovedEvent' } | { __typename?: 'BountyVetoedEvent' } | { __typename?: 'BudgetBalanceSetEvent' } | { __typename?: 'BudgetIncrementUpdatedEvent' } | { __typename?: 'BudgetRefillEvent' } | { __typename?: 'BudgetRefillPlannedEvent' } | { __typename?: 'BudgetSetEvent' } | { __typename?: 'BudgetSpendingEvent' } | { __typename?: 'BudgetUpdatedEvent' } | { __typename?: 'BuyNowCanceledEvent' } | { __typename?: 'BuyNowPriceUpdatedEvent' } | { __typename?: 'CandidacyNoteSetEvent' } | { __typename?: 'CandidacyStakeReleaseEvent' } | { __typename?: 'CandidacyWithdrawEvent' } | { __typename?: 'CategoryArchivalStatusUpdatedEvent' } | { __typename?: 'CategoryCreatedEvent' } | { __typename?: 'CategoryDeletedEvent' } | { __typename?: 'CategoryMembershipOfModeratorUpdatedEvent' } | { __typename?: 'CategoryStickyThreadUpdateEvent' } | { __typename?: 'CommentCreatedEvent' } | { __typename?: 'CommentDeletedEvent' } | { __typename?: 'CommentModeratedEvent' } | { __typename?: 'CommentPinnedEvent' } | { __typename?: 'CommentReactedEvent' } | { __typename?: 'CommentTextUpdatedEvent' } | { __typename?: 'CouncilorRewardUpdatedEvent' } | { __typename?: 'EnglishAuctionSettledEvent' } | { __typename?: 'EnglishAuctionStartedEvent' } | { __typename?: 'InitialInvitationBalanceUpdatedEvent' } | { __typename?: 'InitialInvitationCountUpdatedEvent' } | { __typename?: 'InvitesTransferredEvent' } | { __typename?: 'LeaderInvitationQuotaUpdatedEvent' } | { __typename?: 'LeaderSetEvent' } | { __typename?: 'LeaderUnsetEvent' } | { __typename?: 'MemberAccountsUpdatedEvent' } | { __typename?: 'MemberBannedFromChannelEvent' } | { __typename?: 'MemberCreatedEvent' } | { __typename?: 'MemberInvitedEvent' } | { __typename?: 'MemberProfileUpdatedEvent' } | { __typename?: 'MemberVerificationStatusUpdatedEvent' } | { __typename?: 'MembershipBoughtEvent' } | { __typename?: 'MembershipGiftedEvent' } | { __typename?: 'MembershipPriceUpdatedEvent' } | { __typename?: 'MetaprotocolTransactionStatusEvent' } | { __typename?: 'NewCandidateEvent' } | { __typename?: 'NewCouncilElectedEvent' } | { __typename?: 'NewCouncilNotElectedEvent' } | { __typename?: 'NewMissedRewardLevelReachedEvent' } | { __typename?: 'NftBoughtEvent' } | { __typename?: 'NftIssuedEvent' } | { __typename?: 'NftSlingedBackToTheOriginalArtistEvent' } | { __typename?: 'NotEnoughCandidatesEvent' } | { __typename?: 'OfferAcceptedEvent' } | { __typename?: 'OfferCanceledEvent' } | { __typename?: 'OfferStartedEvent' } | { __typename?: 'OpenAuctionBidAcceptedEvent' } | { __typename?: 'OpenAuctionStartedEvent' } | { __typename?: 'OpeningAddedEvent' } | { __typename?: 'OpeningCanceledEvent' } | { __typename?: 'OpeningFilledEvent' } | { __typename?: 'OracleJudgmentSubmittedEvent' } | (
+export type GetNotificationEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'AnnouncingPeriodStartedEvent' } | { __typename?: 'ApplicationWithdrawnEvent' } | { __typename?: 'AppliedOnOpeningEvent' } | { __typename?: 'AuctionBidCanceledEvent' } | { __typename?: 'AuctionBidMadeEvent' } | { __typename?: 'AuctionCanceledEvent' } | { __typename?: 'BidMadeCompletingAuctionEvent' } | { __typename?: 'BountyCanceledEvent' } | { __typename?: 'BountyCreatedEvent' } | { __typename?: 'BountyCreatorCherryWithdrawalEvent' } | { __typename?: 'BountyFundedEvent' } | { __typename?: 'BountyFundingWithdrawalEvent' } | { __typename?: 'BountyMaxFundingReachedEvent' } | { __typename?: 'BountyRemovedEvent' } | { __typename?: 'BountyVetoedEvent' } | { __typename?: 'BudgetBalanceSetEvent' } | { __typename?: 'BudgetFundedEvent' } | { __typename?: 'BudgetIncrementUpdatedEvent' } | { __typename?: 'BudgetRefillEvent' } | { __typename?: 'BudgetRefillPlannedEvent' } | { __typename?: 'BudgetSetEvent' } | { __typename?: 'BudgetSpendingEvent' } | { __typename?: 'BudgetUpdatedEvent' } | { __typename?: 'BuyNowCanceledEvent' } | { __typename?: 'BuyNowPriceUpdatedEvent' } | { __typename?: 'CandidacyNoteSetEvent' } | { __typename?: 'CandidacyStakeReleaseEvent' } | { __typename?: 'CandidacyWithdrawEvent' } | { __typename?: 'CategoryArchivalStatusUpdatedEvent' } | { __typename?: 'CategoryCreatedEvent' } | { __typename?: 'CategoryDeletedEvent' } | { __typename?: 'CategoryMembershipOfModeratorUpdatedEvent' } | { __typename?: 'CategoryStickyThreadUpdateEvent' } | { __typename?: 'CommentCreatedEvent' } | { __typename?: 'CommentDeletedEvent' } | { __typename?: 'CommentModeratedEvent' } | { __typename?: 'CommentPinnedEvent' } | { __typename?: 'CommentReactedEvent' } | { __typename?: 'CommentTextUpdatedEvent' } | { __typename?: 'CouncilorRewardUpdatedEvent' } | { __typename?: 'EnglishAuctionSettledEvent' } | { __typename?: 'EnglishAuctionStartedEvent' } | { __typename?: 'InitialInvitationBalanceUpdatedEvent' } | { __typename?: 'InitialInvitationCountUpdatedEvent' } | { __typename?: 'InvitesTransferredEvent' } | { __typename?: 'LeaderInvitationQuotaUpdatedEvent' } | { __typename?: 'LeaderSetEvent' } | { __typename?: 'LeaderUnsetEvent' } | { __typename?: 'MemberAccountsUpdatedEvent' } | { __typename?: 'MemberBannedFromChannelEvent' } | { __typename?: 'MemberCreatedEvent' } | { __typename?: 'MemberInvitedEvent' } | { __typename?: 'MemberProfileUpdatedEvent' } | { __typename?: 'MemberVerificationStatusUpdatedEvent' } | { __typename?: 'MembershipBoughtEvent' } | { __typename?: 'MembershipGiftedEvent' } | { __typename?: 'MembershipPriceUpdatedEvent' } | { __typename?: 'MetaprotocolTransactionStatusEvent' } | { __typename?: 'NewCandidateEvent' } | { __typename?: 'NewCouncilElectedEvent' } | { __typename?: 'NewCouncilNotElectedEvent' } | { __typename?: 'NewMissedRewardLevelReachedEvent' } | { __typename?: 'NftBoughtEvent' } | { __typename?: 'NftIssuedEvent' } | { __typename?: 'NftSlingedBackToTheOriginalArtistEvent' } | { __typename?: 'NotEnoughCandidatesEvent' } | { __typename?: 'OfferAcceptedEvent' } | { __typename?: 'OfferCanceledEvent' } | { __typename?: 'OfferStartedEvent' } | { __typename?: 'OpenAuctionBidAcceptedEvent' } | { __typename?: 'OpenAuctionStartedEvent' } | { __typename?: 'OpeningAddedEvent' } | { __typename?: 'OpeningCanceledEvent' } | { __typename?: 'OpeningFilledEvent' } | { __typename?: 'OracleJudgmentSubmittedEvent' } | (
     { __typename?: 'PostAddedEvent' }
     & { ' $fragmentRefs'?: { 'PostAddedEventFieldsFragment': PostAddedEventFieldsFragment } }
   ) | { __typename?: 'PostDeletedEvent' } | { __typename?: 'PostModeratedEvent' } | { __typename?: 'PostTextUpdatedEvent' } | { __typename?: 'ProposalCancelledEvent' } | { __typename?: 'ProposalCreatedEvent' } | { __typename?: 'ProposalDecisionMadeEvent' } | (
@@ -35638,8 +35829,16 @@ export type GetNotificationEventsQuery = { __typename?: 'Query', events: Array<{
     & { ' $fragmentRefs'?: { 'ProposalDiscussionPostCreatedEventFieldsFragment': ProposalDiscussionPostCreatedEventFieldsFragment } }
   ) | { __typename?: 'ProposalDiscussionPostDeletedEvent' } | { __typename?: 'ProposalDiscussionPostUpdatedEvent' } | { __typename?: 'ProposalDiscussionThreadModeChangedEvent' } | { __typename?: 'ProposalExecutedEvent' } | { __typename?: 'ProposalStatusUpdatedEvent' } | { __typename?: 'ProposalVotedEvent' } | { __typename?: 'ReferendumFinishedEvent' } | { __typename?: 'ReferendumStartedEvent' } | { __typename?: 'ReferendumStartedForcefullyEvent' } | { __typename?: 'ReferralCutUpdatedEvent' } | { __typename?: 'RequestFundedEvent' } | { __typename?: 'RevealingStageStartedEvent' } | { __typename?: 'RewardPaidEvent' } | { __typename?: 'RewardPaymentEvent' } | { __typename?: 'StakeDecreasedEvent' } | { __typename?: 'StakeIncreasedEvent' } | { __typename?: 'StakeReleasedEvent' } | { __typename?: 'StakeSlashedEvent' } | { __typename?: 'StakingAccountAddedEvent' } | { __typename?: 'StakingAccountConfirmedEvent' } | { __typename?: 'StakingAccountRemovedEvent' } | { __typename?: 'StatusTextChangedEvent' } | { __typename?: 'TerminatedLeaderEvent' } | { __typename?: 'TerminatedWorkerEvent' } | { __typename?: 'ThreadCreatedEvent' } | { __typename?: 'ThreadDeletedEvent' } | { __typename?: 'ThreadMetadataUpdatedEvent' } | { __typename?: 'ThreadModeratedEvent' } | { __typename?: 'ThreadMovedEvent' } | { __typename?: 'VideoReactedEvent' } | { __typename?: 'VideoReactionsPreferenceEvent' } | { __typename?: 'VoteCastEvent' } | { __typename?: 'VoteRevealedEvent' } | { __typename?: 'VotingPeriodStartedEvent' } | { __typename?: 'WorkEntrantFundsWithdrawnEvent' } | { __typename?: 'WorkEntryAnnouncedEvent' } | { __typename?: 'WorkEntrySlashedEvent' } | { __typename?: 'WorkEntryWithdrawnEvent' } | { __typename?: 'WorkSubmittedEvent' } | { __typename?: 'WorkerExitedEvent' } | { __typename?: 'WorkerRewardAccountUpdatedEvent' } | { __typename?: 'WorkerRewardAmountUpdatedEvent' } | { __typename?: 'WorkerRoleAccountUpdatedEvent' } | { __typename?: 'WorkerStartedLeavingEvent' }> };
 
+export type GetMembershipByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetMembershipByIdQuery = { __typename?: 'Query', membershipByUniqueInput?: { __typename?: 'Membership', controllerAccount: string } | null };
+
 export const PostFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PostFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ForumPost"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"thread"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"posts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"text"}}]}},{"kind":"Field","name":{"kind":"Name","value":"category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"moderators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"membershipId"}}]}}]}}]}}]}}]} as unknown as DocumentNode<PostFieldsFragment, unknown>;
 export const PostAddedEventFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PostAddedEventFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PostAddedEvent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"inBlock"}},{"kind":"Field","name":{"kind":"Name","value":"post"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PostFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PostFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ForumPost"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"thread"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"posts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"text"}}]}},{"kind":"Field","name":{"kind":"Name","value":"category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"moderators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"membershipId"}}]}}]}}]}}]}}]} as unknown as DocumentNode<PostAddedEventFieldsFragment, unknown>;
 export const ProposalDiscussionPostFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ProposalDiscussionPostFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ProposalDiscussionPost"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"discussionThread"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"creatorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"posts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"text"}}]}}]}}]}}]} as unknown as DocumentNode<ProposalDiscussionPostFieldsFragment, unknown>;
 export const ProposalDiscussionPostCreatedEventFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ProposalDiscussionPostCreatedEventFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ProposalDiscussionPostCreatedEvent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"inBlock"}},{"kind":"Field","name":{"kind":"Name","value":"post"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ProposalDiscussionPostFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ProposalDiscussionPostFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ProposalDiscussionPost"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"discussionThread"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"creatorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"posts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"text"}}]}}]}}]}}]} as unknown as DocumentNode<ProposalDiscussionPostCreatedEventFieldsFragment, unknown>;
-export const GetNotificationEventsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetNotificationEvents"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"events"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"type_in"},"value":{"kind":"ListValue","values":[{"kind":"EnumValue","value":"PostAddedEvent"},{"kind":"EnumValue","value":"PostTextUpdatedEvent"}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"IntValue","value":"500"}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"ListValue","values":[{"kind":"EnumValue","value":"createdAt_DESC"}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PostAddedEvent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PostAddedEventFields"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ProposalDiscussionPostCreatedEvent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ProposalDiscussionPostCreatedEventFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PostFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ForumPost"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"thread"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"posts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"text"}}]}},{"kind":"Field","name":{"kind":"Name","value":"category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"moderators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"membershipId"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ProposalDiscussionPostFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ProposalDiscussionPost"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"discussionThread"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"creatorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"posts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"text"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PostAddedEventFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PostAddedEvent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"inBlock"}},{"kind":"Field","name":{"kind":"Name","value":"post"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PostFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ProposalDiscussionPostCreatedEventFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ProposalDiscussionPostCreatedEvent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"inBlock"}},{"kind":"Field","name":{"kind":"Name","value":"post"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ProposalDiscussionPostFields"}}]}}]}}]} as unknown as DocumentNode<GetNotificationEventsQuery, GetNotificationEventsQueryVariables>;
+export const GetNotificationEventsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetNotificationEvents"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"events"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"type_in"},"value":{"kind":"ListValue","values":[{"kind":"EnumValue","value":"PostAddedEvent"},{"kind":"EnumValue","value":"PostTextUpdatedEvent"}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"IntValue","value":"50"}},{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"ListValue","values":[{"kind":"EnumValue","value":"createdAt_DESC"}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PostAddedEvent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PostAddedEventFields"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ProposalDiscussionPostCreatedEvent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ProposalDiscussionPostCreatedEventFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PostFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ForumPost"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"thread"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"posts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"text"}}]}},{"kind":"Field","name":{"kind":"Name","value":"category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"moderators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"membershipId"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ProposalDiscussionPostFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ProposalDiscussionPost"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"discussionThread"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"proposal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"creatorId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"posts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"text"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PostAddedEventFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PostAddedEvent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"inBlock"}},{"kind":"Field","name":{"kind":"Name","value":"post"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PostFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ProposalDiscussionPostCreatedEventFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ProposalDiscussionPostCreatedEvent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"inBlock"}},{"kind":"Field","name":{"kind":"Name","value":"post"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ProposalDiscussionPostFields"}}]}}]}}]} as unknown as DocumentNode<GetNotificationEventsQuery, GetNotificationEventsQueryVariables>;
+export const GetMembershipByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMembershipById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"membershipByUniqueInput"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"controllerAccount"}}]}}]}}]} as unknown as DocumentNode<GetMembershipByIdQuery, GetMembershipByIdQueryVariables>;

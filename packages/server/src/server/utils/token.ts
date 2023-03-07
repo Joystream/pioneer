@@ -1,9 +1,9 @@
 import { ExpressContext } from 'apollo-server-express'
 import { JwtPayload, sign, verify } from 'jsonwebtoken'
+import { pick } from 'lodash'
 import * as Yup from 'yup'
 
 import { APP_SECRET_KEY } from '@/common/config'
-import { SignUpArgs, SignUpArgsSchema } from '@/server/schema/auth'
 
 enum TokenType {
   Authentification,
@@ -39,33 +39,38 @@ export const authMemberId = (req: ExpressContext['req']): number | undefined => 
 
 const isValidAuthTokenPayload = (payload: string | JwtPayload): payload is AuthTokenPayload =>
   jwtToken
-    .concat(
-      Yup.object({
-        type: Yup.number().equals([TokenType.Authentification]),
-        memberId: Yup.number().required(),
-        exp: Yup.number().required(),
-      })
-    )
+    .shape({
+      type: Yup.number().equals([TokenType.Authentification]),
+      memberId: Yup.number().required(),
+      exp: Yup.number().required(),
+    })
     .isValidSync(payload)
 
-interface EmailTokenPayload extends SignUpArgs {
+interface EmailTokenArgs {
+  memberId: number
+  email: string
+}
+interface EmailTokenPayload extends EmailTokenArgs {
   type: TokenType.EmailVerification
 }
 
-export const createEmailToken = (signUpArgs: SignUpArgs) => {
-  const payload: EmailTokenPayload = { ...signUpArgs, type: TokenType.EmailVerification }
+export const createEmailToken = ({ memberId, email }: EmailTokenArgs): string => {
+  const payload: EmailTokenPayload = { memberId, email, type: TokenType.EmailVerification }
   return sign(payload, APP_SECRET_KEY)
 }
 
-export const verifyEmailToken = (emailToken: string): SignUpArgs | undefined => {
+export const verifyEmailToken = (emailToken: string): EmailTokenArgs | undefined => {
   const payload = verify(emailToken, APP_SECRET_KEY)
   if (!isValidEmailTokenPayload(payload)) return
 
-  const { chainMemberId, name, email, password } = payload
-  return { chainMemberId, name, email, password }
+  return pick(payload, 'memberId', 'email')
 }
 
 const isValidEmailTokenPayload = (payload: string | JwtPayload): payload is EmailTokenPayload =>
   jwtToken
-    .concat(SignUpArgsSchema.shape({ type: Yup.number().equals([TokenType.EmailVerification]) }))
+    .shape({
+      type: Yup.number().equals([TokenType.EmailVerification]).required(),
+      memberId: Yup.number().required(),
+      email: Yup.string().email().required(),
+    })
     .isValidSync(payload)
