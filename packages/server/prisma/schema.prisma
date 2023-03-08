@@ -47,9 +47,9 @@ model Notification {
   @@unique([memberId, eventId])
 }
 
-model QueryNodeConsumer {
-  id                Int @id @default(autoincrement())
-  lastConsumedBlock Int
+model Store {
+  key   String @id
+  value Json
 }
 
 enum NotificationType {

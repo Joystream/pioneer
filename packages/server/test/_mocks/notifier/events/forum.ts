@@ -20,7 +20,7 @@ export const postAddedEvent = (
     )<PostFieldsFragment>({
       id: `post:${post}`,
       authorId: `postAuthor:${post}`,
-      createdAt: Date.now(),
+      createdAt: Date(),
       text,
       thread: { id: `thread:${thread}`, authorId: String(threadAuthor), posts: [], category: { moderators: [] } },
     }),

@@ -7,6 +7,7 @@ import { createAndSaveNotifications } from '@/notifier/run'
 
 describe('createAndSaveNotifications', () => {
   beforeEach(async () => {
+    await prisma.store.deleteMany()
     await prisma.subscription.deleteMany()
     await prisma.notification.deleteMany()
     await prisma.member.deleteMany()
@@ -23,7 +24,7 @@ describe('createAndSaveNotifications', () => {
       { notificationType: 'FORUM_WATCHED_THREAD', entityIds: ['thread:1', 'thread:2'], shouldNotify: false },
     ])
 
-    mockRequest.mockReturnValue({
+    mockRequest.mockReturnValue({ events: [] }).mockReturnValueOnce({
       events: [
         postAddedEvent(1, 1, { threadAuthor: alice.id, text: `Hi [@Bob](#mention?member-id=${bob.id})` }),
         postAddedEvent(2, 2, { threadAuthor: bob.id, text: `Hi [@Alice](#mention?member-id=${alice.id})` }),

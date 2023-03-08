@@ -45,22 +45,32 @@ fragment PostAddedEventFields on PostAddedEvent {
   }
 }
 
-fragment ProposalDiscussionPostCreatedEventFields on ProposalDiscussionPostCreatedEvent {
-  __typename
-  id
-  inBlock
-  post {
-    ...ProposalDiscussionPostFields
-  }
-}
+# fragment ProposalDiscussionPostCreatedEventFields on ProposalDiscussionPostCreatedEvent {
+#   __typename
+#   id
+#   inBlock
+#   post {
+#     ...ProposalDiscussionPostFields
+#   }
+# }
 
-query GetNotificationEvents {
-  events(where: { type_in: [PostAddedEvent, PostTextUpdatedEvent] }, limit: 50, orderBy: [createdAt_DESC]) {
+query GetNotificationEvents($from: Int, $exclude: [ID!]) {
+  events(
+    where: {
+      type_in: [
+        PostAddedEvent
+        # PostTextUpdatedEvent
+      ]
+      inBlock_gte: $from
+      NOT: { id_in: $exclude }
+    }
+    orderBy: [inBlock_ASC]
+  ) {
     ... on PostAddedEvent {
       ...PostAddedEventFields
     }
-    ... on ProposalDiscussionPostCreatedEvent {
-      ...ProposalDiscussionPostCreatedEventFields
-    }
+    # ... on ProposalDiscussionPostCreatedEvent {
+    #   ...ProposalDiscussionPostCreatedEventFields
+    # }
   }
 }

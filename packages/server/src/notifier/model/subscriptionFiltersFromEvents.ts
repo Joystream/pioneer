@@ -1,6 +1,6 @@
 import { NotificationType, Prisma } from '@prisma/client'
 
-import { NotificationEvent } from './notificationEvents'
+import { PotentialNotification } from './notificationEvents'
 
 interface SubscriptionFilter {
   notificationType: NotificationType
@@ -10,8 +10,10 @@ interface SubscriptionFilter {
 
 type FilterByNotifType = { [k in NotificationType]: SubscriptionFilter }
 
-export const subscriptionFiltersFromEvent = (events: NotificationEvent[]): Prisma.SubscriptionWhereInput[] => {
-  const filtersByNotificationType = events.reduce<FilterByNotifType>(
+export const subscriptionFiltersFromEvent = (
+  potentialNotifs: PotentialNotification[]
+): Prisma.SubscriptionWhereInput[] => {
+  const filtersByNotificationType = potentialNotifs.reduce<FilterByNotifType>(
     (filterByNotifType, { notificationType, relatedEntityId, relatedMemberIds }) => {
       const currentFilter: { entityIds: string[]; memberId: number[] } = {
         entityIds: filterByNotifType[notificationType]?.entityIds?.hasSome ?? [],
