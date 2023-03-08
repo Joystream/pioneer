@@ -3,8 +3,8 @@ import { isEqual, partition, pick } from 'lodash'
 import { arg, booleanArg, inputObjectType, list, mutationField, objectType, queryField, stringArg } from 'nexus'
 import { NotificationType as GQLNotificationType, Subscription } from 'nexus-prisma'
 
-import { Context } from '@/server/context'
-import { authMemberId } from '@/server/utils/token'
+import { Context } from '@/api/context'
+import { authMemberId } from '@/api/utils/token'
 
 export const SubscriptionFields = objectType({
   name: Subscription.$name,

@@ -1,8 +1,8 @@
 import { mutationField, nonNull, objectType, queryField, stringArg } from 'nexus'
 import { Member } from 'nexus-prisma'
 
-import { Context } from '@/server/context'
-import { authMemberId, verifyEmailToken } from '@/server/utils/token'
+import { Context } from '@/api/context'
+import { authMemberId, verifyEmailToken } from '@/api/utils/token'
 
 export const MemberFields = objectType({
   name: Member.$name,

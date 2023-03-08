@@ -1,8 +1,8 @@
 import { arg, booleanArg, objectType, queryField, stringArg } from 'nexus'
 import { Notification, NotificationType } from 'nexus-prisma'
 
-import { Context } from '@/server/context'
-import { authMemberId } from '@/server/utils/token'
+import { Context } from '@/api/context'
+import { authMemberId } from '@/api/utils/token'
 
 // const NotificationTypeInput =
 

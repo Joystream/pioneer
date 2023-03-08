@@ -2,10 +2,10 @@ import { pick } from 'lodash'
 import { intArg, mutationField, nonNull, stringArg } from 'nexus'
 import * as Yup from 'yup'
 
+import { Context } from '@/api/context'
+import { verifySignature } from '@/api/utils/signature'
+import { createAuthToken, createEmailToken } from '@/api/utils/token'
 import { PIONEER_URL } from '@/common/config'
-import { Context } from '@/server/context'
-import { verifySignature } from '@/server/utils/signature'
-import { createAuthToken, createEmailToken } from '@/server/utils/token'
 
 export interface SignInArgs {
   memberId: number

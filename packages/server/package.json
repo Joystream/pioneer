@@ -3,8 +3,8 @@
   "version": "1.2.0",
   "license": "GPL-3.0-only",
   "scripts": {
-    "start": "yarn start:db && yarn start:server",
-    "start:server": "nodemon --transpile-only -r tsconfig-paths/register ./src/server/index.ts",
+    "start": "yarn start:db && yarn start:api",
+    "start:api": "nodemon --transpile-only -r tsconfig-paths/register ./src/api/index.ts",
     "notify": "ts-node --transpile-only -r tsconfig-paths/register ./src/notifier",
     "prisma": "prisma",
     "codegen": "graphql-codegen",
