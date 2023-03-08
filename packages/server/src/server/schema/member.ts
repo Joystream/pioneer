@@ -27,20 +27,17 @@ export const MemberQuery = queryField('member', {
 export const verifyEmail = mutationField('verifyEmail', {
   type: Member.$name,
   args: { token: nonNull(stringArg()) },
-  resolve: async (_, { token }: { token: string }, { prisma, req }: Context) => {
-    const id = authMemberId(req)
-    if (!id) return null
-
+  resolve: async (_, { token }: { token: string }, { prisma }: Context) => {
     const { memberId, email } = verifyEmailToken(token) ?? {}
-    if (memberId !== id || !email) return null
+    if (!memberId || !email) return null
 
-    const member = await prisma.member.findFirst({ where: { id } })
+    const member = await prisma.member.findFirst({ where: { id: memberId } })
     if (!member) return null
 
     if (member.email === email) {
       return member
     }
 
-    return await prisma.member.update({ where: { id }, data: { email } })
+    return await prisma.member.update({ where: { id: memberId }, data: { email } })
   },
 })
