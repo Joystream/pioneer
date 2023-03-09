@@ -1,4 +1,4 @@
-import { BN_MAX_INTEGER, BN_ZERO } from '@polkadot/util'
+import { BN_MILLION, BN_ZERO } from '@polkadot/util'
 import BN from 'bn.js'
 
 import { Api } from '@/api'
@@ -12,7 +12,7 @@ export function getNextPayout(workers: Pick<Worker, 'group'>[], blockNumber: BN,
   const nextPayoutPerGroup = userGroups.map((name) => api?.consts[name].rewardPeriod.toBn()).map(blocksUntilNext)
 
   if (nextPayoutPerGroup.length) {
-    return nextPayoutPerGroup.reduce((closest, time) => (closest = BN.min(closest ?? BN_ZERO, time ?? BN_MAX_INTEGER)))
+    return nextPayoutPerGroup.reduce((closest, time) => (closest = BN.min(closest ?? BN_ZERO, time ?? BN_MILLION)))
   }
   return new BN(-1)
 }
