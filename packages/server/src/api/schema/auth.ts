@@ -6,6 +6,7 @@ import { Context } from '@/api/context'
 import { verifySignature } from '@/api/utils/signature'
 import { createAuthToken, createEmailToken } from '@/api/utils/token'
 import { PIONEER_URL } from '@/common/config'
+import { configEmailProvider } from '@/common/utils/email'
 
 export interface SignInArgs {
   memberId: number
@@ -19,11 +20,13 @@ export interface SignUpArgs extends SignInArgs {
 
 export const signin = mutationField('signin', {
   type: 'String',
+
   args: {
     memberId: nonNull(stringArg()),
     signature: nonNull(stringArg()),
     timestamp: nonNull(intArg()),
   },
+
   resolve: async (_, args: SignInArgs) => {
     const verification = await verifySignature(args.signature, args.memberId, args.timestamp)
     if (verification !== 'VALID') {
@@ -36,6 +39,7 @@ export const signin = mutationField('signin', {
 
 export const signup = mutationField('signup', {
   type: 'String',
+
   args: {
     memberId: nonNull(stringArg()),
     signature: nonNull(stringArg()),
@@ -43,6 +47,7 @@ export const signup = mutationField('signup', {
     name: nonNull(stringArg()),
     email: stringArg(),
   },
+
   resolve: async (_, args: SignUpArgs, { req, prisma }: Context) => {
     const verification = await verifySignature(args.signature, args.memberId, args.timestamp)
     if (verification !== 'VALID') {
@@ -55,8 +60,11 @@ export const signup = mutationField('signup', {
       const token = createEmailToken(pick(args as Required<SignUpArgs>, 'email', 'memberId'))
       const verificationUrl = `${req.headers.referer ?? PIONEER_URL}/#/?verify-email=${token}`
 
-      // TODO send an email instead of logging the token
-      console.log(`Send email:\nTo ${args.email}\nToken:${token}\nWith link to :${verificationUrl}`)
+      await configEmailProvider()({
+        to: args.email,
+        subject: 'Confirm your email for Pioneer',
+        text: `Token:${token}\nWith link to :${verificationUrl}`,
+      })
     }
 
     return member

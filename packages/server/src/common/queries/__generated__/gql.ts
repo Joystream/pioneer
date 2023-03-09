@@ -14,6 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "query GetMembershipById($id: ID!) {\n  membershipByUniqueInput(where: {id: $id}) {\n    controllerAccount\n  }\n}": types.GetMembershipByIdDocument,
+    "query GetPost($id: ID!) {\n  forumPostByUniqueInput(where: {id: $id}) {\n    author {\n      handle\n    }\n    thread {\n      id\n      title\n    }\n    text\n  }\n}": types.GetPostDocument,
     "fragment PostFields on ForumPost {\n  id\n  authorId\n  createdAt\n  text\n  thread {\n    id\n    authorId\n    posts {\n      authorId\n      createdAt\n      text\n    }\n    category {\n      moderators {\n        membershipId\n      }\n    }\n  }\n}\n\nfragment ProposalDiscussionPostFields on ProposalDiscussionPost {\n  id\n  authorId\n  text\n  discussionThread {\n    id\n    proposal {\n      id\n      creatorId\n    }\n    posts {\n      authorId\n      text\n    }\n  }\n}\n\nfragment PostAddedEventFields on PostAddedEvent {\n  __typename\n  id\n  inBlock\n  post {\n    ...PostFields\n  }\n}\n\nquery GetNotificationEvents($from: Int, $exclude: [ID!]) {\n  events(\n    where: {type_in: [PostAddedEvent], inBlock_gte: $from, NOT: {id_in: $exclude}}\n    orderBy: [inBlock_ASC]\n  ) {\n    ... on PostAddedEvent {\n      ...PostAddedEventFields\n    }\n  }\n}": types.PostFieldsFragmentDoc,
 };
 
@@ -35,6 +36,10 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "query GetMembershipById($id: ID!) {\n  membershipByUniqueInput(where: {id: $id}) {\n    controllerAccount\n  }\n}"): (typeof documents)["query GetMembershipById($id: ID!) {\n  membershipByUniqueInput(where: {id: $id}) {\n    controllerAccount\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "query GetPost($id: ID!) {\n  forumPostByUniqueInput(where: {id: $id}) {\n    author {\n      handle\n    }\n    thread {\n      id\n      title\n    }\n    text\n  }\n}"): (typeof documents)["query GetPost($id: ID!) {\n  forumPostByUniqueInput(where: {id: $id}) {\n    author {\n      handle\n    }\n    thread {\n      id\n      title\n    }\n    text\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

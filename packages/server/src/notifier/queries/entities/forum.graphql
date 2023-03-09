@@ -1,0 +1,12 @@
+query GetPost($id: ID!) {
+  forumPostByUniqueInput(where: { id: $id }) {
+    author {
+      handle
+    }
+    thread {
+      id
+      title
+    }
+    text
+  }
+}

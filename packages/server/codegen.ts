@@ -5,7 +5,7 @@ import { QUERY_NODE_ENDPOINT } from './src/common/config'
 const config: CodegenConfig = {
   schema: QUERY_NODE_ENDPOINT,
 
-  documents: ['src/*/queries/*.graphql'],
+  documents: ['src/*/queries/**/*.graphql'],
 
   generates: {
     './src/common/queries/__generated__/': {

@@ -5,7 +5,7 @@ import { QUERY_NODE_ENDPOINT, STARTING_BLOCK } from '@/common/config'
 import { prisma } from '@/common/prisma'
 import { GetNotificationEventsDocument } from '@/common/queries'
 
-import { createEmail } from './model/email'
+import { notifyByEmail } from './model/email'
 import { toNotificationEvents } from './model/notificationEvents'
 import { notificationsFromEvent } from './model/notifications'
 import { subscriptionFiltersFromEvent } from './model/subscriptionFiltersFromEvents'
@@ -67,13 +67,17 @@ export async function createAndSaveNotifications() {
 
 async function sendNotifications() {
   const notifications = await prisma.notification.findMany({ where: { isSent: false }, include: { member: true } })
-  return await Promise.all(
+
+  const sendEmail = notifyByEmail()
+  return Promise.all(
     notifications.map(async (notification) => {
-      const email = createEmail(notification)
-
-      // TODO send notification
-
-      return prisma.notification.update({ where: { id: notification.id }, data: { isSent: true } })
+      const { id, isSent } = await sendEmail(notification)
+      if (isSent) {
+        await prisma.notification.update({ where: { id }, data: { isSent: true } })
+      } else {
+        // TODO: update a fail counter instead so it can be retried N time later
+        await prisma.notification.update({ where: { id }, data: { isSent: true } })
+      }
     })
   )
 }
