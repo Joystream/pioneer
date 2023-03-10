@@ -1,6 +1,6 @@
-import { Member, Prisma, Subscription } from '@prisma/client'
+import { Prisma, Subscription } from '@prisma/client'
 
-import { isEntityPotentialNotif, NotificationEvent, PotentialNotif } from './notificationEvents'
+import { isGeneralPotentialNotif, NotificationEvent, PotentialNotif } from './notificationEvents'
 
 type Notification = Prisma.NotificationCreateManyInput
 
@@ -11,10 +11,10 @@ interface PotentialNotifByMember {
 }
 
 export const notificationsFromEvent =
-  (subscriptions: Subscription[], members: Member[]) =>
+  (subscriptions: Subscription[], allMemberIds: number[]) =>
   (event: NotificationEvent): Notification[] => {
     const notifsByMembers = event.potentialNotifications.flatMap<PotentialNotifByMember>(
-      getEventsByMember(subscriptions, members)
+      getEventsByMember(subscriptions, allMemberIds)
     )
     return pickNotifs(notifsByMembers).map<Notification>((notif) => ({
       notificationType: notif.data.notificationType,
@@ -25,22 +25,31 @@ export const notificationsFromEvent =
   }
 
 const getEventsByMember =
-  (subscriptions: Subscription[], members: Member[]) =>
+  (subscriptions: Subscription[], allMemberIds: number[]) =>
   (potentialNotif: PotentialNotif): PotentialNotifByMember[] => {
     const relatedSubscripions = subscriptions.filter(isEventRelatedToSubscription(potentialNotif))
-    const doesEventRequiresSub =
-      !potentialNotif.isDefault && !('relatedMemberIds' in potentialNotif && potentialNotif.relatedMemberIds)
+    const isSubscriptionOptional = isGeneralPotentialNotif(potentialNotif) && potentialNotif.isDefault
 
-    return doesEventRequiresSub
-      ? relatedSubscripions.map(({ memberId, shouldNotify }) => ({ data: potentialNotif, memberId, shouldNotify }))
-      : (potentialNotif.relatedMemberIds ?? []).flatMap((relatedMemberId) =>
-          members.flatMap((member) => {
-            if (member.id !== relatedMemberId) return []
-            const subscription = subscriptions.find((subscription) => subscription.memberId === member.id)
-            const shouldNotify = subscription?.shouldNotify ?? true
-            return { data: potentialNotif, memberId: member.id, shouldNotify: shouldNotify }
-          })
-        )
+    if (!isSubscriptionOptional) {
+      return relatedSubscripions.map(({ memberId, shouldNotify }) => ({ data: potentialNotif, memberId, shouldNotify }))
+    }
+
+    if (potentialNotif.relatedMembers === 'ANY') {
+      return allMemberIds.map((memberId) => {
+        const subscription = subscriptions.find((subscription) => subscription.memberId === memberId)
+        const shouldNotify = subscription?.shouldNotify ?? true
+        return { data: potentialNotif, memberId, shouldNotify }
+      })
+    }
+
+    return potentialNotif.relatedMembers.ids.flatMap((relatedMemberId) =>
+      allMemberIds.flatMap((memberId) => {
+        if (memberId !== relatedMemberId) return []
+        const subscription = subscriptions.find((subscription) => subscription.memberId === memberId)
+        const shouldNotify = subscription?.shouldNotify ?? true
+        return { data: potentialNotif, memberId, shouldNotify }
+      })
+    )
   }
 
 const isEventRelatedToSubscription =
@@ -48,10 +57,10 @@ const isEventRelatedToSubscription =
   ({ notificationType, memberId, entityIds }: Subscription): boolean => {
     if (notificationType !== potentialNotif.notificationType) {
       return false
-    } else if (isEntityPotentialNotif(potentialNotif)) {
-      return entityIds.includes(potentialNotif.relatedEntityId)
+    } else if (isGeneralPotentialNotif(potentialNotif)) {
+      return potentialNotif.relatedMembers === 'ANY' || potentialNotif.relatedMembers.ids.includes(memberId)
     } else {
-      return potentialNotif.relatedMemberIds?.includes(memberId) ?? true
+      return entityIds.includes(potentialNotif.relatedEntityId)
     }
   }
 
@@ -63,12 +72,12 @@ const pickNotifs = (notifs: PotentialNotifByMember[]) =>
         (B, indexB) =>
           B === A ||
           B.memberId !== A.memberId ||
-          // Ignore `shouldNotify: false` events except for those with a related entity.
-          (!B.shouldNotify && !isEntityPotentialNotif(B.data)) ||
+          // Ignore `shouldNotify: false` events on general potential notification.
+          (!B.shouldNotify && isGeneralPotentialNotif(B.data)) ||
           // Regardless of priority, events with a related entity and `shouldNotify: false` should prevent
           // other notifications from the same qn event and member id, except for other events with both
           // a related entity and a higher priority.
-          ((B.shouldNotify || isEntityPotentialNotif(A.data)) &&
+          ((B.shouldNotify || !isGeneralPotentialNotif(A.data)) &&
             (B.data.priority < A.data.priority || (B.data.priority === A.data.priority && indexB > indexA)))
       )
   )

@@ -1,4 +1,4 @@
-import { GeneralSubscriptionType } from './notificationTypes'
+import { GeneralSubscriptionType } from './subscriptionTypes'
 
 export const isDefaultNotification = (type: GeneralSubscriptionType): boolean => defaultNotifications.includes(type)
 

@@ -1,40 +1,40 @@
 import { isDefaultNotification } from '@/notifier/model/defaultNotification'
-import { EntitySubscriptionType, GeneralSubscriptionType } from '@/notifier/model/notificationTypes'
+import { EntitySubscriptionType, GeneralSubscriptionType } from '@/notifier/model/subscriptionTypes'
 import { toNumbers } from '@/notifier/model/utils'
 
-import { EntitiyPotentialNotif, GeneralPotentialNotif, NotificationEvent, PotentialNotif } from './types'
-
-type PartialNotif = Omit<GeneralPotentialNotif, 'priority'> | Omit<EntitiyPotentialNotif, 'priority'>
+import { NotificationEvent, PartialNotif, PotentialNotif } from './types'
 
 interface NotifsBuilder {
-  generalEvent: (type: GeneralSubscriptionType) => PartialNotif | false
-  membershipEvent: (type: GeneralSubscriptionType, memberIds: (number | string)[]) => PartialNotif | false
+  generalEvent: (type: GeneralSubscriptionType, members: 'ANY' | (number | string)[]) => PartialNotif | []
   entityEvent: (type: EntitySubscriptionType, entityId: string) => PartialNotif
 }
 
-export const buildEvents = (
+export type BuildEvents = (
   eventData: Omit<NotificationEvent, 'entityId' | 'potentialNotifications'>,
   entityId: string,
-  buildEvents: (b: NotifsBuilder) => (PartialNotif | false)[]
-): NotificationEvent => {
-  const generalEvent: NotifsBuilder['generalEvent'] = (type) => ({ notificationType: type, isDefault: false })
+  build: (b: NotifsBuilder) => (PartialNotif | [])[]
+) => NotificationEvent
+export const buildEvents =
+  (allMemberIds: number[]): BuildEvents =>
+  (eventData, entityId, build): NotificationEvent => {
+    const generalEvent: NotifsBuilder['generalEvent'] = (type, members) => {
+      if (members.length === 0) return []
 
-  const membershipEvent: NotifsBuilder['membershipEvent'] = (type, memberIds) =>
-    (!memberIds || memberIds.length > 0) && {
-      notificationType: type,
-      relatedMemberIds: memberIds && toNumbers(memberIds),
-      isDefault: isDefaultNotification(type),
+      const isDefault = isDefaultNotification(type)
+      const relatedMembers =
+        members === 'ANY' ? 'ANY' : { ids: toNumbers(members).filter((id) => allMemberIds.includes(id)) }
+
+      return { notificationType: type, relatedMembers, isDefault }
     }
 
-  const entityEvent: NotifsBuilder['entityEvent'] = (type, relatedEntityId) => ({
-    notificationType: type,
-    relatedEntityId,
-    isDefault: false,
-  })
+    const entityEvent: NotifsBuilder['entityEvent'] = (type, relatedEntityId) => ({
+      notificationType: type,
+      relatedEntityId,
+    })
 
-  const potentialNotifications: PotentialNotif[] = buildEvents({ generalEvent, membershipEvent, entityEvent }).flatMap(
-    (event, index, list) => (!event ? [] : { ...event, priority: list.length - index })
-  )
+    const potentialNotifications = build({ generalEvent, entityEvent })
+      .flat()
+      .map<PotentialNotif>((event, index, list) => ({ ...event, priority: list.length - index }))
 
-  return { ...eventData, entityId, potentialNotifications }
-}
+    return { ...eventData, entityId, potentialNotifications }
+  }

@@ -3,10 +3,10 @@ import { pick, uniq } from 'lodash'
 import { PostAddedEventFieldsFragmentDoc, PostFieldsFragmentDoc, useFragment } from '@/common/queries'
 import { isOlderThan, itemsExcept, mentionedMembersIdsFromText } from '@/notifier/model/utils'
 
-import { buildEvents } from '../buildEvent'
+import { BuildEvents } from '../buildEvent'
 import { NotificationEvent, QNEvent } from '../types'
 
-export const fromPostAddedEvent = (event: QNEvent<'PostAddedEvent'>): NotificationEvent => {
+export const fromPostAddedEvent = (event: QNEvent<'PostAddedEvent'>, buildEvents: BuildEvents): NotificationEvent => {
   const postAddedEvent = useFragment(PostAddedEventFieldsFragmentDoc, event)
   const post = useFragment(PostFieldsFragmentDoc, postAddedEvent.post)
 
@@ -16,11 +16,11 @@ export const fromPostAddedEvent = (event: QNEvent<'PostAddedEvent'>): Notificati
 
   const eventData = pick(postAddedEvent, 'inBlock', 'id')
 
-  return buildEvents(eventData, post.id, ({ generalEvent, membershipEvent, entityEvent }) => [
-    membershipEvent('FORUM_POST_MENTION', mentionedMemberIds),
-    membershipEvent('FORUM_THREAD_CREATOR', [post.thread.authorId]),
-    membershipEvent('FORUM_THREAD_CONTIBUTOR', earlierAuthors),
+  return buildEvents(eventData, post.id, ({ generalEvent, entityEvent }) => [
+    generalEvent('FORUM_POST_MENTION', mentionedMemberIds),
+    generalEvent('FORUM_THREAD_CREATOR', [post.thread.authorId]),
+    generalEvent('FORUM_THREAD_CONTIBUTOR', earlierAuthors),
     entityEvent('FORUM_WATCHED_THREAD', post.thread.id),
-    generalEvent('FORUM_POST_ALL'),
+    generalEvent('FORUM_POST_ALL', 'ANY'),
   ])
 }

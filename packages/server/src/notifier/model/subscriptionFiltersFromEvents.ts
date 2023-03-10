@@ -21,12 +21,12 @@ export const subscriptionFiltersFromEvent = (potentialNotifs: PotentialNotif[]):
       const prev = filter?.entityIds?.hasSome ?? []
       const entityIds = { hasSome: uniq([...prev, potentialNotif.relatedEntityId]) }
       return { ...filterByNotifType, [type]: toFilter({ entityIds }) }
-    } else if (potentialNotif.relatedMemberIds) {
-      const prev = filter?.memberId?.in ?? []
-      const memberId = { in: uniq([...prev, ...potentialNotif.relatedMemberIds]) }
-      return { ...filterByNotifType, [type]: toFilter({ memberId }) }
-    } else {
+    } else if (potentialNotif.relatedMembers === 'ANY') {
       return filter ? filterByNotifType : { ...filterByNotifType, [type]: toFilter({}) }
+    } else {
+      const prev = filter?.memberId?.in ?? []
+      const memberId = { in: uniq([...prev, ...potentialNotif.relatedMembers.ids]) }
+      return { ...filterByNotifType, [type]: toFilter({ memberId }) }
     }
   }, {} as FilterByNotifType)
 

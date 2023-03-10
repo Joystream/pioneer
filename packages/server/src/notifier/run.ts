@@ -1,6 +1,5 @@
 import { Prisma } from '@prisma/client'
 import { request } from 'graphql-request'
-import { uniq } from 'lodash'
 
 import { QUERY_NODE_ENDPOINT, STARTING_BLOCK } from '@/common/config'
 import { prisma } from '@/common/prisma'
@@ -29,6 +28,8 @@ export async function createAndSaveNotifications() {
   const { value } = (await prisma.store.findFirst({ where: PROGRESS_KEY })) ?? {}
   const progress: ProgressDoc = isProgressDoc(value) && value.block > STARTING_BLOCK ? value : defaultProgress
 
+  const allMemberIds = (await prisma.member.findMany()).map(({ id }) => id)
+
   /* eslint-disable-next-line no-constant-condition */
   while (true) {
     // Fetch events from the query nodes and break if non are found
@@ -37,7 +38,7 @@ export async function createAndSaveNotifications() {
     if (qnData.events.length === 0) break
 
     // Generate the potential notification based on the query nodes data
-    const events = qnData.events.map(toNotificationEvents)
+    const events = qnData.events.map(toNotificationEvents(allMemberIds))
 
     // Update the progress
     progress.block = Math.max(progress.block, ...events.map((event) => event.inBlock))
@@ -46,16 +47,12 @@ export async function createAndSaveNotifications() {
     const potentialNotifs = events.flatMap((event) => event.potentialNotifications)
     if (potentialNotifs.length === 0) continue
 
-    // Fetch subscription and members related to the events
+    // Fetch subscription related to the events
     const subscriptionFilter = { OR: subscriptionFiltersFromEvent(potentialNotifs) }
-    const memberIds = uniq(potentialNotifs.flatMap((pn) => ('relatedMemberIds' in pn && pn.relatedMemberIds) || []))
-    const [subscriptions, members] = await Promise.all([
-      prisma.subscription.findMany({ where: subscriptionFilter }),
-      prisma.member.findMany({ where: { id: { in: memberIds } } }),
-    ])
+    const subscriptions = await prisma.subscription.findMany({ where: subscriptionFilter })
 
     // Create and save new notifications
-    const notifications = events.flatMap(notificationsFromEvent(subscriptions, members))
+    const notifications = events.flatMap(notificationsFromEvent(subscriptions, allMemberIds))
     await prisma.notification.createMany({ data: notifications })
   }
 
