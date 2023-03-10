@@ -3,15 +3,17 @@
   "version": "1.2.0",
   "license": "GPL-3.0-only",
   "scripts": {
-    "start": "yarn start:db && yarn start:api",
-    "start:api": "nodemon --transpile-only -r tsconfig-paths/register ./src/api/index.ts",
-    "notify": "ts-node --transpile-only -r tsconfig-paths/register ./src/notifier",
     "prisma": "prisma",
     "codegen": "graphql-codegen",
-    "start:db": "yarn docker up -d",
-    "docker:clean": "yarn docker down -v",
     "docker": "docker-compose",
-    "test": "jest"
+    "test": "jest",
+    "tsc": "tsc",
+    "start:api": "nodemon --transpile-only -r tsconfig-paths/register ./src/api/index.ts",
+    "start:db": "yarn docker up -d",
+    "start": "yarn start:db && yarn start:api",
+    "notify": "ts-node --transpile-only -r tsconfig-paths/register ./src/notifier",
+    "authtoken": "ts-node --transpile-only -r tsconfig-paths/register ./src/auth/scripts/generateToken",
+    "docker:clean": "yarn docker down -v"
   },
   "dependencies": {
     "@apollo/server-plugin-landing-page-graphql-playground": "^4.0.0",
