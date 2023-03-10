@@ -1,7 +1,7 @@
 import { NotificationType, Prisma } from '@prisma/client'
 import { uniq } from 'lodash'
 
-import { PotentialNotif } from './notificationEvents'
+import { isEntityPotentialNotif, PotentialNotif } from './notificationEvents'
 
 interface SubscriptionFilter {
   notificationType: NotificationType
@@ -17,7 +17,7 @@ export const subscriptionFiltersFromEvent = (potentialNotifs: PotentialNotif[]):
     const filter = filterByNotifType[type]
     const toFilter = (obj: Omit<SubscriptionFilter, 'notificationType'>) => ({ ...obj, notificationType: type })
 
-    if ('relatedEntityId' in potentialNotif) {
+    if (isEntityPotentialNotif(potentialNotif)) {
       const prev = filter?.entityIds?.hasSome ?? []
       const entityIds = { hasSome: uniq([...prev, potentialNotif.relatedEntityId]) }
       return { ...filterByNotifType, [type]: toFilter({ entityIds }) }

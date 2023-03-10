@@ -1,6 +1,6 @@
 import { Member, Prisma, Subscription } from '@prisma/client'
 
-import { EntitiyPotentialNotif, NotificationEvent, PotentialNotif } from './notificationEvents'
+import { isEntityPotentialNotif, NotificationEvent, PotentialNotif } from './notificationEvents'
 
 type Notification = Prisma.NotificationCreateManyInput
 
@@ -72,5 +72,3 @@ const pickNotifs = (notifs: PotentialNotifByMember[]) =>
             (B.data.priority < A.data.priority || (B.data.priority === A.data.priority && indexB > indexA)))
       )
   )
-
-const isEntityPotentialNotif = (p: PotentialNotif): p is EntitiyPotentialNotif => 'relatedEntityId' in p
