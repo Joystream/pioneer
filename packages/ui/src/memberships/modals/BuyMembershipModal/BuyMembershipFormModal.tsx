@@ -71,7 +71,7 @@ const CreateMemberSchema = Yup.object().shape({
   avatarUri: AvatarURISchema,
   name: Yup.string().required(isRequired),
   handle: HandleSchema.required(isRequired).matches(
-    /^[a-zA-Z0-9_.-]*$/,
+    /^[a-zA-Z0-9_\.-]*$/,
     'Spaces and special characters are not supported.'
   ),
   hasTerms: Yup.boolean().required().oneOf([true]),
