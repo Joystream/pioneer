@@ -1,6 +1,6 @@
 export const unique = <T>(list: T[]): T[] => Array.from(new Set(list))
 
-export const toNumbers = (list: string[]) => list.map(Number).filter((item) => !isNaN(item))
+export const toNumbers = (list: (number | string)[]) => list.map(Number).filter((item) => !isNaN(item))
 
 export const itemsExcept = <T, K extends string, O extends { [k in K]: T }>(list: O[], key: K, except: T): T[] =>
   list.flatMap((item: O) => (item[key] === except ? [] : [item[key]]))

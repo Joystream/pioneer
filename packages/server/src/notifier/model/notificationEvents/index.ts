@@ -2,6 +2,8 @@ import { NotificationType } from '@prisma/client'
 
 import { GetNotificationEventsQuery } from '@/common/queries'
 import { DocWithFragments } from '@/common/utils/types'
+import { isDefaultNotification } from '@/notifier/model/defaultNotification'
+import { toNumbers } from '@/notifier/model/utils'
 
 import { fromPostAddedEvent } from './forum'
 
@@ -41,7 +43,7 @@ interface NotifsBuilder {
   entityEvent: (notificationType: NotificationType, relatedEntityId: string) => PartialNotif
   memberEvent: (
     notificationType: NotificationType,
-    relatedMemberIds: number[],
+    relatedMemberIds: (number | string)[],
     isDefault?: boolean
   ) => PartialNotif | false
 }
@@ -54,20 +56,20 @@ export type BuildEvent = (
   buildEvents: BuildPotentialNotifs
 ) => NotificationEvent
 const buildEvent: BuildEvent = (eventData, entityId, buildEvents) => {
-  const generalEvent: NotifsBuilder['generalEvent'] = (notificationType, isDefault = false) => ({
+  const generalEvent: NotifsBuilder['generalEvent'] = (
     notificationType,
-    isDefault,
-  })
+    isDefault = isDefaultNotification(notificationType)
+  ) => ({ notificationType, isDefault })
 
   const entityEvent: NotifsBuilder['entityEvent'] = (notificationType, relatedEntityId) => ({
     ...generalEvent(notificationType, false),
     relatedEntityId,
   })
 
-  const memberEvent: NotifsBuilder['memberEvent'] = (notificationType, relatedMemberIds, isDefault = true) =>
+  const memberEvent: NotifsBuilder['memberEvent'] = (notificationType, relatedMemberIds) =>
     relatedMemberIds.length > 0 && {
-      ...generalEvent(notificationType, isDefault),
-      relatedMemberIds,
+      ...generalEvent(notificationType),
+      relatedMemberIds: toNumbers(relatedMemberIds),
     }
 
   const potentialNotifications: PotentialNotification[] = buildEvents({

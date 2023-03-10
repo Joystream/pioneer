@@ -1,10 +1,11 @@
 import { NotificationType, Prisma } from '@prisma/client'
-import { isEqual, partition, pick } from 'lodash'
+import { partition, pick } from 'lodash'
 import { arg, booleanArg, inputObjectType, list, mutationField, objectType, queryField, stringArg } from 'nexus'
 import { NotificationType as GQLNotificationType, Subscription } from 'nexus-prisma'
 
 import { Context } from '@/api/context'
 import { authMemberId } from '@/api/utils/token'
+import { isDefaultNotification } from '@/notifier/model/defaultNotification'
 
 export const SubscriptionFields = objectType({
   name: Subscription.$name,
@@ -61,16 +62,22 @@ export const subscriptionsMutation = mutationField('subscriptions', {
     if (!memberId) return null
 
     const currents = await prisma.subscription.findMany({ where: { memberId } })
-    const [toUpdate, toDelete] = partition(currents, (a) => data.some((b) => b.notificationType === a.notificationType))
-    const upserts = data.flatMap<Prisma.SubscriptionUpsertArgs>((input) => {
-      const current = toUpdate.find((sub) => sub.notificationType === input.notificationType)
-      const noChangeNeeded =
-        current &&
-        (current.shouldNotify === input.shouldNotify ?? true) &&
-        (current.shouldNotifyByEmail === input.shouldNotifyByEmail ?? true) &&
-        isEqual(current.entityIds, input.entityIds)
 
-      if (noChangeNeeded) return []
+    const changes = data.filter(({ notificationType, shouldNotify = true, shouldNotifyByEmail = true }) => {
+      const notifyByDefault = isDefaultNotification(notificationType)
+      return shouldNotify !== notifyByDefault || shouldNotifyByEmail !== notifyByDefault
+    })
+
+    const [toUpdate, toDelete] = partition(currents, (a) =>
+      changes.some((b) => b.notificationType === a.notificationType)
+    )
+    const upserts = changes.flatMap<Prisma.SubscriptionUpsertArgs>((input) => {
+      const current = toUpdate.find((sub) => sub.notificationType === input.notificationType)
+
+      const { shouldNotify = true, shouldNotifyByEmail = true } = input
+      if (shouldNotify === current?.shouldNotify && shouldNotifyByEmail === current.shouldNotifyByEmail) {
+        return []
+      }
 
       const where = current ? { id: current.id } : { memberId, notificationType: input.notificationType }
       const update = pick(input, 'entityIds', 'shouldNotify', 'shouldNotifyByEmail')
