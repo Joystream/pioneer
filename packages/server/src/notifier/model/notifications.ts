@@ -1,11 +1,11 @@
 import { Member, Prisma, Subscription } from '@prisma/client'
 
-import { NotificationEvent, PotentialNotification } from './notificationEvents'
+import { EntitiyPotentialNotif, NotificationEvent, PotentialNotif } from './notificationEvents'
 
 type Notification = Prisma.NotificationCreateManyInput
 
 interface PotentialNotifByMember {
-  data: PotentialNotification
+  data: PotentialNotif
   memberId: number
   shouldNotify: boolean
 }
@@ -26,9 +26,10 @@ export const notificationsFromEvent =
 
 const getEventsByMember =
   (subscriptions: Subscription[], members: Member[]) =>
-  (potentialNotif: PotentialNotification): PotentialNotifByMember[] => {
+  (potentialNotif: PotentialNotif): PotentialNotifByMember[] => {
     const relatedSubscripions = subscriptions.filter(isEventRelatedToSubscription(potentialNotif))
-    const doesEventRequiresSub = !potentialNotif.isDefault && !potentialNotif.relatedMemberIds
+    const doesEventRequiresSub =
+      !potentialNotif.isDefault && !('relatedMemberIds' in potentialNotif && potentialNotif.relatedMemberIds)
 
     return doesEventRequiresSub
       ? relatedSubscripions.map(({ memberId, shouldNotify }) => ({ data: potentialNotif, memberId, shouldNotify }))
@@ -43,14 +44,14 @@ const getEventsByMember =
   }
 
 const isEventRelatedToSubscription =
-  (potentialNotif: PotentialNotification) =>
+  (potentialNotif: PotentialNotif) =>
   ({ notificationType, memberId, entityIds }: Subscription): boolean => {
     if (notificationType !== potentialNotif.notificationType) {
       return false
-    } else if (potentialNotif.relatedMemberIds) {
-      return potentialNotif.relatedMemberIds.includes(memberId)
+    } else if (isEntityPotentialNotif(potentialNotif)) {
+      return entityIds.includes(potentialNotif.relatedEntityId)
     } else {
-      return !potentialNotif.relatedEntityId || entityIds.includes(potentialNotif.relatedEntityId)
+      return potentialNotif.relatedMemberIds?.includes(memberId) ?? true
     }
   }
 
@@ -63,11 +64,13 @@ const pickNotifs = (notifs: PotentialNotifByMember[]) =>
           B === A ||
           B.memberId !== A.memberId ||
           // Ignore `shouldNotify: false` events except for those with a related entity.
-          (!B.shouldNotify && !B.data.relatedEntityId) ||
+          (!B.shouldNotify && !isEntityPotentialNotif(B.data)) ||
           // Regardless of priority, events with a related entity and `shouldNotify: false` should prevent
           // other notifications from the same qn event and member id, except for other events with both
           // a related entity and a higher priority.
-          ((B.shouldNotify || A.data.relatedEntityId) &&
+          ((B.shouldNotify || isEntityPotentialNotif(A.data)) &&
             (B.data.priority < A.data.priority || (B.data.priority === A.data.priority && indexB > indexA)))
       )
   )
+
+const isEntityPotentialNotif = (p: PotentialNotif): p is EntitiyPotentialNotif => 'relatedEntityId' in p

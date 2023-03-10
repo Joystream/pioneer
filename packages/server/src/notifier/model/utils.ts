@@ -1,4 +1,4 @@
-export const unique = <T>(list: T[]): T[] => Array.from(new Set(list))
+import { uniq } from 'lodash'
 
 export const toNumbers = (list: (number | string)[]) => list.map(Number).filter((item) => !isNaN(item))
 
@@ -13,4 +13,4 @@ export const isOlderThan =
 
 // TODO improve this logic
 export const mentionedMembersIdsFromText = (text: string): number[] =>
-  unique(Array.from(text.matchAll(/\[@\w+\]\(#mention\?member-id=(\d+)\)/g)).map(([, id]) => Number(id)))
+  uniq(Array.from(text.matchAll(/\[@\w+\]\(#mention\?member-id=(\d+)\)/g)).map(([, id]) => Number(id)))

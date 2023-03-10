@@ -1,8 +1,8 @@
-import { NotificationType } from '@prisma/client'
+import { GeneralSubscriptionType } from './notificationTypes'
 
-export const isDefaultNotification = (type: NotificationType): boolean => defaultNotifications.includes(type)
+export const isDefaultNotification = (type: GeneralSubscriptionType): boolean => defaultNotifications.includes(type)
 
-const defaultNotifications: NotificationType[] = [
+const defaultNotifications: GeneralSubscriptionType[] = [
   'FORUM_THREAD_MENTION',
   'FORUM_POST_MENTION',
   'FORUM_POST_REPLY',

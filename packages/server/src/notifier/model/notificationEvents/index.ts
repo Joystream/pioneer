@@ -1,8 +1,7 @@
-import { NotificationType } from '@prisma/client'
-
 import { GetNotificationEventsQuery } from '@/common/queries'
 import { DocWithFragments } from '@/common/utils/types'
 import { isDefaultNotification } from '@/notifier/model/defaultNotification'
+import { EntitySubscriptionType, GeneralSubscriptionType } from '@/notifier/model/notificationTypes'
 import { toNumbers } from '@/notifier/model/utils'
 
 import { fromPostAddedEvent } from './forum'
@@ -11,18 +10,18 @@ type AnyQNEvent = GetNotificationEventsQuery['events'][0]
 type ImplementedQNEvent = DocWithFragments<Required<GetNotificationEventsQuery['events'][0]>>
 export type QNEvent<T extends ImplementedQNEvent['__typename']> = { __typename: T } & ImplementedQNEvent
 
-export interface PotentialNotification {
-  notificationType: NotificationType
-  isDefault: boolean
-  priority: number
-  relatedEntityId?: string
-  relatedMemberIds?: number[]
-}
+type GeneralEventParams = { notificationType: GeneralSubscriptionType; relatedMemberIds?: number[] }
+type EntityEventParams = { notificationType: EntitySubscriptionType; relatedEntityId: string }
+export type GeneralPotentialNotif = { isDefault: boolean; priority: number } & GeneralEventParams
+export type EntitiyPotentialNotif = { isDefault: false; priority: number } & EntityEventParams
+
+export type PotentialNotif = GeneralPotentialNotif | EntitiyPotentialNotif
+
 export interface NotificationEvent {
   id: string
   inBlock: number
   entityId: string
-  potentialNotifications: PotentialNotification[]
+  potentialNotifications: PotentialNotif[]
 }
 
 export const toNotificationEvents = (anyEvent: AnyQNEvent): NotificationEvent => {
@@ -37,15 +36,10 @@ export const toNotificationEvents = (anyEvent: AnyQNEvent): NotificationEvent =>
   }
 }
 
-type PartialNotif = Omit<PotentialNotification, 'priority'>
+type PartialNotif = Omit<GeneralPotentialNotif, 'priority'> | Omit<EntitiyPotentialNotif, 'priority'>
 interface NotifsBuilder {
-  generalEvent: (notificationType: NotificationType, isDefault?: boolean) => PartialNotif
-  entityEvent: (notificationType: NotificationType, relatedEntityId: string) => PartialNotif
-  memberEvent: (
-    notificationType: NotificationType,
-    relatedMemberIds: (number | string)[],
-    isDefault?: boolean
-  ) => PartialNotif | false
+  generalEvent: (type: GeneralSubscriptionType, memberIds?: (number | string)[]) => PartialNotif | false
+  entityEvent: (type: EntitySubscriptionType, entityId: string) => PartialNotif
 }
 export type EventData = Omit<NotificationEvent, 'entityId' | 'potentialNotifications'>
 type BuildPotentialNotifs = (b: NotifsBuilder) => (PartialNotif | false)[]
@@ -56,27 +50,22 @@ export type BuildEvent = (
   buildEvents: BuildPotentialNotifs
 ) => NotificationEvent
 const buildEvent: BuildEvent = (eventData, entityId, buildEvents) => {
-  const generalEvent: NotifsBuilder['generalEvent'] = (
-    notificationType,
-    isDefault = isDefaultNotification(notificationType)
-  ) => ({ notificationType, isDefault })
-
-  const entityEvent: NotifsBuilder['entityEvent'] = (notificationType, relatedEntityId) => ({
-    ...generalEvent(notificationType, false),
-    relatedEntityId,
-  })
-
-  const memberEvent: NotifsBuilder['memberEvent'] = (notificationType, relatedMemberIds) =>
-    relatedMemberIds.length > 0 && {
-      ...generalEvent(notificationType),
-      relatedMemberIds: toNumbers(relatedMemberIds),
+  const generalEvent: NotifsBuilder['generalEvent'] = (type, memberIds) =>
+    (!memberIds || memberIds.length > 0) && {
+      notificationType: type,
+      isDefault: isDefaultNotification(type),
+      relatedMemberIds: memberIds && toNumbers(memberIds),
     }
 
-  const potentialNotifications: PotentialNotification[] = buildEvents({
-    generalEvent,
-    entityEvent,
-    memberEvent,
-  }).flatMap((event, index, list) => (!event ? [] : { ...event, priority: list.length - index }))
+  const entityEvent: NotifsBuilder['entityEvent'] = (notificationType, relatedEntityId) => ({
+    notificationType,
+    relatedEntityId,
+    isDefault: false,
+  })
+
+  const potentialNotifications: PotentialNotif[] = buildEvents({ generalEvent, entityEvent }).flatMap(
+    (event, index, list) => (!event ? [] : { ...event, priority: list.length - index })
+  )
 
   return { ...eventData, entityId, potentialNotifications }
 }

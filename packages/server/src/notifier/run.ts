@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client'
 import { request } from 'graphql-request'
+import { uniq } from 'lodash'
 
 import { QUERY_NODE_ENDPOINT, STARTING_BLOCK } from '@/common/config'
 import { prisma } from '@/common/prisma'
@@ -9,7 +10,6 @@ import { notifyByEmail } from './model/email'
 import { toNotificationEvents } from './model/notificationEvents'
 import { notificationsFromEvent } from './model/notifications'
 import { subscriptionFiltersFromEvent } from './model/subscriptionFiltersFromEvents'
-import { unique } from './model/utils'
 
 export async function run() {
   await createAndSaveNotifications()
@@ -48,7 +48,7 @@ export async function createAndSaveNotifications() {
 
     // Fetch subscription and members related to the events
     const subscriptionFilter = { OR: subscriptionFiltersFromEvent(potentialNotifs) }
-    const memberIds = unique(potentialNotifs.flatMap(({ relatedMemberIds = [] }) => relatedMemberIds))
+    const memberIds = uniq(potentialNotifs.flatMap((pn) => ('relatedMemberIds' in pn && pn.relatedMemberIds) || []))
     const [subscriptions, members] = await Promise.all([
       prisma.subscription.findMany({ where: subscriptionFilter }),
       prisma.member.findMany({ where: { id: { in: memberIds } } }),
