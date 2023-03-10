@@ -1,5 +1,5 @@
 import { config } from 'dotenv'
-import { isSet, pick } from 'lodash'
+import { isString, pick } from 'lodash'
 
 const errMsg = (name: string) => Error(`${name} should be defined in .env`)
 const parsedConfig = config().parsed ?? {}
@@ -17,7 +17,7 @@ if (!EMAIL_SENDER) throw errMsg('EMAIL_SENDER')
 
 const emailProvidersConfig = ['SENDGRID_API_KEY', 'MAILGUN_CONFIG'] as const
 const emailProvider = pick(parsedConfig, emailProvidersConfig)
-if (Object.values(emailProvider).filter(isSet).length !== 1) {
+if (Object.values(emailProvider).filter(isString).length !== 1) {
   throw errMsg(`A unique value out of: ${emailProvidersConfig.join(', ')}`)
 }
 if (emailProvider.MAILGUN_CONFIG && !MAILGUN_DOMAIN) throw errMsg('If MAILGUN_CONFIG is defined, MAILGUN_DOMAIN')
