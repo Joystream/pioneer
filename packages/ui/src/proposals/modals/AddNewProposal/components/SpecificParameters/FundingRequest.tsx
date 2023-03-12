@@ -3,11 +3,13 @@ import { useFormContext } from 'react-hook-form'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { CurrencyName } from '@/app/constants/currency'
-import { InlineToggleWrap, InputComponent, Label, ToggleCheckbox, TokenInput } from '@/common/components/forms'
+import { InlineToggleWrap, InputComponent, Label, ToggleCheckbox, TokenInput, InputTextarea } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium, TextSmall, TextInlineSmall } from '@/common/components/typography'
+import { ButtonPrimary } from '@/common/components/buttons'
+import { Arrow } from '@/common/components/icons'
 import { Prompt } from './Prompt'
 
 export const FundingRequest = () => {
@@ -59,21 +61,39 @@ export const FundingRequest = () => {
         </RowGapBlock>
       </Row>
       <Row>
-        <RowGapBlock gap={20}>
-          <InputComponent
-            label="Amount"
-            tight
-            units={CurrencyName.integerValue}
-            required
-            message="Amount must be greater than zero"
-            name="fundingRequest.amount"
-          >
-            <TokenInput id="amount-input" placeholder="0" name="fundingRequest.amount" />
-          </InputComponent>
-          <InputComponent label="Recipient account" required inputSize="l">
-            <SelectAccount name="fundingRequest.account" />
-          </InputComponent>
-        </RowGapBlock>
+        {payMultiple ? (
+          <RowGapBlock gap={20}>
+            <InputComponent
+              label="Destination accounts and transfer amounts"
+              required
+              message="You can select up to 20 recipients"
+              name="fundingRequest.accountsAndAmounts"
+              id="accounts-amounts"
+              inputSize="xl"
+            >
+              <InputTextarea id="accounts-amounts" name="fundingRequest.accountsAndAmounts" placeholder='Destination account address and amount' />
+            </InputComponent>
+            <ButtonPrimary size="medium">
+              Preview and Validate <Arrow direction="right" />
+            </ButtonPrimary>
+          </RowGapBlock>
+        ) : (
+          <RowGapBlock gap={20}>
+            <InputComponent
+              label="Amount"
+              tight
+              units={CurrencyName.integerValue}
+              required
+              message="Amount must be greater than zero"
+              name="fundingRequest.amount"
+            >
+              <TokenInput id="amount-input" placeholder="0" name="fundingRequest.amount" />
+            </InputComponent>
+            <InputComponent label="Recipient account" required inputSize="l">
+              <SelectAccount name="fundingRequest.account" />
+            </InputComponent>
+          </RowGapBlock>
+        )}
       </Row>
     </RowGapBlock>
   )
