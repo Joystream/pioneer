@@ -81,9 +81,11 @@ export const App = () => {
   )
 }
 
+/**
 export const Mobile = () => (
   <>
     <GlobalStyle />
     <MobileView />
   </>
 )
+**/
