@@ -1,5 +1,5 @@
 import * as Prisma from '@prisma/client'
-import { isEqual, pick } from 'lodash'
+import { pick } from 'lodash'
 import { arg, booleanArg, enumType, list, mutationField, nonNull, objectType, queryField, stringArg } from 'nexus'
 import { Subscription as GQLSubscription } from 'nexus-prisma'
 
@@ -7,7 +7,7 @@ import { Context } from '@/api/context'
 import { authMemberId } from '@/api/utils/token'
 import { EntitySubscriptionType } from '@/notifier/model/subscriptionTypes'
 
-interface EntitySubscription extends Omit<Prisma.Subscription, 'id' | 'memberId'> {
+interface EntitySubscription extends Omit<Prisma.Subscription, 'memberId'> {
   notificationType: EntitySubscriptionType
 }
 
@@ -38,6 +38,7 @@ export const entitySubscriptionsQuery = queryField('entitySubscriptions', {
   type: list('EntitySubscription'),
 
   args: {
+    id: stringArg(),
     notificationType: arg({ type: GQLEntitySubscriptionType.name }),
     entityId: stringArg(),
     shouldNotify: booleanArg(),
@@ -53,8 +54,10 @@ export const entitySubscriptionsQuery = queryField('entitySubscriptions', {
   },
 })
 
-type SubscribeToEntityArgs = EntitySubscription &
-  Required<Pick<EntitySubscription, 'notificationType' | 'entityId'>> & { entityId: string }
+type SubscribeToEntityArgs = Omit<
+  EntitySubscription & Required<Pick<EntitySubscription, 'notificationType' | 'entityId'>> & { entityId: string },
+  'id'
+>
 export const subscribeToEntityMutation = mutationField('subscribeToEntity', {
   type: 'EntitySubscription',
 
@@ -87,7 +90,10 @@ export const subscribeToEntityMutation = mutationField('subscribeToEntity', {
   },
 })
 
-type UnsubscribeToEntityArgs = Pick<EntitySubscription, 'notificationType' | 'entityId'> & { entityId: string }
+type UnsubscribeToEntityArgs = Omit<
+  Pick<EntitySubscription, 'notificationType' | 'entityId'> & { entityId: string },
+  'id'
+>
 export const unsubscribeToEntityMutation = mutationField('unsubscribeToEntity', {
   type: 'EntitySubscription',
 

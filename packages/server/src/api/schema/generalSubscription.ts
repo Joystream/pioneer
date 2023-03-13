@@ -1,6 +1,16 @@
 import * as Prisma from '@prisma/client'
 import { partition } from 'lodash'
-import { arg, booleanArg, enumType, inputObjectType, list, mutationField, objectType, queryField } from 'nexus'
+import {
+  arg,
+  booleanArg,
+  enumType,
+  inputObjectType,
+  list,
+  mutationField,
+  objectType,
+  queryField,
+  stringArg,
+} from 'nexus'
 import { Subscription as GQLSubscription } from 'nexus-prisma'
 
 import { Context } from '@/api/context'
@@ -8,7 +18,7 @@ import { authMemberId } from '@/api/utils/token'
 import { isDefaultNotification } from '@/notifier/model/defaultNotification'
 import { GeneralSubscriptionType } from '@/notifier/model/subscriptionTypes'
 
-interface GeneralSubscription extends Omit<Prisma.Subscription, 'id' | 'memberId' | 'entityId'> {
+interface GeneralSubscription extends Omit<Prisma.Subscription, 'memberId' | 'entityId'> {
   notificationType: GeneralSubscriptionType
 }
 
@@ -38,6 +48,7 @@ export const generalSubscriptionsQuery = queryField('generalSubscriptions', {
   type: list('GeneralSubscription'),
 
   args: {
+    id: stringArg(),
     notificationType: arg({ type: GQLGeneralSubscriptionType.name }),
     shouldNotify: booleanArg(),
     shouldNotifyByEmail: booleanArg(),
@@ -64,7 +75,7 @@ const generalSubscriptionsInput = inputObjectType({
   },
 })
 
-type MutationArgs = { data: GeneralSubscription[] }
+type MutationArgs = { data: Omit<GeneralSubscription, 'id'>[] }
 export const generalSubscriptionsMutation = mutationField('generalSubscriptions', {
   type: list('GeneralSubscription'),
 
