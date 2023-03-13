@@ -12,9 +12,10 @@ interface ProposalHistoryProps {
 }
 
 export const ProposalHistory = ({ proposal }: ProposalHistoryProps) => {
+ 
   const history = useMemo((): StepperStep[] => {
     const updates = proposal.proposalStatusUpdates
-    const createdStatus = { status: 'Created', createdAt: proposal.createdAt, inBlock: proposal.createdInBlock }
+    const createdStatus = { status: 'Deciding', createdAt: proposal.createdAt, inBlock: proposal.createdInBlock }
     const endStatus = !proposalActiveStatuses.includes(proposal.status) && [
       { status: proposal.status, createdAt: proposal.statusSetAtTime, inBlock: proposal.statusSetAtBlock },
     ]
