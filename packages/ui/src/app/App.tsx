@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
 import '@/services/i18n'
@@ -13,6 +13,7 @@ import { ConnectionStatus } from '@/common/components/ConnectionStatus'
 import { MaintenanceScreen } from '@/common/components/page/MaintenanceScreen/MaintenanceScreen'
 import { MobileView } from '@/common/components/page/MobileView/MobileView'
 import { Page, Screen } from '@/common/components/page/Page'
+import { LogoLink } from '@/common/components/page/Sidebar/LogoLink'
 import { NotificationsHolder } from '@/common/components/page/SideNotification'
 import { TransactionStatus } from '@/common/components/TransactionStatus/TransactionStatus'
 import { parseEnv } from '@/common/utils/env'
@@ -38,6 +39,8 @@ import { WorkingGroupsModule } from './pages/WorkingGroups/WorkingGroupsModule'
 import { Providers } from './Providers'
 
 export const App = () => {
+  const [hideSidebar, setHide] = useState(false)
+
   if (parseEnv(process.env.REACT_APP_IS_UNDER_MAINTENANCE)) {
     return <MaintenanceScreen />
   }
@@ -45,7 +48,13 @@ export const App = () => {
   return (
     <Providers>
       <Page>
-        <SideBar />
+        {hideSidebar ? (
+          <div style={{ float: 'left' }} onClick={() => setHide(false)} title="show sidebar">
+            <LogoLink />
+          </div>
+        ) : (
+          <SideBar setHide={setHide} />
+        )}
         <Screen>
           <OnBoardingOverlay />
           <Switch>

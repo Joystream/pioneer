@@ -40,7 +40,8 @@ import { ProfileComponent } from '@/memberships/components/ProfileComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
-export const SideBar = () => {
+export const SideBar = (props: { setHide: (state: boolean) => void }) => {
+  const { setHide } = props
   const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)
   const { stage: electionStage } = useElectionStage()
   const [endpoints] = useNetworkEndpoints()
@@ -56,6 +57,9 @@ export const SideBar = () => {
           {/*  onClick={() => setNotificationsPanelOpen(!isNotificationsPanelOpen)}*/}
           {/*  isNotificationsPanelOpen={isNotificationsPanelOpen}*/}
           {/*/>*/}
+          <div style={{ float: 'right' }} onClick={() => setHide(true)}>
+            X
+          </div>
         </NavigationHeader>
         <AnimateSharedLayout>
           <NavigationLinks>
