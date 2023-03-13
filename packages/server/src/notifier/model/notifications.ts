@@ -54,13 +54,13 @@ const getEventsByMember =
 
 const isEventRelatedToSubscription =
   (potentialNotif: PotentialNotif) =>
-  ({ notificationType, memberId, entityIds }: Subscription): boolean => {
+  ({ notificationType, memberId, entityId }: Subscription): boolean => {
     if (notificationType !== potentialNotif.notificationType) {
       return false
     } else if (isGeneralPotentialNotif(potentialNotif)) {
       return potentialNotif.relatedMembers === 'ANY' || potentialNotif.relatedMembers.ids.includes(memberId)
     } else {
-      return entityIds.includes(potentialNotif.relatedEntityId)
+      return entityId === potentialNotif.relatedEntityId
     }
   }
 

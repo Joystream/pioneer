@@ -27,11 +27,11 @@ model Subscription {
   member              Member           @relation(fields: [memberId], references: [id])
   memberId            Int
   notificationType    NotificationType
-  entityIds           String[]
+  entityId            String?
   shouldNotify        Boolean          @default(true)
   shouldNotifyByEmail Boolean          @default(true)
 
-  @@unique([memberId, notificationType])
+  @@unique([memberId, notificationType, entityId])
 }
 
 model Notification {

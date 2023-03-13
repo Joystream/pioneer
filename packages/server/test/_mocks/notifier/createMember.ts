@@ -1,8 +1,8 @@
-import { NotificationType } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 
 import { prisma } from '@/common/prisma'
 
-type MockedSubscription = { notificationType: NotificationType; entityIds?: string[]; shouldNotify?: boolean }
+type MockedSubscription = Prisma.SubscriptionCreateManyMemberInput
 export const createMember = (id: number, name: string, subscriptions?: MockedSubscription[]) =>
   prisma.member.create({
     data: {
@@ -10,14 +10,7 @@ export const createMember = (id: number, name: string, subscriptions?: MockedSub
       name,
       email: `${name}@${name}.com`,
       subscriptions: subscriptions && {
-        createMany: {
-          data: subscriptions.map(({ notificationType, entityIds = [], shouldNotify = true }) => ({
-            notificationType,
-            entityIds,
-            shouldNotify,
-            shouldNotifyByEmail: false,
-          })),
-        },
+        createMany: { data: subscriptions.map((subscription) => ({ shouldNotifyByEmail: false, ...subscription })) },
       },
     },
     include: { subscriptions: true },

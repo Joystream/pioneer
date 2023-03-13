@@ -21,14 +21,18 @@ describe('createAndSaveNotifications', () => {
     // - Bob should not be notified of new post on thread:1 and thread:2
     const bob = await createMember(2, 'bob', [
       { notificationType: 'FORUM_POST_ALL' },
-      { notificationType: 'FORUM_WATCHED_THREAD', entityIds: ['thread:1', 'thread:2'], shouldNotify: false },
+      { notificationType: 'FORUM_WATCHED_THREAD', entityId: 'thread:1', shouldNotify: false },
+      { notificationType: 'FORUM_WATCHED_THREAD', entityId: 'thread:2', shouldNotify: false },
     ])
+
+    // Charlie had not registered in the back-end he should not get any notification
+    const charlie = { id: 3 }
 
     mockRequest.mockReturnValue({ events: [] }).mockReturnValueOnce({
       events: [
         postAddedEvent(1, 1, { threadAuthor: alice.id, text: `Hi [@Bob](#mention?member-id=${bob.id})` }),
         postAddedEvent(2, 2, { threadAuthor: bob.id, text: `Hi [@Alice](#mention?member-id=${alice.id})` }),
-        postAddedEvent(3, 3),
+        postAddedEvent(3, 3, { threadAuthor: charlie.id }),
       ],
     })
 
