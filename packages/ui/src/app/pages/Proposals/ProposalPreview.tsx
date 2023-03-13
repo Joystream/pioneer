@@ -104,6 +104,8 @@ export const ProposalPreview = () => {
       />
     )
   }
+
+  console.log(proposal);
   return (
     <PageLayout
       lastBreadcrumb={proposal.title}
