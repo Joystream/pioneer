@@ -25,7 +25,7 @@ const PROGRESS_KEY = { key: 'Progress' }
 
 export async function createAndSaveNotifications() {
   // Check the last block that where processed
-  const { value } = (await prisma.store.findFirst({ where: PROGRESS_KEY })) ?? {}
+  const { value } = (await prisma.store.findUnique({ where: PROGRESS_KEY })) ?? {}
   const progress: ProgressDoc = isProgressDoc(value) && value.block > STARTING_BLOCK ? value : defaultProgress
 
   const allMemberIds = (await prisma.member.findMany()).map(({ id }) => id)
