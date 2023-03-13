@@ -1,4 +1,4 @@
-export type NetworkType = 'mainnet' | 'local' | 'testnet' | 'auto-conf' | 'local-mocks'
+export type NetworkType = 'mainnet' | 'local' | 'testnet' | 'auto-conf' | 'local-mocks' | 'custom'
 
 export interface NetworkEndpoints {
   nodeRpcEndpoint: string
@@ -31,6 +31,7 @@ const QUERY_NODE_ENDPOINT_SUBSCRIPTION: PredefinedEndpoint = {
   local: 'ws://localhost:8081/graphql',
   testnet: TESTNET_QUERY_NODE_SOCKET,
   'local-mocks': 'ws://localhost:8081/graphql',
+  custom: '',
 }
 
 const QUERY_NODE_ENDPOINT: PredefinedEndpoint = {
@@ -38,6 +39,7 @@ const QUERY_NODE_ENDPOINT: PredefinedEndpoint = {
   local: 'http://localhost:8081/graphql',
   testnet: TESTNET_QUERY_NODE,
   'local-mocks': 'http://localhost:8081/graphql',
+  custom: '',
 }
 
 const MEMBERSHIP_FAUCET_ENDPOINT: PredefinedEndpoint = {
@@ -45,6 +47,7 @@ const MEMBERSHIP_FAUCET_ENDPOINT: PredefinedEndpoint = {
   local: 'http://localhost:3002/register',
   testnet: TESTNET_MEMBERSHIP_FAUCET_URL,
   'local-mocks': 'http://localhost:3002/register',
+  custom: '',
 }
 
 const NODE_RPC_ENDPOINT: PredefinedEndpoint = {
@@ -52,6 +55,7 @@ const NODE_RPC_ENDPOINT: PredefinedEndpoint = {
   local: 'ws://127.0.0.1:9944',
   testnet: TESTNET_NODE_SOCKET,
   'local-mocks': 'ws://127.0.0.1:9944',
+  custom: '',
 }
 
 export const pickEndpoints = (network: NetworkType): Partial<NetworkEndpoints> => ({

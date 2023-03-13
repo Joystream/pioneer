@@ -64,6 +64,8 @@ export const Settings = () => {
                     onChange={switchNetwork}
                     selectSize="l"
                   />
+                  {network === 'custom' && <>CustomForm</>}
+
                   {endpoints?.configEndpoint && (
                     <ButtonPrimary
                       onClick={() => fetchNetworkEndpoints(endpoints.configEndpoint as string)}
@@ -78,6 +80,7 @@ export const Settings = () => {
                     queryNodeAddress={endpoints.queryNodeEndpoint}
                     faucetAddress={endpoints.membershipFaucetEndpoint}
                   />
+
                   <PolkadotAppInfo rpcUrl={endpoints.nodeRpcEndpoint} />
                 </>
               )}
