@@ -1,10 +1,9 @@
-import { arg, booleanArg, objectType, queryField, stringArg } from 'nexus'
+import * as Prisma from '@prisma/client'
+import { arg, booleanArg, list, objectType, queryField, stringArg } from 'nexus'
 import { Notification, NotificationType } from 'nexus-prisma'
 
 import { Context } from '@/api/context'
 import { authMemberId } from '@/api/utils/token'
-
-// const NotificationTypeInput =
 
 export const NotificationFields = objectType({
   name: Notification.$name,
@@ -18,16 +17,21 @@ export const NotificationFields = objectType({
     t.field(Notification.isRead)
   },
 })
+
+type QueryArgs = Partial<Omit<Prisma.Notification, 'memberId'>>
 export const notificationsQuery = queryField('notifications', {
-  type: Notification.$name,
+  type: list(Notification.$name),
+
   args: {
+    id: stringArg(),
     notificationType: arg({ type: NotificationType.name }),
     eventId: stringArg(),
     entityId: stringArg(),
     isSent: booleanArg(),
     isRead: booleanArg(),
   },
-  resolve: async (_, args, { prisma, req }: Context) => {
+
+  resolve: async (_, args: QueryArgs, { prisma, req }: Context): Promise<Prisma.Notification[] | null> => {
     const memberId = authMemberId(req)
     if (!memberId) return null
 
