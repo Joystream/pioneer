@@ -39,6 +39,8 @@ export const Council = () => {
   const header = <PageHeaderWithHint title="Council" hintType="council" tabs={<CouncilTabs />} />
 
   const isCouncilorLoading = !isRefetched && (isLoading || isLoadingCouncilors)
+
+  const rewardPerDay = useMemo(() => reward?.period?.mul(reward?.amount ?? asBN(0)) ?? asBN(0), [reward])
   const main = (
     <MainPanel>
       <Statistics>
@@ -54,15 +56,14 @@ export const Council = () => {
             { label: 'Period length', value: budget.refillPeriod, type: 'blocks' },
           ]}
         />
-        {reward?.amount && reward?.period && (
-          <MultiValueStat
-            title="Councilor Reward"
-            values={[
-              { label: 'Per Day', value: asBN(+reward.amount * +reward.period) },
-              { label: 'Per Week', value: asBN(7 * +reward.amount * +reward.period) },
-            ]}
-          />
-        )}
+
+        <MultiValueStat
+          title="Councilor Reward"
+          values={[
+            { label: 'Per Day', value: rewardPerDay },
+            { label: 'Per Week', value: asBN(rewardPerDay.mul(asBN(7))) },
+          ]}
+        />
       </Statistics>
 
       {!isCouncilorLoading && sortedCouncilors.length === 0 ? (
