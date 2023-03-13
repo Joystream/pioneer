@@ -51,8 +51,8 @@ export const ProposalPreview = () => {
 
   const votingRounds = useVotingRounds(proposal?.votes, proposal?.proposalStatusUpdates)
   const [currentVotingRound, setVotingRound] = useState(0)
-
   const votes = votingRounds[currentVotingRound] ?? votingRounds[0]
+
   useRefetchQueries({ interval: MILLISECONDS_PER_BLOCK, include: ['getProposal', 'GetProposalVotes'] }, [proposal])
   const notVoted = useMemo(() => {
     if (
