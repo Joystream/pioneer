@@ -1,3 +1,4 @@
+import * as Prisma from '@prisma/client'
 import { pick } from 'lodash'
 import { intArg, mutationField, nonNull, stringArg } from 'nexus'
 import * as Yup from 'yup'
@@ -13,10 +14,6 @@ export interface SignInArgs {
   signature: string
   timestamp: number
 }
-export interface SignUpArgs extends SignInArgs {
-  name: string
-  email?: string
-}
 
 export const signin = mutationField('signin', {
   type: 'String',
@@ -27,7 +24,7 @@ export const signin = mutationField('signin', {
     timestamp: nonNull(intArg()),
   },
 
-  resolve: async (_, args: SignInArgs) => {
+  resolve: async (_, args: SignInArgs): Promise<string | null> => {
     const verification = await verifySignature(args.signature, args.memberId, args.timestamp)
     if (verification !== 'VALID') {
       return null
@@ -36,6 +33,11 @@ export const signin = mutationField('signin', {
     return createAuthToken(args.memberId)
   },
 })
+
+export interface SignUpArgs extends SignInArgs {
+  name: string
+  email?: string
+}
 
 export const signup = mutationField('signup', {
   type: 'String',
@@ -48,7 +50,7 @@ export const signup = mutationField('signup', {
     email: stringArg(),
   },
 
-  resolve: async (_, args: SignUpArgs, { req, prisma }: Context) => {
+  resolve: async (_, args: SignUpArgs, { req, prisma }: Context): Promise<Prisma.Member | null> => {
     const verification = await verifySignature(args.signature, args.memberId, args.timestamp)
     if (verification !== 'VALID') {
       return null
