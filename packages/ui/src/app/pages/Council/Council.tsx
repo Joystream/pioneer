@@ -61,7 +61,7 @@ export const Council = () => {
           title="Councilor Reward"
           values={[
             { label: 'Per Day', value: rewardPerDay },
-            { label: 'Per Week', value: asBN(rewardPerDay.mul(asBN(7))) },
+            { label: 'Per Week', value: rewardPerDay.mul(asBN(7)) },
           ]}
         />
       </Statistics>
