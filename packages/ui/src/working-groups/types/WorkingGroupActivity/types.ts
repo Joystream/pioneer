@@ -114,6 +114,6 @@ export interface WorkerRewardAmountUpdatedActivity extends BaseActivity {
   eventType: 'WorkerRewardAmountUpdatedEvent'
   member: MemberDisplayFields
   newAmount: BN
-  openingTitle: string
+  openingTitle?: string | null
   groupId: GroupIdName
 }
