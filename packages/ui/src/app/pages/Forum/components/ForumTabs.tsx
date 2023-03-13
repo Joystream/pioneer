@@ -9,10 +9,9 @@ const order = { orderKey: 'updatedAt', isDescending: true }
 
 export const ForumTabs = () => {
   const { totalCount } = useMyThreads({ page: 1, order } as UseMyThreadsProps)
-  const myThreadsCount = totalCount
   const tabs = usePageTabs([
     ['Forum', ForumRoutes.forum],
-    ['My Threads', ForumRoutes.myThreads, myThreadsCount],
+    ['My Threads', ForumRoutes.myThreads, totalCount],
     ['Watchlist', ForumRoutes.watchlist],
     ['Archived', ForumRoutes.archived],
   ])
