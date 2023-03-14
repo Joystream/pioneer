@@ -1,4 +1,5 @@
 import { ApiPromise } from '@polkadot/api'
+import yargs from 'yargs'
 
 import { AN_HOUR, A_MINUTE, A_SECOND } from '../../src/common/constants'
 import { durationFormatter, MILLISECONDS_PER_BLOCK } from '../../src/common/model/formatters'
@@ -9,6 +10,14 @@ const etaFormat = durationFormatter([
   [A_MINUTE, 'minute'],
   [A_SECOND, 'second'],
 ])
+
+const options = {
+  blockTime: {
+    number: true,
+    default: MILLISECONDS_PER_BLOCK,
+    alias: 'd',
+  },
+}
 
 export const nextCouncilStageCommand = async (api: ApiPromise, msPerBlock = MILLISECONDS_PER_BLOCK) => {
   const initialStageEnd = await stageEnd()
@@ -46,5 +55,7 @@ export const nextCouncilStageCommand = async (api: ApiPromise, msPerBlock = MILL
 export const nextCouncilStageModule = {
   command: 'nextCouncilStage',
   describe: 'Wait until the next council stage start',
-  handler: () => withApi(nextCouncilStageCommand),
+  handler: ({ blockTime }: yargs.InferredOptionTypes<typeof options>) =>
+    withApi((api) => nextCouncilStageCommand(api, blockTime)),
+  builder: (argv: yargs.Argv<unknown>) => argv.options(options),
 }

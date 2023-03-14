@@ -10,23 +10,32 @@ import { revealVotesCommand } from './reveal'
 import { castVotesCommand } from './vote'
 
 const options = {
-  blockLength: {
+  blockTime: {
     number: true,
     default: MILLISECONDS_PER_BLOCK,
     alias: 'd',
+  },
+  to: {
+    choices: ['VOTE', 'REVEAL', 'IDLE'],
+    default: 'IDLE',
+    alias: 't',
   },
 }
 
 export const electCouncilModule = {
   command: 'council:elect',
   describe: 'Elect a full council',
-  handler: async ({ blockLength }: yargs.InferredOptionTypes<typeof options>) => {
+  handler: async ({ blockTime, to }: yargs.InferredOptionTypes<typeof options>) => {
     await createMembersCommand()
     await withApi(async (api) => {
       await announceCandidaciesCommand(api)
-      await nextCouncilStageCommand(api, blockLength)
+      if (to === 'VOTE') return
+      await nextCouncilStageCommand(api, blockTime)
+
       await castVotesCommand(api)
-      await nextCouncilStageCommand(api, blockLength)
+      if (to === 'REVEAL') return
+      await nextCouncilStageCommand(api, blockTime)
+
       await revealVotesCommand(api)
     })
   },
