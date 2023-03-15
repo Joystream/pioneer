@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] - 2023-03-15
+
+### Fixed
+- Multiple voting rounds proposal view.
+- Forum watchlist tab.
+- Proposal list on narrow screens.
+- Forum thread back button goes back to the category page with the thread.
+- Typo in `docs/README`.
+
 ## [1.3.0] - 2023-02-17
 
 ### Added
@@ -117,7 +126,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v1.3.0...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v1.3.1...HEAD
+[1.3.1]: https://github.com/Joystream/pioneer/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/Joystream/pioneer/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/Joystream/pioneer/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/Joystream/pioneer/compare/v1.1.0...v1.1.1
