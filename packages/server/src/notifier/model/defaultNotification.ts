@@ -1,8 +1,8 @@
-import { GeneralSubscriptionType } from './subscriptionTypes'
+import { GeneralSubscriptionKind } from './subscriptionKinds'
 
-export const isDefaultNotification = (type: GeneralSubscriptionType): boolean => defaultNotifications.includes(type)
+export const isDefaultNotification = (type: GeneralSubscriptionKind): boolean => defaultNotifications.includes(type)
 
-const defaultNotifications: GeneralSubscriptionType[] = [
+const defaultNotifications: GeneralSubscriptionKind[] = [
   'FORUM_THREAD_MENTION',
   'FORUM_POST_MENTION',
   'FORUM_POST_REPLY',

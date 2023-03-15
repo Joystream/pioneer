@@ -17,7 +17,7 @@ export const notificationsFromEvent =
       getEventsByMember(subscriptions, allMemberIds)
     )
     return pickNotifs(notifsByMembers).map<Notification>((notif) => ({
-      notificationType: notif.data.notificationType,
+      kind: notif.data.kind,
       eventId: event.id,
       entityId: event.entityId,
       memberId: notif.memberId,
@@ -54,8 +54,8 @@ const getEventsByMember =
 
 const isEventRelatedToSubscription =
   (potentialNotif: PotentialNotif) =>
-  ({ notificationType, memberId, entityId }: Subscription): boolean => {
-    if (notificationType !== potentialNotif.notificationType) {
+  ({ kind, memberId, entityId }: Subscription): boolean => {
+    if (kind !== potentialNotif.kind) {
       return false
     } else if (isGeneralPotentialNotif(potentialNotif)) {
       return potentialNotif.relatedMembers === 'ANY' || potentialNotif.relatedMembers.ids.includes(memberId)
@@ -64,7 +64,7 @@ const isEventRelatedToSubscription =
     }
   }
 
-const pickNotifs = (notifs: PotentialNotifByMember[]) =>
+const pickNotifs = (notifs: PotentialNotifByMember[]): PotentialNotifByMember[] =>
   notifs.filter(
     (A, indexA) =>
       A.shouldNotify &&

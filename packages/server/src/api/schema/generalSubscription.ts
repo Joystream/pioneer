@@ -16,17 +16,17 @@ import { Subscription as GQLSubscription } from 'nexus-prisma'
 import { Context } from '@/api/context'
 import { authMemberId } from '@/api/utils/token'
 import { isDefaultNotification } from '@/notifier/model/defaultNotification'
-import { GeneralSubscriptionType } from '@/notifier/model/subscriptionTypes'
+import { GeneralSubscriptionKind } from '@/notifier/model/subscriptionKinds'
 
 interface GeneralSubscription extends Omit<Prisma.Subscription, 'memberId' | 'entityId'> {
-  notificationType: GeneralSubscriptionType
+  kind: GeneralSubscriptionKind
 }
 
-const GeneralSubscriptionTypeKeys: GeneralSubscriptionType[] = Object.values(GeneralSubscriptionType)
+const GeneralSubscriptionKindKeys: GeneralSubscriptionKind[] = Object.values(GeneralSubscriptionKind)
 
-export const GQLGeneralSubscriptionType = enumType({
-  name: 'GeneralSubscriptionType',
-  members: GeneralSubscriptionType,
+export const GQLGeneralSubscriptionKind = enumType({
+  name: 'GeneralSubscriptionKind',
+  members: GeneralSubscriptionKind,
 })
 
 export const GeneralSubscriptionFields = objectType({
@@ -35,8 +35,8 @@ export const GeneralSubscriptionFields = objectType({
   definition(t) {
     t.nonNull.id(GQLSubscription.id.name)
     t.nonNull.field({
-      name: GQLSubscription.notificationType.name,
-      type: GQLGeneralSubscriptionType.name,
+      name: GQLSubscription.kind.name,
+      type: GQLGeneralSubscriptionKind.name,
     })
     t.nonNull.boolean(GQLSubscription.shouldNotify.name)
     t.nonNull.boolean(GQLSubscription.shouldNotifyByEmail.name)
@@ -49,7 +49,7 @@ export const generalSubscriptionsQuery = queryField('generalSubscriptions', {
 
   args: {
     id: stringArg(),
-    notificationType: arg({ type: GQLGeneralSubscriptionType.name }),
+    kind: arg({ type: GQLGeneralSubscriptionKind.name }),
     shouldNotify: booleanArg(),
     shouldNotifyByEmail: booleanArg(),
   },
@@ -58,8 +58,8 @@ export const generalSubscriptionsQuery = queryField('generalSubscriptions', {
     const memberId = authMemberId(req)
     if (!memberId) return null
 
-    const notificationType = args.notificationType ?? { in: GeneralSubscriptionTypeKeys }
-    return prisma.subscription.findMany({ where: { ...args, notificationType, memberId } })
+    const kind = args.kind ?? { in: GeneralSubscriptionKindKeys }
+    return prisma.subscription.findMany({ where: { ...args, kind, memberId } })
   },
 })
 
@@ -67,8 +67,8 @@ const generalSubscriptionsInput = inputObjectType({
   name: 'GeneralSubscriptionInput',
   definition(t) {
     t.nonNull.field({
-      name: GQLSubscription.notificationType.name,
-      type: GQLGeneralSubscriptionType.name,
+      name: GQLSubscription.kind.name,
+      type: GQLGeneralSubscriptionKind.name,
     })
     t.boolean(GQLSubscription.shouldNotify.name)
     t.boolean(GQLSubscription.shouldNotifyByEmail.name)
@@ -85,22 +85,20 @@ export const generalSubscriptionsMutation = mutationField('generalSubscriptions'
     const memberId = authMemberId(req)
     if (!memberId) return null
 
-    const notificationType = { in: GeneralSubscriptionTypeKeys }
-    const currents = await prisma.subscription.findMany({ where: { notificationType, memberId } })
+    const kind = { in: GeneralSubscriptionKindKeys }
+    const currents = await prisma.subscription.findMany({ where: { kind, memberId } })
 
-    const changes = data.filter(({ notificationType, shouldNotify = true, shouldNotifyByEmail = true }) => {
-      const notifyByDefault = isDefaultNotification(notificationType)
+    const changes = data.filter(({ kind, shouldNotify = true, shouldNotifyByEmail = true }) => {
+      const notifyByDefault = isDefaultNotification(kind)
       return shouldNotify !== notifyByDefault || shouldNotifyByEmail !== notifyByDefault
     })
 
-    const [toUpdate, toDelete] = partition(currents, (a) =>
-      changes.some((b) => b.notificationType === a.notificationType)
-    )
+    const [toUpdate, toDelete] = partition(currents, (a) => changes.some((b) => b.kind === a.kind))
 
     const deleteTx = prisma.subscription.deleteMany({ where: { id: { in: toDelete.map(({ id }) => id) } } })
 
     const upsertTxs = changes.flatMap((input) => {
-      const current = toUpdate.find((sub) => sub.notificationType === input.notificationType)
+      const current = toUpdate.find((sub) => sub.kind === input.kind)
 
       if (!current) {
         return prisma.subscription.create({ data: { ...input, memberId } })

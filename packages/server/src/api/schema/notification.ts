@@ -1,6 +1,6 @@
 import * as Prisma from '@prisma/client'
 import { arg, booleanArg, list, objectType, queryField, stringArg } from 'nexus'
-import { Notification, NotificationType } from 'nexus-prisma'
+import { Notification, NotificationKind } from 'nexus-prisma'
 
 import { Context } from '@/api/context'
 import { authMemberId } from '@/api/utils/token'
@@ -10,7 +10,7 @@ export const NotificationFields = objectType({
   description: Notification.$description,
   definition(t) {
     t.field(Notification.id)
-    t.field(Notification.notificationType)
+    t.field(Notification.kind)
     t.field(Notification.eventId)
     t.field(Notification.entityId)
     t.field(Notification.isSent)
@@ -24,7 +24,7 @@ export const notificationsQuery = queryField('notifications', {
 
   args: {
     id: stringArg(),
-    notificationType: arg({ type: NotificationType.name }),
+    kind: arg({ type: NotificationKind.name }),
     eventId: stringArg(),
     entityId: stringArg(),
     isSent: booleanArg(),

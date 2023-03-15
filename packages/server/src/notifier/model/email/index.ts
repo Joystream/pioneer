@@ -37,7 +37,7 @@ const createEmail = async (notification: Notification): Promise<Email | undefine
     const to = notification.member.email
     const toEmail: ToEmail = (subject, body) => ({ ...body, to, subject })
 
-    switch (notification.notificationType) {
+    switch (notification.kind) {
       case 'FORUM_THREAD_CONTIBUTOR':
       case 'FORUM_THREAD_CREATOR':
       case 'FORUM_POST_MENTION':

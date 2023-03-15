@@ -5,17 +5,17 @@ import { Subscription as GQLSubscription } from 'nexus-prisma'
 
 import { Context } from '@/api/context'
 import { authMemberId } from '@/api/utils/token'
-import { EntitySubscriptionType } from '@/notifier/model/subscriptionTypes'
+import { EntitySubscriptionKind } from '@/notifier/model/subscriptionKinds'
 
 interface EntitySubscription extends Omit<Prisma.Subscription, 'memberId'> {
-  notificationType: EntitySubscriptionType
+  kind: EntitySubscriptionKind
 }
 
-const EntitySubscriptionTypeKeys: EntitySubscriptionType[] = Object.values(EntitySubscriptionType)
+const EntitySubscriptionKindKeys: EntitySubscriptionKind[] = Object.values(EntitySubscriptionKind)
 
-export const GQLEntitySubscriptionType = enumType({
-  name: 'EntitySubscriptionType',
-  members: EntitySubscriptionType,
+export const GQLEntitySubscriptionKind = enumType({
+  name: 'EntitySubscriptionKind',
+  members: EntitySubscriptionKind,
 })
 
 export const EntitySubscriptionFields = objectType({
@@ -24,8 +24,8 @@ export const EntitySubscriptionFields = objectType({
   definition(t) {
     t.nonNull.id(GQLSubscription.id.name)
     t.nonNull.field({
-      name: GQLSubscription.notificationType.name,
-      type: GQLEntitySubscriptionType.name,
+      name: GQLSubscription.kind.name,
+      type: GQLEntitySubscriptionKind.name,
     })
     t.nonNull.string(GQLSubscription.entityId.name)
     t.nonNull.boolean(GQLSubscription.shouldNotify.name)
@@ -39,7 +39,7 @@ export const entitySubscriptionsQuery = queryField('entitySubscriptions', {
 
   args: {
     id: stringArg(),
-    notificationType: arg({ type: GQLEntitySubscriptionType.name }),
+    kind: arg({ type: GQLEntitySubscriptionKind.name }),
     entityId: stringArg(),
     shouldNotify: booleanArg(),
     shouldNotifyByEmail: booleanArg(),
@@ -49,20 +49,20 @@ export const entitySubscriptionsQuery = queryField('entitySubscriptions', {
     const memberId = authMemberId(req)
     if (!memberId) return null
 
-    const notificationType = args.notificationType ?? { in: EntitySubscriptionTypeKeys }
-    return prisma.subscription.findMany({ where: { ...args, notificationType, memberId } })
+    const kind = args.kind ?? { in: EntitySubscriptionKindKeys }
+    return prisma.subscription.findMany({ where: { ...args, kind, memberId } })
   },
 })
 
 type SubscribeToEntityArgs = Omit<
-  EntitySubscription & Required<Pick<EntitySubscription, 'notificationType' | 'entityId'>> & { entityId: string },
+  EntitySubscription & Required<Pick<EntitySubscription, 'kind' | 'entityId'>> & { entityId: string },
   'id'
 >
 export const subscribeToEntityMutation = mutationField('subscribeToEntity', {
   type: 'EntitySubscription',
 
   args: {
-    notificationType: nonNull(arg({ type: GQLEntitySubscriptionType.name })),
+    kind: nonNull(arg({ type: GQLEntitySubscriptionKind.name })),
     entityId: nonNull(stringArg()),
     shouldNotify: booleanArg(),
     shouldNotifyByEmail: booleanArg(),
@@ -73,7 +73,7 @@ export const subscribeToEntityMutation = mutationField('subscribeToEntity', {
     if (!memberId) return null
 
     const where: Prisma.Prisma.SubscriptionWhereUniqueInput = {
-      memberId_notificationType_entityId: { ...pick(args, 'notificationType', 'entityId'), memberId },
+      memberId_kind_entityId: { ...pick(args, 'kind', 'entityId'), memberId },
     }
     const current = await prisma.subscription.findUnique({ where })
 
@@ -90,15 +90,12 @@ export const subscribeToEntityMutation = mutationField('subscribeToEntity', {
   },
 })
 
-type UnsubscribeToEntityArgs = Omit<
-  Pick<EntitySubscription, 'notificationType' | 'entityId'> & { entityId: string },
-  'id'
->
+type UnsubscribeToEntityArgs = Omit<Pick<EntitySubscription, 'kind' | 'entityId'> & { entityId: string }, 'id'>
 export const unsubscribeToEntityMutation = mutationField('unsubscribeToEntity', {
   type: 'EntitySubscription',
 
   args: {
-    notificationType: nonNull(arg({ type: GQLEntitySubscriptionType.name })),
+    kind: nonNull(arg({ type: GQLEntitySubscriptionKind.name })),
     entityId: nonNull(stringArg()),
   },
 
@@ -107,7 +104,7 @@ export const unsubscribeToEntityMutation = mutationField('unsubscribeToEntity', 
     if (!memberId) return null
 
     const where: Prisma.Prisma.SubscriptionWhereUniqueInput = {
-      memberId_notificationType_entityId: { ...pick(data, 'notificationType', 'entityId'), memberId },
+      memberId_kind_entityId: { ...pick(data, 'kind', 'entityId'), memberId },
     }
     return prisma.subscription.delete({ where })
   },

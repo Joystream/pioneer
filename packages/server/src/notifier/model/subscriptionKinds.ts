@@ -1,11 +1,11 @@
-import { NotificationType } from '@prisma/client'
+import { NotificationKind } from '@prisma/client'
 import { pick } from 'lodash'
 
-const extract = <T extends NotificationType>(...keys: T[]): Pick<typeof NotificationType, T> =>
-  pick(NotificationType, ...keys)
+const extract = <T extends NotificationKind>(...keys: T[]): Pick<typeof NotificationKind, T> =>
+  pick(NotificationKind, ...keys)
 
-export type EntitySubscriptionType = (typeof EntitySubscriptionType)[keyof typeof EntitySubscriptionType]
-export const EntitySubscriptionType = extract(
+export type EntitySubscriptionKind = (typeof EntitySubscriptionKind)[keyof typeof EntitySubscriptionKind]
+export const EntitySubscriptionKind = extract(
   'FORUM_WATCHED_CATEGORY_POST',
   'FORUM_WATCHED_CATEGORY_THREAD',
   'FORUM_WATCHED_CATEGORY_SUBCATEGORY',
@@ -16,8 +16,8 @@ export const EntitySubscriptionType = extract(
   'PROPOSAL_WATCHED_DISCUSSION'
 )
 
-export type GeneralSubscriptionType = (typeof GeneralSubscriptionType)[keyof typeof GeneralSubscriptionType]
-export const GeneralSubscriptionType = extract(
+export type GeneralSubscriptionKind = (typeof GeneralSubscriptionKind)[keyof typeof GeneralSubscriptionKind]
+export const GeneralSubscriptionKind = extract(
   'FORUM_THREAD_ALL',
   'FORUM_THREAD_MENTION',
 

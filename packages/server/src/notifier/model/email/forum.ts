@@ -5,14 +5,14 @@ import { GetPostDocument } from '@/common/queries'
 
 import { BuildEmail } from '.'
 
-export const emailFromForumPostNotification: BuildEmail = async ({ id, notificationType, entityId }, toEmail) => {
+export const emailFromForumPostNotification: BuildEmail = async ({ id, kind, entityId }, toEmail) => {
   if (!entityId) {
-    throw Error(`Missing post id in notification ${notificationType}, with id: ${id}`)
+    throw Error(`Missing post id in notification ${kind}, with id: ${id}`)
   }
 
   const { author, threadId, thread, text } = await post(entityId)
 
-  switch (notificationType) {
+  switch (kind) {
     case 'FORUM_THREAD_CONTIBUTOR':
     case 'FORUM_THREAD_CREATOR':
     case 'FORUM_WATCHED_THREAD':

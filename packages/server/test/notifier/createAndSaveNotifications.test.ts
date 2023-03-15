@@ -20,9 +20,9 @@ describe('createAndSaveNotifications', () => {
     // - By default Bob should be notified of any new post
     // - Bob should not be notified of new post on thread:1 and thread:2
     const bob = await createMember(2, 'bob', [
-      { notificationType: 'FORUM_POST_ALL' },
-      { notificationType: 'FORUM_WATCHED_THREAD', entityId: 'thread:1', shouldNotify: false },
-      { notificationType: 'FORUM_WATCHED_THREAD', entityId: 'thread:2', shouldNotify: false },
+      { kind: 'FORUM_POST_ALL' },
+      { kind: 'FORUM_WATCHED_THREAD', entityId: 'thread:1', shouldNotify: false },
+      { kind: 'FORUM_WATCHED_THREAD', entityId: 'thread:2', shouldNotify: false },
     ])
 
     // Charlie had not registered in the back-end he should not get any notification
@@ -42,18 +42,18 @@ describe('createAndSaveNotifications', () => {
 
     expect(notifications.find(({ eventId }) => eventId === 'event:1')).toMatchObject({
       memberId: alice.id,
-      notificationType: 'FORUM_THREAD_CREATOR',
+      kind: 'FORUM_THREAD_CREATOR',
       entityId: 'post:1',
       isRead: false,
       isSent: false,
     })
     expect(notifications.find(({ eventId }) => eventId === 'event:2')).toMatchObject({
       memberId: alice.id,
-      notificationType: 'FORUM_POST_MENTION',
+      kind: 'FORUM_POST_MENTION',
     })
     expect(notifications.find(({ eventId }) => eventId === 'event:3')).toMatchObject({
       memberId: bob.id,
-      notificationType: 'FORUM_POST_ALL',
+      kind: 'FORUM_POST_ALL',
     })
     expect(notifications).toHaveLength(3)
   })

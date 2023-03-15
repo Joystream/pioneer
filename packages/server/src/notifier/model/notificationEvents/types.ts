@@ -1,16 +1,16 @@
 import { GetNotificationEventsQuery } from '@/common/queries'
 import { DocWithFragments } from '@/common/utils/types'
-import { EntitySubscriptionType, GeneralSubscriptionType } from '@/notifier/model/subscriptionTypes'
+import { EntitySubscriptionKind, GeneralSubscriptionKind } from '@/notifier/model/subscriptionKinds'
 
 export type ImplementedQNEvent = DocWithFragments<Required<GetNotificationEventsQuery['events'][0]>>
 export type QNEvent<T extends ImplementedQNEvent['__typename']> = { __typename: T } & ImplementedQNEvent
 
 type GeneralEventParams = {
-  notificationType: GeneralSubscriptionType
+  kind: GeneralSubscriptionKind
   relatedMembers: 'ANY' | { ids: number[] }
   isDefault: boolean
 }
-type EntityEventParams = { notificationType: EntitySubscriptionType; relatedEntityId: string }
+type EntityEventParams = { kind: EntitySubscriptionKind; relatedEntityId: string }
 export type GeneralPotentialNotif = { priority: number } & GeneralEventParams
 export type EntitiyPotentialNotif = { priority: number } & EntityEventParams
 
