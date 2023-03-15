@@ -3,7 +3,7 @@ import { uniq } from 'lodash'
 
 import { Subset } from '@/common/utils/types'
 
-import { isEntityPotentialNotif, PotentialNotif } from './notificationEvents'
+import { isEntityPotentialNotif, PotentialNotif } from './event'
 
 type Filter = Subset<
   Prisma.SubscriptionWhereInput,

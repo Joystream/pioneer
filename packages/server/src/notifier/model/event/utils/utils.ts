@@ -1,5 +1,10 @@
 import { uniq } from 'lodash'
 
+import { EntitiyPotentialNotif, GeneralPotentialNotif, PotentialNotif } from './types'
+
+export const isGeneralPotentialNotif = (p: PotentialNotif): p is GeneralPotentialNotif => 'relatedMembers' in p
+export const isEntityPotentialNotif = (p: PotentialNotif): p is EntitiyPotentialNotif => 'relatedEntityId' in p
+
 export const toNumbers = (list: (number | string)[]) => list.map(Number).filter((item) => !isNaN(item))
 
 export const itemsExcept = <T, K extends string, O extends { [k in K]: T }>(list: O[], key: K, except: T): T[] =>

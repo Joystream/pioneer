@@ -1,8 +1,8 @@
 import { isDefaultNotification } from '@/notifier/model/defaultNotification'
 import { EntitySubscriptionKind, GeneralSubscriptionKind } from '@/notifier/model/subscriptionKinds'
-import { toNumbers } from '@/notifier/model/utils'
 
 import { NotificationEvent, PartialNotif, PotentialNotif } from './types'
+import { toNumbers } from './utils'
 
 interface NotifsBuilder {
   generalEvent: (kind: GeneralSubscriptionKind, members: 'ANY' | (number | string)[]) => PartialNotif | []

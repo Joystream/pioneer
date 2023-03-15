@@ -6,7 +6,7 @@ import { prisma } from '@/common/prisma'
 import { GetNotificationEventsDocument } from '@/common/queries'
 
 import { notifyByEmail } from './model/email'
-import { toNotificationEvents } from './model/notificationEvents'
+import { toNotificationEvents } from './model/event'
 import { notificationsFromEvent } from './model/notifications'
 import { subscriptionFiltersFromEvent } from './model/subscriptionFiltersFromEvents'
 

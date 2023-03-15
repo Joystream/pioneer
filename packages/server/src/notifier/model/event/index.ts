@@ -1,14 +1,11 @@
 import { GetNotificationEventsQuery } from '@/common/queries'
 
-import { buildEvents } from './buildEvent'
-import { fromPostAddedEvent } from './fromEvents'
-import {
-  EntitiyPotentialNotif,
-  GeneralPotentialNotif,
-  ImplementedQNEvent,
-  NotificationEvent,
-  PotentialNotif,
-} from './types'
+import { fromPostAddedEvent } from './forum'
+import { buildEvents } from './utils/buildEvent'
+import { ImplementedQNEvent, NotificationEvent, PotentialNotif } from './utils/types'
+
+export { isGeneralPotentialNotif, isEntityPotentialNotif } from './utils/utils'
+export { NotificationEvent, PotentialNotif }
 
 type AnyQNEvent = GetNotificationEventsQuery['events'][0]
 
@@ -25,8 +22,3 @@ export const toNotificationEvents =
         return fromPostAddedEvent(event, buildEvents(allMemberIds))
     }
   }
-
-export const isGeneralPotentialNotif = (p: PotentialNotif): p is GeneralPotentialNotif => 'relatedMembers' in p
-export const isEntityPotentialNotif = (p: PotentialNotif): p is EntitiyPotentialNotif => 'relatedEntityId' in p
-
-export { NotificationEvent, PotentialNotif }

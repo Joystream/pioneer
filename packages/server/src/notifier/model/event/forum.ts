@@ -1,10 +1,10 @@
 import { pick, uniq } from 'lodash'
 
 import { PostAddedEventFieldsFragmentDoc, PostFieldsFragmentDoc, useFragment } from '@/common/queries'
-import { isOlderThan, itemsExcept, mentionedMembersIdsFromText } from '@/notifier/model/utils'
 
-import { BuildEvents } from '../buildEvent'
-import { NotificationEvent, QNEvent } from '../types'
+import { BuildEvents } from './utils/buildEvent'
+import { NotificationEvent, QNEvent } from './utils/types'
+import { isOlderThan, itemsExcept, mentionedMembersIdsFromText } from './utils/utils'
 
 export const fromPostAddedEvent = (event: QNEvent<'PostAddedEvent'>, buildEvents: BuildEvents): NotificationEvent => {
   const postAddedEvent = useFragment(PostAddedEventFieldsFragmentDoc, event)
