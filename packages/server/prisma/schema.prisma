@@ -32,6 +32,9 @@ model Subscription {
   shouldNotifyByEmail Boolean          @default(true)
 
   @@unique([memberId, kind, entityId])
+  @@index(memberId)
+  @@index(kind)
+  @@index(entityId)
 }
 
 model Notification {
@@ -45,6 +48,7 @@ model Notification {
   isRead   Boolean          @default(false)
 
   @@unique([memberId, eventId])
+  @@index(memberId)
 }
 
 model Store {
