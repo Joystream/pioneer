@@ -14,7 +14,7 @@ In order to interact with the Joystream ecosystem
 
 ## Tech stack
 
-The Pioneer 2.0 is build using the latest version of [React](https://reactjs.org/). The React development assumes:
+The Pioneer 2.0 is built using the latest version of [React](https://reactjs.org/). The React development assumes:
 
 - [TypeScript](https://www.typescriptlang.org/) 4.x – using `sctrict:true`
 - Function components & [hooks](https://reactjs.org/docs/hooks-intro.html)
