@@ -7,8 +7,8 @@ import { GetNotificationEventsDocument } from '@/common/queries'
 
 import { notifyByEmail } from './model/email'
 import { toNotificationEvents } from './model/event'
+import { filterSubscriptions } from './model/filterSubscriptions'
 import { notificationsFromEvent } from './model/notifications'
-import { subscriptionFiltersFromEvent } from './model/subscriptionFiltersFromEvents'
 
 export async function run() {
   await createAndSaveNotifications()
@@ -48,7 +48,7 @@ export async function createAndSaveNotifications() {
     if (potentialNotifs.length === 0) continue
 
     // Fetch subscription related to the events
-    const subscriptionFilter = { OR: subscriptionFiltersFromEvent(potentialNotifs) }
+    const subscriptionFilter = { OR: filterSubscriptions(potentialNotifs) }
     const subscriptions = await prisma.subscription.findMany({ where: subscriptionFilter })
 
     // Create and save new notifications

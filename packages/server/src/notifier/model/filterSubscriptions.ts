@@ -11,7 +11,7 @@ type Filter = Subset<
 >
 type FilterByNotifKind = { [k in NotificationKind]: Filter }
 
-export const subscriptionFiltersFromEvent = (potentialNotifs: PotentialNotif[]): Prisma.SubscriptionWhereInput[] => {
+export const filterSubscriptions = (potentialNotifs: PotentialNotif[]): Prisma.SubscriptionWhereInput[] => {
   const filtersByNotificationKind = potentialNotifs.reduce<FilterByNotifKind>((filterByNotifKind, potentialNotif) => {
     const kind = potentialNotif.kind
     const filter = filterByNotifKind[kind]
