@@ -78,7 +78,7 @@ describe('ProposalPreview', () => {
   it('Loading', async () => {
     renderPage()
 
-    expect(await loaderSelector()).toBeDefined()
+    expect(loaderSelector()).toBeDefined()
   })
 
   it('Main content', async () => {
@@ -86,9 +86,9 @@ describe('ProposalPreview', () => {
 
     await waitForElementToBeRemoved(() => loaderSelector())
 
-    expect(await screen.findByText(PROPOSAL_DATA.title, { selector: 'h2' })).toBeDefined()
+    expect(await screen.findByText(PROPOSAL_DATA.title, { selector: 'header h2' })).toBeDefined()
 
-    expect(await screen.findByText('Deciding')).toBeDefined()
+    expect(await screen.findByText('Deciding', { selector: 'header *' })).toBeDefined()
 
     expect(await screen.findAllByText(/(?:Approval|Slashing) (?:Quorum|Threshold)/)).toHaveLength(4)
 
