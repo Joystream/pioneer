@@ -57,9 +57,7 @@ export const ProposalStages = ({ status, updates, constitutionality, value, onCh
           <Tooltip key={round} tooltipText={tooltipText}>
             <TabContainer key={round} active={isActive} disabled={isDisabled} onClick={onClick}>
               {icon}
-              <span>
-                Council approvals {round + 1}/{constitutionality}
-              </span>
+              <span>Round {round + 1}</span>
             </TabContainer>
           </Tooltip>
         )
