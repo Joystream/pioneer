@@ -2,8 +2,8 @@ import * as Prisma from '@prisma/client'
 import { intArg, mutationField, nonNull, objectType, queryField, stringArg } from 'nexus'
 import { Member } from 'nexus-prisma'
 
-import { Context } from '@/api/context'
-import { authMemberId, verifyEmailToken } from '@/api/utils/token'
+import { authMemberId, verifyEmailToken } from '@/auth/model/token'
+import { Context } from '@/common/api/context'
 
 export const MemberFields = objectType({
   name: Member.$name,

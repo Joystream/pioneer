@@ -4,11 +4,13 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-p
 import { ApolloServer } from 'apollo-server'
 import { makeSchema } from 'nexus'
 
+import * as authSchema from '@/auth/api'
+import * as notifierSchema from '@/notifier/api'
+
 import { createContext } from './context'
-import * as schemaTypes from './schema'
 
 const schema = makeSchema({
-  types: schemaTypes,
+  types: { ...authSchema, ...notifierSchema },
   contextType: { module: path.resolve('./context.ts'), export: 'Context' },
 })
 

@@ -3,8 +3,8 @@ import { pick } from 'lodash'
 import { arg, booleanArg, enumType, list, mutationField, nonNull, objectType, queryField, stringArg } from 'nexus'
 import { Subscription as GQLSubscription } from 'nexus-prisma'
 
-import { Context } from '@/api/context'
-import { authMemberId } from '@/api/utils/token'
+import { authMemberId } from '@/auth/model/token'
+import { Context } from '@/common/api/context'
 import { EntitySubscriptionKind } from '@/notifier/model/subscriptionKinds'
 
 interface EntitySubscription extends Omit<Prisma.Subscription, 'memberId'> {

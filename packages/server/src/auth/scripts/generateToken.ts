@@ -1,4 +1,4 @@
-import { createAuthToken } from '@/api/utils/token'
+import { createAuthToken } from '@/auth/model/token'
 import { prisma } from '@/common/prisma'
 
 const memberId = process.argv[2] ? Number(process.argv[2]) : 1

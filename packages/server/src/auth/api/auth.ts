@@ -3,13 +3,13 @@ import { pick } from 'lodash'
 import { intArg, mutationField, nonNull, stringArg } from 'nexus'
 import * as Yup from 'yup'
 
-import { Context } from '@/api/context'
-import { verifySignature } from '@/api/utils/signature'
-import { createAuthToken, createEmailToken } from '@/api/utils/token'
+import { verifySignature } from '@/auth/model/signature'
+import { createAuthToken, createEmailToken } from '@/auth/model/token'
+import { Context } from '@/common/api/context'
 import { PIONEER_URL } from '@/common/config'
 import { configEmailProvider } from '@/common/utils/email'
 
-export interface SignInArgs {
+interface SignInArgs {
   memberId: number
   signature: string
   timestamp: number

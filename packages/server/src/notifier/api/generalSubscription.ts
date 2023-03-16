@@ -13,8 +13,8 @@ import {
 } from 'nexus'
 import { Subscription as GQLSubscription } from 'nexus-prisma'
 
-import { Context } from '@/api/context'
-import { authMemberId } from '@/api/utils/token'
+import { authMemberId } from '@/auth/model/token'
+import { Context } from '@/common/api/context'
 import { GeneralSubscriptionKind, isDefaultSubscription } from '@/notifier/model/subscriptionKinds'
 
 interface GeneralSubscription extends Omit<Prisma.Subscription, 'memberId' | 'entityId'> {

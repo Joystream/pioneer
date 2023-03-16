@@ -8,7 +8,7 @@
     "docker": "docker-compose",
     "test": "jest",
     "tsc": "tsc",
-    "start:api": "nodemon --transpile-only -r tsconfig-paths/register ./src/api/index.ts",
+    "start:api": "nodemon --transpile-only -r tsconfig-paths/register ./src/common/api/index.ts",
     "start:db": "yarn docker up -d",
     "start": "yarn start:db && yarn start:api",
     "notify": "ts-node --transpile-only -r tsconfig-paths/register ./src/notifier",
