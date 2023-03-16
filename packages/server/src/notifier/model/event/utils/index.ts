@@ -2,6 +2,8 @@ import { uniq } from 'lodash'
 
 import { EntitiyPotentialNotif, GeneralPotentialNotif, PotentialNotif } from './types'
 
+export { NotifEventFromQNEvent, NotificationEvent, PotentialNotif } from './types'
+
 export const isGeneralPotentialNotif = (p: PotentialNotif): p is GeneralPotentialNotif => 'relatedMembers' in p
 export const isEntityPotentialNotif = (p: PotentialNotif): p is EntitiyPotentialNotif => 'relatedEntityId' in p
 

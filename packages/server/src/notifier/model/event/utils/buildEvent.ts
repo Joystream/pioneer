@@ -1,26 +1,15 @@
-import { isDefaultNotification } from '@/notifier/model/defaultNotification'
-import { EntitySubscriptionKind, GeneralSubscriptionKind } from '@/notifier/model/subscriptionKinds'
+import { isDefaultSubscription } from '@/notifier/model/subscriptionKinds'
 
-import { NotificationEvent, PartialNotif, PotentialNotif } from './types'
-import { toNumbers } from './utils'
+import { toNumbers } from '.'
+import { BuildEvents, NotificationEvent, NotifsBuilder, PotentialNotif } from './types'
 
-interface NotifsBuilder {
-  generalEvent: (kind: GeneralSubscriptionKind, members: 'ANY' | (number | string)[]) => PartialNotif | []
-  entityEvent: (kind: EntitySubscriptionKind, entityId: string) => PartialNotif
-}
-
-export type BuildEvents = (
-  eventData: Omit<NotificationEvent, 'entityId' | 'potentialNotifications'>,
-  entityId: string,
-  build: (b: NotifsBuilder) => (PartialNotif | [])[]
-) => NotificationEvent
 export const buildEvents =
   (allMemberIds: number[]): BuildEvents =>
   (eventData, entityId, build): NotificationEvent => {
     const generalEvent: NotifsBuilder['generalEvent'] = (kind, members) => {
       if (members.length === 0) return []
 
-      const isDefault = isDefaultNotification(kind)
+      const isDefault = isDefaultSubscription(kind)
       const relatedMembers =
         members === 'ANY' ? 'ANY' : { ids: toNumbers(members).filter((id) => allMemberIds.includes(id)) }
 

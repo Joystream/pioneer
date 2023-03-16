@@ -15,8 +15,7 @@ import { Subscription as GQLSubscription } from 'nexus-prisma'
 
 import { Context } from '@/api/context'
 import { authMemberId } from '@/api/utils/token'
-import { isDefaultNotification } from '@/notifier/model/defaultNotification'
-import { GeneralSubscriptionKind } from '@/notifier/model/subscriptionKinds'
+import { GeneralSubscriptionKind, isDefaultSubscription } from '@/notifier/model/subscriptionKinds'
 
 interface GeneralSubscription extends Omit<Prisma.Subscription, 'memberId' | 'entityId'> {
   kind: GeneralSubscriptionKind
@@ -89,7 +88,7 @@ export const generalSubscriptionsMutation = mutationField('generalSubscriptions'
     const currents = await prisma.subscription.findMany({ where: { kind, memberId } })
 
     const changes = data.filter(({ kind, shouldNotify = true, shouldNotifyByEmail = true }) => {
-      const notifyByDefault = isDefaultNotification(kind)
+      const notifyByDefault = isDefaultSubscription(kind)
       return shouldNotify !== notifyByDefault || shouldNotifyByEmail !== notifyByDefault
     })
 

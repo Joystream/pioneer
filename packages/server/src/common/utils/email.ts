@@ -4,7 +4,8 @@ import Mailgun from 'mailgun.js'
 
 import { emailProvider, EMAIL_SENDER, MAILGUN_DOMAIN } from '@/common/config'
 
-export type Email = { to: string; subject: string } & ({ text: string } | { html: string })
+export type EmailBody = { text: string } | { html: string }
+export type Email = { to: string; subject: string } & EmailBody
 
 export const configEmailProvider = (): ((email: Email) => Promise<void>) => {
   const toFullEmail = (email: Email) => ({ ...email, from: EMAIL_SENDER })

@@ -3,7 +3,7 @@ import { DocWithFragments } from '@/common/utils/types'
 import { EntitySubscriptionKind, GeneralSubscriptionKind } from '@/notifier/model/subscriptionKinds'
 
 export type ImplementedQNEvent = DocWithFragments<Required<GetNotificationEventsQuery['events'][0]>>
-export type QNEvent<T extends ImplementedQNEvent['__typename']> = { __typename: T } & ImplementedQNEvent
+type QNEvent<T extends ImplementedQNEvent['__typename']> = { __typename: T } & ImplementedQNEvent
 
 type GeneralEventParams = {
   kind: GeneralSubscriptionKind
@@ -16,7 +16,7 @@ export type EntitiyPotentialNotif = { priority: number } & EntityEventParams
 
 export type PotentialNotif = GeneralPotentialNotif | EntitiyPotentialNotif
 
-export type PartialNotif = Omit<GeneralPotentialNotif, 'priority'> | Omit<EntitiyPotentialNotif, 'priority'>
+type PartialNotif = Omit<GeneralPotentialNotif, 'priority'> | Omit<EntitiyPotentialNotif, 'priority'>
 
 export interface NotificationEvent {
   id: string
@@ -24,3 +24,19 @@ export interface NotificationEvent {
   entityId: string
   potentialNotifications: PotentialNotif[]
 }
+
+export interface NotifsBuilder {
+  generalEvent: (kind: GeneralSubscriptionKind, members: 'ANY' | (number | string)[]) => PartialNotif | []
+  entityEvent: (kind: EntitySubscriptionKind, entityId: string) => PartialNotif
+}
+
+export type BuildEvents = (
+  eventData: Omit<NotificationEvent, 'entityId' | 'potentialNotifications'>,
+  entityId: string,
+  build: (b: NotifsBuilder) => (PartialNotif | [])[]
+) => NotificationEvent
+
+export type NotifEventFromQNEvent<T extends ImplementedQNEvent['__typename']> = (
+  event: QNEvent<T>,
+  buildEvents: BuildEvents
+) => NotificationEvent

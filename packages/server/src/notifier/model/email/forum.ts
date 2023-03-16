@@ -3,37 +3,41 @@ import request from 'graphql-request'
 import { PIONEER_URL, QUERY_NODE_ENDPOINT } from '@/common/config'
 import { GetPostDocument } from '@/common/queries'
 
-import { BuildEmail } from '.'
+import { EmailFromNotification, buildEmail } from './utils'
 
-export const emailFromForumPostNotification: BuildEmail = async ({ id, kind, entityId }, toEmail) => {
+export const fromPostAddedNotification: EmailFromNotification = ({ id, kind, entityId, member }) => {
   if (!entityId) {
     throw Error(`Missing post id in notification ${kind}, with id: ${id}`)
   }
 
-  const { author, threadId, thread, text } = await post(entityId)
+  const toEmail = buildEmail(member.email, () => post(entityId))
 
   switch (kind) {
     case 'FORUM_THREAD_CONTIBUTOR':
     case 'FORUM_THREAD_CREATOR':
     case 'FORUM_WATCHED_THREAD':
-      return toEmail(`New post in "${thread}" in Pioneer's forum`, {
+      return toEmail(({ author, threadId, thread, text }) => ({
+        subject: `New post in "${thread}" in Pioneer's forum`,
         text: `${author} replied in the thread ${thread}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${threadId}?post=${entityId}\n\nContent: ${text}`,
-      })
+      }))
 
     case 'FORUM_POST_MENTION':
-      return toEmail("You were mentioned in Pioneer's forum", {
+      return toEmail(({ author, threadId, thread, text }) => ({
+        subject: "You were mentioned in Pioneer's forum",
         text: `${author} mentioned you in the thread ${thread}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${threadId}?post=${entityId}\n\nContent: ${text}`,
-      })
+      }))
 
     case 'FORUM_POST_REPLY':
-      return toEmail("New reply in Pioneer's forum", {
+      return toEmail(({ author, threadId, thread, text }) => ({
+        subject: "New reply in Pioneer's forum",
         text: `${author} replied to you in the thread ${thread}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${threadId}?post=${entityId}\n\nContent: ${text}`,
-      })
+      }))
 
-    default:
-      return toEmail("New post in Pioneer's forum", {
+    case 'FORUM_POST_ALL':
+      return toEmail(({ author, threadId, thread, text }) => ({
+        subject: "New post in Pioneer's forum",
         text: `${author} posted in the thread ${thread}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${threadId}?post=${entityId}\n\nContent: ${text}`,
-      })
+      }))
   }
 }
 

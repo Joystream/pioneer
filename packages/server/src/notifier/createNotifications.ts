@@ -6,8 +6,8 @@ import { prisma } from '@/common/prisma'
 import { GetNotificationEventsDocument } from '@/common/queries'
 
 import { toNotificationEvents } from './model/event'
-import { filterSubscriptions } from './model/filterSubscriptions'
 import { notificationsFromEvent } from './model/notifications'
+import { filterSubscriptions } from './model/subscriptionFilters'
 
 interface ProgressDoc {
   block: number
@@ -17,7 +17,7 @@ const isProgressDoc = (consumed: any): consumed is ProgressDoc => typeof consume
 const defaultProgress: ProgressDoc = { block: STARTING_BLOCK, eventIds: [] }
 const PROGRESS_KEY = { key: 'Progress' }
 
-export const createNotifications = async () => {
+export const createNotifications = async (): Promise<void> => {
   // Check the last block that where processed
   const { value } = (await prisma.store.findUnique({ where: PROGRESS_KEY })) ?? {}
   const progress: ProgressDoc = isProgressDoc(value) && value.block > STARTING_BLOCK ? value : defaultProgress
