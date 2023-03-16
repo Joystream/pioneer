@@ -8,12 +8,16 @@
     "docker": "docker-compose",
     "test": "jest",
     "tsc": "tsc",
-    "start:api": "nodemon --transpile-only -r tsconfig-paths/register ./src/common/api/index.ts",
-    "start:db": "yarn docker up -d",
-    "start": "yarn start:db && yarn start:api",
-    "notify": "ts-node --transpile-only -r tsconfig-paths/register ./src/notifier",
-    "authtoken": "ts-node --transpile-only -r tsconfig-paths/register ./src/auth/scripts/generateToken",
-    "docker:clean": "yarn docker down -v"
+    "dev:api": "nodemon --transpile-only -r tsconfig-paths/register ./src/common/api/index.ts",
+    "dev:db": "yarn docker up -d",
+    "dev:notify": "ts-node --transpile-only -r tsconfig-paths/register ./src/notifier/scripts/notify.ts",
+    "dev:authtoken": "ts-node --transpile-only -r tsconfig-paths/register ./src/auth/scripts/generateToken",
+    "docker:clean": "yarn docker down -v",
+    "dev": "yarn dev:db && yarn dev:api",
+    "tsc:build": "rm -rf ./dist/* ; yarn codegen && tsc && tscpaths -p tsconfig.json -s ./src -o ./dist",
+    "build": "prisma migrate deploy && yarn tsc:build",
+    "notify": "node ./dist/notifier/scripts/notify",
+    "start": "node ./dist/common/scripts/start"
   },
   "dependencies": {
     "@apollo/server-plugin-landing-page-graphql-playground": "^4.0.0",
@@ -28,6 +32,7 @@
     "mailgun.js": "^8.2.1",
     "nexus": "^1.3.0",
     "nexus-prisma": "^1.0.4",
+    "node-cron": "^3.0.2",
     "yup": "^0.32.9"
   },
   "devDependencies": {
@@ -42,6 +47,7 @@
     "@types/jsonwebtoken": "^9",
     "@types/lodash": "^4",
     "@types/node": "^18.14.0",
+    "@types/node-cron": "^3.0.7",
     "@types/prettier": "^2",
     "@typescript-eslint/eslint-plugin": "^5.52.0",
     "@typescript-eslint/parser": "^5.52.0",
@@ -53,6 +59,7 @@
     "prisma": "^4.10.1",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^3.14.2",
+    "tscpaths": "^0.0.9",
     "typescript": "^4.9.5"
   }
 }

@@ -1,4 +1,7 @@
 import { createNotifications } from './createNotifications'
 import { sendNotifications } from './sendNotifications'
 
-createNotifications().then(sendNotifications)
+export const run = async () => {
+  await createNotifications()
+  await sendNotifications()
+}

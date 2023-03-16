@@ -9477,6 +9477,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node-cron@npm:^3.0.7":
+  version: 3.0.7
+  resolution: "@types/node-cron@npm:3.0.7"
+  checksum: 1a37bd32efe55a285b08299ef4fb8b11edaa1c0d4ef5d541611a9a4a631b4d5db3dbb5b02321ce04b882d4d07f4b3a05c2ff5fd70ce4614d7f8abd45d2f28da2
+  languageName: node
+  linkType: hard
+
 "@types/node-fetch@npm:^2.5.7":
   version: 2.5.12
   resolution: "@types/node-fetch@npm:2.5.12"
@@ -24448,6 +24455,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-cron@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "node-cron@npm:3.0.2"
+  dependencies:
+    uuid: 8.3.2
+  checksum: dd21585c0d4069a0752022dad9b8380a4393c4783ec78355ffa99ff32b018c3743a35d4ebf9d7c7863949e94e302b440f58c884eb4960e71c7260d817e2d3f25
+  languageName: node
+  linkType: hard
+
 "node-dir@npm:^0.1.10":
   version: 0.1.17
   resolution: "node-dir@npm:0.1.17"
@@ -29099,6 +29115,7 @@ __metadata:
     "@types/jsonwebtoken": ^9
     "@types/lodash": ^4
     "@types/node": ^18.14.0
+    "@types/node-cron": ^3.0.7
     "@types/prettier": ^2
     "@typescript-eslint/eslint-plugin": ^5.52.0
     "@typescript-eslint/parser": ^5.52.0
@@ -29113,11 +29130,13 @@ __metadata:
     mailgun.js: ^8.2.1
     nexus: ^1.3.0
     nexus-prisma: ^1.0.4
+    node-cron: ^3.0.2
     nodemon: ^2.0.21
     prettier: ^2.8.4
     prisma: ^4.10.1
     ts-node: ^10.9.1
     tsconfig-paths: ^3.14.2
+    tscpaths: ^0.0.9
     typescript: ^4.9.5
     yup: ^0.32.9
   languageName: unknown
@@ -31174,6 +31193,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tscpaths@npm:^0.0.9":
+  version: 0.0.9
+  resolution: "tscpaths@npm:0.0.9"
+  dependencies:
+    commander: ^2.20.0
+    globby: ^9.2.0
+  bin:
+    tscpaths: cjs/index.js
+  checksum: 384fc9f22ddd6903d555157507d249b37ed0c1716f04d56477e2ece16d01d411d8a13fd906a0f0b88d22e75bd043d6898e7c1acc4de2822a6ba78b0f83443b30
+  languageName: node
+  linkType: hard
+
 "tslib@npm:^1.8.1, tslib@npm:^1.9.0":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
@@ -32096,6 +32127,15 @@ __metadata:
   version: 3.1.0
   resolution: "uuid-browser@npm:3.1.0"
   checksum: 951ec47593865c7cc746df671f7b0f0ff48fcab583fcdaeab6c517a5222af0f5e144a6fcea5fa9620a5b3be047e2f9412a80267ea5c45050e07d51774197d49e
+  languageName: node
+  linkType: hard
+
+"uuid@npm:8.3.2":
+  version: 8.3.2
+  resolution: "uuid@npm:8.3.2"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
   languageName: node
   linkType: hard
 
