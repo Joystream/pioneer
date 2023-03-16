@@ -5,15 +5,9 @@ import { QUERY_NODE_ENDPOINT, STARTING_BLOCK } from '@/common/config'
 import { prisma } from '@/common/prisma'
 import { GetNotificationEventsDocument } from '@/common/queries'
 
-import { notifyByEmail } from './model/email'
 import { toNotificationEvents } from './model/event'
 import { filterSubscriptions } from './model/filterSubscriptions'
 import { notificationsFromEvent } from './model/notifications'
-
-export async function run() {
-  await createAndSaveNotifications()
-  await sendNotifications()
-}
 
 interface ProgressDoc {
   block: number
@@ -23,7 +17,7 @@ const isProgressDoc = (consumed: any): consumed is ProgressDoc => typeof consume
 const defaultProgress: ProgressDoc = { block: STARTING_BLOCK, eventIds: [] }
 const PROGRESS_KEY = { key: 'Progress' }
 
-export async function createAndSaveNotifications() {
+export const createNotifications = async () => {
   // Check the last block that where processed
   const { value } = (await prisma.store.findUnique({ where: PROGRESS_KEY })) ?? {}
   const progress: ProgressDoc = isProgressDoc(value) && value.block > STARTING_BLOCK ? value : defaultProgress
@@ -60,21 +54,4 @@ export async function createAndSaveNotifications() {
   const document: Prisma.JsonObject = { block: progress.block, eventIds: progress.eventIds }
   const update = { value: document }
   prisma.store.upsert({ where: PROGRESS_KEY, update, create: { ...PROGRESS_KEY, ...update } })
-}
-
-async function sendNotifications() {
-  const notifications = await prisma.notification.findMany({ where: { isSent: false }, include: { member: true } })
-
-  const sendEmail = notifyByEmail()
-  return Promise.all(
-    notifications.map(async (notification) => {
-      const { id, isSent } = await sendEmail(notification)
-      if (isSent) {
-        await prisma.notification.update({ where: { id }, data: { isSent: true } })
-      } else {
-        // TODO: update a fail counter instead so it can be retried N time later
-        await prisma.notification.update({ where: { id }, data: { isSent: true } })
-      }
-    })
-  )
 }

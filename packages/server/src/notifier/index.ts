@@ -1,3 +1,4 @@
-import { run } from './run'
+import { createNotifications } from './createNotifications'
+import { sendNotifications } from './sendNotifications'
 
-run()
+createNotifications().then(sendNotifications)
