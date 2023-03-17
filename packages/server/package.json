@@ -15,9 +15,10 @@
     "docker:clean": "yarn docker down -v",
     "dev": "yarn dev:db && yarn dev:api",
     "build": "rm -rf ./dist/* ; yarn codegen && tsc && tscpaths -p tsconfig.json -s ./src -o ./dist",
-    "start": "node ./dist/common/scripts/start",
+    "start:api": "node ./dist/common/scripts/startApi",
+    "start:all": "node ./dist/common/scripts/startAll",
     "notify": "node ./dist/notifier/scripts/notify",
-    "deploy": "prisma migrate deploy && yarn build && yarn start"
+    "deploy": "prisma migrate deploy && prisma generate && yarn build"
   },
   "dependencies": {
     "@apollo/server-plugin-landing-page-graphql-playground": "^4.0.0",

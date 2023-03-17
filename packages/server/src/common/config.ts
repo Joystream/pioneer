@@ -5,8 +5,9 @@ const errMsg = (name: string) => Error(`${name} should be defined in .env`)
 config()
 
 const {
+  PORT = 3000,
+  APP_SECRET_KEY, // TODO check this is defined when running the api
   QUERY_NODE_ENDPOINT,
-  APP_SECRET_KEY,
   PIONEER_URL = 'https://pioneerapp.xyz',
   STARTING_BLOCK: _STARTING_BLOCK,
   EMAIL_SENDER,
@@ -24,7 +25,7 @@ if (Object.values(emailProvider).filter(isString).length !== 1) {
 }
 if (emailProvider.MAILGUN_CONFIG && !MAILGUN_DOMAIN) throw errMsg('If MAILGUN_CONFIG is defined, MAILGUN_DOMAIN')
 
-export { QUERY_NODE_ENDPOINT, APP_SECRET_KEY, PIONEER_URL, EMAIL_SENDER, emailProvider, MAILGUN_DOMAIN }
+export { PORT, APP_SECRET_KEY, QUERY_NODE_ENDPOINT, PIONEER_URL, EMAIL_SENDER, emailProvider, MAILGUN_DOMAIN }
 
 export const STARTING_BLOCK = Number(_STARTING_BLOCK ?? 0)
 

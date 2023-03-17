@@ -9,18 +9,16 @@ import * as notifierSchema from '@/notifier/api'
 
 import { createContext } from './context'
 
+export { Context } from './context'
+
 const schema = makeSchema({
   types: { ...authSchema, ...notifierSchema },
   contextType: { module: path.resolve('./context.ts'), export: 'Context' },
 })
 
-const server = new ApolloServer({
+export const server = new ApolloServer({
   schema,
   context: createContext,
   introspection: true,
   plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
-})
-
-server.listen(3000).then(({ url }) => {
-  process.stdout.write(`🚀 Server ready at ${url}\n`)
 })

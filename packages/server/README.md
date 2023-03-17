@@ -1,1 +1,1 @@
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/9QRIWO)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/feature/backend-poc)

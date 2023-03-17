@@ -4,7 +4,7 @@ import { arg, booleanArg, enumType, list, mutationField, nonNull, objectType, qu
 import { Subscription as GQLSubscription } from 'nexus-prisma'
 
 import { authMemberId } from '@/auth/model/token'
-import { Context } from '@/common/api/context'
+import { Context } from '@/common/api'
 import { EntitySubscriptionKind } from '@/notifier/model/subscriptionKinds'
 
 interface EntitySubscription extends Omit<Prisma.Subscription, 'memberId'> {

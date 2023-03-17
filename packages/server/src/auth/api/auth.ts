@@ -5,7 +5,7 @@ import * as Yup from 'yup'
 
 import { verifySignature } from '@/auth/model/signature'
 import { createAuthToken, createEmailToken } from '@/auth/model/token'
-import { Context } from '@/common/api/context'
+import { Context } from '@/common/api'
 import { PIONEER_URL } from '@/common/config'
 import { configEmailProvider } from '@/common/utils/email'
 

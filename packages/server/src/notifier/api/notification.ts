@@ -3,7 +3,7 @@ import { arg, booleanArg, list, objectType, queryField, stringArg } from 'nexus'
 import { Notification, NotificationKind } from 'nexus-prisma'
 
 import { authMemberId } from '@/auth/model/token'
-import { Context } from '@/common/api/context'
+import { Context } from '@/common/api'
 
 export const NotificationFields = objectType({
   name: Notification.$name,

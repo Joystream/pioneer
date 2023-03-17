@@ -3,7 +3,7 @@ import { intArg, mutationField, nonNull, objectType, queryField, stringArg } fro
 import { Member } from 'nexus-prisma'
 
 import { authMemberId, verifyEmailToken } from '@/auth/model/token'
-import { Context } from '@/common/api/context'
+import { Context } from '@/common/api'
 
 export const MemberFields = objectType({
   name: Member.$name,

@@ -1,6 +1,3 @@
-import '@/common/api'
-import '@/notifier/scripts/notifyNodeCron'
-
 import { pick } from 'lodash'
 import * as Yup from 'yup'
 
