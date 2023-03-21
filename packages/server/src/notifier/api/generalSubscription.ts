@@ -1,27 +1,21 @@
 import * as Prisma from '@prisma/client'
-import { partition } from 'lodash'
-import {
-  arg,
-  booleanArg,
-  enumType,
-  inputObjectType,
-  list,
-  mutationField,
-  objectType,
-  queryField,
-  stringArg,
-} from 'nexus'
-import { Subscription as GQLSubscription } from 'nexus-prisma'
+import { arg, booleanArg, enumType, inputObjectType, list, mutationField, objectType, queryField } from 'nexus'
+import { Subscription } from 'nexus-prisma'
 
 import { authMemberId } from '@/auth/model/token'
 import { Context } from '@/common/api'
 import { GeneralSubscriptionKind, isDefaultSubscription } from '@/notifier/model/subscriptionKinds'
 
-interface GeneralSubscription extends Omit<Prisma.Subscription, 'memberId' | 'entityId'> {
+interface GeneralSubscription extends Omit<Prisma.Subscription, 'id' | 'memberId' | 'entityId'> {
+  id?: number
   kind: GeneralSubscriptionKind
 }
 
 const GeneralSubscriptionKindKeys: GeneralSubscriptionKind[] = Object.values(GeneralSubscriptionKind)
+const defaultSubscription = (kind: GeneralSubscriptionKind): GeneralSubscription => {
+  const shouldNotify = isDefaultSubscription(kind)
+  return { kind, shouldNotify, shouldNotifyByEmail: shouldNotify }
+}
 
 export const GQLGeneralSubscriptionKind = enumType({
   name: 'GeneralSubscriptionKind',
@@ -30,15 +24,15 @@ export const GQLGeneralSubscriptionKind = enumType({
 
 export const GeneralSubscriptionFields = objectType({
   name: 'GeneralSubscription',
-  description: GQLSubscription.$description,
+  description: Subscription.$description,
   definition(t) {
-    t.nonNull.id(GQLSubscription.id.name)
+    t.int(Subscription.id.name)
     t.nonNull.field({
-      name: GQLSubscription.kind.name,
+      name: Subscription.kind.name,
       type: GQLGeneralSubscriptionKind.name,
     })
-    t.nonNull.boolean(GQLSubscription.shouldNotify.name)
-    t.nonNull.boolean(GQLSubscription.shouldNotifyByEmail.name)
+    t.nonNull.boolean(Subscription.shouldNotify.name)
+    t.nonNull.boolean(Subscription.shouldNotifyByEmail.name)
   },
 })
 
@@ -47,18 +41,24 @@ export const generalSubscriptionsQuery = queryField('generalSubscriptions', {
   type: list('GeneralSubscription'),
 
   args: {
-    id: stringArg(),
     kind: arg({ type: GQLGeneralSubscriptionKind.name }),
     shouldNotify: booleanArg(),
     shouldNotifyByEmail: booleanArg(),
   },
 
-  resolve: async (_, args: QueryArgs, { prisma, req }: Context): Promise<Prisma.Subscription[] | null> => {
+  resolve: async (_, args: QueryArgs, { prisma, req }: Context): Promise<GeneralSubscription[] | null> => {
     const memberId = authMemberId(req)
     if (!memberId) return null
 
-    const kind = args.kind ?? { in: GeneralSubscriptionKindKeys }
-    return prisma.subscription.findMany({ where: { ...args, kind, memberId } })
+    const where = { ...args, kind: args.kind ?? { in: GeneralSubscriptionKindKeys }, memberId }
+    const currents = (await prisma.subscription.findMany({ where })) as GeneralSubscription[]
+
+    return GeneralSubscriptionKindKeys.flatMap((kind) => {
+      if (args.kind && !args.kind.includes(kind)) {
+        return []
+      }
+      return currents.find((sub) => sub.kind === kind) ?? defaultSubscription(kind) ?? []
+    })
   },
 })
 
@@ -66,15 +66,15 @@ const generalSubscriptionsInput = inputObjectType({
   name: 'GeneralSubscriptionInput',
   definition(t) {
     t.nonNull.field({
-      name: GQLSubscription.kind.name,
+      name: Subscription.kind.name,
       type: GQLGeneralSubscriptionKind.name,
     })
-    t.boolean(GQLSubscription.shouldNotify.name)
-    t.boolean(GQLSubscription.shouldNotifyByEmail.name)
+    t.boolean(Subscription.shouldNotify.name)
+    t.boolean(Subscription.shouldNotifyByEmail.name)
   },
 })
 
-type MutationArgs = { data: Omit<GeneralSubscription, 'id'>[] }
+type MutationArgs = { data: GeneralSubscription[] }
 export const generalSubscriptionsMutation = mutationField('generalSubscriptions', {
   type: list('GeneralSubscription'),
 
@@ -87,32 +87,22 @@ export const generalSubscriptionsMutation = mutationField('generalSubscriptions'
     const kind = { in: GeneralSubscriptionKindKeys }
     const currents = await prisma.subscription.findMany({ where: { kind, memberId } })
 
-    const changes = data.filter(({ kind, shouldNotify = true, shouldNotifyByEmail = true }) => {
-      const notifyByDefault = isDefaultSubscription(kind)
-      return shouldNotify !== notifyByDefault || shouldNotifyByEmail !== notifyByDefault
-    })
-
-    const [toUpdate, toDelete] = partition(currents, (a) => changes.some((b) => b.kind === a.kind))
-
-    const deleteTx = prisma.subscription.deleteMany({ where: { id: { in: toDelete.map(({ id }) => id) } } })
-
-    const upsertTxs = changes.flatMap((input) => {
-      const current = toUpdate.find((sub) => sub.kind === input.kind)
-
-      if (!current) {
-        return prisma.subscription.create({ data: { ...input, memberId } })
-      }
-
+    const transactions = data.flatMap((input) => {
       const { shouldNotify = true, shouldNotifyByEmail = true } = input
-      if (shouldNotify === current.shouldNotify && shouldNotifyByEmail === current.shouldNotifyByEmail) {
-        return []
-      }
+      const current = currents.find((current) => current.kind === input.kind)
 
-      return prisma.subscription.update({ where: { id: current.id }, data: { shouldNotify, shouldNotifyByEmail } })
+      if (current) {
+        return shouldNotify === current.shouldNotify && shouldNotifyByEmail === current.shouldNotifyByEmail
+          ? []
+          : prisma.subscription.update({ where: { id: current.id }, data: { shouldNotify, shouldNotifyByEmail } })
+      } else {
+        const notifyByDefault = isDefaultSubscription(input.kind)
+        return shouldNotify === notifyByDefault && shouldNotifyByEmail === notifyByDefault
+          ? []
+          : prisma.subscription.create({ data: { ...input, memberId } })
+      }
     })
 
-    const [, ...subscriptions] = await prisma.$transaction([deleteTx, ...upsertTxs])
-
-    return subscriptions
+    return await prisma.$transaction(transactions)
   },
 })

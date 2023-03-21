@@ -1,7 +1,7 @@
 import * as Prisma from '@prisma/client'
 import { pick } from 'lodash'
 import { arg, booleanArg, enumType, list, mutationField, nonNull, objectType, queryField, stringArg } from 'nexus'
-import { Subscription as GQLSubscription } from 'nexus-prisma'
+import { Subscription } from 'nexus-prisma'
 
 import { authMemberId } from '@/auth/model/token'
 import { Context } from '@/common/api'
@@ -20,16 +20,16 @@ export const GQLEntitySubscriptionKind = enumType({
 
 export const EntitySubscriptionFields = objectType({
   name: 'EntitySubscription',
-  description: GQLSubscription.$description,
+  description: Subscription.$description,
   definition(t) {
-    t.nonNull.id(GQLSubscription.id.name)
+    t.nonNull.id(Subscription.id.name)
     t.nonNull.field({
-      name: GQLSubscription.kind.name,
+      name: Subscription.kind.name,
       type: GQLEntitySubscriptionKind.name,
     })
-    t.nonNull.string(GQLSubscription.entityId.name)
-    t.nonNull.boolean(GQLSubscription.shouldNotify.name)
-    t.nonNull.boolean(GQLSubscription.shouldNotifyByEmail.name)
+    t.nonNull.string(Subscription.entityId.name)
+    t.nonNull.boolean(Subscription.shouldNotify.name)
+    t.nonNull.boolean(Subscription.shouldNotifyByEmail.name)
   },
 })
 
