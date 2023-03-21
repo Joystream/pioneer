@@ -8,7 +8,7 @@ services:
     repo: https://github.com/Joystream/pioneer
     branch: feature/backend-poc
 
-    buildCommand: yarn --frozen-lockfile && yarn workspace server deploy
+    buildCommand: yarn --frozen-lockfile && yarn workspace server build
     startCommand: yarn workspace server start:api
 
     envVars:
@@ -56,7 +56,7 @@ services:
     repo: https://github.com/Joystream/pioneer
     branch: feature/backend-poc
 
-    buildCommand: yarn --frozen-lockfile && yarn workspace server deploy
+    buildCommand: yarn --frozen-lockfile && yarn workspace server build
     startCommand: yarn workspace server notify
     schedule: "*/30 * * * *"
 

@@ -19,11 +19,11 @@
     "lint:eslint": "eslint \"./{src,test}/**/*.ts\"",
     "lint:fix": "yarn lint:eslint --fix && yarn lint:prettier --write --loglevel warn",
     "lint:prettier": "yarn prettier \"./{src,test}/**/*.{ts,graphql}\"",
-    "build": "rm -rf ./dist/* ; yarn codegen && tsc && tscpaths -p tsconfig.json -s ./src -o ./dist",
     "start:api": "node ./dist/common/scripts/startApi",
     "start:all": "node ./dist/common/scripts/startAll",
     "notify": "node ./dist/notifier/scripts/notify",
-    "deploy": "prisma migrate deploy && prisma generate && yarn build"
+    "build:local": "rm -rf ./dist/* ; prisma generate && yarn codegen && tsc -p ./src/tsconfig.json && tscpaths -p ./src/tsconfig.json -s ./src -o ./dist",
+    "build": "prisma migrate deploy && yarn build:local"
   },
   "dependencies": {
     "@apollo/server-plugin-landing-page-graphql-playground": "^4.0.0",

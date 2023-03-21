@@ -16,6 +16,7 @@
     "build:storybook": "wsrun --fast-exit --stages -p @joystream/markdown-editor -c build && wsrun -p @joystream/pioneer -c build:storybook",
     "storybook": "wsrun --exclude-missing -c storybook",
     "test": "wsrun --fast-exit --exclude-missing -c test",
+    "ci-build": "wsrun --fast-exit -x @joystream/markdown-editor -c build",
     "ci-test": "NODE_OPTIONS=--max_old_space_size=7000 wsrun --fast-exit ---exclude-missing -c test",
     "start": "wsrun --package @joystream/pioneer -c start",
     "prepare": "husky install"

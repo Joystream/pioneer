@@ -1,8 +1,17 @@
 import sgMail from '@sendgrid/mail'
 import formData from 'form-data'
+import { isString } from 'lodash'
 import Mailgun from 'mailgun.js'
 
 import { emailProvider, EMAIL_SENDER, MAILGUN_DOMAIN } from '@/common/config'
+
+const errMsg = (name: string) => Error(`${name} should be defined in .env`)
+
+if (!EMAIL_SENDER) throw errMsg('EMAIL_SENDER')
+if (Object.values(emailProvider).filter(isString).length !== 1) {
+  throw errMsg(`A unique value out of: ${Object.values(emailProvider).join(', ')}`)
+}
+if (emailProvider.MAILGUN_CONFIG && !MAILGUN_DOMAIN) throw errMsg('If MAILGUN_CONFIG is defined, MAILGUN_DOMAIN')
 
 export type EmailBody = { text: string } | { html: string }
 export type Email = { to: string; subject: string } & EmailBody
