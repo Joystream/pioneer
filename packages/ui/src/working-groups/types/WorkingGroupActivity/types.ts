@@ -110,12 +110,10 @@ export interface WorkerRewardAccountUpdatedActivity extends BaseActivity {
   eventType: 'WorkerRewardAccountUpdatedEvent'
 }
 
-type OptionalString = string | null
-
 export interface WorkerRewardAmountUpdatedActivity extends BaseActivity {
   eventType: 'WorkerRewardAmountUpdatedEvent'
   member: MemberDisplayFields
   newAmount: BN
-  openingTitle?: OptionalString
+  openingTitle?: string | null
   groupId: GroupIdName
 }
