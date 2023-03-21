@@ -52,7 +52,7 @@
     "yarn": "^1.22.0"
   },
   "lint-staged": {
-    "packages/ui/src/**/*.{js,ts,tsx,html}": [
+    "packages/{ui,server}/src/**/*.{js,ts,tsx,html}": [
       "eslint --fix",
       "prettier --write"
     ]
