@@ -1,26 +1,45 @@
 # Pioneer backend
 
+## Quick Start
+
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/feature/backend-poc)
 
-**Note**
-The authorizations tokens of the members provided with the `INITIAL_MEMBERSHIPS` variable, are available in the logs.
+> **Warning**
+>
+> In addition to the [render.com](https://render.com/) registration flow, this deployment requires a [SendGrid](https://sendgrid.com/) API key.
+
+> **Warning**
+>
+> The [render.com database free tier](https://render.com/docs/free#free-postgresql-databases) ends after 90 days.
+
+The `INITIAL_MEMBERSHIPS` variable allows to provide existing Joystream memberships id (and get authorization tokens for them) without going through the signature process. E.g:
+
+```json
+[
+  { "id": 1, "name": "Alice", "email": "alice@example.com" },
+  { "id": 2, "name": "Bob", "email": "bob@example.com" }
+]
+```
+
+The authorization tokens for these membership will be available in the "Logs" section.
 
 ## Overview
 
 Currently the backend is composed of 3 parts:
 
-- A PostgreSQL database which maps Joystream members to a name email, subscription preferences and notifications.
-- A GraphQL API sever to register members in the database save their preferences, check there notifications...
+- A PostgreSQL database which maps existing Joystream memberships by id to a name, an email, subscription preferences and notifications.
+- A GraphQL API server to register members in the database save their preferences, check there notifications...
 - The notify script which checks for each registered members new notifications, and email them if necessary.
 
 ## Production CLI usage
 
-**Note**
-The following commands are run from the sever directory. To run from the monorepos root `yarn` should be replaced by `yarn workspace server`.
+> **Note**
+>
+> The following commands are ran from the `server` directory. To run them from the monorepos root: `yarn` should be replaced by `yarn workspace server`.
 
-`yarn start:api`: starts the API server
-`yarn notify`: run the notify job by checking for new notification for every registered members, and emailing them if necessary.
-`yarn start:all`: for environments where cron is not available, starts both the API server, and schedule notifier job every 30 minutes via [`node-cron`](https://www.npmjs.com/package/node-cron).
+- `yarn start:api`: starts the API server.
+- `yarn notify`: run the notify job.
+- `yarn start:all`: for environments where cron is not available, starts both the API server, and schedule the notify job every 30 minutes via [`node-cron`](https://www.npmjs.com/package/node-cron).
 
 ## API usage
 
@@ -40,6 +59,8 @@ This token is returns by both the `signup` and `signin` mutations:
 signup(memberId: String! signature: String! timestamp: Int! name: String! email: String): String
 signin(memberId: String! signature: String! timestamp: Int!): String
 ```
+
+The `signature` parameter consist of a `MEMBERSHIP_ID:TIMESTAMP` signed with the membership controller account.
 
 ### General subscriptions
 
@@ -61,12 +82,11 @@ This query returns for each notification kind whether or not the authenticated m
 
 To subscribe or unsubscribe to some notification kind run:
 
-```
+```gql
 mutation {
-  generalSubscriptions(data: [
-    { kind: FORUM_THREAD_CREATOR, shouldNotify: false, shouldNotifyByEmail: false },
-    { kind: FORUM_THREAD_ALL }
-  ]) {
+  generalSubscriptions(
+    data: [{ kind: FORUM_THREAD_CREATOR, shouldNotify: false, shouldNotifyByEmail: false }, { kind: FORUM_THREAD_ALL }]
+  ) {
     kind
   }
 }
@@ -125,10 +145,11 @@ query {
 
 ### Run locally
 
-**Note**
-The following commands are ran from the monorepos root.
+> **Note**
+>
+> The following commands are ran from the monorepos root.
 
-To run the api to develop locally:
+To run the API to develop locally:
 
 1. Install the dependencies: `yarn --frozen-lockfile`
 2. Create and configure a `packages/server/.env`
