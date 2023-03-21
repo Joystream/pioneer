@@ -141,6 +141,20 @@ query {
 }
 ```
 
+### Notifications
+
+To list the authenticated member notifications:
+
+```gql
+query {
+  notifications {
+    kind
+    entityId
+    isSent
+  }
+}
+```
+
 ## Development
 
 ### Run locally
