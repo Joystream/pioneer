@@ -11,11 +11,7 @@ fragment PostFields on ForumPost {
       createdAt
       text
     }
-    category {
-      moderators {
-        membershipId
-      }
-    }
+    categoryId
   }
 }
 

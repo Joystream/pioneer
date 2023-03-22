@@ -2,6 +2,7 @@ import { uniq } from 'lodash'
 
 import { EntitiyPotentialNotif, GeneralPotentialNotif, PotentialNotif } from './types'
 
+export { getParentCategories } from './getParentCategories'
 export { NotifEventFromQNEvent, NotificationEvent, PotentialNotif } from './types'
 
 export const isGeneralPotentialNotif = (p: PotentialNotif): p is GeneralPotentialNotif => 'relatedMembers' in p

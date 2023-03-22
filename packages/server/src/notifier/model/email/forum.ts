@@ -13,9 +13,10 @@ export const fromPostAddedNotification: EmailFromNotification = ({ id, kind, ent
   const toEmail = buildEmail(member.email, () => post(entityId))
 
   switch (kind) {
-    case 'FORUM_THREAD_CONTIBUTOR':
+    case 'FORUM_THREAD_CONTRIBUTOR':
     case 'FORUM_THREAD_CREATOR':
     case 'FORUM_WATCHED_THREAD':
+    case 'FORUM_WATCHED_CATEGORY_POST':
       return toEmail(({ author, threadId, thread, text }) => ({
         subject: `New post in "${thread}" in Pioneer's forum`,
         text: `${author} replied in the thread ${thread}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${threadId}?post=${entityId}\n\nContent: ${text}`,

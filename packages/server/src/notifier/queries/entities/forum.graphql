@@ -10,3 +10,9 @@ query GetPost($id: ID!) {
     text
   }
 }
+
+query getForumCategory($id: ID!) {
+  forumCategoryByUniqueInput(where: { id: $id }) {
+    parentId
+  }
+}

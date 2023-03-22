@@ -22,6 +22,6 @@ export const postAddedEvent = (
       authorId: `postAuthor:${post}`,
       createdAt: Date(),
       text,
-      thread: { id: `thread:${thread}`, authorId: String(threadAuthor), posts: [], category: { moderators: [] } },
+      thread: { id: `thread:${thread}`, authorId: String(threadAuthor), posts: [], categoryId: `category:${post}` },
     }),
   })
