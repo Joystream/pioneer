@@ -11,7 +11,7 @@ type AnyQNEvent = GetNotificationEventsQuery['events'][0]
 
 export const toNotificationEvents =
   (allMemberIds: number[]) =>
-  (anyEvent: AnyQNEvent): NotificationEvent => {
+  async (anyEvent: AnyQNEvent): Promise<NotificationEvent> => {
     // NOTE: The conversion to ImplementedQNEvent assumes that the QN will only return
     // events with fragments defined in the codegen document.
     // As a result any event fragment not implemented here will result in a type error.

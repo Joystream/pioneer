@@ -32,7 +32,7 @@ export const createNotifications = async (): Promise<void> => {
     if (qnData.events.length === 0) break
 
     // Generate the potential notification based on the query nodes data
-    const events = qnData.events.map(toNotificationEvents(allMemberIds))
+    const events = await Promise.all(qnData.events.map(toNotificationEvents(allMemberIds)))
 
     // Update the progress
     progress.block = Math.max(progress.block, ...events.map((event) => event.inBlock))
