@@ -154,7 +154,18 @@ export type WorkerRewardAmountUpdatedEventFragment = {
   id: string
   createdAt: any
   newRewardPerBlock: string
-  worker: any
+  worker: {
+    __typename: 'Worker'
+    membership: { __typename: 'Membership'; id: string; handle: string }
+    application: {
+      __typename: 'WorkingGroupApplication'
+      opening: {
+        __typename: 'WorkingGroupOpening'
+        groupId: string
+        metadata: { __typename: 'WorkingGroupOpeningMetadata'; title?: string | null }
+      }
+    }
+  }
 }
 
 export type WorkerRewardAccountUpdatedEventFragment = {
@@ -263,12 +274,13 @@ export type GetMemberRoleEventsQuery = {
     newRewardPerBlock: string
     worker: {
       __typename: 'Worker'
+      membership: { __typename: 'Membership'; id: string; handle: string }
       application: {
         __typename: 'WorkingGroupApplication'
         opening: {
           __typename: 'WorkingGroupOpening'
           groupId: string
-          metadata: { __typename: 'WorkingGroupOpeningMetadata'; title: string }
+          metadata: { __typename: 'WorkingGroupOpeningMetadata'; title?: string | null }
         }
       }
     }
@@ -354,23 +366,6 @@ export type GetGroupEventsQuery = {
     group: { __typename: 'WorkingGroup'; name: string }
     workersHired: Array<{ __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }>
   }>
-  workerRewardAmountUpdatedEvents: Array<{
-    __typename: 'WorkerRewardAmountUpdatedEvent'
-    id: string
-    createdAt: any
-    newRewardPerBlock: string
-    worker: {
-      __typename: 'Worker'
-      application: {
-        __typename: 'WorkingGroupApplication'
-        opening: {
-          __typename: 'WorkingGroupOpening'
-          groupId: string
-          metadata: { __typename: 'WorkingGroupOpeningMetadata'; title: string }
-        }
-      }
-    }
-  }>
   workerExitedEvents: Array<{
     __typename: 'WorkerExitedEvent'
     id: string
@@ -413,6 +408,24 @@ export type GetGroupEventsQuery = {
     createdAt: any
     group: { __typename: 'WorkingGroup'; name: string }
     worker: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
+  }>
+  workerRewardAmountUpdatedEvents: Array<{
+    __typename: 'WorkerRewardAmountUpdatedEvent'
+    id: string
+    createdAt: any
+    newRewardPerBlock: string
+    worker: {
+      __typename: 'Worker'
+      membership: { __typename: 'Membership'; id: string; handle: string }
+      application: {
+        __typename: 'WorkingGroupApplication'
+        opening: {
+          __typename: 'WorkingGroupOpening'
+          groupId: string
+          metadata: { __typename: 'WorkingGroupOpeningMetadata'; title?: string | null }
+        }
+      }
+    }
   }>
 }
 
@@ -976,6 +989,10 @@ export const WorkerRewardAmountUpdatedEventFragmentDoc = gql`
     createdAt
     newRewardPerBlock
     worker {
+      membership {
+        id
+        handle
+      }
       application {
         opening {
           groupId
@@ -1128,6 +1145,9 @@ export const GetGroupEventsDocument = gql`
     terminatedLeaderEvents(where: { group: { id_eq: $group_eq } }) {
       ...TerminatedLeaderEventFields
     }
+    workerRewardAmountUpdatedEvents(where: { group: { id_eq: $group_eq } }) {
+      ...WorkerRewardAmountUpdatedEvent
+    }
   }
   ${AppliedOnOpeningEventFieldsFragmentDoc}
   ${ApplicationWithdrawnEventFieldsFragmentDoc}
@@ -1143,6 +1163,7 @@ export const GetGroupEventsDocument = gql`
   ${StakeSlashedEventFieldsFragmentDoc}
   ${TerminatedWorkerEventFieldsFragmentDoc}
   ${TerminatedLeaderEventFieldsFragmentDoc}
+  ${WorkerRewardAmountUpdatedEventFragmentDoc}
 `
 
 /**
