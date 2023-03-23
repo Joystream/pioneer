@@ -18,25 +18,25 @@ export const fromPostAddedNotification: EmailFromNotification = ({ id, kind, ent
     case 'FORUM_WATCHED_THREAD':
     case 'FORUM_WATCHED_CATEGORY_POST':
       return toEmail(({ author, threadId, thread, text }) => ({
-        subject: `New post in "${thread}" in Pioneer's forum`,
+        subject: `[Pioneer forum] ${thread}`,
         text: `${author} replied in the thread ${thread}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${threadId}?post=${entityId}\n\nContent: ${text}`,
       }))
 
     case 'FORUM_POST_MENTION':
       return toEmail(({ author, threadId, thread, text }) => ({
-        subject: "You were mentioned in Pioneer's forum",
+        subject: `[Pioneer forum] ${thread}`,
         text: `${author} mentioned you in the thread ${thread}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${threadId}?post=${entityId}\n\nContent: ${text}`,
       }))
 
     case 'FORUM_POST_REPLY':
       return toEmail(({ author, threadId, thread, text }) => ({
-        subject: "New reply in Pioneer's forum",
+        subject: `[Pioneer forum] ${thread}`,
         text: `${author} replied to you in the thread ${thread}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${threadId}?post=${entityId}\n\nContent: ${text}`,
       }))
 
     case 'FORUM_POST_ALL':
       return toEmail(({ author, threadId, thread, text }) => ({
-        subject: "New post in Pioneer's forum",
+        subject: `[Pioneer forum] ${thread}`,
         text: `${author} posted in the thread ${thread}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${threadId}?post=${entityId}\n\nContent: ${text}`,
       }))
   }
