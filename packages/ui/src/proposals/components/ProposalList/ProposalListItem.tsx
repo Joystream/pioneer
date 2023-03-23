@@ -88,12 +88,6 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
       <StageField>
         <ProposalItemVoteDetails proposal={proposal} memberId={memberId} isCouncilMember={isCouncilMember} />
       </StageField>
-      <CopyButton
-        square
-        size="small"
-        textToCopy={getUrl({ route: ProposalsRoutes.preview, params: { id: proposal.id } })}
-        icon={<LinkIcon />}
-      />
     </ProposalItem>
   )
 }
