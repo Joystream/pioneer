@@ -1,8 +1,9 @@
 import { createMember } from '@test/_mocks/notifier/createMember'
-import { postAddedEvent } from '@test/_mocks/notifier/events'
+import { postAddedEvent, threadCreatedEvent } from '@test/_mocks/notifier/events'
 import { mockRequest } from '@test/setup'
 
 import { prisma } from '@/common/prisma'
+import { GetForumCategoryDocument, GetNotificationEventsDocument } from '@/common/queries'
 import { createNotifications } from '@/notifier/createNotifications'
 
 describe('createNotifications', () => {
@@ -47,36 +48,99 @@ describe('createNotifications', () => {
       expect(notifications).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-        eventId: 'event:1',
-        memberId: alice.id,
-        kind: 'FORUM_THREAD_CREATOR',
-        entityId: 'post:1',
-        isRead: false,
-        isSent: false,
+            eventId: 'event:1',
+            memberId: alice.id,
+            kind: 'FORUM_THREAD_CREATOR',
+            entityId: 'post:1',
+            isRead: false,
+            isSent: false,
           }),
           expect.objectContaining({
-        eventId: 'event:2',
-        memberId: alice.id,
-        kind: 'FORUM_POST_MENTION',
+            eventId: 'event:2',
+            memberId: alice.id,
+            kind: 'FORUM_POST_MENTION',
           }),
           expect.objectContaining({
-        eventId: 'event:2',
-        memberId: bob.id,
-        kind: 'FORUM_WATCHED_THREAD',
+            eventId: 'event:2',
+            memberId: bob.id,
+            kind: 'FORUM_WATCHED_THREAD',
           }),
           expect.objectContaining({
-        eventId: 'event:3',
-        memberId: alice.id,
-        kind: 'FORUM_WATCHED_CATEGORY_POST',
+            eventId: 'event:3',
+            memberId: alice.id,
+            kind: 'FORUM_WATCHED_CATEGORY_POST',
           }),
           expect.objectContaining({
-        eventId: 'event:3',
-        memberId: bob.id,
-        kind: 'FORUM_POST_ALL',
+            eventId: 'event:3',
+            memberId: bob.id,
+            kind: 'FORUM_POST_ALL',
           }),
         ])
       )
       expect(notifications).toHaveLength(5)
+    })
+
+    it('ThreadCreatedEvent', async () => {
+      // - Alice is using the default behavior for general subscriptions
+      // - Alice should get notified of any new thread in category:10 or it's sub categories
+      const alice = await createMember(1, 'alice', [{ kind: 'FORUM_WATCHED_CATEGORY_THREAD', entityId: 'category:10' }])
+
+      // - By default Bob should be notified of any new thread
+      // - Bob should not be notified of threads created in category:1 or it's sub categories
+      const bob = await createMember(2, 'bob', [
+        { kind: 'FORUM_THREAD_ALL' },
+        { kind: 'FORUM_WATCHED_CATEGORY_THREAD', entityId: 'category:1', shouldNotify: false },
+      ])
+
+      mockRequest
+        .mockReturnValueOnce({
+          events: [
+            threadCreatedEvent(1, {
+              text: `Hi [@Alice](#mention?member-id=${alice.id}) and [@Bob](#mention?member-id=${bob.id})`,
+              category: 'category:1',
+            }),
+            threadCreatedEvent(2, { text: `Hi [@Bob](#mention?member-id=${bob.id})`, category: 'category:10' }),
+            threadCreatedEvent(3),
+          ],
+        })
+        .mockImplementation((_: string, doc: any, variables: any) => {
+          if (doc === GetNotificationEventsDocument) {
+            return { events: [] }
+          } else if (doc === GetForumCategoryDocument) {
+            return {
+              forumCategoryByUniqueInput:
+                variables.id === 'category:10' ? { parentId: 'category:1' } : { parent: null },
+            }
+          }
+        })
+
+      await createNotifications()
+
+      const notifications = await prisma.notification.findMany()
+
+      expect(notifications).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            eventId: 'event:1',
+            memberId: alice.id,
+            kind: 'FORUM_THREAD_MENTION',
+            entityId: 'thread:1',
+          }),
+          expect.objectContaining({
+            eventId: 'event:2',
+            memberId: alice.id,
+            kind: 'FORUM_WATCHED_CATEGORY_THREAD',
+            entityId: 'thread:2',
+          }),
+          expect.objectContaining({
+            eventId: 'event:3',
+            memberId: bob.id,
+            kind: 'FORUM_THREAD_ALL',
+            entityId: 'thread:3',
+          }),
+        ])
+      )
+      expect(notifications).toHaveLength(3)
     })
   })
 })

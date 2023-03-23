@@ -11,6 +11,18 @@ query GetPost($id: ID!) {
   }
 }
 
+query GetThread($id: ID!) {
+  forumThreadByUniqueInput(where: { id: $id }) {
+    author {
+      handle
+    }
+    title
+    initialPost {
+      text
+    }
+  }
+}
+
 query getForumCategory($id: ID!) {
   forumCategoryByUniqueInput(where: { id: $id }) {
     parentId

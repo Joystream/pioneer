@@ -1,7 +1,7 @@
 import request from 'graphql-request'
 
 import { PIONEER_URL, QUERY_NODE_ENDPOINT } from '@/common/config'
-import { GetPostDocument } from '@/common/queries'
+import { GetPostDocument, GetThreadDocument } from '@/common/queries'
 
 import { EmailFromNotification, buildEmail } from './utils'
 
@@ -65,4 +65,50 @@ const post = async (id: string): Promise<Post> => {
   }
 
   return posts[id]
+}
+
+export const fromThreadCreatedNotification: EmailFromNotification = ({ id, kind, entityId, member }) => {
+  if (!entityId) {
+    throw Error(`Missing thread id in notification ${kind}, with id: ${id}`)
+  }
+
+  const toEmail = buildEmail(member.email, () => thread(entityId))
+
+  switch (kind) {
+    case 'FORUM_THREAD_MENTION':
+      return toEmail(({ author, title, text }) => ({
+        subject: `[Pioneer forum] ${title}`,
+        text: `${author} mentioned you in a new thread: ${title}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${entityId}\n\nContent: ${text}`,
+      }))
+
+    case 'FORUM_WATCHED_CATEGORY_THREAD':
+    case 'FORUM_THREAD_ALL':
+      return toEmail(({ author, title, text }) => ({
+        subject: `[Pioneer forum] ${title}`,
+        text: `${author} posted a new thread ${title}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${id}\n\nContent: ${text}`,
+      }))
+  }
+}
+
+interface Thread {
+  author: string
+  title: string
+  text?: string
+}
+const threads: { [id: string]: Thread } = {}
+const thread = async (id: string): Promise<Thread> => {
+  if (!(id in thread)) {
+    const { forumThreadByUniqueInput: thread } = await request(QUERY_NODE_ENDPOINT, GetThreadDocument, { id })
+    if (!thread) {
+      throw Error(`Failed to fetch post ${id} on the QN`)
+    }
+
+    threads[id] = {
+      author: thread.author.handle,
+      title: thread.title,
+      text: thread.initialPost?.text,
+    }
+  }
+
+  return threads[id]
 }

@@ -7,8 +7,8 @@ const extract = <T extends NotificationKind>(...keys: T[]): Pick<typeof Notifica
 export type EntitySubscriptionKind = typeof EntitySubscriptionKind[keyof typeof EntitySubscriptionKind]
 export const EntitySubscriptionKind = extract(
   'FORUM_WATCHED_THREAD',
-  'FORUM_WATCHED_CATEGORY_POST'
-  // 'FORUM_WATCHED_CATEGORY_THREAD'
+  'FORUM_WATCHED_CATEGORY_POST',
+  'FORUM_WATCHED_CATEGORY_THREAD'
   // 'FORUM_WATCHED_CATEGORY_SUBCATEGORY',
 
   // 'PROPOSAL_WATCHED_STATUS',
@@ -22,10 +22,10 @@ export const GeneralSubscriptionKind = extract(
   'FORUM_POST_MENTION',
   'FORUM_POST_REPLY',
   'FORUM_THREAD_CREATOR',
-  'FORUM_THREAD_CONTRIBUTOR'
+  'FORUM_THREAD_CONTRIBUTOR',
 
-  // 'FORUM_THREAD_ALL',
-  // 'FORUM_THREAD_MENTION'
+  'FORUM_THREAD_ALL',
+  'FORUM_THREAD_MENTION'
 
   // 'PROPOSAL_CREATED_ALL',
   // 'PROPOSAL_STATUS_ALL',
@@ -49,7 +49,7 @@ const defaultSubscriptions: GeneralSubscriptionKind[] = [
   'FORUM_POST_REPLY',
   'FORUM_THREAD_CREATOR',
   'FORUM_THREAD_CONTRIBUTOR',
-  // 'FORUM_THREAD_MENTION',
+  'FORUM_THREAD_MENTION',
   // 'PROPOSAL_STATUS_CREATOR',
   // 'PROPOSAL_VOTE_CREATOR',
   // 'PROPOSAL_DISCUSSION_MENTION',

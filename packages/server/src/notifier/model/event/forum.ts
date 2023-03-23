@@ -1,6 +1,11 @@
 import { pick, uniq } from 'lodash'
 
-import { PostAddedEventFieldsFragmentDoc, PostFieldsFragmentDoc, useFragment } from '@/common/queries'
+import {
+  PostAddedEventFieldsFragmentDoc,
+  PostFieldsFragmentDoc,
+  ThreadCreatedEventFieldsFragmentDoc,
+  useFragment,
+} from '@/common/queries'
 
 import {
   NotifEventFromQNEvent,
@@ -28,5 +33,20 @@ export const fromPostAddedEvent: NotifEventFromQNEvent<'PostAddedEvent'> = async
     entityEvent('FORUM_WATCHED_THREAD', post.thread.id),
     ...parentCategoryIds.map((categoryId) => entityEvent('FORUM_WATCHED_CATEGORY_POST', categoryId)),
     generalEvent('FORUM_POST_ALL', 'ANY'),
+  ])
+}
+
+export const fromThreadCreatedEvent: NotifEventFromQNEvent<'ThreadCreatedEvent'> = async (event, buildEvents) => {
+  const threadCreatedEvent = useFragment(ThreadCreatedEventFieldsFragmentDoc, event)
+
+  const mentionedMemberIds = mentionedMembersIdsFromText(threadCreatedEvent.text)
+  const parentCategoryIds = await getParentCategories(threadCreatedEvent.thread.categoryId)
+
+  const eventData = pick(threadCreatedEvent, 'inBlock', 'id')
+
+  return buildEvents(eventData, threadCreatedEvent.thread.id, ({ generalEvent, entityEvent }) => [
+    generalEvent('FORUM_THREAD_MENTION', mentionedMemberIds),
+    ...parentCategoryIds.map((categoryId) => entityEvent('FORUM_WATCHED_CATEGORY_THREAD', categoryId)),
+    generalEvent('FORUM_THREAD_ALL', 'ANY'),
   ])
 }

@@ -1,6 +1,6 @@
 import { GetNotificationEventsQuery } from '@/common/queries'
 
-import { fromPostAddedEvent } from './forum'
+import { fromPostAddedEvent, fromThreadCreatedEvent } from './forum'
 import { NotificationEvent } from './utils'
 import { buildEvents } from './utils/buildEvent'
 import { ImplementedQNEvent } from './utils/types'
@@ -21,5 +21,8 @@ export const toNotificationEvents =
     switch (event.__typename) {
       case 'PostAddedEvent':
         return fromPostAddedEvent(event, build)
+
+      case 'ThreadCreatedEvent':
+        return fromThreadCreatedEvent(event, build)
     }
   }

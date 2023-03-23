@@ -1,6 +1,6 @@
 import { Email } from '@/common/utils/email'
 
-import { fromPostAddedNotification } from './forum'
+import { fromPostAddedNotification, fromThreadCreatedNotification } from './forum'
 import { Notification, hasEmailAddress } from './utils'
 
 export const notifyByEmail =
@@ -10,7 +10,7 @@ export const notifyByEmail =
 
     // The functions should be chained here eg.
     // fromPostAddedNotification(notification) ?? fromProposalPostCreated(notification) ?? ...
-    const email = await fromPostAddedNotification(notification)
+    const email = await (fromPostAddedNotification(notification) ?? fromThreadCreatedNotification(notification))
 
     if (!email) throw Error(`No email template found for notification ${notification.kind}`)
 

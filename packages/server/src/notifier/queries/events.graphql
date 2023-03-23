@@ -41,6 +41,17 @@ fragment PostAddedEventFields on PostAddedEvent {
   }
 }
 
+fragment ThreadCreatedEventFields on ThreadCreatedEvent {
+  __typename
+  id
+  inBlock
+  thread {
+    id
+    categoryId
+  }
+  text
+}
+
 # fragment ProposalDiscussionPostCreatedEventFields on ProposalDiscussionPostCreatedEvent {
 #   __typename
 #   id
@@ -55,6 +66,7 @@ query GetNotificationEvents($from: Int, $exclude: [ID!]) {
     where: {
       type_in: [
         PostAddedEvent
+        ThreadCreatedEvent
         # PostTextUpdatedEvent
       ]
       inBlock_gte: $from
@@ -64,6 +76,9 @@ query GetNotificationEvents($from: Int, $exclude: [ID!]) {
   ) {
     ... on PostAddedEvent {
       ...PostAddedEventFields
+    }
+    ... on ThreadCreatedEvent {
+      ...ThreadCreatedEventFields
     }
     # ... on ProposalDiscussionPostCreatedEvent {
     #   ...ProposalDiscussionPostCreatedEventFields
