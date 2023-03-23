@@ -1,5 +1,16 @@
 # Pioneer backend
 
+## Overview
+
+Currently the backend is meant to checks for each registered member whether they should be notified of something, and email them if necessary.
+Additional functionalities will be added later on.
+
+It is composed of 3 parts:
+
+- A script which aggregate notifications for each registered member based on events available in the [query node](https://query.joystream.org/graphql). Then email the notifications to the associated members.
+- A GraphQL API server to register members in the database, save their preferences, check there notifications...
+- A PostgreSQL database which maps existing Joystream memberships by id to a name, an email, subscription preferences, and notifications. It also keeps tracks of the latest query node event processed by the notify script.
+
 ## Quick Start
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/feature/backend-poc)
@@ -22,14 +33,6 @@ The `INITIAL_MEMBERSHIPS` variable allows to provide existing Joystream membersh
 ```
 
 The authorization tokens for these membership will be available in the "Logs" section.
-
-## Overview
-
-Currently the backend is composed of 3 parts:
-
-- A PostgreSQL database which maps existing Joystream memberships by id to a name, an email, subscription preferences and notifications.
-- A GraphQL API server to register members in the database save their preferences, check there notifications...
-- The notify script which checks for each registered members new notifications, and email them if necessary.
 
 ## Production CLI usage
 
@@ -165,17 +168,31 @@ query {
 
 To run the API to develop locally:
 
-1. Install the dependencies: `yarn --frozen-lockfile`
-2. Create and configure a `packages/server/.env`
-3. Launch the Postgres database. If docker is installed: `yarn workspace server dev:db`
-4. Generate Prisma client: `yarn workspace server prisma generate`
-5. Run `graphql-codegen`: `yarn workspace server codegen`
-6. Start the server: `yarn workspace server dev:api`
+1. `yarn --frozen-lockfile`: Install the dependencies.
+2. Create and configure a `packages/server/.env`.
+3. Launch the Postgres database. `yarn workspace server dev:db`: If docker is installed.
+4. `yarn workspace server prisma generate`: Generate Prisma client.
+5. `yarn workspace server codegen`: Run `graphql-codegen`.
+6. `yarn workspace server dev`: Start the server.
+
+### Some other useful scripts
+
+- `yarn workspace server test`: Run tests.
+- `yarn workspace server dev:db:clean`: Bring down and reset the database.
+- [`yarn workspace server prisma studio`](prisma studio): Launch an administration GUI for the database.
+- [`yarn workspace server prisma migrate dev`](prisma migrate): Synchronize `schema.prisma` with the database schema.
+- [`yarn workspace server prisma db push`](prisma db:push): Does the same but without creating a migration.
+- `yarn workspace server authtoken [member id]`: Generate an authentication token for the provided member.
+- `yarn workspace server lint:fix`: Fix some code formatting issue.
 
 ### Add support for more QN events
 
-TODO: add a link to a future commit adding support for `ThreadCreatedEvent`
+As an example see [this commit](https://github.com/Joystream/pioneer/pull/4210/commits/d9d537aaa485f8710879a6610133c14ece612412) which adds support for notifications based on the `ThreadCreatedEvent`
 
 ## Roadmap
 
 TODO
+
+[prisma studio]: https://www.prisma.io/studio
+[prisma migrate]: https://www.prisma.io/docs/concepts/components/prisma-migrate/migrate-development-production#development-environments
+[prisma db:push]: https://www.prisma.io/docs/concepts/components/prisma-migrate/db-push
