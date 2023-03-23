@@ -42,7 +42,7 @@ export const useLocalStorage = <T>(key?: string) => {
   }, [key])
 
   useEffect(() => {
-    const handleEventOnce = (event: any) => {
+    const handleEventOnce = () => {
       setState(getItem(key))
     }
 
