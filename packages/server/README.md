@@ -308,28 +308,48 @@ As an example see [this commit](https://github.com/Joystream/pioneer/pull/4210/c
 
 ## Roadmap
 
-### Short term
+### MVP (Forum direct mentions and council election stages update)
 
+- [x] Forum direct mentions
+- [ ] Election stage change events (ref #4086)
+- [ ] Write nicer html emails
+- [ ] Allow retrying sending email when it fails and replace `isSent` by `emailStatus` enum which accounts for failure
 - [ ] Add backend email tests
 - [ ] Add backend API tests
-- [ ] Allow retrying sending email when it fails and replace `isSent` by `emailStatus` enum which accounts for failure
-- [ ] Write nicer html emails
-- [ ] Make `shouldNotifyByEmail` independent from `shouldNotify` and rename `shouldNotify` to `shouldNotifyInApp`
-- [ ] Auto publish (via CI) a backend docker image with only prod dependencies
-- [ ] Support multiple email providers
-- [ ] Election stage change events (ref #4086)
-- [ ] Proposal discussion events notifications
-- [ ] New proposal events notifications
-- [ ] Set `Access-Control-Allow-Origin` in an env variable
-- [ ] Councilor specific notifications
 - [ ] Add a change email member API mutation
 
-### Long term
+### V1.1 Customising different notifications
 
+- [ ] Proposal status update notifications
+- [ ] Proposal votes notifications
+- [ ] Proposal discussion events notifications
+
+### V1.2
+
+- [ ] Auto publish (via CI) a backend docker image with only prod dependencies
+- [ ] Set `Access-Control-Allow-Origin` in an env variable
+- [ ] Make `shouldNotifyByEmail` independent from `shouldNotify` and rename `shouldNotify` to `shouldNotifyInApp`
+- [ ] Support multiple email providers
+
+### V1.3
+
+#### Role based
+
+- [ ] Councilor: proposal getting into deciding stage
+- [ ] WG Lead: notifications
+- [ ] WG worker: notifications (see: Front-end settings to QN events relation: Working groups section)
+- [ ] Only notify voters about revealing stage
+
+#### Last day before event x
+
+- [ ] Councillor: 1 day on proposal to vote
 - [ ] Add last day to vote on a proposal notification
-- [ ] Only notify people voted from the revealing stage
 - [ ] Add last day to announce candidacy notification
 - [ ] Add last day to vote on a candidates notification
+
+#### Segment of accounts based on pre-condition
+
+- [ ] Add notifications for multiple accounts for revealing stage (accounts I care about)
 
 [prisma studio]: https://www.prisma.io/studio
 [prisma migrate]: https://www.prisma.io/docs/concepts/components/prisma-migrate/migrate-development-production#development-environments
