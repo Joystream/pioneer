@@ -8,7 +8,7 @@ Additional functionalities will be added later on.
 It is composed of 3 parts:
 
 - A script which aggregate notifications for each registered member based on events available in the [query node](https://query.joystream.org/graphql). Then email the notifications to the associated members.
-- A GraphQL API server to register members in the database, save their preferences, check there notifications...
+- A GraphQL API server to register members in the database, customize the default notification behavior, check members notifications...
 - A PostgreSQL database which maps existing Joystream memberships by id to a name, an email, subscription preferences, and notifications. It also keeps tracks of the latest query node event processed by the notify script.
 
 ## Quick Start
@@ -23,7 +23,7 @@ It is composed of 3 parts:
 >
 > The [render.com database free tier](https://render.com/docs/free#free-postgresql-databases) ends after 90 days.
 
-The `INITIAL_MEMBERSHIPS` variable allows to provide existing Joystream memberships id (and get authorization tokens for them) without going through the signature process. E.g:
+Mapping existing Joystream memberships id to a name and an email address in the `INITIAL_MEMBERSHIPS` variable, is enough to start getting notified regarding these memberships.
 
 ```json
 [
@@ -32,7 +32,7 @@ The `INITIAL_MEMBERSHIPS` variable allows to provide existing Joystream membersh
 ]
 ```
 
-The authorization tokens for these membership will be available in the "Logs" section.
+In order to customize the default notification behavior with the GraphQL API, an authorization token can be found for each membership in the "Logs" section.
 
 ## Production CLI usage
 
@@ -179,9 +179,9 @@ To run the API to develop locally:
 
 - `yarn workspace server test`: Run tests.
 - `yarn workspace server dev:db:clean`: Bring down and reset the database.
-- [`yarn workspace server prisma studio`](prisma studio): Launch an administration GUI for the database.
-- [`yarn workspace server prisma migrate dev`](prisma migrate): Synchronize `schema.prisma` with the database schema.
-- [`yarn workspace server prisma db push`](prisma db:push): Does the same but without creating a migration.
+- [`yarn workspace server prisma studio`][prisma studio]: Launch an administration GUI for the database.
+- [`yarn workspace server prisma migrate dev`][prisma migrate]: Synchronize `schema.prisma` with the database schema.
+- [`yarn workspace server prisma db push`][prisma db:push]: Does the same but without creating a migration.
 - `yarn workspace server authtoken [member id]`: Generate an authentication token for the provided member.
 - `yarn workspace server lint:fix`: Fix some code formatting issue.
 
