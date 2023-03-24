@@ -11,11 +11,11 @@ export interface MarkdownPreviewStylesProps {
 const normalFontSize = ({ size }: MarkdownPreviewStylesProps) => {
   switch (size) {
     case 'xs':
-      return '12px'
-    case 's':
       return '14px'
+    case 's':
+      return '18px'
     default:
-      return '16px'
+      return '20px'
   }
 }
 
@@ -43,29 +43,29 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
   }
 
   .markdown-preview h1 {
-    font-size: 24px;
+    font-size: 36px;
     line-height: 32px;
   }
 
   .markdown-preview h2 {
-    font-size: 20px;
+    font-size: 34px;
     line-height: 28px;
   }
 
   .markdown-preview h3 {
     font-size: ${normalFontSize};
-    line-height: 24px;
+    line-height: 30px;
   }
 
   .markdown-preview h4 {
-    margin-top: 20px;
+    margin-top: 28px;
     font-size: 14px;
     line-height: 20px;
   }
 
   .markdown-preview h5,
   .markdown-preview h6 {
-    margin-top: 12px;
+    margin-top: 20px;
     font-size: 10px;
     line-height: 16px;
   }
