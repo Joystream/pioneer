@@ -239,18 +239,19 @@ As an example see [this commit](https://github.com/Joystream/pioneer/pull/4210/c
 ##### Working groups
 
 - [ ] All working groups notifications:
-      | Notification kind | QN event |
-      | --- | --- |
-      | WG_OPENING_ALL | OpeningAddedEvent |
-      | WG_APPLICATION_ALL | AppliedOnOpeningEvent |
-      | WG_NEW_WORKER_ALL | OpeningFilledEvent |
-      | WG_BUDGET_UPDATE_ALL | BudgetUpdatedEvent |
-      | WG_NEW_BUDGET_ALL | BudgetSetEvent |
-      | WG_SPENDING_ALL | BudgetSpendingEvent |
-      | WG_NEW_LEAD_ALL | LeaderSetEvent |
-      | WG_LEAD_EXIT_ALL | LeaderUnsetEvent |
-      | WG_WORKER_LEAVING_ALL | WorkerStartedLeavingEvent |
-      | WG_WORKER_EXIT_ALL | WorkerExitedEvent |
+
+  | Notification kind     | QN event                  |
+  | --------------------- | ------------------------- |
+  | WG_OPENING_ALL        | OpeningAddedEvent         |
+  | WG_APPLICATION_ALL    | AppliedOnOpeningEvent     |
+  | WG_NEW_WORKER_ALL     | OpeningFilledEvent        |
+  | WG_BUDGET_UPDATE_ALL  | BudgetUpdatedEvent        |
+  | WG_NEW_BUDGET_ALL     | BudgetSetEvent            |
+  | WG_SPENDING_ALL       | BudgetSpendingEvent       |
+  | WG_NEW_LEAD_ALL       | LeaderSetEvent            |
+  | WG_LEAD_EXIT_ALL      | LeaderUnsetEvent          |
+  | WG_WORKER_LEAVING_ALL | WorkerStartedLeavingEvent |
+  | WG_WORKER_EXIT_ALL    | WorkerExitedEvent         |
 
 - [ ] Working groups notifications where I have a role (default):
 
@@ -298,7 +299,7 @@ As an example see [this commit](https://github.com/Joystream/pioneer/pull/4210/c
 
 ##### Forum / Posts
 
-- ~~ [x] Every new post where I am mentioned ~~
+- [x] Every new post where I am mentioned (alread done in "Direct mentions" ☝️)
 
 - [x] Replies to my posts (default):
 
