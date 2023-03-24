@@ -25,11 +25,9 @@ export const ModalContextProvider = (props: Props) => {
         setModalData(modalCall.data)
       }
     },
-    hideModal: (showConfirmOrAny = false) => {
-      const preferShowConfirm = typeof showConfirmOrAny === 'boolean' ? showConfirmOrAny : false
+    hideModal: () => {
       const [state] = currentModalMachine ?? []
       if (
-        !preferShowConfirm ||
         isClosing ||
         !MODAL_WITH_CLOSE_CONFIRMATION.includes((modal ?? '') as ModalNames) ||
         state?.matches('success')
