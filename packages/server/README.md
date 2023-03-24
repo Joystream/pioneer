@@ -189,6 +189,123 @@ To run the API to develop locally:
 
 As an example see [this commit](https://github.com/Joystream/pioneer/pull/4210/commits/d9d537aaa485f8710879a6610133c14ece612412) which adds support for notifications based on the `ThreadCreatedEvent`
 
+#### Front-end settings to QN events relation
+
+##### General
+
+- [ ] Subscribe to all notifications (implementation TBD)
+
+##### Council
+
+- [ ] All council notifications (default):
+
+  | Notification kind           | QN event                     |
+  | --------------------------- | ---------------------------- |
+  | ELECTION_ANNOUNCING_STARTED | AnnouncingPeriodStartedEvent |
+  | ELECTION_VOTING_STARTED     | VotingPeriodStartedEvent     |
+  | ELECTION_REVEALING_STARTED  | ReferendumStartedEvent       |
+  | ELECTION_COUNCIL_ELECTED    | NewCouncilElectedEvent       |
+
+##### Proposals
+
+- [ ] All proposals notifications:
+
+  | Notification kind    | QN event                   |
+  | -------------------- | -------------------------- |
+  | PROPOSAL_CREATED_ALL | ProposalCreatedEvent       |
+  | PROPOSAL_STATUS_ALL  | ProposalStatusUpdatedEvent |
+  | PROPOSAL_VOTE_ALL    | ProposalVotedEvent         |
+
+- [ ] Updates in proposals I created (default):
+
+  | Notification kind           | QN event                           |
+  | --------------------------- | ---------------------------------- |
+  | PROPOSAL_STATUS_CREATOR     | ProposalStatusUpdatedEvent         |
+  | PROPOSAL_VOTE_CREATOR       | ProposalVotedEvent                 |
+  | PROPOSAL_DISCUSSION_CREATOR | ProposalDiscussionPostCreatedEvent |
+
+- [ ] Proposal discussion thread I posted to (default):
+
+  | Notification kind               | QN event                           |
+  | ------------------------------- | ---------------------------------- |
+  | PROPOSAL_DISCUSSION_CONTRIBUTOR | ProposalDiscussionPostCreatedEvent |
+
+- [ ] Direct mentions in the posts (default):
+
+  | Notification kind           | QN event                           |
+  | --------------------------- | ---------------------------------- |
+  | PROPOSAL_DISCUSSION_MENTION | ProposalDiscussionPostCreatedEvent |
+
+##### Working groups
+
+- [ ] All working groups notifications:
+      | Notification kind | QN event |
+      | --- | --- |
+      | WG_OPENING_ALL | OpeningAddedEvent |
+      | WG_APPLICATION_ALL | AppliedOnOpeningEvent |
+      | WG_NEW_WORKER_ALL | OpeningFilledEvent |
+      | WG_BUDGET_UPDATE_ALL | BudgetUpdatedEvent |
+      | WG_NEW_BUDGET_ALL | BudgetSetEvent |
+      | WG_SPENDING_ALL | BudgetSpendingEvent |
+      | WG_NEW_LEAD_ALL | LeaderSetEvent |
+      | WG_LEAD_EXIT_ALL | LeaderUnsetEvent |
+      | WG_WORKER_LEAVING_ALL | WorkerStartedLeavingEvent |
+      | WG_WORKER_EXIT_ALL | WorkerExitedEvent |
+
+- [ ] Working groups notifications where I have a role (default):
+
+  | Notification kind        | QN event                  |
+  | ------------------------ | ------------------------- |
+  | WG_OPENING_WORKER        | OpeningAddedEvent         |
+  | WG_APPLICATION_WORKER    | AppliedOnOpeningEvent     |
+  | WG_NEW_WORKER_WORKER     | OpeningFilledEvent        |
+  | WG_BUDGET_UPDATE_WORKER  | BudgetUpdatedEvent        |
+  | WG_NEW_BUDGET_WORKER     | BudgetSetEvent            |
+  | WG_SPENDING_WORKER       | BudgetSpendingEvent       |
+  | WG_NEW_LEAD_WORKER       | LeaderSetEvent            |
+  | WG_LEAD_EXIT_WORKER      | LeaderUnsetEvent          |
+  | WG_WORKER_LEAVING_WORKER | WorkerStartedLeavingEvent |
+  | WG_WORKER_EXIT_WORKER    | WorkerExitedEvent         |
+
+##### Forum
+
+- [x] Direct mentions (default):
+
+  | Notification kind    | QN event           |
+  | -------------------- | ------------------ |
+  | FORUM_THREAD_MENTION | ThreadCreatedEvent |
+  | FORUM_POST_MENTION   | PostAddedEvent     |
+
+##### Forum / Threads
+
+- [x] Every new thread created:
+
+  | Notification kind | QN event           |
+  | ----------------- | ------------------ |
+  | FORUM_THREAD_ALL  | ThreadCreatedEvent |
+
+- [x] All posts in thread I created (default):
+
+  | Notification kind    | QN event       |
+  | -------------------- | -------------- |
+  | FORUM_THREAD_CREATOR | PostAddedEvent |
+
+- [x] All posts and replies in thread I posted in (default):
+
+  | Notification kind        | QN event       |
+  | ------------------------ | -------------- |
+  | FORUM_THREAD_CONTRIBUTOR | PostAddedEvent |
+
+##### Forum / Posts
+
+- ~~ [x] Every new post where I am mentioned ~~
+
+- [x] Replies to my posts (default):
+
+  | Notification kind | QN event       |
+  | ----------------- | -------------- |
+  | FORUM_POST_REPLY  | PostAddedEvent |
+
 ## Roadmap
 
 ### Short term
