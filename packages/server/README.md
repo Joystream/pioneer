@@ -191,7 +191,28 @@ As an example see [this commit](https://github.com/Joystream/pioneer/pull/4210/c
 
 ## Roadmap
 
-TODO
+### Short term
+
+- [ ] Add backend email tests
+- [ ] Add backend API tests
+- [ ] Allow retrying sending email when it fails and replace `isSent` by `emailStatus` enum which accounts for failure
+- [ ] Write nicer html emails
+- [ ] Make `shouldNotifyByEmail` independent from `shouldNotify` and rename `shouldNotify` to `shouldNotifyInApp`
+- [ ] Auto publish (via CI) a backend docker image with only prod dependencies
+- [ ] Support multiple email providers
+- [ ] Election stage change events (ref #4086)
+- [ ] Proposal discussion events notifications
+- [ ] New proposal events notifications
+- [ ] Set `Access-Control-Allow-Origin` in an env variable
+- [ ] Councilor specific notifications
+- [ ] Add a change email member API mutation
+
+### Long term
+
+- [ ] Add last day to vote on a proposal notification
+- [ ] Only notify people voted from the revealing stage
+- [ ] Add last day to announce candidacy notification
+- [ ] Add last day to vote on a candidates notification
 
 [prisma studio]: https://www.prisma.io/studio
 [prisma migrate]: https://www.prisma.io/docs/concepts/components/prisma-migrate/migrate-development-production#development-environments
