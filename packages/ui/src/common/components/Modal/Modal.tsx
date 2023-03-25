@@ -211,6 +211,7 @@ export const ModalWrap = styled.section<ModalWrapProps>`
   inset: 0;
   margin: auto auto;
   display: grid;
+  max-height: 94vh;
   @media only screen and (max-height: 700px) {
     max-height: 100%;
   }
