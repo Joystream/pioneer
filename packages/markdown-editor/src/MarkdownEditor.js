@@ -17,6 +17,8 @@ import Mention from '@ckeditor/ckeditor5-mention/src/mention'
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph'
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice'
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation'
+import SpecialCharacters from '@ckeditor/ckeditor5-special-characters/src/specialcharacters'
+import SpecialCharactersEssentials from '@ckeditor/ckeditor5-special-characters/src/specialcharactersessentials'
 
 // Plugins to include in the build.
 const plugins = [
