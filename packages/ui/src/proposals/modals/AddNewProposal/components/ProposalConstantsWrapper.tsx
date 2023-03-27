@@ -30,7 +30,7 @@ export const ProposalConstantsWrapper = ({ constants }: { constants: ProposalCon
           <TextInlineMedium dark>{formatTokenValue(constants?.constitutionality)}</TextInlineMedium>
         </TextMedium>
       </RowGapBlock>
-    </Row>    
+    </Row>
     <Row>
       <RowGapBlock gap={4}>
         <Label>Voting period</Label>
