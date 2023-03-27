@@ -1,5 +1,21 @@
 # Pioneer backend
 
+## Table of content
+
+- [Overview](#overview)
+- [Quick Start](#quick-start)
+- [Production CLI usage](#production-cli-usage)
+- [API usage](#api-usage)
+  - [Authentication](#authentication)
+  - [General subscriptions](#general-subscriptions)
+  - [Entity subscriptions](#entity-subscriptions)
+  - [Notifications](#notifications)
+- [Development](#development)
+  - [Run locally](#run-locally)
+  - [Some other useful scripts](#some-other-useful-scripts)
+  - [Adding support for more QN events](#adding-support-for-more-qn-events)
+- [Roadmap](#roadmap)
+
 ## Overview
 
 Currently the backend is meant to checks for each registered member whether they should be notified of something, and email them if necessary.
@@ -185,7 +201,7 @@ To run the API to develop locally:
 - `yarn workspace server authtoken [member id]`: Generate an authentication token for the provided member.
 - `yarn workspace server lint:fix`: Fix some code formatting issue.
 
-### Add support for more QN events
+### Adding support for more QN events
 
 As an example see [this commit](https://github.com/Joystream/pioneer/pull/4210/commits/d9d537aaa485f8710879a6610133c14ece612412) which adds support for notifications based on the `ThreadCreatedEvent`
 
