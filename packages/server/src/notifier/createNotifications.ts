@@ -1,9 +1,12 @@
 import { Prisma } from '@prisma/client'
 import { request } from 'graphql-request'
+import { groupBy, isObject, mapValues } from 'lodash'
+import { info, verbose } from 'npmlog'
 
 import { QUERY_NODE_ENDPOINT, STARTING_BLOCK } from '@/common/config'
 import { prisma } from '@/common/prisma'
 import { GetNotificationEventsDocument } from '@/common/queries'
+import { count, getTypename } from '@/common/utils'
 
 import { toNotificationEvents } from './model/event'
 import { notificationsFromEvent } from './model/notifications'
@@ -13,7 +16,7 @@ interface ProgressDoc {
   block: number
   eventIds: string[]
 }
-const isProgressDoc = (consumed: any): consumed is ProgressDoc => typeof consumed === 'object'
+const isProgressDoc = (consumed: any): consumed is ProgressDoc => isObject(consumed)
 const defaultProgress: ProgressDoc = { block: STARTING_BLOCK, eventIds: [] }
 const PROGRESS_KEY = { key: 'Progress' }
 
@@ -29,6 +32,13 @@ export const createNotifications = async (): Promise<void> => {
     // Fetch events from the query nodes and break if non are found
     const qnVariables = { from: progress.block, exclude: progress.eventIds }
     const qnData = await request(QUERY_NODE_ENDPOINT, GetNotificationEventsDocument, qnVariables)
+    info(
+      'QN events',
+      `Received ${qnData.events.length} new events`,
+      mapValues(groupBy(qnData.events, getTypename), count),
+      `from block ${progress.block} onward excluding`,
+      progress.eventIds
+    )
     if (qnData.events.length === 0) break
 
     // Generate the potential notification based on the query nodes data
@@ -47,10 +57,16 @@ export const createNotifications = async (): Promise<void> => {
 
     // Create and save new notifications
     const notifications = events.flatMap(notificationsFromEvent(subscriptions, allMemberIds))
+    info('New notifications', 'Saving', notifications.length, 'new notifications')
+    verbose(
+      'New notifications',
+      'Saving:',
+      notifications.map(({ kind, eventId, memberId }) => `${eventId}, member ${memberId}: ${kind}`)
+    )
     await prisma.notification.createMany({ data: notifications })
   }
 
-  // Save the curent proccess
+  // Save the current process
   const document: Prisma.JsonObject = { block: progress.block, eventIds: progress.eventIds }
   const update = { value: document }
   prisma.store.upsert({ where: PROGRESS_KEY, update, create: { ...PROGRESS_KEY, ...update } })

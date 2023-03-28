@@ -1,11 +1,13 @@
 import { config } from 'dotenv'
 import { pick } from 'lodash'
+import log from 'npmlog'
 
 config()
 
 const {
   PORT = 3000,
   APP_SECRET_KEY, // TODO check this is defined when running the api
+  APP_LOG_LEVEL = 'info',
   QUERY_NODE_ENDPOINT = 'https://query.joystream.org/graphql',
   PIONEER_URL = 'https://pioneerapp.xyz',
   STARTING_BLOCK: _STARTING_BLOCK,
@@ -13,6 +15,8 @@ const {
   MAILGUN_DOMAIN,
   INITIAL_MEMBERSHIPS: _INITIAL_MEMBERSHIPS,
 } = process.env as { [k: string]: string }
+
+log.level = APP_LOG_LEVEL
 
 const emailProvidersConfig = ['SENDGRID_API_KEY', 'MAILGUN_CONFIG'] as const
 const emailProvider = pick(process.env, emailProvidersConfig)

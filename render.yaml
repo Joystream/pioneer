@@ -81,6 +81,9 @@ services:
       - key: STARTING_BLOCK
         sync: false
 
+      - key: APP_LOG_LEVEL
+        value: verbose
+
 databases:
   - name: db
     region: frankfurt
