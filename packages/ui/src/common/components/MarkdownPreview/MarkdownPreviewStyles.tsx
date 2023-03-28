@@ -96,6 +96,8 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     margin: 0;
     padding-left: 24px;
     list-style: none;
+    font-family: ${Fonts.Inter};
+    font-size: ${normalFontSize};
   }
 
   .markdown-preview ol {
@@ -106,6 +108,8 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     padding-left: 24px;
     list-style: none;
     counter-reset: ol-list-counter;
+    font-family: ${Fonts.Inter};
+    font-size: ${normalFontSize};
   }
 
   .markdown-preview ol li {
@@ -136,14 +140,16 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
   }
 
   .markdown-preview .in-block-code {
-    font-size: 12px;
+    font-family: ${Fonts.Inter};
+    font-size: ${normalFontSize};
     line-height: 20px;
     color: ${Colors.Black[300]};
     background-color: ${Colors.Black[700]};
   }
 
   .markdown-preview .inline-code {
-    font-size: 12px;
+    font-family: ${Fonts.Inter};
+    font-size: ${normalFontSize};
     line-height: 24px;
     padding: 4px 8px;
     color: ${Colors.Black[300]};
@@ -158,6 +164,7 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     color: ${Colors.Black[900]};
     cursor: pointer;
     transition: ${Transitions.all};
+    font-size: ${normalFontSize};
 
     &:hover, &:focus {
       color: ${Colors.Blue[500]};
@@ -194,6 +201,7 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     overflow: auto;
     margin-top: 8px;
     margin-bottom: 8px;
+    font-size: ${normalFontSize};
   }
 
   .markdown-preview table th {
