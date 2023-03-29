@@ -34,11 +34,11 @@ It is composed of 3 parts:
 
 > **Warning**
 >
-> In addition to the [render.com](https://render.com/) registration flow, this deployment requires a [SendGrid](https://sendgrid.com/) API key.
-
-> **Warning**
+> This deployments will require to go through the [render.com](https://render.com/) registration, which includes providing a payment method due to the [cron job cost](https://render.com/pricing#cronjobs).
 >
 > The [render.com database free tier](https://render.com/docs/free#free-postgresql-databases) ends after 90 days.
+>
+> In order to receive notification emails a [SendGrid](https://sendgrid.com/) API key is required. Otherwise the notifications will only be available in the API.
 
 Mapping existing Joystream memberships id to a name and an email address in the `INITIAL_MEMBERSHIPS` variable, is enough to start getting notified regarding these memberships.
 
@@ -73,7 +73,7 @@ Most queries require a Bearer authentication, HTTP header examples:
 }
 ```
 
-![Screen Shot 2023-03-29 at 15 40 03](https://user-images.githubusercontent.com/6571453/228556900-9cfab773-c79f-4146-a6f4-51b461385246.png)
+![Setting the authorization header in the playground](https://user-images.githubusercontent.com/6571453/228556900-9cfab773-c79f-4146-a6f4-51b461385246.png)
 
 This token is returns by both the `signup` and `signin` mutations:
 
