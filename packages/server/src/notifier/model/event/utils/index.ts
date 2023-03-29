@@ -19,6 +19,5 @@ export const isOlderThan =
   <B extends Created>(b: B): boolean =>
     Date.parse(String(a)) > Date.parse(String(b))
 
-// TODO improve this logic
 export const mentionedMembersIdsFromText = (text: string): number[] =>
-  uniq(Array.from(text.matchAll(/\[@\w+\]\(#mention\?member-id=(\d+)\)/g)).map(([, id]) => Number(id)))
+  uniq(Array.from(text.matchAll(/\[@[-.0-9A-Z\\_a-z]+\]\(#mention\?member-id=(\d+)\)/g)).map(([, id]) => Number(id)))
