@@ -190,17 +190,19 @@ To run the API to develop locally:
 1. `yarn --frozen-lockfile`: Install the dependencies.
 2. Create and configure a `packages/server/.env`.
 3. Launch the Postgres database. `yarn workspace server dev:db`: If docker is installed.
-4. `yarn workspace server prisma generate`: Generate Prisma client.
-5. `yarn workspace server codegen`: Run `graphql-codegen`.
-6. `yarn workspace server dev`: Start the server.
+4. `yarn workspace dev:build`: Run `graphql-codegen`, synchronize the database schema, and generate the Prisma clients.
+5. `yarn workspace server dev`: Start the server.
 
 ### Some other useful scripts
 
 - `yarn workspace server test`: Run tests.
-- `yarn workspace server dev:db:clean`: Bring down and reset the database.
+- `yarn workspace server dev:notify`: Run the notifier `nodemon` and `ts-node`.
+- `yarn workspace server dev:db:reset`: Clear the database data and re-synchronize its schema.
+- `yarn workspace server codegen`: Run `graphql-codegen`.
 - [`yarn workspace server prisma studio`][prisma studio]: Launch an administration GUI for the database.
-- [`yarn workspace server prisma migrate dev`][prisma migrate]: Synchronize `schema.prisma` with the database schema.
-- [`yarn workspace server prisma db push`][prisma db:push]: Does the same but without creating a migration.
+- [`yarn workspace server prisma db push`][prisma db:push]: Synchronize `schema.prisma` with the database schema.
+- [`yarn workspace server prisma migrate dev`][prisma migrate]: Create a database migration based on the changes to `schema.prisma`.
+- [`yarn workspace server prisma generate`][prisma generate]: Generate the Prisma clients.
 - `yarn workspace server authtoken [member id]`: Generate an authentication token for the provided member.
 - `yarn workspace server lint:fix`: Fix some code formatting issue.
 
@@ -374,3 +376,4 @@ As an example see [this commit](https://github.com/Joystream/pioneer/pull/4210/c
 [prisma studio]: https://www.prisma.io/studio
 [prisma migrate]: https://www.prisma.io/docs/concepts/components/prisma-migrate/migrate-development-production#development-environments
 [prisma db:push]: https://www.prisma.io/docs/concepts/components/prisma-migrate/db-push
+[prisma generate]: https://www.prisma.io/docs/concepts/components/prisma-client/working-with-prismaclient/generating-prisma-client
