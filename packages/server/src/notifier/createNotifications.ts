@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client'
 import { request } from 'graphql-request'
-import { groupBy, isObject, mapValues } from 'lodash'
+import { clone, groupBy, isEqual, isObject, mapValues } from 'lodash'
 import { info, verbose, warn } from 'npmlog'
 
 import { QUERY_NODE_ENDPOINT, STARTING_BLOCK } from '@/common/config'
@@ -22,13 +22,21 @@ const PROGRESS_KEY = { key: 'Progress' }
 
 export const createNotifications = async (): Promise<void> => {
   // Check the last block that where processed
-  const { value } = (await prisma.store.findUnique({ where: PROGRESS_KEY })) ?? {}
-  const progress: ProgressDoc = isProgressDoc(value) && value.block > STARTING_BLOCK ? value : defaultProgress
+  const { value: initialProgress } = (await prisma.store.findUnique({ where: PROGRESS_KEY })) ?? {}
+  const progress: ProgressDoc =
+    isProgressDoc(initialProgress) && initialProgress.block > STARTING_BLOCK ? clone(initialProgress) : defaultProgress
 
   const allMemberIds = (await prisma.member.findMany()).map(({ id }) => id)
 
   /* eslint-disable-next-line no-constant-condition */
   while (true) {
+    // Save the current process
+    if (!isEqual(progress, initialProgress)) {
+      info('Save progress', `Processed up to block ${progress.block} events`, progress.eventIds)
+      const update = { value: progress as Record<string, any> as Prisma.JsonObject }
+      await prisma.store.upsert({ where: PROGRESS_KEY, update, create: { ...PROGRESS_KEY, ...update } })
+    }
+
     // Fetch events from the query nodes and break if non are found
     const qnVariables = { from: progress.block, exclude: progress.eventIds }
     const qnData = await request(QUERY_NODE_ENDPOINT, GetNotificationEventsDocument, qnVariables)
@@ -39,6 +47,7 @@ export const createNotifications = async (): Promise<void> => {
       `from block ${progress.block} onward excluding`,
       progress.eventIds
     )
+
     if (qnData.events.length === 0) break
 
     // Generate the potential notification based on the query nodes data
@@ -69,9 +78,4 @@ export const createNotifications = async (): Promise<void> => {
       warn('Notification duplicates', `${notifications.length - created.count} duplicates where skipped`)
     }
   }
-
-  // Save the current process
-  const document: Prisma.JsonObject = { block: progress.block, eventIds: progress.eventIds }
-  const update = { value: document }
-  await prisma.store.upsert({ where: PROGRESS_KEY, update, create: { ...PROGRESS_KEY, ...update } })
 }
