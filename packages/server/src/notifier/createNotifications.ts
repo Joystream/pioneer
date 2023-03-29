@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client'
 import { request } from 'graphql-request'
 import { groupBy, isObject, mapValues } from 'lodash'
-import { info, verbose } from 'npmlog'
+import { info, verbose, warn } from 'npmlog'
 
 import { QUERY_NODE_ENDPOINT, STARTING_BLOCK } from '@/common/config'
 import { prisma } from '@/common/prisma'
@@ -63,7 +63,11 @@ export const createNotifications = async (): Promise<void> => {
       'Saving:',
       notifications.map(({ kind, eventId, memberId }) => `${eventId}, member ${memberId}: ${kind}`)
     )
-    await prisma.notification.createMany({ data: notifications })
+    const created = await prisma.notification.createMany({ data: notifications, skipDuplicates: true })
+
+    if (created.count < notifications.length) {
+      warn('Notification duplicates', `${notifications.length - created.count} duplicates where skipped`)
+    }
   }
 
   // Save the current process
