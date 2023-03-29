@@ -21,7 +21,7 @@
     "lint:prettier": "yarn prettier \"./{src,test}/**/*.{ts,graphql}\"",
     "start:api": "node ./dist/common/scripts/startApi",
     "start:all": "node ./dist/common/scripts/startAll",
-    "notify": "node ./dist/notifier/scripts/notify",
+    "notify": "node ./dist/notifier/scripts/notify --unhandled-rejections=strict",
     "build:local": "rm -rf ./dist/* ; prisma generate && yarn codegen && tsc -p ./src/tsconfig.json && tscpaths -p ./src/tsconfig.json -s ./src -o ./dist",
     "build": "prisma migrate deploy && yarn build:local"
   },
