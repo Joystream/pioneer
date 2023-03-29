@@ -1,5 +1,17 @@
 # Pioneer backend
 
+## Overview
+
+A backend for the [Pioneer UI](../ui).
+
+Currently it only handles email notifications by checking for each registered member whether they should be notified of something, and email them if necessary. Additional functionalities will be added later on.
+
+It is composed of 3 parts:
+
+- A script which aggregate notifications for each registered member based on events available in the [query node](https://query.joystream.org/graphql). Then email the notifications to the associated members.
+- A GraphQL API server to register members in the database, customize the default notification behavior, check members notifications...
+- A PostgreSQL database which maps existing Joystream memberships by id to a name, an email, subscription preferences, and notifications. It also keeps tracks of the latest query node event processed by the notify script.
+
 ## Table of content
 
 - [Overview](#overview)
@@ -15,17 +27,6 @@
   - [Some other useful scripts](#some-other-useful-scripts)
   - [Adding support for more QN events](#adding-support-for-more-qn-events)
 - [Roadmap](#roadmap)
-
-## Overview
-
-Currently the backend is meant to checks for each registered member whether they should be notified of something, and email them if necessary.
-Additional functionalities will be added later on.
-
-It is composed of 3 parts:
-
-- A script which aggregate notifications for each registered member based on events available in the [query node](https://query.joystream.org/graphql). Then email the notifications to the associated members.
-- A GraphQL API server to register members in the database, customize the default notification behavior, check members notifications...
-- A PostgreSQL database which maps existing Joystream memberships by id to a name, an email, subscription preferences, and notifications. It also keeps tracks of the latest query node event processed by the notify script.
 
 ## Quick Start
 
