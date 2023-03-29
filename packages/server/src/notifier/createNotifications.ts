@@ -73,5 +73,5 @@ export const createNotifications = async (): Promise<void> => {
   // Save the current process
   const document: Prisma.JsonObject = { block: progress.block, eventIds: progress.eventIds }
   const update = { value: document }
-  prisma.store.upsert({ where: PROGRESS_KEY, update, create: { ...PROGRESS_KEY, ...update } })
+  await prisma.store.upsert({ where: PROGRESS_KEY, update, create: { ...PROGRESS_KEY, ...update } })
 }
