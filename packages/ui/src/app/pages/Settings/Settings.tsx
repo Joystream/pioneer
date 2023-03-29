@@ -21,6 +21,7 @@ import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { useObservable } from '@/common/hooks/useObservable'
 import { useQueryNodeStateSubscription } from '@/common/hooks/useQueryNode'
 import { formatTokenValue } from '@/common/model/formatters'
+import { CustomForm } from './customForm'
 
 type Tab = 'SETTINGS' | 'LANGUAGE'
 
@@ -39,7 +40,7 @@ export const Settings = () => {
   const switchNetwork = (network: NetworkType | null) => {
     if (network) {
       setNetwork(network)
-      window.location.reload()
+      network !== 'custom' && window.location.reload()
     }
   }
   return (
@@ -64,7 +65,7 @@ export const Settings = () => {
                     onChange={switchNetwork}
                     selectSize="l"
                   />
-                  {network === 'custom' && <>CustomForm</>}
+                  {network === 'custom' && <CustomForm switchNetwork={switchNetwork} />}
 
                   {endpoints?.configEndpoint && (
                     <ButtonPrimary
