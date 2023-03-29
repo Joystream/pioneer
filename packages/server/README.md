@@ -73,6 +73,8 @@ Most queries require a Bearer authentication, HTTP header examples:
 }
 ```
 
+![Screen Shot 2023-03-29 at 15 40 03](https://user-images.githubusercontent.com/6571453/228556900-9cfab773-c79f-4146-a6f4-51b461385246.png)
+
 This token is returns by both the `signup` and `signin` mutations:
 
 ```gql
