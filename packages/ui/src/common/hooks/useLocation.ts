@@ -9,5 +9,5 @@ export const useLocation = () => {
     () => global.location.href.replace(RegExp(`${escapeStringRegexp(pathname + search + hash)}$`), ''),
     []
   )
-  return { pathname, search, hash, origin }
+  return useMemo(() => ({ pathname, search, hash, origin }), [pathname, search, hash])
 }
