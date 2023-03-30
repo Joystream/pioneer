@@ -67,7 +67,7 @@ export const PostListItem = ({
     if (ref.current && isSelected) {
       ref.current.scrollIntoView({ behavior: 'smooth', inline: 'start' })
     }
-  }, [ref.current])
+  }, [isSelected])
 
   const [editing, setEditing] = useState(false)
   const editionTime = useMemo(() => {
