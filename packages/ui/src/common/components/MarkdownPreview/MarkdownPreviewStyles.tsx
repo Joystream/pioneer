@@ -101,7 +101,6 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
   }
 
   .markdown-preview ol {
-    grid-row-gap: 8px;
     width: 100%;
     margin: 0;
     padding-left: 24px;
