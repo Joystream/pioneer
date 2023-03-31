@@ -1,13 +1,12 @@
 import log from 'npmlog'
 
+import '@/common/config'
 log.level = 'silent'
 
 export const mockRequest = jest.fn()
 jest.mock('graphql-request', () => ({
   request: mockRequest,
 }))
-
-jest.mock('@/common/config', () => ({ STARTING_BLOCK: 1 }))
 
 jest.mock('@/common/queries/__generated__', () => ({
   useFragment: ({ definitions }: any, obj: any) => {
