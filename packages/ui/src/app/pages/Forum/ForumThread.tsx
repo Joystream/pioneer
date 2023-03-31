@@ -116,8 +116,8 @@ export const ForumThread = () => {
 }
 
 const ThreadPanel = styled(MainPanel)`
-  width: 90%;
   margin: 0 auto;
+  max-width: 1280px;
 `
 
 const ThreadPinned = styled.span`
