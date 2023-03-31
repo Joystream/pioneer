@@ -1,43 +1,22 @@
-fragment PostFields on ForumPost {
-  id
-  authorId
-  createdAt
-  text
-  thread {
-    id
-    authorId
-    posts {
-      authorId
-      createdAt
-      text
-    }
-    categoryId
-  }
-}
-
-fragment ProposalDiscussionPostFields on ProposalDiscussionPost {
-  id
-  authorId
-  text
-  discussionThread {
-    id
-    proposal {
-      id
-      creatorId
-    }
-    posts {
-      authorId
-      text
-    }
-  }
-}
-
 fragment PostAddedEventFields on PostAddedEvent {
   __typename
   id
   inBlock
   post {
-    ...PostFields
+    id
+    authorId
+    createdAt
+    text
+    thread {
+      id
+      authorId
+      posts {
+        authorId
+        createdAt
+        text
+      }
+      categoryId
+    }
   }
 }
 
@@ -58,7 +37,20 @@ fragment ThreadCreatedEventFields on ThreadCreatedEvent {
 #   id
 #   inBlock
 #   post {
-#     ...ProposalDiscussionPostFields
+#     id
+#     authorId
+#     text
+#     discussionThread {
+#       id
+#       proposal {
+#         id
+#         creatorId
+#       }
+#       posts {
+#         authorId
+#         text
+#       }
+#     }
 #   }
 # }
 

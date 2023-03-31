@@ -1,17 +1,12 @@
 import { difference, pick, uniq } from 'lodash'
 
-import {
-  PostAddedEventFieldsFragmentDoc,
-  PostFieldsFragmentDoc,
-  ThreadCreatedEventFieldsFragmentDoc,
-  useFragment,
-} from '@/common/queries'
+import { PostAddedEventFieldsFragmentDoc, ThreadCreatedEventFieldsFragmentDoc, useFragment } from '@/common/queries'
 
 import { NotifEventFromQNEvent, isOlderThan, getMentionedMemberIds, getParentCategories } from './utils'
 
 export const fromPostAddedEvent: NotifEventFromQNEvent<'PostAddedEvent'> = async (event, buildEvents) => {
   const postAddedEvent = useFragment(PostAddedEventFieldsFragmentDoc, event)
-  const post = useFragment(PostFieldsFragmentDoc, postAddedEvent.post)
+  const post = postAddedEvent.post
   const authorId = Number(post.authorId)
 
   const mentionedMemberIds = difference(getMentionedMemberIds(post.text), [authorId])
@@ -33,14 +28,15 @@ export const fromPostAddedEvent: NotifEventFromQNEvent<'PostAddedEvent'> = async
 
 export const fromThreadCreatedEvent: NotifEventFromQNEvent<'ThreadCreatedEvent'> = async (event, buildEvents) => {
   const threadCreatedEvent = useFragment(ThreadCreatedEventFieldsFragmentDoc, event)
-  const authorId = Number(threadCreatedEvent.thread.authorId)
+  const thread = threadCreatedEvent.thread
+  const authorId = Number(thread.authorId)
 
   const mentionedMemberIds = difference(getMentionedMemberIds(threadCreatedEvent.text), [authorId])
-  const parentCategoryIds = await getParentCategories(threadCreatedEvent.thread.categoryId)
+  const parentCategoryIds = await getParentCategories(thread.categoryId)
 
   const eventData = pick(threadCreatedEvent, 'inBlock', 'id')
 
-  return buildEvents(eventData, threadCreatedEvent.thread.id, ({ generalEvent, entityEvent }) => [
+  return buildEvents(eventData, thread.id, ({ generalEvent, entityEvent }) => [
     generalEvent('FORUM_THREAD_MENTION', mentionedMemberIds),
     ...parentCategoryIds.map((categoryId) => entityEvent('FORUM_WATCHED_CATEGORY_THREAD', categoryId)),
     generalEvent('FORUM_THREAD_ALL', 'ANY'),
