@@ -7,11 +7,22 @@ import {
   ThreadCreatedEventFieldsFragment,
 } from '@/common/queries'
 
-type PostAddedEventsMock = { threadAuthor?: string | number; text?: string }
+type PostAddedEventsMock = {
+  category?: string
+  thread?: string
+  threadAuthor?: string | number
+  author?: string | number
+  text?: string
+}
 export const postAddedEvent = (
   post: number,
-  thread: number,
-  { threadAuthor = `threadAuthor:${thread}`, text = `text:${post}` }: PostAddedEventsMock = {}
+  {
+    category = `category:${post}`,
+    thread = `thread:${post}`,
+    threadAuthor = `threadAuthor:${thread}`,
+    author = `postAuthor:${post}`,
+    text = `text:${post}`,
+  }: PostAddedEventsMock = {}
 ): GetNotificationEventsQuery['events'][0] =>
   maskFragment(
     'PostAddedEventFields',
@@ -24,17 +35,21 @@ export const postAddedEvent = (
       'ForumPost'
     )<PostFieldsFragment>({
       id: `post:${post}`,
-      authorId: `postAuthor:${post}`,
+      authorId: String(author),
       createdAt: Date(),
       text,
-      thread: { id: `thread:${thread}`, authorId: String(threadAuthor), posts: [], categoryId: `category:${post}` },
+      thread: { id: thread, authorId: String(threadAuthor), posts: [], categoryId: category },
     }),
   })
 
-type ThreadCreatedEventsMock = { text?: string; category?: string }
+type ThreadCreatedEventsMock = { category?: string; author?: string | number; text?: string }
 export const threadCreatedEvent = (
   thread: number,
-  { text = `text:${thread}`, category = `category:${thread}` }: ThreadCreatedEventsMock = {}
+  {
+    category = `category:${thread}`,
+    author = `threadAuthor:${thread}`,
+    text = `text:${thread}`,
+  }: ThreadCreatedEventsMock = {}
 ): GetNotificationEventsQuery['events'][0] =>
   maskFragment(
     'ThreadCreatedEventFields',
@@ -42,6 +57,6 @@ export const threadCreatedEvent = (
   )<ThreadCreatedEventFieldsFragment>({
     id: `event:${thread}`,
     inBlock: 1,
-    thread: { id: `thread:${thread}`, categoryId: category },
+    thread: { id: `thread:${thread}`, categoryId: category, authorId: String(author) },
     text,
   })

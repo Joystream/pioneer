@@ -47,6 +47,7 @@ fragment ThreadCreatedEventFields on ThreadCreatedEvent {
   inBlock
   thread {
     id
+    authorId
     categoryId
   }
   text

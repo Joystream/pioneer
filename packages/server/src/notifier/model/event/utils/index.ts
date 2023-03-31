@@ -8,16 +8,16 @@ export { NotifEventFromQNEvent, NotificationEvent, PotentialNotif } from './type
 export const isGeneralPotentialNotif = (p: PotentialNotif): p is GeneralPotentialNotif => 'relatedMembers' in p
 export const isEntityPotentialNotif = (p: PotentialNotif): p is EntitiyPotentialNotif => 'relatedEntityId' in p
 
-export const toNumbers = (list: (number | string)[]) => list.map(Number).filter((item) => !isNaN(item))
-
-export const itemsExcept = <T, K extends string, O extends { [k in K]: T }>(list: O[], key: K, except: T): T[] =>
-  list.flatMap((item: O) => (item[key] === except ? [] : [item[key]]))
-
 type Created = { createdAt: any }
 export const isOlderThan =
   <A extends Created>(a: A) =>
   <B extends Created>(b: B): boolean =>
     Date.parse(String(a)) > Date.parse(String(b))
 
-export const mentionedMembersIdsFromText = (text: string): number[] =>
-  uniq(Array.from(text.matchAll(/\[@[-.0-9A-Z\\_a-z]+\]\(#mention\?member-id=(\d+)\)/g)).map(([, id]) => Number(id)))
+export const getMentionedMemberIds = (text: string): number[] =>
+  uniq(
+    Array.from(text.matchAll(/\[@[-.0-9A-Z\\_a-z]+\]\(#mention\?member-id=(\d+)\)/g)).flatMap((match) => {
+      const id = match[1] && Number(match[1])
+      return !id || isNaN(id) ? [] : Number(id)
+    })
+  )

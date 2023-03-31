@@ -1,9 +1,9 @@
+import { intersection } from 'lodash'
 import { verbose } from 'npmlog'
 
 import { getTypename } from '@/common/utils'
 import { isDefaultSubscription } from '@/notifier/model/subscriptionKinds'
 
-import { toNumbers } from '.'
 import { BuildEvents, ImplementedQNEvent, NotificationEvent, NotifsBuilder, PotentialNotif } from './types'
 
 export const buildEvents =
@@ -13,8 +13,7 @@ export const buildEvents =
       if (members.length === 0) return []
 
       const isDefault = isDefaultSubscription(kind)
-      const relatedMembers =
-        members === 'ANY' ? 'ANY' : { ids: toNumbers(members).filter((id) => allMemberIds.includes(id)) }
+      const relatedMembers = members === 'ANY' ? 'ANY' : { ids: intersection(members, allMemberIds) }
 
       return { kind, relatedMembers, isDefault }
     }

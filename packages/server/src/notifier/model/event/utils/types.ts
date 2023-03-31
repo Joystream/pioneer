@@ -26,7 +26,7 @@ export interface NotificationEvent {
 }
 
 export interface NotifsBuilder {
-  generalEvent: (kind: GeneralSubscriptionKind, members: 'ANY' | (number | string)[]) => PartialNotif | []
+  generalEvent: (kind: GeneralSubscriptionKind, members: 'ANY' | number[]) => PartialNotif | []
   entityEvent: (kind: EntitySubscriptionKind, entityId: string) => PartialNotif
 }
 
