@@ -118,7 +118,7 @@ export const ForumThread = () => {
 
 const ThreadPanel = styled(MainPanel)`
   ${ForumPostBlock} {
-    width: 60%;
+    width: 100%;
     margin: 0 auto;
   }
 `
