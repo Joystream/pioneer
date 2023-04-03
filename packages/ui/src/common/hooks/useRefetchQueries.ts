@@ -38,6 +38,7 @@ export const useRefetchQueries = (
         }, interval)
 
         return () => {
+          isRefetched.current = false
           clearInterval(handler)
         }
       } else {
