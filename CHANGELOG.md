@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.2] - 2023-04-04
+
+### Fixed
+
+- Incorrect values in the "My Roles" tab.
+- Working group history tab crashing.
+- Infinite auto scroll to a post after opening a link to this post.
+- Unclear councilor reward widget.
+- Some posts overflowing on Webkit browsers.
+- Improve stake and constitutionality visibility when creating a proposal.
+- Copy improvements: proposal discussion status and voting rounds tabs tooltips, and forum empty category.
+
+### Removed
+- Buggy link icon on proposal lists.
+
 ## [1.3.1] - 2023-03-15
 
 ### Fixed
@@ -126,7 +141,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v1.3.1...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v1.3.2...HEAD
+[1.3.2]: https://github.com/Joystream/pioneer/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/Joystream/pioneer/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/Joystream/pioneer/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/Joystream/pioneer/compare/v1.1.1...v1.2.0
