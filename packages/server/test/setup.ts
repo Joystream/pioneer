@@ -14,3 +14,10 @@ jest.mock('@/common/queries/__generated__', () => ({
     return obj[' $fragmentRefs'][propname]
   },
 }))
+
+export const mockSendEmail = jest.fn()
+jest.mock('@/common/utils/email', () => ({
+  ...jest.requireActual('@/common/utils/email'),
+  NO_EMAIL_PROVIDER: false,
+  configEmailProvider: () => mockSendEmail,
+}))

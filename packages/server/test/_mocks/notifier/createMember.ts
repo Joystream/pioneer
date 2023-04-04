@@ -9,9 +9,7 @@ export const createMember = (id: number, name: string, subscriptions?: MockedSub
       id,
       name,
       email: `${name}@${name}.com`,
-      subscriptions: subscriptions && {
-        createMany: { data: subscriptions.map((subscription) => ({ shouldNotifyByEmail: false, ...subscription })) },
-      },
+      subscriptions: subscriptions && { createMany: { data: subscriptions } },
     },
     include: { subscriptions: true },
   })
