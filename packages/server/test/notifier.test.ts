@@ -1,7 +1,3 @@
-import { createMember } from '@test/_mocks/notifier/createMember'
-import { postAddedEvent, threadCreatedEvent } from '@test/_mocks/notifier/events'
-import { mockRequest, mockSendEmail } from '@test/setup'
-
 import { prisma } from '@/common/prisma'
 import {
   GetForumCategoryDocument,
@@ -10,6 +6,10 @@ import {
   GetThreadDocument,
 } from '@/common/queries'
 import { run } from '@/notifier'
+
+import { createMember } from './_mocks/notifier/createMember'
+import { postAddedEvent, threadCreatedEvent } from './_mocks/notifier/events'
+import { mockRequest, mockSendEmail } from './setup'
 
 describe('Notifier', () => {
   beforeEach(async () => {
