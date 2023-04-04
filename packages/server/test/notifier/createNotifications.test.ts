@@ -1,22 +1,32 @@
 import { createMember } from '@test/_mocks/notifier/createMember'
 import { postAddedEvent, threadCreatedEvent } from '@test/_mocks/notifier/events'
-import { mockRequest } from '@test/setup'
+import { mockRequest, mockSendEmail } from '@test/setup'
 
 import { prisma } from '@/common/prisma'
-import { GetForumCategoryDocument, GetNotificationEventsDocument } from '@/common/queries'
-import { createNotifications } from '@/notifier/createNotifications'
+import {
+  GetForumCategoryDocument,
+  GetNotificationEventsDocument,
+  GetPostDocument,
+  GetThreadDocument,
+} from '@/common/queries'
+import { run } from '@/notifier'
 
-describe('createNotifications', () => {
+describe('Notifier', () => {
   beforeEach(async () => {
     await prisma.store.deleteMany()
     await prisma.subscription.deleteMany()
     await prisma.notification.deleteMany()
     await prisma.member.deleteMany()
     mockRequest.mockReset()
+    mockSendEmail.mockReset()
   })
 
   describe('forum', () => {
     it('PostAddedEvent', async () => {
+      // -------------------
+      // Initialize database
+      // -------------------
+
       // - Alice is using the default behavior for general subscriptions
       // - Alice should be notified of any new post in the category "baz" or it's sub categories
       const alice = await createMember(1, 'alice', [{ kind: 'FORUM_WATCHED_CATEGORY_POST', entityId: 'baz' }])
@@ -34,55 +44,157 @@ describe('createNotifications', () => {
       // Charlie had not registered in the back-end he should not get any notification
       const charlie = { id: 3 }
 
-      mockRequest.mockReturnValue({ events: [] }).mockReturnValueOnce({
-        events: [
-          postAddedEvent(1, { thread: 'foo', threadAuthor: alice.id, text: `Hi [@Bob](#mention?member-id=${bob.id})` }),
-          postAddedEvent(2, { thread: 'bar', text: `Hi [@Alice](#mention?member-id=${alice.id})` }),
-          postAddedEvent(3, { category: 'baz', threadAuthor: charlie.id }),
-          postAddedEvent(4, { category: 'qux', author: alice.id, text: `I [@Alice](#mention?member-id=${alice.id})` }),
-        ],
-      })
+      // -------------------
+      // Mock QN responses
+      // -------------------
 
-      await createNotifications()
+      mockRequest
+        .mockReturnValueOnce({
+          events: [
+            postAddedEvent(1, {
+              thread: 'foo',
+              threadAuthor: alice.id,
+              text: `Hi [@Bob](#mention?member-id=${bob.id})`,
+            }),
+            postAddedEvent(2, { thread: 'bar', text: `Hi [@Alice](#mention?member-id=${alice.id})` }),
+            postAddedEvent(3, { category: 'baz', threadAuthor: charlie.id }),
+            postAddedEvent(4, {
+              category: 'qux',
+              author: alice.id,
+              text: `I [@Alice](#mention?member-id=${alice.id})`,
+            }),
+          ],
+        })
+        .mockImplementation((_: string, doc: any) => {
+          switch (doc) {
+            case GetNotificationEventsDocument:
+              return { events: [] }
+            case GetForumCategoryDocument:
+              return { forumCategoryByUniqueInput: { parentId: null } }
+            case GetPostDocument:
+              return {
+                forumPostByUniqueInput: {
+                  author: { handle: 'author:handle' },
+                  thread: { id: 'thread:id', title: 'thread:title' },
+                  text: 'Lorem Ipsum',
+                },
+              }
+          }
+        })
+
+      // -------------------
+      // Run
+      // -------------------
+
+      await run()
+
+      // -------------------
+      // Check notifications
+      // -------------------
 
       const notifications = await prisma.notification.findMany()
 
-      expect(notifications).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            eventId: 'event:1',
-            memberId: alice.id,
-            kind: 'FORUM_THREAD_CREATOR',
-            entityId: 'post:1',
-            isRead: false,
-            isSent: false,
-          }),
-          expect.objectContaining({
-            eventId: 'event:2',
-            memberId: alice.id,
-            kind: 'FORUM_POST_MENTION',
-          }),
-          expect.objectContaining({
-            eventId: 'event:2',
-            memberId: bob.id,
-            kind: 'FORUM_WATCHED_THREAD',
-          }),
-          expect.objectContaining({
-            eventId: 'event:3',
-            memberId: alice.id,
-            kind: 'FORUM_WATCHED_CATEGORY_POST',
-          }),
-          expect.objectContaining({
-            eventId: 'event:3',
-            memberId: bob.id,
-            kind: 'FORUM_POST_ALL',
-          }),
-        ])
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: 'event:1',
+          memberId: alice.id,
+          kind: 'FORUM_THREAD_CREATOR',
+          entityId: 'post:1',
+          isRead: false,
+          isSent: true,
+        })
+      )
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: 'event:2',
+          memberId: alice.id,
+          kind: 'FORUM_POST_MENTION',
+          isSent: true,
+        })
+      )
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: 'event:2',
+          memberId: bob.id,
+          kind: 'FORUM_WATCHED_THREAD',
+          isSent: true,
+        })
+      )
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: 'event:3',
+          memberId: alice.id,
+          kind: 'FORUM_WATCHED_CATEGORY_POST',
+          isSent: true,
+        })
+      )
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: 'event:3',
+          memberId: bob.id,
+          kind: 'FORUM_POST_ALL',
+          isSent: true,
+        })
       )
       expect(notifications).toHaveLength(5)
+
+      // -------------------
+      // Check emails
+      // -------------------
+
+      expect(mockSendEmail).toHaveBeenCalledWith(
+        expect.objectContaining({
+          to: alice.email,
+          subject: expect.stringContaining('thread:title'),
+          text: expect.stringMatching(
+            /author:handle replied\b.+\b\/#\/forum\/thread\/thread:id\?post=post:1\b.+ Lorem Ipsum/s
+          ),
+        })
+      )
+      expect(mockSendEmail).toHaveBeenCalledWith(
+        expect.objectContaining({
+          to: alice.email,
+          subject: expect.stringContaining('thread:title'),
+          text: expect.stringMatching(
+            /author:handle mentioned you\b.+\b\/#\/forum\/thread\/thread:id\?post=post:2\b.+ Lorem Ipsum/s
+          ),
+        })
+      )
+      expect(mockSendEmail).toHaveBeenCalledWith(
+        expect.objectContaining({
+          to: bob.email,
+          subject: expect.stringContaining('thread:title'),
+          text: expect.stringMatching(
+            /author:handle posted\b.+\b\/#\/forum\/thread\/thread:id\?post=post:2\b.+ Lorem Ipsum/s
+          ),
+        })
+      )
+      expect(mockSendEmail).toHaveBeenCalledWith(
+        expect.objectContaining({
+          to: alice.email,
+          subject: expect.stringContaining('thread:title'),
+          text: expect.stringMatching(
+            /author:handle posted\b.+\b\/#\/forum\/thread\/thread:id\?post=post:3\b.+ Lorem Ipsum/s
+          ),
+        })
+      )
+      expect(mockSendEmail).toHaveBeenCalledWith(
+        expect.objectContaining({
+          to: bob.email,
+          subject: expect.stringContaining('thread:title'),
+          text: expect.stringMatching(
+            /author:handle posted\b.+\b\/#\/forum\/thread\/thread:id\?post=post:3\b.+ Lorem Ipsum/s
+          ),
+        })
+      )
+      expect(mockSendEmail).toHaveBeenCalledTimes(5)
     })
 
     it('ThreadCreatedEvent', async () => {
+      // -------------------
+      // Initialize database
+      // -------------------
+
       // - Alice is using the default behavior for general subscriptions
       // - Alice should get notified of any new thread in bar or it's sub categories
       const alice = await createMember(1, 'alice', [{ kind: 'FORUM_WATCHED_CATEGORY_THREAD', entityId: 'bar' }])
@@ -93,6 +205,10 @@ describe('createNotifications', () => {
         { kind: 'FORUM_THREAD_ALL' },
         { kind: 'FORUM_WATCHED_CATEGORY_THREAD', entityId: 'foo', shouldNotify: false },
       ])
+
+      // -------------------
+      // Mock QN responses
+      // -------------------
 
       mockRequest
         .mockReturnValueOnce({
@@ -106,40 +222,86 @@ describe('createNotifications', () => {
           ],
         })
         .mockImplementation((_: string, doc: any, variables: any) => {
-          if (doc === GetNotificationEventsDocument) {
-            return { events: [] }
-          } else if (doc === GetForumCategoryDocument) {
-            return { forumCategoryByUniqueInput: { parentId: variables.id === 'bar' ? 'foo' : null } }
+          switch (doc) {
+            case GetNotificationEventsDocument:
+              return { events: [] }
+            case GetForumCategoryDocument:
+              return { forumCategoryByUniqueInput: { parentId: variables.id === 'bar' ? 'foo' : null } }
+            case GetThreadDocument:
+              return {
+                forumThreadByUniqueInput: {
+                  author: { handle: 'author:handle' },
+                  title: `${variables.id}:title`,
+                  initialPost: { text: 'Lorem Ipsum' },
+                },
+              }
           }
         })
 
-      await createNotifications()
+      // -------------------
+      // Run
+      // -------------------
+
+      await run()
+
+      // -------------------
+      // Check notifications
+      // -------------------
 
       const notifications = await prisma.notification.findMany()
 
-      expect(notifications).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            eventId: 'event:1',
-            memberId: alice.id,
-            kind: 'FORUM_THREAD_MENTION',
-            entityId: 'thread:1',
-          }),
-          expect.objectContaining({
-            eventId: 'event:2',
-            memberId: alice.id,
-            kind: 'FORUM_WATCHED_CATEGORY_THREAD',
-            entityId: 'thread:2',
-          }),
-          expect.objectContaining({
-            eventId: 'event:3',
-            memberId: bob.id,
-            kind: 'FORUM_THREAD_ALL',
-            entityId: 'thread:3',
-          }),
-        ])
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: 'event:1',
+          memberId: alice.id,
+          kind: 'FORUM_THREAD_MENTION',
+          entityId: 'thread:1',
+        })
+      )
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: 'event:2',
+          memberId: alice.id,
+          kind: 'FORUM_WATCHED_CATEGORY_THREAD',
+          entityId: 'thread:2',
+        })
+      )
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: 'event:3',
+          memberId: bob.id,
+          kind: 'FORUM_THREAD_ALL',
+          entityId: 'thread:3',
+        })
       )
       expect(notifications).toHaveLength(3)
+
+      // -------------------
+      // Check emails
+      // -------------------
+
+      expect(mockSendEmail).toHaveBeenCalledWith(
+        expect.objectContaining({
+          to: alice.email,
+          subject: expect.stringContaining('thread:1:title'),
+          text: expect.stringMatching(/author:handle mentioned you\b.+\b\/#\/forum\/thread\/thread:1\b.+ Lorem Ipsum/s),
+        })
+      )
+      expect(mockSendEmail).toHaveBeenCalledWith(
+        expect.objectContaining({
+          to: alice.email,
+          subject: expect.stringContaining('thread:2:title'),
+          text: expect.stringMatching(/author:handle posted\b.+\b\/#\/forum\/thread\/thread:2\b.+ Lorem Ipsum/s),
+        })
+      )
+      expect(mockSendEmail).toHaveBeenCalledWith(
+        expect.objectContaining({
+          to: bob.email,
+          subject: expect.stringContaining('thread:3:title'),
+          text: expect.stringMatching(/author:handle posted\b.+\b\/#\/forum\/thread\/thread:3\b.+ Lorem Ipsum/s),
+        })
+      )
+      expect(mockSendEmail).toHaveBeenCalledTimes(3)
     })
   })
 })
