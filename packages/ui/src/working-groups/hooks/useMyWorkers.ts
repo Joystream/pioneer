@@ -15,6 +15,7 @@ export const useMyWorkers = () => {
   }
 
   const { data, loading } = useGetWorkersQuery(params)
+
   const workers = useMemo(() => (data && data.workers.map(asWorker)) || [], [data, loading])
 
   return { workers, isLoading: loading }
