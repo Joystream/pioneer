@@ -210,7 +210,6 @@ fragment WorkerRewardAmountUpdatedEvent on WorkerRewardAmountUpdatedEvent {
   id
   createdAt
   newRewardPerBlock
-  groupId
   worker {
     membership {
       id
@@ -312,7 +311,7 @@ query GetGroupEvents($group_eq: ID!) {
   terminatedLeaderEvents(where: { group: { id_eq: $group_eq } }) {
     ...TerminatedLeaderEventFields
   }
-  workerRewardAmountUpdatedEvents(where: { worker: { id_eq: $group_eq } }) {
+  workerRewardAmountUpdatedEvents(where: { group: { id_eq: $group_eq } }) {
     ...WorkerRewardAmountUpdatedEvent
   }
 }

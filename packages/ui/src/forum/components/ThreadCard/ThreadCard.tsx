@@ -22,6 +22,7 @@ interface ThreadCardProps {
 }
 
 export const ThreadCard = ({ thread, className, watchlistButton }: ThreadCardProps) => {
+  const replies = thread.visiblePostsCount - 1
   return (
     <Box
       to={generatePath(ForumRoutes.thread, { id: thread.id })}
@@ -44,10 +45,12 @@ export const ThreadCard = ({ thread, className, watchlistButton }: ThreadCardPro
         {thread.initialPostText}
       </TextMedium>
       <ColumnGapBlock justify="space-between" align="center">
-        <ColumnGapBlock gap={8}>
-          <ReplyIcon />
-          <CountBadge count={thread.visiblePostsCount} />
-        </ColumnGapBlock>
+        {replies > 0 && (
+          <ColumnGapBlock gap={8}>
+            <ReplyIcon />
+            <CountBadge count={replies} />
+          </ColumnGapBlock>
+        )}
         {watchlistButton && <WatchlistButton threadId={thread.id} />}
       </ColumnGapBlock>
     </Box>

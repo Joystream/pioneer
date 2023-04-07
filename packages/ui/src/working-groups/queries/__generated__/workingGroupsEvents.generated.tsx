@@ -154,7 +154,6 @@ export type WorkerRewardAmountUpdatedEventFragment = {
   id: string
   createdAt: any
   newRewardPerBlock: string
-  groupId: string
   worker: {
     __typename: 'Worker'
     membership: { __typename: 'Membership'; id: string; handle: string }
@@ -273,7 +272,6 @@ export type GetMemberRoleEventsQuery = {
     id: string
     createdAt: any
     newRewardPerBlock: string
-    groupId: string
     worker: {
       __typename: 'Worker'
       membership: { __typename: 'Membership'; id: string; handle: string }
@@ -416,7 +414,6 @@ export type GetGroupEventsQuery = {
     id: string
     createdAt: any
     newRewardPerBlock: string
-    groupId: string
     worker: {
       __typename: 'Worker'
       membership: { __typename: 'Membership'; id: string; handle: string }
@@ -994,7 +991,6 @@ export const WorkerRewardAmountUpdatedEventFragmentDoc = gql`
     id
     createdAt
     newRewardPerBlock
-    groupId
     worker {
       membership {
         id
@@ -1152,7 +1148,7 @@ export const GetGroupEventsDocument = gql`
     terminatedLeaderEvents(where: { group: { id_eq: $group_eq } }) {
       ...TerminatedLeaderEventFields
     }
-    workerRewardAmountUpdatedEvents(where: { worker: { id_eq: $group_eq } }) {
+    workerRewardAmountUpdatedEvents(where: { group: { id_eq: $group_eq } }) {
       ...WorkerRewardAmountUpdatedEvent
     }
   }

@@ -12,7 +12,8 @@ export const proposalDescriptions: ProposalDescriptions = {
   createWorkingGroupLeadOpening:
     'Same effect as when creating an opening for workers in the given group with given inputs, except the opening type is for lead.',
   fillWorkingGroupLeadOpening: 'Same effect as when filling opening in group for worker with given inputs.',
-  updateWorkingGroupBudget: 'Same effect as when filling opening in group for worker with given inputs.',
+  updateWorkingGroupBudget:
+    'Positive budget update gets debited from the council budget and credited to the group budget, otherwise the reverse.',
   decreaseWorkingGroupLeadStake: 'Same effect as when decreasing worker stake in group with given inputs.',
   slashWorkingGroupLead: 'Same effect as slashing worker in the group, the staking account gets slashed.',
   setWorkingGroupLeadReward: 'Same effect as updating the reward of the worker.',
