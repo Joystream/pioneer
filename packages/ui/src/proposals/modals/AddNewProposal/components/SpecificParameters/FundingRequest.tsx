@@ -1,9 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { CurrencyName } from '@/app/constants/currency'
-import { InlineToggleWrap, InputComponent, Label, ToggleCheckbox, TokenInput, InputTextarea } from '@/common/components/forms'
+import {
+  InlineToggleWrap,
+  InputComponent,
+  Label,
+  ToggleCheckbox,
+  TokenInput,
+  InputTextarea,
+} from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
@@ -11,9 +18,11 @@ import { TextMedium, TextSmall, TextInlineSmall } from '@/common/components/typo
 import { ButtonPrimary } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
 import { Prompt } from './Prompt'
+import { PreviewAndValidateModal } from './modals/PreviewAndValidate'
 
 export const FundingRequest = () => {
   const { watch, setValue } = useFormContext()
+  const [isPreviewModalShown, setIsPreviewModalShown] = useState(false);
   const [payMultiple] = watch(['fundingRequest.payMultiple'])
   return (
     <RowGapBlock gap={24}>
@@ -71,9 +80,18 @@ export const FundingRequest = () => {
               id="accounts-amounts"
               inputSize="xl"
             >
-              <InputTextarea id="accounts-amounts" name="fundingRequest.accountsAndAmounts" placeholder='Destination account address and amount' />
+              <InputTextarea
+                id="accounts-amounts"
+                name="fundingRequest.accountsAndAmounts"
+                placeholder="Destination account address and amount"
+              />
             </InputComponent>
-            <ButtonPrimary size="medium">
+            <ButtonPrimary
+              size="medium"
+              onClick={() =>
+                setIsPreviewModalShown(true)
+              }
+            >
               Preview and Validate <Arrow direction="right" />
             </ButtonPrimary>
           </RowGapBlock>
@@ -95,6 +113,7 @@ export const FundingRequest = () => {
           </RowGapBlock>
         )}
       </Row>
+      {isPreviewModalShown && <PreviewAndValidateModal setIsPreviewModalShown={setIsPreviewModalShown} />}
     </RowGapBlock>
   )
 }
