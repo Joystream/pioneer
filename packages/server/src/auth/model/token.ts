@@ -26,8 +26,8 @@ export const createAuthToken = (memberId: number): string => {
   return sign(payload, APP_SECRET_KEY)
 }
 
-export const authMemberId = (req: ExpressContext['req']): number | undefined => {
-  const authHeader = req.get('Authorization')
+export const authMemberId = (req: ExpressContext['req'] | undefined): number | undefined => {
+  const authHeader = req?.get('Authorization')
   const token = authHeader?.match(/(?<=^Bearer +)\S+/)?.[0]
   if (!token) return
 
