@@ -1,6 +1,5 @@
-import * as Prisma from '@prisma/client'
 import { pick } from 'lodash'
-import { intArg, mutationField, nonNull, stringArg } from 'nexus'
+import { arg, intArg, mutationField, nonNull, stringArg } from 'nexus'
 import * as Yup from 'yup'
 
 import { verifySignature } from '@/auth/model/signature'
@@ -19,9 +18,9 @@ export const signin = mutationField('signin', {
   type: 'String',
 
   args: {
-    memberId: nonNull(stringArg()),
+    memberId: nonNull(intArg()),
     signature: nonNull(stringArg()),
-    timestamp: nonNull(intArg()),
+    timestamp: nonNull(arg({ type: 'BigInt' })),
   },
 
   resolve: async (_, args: SignInArgs): Promise<string | null> => {
@@ -43,24 +42,24 @@ export const signup = mutationField('signup', {
   type: 'String',
 
   args: {
-    memberId: nonNull(stringArg()),
-    signature: nonNull(stringArg()),
-    timestamp: nonNull(intArg()),
+    memberId: nonNull(intArg()),
     name: nonNull(stringArg()),
     email: stringArg(),
+    signature: nonNull(stringArg()),
+    timestamp: nonNull(arg({ type: 'BigInt' })),
   },
 
-  resolve: async (_, args: SignUpArgs, { req, prisma }: Context): Promise<Prisma.Member | null> => {
+  resolve: async (_, args: SignUpArgs, { req, prisma }: Context): Promise<string | null> => {
     const verification = await verifySignature(args.signature, args.memberId, args.timestamp)
     if (verification !== 'VALID') {
       return null
     }
 
-    const member = await prisma.member.create({ data: { id: args.memberId, name: args.name } })
+    await prisma.member.create({ data: { id: args.memberId, name: args.name } })
 
     if (args.email && (await Yup.string().email().isValid(args.email))) {
       const token = createEmailToken(pick(args as Required<SignUpArgs>, 'email', 'memberId'))
-      const verificationUrl = `${req.headers.referer ?? PIONEER_URL}/#/?verify-email=${token}`
+      const verificationUrl = `${req?.headers.referer ?? PIONEER_URL}/#/?verify-email=${token}`
 
       await configEmailProvider()({
         to: args.email,
@@ -69,6 +68,6 @@ export const signup = mutationField('signup', {
       })
     }
 
-    return member
+    return createAuthToken(args.memberId)
   },
 })
