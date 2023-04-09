@@ -14,7 +14,6 @@ import { ArrowReplyIcon, LinkIcon, ReplyIcon } from '@/common/components/icons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { Badge } from '@/common/components/typography'
 import { BorderRad, Colors, Fonts, Shadows } from '@/common/constants'
-import { useLocation } from '@/common/hooks/useLocation'
 import { useModal } from '@/common/hooks/useModal'
 import { relativeIfRecent } from '@/common/model/relativeIfRecent'
 import { PostHistoryModalCall } from '@/forum/modals/PostHistoryModal'
@@ -58,7 +57,6 @@ export const PostListItem = ({
   const { active } = useMyMemberships()
   const { createdAtBlock, lastEditedAt, author, text, repliesTo } = post
   const [postLastEditedAt, setPostLastEditedAt] = useState<string | undefined>(lastEditedAt)
-  const location = useLocation()
   const { showModal } = useModal()
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -69,7 +67,7 @@ export const PostListItem = ({
     if (ref.current && isSelected) {
       ref.current.scrollIntoView({ behavior: 'smooth', inline: 'start' })
     }
-  }, [location, ref.current])
+  }, [isSelected])
 
   const [editing, setEditing] = useState(false)
   const editionTime = useMemo(() => {
