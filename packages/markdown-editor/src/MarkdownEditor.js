@@ -19,6 +19,8 @@ import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefrom
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation'
 import SpecialCharacters from '@ckeditor/ckeditor5-special-characters/src/specialcharacters'
 import SpecialCharactersEssentials from '@ckeditor/ckeditor5-special-characters/src/specialcharactersessentials'
+import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar'
+import Table from '@ckeditor/ckeditor5-table/src/table'
 
 // Plugins to include in the build.
 const plugins = [
@@ -40,6 +42,11 @@ const plugins = [
   PasteFromOffice,
   TextTransformation,
   AutoImage,
+  SpecialCharacters,
+  SpecialCharactersEssentials,
+  TableToolbar,
+  Table,
+  SpecialCharactersExtended,
 ]
 
 ClassicEditor.builtinPlugins = plugins
@@ -86,6 +93,16 @@ function prepareLink({ type, itemId, addon }) {
       return ''
     }
   }
+}
+
+function SpecialCharactersExtended(editor) {
+  editor.plugins.get('SpecialCharacters').addItems('Mathematical', [
+    { title: 'smiley face', character: '😊' },
+    { title: 'rocket', character: '🚀' },
+    { title: 'wind blowing face', character: '🌬️' },
+    { title: 'floppy disk', character: '💾' },
+    { title: 'heart', character: '❤️' },
+  ])
 }
 
 export default {
