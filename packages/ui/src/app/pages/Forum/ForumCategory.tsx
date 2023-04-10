@@ -59,9 +59,12 @@ export const ForumCategory = () => {
     return <Loading />
   }
 
+
   if (isLoadingCategory) {
     return <Loading />
   }
+  console.log(category)
+  
   if (!category) {
     return <EmptyPagePlaceholder title="There is no data in the category" copy="" button={null} />
   }
