@@ -31,7 +31,7 @@ import { ForumPageLayout } from './components/ForumPageLayout'
 
 export const ForumThread = () => {
   const { id } = useParams<{ id: string }>()
-  const { isLoading: isLoadingThread, thread } = useForumThread(id)
+  const { isLoading: isLoadingThread, thread, hasError } = useForumThread(id)
   const isRefetched = useRefetchQueries({
     interval: MILLISECONDS_PER_BLOCK,
     include: ['GetForumThreads'],
@@ -60,7 +60,7 @@ export const ForumThread = () => {
   }
 
   useEffect(() => {
-    if (!isLoading && !thread) {
+    if (!isLoading && !thread && !hasError) {
       history.replace('/404')
     }
   }, [isLoading, thread])
