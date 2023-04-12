@@ -1,6 +1,6 @@
 // import { useModal } from '@/common/hooks/useModal'
 import React, { useEffect } from 'react'
-import { Modal, ModalHeader, ModalWrap } from '@/common/components/Modal'
+import { Modal, ModalGlass, ModalHeader, ModalWrap } from '@/common/components/Modal'
 import styled from 'styled-components'
 
 interface PreviewAndValidateModalProps{
@@ -11,13 +11,8 @@ export const PreviewAndValidateModal = ({setIsPreviewModalShown}: PreviewAndVali
 //   const { hideModal, modalData, showModal } = useModal()
 
   return (
-    <CustomModal onClose={() => undefined} modalSize="l" modalHeight="xl">
+    <Modal onClose={() => undefined} modalSize="s" customModalSize={'552'} marginRight={'68'} modalHeight="xl">
       <ModalHeader onClick={() => setIsPreviewModalShown(false)} title="Preview And Validate" />
-    </CustomModal>
+    </Modal>
   )
 }
-const CustomModal = styled(Modal)`
-${ModalWrap} {
-    max-width: 552px !important;
-}
-`
