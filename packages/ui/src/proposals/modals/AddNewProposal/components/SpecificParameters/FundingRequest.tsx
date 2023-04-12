@@ -23,7 +23,15 @@ import { PreviewAndValidateModal } from './modals/PreviewAndValidate'
 export const FundingRequest = () => {
   const { watch, setValue } = useFormContext()
   const [isPreviewModalShown, setIsPreviewModalShown] = useState(false);
+  const [isValidCSV, setIsValidCSV] = useState(true)
   const [payMultiple] = watch(['fundingRequest.payMultiple'])
+  const  [accountsAndAmounts] = watch(['fundingRequest.accountsAndAmounts'])
+  const splitRows = (input: string) => {
+    const splitAccountsAmounts = input.split(';\n')
+    const repeatingColons = splitAccountsAmounts.filter((item) => (item.match(/;/g) || []).length > 1).length
+    repeatingColons ? setIsValidCSV(false) : setIsValidCSV(true)
+    repeatingColons ? setIsPreviewModalShown(false) : setIsPreviewModalShown(true)
+  }
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -75,9 +83,10 @@ export const FundingRequest = () => {
             <InputComponent
               label="Destination accounts and transfer amounts"
               required
-              message="You can select up to 20 recipients"
+              message={isValidCSV ? "You can select up to 20 recipients" : "Not valid CSV format, use line breaks to split the rows."}
               name="fundingRequest.accountsAndAmounts"
               id="accounts-amounts"
+              validation={isValidCSV ? undefined : 'invalid'}
               inputSize="xl"
             >
               <InputTextarea
@@ -88,8 +97,9 @@ export const FundingRequest = () => {
             </InputComponent>
             <ButtonPrimary
               size="medium"
-              onClick={() =>
-                setIsPreviewModalShown(true)
+              onClick={() =>{
+                splitRows(accountsAndAmounts)
+              }
               }
             >
               Preview and Validate <Arrow direction="right" />
