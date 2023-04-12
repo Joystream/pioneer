@@ -11,7 +11,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "jsx": "react",
-    "lib": ["DOM", "ES2020"],
+    "lib": ["DOM", "ESNext", "WebWorker"],
     "types": ["jest"],
     "baseUrl": "."
   },
