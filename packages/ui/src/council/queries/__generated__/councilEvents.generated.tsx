@@ -107,16 +107,19 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'CategoryDeletedEvent' }
     | { __typename: 'CategoryMembershipOfModeratorUpdatedEvent' }
     | { __typename: 'CategoryStickyThreadUpdateEvent' }
+    | { __typename: 'ChannelFundsWithdrawnEvent' }
+    | { __typename: 'ChannelRewardClaimedAndWithdrawnEvent' }
+    | { __typename: 'ChannelRewardClaimedEvent' }
     | { __typename: 'CommentCreatedEvent' }
     | { __typename: 'CommentDeletedEvent' }
     | { __typename: 'CommentModeratedEvent' }
     | { __typename: 'CommentPinnedEvent' }
     | { __typename: 'CommentReactedEvent' }
     | { __typename: 'CommentTextUpdatedEvent' }
+    | { __typename: 'CouncilBudgetFundedEvent' }
     | { __typename: 'CouncilorRewardUpdatedEvent'; id: string; createdAt: any; rewardAmount: string }
     | { __typename: 'EnglishAuctionSettledEvent' }
     | { __typename: 'EnglishAuctionStartedEvent' }
-    | { __typename: 'FoundingMemberCreatedEvent' }
     | { __typename: 'InitialInvitationBalanceUpdatedEvent' }
     | { __typename: 'InitialInvitationCountUpdatedEvent' }
     | { __typename: 'InvitesTransferredEvent' }
@@ -125,6 +128,7 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'LeaderUnsetEvent' }
     | { __typename: 'MemberAccountsUpdatedEvent' }
     | { __typename: 'MemberBannedFromChannelEvent' }
+    | { __typename: 'MemberCreatedEvent' }
     | { __typename: 'MemberInvitedEvent' }
     | { __typename: 'MemberProfileUpdatedEvent' }
     | { __typename: 'MemberVerificationStatusUpdatedEvent' }
@@ -175,7 +179,6 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'PostAddedEvent' }
     | { __typename: 'PostDeletedEvent' }
     | { __typename: 'PostModeratedEvent' }
-    | { __typename: 'PostReactedEvent' }
     | { __typename: 'PostTextUpdatedEvent' }
     | { __typename: 'ProposalCancelledEvent' }
     | { __typename: 'ProposalCreatedEvent' }

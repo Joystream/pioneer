@@ -22,11 +22,8 @@ export const proposalDetails: ProposalType[] = [
   'setInitialInvitationCount',
   'setMembershipLeadInvitationQuota',
   'setReferralCut',
-  'createBlogPost',
-  'editBlogPost',
-  'lockBlogPost',
-  'unlockBlogPost',
   'veto',
+  'updateChannelPayouts',
 ]
 
 export const enabledProposals: ProposalType[] = [
@@ -49,6 +46,7 @@ export const enabledProposals: ProposalType[] = [
   'setReferralCut',
   'setInitialInvitationBalance',
   'setMembershipPrice',
+  'updateChannelPayouts',
 ]
 
 export const typenameToProposalDetails = (typename: string): ProposalType => {
