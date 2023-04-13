@@ -19,7 +19,7 @@ const iconMap = { approved: <CheckboxIcon />, rejected: <CrossIcon />, deciding:
 export const ProposalStages = ({ status, updates, constitutionality, value, onChange }: ProposalStagesProps) => {
   const roundStates: RoundState[] = useMemo(() => {
     // `decidingCount` is ("deciding updates" + 1) because the first deciding stage isn't included in updates
-    const decidingCount = updates.filter(({ status }) => status === 'deciding').length + 1
+    const decidingCount = updates.filter(({ status }) => status === 'deciding').length 
 
     const lastUpdate = last(updates).status
     const onGoing = lastUpdate === status
