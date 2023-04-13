@@ -83,9 +83,11 @@ export const ProposalPreview = () => {
   const hasVoted = proposal?.votes.some(
     (vote) => vote.voter.id === active?.id && proposal?.councilApprovals === vote.votingRound - 1
   )
-
+  
   const myVote = proposal?.votes.find((vote) => vote.voter.id === active?.id && vote.votingRound === currentVotingRound)
   const myVoteStatus = myVote?.voteKind
+  
+  console.log(votingRounds.length)
 
   if (!proposal || !votes) {
     if (!proposal && !isLoading) {
@@ -158,7 +160,7 @@ export const ProposalPreview = () => {
             </BadgeAndTime>
           </RowGapBlock>
 
-          {(proposal.status === 'dormant' || votingRounds.length >= 1) && (
+          {(proposal.status === 'dormant' || votingRounds.length > 1) && (
             <ProposalStages
               status={proposal.status}
               updates={proposal.proposalStatusUpdates}
