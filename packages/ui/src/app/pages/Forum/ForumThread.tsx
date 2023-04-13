@@ -8,6 +8,7 @@ import { PageHeaderRow, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
+import { EmptyPagePlaceholder } from '@/common/components/EmptyPagePlaceholder/EmptyPagePlaceholder'
 import { LinkIcon } from '@/common/components/icons'
 import { PinIcon } from '@/common/components/icons/PinIcon'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
@@ -108,8 +109,14 @@ export const ForumThread = () => {
 
   const displayMain = () => (
     <ThreadPanel ref={sideNeighborRef}>
-      <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} />
-      {thread && isThreadActive && <NewThreadPost ref={newPostRef} getTransaction={getTransaction} />}
+      {hasError ? (
+        <EmptyPagePlaceholder title="Something went wrong fetching this thread" copy="" button={null} />
+      ) : (
+        <>
+          <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} />
+          {thread && isThreadActive && <NewThreadPost ref={newPostRef} getTransaction={getTransaction} />}
+        </>
+      )}
     </ThreadPanel>
   )
 
