@@ -21,6 +21,7 @@ import SpecialCharacters from '@ckeditor/ckeditor5-special-characters/src/specia
 import SpecialCharactersEssentials from '@ckeditor/ckeditor5-special-characters/src/specialcharactersessentials'
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar'
 import Table from '@ckeditor/ckeditor5-table/src/table'
+import emojiData from './EmojiLib.json'
 
 // Plugins to include in the build.
 const plugins = [
@@ -95,14 +96,23 @@ function prepareLink({ type, itemId, addon }) {
   }
 }
 
+function convertJSONToArray(jsonStr) {
+  const result = []
+  for (const key in jsonStr) {
+    if (jsonStr.hasOwnProperty(key)) {
+      result.push({
+        title: key,
+        character: jsonStr[key],
+      })
+    }
+  }
+
+  return result
+}
+
 function SpecialCharactersExtended(editor) {
-  editor.plugins.get('SpecialCharacters').addItems('Mathematical', [
-    { title: 'smiley face', character: '😊' },
-    { title: 'rocket', character: '🚀' },
-    { title: 'wind blowing face', character: '🌬️' },
-    { title: 'floppy disk', character: '💾' },
-    { title: 'heart', character: '❤️' },
-  ])
+  const emoji = convertJSONToArray(emojiData)
+  editor.plugins.get('SpecialCharacters').addItems('Emoji', emoji, { label: 'Emoji' })
 }
 
 export default {
