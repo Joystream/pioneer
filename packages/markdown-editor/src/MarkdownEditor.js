@@ -90,4 +90,3 @@ export default {
   ClassicEditor,
   InlineEditor,
 }
- 
