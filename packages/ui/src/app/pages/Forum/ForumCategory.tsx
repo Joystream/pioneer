@@ -66,7 +66,7 @@ export const ForumCategory = () => {
   if (hasError) {
     return <EmptyPagePlaceholder title="Something went wrong fetching this thread" copy="" button={null} />
   }
-  
+
   if (!category) {
     return <EmptyPagePlaceholder title="There is no data in the category" copy="" button={null} />
   }
