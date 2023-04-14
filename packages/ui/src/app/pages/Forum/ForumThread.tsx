@@ -110,7 +110,7 @@ export const ForumThread = () => {
   const displayMain = () => (
     <ThreadPanel ref={sideNeighborRef}>
       {hasError ? (
-        <EmptyPagePlaceholder title="Something went wrong fetching this thread" copy="" button={null} />
+        <EmptyPagePlaceholder title="Something went wrong fetching this thread." copy="" button={null} />
       ) : (
         <>
           <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} />
