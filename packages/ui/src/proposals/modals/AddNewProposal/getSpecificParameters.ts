@@ -177,6 +177,17 @@ export const getSpecificParameters = (
         SetMembershipPrice: specifics?.setMembershipPrice?.amount ?? 0,
       })
     }
+    case 'updateChannelPayouts': {
+      return createType('PalletProposalsCodexProposalDetails', {
+        UpdateChannelPayouts: {
+          payload: specifics?.updateChannelPayouts.payload ?? null,
+          minCashoutAllowed: specifics?.updateChannelPayouts.minimumCashoutAllowed,
+          maxCashoutAllowed: specifics?.updateChannelPayouts.maximumCashoutAllowed,
+          channelCashoutsEnabled: specifics.updateChannelPayouts.cashoutEnabled ?? false,
+          commitment: specifics.updateChannelPayouts.commitment ?? null,
+        },
+      })
+    }
     default:
       return createType('PalletProposalsCodexProposalDetails', { Signal: '' })
   }

@@ -4,7 +4,6 @@ import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { CopyButtonTemplate } from '@/common/components/buttons'
-import { LinkIcon } from '@/common/components/icons'
 import { TableListItem } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
@@ -13,7 +12,6 @@ import { TextSmall } from '@/common/components/typography/Text'
 import { Colors, Overflow } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { toDDMMYY } from '@/common/utils/dates'
-import { getUrl } from '@/common/utils/getUrl'
 import { MemberInfo } from '@/memberships/components'
 import { ProposalColLayout } from '@/proposals/constants'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
@@ -88,12 +86,6 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
       <StageField>
         <ProposalItemVoteDetails proposal={proposal} memberId={memberId} isCouncilMember={isCouncilMember} />
       </StageField>
-      <CopyButton
-        square
-        size="small"
-        textToCopy={getUrl({ route: ProposalsRoutes.preview, params: { id: proposal.id } })}
-        icon={<LinkIcon />}
-      />
     </ProposalItem>
   )
 }

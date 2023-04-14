@@ -50,16 +50,14 @@ export const ProposalStages = ({ status, updates, constitutionality, value, onCh
         const icon = iconMap[roundState]
         const onClick = isDisabled ? undefined : () => onChange(round)
         const tooltipText = isDisabled
-          ? 'The number of councils that must approve the proposal in a row before it has its intended effect is more than one. The execution is triggered after the last council completes the voting. Votes for each council are displayed in a separate tab.'
+          ? 'This tab will become available with the next elected council. More precisely, when this proposal enters the deciding stage with the next council.'
           : 'This proposal must undergo the voting of multiple consequent councils. The result of each council vote will be displayed in the separate tabs. For the proposal to be approved, each of the councils must approve it.'
 
         return (
           <Tooltip key={round} tooltipText={tooltipText}>
             <TabContainer key={round} active={isActive} disabled={isDisabled} onClick={onClick}>
               {icon}
-              <span>
-                Council approvals {round + 1}/{constitutionality}
-              </span>
+              <span>Round {round + 1}</span>
             </TabContainer>
           </Tooltip>
         )
