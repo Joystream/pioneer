@@ -47,7 +47,7 @@ export const generalSubscriptionsQuery = queryField('generalSubscriptions', {
   },
 
   resolve: async (_, args: QueryArgs, { prisma, req }: Context): Promise<GeneralSubscription[] | null> => {
-    const memberId = authMemberId(req)
+    const memberId = (await authMemberId(req))?.id
     if (!memberId) return null
 
     const where = { ...args, kind: args.kind ?? { in: GeneralSubscriptionKindKeys }, memberId }
@@ -81,7 +81,7 @@ export const generalSubscriptionsMutation = mutationField('generalSubscriptions'
   args: { data: list(generalSubscriptionsInput) },
 
   resolve: async (_, { data }: MutationArgs, { prisma, req }: Context): Promise<Prisma.Subscription[] | null> => {
-    const memberId = authMemberId(req)
+    const memberId = (await authMemberId(req))?.id
     if (!memberId) return null
 
     const kind = { in: GeneralSubscriptionKindKeys }

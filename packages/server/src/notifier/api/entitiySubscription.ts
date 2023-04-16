@@ -46,7 +46,7 @@ export const entitySubscriptionsQuery = queryField('entitySubscriptions', {
   },
 
   resolve: async (_, args: QueryArgs, { prisma, req }: Context): Promise<Prisma.Subscription[] | null> => {
-    const memberId = authMemberId(req)
+    const memberId = (await authMemberId(req))?.id
     if (!memberId) return null
 
     const kind = args.kind ?? { in: EntitySubscriptionKindKeys }
@@ -69,7 +69,7 @@ export const subscribeToEntityMutation = mutationField('subscribeToEntity', {
   },
 
   resolve: async (_, args: SubscribeToEntityArgs, { prisma, req }: Context): Promise<Prisma.Subscription | null> => {
-    const memberId = authMemberId(req)
+    const memberId = (await authMemberId(req))?.id
     if (!memberId) return null
 
     const where: Prisma.Prisma.SubscriptionWhereUniqueInput = {
@@ -100,7 +100,7 @@ export const unsubscribeToEntityMutation = mutationField('unsubscribeToEntity', 
   },
 
   resolve: async (_, data: UnsubscribeToEntityArgs, { prisma, req }: Context): Promise<Prisma.Subscription | null> => {
-    const memberId = authMemberId(req)
+    const memberId = (await authMemberId(req))?.id
     if (!memberId) return null
 
     const where: Prisma.Prisma.SubscriptionWhereUniqueInput = {

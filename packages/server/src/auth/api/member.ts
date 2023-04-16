@@ -18,12 +18,7 @@ export const MemberFields = objectType({
 export const MemberQuery = queryField('member', {
   type: Member.$name,
 
-  resolve: async (_, __, { prisma, req }: Context): Promise<Prisma.Member | null> => {
-    const id = authMemberId(req)
-    if (!id) return null
-
-    return prisma.member.findUnique({ where: { id } })
-  },
+  resolve: (_, __, { req }: Context): Promise<Prisma.Member | null> => authMemberId(req),
 })
 
 type memberExistArg = { id: number }

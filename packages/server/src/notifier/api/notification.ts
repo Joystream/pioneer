@@ -32,7 +32,7 @@ export const notificationsQuery = queryField('notifications', {
   },
 
   resolve: async (_, args: QueryArgs, { prisma, req }: Context): Promise<Prisma.Notification[] | null> => {
-    const memberId = authMemberId(req)
+    const memberId = (await authMemberId(req))?.id
     if (!memberId) return null
 
     return prisma.notification.findMany({ where: { ...args, memberId } })
