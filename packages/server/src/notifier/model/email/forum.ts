@@ -32,8 +32,8 @@ export const fromPostAddedNotification: EmailFromNotification = ({ id, kind, ent
         text: `${author} replied to you in the thread ${thread}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${threadId}?post=${entityId}\n\nContent: ${text}`,
       }))
 
-    case 'FORUM_WATCHED_THREAD':
-    case 'FORUM_WATCHED_CATEGORY_POST':
+    case 'FORUM_THREAD_ENTITY_POST':
+    case 'FORUM_CATEGORY_ENTITY_POST':
     case 'FORUM_POST_ALL':
       return toEmail(({ author, threadId, thread, text }) => ({
         subject: `[Pioneer forum] ${thread}`,
@@ -81,7 +81,7 @@ export const fromThreadCreatedNotification: EmailFromNotification = ({ id, kind,
         text: `${author} mentioned you in a new thread: ${title}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${entityId}\n\nContent: ${text}`,
       }))
 
-    case 'FORUM_WATCHED_CATEGORY_THREAD':
+    case 'FORUM_CATEGORY_ENTITY_THREAD':
     case 'FORUM_THREAD_ALL':
       return toEmail(({ author, title, text }) => ({
         subject: `[Pioneer forum] ${title}`,

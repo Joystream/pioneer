@@ -68,7 +68,7 @@ describe('API: notifier', () => {
 
     const wrongMutation2 = gql`
       mutation {
-        generalSubscriptions(data: [{ kind: FORUM_WATCHED_THREAD }]) {
+        generalSubscriptions(data: [{ kind: FORUM_THREAD_ENTITY_POST }]) {
           id
         }
       }
@@ -136,7 +136,7 @@ describe('API: notifier', () => {
 
     const wrongMutation2 = gql`
       mutation {
-        entitySubscription(kind: FORUM_WATCHED_THREAD, entityId: null, status: WATCH) {
+        entitySubscription(kind: FORUM_THREAD_ENTITY_POST, entityId: null, status: WATCH) {
           id
         }
       }
@@ -145,7 +145,7 @@ describe('API: notifier', () => {
 
     const watchThreadMutation = (id: string) => gql`
         mutation {
-          entitySubscription(kind: FORUM_WATCHED_THREAD, entityId: ${id}, status: WATCH) {
+          entitySubscription(kind: FORUM_THREAD_ENTITY_POST, entityId: ${id}, status: WATCH) {
             id
             kind
             entityId
@@ -156,7 +156,7 @@ describe('API: notifier', () => {
     expect(await authApi(watchThreadMutation('1'), authToken)).toEqual({
       entitySubscription: {
         id: expect.any(Number),
-        kind: 'FORUM_WATCHED_THREAD',
+        kind: 'FORUM_THREAD_ENTITY_POST',
         entityId: '1',
         status: 'WATCH',
       },
@@ -164,7 +164,7 @@ describe('API: notifier', () => {
 
     const unWatchThreadMutation = (id: string) => gql`
         mutation {
-          entitySubscription(kind: FORUM_WATCHED_THREAD, entityId: ${id}, status: DEFAULT) {
+          entitySubscription(kind: FORUM_THREAD_ENTITY_POST, entityId: ${id}, status: DEFAULT) {
             id
             kind
             entityId
@@ -175,7 +175,7 @@ describe('API: notifier', () => {
     expect(await authApi(unWatchThreadMutation('2'), authToken)).toEqual({
       entitySubscription: {
         id: null,
-        kind: 'FORUM_WATCHED_THREAD',
+        kind: 'FORUM_THREAD_ENTITY_POST',
         entityId: '2',
         status: 'DEFAULT',
       },
@@ -183,7 +183,7 @@ describe('API: notifier', () => {
 
     const muteCategoryMutation = (id: string) => gql`
         mutation {
-          entitySubscription(kind: FORUM_WATCHED_CATEGORY_POST, entityId: ${id}, status: MUTE) {
+          entitySubscription(kind: FORUM_CATEGORY_ENTITY_POST, entityId: ${id}, status: MUTE) {
             id
             kind
             entityId
@@ -194,7 +194,7 @@ describe('API: notifier', () => {
     expect(await authApi(muteCategoryMutation('1'), authToken)).toEqual({
       entitySubscription: {
         id: expect.any(Number),
-        kind: 'FORUM_WATCHED_CATEGORY_POST',
+        kind: 'FORUM_CATEGORY_ENTITY_POST',
         entityId: '1',
         status: 'MUTE',
       },
@@ -212,15 +212,15 @@ describe('API: notifier', () => {
     `
     expect(await authApi(entitySubscriptionsQuery, authToken)).toEqual({
       entitySubscriptions: [
-        { id: expect.any(Number), kind: 'FORUM_WATCHED_THREAD', entityId: '1', status: 'WATCH' },
-        { id: expect.any(Number), kind: 'FORUM_WATCHED_CATEGORY_POST', entityId: '1', status: 'MUTE' },
+        { id: expect.any(Number), kind: 'FORUM_THREAD_ENTITY_POST', entityId: '1', status: 'WATCH' },
+        { id: expect.any(Number), kind: 'FORUM_CATEGORY_ENTITY_POST', entityId: '1', status: 'MUTE' },
       ],
     })
 
     expect(await authApi(unWatchThreadMutation('1'), authToken)).toEqual({
       entitySubscription: {
         id: expect.any(Number),
-        kind: 'FORUM_WATCHED_THREAD',
+        kind: 'FORUM_THREAD_ENTITY_POST',
         entityId: '1',
         status: 'DEFAULT',
       },
@@ -228,7 +228,7 @@ describe('API: notifier', () => {
 
     expect(await authApi(entitySubscriptionsQuery, authToken)).toEqual({
       entitySubscriptions: [
-        { id: expect.any(Number), kind: 'FORUM_WATCHED_CATEGORY_POST', entityId: '1', status: 'MUTE' },
+        { id: expect.any(Number), kind: 'FORUM_CATEGORY_ENTITY_POST', entityId: '1', status: 'MUTE' },
       ],
     })
   })

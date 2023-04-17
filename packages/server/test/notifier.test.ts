@@ -29,16 +29,16 @@ describe('Notifier', () => {
 
       // - Alice is using the default behavior for general subscriptions
       // - Alice should be notified of any new post in the category "baz" or it's sub categories
-      const alice = await createMember(1, 'alice', [{ kind: 'FORUM_WATCHED_CATEGORY_POST', entityId: 'baz' }])
+      const alice = await createMember(1, 'alice', [{ kind: 'FORUM_CATEGORY_ENTITY_POST', entityId: 'baz' }])
 
       // - By default Bob should be notified of any new post
       // - Bob should not be notified of new post on the thread "foo" or the category "qux"
-      // - Bob should be notified of new post on the thread "bar" as FORUM_WATCHED_THREAD rather than FORUM_POST_ALL
+      // - Bob should be notified of new post on the thread "bar" as FORUM_THREAD_ENTITY_POST rather than FORUM_POST_ALL
       const bob = await createMember(2, 'bob', [
         { kind: 'FORUM_POST_ALL' },
-        { kind: 'FORUM_WATCHED_THREAD', entityId: 'foo', shouldNotify: false },
-        { kind: 'FORUM_WATCHED_THREAD', entityId: 'bar' },
-        { kind: 'FORUM_WATCHED_CATEGORY_POST', entityId: 'qux', shouldNotify: false },
+        { kind: 'FORUM_THREAD_ENTITY_POST', entityId: 'foo', shouldNotify: false },
+        { kind: 'FORUM_THREAD_ENTITY_POST', entityId: 'bar' },
+        { kind: 'FORUM_CATEGORY_ENTITY_POST', entityId: 'qux', shouldNotify: false },
       ])
 
       // Charlie had not registered in the back-end he should not get any notification
@@ -116,7 +116,7 @@ describe('Notifier', () => {
         expect.objectContaining({
           eventId: 'event:2',
           memberId: bob.id,
-          kind: 'FORUM_WATCHED_THREAD',
+          kind: 'FORUM_THREAD_ENTITY_POST',
           isSent: true,
         })
       )
@@ -124,7 +124,7 @@ describe('Notifier', () => {
         expect.objectContaining({
           eventId: 'event:3',
           memberId: alice.id,
-          kind: 'FORUM_WATCHED_CATEGORY_POST',
+          kind: 'FORUM_CATEGORY_ENTITY_POST',
           isSent: true,
         })
       )
@@ -197,13 +197,13 @@ describe('Notifier', () => {
 
       // - Alice is using the default behavior for general subscriptions
       // - Alice should get notified of any new thread in bar or it's sub categories
-      const alice = await createMember(1, 'alice', [{ kind: 'FORUM_WATCHED_CATEGORY_THREAD', entityId: 'bar' }])
+      const alice = await createMember(1, 'alice', [{ kind: 'FORUM_CATEGORY_ENTITY_THREAD', entityId: 'bar' }])
 
       // - By default Bob should be notified of any new thread
       // - Bob should not be notified of threads created in category foo or it's sub categories (bar)
       const bob = await createMember(2, 'bob', [
         { kind: 'FORUM_THREAD_ALL' },
-        { kind: 'FORUM_WATCHED_CATEGORY_THREAD', entityId: 'foo', shouldNotify: false },
+        { kind: 'FORUM_CATEGORY_ENTITY_THREAD', entityId: 'foo', shouldNotify: false },
       ])
 
       // -------------------
@@ -262,7 +262,7 @@ describe('Notifier', () => {
         expect.objectContaining({
           eventId: 'event:2',
           memberId: alice.id,
-          kind: 'FORUM_WATCHED_CATEGORY_THREAD',
+          kind: 'FORUM_CATEGORY_ENTITY_THREAD',
           entityId: 'thread:2',
         })
       )

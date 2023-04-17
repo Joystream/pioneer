@@ -122,7 +122,7 @@ Specific entities like forum threads, categories, or proposals can be subscribed
 
 ```gql
 mutation {
-  subscribeToEntity(kind: FORUM_WATCHED_CATEGORY_POST, entityId: "3", shouldNotify: true) {
+  subscribeToEntity(kind: FORUM_CATEGORY_ENTITY_POST, entityId: "3", status: WATCH) {
     id
   }
 }
@@ -132,7 +132,7 @@ This mutation subscribes the authenticated member to get notified of any new pos
 
 ```gql
 mutation {
-  subscribeToEntity(kind: FORUM_WATCHED_THREAD, entityId: "123", shouldNotify: false) {
+  subscribeToEntity(kind: FORUM_THREAD_ENTITY_POST, entityId: "123", status: MUTE) {
     id
   }
 }
@@ -144,7 +144,7 @@ To cancel entity subscriptions:
 
 ```gql
 mutation {
-  unsubscribeToEntity(kind: FORUM_WATCHED_THREAD, entityId: "123") {
+  entitySubscription(kind: FORUM_THREAD_ENTITY_POST, entityId: "123", status: DEFAULT) {
     id
   }
 }
@@ -157,8 +157,7 @@ query {
   entitySubscriptions {
     kind
     entityId
-    shouldNotify
-    shouldNotifyByEmail
+    status
   }
 }
 ```

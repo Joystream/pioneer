@@ -1,9 +1,11 @@
 import * as Prisma from '@prisma/client'
-import { arg, booleanArg, list, objectType, queryField, stringArg } from 'nexus'
+import { arg, booleanArg, enumType, list, objectType, queryField, stringArg } from 'nexus'
 import { Notification, NotificationKind } from 'nexus-prisma'
 
 import { authMemberId } from '@/auth/model/token'
 import { Context } from '@/common/api'
+
+export const NotificationKindEnum = enumType(NotificationKind)
 
 export const NotificationFields = objectType({
   name: Notification.$name,
