@@ -188,9 +188,10 @@ To run the API to develop locally:
 
 1. `yarn --frozen-lockfile`: Install the dependencies.
 2. Create and configure a `packages/server/.env`.
-3. Launch the Postgres database. `yarn workspace server dev:db`: If docker is installed.
-4. `yarn workspace dev:build`: Run `graphql-codegen`, synchronize the database schema, and generate the Prisma clients.
-5. `yarn workspace server dev`: Start the server.
+3. Prepare the database and generate the code by running either:
+    - `yarn workspace server dev:db:build`: To use docker for the db.
+    - Otherwise `yarn workspace dev:build`: Once the configured db is running.
+4. `yarn workspace server dev:api`: Start the server.
 
 ### Some other useful scripts
 
