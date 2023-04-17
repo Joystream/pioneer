@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { MembershipExternalResourceType } from '@/common/api/queries'
 import { TogglableIcon } from '@/common/components/forms'
 import { Fields, FilterBox, FilterLabel } from '@/common/components/forms/FilterBox'
-import { CheckboxIcon, CouncilMemberIcon, FounderMemberIcon } from '@/common/components/icons'
+import { CheckboxIcon, CouncilMemberIcon, FounderMemberIcon, VerifiedMemberIcon } from '@/common/components/icons'
 import { ItemCount } from '@/common/components/ItemCount'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { MyProfileIcon } from '@/common/components/page/Sidebar/LinksIcons'
@@ -28,6 +28,7 @@ export interface MemberListFilter {
   onlyFounder: boolean
   searchFilter: MemberSearchFilter
   onlyCouncil: boolean
+  onlyVerified: boolean
 }
 
 type FilterKey = keyof MemberListFilter
@@ -44,6 +45,7 @@ const filterReducer = (filters: MemberListFilter, action: Action): MemberListFil
       return MemberListEmptyFilter
 
     case 'change':
+      // console.log(action.field);
       if (action.field !== 'search' && !filters.search) {
         return { ...filters, searchFilter: 'Membership', [action.field]: action.value }
       }
@@ -58,6 +60,7 @@ export const MemberListEmptyFilter: MemberListFilter = {
   onlyFounder: false,
   searchFilter: 'Membership',
   onlyCouncil: false,
+  onlyVerified: false,
 }
 
 const memberListIcons = {
@@ -109,7 +112,7 @@ export interface MemberListFiltersProps {
 export const MemberListFilters = ({ memberCount, onApply }: MemberListFiltersProps) => {
   const [filters, dispatch] = useReducer(filterReducer, MemberListEmptyFilter)
   const searchSlot = useRef<HTMLDivElement>(null)
-  const { search, roles, onlyCouncil, onlyFounder } = filters
+  const { search, roles, onlyCouncil, onlyFounder, onlyVerified } = filters
 
   const applyFilters = () => onApply(filters)
   const clear = isFilterEmpty(filters)
@@ -181,6 +184,16 @@ export const MemberListFilters = ({ memberCount, onApply }: MemberListFiltersPro
           >
             <CouncilMemberIcon />
           </TogglableIcon>
+          <TogglableIcon
+            tooltipText="Verified Member"
+            value={onlyVerified}
+            onChange={(value) => {
+              dispatch({ type: 'change', field: 'onlyVerified', value })
+              onApply({ ...filters, onlyVerified: value })
+            }}
+          >
+            <VerifiedMemberIcon />
+          </TogglableIcon>
         </ToggleContainer>
       </MembersFilterBox>
     </Wrapper>
@@ -235,7 +248,7 @@ const ToggleContainer = styled.div`
   height: 48px;
 
   & > :first-child {
-    grid-column: span 2;
+    grid-column: span 3;
   }
 `
 
