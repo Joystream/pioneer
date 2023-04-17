@@ -1,22 +1,14 @@
 import { prisma } from '@/common/prisma'
-import {
-  GetForumCategoryDocument,
-  GetNotificationEventsDocument,
-  GetPostDocument,
-  GetThreadDocument,
-} from '@/common/queries'
+import { GetForumCategoryDocument, GetNotificationEventsDocument, GetThreadDocument } from '@/common/queries'
 import { run } from '@/notifier'
 
 import { createMember } from './_mocks/notifier/createMember'
 import { postAddedEvent, threadCreatedEvent } from './_mocks/notifier/events'
-import { mockRequest, mockSendEmail } from './setup'
+import { clearDb, mockRequest, mockSendEmail } from './setup'
 
 describe('Notifier', () => {
   beforeEach(async () => {
-    await prisma.store.deleteMany()
-    await prisma.subscription.deleteMany()
-    await prisma.notification.deleteMany()
-    await prisma.member.deleteMany()
+    await clearDb()
     mockRequest.mockReset()
     mockSendEmail.mockReset()
   })
@@ -65,21 +57,14 @@ describe('Notifier', () => {
             }),
           ],
         })
-        .mockImplementation((_: string, doc: any) => {
-          switch (doc) {
-            case GetNotificationEventsDocument:
-              return { events: [] }
-            case GetForumCategoryDocument:
-              return { forumCategoryByUniqueInput: { parentId: null } }
-            case GetPostDocument:
-              return {
-                forumPostByUniqueInput: {
-                  author: { handle: 'author:handle' },
-                  thread: { id: 'thread:id', title: 'thread:title' },
-                  text: 'Lorem Ipsum',
-                },
-              }
-          }
+        .mockReturnValue({
+          events: [],
+          forumCategoryByUniqueInput: { parentId: null },
+          forumPostByUniqueInput: {
+            author: { handle: 'author:handle' },
+            thread: { id: 'thread:id', title: 'thread:title' },
+            text: 'Lorem Ipsum',
+          },
         })
 
       // -------------------
