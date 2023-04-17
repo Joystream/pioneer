@@ -6,7 +6,7 @@
     "prisma": "prisma",
     "codegen": "graphql-codegen",
     "docker": "docker-compose",
-    "test": "jest",
+    "test": "jest --runInBand",
     "tsc": "tsc",
     "ts-node": "ts-node --transpile-only -r tsconfig-paths/register",
     "nodemon": "nodemon --transpile-only -r tsconfig-paths/register",

@@ -7,7 +7,6 @@ import { isUndefined, zipWith } from 'lodash'
 
 import { createAuthToken } from '@/auth/model/token'
 import { server } from '@/common/api'
-import { prisma } from '@/common/prisma'
 
 export type Member = { id: number; name: string; email: string; controller: KeyringPair }
 
@@ -20,31 +19,34 @@ export const keyring = new Keyring({
   ss58Format: JOYSTREAM_ADDRESS_PREFIX,
 })
 
-export const clearDb = async () => {
-  await prisma.subscription.deleteMany()
-  await prisma.notification.deleteMany()
-  await prisma.member.deleteMany()
-}
-
-export const api = async (query: string, headers?: Record<string, string>) => {
+export const api = async (query: string, headers?: Record<string, string>, expectFailure = false) => {
   const req = headers && { get: (prop: string) => headers[prop] }
   const ctx = req && ({ req, res: {} } as ExpressContext)
   const res = await server.executeOperation({ query }, ctx)
-  expect(res.errors).toBeUndefined()
+
+  if (expectFailure) {
+    expect(res.errors).toBeDefined()
+    throw res.errors
+  } else {
+    expect(res.errors).toBeUndefined()
+  }
+
   return res.data
 }
 
-export const authApi = async (query: string, authToken: string) => {
-  const unAuthorized1 = await api(query)
-  expect(Object.values(unAuthorized1 ?? {})).not.toContainEqual(expect.anything())
+export const authApi = async (query: string, authToken: string, expectFailure = false) => {
+  if (!expectFailure) {
+    const unAuthorized1 = await api(query)
+    expect(Object.values(unAuthorized1 ?? {})).not.toContainEqual(expect.anything())
 
-  const unAuthorized2 = await api(query, { Authorization: 'foo' })
-  expect(Object.values(unAuthorized2 ?? {})).not.toContainEqual(expect.anything())
+    const unAuthorized2 = await api(query, { Authorization: 'foo' })
+    expect(Object.values(unAuthorized2 ?? {})).not.toContainEqual(expect.anything())
 
-  const unAuthorized3 = await api(query, { Authorization: `Bearer ${createAuthToken(1234)}` })
-  expect(Object.values(unAuthorized3 ?? {})).not.toContainEqual(expect.anything())
+    const unAuthorized3 = await api(query, { Authorization: `Bearer ${createAuthToken(1234)}` })
+    expect(Object.values(unAuthorized3 ?? {})).not.toContainEqual(expect.anything())
+  }
 
-  return await api(query, { Authorization: `Bearer ${authToken}` })
+  return await api(query, { Authorization: `Bearer ${authToken}` }, expectFailure)
 }
 
 export const signWith = (member: Member, value: string) => u8aToHex(member.controller.sign(value))
