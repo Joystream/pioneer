@@ -23,12 +23,16 @@ import { PreviewAndValidateModal } from './modals/PreviewAndValidate'
 export const FundingRequest = () => {
   const { watch, setValue } = useFormContext()
   const [isPreviewModalShown, setIsPreviewModalShown] = useState(false);
+  const [previewModalData, setPreviewModalData] = useState<string[]>([]);
   const [isValidCSV, setIsValidCSV] = useState(true)
   const [payMultiple] = watch(['fundingRequest.payMultiple'])
   const  [accountsAndAmounts] = watch(['fundingRequest.accountsAndAmounts'])
   const splitRows = (input: string) => {
-    const splitAccountsAmounts = input.split(';\n')
-    const repeatingColons = splitAccountsAmounts.filter((item) => (item.match(/;/g) || []).length > 1).length
+    const inputSplit = input.split(';\n')
+    const repeatingColons = inputSplit.filter((item) => (item.match(/;/g) || []).length > 1).length
+    if(!repeatingColons){
+      setPreviewModalData(inputSplit)
+    }
     repeatingColons ? setIsValidCSV(false) : setIsValidCSV(true)
     repeatingColons ? setIsPreviewModalShown(false) : setIsPreviewModalShown(true)
   }
@@ -123,7 +127,7 @@ export const FundingRequest = () => {
           </RowGapBlock>
         )}
       </Row>
-      {isPreviewModalShown && <PreviewAndValidateModal setIsPreviewModalShown={setIsPreviewModalShown} />}
+      {isPreviewModalShown && <PreviewAndValidateModal previewModalData={previewModalData} setIsPreviewModalShown={setIsPreviewModalShown} />}
     </RowGapBlock>
   )
 }
