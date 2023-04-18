@@ -1,9 +1,7 @@
-import log from 'npmlog'
-
 import { prisma } from '@/common/prisma'
 
-import '@/common/config'
-log.level = 'silent'
+process.env.APP_SECRET_KEY = 'foo'
+process.env.APP_LOG_LEVEL = 'silent'
 
 export const clearDb = async () => {
   type TNames = { name: string }[]
