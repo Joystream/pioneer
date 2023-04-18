@@ -60,7 +60,7 @@ export const ForumCategory = () => {
   }
 
   if (!category) {
-    return <EmptyPagePlaceholder title="There is no any data in the category" copy="" button={null} />
+    return <EmptyPagePlaceholder title="There is no data in the category" copy="" button={null} />
   }
 
   return (
