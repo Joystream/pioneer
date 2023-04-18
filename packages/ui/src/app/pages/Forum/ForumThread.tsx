@@ -14,9 +14,7 @@ import { PinIcon } from '@/common/components/icons/PinIcon'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Colors } from '@/common/constants'
-import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { createType } from '@/common/model/createType'
-import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getUrl } from '@/common/utils/getUrl'
 import { PostList } from '@/forum/components/PostList/PostList'
@@ -32,12 +30,7 @@ import { ForumPageLayout } from './components/ForumPageLayout'
 
 export const ForumThread = () => {
   const { id } = useParams<{ id: string }>()
-  const { isLoading: isLoadingThread, thread, hasError } = useForumThread(id)
-  const isRefetched = useRefetchQueries({
-    interval: MILLISECONDS_PER_BLOCK,
-    include: ['GetForumThreads'],
-  })
-  const isLoading = isLoadingThread && !isRefetched
+  const { isLoading, thread, hasError } = useForumThread(id)
   const { api } = useApi()
   const { active } = useMyMemberships()
 
