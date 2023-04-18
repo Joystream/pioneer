@@ -78,11 +78,35 @@ Most queries require a Bearer authentication, HTTP header examples:
 This token is returns by both the `signup` and `signin` mutations:
 
 ```gql
-signup(memberId: String! signature: String! timestamp: Int! name: String! email: String): String
-signin(memberId: String! signature: String! timestamp: Int!): String
+signup(memberId: String! signature: String! timestamp: BigInt! name: String! email: String): String
+signin(memberId: String! signature: String! timestamp: BigInt!): String
 ```
 
 The `signature` parameter consist of a `MEMBERSHIP_ID:TIMESTAMP` signed with the membership controller account.
+
+To check the validity of an authorization token:
+
+```gql
+query {
+  member {
+    id
+    name
+    email
+  }
+}
+```
+
+When ran with a correct `Authorization` header, it returns the member data. Otherwise it returns `null`. The email field will be `null' if the member email address has not yet been verified.
+
+To check that a member is registered in the API:
+
+```gql
+query {
+  memberExist(id: Int!)
+}
+```
+
+This returns `true` if the member is registered and `false` otherwise. This query does not require an authorization token.
 
 ### General subscriptions
 
