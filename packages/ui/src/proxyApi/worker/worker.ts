@@ -43,21 +43,23 @@ messages.subscribe(({ data }) => {
       })
   } else {
     apiObserver.pipe(firstWhere(isDefined)).subscribe(async (api) => {
+      if (!api) return
+
       switch (message.messageType) {
         case 'derive':
-          return query('derive', api as ApiRx, message, postMessage)
+          return query('derive', api, message, postMessage)
 
         case 'query':
-          return query('query', api as ApiRx, message, postMessage)
+          return query('query', api, message, postMessage)
 
         case 'rpc':
-          return query('rpc', api as ApiRx, message, postMessage)
+          return query('rpc', api, message, postMessage)
 
         case 'tx':
-          return tx(api as ApiRx, message, postMessage)
+          return tx(api, message, postMessage)
 
         case 'chain-metadata':
-          return postMessage({ messageType: 'chain-metadata', payload: await getPolkadotApiChainInfo(api as ApiRx) })
+          return postMessage({ messageType: 'chain-metadata', payload: await getPolkadotApiChainInfo(api) })
       }
     })
   }

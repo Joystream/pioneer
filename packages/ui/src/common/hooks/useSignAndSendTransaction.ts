@@ -52,7 +52,7 @@ export const useSignAndSendTransaction = ({
 
   const sign = useCallback(() => {
     if (wallet && api) {
-      getChainMetadata(api).then(async (metadata) => {
+      return getChainMetadata(api).then(async (metadata) => {
         await wallet.updateMetadata(metadata)
         send('SIGN')
       })
