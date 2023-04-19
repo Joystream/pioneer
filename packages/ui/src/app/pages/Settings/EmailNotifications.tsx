@@ -8,6 +8,7 @@ import { TransactionButton } from '@/common/components/buttons/TransactionButton
 
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { MainPanel } from '@/common/components/page/PageContent'
+import { InputComponent, InputText } from '@/common/components/forms'
 
 export const EmailNotifications = () => {
   const { members, active, hasMembers } = useMyMemberships()
@@ -22,6 +23,10 @@ export const EmailNotifications = () => {
 
   const [subscribed, setSubscribed] = useState(!!email)
   const [_email, setEmail] = useState(email ?? '')
+	
+  type InputEmailState = 'verified' | 'unverified' | 'active'
+  const initState = !email ? 'active' : verified ? 'verified' : 'unverified'
+  const [emailState, changeEmailState] = useState<InputEmailState>(initState)
 
   const subscribe = () => {
     let inputstr
@@ -32,6 +37,11 @@ export const EmailNotifications = () => {
       : ((inputstr = prompt('Email notifications verify modal', 'default@email.com')), //here email verify modal comes
         setEmail(inputstr ?? ''))
     setSubscribed(true)
+  }
+
+  const inputEmailChange = (e: any) => {
+    changeEmailState(e.target.value == email ? initState : 'active')
+    setEmail(e.target.value)
   }
 	
   return (
@@ -51,6 +61,10 @@ export const EmailNotifications = () => {
           />
         ) : (
           <MainPanel>
+						
+              <InputComponent inputSize="l" label="Email">
+                <InputText value={_email} placeholder="Add email for notifications here" onChange={inputEmailChange} />
+              </InputComponent>
           </MainPanel>
         )
       }
