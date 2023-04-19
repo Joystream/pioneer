@@ -7,8 +7,10 @@ import { EmptyPagePlaceholder } from '@/common/components/EmptyPagePlaceholder/E
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { MainPanel } from '@/common/components/page/PageContent'
-import { InputComponent, InputText } from '@/common/components/forms'
+import { ColumnGapBlock, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
+import { InputComponent, InputText, ToggleCheckbox } from '@/common/components/forms'
+import { TextBig, TextMedium } from '@/common/components/typography'
+import { useToggle } from '@/common/hooks/useToggle'
 
 export const EmailNotifications = () => {
   const { members, active, hasMembers } = useMyMemberships()
@@ -27,6 +29,8 @@ export const EmailNotifications = () => {
   type InputEmailState = 'verified' | 'unverified' | 'active'
   const initState = !email ? 'active' : verified ? 'verified' : 'unverified'
   const [emailState, changeEmailState] = useState<InputEmailState>(initState)
+	
+  const [notifiedCheck, setNotifiedCheck] = useToggle(notifyset)
 
   const subscribe = () => {
     let inputstr
@@ -61,10 +65,23 @@ export const EmailNotifications = () => {
           />
         ) : (
           <MainPanel>
-						
+            <RowGapBlock gap={16}>
+              <ColumnGapBlock gap={12}>
+                <TextBig value bold>
+                  I want to be notified by email:
+                </TextBig>
+                <ToggleCheckbox
+                  name="Notification setting checktoggle"
+                  trueLabel={notifiedCheck ? <TextMedium bold>Yes</TextMedium> : <TextMedium>Yes</TextMedium>}
+                  falseLabel={notifiedCheck ? <TextMedium>No</TextMedium> : <TextMedium bold>No</TextMedium>}
+                  checked={notifiedCheck}
+                  onChange={setNotifiedCheck}
+                />
+              </ColumnGapBlock>
               <InputComponent inputSize="l" label="Email">
                 <InputText value={_email} placeholder="Add email for notifications here" onChange={inputEmailChange} />
               </InputComponent>
+            </RowGapBlock>
           </MainPanel>
         )
       }
