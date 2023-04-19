@@ -15,6 +15,7 @@ import { SettingsInformation } from '@/common/components/SettingsInformation'
 import { InfoBannerIcon } from './components/InfoBannerIcon'
 import { InformationBanner } from './components/InformationBanner'
 import { GenerateNewLinkButton } from './components/GenerateNewLinkButton'
+import { SaveChangesButton } from './components/SaveChangesButton'
 
 export const EmailNotifications = () => {
   const { members, active, hasMembers } = useMyMemberships()
@@ -36,6 +37,8 @@ export const EmailNotifications = () => {
 	
   const [notifiedCheck, setNotifiedCheck] = useToggle(notifyset)
 
+  const [saveBtnEnabled, setSaveBtnEnabled] = useState(true)
+
   const subscribe = () => {
     let inputstr
     !hasMembers
@@ -51,10 +54,29 @@ export const EmailNotifications = () => {
     changeEmailState(e.target.value == email ? initState : 'active')
     setEmail(e.target.value)
   }
+
+	const saveChanges = () => {
+    alert('All changes are saved successfully') //Here SaveFunctions comes
+    //state true
+  }
+	
+  useEffect(() => {
+    if (!notifiedCheck) {
+      setSaveBtnEnabled(true)
+      return
+    }
+    setSaveBtnEnabled(!!_email ?? false)
+  })
 	
   return (
     <PageLayout
-      header={<PageHeader title="Settings" tabs={<SettingsTabs />} />}
+      header={
+        <PageHeader
+          title="Settings"
+          tabs={<SettingsTabs />}
+          buttons={<SaveChangesButton disabled={!saveBtnEnabled} saveChanges={saveChanges} />}
+        />
+      }
       main={
         !subscribed ? (
           <EmptyPagePlaceholder
