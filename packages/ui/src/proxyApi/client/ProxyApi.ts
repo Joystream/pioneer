@@ -6,7 +6,6 @@ import { firstWhere } from '@/common/utils/rx'
 
 import { deserializeMessage, serializePayload, WorkerProxyMessage } from '../models/payload'
 import { ClientMessage, PostMessage, RawWorkerMessageEvent, WorkerConnectMessage, WorkerInitMessage } from '../types'
-import { workerApi as launchWorker } from '../worker'
 
 import { AsyncProps, _async } from './_async'
 import { query } from './query'
@@ -23,7 +22,7 @@ export class ProxyApi extends Events {
   _async: AsyncProps
 
   static create(providerEndpoint: string) {
-    const worker = launchWorker()
+    const worker = new Worker(new URL('../worker', import.meta.url), { type: 'module' })
 
     const messages = fromEvent<RawWorkerMessageEvent>(worker, 'message')
 

@@ -7,6 +7,60 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0 Ephesus][1.4.0] - 2023-04-12
+
+### Added
+- Update Channel Payouts Proposal.
+- Self-imposed governance blacklisting support.
+
+## [1.3.2] - 2023-04-05
+
+### Fixed
+- Incorrect values in the "My Roles" tab.
+- Working group history tab crashing.
+- Infinite auto scroll to a post after opening a link to this post.
+- Unclear councilor reward widget.
+- Some posts overflowing on Webkit browsers.
+- Improve stake and constitutionality visibility when creating a proposal.
+- Copy improvements: proposal discussion status and voting rounds tabs tooltips, and forum empty category.
+
+### Removed
+- Buggy link icon on proposal lists.
+
+## [1.3.1] - 2023-03-15
+
+### Fixed
+- Multiple voting rounds proposal view.
+- Forum watchlist tab.
+- Proposal list on narrow screens.
+- Forum thread back button goes back to the category page with the thread.
+- Typo in `docs/README`.
+
+## [1.3.0] - 2023-02-17
+
+### Added
+- Member handles when hovering candidacies.
+- Allow full UTF-8 proposal titles.
+- `decode` helper command for development.
+
+### Changed
+- Open markdown links in a new tab.
+- WG openings list items and selector options.
+- Description of the update WG budget proposal.
+- Rename proposal "Constants" to "Parameters".
+
+### Removed
+- The virtual member role.
+
+### Fixed
+- Invite member modal.
+- New posts preview modal.
+- Status of rejected and canceled application.
+- Block explorer icon look.
+- Do not truncate forum category descriptions.
+- Latest threads reply count.
+- Typos.
+
 ## [1.2.0] - 2023-02-09
 
 ### Added
@@ -51,7 +105,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Blockheight info labels (in the settings).
 - Replaced/Removed some more lorem ipsum.
 - Better prevent localstorage overwrites from the forum tread watchlist.
-- The hire limit on single postion openings.
+- The hire limit on single position openings.
 - The temporary "Insufficient balance to cover fee" message on the vesting claim modal.
 
 ## [1.0.1] - 2023-01-05
@@ -59,11 +113,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Proposal view crashing due to high amounts of JOY
 
-## [1.0.0] - 2022-12-16
+## [1.0.0 Mainnet][1.0.0] - 2022-12-16
 
 ### Added
 - Mainnet network in the setting.
-- Documentation link to the [Joystrem Handbook](https://joystream.gitbook.io/testnet-workspace) for each working group.
+- Documentation link to the [Joystream Handbook](https://joystream.gitbook.io/testnet-workspace) for each working group.
 - Refresh auto-conf network button.
 - RPC blockheight and latest processed block in settings.
 
@@ -81,9 +135,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Testnet banner.
 
 ### Fixed
-- Large election relealing stage (long term fix).
+- Large election revealing stage (long term fix).
 - Recovering the stake locked when applying to an opening.
-- Some broken [Joystrem Handbook](https://joystream.gitbook.io/testnet-workspace) links.
+- Some broken [Joystream Handbook](https://joystream.gitbook.io/testnet-workspace) links.
 - Replace placeholder text on vesting tooltips.
 - Broken text on the insufficient funds modal.
 - Proposal discussion order.
@@ -92,7 +146,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v1.2.0...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/Joystream/pioneer/compare/v1.3.2...v1.4.0
+[1.3.2]: https://github.com/Joystream/pioneer/compare/v1.3.1...v1.3.2
+[1.3.1]: https://github.com/Joystream/pioneer/compare/v1.3.0...v1.3.1
+[1.3.0]: https://github.com/Joystream/pioneer/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/Joystream/pioneer/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/Joystream/pioneer/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/Joystream/pioneer/compare/v1.0.1...v1.1.0

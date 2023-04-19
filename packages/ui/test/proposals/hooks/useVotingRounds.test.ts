@@ -13,14 +13,14 @@ const { Approve, Reject, Slash, Abstain } = ProposalVoteKind
 const asVote = ([voteKind, votingRound]: VoteData) => ({ id: '0', voteKind, votingRound, voter: getMember('alice') })
 const asVotes = (data: VoteData[]) => data.map(asVote)
 
-const renderUseProposalVotes = (voteData: VoteData[], statuses: ProposalStatus[]) =>
+const renderUseProposalVotes = (voteData: VoteData[], statusUpdates: ProposalStatus[]) =>
   renderHook(
     ([voteData, statuses]: [VoteData[], ProposalStatus[]]) => {
       const votes = asVotes(voteData)
       const updates = statuses.map((status) => ({ status, inBlock: randomBlock() }))
       return useVotingRounds(votes, updates)
     },
-    { initialProps: [voteData, statuses] }
+    { initialProps: [voteData, statusUpdates] }
   )
 
 const councilSize = 3
@@ -45,7 +45,7 @@ describe('useVotingRounds', () => {
         [Slash, 2],
         [Abstain, 2],
       ],
-      ['deciding', 'dormant', 'deciding']
+      ['dormant', 'deciding']
     )
 
     expect(result.current).toEqual([
@@ -103,7 +103,7 @@ describe('useVotingRounds', () => {
         [Approve, 1],
         [Approve, 1],
       ],
-      ['deciding', 'dormant', 'deciding']
+      ['dormant', 'deciding']
     )
 
     expect(result.current).toEqual([
@@ -141,7 +141,7 @@ describe('useVotingRounds', () => {
         [Slash, 1],
         [Abstain, 1],
       ],
-      ['deciding', 'dormant', 'deciding']
+      ['dormant', 'deciding']
     )
 
     expect(result.current).toEqual([
@@ -187,7 +187,7 @@ describe('useVotingRounds', () => {
         [Approve, 0],
         [Abstain, 0],
       ],
-      ['deciding']
+      []
     )
 
     expect(result.current).toEqual([
