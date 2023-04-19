@@ -33,6 +33,8 @@ import { MyAccounts } from './pages/Profile/MyAccounts'
 import { MyMemberships } from './pages/Profile/MyMemberships'
 import { ProposalsModule } from './pages/Proposals/ProposalsModule'
 import { Settings } from './pages/Settings/Settings'
+import { Language } from './pages/Settings/Language'
+import { EmailNotifications } from './pages/Settings/EmailNotifications'
 import { PrivacyPolicy, TermsOfService } from './pages/Terms'
 import { WorkingGroupsModule } from './pages/WorkingGroups/WorkingGroupsModule'
 import { Providers } from './Providers'
@@ -61,6 +63,8 @@ export const App = () => {
             <Route exact path={ProfileRoutes.memberships} component={MyMemberships} />
             <Route exact path={MembersRoutes.members} component={Members} />
             <Route exact path={SettingsRoutes.settings} component={Settings} />
+            <Route exact path={SettingsRoutes.language} component={Language} />
+            <Route exact path={SettingsRoutes.notifications} component={EmailNotifications} />
             <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
             <Route exact path={TermsRoutes.termsOfService} component={TermsOfService} />
             <Route exact path="/404" component={NotFound} />
