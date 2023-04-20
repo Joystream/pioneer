@@ -5,7 +5,7 @@ export const ProfileRoutes = {
 
 export const SettingsRoutes = {
   settings: '/settings',
-  language: '/settings/language',
+  // language: '/settings/language',
   notifications: '/settings/notifications',
 } as const
 

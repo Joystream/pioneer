@@ -1,7 +1,7 @@
 import React, { MouseEventHandler } from 'react'
 
 import { ButtonPrimary } from '@/common/components/buttons/Buttons'
-import { SaveSymbol } from './SaveSymbol'
+import { SaveSymbol } from '../../../../common/components/icons/symbols/SaveSymbol'
 
 const saveChanges = () => {
   alert('All changes are saved successfully') //Here SaveFunctions comes

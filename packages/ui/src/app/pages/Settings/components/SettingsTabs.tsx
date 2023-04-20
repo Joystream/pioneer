@@ -6,7 +6,7 @@ import { usePageTabs } from '../../../hooks/usePageTabs'
 export const SettingsTabs = () => {
   const tabs = usePageTabs([
     ['Network', '/settings'],
-    ['Language', '/settings/language'],
+    // ['Language', '/settings/language'],
     ['Notifications', '/settings/notifications'],
   ])
 
