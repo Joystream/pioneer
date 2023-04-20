@@ -88,7 +88,7 @@ export const MemberInfo = React.memo(
         <div>
           <MemberHead>
             <MemberHandle>{member.handle}</MemberHandle>
-            {(member.isFoundingMember || member.isCouncilMember) && (
+            {(member.isFoundingMember || member.isCouncilMember || member.isVerified) && (
               <MemberIcons>
                 {member.isFoundingMember && (
                   <Tooltip tooltipText="This member is founder">
