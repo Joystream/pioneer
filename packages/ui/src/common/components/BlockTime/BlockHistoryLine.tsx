@@ -1,12 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { BlockTime } from '@/common/components/BlockTime'
 import { Link } from '@/common/components/Link'
 import { TextInlineSmall } from '@/common/components/typography'
 import { Fonts, Colors } from '@/common/constants'
 import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
-import { formatDateString } from '@/common/model/formatters'
 
+// import { formatDateString } from '@/common/model/formatters'
 import { BlockInfoProp } from './BlockInfo'
 
 export const BlockHistoryLine = ({ block }: BlockInfoProp) => {
@@ -16,8 +17,9 @@ export const BlockHistoryLine = ({ block }: BlockInfoProp) => {
       <BlockLink
         href={`https://polkadot.js.org/apps/?rpc=${endpoints.nodeRpcEndpoint}/ws-rpc#/explorer/query/${block.number}`}
       >
-        <TextInlineSmall lighter>{formatDateString(block.timestamp)}</TextInlineSmall>
+        <BlockTime block={block} layout="reverse-start" lessInfo />
       </BlockLink>
+      {/* <TextInlineSmall lighter>{formatDateString(block.timestamp)}</TextInlineSmall> */}
     </BlockHistoryLineContainer>
   )
 }
