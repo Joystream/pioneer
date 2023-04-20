@@ -14,6 +14,7 @@ import { MaintenanceScreen } from '@/common/components/page/MaintenanceScreen/Ma
 import { MobileView } from '@/common/components/page/MobileView/MobileView'
 import { Page, Screen } from '@/common/components/page/Page'
 import { NotificationsHolder } from '@/common/components/page/SideNotification'
+import { CenterNotificationsHolder } from '@/common/components/page/CenterNotification'
 import { TransactionStatus } from '@/common/components/TransactionStatus/TransactionStatus'
 import { parseEnv } from '@/common/utils/env'
 import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
@@ -22,6 +23,7 @@ import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
 import { ExtensionNotification } from './components/ExtensionWarning'
+import { BackendErrorNotification } from './components/BackendError'
 import { SideBar } from './components/SideBar'
 import { MembersRoutes, ProfileRoutes, SettingsRoutes, TermsRoutes } from './constants/routes'
 import { GlobalModals } from './GlobalModals'
@@ -71,6 +73,9 @@ export const App = () => {
         </Screen>
       </Page>
       <GlobalModals />
+      <CenterNotificationsHolder>
+        <BackendErrorNotification />
+      </CenterNotificationsHolder>
       <NotificationsHolder>
         <TransactionStatus />
         <ConnectionStatus />

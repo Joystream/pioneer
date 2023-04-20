@@ -100,6 +100,7 @@ export const ZIndex = {
   tooltip: 100,
   popover: 95,
   sideNotification: 90,
+  centerNotification: 105,
 }
 
 export const BorderRad = {
@@ -238,6 +239,20 @@ export const Animations = {
       to {
         opactiy: 1;
         transform: translateX(0%);
+      }
+    }
+  `,
+  showAlert: `
+    animation: showAlert ${Transitions.duration} ease;
+
+    @keyframes showAlert {
+      from {
+        opacity: 0;
+        transform: translateY(-120%);
+      }
+      to {
+        opactiy: 1;
+        transform: translateY(0%);
       }
     }
   `,
