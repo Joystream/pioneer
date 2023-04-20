@@ -45,7 +45,6 @@ const filterReducer = (filters: MemberListFilter, action: Action): MemberListFil
       return MemberListEmptyFilter
 
     case 'change':
-      // console.log(action.field);
       if (action.field !== 'search' && !filters.search) {
         return { ...filters, searchFilter: 'Membership', [action.field]: action.value }
       }
