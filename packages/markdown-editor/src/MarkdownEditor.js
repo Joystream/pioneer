@@ -96,23 +96,8 @@ function prepareLink({ type, itemId, addon }) {
   }
 }
 
-function convertJSONToArray(jsonStr) {
-  const result = []
-  for (const key in jsonStr) {
-    if (jsonStr.hasOwnProperty(key)) {
-      result.push({
-        title: key,
-        character: jsonStr[key],
-      })
-    }
-  }
-
-  return result
-}
-
 function SpecialCharactersExtended(editor) {
-  const emoji = convertJSONToArray(emojiData)
-  editor.plugins.get('SpecialCharacters').addItems('Emoji', emoji, { label: 'Emoji' })
+  editor.plugins.get('SpecialCharacters').addItems('Emoji', emojiData, { label: 'Emoji' })
 }
 
 export default {
