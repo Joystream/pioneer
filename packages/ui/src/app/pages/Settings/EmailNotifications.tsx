@@ -11,32 +11,19 @@ import { ColumnGapBlock, MainPanel, RowGapBlock } from '@/common/components/page
 import { InputComponent, InputText, ToggleCheckbox } from '@/common/components/forms'
 import { TextBig, TextMedium } from '@/common/components/typography'
 import { useToggle } from '@/common/hooks/useToggle'
-import { SettingsInformation } from '@/common/components/SettingsInformation'
-import { InfoBannerIcon } from './components/InfoBannerIcon'
-import { InformationBanner } from './components/InformationBanner'
-import { GenerateNewLinkButton } from './components/GenerateNewLinkButton'
+import { InformationBanner, InputEmailState } from './components/InformationBanner'
 import { SaveChangesButton } from './components/SaveChangesButton'
 
 export const EmailNotifications = () => {
-  const { members, active, hasMembers } = useMyMemberships()
-  // The informations related to notification setttings like EmailAddress
-  //   can be in the MembershipsContext
-  /*
-  const { email, verified, notifyset } = active.email
- */
-  ///////////////////////////////////////////////////////////////////////       mock      /////////////////
-  const { email, verified, notifyset } = { email: null, verified: true, notifyset: true }
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////
+  const { email, verified, notifyset } = { email: 'test@email.com', verified: true, notifyset: true } //mocking states
+
+  const { hasMembers } = useMyMemberships()
 
   const [subscribed, setSubscribed] = useState(!!email)
   const [_email, setEmail] = useState(email ?? '')
-	
-  type InputEmailState = 'verified' | 'unverified' | 'active'
   const initState = !email ? 'active' : verified ? 'verified' : 'unverified'
   const [emailState, changeEmailState] = useState<InputEmailState>(initState)
-	
   const [notifiedCheck, setNotifiedCheck] = useToggle(notifyset)
-
   const [saveBtnEnabled, setSaveBtnEnabled] = useState(true)
 
   const subscribe = () => {
@@ -55,11 +42,6 @@ export const EmailNotifications = () => {
     setEmail(e.target.value)
   }
 
-	const saveChanges = () => {
-    alert('All changes are saved successfully') //Here SaveFunctions comes
-    //state true
-  }
-	
   useEffect(() => {
     if (!notifiedCheck) {
       setSaveBtnEnabled(true)
@@ -67,14 +49,14 @@ export const EmailNotifications = () => {
     }
     setSaveBtnEnabled(!!_email ?? false)
   })
-	
+
   return (
     <PageLayout
       header={
         <PageHeader
           title="Settings"
           tabs={<SettingsTabs />}
-          buttons={<SaveChangesButton disabled={!saveBtnEnabled} saveChanges={saveChanges} />}
+          buttons={<SaveChangesButton disabled={!saveBtnEnabled} />}
         />
       }
       main={
@@ -107,43 +89,7 @@ export const EmailNotifications = () => {
               <InputComponent inputSize="l" label="Email">
                 <InputText value={_email} placeholder="Add email for notifications here" onChange={inputEmailChange} />
               </InputComponent>
-              {emailState === 'verified' && (
-                <SettingsInformation
-                  icon={<InfoBannerIcon />}
-                  title="Your email will never be shared and does not go on chain"
-                >
-                  <TextMedium lighter>
-                    We use your email only to send you important notifications. You can change this email or opt out
-                    from anytime in settings.
-                  </TextMedium>
-                </SettingsInformation>
-              )}
-              {emailState === 'unverified' && (
-                <InformationBanner
-                  icon={<InfoBannerIcon />}
-                  title="Verify your email account with a link in a message we sent you"
-                  button={<GenerateNewLinkButton />}
-                  footer="Next link can be generated in 30 min..."
-                >
-                  <TextMedium lighter>
-                    We sent a link to your email account that you have to use to verify. If you don't see any message
-                    from us checkthe spam folder, if you cannot find the message you can generate a new link.
-                  </TextMedium>
-                </InformationBanner>
-              )}
-              {emailState === 'active' && !!_email && (
-                <InformationBanner
-                  icon={<InfoBannerIcon />}
-                  title="Your email will never be shared and does not go on chain"
-                  button={<GenerateNewLinkButton />}
-                  footer="Check your email. Next link can be generated in 30 min"
-                >
-                  <TextMedium lighter>
-                    We use your email only to send you important notifications. You can change this email or opt out
-                    from anytime in settings.
-                  </TextMedium>
-                </InformationBanner>
-              )}
+              <InformationBanner emailState={emailState} />
             </RowGapBlock>
           </MainPanel>
         )

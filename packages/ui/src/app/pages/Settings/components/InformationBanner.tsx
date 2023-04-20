@@ -1,52 +1,52 @@
-import * as React from 'react'
-import styled from 'styled-components'
+import React, { useState, useEffect } from 'react'
 
-import { ColumnGapBlock } from '@/common/components/page/PageContent'
-import { TextBig, TextMedium } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
+import { SettingsInformation } from '@/common/components/SettingsInformation'
+import { TextMedium } from '@/common/components/typography'
+import { InfoBannerIcon } from './InfoBannerIcon'
+import { WarningWithAction } from './WarningWithAction'
+import { GenerateNewLinkButton } from './GenerateNewLinkButton'
 
-interface SettingsInformationProps {
-  icon?: React.ReactElement
-  title: string
-  children: React.ReactNode
-  button: React.ReactElement
-  footer: string
+export type InputEmailState = 'verified' | 'unverified' | 'active'
+interface Props {
+  emailState: InputEmailState
 }
-
-export const InformationBanner = ({ title, icon, children, button, footer }: SettingsInformationProps) => {
+export const InformationBanner = ({ emailState }: Props) => {
+  switch (emailState) {
+    case 'verified':
+      return (
+        <SettingsInformation icon={<InfoBannerIcon />} title="Your email will never be shared and does not go on chain">
+          <TextMedium lighter>
+            We use your email only to send you important notifications. You can change this email or opt out from
+            anytime in settings.
+          </TextMedium>
+        </SettingsInformation>
+      )
+    case 'unverified':
+      return (
+        <WarningWithAction
+          icon={<InfoBannerIcon />}
+          title="Verify your email account with a link in a message we sent you"
+          button={<GenerateNewLinkButton />}
+          description="Next link can be generated in 30 min..."
+        >
+          <TextMedium lighter>
+            We sent a link to your email account that you have to use to verify. If you don't see any message from us
+            checkthe spam folder, if you cannot find the message you can generate a new link.
+          </TextMedium>
+        </WarningWithAction>
+      )
+  }
   return (
-    <InformationWrapper>
-      <InfoMainWrapper>
-        <InfoTitleWrapper>
-          {icon}
-          <TextBig bold>{title}</TextBig>
-        </InfoTitleWrapper>
-        {children}
-      </InfoMainWrapper>
-
-      <InfoFooterWrapper>
-        {button}
-        <TextMedium>{footer}</TextMedium>
-      </InfoFooterWrapper>
-    </InformationWrapper>
+    <WarningWithAction
+      icon={<InfoBannerIcon />}
+      title="Your email will never be shared and does not go on chain"
+      button={<GenerateNewLinkButton />}
+      description="Check your email. Next link can be generated in 30 min"
+    >
+      <TextMedium lighter>
+        We use your email only to send you important notifications. You can change this email or opt out from anytime in
+        settings.
+      </TextMedium>
+    </WarningWithAction>
   )
 }
-
-export const InformationWrapper = styled.div`
-  background-color: ${Colors.Negative[50]};
-  padding: 16px;
-`
-export const InfoMainWrapper = styled.div`
-  margin-bottom : 16px
-`
-export const InfoTitleWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  column-gap: 8px;
-  margin-bottom : 8px
-`
-export const InfoFooterWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  column-gap: 8px;
-`
