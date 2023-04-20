@@ -1,3 +1,4 @@
+import { ProposalDetails } from '@/common/api/queries'
 import { asBlock, Block } from '@/common/types'
 import { asMember, Member } from '@/memberships/types'
 import { typenameToProposalDetails } from '@/proposals/model/proposalDetails'
@@ -30,32 +31,39 @@ const currentProposalStatusArray: CurrentProposalStatus[] = ['deciding', 'dorman
 export const isActiveProposalStatus = (status: ProposalStatus): status is CurrentProposalStatus =>
   currentProposalStatusArray.includes(status as CurrentProposalStatus)
 
+type ProposalDetailType<T> = T extends `${infer U}ProposalDetails` ? Uncapitalize<U> : never
 export type ProposalType =
-  | 'signal'
-  | 'runtimeUpgrade'
-  | 'fundingRequest'
-  | 'setMaxValidatorCount'
-  | 'createWorkingGroupLeadOpening'
-  | 'fillWorkingGroupLeadOpening'
-  | 'updateWorkingGroupBudget'
-  | 'decreaseWorkingGroupLeadStake'
-  | 'slashWorkingGroupLead'
-  | 'setWorkingGroupLeadReward'
-  | 'terminateWorkingGroupLead'
-  | 'amendConstitution'
-  | 'cancelWorkingGroupLeadOpening'
-  | 'setMembershipPrice'
-  | 'setCouncilBudgetIncrement'
-  | 'setCouncilorReward'
-  | 'setInitialInvitationBalance'
-  | 'setInitialInvitationCount'
-  | 'setMembershipLeadInvitationQuota'
-  | 'setReferralCut'
-  | 'createBlogPost'
-  | 'editBlogPost'
-  | 'lockBlogPost'
-  | 'unlockBlogPost'
-  | 'veto'
+  | ProposalDetailType<ProposalDetails['__typename']> &
+      (
+        | 'signal'
+        | 'runtimeUpgrade'
+        | 'fundingRequest'
+        | 'setMaxValidatorCount'
+        | 'createWorkingGroupLeadOpening'
+        | 'fillWorkingGroupLeadOpening'
+        | 'updateWorkingGroupBudget'
+        | 'decreaseWorkingGroupLeadStake'
+        | 'slashWorkingGroupLead'
+        | 'setWorkingGroupLeadReward'
+        | 'terminateWorkingGroupLead'
+        | 'amendConstitution'
+        | 'cancelWorkingGroupLeadOpening'
+        | 'setMembershipPrice'
+        | 'setCouncilBudgetIncrement'
+        | 'setCouncilorReward'
+        | 'setInitialInvitationBalance'
+        | 'setInitialInvitationCount'
+        | 'setMembershipLeadInvitationQuota'
+        | 'setReferralCut'
+        | 'createBlogPost'
+        | 'editBlogPost'
+        | 'lockBlogPost'
+        | 'unlockBlogPost'
+        | 'veto'
+        | 'updateChannelPayouts'
+      )
+
+export type DisabledProposal = 'createBlogPost' | 'editBlogPost' | 'lockBlogPost' | 'unlockBlogPost'
 
 export interface Proposal {
   id: string
