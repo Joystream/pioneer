@@ -9553,6 +9553,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/npmlog@npm:^4.1.4":
+  version: 4.1.4
+  resolution: "@types/npmlog@npm:4.1.4"
+  checksum: 740f7431ccfc0e127aa8d162fe05c6ce8aa71290be020d179b2824806d19bd2c706c7e0c9a3c9963cefcdf2ceacb1dec6988c394c3694451387759dafe0aa927
+  languageName: node
+  linkType: hard
+
 "@types/overlayscrollbars@npm:^1.12.0":
   version: 1.12.1
   resolution: "@types/overlayscrollbars@npm:1.12.1"
@@ -29160,6 +29167,7 @@ __metadata:
     "@types/lodash": ^4
     "@types/node": ^18.14.0
     "@types/node-cron": ^3.0.7
+    "@types/npmlog": ^4.1.4
     "@types/prettier": ^2
     "@typescript-eslint/eslint-plugin": ^5.52.0
     "@typescript-eslint/parser": ^5.52.0
