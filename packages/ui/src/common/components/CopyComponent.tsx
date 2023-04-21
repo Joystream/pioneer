@@ -1,3 +1,4 @@
+import { isString } from 'lodash'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -6,19 +7,16 @@ import { Colors, Fonts, Transitions } from '../constants'
 import { CopyButton } from './buttons'
 
 export interface CopyComponentProps {
-  altText?: string
+  altText?: React.ReactNode
   copyText?: string
   disabled?: boolean
   className?: any
 }
 
-export const CopyComponent = React.memo(({ altText, copyText, disabled, className }: CopyComponentProps) => {
+export const CopyComponent = React.memo(({ copyText, altText = copyText, disabled, className }: CopyComponentProps) => {
   return (
     <CopyGroup className={className} disabled={disabled}>
-      <CopyText>
-        {!altText && copyText}
-        {altText && altText}
-      </CopyText>
+      {isString(altText) ? <CopyText>{altText}</CopyText> : altText}
       <CopyButton textToCopy={copyText} disabled={disabled} />
     </CopyGroup>
   )

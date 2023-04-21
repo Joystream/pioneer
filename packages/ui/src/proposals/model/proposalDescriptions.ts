@@ -1,7 +1,7 @@
-import { ProposalType } from '@/proposals/types'
+import { DisabledProposal, ProposalType } from '@/proposals/types'
 
 type ProposalDescriptions = {
-  [key in ProposalType]: string
+  [key in ProposalType | DisabledProposal]: string
 }
 export const proposalDescriptions: ProposalDescriptions = {
   signal:
@@ -34,6 +34,8 @@ export const proposalDescriptions: ProposalDescriptions = {
     'Membership Workgroup Lead is automatically assigned invitations upon taking the role. This proposals is aimed on managing this invitations count.',
   setReferralCut:
     'Referrals, same as new membership invitations are incentivised by the platform. Referral cut entails the reward to the originator of invitation links which resulted in new memberships.',
+  updateChannelPayouts:
+    'Proposal to submit the Channel Incentives Payout payload, update the min/max claimable amounts and block/allow claiming of awarded JOYs by channels.',
   createBlogPost: 'Council blog',
   editBlogPost: 'Unlocked blog post can be edited.',
   lockBlogPost: 'When a post is locked it can no longer be modified.',
