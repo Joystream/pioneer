@@ -25,8 +25,8 @@
     "wsrun": "^5.2.4"
   },
   "devDependencies": {
-    "@typescript-eslint/parser": "^5.19.0",
-    "eslint": "^7.29.0",
+    "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "@typescript-eslint/parser": "^5.50.0",
     "husky": ">=6",
     "lint-staged": ">=10"
   },
@@ -43,10 +43,12 @@
     "@polkadot/types-known": "8.9.1",
     "@polkadot/util": "9.5.1",
     "@polkadot/util-crypto": "9.5.1",
-    "bn.js": "^4.11.9"
+    "bn.js": "^4.11.9",
+    "@joystream/js@1.2.0": "patch:@joystream/js@npm%3A1.2.0#./.yarn/patches/@joystream-js-npm-1.2.0-a8795e7496.patch",
+    "@joystream/types": "./packages/joystream-types-v0.20.6.tgz"
   },
   "engines": {
-    "node": ">=14.0.0",
+    "node": ">=14.18.0",
     "yarn": "^1.22.0"
   },
   "lint-staged": {
