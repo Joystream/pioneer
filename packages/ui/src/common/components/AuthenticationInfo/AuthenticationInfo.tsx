@@ -19,9 +19,11 @@ const AuthenticationInfo: React.FC<AuthenticationInfoProps> = React.memo(
     const { t } = useTranslation('settings')
     return (
       <AuthenticationInformation title={InfoTitle} icon={<WarnedIconLine />}>
-        <ColumnGapBlock gap={3}>
-          <TextMedium light>{InfoText}</TextMedium>
-        </ColumnGapBlock>
+        <AuthenNotiTextSection>
+          <ColumnGapBlock gap={3}>
+            <TextMedium light>{InfoText}</TextMedium>
+          </ColumnGapBlock>
+        </AuthenNotiTextSection>
         <ButtonGhost size="medium">Authorize again</ButtonGhost>
       </AuthenticationInformation>
     )
@@ -32,7 +34,11 @@ AuthenticationInfo.displayName = 'AuthenticationInfo'
 
 export default AuthenticationInfo
 
+const AuthenNotiTextSection = styled.div`
+  margin-bottom: 12px;
+`
 export const CopyText = styled(CopyComponent)`
   font-size: 14px;
   margin-left: 5px;
 `
+

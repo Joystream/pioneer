@@ -72,7 +72,6 @@ export const ColumnGapBlock = styled.div<GapBlockProps>`
   width: fit-content;
   align-items: ${({ align }) => (align === 'center' ? 'center' : 'start')};
   justify-content: ${({ justify }) => (justify === 'space-between' ? 'space-between' : 'start')};
-  margin-bottom: 16px;
 `
 
 export const PageFooter = styled.div`
