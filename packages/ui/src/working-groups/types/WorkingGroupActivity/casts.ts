@@ -229,7 +229,7 @@ export const asWorkerRewardAmountUpdatedActivity: GroupActivityCast<
   ...asBaseActivity(fragment),
   member: asMemberDisplayFields(fragment.worker.membership),
   newAmount: new BN(fragment.newRewardPerBlock),
-  openingTitle: fragment.worker.application.opening.metadata.title,
+  openingTitle: fragment.worker.application.opening.metadata.title ?? '',
   groupId: fragment.worker.application.opening.groupId as GroupIdName,
 })
 

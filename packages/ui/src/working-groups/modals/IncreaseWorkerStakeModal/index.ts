@@ -1,2 +1,2 @@
 export * from './IncreaseWorkerStakeModal'
-export { IncreaseWorkerStakeModalCall } from './types'
+export type { IncreaseWorkerStakeModalCall } from './types'

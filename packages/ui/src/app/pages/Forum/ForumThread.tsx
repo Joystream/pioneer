@@ -19,7 +19,6 @@ import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getUrl } from '@/common/utils/getUrl'
 import { PostList } from '@/forum/components/PostList/PostList'
-import { ForumPostBlock } from '@/forum/components/PostList/PostListItem'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
@@ -117,10 +116,8 @@ export const ForumThread = () => {
 }
 
 const ThreadPanel = styled(MainPanel)`
-  ${ForumPostBlock} {
-    width: 60%;
-    margin: 0 auto;
-  }
+  margin: 0 auto;
+  max-width: 1280px;
 `
 
 const ThreadPinned = styled.span`
