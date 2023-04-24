@@ -1932,7 +1932,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-autoformat@npm:^31.0.0":
+"@ckeditor/ckeditor5-autoformat@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-autoformat@npm:31.0.0"
   dependencies:
@@ -1941,7 +1941,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-basic-styles@npm:^31.0.0":
+"@ckeditor/ckeditor5-basic-styles@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-basic-styles@npm:31.0.0"
   dependencies:
@@ -1950,7 +1950,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-block-quote@npm:^31.0.0":
+"@ckeditor/ckeditor5-block-quote@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-block-quote@npm:31.0.0"
   dependencies:
@@ -2027,7 +2027,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-editor-classic@npm:^31.0.0":
+"@ckeditor/ckeditor5-editor-classic@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-editor-classic@npm:31.0.0"
   dependencies:
@@ -2037,7 +2037,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-editor-inline@npm:^31.0.0":
+"@ckeditor/ckeditor5-editor-inline@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-editor-inline@npm:31.0.0"
   dependencies:
@@ -2068,7 +2068,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-essentials@npm:^31.0.0":
+"@ckeditor/ckeditor5-essentials@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-essentials@npm:31.0.0"
   dependencies:
@@ -2077,7 +2077,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-heading@npm:^31.0.0":
+"@ckeditor/ckeditor5-heading@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-heading@npm:31.0.0"
   dependencies:
@@ -2086,7 +2086,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-image@npm:^31.0.0":
+"@ckeditor/ckeditor5-image@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-image@npm:31.0.0"
   dependencies:
@@ -2097,7 +2097,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-indent@npm:^31.0.0":
+"@ckeditor/ckeditor5-indent@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-indent@npm:31.0.0"
   dependencies:
@@ -2106,7 +2106,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-link@npm:^31.0.0":
+"@ckeditor/ckeditor5-link@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-link@npm:31.0.0"
   dependencies:
@@ -2117,7 +2117,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-list@npm:^31.0.0":
+"@ckeditor/ckeditor5-list@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-list@npm:31.0.0"
   dependencies:
@@ -2126,7 +2126,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-markdown-gfm@npm:^31.0.0":
+"@ckeditor/ckeditor5-markdown-gfm@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-markdown-gfm@npm:31.0.0"
   dependencies:
@@ -2138,7 +2138,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-mention@npm:^31.0.0":
+"@ckeditor/ckeditor5-mention@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-mention@npm:31.0.0"
   dependencies:
@@ -2148,7 +2148,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-paragraph@npm:^31.0.0":
+"@ckeditor/ckeditor5-paragraph@npm:31.0.0, @ckeditor/ckeditor5-paragraph@npm:^31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-paragraph@npm:31.0.0"
   dependencies:
@@ -2159,7 +2159,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-paste-from-office@npm:^31.0.0":
+"@ckeditor/ckeditor5-paste-from-office@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-paste-from-office@npm:31.0.0"
   dependencies:
@@ -2179,7 +2179,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-theme-lark@npm:^31.0.0":
+"@ckeditor/ckeditor5-special-characters@npm:31.0.0":
+  version: 31.0.0
+  resolution: "@ckeditor/ckeditor5-special-characters@npm:31.0.0"
+  dependencies:
+    ckeditor5: ^31.0.0
+  checksum: 30a7140eb400b4ed6ca71781f5e9d011997812c75942f3ab6326170439f9dc948430b8537ca8bf1014c276aa4eaa8973d6a4cb7dd415e420d90906a5077147d0
+  languageName: node
+  linkType: hard
+
+"@ckeditor/ckeditor5-table@npm:31.0.0":
+  version: 31.0.0
+  resolution: "@ckeditor/ckeditor5-table@npm:31.0.0"
+  dependencies:
+    ckeditor5: ^31.0.0
+    lodash-es: ^4.17.15
+  checksum: cafd804e273bcacbc8f15017b270ec4863210eac5dbe03c4a534f015de6721525a544eb2281c27c8c20627576f6aeba4d1cd2dfd470767689ff1d28cc0ecd31e
+  languageName: node
+  linkType: hard
+
+"@ckeditor/ckeditor5-theme-lark@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-theme-lark@npm:31.0.0"
   dependencies:
@@ -2188,7 +2207,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-typing@npm:^31.0.0":
+"@ckeditor/ckeditor5-typing@npm:31.0.0, @ckeditor/ckeditor5-typing@npm:^31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-typing@npm:31.0.0"
   dependencies:
@@ -3348,25 +3367,27 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joystream/markdown-editor@workspace:packages/markdown-editor"
   dependencies:
-    "@ckeditor/ckeditor5-autoformat": ^31.0.0
-    "@ckeditor/ckeditor5-basic-styles": ^31.0.0
-    "@ckeditor/ckeditor5-block-quote": ^31.0.0
+    "@ckeditor/ckeditor5-autoformat": 31.0.0
+    "@ckeditor/ckeditor5-basic-styles": 31.0.0
+    "@ckeditor/ckeditor5-block-quote": 31.0.0
     "@ckeditor/ckeditor5-dev-utils": ^25.4.5
     "@ckeditor/ckeditor5-dev-webpack-plugin": ^25.4.5
-    "@ckeditor/ckeditor5-editor-classic": ^31.0.0
-    "@ckeditor/ckeditor5-editor-inline": ^31.0.0
-    "@ckeditor/ckeditor5-essentials": ^31.0.0
-    "@ckeditor/ckeditor5-heading": ^31.0.0
-    "@ckeditor/ckeditor5-image": ^31.0.0
-    "@ckeditor/ckeditor5-indent": ^31.0.0
-    "@ckeditor/ckeditor5-link": ^31.0.0
-    "@ckeditor/ckeditor5-list": ^31.0.0
-    "@ckeditor/ckeditor5-markdown-gfm": ^31.0.0
-    "@ckeditor/ckeditor5-mention": ^31.0.0
-    "@ckeditor/ckeditor5-paragraph": ^31.0.0
-    "@ckeditor/ckeditor5-paste-from-office": ^31.0.0
-    "@ckeditor/ckeditor5-theme-lark": ^31.0.0
-    "@ckeditor/ckeditor5-typing": ^31.0.0
+    "@ckeditor/ckeditor5-editor-classic": 31.0.0
+    "@ckeditor/ckeditor5-editor-inline": 31.0.0
+    "@ckeditor/ckeditor5-essentials": 31.0.0
+    "@ckeditor/ckeditor5-heading": 31.0.0
+    "@ckeditor/ckeditor5-image": 31.0.0
+    "@ckeditor/ckeditor5-indent": 31.0.0
+    "@ckeditor/ckeditor5-link": 31.0.0
+    "@ckeditor/ckeditor5-list": 31.0.0
+    "@ckeditor/ckeditor5-markdown-gfm": 31.0.0
+    "@ckeditor/ckeditor5-mention": 31.0.0
+    "@ckeditor/ckeditor5-paragraph": 31.0.0
+    "@ckeditor/ckeditor5-paste-from-office": 31.0.0
+    "@ckeditor/ckeditor5-special-characters": 31.0.0
+    "@ckeditor/ckeditor5-table": 31.0.0
+    "@ckeditor/ckeditor5-theme-lark": 31.0.0
+    "@ckeditor/ckeditor5-typing": 31.0.0
     "@typescript-eslint/eslint-plugin": ^4.33.0
     "@typescript-eslint/parser": ^4.33.0
     prettier: ^2.4.1
