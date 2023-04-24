@@ -19,7 +19,7 @@ const normalFontSize = ({ size }: MarkdownPreviewStylesProps) => {
   }
 }
 
-const normalColor = ({ isReply }: MarkdownPreviewStylesProps) => Colors.Black[isReply ? 600 : 500]
+const normalColor = ({ isReply }: MarkdownPreviewStylesProps) => Colors.Black[isReply ? 800 : 700]
 
 export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProps>`
   .markdown-preview {
