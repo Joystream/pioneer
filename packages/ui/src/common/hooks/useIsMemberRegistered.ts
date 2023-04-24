@@ -12,10 +12,11 @@ const query = gql`
 type UseIsMemberRegistered = { isRegistered?: boolean; error?: Error }
 
 export const useIsMemberRegistered = (memberId: number | undefined): UseIsMemberRegistered => {
-  const { data, error } = useBackend<{ memberExist: boolean | null }>(
-    { query, variables: { id: memberId } },
-    isUndefined(memberId)
-  )
+  const { data, error } = useBackend<{ memberExist: boolean | null }>({
+    query,
+    variables: { id: memberId },
+    skip: isUndefined(memberId),
+  })
 
   return { isRegistered: data?.memberExist ?? undefined, error }
 }
