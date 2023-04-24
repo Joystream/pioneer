@@ -4,9 +4,9 @@ import { useContext, useEffect, useReducer, useState } from 'react'
 import { BackendContext } from '@/app/providers/backend/context'
 
 type Props = QueryOptions & { skip?: boolean }
-type useBackend<T> = { data?: T; error?: Error }
+type UseBackend<T> = { data?: T; error?: Error }
 
-export const useBackend = <T>({ skip = false, ...queryOptions }: Props): useBackend<T> => {
+export const useBackend = <T>({ skip = false, ...queryOptions }: Props): UseBackend<T> => {
   const [data, setData] = useState<T | undefined>()
   const [error, setError] = useState<Error | undefined>()
   const backendClient = useContext(BackendContext)
