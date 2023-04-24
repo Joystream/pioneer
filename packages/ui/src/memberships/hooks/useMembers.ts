@@ -26,7 +26,7 @@ export const useMembers = ({ order, filter, perPage = 10 }: UseMemberProps) => {
     where,
     orderBy: toQueryOrderByInput<MembershipOrderByInput>(order),
   }
-  
+
   const { data, loading, error: err } = useGetMembersWithDetailsQuery({ variables })
 
   if (err) {
