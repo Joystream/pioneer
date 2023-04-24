@@ -13,6 +13,7 @@ import { OnBoardingProvider } from '@/common/providers/onboarding/provider'
 import { TransactionStatusProvider } from '@/common/providers/transactionStatus/provider'
 import { MembershipContextProvider } from '@/memberships/providers/membership/provider'
 
+import { BackendProvider } from './providers/backend/provider'
 import { GlobalStyle } from './providers/GlobalStyle'
 import { RouteActions } from './RouteActions'
 
@@ -32,12 +33,14 @@ export const Providers = ({ children }: Props) => (
                   <HashRouter>
                     <RouteActions>
                       <ModalContextProvider>
-                        <OnBoardingProvider>
-                          <ImageReportProvider>
-                            <GlobalStyle />
-                            {children}
-                          </ImageReportProvider>
-                        </OnBoardingProvider>
+                        <BackendProvider>
+                          <OnBoardingProvider>
+                            <ImageReportProvider>
+                              <GlobalStyle />
+                              {children}
+                            </ImageReportProvider>
+                          </OnBoardingProvider>
+                        </BackendProvider>
                       </ModalContextProvider>
                     </RouteActions>
                   </HashRouter>
