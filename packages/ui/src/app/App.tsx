@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
 import '@/services/i18n'
@@ -36,14 +36,18 @@ import { Settings } from './pages/Settings/Settings'
 import { PrivacyPolicy, TermsOfService } from './pages/Terms'
 import { WorkingGroupsModule } from './pages/WorkingGroups/WorkingGroupsModule'
 import { Providers } from './Providers'
+import { PageContext } from './PageContext'
+import { WatchingNotification } from './components/WatchingNotification'
 
 export const App = () => {
   if (parseEnv(process.env.REACT_APP_IS_UNDER_MAINTENANCE)) {
     return <MaintenanceScreen />
   }
+  const [showWatchingNotification, setShowWatchingNotification] = useState<boolean>(false)
 
   return (
     <Providers>
+      <PageContext.Provider value={{ showWatchingNotification, setShowWatchingNotification }}>
       <Page>
         <SideBar />
         <Screen>
@@ -71,12 +75,14 @@ export const App = () => {
         </Screen>
       </Page>
       <GlobalModals />
-      <NotificationsHolder>
-        <TransactionStatus />
-        <ConnectionStatus />
-        <ExtensionNotification />
-        <ImageReportNotification />
-      </NotificationsHolder>
+        <NotificationsHolder>
+          <TransactionStatus />
+          <ConnectionStatus />
+          <ExtensionNotification />
+          <ImageReportNotification />
+          {showWatchingNotification && <WatchingNotification />}
+        </NotificationsHolder>
+      </PageContext.Provider>
     </Providers>
   )
 }

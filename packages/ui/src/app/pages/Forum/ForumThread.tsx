@@ -22,6 +22,7 @@ import { PostList } from '@/forum/components/PostList/PostList'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
+import { WatchThreadButton } from '@/forum/components/Thread/WatchThreadButton'
 import { ForumRoutes } from '@/forum/constant'
 import { useForumThread } from '@/forum/hooks/useForumThread'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -76,6 +77,7 @@ export const ForumThread = () => {
             <ThreadTitle thread={thread} />
           </PreviousPage>
           <ButtonsGroup>
+            <WatchThreadButton threadId={thread.id} />
             <CopyButtonTemplate
               size="medium"
               textToCopy={getUrl({ route: ForumRoutes.thread, params: { id: thread.id } })}
