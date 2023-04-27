@@ -27,6 +27,7 @@ import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { MemberStack, moderatorsSummary } from '@/memberships/components/MemberStack'
 
 import { ForumPageLayout } from './components/ForumPageLayout'
+import { WatchCategoryButton } from '@/forum/components/category/WatchCategoryButton'
 
 export const ForumCategory = () => {
   const [page, setPage] = useState<number>(useForumCategoryThreadPage())
@@ -80,13 +81,16 @@ export const ForumCategory = () => {
             </TextMedium>
           }
           buttons={
-            <TransactionButton
-              style="primary"
-              size="medium"
-              onClick={() => showModal({ modal: 'CreateThreadModal', data: { categoryId: id } })}
-            >
-              <PlusIcon /> Add New Thread
-            </TransactionButton>
+            <>
+              <WatchCategoryButton categoryId={category.id} />
+              <TransactionButton
+                style="primary"
+                size="medium"
+                onClick={() => showModal({ modal: 'CreateThreadModal', data: { categoryId: id } })}
+              >
+                <PlusIcon /> Add New Thread
+              </TransactionButton>
+            </>
           }
         >
           <ModeratorsContainer>
