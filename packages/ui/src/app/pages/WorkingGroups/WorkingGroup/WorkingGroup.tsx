@@ -15,6 +15,8 @@ import { StatusBadge, StatusGroup } from '../components/StatusBadges'
 import { AboutTab, AboutTabSidebar } from './AboutTab'
 import { HistoryTab, HistoryTabSidebar } from './HistoryTab'
 import { OpeningsTab, OpeningsTabSidebar } from './OpeningsTab'
+import { ButtonsGroup } from '@/common/components/buttons/Buttons'
+import { WatchWorkingGroupButton } from '@/working-groups/components/WatchWorkingGroupButton'
 
 type Tab = 'OPENINGS' | 'ABOUT' | 'HISTORY'
 
@@ -66,6 +68,9 @@ export function WorkingGroup() {
               </StatusGroup>
             )}
           </PreviousPage>
+          <ButtonsGroup>
+            <WatchWorkingGroupButton groupName={group?.name ?? name} />
+          </ButtonsGroup>
           <Tabs tabs={tabs} />
         </PageHeaderWrapper>
       }
