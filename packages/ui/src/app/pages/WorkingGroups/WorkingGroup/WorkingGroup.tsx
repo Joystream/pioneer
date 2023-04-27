@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
+import { ButtonsGroup } from '@/common/components/buttons/Buttons'
 import { Loading } from '@/common/components/Loading'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Tabs } from '@/common/components/Tabs'
 import { nameMapping } from '@/common/helpers'
+import { WatchWorkingGroupButton } from '@/working-groups/components/WatchWorkingGroupButton'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 import { urlParamToWorkingGroupId } from '@/working-groups/model/workingGroupName'
 
@@ -15,8 +17,6 @@ import { StatusBadge, StatusGroup } from '../components/StatusBadges'
 import { AboutTab, AboutTabSidebar } from './AboutTab'
 import { HistoryTab, HistoryTabSidebar } from './HistoryTab'
 import { OpeningsTab, OpeningsTabSidebar } from './OpeningsTab'
-import { ButtonsGroup } from '@/common/components/buttons/Buttons'
-import { WatchWorkingGroupButton } from '@/working-groups/components/WatchWorkingGroupButton'
 
 type Tab = 'OPENINGS' | 'ABOUT' | 'HISTORY'
 

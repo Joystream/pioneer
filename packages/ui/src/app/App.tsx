@@ -23,8 +23,10 @@ import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
 import { ExtensionNotification } from './components/ExtensionWarning'
 import { SideBar } from './components/SideBar'
+import { WatchingNotification } from './components/WatchingNotification'
 import { MembersRoutes, ProfileRoutes, SettingsRoutes, TermsRoutes } from './constants/routes'
 import { GlobalModals } from './GlobalModals'
+import { PageContext } from './PageContext'
 import { BountyModule } from './pages/Bounty/BountyModule'
 import { ElectionModule } from './pages/Election/ElectionModule'
 import { ForumModule } from './pages/Forum'
@@ -36,8 +38,6 @@ import { Settings } from './pages/Settings/Settings'
 import { PrivacyPolicy, TermsOfService } from './pages/Terms'
 import { WorkingGroupsModule } from './pages/WorkingGroups/WorkingGroupsModule'
 import { Providers } from './Providers'
-import { PageContext } from './PageContext'
-import { WatchingNotification } from './components/WatchingNotification'
 
 export const App = () => {
   if (parseEnv(process.env.REACT_APP_IS_UNDER_MAINTENANCE)) {
@@ -45,8 +45,8 @@ export const App = () => {
   }
 
   const [showWatchingNotification, setShowWatchingNotification] = useState<boolean>(false)
-  const [notiMesageStr, setNotiMesageStr] = useState<string>("")
-  const [notiTitleStr, setNotiTitleStr] = useState<string>("")
+  const [notiMesageStr, setNotiMesageStr] = useState<string>('')
+  const [notiTitleStr, setNotiTitleStr] = useState<string>('')
 
   return (
     <Providers>

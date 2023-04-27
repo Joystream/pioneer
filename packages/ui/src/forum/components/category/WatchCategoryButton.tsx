@@ -1,8 +1,8 @@
 import React, { useState, useContext, useCallback } from 'react'
 
+import { PageContext } from '@/app/PageContext'
 import { ButtonGhost } from '@/common/components/buttons'
 import { WatchIcon } from '@/common/components/icons'
-import { PageContext } from '@/app/PageContext'
 
 interface Props {
   categoryId: string
@@ -57,8 +57,8 @@ export const WatchCategoryButton = ({ categoryId }: Props) => {
   )
   
   if(watching){
-    setNotiTitleStr("You are now watching this forum category");
-    setNotiMesageStr("You will receive notifications about important updates related to this forum category");
+    setNotiTitleStr('You are now watching this forum category');
+    setNotiMesageStr('You will receive notifications about important updates related to this forum category');
     return (
       <ButtonGhost size="medium" onClick={(e) => { toggleWatching(e);}}>
         <WatchIcon />
@@ -66,8 +66,8 @@ export const WatchCategoryButton = ({ categoryId }: Props) => {
       </ButtonGhost>
     )
   }else{
-    setNotiTitleStr("You are no longer watching this forum category");
-    setNotiMesageStr("You will no longer receive any notifications about changes related to this forum category");
+    setNotiTitleStr('You are no longer watching this forum category');
+    setNotiMesageStr('You will no longer receive any notifications about changes related to this forum category');
     return (
       <ButtonGhost size="medium" onClick={(e) => { toggleWatching(e);}}>
         <WatchIcon />

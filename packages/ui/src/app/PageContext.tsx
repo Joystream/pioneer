@@ -12,8 +12,8 @@ interface PageContext {
 export const PageContext = createContext<PageContext>({
   showWatchingNotification: false,
   setShowWatchingNotification: () => {},
-  notiMesageStr: "",
+  notiMesageStr: '',
   setNotiMesageStr: () => {},
-  notiTitleStr: "",
+  notiTitleStr: '',
   setNotiTitleStr: () => {},
 })

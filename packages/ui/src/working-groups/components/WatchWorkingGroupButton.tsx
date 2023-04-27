@@ -1,8 +1,8 @@
 import React, { useState, useContext, useCallback } from 'react'
 
+import { PageContext } from '@/app/PageContext'
 import { ButtonGhost } from '@/common/components/buttons'
 import { WatchIcon } from '@/common/components/icons'
-import { PageContext } from '@/app/PageContext'
 
 interface Props {
   groupName: string
@@ -56,8 +56,8 @@ export const WatchWorkingGroupButton = ({ groupName }: Props) => {
     [hideTimeoutId, innerHideTimeoutId]
   )
   if(watching){
-    setNotiTitleStr("You are now watching this working group");
-    setNotiMesageStr("You will receive notifications about important updates related to this working group");
+    setNotiTitleStr('You are now watching this working group');
+    setNotiMesageStr('You will receive notifications about important updates related to this working group');
     return (
       <ButtonGhost size="medium" onClick={(e) => { toggleWatching(e);}}>
         <WatchIcon />
@@ -65,8 +65,8 @@ export const WatchWorkingGroupButton = ({ groupName }: Props) => {
       </ButtonGhost>
     )
   }else{
-    setNotiTitleStr("You are no longer watching this working group");
-    setNotiMesageStr("You will no longer receive any notifications about changes related to this working group");
+    setNotiTitleStr('You are no longer watching this working group');
+    setNotiMesageStr('You will no longer receive any notifications about changes related to this working group');
     return (
       <ButtonGhost size="medium" onClick={(e) => { toggleWatching(e);}}>
         <WatchIcon />

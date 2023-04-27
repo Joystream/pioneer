@@ -17,6 +17,7 @@ import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { useSort } from '@/common/hooks/useSort'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { ForumCategoryList } from '@/forum/components/category/ForumCategoryList'
+import { WatchCategoryButton } from '@/forum/components/category/WatchCategoryButton'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
@@ -27,7 +28,6 @@ import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { MemberStack, moderatorsSummary } from '@/memberships/components/MemberStack'
 
 import { ForumPageLayout } from './components/ForumPageLayout'
-import { WatchCategoryButton } from '@/forum/components/category/WatchCategoryButton'
 
 export const ForumCategory = () => {
   const [page, setPage] = useState<number>(useForumCategoryThreadPage())

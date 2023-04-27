@@ -31,6 +31,7 @@ import { ProposalStatistics } from '@/proposals/components/StatisticsPreview'
 import { VoteForProposalButton } from '@/proposals/components/VoteForProposalButton'
 import { VotesContainer, VotesPreview } from '@/proposals/components/VotesPreview'
 import { getVoteStatusComponent } from '@/proposals/components/VoteStatusComponent'
+import { WatchProposalButton } from '@/proposals/components/WatchProposalButton'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { useBlocksToProposalExecution } from '@/proposals/hooks/useBlocksToProposalExecution'
 import { useProposal } from '@/proposals/hooks/useProposal'
@@ -38,7 +39,6 @@ import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { useVotingRounds } from '@/proposals/hooks/useVotingRounds'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
-import { WatchProposalButton } from '@/proposals/components/WatchProposalButton'
 
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
