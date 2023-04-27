@@ -40,50 +40,59 @@ import { WorkingGroupsModule } from './pages/WorkingGroups/WorkingGroupsModule'
 import { Providers } from './Providers'
 
 export const App = () => {
-  if (parseEnv(process.env.REACT_APP_IS_UNDER_MAINTENANCE)) {
-    return <MaintenanceScreen />
-  }
-
   const [showWatchingNotification, setShowWatchingNotification] = useState<boolean>(false)
   const [notiMesageStr, setNotiMesageStr] = useState<string>('')
   const [notiTitleStr, setNotiTitleStr] = useState<string>('')
 
+  if (parseEnv(process.env.REACT_APP_IS_UNDER_MAINTENANCE)) {
+    return <MaintenanceScreen />
+  }
+
   return (
     <Providers>
-      <PageContext.Provider value={{ showWatchingNotification, setShowWatchingNotification, notiMesageStr, setNotiMesageStr , notiTitleStr, setNotiTitleStr }}>
-      <Page>
-        <SideBar />
-        <Screen>
-          <OnBoardingOverlay />
-          <Switch>
-            {/*// Uncomment to see whole overview section*/}
-            {/*<Route path={OverviewRoutes.overview} component={OverviewModule} />*/}
-            <Route path={WorkingGroupsRoutes.groups} component={WorkingGroupsModule} />
-            <Route path={ProposalsRoutes.home} component={ProposalsModule} />
-            <Route path={CouncilRoutes.council} component={CouncilModule} />
-            <Route path={ElectionRoutes.currentElection} component={ElectionModule} />
-            <Route path={ForumRoutes.forum} component={ForumModule} />
-            <Route path={BountyRoutes.bounties} component={BountyModule} />
-            <Route exact path={ProfileRoutes.profile} component={MyAccounts} />
-            <Route exact path={ProfileRoutes.memberships} component={MyMemberships} />
-            <Route exact path={MembersRoutes.members} component={Members} />
-            <Route exact path={SettingsRoutes.settings} component={Settings} />
-            <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
-            <Route exact path={TermsRoutes.termsOfService} component={TermsOfService} />
-            <Route exact path="/404" component={NotFound} />
-            <Redirect exact from="/" to={WorkingGroupsRoutes.groups} />
-            <Redirect exact from={ProposalsRoutes.home} to={ProposalsRoutes.current} />
-            <Redirect from="*" to="/404" />
-          </Switch>
-        </Screen>
-      </Page>
-      <GlobalModals />
+      <PageContext.Provider
+        value={{
+          showWatchingNotification,
+          setShowWatchingNotification,
+          notiMesageStr,
+          setNotiMesageStr,
+          notiTitleStr,
+          setNotiTitleStr,
+        }}
+      >
+        <Page>
+          <SideBar />
+          <Screen>
+            <OnBoardingOverlay />
+            <Switch>
+              {/*// Uncomment to see whole overview section*/}
+              {/*<Route path={OverviewRoutes.overview} component={OverviewModule} />*/}
+              <Route path={WorkingGroupsRoutes.groups} component={WorkingGroupsModule} />
+              <Route path={ProposalsRoutes.home} component={ProposalsModule} />
+              <Route path={CouncilRoutes.council} component={CouncilModule} />
+              <Route path={ElectionRoutes.currentElection} component={ElectionModule} />
+              <Route path={ForumRoutes.forum} component={ForumModule} />
+              <Route path={BountyRoutes.bounties} component={BountyModule} />
+              <Route exact path={ProfileRoutes.profile} component={MyAccounts} />
+              <Route exact path={ProfileRoutes.memberships} component={MyMemberships} />
+              <Route exact path={MembersRoutes.members} component={Members} />
+              <Route exact path={SettingsRoutes.settings} component={Settings} />
+              <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
+              <Route exact path={TermsRoutes.termsOfService} component={TermsOfService} />
+              <Route exact path="/404" component={NotFound} />
+              <Redirect exact from="/" to={WorkingGroupsRoutes.groups} />
+              <Redirect exact from={ProposalsRoutes.home} to={ProposalsRoutes.current} />
+              <Redirect from="*" to="/404" />
+            </Switch>
+          </Screen>
+        </Page>
+        <GlobalModals />
         <NotificationsHolder>
           <TransactionStatus />
           <ConnectionStatus />
           <ExtensionNotification />
           <ImageReportNotification />
-          {showWatchingNotification && <WatchingNotification title={notiTitleStr} message={notiMesageStr}/>}
+          {showWatchingNotification && <WatchingNotification title={notiTitleStr} message={notiMesageStr} />}
         </NotificationsHolder>
       </PageContext.Provider>
     </Providers>

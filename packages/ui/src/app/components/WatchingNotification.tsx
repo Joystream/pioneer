@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import { SideNotification } from '@/common/components/page/SideNotification'
 
@@ -8,19 +8,12 @@ type WatchingNotificationProps = {
   message: string
 }
 
-export function WatchingNotification({title, message }: WatchingNotificationProps) {
+export function WatchingNotification({ title, message }: WatchingNotificationProps) {
   const [showNotification, setShowNotification] = useState<WatchingNotificationTypes | undefined>(true)
 
   if (showNotification === true) {
-    return (
-      <SideNotification
-        onClick={() => setShowNotification(false)}
-        title={title}
-        message={message}
-        showClose
-      />
-    )
+    return <SideNotification onClick={() => setShowNotification(false)} title={title} message={message} showClose />
   }
-  
+
   return null
 }

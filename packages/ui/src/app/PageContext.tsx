@@ -11,9 +11,15 @@ interface PageContext {
 
 export const PageContext = createContext<PageContext>({
   showWatchingNotification: false,
-  setShowWatchingNotification: () => {},
+  setShowWatchingNotification: () => {
+    return true
+  },
   notiMesageStr: '',
-  setNotiMesageStr: () => {},
+  setNotiMesageStr: () => {
+    return ''
+  },
   notiTitleStr: '',
-  setNotiTitleStr: () => {},
+  setNotiTitleStr: () => {
+    return ''
+  },
 })

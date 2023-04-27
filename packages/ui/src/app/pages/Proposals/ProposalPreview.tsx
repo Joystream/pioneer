@@ -116,7 +116,7 @@ export const ProposalPreview = () => {
               <PageTitle>{proposal.title}</PageTitle>
             </PreviousPage>
             <ButtonsGroup>
-              <WatchProposalButton proposalId={proposal.id } />
+              <WatchProposalButton proposalId={proposal.id} />
               {active?.isCouncilMember &&
                 proposal.status === 'deciding' &&
                 (!hasVoted ? (
