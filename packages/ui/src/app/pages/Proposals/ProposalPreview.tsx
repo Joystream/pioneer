@@ -38,6 +38,7 @@ import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { useVotingRounds } from '@/proposals/hooks/useVotingRounds'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
+import { WatchProposalButton } from '@/proposals/components/WatchProposalButton'
 
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
@@ -115,6 +116,7 @@ export const ProposalPreview = () => {
               <PageTitle>{proposal.title}</PageTitle>
             </PreviousPage>
             <ButtonsGroup>
+              <WatchProposalButton proposalId={proposal.id } />
               {active?.isCouncilMember &&
                 proposal.status === 'deciding' &&
                 (!hasVoted ? (

@@ -43,11 +43,14 @@ export const App = () => {
   if (parseEnv(process.env.REACT_APP_IS_UNDER_MAINTENANCE)) {
     return <MaintenanceScreen />
   }
+
   const [showWatchingNotification, setShowWatchingNotification] = useState<boolean>(false)
+  const [notiMesageStr, setNotiMesageStr] = useState<string>("")
+  const [notiTitleStr, setNotiTitleStr] = useState<string>("")
 
   return (
     <Providers>
-      <PageContext.Provider value={{ showWatchingNotification, setShowWatchingNotification }}>
+      <PageContext.Provider value={{ showWatchingNotification, setShowWatchingNotification, notiMesageStr, setNotiMesageStr , notiTitleStr, setNotiTitleStr }}>
       <Page>
         <SideBar />
         <Screen>
@@ -80,7 +83,7 @@ export const App = () => {
           <ConnectionStatus />
           <ExtensionNotification />
           <ImageReportNotification />
-          {showWatchingNotification && <WatchingNotification />}
+          {showWatchingNotification && <WatchingNotification title={notiTitleStr} message={notiMesageStr}/>}
         </NotificationsHolder>
       </PageContext.Provider>
     </Providers>

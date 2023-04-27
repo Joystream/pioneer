@@ -5,10 +5,10 @@ import { WatchIcon } from '@/common/components/icons'
 import { PageContext } from '@/app/PageContext'
 
 interface Props {
-  threadId: string
+  proposalId: string
 }
 
-export const WatchThreadButton = ({ threadId }: Props) => {
+export const WatchProposalButton = ({ proposalId }: Props) => {
   const hideNotificationTimeout = 4000
   const { setShowWatchingNotification, setNotiTitleStr, setNotiMesageStr } = useContext(PageContext)
   const [innerHideTimeoutId, setInnerHideTimeoutId] = useState<NodeJS.Timeout | null>(null)
@@ -55,10 +55,9 @@ export const WatchThreadButton = ({ threadId }: Props) => {
     },
     [hideTimeoutId, innerHideTimeoutId]
   )
-  
   if(watching){
-    setNotiTitleStr("You are now watching this forum thread");
-    setNotiMesageStr("You will receive notifications about important updates related to this forum thread");
+    setNotiTitleStr("You are now watching this proposal");
+    setNotiMesageStr("You will receive notifications about important updates related to this proposal.");
     return (
       <ButtonGhost size="medium" onClick={(e) => { toggleWatching(e);}}>
         <WatchIcon />
@@ -66,8 +65,8 @@ export const WatchThreadButton = ({ threadId }: Props) => {
       </ButtonGhost>
     )
   }else{
-    setNotiTitleStr("You are no longer watching this forum thread");
-    setNotiMesageStr("You will no longer receive any notifications about changes related to this forum thread");
+    setNotiTitleStr("You are no longer watching this proposal");
+    setNotiMesageStr("You will no longer receive any notifications about changes related to this proposal.");
     return (
       <ButtonGhost size="medium" onClick={(e) => { toggleWatching(e);}}>
         <WatchIcon />
