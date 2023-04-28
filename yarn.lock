@@ -3477,7 +3477,7 @@ __metadata:
     i18next: ^21.6.3
     i18next-browser-languagedetector: ^6.1.2
     i18next-json-csv-converter: ^0.2.0
-    injectweb3-connect: ^1.2.7
+    injectweb3-connect: 2.1.0
     jest: ^27.2.5
     jest-transform-stub: ^2.0.0
     jsdom: ^18.0.0
@@ -3986,38 +3986,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/extension-dapp@npm:^0.44.1":
-  version: 0.44.1
-  resolution: "@polkadot/extension-dapp@npm:0.44.1"
-  dependencies:
-    "@babel/runtime": ^7.18.3
-    "@polkadot/extension-inject": ^0.44.1
-    "@polkadot/util": ^9.4.1
-    "@polkadot/util-crypto": ^9.4.1
-  peerDependencies:
-    "@polkadot/api": "*"
-    "@polkadot/util": "*"
-    "@polkadot/util-crypto": "*"
-  checksum: e759e8ea954e2be986ca16c7231d84306e2d5f37f444e936b18644011c4c15d765607ec5814eaeab2de65b655eb698b10619438ad58bb79b6c9aef478e93a193
-  languageName: node
-  linkType: hard
-
-"@polkadot/extension-inject@npm:^0.44.1":
-  version: 0.44.1
-  resolution: "@polkadot/extension-inject@npm:0.44.1"
-  dependencies:
-    "@babel/runtime": ^7.18.3
-    "@polkadot/rpc-provider": ^8.7.1
-    "@polkadot/types": ^8.7.1
-    "@polkadot/util": ^9.4.1
-    "@polkadot/util-crypto": ^9.4.1
-    "@polkadot/x-global": ^9.4.1
-  peerDependencies:
-    "@polkadot/api": "*"
-  checksum: cea75c32e702d344b4e1b4116ee3e98a09bb8fc97649677c22307063b6671b914e926bc8186d4e374d7686218cce3628583cd5dbfcb04ce6997e21d66024cd25
-  languageName: node
-  linkType: hard
-
 "@polkadot/extension-inject@npm:^0.44.2-4":
   version: 0.44.2-4
   resolution: "@polkadot/extension-inject@npm:0.44.2-4"
@@ -4402,7 +4370,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/x-global@npm:9.7.2, @polkadot/x-global@npm:^9.4.1, @polkadot/x-global@npm:^9.5.1":
+"@polkadot/x-global@npm:9.7.2, @polkadot/x-global@npm:^9.5.1":
   version: 9.7.2
   resolution: "@polkadot/x-global@npm:9.7.2"
   dependencies:
@@ -14644,16 +14612,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"injectweb3-connect@npm:^1.2.7":
-  version: 1.2.7
-  resolution: "injectweb3-connect@npm:1.2.7"
-  dependencies:
-    "@polkadot/api": ^8.8.2
-    "@polkadot/extension-dapp": ^0.44.1
-    "@polkadot/extension-inject": ^0.44.1
-    "@polkadot/types-known": ^9.9.1
-    "@polkadot/util-crypto": ^9.4.1
-  checksum: c69e40a508642a2d9b480b540f53bc587811e686c4b31b6f397f02b07b560c149c4b59fb7b850abbe292019d539abfec0a5e49791664f3db3df9c14b6a0e3251
+"injectweb3-connect@npm:2.1.0":
+  version: 2.1.0
+  resolution: "injectweb3-connect@npm:2.1.0"
+  peerDependencies:
+    "@polkadot/api": ^10.4.1
+  checksum: 50e706a4ca91c57df793e5ebc26fbf5c26b259e63df92cdaaef43c4563191d283c60eeadbc95901de773783696a86ea00ff8f643646b9c08ab793e882f2c19b0
   languageName: node
   linkType: hard
 
