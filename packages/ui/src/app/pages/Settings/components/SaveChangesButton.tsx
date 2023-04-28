@@ -3,13 +3,11 @@ import React, { MouseEventHandler } from 'react'
 import { ButtonPrimary } from '@/common/components/buttons/Buttons'
 import { SaveSymbol } from '../../../../common/components/icons/symbols/SaveSymbol'
 
-const saveChanges = () => {
-  alert('All changes are saved successfully') //Here SaveFunctions comes
-}
 interface SaveChangesButtonProps {
   disabled?: boolean
+  saveChanges:MouseEventHandler
 }
-export const SaveChangesButton = ({ disabled = true }: SaveChangesButtonProps) => {
+export const SaveChangesButton = ({ disabled = true, saveChanges }: SaveChangesButtonProps) => {
   return (
     <ButtonPrimary size="large" onClick={saveChanges} disabled={disabled}>
       <SaveSymbol />

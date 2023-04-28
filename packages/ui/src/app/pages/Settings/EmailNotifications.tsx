@@ -13,42 +13,44 @@ import { TextBig, TextMedium } from '@/common/components/typography'
 import { useToggle } from '@/common/hooks/useToggle'
 import { InformationBanner, InputEmailState } from './components/InformationBanner'
 import { SaveChangesButton } from './components/SaveChangesButton'
+import { useModal } from '@/common/hooks/useModal'
 
 export const EmailNotifications = () => {
-  const { email, verified, notifyset } = { email: 'test@email.com', verified: true, notifyset: true } //mocking states
+  const [state, setState] = useState({ email: '', verified: false, notifyset: false }) //mocking states
 
   const { hasMembers } = useMyMemberships()
 
-  const [subscribed, setSubscribed] = useState(!!email)
-  const [_email, setEmail] = useState(email ?? '')
-  const initState = !email ? 'active' : verified ? 'verified' : 'unverified'
+  const [subscribed, setSubscribed] = useState(!!state.email)
+  const [_email, setEmail] = useState(state.email)
+  const initState = !state.email ? 'active' : state.verified ? 'verified' : 'unverified'
   const [emailState, changeEmailState] = useState<InputEmailState>(initState)
-  const [notifiedCheck, setNotifiedCheck] = useToggle(notifyset)
-  const [saveBtnEnabled, setSaveBtnEnabled] = useState(true)
+  const [notifiedCheck, setNotifiedCheck] = useToggle(state.notifyset)
+  const { showModal } = useModal()
 
   const subscribe = () => {
-    let inputstr
-    !hasMembers
-      ? (alert('here openModal function comes'), //here openModal function comes
-        (inputstr = prompt('Email notifications verify modal', 'default@email.com')), //here email verify modal comes
-        setEmail(inputstr ?? ''))
-      : ((inputstr = prompt('Email notifications verify modal', 'default@email.com')), //here email verify modal comes
-        setEmail(inputstr ?? ''))
-    setSubscribed(true)
+    if (!hasMembers)
+      try {
+        showModal({ modal: 'memberModal' })
+      } catch (err) {
+        if (!err) {
+          setEmail(prompt('Email notifications verify modal', 'default@email.com') ?? '')
+          setSubscribed(true)
+        }
+      }
+    else {
+      setEmail(prompt('Email notifications verify modal', 'default@email.com') ?? '')
+      setSubscribed(true)
+    }
   }
 
   const inputEmailChange = (e: any) => {
-    changeEmailState(e.target.value == email ? initState : 'active')
+    changeEmailState(e.target.value == state.email ? initState : 'active')
     setEmail(e.target.value)
   }
 
-  useEffect(() => {
-    if (!notifiedCheck) {
-      setSaveBtnEnabled(true)
-      return
-    }
-    setSaveBtnEnabled(!!_email ?? false)
-  })
+  const saveChanges = () => {
+    setState((state) => ({ ...state, email: _email, notifyset: notifiedCheck })) //save settings
+  }
 
   return (
     <PageLayout
@@ -56,7 +58,7 @@ export const EmailNotifications = () => {
         <PageHeader
           title="Settings"
           tabs={<SettingsTabs />}
-          buttons={<SaveChangesButton disabled={!saveBtnEnabled} />}
+          buttons={<SaveChangesButton disabled={!subscribed || !_email || !notifiedCheck} saveChanges={saveChanges} />}
         />
       }
       main={
