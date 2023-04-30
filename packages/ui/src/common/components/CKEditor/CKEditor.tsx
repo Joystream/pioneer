@@ -57,6 +57,9 @@ export const BaseCKEditor = React.forwardRef(
               'blockQuote',
               'undo',
               'redo',
+              '|',
+              'insertTable',
+              'specialCharacters',
             ],
           },
           mention: {
@@ -67,6 +70,9 @@ export const BaseCKEditor = React.forwardRef(
           },
           image: {
             toolbar: ['imageStyle:full', 'imageStyle:side', '|', 'imageTextAlternative'],
+          },
+          table: {
+            contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells'],
           },
           // This value must be kept in sync with the language defined in webpack.config.js.
           language: 'en',
