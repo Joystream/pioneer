@@ -3,6 +3,7 @@ import { useFormContext } from 'react-hook-form'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { CurrencyName } from '@/app/constants/currency'
+import { ButtonPrimary } from '@/common/components/buttons'
 import {
   InlineToggleWrap,
   InputComponent,
@@ -11,14 +12,14 @@ import {
   TokenInput,
   InputTextarea,
 } from '@/common/components/forms'
+import { Arrow } from '@/common/components/icons'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium, TextSmall, TextInlineSmall } from '@/common/components/typography'
-import { ButtonPrimary } from '@/common/components/buttons'
-import { Arrow } from '@/common/components/icons'
-import { Prompt } from './Prompt'
+
 import { PreviewAndValidateModal } from './modals/PreviewAndValidate'
+import { Prompt } from './Prompt'
 
 export const FundingRequest = () => {
   const { watch, setValue } = useFormContext()

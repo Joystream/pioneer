@@ -1,5 +1,13 @@
 // import { useModal } from '@/common/hooks/useModal'
+import BN from 'bn.js'
 import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
+
+import { AccountInfo } from '@/accounts/components/AccountInfo'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { Account, AccountOption } from '@/accounts/types'
+import { Close, CloseButton } from '@/common/components/buttons'
 import {
   AccountRow,
   BalanceInfoInRow,
@@ -11,14 +19,7 @@ import {
   ModalHeader,
   ModalWrap,
 } from '@/common/components/Modal'
-import styled from 'styled-components'
-import { Account, AccountOption } from '@/accounts/types'
-import { AccountInfo } from '@/accounts/components/AccountInfo'
-import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { TokenValue } from '@/common/components/typography'
-import BN from 'bn.js'
-import { Close, CloseButton } from '@/common/components/buttons'
 
 interface PreviewAndValidateModalProps {
   setIsPreviewModalShown: (bool: boolean) => void
