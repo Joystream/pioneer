@@ -22,7 +22,7 @@ import { PreviewAndValidateModal } from './modals/PreviewAndValidate'
 import { Prompt } from './Prompt'
 
 export const FundingRequest = () => {
-  const { watch, setValue } = useFormContext()
+  const { watch, /*setValue*/ } = useFormContext()
   const [isPreviewModalShown, setIsPreviewModalShown] = useState(false)
   const [previewModalData, setPreviewModalData] = useState<string[]>([])
   const [isValidCSV, setIsValidCSV] = useState(true)

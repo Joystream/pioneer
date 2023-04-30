@@ -15,9 +15,7 @@ import {
   InfoValue,
   Modal,
   ModalBody,
-  ModalGlass,
   ModalHeader,
-  ModalWrap,
 } from '@/common/components/Modal'
 import { TokenValue } from '@/common/components/typography'
 
