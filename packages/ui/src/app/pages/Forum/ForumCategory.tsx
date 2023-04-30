@@ -33,7 +33,7 @@ export const ForumCategory = () => {
   const { id, type } = useParams<{ id: string; type?: 'archive' }>()
   const isArchive = type === 'archive'
 
-  const { category } = useForumCategory(id)
+  const { category, isLoading: isLoadingCategory, hasError } = useForumCategory(id)
   const { order, getSortProps } = useSort<ForumThreadOrderByInput>('updatedAt')
   const {
     isLoading: isLoadingThreads,
@@ -57,6 +57,14 @@ export const ForumCategory = () => {
 
   if (isLoadingThreads && !isRefetched) {
     return <Loading />
+  }
+
+  if (isLoadingCategory) {
+    return <Loading />
+  }
+
+  if (hasError) {
+    return <EmptyPagePlaceholder title="Something went wrong fetching this category." copy="" button={null} />
   }
 
   if (!category) {
