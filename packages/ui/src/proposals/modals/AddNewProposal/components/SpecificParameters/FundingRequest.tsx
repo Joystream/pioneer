@@ -26,16 +26,20 @@ export const FundingRequest = () => {
   const [isPreviewModalShown, setIsPreviewModalShown] = useState(false)
   const [previewModalData, setPreviewModalData] = useState<string[]>([])
   const [isValidCSV, setIsValidCSV] = useState(true)
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const [payMultiple] = watch(['fundingRequest.payMultiple'])
   const [accountsAndAmounts] = watch(['fundingRequest.accountsAndAmounts'])
   const splitRows = (input: string) => {
     const inputSplit = input.split(';\n')
     const repeatingColons = inputSplit.filter((item) => (item.match(/;/g) || []).length > 1).length
-    if (!repeatingColons) {
+    if (repeatingColons || inputSplit.length > 20) {
+      setIsValidCSV(false)
+      repeatingColons ? setErrorMessage('Not valid CSV format, use line breaks to split the rows.') : setErrorMessage('Maximum allowed accounts is 20')
+    } else {
+      setIsValidCSV(true)
+      setIsPreviewModalShown(true)
       setPreviewModalData(inputSplit)
     }
-    repeatingColons ? setIsValidCSV(false) : setIsValidCSV(true)
-    repeatingColons ? setIsPreviewModalShown(false) : setIsPreviewModalShown(true)
   }
   return (
     <RowGapBlock gap={24}>
@@ -91,7 +95,7 @@ export const FundingRequest = () => {
               message={
                 isValidCSV
                   ? 'You can select up to 20 recipients'
-                  : 'Not valid CSV format, use line breaks to split the rows.'
+                  : errorMessage
               }
               name="fundingRequest.accountsAndAmounts"
               id="accounts-amounts"
