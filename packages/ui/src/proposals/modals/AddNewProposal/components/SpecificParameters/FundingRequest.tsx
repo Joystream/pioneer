@@ -22,15 +22,15 @@ import { PreviewAndValidateModal } from './modals/PreviewAndValidate'
 
 export const FundingRequest = () => {
   const { watch, setValue } = useFormContext()
-  const [isPreviewModalShown, setIsPreviewModalShown] = useState(false);
-  const [previewModalData, setPreviewModalData] = useState<string[]>([]);
+  const [isPreviewModalShown, setIsPreviewModalShown] = useState(false)
+  const [previewModalData, setPreviewModalData] = useState<string[]>([])
   const [isValidCSV, setIsValidCSV] = useState(true)
   const [payMultiple] = watch(['fundingRequest.payMultiple'])
-  const  [accountsAndAmounts] = watch(['fundingRequest.accountsAndAmounts'])
+  const [accountsAndAmounts] = watch(['fundingRequest.accountsAndAmounts'])
   const splitRows = (input: string) => {
     const inputSplit = input.split(';\n')
     const repeatingColons = inputSplit.filter((item) => (item.match(/;/g) || []).length > 1).length
-    if(!repeatingColons){
+    if (!repeatingColons) {
       setPreviewModalData(inputSplit)
     }
     repeatingColons ? setIsValidCSV(false) : setIsValidCSV(true)
@@ -87,7 +87,11 @@ export const FundingRequest = () => {
             <InputComponent
               label="Destination accounts and transfer amounts"
               required
-              message={isValidCSV ? "You can select up to 20 recipients" : "Not valid CSV format, use line breaks to split the rows."}
+              message={
+                isValidCSV
+                  ? 'You can select up to 20 recipients'
+                  : 'Not valid CSV format, use line breaks to split the rows.'
+              }
               name="fundingRequest.accountsAndAmounts"
               id="accounts-amounts"
               validation={isValidCSV ? undefined : 'invalid'}
@@ -101,10 +105,9 @@ export const FundingRequest = () => {
             </InputComponent>
             <ButtonPrimary
               size="medium"
-              onClick={() =>{
+              onClick={() => {
                 splitRows(accountsAndAmounts)
-              }
-              }
+              }}
             >
               Preview and Validate <Arrow direction="right" />
             </ButtonPrimary>
@@ -127,7 +130,9 @@ export const FundingRequest = () => {
           </RowGapBlock>
         )}
       </Row>
-      {isPreviewModalShown && <PreviewAndValidateModal previewModalData={previewModalData} setIsPreviewModalShown={setIsPreviewModalShown} />}
+      {isPreviewModalShown && (
+        <PreviewAndValidateModal previewModalData={previewModalData} setIsPreviewModalShown={setIsPreviewModalShown} />
+      )}
     </RowGapBlock>
   )
 }
