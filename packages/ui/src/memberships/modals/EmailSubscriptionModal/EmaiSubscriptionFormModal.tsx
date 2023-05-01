@@ -26,7 +26,7 @@ const EmailSubscriptionSchema = Yup.object().shape({
 })
 
 export const EmailSubscriptionFormModal = ({ onClose, onSubmit, member }: Props) => {
-  const [, setEmail] = useLocalStorage('memberEmail')
+  const [, setMembersEmail] = useLocalStorage<Record<string, string>>('memberEmail')
 
   const form = useForm({
     resolver: useYupValidationResolver<EmailSubscriptionForm>(EmailSubscriptionSchema),
@@ -34,15 +34,13 @@ export const EmailSubscriptionFormModal = ({ onClose, onSubmit, member }: Props)
   })
 
   const onCancelClick = () => {
-    setEmail('')
+    setMembersEmail((emails) => ({ ...emails, [member.id]: '' }))
     onClose()
   }
 
   const onSubmitClick = () => {
     onSubmit({
       email: form.getValues('email'),
-      id: member.id,
-      name: member.name,
     })
   }
 

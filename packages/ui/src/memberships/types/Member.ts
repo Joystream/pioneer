@@ -30,7 +30,6 @@ export interface Member {
   isCouncilMember: boolean
   createdAt: string
   boundAccountsEvents?: BoundAccountEvent[]
-  email?: string
 }
 
 export type GenesisEntry = {
