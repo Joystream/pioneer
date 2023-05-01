@@ -80,7 +80,7 @@ export const EmailSubscriptionFormModal = ({ onClose, onSubmit, member }: Props)
         }}
       >
         <ButtonGhost size="medium" onClick={onCancelClick}>
-          cancel
+          Not now
         </ButtonGhost>
       </StyledFooter>
     </Modal>
