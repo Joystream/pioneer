@@ -39,6 +39,7 @@ import { ForumRoutes } from '@/forum/constant'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
+import { ValidatorsRoutes } from '@/validators/constants/routes'
 
 export const SideBar = () => {
   const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)
@@ -115,6 +116,11 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
+              <NavigationLink to={ValidatorsRoutes.list} icon={<ValidatorsIcon />}>
+                Validators
+              </NavigationLink>
+            </NavigationLinksItem>
+            <NavigationLinksItem>
               <NavigationExpandButton active={comingSoonListActive} onClick={toggleComingSoonListActive}>
                 <Arrow direction="down" size="20" className="nav-icon" />
                 COMING SOON
@@ -141,11 +147,6 @@ export const SideBar = () => {
                   <NavigationLinksItem>
                     <NavigationLink to="/inexisting" icon={<FinancialsIcon />} disabled>
                       Financials
-                    </NavigationLink>
-                  </NavigationLinksItem>
-                  <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" icon={<ValidatorsIcon />} disabled>
-                      Validators
                     </NavigationLink>
                   </NavigationLinksItem>
                   <NavigationLinksItem>

@@ -36,6 +36,8 @@ import { Settings } from './pages/Settings/Settings'
 import { PrivacyPolicy, TermsOfService } from './pages/Terms'
 import { WorkingGroupsModule } from './pages/WorkingGroups/WorkingGroupsModule'
 import { Providers } from './Providers'
+import { ValidatorsRoutes } from '@/validators/constants/routes'
+import { ValidatorsModule } from './pages/Validators/ValidatorsModule'
 
 export const App = () => {
   if (parseEnv(process.env.REACT_APP_IS_UNDER_MAINTENANCE)) {
@@ -61,6 +63,7 @@ export const App = () => {
             <Route exact path={ProfileRoutes.memberships} component={MyMemberships} />
             <Route exact path={MembersRoutes.members} component={Members} />
             <Route exact path={SettingsRoutes.settings} component={Settings} />
+            <Route path={ValidatorsRoutes.list} component={ValidatorsModule} />
             <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
             <Route exact path={TermsRoutes.termsOfService} component={TermsOfService} />
             <Route exact path="/404" component={NotFound} />
