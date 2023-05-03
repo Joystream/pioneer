@@ -225,8 +225,13 @@ const serializeCodec = (codec: Codec): SerializedCodec => {
   }
 
   const properties = (Object.getOwnPropertyNames(Object.getPrototypeOf(codec)) as (keyof Codec)[])
-    .map((key) => [key, codec[key]])
-    .filter(([, prop]) => !isFunction(prop))
+    .map<[keyof Codec, Codec[keyof Codec]]>((key) => [key, codec[key]])
+    .filter(
+      ([key, prop]) =>
+        !['encodedLength', 'hash', 'initialU8aLength', 'isEmpty', 'registry', 'createdAtHash'].includes(key) &&
+        !isFunction(prop) &&
+        !Object.getOwnPropertyDescriptor(codec, key)
+    )
 
   return properties.length > 0
     ? { ...serializedCodec, properties: serializePayload(Object.fromEntries(properties)) }
