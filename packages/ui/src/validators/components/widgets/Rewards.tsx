@@ -10,8 +10,8 @@ import { size } from 'lodash'
 
 export const Rewards = () => {
   const { total, last, apr } = {
-    total: '20000000000000',
-    last: '8000000000000',
+    total: '20000000000000000',
+    last: '8000000000000000',
     apr: 4,
   }
   const Apr = (
@@ -30,12 +30,12 @@ export const Rewards = () => {
       actionElement={Apr}
     >
       <StatisticItemSpacedContent>
-        <StatisticLabel> Active </StatisticLabel>
-        <TokenValue value={new BN(total ?? 0)} />
+        <StatisticLabel> Total </StatisticLabel>
+        <TokenValue size='l' value={new BN(total ?? 0)} />
       </StatisticItemSpacedContent>
       <StatisticItemSpacedContent>
-        <StatisticLabel> Waiting </StatisticLabel>
-        <TokenValue value={new BN(last ?? 0)} />
+        <StatisticLabel> Last </StatisticLabel>
+        <TokenValue size='l' value={new BN(last ?? 0)} />
       </StatisticItemSpacedContent>
     </StatisticItem>
   )

@@ -12,8 +12,8 @@ import { PercentageChart } from '@/common/components/charts/PercentageChart'
 export const Era = () => {
   const { nextReward, totalDuration, percentage } = {
     nextReward: formatDurationDate(7860022),
-    totalDuration: formatDurationDate(21990045),
-    percentage:67
+    totalDuration: formatDurationDate(7860022*3),
+    percentage: 67,
   }
   return (
     <StatisticItem
@@ -26,11 +26,15 @@ export const Era = () => {
     >
       <StatisticItemSpacedContent>
         <StatisticLabel> Next reward </StatisticLabel>
-        <DurationValue value={nextReward} />
+        <div>
+          <DurationValue value={nextReward} />
+        </div>
       </StatisticItemSpacedContent>
       <StatisticItemSpacedContent>
         <StatisticLabel> Total duration </StatisticLabel>
-        <DurationValue value={totalDuration} />
+        <div>
+          <DurationValue value={totalDuration} />
+        </div>
       </StatisticItemSpacedContent>
     </StatisticItem>
   )
