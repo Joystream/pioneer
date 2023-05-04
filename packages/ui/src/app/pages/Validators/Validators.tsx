@@ -9,7 +9,7 @@ import { ValidatorsState } from '@/validators/components/widgets/ValidatorsState
 import { Era } from '@/validators/components/widgets/Era'
 import { Staking } from '@/validators/components/widgets/Staking'
 import { Rewards } from '@/validators/components/widgets/Rewards'
-// import { ValidatorsInfo } from '@/validators/modals/ValidatorsInfo'
+import { ValidatorsInfo } from '@/validators/modals/ValidatorsInfo'
 
 export const Validators = () => {
 
@@ -32,7 +32,7 @@ export const Validators = () => {
           </MainPanel>
         }
       />
-      {/* <ValidatorsInfo /> */}
+      <ValidatorsInfo />
     </>
   )
 }
