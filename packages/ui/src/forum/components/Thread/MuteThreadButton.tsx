@@ -6,51 +6,52 @@ import { WatchIcon } from '@/common/components/icons'
 import { WatchingNotificationProps } from '@/app/components/WatchingNotification'
 
 interface Props {
-  proposalId: string
+  threadId: string
 }
 
-export const WatchProposalButton = ({ proposalId }: Props) => {
+export const MuteThreadButton = ({ threadId}: Props) => {
   const {setNotiArr} = useContext(PageContext)
   const [showNotification, setShowNotification] = useState<boolean>(false)
-  const [watching, setWatching] = useState<boolean>(false)
+  const [isMuted, setIsMuted] = useState<boolean>(false)
 
-  const toggleWatching = useCallback(
+  const toggleMute = useCallback(
     (e) => {
       setShowNotification(true);
       e.stopPropagation()
-      setWatching((prev) => !prev)
+      setIsMuted((prev) => !prev)
     },
     []
   )
 
   useEffect(() => {
     if(showNotification){
-      if (watching) {
+      if (isMuted) {
         var newNoti = {
-          title: 'You are now watching this proposal',
-          message: 'You will receive notifications about important updates related to this proposal',
+          title: 'This thread is now muted',
+          message: 'You will not receive any notifications about any related to this forum thread',
         }
+        setNotiArr((prevList:Array<WatchingNotificationProps>) => [...prevList, newNoti])
       } else {
         var newNoti = {
-          title: 'You are no longer watching this proposa',
-          message: 'You will no longer receive any notifications about changes related to this proposal',
+          title: 'This thread is no longer muted',
+          message: 'You can now receive notifications about new changes related to this forum thread',
         }
+        setNotiArr((prevList:Array<WatchingNotificationProps>) => [...prevList, newNoti])
       }
-      setNotiArr((prevList:Array<WatchingNotificationProps>) => [...prevList, newNoti]);
     }
-  }, [watching])
+  }, [isMuted])
 
   return (
     <ButtonGhost
       size="medium"
       onClick={(e) => {
-        toggleWatching(e)
+        toggleMute(e)
       }}
     >
       <WatchIcon />
-      {watching ? 'Stop Watching' : 'Watch'}
+      {isMuted ? 'Unmute Thread' : 'Mute Thread'}
     </ButtonGhost>
   )
 }
 
-export default WatchProposalButton
+export default MuteThreadButton

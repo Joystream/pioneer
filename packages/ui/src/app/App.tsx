@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
 import '@/services/i18n'
@@ -23,7 +23,8 @@ import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
 import { ExtensionNotification } from './components/ExtensionWarning'
 import { SideBar } from './components/SideBar'
-import { WatchingNotification } from './components/WatchingNotification'
+import { WatchingNotification, WatchingNotificationProps } from './components/WatchingNotification'
+import { MuteNotification } from './components/MuteNotification'
 import { MembersRoutes, ProfileRoutes, SettingsRoutes, TermsRoutes } from './constants/routes'
 import { GlobalModals } from './GlobalModals'
 import { PageContext } from './PageContext'
@@ -40,10 +41,9 @@ import { WorkingGroupsModule } from './pages/WorkingGroups/WorkingGroupsModule'
 import { Providers } from './Providers'
 
 export const App = () => {
-  const [showWatchingNotification, setShowWatchingNotification] = useState<boolean>(false)
-  const [notiMesageStr, setNotiMesageStr] = useState<string>('')
-  const [notiTitleStr, setNotiTitleStr] = useState<string>('')
 
+  const [notiArr, setNotiArr] = useState<WatchingNotificationProps[]>([])
+  
   if (parseEnv(process.env.REACT_APP_IS_UNDER_MAINTENANCE)) {
     return <MaintenanceScreen />
   }
@@ -52,12 +52,7 @@ export const App = () => {
     <Providers>
       <PageContext.Provider
         value={{
-          showWatchingNotification,
-          setShowWatchingNotification,
-          notiMesageStr,
-          setNotiMesageStr,
-          notiTitleStr,
-          setNotiTitleStr,
+          setNotiArr,
         }}
       >
         <Page>
@@ -92,7 +87,10 @@ export const App = () => {
           <ConnectionStatus />
           <ExtensionNotification />
           <ImageReportNotification />
-          {showWatchingNotification && <WatchingNotification title={notiTitleStr} message={notiMesageStr} />}
+          {/* <WatchingNotification title={notiTitleStr} message={notiMesageStr} /> */}
+          {notiArr.map((noti) => (
+            <WatchingNotification title={noti.title} message={noti.message} />
+          ))}
         </NotificationsHolder>
       </PageContext.Provider>
     </Providers>

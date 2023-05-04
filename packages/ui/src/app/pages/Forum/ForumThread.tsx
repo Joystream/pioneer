@@ -1,5 +1,5 @@
 import { ForumPostMetadata } from '@joystream/metadata-protobuf'
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -23,6 +23,7 @@ import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
 import { WatchThreadButton } from '@/forum/components/Thread/WatchThreadButton'
+import { MuteThreadButton } from '@/forum/components/Thread/MuteThreadButton'
 import { ForumRoutes } from '@/forum/constant'
 import { useForumThread } from '@/forum/hooks/useForumThread'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -77,7 +78,8 @@ export const ForumThread = () => {
             <ThreadTitle thread={thread} />
           </PreviousPage>
           <ButtonsGroup>
-            <WatchThreadButton threadId={thread.id} />
+            <MuteThreadButton threadId={thread.id}/>
+            <WatchThreadButton threadId={thread.id}/>
             <CopyButtonTemplate
               size="medium"
               textToCopy={getUrl({ route: ForumRoutes.thread, params: { id: thread.id } })}
