@@ -13,7 +13,7 @@ export interface ProxyPromisePayload<T = any> {
   result?: T
 }
 
-export type PostMessage<Message extends AnyMessage = AnyMessage> = (message: Message) => void
+export type PostMessage<Message extends AnyMessage = AnyMessage> = (message: Message, asJSON?: boolean) => void
 
 export type ApiKinds = 'derive' | 'query' | 'rpc' | 'tx'
 

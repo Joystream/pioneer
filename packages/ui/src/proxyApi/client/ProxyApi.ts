@@ -32,7 +32,10 @@ export class ProxyApi extends Events {
       share()
     )
     const postMessage: PostMessage<ClientMessage> = (message) =>
-      worker.postMessage({ ...message, payload: serializePayload(message.payload, workerProxyMessages, postMessage) })
+      worker.postMessage({
+        ...message,
+        payload: serializePayload(message.payload, { messages: workerProxyMessages, postMessage }),
+      })
 
     postMessage({ messageType: 'init', payload: providerEndpoint })
 

@@ -14,8 +14,8 @@ import { transactionsRecord, tx } from './tx'
 
 const apiObserver = new BehaviorSubject<ApiRx | undefined>(undefined)
 
-const postMessage: PostMessage<WorkerMessage> = (message) =>
-  self.postMessage({ ...message, payload: serializePayload(message.payload) })
+const postMessage: PostMessage<WorkerMessage> = (message, toJSON = false) =>
+  self.postMessage({ ...message, payload: serializePayload(message.payload, { toJSON }) })
 
 const messages = fromEvent<RawClientMessageEvent>(self, 'message')
 
@@ -26,7 +26,7 @@ const clientProxyMessage = messages.pipe(
 )
 
 messages.subscribe(({ data }) => {
-  const payload = deserializePayload(data.payload, clientProxyMessage, postMessage, transactionsRecord)
+  const payload = deserializePayload(data.payload, { messages: clientProxyMessage, postMessage, transactionsRecord })
   const message = { ...data, payload } as ClientMessage
 
   if (message.messageType === 'init') {
@@ -59,7 +59,7 @@ messages.subscribe(({ data }) => {
           return tx(api, message, postMessage)
 
         case 'chain-metadata':
-          return postMessage({ messageType: 'chain-metadata', payload: await getPolkadotApiChainInfo(api) })
+          return postMessage({ messageType: 'chain-metadata', payload: await getPolkadotApiChainInfo(api) }, true)
       }
     })
   }
