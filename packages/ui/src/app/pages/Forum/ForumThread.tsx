@@ -19,11 +19,11 @@ import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getUrl } from '@/common/utils/getUrl'
 import { PostList } from '@/forum/components/PostList/PostList'
+import { MuteThreadButton } from '@/forum/components/Thread/MuteThreadButton'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
 import { WatchThreadButton } from '@/forum/components/Thread/WatchThreadButton'
-import { MuteThreadButton } from '@/forum/components/Thread/MuteThreadButton'
 import { ForumRoutes } from '@/forum/constant'
 import { useForumThread } from '@/forum/hooks/useForumThread'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -46,6 +46,12 @@ export const ForumThread = () => {
   const history = useHistory()
 
   const isThreadActive = !!(thread && thread.status.__typename === 'ThreadStatusActive')
+  const [isMuted, setIsMuted] = useState<boolean>(false)
+  const [muteButtonStart, setMuteButtonStart] = useState(false)
+
+  const onMuteButtonStart = () => {
+    setMuteButtonStart(true)
+  }
 
   const getTransaction = (postText: string, isEditable: boolean) => {
     if (api && active && thread) {
@@ -78,8 +84,13 @@ export const ForumThread = () => {
             <ThreadTitle thread={thread} />
           </PreviousPage>
           <ButtonsGroup>
-            <MuteThreadButton threadId={thread.id}/>
-            <WatchThreadButton threadId={thread.id}/>
+            <MuteThreadButton
+              threadId={thread.id}
+              isMuted={isMuted}
+              setIsMuted={setIsMuted}
+              onButtonStart={onMuteButtonStart}
+            />
+            <WatchThreadButton threadId={thread.id} isMuted={isMuted} muteButtonStart={muteButtonStart} />
             <CopyButtonTemplate
               size="medium"
               textToCopy={getUrl({ route: ForumRoutes.thread, params: { id: thread.id } })}

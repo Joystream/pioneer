@@ -12,7 +12,7 @@ export function WatchingNotification({ title, message }: WatchingNotificationPro
   const hideNotificationTimeout = 4000
   const [showNotification, setShowNotification] = useState<WatchingNotificationTypes | undefined>(true)
 
-  const hideNotification = () =>{
+  const hideNotification = () => {
     setShowNotification(false)
   }
 

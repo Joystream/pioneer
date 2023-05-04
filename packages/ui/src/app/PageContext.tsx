@@ -6,5 +6,7 @@ interface PageContext {
 }
 
 export const PageContext = createContext<PageContext>({
-  setNotiArr: () => {return []},
+  setNotiArr: () => {
+    return []
+  },
 })

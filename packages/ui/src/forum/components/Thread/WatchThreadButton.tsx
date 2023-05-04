@@ -1,45 +1,51 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react'
 
+import { WatchingNotificationProps } from '@/app/components/WatchingNotification'
 import { PageContext } from '@/app/PageContext'
 import { ButtonGhost } from '@/common/components/buttons'
 import { WatchIcon } from '@/common/components/icons'
-import { WatchingNotificationProps } from '@/app/components/WatchingNotification'
 
 interface Props {
   threadId: string
+  isMuted: boolean
+  muteButtonStart: boolean
 }
 
-export const WatchThreadButton = ({ threadId}: Props) => {
-  const {setNotiArr} = useContext(PageContext)
+export const WatchThreadButton = ({ threadId, isMuted, muteButtonStart }: Props) => {
+  const { setNotiArr } = useContext(PageContext)
   const [showNotification, setShowNotification] = useState<boolean>(false)
   const [watching, setWatching] = useState<boolean>(false)
-  
-  const toggleWatching = useCallback(
-    (e) => {
-      setShowNotification(true);
-      e.stopPropagation()
-      setWatching((prev) => !prev)
-    },
-    []
-  )
+
+  const toggleWatching = useCallback((e) => {
+    e.stopPropagation()
+    setShowNotification(true)
+    setWatching((prev) => !prev)
+  }, [])
 
   useEffect(() => {
-    if(showNotification){
-      if (watching) {
-        var newNoti = {
-          title: 'You are now watching this forum thread',
-          message: 'You will receive notifications about important updates related to this forum thread',
-        }
-      } else {
-        var newNoti = {
-          title: 'You are no longer watching this forum thread',
-          message: 'You will no longer receive any notifications about changes related to this forum thread',
-        }
+    if (muteButtonStart === true) {
+      setWatching(!isMuted)
+    }
+  }, [isMuted])
+
+  useEffect(() => {
+    if (muteButtonStart === true) {
+      setShowNotification(true)
+    }
+  }, [muteButtonStart])
+
+  useEffect(() => {
+    if (showNotification) {
+      const newNoti = {
+        title: watching ? 'You are now watching this forum thread' : 'You are no longer watching this forum thread',
+        message: watching
+          ? 'You will receive notifications about important updates related to this forum thread'
+          : 'You will no longer receive any notifications about changes related to this forum thread',
       }
-      setNotiArr((prevList:Array<WatchingNotificationProps>) => [...prevList, newNoti]);
+      setNotiArr((prevList: Array<WatchingNotificationProps>) => [...prevList, newNoti])
     }
   }, [watching])
-  
+
   return (
     <ButtonGhost
       size="medium"
@@ -48,7 +54,7 @@ export const WatchThreadButton = ({ threadId}: Props) => {
       }}
     >
       <WatchIcon />
-      {watching?'Sop Wathcing':'Watch'}
+      {watching ? 'Sop Wathcing' : 'Watch'}
     </ButtonGhost>
   )
 }

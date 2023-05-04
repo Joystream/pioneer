@@ -24,7 +24,6 @@ import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 import { ExtensionNotification } from './components/ExtensionWarning'
 import { SideBar } from './components/SideBar'
 import { WatchingNotification, WatchingNotificationProps } from './components/WatchingNotification'
-import { MuteNotification } from './components/MuteNotification'
 import { MembersRoutes, ProfileRoutes, SettingsRoutes, TermsRoutes } from './constants/routes'
 import { GlobalModals } from './GlobalModals'
 import { PageContext } from './PageContext'
@@ -41,9 +40,8 @@ import { WorkingGroupsModule } from './pages/WorkingGroups/WorkingGroupsModule'
 import { Providers } from './Providers'
 
 export const App = () => {
-
   const [notiArr, setNotiArr] = useState<WatchingNotificationProps[]>([])
-  
+
   if (parseEnv(process.env.REACT_APP_IS_UNDER_MAINTENANCE)) {
     return <MaintenanceScreen />
   }
@@ -88,8 +86,8 @@ export const App = () => {
           <ExtensionNotification />
           <ImageReportNotification />
           {/* <WatchingNotification title={notiTitleStr} message={notiMesageStr} /> */}
-          {notiArr.map((noti) => (
-            <WatchingNotification title={noti.title} message={noti.message} />
+          {notiArr.map((noti, index) => (
+            <WatchingNotification key={index} title={noti.title} message={noti.message} />
           ))}
         </NotificationsHolder>
       </PageContext.Provider>
