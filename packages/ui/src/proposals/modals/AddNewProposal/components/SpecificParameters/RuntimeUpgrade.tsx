@@ -32,7 +32,7 @@ const maybeDecompressRuntimeBlob = async (blob: ArrayBuffer): Promise<Buffer | U
   return wasm
 }
 
-export const getValidatedFiles = async (files: File[]): Promise<ValidatedFile[]> => {
+const getValidatedFiles = async (files: File[]): Promise<ValidatedFile[]> => {
   const transformedFiles: ValidatedFile[] = []
   for (let i = 0; i < files.length; i++) {
     const file = files[i]
@@ -47,7 +47,7 @@ export const getValidatedFiles = async (files: File[]): Promise<ValidatedFile[]>
   return transformedFiles
 }
 
-export const validator = (file: ValidatedFile) => {
+const validator = (file: ValidatedFile) => {
   if (!file.isValidWASM) {
     return {
       code: 'file-invalid-type',
