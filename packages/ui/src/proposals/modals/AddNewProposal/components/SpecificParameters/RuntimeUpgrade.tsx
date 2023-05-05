@@ -76,6 +76,7 @@ export const RuntimeUpgrade = () => {
       </Row>
       <Row>
         <FileDropzone
+          id="runtime-upgrade-input"
           title="Blob"
           subtitle=""
           accept="application/wasm"

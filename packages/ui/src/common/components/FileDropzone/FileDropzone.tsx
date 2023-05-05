@@ -15,6 +15,7 @@ interface DragResponseProps {
 }
 
 interface FileDropzoneProps extends Omit<DropzoneOptions, 'getFilesFromEvent'> {
+  id?: string
   title: string
   subtitle: string
   isRequired?: boolean
@@ -24,6 +25,7 @@ interface FileDropzoneProps extends Omit<DropzoneOptions, 'getFilesFromEvent'> {
 const MEGABYTE = 1024 * 1024
 
 export const FileDropzone = ({
+  id,
   title,
   subtitle,
   getFilesFromEvent,
@@ -50,7 +52,7 @@ export const FileDropzone = ({
             isDragAccept={isDragAccept}
             isDragReject={isDragReject}
           >
-            <input {...getInputProps()} />
+            <input {...getInputProps()} id={id} />
             <DropZoneText>
               Drop your file here or <DropZoneTextUnderline>browse</DropZoneTextUnderline>
             </DropZoneText>
