@@ -1,29 +1,17 @@
 import { ZstdInit } from '@oneidentity/zstd-js/decompress'
 import React, { useCallback } from 'react'
-import { useDropzone, DropEvent } from 'react-dropzone'
 import { useFormContext } from 'react-hook-form'
-import styled, { css } from 'styled-components'
 
-import { Label } from '@/common/components/forms'
+import { FileDropzone } from '@/common/components/FileDropzone/FileDropzone'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium, TextSmall } from '@/common/components/typography'
-import { BorderRad, Colors, Transitions } from '@/common/constants'
-
-interface DragResponseProps {
-  isDragActive?: boolean
-  isDragAccept?: boolean
-  isDragReject?: boolean
-}
+import { TextMedium } from '@/common/components/typography'
 
 interface ValidatedFile extends File {
   isValidWASM?: boolean
 }
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024
-
-const isDragEvent = (event: any): event is React.DragEvent<HTMLElement> => !!event?.dataTransfer
-const isChangeEvent = (event: any): event is React.ChangeEvent<HTMLInputElement> => !!event?.target?.files
 
 // https://github.com/paritytech/substrate/blob/master/primitives/maybe-compressed-blob/src/lib.rs
 // Convert blob to Buffer type to make it easier work with (compare|subarray),
@@ -44,36 +32,22 @@ const maybeDecompressRuntimeBlob = async (blob: ArrayBuffer): Promise<Buffer | U
   return wasm
 }
 
-const getValidatedFiles = async (event: DropEvent): Promise<ValidatedFile[]> => {
-  const files = []
-
-  let fileList: FileList | null = null
-
-  if (isDragEvent(event)) {
-    fileList = event.dataTransfer.files
-  } else if (isChangeEvent(event)) {
-    fileList = event.target.files
-  }
-
-  if (!fileList) {
-    return []
-  }
-
-  for (let i = 0; i < fileList.length; i++) {
-    const file = fileList.item(i)
+export const getValidatedFiles = async (files: File[]): Promise<ValidatedFile[]> => {
+  const transformedFiles: ValidatedFile[] = []
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i]
     if (file) {
       const uncompressedRuntime = await maybeDecompressRuntimeBlob(await file.arrayBuffer())
       const isValidWASM = await WebAssembly.validate(uncompressedRuntime)
       Object.assign(file, { isValidWASM })
       // Original file (not the decompressed one)
-      files.push(file)
+      transformedFiles.push(file as ValidatedFile)
     }
   }
-
-  return files
+  return transformedFiles
 }
 
-const validator = (file: ValidatedFile) => {
+export const validator = (file: ValidatedFile) => {
   if (!file.isValidWASM) {
     return {
       code: 'file-invalid-type',
@@ -92,17 +66,6 @@ export const RuntimeUpgrade = () => {
     }
   }, [])
 
-  const { isDragActive, isDragAccept, isDragReject, getRootProps, getInputProps, acceptedFiles, fileRejections } =
-    useDropzone({
-      onDrop,
-      accept: 'application/wasm',
-      maxFiles: 1,
-      maxSize: MAX_FILE_SIZE,
-      multiple: false,
-      getFilesFromEvent: getValidatedFiles,
-      validator,
-    })
-
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -112,150 +75,19 @@ export const RuntimeUpgrade = () => {
         </RowGapBlock>
       </Row>
       <Row>
-        <RowGapBlock gap={32}>
-          <RowGapBlock gap={4}>
-            <RowGapBlock gap={12}>
-              <RowGapBlock gap={4}>
-                <Label isRequired>Blob</Label>
-                <TextMedium lighter>Please upload the raw WebAssembly object to be used as the new runtime.</TextMedium>
-              </RowGapBlock>
-              <DropZone
-                {...getRootProps()}
-                isDragActive={isDragActive}
-                isDragAccept={isDragAccept}
-                isDragReject={isDragReject}
-              >
-                <input id="runtime-upgrade-input" {...getInputProps()} />
-                <DropZoneText>
-                  Drop your file here or <DropZoneTextUnderline>browse</DropZoneTextUnderline>
-                </DropZoneText>
-              </DropZone>
-            </RowGapBlock>
-            <TextSmall lighter>Maximum upload file size is 3 MB</TextSmall>
-          </RowGapBlock>
-          <RowGapBlock gap={8}>
-            {acceptedFiles.map((file) => (
-              <ReceivedFile key={file.name} valid={true}>
-                <AcceptedFileText>
-                  <b>{file.name}</b> ({file.size} B) was loaded successfully!
-                </AcceptedFileText>
-              </ReceivedFile>
-            ))}
-            {fileRejections.map(({ file, errors }) => (
-              <ReceivedFile key={file.name} valid={false}>
-                <AcceptedFileText>
-                  <b>{file.name}</b> ({file.size} B) was not loaded because of:{' '}
-                  {errors.map((error) => `"${error.message}"`).join(', ')}.
-                </AcceptedFileText>
-              </ReceivedFile>
-            ))}
-          </RowGapBlock>
-        </RowGapBlock>
+        <FileDropzone
+          title="Blob"
+          subtitle=""
+          accept="application/wasm"
+          maxFiles={1}
+          maxSize={MAX_FILE_SIZE}
+          multiple={false}
+          getFilesFromEvent={getValidatedFiles}
+          validator={validator}
+          onDrop={onDrop}
+          isRequired
+        />
       </Row>
     </RowGapBlock>
   )
 }
-
-const DropZoneText = styled.span`
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 400;
-  font-style: italic;
-  color: ${Colors.Black[600]};
-  transition: ${Transitions.all};
-`
-
-const DropZoneTextUnderline = styled.span`
-  font-weight: 700;
-  text-decoration: underline;
-`
-
-const DropZone = styled.div<DragResponseProps>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-  height: fit-content;
-  min-height: 104px;
-  border: 1px dotted ${Colors.Black[300]};
-  border-radius: ${BorderRad.s};
-  cursor: pointer;
-  transition: ${Transitions.all};
-
-  &:hover {
-    ${({ isDragActive, isDragAccept, isDragReject }) =>
-      !isDragActive &&
-      !isDragAccept &&
-      !isDragReject &&
-      css`
-        border-color: ${Colors.Blue[500]};
-
-        ${DropZoneText} {
-          color: ${Colors.Blue[500]};
-        }
-      `};
-  }
-
-  ${({ isDragActive }) =>
-    isDragActive &&
-    css`
-      border-color: ${Colors.Blue[400]};
-
-      ${DropZoneText} {
-        color: ${Colors.Blue[400]};
-      }
-    `}
-  ${({ isDragAccept }) =>
-    isDragAccept &&
-    css`
-      border-color: ${Colors.Green[500]};
-
-      ${DropZoneText} {
-        color: ${Colors.Green[500]};
-      }
-    `}
-  ${({ isDragReject }) =>
-    isDragReject &&
-    css`
-      border-color: ${Colors.Red[400]};
-
-      ${DropZoneText} {
-        color: ${Colors.Red[400]};
-      }
-    `}
-`
-
-const AcceptedFileText = styled.span`
-  font-size: 14px;
-  line-height: 20px;
-  transition: ${Transitions.all};
-`
-
-const ReceivedFile = styled.div<{ valid?: boolean }>`
-  display: flex;
-  align-items: center;
-  padding: 16px 20px;
-  border-left: 4px solid ${Colors.Black[300]};
-  border-radius: ${BorderRad.s};
-  overflow: hidden;
-
-  ${({ valid }) =>
-    valid === true
-      ? css`
-          border-color: ${Colors.Green[500]};
-          background-color: ${Colors.Green[100]};
-
-          ${AcceptedFileText} {
-            color: ${Colors.Green[500]};
-          }
-        `
-      : css`
-          border-color: ${Colors.Red[400]};
-          background-color: ${Colors.Red[100]};
-
-          ${AcceptedFileText} {
-            color: ${Colors.Red[400]};
-          }
-        `};
-`
