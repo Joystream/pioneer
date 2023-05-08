@@ -27,6 +27,7 @@ import { Loading } from '@/common/components/Loading'
 import { ModalGlass } from '@/common/components/Modal'
 import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/Search/SearchResultsModal'
 import { SuccessModal } from '@/common/components/SuccessModal'
+import { BackendErrorModal } from '@/common/components/BackendErrorModal'
 import { useModal } from '@/common/hooks/useModal'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { ConfirmModal } from '@/common/modals/ConfirmModal/ConfirmModal'
@@ -269,6 +270,10 @@ const useGlobalModalHandler = (machine: UnknownMachine<any, any, any> | undefine
 
   if (state.matches('requirementsVerification')) {
     return <LoaderModal onClose={hideModal} />
+  }
+
+  if (state.matches('error') && get(state.meta, ['(machine).error', 'message'])) {
+    return <BackendErrorModal  onClose={hideModal} text='The backend server is down. Please try again later.' />
   }
 
   return null
