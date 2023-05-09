@@ -1,0 +1,13 @@
+diff --git a/dist/types/path/eager.d.ts b/dist/types/path/eager.d.ts
+index 70db89679ae6ae6fba0632729dd3357a670b822c..cf4b394ea780a6ba0f42990fdb5af10f126f6cb0 100644
+--- a/dist/types/path/eager.d.ts
++++ b/dist/types/path/eager.d.ts
+@@ -5,7 +5,7 @@ import { ArrayKey, IsTuple, TupleKeys } from './common';
+  * Helper type for recursively constructing paths through a type.
+  * See {@link Path}
+  */
+-declare type PathImpl<K extends string | number, V> = V extends Primitive ? `${K}` : `${K}` | `${K}.${Path<V>}`;
++declare type PathImpl<K extends string | number, V> = V extends Primitive | SharedArrayBuffer ? `${K}` : `${K}` | `${K}.${Path<V>}`;
+ /**
+  * Type which eagerly collects all paths through a type
+  * @typeParam T - type which should be introspected
