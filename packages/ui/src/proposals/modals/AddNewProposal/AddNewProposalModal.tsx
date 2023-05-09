@@ -85,8 +85,9 @@ export const AddNewProposalModal = () => {
   const stakingStatus = useStakingAccountStatus(formMap[0]?.address, activeMember?.id, [state.matches('transaction')])
   const schema = useMemo(() => schemaFactory(api), [!api])
 
+  const path = useMemo(() => machineStateConverter(state.value), [state.value])
   const form = useForm<AddNewProposalForm>({
-    resolver: useYupValidationResolver<AddNewProposalForm>(schema, machineStateConverter(state.value)),
+    resolver: useYupValidationResolver<AddNewProposalForm>(schema, path),
     mode: 'onChange',
     context: {
       minimumValidatorCount,
@@ -131,15 +132,15 @@ export const AddNewProposalModal = () => {
 
   useEffect(() => {
     form.trigger([])
-  }, [machineStateConverter(state.value)])
+  }, [path])
 
   useEffect(() => {
     setIsExecutionError(
-      Object.values((form.formState.errors as any)[machineStateConverter(state.value)] ?? {}).some(
+      Object.values((form.formState.errors as any)[path] ?? {}).some(
         (value) => (value as FieldError).type === 'execution'
       )
     )
-  }, [JSON.stringify(form.formState.errors), machineStateConverter(state.value)])
+  }, [JSON.stringify(form.formState.errors), path])
 
   const transactionsSteps = useMemo(
     () =>
@@ -147,39 +148,41 @@ export const AddNewProposalModal = () => {
     [state.context.discussionMode]
   )
 
-  const transaction = useMemo(() => {
-    if (activeMember && api) {
-      const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } =
-        form.getValues() as AddNewProposalForm
+  const { transaction, feeInfo } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => {
+      if (activeMember && api) {
+        const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } =
+          form.getValues() as AddNewProposalForm
 
-      const txBaseParams: BaseProposalParams = {
-        memberId: activeMember?.id,
-        title: proposalDetails?.title,
-        description: proposalDetails?.rationale,
-        ...(stakingAccount.stakingAccount ? { stakingAccountId: stakingAccount.stakingAccount.address } : {}),
-        ...(triggerAndDiscussion.triggerBlock ? { exactExecutionBlock: triggerAndDiscussion.triggerBlock } : {}),
+        const txBaseParams: BaseProposalParams = {
+          memberId: activeMember?.id,
+          title: proposalDetails?.title,
+          description: proposalDetails?.rationale,
+          ...(stakingAccount.stakingAccount ? { stakingAccountId: stakingAccount.stakingAccount.address } : {}),
+          ...(triggerAndDiscussion.triggerBlock ? { exactExecutionBlock: triggerAndDiscussion.triggerBlock } : {}),
+        }
+
+        const txSpecificParameters = getSpecificParameters(api, specifics)
+
+        if (stakingStatus === 'confirmed') {
+          return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
+        }
+
+        return api.tx.utility.batch([
+          api.tx.members.confirmStakingAccount(activeMember.id, stakingAccount.stakingAccount?.address ?? ''),
+          api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
+        ])
       }
-
-      const txSpecificParameters = getSpecificParameters(api, specifics)
-
-      if (stakingStatus === 'confirmed') {
-        return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
-      }
-
-      return api.tx.utility.batch([
-        api.tx.members.confirmStakingAccount(activeMember.id, stakingAccount.stakingAccount?.address ?? ''),
-        api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
-      ])
-    }
-  }, [
-    state.value,
-    connectionState,
-    stakingStatus,
-    form.formState.isValidating,
-    JSON.stringify(form.getValues()?.[machineStateConverter(state.value) as keyof AddNewProposalForm]),
-  ])
-
-  const { feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
+    },
+    [
+      state.value,
+      connectionState,
+      stakingStatus,
+      form.formState.isValidating,
+      JSON.stringify(form.getValues()?.[path as keyof AddNewProposalForm]),
+    ]
+  )
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
@@ -216,9 +219,9 @@ export const AddNewProposalModal = () => {
 
   const shouldDisableNext = useMemo(() => {
     if (isExecutionError) {
-      const hasOtherError = Object.values(
-        (form.formState.errors as any)[machineStateConverter(state.value)] ?? {}
-      ).some((value) => (value as FieldError).type !== 'execution')
+      const hasOtherError = Object.values((form.formState.errors as any)[path] ?? {}).some(
+        (value) => (value as FieldError).type !== 'execution'
+      )
 
       if (!form.formState.isDirty) {
         return true

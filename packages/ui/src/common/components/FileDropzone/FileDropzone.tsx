@@ -52,7 +52,7 @@ export const FileDropzone = ({
             isDragAccept={isDragAccept}
             isDragReject={isDragReject}
           >
-            <input {...getInputProps()} id={id} />
+            <input {...getInputProps({ id })} />
             <DropZoneText>
               Drop your file here or <DropZoneTextUnderline>browse</DropZoneTextUnderline>
             </DropZoneText>
