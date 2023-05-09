@@ -22,7 +22,7 @@ import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModa
 //   WithdrawContributionModal,
 // } from '@/bounty/modals/WithdrawContributionModal'
 // import { BountyWithdrawWorkEntryModalCall, WithdrawWorkEntryModal } from '@/bounty/modals/WithdrawWorkEntryModal'
-// import { BackendErrorModal } from '@/common/components/BackendErrorModal'
+import { BackendErrorModal } from '@/common/components/BackendErrorModal'
 import { FailureModal } from '@/common/components/FailureModal'
 import { Loading } from '@/common/components/Loading'
 import { ModalGlass } from '@/common/components/Modal'
@@ -230,7 +230,12 @@ export const GlobalModals = () => {
       document.body
     )
   }
-
+  return ReactDOM.createPortal(
+    <TransactionFeesProvider>
+      <BackendErrorModal onClose={()=>{hideModal}} text='ssssss'></BackendErrorModal>
+    </TransactionFeesProvider>,
+    document.body
+  )
   return null
 }
 
