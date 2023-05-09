@@ -272,9 +272,11 @@ const useGlobalModalHandler = (machine: UnknownMachine<any, any, any> | undefine
     return <LoaderModal onClose={hideModal} />
   }
 
+  /* --- BackendErrorModal should be showed when backendserver is down. ---
   if (state.matches('error') && get(state.meta, ['(machine).error', 'message'])) {
     return <BackendErrorModal onClose={hideModal} text="The backend server is down. Please try again later." />
   }
+  */
 
   return null
 }
