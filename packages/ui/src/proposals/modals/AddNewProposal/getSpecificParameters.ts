@@ -35,9 +35,7 @@ export const getSpecificParameters = (
       })
     }
     case 'runtimeUpgrade': {
-      const u8a = specifics?.runtimeUpgrade?.runtime
-        ? new Uint8Array(specifics.runtimeUpgrade.runtime)
-        : new Uint8Array()
+      const u8a = specifics?.runtimeUpgrade?.runtime ?? new Uint8Array()
       return createType('PalletProposalsCodexProposalDetails', {
         RuntimeUpgrade: createType('Bytes', u8a),
       })

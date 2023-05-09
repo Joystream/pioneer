@@ -38,7 +38,7 @@ const getValidatedFiles = async (files: File[]): Promise<ValidatedFile[]> => {
     const file = files[i]
     if (file) {
       const uncompressedRuntime = await maybeDecompressRuntimeBlob(await file.arrayBuffer())
-      const isValidWASM = await WebAssembly.validate(uncompressedRuntime)
+      const isValidWASM = WebAssembly.validate(uncompressedRuntime)
       Object.assign(file, { isValidWASM })
       // Original file (not the decompressed one)
       transformedFiles.push(file as ValidatedFile)
@@ -59,10 +59,12 @@ const validator = (file: ValidatedFile) => {
 }
 
 export const RuntimeUpgrade = () => {
-  const { setValue } = useFormContext()
+  const { setValue, trigger } = useFormContext()
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (acceptedFiles.length) {
-      setValue('runtimeUpgrade.runtime', await acceptedFiles[0].arrayBuffer())
+      const arrayBuffer = await acceptedFiles[0].arrayBuffer()
+      setValue('runtimeUpgrade.runtime', new Uint8Array(arrayBuffer))
+      trigger('runtimeUpgrade.runtime')
     }
   }, [])
 
