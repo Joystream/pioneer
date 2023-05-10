@@ -377,3 +377,11 @@ export const ResultText = styled(TextMedium)`
 export const ResultTextWhite = styled(ResultText)`
   color: ${Colors.Black[400]};
 `
+interface ModalBodyContainer {
+  backgroundColor: string
+}
+
+export const ModalBodyContainer = styled.div<ModalBodyContainer>`
+  padding: 16px;
+  background-color: ${({ backgroundColor }) => backgroundColor};
+`
