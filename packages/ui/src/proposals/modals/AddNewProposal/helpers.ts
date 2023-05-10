@@ -214,8 +214,8 @@ export const schemaFactory = (api?: ProxyApi) => {
     }),
     runtimeUpgrade: Yup.object().shape({
       runtime: Yup.mixed()
-        .test('byteLength', 'Invalid input', (value?: File) => !!value && value?.size > 0)
-        .required('Field is required'),
+        .required('Field is required')
+        .test('byteLength', 'Invalid input', (value: File) => value.size > 0),
     }),
     setCouncilorReward: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, '')).required('Field is required'),
