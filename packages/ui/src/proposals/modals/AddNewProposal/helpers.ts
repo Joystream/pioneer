@@ -73,7 +73,7 @@ export interface AddNewProposalForm {
     account: Account
   }
   runtimeUpgrade: {
-    runtime?: Uint8Array
+    runtime?: File
   }
   setCouncilorReward: {
     amount?: BN
@@ -214,7 +214,7 @@ export const schemaFactory = (api?: ProxyApi) => {
     }),
     runtimeUpgrade: Yup.object().shape({
       runtime: Yup.mixed()
-        .test('byteLength', 'Invalid input', (value?: Uint8Array) => !!value && value.byteLength > 0)
+        .test('byteLength', 'Invalid input', (value?: File) => !!value && value?.size > 0)
         .required('Field is required'),
     }),
     setCouncilorReward: Yup.object().shape({

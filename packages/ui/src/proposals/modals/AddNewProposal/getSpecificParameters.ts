@@ -15,7 +15,8 @@ const getWorkingGroupParam = (groupId: GroupIdName | undefined) => groupId && Gr
 
 export const getSpecificParameters = (
   api: Api,
-  specifics: Omit<AddNewProposalForm, 'triggerAndDiscussion' | 'stakingAccount' | 'proposalDetails'>
+  specifics: Omit<AddNewProposalForm, 'triggerAndDiscussion' | 'stakingAccount' | 'proposalDetails'>,
+  files: Uint8Array[]
 ) => {
   if (!specifics.proposalType.type) {
     return createType('PalletProposalsCodexProposalDetails', { Signal: '' })
@@ -35,9 +36,8 @@ export const getSpecificParameters = (
       })
     }
     case 'runtimeUpgrade': {
-      const u8a = specifics?.runtimeUpgrade?.runtime ?? new Uint8Array()
       return createType('PalletProposalsCodexProposalDetails', {
-        RuntimeUpgrade: createType('Bytes', u8a),
+        RuntimeUpgrade: createType('Bytes', files[0] ?? new Uint8Array()),
       })
     }
     case 'createWorkingGroupLeadOpening': {

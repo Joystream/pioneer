@@ -39,21 +39,23 @@ import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccount
 import { IStakingAccountSchema } from '@/memberships/model/validation'
 import { useMinimumValidatorCount } from '@/proposals/hooks/useMinimumValidatorCount'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
-import { ExecutionRequirementsWarning } from '@/proposals/modals/AddNewProposal/components/ExecutionRequirementsWarning'
-import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
-import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
-import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
-import { SpecificParametersStep } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
-import { StakingAccountStep } from '@/proposals/modals/AddNewProposal/components/StakingAccountStep'
-import { SuccessModal } from '@/proposals/modals/AddNewProposal/components/SuccessModal'
-import { TriggerAndDiscussionStep } from '@/proposals/modals/AddNewProposal/components/TriggerAndDiscussionStep'
-import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
-import { getSpecificParameters } from '@/proposals/modals/AddNewProposal/getSpecificParameters'
-import { AddNewProposalForm, defaultProposalValues, schemaFactory } from '@/proposals/modals/AddNewProposal/helpers'
-import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
-import { addNewProposalMachine, AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalType } from '@/proposals/types'
 import { GroupIdName } from '@/working-groups/types'
+
+import { AddNewProposalModalCall } from '.'
+import { ExecutionRequirementsWarning } from './components/ExecutionRequirementsWarning'
+import { ProposalConstantsWrapper } from './components/ProposalConstantsWrapper'
+import { ProposalDetailsStep } from './components/ProposalDetailsStep'
+import { ProposalTypeStep } from './components/ProposalTypeStep'
+import { SpecificParametersStep } from './components/SpecificParameters/SpecificParametersStep'
+import { StakingAccountStep } from './components/StakingAccountStep'
+import { SuccessModal } from './components/SuccessModal'
+import { TriggerAndDiscussionStep } from './components/TriggerAndDiscussionStep'
+import { WarningModal } from './components/WarningModal'
+import { FilesContext } from './FilesContext'
+import { getSpecificParameters } from './getSpecificParameters'
+import { AddNewProposalForm, defaultProposalValues, schemaFactory } from './helpers'
+import { addNewProposalMachine, AddNewProposalMachineState } from './machine'
 
 export type BaseProposalParams = Exclude<
   Parameters<Api['tx']['proposalsCodex']['createProposal']>[0],
@@ -78,6 +80,7 @@ export const AddNewProposalModal = () => {
 
   const [warningAccepted, setWarningAccepted] = useState<boolean>(true)
   const [isExecutionError, setIsExecutionError] = useState<boolean>(false)
+  const [files, setFiles] = useState<Uint8Array[]>([])
 
   const constants = useProposalConstants(formMap[1])
   const { hasRequiredStake } = useHasRequiredStake(constants?.requiredStake || BN_ZERO, 'Proposals')
@@ -163,7 +166,7 @@ export const AddNewProposalModal = () => {
           ...(triggerAndDiscussion.triggerBlock ? { exactExecutionBlock: triggerAndDiscussion.triggerBlock } : {}),
         }
 
-        const txSpecificParameters = getSpecificParameters(api, specifics)
+        const txSpecificParameters = getSpecificParameters(api, specifics, files)
 
         if (stakingStatus === 'confirmed') {
           return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
@@ -363,7 +366,9 @@ export const AddNewProposalModal = () => {
               {state.matches('generalParameters.proposalDetails') && <ProposalDetailsStep proposer={activeMember} />}
               {state.matches('generalParameters.triggerAndDiscussion') && <TriggerAndDiscussionStep />}
               {state.matches('specificParameters') && (
-                <SpecificParametersStep matches={state.matches as AddNewProposalMachineState['matches']} />
+                <FilesContext.Provider value={setFiles}>
+                  <SpecificParametersStep matches={state.matches as AddNewProposalMachineState['matches']} />
+                </FilesContext.Provider>
               )}
               {isExecutionError && <ExecutionRequirementsWarning />}
             </FormProvider>
