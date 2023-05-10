@@ -1,14 +1,15 @@
-import { DependencyList, useContext, useEffect } from 'react'
+import { DependencyList, useContext, useEffect, useState } from 'react'
 
 import { Transaction, TransactionFeesContext, Fee } from '@/common/providers/transactionFees/context'
 import { Address } from '@/common/types'
 
 export function useTransactionFee(
   signer?: Address,
-  getTransaction?: () => Transaction | undefined,
+  getTransaction?: () => Transaction | undefined | Promise<Transaction | undefined>,
   deps: DependencyList = []
-): Fee {
+): Fee & { isLoading: boolean } {
   const { transaction, feeInfo, setSigner, setTransaction } = useContext(TransactionFeesContext)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     if (signer) {
@@ -18,9 +19,13 @@ export function useTransactionFee(
 
   useEffect(() => {
     if (signer && getTransaction) {
-      setTransaction(getTransaction())
+      setIsLoading(true)
+      Promise.resolve(getTransaction()).then((tx) => {
+        setIsLoading(false)
+        setTransaction(tx)
+      })
     }
   }, [signer, !!getTransaction, setTransaction, ...deps])
 
-  return { transaction, feeInfo }
+  return { transaction, isLoading, feeInfo }
 }

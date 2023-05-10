@@ -5,6 +5,7 @@ import { BN_ZERO } from '@/common/constants'
 import { createType } from '@/common/model/createType'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { last } from '@/common/utils'
+import { asUint8Array } from '@/common/utils/file'
 import { AddNewProposalForm } from '@/proposals/modals/AddNewProposal/helpers'
 import { GroupIdToGroupParam } from '@/working-groups/constants'
 import { GroupIdName } from '@/working-groups/types'
@@ -13,10 +14,9 @@ const idToRuntimeId = (id: string): number => Number(last(id.split('-')))
 
 const getWorkingGroupParam = (groupId: GroupIdName | undefined) => groupId && GroupIdToGroupParam[groupId]
 
-export const getSpecificParameters = (
+export const getSpecificParameters = async (
   api: Api,
-  specifics: Omit<AddNewProposalForm, 'triggerAndDiscussion' | 'stakingAccount' | 'proposalDetails'>,
-  files: Uint8Array[]
+  specifics: Omit<AddNewProposalForm, 'triggerAndDiscussion' | 'stakingAccount' | 'proposalDetails'>
 ) => {
   if (!specifics.proposalType.type) {
     return createType('PalletProposalsCodexProposalDetails', { Signal: '' })
@@ -36,8 +36,10 @@ export const getSpecificParameters = (
       })
     }
     case 'runtimeUpgrade': {
+      const file = specifics?.runtimeUpgrade?.runtime
+      const u8a = file ? await asUint8Array(file) : new Uint8Array()
       return createType('PalletProposalsCodexProposalDetails', {
-        RuntimeUpgrade: createType('Bytes', files[0] ?? new Uint8Array()),
+        RuntimeUpgrade: createType('Bytes', u8a),
       })
     }
     case 'createWorkingGroupLeadOpening': {

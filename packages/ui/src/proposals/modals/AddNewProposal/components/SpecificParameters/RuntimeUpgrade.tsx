@@ -1,12 +1,11 @@
 import { ZstdInit } from '@oneidentity/zstd-js/decompress'
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { FileDropzone } from '@/common/components/FileDropzone/FileDropzone'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
-import { FilesContext } from '@/proposals/modals/AddNewProposal/FilesContext'
 
 interface ValidatedFile extends File {
   isValidWASM?: boolean
@@ -61,12 +60,9 @@ const validator = (file: ValidatedFile) => {
 
 export const RuntimeUpgrade = () => {
   const { setValue, trigger } = useFormContext()
-  const setFiles = useContext(FilesContext)
 
   const onDrop = useCallback(async ([acceptedFile]: File[]) => {
     if (acceptedFile) {
-      const arrayBuffer = await acceptedFile.arrayBuffer()
-      setFiles([new Uint8Array(arrayBuffer)])
       setValue('runtimeUpgrade.runtime', acceptedFile)
       trigger('runtimeUpgrade.runtime')
     }

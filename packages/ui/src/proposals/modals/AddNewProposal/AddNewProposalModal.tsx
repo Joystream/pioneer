@@ -52,7 +52,6 @@ import { StakingAccountStep } from './components/StakingAccountStep'
 import { SuccessModal } from './components/SuccessModal'
 import { TriggerAndDiscussionStep } from './components/TriggerAndDiscussionStep'
 import { WarningModal } from './components/WarningModal'
-import { FilesContext } from './FilesContext'
 import { getSpecificParameters } from './getSpecificParameters'
 import { AddNewProposalForm, defaultProposalValues, schemaFactory } from './helpers'
 import { addNewProposalMachine, AddNewProposalMachineState } from './machine'
@@ -80,7 +79,6 @@ export const AddNewProposalModal = () => {
 
   const [warningAccepted, setWarningAccepted] = useState<boolean>(true)
   const [isExecutionError, setIsExecutionError] = useState<boolean>(false)
-  const [files, setFiles] = useState<Uint8Array[]>([])
 
   const constants = useProposalConstants(formMap[1])
   const { hasRequiredStake } = useHasRequiredStake(constants?.requiredStake || BN_ZERO, 'Proposals')
@@ -151,9 +149,9 @@ export const AddNewProposalModal = () => {
     [state.context.discussionMode]
   )
 
-  const { transaction, feeInfo } = useTransactionFee(
+  const { transaction, isLoading, feeInfo } = useTransactionFee(
     activeMember?.controllerAccount,
-    () => {
+    async () => {
       if (activeMember && api) {
         const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } =
           form.getValues() as AddNewProposalForm
@@ -166,7 +164,7 @@ export const AddNewProposalModal = () => {
           ...(triggerAndDiscussion.triggerBlock ? { exactExecutionBlock: triggerAndDiscussion.triggerBlock } : {}),
         }
 
-        const txSpecificParameters = getSpecificParameters(api, specifics, files)
+        const txSpecificParameters = await getSpecificParameters(api, specifics)
 
         if (stakingStatus === 'confirmed') {
           return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
@@ -221,6 +219,9 @@ export const AddNewProposalModal = () => {
   }, [send])
 
   const shouldDisableNext = useMemo(() => {
+    if (isLoading) {
+      return true
+    }
     if (isExecutionError) {
       const hasOtherError = Object.values((form.formState.errors as any)[path] ?? {}).some(
         (value) => (value as FieldError).type !== 'execution'
@@ -245,6 +246,7 @@ export const AddNewProposalModal = () => {
     warningAccepted,
     JSON.stringify(form.getValues()),
     JSON.stringify(form.formState.errors),
+    isLoading,
   ])
 
   if (!api || !activeMember || !feeInfo || state.matches('requirementsVerification')) {
@@ -366,9 +368,7 @@ export const AddNewProposalModal = () => {
               {state.matches('generalParameters.proposalDetails') && <ProposalDetailsStep proposer={activeMember} />}
               {state.matches('generalParameters.triggerAndDiscussion') && <TriggerAndDiscussionStep />}
               {state.matches('specificParameters') && (
-                <FilesContext.Provider value={setFiles}>
-                  <SpecificParametersStep matches={state.matches as AddNewProposalMachineState['matches']} />
-                </FilesContext.Provider>
+                <SpecificParametersStep matches={state.matches as AddNewProposalMachineState['matches']} />
               )}
               {isExecutionError && <ExecutionRequirementsWarning />}
             </FormProvider>
