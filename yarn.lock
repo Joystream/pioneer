@@ -21252,21 +21252,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:7.29.0":
+"react-hook-form@npm:^7.29.0":
   version: 7.29.0
   resolution: "react-hook-form@npm:7.29.0"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
   checksum: 4379f972c916d01f4706c27c0fb207b1676b382fc4803ee557edf77cb2355ff320a659940325fda81c1f4fd799e685a6e228577c1050e5b8c32e815884d0defe
-  languageName: node
-  linkType: hard
-
-"react-hook-form@patch:react-hook-form@npm%3A7.29.0#./.yarn/patches/react-hook-form-npm-7.29.0-baedbea779.patch::locator=pioneer%40workspace%3A.":
-  version: 7.29.0
-  resolution: "react-hook-form@patch:react-hook-form@npm%3A7.29.0#./.yarn/patches/react-hook-form-npm-7.29.0-baedbea779.patch::version=7.29.0&hash=baf830&locator=pioneer%40workspace%3A."
-  peerDependencies:
-    react: ^16.8.0 || ^17 || ^18
-  checksum: d37b83db84ee86c77ac467cf9d7c03ad2b60813fc40b7bf1969a21427d495362a21335a388d87411840efec09543df98f7ca1d373713f6fe8be564f5aa8ec785
   languageName: node
   linkType: hard
 
