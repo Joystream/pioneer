@@ -44,7 +44,6 @@
     "@polkadot/util": "9.5.1",
     "@polkadot/util-crypto": "9.5.1",
     "bn.js": "^4.11.9",
-    "injectweb3-connect": "./packages/injectweb3-connect-v2.2.0.0.tgz",
     "@joystream/js@1.2.0": "patch:@joystream/js@npm%3A1.2.0#./.yarn/patches/@joystream-js-npm-1.2.0-a8795e7496.patch",
     "@joystream/types": "./packages/joystream-types-v0.20.6.tgz"
   },
