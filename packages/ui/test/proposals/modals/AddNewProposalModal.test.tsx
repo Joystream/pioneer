@@ -2,6 +2,7 @@ import { OpeningMetadata } from '@joystream/metadata-protobuf'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import BN from 'bn.js'
+import { findLast } from 'lodash'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
@@ -482,7 +483,7 @@ describe('UI: AddNewProposalModal', () => {
 
     describe('Specific parameters', () => {
       const getTxParameters = async () => {
-        const [, getTransaction] = mockedTransactionFee.mock.calls.findLast((value) => value.length) ?? []
+        const [, getTransaction] = findLast(mockedTransactionFee.mock.calls, (params) => params.length > 0) ?? []
         if (!getTransaction) return
 
         createProposalTxMock.mockReset()
