@@ -3,11 +3,12 @@ import { DependencyList, useContext, useEffect, useState } from 'react'
 import { Transaction, TransactionFeesContext, Fee } from '@/common/providers/transactionFees/context'
 import { Address } from '@/common/types'
 
+export type UseTransactionFee = Fee & { isLoading: boolean }
 export function useTransactionFee(
   signer?: Address,
   getTransaction?: () => Transaction | undefined | Promise<Transaction | undefined>,
   deps: DependencyList = []
-): Fee & { isLoading: boolean } {
+): UseTransactionFee {
   const { transaction, feeInfo, setSigner, setTransaction } = useContext(TransactionFeesContext)
   const [isLoading, setIsLoading] = useState(false)
 
