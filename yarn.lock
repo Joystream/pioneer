@@ -3477,7 +3477,7 @@ __metadata:
     i18next: ^21.6.3
     i18next-browser-languagedetector: ^6.1.2
     i18next-json-csv-converter: ^0.2.0
-    injectweb3-connect: 2.1.0
+    injectweb3-connect: 2.1.1
     jest: ^27.2.5
     jest-transform-stub: ^2.0.0
     jsdom: ^18.0.0
@@ -14612,12 +14612,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"injectweb3-connect@npm:2.1.0":
-  version: 2.1.0
-  resolution: "injectweb3-connect@npm:2.1.0"
+"injectweb3-connect@npm:2.1.1":
+  version: 2.1.1
+  resolution: "injectweb3-connect@npm:2.1.1"
   peerDependencies:
     "@polkadot/api": ^10.4.1
-  checksum: 50e706a4ca91c57df793e5ebc26fbf5c26b259e63df92cdaaef43c4563191d283c60eeadbc95901de773783696a86ea00ff8f643646b9c08ab793e882f2c19b0
+  checksum: a3e1eff7da5f603bade0dacc3f147a0a92581dd9e2ecb989819766be2fa2563e454232c18c69b485961a8556aacae9585aaef98f1876276f613aca79ffdc58e3
   languageName: node
   linkType: hard
 
