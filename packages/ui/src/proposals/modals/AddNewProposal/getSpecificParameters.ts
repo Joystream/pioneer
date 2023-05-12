@@ -5,7 +5,7 @@ import { BN_ZERO } from '@/common/constants'
 import { createType } from '@/common/model/createType'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { last } from '@/common/utils'
-import { asUint8Array } from '@/common/utils/file'
+import { asArrayBuffer } from '@/common/utils/file'
 import { AddNewProposalForm } from '@/proposals/modals/AddNewProposal/helpers'
 import { GroupIdToGroupParam } from '@/working-groups/constants'
 import { GroupIdName } from '@/working-groups/types'
@@ -36,8 +36,7 @@ export const getSpecificParameters = async (
       })
     }
     case 'runtimeUpgrade': {
-      const file = specifics?.runtimeUpgrade?.runtime
-      const u8a = file ? await asUint8Array(file) : new Uint8Array()
+      const u8a = new Uint8Array(await asArrayBuffer(specifics?.runtimeUpgrade?.runtime))
       return createType('PalletProposalsCodexProposalDetails', {
         RuntimeUpgrade: createType('Bytes', u8a),
       })
