@@ -3,12 +3,10 @@ import BN from 'bn.js'
 
 import { StatisticItem, StatisticItemSpacedContent, StatisticLabel } from '@/common/components/statistics'
 import { TokenValue } from '@/common/components/typography'
+import { useStakingStatistics } from '@/validators/hooks/useStakingStatistics'
 
 export const Staking = () => {
-  const { ideal, current } = {
-    ideal: '200000000000000',
-    current: '8000000000000',
-  }
+  const {idealStaking, currentStaking}=useStakingStatistics()
   return (
     <StatisticItem
       title="staking"
@@ -19,11 +17,11 @@ export const Staking = () => {
     >
       <StatisticItemSpacedContent>
         <StatisticLabel> Ideal </StatisticLabel>
-        <TokenValue size='l' value={new BN(ideal ?? 0)} />
+        <TokenValue size='l' value={new BN(idealStaking ?? 0)} />
       </StatisticItemSpacedContent>
       <StatisticItemSpacedContent>
         <StatisticLabel> Current </StatisticLabel>
-        <TokenValue size='l' value={new BN(current ?? 0)} />
+        <TokenValue size='l' value={new BN(currentStaking ?? 0)} />
       </StatisticItemSpacedContent>
     </StatisticItem>
   )
