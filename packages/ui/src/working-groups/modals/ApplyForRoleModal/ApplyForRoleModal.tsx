@@ -25,6 +25,7 @@ import { TextMedium, TokenValue } from '@/common/components/typography'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
+import { Comparator } from '@/common/model/Comparator'
 import { getDataFromEvent, metadataToBytes } from '@/common/model/JoystreamNode'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { enhancedGetErrorMessage, enhancedHasError, useYupValidationResolver } from '@/common/utils/validation'
@@ -188,12 +189,16 @@ export const ApplyForRoleModal = () => {
   if (state.matches('transaction') && signer && api && transactionService) {
     const { stake, form: formFields } = form.getValues()
 
+    const answers = Object.entries<string>(formFields)
+      .sort(Comparator<[string, string]>(true, 0).string)
+      .map(([, answer]) => answer)
+
     const applyOnOpeningTransaction = api.tx[opening.groupId].applyOnOpening({
       memberId: activeMember?.id,
       openingId: opening.runtimeId,
       roleAccountId: stake.roleAccount.address,
       rewardAccountId: stake.rewardAccount.address,
-      description: metadataToBytes(ApplicationMetadata, { answers: Object.values(formFields ?? {}) as string[] }),
+      description: metadataToBytes(ApplicationMetadata, { answers }),
       stakeParameters: {
         stake: stake.amount,
         stakingAccountId: stake.account?.address,
