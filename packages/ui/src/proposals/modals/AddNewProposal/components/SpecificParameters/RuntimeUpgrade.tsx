@@ -7,9 +7,8 @@ import { Loading } from '@/common/components/Loading'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
+import { maybeDecompressRuntimeBlob } from '@/common/utils/crypto/worker'
 import { asArrayBuffer } from '@/common/utils/file'
-
-import { maybeDecompressRuntimeBlob } from './utils'
 
 interface ValidatedFile extends File {
   isValidWASM?: boolean
