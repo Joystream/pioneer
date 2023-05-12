@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import {
   StatisticItem,
@@ -8,13 +8,21 @@ import {
 } from '@/common/components/statistics'
 import { DurationValue } from '@/common/components/typography/DurationValue'
 import { PercentageChart } from '@/common/components/charts/PercentageChart'
-
+import { useStakingStatistics } from '@/validators/hooks/useStakingStatistics'
 export const Era = () => {
-  const { nextReward, totalDuration, percentage } = {
-    nextReward: formatDurationDate(7860022),
-    totalDuration: formatDurationDate(7860022*3),
-    percentage: 67,
-  }
+  const { eraStartedOn, eraDuration, now } = useStakingStatistics()
+  const { nextReward, totalDuration, percentage } = useMemo(() => {
+    const nextReward =
+      eraDuration && now && eraStartedOn ? eraDuration - (now.toNumber() - Number(eraStartedOn)) : undefined
+    const totalDuration = eraDuration
+    const percentage = nextReward ? Math.floor(100-(nextReward / totalDuration) * 100) : 0
+    console.log(now?.toNumber())
+    return {
+      nextReward:formatDurationDate(nextReward??0),
+      totalDuration:formatDurationDate(totalDuration??0),
+      percentage,
+    }
+  }, [eraStartedOn, eraDuration, now])
   return (
     <StatisticItem
       title="era"
