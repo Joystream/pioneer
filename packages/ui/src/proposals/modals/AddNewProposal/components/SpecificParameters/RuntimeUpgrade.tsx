@@ -1,9 +1,7 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import { useFormContext } from 'react-hook-form'
-import styled from 'styled-components'
 
 import { FileDropzone } from '@/common/components/FileDropzone/FileDropzone'
-import { Loading } from '@/common/components/Loading'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
@@ -15,6 +13,22 @@ interface ValidatedFile extends File {
 }
 
 const MAX_FILE_SIZE = 3 * 1024 * 1024
+
+const getValidatedFiles = async (files: File[]): Promise<ValidatedFile[]> => {
+  const transformedFiles: ValidatedFile[] = []
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i]
+    if (file) {
+      const blob = await asArrayBuffer(file)
+      const uncompressedRuntime = await maybeDecompressRuntimeBlob(blob)
+      const isValidWASM = WebAssembly.validate(uncompressedRuntime)
+      Object.assign(file, { isValidWASM })
+      // Original file (not the decompressed one)
+      transformedFiles.push(file as ValidatedFile)
+    }
+  }
+  return transformedFiles
+}
 
 const validator = (file: ValidatedFile) => {
   if (!file.isValidWASM) {
@@ -29,33 +43,12 @@ const validator = (file: ValidatedFile) => {
 
 export const RuntimeUpgrade = () => {
   const { setValue, trigger } = useFormContext()
+
   const onDrop = useCallback(async ([acceptedFile]: File[]) => {
     if (acceptedFile) {
       setValue('runtimeUpgrade.runtime', acceptedFile)
       trigger('runtimeUpgrade.runtime')
     }
-  }, [])
-
-  const [isProcessingFile, setIsProcessingFile] = useState(false)
-  const getValidatedFiles = useCallback(async (files: File[]): Promise<ValidatedFile[]> => {
-    setIsProcessingFile(true)
-
-    const transformedFiles: ValidatedFile[] = []
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i]
-      if (file) {
-        const blob = await asArrayBuffer(file)
-        const uncompressedRuntime = await maybeDecompressRuntimeBlob(blob)
-        const isValidWASM = WebAssembly.validate(uncompressedRuntime)
-        Object.assign(file, { isValidWASM })
-        // Original file (not the decompressed one)
-        transformedFiles.push(file as ValidatedFile)
-      }
-    }
-
-    setIsProcessingFile(false)
-
-    return transformedFiles
   }, [])
 
   return (
@@ -80,19 +73,7 @@ export const RuntimeUpgrade = () => {
           onDrop={onDrop}
           isRequired
         />
-        {isProcessingFile && (
-          <Box>
-            <Loading text="Processing your file..." withoutMargin />
-          </Box>
-        )}
       </Row>
     </RowGapBlock>
   )
 }
-
-const Box = styled.div`
-  > div {
-    width: 100%;
-    margin: 10px 0;
-  }
-`

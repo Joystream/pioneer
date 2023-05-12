@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { DropzoneOptions, useDropzone } from 'react-dropzone'
 import styled, { css } from 'styled-components'
 
 import { getFilesFromRawEvent } from '@/common/components/FileDropzone/helpers'
 import { Label } from '@/common/components/forms'
+import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TextSmall } from '@/common/components/typography'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
@@ -28,14 +29,24 @@ export const FileDropzone = ({
   id,
   title,
   subtitle,
-  getFilesFromEvent,
+  getFilesFromEvent: _getFilesFromEvent,
   isRequired,
   ...dropzoneOptions
 }: FileDropzoneProps) => {
+  const [isProcessingFile, setIsProcessingFile] = useState(false)
+  const getFilesFromEvent = useCallback<Required<DropzoneOptions>['getFilesFromEvent']>(
+    async (event) => {
+      setIsProcessingFile(true)
+      const res = await _getFilesFromEvent(getFilesFromRawEvent(event))
+      setIsProcessingFile(false)
+      return res
+    },
+    [_getFilesFromEvent]
+  )
   const { isDragActive, isDragAccept, isDragReject, getRootProps, getInputProps, acceptedFiles, fileRejections } =
     useDropzone({
       ...dropzoneOptions,
-      getFilesFromEvent: (event) => getFilesFromEvent(getFilesFromRawEvent(event)),
+      getFilesFromEvent,
     })
 
   return (
@@ -62,23 +73,29 @@ export const FileDropzone = ({
           <TextSmall lighter>Maximum upload file size is {dropzoneOptions.maxSize / MEGABYTE} MB</TextSmall>
         )}
       </RowGapBlock>
-      <RowGapBlock gap={8}>
-        {acceptedFiles.map((file) => (
-          <ReceivedFile key={file.name} valid={true}>
-            <AcceptedFileText>
-              <b>{file.name}</b> ({file.size} B) was loaded successfully!
-            </AcceptedFileText>
-          </ReceivedFile>
-        ))}
-        {fileRejections.map(({ file, errors }) => (
-          <ReceivedFile key={file.name} valid={false}>
-            <AcceptedFileText>
-              <b>{file.name}</b> ({file.size} B) was not loaded because of:{' '}
-              {errors.map((error) => `"${error.message}"`).join(', ')}.
-            </AcceptedFileText>
-          </ReceivedFile>
-        ))}
-      </RowGapBlock>
+      {isProcessingFile ? (
+        <LoaderBox>
+          <Loading text="Processing your file..." withoutMargin />
+        </LoaderBox>
+      ) : (
+        <RowGapBlock gap={8}>
+          {acceptedFiles.map((file) => (
+            <ReceivedFile key={file.name} valid={true}>
+              <AcceptedFileText>
+                <b>{file.name}</b> ({file.size} B) was loaded successfully!
+              </AcceptedFileText>
+            </ReceivedFile>
+          ))}
+          {fileRejections.map(({ file, errors }) => (
+            <ReceivedFile key={file.name} valid={false}>
+              <AcceptedFileText>
+                <b>{file.name}</b> ({file.size} B) was not loaded because of:{' '}
+                {errors.map((error) => `"${error.message}"`).join(', ')}.
+              </AcceptedFileText>
+            </ReceivedFile>
+          ))}
+        </RowGapBlock>
+      )}
     </RowGapBlock>
   )
 }
@@ -151,6 +168,13 @@ export const DropZone = styled.div<DragResponseProps>`
         color: ${Colors.Red[400]};
       }
     `}
+`
+
+const LoaderBox = styled(RowGapBlock)`
+  > div {
+    width: 100%;
+    margin: 10px 0;
+  }
 `
 
 const AcceptedFileText = styled.span`
