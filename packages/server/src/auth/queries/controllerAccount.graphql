@@ -1,5 +1,0 @@
-query GetMembershipById($id: ID!) {
-  membershipByUniqueInput(where: { id: $id }) {
-    controllerAccount
-  }
-}

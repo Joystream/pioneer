@@ -12,12 +12,8 @@
     "plugin:import/warnings",
     "plugin:import/typescript"
   ],
-  "plugins": [
-    "import"
-  ],
-  "ignorePatterns": [
-    ".eslintrc.js"
-  ],
+  "plugins": ["import", "react-hooks"],
+  "ignorePatterns": [".eslintrc.js"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": "./tsconfig.json",
@@ -45,15 +41,7 @@
     "import/order": [
       "error",
       {
-        "groups": [
-          "builtin",
-          "external",
-          "parent",
-          [
-            "index",
-            "sibling"
-          ]
-        ],
+        "groups": ["builtin", "external", "parent", ["index", "sibling"]],
         "pathGroups": [
           {
             "pattern": "@/**",
@@ -61,9 +49,7 @@
             "position": "after"
           }
         ],
-        "pathGroupsExcludedImportTypes": [
-          "builtin"
-        ],
+        "pathGroupsExcludedImportTypes": ["builtin"],
         "newlines-between": "always",
         "alphabetize": {
           "order": "asc",
@@ -76,30 +62,25 @@
       {
         "noUselessIndex": true
       }
-    ]
+    ],
+    "react-hooks/rules-of-hooks": "error"
   },
   "overrides": [
     {
-      "files": [
-        "test/**/*.{js,ts,tsx}"
-      ],
+      "files": ["test/**/*.{js,ts,tsx}"],
       "rules": {
         "@typescript-eslint/no-non-null-assertion": "off",
         "no-unused-expressions": "off"
       }
     },
     {
-      "files": [
-        "**/__generated__/**/*.{js,ts,tsx}"
-      ],
+      "files": ["**/__generated__/**/*.{js,ts,tsx}"],
       "rules": {
         "import/order": "off"
       }
     },
     {
-      "files": [
-        "src/common/logger/*.ts"
-      ],
+      "files": ["src/common/logger/*.ts"],
       "rules": {
         "no-console": "off"
       }

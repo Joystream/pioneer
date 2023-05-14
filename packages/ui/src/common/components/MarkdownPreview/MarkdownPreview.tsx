@@ -74,13 +74,16 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
     }
   }, [markdown, append])
 
-  const stripBackslashes = (text: string) => text.replace(/\\(.)/gm, '$1')
+  const stripBackslashes = (text: string): ReactNode => {
+    const html = text.replace(/\\(.)/gm, '$1').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+    return <div dangerouslySetInnerHTML={{ __html: html }} />;
+  };
+  
+  console.log(stripBackslashes(markdown))
   return (
     <div className="markdown-preview">
       <MarkdownPreviewStyles {...styleProps} />
-      <ReactMarkdown rehypePlugins={rehypePlugins} remarkPlugins={[remarkGfm]} components={components} rawSourcePos>
         {stripBackslashes(markdown)}
-      </ReactMarkdown>
       {appendAfter && <p>{append}</p>}
     </div>
   )
