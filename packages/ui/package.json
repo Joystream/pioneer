@@ -11,8 +11,6 @@
     "lint:prettier": "yarn prettier \"./{src,test}/**/*.{ts,tsx,html,graphql}\"",
     "lint:post-codegen": "eslint \"./{src,test}/**/*.generated.{ts,tsx}\" --fix && yarn prettier \"./{src,test}/**/*.generated.{ts,tsx,html,graphql}\" --write --loglevel warn",
     "node-mocks": "ts-node --transpile-only dev/node-mocks/index.ts",
-    "node-mocks:announce-vote": "yarn node-mocks council:announce && yarn helpers nextCouncilStage && yarn node-mocks council:vote",
-    "node-mocks:announce-vote-reveal": "yarn node-mocks council:elect",
     "queries:generate": "graphql-codegen --config codegen.config.yml && yarn lint:post-codegen",
     "query-node-mocks": "ts-node --transpile-only dev/query-node-mocks/generateMocks.ts",
     "helpers": "ts-node --transpile-only dev/helpers/index.ts",
