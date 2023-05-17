@@ -3436,7 +3436,7 @@ __metadata:
     "@joystream/js": 1.2.0
     "@joystream/markdown-editor": ^0.1.0
     "@joystream/metadata-protobuf": ^2.0.0
-    "@joystream/types": 0.20.6
+    "@joystream/types": ^2.0.0
     "@miragejs/graphql": ^0.1.13
     "@nivo/bar": ^0.79.1
     "@nivo/core": ^0.79.0
@@ -3543,9 +3543,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joystream/types@file:./packages/joystream-types-v0.20.6.tgz::locator=pioneer%40workspace%3A.":
-  version: 0.20.6
-  resolution: "@joystream/types@file:./packages/joystream-types-v0.20.6.tgz::locator=pioneer%40workspace%3A."
+"@joystream/types@npm:^2.0.0":
+  version: 2.1.0
+  resolution: "@joystream/types@npm:2.1.0"
   dependencies:
     "@polkadot/api": 8.9.1
     "@polkadot/keyring": 9.5.1
@@ -3555,7 +3555,23 @@ __metadata:
     ajv: ^6.11.0
     lodash: ^4.17.15
     moment: ^2.24.0
-  checksum: f9085b9885504d388cf0ffcebb3ab8bcb4af6ae8ae095ba6f2c5310aaf61df04dc22ff6f783141c498cbe6eda309f44f34ed30b4c6cd51841a888bcb07b93323
+  checksum: 22411d5715b0f510f21cefbbdba45a91e180744e1c53961fef043026dd6193e9412e91bf0394875cfef325c50e63836c956c898a225223f5f064bfc017108cf4
+  languageName: node
+  linkType: hard
+
+"@joystream/types@npm:~0.20.5":
+  version: 0.20.5
+  resolution: "@joystream/types@npm:0.20.5"
+  dependencies:
+    "@polkadot/api": 8.9.1
+    "@polkadot/keyring": 9.5.1
+    "@polkadot/types": 8.9.1
+    "@types/lodash": ^4.14.157
+    "@types/vfile": ^4.0.0
+    ajv: ^6.11.0
+    lodash: ^4.17.15
+    moment: ^2.24.0
+  checksum: a3e310f358d7aa6d51a39d639f6ceec5052959abd38bc3ef34339a3c411ea91647d4fe50d09361d2aecd7d254da5d90b774e44dc67656cf1a5cd72aa89b0ba7b
   languageName: node
   linkType: hard
 
