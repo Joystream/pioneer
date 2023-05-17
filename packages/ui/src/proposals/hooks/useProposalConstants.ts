@@ -11,20 +11,22 @@ import { ProposalType } from '../types'
 export const useProposalConstants = (proposalType?: ProposalType): ProposalConstants | null => {
   const { api, isConnected } = useApi()
 
-  return useMemo(() => {
-    if (!proposalType) {
-      return null
-    }
+  return useMemo(proposalConstants(api), [proposalType, isConnected])
+}
 
-    const constantKey = proposalTypeToConstantKey.get(proposalType)
+export const proposalConstants = (api?: Pick<Api, 'consts'>) => (proposalType?: ProposalType) => {
+  if (!proposalType) {
+    return null
+  }
 
-    if (!constantKey) {
-      return null
-    }
-    const constants = api?.consts.proposalsCodex[constantKey]
+  const constantKey = proposalTypeToConstantKey.get(proposalType)
 
-    return constants && extendsProposalPallet(constants) ? asProposalConstants(constants) : null
-  }, [proposalType, isConnected])
+  if (!constantKey) {
+    return null
+  }
+  const constants = api?.consts.proposalsCodex[constantKey]
+
+  return constants && extendsProposalPallet(constants) ? asProposalConstants(constants) : null
 }
 
 const extendsProposalPallet = (
