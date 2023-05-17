@@ -1,14 +1,17 @@
 import { ApiPromise } from '@polkadot/api'
 import { uniq } from 'lodash'
 
-import { lockLookup } from '../../../../src/accounts/model/lockTypes'
-import { flatMapP, mapP } from '../../../../src/common/utils'
-import memberData from '../../../../src/mocks/data/raw/members.json'
+import { lockLookup } from '@/accounts/model/lockTypes'
+import { flatMapP, mapP } from '@/common/utils'
+import memberData from '@/mocks/data/raw/members.json'
+
 import { accountsMap } from '../../data/addresses'
 import { signAndSend, withApi } from '../../lib/api'
 import { createMembersCommand } from '../members/create'
 
 export const announceCandidaciesCommand = async (api: ApiPromise) => {
+  await createMembersCommand(api)
+
   const candidateCount = api.consts.council.councilSize.toNumber() + 1
   const announceStake = api.consts.council.minCandidateStake
 
@@ -60,13 +63,8 @@ export const announceCandidaciesCommand = async (api: ApiPromise) => {
   })
 }
 
-const handler = async () => {
-  await createMembersCommand()
-  await withApi(announceCandidaciesCommand)
-}
-
 export const announceCandidaciesModule = {
   command: 'council:announce',
   describe: 'Announce council candidates',
-  handler: handler,
+  handler: () => withApi(announceCandidaciesCommand),
 }
