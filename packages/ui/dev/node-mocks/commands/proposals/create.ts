@@ -31,7 +31,7 @@ export const createProposal = async (api: ApiPromise, proposalDetails: PalletPro
   const { id: memberId, controllerAccount } = memberData[0]
 
   const proposalType = typenameToProposalDetails(proposalDetails.type)
-  const requiredStake = proposalConstants(api)(proposalType)?.requiredStake
+  const requiredStake = proposalConstants(api, proposalType)?.requiredStake
   if (!requiredStake) throw `Not supported proposal ${proposalDetails.type}`
 
   // 1. Create and fund the staking account

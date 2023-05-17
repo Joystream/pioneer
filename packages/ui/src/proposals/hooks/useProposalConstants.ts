@@ -11,10 +11,10 @@ import { ProposalType } from '../types'
 export const useProposalConstants = (proposalType?: ProposalType): ProposalConstants | null => {
   const { api, isConnected } = useApi()
 
-  return useMemo(proposalConstants(api), [proposalType, isConnected])
+  return useMemo(() => proposalConstants(api, proposalType), [proposalType, isConnected])
 }
 
-export const proposalConstants = (api?: Pick<Api, 'consts'>) => (proposalType?: ProposalType) => {
+export const proposalConstants = (api?: Pick<Api, 'consts'>, proposalType?: ProposalType) => {
   if (!proposalType) {
     return null
   }
