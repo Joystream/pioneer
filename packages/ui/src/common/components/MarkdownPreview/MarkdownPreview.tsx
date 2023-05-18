@@ -1,8 +1,9 @@
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import ReactMarkdown, { Components } from 'react-markdown'
 import { Position } from 'react-markdown/lib/ast-to-react'
-import { PluggableList } from 'react-markdown/lib/react-markdown'
-import { Root } from 'react-markdown/lib/rehype-filter'
+// import { PluggableList } from 'react-markdown/lib/react-markdown'
+// import { Root } from 'react-markdown/lib/rehype-filter'
+import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
 import styled from 'styled-components'
 
@@ -26,15 +27,15 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
     if (append) setAppendAfter(!endsWithP.current)
   }, [markdown, append])
 
-  const rehypePlugins = useMemo((): PluggableList => {
-    const checkEndWithP: PluggableList[0] = () => (tree) => {
-      const children = (tree as Root).children
-      const lastNode = children?.[children.length - 1]
-      endsWithP.current = lastNode?.type === 'element' && lastNode?.tagName === 'p'
-      return tree
-    }
-    return append ? [checkEndWithP] : []
-  }, [markdown, append])
+  // const rehypePlugins = useMemo((): PluggableList => {
+  //   const checkEndWithP: PluggableList[0] = () => (tree) => {
+  //     const children = (tree as Root).children
+  //     const lastNode = children?.[children.length - 1]
+  //     endsWithP.current = lastNode?.type === 'element' && lastNode?.tagName === 'p'
+  //     return tree
+  //   }
+  //   return append ? [checkEndWithP] : []
+  // }, [markdown, append])
 
   const components = useMemo((): Components => {
     const shouldAppend = (sourcePosition?: Position | null): boolean =>
@@ -74,16 +75,14 @@ export const MarkdownPreview = ({ markdown, append, ...styleProps }: MarkdownPre
     }
   }, [markdown, append])
 
-  const stripBackslashes = (text: string): ReactNode => {
-    const html = text.replace(/\\(.)/gm, '$1').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-    return <div dangerouslySetInnerHTML={{ __html: html }} />;
-  };
-  
-  console.log(stripBackslashes(markdown))
+  const stripBackslashes = (text: string) => text.replace(/\\(.)/gm, '$1')
+
   return (
     <div className="markdown-preview">
       <MarkdownPreviewStyles {...styleProps} />
+      <ReactMarkdown rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]} components={components} rawSourcePos>
         {stripBackslashes(markdown)}
+      </ReactMarkdown>
       {appendAfter && <p>{append}</p>}
     </div>
   )
