@@ -1,4 +1,5 @@
 import { ApiPromise } from '@polkadot/api'
+import yargs from 'yargs'
 
 import { AN_HOUR, A_MINUTE, A_SECOND } from '../../src/common/constants'
 import { durationFormatter, MILLISECONDS_PER_BLOCK } from '../../src/common/model/formatters'
@@ -10,10 +11,18 @@ const etaFormat = durationFormatter([
   [A_SECOND, 'second'],
 ])
 
-export const nextCouncilStageCommand = async (api: ApiPromise) => {
+const options = {
+  blockTime: {
+    number: true,
+    default: MILLISECONDS_PER_BLOCK,
+    alias: 'd',
+  },
+}
+
+export const nextCouncilStageCommand = async (api: ApiPromise, msPerBlock = MILLISECONDS_PER_BLOCK) => {
   const initialStageEnd = await stageEnd()
   let remaining: number
-  while ((remaining = await getRemaining()) > 0) {
+  while ((remaining = await getRemaining(msPerBlock)) > 0) {
     process.stdout.write(`\nWait ${etaFormat(remaining)} for the current stage to end\n`)
     await new Promise<void>((resolve) => setTimeout(() => resolve(), remaining))
   }
@@ -37,14 +46,16 @@ export const nextCouncilStageCommand = async (api: ApiPromise) => {
     }
   }
 
-  async function getRemaining(): Promise<number> {
+  async function getRemaining(msPerBlock: number): Promise<number> {
     const currentBlock = (await api.rpc.chain.getHeader()).number.toNumber()
-    return (initialStageEnd - currentBlock) * MILLISECONDS_PER_BLOCK
+    return (initialStageEnd - currentBlock) * msPerBlock
   }
 }
 
 export const nextCouncilStageModule = {
   command: 'nextCouncilStage',
   describe: 'Wait until the next council stage start',
-  handler: () => withApi(nextCouncilStageCommand),
+  handler: ({ blockTime }: yargs.InferredOptionTypes<typeof options>) =>
+    withApi((api) => nextCouncilStageCommand(api, blockTime)),
+  builder: (argv: yargs.Argv<unknown>) => argv.options(options),
 }

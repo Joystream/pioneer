@@ -3441,6 +3441,7 @@ __metadata:
     "@nivo/bar": ^0.79.1
     "@nivo/core": ^0.79.0
     "@noble/hashes": ^1.1.5
+    "@oneidentity/zstd-js": ^1.0.3
     "@polkadot/api": 8.9.1
     "@polkadot/extension-dapp": 0.44.2-4
     "@polkadot/keyring": 9.5.1
@@ -3881,6 +3882,15 @@ __metadata:
     mkdirp: ^1.0.4
     rimraf: ^3.0.2
   checksum: 52dc02259d98da517fae4cb3a0a3850227bdae4939dda1980b788a7670636ca2b4a01b58df03dd5f65c1e3cb70c50fa8ce5762b582b3f499ec30ee5ce1fd9380
+  languageName: node
+  linkType: hard
+
+"@oneidentity/zstd-js@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@oneidentity/zstd-js@npm:1.0.3"
+  dependencies:
+    "@types/emscripten": ^1.39.4
+  checksum: 4db7f4e3b694dc5c173b94e0555c60a885ad02da38773cb84a9c15936f0c6c16ef1295507a68b19e99dc5b0563d3cb3381396d44f22b5552e77770495f52ad9f
   languageName: node
   linkType: hard
 
@@ -6052,6 +6062,13 @@ __metadata:
   dependencies:
     "@types/ms": "*"
   checksum: 0a7b89d8ed72526858f0b61c6fd81f477853e8c4415bb97f48b1b5545248d2ae389931680b94b393b993a7cfe893537a200647d93defe6d87159b96812305adc
+  languageName: node
+  linkType: hard
+
+"@types/emscripten@npm:^1.39.4":
+  version: 1.39.6
+  resolution: "@types/emscripten@npm:1.39.6"
+  checksum: 437f2f9cdfd9057255662508fa9a415fe704ba484c6198f3549c5b05feebcdcd612b1ec7b10026d2566935d05d3c36f9366087cb42bc90bd25772a88fcfc9343
   languageName: node
   linkType: hard
 

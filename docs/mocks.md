@@ -11,6 +11,7 @@ To test most of the extrinsics requires existing on-chain data. To create some o
 
 Available commands:
 
+- `yarn workspace @joystream/pioneer node-mocks council:elect [-d BLOCK_TIME] [--to ELECTION_STAGE]` - Run an election until the specified stage: VOTE, REVEAL, or IDLE (default)
 - `yarn workspace @joystream/pioneer node-mocks council:announce` - Announce enough candidacies to start the voting stage when the announcing stage ends
 - `yarn workspace @joystream/pioneer node-mocks council:vote` - Vote for the announced by the previous command candidate to start the revealing stage next
 - `yarn workspace @joystream/pioneer node-mocks council:reveal` - Reveal the votes casted by the previous command to start elect a new council and start the idle stage next
@@ -27,10 +28,6 @@ To show help:
 ```shell
 yarn node-mocks --help
 ```
-
-Shortcuts:
-- `yarn workspace @joystream/pioneer node-mocks:announce-vote` - Announce candidacies, wait, then vote on them
-- `yarn workspace @joystream/pioneer node-mocks:announce-vote-reveal` - Announce candidacies, wait, vote on them, wait, then reveal these votes
 
 #### Chain spec
 

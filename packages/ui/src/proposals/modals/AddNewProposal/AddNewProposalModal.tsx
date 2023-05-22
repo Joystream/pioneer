@@ -39,21 +39,22 @@ import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccount
 import { IStakingAccountSchema } from '@/memberships/model/validation'
 import { useMinimumValidatorCount } from '@/proposals/hooks/useMinimumValidatorCount'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
-import { ExecutionRequirementsWarning } from '@/proposals/modals/AddNewProposal/components/ExecutionRequirementsWarning'
-import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
-import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
-import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
-import { SpecificParametersStep } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
-import { StakingAccountStep } from '@/proposals/modals/AddNewProposal/components/StakingAccountStep'
-import { SuccessModal } from '@/proposals/modals/AddNewProposal/components/SuccessModal'
-import { TriggerAndDiscussionStep } from '@/proposals/modals/AddNewProposal/components/TriggerAndDiscussionStep'
-import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
-import { getSpecificParameters } from '@/proposals/modals/AddNewProposal/getSpecificParameters'
-import { AddNewProposalForm, defaultProposalValues, schemaFactory } from '@/proposals/modals/AddNewProposal/helpers'
-import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
-import { addNewProposalMachine, AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalType } from '@/proposals/types'
 import { GroupIdName } from '@/working-groups/types'
+
+import { AddNewProposalModalCall } from '.'
+import { ExecutionRequirementsWarning } from './components/ExecutionRequirementsWarning'
+import { ProposalConstantsWrapper } from './components/ProposalConstantsWrapper'
+import { ProposalDetailsStep } from './components/ProposalDetailsStep'
+import { ProposalTypeStep } from './components/ProposalTypeStep'
+import { SpecificParametersStep } from './components/SpecificParameters/SpecificParametersStep'
+import { StakingAccountStep } from './components/StakingAccountStep'
+import { SuccessModal } from './components/SuccessModal'
+import { TriggerAndDiscussionStep } from './components/TriggerAndDiscussionStep'
+import { WarningModal } from './components/WarningModal'
+import { getSpecificParameters } from './getSpecificParameters'
+import { AddNewProposalForm, defaultProposalValues, schemaFactory } from './helpers'
+import { addNewProposalMachine, AddNewProposalMachineState } from './machine'
 
 export type BaseProposalParams = Exclude<
   Parameters<Api['tx']['proposalsCodex']['createProposal']>[0],
@@ -85,8 +86,9 @@ export const AddNewProposalModal = () => {
   const stakingStatus = useStakingAccountStatus(formMap[0]?.address, activeMember?.id, [state.matches('transaction')])
   const schema = useMemo(() => schemaFactory(api), [!api])
 
+  const path = useMemo(() => machineStateConverter(state.value), [state.value])
   const form = useForm<AddNewProposalForm>({
-    resolver: useYupValidationResolver<AddNewProposalForm>(schema, machineStateConverter(state.value)),
+    resolver: useYupValidationResolver<AddNewProposalForm>(schema, path),
     mode: 'onChange',
     context: {
       minimumValidatorCount,
@@ -131,15 +133,15 @@ export const AddNewProposalModal = () => {
 
   useEffect(() => {
     form.trigger([])
-  }, [machineStateConverter(state.value)])
+  }, [path])
 
   useEffect(() => {
     setIsExecutionError(
-      Object.values((form.formState.errors as any)[machineStateConverter(state.value)] ?? {}).some(
+      Object.values((form.formState.errors as any)[path] ?? {}).some(
         (value) => (value as FieldError).type === 'execution'
       )
     )
-  }, [JSON.stringify(form.formState.errors), machineStateConverter(state.value)])
+  }, [JSON.stringify(form.formState.errors), path])
 
   const transactionsSteps = useMemo(
     () =>
@@ -147,39 +149,41 @@ export const AddNewProposalModal = () => {
     [state.context.discussionMode]
   )
 
-  const transaction = useMemo(() => {
-    if (activeMember && api) {
-      const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } =
-        form.getValues() as AddNewProposalForm
+  const { transaction, isLoading, feeInfo } = useTransactionFee(
+    activeMember?.controllerAccount,
+    async () => {
+      if (activeMember && api) {
+        const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } =
+          form.getValues() as AddNewProposalForm
 
-      const txBaseParams: BaseProposalParams = {
-        memberId: activeMember?.id,
-        title: proposalDetails?.title,
-        description: proposalDetails?.rationale,
-        ...(stakingAccount.stakingAccount ? { stakingAccountId: stakingAccount.stakingAccount.address } : {}),
-        ...(triggerAndDiscussion.triggerBlock ? { exactExecutionBlock: triggerAndDiscussion.triggerBlock } : {}),
+        const txBaseParams: BaseProposalParams = {
+          memberId: activeMember?.id,
+          title: proposalDetails?.title,
+          description: proposalDetails?.rationale,
+          ...(stakingAccount.stakingAccount ? { stakingAccountId: stakingAccount.stakingAccount.address } : {}),
+          ...(triggerAndDiscussion.triggerBlock ? { exactExecutionBlock: triggerAndDiscussion.triggerBlock } : {}),
+        }
+
+        const txSpecificParameters = await getSpecificParameters(api, specifics)
+
+        if (stakingStatus === 'confirmed') {
+          return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
+        }
+
+        return api.tx.utility.batch([
+          api.tx.members.confirmStakingAccount(activeMember.id, stakingAccount.stakingAccount?.address ?? ''),
+          api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
+        ])
       }
-
-      const txSpecificParameters = getSpecificParameters(api, specifics)
-
-      if (stakingStatus === 'confirmed') {
-        return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
-      }
-
-      return api.tx.utility.batch([
-        api.tx.members.confirmStakingAccount(activeMember.id, stakingAccount.stakingAccount?.address ?? ''),
-        api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
-      ])
-    }
-  }, [
-    state.value,
-    connectionState,
-    stakingStatus,
-    form.formState.isValidating,
-    JSON.stringify(form.getValues()?.[machineStateConverter(state.value) as keyof AddNewProposalForm]),
-  ])
-
-  const { feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
+    },
+    [
+      state.value,
+      connectionState,
+      stakingStatus,
+      form.formState.isValidating,
+      JSON.stringify(form.getValues()?.[path as keyof AddNewProposalForm]),
+    ]
+  )
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
@@ -215,10 +219,13 @@ export const AddNewProposalModal = () => {
   }, [send])
 
   const shouldDisableNext = useMemo(() => {
+    if (isLoading) {
+      return true
+    }
     if (isExecutionError) {
-      const hasOtherError = Object.values(
-        (form.formState.errors as any)[machineStateConverter(state.value)] ?? {}
-      ).some((value) => (value as FieldError).type !== 'execution')
+      const hasOtherError = Object.values((form.formState.errors as any)[path] ?? {}).some(
+        (value) => (value as FieldError).type !== 'execution'
+      )
 
       if (!form.formState.isDirty) {
         return true
@@ -239,6 +246,7 @@ export const AddNewProposalModal = () => {
     warningAccepted,
     JSON.stringify(form.getValues()),
     JSON.stringify(form.formState.errors),
+    isLoading,
   ])
 
   if (!api || !activeMember || !feeInfo || state.matches('requirementsVerification')) {
