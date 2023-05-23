@@ -13,10 +13,9 @@ export const Era = () => {
   const { eraStartedOn, eraDuration, now } = useStakingStatistics()
   const { nextReward, totalDuration, percentage } = useMemo(() => {
     const nextReward =
-      eraDuration && now && eraStartedOn ? eraDuration - (now.toNumber() - Number(eraStartedOn)) : undefined
-    const totalDuration = eraDuration
+      eraDuration && now && eraStartedOn ? Number(eraDuration) - (now.toNumber() - Number(eraStartedOn)) : undefined
+    const totalDuration = Number(eraDuration)
     const percentage = nextReward ? Math.floor(100-(nextReward / totalDuration) * 100) : 0
-    console.log(now?.toNumber())
     return {
       nextReward:formatDurationDate(nextReward??0),
       totalDuration:formatDurationDate(totalDuration??0),

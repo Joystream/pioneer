@@ -1,52 +1,50 @@
-import { useEffect, useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useApi } from '@/api/hooks/useApi'
 import { map } from 'rxjs'
 import { BN } from '@polkadot/util'
+import { ERA_DURATION } from '../constants/constant'
 
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useObservable } from '@/common/hooks/useObservable'
 
-export interface Staking {
-  eraStartedOn: Date
-  eraDuration: Date
-  idealStaking: BN
-  currentStaking: BN
-  allValidatorsCount: Number
-  activeValidatorsCount: Number
-  allNominatorsCount: Number
-  activNominatorsCount: Number
-  totalRewards: BN
-  lastRewards: BN
-}
-
 export const useStakingStatistics = () => {
   const { api } = useApi()
-  const activeEra = useObservable(() => api?.query.staking.activeEra(), [api?.isConnected])
+  const activeEra = useFirstObservableValue(
+    () =>
+      api?.query.staking.activeEra().pipe(
+        map((activeEra) => ({
+          eraIndex: activeEra?.unwrap().index,
+          eraStartedOn: activeEra?.unwrap().start,
+        }))
+      ),
+    [api?.isConnected]
+  )
+  const { eraIndex, eraStartedOn } = useMemo(() => activeEra ?? { eraIndex: new BN(0), eraStartedOn: new Date(0) }, [activeEra])
   const now = useObservable(() => api?.query.timestamp.now(), [api?.isConnected])
-  const [eraStartedOn, setEraStartedOn] = useState(activeEra?.unwrap().start)
-  const [eraDuration] = useState(21600000)
-  useEffect(() => {
-    setEraStartedOn(activeEra?.unwrap().start)
-  }, [activeEra])
   const [idealStaking] = useState(0)
   const currentStaking = useFirstObservableValue(
-    () => api?.query.staking.erasTotalStake(activeEra?.unwrap().index ?? 0),
-    [api?.isConnected,activeEra]
+    () => api?.query.staking.erasTotalStake(eraIndex),
+    [api?.isConnected, eraIndex]
   )
-  const activeValidatorsCount = useFirstObservableValue(() => api?.query.staking.validatorCount(), [api?.isConnected])
+  const activeValidators = useFirstObservableValue(() => api?.query.session.validators(), [api?.isConnected])
   const allValidatorsCount = useFirstObservableValue(
     () => api?.query.staking.counterForValidators(),
     [api?.isConnected]
   )
-  const allNominators = useFirstObservableValue(() => api?.query.staking.nominators.entries(), [api?.isConnected])
+  const lastEraRewards = useFirstObservableValue(
+    () => api?.query.staking.erasRewardPoints(eraIndex.sub(new BN(1))),
+    [[api?.isConnected, eraIndex]]
+  )
 
   return {
     eraStartedOn,
-    eraDuration,
+    eraDuration: ERA_DURATION,
     now,
     idealStaking,
     currentStaking,
-    activeValidatorsCount,
+    activeValidatorsCount: activeValidators?.length,
     allValidatorsCount,
+    // totalRewards,
+    lastRewards: lastEraRewards?.total.mul(new BN(10000000000)),
   }
 }
