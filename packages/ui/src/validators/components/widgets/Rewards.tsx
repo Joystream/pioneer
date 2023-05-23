@@ -1,24 +1,14 @@
+import React from 'react'
 import BN from 'bn.js'
-import React, { FC } from 'react'
 import { Colors } from '@/common/constants'
 
-import { TextSmall, TokenValue } from '@/common/components/typography'
-
+import { TokenValue } from '@/common/components/typography'
 import { StatisticItem, StatisticItemSpacedContent, StatisticLabel } from '@/common/components/statistics'
-import { PageHeaderRow } from '@/app/components/PageLayout'
-import { size } from 'lodash'
+import {useStakingStatistics} from '@/validators/hooks/useStakingStatistics'
 
 export const Rewards = () => {
-  const { total, last, apr } = {
-    total: '20000000000000000',
-    last: '8000000000000000',
-    apr: 4,
-  }
-  const Apr = (
-    <StatisticLabel>
-      APR<span style={{ color: Colors.Blue[400], fontSize:16 }}> {apr} </span>%
-    </StatisticLabel>
-  )
+  const {lastRewards}= useStakingStatistics()
+  const total = '20000000000000000'
 
   return (
     <StatisticItem
@@ -27,7 +17,6 @@ export const Rewards = () => {
       tooltipTitle="Rewards tooltip title"
       tooltipLinkText="link..."
       tooltipLinkURL="#"
-      actionElement={Apr}
     >
       <StatisticItemSpacedContent>
         <StatisticLabel> Total </StatisticLabel>
@@ -35,7 +24,7 @@ export const Rewards = () => {
       </StatisticItemSpacedContent>
       <StatisticItemSpacedContent>
         <StatisticLabel> Last </StatisticLabel>
-        <TokenValue size='l' value={new BN(last ?? 0)} />
+        <TokenValue size='l' value={lastRewards ??new BN(0)} />
       </StatisticItemSpacedContent>
     </StatisticItem>
   )
