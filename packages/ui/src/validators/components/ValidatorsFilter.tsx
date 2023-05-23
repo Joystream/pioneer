@@ -5,7 +5,7 @@ import { FilterBox } from '@/common/components/forms/FilterBox'
 import { FilterSelect } from '@/common/components/selects'
 import { SearchBox } from '@/common/components/forms/FilterBox/FilterSearchBox'
 
-export const ValidatorsListFilter = () => {
+export const ValidatorsFilter = () => {
   const [search, setSearch] = useState('')
   const [selectValue, setSelectValue] = useState<null | 'foo' | 'bar'>(null)
 

@@ -10,7 +10,8 @@ import { Era } from '@/validators/components/widgets/Era'
 import { Staking } from '@/validators/components/widgets/Staking'
 import { Rewards } from '@/validators/components/widgets/Rewards'
 import { ValidatorsInfo } from '@/validators/modals/ValidatorsInfo'
-import { ValidatorsListFilter } from '@/validators/components/ValidatorsListFilter'
+import { ValidatorsFilter } from '@/validators/components/ValidatorsFilter'
+import { ValidatorsList } from '@/validators/components/ValidatorsList'
 
 export const Validators = () => {
 
@@ -26,12 +27,11 @@ export const Validators = () => {
               <Era />
               <Rewards />
             </Statistics>
-            <ValidatorsListFilter />
+            <ValidatorsFilter />
           </RowGapBlock>
         }
         main={
-          <MainPanel>
-          </MainPanel>
+          <ValidatorsList />
         }
       />
       <ValidatorsInfo />
