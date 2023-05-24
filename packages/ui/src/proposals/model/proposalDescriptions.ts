@@ -18,7 +18,6 @@ export const proposalDescriptions: ProposalDescriptions = {
   setWorkingGroupLeadReward: 'Same effect as updating the reward of the worker.',
   terminateWorkingGroupLead:
     'Same as when terminating a worker in group with given inputs, and removing lead designation.',
-  amendConstitution: 'Proposal to amend constitution. Does not effect platform parameters.',
   cancelWorkingGroupLeadOpening: 'Same as when cancelling an opening for workers in the given group with given inputs.',
   setMembershipPrice: 'Sets new membership price.',
   setCouncilBudgetIncrement:
@@ -36,9 +35,5 @@ export const proposalDescriptions: ProposalDescriptions = {
   updateChannelPayouts:
     'Proposal to submit the Channel Incentives Payout payload, update the min/max claimable amounts and block/allow claiming of awarded JOYs by channels.',
   runtimeUpgrade: 'Proposal to upgrade version to the new runtime.',
-  createBlogPost: 'Council blog',
-  editBlogPost: 'Unlocked blog post can be edited.',
-  lockBlogPost: 'When a post is locked it can no longer be modified.',
-  unlockBlogPost: 'Unlocked post can be modified.',
-  veto: 'Veto for a particular, previously issued proposal. Vetoed proposal is automatically discarded.',
+  //veto: 'Veto for a particular, previously issued proposal. Vetoed proposal is automatically discarded.',
 }
