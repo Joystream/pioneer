@@ -19,32 +19,39 @@ export const useStakingStatistics = () => {
       ),
     [api?.isConnected]
   )
-  const { eraIndex, eraStartedOn } = useMemo(() => activeEra ?? { eraIndex: new BN(0), eraStartedOn: new Date(0) }, [activeEra])
+  const { eraIndex, eraStartedOn } = useMemo(
+    () => activeEra ?? { eraIndex: new BN(0), eraStartedOn: new Date(0) },
+    [activeEra, api?.isConnected]
+  )
   const now = useObservable(() => api?.query.timestamp.now(), [api?.isConnected])
-  const [idealStaking] = useState(0)
+  const totalIssuance = useFirstObservableValue(() => api?.query.balances.totalIssuance(), [api?.isConnected])
   const currentStaking = useFirstObservableValue(
     () => api?.query.staking.erasTotalStake(eraIndex),
-    [api?.isConnected, eraIndex]
+    [eraIndex, api?.isConnected]
   )
   const activeValidators = useFirstObservableValue(() => api?.query.session.validators(), [api?.isConnected])
   const allValidatorsCount = useFirstObservableValue(
     () => api?.query.staking.counterForValidators(),
     [api?.isConnected]
   )
-  const lastEraRewards = useFirstObservableValue(
-    () => api?.query.staking.erasRewardPoints(eraIndex.sub(new BN(1))),
-    [[api?.isConnected, eraIndex]]
+  const lastValidatorRewards = useFirstObservableValue(
+    () => api?.query.staking.erasValidatorReward(eraIndex.sub(new BN(1))),
+    [eraIndex, api?.isConnected]
   )
+  const totalRewards = useFirstObservableValue(()=>api?.derive.staking.erasRewards(),[api?.isConnected])
 
-  return {
-    eraStartedOn,
-    eraDuration: ERA_DURATION,
-    now,
-    idealStaking,
-    currentStaking,
-    activeValidatorsCount: activeValidators?.length,
-    allValidatorsCount,
-    // totalRewards,
-    lastRewards: lastEraRewards?.total.mul(new BN(10000000000)),
-  }
+  return useMemo(
+    () => ({
+      eraStartedOn,
+      eraDuration: ERA_DURATION,
+      now,
+      idealStaking: new BN(totalIssuance ?? 0).div(new BN(2)),
+      currentStaking: new BN(currentStaking ?? 0),
+      activeValidatorsCount: activeValidators?.length,
+      allValidatorsCount,
+      totalRewards: totalRewards?.reduce((total:BN, reward)=>(total.add(reward.eraReward)),new BN(0)),
+      lastRewards: new BN(lastValidatorRewards?.toString()??0),
+    }),
+    [eraStartedOn, ERA_DURATION, now, totalIssuance, currentStaking, activeValidators, allValidatorsCount, lastValidatorRewards]
+  )
 }

@@ -7,8 +7,7 @@ import { StatisticItem, StatisticItemSpacedContent, StatisticLabel } from '@/com
 import {useStakingStatistics} from '@/validators/hooks/useStakingStatistics'
 
 export const Rewards = () => {
-  const {lastRewards}= useStakingStatistics()
-  const total = '20000000000000000'
+  const {totalRewards, lastRewards}= useStakingStatistics()
 
   return (
     <StatisticItem
@@ -20,11 +19,11 @@ export const Rewards = () => {
     >
       <StatisticItemSpacedContent>
         <StatisticLabel> Total </StatisticLabel>
-        <TokenValue size='l' value={new BN(total ?? 0)} />
+        <TokenValue size='l' value={new BN(totalRewards ?? 0)} />
       </StatisticItemSpacedContent>
       <StatisticItemSpacedContent>
         <StatisticLabel> Last </StatisticLabel>
-        <TokenValue size='l' value={lastRewards ??new BN(0)} />
+        <TokenValue size='l' value={lastRewards} />
       </StatisticItemSpacedContent>
     </StatisticItem>
   )
