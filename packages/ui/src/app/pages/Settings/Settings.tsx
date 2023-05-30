@@ -42,6 +42,7 @@ export const Settings = () => {
       window.location.reload()
     }
   }
+
   return (
     <Container>
       <PageLayout

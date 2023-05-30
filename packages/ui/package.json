@@ -59,7 +59,7 @@
     "graphql-tag": "^2.12.5",
     "i18next": "^21.6.3",
     "i18next-browser-languagedetector": "^6.1.2",
-    "injectweb3-connect": "^1.1.1",
+    "injectweb3-connect": "2.1.1",
     "jsonpath": "^1.1.1",
     "lodash": "^4.17.21",
     "mime": "^2.4.4",

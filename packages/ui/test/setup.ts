@@ -13,6 +13,25 @@ import { UseModal } from '@/common/providers/modal/types'
 
 configure({ testIdAttribute: 'id' })
 
+jest.mock('injectweb3-connect', () => {
+  const wallet = {
+    title: 'ExtraWallet',
+    extensionName: 'polkadot-js',
+    logo: { src: 'https://picsum.photos/100?grayscale&blur=2' },
+    updateMetadata: jest.fn(() => Promise.resolve(true)),
+  }
+  const BaseDotsamaWallet = function () {
+    return
+  }
+  BaseDotsamaWallet.prototype = wallet
+
+  return {
+    getWalletBySource: jest.fn(() => ({ ...wallet })),
+    getAllWallets: jest.fn(() => [{ ...wallet }]),
+    BaseDotsamaWallet,
+  }
+})
+
 // Prevent jest from importing workers
 jest.mock('@/common/utils/crypto/worker', () => jest.requireActual('@/common/utils/crypto'))
 

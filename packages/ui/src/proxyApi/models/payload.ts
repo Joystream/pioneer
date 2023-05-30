@@ -27,11 +27,13 @@ export interface ClientProxyMessage {
   payload: ProxyPromisePayload
 }
 
-export const serializePayload = (
-  payload: any,
-  messages?: Observable<WorkerProxyMessage>,
+interface serializationOptions {
+  messages?: Observable<WorkerProxyMessage>
   postMessage?: PostMessage<ClientProxyMessage>
-): any => {
+  toJSON?: boolean
+}
+
+export const serializePayload = (payload: any, { messages, postMessage, toJSON }: serializationOptions = {}): any => {
   const stack: AnyObject[] = []
   const result = serializeValue(payload)
 
@@ -56,7 +58,7 @@ export const serializePayload = (
     } else if (typeof value !== 'object' || value === null) {
       return value
     } else if (isCodec(value)) {
-      return serializeCodec(value)
+      return toJSON ? value.toJSON() : serializeCodec(value)
     } else if (value instanceof BN) {
       return { kind: 'BN', value: value.toArray() }
     } else if (value.kind === 'SubmittableExtrinsicProxy') {
@@ -83,12 +85,16 @@ const serializeObject = (value: Record<any, any>): Record<string, any> => {
   return { ...value }
 }
 
+interface deSerializationOptions {
+  messages?: Observable<ClientProxyMessage>
+  postMessage?: PostMessage<WorkerProxyMessage>
+  transactionsRecord?: TransactionsRecord
+}
+
 // WARNING this mutate the serialized payload
 export const deserializePayload = (
   payload: any,
-  messages?: Observable<ClientProxyMessage>,
-  postMessage?: PostMessage<WorkerProxyMessage>,
-  transactionsRecord?: TransactionsRecord
+  { messages, postMessage, transactionsRecord }: deSerializationOptions = {}
 ): any => {
   const stack: AnyObject[] = []
   const result = deserializeValue(payload)
@@ -225,8 +231,13 @@ const serializeCodec = (codec: Codec): SerializedCodec => {
   }
 
   const properties = (Object.getOwnPropertyNames(Object.getPrototypeOf(codec)) as (keyof Codec)[])
-    .map((key) => [key, codec[key]])
-    .filter(([, prop]) => !isFunction(prop))
+    .map<[keyof Codec, Codec[keyof Codec]]>((key) => [key, codec[key]])
+    .filter(
+      ([key, prop]) =>
+        !['encodedLength', 'hash', 'initialU8aLength', 'isEmpty', 'registry', 'createdAtHash'].includes(key) &&
+        !isFunction(prop) &&
+        !Object.getOwnPropertyDescriptor(codec, key)
+    )
 
   return properties.length > 0
     ? { ...serializedCodec, properties: serializePayload(Object.fromEntries(properties)) }
