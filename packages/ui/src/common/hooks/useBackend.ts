@@ -14,6 +14,9 @@ type UseBackendEager<T> = { data?: T; error?: GraphQLError }
 type UseBackendLazy<T> = { data?: T; error?: GraphQLError; send: (variables: any) => SendRes<T> }
 type UseBackend<T> = UseBackendEager<T> | UseBackendLazy<T>
 
+const MAX_RETRY = 10
+const RETRY_INTERVAL = 5_000
+
 export function useBackend<T>(props: EagerQueryOptions): UseBackendEager<T>
 export function useBackend<T>(props: LazyQueryOptions): UseBackendLazy<T>
 export function useBackend<T>(props: LazyMutationOptions): UseBackendLazy<T>
@@ -26,6 +29,7 @@ export function useBackend<T>({ skip = false, ...options }: Props): UseBackend<T
   const queryOptions = 'query' in options ? options : undefined
   const mutationOptions = 'mutation' in options ? options : undefined
   const variables = 'variables' in options && options.variables
+  const isEagerQuery = !!variables
 
   const send = useCallback(
     async (variables: any): SendRes<T> => {
@@ -47,12 +51,12 @@ export function useBackend<T>({ skip = false, ...options }: Props): UseBackend<T
   )
 
   useEffect(() => {
-    if (skip || !variables) return
+    if (!isEagerQuery || skip || retry > MAX_RETRY) return
 
     let timeout: ReturnType<typeof setTimeout>
-    send(variables).catch(() => (timeout = setTimeout(incrementRetry, 5_000)))
+    send(variables).catch(() => (timeout = setTimeout(incrementRetry, RETRY_INTERVAL)))
     return () => clearTimeout(timeout)
   }, [send, JSON.stringify(variables), skip, retry])
 
-  return variables ? { data, error } : { data, error, send }
+  return isEagerQuery ? { data, error } : { data, error, send }
 }
