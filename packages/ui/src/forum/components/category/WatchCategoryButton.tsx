@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react'
 
-import { WatchingNotificationProps } from '@/app/components/WatchingNotification'
-import { PageContext } from '@/app/PageContext'
 import { ButtonGhost } from '@/common/components/buttons'
 import { WatchIcon } from '@/common/components/icons'
+import { NotificationContext, notificationTimeout } from '@/common/providers/Notification/context'
 
 interface Props {
   categoryId: string
 }
 
 export const WatchCategoryButton = ({ categoryId }: Props) => {
-  const { setNotiArr } = useContext(PageContext)
+  const { addNotification, removeNotification } = useContext(NotificationContext)
   const [showNotification, setShowNotification] = useState<boolean>(false)
   const [watching, setWatching] = useState<boolean>(false)
 
@@ -27,7 +26,8 @@ export const WatchCategoryButton = ({ categoryId }: Props) => {
           ? 'You will receive notifications about important updates related to this forum category'
           : 'You will no longer receive any notifications about changes related to this forum category',
       }
-      setNotiArr((prevList: Array<WatchingNotificationProps>) => [...prevList, newNoti])
+      const notificationKey = addNotification(newNoti)
+      setTimeout(() => removeNotification(notificationKey), notificationTimeout)
     }
   }, [watching])
 

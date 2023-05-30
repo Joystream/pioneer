@@ -126,7 +126,6 @@ export const ForumThread = () => {
       {thread && isThreadActive && <NewThreadPost ref={newPostRef} getTransaction={getTransaction} />}
     </ThreadPanel>
   )
-
   return <ForumPageLayout isThread header={displayHeader()} main={displayMain()} />
 }
 

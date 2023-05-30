@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext, useCallback, SetStateAction, Dispatch } from 'react'
 
-import { WatchingNotificationProps } from '@/app/components/WatchingNotification'
-import { PageContext } from '@/app/PageContext'
 import { ButtonGhost } from '@/common/components/buttons'
 import { WatchIcon } from '@/common/components/icons'
+import { useModal } from '@/common/hooks/useModal'
+import { Confirm2Context } from '@/common/providers/confirm2/context'
+import { NotificationContext, notificationTimeout } from '@/common/providers/Notification/context'
 
 interface Props {
   threadId: string
@@ -13,18 +14,33 @@ interface Props {
 }
 
 export const MuteThreadButton = ({ threadId, isMuted, setIsMuted, onButtonStart }: Props) => {
-  const { setNotiArr } = useContext(PageContext)
+  const { showModal } = useModal()
+  const { isConfirmed } = useContext(Confirm2Context)
+  const { addNotification, removeNotification } = useContext(NotificationContext)
   const [showNotification, setShowNotification] = useState<boolean>(false)
 
   const toggleMute = useCallback(
     (e) => {
-      setShowNotification(true)
       e.stopPropagation()
-      setIsMuted((prev) => !prev)
-      onButtonStart()
+      const modalData = {
+        headerText: isMuted ? 'Unmute the thread?' : 'Stop watching the thread?',
+        modalText: isMuted
+          ? 'By watching the thread you will automatically unmute it.'
+          : 'By muting this thread you will automatically stop watching it.',
+        buttonText: isMuted ? 'confirm And Watch' : 'confirm And Mute',
+      }
+      showModal({ modal: 'ConfirmModal2', data: modalData })
     },
     [onButtonStart]
   )
+
+  useEffect(() => {
+    if (isConfirmed == true) {
+      setShowNotification(true)
+      setIsMuted((prev) => !prev)
+      onButtonStart()
+    }
+  }, [isConfirmed])
 
   useEffect(() => {
     if (showNotification) {
@@ -33,15 +49,15 @@ export const MuteThreadButton = ({ threadId, isMuted, setIsMuted, onButtonStart 
           title: 'This thread is now muted',
           message: 'You will not receive any notifications about any related to this forum thread',
         }
-        setNotiArr((prevList: Array<WatchingNotificationProps>) => [...prevList, newNoti])
+        const notificationKey = addNotification(newNoti)
+        setTimeout(() => removeNotification(notificationKey), notificationTimeout)
       } else {
         const newNoti = {
           title: 'This thread is no longer muted',
           message: 'You can now receive notifications about new changes related to this forum thread',
         }
-        setTimeout(() => {
-          setNotiArr((prevList: Array<WatchingNotificationProps>) => [...prevList, newNoti])
-        }, 10)
+        const notificationKey = addNotification(newNoti)
+        setTimeout(() => removeNotification(notificationKey), notificationTimeout)
       }
     }
   }, [isMuted])

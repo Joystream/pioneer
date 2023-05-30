@@ -30,6 +30,7 @@ import { SuccessModal } from '@/common/components/SuccessModal'
 import { useModal } from '@/common/hooks/useModal'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { ConfirmModal } from '@/common/modals/ConfirmModal/ConfirmModal'
+import { ConfirmModal2, ConfirmModal2Call } from '@/common/modals/ConfirmModal2'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
 import { ReportContentModal, ReportContentModalCall } from '@/common/modals/ReportContentModal'
 import { ModalName, UnknownMachine } from '@/common/providers/modal/types'
@@ -120,6 +121,7 @@ export type ModalNames =
   | ModalName<ClaimVestingModalCall>
   | ModalName<UpdateMembershipModalCall>
   | ModalName<ReportContentModalCall>
+  | ModalName<ConfirmModal2Call>
   | ModalName<PostReplyModalCall>
   | ModalName<InviteMemberModalCall>
 
@@ -170,6 +172,7 @@ const modals: Record<ModalNames, ReactElement> = {
   ClaimVestingModal: <ClaimVestingModal />,
   UpdateMembershipModal: <UpdateMembershipModal />,
   ReportContentModal: <ReportContentModal />,
+  ConfirmModal2: <ConfirmModal2 />,
   PostReplyModal: <PostReplyModal />,
 }
 
@@ -188,6 +191,7 @@ const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
   'DisconnectWallet',
   'ClaimVestingModal',
   'ReportContentModal',
+  'ConfirmModal2',
 ]
 
 export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [

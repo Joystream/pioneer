@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react'
 
-import { WatchingNotificationProps } from '@/app/components/WatchingNotification'
-import { PageContext } from '@/app/PageContext'
 import { ButtonGhost } from '@/common/components/buttons'
 import { WatchIcon } from '@/common/components/icons'
+import { NotificationContext, notificationTimeout } from '@/common/providers/Notification/context'
 
 interface Props {
   groupName: string
 }
 
 export const WatchWorkingGroupButton = ({ groupName }: Props) => {
-  const { setNotiArr } = useContext(PageContext)
+  const { addNotification, removeNotification } = useContext(NotificationContext)
   const [showNotification, setShowNotification] = useState<boolean>(false)
   const [watching, setWatching] = useState<boolean>(false)
 
@@ -28,7 +27,8 @@ export const WatchWorkingGroupButton = ({ groupName }: Props) => {
           ? 'You will receive notifications about important updates related to this working group'
           : 'You will no longer receive any notifications about changes related to this working group',
       }
-      setNotiArr((prevList: Array<WatchingNotificationProps>) => [...prevList, newNoti])
+      const notificationKey = addNotification(newNoti)
+      setTimeout(() => removeNotification(notificationKey), notificationTimeout)
     }
   }, [watching])
 
