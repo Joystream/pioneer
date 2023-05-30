@@ -58,6 +58,21 @@ export function ButtonPrimary({ className, children, size, square, disabled, onC
   )
 }
 
+export function ButtonDark({ className, children, size, square, disabled, onClick, outlined }: ButtonProps) {
+  return (
+    <ButtonDarkStyles
+      className={className}
+      size={size}
+      square={square}
+      disabled={disabled}
+      onClick={onClick}
+      outlined={outlined}
+    >
+      <ButtonInnerWrapper size={size}>{children}</ButtonInnerWrapper>
+    </ButtonDarkStyles>
+  )
+}
+
 export function ButtonSecondary({ className, children, size, square, disabled, onClick }: ButtonProps) {
   return (
     <ButtonSecondaryStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
@@ -236,6 +251,40 @@ export const ButtonPrimaryStyles = styled.button<ButtonProps>`
   &:disabled {
     border-color: ${Colors.Blue[100]};
     background-color: ${Colors.Blue[100]};
+  }
+`
+
+export const ButtonDarkStyles = styled.button<ButtonProps>`
+  ${BasicButtonStyles};
+
+  border-color: ${Colors.Gray[900]};
+  background-color: ${({ outlined }) => (outlined ? Colors.White : Colors.Gray[900])};
+  color: ${({ outlined }) => (outlined ? Colors.Gray[900] : Colors.White)};
+
+  ${ButtonInnerWrapper} > svg {
+    color: ${({ outlined }) => (outlined ? Colors.Gray[900] : Colors.White)};
+  }
+
+  &:before {
+    background-color: ${Colors.Black[600]};
+  }
+
+  &:after {
+    background-color: ${Colors.Black[700]};
+  }
+
+  &:hover,
+  &:focus {
+    border-color: ${Colors.Black[600]};
+  }
+
+  &:active {
+    border-color: ${Colors.Black[700]};
+  }
+
+  &:disabled {
+    border-color: ${Colors.Black[100]};
+    background-color: ${Colors.Black[100]};
   }
 `
 

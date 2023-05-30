@@ -137,15 +137,15 @@ export const ModalCustomTopBar = styled(ModalTopBar)`
   padding: 4px 24px;
 `
 
-export const ModalBody = styled.div`
+export const ModalBody = styled.div<{ isWhite?: boolean }>`
   overflow-y: auto;
   display: grid;
   grid-area: modalbody;
   grid-row-gap: 16px;
   padding: 24px 24px 24px;
-  background-color: ${Colors.Black[50]};
-  border-top: 1px solid ${Colors.Black[200]};
-  border-bottom: 1px solid ${Colors.Black[200]};
+  background-color: ${({ isWhite }) => (isWhite ? Colors.White : Colors.Black[50])};
+  border-top: ${({ isWhite }) => (isWhite ? 'none' : '1px solid ${Colors.Black[200]}')};
+  border-bottom: ${({ isWhite }) => (isWhite ? 'none' : '1px solid ${Colors.Black[200]}')};
 `
 
 interface ModalFooterProps {

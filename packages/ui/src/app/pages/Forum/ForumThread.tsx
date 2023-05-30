@@ -45,6 +45,15 @@ export const ForumThread = () => {
   const history = useHistory()
 
   const isThreadActive = !!(thread && thread.status.__typename === 'ThreadStatusActive')
+<<<<<<< HEAD
+=======
+  const [isMuted, setIsMuted] = useState<boolean>(false)
+  const [muteButtonStart, setMuteButtonStart] = useState(false)
+
+  const onMuteButtonStart = () => {
+    setMuteButtonStart(true)
+  }
+>>>>>>> 2ba5d8f0 (5/30/2023)
 
   const getTransaction = (postText: string, isEditable: boolean) => {
     if (api && active && thread) {
@@ -113,7 +122,6 @@ export const ForumThread = () => {
       {thread && isThreadActive && <NewThreadPost ref={newPostRef} getTransaction={getTransaction} />}
     </ThreadPanel>
   )
-
   return <ForumPageLayout isThread header={displayHeader()} main={displayMain()} />
 }
 

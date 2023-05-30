@@ -5,6 +5,7 @@ import { AccountsContextProvider } from '@/accounts/providers/accounts/provider'
 import { BalancesContextProvider } from '@/accounts/providers/balances/provider'
 import { ApiContextProvider } from '@/api/providers/provider'
 import { QueryNodeProvider } from '@/app/providers/QueryNodeProvider'
+import { Confirm2Provier } from '@/common/providers/confirm2/provider'
 import { ImageReportProvider } from '@/common/providers/imageReports/provider'
 import { KeyringContextProvider } from '@/common/providers/keyring/provider'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
@@ -36,8 +37,17 @@ export const Providers = ({ children }: Props) => (
                         <BackendProvider>
                           <OnBoardingProvider>
                             <ImageReportProvider>
+<<<<<<< HEAD
                               <GlobalStyle />
                               {children}
+=======
+                              <NotificationProvier>
+                                <Confirm2Provier>
+                                  <GlobalStyle />
+                                  {children}
+                                </Confirm2Provier>
+                              </NotificationProvier>
+>>>>>>> 2ba5d8f0 (5/30/2023)
                             </ImageReportProvider>
                           </OnBoardingProvider>
                         </BackendProvider>
