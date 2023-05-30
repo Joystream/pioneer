@@ -78,11 +78,35 @@ Most queries require a Bearer authentication, HTTP header examples:
 This token is returns by both the `signup` and `signin` mutations:
 
 ```gql
-signup(memberId: String! signature: String! timestamp: Int! name: String! email: String): String
-signin(memberId: String! signature: String! timestamp: Int!): String
+signup(memberId: String! signature: String! timestamp: BigInt! name: String! email: String): String
+signin(memberId: String! signature: String! timestamp: BigInt!): String
 ```
 
 The `signature` parameter consist of a `MEMBERSHIP_ID:TIMESTAMP` signed with the membership controller account.
+
+To check the validity of an authorization token:
+
+```gql
+query {
+  member {
+    id
+    name
+    email
+  }
+}
+```
+
+When ran with a correct `Authorization` header, it returns the member data. Otherwise it returns `null`. The email field will be `null' if the member email address has not yet been verified.
+
+To check that a member is registered in the API:
+
+```gql
+query {
+  memberExist(id: Int!)
+}
+```
+
+This returns `true` if the member is registered and `false` otherwise. This query does not require an authorization token.
 
 ### General subscriptions
 
@@ -122,7 +146,7 @@ Specific entities like forum threads, categories, or proposals can be subscribed
 
 ```gql
 mutation {
-  subscribeToEntity(kind: FORUM_WATCHED_CATEGORY_POST, entityId: "3", shouldNotify: true) {
+  subscribeToEntity(kind: FORUM_CATEGORY_ENTITY_POST, entityId: "3", status: WATCH) {
     id
   }
 }
@@ -132,7 +156,7 @@ This mutation subscribes the authenticated member to get notified of any new pos
 
 ```gql
 mutation {
-  subscribeToEntity(kind: FORUM_WATCHED_THREAD, entityId: "123", shouldNotify: false) {
+  subscribeToEntity(kind: FORUM_THREAD_ENTITY_POST, entityId: "123", status: MUTE) {
     id
   }
 }
@@ -144,7 +168,7 @@ To cancel entity subscriptions:
 
 ```gql
 mutation {
-  unsubscribeToEntity(kind: FORUM_WATCHED_THREAD, entityId: "123") {
+  entitySubscription(kind: FORUM_THREAD_ENTITY_POST, entityId: "123", status: DEFAULT) {
     id
   }
 }
@@ -157,8 +181,7 @@ query {
   entitySubscriptions {
     kind
     entityId
-    shouldNotify
-    shouldNotifyByEmail
+    status
   }
 }
 ```
@@ -189,9 +212,10 @@ To run the API to develop locally:
 
 1. `yarn --frozen-lockfile`: Install the dependencies.
 2. Create and configure a `packages/server/.env`.
-3. Launch the Postgres database. `yarn workspace server dev:db`: If docker is installed.
-4. `yarn workspace dev:build`: Run `graphql-codegen`, synchronize the database schema, and generate the Prisma clients.
-5. `yarn workspace server dev`: Start the server.
+3. Prepare the database and generate the code by running either:
+    - `yarn workspace server dev:db:build`: To use docker for the db.
+    - Otherwise `yarn workspace dev:build`: Once the configured db is running.
+4. `yarn workspace server dev:api`: Start the server.
 
 ### Some other useful scripts
 

@@ -1,9 +1,11 @@
 import * as Prisma from '@prisma/client'
-import { arg, booleanArg, list, objectType, queryField, stringArg } from 'nexus'
+import { arg, booleanArg, enumType, list, objectType, queryField, stringArg } from 'nexus'
 import { Notification, NotificationKind } from 'nexus-prisma'
 
 import { authMemberId } from '@/auth/model/token'
 import { Context } from '@/common/api'
+
+export const NotificationKindEnum = enumType(NotificationKind)
 
 export const NotificationFields = objectType({
   name: Notification.$name,
@@ -32,7 +34,7 @@ export const notificationsQuery = queryField('notifications', {
   },
 
   resolve: async (_, args: QueryArgs, { prisma, req }: Context): Promise<Prisma.Notification[] | null> => {
-    const memberId = authMemberId(req)
+    const memberId = (await authMemberId(req))?.id
     if (!memberId) return null
 
     return prisma.notification.findMany({ where: { ...args, memberId } })

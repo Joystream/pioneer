@@ -22,7 +22,10 @@ export const verifySignature = async (
     return 'INVALID'
   }
 
-  const { isValid } = signatureVerify(`${membershipId}:${timestamp}`, signature, controllerAccount)
-
-  return isValid ? 'VALID' : 'INVALID'
+  try {
+    const { isValid } = signatureVerify(`${membershipId}:${timestamp}`, signature, controllerAccount)
+    return isValid ? 'VALID' : 'INVALID'
+  } catch {
+    return 'INVALID'
+  }
 }

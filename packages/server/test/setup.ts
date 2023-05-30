@@ -1,7 +1,14 @@
-import log from 'npmlog'
+import { prisma } from '@/common/prisma'
 
-import '@/common/config'
-log.level = 'silent'
+process.env.APP_SECRET_KEY = 'foo'
+process.env.APP_LOG_LEVEL = 'silent'
+
+export const clearDb = async () => {
+  type TNames = { name: string }[]
+  const tNames = await prisma.$queryRaw<TNames>`SELECT tablename AS name FROM pg_tables WHERE schemaname='public'`
+  const tables = tNames.flatMap(({ name }) => (name === '_prisma_migrations' ? [] : `"public"."${name}"`))
+  await prisma.$executeRawUnsafe(`TRUNCATE TABLE ${tables.join(', ')} CASCADE;`)
+}
 
 export const mockRequest = jest.fn()
 jest.mock('graphql-request', () => ({
