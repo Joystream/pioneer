@@ -8,11 +8,12 @@ interface SettingsInformationProps {
   icon?: React.ReactElement
   title: string
   children: React.ReactNode
+  type?: string
 }
 
-export const SettingsInformation = ({ title, icon, children }: SettingsInformationProps) => {
+export const SettingsInformation = ({ title, icon, children, type }: SettingsInformationProps) => {
   return (
-    <NetworkDetailsWrapper>
+    <NetworkDetailsWrapper type={type}>
       <DetailsItemWrapper>
         {icon}
         <StyledDetailsText bold>{title}</StyledDetailsText>
@@ -21,9 +22,18 @@ export const SettingsInformation = ({ title, icon, children }: SettingsInformati
     </NetworkDetailsWrapper>
   )
 }
-
-export const NetworkDetailsWrapper = styled.div`
-  background-color: ${Colors.Blue[50]};
+interface NetworkDetailsWrapperProps {
+  type?: string
+}
+export const NetworkDetailsWrapper = styled.div<NetworkDetailsWrapperProps>`
+  background-color: ${(props) => {
+    switch (props.type) {
+      case 'error':
+        return Colors.Red[50]
+      default:
+        return Colors.Blue[50]
+    }
+  }};
   padding: 16px;
 `
 
