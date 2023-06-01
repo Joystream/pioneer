@@ -46,7 +46,6 @@ export type ProposalType =
         | 'slashWorkingGroupLead'
         | 'setWorkingGroupLeadReward'
         | 'terminateWorkingGroupLead'
-        | 'amendConstitution'
         | 'cancelWorkingGroupLeadOpening'
         | 'setMembershipPrice'
         | 'setCouncilBudgetIncrement'
@@ -55,11 +54,7 @@ export type ProposalType =
         | 'setInitialInvitationCount'
         | 'setMembershipLeadInvitationQuota'
         | 'setReferralCut'
-        | 'createBlogPost'
-        | 'editBlogPost'
-        | 'lockBlogPost'
         | 'unlockBlogPost'
-        | 'veto'
         | 'updateChannelPayouts'
       )
 
