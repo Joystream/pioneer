@@ -20,18 +20,11 @@ const Template: Story = () => {
           modal: 'foo',
           showModal: () => undefined,
           modalData: {
-            id: '0',
-            name: 'Alice member',
-            rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-            controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-            handle: 'alice',
-            isVerified: false,
-            isFoundingMember: false,
-            isCouncilMember: false,
-            roles: [],
-            boundAccounts: [],
-            inviteCount: 0,
-            createdAt: '',
+            member: {
+              id: '0',
+              name: 'Alice member',
+              controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+            },
           },
         }}
       >
