@@ -2,6 +2,7 @@ const baseConfig = require('../../.eslintrc.json')
 
 const config = {
   ...baseConfig,
+  extends: ['plugin:storybook/recommended'],
 }
 
 const domains = ['accounts', 'memberships', 'working-groups']
