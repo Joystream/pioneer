@@ -27,6 +27,14 @@ config.rules['import/no-restricted-paths'] = [
   },
 ]
 
+config.overrides = [
+  ...config.overrides,
+  {
+    files: ['**/*.stories.tsx'],
+    rules: { 'react-hooks/rules-of-hooks': 'off' },
+  },
+]
+
 config.ignorePatterns = [...config.ignorePatterns, 'src/bounty/**/*', 'test/bounty/**/*']
 
 module.exports = config
