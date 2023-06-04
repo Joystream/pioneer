@@ -2,12 +2,22 @@ import BN from 'bn.js'
 import * as Yup from 'yup'
 
 import { Account } from '@/accounts/types'
+import { Api } from '@/api'
+import { CurrencyName } from '@/app/constants/currency'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
-import { BNSchema, lessThanMixed, maxContext, maxMixed, minContext, moreThanMixed } from '@/common/utils/validation'
+import {
+  BNSchema,
+  lessThanMixed,
+  maxContext,
+  maxMixed,
+  minContext,
+  minMixed,
+  moreThanMixed,
+  whenDefined,
+} from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
 import { ProposalType } from '@/proposals/types'
-import { ProxyApi } from '@/proxyApi'
 import { GroupIdName } from '@/working-groups/types'
 
 export const defaultProposalValues = {
@@ -31,6 +41,9 @@ export const defaultProposalValues = {
   },
   durationAndProcess: {
     isLimited: false,
+  },
+  updateChannelPayouts: {
+    cashoutEnabled: true,
   },
 }
 
@@ -60,7 +73,7 @@ export interface AddNewProposalForm {
     account: Account
   }
   runtimeUpgrade: {
-    runtime?: ArrayBuffer
+    runtime?: File
   }
   setCouncilorReward: {
     amount?: BN
@@ -122,13 +135,13 @@ export interface AddNewProposalForm {
     groupId?: GroupIdName
   }
   setInitialInvitationCount: {
-    invitationCount?: BN
+    invitationCount?: number
   }
   setReferralCut: {
     referralCut?: number
   }
   setMembershipLeadInvitationQuota: {
-    amount?: BN
+    count?: number
     leadId?: string
   }
   setInitialInvitationBalance: {
@@ -140,9 +153,22 @@ export interface AddNewProposalForm {
   setMembershipPrice: {
     amount?: BN
   }
+  updateChannelPayouts: {
+    commitment?: string
+    payloadSize?: number
+    payloadHash?: string
+    minimumCashoutAllowed?: BN
+    maximumCashoutAllowed?: BN
+    cashoutEnabled?: boolean
+    payload: {
+      objectCreationParams: { size_: BN; ipfsContentId: any /* Bytes */ }
+      expectedDataSizeFee: BN
+      expectedDataObjectStateBloatBond: BN
+    }
+  }
 }
 
-export const schemaFactory = (api?: ProxyApi) => {
+export const schemaFactory = (api?: Api) => {
   return Yup.object().shape({
     groupId: Yup.string(),
     proposalType: Yup.object().shape({
@@ -154,8 +180,7 @@ export const schemaFactory = (api?: ProxyApi) => {
     proposalDetails: Yup.object().shape({
       title: Yup.string()
         .required('Field is required')
-        .max(api?.consts.proposalsEngine.titleMaxLength.toNumber() ?? 0, 'Title exceeds maximum length')
-        .matches(/^[\x20-\x7E]*$/, 'Title includes forbidden characters'),
+        .max(api?.consts.proposalsEngine.titleMaxLength.toNumber() ?? 0, 'Title exceeds maximum length'),
       rationale: Yup.string()
         .required('Field is required')
         .max(api?.consts.proposalsEngine.descriptionMaxLength.toNumber() ?? 0, 'Rationale exceeds maximum length'),
@@ -189,8 +214,8 @@ export const schemaFactory = (api?: ProxyApi) => {
     }),
     runtimeUpgrade: Yup.object().shape({
       runtime: Yup.mixed()
-        .test('byteLength', 'Invalid input', (value: ArrayBuffer) => value.byteLength !== 0)
-        .required('Field is required'),
+        .required('Field is required')
+        .test('byteLength', 'Invalid input', (value: File) => value.size > 0),
     }),
     setCouncilorReward: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, '')).required('Field is required'),
@@ -296,7 +321,7 @@ export const schemaFactory = (api?: ProxyApi) => {
         .required('Field is required'),
     }),
     setMembershipLeadInvitationQuota: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
+      count: BNSchema.test(moreThanMixed(0, 'Quota must be greater than zero')).required('Field is required'),
       leadId: Yup.string().test('execution', (value) => !!value),
     }),
     setInitialInvitationBalance: Yup.object().shape({
@@ -315,6 +340,32 @@ export const schemaFactory = (api?: ProxyApi) => {
     }),
     setMembershipPrice: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
+    }),
+    updateChannelPayouts: Yup.object().shape({
+      payloadSize: Yup.number(),
+      payloadHash: whenDefined('payloadSize', Yup.string().required()),
+      commitment: whenDefined('payloadSize', Yup.string().required()),
+      minimumCashoutAllowed: BNSchema.test(
+        minContext(
+          `Input should be at least \${min}${CurrencyName.integerValue} for proposal to execute`,
+          'minCashoutAllowed',
+          true,
+          'execution'
+        )
+      ).required(),
+      maximumCashoutAllowed: BNSchema.test(
+        minMixed(Yup.ref('minimumCashoutAllowed'), 'Maximum cashout cannot be lower than minimum')
+      )
+        .test(
+          maxContext(
+            `Input should be at most \${max}${CurrencyName.integerValue} for proposal to execute`,
+            'maxCashoutAllowed',
+            true,
+            'execution'
+          )
+        )
+        .required(),
+      channelCashoutsEnabled: Yup.boolean(),
     }),
   })
 }

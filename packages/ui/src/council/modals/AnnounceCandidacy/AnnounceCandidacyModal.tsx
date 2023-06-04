@@ -257,7 +257,9 @@ export const AnnounceCandidacyModal = () => {
       'Signing this transaction will result in the specified amount of JOY tokens staked for the chosen purpose, resulting in a rivalrous lock applied to this amount until the stake gets recovered.'
     return (
       <SignTransactionModal
-        additionalTransactionInfo={[{ title: 'Add Stake', tooltipText }]}
+        additionalTransactionInfo={[
+          { title: 'Add Stake', value: form.watch('staking.amount') ?? BN_ZERO, tooltipText },
+        ]}
         buttonText="Sign transaction and Announce"
         transaction={announceCandidacyTransaction}
         signer={activeMember.controllerAccount}

@@ -158,15 +158,17 @@ export const ProposalPreview = () => {
             </BadgeAndTime>
           </RowGapBlock>
 
-          {(proposal.status === 'dormant' || votingRounds.length > 1) && (
-            <ProposalStages
-              status={proposal.status}
-              updates={proposal.proposalStatusUpdates}
-              constitutionality={constants?.constitutionality}
-              value={currentVotingRound}
-              onChange={setVotingRound}
-            />
-          )}
+          {constants?.constitutionality
+            ? constants?.constitutionality > 1 && (
+                <ProposalStages
+                  status={proposal.status}
+                  updates={proposal.proposalStatusUpdates}
+                  constitutionality={constants?.constitutionality}
+                  value={currentVotingRound}
+                  onChange={setVotingRound}
+                />
+              )
+            : ''}
         </PageHeaderWrapper>
       }
       main={

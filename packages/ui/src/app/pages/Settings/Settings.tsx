@@ -7,7 +7,7 @@ import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { NetworkType } from '@/app/config'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { WarnedIcon } from '@/common/components/icons/activities'
-import { LanguageSelect } from '@/common/components/LanguageSelect'
+// import { LanguageSelect } from '@/common/components/LanguageSelect'
 import NetworkInfo from '@/common/components/NetworkInfo/NetworkInfo'
 import { ColumnGapBlock, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
@@ -34,7 +34,7 @@ export const Settings = () => {
   const [currentTab, setCurrentTab] = useState<Tab>('SETTINGS')
   const tabs = [
     { title: t('network'), active: currentTab === 'SETTINGS', onClick: () => setCurrentTab('SETTINGS') },
-    { title: t('language'), active: currentTab === 'LANGUAGE', onClick: () => setCurrentTab('LANGUAGE') },
+    //{ title: t('language'), active: currentTab === 'LANGUAGE', onClick: () => setCurrentTab('LANGUAGE') },
   ]
   const switchNetwork = (network: NetworkType | null) => {
     if (network) {
@@ -42,6 +42,7 @@ export const Settings = () => {
       window.location.reload()
     }
   }
+
   return (
     <Container>
       <PageLayout
@@ -54,7 +55,7 @@ export const Settings = () => {
           <MainPanel>
             <RowGapBlock gap={32}>
               <Tabs tabsSize="xs" tabs={tabs} />
-              {currentTab === 'LANGUAGE' && <LanguageSelect />}
+              {/**currentTab === 'LANGUAGE' && <LanguageSelect />**/}
               {currentTab === 'SETTINGS' && (
                 <>
                   <SimpleSelect
@@ -81,17 +82,13 @@ export const Settings = () => {
                   <PolkadotAppInfo rpcUrl={endpoints.nodeRpcEndpoint} />
                 </>
               )}
-              <SettingsInformation icon={<WarnedIcon />} title="Chain Informations">
+              <SettingsInformation icon={<WarnedIcon />} title={t('chainInfo')}>
                 <ColumnGapBlock gap={5}>
-                  <TextMedium lighter bold>
-                    RPC blockheight:{' '}
-                  </TextMedium>
+                  <TextMedium lighter>{t('rpcBlockheight')}</TextMedium>
                   <TextMedium lighter>{formatTokenValue(header?.number.toNumber())}</TextMedium>
                 </ColumnGapBlock>
                 <ColumnGapBlock gap={5}>
-                  <TextMedium lighter bold>
-                    QueryNode blockheight:{' '}
-                  </TextMedium>
+                  <TextMedium lighter>{t('qnBlockheight')}</TextMedium>
                   <TextMedium lighter>{formatTokenValue(queryNodeState?.indexerHead)}</TextMedium>
                 </ColumnGapBlock>
               </SettingsInformation>

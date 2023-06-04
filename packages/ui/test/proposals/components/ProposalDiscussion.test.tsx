@@ -15,9 +15,17 @@ import { getMember } from '../../_mocks/members'
 import { MockKeyringProvider } from '../../_mocks/providers'
 import { stubApi, stubTransaction } from '../../_mocks/transactions'
 
-jest.mock('@/common/components/CKEditor', () => ({
-  BaseCKEditor: (props: CKEditorProps) => mockCKEditor(props),
-}))
+jest.mock('@/common/components/CKEditor', () => {
+  return {
+    BaseCKEditor: (props: CKEditorProps) => mockCKEditor(props),
+  }
+})
+
+const strings = {
+  isClosed: 'The discussion is limited to following whitelisted members:',
+  selectCouncilor: 'Please select your council membership to post in this thread.',
+  selectWhitelisted: 'Please select your other membership to post in this thread:',
+}
 
 describe('UI: Proposal discussion', () => {
   const api = stubApi()
@@ -52,46 +60,35 @@ describe('UI: Proposal discussion', () => {
     it('Non-whitelisted member', async () => {
       useMyMemberships.setActive(alice)
       renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['111', '13'] })
-      expect(
-        await screen.findByText(
-          'The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.'
-        )
-      ).toBeDefined()
+      expect(await screen.queryByText(/${strings.isClosed}/i)).toBeDefined()
     })
 
     it('Whitelisted member', async () => {
       useMyMemberships.setActive(alice)
       renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['111', '13', '0'] })
-      expect(
-        screen.queryByText(
-          'The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.'
-        )
-      ).toBeNull()
-      expect(screen.queryByText('Please select your council membership to post in this thread.')).toBeNull()
+      expect(await screen.queryByText(/${strings.isClosed}/i)).toBeNull()
+      expect(await screen.queryByText(strings.selectCouncilor)).toBeNull()
       expect(await getButton('Create post')).toBeDefined()
     })
 
     it('Whitelisted member not selected', async () => {
       renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['111', '13', '0'] })
-      expect(await screen.findByText('Please select a whitelisted membership to post in this thread.')).toBeDefined()
+      expect(await screen.queryByText(/${strings.isClosed}/i)).toBeNull()
+      expect(await screen.queryByText(/${strings.selectWhitelisted}/i)).toBeDefined()
     })
 
     it('Council member', async () => {
       useMyMemberships.setActive(councillor)
       renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['111'] })
-      expect(
-        screen.queryByText(
-          'The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.'
-        )
-      ).toBeNull()
-      expect(screen.queryByText('Please select your council membership to post in this thread.')).toBeNull()
+      expect(screen.queryByText(/${strings.isClosed}/i)).toBeNull()
+      expect(screen.queryByText(strings.selectCouncilor)).toBeNull()
       expect(await getButton('Create post')).toBeDefined()
     })
 
     it('Council member not selected', async () => {
       useMyMemberships.members = [councillor]
       renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['111'] })
-      expect(await screen.findByText('Please select your council membership to post in this thread.')).toBeDefined()
+      expect(await screen.findByText(strings.selectCouncilor)).toBeDefined()
     })
 
     describe('User has both a council and a whitelisted membership', () => {
@@ -99,12 +96,8 @@ describe('UI: Proposal discussion', () => {
         useMyMemberships.members = [alice, councillor]
         useMyMemberships.setActive(councillor)
         renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['0'] })
-        expect(
-          screen.queryByText(
-            'The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.'
-          )
-        ).toBeNull()
-        expect(screen.queryByText('Please select your council membership to post in this thread.')).toBeNull()
+        expect(screen.queryByText(/${strings.isClosed}/i)).toBeNull()
+        expect(screen.queryByText(strings.selectCouncilor)).toBeNull()
         expect(await getButton('Create post')).toBeDefined()
       })
 
@@ -112,24 +105,16 @@ describe('UI: Proposal discussion', () => {
         useMyMemberships.members = [alice, councillor]
         useMyMemberships.setActive(alice)
         renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['0'] })
-        expect(
-          screen.queryByText(
-            'The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.'
-          )
-        ).toBeNull()
-        expect(screen.queryByText('Please select your council membership to post in this thread.')).toBeNull()
+        expect(screen.queryByText(strings.isClosed)).toBeNull()
+        expect(screen.queryByText(strings.selectCouncilor)).toBeNull()
         expect(await getButton('Create post')).toBeDefined()
       })
 
       it('Neither member selected', async () => {
         useMyMemberships.members = [alice, councillor]
         renderComponent({ ...baseThread, mode: 'closed', whitelistIds: ['0'] })
-        expect(
-          screen.queryByText(
-            'The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.'
-          )
-        ).toBeNull()
-        expect(await screen.findByText('Please select your council membership to post in this thread.')).toBeDefined()
+        expect(screen.queryByText(/${strings.isClosed}/i)).toBeNull()
+        expect(await screen.findByText(strings.selectCouncilor)).toBeDefined()
         expect(screen.queryByText('Create post')).toBeNull()
       })
     })
@@ -139,11 +124,7 @@ describe('UI: Proposal discussion', () => {
     it('Member selected', async () => {
       useMyMemberships.setActive(alice)
       renderComponent({ ...baseThread })
-      expect(
-        screen.queryByText(
-          'The discussion of this proposal is closed; only members whitelisted by the proposer can comment on it.'
-        )
-      ).toBeNull()
+      expect(screen.queryByText(/${strings.isClosed}/i)).toBeNull()
       expect(await getButton('Create post')).toBeDefined()
     })
 

@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import ReactPaginate from 'react-paginate'
+import { useHistory } from 'react-router'
 import styled from 'styled-components'
 
 import { Arrow } from '@/common/components/icons'
@@ -12,8 +13,14 @@ interface PaginationProps {
 }
 
 export const Pagination: FC<PaginationProps> = ({ pageCount = 0, handlePageChange, page }) => {
+  const history = useHistory()
+
   if (pageCount < 2) {
     return null
+  }
+  const pageChangeAction = (value: any) => {
+    history.push(`?page=${value.selected + 1}`)
+    handlePageChange(value.selected + 1)
   }
 
   return (
@@ -32,7 +39,7 @@ export const Pagination: FC<PaginationProps> = ({ pageCount = 0, handlePageChang
         nextLabel={<Arrow direction="right" />}
         nextLinkClassName="pagination__link"
         previousLinkClassName="pagination__link pagination__link--previous"
-        onPageChange={(value) => handlePageChange(value.selected + 1)}
+        onPageChange={(value) => pageChangeAction(value)}
         forcePage={page && page - 1}
       />
     </StyledPaginateContainer>

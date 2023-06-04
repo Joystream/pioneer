@@ -127,6 +127,7 @@ describe('UI: Vote for Council Modal', () => {
       })
     )
     stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 0))
+    stubQuery(api, 'referendum.accountsOptedOut.keys', [])
   })
 
   describe('Requirements', () => {

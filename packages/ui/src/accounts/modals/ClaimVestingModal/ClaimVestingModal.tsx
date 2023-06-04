@@ -82,7 +82,7 @@ export const ClaimVestingModal = () => {
               <InputComponent
                 inputSize="l"
                 validation={canAfford ? undefined : 'invalid'}
-                message={canAfford ? '' : 'Insufficient balance to cover fee.'}
+                message={isReady ? (canAfford ? '' : 'Insufficient balance to cover fee.') : ''}
               >
                 <SelectVestingAccount selected={selectedAccount} onChange={setSelectedAccount} />
               </InputComponent>

@@ -14,6 +14,7 @@ export const useWorkerEarnings = (workerId: string) => {
 
   const currentDayEarnings = data?.rewardPaidEvents
     .filter((event) => {
+      // TODO use rewardPerBlock
       const dayAgo = Date.now() - DAY_IN_MILLISECONDS
       const eventDate = new Date(event.createdAt).getTime()
       return eventDate > dayAgo

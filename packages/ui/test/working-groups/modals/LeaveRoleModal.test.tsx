@@ -33,8 +33,6 @@ import {
 } from '../../_mocks/transactions'
 import { WORKER } from '../../_mocks/working-groups'
 
-
-
 const mockUseModal: UseModal<any> = {
   modal: null,
   modalData: { workerId: 'forumWorkingGroup-1' },

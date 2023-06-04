@@ -4,7 +4,7 @@ import { EventRecord } from '@polkadot/types/interfaces'
 import { SpRuntimeDispatchError } from '@polkadot/types/lookup'
 import { AnyTuple, Codec } from '@polkadot/types/types'
 import BN from 'bn.js'
-import { get, isArray, isFunction, merge, startCase, uniqueId } from 'lodash'
+import { get, isArray, isFunction, startCase, uniqueId } from 'lodash'
 import { filter, firstValueFrom, map, Observable } from 'rxjs'
 
 import { error } from '@/common/logger'
@@ -27,11 +27,13 @@ export interface ClientProxyMessage {
   payload: ProxyPromisePayload
 }
 
-export const serializePayload = (
-  payload: any,
-  messages?: Observable<WorkerProxyMessage>,
+interface serializationOptions {
+  messages?: Observable<WorkerProxyMessage>
   postMessage?: PostMessage<ClientProxyMessage>
-): any => {
+  toJSON?: boolean
+}
+
+export const serializePayload = (payload: any, { messages, postMessage, toJSON }: serializationOptions = {}): any => {
   const stack: AnyObject[] = []
   const result = serializeValue(payload)
 
@@ -51,12 +53,12 @@ export const serializePayload = (
   return result
 
   function serializeValue(value: any) {
-    if (typeof value === 'function') {
+    if (isFunction(value)) {
       return undefined
     } else if (typeof value !== 'object' || value === null) {
       return value
     } else if (isCodec(value)) {
-      return serializeCodec(value)
+      return toJSON ? value.toJSON() : serializeCodec(value)
     } else if (value instanceof BN) {
       return { kind: 'BN', value: value.toArray() }
     } else if (value.kind === 'SubmittableExtrinsicProxy') {
@@ -83,12 +85,16 @@ const serializeObject = (value: Record<any, any>): Record<string, any> => {
   return { ...value }
 }
 
+interface deSerializationOptions {
+  messages?: Observable<ClientProxyMessage>
+  postMessage?: PostMessage<WorkerProxyMessage>
+  transactionsRecord?: TransactionsRecord
+}
+
 // WARNING this mutate the serialized payload
 export const deserializePayload = (
   payload: any,
-  messages?: Observable<ClientProxyMessage>,
-  postMessage?: PostMessage<WorkerProxyMessage>,
-  transactionsRecord?: TransactionsRecord
+  { messages, postMessage, transactionsRecord }: deSerializationOptions = {}
 ): any => {
   const stack: AnyObject[] = []
   const result = deserializeValue(payload)
@@ -116,11 +122,9 @@ export const deserializePayload = (
     } else if ('kind' in value) {
       switch (value.kind) {
         case 'codec':
-          return deserializeCodec(value)
+          return 'properties' in value ? deserializeExtendedCodec(value) : deserializeCodec(value)
         case 'BN':
           return new BN(value.value)
-        case 'extended-codec':
-          return deserializeExtendedCodec(value)
         case 'SubmittableExtrinsicProxy':
           return transactionsRecord?.[value.txId]
         case 'proxy':
@@ -190,9 +194,10 @@ const deserializeProxy = (
 }
 
 interface SerializedCodec {
-  kind: 'codec' | 'extended-codec'
+  kind: 'codec'
   type: string
   value: any
+  properties?: any
 }
 
 const serializeCodec = (codec: Codec): SerializedCodec => {
@@ -202,13 +207,15 @@ const serializeCodec = (codec: Codec): SerializedCodec => {
     error('Unrecognized codec object', codec, codec.toHuman())
   }
 
+  const serializedCodec: SerializedCodec = { kind: 'codec', type, value: codec.toJSON() }
+
   if (isEventRecord(codec)) {
     const { data, index, meta, method, section, typeDef } = codec.event
     const serializedData = data.map((data) => {
       const result = serializeCodec(data)
       if (isDispatchError(data)) {
         const error = serializePayload(findMetaError(data))
-        return { ...result, kind: 'extended-codec', value: { ...result.value, error } }
+        return { ...result, properties: { ...result.value, error } }
       }
       return result
     })
@@ -220,10 +227,21 @@ const serializeCodec = (codec: Codec): SerializedCodec => {
       section,
       typeDef,
     }
-    return { kind: 'extended-codec', type, value: merge(codec.toJSON(), { event }) }
+    return { ...serializedCodec, properties: { event } }
   }
 
-  return { kind: 'codec', type, value: codec.toJSON() }
+  const properties = (Object.getOwnPropertyNames(Object.getPrototypeOf(codec)) as (keyof Codec)[])
+    .map<[keyof Codec, Codec[keyof Codec]]>((key) => [key, codec[key]])
+    .filter(
+      ([key, prop]) =>
+        !['encodedLength', 'hash', 'initialU8aLength', 'isEmpty', 'registry', 'createdAtHash'].includes(key) &&
+        !isFunction(prop) &&
+        !Object.getOwnPropertyDescriptor(codec, key)
+    )
+
+  return properties.length > 0
+    ? { ...serializedCodec, properties: serializePayload(Object.fromEntries(properties)) }
+    : serializedCodec
 }
 
 const isDispatchError = (data: Codec): data is SpRuntimeDispatchError => {
@@ -250,7 +268,7 @@ const deserializeCodec = (serialized: SerializedCodec) => createType(serialized.
 const deserializeExtendedCodec = (serialized: SerializedCodec) =>
   recursiveProxy(deserializeCodec(serialized), {
     get: ({ value, property }) => bindIfFunction(value[property], value),
-    default: ({ path }) => deserializePayload(get(serialized.value, path)),
+    default: ({ path }) => deserializePayload(get(serialized.properties, path)),
   })
 
 const bindIfFunction = (value: any, context: any) => (isFunction(value) ? value.bind(context) : value)

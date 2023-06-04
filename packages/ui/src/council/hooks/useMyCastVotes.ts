@@ -14,7 +14,7 @@ export interface MyCastVote extends Vote {
 }
 
 export interface CandidateWithMyVotes extends ElectionCandidate {
-  ownStake: BN
+  myStake: BN
   myVotes: MyCastVote[]
 }
 

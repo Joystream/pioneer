@@ -1,3 +1,5 @@
+export * from './utils/bn'
+
 import { Reducer } from './types/helpers'
 
 type Obj = Record<string, any>

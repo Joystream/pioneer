@@ -54,6 +54,8 @@ import { MemberModalCall, MemberProfile } from '@/memberships/components/MemberP
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals/BuyMembershipModal'
 import { DisconnectWalletModal, DisconnectWalletModalCall } from '@/memberships/modals/DisconnectWalletModal'
+import { InviteMemberModal } from '@/memberships/modals/InviteMemberModal'
+import { InviteMemberModalCall } from '@/memberships/modals/InviteMemberModal/types'
 import { SignOutModal } from '@/memberships/modals/SignOutModal/SignOutModal'
 import { SignOutModalCall } from '@/memberships/modals/SignOutModal/types'
 import { SwitchMemberModal, SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -119,6 +121,7 @@ export type ModalNames =
   | ModalName<UpdateMembershipModalCall>
   | ModalName<ReportContentModalCall>
   | ModalName<PostReplyModalCall>
+  | ModalName<InviteMemberModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -149,6 +152,7 @@ const modals: Record<ModalNames, ReactElement> = {
   RevealVote: <RevealVoteModal />,
   RecoverBalance: <RecoverBalanceModal />,
   IncreaseWorkerStake: <IncreaseWorkerStakeModal />,
+  InviteMemberModal: <InviteMemberModal />,
   OnBoardingModal: <OnBoardingModal />,
   RestoreVotes: <RestoreVotesModal />,
   // AddBounty: <AddBountyModal />,

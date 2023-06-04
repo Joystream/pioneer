@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { BalanceLock, LockType } from '@/accounts/types'
 import { QuestionIcon } from '@/common/components/icons'
 import {
+  AppsWorkerIcon,
   BoundStakingIcon,
   BountiesIcon,
   BuilderWorkerIcon,
@@ -12,7 +13,6 @@ import {
   CouncilorIcon,
   DistributionWorkerIcon,
   ForumWorkerIcon,
-  GatewayWorkerIcon,
   HRWorkerIcon,
   InvitationIcon,
   LockIcon,
@@ -42,7 +42,7 @@ const locksMap: Record<LockType, ReactElement> = {
   Invitation: <InvitationIcon />,
   'Bound Staking Account': <BoundStakingIcon />,
   Bounties: <BountiesIcon />,
-  'Apps Worker': <GatewayWorkerIcon />,
+  'Apps Worker': <AppsWorkerIcon />,
   'Builders Worker': <BuilderWorkerIcon />,
   'HR Worker': <HRWorkerIcon />,
   'Marketing Worker': <MarketingWorkerIcon />,

@@ -1,9 +1,8 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import * as Apollo from '@apollo/client'
 import { gql } from '@apollo/client'
 import { MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
-
+import * as Apollo from '@apollo/client'
 const defaultOptions = {} as const
 export type WorkerProposalDetailsFragment = {
   __typename: 'Worker'
@@ -83,6 +82,7 @@ export type ProposalFieldsFragment = {
     | { __typename: 'SignalProposalDetails' }
     | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
     | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+    | { __typename: 'UpdateChannelPayoutsProposalDetails' }
     | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
     | { __typename: 'VetoProposalDetails' }
   creator: {
@@ -387,7 +387,7 @@ export type ProposalWithDetailsFieldsFragment = {
     | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: string }
     | { __typename: 'SetInitialInvitationCountProposalDetails'; newInitialInvitationsCount: number }
     | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
-    | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+    | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails'; newLeadInvitationQuota: number }
     | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: string }
     | { __typename: 'SetReferralCutProposalDetails'; newReferralCut: number }
     | {
@@ -514,6 +514,13 @@ export type ProposalWithDetailsFieldsFragment = {
             }> | null
           }
         } | null
+      }
+    | {
+        __typename: 'UpdateChannelPayoutsProposalDetails'
+        channelCashoutsEnabled?: boolean | null
+        minCashoutAllowed?: string | null
+        maxCashoutAllowed?: string | null
+        payloadHash?: string | null
       }
     | {
         __typename: 'UpdateWorkingGroupBudgetProposalDetails'
@@ -870,6 +877,7 @@ export type ProposalMentionFieldsFragment = {
     | { __typename: 'SignalProposalDetails' }
     | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
     | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+    | { __typename: 'UpdateChannelPayoutsProposalDetails' }
     | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
     | { __typename: 'VetoProposalDetails' }
   status:
@@ -975,6 +983,7 @@ export type GetProposalsQuery = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
     creator: {
@@ -1210,7 +1219,7 @@ export type GetProposalQuery = {
       | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: string }
       | { __typename: 'SetInitialInvitationCountProposalDetails'; newInitialInvitationsCount: number }
       | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
-      | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+      | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails'; newLeadInvitationQuota: number }
       | { __typename: 'SetMembershipPriceProposalDetails'; newPrice: string }
       | { __typename: 'SetReferralCutProposalDetails'; newReferralCut: number }
       | {
@@ -1337,6 +1346,13 @@ export type GetProposalQuery = {
               }> | null
             }
           } | null
+        }
+      | {
+          __typename: 'UpdateChannelPayoutsProposalDetails'
+          channelCashoutsEnabled?: boolean | null
+          minCashoutAllowed?: string | null
+          maxCashoutAllowed?: string | null
+          payloadHash?: string | null
         }
       | {
           __typename: 'UpdateWorkingGroupBudgetProposalDetails'
@@ -1686,6 +1702,7 @@ export type GetProposalMentionQuery = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
     status:
@@ -1796,9 +1813,20 @@ export type GetLatestProposalByMemberIdQuery = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
   }>
+}
+
+export type GetPayloadDataObjectIdQueryVariables = Types.Exact<{
+  inBlock?: Types.InputMaybe<Types.Scalars['Int']>
+  payloadHash?: Types.InputMaybe<Types.Scalars['String']>
+}>
+
+export type GetPayloadDataObjectIdQuery = {
+  __typename: 'Query'
+  channelPayoutsUpdatedEvents: Array<{ __typename: 'ChannelPayoutsUpdatedEvent'; payloadDataObjectId: string }>
 }
 
 export const VoteFieldsFragmentDoc = gql`
@@ -2004,6 +2032,9 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       ... on SetCouncilBudgetIncrementProposalDetails {
         newAmount
       }
+      ... on SetMembershipLeadInvitationQuotaProposalDetails {
+        newLeadInvitationQuota
+      }
       ... on SignalProposalDetails {
         text
       }
@@ -2024,6 +2055,12 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
           id
           title
         }
+      }
+      ... on UpdateChannelPayoutsProposalDetails {
+        channelCashoutsEnabled
+        minCashoutAllowed
+        maxCashoutAllowed
+        payloadHash
       }
     }
     discussionThread {
@@ -2669,4 +2706,53 @@ export type GetLatestProposalByMemberIdLazyQueryHookResult = ReturnType<typeof u
 export type GetLatestProposalByMemberIdQueryResult = Apollo.QueryResult<
   GetLatestProposalByMemberIdQuery,
   GetLatestProposalByMemberIdQueryVariables
+>
+export const GetPayloadDataObjectIdDocument = gql`
+  query GetPayloadDataObjectId($inBlock: Int, $payloadHash: String) {
+    channelPayoutsUpdatedEvents(where: { inBlock_eq: $inBlock, payloadHash_eq: $payloadHash }, limit: 1) {
+      payloadDataObjectId
+    }
+  }
+`
+
+/**
+ * __useGetPayloadDataObjectIdQuery__
+ *
+ * To run a query within a React component, call `useGetPayloadDataObjectIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPayloadDataObjectIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPayloadDataObjectIdQuery({
+ *   variables: {
+ *      inBlock: // value for 'inBlock'
+ *      payloadHash: // value for 'payloadHash'
+ *   },
+ * });
+ */
+export function useGetPayloadDataObjectIdQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetPayloadDataObjectIdQuery, GetPayloadDataObjectIdQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetPayloadDataObjectIdQuery, GetPayloadDataObjectIdQueryVariables>(
+    GetPayloadDataObjectIdDocument,
+    options
+  )
+}
+export function useGetPayloadDataObjectIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetPayloadDataObjectIdQuery, GetPayloadDataObjectIdQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetPayloadDataObjectIdQuery, GetPayloadDataObjectIdQueryVariables>(
+    GetPayloadDataObjectIdDocument,
+    options
+  )
+}
+export type GetPayloadDataObjectIdQueryHookResult = ReturnType<typeof useGetPayloadDataObjectIdQuery>
+export type GetPayloadDataObjectIdLazyQueryHookResult = ReturnType<typeof useGetPayloadDataObjectIdLazyQuery>
+export type GetPayloadDataObjectIdQueryResult = Apollo.QueryResult<
+  GetPayloadDataObjectIdQuery,
+  GetPayloadDataObjectIdQueryVariables
 >

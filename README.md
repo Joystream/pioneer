@@ -9,8 +9,7 @@ Governance application for the Joystream DAO platform.
 
 ## Deployed version
 
-- The live production is available on [https://dao.joystream.org/](https://dao.joystream.org/)
-- The preview build, deployed from the `dev` branch, is available on [https://pioneer-2.vercel.app/](https://pioneer-2.vercel.app/).
+- The live production is available on [https://pioneerapp.xyz/)
 - Components preview and testing from `dev` branch, is available on [https://pioneer-2-storybook.vercel.app/](https://pioneer-2-storybook.vercel.app/).
 
 The deployed version can interact with two backends:

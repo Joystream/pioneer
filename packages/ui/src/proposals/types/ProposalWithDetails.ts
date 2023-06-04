@@ -9,7 +9,7 @@ import {
   VoteFieldsFragment,
 } from '@/proposals/queries'
 
-import { asProposalDetails, ProposalDetails } from './ProposalDetails'
+import { asProposalDetails, ProposalDetails, ProposalExtraDetails } from './ProposalDetails'
 import { asProposal, Proposal, ProposalStatus } from './proposals'
 
 export interface ProposalStatusUpdates {
@@ -34,7 +34,10 @@ const getWhitelist = (fields: ProposalWithDetailsFieldsFragment['discussionThrea
   }
 }
 
-export const asProposalWithDetails = (fields: ProposalWithDetailsFieldsFragment): ProposalWithDetails => ({
+export const asProposalWithDetails = (
+  fields: ProposalWithDetailsFieldsFragment,
+  extraDetails: ProposalExtraDetails
+): ProposalWithDetails => ({
   ...asProposal(fields),
   votes: fields.votes.map(asProposalVote),
   rationale: fields.description,
@@ -55,7 +58,7 @@ export const asProposalWithDetails = (fields: ProposalWithDetailsFieldsFragment)
     inBlock: asBlock(status),
     status: typenameToProposalStatus(status.newStatus.__typename),
   })),
-  details: asProposalDetails(fields.details),
+  details: asProposalDetails(fields.details, extraDetails),
 })
 
 export interface ProposalVote {

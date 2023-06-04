@@ -58,11 +58,11 @@ export const PastElectionTabs = ({ election }: PastElectionTabsProps) => {
             revealed: !!myVote,
             member: votingResult.candidate.member,
             sumOfAllStakes: votingResult.totalStake,
-            ownStake: myVote ? myVote.stake : undefined,
             totalStake: election.totalStake,
             votes: votingResult.votes.length,
             index: index + 1,
             myVotes: [],
+            myStake: myVote?.stake,
           }
         })}
       />

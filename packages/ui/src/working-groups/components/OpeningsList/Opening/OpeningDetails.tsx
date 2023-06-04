@@ -1,9 +1,11 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { ButtonsGroup } from '@/common/components/buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { StatiscticContentColumn, Statistics, StatsBlock, MultiColumnsStatistic } from '@/common/components/statistics'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { isInFuture, nameMapping } from '@/common/helpers'
@@ -66,7 +68,16 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
             <TextBig>
               <TokenValue value={opening.stake} />
             </TextBig>
-            <Subscription>Minimum Stake Required</Subscription>
+            <MinStake>
+              Minimum Stake Required{' '}
+              <Tooltip
+                tooltipText="Minimum tokens free of rivalrous locks required as application stake to this role."
+                tooltipLinkText="Learn more"
+                tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/working-groups#staking"
+              >
+                <TooltipDefault />
+              </Tooltip>
+            </MinStake>
           </StatsBlock>
         </Statistics>
         <ButtonsGroup align="right">
@@ -87,3 +98,9 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
     </OpenedContainer>
   )
 }
+
+const MinStake = styled(Subscription)`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`

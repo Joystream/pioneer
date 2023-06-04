@@ -151,7 +151,7 @@ describe('UI: Past Election page', () => {
         })
 
         expect(queryAllByText(/Total stake/i).length).toBe(1)
-        expect(queryAllByText(/My stake/i).length).toBe(1)
+        expect(queryAllByText(/My contributed votes/i).length).toBe(1)
       })
     })
   })

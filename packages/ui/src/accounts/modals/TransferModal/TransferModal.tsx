@@ -62,6 +62,10 @@ export const TransferModal = () => {
     return <TransferSuccessModal onClose={hideModal} from={from} to={to} amount={amount} fee={fee} />
   }
 
+  if (state.matches('canceled')) {
+    return <FailureModal onClose={hideModal}>Transaction was canceled</FailureModal>
+  }
+
   if (state.matches('error')) {
     const { amount, to, from } = state.context
 

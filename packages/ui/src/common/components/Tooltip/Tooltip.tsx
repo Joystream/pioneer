@@ -17,13 +17,16 @@ export interface TooltipProps extends Omit<TooltipPopupProps, 'popUpHandlers' | 
   children: React.ReactNode
 }
 
-export interface TooltipPopupProps {
-  className?: string
-  tooltipOpen?: boolean
+export interface TooltipContentProp {
   tooltipText?: React.ReactNode
   tooltipTitle?: string
   tooltipLinkText?: React.ReactNode
   tooltipLinkURL?: string
+}
+
+export interface TooltipPopupProps extends TooltipContentProp {
+  className?: string
+  tooltipOpen?: boolean
   popupContent?: React.ReactNode
   offset?: [number, number]
   popUpHandlers: {
@@ -301,13 +304,16 @@ export const TooltipLink = styled(Link)<{ to: string; target: string }>`
   }
 `
 
-export const TooltipExternalLink = styled.a<{ href: string | undefined; target: string }>`
+export const TooltipExternalLink = styled.a<{
+  href: string | undefined
+  target: string
+}>`
   display: grid;
   grid-auto-flow: column;
   grid-column-gap: 8px;
+  margin-top: 10px;
   align-items: center;
   width: fit-content;
-  margin-top: 10px;
   font-size: 12px;
   line-height: 18px;
   font-weight: 400;
