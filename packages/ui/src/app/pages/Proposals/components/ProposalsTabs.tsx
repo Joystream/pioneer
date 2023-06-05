@@ -8,6 +8,7 @@ export const ProposalsTabs = () => {
   const tabs = usePageTabs([
     ['Current', ProposalsRoutes.current],
     ['Past', ProposalsRoutes.past],
+    ['Notification', ProposalsRoutes.notification],
   ])
 
   return <Tabs tabs={tabs} />
