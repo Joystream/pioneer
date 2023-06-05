@@ -247,20 +247,22 @@ export const BuyMembershipForm = ({
                   <ToggleCheckbox trueLabel="Yes" falseLabel="No" name="isValidator" />
                 </InlineToggleWrap>
                 {!isValidator && (
-                <RowInline>
+                <Row>
                   <InputComponent
                     label="Stash account"
                     required
                     inputSize="l"
                     tooltipText="Stash account is ... TOOLTIP MUST BE PROVIDED"
-                    className=""
                   >
+                    <div></div>
+                  </InputComponent>
+                  <RowInline>
                     <SelectAccount name="stashAccount" />
                     <ButtonPrimary size="medium">
                       <PlusIcon />
                     </ButtonPrimary>
-                  </InputComponent>
-                </RowInline>
+                  </RowInline>
+                </Row>
                 )}
               </Row>
             )}
