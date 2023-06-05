@@ -85,10 +85,10 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
-    "@babel/core": "7.22.x",
-    "@babel/preset-env": "7.22.x",
-    "@babel/preset-react": "7.22.x",
-    "@babel/preset-typescript": "7.21.x",
+    "@babel/core": "7",
+    "@babel/preset-env": "7",
+    "@babel/preset-react": "7",
+    "@babel/preset-typescript": "7",
     "@graphql-codegen/cli": "^2.2.0",
     "@graphql-codegen/near-operation-file-preset": "^2.1.4",
     "@graphql-codegen/typescript": "^2.2.2",
@@ -110,7 +110,6 @@
     "@types/yargs": "^17.0.3",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "@typescript-eslint/parser": "^5.50.0",
-    "babel": "^6.23.0",
     "babel-jest": "^27.2.5",
     "babel-loader": "^8.2.2",
     "babel-plugin-import-graphql": "^2.8.1",
