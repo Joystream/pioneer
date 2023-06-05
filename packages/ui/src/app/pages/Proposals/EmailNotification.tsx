@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react'
+import styled from 'styled-components'
 
-import NotificationLogo from '@/app/assets/images/NotificationLogo.png';
-import NotificationMark from '@/app/assets/images/NotificationMark.png';
+import NotificationLogo from '@/app/assets/images/NotificationLogo.png'
+import NotificationMark from '@/app/assets/images/NotificationMark.png'
 
 export const EmailNotification = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [showModal280, setShowModal280] = useState(false);
+  const [showModal, setShowModal] = useState(false)
+  const [showModal280, setShowModal280] = useState(false)
 
   const openModal = () => {
-    setShowModal(true);
-  };
+    setShowModal(true)
+  }
   const openModal280 = () => {
-    setShowModal280(true);
-  };
+    setShowModal280(true)
+  }
 
   return (
     <div>
-     <ButtonContainer>
-         <Button onClick={openModal}>600px Notification</Button>
-         <Button onClick={openModal280}>280px Notification</Button>
-     </ButtonContainer>
+      <ButtonContainer>
+        <Button onClick={openModal}>600px Notification</Button>
+        <Button onClick={openModal280}>280px Notification</Button>
+      </ButtonContainer>
       {showModal && (
         <ModalOverlay>
           <ModalContainer>
@@ -30,12 +30,8 @@ export const EmailNotification = () => {
               </Link>
             </ModalHeader>
             <ModalContent>
-              <ContentTitle>
-                Hi {'{name}'},
-              </ContentTitle>
-              <ContentBody>
-                New proposal {'{proposal name}'} is created... there are 2 days left to vote...
-              </ContentBody>
+              <ContentTitle>Hi {'{name}'},</ContentTitle>
+              <ContentBody>New proposal {'{proposal name}'} is created... there are 2 days left to vote...</ContentBody>
               <ContentView>
                 <p>View on Pioneer</p>
               </ContentView>
@@ -46,24 +42,12 @@ export const EmailNotification = () => {
               </FavIcon>
               <FooterContent>
                 <LinkRow>
-                  <PioneerLink>
-                    Pioneer.xyz
-                  </PioneerLink>
-                  |
-                  <JoystreamLink>
-                    Joystream.org
-                  </JoystreamLink>
+                  <PioneerLink>Pioneer.xyz</PioneerLink>|<JoystreamLink>Joystream.org</JoystreamLink>
                 </LinkRow>
                 <DetailRow>
-                  <CouncilLink>
-                    Council
-                  </CouncilLink>
-                  <ProposalsLink>
-                    Proposals
-                  </ProposalsLink>
-                  <ForumLink>
-                    Forum
-                  </ForumLink>
+                  <CouncilLink>Council</CouncilLink>
+                  <ProposalsLink>Proposals</ProposalsLink>
+                  <ForumLink>Forum</ForumLink>
                 </DetailRow>
                 <UnsubscribeRow>
                   You can <u>unsubscribe</u> anytime.
@@ -82,9 +66,7 @@ export const EmailNotification = () => {
               </Link>
             </ModalHeader280>
             <ModalContent280>
-              <ContentTitle280>
-                Hi {'{name}'},
-              </ContentTitle280>
+              <ContentTitle280>Hi {'{name}'},</ContentTitle280>
               <ContentBody280>
                 New proposal {'{proposal name}'} is created... there are 2 days left to vote...
               </ContentBody280>
@@ -98,24 +80,12 @@ export const EmailNotification = () => {
               </FavIcon>
               <FooterContent>
                 <LinkRow>
-                  <PioneerLink>
-                    Pioneer.xyz
-                  </PioneerLink>
-                  |
-                  <JoystreamLink>
-                    Joystream.org
-                  </JoystreamLink>
+                  <PioneerLink>Pioneer.xyz</PioneerLink>|<JoystreamLink>Joystream.org</JoystreamLink>
                 </LinkRow>
                 <DetailRow>
-                  <CouncilLink>
-                    Council
-                  </CouncilLink>
-                  <ProposalsLink>
-                    Proposals
-                  </ProposalsLink>
-                  <ForumLink>
-                    Forum
-                  </ForumLink>
+                  <CouncilLink>Council</CouncilLink>
+                  <ProposalsLink>Proposals</ProposalsLink>
+                  <ForumLink>Forum</ForumLink>
                 </DetailRow>
                 <UnsubscribeRow>
                   You can <u>unsubscribe</u> anytime.
@@ -126,8 +96,8 @@ export const EmailNotification = () => {
         </ModalOverlay>
       )}
     </div>
-  );
-};
+  )
+}
 
 const Link = styled.a`
   img {
@@ -139,7 +109,7 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`;
+`
 const Button = styled.button`
   background-color: #3f51b5;
   color: #fff;
@@ -153,7 +123,7 @@ const Button = styled.button`
   &:hover {
     background-color: #303f9f;
   }
-`;
+`
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -164,7 +134,7 @@ const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align: center;
-`;
+`
 const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -173,8 +143,8 @@ const ModalContainer = styled.div`
   position: relative;
   width: 600px;
   height: 493px;
-  background: #FFFFFF;
-`;
+  background: #ffffff;
+`
 const ModalContainer280 = styled.div`
   display: flex;
   flex-direction: column;
@@ -183,8 +153,8 @@ const ModalContainer280 = styled.div`
   position: relative;
   width: 280px;
   height: 517px;
-  background: #FFFFFF;
-`;
+  background: #ffffff;
+`
 const ModalHeader = styled.div`
   display: flex;
   flex-direction: column;
@@ -194,8 +164,8 @@ const ModalHeader = styled.div`
   gap: 10px;
   width: 600px;
   height: 111px;
-  background: #4038FF;
-`;
+  background: #4038ff;
+`
 const ModalHeader280 = styled.div`
   display: flex;
   flex-direction: column;
@@ -205,8 +175,8 @@ const ModalHeader280 = styled.div`
   gap: 10px;
   width: 280px;
   height: 111px;
-  background: #4038FF;
-`;
+  background: #4038ff;
+`
 const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -223,7 +193,7 @@ const ModalContent = styled.div`
     border-radius: 5px;
     cursor: pointer;
   }
-`;
+`
 const ModalContent280 = styled.div`
   display: flex;
   flex-direction: column;
@@ -240,7 +210,7 @@ const ModalContent280 = styled.div`
     border-radius: 5px;
     cursor: pointer;
   }
-`;
+`
 const ContentTitle = styled.div`
   width: 440px;
   height: 32px;
@@ -298,7 +268,7 @@ const ContentView = styled.div`
   width: 144px;
   height: 44px;
 
-  background: #4038FF;
+  background: #4038ff;
   border-radius: 2px;
 
   p {
@@ -311,7 +281,7 @@ const ContentView = styled.div`
     font-size: 14px;
     line-height: 140%;
     /* identical to box height, or 20px */
-    color: #FFFFFF;
+    color: #ffffff;
   }
 `
 const ModalFooter = styled.div`
@@ -323,7 +293,7 @@ const ModalFooter = styled.div`
   width: 600px;
   height: 146px;
   background: #000000;
-`;
+`
 const ModalFooter280 = styled.div`
   display: flex;
   flex-direction: column;
@@ -333,7 +303,7 @@ const ModalFooter280 = styled.div`
   width: 280px;
   height: 146px;
   background: #000000;
-`;
+`
 const FavIcon = styled.a`
   img {
     width: 24px;
@@ -373,32 +343,31 @@ const LinkRow = styled.div`
 
   /* Black/25 */
 
-  color: #F9FAFC;
+  color: #f9fafc;
 `
 const CouncilLink = styled.div`
   width: 38px;
   height: 14px;
-  `
+`
 const ProposalsLink = styled.div`
   width: 49px;
   height: 14px;
-  `
+`
 const ForumLink = styled.div`
   width: 32px;
   height: 14px;
-  `
+`
 const DetailRow = styled.div`
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
   font-size: 10px;
   line-height: 140%;
-  color: #F9FAFC;
+  color: #f9fafc;
 
   display: flex;
   align-items: center;
   text-align: center;
-
 `
 const UnsubscribeRow = styled.div`
   font-family: 'Poppins';
@@ -406,8 +375,8 @@ const UnsubscribeRow = styled.div`
   font-weight: 400;
   font-size: 10px;
   line-height: 140%;
-  color: #C4CCD6;
+  color: #c4ccd6;
   padding-top: 10px;
 `
 
-export default EmailNotification;
+export default EmailNotification
