@@ -17,6 +17,13 @@ export const Row = styled.div`
   height: auto;
 `
 
+export const RowInline = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: auto;
+`
+
 export const AccountRow = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;

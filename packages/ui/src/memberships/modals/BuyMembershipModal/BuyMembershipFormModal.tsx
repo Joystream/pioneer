@@ -27,6 +27,7 @@ import {
   ModalFooterGroup,
   ModalHeader,
   Row,
+  RowInline,
   ScrolledModal,
   ScrolledModalBody,
   ScrolledModalContainer,
@@ -51,6 +52,8 @@ import {
   ReferrerSchema,
 } from '../../model/validation'
 import { Member } from '../../types'
+import { PlusIcon } from '@/common/components/icons/PlusIcon'
+import { RowGapBlock } from '@/common/components/page/PageContent'
 
 interface BuyMembershipFormModalProps {
   onClose: () => void
@@ -76,6 +79,7 @@ const CreateMemberSchema = Yup.object().shape({
   ),
   hasTerms: Yup.boolean().required().oneOf([true]),
   isReferred: Yup.boolean(),
+  isValidator: Yup.boolean(),
   referrer: ReferrerSchema,
   externalResources: ExternalResourcesSchema,
 })
@@ -88,6 +92,7 @@ export interface MemberFormFields {
   about: string
   avatarUri: File | string | null
   isReferred?: boolean
+  isValidator?: boolean
   referrer?: Member
   hasTerms?: boolean
   invitor?: Member
@@ -101,6 +106,7 @@ const formDefaultValues = {
   about: '',
   avatarUri: null,
   isReferred: false,
+  isValidator: false,
   referrer: undefined,
   hasTerms: false,
   externalResources: {},
@@ -135,7 +141,7 @@ export const BuyMembershipForm = ({
     },
   })
 
-  const [handle, isReferred, referrer, captchaToken] = form.watch(['handle', 'isReferred', 'referrer', 'captchaToken'])
+  const [handle, isReferred, isValidator, referrer, captchaToken] = form.watch(['handle', 'isReferred', 'isValidator', 'referrer', 'captchaToken'])
 
   useEffect(() => {
     if (handle) {
@@ -233,6 +239,31 @@ export const BuyMembershipForm = ({
             <AvatarInput />
 
             <SocialMediaSelector />
+
+            {type === 'general' && (
+              <Row>
+                <InlineToggleWrap>
+                  <Label>I am a validator: </Label>
+                  <ToggleCheckbox trueLabel="Yes" falseLabel="No" name="isValidator" />
+                </InlineToggleWrap>
+                {!isValidator && (
+                <RowInline>
+                  <InputComponent
+                    label="Stash account"
+                    required
+                    inputSize="l"
+                    tooltipText="Stash account is ... TOOLTIP MUST BE PROVIDED"
+                    className=""
+                  >
+                    <SelectAccount name="stashAccount" />
+                    <ButtonPrimary size="medium">
+                      <PlusIcon />
+                    </ButtonPrimary>
+                  </InputComponent>
+                </RowInline>
+                )}
+              </Row>
+            )}
 
             {process.env.REACT_APP_CAPTCHA_SITE_KEY && type === 'onBoarding' && (
               <Row>
