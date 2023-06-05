@@ -1,0 +1,37 @@
+
+*** These modified files were found in JOE when it aborted on Fri Jun  2 04:15:23 2023
+*** JOE was aborted by UNIX signal 1
+
+*** File '/home/debian/pioneer2/pioneer/.git/MERGE_MSG'
+Merge branch 'validators-list-page' of https://github.com/eshark9312/pioneer into fix/4331-validatorPage
+
+# Please enter a commit message to explain why this merge is necessary,
+# especially if it merges an updated upstream into a topic branch.
+#
+# Lines starting with '#' will be ignored, and an empty message aborts
+# the commit.
+
+y
+
+
+*** File '(Unnamed)'
+wq
+
+*** File '(Unnamed)'
+/home/debian/ipfs/joystream/pioneer/.git/MERGE_MSG
+/home/debian/pioneer/.git/rebase-merge/git-rebase-todo
+/home/debian/community-repo2/.git/COMMIT_EDITMSG
+/home/debian/community-repo2/.git/COMMIT_EDITMSG
+/home/debian/community-repo/.git/COMMIT_EDITMSG
+/home/debian/community-repo/.git/COMMIT_EDITMSG
+/home/debian/joystream/.git/COMMIT_EDITMSG
+/home/debian/tmp/pioneer-backend/pioneer/.git/MERGE_MSG
+* Build Log *
+/home/debian/discord-send-bot/.git/MERGE_MSG
+/home/debian/pioneer2/pioneer/.git/MERGE_MSG
+
+*** File '* Startup Log *'
+Processing '/etc/joe/editorrc'...
+Processing '/etc/joe/ftyperc'...
+Finished processing /etc/joe/ftyperc
+Finished processing /etc/joe/editorrc

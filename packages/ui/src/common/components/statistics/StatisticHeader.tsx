@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Label } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
+import { WatchIcon } from '../icons'
 
 export interface StatisticHeaderProps {
   title?: string
@@ -14,6 +15,7 @@ export interface StatisticHeaderProps {
   TooltipIcon?: React.ElementType
   counter?: number
   dotElement?: React.ReactNode
+  actionElement?: React.ReactNode
 }
 
 export const StatisticHeader = ({
@@ -24,6 +26,7 @@ export const StatisticHeader = ({
   tooltipLinkURL,
   counter,
   dotElement,
+  actionElement,
   TooltipIcon = TooltipDefault,
 }: StatisticHeaderProps) => (
   <StatsHeader>
@@ -43,6 +46,7 @@ export const StatisticHeader = ({
       )}
       {counter && <Counter>{counter}</Counter>}
     </StatsInfo>
+    {actionElement ?? null}
   </StatsHeader>
 )
 
