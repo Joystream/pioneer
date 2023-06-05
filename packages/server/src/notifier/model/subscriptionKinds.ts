@@ -6,14 +6,14 @@ const extract = <T extends NotificationKind>(...keys: T[]): Pick<typeof Notifica
 
 export type EntitySubscriptionKind = typeof EntitySubscriptionKind[keyof typeof EntitySubscriptionKind]
 export const EntitySubscriptionKind = extract(
-  'FORUM_WATCHED_THREAD',
-  'FORUM_WATCHED_CATEGORY_POST',
-  'FORUM_WATCHED_CATEGORY_THREAD'
+  'FORUM_THREAD_ENTITY_POST',
+  'FORUM_CATEGORY_ENTITY_POST',
+  'FORUM_CATEGORY_ENTITY_THREAD'
   // 'FORUM_WATCHED_CATEGORY_SUBCATEGORY',
 
-  // 'PROPOSAL_WATCHED_STATUS',
-  // 'PROPOSAL_WATCHED_VOTE',
-  // 'PROPOSAL_WATCHED_DISCUSSION'
+  // 'PROPOSAL_ENTITY_STATUS',
+  // 'PROPOSAL_ENTITY_VOTE',
+  // 'PROPOSAL_ENTITY_DISCUSSION'
 )
 
 export type GeneralSubscriptionKind = typeof GeneralSubscriptionKind[keyof typeof GeneralSubscriptionKind]

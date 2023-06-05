@@ -1,37 +1,62 @@
-import { QueryOptions } from '@apollo/client'
-import { useContext, useEffect, useReducer, useState } from 'react'
+import type { MutationOptions, QueryOptions } from '@apollo/client'
+import type { GraphQLError } from 'graphql'
+import { useCallback, useContext, useEffect, useReducer, useState } from 'react'
 
 import { BackendContext } from '@/app/providers/backend/context'
 
-type Props = QueryOptions & { skip?: boolean }
-type UseBackend<T> = { data?: T; error?: Error }
+type EagerQueryOptions = { skip?: boolean } & QueryOptions & Pick<Required<QueryOptions>, 'variables'>
+type LazyQueryOptions = { skip?: boolean } & Omit<QueryOptions, 'variables'>
+type LazyMutationOptions = Omit<MutationOptions, 'variables'>
+type Props = (EagerQueryOptions | LazyQueryOptions | LazyMutationOptions) & { skip?: boolean }
 
-export const useBackend = <T>({ skip = false, ...queryOptions }: Props): UseBackend<T> => {
+type SendRes<T> = Promise<{ data?: T; error?: GraphQLError }>
+type UseBackendEager<T> = { data?: T; error?: GraphQLError }
+type UseBackendLazy<T> = { data?: T; error?: GraphQLError; send: (variables: any) => SendRes<T> }
+type UseBackend<T> = UseBackendEager<T> | UseBackendLazy<T>
+
+const MAX_RETRY = 10
+const RETRY_INTERVAL = 5_000
+
+export function useBackend<T>(props: EagerQueryOptions): UseBackendEager<T>
+export function useBackend<T>(props: LazyQueryOptions): UseBackendLazy<T>
+export function useBackend<T>(props: LazyMutationOptions): UseBackendLazy<T>
+export function useBackend<T>({ skip = false, ...options }: Props): UseBackend<T> {
   const [data, setData] = useState<T | undefined>()
-  const [error, setError] = useState<Error | undefined>()
+  const [error, setError] = useState<GraphQLError | undefined>()
   const backendClient = useContext(BackendContext)
   const [retry, incrementRetry] = useReducer((retry) => retry + 1, 0)
 
+  const queryOptions = 'query' in options ? options : undefined
+  const mutationOptions = 'mutation' in options ? options : undefined
+  const variables = 'variables' in options && options.variables
+  const isEagerQuery = !!variables
+
+  const send = useCallback(
+    async (variables: any): SendRes<T> => {
+      const query = queryOptions && backendClient?.query({ ...queryOptions, variables })
+      const mutation = mutationOptions && backendClient?.mutate({ ...mutationOptions, variables })
+      const res = await (query ?? mutation)
+
+      if (!res) return {}
+
+      const error = res.errors?.[0]
+      const data = res.data ?? undefined
+
+      if (error) setError(error)
+      setData(data)
+
+      return { data, error }
+    },
+    [backendClient]
+  )
+
   useEffect(() => {
-    if (!backendClient || skip) return
+    if (!isEagerQuery || skip || retry > MAX_RETRY) return
 
     let timeout: ReturnType<typeof setTimeout>
-    backendClient.query(queryOptions).then(
-      ({ data, error }) => {
-        if (error) {
-          setError(error)
-        } else {
-          setData(data ?? undefined)
-        }
-      },
-      (err) => {
-        setError(err)
-        timeout = setTimeout(incrementRetry, 5_000)
-      }
-    )
-
+    send(variables).catch(() => (timeout = setTimeout(incrementRetry, RETRY_INTERVAL)))
     return () => clearTimeout(timeout)
-  }, [JSON.stringify(queryOptions.variables), backendClient, retry])
+  }, [send, JSON.stringify(variables), skip, retry])
 
-  return { data, error }
+  return isEagerQuery ? { data, error } : { data, error, send }
 }

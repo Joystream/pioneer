@@ -29148,6 +29148,8 @@ __metadata:
     "@graphql-codegen/cli": ^3.1.0
     "@graphql-codegen/client-preset": ^2.1.0
     "@jest/types": ^29.4.3
+    "@joystream/types": 0.20.6
+    "@polkadot/keyring": ^11.1.3
     "@polkadot/util-crypto": ^11.0.1
     "@prisma/client": ^4.10.1
     "@sendgrid/mail": ^7.7.0
