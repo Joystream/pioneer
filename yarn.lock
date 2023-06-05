@@ -3532,6 +3532,7 @@ __metadata:
     subscriptions-transport-ws: ^0.11.0
     ts-loader: ^9.2.6
     ts-node: ^10.4.0
+    tsconfig-paths: ^3.11.0
     typescript: 4.4.3
     use-react-router-breadcrumbs: ^2.0.2
     webpack: ^5.64.1
