@@ -99,7 +99,7 @@ const ActivePageIndicator = styled(motion.div)`
   }
 `
 
-const NAVIGATION_LINK_GAP = 16
+export const NAVIGATION_LINK_GAP = 16
 
 const NavigationItemLinkChildren = styled.div`
   display: grid;

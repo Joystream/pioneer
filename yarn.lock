@@ -1932,7 +1932,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-autoformat@npm:^31.0.0":
+"@ckeditor/ckeditor5-autoformat@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-autoformat@npm:31.0.0"
   dependencies:
@@ -1941,7 +1941,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-basic-styles@npm:^31.0.0":
+"@ckeditor/ckeditor5-basic-styles@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-basic-styles@npm:31.0.0"
   dependencies:
@@ -1950,7 +1950,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-block-quote@npm:^31.0.0":
+"@ckeditor/ckeditor5-block-quote@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-block-quote@npm:31.0.0"
   dependencies:
@@ -2027,7 +2027,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-editor-classic@npm:^31.0.0":
+"@ckeditor/ckeditor5-editor-classic@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-editor-classic@npm:31.0.0"
   dependencies:
@@ -2037,7 +2037,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-editor-inline@npm:^31.0.0":
+"@ckeditor/ckeditor5-editor-inline@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-editor-inline@npm:31.0.0"
   dependencies:
@@ -2068,7 +2068,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-essentials@npm:^31.0.0":
+"@ckeditor/ckeditor5-essentials@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-essentials@npm:31.0.0"
   dependencies:
@@ -2077,7 +2077,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-heading@npm:^31.0.0":
+"@ckeditor/ckeditor5-heading@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-heading@npm:31.0.0"
   dependencies:
@@ -2086,7 +2086,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-image@npm:^31.0.0":
+"@ckeditor/ckeditor5-image@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-image@npm:31.0.0"
   dependencies:
@@ -2097,7 +2097,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-indent@npm:^31.0.0":
+"@ckeditor/ckeditor5-indent@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-indent@npm:31.0.0"
   dependencies:
@@ -2106,7 +2106,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-link@npm:^31.0.0":
+"@ckeditor/ckeditor5-link@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-link@npm:31.0.0"
   dependencies:
@@ -2117,7 +2117,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-list@npm:^31.0.0":
+"@ckeditor/ckeditor5-list@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-list@npm:31.0.0"
   dependencies:
@@ -2126,7 +2126,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-markdown-gfm@npm:^31.0.0":
+"@ckeditor/ckeditor5-markdown-gfm@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-markdown-gfm@npm:31.0.0"
   dependencies:
@@ -2138,7 +2138,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-mention@npm:^31.0.0":
+"@ckeditor/ckeditor5-mention@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-mention@npm:31.0.0"
   dependencies:
@@ -2148,7 +2148,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-paragraph@npm:^31.0.0":
+"@ckeditor/ckeditor5-paragraph@npm:31.0.0, @ckeditor/ckeditor5-paragraph@npm:^31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-paragraph@npm:31.0.0"
   dependencies:
@@ -2159,7 +2159,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-paste-from-office@npm:^31.0.0":
+"@ckeditor/ckeditor5-paste-from-office@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-paste-from-office@npm:31.0.0"
   dependencies:
@@ -2179,7 +2179,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-theme-lark@npm:^31.0.0":
+"@ckeditor/ckeditor5-special-characters@npm:31.0.0":
+  version: 31.0.0
+  resolution: "@ckeditor/ckeditor5-special-characters@npm:31.0.0"
+  dependencies:
+    ckeditor5: ^31.0.0
+  checksum: 30a7140eb400b4ed6ca71781f5e9d011997812c75942f3ab6326170439f9dc948430b8537ca8bf1014c276aa4eaa8973d6a4cb7dd415e420d90906a5077147d0
+  languageName: node
+  linkType: hard
+
+"@ckeditor/ckeditor5-table@npm:31.0.0":
+  version: 31.0.0
+  resolution: "@ckeditor/ckeditor5-table@npm:31.0.0"
+  dependencies:
+    ckeditor5: ^31.0.0
+    lodash-es: ^4.17.15
+  checksum: cafd804e273bcacbc8f15017b270ec4863210eac5dbe03c4a534f015de6721525a544eb2281c27c8c20627576f6aeba4d1cd2dfd470767689ff1d28cc0ecd31e
+  languageName: node
+  linkType: hard
+
+"@ckeditor/ckeditor5-theme-lark@npm:31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-theme-lark@npm:31.0.0"
   dependencies:
@@ -2188,7 +2207,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ckeditor/ckeditor5-typing@npm:^31.0.0":
+"@ckeditor/ckeditor5-typing@npm:31.0.0, @ckeditor/ckeditor5-typing@npm:^31.0.0":
   version: 31.0.0
   resolution: "@ckeditor/ckeditor5-typing@npm:31.0.0"
   dependencies:
@@ -3348,25 +3367,27 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@joystream/markdown-editor@workspace:packages/markdown-editor"
   dependencies:
-    "@ckeditor/ckeditor5-autoformat": ^31.0.0
-    "@ckeditor/ckeditor5-basic-styles": ^31.0.0
-    "@ckeditor/ckeditor5-block-quote": ^31.0.0
+    "@ckeditor/ckeditor5-autoformat": 31.0.0
+    "@ckeditor/ckeditor5-basic-styles": 31.0.0
+    "@ckeditor/ckeditor5-block-quote": 31.0.0
     "@ckeditor/ckeditor5-dev-utils": ^25.4.5
     "@ckeditor/ckeditor5-dev-webpack-plugin": ^25.4.5
-    "@ckeditor/ckeditor5-editor-classic": ^31.0.0
-    "@ckeditor/ckeditor5-editor-inline": ^31.0.0
-    "@ckeditor/ckeditor5-essentials": ^31.0.0
-    "@ckeditor/ckeditor5-heading": ^31.0.0
-    "@ckeditor/ckeditor5-image": ^31.0.0
-    "@ckeditor/ckeditor5-indent": ^31.0.0
-    "@ckeditor/ckeditor5-link": ^31.0.0
-    "@ckeditor/ckeditor5-list": ^31.0.0
-    "@ckeditor/ckeditor5-markdown-gfm": ^31.0.0
-    "@ckeditor/ckeditor5-mention": ^31.0.0
-    "@ckeditor/ckeditor5-paragraph": ^31.0.0
-    "@ckeditor/ckeditor5-paste-from-office": ^31.0.0
-    "@ckeditor/ckeditor5-theme-lark": ^31.0.0
-    "@ckeditor/ckeditor5-typing": ^31.0.0
+    "@ckeditor/ckeditor5-editor-classic": 31.0.0
+    "@ckeditor/ckeditor5-editor-inline": 31.0.0
+    "@ckeditor/ckeditor5-essentials": 31.0.0
+    "@ckeditor/ckeditor5-heading": 31.0.0
+    "@ckeditor/ckeditor5-image": 31.0.0
+    "@ckeditor/ckeditor5-indent": 31.0.0
+    "@ckeditor/ckeditor5-link": 31.0.0
+    "@ckeditor/ckeditor5-list": 31.0.0
+    "@ckeditor/ckeditor5-markdown-gfm": 31.0.0
+    "@ckeditor/ckeditor5-mention": 31.0.0
+    "@ckeditor/ckeditor5-paragraph": 31.0.0
+    "@ckeditor/ckeditor5-paste-from-office": 31.0.0
+    "@ckeditor/ckeditor5-special-characters": 31.0.0
+    "@ckeditor/ckeditor5-table": 31.0.0
+    "@ckeditor/ckeditor5-theme-lark": 31.0.0
+    "@ckeditor/ckeditor5-typing": 31.0.0
     "@typescript-eslint/eslint-plugin": ^4.33.0
     "@typescript-eslint/parser": ^4.33.0
     prettier: ^2.4.1
@@ -3415,11 +3436,12 @@ __metadata:
     "@joystream/js": 1.2.0
     "@joystream/markdown-editor": ^0.1.0
     "@joystream/metadata-protobuf": ^2.0.0
-    "@joystream/types": 0.20.6
+    "@joystream/types": ^2.0.0
     "@miragejs/graphql": ^0.1.13
     "@nivo/bar": ^0.79.1
     "@nivo/core": ^0.79.0
     "@noble/hashes": ^1.1.5
+    "@oneidentity/zstd-js": ^1.0.3
     "@polkadot/api": 8.9.1
     "@polkadot/extension-dapp": 0.44.2-4
     "@polkadot/keyring": 9.5.1
@@ -3477,7 +3499,7 @@ __metadata:
     i18next: ^21.6.3
     i18next-browser-languagedetector: ^6.1.2
     i18next-json-csv-converter: ^0.2.0
-    injectweb3-connect: ^1.1.1
+    injectweb3-connect: 2.1.1
     jest: ^27.2.5
     jest-transform-stub: ^2.0.0
     jsdom: ^18.0.0
@@ -3521,9 +3543,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joystream/types@file:./packages/joystream-types-v0.20.6.tgz::locator=pioneer%40workspace%3A.":
-  version: 0.20.6
-  resolution: "@joystream/types@file:./packages/joystream-types-v0.20.6.tgz::locator=pioneer%40workspace%3A."
+"@joystream/types@npm:^2.0.0":
+  version: 2.1.0
+  resolution: "@joystream/types@npm:2.1.0"
   dependencies:
     "@polkadot/api": 8.9.1
     "@polkadot/keyring": 9.5.1
@@ -3533,7 +3555,23 @@ __metadata:
     ajv: ^6.11.0
     lodash: ^4.17.15
     moment: ^2.24.0
-  checksum: f9085b9885504d388cf0ffcebb3ab8bcb4af6ae8ae095ba6f2c5310aaf61df04dc22ff6f783141c498cbe6eda309f44f34ed30b4c6cd51841a888bcb07b93323
+  checksum: 22411d5715b0f510f21cefbbdba45a91e180744e1c53961fef043026dd6193e9412e91bf0394875cfef325c50e63836c956c898a225223f5f064bfc017108cf4
+  languageName: node
+  linkType: hard
+
+"@joystream/types@npm:~0.20.5":
+  version: 0.20.5
+  resolution: "@joystream/types@npm:0.20.5"
+  dependencies:
+    "@polkadot/api": 8.9.1
+    "@polkadot/keyring": 9.5.1
+    "@polkadot/types": 8.9.1
+    "@types/lodash": ^4.14.157
+    "@types/vfile": ^4.0.0
+    ajv: ^6.11.0
+    lodash: ^4.17.15
+    moment: ^2.24.0
+  checksum: a3e310f358d7aa6d51a39d639f6ceec5052959abd38bc3ef34339a3c411ea91647d4fe50d09361d2aecd7d254da5d90b774e44dc67656cf1a5cd72aa89b0ba7b
   languageName: node
   linkType: hard
 
@@ -3863,6 +3901,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@oneidentity/zstd-js@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@oneidentity/zstd-js@npm:1.0.3"
+  dependencies:
+    "@types/emscripten": ^1.39.4
+  checksum: 4db7f4e3b694dc5c173b94e0555c60a885ad02da38773cb84a9c15936f0c6c16ef1295507a68b19e99dc5b0563d3cb3381396d44f22b5552e77770495f52ad9f
+  languageName: node
+  linkType: hard
+
 "@pmmmwh/react-refresh-webpack-plugin@npm:^0.4.3":
   version: 0.4.3
   resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.4.3"
@@ -3983,38 +4030,6 @@ __metadata:
     "@polkadot/util": "*"
     "@polkadot/util-crypto": "*"
   checksum: e63ca2c28315713e829a13648e37dae78740e61d4727820ebefcaa5eb0d99bdb92ad47062b31cbc73140eb831092064ef31aafb7cc552b4c587e1e81b10e2510
-  languageName: node
-  linkType: hard
-
-"@polkadot/extension-dapp@npm:^0.44.1":
-  version: 0.44.1
-  resolution: "@polkadot/extension-dapp@npm:0.44.1"
-  dependencies:
-    "@babel/runtime": ^7.18.3
-    "@polkadot/extension-inject": ^0.44.1
-    "@polkadot/util": ^9.4.1
-    "@polkadot/util-crypto": ^9.4.1
-  peerDependencies:
-    "@polkadot/api": "*"
-    "@polkadot/util": "*"
-    "@polkadot/util-crypto": "*"
-  checksum: e759e8ea954e2be986ca16c7231d84306e2d5f37f444e936b18644011c4c15d765607ec5814eaeab2de65b655eb698b10619438ad58bb79b6c9aef478e93a193
-  languageName: node
-  linkType: hard
-
-"@polkadot/extension-inject@npm:^0.44.1":
-  version: 0.44.1
-  resolution: "@polkadot/extension-inject@npm:0.44.1"
-  dependencies:
-    "@babel/runtime": ^7.18.3
-    "@polkadot/rpc-provider": ^8.7.1
-    "@polkadot/types": ^8.7.1
-    "@polkadot/util": ^9.4.1
-    "@polkadot/util-crypto": ^9.4.1
-    "@polkadot/x-global": ^9.4.1
-  peerDependencies:
-    "@polkadot/api": "*"
-  checksum: cea75c32e702d344b4e1b4116ee3e98a09bb8fc97649677c22307063b6671b914e926bc8186d4e374d7686218cce3628583cd5dbfcb04ce6997e21d66024cd25
   languageName: node
   linkType: hard
 
@@ -4402,7 +4417,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/x-global@npm:9.7.2, @polkadot/x-global@npm:^9.4.1, @polkadot/x-global@npm:^9.5.1":
+"@polkadot/x-global@npm:9.7.2, @polkadot/x-global@npm:^9.5.1":
   version: 9.7.2
   resolution: "@polkadot/x-global@npm:9.7.2"
   dependencies:
@@ -6031,6 +6046,13 @@ __metadata:
   dependencies:
     "@types/ms": "*"
   checksum: 0a7b89d8ed72526858f0b61c6fd81f477853e8c4415bb97f48b1b5545248d2ae389931680b94b393b993a7cfe893537a200647d93defe6d87159b96812305adc
+  languageName: node
+  linkType: hard
+
+"@types/emscripten@npm:^1.39.4":
+  version: 1.39.6
+  resolution: "@types/emscripten@npm:1.39.6"
+  checksum: 437f2f9cdfd9057255662508fa9a415fe704ba484c6198f3549c5b05feebcdcd612b1ec7b10026d2566935d05d3c36f9366087cb42bc90bd25772a88fcfc9343
   languageName: node
   linkType: hard
 
@@ -14644,15 +14666,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"injectweb3-connect@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "injectweb3-connect@npm:1.1.1"
-  dependencies:
-    "@polkadot/api": ^8.8.2
-    "@polkadot/extension-dapp": ^0.44.1
-    "@polkadot/extension-inject": ^0.44.1
-    "@polkadot/util-crypto": ^9.4.1
-  checksum: b0ac017f918e2d752521081e88790d6679355a699c47927cff3ac1edfa891b02d2cd24bad5e786a29f935fab569dbc6e470fabd4250bf40b7c5fae67d7bf74c6
+"injectweb3-connect@npm:2.1.1":
+  version: 2.1.1
+  resolution: "injectweb3-connect@npm:2.1.1"
+  peerDependencies:
+    "@polkadot/api": ^10.4.1
+  checksum: a3e1eff7da5f603bade0dacc3f147a0a92581dd9e2ecb989819766be2fa2563e454232c18c69b485961a8556aacae9585aaef98f1876276f613aca79ffdc58e3
   languageName: node
   linkType: hard
 
