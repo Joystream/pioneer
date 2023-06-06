@@ -113,6 +113,7 @@ export const BorderRad = {
 export const Sizes = {
   selectHeight: '80px',
   accountHeight: '94px',
+  validatorHeight:'70px'
 }
 
 export const Shadows = {

@@ -4,10 +4,9 @@ import { ContentWithTabs } from '@/common/components/page/PageContent'
 import { Tabs } from '@/common/components/Tabs'
 import { Colors } from '@/common/constants'
 import { Overview } from './OverView'
-import { Norminators } from './Nominators'
+import { Nominators } from './Nominators'
 import { RewardHistory } from './RewardHistory'
 import { SlashingHistory } from './SlashingHistory'
-
 
 export function ValidatorDashboardMain() {
 
@@ -54,10 +53,10 @@ export function ValidatorDashboardMain() {
 
   return (
     <ContentWithTabs>
-      <Tabs tabsSize="xs" tabs={tabs} />
+      <Tabs tabs={tabs} />
       <ValidatorDasbaordWarp>
         {IsOverview && <Overview />}
-        {IsNominators && <Norminators />}
+        {IsNominators && <Nominators />}
         {IsRewards && <RewardHistory />}
         {IsSlashing && <SlashingHistory />}
       </ValidatorDasbaordWarp>

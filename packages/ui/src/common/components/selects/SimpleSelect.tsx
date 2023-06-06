@@ -210,16 +210,16 @@ export const SelectContainer = styled.label<SimpleSelectSizingProps>`
   ${OptionContainer},
   ${SelectComponent} {
     height: ${({ selectSize }) => {
-      switch (selectSize) {
-        case 's':
-        default:
-          return '32px;'
-        case 'm':
-          return '40px'
-        case 'l':
-          return '48px'
-      }
-    }};
+    switch (selectSize) {
+      case 's':
+      default:
+        return '32px;'
+      case 'm':
+        return '40px'
+      case 'l':
+        return '48px'
+    }
+  }};
   }
 
   &:hover,

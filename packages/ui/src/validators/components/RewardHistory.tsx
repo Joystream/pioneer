@@ -10,14 +10,28 @@ import { Tabs } from '@/common/components/Tabs'
 import { Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { SortKey, setOrder } from '@/accounts/model/sortAccounts'
+import { SortKey, setOrder, sortAccounts } from '@/accounts/model/sortAccounts'
+import { List, ListItem } from '@/common/components/List'
+import { ValidatorAccountItem } from './dashboard/ValidatorAccountItem'
+import { filterAccounts } from '@/accounts/model/filterAccounts'
+import { useMyBalances } from '@/accounts/hooks/useMyBalances'
+import { RewardHistoryItem } from './dashboard/RewardHistoryItem'
 
 export function RewardHistory() {
-    const { hasAccounts, isLoading, wallet } = useMyAccounts()
+    const { allAccounts, hasAccounts, isLoading, wallet } = useMyAccounts()
     const { showModal } = useModal()
-
+    const [isDisplayAll, setIsDisplayAll] = useState(true)
+    const balances = useMyBalances()
     const [sortBy, setSortBy] = useState<SortKey>('name')
     const [isDescending, setDescending] = useState(false)
+    const visibleAccounts = useMemo(
+        () => filterAccounts(allAccounts, isDisplayAll, balances),
+        [JSON.stringify(allAccounts), isDisplayAll, hasAccounts]
+    )
+    const sortedAccounts = useMemo(
+        () => sortAccounts(visibleAccounts, balances, sortBy, isDescending),
+        [visibleAccounts, balances, sortBy, isDescending]
+    )
 
     const getOnSort = (key: SortKey) => () => setOrder(key, sortBy, setSortBy, isDescending, setDescending)
 
@@ -51,9 +65,22 @@ export function RewardHistory() {
     return (
         <ContentWithTabs>
             <AccountsWrap>
-                <h1>Reward History</h1>
-
-
+                <ListHeaders>
+                    <Header sortKey='name'>ACCOUNT</Header>
+                    <Header sortKey='total'>EPOCH</Header>
+                    <Header sortKey='total'>DATE</Header>
+                </ListHeaders>
+                <List>
+                    {!isLoading ? (
+                        sortedAccounts.map((account) => (
+                            <ListItem key={account.address} borderless>
+                                <RewardHistoryItem account={account} />
+                            </ListItem>
+                        ))
+                    ) : (
+                        <AccountItemLoading count={5} />
+                    )}
+                </List>
             </AccountsWrap>
         </ContentWithTabs>
     )
@@ -79,7 +106,7 @@ const ListHeaders = styled.div`
   display: grid;
   grid-area: accountstablenav;
   grid-template-rows: 1fr;
-  grid-template-columns: 276px repeat(4, 128px) 104px;
+  grid-template-columns: 32px repeat(2,128px) 104px;
   justify-content: space-between;
   width: 100%;
   padding-left: 16px;
