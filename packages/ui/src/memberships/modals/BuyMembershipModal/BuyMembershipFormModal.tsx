@@ -2,9 +2,10 @@ import HCaptcha from '@hcaptcha/react-hcaptcha'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import React, { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import styled from 'styled-components'
 import * as Yup from 'yup'
 
-import { SelectAccount } from '@/accounts/components/SelectAccount'
+import { SelectAccount, SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
@@ -20,7 +21,9 @@ import {
   LabelLink,
   ToggleCheckbox,
 } from '@/common/components/forms'
-import { Arrow } from '@/common/components/icons'
+import { Arrow, CrossIcon } from '@/common/components/icons'
+import { PlusIcon } from '@/common/components/icons/PlusIcon'
+import { AlertSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
 import {
   ModalFooter,
@@ -35,7 +38,7 @@ import {
 } from '@/common/components/Modal'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
-import { TextMedium } from '@/common/components/typography'
+import { TextMedium, TextSmall } from '@/common/components/typography'
 import { definedValues } from '@/common/utils'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { AvatarInput } from '@/memberships/components/AvatarInput'
@@ -52,8 +55,7 @@ import {
   ReferrerSchema,
 } from '../../model/validation'
 import { Member } from '../../types'
-import { PlusIcon } from '@/common/components/icons/PlusIcon'
-import { RowGapBlock } from '@/common/components/page/PageContent'
+
 
 interface BuyMembershipFormModalProps {
   onClose: () => void
@@ -71,6 +73,7 @@ const isRequired = 'This field is required.'
 const CreateMemberSchema = Yup.object().shape({
   rootAccount: AccountSchema.required(isRequired),
   controllerAccount: AccountSchema.required(isRequired),
+  stashAccountSelect: AccountSchema,
   avatarUri: AvatarURISchema,
   name: Yup.string().required(isRequired),
   handle: HandleSchema.required(isRequired).matches(
@@ -87,6 +90,8 @@ const CreateMemberSchema = Yup.object().shape({
 export interface MemberFormFields {
   rootAccount?: Account
   controllerAccount?: Account
+  stashAccountSelect?: Account
+  stashAccounts?: Account[]
   name: string
   handle: string
   about: string
@@ -127,6 +132,8 @@ export const BuyMembershipForm = ({
 }: BuyMembershipFormProps) => {
   const { allAccounts } = useMyAccounts()
   const [formHandleMap, setFormHandleMap] = useState('')
+  const [stashAccounts, setStashAccounts] = useState([{}])
+  const [isAccountAdded, setIsAccountAdded] = useState(true)
   const { isUploading, uploadAvatarAndSubmit } = useUploadAvatarAndSubmit(onSubmit)
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
 
@@ -141,7 +148,7 @@ export const BuyMembershipForm = ({
     },
   })
 
-  const [handle, isReferred, isValidator, referrer, captchaToken] = form.watch(['handle', 'isReferred', 'isValidator', 'referrer', 'captchaToken'])
+  const [handle, isReferred, isValidator, referrer, captchaToken, stashAccountSelect] = form.watch(['handle', 'isReferred', 'isValidator', 'referrer', 'captchaToken', 'stashAccountSelect'])
 
   useEffect(() => {
     if (handle) {
@@ -155,9 +162,28 @@ export const BuyMembershipForm = ({
     }
   }, [data?.membershipsConnection.totalCount])
 
-  const isFormValid = !isUploading && form.formState.isValid
+  const isFormValid = !isUploading && form.formState.isValid && ( !isValidator || stashAccounts?.length > 1 )
   const isDisabled =
     type === 'onBoarding' && process.env.REACT_APP_CAPTCHA_SITE_KEY ? !captchaToken || !isFormValid : !isFormValid
+
+  const addStashAccount = () => {
+    const accountSelection = stashAccountSelect as Account;
+    setStashAccounts((prevStashAccounts)=>[...prevStashAccounts,accountSelection])
+    form?.setValue('stashAccountSelect' as keyof MemberFormFields, undefined)
+  }
+
+  const removeStashAccount = (index:number) => {
+    setStashAccounts((prevAccounts)=>prevAccounts.filter((account,ind)=>ind!==index))
+  }
+
+  useEffect(()=>{
+    const accountSelection = stashAccountSelect as Account;
+    if (stashAccounts.some((account)=>account === accountSelection)) {
+      setIsAccountAdded(true)
+    } else {
+      setIsAccountAdded(false)
+    }
+  },[stashAccountSelect])
 
   return (
     <>
@@ -241,30 +267,84 @@ export const BuyMembershipForm = ({
             <SocialMediaSelector />
 
             {type === 'general' && (
+              <>
               <Row>
                 <InlineToggleWrap>
                   <Label>I am a validator: </Label>
                   <ToggleCheckbox trueLabel="Yes" falseLabel="No" name="isValidator" />
                 </InlineToggleWrap>
-                {!isValidator && (
-                <Row>
+              </Row>
+              {isValidator && (
+              <>
+              <Row>
+                <RowInline>
                   <InputComponent
+                    id="select-stashAccount"
                     label="Stash account"
-                    required
                     inputSize="l"
                     tooltipText="Stash account is ... TOOLTIP MUST BE PROVIDED"
                   >
-                    <div></div>
+                    <SelectAccount id="select-stashAccount" name="stashAccountSelect"/>
                   </InputComponent>
+                  <BtnWrapper pt={30} width={65}>
+                  <ButtonPrimary size="medium" onClick={addStashAccount}
+                    disabled={isAccountAdded || stashAccountSelect === undefined}
+                    >
+                    <PlusIcon />
+                  </ButtonPrimary>
+                  </BtnWrapper>
+                </RowInline>
+                {isAccountAdded && (
                   <RowInline>
-                    <SelectAccount name="stashAccount" />
-                    <ButtonPrimary size="medium">
-                      <PlusIcon />
-                    </ButtonPrimary>
+                    <TextSmall error><InputNotificationIcon><AlertSymbol/></InputNotificationIcon></TextSmall>
+                    <TextSmall error>
+                      This stash account is already added to the list.
+                    </TextSmall>
                   </RowInline>
-                </Row>
-                )}
+                  )
+                }
+                {stashAccounts.length < 2 && (
+                  <RowInline>
+                    <TextSmall error><InputNotificationIcon><AlertSymbol/></InputNotificationIcon></TextSmall>
+                    <TextSmall error>
+                      You should add at least 1 stash account.
+                    </TextSmall>
+                  </RowInline>
+                  )
+                }
               </Row>
+
+              {stashAccounts.map((stashAccount, index)=>{
+                if(index !== 0){
+                  return(
+                    <Row>
+                      <RowInline>
+                          <SelectedAccount account={stashAccount as Account} key={'selected'+index}/>
+                        <BtnWrapper width={65}>
+                        <ButtonGhost size="medium" onClick={()=>{removeStashAccount(index)}
+                        }>
+                          <CrossIcon />
+                        </ButtonGhost>
+                        </BtnWrapper>
+                      </RowInline>
+                    </Row>)
+                }
+              })}
+              <Row>
+                <RowInline>
+                <Label>Status</Label>
+                <Tooltip
+                  tooltipText="This is the status which indicates the selected account is actually a validator account."
+                >
+                  <TooltipDefault />
+                </Tooltip>
+                <TextSmall dark> : {'Unverified'} ! </TextSmall>
+                </RowInline>
+              </Row>
+              </>
+              )}
+
+              </>
             )}
 
             {process.env.REACT_APP_CAPTCHA_SITE_KEY && type === 'onBoarding' && (
@@ -320,6 +400,14 @@ export const BuyMembershipForm = ({
           <ButtonPrimary
             size="medium"
             onClick={() => {
+              stashAccounts.length > 1 && (
+                stashAccounts.map((account, index)=>{
+                  if(index !== 0){
+                    form?.register('stashAccounts[' + (index - 1) + ']' as keyof MemberFormFields)
+                    form?.setValue('stashAccounts[' + (index - 1) + ']' as keyof MemberFormFields, account as Account)
+                  }
+                })
+              )
               const values = form.getValues()
               uploadAvatarAndSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
             }}
@@ -341,3 +429,35 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: B
     </ScrolledModal>
   )
 }
+
+const InputNotificationIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 12px;
+  height: 12px;
+  color: inherit;
+  padding-right: 2px;
+
+  .blackPart,
+  .primaryPart {
+    fill: currentColor;
+  }
+`
+interface PaddingProps {
+  pl?: number
+  pr?: number
+  pt?: number
+  pb?: number
+  width?: number
+}
+
+const BtnWrapper = styled.div<PaddingProps>`
+ padding-right : ${({ pr }) => ( pr ? pr + 'px' : '0px')};
+ padding-left  : ${({ pl }) => ( pl ? pl + 'px' : '0px')};
+ padding-top   : ${({ pt }) => ( pt ? pt + 'px' : '0px')};
+ padding-bottom: ${({ pb }) => ( pb ? pb + 'px' : '0px')};
+ width         : ${({ width }) => ( width ? width + 'px' : '0px')};
+ display : flex;
+ justify-content : end;
+`

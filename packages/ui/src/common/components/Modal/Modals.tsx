@@ -22,6 +22,7 @@ export const RowInline = styled.div`
   flex-direction: row;
   width: 100%;
   height: auto;
+  align-items: center;
 `
 
 export const AccountRow = styled.div`
