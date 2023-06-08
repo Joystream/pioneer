@@ -32,10 +32,9 @@ type QNMock = { query: DocumentNode; data?: any; resolver: (options?: Options, a
 type Context = { args: any; parameters: { queryNode?: QNMock[] } }
 
 export const QNDecorator = (story: CallableFunction, { args, parameters }: Context) => {
-  if (parameters && parameters.queryNode) {
-    parameters.queryNode.forEach(({ query, data, resolver }) => {
-      queryResults.set(query, (options?: Options) => resolver?.(options, args) ?? { loading: false, data })
-    })
-  }
+  parameters.queryNode?.forEach(({ query, data, resolver }) => {
+    queryResults.set(query, (options?: Options) => resolver?.(options, args) ?? { loading: false, data })
+  })
+
   return story()
 }
