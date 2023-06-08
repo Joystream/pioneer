@@ -1,10 +1,13 @@
 import React from 'react'
-import { GlobalStyle } from '@/app/providers/GlobalStyle'
-import { Colors } from '@/common/constants'
 import { I18nextProvider } from 'react-i18next'
-import { i18next } from '../src/services/i18n'
 import { useForm, FormProvider } from 'react-hook-form'
-import { MemoryRouter } from 'react-router'
+import { MemoryRouter, Route } from 'react-router'
+
+import { GlobalStyle } from '../src/app/providers/GlobalStyle'
+import { Colors } from '../src/common/constants'
+import { whenDefined } from '../src/common/utils'
+import { QNDecorator } from '../src/mocks/modules/apollo-client'
+import { i18next } from '../src/services/i18n'
 
 const stylesWrapperDecorator = (styleFn) => (
   <div>
@@ -32,12 +35,14 @@ const RHFDecorator = (Story) => {
   )
 }
 
-const RouterDecorator = (Story) => <MemoryRouter><Story /></MemoryRouter>
+const RouterDecorator = (Story, { parameters }) => (
+  <MemoryRouter initialEntries={whenDefined(parameters?.router?.href, (href) => [href])}>
+    <Route component={Story} path={parameters?.router?.path ?? '/'} />
+  </MemoryRouter>
+)
 
-export const decorators = [stylesWrapperDecorator, i18nextDecorator, RHFDecorator, RouterDecorator]
-window.jest = {
-  fn: (callback) => callback,
-}
+export const decorators = [stylesWrapperDecorator, i18nextDecorator, RHFDecorator, RouterDecorator, QNDecorator]
+
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
   backgrounds: {
