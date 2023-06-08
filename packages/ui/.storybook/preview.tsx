@@ -6,6 +6,7 @@ import { MemoryRouter, Route } from 'react-router'
 import { GlobalStyle } from '../src/app/providers/GlobalStyle'
 import { Colors } from '../src/common/constants'
 import { whenDefined } from '../src/common/utils'
+import { APIDecorator } from '../src/mocks/providers/api'
 import { QNDecorator } from '../src/mocks/modules/apollo-client'
 import { i18next } from '../src/services/i18n'
 
@@ -41,7 +42,14 @@ const RouterDecorator = (Story, { parameters }) => (
   </MemoryRouter>
 )
 
-export const decorators = [stylesWrapperDecorator, i18nextDecorator, RHFDecorator, RouterDecorator, QNDecorator]
+export const decorators = [
+  stylesWrapperDecorator,
+  i18nextDecorator,
+  RHFDecorator,
+  RouterDecorator,
+  APIDecorator,
+  QNDecorator,
+]
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
