@@ -132,7 +132,7 @@
     "loader": "^2.1.1",
     "miragejs": "^0.1.42",
     "mock-local-storage": "^1.1.17",
-    "prettier": "^2.4.1",
+    "prettier": "^2.8.8",
     "raw-loader": "^4.0.2",
     "storybook": "^7.0.18",
     "ts-loader": "^9.2.6",
