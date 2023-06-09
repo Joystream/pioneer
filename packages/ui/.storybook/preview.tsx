@@ -9,6 +9,7 @@ import { whenDefined } from '../src/common/utils'
 import { APIDecorator } from '../src/mocks/providers/api'
 import { QNDecorator } from '../src/mocks/modules/query-node'
 import { i18next } from '../src/services/i18n'
+import { AccountsDecorator } from '../src/mocks/providers/accounts'
 
 const stylesWrapperDecorator = (styleFn) => (
   <div>
@@ -49,6 +50,7 @@ export const decorators = [
   RouterDecorator,
   APIDecorator,
   QNDecorator,
+  AccountsDecorator,
 ]
 
 export const parameters = {
