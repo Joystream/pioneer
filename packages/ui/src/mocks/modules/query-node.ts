@@ -28,7 +28,7 @@ export const useApolloClient = () => ({
   query: () => undefined,
 })
 
-type QNMock = { query: DocumentNode; data?: any; resolver: (options?: Options, args?: any) => Result }
+type QNMock = { query: DocumentNode; data?: any; resolver?: (options?: Options, args?: any) => Result }
 type Context = { args: any; parameters: { queryNode?: QNMock[] } }
 
 export const QNDecorator = (story: CallableFunction, { args, parameters }: Context) => {

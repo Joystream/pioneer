@@ -7,7 +7,7 @@ import { GlobalStyle } from '../src/app/providers/GlobalStyle'
 import { Colors } from '../src/common/constants'
 import { whenDefined } from '../src/common/utils'
 import { APIDecorator } from '../src/mocks/providers/api'
-import { QNDecorator } from '../src/mocks/modules/apollo-client'
+import { QNDecorator } from '../src/mocks/modules/query-node'
 import { i18next } from '../src/services/i18n'
 
 const stylesWrapperDecorator = (styleFn) => (
