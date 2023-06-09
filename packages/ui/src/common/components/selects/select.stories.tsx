@@ -1,4 +1,3 @@
-import { Meta, Story } from '@storybook/react'
 import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -12,70 +11,71 @@ export default {
   argTypes: {
     onApply: { action: 'Apply' },
   },
-} as Meta
+}
 
 interface Props {
   optionsString: string
   onApply: (value: string[]) => void
 }
 
-const Template: Story<Props> = ({ optionsString = '', onApply }) => {
-  const options = (optionsString || '').split(' ')
-  const [value, setValue] = useState<string | null>(null)
+export const Default = {
+  args: {
+    optionsString: 'sunt irure cillum labore pariatur commodo tempor excepteur',
+  },
 
-  // Search Select
-  const [search, setSearch] = useState('')
-  const result = useMemo(() => {
-    const pattern = RegExp(search)
-    return options.filter((option) => pattern.test(option))
-  }, [search, options])
+  render: ({ optionsString = '', onApply }: Props) => {
+    const options = (optionsString || '').split(' ')
+    const [value, setValue] = useState<string | null>(null)
 
-  // Multi Select
-  const [multi, setMulti] = useState<string[]>([])
+    // Search Select
+    const [search, setSearch] = useState('')
+    const result = useMemo(() => {
+      const pattern = RegExp(search)
+      return options.filter((option) => pattern.test(option))
+    }, [search, options])
 
-  return (
-    <ScrollBlock>
-      <ModalBlock>
-        <TemplateBlock>
-          <Row>
-            <SimpleSelect title="Simple Select" options={options} value={value} onChange={setValue} />
-          </Row>
-          <Row>
-            <SimpleSelect title="Simple Select" options={options} value={value} onChange={setValue} selectSize="m" />
-          </Row>
-          <Row>
-            <SimpleSelect title="Simple Select" options={options} value={value} onChange={setValue} selectSize="l" />
-          </Row>
-          <Row>
-            <FilterSelect title="Filter Select" options={options} value={value} onChange={setValue} />
-          </Row>
-          <Row>
-            <FilterSelect title="Filter Select" options={options} value={value} onChange={setValue} />
-          </Row>
-          <Row>
-            <FilterSelect title="Filter Select" options={options} value={value} onChange={setValue} />
-          </Row>
-          <Row>
-            <SimpleSelect
-              title="Search Select"
-              options={result}
-              value={value}
-              onChange={setValue}
-              onSearch={setSearch}
-            />
-          </Row>
-          <Row>
-            <MultiSelect title="Multi Select" options={options} value={multi} onChange={setMulti} onApply={onApply} />
-          </Row>
-        </TemplateBlock>
-      </ModalBlock>
-    </ScrollBlock>
-  )
-}
+    // Multi Select
+    const [multi, setMulti] = useState<string[]>([])
 
-export const Default = Template
-Default.args = {
-  optionsString: 'sunt irure cillum labore pariatur commodo tempor excepteur',
+    return (
+      <ScrollBlock>
+        <ModalBlock>
+          <TemplateBlock>
+            <Row>
+              <SimpleSelect title="Simple Select" options={options} value={value} onChange={setValue} />
+            </Row>
+            <Row>
+              <SimpleSelect title="Simple Select" options={options} value={value} onChange={setValue} selectSize="m" />
+            </Row>
+            <Row>
+              <SimpleSelect title="Simple Select" options={options} value={value} onChange={setValue} selectSize="l" />
+            </Row>
+            <Row>
+              <FilterSelect title="Filter Select" options={options} value={value} onChange={setValue} />
+            </Row>
+            <Row>
+              <FilterSelect title="Filter Select" options={options} value={value} onChange={setValue} />
+            </Row>
+            <Row>
+              <FilterSelect title="Filter Select" options={options} value={value} onChange={setValue} />
+            </Row>
+            <Row>
+              <SimpleSelect
+                title="Search Select"
+                options={result}
+                value={value}
+                onChange={setValue}
+                onSearch={setSearch}
+              />
+            </Row>
+            <Row>
+              <MultiSelect title="Multi Select" options={options} value={multi} onChange={setMulti} onApply={onApply} />
+            </Row>
+          </TemplateBlock>
+        </ModalBlock>
+      </ScrollBlock>
+    )
+  },
 }
 
 const Row = styled.div`

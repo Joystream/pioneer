@@ -70,7 +70,7 @@ describe('formatters', () => {
     const dateString = '1983-10-01T06:42:00.155Z'
 
     it('Default format', () => {
-      expect(formatDateString(dateString)).toMatch(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}, [0-9]{2}:[0-9]{2}(AM|PM) [A-Z]+/)
+      expect(formatDateString(dateString)).toMatch(RegExp(String.raw`\d{2}/\d{2}/\d{4}, \d{2}:\d{2}\s[AP]M [A-Z]+$`))
     })
   })
 

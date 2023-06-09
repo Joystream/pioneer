@@ -8,7 +8,7 @@ import { deserializeMessage } from '../models/payload'
 import { PostMessage, ProxyPromisePayload, RawWorkerMessageEvent } from '../types'
 import { apiInterfaceProxy } from '../utils/proxy'
 
-type ObservableMethods = typeof ObservableMethods[number]
+type ObservableMethods = (typeof ObservableMethods)[number]
 
 export type TxModule = keyof ProxyApi['tx']
 
