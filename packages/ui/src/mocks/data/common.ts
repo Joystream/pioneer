@@ -1,3 +1,5 @@
+import { isoDate } from '../helpers'
+
 import { alice } from './members'
 
 export type BlockFieldsMock = {
@@ -9,7 +11,7 @@ export type BlockFieldsMock = {
 export const amount = '1666666666660000'
 
 export const block = {
-  createdAt: '2023-01-12T03:04:56.001Z',
+  createdAt: isoDate('01/02/2023'),
   inBlock: 12345,
 }
 
@@ -22,7 +24,7 @@ export const workingGroupOpening = {
 }
 export const worker = {
   __typename: 'Worker',
-  createdAt: block.createdAt,
+  createdAt: isoDate('01/02/2023'),
   group: workingGroup,
   membership: alice,
 }

@@ -8,6 +8,8 @@ import { UseApi } from '@/api/providers/provider'
 import { createType } from '@/common/model/createType'
 import { isDefined } from '@/common/utils'
 
+import { asChainData } from '../helpers/asChainData'
+
 type ValueMock = { value?: any; get?: (args: any) => any; wrapperFn?: (result: any) => any }
 type TxMock = { path: string; paymentInfo?: ValueMock; signAndSend?: ValueMock }
 type DefaultMock = { path: string } & ValueMock
@@ -53,13 +55,13 @@ export const APIDecorator = (Story: CallableFunction, { args, parameters }: Cont
   } as Api
 
   // Add mocks from parameters
-  parameters.api.consts?.forEach(setDefaultMock('consts', api, args))
-  parameters.api.derive?.forEach(setDefaultMock('derive', api, args, (x) => () => of(x)))
-  parameters.api.query?.forEach(setDefaultMock('query', api, args, (x) => () => of(x)))
-  parameters.api.rpc?.forEach(setDefaultMock('rpc', api, args, (x) => () => of(x)))
+  parameters.api.consts?.forEach(setDefaultMock('consts', api, args, asChainData))
+  parameters.api.derive?.forEach(setDefaultMock('derive', api, args, queryWrapperFn))
+  parameters.api.query?.forEach(setDefaultMock('query', api, args, queryWrapperFn))
+  parameters.api.rpc?.forEach(setDefaultMock('rpc', api, args, queryWrapperFn))
   const setTxMock = setDefaultMock('tx', api, args)
   parameters.api.tx?.forEach(({ path, paymentInfo, signAndSend }) => {
-    setTxMock({ wrapperFn: (x) => () => of(x), ...paymentInfo, path: `${path}.paymentInfo` })
+    setTxMock({ wrapperFn: queryWrapperFn, ...paymentInfo, path: `${path}.paymentInfo` })
     setTxMock({ ...signAndSend, path: `${path}.signAndSend` })
   })
 
@@ -74,6 +76,8 @@ export const APIDecorator = (Story: CallableFunction, { args, parameters }: Cont
 
   return <ApiContext.Provider value={contextValue}>{<Story />}</ApiContext.Provider>
 }
+
+const queryWrapperFn = (data: any) => () => of(asChainData(data))
 
 const setDefaultMock =
   (kind: keyof APIMock, api: Api, args: any, defaultWrapperFn: (x: any) => any = (x) => x) =>

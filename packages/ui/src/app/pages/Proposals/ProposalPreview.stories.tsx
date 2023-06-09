@@ -2,16 +2,16 @@ import { Meta, StoryObj } from '@storybook/react'
 import { random } from 'faker'
 import { mapValues } from 'lodash'
 
-import { asBN } from '@/common/utils'
 import { GetElectedCouncilDocument } from '@/council/queries'
-import { amount, block, worker, workingGroup, workingGroupOpening } from '@/mocks/data/common'
+import { worker, workingGroup, workingGroupOpening } from '@/mocks/data/common'
 import { alice, bob, charlie } from '@/mocks/data/members'
+import { isoDate, joy } from '@/mocks/helpers'
 import { ProposalDetailsType, proposalDetailsToConstantKey } from '@/mocks/helpers/proposalDetailsToConstantKey'
 import { GetProposalDocument } from '@/proposals/queries'
 
-import { randomMarkdown } from '../../../../dev/query-node-mocks/generators/utils'
-
 import { ProposalPreview } from './ProposalPreview'
+
+import { randomMarkdown } from '@/../dev/query-node-mocks/generators/utils'
 
 const id = '0'
 
@@ -36,13 +36,13 @@ const details = {
   AmendConstitutionProposalDetails: {},
   CancelWorkingGroupLeadOpeningProposalDetails: { opening: workingGroupOpening },
   CreateWorkingGroupLeadOpeningProposalDetails: {
-    stakeAmount: amount,
+    stakeAmount: joy(200),
     unstakingPeriod: 3400,
-    rewardPerBlock: amount,
+    rewardPerBlock: joy(200),
     metadata: { __typename: 'WorkingGroupOpeningMetadata', description: randomMarkdown() },
     group: workingGroup,
   },
-  DecreaseWorkingGroupLeadStakeProposalDetails: { amount, lead: worker },
+  DecreaseWorkingGroupLeadStakeProposalDetails: { amount: joy(200), lead: worker },
   FillWorkingGroupLeadOpeningProposalDetails: {
     opening: workingGroupOpening,
     application: { __typename: 'WorkingGroupApplication', applicant: alice },
@@ -50,29 +50,29 @@ const details = {
   FundingRequestProposalDetails: {
     destinationsList: {
       __typename: 'FundingRequestDestinationsList',
-      destinations: [{ __typename: 'FundingRequestDestination', amount, account: alice.rootAccount }],
+      destinations: [{ __typename: 'FundingRequestDestination', amount: joy(200), account: alice.rootAccount }],
     },
   },
   RuntimeUpgradeProposalDetails: { newRuntimeBytecode: { __typename: 'RuntimeWasmBytecode', id: '0' } },
-  SetCouncilBudgetIncrementProposalDetails: { newAmount: amount },
-  SetCouncilorRewardProposalDetails: { newRewardPerBlock: amount },
-  SetInitialInvitationBalanceProposalDetails: { newInitialInvitationBalance: amount },
+  SetCouncilBudgetIncrementProposalDetails: { newAmount: joy(200) },
+  SetCouncilorRewardProposalDetails: { newRewardPerBlock: joy(200) },
+  SetInitialInvitationBalanceProposalDetails: { newInitialInvitationBalance: joy(200) },
   SetInitialInvitationCountProposalDetails: { newInitialInvitationsCount: 100 },
   SetMaxValidatorCountProposalDetails: { newMaxValidatorCount: 100 },
   SetMembershipLeadInvitationQuotaProposalDetails: { newLeadInvitationQuota: 100 },
-  SetMembershipPriceProposalDetails: { newPrice: amount },
+  SetMembershipPriceProposalDetails: { newPrice: joy(200) },
   SetReferralCutProposalDetails: { newReferralCut: 100 },
-  SetWorkingGroupLeadRewardProposalDetails: { newRewardPerBlock: amount, lead: worker },
+  SetWorkingGroupLeadRewardProposalDetails: { newRewardPerBlock: joy(200), lead: worker },
   SignalProposalDetails: { text: randomMarkdown() },
-  SlashWorkingGroupLeadProposalDetails: { amount: amount, lead: worker },
-  TerminateWorkingGroupLeadProposalDetails: { slashingAmount: amount, lead: worker },
+  SlashWorkingGroupLeadProposalDetails: { amount: joy(200), lead: worker },
+  TerminateWorkingGroupLeadProposalDetails: { slashingAmount: joy(200), lead: worker },
   UpdateChannelPayoutsProposalDetails: {
     channelCashoutsEnabled: true,
-    minCashoutAllowed: amount,
-    maxCashoutAllowed: amount,
+    minCashoutAllowed: joy(200),
+    maxCashoutAllowed: joy(200),
     payloadHash: '0x000000',
   },
-  UpdateWorkingGroupBudgetProposalDetails: { amount, group: workingGroup },
+  UpdateWorkingGroupBudgetProposalDetails: { amount: joy(200), group: workingGroup },
   VetoProposalDetails: { proposal: { __typename: 'Proposal', id: '0', title: random.words(4) } },
 }
 
@@ -119,13 +119,13 @@ export default {
         data: {
           electedCouncils: {
             id: '0',
-            electedAtBlock: block.inBlock,
-            electedAtTime: block.createdAt,
+            electedAtBlock: 123,
+            electedAtTime: isoDate('01/02/2023'),
             councilElections: [{ cycleId: 4 }],
             councilMembers: [
-              { id: '0', unpaidReward: '0', stake: amount, member: alice },
-              { id: '1', unpaidReward: '0', stake: amount, member: bob },
-              { id: '2', unpaidReward: '0', stake: amount, member: charlie },
+              { id: '0', unpaidReward: '0', stake: joy(200), member: alice },
+              { id: '1', unpaidReward: '0', stake: joy(200), member: bob },
+              { id: '2', unpaidReward: '0', stake: joy(200), member: charlie },
             ],
           },
         },
@@ -137,32 +137,29 @@ export default {
         {
           path: 'proposalsCodex',
           get: ({ type, constitutionality }: Args) => ({
-            [proposalDetailsToConstantKey(type) as string]: mapValues(
-              {
-                votingPeriod: 200,
-                gracePeriod: 100,
-                approvalQuorumPercentage: 80,
-                approvalThresholdPercentage: 100,
-                slashingQuorumPercentage: 60,
-                slashingThresholdPercentage: 80,
-                requiredStake: amount,
-                constitutionality,
-              },
-              asBN
-            ),
+            [proposalDetailsToConstantKey(type) as string]: {
+              votingPeriod: 200,
+              gracePeriod: 100,
+              approvalQuorumPercentage: 80,
+              approvalThresholdPercentage: 100,
+              slashingQuorumPercentage: 60,
+              slashingThresholdPercentage: 80,
+              requiredStake: joy(200),
+              constitutionality,
+            },
           }),
         },
-        { path: 'council.councilSize', value: asBN(3) },
-        { path: 'council.idlePeriodDuration', value: asBN(1) },
-        { path: 'council.announcingPeriodDuration', value: asBN(1) },
-        { path: 'referendum.voteStageDuration', value: asBN(1) },
-        { path: 'referendum.revealStageDuration', value: asBN(1) },
+        { path: 'council.councilSize', value: 3 },
+        { path: 'council.idlePeriodDuration', value: 1 },
+        { path: 'council.announcingPeriodDuration', value: 1 },
+        { path: 'referendum.voteStageDuration', value: 1 },
+        { path: 'referendum.revealStageDuration', value: 1 },
       ],
       query: [
-        { path: 'members.membershipPrice', value: asBN(amount) },
-        { path: 'council.budget', value: asBN(amount) },
-        { path: 'council.councilorReward', value: asBN(amount) },
-        { path: 'council.stage', value: { stage: { isIdle: true }, changedAt: asBN(123) } },
+        { path: 'members.membershipPrice', value: joy(5) },
+        { path: 'council.budget', value: joy(1000) },
+        { path: 'council.councilorReward', value: joy(500) },
+        { path: 'council.stage', value: { stage: { isIdle: true }, changedAt: 123 } },
         { path: 'referendum.stage', value: {} },
       ],
     },
