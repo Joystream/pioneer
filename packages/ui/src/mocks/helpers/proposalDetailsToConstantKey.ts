@@ -4,7 +4,7 @@ import { ProposalFieldsFragment } from '@/proposals/queries'
 export type ProposalDetailsType = ProposalFieldsFragment['details']['__typename']
 
 export const proposalDetailsToConstantKey = (details: ProposalDetailsType) =>
-  proposalDetailsToConstantKeyMap.get(details)
+  proposalDetailsToConstantKeyMap.get(details) as string
 
 const proposalDetailsToConstantKeyMap = new Map<ProposalDetailsType, keyof Api['consts']['proposalsCodex']>([
   ['AmendConstitutionProposalDetails', 'amendConstitutionProposalParameters'],

@@ -91,21 +91,49 @@ export default {
   argTypes: {
     type: { control: { type: 'select' }, options: Object.keys(details) },
     status: { control: { type: 'select' }, options: statuses },
-    constitutionality: { control: false },
+    constitutionality: { control: { type: 'range', min: 1, max: 4 } },
   },
   args: {
     isCouncilor: false,
     isProposer: false,
     type: 'SignalProposalDetails',
-    status: 'ProposalStatusDeciding',
     constitutionality: 1,
+    status: 'ProposalStatusDeciding',
   },
 
   parameters: {
     router: { path: '/:id', href: `/${id}` },
 
-    // Alice is the proposer and is councilor, Bob is councilor too, and Dave isn't councilor
     accounts: { active: alice, list: [{ member: alice }] },
+
+    chain: ({ type, constitutionality }: Args) => ({
+      consts: {
+        proposalsCodex: {
+          [proposalDetailsToConstantKey(type)]: {
+            votingPeriod: 200,
+            gracePeriod: 100,
+            approvalQuorumPercentage: 80,
+            approvalThresholdPercentage: 100,
+            slashingQuorumPercentage: 60,
+            slashingThresholdPercentage: 80,
+            requiredStake: joy(200),
+            constitutionality,
+          },
+        },
+        council: { councilSize: 3, idlePeriodDuration: 1, announcingPeriodDuration: 1 },
+        referendum: { voteStageDuration: 1, revealStageDuration: 1 },
+      },
+
+      query: {
+        members: { membershipPrice: joy(5) },
+        council: {
+          budget: joy(1000),
+          councilorReward: joy(1),
+          stage: { stage: { isIdle: true }, changedAt: 123 },
+        },
+        referendum: { stage: {} },
+      },
+    }),
 
     queryNode: ({ isCouncilor, isProposer, type, status }: Args) => [
       {
@@ -145,38 +173,6 @@ export default {
         },
       },
     ],
-
-    api: {
-      consts: [
-        {
-          path: 'proposalsCodex',
-          get: ({ type, constitutionality }: Args) => ({
-            [proposalDetailsToConstantKey(type) as string]: {
-              votingPeriod: 200,
-              gracePeriod: 100,
-              approvalQuorumPercentage: 80,
-              approvalThresholdPercentage: 100,
-              slashingQuorumPercentage: 60,
-              slashingThresholdPercentage: 80,
-              requiredStake: joy(200),
-              constitutionality,
-            },
-          }),
-        },
-        { path: 'council.councilSize', value: 3 },
-        { path: 'council.idlePeriodDuration', value: 1 },
-        { path: 'council.announcingPeriodDuration', value: 1 },
-        { path: 'referendum.voteStageDuration', value: 1 },
-        { path: 'referendum.revealStageDuration', value: 1 },
-      ],
-      query: [
-        { path: 'members.membershipPrice', value: joy(5) },
-        { path: 'council.budget', value: joy(1000) },
-        { path: 'council.councilorReward', value: joy(500) },
-        { path: 'council.stage', value: { stage: { isIdle: true }, changedAt: 123 } },
-        { path: 'referendum.stage', value: {} },
-      ],
-    },
   },
 } satisfies Meta
 
