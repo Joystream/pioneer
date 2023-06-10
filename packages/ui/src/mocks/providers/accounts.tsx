@@ -54,15 +54,15 @@ export const AccountsDecorator = (Story: CallableFunction, { args, parameters }:
   const [members, setMembers] = useState<MyMemberships['members']>([])
   const [active, setActive] = useState<Member | undefined>()
 
-  const param = useMemo(
+  const params = useMemo(
     () => (isFunction(parameters.accounts) ? parameters.accounts(args) : parameters.accounts),
     [isFunction(parameters.accounts) && args]
   )
 
   useEffect(() => {
-    if (!param) return
+    if (!params) return
 
-    const accountData = param.list.flatMap(
+    const accountData = params.list.flatMap(
       ({ balances, member, address = member?.controllerAccount }) =>
         whenDefined(address, (address) => ({ address, balances, member })) ?? []
     )
@@ -97,21 +97,21 @@ export const AccountsDecorator = (Story: CallableFunction, { args, parameters }:
     )
 
     const members = accountData.flatMap(({ member }) => whenDefined(member, asMember) ?? [])
-    const activeHandle = whenDefined(param.active, (active) => (isString(active) ? active : active.handle))
+    const activeHandle = whenDefined(params.active, (active) => (isString(active) ? active : active.handle))
     const active = whenDefined(activeHandle, (activeHandle) => members.find(({ handle }) => handle === activeHandle))
 
     setAllAccounts(allAccounts)
     setBalances(balances)
     setMembers(members)
     setActive(active)
-  }, [param])
+  }, [params])
 
   const getMemberIdByBoundAccountAddress = useCallback(
     (address: string) => members.find((member) => member.boundAccounts.includes(address))?.id,
     [members]
   )
 
-  if (!param) return Story()
+  if (!params) return Story()
 
   // Set contexts
   const accountContextValue: UseAccounts = {

@@ -107,48 +107,42 @@ export default {
     // Alice is the proposer and is councilor, Bob is councilor too, and Dave isn't councilor
     accounts: { active: alice, list: [{ member: alice }] },
 
-    queryNode: [
+    queryNode: ({ isCouncilor, isProposer, type, status }: Args) => [
       {
         query: GetProposalDocument,
-        resolver: (_: any, { isProposer, type, status }: Args) => ({
-          loading: false,
-          data: {
-            proposal: {
-              id,
-              title,
-              description,
-              votes: [],
-              createdInEvent: {},
-              discussionThread: {
-                posts: [],
-                mode: {},
-              },
-              creator: isProposer ? alice : bob,
-              details: proposalDetailsMap[type],
-              status: { __typename: status },
-              proposalStatusUpdates: [],
+        data: {
+          proposal: {
+            id,
+            title,
+            description,
+            votes: [],
+            createdInEvent: {},
+            discussionThread: {
+              posts: [],
+              mode: {},
             },
+            creator: isProposer ? alice : bob,
+            details: proposalDetailsMap[type],
+            status: { __typename: status },
+            proposalStatusUpdates: [],
           },
-        }),
+        },
       },
       {
         query: GetElectedCouncilDocument,
-        resolver: (_: any, { isCouncilor }: Args) => ({
-          loading: false,
-          data: {
-            electedCouncils: {
-              id: '0',
-              electedAtBlock: 123,
-              electedAtTime: isoDate('01/02/2023'),
-              councilElections: [{ cycleId: 4 }],
-              councilMembers: [
-                { id: '0', unpaidReward: '0', stake: joy(200), member: isCouncilor ? alice : dave },
-                { id: '1', unpaidReward: '0', stake: joy(200), member: bob },
-                { id: '2', unpaidReward: '0', stake: joy(200), member: charlie },
-              ],
-            },
+        data: {
+          electedCouncils: {
+            id: '0',
+            electedAtBlock: 123,
+            electedAtTime: isoDate('01/02/2023'),
+            councilElections: [{ cycleId: 4 }],
+            councilMembers: [
+              { id: '0', unpaidReward: '0', stake: joy(200), member: isCouncilor ? alice : dave },
+              { id: '1', unpaidReward: '0', stake: joy(200), member: bob },
+              { id: '2', unpaidReward: '0', stake: joy(200), member: charlie },
+            ],
           },
-        }),
+        },
       },
     ],
 
