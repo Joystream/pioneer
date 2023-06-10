@@ -4,7 +4,7 @@ import { mapValues } from 'lodash'
 
 import { GetElectedCouncilDocument } from '@/council/queries'
 import { worker, workingGroup, workingGroupOpening } from '@/mocks/data/common'
-import { alice, bob, charlie } from '@/mocks/data/members'
+import { alice, bob, charlie, dave } from '@/mocks/data/members'
 import { isoDate, joy } from '@/mocks/helpers'
 import { ProposalDetailsType, proposalDetailsToConstantKey } from '@/mocks/helpers/proposalDetailsToConstantKey'
 import { GetProposalDocument } from '@/proposals/queries'
@@ -76,24 +76,41 @@ const details = {
   VetoProposalDetails: { proposal: { __typename: 'Proposal', id: '0', title: random.words(4) } },
 }
 
-type Args = { type: ProposalDetailsType; status: (typeof statuses)[number]; constitutionality: number }
+type Args = {
+  isCouncilor: boolean
+  isProposer: boolean
+  type: ProposalDetailsType
+  status: (typeof statuses)[number]
+  constitutionality: number
+}
 
 export default {
   title: 'Pages/Proposals/ProposalPreview',
   component: ProposalPreview,
+
   argTypes: {
     type: { control: { type: 'select' }, options: Object.keys(details) },
     status: { control: { type: 'select' }, options: statuses },
     constitutionality: { control: false },
   },
-  args: { type: 'SignalProposalDetails', status: 'ProposalStatusDeciding', constitutionality: 1 },
+  args: {
+    isCouncilor: false,
+    isProposer: false,
+    type: 'SignalProposalDetails',
+    status: 'ProposalStatusDeciding',
+    constitutionality: 1,
+  },
+
   parameters: {
     router: { path: '/:id', href: `/${id}` },
+
+    // Alice is the proposer and is councilor, Bob is councilor too, and Dave isn't councilor
+    accounts: { active: alice, list: [{ member: alice }] },
 
     queryNode: [
       {
         query: GetProposalDocument,
-        resolver: (_: any, { type, status }: Args) => ({
+        resolver: (_: any, { isProposer, type, status }: Args) => ({
           loading: false,
           data: {
             proposal: {
@@ -106,7 +123,7 @@ export default {
                 posts: [],
                 mode: {},
               },
-              creator: alice,
+              creator: isProposer ? alice : bob,
               details: proposalDetailsMap[type],
               status: { __typename: status },
               proposalStatusUpdates: [],
@@ -116,19 +133,22 @@ export default {
       },
       {
         query: GetElectedCouncilDocument,
-        data: {
-          electedCouncils: {
-            id: '0',
-            electedAtBlock: 123,
-            electedAtTime: isoDate('01/02/2023'),
-            councilElections: [{ cycleId: 4 }],
-            councilMembers: [
-              { id: '0', unpaidReward: '0', stake: joy(200), member: alice },
-              { id: '1', unpaidReward: '0', stake: joy(200), member: bob },
-              { id: '2', unpaidReward: '0', stake: joy(200), member: charlie },
-            ],
+        resolver: (_: any, { isCouncilor }: Args) => ({
+          loading: false,
+          data: {
+            electedCouncils: {
+              id: '0',
+              electedAtBlock: 123,
+              electedAtTime: isoDate('01/02/2023'),
+              councilElections: [{ cycleId: 4 }],
+              councilMembers: [
+                { id: '0', unpaidReward: '0', stake: joy(200), member: isCouncilor ? alice : dave },
+                { id: '1', unpaidReward: '0', stake: joy(200), member: bob },
+                { id: '2', unpaidReward: '0', stake: joy(200), member: charlie },
+              ],
+            },
           },
-        },
+        }),
       },
     ],
 
