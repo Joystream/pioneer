@@ -4,7 +4,8 @@ import { mapValues } from 'lodash'
 
 import { GetElectedCouncilDocument } from '@/council/queries'
 import { worker, workingGroup, workingGroupOpening } from '@/mocks/data/common'
-import { alice, bob, charlie, dave } from '@/mocks/data/members'
+import { councilMembers } from '@/mocks/data/council'
+import { member } from '@/mocks/data/members'
 import { isoDate, joy } from '@/mocks/helpers'
 import { ProposalDetailsType, proposalDetailsToConstantKey } from '@/mocks/helpers/proposalDetailsToConstantKey'
 import { GetProposalDocument } from '@/proposals/queries'
@@ -12,6 +13,8 @@ import { GetProposalDocument } from '@/proposals/queries'
 import { ProposalPreview } from './ProposalPreview'
 
 import { randomMarkdown } from '@/../dev/query-node-mocks/generators/utils'
+
+const bob = member('bob', { isCouncilMember: true })
 
 const id = '0'
 
@@ -45,12 +48,12 @@ const details = {
   DecreaseWorkingGroupLeadStakeProposalDetails: { amount: joy(200), lead: worker },
   FillWorkingGroupLeadOpeningProposalDetails: {
     opening: workingGroupOpening,
-    application: { __typename: 'WorkingGroupApplication', applicant: alice },
+    application: { __typename: 'WorkingGroupApplication', applicant: bob },
   },
   FundingRequestProposalDetails: {
     destinationsList: {
       __typename: 'FundingRequestDestinationsList',
-      destinations: [{ __typename: 'FundingRequestDestination', amount: joy(200), account: alice.rootAccount }],
+      destinations: [{ __typename: 'FundingRequestDestination', amount: joy(200), account: bob.rootAccount }],
     },
   },
   RuntimeUpgradeProposalDetails: { newRuntimeBytecode: { __typename: 'RuntimeWasmBytecode', id: '0' } },
@@ -77,7 +80,7 @@ const details = {
 }
 
 type Args = {
-  isCouncilor: boolean
+  isCouncilMember: boolean
   isProposer: boolean
   type: ProposalDetailsType
   status: (typeof statuses)[number]
@@ -94,7 +97,7 @@ export default {
     constitutionality: { control: { type: 'range', min: 1, max: 4 } },
   },
   args: {
-    isCouncilor: false,
+    isCouncilMember: false,
     isProposer: false,
     type: 'SignalProposalDetails',
     constitutionality: 1,
@@ -104,7 +107,7 @@ export default {
   parameters: {
     router: { path: '/:id', href: `/${id}` },
 
-    accounts: { active: alice, list: [{ member: alice }] },
+    accounts: ({ isCouncilMember }: Args) => ({ active: member('alice', { isCouncilMember }) }),
 
     chain: ({ type, constitutionality }: Args) => ({
       consts: {
@@ -135,7 +138,7 @@ export default {
       },
     }),
 
-    queryNode: ({ isCouncilor, isProposer, type, status }: Args) => [
+    queryNode: ({ isCouncilMember, isProposer, type, status }: Args) => [
       {
         query: GetProposalDocument,
         data: {
@@ -149,7 +152,7 @@ export default {
               posts: [],
               mode: {},
             },
-            creator: isProposer ? alice : bob,
+            creator: isProposer ? member('alice', { isCouncilMember }) : bob,
             details: proposalDetailsMap[type],
             status: { __typename: status },
             proposalStatusUpdates: [],
@@ -164,11 +167,11 @@ export default {
             electedAtBlock: 123,
             electedAtTime: isoDate('01/02/2023'),
             councilElections: [{ cycleId: 4 }],
-            councilMembers: [
-              { id: '0', unpaidReward: '0', stake: joy(200), member: isCouncilor ? alice : dave },
-              { id: '1', unpaidReward: '0', stake: joy(200), member: bob },
-              { id: '2', unpaidReward: '0', stake: joy(200), member: charlie },
-            ],
+            councilMembers: councilMembers({ unpaidReward: '0', stake: joy(200) }, [
+              isCouncilMember ? 'alice' : 'dave',
+              'bob',
+              'charlie',
+            ]),
           },
         },
       },

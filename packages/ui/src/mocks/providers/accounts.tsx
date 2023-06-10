@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import { isFunction, isString, mapValues } from 'lodash'
+import { isFunction, isObject, isString, mapValues } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
@@ -9,9 +9,9 @@ import { Account, AddressToBalanceMap, LockType } from '@/accounts/types'
 import { asBN, whenDefined } from '@/common/utils'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
-import { MemberFieldsFragment } from '@/memberships/queries'
 import { Member, asMember } from '@/memberships/types'
 
+import { Membership } from '../data/members'
 import { joy } from '../helpers'
 
 type Balance = number | string | BN
@@ -36,7 +36,6 @@ type Balances = {
   vestedBalance?: Balance
   vestingLocked?: Balance
 }
-type Membership = Omit<MemberFieldsFragment, '__typename'>
 
 type AccountMock = {
   balances?: Balances
@@ -44,7 +43,7 @@ type AccountMock = {
   member?: Membership
 }
 
-type AccountsParam = { active?: Membership | Membership['id']; list: AccountMock[] } | undefined
+type AccountsParam = { active?: Membership | Membership['id']; list?: AccountMock[] } | undefined
 
 export type Context = { args: any; parameters: { accounts?: AccountsParam | ((args: any) => AccountsParam) } }
 
@@ -60,9 +59,10 @@ export const AccountsDecorator = (Story: CallableFunction, { args, parameters }:
   )
 
   useEffect(() => {
-    if (!params) return
+    const list = params?.list ?? (params && isObject(params.active) ? [{ member: params.active }] : undefined)
+    if (!list) return
 
-    const accountData = params.list.flatMap(
+    const accountData = list.flatMap(
       ({ balances, member, address = member?.controllerAccount }) =>
         whenDefined(address, (address) => ({ address, balances, member })) ?? []
     )
@@ -97,8 +97,10 @@ export const AccountsDecorator = (Story: CallableFunction, { args, parameters }:
     )
 
     const members = accountData.flatMap(({ member }) => whenDefined(member, asMember) ?? [])
-    const activeHandle = whenDefined(params.active, (active) => (isString(active) ? active : active.handle))
-    const active = whenDefined(activeHandle, (activeHandle) => members.find(({ handle }) => handle === activeHandle))
+
+    const active = whenDefined(params?.active, (active) =>
+      isObject(active) ? asMember(active) : members.find(({ handle }) => handle === active)
+    )
 
     setAllAccounts(allAccounts)
     setBalances(balances)

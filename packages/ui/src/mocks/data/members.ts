@@ -1,5 +1,11 @@
+import { MemberFieldsFragment } from '@/memberships/queries'
+
 import rawMembers from './raw/members.json'
 
-const [alice, bob, charlie, dave, eve, ferdie] = rawMembers.map((member) => ({ roles: [], ...member }))
-
-export { alice, bob, charlie, dave, eve, ferdie }
+export type Membership = Omit<MemberFieldsFragment, '__typename'>
+export const member = (handle: string, { roles = [], ...extra }: Partial<Membership> = {}) =>
+  ({
+    ...rawMembers.find((member) => member.handle === handle),
+    ...extra,
+    roles,
+  } as Membership)
