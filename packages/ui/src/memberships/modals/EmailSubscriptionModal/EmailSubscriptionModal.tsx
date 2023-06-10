@@ -1,16 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
-import { TextMedium } from '@/common/components/typography'
+import { FailureModal } from '@/common/components/FailureModal'
+import { ResultText } from '@/common/components/Modal'
+import { WaitModal } from '@/common/components/WaitModal'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
-import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { EmailSubscriptionModalCall } from '@/memberships/modals/EmailSubscriptionModal/index'
 
 import { EmailSubscriptionFormModal } from './EmaiSubscriptionFormModal'
 import { EmailSubscriptionMachine } from './machine'
 import { EmailSubscriptionForm } from './types'
-import { createBatch } from './utils'
 
 export const EmailSubscriptionModal = () => {
   const { api } = useApi()
@@ -19,6 +19,17 @@ export const EmailSubscriptionModal = () => {
     modalData: { member },
   } = useModal<EmailSubscriptionModalCall>()
   const [state, send] = useMachine(EmailSubscriptionMachine)
+
+  const signModal = async () => {
+    const timestamp = new Date()
+    api?.sign(member.controllerAccount, `${member.id}:${timestamp}`)
+  }
+
+  useEffect(() => {
+    if (state.matches('signature')) {
+      signModal()
+    }
+  }, [state])
 
   if (state.matches('prepare')) {
     return (
@@ -31,15 +42,15 @@ export const EmailSubscriptionModal = () => {
   }
 
   if (state.matches('transaction')) {
+    return <WaitModal onClose={hideModal} title="Pending transaction" description="Registering email address..." />
+  }
+
+  if (state.matches('error')) {
     return (
-      <SignTransactionModal
-        buttonText="Sign and subscribe"
-        transaction={createBatch(state.context.form, api)}
-        signer={member.controllerAccount}
-        service={state.children.transaction}
-      >
-        <TextMedium>You subscribed to emal.</TextMedium>
-      </SignTransactionModal>
+      <FailureModal onClose={hideModal}>
+        There was a problem with creating a subscription.
+        <ResultText>We could not create your subscription at the moment! Please, try again later!</ResultText>
+      </FailureModal>
     )
   }
 

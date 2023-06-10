@@ -2,12 +2,6 @@ import { EventRecord } from '@polkadot/types/interfaces/system'
 import { assign, createMachine } from 'xstate'
 
 import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
-import {
-  isTransactionCanceled,
-  isTransactionError,
-  isTransactionSuccess,
-  transactionMachine,
-} from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
 
 import { EmailSubscriptionForm } from './types'
@@ -17,7 +11,7 @@ interface EmailSubscriptionContext {
 }
 
 interface TransactionContext {
-  transactionEvents?: EventRecord[]
+  signature?: EventRecord[]
 }
 
 type Context = EmailSubscriptionContext & TransactionContext
@@ -25,15 +19,16 @@ type Context = EmailSubscriptionContext & TransactionContext
 type EmailSubscriptionState =
   | { value: 'prepare'; context: EmptyObject }
   | { value: 'transaction'; context: Required<EmailSubscriptionContext> }
+  | { value: 'signature'; context: Required<EmailSubscriptionContext> }
   | { value: 'success'; context: Required<EmailSubscriptionContext> }
   | { value: 'error'; context: Required<Context> }
 
 export type EmailSubscriptionEvent =
-  | { type: 'PASS' }
-  | { type: 'FAIL' }
   | { type: 'DONE'; form: EmailSubscriptionForm }
   | { type: 'SUCCESS' }
   | { type: 'ERROR' }
+  | { type: 'SIGNED'; signature: EventRecord[] }
+  | { type: 'CANCEL' }
 
 export const EmailSubscriptionMachine = createMachine<Context, EmailSubscriptionEvent, EmailSubscriptionState>({
   initial: 'prepare',
@@ -41,29 +36,34 @@ export const EmailSubscriptionMachine = createMachine<Context, EmailSubscription
     prepare: {
       on: {
         DONE: {
-          target: 'transaction',
+          target: 'signature',
           actions: assign({ form: (_, event) => event.form }),
         },
       },
     },
+    signature: {
+      on: {
+        SIGNED: {
+          target: 'transaction',
+          actions: assign({
+            signature: (_, event) => {
+              return event.signature
+            },
+          }),
+        },
+        CANCEL: {
+          target: 'canceled',
+        },
+      },
+    },
     transaction: {
-      invoke: {
-        id: 'transaction',
-        src: transactionMachine,
-        onDone: [
-          {
-            target: 'success',
-            cond: isTransactionSuccess,
-          },
-          {
-            target: 'error',
-            cond: isTransactionError,
-          },
-          {
-            target: 'canceled',
-            cond: isTransactionCanceled,
-          },
-        ],
+      on: {
+        SUCCESS: {
+          target: 'success',
+        },
+        ERROR: {
+          target: 'error',
+        },
       },
     },
     ...transactionModalFinalStatusesFactory({
