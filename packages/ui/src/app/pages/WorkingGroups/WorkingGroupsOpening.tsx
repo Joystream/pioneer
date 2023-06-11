@@ -174,7 +174,7 @@ export const WorkingGroupOpening = () => {
       sidebar={
         <SidePanel scrollable>
           <ApplicantsList
-            allApplicants={activeApplications}
+            allApplicants={opening.applications}
             myApplication={myApplication}
             hired={hiringApplication}
             hiringComplete={opening.status !== OpeningStatuses.OPEN}
