@@ -1,13 +1,17 @@
 import { Meta, StoryContext, StoryObj } from '@storybook/react'
 import { random } from 'faker'
-import { last, mapValues } from 'lodash'
+import { last } from 'lodash'
 
 import { ProposalVoteKind } from '@/common/api/queries'
 import { repeat, whenDefined } from '@/common/utils'
 import { GetElectedCouncilDocument } from '@/council/queries'
-import { worker, workingGroup, workingGroupOpening } from '@/mocks/data/common'
 import { member } from '@/mocks/data/members'
-import { ProposalStatus, proposalDiscussionPosts, proposalActiveStatus } from '@/mocks/data/proposals'
+import {
+  ProposalStatus,
+  proposalDiscussionPosts,
+  proposalActiveStatus,
+  proposalDetailsMap,
+} from '@/mocks/data/proposals'
 import { isoDate, joy } from '@/mocks/helpers'
 import { ProposalDetailsType, proposalDetailsToConstantKey } from '@/mocks/helpers/proposalDetailsToConstantKey'
 import { MocksParameters } from '@/mocks/providers'
@@ -22,50 +26,6 @@ const charlie = member('charlie', { isCouncilMember: true })
 
 const title = random.words(4)
 const description = randomMarkdown()
-
-const details = {
-  AmendConstitutionProposalDetails: {},
-  CancelWorkingGroupLeadOpeningProposalDetails: { opening: workingGroupOpening },
-  CreateWorkingGroupLeadOpeningProposalDetails: {
-    stakeAmount: joy(200),
-    unstakingPeriod: 3400,
-    rewardPerBlock: joy(200),
-    metadata: { __typename: 'WorkingGroupOpeningMetadata', description: randomMarkdown() },
-    group: workingGroup,
-  },
-  DecreaseWorkingGroupLeadStakeProposalDetails: { amount: joy(200), lead: worker },
-  FillWorkingGroupLeadOpeningProposalDetails: {
-    opening: workingGroupOpening,
-    application: { __typename: 'WorkingGroupApplication', applicant: bob },
-  },
-  FundingRequestProposalDetails: {
-    destinationsList: {
-      __typename: 'FundingRequestDestinationsList',
-      destinations: [{ __typename: 'FundingRequestDestination', amount: joy(200), account: bob.rootAccount }],
-    },
-  },
-  RuntimeUpgradeProposalDetails: { newRuntimeBytecode: { __typename: 'RuntimeWasmBytecode', id: '0' } },
-  SetCouncilBudgetIncrementProposalDetails: { newAmount: joy(200) },
-  SetCouncilorRewardProposalDetails: { newRewardPerBlock: joy(200) },
-  SetInitialInvitationBalanceProposalDetails: { newInitialInvitationBalance: joy(200) },
-  SetInitialInvitationCountProposalDetails: { newInitialInvitationsCount: 100 },
-  SetMaxValidatorCountProposalDetails: { newMaxValidatorCount: 100 },
-  SetMembershipLeadInvitationQuotaProposalDetails: { newLeadInvitationQuota: 100 },
-  SetMembershipPriceProposalDetails: { newPrice: joy(200) },
-  SetReferralCutProposalDetails: { newReferralCut: 100 },
-  SetWorkingGroupLeadRewardProposalDetails: { newRewardPerBlock: joy(200), lead: worker },
-  SignalProposalDetails: { text: randomMarkdown() },
-  SlashWorkingGroupLeadProposalDetails: { amount: joy(200), lead: worker },
-  TerminateWorkingGroupLeadProposalDetails: { slashingAmount: joy(200), lead: worker },
-  UpdateChannelPayoutsProposalDetails: {
-    channelCashoutsEnabled: true,
-    minCashoutAllowed: joy(200),
-    maxCashoutAllowed: joy(200),
-    payloadHash: '0x000000',
-  },
-  UpdateWorkingGroupBudgetProposalDetails: { amount: joy(200), group: workingGroup },
-  VetoProposalDetails: { proposal: { __typename: 'Proposal', id: '0', title: random.words(4) } },
-}
 
 const voteArgs = ['None', 'Approve', 'Reject', 'Slash', 'Abstain'] as const
 type VoteArg = (typeof voteArgs)[number]
@@ -89,7 +49,7 @@ export default {
   component: ProposalPreview,
 
   argTypes: {
-    type: { control: { type: 'select' }, options: Object.keys(details) },
+    type: { control: { type: 'select' }, options: Object.keys(proposalDetailsMap) },
     constitutionality: { control: { type: 'range', min: 1, max: 4 } },
     vote1: { control: { type: 'inline-radio' }, options: voteArgs },
     vote2: { control: { type: 'inline-radio' }, options: voteArgs },
@@ -211,6 +171,7 @@ export default {
               },
             },
           },
+
           {
             query: GetElectedCouncilDocument,
             data: {
@@ -318,5 +279,3 @@ export const UpdateWorkingGroupBudget: Story = {
 export const Veto: Story = {
   args: { type: 'VetoProposalDetails' },
 }
-
-const proposalDetailsMap = mapValues(details, (value, __typename) => Object.assign(value, { __typename }))
