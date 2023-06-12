@@ -2,6 +2,8 @@ import { Meta, StoryContext, StoryObj } from '@storybook/react'
 import { random } from 'faker'
 import { last, mapValues } from 'lodash'
 
+import { ProposalVoteKind } from '@/common/api/queries'
+import { repeat, whenDefined } from '@/common/utils'
 import { GetElectedCouncilDocument } from '@/council/queries'
 import { worker, workingGroup, workingGroupOpening } from '@/mocks/data/common'
 import { member } from '@/mocks/data/members'
@@ -65,6 +67,11 @@ const details = {
   VetoProposalDetails: { proposal: { __typename: 'Proposal', id: '0', title: random.words(4) } },
 }
 
+const voteArgs = ['None', 'Approve', 'Reject', 'Slash', 'Abstain'] as const
+type VoteArg = (typeof voteArgs)[number]
+const asVoteKind = (vote?: VoteArg): ProposalVoteKind | undefined =>
+  vote === 'None' ? undefined : vote && ProposalVoteKind[vote]
+
 type Args = {
   isCouncilMember: boolean
   isProposer: boolean
@@ -72,6 +79,9 @@ type Args = {
   isInDiscussionWhitelist: boolean
   type: ProposalDetailsType
   constitutionality: number
+  vote1: VoteArg
+  vote2: VoteArg
+  vote3: VoteArg
 }
 
 export default {
@@ -81,7 +91,11 @@ export default {
   argTypes: {
     type: { control: { type: 'select' }, options: Object.keys(details) },
     constitutionality: { control: { type: 'range', min: 1, max: 4 } },
+    vote1: { control: { type: 'inline-radio' }, options: voteArgs },
+    vote2: { control: { type: 'inline-radio' }, options: voteArgs },
+    vote3: { control: { type: 'inline-radio' }, options: voteArgs },
   },
+
   args: {
     isCouncilMember: false,
     isProposer: false,
@@ -89,6 +103,9 @@ export default {
     isDiscussionOpen: true,
     type: 'SignalProposalDetails',
     constitutionality: 1,
+    vote1: 'None',
+    vote2: 'None',
+    vote3: 'None',
   },
 
   parameters: {
@@ -102,6 +119,7 @@ export default {
 
       const status = last(parameters.statuses) as ProposalStatus
       const updates = parameters.statuses.slice(1, proposalActiveStatus.includes(status) ? undefined : -1)
+      const councilors = [isCouncilMember ? alice : dave, bob, charlie]
 
       return {
         accounts: { active: alice },
@@ -143,7 +161,6 @@ export default {
                 id: '0',
                 title,
                 description,
-                votes: [],
                 discussionThread: {
                   posts: proposalDiscussionPosts,
                   mode: args.isDiscussionOpen
@@ -169,6 +186,28 @@ export default {
                 status: { __typename: status },
                 statusSetAtBlock: 123,
                 statusSetAtTime: isoDate('2023/01/12'),
+
+                votes: repeat(
+                  (index) =>
+                    [
+                      whenDefined(asVoteKind(args.vote1), (voteKind) => ({
+                        voteKind,
+                        voter: councilors[0],
+                        votingRound: index + 1,
+                      })) ?? [],
+                      whenDefined(asVoteKind(args.vote2), (voteKind) => ({
+                        voteKind,
+                        voter: councilors[1],
+                        votingRound: index + 1,
+                      })) ?? [],
+                      whenDefined(asVoteKind(args.vote3), (voteKind) => ({
+                        voteKind,
+                        voter: councilors[2],
+                        votingRound: index + 1,
+                      })) ?? [],
+                    ].flat(),
+                  constitutionality
+                ).flat(),
               },
             },
           },
@@ -181,9 +220,9 @@ export default {
                 electedAtTime: isoDate('2023/01/02'),
                 councilElections: [{ cycleId: 4 }],
                 councilMembers: [
-                  { id: '0', unpaidReward: '0', stake: joy(200), member: isCouncilMember ? alice : dave },
-                  { id: '1', unpaidReward: '0', stake: joy(200), member: bob },
-                  { id: '2', unpaidReward: '0', stake: joy(200), member: charlie },
+                  { id: '0', unpaidReward: '0', stake: joy(200), member: councilors[0] },
+                  { id: '1', unpaidReward: '0', stake: joy(200), member: councilors[1] },
+                  { id: '2', unpaidReward: '0', stake: joy(200), member: councilors[2] },
                 ],
               },
             },
@@ -192,12 +231,7 @@ export default {
       }
     },
 
-    statuses: [
-      'ProposalStatusDeciding',
-      'ProposalStatusDormant',
-      'ProposalStatusDeciding',
-      'ProposalStatusGracing',
-    ] satisfies ProposalStatus[],
+    statuses: ['ProposalStatusDeciding'] satisfies ProposalStatus[],
   },
 } satisfies Meta<Args>
 
@@ -205,6 +239,9 @@ type Story = StoryObj<typeof ProposalPreview>
 
 export const AmendConstitution: Story = {
   args: { type: 'AmendConstitutionProposalDetails', constitutionality: 2 },
+  parameters: {
+    statuses: ['ProposalStatusDeciding', 'ProposalStatusDormant', 'ProposalStatusDeciding'] satisfies ProposalStatus[],
+  },
 }
 export const CancelWorkingGroupLeadOpening: Story = {
   args: { type: 'CancelWorkingGroupLeadOpeningProposalDetails' },
@@ -223,12 +260,21 @@ export const FundingRequest: Story = {
 }
 export const RuntimeUpgrade: Story = {
   args: { type: 'RuntimeUpgradeProposalDetails', constitutionality: 2 },
+  parameters: {
+    statuses: ['ProposalStatusDeciding', 'ProposalStatusDormant', 'ProposalStatusDeciding'] satisfies ProposalStatus[],
+  },
 }
 export const SetCouncilBudgetIncrement: Story = {
   args: { type: 'SetCouncilBudgetIncrementProposalDetails', constitutionality: 2 },
+  parameters: {
+    statuses: ['ProposalStatusDeciding', 'ProposalStatusDormant', 'ProposalStatusDeciding'] satisfies ProposalStatus[],
+  },
 }
 export const SetCouncilorReward: Story = {
   args: { type: 'SetCouncilorRewardProposalDetails', constitutionality: 2 },
+  parameters: {
+    statuses: ['ProposalStatusDeciding', 'ProposalStatusDormant', 'ProposalStatusDeciding'] satisfies ProposalStatus[],
+  },
 }
 export const SetInitialInvitationBalance: Story = {
   args: { type: 'SetInitialInvitationBalanceProposalDetails' },
@@ -238,6 +284,9 @@ export const SetInitialInvitationCount: Story = {
 }
 export const SetMaxValidatorCount: Story = {
   args: { type: 'SetMaxValidatorCountProposalDetails', constitutionality: 2 },
+  parameters: {
+    statuses: ['ProposalStatusDeciding', 'ProposalStatusDormant', 'ProposalStatusDeciding'] satisfies ProposalStatus[],
+  },
 }
 export const SetMembershipLeadInvitationQuota: Story = {
   args: { type: 'SetMembershipLeadInvitationQuotaProposalDetails' },
