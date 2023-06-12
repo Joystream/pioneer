@@ -112,7 +112,7 @@ export const BuyMembershipSignModal = ({
         transactionFee={paymentInfo?.partialFee.toBn()}
         next={{ disabled: signDisabled, label:formData.isValidator ? 'Create membership': 'Sign and create a member', onClick: sign }}
       >
-        {shouldInformAboutLock && (<TransactionInfo
+        {!bondValidatorAcc  && (<TransactionInfo
           title="Creation fee:"
           value={membershipPrice?.toBn()}
           tooltipText="The price to create a membership."
