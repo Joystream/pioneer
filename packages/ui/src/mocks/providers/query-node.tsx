@@ -1,6 +1,5 @@
 import { DocumentNode } from '@apollo/client/core'
-import { isFunction } from 'lodash'
-import React, { createContext, useCallback, useContext, useMemo, useState } from 'react'
+import React, { FC, createContext, useCallback, useContext, useMemo, useState } from 'react'
 
 export { gql } from '@apollo/client/core'
 
@@ -32,28 +31,20 @@ export const useApolloClient = () => ({
 })
 
 type QNMock = { query: DocumentNode; data?: any; resolver?: Resolver }
-type Context = { args: any; parameters: { queryNode?: QNMock[] | ((args: any) => QNMock[]) } }
 
-export const QNDecorator = (Story: CallableFunction, { args, parameters }: Context) => {
-  const params = useMemo(
-    () => (isFunction(parameters.queryNode) ? parameters.queryNode(args) : parameters.queryNode),
-    [isFunction(parameters.queryNode) && args]
-  )
+export type MockQNProps = { queryNode?: QNMock[] }
 
+export const MockQNProvider: FC<MockQNProps> = ({ children, queryNode }) => {
   const queryMap = useMemo(
     () =>
       new Map(
-        params?.map<[DocumentNode, Resolver]>(({ query, data, resolver }) => [
+        queryNode?.map<[DocumentNode, Resolver]>(({ query, data, resolver }) => [
           query,
           (options) => resolver?.(options) ?? { loading: false, data },
         ])
       ),
-    [params]
+    [queryNode]
   )
 
-  return (
-    <QNMockContext.Provider value={queryMap}>
-      <Story />
-    </QNMockContext.Provider>
-  )
+  return <QNMockContext.Provider value={queryMap}>{children}</QNMockContext.Provider>
 }

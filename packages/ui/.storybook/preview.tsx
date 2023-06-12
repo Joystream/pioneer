@@ -1,24 +1,23 @@
+import { Decorator } from '@storybook/react'
 import React from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { useForm, FormProvider } from 'react-hook-form'
-import { MemoryRouter, Route } from 'react-router'
+import { MemoryRouter, Redirect, Route, Switch } from 'react-router'
 
+import { NotFound } from '../src/app/pages/NotFound'
 import { GlobalStyle } from '../src/app/providers/GlobalStyle'
 import { Colors } from '../src/common/constants'
-import { whenDefined } from '../src/common/utils'
-import { APIDecorator } from '../src/mocks/providers/api'
-import { QNDecorator } from '../src/mocks/modules/query-node'
+import { MockProvidersDecorator } from '../src/mocks/providers'
 import { i18next } from '../src/services/i18n'
-import { AccountsDecorator } from '../src/mocks/providers/accounts'
 
-const stylesWrapperDecorator = (styleFn) => (
+const stylesWrapperDecorator: Decorator = (styleFn) => (
   <div>
     <GlobalStyle />
     {styleFn()}
   </div>
 )
 
-const i18nextDecorator = (Story) => (
+const i18nextDecorator: Decorator = (Story) => (
   <React.Suspense fallback="Missing i18next config">
     <I18nextProvider i18n={i18next}>
       <Story />
@@ -26,7 +25,7 @@ const i18nextDecorator = (Story) => (
   </React.Suspense>
 )
 
-const RHFDecorator = (Story) => {
+const RHFDecorator: Decorator = (Story) => {
   const form = useForm()
   return (
     <React.Suspense fallback="Loading RHF context">
@@ -37,9 +36,13 @@ const RHFDecorator = (Story) => {
   )
 }
 
-const RouterDecorator = (Story, { parameters }) => (
-  <MemoryRouter initialEntries={whenDefined(parameters?.router?.href, (href) => [href])}>
-    <Route component={Story} path={parameters?.router?.path ?? '/'} />
+const RouterDecorator: Decorator = (Story, { parameters }) => (
+  <MemoryRouter initialEntries={[`/story/${parameters.router?.href ?? ''}`]}>
+    <Switch>
+      <Route component={Story} path={`/story/${parameters.router?.path ?? ''}`} />
+      <Route exact path="/404" component={NotFound} />
+      <Redirect from="*" to="/404" />
+    </Switch>
   </MemoryRouter>
 )
 
@@ -47,10 +50,8 @@ export const decorators = [
   stylesWrapperDecorator,
   i18nextDecorator,
   RHFDecorator,
+  MockProvidersDecorator,
   RouterDecorator,
-  APIDecorator,
-  QNDecorator,
-  AccountsDecorator,
 ]
 
 export const parameters = {

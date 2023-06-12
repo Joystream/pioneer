@@ -22,7 +22,7 @@ module.exports = {
       {
         alias: {
           '@/common/utils/crypto/worker$': path.resolve(__dirname, '../src/common/utils/crypto'),
-          '@apollo/client$': path.resolve(__dirname, '../src/mocks/modules/query-node'),
+          '@apollo/client$': path.resolve(__dirname, '../src/mocks/providers/query-node'),
         },
       },
       shared.resolve

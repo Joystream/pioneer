@@ -1,6 +1,6 @@
 import BN from 'bn.js'
-import { isFunction, isObject, isString, mapValues } from 'lodash'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { isObject, isString, mapValues } from 'lodash'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
@@ -43,23 +43,18 @@ type AccountMock = {
   member?: Membership
 }
 
-type AccountsParam = { active?: Membership | Membership['id']; list?: AccountMock[] } | undefined
+type MockAccounts = { active?: Membership | Membership['id']; list?: AccountMock[] } | undefined
 
-export type Context = { args: any; parameters: { accounts?: AccountsParam | ((args: any) => AccountsParam) } }
+export type MockAccountsProps = { accounts?: MockAccounts }
 
-export const AccountsDecorator = (Story: CallableFunction, { args, parameters }: Context) => {
+export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts }) => {
   const [allAccounts, setAllAccounts] = useState<Account[]>([])
   const [balances, setBalances] = useState<AddressToBalanceMap>({})
   const [members, setMembers] = useState<MyMemberships['members']>([])
   const [active, setActive] = useState<Member | undefined>()
 
-  const params = useMemo(
-    () => (isFunction(parameters.accounts) ? parameters.accounts(args) : parameters.accounts),
-    [isFunction(parameters.accounts) && args]
-  )
-
   useEffect(() => {
-    const list = params?.list ?? (params && isObject(params.active) ? [{ member: params.active }] : undefined)
+    const list = accounts?.list ?? (accounts && isObject(accounts.active) ? [{ member: accounts.active }] : undefined)
     if (!list) return
 
     const accountData = list.flatMap(
@@ -98,7 +93,7 @@ export const AccountsDecorator = (Story: CallableFunction, { args, parameters }:
 
     const members = accountData.flatMap(({ member }) => whenDefined(member, asMember) ?? [])
 
-    const active = whenDefined(params?.active, (active) =>
+    const active = whenDefined(accounts?.active, (active) =>
       isObject(active) ? asMember(active) : members.find(({ handle }) => handle === active)
     )
 
@@ -106,14 +101,14 @@ export const AccountsDecorator = (Story: CallableFunction, { args, parameters }:
     setBalances(balances)
     setMembers(members)
     setActive(active)
-  }, [params])
+  }, [accounts])
 
   const getMemberIdByBoundAccountAddress = useCallback(
     (address: string) => members.find((member) => member.boundAccounts.includes(address))?.id,
     [members]
   )
 
-  if (!params) return Story()
+  if (!accounts) return <>{children}</>
 
   // Set contexts
   const accountContextValue: UseAccounts = {
@@ -134,9 +129,7 @@ export const AccountsDecorator = (Story: CallableFunction, { args, parameters }:
   return (
     <AccountsContext.Provider value={accountContextValue}>
       <BalancesContext.Provider value={balances}>
-        <MembershipContext.Provider value={membershipContextValue}>
-          <Story />
-        </MembershipContext.Provider>
+        <MembershipContext.Provider value={membershipContextValue}>{children}</MembershipContext.Provider>
       </BalancesContext.Provider>
     </AccountsContext.Provider>
   )

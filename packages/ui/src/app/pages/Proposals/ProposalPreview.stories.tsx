@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryContext, StoryObj } from '@storybook/react'
 import { random } from 'faker'
 import { mapValues } from 'lodash'
 
@@ -7,6 +7,7 @@ import { worker, workingGroup, workingGroupOpening } from '@/mocks/data/common'
 import { member } from '@/mocks/data/members'
 import { isoDate, joy } from '@/mocks/helpers'
 import { ProposalDetailsType, proposalDetailsToConstantKey } from '@/mocks/helpers/proposalDetailsToConstantKey'
+import { MocksParameters } from '@/mocks/providers'
 import { GetProposalDocument } from '@/proposals/queries'
 
 import { ProposalPreview } from './ProposalPreview'
@@ -15,8 +16,6 @@ import { randomMarkdown } from '@/../dev/query-node-mocks/generators/utils'
 
 const bob = member('bob', { isCouncilMember: true })
 const charlie = member('charlie', { isCouncilMember: true })
-
-const id = '0'
 
 const title = random.words(4)
 const description = randomMarkdown()
@@ -109,89 +108,91 @@ export default {
   },
 
   parameters: {
-    router: { path: '/:id', href: `/${id}` },
+    mocks: ({ args }: StoryContext<Args>): MocksParameters => {
+      const { constitutionality, isCouncilMember } = args
 
-    accounts: ({ isCouncilMember }: Args) => ({ active: member('alice', { isCouncilMember }) }),
-
-    chain: ({ type, constitutionality }: Args) => ({
-      consts: {
-        proposalsCodex: {
-          [proposalDetailsToConstantKey(type)]: {
-            votingPeriod: 200,
-            gracePeriod: 100,
-            approvalQuorumPercentage: 80,
-            approvalThresholdPercentage: 100,
-            slashingQuorumPercentage: 60,
-            slashingThresholdPercentage: 80,
-            requiredStake: joy(200),
-            constitutionality,
-          },
-        },
-        council: { councilSize: 3, idlePeriodDuration: 1, announcingPeriodDuration: 1 },
-        referendum: { voteStageDuration: 1, revealStageDuration: 1 },
-      },
-
-      query: {
-        members: { membershipPrice: joy(5) },
-        council: {
-          budget: joy(1000),
-          councilorReward: joy(1),
-          stage: { stage: { isIdle: true }, changedAt: 123 },
-        },
-        referendum: { stage: {} },
-      },
-    }),
-
-    queryNode: ({ isCouncilMember, isProposer, isDiscussionOpen, isInDiscussionWhitelist, type, status }: Args) => {
       const alice = member('alice', { isCouncilMember })
       const dave = member('dave', { isCouncilMember: !isCouncilMember })
 
-      return [
-        {
-          query: GetProposalDocument,
-          data: {
-            proposal: {
-              id,
-              title,
-              description,
-              votes: [],
-              createdInEvent: {},
-              discussionThread: {
-                posts: [],
-                mode: isDiscussionOpen
-                  ? { __typename: 'ProposalDiscussionThreadModeOpen' }
-                  : {
-                      __typename: 'ProposalDiscussionThreadModeClosed',
-                      whitelist: {
-                        __typename: 'ProposalDiscussionWhitelist',
-                        members: isInDiscussionWhitelist ? [alice] : [],
-                      },
-                    },
+      return {
+        accounts: { active: alice },
+
+        chain: {
+          consts: {
+            proposalsCodex: {
+              [proposalDetailsToConstantKey(args.type)]: {
+                votingPeriod: 200,
+                gracePeriod: 100,
+                approvalQuorumPercentage: 80,
+                approvalThresholdPercentage: 100,
+                slashingQuorumPercentage: 60,
+                slashingThresholdPercentage: 80,
+                requiredStake: joy(200),
+                constitutionality,
               },
-              creator: isProposer ? alice : bob,
-              details: proposalDetailsMap[type],
-              status: { __typename: status },
-              proposalStatusUpdates: [],
             },
+            council: { councilSize: 3, idlePeriodDuration: 1, announcingPeriodDuration: 1 },
+            referendum: { voteStageDuration: 1, revealStageDuration: 1 },
+          },
+
+          query: {
+            members: { membershipPrice: joy(5) },
+            council: {
+              budget: joy(1000),
+              councilorReward: joy(1),
+              stage: { stage: { isIdle: true }, changedAt: 123 },
+            },
+            referendum: { stage: {} },
           },
         },
-        {
-          query: GetElectedCouncilDocument,
-          data: {
-            electedCouncils: {
-              id: '0',
-              electedAtBlock: 123,
-              electedAtTime: isoDate('01/02/2023'),
-              councilElections: [{ cycleId: 4 }],
-              councilMembers: [
-                { id: '0', unpaidReward: '0', stake: joy(200), member: isCouncilMember ? alice : dave },
-                { id: '1', unpaidReward: '0', stake: joy(200), member: bob },
-                { id: '2', unpaidReward: '0', stake: joy(200), member: charlie },
-              ],
+
+        queryNode: [
+          {
+            query: GetProposalDocument,
+            data: {
+              proposal: {
+                id: '0',
+                title,
+                description,
+                votes: [],
+                createdInEvent: {},
+                discussionThread: {
+                  posts: [],
+                  mode: args.isDiscussionOpen
+                    ? { __typename: 'ProposalDiscussionThreadModeOpen' }
+                    : {
+                        __typename: 'ProposalDiscussionThreadModeClosed',
+                        whitelist: {
+                          __typename: 'ProposalDiscussionWhitelist',
+                          members: args.isInDiscussionWhitelist ? [alice] : [],
+                        },
+                      },
+                },
+                creator: args.isProposer ? alice : bob,
+                details: proposalDetailsMap[args.type],
+                status: { __typename: args.status },
+                proposalStatusUpdates: [],
+              },
             },
           },
-        },
-      ]
+          {
+            query: GetElectedCouncilDocument,
+            data: {
+              electedCouncils: {
+                id: '0',
+                electedAtBlock: 123,
+                electedAtTime: isoDate('01/02/2023'),
+                councilElections: [{ cycleId: 4 }],
+                councilMembers: [
+                  { id: '0', unpaidReward: '0', stake: joy(200), member: isCouncilMember ? alice : dave },
+                  { id: '1', unpaidReward: '0', stake: joy(200), member: bob },
+                  { id: '2', unpaidReward: '0', stake: joy(200), member: charlie },
+                ],
+              },
+            },
+          },
+        ],
+      }
     },
   },
 } satisfies Meta<Args>

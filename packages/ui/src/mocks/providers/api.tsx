@@ -1,5 +1,5 @@
 import { isFunction, set } from 'lodash'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 import { Observable, of } from 'rxjs'
 
 import { Api } from '@/api'
@@ -10,27 +10,23 @@ import { createType } from '@/common/model/createType'
 import { joy } from '../helpers'
 import { asChainData } from '../helpers/asChainData'
 
-type ChainMock = {
-  consts?: Record<'string', any>
-  derive?: Record<'string', any>
-  query?: Record<'string', any>
-  rpc?: Record<'string', any>
-  tx?: Record<'string', { paymentInfo?: any; signAndSend?: any }>
+type MockApi = {
+  consts?: Record<string, any>
+  derive?: Record<string, any>
+  query?: Record<string, any>
+  rpc?: Record<string, any>
+  tx?: Record<string, { paymentInfo?: any; signAndSend?: any }>
 }
 
-type Context = { args: any; parameters: { chain?: ChainMock | ((args: any) => ChainMock) } }
-export const APIDecorator = (Story: CallableFunction, { args, parameters }: Context) => {
-  const params = useMemo(
-    () => (isFunction(parameters.chain) ? parameters.chain(args) : parameters.chain),
-    [isFunction(parameters.chain) && args]
-  )
+export type MockApiProps = { chain?: MockApi }
 
-  // When changing args: updates the values by "disconnecting" the mocked api for a rendering frame.
-  const [prevArgs, setPrevArgs] = useState(args)
-  useEffect(() => setPrevArgs(args), [args])
+export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
+  // When changing mocks: updates the values by "disconnecting" the mocked api for a rendering frame.
+  const [prevMocks, setPrevMocks] = useState(chain)
+  useEffect(() => setPrevMocks(chain), [chain])
 
   const api = useMemo<Api | undefined>(() => {
-    if (!params) return
+    if (!chain) return
 
     // Add default mocks
     const blockHash = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'
@@ -69,16 +65,16 @@ export const APIDecorator = (Story: CallableFunction, { args, parameters }: Cont
 
     return api
 
-    function traverseParams(kind: keyof ChainMock, fn: (path: string, value: any) => any) {
-      Object.entries(params?.[kind] ?? {}).forEach(([moduleName, moduleParam]) =>
+    function traverseParams(kind: keyof MockApi, fn: (path: string, value: any) => any) {
+      Object.entries(chain?.[kind] ?? {}).forEach(([moduleName, moduleParam]) =>
         Object.entries(moduleParam).forEach(([key, value]) => fn(`${kind}.${moduleName}.${key}`, value))
       )
     }
-  }, [params])
+  }, [chain])
 
   // Set context
   const contextValue: UseApi =
-    api && args === prevArgs
+    api && chain === prevMocks
       ? {
           api,
           isConnected: true,
@@ -94,7 +90,7 @@ export const APIDecorator = (Story: CallableFunction, { args, parameters }: Cont
           qnConnectionState: 'connecting',
         }
 
-  return <ApiContext.Provider value={contextValue}>{<Story />}</ApiContext.Provider>
+  return <ApiContext.Provider value={contextValue}>{children}</ApiContext.Provider>
 }
 
 const asApiConst = (value: any) => {
