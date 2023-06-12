@@ -48,7 +48,7 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
           actions: assign({ form: (_, event) => event.form }),
         },
         DONEWITHVAL: {
-          target: 'buyMembershipTransaction',
+          target: 'buyValidatorMembershipTx',
           actions: assign({ form: (_, event) => event.form }),
         },
       },
