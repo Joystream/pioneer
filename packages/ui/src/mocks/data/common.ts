@@ -1,6 +1,8 @@
 import { isoDate } from '../helpers'
 
-import { alice } from './members'
+import { member } from './members'
+
+const membership = member('eve')
 
 export type BlockFieldsMock = {
   inBlock: number
@@ -26,5 +28,5 @@ export const worker = {
   __typename: 'Worker',
   createdAt: isoDate('01/02/2023'),
   group: workingGroup,
-  membership: alice,
+  membership,
 }

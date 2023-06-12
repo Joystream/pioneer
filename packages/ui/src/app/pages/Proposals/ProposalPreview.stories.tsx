@@ -1,10 +1,11 @@
 import { Meta, StoryContext, StoryObj } from '@storybook/react'
 import { random } from 'faker'
-import { mapValues } from 'lodash'
+import { last, mapValues } from 'lodash'
 
 import { GetElectedCouncilDocument } from '@/council/queries'
 import { worker, workingGroup, workingGroupOpening } from '@/mocks/data/common'
 import { member } from '@/mocks/data/members'
+import { ProposalStatus, proposalActiveStatus } from '@/mocks/data/proposals'
 import { isoDate, joy } from '@/mocks/helpers'
 import { ProposalDetailsType, proposalDetailsToConstantKey } from '@/mocks/helpers/proposalDetailsToConstantKey'
 import { MocksParameters } from '@/mocks/providers'
@@ -19,20 +20,6 @@ const charlie = member('charlie', { isCouncilMember: true })
 
 const title = random.words(4)
 const description = randomMarkdown()
-
-const statuses = [
-  'ProposalStatusCanceledByRuntime',
-  'ProposalStatusCancelled',
-  'ProposalStatusDeciding',
-  'ProposalStatusDormant',
-  'ProposalStatusExecuted',
-  'ProposalStatusExecutionFailed',
-  'ProposalStatusExpired',
-  'ProposalStatusGracing',
-  'ProposalStatusRejected',
-  'ProposalStatusSlashed',
-  'ProposalStatusVetoed',
-] as const
 
 const details = {
   AmendConstitutionProposalDetails: {},
@@ -84,7 +71,6 @@ type Args = {
   isDiscussionOpen: boolean
   isInDiscussionWhitelist: boolean
   type: ProposalDetailsType
-  status: (typeof statuses)[number]
   constitutionality: number
 }
 
@@ -94,7 +80,6 @@ export default {
 
   argTypes: {
     type: { control: { type: 'select' }, options: Object.keys(details) },
-    status: { control: { type: 'select' }, options: statuses },
     constitutionality: { control: { type: 'range', min: 1, max: 4 } },
   },
   args: {
@@ -104,15 +89,17 @@ export default {
     isDiscussionOpen: true,
     type: 'SignalProposalDetails',
     constitutionality: 1,
-    status: 'ProposalStatusDeciding',
   },
 
   parameters: {
-    mocks: ({ args }: StoryContext<Args>): MocksParameters => {
+    mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
       const { constitutionality, isCouncilMember } = args
 
       const alice = member('alice', { isCouncilMember })
       const dave = member('dave', { isCouncilMember: !isCouncilMember })
+
+      const status = last(parameters.statuses) as ProposalStatus
+      const updates = parameters.statuses.slice(1, proposalActiveStatus.includes(status) ? undefined : -1)
 
       return {
         accounts: { active: alice },
@@ -155,7 +142,6 @@ export default {
                 title,
                 description,
                 votes: [],
-                createdInEvent: {},
                 discussionThread: {
                   posts: [],
                   mode: args.isDiscussionOpen
@@ -168,10 +154,19 @@ export default {
                         },
                       },
                 },
+
                 creator: args.isProposer ? alice : bob,
                 details: proposalDetailsMap[args.type],
-                status: { __typename: args.status },
-                proposalStatusUpdates: [],
+
+                createdInEvent: { inBlock: 123, createdAt: isoDate('2023/01/02') },
+                proposalStatusUpdates: updates.map((status: ProposalStatus) => ({
+                  inBlock: 123,
+                  createdAt: isoDate('2023/01/02'),
+                  newStatus: { __typename: status },
+                })),
+                status: { __typename: status },
+                statusSetAtBlock: 123,
+                statusSetAtTime: isoDate('2023/01/12'),
               },
             },
           },
@@ -181,7 +176,7 @@ export default {
               electedCouncils: {
                 id: '0',
                 electedAtBlock: 123,
-                electedAtTime: isoDate('01/02/2023'),
+                electedAtTime: isoDate('2023/01/02'),
                 councilElections: [{ cycleId: 4 }],
                 councilMembers: [
                   { id: '0', unpaidReward: '0', stake: joy(200), member: isCouncilMember ? alice : dave },
@@ -194,6 +189,13 @@ export default {
         ],
       }
     },
+
+    statuses: [
+      'ProposalStatusDeciding',
+      'ProposalStatusDormant',
+      'ProposalStatusDeciding',
+      'ProposalStatusGracing',
+    ] satisfies ProposalStatus[],
   },
 } satisfies Meta<Args>
 
