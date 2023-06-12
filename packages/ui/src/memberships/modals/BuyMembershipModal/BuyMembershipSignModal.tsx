@@ -98,7 +98,7 @@ export const BuyMembershipSignModal = ({
             <Info>
               <TextMedium>
                 Invitation lock can be spent on transaction fees and staking for proposals, voting and working groups
-                applications. JOY tokens subject to this lock cannot be transferred to any other accounts. This lock is
+                applications. JOYS tokens subject to this lock cannot be transferred to any other accounts. This lock is
                 unrecoverable. NB: Transaction fees will first be taken from your transferable balance if it is
                 positive.
               </TextMedium>

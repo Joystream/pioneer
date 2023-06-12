@@ -28304,7 +28304,7 @@ export type SlashWorkingGroupLeadProposalDetails = {
 export type StakeDecreasedEvent = BaseGraphQlObject &
   Event & {
     __typename: 'StakeDecreasedEvent'
-    /** The amount of JOY the stake was decreased by */
+    /** The amount of JOYS the stake was decreased by */
     amount: Scalars['BigInt']
     createdAt: Scalars['DateTime']
     createdById: Scalars['ID']
@@ -28450,7 +28450,7 @@ export type StakeDecreasedEventWhereUniqueInput = {
 export type StakeIncreasedEvent = BaseGraphQlObject &
   Event & {
     __typename: 'StakeIncreasedEvent'
-    /** The amount of JOY the stake was increased by */
+    /** The amount of JOYS the stake was increased by */
     amount: Scalars['BigInt']
     createdAt: Scalars['DateTime']
     createdById: Scalars['ID']
@@ -34483,7 +34483,7 @@ export type Worker = BaseGraphQlObject & {
   /** WorkerId in specific working group module */
   runtimeId: Scalars['Int']
   slashes: Array<StakeSlashedEvent>
-  /** Current role stake (in JOY) */
+  /** Current role stake (in JOYS) */
   stake: Scalars['BigInt']
   /** Worker's staking account */
   stakeAccount: Scalars['String']
@@ -35508,7 +35508,7 @@ export type WorkingGroup = BaseGraphQlObject & {
   __typename: 'WorkingGroup'
   applicationwithdrawneventgroup?: Maybe<Array<ApplicationWithdrawnEvent>>
   appliedonopeningeventgroup?: Maybe<Array<AppliedOnOpeningEvent>>
-  /** Current working group budget (JOY) */
+  /** Current working group budget (JOYS) */
   budget: Scalars['BigInt']
   budgetseteventgroup?: Maybe<Array<BudgetSetEvent>>
   budgetspendingeventgroup?: Maybe<Array<BudgetSpendingEvent>>

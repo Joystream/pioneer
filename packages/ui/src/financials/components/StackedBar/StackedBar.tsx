@@ -8,7 +8,7 @@ import { formatTokenValue } from '@/common/model/formatters'
 import { DataListItem } from '@/financials/components/StackedBar/components/DataListItem'
 import { chartColors } from '@/financials/types/constants'
 
-export type Data = Record<string, number> // NOTE Currently does not support JOY values
+export type Data = Record<string, number> // NOTE Currently does not support JOYS values
 
 export interface StackedBarProps {
   data: Data
