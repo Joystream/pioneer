@@ -23,9 +23,9 @@ interface BuyMembershipContext {
 
 type BuyMembershipState =
   | { value: 'prepare'; context: EmptyObject }
-  | { value: 'buyMembershipTransaction'; context: { form: MemberFormFields } }
-  // | { value: 'temp'; context: { form: MemberFormFields } }
-  // | { value: 'bondValidatorAccTransaction'; context: { form: MemberFormFields } }
+  | { value: 'buyMembershipTx'; context: { form: MemberFormFields } }
+  | { value: 'buyValidatorMembershipTx'; context: { form: MemberFormFields } }
+  | { value: 'bondValidatorAccTx'; context: { form: MemberFormFields } }
   | { value: 'success'; context: Required<BuyMembershipContext> }
   | { value: 'canceled'; context: Required<BuyMembershipContext> }
   | { value: 'error'; context: { form: MemberFormFields; transactionEvents: EventRecord[] } }
@@ -34,9 +34,9 @@ export type BuyMembershipEvent =
   | { type: 'PASS' }
   | { type: 'FAIL' }
   | { type: 'DONE'; form: MemberFormFields }
+  | { type: 'DONEWITHVAL'; form: MemberFormFields }
   | { type: 'SUCCESS'; memberId: BN }
   | { type: 'ERROR' }
-  // | { type: 'SKIP' }
 
 export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembershipEvent, BuyMembershipState>({
   initial: 'prepare',
@@ -44,12 +44,16 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
     prepare: {
       on: {
         DONE: {
+          target: 'buyMembershipTx',
+          actions: assign({ form: (_, event) => event.form }),
+        },
+        DONEWITHVAL: {
           target: 'buyMembershipTransaction',
           actions: assign({ form: (_, event) => event.form }),
         },
       },
     },
-    buyMembershipTransaction: {
+    buyMembershipTx: {
       invoke: {
         id: 'transaction',
         src: transactionMachine,
@@ -73,40 +77,54 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
         ],
       },
     },
-    // temp:{
-    //   on: {
-    //     DONE: {
-    //       target: 'buyMembershipTransaction',
-    //     },
-    //     SKIP: {
-    //       target: 'success',
-    //     },
-    //   },
-    // },
-    // bondValidatorAccTransaction: {
-    //   invoke: {
-    //     id: 'transaction',
-    //     src: transactionMachine,
-    //     onDone: [
-    //       {
-    //         target: 'success',
-    //         actions: assign({
-    //           memberId: (context, event) => getDataFromEvent(event.data.events, 'members', 'MembershipBought', 0),
-    //         }),
-    //         cond: isTransactionSuccess,
-    //       },
-    //       {
-    //         target: 'error',
-    //         cond: isTransactionError,
-    //         actions: assign({ transactionEvents: (context, event) => event.data.events }),
-    //       },
-    //       {
-    //         target: 'canceled',
-    //         cond: isTransactionCanceled,
-    //       },
-    //     ],
-    //   },
-    // },
+    buyValidatorMembershipTx: {
+      invoke: {
+        id: 'transaction',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'bondValidatorAccTx',
+            actions: assign({
+              memberId: (context, event) => getDataFromEvent(event.data.events, 'members', 'MembershipBought', 0),
+            }),
+            cond: isTransactionSuccess,
+          },
+          {
+            target: 'error',
+            cond: isTransactionError,
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+          },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
+        ],
+      },
+    },
+    bondValidatorAccTx: {
+      invoke: {
+        id: 'transaction',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'success',
+            // actions: assign({
+            //   memberId: (context, event) => getDataFromEvent(event.data.events, 'members', 'MembershipBought', 0),
+            // }),
+            cond: isTransactionSuccess,
+          },
+          {
+            target: 'error',
+            cond: isTransactionError,
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
+          },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
+        ],
+      },
+    },
     ...transactionModalFinalStatusesFactory({
       metaMessages: {
         error: 'There was a problem with creating a membership.',

@@ -28,6 +28,7 @@ interface SignProps {
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
   initialSigner?: Account
   service: ActorRef<any>
+  bondValidatorAcc?: Boolean
 }
 
 export const BuyMembershipSignModal = ({
@@ -37,6 +38,7 @@ export const BuyMembershipSignModal = ({
   transaction,
   initialSigner,
   service,
+  bondValidatorAcc,
 }: SignProps) => {
   const { allAccounts } = useMyAccounts()
   const [from, setFrom] = useState(
@@ -70,12 +72,12 @@ export const BuyMembershipSignModal = ({
 
   const signDisabled = !isReady || !hasFunds || !validationInfo
   return (
-    <TransactionModal onClose={onClose} service={service} useMultiTransaction={formData.isValidator ? {steps:[{title:'Create Membership'},{title:'Bind validator account'}],active:0}: undefined}>
+    <TransactionModal onClose={onClose} service={service} useMultiTransaction={formData.isValidator ? {steps:[{title:'Create Membership'},{title:'Bind validator account'}],active: bondValidatorAcc?1:0}: undefined}>
       <ModalBody>
-        <TextMedium>{formData.isValidator ? "You intend to create a validator membership.":"You intend to create a new membership."}</TextMedium>
-        <TextMedium>
+        <TextMedium>{formData.isValidator ? (bondValidatorAcc? "You are intending to bond your validator account with your membership": "You intend to create a validator membership."):"You intend to create a new membership."}</TextMedium>
+        {!bondValidatorAcc && (<TextMedium>
           The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />.
-        </TextMedium>
+        </TextMedium>)}
         <TextMedium>
           Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
         </TextMedium>
@@ -110,11 +112,11 @@ export const BuyMembershipSignModal = ({
         transactionFee={paymentInfo?.partialFee.toBn()}
         next={{ disabled: signDisabled, label:formData.isValidator ? 'Create membership': 'Sign and create a member', onClick: sign }}
       >
-        <TransactionInfo
+        {shouldInformAboutLock && (<TransactionInfo
           title="Creation fee:"
           value={membershipPrice?.toBn()}
           tooltipText="The price to create a membership."
-        />
+        />)}
       </ModalTransactionFooter>
     </TransactionModal>
   )

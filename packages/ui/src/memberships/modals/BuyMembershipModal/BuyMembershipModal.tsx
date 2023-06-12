@@ -28,12 +28,18 @@ export const BuyMembershipModal = () => {
   }, [isSuccessful, apolloClient])
 
   if (state.matches('prepare')) {
-    const onSubmit = (params: MemberFormFields) => send({ type: 'DONE', form: params })
+    const onSubmit = (params: MemberFormFields) =>
+      send({ type: params.isValidator ? 'DONEWITHVAL' : 'DONE', form: params })
 
     return <BuyMembershipFormModal onClose={hideModal} onSubmit={onSubmit} membershipPrice={membershipPrice} />
   }
 
-  if (state.matches('buyMembershipTransaction') && api) {
+  if (
+    (state.matches('buyMembershipTx') ||
+      state.matches('buyValidatorMembershipTx') ||
+      state.matches('bondValidatorAccTx')) &&
+    api
+  ) {
     const transaction = api.tx.members.buyMembership(toMemberTransactionParams(state.context.form))
     const { form } = state.context
     const service = state.children.transaction
@@ -46,53 +52,10 @@ export const BuyMembershipModal = () => {
         transaction={transaction}
         initialSigner={form.controllerAccount}
         service={service}
+        bondValidatorAcc={state.matches('bondValidatorAccTx')}
       />
     )
   }
-
-  // if (state.matches('temp')) {
-  //   const { form } = state.context
-  //   if(form.isValidator) send({ type : 'PASS'})
-  // }
-
-  // if (state.matches('bondValidatorAccTransaction') && api) {
-  //   const transaction = api.tx.members.buyMembership(toMemberTransactionParams(state.context.form))
-  //   const { form } = state.context
-  //   const service = state.children.transaction
-
-  //   return (
-  //     <BuyMembershipSignModal
-  //       onClose={hideModal}
-  //       membershipPrice={membershipPrice}
-  //       formData={form}
-  //       transaction={transaction}
-  //       initialSigner={form.controllerAccount}
-  //       service={service}
-  //     />
-  //   )
-  // }
-
-  // if (state.matches('temp')) {
-  //   const { form } = state.context
-  //   if(form.isValidator) send({ type : 'PASS'})
-  // }
-
-  // if (state.matches('bondValidatorAccTransaction') && api) {
-  //   const transaction = api.tx.members.buyMembership(toMemberTransactionParams(state.context.form))
-  //   const { form } = state.context
-  //   const service = state.children.transaction
-
-  //   return (
-  //     <BuyMembershipSignModal
-  //       onClose={hideModal}
-  //       membershipPrice={membershipPrice}
-  //       formData={form}
-  //       transaction={transaction}
-  //       initialSigner={form.controllerAccount}
-  //       service={service}
-  //     />
-  //   )
-  // }
 
   if (isSuccessful) {
     const { form, memberId } = state.context
