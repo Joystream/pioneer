@@ -161,7 +161,11 @@ export const WorkingGroupOpening = () => {
                 tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/working-groups#staking"
                 value={opening.stake}
               />
-              <ApplicationStats applicants={opening.applications?.length ?? 0} hiring={opening.hiring} status={opening.status} />
+              <ApplicationStats
+                applicants={opening.applications?.length ?? 0}
+                hiring={opening.hiring}
+                status={opening.status}
+              />
             </Statistics>
           </RowGapBlock>
         </PageHeaderWrapper>
