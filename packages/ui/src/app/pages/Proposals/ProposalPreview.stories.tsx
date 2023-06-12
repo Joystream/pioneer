@@ -5,7 +5,7 @@ import { last, mapValues } from 'lodash'
 import { GetElectedCouncilDocument } from '@/council/queries'
 import { worker, workingGroup, workingGroupOpening } from '@/mocks/data/common'
 import { member } from '@/mocks/data/members'
-import { ProposalStatus, proposalActiveStatus } from '@/mocks/data/proposals'
+import { ProposalStatus, proposalDiscussionPosts, proposalActiveStatus } from '@/mocks/data/proposals'
 import { isoDate, joy } from '@/mocks/helpers'
 import { ProposalDetailsType, proposalDetailsToConstantKey } from '@/mocks/helpers/proposalDetailsToConstantKey'
 import { MocksParameters } from '@/mocks/providers'
@@ -92,6 +92,8 @@ export default {
   },
 
   parameters: {
+    router: { path: '/:id', href: '/0' },
+
     mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
       const { constitutionality, isCouncilMember } = args
 
@@ -143,7 +145,7 @@ export default {
                 description,
                 votes: [],
                 discussionThread: {
-                  posts: [],
+                  posts: proposalDiscussionPosts,
                   mode: args.isDiscussionOpen
                     ? { __typename: 'ProposalDiscussionThreadModeOpen' }
                     : {
