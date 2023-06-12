@@ -72,12 +72,31 @@ export const BuyMembershipSignModal = ({
 
   const signDisabled = !isReady || !hasFunds || !validationInfo
   return (
-    <TransactionModal onClose={onClose} service={service} useMultiTransaction={formData.isValidator ? {steps:[{title:'Create Membership'},{title:'Bind validator account'}],active: bondValidatorAcc?1:0}: undefined}>
+    <TransactionModal
+      onClose={onClose}
+      service={service}
+      useMultiTransaction={
+        formData.isValidator
+          ? {
+              steps: [{ title: 'Create Membership' }, { title: 'Bind validator account' }],
+              active: bondValidatorAcc ? 1 : 0,
+            }
+          : undefined
+      }
+    >
       <ModalBody>
-        <TextMedium>{formData.isValidator ? (bondValidatorAcc? "You are intending to bond your validator account with your membership": "You intend to create a validator membership."):"You intend to create a new membership."}</TextMedium>
-        {!bondValidatorAcc && (<TextMedium>
-          The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />.
-        </TextMedium>)}
+        <TextMedium>
+          {formData.isValidator
+            ? bondValidatorAcc
+              ? 'You are intending to bond your validator account with your membership'
+              : 'You intend to create a validator membership.'
+            : 'You intend to create a new membership.'}
+        </TextMedium>
+        {!bondValidatorAcc && (
+          <TextMedium>
+            The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />.
+          </TextMedium>
+        )}
         <TextMedium>
           Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
         </TextMedium>
@@ -110,13 +129,23 @@ export const BuyMembershipSignModal = ({
       </ModalBody>
       <ModalTransactionFooter
         transactionFee={paymentInfo?.partialFee.toBn()}
-        next={{ disabled: signDisabled, label:formData.isValidator ? 'Create membership': 'Sign and create a member', onClick: sign }}
+        next={{
+          disabled: signDisabled && !bondValidatorAcc ,
+          label: formData.isValidator
+            ? bondValidatorAcc
+              ? 'Sign and Bond'
+              : 'Create membership'
+            : 'Sign and create a member',
+          onClick: sign,
+        }}
       >
-        {!bondValidatorAcc  && (<TransactionInfo
-          title="Creation fee:"
-          value={membershipPrice?.toBn()}
-          tooltipText="The price to create a membership."
-        />)}
+        {!bondValidatorAcc && (
+          <TransactionInfo
+            title="Creation fee:"
+            value={membershipPrice?.toBn()}
+            tooltipText="The price to create a membership."
+          />
+        )}
       </ModalTransactionFooter>
     </TransactionModal>
   )
