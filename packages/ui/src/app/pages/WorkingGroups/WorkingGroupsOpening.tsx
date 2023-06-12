@@ -54,7 +54,7 @@ export const WorkingGroupOpening = () => {
 
   const hiredApplicants = useMemo(() => {
     if (activeApplications) {
-      return activeApplications.findAll(({ status }) => status === 'ApplicationStatusAccepted')
+      return activeApplications.filter(({ status }) => status === 'ApplicationStatusAccepted')
     }
   }, [opening?.id])
   const myApplication = useMemo(() => {
