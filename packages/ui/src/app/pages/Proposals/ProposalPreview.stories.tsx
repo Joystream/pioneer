@@ -4,7 +4,6 @@ import { mapValues } from 'lodash'
 
 import { GetElectedCouncilDocument } from '@/council/queries'
 import { worker, workingGroup, workingGroupOpening } from '@/mocks/data/common'
-import { councilMembers } from '@/mocks/data/council'
 import { member } from '@/mocks/data/members'
 import { isoDate, joy } from '@/mocks/helpers'
 import { ProposalDetailsType, proposalDetailsToConstantKey } from '@/mocks/helpers/proposalDetailsToConstantKey'
@@ -15,6 +14,7 @@ import { ProposalPreview } from './ProposalPreview'
 import { randomMarkdown } from '@/../dev/query-node-mocks/generators/utils'
 
 const bob = member('bob', { isCouncilMember: true })
+const charlie = member('charlie', { isCouncilMember: true })
 
 const id = '0'
 
@@ -82,6 +82,8 @@ const details = {
 type Args = {
   isCouncilMember: boolean
   isProposer: boolean
+  isDiscussionOpen: boolean
+  isInDiscussionWhitelist: boolean
   type: ProposalDetailsType
   status: (typeof statuses)[number]
   constitutionality: number
@@ -99,6 +101,8 @@ export default {
   args: {
     isCouncilMember: false,
     isProposer: false,
+    isInDiscussionWhitelist: false,
+    isDiscussionOpen: true,
     type: 'SignalProposalDetails',
     constitutionality: 1,
     status: 'ProposalStatusDeciding',
@@ -138,46 +142,59 @@ export default {
       },
     }),
 
-    queryNode: ({ isCouncilMember, isProposer, type, status }: Args) => [
-      {
-        query: GetProposalDocument,
-        data: {
-          proposal: {
-            id,
-            title,
-            description,
-            votes: [],
-            createdInEvent: {},
-            discussionThread: {
-              posts: [],
-              mode: {},
+    queryNode: ({ isCouncilMember, isProposer, isDiscussionOpen, isInDiscussionWhitelist, type, status }: Args) => {
+      const alice = member('alice', { isCouncilMember })
+      const dave = member('dave', { isCouncilMember: !isCouncilMember })
+
+      return [
+        {
+          query: GetProposalDocument,
+          data: {
+            proposal: {
+              id,
+              title,
+              description,
+              votes: [],
+              createdInEvent: {},
+              discussionThread: {
+                posts: [],
+                mode: isDiscussionOpen
+                  ? { __typename: 'ProposalDiscussionThreadModeOpen' }
+                  : {
+                      __typename: 'ProposalDiscussionThreadModeClosed',
+                      whitelist: {
+                        __typename: 'ProposalDiscussionWhitelist',
+                        members: isInDiscussionWhitelist ? [alice] : [],
+                      },
+                    },
+              },
+              creator: isProposer ? alice : bob,
+              details: proposalDetailsMap[type],
+              status: { __typename: status },
+              proposalStatusUpdates: [],
             },
-            creator: isProposer ? member('alice', { isCouncilMember }) : bob,
-            details: proposalDetailsMap[type],
-            status: { __typename: status },
-            proposalStatusUpdates: [],
           },
         },
-      },
-      {
-        query: GetElectedCouncilDocument,
-        data: {
-          electedCouncils: {
-            id: '0',
-            electedAtBlock: 123,
-            electedAtTime: isoDate('01/02/2023'),
-            councilElections: [{ cycleId: 4 }],
-            councilMembers: councilMembers({ unpaidReward: '0', stake: joy(200) }, [
-              isCouncilMember ? 'alice' : 'dave',
-              'bob',
-              'charlie',
-            ]),
+        {
+          query: GetElectedCouncilDocument,
+          data: {
+            electedCouncils: {
+              id: '0',
+              electedAtBlock: 123,
+              electedAtTime: isoDate('01/02/2023'),
+              councilElections: [{ cycleId: 4 }],
+              councilMembers: [
+                { id: '0', unpaidReward: '0', stake: joy(200), member: isCouncilMember ? alice : dave },
+                { id: '1', unpaidReward: '0', stake: joy(200), member: bob },
+                { id: '2', unpaidReward: '0', stake: joy(200), member: charlie },
+              ],
+            },
           },
         },
-      },
-    ],
+      ]
+    },
   },
-} satisfies Meta
+} satisfies Meta<Args>
 
 type Story = StoryObj<typeof ProposalPreview>
 
