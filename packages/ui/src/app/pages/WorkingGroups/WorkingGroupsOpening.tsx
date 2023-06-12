@@ -52,9 +52,9 @@ export const WorkingGroupOpening = () => {
     }
   }, [opening?.applications])
 
-  const hiringApplication = useMemo(() => {
+  const hiredApplicants = useMemo(() => {
     if (activeApplications) {
-      return activeApplications.find(({ status }) => status === 'ApplicationStatusAccepted')
+      return activeApplications.findAll(({ status }) => status === 'ApplicationStatusAccepted')
     }
   }, [opening?.id])
   const myApplication = useMemo(() => {
@@ -161,7 +161,7 @@ export const WorkingGroupOpening = () => {
                 tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/working-groups#staking"
                 value={opening.stake}
               />
-              <ApplicationStats applicants={opening.applicants} hiring={opening.hiring} status={opening.status} />
+              <ApplicationStats applicants={opening.applications?.length ?? 0} hiring={opening.hiring} status={opening.status} />
             </Statistics>
           </RowGapBlock>
         </PageHeaderWrapper>
@@ -176,7 +176,7 @@ export const WorkingGroupOpening = () => {
           <ApplicantsList
             allApplicants={opening.applications}
             myApplication={myApplication}
-            hired={hiringApplication}
+            hired={hiredApplicants}
             hiringComplete={opening.status !== OpeningStatuses.OPEN}
           />
           {opening.status === OpeningStatuses.OPEN && !activeApplications?.length && <ApplicationStatus />}
