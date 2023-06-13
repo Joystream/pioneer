@@ -39,7 +39,6 @@ import { MemberWithDetails } from '../../types'
 import { UpdateMemberForm } from './types'
 import { changedOrNull, hasAnyEdits, membershipExternalResourceToObject } from './utils'
 
-
 interface Props {
   onClose: () => void
   onSubmit: (params: WithNullableValues<UpdateMemberForm>) => void
@@ -83,7 +82,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   // const stashAccounts = member.stashAccounts ?? []
   const [stashAccounts, setStashAccounts] = useState([{}])
   const [isAccountAdded, setIsAccountAdded] = useState(true)
-  
+
   const form = useForm({
     resolver: useYupValidationResolver<UpdateMemberForm>(UpdateMemberSchema),
     defaultValues: {
@@ -94,8 +93,14 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     context,
     mode: 'onChange',
   })
-  
-  const [controllerAccount, rootAccount, handle, stashAccountSelect, isValidator] = form.watch(['controllerAccount', 'rootAccount', 'handle', 'stashAccountSelect', 'isValidator'])
+
+  const [controllerAccount, rootAccount, handle, stashAccountSelect, isValidator] = form.watch([
+    'controllerAccount',
+    'rootAccount',
+    'handle',
+    'stashAccountSelect',
+    'isValidator',
+  ])
 
   useEffect(() => {
     form.trigger('handle')
@@ -108,26 +113,29 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
 
-  const canUpdate = form.formState.isValid && hasAnyEdits(form.getValues(), getUpdateMemberFormInitial(member)) && ( !isValidator || stashAccounts?.length > 1 )
+  const canUpdate =
+    form.formState.isValid &&
+    hasAnyEdits(form.getValues(), getUpdateMemberFormInitial(member)) &&
+    (!isValidator || stashAccounts?.length > 1)
 
   const addStashAccount = () => {
-    const accountSelection = stashAccountSelect as Account;
-    setStashAccounts((prevStashAccounts)=>[...prevStashAccounts,accountSelection])
+    const accountSelection = stashAccountSelect as Account
+    setStashAccounts((prevStashAccounts) => [...prevStashAccounts, accountSelection])
     form?.setValue('stashAccountSelect' as keyof UpdateMemberForm, undefined)
   }
 
-  const removeStashAccount = (index:number) => {
-    setStashAccounts((prevAccounts)=>prevAccounts.filter((account,ind)=>ind!==index))
+  const removeStashAccount = (index: number) => {
+    setStashAccounts((prevAccounts) => prevAccounts.filter((account, ind) => ind !== index))
   }
 
-  useEffect(()=>{
-    const accountSelection = stashAccountSelect as Account;
-    if (stashAccounts.some((account)=>account === accountSelection)) {
+  useEffect(() => {
+    const accountSelection = stashAccountSelect as Account
+    if (stashAccounts.some((account) => account === accountSelection)) {
       setIsAccountAdded(true)
     } else {
       setIsAccountAdded(false)
     }
-  },[stashAccountSelect])
+  }, [stashAccountSelect])
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Edit membership" />
@@ -189,80 +197,85 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
             <Row>
               <InlineToggleWrap>
                 <Label>I am a validator: </Label>
-                <ToggleCheckbox trueLabel="Yes" falseLabel="No" name="isValidator"/>
+                <ToggleCheckbox trueLabel="Yes" falseLabel="No" name="isValidator" />
               </InlineToggleWrap>
             </Row>
             {isValidator && (
-            <>
-            <Row>
-              <RowInline>
-                <InputComponent
-                  id="select-stashAccount"
-                  label="Stash account"
-                  inputSize="l"
-                  tooltipText="Stash account is ... TOOLTIP MUST BE PROVIDED"
-                >
-                  <SelectAccount id="select-stashAccount" name="stashAccountSelect"/>
-                </InputComponent>
-                <BtnWrapper pt={30} width={65}>
-                <ButtonPrimary size="medium" onClick={addStashAccount}
-                  disabled={isAccountAdded || stashAccountSelect === undefined}
-                  >
-                  <PlusIcon />
-                </ButtonPrimary>
-                </BtnWrapper>
-              </RowInline>
-              {isAccountAdded && (
-                <RowInline>
-                  <TextSmall error><InputNotificationIcon><AlertSymbol/></InputNotificationIcon></TextSmall>
-                  <TextSmall error>
-                    This stash account is already added to the list.
-                  </TextSmall>
-                </RowInline>
-                )
-              }
-              {stashAccounts.length < 2 && (
-                <RowInline>
-                  <TextSmall error><InputNotificationIcon><AlertSymbol/></InputNotificationIcon></TextSmall>
-                  <TextSmall error>
-                    You should add at least 1 stash account.
-                  </TextSmall>
-                </RowInline>
-                )
-              }
-            </Row>
-
-            {stashAccounts.map((stashAccount, index)=>{
-              if(index !== 0){
-                return(
-                  <Row>
+              <>
+                <Row>
+                  <RowInline>
+                    <InputComponent
+                      id="select-stashAccount"
+                      label="Stash account"
+                      inputSize="l"
+                      tooltipText="Stash account is ... TOOLTIP MUST BE PROVIDED"
+                    >
+                      <SelectAccount id="select-stashAccount" name="stashAccountSelect" />
+                    </InputComponent>
+                    <BtnWrapper pt={30} width={65}>
+                      <ButtonPrimary
+                        size="medium"
+                        onClick={addStashAccount}
+                        disabled={isAccountAdded || stashAccountSelect === undefined}
+                      >
+                        <PlusIcon />
+                      </ButtonPrimary>
+                    </BtnWrapper>
+                  </RowInline>
+                  {isAccountAdded && (
                     <RowInline>
-                        <SelectedAccount account={stashAccount as Account} key={'selected'+index}/>
-                      <BtnWrapper width={65}>
-                      <ButtonGhost size="medium" onClick={()=>{removeStashAccount(index)}
-                      }>
-                        <CrossIcon />
-                      </ButtonGhost>
-                      </BtnWrapper>
+                      <TextSmall error>
+                        <InputNotificationIcon>
+                          <AlertSymbol />
+                        </InputNotificationIcon>
+                      </TextSmall>
+                      <TextSmall error>This stash account is already added to the list.</TextSmall>
                     </RowInline>
-                  </Row>)
-              }
-            })}
-            <Row>
-              <RowInline>
-              <Label>Status</Label>
-              <Tooltip
-                tooltipText="This is the status which indicates the selected account is actually a validator account."
-              >
-                <TooltipDefault />
-              </Tooltip>
-                <TextSmall dark> : {'Unverified'} ! </TextSmall>
-              </RowInline>
-            </Row>
-            </>
+                  )}
+                  {stashAccounts.length < 2 && (
+                    <RowInline>
+                      <TextSmall error>
+                        <InputNotificationIcon>
+                          <AlertSymbol />
+                        </InputNotificationIcon>
+                      </TextSmall>
+                      <TextSmall error>You should add at least 1 stash account.</TextSmall>
+                    </RowInline>
+                  )}
+                </Row>
+
+                {stashAccounts.map((stashAccount, index) => {
+                  if (index !== 0) {
+                    return (
+                      <Row>
+                        <RowInline>
+                          <SelectedAccount account={stashAccount as Account} key={'selected' + index} />
+                          <BtnWrapper width={65}>
+                            <ButtonGhost
+                              size="medium"
+                              onClick={() => {
+                                removeStashAccount(index)
+                              }}
+                            >
+                              <CrossIcon />
+                            </ButtonGhost>
+                          </BtnWrapper>
+                        </RowInline>
+                      </Row>
+                    )
+                  }
+                })}
+                <Row>
+                  <RowInline>
+                    <Label>Status</Label>
+                    <Tooltip tooltipText="This is the status which indicates the selected account is actually a validator account.">
+                      <TooltipDefault />
+                    </Tooltip>
+                    <TextSmall dark> : {'Unverified'} ! </TextSmall>
+                  </RowInline>
+                </Row>
+              </>
             )}
-
-
           </FormProvider>
         </ScrolledModalContainer>
       </ScrolledModalBody>
@@ -271,14 +284,13 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
           disabled: !canUpdate || isUploading,
           label: isUploading ? <Loading text="Uploading avatar" /> : 'Save changes',
           onClick: () => {
-            stashAccounts.length > 1 && (
-              stashAccounts.map((account, index)=>{
-                if(index !== 0){
-                  form?.register('stashAccounts[' + (index - 1) + ']' as keyof UpdateMemberForm)
-                  form?.setValue('stashAccounts[' + (index - 1) + ']' as keyof UpdateMemberForm, account as Account)
+            stashAccounts.length > 1 &&
+              stashAccounts.map((account, index) => {
+                if (index !== 0) {
+                  form?.register(('stashAccounts[' + (index - 1) + ']') as keyof UpdateMemberForm)
+                  form?.setValue(('stashAccounts[' + (index - 1) + ']') as keyof UpdateMemberForm, account as Account)
                 }
               })
-            )
             uploadAvatarAndSubmit(form.getValues())
           },
         }}
@@ -310,11 +322,11 @@ interface PaddingProps {
 }
 
 const BtnWrapper = styled.div<PaddingProps>`
- padding-right : ${({ pr }) => ( pr ? pr + 'px' : '0px')};
- padding-left  : ${({ pl }) => ( pl ? pl + 'px' : '0px')};
- padding-top   : ${({ pt }) => ( pt ? pt + 'px' : '0px')};
- padding-bottom: ${({ pb }) => ( pb ? pb + 'px' : '0px')};
- width         : ${({ width }) => ( width ? width + 'px' : '0px')};
- display : flex;
- justify-content : end;
+  padding-right: ${({ pr }) => (pr ? pr + 'px' : '0px')};
+  padding-left: ${({ pl }) => (pl ? pl + 'px' : '0px')};
+  padding-top: ${({ pt }) => (pt ? pt + 'px' : '0px')};
+  padding-bottom: ${({ pb }) => (pb ? pb + 'px' : '0px')};
+  width: ${({ width }) => (width ? width + 'px' : '0px')};
+  display: flex;
+  justify-content: end;
 `

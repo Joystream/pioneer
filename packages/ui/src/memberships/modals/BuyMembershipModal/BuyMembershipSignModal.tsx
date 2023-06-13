@@ -28,7 +28,7 @@ interface SignProps {
   transaction: SubmittableExtrinsic<'rxjs', ISubmittableResult> | undefined
   initialSigner?: Account
   service: ActorRef<any>
-  bondValidatorAcc?: Boolean
+  bondValidatorAcc?: boolean
 }
 
 export const BuyMembershipSignModal = ({
@@ -130,7 +130,7 @@ export const BuyMembershipSignModal = ({
       <ModalTransactionFooter
         transactionFee={paymentInfo?.partialFee.toBn()}
         next={{
-          disabled: signDisabled && !bondValidatorAcc ,
+          disabled: signDisabled && !bondValidatorAcc,
           label: formData.isValidator
             ? bondValidatorAcc
               ? 'Sign and Bond'
