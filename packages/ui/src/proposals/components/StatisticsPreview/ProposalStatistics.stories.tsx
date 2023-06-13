@@ -1,5 +1,5 @@
-import { Meta, Story } from '@storybook/react'
-import React from 'react'
+import { Meta, StoryObj } from '@storybook/react'
+import React, { FC } from 'react'
 
 import { percentageControl, voteControl } from '@/common/components/storybookParts/previewStyles'
 import { ProposalConstants } from '@/proposals/types'
@@ -7,7 +7,7 @@ import { ProposalConstants } from '@/proposals/types'
 import { ProposalStatistics } from './ProposalStatistics'
 
 export default {
-  title: 'Proposals/ProposalPreview/ProposalStatistics',
+  title: 'Pages/Proposals/ProposalPreview/Components/ProposalStatistics',
   component: ProposalStatistics,
   argTypes: {
     approve: voteControl,
@@ -35,42 +35,46 @@ interface Args {
   slashingThresholdPercentage: number
 }
 
-export const Default: Story<Args> = ({
-  approve = 0,
-  reject = 0,
-  slash = 0,
-  abstain = 0,
-  councilSize,
-  unknownConstants,
-  approvalQuorumPercentage,
-  approvalThresholdPercentage,
-  slashingQuorumPercentage,
-  slashingThresholdPercentage,
-}) => {
-  const constants = unknownConstants
-    ? null
-    : ({
-        approvalQuorumPercentage,
-        approvalThresholdPercentage,
-        slashingQuorumPercentage,
-        slashingThresholdPercentage,
-      } as ProposalConstants)
+export const Default: StoryObj<FC<Args>> = {
+  name: 'ProposalStatistics',
 
-  const total = approve + slash + reject + abstain
-  const remain = councilSize ? councilSize - total : undefined
+  args: {
+    approve: 2,
+    reject: 2,
+    slash: 0,
+    abstain: 3,
+    councilSize: 20,
+    unknownConstants: false,
+    approvalQuorumPercentage: 30,
+    approvalThresholdPercentage: 51,
+    slashingQuorumPercentage: 10,
+    slashingThresholdPercentage: 10,
+  },
 
-  return <ProposalStatistics constants={constants} voteCount={{ approve, slash, reject, abstain, total, remain }} />
-}
+  render: ({
+    approve = 0,
+    reject = 0,
+    slash = 0,
+    abstain = 0,
+    councilSize,
+    unknownConstants,
+    approvalQuorumPercentage,
+    approvalThresholdPercentage,
+    slashingQuorumPercentage,
+    slashingThresholdPercentage,
+  }) => {
+    const constants = unknownConstants
+      ? null
+      : ({
+          approvalQuorumPercentage,
+          approvalThresholdPercentage,
+          slashingQuorumPercentage,
+          slashingThresholdPercentage,
+        } as ProposalConstants)
 
-Default.args = {
-  approve: 2,
-  reject: 2,
-  slash: 0,
-  abstain: 3,
-  councilSize: 20,
-  unknownConstants: false,
-  approvalQuorumPercentage: 30,
-  approvalThresholdPercentage: 51,
-  slashingQuorumPercentage: 10,
-  slashingThresholdPercentage: 10,
+    const total = approve + slash + reject + abstain
+    const remain = councilSize ? councilSize - total : undefined
+
+    return <ProposalStatistics constants={constants} voteCount={{ approve, slash, reject, abstain, total, remain }} />
+  },
 }
