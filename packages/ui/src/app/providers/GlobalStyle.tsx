@@ -54,6 +54,7 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 14px;
     color: ${Colors.Black[900]};
     overscroll-behavior-y: none;
+    overflow: hidden;
   }
   body > #app {
     height: 100%;

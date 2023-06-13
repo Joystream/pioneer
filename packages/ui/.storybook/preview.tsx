@@ -3,6 +3,7 @@ import React from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { useForm, FormProvider } from 'react-hook-form'
 import { MemoryRouter, Redirect, Route, Switch } from 'react-router'
+import { createGlobalStyle } from 'styled-components'
 
 import { NotFound } from '../src/app/pages/NotFound'
 import { GlobalStyle } from '../src/app/providers/GlobalStyle'
@@ -10,12 +11,18 @@ import { Colors } from '../src/common/constants'
 import { MockProvidersDecorator } from '../src/mocks/providers'
 import { i18next } from '../src/services/i18n'
 
-const stylesWrapperDecorator: Decorator = (styleFn) => (
-  <div>
+const stylesWrapperDecorator: Decorator = (Story) => (
+  <>
     <GlobalStyle />
-    {styleFn()}
-  </div>
+    <StoryStyles />
+    {Story()}
+  </>
 )
+const StoryStyles = createGlobalStyle`
+  body, html {
+    overflow: visible
+  }
+`
 
 const i18nextDecorator: Decorator = (Story) => (
   <React.Suspense fallback="Missing i18next config">
