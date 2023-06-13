@@ -2,8 +2,10 @@ import * as Prisma from '@prisma/client'
 import { intArg, mutationField, nonNull, objectType, queryField, stringArg } from 'nexus'
 import { Member } from 'nexus-prisma'
 
-import { authMemberId, verifyEmailToken } from '@/auth/model/token'
+import { authMemberId, verifyEmailToken, createEmailToken } from '@/auth/model/token'
 import { Context } from '@/common/api'
+import { PIONEER_URL } from '@/common/config'
+import { configEmailProvider } from '@/common/utils/email'
 
 export const MemberFields = objectType({
   name: Member.$name,
@@ -49,5 +51,32 @@ export const verifyEmail = mutationField('verifyEmail', {
     }
 
     return await prisma.member.update({ where: { id: memberId }, data: { email } })
+  },
+})
+
+type VerifyEmailVerificationArgs = { email: string }
+export const sendEmailVerification = mutationField('sendEmailVerification', {
+  type: 'Boolean',
+
+  args: { email: nonNull(stringArg()) },
+
+  resolve: async (_, { email }: VerifyEmailVerificationArgs, { req, prisma }: Context): Promise<boolean> => {
+    const memberId = authMemberId(req)
+
+    if (!memberId) return false
+
+    const token = createEmailToken({ memberId, email })
+
+    const verificationUrl = `${req?.headers.referer ?? PIONEER_URL}/#/?verify-email=${token}`
+
+    await configEmailProvider()({
+      to: email,
+
+      subject: 'Confirm your email for Pioneer',
+
+      text: `Token:${token}\nWith link to :${verificationUrl}`,
+    })
+
+    return true
   },
 })
