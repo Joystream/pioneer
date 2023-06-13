@@ -19,9 +19,9 @@ export const MockProvidersDecorator = (Story: CallableFunction, storyContext: Co
   }, [storyContext])
 
   return (
-    <MockApiProvider chain={mocks.chain}>
-      <MockQNProvider queryNode={mocks.queryNode}>
-        <MockAccountsProvider accounts={mocks.accounts}>
+    <MockApiProvider chain={mocks?.chain}>
+      <MockQNProvider queryNode={mocks?.queryNode}>
+        <MockAccountsProvider accounts={mocks?.accounts}>
           <Story />
         </MockAccountsProvider>
       </MockQNProvider>

@@ -1,7 +1,8 @@
 import { DocumentNode } from '@apollo/client/core'
 import React, { FC, createContext, useCallback, useContext, useMemo, useState } from 'react'
 
-export { gql } from '@apollo/client/core'
+export { ApolloClient, gql, HttpLink, InMemoryCache } from '@apollo/client/core'
+export { ApolloProvider } from '@apollo/client/react'
 
 type Options = { variables: any; skip: boolean } | undefined
 type Result = { loading: boolean; data: any }
