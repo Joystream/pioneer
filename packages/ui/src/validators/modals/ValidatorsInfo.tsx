@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
+import { useToggle } from '@/common/hooks/useToggle'
 
 import { ButtonPrimary } from '../../common/components/buttons'
 import { Checkbox } from '../../common/components/forms'
@@ -12,7 +13,6 @@ import { ArrowRightIcon } from '../../common/components/icons'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../common/components/Modal'
 import { TextMedium } from '../../common/components/typography'
 import { Colors } from '../../common/constants'
-import { useToggle } from '@/common/hooks/useToggle'
 
 export const ValidatorsInfo = () => {
   const title = 'Nominating validators on Joystream'

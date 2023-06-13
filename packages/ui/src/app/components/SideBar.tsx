@@ -37,8 +37,8 @@ import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { ForumRoutes } from '@/forum/constant'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
-import { WorkingGroupsRoutes } from '@/working-groups/constants'
 import { ValidatorsRoutes } from '@/validators/constants/routes'
+import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
 export const SideBar = () => {
   const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)

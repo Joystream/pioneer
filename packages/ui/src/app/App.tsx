@@ -19,6 +19,7 @@ import { parseEnv } from '@/common/utils/env'
 import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
 import { ForumRoutes } from '@/forum/constant'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
+import { ValidatorsRoutes } from '@/validators/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
 import { ExtensionNotification } from './components/ExtensionWarning'
@@ -34,10 +35,9 @@ import { MyMemberships } from './pages/Profile/MyMemberships'
 import { ProposalsModule } from './pages/Proposals/ProposalsModule'
 import { Settings } from './pages/Settings/Settings'
 import { PrivacyPolicy, TermsOfService } from './pages/Terms'
+import { ValidatorsModule } from './pages/Validators/ValidatorsModule'
 import { WorkingGroupsModule } from './pages/WorkingGroups/WorkingGroupsModule'
 import { Providers } from './Providers'
-import { ValidatorsRoutes } from '@/validators/constants/routes'
-import { ValidatorsModule } from './pages/Validators/ValidatorsModule'
 
 export const App = () => {
   if (parseEnv(process.env.REACT_APP_IS_UNDER_MAINTENANCE)) {

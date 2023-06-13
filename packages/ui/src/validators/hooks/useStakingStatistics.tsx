@@ -1,11 +1,12 @@
-import { useState, useEffect, useMemo } from 'react'
-import { useApi } from '@/api/hooks/useApi'
-import { map } from 'rxjs'
 import { BN } from '@polkadot/util'
-import { ERA_DURATION } from '../constants/constant'
+import { useMemo } from 'react'
+import { map } from 'rxjs'
 
+import { useApi } from '@/api/hooks/useApi'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useObservable } from '@/common/hooks/useObservable'
+
+import { ERA_DURATION } from '../constants/constant'
 
 export const useStakingStatistics = () => {
   const { api } = useApi()
@@ -38,7 +39,7 @@ export const useStakingStatistics = () => {
     () => api?.query.staking.erasValidatorReward(eraIndex.sub(new BN(1))),
     [eraIndex, api?.isConnected]
   )
-  const totalRewards = useFirstObservableValue(()=>api?.derive.staking.erasRewards(),[api?.isConnected])
+  const totalRewards = useFirstObservableValue(() => api?.derive.staking.erasRewards(), [api?.isConnected])
 
   return useMemo(
     () => ({
@@ -49,9 +50,18 @@ export const useStakingStatistics = () => {
       currentStaking: new BN(currentStaking ?? 0),
       activeValidatorsCount: activeValidators?.length,
       allValidatorsCount,
-      totalRewards: totalRewards?.reduce((total:BN, reward)=>(total.add(reward.eraReward)),new BN(0)),
-      lastRewards: new BN(lastValidatorRewards?.toString()??0),
+      totalRewards: totalRewards?.reduce((total: BN, reward) => total.add(reward.eraReward), new BN(0)),
+      lastRewards: new BN(lastValidatorRewards?.toString() ?? 0),
     }),
-    [eraStartedOn, ERA_DURATION, now, totalIssuance, currentStaking, activeValidators, allValidatorsCount, lastValidatorRewards]
+    [
+      eraStartedOn,
+      ERA_DURATION,
+      now,
+      totalIssuance,
+      currentStaking,
+      activeValidators,
+      allValidatorsCount,
+      lastValidatorRewards,
+    ]
   )
 }

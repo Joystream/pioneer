@@ -2,8 +2,9 @@ import React from 'react'
 import { Route, Switch } from 'react-router'
 
 import { ValidatorsRoutes } from '@/validators/constants/routes'
-import { Validators } from './Validators'
+
 import { ValidatorDashboard } from './ValidatorDashboard'
+import { Validators } from './Validators'
 
 export const ValidatorsModule = () => {
   return (
