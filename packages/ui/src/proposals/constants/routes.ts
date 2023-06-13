@@ -1,7 +1,6 @@
 export const ProposalsRoutes = {
   current: '/proposals/current',
   past: '/proposals/past',
-  notification: '/proposals/notification',
   myproposals: '/proposals/my-proposals',
   preview: '/proposals/preview/:id',
   home: '/proposals',
