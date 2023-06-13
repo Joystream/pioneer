@@ -7,7 +7,7 @@ import { LockItem } from '../LockItem'
 import { LockDetailsProps } from '../types'
 
 const tooltipLabel =
-  'Invitation lock can be spent on transaction fees and staking for proposals, voting and working groups applications. JOYS tokens subject to this lock cannot be transferred to any other accounts. This lock is unrecoverable. NB: Transaction fees will first be taken from your transferable balance if it is positive.'
+  'Invitation lock can be spent on transaction fees and staking for proposals, voting and working groups applications. JOYSTREAM tokens subject to this lock cannot be transferred to any other accounts. This lock is unrecoverable. NB: Transaction fees will first be taken from your transferable balance if it is positive.'
 
 export const InvitationLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
   const { data } = useGetMemberInvitedEventsQuery({ variables: { lockAccount: address } })

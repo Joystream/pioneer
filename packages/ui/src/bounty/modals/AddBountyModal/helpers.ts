@@ -88,7 +88,7 @@ export const addBountyModalSchema = Yup.object().shape({
     cherry: BNSchema.test(
       minContext(`Cherry must be greater than minimum of \${min} ${CurrencyName.integerValue}`, 'minCherryLimit')
     )
-      .test(maxContext('Cherry of ${max} JOYS exceeds your balance', 'maxCherryLimit'))
+      .test(maxContext('Cherry of ${max} JOYSTREAM exceeds your balance', 'maxCherryLimit'))
       .required(''),
     fundingMaximalRange: BNSchema.test(moreThanMixed(0, 'Value must be greater than zero', false)).required(''),
     fundingMinimalRange: BNSchema.when('isPerpetual', {
@@ -105,7 +105,7 @@ export const addBountyModalSchema = Yup.object().shape({
   }),
   [AddBountyStates.workingPeriodDetails]: Yup.object().shape({
     workingPeriodStake: BNSchema.test(
-      minContext('Minimum Entrant stake must be greater than ${min} JOYS', 'minWorkEntrantStake')
+      minContext('Minimum Entrant stake must be greater than ${min} JOYSTREAM', 'minWorkEntrantStake')
     ).required(''),
     workingPeriodLength: Yup.number().min(1, 'Value must be greater than zero').required(),
     isWorkingPeriodOpen: Yup.boolean(),

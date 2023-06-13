@@ -2975,7 +2975,7 @@ type Worker implements BaseGraphQLObject {
   isActive: Boolean!
 
   """
-  Current role stake (in JOYS)
+  Current role stake (in JOYSTREAM)
   """
   stake: BigInt!
 
@@ -3047,7 +3047,7 @@ type WorkingGroup implements BaseGraphQLObject {
   openings: [WorkingGroupOpening!]!
 
   """
-  Current working group budget (JOYS)
+  Current working group budget (JOYSTREAM)
   """
   budget: BigInt!
   applicationwithdrawneventgroup: [ApplicationWithdrawnEvent!]
@@ -28306,7 +28306,7 @@ type StakeDecreasedEvent implements Event & BaseGraphQLObject {
   workerId: String!
 
   """
-  The amount of JOYS the stake was decreased by
+  The amount of JOYSTREAM the stake was decreased by
   """
   amount: BigInt!
 }
@@ -28351,7 +28351,7 @@ type StakeIncreasedEvent implements Event & BaseGraphQLObject {
   workerId: String!
 
   """
-  The amount of JOYS the stake was increased by
+  The amount of JOYSTREAM the stake was increased by
   """
   amount: BigInt!
 }

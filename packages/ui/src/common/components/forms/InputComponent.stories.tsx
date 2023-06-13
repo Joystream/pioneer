@@ -20,7 +20,7 @@ const Template: Story<InputComponentProps> = ({ units, ...args }) => (
         <InputComponent {...args} label="Number input" units={units}>
           <InputNumber />
         </InputComponent>
-        <InputComponent {...args} label="JOYS input" units="JOYS">
+        <InputComponent {...args} label="JOYSTREAM input" units="JOYSTREAM">
           <TokenInput />
         </InputComponent>
       </Row>
@@ -31,7 +31,7 @@ const Template: Story<InputComponentProps> = ({ units, ...args }) => (
         <InputComponent {...args} label="Number input" units={units} inputSize="l">
           <InputNumber />
         </InputComponent>
-        <InputComponent {...args} label="JOYS input" inputSize="l" units="JOYS">
+        <InputComponent {...args} label="JOYSTREAM input" inputSize="l" units="JOYSTREAM">
           <TokenInput />
         </InputComponent>
       </Row>

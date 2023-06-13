@@ -254,7 +254,7 @@ export const AnnounceCandidacyModal = () => {
 
   if (state.matches('announceCandidacyTransaction')) {
     const tooltipText =
-      'Signing this transaction will result in the specified amount of JOYS tokens staked for the chosen purpose, resulting in a rivalrous lock applied to this amount until the stake gets recovered.'
+      'Signing this transaction will result in the specified amount of JOYSTREAM tokens staked for the chosen purpose, resulting in a rivalrous lock applied to this amount until the stake gets recovered.'
     return (
       <SignTransactionModal
         additionalTransactionInfo={[
