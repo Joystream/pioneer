@@ -25,10 +25,10 @@ export const Era = () => {
   return (
     <StatisticItem
       title="era"
-      tooltipText="tooltip text..."
-      tooltipTitle="era tooltip title"
-      tooltipLinkText="link..."
-      tooltipLinkURL="#"
+      tooltipText="One era consists of 6 epochs with 1 hour duration each."
+      tooltipTitle="Era"
+      tooltipLinkText="What is an era"
+      tooltipLinkURL="TBD"
       actionElement={<PercentageChart percentage={percentage} small />}
     >
       <StatisticItemSpacedContent>
