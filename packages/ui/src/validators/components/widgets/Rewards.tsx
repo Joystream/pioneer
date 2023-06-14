@@ -17,7 +17,7 @@ export const Rewards = () => {
       tooltipLinkURL="#"
     >
       <StatisticItemSpacedContent>
-        <StatisticLabel> Total </StatisticLabel>
+        <StatisticLabel>Month</StatisticLabel>
         <TokenValue size="l" value={new BN(totalRewards ?? 0)} />
       </StatisticItemSpacedContent>
       <StatisticItemSpacedContent>
