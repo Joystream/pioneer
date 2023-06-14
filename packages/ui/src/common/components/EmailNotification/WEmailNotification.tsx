@@ -5,42 +5,42 @@ import NotificationLogo from '@/app/assets/images/NotificationLogo.png'
 import NotificationMark from '@/app/assets/images/NotificationMark.png'
 
 export const WEmailNotification = (props: any) => {
-    const { title, content } = props;
+  const { title, content } = props
 
   return (
     <ModalOverlay>
-        <ModalContainer>
+      <ModalContainer>
         <ModalHeader>
-            <Link>
+          <Link>
             <img src={NotificationLogo} alt="Mark" />
-            </Link>
+          </Link>
         </ModalHeader>
         <ModalContent>
-            <ContentTitle>{title}</ContentTitle>
-            <ContentBody>{content}</ContentBody>
-            <ContentView>
+          <ContentTitle>{title}</ContentTitle>
+          <ContentBody>{content}</ContentBody>
+          <ContentView>
             <p>View on Pioneer</p>
-            </ContentView>
+          </ContentView>
         </ModalContent>
         <ModalFooter>
-            <FavIcon>
+          <FavIcon>
             <img src={NotificationMark} alt="NotificationMark" />
-            </FavIcon>
-            <FooterContent>
+          </FavIcon>
+          <FooterContent>
             <LinkRow>
-                <PioneerLink>Pioneer.xyz</PioneerLink>|<JoystreamLink>Joystream.org</JoystreamLink>
+              <PioneerLink>Pioneer.xyz</PioneerLink>|<JoystreamLink>Joystream.org</JoystreamLink>
             </LinkRow>
             <DetailRow>
-                <CouncilLink>Council</CouncilLink>
-                <ProposalsLink>Proposals</ProposalsLink>
-                <ForumLink>Forum</ForumLink>
+              <CouncilLink>Council</CouncilLink>
+              <ProposalsLink>Proposals</ProposalsLink>
+              <ForumLink>Forum</ForumLink>
             </DetailRow>
             <UnsubscribeRow>
-                You can <u>unsubscribe</u> anytime.
+              You can <u>unsubscribe</u> anytime.
             </UnsubscribeRow>
-            </FooterContent>
+          </FooterContent>
         </ModalFooter>
-        </ModalContainer>
+      </ModalContainer>
     </ModalOverlay>
   )
 }

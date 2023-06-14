@@ -5,7 +5,7 @@ import NotificationLogo from '@/app/assets/images/NotificationLogo.png'
 import NotificationMark from '@/app/assets/images/NotificationMark.png'
 
 export const MEmailNotification = (props: any) => {
-  const { title, content } = props;
+  const { title, content } = props
 
   return (
     <ModalOverlay>
