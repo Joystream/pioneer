@@ -32,7 +32,7 @@ export const Era = () => {
       actionElement={<PercentageChart percentage={percentage} small />}
     >
       <StatisticItemSpacedContent>
-        <StatisticLabel> Next reward </StatisticLabel>
+        <StatisticLabel>Next reward</StatisticLabel>
         <div>
           <DurationValue value={nextReward} />
         </div>
