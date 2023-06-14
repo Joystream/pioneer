@@ -1,4 +1,4 @@
-import * as Prisma from '@prisma/client'
+import * as prisma from '@prisma/client'
 import { intArg, mutationField, nonNull, objectType, queryField, stringArg } from 'nexus'
 import { Member } from 'nexus-prisma'
 
@@ -20,7 +20,7 @@ export const MemberFields = objectType({
 export const MemberQuery = queryField('member', {
   type: Member.$name,
 
-  resolve: (_, __, { req }: Context): Promise<Prisma.Member | null> => authMemberId(req),
+  resolve: (_, __, { req }: Context): Promise<Member | null> => authMemberId(req),
 })
 
 type memberExistArg = { id: number }
@@ -39,7 +39,7 @@ export const verifyEmail = mutationField('verifyEmail', {
 
   args: { token: nonNull(stringArg()) },
 
-  resolve: async (_, { token }: VerifyEmailArgs, { prisma }: Context): Promise<Prisma.Member | null> => {
+  resolve: async (_, { token }: VerifyEmailArgs): Promise<Member | null> => {
     const { memberId, email } = verifyEmailToken(token) ?? {}
     if (!memberId || !email) return null
 
@@ -60,7 +60,7 @@ export const sendEmailVerification = mutationField('sendEmailVerification', {
 
   args: { email: nonNull(stringArg()) },
 
-  resolve: async (_, { email }: VerifyEmailVerificationArgs, { req, prisma }: Context): Promise<boolean> => {
+  resolve: async (_, { email }: VerifyEmailVerificationArgs, { req }: Context): Promise<boolean> => {
     const memberId = authMemberId(req)
 
     if (!memberId) return false
