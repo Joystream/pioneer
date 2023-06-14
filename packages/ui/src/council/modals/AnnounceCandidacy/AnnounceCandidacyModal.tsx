@@ -81,7 +81,6 @@ export const AnnounceCandidacyModal = () => {
   const { active: activeMember } = useMyMemberships()
   const { hideModal, showModal } = useModal()
   const [state, send, service] = useMachine(announceCandidacyMachine)
-
   const constants = useCouncilConstants()
   const { hasRequiredStake } = useHasRequiredStake(
     constants?.election.minCandidacyStake || BN_ZERO,
