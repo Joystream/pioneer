@@ -9,7 +9,7 @@ interface FallbackProps {
   resetErrorBoundary: (...args: Array<unknown>) => void
 }
 
-export default function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
+export const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   return (
     <Modal modalSize="m" onClose={resetErrorBoundary}>
       <ModalHeader icon={<FailureIcon />} title="Something went wrong" onClick={resetErrorBoundary} />
@@ -25,19 +25,4 @@ export default function ErrorFallback({ error, resetErrorBoundary }: FallbackPro
       </ModalFooterComponent>
     </Modal>
   )
-  // return (
-  //   <div role="alert">
-  //     <ModalHeader title="Something went wrong:" onClick={resetErrorBoundary} />
-  //     <ModalBody>
-  //       <pre>{error.message}</pre>
-  //     </ModalBody>
-  //     <ModalFooter>
-  //       <ColumnGapBlock>
-  //         <ButtonPrimary size="medium" onClick={resetErrorBoundary}>
-  //           Try again
-  //         </ButtonPrimary>
-  //       </ColumnGapBlock>
-  //     </ModalFooter>
-  //   </div>
-  // )
 }
