@@ -48,7 +48,7 @@ export const App = () => {
     <Providers>
       <Page>
         <SideBar />
-        <ErrorBoundary FallbackComponent={ErrorFallback} onReset={}>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
           <Screen>
             <OnBoardingOverlay />
             <Switch>
@@ -74,7 +74,7 @@ export const App = () => {
           </Screen>
         </ErrorBoundary>
       </Page>
-      <ErrorBoundary FallbackComponent={ErrorFallback} onReset={}>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
         <GlobalModals />
       </ErrorBoundary>
       <NotificationsHolder>
