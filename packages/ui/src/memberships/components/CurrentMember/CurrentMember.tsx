@@ -1,14 +1,16 @@
-import React from 'react'
+import React,  { useEffect } from 'react'
 import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ArrowDownExpandedIcon, Icon } from '@/common/components/icons'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
 
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '..'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
+import { EmailSubscriptionModalCall } from '../../modals/EmailSubscriptionModal'
 import { SwitchMemberModalCall } from '../../modals/SwitchMemberModal'
 import { AddMembershipButton } from '../AddMembershipButton'
 
@@ -16,6 +18,18 @@ export const CurrentMember = () => {
   const { wallet } = useMyAccounts()
   const { members, hasMembers, active } = useMyMemberships()
   const { showModal } = useModal()
+  const [memberEmail] = useLocalStorage('memberEmail')
+
+  useEffect(() => {
+    const showSubscriptionModal = typeof memberEmail !== 'string' && active
+    if (showSubscriptionModal) {
+      showModal<EmailSubscriptionModalCall>({
+        modal: 'EmailSubscriptionModal',
+        data: { member: active },
+      })
+    }
+  }, [active])
+
   if (!wallet) {
     return (
       <MembershipButtonsWrapper>
