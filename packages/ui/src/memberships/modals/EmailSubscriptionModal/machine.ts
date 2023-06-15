@@ -3,15 +3,15 @@ import { assign, createMachine } from 'xstate'
 import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 
 interface EmailSubscriptionContext {
-  email: string,
-  timestamp: bigint,
+  email: string
+  timestamp: bigint
   signature: string
 }
 
-type Context = EmailSubscriptionContext 
+type Context = EmailSubscriptionContext
 
 type EmailSubscriptionState =
-    { value: 'prepare'; context: EmailSubscriptionContext }
+  | { value: 'prepare'; context: EmailSubscriptionContext }
   | { value: 'transaction'; context: Required<EmailSubscriptionContext> }
   | { value: 'signature'; context: Required<EmailSubscriptionContext> }
   | { value: 'success'; context: Required<EmailSubscriptionContext> }
@@ -20,7 +20,7 @@ type EmailSubscriptionState =
 export type EmailSubscriptionEvent =
   | { type: 'SUCCESS' }
   | { type: 'ERROR' }
-  | { type: 'SIGNED'; signature: string; }
+  | { type: 'SIGNED'; signature: string }
   | { type: 'CANCEL' }
 
 export const EmailSubscriptionMachine = createMachine<Context, EmailSubscriptionEvent, EmailSubscriptionState>({

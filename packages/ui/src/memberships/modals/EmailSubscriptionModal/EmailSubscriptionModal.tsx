@@ -21,10 +21,9 @@ export const EmailSubscriptionModal = () => {
   const [state, send] = useMachine(EmailSubscriptionMachine)
 
   const signModal = async () => {
-    // const timestamp = new Date()
-    // api?.sign(member.controllerAccount, `${member.id}:${timestamp}`)
+    const timestamp = new Date()
+    api?.sign(member.controllerAccount, `${member.id}:${timestamp}`)
   }
-
 
   useEffect(() => {
     if (state.matches('signature')) {
@@ -36,7 +35,7 @@ export const EmailSubscriptionModal = () => {
     return (
       <EmailSubscriptionFormModal
         onClose={hideModal}
-        onSubmit={(params: EmailSubscriptionForm) => send('SIGNED',  { email: params.email })}
+        onSubmit={(params: EmailSubscriptionForm) => send('SIGNED', { email: params.email })}
         member={member}
       />
     )
