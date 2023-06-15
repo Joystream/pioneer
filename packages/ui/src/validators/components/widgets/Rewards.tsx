@@ -11,10 +11,10 @@ export const Rewards = () => {
   return (
     <StatisticItem
       title="Rewards"
-      tooltipText="tooltip text..."
-      tooltipTitle="Rewards tooltip title"
-      tooltipLinkText="link..."
-      tooltipLinkURL="#"
+      tooltipText="After each era rewards can be claimed and minted for 30 days."
+      tooltipTitle="Staking Rewards"
+      tooltipLinkText="Handbook"
+      tooltipLinkURL="https://handbook.joystream.org/system/nomination#risks-and-rewards"
     >
       <StatisticItemSpacedContent>
         <StatisticLabel>Month</StatisticLabel>
