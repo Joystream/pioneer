@@ -99,7 +99,7 @@ const ActivePageIndicator = styled(motion.div)`
   }
 `
 
-const NAVIGATION_LINK_GAP = 16
+export const NAVIGATION_LINK_GAP = 16
 
 const NavigationItemLinkChildren = styled.div`
   display: grid;
@@ -119,7 +119,21 @@ const NavigationItemLinkChildren = styled.div`
   ${Overflow.FullDots};
 
   svg {
-    width: 20px;
+    width: 16px;
+    height: 16px;
+
+    path {
+      fill: ${Colors.Black[400]}!important;
+      transition: ${Transitions.all};
+    }
+  }
+
+  &:hover {
+    svg {
+      path {
+        fill: ${Colors.White}!important;
+      }
+    }
   }
 `
 

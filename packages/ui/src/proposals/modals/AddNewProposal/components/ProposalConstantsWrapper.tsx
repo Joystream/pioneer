@@ -10,7 +10,25 @@ export const ProposalConstantsWrapper = ({ constants }: { constants: ProposalCon
   <RowGapBlock gap={24}>
     <Row>
       <RowGapBlock gap={8}>
-        <h4>Constants</h4>
+        <h4>Parameters</h4>
+      </RowGapBlock>
+    </Row>
+    <Row>
+      <RowGapBlock gap={4}>
+        <Label>Required Stake</Label>
+        <TextMedium lighter>
+          <TextInlineMedium dark>
+            <TokenValue value={constants?.requiredStake} />
+          </TextInlineMedium>
+        </TextMedium>
+      </RowGapBlock>
+    </Row>
+    <Row>
+      <RowGapBlock gap={4}>
+        <Label>Constitutionality</Label>
+        <TextMedium lighter>
+          <TextInlineMedium dark>{formatTokenValue(constants?.constitutionality)}</TextInlineMedium>
+        </TextMedium>
       </RowGapBlock>
     </Row>
     <Row>
@@ -58,24 +76,6 @@ export const ProposalConstantsWrapper = ({ constants }: { constants: ProposalCon
         <Label>Slashing threshold</Label>
         <TextMedium lighter>
           <TextInlineMedium dark>{formatTokenValue(constants?.slashingThresholdPercentage)}</TextInlineMedium>%
-        </TextMedium>
-      </RowGapBlock>
-    </Row>
-    <Row>
-      <RowGapBlock gap={4}>
-        <Label>Required Stake</Label>
-        <TextMedium lighter>
-          <TextInlineMedium dark>
-            <TokenValue value={constants?.requiredStake} />
-          </TextInlineMedium>
-        </TextMedium>
-      </RowGapBlock>
-    </Row>
-    <Row>
-      <RowGapBlock gap={4}>
-        <Label>Constitutionality</Label>
-        <TextMedium lighter>
-          <TextInlineMedium dark>{formatTokenValue(constants?.constitutionality)}</TextInlineMedium>
         </TextMedium>
       </RowGapBlock>
     </Row>

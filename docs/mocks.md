@@ -11,26 +11,25 @@ To test most of the extrinsics requires existing on-chain data. To create some o
 
 Available commands:
 
+- `yarn workspace @joystream/pioneer node-mocks council:elect [-d BLOCK_TIME¹] [--to ELECTION_STAGE]` - Run an election until the specified stage: VOTE, REVEAL, or IDLE (default)
 - `yarn workspace @joystream/pioneer node-mocks council:announce` - Announce enough candidacies to start the voting stage when the announcing stage ends
 - `yarn workspace @joystream/pioneer node-mocks council:vote` - Vote for the announced by the previous command candidate to start the revealing stage next
 - `yarn workspace @joystream/pioneer node-mocks council:reveal` - Reveal the votes casted by the previous command to start elect a new council and start the idle stage next
 - `yarn workspace @joystream/pioneer node-mocks members:create` - generate memberships using query-node mocks data
 - `yarn workspace @joystream/pioneer node-mocks set-budget` - Set membership Working Group budget
-- `yarn workspace @joystream/pioneer node-mocks opening:create` - Create an opening
+- `yarn workspace @joystream/pioneer node-mocks opening:create [-d BLOCK_TIME¹]` - Create an opening
 - `yarn workspace @joystream/pioneer node-mocks opening:fill` - Fill existing opening
 - `yarn workspace @joystream/pioneer node-mocks upcoming-opening:create` - Create an upcoming opening
 - `yarn workspace @joystream/pioneer node-mocks forumCategory:create` - Create a forum category
 - `yarn workspace @joystream/pioneer node-mocks transfer` - Transfer tokens between accounts
+
+**(¹)** `BLOCK_TIME` is the time between each block. It is 6000ms by default but on testing chain it is 1000ms. Therefore when running some of the scripts on these testing chain `-d 1000` should be added for the command to succeed.
 
 To show help:
 
 ```shell
 yarn node-mocks --help
 ```
-
-Shortcuts:
-- `yarn workspace @joystream/pioneer node-mocks:announce-vote` - Announce candidacies, wait, then vote on them
-- `yarn workspace @joystream/pioneer node-mocks:announce-vote-reveal` - Announce candidacies, wait, vote on them, wait, then reveal these votes
 
 #### Chain spec
 
@@ -55,6 +54,41 @@ Another way to influence the on-chain state for testing purpose, is to provide a
       <path to the runtime> --tmp --alice --validator --unsafe-ws-external --unsafe-rpc-external --rpc-cors=all --chain packages/ui/dev/chain-spec/data/chain-spec.json --log runtime
       ```
 ### Other helper commands
+
+#### Decoding data from the chain:
+
+```shell
+> yarn workspace @joystream/pioneer run helpers decode -t [TYPE] -v [VALUE]
+```
+
+This command requires two arguments:
+- `-t`, `--type`: The expected type of the value to decode. It can be `text`, or the name or alias of a [metadata class](https://github.com/Joystream/joystream/blob/master/metadata-protobuf/doc/index.md).
+- `-v`, `--value`: The hash or the string representation of the `Uint8Array` to decode.
+
+With `-t text` this command will simply decode encoded plaint text values. E.g:
+```shell
+> yarn workspace @joystream/pioneer run helpers decode -t text -v 0x4c6f72656d20697370756d
+Lorem ispum
+```
+
+Otherwhise the type options should refer to a [metadata class](https://github.com/Joystream/joystream/blob/master/metadata-protobuf/doc/index.md). It can be the name of the class:
+```shell
+> yarn workspace @joystream/pioneer run helpers decode -t CouncilCandidacyNoteMetadata -v 0x0a0a616...
+CouncilCandidacyNoteMetadata {
+  ...
+}
+```
+
+Or it can be an alias:
+```shell
+> yarn workspace @joystream/pioneer run helpers decode -t candidacy -v 0x0a0a616...
+CouncilCandidacyNoteMetadata {
+  ...
+}
+```
+The available aliases are: `post`, `opening`, `thread`, `bounty`, `candidacy`, `candidate`, `application`, `member`, and `membership`.
+
+#### Others
 - `yarn workspace @joystream/pioneer run helpers commitment -s <salt> [-a <accountId>] [-o <optionId>] [-c <cycleId>]` - Calculate a commitment
 - `yarn workspace @joystream/pioneer run helpers nextCouncilStage` - Wait until the next council stage start
 

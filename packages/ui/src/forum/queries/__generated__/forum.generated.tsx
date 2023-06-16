@@ -1,9 +1,8 @@
 import * as Types from '../../../common/api/queries/__generated__/baseTypes.generated'
 
-import * as Apollo from '@apollo/client'
 import { gql } from '@apollo/client'
 import { MemberFieldsFragmentDoc } from '../../../memberships/queries/__generated__/members.generated'
-
+import * as Apollo from '@apollo/client'
 const defaultOptions = {} as const
 export type ForumBaseCategoryFieldsFragment = {
   __typename: 'ForumCategory'
@@ -122,6 +121,11 @@ export type ForumCategoryWithDetailsFieldsFragment = {
         }
       | { __typename: 'CategoryStatusRemoved' }
   }> | null
+  moderators: Array<{
+    __typename: 'Worker'
+    id: string
+    membership: { __typename: 'Membership'; id: string; handle: string }
+  }>
   status:
     | { __typename: 'CategoryStatusActive' }
     | {
@@ -832,6 +836,11 @@ export type GetForumCategoryQuery = {
           }
         | { __typename: 'CategoryStatusRemoved' }
     }> | null
+    moderators: Array<{
+      __typename: 'Worker'
+      id: string
+      membership: { __typename: 'Membership'; id: string; handle: string }
+    }>
     status:
       | { __typename: 'CategoryStatusActive' }
       | {
@@ -1556,9 +1565,13 @@ export const ForumCategoryWithDetailsFieldsFragmentDoc = gql`
     forumcategoryparent {
       ...ForumCategoryFields
     }
+    moderators {
+      ...ForumModeratorFields
+    }
   }
   ${ForumBaseCategoryFieldsFragmentDoc}
   ${ForumCategoryFieldsFragmentDoc}
+  ${ForumModeratorFieldsFragmentDoc}
 `
 export const ForumCategoryBreadcrumbsFieldsFragmentDoc = gql`
   fragment ForumCategoryBreadcrumbsFields on ForumCategory {

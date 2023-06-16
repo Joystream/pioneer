@@ -19,7 +19,7 @@ const normalFontSize = ({ size }: MarkdownPreviewStylesProps) => {
   }
 }
 
-const normalColor = ({ isReply }: MarkdownPreviewStylesProps) => Colors.Black[isReply ? 600 : 500]
+const normalColor = ({ isReply }: MarkdownPreviewStylesProps) => Colors.Black[isReply ? 800 : 700]
 
 export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProps>`
   .markdown-preview {
@@ -88,10 +88,12 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     font-weight: 400;
     color: ${Colors.Black[500]};
   }
+  
+  .markdown-preview li + li {
+    margin-top: 8px;
+  }
 
   .markdown-preview ul {
-    display: grid;
-    grid-row-gap: 8px;
     width: 100%;
     margin: 0;
     padding-left: 24px;
@@ -99,8 +101,6 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
   }
 
   .markdown-preview ol {
-    display: grid;
-    grid-row-gap: 8px;
     width: 100%;
     margin: 0;
     padding-left: 24px;

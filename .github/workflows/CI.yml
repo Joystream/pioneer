@@ -1,26 +1,32 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - main
+  push: { branches: [dev, main] }
   pull_request:
 
 jobs:
   test:
     timeout-minutes: 60
     strategy:
-      matrix:
-        node: ['14.x']
-        os: [ubuntu-latest]
+      matrix: { node: ["18.x"], os: [ubuntu-latest] }
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
       - name: Use Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
-      - run: yarn install --frozen-lockfile
-      - run: yarn lint
-      - run: yarn build
-      - run: yarn ci-test --silent
+
+      - name: Install dependencies
+        run: yarn --immutable
+
+      - name: Verify linting
+        run: yarn lint
+
+      - name: Build Pioneer
+        run: yarn build
+
+      - name: Run tests
+        run: node --max_old_space_size=7000 --expose-gc $(yarn bin jest) --logHeapUsage --silent
+        working-directory: packages/ui

@@ -173,7 +173,7 @@ describe('UI: InviteMemberModal', () => {
           <ApiContext.Provider value={api}>
             <ModalContextProvider>
               <GlobalModals />
-              <InviteMemberModal onClose={() => undefined} />
+              <InviteMemberModal />
             </ModalContextProvider>
           </ApiContext.Provider>
         </MockKeyringProvider>

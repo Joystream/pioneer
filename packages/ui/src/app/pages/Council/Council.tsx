@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React, { useMemo, useState } from 'react'
 
 import { PageHeaderWithHint } from '@/app/components/PageHeaderWithHint'
@@ -10,6 +9,7 @@ import { BlockDurationStatistics, MultiValueStat, Statistics } from '@/common/co
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
+import { asBN } from '@/common/utils/bn'
 import { CouncilList, CouncilOrder } from '@/council/components/councilList'
 import { ViewElectionButton } from '@/council/components/ViewElectionButton'
 import { useCouncilActivities } from '@/council/hooks/useCouncilActivities'
@@ -39,6 +39,8 @@ export const Council = () => {
   const header = <PageHeaderWithHint title="Council" hintType="council" tabs={<CouncilTabs />} />
 
   const isCouncilorLoading = !isRefetched && (isLoading || isLoadingCouncilors)
+
+  const rewardPerDay = useMemo(() => reward?.period?.mul(reward?.amount ?? asBN(0)) ?? asBN(0), [reward])
   const main = (
     <MainPanel>
       <Statistics>
@@ -54,11 +56,12 @@ export const Council = () => {
             { label: 'Period length', value: budget.refillPeriod, type: 'blocks' },
           ]}
         />
+
         <MultiValueStat
           title="Councilor Reward"
           values={[
-            { label: 'Amount', value: reward.amount },
-            { label: 'Period length', value: reward.period, type: 'blocks' },
+            { label: 'Per Day', value: rewardPerDay },
+            { label: 'Per Week', value: rewardPerDay.mul(asBN(7)) },
           ]}
         />
       </Statistics>
@@ -86,6 +89,6 @@ const sortBy = ({ key, isDescending }: CouncilOrder): ((a: Councilor, b: Council
     case 'member':
       return (a, b) => a.member.handle.localeCompare(b.member.handle) * direction
     default:
-      return (a, b) => (new BN(a[key] ?? 0).gte(new BN(b[key] ?? 0)) ? 1 : -1) * direction
+      return (a, b) => (asBN(a[key] ?? 0).gte(asBN(b[key] ?? 0)) ? 1 : -1) * direction
   }
 }

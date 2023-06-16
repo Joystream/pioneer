@@ -2,10 +2,10 @@ import styled, { css } from 'styled-components'
 
 import { TooltipContainer } from '@/common/components/Tooltip'
 import { TextInlineSmall } from '@/common/components/typography'
+import { UserImage } from '@/common/components/UserImage/UserImage'
 
 import { BorderRad, Colors, Fonts, Transitions } from '../../common/constants'
 
-import { AvatarImg } from './Avatar'
 import { MemberRoleHelp, MemberRolesWrapper, MemberStatusTooltip } from './MemberRoles'
 import { MemberInfoWrapProps } from './types'
 
@@ -51,6 +51,14 @@ interface MemberPhotoProps {
   fixedSize?: boolean
   big?: boolean
 }
+
+export const AvatarImg = styled(UserImage)<{ isLoading?: boolean }>`
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+  object-fit: cover;
+  display: ${({ isLoading }) => isLoading && 'none'};
+`
 
 export const MemberPhoto = styled.div<MemberPhotoProps>`
   display: flex;
