@@ -45,32 +45,22 @@ export const useStakingStatistics = () => {
     [eraIndex, api?.isConnected]
   )
   const totalRewards = useFirstObservableValue(() => api?.derive.staking.erasRewards(), [api?.isConnected])
-
-  return useMemo(
-    () => ({
-      eraStartedOn,
-      eraDuration: ERA_DURATION,
-      now,
-      idealStaking: new BN(totalIssuance ?? 0).div(new BN(2)),
-      currentStaking: new BN(currentStaking ?? 0),
-      activeValidatorsCount: activeValidators?.length ?? 0,
-      acitveNominatorsCount: activeNominators?.length ?? 0,
-      allValidatorsCount: allValidatorsCount?.toNumber() ?? 0,
-      allNominatorsCount: allNominatorsCount?.toNumber() ?? 0,
-      totalRewards: totalRewards?.reduce((total: BN, reward) => total.add(reward.eraReward), new BN(0)),
-      lastRewards: new BN(lastValidatorRewards?.toString() ?? 0),
-    }),
-    [
-      eraStartedOn,
-      ERA_DURATION,
-      now,
-      totalIssuance,
-      currentStaking,
-      activeValidators,
-      allValidatorsCount,
-      lastValidatorRewards,
-      activeNominators,
-      allNominatorsCount,
-    ]
+  const stakingPercentage = useMemo(
+    () => (totalIssuance && currentStaking ? currentStaking.muln(1000).div(totalIssuance).toNumber()/10 : 0),
+    [currentStaking, totalIssuance]
   )
+  return {
+    eraStartedOn,
+    eraDuration: ERA_DURATION,
+    now,
+    idealStaking: new BN(totalIssuance ?? 0).div(new BN(2)),
+    currentStaking: new BN(currentStaking ?? 0),
+    stakingPercentage,
+    activeValidatorsCount: activeValidators?.length ?? 0,
+    acitveNominatorsCount: activeNominators?.length ?? 0,
+    allValidatorsCount: allValidatorsCount?.toNumber() ?? 0,
+    allNominatorsCount: allNominatorsCount?.toNumber() ?? 0,
+    totalRewards: totalRewards?.reduce((total: BN, reward) => total.add(reward.eraReward), new BN(0)),
+    lastRewards: new BN(lastValidatorRewards?.toString() ?? 0),
+  }
 }
