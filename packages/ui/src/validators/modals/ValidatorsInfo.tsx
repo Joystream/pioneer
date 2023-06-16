@@ -1,10 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
-import { useModal } from '@/common/hooks/useModal'
 import { useToggle } from '@/common/hooks/useToggle'
 
 import { ButtonPrimary } from '../../common/components/buttons'
@@ -18,15 +17,17 @@ export const ValidatorsInfo = () => {
   const title = 'Nominating validators on Joystream'
   const buttonName = 'Start nominating'
   const [check, setCheck] = useToggle(false)
-  const { hideModal } = useModal()
-  const [pageCheck, showInfo] = useLocalStorage<boolean>('ValidatorsPageCheck')
-
+  const [notShowAgain, setNotShowAgain] = useLocalStorage<boolean>('ValidatorsPageCheck')
+  const [showModal, setShowModal] = useState<boolean>(true)
   const closeModal = () => {
-    hideModal()
-    if (check) showInfo(true)
+    setShowModal(false)
+  }
+  const checkModal = () => {
+    setNotShowAgain(check)
+    closeModal()
   }
 
-  if (!pageCheck)
+  if (!notShowAgain && showModal)
     return (
       <Modal modalSize="s" onClose={closeModal}>
         <ModalHeader title={title} onClick={closeModal} />
@@ -64,7 +65,7 @@ export const ValidatorsInfo = () => {
           <Checkbox id="" onChange={setCheck} isChecked={check}>
             Do not show this again.
           </Checkbox>
-          <ButtonPrimary size="medium" onClick={closeModal}>
+          <ButtonPrimary size="medium" onClick={checkModal}>
             {buttonName} <ArrowRightIcon white />
           </ButtonPrimary>
         </InfoModalFooter>
