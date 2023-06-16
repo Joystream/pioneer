@@ -16,7 +16,6 @@
     "build:storybook": "wsrun --fast-exit --stages -c --exclude @joystream/pioneer --exclude-missing build && wsrun --package @joystream/pioneer -c build:storybook",
     "storybook": "wsrun --exclude-missing -c storybook",
     "test": "wsrun --fast-exit --package @joystream/pioneer -c test",
-    "ci-test": "NODE_OPTIONS=--max_old_space_size=7000 wsrun --fast-exit --package @joystream/pioneer -c test",
     "start": "wsrun --package @joystream/pioneer -c start",
     "prepare": "husky install"
   },
