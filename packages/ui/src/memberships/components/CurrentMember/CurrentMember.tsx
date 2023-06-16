@@ -18,10 +18,10 @@ export const CurrentMember = () => {
   const { wallet } = useMyAccounts()
   const { members, hasMembers, active } = useMyMemberships()
   const { showModal } = useModal()
-  const [memberEmail] = useLocalStorage('memberEmail')
+  const [membersEmail] = useLocalStorage<Record<string, string>>('membersEmail')
 
   useEffect(() => {
-    const showSubscriptionModal = typeof memberEmail !== 'string' && active
+    const showSubscriptionModal = active && (!membersEmail || !(active.id in membersEmail))
     if (showSubscriptionModal) {
       showModal<EmailSubscriptionModalCall>({
         modal: 'EmailSubscriptionModal',

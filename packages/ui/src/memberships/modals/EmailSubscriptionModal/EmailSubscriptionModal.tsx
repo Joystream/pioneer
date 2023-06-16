@@ -21,8 +21,8 @@ export const EmailSubscriptionModal = () => {
   const [state, send] = useMachine(EmailSubscriptionMachine)
 
   const signModal = async () => {
-    const timestamp = new Date()
-    api?.sign(member.controllerAccount, `${member.id}:${timestamp}`)
+    // const timestamp = new Date()
+    // api?.sign(member.controllerAccount, `${member.id}:${timestamp}`)
   }
 
   useEffect(() => {
@@ -30,16 +30,6 @@ export const EmailSubscriptionModal = () => {
       signModal()
     }
   }, [state])
-
-  if (state.matches('prepare')) {
-    return (
-      <EmailSubscriptionFormModal
-        onClose={hideModal}
-        onSubmit={(params: EmailSubscriptionForm) => send('SIGNED', { email: params.email })}
-        member={member}
-      />
-    )
-  }
 
   if (state.matches('signature') || state.matches('transaction')) {
     return <WaitModal onClose={hideModal} title="Pending transaction" description="Registering email address..." />
@@ -54,5 +44,13 @@ export const EmailSubscriptionModal = () => {
     )
   }
 
-  return null
+  return (
+    <EmailSubscriptionFormModal
+      onClose={hideModal}
+      onSubmit={(params: EmailSubscriptionForm) => {
+        send('DONE', { email: params.email })
+      }}
+      member={member}
+    />
+  )
 }
