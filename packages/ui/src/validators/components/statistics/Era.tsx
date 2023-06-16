@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react'
 
 import { PercentageChart } from '@/common/components/charts/PercentageChart'
+import { BlockIcon } from '@/common/components/icons'
 import {
+  NumericValue,
   StatisticItem,
   StatisticItemSpacedContent,
   StatisticLabel,
@@ -10,8 +12,8 @@ import {
 import { DurationValue } from '@/common/components/typography/DurationValue'
 import { useStakingStatistics } from '@/validators/hooks/useStakingStatistics'
 export const Era = () => {
-  const { eraStartedOn, eraDuration, now } = useStakingStatistics()
-  const { nextReward, totalDuration, percentage } = useMemo(() => {
+  const { eraStartedOn, eraDuration, now, eraRewardPoints } = useStakingStatistics()
+  const { nextReward, percentage } = useMemo(() => {
     const nextReward =
       eraDuration && now && eraStartedOn ? Number(eraDuration) - (now.toNumber() - Number(eraStartedOn)) : undefined
     const totalDuration = Number(eraDuration)
@@ -32,15 +34,20 @@ export const Era = () => {
       actionElement={<PercentageChart percentage={percentage} small />}
     >
       <StatisticItemSpacedContent>
-        <StatisticLabel>Next reward</StatisticLabel>
+        <StatisticLabel>Next Reward</StatisticLabel>
         <div>
           <DurationValue value={nextReward} />
         </div>
       </StatisticItemSpacedContent>
       <StatisticItemSpacedContent>
-        <StatisticLabel> Total duration </StatisticLabel>
+        <StatisticLabel>Blocks / Points</StatisticLabel>
         <div>
-          <DurationValue value={totalDuration} />
+          {eraRewardPoints && (
+            <NumericValue>
+              <BlockIcon />
+              {eraRewardPoints.total.toNumber() / 20} / {eraRewardPoints?.total.toNumber()}
+            </NumericValue>
+          )}
         </div>
       </StatisticItemSpacedContent>
     </StatisticItem>

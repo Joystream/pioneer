@@ -2,8 +2,8 @@ import React from 'react'
 
 import { StatisticItem, StatisticItemSpacedContent, StatisticLabel } from '@/common/components/statistics'
 import { TokenValue } from '@/common/components/typography'
-import { useStakingStatistics } from '@/validators/hooks/useStakingStatistics'
 import { Colors } from '@/common/constants'
+import { useStakingStatistics } from '@/validators/hooks/useStakingStatistics'
 
 export const Staking = () => {
   const { idealStaking, currentStaking, stakingPercentage } = useStakingStatistics()
