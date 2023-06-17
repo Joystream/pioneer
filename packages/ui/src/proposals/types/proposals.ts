@@ -54,11 +54,11 @@ export type ProposalType =
         | 'setInitialInvitationCount'
         | 'setMembershipLeadInvitationQuota'
         | 'setReferralCut'
-        | 'unlockBlogPost'
+        | 'veto'
         | 'updateChannelPayouts'
       )
 
-export type DisabledProposal = 'createBlogPost' | 'editBlogPost' | 'lockBlogPost' | 'unlockBlogPost'
+export type DisabledProposal = 'veto'
 
 export interface Proposal {
   id: string

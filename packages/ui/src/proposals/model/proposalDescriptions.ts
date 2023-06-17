@@ -35,5 +35,5 @@ export const proposalDescriptions: ProposalDescriptions = {
   updateChannelPayouts:
     'Proposal to submit the Channel Incentives Payout payload, update the min/max claimable amounts and block/allow claiming of awarded JOYs by channels.',
   runtimeUpgrade: 'Proposal to upgrade version to the new runtime.',
-  //veto: 'Veto for a particular, previously issued proposal. Vetoed proposal is automatically discarded.',
+  veto: 'Veto for a particular, previously issued proposal. Vetoed proposal is automatically discarded.',
 }
