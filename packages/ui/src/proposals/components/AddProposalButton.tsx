@@ -3,7 +3,6 @@ import React, { useCallback, useMemo } from 'react'
 import { useApi } from '@/api/hooks/useApi'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
-import { Tooltip } from '@/common/components/Tooltip'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useModal } from '@/common/hooks/useModal'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'
@@ -36,11 +35,15 @@ export const AddProposalButton = () => {
   }, [api?.isConnected, availableSlots])
 
   return (
-    <Tooltip placement="bottom-end" {...tooltipProps}>
-      <TransactionButton style="primary" size="medium" onClick={addProposalModal} disabled={!availableSlots}>
-        <PlusIcon />
-        Add new proposal
-      </TransactionButton>
-    </Tooltip>
+    <TransactionButton
+      style="primary"
+      size="medium"
+      tooltip={tooltipProps}
+      onClick={addProposalModal}
+      disabled={!availableSlots}
+    >
+      <PlusIcon />
+      Add new proposal
+    </TransactionButton>
   )
 }
