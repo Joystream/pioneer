@@ -9,13 +9,22 @@ import { ButtonGhost, ButtonPrimary, ButtonProps, ButtonSecondary } from '.'
 
 interface WrapperProps {
   children: ReactNode
+  tooltip: { [key: string]: string }
 }
 
-export const TransactionButtonWrapper = ({ children }: WrapperProps) => {
+export const TransactionButtonWrapper = ({ children, tooltip }: WrapperProps) => {
   const { isTransactionPending } = useTransactionStatus()
 
   if (isTransactionPending) {
     return <Tooltip tooltipText="Please wait until the current transaction is over">{children}</Tooltip>
+  }
+
+  if (tooltip) {
+    return (
+      <Tooltip placement="bottom-end" {...tooltip}>
+        {children}
+      </Tooltip>
+    )
   }
 
   return <>{children}</>
@@ -25,6 +34,7 @@ type StyleOption = 'primary' | 'ghost' | 'secondary'
 
 interface TransactionButtonProps extends ButtonProps {
   style: StyleOption
+  tooltip: { [key: string]: string }
 }
 
 export const TransactionButton = (props: TransactionButtonProps) => {
@@ -33,7 +43,7 @@ export const TransactionButton = (props: TransactionButtonProps) => {
   const Button = buttonTypes[props.style]
 
   return (
-    <TransactionButtonWrapper>
+    <TransactionButtonWrapper tooltip={props.tooltip}>
       <Button {...props} disabled={isTransactionPending || props.disabled} />
     </TransactionButtonWrapper>
   )

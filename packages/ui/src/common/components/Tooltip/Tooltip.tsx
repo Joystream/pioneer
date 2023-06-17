@@ -36,6 +36,7 @@ export interface TooltipPopupProps extends TooltipContentProp {
   forBig?: boolean
   hideOnComponentLeave?: boolean
   boundaryClassName?: string
+  placement?: 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end'
 }
 
 export interface DarkTooltipInnerItemProps {
@@ -57,6 +58,7 @@ export const Tooltip = ({
   offset,
   hideOnComponentLeave,
   boundaryClassName,
+  placement = 'bottom-start',
 }: TooltipProps) => {
   const [isTooltipActive, setTooltipActive] = useState(tooltipOpen)
   const [referenceElementRef, setReferenceElementRef] = useState<HTMLElement | null>(null)
@@ -64,7 +66,7 @@ export const Tooltip = ({
   const [boundaryElement, setBoundaryElement] = useState<HTMLElement | null>(null)
 
   const { styles, attributes } = usePopper(referenceElementRef, popperElementRef, {
-    placement: 'bottom-start',
+    placement,
     modifiers: [
       {
         name: 'offset',
