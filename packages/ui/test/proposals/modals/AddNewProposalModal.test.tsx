@@ -935,7 +935,7 @@ describe('UI: AddNewProposalModal', () => {
           await finishProposalDetails()
           await finishTriggerAndDiscussion()
 
-          expect(screen.getByText(/^Tokens added to council budget$/i)).toBeDefined()
+          expect(screen.getByText(/^Tokens added to council budget every day$/i)).toBeDefined()
         })
 
         it('Invalid form', async () => {
