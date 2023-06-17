@@ -58,7 +58,7 @@ export const BaseCKEditor = React.forwardRef(
               'undo',
               'redo',
               '|',
-              // 'insertTable',
+              'insertTable',
               'specialCharacters',
             ],
           },
