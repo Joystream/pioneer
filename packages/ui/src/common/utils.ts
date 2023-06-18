@@ -6,8 +6,6 @@ type Obj = Record<string, any>
 
 // Type guards
 
-export const isFunction = (something: unknown): something is CallableFunction => typeof something === 'function'
-
 export const isDefined = <T extends any>(something: T | undefined): something is T => typeof something !== 'undefined'
 
 export const isNumber = (something: unknown): something is number => typeof something === 'number'
@@ -50,7 +48,7 @@ export const equals = <T extends any>(
   reference: T,
   { depth = 1, ...option }: EqualsOption = {}
 ): ((compared: T) => boolean) => {
-  if (depth > 0 && isRecord(reference)) {
+  if (depth && isRecord(reference)) {
     const isEqual = objectEquals(reference, { depth, ...option })
     return (compared) => isRecord(compared) && isEqual(compared)
   } else {
@@ -70,7 +68,7 @@ export const definedValues = <T extends Record<any, any>>(obj: T): T =>
 
 // Lists:
 
-export const dedupeObjects = <T>(list: T[], options?: EqualsOption): T[] =>
+export const dedupeObjects = <T extends Obj>(list: T[], options?: EqualsOption): T[] =>
   list.reduce((remain: T[], item) => [...remain, ...(remain.some(objectEquals(item, options)) ? [] : [item])], [])
 
 export const intersperse = <T extends any, S extends any>(

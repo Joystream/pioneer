@@ -2,7 +2,8 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
-import { RuntimeUpgrade } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/RuntimeUpgrade'
+
+import { RuntimeUpgrade } from './RuntimeUpgrade'
 
 export default {
   title: 'Proposals/AddNewProposalModal/RuntimeUpgrade',

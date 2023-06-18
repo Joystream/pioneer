@@ -24,7 +24,7 @@ export const BlockTime = React.memo(({ block, layout, dateLabel, lessInfo, posit
   <BlockTimeWrapper layout={layout} position={position}>
     <AboutText>
       {dateLabel && layout == 'row' && dateLabel + ': '}
-      {formatDateString(block.timestamp, layout === 'column' ? 's' : 'l')}
+      {formatDateString(block.timestamp)}
     </AboutText>
     {layout == 'row' && <Separator>{' | '}</Separator>}
     <BlockInfo block={block} lessInfo={lessInfo} />

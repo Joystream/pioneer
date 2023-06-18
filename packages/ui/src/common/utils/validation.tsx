@@ -214,7 +214,7 @@ export const useYupValidationResolver = <T extends FieldValues>(
       } catch (errors: any) {
         return {
           values: {},
-          errors: convertYupErrorVectorToFieldErrors<T>(errors?.inner ?? []),
+          errors: convertYupErrorVectorToFieldErrors<T>(errors?.inner ?? [errors ?? Error('Unknown')]),
         }
       }
     },

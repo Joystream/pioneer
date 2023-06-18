@@ -2,6 +2,7 @@ const baseConfig = require('../../.eslintrc.json')
 
 const config = {
   ...baseConfig,
+  extends: ['plugin:storybook/recommended'],
 }
 
 const domains = ['accounts', 'memberships', 'working-groups']
@@ -23,6 +24,14 @@ config.rules['import/no-restricted-paths'] = [
   'error',
   {
     zones: zones,
+  },
+]
+
+config.overrides = [
+  ...config.overrides,
+  {
+    files: ['**/*.stories.tsx'],
+    rules: { 'react-hooks/rules-of-hooks': 'off' },
   },
 ]
 
