@@ -84,7 +84,8 @@ export const ProposalPreview = () => {
     (vote) => vote.voter.id === active?.id && proposal?.councilApprovals === vote.votingRound - 1
   )
 
-  const myVote = proposal?.votes.find((vote) => vote.voter.id === active?.id && vote.votingRound === currentVotingRound)
+  const myVote =
+    active && proposal?.votes.find((vote) => vote.voter.id === active.id && vote.votingRound === currentVotingRound + 1)
   const myVoteStatus = myVote?.voteKind
 
   if (!proposal || !votes) {
