@@ -18,6 +18,7 @@ export const EmailSubscriptionModal = () => {
     hideModal,
     modalData: { member },
   } = useModal<EmailSubscriptionModalCall>()
+
   const [state, send] = useMachine(EmailSubscriptionMachine)
 
   useEffect(() => {
@@ -27,8 +28,16 @@ export const EmailSubscriptionModal = () => {
     }
   }, [state])
 
-  if (state.matches('signature') || state.matches('transaction')) {
-    return <WaitModal onClose={hideModal} title="Pending transaction" description="Registering email address..." />
+  if (state.matches('prepare')) {
+    return (
+      <EmailSubscriptionFormModal
+        onClose={hideModal}
+        onSubmit={(params: EmailSubscriptionForm) => {
+          send('DONE', { email: params.email })
+        }}
+        member={member}
+      />
+    )
   }
 
   if (state.matches('error')) {
@@ -40,13 +49,5 @@ export const EmailSubscriptionModal = () => {
     )
   }
 
-  return (
-    <EmailSubscriptionFormModal
-      onClose={hideModal}
-      onSubmit={(params: EmailSubscriptionForm) => {
-        send('DONE', { email: params.email })
-      }}
-      member={member}
-    />
-  )
+  return <WaitModal onClose={hideModal} title="Pending transaction" description="Registering email address..." />
 }

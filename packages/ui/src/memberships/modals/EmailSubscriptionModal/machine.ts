@@ -1,10 +1,11 @@
 import { assign, createMachine } from 'xstate'
 
 import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
+import { EmptyObject } from '@/common/types'
 
 import { EmailSubscriptionForm } from './types'
 
-interface Context extends EmailSubscriptionContext {
+interface Context extends EmailSubscriptionForm {
   email: string
   timestamp: number
 }
@@ -20,7 +21,7 @@ export type EmailSubscriptionEvent =
   | { type: 'DONE'; email: string }
   | { type: 'SUCCESS' }
   | { type: 'ERROR' }
-  | { type: 'SIGNED'; signature: string ; timestamp: number }
+  | { type: 'SIGNED'; signature: string; timestamp: number }
   | { type: 'CANCEL' }
 
 export const EmailSubscriptionMachine = createMachine<Context, EmailSubscriptionEvent, EmailSubscriptionState>({
@@ -42,6 +43,7 @@ export const EmailSubscriptionMachine = createMachine<Context, EmailSubscription
           target: 'transaction',
           actions: assign({
             signature: (_, event) => event.signature,
+            timestamp: (_, event) => event.timestamp,
           }),
         },
         CANCEL: {
