@@ -19,6 +19,7 @@
     "storybook": "storybook dev -p 6006",
     "i18n:json2csv": "node ./src/services/i18n/utils/converter.js --input=\"./src/services/i18n/dict\" --output=\"./src/services/i18n/utils/csv\"",
     "i18n:csv2json": "node ./src/services/i18n/utils/converter.js --from=csv --input=\"./src/services/i18n/utils/csv\" --output=\"./src/services/i18n/dict\" && yarn prettier \"./src/services/i18n/dict/**/*.json\" --print-width 20 --write --loglevel warn",
+    "test-storybook": "test-storybook",
     "test": "jest"
   },
   "dependencies": {
@@ -103,6 +104,7 @@
     "@storybook/jest": "^0.1.0",
     "@storybook/react": "^7.0.18",
     "@storybook/react-webpack5": "^7.0.18",
+    "@storybook/test-runner": "^0.10.0",
     "@storybook/testing-library": "^0.1.0",
     "@storybook/theming": "^7.0.18",
     "@testing-library/jest-dom": "^5.14.1",
