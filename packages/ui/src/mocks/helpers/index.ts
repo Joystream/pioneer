@@ -1,5 +1,6 @@
 import { JOY_DECIMAL_PLACES } from '@/common/constants'
 
+export * from './storybook'
 export { getMember } from '@/../test/_mocks/members'
 
 export function camelCaseToDash(myStr: string) {
