@@ -17,7 +17,7 @@ import {
 } from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
-import { AccountAndAmountSchema, maxAccounts, maxFundingAmount } from '@/proposals/model/validation'
+import { duplicateAccounts, isValidCSV, maxAccounts, maxFundingAmount } from '@/proposals/model/validation'
 import { ProposalType } from '@/proposals/types'
 import { GroupIdName } from '@/working-groups/types'
 
@@ -36,6 +36,9 @@ export const defaultProposalValues = {
   triggerAndDiscussion: {
     discussionWhitelist: [],
     isDiscussionClosed: false,
+  },
+  fundingRequest: {
+    payMultiple: false
   },
   updateWorkingGroupBudget: {
     isPositive: true,
@@ -208,21 +211,21 @@ export const schemaFactory = (api?: Api) => {
     }),
     fundingRequest: Yup.object().shape({
       payMultiple: Yup.boolean().required(),
-      amount: BNSchema.test(moreThanMixed(0, ''))
-        // todo: change funding request to allow upload request in file
-        .test(
-          maxMixed(api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount, 'Maximal amount allowed is ${max}')
-        ).when('payMultiple',{
+      amount: BNSchema.when('payMultiple',{
           is: false,
-          then: (schema) => schema.required('Field is required')
+          then: (schema) => schema.test(moreThanMixed(0, '')) // todo: change funding request to allow upload request in file
+          .test(
+            maxMixed(api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount, 'Maximal amount allowed is ${max}')
+          ).required('Field is required')
         }),
       account: AccountSchema.when('payMultiple',{
         is: false,
         then: (schema) => schema.required('Field is required')
       }),
-      accountsAndAmounts: AccountAndAmountSchema.when('payMultiple',{
+      accountsAndAmounts: Yup.string().when('payMultiple',{
         is: true,
         then: (schema) => schema
+        .test(duplicateAccounts('Duplicate accounts are not allowed')).test(isValidCSV('Not valid CSV format'))
         .test(
           maxAccounts('Maximum allowed accounts is ${max}',api?.consts.proposalsCodex.fundingRequestProposalMaxAccounts.toNumber())
         ).test(

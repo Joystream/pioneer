@@ -72,5 +72,3 @@ export const maxAccounts = (message:string, max: number | undefined): Yup.TestCo
         return max ? formattedTotal.lte(new BN(max)) : false
     }
   })
-
-export const AccountAndAmountSchema = Yup.string().test(duplicateAccounts('Duplicate accounts are not allowed')).test(isValidCSV('Not valid CSV format'))
