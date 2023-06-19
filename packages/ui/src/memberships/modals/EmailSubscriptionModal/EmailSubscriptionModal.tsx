@@ -20,14 +20,10 @@ export const EmailSubscriptionModal = () => {
   } = useModal<EmailSubscriptionModalCall>()
   const [state, send] = useMachine(EmailSubscriptionMachine)
 
-  const signModal = async () => {
-    // const timestamp = new Date()
-    // api?.sign(member.controllerAccount, `${member.id}:${timestamp}`)
-  }
-
   useEffect(() => {
     if (state.matches('signature')) {
-      signModal()
+      // const timestamp = new Date()
+      // api?.sign(member.controllerAccount, `${member.id}:${timestamp}`)
     }
   }, [state])
 
