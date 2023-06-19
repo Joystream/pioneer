@@ -23,11 +23,11 @@ export const Staking = () => {
     >
       <StatisticItemSpacedContent>
         <StatisticLabel> Ideal </StatisticLabel>
-        <TokenValue size="l" value={idealStaking} />
+        <TokenValue size="l" mjoy value={idealStaking} />
       </StatisticItemSpacedContent>
       <StatisticItemSpacedContent>
         <StatisticLabel> Current </StatisticLabel>
-        <TokenValue size="l" value={currentStaking} />
+        <TokenValue size="l" mjoy value={currentStaking} />
       </StatisticItemSpacedContent>
     </StatisticItem>
   )
