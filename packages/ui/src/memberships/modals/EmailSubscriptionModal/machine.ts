@@ -20,7 +20,7 @@ export type EmailSubscriptionEvent =
   | { type: 'DONE'; email: string }
   | { type: 'SUCCESS' }
   | { type: 'ERROR' }
-  | { type: 'SIGNED'; signature: string }
+  | { type: 'SIGNED'; signature: string ; timestamp: number }
   | { type: 'CANCEL' }
 
 export const EmailSubscriptionMachine = createMachine<Context, EmailSubscriptionEvent, EmailSubscriptionState>({
