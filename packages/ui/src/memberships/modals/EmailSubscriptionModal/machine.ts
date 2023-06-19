@@ -10,11 +10,11 @@ interface Context extends EmailSubscriptionContext {
 }
 
 type EmailSubscriptionState =
-  | { value: 'prepare'; context: Required<EmailSubscriptionContext> }
-  | { value: 'transaction'; context: Required<EmailSubscriptionContext> }
-  | { value: 'signature'; context: Required<EmailSubscriptionContext> }
-  | { value: 'success'; context: Required<EmailSubscriptionContext> }
-  | { value: 'error'; context: Required<Context> }
+  | { value: 'prepare'; context: EmptyObject }
+  | { value: 'signature'; context: Pick<Context, 'email'> }
+  | { value: 'transaction'; context: Context }
+  | { value: 'success'; context: Context }
+  | { value: 'error'; context: Context }
 
 export type EmailSubscriptionEvent =
   | { type: 'DONE'; email: string }
