@@ -64,7 +64,7 @@ export const EmailSubscriptionMachine = createMachine<Context, EmailSubscription
     },
     ...transactionModalFinalStatusesFactory({
       metaMessages: {
-        error: 'There was a problem email subscription.',
+        error: 'There was a problem during the email subscription.',
       },
     }),
   },
