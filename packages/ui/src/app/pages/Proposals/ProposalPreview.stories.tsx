@@ -1,6 +1,6 @@
 import { expect } from '@storybook/jest'
 import { Meta, StoryContext, StoryObj } from '@storybook/react'
-import { within } from '@storybook/testing-library'
+import { userEvent, within } from '@storybook/testing-library'
 import { random } from 'faker'
 import { last } from 'lodash'
 import { FC } from 'react'
@@ -384,5 +384,7 @@ export const TestsHasNotInCurrentRound: Story = {
 
     expect(screen.getByText(/Vote on Proposal/i)).toBeDefined()
     expect(screen.queryByText(/You voted for:/i)).toBeNull()
+    await userEvent.click(screen.getByText('Round 1'))
+    expect(screen.getByText(/You voted for:/i)).toHaveTextContent('You voted for: Approved')
   },
 }
