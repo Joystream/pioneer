@@ -4,13 +4,10 @@ import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
 
 import { EmailSubscriptionForm } from './types'
 
-interface EmailSubscriptionContext {
+interface Context extends EmailSubscriptionContext {
   email: string
-  timestamp: bigint
-  signature: string
+  timestamp: number
 }
-
-type Context = EmailSubscriptionContext & EmailSubscriptionForm
 
 type EmailSubscriptionState =
   | { value: 'prepare'; context: Required<EmailSubscriptionContext> }
