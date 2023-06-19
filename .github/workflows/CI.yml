@@ -5,7 +5,37 @@ on:
   pull_request:
 
 jobs:
+  install:
+    timeout-minutes: 10
+    strategy:
+      matrix: { node: ["18.x"], os: [ubuntu-latest] }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
+        name: Install dependencies
+        run: yarn --immutable
+
   test:
+    needs: install
     timeout-minutes: 60
     strategy:
       matrix: { node: ["18.x"], os: [ubuntu-latest] }
@@ -17,6 +47,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
       - name: Install dependencies
         run: yarn --immutable
@@ -30,3 +71,65 @@ jobs:
       - name: Run tests
         run: node --max_old_space_size=7000 --expose-gc $(yarn bin jest) --logHeapUsage --silent
         working-directory: packages/ui
+
+  storybook-test:
+    needs: install
+    timeout-minutes: 60
+    strategy:
+      matrix: { node: ["18.x"], os: [ubuntu-latest] }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn --immutable
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Get the Storybook preview deployment url
+        run: |
+          URL=$( \
+            vercel list \
+              --meta githubCommitSha=$COMMIT_SHA \
+              --token=${{ secrets.VERCEL_STORYBOOK_TOKEN }} \
+            2>&1 | tail -n 2 | head -n 1 | awk '{print $2}' \
+          )
+          echo "VERCEL_DEPLOYMENT_URL=$URL" >> "$GITHUB_ENV"
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_STORYBOOK_PROJECT_ID }}
+          COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Wait for the deployment to complete
+        run: |
+          vercel inspect "${{ env.VERCEL_DEPLOYMENT_URL }}" \
+            --wait --timeout 10m \
+            --token=${{ secrets.VERCEL_STORYBOOK_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_STORYBOOK_PROJECT_ID }}
+
+      - name: Run Storybook tests
+        run: yarn workspace @joystream/pioneer test-storybook
+        env:
+          TARGET_URL: ${{ env.VERCEL_DEPLOYMENT_URL }}
