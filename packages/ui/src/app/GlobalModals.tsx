@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import { ClaimVestingModalCall } from '@/accounts/modals/ClaimVestingModal'
 import { ClaimVestingModal } from '@/accounts/modals/ClaimVestingModal/ClaimVestingModal'
-import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFundsModal'
 import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'
 // import { AddBountyModal, AddBountyModalCall } from '@/bounty/modals/AddBountyModal'

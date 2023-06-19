@@ -40,7 +40,7 @@ module.exports = {
     reactDocgen: 'none',
   },
   stories: ['../src/**/*.stories.@(ts|tsx)'],
-  addons: ['@storybook/addon-links', '@storybook/addon-essentials'],
+  addons: ['@storybook/addon-essentials', '@storybook/addon-interactions', '@storybook/addon-links'],
 }
 
 function isCssRule(rule) {

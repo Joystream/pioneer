@@ -1,6 +1,7 @@
 import { random } from 'faker'
 import { mapValues } from 'lodash'
 
+import { RecursivePartial } from '@/common/types/helpers'
 import { worker, workingGroup, workingGroupOpening } from '@/mocks/data/common'
 import { joy } from '@/mocks/helpers'
 import { ProposalWithDetailsFieldsFragment } from '@/proposals/queries'
@@ -65,7 +66,10 @@ const proposalDetails = {
   },
   UpdateWorkingGroupBudgetProposalDetails: { amount: joy(200), group: workingGroup },
   VetoProposalDetails: { proposal: { __typename: 'Proposal', id: '0', title: random.words(4) } },
-}
-export const proposalDetailsMap = mapValues(proposalDetails, (value, __typename) =>
-  Object.assign(value, { __typename })
+} as Record<string, RecursivePartial<ProposalWithDetailsFieldsFragment['details']>>
+
+export const proposalDetailsMap = mapValues(
+  proposalDetails,
+  (value, __typename) =>
+    Object.assign(value, { __typename }) as RecursivePartial<ProposalWithDetailsFieldsFragment['details']>
 )
