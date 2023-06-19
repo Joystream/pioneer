@@ -3,7 +3,7 @@ import { random } from 'faker'
 import { last } from 'lodash'
 
 import { ProposalVoteKind } from '@/common/api/queries'
-import { repeat, whenDefined } from '@/common/utils'
+import { repeat } from '@/common/utils'
 import { GetElectedCouncilDocument } from '@/council/queries'
 import { member } from '@/mocks/data/members'
 import {
@@ -81,6 +81,14 @@ export default {
       const updates = parameters.statuses.slice(1, proposalActiveStatus.includes(status) ? undefined : -1)
       const councilors = [isCouncilMember ? alice : dave, bob, charlie]
 
+      const paramVotes = parameters.votes as VoteArg[][] | undefined
+      const votesRounds = paramVotes ?? repeat(() => [args.vote1, args.vote2, args.vote3], constitutionality)
+      const votes = votesRounds.flatMap((votes, round) =>
+        votes.flatMap((vote, index) =>
+          vote === 'None' ? [] : { voteKind: asVoteKind(vote), voter: councilors[index], votingRound: round + 1 }
+        )
+      )
+
       return {
         accounts: { active: alice },
 
@@ -147,28 +155,9 @@ export default {
                 statusSetAtBlock: 123,
                 statusSetAtTime: isoDate('2023/01/12'),
 
-                votes: repeat(
-                  (index) =>
-                    [
-                      whenDefined(asVoteKind(args.vote1), (voteKind) => ({
-                        voteKind,
-                        voter: councilors[0],
-                        votingRound: index + 1,
-                      })) ?? [],
-                      whenDefined(asVoteKind(args.vote2), (voteKind) => ({
-                        voteKind,
-                        voter: councilors[1],
-                        votingRound: index + 1,
-                      })) ?? [],
-                      whenDefined(asVoteKind(args.vote3), (voteKind) => ({
-                        voteKind,
-                        voter: councilors[2],
-                        votingRound: index + 1,
-                      })) ?? [],
-                    ].flat(),
-                  constitutionality
-                ).flat(),
-              },
+                councilApprovals: parameters.councilApprovals ?? constitutionality - 1,
+                votes,
+              }
             },
           },
 
