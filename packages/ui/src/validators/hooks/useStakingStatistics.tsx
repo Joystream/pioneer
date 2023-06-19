@@ -1,6 +1,6 @@
 import { BN } from '@polkadot/util'
 import { useMemo } from 'react'
-import { map } from 'rxjs'
+import { combineLatest, map } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
@@ -27,7 +27,15 @@ export const useStakingStatistics = () => {
   const totalIssuance = useObservable(() => api?.query.balances.totalIssuance(), [api?.isConnected])
   const currentStaking = useObservable(() => api?.query.staking.erasTotalStake(eraIndex), [eraIndex, api?.isConnected])
   const activeValidators = useObservable(() => api?.query.session.validators(), [api?.isConnected])
-  const activeNominators = useObservable(() => api?.query.staking.nominators.entries(), [api?.isConnected])
+  const stakers = useObservable(() => {
+    if (activeValidators && api)
+      return combineLatest(activeValidators.map((address) => api.query.staking.erasStakers(eraIndex, address)))
+  }, [api?.isConnected, activeValidators, eraIndex])
+  const acitveNominators = useMemo(() => {
+    const nominators = stakers?.map((validator) => validator.others.map((nominator) => nominator.who.toString()))
+    const uniqueNominators = [...new Set(nominators?.flat())]
+    return uniqueNominators
+  }, [stakers])
   const allValidatorsCount = useObservable(() => api?.query.staking.counterForValidators(), [api?.isConnected])
   const allNominatorsCount = useObservable(() => api?.query.staking.counterForNominators(), [api?.isConnected])
   const lastValidatorRewards = useObservable(
@@ -52,7 +60,7 @@ export const useStakingStatistics = () => {
     currentStaking: new BN(currentStaking ?? 0),
     stakingPercentage,
     activeValidatorsCount: activeValidators?.length ?? 0,
-    acitveNominatorsCount: activeNominators?.length ?? 0,
+    acitveNominatorsCount: acitveNominators.length,
     allValidatorsCount: allValidatorsCount?.toNumber() ?? 0,
     allNominatorsCount: allNominatorsCount?.toNumber() ?? 0,
     totalRewards: totalRewards?.reduce((total: BN, reward) => total.add(reward.eraReward), new BN(0)),
