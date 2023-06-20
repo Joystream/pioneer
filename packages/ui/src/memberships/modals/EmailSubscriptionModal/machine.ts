@@ -24,47 +24,50 @@ export type EmailSubscriptionEvent =
   | { type: 'SIGNED'; signature: string; timestamp: number }
   | { type: 'CANCEL' }
 
-export const EmailSubscriptionMachine = createMachine<Partial<Context>, EmailSubscriptionEvent, EmailSubscriptionState>({
-  initial: 'prepare',
-  states: {
-    prepare: {
-      on: {
-        DONE: {
-          target: 'signature',
-          actions: assign({
-            email: (_, event) => event.email,
-          }),
+export const EmailSubscriptionMachine = createMachine<Partial<Context>, EmailSubscriptionEvent, EmailSubscriptionState>(
+  {
+    initial: 'prepare',
+    states: {
+      prepare: {
+        on: {
+          DONE: {
+            target: 'signature',
+            actions: assign({
+              email: (_, event) => event.email,
+            }),
+          },
         },
       },
+      signature: {
+        on: {
+          SIGNED: {
+            target: 'transaction',
+            actions: (_, event) =>
+              assign({
+                signature: event.signature,
+                timestamp: event.timestamp,
+              }),
+          },
+          CANCEL: {
+            target: 'canceled',
+          },
+        },
+      },
+      transaction: {
+        on: {
+          SUCCESS: {
+            target: 'success',
+          },
+          ERROR: {
+            target: 'error',
+          },
+        },
+      },
+      ...transactionModalFinalStatusesFactory({
+        metaMessages: {
+          error: 'There was a problem during the email subscription.',
+        },
+      }),
     },
-    signature: {
-      on: {
-        SIGNED: {
-          target: 'transaction',
-          actions: (_, event) => assign({
-            signature: event.signature,
-            timestamp: event.timestamp,
-          })
-        },
-        CANCEL: {
-          target: 'canceled',
-        },
-      },
-    },
-    transaction: {
-      on: {
-        SUCCESS: {
-          target: 'success',
-        },
-        ERROR: {
-          target: 'error',
-        },
-      },
-    },
-    ...transactionModalFinalStatusesFactory({
-      metaMessages: {
-        error: 'There was a problem during the email subscription.',
-      },
-    }),
-  },
-})
+  }
+)
