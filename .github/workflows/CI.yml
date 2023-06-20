@@ -104,6 +104,10 @@ jobs:
       - name: Install Playwright
         run: npx playwright install --with-deps
 
+      - name: Get branch names
+        id: branch-name
+        uses: tj-actions/branch-names@v7
+
       - name: Get the Storybook preview deployment url
         run: |
           PROJECT="pioneer-2-storybook"
@@ -122,7 +126,7 @@ jobs:
           )
           echo "VERCEL_DEPLOYMENT_URL=$SUBDOMAIN.vercel.app" >> "$GITHUB_ENV"
         env:
-          BRANCH: ${{ github.ref_name }}
+          BRANCH: ${{ steps.branch-name.outputs.head_ref_branch }}
 
       - name: Wait for the deployment to complete
         run: |
