@@ -6,6 +6,8 @@ import { AnyObject } from 'yup/lib/types'
 import { isValidAddress } from '@/accounts/model/isValidAddress'
 import { formatJoyValue } from '@/common/model/formatters'
 
+import { CSV_PATTERN } from '../constants/regExp'
+
 export const maxAccounts = (message:string, max: number | undefined): Yup.TestConfig<any, AnyObject> => ({
     message,
     name: 'maxAccounts',
@@ -40,8 +42,7 @@ export const maxAccounts = (message:string, max: number | undefined): Yup.TestCo
     name: 'isValidCSV',
     exclusive: false,
     test(value: string, testContext){
-        const pattern = /^([^,:;]+),([^,:;]+)(;\n[^,:;]+,[^,:;]+)*(;\n)?$/;
-        if(!pattern.test(value)) return false;
+        if(!CSV_PATTERN.test(value)) return false;
 
         const pairs = value.split(';\n');
         const keyring = testContext?.options?.context?.keyring

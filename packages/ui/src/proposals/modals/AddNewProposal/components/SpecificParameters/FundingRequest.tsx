@@ -18,6 +18,7 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium, TextSmall, TextInlineSmall } from '@/common/components/typography'
+import { CSV_PATTERN } from '@/proposals/constants/regExp'
 
 import { PreviewAndValidateModal } from './modals/PreviewAndValidate'
 import { ErrorPrompt, Prompt } from './Prompt'
@@ -33,9 +34,8 @@ export const FundingRequest = () => {
     setValue('fundingRequest.accountsAndAmounts',input, {shouldValidate: true})
   },[])
   const previewInput = useCallback(() => {
-    const pattern = /^([^,:;]+),([^,:;]+)(;\n[^,:;]+,[^,:;]+)*(;\n)?$/;
     const input = getValues('fundingRequest.accountsAndAmounts')
-    if(pattern.test(input)){
+    if(CSV_PATTERN.test(input)){
       const inputSplit = input.split(';\n')
       setValue('fundingRequest.hasPreviewedInput', true,{shouldValidate: true})
       setIsPreviewModalShown(true)
