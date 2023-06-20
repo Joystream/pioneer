@@ -54,9 +54,20 @@ interface ModalProps {
   children: ReactNode
   isDark?: boolean
   className?: any
+  customModalSize?: any
+  marginRight?: any
 }
 
-export const Modal = ({ onClose, modalHeight = 'm', children, modalSize, isDark, className }: ModalProps) => {
+export const Modal = ({
+  onClose,
+  modalHeight = 'm',
+  children,
+  modalSize,
+  isDark,
+  className,
+  customModalSize,
+  marginRight,
+}: ModalProps) => {
   function onBackgroundClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     if (e.target === e.currentTarget) {
       onClose()
@@ -68,7 +79,14 @@ export const Modal = ({ onClose, modalHeight = 'm', children, modalSize, isDark,
   return (
     <>
       <ModalGlass onClick={onBackgroundClick} />
-      <ModalWrap modalMaxSize={modalSize} modalHeight={modalHeight} isDark={isDark} role="modal" className={className}>
+      <ModalWrap
+        modalMaxSize={customModalSize || modalSize}
+        modalHeight={modalHeight}
+        isDark={isDark}
+        role="modal"
+        className={className}
+        marginRight={marginRight}
+      >
         {children}
       </ModalWrap>
     </>
@@ -203,6 +221,7 @@ interface ModalWrapProps {
   modalMaxSize: string
   isDark?: boolean
   modalHeight?: ModalHeight
+  marginRight?: string
 }
 
 export const ModalWrap = styled.section<ModalWrapProps>`
@@ -210,6 +229,7 @@ export const ModalWrap = styled.section<ModalWrapProps>`
   position: absolute;
   inset: 0;
   margin: auto auto;
+  margin-right: ${({ marginRight }) => (marginRight ? `${marginRight}px` : 'auto')};
   display: grid;
   @media only screen and (max-height: 700px) {
     max-height: 100%;
@@ -233,6 +253,8 @@ export const ModalWrap = styled.section<ModalWrapProps>`
         return '904px'
       case 'l':
         return '1240px'
+      default:
+        return `${modalMaxSize}px`
     }
   }};
   height: ${({ modalHeight }) => (modalHeight === 'xl' ? '90vh' : 'min-content')};

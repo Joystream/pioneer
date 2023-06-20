@@ -24,6 +24,7 @@ import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
+import { useKeyring } from '@/common/hooks/useKeyring'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
@@ -87,6 +88,9 @@ export const AddNewProposalModal = () => {
   const schema = useMemo(() => schemaFactory(api), [!api])
 
   const path = useMemo(() => machineStateConverter(state.value), [state.value])
+
+  const keyring = useKeyring()
+
   const form = useForm<AddNewProposalForm>({
     resolver: useYupValidationResolver<AddNewProposalForm>(schema, path),
     mode: 'onChange',
@@ -105,6 +109,7 @@ export const AddNewProposalModal = () => {
       minTriggerBlock: currentBlock
         ? currentBlock.addn(constants?.votingPeriod ?? 0).addn(constants?.gracePeriod ?? 0)
         : BN_ZERO,
+      keyring,
     } as IStakingAccountSchema,
     defaultValues: defaultProposalValues,
   })
