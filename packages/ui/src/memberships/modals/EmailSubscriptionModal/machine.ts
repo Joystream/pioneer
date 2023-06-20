@@ -24,7 +24,7 @@ export type EmailSubscriptionEvent =
   | { type: 'SIGNED'; signature: string; timestamp: number }
   | { type: 'CANCEL' }
 
-export const EmailSubscriptionMachine = createMachine<Context, EmailSubscriptionEvent, EmailSubscriptionState>({
+export const EmailSubscriptionMachine = createMachine<Partial<Context>, EmailSubscriptionEvent, EmailSubscriptionState>({
   initial: 'prepare',
   states: {
     prepare: {
@@ -41,10 +41,10 @@ export const EmailSubscriptionMachine = createMachine<Context, EmailSubscription
       on: {
         SIGNED: {
           target: 'transaction',
-          actions: assign({
-            signature: (_, event) => event.signature,
-            timestamp: (_, event) => event.timestamp,
-          }),
+          actions: (_, event) => assign({
+            signature: event.signature,
+            timestamp: event.timestamp,
+          })
         },
         CANCEL: {
           target: 'canceled',
