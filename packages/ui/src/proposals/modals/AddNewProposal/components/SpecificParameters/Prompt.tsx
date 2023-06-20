@@ -42,3 +42,16 @@ const PromptQuestion = styled.div`
   border-radius: ${BorderRad.full};
   border: 1px solid ${Colors.Black[900]};
 `
+export const ErrorPrompt = styled.div`
+display: flex;
+justify-content: center;
+flex-direction: column;
+border-left: 4px solid ${Colors.Red[200]};
+padding-left: 10.78px;
+background-color: ${Colors.Red[50]};
+color: ${Colors.Red[400]};
+width: 504px;
+height: 56px;
+border-radius: 2px;
+font-weight: 400;
+`

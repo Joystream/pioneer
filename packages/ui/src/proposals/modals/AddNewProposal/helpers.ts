@@ -38,7 +38,8 @@ export const defaultProposalValues = {
     isDiscussionClosed: false,
   },
   fundingRequest: {
-    payMultiple: false
+    payMultiple: false,
+    hasPreviewedInput: false,
   },
   updateWorkingGroupBudget: {
     isPositive: true,
@@ -77,6 +78,7 @@ export interface AddNewProposalForm {
     account?: Account
     payMultiple?: boolean
     accountsAndAmounts?: string
+    hasPreviewedInput?: boolean
   }
   runtimeUpgrade: {
     runtime?: File
@@ -221,6 +223,10 @@ export const schemaFactory = (api?: Api) => {
       account: AccountSchema.when('payMultiple',{
         is: false,
         then: (schema) => schema.required('Field is required')
+      }),
+      hasPreviewedInput: Yup.boolean().when('payMultiple',{
+        is: true,
+        then: (schema) => schema.test('previewedinput','Please preview', (value) => typeof value !== 'undefined' && value).required('Field is required')
       }),
       accountsAndAmounts: Yup.string().when('payMultiple',{
         is: true,
