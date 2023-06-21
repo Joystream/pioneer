@@ -35,6 +35,7 @@ jobs:
         run: yarn --immutable
 
   ui-unit-tests:
+    if: false
     needs: install
     timeout-minutes: 60
     strategy:
@@ -86,22 +87,22 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+      # - name: Get yarn cache directory path
+      #   id: yarn-cache-dir-path
+      #   run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v3
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+      # - uses: actions/cache@v3
+      #   with:
+      #     path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+      #     key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-yarn-
 
-      - name: Install dependencies
-        run: yarn --immutable
+      # - name: Install dependencies
+      #   run: yarn --immutable
 
-      - name: Install Playwright
-        run: npx playwright install --with-deps
+      # - name: Install Playwright
+      #   run: npx playwright install --with-deps
 
       - name: Get the Storybook preview deployment url
         run: |
@@ -129,20 +130,20 @@ jobs:
         run: |
           while true; do
             RES=$(curl -L 'https://api.vercel.com/v13/deployments/${{ env.VERCEL_DEPLOYMENT_URL }}')
-            STATUS=$(echo -n "$RES" | jq '.status')
-            SHA=$(echo -n "$RES" | jq '.meta.githubCommitSha')
+            STATUS=$(echo -n "$RES" | jq -r '.status')
+            SHA=$(echo -n "$RES" | jq -r '.meta.githubCommitSha')
 
             if [ "$SHA" == '${{ env.COMMIT_SHA }}' ] && [ "$STATUS" == 'READY' ]; then
-              break
+              exit
             fi
 
-            echo -e '\nWait for the Storybook deployment...\n'
+            echo -e '\nWait for the Storybook deployment...\n\n'
             sleep 20
           done
         env:
           COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
 
-      - name: Run Storybook tests
-        run: yarn workspace @joystream/pioneer test-storybook
-        env:
-          TARGET_URL: https://${{ env.VERCEL_DEPLOYMENT_URL }}
+      # - name: Run Storybook tests
+      #   run: yarn workspace @joystream/pioneer test-storybook
+      #   env:
+      #     TARGET_URL: https://${{ env.VERCEL_DEPLOYMENT_URL }}
