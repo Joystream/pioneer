@@ -106,16 +106,16 @@ jobs:
       - name: Get the Storybook preview deployment url
         run: |
           if [ "$PREFIX" == 'git-fork' ]; then
-            BRANCH=$(echo -n "$LABEL" | sed 's/:/-/')
+            BRANCH=$(echo -n '${{ env.LABEL }}' | sed 's/:/-/')
           else
-            BRANCH=$(echo -n "$LABEL" | cut -d ':' -f2-)
+            BRANCH=$(echo -n '${{ env.LABEL }}' | cut -d ':' -f2-)
           fi
 
           URL_BRANCH=$(echo -n "$BRANCH" | tr -d '#' | tr -c '[:alnum:]' '-' | tr '[:upper:]' '[:lower:]')
-          SUBDOMAIN="$PROJECT-$PREFIX-$URL_BRANCH-joystream"
+          SUBDOMAIN="${{ env.PROJECT }}-${{ env.PREFIX }}-$URL_BRANCH-joystream"
 
           if [ ${#SUBDOMAIN} -gt 63 ]; then
-            HASH=$(echo -n "$PREFIX-$BRANCH$PROJECT" | sha256sum | head -c 6)
+            HASH=$(echo -n "${{ env.PREFIX }}-$BRANCH${{ env.PROJECT }}" | sha256sum | head -c 6)
             SUBDOMAIN="$(echo -n "$SUBDOMAIN" | head -c 46)-$HASH-joystream"
           fi
 
@@ -128,11 +128,11 @@ jobs:
       - name: Wait for the deployment to complete
         run: |
           while true; do
-            RES=$(curl -L "https://api.vercel.com/v13/deployments/${{ env.VERCEL_DEPLOYMENT_URL }}")
+            RES=$(curl -L 'https://api.vercel.com/v13/deployments/${{ env.VERCEL_DEPLOYMENT_URL }}')
             STATUS=$(echo -n "$RES" | jq '.status')
             SHA=$(echo -n "$RES" | jq '.meta.githubCommitSha')
 
-            if [ "$SHA" == "$COMMIT_SHA" ] && [ "$STATUS" == 'READY' ]; then
+            if [ "$SHA" == '${{ env.COMMIT_SHA }}' ] && [ "$STATUS" == 'READY' ]; then
               break
             fi
 
