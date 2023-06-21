@@ -110,7 +110,7 @@ jobs:
 
       - run: |
           echo "${{ toJSON(steps.branch-name.outputs) }}"
-          echo "${{ toJSON(github.event.pull_request) }}"
+          echo "${{ toJSON(github.event.pull_request.head) }}"
           echo "${{ github.repository }}"
           echo "${{ github.repository_owner }}"
           echo "${{ github.repositoryUrl }}"
