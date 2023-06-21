@@ -1,8 +1,8 @@
 name: CI
 
 on:
-  push: { branches: [dev, main] }
-  pull_request:
+  push: { branches: [dev, main, fix/storybook-ci] }
+  # pull_request:
 
 jobs:
   install:
@@ -107,14 +107,6 @@ jobs:
       - name: Get branch names
         id: branch-name
         uses: tj-actions/branch-names@v7
-
-      - run: |
-          echo "${{ toJSON(steps.branch-name.outputs) }}"
-          echo "${{ toJSON(github.event.pull_request.head) }}"
-          echo "${{ github.repository }}"
-          echo "${{ github.repository_owner }}"
-          echo "${{ github.repositoryUrl }}"
-          echo "${{ github.ref }}"
 
       - name: Get the Storybook preview deployment url
         run: |
