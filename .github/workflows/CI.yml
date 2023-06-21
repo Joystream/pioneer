@@ -115,7 +115,7 @@ jobs:
           SUBDOMAIN="${{ env.PROJECT }}-${{ env.PREFIX }}-$URL_BRANCH-joystream"
 
           if [ ${#SUBDOMAIN} -gt 63 ]; then
-            HASH=$(echo -n "${{ env.PREFIX }}-$BRANCH${{ env.PROJECT }}" | sha256sum | head -c 6)
+            HASH=$(echo -n "${{ env.PREFIX }}-${BRANCH}${{ env.PROJECT }}" | sha256sum | head -c 6)
             SUBDOMAIN="$(echo -n "$SUBDOMAIN" | head -c 46)-$HASH-joystream"
           fi
 
