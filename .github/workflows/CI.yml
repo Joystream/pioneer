@@ -132,8 +132,14 @@ jobs:
             STATUS=$(echo -n "$RES" | jq -r '.status')
             SHA=$(echo -n "$RES" | jq -r '.meta.githubCommitSha')
 
+
+            if [ "$SHA" == 'null' ] || [ "$STATUS" == 'null' ]; then
+              echo -e "\nError the JSON response is missing expected fields:\n\n$RES\n" >&2
+              exit 5
+            fi
+
             if [ "$SHA" == '${{ env.COMMIT_SHA }}' ] && [ "$STATUS" == 'READY' ]; then
-              exit
+              exit 0
             fi
 
             echo -e '\nWait for the Storybook deployment...\n\n'
