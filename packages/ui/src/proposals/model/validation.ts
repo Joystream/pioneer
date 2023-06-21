@@ -1,12 +1,15 @@
 import { isBn } from '@polkadot/util'
 import BN from 'bn.js'
 import * as Yup from 'yup'
+import Reference from 'yup/lib/Reference'
 import { AnyObject } from 'yup/lib/types'
 
 import { isValidAddress } from '@/accounts/model/isValidAddress'
+import { JOY_DECIMAL_PLACES } from '@/common/constants'
 import { formatJoyValue } from '@/common/model/formatters'
 
 import { CSV_PATTERN } from '../constants/regExp'
+
 
 export const maxAccounts = (message:string, max: number | undefined): Yup.TestConfig<any, AnyObject> => ({
     message,
@@ -56,7 +59,7 @@ export const maxAccounts = (message:string, max: number | undefined): Yup.TestCo
     }
   })
 
-  export const maxFundingAmount = (message:string,max: number | BN | undefined,isJoyValue = true): Yup.TestConfig<any, AnyObject> =>({
+  export const maxFundingAmount = (message:string,max: Reference<number | BN> | number | BN | undefined,isJoyValue = true): Yup.TestConfig<any, AnyObject> =>({
     message,
     name: 'maxFundingAmount',
     params: { max: isJoyValue && isBn(max) ? formatJoyValue(max, { precision: 2 }) : max },
@@ -64,12 +67,13 @@ export const maxAccounts = (message:string, max: number | undefined): Yup.TestCo
     test(value: string){
 
         const pairs = value.split(';\n');
-        let total = 0;
+        let total = new BN(0);
+        const decimals = new BN(10).pow(new BN(JOY_DECIMAL_PLACES))
         for(const pair of pairs){
           const [,amount] = pair.split(',')
-          total += Number(amount)
+          total = total.add(new BN(amount))
         }
-        const formattedTotal = new BN(total)
-        return max ? formattedTotal.lte(new BN(max)) : false
+        total = total.mul(decimals)
+        return !total || typeof max === 'undefined' || !isBn(total) || total.lte(new BN(this.resolve(max)))
     }
   })

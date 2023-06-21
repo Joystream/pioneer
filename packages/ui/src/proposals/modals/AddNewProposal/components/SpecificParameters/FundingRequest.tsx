@@ -133,7 +133,7 @@ export const FundingRequest = () => {
         )}
       </Row>
       {isPreviewModalShown && (
-        <PreviewAndValidateModal previewModalData={previewModalData} setIsPreviewModalShown={setIsPreviewModalShown} />
+        <PreviewAndValidateModal previewModalData={previewModalData} setIsPreviewModalShown={setIsPreviewModalShown} setValue={setValue}/>
       )}
     </RowGapBlock>
   )

@@ -233,9 +233,10 @@ export const schemaFactory = (api?: Api) => {
         then: (schema) => schema
         .test(duplicateAccounts('Duplicate accounts are not allowed')).test(isValidCSV('Not valid CSV format'))
         .test(
-          maxAccounts('Maximum allowed accounts is ${max}',api?.consts.proposalsCodex.fundingRequestProposalMaxAccounts.toNumber())
-        ).test(
           maxFundingAmount('Maximal amount allowed is ${max}',api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount)
+        )
+        .test(
+          maxAccounts('Maximum allowed accounts is ${max}',api?.consts.proposalsCodex.fundingRequestProposalMaxAccounts.toNumber())
         ).required('Field is required')
       })}),
     runtimeUpgrade: Yup.object().shape({
