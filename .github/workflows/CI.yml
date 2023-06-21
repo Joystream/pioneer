@@ -110,12 +110,15 @@ jobs:
           else
             BRANCH=$(echo -n "$LABEL" | cut -d ':' -f2-)
           fi
+
           URL_BRANCH=$(echo -n "$BRANCH" | tr -d '#' | tr -c '[:alnum:]' '-' | tr '[:upper:]' '[:lower:]')
           SUBDOMAIN="$PROJECT-$PREFIX-$URL_BRANCH-joystream"
+
           if [ ${#SUBDOMAIN} -gt 63 ]; then
             HASH=$(echo -n "$PREFIX-$BRANCH$PROJECT" | sha256sum | head -c 6)
             SUBDOMAIN="$(echo -n "$SUBDOMAIN" | head -c 46)-$HASH-joystream"
           fi
+
           echo "VERCEL_DEPLOYMENT_URL=$SUBDOMAIN.vercel.app" >> "$GITHUB_ENV"
         env:
           PROJECT: pioneer-2-storybook
