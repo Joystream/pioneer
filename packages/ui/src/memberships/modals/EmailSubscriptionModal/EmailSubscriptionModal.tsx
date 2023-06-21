@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { useApi } from '@/api/hooks/useApi'
+// import { useApi } from '@/api/hooks/useApi'
 import { FailureModal } from '@/common/components/FailureModal'
 import { ResultText } from '@/common/components/Modal'
 import { WaitModal } from '@/common/components/WaitModal'
@@ -13,7 +13,7 @@ import { EmailSubscriptionMachine } from './machine'
 import { EmailSubscriptionForm } from './types'
 
 export const EmailSubscriptionModal = () => {
-  const { api } = useApi()
+  // const { api } = useApi()
   const {
     hideModal,
     modalData: { member },
