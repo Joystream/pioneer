@@ -43,8 +43,8 @@ export const EmailSubscriptionModal = () => {
   if (state.matches('error')) {
     return (
       <FailureModal onClose={hideModal}>
-        There was a problem with creating a subscription.
-        <ResultText>We could not create your subscription at the moment! Please, try again later!</ResultText>
+        There was a problem registering your email.
+        <ResultText>We could not register your email at the moment! Please, try again later!</ResultText>
       </FailureModal>
     )
   }
