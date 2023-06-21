@@ -213,32 +213,51 @@ export const schemaFactory = (api?: Api) => {
     }),
     fundingRequest: Yup.object().shape({
       payMultiple: Yup.boolean().required(),
-      amount: BNSchema.when('payMultiple',{
-          is: false,
-          then: (schema) => schema.test(moreThanMixed(0, '')) // todo: change funding request to allow upload request in file
-          .test(
-            maxMixed(api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount, 'Maximal amount allowed is ${max}')
-          ).required('Field is required')
-        }),
-      account: AccountSchema.when('payMultiple',{
+      amount: BNSchema.when('payMultiple', {
         is: false,
-        then: (schema) => schema.required('Field is required')
+        then: (schema) =>
+          schema
+            .test(moreThanMixed(0, '')) // todo: change funding request to allow upload request in file
+            .test(
+              maxMixed(
+                api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount,
+                'Maximal amount allowed is ${max}'
+              )
+            )
+            .required('Field is required'),
       }),
-      hasPreviewedInput: Yup.boolean().when('payMultiple',{
-        is: true,
-        then: (schema) => schema.test('previewedinput','Please preview', (value) => typeof value !== 'undefined' && value).required('Field is required')
+      account: AccountSchema.when('payMultiple', {
+        is: false,
+        then: (schema) => schema.required('Field is required'),
       }),
-      accountsAndAmounts: Yup.string().when('payMultiple',{
+      hasPreviewedInput: Yup.boolean().when('payMultiple', {
         is: true,
-        then: (schema) => schema
-        .test(duplicateAccounts('Duplicate accounts are not allowed')).test(isValidCSV('Not valid CSV format'))
-        .test(
-          maxFundingAmount('Maximal amount allowed is ${max}',api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount)
-        )
-        .test(
-          maxAccounts('Maximum allowed accounts is ${max}',api?.consts.proposalsCodex.fundingRequestProposalMaxAccounts.toNumber())
-        ).required('Field is required')
-      })}),
+        then: (schema) =>
+          schema
+            .test('previewedinput', 'Please preview', (value) => typeof value !== 'undefined' && value)
+            .required('Field is required'),
+      }),
+      accountsAndAmounts: Yup.string().when('payMultiple', {
+        is: true,
+        then: (schema) =>
+          schema
+            .test(duplicateAccounts('Duplicate accounts are not allowed'))
+            .test(isValidCSV('Not valid CSV format'))
+            .test(
+              maxFundingAmount(
+                'Maximal amount allowed is ${max}',
+                api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount
+              )
+            )
+            .test(
+              maxAccounts(
+                'Maximum allowed accounts is ${max}',
+                api?.consts.proposalsCodex.fundingRequestProposalMaxAccounts.toNumber()
+              )
+            )
+            .required('Field is required'),
+      }),
+    }),
     runtimeUpgrade: Yup.object().shape({
       runtime: Yup.mixed()
         .required('Field is required')

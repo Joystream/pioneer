@@ -33,7 +33,7 @@ import { ErrorPrompt } from '../../Prompt'
 interface PreviewAndValidateModalProps {
   setIsPreviewModalShown: (bool: boolean) => void
   previewModalData: string[]
-  setValue: (name: string, value: any, options: {shouldValidate: boolean}) => void
+  setValue: (name: string, value: any, options: { shouldValidate: boolean }) => void
 }
 interface AccountAndAmount {
   account: Account
@@ -41,7 +41,11 @@ interface AccountAndAmount {
   isValidAccount: boolean
 }
 
-export const PreviewAndValidateModal = ({ setIsPreviewModalShown, previewModalData, setValue }: PreviewAndValidateModalProps) => {
+export const PreviewAndValidateModal = ({
+  setIsPreviewModalShown,
+  previewModalData,
+  setValue,
+}: PreviewAndValidateModalProps) => {
   const { api } = useApi()
   const maxTotalAmount = api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount
   const maxAllowedAccounts = api?.consts.proposalsCodex.fundingRequestProposalMaxAccounts.toNumber()
@@ -53,21 +57,20 @@ export const PreviewAndValidateModal = ({ setIsPreviewModalShown, previewModalDa
   const [errorMessages, setErrorMessages] = useState<string[]>([])
   const decimals = new BN(10).pow(new BN(JOY_DECIMAL_PLACES))
 
-
   const removeAccount = useCallback((index: number) => {
     setErrorMessages([])
-    setPreviewAccounts((prev) => prev.filter((item,i) => index !== i))
-  },[])
+    setPreviewAccounts((prev) => prev.filter((item, i) => index !== i))
+  }, [])
 
   const closeModalWithData = useCallback(() => {
     let textAreaValue = ''
-    previewAccounts.map((item,index) => {
-      textAreaValue+=`${item.account.address},${item.amount.div(decimals)}`
-      textAreaValue+=( previewAccounts.length - 1) === index ? '':';\n'
+    previewAccounts.map((item, index) => {
+      textAreaValue += `${item.account.address},${item.amount.div(decimals)}`
+      textAreaValue += previewAccounts.length - 1 === index ? '' : ';\n'
     })
-    setValue('fundingRequest.accountsAndAmounts',textAreaValue,{shouldValidate: true})
+    setValue('fundingRequest.accountsAndAmounts', textAreaValue, { shouldValidate: true })
     setIsPreviewModalShown(false)
-  },[previewAccounts])
+  }, [previewAccounts])
 
   useEffect(() => {
     setPreviewAccounts(
@@ -90,12 +93,22 @@ export const PreviewAndValidateModal = ({ setIsPreviewModalShown, previewModalDa
       total = total.add(item.amount)
       totalInvalidAccounts += !item.isValidAccount ? 1 : 0
     })
-    setErrorMessages((prev) => totalInvalidAccounts > 0 ? [...prev, 'Incorrect destination accounts detected'] : [...prev])
-    setErrorMessages((prev) => maxAllowedAccounts && (previewAccounts?.length > maxAllowedAccounts) ? [...prev, 'Maximum allowed accounts exceeded'] : [...prev])
+    setErrorMessages((prev) =>
+      totalInvalidAccounts > 0 ? [...prev, 'Incorrect destination accounts detected'] : [...prev]
+    )
+    setErrorMessages((prev) =>
+      maxAllowedAccounts && previewAccounts?.length > maxAllowedAccounts
+        ? [...prev, 'Maximum allowed accounts exceeded']
+        : [...prev]
+    )
     setTotalAmount(total)
   }, [previewAccounts])
   useEffect(() => {
-    setErrorMessages((prev) => totalAmount.gt(isBn(maxTotalAmount) ? maxTotalAmount : new BN(0)) ? [...prev, 'Max payment amount is exceeded'] : [...prev])
+    setErrorMessages((prev) =>
+      totalAmount.gt(isBn(maxTotalAmount) ? maxTotalAmount : new BN(0))
+        ? [...prev, 'Max payment amount is exceeded']
+        : [...prev]
+    )
   }, [totalAmount])
   return (
     <Modal onClose={() => undefined} modalSize="s" customModalSize={'552'} marginRight={'68'} modalHeight="xl">

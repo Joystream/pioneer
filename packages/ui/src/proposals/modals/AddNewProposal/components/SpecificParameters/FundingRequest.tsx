@@ -28,20 +28,20 @@ export const FundingRequest = () => {
   const [isPreviewModalShown, setIsPreviewModalShown] = useState(false)
   const [previewModalData, setPreviewModalData] = useState<string[]>([])
   const [payMultiple] = watch(['fundingRequest.payMultiple'])
-  const [hasPreviewedInput] = watch(['fundingRequest.hasPreviewedInput'],{'fundingRequest.hasPreviewedInput':true})
+  const [hasPreviewedInput] = watch(['fundingRequest.hasPreviewedInput'], { 'fundingRequest.hasPreviewedInput': true })
   const verifyInput = useCallback((input: string) => {
-    setValue('fundingRequest.hasPreviewedInput', false,{shouldValidate: true})
-    setValue('fundingRequest.accountsAndAmounts',input, {shouldValidate: true})
-  },[])
+    setValue('fundingRequest.hasPreviewedInput', false, { shouldValidate: true })
+    setValue('fundingRequest.accountsAndAmounts', input, { shouldValidate: true })
+  }, [])
   const previewInput = useCallback(() => {
     const input = getValues('fundingRequest.accountsAndAmounts')
-    if(CSV_PATTERN.test(input)){
+    if (CSV_PATTERN.test(input)) {
       const inputSplit = input.split(';\n')
-      setValue('fundingRequest.hasPreviewedInput', true,{shouldValidate: true})
+      setValue('fundingRequest.hasPreviewedInput', true, { shouldValidate: true })
       setIsPreviewModalShown(true)
       setPreviewModalData(inputSplit)
     }
-  },[])
+  }, [])
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -105,12 +105,9 @@ export const FundingRequest = () => {
                 onInput={(event) => verifyInput(event.currentTarget.value)}
               />
             </InputComponent>
-            <HiddenCheckBox name="fundingRequest.hasPreviewedInput" checked={hasPreviewedInput}/>
+            <HiddenCheckBox name="fundingRequest.hasPreviewedInput" checked={hasPreviewedInput} />
             {!hasPreviewedInput && <ErrorPrompt>Please preview and validate the inputs to proceed</ErrorPrompt>}
-            <ButtonPrimary
-              size="medium"
-              onClick={() => previewInput()}
-            >
+            <ButtonPrimary size="medium" onClick={() => previewInput()}>
               Preview and Validate <Arrow direction="right" />
             </ButtonPrimary>
           </RowGapBlock>
@@ -133,13 +130,17 @@ export const FundingRequest = () => {
         )}
       </Row>
       {isPreviewModalShown && (
-        <PreviewAndValidateModal previewModalData={previewModalData} setIsPreviewModalShown={setIsPreviewModalShown} setValue={setValue}/>
+        <PreviewAndValidateModal
+          previewModalData={previewModalData}
+          setIsPreviewModalShown={setIsPreviewModalShown}
+          setValue={setValue}
+        />
       )}
     </RowGapBlock>
   )
 }
 const HiddenCheckBox = styled.input.attrs({ type: 'checkbox' })`
-margin-top: -12px;
-height: 0px;
-visibility: hidden;
+  margin-top: -12px;
+  height: 0px;
+  visibility: hidden;
 `
