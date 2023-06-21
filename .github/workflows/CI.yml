@@ -104,10 +104,6 @@ jobs:
       # - name: Install Playwright
       #   run: npx playwright install --with-deps
 
-      - name: Get branch names
-        id: branch-name
-        uses: tj-actions/branch-names@v7
-
       - name: Get the Storybook preview deployment url
         run: |
           if [ "$PREFIX" == 'git-fork' ]; then
