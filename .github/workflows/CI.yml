@@ -109,12 +109,12 @@ jobs:
         uses: tj-actions/branch-names@v7
 
       - run: |
-          echo ${{ toJSON(steps.branch-name.outputs) }}
-          echo ${{ toJSON(github.event.pull_request) }}
-          echo ${{ github.repository }}
-          echo ${{ github.repository_owner }}
-          echo ${{ github.repositoryUrl }}
-          echo ${{ github.ref }}
+          echo "${{ toJSON(steps.branch-name.outputs) }}"
+          echo "${{ toJSON(github.event.pull_request) }}"
+          echo "${{ github.repository }}"
+          echo "${{ github.repository_owner }}"
+          echo "${{ github.repositoryUrl }}"
+          echo "${{ github.ref }}"
 
       - name: Get the Storybook preview deployment url
         run: |
@@ -135,8 +135,9 @@ jobs:
           echo "VERCEL_DEPLOYMENT_URL=$SUBDOMAIN.vercel.app" >> "$GITHUB_ENV"
         env:
           BRANCH: ${{ steps.branch-name.outputs.head_ref_branch }}
-        
-        run: echo "$TARGET_URL"
+
+      - run: echo "$TARGET_URL"
+        env:
           TARGET_URL: https://${{ env.VERCEL_DEPLOYMENT_URL }}
 
       # - name: Wait for the deployment to complete
