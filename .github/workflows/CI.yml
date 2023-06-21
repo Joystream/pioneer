@@ -34,7 +34,7 @@ jobs:
         name: Install dependencies
         run: yarn --immutable
 
-  test:
+  ui-unit-tests:
     needs: install
     timeout-minutes: 60
     strategy:
@@ -72,7 +72,7 @@ jobs:
         run: node --max_old_space_size=7000 --expose-gc $(yarn bin jest) --logHeapUsage --silent
         working-directory: packages/ui
 
-  storybook-test:
+  interaction-tests:
     needs: install
     timeout-minutes: 60
     strategy:
