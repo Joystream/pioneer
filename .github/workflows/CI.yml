@@ -110,10 +110,14 @@ jobs:
 
       - name: Get the Storybook preview deployment url
         run: |
+          if [ "$PREFIX" == 'git-fork' ]; then
+            BRANCH=$(echo -n "$LABEL" | sed 's/:/-/')
+          else
+            BRANCH=$(echo -n "$LABEL" | cut -d ':' -f2-)
+          fi
           URL_BRANCH=$(echo -n "$BRANCH" | tr -d '#' | tr -c '[:alnum:]' '-' | tr '[:upper:]' '[:lower:]')
           SUBDOMAIN="$PROJECT-$PREFIX-$URL_BRANCH-joystream"
           if [ ${#SUBDOMAIN} -gt 63 ]; then
-            [ "$PREFIX" == 'git-fork' ] && BRANCH=$(echo -n "$BRANCH" | sed 's/:/-/')
             HASH=$(echo -n "$PREFIX-$BRANCH$PROJECT" | sha256sum | head -c 6)
             SUBDOMAIN="$(echo -n "$SUBDOMAIN" | head -c 46)-$HASH-joystream"
           fi
@@ -121,7 +125,7 @@ jobs:
         env:
           PROJECT: pioneer-2-storybook
           PREFIX: ${{ github.event.pull_request.head.repo.fork && 'git-fork' || 'git' }}
-          BRANCH: ${{ github.event.pull_request.head.label || github.ref_name }}
+          LABEL: ${{ github.event.pull_request.head.label || github.ref_name }}
 
       - name: Wait for the deployment to complete
         run: |
