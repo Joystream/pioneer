@@ -118,23 +118,18 @@ jobs:
 
       - name: Get the Storybook preview deployment url
         run: |
-          PROJECT="pioneer-2-storybook"
-          PREFIX="git-"
-          URL_BRANCH=$( \
-            node \
-              -e 'process.stdout.write(process.argv[1].replace(/#/g, "").replace(/\W/g, "-").toLowerCase())' \
-              "$BRANCH" \
-          )
-          LONG="$PROJECT-$PREFIX$URL_BRANCH-joystream"
-          SHORT=$(echo "$LONG" | head -c 46)
-          SUBDOMAIN=$( \
-            [ ${#LONG} -le 63 ] \
-              && echo "$LONG" \
-              || echo "$SHORT-$(echo -n "$PREFIX$BRANCH$PROJECT" | sha256sum | head -c 6)" \
-          )
+          URL_BRANCH=$(echo -n "$BRANCH" | tr -d '#' | tr -c '[:alnum:]' '-' | tr '[:upper:]' '[:lower:]')
+          SUBDOMAIN="$PROJECT-$PREFIX-$URL_BRANCH-joystream"
+          if [ ${#SUBDOMAIN} -gt 63 ]; then
+            [ "$PREFIX" == 'git-fork' ] && BRANCH=$(echo -n "$BRANCH" | sed 's/:/-/')
+            HASH=$(echo -n "$PREFIX-$BRANCH$PROJECT" | sha256sum | head -c 6)
+            SUBDOMAIN="$(echo -n "$SUBDOMAIN" | head -c 46)-$HASH-joystream"
+          fi
           echo "VERCEL_DEPLOYMENT_URL=$SUBDOMAIN.vercel.app" >> "$GITHUB_ENV"
         env:
-          BRANCH: ${{ steps.branch-name.outputs.head_ref_branch }}
+          PROJECT: pioneer-2-storybook
+          PREFIX: ${{ github.event.pull_request.head.repo.fork && 'git-fork' || 'git' }}
+          BRANCH: ${{ github.event.pull_request.head.label || github.ref_name }}
 
       - run: echo "$TARGET_URL"
         env:
