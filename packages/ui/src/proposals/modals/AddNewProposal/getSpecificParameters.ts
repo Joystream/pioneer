@@ -1,7 +1,8 @@
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
+import BN from 'bn.js'
 
 import { Api } from '@/api'
-import { BN_ZERO } from '@/common/constants'
+import { BN_ZERO, JOY_DECIMAL_PLACES } from '@/common/constants'
 import { createType } from '@/common/model/createType'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { last } from '@/common/utils'
@@ -13,6 +14,15 @@ import { GroupIdName } from '@/working-groups/types'
 const idToRuntimeId = (id: string): number => Number(last(id.split('-')))
 
 const getWorkingGroupParam = (groupId: GroupIdName | undefined) => groupId && GroupIdToGroupParam[groupId]
+
+const mapAccountsAndAmounts = (input: string | undefined) => {
+  const decimals = new BN(10).pow(new BN(JOY_DECIMAL_PLACES))
+  return input?.split(';\n').map((item) => {
+    const [address, amount] = item.split(',')
+    const formattedAmount = new BN(amount).mul(decimals)
+    return { amount: formattedAmount, account: address }
+  })
+}
 
 export const getSpecificParameters = async (
   api: Api,
@@ -30,9 +40,9 @@ export const getSpecificParameters = async (
     }
     case 'fundingRequest': {
       return createType('PalletProposalsCodexProposalDetails', {
-        FundingRequest: [
-          { amount: specifics?.fundingRequest?.amount, account: specifics?.fundingRequest?.account?.address },
-        ],
+        FundingRequest: specifics?.fundingRequest?.payMultiple
+          ? mapAccountsAndAmounts(specifics?.fundingRequest?.accountsAndAmounts)
+          : [{ amount: specifics?.fundingRequest?.amount, account: specifics?.fundingRequest?.account?.address }],
       })
     }
     case 'runtimeUpgrade': {
