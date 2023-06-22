@@ -1,0 +1,30 @@
+query GetPost($id: ID!) {
+  forumPostByUniqueInput(where: { id: $id }) {
+    author {
+      handle
+    }
+    thread {
+      id
+      title
+    }
+    text
+  }
+}
+
+query GetThread($id: ID!) {
+  forumThreadByUniqueInput(where: { id: $id }) {
+    author {
+      handle
+    }
+    title
+    initialPost {
+      text
+    }
+  }
+}
+
+query getForumCategory($id: ID!) {
+  forumCategoryByUniqueInput(where: { id: $id }) {
+    parentId
+  }
+}

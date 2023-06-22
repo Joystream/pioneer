@@ -54,6 +54,7 @@ import { MemberModalCall, MemberProfile } from '@/memberships/components/MemberP
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals/BuyMembershipModal'
 import { DisconnectWalletModal, DisconnectWalletModalCall } from '@/memberships/modals/DisconnectWalletModal'
+import { EmailSubscriptionModal, EmailSubscriptionModalCall } from '@/memberships/modals/EmailSubscriptionModal'
 import { InviteMemberModal } from '@/memberships/modals/InviteMemberModal'
 import { InviteMemberModalCall } from '@/memberships/modals/InviteMemberModal/types'
 import { SignOutModal } from '@/memberships/modals/SignOutModal/SignOutModal'
@@ -122,6 +123,7 @@ export type ModalNames =
   | ModalName<ReportContentModalCall>
   | ModalName<PostReplyModalCall>
   | ModalName<InviteMemberModalCall>
+  | ModalName<EmailSubscriptionModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -171,6 +173,7 @@ const modals: Record<ModalNames, ReactElement> = {
   UpdateMembershipModal: <UpdateMembershipModal />,
   ReportContentModal: <ReportContentModal />,
   PostReplyModal: <PostReplyModal />,
+  EmailSubscriptionModal: <EmailSubscriptionModal />,
 }
 
 const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [

@@ -1,0 +1,90 @@
+services:
+  - type: web
+    name: api
+    env: node
+    region: frankfurt
+    plan: free
+
+    repo: https://github.com/Joystream/pioneer
+    branch: feature/backend-poc
+
+    buildCommand: yarn --frozen-lockfile && yarn workspace server build
+    startCommand: yarn workspace server start:api
+
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: db
+          property: connectionString
+
+      - key: QUERY_NODE_ENDPOINT
+        fromService:
+          type: cron
+          name: notifier
+          envVarKey: QUERY_NODE_ENDPOINT
+
+      - key: PIONEER_URL
+        fromService:
+          type: cron
+          name: notifier
+          envVarKey: PIONEER_URL
+
+      - key: EMAIL_SENDER
+        fromService:
+          type: cron
+          name: notifier
+          envVarKey: EMAIL_SENDER
+
+      - key: SENDGRID_API_KEY
+        fromService:
+          type: cron
+          name: notifier
+          envVarKey: SENDGRID_API_KEY
+
+      - key: APP_SECRET_KEY
+        generateValue: true
+
+      - key: INITIAL_MEMBERSHIPS
+        sync: false
+
+  - type: cron
+    name: notifier
+    env: node
+    region: frankfurt
+    plan: starter
+
+    repo: https://github.com/Joystream/pioneer
+    branch: feature/backend-poc
+
+    buildCommand: yarn --frozen-lockfile && yarn workspace server build
+    startCommand: yarn workspace server notify
+    schedule: "*/30 * * * *"
+
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: db
+          property: connectionString
+
+      - key: QUERY_NODE_ENDPOINT
+        value: https://query.joystream.org/graphql
+
+      - key: PIONEER_URL
+        value: https://pioneerapp.xyz
+
+      - key: EMAIL_SENDER
+        sync: false
+
+      - key: SENDGRID_API_KEY
+        sync: false
+
+      - key: STARTING_BLOCK
+        sync: false
+
+      - key: APP_LOG_LEVEL
+        value: verbose
+
+databases:
+  - name: db
+    region: frankfurt
+    plan: free
