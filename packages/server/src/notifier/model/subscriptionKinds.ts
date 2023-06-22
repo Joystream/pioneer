@@ -4,7 +4,7 @@ import { pick } from 'lodash'
 const extract = <T extends NotificationKind>(...keys: T[]): Pick<typeof NotificationKind, T> =>
   pick(NotificationKind, ...keys)
 
-export type EntitySubscriptionKind = typeof EntitySubscriptionKind[keyof typeof EntitySubscriptionKind]
+export type EntitySubscriptionKind = (typeof EntitySubscriptionKind)[keyof typeof EntitySubscriptionKind]
 export const EntitySubscriptionKind = extract(
   'FORUM_THREAD_ENTITY_POST',
   'FORUM_CATEGORY_ENTITY_POST',
@@ -16,7 +16,7 @@ export const EntitySubscriptionKind = extract(
   // 'PROPOSAL_ENTITY_DISCUSSION'
 )
 
-export type GeneralSubscriptionKind = typeof GeneralSubscriptionKind[keyof typeof GeneralSubscriptionKind]
+export type GeneralSubscriptionKind = (typeof GeneralSubscriptionKind)[keyof typeof GeneralSubscriptionKind]
 export const GeneralSubscriptionKind = extract(
   'FORUM_POST_ALL',
   'FORUM_POST_MENTION',

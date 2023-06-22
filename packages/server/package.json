@@ -51,7 +51,7 @@
     "@graphql-codegen/cli": "^3.1.0",
     "@graphql-codegen/client-preset": "^2.1.0",
     "@jest/types": "^29.4.3",
-    "@joystream/types": "0.20.6",
+    "@joystream/types": "^2.0.0",
     "@polkadot/keyring": "^11.1.3",
     "@types/babel__core": "^7",
     "@types/babel__preset-env": "^7",

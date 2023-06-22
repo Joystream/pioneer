@@ -1,11 +1,24 @@
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
+import { pick } from 'lodash'
+import yargs from 'yargs'
 
-import { getDataFromEvent, metadataToBytes } from '../../../../src/common/model/JoystreamNode'
+import { createType } from '@/common/model/createType'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
+import { metadataToBytes } from '@/common/model/JoystreamNode'
+import { isDefined } from '@/common/utils'
+
 import { GROUP, GroupIdName } from '../../consts'
-import { getSudoAccount } from '../../data/addresses'
-import { signAndSend, withApi } from '../../lib/api'
+import { withApi } from '../../lib/api'
+import { electCouncilCommand, electCouncilOptions } from '../council/elect'
+import { approveProposal } from '../proposals/approve'
+import { createProposal } from '../proposals/create'
 
-export const addOpeningCommand = async ({ group = GROUP }: { group?: GroupIdName } = {}) => {
+const addOpeningOptions = pick(electCouncilOptions, 'blockTime')
+
+type Args = yargs.InferredOptionTypes<typeof addOpeningOptions>
+type Props = Partial<Args> & { group?: GroupIdName }
+
+export const addOpeningCommand = async ({ group = GROUP, blockTime = MILLISECONDS_PER_BLOCK }: Props) => {
   const title = `Test ${group} opening`
 
   const openingMetadata = {
@@ -22,23 +35,31 @@ export const addOpeningCommand = async ({ group = GROUP }: { group?: GroupIdName
   }
 
   return await withApi(async (api) => {
-    const tx = api.tx[group].addOpening(
-      metadataToBytes(OpeningMetadata, openingMetadata),
-      'Leader',
-      { stakeAmount: api.consts[group].minimumApplicationStake, leavingUnstakingPeriod: 360_000 },
-      '1337'
-    )
+    const { minimumApplicationStake, minUnstakingPeriodLimit } = api.consts[group]
+    const proposalDetails = createType('PalletProposalsCodexProposalDetails', {
+      CreateWorkingGroupLeadOpening: {
+        description: metadataToBytes(OpeningMetadata, openingMetadata),
+        stakePolicy: { stakeAmount: minimumApplicationStake, leavingUnstakingPeriod: minUnstakingPeriodLimit },
+        rewardPerBlock: '1337',
+        group: 'membership',
+      },
+    })
 
-    const events = await signAndSend(api.tx.sudo.sudo(tx), getSudoAccount())
+    // 1. Elect a council
+    await electCouncilCommand(api, { blockTime, replaceCurrent: false })
 
-    return String(getDataFromEvent(events, group, 'OpeningAdded'))
+    // 2. Create a working lead opening proposal
+    const [proposalId] = await createProposal(api, proposalDetails)
+    if (!isDefined(proposalId)) throw 'Failed to create the proposal'
+
+    // 3. Approve the proposal
+    await approveProposal(api, proposalId)
   })
 }
 
 export const createOpeningModule = {
   command: 'opening:create',
   describe: 'Create new opening',
-  handler: async () => {
-    await addOpeningCommand()
-  },
+  handler: ({ blockTime }: Args) => addOpeningCommand({ blockTime }),
+  builder: (argv: yargs.Argv<unknown>) => argv.options(addOpeningOptions),
 }
