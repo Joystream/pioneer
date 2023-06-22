@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { PageHeader } from '@/app/components/PageHeader'
 import { PageLayout } from '@/app/components/PageLayout'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Statistics } from '@/common/components/statistics'
@@ -9,13 +8,11 @@ import { Rewards } from '@/validators/components/statistics/Rewards'
 import { Staking } from '@/validators/components/statistics/Staking'
 import { ValidatorsState } from '@/validators/components/statistics/ValidatorsState'
 
-import { ValidatorsTabs } from './components/ValidatorsTabs'
 export const ValidatorList = () => {
   return (
     <PageLayout
       header={
         <RowGapBlock gap={24}>
-          <PageHeader title="Validators" tabs={<ValidatorsTabs />} />
           <Statistics>
             <ValidatorsState />
             <Staking />
