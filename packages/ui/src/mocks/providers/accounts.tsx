@@ -1,3 +1,4 @@
+import { createType } from '@joystream/types'
 import BN from 'bn.js'
 import { isObject, isString, mapValues } from 'lodash'
 import React, { FC, useCallback, useEffect, useState } from 'react'
@@ -6,7 +7,7 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { Account, AddressToBalanceMap, LockType } from '@/accounts/types'
-import { asBN, whenDefined } from '@/common/utils'
+import { whenDefined } from '@/common/utils'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { Member, asMember } from '@/memberships/types'
@@ -135,4 +136,5 @@ export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts
   )
 }
 
-const asBalance = (balance: Balance = 0): BN => (balance instanceof BN ? balance : asBN(joy(balance)))
+const asBalance = (balance: Balance = 0): BN =>
+  (balance instanceof BN ? balance : createType('BalanceOf', joy(balance))) as BN
