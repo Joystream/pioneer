@@ -197,6 +197,10 @@ export default {
   },
 } satisfies Meta<Args>
 
+// ----------------------------------------------------------------------------
+// ProposalPreview
+// ----------------------------------------------------------------------------
+
 export const AmendConstitution: Story = {
   args: { type: 'AmendConstitutionProposalDetails', constitutionality: 2 },
   parameters: {
@@ -277,6 +281,17 @@ export const UpdateWorkingGroupBudget: Story = {
 }
 export const Veto: Story = {
   args: { type: 'VetoProposalDetails' },
+}
+
+// ----------------------------------------------------------------------------
+// VoteForProposalModal
+// ----------------------------------------------------------------------------
+
+export const VoteForProposalModal: Story = {
+  args: { type: 'SignalProposalDetails', isCouncilMember: true },
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByText('Vote on Proposal'))
+  },
 }
 
 // ----------------------------------------------------------------------------
