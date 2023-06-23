@@ -48,15 +48,18 @@ const RHFDecorator: Decorator = (Story) => {
   )
 }
 
-const RouterDecorator: Decorator = (Story, { parameters }) => (
-  <MemoryRouter initialEntries={[`/story/${parameters.router?.href ?? ''}`]}>
-    <Switch>
-      <Route component={Story} path={`/story/${parameters.router?.path ?? ''}`} />
-      <Route exact path="/404" component={NotFound} />
-      <Redirect from="*" to="/404" />
-    </Switch>
-  </MemoryRouter>
-)
+const RouterDecorator: Decorator = (Story, { parameters }) => {
+  const storyPath = `/story/${parameters.router?.href ?? ''}`
+  return (
+    <MemoryRouter initialEntries={[storyPath]}>
+      <Switch>
+        <Route component={Story} path={`/story/${parameters.router?.path ?? ''}`} />
+        {parameters.enable404 && <Route path="*" component={NotFound} />}
+        <Redirect from="*" to={storyPath} />
+      </Switch>
+    </MemoryRouter>
+  )
+}
 
 const ModalDecorator: Decorator = (Story) => (
   <TransactionStatusProvider>
