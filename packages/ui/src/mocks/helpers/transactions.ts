@@ -12,8 +12,8 @@ export type TxMock = {
   failure?: string
   event?: string
   fee?: Balance
-  onCall?: (...args: any[]) => any | ((...args: any[]) => any)[]
-  onSubmission?: (...args: any[]) => any | ((...args: any[]) => any)[]
+  onCall?: CallableFunction | CallableFunction[]
+  onSend?: CallableFunction | CallableFunction[]
 }
 
 export const fromTxMock = (
@@ -27,14 +27,14 @@ export const fromTxMock = (
   const paymentInfo = () => of({ partialFee: createType('BalanceOf', joy(fee)) })
 
   const onCall = [rest.onCall ?? []].flat()
-  const onSubmission = [rest.onSubmission ?? []].flat()
+  const onSend = [rest.onSend ?? []].flat()
 
   return (...args: any[]) => {
     onCall.map((spy) => spy(...args))
     return {
       paymentInfo,
       signAndSend: () => {
-        onSubmission.map((spy) => spy(...args))
+        onSend.map((spy) => spy(...args))
         return txResult
       },
     }
