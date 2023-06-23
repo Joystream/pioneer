@@ -127,6 +127,10 @@ export default {
             },
             referendum: { stage: {} },
           },
+
+          tx: {
+            proposalsEngine: { vote: { event: 'Voted' } },
+          },
         },
 
         queryNode: [
