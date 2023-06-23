@@ -20,6 +20,8 @@ import { mockedBalances, mockedMyBalances, mockedUseMyAccounts } from '../setup'
 
 import { createBalanceLock, createRuntimeDispatchInfo } from './chainTypes'
 
+export const currentStubErrorMessage = 'Balance too low to send value.'
+
 const createBatchSuccessEvents = () => [
   {
     phase: { ApplyExtrinsic: 2 },
@@ -48,7 +50,7 @@ const createBatchErrorEvents = () => [
 ]
 
 export const stubTransactionFailure = (transaction: any) => {
-  set(transaction, 'signAndSend', () => stubTransactionResult(createErrorEvents()))
+  set(transaction, 'signAndSend', () => stubTransactionResult(createErrorEvents(currentStubErrorMessage)))
 }
 
 type PartialTuple<T extends AnyTuple> = Partial<T>

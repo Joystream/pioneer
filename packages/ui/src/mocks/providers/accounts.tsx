@@ -15,7 +15,7 @@ import { Member, asMember } from '@/memberships/types'
 import { Membership } from '../data/members'
 import { joy } from '../helpers'
 
-type Balance = number | string | BN
+export type Balance = number | string | BN
 
 type BalanceLock = LockType | { amount: Balance; type: LockType }
 type DeriveBalancesVesting = {

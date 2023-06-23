@@ -10,9 +10,8 @@ import { ApiContext } from '@/api/providers/context'
 import { UseApi } from '@/api/providers/provider'
 import { createType } from '@/common/model/createType'
 
-import { joy } from '../helpers'
 import { asChainData } from '../helpers/asChainData'
-import { createSuccessEvents, stubTransactionResult } from '../helpers/transactions'
+import { TxMock, fromTxMock } from '../helpers/transactions'
 
 export const BLOCK_HEAD = 1337
 export const BLOCK_HASH = '0x1234567890'
@@ -26,7 +25,7 @@ type MockApi = {
   derive?: RecursiveMock<Api['derive'], CallableFunction>
   query?: RecursiveMock<AugmentedQueries<'rxjs'>, CallableFunction>
   rpc?: RecursiveMock<RpcInterface, CallableFunction>
-  tx?: RecursiveMock<AugmentedSubmittables<'rxjs'>, CallableFunction, { paymentInfo?: any; signAndSend?: any }>
+  tx?: RecursiveMock<AugmentedSubmittables<'rxjs'>, CallableFunction, TxMock>
 }
 
 export type MockApiProps = { chain?: MockApi }
@@ -68,19 +67,11 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
     traverseParams('derive', (path, value) => set(api, path, asApiMethod(value)))
     traverseParams('query', (path, value) => set(api, path, asApiMethod(value)))
     traverseParams('rpc', (path, value) => set(api, path, asApiMethod(value)))
-    traverseParams('tx', (path, { paymentInfo, signAndSend }, moduleName) => {
-      set(api, path, () => {
-        const event = createSuccessEvents(signAndSend ?? [], moduleName, 'EventName') // TODO pass the actual event name
-        return {
-          paymentInfo: asApiMethod({ partialFee: joy(paymentInfo ?? 5) }),
-          signAndSend: () => signAndSend ?? stubTransactionResult(event),
-        }
-      })
-    })
+    traverseParams<TxMock>('tx', (path, txMock, moduleName) => set(api, path, fromTxMock(txMock, moduleName)))
 
     return api
 
-    function traverseParams(kind: keyof MockApi, fn: (path: string, value: any, moduleName: string) => any) {
+    function traverseParams<T>(kind: keyof MockApi, fn: (path: string, value: T, moduleName: string) => any) {
       Object.entries(chain?.[kind] ?? {}).forEach(([moduleName, moduleParam]) =>
         Object.entries(moduleParam as Record<string, any>).forEach(([key, value]) =>
           fn(`${kind}.${moduleName}.${key}`, value, moduleName)
