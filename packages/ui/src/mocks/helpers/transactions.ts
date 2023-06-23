@@ -12,29 +12,25 @@ export type TxMock = {
   failure?: string
   event?: string
   fee?: Balance
-  onCall?: CallableFunction | CallableFunction[]
-  onSend?: CallableFunction | CallableFunction[]
+  onCall?: CallableFunction
+  onSend?: CallableFunction
 }
 
 export const fromTxMock = (
-  { failure, event: eventName = 'Default Event', fee = 5, ...rest }: TxMock,
+  { data, failure, event: eventName = 'Default Event', fee = 5, onCall, onSend }: TxMock,
   moduleName: string
 ) => {
-  const data = [rest.data ?? []].flat()
-  const event = failure ? createErrorEvents(failure) : createSuccessEvents(data, moduleName, eventName)
+  const event = failure ? createErrorEvents(failure) : createSuccessEvents([data ?? []].flat(), moduleName, eventName)
   const txResult = stubTransactionResult(event)
 
   const paymentInfo = () => of({ partialFee: createType('BalanceOf', joy(fee)) })
 
-  const onCall = [rest.onCall ?? []].flat()
-  const onSend = [rest.onSend ?? []].flat()
-
   return (...args: any[]) => {
-    onCall.map((spy) => spy(...args))
+    onCall?.(...args)
     return {
       paymentInfo,
       signAndSend: () => {
-        onSend.map((spy) => spy(...args))
+        onSend?.(...args)
         return txResult
       },
     }
