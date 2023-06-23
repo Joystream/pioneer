@@ -25,18 +25,20 @@ type DeriveBalancesVesting = {
   locked: Balance
   vested: Balance
 }
-type Balances = {
-  total?: Balance
-  locked?: Balance
-  recoverable?: Balance
-  transferable?: Balance
-  locks?: BalanceLock[]
-  vesting?: DeriveBalancesVesting[]
-  vestingTotal?: Balance
-  vestedClaimable?: Balance
-  vestedBalance?: Balance
-  vestingLocked?: Balance
-}
+type Balances =
+  | Balance
+  | {
+      total?: Balance
+      locked?: Balance
+      recoverable?: Balance
+      transferable?: Balance
+      locks?: BalanceLock[]
+      vesting?: DeriveBalancesVesting[]
+      vestingTotal?: Balance
+      vestedClaimable?: Balance
+      vestedBalance?: Balance
+      vestingLocked?: Balance
+    }
 
 type AccountMock = {
   balances?: Balances
@@ -66,27 +68,28 @@ export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts
     const allAccounts: Account[] = accountData.map(({ address, member }) => ({ address, name: member?.handle }))
 
     const balances: AddressToBalanceMap = Object.fromEntries(
-      accountData.map(({ address, balances }) => {
+      accountData.map(({ address, balances = 100 }) => {
+        const _balances = isObject(balances) && !(balances instanceof BN) ? balances : { total: balances }
         const locks =
-          balances?.locks?.map((lock) =>
+          _balances?.locks?.map((lock) =>
             isString(lock) ? { amount: asBalance(1), type: lock } : { amount: asBalance(lock.amount), type: lock.type }
           ) ?? []
 
-        const vesting = balances?.vesting?.map((schedule) => mapValues(schedule, asBalance)) ?? []
+        const vesting = _balances?.vesting?.map((schedule) => mapValues(schedule, asBalance)) ?? []
 
         return [
           address,
           {
-            total: asBalance(balances?.total),
-            locked: asBalance(balances?.locked),
-            recoverable: asBalance(balances?.recoverable),
-            transferable: asBalance(balances?.transferable),
+            total: asBalance(_balances.total ?? _balances.transferable),
+            locked: asBalance(_balances.locked),
+            recoverable: asBalance(_balances.recoverable),
+            transferable: asBalance(_balances.transferable ?? _balances.total),
             locks,
             vesting,
-            vestingTotal: asBalance(balances?.vestingTotal),
-            vestedClaimable: asBalance(balances?.vestedClaimable),
-            vestedBalance: asBalance(balances?.vestedBalance),
-            vestingLocked: asBalance(balances?.vestingLocked),
+            vestingTotal: asBalance(_balances.vestingTotal),
+            vestedClaimable: asBalance(_balances.vestedClaimable),
+            vestedBalance: asBalance(_balances.vestedBalance),
+            vestingLocked: asBalance(_balances.vestingLocked),
           },
         ]
       })
