@@ -9,6 +9,10 @@ import { createType } from '@/common/model/createType'
 
 import { joy } from '../helpers'
 import { asChainData } from '../helpers/asChainData'
+import { createSuccessEvents, stubTransactionResult } from '../helpers/transactions'
+
+export const BLOCK_HEAD = 1337
+export const BLOCK_HASH = '0x1234567890'
 
 type MockApi = {
   consts?: Record<string, any>
@@ -29,12 +33,11 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
     if (!chain) return
 
     // Add default mocks
-    const blockHash = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'
     const blockHead = {
-      parentHash: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-      number: 1337,
-      stateRoot: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-      extrinsicsRoot: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+      parentHash: BLOCK_HASH,
+      number: BLOCK_HEAD,
+      stateRoot: BLOCK_HASH,
+      extrinsicsRoot: BLOCK_HASH,
       digest: { logs: [] },
     }
 
@@ -46,7 +49,7 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
       query: {},
       rpc: {
         chain: {
-          getBlockHash: asApiMethod(createType('BlockHash', blockHash)),
+          getBlockHash: asApiMethod(createType('BlockHash', BLOCK_HASH)),
           subscribeNewHeads: asApiMethod(createType('Header', blockHead)),
         },
       },
@@ -58,16 +61,23 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
     traverseParams('derive', (path, value) => set(api, path, asApiMethod(value)))
     traverseParams('query', (path, value) => set(api, path, asApiMethod(value)))
     traverseParams('rpc', (path, value) => set(api, path, asApiMethod(value)))
-    traverseParams('tx', (path, { paymentInfo, signAndSend }) => {
-      set(api.tx, `${path}.paymentInfo`, asApiMethod(paymentInfo ?? joy(5)))
-      set(api.tx, `${path}.signAndSend`, asApiMethod(signAndSend ?? undefined))
+    traverseParams('tx', (path, { paymentInfo, signAndSend }, moduleName) => {
+      set(api, path, () => {
+        const event = createSuccessEvents(signAndSend ?? [], moduleName, 'EventName') // TODO pass the actual event name
+        return {
+          paymentInfo: asApiMethod({ partialFee: joy(paymentInfo ?? 5) }),
+          signAndSend: () => signAndSend ?? stubTransactionResult(event),
+        }
+      })
     })
 
     return api
 
-    function traverseParams(kind: keyof MockApi, fn: (path: string, value: any) => any) {
+    function traverseParams(kind: keyof MockApi, fn: (path: string, value: any, moduleName: string) => any) {
       Object.entries(chain?.[kind] ?? {}).forEach(([moduleName, moduleParam]) =>
-        Object.entries(moduleParam).forEach(([key, value]) => fn(`${kind}.${moduleName}.${key}`, value))
+        Object.entries(moduleParam as Record<string, any>).forEach(([key, value]) =>
+          fn(`${kind}.${moduleName}.${key}`, value, moduleName)
+        )
       )
     }
   }, [chain])

@@ -1,6 +1,8 @@
 import { DocumentNode } from '@apollo/client/core'
 import React, { FC, createContext, useCallback, useContext, useMemo, useState } from 'react'
 
+import { BLOCK_HEAD } from './api'
+
 export { ApolloClient, gql, HttpLink, InMemoryCache } from '@apollo/client/core'
 export { ApolloProvider } from '@apollo/client/react'
 
@@ -24,7 +26,7 @@ export const useLazyQuery = (query: DocumentNode, options?: Options): [() => voi
   return [get, lazyResult]
 }
 
-export const useSubscription = useQuery
+export const useSubscription = () => ({ data: { stateSubscription: { indexerHead: BLOCK_HEAD } } })
 
 export const useApolloClient = () => ({
   refetchQueries: () => undefined,

@@ -5,9 +5,14 @@ import { useForm, FormProvider } from 'react-hook-form'
 import { MemoryRouter, Redirect, Route, Switch } from 'react-router'
 import { createGlobalStyle } from 'styled-components'
 
+import { GlobalModals } from '../src/app/GlobalModals'
 import { NotFound } from '../src/app/pages/NotFound'
 import { GlobalStyle } from '../src/app/providers/GlobalStyle'
+import { NotificationsHolder } from '../src/common/components/page/SideNotification'
+import { TransactionStatus } from '../src/common/components/TransactionStatus/TransactionStatus'
 import { Colors } from '../src/common/constants'
+import { ModalContextProvider } from '../src/common/providers/modal/provider'
+import { TransactionStatusProvider } from '../src/common/providers/transactionStatus/provider'
 import { MockProvidersDecorator } from '../src/mocks/providers'
 import { i18next } from '../src/services/i18n'
 
@@ -53,7 +58,20 @@ const RouterDecorator: Decorator = (Story, { parameters }) => (
   </MemoryRouter>
 )
 
+const ModalDecorator: Decorator = (Story) => (
+  <TransactionStatusProvider>
+    <ModalContextProvider>
+      <Story />
+      <GlobalModals />
+      <NotificationsHolder>
+        <TransactionStatus />
+      </NotificationsHolder>
+    </ModalContextProvider>
+  </TransactionStatusProvider>
+)
+
 export const decorators = [
+  ModalDecorator,
   stylesWrapperDecorator,
   i18nextDecorator,
   RHFDecorator,
