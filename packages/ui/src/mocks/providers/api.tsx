@@ -1,3 +1,6 @@
+import { AugmentedConsts, AugmentedQueries, AugmentedSubmittables } from '@polkadot/api/types'
+import { RpcInterface } from '@polkadot/rpc-core/types'
+import { Codec } from '@polkadot/types/types'
 import { isFunction, set } from 'lodash'
 import React, { FC, useEffect, useMemo, useState } from 'react'
 import { Observable, of } from 'rxjs'
@@ -14,12 +17,16 @@ import { createSuccessEvents, stubTransactionResult } from '../helpers/transacti
 export const BLOCK_HEAD = 1337
 export const BLOCK_HASH = '0x1234567890'
 
+type RecursiveMock<T extends Record<any, any>, R, V = any> = {
+  [K in keyof T]?: T[K] extends R ? V : RecursiveMock<T[K], R, V>
+}
+
 type MockApi = {
-  consts?: Record<string, any>
-  derive?: Record<string, any>
-  query?: Record<string, any>
-  rpc?: Record<string, any>
-  tx?: Record<string, { paymentInfo?: any; signAndSend?: any }>
+  consts?: RecursiveMock<AugmentedConsts<'rxjs'>, Codec>
+  derive?: RecursiveMock<Api['derive'], CallableFunction>
+  query?: RecursiveMock<AugmentedQueries<'rxjs'>, CallableFunction>
+  rpc?: RecursiveMock<RpcInterface, CallableFunction>
+  tx?: RecursiveMock<AugmentedSubmittables<'rxjs'>, CallableFunction, { paymentInfo?: any; signAndSend?: any }>
 }
 
 export type MockApiProps = { chain?: MockApi }
