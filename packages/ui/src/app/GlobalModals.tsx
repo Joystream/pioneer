@@ -42,6 +42,7 @@ import { RevealVoteModal, RevealVoteModalCall } from '@/council/modals/RevealVot
 import { VoteForCouncilModal, VoteForCouncilModalCall } from '@/council/modals/VoteForCouncil'
 import { WithdrawCandidacyModal } from '@/council/modals/WithdrawCandidacyModal'
 import { WithdrawCandidacyModalCall } from '@/council/modals/WithdrawCandidacyModal/types'
+import { CreateOpeningModal, CreateOpeningModalCall } from '@/working-groups/modals/CreateOpening'
 import { CreateThreadModal, CreateThreadModalCall } from '@/forum/modals/CreateThreadModal'
 import { DeleteThreadModal, DeleteThreadModalCall } from '@/forum/modals/DeleteThreadModal'
 import { EditThreadTitleModal, EditThreadTitleModalCall } from '@/forum/modals/EditThreadTitleModal'
@@ -87,6 +88,7 @@ export type ModalNames =
   | ModalName<MoveFundsModalCall>
   | ModalName<AddNewProposalModalCall>
   | ModalName<VoteRationaleModalCall>
+  | ModalName<CreateOpeningModalCall>
   | ModalName<CreateThreadModalCall>
   | ModalName<DeleteThreadModalCall>
   | ModalName<DeletePostModalCall>
@@ -131,6 +133,7 @@ const modals: Record<ModalNames, ReactElement> = {
   ApplyForRoleModal: <ApplyForRoleModal />,
   ApplicationDetails: <ApplicationDetailsModal />,
   SwitchMember: <SwitchMemberModal />,
+  CreateOpening: <CreateOpeningModal />,
   LeaveRole: <LeaveRoleModal />,
   ChangeAccountModal: <ChangeAccountModal />,
   MoveFundsModal: <MoveFundsModal />,
@@ -193,6 +196,7 @@ const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
 export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [
   'AddNewProposalModal',
   'AnnounceCandidateModal',
+  'CreateOpening',
   'CreatePost',
   'CreateThreadModal',
   'ApplyForRoleModal',

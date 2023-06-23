@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
@@ -6,9 +6,11 @@ import { MainPanel } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { Label } from '@/common/components/typography'
+import { CreateOpeningButton } from '@/working-groups/components/CreateOpeningButton'
 import { LoadingOpenings } from '@/working-groups/components/OpeningsList'
 import { WorkersList } from '@/working-groups/components/WorkersList'
 import { useGroupDebt } from '@/working-groups/hooks/useGroupDebt'
+import { useMyWorkers } from '@/working-groups/hooks/useMyWorkers'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
 import { useWorkers } from '@/working-groups/hooks/useWorkers'
@@ -22,6 +24,8 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
   const { isLoading: isLoadingUpcoming, upcomingOpenings } = useUpcomingOpenings({ groupId: workingGroup.id })
   const { isLoading: isLoadingCurrent, openings } = useOpenings({ groupId: workingGroup.id, type: 'open' })
   const { debt } = useGroupDebt(workingGroup.id)
+  const { isLoading, workers } = useMyWorkers()
+  const isLead = useMemo(() => workers.find((w) => w.membership.id === workingGroup.leadId), [!isLoading])
 
   return (
     <MainPanel>
@@ -60,6 +64,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
       <OpeningsCategories>
         <OpeningsCategory>
           <Label>Openings</Label>
+          {isLead && <CreateOpeningButton group={workingGroup.id} />}
           <LoadingOpenings isLoading={isLoadingCurrent} openings={openings} />
         </OpeningsCategory>
       </OpeningsCategories>
