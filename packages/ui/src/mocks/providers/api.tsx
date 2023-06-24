@@ -1,3 +1,6 @@
+import { AugmentedConsts, AugmentedQueries, AugmentedSubmittables } from '@polkadot/api/types'
+import { RpcInterface } from '@polkadot/rpc-core/types'
+import { Codec } from '@polkadot/types/types'
 import { isFunction, set } from 'lodash'
 import React, { FC, useEffect, useMemo, useState } from 'react'
 import { Observable, of } from 'rxjs'
@@ -7,15 +10,22 @@ import { ApiContext } from '@/api/providers/context'
 import { UseApi } from '@/api/providers/provider'
 import { createType } from '@/common/model/createType'
 
-import { joy } from '../helpers'
 import { asChainData } from '../helpers/asChainData'
+import { TxMock, fromTxMock } from '../helpers/transactions'
+
+export const BLOCK_HEAD = 1337
+export const BLOCK_HASH = '0x1234567890'
+
+type RecursiveMock<T extends Record<any, any>, R, V = any> = {
+  [K in keyof T]?: T[K] extends R ? V : RecursiveMock<T[K], R, V>
+}
 
 type MockApi = {
-  consts?: Record<string, any>
-  derive?: Record<string, any>
-  query?: Record<string, any>
-  rpc?: Record<string, any>
-  tx?: Record<string, { paymentInfo?: any; signAndSend?: any }>
+  consts?: RecursiveMock<AugmentedConsts<'rxjs'>, Codec>
+  derive?: RecursiveMock<Api['derive'], CallableFunction>
+  query?: RecursiveMock<AugmentedQueries<'rxjs'>, CallableFunction>
+  rpc?: RecursiveMock<RpcInterface, CallableFunction>
+  tx?: RecursiveMock<AugmentedSubmittables<'rxjs'>, CallableFunction, TxMock>
 }
 
 export type MockApiProps = { chain?: MockApi }
@@ -29,12 +39,11 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
     if (!chain) return
 
     // Add default mocks
-    const blockHash = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'
     const blockHead = {
-      parentHash: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-      number: 1337,
-      stateRoot: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-      extrinsicsRoot: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+      parentHash: BLOCK_HASH,
+      number: BLOCK_HEAD,
+      stateRoot: BLOCK_HASH,
+      extrinsicsRoot: BLOCK_HASH,
       digest: { logs: [] },
     }
 
@@ -46,7 +55,7 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
       query: {},
       rpc: {
         chain: {
-          getBlockHash: asApiMethod(createType('BlockHash', blockHash)),
+          getBlockHash: asApiMethod(createType('BlockHash', BLOCK_HASH)),
           subscribeNewHeads: asApiMethod(createType('Header', blockHead)),
         },
       },
@@ -58,16 +67,15 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
     traverseParams('derive', (path, value) => set(api, path, asApiMethod(value)))
     traverseParams('query', (path, value) => set(api, path, asApiMethod(value)))
     traverseParams('rpc', (path, value) => set(api, path, asApiMethod(value)))
-    traverseParams('tx', (path, { paymentInfo, signAndSend }) => {
-      set(api.tx, `${path}.paymentInfo`, asApiMethod(paymentInfo ?? joy(5)))
-      set(api.tx, `${path}.signAndSend`, asApiMethod(signAndSend ?? undefined))
-    })
+    traverseParams<TxMock>('tx', (path, txMock, moduleName) => set(api, path, fromTxMock(txMock, moduleName)))
 
     return api
 
-    function traverseParams(kind: keyof MockApi, fn: (path: string, value: any) => any) {
+    function traverseParams<T>(kind: keyof MockApi, fn: (path: string, value: T, moduleName: string) => any) {
       Object.entries(chain?.[kind] ?? {}).forEach(([moduleName, moduleParam]) =>
-        Object.entries(moduleParam).forEach(([key, value]) => fn(`${kind}.${moduleName}.${key}`, value))
+        Object.entries(moduleParam as Record<string, any>).forEach(([key, value]) =>
+          fn(`${kind}.${moduleName}.${key}`, value, moduleName)
+        )
       )
     }
   }, [chain])

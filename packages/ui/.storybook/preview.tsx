@@ -5,9 +5,14 @@ import { useForm, FormProvider } from 'react-hook-form'
 import { MemoryRouter, Redirect, Route, Switch } from 'react-router'
 import { createGlobalStyle } from 'styled-components'
 
+import { GlobalModals } from '../src/app/GlobalModals'
 import { NotFound } from '../src/app/pages/NotFound'
 import { GlobalStyle } from '../src/app/providers/GlobalStyle'
+import { NotificationsHolder } from '../src/common/components/page/SideNotification'
+import { TransactionStatus } from '../src/common/components/TransactionStatus/TransactionStatus'
 import { Colors } from '../src/common/constants'
+import { ModalContextProvider } from '../src/common/providers/modal/provider'
+import { TransactionStatusProvider } from '../src/common/providers/transactionStatus/provider'
 import { MockProvidersDecorator } from '../src/mocks/providers'
 import { i18next } from '../src/services/i18n'
 
@@ -43,17 +48,33 @@ const RHFDecorator: Decorator = (Story) => {
   )
 }
 
-const RouterDecorator: Decorator = (Story, { parameters }) => (
-  <MemoryRouter initialEntries={[`/story/${parameters.router?.href ?? ''}`]}>
-    <Switch>
-      <Route component={Story} path={`/story/${parameters.router?.path ?? ''}`} />
-      <Route exact path="/404" component={NotFound} />
-      <Redirect from="*" to="/404" />
-    </Switch>
-  </MemoryRouter>
+const RouterDecorator: Decorator = (Story, { parameters }) => {
+  const storyPath = `/story/${parameters.router?.href ?? ''}`
+  return (
+    <MemoryRouter initialEntries={[storyPath]}>
+      <Switch>
+        <Route component={Story} path={`/story/${parameters.router?.path ?? ''}`} />
+        {parameters.enable404 && <Route path="*" component={NotFound} />}
+        <Redirect from="*" to={storyPath} />
+      </Switch>
+    </MemoryRouter>
+  )
+}
+
+const ModalDecorator: Decorator = (Story) => (
+  <TransactionStatusProvider>
+    <ModalContextProvider>
+      <Story />
+      <GlobalModals />
+      <NotificationsHolder>
+        <TransactionStatus />
+      </NotificationsHolder>
+    </ModalContextProvider>
+  </TransactionStatusProvider>
 )
 
 export const decorators = [
+  ModalDecorator,
   stylesWrapperDecorator,
   i18nextDecorator,
   RHFDecorator,
@@ -91,7 +112,7 @@ export const parameters = {
   options: {
     storySort: {
       method: 'alphabetical',
-      order: ['Common'],
+      order: ['Pages', 'Common'],
     },
   },
 }
