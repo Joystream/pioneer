@@ -16,7 +16,7 @@ import {
   proposalActiveStatus,
   proposalDetailsMap,
 } from '@/mocks/data/proposals'
-import { isoDate, joy, merge } from '@/mocks/helpers'
+import { getButtonByText, getEditorByLabel, withinModal, isoDate, joy } from '@/mocks/helpers'
 import { ProposalDetailsType, proposalDetailsToConstantKey } from '@/mocks/helpers/proposalDetailsToConstantKey'
 import { MocksParameters } from '@/mocks/providers'
 import { GetProposalDocument, ProposalWithDetailsFieldsFragment } from '@/proposals/queries'
@@ -49,6 +49,7 @@ type Args = {
   vote1: VoteArg
   vote2: VoteArg
   vote3: VoteArg
+  onVote: CallableFunction
 }
 type Story = StoryObj<FC<Args>>
 
@@ -62,6 +63,7 @@ export default {
     vote1: { control: { type: 'inline-radio' }, options: voteArgs },
     vote2: { control: { type: 'inline-radio' }, options: voteArgs },
     vote3: { control: { type: 'inline-radio' }, options: voteArgs },
+    onVote: { action: 'Voted' },
   },
 
   args: {
@@ -129,7 +131,7 @@ export default {
           },
 
           tx: {
-            proposalsEngine: { vote: { event: 'Voted' } },
+            proposalsEngine: { vote: { event: 'Voted', onSend: args.onVote } },
           },
         },
 
@@ -295,7 +297,7 @@ export const VoteForProposalModal: Story = {
 }
 
 // ----------------------------------------------------------------------------
-// Tests
+// Test ProposalPreview
 // ----------------------------------------------------------------------------
 
 export const TestsIsNotCouncil: Story = {
@@ -393,3 +395,53 @@ export const TestsHasNotInCurrentRound: Story = {
     expect(screen.getByText(/You voted for:/i)).toHaveTextContent('You voted for: Approved')
   },
 }
+
+// ----------------------------------------------------------------------------
+// VoteForProposalModal
+// ----------------------------------------------------------------------------
+
+export const TestVoteForProposalModal: Story = {
+  args: { type: 'SignalProposalDetails', isCouncilMember: true },
+
+  name: 'Test VoteForProposalModal',
+  play: async ({ canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    await userEvent.click(screen.getByText('Vote on Proposal'))
+
+    await step('Render', async () => {
+      await modal.findByText(/Vote for proposal/i)
+      modal.getByText(PROPOSAL_DATA.title)
+    })
+
+    const getButton = (text: string | RegExp) => getButtonByText(modal, text)
+
+    await step('Form > Empty', () => {
+      expect(getButton(/^sign transaction and vote/i)).toBeDisabled()
+      getButton(/^Reject/i)
+      getButton(/^Approve/i)
+      getButton(/^Abstain/i)
+    })
+
+    const rationaleEditor = await getEditorByLabel(modal, /Rationale/i)
+
+    await step('No vote type selected', async () => {
+      rationaleEditor.setData('Some rationale')
+      expect(getButton(/^sign transaction and vote/i)).toBeDisabled()
+    })
+
+    await step('Form > No rationale', async () => {
+      rationaleEditor.setData('')
+      await userEvent.click(getButton(/^Approve/i))
+      expect(getButton(/^sign transaction and vote/i)).toBeDisabled()
+    })
+
+    await step('Form > Filled', async () => {
+      rationaleEditor.setData('Some rationale')
+      expect(getButton(/^sign transaction and vote/i)).not.toBeDisabled()
+    })
+  },
+}
+
+// TODO: Test Requirements verification
