@@ -20,7 +20,7 @@ export interface BaseCKEditorProps {
 
 export const BaseCKEditor = React.forwardRef(
   (
-    { maxRows = 20, minRows = 5, onChange, onBlur, onFocus, onReady, disabled, inline }: CKEditorProps,
+    { id, maxRows = 20, minRows = 5, onChange, onBlur, onFocus, onReady, disabled, inline }: BaseCKEditorProps,
     ref?: Ref<HTMLDivElement>
   ) => {
     const localRef = useRef<HTMLDivElement>(null)
@@ -78,6 +78,10 @@ export const BaseCKEditor = React.forwardRef(
           language: 'en',
         })
         .then((editor: any) => {
+          Object.defineProperty(elementRef.current, 'setData', {
+            value: (value: any) => editorRef.current?.setData(value),
+          })
+
           if (onReady) {
             onReady(editor)
           }
@@ -111,12 +115,12 @@ export const BaseCKEditor = React.forwardRef(
       return () => {
         createPromise.then((editor) => editor.destroy())
       }
-    }, [elementRef.current])
+    }, [])
 
     return (
       <>
         <CKEditorStylesOverrides maxRows={maxRows} minRows={minRows} />
-        <div className="ckeditor-anchor" ref={elementRef} />
+        <div id={id} className="ckeditor-anchor" ref={elementRef} />
       </>
     )
   }
