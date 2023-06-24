@@ -62,15 +62,18 @@ const RouterDecorator: Decorator = (Story, { parameters }) => {
 }
 
 const ModalDecorator: Decorator = (Story) => (
-  <TransactionStatusProvider>
-    <ModalContextProvider>
-      <Story />
-      <GlobalModals />
-      <NotificationsHolder>
-        <TransactionStatus />
-      </NotificationsHolder>
-    </ModalContextProvider>
-  </TransactionStatusProvider>
+  <>
+    <div id="modal-container" />
+    <TransactionStatusProvider>
+      <ModalContextProvider>
+        <Story />
+        <GlobalModals />
+        <NotificationsHolder>
+          <TransactionStatus />
+        </NotificationsHolder>
+      </ModalContextProvider>
+    </TransactionStatusProvider>
+  </>
 )
 
 export const decorators = [
