@@ -299,9 +299,9 @@ export const VoteForProposalModal: Story = {
 // ----------------------------------------------------------------------------
 
 export const TestsIsNotCouncil: Story = {
-  ...merge<Story>(SetMaxValidatorCount, { args: { isCouncilMember: false, isProposer: true } }),
+  args: { type: 'SetMaxValidatorCountProposalDetails', constitutionality: 2, isCouncilMember: false, isProposer: true },
 
-  name: 'Test: Is not in council',
+  name: 'Test ProposalPreview > Is not in council',
   play: async ({ canvasElement, step }) => {
     const screen = within(canvasElement)
 
@@ -347,9 +347,9 @@ export const TestsIsNotCouncil: Story = {
 }
 
 export const TestsHasNotVoted: Story = {
-  ...merge<Story>(SetMaxValidatorCount, { args: { isCouncilMember: true, isProposer: true } }),
+  args: { type: 'SetMaxValidatorCountProposalDetails', constitutionality: 2, isCouncilMember: true, isProposer: true },
 
-  name: 'Test: Has not voted',
+  name: 'Test ProposalPreview > Has not voted',
   play: async ({ canvasElement }) => {
     const screen = within(canvasElement)
     expect(screen.queryByText(/You voted for:/i)).toBeNull()
@@ -357,19 +357,14 @@ export const TestsHasNotVoted: Story = {
 }
 
 export const TestsHasInCurrentRound: Story = {
-  ...merge<Story>(
-    { ...SetMaxValidatorCount, parameters: {} },
-    {
-      args: { isCouncilMember: true, isProposer: true },
-      parameters: {
-        statuses: ['ProposalStatusDeciding'] satisfies ProposalStatus[],
-        councilApprovals: 0,
-        votes: [['Reject', 'Approve', 'Approve']] satisfies VoteArg[][],
-      },
-    }
-  ),
+  args: { type: 'SetMaxValidatorCountProposalDetails', constitutionality: 2, isCouncilMember: true, isProposer: true },
+  parameters: {
+    statuses: ['ProposalStatusDeciding'] satisfies ProposalStatus[],
+    councilApprovals: 0,
+    votes: [['Reject', 'Approve', 'Approve']] satisfies VoteArg[][],
+  },
 
-  name: 'Test: Has voted in the current round',
+  name: 'Test ProposalPreview > Has voted in the current round',
   play: async ({ canvasElement }) => {
     const screen = within(canvasElement)
 
@@ -379,25 +374,16 @@ export const TestsHasInCurrentRound: Story = {
 }
 
 export const TestsHasNotInCurrentRound: Story = {
-  ...merge<Story>(
-    { ...SetMaxValidatorCount, parameters: {} },
-    {
-      args: { isCouncilMember: true, isProposer: true },
-      parameters: {
-        statuses: [
-          'ProposalStatusDeciding',
-          'ProposalStatusDormant',
-          'ProposalStatusDeciding',
-        ] satisfies ProposalStatus[],
-        votes: [
-          ['Approve', 'Approve', 'Approve'],
-          ['None', 'Reject', 'Slash'],
-        ] satisfies VoteArg[][],
-      },
-    }
-  ),
+  args: { type: 'SetMaxValidatorCountProposalDetails', constitutionality: 2, isCouncilMember: true, isProposer: true },
+  parameters: {
+    statuses: ['ProposalStatusDeciding', 'ProposalStatusDormant', 'ProposalStatusDeciding'] satisfies ProposalStatus[],
+    votes: [
+      ['Approve', 'Approve', 'Approve'],
+      ['None', 'Reject', 'Slash'],
+    ] satisfies VoteArg[][],
+  },
 
-  name: 'Test: Not voted in the current round',
+  name: 'Test ProposalPreview > Not voted in the current round',
   play: async ({ canvasElement }) => {
     const screen = within(canvasElement)
 
