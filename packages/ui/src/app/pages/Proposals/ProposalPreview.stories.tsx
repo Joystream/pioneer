@@ -16,7 +16,7 @@ import {
   proposalActiveStatus,
   proposalDetailsMap,
 } from '@/mocks/data/proposals'
-import { getButtonByText, getEditorByLabel, withinModal, isoDate, joy } from '@/mocks/helpers'
+import { getButtonByText, getEditorByLabel, withinModal, isoDate, joy, Container } from '@/mocks/helpers'
 import { ProposalDetailsType, proposalDetailsToConstantKey } from '@/mocks/helpers/proposalDetailsToConstantKey'
 import { MocksParameters } from '@/mocks/providers'
 import { GetProposalDocument, ProposalWithDetailsFieldsFragment } from '@/proposals/queries'
@@ -134,7 +134,7 @@ export default {
           },
 
           tx: {
-            proposalsEngine: { vote: { event: 'Voted', onSend: args.onVote } },
+            proposalsEngine: { vote: { event: 'Voted', onSend: args.onVote, failure: parameters.txFailure } },
           },
         },
 
@@ -401,6 +401,9 @@ export const TestsHasNotVotedInCurrentRound: Story = {
 // VoteForProposalModal
 // ----------------------------------------------------------------------------
 
+const fillRationale = async (modal: Container): Promise<void> =>
+  (await getEditorByLabel(modal, /Rationale/i)).setData('Some rationale')
+
 export const TestVoteHappy: Story = {
   args: { type: 'SignalProposalDetails', isCouncilMember: true },
 
@@ -470,15 +473,12 @@ export const TestVoteHappy: Story = {
       })
 
       await step('Form', async () => {
-        const rationaleEditor = await getEditorByLabel(modal, /Rationale/i)
         const nextButton = getButton(/^sign transaction and vote/i)
-        expect(nextButton).toBeDisabled()
 
         await userEvent.click(getButton(/^Reject/i))
         expect(nextButton).toBeDisabled()
-        rationaleEditor.setData('Some rationale')
-        expect(nextButton).toBeEnabled()
 
+        await fillRationale(modal)
         await userEvent.click(nextButton)
       })
 
@@ -509,16 +509,15 @@ export const TestVoteHappy: Story = {
       })
 
       await step('Form', async () => {
-        const rationaleEditor = await getEditorByLabel(modal, /Rationale/i)
         const nextButton = getButton(/^sign transaction and vote/i)
 
         await userEvent.click(getButton(/^Reject/i))
         const slashToggle = modal.getByLabelText('Slash Proposal')
+
         userEvent.click(slashToggle)
         expect(nextButton).toBeDisabled()
-        rationaleEditor.setData('Some rationale')
-        expect(nextButton).toBeEnabled()
 
+        await fillRationale(modal)
         await userEvent.click(nextButton)
       })
 
@@ -526,7 +525,6 @@ export const TestVoteHappy: Story = {
         expect(modal.getByText('Authorize transaction'))
         const signText = modal.getByText(RegExp(`^You intend to .+ "${PROPOSAL_DATA.title}"\\.$`))
         expect(within(signText).getByText('Slash'))
-
         await userEvent.click(modal.getByText(/^Sign transaction and Vote/))
       })
 
@@ -549,21 +547,15 @@ export const TestVoteHappy: Story = {
       })
 
       await step('Form', async () => {
-        const rationaleEditor = await getEditorByLabel(modal, /Rationale/i)
-        const nextButton = getButton(/^sign transaction and vote/i)
-
         await userEvent.click(getButton(/^Abstain/i))
-        rationaleEditor.setData('Some rationale')
-        expect(nextButton).toBeEnabled()
-
-        await userEvent.click(nextButton)
+        await fillRationale(modal)
+        await userEvent.click(getButton(/^sign transaction and vote/i))
       })
 
       await step('Sign', async () => {
         expect(modal.getByText('Authorize transaction'))
         const signText = modal.getByText(RegExp(`^You intend to .+ "${PROPOSAL_DATA.title}"\\.$`))
         expect(within(signText).getByText('Abstain'))
-
         await userEvent.click(modal.getByText(/^Sign transaction and Vote/))
       })
 
@@ -574,11 +566,53 @@ export const TestVoteHappy: Story = {
         expect(within(confirmText).getByText('Abstain'))
 
         expect(onVote).toHaveBeenLastCalledWith(activeMember.id, PROPOSAL_DATA.id, 'Abstain', 'Some rationale')
-
-        await userEvent.click(modal.getByText('Back to proposals'))
       })
     })
   },
 }
 
-// TODO: Test Requirements verification
+export const TestVoteInsufficientFunds: Story = {
+  args: { type: 'SignalProposalDetails', isCouncilMember: true },
+  parameters: { totalBalance: 1 },
+
+  name: 'Test VoteForProposalModal Insufficient Funds',
+
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByText('Vote on Proposal'))
+    expect(await withinModal(canvasElement).findByText('Insufficient Funds'))
+  },
+}
+
+export const TestVoteTxError: Story = {
+  args: { type: 'SignalProposalDetails', isCouncilMember: true },
+  parameters: { txFailure: 'Some error message' },
+
+  name: 'Test VoteForProposalModal Transaction Error',
+
+  play: async ({ canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+    const getButton = (text: string | RegExp) => getButtonByText(modal, text)
+
+    await step('Render', async () => {
+      await userEvent.click(screen.getByText('Vote on Proposal'))
+      expect(await modal.findByText('Vote for proposal'))
+    })
+
+    await step('Form', async () => {
+      await userEvent.click(getButton(/^Approve/i))
+      await fillRationale(modal)
+      await userEvent.click(getButton(/^sign transaction and vote/i))
+    })
+
+    await step('Sign', async () => {
+      expect(modal.getByText('Authorize transaction'))
+      await userEvent.click(modal.getByText(/^Sign transaction and Vote/))
+    })
+
+    await step('Error', async () => {
+      expect(await screen.findByText('Failure'))
+      expect(await screen.findByText('Some error message'))
+    })
+  },
+}

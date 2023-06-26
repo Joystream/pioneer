@@ -3,7 +3,7 @@ import { waitForOptions as WaitForOptions } from '@testing-library/dom/types'
 import * as queries from '@testing-library/dom/types/queries'
 import { BoundFunctions } from '@testing-library/react'
 
-type Container = BoundFunctions<typeof queries>
+export type Container = BoundFunctions<typeof queries>
 
 export const withinModal = (canvasElement: HTMLElement): Container =>
   within(canvasElement.querySelector('#modal-container') as HTMLElement)
