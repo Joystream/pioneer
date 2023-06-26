@@ -25,19 +25,21 @@ export const BaseCKEditor = React.forwardRef(
   ) => {
     const localRef = useRef<HTMLDivElement>(null)
     const elementRef: RefObject<HTMLDivElement> = (ref ?? localRef) as RefObject<HTMLDivElement>
-    const editorRef = useRef<Promise<Editor> | null>(null)
+    const editorRef = useRef<Editor | null>(null)
 
     const { mentionMembersFeed, mentionFeed, itemRenderer } = useMentions()
 
     useEffect(() => {
-      editorRef.current?.then((editor) => (editor.isReadOnly = !!disabled))
+      if (!editorRef.current) {
+        return
+      }
+
+      editorRef.current.isReadOnly = !!disabled
     }, [disabled])
 
     useEffect(() => {
-      if (editorRef.current || !elementRef.current) return
-
-      editorRef.current = (inline ? MarkdownEditor.InlineEditor : MarkdownEditor.ClassicEditor)
-        .create(elementRef.current, {
+      const createPromise: Promise<Editor> = (inline ? MarkdownEditor.InlineEditor : MarkdownEditor.ClassicEditor)
+        .create(elementRef.current || '', {
           toolbar: {
             items: [
               'heading',
@@ -76,6 +78,10 @@ export const BaseCKEditor = React.forwardRef(
           language: 'en',
         })
         .then((editor: Editor) => {
+          // The component might be unmounted by the time it's initialize
+          // In this case the editor will be cleaned up when the promise resolves
+          if (!elementRef.current) return editor
+
           Object.defineProperty(elementRef.current, 'setData', {
             configurable: true,
             value: (data: any) => editor.setData(data),
@@ -85,6 +91,7 @@ export const BaseCKEditor = React.forwardRef(
             onReady(editor)
           }
 
+          editorRef.current = editor
           editor.isReadOnly = disabled ?? false
 
           const modelDocument = editor.model.document
@@ -109,14 +116,11 @@ export const BaseCKEditor = React.forwardRef(
 
           return editor
         })
-    }, [elementRef.current])
 
-    useEffect(
-      () => () => {
-        editorRef.current?.then((editor) => editor.destroy())
-      },
-      []
-    )
+      return () => {
+        createPromise.then((editor) => editor.destroy())
+      }
+    }, [])
 
     return (
       <>
