@@ -29,7 +29,7 @@ const bob = member('bob', { isCouncilMember: true })
 const charlie = member('charlie', { isCouncilMember: true })
 
 const PROPOSAL_DATA = {
-  id: '0',
+  id: '123',
   title: random.words(4),
   description: randomMarkdown(),
 }
@@ -79,7 +79,7 @@ export default {
   },
 
   parameters: {
-    router: { path: '/:id', href: '/0' },
+    router: { path: '/:id', href: `/${PROPOSAL_DATA.id}` },
 
     statuses: ['ProposalStatusDeciding'] satisfies ProposalStatus[],
     totalBalance: 100,
@@ -401,46 +401,182 @@ export const TestsHasNotVotedInCurrentRound: Story = {
 // VoteForProposalModal
 // ----------------------------------------------------------------------------
 
-export const TestVoteForProposalModal: Story = {
+export const TestVoteHappy: Story = {
   args: { type: 'SignalProposalDetails', isCouncilMember: true },
 
-  name: 'Test VoteForProposalModal',
-  play: async ({ canvasElement, step }) => {
+  name: 'Test VoteForProposalModal Happy cases',
+
+  play: async ({ canvasElement, step, args: { onVote } }) => {
+    const activeMember = member('alice')
+
     const screen = within(canvasElement)
     const modal = withinModal(canvasElement)
-
-    await userEvent.click(screen.getByText('Vote on Proposal'))
-
-    await step('Render', async () => {
-      await modal.findByText(/Vote for proposal/i)
-      modal.getByText(PROPOSAL_DATA.title)
-    })
-
     const getButton = (text: string | RegExp) => getButtonByText(modal, text)
 
-    await step('Form > Empty', () => {
-      expect(getButton(/^sign transaction and vote/i)).toBeDisabled()
-      getButton(/^Reject/i)
-      getButton(/^Approve/i)
-      getButton(/^Abstain/i)
+    await step('Approve', async () => {
+      await step('Render', async () => {
+        await userEvent.click(screen.getByText('Vote on Proposal'))
+        expect(await modal.findByText('Vote for proposal'))
+        expect(modal.getByText(PROPOSAL_DATA.title))
+
+        expect(getButton(/^Reject/i))
+        expect(getButton(/^Approve/i))
+        expect(getButton(/^Abstain/i))
+      })
+
+      await step('Form', async () => {
+        const rationaleEditor = await getEditorByLabel(modal, /Rationale/i)
+        const nextButton = getButton(/^sign transaction and vote/i)
+        expect(nextButton).toBeDisabled()
+
+        rationaleEditor.setData('Some rationale')
+        expect(nextButton).toBeDisabled()
+        rationaleEditor.setData('')
+
+        await userEvent.click(getButton(/^Approve/i))
+        expect(nextButton).toBeDisabled()
+
+        rationaleEditor.setData('Some rationale')
+        expect(nextButton).toBeEnabled()
+
+        await userEvent.click(nextButton)
+      })
+
+      await step('Sign', async () => {
+        expect(modal.getByText('Authorize transaction'))
+        const signText = modal.getByText(RegExp(`^You intend to .+ "${PROPOSAL_DATA.title}"\\.$`))
+        expect(within(signText).getByText('Approve'))
+        expect(modal.queryByText(/^(.*?)You need at least \d+ tJOY(.*)/i)).toBeNull()
+
+        await userEvent.click(modal.getByText(/^Sign transaction and Vote/))
+      })
+
+      await step('Confirm', async () => {
+        const confirmText = await modal.findByText(
+          RegExp(`^You have just successfully .+ \\W${PROPOSAL_DATA.title}\\W\\.$`)
+        )
+        expect(within(confirmText).getByText('Approve'))
+
+        expect(onVote).toHaveBeenLastCalledWith(activeMember.id, PROPOSAL_DATA.id, 'Approve', 'Some rationale')
+
+        await userEvent.click(modal.getByText('Back to proposals'))
+      })
     })
 
-    const rationaleEditor = await getEditorByLabel(modal, /Rationale/i)
+    await step('Reject', async () => {
+      await step('Render', async () => {
+        await userEvent.click(screen.getByText('Vote on Proposal'))
+        expect(await modal.findByText('Vote for proposal'))
+      })
 
-    await step('No vote type selected', async () => {
-      rationaleEditor.setData('Some rationale')
-      expect(getButton(/^sign transaction and vote/i)).toBeDisabled()
+      await step('Form', async () => {
+        const rationaleEditor = await getEditorByLabel(modal, /Rationale/i)
+        const nextButton = getButton(/^sign transaction and vote/i)
+        expect(nextButton).toBeDisabled()
+
+        await userEvent.click(getButton(/^Reject/i))
+        expect(nextButton).toBeDisabled()
+        rationaleEditor.setData('Some rationale')
+        expect(nextButton).toBeEnabled()
+
+        await userEvent.click(nextButton)
+      })
+
+      await step('Sign', async () => {
+        expect(modal.getByText('Authorize transaction'))
+        const signText = modal.getByText(RegExp(`^You intend to .+ "${PROPOSAL_DATA.title}"\\.$`))
+        expect(within(signText).getByText('Reject'))
+
+        await userEvent.click(modal.getByText(/^Sign transaction and Vote/))
+      })
+
+      await step('Confirm', async () => {
+        const confirmText = await modal.findByText(
+          RegExp(`^You have just successfully .+ \\W${PROPOSAL_DATA.title}\\W\\.$`)
+        )
+        expect(within(confirmText).getByText('Reject'))
+
+        expect(onVote).toHaveBeenLastCalledWith(activeMember.id, PROPOSAL_DATA.id, 'Reject', 'Some rationale')
+
+        await userEvent.click(modal.getByText('Back to proposals'))
+      })
     })
 
-    await step('Form > No rationale', async () => {
-      rationaleEditor.setData('')
-      await userEvent.click(getButton(/^Approve/i))
-      expect(getButton(/^sign transaction and vote/i)).toBeDisabled()
+    await step('Slash', async () => {
+      await step('Render', async () => {
+        await userEvent.click(screen.getByText('Vote on Proposal'))
+        expect(await modal.findByText('Vote for proposal'))
+      })
+
+      await step('Form', async () => {
+        const rationaleEditor = await getEditorByLabel(modal, /Rationale/i)
+        const nextButton = getButton(/^sign transaction and vote/i)
+
+        await userEvent.click(getButton(/^Reject/i))
+        const slashToggle = modal.getByLabelText('Slash Proposal')
+        userEvent.click(slashToggle)
+        expect(nextButton).toBeDisabled()
+        rationaleEditor.setData('Some rationale')
+        expect(nextButton).toBeEnabled()
+
+        await userEvent.click(nextButton)
+      })
+
+      await step('Sign', async () => {
+        expect(modal.getByText('Authorize transaction'))
+        const signText = modal.getByText(RegExp(`^You intend to .+ "${PROPOSAL_DATA.title}"\\.$`))
+        expect(within(signText).getByText('Slash'))
+
+        await userEvent.click(modal.getByText(/^Sign transaction and Vote/))
+      })
+
+      await step('Confirm', async () => {
+        const confirmText = await modal.findByText(
+          RegExp(`^You have just successfully .+ \\W${PROPOSAL_DATA.title}\\W\\.$`)
+        )
+        expect(within(confirmText).getByText('Slash'))
+
+        expect(onVote).toHaveBeenLastCalledWith(activeMember.id, PROPOSAL_DATA.id, 'Slash', 'Some rationale')
+
+        await userEvent.click(modal.getByText('Back to proposals'))
+      })
     })
 
-    await step('Form > Filled', async () => {
-      rationaleEditor.setData('Some rationale')
-      expect(getButton(/^sign transaction and vote/i)).not.toBeDisabled()
+    await step('Abstain', async () => {
+      await step('Render', async () => {
+        await userEvent.click(screen.getByText('Vote on Proposal'))
+        expect(await modal.findByText('Vote for proposal'))
+      })
+
+      await step('Form', async () => {
+        const rationaleEditor = await getEditorByLabel(modal, /Rationale/i)
+        const nextButton = getButton(/^sign transaction and vote/i)
+
+        await userEvent.click(getButton(/^Abstain/i))
+        rationaleEditor.setData('Some rationale')
+        expect(nextButton).toBeEnabled()
+
+        await userEvent.click(nextButton)
+      })
+
+      await step('Sign', async () => {
+        expect(modal.getByText('Authorize transaction'))
+        const signText = modal.getByText(RegExp(`^You intend to .+ "${PROPOSAL_DATA.title}"\\.$`))
+        expect(within(signText).getByText('Abstain'))
+
+        await userEvent.click(modal.getByText(/^Sign transaction and Vote/))
+      })
+
+      await step('Confirm', async () => {
+        const confirmText = await modal.findByText(
+          RegExp(`^You have just successfully .+ \\W${PROPOSAL_DATA.title}\\W\\.$`)
+        )
+        expect(within(confirmText).getByText('Abstain'))
+
+        expect(onVote).toHaveBeenLastCalledWith(activeMember.id, PROPOSAL_DATA.id, 'Abstain', 'Some rationale')
+
+        await userEvent.click(modal.getByText('Back to proposals'))
+      })
     })
   },
 }
