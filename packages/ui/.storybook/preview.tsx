@@ -51,29 +51,29 @@ const RHFDecorator: Decorator = (Story) => {
 const RouterDecorator: Decorator = (Story, { parameters }) => {
   const storyPath = `/story/${parameters.router?.href ?? ''}`
   return (
-    <MemoryRouter initialEntries={[storyPath]}>
-      <Switch>
-        <Route component={Story} path={`/story/${parameters.router?.path ?? ''}`} />
-        {parameters.enable404 && <Route path="*" component={NotFound} />}
-        <Redirect from="*" to={storyPath} />
-      </Switch>
-    </MemoryRouter>
+    <>
+      <div id="modal-container" />
+      <MemoryRouter initialEntries={[storyPath]}>
+        <Switch>
+          <Route component={Story} path={`/story/${parameters.router?.path ?? ''}`} />
+          {parameters.enable404 && <Route path="*" component={NotFound} />}
+          <Redirect from="*" to={storyPath} />
+        </Switch>
+      </MemoryRouter>
+    </>
   )
 }
 
 const ModalDecorator: Decorator = (Story) => (
-  <>
-    <div id="modal-container" />
-    <TransactionStatusProvider>
-      <ModalContextProvider>
-        <Story />
-        <GlobalModals />
-        <NotificationsHolder>
-          <TransactionStatus />
-        </NotificationsHolder>
-      </ModalContextProvider>
-    </TransactionStatusProvider>
-  </>
+  <TransactionStatusProvider>
+    <ModalContextProvider>
+      <Story />
+      <GlobalModals />
+      <NotificationsHolder>
+        <TransactionStatus />
+      </NotificationsHolder>
+    </ModalContextProvider>
+  </TransactionStatusProvider>
 )
 
 export const decorators = [
