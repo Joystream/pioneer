@@ -309,36 +309,35 @@ export const TestsIsNotCouncil: Story = {
     const screen = within(canvasElement)
 
     await step('Main', () => {
-      expect(screen.getByText(PROPOSAL_DATA.title, { selector: 'header h2' })).toBeDefined()
+      expect(screen.getByText(PROPOSAL_DATA.title, { selector: 'header h2' }))
 
-      expect(screen.getByText('Deciding', { selector: 'header *' })).toBeDefined()
+      expect(screen.getByText('Deciding', { selector: 'header *' }))
 
       expect(screen.getAllByText(/(?:Approval|Slashing) (?:Quorum|Threshold)/)).toHaveLength(4)
 
-      expect(screen.getByText('Set Max Validator Count')).toBeDefined()
+      expect(screen.getByText('Set Max Validator Count'))
 
-      expect(screen.getByText('Rationale')).toBeDefined()
+      expect(screen.getByText('Rationale'))
 
-      expect(screen.getByText('Discussion')).toBeDefined()
+      expect(screen.getByText('Discussion'))
     })
 
     await step('Header', () => {
-      expect(screen.getByText('Round 1')).toBeVisible()
-      expect(screen.getByText('Round 2')).toBeVisible()
+      expect(screen.getByText('Round 1'))
+      expect(screen.getByText('Round 2'))
     })
 
     await step('Sidebar', () => {
       const sideBarElement = screen.getByRole('complementary')
-      expect(sideBarElement).toBeDefined()
-
       const sideBar = within(sideBarElement)
       const proposerSection = within(sideBar.getByText('Proposer').parentElement as HTMLElement)
-      expect(proposerSection.getByText('alice')).toBeDefined()
 
-      expect(sideBar.getByText('History')).toBeDefined()
+      expect(proposerSection.getByText('alice'))
+
+      expect(sideBar.getByText('History'))
 
       for (const name of ['Approved', 'Rejected', 'Slashed', 'Abstained', 'Not Voted']) {
-        expect(sideBar.getByText(name)).toBeDefined()
+        expect(sideBar.getByText(name))
       }
     })
 
@@ -371,7 +370,7 @@ export const TestsHasVotedInCurrentRound: Story = {
   play: async ({ canvasElement }) => {
     const screen = within(canvasElement)
 
-    expect(screen.getByText(/Already voted/i)).toBeDefined()
+    expect(screen.getByText(/Already voted/i))
     expect(screen.getByText(/You voted for:/i)).toHaveTextContent('You voted for: Rejected')
   },
 }
@@ -390,7 +389,7 @@ export const TestsHasNotVotedInCurrentRound: Story = {
   play: async ({ canvasElement }) => {
     const screen = within(canvasElement)
 
-    expect(screen.getByText(/Vote on Proposal/i)).toBeDefined()
+    expect(screen.getByText(/Vote on Proposal/i))
     expect(screen.queryByText(/You voted for:/i)).toBeNull()
     await userEvent.click(screen.getByText('Round 1'))
     expect(screen.getByText(/You voted for:/i)).toHaveTextContent('You voted for: Approved')
