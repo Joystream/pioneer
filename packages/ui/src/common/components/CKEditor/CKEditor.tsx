@@ -25,21 +25,19 @@ export const BaseCKEditor = React.forwardRef(
   ) => {
     const localRef = useRef<HTMLDivElement>(null)
     const elementRef: RefObject<HTMLDivElement> = (ref ?? localRef) as RefObject<HTMLDivElement>
-    const editorRef = useRef<Editor | null>(null)
+    const editorRef = useRef<Promise<Editor> | null>(null)
 
     const { mentionMembersFeed, mentionFeed, itemRenderer } = useMentions()
 
     useEffect(() => {
-      if (!editorRef.current) {
-        return
-      }
-
-      editorRef.current.isReadOnly = !!disabled
+      editorRef.current?.then((editor) => (editor.isReadOnly = !!disabled))
     }, [disabled])
 
     useEffect(() => {
-      const createPromise: Promise<Editor> = (inline ? MarkdownEditor.InlineEditor : MarkdownEditor.ClassicEditor)
-        .create(elementRef.current || '', {
+      if (editorRef.current || !elementRef.current) return
+
+      editorRef.current = (inline ? MarkdownEditor.InlineEditor : MarkdownEditor.ClassicEditor)
+        .create(elementRef.current, {
           toolbar: {
             items: [
               'heading',
@@ -77,16 +75,16 @@ export const BaseCKEditor = React.forwardRef(
           // This value must be kept in sync with the language defined in webpack.config.js.
           language: 'en',
         })
-        .then((editor: any) => {
+        .then((editor: Editor) => {
           Object.defineProperty(elementRef.current, 'setData', {
-            value: (value: any) => editorRef.current?.setData(value),
+            configurable: true,
+            value: (data: any) => editor.setData(data),
           })
 
           if (onReady) {
             onReady(editor)
           }
 
-          editorRef.current = editor
           editor.isReadOnly = disabled ?? false
 
           const modelDocument = editor.model.document
@@ -111,11 +109,14 @@ export const BaseCKEditor = React.forwardRef(
 
           return editor
         })
+    }, [elementRef.current])
 
-      return () => {
-        createPromise.then((editor) => editor.destroy())
-      }
-    }, [])
+    useEffect(
+      () => () => {
+        editorRef.current?.then((editor) => editor.destroy())
+      },
+      []
+    )
 
     return (
       <>

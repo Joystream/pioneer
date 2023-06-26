@@ -358,7 +358,7 @@ export const TestsHasNotVoted: Story = {
   },
 }
 
-export const TestsHasInCurrentRound: Story = {
+export const TestsHasVotedInCurrentRound: Story = {
   args: { type: 'SetMaxValidatorCountProposalDetails', constitutionality: 2, isCouncilMember: true, isProposer: true },
   parameters: {
     statuses: ['ProposalStatusDeciding'] satisfies ProposalStatus[],
@@ -375,7 +375,7 @@ export const TestsHasInCurrentRound: Story = {
   },
 }
 
-export const TestsHasNotInCurrentRound: Story = {
+export const TestsHasNotVotedInCurrentRound: Story = {
   args: { type: 'SetMaxValidatorCountProposalDetails', constitutionality: 2, isCouncilMember: true, isProposer: true },
   parameters: {
     statuses: ['ProposalStatusDeciding', 'ProposalStatusDormant', 'ProposalStatusDeciding'] satisfies ProposalStatus[],
