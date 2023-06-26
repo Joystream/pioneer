@@ -81,6 +81,9 @@ export default {
   parameters: {
     router: { path: '/:id', href: '/0' },
 
+    statuses: ['ProposalStatusDeciding'] satisfies ProposalStatus[],
+    totalBalance: 100,
+
     mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
       const { constitutionality, isCouncilMember } = args
 
@@ -100,7 +103,7 @@ export default {
       )
 
       return {
-        accounts: { active: alice },
+        accounts: { active: { member: alice, balances: parameters.totalBalance } },
 
         chain: {
           consts: {
@@ -194,8 +197,6 @@ export default {
         ],
       }
     },
-
-    statuses: ['ProposalStatusDeciding'] satisfies ProposalStatus[],
   },
 } satisfies Meta<Args>
 
