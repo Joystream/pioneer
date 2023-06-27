@@ -98,7 +98,7 @@ export type CreateOpeningMachineState = State<
 
 type Context = CreateOpeningForm & TransactionContext
 
-export const createOpeningMachine = createMachine<Context, CreateOpeningEvent, CreateOpeningState>({
+export const createOpeningMachine = createMachine<Partial<Context>, CreateOpeningEvent, CreateOpeningState>({
   initial: 'specificParameters',
   states: {
     requirementsVerification: { on: { FAIL: 'requirementsFailed', NEXT: 'generalParameters' } },
@@ -113,7 +113,7 @@ export const createOpeningMachine = createMachine<Context, CreateOpeningEvent, C
         NEXT: 'beforeTransaction',
       },
       initial: 'entry',
-      states: {
+      states: { 
         entry: {
           always: [{ target: 'createWorkingGroupLeadOpening', cond: isType('createWorkingGroupLeadOpening') }],
         },
