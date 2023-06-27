@@ -46,7 +46,9 @@ type AccountMock = {
   member?: Membership
 }
 
-type MockAccounts = { active?: Membership | Membership['id']; list?: AccountMock[] } | undefined
+type Active = AccountMock | Membership['handle']
+
+type MockAccounts = { active?: Active; list?: AccountMock[] } | undefined
 
 export type MockAccountsProps = { accounts?: MockAccounts }
 
@@ -57,7 +59,7 @@ export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts
   const [active, setActive] = useState<Member | undefined>()
 
   useEffect(() => {
-    const list = accounts?.list ?? (accounts && isObject(accounts.active) ? [{ member: accounts.active }] : undefined)
+    const list = accounts?.list ?? (accounts && isObject(accounts.active) ? [accounts.active] : undefined)
     if (!list) return
 
     const accountData = list.flatMap(
@@ -98,7 +100,7 @@ export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts
     const members = accountData.flatMap(({ member }) => whenDefined(member, asMember) ?? [])
 
     const active = whenDefined(accounts?.active, (active) =>
-      isObject(active) ? asMember(active) : members.find(({ handle }) => handle === active)
+      isString(active) ? members.find(({ handle }) => handle === active) : active.member && asMember(active.member)
     )
 
     setAllAccounts(allAccounts)
