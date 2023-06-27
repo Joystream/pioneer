@@ -2,7 +2,6 @@ import { BN } from '@polkadot/util'
 import { Meta, StoryObj } from '@storybook/react'
 import { of } from 'rxjs'
 
-import { Address } from '@/common/types'
 import { joy } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
 
@@ -44,7 +43,7 @@ export default {
               now: Date.now(),
             },
             session: {
-              validators : [
+              validators: [
                 'j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D',
                 'j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW',
                 'j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP',
@@ -66,7 +65,7 @@ export default {
               },
               counterForValidators: new BN(12),
               counterForNominators: new BN(20),
-              erasRewardPoints: (earindex: number) => {
+              erasRewardPoints: () => {
                 return of({
                   total: new BN(18000),
                   individuals: {
@@ -83,8 +82,8 @@ export default {
                   },
                 })
               },
-              erasValidatorReward: (eraIndex: number) => of(new BN(1234560000)),
-              erasStakers: (eraIndex: number, address: Address) => {
+              erasValidatorReward: () => of(new BN(1234560000)),
+              erasStakers: () => {
                 return of({
                   total: new BN(1000000000),
                   own: new BN(1000000),
@@ -112,7 +111,7 @@ export default {
                   ],
                 })
               },
-              erasTotalStake: (eraIndex: number) => {
+              erasTotalStake: () => {
                 return of(new BN(1300000000000000))
               },
             },
