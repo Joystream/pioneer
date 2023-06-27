@@ -8,6 +8,7 @@ import { createGlobalStyle } from 'styled-components'
 import { GlobalModals } from '../src/app/GlobalModals'
 import { NotFound } from '../src/app/pages/NotFound'
 import { GlobalStyle } from '../src/app/providers/GlobalStyle'
+import { OnBoardingProvider } from '../src/common/providers/onboarding/provider'
 import { NotificationsHolder } from '../src/common/components/page/SideNotification'
 import { TransactionStatus } from '../src/common/components/TransactionStatus/TransactionStatus'
 import { Colors } from '../src/common/constants'
@@ -67,11 +68,13 @@ const RouterDecorator: Decorator = (Story, { parameters }) => {
 const ModalDecorator: Decorator = (Story) => (
   <TransactionStatusProvider>
     <ModalContextProvider>
-      <Story />
-      <GlobalModals />
-      <NotificationsHolder>
-        <TransactionStatus />
-      </NotificationsHolder>
+      <OnBoardingProvider>
+        <Story />
+        <GlobalModals />
+        <NotificationsHolder>
+          <TransactionStatus />
+        </NotificationsHolder>
+      </OnBoardingProvider>
     </ModalContextProvider>
   </TransactionStatusProvider>
 )
