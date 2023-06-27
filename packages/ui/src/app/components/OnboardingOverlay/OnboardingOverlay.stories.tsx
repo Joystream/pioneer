@@ -12,7 +12,7 @@ import { MyMemberships } from '@/memberships/providers/membership/provider'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
 export default {
-  title: 'App/OnboardingOverlay',
+  title: 'App/Components/OnboardingOverlay',
   component: OnBoardingOverlay,
 } as Meta
 
