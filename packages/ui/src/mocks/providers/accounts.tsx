@@ -1,5 +1,6 @@
 import { createType } from '@joystream/types'
 import BN from 'bn.js'
+import { PolkadotLogo, Wallet } from 'injectweb3-connect'
 import { isObject, isString, mapValues } from 'lodash'
 import React, { FC, useCallback, useEffect, useState } from 'react'
 
@@ -42,13 +43,13 @@ type Balances =
 
 type AccountMock = {
   balances?: Balances
-  address?: string
+  account?: { name: string; address: string }
   member?: Membership
 }
 
 type Active = AccountMock | Membership['handle']
 
-type MockAccounts = { active?: Active; list?: AccountMock[] } | undefined
+type MockAccounts = { active?: Active; list?: AccountMock[]; hasWallet?: boolean } | undefined
 
 export type MockAccountsProps = { accounts?: MockAccounts }
 
@@ -63,11 +64,11 @@ export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts
     if (!list) return
 
     const accountData = list.flatMap(
-      ({ balances, member, address = member?.controllerAccount }) =>
-        whenDefined(address, (address) => ({ address, balances, member })) ?? []
+      ({ balances, member, account: { name = member?.handle, address = member?.controllerAccount } = {} }) =>
+        whenDefined(address, (address) => ({ name, address, balances, member })) ?? []
     )
 
-    const allAccounts: Account[] = accountData.map(({ address, member }) => ({ address, name: member?.handle }))
+    const allAccounts: Account[] = accountData.map(({ name, address }) => ({ name, address }))
 
     const balances: AddressToBalanceMap = Object.fromEntries(
       accountData.map(({ address, balances = 100 }) => {
@@ -121,6 +122,7 @@ export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts
     allAccounts,
     hasAccounts: true,
     isLoading: false,
+    wallet: accounts.hasWallet === false ? undefined : WALLET,
   }
 
   const membershipContextValue: MyMemberships = {
@@ -143,3 +145,19 @@ export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts
 
 const asBalance = (balance: Balance = 0): BN =>
   (balance instanceof BN ? balance : createType('BalanceOf', joy(balance))) as BN
+
+const WALLET: Wallet = {
+  installed: true,
+  enable: () => undefined,
+  extensionName: 'foo',
+  title: 'bar',
+  installUrl: 'http://example.com',
+  logo: { src: PolkadotLogo, alt: 'Wallet logo' },
+  signer: {},
+  extension: {},
+  getAccounts: async () => [],
+  subscribeAccounts: () => undefined,
+  updateMetadata: async () => false,
+  walletAccountToInjectedAccountWithMeta: () => ({ address: '0x123', meta: { source: '' } }),
+  transformError: () => Error(),
+}
