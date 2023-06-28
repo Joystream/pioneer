@@ -77,22 +77,115 @@ export default {
   },
 } satisfies Meta<Args>
 
-export const LoggedIn: Story = {}
+export const Default: Story = {}
 
-export const NoWallet: Story = {
+export const UnreachableRPCNode: Story = { args: { isRPCNodeConnected: false } }
+
+// ----------------------------------------------------------------------------
+// Test Switch membership modal
+// ----------------------------------------------------------------------------
+
+export const SwitchMembership: Story = {
+  play: async ({ canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    await step('Switch active membership to bob', async () => {
+      expect(screen.queryByText('bob')).toBeNull()
+      await userEvent.click(screen.getByText('alice'))
+
+      await userEvent.click(modal.getByText('bob'))
+      expect(screen.queryByText('alice')).toBeNull()
+      expect(screen.getByText('bob'))
+    })
+
+    await step('Sign out', async () => {
+      await userEvent.click(screen.getByText('bob'))
+      await userEvent.click(modal.getByText('Sign Out'))
+      expect(modal.getByText('Sign out of bob ?'))
+      await userEvent.click(getButtonByText(modal, 'Sign Out'))
+
+      expect(getButtonByText(screen, 'Select membership'))
+    })
+  },
+}
+
+// ----------------------------------------------------------------------------
+// Test On Boarding flow
+// ----------------------------------------------------------------------------
+
+const expectActiveStepToBe = (modal: Container, text: string) =>
+  expect(modal.getByText(text, { selector: 'h6' }).parentElement?.previousElementSibling).toHaveStyle(
+    `background-color: ${Colors.Blue[500]}`
+  )
+
+export const ConnectWallet: Story = {
   args: { hasWallet: false, hasAccounts: false, hasFunds: false, hasMemberships: false, isLoggedIn: false },
+
+  play: async ({ canvasElement }) => {
+    const screen = within(canvasElement)
+    await userEvent.click(getButtonByText(screen, 'Connect Wallet'))
+
+    const modal = withinModal(canvasElement)
+    expectActiveStepToBe(modal, 'Connect wallet')
+    expect(modal.getByText('Select Wallet'))
+    const pluginButton = getButtonByText(modal, 'Install extension')
+    expect(pluginButton).toBeDisabled()
+    await userEvent.click(modal.getByText('Polkadot.js'))
+    expect(pluginButton).toBeEnabled()
+  },
 }
 
 export const NoAccount: Story = {
   args: { hasAccounts: false, hasFunds: false, hasMemberships: false, isLoggedIn: false },
+
+  play: async ({ canvasElement }) => {
+    const screen = within(canvasElement)
+    await userEvent.click(getButtonByText(screen, 'Join Now'))
+
+    const modal = withinModal(canvasElement)
+    expectActiveStepToBe(modal, 'Connect account')
+    expect(modal.getByText('Connect account', { selector: '[class^=ModalBody] *' }))
+    expect(getButtonByText(modal, 'Return to wallet selection')).toBeEnabled()
+    expect(getButtonByText(modal, 'Connect Account')).toBeDisabled()
+    expect(modal.queryByText('alice')).toBeNull()
+  },
 }
 
-export const NoFund: Story = {
+export const FaucetMembership: Story = {
   args: { hasFunds: false, hasMemberships: false, isLoggedIn: false },
-}
 
-export const NoMembership: Story = {
-  args: { hasMemberships: false, isLoggedIn: false },
-}
+  play: async ({ canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
 
-export const UnreachableRPCNode: Story = { args: { isRPCNodeConnected: false } }
+    await userEvent.click(getButtonByText(screen, 'Join Now'))
+
+    await step('Connect account', async () => {
+      expectActiveStepToBe(modal, 'Connect account')
+      expect(modal.getByText('Connect account', { selector: '[class^=ModalBody] *' }))
+
+      expect(getButtonByText(modal, 'Return to wallet selection')).toBeEnabled()
+
+      const connectAccountButton = getButtonByText(modal, 'Connect Account')
+      expect(connectAccountButton).toBeDisabled()
+      await userEvent.click(modal.getByText('alice'))
+      expect(connectAccountButton).toBeEnabled()
+      await userEvent.click(connectAccountButton)
+    })
+
+    await step('Create free membership', async () => {
+      await waitFor(() => expectActiveStepToBe(modal, 'Create free membership'))
+      expect(modal.getByText('Please fill in all the details below.'))
+
+      // Check that the CAPTCHA blocks the next step
+      await userEvent.type(modal.getByLabelText('Member Name'), 'Alice')
+      await userEvent.type(modal.getByLabelText('Membership handle'), 'alice')
+      await userEvent.type(modal.getByLabelText('About member'), 'Lorem ipsum...')
+      const avatar = 'https://api.dicebear.com/6.x/bottts-neutral/svg?seed=Alice'
+      await userEvent.type(modal.getByLabelText('Member Avatar'), avatar)
+      await userEvent.click(modal.getByLabelText(/^I agree to the/))
+      expect(getButtonByText(modal, 'Create a Membership')).toBeDisabled()
+    })
+  },
+}
