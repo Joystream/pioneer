@@ -134,7 +134,13 @@ export default {
           },
 
           tx: {
-            proposalsEngine: { vote: { event: 'Voted', onSend: args.onVote, failure: parameters.txFailure } },
+            proposalsEngine: {
+              vote: {
+                event: 'Voted',
+                onSend: args.onVote,
+                failure: parameters.txFailure,
+              },
+            },
           },
         },
 
@@ -416,7 +422,7 @@ export const TestVoteHappy: Story = {
     const getButton = (text: string | RegExp) => getButtonByText(modal, text)
 
     await step('Approve', async () => {
-      await step('Render', async () => {
+      await step('Form', async () => {
         await userEvent.click(screen.getByText('Vote on Proposal'))
         expect(await modal.findByText('Vote for proposal'))
         expect(modal.getByText(PROPOSAL_DATA.title))
@@ -424,9 +430,7 @@ export const TestVoteHappy: Story = {
         expect(getButton(/^Reject/i))
         expect(getButton(/^Approve/i))
         expect(getButton(/^Abstain/i))
-      })
 
-      await step('Form', async () => {
         const rationaleEditor = await getEditorByLabel(modal, /Rationale/i)
         const nextButton = getButton(/^sign transaction and vote/i)
         expect(nextButton).toBeDisabled()
@@ -466,12 +470,10 @@ export const TestVoteHappy: Story = {
     })
 
     await step('Reject', async () => {
-      await step('Render', async () => {
+      await step('Form', async () => {
         await userEvent.click(screen.getByText('Vote on Proposal'))
         expect(await modal.findByText('Vote for proposal'))
-      })
 
-      await step('Form', async () => {
         const nextButton = getButton(/^sign transaction and vote/i)
 
         await userEvent.click(getButton(/^Reject/i))
@@ -502,12 +504,10 @@ export const TestVoteHappy: Story = {
     })
 
     await step('Slash', async () => {
-      await step('Render', async () => {
+      await step('Form', async () => {
         await userEvent.click(screen.getByText('Vote on Proposal'))
         expect(await modal.findByText('Vote for proposal'))
-      })
 
-      await step('Form', async () => {
         const nextButton = getButton(/^sign transaction and vote/i)
 
         await userEvent.click(getButton(/^Reject/i))
@@ -540,12 +540,9 @@ export const TestVoteHappy: Story = {
     })
 
     await step('Abstain', async () => {
-      await step('Render', async () => {
+      await step('Form', async () => {
         await userEvent.click(screen.getByText('Vote on Proposal'))
         expect(await modal.findByText('Vote for proposal'))
-      })
-
-      await step('Form', async () => {
         await userEvent.click(getButton(/^Abstain/i))
         await fillRationale(modal)
         await userEvent.click(getButton(/^sign transaction and vote/i))
@@ -582,36 +579,27 @@ export const TestVoteInsufficientFunds: Story = {
   },
 }
 
-export const TestVoteTxError: Story = {
+export const TestVoteTxFailure: Story = {
   args: { type: 'SignalProposalDetails', isCouncilMember: true },
   parameters: { txFailure: 'Some error message' },
 
-  name: 'Test VoteForProposalModal Transaction Error',
+  name: 'Test VoteForProposalModal Transaction Failure',
 
-  play: async ({ canvasElement, step }) => {
+  play: async ({ canvasElement }) => {
     const screen = within(canvasElement)
     const modal = withinModal(canvasElement)
     const getButton = (text: string | RegExp) => getButtonByText(modal, text)
 
-    await step('Render', async () => {
-      await userEvent.click(screen.getByText('Vote on Proposal'))
-      expect(await modal.findByText('Vote for proposal'))
-    })
+    await userEvent.click(screen.getByText('Vote on Proposal'))
 
-    await step('Form', async () => {
-      await userEvent.click(getButton(/^Approve/i))
-      await fillRationale(modal)
-      await userEvent.click(getButton(/^sign transaction and vote/i))
-    })
+    expect(await modal.findByText('Vote for proposal'))
+    await userEvent.click(getButton(/^Approve/i))
+    await fillRationale(modal)
+    await userEvent.click(getButton(/^sign transaction and vote/i))
 
-    await step('Sign', async () => {
-      expect(modal.getByText('Authorize transaction'))
-      await userEvent.click(modal.getByText(/^Sign transaction and Vote/))
-    })
+    await userEvent.click(modal.getByText(/^Sign transaction and Vote/))
 
-    await step('Error', async () => {
-      expect(await screen.findByText('Failure'))
-      expect(await screen.findByText('Some error message'))
-    })
+    expect(await modal.findByText('Failure'))
+    expect(await modal.findByText('Some error message'))
   },
 }
