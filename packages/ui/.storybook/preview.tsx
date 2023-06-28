@@ -118,7 +118,7 @@ export const parameters = {
   options: {
     storySort: {
       method: 'alphabetical',
-      order: ['Pages', 'App', 'Common'],
+      order: ['App', 'Pages', 'Common'],
     },
   },
 }
