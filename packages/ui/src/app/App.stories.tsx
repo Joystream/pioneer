@@ -13,8 +13,9 @@ import { Membership, member } from '@/mocks/data/members'
 import { Container, getButtonByText, joy, selectFromDropdown, withinModal } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
 
-import { OnBoardingOverlay } from './OnboardingOverlay/OnBoardingOverlay'
-import { SideBar } from './SideBar'
+import { App } from './App'
+import { OnBoardingOverlay } from './components/OnboardingOverlay/OnBoardingOverlay'
+import { SideBar } from './components/SideBar'
 
 type Args = {
   isLoggedIn: boolean
@@ -50,8 +51,8 @@ const NoPaddingStyle = createGlobalStyle`
 `
 
 export default {
-  title: 'App/SideBar',
-  component: SideBar,
+  title: 'App',
+  component: App,
 
   argTypes: {
     onBuyMembership: { action: 'BuyMembership' },
