@@ -65,9 +65,8 @@ export default {
               },
               counterForValidators: new BN(12),
               counterForNominators: new BN(20),
-              erasRewardPoints: () => {
-                return of({
-                  total: new BN(18000),
+              erasRewardPoints: {
+                  total: joy('0.0018'),
                   individuals: {
                     j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: '180',
                     j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: '200',
@@ -80,7 +79,6 @@ export default {
                     j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: '160',
                     j4S998Thq5kQHyurofh8QfHrcFN2c1T19gTdMGUVVx5EHKgky: '220',
                   },
-                })
               },
               erasValidatorReward: () => of(new BN(1234560000)),
               erasStakers: () => {
