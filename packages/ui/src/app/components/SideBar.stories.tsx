@@ -1,8 +1,14 @@
+import { metadataToBytes } from '@joystream/js/utils'
+import { MembershipMetadata } from '@joystream/metadata-protobuf'
+import { expect } from '@storybook/jest'
 import { Meta, StoryContext, StoryObj } from '@storybook/react'
+import { userEvent, waitFor, within } from '@storybook/testing-library'
 import { FC } from 'react'
 
+import { Colors } from '@/common/constants'
+import { GetMemberDocument } from '@/memberships/queries'
 import { Membership, member } from '@/mocks/data/members'
-import { joy } from '@/mocks/helpers'
+import { Container, getButtonByText, joy, selectFromDropdown, withinModal } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
 
 import { SideBar } from './SideBar'
@@ -24,6 +30,16 @@ const alice = member('alice')
 const bob = member('bob')
 const charlie = member('charlie')
 
+const MEMBER_DATA = {
+  id: '12',
+  handle: 'realbobbybob',
+  metadata: {
+    name: 'BobbyBob',
+    about: 'Lorem ipsum...',
+    avatar: { avatarUri: 'https://api.dicebear.com/6.x/bottts-neutral/svg?seed=bob' },
+  },
+}
+
 export default {
   title: 'App/SideBar',
   component: SideBar,
@@ -43,9 +59,11 @@ export default {
   },
 
   parameters: {
-    mocks: ({ args }: StoryContext<Args>): MocksParameters => {
+    totalBalance: 100,
+
+    mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
       const account = (member: Membership) => ({
-        balances: args.hasFunds ? 100 : 0,
+        balances: args.hasFunds ? parameters.totalBalance : 0,
         ...(args.hasMemberships ? { member } : { account: { name: member.handle, address: member.controllerAccount } }),
       })
 
@@ -60,18 +78,35 @@ export default {
           ? undefined
           : {
               query: {
-                members: { membershipPrice: joy(5) },
+                members: { membershipPrice: joy(20) },
                 council: { stage: { stage: { isIdle: true }, changedAt: 123 } },
                 referendum: { stage: {} },
               },
 
               tx: {
-                balances: { transfer: { event: 'Balances.Transfer', onSend: args.onTransfer } },
+                balances: {
+                  transfer: {
+                    event: 'Transfer',
+                    onSend: args.onTransfer,
+                  },
+                },
                 members: {
-                  buyMembership: { event: 'MembershipBought', onSend: args.onBuyMembership },
+                  buyMembership: {
+                    event: 'MembershipBought',
+                    data: [MEMBER_DATA.id],
+                    onSend: args.onBuyMembership,
+                    failure: parameters.txFailure,
+                  },
                 },
               },
             },
+
+        queryNode: [
+          {
+            query: GetMemberDocument,
+            data: { membershipByUniqueInput: { ...bob, ...MEMBER_DATA, invitees: [] } },
+          },
+        ],
       }
     },
   },
@@ -179,13 +214,136 @@ export const FaucetMembership: Story = {
       expect(modal.getByText('Please fill in all the details below.'))
 
       // Check that the CAPTCHA blocks the next step
-      await userEvent.type(modal.getByLabelText('Member Name'), 'Alice')
-      await userEvent.type(modal.getByLabelText('Membership handle'), 'alice')
-      await userEvent.type(modal.getByLabelText('About member'), 'Lorem ipsum...')
-      const avatar = 'https://api.dicebear.com/6.x/bottts-neutral/svg?seed=Alice'
-      await userEvent.type(modal.getByLabelText('Member Avatar'), avatar)
+      await userEvent.type(modal.getByLabelText('Member Name'), MEMBER_DATA.metadata.name)
+      await userEvent.type(modal.getByLabelText('Membership handle'), MEMBER_DATA.handle)
+      await userEvent.type(modal.getByLabelText('About member'), MEMBER_DATA.metadata.about)
+      await userEvent.type(modal.getByLabelText('Member Avatar'), MEMBER_DATA.metadata.avatar.avatarUri)
       await userEvent.click(modal.getByLabelText(/^I agree to the/))
       expect(getButtonByText(modal, 'Create a Membership')).toBeDisabled()
     })
+  },
+}
+
+// ----------------------------------------------------------------------------
+// Test Buy Membership Modal
+// ----------------------------------------------------------------------------
+const fillMembershipForm = async (modal: Container) => {
+  await selectFromDropdown(modal, 'Root account', 'alice')
+  await selectFromDropdown(modal, 'Controller account', 'bob')
+  await userEvent.type(modal.getByLabelText('Member Name'), MEMBER_DATA.metadata.name)
+  await userEvent.type(modal.getByLabelText('Membership handle'), MEMBER_DATA.handle)
+  await userEvent.type(modal.getByLabelText('About member'), MEMBER_DATA.metadata.about)
+  await userEvent.type(modal.getByLabelText('Member Avatar'), MEMBER_DATA.metadata.avatar.avatarUri)
+  await userEvent.click(modal.getByLabelText(/^I agree to the/))
+}
+
+export const BuyMembershipHappy: Story = {
+  args: { hasMemberships: false, isLoggedIn: false },
+
+  play: async ({ args, canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    await userEvent.click(getButtonByText(screen, 'Join Now'))
+
+    await step('Form', async () => {
+      const createButton = getButtonByText(modal, 'Create a Membership')
+
+      await step('Fill', async () => {
+        expect(createButton).toBeDisabled()
+        await fillMembershipForm(modal)
+        await waitFor(() => expect(createButton).toBeEnabled())
+      })
+
+      await step('Disables button on incorrect email address', async () => {
+        await userEvent.click(modal.getByText('Email'))
+        const emailInput = modal.getByPlaceholderText('Enter Email')
+
+        await userEvent.type(emailInput, 'bobby@bob')
+        await waitFor(() => expect(createButton).toBeDisabled())
+        await userEvent.type(emailInput, '.com')
+        await waitFor(() => expect(createButton).toBeEnabled())
+      })
+
+      await userEvent.click(createButton)
+    })
+
+    await step('Sign', async () => {
+      expect(modal.getByText('Authorize transaction'))
+      expect(modal.getByText('You intend to create a new membership.'))
+      expect(modal.getByText('Creation fee:')?.nextSibling?.textContent).toBe('20')
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'bob' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and create a member'))
+    })
+
+    await step('Confirm', async () => {
+      expect(await modal.findByText('Success'))
+      expect(modal.getByText(MEMBER_DATA.handle))
+
+      expect(args.onBuyMembership).toHaveBeenCalledWith({
+        rootAccount: alice.controllerAccount,
+        controllerAccount: bob.controllerAccount,
+        handle: MEMBER_DATA.handle,
+        metadata: metadataToBytes(MembershipMetadata, {
+          name: MEMBER_DATA.metadata.name,
+          about: MEMBER_DATA.metadata.about,
+          avatarUri: MEMBER_DATA.metadata.avatar.avatarUri,
+          externalResources: [{ type: MembershipMetadata.ExternalResource.ResourceType.EMAIL, value: 'bobby@bob.com' }],
+        }),
+        invitingMemberId: undefined,
+        referrerId: undefined,
+      })
+
+      const viewProfileButton = getButtonByText(modal, 'View my profile')
+      expect(viewProfileButton).toBeEnabled()
+      userEvent.click(viewProfileButton)
+
+      expect(modal.getByText('Profile'))
+      expect(modal.getByText(MEMBER_DATA.handle))
+    })
+  },
+}
+
+export const BuyMembershipNotEnoughFund: Story = {
+  args: { hasMemberships: false, isLoggedIn: false },
+  parameters: { totalBalance: 20 },
+
+  play: async ({ canvasElement }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    await userEvent.click(getButtonByText(screen, 'Join Now'))
+
+    await fillMembershipForm(modal)
+    const createButton = getButtonByText(modal, 'Create a Membership')
+    await waitFor(() => expect(createButton).toBeEnabled())
+    await userEvent.click(createButton)
+
+    expect(modal.getByText('Insufficient funds to cover the membership creation.'))
+    expect(getButtonByText(modal, 'Sign and create a member')).toBeDisabled()
+  },
+}
+
+export const BuyMembershipTxFailure: Story = {
+  args: { hasMemberships: false, isLoggedIn: false },
+  parameters: { txFailure: 'Some error message' },
+
+  play: async ({ canvasElement }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    await userEvent.click(getButtonByText(screen, 'Join Now'))
+
+    await fillMembershipForm(modal)
+    const createButton = getButtonByText(modal, 'Create a Membership')
+    await waitFor(() => expect(createButton).toBeEnabled())
+    await userEvent.click(createButton)
+
+    await userEvent.click(getButtonByText(modal, 'Sign and create a member'))
+
+    expect(await screen.findByText('Failure'))
+    expect(await modal.findByText('Some error message'))
   },
 }

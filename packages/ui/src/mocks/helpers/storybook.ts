@@ -1,4 +1,5 @@
-import { waitFor, within } from '@storybook/testing-library'
+import { expect } from '@storybook/jest'
+import { userEvent, waitFor, within } from '@storybook/testing-library'
 import { waitForOptions as WaitForOptions } from '@testing-library/dom/types'
 import * as queries from '@testing-library/dom/types/queries'
 import { BoundFunctions } from '@testing-library/react'
@@ -29,4 +30,20 @@ export const getEditorByLabel = async (
   }, waitForOptions)
 
   return editor as HTMLElement & { setData: (data: string) => void }
+}
+
+export const selectFromDropdown = async (container: Container, labelText: string | RegExp, name: string) => {
+  const label = container.getByText(labelText)
+  const toggle = label.parentElement?.querySelector('.ui-toggle')
+  if (!toggle) throw `Found a label with the text of: ${labelText}, however no dropdown is associated with this label.`
+
+  await userEvent.click(toggle)
+
+  const optionsWrapper = await waitFor(() => {
+    const optionsWrapper = document.getElementById('select-popper-wrapper')
+    expect(optionsWrapper).not.toBeNull()
+    return optionsWrapper as HTMLElement
+  }, {})
+
+  await userEvent.click(within(optionsWrapper).getByText(name))
 }
