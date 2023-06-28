@@ -109,9 +109,7 @@ export default {
                   ],
                 })
               },
-              erasTotalStake: () => {
-                return of(new BN(1300000000000000))
-              },
+              erasTotalStake: joy(130_000),
             },
           },
         },
