@@ -167,6 +167,29 @@ export const SwitchMembership: Story = {
 }
 
 // ----------------------------------------------------------------------------
+// Test On Boarding Overlay
+// ----------------------------------------------------------------------------
+
+export const OnBoardingOverlayStory: Story = {
+  args: { hasWallet: false, hasAccounts: false, hasFunds: false, hasMemberships: false, isLoggedIn: false },
+
+  name: 'On Boarding Overlay',
+
+  play: async ({ canvasElement }) => {
+    const screen = within(canvasElement)
+
+    expect(screen.getByText('Become a member'))
+    userEvent.click(screen.getByText('Show how'))
+    expect(screen.getByText('What are the benefits?'))
+    expect(screen.getByText('How to become a member?'))
+
+    expect(screen.getByText('Connect wallet', { selector: 'h6' }))
+    expect(screen.getByText('Connect account', { selector: 'h6' }))
+    expect(screen.getByText('Create free membership', { selector: 'h6' }))
+  },
+}
+
+// ----------------------------------------------------------------------------
 // Test On Boarding flow
 // ----------------------------------------------------------------------------
 
