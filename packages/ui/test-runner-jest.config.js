@@ -9,5 +9,5 @@ module.exports = {
    * @see https://jestjs.io/docs/configuration
    */
   roots: undefined,
-  testMatch: ['<rootDir>/src/app/pages/*/*.stories.tsx'],
+  testMatch: ['<rootDir>/src/app/**/*.stories.tsx'],
 }
