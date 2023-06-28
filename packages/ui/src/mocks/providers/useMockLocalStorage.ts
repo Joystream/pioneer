@@ -1,18 +1,8 @@
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 
-type Props = { state?: Record<string, string>; spy?: CallableFunction }
-export type MockLocalStorage = { localStorage?: Props }
+export type MockLocalStorage = { localStorage?: Record<string, string> }
 
-export const useMockLocalStorage = ({ state = {}, spy }: Props = {}) => {
-  const spyOn = useCallback(
-    <T extends (...args: any[]) => any>(key: string, fn: T) =>
-      (...args: Parameters<T>): ReturnType<T> => {
-        spy?.(key, ...args)
-        return fn(...args)
-      },
-    [spy]
-  )
-
+export const useMockLocalStorage = (state: Record<string, string> = {}) => {
   const storageMap = useMemo(() => new Map<string, string>(Object.entries(state)), [state])
 
   const storage: Storage = useMemo(
@@ -20,13 +10,13 @@ export const useMockLocalStorage = ({ state = {}, spy }: Props = {}) => {
       get length() {
         return storageMap.size
       },
-      key: spyOn('key', (index) => Array.from(storageMap.keys())[index]),
-      clear: spyOn('clear', () => storageMap.clear()),
-      getItem: spyOn('getItem', (key) => storageMap.get(key) ?? null),
-      setItem: spyOn('setItem', (key, value) => storageMap.set(key, value)),
-      removeItem: spyOn('removeItem', (key) => storageMap.delete(key)),
+      key: (index) => Array.from(storageMap.keys())[index],
+      clear: () => storageMap.clear(),
+      getItem: (key) => storageMap.get(key) ?? null,
+      setItem: (key, value) => storageMap.set(key, value),
+      removeItem: (key) => storageMap.delete(key),
     }),
-    [storageMap, spyOn]
+    [storageMap]
   )
 
   Object.defineProperty(global, 'localStorage', { get: () => storage })
