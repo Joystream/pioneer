@@ -3,14 +3,17 @@ import { MembershipMetadata } from '@joystream/metadata-protobuf'
 import { expect } from '@storybook/jest'
 import { Meta, StoryContext, StoryObj } from '@storybook/react'
 import { userEvent, waitFor, within } from '@storybook/testing-library'
-import { FC } from 'react'
+import React, { FC } from 'react'
+import { createGlobalStyle } from 'styled-components'
 
+import { Page, Screen } from '@/common/components/page/Page'
 import { Colors } from '@/common/constants'
 import { GetMemberDocument } from '@/memberships/queries'
 import { Membership, member } from '@/mocks/data/members'
 import { Container, getButtonByText, joy, selectFromDropdown, withinModal } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
 
+import { OnBoardingOverlay } from './OnboardingOverlay/OnBoardingOverlay'
 import { SideBar } from './SideBar'
 
 type Args = {
@@ -39,6 +42,12 @@ const MEMBER_DATA = {
     avatar: { avatarUri: 'https://api.dicebear.com/6.x/bottts-neutral/svg?seed=bob' },
   },
 }
+
+const NoPaddingStyle = createGlobalStyle`
+  html, body {
+    padding: 0 !important;
+  }
+`
 
 export default {
   title: 'App/SideBar',
@@ -110,6 +119,15 @@ export default {
       }
     },
   },
+  render: () => (
+    <Page>
+      <NoPaddingStyle />
+      <SideBar />
+      <Screen>
+        <OnBoardingOverlay />
+      </Screen>
+    </Page>
+  ),
 } satisfies Meta<Args>
 
 export const Default: Story = {}
@@ -124,6 +142,8 @@ export const SwitchMembership: Story = {
   play: async ({ canvasElement, step }) => {
     const screen = within(canvasElement)
     const modal = withinModal(canvasElement)
+
+    expect(screen.queryByText('Become a member')).toBeNull()
 
     await step('Switch active membership to bob', async () => {
       expect(screen.queryByText('bob')).toBeNull()
@@ -159,7 +179,10 @@ export const ConnectWallet: Story = {
 
   play: async ({ canvasElement }) => {
     const screen = within(canvasElement)
-    await userEvent.click(getButtonByText(screen, 'Connect Wallet'))
+
+    expect(screen.getByText('Become a member'))
+
+    await userEvent.click(getButtonByText(screen, 'Connect Wallet', { selector: 'nav *' }))
 
     const modal = withinModal(canvasElement)
     expectActiveStepToBe(modal, 'Connect wallet')
@@ -176,7 +199,10 @@ export const NoAccount: Story = {
 
   play: async ({ canvasElement }) => {
     const screen = within(canvasElement)
-    await userEvent.click(getButtonByText(screen, 'Join Now'))
+
+    expect(screen.getByText('Become a member'))
+
+    await userEvent.click(getButtonByText(screen, 'Join Now', { selector: 'nav *' }))
 
     const modal = withinModal(canvasElement)
     expectActiveStepToBe(modal, 'Connect account')
@@ -194,7 +220,9 @@ export const FaucetMembership: Story = {
     const screen = within(canvasElement)
     const modal = withinModal(canvasElement)
 
-    await userEvent.click(getButtonByText(screen, 'Join Now'))
+    expect(screen.getByText('Become a member'))
+
+    await userEvent.click(getButtonByText(screen, 'Join Now', { selector: 'nav *' }))
 
     await step('Connect account', async () => {
       expectActiveStepToBe(modal, 'Connect account')
@@ -246,6 +274,8 @@ export const BuyMembershipHappy: Story = {
   play: async ({ args, canvasElement, step }) => {
     const screen = within(canvasElement)
     const modal = withinModal(canvasElement)
+
+    expect(screen.queryByText('Become a member')).toBeNull()
 
     await userEvent.click(getButtonByText(screen, 'Join Now'))
 
