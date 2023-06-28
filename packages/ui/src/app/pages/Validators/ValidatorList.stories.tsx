@@ -19,7 +19,7 @@ export default {
           derive: {
             staking: {
               erasRewards: [
-                { era: new BN(688), eraReward: new BN(1234560000) },
+                { era: 688, eraReward: joy('0.123456') },
                 { era: new BN(689), eraReward: new BN(1234560000) },
                 { era: new BN(690), eraReward: new BN(1234560000) },
                 { era: new BN(691), eraReward: new BN(1234560000) },
