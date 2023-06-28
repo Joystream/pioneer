@@ -206,7 +206,10 @@ export const FaucetMembership: Story = {
       expect(connectAccountButton).toBeDisabled()
       await userEvent.click(modal.getByText('alice'))
       expect(connectAccountButton).toBeEnabled()
+
+      expect(localStorage.getItem('onboarding-membership-account')).toBeNull()
       await userEvent.click(connectAccountButton)
+      expect(localStorage.getItem('onboarding-membership-account')).toBe(JSON.stringify(alice.controllerAccount))
     })
 
     await step('Create free membership', async () => {
