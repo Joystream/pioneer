@@ -2,10 +2,13 @@ import { createType } from '@joystream/types'
 import BN from 'bn.js'
 import { asyncScheduler, from, of, scheduled } from 'rxjs'
 
+import { whenDefined } from '@/common/utils'
+
 import { Balance } from '../providers/accounts'
 import { BLOCK_HASH } from '../providers/api'
 
 import { joy } from '.'
+import { asChainData } from './asChainData'
 
 export type TxMock = {
   data?: any[] | any
@@ -20,7 +23,8 @@ export const fromTxMock = (
   { data, failure, event: eventName = 'Default Event', fee = 5, onCall, onSend }: TxMock,
   moduleName: string
 ) => {
-  const event = failure ? createErrorEvents(failure) : createSuccessEvents([data ?? []].flat(), moduleName, eventName)
+  const eventData = whenDefined(data, (data) => [asChainData(data)].flat()) ?? []
+  const event = failure ? createErrorEvents(failure) : createSuccessEvents(eventData, moduleName, eventName)
   const txResult = stubTransactionResult(event)
 
   const paymentInfo = () => of({ partialFee: createType('BalanceOf', joy(fee)) })
