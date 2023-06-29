@@ -2,11 +2,9 @@ import { Decorator } from '@storybook/react'
 import React from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { useForm, FormProvider } from 'react-hook-form'
-import { MemoryRouter, Redirect, Route, Switch } from 'react-router'
 import { createGlobalStyle } from 'styled-components'
 
 import { GlobalModals } from '../src/app/GlobalModals'
-import { NotFound } from '../src/app/pages/NotFound'
 import { GlobalStyle } from '../src/app/providers/GlobalStyle'
 import { OnBoardingProvider } from '../src/common/providers/onboarding/provider'
 import { NotificationsHolder } from '../src/common/components/page/SideNotification'
@@ -14,7 +12,7 @@ import { TransactionStatus } from '../src/common/components/TransactionStatus/Tr
 import { Colors } from '../src/common/constants'
 import { ModalContextProvider } from '../src/common/providers/modal/provider'
 import { TransactionStatusProvider } from '../src/common/providers/transactionStatus/provider'
-import { MockProvidersDecorator } from '../src/mocks/providers'
+import { MockProvidersDecorator, MockRouterDecorator } from '../src/mocks/providers'
 import { i18next } from '../src/services/i18n'
 
 const stylesWrapperDecorator: Decorator = (Story) => (
@@ -49,22 +47,6 @@ const RHFDecorator: Decorator = (Story) => {
   )
 }
 
-const RouterDecorator: Decorator = (Story, { parameters }) => {
-  const storyPath = `/story/${parameters.router?.href ?? ''}`
-  return (
-    <>
-      <div id="modal-container" />
-      <MemoryRouter initialEntries={[storyPath]}>
-        <Switch>
-          <Route component={Story} path={`/story/${parameters.router?.path ?? ''}`} />
-          {parameters.enable404 && <Route path="*" component={NotFound} />}
-          <Redirect from="*" to={storyPath} />
-        </Switch>
-      </MemoryRouter>
-    </>
-  )
-}
-
 const ModalDecorator: Decorator = (Story) => (
   <TransactionStatusProvider>
     <ModalContextProvider>
@@ -85,7 +67,7 @@ export const decorators = [
   i18nextDecorator,
   RHFDecorator,
   MockProvidersDecorator,
-  RouterDecorator,
+  MockRouterDecorator,
 ]
 
 export const parameters = {
