@@ -1,4 +1,3 @@
-import { BN } from '@polkadot/util'
 import { Meta, StoryObj } from '@storybook/react'
 
 import { joy } from '@/mocks/helpers'
@@ -37,8 +36,12 @@ export default {
           },
 
           query: {
-            balances: { totalIssuance: joy(1000000) },
+            balances: {
+              totalIssuance: joy(1000000),
+            },
+
             timestamp: { now: Date.now() },
+
             session: {
               validators: [
                 'j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D',
@@ -53,12 +56,13 @@ export default {
                 'j4S998Thq5kQHyurofh8QfHrcFN2c1T19gTdMGUVVx5EHKgky',
               ],
             },
+
             staking: {
               activeEra: {
-                unwrap: () => ({
-                  index: new BN(700),
+                unwrap: {
+                  index: 700,
                   start: Date.now() - 5400000,
-                }),
+                },
               },
               counterForValidators: 12,
               counterForNominators: 20,
