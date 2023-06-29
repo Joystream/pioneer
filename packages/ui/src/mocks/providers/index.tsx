@@ -10,7 +10,7 @@ import { MockLocalStorage, useMockLocalStorage } from './useMockLocalStorage'
 export type MocksParameters = MockApiProps & MockQNProps & MockAccountsProps & MockLocalStorage
 
 type Context = StoryContext & {
-  parameters: { mocks: MocksParameters | ((storyContext: StoryContext) => MocksParameters) }
+  parameters: { mocks?: MocksParameters | ((storyContext: StoryContext) => MocksParameters) }
 }
 
 export const MockProvidersDecorator = (Story: CallableFunction, storyContext: Context) => {
@@ -19,7 +19,7 @@ export const MockProvidersDecorator = (Story: CallableFunction, storyContext: Co
     return isFunction(mocks) ? mocks(storyContext) : mocks
   }, [storyContext])
 
-  useMockLocalStorage(mocks.localStorage)
+  useMockLocalStorage(mocks?.localStorage)
 
   return (
     <MockApiProvider chain={mocks?.chain}>
