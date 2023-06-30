@@ -1,5 +1,5 @@
 import { random } from 'faker'
-import { mapValues } from 'lodash'
+import { mapValues, merge } from 'lodash'
 
 import { RecursivePartial } from '@/common/types/helpers'
 import { repeat } from '@/common/utils'
@@ -7,7 +7,8 @@ import { worker, workingGroup, workingGroupOpening } from '@/mocks/data/common'
 import { isoDate, joy } from '@/mocks/helpers'
 import { ProposalWithDetailsFieldsFragment } from '@/proposals/queries'
 
-import { ProposalDetailsType } from '../helpers/proposalDetailsToConstantKey'
+import { ProposalDetailsType, proposalDetailsToConstantKey } from '../helpers/proposalDetailsToConstantKey'
+import { MocksParameters } from '../providers'
 
 import { Membership, member } from './members'
 import forumPosts from './raw/forumPosts.json'
@@ -84,6 +85,8 @@ export const proposalDetailsMap = mapValues(
 
 export const proposalTypes = Object.keys(proposalDetailsMap) as ProposalDetailsType[]
 
+export const MAX_ACTIVE_PROPOSAL = 20
+
 type ProposalData = Omit<PartialProposal, 'status'> & {
   id: string
   title: string
@@ -127,3 +130,62 @@ export const generateProposals = (
       councilApprovals: 0,
     })
   }, Math.min(limit, max - offset))
+
+type Chain = MocksParameters['chain']
+export const proposalsPagesChain = (activeProposalCount: number, extra?: Chain): Chain =>
+  merge(
+    {
+      consts: {
+        content: {
+          minimumCashoutAllowedLimit: joy(166),
+          maximumCashoutAllowedLimit: joy(1_666_666),
+        },
+
+        members: {
+          referralCutMaximumPercent: 50,
+        },
+
+        proposalsEngine: {
+          maxActiveProposalLimit: MAX_ACTIVE_PROPOSAL,
+          descriptionMaxLength: 3000,
+          titleMaxLength: 40,
+        },
+
+        proposalsCodex: {
+          fundingRequestProposalMaxTotalAmount: joy(166_666),
+          setMaxValidatorCountProposalMaxValidators: 100,
+
+          ...Object.fromEntries(
+            proposalTypes.map((type) => [
+              proposalDetailsToConstantKey(type),
+              {
+                votingPeriod: 200,
+                gracePeriod: 100,
+                approvalQuorumPercentage: 80,
+                approvalThresholdPercentage: 100,
+                slashingQuorumPercentage: 60,
+                slashingThresholdPercentage: 80,
+                requiredStake: joy(20),
+                constitutionality: 2,
+              },
+            ])
+          ),
+        },
+      },
+
+      query: {
+        members: { membershipPrice: joy(20) },
+        proposalsEngine: { activeProposalCount },
+        staking: { minimumValidatorCount: 4 },
+      },
+
+      tx: {
+        proposalsCodex: {
+          createProposal: { event: 'Create' },
+        },
+        members: { confirmStakingAccount: {} },
+        utility: { batch: {} },
+      },
+    } satisfies Chain,
+    extra
+  )
