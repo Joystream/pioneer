@@ -56,7 +56,7 @@ export const useStakingStatistics = () => {
     eraDuration: ERA_DURATION,
     eraRewardPoints,
     now,
-    idealStaking: new BN(totalIssuance ?? 0).div(new BN(2)),
+    idealStaking: new BN(totalIssuance ?? 0).divn(2),
     currentStaking: new BN(currentStaking ?? 0),
     stakingPercentage,
     activeValidatorsCount: activeValidators?.length ?? 0,
