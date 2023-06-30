@@ -39,7 +39,7 @@ export const useStakingStatistics = () => {
   const allValidatorsCount = useObservable(() => api?.query.staking.counterForValidators(), [api?.isConnected])
   const allNominatorsCount = useObservable(() => api?.query.staking.counterForNominators(), [api?.isConnected])
   const lastValidatorRewards = useObservable(
-    () => api?.query.staking.erasValidatorReward(eraIndex.sub(new BN(1))),
+    () => api?.query.staking.erasValidatorReward(eraIndex.subn(1)),
     [eraIndex, api?.isConnected]
   )
   const totalRewards = useObservable(() => api?.derive.staking.erasRewards(), [api?.isConnected])
