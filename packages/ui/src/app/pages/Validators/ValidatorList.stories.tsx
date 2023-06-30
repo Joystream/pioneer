@@ -67,7 +67,7 @@ export default {
               counterForValidators: 12,
               counterForNominators: 20,
               erasRewardPoints: {
-                total: joy(0.0018),
+                total: 18000,
                 individuals: {
                   j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: 180,
                   j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: 200,
