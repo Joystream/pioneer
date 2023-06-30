@@ -25,7 +25,7 @@ type Args = {
 type Story = StoryObj<FC<Args>>
 
 export default {
-  title: 'Pages/Proposals/PastProposals',
+  title: 'Pages/Proposals/ProposalList/Past',
   component: PastProposals,
 
   argTypes: {
@@ -40,7 +40,7 @@ export default {
     router: {
       href: '/proposals/past',
       actions: {
-        '/proposals/current': linkTo('Pages/Proposals/CurrentProposals'),
+        '/proposals/current': linkTo('Pages/Proposals/ProposalList/Current'),
       },
     },
 

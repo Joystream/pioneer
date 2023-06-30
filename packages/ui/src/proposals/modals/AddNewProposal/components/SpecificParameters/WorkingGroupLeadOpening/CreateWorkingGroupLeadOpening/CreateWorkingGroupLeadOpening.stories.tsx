@@ -6,7 +6,7 @@ import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvi
 import { ApplicationForm, DurationAndProcess, StakingPolicyAndReward, WorkingGroupAndDescription } from '.'
 
 export default {
-  title: 'Proposals/AddNewProposalModal/CreateWorkingGroupLeadOpening',
+  title: 'Pages/Proposals/ProposalList/Current/Modals/AddNewProposalModal/CreateWorkingGroupLeadOpening',
   components: [ApplicationForm, DurationAndProcess, StakingPolicyAndReward, WorkingGroupAndDescription],
 } as Meta
 
