@@ -2,11 +2,14 @@ import { random } from 'faker'
 import { mapValues } from 'lodash'
 
 import { RecursivePartial } from '@/common/types/helpers'
+import { repeat } from '@/common/utils'
 import { worker, workingGroup, workingGroupOpening } from '@/mocks/data/common'
-import { joy } from '@/mocks/helpers'
+import { isoDate, joy } from '@/mocks/helpers'
 import { ProposalWithDetailsFieldsFragment } from '@/proposals/queries'
 
-import { member } from './members'
+import { ProposalDetailsType } from '../helpers/proposalDetailsToConstantKey'
+
+import { Membership, member } from './members'
 import forumPosts from './raw/forumPosts.json'
 
 import { randomMarkdown } from '@/../dev/query-node-mocks/generators/utils'
@@ -15,14 +18,20 @@ export type ProposalStatus = ProposalWithDetailsFieldsFragment['status']['__type
 
 export const proposalActiveStatus = ['ProposalStatusDeciding', 'ProposalStatusDormant', 'ProposalStatusGracing']
 
+export type PartialProposal = RecursivePartial<ProposalWithDetailsFieldsFragment>
+
 const membership = member('eve')
-export const proposalDiscussionPosts = forumPosts.slice(0, 2).map(({ threadId, postAddedEvent, ...fields }) => ({
-  ...fields,
-  discussionThread: threadId,
-  author: membership,
-  status: { __typename: 'ProposalDiscussionPostStatusActive' },
-  createdInEvent: postAddedEvent,
-}))
+
+type ProposalPost = ProposalWithDetailsFieldsFragment['discussionThread']['posts'][number]
+export const proposalDiscussionPosts: RecursivePartial<ProposalPost>[] = forumPosts
+  .slice(0, 2)
+  .map<RecursivePartial<ProposalPost>>(({ threadId, postAddedEvent, ...fields }) => ({
+    ...fields,
+    author: membership,
+    status: { __typename: 'ProposalDiscussionPostStatusActive' },
+    createdInEvent: postAddedEvent as Partial<ProposalPost['createdInEvent']>,
+    discussionThread: { id: threadId } as Partial<ProposalPost['discussionThread']>,
+  }))
 
 const proposalDetails = {
   AmendConstitutionProposalDetails: {},
@@ -70,6 +79,51 @@ const proposalDetails = {
 
 export const proposalDetailsMap = mapValues(
   proposalDetails,
-  (value, __typename) =>
-    Object.assign(value, { __typename }) as RecursivePartial<ProposalWithDetailsFieldsFragment['details']>
+  (value, __typename) => Object.assign(value, { __typename }) as Partial<ProposalWithDetailsFieldsFragment['details']>
 )
+
+export const proposalTypes = Object.keys(proposalDetailsMap) as ProposalDetailsType[]
+
+type ProposalData = Omit<PartialProposal, 'status'> & {
+  id: string
+  title: string
+  description: string
+  creator: Membership
+  type: ProposalDetailsType
+  status: ProposalStatus
+}
+export const generateProposal = (data: ProposalData): PartialProposal => ({
+  createdInEvent: { inBlock: 123, createdAt: isoDate('2023/01/02') },
+  statusSetAtBlock: 123,
+  statusSetAtTime: isoDate('2023/01/12'),
+
+  ...data,
+
+  details: proposalDetailsMap[data.type],
+  status: { __typename: data.status },
+})
+
+type ProposalsProps = {
+  title: string
+  description: string
+  creator: Membership
+  statuses: ProposalStatus[]
+  limit?: number
+  offset?: number
+}
+export const generateProposals = (
+  { title, description, creator, statuses, limit = 5, offset = 0 }: ProposalsProps,
+  max: number
+) =>
+  repeat((index) => {
+    const id = 123 + index + offset
+    return generateProposal({
+      id: String(id),
+      status: statuses.at(id % statuses.length) ?? statuses[0],
+      type: proposalTypes.at(id % proposalTypes.length) ?? proposalTypes[0],
+      title,
+      creator,
+      description,
+      councilApprovals: 0,
+    })
+  }, Math.min(limit, max - offset))
