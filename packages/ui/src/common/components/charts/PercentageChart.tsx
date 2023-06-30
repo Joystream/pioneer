@@ -16,7 +16,7 @@ export const PercentageChart = ({ percentage, className, isOnBlack, small }: Per
   return (
     <PercentageChartContainer className={className} isOnBlack={isOnBlack} small={small}>
       <PercentageChartBorder>
-        <PercentageChartText small={small} children={Math.min(innerPercentage, 100) + '%'} />
+        <PercentageChartText small={small}>{Math.min(innerPercentage, 100)}%</PercentageChartText>
         <PercentageChartSvg viewBox="0 0 34 34" fill="none" color="currentColor">
           <PercentageChartCircle cx="17" cy="17" r="16" percentage={Math.min(innerPercentage, 100)} />
         </PercentageChartSvg>
