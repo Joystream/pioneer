@@ -20,7 +20,7 @@ export const useStakingStatistics = () => {
     [api?.isConnected]
   )
   const { eraIndex, eraStartedOn } = useMemo(
-    () => activeEra ?? { eraIndex: new BN(0), eraStartedOn: new Date(0) },
+    () => activeEra ?? { eraIndex: new BN(0), eraStartedOn: 0 },
     [activeEra, api?.isConnected]
   )
   const now = useObservable(() => api?.query.timestamp.now(), [api?.isConnected])
