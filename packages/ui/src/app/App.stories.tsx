@@ -120,7 +120,11 @@ export default {
       }
     },
   },
-  render: () => (
+
+  render: (
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    args // This parameter is needs for the controls to appear in stories
+  ) => (
     <Page>
       <NoPaddingStyle />
       <SideBar />
