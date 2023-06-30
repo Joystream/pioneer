@@ -1,1 +1,1 @@
-export const ERA_DURATION = new Date(21600000)
+export const ERA_DURATION = 21600000
