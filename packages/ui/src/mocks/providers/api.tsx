@@ -1,13 +1,14 @@
 import { AugmentedConsts, AugmentedQueries, AugmentedSubmittables } from '@polkadot/api/types'
 import { RpcInterface } from '@polkadot/rpc-core/types'
 import { Codec } from '@polkadot/types/types'
-import { isFunction, set } from 'lodash'
+import { isFunction, mapValues, merge } from 'lodash'
 import React, { FC, useEffect, useMemo, useState } from 'react'
 import { Observable, of } from 'rxjs'
 
 import { Api } from '@/api'
 import { ApiContext } from '@/api/providers/context'
 import { UseApi } from '@/api/providers/provider'
+import { warning } from '@/common/logger'
 import { createType } from '@/common/model/createType'
 
 import { asChainData } from '../helpers/asChainData'
@@ -38,45 +39,42 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
   const api = useMemo<Api | undefined>(() => {
     if (!chain) return
 
-    // Add default mocks
-    const blockHead = {
-      parentHash: BLOCK_HASH,
-      number: BLOCK_HEAD,
-      stateRoot: BLOCK_HASH,
-      extrinsicsRoot: BLOCK_HASH,
-      digest: { logs: [] },
+    // Common mocks:
+    const rpcChain = {
+      getBlockHash: createType('BlockHash', BLOCK_HASH),
+      subscribeNewHeads: {
+        parentHash: BLOCK_HASH,
+        number: BLOCK_HEAD,
+        stateRoot: BLOCK_HASH,
+        extrinsicsRoot: BLOCK_HASH,
+        digest: { logs: [] },
+      },
     }
 
     const api = {
-      _async: { chainMetadata: Promise.resolve({}) },
+      _async: { chainMetadata: Promise.resolve({}) } as Api['_async'],
       isConnected: true,
-      consts: {},
-      derive: {},
-      query: {},
-      rpc: {
-        chain: {
-          getBlockHash: asApiMethod(createType('BlockHash', BLOCK_HASH)),
-          subscribeNewHeads: asApiMethod(createType('Header', blockHead)),
-        },
-      },
-      tx: {},
-    } as Api
+      ...asApi('consts', asApiConst),
+      ...asApi('derive', asApiMethod),
+      ...asApi('query', asApiMethod),
+      ...asApi('rpc', asApiMethod, { chain: rpcChain }),
+      ...asApi('tx', fromTxMock),
+    }
 
-    // Add mocks from parameters
-    traverseParams('consts', (path, value) => set(api, path, asApiConst(value)))
-    traverseParams('derive', (path, value) => set(api, path, asApiMethod(value)))
-    traverseParams('query', (path, value) => set(api, path, asApiMethod(value)))
-    traverseParams('rpc', (path, value) => set(api, path, asApiMethod(value)))
-    traverseParams<TxMock>('tx', (path, txMock, moduleName) => set(api, path, fromTxMock(txMock, moduleName)))
+    return watchForMissingProps(api, 'api') as Api
 
-    return api
-
-    function traverseParams<T>(kind: keyof MockApi, fn: (path: string, value: T, moduleName: string) => any) {
-      Object.entries(chain?.[kind] ?? {}).forEach(([moduleName, moduleParam]) =>
-        Object.entries(moduleParam as Record<string, any>).forEach(([key, value]) =>
-          fn(`${kind}.${moduleName}.${key}`, value, moduleName)
-        )
-      )
+    function asApi<K extends keyof MockApi>(
+      kind: K,
+      fn: (value: any, moduleName: string) => any,
+      common: MockApi[K] = {}
+    ) {
+      const chainData: MockApi[K] = merge(common, chain?.[kind])
+      return {
+        [kind]: mapValues(chainData, (moduleParam, moduleName) => {
+          const module = mapValues(moduleParam, (value) => fn(value, moduleName))
+          return watchForMissingProps(module, `${kind}.${moduleName}`)
+        }),
+      } as Record<K, Api[K]>
     }
   }, [chain])
 
@@ -100,6 +98,15 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
 
   return <ApiContext.Provider value={contextValue}>{children}</ApiContext.Provider>
 }
+
+const watchForMissingProps = <T extends Record<any, any>>(target: T, path: string): T =>
+  new Proxy(target, {
+    get(target, p) {
+      const key = p as unknown as string
+      if (!(key in target)) warning('Missing chain data:', `${path}.${key}`)
+      return target[key]
+    },
+  })
 
 const asApiConst = (value: any) => {
   if (isFunction(value)) {
