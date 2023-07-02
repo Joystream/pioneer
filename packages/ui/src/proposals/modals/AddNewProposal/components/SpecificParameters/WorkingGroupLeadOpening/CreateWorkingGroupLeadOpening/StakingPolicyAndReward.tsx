@@ -8,18 +8,24 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { formatBlocksToDuration } from '@/common/model/formatters'
 
-export const StakingPolicyAndReward = () => {
+interface Props {
+  noHeader?: boolean
+}
+
+export const StakingPolicyAndReward = ({ noHeader = false }: Props) => {
   const { watch } = useFormContext()
   const leavingUnstakingPeriod = watch('stakingPolicyAndReward.leavingUnstakingPeriod')
 
   return (
     <RowGapBlock gap={24}>
-      <Row>
-        <RowGapBlock gap={8}>
-          <h4>Specific parameters</h4>
-          <TextMedium lighter>Create Working Group Lead Opening</TextMedium>
-        </RowGapBlock>
-      </Row>
+       {noHeader || (
+        <Row>
+          <RowGapBlock gap={8}>
+            <h4>Specific parameters</h4>
+            <TextMedium lighter>Create Working Group Lead Opening</TextMedium>
+          </RowGapBlock>
+        </Row>
+      )}
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent

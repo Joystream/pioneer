@@ -6,6 +6,7 @@ import {
   StakingPolicyAndReward,
   WorkingGroupAndDescription,
 } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
+import { GroupIdName } from '@/working-groups/types'
 
 import { CreateOpeningMachineState } from '../machine'
 
@@ -13,20 +14,21 @@ import { ImportOpening } from './Import'
 
 export interface CreateOpeningStepProps {
   matches: CreateOpeningMachineState['matches']
+  groupId: GroupIdName
 }
 
-export const CreateOpeningSteps = ({ matches }: CreateOpeningStepProps) => {
+export const CreateOpeningSteps = ({ matches, groupId }: CreateOpeningStepProps) => {
   switch (true) {
-    case matches('specificParameters.createWorkingGroupLeadOpening.workingGroupAndDescription'):
-      return <WorkingGroupAndDescription />
+    case matches('workingGroupAndDescription'):
+      return <WorkingGroupAndDescription noHeader={true} groupId={groupId} />
 
-    case matches('specificParameters.createWorkingGroupLeadOpening.durationAndProcess'):
-      return <DurationAndProcess />
+    case matches('durationAndProcess'):
+      return <DurationAndProcess noHeader={true} />
 
-    case matches('specificParameters.createWorkingGroupLeadOpening.applicationForm'):
-      return <ApplicationForm />
+    case matches('applicationForm'):
+      return <ApplicationForm noHeader={true} />
 
-    case matches('specificParameters.createWorkingGroupLeadOpening.stakingPolicyAndReward'):
+    case matches('stakingPolicyAndReward'):
       return <StakingPolicyAndReward />
 
     default:

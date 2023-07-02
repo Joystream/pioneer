@@ -7,15 +7,21 @@ import { OpeningDuration } from '@/common/components/OpeningDuration/OpeningDura
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextMedium } from '@/common/components/typography'
 
-export const DurationAndProcess = () => {
+interface Props {
+  noHeader?: boolean
+}
+
+export const DurationAndProcess = ({ noHeader = false }: Props) => {
   return (
     <RowGapBlock gap={24}>
-      <Row>
-        <RowGapBlock gap={8}>
-          <h4>Specific parameters</h4>
-          <TextMedium lighter>Create Working Group Lead Opening</TextMedium>
-        </RowGapBlock>
-      </Row>
+       {noHeader || (
+        <Row>
+          <RowGapBlock gap={8}>
+            <h4>Specific parameters</h4>
+            <TextMedium lighter>Create Working Group Lead Opening</TextMedium>
+          </RowGapBlock>
+        </Row>
+      )}
       <Row>
         <RowGapBlock gap={20}>
           <TextBig bold value>

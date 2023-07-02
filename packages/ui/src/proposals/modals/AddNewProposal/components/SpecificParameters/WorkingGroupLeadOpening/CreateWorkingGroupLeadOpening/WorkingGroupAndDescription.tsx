@@ -7,8 +7,8 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
-import { GroupIdName } from '@/working-groups/types'
 import { GroupIdToGroupParam } from '@/working-groups/constants'
+import { GroupIdName } from '@/working-groups/types'
 
 interface Props {
   noHeader?: boolean
