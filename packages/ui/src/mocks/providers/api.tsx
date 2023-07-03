@@ -54,11 +54,11 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
     const api = {
       _async: { chainMetadata: Promise.resolve({}) } as Api['_async'],
       isConnected: true,
-      ...asApi('consts', asApiConst),
-      ...asApi('derive', asApiMethod),
-      ...asApi('query', asApiMethod),
-      ...asApi('rpc', asApiMethod, { chain: rpcChain }),
-      ...asApi('tx', fromTxMock),
+      consts: asApi('consts', asApiConst),
+      derive: asApi('derive', asApiMethod),
+      query: asApi('query', asApiMethod),
+      rpc: asApi('rpc', asApiMethod, { chain: rpcChain }),
+      tx: asApi('tx', fromTxMock),
     }
 
     return watchForMissingProps(api, 'api') as Api
@@ -69,12 +69,10 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
       common: MockApi[K] = {}
     ) {
       const chainData: MockApi[K] = merge(common, chain?.[kind])
-      return {
-        [kind]: mapValues(chainData, (moduleParam, moduleName) => {
-          const module = mapValues(moduleParam, (value) => fn(value, moduleName))
-          return watchForMissingProps(module, `${kind}.${moduleName}`)
-        }),
-      } as Record<K, Api[K]>
+      return mapValues(chainData, (moduleData, moduleName) => {
+        const module = mapValues(moduleData, (value) => fn(value, moduleName))
+        return watchForMissingProps(module, `${kind}.${moduleName}`)
+      }) as Api[K]
     }
   }, [chain])
 
