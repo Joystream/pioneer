@@ -1,3 +1,4 @@
+import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { random } from 'faker'
 import { mapValues, merge } from 'lodash'
 
@@ -131,8 +132,17 @@ export const generateProposals = (
     })
   }, Math.min(limit, max - offset))
 
+type ProposalChainProps = {
+  activeProposalCount: number
+  onCreateProposal?: CallableFunction
+  onConfirmStakingAccount?: CallableFunction
+  onStakingAccountAdded?: CallableFunction
+}
 type Chain = MocksParameters['chain']
-export const proposalsPagesChain = (activeProposalCount: number, extra?: Chain): Chain =>
+export const proposalsPagesChain = (
+  { activeProposalCount, onCreateProposal, onConfirmStakingAccount, onStakingAccountAdded }: ProposalChainProps,
+  extra?: Chain
+): Chain =>
   merge(
     {
       consts: {
@@ -174,17 +184,35 @@ export const proposalsPagesChain = (activeProposalCount: number, extra?: Chain):
       },
 
       query: {
-        members: { membershipPrice: joy(20) },
+        members: {
+          membershipPrice: joy(20),
+          stakingAccountIdMemberStatus: {
+            memberId: 0,
+            confirmed: false,
+            size: 0,
+          },
+        },
+
         proposalsEngine: { activeProposalCount },
         staking: { minimumValidatorCount: 4 },
       },
 
       tx: {
         proposalsCodex: {
-          createProposal: { event: 'Create' },
+          createProposal: { event: 'ProposalCreated', onSend: onCreateProposal },
         },
-        members: { confirmStakingAccount: {} },
-        utility: { batch: {} },
+
+        members: {
+          addStakingAccountCandidate: { event: 'StakingAccountAdded', onSend: onStakingAccountAdded },
+          confirmStakingAccount: { event: 'StakingAccountConfirmed', onSend: onConfirmStakingAccount },
+        },
+
+        utility: {
+          batch: {
+            onSend: (transactions: SubmittableExtrinsic<'rxjs'>[]) =>
+              transactions.forEach((transaction) => transaction.signAndSend('')),
+          },
+        },
       },
     } satisfies Chain,
     extra
