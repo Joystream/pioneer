@@ -1,9 +1,11 @@
+import { createType } from '@joystream/types'
 import { mapValues } from 'lodash'
 
-import { asBN } from '@/common/utils'
+import { isDefined } from '@/common/utils'
 
 export const asChainData = (data: any): any => {
-  switch (Object.getPrototypeOf(data).constructor.name) {
+  const type = isDefined(data) ? Object.getPrototypeOf(data).constructor.name : typeof data
+  switch (type) {
     case 'Object':
       return mapValues(data, asChainData)
 
@@ -11,10 +13,10 @@ export const asChainData = (data: any): any => {
       return data.map(asChainData)
 
     case 'Number':
-      return asBN(data)
+      return createType('u128', data)
 
     case 'String':
-      return isNaN(data) ? data : asBN(data)
+      return isNaN(data) ? data : createType('u128', data)
 
     default:
       return data
