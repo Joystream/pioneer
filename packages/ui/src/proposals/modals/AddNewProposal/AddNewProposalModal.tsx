@@ -64,7 +64,7 @@ export type BaseProposalParams = Exclude<
 const minimalSteps = [{ title: 'Bind account for staking' }, { title: 'Create proposal' }]
 
 export const AddNewProposalModal = () => {
-  const { api, connectionState } = useApi()
+  const { api } = useApi()
   const { active: activeMember } = useMyMemberships()
   const minimumValidatorCount = useMinimumValidatorCount()
   const maximumReferralCut = api?.consts.members.referralCutMaximumPercent
@@ -149,12 +149,14 @@ export const AddNewProposalModal = () => {
     [state.context.discussionMode]
   )
 
+  const formValues = form.getValues() as AddNewProposalForm
+  const formStr = JSON.stringify(formValues)
+
   const { transaction, isLoading, feeInfo } = useTransactionFee(
     activeMember?.controllerAccount,
     async () => {
       if (activeMember && api) {
-        const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } =
-          form.getValues() as AddNewProposalForm
+        const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } = formValues
 
         const txBaseParams: BaseProposalParams = {
           memberId: activeMember?.id,
@@ -176,13 +178,7 @@ export const AddNewProposalModal = () => {
         ])
       }
     },
-    [
-      state.value,
-      connectionState,
-      stakingStatus,
-      form.formState.isValidating,
-      JSON.stringify(form.getValues()?.[path as keyof AddNewProposalForm]),
-    ]
+    [api?.isConnected, activeMember, stakingStatus, formStr]
   )
 
   useEffect((): any => {
@@ -244,7 +240,7 @@ export const AddNewProposalModal = () => {
     form.formState.isDirty,
     isExecutionError,
     warningAccepted,
-    JSON.stringify(form.getValues()),
+    formStr,
     JSON.stringify(form.formState.errors),
     isLoading,
   ])
@@ -309,7 +305,7 @@ export const AddNewProposalModal = () => {
   }
 
   if (state.matches('discussionTransaction')) {
-    const { triggerAndDiscussion } = form.getValues() as AddNewProposalForm
+    const { triggerAndDiscussion } = formValues
     const threadMode = createType('PalletProposalsDiscussionThreadModeBTreeSet', {
       closed: triggerAndDiscussion.discussionWhitelist?.map((member) =>
         createType('MemberId', Number.parseInt(member.id))
@@ -336,7 +332,7 @@ export const AddNewProposalModal = () => {
   }
 
   if (state.matches('success')) {
-    const { proposalDetails, proposalType } = form.getValues() as AddNewProposalForm
+    const { proposalDetails, proposalType } = formValues
     return (
       <SuccessModal
         onClose={hideModal}
