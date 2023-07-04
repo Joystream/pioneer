@@ -8,9 +8,10 @@ import { BLOCK_HEAD } from './api'
 export { ApolloClient, gql, HttpLink, InMemoryCache } from '@apollo/client/core'
 export { ApolloProvider } from '@apollo/client/react'
 
-type Options = { variables: any; skip: boolean } | undefined
+type OptionVariables = { where?: Record<'string', any>; orderBy?: string | string[]; limit?: number; offset?: number }
+type Options = { variables?: OptionVariables; skip?: boolean }
 type Result = { loading: boolean; data: any }
-type Resolver = (options: Options) => Result
+type Resolver = (options?: Options) => Result
 
 type QueryMap = Map<DocumentNode, Resolver>
 const QNMockContext = createContext<QueryMap>(new Map())

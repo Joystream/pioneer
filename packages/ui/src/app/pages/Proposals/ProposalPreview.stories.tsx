@@ -6,7 +6,6 @@ import { last } from 'lodash'
 import { FC } from 'react'
 
 import { ProposalVoteKind } from '@/common/api/queries'
-import { RecursivePartial } from '@/common/types/helpers'
 import { repeat } from '@/common/utils'
 import { GetElectedCouncilDocument } from '@/council/queries'
 import { member } from '@/mocks/data/members'
@@ -14,12 +13,13 @@ import {
   ProposalStatus,
   proposalDiscussionPosts,
   proposalActiveStatus,
-  proposalDetailsMap,
+  generateProposal,
+  proposalTypes,
 } from '@/mocks/data/proposals'
 import { getButtonByText, getEditorByLabel, withinModal, isoDate, joy, Container } from '@/mocks/helpers'
 import { ProposalDetailsType, proposalDetailsToConstantKey } from '@/mocks/helpers/proposalDetailsToConstantKey'
 import { MocksParameters } from '@/mocks/providers'
-import { GetProposalDocument, ProposalWithDetailsFieldsFragment } from '@/proposals/queries'
+import { GetProposalDocument } from '@/proposals/queries'
 
 import { ProposalPreview } from './ProposalPreview'
 
@@ -58,7 +58,7 @@ export default {
   component: ProposalPreview,
 
   argTypes: {
-    type: { control: { type: 'select' }, options: Object.keys(proposalDetailsMap) },
+    type: { control: { type: 'select' }, options: proposalTypes },
     constitutionality: { control: { type: 'range', min: 1, max: 4 } },
     vote1: { control: { type: 'inline-radio' }, options: voteArgs },
     vote2: { control: { type: 'inline-radio' }, options: voteArgs },
@@ -148,10 +148,14 @@ export default {
           {
             query: GetProposalDocument,
             data: {
-              proposal: {
+              proposal: generateProposal({
                 id: PROPOSAL_DATA.id,
                 title: PROPOSAL_DATA.title,
                 description: PROPOSAL_DATA.description,
+                status,
+                type: args.type,
+                creator: args.isProposer ? alice : bob,
+
                 discussionThread: {
                   posts: proposalDiscussionPosts,
                   mode: args.isDiscussionOpen
@@ -165,22 +169,15 @@ export default {
                       },
                 },
 
-                creator: args.isProposer ? alice : bob,
-                details: proposalDetailsMap[args.type],
-
-                createdInEvent: { inBlock: 123, createdAt: isoDate('2023/01/02') },
                 proposalStatusUpdates: updates.map((status: ProposalStatus) => ({
                   inBlock: 123,
                   createdAt: isoDate('2023/01/02'),
                   newStatus: { __typename: status },
                 })),
-                status: { __typename: status },
-                statusSetAtBlock: 123,
-                statusSetAtTime: isoDate('2023/01/12'),
 
                 councilApprovals: parameters.councilApprovals ?? constitutionality - 1,
                 votes,
-              } as RecursivePartial<ProposalWithDetailsFieldsFragment>,
+              }),
             },
           },
 
