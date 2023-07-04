@@ -1,4 +1,5 @@
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
+import BN from 'bn.js'
 import { assign, createMachine, State, Typestate } from 'xstate'
 import { StateSchema } from 'xstate/lib/types'
 
@@ -56,7 +57,7 @@ export const getTxParams = (group: GroupIdName, specifics: CreateOpeningForm) =>
     stakeAmount: specifics?.stakingPolicyAndReward?.stakingAmount,
     leavingUnstakingPeriod: specifics?.stakingPolicyAndReward?.leavingUnstakingPeriod,
   },
-  rewardPerBlock: specifics?.stakingPolicyAndReward?.rewardPerBlock,
+  rewardPerBlock: new BN(specifics?.stakingPolicyAndReward?.rewardPerBlock).toNumber(),
   group,
 })
 
@@ -64,28 +65,32 @@ export type CreateOpeningState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'warning'; context: EmptyObject }
-  | {
-      value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndDescription' } }
-      context: Required<CreateOpeningForm>
-    }
-  | {
-      value: { specificParameters: { createWorkingGroupLeadOpening: 'durationAndProcess' } }
-      context: Required<CreateOpeningForm>
-    }
-  | {
-      value: { specificParameters: { createWorkingGroupLeadOpening: 'applicationForm' } }
-      context: Required<CreateOpeningForm>
-    }
-  | {
-      value: { specificParameters: { createWorkingGroupLeadOpening: 'stakingPolicyAndReward' } }
-      context: Required<CreateOpeningForm>
-    }
+  | { value: 'workingGroupAndDescription'; context: Required<CreateOpeningForm> }
+  | { value: 'durationAndProcess'; context: Required<CreateOpeningForm> }
+  | { value: 'applicationForm'; context: Required<CreateOpeningForm> }
+  | { value: 'stakingPolicyAndReward'; context: Required<CreateOpeningForm> }
+  // | {
+  //     value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndDescription' } }
+  //     context: Required<CreateOpeningForm>
+  //   }
+  // | {
+  //     value: { specificParameters: { createWorkingGroupLeadOpening: 'durationAndProcess' } }
+  //     context: Required<CreateOpeningForm>
+  //   }
+  // | {
+  //     value: { specificParameters: { createWorkingGroupLeadOpening: 'applicationForm' } }
+  //     context: Required<CreateOpeningForm>
+  //   }
+  // | {
+  //     value: { specificParameters: { createWorkingGroupLeadOpening: 'stakingPolicyAndReward' } }
+  //     context: Required<CreateOpeningForm>
+  //   }
   | { value: 'beforeTransaction'; context: Required<CreateOpeningForm> }
   | { value: 'transaction'; context: Required<TransactionContext> }
   | { value: 'success'; context: Required<TransactionContext> }
   | { value: 'error'; context: TransactionContext }
 
-const isType = (type: string) => (context: any) => type === context?.type
+// const isType = (type: string) => (context: any) => type === context?.type
 
 export type CreateOpeningEvent = { type: 'FAIL' } | { type: 'BACK' } | { type: 'NEXT' }
 
@@ -99,76 +104,117 @@ export type CreateOpeningMachineState = State<
 type Context = CreateOpeningForm & TransactionContext
 
 export const createOpeningMachine = createMachine<Partial<Context>, CreateOpeningEvent, CreateOpeningState>({
-  initial: 'specificParameters',
+  initial: 'requirementsVerification',
   states: {
-    requirementsVerification: { on: { FAIL: 'requirementsFailed', NEXT: 'generalParameters' } },
+    requirementsVerification: { on: { FAIL: 'requirementsFailed', NEXT: 'workingGroupAndDescription' } },
     requirementsFailed: { type: 'final' },
-    generalParameters: {
-      on: { NEXT: 'specificParameters' },
-    },
-    specificParameters: {
-      meta: { isStep: true, stepTitle: 'Specific parameters' },
-      on: {
-        BACK: 'generalParameters',
-        NEXT: 'beforeTransaction',
+    // generalParameters: {
+    //   on: { NEXT: 'specificParameters' },
+    // },
+    // specificParameters: {
+    //   meta: { isStep: true, stepTitle: 'Specific parameters' },
+    //   on: {
+    //     // BACK: 'generalParameters',
+    //     NEXT: 'beforeTransaction',
+    //   },
+    //   initial: 'entry',
+    //   states: {
+    //     entry: {
+    //       // always: [{ target: 'createWorkingGroupLeadOpening', cond: isType('createWorkingGroupLeadOpening') }],
+    //       always: [{ target: 'createWorkingGroupLeadOpening', cond: isType('createWorkingGroupLeadOpening') }],
+    //     },
+    //     createWorkingGroupLeadOpening: {
+    //       initial: 'workingGroupAndDescription',
+    //       states: {
+    //         workingGroupAndDescription: {
+    //           meta: {
+    //             isStep: true,
+    //             stepTitle: 'Working group & Description',
+    //             cond: isType('createWorkingGroupLeadOpening'),
+    //           },
+    //           on: {
+    //             NEXT: 'durationAndProcess',
+    //           },
+    //         },
+    //         durationAndProcess: {
+    //           meta: {
+    //             isStep: true,
+    //             stepTitle: 'Duration & Process',
+    //             cond: isType('createWorkingGroupLeadOpening'),
+    //           },
+    //           on: {
+    //             BACK: 'workingGroupAndDescription',
+    //             NEXT: 'applicationForm',
+    //           },
+    //         },
+    //         applicationForm: {
+    //           meta: {
+    //             isStep: true,
+    //             stepTitle: 'Application Form',
+    //             cond: isType('createWorkingGroupLeadOpening'),
+    //           },
+    //           on: {
+    //             BACK: 'durationAndProcess',
+    //             NEXT: 'stakingPolicyAndReward',
+    //           },
+    //         },
+    //         stakingPolicyAndReward: {
+    //           meta: {
+    //             isStep: true,
+    //             stepTitle: 'Staking Policy & Reward',
+    //             cond: isType('createWorkingGroupLeadOpening'),
+    //           },
+    //           on: {
+    //             BACK: 'applicationForm',
+    //           },
+    //         },
+    //       },
+    //     },
+    //   },
+    // },
+    workingGroupAndDescription: {
+      meta: {
+        isStep: true,
+        stepTitle: 'Working group & Description',
       },
-      initial: 'entry',
-      states: { 
-        entry: {
-          always: [{ target: 'createWorkingGroupLeadOpening', cond: isType('createWorkingGroupLeadOpening') }],
-        },
-        createWorkingGroupLeadOpening: {
-          initial: 'workingGroupAndDescription',
-          states: {
-            workingGroupAndDescription: {
-              meta: {
-                isStep: true,
-                stepTitle: 'Working group & Description',
-                cond: isType('createWorkingGroupLeadOpening'),
-              },
-              on: {
-                NEXT: 'durationAndProcess',
-              },
-            },
-            durationAndProcess: {
-              meta: {
-                isStep: true,
-                stepTitle: 'Duration & Process',
-                cond: isType('createWorkingGroupLeadOpening'),
-              },
-              on: {
-                BACK: 'workingGroupAndDescription',
-                NEXT: 'applicationForm',
-              },
-            },
-            applicationForm: {
-              meta: {
-                isStep: true,
-                stepTitle: 'Application Form',
-                cond: isType('createWorkingGroupLeadOpening'),
-              },
-              on: {
-                BACK: 'durationAndProcess',
-                NEXT: 'stakingPolicyAndReward',
-              },
-            },
-            stakingPolicyAndReward: {
-              meta: {
-                isStep: true,
-                stepTitle: 'Staking Policy & Reward',
-                cond: isType('createWorkingGroupLeadOpening'),
-              },
-              on: {
-                BACK: 'applicationForm',
-              },
-            },
-          },
-        },
+      on: {
+        NEXT: 'durationAndProcess',
+      },
+    },
+    durationAndProcess: {
+      meta: {
+        isStep: true,
+        stepTitle: 'Duration & Process',
+      },
+      on: {
+        BACK: 'workingGroupAndDescription',
+        NEXT: 'applicationForm',
+      },
+    },
+    applicationForm: {
+      meta: {
+        isStep: true,
+        stepTitle: 'Application Form',
+      },
+      on: {
+        BACK: 'durationAndProcess',
+        NEXT: 'stakingPolicyAndReward',
+      },
+    },
+    stakingPolicyAndReward: {
+      meta: {
+        isStep: true,
+        stepTitle: 'Staking Policy & Reward',
+      },
+      on: {
+        BACK: 'applicationForm',
+        NEXT: 'beforeTransaction'
       },
     },
     beforeTransaction: {
       id: 'beforeTransaction',
       on: {
+        NEXT: 'transaction',
         FAIL: 'requirementsFailed',
       },
     },

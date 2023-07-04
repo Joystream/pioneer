@@ -8,7 +8,7 @@ import { useApi } from '@/api/hooks/useApi'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { DownloadButtonGhost } from '@/common/components/buttons/DownloadButtons'
 import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
-import { StepDescriptionColumn, Stepper, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
+import { /*StepDescriptionColumn, */Stepper, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
 import { TextMedium } from '@/common/components/typography'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
@@ -37,7 +37,8 @@ export const CreateOpeningModal = () => {
 
   const { group } = modalData
   const context = { hiringTarget: 1, minStake: new BN(50000), group } as OpeningConditions
-  const resolver = useYupValidationResolver<CreateOpeningForm>(OpeningSchema, machineStateConverter(state.value))
+  const path = useMemo(() => machineStateConverter(state.value), [state.value])
+  const resolver = useYupValidationResolver<CreateOpeningForm>(OpeningSchema, path)
   const form = useForm<CreateOpeningForm>({ resolver, mode: 'onChange', defaultValues, context })
   /**
   const [stakingPolicyAndRewardRewardPerBlock] = form.watch([
@@ -52,7 +53,6 @@ export const CreateOpeningModal = () => {
     'stakingPolicyAndReward.rewardPerBlock',
   ])
   **/
-
   useEffect(() => {
     form.trigger(machineStateConverter(state.value) as keyof CreateOpeningForm)
   }, [machineStateConverter(state.value)])
@@ -63,7 +63,7 @@ export const CreateOpeningModal = () => {
       const { description, stakePolicy, rewardPerBlock } = getTxParams(group, specifics)
       return api.tx[group].addOpening(description, 'Regular', stakePolicy, String(rewardPerBlock))
     }
-  }, [connectionState, activeMember?.id, group])
+  }, [connectionState, activeMember?.id,form.formState.isValidating, group])
 
   const { feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => createOpeningTx, [
     connectionState,
@@ -72,12 +72,12 @@ export const CreateOpeningModal = () => {
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
-      feeInfo && send(feeInfo.canAfford ? 'NEXT' : 'FAIL')
+      return feeInfo && send(feeInfo.canAfford ? 'NEXT' : 'FAIL')
     }
     if (state.matches('beforeTransaction')) {
-      return feeInfo?.canAfford ? null : send('FAIL')
+      return feeInfo?.canAfford ? send('NEXT') : send('FAIL')
     }
-  }, [state, activeMember?.id, feeInfo?.canAfford])
+  }, [state, activeMember?.id, feeInfo])
 
   if (!activeMember || state.matches('requirementsFailed')) {
     return null
@@ -91,7 +91,7 @@ export const CreateOpeningModal = () => {
         buttonText="Sign transaction and Create"
         transaction={createOpeningTx}
         signer={activeMember.controllerAccount}
-        service={state.children.createOpeningTx}
+        service={state.children.transaction}
         useMultiTransaction={{ steps: transactionSteps, active: 1 }}
         skipQueryNode
       >
@@ -105,17 +105,19 @@ export const CreateOpeningModal = () => {
   }
 
   return (
-    <Modal onClose={hideModal} modalSize="m" modalHeight="s">
+    <Modal onClose={hideModal} modalSize="m" modalHeight="xl">
       <ModalHeader title="Create Opening" onClick={hideModal} />
 
       <StepperModalBody>
-        <Stepper steps={getSteps(service)} />
-        <StepDescriptionColumn></StepDescriptionColumn>
-        <StyledStepperBody>
-          <FormProvider {...form}>
-            <Steps matches={state.matches as CreateOpeningMachineState['matches']} />
-          </FormProvider>
-        </StyledStepperBody>
+        <StepperOpeningWrapper>
+          <Stepper steps={getSteps(service)} />
+          {/* <StepDescriptionColumn></StepDescriptionColumn> */}
+          <StyledStepperBody>
+            <FormProvider {...form}>
+              <Steps matches={state.matches as CreateOpeningMachineState['matches']} groupId={group} />
+            </FormProvider>
+          </StyledStepperBody>
+        </StepperOpeningWrapper>
       </StepperModalBody>
 
       <ModalTransactionFooter
@@ -140,5 +142,6 @@ export const CreateOpeningModal = () => {
 }
 
 export const StepperOpeningWrapper = styled(StepperModalWrapper)`
-  grid-template-columns: 220px 336px 1fr;
+  // grid-template-columns: 220px 336px 1fr;
+  grid-template-columns: 220px 1fr;
 `

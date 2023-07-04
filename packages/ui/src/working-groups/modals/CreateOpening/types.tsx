@@ -4,6 +4,7 @@ import * as Yup from 'yup'
 
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
 import { ModalWithDataCall } from '@/common/providers/modal/types'
+import { BNSchema, minContext, moreThanMixed } from '@/common/utils/validation'
 import { GroupIdName } from '@/working-groups/types'
 
 export interface OpeningModalData {
@@ -27,24 +28,59 @@ export interface TransactionContext extends OpeningConditions {
 export const OpeningSchema = Yup.object().shape({
   group: Yup.number().optional(),
   target: Yup.number().optional(),
-  applicationForm: Yup.array().required('applicationForm is required'),
-  durationAndProcess: Yup.object().required('durationAndProcess is required'),
-  stakingPolicyAndReward: Yup.object().required('stakingPolicy is required'),
-  workingGroupAndDescription: Yup.object().required('workingGroupAndDescription is required'),
+  applicationForm: Yup.object().shape({
+    questions: Yup.array()
+      .of(
+        Yup.object({
+          questionField: Yup.string().required('Field is required'),
+          shortValue: Yup.boolean(),
+        })
+      )
+      .min(1)
+      .required('Field is required'),
+  }),
+  durationAndProcess: Yup.object().shape({
+    details: Yup.string().required('Field is required'),
+    isLimited: Yup.boolean(),
+    duration: Yup.number().when('isLimited', {
+      is: true,
+      then: Yup.number().required('Field is required'),
+    }),
+  }),
+  stakingPolicyAndReward: Yup.object().shape({
+    stakingAmount: BNSchema.test(
+      minContext('Input must be at least ${min} for proposal to execute', 'leaderOpeningStake', true, 'execution')
+    ).required('Field is required'),
+    leavingUnstakingPeriod: BNSchema.test(
+      minContext(
+        'Input must be at least ${min} for proposal to execute',
+        'minUnstakingPeriodLimit',
+        false,
+        'execution'
+      )
+    ).required('Field is required'),
+    rewardPerBlock: BNSchema.test(moreThanMixed(1, 'Amount must be greater than zero')).required('Field is required'),
+  }),
+  workingGroupAndDescription: Yup.object().shape({
+    title: Yup.string().required('Field is required').max(55, 'Max length is 55 characters'),
+    description: Yup.string().required('Field is required'),
+    shortDescription: Yup.string().required('Field is required'),
+    groupId: Yup.string().required('Field is required'),
+  }),
 })
 
 export const defaultValues = {
   target: 1,
-  applicationForm: { questions: [] },
+  // applicationForm: { questions: [] },
   durationAndProcess: {
     details: '',
     duration: 100000,
     isLimited: false,
   },
   stakingPolicyAndReward: {
-    stakingAmount: 50000,
+    stakingAmount: undefined,
     leavingUnstakingPeriod: 14400,
-    rewardPerBlock: 1,
+    rewardPerBlock: undefined,
   },
   workingGroupAndDescription: {
     title: '',
