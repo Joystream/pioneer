@@ -52,12 +52,7 @@ export const OpeningSchema = Yup.object().shape({
       minContext('Input must be at least ${min} for proposal to execute', 'leaderOpeningStake', true, 'execution')
     ).required('Field is required'),
     leavingUnstakingPeriod: BNSchema.test(
-      minContext(
-        'Input must be at least ${min} for proposal to execute',
-        'minUnstakingPeriodLimit',
-        false,
-        'execution'
-      )
+      minContext('Input must be at least ${min} for proposal to execute', 'minUnstakingPeriodLimit', false, 'execution')
     ).required('Field is required'),
     rewardPerBlock: BNSchema.test(moreThanMixed(1, 'Amount must be greater than zero')).required('Field is required'),
   }),

@@ -208,7 +208,7 @@ export const createOpeningMachine = createMachine<Partial<Context>, CreateOpenin
       },
       on: {
         BACK: 'applicationForm',
-        NEXT: 'beforeTransaction'
+        NEXT: 'beforeTransaction',
       },
     },
     beforeTransaction: {

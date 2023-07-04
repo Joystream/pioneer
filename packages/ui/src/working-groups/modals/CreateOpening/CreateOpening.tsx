@@ -8,7 +8,11 @@ import { useApi } from '@/api/hooks/useApi'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { DownloadButtonGhost } from '@/common/components/buttons/DownloadButtons'
 import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
-import { /*StepDescriptionColumn, */Stepper, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
+import {
+  /*StepDescriptionColumn, */ Stepper,
+  StepperModalBody,
+  StepperModalWrapper,
+} from '@/common/components/StepperModal'
 import { TextMedium } from '@/common/components/typography'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
@@ -63,7 +67,7 @@ export const CreateOpeningModal = () => {
       const { description, stakePolicy, rewardPerBlock } = getTxParams(group, specifics)
       return api.tx[group].addOpening(description, 'Regular', stakePolicy, String(rewardPerBlock))
     }
-  }, [connectionState, activeMember?.id,form.formState.isValidating, group])
+  }, [connectionState, activeMember?.id, form.formState.isValidating, group])
 
   const { feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => createOpeningTx, [
     connectionState,

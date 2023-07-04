@@ -18,7 +18,7 @@ export const StakingPolicyAndReward = ({ noHeader = false }: Props) => {
 
   return (
     <RowGapBlock gap={24}>
-       {noHeader || (
+      {noHeader || (
         <Row>
           <RowGapBlock gap={8}>
             <h4>Specific parameters</h4>
