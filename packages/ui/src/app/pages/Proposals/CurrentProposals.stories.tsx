@@ -1,10 +1,11 @@
 import { linkTo } from '@storybook/addon-links'
 import { expect, jest } from '@storybook/jest'
 import { Meta, ReactRenderer, StoryContext, StoryObj } from '@storybook/react'
-import { userEvent, waitFor, within } from '@storybook/testing-library'
+import { userEvent, waitFor, waitForElementToBeRemoved, within } from '@storybook/testing-library'
 import { PlayFunction, StepFunction } from '@storybook/types'
 import { FC } from 'react'
 
+import { SearchMembersDocument } from '@/memberships/queries'
 import { member } from '@/mocks/data/members'
 import { generateProposals, MAX_ACTIVE_PROPOSAL, proposalsPagesChain } from '@/mocks/data/proposals'
 import { Container, getButtonByText, getEditorByLabel, selectFromDropdown, withinModal } from '@/mocks/helpers'
@@ -118,6 +119,13 @@ export default {
               proposalVotedEvents: [],
             },
           },
+
+          {
+            query: SearchMembersDocument,
+            data: {
+              memberships: [alice],
+            },
+          },
         ],
       }
     },
@@ -131,39 +139,42 @@ export const Default: Story = {}
 // ----------------------------------------------------------------------------
 
 const alice = member('alice')
+const waitForModal = (modal: Container, name: string) => modal.findByRole('heading', { name })
 const fillGeneralParameters = async (
   modal: Container,
   step: StepFunction<ReactRenderer, Args>,
   proposalType: string
 ) => {
-  await step('General Parameters: Proposal type', async () => {
-    expect(await modal.findByRole('heading', { name: 'Creating new proposal' }))
-    const nextButton = getButtonByText(modal, 'Next step')
-    await userEvent.click(modal.getByText(proposalType))
-    await waitFor(() => expect(nextButton).not.toBeDisabled())
-    await userEvent.click(nextButton)
-  })
+  let nextButton: HTMLElement
 
-  await step('General Parameters: Stake', async () => {
-    const nextButton = getButtonByText(modal, 'Next step')
-    await selectFromDropdown(modal, 'Select account for Staking', 'alice')
-    await waitFor(() => expect(nextButton).toBeEnabled())
-    await userEvent.click(nextButton)
-  })
+  await step('Fill General Parameters', async () => {
+    await step('Proposal type', async () => {
+      await waitForModal(modal, 'Creating new proposal')
+      nextButton = getButtonByText(modal, 'Next step')
 
-  await step('General Parameters: Details', async () => {
-    const nextButton = getButtonByText(modal, 'Next step')
-    const rationaleEditor = await getEditorByLabel(modal, 'Rationale')
-    await userEvent.type(modal.getByLabelText('Proposal title'), PROPOSAL_DATA.title)
-    rationaleEditor.setData(PROPOSAL_DATA.description)
-    await waitFor(() => expect(nextButton).toBeEnabled())
-    await userEvent.click(nextButton)
-  })
+      await userEvent.click(modal.getByText(proposalType))
+      await waitFor(() => expect(nextButton).not.toBeDisabled())
+      await userEvent.click(nextButton)
+    })
 
-  await step('General Parameters: Discussion', async () => {
-    const nextButton = getButtonByText(modal, 'Next step')
-    await waitFor(() => expect(nextButton).toBeEnabled())
-    await userEvent.click(nextButton)
+    await step('Staking account', async () => {
+      await selectFromDropdown(modal, 'Select account for Staking', 'alice')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+
+    await step('Proposal details', async () => {
+      const rationaleEditor = await getEditorByLabel(modal, 'Rationale')
+      await userEvent.type(modal.getByLabelText('Proposal title'), PROPOSAL_DATA.title)
+      rationaleEditor.setData(PROPOSAL_DATA.description)
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+
+    await step('Trigger & Discussion', async () => {
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
   })
 }
 
@@ -181,16 +192,36 @@ export const AddNewProposalHappy: Story = {
     const modal = withinModal(canvasElement)
     const createProposalButton = getButtonByText(screen, 'Add new proposal')
 
-    await step('Warning Modal', async () => {
-      const closeModal = async (name: string) => {
-        const closeButton = (await modal.findByRole('heading', { name })).nextElementSibling
-        await userEvent.click(closeButton as HTMLElement)
-        await userEvent.click(getButtonByText(modal, 'Close'))
-      }
+    // Helpers:
 
+    const closeModal = async (heading: string | HTMLElement) => {
+      const headingElement = heading instanceof HTMLElement ? heading : modal.getByRole('heading', { name: heading })
+      await userEvent.click(headingElement.nextElementSibling as HTMLElement)
+      await userEvent.click(getButtonByText(modal, 'Close'))
+    }
+
+    const createProposal = async (proposalType: string, specificStep: PlayFunction<ReactRenderer, Args>) => {
+      await userEvent.click(createProposalButton)
+
+      await fillGeneralParameters(modal, step, proposalType)
+
+      await step(`Specific parameters: ${proposalType}`, specificStep)
+
+      await step('Sign transaction and Create', async () => {
+        const signButton = getButtonByText(modal, 'Sign transaction and Create')
+        await userEvent.click(signButton)
+        const heading = await waitForModal(modal, 'Success')
+        await userEvent.click(heading?.nextElementSibling as HTMLElement)
+      })
+    }
+
+    // Tests:
+
+    await step('Warning Modal', async () => {
       await step('Temporarily close ', async () => {
         await userEvent.click(createProposalButton)
-        expect(await modal.findByRole('heading', { name: 'Caution' }))
+        await waitForModal(modal, 'Caution')
+
         const nextButton = getButtonByText(modal, 'Create A Proposal')
         expect(nextButton).toBeDisabled()
         await userEvent.click(
@@ -205,7 +236,8 @@ export const AddNewProposalHappy: Story = {
 
       await step('Permanently close ', async () => {
         await userEvent.click(createProposalButton)
-        expect(await modal.findByRole('heading', { name: 'Caution' }))
+        await waitForModal(modal, 'Caution')
+
         const nextButton = getButtonByText(modal, 'Create A Proposal')
         await userEvent.click(modal.getByLabelText('Do not show this message again.'))
         expect(nextButton).toBeDisabled()
@@ -217,46 +249,146 @@ export const AddNewProposalHappy: Story = {
         await closeModal('Creating new proposal')
 
         await userEvent.click(createProposalButton)
-        await closeModal('Creating new proposal')
+        await closeModal(await waitForModal(modal, 'Creating new proposal'))
 
         expect(localStorage.getItem('proposalCaution')).toBe('true')
       })
     })
 
-    const createProposal = async (proposalType: string, specificStep: PlayFunction<ReactRenderer, Args>) => {
-      await userEvent.click(createProposalButton)
+    await step('General parameters', async () => {
+      let nextButton: HTMLElement
 
-      await fillGeneralParameters(modal, step, 'Signal')
+      await step('Proposal type', async () => {
+        await userEvent.click(createProposalButton)
+        await waitForModal(modal, 'Creating new proposal')
+        nextButton = getButtonByText(modal, 'Next step')
 
-      await step(`Specific parameters: ${proposalType}`, specificStep)
+        // TODO test steps
 
-      await step('Sign transaction and Create', async () => {
-        const signButton = getButtonByText(modal, 'Sign transaction and Create')
-        await userEvent.click(signButton)
-        const closeButton = (await modal.findByRole('heading', { name: 'Success' })).nextElementSibling
-        await userEvent.click(closeButton as HTMLElement)
+        expect(nextButton).toBeDisabled()
+        await userEvent.click(modal.getByText('Funding Request'))
+        await waitFor(() => expect(nextButton).not.toBeDisabled())
+        await userEvent.click(nextButton)
       })
-    }
 
-    await step('Signal', async () => {
-      await createProposal('Signal', async () => {
-        const nextButton = getButtonByText(modal, 'Create proposal')
-        const editor = await getEditorByLabel(modal, 'Signal')
-        editor.setData('Lorem ipsum...')
+      await step('Staking account', async () => {
+        expect(nextButton).toBeDisabled()
+        await selectFromDropdown(modal, 'Select account for Staking', 'alice')
         await waitFor(() => expect(nextButton).toBeEnabled())
         await userEvent.click(nextButton)
       })
 
-      const [generalParameters, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
-      expect(specificParameters.toHuman()).toEqual({ Signal: 'Lorem ipsum...' })
-      expect(generalParameters).toEqual({
-        memberId: alice.id,
-        title: PROPOSAL_DATA.title,
-        description: PROPOSAL_DATA.description,
-        stakingAccountId: alice.controllerAccount,
+      await step('Proposal details', async () => {
+        const titleField = modal.getByLabelText('Proposal title')
+        const rationaleEditor = await getEditorByLabel(modal, 'Rationale')
+
+        expect(nextButton).toBeDisabled()
+
+        // Somehow reason the validation for the title field stop working once the editor setData
+        // However it only happens with tests `userEvent` and not when interacting manually with the story
+        await userEvent.type(titleField, PROPOSAL_DATA.title.padEnd(41, ' baz'))
+        rationaleEditor.setData(PROPOSAL_DATA.description)
+        const titleValidation = await modal.findByText('Title exceeds maximum length')
+
+        expect(titleValidation)
+        expect(nextButton).toBeDisabled()
+
+        await userEvent.clear(titleField)
+        await userEvent.type(titleField, PROPOSAL_DATA.title)
+
+        await waitForElementToBeRemoved(titleValidation)
+        expect(nextButton).toBeEnabled()
+
+        rationaleEditor.setData(PROPOSAL_DATA.description.padEnd(3002, ' baz'))
+        const rationaleValidation = await modal.findByText('Rationale exceeds maximum length')
+
+        expect(rationaleValidation)
+        expect(nextButton).toBeDisabled()
+
+        rationaleEditor.setData(PROPOSAL_DATA.description)
+
+        await waitForElementToBeRemoved(rationaleValidation)
+        expect(nextButton).toBeEnabled()
+
+        await userEvent.click(nextButton)
       })
 
-      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(alice.id, alice.controllerAccount)
+      await step('Trigger & Discussion', async () => {
+        await step('Trigger', async () => {
+          expect(nextButton).toBeEnabled()
+
+          await userEvent.click(modal.getByText('Yes'))
+          expect(nextButton).toBeDisabled()
+          const blockInput = modal.getByRole('textbox')
+          await userEvent.type(blockInput, '5000')
+
+          await waitFor(() => expect(nextButton).toBeEnabled())
+
+          await userEvent.clear(blockInput)
+          await userEvent.type(blockInput, '10')
+
+          expect(await modal.findByText(/The minimum block number is \d+/))
+          expect(nextButton).toBeDisabled()
+
+          // This "too high" test case seems to fail due to a RHF validation bug
+          // await userEvent.type(blockInput, '999999999')
+
+          await userEvent.clear(blockInput)
+          await userEvent.type(blockInput, '9999')
+
+          expect(await modal.findByText(/^≈.*/))
+          expect(modal.queryByText(/The minimum block number is \d+/)).toBeNull()
+          expect(nextButton).toBeEnabled()
+        })
+
+        await step('Discussion Mode', async () => {
+          await userEvent.click(modal.getByText('Closed'))
+
+          await waitFor(() => expect(nextButton).toBeDisabled())
+          await selectFromDropdown(modal, 'Add member to whitelist', 'alice')
+
+          expect(await modal.findByText('alice'))
+          expect(nextButton).toBeEnabled()
+
+          userEvent.click(screen.getByTestId('removeMember'))
+          expect(modal.queryByText('alice')).toBeNull()
+          await waitFor(() => expect(nextButton).toBeEnabled())
+
+          await userEvent.click(nextButton)
+
+          expect(modal.getByText('Specific parameters', { selector: 'h4' }))
+        })
+      })
+    })
+
+    closeModal('Creating new proposal: Funding Request')
+    await waitFor(() => expect(createProposalButton).toBeEnabled())
+
+    await step('Specific parameters', async () => {
+      await step('Signal', async () => {
+        await createProposal('Signal', async () => {
+          const nextButton = getButtonByText(modal, 'Create proposal')
+          const editor = await getEditorByLabel(modal, 'Signal')
+          editor.setData('Lorem ipsum...')
+          await waitFor(() => expect(nextButton).toBeEnabled())
+          await userEvent.click(nextButton)
+        })
+
+        const [generalParameters, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+        expect(specificParameters.toHuman()).toEqual({ Signal: 'Lorem ipsum...' })
+        expect(generalParameters).toEqual({
+          memberId: alice.id,
+          title: PROPOSAL_DATA.title,
+          description: PROPOSAL_DATA.description,
+          stakingAccountId: alice.controllerAccount,
+        })
+
+        expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(alice.id, alice.controllerAccount)
+      })
     })
   },
 }
+
+// TODO:
+// - No active member
+// - Not enough funds
