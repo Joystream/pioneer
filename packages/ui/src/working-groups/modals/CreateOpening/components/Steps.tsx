@@ -29,7 +29,7 @@ export const CreateOpeningSteps = ({ matches, groupId }: CreateOpeningStepProps)
       return <ApplicationForm noHeader={true} />
 
     case matches('stakingPolicyAndReward'):
-      return <StakingPolicyAndReward />
+      return <StakingPolicyAndReward noHeader={true} />
 
     default:
       return <ImportOpening />
