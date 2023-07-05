@@ -23,7 +23,7 @@ export const DownloadLink: FC<DownloadLinkProps> = ({ name, parts, type, classNa
     const url = URL.createObjectURL(new Blob(parts, { type: type ?? getType(name) ?? undefined }))
     setHref(url)
     return () => URL.revokeObjectURL(url)
-  }, [])
+  }, [parts])
 
   return (
     <a className={className} href={href} download={name} target="__blank">

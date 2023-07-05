@@ -10,8 +10,6 @@ import { GroupIdName } from '@/working-groups/types'
 
 import { CreateOpeningMachineState } from '../machine'
 
-import { ImportOpening } from './Import'
-
 export interface CreateOpeningStepProps {
   matches: CreateOpeningMachineState['matches']
   groupId: GroupIdName
@@ -32,6 +30,6 @@ export const CreateOpeningSteps = ({ matches, groupId }: CreateOpeningStepProps)
       return <StakingPolicyAndReward noHeader={true} />
 
     default:
-      return <ImportOpening />
+      return <></>
   }
 }

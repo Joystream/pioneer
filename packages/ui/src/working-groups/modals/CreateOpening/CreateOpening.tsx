@@ -14,6 +14,7 @@ import {
   StepperModalWrapper,
 } from '@/common/components/StepperModal'
 import { TextMedium } from '@/common/components/typography'
+import { JOY_DECIMAL_PLACES } from '@/common/constants'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
@@ -25,14 +26,15 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { StyledStepperBody } from '@/proposals/modals/AddNewProposal'
 import { GroupIdToGroupParam } from '@/working-groups/constants'
 
-import { SuccessModal, CreateOpeningSteps as Steps } from './components'
+import { SuccessModal, CreateOpeningSteps as Steps, ImportOpening } from './components'
 import { createOpeningMachine, CreateOpeningMachineState, getTxParams } from './machine'
 import { OpeningConditions, CreateOpeningForm, CreateOpeningModalCall, OpeningSchema, defaultValues } from './types'
+
 
 const transactionSteps = [{ title: 'Import Opening' }, { title: 'Edit Opening' }, { title: 'Submit Opening' }]
 
 export const CreateOpeningModal = () => {
-  const [showImport, setShowImport] = useState<boolean>(true)
+  const [showImport, setShowImport] = useState<boolean>(false)
 
   const { api, connectionState } = useApi()
   const { active: activeMember } = useMyMemberships()
@@ -73,6 +75,24 @@ export const CreateOpeningModal = () => {
     connectionState,
     createOpeningTx,
   ])
+  const setExportJsonValue = () =>{
+    const { ...specifics } = form.getValues() as CreateOpeningForm
+    const exportValue = {
+      applicationDetails: specifics.durationAndProcess.details,
+      title: specifics.workingGroupAndDescription.title,
+      shortDescription: specifics.workingGroupAndDescription.shortDescription,
+      description: specifics.workingGroupAndDescription.description,
+      applicationFormQuestions: specifics.applicationForm?.questions?.map((question) =>{
+        return {question: question.questionField}
+      }),
+      stakingPolicy: {
+        amount: specifics.stakingPolicyAndReward.stakingAmount / Math.pow(10,JOY_DECIMAL_PLACES),
+        unstakingPeriod: specifics.stakingPolicyAndReward.leavingUnstakingPeriod,
+      },
+      rewardPerBlock: specifics.stakingPolicyAndReward.rewardPerBlock / Math.pow(10,JOY_DECIMAL_PLACES),
+    }
+    return exportValue
+  }
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
@@ -118,7 +138,7 @@ export const CreateOpeningModal = () => {
           {/* <StepDescriptionColumn></StepDescriptionColumn> */}
           <StyledStepperBody>
             <FormProvider {...form}>
-              <Steps matches={state.matches as CreateOpeningMachineState['matches']} groupId={group} />
+              {showImport ? <ImportOpening groupId={group}/>:<Steps matches={state.matches as CreateOpeningMachineState['matches']} groupId={group} />}
             </FormProvider>
           </StyledStepperBody>
         </StepperOpeningWrapper>
@@ -126,16 +146,16 @@ export const CreateOpeningModal = () => {
 
       <ModalTransactionFooter
         next={{
-          disabled: !form.formState.isValid,
+          disabled: !form.formState.isValid || showImport,
           label: isLastStepActive(getSteps(service)) ? 'Create Opening' : 'Next step',
           onClick: () => send('NEXT'),
         }}
         extraButtons={
           <ButtonsGroup align="left">
             <ButtonPrimary size="medium" onClick={() => setShowImport(!showImport)}>
-              Import
+              {showImport ? 'Preview Import': 'Import'}
             </ButtonPrimary>
-            <DownloadButtonGhost size="medium" name={'opening.json'} parts={[JSON.stringify(form.getValues())]}>
+            <DownloadButtonGhost size="medium" name={'opening.json'} parts={[JSON.stringify(setExportJsonValue())]}>
               Export
             </DownloadButtonGhost>
           </ButtonsGroup>
