@@ -32,35 +32,35 @@ export const OpeningSchema = Yup.object().shape({
     questions: Yup.array()
       .of(
         Yup.object({
-          questionField: Yup.string().required('Field is required'),
+          questionField: Yup.string().required('Question is required'),
           shortValue: Yup.boolean(),
         })
       )
       .min(1)
-      .required('Field is required'),
+      .required('Questions is required'),
   }),
   durationAndProcess: Yup.object().shape({
-    details: Yup.string().required('Field is required'),
+    details: Yup.string().required('Details is required'),
     isLimited: Yup.boolean(),
     duration: Yup.number().when('isLimited', {
       is: true,
-      then: Yup.number().required('Field is required'),
+      then: Yup.number().required('Duration is required'),
     }),
   }),
   stakingPolicyAndReward: Yup.object().shape({
     stakingAmount: BNSchema.test(
       minContext('Input must be at least ${min} for proposal to execute', 'leaderOpeningStake', true, 'execution')
-    ).required('Field is required'),
+    ).required('Staking amount is required'),
     leavingUnstakingPeriod: BNSchema.test(
       minContext('Input must be at least ${min} for proposal to execute', 'minUnstakingPeriodLimit', false, 'execution')
-    ).required('Field is required'),
-    rewardPerBlock: BNSchema.test(moreThanMixed(1, 'Amount must be greater than zero')).required('Field is required'),
+    ).required('Leaving unstaking period is required'),
+    rewardPerBlock: BNSchema.test(moreThanMixed(1, 'Amount must be greater than zero')).required('Reward per block is required'),
   }),
   workingGroupAndDescription: Yup.object().shape({
-    title: Yup.string().required('Field is required').max(55, 'Max length is 55 characters'),
-    description: Yup.string().required('Field is required'),
-    shortDescription: Yup.string().required('Field is required'),
-    groupId: Yup.string().required('Field is required'),
+    title: Yup.string().required('Title is required').max(55, 'Max length is 55 characters'),
+    description: Yup.string().required('Description is required'),
+    shortDescription: Yup.string().required('Short Description is required'),
+    groupId: Yup.string().required('Group Id is required'),
   }),
 })
 
