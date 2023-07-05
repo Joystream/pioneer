@@ -30,7 +30,6 @@ import { SuccessModal, CreateOpeningSteps as Steps, ImportOpening } from './comp
 import { createOpeningMachine, CreateOpeningMachineState, getTxParams } from './machine'
 import { OpeningConditions, CreateOpeningForm, CreateOpeningModalCall, OpeningSchema, defaultValues } from './types'
 
-
 const transactionSteps = [{ title: 'Import Opening' }, { title: 'Edit Opening' }, { title: 'Submit Opening' }]
 
 export const CreateOpeningModal = () => {
@@ -75,21 +74,21 @@ export const CreateOpeningModal = () => {
     connectionState,
     createOpeningTx,
   ])
-  const setExportJsonValue = () =>{
+  const setExportJsonValue = () => {
     const { ...specifics } = form.getValues() as CreateOpeningForm
     const exportValue = {
       applicationDetails: specifics.durationAndProcess.details,
       title: specifics.workingGroupAndDescription.title,
       shortDescription: specifics.workingGroupAndDescription.shortDescription,
       description: specifics.workingGroupAndDescription.description,
-      applicationFormQuestions: specifics.applicationForm?.questions?.map((question) =>{
-        return {question: question.questionField}
+      applicationFormQuestions: specifics.applicationForm?.questions?.map((question) => {
+        return { question: question.questionField }
       }),
       stakingPolicy: {
-        amount: specifics.stakingPolicyAndReward.stakingAmount / Math.pow(10,JOY_DECIMAL_PLACES),
+        amount: specifics.stakingPolicyAndReward.stakingAmount / Math.pow(10, JOY_DECIMAL_PLACES),
         unstakingPeriod: specifics.stakingPolicyAndReward.leavingUnstakingPeriod,
       },
-      rewardPerBlock: specifics.stakingPolicyAndReward.rewardPerBlock / Math.pow(10,JOY_DECIMAL_PLACES),
+      rewardPerBlock: specifics.stakingPolicyAndReward.rewardPerBlock / Math.pow(10, JOY_DECIMAL_PLACES),
     }
     return exportValue
   }
@@ -138,7 +137,11 @@ export const CreateOpeningModal = () => {
           {/* <StepDescriptionColumn></StepDescriptionColumn> */}
           <StyledStepperBody>
             <FormProvider {...form}>
-              {showImport ? <ImportOpening groupId={group}/>:<Steps matches={state.matches as CreateOpeningMachineState['matches']} groupId={group} />}
+              {showImport ? (
+                <ImportOpening groupId={group} />
+              ) : (
+                <Steps matches={state.matches as CreateOpeningMachineState['matches']} groupId={group} />
+              )}
             </FormProvider>
           </StyledStepperBody>
         </StepperOpeningWrapper>
@@ -153,7 +156,7 @@ export const CreateOpeningModal = () => {
         extraButtons={
           <ButtonsGroup align="left">
             <ButtonPrimary size="medium" onClick={() => setShowImport(!showImport)}>
-              {showImport ? 'Preview Import': 'Import'}
+              {showImport ? 'Preview Import' : 'Import'}
             </ButtonPrimary>
             <DownloadButtonGhost size="medium" name={'opening.json'} parts={[JSON.stringify(setExportJsonValue())]}>
               Export

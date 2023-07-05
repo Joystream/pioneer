@@ -54,7 +54,9 @@ export const OpeningSchema = Yup.object().shape({
     leavingUnstakingPeriod: BNSchema.test(
       minContext('Input must be at least ${min} for proposal to execute', 'minUnstakingPeriodLimit', false, 'execution')
     ).required('Leaving unstaking period is required'),
-    rewardPerBlock: BNSchema.test(moreThanMixed(1, 'Amount must be greater than zero')).required('Reward per block is required'),
+    rewardPerBlock: BNSchema.test(moreThanMixed(1, 'Amount must be greater than zero')).required(
+      'Reward per block is required'
+    ),
   }),
   workingGroupAndDescription: Yup.object().shape({
     title: Yup.string().required('Title is required').max(55, 'Max length is 55 characters'),
