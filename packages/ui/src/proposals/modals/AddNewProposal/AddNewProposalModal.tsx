@@ -77,7 +77,7 @@ export const AddNewProposalModal = () => {
   const [formMap, setFormMap] = useState<Partial<[Account, ProposalType, GroupIdName, boolean]>>([])
   const workingGroupConsts = api?.consts[formMap[2] as GroupIdName]
 
-  const [warningAccepted, setWarningAccepted] = useState<boolean>(true)
+  const [warningAccepted, setWarningAccepted] = useState<boolean>(false)
   const [isExecutionError, setIsExecutionError] = useState<boolean>(false)
 
   const constants = useProposalConstants(formMap[1])
@@ -133,6 +133,7 @@ export const AddNewProposalModal = () => {
 
   useEffect(() => {
     form.trigger([])
+    setWarningAccepted(false)
   }, [path])
 
   useEffect(() => {
@@ -206,8 +207,6 @@ export const AddNewProposalModal = () => {
       feeInfo?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
   }, [state, stakingStatus, feeInfo])
-
-  useEffect(() => setWarningAccepted(!isExecutionError), [isExecutionError])
 
   const goToPrevious = useCallback(() => {
     send('BACK')
