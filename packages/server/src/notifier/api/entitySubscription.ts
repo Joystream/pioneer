@@ -23,7 +23,7 @@ export const EntitySubscriptionStatus = enumType({
 interface EntitySubscription extends Omit<Prisma.Subscription, 'shouldNotify' | 'shouldNotifyByEmail'> {
   kind: EntitySubscriptionKind
   entityId: string
-  status: typeof EntitySubscriptionStatusMembers[number]
+  status: (typeof EntitySubscriptionStatusMembers)[number]
 }
 
 export const EntitySubscriptionFields = objectType({

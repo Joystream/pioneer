@@ -10,8 +10,12 @@ export const hashFile = computeInWorker('HASH_FILE')
 
 export const merkleRootFromBinary = computeInWorker('MERKLE_ROOT')
 
-function computeInWorker(type: WorkerRequestType) {
-  return async (file: Blob): Promise<string> => {
+export const maybeDecompressRuntimeBlob = computeInWorker('DECOMPRESS_RUNTIME')
+
+function computeInWorker(type: 'HASH_FILE' | 'MERKLE_ROOT'): (file: Blob) => Promise<string>
+function computeInWorker(type: 'DECOMPRESS_RUNTIME'): (file: ArrayBuffer) => Promise<Buffer | Uint8Array>
+function computeInWorker(type: WorkerRequestType): (file: any) => Promise<any> {
+  return async (file) => {
     if (!worker) {
       worker = new Worker(new URL('./worker', import.meta.url), { type: 'module' })
       messages = fromEvent<MessageEvent<WorkerResponse>>(worker, 'message')

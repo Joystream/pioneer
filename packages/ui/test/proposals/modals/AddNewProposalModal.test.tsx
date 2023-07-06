@@ -2,11 +2,12 @@ import { OpeningMetadata } from '@joystream/metadata-protobuf'
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, configure, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import BN from 'bn.js'
+import { findLast } from 'lodash'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
 
-import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFundsModal'
 import { ApiContext } from '@/api/providers/context'
 import { CurrencyName } from '@/app/constants/currency'
 import { GlobalModals } from '@/app/GlobalModals'
@@ -16,7 +17,6 @@ import { createType } from '@/common/model/createType'
 import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
-import { last } from '@/common/utils'
 import { powerOf2 } from '@/common/utils/bn'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
@@ -58,7 +58,7 @@ import {
   stubTransactionFailure,
   stubTransactionSuccess,
 } from '../../_mocks/transactions'
-import { mockTransactionFee, mockUseModalCall } from '../../setup'
+import { mockedTransactionFee, mockTransactionFee, mockUseModalCall } from '../../setup'
 
 const QUESTION_INPUT = OpeningMetadata.ApplicationFormQuestion.InputType
 
@@ -71,6 +71,18 @@ jest.mock('@/common/components/CKEditor', () => ({
 jest.mock('@/common/hooks/useCurrentBlockNumber', () => ({
   useCurrentBlockNumber: () => mockUseCurrentBlockNumber(),
 }))
+
+jest.mock('react-dropzone', () => {
+  const reactDropzone = jest.requireActual('react-dropzone')
+  return {
+    ...reactDropzone,
+    useDropzone: (props: any) =>
+      reactDropzone.useDropzone({
+        ...props,
+        getFilesFromEvent: (event: React.ChangeEvent<HTMLInputElement>) => event.target.files,
+      }),
+  }
+})
 
 const OPENING_DATA = {
   id: 'forumWorkingGroup-1337',
@@ -470,6 +482,15 @@ describe('UI: AddNewProposalModal', () => {
     })
 
     describe('Specific parameters', () => {
+      const getTxParameters = async () => {
+        const [, getTransaction] = findLast(mockedTransactionFee.mock.calls, (params) => params.length > 0) ?? []
+        if (!getTransaction) return
+
+        createProposalTxMock.mockReset()
+        await getTransaction()
+        return createProposalTxMock.mock.calls[0]
+      }
+
       beforeEach(async () => {
         await finishWarning()
       })
@@ -493,7 +514,7 @@ describe('UI: AddNewProposalModal', () => {
           const signal = 'Foo'
           await SpecificParameters.Signal.fillSignal(signal)
 
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const [, txSpecificParameters] = await getTxParameters()
           const parameters = txSpecificParameters.asSignal.toHuman()
           expect(parameters).toEqual(signal)
           const button = await getCreateButton()
@@ -544,7 +565,7 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.fillAmount(amount)
           await SpecificParameters.FundingRequest.selectRecipient('bob')
 
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const [, txSpecificParameters] = await getTxParameters()
           const parameters = txSpecificParameters.asFundingRequest.toJSON()
           expect(parameters).toEqual([
             {
@@ -581,7 +602,7 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.fillAmount(amount)
           expect(await screen.getByTestId('amount-input')).toHaveValue(String(amount))
 
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const [, txSpecificParameters] = await getTxParameters()
           const parameters = txSpecificParameters.asSetReferralCut.toJSON()
 
           expect(parameters).toEqual(amount)
@@ -599,7 +620,7 @@ describe('UI: AddNewProposalModal', () => {
           const checkbox = screen.getByTestId('execution-requirement')
           fireEvent.click(checkbox)
 
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const [, txSpecificParameters] = await getTxParameters()
           const parameters = txSpecificParameters.asSetReferralCut.toJSON()
 
           expect(parameters).toEqual(amount)
@@ -651,7 +672,7 @@ describe('UI: AddNewProposalModal', () => {
           )
           await SpecificParameters.fillAmount(amount)
 
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const [, txSpecificParameters] = await getTxParameters()
           const parameters = txSpecificParameters.asDecreaseWorkingGroupLeadStake.toJSON()
           expect(parameters).toEqual([Number(forumLeadId?.split('-')[1]), amount, group])
 
@@ -689,7 +710,7 @@ describe('UI: AddNewProposalModal', () => {
           await triggerYes()
           await SpecificParameters.fillAmount(slashingAmount)
 
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const [, txSpecificParameters] = await getTxParameters()
           const parameters = txSpecificParameters.asTerminateWorkingGroupLead.toJSON()
           expect(parameters).toEqual({
             slashingAmount,
@@ -793,7 +814,7 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.CreateWorkingGroupLeadOpening.fillRewardPerBlock(step4.rewardPerBlock)
           expect(await getCreateButton()).toBeEnabled()
 
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const [, txSpecificParameters] = await getTxParameters()
 
           const { description: metadata, ...data } = txSpecificParameters.asCreateWorkingGroupLeadOpening.toJSON()
           expect(data).toEqual({
@@ -843,7 +864,7 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.SetWorkingGroupLeadReward.fillRewardAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
 
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const [, txSpecificParameters] = await getTxParameters()
           const parameters = txSpecificParameters.asSetWorkingGroupLeadReward.toJSON()
           expect(parameters).toEqual([Number(forumLeadId?.split('-')[1]), amount, group])
         })
@@ -877,7 +898,7 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.fillAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
 
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const [, txSpecificParameters] = await getTxParameters()
           const parameters = txSpecificParameters.asSetMaxValidatorCount.toJSON()
           await waitFor(() => expect(parameters).toEqual(amount))
         })
@@ -900,7 +921,7 @@ describe('UI: AddNewProposalModal', () => {
 
         it('Valid form', async () => {
           await SpecificParameters.CancelWorkingGroupLeadOpening.selectedOpening('forumWorkingGroup-1337')
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const [, txSpecificParameters] = await getTxParameters()
           const parameters = txSpecificParameters.asCancelWorkingGroupLeadOpening.toJSON()
           expect(parameters).toEqual([1337, 'Forum'])
           expect(await getCreateButton()).toBeEnabled()
@@ -938,7 +959,7 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.fillAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
 
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const [, txSpecificParameters] = await getTxParameters()
           const parameters = txSpecificParameters.asSetCouncilBudgetIncrement.toJSON()
           expect(parameters).toEqual(amount)
         })
@@ -968,7 +989,7 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.fillAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
 
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const [, txSpecificParameters] = await getTxParameters()
           const parameters = txSpecificParameters.asSetCouncilorReward.toJSON()
           expect(parameters).toEqual(amount)
         })
@@ -1007,7 +1028,7 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.fillAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
 
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const [, txSpecificParameters] = await getTxParameters()
           const parameters = txSpecificParameters.asSetMembershipLeadInvitationQuota.toJSON()
           expect(parameters).toEqual(amount)
         })
@@ -1032,7 +1053,7 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.FillWorkingGroupLeadOpening.selectApplication(
             `Member ID: ${APPLICATION_DATA.applicantId}`
           )
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const [, txSpecificParameters] = await getTxParameters()
           const parameters = txSpecificParameters.asFillWorkingGroupLeadOpening.toJSON()
           expect(parameters).toEqual({
             openingId: 1337,
@@ -1072,7 +1093,7 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.SetInitialInvitationCount.fillCount(count)
           expect(await getCreateButton()).toBeEnabled()
 
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const [, txSpecificParameters] = await getTxParameters()
           const parameters = txSpecificParameters.asSetInitialInvitationCount.toJSON()
           expect(parameters).toEqual(count)
         })
@@ -1104,7 +1125,7 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.fillAmount(amount)
           expect(await getCreateButton()).toBeEnabled()
 
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const [, txSpecificParameters] = await getTxParameters()
           const parameters = txSpecificParameters.asSetInitialInvitationBalance.toJSON()
           expect(parameters).toEqual(amount)
         })
@@ -1131,7 +1152,7 @@ describe('UI: AddNewProposalModal', () => {
           await SpecificParameters.fillAmount(price)
           expect(await getCreateButton()).toBeEnabled()
 
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const [, txSpecificParameters] = await getTxParameters()
           const parameters = txSpecificParameters.asSetMembershipPrice.toJSON()
           expect(parameters).toEqual(price)
         })
@@ -1163,7 +1184,7 @@ describe('UI: AddNewProposalModal', () => {
         it('Valid - group selected, amount automatically filled', async () => {
           await SpecificParameters.UpdateWorkingGroupBudget.selectGroup('Forum')
           await waitFor(() => expect(screen.queryByText(/Current budget for Forum Working Group is /i)).not.toBeNull())
-          screen.logTestingPlaygroundURL()
+
           expect(await getCreateButton()).not.toBeDisabled()
         })
 
@@ -1198,9 +1219,36 @@ describe('UI: AddNewProposalModal', () => {
 
           expect(await getCreateButton()).toBeEnabled()
 
-          const [, txSpecificParameters] = last(createProposalTxMock.mock.calls)
+          const [, txSpecificParameters] = await getTxParameters()
           const parameters = txSpecificParameters.asUpdateWorkingGroupBudget.toJSON()
           expect(parameters).toEqual([amount, group, 'Negative'])
+        })
+      })
+
+      describe('Type - Runtime Upgrade', () => {
+        beforeEach(async () => {
+          await finishProposalType('runtimeUpgrade')
+          await finishStakingAccount()
+          await finishProposalDetails()
+          await finishTriggerAndDiscussion()
+        })
+
+        it('Default - Invalid', async () => {
+          expect(await getCreateButton()).toBeDisabled()
+        })
+
+        it('Valid', async () => {
+          const file = Object.defineProperties(new File([], 'runtime.wasm', { type: 'application/wasm' }), {
+            isValidWASM: { value: true },
+            arrayBuffer: { value: () => Promise.resolve(new ArrayBuffer(1)) },
+            size: { value: 1 },
+          })
+
+          await act(async () => {
+            fireEvent.change(screen.getByTestId('runtime-upgrade-input'), { target: { files: [file] } })
+          })
+
+          expect(await getCreateButton()).toBeEnabled()
         })
       })
     })
@@ -1233,6 +1281,7 @@ describe('UI: AddNewProposalModal', () => {
 
       describe('Staking account not bound nor staking candidate', () => {
         beforeEach(async () => {
+          mockTransactionFee({ transaction: batchTx })
           await finishWarning()
           await finishProposalType('fundingRequest')
           await finishStakingAccount()
@@ -1263,8 +1312,8 @@ describe('UI: AddNewProposalModal', () => {
             fireEvent.click(screen.getByText(/^Sign transaction/i))
           })
 
-          expect(await screen.findByText(/You intend to create a proposa/i)).toBeDefined()
-          expect((await screen.findByText(/^modals.transactionFee.label/i))?.nextSibling?.textContent).toBe('25')
+          expect(await screen.findByText(/You intend to create a proposal/i)).toBeDefined()
+          expect(screen.getByText(/modals\.transactionFee\.label/i)?.nextSibling?.textContent).toBe('25')
         })
 
         it('Create proposal success', async () => {
@@ -1298,6 +1347,7 @@ describe('UI: AddNewProposalModal', () => {
 
       describe('Staking account is a candidate', () => {
         beforeEach(async () => {
+          mockTransactionFee({ transaction: batchTx })
           stubQuery(
             api,
             'members.stakingAccountIdMemberStatus',
@@ -1344,6 +1394,7 @@ describe('UI: AddNewProposalModal', () => {
 
       describe('Staking account is confirmed', () => {
         beforeEach(async () => {
+          mockTransactionFee({ transaction: createProposalTx })
           stubQuery(
             api,
             'members.stakingAccountIdMemberStatus',
@@ -1413,6 +1464,7 @@ describe('UI: AddNewProposalModal', () => {
 
     describe('Discussion mode transaction', () => {
       beforeEach(async () => {
+        mockTransactionFee({ transaction: createProposalTx })
         stubQuery(
           api,
           'members.stakingAccountIdMemberStatus',

@@ -84,7 +84,8 @@ export const ProposalPreview = () => {
     (vote) => vote.voter.id === active?.id && proposal?.councilApprovals === vote.votingRound - 1
   )
 
-  const myVote = proposal?.votes.find((vote) => vote.voter.id === active?.id && vote.votingRound === currentVotingRound)
+  const myVote =
+    active && proposal?.votes.find((vote) => vote.voter.id === active.id && vote.votingRound === currentVotingRound + 1)
   const myVoteStatus = myVote?.voteKind
 
   if (!proposal || !votes) {
@@ -158,15 +159,17 @@ export const ProposalPreview = () => {
             </BadgeAndTime>
           </RowGapBlock>
 
-          {(proposal.status === 'dormant' || votingRounds.length > 1) && (
-            <ProposalStages
-              status={proposal.status}
-              updates={proposal.proposalStatusUpdates}
-              constitutionality={constants?.constitutionality}
-              value={currentVotingRound}
-              onChange={setVotingRound}
-            />
-          )}
+          {constants?.constitutionality
+            ? constants?.constitutionality > 1 && (
+                <ProposalStages
+                  status={proposal.status}
+                  updates={proposal.proposalStatusUpdates}
+                  constitutionality={constants?.constitutionality}
+                  value={currentVotingRound}
+                  onChange={setVotingRound}
+                />
+              )
+            : ''}
         </PageHeaderWrapper>
       }
       main={

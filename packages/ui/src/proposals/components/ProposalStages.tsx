@@ -1,10 +1,11 @@
+import { last } from 'lodash'
 import React, { useMemo } from 'react'
 
 import { ControlProps } from '@/common/components/forms'
 import { CheckboxIcon, CrossIcon } from '@/common/components/icons'
 import { TabContainer, TabsContainer } from '@/common/components/Tabs'
 import { Tooltip } from '@/common/components/Tooltip'
-import { last, repeat } from '@/common/utils'
+import { repeat } from '@/common/utils'
 import { ProposalStatus, ProposalStatusUpdates } from '@/proposals/types'
 
 export interface ProposalStagesProps extends ControlProps<number> {
@@ -21,9 +22,9 @@ export const ProposalStages = ({ status, updates, constitutionality, value, onCh
     // `decidingCount` is ("deciding updates" + 1) because the first deciding stage isn't included in updates
     const decidingCount = updates.filter(({ status }) => status === 'deciding').length + 1
 
-    const lastUpdate = last(updates).status
-    const onGoing = lastUpdate === status
-    const approved = lastUpdate === 'gracing'
+    const latestUpdate = last(updates)?.status
+    const onGoing = !latestUpdate || latestUpdate === status
+    const approved = latestUpdate === 'gracing'
     const rejected = !onGoing && !approved
     const isDormant = onGoing && status === 'dormant'
 

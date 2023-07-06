@@ -16,8 +16,6 @@
     "build:storybook": "wsrun --fast-exit --stages -p @joystream/markdown-editor -c build && wsrun -p @joystream/pioneer -c build:storybook",
     "storybook": "wsrun --exclude-missing -c storybook",
     "test": "wsrun --fast-exit --exclude-missing -c test",
-    "ci-build": "wsrun --fast-exit -x @joystream/markdown-editor -c build",
-    "ci-test": "NODE_OPTIONS=--max_old_space_size=7000 wsrun --fast-exit ---exclude-missing -c test",
     "start": "wsrun --package @joystream/pioneer -c start",
     "prepare": "husky install"
   },
@@ -32,6 +30,12 @@
     "lint-staged": ">=10"
   },
   "resolutions": {
+    "@babel/core": "~7.21.0",
+    "@babel/preset-env": "~7.21.0",
+    "@babel/generator": "~7.21.0",
+    "@babel/parser": "~7.21.0",
+    "@babel/traverse": "~7.21.0",
+    "@babel/types": "~7.21.0",
     "@polkadot/api": "8.9.1",
     "@polkadot/api-contract": "8.9.1",
     "@polkadot/api-derive": "8.9.1",
@@ -45,8 +49,7 @@
     "@polkadot/util": "9.5.1",
     "@polkadot/util-crypto": "9.5.1",
     "bn.js": "^4.11.9",
-    "@joystream/js@1.2.0": "patch:@joystream/js@npm%3A1.2.0#./.yarn/patches/@joystream-js-npm-1.2.0-a8795e7496.patch",
-    "@joystream/types": "./packages/joystream-types-v0.20.6.tgz"
+    "@joystream/js@1.2.0": "patch:@joystream/js@npm%3A1.2.0#./.yarn/patches/@joystream-js-npm-1.2.0-a8795e7496.patch"
   },
   "engines": {
     "node": ">=14.18.0",

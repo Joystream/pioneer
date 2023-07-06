@@ -1,5 +1,5 @@
-import { Meta, Story } from '@storybook/react'
-import React from 'react'
+import { Meta, StoryObj } from '@storybook/react'
+import React, { FC } from 'react'
 
 import { ProposalVoteKind } from '@/common/api/queries'
 import { SideBar, voteControl } from '@/common/components/storybookParts/previewStyles'
@@ -10,7 +10,7 @@ import { countVoteMap, VoteMap } from '@/proposals/hooks/useVotingRounds'
 import { VotesPreview } from './VotesPreview'
 
 export default {
-  title: 'Proposals/ProposalPreview/VotesPreview',
+  title: 'Pages/Proposals/ProposalPreview/Components/VotesPreview',
   component: VotesPreview,
   argTypes: {
     approve: voteControl,
@@ -30,33 +30,37 @@ interface Args {
   councilSize: number
 }
 
-export const Default: Story<Args> = ({ approve = 0, reject = 0, slash = 0, abstain = 0, councilSize }) => {
-  const lengths: [ProposalVoteKind, number][] = [
-    [Approve, approve],
-    [Reject, reject],
-    [Slash, slash],
-    [Abstain, abstain],
-  ]
+export const Default: StoryObj<FC<Args>> = {
+  name: 'VotesPreview',
 
-  const map: VoteMap = new Map(
-    lengths.map(([voteKind, length]) => [
-      voteKind,
-      repeat(() => ({ voteKind, id: '1', votingRound: 1, voter: getMember('alice') }), length),
-    ])
-  )
+  args: {
+    approve: 3,
+    reject: 1,
+    slash: 0,
+    councilSize: 12,
+  },
 
-  const count = countVoteMap(map, approve + slash + reject + abstain, councilSize || undefined)
+  render: ({ approve = 0, reject = 0, slash = 0, abstain = 0, councilSize }) => {
+    const lengths: [ProposalVoteKind, number][] = [
+      [Approve, approve],
+      [Reject, reject],
+      [Slash, slash],
+      [Abstain, abstain],
+    ]
 
-  return (
-    <SideBar>
-      <VotesPreview votes={{ map, count }} />
-    </SideBar>
-  )
-}
+    const map: VoteMap = new Map(
+      lengths.map(([voteKind, length]) => [
+        voteKind,
+        repeat(() => ({ voteKind, id: '1', votingRound: 1, voter: getMember('alice') }), length),
+      ])
+    )
 
-Default.args = {
-  approve: 3,
-  reject: 1,
-  slash: 0,
-  councilSize: 12,
+    const count = countVoteMap(map, approve + slash + reject + abstain, councilSize || undefined)
+
+    return (
+      <SideBar>
+        <VotesPreview votes={{ map, count }} />
+      </SideBar>
+    )
+  },
 }
