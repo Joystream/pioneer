@@ -64,7 +64,7 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
       <OpeningsCategories>
         <OpeningsCategory>
           <Label>Openings</Label>
-          {!isLead && <CreateOpeningButton group={workingGroup.id} />}
+          {isLead && <CreateOpeningButton group={workingGroup.id} />}
           <LoadingOpenings isLoading={isLoadingCurrent} openings={openings} />
         </OpeningsCategory>
       </OpeningsCategories>

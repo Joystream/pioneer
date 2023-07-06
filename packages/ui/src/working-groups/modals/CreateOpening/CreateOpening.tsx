@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import styled from 'styled-components'
 
@@ -93,6 +93,10 @@ export const CreateOpeningModal = () => {
     return exportValue
   }
 
+  const goToPrevious = useCallback(() => {
+    send('BACK')
+  }, [send])
+
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
       return feeInfo && send(feeInfo.canAfford ? 'NEXT' : 'FAIL')
@@ -148,6 +152,7 @@ export const CreateOpeningModal = () => {
       </StepperModalBody>
 
       <ModalTransactionFooter
+        prev={{ disabled: state.matches('workingGroupAndDescription'), onClick: goToPrevious }}
         next={{
           disabled: !form.formState.isValid || showImport,
           label: isLastStepActive(getSteps(service)) ? 'Create Opening' : 'Next step',
@@ -155,7 +160,7 @@ export const CreateOpeningModal = () => {
         }}
         extraButtons={
           <ButtonsGroup align="left">
-            <ButtonPrimary size="medium" onClick={() => setShowImport(!showImport)}>
+            <ButtonPrimary size="medium" onClick={() => setShowImport(!showImport)} disabled={showImport && !form.formState.isValid}>
               {showImport ? 'Preview Import' : 'Import'}
             </ButtonPrimary>
             <DownloadButtonGhost size="medium" name={'opening.json'} parts={[JSON.stringify(setExportJsonValue())]}>
