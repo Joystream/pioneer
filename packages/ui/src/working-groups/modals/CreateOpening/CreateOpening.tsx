@@ -160,7 +160,11 @@ export const CreateOpeningModal = () => {
         }}
         extraButtons={
           <ButtonsGroup align="left">
-            <ButtonPrimary size="medium" onClick={() => setShowImport(!showImport)} disabled={showImport && !form.formState.isValid}>
+            <ButtonPrimary
+              size="medium"
+              onClick={() => setShowImport(!showImport)}
+              disabled={showImport && !form.formState.isValid}
+            >
               {showImport ? 'Preview Import' : 'Import'}
             </ButtonPrimary>
             <DownloadButtonGhost size="medium" name={'opening.json'} parts={[JSON.stringify(setExportJsonValue())]}>
