@@ -34,7 +34,7 @@ It is composed of 3 parts:
 
 ### Demo
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/feature/backend-dev-blueprint)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/backend-dev-blueprint)
 
 > **Warning**
 >
@@ -57,7 +57,7 @@ In order to customize the default notification behavior with the GraphQL API, an
 
 ### Production
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/feature/feature/backend-deployments)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/backend)
 
 ## Production CLI usage
 
