@@ -41,8 +41,8 @@ interface Props {
 }
 
 export function TransferSignModal({ onClose, from, amount, to, service, transactionFactory }: Props) {
-  const toAddress = to.address
-  const fromAddress = from.address
+  const toAddress = to?.address
+  const fromAddress = from?.address
   const balanceFrom = useBalance(fromAddress)
   const balanceTo = useBalance(toAddress)
   const { api, connectionState } = useApi()
