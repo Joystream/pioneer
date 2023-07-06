@@ -30,7 +30,11 @@ It is composed of 3 parts:
 
 ## Quick Start
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/feature/backend-poc)
+### render.com deployments
+
+### Demo
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/feature/backend-dev-blueprint)
 
 > **Warning**
 >
@@ -50,6 +54,10 @@ Mapping existing Joystream memberships id to a name and an email address in the 
 ```
 
 In order to customize the default notification behavior with the GraphQL API, an authorization token can be found for each membership in the "Logs" section.
+
+### Production
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/feature/feature/backend-deployments)
 
 ## Production CLI usage
 

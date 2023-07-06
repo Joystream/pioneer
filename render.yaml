@@ -4,10 +4,11 @@ services:
     region: frankfurt
     plan: starter
 
-    runtime: node
-    buildCommand: yarn --immutable && yarn workspace server build
-    startCommand: yarn workspace server notify
     schedule: "*/30 * * * *"
+
+    runtime: image
+    image:
+      url: docker.io/thesan/pioneer-backend:prod
 
     # Define env on this cron service to make sure it builds first so it won't execute before the migration is ready
     envVars:
@@ -39,9 +40,9 @@ services:
     region: frankfurt
     plan: free
 
-    runtime: node
-    buildCommand: yarn --immutable && yarn workspace server build
-    startCommand: yarn workspace server start:api
+    runtime: image
+    image:
+      url: docker.io/thesan/pioneer-backend:prod
 
     envVars:
       - key: DATABASE_URL
@@ -75,9 +76,6 @@ services:
 
       - key: APP_SECRET_KEY
         generateValue: true
-
-      - key: INITIAL_MEMBERSHIPS
-        sync: false
 
 databases:
   - name: db
