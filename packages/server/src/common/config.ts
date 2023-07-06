@@ -6,7 +6,7 @@ config()
 
 const {
   PORT = 3000,
-  APP_SECRET_KEY, // TODO check this is defined when running the api
+  APP_SECRET_KEY,
   APP_LOG_LEVEL = 'info',
   QUERY_NODE_ENDPOINT = 'https://query.joystream.org/graphql',
   PIONEER_URL = 'https://pioneerapp.xyz',
