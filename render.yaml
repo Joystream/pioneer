@@ -1,16 +1,12 @@
 services:
-  - type: cron
-    name: notifier
+  - type: web
+    name: api
     region: frankfurt
     plan: starter
 
-    schedule: "*/30 * * * *"
-
     runtime: image
-    image:
-      url: docker.io/thesan/pioneer-backend:prod
+    image: { url: docker.io/thesan/pioneer-backend:prod }
 
-    # Define env on this cron service to make sure it builds first so it won't execute before the migration is ready
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -29,20 +25,18 @@ services:
       - key: SENDGRID_API_KEY
         sync: false
 
-      - key: STARTING_BLOCK
-        sync: false
+      - key: APP_SECRET_KEY
+        generateValue: true
 
-      - key: APP_LOG_LEVEL
-        value: verbose
-
-  - type: web
-    name: api
+  - type: cron
+    name: notifier
     region: frankfurt
     plan: starter
 
     runtime: image
-    image:
-      url: docker.io/thesan/pioneer-backend:prod
+    image: { url: docker.io/thesan/pioneer-backend:prod }
+    dockerCommand: notify
+    schedule: "*/30 * * * *"
 
     envVars:
       - key: DATABASE_URL
@@ -52,30 +46,33 @@ services:
 
       - key: QUERY_NODE_ENDPOINT
         fromService:
-          type: cron
-          name: notifier
+          type: web
+          name: api
           envVarKey: QUERY_NODE_ENDPOINT
 
       - key: PIONEER_URL
         fromService:
-          type: cron
-          name: notifier
+          type: web
+          name: api
           envVarKey: PIONEER_URL
 
       - key: EMAIL_SENDER
         fromService:
-          type: cron
-          name: notifier
+          type: web
+          name: api
           envVarKey: EMAIL_SENDER
 
       - key: SENDGRID_API_KEY
         fromService:
-          type: cron
-          name: notifier
+          type: web
+          name: api
           envVarKey: SENDGRID_API_KEY
 
-      - key: APP_SECRET_KEY
-        generateValue: true
+      - key: STARTING_BLOCK
+        sync: false
+
+      - key: APP_LOG_LEVEL
+        value: verbose
 
 databases:
   - name: db
