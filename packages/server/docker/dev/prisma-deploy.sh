@@ -2,4 +2,3 @@
 
 cd /app
 prisma migrate deploy 
-prisma generate

@@ -18,6 +18,7 @@ RUN yarn build:local
 RUN rm -rf node_modules
 ENV NODE_ENV=production
 RUN yarn --prod --immutable
+RUN yarn prisma generate
 
 FROM alpine:3.17
 WORKDIR /app
