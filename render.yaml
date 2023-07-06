@@ -38,7 +38,7 @@ services:
   - type: web
     name: api
     region: frankfurt
-    plan: free
+    plan: starter
 
     runtime: image
     image:
