@@ -138,6 +138,7 @@ export const Default: Story = {}
 // Create proposal tests
 // ----------------------------------------------------------------------------
 
+const EXECUTION_WARNING_BOX = 'I understand the implications of overriding the execution constraints validation.'
 const alice = member('alice')
 const waitForModal = (modal: Container, name: string) => modal.findByRole('heading', { name })
 const fillGeneralParameters = async (
@@ -190,7 +191,6 @@ export const AddNewProposalHappy: Story = {
   play: async ({ args, canvasElement, step }) => {
     const screen = within(canvasElement)
     const modal = withinModal(canvasElement)
-    const createProposalButton = getButtonByText(screen, 'Add new proposal')
 
     // Helpers:
 
@@ -201,6 +201,11 @@ export const AddNewProposalHappy: Story = {
     }
 
     const createProposal = async (proposalType: string, specificStep: PlayFunction<ReactRenderer, Args>) => {
+      const createProposalButton = getButtonByText(screen, 'Add new proposal')
+
+      await waitFor(() => expect(createProposalButton).toBeEnabled())
+      await new Promise((res) => setTimeout(res, 2000)) // TODO try without a timeout
+
       await userEvent.click(createProposalButton)
 
       await fillGeneralParameters(modal, step, proposalType)
@@ -218,6 +223,8 @@ export const AddNewProposalHappy: Story = {
     // Tests:
 
     await step('Warning Modal', async () => {
+      const createProposalButton = getButtonByText(screen, 'Add new proposal')
+
       await step('Temporarily close ', async () => {
         await userEvent.click(createProposalButton)
         await waitForModal(modal, 'Caution')
@@ -259,6 +266,7 @@ export const AddNewProposalHappy: Story = {
       let nextButton: HTMLElement
 
       await step('Proposal type', async () => {
+        const createProposalButton = getButtonByText(screen, 'Add new proposal')
         await userEvent.click(createProposalButton)
         await waitForModal(modal, 'Creating new proposal')
         nextButton = getButtonByText(modal, 'Next step')
@@ -362,15 +370,27 @@ export const AddNewProposalHappy: Story = {
     })
 
     closeModal('Creating new proposal: Funding Request')
-    await waitFor(() => expect(createProposalButton).toBeEnabled())
 
     await step('Specific parameters', async () => {
       await step('Signal', async () => {
         await createProposal('Signal', async () => {
           const nextButton = getButtonByText(modal, 'Create proposal')
+          expect(nextButton).toBeDisabled()
+
           const editor = await getEditorByLabel(modal, 'Signal')
+
+          // Valid
           editor.setData('Lorem ipsum...')
           await waitFor(() => expect(nextButton).toBeEnabled())
+
+          // Invalid
+          editor.setData('')
+          await waitFor(() => expect(nextButton).toBeDisabled())
+
+          // Valid again
+          editor.setData('Lorem ipsum...')
+          await waitFor(() => expect(nextButton).toBeEnabled())
+
           await userEvent.click(nextButton)
         })
 
@@ -384,6 +404,61 @@ export const AddNewProposalHappy: Story = {
         })
 
         expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(alice.id, alice.controllerAccount)
+      })
+
+      await step('Funding Request', async () => {
+        await createProposal('Funding Request', async () => {
+          const nextButton = getButtonByText(modal, 'Create proposal')
+          expect(nextButton).toBeDisabled()
+
+          const amountField = modal.getByTestId('amount-input')
+
+          // Valid
+          await userEvent.type(amountField, '100')
+          expect(nextButton).toBeDisabled()
+          await selectFromDropdown(modal, 'Recipient account', 'alice')
+          await waitFor(() => expect(nextButton).toBeEnabled())
+
+          // Invalid
+          await userEvent.clear(amountField)
+          await userEvent.type(amountField, '100000')
+          await waitFor(() => expect(nextButton).toBeDisabled())
+
+          // Valid again
+          await userEvent.clear(amountField)
+          await userEvent.type(amountField, '100')
+          await waitFor(() => expect(nextButton).toBeEnabled())
+
+          await userEvent.click(nextButton)
+        })
+      })
+
+      await step('Set Referral Cut', async () => {
+        await createProposal('Set Referral Cut', async () => {
+          const nextButton = getButtonByText(modal, 'Create proposal')
+          expect(nextButton).toBeDisabled()
+
+          const amountField = modal.getByTestId('amount-input')
+
+          // Valid
+          await userEvent.type(amountField, '40')
+          await waitFor(() => expect(nextButton).toBeEnabled())
+
+          // Invalid: creation constraints
+          await userEvent.clear(amountField)
+          await userEvent.type(amountField, '200')
+          await waitFor(() => expect(nextButton).toBeDisabled())
+
+          // Execution constraints warning
+          await userEvent.clear(amountField)
+          await userEvent.type(amountField, '100')
+          expect(await modal.findByText('Input must be equal or less than 50% for proposal to execute'))
+          expect(nextButton).toBeDisabled()
+          userEvent.click(modal.getByText(EXECUTION_WARNING_BOX))
+          await waitFor(() => expect(nextButton).toBeEnabled())
+
+          await userEvent.click(nextButton)
+        })
       })
     })
   },
