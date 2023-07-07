@@ -292,29 +292,26 @@ export const AddNewProposalHappy: Story = {
 
         expect(nextButton).toBeDisabled()
 
-        // Somehow reason the validation for the title field stop working once the editor setData
-        // However it only happens with tests `userEvent` and not when interacting manually with the story
-        await userEvent.type(titleField, PROPOSAL_DATA.title.padEnd(41, ' baz'))
+        // Invalid title
         rationaleEditor.setData(PROPOSAL_DATA.description)
+        await userEvent.clear(titleField)
+        await userEvent.type(
+          titleField,
+          'Reprehenderit laborum veniam est ut magna velit velit deserunt reprehenderit dolore.'
+        )
         const titleValidation = await modal.findByText('Title exceeds maximum length')
-
-        expect(titleValidation)
         expect(nextButton).toBeDisabled()
 
+        // Invalid rational
         await userEvent.clear(titleField)
         await userEvent.type(titleField, PROPOSAL_DATA.title)
-
-        await waitForElementToBeRemoved(titleValidation)
-        expect(nextButton).toBeEnabled()
-
         rationaleEditor.setData(PROPOSAL_DATA.description.padEnd(3002, ' baz'))
         const rationaleValidation = await modal.findByText('Rationale exceeds maximum length')
-
-        expect(rationaleValidation)
+        expect(titleValidation).not.toBeInTheDocument()
         expect(nextButton).toBeDisabled()
 
+        // Valid
         rationaleEditor.setData(PROPOSAL_DATA.description)
-
         await waitForElementToBeRemoved(rationaleValidation)
         expect(nextButton).toBeEnabled()
 
@@ -327,25 +324,25 @@ export const AddNewProposalHappy: Story = {
 
           await userEvent.click(modal.getByText('Yes'))
           expect(nextButton).toBeDisabled()
+
           const blockInput = modal.getByRole('textbox')
-          await userEvent.type(blockInput, '5000')
 
-          await waitFor(() => expect(nextButton).toBeEnabled())
-
-          await userEvent.clear(blockInput)
+          // Invalid: too low
           await userEvent.type(blockInput, '10')
-
           expect(await modal.findByText(/The minimum block number is \d+/))
           expect(nextButton).toBeDisabled()
 
-          // This "too high" test case seems to fail due to a RHF validation bug
-          // await userEvent.type(blockInput, '999999999')
+          // Invalid: too high
+          await userEvent.type(blockInput, '999999999')
+          await waitFor(() => expect(modal.queryByText(/The minimum block number is \d+/)).toBeNull())
+          expect(await modal.findByText(/The maximum block number is \d+/))
+          expect(nextButton).toBeDisabled()
 
+          // Valid
           await userEvent.clear(blockInput)
           await userEvent.type(blockInput, '9999')
-
+          await waitFor(() => expect(modal.queryByText(/The maximum block number is \d+/)).toBeNull())
           expect(await modal.findByText(/^≈.*/))
-          expect(modal.queryByText(/The minimum block number is \d+/)).toBeNull()
           expect(nextButton).toBeEnabled()
         })
 
@@ -367,9 +364,9 @@ export const AddNewProposalHappy: Story = {
           expect(modal.getByText('Specific parameters', { selector: 'h4' }))
         })
       })
-    })
 
-    closeModal('Creating new proposal: Funding Request')
+      closeModal('Creating new proposal: Funding Request')
+    })
 
     await step('Specific parameters', async () => {
       await step('Signal', async () => {
@@ -379,17 +376,15 @@ export const AddNewProposalHappy: Story = {
 
           const editor = await getEditorByLabel(modal, 'Signal')
 
-          // Valid
-          editor.setData('Lorem ipsum...')
-          await waitFor(() => expect(nextButton).toBeEnabled())
-
           // Invalid
           editor.setData('')
-          await waitFor(() => expect(nextButton).toBeDisabled())
+          const validation = await modal.findByText('Field is required')
+          expect(nextButton).toBeDisabled()
 
-          // Valid again
+          // Valid
           editor.setData('Lorem ipsum...')
-          await waitFor(() => expect(nextButton).toBeEnabled())
+          await waitForElementToBeRemoved(validation)
+          expect(nextButton).toBeEnabled()
 
           await userEvent.click(nextButton)
         })
@@ -413,21 +408,18 @@ export const AddNewProposalHappy: Story = {
 
           const amountField = modal.getByTestId('amount-input')
 
-          // Valid
-          await userEvent.type(amountField, '100')
-          expect(nextButton).toBeDisabled()
-          await selectFromDropdown(modal, 'Recipient account', 'alice')
-          await waitFor(() => expect(nextButton).toBeEnabled())
-
           // Invalid
+          await selectFromDropdown(modal, 'Recipient account', 'alice')
           await userEvent.clear(amountField)
-          await userEvent.type(amountField, '100000')
-          await waitFor(() => expect(nextButton).toBeDisabled())
+          await userEvent.type(amountField, '166667')
+          expect(await modal.findByText(/Maximal amount allowed is \d+/))
+          expect(nextButton).toBeDisabled()
 
           // Valid again
           await userEvent.clear(amountField)
           await userEvent.type(amountField, '100')
-          await waitFor(() => expect(nextButton).toBeEnabled())
+          await waitFor(() => expect(modal.queryByText(/Maximal amount allowed is \d+/)).toBeNull())
+          await expect(nextButton).toBeEnabled()
 
           await userEvent.click(nextButton)
         })
