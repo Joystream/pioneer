@@ -86,7 +86,7 @@ export const AddNewProposalModal = () => {
   const stakingStatus = useStakingAccountStatus(formMap[0]?.address, activeMember?.id, [state.matches('transaction')])
   const schema = useMemo(() => schemaFactory(api), [!api])
 
-  const path = useMemo(() => machineStateConverter(state.value), [state.value])
+  const path = useMemo(() => machineStateConverter(state.value) as keyof AddNewProposalForm, [state.value])
   const form = useForm<AddNewProposalForm>({
     resolver: useYupValidationResolver<AddNewProposalForm>(schema, path),
     mode: 'onChange',
@@ -108,6 +108,11 @@ export const AddNewProposalModal = () => {
     } as IStakingAccountSchema,
     defaultValues: defaultProposalValues,
   })
+
+  const formValues = form.getValues() as AddNewProposalForm
+  const currentErrors = form.formState.errors[path] ?? {}
+  const serializedCurrentForm = JSON.stringify(formValues[path])
+  const serializedCurrentFormErrors = JSON.stringify(currentErrors)
 
   const mapDependencies = form.watch([
     'stakingAccount.stakingAccount',
@@ -137,21 +142,14 @@ export const AddNewProposalModal = () => {
   }, [path])
 
   useEffect(() => {
-    setIsExecutionError(
-      Object.values((form.formState.errors as any)[path] ?? {}).some(
-        (value) => (value as FieldError).type === 'execution'
-      )
-    )
-  }, [JSON.stringify(form.formState.errors), path])
+    setIsExecutionError(Object.values(currentErrors).some((value) => (value as FieldError).type === 'execution'))
+  }, [serializedCurrentFormErrors])
 
   const transactionsSteps = useMemo(
     () =>
       state.context.discussionMode === 'closed' ? [...minimalSteps, { title: 'Set discussion mode' }] : minimalSteps,
     [state.context.discussionMode]
   )
-
-  const formValues = form.getValues() as AddNewProposalForm
-  const formStr = JSON.stringify(formValues)
 
   const { transaction, isLoading, feeInfo } = useTransactionFee(
     activeMember?.controllerAccount,
@@ -179,7 +177,7 @@ export const AddNewProposalModal = () => {
         ])
       }
     },
-    [api?.isConnected, activeMember, stakingStatus, formStr]
+    [api?.isConnected, activeMember, stakingStatus, serializedCurrentForm]
   )
 
   useEffect((): any => {
@@ -218,14 +216,11 @@ export const AddNewProposalModal = () => {
       return true
     }
     if (isExecutionError) {
-      const hasOtherError = Object.values((form.formState.errors as any)[path] ?? {}).some(
-        (value) => (value as FieldError).type !== 'execution'
-      )
-
       if (!form.formState.isDirty) {
         return true
       }
 
+      const hasOtherError = Object.values(currentErrors).some((value) => (value as FieldError).type !== 'execution')
       if (!hasOtherError) {
         return !warningAccepted
       }
@@ -234,15 +229,7 @@ export const AddNewProposalModal = () => {
     }
 
     return !form.formState.isValid
-  }, [
-    form.formState.isValid,
-    form.formState.isDirty,
-    isExecutionError,
-    warningAccepted,
-    formStr,
-    JSON.stringify(form.formState.errors),
-    isLoading,
-  ])
+  }, [form.formState.isValid, form.formState.isDirty, isExecutionError, warningAccepted, isLoading])
 
   if (!api || !activeMember || !feeInfo || state.matches('requirementsVerification')) {
     return null
