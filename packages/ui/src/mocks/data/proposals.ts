@@ -134,13 +134,20 @@ export const generateProposals = (
 
 type ProposalChainProps = {
   activeProposalCount: number
-  onCreateProposal?: CallableFunction
-  onConfirmStakingAccount?: CallableFunction
-  onStakingAccountAdded?: CallableFunction
+  onCreateProposal?: jest.Mock
+  onThreadChangeThreadMode?: jest.Mock
+  onAddStakingAccountCandidate?: jest.Mock
+  onConfirmStakingAccount?: jest.Mock
 }
 type Chain = MocksParameters['chain']
 export const proposalsPagesChain = (
-  { activeProposalCount, onCreateProposal, onConfirmStakingAccount, onStakingAccountAdded }: ProposalChainProps,
+  {
+    activeProposalCount,
+    onCreateProposal,
+    onThreadChangeThreadMode,
+    onAddStakingAccountCandidate,
+    onConfirmStakingAccount,
+  }: ProposalChainProps,
   extra?: Chain
 ): Chain =>
   merge(
@@ -201,9 +208,12 @@ export const proposalsPagesChain = (
         proposalsCodex: {
           createProposal: { event: 'ProposalCreated', onSend: onCreateProposal },
         },
+        proposalsDiscussion: {
+          changeThreadMode: { event: 'ThreadModeChanged', onSend: onThreadChangeThreadMode },
+        },
 
         members: {
-          addStakingAccountCandidate: { event: 'StakingAccountAdded', onSend: onStakingAccountAdded },
+          addStakingAccountCandidate: { event: 'StakingAccountAdded', onSend: onAddStakingAccountCandidate },
           confirmStakingAccount: { event: 'StakingAccountConfirmed', onSend: onConfirmStakingAccount },
         },
 

@@ -2,7 +2,7 @@ import { linkTo } from '@storybook/addon-links'
 import { expect, jest } from '@storybook/jest'
 import { Meta, ReactRenderer, StoryContext, StoryObj } from '@storybook/react'
 import { userEvent, waitFor, waitForElementToBeRemoved, within } from '@storybook/testing-library'
-import { PlayFunction, StepFunction } from '@storybook/types'
+import { PlayFunction, PlayFunctionContext, StepFunction } from '@storybook/types'
 import { FC } from 'react'
 
 import { SearchMembersDocument } from '@/memberships/queries'
@@ -23,8 +23,9 @@ type Args = {
   isCouncilMember: boolean
   proposalCount: number
   onCreateProposal: jest.Mock
+  onThreadChangeThreadMode: jest.Mock
   onConfirmStakingAccount: jest.Mock
-  onStakingAccountAdded: jest.Mock
+  onAddStakingAccountCandidate: jest.Mock
   onVote: jest.Mock
 }
 type Story = StoryObj<FC<Args>>
@@ -36,8 +37,9 @@ export default {
   argTypes: {
     proposalCount: { control: { type: 'range', max: MAX_ACTIVE_PROPOSAL } },
     onCreateProposal: { action: 'ProposalsCodex.ProposalCreated' },
+    onThreadChangeThreadMode: { action: 'proposalsDiscussion.ThreadModeChanged' },
     onConfirmStakingAccount: { action: 'Members.StakingAccountConfirmed' },
-    onStakingAccountAdded: { action: 'Members.StakingAccountAdded' },
+    onAddStakingAccountCandidate: { action: 'Members.StakingAccountAdded' },
     onVote: { action: 'ProposalsEngine.Voted' },
   },
 
@@ -70,8 +72,9 @@ export default {
           {
             activeProposalCount: args.proposalCount,
             onCreateProposal: args.onCreateProposal,
+            onThreadChangeThreadMode: args.onThreadChangeThreadMode,
+            onAddStakingAccountCandidate: args.onAddStakingAccountCandidate,
             onConfirmStakingAccount: args.onConfirmStakingAccount,
-            onStakingAccountAdded: args.onStakingAccountAdded,
           },
           {
             query: {
@@ -135,92 +138,32 @@ export default {
 export const Default: Story = {}
 
 // ----------------------------------------------------------------------------
-// Create proposal tests
+// Create proposal: General parameters tests
 // ----------------------------------------------------------------------------
 
-const EXECUTION_WARNING_BOX = 'I understand the implications of overriding the execution constraints validation.'
 const alice = member('alice')
 const waitForModal = (modal: Container, name: string) => modal.findByRole('heading', { name })
-const fillGeneralParameters = async (
-  modal: Container,
-  step: StepFunction<ReactRenderer, Args>,
-  proposalType: string
-) => {
-  let nextButton: HTMLElement
 
-  await step('Fill General Parameters', async () => {
-    await step('Proposal type', async () => {
-      await waitForModal(modal, 'Creating new proposal')
-      nextButton = getButtonByText(modal, 'Next step')
-
-      await userEvent.click(modal.getByText(proposalType))
-      await waitFor(() => expect(nextButton).not.toBeDisabled())
-      await userEvent.click(nextButton)
-    })
-
-    await step('Staking account', async () => {
-      await selectFromDropdown(modal, 'Select account for Staking', 'alice')
-      await waitFor(() => expect(nextButton).toBeEnabled())
-      await userEvent.click(nextButton)
-    })
-
-    await step('Proposal details', async () => {
-      const rationaleEditor = await getEditorByLabel(modal, 'Rationale')
-      await userEvent.type(modal.getByLabelText('Proposal title'), PROPOSAL_DATA.title)
-      rationaleEditor.setData(PROPOSAL_DATA.description)
-      await waitFor(() => expect(nextButton).toBeEnabled())
-      await userEvent.click(nextButton)
-    })
-
-    await step('Trigger & Discussion', async () => {
-      await waitFor(() => expect(nextButton).toBeEnabled())
-      await userEvent.click(nextButton)
-    })
-  })
+const hasStakingAccountParameters = {
+  stakingAccountIdMemberStatus: {
+    memberId: alice.id,
+    confirmed: true,
+    size: 1,
+  },
 }
 
 export const AddNewProposalHappy: Story = {
-  parameters: {
-    stakingAccountIdMemberStatus: {
-      memberId: alice.id,
-      confirmed: true,
-      size: 1,
-    },
-  },
+  parameters: hasStakingAccountParameters,
 
   play: async ({ args, canvasElement, step }) => {
     const screen = within(canvasElement)
     const modal = withinModal(canvasElement)
-
-    // Helpers:
 
     const closeModal = async (heading: string | HTMLElement) => {
       const headingElement = heading instanceof HTMLElement ? heading : modal.getByRole('heading', { name: heading })
       await userEvent.click(headingElement.nextElementSibling as HTMLElement)
       await userEvent.click(getButtonByText(modal, 'Close'))
     }
-
-    const createProposal = async (proposalType: string, specificStep: PlayFunction<ReactRenderer, Args>) => {
-      const createProposalButton = getButtonByText(screen, 'Add new proposal')
-
-      await waitFor(() => expect(createProposalButton).toBeEnabled())
-      await new Promise((res) => setTimeout(res, 2000)) // TODO try without a timeout
-
-      await userEvent.click(createProposalButton)
-
-      await fillGeneralParameters(modal, step, proposalType)
-
-      await step(`Specific parameters: ${proposalType}`, specificStep)
-
-      await step('Sign transaction and Create', async () => {
-        const signButton = getButtonByText(modal, 'Sign transaction and Create')
-        await userEvent.click(signButton)
-        const heading = await waitForModal(modal, 'Success')
-        await userEvent.click(heading?.nextElementSibling as HTMLElement)
-      })
-    }
-
-    // Tests:
 
     await step('Warning Modal', async () => {
       const createProposalButton = getButtonByText(screen, 'Add new proposal')
@@ -274,7 +217,7 @@ export const AddNewProposalHappy: Story = {
         // TODO test steps
 
         expect(nextButton).toBeDisabled()
-        await userEvent.click(modal.getByText('Funding Request'))
+        await userEvent.click(modal.getByText('Signal'))
         await waitFor(() => expect(nextButton).not.toBeDisabled())
         await userEvent.click(nextButton)
       })
@@ -363,94 +306,45 @@ export const AddNewProposalHappy: Story = {
 
           expect(modal.getByText('Specific parameters', { selector: 'h4' }))
         })
-      })
 
-      closeModal('Creating new proposal: Funding Request')
-    })
-
-    await step('Specific parameters', async () => {
-      await step('Signal', async () => {
-        await createProposal('Signal', async () => {
-          const nextButton = getButtonByText(modal, 'Create proposal')
-          expect(nextButton).toBeDisabled()
-
+        await step('Specific parameters', async () => {
           const editor = await getEditorByLabel(modal, 'Signal')
-
-          // Invalid
-          editor.setData('')
-          const validation = await modal.findByText('Field is required')
-          expect(nextButton).toBeDisabled()
-
-          // Valid
           editor.setData('Lorem ipsum...')
-          await waitForElementToBeRemoved(validation)
-          expect(nextButton).toBeEnabled()
+          await waitFor(() => expect(nextButton).toBeEnabled())
 
           await userEvent.click(nextButton)
         })
+      })
 
-        const [generalParameters, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
-        expect(specificParameters.toHuman()).toEqual({ Signal: 'Lorem ipsum...' })
+      await step('Sign Create Proposal transaction', async () => {
+        expect(modal.getByText('You intend to create a proposal.'))
+        await userEvent.click(modal.getByText('Sign transaction and Create'))
+      })
+
+      await step('Sign set discussion mode transaction', async () => {
+        expect(await modal.findByText('You intend to change the proposal discussion thread mode.'))
+        await userEvent.click(modal.getByText('Sign transaction and change mode'))
+        expect(await waitForModal(modal, 'Success'))
+      })
+
+      step('Transaction parameters', () => {
+        expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(alice.id, alice.controllerAccount)
+
+        const [generalParameters] = args.onCreateProposal.mock.calls.at(-1)
         expect(generalParameters).toEqual({
           memberId: alice.id,
           title: PROPOSAL_DATA.title,
           description: PROPOSAL_DATA.description,
           stakingAccountId: alice.controllerAccount,
+          exactExecutionBlock: 9999,
         })
 
-        expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(alice.id, alice.controllerAccount)
-      })
-
-      await step('Funding Request', async () => {
-        await createProposal('Funding Request', async () => {
-          const nextButton = getButtonByText(modal, 'Create proposal')
-          expect(nextButton).toBeDisabled()
-
-          const amountField = modal.getByTestId('amount-input')
-
-          // Invalid
-          await selectFromDropdown(modal, 'Recipient account', 'alice')
-          await userEvent.clear(amountField)
-          await userEvent.type(amountField, '166667')
-          expect(await modal.findByText(/Maximal amount allowed is \d+/))
-          expect(nextButton).toBeDisabled()
-
-          // Valid again
-          await userEvent.clear(amountField)
-          await userEvent.type(amountField, '100')
-          await waitFor(() => expect(modal.queryByText(/Maximal amount allowed is \d+/)).toBeNull())
-          await expect(nextButton).toBeEnabled()
-
-          await userEvent.click(nextButton)
-        })
-      })
-
-      await step('Set Referral Cut', async () => {
-        await createProposal('Set Referral Cut', async () => {
-          const nextButton = getButtonByText(modal, 'Create proposal')
-          expect(nextButton).toBeDisabled()
-
-          const amountField = modal.getByTestId('amount-input')
-
-          // Valid
-          await userEvent.type(amountField, '40')
-          await waitFor(() => expect(nextButton).toBeEnabled())
-
-          // Invalid: creation constraints
-          await userEvent.clear(amountField)
-          await userEvent.type(amountField, '200')
-          await waitFor(() => expect(nextButton).toBeDisabled())
-
-          // Execution constraints warning
-          await userEvent.clear(amountField)
-          await userEvent.type(amountField, '100')
-          expect(await modal.findByText('Input must be equal or less than 50% for proposal to execute'))
-          expect(nextButton).toBeDisabled()
-          userEvent.click(modal.getByText(EXECUTION_WARNING_BOX))
-          await waitFor(() => expect(nextButton).toBeEnabled())
-
-          await userEvent.click(nextButton)
-        })
+        const changeModeTxParams = args.onThreadChangeThreadMode.mock.calls.at(-1)
+        expect(changeModeTxParams.length).toBe(3)
+        const [memberId, threadId, mode] = changeModeTxParams
+        expect(memberId).toBe(alice.id)
+        expect(typeof threadId).toBe('number')
+        expect(mode.toJSON()).toEqual({ closed: [] })
       })
     })
   },
@@ -459,3 +353,182 @@ export const AddNewProposalHappy: Story = {
 // TODO:
 // - No active member
 // - Not enough funds
+
+// ----------------------------------------------------------------------------
+// Create proposal: Specific parameters tests helpers
+// ----------------------------------------------------------------------------
+
+const EXECUTION_WARNING_BOX = 'I understand the implications of overriding the execution constraints validation.'
+const fillGeneralParameters = async (
+  modal: Container,
+  step: StepFunction<ReactRenderer, Args>,
+  proposalType: string
+) => {
+  let nextButton: HTMLElement
+
+  await step('Fill General Parameters', async () => {
+    await step('Proposal type', async () => {
+      await waitForModal(modal, 'Creating new proposal')
+      nextButton = getButtonByText(modal, 'Next step')
+
+      await userEvent.click(modal.getByText(proposalType))
+      await waitFor(() => expect(nextButton).not.toBeDisabled())
+      await userEvent.click(nextButton)
+    })
+
+    await step('Staking account', async () => {
+      await selectFromDropdown(modal, 'Select account for Staking', 'alice')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+
+    await step('Proposal details', async () => {
+      const rationaleEditor = await getEditorByLabel(modal, 'Rationale')
+      await userEvent.type(modal.getByLabelText('Proposal title'), PROPOSAL_DATA.title)
+      rationaleEditor.setData(PROPOSAL_DATA.description)
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+
+    await step('Trigger & Discussion', async () => {
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+  })
+}
+
+type SpecificParametersTestFunction = (
+  args: Pick<PlayFunctionContext<ReactRenderer, Args>, 'args' | 'parameters' | 'step'> & {
+    modal: Container
+    createProposal: (create: () => Promise<void>) => Promise<void>
+  }
+) => Promise<void>
+const specificParametersTest =
+  (proposalType: string, specificStep: SpecificParametersTestFunction): PlayFunction<ReactRenderer, Args> =>
+  async ({ args, parameters, canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    const createProposal = async (create: () => Promise<void>) => {
+      localStorage.setItem('proposalCaution', 'true')
+
+      await userEvent.click(getButtonByText(screen, 'Add new proposal'))
+
+      await fillGeneralParameters(modal, step, proposalType)
+
+      await step(`Specific parameters: ${proposalType}`, create)
+
+      await step('Sign transaction and Create', async () => {
+        await userEvent.click(modal.getByText('Sign transaction and Create'))
+        expect(await waitForModal(modal, 'Success'))
+      })
+    }
+
+    await specificStep({ args, parameters, createProposal, modal, step })
+  }
+
+// ----------------------------------------------------------------------------
+// Create proposal: Specific parameters tests
+// ----------------------------------------------------------------------------
+
+export const SpecificParametersSignal: Story = {
+  parameters: hasStakingAccountParameters,
+
+  play: specificParametersTest('Signal', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      const editor = await getEditorByLabel(modal, 'Signal')
+
+      // Invalid
+      editor.setData('')
+      const validation = await modal.findByText('Field is required')
+      expect(nextButton).toBeDisabled()
+
+      // Valid
+      editor.setData('Lorem ipsum...')
+      await waitForElementToBeRemoved(validation)
+      expect(nextButton).toBeEnabled()
+
+      await userEvent.click(nextButton)
+    })
+
+    step('Transaction parameters', () => {
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toHuman()).toEqual({ Signal: 'Lorem ipsum...' })
+    })
+  }),
+}
+
+export const SpecificParametersFundingRequest: Story = {
+  parameters: hasStakingAccountParameters,
+
+  play: specificParametersTest('Funding Request', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      const amountField = modal.getByTestId('amount-input')
+
+      // Invalid
+      await selectFromDropdown(modal, 'Recipient account', 'alice')
+      await userEvent.clear(amountField)
+      await userEvent.type(amountField, '166667')
+      expect(await modal.findByText(/Maximal amount allowed is \d+/))
+      expect(nextButton).toBeDisabled()
+
+      // Valid again
+      await userEvent.clear(amountField)
+      await userEvent.type(amountField, '100')
+      await waitFor(() => expect(modal.queryByText(/Maximal amount allowed is \d+/)).toBeNull())
+      await expect(nextButton).toBeEnabled()
+
+      await userEvent.click(nextButton)
+    })
+
+    step('Transaction parameters', () => {
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({
+        fundingRequest: [{ account: alice.controllerAccount, amount: 100_0000000000 }],
+      })
+    })
+  }),
+}
+
+export const SpecificParametersSetReferralCut: Story = {
+  parameters: hasStakingAccountParameters,
+
+  play: specificParametersTest('Set Referral Cut', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      const amountField = modal.getByTestId('amount-input')
+
+      // Valid
+      await userEvent.type(amountField, '40')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+
+      // Invalid: creation constraints
+      await userEvent.clear(amountField)
+      await userEvent.type(amountField, '200')
+      await waitFor(() => expect(nextButton).toBeDisabled())
+
+      // Execution constraints warning
+      await userEvent.clear(amountField)
+      await userEvent.type(amountField, '100')
+      expect(await modal.findByText('Input must be equal or less than 50% for proposal to execute'))
+      expect(nextButton).toBeDisabled()
+      userEvent.click(modal.getByText(EXECUTION_WARNING_BOX))
+      await waitFor(() => expect(nextButton).toBeEnabled())
+
+      await userEvent.click(nextButton)
+    })
+
+    step('Transaction parameters', () => {
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({ setReferralCut: 100 })
+    })
+  }),
+}
