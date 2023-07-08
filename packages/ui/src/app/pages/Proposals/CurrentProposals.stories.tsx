@@ -8,9 +8,10 @@ import { FC } from 'react'
 import { SearchMembersDocument } from '@/memberships/queries'
 import { member } from '@/mocks/data/members'
 import { generateProposals, MAX_ACTIVE_PROPOSAL, proposalsPagesChain } from '@/mocks/data/proposals'
-import { Container, getButtonByText, getEditorByLabel, selectFromDropdown, withinModal } from '@/mocks/helpers'
+import { Container, getButtonByText, getEditorByLabel, joy, selectFromDropdown, withinModal } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
 import { GetProposalVotesDocument, GetProposalsCountDocument, GetProposalsDocument } from '@/proposals/queries'
+import { GetWorkingGroupDocument, GetWorkingGroupsDocument } from '@/working-groups/queries'
 
 import { Proposals } from './Proposals'
 
@@ -64,6 +65,24 @@ export default {
 
     mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
       const alice = member('alice', { isCouncilMember: args.isCouncilMember })
+
+      const forumWG = {
+        id: 'forumWorkingGroup',
+        name: 'forumWorkingGroup',
+        budget: joy(100),
+        workers: [{ stake: joy(parameters.wgLeadStake ?? 0) }, { stake: joy(50) }],
+        leader: parameters.wgLeadStake
+          ? {
+              id: 'forumWorkingGroup-10',
+              runtimeId: '10',
+              stake: joy(parameters.wgLeadStake),
+              rewardPerBlock: joy(5),
+              membershipId: alice.id,
+              isActive: true,
+            }
+          : undefined,
+      }
+      const storageWG = { id: 'storageWorkingGroup', name: 'storageWorkingGroup', budget: joy(100), workers: [] }
 
       return {
         accounts: { active: { member: alice } },
@@ -127,6 +146,19 @@ export default {
             query: SearchMembersDocument,
             data: {
               memberships: [alice],
+            },
+          },
+
+          {
+            query: GetWorkingGroupsDocument,
+            data: {
+              workingGroups: [forumWG, storageWG],
+            },
+          },
+          {
+            query: GetWorkingGroupDocument,
+            data: {
+              workingGroupByUniqueInput: forumWG,
             },
           },
         ],
@@ -529,6 +561,59 @@ export const SpecificParametersSetReferralCut: Story = {
     step('Transaction parameters', () => {
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({ setReferralCut: 100 })
+    })
+  }),
+}
+
+export const SpecificParametersDecreaseWorkingGroupLeadStake: Story = {
+  parameters: { ...hasStakingAccountParameters, wgLeadStake: 1000 },
+
+  play: specificParametersTest('Decrease Working Group Lead Stake', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      const body = within(document.body)
+
+      // WGs without a lead are disabled
+      await userEvent.click(modal.getByPlaceholderText('Select Working Group or type group name'))
+      const storageWG = body.getByText('Storage')
+      expect(storageWG.nextElementSibling?.firstElementChild?.textContent).toMatch(/This group has no lead/)
+      expect(storageWG).toHaveStyle({ 'pointer-events': 'none' })
+
+      // NOTE: This should be valid but here the button is still disabled
+      userEvent.click(body.getByText('Forum'))
+      const stakeMessage = modal.getByText(/The actual stake for Forum Working Group Lead is/)
+      expect(within(stakeMessage).getByText('1,000'))
+
+      const amountField = modal.getByTestId('amount-input')
+
+      await waitFor(() => expect(amountField).toHaveValue('500'))
+
+      // Invalid: stake set to 0
+      await userEvent.clear(amountField)
+      expect(await modal.findByText('Amount must be greater than zero'))
+      expect(nextButton).toBeDisabled()
+
+      // Valid 1/3
+      userEvent.click(modal.getByText('By 1/3'))
+      waitFor(() => expect(modal.queryByText('Amount must be greater than zero')).toBeNull())
+      expect(amountField).toHaveValue('333.3333333333')
+
+      // Valid 1/2
+      userEvent.click(modal.getByText('By half'))
+      expect(amountField).toHaveValue('500')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+
+      await userEvent.click(nextButton)
+    })
+
+    step('Transaction parameters', () => {
+      const leaderId = 10 // Set on the mock QN query
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({
+        decreaseWorkingGroupLeadStake: [leaderId, Number(joy(500)), 'Forum'],
+      })
     })
   }),
 }
