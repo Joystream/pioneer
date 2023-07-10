@@ -5,7 +5,7 @@ import { userEvent, waitFor, waitForElementToBeRemoved, within } from '@storyboo
 import { PlayFunction, PlayFunctionContext, StepFunction } from '@storybook/types'
 import { FC } from 'react'
 
-import { SearchMembersDocument } from '@/memberships/queries'
+import { GetMemberDocument, SearchMembersDocument } from '@/memberships/queries'
 import { member } from '@/mocks/data/members'
 import { generateProposals, MAX_ACTIVE_PROPOSAL, proposalsPagesChain } from '@/mocks/data/proposals'
 import { Container, getButtonByText, getEditorByLabel, joy, selectFromDropdown, withinModal } from '@/mocks/helpers'
@@ -146,6 +146,12 @@ export default {
             query: SearchMembersDocument,
             data: {
               memberships: [alice],
+            },
+          },
+          {
+            query: GetMemberDocument,
+            data: {
+              membershipByUniqueInput: alice,
             },
           },
 
@@ -613,6 +619,52 @@ export const SpecificParametersDecreaseWorkingGroupLeadStake: Story = {
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({
         decreaseWorkingGroupLeadStake: [leaderId, Number(joy(500)), 'Forum'],
+      })
+    })
+  }),
+}
+
+export const SpecificParametersTerminateWorkingGroupLead: Story = {
+  parameters: { ...hasStakingAccountParameters, wgLeadStake: 1000 },
+
+  play: specificParametersTest('Terminate Working Group Lead', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      const body = within(document.body)
+
+      // WGs without a lead are disabled
+      await userEvent.click(modal.getByPlaceholderText('Select Working Group or type group name'))
+      const storageWG = body.getByText('Storage')
+      expect(storageWG.nextElementSibling?.firstElementChild?.textContent).toMatch(/This group has no lead/)
+      expect(storageWG).toHaveStyle({ 'pointer-events': 'none' })
+
+      // Valid: Don't Slash lead
+      userEvent.click(body.getByText('Forum'))
+      expect(await modal.findByText('alice'))
+      await waitFor(() => expect(nextButton).toBeEnabled())
+
+      // Valid: Slash the lead 2000 JOY
+      userEvent.click(modal.getByText('Yes'))
+      const amountField = modal.getByTestId('amount-input')
+      expect(amountField).toHaveValue('')
+      userEvent.type(amountField, '2000')
+      await waitFor(() => expect(nextButton).toBeDisabled())
+      await waitFor(() => expect(nextButton).toBeEnabled())
+
+      await userEvent.click(nextButton)
+    })
+
+    step('Transaction parameters', () => {
+      const leaderId = 10 // Set on the mock QN query
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({
+        terminateWorkingGroupLead: {
+          workerId: leaderId,
+          slashingAmount: Number(joy(2000)),
+          group: 'Forum',
+        },
       })
     })
   }),
