@@ -1,6 +1,7 @@
+import { ApiPromise, WsProvider } from '@polkadot/api'
 import React, { useEffect } from 'react'
 
-// import { useApi } from '@/api/hooks/useApi'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { FailureModal } from '@/common/components/FailureModal'
 import { ResultText } from '@/common/components/Modal'
 import { WaitModal } from '@/common/components/WaitModal'
@@ -13,18 +14,31 @@ import { EmailSubscriptionMachine } from './machine'
 import { EmailSubscriptionForm } from './types'
 
 export const EmailSubscriptionModal = () => {
-  // const { api } = useApi()
+  const provider = new WsProvider(process.env.REACT_APP_TESTNET_NODE_SOCKET)
+  const api = new ApiPromise({ provider })
   const {
     hideModal,
     modalData: { member },
   } = useModal<EmailSubscriptionModalCall>()
 
+  const { wallet } = useMyAccounts()
+
   const [state, send] = useMachine(EmailSubscriptionMachine)
+
+  const signEmail = async () => {
+    if (state.context.email) {
+      await api.setSigner(wallet?.signer)
+      await api.sign(member.controllerAccount, {
+        data: state.context.email,
+      })
+    }
+  }
 
   useEffect(() => {
     if (state.matches('signature')) {
+      signEmail()
       // const timestamp = new Date()
-      // api?.sign(member.controllerAccount, `${member.id}:${timestamp}`)
+      // const signature = api?.sign(member.controllerAccount, `${member.id}:${timestamp}`)
     }
   }, [state])
 
