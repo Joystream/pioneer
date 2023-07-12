@@ -54,9 +54,22 @@ export type TransferEvent =
   | TransactionErrorEvent
 
 export const transferMachine = createMachine<TransferContext, TransferEvent, TransferState>({
-  initial: 'transaction',
+  initial: 'prepare',
   states: {
-    import: {},
+    prepare: {
+      on: {
+        SET_TO: {
+          actions: assign({ to: (_, event) => event.to }),
+        },
+        SET_FROM: {
+          actions: assign({ from: (_, event) => event.from }),
+        },
+        SET_AMOUNT: {
+          actions: assign({ amount: (_, event) => event.amount }),
+        },
+        DONE: 'transaction',
+      },
+    },
     transaction: {
       invoke: {
         id: 'transaction',
