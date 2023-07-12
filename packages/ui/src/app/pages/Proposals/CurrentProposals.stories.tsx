@@ -102,6 +102,7 @@ export default {
     },
 
     isLoggedIn: true,
+    balance: 100,
 
     stakingAccountIdMemberStatus: {
       memberId: 0,
@@ -131,7 +132,9 @@ export default {
       const storageWG = { id: 'storageWorkingGroup', name: 'storageWorkingGroup', budget: joy(100), workers: [] }
 
       return {
-        accounts: parameters.isLoggedIn ? { active: { member: alice } } : { list: [{ member: alice }] },
+        accounts: parameters.isLoggedIn
+          ? { active: { member: alice, balances: parameters.balance } }
+          : { list: [{ member: alice }] },
 
         chain: proposalsPagesChain(
           {
@@ -485,8 +488,28 @@ export const AddNewProposalHappy: Story = {
   },
 }
 
+export const NotEnoughFunds: Story = {
+  parameters: { balance: 1 },
+
+  play: async ({ canvasElement }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+    await userEvent.click(screen.getByText('Add new proposal'))
+    expect(
+      await modal.findByText(
+        /^Unfortunately the account associated with the currently selected membership has insufficient balance/
+      )
+    )
+    expect(modal.getByText('Move funds'))
+  },
+}
+
 // TODO:
-// - Not enough funds
+// - Staking account not bound nor staking candidate > Bind account failure
+// - Staking account not bound nor staking candidate > Create proposal failure
+// - Staking account is a candidate > Create proposal failure
+// - Staking account is confirmed > Create proposal failure
+// - Discussion mode transaction > Failure
 
 // ----------------------------------------------------------------------------
 // Create proposal: Specific parameters tests helpers
