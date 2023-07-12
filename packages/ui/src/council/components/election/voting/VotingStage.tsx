@@ -49,8 +49,8 @@ export const VotingStage = ({ election, isLoading }: VotingStageProps) => {
   }, [optionIds?.size, election?.candidates, votes, election])
 
   useEffect(() => {
-    console.log('My Votes length ',myVotes)
-    console.log('Voted for candidates ',votedForCandidates)
+    console.log('My Votes length ', myVotes)
+    console.log('Voted for candidates ', votedForCandidates)
   })
 
   return (
