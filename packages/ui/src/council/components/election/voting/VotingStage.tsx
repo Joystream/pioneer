@@ -37,18 +37,19 @@ export const VotingStage = ({ election, isLoading }: VotingStageProps) => {
       }))
     const votedForCandidates = allCandidates
       ?.filter(({ voted }) => voted)
-      .map((candidate) => {
-        const myVotesForCandidate = votes?.filter((vote) => vote.optionId === candidate.member.id) ?? []
-        return {
-          ...candidate,
-          myStake: myVotesForCandidate.reduce((prev, next) => prev.add(next.stake), BN_ZERO),
-        }
-      })
+      // .map((candidate) => {
+      //   const myVotesForCandidate = votes?.filter((vote) => vote.optionId === candidate.member.id) ?? []
+      //   return {
+      //     ...candidate,
+      //     myStake: myVotesForCandidate.reduce((prev, next) => prev.add(next.stake), BN_ZERO),
+      //   }
+      // })
 
     return [allCandidates, votedForCandidates]
   }, [optionIds?.size, election?.candidates, votes, election])
 
   useEffect(() => {
+    console.log('My Cast Votes ', votes)
     console.log('My Votes length ', myVotes)
     console.log('Voted for candidates ', votedForCandidates)
   })
