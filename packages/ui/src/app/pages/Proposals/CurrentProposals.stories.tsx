@@ -137,6 +137,7 @@ export default {
             minimumValidatorCount: parameters.minimumValidatorCount,
             setMaxValidatorCountProposalMaxValidators: parameters.setMaxValidatorCountProposalMaxValidators,
             initialInvitationCount: parameters.initialInvitationCount,
+            initialInvitationBalance: parameters.initialInvitationBalance,
             onCreateProposal: args.onCreateProposal,
             onThreadChangeThreadMode: args.onThreadChangeThreadMode,
             onAddStakingAccountCandidate: args.onAddStakingAccountCandidate,
@@ -1110,12 +1111,10 @@ export const SpecificParametersSetInitialInvitationCount: Story = {
 
       const countField = modal.getByLabelText('New Count')
 
-      // Invalid 0 invitation
-      await userEvent.type(countField, '1')
-      await waitFor(() => expect(nextButton).toBeEnabled())
-      await userEvent.clear(countField)
+      // Invalid 0 invitations
       await userEvent.type(countField, '0')
-      await waitFor(() => expect(nextButton).toBeDisabled())
+      expect(await modal.findByText('Amount must be greater than zero'))
+      expect(nextButton).toBeDisabled()
 
       // The value remains less than 2^32
       await userEvent.clear(countField)
@@ -1133,6 +1132,38 @@ export const SpecificParametersSetInitialInvitationCount: Story = {
     step('Transaction parameters', () => {
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({ setInitialInvitationCount: 7 })
+    })
+  }),
+}
+
+export const SpecificParametersSetInitialInvitationBalance: Story = {
+  parameters: { ...hasStakingAccountParameters, initialInvitationBalance: joy(5) },
+
+  play: specificParametersTest('Set Initial Invitation Balance', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      const current = modal.getByText(/The current balance is/)
+      expect(within(current).getByText('5'))
+
+      const amountField = modal.getByTestId('amount-input')
+
+      // Invalid balance 0
+      await userEvent.type(amountField, '0')
+      expect(await modal.findByText('Amount must be greater than zero'))
+      expect(nextButton).toBeDisabled()
+
+      // Valid
+      await userEvent.clear(amountField)
+      await userEvent.type(amountField, '7')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+
+    step('Transaction parameters', () => {
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({ setInitialInvitationBalance: Number(joy(7)) })
     })
   }),
 }

@@ -137,6 +137,7 @@ type ProposalChainProps = {
   minimumValidatorCount?: number
   setMaxValidatorCountProposalMaxValidators?: number
   initialInvitationCount?: number
+  initialInvitationBalance?: string
   onCreateProposal?: jest.Mock
   onThreadChangeThreadMode?: jest.Mock
   onAddStakingAccountCandidate?: jest.Mock
@@ -149,6 +150,7 @@ export const proposalsPagesChain = (
     minimumValidatorCount = 4,
     setMaxValidatorCountProposalMaxValidators = 100,
     initialInvitationCount = 5,
+    initialInvitationBalance = joy(5),
     onCreateProposal,
     onThreadChangeThreadMode,
     onAddStakingAccountCandidate,
@@ -199,6 +201,7 @@ export const proposalsPagesChain = (
       query: {
         members: {
           initialInvitationCount,
+          initialInvitationBalance,
           membershipPrice: joy(20),
           stakingAccountIdMemberStatus: {
             memberId: 0,
