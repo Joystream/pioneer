@@ -1,3 +1,4 @@
+import { OpeningMetadata } from '@joystream/metadata-protobuf'
 import { linkTo } from '@storybook/addon-links'
 import { expect, jest } from '@storybook/jest'
 import { Meta, ReactRenderer, StoryContext, StoryObj } from '@storybook/react'
@@ -5,6 +6,7 @@ import { userEvent, waitFor, waitForElementToBeRemoved, within } from '@storyboo
 import { PlayFunction, PlayFunctionContext, StepFunction } from '@storybook/types'
 import { FC } from 'react'
 
+import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromBytes'
 import { GetMemberDocument, SearchMembersDocument } from '@/memberships/queries'
 import { member } from '@/mocks/data/members'
 import { generateProposals, MAX_ACTIVE_PROPOSAL, proposalsPagesChain } from '@/mocks/data/proposals'
@@ -665,6 +667,89 @@ export const SpecificParametersTerminateWorkingGroupLead: Story = {
           slashingAmount: Number(joy(2000)),
           group: 'Forum',
         },
+      })
+    })
+  }),
+}
+
+export const SpecificParametersCreateWorkingGroupLeadOpening: Story = {
+  parameters: { ...hasStakingAccountParameters, wgLeadStake: 1000 },
+
+  play: specificParametersTest('Create Working Group Lead Opening', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Next step')
+      expect(nextButton).toBeDisabled()
+
+      const body = within(document.body)
+
+      // WGs without a lead are enabled
+      await userEvent.click(modal.getByPlaceholderText('Select Working Group or type group name'))
+      const storageWG = body.getByText('Storage')
+      expect(storageWG).not.toHaveStyle({ 'pointer-events': 'none' })
+
+      // Step 1 valid
+      await userEvent.click(body.getByText('Forum'))
+      await userEvent.type(modal.getByLabelText('Opening title'), 'Foo')
+      await userEvent.type(modal.getByLabelText('Short description'), 'Bar')
+      ;(await getEditorByLabel(modal, 'Description')).setData('Baz')
+      expect(nextButton).toBeDisabled()
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+
+      // Step 2
+      expect(nextButton).toBeDisabled()
+      ;(await getEditorByLabel(modal, 'Application process')).setData('Lorem ipsum...')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(modal.getByText('Limited'))
+      await waitFor(() => expect(nextButton).toBeDisabled())
+      await userEvent.type(modal.getByLabelText('Expected length of the application period'), '1000')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+
+      // Step 3
+      expect(nextButton).toBeDisabled()
+      await userEvent.type(modal.getByRole('textbox'), '🐁?')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(modal.getByText('Add new question'))
+      await waitFor(() => expect(nextButton).toBeDisabled())
+      await userEvent.click(modal.getAllByText('Long answer')[1])
+      await userEvent.type(modal.getAllByRole('textbox')[1], '🐘?')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+
+      // Step 4
+      expect(nextButton).toBeDisabled()
+      await userEvent.type(modal.getByLabelText('Staking amount *'), '100')
+      await userEvent.type(modal.getByLabelText('Role cooldown period'), '0')
+      await userEvent.type(modal.getByLabelText('Reward amount per Block'), '0.1')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+
+    step('Transaction parameters', () => {
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      const { description, ...data } = specificParameters.asCreateWorkingGroupLeadOpening.toJSON()
+
+      expect(data).toEqual({
+        rewardPerBlock: Number(joy(0.1)),
+        stakePolicy: {
+          stakeAmount: Number(joy(100)),
+          leavingUnstakingPeriod: 0,
+        },
+        group: 'Forum',
+      })
+
+      expect(metadataFromBytes(OpeningMetadata, description)).toEqual({
+        title: 'Foo',
+        shortDescription: 'Bar',
+        description: 'Baz',
+        hiringLimit: 1,
+        expectedEndingTimestamp: 1000,
+        applicationDetails: 'Lorem ipsum...',
+        applicationFormQuestions: [
+          { question: '🐁?', type: OpeningMetadata.ApplicationFormQuestion.InputType.TEXT },
+          { question: '🐘?', type: OpeningMetadata.ApplicationFormQuestion.InputType.TEXTAREA },
+        ],
       })
     })
   }),
