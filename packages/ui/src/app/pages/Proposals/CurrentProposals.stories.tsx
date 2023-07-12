@@ -69,8 +69,8 @@ type Args = {
   proposalCount: number
   onCreateProposal: jest.Mock
   onThreadChangeThreadMode: jest.Mock
-  onConfirmStakingAccount: jest.Mock
   onAddStakingAccountCandidate: jest.Mock
+  onConfirmStakingAccount: jest.Mock
   onVote: jest.Mock
 }
 type Story = StoryObj<FC<Args>>
@@ -83,8 +83,8 @@ export default {
     proposalCount: { control: { type: 'range', max: MAX_ACTIVE_PROPOSAL } },
     onCreateProposal: { action: 'ProposalsCodex.ProposalCreated' },
     onThreadChangeThreadMode: { action: 'proposalsDiscussion.ThreadModeChanged' },
-    onConfirmStakingAccount: { action: 'Members.StakingAccountConfirmed' },
     onAddStakingAccountCandidate: { action: 'Members.StakingAccountAdded' },
+    onConfirmStakingAccount: { action: 'Members.StakingAccountConfirmed' },
     onVote: { action: 'ProposalsEngine.Voted' },
   },
 
@@ -101,10 +101,12 @@ export default {
       },
     },
 
+    isLoggedIn: true,
+
     stakingAccountIdMemberStatus: {
       memberId: 0,
-      confirmed: false,
-      size: 0,
+      confirmed: true,
+      size: 1,
     },
 
     mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
@@ -129,7 +131,7 @@ export default {
       const storageWG = { id: 'storageWorkingGroup', name: 'storageWorkingGroup', budget: joy(100), workers: [] }
 
       return {
-        accounts: { active: { member: alice } },
+        accounts: parameters.isLoggedIn ? { active: { member: alice } } : { list: [{ member: alice }] },
 
         chain: proposalsPagesChain(
           {
@@ -266,16 +268,16 @@ export const Default: Story = {}
 const alice = member('alice')
 const waitForModal = (modal: Container, name: string) => modal.findByRole('heading', { name })
 
-const hasStakingAccountParameters = {
-  stakingAccountIdMemberStatus: {
-    memberId: alice.id,
-    confirmed: true,
-    size: 1,
-  },
-}
-
 export const AddNewProposalHappy: Story = {
-  parameters: hasStakingAccountParameters,
+  parameters: {
+    isLoggedIn: false,
+
+    stakingAccountIdMemberStatus: {
+      memberId: 0,
+      confirmed: false,
+      size: 0,
+    },
+  },
 
   play: async ({ args, canvasElement, step }) => {
     const screen = within(canvasElement)
@@ -287,11 +289,16 @@ export const AddNewProposalHappy: Story = {
       await userEvent.click(getButtonByText(modal, 'Close'))
     }
 
+    await step('Select Membership Modal', async () => {
+      await userEvent.click(screen.getByText('Add new proposal'))
+      expect(modal.getByText('Select Membership'))
+      await userEvent.click(modal.getByText('alice'))
+    })
+
     await step('Warning Modal', async () => {
       const createProposalButton = getButtonByText(screen, 'Add new proposal')
 
       await step('Temporarily close ', async () => {
-        await userEvent.click(createProposalButton)
         await waitForModal(modal, 'Caution')
 
         const nextButton = getButtonByText(modal, 'Create A Proposal')
@@ -335,8 +342,6 @@ export const AddNewProposalHappy: Story = {
         await userEvent.click(createProposalButton)
         await waitForModal(modal, 'Creating new proposal')
         nextButton = getButtonByText(modal, 'Next step')
-
-        // TODO test steps
 
         expect(nextButton).toBeDisabled()
         await userEvent.click(modal.getByText('Signal'))
@@ -438,8 +443,14 @@ export const AddNewProposalHappy: Story = {
         })
       })
 
+      await step('Bind Staking Account', async () => {
+        expect(modal.getByText('You intend to bind account for staking'))
+        expect(modal.getAllByText('alice')).toHaveLength(2)
+        await userEvent.click(modal.getByText('Sign transaction and Bind Staking Account'))
+      })
+
       await step('Sign Create Proposal transaction', async () => {
-        expect(modal.getByText('You intend to create a proposal.'))
+        expect(await modal.findByText('You intend to create a proposal.'))
         await userEvent.click(modal.getByText('Sign transaction and Create'))
       })
 
@@ -450,6 +461,8 @@ export const AddNewProposalHappy: Story = {
       })
 
       step('Transaction parameters', () => {
+        expect(args.onAddStakingAccountCandidate).toHaveBeenCalledWith(alice.id)
+
         expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(alice.id, alice.controllerAccount)
 
         const [generalParameters] = args.onCreateProposal.mock.calls.at(-1)
@@ -473,7 +486,6 @@ export const AddNewProposalHappy: Story = {
 }
 
 // TODO:
-// - No active member
 // - Not enough funds
 
 // ----------------------------------------------------------------------------
@@ -554,8 +566,6 @@ const specificParametersTest =
 // ----------------------------------------------------------------------------
 
 export const SpecificParametersSignal: Story = {
-  parameters: hasStakingAccountParameters,
-
   play: specificParametersTest('Signal', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
       const nextButton = getButtonByText(modal, 'Create proposal')
@@ -584,8 +594,6 @@ export const SpecificParametersSignal: Story = {
 }
 
 export const SpecificParametersFundingRequest: Story = {
-  parameters: hasStakingAccountParameters,
-
   play: specificParametersTest('Funding Request', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
       const nextButton = getButtonByText(modal, 'Create proposal')
@@ -619,8 +627,6 @@ export const SpecificParametersFundingRequest: Story = {
 }
 
 export const SpecificParametersSetReferralCut: Story = {
-  parameters: hasStakingAccountParameters,
-
   play: specificParametersTest('Set Referral Cut', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
       const nextButton = getButtonByText(modal, 'Create proposal')
@@ -656,7 +662,7 @@ export const SpecificParametersSetReferralCut: Story = {
 }
 
 export const SpecificParametersDecreaseWorkingGroupLeadStake: Story = {
-  parameters: { ...hasStakingAccountParameters, wgLeadStake: 1000 },
+  parameters: { wgLeadStake: 1000 },
 
   play: specificParametersTest('Decrease Working Group Lead Stake', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
@@ -709,7 +715,7 @@ export const SpecificParametersDecreaseWorkingGroupLeadStake: Story = {
 }
 
 export const SpecificParametersTerminateWorkingGroupLead: Story = {
-  parameters: { ...hasStakingAccountParameters, wgLeadStake: 1000 },
+  parameters: { wgLeadStake: 1000 },
 
   play: specificParametersTest('Terminate Working Group Lead', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
@@ -755,7 +761,7 @@ export const SpecificParametersTerminateWorkingGroupLead: Story = {
 }
 
 export const SpecificParametersCreateWorkingGroupLeadOpening: Story = {
-  parameters: { ...hasStakingAccountParameters, wgLeadStake: 1000 },
+  parameters: { wgLeadStake: 1000 },
 
   play: specificParametersTest('Create Working Group Lead Opening', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
@@ -838,7 +844,7 @@ export const SpecificParametersCreateWorkingGroupLeadOpening: Story = {
 }
 
 export const SpecificParametersSetWorkingGroupLeadReward: Story = {
-  parameters: { ...hasStakingAccountParameters, wgLeadStake: 1000 },
+  parameters: { wgLeadStake: 1000 },
 
   play: specificParametersTest('Set Working Group Lead Reward', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
@@ -886,11 +892,7 @@ export const SpecificParametersSetWorkingGroupLeadReward: Story = {
 }
 
 export const SpecificParametersSetMaxValidatorCount: Story = {
-  parameters: {
-    ...hasStakingAccountParameters,
-    minimumValidatorCount: 4,
-    setMaxValidatorCountProposalMaxValidators: 100,
-  },
+  parameters: { minimumValidatorCount: 4, setMaxValidatorCountProposalMaxValidators: 100 },
 
   play: specificParametersTest('Set Max Validator Count', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
@@ -926,8 +928,6 @@ export const SpecificParametersSetMaxValidatorCount: Story = {
 }
 
 export const SpecificParametersCancelWorkingGroupLeadOpening: Story = {
-  parameters: hasStakingAccountParameters,
-
   play: specificParametersTest('Cancel Working Group Lead Opening', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
       const nextButton = getButtonByText(modal, 'Create proposal')
@@ -950,8 +950,6 @@ export const SpecificParametersCancelWorkingGroupLeadOpening: Story = {
 }
 
 export const SpecificParametersSetCouncilBudgetIncrement: Story = {
-  parameters: hasStakingAccountParameters,
-
   play: specificParametersTest('Set Council Budget Increment', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
       const nextButton = getButtonByText(modal, 'Create proposal')
@@ -987,8 +985,6 @@ export const SpecificParametersSetCouncilBudgetIncrement: Story = {
 }
 
 export const SpecificParametersSetCouncilorReward: Story = {
-  parameters: hasStakingAccountParameters,
-
   play: specificParametersTest('Set Councilor Reward', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
       const nextButton = getButtonByText(modal, 'Create proposal')
@@ -1018,7 +1014,7 @@ export const SpecificParametersSetCouncilorReward: Story = {
 }
 
 export const SpecificParametersSetMembershipLeadInvitationQuota: Story = {
-  parameters: { ...hasStakingAccountParameters, wgLeadStake: 1000 },
+  parameters: { wgLeadStake: 1000 },
 
   play: specificParametersTest(
     'Set Membership Lead Invitation Quota',
@@ -1058,8 +1054,6 @@ export const SpecificParametersSetMembershipLeadInvitationQuota: Story = {
 }
 
 export const SpecificParametersFillWorkingGroupLeadOpening: Story = {
-  parameters: hasStakingAccountParameters,
-
   play: specificParametersTest('Fill Working Group Lead Opening', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
       const nextButton = getButtonByText(modal, 'Create proposal')
@@ -1106,7 +1100,7 @@ export const SpecificParametersFillWorkingGroupLeadOpening: Story = {
 }
 
 export const SpecificParametersSetInitialInvitationCount: Story = {
-  parameters: { ...hasStakingAccountParameters, initialInvitationCount: 5 },
+  parameters: { initialInvitationCount: 5 },
 
   play: specificParametersTest('Set Initial Invitation Count', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
@@ -1143,7 +1137,7 @@ export const SpecificParametersSetInitialInvitationCount: Story = {
 }
 
 export const SpecificParametersSetInitialInvitationBalance: Story = {
-  parameters: { ...hasStakingAccountParameters, initialInvitationBalance: joy(5) },
+  parameters: { initialInvitationBalance: joy(5) },
 
   play: specificParametersTest('Set Initial Invitation Balance', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
@@ -1175,8 +1169,6 @@ export const SpecificParametersSetInitialInvitationBalance: Story = {
 }
 
 export const SpecificParametersSetMembershipPrice: Story = {
-  parameters: hasStakingAccountParameters,
-
   play: specificParametersTest('Set Membership Price', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
       const nextButton = getButtonByText(modal, 'Create proposal')
@@ -1205,7 +1197,6 @@ export const SpecificParametersSetMembershipPrice: Story = {
 
 export const SpecificParametersUpdateWorkingGroupBudget: Story = {
   parameters: {
-    ...hasStakingAccountParameters,
     councilSize: 3,
     councilBudget: joy(2000),
     councilorReward: joy(100),
@@ -1268,8 +1259,6 @@ export const SpecificParametersUpdateWorkingGroupBudget: Story = {
 }
 
 export const SpecificParametersRuntimeUpgrade: Story = {
-  parameters: hasStakingAccountParameters,
-
   play: specificParametersTest('Runtime Upgrade', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
       const nextButton = getButtonByText(modal, 'Create proposal')
