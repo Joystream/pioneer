@@ -754,3 +754,51 @@ export const SpecificParametersCreateWorkingGroupLeadOpening: Story = {
     })
   }),
 }
+
+export const SpecificParametersSetWorkingGroupLeadReward: Story = {
+  parameters: { ...hasStakingAccountParameters, wgLeadStake: 1000 },
+
+  play: specificParametersTest('Set Working Group Lead Reward', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      const body = within(document.body)
+
+      // WGs without a lead are disabled
+      await userEvent.click(modal.getByPlaceholderText('Select Working Group or type group name'))
+      const storageWG = body.getByText('Storage')
+      expect(storageWG.nextElementSibling?.firstElementChild?.textContent).toMatch(/This group has no lead/)
+      expect(storageWG).toHaveStyle({ 'pointer-events': 'none' })
+
+      // Valid
+      userEvent.click(body.getByText('Forum'))
+      expect(await modal.findByText('alice'))
+      const stakeMessage = modal.getByText(/Current reward per block for Forum Working Group Lead is/)
+      expect(within(stakeMessage).getByText('5'))
+      expect(nextButton).toBeDisabled()
+      const amountField = modal.getByTestId('amount-input')
+      await userEvent.type(amountField, '1')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+
+      // Invalid
+      await userEvent.clear(amountField)
+      await userEvent.type(amountField, '0')
+      await waitFor(() => expect(nextButton).toBeDisabled())
+
+      // Valid again
+      await userEvent.clear(amountField)
+      await userEvent.type(amountField, '10')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+
+    step('Transaction parameters', () => {
+      const leaderId = 10 // Set on the mock QN query
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({
+        setWorkingGroupLeadReward: [leaderId, Number(joy(10)), 'Forum'],
+      })
+    })
+  }),
+}
