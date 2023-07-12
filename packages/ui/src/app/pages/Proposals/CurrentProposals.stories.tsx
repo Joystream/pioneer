@@ -1266,3 +1266,43 @@ export const SpecificParametersUpdateWorkingGroupBudget: Story = {
     })
   }),
 }
+
+export const SpecificParametersRuntimeUpgrade: Story = {
+  parameters: hasStakingAccountParameters,
+
+  play: specificParametersTest('Runtime Upgrade', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      const uploadField = modal.getByTestId('runtime-upgrade-input')
+
+      // Invalid
+      await userEvent.upload(uploadField, new File([], 'invalid.wasm', { type: 'application/wasm' }))
+      const validation = await modal.findByText(/was not loaded because of: "not valid WASM file"./)
+      expect(within(validation).getByText('invalid.wasm'))
+
+      // Valid
+      const setIsValidWASM = jest.fn()
+      const validFile = Object.defineProperties(new File([], 'valid.wasm', { type: 'application/wasm' }), {
+        isValidWASM: { get: () => true, set: setIsValidWASM },
+        arrayBuffer: { value: () => Promise.resolve(new ArrayBuffer(1)) },
+        size: { value: 1 },
+      })
+      await userEvent.upload(uploadField, validFile)
+      await waitFor(() => expect(setIsValidWASM).toHaveBeenCalledWith(false))
+      const confirmation = await modal.findByText(/was loaded successfully!/)
+      expect(within(confirmation).getByText('valid.wasm'))
+
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await waitFor(() => expect(nextButton).toBeDisabled()) // The button gets enabled 1 rendering frame due to isLoading lagging behind
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+
+    step('Transaction parameters', () => {
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({ runtimeUpgrade: '0x' })
+    })
+  }),
+}
