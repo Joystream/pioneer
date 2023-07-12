@@ -27,6 +27,7 @@ import {
   GetProposalsDocument,
 } from '@/proposals/queries'
 import {
+  GetWorkingGroupApplicationsDocument,
   GetWorkingGroupDocument,
   GetWorkingGroupOpeningsDocument,
   GetWorkingGroupsDocument,
@@ -37,6 +38,30 @@ import { Proposals } from './Proposals'
 const PROPOSAL_DATA = {
   title: 'Foo bar',
   description: '## est minus rerum sed\n\nAssumenda et laboriosam minus accusantium. Sed in quo illum.',
+}
+
+const OPENING_DATA = {
+  id: 'storageWorkingGroup-12',
+  runtimeId: 12,
+  groupId: 'storageWorkingGroup',
+  group: {
+    name: 'storageWorkingGroup',
+    budget: '962651993476422',
+    leaderId: 'storageWorkingGroup-0',
+  },
+  type: 'LEADER',
+  stakeAmount: '2500000000000000',
+  rewardPerBlock: '1930000000',
+  createdInEvent: { inBlock: 123, createdAt: isoDate('2023/01/02') },
+  metadata: {
+    title: 'Hire Storage Working Group Lead',
+    applicationDetails: 'answers to questions',
+    shortDescription: 'Hire Storage Working Group Lead',
+    description: 'Lorem ipsum...',
+    hiringLimit: 1,
+    expectedEnding: null,
+  },
+  status: { __typename: 'OpeningStatusOpen' },
 }
 
 type Args = {
@@ -196,29 +221,24 @@ export default {
           {
             query: GetWorkingGroupOpeningsDocument,
             data: {
-              workingGroupOpenings: [
+              workingGroupOpenings: [OPENING_DATA],
+            },
+          },
+          {
+            query: GetWorkingGroupApplicationsDocument,
+            data: {
+              workingGroupApplications: [
                 {
-                  id: 'storageWorkingGroup-12',
-                  runtimeId: 12,
-                  groupId: 'storageWorkingGroup',
-                  group: {
-                    name: 'storageWorkingGroup',
-                    budget: '962651993476422',
-                    leaderId: 'storageWorkingGroup-0',
-                  },
-                  type: 'LEADER',
-                  stakeAmount: '2500000000000000',
-                  rewardPerBlock: '1930000000',
-                  createdInEvent: { inBlock: 123, createdAt: isoDate('2023/01/02') },
-                  metadata: {
-                    title: 'Hire Storage Working Group Lead',
-                    applicationDetails: 'answers to questions',
-                    shortDescription: 'Hire Storage Working Group Lead',
-                    description: 'Lorem ipsum...',
-                    hiringLimit: 1,
-                    expectedEnding: null,
-                  },
-                  status: { __typename: 'OpeningStatusOpen' },
+                  id: 'storageWorkingGroup-15',
+                  runtimeId: 15,
+                  opening: OPENING_DATA,
+                  answers: [
+                    { answer: 'Foo', question: { question: '🐁?' } },
+                    { answer: 'Bar', question: { question: '🐘?' } },
+                  ],
+                  status: { __typename: 'ApplicationStatusPending' },
+                  applicant: alice,
+                  createdInEvent: { inBlock: 234, createdAt: isoDate('2023/01/04') },
                 },
               ],
             },
@@ -898,7 +918,7 @@ export const SpecificParametersSetMaxValidatorCount: Story = {
 }
 
 export const SpecificParametersCancelWorkingGroupLeadOpening: Story = {
-  parameters: { ...hasStakingAccountParameters, wgLeadStake: 1000 },
+  parameters: hasStakingAccountParameters,
 
   play: specificParametersTest('Cancel Working Group Lead Opening', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
@@ -922,7 +942,7 @@ export const SpecificParametersCancelWorkingGroupLeadOpening: Story = {
 }
 
 export const SpecificParametersSetCouncilBudgetIncrement: Story = {
-  parameters: { ...hasStakingAccountParameters, wgLeadStake: 1000 },
+  parameters: hasStakingAccountParameters,
 
   play: specificParametersTest('Set Council Budget Increment', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
@@ -959,7 +979,7 @@ export const SpecificParametersSetCouncilBudgetIncrement: Story = {
 }
 
 export const SpecificParametersSetCouncilorReward: Story = {
-  parameters: { ...hasStakingAccountParameters, wgLeadStake: 1000 },
+  parameters: hasStakingAccountParameters,
 
   play: specificParametersTest('Set Councilor Reward', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
@@ -1027,4 +1047,52 @@ export const SpecificParametersSetMembershipLeadInvitationQuota: Story = {
       })
     }
   ),
+}
+
+export const SpecificParametersFillWorkingGroupLeadOpening: Story = {
+  parameters: hasStakingAccountParameters,
+
+  play: specificParametersTest('Fill Working Group Lead Opening', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      const body = within(document.body)
+
+      // Select Opening
+      await userEvent.click(modal.getByPlaceholderText('Choose opening to fill'))
+      userEvent.click(body.getByText('Hire Storage Working Group Lead'))
+
+      // Select Application
+      const applicationSelector = await modal.findByPlaceholderText('Choose application')
+      const options = await waitFor(async () => {
+        await userEvent.click(applicationSelector)
+        const options = document.getElementById('select-popper-wrapper')
+        expect(options).not.toBeNull()
+        return within(options as HTMLElement)
+      })
+      expect(nextButton).toBeDisabled()
+      userEvent.click(options.getByText('alice'))
+
+      // Check application
+      expect(await modal.findByText('🐁?'))
+      expect(modal.getByText('Foo'))
+      expect(modal.getByText('🐘?'))
+      expect(modal.getByText('Bar'))
+
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+
+    step('Transaction parameters', () => {
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({
+        fillWorkingGroupLeadOpening: {
+          applicationId: 15,
+          openingId: 12,
+          workingGroup: 'Storage',
+        },
+      })
+    })
+  }),
 }
