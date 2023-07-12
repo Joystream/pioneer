@@ -136,6 +136,7 @@ export default {
             activeProposalCount: args.proposalCount,
             minimumValidatorCount: parameters.minimumValidatorCount,
             setMaxValidatorCountProposalMaxValidators: parameters.setMaxValidatorCountProposalMaxValidators,
+            initialInvitationCount: parameters.initialInvitationCount,
             onCreateProposal: args.onCreateProposal,
             onThreadChangeThreadMode: args.onThreadChangeThreadMode,
             onAddStakingAccountCandidate: args.onAddStakingAccountCandidate,
@@ -1093,6 +1094,45 @@ export const SpecificParametersFillWorkingGroupLeadOpening: Story = {
           workingGroup: 'Storage',
         },
       })
+    })
+  }),
+}
+
+export const SpecificParametersSetInitialInvitationCount: Story = {
+  parameters: { ...hasStakingAccountParameters, initialInvitationCount: 5 },
+
+  play: specificParametersTest('Set Initial Invitation Count', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      expect(modal.getByText('The current initial invitation count is 5.'))
+
+      const countField = modal.getByLabelText('New Count')
+
+      // Invalid 0 invitation
+      await userEvent.type(countField, '1')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.clear(countField)
+      await userEvent.type(countField, '0')
+      await waitFor(() => expect(nextButton).toBeDisabled())
+
+      // The value remains less than 2^32
+      await userEvent.clear(countField)
+      await userEvent.type(countField, ''.padEnd(39, '9'))
+      const value = Number((countField as HTMLInputElement).value.replace(/,/g, ''))
+      expect(value).toBeLessThan(2 ** 32)
+
+      // Valid
+      await userEvent.clear(countField)
+      await userEvent.type(countField, '7')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+
+    step('Transaction parameters', () => {
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({ setInitialInvitationCount: 7 })
     })
   }),
 }
