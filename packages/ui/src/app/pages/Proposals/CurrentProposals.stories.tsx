@@ -92,6 +92,8 @@ export default {
         chain: proposalsPagesChain(
           {
             activeProposalCount: args.proposalCount,
+            minimumValidatorCount: parameters.minimumValidatorCount,
+            setMaxValidatorCountProposalMaxValidators: parameters.setMaxValidatorCountProposalMaxValidators,
             onCreateProposal: args.onCreateProposal,
             onThreadChangeThreadMode: args.onThreadChangeThreadMode,
             onAddStakingAccountCandidate: args.onAddStakingAccountCandidate,
@@ -799,6 +801,46 @@ export const SpecificParametersSetWorkingGroupLeadReward: Story = {
       expect(specificParameters.toJSON()).toEqual({
         setWorkingGroupLeadReward: [leaderId, Number(joy(10)), 'Forum'],
       })
+    })
+  }),
+}
+
+export const SpecificParametersSetMaxValidatorCount: Story = {
+  parameters: {
+    ...hasStakingAccountParameters,
+    minimumValidatorCount: 4,
+    setMaxValidatorCountProposalMaxValidators: 100,
+  },
+
+  play: specificParametersTest('Set Max Validator Count', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      const amountField = modal.getByTestId('amount-input')
+
+      // Invalid: too low
+      await userEvent.type(amountField, '1')
+      const validation = await modal.findByText('Minimal amount allowed is 4')
+      expect(validation)
+      expect(nextButton).toBeDisabled()
+
+      // Invalid: too high
+      await userEvent.type(amountField, '999')
+      // console.log(validation)
+      await waitFor(() => expect(validation).toHaveTextContent('Maximal amount allowed is 100'))
+      expect(nextButton).toBeDisabled()
+
+      // Valid
+      await userEvent.clear(amountField)
+      await userEvent.type(amountField, '10')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+
+    step('Transaction parameters', () => {
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({ setMaxValidatorCount: 10 })
     })
   }),
 }

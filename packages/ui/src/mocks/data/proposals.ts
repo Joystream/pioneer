@@ -134,6 +134,8 @@ export const generateProposals = (
 
 type ProposalChainProps = {
   activeProposalCount: number
+  minimumValidatorCount?: number
+  setMaxValidatorCountProposalMaxValidators?: number
   onCreateProposal?: jest.Mock
   onThreadChangeThreadMode?: jest.Mock
   onAddStakingAccountCandidate?: jest.Mock
@@ -143,6 +145,8 @@ type Chain = MocksParameters['chain']
 export const proposalsPagesChain = (
   {
     activeProposalCount,
+    minimumValidatorCount = 4,
+    setMaxValidatorCountProposalMaxValidators = 100,
     onCreateProposal,
     onThreadChangeThreadMode,
     onAddStakingAccountCandidate,
@@ -170,7 +174,7 @@ export const proposalsPagesChain = (
 
         proposalsCodex: {
           fundingRequestProposalMaxTotalAmount: joy(166_666),
-          setMaxValidatorCountProposalMaxValidators: 100,
+          setMaxValidatorCountProposalMaxValidators,
 
           ...Object.fromEntries(
             proposalTypes.map((type) => [
@@ -201,7 +205,7 @@ export const proposalsPagesChain = (
         },
 
         proposalsEngine: { activeProposalCount },
-        staking: { minimumValidatorCount: 4 },
+        staking: { minimumValidatorCount },
       },
 
       tx: {
