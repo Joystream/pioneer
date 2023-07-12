@@ -138,6 +138,12 @@ type ProposalChainProps = {
   setMaxValidatorCountProposalMaxValidators?: number
   initialInvitationCount?: number
   initialInvitationBalance?: string
+
+  councilSize?: number
+  councilBudget?: string
+  councilorReward?: string
+  nextRewardPayments?: number
+
   onCreateProposal?: jest.Mock
   onThreadChangeThreadMode?: jest.Mock
   onAddStakingAccountCandidate?: jest.Mock
@@ -151,6 +157,12 @@ export const proposalsPagesChain = (
     setMaxValidatorCountProposalMaxValidators = 100,
     initialInvitationCount = 5,
     initialInvitationBalance = joy(5),
+
+    councilSize = 3,
+    councilBudget = joy(2000),
+    councilorReward = joy(200),
+    nextRewardPayments = 12345,
+
     onCreateProposal,
     onThreadChangeThreadMode,
     onAddStakingAccountCandidate,
@@ -165,6 +177,8 @@ export const proposalsPagesChain = (
           minimumCashoutAllowedLimit: joy(166),
           maximumCashoutAllowedLimit: joy(1_666_666),
         },
+
+        council: { councilSize, idlePeriodDuration: 1, announcingPeriodDuration: 1 },
 
         members: {
           referralCutMaximumPercent: 50,
@@ -199,6 +213,14 @@ export const proposalsPagesChain = (
       },
 
       query: {
+        council: {
+          budget: councilBudget,
+          councilorReward,
+          nextRewardPayments,
+          stage: { stage: { isIdle: true }, changedAt: 123 },
+        },
+        referendum: { stage: {} },
+
         members: {
           initialInvitationCount,
           initialInvitationBalance,

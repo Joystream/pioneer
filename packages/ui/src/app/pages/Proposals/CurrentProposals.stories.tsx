@@ -138,6 +138,12 @@ export default {
             setMaxValidatorCountProposalMaxValidators: parameters.setMaxValidatorCountProposalMaxValidators,
             initialInvitationCount: parameters.initialInvitationCount,
             initialInvitationBalance: parameters.initialInvitationBalance,
+
+            councilSize: parameters.councilSize,
+            councilBudget: parameters.councilBudget,
+            councilorReward: parameters.councilorReward,
+            nextRewardPayments: parameters.nextRewardPayments,
+
             onCreateProposal: args.onCreateProposal,
             onThreadChangeThreadMode: args.onThreadChangeThreadMode,
             onAddStakingAccountCandidate: args.onAddStakingAccountCandidate,
@@ -1193,6 +1199,70 @@ export const SpecificParametersSetMembershipPrice: Story = {
     step('Transaction parameters', () => {
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({ setMembershipPrice: Number(joy(8)) })
+    })
+  }),
+}
+
+export const SpecificParametersUpdateWorkingGroupBudget: Story = {
+  parameters: {
+    ...hasStakingAccountParameters,
+    councilSize: 3,
+    councilBudget: joy(2000),
+    councilorReward: joy(100),
+    nextRewardPayments: 12345,
+  },
+
+  play: specificParametersTest('Update Working Group Budget', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      const amountField = modal.getByTestId('amount-input')
+
+      const currentCouncilBudget = modal.getByText(/Current budget for Council is/)
+      expect(within(currentCouncilBudget).getByText('2,000'))
+
+      const councilSummary = modal.getByText(/Next Council payment is in/)
+      expect(within(councilSummary).getByText('12,345')) // Next reward payment block
+      expect(within(councilSummary).getByText(100 * 3)) // Next reward payment block
+
+      expect(
+        modal.getByText(
+          'If the Councils budget is less than provided amount at attempted execution, this proposal will fail to execute, and the budget size will not be changed.'
+        )
+      )
+
+      userEvent.click(modal.getByText('Yes'))
+      expect(
+        modal.getByText(
+          'If the budget is less than provided amount at attempted execution, this proposal will fail to execute and the budget size will not be changed'
+        )
+      )
+
+      // Select working group
+      await userEvent.click(modal.getByPlaceholderText('Select Working Group or type group name'))
+      userEvent.click(within(document.body).getByText('Forum'))
+
+      const currentWgBudget = modal.getByText(/Current budget for Forum Working Group is/)
+      expect(within(currentWgBudget).getByText('100'))
+
+      // Invalid price set to 0
+      await userEvent.type(amountField, '0')
+      expect(await modal.findByText('Amount must be greater than zero'))
+      expect(nextButton).toBeDisabled()
+
+      // Valid
+      await userEvent.clear(amountField)
+      await userEvent.type(amountField, '99')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+
+    step('Transaction parameters', () => {
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({
+        updateWorkingGroupBudget: [Number(joy(99)), 'Forum', 'Negative'],
+      })
     })
   }),
 }
