@@ -1167,3 +1167,32 @@ export const SpecificParametersSetInitialInvitationBalance: Story = {
     })
   }),
 }
+
+export const SpecificParametersSetMembershipPrice: Story = {
+  parameters: hasStakingAccountParameters,
+
+  play: specificParametersTest('Set Membership Price', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      const amountField = modal.getByTestId('amount-input')
+
+      // Invalid price set to 0
+      await userEvent.type(amountField, '0')
+      expect(await modal.findByText('Amount must be greater than zero'))
+      expect(nextButton).toBeDisabled()
+
+      // Valid
+      await userEvent.clear(amountField)
+      await userEvent.type(amountField, '8')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+
+    step('Transaction parameters', () => {
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({ setMembershipPrice: Number(joy(8)) })
+    })
+  }),
+}
