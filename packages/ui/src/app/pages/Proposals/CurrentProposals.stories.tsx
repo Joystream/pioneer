@@ -944,7 +944,7 @@ export const SpecificParametersSetCouncilBudgetIncrement: Story = {
       const value = Number((amountField as HTMLInputElement).value.replace(/,/g, ''))
       expect(value).toBeLessThan(2 ** 128)
 
-      // // Valid
+      // Valid
       await userEvent.clear(amountField)
       await userEvent.type(amountField, '500')
       await waitFor(() => expect(nextButton).toBeEnabled())
@@ -954,6 +954,37 @@ export const SpecificParametersSetCouncilBudgetIncrement: Story = {
     step('Transaction parameters', () => {
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({ setCouncilBudgetIncrement: Number(joy(500)) })
+    })
+  }),
+}
+
+export const SpecificParametersSetCouncilorReward: Story = {
+  parameters: { ...hasStakingAccountParameters, wgLeadStake: 1000 },
+
+  play: specificParametersTest('Set Councilor Reward', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      const amountField = modal.getByTestId('amount-input')
+
+      // Invalid budget 0
+      await userEvent.type(amountField, '1')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.clear(amountField)
+      await userEvent.type(amountField, '0')
+      await waitFor(() => expect(nextButton).toBeDisabled())
+
+      // Valid
+      await userEvent.clear(amountField)
+      await userEvent.type(amountField, '10')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+
+    step('Transaction parameters', () => {
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({ setCouncilorReward: Number(joy(10)) })
     })
   }),
 }
