@@ -10,10 +10,27 @@ import { metadataFromBytes } from '@/common/model/JoystreamNode/metadataFromByte
 import { GetMemberDocument, SearchMembersDocument } from '@/memberships/queries'
 import { member } from '@/mocks/data/members'
 import { generateProposals, MAX_ACTIVE_PROPOSAL, proposalsPagesChain } from '@/mocks/data/proposals'
-import { Container, getButtonByText, getEditorByLabel, joy, selectFromDropdown, withinModal } from '@/mocks/helpers'
+import {
+  Container,
+  getButtonByText,
+  getEditorByLabel,
+  isoDate,
+  joy,
+  selectFromDropdown,
+  withinModal,
+} from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
-import { GetProposalVotesDocument, GetProposalsCountDocument, GetProposalsDocument } from '@/proposals/queries'
-import { GetWorkingGroupDocument, GetWorkingGroupsDocument } from '@/working-groups/queries'
+import {
+  GetProposalsEventsDocument,
+  GetProposalVotesDocument,
+  GetProposalsCountDocument,
+  GetProposalsDocument,
+} from '@/proposals/queries'
+import {
+  GetWorkingGroupDocument,
+  GetWorkingGroupOpeningsDocument,
+  GetWorkingGroupsDocument,
+} from '@/working-groups/queries'
 
 import { Proposals } from './Proposals'
 
@@ -147,6 +164,11 @@ export default {
           },
 
           {
+            query: GetProposalsEventsDocument,
+            data: { events: [] },
+          },
+
+          {
             query: SearchMembersDocument,
             data: {
               memberships: [alice],
@@ -169,6 +191,36 @@ export default {
             query: GetWorkingGroupDocument,
             data: {
               workingGroupByUniqueInput: forumWG,
+            },
+          },
+          {
+            query: GetWorkingGroupOpeningsDocument,
+            data: {
+              workingGroupOpenings: [
+                {
+                  id: 'storageWorkingGroup-12',
+                  runtimeId: 12,
+                  groupId: 'storageWorkingGroup',
+                  group: {
+                    name: 'storageWorkingGroup',
+                    budget: '962651993476422',
+                    leaderId: 'storageWorkingGroup-0',
+                  },
+                  type: 'LEADER',
+                  stakeAmount: '2500000000000000',
+                  rewardPerBlock: '1930000000',
+                  createdInEvent: { inBlock: 123, createdAt: isoDate('2023/01/02') },
+                  metadata: {
+                    title: 'Hire Storage Working Group Lead',
+                    applicationDetails: 'answers to questions',
+                    shortDescription: 'Hire Storage Working Group Lead',
+                    description: 'Lorem ipsum...',
+                    hiringLimit: 1,
+                    expectedEnding: null,
+                  },
+                  status: { __typename: 'OpeningStatusOpen' },
+                },
+              ],
             },
           },
         ],
@@ -841,6 +893,30 @@ export const SpecificParametersSetMaxValidatorCount: Story = {
     step('Transaction parameters', () => {
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({ setMaxValidatorCount: 10 })
+    })
+  }),
+}
+
+export const SpecificParametersCancelWorkingGroupLeadOpening: Story = {
+  parameters: { ...hasStakingAccountParameters, wgLeadStake: 1000 },
+
+  play: specificParametersTest('Cancel Working Group Lead Opening', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      const body = within(document.body)
+
+      // Valid
+      await userEvent.click(modal.getByPlaceholderText('Choose opening to cancel'))
+      userEvent.click(body.getByText('Hire Storage Working Group Lead'))
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+
+    step('Transaction parameters', () => {
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({ cancelWorkingGroupLeadOpening: [12, 'Storage'] })
     })
   }),
 }
