@@ -1,4 +1,5 @@
-import React, { useMemo, useState } from 'react'
+/* eslint-disable no-console */
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { NoData } from '@/common/components/NoData'
@@ -38,16 +39,19 @@ export const VotingStage = ({ election, isLoading }: VotingStageProps) => {
       ?.filter(({ voted }) => voted)
       .map((candidate) => {
         const myVotesForCandidate = votes?.filter((vote) => vote.optionId === candidate.member.id) ?? []
-
         return {
           ...candidate,
-          myVotes: myVotesForCandidate,
           myStake: myVotesForCandidate.reduce((prev, next) => prev.add(next.stake), BN_ZERO),
         }
       })
 
     return [allCandidates, votedForCandidates]
-  }, [optionIds?.size, election?.candidates])
+  }, [optionIds?.size, election?.candidates, votes, election])
+
+  useEffect(() => {
+    console.log('My Votes length ',myVotes)
+    console.log('Voted for candidates ',votedForCandidates)
+  })
 
   return (
     <>
