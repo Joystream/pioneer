@@ -34,15 +34,17 @@ export const VotingStage = ({ election, isLoading }: VotingStageProps) => {
         ...candidate,
         voted: optionIds?.has(candidate.member.id),
       }))
-    const votedForCandidates = allCandidates?.filter(({ voted }) => voted).map((candidate) => {
-      const myVotesForCandidate = votes?.filter((vote) => vote.optionId === candidate.member.id) ?? []
+    const votedForCandidates = allCandidates
+      ?.filter(({ voted }) => voted)
+      .map((candidate) => {
+        const myVotesForCandidate = votes?.filter((vote) => vote.optionId === candidate.member.id) ?? []
 
-      return {
-        ...candidate,
-        myVotes: myVotesForCandidate,
-        myStake: myVotesForCandidate.reduce((prev, next) => prev.add(next.stake), BN_ZERO),
-      }
-    })
+        return {
+          ...candidate,
+          myVotes: myVotesForCandidate,
+          myStake: myVotesForCandidate.reduce((prev, next) => prev.add(next.stake), BN_ZERO),
+        }
+      })
 
     return [allCandidates, votedForCandidates]
   }, [optionIds?.size, election?.candidates])
