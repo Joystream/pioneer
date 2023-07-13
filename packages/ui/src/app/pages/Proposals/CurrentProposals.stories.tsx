@@ -430,7 +430,7 @@ export const AddNewProposalHappy: Story = {
           await userEvent.type(blockInput, '9999')
           await waitFor(() => expect(modal.queryByText(/The maximum block number is \d+/)).toBeNull())
           expect(await modal.findByText(/^≈.*/))
-          expect(nextButton).toBeEnabled()
+          await waitFor(() => expect(nextButton).toBeEnabled())
         })
 
         await step('Discussion Mode', async () => {
@@ -710,7 +710,14 @@ const specificParametersTest =
       await step(`Specific parameters: ${proposalType}`, create)
 
       await step('Sign transaction and Create', async () => {
-        await userEvent.click(modal.getByText('Sign transaction and Create'))
+        await waitFor(async () => {
+          const createButton = modal.queryByText('Create proposal')
+          if (createButton) {
+            await waitFor(() => expect(createButton).toBeEnabled())
+            await userEvent.click(createButton)
+          }
+          await userEvent.click(modal.getByText('Sign transaction and Create'))
+        })
         expect(await waitForModal(modal, 'Success'))
       })
     }
@@ -735,8 +742,6 @@ export const SpecificParametersSignal: Story = {
       editor.setData('Lorem ipsum...')
       await waitForElementToBeRemoved(validation)
       expect(nextButton).toBeEnabled()
-
-      await userEvent.click(nextButton)
     })
 
     step('Transaction parameters', () => {
@@ -765,9 +770,6 @@ export const SpecificParametersFundingRequest: Story = {
       await userEvent.clear(amountField)
       await userEvent.type(amountField, '100')
       await waitFor(() => expect(modal.queryByText(/Maximal amount allowed is \d+/)).toBeNull())
-      await expect(nextButton).toBeEnabled()
-
-      await userEvent.click(nextButton)
     })
 
     step('Transaction parameters', () => {
@@ -802,9 +804,6 @@ export const SpecificParametersSetReferralCut: Story = {
       expect(await modal.findByText('Input must be equal or less than 50% for proposal to execute'))
       expect(nextButton).toBeDisabled()
       userEvent.click(modal.getByText(EXECUTION_WARNING_BOX))
-      await waitFor(() => expect(nextButton).toBeEnabled())
-
-      await userEvent.click(nextButton)
     })
 
     step('Transaction parameters', () => {
@@ -852,9 +851,6 @@ export const SpecificParametersDecreaseWorkingGroupLeadStake: Story = {
       // Valid 1/2
       userEvent.click(modal.getByText('By half'))
       expect(amountField).toHaveValue('500')
-      await waitFor(() => expect(nextButton).toBeEnabled())
-
-      await userEvent.click(nextButton)
     })
 
     step('Transaction parameters', () => {
@@ -893,10 +889,6 @@ export const SpecificParametersTerminateWorkingGroupLead: Story = {
       const amountField = modal.getByTestId('amount-input')
       expect(amountField).toHaveValue('')
       userEvent.type(amountField, '2000')
-      await waitFor(() => expect(nextButton).toBeDisabled())
-      await waitFor(() => expect(nextButton).toBeEnabled())
-
-      await userEvent.click(nextButton)
     })
 
     step('Transaction parameters', () => {
@@ -963,8 +955,6 @@ export const SpecificParametersCreateWorkingGroupLeadOpening: Story = {
       await userEvent.type(modal.getByLabelText('Staking amount *'), '100')
       await userEvent.type(modal.getByLabelText('Role cooldown period'), '0')
       await userEvent.type(modal.getByLabelText('Reward amount per Block'), '0.1')
-      await waitFor(() => expect(nextButton).toBeEnabled())
-      await userEvent.click(nextButton)
     })
 
     step('Transaction parameters', () => {
@@ -1030,8 +1020,6 @@ export const SpecificParametersSetWorkingGroupLeadReward: Story = {
       // Valid again
       await userEvent.clear(amountField)
       await userEvent.type(amountField, '10')
-      await waitFor(() => expect(nextButton).toBeEnabled())
-      await userEvent.click(nextButton)
     })
 
     step('Transaction parameters', () => {
@@ -1069,8 +1057,6 @@ export const SpecificParametersSetMaxValidatorCount: Story = {
       // Valid
       await userEvent.clear(amountField)
       await userEvent.type(amountField, '10')
-      await waitFor(() => expect(nextButton).toBeEnabled())
-      await userEvent.click(nextButton)
     })
 
     step('Transaction parameters', () => {
@@ -1091,8 +1077,6 @@ export const SpecificParametersCancelWorkingGroupLeadOpening: Story = {
       // Valid
       await userEvent.click(modal.getByPlaceholderText('Choose opening to cancel'))
       userEvent.click(body.getByText('Hire Storage Working Group Lead'))
-      await waitFor(() => expect(nextButton).toBeEnabled())
-      await userEvent.click(nextButton)
     })
 
     step('Transaction parameters', () => {
@@ -1126,8 +1110,6 @@ export const SpecificParametersSetCouncilBudgetIncrement: Story = {
       // Valid
       await userEvent.clear(amountField)
       await userEvent.type(amountField, '500')
-      await waitFor(() => expect(nextButton).toBeEnabled())
-      await userEvent.click(nextButton)
     })
 
     step('Transaction parameters', () => {
@@ -1155,8 +1137,6 @@ export const SpecificParametersSetCouncilorReward: Story = {
       // Valid
       await userEvent.clear(amountField)
       await userEvent.type(amountField, '10')
-      await waitFor(() => expect(nextButton).toBeEnabled())
-      await userEvent.click(nextButton)
     })
 
     step('Transaction parameters', () => {
@@ -1194,8 +1174,6 @@ export const SpecificParametersSetMembershipLeadInvitationQuota: Story = {
         // Valid
         await userEvent.clear(amountField)
         await userEvent.type(amountField, '3')
-        await waitFor(() => expect(nextButton).toBeEnabled())
-        await userEvent.click(nextButton)
       })
 
       step('Transaction parameters', () => {
@@ -1234,9 +1212,6 @@ export const SpecificParametersFillWorkingGroupLeadOpening: Story = {
       expect(modal.getByText('Foo'))
       expect(modal.getByText('🐘?'))
       expect(modal.getByText('Bar'))
-
-      await waitFor(() => expect(nextButton).toBeEnabled())
-      await userEvent.click(nextButton)
     })
 
     step('Transaction parameters', () => {
@@ -1278,8 +1253,6 @@ export const SpecificParametersSetInitialInvitationCount: Story = {
       // Valid
       await userEvent.clear(countField)
       await userEvent.type(countField, '7')
-      await waitFor(() => expect(nextButton).toBeEnabled())
-      await userEvent.click(nextButton)
     })
 
     step('Transaction parameters', () => {
@@ -1310,8 +1283,6 @@ export const SpecificParametersSetInitialInvitationBalance: Story = {
       // Valid
       await userEvent.clear(amountField)
       await userEvent.type(amountField, '7')
-      await waitFor(() => expect(nextButton).toBeEnabled())
-      await userEvent.click(nextButton)
     })
 
     step('Transaction parameters', () => {
@@ -1337,8 +1308,6 @@ export const SpecificParametersSetMembershipPrice: Story = {
       // Valid
       await userEvent.clear(amountField)
       await userEvent.type(amountField, '8')
-      await waitFor(() => expect(nextButton).toBeEnabled())
-      await userEvent.click(nextButton)
     })
 
     step('Transaction parameters', () => {
@@ -1398,8 +1367,6 @@ export const SpecificParametersUpdateWorkingGroupBudget: Story = {
       // Valid
       await userEvent.clear(amountField)
       await userEvent.type(amountField, '99')
-      await waitFor(() => expect(nextButton).toBeEnabled())
-      await userEvent.click(nextButton)
     })
 
     step('Transaction parameters', () => {
@@ -1435,11 +1402,6 @@ export const SpecificParametersRuntimeUpgrade: Story = {
       await waitFor(() => expect(setIsValidWASM).toHaveBeenCalledWith(false))
       const confirmation = await modal.findByText(/was loaded successfully!/)
       expect(within(confirmation).getByText('valid.wasm'))
-
-      await waitFor(() => expect(nextButton).toBeEnabled())
-      await waitFor(() => expect(nextButton).toBeDisabled()) // The button gets enabled 1 rendering frame due to isLoading lagging behind
-      await waitFor(() => expect(nextButton).toBeEnabled())
-      await userEvent.click(nextButton)
     })
 
     step('Transaction parameters', () => {

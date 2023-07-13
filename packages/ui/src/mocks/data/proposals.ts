@@ -189,6 +189,7 @@ export const proposalsPagesChain = (
         },
 
         council: { councilSize, idlePeriodDuration: 1, announcingPeriodDuration: 1 },
+        referendum: { voteStageDuration: 1, revealStageDuration: 1 },
 
         members: {
           referralCutMaximumPercent: 50,
