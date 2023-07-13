@@ -857,7 +857,7 @@ export const SpecificParametersDecreaseWorkingGroupLeadStake: Story = {
       const leaderId = 10 // Set on the mock QN query
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({
-        decreaseWorkingGroupLeadStake: [leaderId, Number(joy(500)), 'Forum'],
+        decreaseWorkingGroupLeadStake: [leaderId, 500_0000000000, 'Forum'],
       })
     })
   }),
@@ -897,7 +897,7 @@ export const SpecificParametersTerminateWorkingGroupLead: Story = {
       expect(specificParameters.toJSON()).toEqual({
         terminateWorkingGroupLead: {
           workerId: leaderId,
-          slashingAmount: Number(joy(2000)),
+          slashingAmount: 2000_0000000000,
           group: 'Forum',
         },
       })
@@ -962,9 +962,9 @@ export const SpecificParametersCreateWorkingGroupLeadOpening: Story = {
       const { description, ...data } = specificParameters.asCreateWorkingGroupLeadOpening.toJSON()
 
       expect(data).toEqual({
-        rewardPerBlock: Number(joy(0.1)),
+        rewardPerBlock: 1000000000,
         stakePolicy: {
-          stakeAmount: Number(joy(100)),
+          stakeAmount: 100_0000000000,
           leavingUnstakingPeriod: 0,
         },
         group: 'Forum',
@@ -1026,7 +1026,7 @@ export const SpecificParametersSetWorkingGroupLeadReward: Story = {
       const leaderId = 10 // Set on the mock QN query
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({
-        setWorkingGroupLeadReward: [leaderId, Number(joy(10)), 'Forum'],
+        setWorkingGroupLeadReward: [leaderId, 10_0000000000, 'Forum'],
       })
     })
   }),
@@ -1114,7 +1114,7 @@ export const SpecificParametersSetCouncilBudgetIncrement: Story = {
 
     step('Transaction parameters', () => {
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
-      expect(specificParameters.toJSON()).toEqual({ setCouncilBudgetIncrement: Number(joy(500)) })
+      expect(specificParameters.toJSON()).toEqual({ setCouncilBudgetIncrement: 500_0000000000 })
     })
   }),
 }
@@ -1141,7 +1141,7 @@ export const SpecificParametersSetCouncilorReward: Story = {
 
     step('Transaction parameters', () => {
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
-      expect(specificParameters.toJSON()).toEqual({ setCouncilorReward: Number(joy(10)) })
+      expect(specificParameters.toJSON()).toEqual({ setCouncilorReward: 10_0000000000 })
     })
   }),
 }
@@ -1287,7 +1287,7 @@ export const SpecificParametersSetInitialInvitationBalance: Story = {
 
     step('Transaction parameters', () => {
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
-      expect(specificParameters.toJSON()).toEqual({ setInitialInvitationBalance: Number(joy(7)) })
+      expect(specificParameters.toJSON()).toEqual({ setInitialInvitationBalance: 7_0000000000 })
     })
   }),
 }
@@ -1312,7 +1312,7 @@ export const SpecificParametersSetMembershipPrice: Story = {
 
     step('Transaction parameters', () => {
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
-      expect(specificParameters.toJSON()).toEqual({ setMembershipPrice: Number(joy(8)) })
+      expect(specificParameters.toJSON()).toEqual({ setMembershipPrice: 8_0000000000 })
     })
   }),
 }
@@ -1372,7 +1372,7 @@ export const SpecificParametersUpdateWorkingGroupBudget: Story = {
     step('Transaction parameters', () => {
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({
-        updateWorkingGroupBudget: [Number(joy(99)), 'Forum', 'Negative'],
+        updateWorkingGroupBudget: [99_0000000000, 'Forum', 'Negative'],
       })
     })
   }),
