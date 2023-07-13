@@ -1513,7 +1513,7 @@ describe('UI: AddNewProposalModal', () => {
   })
 
   const getCheckbox = async () =>
-    await screen.queryByText('I’m aware of the possible risks associated with creating a proposal.')
+    await screen.queryByText("I'm aware of the possible risks associated with creating a proposal.")
 
   async function finishWarning() {
     await renderModal()

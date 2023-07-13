@@ -67,10 +67,10 @@ const OPENING_DATA = {
 type Args = {
   isCouncilMember: boolean
   proposalCount: number
-  onCreateProposal: jest.Mock
-  onThreadChangeThreadMode: jest.Mock
   onAddStakingAccountCandidate: jest.Mock
   onConfirmStakingAccount: jest.Mock
+  onCreateProposal: jest.Mock
+  onChangeThreadMode: jest.Mock
   onVote: jest.Mock
 }
 type Story = StoryObj<FC<Args>>
@@ -81,10 +81,10 @@ export default {
 
   argTypes: {
     proposalCount: { control: { type: 'range', max: MAX_ACTIVE_PROPOSAL } },
-    onCreateProposal: { action: 'ProposalsCodex.ProposalCreated' },
-    onThreadChangeThreadMode: { action: 'proposalsDiscussion.ThreadModeChanged' },
     onAddStakingAccountCandidate: { action: 'Members.StakingAccountAdded' },
     onConfirmStakingAccount: { action: 'Members.StakingAccountConfirmed' },
+    onCreateProposal: { action: 'ProposalsCodex.ProposalCreated' },
+    onChangeThreadMode: { action: 'proposalsDiscussion.ThreadModeChanged' },
     onVote: { action: 'ProposalsEngine.Voted' },
   },
 
@@ -106,7 +106,7 @@ export default {
 
     stakingAccountIdMemberStatus: {
       memberId: 0,
-      confirmed: true,
+      confirmed: { isTrue: true },
       size: 1,
     },
 
@@ -149,10 +149,15 @@ export default {
             councilorReward: parameters.councilorReward,
             nextRewardPayments: parameters.nextRewardPayments,
 
-            onCreateProposal: args.onCreateProposal,
-            onThreadChangeThreadMode: args.onThreadChangeThreadMode,
             onAddStakingAccountCandidate: args.onAddStakingAccountCandidate,
             onConfirmStakingAccount: args.onConfirmStakingAccount,
+            onCreateProposal: args.onCreateProposal,
+            onChangeThreadMode: args.onChangeThreadMode,
+
+            addStakingAccountCandidateFailure: parameters.addStakingAccountCandidateFailure,
+            confirmStakingAccountFailure: parameters.confirmStakingAccountFailure,
+            createProposalFailure: parameters.createProposalFailure,
+            changeThreadModeFailure: parameters.changeThreadModeFailure,
           },
           {
             query: {
@@ -265,11 +270,20 @@ export default {
 export const Default: Story = {}
 
 // ----------------------------------------------------------------------------
-// Create proposal: General parameters tests
+// Create proposal: Happy case
 // ----------------------------------------------------------------------------
 
 const alice = member('alice')
 const waitForModal = (modal: Container, name: string) => modal.findByRole('heading', { name })
+
+const fillSetReferralCutStep = async (modal: Container, step: StepFunction<ReactRenderer, Args>) => {
+  await step('Specific parameters', async () => {
+    const nextButton = getButtonByText(modal, 'Create proposal')
+    await userEvent.type(modal.getByTestId('amount-input'), '40')
+    await waitFor(() => expect(nextButton).toBeEnabled())
+    await userEvent.click(nextButton)
+  })
+}
 
 export const AddNewProposalHappy: Story = {
   parameters: {
@@ -277,7 +291,7 @@ export const AddNewProposalHappy: Story = {
 
     stakingAccountIdMemberStatus: {
       memberId: 0,
-      confirmed: false,
+      confirmed: { isTrue: false },
       size: 0,
     },
   },
@@ -347,7 +361,7 @@ export const AddNewProposalHappy: Story = {
         nextButton = getButtonByText(modal, 'Next step')
 
         expect(nextButton).toBeDisabled()
-        await userEvent.click(modal.getByText('Signal'))
+        await userEvent.click(modal.getByText('Set Referral Cut'))
         await waitFor(() => expect(nextButton).not.toBeDisabled())
         await userEvent.click(nextButton)
       })
@@ -437,13 +451,7 @@ export const AddNewProposalHappy: Story = {
           expect(modal.getByText('Specific parameters', { selector: 'h4' }))
         })
 
-        await step('Specific parameters', async () => {
-          const editor = await getEditorByLabel(modal, 'Signal')
-          editor.setData('Lorem ipsum...')
-          await waitFor(() => expect(nextButton).toBeEnabled())
-
-          await userEvent.click(nextButton)
-        })
+        await fillSetReferralCutStep(modal, step)
       })
 
       await step('Bind Staking Account', async () => {
@@ -477,7 +485,7 @@ export const AddNewProposalHappy: Story = {
           exactExecutionBlock: 9999,
         })
 
-        const changeModeTxParams = args.onThreadChangeThreadMode.mock.calls.at(-1)
+        const changeModeTxParams = args.onChangeThreadMode.mock.calls.at(-1)
         expect(changeModeTxParams.length).toBe(3)
         const [memberId, threadId, mode] = changeModeTxParams
         expect(memberId).toBe(alice.id)
@@ -487,6 +495,10 @@ export const AddNewProposalHappy: Story = {
     })
   },
 }
+
+// ----------------------------------------------------------------------------
+// Create proposal: Failure cases
+// ----------------------------------------------------------------------------
 
 export const NotEnoughFunds: Story = {
   parameters: { balance: 1 },
@@ -504,22 +516,11 @@ export const NotEnoughFunds: Story = {
   },
 }
 
-// TODO:
-// - Staking account not bound nor staking candidate > Bind account failure
-// - Staking account not bound nor staking candidate > Create proposal failure
-// - Staking account is a candidate > Create proposal failure
-// - Staking account is confirmed > Create proposal failure
-// - Discussion mode transaction > Failure
-
-// ----------------------------------------------------------------------------
-// Create proposal: Specific parameters tests helpers
-// ----------------------------------------------------------------------------
-
-const EXECUTION_WARNING_BOX = 'I understand the implications of overriding the execution constraints validation.'
 const fillGeneralParameters = async (
   modal: Container,
   step: StepFunction<ReactRenderer, Args>,
-  proposalType: string
+  proposalType: string,
+  closeDiscussion = false
 ) => {
   let nextButton: HTMLElement
 
@@ -548,12 +549,145 @@ const fillGeneralParameters = async (
     })
 
     await step('Trigger & Discussion', async () => {
+      if (closeDiscussion) await userEvent.click(modal.getByText('Closed'))
       await waitFor(() => expect(nextButton).toBeEnabled())
       await userEvent.click(nextButton)
     })
   })
 }
 
+const completeForms = async (canvasElement: HTMLElement, step: StepFunction<ReactRenderer, Args>) => {
+  const screen = within(canvasElement)
+  const modal = withinModal(canvasElement)
+
+  localStorage.setItem('proposalCaution', 'true')
+  await userEvent.click(getButtonByText(screen, 'Add new proposal'))
+  await fillGeneralParameters(modal, step, 'Set Referral Cut', true)
+  await fillSetReferralCutStep(modal, step)
+}
+
+export const BindAccountFailure: Story = {
+  parameters: {
+    stakingAccountIdMemberStatus: {
+      memberId: 0,
+      confirmed: { isTrue: false },
+      size: 0,
+    },
+    addStakingAccountCandidateFailure: 'It failed 🙀',
+  },
+
+  play: async ({ args, canvasElement, step }) => {
+    const modal = withinModal(canvasElement)
+    await completeForms(canvasElement, step)
+    await userEvent.click(modal.getByText('Sign transaction and Bind Staking Account'))
+
+    expect(await modal.findByText('It failed 🙀'))
+    within(document.body).getByText('Transaction failed')
+
+    expect(args.onAddStakingAccountCandidate).toHaveBeenCalled()
+    expect(args.onConfirmStakingAccount).not.toHaveBeenCalled()
+    expect(args.onCreateProposal).not.toHaveBeenCalled()
+    expect(args.onChangeThreadMode).not.toHaveBeenCalled()
+  },
+}
+
+export const BindAccountThenCreateProposalFailure: Story = {
+  parameters: {
+    stakingAccountIdMemberStatus: {
+      memberId: 0,
+      confirmed: { isTrue: false },
+      size: 0,
+    },
+    createProposalFailure: 'It failed 🙀',
+  },
+
+  play: async ({ args, canvasElement, step }) => {
+    const modal = withinModal(canvasElement)
+    await completeForms(canvasElement, step)
+    await userEvent.click(modal.getByText('Sign transaction and Bind Staking Account'))
+    await userEvent.click(await modal.findByText('Sign transaction and Create'))
+
+    expect(await modal.findByText('It failed 🙀'))
+    within(document.body).getByText('Transaction failed')
+
+    expect(args.onAddStakingAccountCandidate).toHaveBeenCalled()
+    expect(args.onConfirmStakingAccount).toHaveBeenCalled()
+    expect(args.onCreateProposal).toHaveBeenCalled()
+    expect(args.onChangeThreadMode).not.toHaveBeenCalled()
+  },
+}
+
+export const ConfirmAccountThenCreateProposalFailure: Story = {
+  parameters: {
+    stakingAccountIdMemberStatus: {
+      memberId: 0,
+      confirmed: { isTrue: false },
+      size: 1,
+    },
+    createProposalFailure: 'It failed 🙀',
+  },
+
+  play: async ({ args, canvasElement, step }) => {
+    const modal = withinModal(canvasElement)
+    await completeForms(canvasElement, step)
+    await userEvent.click(await modal.findByText('Sign transaction and Create'))
+
+    expect(await modal.findByText('It failed 🙀'))
+    within(document.body).getByText('Transaction failed')
+
+    expect(args.onAddStakingAccountCandidate).not.toHaveBeenCalled()
+    expect(args.onConfirmStakingAccount).toHaveBeenCalled()
+    expect(args.onCreateProposal).toHaveBeenCalled()
+    expect(args.onChangeThreadMode).not.toHaveBeenCalled()
+  },
+}
+
+export const CreateProposalFailure: Story = {
+  parameters: {
+    createProposalFailure: 'It failed 🙀',
+  },
+
+  play: async ({ args, canvasElement, step }) => {
+    const modal = withinModal(canvasElement)
+    await completeForms(canvasElement, step)
+    await userEvent.click(await modal.findByText('Sign transaction and Create'))
+
+    expect(await modal.findByText('It failed 🙀'))
+    within(document.body).getByText('Transaction failed')
+
+    expect(args.onAddStakingAccountCandidate).not.toHaveBeenCalled()
+    expect(args.onConfirmStakingAccount).not.toHaveBeenCalled()
+    expect(args.onCreateProposal).toHaveBeenCalled()
+    expect(args.onChangeThreadMode).not.toHaveBeenCalled()
+  },
+}
+
+export const ChangeThreadModeFailure: Story = {
+  parameters: {
+    changeThreadModeFailure: 'It failed 🙀',
+  },
+
+  play: async ({ args, canvasElement, step }) => {
+    const modal = withinModal(canvasElement)
+    await completeForms(canvasElement, step)
+    await userEvent.click(await modal.findByText('Sign transaction and Create'))
+    await userEvent.click(await modal.findByText('Sign transaction and change mode'))
+
+    expect(await modal.findByText('It failed 🙀'))
+    // within(document.body).getByText('Transaction failed')
+
+    expect(args.onAddStakingAccountCandidate).not.toHaveBeenCalled()
+    expect(args.onConfirmStakingAccount).not.toHaveBeenCalled()
+    expect(args.onCreateProposal).toHaveBeenCalled()
+    expect(args.onChangeThreadMode).toHaveBeenCalled()
+  },
+}
+
+// ----------------------------------------------------------------------------
+// Create proposal: Specific parameters tests
+// ----------------------------------------------------------------------------
+
+const EXECUTION_WARNING_BOX = 'I understand the implications of overriding the execution constraints validation.'
 type SpecificParametersTestFunction = (
   args: Pick<PlayFunctionContext<ReactRenderer, Args>, 'args' | 'parameters' | 'step'> & {
     modal: Container
@@ -583,10 +717,6 @@ const specificParametersTest =
 
     await specificStep({ args, parameters, createProposal, modal, step })
   }
-
-// ----------------------------------------------------------------------------
-// Create proposal: Specific parameters tests
-// ----------------------------------------------------------------------------
 
 export const SpecificParametersSignal: Story = {
   play: specificParametersTest('Signal', async ({ args, createProposal, modal, step }) => {

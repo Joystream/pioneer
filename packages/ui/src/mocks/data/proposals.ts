@@ -144,10 +144,15 @@ type ProposalChainProps = {
   councilorReward?: string
   nextRewardPayments?: number
 
-  onCreateProposal?: jest.Mock
-  onThreadChangeThreadMode?: jest.Mock
   onAddStakingAccountCandidate?: jest.Mock
   onConfirmStakingAccount?: jest.Mock
+  onCreateProposal?: jest.Mock
+  onChangeThreadMode?: jest.Mock
+
+  addStakingAccountCandidateFailure?: string
+  confirmStakingAccountFailure?: string
+  createProposalFailure?: string
+  changeThreadModeFailure?: string
 }
 type Chain = MocksParameters['chain']
 export const proposalsPagesChain = (
@@ -163,10 +168,15 @@ export const proposalsPagesChain = (
     councilorReward = joy(200),
     nextRewardPayments = 12345,
 
-    onCreateProposal,
-    onThreadChangeThreadMode,
     onAddStakingAccountCandidate,
     onConfirmStakingAccount,
+    onCreateProposal,
+    onChangeThreadMode,
+
+    addStakingAccountCandidateFailure,
+    confirmStakingAccountFailure,
+    createProposalFailure,
+    changeThreadModeFailure,
   }: ProposalChainProps,
   extra?: Chain
 ): Chain =>
@@ -238,19 +248,32 @@ export const proposalsPagesChain = (
 
       tx: {
         proposalsCodex: {
-          createProposal: { event: 'ProposalCreated', onSend: onCreateProposal },
+          createProposal: { event: 'ProposalCreated', onSend: onCreateProposal, failure: createProposalFailure },
         },
         proposalsDiscussion: {
-          changeThreadMode: { event: 'ThreadModeChanged', onSend: onThreadChangeThreadMode },
+          changeThreadMode: {
+            event: 'ThreadModeChanged',
+            onSend: onChangeThreadMode,
+            failure: changeThreadModeFailure,
+          },
         },
 
         members: {
-          addStakingAccountCandidate: { event: 'StakingAccountAdded', onSend: onAddStakingAccountCandidate },
-          confirmStakingAccount: { event: 'StakingAccountConfirmed', onSend: onConfirmStakingAccount },
+          addStakingAccountCandidate: {
+            event: 'StakingAccountAdded',
+            onSend: onAddStakingAccountCandidate,
+            failure: addStakingAccountCandidateFailure,
+          },
+          confirmStakingAccount: {
+            event: 'StakingAccountConfirmed',
+            onSend: onConfirmStakingAccount,
+            failure: confirmStakingAccountFailure,
+          },
         },
 
         utility: {
           batch: {
+            failure: createProposalFailure,
             onSend: (transactions: SubmittableExtrinsic<'rxjs'>[]) =>
               transactions.forEach((transaction) => transaction.signAndSend('')),
           },
