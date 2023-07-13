@@ -45,19 +45,6 @@ export const CreateOpeningModal = () => {
   const path = useMemo(() => machineStateConverter(state.value), [state.value])
   const resolver = useYupValidationResolver<CreateOpeningForm>(OpeningSchema, path)
   const form = useForm<CreateOpeningForm>({ resolver, mode: 'onChange', defaultValues, context })
-  /**
-  const [stakingPolicyAndRewardRewardPerBlock] = form.watch([
-    'applicationForm.questions',
-    'workingGroupAndDescription.title',
-    'workingGroupAndDescription.shortDescription',
-    'workingGroupAndDescription.description',
-    'durationAndProcess.details',
-    'durationAndProcess.duration',
-    'stakingPolicyAndReward.stakingAmount',
-    'stakingPolicyAndReward.leavingUnstakingPeriod',
-    'stakingPolicyAndReward.rewardPerBlock',
-  ])
-  **/
   useEffect(() => {
     form.trigger(machineStateConverter(state.value) as keyof CreateOpeningForm)
   }, [machineStateConverter(state.value)])
@@ -167,9 +154,11 @@ export const CreateOpeningModal = () => {
             >
               {showImport ? 'Preview Import' : 'Import'}
             </ButtonPrimary>
-            <DownloadButtonGhost size="medium" name={'opening.json'} parts={[JSON.stringify(setExportJsonValue())]}>
-              Export
-            </DownloadButtonGhost>
+            {isLastStepActive(getSteps(service)) && (
+              <DownloadButtonGhost size="medium" name={'opening.json'} parts={[JSON.stringify(setExportJsonValue())]}>
+                Export
+              </DownloadButtonGhost>
+            )}
           </ButtonsGroup>
         }
       />

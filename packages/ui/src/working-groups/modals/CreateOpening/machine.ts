@@ -69,28 +69,10 @@ export type CreateOpeningState =
   | { value: 'durationAndProcess'; context: Required<CreateOpeningForm> }
   | { value: 'applicationForm'; context: Required<CreateOpeningForm> }
   | { value: 'stakingPolicyAndReward'; context: Required<CreateOpeningForm> }
-  // | {
-  //     value: { specificParameters: { createWorkingGroupLeadOpening: 'workingGroupAndDescription' } }
-  //     context: Required<CreateOpeningForm>
-  //   }
-  // | {
-  //     value: { specificParameters: { createWorkingGroupLeadOpening: 'durationAndProcess' } }
-  //     context: Required<CreateOpeningForm>
-  //   }
-  // | {
-  //     value: { specificParameters: { createWorkingGroupLeadOpening: 'applicationForm' } }
-  //     context: Required<CreateOpeningForm>
-  //   }
-  // | {
-  //     value: { specificParameters: { createWorkingGroupLeadOpening: 'stakingPolicyAndReward' } }
-  //     context: Required<CreateOpeningForm>
-  //   }
   | { value: 'beforeTransaction'; context: Required<CreateOpeningForm> }
   | { value: 'transaction'; context: Required<TransactionContext> }
   | { value: 'success'; context: Required<TransactionContext> }
   | { value: 'error'; context: TransactionContext }
-
-// const isType = (type: string) => (context: any) => type === context?.type
 
 export type CreateOpeningEvent = { type: 'FAIL' } | { type: 'BACK' } | { type: 'NEXT' }
 
@@ -108,70 +90,6 @@ export const createOpeningMachine = createMachine<Partial<Context>, CreateOpenin
   states: {
     requirementsVerification: { on: { FAIL: 'requirementsFailed', NEXT: 'workingGroupAndDescription' } },
     requirementsFailed: { type: 'final' },
-    // generalParameters: {
-    //   on: { NEXT: 'specificParameters' },
-    // },
-    // specificParameters: {
-    //   meta: { isStep: true, stepTitle: 'Specific parameters' },
-    //   on: {
-    //     // BACK: 'generalParameters',
-    //     NEXT: 'beforeTransaction',
-    //   },
-    //   initial: 'entry',
-    //   states: {
-    //     entry: {
-    //       // always: [{ target: 'createWorkingGroupLeadOpening', cond: isType('createWorkingGroupLeadOpening') }],
-    //       always: [{ target: 'createWorkingGroupLeadOpening', cond: isType('createWorkingGroupLeadOpening') }],
-    //     },
-    //     createWorkingGroupLeadOpening: {
-    //       initial: 'workingGroupAndDescription',
-    //       states: {
-    //         workingGroupAndDescription: {
-    //           meta: {
-    //             isStep: true,
-    //             stepTitle: 'Working group & Description',
-    //             cond: isType('createWorkingGroupLeadOpening'),
-    //           },
-    //           on: {
-    //             NEXT: 'durationAndProcess',
-    //           },
-    //         },
-    //         durationAndProcess: {
-    //           meta: {
-    //             isStep: true,
-    //             stepTitle: 'Duration & Process',
-    //             cond: isType('createWorkingGroupLeadOpening'),
-    //           },
-    //           on: {
-    //             BACK: 'workingGroupAndDescription',
-    //             NEXT: 'applicationForm',
-    //           },
-    //         },
-    //         applicationForm: {
-    //           meta: {
-    //             isStep: true,
-    //             stepTitle: 'Application Form',
-    //             cond: isType('createWorkingGroupLeadOpening'),
-    //           },
-    //           on: {
-    //             BACK: 'durationAndProcess',
-    //             NEXT: 'stakingPolicyAndReward',
-    //           },
-    //         },
-    //         stakingPolicyAndReward: {
-    //           meta: {
-    //             isStep: true,
-    //             stepTitle: 'Staking Policy & Reward',
-    //             cond: isType('createWorkingGroupLeadOpening'),
-    //           },
-    //           on: {
-    //             BACK: 'applicationForm',
-    //           },
-    //         },
-    //       },
-    //     },
-    //   },
-    // },
     workingGroupAndDescription: {
       meta: {
         isStep: true,
