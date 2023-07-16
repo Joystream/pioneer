@@ -180,7 +180,11 @@ export const ProposalPreview = () => {
             {/* Proposal-specific dashboard */}
             <h3>{camelCaseToText(proposal.type)}</h3>
 
-            <ProposalDetails proposalDetails={proposal.details} />
+            <ProposalDetails
+              proposalDetails={proposal.details}
+              gracePeriod={constants?.gracePeriod}
+              exactExecutionBlock={proposal.exactExecutionBlock}
+            />
 
             <RationalePreview rationale={proposal.rationale} />
             <ProposalDiscussions thread={proposal.discussionThread} proposalId={id} />

@@ -29,6 +29,8 @@ import {
 
 interface Props {
   proposalDetails?: ProposalWithDetails['details']
+  gracePeriod?: number
+  exactExecutionBlock?: number
 }
 
 export interface ProposalDetailContent {
@@ -51,7 +53,7 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   Hash: Hash,
 }
 
-export const ProposalDetails = ({ proposalDetails }: Props) => {
+export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBlock }: Props) => {
   const { api } = useApi()
   const { budget } = useCouncilStatistics()
   const { group } = useWorkingGroup({ name: (proposalDetails as UpdateGroupBudgetDetails)?.group?.id })
@@ -68,6 +70,24 @@ export const ProposalDetails = ({ proposalDetails }: Props) => {
   const detailsRenderStructure = useMemo(() => getDetailsRenderStructure(proposalDetails), [proposalDetails])
 
   const additionalDetails = useMemo(() => {
+    if (gracePeriod) {
+      return [
+        {
+          renderType: 'NumberOfBlocks',
+          label: 'Gracing Period',
+          value: gracePeriod,
+        },
+      ] as RenderNode[]
+    }
+    if (exactExecutionBlock) {
+      return [
+        {
+          renderType: 'NumberOfBlocks',
+          label: 'Exact Execution Block',
+          value: exactExecutionBlock,
+        },
+      ] as RenderNode[]
+    }
     if (proposalDetails?.type === 'setReferralCut') {
       return [
         {
