@@ -1,4 +1,5 @@
 import { Decorator } from '@storybook/react'
+import { configure } from '@storybook/testing-library'
 import React from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { useForm, FormProvider } from 'react-hook-form'
@@ -14,6 +15,8 @@ import { ModalContextProvider } from '../src/common/providers/modal/provider'
 import { TransactionStatusProvider } from '../src/common/providers/transactionStatus/provider'
 import { MockProvidersDecorator, MockRouterDecorator } from '../src/mocks/providers'
 import { i18next } from '../src/services/i18n'
+
+configure({ testIdAttribute: 'id' })
 
 const stylesWrapperDecorator: Decorator = (Story) => (
   <>

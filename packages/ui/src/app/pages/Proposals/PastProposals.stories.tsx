@@ -46,7 +46,7 @@ export default {
 
     mocks: ({ args }: StoryContext<Args>): MocksParameters => {
       return {
-        chain: proposalsPagesChain(5),
+        chain: proposalsPagesChain({ activeProposalCount: 5 }),
 
         queryNode: [
           {

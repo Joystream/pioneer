@@ -42,10 +42,10 @@ export const getEditorByLabel = async (
   return editor as HTMLElement & { setData: (data: string) => void }
 }
 
-export const selectFromDropdown = async (container: Container, labelText: string | RegExp, name: string) => {
-  const label = container.getByText(labelText)
-  const toggle = label.parentElement?.querySelector('.ui-toggle')
-  if (!toggle) throw `Found a label with the text of: ${labelText}, however no dropdown is associated with this label.`
+export const selectFromDropdown = async (container: Container, label: string | RegExp | HTMLElement, name: string) => {
+  const labelElement = label instanceof HTMLElement ? label : container.getByText(label)
+  const toggle = labelElement.parentElement?.querySelector('.ui-toggle')
+  if (!toggle) throw `Found a label: ${label.toString()}, however no dropdown is associated with this label.`
 
   await userEvent.click(toggle)
 
