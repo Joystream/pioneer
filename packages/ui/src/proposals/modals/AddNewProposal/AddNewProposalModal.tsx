@@ -64,7 +64,7 @@ export type BaseProposalParams = Exclude<
 const minimalSteps = [{ title: 'Bind account for staking' }, { title: 'Create proposal' }]
 
 export const AddNewProposalModal = () => {
-  const { api, connectionState } = useApi()
+  const { api } = useApi()
   const { active: activeMember } = useMyMemberships()
   const minimumValidatorCount = useMinimumValidatorCount()
   const maximumReferralCut = api?.consts.members.referralCutMaximumPercent
@@ -77,7 +77,7 @@ export const AddNewProposalModal = () => {
   const [formMap, setFormMap] = useState<Partial<[Account, ProposalType, GroupIdName, boolean]>>([])
   const workingGroupConsts = api?.consts[formMap[2] as GroupIdName]
 
-  const [warningAccepted, setWarningAccepted] = useState<boolean>(true)
+  const [warningAccepted, setWarningAccepted] = useState<boolean>(false)
   const [isExecutionError, setIsExecutionError] = useState<boolean>(false)
 
   const constants = useProposalConstants(formMap[1])
@@ -133,6 +133,7 @@ export const AddNewProposalModal = () => {
 
   useEffect(() => {
     form.trigger([])
+    setWarningAccepted(false)
   }, [path])
 
   useEffect(() => {
@@ -149,12 +150,14 @@ export const AddNewProposalModal = () => {
     [state.context.discussionMode]
   )
 
+  const formValues = form.getValues() as AddNewProposalForm
+  const formStr = JSON.stringify(formValues)
+
   const { transaction, isLoading, feeInfo } = useTransactionFee(
     activeMember?.controllerAccount,
     async () => {
       if (activeMember && api) {
-        const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } =
-          form.getValues() as AddNewProposalForm
+        const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } = formValues
 
         const txBaseParams: BaseProposalParams = {
           memberId: activeMember?.id,
@@ -176,13 +179,7 @@ export const AddNewProposalModal = () => {
         ])
       }
     },
-    [
-      state.value,
-      connectionState,
-      stakingStatus,
-      form.formState.isValidating,
-      JSON.stringify(form.getValues()?.[path as keyof AddNewProposalForm]),
-    ]
+    [api?.isConnected, activeMember, stakingStatus, formStr]
   )
 
   useEffect((): any => {
@@ -210,8 +207,6 @@ export const AddNewProposalModal = () => {
       feeInfo?.canAfford ? send(stakingStatus === 'free' ? 'REQUIRES_STAKING_CANDIDATE' : 'BOUND') : send('FAIL')
     }
   }, [state, stakingStatus, feeInfo])
-
-  useEffect(() => setWarningAccepted(!isExecutionError), [isExecutionError])
 
   const goToPrevious = useCallback(() => {
     send('BACK')
@@ -244,7 +239,7 @@ export const AddNewProposalModal = () => {
     form.formState.isDirty,
     isExecutionError,
     warningAccepted,
-    JSON.stringify(form.getValues()),
+    formStr,
     JSON.stringify(form.formState.errors),
     isLoading,
   ])
@@ -309,7 +304,7 @@ export const AddNewProposalModal = () => {
   }
 
   if (state.matches('discussionTransaction')) {
-    const { triggerAndDiscussion } = form.getValues() as AddNewProposalForm
+    const { triggerAndDiscussion } = formValues
     const threadMode = createType('PalletProposalsDiscussionThreadModeBTreeSet', {
       closed: triggerAndDiscussion.discussionWhitelist?.map((member) =>
         createType('MemberId', Number.parseInt(member.id))
@@ -336,7 +331,7 @@ export const AddNewProposalModal = () => {
   }
 
   if (state.matches('success')) {
-    const { proposalDetails, proposalType } = form.getValues() as AddNewProposalForm
+    const { proposalDetails, proposalType } = formValues
     return (
       <SuccessModal
         onClose={hideModal}
