@@ -321,7 +321,7 @@ export const schemaFactory = (api?: Api) => {
         .required('Field is required'),
     }),
     setMembershipLeadInvitationQuota: Yup.object().shape({
-      count: BNSchema.test(moreThanMixed(0, 'Quota must be greater than zero')).required('Field is required'),
+      count: Yup.number().min(1, 'Quota must be greater than zero').required('Field is required'),
       leadId: Yup.string().test('execution', (value) => !!value),
     }),
     setInitialInvitationBalance: Yup.object().shape({

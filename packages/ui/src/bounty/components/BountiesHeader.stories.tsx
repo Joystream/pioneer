@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+import { MockApolloProvider } from '../../mocks/components/storybook/MockApolloProvider'
 
 import { BountiesHeader } from './BountiesHeader'
 

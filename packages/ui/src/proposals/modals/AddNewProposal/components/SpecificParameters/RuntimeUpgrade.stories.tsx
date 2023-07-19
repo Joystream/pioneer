@@ -6,7 +6,7 @@ import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvi
 import { RuntimeUpgrade } from './RuntimeUpgrade'
 
 export default {
-  title: 'Proposals/AddNewProposalModal/RuntimeUpgrade',
+  title: 'Pages/Proposals/ProposalList/Current/Modals/AddNewProposalModal/RuntimeUpgrade',
   component: RuntimeUpgrade,
 } as Meta
 

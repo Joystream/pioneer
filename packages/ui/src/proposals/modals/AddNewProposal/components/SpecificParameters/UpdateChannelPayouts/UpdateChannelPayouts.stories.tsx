@@ -6,7 +6,7 @@ import { AddNewProposalTemplate } from '@/proposals/components/StorybookTemplate
 import { UpdateChannelPayouts } from './UpdateChannelPayouts'
 
 export default {
-  title: 'Proposals/AddNewProposalModal/UpdateChannelPayouts',
+  title: 'Pages/Proposals/ProposalList/Current/Modals/AddNewProposalModal/UpdateChannelPayouts',
   component: UpdateChannelPayouts,
 } as Meta
 
