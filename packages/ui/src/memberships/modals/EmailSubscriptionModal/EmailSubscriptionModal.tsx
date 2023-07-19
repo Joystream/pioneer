@@ -20,15 +20,14 @@ export const EmailSubscriptionModal = () => {
 
   const { wallet } = useMyAccounts()
   const [state, send] = useMachine(EmailSubscriptionMachine)
-  
+
   const signEmail = async () => {
-      const timestamp = Date.now()
-      const signature = await wallet?.signer.signPayload({
-        address: member.controllerAccount,
-        data: `${member.id}:${timestamp}`
-      })
-      console.log(signature)
-      return signature
+    const timestamp = Date.now()
+    const signature = await wallet?.signer.signPayload({
+      address: member.controllerAccount,
+      data: `${member.id}:${timestamp}`,
+    })
+    return signature
   }
 
   useEffect(() => {
