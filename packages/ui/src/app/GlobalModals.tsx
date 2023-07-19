@@ -1,5 +1,5 @@
 import { get } from 'lodash'
-import React, { memo, ReactElement, useMemo } from 'react'
+import React, { memo, ReactElement, useEffect, useMemo, useState } from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 
@@ -208,6 +208,12 @@ export const GlobalModals = () => {
   const { status } = useTransactionStatus()
   const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
 
+  const [container, setContainer] = useState(document.body)
+  useEffect(() => {
+    const container = document.getElementById('modal-container')
+    if (container) setContainer(container)
+  }, [])
+
   const potentialFallback = useGlobalModalHandler(currentModalMachine, hideModal)
 
   if (modal && !GUEST_ACCESSIBLE_MODALS.includes(modal as ModalNames) && !activeMember) {
@@ -229,7 +235,7 @@ export const GlobalModals = () => {
         {isClosing && <ConfirmModal />}
         {status === 'loadingFees' && <LoaderModal onClose={hideModal} />}
       </TransactionFeesProvider>,
-      document.body
+      container
     )
   }
 

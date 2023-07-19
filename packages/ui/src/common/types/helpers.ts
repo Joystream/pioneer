@@ -11,7 +11,9 @@ export type Awaited<T> = T extends PromiseLike<infer U> ? U : T
 export type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[]
     ? RecursivePartial<U>[]
-    : T[P] extends object | undefined
-    ? RecursivePartial<T[P]>
-    : T[P]
+    : T[P] extends infer U // This line distributes union types
+    ? U extends object
+      ? RecursivePartial<U>
+      : U
+    : never
 }
