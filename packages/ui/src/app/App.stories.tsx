@@ -24,6 +24,7 @@ type Args = {
   hasAccounts: boolean
   hasWallet: boolean
   isRPCNodeConnected: boolean
+  hasRegisteredEmail: boolean
   onBuyMembership: CallableFunction
   onTransfer: CallableFunction
 }
@@ -66,6 +67,7 @@ export default {
     hasFunds: true,
     hasWallet: true,
     isRPCNodeConnected: true,
+    hasRegisteredEmail: true
   },
 
   parameters: {
@@ -76,7 +78,6 @@ export default {
         balances: args.hasFunds ? parameters.totalBalance : 0,
         ...(args.hasMemberships ? { member } : { account: { name: member.handle, address: member.controllerAccount } }),
       })
-
       return {
         accounts: {
           active: args.isLoggedIn ? 'alice' : undefined,
@@ -117,6 +118,10 @@ export default {
             data: { membershipByUniqueInput: { ...bob, ...MEMBER_DATA, invitees: [] } },
           },
         ],
+
+        localStorage: {
+          membersEmail:  args.hasRegisteredEmail ? JSON.stringify({ 0: 'alice@example.com' }) : '',
+        },
       }
     },
   },
@@ -406,5 +411,31 @@ export const BuyMembershipTxFailure: Story = {
 
     expect(await screen.findByText('Failure'))
     expect(await modal.findByText('Some error message'))
+  },
+}
+
+
+// ----------------------------------------------------------------------------
+// Test Emil Subsciption Modal
+// ----------------------------------------------------------------------------
+export const DeclineEmailSubscriptionModal: Story = {
+  args: {
+    isLoggedIn: true,
+    hasMemberships: true,
+    hasAccounts: true,
+    hasFunds: true,
+    hasWallet: true,
+    isRPCNodeConnected: true,
+    hasRegisteredEmail: false
+  },
+
+  name: 'Email subscription modal',
+
+  play: async ({ canvasElement }) => {
+    const screen = within(canvasElement)
+
+    expect(screen.getByText('Sign up to email notifications'))
+    userEvent.click(screen.getByText('Not now'))
+    expect(screen.getByText('Sign up to email notifications')).not.toBeInTheDocument()
   },
 }
