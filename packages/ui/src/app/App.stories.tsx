@@ -67,7 +67,7 @@ export default {
     hasFunds: true,
     hasWallet: true,
     isRPCNodeConnected: true,
-    hasRegisteredEmail: true
+    hasRegisteredEmail: true,
   },
 
   parameters: {
@@ -120,7 +120,7 @@ export default {
         ],
 
         localStorage: {
-          membersEmail:  args.hasRegisteredEmail ? JSON.stringify({ 0: 'alice@example.com' }) : '',
+          membersEmail: args.hasRegisteredEmail ? JSON.stringify({ 0: 'alice@example.com' }) : '',
         },
       }
     },
@@ -414,11 +414,10 @@ export const BuyMembershipTxFailure: Story = {
   },
 }
 
-
 // ----------------------------------------------------------------------------
 // Test Emil Subsciption Modal
 // ----------------------------------------------------------------------------
-export const DeclineEmailSubscriptionModal: Story = {
+export const EmailSubscriptionModal: Story = {
   args: {
     isLoggedIn: true,
     hasMemberships: true,
@@ -426,10 +425,10 @@ export const DeclineEmailSubscriptionModal: Story = {
     hasFunds: true,
     hasWallet: true,
     isRPCNodeConnected: true,
-    hasRegisteredEmail: false
+    hasRegisteredEmail: false,
   },
 
-  name: 'Email subscription modal',
+  name: 'Decline email subscription modal',
 
   play: async ({ canvasElement }) => {
     const screen = within(canvasElement)
