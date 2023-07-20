@@ -417,7 +417,7 @@ export const BuyMembershipTxFailure: Story = {
 // ----------------------------------------------------------------------------
 // Test Emil Subsciption Modal
 // ----------------------------------------------------------------------------
-export const EmailSubscriptionModal: Story = {
+export const EmailSubscriptionModalDecline: Story = {
   args: {
     isLoggedIn: true,
     hasMemberships: true,
@@ -427,14 +427,30 @@ export const EmailSubscriptionModal: Story = {
     isRPCNodeConnected: true,
     hasRegisteredEmail: false,
   },
-
-  name: 'Decline email subscription modal',
-
   play: async ({ canvasElement }) => {
     const screen = within(canvasElement)
+    const element = await screen.getByText('Sign up to email notifications')
+    expect(element)
+    await userEvent.click(screen.getByText('Not now'))
+    expect(element).not.toBeInTheDocument()
+  },
+}
 
-    expect(screen.getByText('Sign up to email notifications'))
-    userEvent.click(screen.getByText('Not now'))
-    expect(screen.getByText('Sign up to email notifications')).not.toBeInTheDocument()
+export const EmailSubscriptionModalSubscribe: Story = {
+  args: {
+    isLoggedIn: true,
+    hasMemberships: true,
+    hasAccounts: true,
+    hasFunds: true,
+    hasWallet: true,
+    isRPCNodeConnected: true,
+    hasRegisteredEmail: false,
+  },
+  play: async ({ canvasElement }) => {
+    const screen = within(canvasElement)
+    const button = screen.getByText(/^Sign and Authorize Email/i)
+    await userEvent.type(screen.getByPlaceholderText('Add email for notifications here'), 'test@email.com')
+    await userEvent.click(button)
+    expect(screen.getByText('Pending transaction'))
   },
 }
