@@ -16,6 +16,7 @@ type EmailSubscriptionState =
   | { value: 'transaction'; context: Context }
   | { value: 'success'; context: Context }
   | { value: 'error'; context: Context }
+  | { value: 'canceled'; context: EmptyObject }
 
 export type EmailSubscriptionEvent =
   | { type: 'DONE'; email: string }
@@ -66,6 +67,10 @@ export const EmailSubscriptionMachine = createMachine<Partial<Context>, EmailSub
       ...transactionModalFinalStatusesFactory({
         metaMessages: {
           error: 'There was a problem during the email subscription.',
+        },
+        cancel: {
+          target: 'canceled',
+          action: 'BACK',
         },
       }),
     },
