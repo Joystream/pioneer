@@ -1,6 +1,5 @@
+import { createType } from '@joystream/types'
 import { isFunction, mapValues } from 'lodash'
-
-import { asBN } from '@/common/utils'
 
 export const asChainData = (data: any, key?: string | number): any => {
   if (key === 'unwrap' && !isFunction(data)) {
@@ -16,10 +15,10 @@ export const asChainData = (data: any, key?: string | number): any => {
       return data.map(asChainData)
 
     case 'Number':
-      return asBN(data)
+      return createType('u128', data)
 
     case 'String':
-      return isNaN(data) ? data : asBN(data)
+      return isNaN(data) ? data : createType('u128', data)
 
     default:
       return data
