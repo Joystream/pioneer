@@ -22,17 +22,18 @@ export const useStakingStatistics = () => {
   const now = useObservable(() => api?.query.timestamp.now(), [api?.isConnected])
   const totalIssuance = useObservable(() => api?.query.balances.totalIssuance(), [api?.isConnected])
   const currentStaking = useObservable(
-    () => activeEra && api?.query.staking.erasTotalStake(activeEra.eraIndex),
+    () => activeEra && api && api.query.staking.erasTotalStake(activeEra.eraIndex),
     [activeEra, api?.isConnected]
   )
   const activeValidators = useObservable(() => api?.query.session.validators(), [api?.isConnected])
-  const stakers = useObservable(() => {
-    if (activeValidators && api)
-      return (
-        activeEra &&
-        combineLatest(activeValidators.map((address) => api.query.staking.erasStakers(activeEra.eraIndex, address)))
-      )
-  }, [api?.isConnected, activeValidators, activeEra])
+  const stakers = useObservable(
+    () =>
+      activeValidators &&
+      api &&
+      activeEra &&
+      combineLatest(activeValidators.map((address) => api.query.staking.erasStakers(activeEra.eraIndex, address))),
+    [api?.isConnected, activeValidators, activeEra]
+  )
   const acitveNominators = useMemo(() => {
     const nominators = stakers?.map((validator) => validator.others.map((nominator) => nominator.who.toString()))
     const uniqueNominators = [...new Set(nominators?.flat())]
@@ -41,7 +42,7 @@ export const useStakingStatistics = () => {
   const allValidatorsCount = useObservable(() => api?.query.staking.counterForValidators(), [api?.isConnected])
   const allNominatorsCount = useObservable(() => api?.query.staking.counterForNominators(), [api?.isConnected])
   const lastValidatorRewards = useObservable(
-    () => activeEra && api?.query.staking.erasValidatorReward(activeEra.eraIndex.subn(1)),
+    () => activeEra && api && api.query.staking.erasValidatorReward(activeEra.eraIndex.subn(1)),
     [activeEra, api?.isConnected]
   )
   const totalRewards = useObservable(() => api?.derive.staking.erasRewards(), [api?.isConnected])
@@ -50,7 +51,7 @@ export const useStakingStatistics = () => {
     [currentStaking, totalIssuance]
   )
   const eraRewardPoints = useObservable(
-    () => activeEra && api?.query.staking.erasRewardPoints(activeEra.eraIndex),
+    () => activeEra && api && api.query.staking.erasRewardPoints(activeEra.eraIndex),
     [activeEra, api?.isConnected]
   )
   return {

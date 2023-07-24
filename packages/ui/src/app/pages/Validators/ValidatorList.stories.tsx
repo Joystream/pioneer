@@ -34,14 +34,11 @@ export default {
               ],
             },
           },
-
           query: {
             balances: {
               totalIssuance: joy(1000000),
             },
-
             timestamp: { now: Date.now() },
-
             session: {
               validators: [
                 'j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D',
@@ -56,7 +53,6 @@ export default {
                 'j4S998Thq5kQHyurofh8QfHrcFN2c1T19gTdMGUVVx5EHKgky',
               ],
             },
-
             staking: {
               activeEra: {
                 index: 700,
