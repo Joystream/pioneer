@@ -1,3 +1,5 @@
+import { Option, u64 } from '@polkadot/types'
+import { PalletStakingEraRewardPoints } from '@polkadot/types/lookup'
 import React, { useMemo } from 'react'
 
 import { PercentageChart } from '@/common/components/charts/PercentageChart'
@@ -10,9 +12,15 @@ import {
   formatDurationDate,
 } from '@/common/components/statistics'
 import { DurationValue } from '@/common/components/typography/DurationValue'
-import { useStakingStatistics } from '@/validators/hooks/useStakingStatistics'
-export const Era = () => {
-  const { eraStartedOn, eraDuration, now, eraRewardPoints } = useStakingStatistics()
+
+interface EraProps {
+  eraStartedOn: Option<u64> | undefined
+  eraDuration: number
+  now: u64 | undefined
+  eraRewardPoints: PalletStakingEraRewardPoints | undefined
+}
+
+export const Era = ({ eraStartedOn, eraDuration, now, eraRewardPoints }: EraProps) => {
   const { nextReward, percentage } = useMemo(() => {
     const nextReward =
       eraDuration && now && eraStartedOn ? Number(eraDuration) - (now.toNumber() - Number(eraStartedOn)) : undefined

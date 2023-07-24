@@ -3,10 +3,13 @@ import React from 'react'
 
 import { StatisticItem, StatisticItemSpacedContent, StatisticLabel } from '@/common/components/statistics'
 import { TokenValue } from '@/common/components/typography'
-import { useStakingStatistics } from '@/validators/hooks/useStakingStatistics'
 
-export const Rewards = () => {
-  const { totalRewards, lastRewards } = useStakingStatistics()
+interface RewardsProps{
+  totalRewards: BN | undefined,
+  lastRewards: BN | undefined
+}
+
+export const Rewards = ({ totalRewards, lastRewards }: RewardsProps) => {
 
   return (
     <StatisticItem
@@ -18,7 +21,7 @@ export const Rewards = () => {
     >
       <StatisticItemSpacedContent>
         <StatisticLabel>Month</StatisticLabel>
-        <TokenValue size="l" value={new BN(totalRewards ?? 0)} />
+        <TokenValue size="l" value={totalRewards} />
       </StatisticItemSpacedContent>
       <StatisticItemSpacedContent>
         <StatisticLabel> Last </StatisticLabel>

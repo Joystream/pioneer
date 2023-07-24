@@ -1,11 +1,20 @@
 import React from 'react'
 
 import { NumericValue, StatisticItem, StatisticItemSpacedContent, StatisticLabel } from '@/common/components/statistics'
-import { useStakingStatistics } from '@/validators/hooks/useStakingStatistics'
 
-export const ValidatorsState = () => {
-  const { activeValidatorsCount, allValidatorsCount, acitveNominatorsCount, allNominatorsCount } =
-    useStakingStatistics()
+interface ValidatorsStateProps {
+  activeValidatorsCount: number
+  allValidatorsCount: number
+  acitveNominatorsCount: number
+  allNominatorsCount: number
+}
+
+export const ValidatorsState = ({
+  activeValidatorsCount,
+  allValidatorsCount,
+  acitveNominatorsCount,
+  allNominatorsCount,
+}: ValidatorsStateProps) => {
   return (
     <StatisticItem
       title="validators and Nominators"

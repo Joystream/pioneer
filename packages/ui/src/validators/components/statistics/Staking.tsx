@@ -1,12 +1,17 @@
+import { BN } from '@polkadot/util'
 import React from 'react'
 
 import { StatisticItem, StatisticItemSpacedContent, StatisticLabel } from '@/common/components/statistics'
 import { TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
-import { useStakingStatistics } from '@/validators/hooks/useStakingStatistics'
 
-export const Staking = () => {
-  const { idealStaking, currentStaking, stakingPercentage } = useStakingStatistics()
+interface StakingProps {
+  idealStaking: BN
+  currentStaking: BN
+  stakingPercentage: number
+}
+
+export const Staking = ({ idealStaking, currentStaking, stakingPercentage }: StakingProps) => {
   const Percentage = (
     <StatisticLabel>
       Percentage <span style={{ color: Colors.Blue[400], fontSize: 16 }}> {stakingPercentage} </span>%
