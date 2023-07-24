@@ -242,7 +242,10 @@ export const schemaFactory = (api?: Api) => {
         is: true,
         then: (schema) => schema.test(isValidCSV('Not valid CSV format')).required('Field is required'),
       }),
-      accountsAndAmounts: Yup.array().required(),
+      accountsAndAmounts: Yup.array().when('payMultiple', {
+        is: true,
+        then: (schema) => schema.required(),
+      }),
     }),
     runtimeUpgrade: Yup.object().shape({
       runtime: Yup.mixed()

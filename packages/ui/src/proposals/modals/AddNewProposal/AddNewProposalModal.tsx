@@ -87,10 +87,9 @@ export const AddNewProposalModal = () => {
   const stakingStatus = useStakingAccountStatus(formMap[0]?.address, activeMember?.id, [state.matches('transaction')])
   const schema = useMemo(() => schemaFactory(api), [!api])
 
-
   const keyring = useKeyring()
   const path = useMemo(() => machineStateConverter(state.value) as keyof AddNewProposalForm, [state.value])
-  
+
   const form = useForm<AddNewProposalForm>({
     resolver: useYupValidationResolver<AddNewProposalForm>(schema, path),
     mode: 'onChange',
