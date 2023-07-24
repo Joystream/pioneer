@@ -59,10 +59,8 @@ export default {
 
             staking: {
               activeEra: {
-                unwrap: {
-                  index: 700,
-                  start: Date.now() - 5400000,
-                },
+                index: 700,
+                start: Date.now() - 5400000,
               },
               counterForValidators: 12,
               counterForNominators: 20,

@@ -1,15 +1,10 @@
 import { createType } from '@joystream/types'
-import { isFunction, mapValues } from 'lodash'
+import { mapValues } from 'lodash'
 
-export const asChainData = (data: any, key?: string | number): any => {
-  if (key === 'unwrap' && !isFunction(data)) {
-    const unwrappedValue = asChainData(data)
-    return () => unwrappedValue
-  }
-
+export const asChainData = (data: any): any => {
   switch (Object.getPrototypeOf(data).constructor.name) {
     case 'Object':
-      return mapValues(data, asChainData)
+      return withUnwrap(mapValues(data, asChainData))
 
     case 'Array':
       return data.map(asChainData)
@@ -24,3 +19,5 @@ export const asChainData = (data: any, key?: string | number): any => {
       return data
   }
 }
+
+const withUnwrap = (data: Record<any, any>) => Object.defineProperty(data, 'unwrap', { value: () => data })
