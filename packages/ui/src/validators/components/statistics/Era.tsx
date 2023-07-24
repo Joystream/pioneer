@@ -22,8 +22,7 @@ interface EraProps {
 
 export const Era = ({ eraStartedOn, eraDuration, now, eraRewardPoints }: EraProps) => {
   const { nextReward, percentage } = useMemo(() => {
-    const nextReward =
-      eraDuration && now && eraStartedOn ? Number(eraDuration) - (now.toNumber() - Number(eraStartedOn)) : undefined
+    const nextReward = now && eraStartedOn && eraDuration - Number(now) - Number(eraStartedOn)
     const totalDuration = Number(eraDuration)
     const percentage = nextReward ? Math.floor(100 - (nextReward / totalDuration) * 100) : 0
     return {

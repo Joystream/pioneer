@@ -4,13 +4,12 @@ import React from 'react'
 import { StatisticItem, StatisticItemSpacedContent, StatisticLabel } from '@/common/components/statistics'
 import { TokenValue } from '@/common/components/typography'
 
-interface RewardsProps{
-  totalRewards: BN | undefined,
+interface RewardsProps {
+  totalRewards: BN | undefined
   lastRewards: BN | undefined
 }
 
 export const Rewards = ({ totalRewards, lastRewards }: RewardsProps) => {
-
   return (
     <StatisticItem
       title="Rewards"
