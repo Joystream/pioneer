@@ -3,9 +3,8 @@ import { useMemo } from 'react'
 import { combineLatest, map } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
+import { ERA_DURATION } from '@/common/constants'
 import { useObservable } from '@/common/hooks/useObservable'
-
-import { ERA_DURATION } from '../constants/constant'
 
 export const useStakingStatistics = () => {
   const { api } = useApi()

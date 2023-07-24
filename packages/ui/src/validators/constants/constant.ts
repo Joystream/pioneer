@@ -1,1 +1,0 @@
-export const ERA_DURATION = 21600000
