@@ -1,15 +1,22 @@
 import { Decorator } from '@storybook/react'
+import { configure } from '@storybook/testing-library'
 import React from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { useForm, FormProvider } from 'react-hook-form'
-import { MemoryRouter, Redirect, Route, Switch } from 'react-router'
 import { createGlobalStyle } from 'styled-components'
 
-import { NotFound } from '../src/app/pages/NotFound'
+import { GlobalModals } from '../src/app/GlobalModals'
 import { GlobalStyle } from '../src/app/providers/GlobalStyle'
+import { OnBoardingProvider } from '../src/common/providers/onboarding/provider'
+import { NotificationsHolder } from '../src/common/components/page/SideNotification'
+import { TransactionStatus } from '../src/common/components/TransactionStatus/TransactionStatus'
 import { Colors } from '../src/common/constants'
-import { MockProvidersDecorator } from '../src/mocks/providers'
+import { ModalContextProvider } from '../src/common/providers/modal/provider'
+import { TransactionStatusProvider } from '../src/common/providers/transactionStatus/provider'
+import { MockProvidersDecorator, MockRouterDecorator } from '../src/mocks/providers'
 import { i18next } from '../src/services/i18n'
+
+configure({ testIdAttribute: 'id' })
 
 const stylesWrapperDecorator: Decorator = (Story) => (
   <>
@@ -43,22 +50,27 @@ const RHFDecorator: Decorator = (Story) => {
   )
 }
 
-const RouterDecorator: Decorator = (Story, { parameters }) => (
-  <MemoryRouter initialEntries={[`/story/${parameters.router?.href ?? ''}`]}>
-    <Switch>
-      <Route component={Story} path={`/story/${parameters.router?.path ?? ''}`} />
-      <Route exact path="/404" component={NotFound} />
-      <Redirect from="*" to="/404" />
-    </Switch>
-  </MemoryRouter>
+const ModalDecorator: Decorator = (Story) => (
+  <TransactionStatusProvider>
+    <ModalContextProvider>
+      <OnBoardingProvider>
+        <Story />
+        <GlobalModals />
+        <NotificationsHolder>
+          <TransactionStatus />
+        </NotificationsHolder>
+      </OnBoardingProvider>
+    </ModalContextProvider>
+  </TransactionStatusProvider>
 )
 
 export const decorators = [
+  ModalDecorator,
   stylesWrapperDecorator,
   i18nextDecorator,
   RHFDecorator,
   MockProvidersDecorator,
-  RouterDecorator,
+  MockRouterDecorator,
 ]
 
 export const parameters = {
@@ -91,7 +103,7 @@ export const parameters = {
   options: {
     storySort: {
       method: 'alphabetical',
-      order: ['Common'],
+      order: ['App', 'Pages', 'Common'],
     },
   },
 }
