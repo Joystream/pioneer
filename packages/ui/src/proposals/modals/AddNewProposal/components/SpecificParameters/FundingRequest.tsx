@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react'
+/* eslint-disable no-console */
+import React, { useCallback, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
@@ -24,22 +25,22 @@ import { PreviewAndValidateModal } from './modals/PreviewAndValidate'
 import { ErrorPrompt, Prompt } from './Prompt'
 
 export const FundingRequest = () => {
-  const { watch, setValue, getValues } = useFormContext()
+  const { watch, setValue, getValues, getFieldState } = useFormContext()
   const [isPreviewModalShown, setIsPreviewModalShown] = useState(false)
-  const [previewModalData, setPreviewModalData] = useState<string[]>([])
   const [payMultiple] = watch(['fundingRequest.payMultiple'])
   const [hasPreviewedInput] = watch(['fundingRequest.hasPreviewedInput'], { 'fundingRequest.hasPreviewedInput': true })
-  const verifyInput = useCallback((input: string) => {
-    setValue('fundingRequest.hasPreviewedInput', false, { shouldValidate: true })
-    setValue('fundingRequest.accountsAndAmounts', input, { shouldValidate: true })
-  }, [])
+  const csvInput = watch('fundingRequest.csvInput')
+  useEffect(() => {
+    if (getFieldState('hasPreviewedInput')) {
+      setValue('fundingRequest.hasPreviewedInput', false, { shouldValidate: true })
+      console.log('Value ', getValues('fundingRequest.accountsAndAmounts'))
+      console.log('Previewed ', getValues('fundingRequest.hasPreviewedInput'))
+    }
+  }, [csvInput])
   const previewInput = useCallback(() => {
-    const input = getValues('fundingRequest.accountsAndAmounts')
+    const input = getValues('fundingRequest.csvInput')
     if (CSV_PATTERN.test(input)) {
-      const inputSplit = input.split(';\n')
-      setValue('fundingRequest.hasPreviewedInput', true, { shouldValidate: true })
       setIsPreviewModalShown(true)
-      setPreviewModalData(inputSplit)
     }
   }, [])
   return (
@@ -94,15 +95,14 @@ export const FundingRequest = () => {
               label="Destination accounts and transfer amounts"
               required
               message={'You can select up to 20 recipients'}
-              name="fundingRequest.accountsAndAmounts"
+              name="fundingRequest.csvInput"
               id="accounts-amounts"
               inputSize="xl"
             >
               <InputTextarea
                 id="accounts-amounts"
-                name="fundingRequest.accountsAndAmounts"
+                name="fundingRequest.csvInput"
                 placeholder="Destination account address and amount"
-                onInput={(event) => verifyInput(event.currentTarget.value)}
               />
             </InputComponent>
             <HiddenCheckBox name="fundingRequest.hasPreviewedInput" checked={hasPreviewedInput} />
@@ -129,13 +129,7 @@ export const FundingRequest = () => {
           </RowGapBlock>
         )}
       </Row>
-      {isPreviewModalShown && (
-        <PreviewAndValidateModal
-          previewModalData={previewModalData}
-          setIsPreviewModalShown={setIsPreviewModalShown}
-          setValue={setValue}
-        />
-      )}
+      {isPreviewModalShown && <PreviewAndValidateModal setIsPreviewModalShown={setIsPreviewModalShown} />}
     </RowGapBlock>
   )
 }

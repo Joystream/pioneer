@@ -17,7 +17,7 @@ import {
 } from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
-import { duplicateAccounts, isValidCSV, maxAccounts, maxFundingAmount } from '@/proposals/model/validation'
+import { isValidCSV } from '@/proposals/model/validation'
 import { ProposalType } from '@/proposals/types'
 import { GroupIdName } from '@/working-groups/types'
 
@@ -77,7 +77,8 @@ export interface AddNewProposalForm {
     amount?: BN
     account?: Account
     payMultiple?: boolean
-    accountsAndAmounts?: string
+    csvInput?: string
+    accountsAndAmounts?: { amount: BN; account: string }[]
     hasPreviewedInput?: boolean
   }
   runtimeUpgrade: {
@@ -217,7 +218,7 @@ export const schemaFactory = (api?: Api) => {
         is: false,
         then: (schema) =>
           schema
-            .test(moreThanMixed(0, '')) // todo: change funding request to allow upload request in file
+            .test(moreThanMixed(0, ''))
             .test(
               maxMixed(
                 api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount,
@@ -237,26 +238,11 @@ export const schemaFactory = (api?: Api) => {
             .test('previewedinput', 'Please preview', (value) => typeof value !== 'undefined' && value)
             .required('Field is required'),
       }),
-      accountsAndAmounts: Yup.string().when('payMultiple', {
+      csvInput: Yup.string().when('payMultiple', {
         is: true,
-        then: (schema) =>
-          schema
-            .test(duplicateAccounts('Duplicate accounts are not allowed'))
-            .test(isValidCSV('Not valid CSV format'))
-            .test(
-              maxFundingAmount(
-                'Maximal amount allowed is ${max}',
-                api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount
-              )
-            )
-            .test(
-              maxAccounts(
-                'Maximum allowed accounts is ${max}',
-                api?.consts.proposalsCodex.fundingRequestProposalMaxAccounts.toNumber()
-              )
-            )
-            .required('Field is required'),
+        then: (schema) => schema.test(isValidCSV('Not valid CSV format')).required('Field is required'),
       }),
+      accountsAndAmounts: Yup.array().required(),
     }),
     runtimeUpgrade: Yup.object().shape({
       runtime: Yup.mixed()

@@ -1,6 +1,8 @@
+/* eslint-disable no-console */
 import { isBn } from '@polkadot/util'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useState } from 'react'
+import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
@@ -32,8 +34,6 @@ import { ErrorPrompt } from '../../Prompt'
 
 interface PreviewAndValidateModalProps {
   setIsPreviewModalShown: (bool: boolean) => void
-  previewModalData: string[]
-  setValue: (name: string, value: any, options: { shouldValidate: boolean }) => void
 }
 interface AccountAndAmount {
   account: Account
@@ -41,12 +41,9 @@ interface AccountAndAmount {
   isValidAccount: boolean
 }
 
-export const PreviewAndValidateModal = ({
-  setIsPreviewModalShown,
-  previewModalData,
-  setValue,
-}: PreviewAndValidateModalProps) => {
+export const PreviewAndValidateModal = ({ setIsPreviewModalShown }: PreviewAndValidateModalProps) => {
   const { api } = useApi()
+  const { setValue, getValues } = useFormContext()
   const maxTotalAmount = api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount
   const maxAllowedAccounts = api?.consts.proposalsCodex.fundingRequestProposalMaxAccounts.toNumber()
   const keyring = useKeyring()
@@ -64,17 +61,27 @@ export const PreviewAndValidateModal = ({
 
   const closeModalWithData = useCallback(() => {
     let textAreaValue = ''
+    const accountsAndAmounts: { amount: BN; account: string }[] = []
     previewAccounts.map((item, index) => {
       textAreaValue += `${item.account.address},${item.amount.div(decimals)}`
       textAreaValue += previewAccounts.length - 1 === index ? '' : ';\n'
+      accountsAndAmounts.push({ amount: item.amount, account: item.account.address })
     })
-    setValue('fundingRequest.accountsAndAmounts', textAreaValue, { shouldValidate: true })
+    setValue('fundingRequest.csvInput', textAreaValue, { shouldValidate: true })
+    setValue('fundingRequest.hasPreviewedInput', true, { shouldValidate: true })
+    console.log('error length ', errorMessages.length)
+    if (errorMessages.length === 0) {
+      setValue('fundingRequest.accountsAndAmounts', accountsAndAmounts, { shouldValidate: true })
+    } else {
+      setValue('fundingRequest.accountsAndAmounts', undefined, { shouldValidate: true })
+    }
     setIsPreviewModalShown(false)
-  }, [previewAccounts])
+  }, [previewAccounts, errorMessages])
 
   useEffect(() => {
+    const csvInput = getValues('fundingRequest.csvInput').split(';\n')
     setPreviewAccounts(
-      previewModalData.map((item) => {
+      csvInput.map((item: string) => {
         const splitAccountsAndAmounts = item.split(',')
         const amount = new BN(splitAccountsAndAmounts[1].replace(';', '')).mul(decimals)
         const isValidAccount = isValidAddress(splitAccountsAndAmounts[0], keyring)
@@ -93,22 +100,22 @@ export const PreviewAndValidateModal = ({
       total = total.add(item.amount)
       totalInvalidAccounts += !item.isValidAccount ? 1 : 0
     })
-    setErrorMessages((prev) =>
-      totalInvalidAccounts > 0 ? [...prev, 'Incorrect destination accounts detected'] : [...prev]
-    )
-    setErrorMessages((prev) =>
-      maxAllowedAccounts && previewAccounts?.length > maxAllowedAccounts
-        ? [...prev, 'Maximum allowed accounts exceeded']
-        : [...prev]
-    )
+    const messages: string[] = []
+    if (totalInvalidAccounts > 0) {
+      messages.push('Incorrect destination accounts detected')
+    }
+    if (maxAllowedAccounts && previewAccounts?.length > maxAllowedAccounts) {
+      messages.push('Maximum allowed accounts exceeded')
+    }
+    if (messages.length > 0) {
+      setErrorMessages((prev) => [...prev, ...messages])
+    }
     setTotalAmount(total)
   }, [previewAccounts])
   useEffect(() => {
-    setErrorMessages((prev) =>
-      totalAmount.gt(isBn(maxTotalAmount) ? maxTotalAmount : new BN(0))
-        ? [...prev, 'Max payment amount is exceeded']
-        : [...prev]
-    )
+    if (totalAmount.gt(isBn(maxTotalAmount) ? maxTotalAmount : new BN(0))) {
+      setErrorMessages((prev) => [...prev, 'Max payment amount is exceeded'])
+    }
   }, [totalAmount])
   return (
     <Modal onClose={() => undefined} modalSize="s" customModalSize={'552'} marginRight={'68'} modalHeight="xl">
