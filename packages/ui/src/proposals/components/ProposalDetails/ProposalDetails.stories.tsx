@@ -11,7 +11,7 @@ import { ModalContext } from '../../../common/providers/modal/context'
 import { ProposalDetails } from './ProposalDetails'
 
 export default {
-  title: 'Proposals/ProposalPreview/ProposalDetails',
+  title: 'Pages/Proposals/ProposalPreview/Components/ProposalDetails',
   component: ProposalDetails,
 } as Meta
 

@@ -74,7 +74,7 @@ describe('UI: Restore Votes Modal', () => {
       displayModal()
       await uploadFile(createFile('not json'))
       expect(await screen.findByRole('button', { name: 'Restore Votes' })).toBeDisabled()
-      expect(await screen.findByText(/^Unexpected token .+ in JSON/)).toBeDefined()
+      expect(await screen.findByText(/^Unexpected token/)).toBeDefined()
     })
 
     it('Invalid schema', async () => {

@@ -16,7 +16,6 @@
     "build:storybook": "wsrun --fast-exit --stages -c --exclude @joystream/pioneer --exclude-missing build && wsrun --package @joystream/pioneer -c build:storybook",
     "storybook": "wsrun --exclude-missing -c storybook",
     "test": "wsrun --fast-exit --package @joystream/pioneer -c test",
-    "ci-test": "NODE_OPTIONS=--max_old_space_size=7000 wsrun --fast-exit --package @joystream/pioneer -c test",
     "start": "wsrun --package @joystream/pioneer -c start",
     "prepare": "husky install"
   },
@@ -31,6 +30,12 @@
     "lint-staged": ">=10"
   },
   "resolutions": {
+    "@babel/core": "~7.21.0",
+    "@babel/preset-env": "~7.21.0",
+    "@babel/generator": "~7.21.0",
+    "@babel/parser": "~7.21.0",
+    "@babel/traverse": "~7.21.0",
+    "@babel/types": "~7.21.0",
     "@polkadot/api": "8.9.1",
     "@polkadot/api-contract": "8.9.1",
     "@polkadot/api-derive": "8.9.1",
