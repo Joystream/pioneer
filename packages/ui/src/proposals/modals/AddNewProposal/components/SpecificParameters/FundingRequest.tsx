@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useCallback, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
@@ -31,10 +30,9 @@ export const FundingRequest = () => {
   const [hasPreviewedInput] = watch(['fundingRequest.hasPreviewedInput'], { 'fundingRequest.hasPreviewedInput': true })
   const csvInput = watch('fundingRequest.csvInput')
   useEffect(() => {
-    if (getFieldState('hasPreviewedInput')) {
+    if (getFieldState('fundingRequest.accountsAndAmounts')) {
+      setValue('fundingRequest.accountsAndAmounts', undefined, { shouldValidate: true })
       setValue('fundingRequest.hasPreviewedInput', false, { shouldValidate: true })
-      console.log('Value ', getValues('fundingRequest.accountsAndAmounts'))
-      console.log('Previewed ', getValues('fundingRequest.hasPreviewedInput'))
     }
   }, [csvInput])
   const previewInput = useCallback(() => {
@@ -75,9 +73,9 @@ export const FundingRequest = () => {
                 <TextSmall>
                   For <TextInlineSmall bold>multiple accounts and amounts</TextInlineSmall>, follow this CSV pattern:
                   <br />
-                  account1, amount1;
+                  account1, amount1
                   <br />
-                  account2, amount2;
+                  account2, amount2
                   <br />
                   ...
                   <br />
@@ -129,7 +127,7 @@ export const FundingRequest = () => {
           </RowGapBlock>
         )}
       </Row>
-      {isPreviewModalShown && <PreviewAndValidateModal setIsPreviewModalShown={setIsPreviewModalShown} />}
+      {isPreviewModalShown && <PreviewAndValidateModal onClose={setIsPreviewModalShown} />}
     </RowGapBlock>
   )
 }

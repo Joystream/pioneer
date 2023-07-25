@@ -16,7 +16,7 @@ export const maxAccounts = (message: string, max: number | undefined): Yup.TestC
   params: { max },
   exclusive: false,
   test(value: string) {
-    const pairs = value.split(';\n')
+    const pairs = value.split('\n')
     return max ? pairs.length <= max : false
   },
 })
@@ -26,7 +26,7 @@ export const duplicateAccounts = (message: string): Yup.TestConfig<any, AnyObjec
   name: 'duplicateAccounts',
   exclusive: false,
   test(value: string) {
-    const pairs = value.split(';\n')
+    const pairs = value.split('\n')
     const addresses: string[] = []
 
     for (const pair of pairs) {
@@ -46,7 +46,7 @@ export const isValidCSV = (message: string): Yup.TestConfig<any, AnyObject> => (
   test(value: string, testContext) {
     if (!CSV_PATTERN.test(value)) return false
 
-    const pairs = value.split(';\n')
+    const pairs = value.split('\n')
     const keyring = testContext?.options?.context?.keyring
 
     for (const pair of pairs) {
@@ -68,7 +68,7 @@ export const maxFundingAmount = (
   params: { max: isJoyValue && isBn(max) ? formatJoyValue(max, { precision: 2 }) : max },
   exclusive: false,
   test(value: string) {
-    const pairs = value.split(';\n')
+    const pairs = value.split('\n')
     let total = new BN(0)
     const decimals = new BN(10).pow(new BN(JOY_DECIMAL_PLACES))
     for (const pair of pairs) {

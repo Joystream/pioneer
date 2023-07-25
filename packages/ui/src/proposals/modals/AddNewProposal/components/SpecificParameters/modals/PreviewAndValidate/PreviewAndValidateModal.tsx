@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { isBn } from '@polkadot/util'
 import BN from 'bn.js'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -32,13 +31,15 @@ import {
 } from '@/common/components/SidePane'
 import { TransactionFee } from '@/common/components/TransactionFee'
 import { TokenValue } from '@/common/components/typography'
-import { Colors, JOY_DECIMAL_PLACES } from '@/common/constants'
+import { Colors } from '@/common/constants'
 import { useKeyring } from '@/common/hooks/useKeyring'
+import { formatJoyValue } from '@/common/model/formatters'
+import { joy } from '@/mocks/helpers'
 
 import { ErrorPrompt } from '../../Prompt'
 
 interface PreviewAndValidateModalProps {
-  setIsPreviewModalShown: (bool: boolean) => void
+  onClose: (bool: boolean) => void
 }
 interface AccountAndAmount {
   account: Account
@@ -46,7 +47,7 @@ interface AccountAndAmount {
   isValidAccount: boolean
 }
 
-export const PreviewAndValidateModal = ({ setIsPreviewModalShown }: PreviewAndValidateModalProps) => {
+export const PreviewAndValidateModal = ({ onClose }: PreviewAndValidateModalProps) => {
   const { api } = useApi()
   const { setValue, getValues } = useFormContext()
   const maxTotalAmount = api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount
@@ -57,7 +58,6 @@ export const PreviewAndValidateModal = ({ setIsPreviewModalShown }: PreviewAndVa
   const [previewAccounts, setPreviewAccounts] = useState<AccountAndAmount[]>([])
   const [totalAmount, setTotalAmount] = useState<BN>(new BN(0))
   const [errorMessages, setErrorMessages] = useState<string[]>([])
-  const decimals = new BN(10).pow(new BN(JOY_DECIMAL_PLACES))
 
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {
@@ -71,30 +71,33 @@ export const PreviewAndValidateModal = ({ setIsPreviewModalShown }: PreviewAndVa
   }, [])
 
   const closeModalWithData = useCallback(() => {
-    let textAreaValue = ''
     const accountsAndAmounts: { amount: BN; account: string }[] = []
-    previewAccounts.map((item, index) => {
-      textAreaValue += `${item.account.address},${item.amount.div(decimals)}`
-      textAreaValue += previewAccounts.length - 1 === index ? '' : ';\n'
+    previewAccounts.map((item) => {
       accountsAndAmounts.push({ amount: item.amount, account: item.account.address })
     })
-    setValue('fundingRequest.csvInput', textAreaValue, { shouldValidate: true })
     setValue('fundingRequest.hasPreviewedInput', true, { shouldValidate: true })
-    console.log('error length ', errorMessages.length)
     if (errorMessages.length === 0) {
       setValue('fundingRequest.accountsAndAmounts', accountsAndAmounts, { shouldValidate: true })
     } else {
       setValue('fundingRequest.accountsAndAmounts', undefined, { shouldValidate: true })
     }
-    setIsPreviewModalShown(false)
+    onClose(false)
   }, [previewAccounts, errorMessages])
+  useEffect(() => {
+    if (previewAccounts.length > 0) {
+      const value = previewAccounts
+        .map(({ account, amount }) => `${account.address},${formatJoyValue(amount).replaceAll(',', '')}`)
+        .join('\n')
+      setValue('fundingRequest.csvInput', value)
+    }
+  }, [previewAccounts])
 
   useEffect(() => {
-    const csvInput = getValues('fundingRequest.csvInput').split(';\n')
+    const csvInput = getValues('fundingRequest.csvInput').split('\n')
     setPreviewAccounts(
       csvInput.map((item: string) => {
         const splitAccountsAndAmounts = item.split(',')
-        const amount = new BN(splitAccountsAndAmounts[1].replace(';', '')).mul(decimals)
+        const amount = new BN(joy(splitAccountsAndAmounts[1]))
         const isValidAccount = isValidAddress(splitAccountsAndAmounts[0], keyring)
         return {
           account: accountOrNamed(accounts, splitAccountsAndAmounts[0], 'Unknown Member'),
