@@ -32,6 +32,20 @@ export default {
                 { era: 699, eraReward: joy(0.123456) },
                 { era: 700, eraReward: joy(0.123456) },
               ],
+              stakerRewards: [
+                {
+                  eraReward: joy(0.7),
+                },
+                {
+                  eraReward: joy(0.79),
+                },
+                {
+                  eraReward: joy(0.3),
+                },
+                {
+                  eraReward: joy(0.8),
+                },
+              ],
             },
           },
           query: {
@@ -103,6 +117,10 @@ export default {
                 ],
               },
               erasTotalStake: joy(130_000),
+              validators: {
+                commission: joy(0.0000011),
+                blocked: false,
+              },
             },
           },
         },
@@ -113,4 +131,4 @@ export default {
 
 type Story = StoryObj<typeof ValidatorList>
 
-export const Statistics: Story = {}
+export const StatisticsAndLists: Story = {}
