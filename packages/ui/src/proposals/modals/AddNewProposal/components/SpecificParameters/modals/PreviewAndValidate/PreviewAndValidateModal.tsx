@@ -17,14 +17,19 @@ import {
   BalanceInfoInRow,
   InfoTitle,
   InfoValue,
-  Modal,
-  ModalBody,
   ModalFooter,
-  ModalHeader,
   Row,
   TransactionInfoContainer,
 } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
+import {
+  SidePane,
+  SidePaneBody,
+  SidePaneGlass,
+  SidePaneHeader,
+  SidePanelTop,
+  SidePaneTitle,
+} from '@/common/components/SidePane'
 import { TransactionFee } from '@/common/components/TransactionFee'
 import { TokenValue } from '@/common/components/typography'
 import { Colors, JOY_DECIMAL_PLACES } from '@/common/constants'
@@ -53,6 +58,12 @@ export const PreviewAndValidateModal = ({ setIsPreviewModalShown }: PreviewAndVa
   const [totalAmount, setTotalAmount] = useState<BN>(new BN(0))
   const [errorMessages, setErrorMessages] = useState<string[]>([])
   const decimals = new BN(10).pow(new BN(JOY_DECIMAL_PLACES))
+
+  const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (e.target === e.currentTarget) {
+      closeModalWithData()
+    }
+  }
 
   const removeAccount = useCallback((index: number) => {
     setErrorMessages([])
@@ -118,44 +129,48 @@ export const PreviewAndValidateModal = ({ setIsPreviewModalShown }: PreviewAndVa
     }
   }, [totalAmount])
   return (
-    <Modal onClose={() => undefined} modalSize="s" customModalSize={'552'} marginRight={'68'} modalHeight="xl">
-      <ModalHeader onClick={() => closeModalWithData()} title="Preview And Validate" />
-      <CustomModalBody>
-        <RowGapBlock gap={8}>
-          <Row>
-            <RowGapBlock gap={8}>
-              {errorMessages?.map((message) => (
-                <ErrorPrompt>{message}</ErrorPrompt>
+    <SidePaneGlass onClick={onBackgroundClick}>
+      <PreviewPanel>
+        <PreviewPanelHeader>
+          <SidePanelTop>
+            <SidePaneTitle>Preview And Validate</SidePaneTitle>
+            <CloseButton onClick={() => closeModalWithData()}></CloseButton>
+          </SidePanelTop>
+        </PreviewPanelHeader>
+        <PreviewPanelBody>
+          <RowGapBlock gap={8}>
+            <Row>
+              <RowGapBlock gap={8}>
+                {errorMessages?.map((message) => (
+                  <ErrorPrompt>{message}</ErrorPrompt>
+                ))}
+              </RowGapBlock>
+            </Row>
+            <Row>
+              {previewAccounts?.map((previewAccount, i) => (
+                <CustomAccountRow key={i} className={previewAccount.isValidAccount ? '' : 'error'}>
+                  <AccountInfo account={previewAccount.account} />
+                  <CustomBalanceInfoInRow>
+                    <InfoTitle>Amount</InfoTitle>
+                    <InfoValue>
+                      <TokenValue value={previewAccount.amount} />
+                    </InfoValue>
+                    <CloseButton onClick={() => removeAccount(i)} />
+                  </CustomBalanceInfoInRow>
+                </CustomAccountRow>
               ))}
-            </RowGapBlock>
-          </Row>
-          <Row>
-            {previewAccounts?.map((previewAccount, i) => (
-              <CustomAccountRow key={i} className={previewAccount.isValidAccount ? '' : 'error'}>
-                <AccountInfo account={previewAccount.account} />
-                <CustomBalanceInfoInRow>
-                  <InfoTitle>Amount</InfoTitle>
-                  <InfoValue>
-                    <TokenValue value={previewAccount.amount} />
-                  </InfoValue>
-                  <CloseButton onClick={() => removeAccount(i)} />
-                </CustomBalanceInfoInRow>
-              </CustomAccountRow>
-            ))}
-          </Row>
-        </RowGapBlock>
-      </CustomModalBody>
-      <ModalFooter>
-        <TransactionInfoContainer>
-          <TransactionFee title={'Total amount'} value={totalAmount} />
-        </TransactionInfoContainer>
-      </ModalFooter>
-    </Modal>
+            </Row>
+          </RowGapBlock>
+        </PreviewPanelBody>
+        <ModalFooter>
+          <TransactionInfoContainer>
+            <TransactionFee title={'Total amount'} value={totalAmount} />
+          </TransactionInfoContainer>
+        </ModalFooter>
+      </PreviewPanel>
+    </SidePaneGlass>
   )
 }
-const CustomModalBody = styled(ModalBody)`
-  display: block;
-`
 const CustomAccountRow = styled(AccountRow)`
   margin-bottom: 4px;
   padding-right: 16px;
@@ -168,4 +183,13 @@ const CustomBalanceInfoInRow = styled(BalanceInfoInRow)`
   ${Close} {
     margin-left: auto;
   }
+`
+const PreviewPanel = styled(SidePane)`
+  grid-template-rows: auto 1fr auto;
+`
+const PreviewPanelHeader = styled(SidePaneHeader)`
+  padding: 12px 24px;
+`
+const PreviewPanelBody = styled(SidePaneBody)`
+  padding: 12px 24px;
 `
