@@ -47,9 +47,9 @@ export const useValidatorsList = () => {
   }
 
   const getValidatorsInfo = (api: ProxyApi) => {
-    return api.query.session.validators().pipe(
+    return api.query.staking.validators.entries().pipe(
       switchMap((entries) => {
-        const validatorAddresses = entries.map((address) => address.toString())
+        const validatorAddresses = entries.map((entry) => entry[0].args[0].toString())
         const validatorInfoObservables = validatorAddresses.map((address) => getValidatorInfo(address, api))
         return combineLatest(validatorInfoObservables)
       })
