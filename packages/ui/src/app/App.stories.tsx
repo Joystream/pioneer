@@ -429,10 +429,29 @@ export const EmailSubscriptionModalDecline: Story = {
   },
   play: async ({ canvasElement }) => {
     const modal = withinModal(canvasElement)
-    const element = await screen.getByText('Sign up to email notifications')
+    const element = await modal.getByText('Sign up to email notifications')
     expect(element)
-    await userEvent.click(screen.getByText('Not now'))
+    await userEvent.click(modal.getByText('Not now'))
     expect(element).not.toBeInTheDocument()
+  },
+}
+
+export const EmailSubscriptionModalWrongEmail: Story = {
+  args: {
+    isLoggedIn: true,
+    hasMemberships: true,
+    hasAccounts: true,
+    hasFunds: true,
+    hasWallet: true,
+    isRPCNodeConnected: true,
+    hasRegisteredEmail: false,
+  },
+  play: async ({ canvasElement }) => {
+    const modal = withinModal(canvasElement)
+    const button = modal.getByText(/^Sign and Authorize Email/i).closest('button')
+    expect(button).toBeDisabled()
+    await userEvent.type(modal.getByPlaceholderText('Add email for notifications here'), 'test@email')
+    expect(button).toBeDisabled()
   },
 }
 
@@ -448,11 +467,11 @@ export const EmailSubscriptionModalSubscribe: Story = {
   },
   play: async ({ canvasElement }) => {
     const modal = withinModal(canvasElement)
-    const button = screen.getByText(/^Sign and Authorize Email/i)
+    const button = modal.getByText(/^Sign and Authorize Email/i).closest('button')
     expect(button).toBeDisabled()
-    await userEvent.type(screen.getByPlaceholderText('Add email for notifications here'), 'test@email.com')
+    await userEvent.type(modal.getByPlaceholderText('Add email for notifications here'), 'test@email.com')
     await waitFor(() => expect(button).toBeEnabled())
     await userEvent.click(button)
-    expect(screen.getByText('Pending transaction'))
+    expect(modal.getByText('Transaction was canceled.'))
   },
 }
