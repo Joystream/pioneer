@@ -428,7 +428,7 @@ export const EmailSubscriptionModalDecline: Story = {
     hasRegisteredEmail: false,
   },
   play: async ({ canvasElement }) => {
-    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
     const element = await screen.getByText('Sign up to email notifications')
     expect(element)
     await userEvent.click(screen.getByText('Not now'))
