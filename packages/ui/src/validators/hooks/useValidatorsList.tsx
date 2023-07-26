@@ -28,7 +28,7 @@ export const useValidatorsList = () => {
         return {
           member: false,
           address: encodeAddress(address),
-          verification: false,
+          verification: Math.random() > 0.5,
           state: activeValidators.includes(address),
           totalRewards: rewardHistory.reduce((total: BN, data) => total.add(data.eraReward), new BN(0)),
           APR:
