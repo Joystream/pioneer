@@ -449,6 +449,7 @@ export const EmailSubscriptionModalSubscribe: Story = {
   play: async ({ canvasElement }) => {
     const modal = withinModal(canvasElement)
     const button = screen.getByText(/^Sign and Authorize Email/i)
+    expect(button).toBeDisabled()
     await userEvent.type(screen.getByPlaceholderText('Add email for notifications here'), 'test@email.com')
     await waitFor(() => expect(button).toBeEnabled())
     await userEvent.click(button)
