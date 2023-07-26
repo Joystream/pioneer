@@ -467,10 +467,10 @@ export const EmailSubscriptionModalSubscribe: Story = {
   },
   play: async ({ canvasElement }) => {
     const modal = withinModal(canvasElement)
-    const button = modal.getByText(/^Sign and Authorize Email/i).closest('button')
-    expect(button).toBeDisabled()
+    const button = modal.getByText(/^Sign and Authorize Email/i)
+    expect(button.closest('button')).toBeDisabled()
     await userEvent.type(modal.getByPlaceholderText('Add email for notifications here'), 'test@email.com')
-    await waitFor(() => expect(button).toBeEnabled())
+    await waitFor(() => expect(button.closest('button')).toBeEnabled())
     await userEvent.click(button)
     expect(modal.getByText('Transaction was canceled.'))
   },
