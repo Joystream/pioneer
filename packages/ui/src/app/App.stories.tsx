@@ -450,6 +450,7 @@ export const EmailSubscriptionModalSubscribe: Story = {
     const modal = withinModal(canvasElement)
     const button = screen.getByText(/^Sign and Authorize Email/i)
     await userEvent.type(screen.getByPlaceholderText('Add email for notifications here'), 'test@email.com')
+    await waitFor(() => expect(button).toBeEnabled())
     await userEvent.click(button)
     expect(screen.getByText('Pending transaction'))
   },
