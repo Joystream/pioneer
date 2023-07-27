@@ -1,6 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react'
+import { userEvent, within } from '@storybook/testing-library'
 
-import { joy } from '@/mocks/helpers'
+import { joy, selectFromDropdown } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
 
 import { ValidatorList } from './ValidatorList'
@@ -142,3 +143,43 @@ export default {
 type Story = StoryObj<typeof ValidatorList>
 
 export const StatisticsAndLists: Story = {}
+
+export const TestsFilters: Story = {
+  play: async ({ canvasElement, step }) => {
+    const screen = within(canvasElement)
+
+    const searchElement = screen.getByPlaceholderText('Search')
+    const verificationFilter = screen.getAllByText('Verification')[0]
+    const stateFilter = screen.getAllByText('State')[0]
+    const clearFilter = () => {
+      userEvent.click(screen.getByText('Clear all filters'))
+    }
+
+    await step('Verifcation Filter', async () => {
+      await selectFromDropdown(screen, verificationFilter, 'verified')
+      await selectFromDropdown(screen, verificationFilter, 'unverified')
+      await selectFromDropdown(screen, verificationFilter, 'All')
+    })
+    await step('State Filter', async () => {
+      await selectFromDropdown(screen, stateFilter, 'active')
+      await selectFromDropdown(screen, stateFilter, 'waiting')
+      await selectFromDropdown(screen, stateFilter, 'All')
+    })
+    await step('Search', async () => {
+      userEvent.type(searchElement, 'j4RLnWh{enter}')
+      userEvent.type(searchElement, 'j4Rx{enter}')
+    })
+
+    await step('Clear Filter', async () => {
+      await selectFromDropdown(screen, verificationFilter, 'verified')
+      await selectFromDropdown(screen, stateFilter, 'waiting')
+      clearFilter()
+      await selectFromDropdown(screen, stateFilter, 'active')
+      clearFilter()
+      await selectFromDropdown(screen, verificationFilter, 'unverified')
+      await selectFromDropdown(screen, stateFilter, 'waiting')
+      userEvent.type(searchElement, 'j4Rx{enter}')
+      clearFilter()
+    })
+  },
+}
