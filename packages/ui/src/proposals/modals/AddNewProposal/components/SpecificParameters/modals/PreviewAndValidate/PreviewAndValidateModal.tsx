@@ -51,7 +51,7 @@ export const PreviewAndValidateModal = ({ onClose }: PreviewAndValidateModalProp
   const { api } = useApi()
   const { setValue, getValues } = useFormContext()
   const maxTotalAmount = api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount
-  const maxAllowedAccounts = api?.consts.proposalsCodex.fundingRequestProposalMaxAccounts.toNumber()
+  const maxAllowedAccounts = api?.consts.proposalsCodex.fundingRequestProposalMaxAccounts?.toNumber()
   const keyring = useKeyring()
   const { allAccounts } = useMyAccounts()
   const accounts = allAccounts as AccountOption[]
@@ -132,7 +132,7 @@ export const PreviewAndValidateModal = ({ onClose }: PreviewAndValidateModalProp
     }
   }, [totalAmount])
   return (
-    <SidePaneGlass onClick={onBackgroundClick}>
+    <SidePaneGlass onClick={onBackgroundClick} id='sidePanel'>
       <PreviewPanel>
         <PreviewPanelHeader>
           <SidePanelTop>

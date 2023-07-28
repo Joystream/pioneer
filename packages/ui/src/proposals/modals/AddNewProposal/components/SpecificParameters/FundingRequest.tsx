@@ -65,7 +65,7 @@ export const FundingRequest = () => {
                 <TooltipDefault />
               </Tooltip>
             </InlineToggleWrap>
-            <ToggleCheckbox falseLabel="No" trueLabel="Yes" name="fundingRequest.payMultiple" />
+            <ToggleCheckbox falseLabel="No" trueLabel="Yes" name="fundingRequest.payMultiple" id='pay-multiple' />
           </Row>
           {payMultiple && (
             <Row>

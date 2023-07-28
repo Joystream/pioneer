@@ -781,6 +781,46 @@ export const SpecificParametersFundingRequest: Story = {
   }),
 }
 
+export const SpecificParametersMultipleFundingRequest: Story = {
+  play: specificParametersTest('Funding Request', async ({ args, createProposal, modal, step }) => {
+    const bob = member('bob')
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      await userEvent.click(modal.getByTestId('pay-multiple'))
+
+      const csvField = modal.getByTestId('accounts-amounts')
+      
+      // Invalid
+      await userEvent.clear(csvField)
+      await userEvent.type(csvField, `${alice.controllerAccount},500${bob.controllerAccount},500`)
+      expect(modal.findByText(/Not valid CSV format/))
+      expect(nextButton).toBeDisabled()
+
+      // Valid
+      await userEvent.clear(csvField)
+      await userEvent.type(
+        csvField,
+        `${alice.controllerAccount},500\n${bob.controllerAccount},500`
+      )
+      await waitFor(() => expect(modal.queryByText(/Not valid CSV format/)).toBeNull())
+      expect(nextButton).toBeDisabled()
+      const previewButton = getButtonByText(modal, 'Preview and Validate')
+      
+      await userEvent.click(previewButton)
+      await userEvent.click(modal.getByTestId('sidePanel'))
+    })
+
+    step('Transaction parameters', () => {
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({
+        fundingRequest: [{ account: alice.controllerAccount, amount: 500_0000000000 },{ account: bob.controllerAccount, amount: 500_0000000000 }],
+      })
+    })
+  }),
+}
+
 export const SpecificParametersSetReferralCut: Story = {
   play: specificParametersTest('Set Referral Cut', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {

@@ -4,7 +4,6 @@ import * as Yup from 'yup'
 import Reference from 'yup/lib/Reference'
 import { AnyObject } from 'yup/lib/types'
 
-import { isValidAddress } from '@/accounts/model/isValidAddress'
 import { JOY_DECIMAL_PLACES } from '@/common/constants'
 import { formatJoyValue } from '@/common/model/formatters'
 
@@ -43,15 +42,14 @@ export const isValidCSV = (message: string): Yup.TestConfig<any, AnyObject> => (
   message,
   name: 'isValidCSV',
   exclusive: false,
-  test(value: string, testContext) {
+  test(value: string) {
     if (!CSV_PATTERN.test(value)) return false
 
     const pairs = value.split('\n')
-    const keyring = testContext?.options?.context?.keyring
 
     for (const pair of pairs) {
-      const [address, amount] = pair.split(',')
-      if (!Number(amount) || !isValidAddress(address, keyring)) return false
+      const [, amount] = pair.split(',')
+      if (!Number(amount)) return false
     }
 
     return true
