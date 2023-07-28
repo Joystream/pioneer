@@ -1,3 +1,4 @@
+import { expect } from '@storybook/jest'
 import { Meta, StoryObj } from '@storybook/react'
 import { userEvent, within } from '@storybook/testing-library'
 
@@ -151,35 +152,40 @@ export const TestsFilters: Story = {
     const searchElement = screen.getByPlaceholderText('Search')
     const verificationFilter = screen.getAllByText('Verification')[0]
     const stateFilter = screen.getAllByText('State')[0]
-    const clearFilter = () => {
-      userEvent.click(screen.getByText('Clear all filters'))
+    const clearFilter = async () => {
+      expect(screen.getByText('Clear all filters'))
+      await userEvent.click(screen.getByText('Clear all filters'))
     }
 
     await step('Verifcation Filter', async () => {
       await selectFromDropdown(screen, verificationFilter, 'verified')
+      await expect(screen.queryByText('unverifed')).toBeNull()
       await selectFromDropdown(screen, verificationFilter, 'unverified')
+      await expect(screen.queryByText('verifed')).toBeNull()
       await selectFromDropdown(screen, verificationFilter, 'All')
     })
     await step('State Filter', async () => {
       await selectFromDropdown(screen, stateFilter, 'active')
+      await expect(screen.queryByText('waiting')).toBeNull()
       await selectFromDropdown(screen, stateFilter, 'waiting')
+      await expect(screen.queryByText('active')).toBeNull()
       await selectFromDropdown(screen, stateFilter, 'All')
     })
     await step('Search', async () => {
-      userEvent.type(searchElement, 'j4RLnWh{enter}')
-      userEvent.type(searchElement, 'j4Rx{enter}')
+      await userEvent.type(searchElement, 'j4RLnWh{enter}')
+      await userEvent.type(searchElement, 'j4Rx{enter}')
     })
 
     await step('Clear Filter', async () => {
       await selectFromDropdown(screen, verificationFilter, 'verified')
       await selectFromDropdown(screen, stateFilter, 'waiting')
-      clearFilter()
+      await clearFilter()
       await selectFromDropdown(screen, stateFilter, 'active')
-      clearFilter()
+      await clearFilter()
       await selectFromDropdown(screen, verificationFilter, 'unverified')
       await selectFromDropdown(screen, stateFilter, 'waiting')
-      userEvent.type(searchElement, 'j4Rx{enter}')
-      clearFilter()
+      await userEvent.type(searchElement, 'j4Rx{enter}')
+      await clearFilter()
     })
   },
 }
