@@ -1,13 +1,10 @@
 import { createType } from '@joystream/types'
 import { mapValues } from 'lodash'
 
-import { isDefined } from '@/common/utils'
-
 export const asChainData = (data: any): any => {
-  const type = isDefined(data) ? Object.getPrototypeOf(data).constructor.name : typeof data
-  switch (type) {
+  switch (Object.getPrototypeOf(data).constructor.name) {
     case 'Object':
-      return mapValues(data, asChainData)
+      return withUnwrap(mapValues(data, asChainData))
 
     case 'Array':
       return data.map(asChainData)
@@ -22,3 +19,5 @@ export const asChainData = (data: any): any => {
       return data
   }
 }
+
+const withUnwrap = (data: Record<any, any>) => Object.defineProperty(data, 'unwrap', { value: () => data })
