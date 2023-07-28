@@ -132,7 +132,7 @@ export const PreviewAndValidateModal = ({ onClose }: PreviewAndValidateModalProp
     }
   }, [totalAmount])
   return (
-    <SidePaneGlass onClick={onBackgroundClick} id='sidePanel'>
+    <SidePaneGlass onClick={onBackgroundClick} id="sidePanel">
       <PreviewPanel>
         <PreviewPanelHeader>
           <SidePanelTop>
