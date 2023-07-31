@@ -31,7 +31,7 @@ export const useValidatorsList = () => {
           state: activeValidators.includes(address),
           totalRewards: rewardHistory.reduce((total: BN, data) => total.add(data.eraReward), new BN(0)),
           APR:
-            rewardHistory.length === 0
+            rewardHistory.length === 0 || stakingInfo.total.toBn().isZero()
               ? 0
               : new BN(rewardHistory[rewardHistory.length - 1].eraReward)
                   .mul(new BN(1460 * 100))
