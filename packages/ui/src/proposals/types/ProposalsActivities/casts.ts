@@ -81,13 +81,15 @@ const asProposalDiscussionModeChangedActivity: ProposalActivityCast<
   newMode: fields.newMode.__typename === 'ProposalDiscussionThreadModeClosed' ? 'closed' : 'open',
 })
 
-const asProposalExecutedActivity: ProposalActivityCast<ProposalExecutedEventFieldsFragment, ProposalExecutedActivity> =
-  (fields) => ({
-    eventType: fields.__typename,
-    ...asBaseActivity(fields),
-    proposal: asProposalFields(fields.proposal),
-    executedSuccessfully: fields.executionStatus.__typename === 'ProposalStatusExecuted',
-  })
+const asProposalExecutedActivity: ProposalActivityCast<
+  ProposalExecutedEventFieldsFragment,
+  ProposalExecutedActivity
+> = (fields) => ({
+  eventType: fields.__typename,
+  ...asBaseActivity(fields),
+  proposal: asProposalFields(fields.proposal),
+  executedSuccessfully: fields.executionStatus.__typename === 'ProposalStatusExecuted',
+})
 
 const asProposalVotedActivity: ProposalActivityCast<ProposalVotedEventFieldsFragment, ProposalVotedActivity> = (
   fields

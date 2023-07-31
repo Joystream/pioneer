@@ -43,11 +43,8 @@
       {
         "groups": ["builtin", "external", "parent", ["index", "sibling"]],
         "pathGroups": [
-          {
-            "pattern": "@/**",
-            "group": "external",
-            "position": "after"
-          }
+          { "pattern": "@test/**", "position": "after", "group": "builtin" },
+          { "pattern": "@/**", "position": "after", "group": "external" }
         ],
         "pathGroupsExcludedImportTypes": ["builtin"],
         "newlines-between": "always",

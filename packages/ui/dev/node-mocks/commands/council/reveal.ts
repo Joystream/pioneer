@@ -6,7 +6,7 @@ import { signAndSend, withApi } from '../../lib/api'
 import { votes } from './vote'
 
 export const revealVotesCommand = async (api: ApiPromise) => {
-  await mapP(votes(api), ({ accountId, optionsId, salt }) =>
+  await mapP(await votes(api), ({ accountId, optionsId, salt }) =>
     signAndSend(api.tx.referendum.revealVote(salt, optionsId), accountId)
   )
 }
