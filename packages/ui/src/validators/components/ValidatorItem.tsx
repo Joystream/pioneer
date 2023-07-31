@@ -1,7 +1,6 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
-import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { TableListItemAsLinkHover } from '@/common/components/List'
@@ -11,24 +10,17 @@ import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 
 import { Validator } from '../types/Validator'
 
+import { ValidatorInfo } from './ValidatorInfo'
 interface ValidatorItemProps {
   validator: Validator
 }
 export const ValidatorItem = ({ validator }: ValidatorItemProps) => {
   const { address, verification, state, totalRewards, APR } = validator
-  const validatorAccount = useMemo(
-    () => ({
-      name: 'unknown',
-      address: address,
-      source: '',
-    }),
-    [validator]
-  )
 
   return (
     <ValidatorItemWrapper>
       <ValidatorItemWrap>
-        <AccountInfo account={validatorAccount} />
+        <ValidatorInfo address={address} />
         {verification ? (
           <BadgeStatus inverted size="l">
             verified

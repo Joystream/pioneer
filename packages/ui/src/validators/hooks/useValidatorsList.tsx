@@ -26,7 +26,6 @@ export const useValidatorsList = () => {
     return combineLatest([activeValidators$, stakingInfo$, rewardHistory$, validatorInfo$]).pipe(
       map(([activeValidators, stakingInfo, rewardHistory, validatorInfo]) => {
         return {
-          member: false,
           address: encodeAddress(address),
           verification: Math.random() > 0.5,
           state: activeValidators.includes(address),
