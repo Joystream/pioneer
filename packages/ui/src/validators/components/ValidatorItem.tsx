@@ -15,12 +15,12 @@ interface ValidatorItemProps {
   validator: Validator
 }
 export const ValidatorItem = ({ validator }: ValidatorItemProps) => {
-  const { address, verification, state, totalRewards, APR } = validator
+  const { address, member, verification, state, totalRewards, APR } = validator
 
   return (
     <ValidatorItemWrapper>
       <ValidatorItemWrap>
-        <ValidatorInfo address={address} />
+        <ValidatorInfo member={member} address={address} />
         {verification ? (
           <BadgeStatus inverted size="l">
             verified

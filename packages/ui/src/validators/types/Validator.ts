@@ -4,7 +4,7 @@ import { Address } from '@/common/types'
 import { MemberWithDetails } from '@/memberships/types'
 
 export interface Validator {
-  member?:MemberWithDetails
+  member?: MemberWithDetails
   address: Address
   verification: boolean
   state: boolean

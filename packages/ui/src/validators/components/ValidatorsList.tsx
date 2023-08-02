@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { List, ListItem } from '@/common/components/List'
@@ -13,8 +13,6 @@ interface ValidatorsListProps {
 }
 
 export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
-  const sortedValidators = useMemo(() => validators, [validators])
-
   return (
     <ValidatorsListWrap>
       <ListHeaders>
@@ -26,7 +24,7 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
         <ListHeader>Started On</ListHeader>
       </ListHeaders>
       <List>
-        {sortedValidators?.map((validator) => (
+        {validators?.map((validator) => (
           <ListItem key={validator.address} borderless>
             <ValidatorItem validator={validator} />
           </ListItem>
@@ -58,7 +56,7 @@ const ListHeaders = styled.div`
   padding-right: 8px;
 `
 
-export const ListHeader = styled.span`
+const ListHeader = styled.span`
   display: flex;
   justify-content: flex-end;
   align-items: center;

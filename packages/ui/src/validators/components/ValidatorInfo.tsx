@@ -2,34 +2,26 @@ import { Identicon } from '@polkadot/react-identicon'
 import React from 'react'
 import styled from 'styled-components'
 
-import { BadgeStatus } from '@/common/components/BadgeStatus/BadgeStatus'
 import { CopyComponent } from '@/common/components/CopyComponent'
 import { DiscordIcon, TelegramIcon, TwitterIcon } from '@/common/components/icons/socials'
-import { Tooltip } from '@/common/components/Tooltip'
+import { DefaultTooltip, Tooltip } from '@/common/components/Tooltip'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
 import { shortenAddress } from '@/common/model/formatters'
 import { Address } from '@/common/types'
-import { MemberIcons, MemberStatusTooltip } from '@/memberships/components'
+import { MemberIcons } from '@/memberships/components'
 import { Avatar } from '@/memberships/components/Avatar'
 import { MemberWithDetails } from '@/memberships/types'
 
 interface ValidatorInfoProps {
   address: Address
-  member: MemberWithDetails
+  member?: MemberWithDetails
   isOnDark?: boolean
 }
 
-export const ValidatorInfo = React.memo(({ address, member, isOnDark }: ValidatorInfoProps) => {
-
-  const twitter = member?.externalResources?.find(({ source }) => {
-    source === 'TWITTER'
-  })
-  const telegram = member?.externalResources?.find(({ source }) => {
-    source === 'TELEGRAM'
-  })
-  const discord = member?.externalResources?.find(({ source }) => {
-    source === 'DISCORD'
-  })
+export const ValidatorInfo = React.memo(({ address, member }: ValidatorInfoProps) => {
+  const twitter = member?.externalResources?.find(({ source }) => source === 'TWITTER')
+  const telegram = member?.externalResources?.find(({ source }) => source === 'TELEGRAM')
+  const discord = member?.externalResources?.find(({ source }) => source === 'DISCORD')
 
   return (
     <ValidatorInfoWrap>
@@ -44,23 +36,23 @@ export const ValidatorInfo = React.memo(({ address, member, isOnDark }: Validato
           <MemberIcons>
             {twitter && (
               <Tooltip tooltipText={twitter.value}>
-                <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'tooltipondark' : 'tooltiponlight'}>
+                <SocialTooltip>
                   <TwitterIcon />
-                </MemberStatusTooltip>
+                </SocialTooltip>
               </Tooltip>
             )}
             {telegram && (
               <Tooltip tooltipText={telegram.value}>
-                <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'tooltipondark' : 'tooltiponlight'}>
+                <SocialTooltip>
                   <TelegramIcon />
-                </MemberStatusTooltip>
+                </SocialTooltip>
               </Tooltip>
             )}
             {discord && (
               <Tooltip tooltipText={discord.value}>
-                <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'tooltipondark' : 'tooltiponlight'}>
+                <SocialTooltip>
                   <DiscordIcon />
-                </MemberStatusTooltip>
+                </SocialTooltip>
               </Tooltip>
             )}
           </MemberIcons>
@@ -83,10 +75,6 @@ const ValidatorInfoWrap = styled.div`
   align-items: center;
   width: 100%;
   justify-self: start;
-
-  & ${BadgeStatus} {
-    grid-area: accounttype;
-  }
 `
 
 const AccountPhoto = styled.div`
@@ -97,7 +85,6 @@ const AccountPhoto = styled.div`
   align-self: center;
   height: 40px;
   width: 40px;
-  background-color: ${Colors.Blue[500]};
   border-radius: ${BorderRad.full};
   overflow: hidden;
 `
@@ -130,4 +117,21 @@ const ValidatorHandle = styled.h5`
 
 const AccountCopyAddress = styled(CopyComponent)`
   grid-area: accountaddress;
+`
+const SocialTooltip = styled(DefaultTooltip)`
+  > svg {
+    width: 8px;
+    height; 8px;
+    cursor: pointer;
+    path {
+      fill: ${Colors.Black[900]};
+    }
+  }
+  &:hover {
+    border-color: ${Colors.Blue[300]} !important;
+    background: transparent !important;
+    path {
+      fill: ${Colors.Blue[500]};
+    }
+  }
 `
