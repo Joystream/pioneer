@@ -11,16 +11,15 @@ import { shortenAddress } from '@/common/model/formatters'
 import { Address } from '@/common/types'
 import { MemberIcons, MemberStatusTooltip } from '@/memberships/components'
 import { Avatar } from '@/memberships/components/Avatar'
-
-import { useAddressToMember } from '../hooks/useAddressToMember'
+import { MemberWithDetails } from '@/memberships/types'
 
 interface ValidatorInfoProps {
   address: Address
+  member: MemberWithDetails
   isOnDark?: boolean
 }
 
-export const ValidatorInfo = React.memo(({ address, isOnDark }: ValidatorInfoProps) => {
-  const { member } = useAddressToMember(address)
+export const ValidatorInfo = React.memo(({ address, member, isOnDark }: ValidatorInfoProps) => {
 
   const twitter = member?.externalResources?.find(({ source }) => {
     source === 'TWITTER'
