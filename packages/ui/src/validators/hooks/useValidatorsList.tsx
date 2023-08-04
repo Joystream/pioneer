@@ -5,8 +5,10 @@ import { of, map, switchMap, Observable, combineLatest } from 'rxjs'
 import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { Api } from '@/api'
 import { useApi } from '@/api/hooks/useApi'
+import { ERAS_PER_YEAR } from '@/common/constants'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { Address } from '@/common/types'
+import { last } from '@/common/utils'
 import { MemberWithDetails } from '@/memberships/types'
 
 import { Verification, State, Validator } from '../types'
@@ -92,21 +94,23 @@ export const useValidatorsList = () => {
     return combineLatest([activeValidators$, stakingInfo$, rewardHistory$, validatorInfo$]).pipe(
       map(([activeValidators, stakingInfo, rewardHistory, validatorInfo]) => {
         const encodedAddress = encodeAddress(address)
+        const apr =
+          rewardHistory.length &&
+          stakingInfo.total.toNumber() &&
+          last(rewardHistory)
+            .eraReward.toBn()
+            .muln(ERAS_PER_YEAR)
+            .mul(validatorInfo.commission.toBn())
+            .div(stakingInfo.total.toBn())
+            .divn(10 ** 7)
+            .toNumber()
         return {
           member: getMember(encodedAddress),
           address: encodedAddress,
           isVerified: verifiedValidators.includes(encodedAddress),
           isActive: activeValidators.includes(address),
           totalRewards: rewardHistory.reduce((total: BN, data) => total.add(data.eraReward), new BN(0)),
-          APR:
-            rewardHistory.length === 0 || stakingInfo.total.toBn().isZero()
-              ? 0
-              : new BN(rewardHistory[rewardHistory.length - 1].eraReward)
-                  .mul(new BN(365 * 4 * 100))
-                  .mul(validatorInfo.commission.toBn())
-                  .div(new BN('1000000000'))
-                  .div(stakingInfo.total.toBn())
-                  .toNumber(),
+          APR: apr,
           startedOn: 'Dec 2022',
         }
       })
