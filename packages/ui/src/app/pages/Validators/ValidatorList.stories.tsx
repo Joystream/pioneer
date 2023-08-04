@@ -157,9 +157,8 @@ export const TestsFilters: Story = {
       await userEvent.click(screen.getByText('Clear all filters'))
     }
     const expectNumberOfValidatorsToBe = async (n: number) => {
-      const liElements = screen.getAllByRole('listitem')
+      const liElements = screen.queryAllByRole('listitem')
       const validatorElements = liElements.filter((li) => li.textContent?.includes('Nominate'))
-      alert(validatorElements.length)
       await expect(validatorElements.length).toBe(n)
     }
 
@@ -203,12 +202,12 @@ export const TestsFilters: Story = {
       await selectFromDropdown(screen, stateFilter, 'active')
       await expectNumberOfValidatorsToBe(4)
       await clearFilter()
-      await expectNumberOfValidatorsToBe(0)
+      await expectNumberOfValidatorsToBe(11)
       await userEvent.type(searchElement, 'j4R{enter}')
       await expectNumberOfValidatorsToBe(9)
       await expect(screen.getByText('Clear all filters'))
       await clearFilter()
-      await expectNumberOfValidatorsToBe(0)
+      await expectNumberOfValidatorsToBe(11)
     })
   },
 }
