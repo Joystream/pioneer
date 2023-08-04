@@ -1,6 +1,6 @@
 import { expect } from '@storybook/jest'
 import { Meta, StoryObj } from '@storybook/react'
-import { userEvent, within } from '@storybook/testing-library'
+import { userEvent, waitFor, within } from '@storybook/testing-library'
 
 import { joy, selectFromDropdown } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
@@ -185,13 +185,20 @@ export const TestsFilters: Story = {
       await selectFromDropdown(screen, stateFilter, 'All')
     })
     await step('Search', async () => {
-      await userEvent.type(searchElement, 'j4Rh1c{enter}')
+      await userEvent.type(searchElement, 'j4Rh1c')
+      await waitFor(async () => {
+        await userEvent.type(searchElement, '{enter}')
+        expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(1)
+      })
       await expect(screen.getByText('alice'))
-      await expectNumberOfValidatorsToBe(1)
-      await userEvent.type(searchElement, 'j4R{enter}')
+      await userEvent.clear(searchElement)
+      await userEvent.type(searchElement, 'j4R')
+      await waitFor(async () => {
+        await userEvent.type(searchElement, '{enter}')
+        expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(9)
+      })
       await expect(screen.getByText('alice'))
       await expect(screen.getByText('bob'))
-      await expectNumberOfValidatorsToBe(9)
     })
 
     await step('Clear Filter', async () => {
