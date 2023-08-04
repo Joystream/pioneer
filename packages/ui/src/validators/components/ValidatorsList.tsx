@@ -25,7 +25,7 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
       </ListHeaders>
       <List>
         {validators?.map((validator) => (
-          <ListItem key={validator.address} borderless>
+          <ListItem key={validator.address}>
             <ValidatorItem validator={validator} />
           </ListItem>
         ))}
@@ -43,6 +43,13 @@ const ValidatorsListWrap = styled.div`
     'validatorslist';
   grid-row-gap: 4px;
   width: 100%;
+
+  ${List} {
+    gap: 8px;
+  }
+  ${ListItem} {
+    background: ${Colors.Black[50]};
+  }
 `
 
 const ListHeaders = styled.div`

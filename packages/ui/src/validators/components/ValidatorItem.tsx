@@ -15,13 +15,13 @@ interface ValidatorItemProps {
   validator: Validator
 }
 export const ValidatorItem = ({ validator }: ValidatorItemProps) => {
-  const { address, member, verification, state, totalRewards, APR } = validator
+  const { address, member, isVerified, isActive, totalRewards, APR, startedOn } = validator
 
   return (
     <ValidatorItemWrapper>
       <ValidatorItemWrap>
         <ValidatorInfo member={member} address={address} />
-        {verification ? (
+        {isVerified ? (
           <BadgeStatus inverted size="l">
             verified
           </BadgeStatus>
@@ -29,11 +29,11 @@ export const ValidatorItem = ({ validator }: ValidatorItemProps) => {
           <div></div>
         )}
         <BadgeStatus inverted size="l">
-          {state ? 'active' : 'waiting'}
+          {isActive ? 'active' : 'waiting'}
         </BadgeStatus>
         <TokenValue size="xs" value={totalRewards} />
-        <TextMedium bold> {APR} </TextMedium>
-        <TextSmall> Dec 2022 </TextSmall>
+        <TextMedium bold>{APR}</TextMedium>
+        <TextSmall>{startedOn}</TextSmall>
         <ButtonPrimary size="small">Nominate</ButtonPrimary>
       </ValidatorItemWrap>
     </ValidatorItemWrapper>
@@ -61,7 +61,7 @@ export const ValidatorItemWrap = styled.div`
   align-items: center;
   width: 100%;
   height: ${Sizes.accountHeight};
-  padding: 16px 8px 16px 16px;
+  padding: 16px;
   margin-left: -1px;
 
   ${Skeleton} {

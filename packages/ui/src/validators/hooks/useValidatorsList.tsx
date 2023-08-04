@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react'
 import { of, map, switchMap, Observable, combineLatest } from 'rxjs'
 
 import { encodeAddress } from '@/accounts/model/encodeAddress'
+import { Api } from '@/api'
 import { useApi } from '@/api/hooks/useApi'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { Address } from '@/common/types'
 import { MemberWithDetails } from '@/memberships/types'
-import { ProxyApi } from '@/proxyApi'
 
 import { Verification, State, Validator } from '../types'
 
@@ -78,11 +78,11 @@ const getMember = (address: Address) =>
 export const useValidatorsList = () => {
   const { api } = useApi()
   const [search, setSearch] = useState('')
-  const [verification, setVerification] = useState<Verification>(null)
-  const [state, setState] = useState<State>(null)
+  const [isVerified, setIsVerified] = useState<Verification>(null)
+  const [isActive, setIsActive] = useState<State>(null)
   const [visibleValidators, setVisibleValidators] = useState<Validator[]>([])
 
-  const getValidatorInfo = (address: string, api: ProxyApi): Observable<Validator> => {
+  const getValidatorInfo = (address: string, api: Api): Observable<Validator> => {
     const activeValidators$ = api.query.session.validators()
     const stakingInfo$ = api.query.staking
       .activeEra()
@@ -95,25 +95,25 @@ export const useValidatorsList = () => {
         return {
           member: getMember(encodedAddress),
           address: encodedAddress,
-          verification: verifiedValidators.includes(encodedAddress),
-          state: activeValidators.includes(address),
+          isVerified: verifiedValidators.includes(encodedAddress),
+          isActive: activeValidators.includes(address),
           totalRewards: rewardHistory.reduce((total: BN, data) => total.add(data.eraReward), new BN(0)),
           APR:
             rewardHistory.length === 0 || stakingInfo.total.toBn().isZero()
               ? 0
               : new BN(rewardHistory[rewardHistory.length - 1].eraReward)
-                  .mul(new BN(1460 * 100))
+                  .mul(new BN(365 * 4 * 100))
                   .mul(validatorInfo.commission.toBn())
                   .div(new BN('1000000000'))
                   .div(stakingInfo.total.toBn())
                   .toNumber(),
-          startedOn: Date.now(),
+          startedOn: 'Dec 2022',
         }
       })
     )
   }
 
-  const getValidatorsInfo = (api: ProxyApi) => {
+  const getValidatorsInfo = (api: Api) => {
     return api.query.staking.validators.entries().pipe(
       switchMap((entries) => {
         const validatorAddresses = entries.map((entry) => entry[0].args[0].toString())
@@ -130,13 +130,13 @@ export const useValidatorsList = () => {
       setVisibleValidators(
         allValidators
           .filter((validator) => {
-            if (state === 'active') return validator.state
-            else if (state === 'waiting') return !validator.state
+            if (isActive === 'active') return validator.isActive
+            else if (isActive === 'waiting') return !validator.isActive
             else return true
           })
           .filter((validator) => {
-            if (verification === 'verified') return validator.verification
-            else if (verification === 'unverified') return !validator.verification
+            if (isVerified === 'verified') return validator.isVerified
+            else if (isVerified === 'unverified') return !validator.isVerified
             else return true
           })
           .filter((validator) => {
@@ -144,7 +144,7 @@ export const useValidatorsList = () => {
           })
       )
     }
-  }, [allValidators, search, verification, state])
+  }, [allValidators, search, isVerified, isActive])
 
   return {
     visibleValidators,
@@ -152,10 +152,10 @@ export const useValidatorsList = () => {
     filter: {
       search,
       setSearch,
-      verification,
-      setVerification,
-      state,
-      setState,
+      isVerified,
+      setIsVerified,
+      isActive,
+      setIsActive,
     },
   }
 }

@@ -11,10 +11,10 @@ interface ValidatorFilterProps {
   filter: {
     search: string
     setSearch: (search: string) => void
-    verification: Verification
-    setVerification: (verification: Verification) => void
-    state: State
-    setState: (state: State) => void
+    isVerified: Verification
+    setIsVerified: (isVerified: Verification) => void
+    isActive: State
+    setIsActive: (isActive: State) => void
   }
 }
 
@@ -25,11 +25,11 @@ export const ValidatorsFilter = ({ filter }: ValidatorFilterProps) => {
   }, [filter.search])
   const display = () => filter.setSearch(search)
   const clear =
-    filter.search || filter.verification || filter.state
+    filter.search || filter.isVerified || filter.isActive
       ? () => {
           filter.setSearch('')
-          filter.setVerification(null)
-          filter.setState(null)
+          filter.setIsVerified(null)
+          filter.setIsActive(null)
         }
       : undefined
 
@@ -40,10 +40,15 @@ export const ValidatorsFilter = ({ filter }: ValidatorFilterProps) => {
           <FilterSelect
             title="Verification"
             options={['verified', 'unverified']}
-            value={filter.verification}
-            onChange={filter.setVerification}
+            value={filter.isVerified}
+            onChange={filter.setIsVerified}
           />
-          <FilterSelect title="State" options={['active', 'waiting']} value={filter.state} onChange={filter.setState} />
+          <FilterSelect
+            title="State"
+            options={['active', 'waiting']}
+            value={filter.isActive}
+            onChange={filter.setIsActive}
+          />
         </SelectFields>
         <SearchBox label="Search" value={search} onApply={display} onChange={setSearch} />
       </Fields>

@@ -6,9 +6,9 @@ import { MemberWithDetails } from '@/memberships/types'
 export interface Validator {
   member?: MemberWithDetails
   address: Address
-  verification: boolean
-  state: boolean
+  isVerified: boolean
+  isActive: boolean
   totalRewards: BN
   APR: number
-  startedOn: number
+  startedOn: string
 }
