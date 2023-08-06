@@ -795,7 +795,7 @@ export const SpecificParametersMultipleFundingRequest: Story = {
       // Invalid
       await userEvent.clear(csvField)
       await userEvent.type(csvField, `${alice.controllerAccount},500${bob.controllerAccount},500`)
-      expect(modal.findByText(/Not valid CSV format/))
+      expect(await modal.findByText(/Not valid CSV format/))
       expect(nextButton).toBeDisabled()
 
       // Valid
