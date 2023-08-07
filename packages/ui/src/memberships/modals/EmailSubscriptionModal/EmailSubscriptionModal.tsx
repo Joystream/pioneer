@@ -54,17 +54,11 @@ export const EmailSubscriptionModal = () => {
     )
   }
 
-  if (state.matches('error') || state.matches('canceled')) {
+  if (state.matches('error')) {
     return (
       <FailureModal onClose={hideModal}>
-        {state.matches('canceled') ? (
-          <ResultText>Transaction was canceled.</ResultText>
-        ) : (
-          <>
-            There was a problem registering your email.
-            <ResultText>We could not register your email at the moment! Please, try again later!</ResultText>
-          </>
-        )}
+        There was a problem registering your email.
+        <ResultText>We could not register your email at the moment! Please, try again later!</ResultText>
       </FailureModal>
     )
   }

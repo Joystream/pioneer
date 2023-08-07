@@ -472,6 +472,6 @@ export const EmailSubscriptionModalSubscribe: Story = {
     await userEvent.type(modal.getByPlaceholderText('Add email for notifications here'), 'test@email.com')
     await waitFor(() => expect(button.closest('button')).toBeEnabled())
     await userEvent.click(button)
-    expect(modal.getByText('Transaction was canceled.'))
+    expect(modal.getByText('Pending transaction'))
   },
 }

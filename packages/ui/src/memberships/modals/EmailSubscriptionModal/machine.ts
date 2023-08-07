@@ -16,7 +16,6 @@ type EmailSubscriptionState =
   | { value: 'transaction'; context: Context }
   | { value: 'success'; context: Context }
   | { value: 'error'; context: Context }
-  | { value: 'canceled'; context: EmptyObject }
 
 export type EmailSubscriptionEvent =
   | { type: 'DONE'; email: string }
@@ -70,7 +69,7 @@ export const EmailSubscriptionMachine = createMachine<Partial<Context>, EmailSub
         },
         cancel: {
           target: 'canceled',
-          action: 'BACK',
+          action: 'prepare',
         },
       }),
     },
