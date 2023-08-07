@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -10,6 +11,7 @@ import { CandidateCardProps, CandidateCard, CandidateCardCandidate } from './Can
 interface CandidateCardListCandidate extends CandidateCardCandidate {
   isMyCandidate?: boolean
   voted?: boolean
+  myStake?: BN
 }
 
 interface CandidatesListProps extends Pick<CandidateCardProps, 'canVote' | 'isPreview'> {
@@ -34,8 +36,15 @@ export const CandidateCardList = ({ candidates = [], isLoading, canVote }: Candi
 
   return (
     <CandidatesListStyles>
-      {candidates.map(({ voted, isMyCandidate, ...candidate }, index) => (
-        <CandidateCard key={index} candidate={candidate} voted={voted} withdrawable={isMyCandidate} canVote={canVote} />
+      {candidates.map(({ voted, isMyCandidate, myStake, ...candidate }, index) => (
+        <CandidateCard
+          key={index}
+          candidate={candidate}
+          voted={voted}
+          withdrawable={isMyCandidate}
+          canVote={canVote}
+          myStake={myStake}
+        />
       ))}
     </CandidatesListStyles>
   )
