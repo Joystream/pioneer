@@ -67,6 +67,10 @@ export const EmailSubscriptionMachine = createMachine<Partial<Context>, EmailSub
         metaMessages: {
           error: 'There was a problem during the email subscription.',
         },
+        cancel: {
+          target: 'canceled',
+          action: 'prepare',
+        },
       }),
     },
   }

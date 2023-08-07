@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-// import { useApi } from '@/api/hooks/useApi'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { FailureModal } from '@/common/components/FailureModal'
 import { ResultText } from '@/common/components/Modal'
 import { WaitModal } from '@/common/components/WaitModal'
@@ -13,18 +13,32 @@ import { EmailSubscriptionMachine } from './machine'
 import { EmailSubscriptionForm } from './types'
 
 export const EmailSubscriptionModal = () => {
-  // const { api } = useApi()
   const {
     hideModal,
     modalData: { member },
   } = useModal<EmailSubscriptionModalCall>()
 
+  const { wallet } = useMyAccounts()
   const [state, send] = useMachine(EmailSubscriptionMachine)
+
+  const signEmail = async () => {
+    const timestamp = Date.now()
+    try {
+      const signature = await wallet?.signer.signPayload({
+        address: member.controllerAccount,
+        data: `${member.id}:${timestamp}`,
+      })
+      if (signature) {
+        send('SIGNED', { signature: signature.signature, timestamp })
+      }
+    } catch (error) {
+      send('CANCEL')
+    }
+  }
 
   useEffect(() => {
     if (state.matches('signature')) {
-      // const timestamp = new Date()
-      // api?.sign(member.controllerAccount, `${member.id}:${timestamp}`)
+      signEmail()
     }
   }, [state])
 

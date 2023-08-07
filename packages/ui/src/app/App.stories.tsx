@@ -24,6 +24,7 @@ type Args = {
   hasAccounts: boolean
   hasWallet: boolean
   isRPCNodeConnected: boolean
+  hasRegisteredEmail: boolean
   onBuyMembership: CallableFunction
   onTransfer: CallableFunction
 }
@@ -66,6 +67,7 @@ export default {
     hasFunds: true,
     hasWallet: true,
     isRPCNodeConnected: true,
+    hasRegisteredEmail: true,
   },
 
   parameters: {
@@ -76,7 +78,6 @@ export default {
         balances: args.hasFunds ? parameters.totalBalance : 0,
         ...(args.hasMemberships ? { member } : { account: { name: member.handle, address: member.controllerAccount } }),
       })
-
       return {
         accounts: {
           active: args.isLoggedIn ? 'alice' : undefined,
@@ -117,6 +118,10 @@ export default {
             data: { membershipByUniqueInput: { ...bob, ...MEMBER_DATA, invitees: [] } },
           },
         ],
+
+        localStorage: {
+          membersEmail: args.hasRegisteredEmail ? JSON.stringify({ 0: 'alice@example.com' }) : '',
+        },
       }
     },
   },
@@ -406,5 +411,67 @@ export const BuyMembershipTxFailure: Story = {
 
     expect(await screen.findByText('Failure'))
     expect(await modal.findByText('Some error message'))
+  },
+}
+
+// ----------------------------------------------------------------------------
+// Test Emil Subsciption Modal
+// ----------------------------------------------------------------------------
+export const EmailSubscriptionModalDecline: Story = {
+  args: {
+    isLoggedIn: true,
+    hasMemberships: true,
+    hasAccounts: true,
+    hasFunds: true,
+    hasWallet: true,
+    isRPCNodeConnected: true,
+    hasRegisteredEmail: false,
+  },
+  play: async ({ canvasElement }) => {
+    const modal = withinModal(canvasElement)
+    const element = await modal.getByText('Sign up to email notifications')
+    expect(element)
+    await userEvent.click(modal.getByText('Not now'))
+    expect(element).not.toBeInTheDocument()
+  },
+}
+
+export const EmailSubscriptionModalWrongEmail: Story = {
+  args: {
+    isLoggedIn: true,
+    hasMemberships: true,
+    hasAccounts: true,
+    hasFunds: true,
+    hasWallet: true,
+    isRPCNodeConnected: true,
+    hasRegisteredEmail: false,
+  },
+  play: async ({ canvasElement }) => {
+    const modal = withinModal(canvasElement)
+    const button = modal.getByText(/^Sign and Authorize Email/i).closest('button')
+    expect(button).toBeDisabled()
+    await userEvent.type(modal.getByPlaceholderText('Add email for notifications here'), 'test@email')
+    expect(button).toBeDisabled()
+  },
+}
+
+export const EmailSubscriptionModalSubscribe: Story = {
+  args: {
+    isLoggedIn: true,
+    hasMemberships: true,
+    hasAccounts: true,
+    hasFunds: true,
+    hasWallet: true,
+    isRPCNodeConnected: true,
+    hasRegisteredEmail: false,
+  },
+  play: async ({ canvasElement }) => {
+    const modal = withinModal(canvasElement)
+    const button = modal.getByText(/^Sign and Authorize Email/i)
+    expect(button.closest('button')).toBeDisabled()
+    await userEvent.type(modal.getByPlaceholderText('Add email for notifications here'), 'test@email.com')
+    await waitFor(() => expect(button.closest('button')).toBeEnabled())
+    await userEvent.click(button)
+    expect(modal.getByText('Pending transaction'))
   },
 }

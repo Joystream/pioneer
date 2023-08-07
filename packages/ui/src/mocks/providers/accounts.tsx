@@ -153,7 +153,11 @@ const WALLET: Wallet = {
   title: 'bar',
   installUrl: 'http://example.com',
   logo: { src: PolkadotLogo, alt: 'Wallet logo' },
-  signer: {},
+  signer: {
+    signPayload: async () => ({
+      signature: '0x123',
+    }),
+  },
   extension: {},
   getAccounts: async () => [],
   subscribeAccounts: () => undefined,
