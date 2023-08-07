@@ -15,7 +15,7 @@ interface ValidatorItemProps {
   validator: Validator
 }
 export const ValidatorItem = ({ validator }: ValidatorItemProps) => {
-  const { address, member, isVerified, isActive, totalRewards, APR, startedOn } = validator
+  const { address, member, isVerified, isActive, totalRewards, APR } = validator
 
   return (
     <ValidatorItemWrapper>
@@ -33,7 +33,6 @@ export const ValidatorItem = ({ validator }: ValidatorItemProps) => {
         </BadgeStatus>
         <TokenValue size="xs" value={totalRewards} />
         <TextMedium bold>{APR}</TextMedium>
-        <TextSmall>{startedOn}</TextSmall>
         <ButtonPrimary size="small">Nominate</ButtonPrimary>
       </ValidatorItemWrap>
     </ValidatorItemWrapper>
@@ -54,7 +53,7 @@ const ValidatorItemWrapper = styled.div`
 
 export const ValidatorItemWrap = styled.div`
   display: grid;
-  grid-template-columns: 200px repeat(2, 80px) 120px 50px 80px 100px;
+  grid-template-columns: 250px 80px 80px 120px 80px 120px;
   grid-template-rows: 1fr;
   justify-content: space-between;
   justify-items: end;

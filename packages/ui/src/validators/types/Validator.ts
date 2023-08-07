@@ -10,5 +10,4 @@ export interface Validator {
   isActive: boolean
   totalRewards: BN
   APR: number
-  startedOn: string
 }

@@ -102,7 +102,7 @@ export const useValidatorsList = () => {
             .muln(ERAS_PER_YEAR)
             .mul(validatorInfo.commission.toBn())
             .div(stakingInfo.total.toBn())
-            .divn(10 ** 7)
+            .divn(10 ** 7) // Convert from Perbill to Percent
             .toNumber()
         return {
           member: getMember(encodedAddress),
@@ -111,7 +111,6 @@ export const useValidatorsList = () => {
           isActive: activeValidators.includes(address),
           totalRewards: rewardHistory.reduce((total: BN, data) => total.add(data.eraReward), new BN(0)),
           APR: apr,
-          startedOn: 'Dec 2022',
         }
       })
     )

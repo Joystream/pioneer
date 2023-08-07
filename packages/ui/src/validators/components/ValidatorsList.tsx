@@ -21,7 +21,6 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
         <ListHeader>State</ListHeader>
         <ListHeader>Total Reward</ListHeader>
         <ListHeader>APR</ListHeader>
-        <ListHeader>Started On</ListHeader>
       </ListHeaders>
       <List>
         {validators?.map((validator) => (
@@ -56,7 +55,7 @@ const ListHeaders = styled.div`
   display: grid;
   grid-area: validatorstablenav;
   grid-template-rows: 1fr;
-  grid-template-columns: 200px repeat(2, 80px) 120px 50px 80px 100px;
+  grid-template-columns: 250px 80px 80px 120px 80px 120px;
   justify-content: space-between;
   width: 100%;
   padding-left: 16px;

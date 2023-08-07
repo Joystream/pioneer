@@ -91,7 +91,7 @@ export default {
               },
               erasValidatorReward: joy(0.123456),
               erasStakers: {
-                total: joy(0.1),
+                total: joy(400),
                 own: joy(0.0001),
                 others: [
                   { who: 'j4WGdFxqTkyAgzJiTbEBeRseP12dPEvJgf2Wy9qkPa68XSP55', value: joy(0.2) },
@@ -130,7 +130,7 @@ export default {
                   ['j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt'],
                   ['j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM'],
                 ],
-                commission: 0.0000011 * 10 ** 9,
+                commission: 0.05 * 10 ** 9,
                 blocked: false,
               },
             },
