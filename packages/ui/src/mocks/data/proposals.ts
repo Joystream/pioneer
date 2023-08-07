@@ -203,6 +203,7 @@ export const proposalsPagesChain = (
 
         proposalsCodex: {
           fundingRequestProposalMaxTotalAmount: joy(166_666),
+          fundingRequestProposalMaxAccounts:2,
           setMaxValidatorCountProposalMaxValidators,
 
           ...Object.fromEntries(

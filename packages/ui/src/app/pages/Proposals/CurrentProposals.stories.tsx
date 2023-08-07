@@ -784,6 +784,7 @@ export const SpecificParametersFundingRequest: Story = {
 export const SpecificParametersMultipleFundingRequest: Story = {
   play: specificParametersTest('Funding Request', async ({ args, createProposal, modal, step }) => {
     const bob = member('bob')
+    const charlie = member('charlie')
     await createProposal(async () => {
       const nextButton = getButtonByText(modal, 'Create proposal')
       expect(nextButton).toBeDisabled()
@@ -796,17 +797,60 @@ export const SpecificParametersMultipleFundingRequest: Story = {
       await userEvent.clear(csvField)
       await userEvent.type(csvField, `${alice.controllerAccount},500${bob.controllerAccount},500`)
       expect(await modal.findByText(/Not valid CSV format/))
+      // ensure its not being open-able while the CSV syntax is valid
+      const previewButton = getButtonByText(modal, 'Preview and Validate')
+      await userEvent.click(previewButton)
+      await waitFor(() => expect(modal.queryByTestId('sidePanel-overlay')).toBeNull())
       expect(nextButton).toBeDisabled()
+
+      // Invalid Accounts error
+      await userEvent.clear(csvField)
+      await userEvent.type(csvField, `5GNJqTPy,500\n${bob.controllerAccount},500`)
+
+      await waitFor(() => expect(modal.queryByText(/Not valid CSV format/)).toBeNull())
+      expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
+      expect(nextButton).toBeDisabled()
+
+      await userEvent.click(previewButton)
+      expect(await modal.findByText(/Incorrect destination accounts detected/))
+      await userEvent.click(modal.getByTestId('sidePanel-overlay'))
+
+      // Max Amount error
+      await userEvent.clear(csvField)
+      await userEvent.type(csvField, `${alice.controllerAccount},166667\n${bob.controllerAccount},500`)
+      expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
+      expect(nextButton).toBeDisabled()
+      await userEvent.click(previewButton)
+      expect(await modal.findByText(/Max payment amount is exceeded/))
+      await userEvent.click(modal.getByTestId('sidePanel-overlay')) //ensure create proposal is still disabled
+      expect(nextButton).toBeDisabled()
+
+      // Max Allowed Accounts error
+      await userEvent.clear(csvField)
+      await userEvent.type(
+        csvField,
+        `${alice.controllerAccount},400\n${bob.controllerAccount},500\n${charlie.controllerAccount},500`
+      )
+      expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
+      expect(nextButton).toBeDisabled()
+      await userEvent.click(previewButton)
+      expect(await modal.findByText(/Maximum allowed accounts exceeded/))
+      await userEvent.click(modal.getByTestId('sidePanel-overlay')) //ensure create proposal is still disabled
+      expect(nextButton).toBeDisabled()
+
+      //  delete one account from the list'
+      await userEvent.click(previewButton)
+      await userEvent.click(modal.getByTestId('removeAccount-2'))
+      await waitFor(() => expect(modal.queryByText(/Maximum allowed accounts exceeded/)).toBeNull())
+      await userEvent.click(modal.getByTestId('sidePanel-overlay'))
 
       // Valid
       await userEvent.clear(csvField)
       await userEvent.type(csvField, `${alice.controllerAccount},500\n${bob.controllerAccount},500`)
-      await waitFor(() => expect(modal.queryByText(/Not valid CSV format/)).toBeNull())
       expect(nextButton).toBeDisabled()
-      const previewButton = getButtonByText(modal, 'Preview and Validate')
 
       await userEvent.click(previewButton)
-      await userEvent.click(modal.getByTestId('sidePanel'))
+      await userEvent.click(modal.getByTestId('sidePanel-overlay'))
     })
 
     step('Transaction parameters', () => {

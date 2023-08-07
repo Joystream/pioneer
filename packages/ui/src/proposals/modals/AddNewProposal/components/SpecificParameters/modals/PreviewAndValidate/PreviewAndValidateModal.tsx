@@ -132,7 +132,7 @@ export const PreviewAndValidateModal = ({ onClose }: PreviewAndValidateModalProp
     }
   }, [totalAmount])
   return (
-    <SidePaneGlass onClick={onBackgroundClick} id="sidePanel">
+    <SidePaneGlass onClick={onBackgroundClick} id="sidePanel-overlay">
       <PreviewPanel>
         <PreviewPanelHeader>
           <SidePanelTop>
@@ -158,7 +158,7 @@ export const PreviewAndValidateModal = ({ onClose }: PreviewAndValidateModalProp
                     <InfoValue>
                       <TokenValue value={previewAccount.amount} />
                     </InfoValue>
-                    <CloseButton onClick={() => removeAccount(i)} />
+                    <CloseButton id={`removeAccount-${i}`} onClick={() => removeAccount(i)} />
                   </CustomBalanceInfoInRow>
                 </CustomAccountRow>
               ))}
