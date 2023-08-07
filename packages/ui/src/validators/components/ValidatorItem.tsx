@@ -5,7 +5,7 @@ import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { TableListItemAsLinkHover } from '@/common/components/List'
 import { Skeleton } from '@/common/components/Skeleton'
-import { TextMedium, TextSmall, TokenValue } from '@/common/components/typography'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 
 import { Validator } from '../types/Validator'
