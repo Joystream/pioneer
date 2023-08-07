@@ -10,7 +10,7 @@ import { formatJoyValue } from '../../model/formatters'
 import { Tooltip } from '../Tooltip'
 
 interface ValueSizingProps {
-  size?: 's' | 'm' | 'l'
+  size?: 'xs' | 's' | 'm' | 'l'
 }
 
 interface ValueProps extends ValueSizingProps {
@@ -67,6 +67,14 @@ export const ValueInJoys = styled(JOYSuffix)<ValueSizingProps>`
 
   ${({ size }) => {
     switch (size) {
+      case 'xs': {
+        return css`
+          font-size: 14px;
+          :after {
+            font-size: 14px;
+          }
+        `
+      }
       case 's': {
         return css`
           font-size: 16px;

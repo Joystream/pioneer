@@ -1,6 +1,8 @@
+import { expect } from '@storybook/jest'
 import { Meta, StoryObj } from '@storybook/react'
+import { userEvent, waitFor, within } from '@storybook/testing-library'
 
-import { joy } from '@/mocks/helpers'
+import { joy, selectFromDropdown } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
 
 import { ValidatorList } from './ValidatorList'
@@ -32,6 +34,20 @@ export default {
                 { era: 699, eraReward: joy(0.123456) },
                 { era: 700, eraReward: joy(0.123456) },
               ],
+              stakerRewards: [
+                {
+                  eraReward: joy(0.7),
+                },
+                {
+                  eraReward: joy(0.79),
+                },
+                {
+                  eraReward: joy(0.3),
+                },
+                {
+                  eraReward: joy(0.8),
+                },
+              ],
             },
           },
           query: {
@@ -50,7 +66,6 @@ export default {
                 'j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP',
                 'j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ',
                 'j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg',
-                'j4S998Thq5kQHyurofh8QfHrcFN2c1T19gTdMGUVVx5EHKgky',
               ],
             },
             staking: {
@@ -72,12 +87,11 @@ export default {
                   j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: 140,
                   j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: 160,
                   j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: 160,
-                  j4S998Thq5kQHyurofh8QfHrcFN2c1T19gTdMGUVVx5EHKgky: 220,
                 },
               },
               erasValidatorReward: joy(0.123456),
               erasStakers: {
-                total: joy(0.1),
+                total: joy(400),
                 own: joy(0.0001),
                 others: [
                   { who: 'j4WGdFxqTkyAgzJiTbEBeRseP12dPEvJgf2Wy9qkPa68XSP55', value: joy(0.2) },
@@ -99,10 +113,26 @@ export default {
                   { who: 'j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP', value: joy(0.2) },
                   { who: 'j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ', value: joy(0.2) },
                   { who: 'j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg', value: joy(0.2) },
-                  { who: 'j4S998Thq5kQHyurofh8QfHrcFN2c1T19gTdMGUVVx5EHKgky', value: joy(0.2) },
                 ],
               },
               erasTotalStake: joy(130_000),
+              validators: {
+                entries: [
+                  ['j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D'],
+                  ['j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW'],
+                  ['j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP'],
+                  ['j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz'],
+                  ['j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa'],
+                  ['j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN'],
+                  ['j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP'],
+                  ['j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ'],
+                  ['j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg'],
+                  ['j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt'],
+                  ['j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM'],
+                ],
+                commission: 0.05 * 10 ** 9,
+                blocked: false,
+              },
             },
           },
         },
@@ -113,4 +143,67 @@ export default {
 
 type Story = StoryObj<typeof ValidatorList>
 
-export const Statistics: Story = {}
+export const StatisticsAndLists: Story = {}
+
+export const TestsFilters: Story = {
+  play: async ({ canvasElement, step }) => {
+    const screen = within(canvasElement)
+
+    const searchElement = screen.getByPlaceholderText('Search')
+    const verificationFilter = screen.getAllByText('Verification')[0]
+    const stateFilter = screen.getAllByText('State')[0]
+
+    await step('Verifcation Filter', async () => {
+      await selectFromDropdown(screen, verificationFilter, 'verified')
+      expect(screen.queryByText('unverifed')).toBeNull()
+      expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(4)
+      expect(screen.getByText('alice'))
+      expect(screen.getByText('bob'))
+      await selectFromDropdown(screen, verificationFilter, 'unverified')
+      expect(screen.queryByText('verifed')).toBeNull()
+      expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(7)
+      expect(screen.queryByText('alice')).toBeNull()
+      expect(screen.queryByText('bob')).toBeNull()
+      await selectFromDropdown(screen, verificationFilter, 'All')
+    })
+    await step('State Filter', async () => {
+      await selectFromDropdown(screen, stateFilter, 'active')
+      expect(screen.queryByText('waiting')).toBeNull()
+      expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(9)
+      await selectFromDropdown(screen, stateFilter, 'waiting')
+      expect(screen.queryByText('active')).toBeNull()
+      expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(2)
+      await selectFromDropdown(screen, stateFilter, 'All')
+    })
+    await step('Search', async () => {
+      await userEvent.type(searchElement, 'j4Rh1c')
+      await waitFor(async () => {
+        await userEvent.type(searchElement, '{enter}')
+        expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(1)
+      })
+      expect(screen.queryByText('alice'))
+      await userEvent.clear(searchElement)
+      await userEvent.type(searchElement, 'j4R')
+      await waitFor(async () => {
+        await userEvent.type(searchElement, '{enter}')
+        expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(9)
+      })
+      expect(screen.queryByText('alice'))
+      expect(screen.queryByText('bob'))
+    })
+
+    await step('Clear Filter', async () => {
+      await selectFromDropdown(screen, verificationFilter, 'verified')
+      expect(screen.queryByText('Clear all filters'))
+      await selectFromDropdown(screen, stateFilter, 'active')
+      expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(4)
+      await userEvent.click(screen.getByText('Clear all filters'))
+      expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(11)
+      await userEvent.type(searchElement, 'j4R{enter}')
+      expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(9)
+      expect(screen.queryByText('Clear all filters'))
+      await userEvent.click(screen.getByText('Clear all filters'))
+      expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(11)
+    })
+  },
+}
