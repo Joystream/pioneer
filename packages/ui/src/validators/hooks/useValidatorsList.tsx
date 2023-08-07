@@ -95,15 +95,15 @@ export const useValidatorsList = () => {
       map(([activeValidators, stakingInfo, rewardHistory, validatorInfo]) => {
         const encodedAddress = encodeAddress(address)
         const apr =
-          rewardHistory.length &&
-          stakingInfo.total.toNumber() &&
-          last(rewardHistory)
-            .eraReward.toBn()
-            .muln(ERAS_PER_YEAR)
-            .mul(validatorInfo.commission.toBn())
-            .div(stakingInfo.total.toBn())
-            .divn(10 ** 7) // Convert from Perbill to Percent
-            .toNumber()
+          rewardHistory.length && !stakingInfo.total.toBn().isZero()
+            ? last(rewardHistory)
+                .eraReward.toBn()
+                .muln(ERAS_PER_YEAR)
+                .mul(validatorInfo.commission.toBn())
+                .div(stakingInfo.total.toBn())
+                .divn(10 ** 7) // Convert from Perbill to Percent
+                .toNumber()
+            : 0
         return {
           member: getMember(encodedAddress),
           address: encodedAddress,
