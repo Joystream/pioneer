@@ -56,6 +56,17 @@ const proposalDetails = {
       destinations: [{ __typename: 'FundingRequestDestination', amount: joy(200), account: membership.rootAccount }],
     },
   },
+  FundingRequestMultipleRecipientsProposalDetails: {
+    destinationsList: {
+      __typename: 'FundingRequestDestinationsList',
+      destinations: [
+        { __typename: 'FundingRequestDestination', amount: joy(200), account: membership.rootAccount },
+        { __typename: 'FundingRequestDestination', amount: joy(20), account: member('alice').rootAccount },
+        { __typename: 'FundingRequestDestination', amount: joy(1), account: member('bob').rootAccount },
+        { __typename: 'FundingRequestDestination', amount: joy(500), account: member('charlie').rootAccount },
+      ],
+    },
+  },
   RuntimeUpgradeProposalDetails: { newRuntimeBytecode: { __typename: 'RuntimeWasmBytecode', id: '0' } },
   SetCouncilBudgetIncrementProposalDetails: { newAmount: joy(200) },
   SetCouncilorRewardProposalDetails: { newRewardPerBlock: joy(200) },

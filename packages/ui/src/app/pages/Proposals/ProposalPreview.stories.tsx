@@ -153,7 +153,10 @@ export default {
                 title: PROPOSAL_DATA.title,
                 description: PROPOSAL_DATA.description,
                 status,
-                type: args.type,
+                type:
+                  args.type === 'FundingRequestMultipleRecipientsProposalDetails'
+                    ? 'FundingRequestProposalDetails'
+                    : args.type,
                 creator: args.isProposer ? alice : bob,
 
                 discussionThread: {
@@ -227,6 +230,9 @@ export const FillWorkingGroupLeadOpening: Story = {
 }
 export const FundingRequest: Story = {
   args: { type: 'FundingRequestProposalDetails' },
+}
+export const FundingRequestMultipleRecipients: Story = {
+  args: { type: 'FundingRequestMultipleRecipientsProposalDetails' },
 }
 export const RuntimeUpgrade: Story = {
   args: { type: 'RuntimeUpgradeProposalDetails', constitutionality: 2 },
