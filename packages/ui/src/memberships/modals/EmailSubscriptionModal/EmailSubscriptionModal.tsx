@@ -64,7 +64,6 @@ export const EmailSubscriptionModal = () => {
     }
   }
 
-
   useEffect(() => {
     if (state.matches('signature')) {
       signEmail()
