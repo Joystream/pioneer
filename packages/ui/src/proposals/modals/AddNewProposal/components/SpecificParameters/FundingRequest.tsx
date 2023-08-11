@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
@@ -23,7 +23,7 @@ import { PreviewAndValidateModal } from './modals/PreviewAndValidate'
 import { ErrorPrompt, Prompt } from './Prompt'
 
 export const FundingRequest = () => {
-  const { watch, setValue, getValues, getFieldState } = useFormContext()
+  const { watch, setValue, getFieldState } = useFormContext()
   const [isPreviewModalShown, setIsPreviewModalShown] = useState(false)
   const [payMultiple] = watch(['fundingRequest.payMultiple'])
   const [hasPreviewedInput] = watch(['fundingRequest.hasPreviewedInput'], { 'fundingRequest.hasPreviewedInput': true })
@@ -35,17 +35,8 @@ export const FundingRequest = () => {
     }
   }, [csvInput])
 
-  const shouldDisablePreviewButton = () => {
-    const input = getFieldState('fundingRequest.csvInput')
-    return input.error !== undefined || !input.isDirty
-  }
-  const shouldPreview = useCallback(() => {
-    const input = getValues('fundingRequest.csvInput')
-    if (getFieldState('fundingRequest.csvInput').error !== undefined || !input || hasPreviewedInput) {
-      return false
-    }
-    return true
-  }, [hasPreviewedInput])
+  const canPreviewInput = csvInput.isDirty && !csvInput.error
+
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -109,12 +100,10 @@ export const FundingRequest = () => {
               />
             </InputComponent>
             <HiddenCheckBox name="fundingRequest.hasPreviewedInput" checked={hasPreviewedInput} />
-            {shouldPreview() && <ErrorPrompt>Please preview and validate the inputs to proceed</ErrorPrompt>}
-            <ButtonPrimary
-              size="medium"
-              disabled={shouldDisablePreviewButton()}
-              onClick={() => setIsPreviewModalShown(true)}
-            >
+            {canPreviewInput && !hasPreviewedInput && (
+              <ErrorPrompt>Please preview and validate the inputs to proceed</ErrorPrompt>
+            )}
+            <ButtonPrimary size="medium" disabled={!canPreviewInput} onClick={() => setIsPreviewModalShown(true)}>
               Preview and Validate <Arrow direction="right" />
             </ButtonPrimary>
           </RowGapBlock>

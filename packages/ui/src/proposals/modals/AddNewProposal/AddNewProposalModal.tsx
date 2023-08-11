@@ -24,7 +24,6 @@ import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
 import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
-import { useKeyring } from '@/common/hooks/useKeyring'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
@@ -87,7 +86,6 @@ export const AddNewProposalModal = () => {
   const stakingStatus = useStakingAccountStatus(formMap[0]?.address, activeMember?.id, [state.matches('transaction')])
   const schema = useMemo(() => schemaFactory(api), [!api])
 
-  const keyring = useKeyring()
   const path = useMemo(() => machineStateConverter(state.value) as keyof AddNewProposalForm, [state.value])
 
   const form = useForm<AddNewProposalForm>({
@@ -108,7 +106,6 @@ export const AddNewProposalModal = () => {
       minTriggerBlock: currentBlock
         ? currentBlock.addn(constants?.votingPeriod ?? 0).addn(constants?.gracePeriod ?? 0)
         : BN_ZERO,
-      keyring,
     } as IStakingAccountSchema,
     defaultValues: defaultProposalValues,
   })
