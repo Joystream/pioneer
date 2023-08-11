@@ -64,6 +64,21 @@ export const EmailSubscriptionModal = () => {
     }
   }
 
+  const signEmail = async () => {
+    const timestamp = Date.now()
+    try {
+      const signature = await wallet?.signer.signPayload({
+        address: member.controllerAccount,
+        data: `${member.id}:${timestamp}`,
+      })
+      if (signature) {
+        send('SIGNED', { signature: signature.signature, timestamp })
+      }
+    } catch (error) {
+      send('CANCEL')
+    }
+  }
+
   useEffect(() => {
     if (state.matches('signature')) {
       signEmail()
