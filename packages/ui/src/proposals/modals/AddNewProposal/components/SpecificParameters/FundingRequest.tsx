@@ -34,9 +34,8 @@ export const FundingRequest = () => {
       setValue('fundingRequest.hasPreviewedInput', false, { shouldValidate: true })
     }
   }, [csvInput])
-
-  const canPreviewInput = csvInput.isDirty && !csvInput.error
-
+  const canPreviewInput =
+    getFieldState('fundingRequest.csvInput').isDirty && !getFieldState('fundingRequest.csvInput').error
   return (
     <RowGapBlock gap={24}>
       <Row>
