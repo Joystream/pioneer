@@ -18,7 +18,6 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium, TextSmall, TextInlineSmall } from '@/common/components/typography'
-import { CSV_PATTERN } from '@/proposals/constants/regExp'
 
 import { PreviewAndValidateModal } from './modals/PreviewAndValidate'
 import { ErrorPrompt, Prompt } from './Prompt'
@@ -35,12 +34,18 @@ export const FundingRequest = () => {
       setValue('fundingRequest.hasPreviewedInput', false, { shouldValidate: true })
     }
   }, [csvInput])
-  const previewInput = useCallback(() => {
+ 
+  const shouldDisablePreviewButton = () => {
+    const input = getFieldState('fundingRequest.csvInput')
+    return input.error !== undefined || !input.isDirty
+  }
+  const shouldPreview = useCallback(() => {
     const input = getValues('fundingRequest.csvInput')
-    if (CSV_PATTERN.test(input)) {
-      setIsPreviewModalShown(true)
+    if(getFieldState('fundingRequest.csvInput').error !== undefined || !input || hasPreviewedInput) {
+      return false
     }
-  }, [])
+    return true
+  },[hasPreviewedInput])
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -104,8 +109,10 @@ export const FundingRequest = () => {
               />
             </InputComponent>
             <HiddenCheckBox name="fundingRequest.hasPreviewedInput" checked={hasPreviewedInput} />
-            {!hasPreviewedInput && <ErrorPrompt>Please preview and validate the inputs to proceed</ErrorPrompt>}
-            <ButtonPrimary size="medium" onClick={() => previewInput()}>
+            {shouldPreview() && (
+                <ErrorPrompt>Please preview and validate the inputs to proceed</ErrorPrompt>
+              )}
+            <ButtonPrimary size="medium" disabled={shouldDisablePreviewButton()} onClick={() => setIsPreviewModalShown(true)}>
               Preview and Validate <Arrow direction="right" />
             </ButtonPrimary>
           </RowGapBlock>
