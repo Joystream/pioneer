@@ -799,7 +799,7 @@ export const SpecificParametersMultipleFundingRequest: Story = {
       expect(await modal.findByText(/Not valid CSV format/))
       // ensure its not being open-able while the CSV syntax is valid
       const previewButton = getButtonByText(modal, 'Preview and Validate')
-      await userEvent.click(previewButton)
+      expect(previewButton).toBeDisabled()
       await waitFor(() => expect(modal.queryByTestId('sidePanel-overlay')).toBeNull())
       expect(nextButton).toBeDisabled()
 
@@ -810,6 +810,7 @@ export const SpecificParametersMultipleFundingRequest: Story = {
       await waitFor(() => expect(modal.queryByText(/Not valid CSV format/)).toBeNull())
       expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
       expect(nextButton).toBeDisabled()
+      expect(previewButton).toBeEnabled()
 
       await userEvent.click(previewButton)
       expect(await modal.findByText(/Incorrect destination accounts detected/))
@@ -820,6 +821,7 @@ export const SpecificParametersMultipleFundingRequest: Story = {
       await userEvent.type(csvField, `${alice.controllerAccount},166667\n${bob.controllerAccount},500`)
       expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
       expect(nextButton).toBeDisabled()
+      await waitFor(() => expect(previewButton).toBeEnabled())
       await userEvent.click(previewButton)
       expect(await modal.findByText(/Max payment amount is exceeded/))
       await userEvent.click(modal.getByTestId('sidePanel-overlay')) //ensure create proposal is still disabled
@@ -833,12 +835,14 @@ export const SpecificParametersMultipleFundingRequest: Story = {
       )
       expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
       expect(nextButton).toBeDisabled()
+      await waitFor(() => expect(previewButton).toBeEnabled())
       await userEvent.click(previewButton)
       expect(await modal.findByText(/Maximum allowed accounts exceeded/))
       await userEvent.click(modal.getByTestId('sidePanel-overlay')) //ensure create proposal is still disabled
       expect(nextButton).toBeDisabled()
 
       //  delete one account from the list'
+      await waitFor(() => expect(previewButton).toBeEnabled())
       await userEvent.click(previewButton)
       await userEvent.click(modal.getByTestId('removeAccount-2'))
       await waitFor(() => expect(modal.queryByText(/Maximum allowed accounts exceeded/)).toBeNull())
@@ -849,6 +853,7 @@ export const SpecificParametersMultipleFundingRequest: Story = {
       await userEvent.type(csvField, `${alice.controllerAccount},500\n${bob.controllerAccount},500`)
       expect(nextButton).toBeDisabled()
 
+      await waitFor(() => expect(previewButton).toBeEnabled())
       await userEvent.click(previewButton)
       await userEvent.click(modal.getByTestId('sidePanel-overlay'))
     })

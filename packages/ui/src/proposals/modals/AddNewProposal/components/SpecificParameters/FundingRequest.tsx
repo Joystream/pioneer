@@ -34,18 +34,18 @@ export const FundingRequest = () => {
       setValue('fundingRequest.hasPreviewedInput', false, { shouldValidate: true })
     }
   }, [csvInput])
- 
+
   const shouldDisablePreviewButton = () => {
     const input = getFieldState('fundingRequest.csvInput')
     return input.error !== undefined || !input.isDirty
   }
   const shouldPreview = useCallback(() => {
     const input = getValues('fundingRequest.csvInput')
-    if(getFieldState('fundingRequest.csvInput').error !== undefined || !input || hasPreviewedInput) {
+    if (getFieldState('fundingRequest.csvInput').error !== undefined || !input || hasPreviewedInput) {
       return false
     }
     return true
-  },[hasPreviewedInput])
+  }, [hasPreviewedInput])
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -109,10 +109,12 @@ export const FundingRequest = () => {
               />
             </InputComponent>
             <HiddenCheckBox name="fundingRequest.hasPreviewedInput" checked={hasPreviewedInput} />
-            {shouldPreview() && (
-                <ErrorPrompt>Please preview and validate the inputs to proceed</ErrorPrompt>
-              )}
-            <ButtonPrimary size="medium" disabled={shouldDisablePreviewButton()} onClick={() => setIsPreviewModalShown(true)}>
+            {shouldPreview() && <ErrorPrompt>Please preview and validate the inputs to proceed</ErrorPrompt>}
+            <ButtonPrimary
+              size="medium"
+              disabled={shouldDisablePreviewButton()}
+              onClick={() => setIsPreviewModalShown(true)}
+            >
               Preview and Validate <Arrow direction="right" />
             </ButtonPrimary>
           </RowGapBlock>
