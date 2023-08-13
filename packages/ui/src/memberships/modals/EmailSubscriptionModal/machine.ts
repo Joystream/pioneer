@@ -8,12 +8,13 @@ import { EmailSubscriptionForm } from './types'
 interface Context extends EmailSubscriptionForm {
   email: string
   timestamp: number
+  signature: string
 }
 
 type EmailSubscriptionState =
-  | { value: 'prepare'; context: EmptyObject }
+  | { value: 'form'; context: EmptyObject }
   | { value: 'signature'; context: Pick<Context, 'email'> }
-  | { value: 'transaction'; context: Context }
+  | { value: 'signup'; context: Context }
   | { value: 'success'; context: Context }
   | { value: 'error'; context: Context }
 
@@ -26,9 +27,9 @@ export type EmailSubscriptionEvent =
 
 export const EmailSubscriptionMachine = createMachine<Partial<Context>, EmailSubscriptionEvent, EmailSubscriptionState>(
   {
-    initial: 'prepare',
+    initial: 'form',
     states: {
-      prepare: {
+      form: {
         on: {
           DONE: {
             target: 'signature',
@@ -41,19 +42,18 @@ export const EmailSubscriptionMachine = createMachine<Partial<Context>, EmailSub
       signature: {
         on: {
           SIGNED: {
-            target: 'transaction',
-            actions: (_, event) =>
-              assign({
-                signature: event.signature,
-                timestamp: event.timestamp,
-              }),
+            target: 'signup',
+            actions: assign({
+              signature: (_, event) => event.signature,
+              timestamp: (_, event) => event.timestamp,
+            }),
           },
           CANCEL: {
             target: 'canceled',
           },
         },
       },
-      transaction: {
+      signup: {
         on: {
           SUCCESS: {
             target: 'success',
@@ -69,7 +69,7 @@ export const EmailSubscriptionMachine = createMachine<Partial<Context>, EmailSub
         },
         cancel: {
           target: 'canceled',
-          action: 'prepare',
+          action: 'form',
         },
       }),
     },

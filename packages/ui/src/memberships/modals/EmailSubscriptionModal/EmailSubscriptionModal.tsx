@@ -29,13 +29,7 @@ export const EmailSubscriptionModal = () => {
   const [, setMembersEmail] = useLocalStorage<Record<string, string>>('membersEmail')
   const { wallet } = useMyAccounts()
   const [state, send] = useMachine(EmailSubscriptionMachine)
-  const {
-    data,
-    error,
-    send: mutate,
-  } = useBackend({
-    mutation: SIGNUP_MUTATION,
-  })
+  const signupMutation = useBackend({ mutation: SIGNUP_MUTATION })
 
   const signEmail = async () => {
     const timestamp = Date.now()
@@ -54,12 +48,12 @@ export const EmailSubscriptionModal = () => {
 
   const signUp = async () => {
     if (state.event.type === 'SIGNED') {
-      await mutate({
+      await signupMutation.send({
         memberId: parseFloat(member.id),
         name: member.name,
         email: state.context.email,
-        signature: state.event.signature,
-        timestamp: state.event.timestamp,
+        signature: state.context.signature,
+        timestamp: state.context.timestamp,
       })
     }
   }
@@ -68,23 +62,23 @@ export const EmailSubscriptionModal = () => {
     if (state.matches('signature')) {
       signEmail()
     }
-    if (state.matches('transaction')) {
+    if (state.matches('signup')) {
       signUp()
     }
   }, [state])
 
   useEffect(() => {
-    if (data) {
+    if (signupMutation.data) {
       send('SUCCESS')
       setMembersEmail((emails) => ({ ...emails, [member.id]: state.context.email || '' }))
       hideModal()
     }
-    if (error) {
+    if (signupMutation.error) {
       send('ERROR')
     }
-  }, [data, error])
+  }, [signupMutation])
 
-  if (state.matches('prepare')) {
+  if (state.matches('form')) {
     return (
       <EmailSubscriptionFormModal
         onClose={hideModal}
