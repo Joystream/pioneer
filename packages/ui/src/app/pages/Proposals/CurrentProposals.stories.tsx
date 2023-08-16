@@ -781,6 +781,95 @@ export const SpecificParametersFundingRequest: Story = {
   }),
 }
 
+export const SpecificParametersMultipleFundingRequest: Story = {
+  play: specificParametersTest('Funding Request', async ({ args, createProposal, modal, step }) => {
+    const bob = member('bob')
+    const charlie = member('charlie')
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      await userEvent.click(modal.getByTestId('pay-multiple'))
+
+      const csvField = modal.getByTestId('accounts-amounts')
+
+      // Invalid
+      await userEvent.clear(csvField)
+      await userEvent.type(csvField, `${alice.controllerAccount},500${bob.controllerAccount},500`)
+      expect(await modal.findByText(/Not valid CSV format/))
+      // ensure its not being open-able while the CSV syntax is valid
+      const previewButton = getButtonByText(modal, 'Preview and Validate')
+      expect(previewButton).toBeDisabled()
+      await waitFor(() => expect(modal.queryByTestId('sidePanel-overlay')).toBeNull())
+      expect(nextButton).toBeDisabled()
+
+      // Invalid Accounts error
+      await userEvent.clear(csvField)
+      await userEvent.type(csvField, `5GNJqTPy,500\n${bob.controllerAccount},500`)
+
+      await waitFor(() => expect(modal.queryByText(/Not valid CSV format/)).toBeNull())
+      expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
+      expect(nextButton).toBeDisabled()
+      expect(previewButton).toBeEnabled()
+
+      await userEvent.click(previewButton)
+      expect(await modal.findByText(/Incorrect destination accounts detected/))
+      await userEvent.click(modal.getByTestId('sidePanel-overlay'))
+
+      // Max Amount error
+      await userEvent.clear(csvField)
+      await userEvent.type(csvField, `${alice.controllerAccount},166667\n${bob.controllerAccount},500`)
+      expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
+      expect(nextButton).toBeDisabled()
+      await waitFor(() => expect(previewButton).toBeEnabled())
+      await userEvent.click(previewButton)
+      expect(await modal.findByText(/Max payment amount is exceeded/))
+      await userEvent.click(modal.getByTestId('sidePanel-overlay')) //ensure create proposal is still disabled
+      expect(nextButton).toBeDisabled()
+
+      // Max Allowed Accounts error
+      await userEvent.clear(csvField)
+      await userEvent.type(
+        csvField,
+        `${alice.controllerAccount},400\n${bob.controllerAccount},500\n${charlie.controllerAccount},500`
+      )
+      expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
+      expect(nextButton).toBeDisabled()
+      await waitFor(() => expect(previewButton).toBeEnabled())
+      await userEvent.click(previewButton)
+      expect(await modal.findByText(/Maximum allowed accounts exceeded/))
+      await userEvent.click(modal.getByTestId('sidePanel-overlay')) //ensure create proposal is still disabled
+      expect(nextButton).toBeDisabled()
+
+      //  delete one account from the list'
+      await waitFor(() => expect(previewButton).toBeEnabled())
+      await userEvent.click(previewButton)
+      await userEvent.click(modal.getByTestId('removeAccount-2'))
+      await waitFor(() => expect(modal.queryByText(/Maximum allowed accounts exceeded/)).toBeNull())
+      await userEvent.click(modal.getByTestId('sidePanel-overlay'))
+
+      // Valid
+      await userEvent.clear(csvField)
+      await userEvent.type(csvField, `${alice.controllerAccount},500\n${bob.controllerAccount},500`)
+      expect(nextButton).toBeDisabled()
+
+      await waitFor(() => expect(previewButton).toBeEnabled())
+      await userEvent.click(previewButton)
+      await userEvent.click(modal.getByTestId('sidePanel-overlay'))
+    })
+
+    step('Transaction parameters', () => {
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({
+        fundingRequest: [
+          { account: alice.controllerAccount, amount: 500_0000000000 },
+          { account: bob.controllerAccount, amount: 500_0000000000 },
+        ],
+      })
+    })
+  }),
+}
+
 export const SpecificParametersSetReferralCut: Story = {
   play: specificParametersTest('Set Referral Cut', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {

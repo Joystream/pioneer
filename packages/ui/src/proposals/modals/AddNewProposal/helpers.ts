@@ -17,6 +17,7 @@ import {
 } from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
+import { isValidCSV } from '@/proposals/model/validation'
 import { ProposalType } from '@/proposals/types'
 import { GroupIdName } from '@/working-groups/types'
 
@@ -35,6 +36,10 @@ export const defaultProposalValues = {
   triggerAndDiscussion: {
     discussionWhitelist: [],
     isDiscussionClosed: false,
+  },
+  fundingRequest: {
+    payMultiple: false,
+    hasPreviewedInput: true,
   },
   updateWorkingGroupBudget: {
     isPositive: true,
@@ -69,8 +74,12 @@ export interface AddNewProposalForm {
     signal?: string
   }
   fundingRequest: {
-    amount: BN
-    account: Account
+    amount?: BN
+    account?: Account
+    payMultiple?: boolean
+    csvInput?: string
+    accountsAndAmounts?: { amount: BN; account: string }[]
+    hasPreviewedInput?: boolean
   }
   runtimeUpgrade: {
     runtime?: File
@@ -204,13 +213,39 @@ export const schemaFactory = (api?: Api) => {
       signal: Yup.string().required('Field is required').trim(),
     }),
     fundingRequest: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, ''))
-        // todo: change funding request to allow upload request in file
-        .test(
-          maxMixed(api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount, 'Maximal amount allowed is ${max}')
-        )
-        .required('Field is required'),
-      account: AccountSchema.required('Field is required'),
+      payMultiple: Yup.boolean().required(),
+      amount: BNSchema.when('payMultiple', {
+        is: false,
+        then: (schema) =>
+          schema
+            .test(moreThanMixed(0, ''))
+            .test(
+              maxMixed(
+                api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount,
+                'Maximal amount allowed is ${max}'
+              )
+            )
+            .required('Field is required'),
+      }),
+      account: AccountSchema.when('payMultiple', {
+        is: false,
+        then: (schema) => schema.required('Field is required'),
+      }),
+      hasPreviewedInput: Yup.boolean().when('payMultiple', {
+        is: true,
+        then: (schema) =>
+          schema
+            .test('previewedinput', 'Please preview', (value) => typeof value !== 'undefined' && value)
+            .required('Field is required'),
+      }),
+      csvInput: Yup.string().when('payMultiple', {
+        is: true,
+        then: (schema) => schema.test(isValidCSV('Not valid CSV format')).required('Field is required'),
+      }),
+      accountsAndAmounts: Yup.array().when('payMultiple', {
+        is: true,
+        then: (schema) => schema.required(),
+      }),
     }),
     runtimeUpgrade: Yup.object().shape({
       runtime: Yup.mixed()
