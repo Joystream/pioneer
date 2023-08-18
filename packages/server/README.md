@@ -78,8 +78,8 @@ Most queries require a Bearer authentication, HTTP header examples:
 This token is returns by both the `signup` and `signin` mutations:
 
 ```gql
-signup(memberId: String! signature: String! timestamp: BigInt! name: String! email: String): String
-signin(memberId: String! signature: String! timestamp: BigInt!): String
+signup(memberId: Int! signature: String! timestamp: BigInt! name: String! email: String): String
+signin(memberId: Int! signature: String! timestamp: BigInt!): String
 ```
 
 The `signature` parameter consist of a `MEMBERSHIP_ID:TIMESTAMP` signed with the membership controller account.
