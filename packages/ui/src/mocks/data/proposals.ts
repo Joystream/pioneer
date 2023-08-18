@@ -90,10 +90,10 @@ const proposalDetails = {
   VetoProposalDetails: { proposal: { __typename: 'Proposal', id: '0', title: random.words(4) } },
 } as Record<string, RecursivePartial<ProposalWithDetailsFieldsFragment['details']>>
 
-export const proposalDetailsMap = mapValues(
-  proposalDetails,
-  (value, __typename) => Object.assign(value, { __typename }) as Partial<ProposalWithDetailsFieldsFragment['details']>
-)
+export const proposalDetailsMap = mapValues(proposalDetails, (value, key) => {
+  const __typename = key === 'FundingRequestMultipleRecipientsProposalDetails' ? 'FundingRequestProposalDetails' : key
+  return Object.assign(value, { __typename }) as Partial<ProposalWithDetailsFieldsFragment['details']>
+})
 
 export const proposalTypes = Object.keys(proposalDetailsMap) as ProposalDetailsType[]
 

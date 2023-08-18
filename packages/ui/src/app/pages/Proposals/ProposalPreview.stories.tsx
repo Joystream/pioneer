@@ -153,10 +153,7 @@ export default {
                 title: PROPOSAL_DATA.title,
                 description: PROPOSAL_DATA.description,
                 status,
-                type:
-                  args.type === 'FundingRequestMultipleRecipientsProposalDetails'
-                    ? 'FundingRequestProposalDetails'
-                    : args.type,
+                type: args.type,
                 creator: args.isProposer ? alice : bob,
 
                 discussionThread: {
