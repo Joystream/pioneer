@@ -7,7 +7,10 @@ import { Era } from '@/validators/components/statistics/Era'
 import { Rewards } from '@/validators/components/statistics/Rewards'
 import { Staking } from '@/validators/components/statistics/Staking'
 import { ValidatorsState } from '@/validators/components/statistics/ValidatorsState'
+import { ValidatorsFilter } from '@/validators/components/ValidatorsFilter'
+import { ValidatorsList } from '@/validators/components/ValidatorsList'
 import { useStakingStatistics } from '@/validators/hooks/useStakingStatistics'
+import { useValidatorsList } from '@/validators/hooks/useValidatorsList'
 
 export const ValidatorList = () => {
   const {
@@ -25,6 +28,7 @@ export const ValidatorList = () => {
     acitveNominatorsCount,
     allNominatorsCount,
   } = useStakingStatistics()
+  const { visibleValidators, filter } = useValidatorsList()
 
   return (
     <PageLayout
@@ -45,9 +49,10 @@ export const ValidatorList = () => {
             <Era eraStartedOn={eraStartedOn} eraDuration={eraDuration} now={now} eraRewardPoints={eraRewardPoints} />
             <Rewards totalRewards={totalRewards} lastRewards={lastRewards} />
           </Statistics>
+          <ValidatorsFilter filter={filter} />
         </RowGapBlock>
       }
-      main={<></>}
+      main={<ValidatorsList validators={visibleValidators} />}
     />
   )
 }
