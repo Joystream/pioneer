@@ -54,8 +54,8 @@ export const OnBoardingPlugin = () => {
               Extension is blocking Pioneer from access
             </TextBig>
             <TextMedium lighter>
-              Change the settings of the wallet browser plugin to allow it access this domain and reload the
-              page
+              Please change settings of the wallet browser plugin to allow it to access this domain and reload the
+              page.
             </TextMedium>
           </RedBox>
         )}
