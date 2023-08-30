@@ -10,7 +10,7 @@ export const fromPostAddedNotification: EmailFromNotification = ({ id, kind, ent
     throw Error(`Missing post id in notification ${kind}, with id: ${id}`)
   }
 
-  const toEmail = buildEmail(member.email, () => post(entityId))
+  const toEmail = buildEmail(member.email, () => getForumPost(entityId))
 
   switch (kind) {
     case 'FORUM_THREAD_CONTRIBUTOR':
@@ -42,21 +42,21 @@ export const fromPostAddedNotification: EmailFromNotification = ({ id, kind, ent
   }
 }
 
-interface Post {
+interface ForumPost {
   author: string
   threadId: string
   thread: string
   text: string
 }
-const posts: { [id: string]: Post } = {}
-const post = async (id: string): Promise<Post> => {
-  if (!(id in posts)) {
+const cachedForumPosts: { [id: string]: ForumPost } = {}
+const getForumPost = async (id: string): Promise<ForumPost> => {
+  if (!(id in cachedForumPosts)) {
     const { forumPostByUniqueInput: post } = await request(QUERY_NODE_ENDPOINT, GetPostDocument, { id })
     if (!post) {
       throw Error(`Failed to fetch post ${id} on the QN`)
     }
 
-    posts[id] = {
+    cachedForumPosts[id] = {
       author: post.author.handle,
       threadId: post.thread.id,
       thread: post.thread.title,
@@ -64,7 +64,7 @@ const post = async (id: string): Promise<Post> => {
     }
   }
 
-  return posts[id]
+  return cachedForumPosts[id]
 }
 
 export const fromThreadCreatedNotification: EmailFromNotification = ({ id, kind, entityId, member }) => {

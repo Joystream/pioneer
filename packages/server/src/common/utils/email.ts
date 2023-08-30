@@ -1,40 +1,59 @@
 import sgMail from '@sendgrid/mail'
 import formData from 'form-data'
-import { isString } from 'lodash'
 import Mailgun from 'mailgun.js'
+import type MailgunClient from 'mailgun.js/client'
 
-import { emailProvider, EMAIL_SENDER, MAILGUN_DOMAIN } from '@/common/config'
+import { EMAIL_SENDER, SENDGRID_CONFIG, MAILGUN_CONFIG } from '@/common/config'
 
-const errMsg = (name: string) => Error(`${name} should be defined in .env`)
-
-const definedEmailProviders = Object.values(emailProvider).filter(isString)
-
-export const NO_EMAIL_PROVIDER = definedEmailProviders.length === 0
-
-if (!NO_EMAIL_PROVIDER && !EMAIL_SENDER) throw errMsg('EMAIL_SENDER')
-if (definedEmailProviders.length > 1) {
-  throw errMsg(`A unique value out of: ${Object.values(emailProvider).join(', ')}`)
-}
-if (emailProvider.MAILGUN_CONFIG && !MAILGUN_DOMAIN) throw errMsg('If MAILGUN_CONFIG is defined, MAILGUN_DOMAIN')
+const createMissingEnvError = (name: string) => Error(`${name} should be defined in environment`)
 
 export type EmailBody = { text: string } | { html: string }
-export type Email = { to: string; subject: string } & EmailBody
+export type EmailWithoutRecipient = { subject: string } & EmailBody
+export type Email = { to: string } & EmailWithoutRecipient
 
-export const configEmailProvider = (): ((email: Email) => Promise<void>) => {
-  const toFullEmail = (email: Email) => ({ ...email, from: EMAIL_SENDER })
+const toFullEmail = (email: Email) => ({ ...email, from: EMAIL_SENDER })
 
-  if (emailProvider.SENDGRID_API_KEY) {
-    sgMail.setApiKey(emailProvider.SENDGRID_API_KEY)
-    return async (email) => {
-      await sgMail.send(toFullEmail(email))
-    }
-  } else if (emailProvider.MAILGUN_CONFIG) {
-    const mailgun = new Mailgun(formData)
-    const mg = mailgun.client({ username: 'api', key: JSON.parse(emailProvider.MAILGUN_CONFIG) })
-    return async (email) => {
-      await mg.messages.create(MAILGUN_DOMAIN, toFullEmail(email))
-    }
+interface EmailProvider {
+  sendEmail: (email: Email) => Promise<void>
+}
+
+class MailgunEmailProvider implements EmailProvider {
+  private mailgun: MailgunClient
+  private mailgunDomain: string
+
+  constructor(config: Exclude<typeof MAILGUN_CONFIG, null>) {
+    this.mailgun = new Mailgun(formData).client({ username: 'api', key: config.apiKey })
+    this.mailgunDomain = config.domain
   }
 
+  async sendEmail(email: Email): Promise<void> {
+    await this.mailgun.messages.create(this.mailgunDomain, toFullEmail(email))
+  }
+}
+
+class SendgridEmailProvider implements EmailProvider {
+  constructor(config: Exclude<typeof SENDGRID_CONFIG, null>) {
+    sgMail.setApiKey(config.apiKey)
+  }
+
+  async sendEmail(email: Email): Promise<void> {
+    await sgMail.send(toFullEmail(email))
+  }
+}
+
+if (!EMAIL_SENDER) {
+  throw createMissingEnvError('EMAIL_SENDER')
+}
+
+if (!SENDGRID_CONFIG && !MAILGUN_CONFIG) {
   throw Error('The email provider is not defined correctly')
 }
+
+if (SENDGRID_CONFIG && MAILGUN_CONFIG) {
+  throw Error('Multiple email providers are defined')
+}
+
+export const emailProvider = SENDGRID_CONFIG
+  ? new SendgridEmailProvider(SENDGRID_CONFIG)
+  : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    new MailgunEmailProvider(MAILGUN_CONFIG!)
