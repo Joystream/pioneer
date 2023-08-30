@@ -15,6 +15,7 @@ import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 import {
   Address,
   Amount,
+  DestinationsPreview,
   Divider,
   Hash,
   Markdown,
@@ -49,6 +50,7 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   OpeningLink: OpeningLink,
   Percentage: Percentage,
   Hash: Hash,
+  DestinationsPreview: DestinationsPreview,
 }
 
 export const ProposalDetails = ({ proposalDetails }: Props) => {
@@ -74,6 +76,16 @@ export const ProposalDetails = ({ proposalDetails }: Props) => {
           renderType: 'Amount',
           label: 'Current membership price',
           value: membershipPrice ?? 0,
+        },
+      ] as RenderNode[]
+    }
+
+    if (proposalDetails?.type === 'fundingRequest') {
+      return [
+        {
+          renderType: 'Amount',
+          label: 'Current WG Budget',
+          value: group?.budget,
         },
       ] as RenderNode[]
     }
