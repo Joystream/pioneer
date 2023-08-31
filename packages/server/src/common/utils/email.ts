@@ -13,7 +13,7 @@ export type Email = { to: string } & EmailWithoutRecipient
 
 const toFullEmail = (email: Email) => ({ ...email, from: EMAIL_SENDER })
 
-interface EmailProvider {
+export interface EmailProvider {
   sendEmail: (email: Email) => Promise<void>
 }
 
@@ -41,19 +41,21 @@ class SendgridEmailProvider implements EmailProvider {
   }
 }
 
-if (!EMAIL_SENDER) {
-  throw createMissingEnvError('EMAIL_SENDER')
-}
+export const createEmailProvider = (): EmailProvider => {
+  if (!EMAIL_SENDER) {
+    throw createMissingEnvError('EMAIL_SENDER')
+  }
 
-if (!SENDGRID_CONFIG && !MAILGUN_CONFIG) {
-  throw Error('The email provider is not defined correctly')
-}
+  if (!SENDGRID_CONFIG && !MAILGUN_CONFIG) {
+    throw Error('The email provider is not defined correctly')
+  }
 
-if (SENDGRID_CONFIG && MAILGUN_CONFIG) {
-  throw Error('Multiple email providers are defined')
-}
+  if (SENDGRID_CONFIG && MAILGUN_CONFIG) {
+    throw Error('Multiple email providers are defined')
+  }
 
-export const emailProvider = SENDGRID_CONFIG
-  ? new SendgridEmailProvider(SENDGRID_CONFIG)
-  : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    new MailgunEmailProvider(MAILGUN_CONFIG!)
+  return SENDGRID_CONFIG
+    ? new SendgridEmailProvider(SENDGRID_CONFIG)
+    : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      new MailgunEmailProvider(MAILGUN_CONFIG!)
+}

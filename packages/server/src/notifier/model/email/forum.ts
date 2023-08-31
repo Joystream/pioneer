@@ -1,114 +1,111 @@
-import { request } from 'graphql-request'
+import { render } from '@react-email/render'
+import { match } from 'ts-pattern'
 
-import { PIONEER_URL, QUERY_NODE_ENDPOINT } from '@/common/config'
-import { GetPostDocument, GetThreadDocument } from '@/common/queries'
+import { PIONEER_URL } from '@/common/config'
+import { PioneerEmail } from '@/common/email-templates/pioneer-email'
 
-import { EmailFromNotification, buildEmail } from './utils'
+import { EmailFromNotificationFn, getForumPost, getForumThread } from './utils'
 
-export const fromPostAddedNotification: EmailFromNotification = ({ id, kind, entityId, member }) => {
+export const fromPostAddedNotification: EmailFromNotificationFn = async ({ id, kind, entityId, member }) => {
+  if (
+    kind !== 'FORUM_THREAD_CONTRIBUTOR' &&
+    kind !== 'FORUM_THREAD_CREATOR' &&
+    kind !== 'FORUM_POST_MENTION' &&
+    // TODO: add FORUM_POST_REPLY support (along with event support)
+    // kind !== 'FORUM_POST_REPLY' &&
+    kind !== 'FORUM_THREAD_ENTITY_POST' &&
+    kind !== 'FORUM_CATEGORY_ENTITY_POST' &&
+    kind !== 'FORUM_POST_ALL'
+  ) {
+    // do an early return if the kind is not supported
+    // this way we can fetch the data outside of the switch
+    // we also get `kind` to be narrowed down to the supported types
+    return
+  }
+
   if (!entityId) {
     throw Error(`Missing post id in notification ${kind}, with id: ${id}`)
   }
 
-  const toEmail = buildEmail(member.email, () => getForumPost(entityId))
+  const { author, thread, threadId } = await getForumPost(entityId)
 
-  switch (kind) {
-    case 'FORUM_THREAD_CONTRIBUTOR':
-    case 'FORUM_THREAD_CREATOR':
-      return toEmail(({ author, threadId, thread, text }) => ({
-        subject: `[Pioneer forum] ${thread}`,
-        text: `${author} replied in the thread ${thread}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${threadId}?post=${entityId}\n\nContent: ${text}`,
-      }))
+  const emailSubject = `[Pioneer forum] ${thread}`
+  const emailSummary: string = match(kind)
+    .with('FORUM_THREAD_CONTRIBUTOR', 'FORUM_THREAD_CREATOR', () => `${author} replied in the thread ${thread}.`)
+    .with('FORUM_POST_MENTION', () => `${author} mentioned you in the thread ${thread}.`)
+    .with(
+      'FORUM_THREAD_ENTITY_POST',
+      'FORUM_CATEGORY_ENTITY_POST',
+      'FORUM_POST_ALL',
+      () => `${author} posted in the thread ${thread}.`
+    )
+    .exhaustive()
+  const emailText: string = match(kind)
+    .with('FORUM_THREAD_CONTRIBUTOR', 'FORUM_THREAD_CREATOR', () => `${author} replied in the thread ${thread}.`)
+    .with('FORUM_POST_MENTION', () => `${author} mentioned you in the thread ${thread}.`)
+    .with(
+      'FORUM_THREAD_ENTITY_POST',
+      'FORUM_CATEGORY_ENTITY_POST',
+      'FORUM_POST_ALL',
+      () => `${author} posted in the thread ${thread}.`
+    )
+    .exhaustive()
 
-    case 'FORUM_POST_MENTION':
-      return toEmail(({ author, threadId, thread, text }) => ({
-        subject: `[Pioneer forum] ${thread}`,
-        text: `${author} mentioned you in the thread ${thread}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${threadId}?post=${entityId}\n\nContent: ${text}`,
-      }))
+  const renderedEmail = render(
+    PioneerEmail({
+      memberHandle: member.name,
+      summary: emailSummary,
+      text: emailText,
+      cta: {
+        label: 'See on Pioneer',
+        href: `${PIONEER_URL}/#/forum/thread/${threadId}?post=${entityId}`,
+      },
+    })
+  )
 
-    case 'FORUM_POST_REPLY':
-      return toEmail(({ author, threadId, thread, text }) => ({
-        subject: `[Pioneer forum] ${thread}`,
-        text: `${author} replied to you in the thread ${thread}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${threadId}?post=${entityId}\n\nContent: ${text}`,
-      }))
-
-    case 'FORUM_THREAD_ENTITY_POST':
-    case 'FORUM_CATEGORY_ENTITY_POST':
-    case 'FORUM_POST_ALL':
-      return toEmail(({ author, threadId, thread, text }) => ({
-        subject: `[Pioneer forum] ${thread}`,
-        text: `${author} posted in the thread ${thread}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${threadId}?post=${entityId}\n\nContent: ${text}`,
-      }))
+  return {
+    subject: emailSubject,
+    html: renderedEmail,
+    to: member.email,
   }
 }
 
-interface ForumPost {
-  author: string
-  threadId: string
-  thread: string
-  text: string
-}
-const cachedForumPosts: { [id: string]: ForumPost } = {}
-const getForumPost = async (id: string): Promise<ForumPost> => {
-  if (!(id in cachedForumPosts)) {
-    const { forumPostByUniqueInput: post } = await request(QUERY_NODE_ENDPOINT, GetPostDocument, { id })
-    if (!post) {
-      throw Error(`Failed to fetch post ${id} on the QN`)
-    }
-
-    cachedForumPosts[id] = {
-      author: post.author.handle,
-      threadId: post.thread.id,
-      thread: post.thread.title,
-      text: post.text,
-    }
+export const fromThreadCreatedNotification: EmailFromNotificationFn = async ({ id, kind, entityId, member }) => {
+  if (kind !== 'FORUM_THREAD_MENTION' && kind !== 'FORUM_CATEGORY_ENTITY_THREAD' && kind !== 'FORUM_THREAD_ALL') {
+    return
   }
 
-  return cachedForumPosts[id]
-}
-
-export const fromThreadCreatedNotification: EmailFromNotification = ({ id, kind, entityId, member }) => {
   if (!entityId) {
     throw Error(`Missing thread id in notification ${kind}, with id: ${id}`)
   }
 
-  const toEmail = buildEmail(member.email, () => thread(entityId))
+  const { author, title } = await getForumThread(entityId)
 
-  switch (kind) {
-    case 'FORUM_THREAD_MENTION':
-      return toEmail(({ author, title, text }) => ({
-        subject: `[Pioneer forum] ${title}`,
-        text: `${author} mentioned you in a new thread: ${title}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${entityId}\n\nContent: ${text}`,
-      }))
+  const emailSubject = `[Pioneer forum] ${title}`
+  const emailSummary: string = match(kind)
+    .with('FORUM_THREAD_MENTION', () => `${author} mentioned you in a new thread ${title}.`)
+    .with('FORUM_CATEGORY_ENTITY_THREAD', 'FORUM_THREAD_ALL', () => `${author} posted a new thread ${title}.`)
+    .exhaustive()
+  const emailText: string = match(kind)
+    .with('FORUM_THREAD_MENTION', () => `${author} mentioned you in a new thread ${title}.`)
+    .with('FORUM_CATEGORY_ENTITY_THREAD', 'FORUM_THREAD_ALL', () => `${author} posted a new thread ${title}.`)
+    .exhaustive()
 
-    case 'FORUM_CATEGORY_ENTITY_THREAD':
-    case 'FORUM_THREAD_ALL':
-      return toEmail(({ author, title, text }) => ({
-        subject: `[Pioneer forum] ${title}`,
-        text: `${author} posted a new thread ${title}.\nRead it here: ${PIONEER_URL}/#/forum/thread/${entityId}\n\nContent: ${text}`,
-      }))
+  const renderedEmail = render(
+    PioneerEmail({
+      memberHandle: member.name,
+      summary: emailSummary,
+      text: emailText,
+      cta: {
+        label: 'See on Pioneer',
+        href: `${PIONEER_URL}/#/forum/thread/${entityId}`,
+      },
+    })
+  )
+
+  return {
+    subject: emailSubject,
+    html: renderedEmail,
+    to: member.email,
   }
-}
-
-interface Thread {
-  author: string
-  title: string
-  text?: string
-}
-const threads: { [id: string]: Thread } = {}
-const thread = async (id: string): Promise<Thread> => {
-  if (!(id in thread)) {
-    const { forumThreadByUniqueInput: thread } = await request(QUERY_NODE_ENDPOINT, GetThreadDocument, { id })
-    if (!thread) {
-      throw Error(`Failed to fetch post ${id} on the QN`)
-    }
-
-    threads[id] = {
-      author: thread.author.handle,
-      title: thread.title,
-      text: thread.initialPost?.text,
-    }
-  }
-
-  return threads[id]
 }

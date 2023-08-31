@@ -1,5 +1,4 @@
 import { config } from 'dotenv'
-import { pick } from 'lodash'
 import log from 'npmlog'
 
 config()

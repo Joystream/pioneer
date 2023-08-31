@@ -17,6 +17,7 @@
     "dev:api": "yarn nodemon ./src/common/scripts/startApi.ts",
     "dev:notify": "yarn nodemon ./src/notifier/scripts/notify.ts",
     "dev:authtoken": "yarn nodemon ./src/auth/scripts/generateToken.ts",
+    "dev:emails": "email dev --dir ./src/common/email-templates",
     "lint": "yarn lint:prettier --check && yarn lint:eslint --max-warnings=0",
     "lint:eslint": "eslint \"./{src,test}/**/*.ts\"",
     "lint:fix": "yarn lint:eslint --fix && yarn lint:prettier --write --loglevel warn",
@@ -31,6 +32,8 @@
     "@apollo/server-plugin-landing-page-graphql-playground": "^4.0.0",
     "@polkadot/util-crypto": "^11.0.1",
     "@prisma/client": "^4.10.1",
+    "@react-email/components": "^0.0.7",
+    "@react-email/render": "^0.0.7",
     "@sendgrid/mail": "^7.7.0",
     "apollo-server": "^3.11.1",
     "graphql": "^16.6.0",
@@ -42,6 +45,8 @@
     "nexus-prisma": "^1.0.4",
     "node-cron": "^3.0.2",
     "npmlog": "^7.0.1",
+    "react-email": "^1.9.4",
+    "ts-pattern": "^5.0.5",
     "yup": "^0.32.9"
   },
   "devDependencies": {

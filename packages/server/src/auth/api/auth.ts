@@ -6,7 +6,9 @@ import { verifySignature } from '@/auth/model/signature'
 import { createAuthToken, createEmailToken } from '@/auth/model/token'
 import { Context } from '@/common/api'
 import { PIONEER_URL } from '@/common/config'
-import { emailProvider } from '@/common/utils/email'
+import { createEmailProvider } from '@/common/utils/email'
+
+const emailProvider = createEmailProvider()
 
 interface SignInArgs {
   memberId: number
