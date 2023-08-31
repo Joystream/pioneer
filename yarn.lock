@@ -29446,7 +29446,7 @@ __metadata:
     prisma: ^4.10.1
     react-email: ^1.9.4
     ts-node: ^10.9.1
-    ts-pattern: ^5.0.5
+    ts-pattern: ^4.3.0
     tsconfig-paths: ^3.14.2
     tscpaths: ^0.0.9
     typescript: ^4.9.5
@@ -31484,10 +31484,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-pattern@npm:^5.0.5":
-  version: 5.0.5
-  resolution: "ts-pattern@npm:5.0.5"
-  checksum: 9eef9fe24ee29c92cfd00c945c35d1b93b1d04e9e47da6cd13f0a2f480864210acdab0c6d2d07ef4f396f6f0e54627a6b60afacc788c4501ee81f699a45588ff
+"ts-pattern@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "ts-pattern@npm:4.3.0"
+  checksum: f5167f6f721212c1e22f8590bb1fc21e27fd591d6fc5af0e467778f8e5b2dc1ae490cf5c633c83a3021a61283a671a53faf250b081c17c0f025e73eb775e5fe3
   languageName: node
   linkType: hard
 

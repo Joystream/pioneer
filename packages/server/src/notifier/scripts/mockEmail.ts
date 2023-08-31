@@ -7,7 +7,7 @@ import { createEmailNotifier } from '../model/email'
 const sendEmail = async () => {
   const emailAddress = process.argv[2]
   if (!emailAddress) {
-    process.stderr.write('Usage: mockEmail emailAddress [notificationKind]')
+    process.stderr.write('Usage: mockEmail email [notificationKind]')
     return
   }
   const emailProvider = createEmailProvider()
