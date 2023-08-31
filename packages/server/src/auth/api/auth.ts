@@ -1,3 +1,4 @@
+import { render } from '@react-email/render'
 import { pick } from 'lodash'
 import { arg, intArg, mutationField, nonNull, stringArg } from 'nexus'
 import * as Yup from 'yup'
@@ -6,6 +7,7 @@ import { verifySignature } from '@/auth/model/signature'
 import { createAuthToken, createEmailToken } from '@/auth/model/token'
 import { Context } from '@/common/api'
 import { PIONEER_URL } from '@/common/config'
+import PioneerEmail from '@/common/email-templates/pioneer-email'
 import { createEmailProvider } from '@/common/utils/email'
 
 const emailProvider = createEmailProvider()
@@ -66,7 +68,17 @@ export const signup = mutationField('signup', {
       await emailProvider.sendEmail({
         to: args.email,
         subject: 'Confirm your email for Pioneer',
-        text: `Token:${token}\nWith link to :${verificationUrl}`,
+        html: render(
+          PioneerEmail({
+            memberHandle: args.name,
+            summary: 'Confirm your email for Pioneer',
+            text: 'Please use the link below to confirm your email address for Pioneer notifications',
+            cta: {
+              label: 'Confirm email',
+              href: verificationUrl,
+            },
+          })
+        ),
       })
     }
 
