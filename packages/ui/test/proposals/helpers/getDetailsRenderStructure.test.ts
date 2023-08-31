@@ -60,49 +60,27 @@ describe('getDetailsRenderStructure()', () => {
     expect(structure).toEqual({
       structure: [
         {
-          label: 'amount',
-          value: new BN(20),
+          label: 'Total Payment',
+          value: new BN(60),
           renderType: 'Amount',
         },
         {
-          label: 'destination',
-          value: alice.address,
-          renderType: 'Address',
-        },
-        {
-          label: '',
-          value: undefined,
-          renderType: 'Divider',
-        },
-        {
-          label: 'amount',
-          value: new BN(30),
-          renderType: 'Amount',
-        },
-        {
-          label: 'destination',
-          value: bob.address,
-          renderType: 'Address',
-        },
-        {
-          label: '',
-          value: undefined,
-          renderType: 'Divider',
-        },
-        {
-          label: 'amount',
-          value: new BN(10),
-          renderType: 'Amount',
-        },
-        {
-          label: 'destination',
-          value: aliceStash.address,
-          renderType: 'Address',
-        },
-        {
-          label: '',
-          value: undefined,
-          renderType: 'Divider',
+          label: 'Payment Details',
+          value: [
+            {
+              account: alice.address,
+              amount: new BN(20),
+            },
+            {
+              account: bob.address,
+              amount: new BN(30),
+            },
+            {
+              account: aliceStash.address,
+              amount: new BN(10),
+            },
+          ],
+          renderType: 'DestinationsPreview',
         },
       ],
     })
