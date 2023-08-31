@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { TransferButtonStyled } from '../../accounts/components/TransferButton'
 import { useMyTotalBalances } from '../../accounts/hooks/useMyTotalBalances'
-import { TokenValue } from '../../common/components/typography'
+import { TextSmall, TokenValue } from '../../common/components/typography'
 import { Colors } from '../../common/constants'
 
 import { Memberships } from '.'
@@ -19,6 +19,11 @@ export function ProfileComponent() {
         <BalanceTitle>Total Balance</BalanceTitle>
         <TotalBalance>
           <TotalTokenValue value={total} />
+          <TextSmall>
+            <BuyTokenLink href="https://www.joystream.org/token" target="_blank">
+              Buy Joy tokens
+            </BuyTokenLink>
+          </TextSmall>
         </TotalBalance>
         <TransferButtonStyled />
       </MemberBalance>
@@ -79,8 +84,13 @@ const TotalBalance = styled.span`
   line-height: 24px;
   color: ${Colors.White};
   font-weight: 700;
+  flex-direction: column;
 `
 
 const TotalTokenValue = styled(TokenValue)`
   color: ${Colors.White};
+`
+const BuyTokenLink = styled.a`
+  color: ${Colors.White};
+  text-decoration: underline;
 `
