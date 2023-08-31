@@ -7,7 +7,7 @@ interface StatisticsLayoutProps {
 
 export const Statistics = styled.div<StatisticsLayoutProps>`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: ${({ gapSize }) => (gapSize === 's' ? '16px' : '24px')};
   width: 100%;
   max-width: 100%;

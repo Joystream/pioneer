@@ -30,9 +30,9 @@ export const getSpecificParameters = async (
     }
     case 'fundingRequest': {
       return createType('PalletProposalsCodexProposalDetails', {
-        FundingRequest: [
-          { amount: specifics?.fundingRequest?.amount, account: specifics?.fundingRequest?.account?.address },
-        ],
+        FundingRequest: specifics?.fundingRequest?.payMultiple
+          ? specifics?.fundingRequest?.accountsAndAmounts
+          : [{ amount: specifics?.fundingRequest?.amount, account: specifics?.fundingRequest?.account?.address }],
       })
     }
     case 'runtimeUpgrade': {
