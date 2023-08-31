@@ -16,6 +16,7 @@
     "dev:db:build": "yarn dev:db && yarn dev:build",
     "dev:api": "yarn nodemon ./src/common/scripts/startApi.ts",
     "dev:notify": "yarn nodemon ./src/notifier/scripts/notify.ts",
+    "dev:mockEmail": "yarn ts-node ./src/notifier/scripts/mockEmail.ts",
     "dev:authtoken": "yarn nodemon ./src/auth/scripts/generateToken.ts",
     "dev:emails": "email dev --dir ./src/common/email-templates",
     "lint": "yarn lint:prettier --check && yarn lint:eslint --max-warnings=0",
