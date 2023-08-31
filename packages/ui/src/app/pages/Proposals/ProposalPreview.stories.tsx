@@ -1,4 +1,4 @@
-import { expect } from '@storybook/jest'
+import { expect, jest } from '@storybook/jest'
 import { Meta, StoryContext, StoryObj } from '@storybook/react'
 import { userEvent, within } from '@storybook/testing-library'
 import { random } from 'faker'
@@ -49,7 +49,7 @@ type Args = {
   vote1: VoteArg
   vote2: VoteArg
   vote3: VoteArg
-  onVote: CallableFunction
+  onVote: jest.Mock
 }
 type Story = StoryObj<FC<Args>>
 
@@ -63,7 +63,7 @@ export default {
     vote1: { control: { type: 'inline-radio' }, options: voteArgs },
     vote2: { control: { type: 'inline-radio' }, options: voteArgs },
     vote3: { control: { type: 'inline-radio' }, options: voteArgs },
-    onVote: { action: 'Voted' },
+    onVote: { action: 'ProposalsEngine.Voted' },
   },
 
   args: {
