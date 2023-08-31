@@ -7,7 +7,7 @@ import { verifySignature } from '@/auth/model/signature'
 import { createAuthToken, createEmailToken } from '@/auth/model/token'
 import { Context } from '@/common/api'
 import { PIONEER_URL } from '@/common/config'
-import PioneerEmail from '@/common/email-templates/pioneer-email'
+import PioneerEmailTemplate from '@/common/email-templates/pioneer-email'
 import { createEmailProvider } from '@/common/utils/email'
 
 const emailProvider = createEmailProvider()
@@ -69,11 +69,11 @@ export const signup = mutationField('signup', {
         to: args.email,
         subject: 'Confirm your email for Pioneer',
         html: render(
-          PioneerEmail({
+          PioneerEmailTemplate({
             memberHandle: args.name,
             summary: 'Confirm your email for Pioneer',
             text: 'Please use the link below to confirm your email address for Pioneer notifications',
-            cta: {
+            button: {
               label: 'Confirm email',
               href: verificationUrl,
             },

@@ -2,7 +2,7 @@ import { render } from '@react-email/render'
 import { match } from 'ts-pattern'
 
 import { PIONEER_URL } from '@/common/config'
-import { PioneerEmail } from '@/common/email-templates/pioneer-email'
+import { PioneerEmailTemplate } from '@/common/email-templates/pioneer-email'
 
 import { EmailFromNotificationFn, getForumPost, getForumThread } from './utils'
 
@@ -30,6 +30,7 @@ export const fromPostAddedNotification: EmailFromNotificationFn = async ({ id, k
   const { author, thread, threadId } = await getForumPost(entityId)
 
   const emailSubject = `[Pioneer forum] ${thread}`
+
   const emailSummary: string = match(kind)
     .with('FORUM_THREAD_CONTRIBUTOR', 'FORUM_THREAD_CREATOR', () => `${author} replied in the thread ${thread}.`)
     .with('FORUM_POST_MENTION', () => `${author} mentioned you in the thread ${thread}.`)
@@ -40,6 +41,7 @@ export const fromPostAddedNotification: EmailFromNotificationFn = async ({ id, k
       () => `${author} posted in the thread ${thread}.`
     )
     .exhaustive()
+
   const emailText: string = match(kind)
     .with('FORUM_THREAD_CONTRIBUTOR', 'FORUM_THREAD_CREATOR', () => `${author} replied in the thread ${thread}.`)
     .with('FORUM_POST_MENTION', () => `${author} mentioned you in the thread ${thread}.`)
@@ -51,12 +53,12 @@ export const fromPostAddedNotification: EmailFromNotificationFn = async ({ id, k
     )
     .exhaustive()
 
-  const renderedEmail = render(
-    PioneerEmail({
+  const emailHtml = render(
+    PioneerEmailTemplate({
       memberHandle: member.name,
       summary: emailSummary,
       text: emailText,
-      cta: {
+      button: {
         label: 'See on Pioneer',
         href: `${PIONEER_URL}/#/forum/thread/${threadId}?post=${entityId}`,
       },
@@ -65,7 +67,7 @@ export const fromPostAddedNotification: EmailFromNotificationFn = async ({ id, k
 
   return {
     subject: emailSubject,
-    html: renderedEmail,
+    html: emailHtml,
     to: member.email,
   }
 }
@@ -82,21 +84,23 @@ export const fromThreadCreatedNotification: EmailFromNotificationFn = async ({ i
   const { author, title } = await getForumThread(entityId)
 
   const emailSubject = `[Pioneer forum] ${title}`
+
   const emailSummary: string = match(kind)
     .with('FORUM_THREAD_MENTION', () => `${author} mentioned you in a new thread ${title}.`)
     .with('FORUM_CATEGORY_ENTITY_THREAD', 'FORUM_THREAD_ALL', () => `${author} posted a new thread ${title}.`)
     .exhaustive()
+
   const emailText: string = match(kind)
     .with('FORUM_THREAD_MENTION', () => `${author} mentioned you in a new thread ${title}.`)
     .with('FORUM_CATEGORY_ENTITY_THREAD', 'FORUM_THREAD_ALL', () => `${author} posted a new thread ${title}.`)
     .exhaustive()
 
-  const renderedEmail = render(
-    PioneerEmail({
+  const emailHtml = render(
+    PioneerEmailTemplate({
       memberHandle: member.name,
       summary: emailSummary,
       text: emailText,
-      cta: {
+      button: {
         label: 'See on Pioneer',
         href: `${PIONEER_URL}/#/forum/thread/${entityId}`,
       },
@@ -105,7 +109,7 @@ export const fromThreadCreatedNotification: EmailFromNotificationFn = async ({ i
 
   return {
     subject: emailSubject,
-    html: renderedEmail,
+    html: emailHtml,
     to: member.email,
   }
 }

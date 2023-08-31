@@ -13,25 +13,26 @@ import * as React from 'react'
 
 import { PIONEER_URL } from '../config'
 
-interface PioneerEmailProps {
+interface PioneerEmailTemplateProps {
   memberHandle: string
   text: string
   summary: string
-  cta?: {
+  button: {
     href: string
     label: string
   }
 }
 
-export const PioneerEmail = ({
+export const PioneerEmailTemplate = ({
   memberHandle = 'bob',
   text = 'New council election has just started. Follow the link below to announce your candidacy.',
   summary,
-  cta = {
-    href: 'https://pioneer.dev',
+  // button default value only for email development preview
+  button = {
+    href: `${PIONEER_URL}/#/election`,
     label: 'See on Pioneer',
   },
-}: PioneerEmailProps) => (
+}: PioneerEmailTemplateProps) => (
   <Html>
     <Head />
     <Preview>{summary}</Preview>
@@ -47,9 +48,9 @@ export const PioneerEmail = ({
         <Section style={mainSectionStyle}>
           <Heading style={h1Style}>Hi {memberHandle},</Heading>
           <Text style={textStyle}>{text}</Text>
-          {cta && (
-            <Button href={cta.href} style={ctaStyle} pX={16} pY={12}>
-              {cta.label}
+          {button && (
+            <Button href={button.href} style={ctaStyle} pX={16} pY={12}>
+              {button.label}
             </Button>
           )}
         </Section>
@@ -86,7 +87,7 @@ export const PioneerEmail = ({
   </Html>
 )
 
-export default PioneerEmail
+export default PioneerEmailTemplate
 
 const bodyStyle = {
   backgroundColor: '#ffffff',
