@@ -69,11 +69,6 @@ const destinationsMapper: Mapper<DestinationsDetail, 'destinations'> = (value): 
         value: destination.account,
         renderType: 'Address',
       })
-      result.push({
-        label: '',
-        value: undefined,
-        renderType: 'Divider',
-      })
     })
   }
   if (value.length > 1) {

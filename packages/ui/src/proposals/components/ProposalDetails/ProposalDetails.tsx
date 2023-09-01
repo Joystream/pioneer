@@ -56,7 +56,7 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
 export const ProposalDetails = ({ proposalDetails }: Props) => {
   const { api } = useApi()
   const { budget } = useCouncilStatistics()
-  const { group } = useWorkingGroup({ name: (proposalDetails as UpdateGroupBudgetDetails)?.group?.id })
+  const { group } = useWorkingGroup({ name: proposalDetails?.type === 'fundingRequest' ? 'contentWorkingGroup':(proposalDetails as UpdateGroupBudgetDetails)?.group?.id })
   const membershipPrice = useFirstObservableValue(() => api?.query.members.membershipPrice(), [api?.isConnected])
   const renderProposalDetail = useCallback((detail: RenderNode, index: number) => {
     const Component = renderTypeMapper[detail.renderType]
@@ -84,7 +84,7 @@ export const ProposalDetails = ({ proposalDetails }: Props) => {
       return [
         {
           renderType: 'Amount',
-          label: 'Current WG Budget',
+          label: 'Current Content WG Budget',
           value: group?.budget,
         },
       ] as RenderNode[]

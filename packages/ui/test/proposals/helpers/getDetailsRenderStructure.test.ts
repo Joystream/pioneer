@@ -28,11 +28,6 @@ describe('getDetailsRenderStructure()', () => {
           value: alice.address,
           renderType: 'Address',
         },
-        {
-          label: '',
-          value: undefined,
-          renderType: 'Divider',
-        },
       ],
     })
   })
