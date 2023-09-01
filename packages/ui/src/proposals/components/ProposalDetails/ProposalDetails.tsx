@@ -57,10 +57,7 @@ export const ProposalDetails = ({ proposalDetails }: Props) => {
   const { api } = useApi()
   const { budget } = useCouncilStatistics()
   const { group } = useWorkingGroup({
-    name:
-      proposalDetails?.type === 'fundingRequest'
-        ? 'contentWorkingGroup'
-        : (proposalDetails as UpdateGroupBudgetDetails)?.group?.id,
+    name: (proposalDetails as UpdateGroupBudgetDetails)?.group?.id,
   })
   const membershipPrice = useFirstObservableValue(() => api?.query.members.membershipPrice(), [api?.isConnected])
   const renderProposalDetail = useCallback((detail: RenderNode, index: number) => {
@@ -89,8 +86,8 @@ export const ProposalDetails = ({ proposalDetails }: Props) => {
       return [
         {
           renderType: 'Amount',
-          label: 'Current Content WG Budget',
-          value: group?.budget,
+          label: 'Current Council Budget',
+          value: budget.amount,
         },
       ] as RenderNode[]
     }
