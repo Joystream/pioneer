@@ -1,6 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { QuestionIcon } from '@/common/components/icons'
+import { Tooltip, DefaultTooltip } from '@/common/components/Tooltip'
+
 import { TransferButtonStyled } from '../../accounts/components/TransferButton'
 import { useMyTotalBalances } from '../../accounts/hooks/useMyTotalBalances'
 import { TextSmall, TokenValue } from '../../common/components/typography'
@@ -18,7 +21,19 @@ export function ProfileComponent() {
       <MemberBalance>
         <BalanceTitle>Total Balance</BalanceTitle>
         <TotalBalance>
-          <TotalTokenValue value={total} />
+          <TokenDetail>
+            <TotalTokenValue value={total} />
+            <Tooltip
+              className={'popper-light'}
+              tooltipLinkText="Learn how to earn JOY’s"
+              tooltipLinkURL="https://www.joystream.org/token/"
+              placement="top-start"
+            >
+              <StyledDefaultTooltip>
+                <QuestionIcon />
+              </StyledDefaultTooltip>
+            </Tooltip>
+          </TokenDetail>
           <TextSmall>
             <BuyTokenLink href="https://www.joystream.org/token" target="_blank">
               Buy Joy tokens
@@ -93,4 +108,11 @@ const TotalTokenValue = styled(TokenValue)`
 const BuyTokenLink = styled.a`
   color: ${Colors.White};
   text-decoration: underline;
+`
+const TokenDetail = styled.div`
+  display: flex;
+  column-gap: 8px;
+`
+const StyledDefaultTooltip = styled(DefaultTooltip)`
+  margin-top: 4px;
 `

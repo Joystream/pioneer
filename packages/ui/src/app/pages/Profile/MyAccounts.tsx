@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { Accounts } from '@/accounts/components/Accounts'
 import { ClaimVestingButton } from '@/accounts/components/ClaimVestingButton'
@@ -9,6 +9,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
 
+import { BannerSection } from './components/BannerSection'
 import { MyProfileTabs } from './components/MyProfileTabs'
 
 const hints = {
@@ -52,6 +53,7 @@ export const MyAccounts = () => {
   const { total, transferable, locked, recoverable, vestingTotal, vestedClaimable, vestingLocked } =
     useMyTotalBalances()
   const { hasAccounts, isLoading } = useMyAccounts()
+  const [shouldDismissBanner, setShouldDismissBanner] = useState(false)
   const shouldHideStatistics = !hasAccounts && !isLoading
 
   return (
@@ -62,6 +64,7 @@ export const MyAccounts = () => {
             <PageTitle>My Profile</PageTitle>
             <MyProfileTabs />
           </PageHeaderWrapper>
+          {!shouldDismissBanner && <BannerSection setShouldDismissBanner={setShouldDismissBanner} />}
           {!shouldHideStatistics && (
             <Statistics>
               <TokenValueStat {...hints.total} value={total} />
