@@ -87,6 +87,7 @@ export const AddNewProposalModal = () => {
   const schema = useMemo(() => schemaFactory(api), [!api])
 
   const path = useMemo(() => machineStateConverter(state.value) as keyof AddNewProposalForm, [state.value])
+
   const form = useForm<AddNewProposalForm>({
     resolver: useYupValidationResolver<AddNewProposalForm>(schema, path),
     mode: 'onChange',

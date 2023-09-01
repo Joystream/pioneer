@@ -1,7 +1,7 @@
 import { AugmentedConsts, AugmentedQueries, AugmentedSubmittables } from '@polkadot/api/types'
 import { RpcInterface } from '@polkadot/rpc-core/types'
 import { Codec } from '@polkadot/types/types'
-import { isFunction, isObject, mapValues, merge } from 'lodash'
+import { isArray, isFunction, isObject, mapValues, merge } from 'lodash'
 import React, { FC, useEffect, useMemo, useState } from 'react'
 import { Observable, of } from 'rxjs'
 
@@ -124,6 +124,11 @@ const asApiMethod = (value: any) => {
 
   if (isObject(value) && 'size' in value) {
     method.size = () => of(asChainData(value.size))
+  }
+
+  if (isObject(value) && 'entries' in value && isArray(value.entries)) {
+    const entries = value.entries.map((entry) => [{ args: [asChainData(entry)] }])
+    method.entries = () => of(entries)
   }
 
   return method
