@@ -95,7 +95,7 @@ describe('API: Authentication', () => {
       expect.objectContaining({
         to: ALICE.email,
         subject: 'Confirm your email for Pioneer',
-        text: expect.stringMatching(verifyEmailLinkRegex),
+        html: expect.stringMatching(verifyEmailLinkRegex),
       })
     )
   })

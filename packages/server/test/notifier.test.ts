@@ -131,45 +131,35 @@ describe('Notifier', () => {
         expect.objectContaining({
           to: alice.email,
           subject: expect.stringContaining('thread:title'),
-          text: expect.stringMatching(
-            /author:handle replied\b.+\b\/#\/forum\/thread\/thread:id\?post=post:1\b.+ Lorem Ipsum/s
-          ),
+          html: expect.stringMatching(/\/#\/forum\/thread\/thread:id\?post=post:1/s),
         })
       )
       expect(mockSendEmail).toHaveBeenCalledWith(
         expect.objectContaining({
           to: alice.email,
           subject: expect.stringContaining('thread:title'),
-          text: expect.stringMatching(
-            /author:handle mentioned you\b.+\b\/#\/forum\/thread\/thread:id\?post=post:2\b.+ Lorem Ipsum/s
-          ),
+          html: expect.stringMatching(/\/#\/forum\/thread\/thread:id\?post=post:2/s),
         })
       )
       expect(mockSendEmail).toHaveBeenCalledWith(
         expect.objectContaining({
           to: bob.email,
           subject: expect.stringContaining('thread:title'),
-          text: expect.stringMatching(
-            /author:handle posted\b.+\b\/#\/forum\/thread\/thread:id\?post=post:2\b.+ Lorem Ipsum/s
-          ),
+          html: expect.stringMatching(/\/#\/forum\/thread\/thread:id\?post=post:2/s),
         })
       )
       expect(mockSendEmail).toHaveBeenCalledWith(
         expect.objectContaining({
           to: alice.email,
           subject: expect.stringContaining('thread:title'),
-          text: expect.stringMatching(
-            /author:handle posted\b.+\b\/#\/forum\/thread\/thread:id\?post=post:3\b.+ Lorem Ipsum/s
-          ),
+          html: expect.stringMatching(/\/#\/forum\/thread\/thread:id\?post=post:3/s),
         })
       )
       expect(mockSendEmail).toHaveBeenCalledWith(
         expect.objectContaining({
           to: bob.email,
           subject: expect.stringContaining('thread:title'),
-          text: expect.stringMatching(
-            /author:handle posted\b.+\b\/#\/forum\/thread\/thread:id\?post=post:3\b.+ Lorem Ipsum/s
-          ),
+          html: expect.stringMatching(/\/#\/forum\/thread\/thread:id\?post=post:3/s),
         })
       )
       expect(mockSendEmail).toHaveBeenCalledTimes(5)
@@ -269,21 +259,21 @@ describe('Notifier', () => {
         expect.objectContaining({
           to: alice.email,
           subject: expect.stringContaining('thread:1:title'),
-          text: expect.stringMatching(/author:handle mentioned you\b.+\b\/#\/forum\/thread\/thread:1\b.+ Lorem Ipsum/s),
+          html: expect.stringMatching(/\/#\/forum\/thread\/thread:1/s),
         })
       )
       expect(mockSendEmail).toHaveBeenCalledWith(
         expect.objectContaining({
           to: alice.email,
           subject: expect.stringContaining('thread:2:title'),
-          text: expect.stringMatching(/author:handle posted\b.+\b\/#\/forum\/thread\/thread:2\b.+ Lorem Ipsum/s),
+          html: expect.stringMatching(/\/#\/forum\/thread\/thread:2/s),
         })
       )
       expect(mockSendEmail).toHaveBeenCalledWith(
         expect.objectContaining({
           to: bob.email,
           subject: expect.stringContaining('thread:3:title'),
-          text: expect.stringMatching(/author:handle posted\b.+\b\/#\/forum\/thread\/thread:3\b.+ Lorem Ipsum/s),
+          html: expect.stringMatching(/\/#\/forum\/thread\/thread:3/s),
         })
       )
       expect(mockSendEmail).toHaveBeenCalledTimes(3)

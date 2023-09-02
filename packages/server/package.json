@@ -76,6 +76,7 @@
     "nodemon": "^2.0.21",
     "prettier": "^2.4.1",
     "prisma": "^4.10.1",
+    "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^3.14.2",
     "tscpaths": "^0.0.9",
