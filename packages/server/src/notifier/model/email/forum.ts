@@ -1,10 +1,10 @@
-import { render } from '@react-email/render'
 import { match } from 'ts-pattern'
 
 import { PIONEER_URL } from '@/common/config'
-import { PioneerEmailTemplate } from '@/common/email-templates/pioneer-email'
+import { renderPioneerEmail } from '@/common/email-templates/pioneer-email'
 
-import { EmailFromNotificationFn, getForumPost, getForumThread } from './utils'
+import { EmailFromNotificationFn } from './utils'
+import { getForumPost, getForumThread } from './utils/forum'
 
 export const fromPostAddedNotification: EmailFromNotificationFn = async ({ id, kind, entityId, member }) => {
   if (
@@ -53,17 +53,15 @@ export const fromPostAddedNotification: EmailFromNotificationFn = async ({ id, k
     )
     .exhaustive()
 
-  const emailHtml = render(
-    PioneerEmailTemplate({
-      memberHandle: member.name,
-      summary: emailSummary,
-      text: emailText,
-      button: {
-        label: 'See on Pioneer',
-        href: `${PIONEER_URL}/#/forum/thread/${threadId}?post=${entityId}`,
-      },
-    })
-  )
+  const emailHtml = renderPioneerEmail({
+    memberHandle: member.name,
+    summary: emailSummary,
+    text: emailText,
+    button: {
+      label: 'See on Pioneer',
+      href: `${PIONEER_URL}/#/forum/thread/${threadId}?post=${entityId}`,
+    },
+  })
 
   return {
     subject: emailSubject,
@@ -95,17 +93,15 @@ export const fromThreadCreatedNotification: EmailFromNotificationFn = async ({ i
     .with('FORUM_CATEGORY_ENTITY_THREAD', 'FORUM_THREAD_ALL', () => `${author} posted a new thread ${title}.`)
     .exhaustive()
 
-  const emailHtml = render(
-    PioneerEmailTemplate({
-      memberHandle: member.name,
-      summary: emailSummary,
-      text: emailText,
-      button: {
-        label: 'See on Pioneer',
-        href: `${PIONEER_URL}/#/forum/thread/${entityId}`,
-      },
-    })
-  )
+  const emailHtml = renderPioneerEmail({
+    memberHandle: member.name,
+    summary: emailSummary,
+    text: emailText,
+    button: {
+      label: 'See on Pioneer',
+      href: `${PIONEER_URL}/#/forum/thread/${entityId}`,
+    },
+  })
 
   return {
     subject: emailSubject,

@@ -7,6 +7,7 @@ import { Html } from '@react-email/html'
 import { Img } from '@react-email/img'
 import { Link } from '@react-email/link'
 import { Preview } from '@react-email/preview'
+import { render } from '@react-email/render'
 import { Section } from '@react-email/section'
 import { Text } from '@react-email/text'
 import * as React from 'react'
@@ -23,7 +24,7 @@ interface PioneerEmailTemplateProps {
   }
 }
 
-export const PioneerEmailTemplate = ({
+const PioneerEmailTemplate = ({
   memberHandle = 'bob',
   text = 'New council election has just started. Follow the link below to announce your candidacy.',
   summary,
@@ -87,7 +88,7 @@ export const PioneerEmailTemplate = ({
   </Html>
 )
 
-export default PioneerEmailTemplate
+export const renderPioneerEmail = (props: PioneerEmailTemplateProps) => render(PioneerEmailTemplate(props))
 
 const bodyStyle = {
   backgroundColor: '#ffffff',
