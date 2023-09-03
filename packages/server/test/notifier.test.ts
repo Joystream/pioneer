@@ -4,6 +4,7 @@ import { run } from '@/notifier'
 
 import { createMember } from './_mocks/notifier/createMember'
 import { postAddedEvent, threadCreatedEvent } from './_mocks/notifier/events'
+import { electionAnnouncingEvent, electionRevealingEvent, electionVotingEvent } from './_mocks/notifier/events/election'
 import { clearDb, mockRequest, mockSendEmail } from './setup'
 
 describe('Notifier', () => {
@@ -274,6 +275,111 @@ describe('Notifier', () => {
           to: bob.email,
           subject: expect.stringContaining('thread:3:title'),
           html: expect.stringMatching(/\/#\/forum\/thread\/thread:3/s),
+        })
+      )
+      expect(mockSendEmail).toHaveBeenCalledTimes(3)
+    })
+  })
+
+  describe('election', () => {
+    it('ElectionAnnouncingStartedEvent', async () => {
+      // -------------------
+      // Initialize database
+      // -------------------
+
+      // - Alice is using the default behavior for general subscriptions
+      // - Alice should be notified of any election changes
+      const alice = await createMember(1, 'alice', [
+        { kind: 'ELECTION_ANNOUNCING_STARTED' },
+        { kind: 'ELECTION_VOTING_STARTED' },
+        { kind: 'ELECTION_REVEALING_STARTED' },
+      ])
+
+      // - Bob should not be notified of any election changes
+      await createMember(2, 'bob', [{ kind: 'FORUM_POST_ALL' }])
+
+      // -------------------
+      // Mock QN responses
+      // -------------------
+
+      const announcingId = 'announcing:id'
+      const votingId = 'voting:id'
+      const revealingId = 'revealing:id'
+
+      mockRequest
+        .mockReturnValueOnce({
+          events: [
+            electionAnnouncingEvent(announcingId),
+            electionVotingEvent(votingId),
+            electionRevealingEvent(revealingId),
+          ],
+        })
+        .mockReturnValue({
+          events: [],
+        })
+
+      // -------------------
+      // Run
+      // -------------------
+
+      await run()
+
+      // -------------------
+      // Check notifications
+      // -------------------
+
+      const notifications = await prisma.notification.findMany()
+
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: announcingId,
+          memberId: alice.id,
+          kind: 'ELECTION_ANNOUNCING_STARTED',
+          isRead: false,
+          isSent: true,
+        })
+      )
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: votingId,
+          memberId: alice.id,
+          kind: 'ELECTION_VOTING_STARTED',
+          isSent: true,
+        })
+      )
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: revealingId,
+          memberId: alice.id,
+          kind: 'ELECTION_REVEALING_STARTED',
+          isSent: true,
+        })
+      )
+      expect(notifications).toHaveLength(3)
+
+      // -------------------
+      // Check emails
+      // -------------------
+
+      expect(mockSendEmail).toHaveBeenCalledWith(
+        expect.objectContaining({
+          to: alice.email,
+          subject: expect.stringContaining('election started'),
+          html: expect.stringMatching(/\/#\/election/s),
+        })
+      )
+      expect(mockSendEmail).toHaveBeenCalledWith(
+        expect.objectContaining({
+          to: alice.email,
+          subject: expect.stringContaining('voting started'),
+          html: expect.stringMatching(/\/#\/election/s),
+        })
+      )
+      expect(mockSendEmail).toHaveBeenCalledWith(
+        expect.objectContaining({
+          to: alice.email,
+          subject: expect.stringContaining('revealing period started'),
+          html: expect.stringMatching(/\/#\/election/s),
         })
       )
       expect(mockSendEmail).toHaveBeenCalledTimes(3)

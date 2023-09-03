@@ -3,6 +3,11 @@ import { verbose, error } from 'npmlog'
 
 import { Email, EmailProvider } from '@/common/utils/email'
 
+import {
+  fromElectionAnnouncingStartedNotification,
+  fromElectionRevealingStartedNotification,
+  fromElectionVotingStartedNotification,
+} from './election'
 import { fromPostAddedNotification, fromThreadCreatedNotification } from './forum'
 import { Notification, hasEmailAddress } from './utils'
 
@@ -17,7 +22,13 @@ export const createEmailNotifier =
       pick(notification, 'id', 'eventId', 'kind', 'entityId')
     )
 
-    const emailHandlers = [fromPostAddedNotification, fromThreadCreatedNotification]
+    const emailHandlers = [
+      fromPostAddedNotification,
+      fromThreadCreatedNotification,
+      fromElectionAnnouncingStartedNotification,
+      fromElectionVotingStartedNotification,
+      fromElectionRevealingStartedNotification,
+    ]
     const emailPromises = emailHandlers.map((handler) => handler(notification))
     const emailResults = await Promise.all(emailPromises)
 
