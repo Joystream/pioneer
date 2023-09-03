@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client'
+
 import { Email } from '@/common/utils/email'
 
 export type Notification = Prisma.NotificationGetPayload<{ include: { member: true } }>
