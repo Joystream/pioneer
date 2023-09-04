@@ -113,7 +113,7 @@ export const ProposalDetails = ({ proposalDetails }: Props) => {
     }
 
     return []
-  }, [membershipPrice, !group])
+  }, [membershipPrice, !group, budget])
 
   const extraInformation = useMemo(() => {
     if (proposalDetails?.type === 'updateWorkingGroupBudget') {
