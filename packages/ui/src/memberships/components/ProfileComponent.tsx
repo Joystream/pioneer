@@ -23,8 +23,7 @@ export function ProfileComponent() {
         <TotalBalance>
           <TokenDetail>
             <TotalTokenValue value={total} />
-            <Tooltip
-              className={'popper-light'}
+            <StyledTooltip
               tooltipLinkText="Learn how to earn JOY’s"
               tooltipLinkURL="https://www.joystream.org/token/"
               placement="top-start"
@@ -32,7 +31,7 @@ export function ProfileComponent() {
               <StyledDefaultTooltip>
                 <QuestionIcon />
               </StyledDefaultTooltip>
-            </Tooltip>
+            </StyledTooltip>
           </TokenDetail>
           <TextSmall>
             <BuyTokenLink href="https://www.joystream.org/token" target="_blank">
@@ -107,6 +106,7 @@ const TotalTokenValue = styled(TokenValue)`
 `
 const BuyTokenLink = styled.a`
   color: ${Colors.White};
+  font-weight: 400;
   text-decoration: underline;
 `
 const TokenDetail = styled.div`
@@ -115,4 +115,16 @@ const TokenDetail = styled.div`
 `
 const StyledDefaultTooltip = styled(DefaultTooltip)`
   margin-top: 4px;
+`
+const StyledTooltip = styled(Tooltip)`
+  background-color: ${Colors.Black[75]};
+  border-color: ${Colors.Black[300]};
+  a {
+    color: ${Colors.Blue[500]};
+    font-weight: 700;
+  }
+  :after {
+    background-color: ${Colors.Black[75]};
+    border-color: ${Colors.Black[300]};
+  }
 `

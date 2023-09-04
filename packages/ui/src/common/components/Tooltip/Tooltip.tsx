@@ -216,19 +216,6 @@ export const TooltipPopupContainer = styled.div<{ isTooltipActive?: boolean; for
     z-index: -1;
   }
 
-  &.popper-light {
-    background-color: ${Colors.Black[75]};
-    border-color: ${Colors.Black[300]};
-  }
-  &.popper-light a {
-    color: ${Colors.Blue[500]};
-    font-weight: 700;
-  }
-  &.popper-light:after {
-    background-color: ${Colors.Black[75]};
-    border-color: ${Colors.Black[300]};
-  }
-
   &[data-popper-placement^='top'] {
     &:after {
       bottom: -4px;
