@@ -16,6 +16,8 @@ export const fromPostAddedEvent: NotifEventFromQNEvent<'PostAddedEvent'> = async
 
   const eventData = pick(postAddedEvent, 'inBlock', 'id')
 
+  // TODO: add FORUM_POST_REPLY support
+
   return buildEvents(eventData, post.id, ({ generalEvent, entityEvent }) => [
     generalEvent('FORUM_POST_MENTION', mentionedMemberIds),
     generalEvent('FORUM_THREAD_CREATOR', [Number(post.thread.authorId)]),

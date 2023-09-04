@@ -1,4 +1,5 @@
 import { prisma } from '@/common/prisma'
+import { EmailProvider } from '@/common/utils/email'
 
 process.env.APP_SECRET_KEY = 'foo'
 process.env.APP_LOG_LEVEL = 'silent'
@@ -23,8 +24,10 @@ jest.mock('@/common/queries/__generated__', () => ({
 }))
 
 export const mockSendEmail = jest.fn()
+class MockEmailProvider implements EmailProvider {
+  sendEmail = mockSendEmail
+}
 jest.mock('@/common/utils/email', () => ({
   ...jest.requireActual('@/common/utils/email'),
-  NO_EMAIL_PROVIDER: false,
-  configEmailProvider: () => mockSendEmail,
+  createEmailProvider: () => new MockEmailProvider(),
 }))

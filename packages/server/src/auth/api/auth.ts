@@ -6,7 +6,10 @@ import { verifySignature } from '@/auth/model/signature'
 import { createAuthToken, createEmailToken } from '@/auth/model/token'
 import { Context } from '@/common/api'
 import { PIONEER_URL } from '@/common/config'
-import { configEmailProvider } from '@/common/utils/email'
+import { renderPioneerEmail } from '@/common/email-templates/pioneer-email'
+import { createEmailProvider } from '@/common/utils/email'
+
+const emailProvider = createEmailProvider()
 
 interface SignInArgs {
   memberId: number
@@ -61,10 +64,18 @@ export const signup = mutationField('signup', {
       const token = createEmailToken(pick(args as Required<SignUpArgs>, 'email', 'memberId'))
       const verificationUrl = `${req?.headers.referer ?? PIONEER_URL}/#/?verify-email=${token}`
 
-      await configEmailProvider()({
+      await emailProvider.sendEmail({
         to: args.email,
         subject: 'Confirm your email for Pioneer',
-        text: `Token:${token}\nWith link to :${verificationUrl}`,
+        html: renderPioneerEmail({
+          memberHandle: args.name,
+          summary: 'Confirm your email for Pioneer',
+          text: 'Please use the link below to confirm your email address for Pioneer notifications',
+          button: {
+            label: 'Confirm email',
+            href: verificationUrl,
+          },
+        }),
       })
     }
 
