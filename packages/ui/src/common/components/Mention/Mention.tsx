@@ -23,6 +23,7 @@ import {
   GetForumThreadMentionQuery,
 } from '@/forum/queries'
 import { asForumPostMention, asForumThreadMention, ForumPostMention, ForumThreadMention } from '@/forum/types'
+import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
 import { GetMemberMentionDocument, GetMemberMentionQuery } from '@/memberships/queries'
 import { asMember, Member } from '@/memberships/types'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
@@ -79,7 +80,7 @@ type TState =
 export const Mention = ({ children, type, itemId }: MentionProps) => {
   const client = useApolloClient()
   const [data, setData] = useState<TState>()
-
+  const showMemberModal = useShowMemberModal((data as Member)?.id)
   const query = useCallback(
     (query: DocumentNode) => async (id: string) =>
       await client.query({
@@ -246,11 +247,19 @@ export const Mention = ({ children, type, itemId }: MentionProps) => {
     <Container id="mention-container">
       {Icon}
       <Tooltip popupContent={Content} forBig>
-        <a href={'#' + UrlAddress}>
-          <TextMedium as="span" black bold underline>
-            {children}
-          </TextMedium>
-        </a>
+        {type === 'member' ? (
+          <a onClick={showMemberModal}>
+            <TextMedium as="span" black bold underline>
+              {children}
+            </TextMedium>
+          </a>
+        ) : (
+          <a href={'#' + UrlAddress}>
+            <TextMedium as="span" black bold underline>
+              {children}
+            </TextMedium>
+          </a>
+        )}
       </Tooltip>
     </Container>
   )
