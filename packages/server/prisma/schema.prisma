@@ -38,14 +38,15 @@ model Subscription {
 }
 
 model Notification {
-  id       Int              @id @default(autoincrement())
-  member   Member           @relation(fields: [memberId], references: [id])
-  memberId Int
-  kind     NotificationKind
-  eventId  String
-  entityId String?
-  isSent   Boolean          @default(false)
-  isRead   Boolean          @default(false)
+  id         Int                @id @default(autoincrement())
+  member     Member             @relation(fields: [memberId], references: [id])
+  memberId   Int
+  kind       NotificationKind
+  eventId    String
+  entityId   String?
+  status     NotificationStatus @default(PENDING)
+  retryCount Int                @default(0)
+  isRead     Boolean            @default(false)
 
   @@unique([memberId, eventId])
   @@index(memberId)
@@ -92,7 +93,6 @@ enum NotificationKind {
   ELECTION_ANNOUNCING_STARTED
   ELECTION_VOTING_STARTED
   ELECTION_REVEALING_STARTED
-  
 
   // ------------------
   // Entity specific
@@ -107,4 +107,10 @@ enum NotificationKind {
   // PROPOSAL_ENTITY_STATUS
   // PROPOSAL_ENTITY_VOTE
   // PROPOSAL_ENTITY_DISCUSSION
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
 }

@@ -195,7 +195,7 @@ query {
   notifications {
     kind
     entityId
-    isSent
+    status
   }
 }
 ```

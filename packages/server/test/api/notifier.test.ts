@@ -241,7 +241,7 @@ describe('API: notifier', () => {
           kind
           eventId
           entityId
-          isSent
+          status
           isRead
         }
       }
@@ -254,7 +254,6 @@ describe('API: notifier', () => {
           kind: 'FORUM_POST_ALL',
           eventId: 'post_creation:1',
           entityId: 'post:1',
-          isSent: false,
           isRead: false,
           memberId: ALICE.id,
         },
@@ -268,7 +267,7 @@ describe('API: notifier', () => {
           kind: 'FORUM_POST_ALL',
           eventId: 'post_creation:1',
           entityId: 'post:1',
-          isSent: false,
+          status: 'PENDING',
           isRead: false,
         },
       ],
