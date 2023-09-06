@@ -15,6 +15,7 @@ import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 import {
   Address,
   Amount,
+  DestinationsPreview,
   Divider,
   Hash,
   Markdown,
@@ -49,12 +50,15 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   OpeningLink: OpeningLink,
   Percentage: Percentage,
   Hash: Hash,
+  DestinationsPreview: DestinationsPreview,
 }
 
 export const ProposalDetails = ({ proposalDetails }: Props) => {
   const { api } = useApi()
   const { budget } = useCouncilStatistics()
-  const { group } = useWorkingGroup({ name: (proposalDetails as UpdateGroupBudgetDetails)?.group?.id })
+  const { group } = useWorkingGroup({
+    name: (proposalDetails as UpdateGroupBudgetDetails)?.group?.id,
+  })
   const membershipPrice = useFirstObservableValue(() => api?.query.members.membershipPrice(), [api?.isConnected])
   const renderProposalDetail = useCallback((detail: RenderNode, index: number) => {
     const Component = renderTypeMapper[detail.renderType]
@@ -74,6 +78,16 @@ export const ProposalDetails = ({ proposalDetails }: Props) => {
           renderType: 'Amount',
           label: 'Current membership price',
           value: membershipPrice ?? 0,
+        },
+      ] as RenderNode[]
+    }
+
+    if (proposalDetails?.type === 'fundingRequest') {
+      return [
+        {
+          renderType: 'Amount',
+          label: 'Current Council Budget',
+          value: budget.amount,
         },
       ] as RenderNode[]
     }
@@ -99,7 +113,7 @@ export const ProposalDetails = ({ proposalDetails }: Props) => {
     }
 
     return []
-  }, [membershipPrice, !group])
+  }, [membershipPrice, !group, budget])
 
   const extraInformation = useMemo(() => {
     if (proposalDetails?.type === 'updateWorkingGroupBudget') {
