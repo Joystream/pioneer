@@ -289,14 +289,10 @@ describe('Notifier', () => {
 
       // - Alice is using the default behavior for general subscriptions
       // - Alice should be notified of any election changes
-      const alice = await createMember(1, 'alice', [
-        { kind: 'ELECTION_ANNOUNCING_STARTED' },
-        { kind: 'ELECTION_VOTING_STARTED' },
-        { kind: 'ELECTION_REVEALING_STARTED' },
-      ])
+      const alice = await createMember(1, 'alice')
 
       // - Bob should not be notified of any election changes
-      await createMember(2, 'bob', [{ kind: 'FORUM_POST_ALL' }])
+      await createMember(2, 'bob', [{ kind: 'ELECTION_ANNOUNCING_STARTED', shouldNotify: false }])
 
       // -------------------
       // Mock QN responses
@@ -356,10 +352,10 @@ describe('Notifier', () => {
 
       // - Alice is using the default behavior for general subscriptions
       // - Alice should be notified of any election changes
-      const alice = await createMember(1, 'alice', [{ kind: 'ELECTION_VOTING_STARTED' }])
+      const alice = await createMember(1, 'alice')
 
       // - Bob should not be notified of any election changes
-      await createMember(2, 'bob', [{ kind: 'FORUM_POST_ALL' }])
+      await createMember(2, 'bob', [{ kind: 'ELECTION_VOTING_STARTED', shouldNotify: false }])
 
       // -------------------
       // Mock QN responses
@@ -418,10 +414,10 @@ describe('Notifier', () => {
 
       // - Alice is using the default behavior for general subscriptions
       // - Alice should be notified of any election changes
-      const alice = await createMember(1, 'alice', [{ kind: 'ELECTION_REVEALING_STARTED' }])
+      const alice = await createMember(1, 'alice')
 
       // - Bob should not be notified of any election changes
-      await createMember(2, 'bob', [{ kind: 'FORUM_POST_ALL' }])
+      await createMember(2, 'bob', [{ kind: 'ELECTION_REVEALING_STARTED', shouldNotify: false }])
 
       // -------------------
       // Mock QN responses
