@@ -2,7 +2,6 @@ import * as Prisma from '@prisma/client'
 import { arg, booleanArg, enumType, list, objectType, queryField, stringArg } from 'nexus'
 import { Notification, NotificationKind, NotificationStatus } from 'nexus-prisma'
 
-import { authMemberId } from '@/auth/model/token'
 import { Context } from '@/common/api'
 
 export const NotificationKindEnum = enumType(NotificationKind)
@@ -34,10 +33,11 @@ export const notificationsQuery = queryField('notifications', {
     isRead: booleanArg(),
   },
 
-  resolve: async (_, args: QueryArgs, { prisma, req }: Context): Promise<Prisma.Notification[] | null> => {
-    const memberId = (await authMemberId(req))?.id
-    if (!memberId) return null
+  resolve: async (_, args: QueryArgs, { prisma, member }: Context): Promise<Prisma.Notification[] | null> => {
+    if (!member) {
+      throw new Error('Unauthorized')
+    }
 
-    return prisma.notification.findMany({ where: { ...args, memberId } })
+    return prisma.notification.findMany({ where: { ...args, memberId: member.id } })
   },
 })

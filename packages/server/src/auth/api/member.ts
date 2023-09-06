@@ -2,7 +2,7 @@ import * as Prisma from '@prisma/client'
 import { intArg, mutationField, nonNull, objectType, queryField, stringArg } from 'nexus'
 import { Member } from 'nexus-prisma'
 
-import { authMemberId, verifyEmailToken } from '@/auth/model/token'
+import { verifyEmailToken } from '@/auth/model/token'
 import { Context } from '@/common/api'
 
 export const MemberFields = objectType({
@@ -18,7 +18,13 @@ export const MemberFields = objectType({
 export const MemberQuery = queryField('member', {
   type: Member.$name,
 
-  resolve: (_, __, { req }: Context): Promise<Prisma.Member | null> => authMemberId(req),
+  resolve: (_, __, { member }: Context) => {
+    if (!member) {
+      throw new Error('Unauthorized')
+    }
+
+    return member
+  },
 })
 
 type memberExistArg = { id: number }

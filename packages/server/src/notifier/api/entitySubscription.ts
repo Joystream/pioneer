@@ -3,7 +3,6 @@ import { omit, pick } from 'lodash'
 import { arg, enumType, list, mutationField, nonNull, objectType, queryField, stringArg } from 'nexus'
 import { Subscription } from 'nexus-prisma'
 
-import { authMemberId } from '@/auth/model/token'
 import { Context } from '@/common/api'
 import { EntitySubscriptionKind } from '@/notifier/model/subscriptionKinds'
 
@@ -48,15 +47,16 @@ export const entitySubscriptionsQuery = queryField('entitySubscriptions', {
     status: arg({ type: EntitySubscriptionStatus.name }),
   },
 
-  resolve: async (_, args: QueryArgs, { prisma, req }: Context): Promise<EntitySubscription[] | null> => {
-    const memberId = (await authMemberId(req))?.id
-    if (!memberId) return null
+  resolve: async (_, args: QueryArgs, { prisma, member }: Context): Promise<EntitySubscription[] | null> => {
+    if (!member) {
+      throw new Error('Unauthorized')
+    }
 
     const where = {
       ...args,
       kind: args.kind ?? { in: EntitySubscriptionKindKeys },
       shouldNotify: args.status && args.status === 'WATCH',
-      memberId,
+      memberId: member.id,
     }
 
     return (await prisma.subscription.findMany({ where })).map<EntitySubscription>(({ shouldNotify, ...rest }) => ({
@@ -77,12 +77,13 @@ export const subscribeToEntityMutation = mutationField('entitySubscription', {
     status: nonNull(arg({ type: EntitySubscriptionStatus.name })),
   },
 
-  resolve: async (_, args: MutationArgs, { prisma, req }: Context): Promise<MutationResult | null> => {
-    const memberId = (await authMemberId(req))?.id
-    if (!memberId) return null
+  resolve: async (_, args: MutationArgs, { prisma, member }: Context): Promise<MutationResult | null> => {
+    if (!member) {
+      throw new Error('Unauthorized')
+    }
 
     const where: Prisma.Prisma.SubscriptionWhereUniqueInput = {
-      memberId_kind_entityId: { ...pick(args, 'kind', 'entityId'), memberId },
+      memberId_kind_entityId: { ...pick(args, 'kind', 'entityId'), memberId: member.id },
     }
 
     const current = await prisma.subscription.findUnique({ where })
@@ -96,7 +97,7 @@ export const subscribeToEntityMutation = mutationField('entitySubscription', {
       ...omit(args, 'status'),
       shouldNotify: args.status === 'WATCH',
       shouldNotifyByEmail: args.status === 'WATCH',
-      memberId,
+      memberId: member.id,
     }
 
     if (!current) {

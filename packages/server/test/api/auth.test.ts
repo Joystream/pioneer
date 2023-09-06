@@ -180,7 +180,7 @@ describe('API: Authentication', () => {
     const unknownMember = await signin({ signature: signWith(BOB, `${BOB.id}:${timestamp}`), memberId: BOB.id })
     expect(unknownMember).toEqual({ signin: expect.stringMatching(jwtRegex) })
     const unknownMemberToken = (unknownMember as any).signin
-    expect(await api(memberQuery, { Authorization: `Bearer ${unknownMemberToken}` })).toEqual({ member: null })
+    expect(await api(memberQuery, { Authorization: `Bearer ${unknownMemberToken}` }, true)).toEqual({ member: null })
 
     // This one should succeed
     const success = await signin({ signature: signWith(ALICE, `${ALICE.id}:${timestamp}`), memberId: ALICE.id })

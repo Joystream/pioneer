@@ -64,7 +64,8 @@ describe('API: notifier', () => {
         }
       }
     `
-    await expect(authApi(wrongMutation1, authToken, true)).rejects.toBeDefined()
+    // expectFailure = true already checks for errors
+    expect(await authApi(wrongMutation1, authToken, true)).toBeFalsy()
 
     const wrongMutation2 = gql`
       mutation {
@@ -73,7 +74,8 @@ describe('API: notifier', () => {
         }
       }
     `
-    await expect(authApi(wrongMutation2, authToken, true)).rejects.toBeDefined()
+    // expectFailure = true already checks for errors
+    expect(await authApi(wrongMutation2, authToken, true)).toBeFalsy()
 
     const generalSubscriptionsMutation = gql`
       mutation {
@@ -132,7 +134,8 @@ describe('API: notifier', () => {
         }
       }
     `
-    await expect(authApi(wrongMutation1, authToken, true)).rejects.toBeDefined()
+    // expectFailure = true already checks for errors
+    expect(await authApi(wrongMutation1, authToken, true)).toBeFalsy()
 
     const wrongMutation2 = gql`
       mutation {
@@ -141,7 +144,8 @@ describe('API: notifier', () => {
         }
       }
     `
-    await expect(authApi(wrongMutation2, authToken, true)).rejects.toBeDefined()
+    // expectFailure = true already checks for errors
+    expect(await authApi(wrongMutation2, authToken, true)).toBeFalsy()
 
     const watchThreadMutation = (id: string) => gql`
         mutation {
