@@ -8,6 +8,7 @@ import { MembersRoutes, ProfileRoutes, SettingsRoutes } from '@/app/constants/ro
 import { BountyRoutes } from '@/bounty/constants'
 import { Arrow } from '@/common/components/icons'
 import { LinkSymbol, LinkSymbolStyle, PolkadotSymbol } from '@/common/components/icons/symbols'
+import { ExplorerSymbol } from '@/common/components/icons/symbols/ExplorerSymbol'
 import { AppsIcon } from '@/common/components/page/Sidebar/LinksIcons/AppsIcon'
 import { BandwidthIcon } from '@/common/components/page/Sidebar/LinksIcons/BandwidthIcon'
 import { BountyIcon } from '@/common/components/page/Sidebar/LinksIcons/BountyIcon'
@@ -38,7 +39,6 @@ import { ForumRoutes } from '@/forum/constant'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
-import { ExplorerSymbol } from '@/common/components/icons/symbols/ExplorerSymbol'
 
 export const SideBar = () => {
   const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)
