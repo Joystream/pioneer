@@ -1,20 +1,42 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { MenuIcon } from '@/common/components/icons/MenuIcon'
 import { Colors } from '@/common/constants'
 
+import { SideBarSlider } from './SideBarSlider'
+
 export const NavBar = () => {
-  return (
+  const [open, setOpen] = useState(false)
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (windowWidth >= 768) {
+      setOpen(false);
+    }
+  }, [windowWidth]);
+
+  return (<>
     <Wrapper>
       <Link href="#">
         <img src="./favicon.svg" width={32} height={32} alt="Pioneer Logo" />
       </Link>
-      <MenuIconWrapper>
+      <MenuIconWrapper onClick={()=>{setOpen(!open)}}>
         <MenuIcon />
       </MenuIconWrapper>
     </Wrapper>
-  )
+    {open && <SideBarSlider setOpen={setOpen}/>}
+  </>)
 }
 
 const Wrapper = styled.div`
