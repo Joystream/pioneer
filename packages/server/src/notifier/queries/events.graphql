@@ -32,6 +32,24 @@ fragment ThreadCreatedEventFields on ThreadCreatedEvent {
   text
 }
 
+fragment ElectionAnnouncingStartedEventFields on AnnouncingPeriodStartedEvent {
+  __typename
+  id
+  inBlock
+}
+
+fragment ElectionVotingStartedEventFields on VotingPeriodStartedEvent {
+  __typename
+  id
+  inBlock
+}
+
+fragment ElectionRevealingStartedFields on RevealingStageStartedEvent {
+  __typename
+  id
+  inBlock
+}
+
 # fragment ProposalDiscussionPostCreatedEventFields on ProposalDiscussionPostCreatedEvent {
 #   __typename
 #   id
@@ -60,6 +78,9 @@ query GetNotificationEvents($from: Int, $exclude: [ID!]) {
       type_in: [
         PostAddedEvent
         ThreadCreatedEvent
+        AnnouncingPeriodStartedEvent
+        VotingPeriodStartedEvent
+        RevealingStageStartedEvent
         # PostTextUpdatedEvent
       ]
       inBlock_gte: $from
@@ -72,6 +93,15 @@ query GetNotificationEvents($from: Int, $exclude: [ID!]) {
     }
     ... on ThreadCreatedEvent {
       ...ThreadCreatedEventFields
+    }
+    ... on AnnouncingPeriodStartedEvent {
+      ...ElectionAnnouncingStartedEventFields
+    }
+    ... on VotingPeriodStartedEvent {
+      ...ElectionVotingStartedEventFields
+    }
+    ... on RevealingStageStartedEvent {
+      ...ElectionRevealingStartedFields
     }
     # ... on ProposalDiscussionPostCreatedEvent {
     #   ...ProposalDiscussionPostCreatedEventFields
