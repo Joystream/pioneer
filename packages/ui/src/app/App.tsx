@@ -22,6 +22,7 @@ import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
 import { ExtensionNotification } from './components/ExtensionWarning'
+import { NavBar } from './components/NavBar'
 import { SideBar } from './components/SideBar'
 import { MembersRoutes, ProfileRoutes, SettingsRoutes, TermsRoutes } from './constants/routes'
 import { GlobalModals } from './GlobalModals'
@@ -45,6 +46,7 @@ export const App = () => {
   return (
     <Providers>
       <Page>
+        <NavBar />
         <SideBar />
         <Screen>
           <OnBoardingOverlay />

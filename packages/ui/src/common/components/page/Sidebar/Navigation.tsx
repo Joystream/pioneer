@@ -3,15 +3,19 @@ import styled from 'styled-components'
 import { Colors, ZIndex } from '../../../constants'
 
 export const Navigation = styled.nav`
-  display: flex;
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
-  grid-area: navbar;
+  grid-area: sidebar;
   width: 100%;
   max-width: 226px;
   height: 100vh;
   z-index: ${ZIndex.navbar};
+
+  @media (min-width: 768px) {
+    display: flex;
+  }
 `
 
 export const NavigationInnerWrapper = styled.div`
