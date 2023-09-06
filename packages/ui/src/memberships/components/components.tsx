@@ -145,7 +145,11 @@ export const MemberInfoWrap = styled.div<MemberInfoWrapProps>`
   ${({ skipModal }) =>
     !skipModal &&
     css`
-      cursor: pointer;
+      pointer-events: none;
+      @media (min-width: 768px) {
+        cursor: pointer;
+        pointer-events: auto;
+      }
       &:hover,
       &:focus,
       &:focus-within,
