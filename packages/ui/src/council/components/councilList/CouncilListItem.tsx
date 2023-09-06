@@ -33,11 +33,16 @@ export const CouncilListItem = ({ councilor }: CouncilListItemProps) => {
 }
 
 const CouncilListItemStyles = styled(TableListItem).attrs({ $colLayout: CouncilColLayout })`
-  cursor: pointer;
   height: 72px;
   padding: 16px 58px 16px 24px;
 
   & > :nth-child(n + 2) {
     justify-self: end;
+  }
+
+  pointer-events: none;
+  @media (min-width: 768px) {
+    cursor: pointer;
+    pointer-events: auto;
   }
 `
