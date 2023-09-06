@@ -41,7 +41,7 @@ const PioneerEmailTemplate = ({
       <Container style={containerStyle}>
         <Section style={logoSectionStyle}>
           <Img
-            src="https://github.com/Joystream/design/blob/master/logo/pioneer/horizontal/monochromatic/light/cropped/png/pioneer-logo@1x.png?raw=true"
+            src="https://github.com/Joystream/design/blob/master/logo/pioneer/horizontal/color/dark/cropped/png/pioneer-logo@1x.png?raw=true"
             alt="Pioneer's Logo"
             style={pioneerLogoStyle}
           />
@@ -81,13 +81,15 @@ const PioneerEmailTemplate = ({
               Forum
             </Link>
           </Text>
-          // TODO: include link to notifications settings
+          {/* TODO: include link to notifications settings */}
         </Section>
       </Container>
     </Body>
   </Html>
 )
 
+// default export is needed so that dev emails preview work
+export default PioneerEmailTemplate
 export const renderPioneerEmail = (props: PioneerEmailTemplateProps) => render(PioneerEmailTemplate(props))
 
 const bodyStyle = {
@@ -99,11 +101,10 @@ const bodyStyle = {
 const containerStyle = {
   margin: '0 auto',
   maxWidth: '600px',
-  border: '1px solid #eee',
+  border: '1px solid #d6dee7',
 }
 
 const logoSectionStyle: React.CSSProperties = {
-  backgroundColor: '#4038FF',
   padding: '32px 0',
 }
 
@@ -113,7 +114,7 @@ const pioneerLogoStyle = {
 }
 
 const mainSectionStyle = {
-  padding: '40px 40px',
+  padding: '10px 40px 40px',
 }
 
 const h1Style = {
@@ -145,7 +146,7 @@ const ctaStyle = {
 }
 
 const footerSectionStyle = {
-  backgroundColor: '#000',
+  backgroundColor: '#d6dee7',
   padding: '24px 16px 20px 16px',
 }
 
@@ -166,7 +167,7 @@ const bigLinkStyle = {
   fontSize: '14px',
   lineHeight: '20px',
   fontWeight: '700',
-  color: '#F9FAFC',
+  color: '#000',
 }
 
 const divisorStyle = {
@@ -187,7 +188,7 @@ const pioneerLinkStyle = {
   fontSize: '10px',
   lineHeight: '14px',
   fontWeight: '400',
-  color: '#F9FAFC',
+  color: '#2f353b',
 }
 
 const middlePioneerLinkStyle = {
