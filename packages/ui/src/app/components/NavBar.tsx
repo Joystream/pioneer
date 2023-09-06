@@ -47,7 +47,7 @@ const Wrapper = styled.div`
   padding: 12px 16px;
   justify-content: space-between;
   align-items: center;
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     display: none;
   }
 `

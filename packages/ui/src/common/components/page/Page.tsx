@@ -13,7 +13,7 @@ export const Page = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     grid-template-columns: 226px 1fr;
     grid-template-rows: auto;
     grid-template-areas: 'sidebar page';

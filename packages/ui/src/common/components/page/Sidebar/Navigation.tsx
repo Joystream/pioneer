@@ -13,7 +13,7 @@ export const Navigation = styled.nav`
   height: 100vh;
   z-index: ${ZIndex.navbar};
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     display: flex;
   }
 `
