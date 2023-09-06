@@ -1,7 +1,9 @@
 import { Api } from '@/api'
 import { ProposalFieldsFragment } from '@/proposals/queries'
 
-export type ProposalDetailsType = ProposalFieldsFragment['details']['__typename']
+export type ProposalDetailsType =
+  | ProposalFieldsFragment['details']['__typename']
+  | 'FundingRequestMultipleRecipientsProposalDetails'
 
 export const proposalDetailsToConstantKey = (details: ProposalDetailsType) =>
   proposalDetailsToConstantKeyMap.get(details) as string
@@ -13,6 +15,7 @@ const proposalDetailsToConstantKeyMap = new Map<ProposalDetailsType, keyof Api['
   ['DecreaseWorkingGroupLeadStakeProposalDetails', 'decreaseWorkingGroupLeadStakeProposalParameters'],
   ['FillWorkingGroupLeadOpeningProposalDetails', 'fillWorkingGroupOpeningProposalParameters'],
   ['FundingRequestProposalDetails', 'fundingRequestProposalParameters'],
+  ['FundingRequestMultipleRecipientsProposalDetails', 'fundingRequestProposalParameters'],
   ['RuntimeUpgradeProposalDetails', 'runtimeUpgradeProposalParameters'],
   ['SetCouncilBudgetIncrementProposalDetails', 'setCouncilBudgetIncrementProposalParameters'],
   ['SetCouncilorRewardProposalDetails', 'setCouncilorRewardProposalParameters'],
