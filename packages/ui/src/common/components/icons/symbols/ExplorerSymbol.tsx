@@ -1,10 +1,8 @@
 import React from 'react'
 
-import { Icon } from '../Icon'
-
 export function ExplorerSymbol() {
   return (
-    <Icon viewBox="160 170 360 540">
+    <svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1" xmlns="http://www.w3.org/2000/svg">
       <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="SUBSCAN-黑" fill="#000000" fill-rule="nonzero">
           <path
@@ -50,6 +48,6 @@ export function ExplorerSymbol() {
           ></path>
         </g>
       </g>
-    </Icon>
+    </svg>
   )
 }
