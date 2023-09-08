@@ -42,7 +42,6 @@ interface GapBlockProps {
 }
 
 export const RowGapBlock = styled.div<GapBlockProps>`
-  overflow: auto;
   display: grid;
   grid-row-gap: ${({ gap }) => (gap ? gap + 'px' : '0px')};
   width: 100%;
