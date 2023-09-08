@@ -19,6 +19,7 @@ describe('API: Authentication', () => {
   })
 
   let authToken: string
+  let emailVerifyToken: string
 
   it('Member does not exist', async () => {
     const memberExistQuery = gql`
@@ -29,6 +30,21 @@ describe('API: Authentication', () => {
     expect(await api(memberExistQuery)).toEqual({ memberExist: false })
   })
 
+  const extractEmailToken = (emailRecipient: string) => {
+    expect(mockEmailProvider.sentEmails.length).toBe(1)
+    expect(mockEmailProvider.sentEmails).toContainEqual(
+      expect.objectContaining({
+        to: emailRecipient,
+        subject: 'Confirm your email for Pioneer',
+        html: expect.stringMatching(verifyEmailLinkRegex),
+      })
+    )
+
+    const emailVerifyToken = verifyEmailLinkRegex.exec(mockEmailProvider.sentEmails[0].html)?.[1] ?? ''
+    expect(emailVerifyToken).toMatch(jwtRegex)
+    return emailVerifyToken
+  }
+
   it('Member signs up ', async () => {
     mockEmailProvider.reset()
     mockRequest.mockReset()
@@ -36,8 +52,12 @@ describe('API: Authentication', () => {
 
     const timestamp = Date.now()
 
-    const signup = (input: { memberId?: number; signature?: string; timestamp?: number }) => {
+    const signup = (
+      input: { memberId?: number; signature?: string; timestamp?: number; email?: string },
+      expectFailure = false
+    ) => {
       const memberId = isUndefined(input.memberId) ? ALICE.id : input.memberId
+      const email = isUndefined(input.email) ? ALICE.email : input.email
       const t = isUndefined(input.timestamp) ? timestamp : input.timestamp
       const signature = isUndefined(input.signature) ? signWith(ALICE, `${memberId}:${t}`) : input.signature
 
@@ -46,37 +66,44 @@ describe('API: Authentication', () => {
             signup(
               memberId: ${memberId}
               name: ${ALICE.name}
-              email: ${ALICE.email}
+              email: ${email}
               signature: ${signature}
               timestamp: ${t}
             )
           }
         `
-      return api(mutation)
+      return api(mutation, undefined, expectFailure)
     }
 
     // Empty signature
-    const emptySignature = await signup({ signature: '' })
+    const emptySignature = await signup({ signature: '' }, true)
     expect(emptySignature).toEqual({ signup: null })
 
     // Wrong signature
-    const wrongSig1 = await signup({ signature: signWith(ALICE, `${ALICE.id + 1}:${timestamp}`) })
+    const wrongSig1 = await signup({ signature: signWith(ALICE, `${ALICE.id + 1}:${timestamp}`) }, true)
     expect(wrongSig1).toEqual({ signup: null })
 
     // Wrong signature
-    const wrongSig2 = await signup({ signature: signWith(ALICE, `${ALICE.id}:${timestamp + 1}`) })
+    const wrongSig2 = await signup({ signature: signWith(ALICE, `${ALICE.id}:${timestamp + 1}`) }, true)
     expect(wrongSig2).toEqual({ signup: null })
 
     // Outdated old timestamp
-    const oldTimestamp = await signup({ signature: signWith(ALICE, `${ALICE.id}:${1}`), timestamp: 1 })
+    const oldTimestamp = await signup({ signature: signWith(ALICE, `${ALICE.id}:${1}`), timestamp: 1 }, true)
     expect(oldTimestamp).toEqual({ signup: null })
 
     // Signed with the wrong controller account
-    const wrongController = await signup({ signature: signWith(BOB, `${ALICE.id}:${timestamp}`), memberId: ALICE.id })
+    const wrongController = await signup(
+      { signature: signWith(BOB, `${ALICE.id}:${timestamp}`), memberId: ALICE.id },
+      true
+    )
     expect(wrongController).toEqual({ signup: null })
 
+    // Invalid email
+    const invalidEmail = await signup({ email: 'foo' }, true)
+    expect(invalidEmail).toEqual({ signup: null })
+
     // Membership not in the QN
-    const unknownMember = await signup({ signature: signWith(BOB, `${BOB.id}:${timestamp}`), memberId: BOB.id })
+    const unknownMember = await signup({ signature: signWith(BOB, `${BOB.id}:${timestamp}`), memberId: BOB.id }, true)
     expect(unknownMember).toEqual({ signup: null })
 
     // No member should have been created
@@ -85,19 +112,18 @@ describe('API: Authentication', () => {
     // This one should succeed
     const success = await signup({ signature: signWith(ALICE, `${ALICE.id}:${timestamp}`), memberId: ALICE.id })
 
+    // Second signup for the same member should fail
+    const secondSuccess = await signup(
+      { signature: signWith(ALICE, `${ALICE.id}:${timestamp}`), memberId: ALICE.id },
+      true
+    )
+
     expect(success).toEqual({ signup: expect.stringMatching(jwtRegex) })
+    expect(secondSuccess).toEqual({ signup: null })
     expect(await prisma.member.count({ where: { id: ALICE.id } })).toBe(1)
 
     authToken = success?.signup
-
-    expect(mockEmailProvider.sentEmails.length).toBe(1)
-    expect(mockEmailProvider.sentEmails).toContainEqual(
-      expect.objectContaining({
-        to: ALICE.email,
-        subject: 'Confirm your email for Pioneer',
-        html: expect.stringMatching(verifyEmailLinkRegex),
-      })
-    )
+    emailVerifyToken = extractEmailToken(ALICE.email)
   })
 
   it('Member exist', async () => {
@@ -109,17 +135,17 @@ describe('API: Authentication', () => {
     expect(await api(memberExistQuery)).toEqual({ memberExist: true })
   })
 
-  it('Member query', async () => {
-    const memberQuery = gql`
+  it('Me query', async () => {
+    const meQuery = gql`
       query {
-        member {
+        me {
           id
           name
           email
         }
       }
     `
-    expect(await authApi(memberQuery, authToken)).toEqual({ member: { id: ALICE.id, name: ALICE.name, email: null } })
+    expect(await authApi(meQuery, authToken)).toEqual({ me: { id: ALICE.id, name: ALICE.name, email: null } })
   })
 
   it('Member sign in', async () => {
@@ -131,15 +157,15 @@ describe('API: Authentication', () => {
     }))
 
     const timestamp = Date.now()
-    const memberQuery = gql`
+    const meQuery = gql`
       query {
-        member {
+        me {
           id
         }
       }
     `
 
-    const signin = (input: { memberId?: number; signature?: string; timestamp?: number }) => {
+    const signin = (input: { memberId?: number; signature?: string; timestamp?: number }, expectFailure = false) => {
       const memberId = isUndefined(input.memberId) ? ALICE.id : input.memberId
       const t = isUndefined(input.timestamp) ? timestamp : input.timestamp
       const signature = isUndefined(input.signature) ? signWith(ALICE, `${memberId}:${t}`) : input.signature
@@ -153,34 +179,36 @@ describe('API: Authentication', () => {
             )
           }
         `
-      return api(mutation)
+      return api(mutation, undefined, expectFailure)
     }
 
     // Empty signature
-    const emptySignature = await signin({ signature: '' })
+    const emptySignature = await signin({ signature: '' }, true)
     expect(emptySignature).toEqual({ signin: null })
-
     // Wrong signature
-    const wrongSig1 = await signin({ signature: signWith(ALICE, `123:${timestamp}`) })
+    const wrongSig1 = await signin({ signature: signWith(ALICE, `123:${timestamp}`) }, true)
     expect(wrongSig1).toEqual({ signin: null })
 
     // Wrong signature
-    const wrongSig2 = await signin({ signature: signWith(ALICE, `${ALICE.id}:${timestamp - 1}`) })
+    const wrongSig2 = await signin({ signature: signWith(ALICE, `${ALICE.id}:${timestamp - 1}`) }, true)
     expect(wrongSig2).toEqual({ signin: null })
 
     // Outdated old timestamp
-    const oldTimestamp = await signin({ signature: signWith(ALICE, `${ALICE.id}:1`), timestamp: 1 })
+    const oldTimestamp = await signin({ signature: signWith(ALICE, `${ALICE.id}:1`), timestamp: 1 }, true)
     expect(oldTimestamp).toEqual({ signin: null })
 
     // Signed with the wrong controller account
-    const wrongController = await signin({ signature: signWith(BOB, `${ALICE.id}:${timestamp}`), memberId: ALICE.id })
+    const wrongController = await signin(
+      { signature: signWith(BOB, `${ALICE.id}:${timestamp}`), memberId: ALICE.id },
+      true
+    )
     expect(wrongController).toEqual({ signin: null })
 
     // Membership not registered (will returned a valid token but without access to an existing member)
     const unknownMember = await signin({ signature: signWith(BOB, `${BOB.id}:${timestamp}`), memberId: BOB.id })
     expect(unknownMember).toEqual({ signin: expect.stringMatching(jwtRegex) })
     const unknownMemberToken = (unknownMember as any).signin
-    expect(await api(memberQuery, { Authorization: `Bearer ${unknownMemberToken}` })).toEqual({ member: null })
+    expect(await api(meQuery, { Authorization: `Bearer ${unknownMemberToken}` }, true)).toEqual({ me: null })
 
     // This one should succeed
     const success = await signin({ signature: signWith(ALICE, `${ALICE.id}:${timestamp}`), memberId: ALICE.id })
@@ -191,7 +219,87 @@ describe('API: Authentication', () => {
 
     expect(signInToken).not.toBe(authToken)
 
-    const authorized = await api(memberQuery, { Authorization: `Bearer ${signInToken}` })
-    expect(authorized).toEqual({ member: { id: ALICE.id } })
+    const authorized = await api(meQuery, { Authorization: `Bearer ${signInToken}` })
+    expect(authorized).toEqual({ me: { id: ALICE.id } })
+  })
+
+  const verifyEmail = (emailToken: string, expectFailure = false) => {
+    const verifyEmailMutation = gql`
+      mutation {
+        verifyEmail(token: ${emailToken}) {
+          id
+          name
+          email
+        }
+      }
+    `
+    return api(verifyEmailMutation, undefined, expectFailure)
+  }
+
+  it('Member verifies email', async () => {
+    // Empty token
+    expect(await verifyEmail('', true)).toEqual({ verifyEmail: null })
+
+    // Wrong token
+    expect(await verifyEmail('foo', true)).toEqual({ verifyEmail: null })
+
+    // Invalid token
+    expect(await verifyEmail('foo.bar.baz', true)).toEqual({ verifyEmail: null })
+
+    // Valid token
+    expect(await verifyEmail(emailVerifyToken)).toEqual({
+      verifyEmail: { id: ALICE.id, name: ALICE.name, email: ALICE.email },
+    })
+
+    // Email should be updated
+    expect(await prisma.member.findUnique({ where: { id: ALICE.id } })).toEqual(
+      expect.objectContaining({ email: ALICE.email })
+    )
+  })
+
+  it('Member changes email', async () => {
+    mockEmailProvider.reset()
+
+    const changeEmail = (newEmail: string, token: string, expectFailure = false) => {
+      const mutation = gql`
+        mutation {
+          initEmailChange(email: ${newEmail})
+        }
+      `
+      return api(
+        mutation,
+        {
+          Authorization: `Bearer ${token}`,
+        },
+        expectFailure
+      )
+    }
+
+    // Not authenticated
+    expect(await changeEmail('foo', '', true)).toEqual({ initEmailChange: null })
+
+    // Invalid email
+    expect(await changeEmail('foo', authToken, true)).toEqual({ initEmailChange: null })
+
+    const newAliceEmail = 'alice-new@example.com'
+
+    // Valid email
+    expect(await changeEmail(newAliceEmail, authToken)).toEqual({ initEmailChange: true })
+    emailVerifyToken = extractEmailToken(newAliceEmail)
+
+    // Email should not be updated yet
+    expect(await prisma.member.findUnique({ where: { id: ALICE.id } })).toEqual(
+      expect.objectContaining({ email: ALICE.email })
+    )
+
+    // Verify new email
+    expect(await verifyEmail(emailVerifyToken)).toEqual({
+      verifyEmail: { id: ALICE.id, name: ALICE.name, email: newAliceEmail },
+    })
+
+    // Email should be updated
+    expect(await prisma.member.findUnique({ where: { id: ALICE.id } })).toEqual(
+      expect.objectContaining({ email: newAliceEmail })
+    )
   })
 })

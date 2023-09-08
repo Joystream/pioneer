@@ -26,7 +26,6 @@ export const api = async (query: string, headers?: Record<string, string>, expec
 
   if (expectFailure) {
     expect(res.errors).toBeDefined()
-    throw res.errors
   } else {
     expect(res.errors).toBeUndefined()
   }
@@ -36,13 +35,13 @@ export const api = async (query: string, headers?: Record<string, string>, expec
 
 export const authApi = async (query: string, authToken: string, expectFailure = false) => {
   if (!expectFailure) {
-    const unAuthorized1 = await api(query)
+    const unAuthorized1 = await api(query, {}, true)
     expect(Object.values(unAuthorized1 ?? {})).not.toContainEqual(expect.anything())
 
-    const unAuthorized2 = await api(query, { Authorization: 'foo' })
+    const unAuthorized2 = await api(query, { Authorization: 'foo' }, true)
     expect(Object.values(unAuthorized2 ?? {})).not.toContainEqual(expect.anything())
 
-    const unAuthorized3 = await api(query, { Authorization: `Bearer ${createAuthToken(1234)}` })
+    const unAuthorized3 = await api(query, { Authorization: `Bearer ${createAuthToken(1234)}` }, true)
     expect(Object.values(unAuthorized3 ?? {})).not.toContainEqual(expect.anything())
   }
 
@@ -52,4 +51,4 @@ export const authApi = async (query: string, authToken: string, expectFailure = 
 export const signWith = (member: Member, value: string) => u8aToHex(member.controller.sign(value))
 
 export const jwtRegex = /^ey[\w-]+\.[\w-]+\.[\w-]+$/
-export const verifyEmailLinkRegex = RegExp(String.raw`\b/#/\?verify-email=${jwtRegex.source.slice(1, -1)}\b`, 's')
+export const verifyEmailLinkRegex = RegExp(String.raw`\b/#/\?verify-email=(${jwtRegex.source.slice(1, -1)})\b`, 's')
