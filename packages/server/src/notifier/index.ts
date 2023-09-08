@@ -1,5 +1,5 @@
 import { createNotifications } from './createNotifications'
-import { processNotifications } from './sendNotifications'
+import { processNotifications } from './processNotifications'
 
 export const run = async () => {
   await createNotifications()
