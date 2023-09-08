@@ -3,7 +3,7 @@ import { isUndefined } from 'lodash'
 
 import { prisma } from '@/common/prisma'
 
-import { clearDb, mockRequest, mockSendEmail } from '../setup'
+import { clearDb, mockRequest, mockEmailProvider } from '../setup'
 
 import { api, authApi, gql, jwtRegex, keyring, Member, signWith, verifyEmailLinkRegex } from './utils'
 
@@ -30,7 +30,7 @@ describe('API: Authentication', () => {
   })
 
   it('Member signs up ', async () => {
-    mockSendEmail.mockReset()
+    mockEmailProvider.reset()
     mockRequest.mockReset()
     mockRequest.mockReturnValue({ membershipByUniqueInput: { controllerAccount: ALICE.controller.address } })
 
@@ -90,8 +90,8 @@ describe('API: Authentication', () => {
 
     authToken = success?.signup
 
-    expect(mockSendEmail).toHaveBeenCalledTimes(1)
-    expect(mockSendEmail).toHaveBeenCalledWith(
+    expect(mockEmailProvider.sentEmails.length).toBe(1)
+    expect(mockEmailProvider.sentEmails).toContainEqual(
       expect.objectContaining({
         to: ALICE.email,
         subject: 'Confirm your email for Pioneer',

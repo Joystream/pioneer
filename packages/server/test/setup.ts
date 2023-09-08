@@ -23,11 +23,24 @@ jest.mock('@/common/queries/__generated__', () => ({
   },
 }))
 
-export const mockSendEmail = jest.fn()
 class MockEmailProvider implements EmailProvider {
-  sendEmail = mockSendEmail
+  sentEmails: any[] = []
+  shouldFail = false
+
+  sendEmail = async (email: any) => {
+    if (this.shouldFail) {
+      throw new Error('MockEmailProvider sendEmail failed')
+    }
+    this.sentEmails.push(email)
+  }
+
+  reset = () => {
+    this.sentEmails = []
+    this.shouldFail = false
+  }
 }
+export const mockEmailProvider = new MockEmailProvider()
 jest.mock('@/common/utils/email', () => ({
   ...jest.requireActual('@/common/utils/email'),
-  createEmailProvider: () => new MockEmailProvider(),
+  createEmailProvider: () => mockEmailProvider,
 }))

@@ -24,7 +24,8 @@ const sendEmail = async () => {
     },
     memberId: 1,
     isRead: false,
-    isSent: false,
+    retryCount: 0,
+    status: 'PENDING' as const,
   }
 
   const notification = {

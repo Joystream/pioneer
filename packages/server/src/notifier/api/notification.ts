@@ -1,11 +1,12 @@
 import * as Prisma from '@prisma/client'
 import { arg, booleanArg, enumType, list, objectType, queryField, stringArg } from 'nexus'
-import { Notification, NotificationKind } from 'nexus-prisma'
+import { Notification, NotificationKind, NotificationStatus } from 'nexus-prisma'
 
 import { authMemberId } from '@/auth/model/token'
 import { Context } from '@/common/api'
 
 export const NotificationKindEnum = enumType(NotificationKind)
+export const NotificationStatusEnum = enumType(NotificationStatus)
 
 export const NotificationFields = objectType({
   name: Notification.$name,
@@ -15,7 +16,7 @@ export const NotificationFields = objectType({
     t.field(Notification.kind)
     t.field(Notification.eventId)
     t.field(Notification.entityId)
-    t.field(Notification.isSent)
+    t.field(Notification.status)
     t.field(Notification.isRead)
   },
 })
@@ -29,7 +30,7 @@ export const notificationsQuery = queryField('notifications', {
     kind: arg({ type: NotificationKind.name }),
     eventId: stringArg(),
     entityId: stringArg(),
-    isSent: booleanArg(),
+    status: arg({ type: NotificationStatus.name }),
     isRead: booleanArg(),
   },
 
