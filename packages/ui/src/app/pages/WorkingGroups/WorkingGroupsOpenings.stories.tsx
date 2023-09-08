@@ -1,4 +1,4 @@
-import { StoryContext, StoryObj } from '@storybook/react'
+import { Meta, StoryContext, StoryObj } from '@storybook/react'
 import { FC } from 'react'
 
 import { member } from '@/mocks/data/members'
@@ -47,6 +47,6 @@ export default {
       }
     },
   },
-}
+} satisfies Meta<Args>
 
 export const Default: Story = {}
