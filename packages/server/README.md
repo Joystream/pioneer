@@ -88,7 +88,7 @@ To check the validity of an authorization token:
 
 ```gql
 query {
-  member {
+  me {
     id
     name
     email
@@ -96,7 +96,7 @@ query {
 }
 ```
 
-When ran with a correct `Authorization` header, it returns the member data. Otherwise it returns `null`. The email field will be `null' if the member email address has not yet been verified.
+When ran with a correct `Authorization` header, it returns the authorized member data. Otherwise it returns unauthorized error. The email field will be `null' if the member email address has not yet been verified.
 
 To check that a member is registered in the API:
 

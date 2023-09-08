@@ -135,17 +135,17 @@ describe('API: Authentication', () => {
     expect(await api(memberExistQuery)).toEqual({ memberExist: true })
   })
 
-  it('Member query', async () => {
-    const memberQuery = gql`
+  it('Me query', async () => {
+    const meQuery = gql`
       query {
-        member {
+        me {
           id
           name
           email
         }
       }
     `
-    expect(await authApi(memberQuery, authToken)).toEqual({ member: { id: ALICE.id, name: ALICE.name, email: null } })
+    expect(await authApi(meQuery, authToken)).toEqual({ me: { id: ALICE.id, name: ALICE.name, email: null } })
   })
 
   it('Member sign in', async () => {
@@ -157,9 +157,9 @@ describe('API: Authentication', () => {
     }))
 
     const timestamp = Date.now()
-    const memberQuery = gql`
+    const meQuery = gql`
       query {
-        member {
+        me {
           id
         }
       }
@@ -208,7 +208,7 @@ describe('API: Authentication', () => {
     const unknownMember = await signin({ signature: signWith(BOB, `${BOB.id}:${timestamp}`), memberId: BOB.id })
     expect(unknownMember).toEqual({ signin: expect.stringMatching(jwtRegex) })
     const unknownMemberToken = (unknownMember as any).signin
-    expect(await api(memberQuery, { Authorization: `Bearer ${unknownMemberToken}` }, true)).toEqual({ member: null })
+    expect(await api(meQuery, { Authorization: `Bearer ${unknownMemberToken}` }, true)).toEqual({ me: null })
 
     // This one should succeed
     const success = await signin({ signature: signWith(ALICE, `${ALICE.id}:${timestamp}`), memberId: ALICE.id })
@@ -219,8 +219,8 @@ describe('API: Authentication', () => {
 
     expect(signInToken).not.toBe(authToken)
 
-    const authorized = await api(memberQuery, { Authorization: `Bearer ${signInToken}` })
-    expect(authorized).toEqual({ member: { id: ALICE.id } })
+    const authorized = await api(meQuery, { Authorization: `Bearer ${signInToken}` })
+    expect(authorized).toEqual({ me: { id: ALICE.id } })
   })
 
   const verifyEmail = (emailToken: string, expectFailure = false) => {

@@ -19,7 +19,7 @@ export const MemberFields = objectType({
   },
 })
 
-export const MemberQuery = queryField('member', {
+export const MeQuery = queryField('me', {
   type: NexusMember.$name,
 
   resolve: (_, __, { member }: Context) => {
