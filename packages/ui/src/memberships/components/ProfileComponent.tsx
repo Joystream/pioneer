@@ -34,7 +34,7 @@ export function ProfileComponent() {
             </StyledTooltip>
           </TokenDetail>
           <TextSmall>
-            <BuyTokenLink href="https://www.joystream.org/token" target="_blank">
+            <BuyTokenLink href="https://www.joystream.org/token/#exchanges" target="_blank">
               Buy Joy tokens
             </BuyTokenLink>
           </TextSmall>
