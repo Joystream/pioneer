@@ -25,7 +25,7 @@ export function ProfileComponent() {
             <TotalTokenValue value={total} />
             <StyledTooltip
               tooltipLinkText="Learn how to earn JOY’s"
-              tooltipLinkURL="https://www.joystream.org/token/"
+              tooltipLinkURL="https://www.joystream.org/token#earn"
               placement="top-start"
             >
               <StyledDefaultTooltip>
