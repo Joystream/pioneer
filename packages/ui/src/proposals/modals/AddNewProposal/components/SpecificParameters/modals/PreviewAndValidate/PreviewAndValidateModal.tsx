@@ -174,7 +174,7 @@ export const PreviewAndValidateModal = ({ onClose }: PreviewAndValidateModalProp
     </SidePaneGlass>
   )
 }
-const CustomAccountRow = styled(AccountRow)`
+export const CustomAccountRow = styled(AccountRow)`
   margin-bottom: 4px;
   padding-right: 16px;
   &.error {
@@ -187,12 +187,12 @@ const CustomBalanceInfoInRow = styled(BalanceInfoInRow)`
     margin-left: auto;
   }
 `
-const PreviewPanel = styled(SidePane)`
+export const PreviewPanel = styled(SidePane)`
   grid-template-rows: auto 1fr auto;
 `
-const PreviewPanelHeader = styled(SidePaneHeader)`
+export const PreviewPanelHeader = styled(SidePaneHeader)`
   padding: 12px 24px;
 `
-const PreviewPanelBody = styled(SidePaneBody)`
+export const PreviewPanelBody = styled(SidePaneBody)`
   padding: 12px 24px;
 `
