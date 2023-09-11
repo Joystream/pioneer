@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { CloseButton } from '@/common/components/buttons'
+import { LinkButtonLinkStyles } from '@/common/components/buttons/LinkButtons'
 import { Arrow, QuestionIcon } from '@/common/components/icons'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { DefaultTooltip } from '@/common/components/Tooltip'
@@ -26,13 +27,13 @@ export const BannerSection = ({ setShouldDismissBanner }: Props) => {
       </BannerHeader>
       <TextMedium>
         JOY token is a native crypto asset of Joystream blockchain. It is used for platform governance, purchasing NFTs,
-        trading creator tokens, and covering blockchain processing fees. They are listed on{' '}
-        <a href="https://www.mexc.com/exchange/JOYSTREAM_USDT?_from=market" target="_blank">
-          MEXC exchange{' '}
-        </a>
-        under "JOYSTREAM" ticker.
+        trading creator tokens, and covering blockchain processing fees. They are listed on&nbsp;
+        <CustomLinkStyle to={'https://www.mexc.com/exchange/JOYSTREAM_USDT?_from=market'} size={'medium'}>
+          <TextInlineMedium>MEXC</TextInlineMedium>
+        </CustomLinkStyle>
+        &nbsp;exchange under "JOYSTREAM" ticker.
       </TextMedium>
-      <TextLink href="https://www.joystream.org/token/" target="_blank">
+      <TextLink href="https://www.joystream.org/token#earn" target="_blank">
         <TextInlineMedium bold={true}>Learn how to earn JOY's</TextInlineMedium> <Arrow size={'24'} direction="right" />
       </TextLink>
     </Banner>
@@ -63,4 +64,9 @@ const TextLink = styled.a`
 `
 const BannerTooltip = styled(DefaultTooltip)`
   margin-top: 1px;
+`
+const CustomLinkStyle = styled(LinkButtonLinkStyles)`
+  display: inline-flex;
+  // margin-left: 2px;
+  // margin-right: 2px;
 `

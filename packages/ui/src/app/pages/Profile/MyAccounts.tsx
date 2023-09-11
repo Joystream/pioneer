@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { Accounts } from '@/accounts/components/Accounts'
 import { ClaimVestingButton } from '@/accounts/components/ClaimVestingButton'
@@ -8,6 +8,7 @@ import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 
 import { BannerSection } from './components/BannerSection'
 import { MyProfileTabs } from './components/MyProfileTabs'
@@ -53,7 +54,7 @@ export const MyAccounts = () => {
   const { total, transferable, locked, recoverable, vestingTotal, vestedClaimable, vestingLocked } =
     useMyTotalBalances()
   const { hasAccounts, isLoading } = useMyAccounts()
-  const [shouldDismissBanner, setShouldDismissBanner] = useState(false)
+  const [shouldDismissBanner, setShouldDismissBanner] = useLocalStorage<boolean>('buy-joy-banner') ?? false
   const shouldHideStatistics = !hasAccounts && !isLoading
 
   return (
