@@ -60,7 +60,7 @@ export default {
                 name: WG_DATA.name,
                 budget: joy(200),
                 workers: [],
-                leader: { membershipId: alice.id, isActive: true }
+                leader: { membershipId: alice.id, isActive: true },
               },
             },
           },
@@ -78,14 +78,14 @@ export default {
                   membership: alice,
                 },
                 {
-                    id: `${WG_DATA.id}-1`,
-                    group: {
-                      id: WG_DATA.id,
-                      name: WG_DATA.name,
-                    },
-                    status: 'WorkerStatusActive',
-                    membership: member('charlie'),
+                  id: `${WG_DATA.id}-1`,
+                  group: {
+                    id: WG_DATA.id,
+                    name: WG_DATA.name,
                   },
+                  status: 'WorkerStatusActive',
+                  membership: member('charlie'),
+                },
               ],
             },
           },
