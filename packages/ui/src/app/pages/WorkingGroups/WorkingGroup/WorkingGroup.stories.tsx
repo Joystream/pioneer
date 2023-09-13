@@ -4,7 +4,7 @@ import { FC } from 'react'
 import { member } from '@/mocks/data/members'
 import { joy } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
-import { GetGroupDebtDocument, GetWorkersDocument, GetWorkingGroupDocument } from '@/working-groups/queries'
+import { GetWorkersDocument, GetWorkingGroupDocument } from '@/working-groups/queries'
 
 import { WorkingGroup } from './WorkingGroup'
 
@@ -59,20 +59,9 @@ export default {
                 id: WG_DATA.id,
                 name: WG_DATA.name,
                 budget: joy(200),
-                leadId: '0',
-                averageStake: joy(300),
                 workers: [],
+                leader: { membershipId: alice.id, isActive: true }
               },
-            },
-          },
-          {
-            query: GetGroupDebtDocument,
-            data: {
-              workers: [
-                {
-                  missingRewardAmount: joy(0),
-                },
-              ],
             },
           },
           {
@@ -88,6 +77,15 @@ export default {
                   status: 'WorkerStatusActive',
                   membership: alice,
                 },
+                {
+                    id: `${WG_DATA.id}-1`,
+                    group: {
+                      id: WG_DATA.id,
+                      name: WG_DATA.name,
+                    },
+                    status: 'WorkerStatusActive',
+                    membership: member('charlie'),
+                  },
               ],
             },
           },
