@@ -32,8 +32,6 @@ export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member
   boundAccountsEvents: data.stakingaccountaddedeventmember?.map(asBoundAccountsEvent) ?? [],
   roles: data.roles.map(asMemberRole),
   createdAt: data.createdAt,
-  isVerifiedValidator: data.metadata.isVerifiedValidator ?? false,
-  validatorAccount: data.metadata.validatorAccount ?? undefined,
 })
 
 export const asMemberRole = (data: MemberFieldsFragment['roles'][0]): MemberRole => ({

@@ -30,8 +30,6 @@ export interface Member {
   isCouncilMember: boolean
   createdAt: string
   boundAccountsEvents?: BoundAccountEvent[]
-  isVerifiedValidator: boolean
-  validatorAccount: Address | undefined
 }
 
 export type GenesisEntry = {
