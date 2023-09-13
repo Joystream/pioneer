@@ -21,7 +21,7 @@ const WG_DATA = {
 }
 
 export default {
-  title: 'Pages/Working Group',
+  title: 'Pages/Working Group/WorkingGroup',
   component: WorkingGroup,
 
   args: {
