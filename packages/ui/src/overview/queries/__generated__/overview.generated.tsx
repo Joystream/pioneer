@@ -75,6 +75,8 @@ export type GetAllDeadLinesQuery = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
+          validatorAccount?: string | null
+          isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
         roles: Array<{

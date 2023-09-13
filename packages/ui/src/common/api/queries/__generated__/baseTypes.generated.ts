@@ -14583,6 +14583,7 @@ export type MemberMetadata = BaseGraphQlObject & {
   deletedById?: Maybe<Scalars['ID']>
   externalResources?: Maybe<Array<MembershipExternalResource>>
   id: Scalars['ID']
+  isVerifiedValidator?: Maybe<Scalars['Boolean']>
   member?: Maybe<Membership>
   membercreatedeventmetadata?: Maybe<Array<MemberCreatedEvent>>
   memberinvitedeventmetadata?: Maybe<Array<MemberInvitedEvent>>
@@ -14593,6 +14594,7 @@ export type MemberMetadata = BaseGraphQlObject & {
   name?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['DateTime']>
   updatedById?: Maybe<Scalars['ID']>
+  validatorAccount?: Maybe<Scalars['String']>
   version: Scalars['Int']
 }
 
@@ -14606,7 +14608,9 @@ export type MemberMetadataConnection = {
 export type MemberMetadataCreateInput = {
   about?: InputMaybe<Scalars['String']>
   avatar: Scalars['JSONObject']
+  isVerifiedValidator?: InputMaybe<Scalars['Boolean']>
   name?: InputMaybe<Scalars['String']>
+  validatorAccount?: InputMaybe<Scalars['String']>
 }
 
 export type MemberMetadataEdge = {
@@ -14622,16 +14626,22 @@ export enum MemberMetadataOrderByInput {
   CreatedAtDesc = 'createdAt_DESC',
   DeletedAtAsc = 'deletedAt_ASC',
   DeletedAtDesc = 'deletedAt_DESC',
+  IsVerifiedValidatorAsc = 'isVerifiedValidator_ASC',
+  IsVerifiedValidatorDesc = 'isVerifiedValidator_DESC',
   NameAsc = 'name_ASC',
   NameDesc = 'name_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
+  ValidatorAccountAsc = 'validatorAccount_ASC',
+  ValidatorAccountDesc = 'validatorAccount_DESC',
 }
 
 export type MemberMetadataUpdateInput = {
   about?: InputMaybe<Scalars['String']>
   avatar?: InputMaybe<Scalars['JSONObject']>
+  isVerifiedValidator?: InputMaybe<Scalars['Boolean']>
   name?: InputMaybe<Scalars['String']>
+  validatorAccount?: InputMaybe<Scalars['String']>
 }
 
 export type MemberMetadataWhereInput = {
@@ -14664,6 +14674,8 @@ export type MemberMetadataWhereInput = {
   externalResources_some?: InputMaybe<MembershipExternalResourceWhereInput>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
+  isVerifiedValidator_eq?: InputMaybe<Scalars['Boolean']>
+  isVerifiedValidator_in?: InputMaybe<Array<Scalars['Boolean']>>
   member?: InputMaybe<MembershipWhereInput>
   membercreatedeventmetadata_every?: InputMaybe<MemberCreatedEventWhereInput>
   membercreatedeventmetadata_none?: InputMaybe<MemberCreatedEventWhereInput>
@@ -14692,6 +14704,11 @@ export type MemberMetadataWhereInput = {
   updatedAt_lte?: InputMaybe<Scalars['DateTime']>
   updatedById_eq?: InputMaybe<Scalars['ID']>
   updatedById_in?: InputMaybe<Array<Scalars['ID']>>
+  validatorAccount_contains?: InputMaybe<Scalars['String']>
+  validatorAccount_endsWith?: InputMaybe<Scalars['String']>
+  validatorAccount_eq?: InputMaybe<Scalars['String']>
+  validatorAccount_in?: InputMaybe<Array<Scalars['String']>>
+  validatorAccount_startsWith?: InputMaybe<Scalars['String']>
 }
 
 export type MemberMetadataWhereUniqueInput = {
