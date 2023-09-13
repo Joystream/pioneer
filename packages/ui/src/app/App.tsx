@@ -17,6 +17,7 @@ import { parseEnv } from '@/common/utils/env'
 import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
 import { ForumRoutes } from '@/forum/constant'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
+import { ValidatorsRoutes } from '@/validators/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
 import { ExtensionNotification } from './components/ExtensionWarning'
@@ -34,6 +35,7 @@ import { ProposalsModule } from './pages/Proposals/ProposalsModule'
 import { SettingsRoutes } from './pages/Settings/routes'
 import { SettingsModule } from './pages/Settings/SettingsModule'
 import { PrivacyPolicy, TermsOfService } from './pages/Terms'
+import { ValidatorsModule } from './pages/Validators/ValidatorsModule'
 import { WorkingGroupsModule } from './pages/WorkingGroups/WorkingGroupsModule'
 import { Providers } from './Providers'
 
@@ -62,6 +64,8 @@ export const App = () => {
             <Route exact path={ProfileRoutes.profile} component={MyAccounts} />
             <Route exact path={ProfileRoutes.memberships} component={MyMemberships} />
             <Route exact path={MembersRoutes.members} component={Members} />
+            <Route exact path={SettingsRoutes.settings} component={Settings} />
+            <Route path={ValidatorsRoutes.list} component={ValidatorsModule} />
             <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
             <Route exact path={TermsRoutes.termsOfService} component={TermsOfService} />
             <Route exact path="/404" component={NotFound} />
