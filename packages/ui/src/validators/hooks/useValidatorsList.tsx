@@ -7,75 +7,12 @@ import { Api } from '@/api'
 import { useApi } from '@/api/hooks/useApi'
 import { ERAS_PER_YEAR } from '@/common/constants'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
-import { Address } from '@/common/types'
+import { error } from '@/common/logger'
 import { last } from '@/common/utils'
-import { MemberWithDetails } from '@/memberships/types'
+import { useGetMembersWithDetailsQuery } from '@/memberships/queries'
+import { MemberWithDetails, asMemberWithDetails } from '@/memberships/types'
 
 import { Verification, State, Validator } from '../types'
-
-const verifiedValidators = [
-  'j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW',
-  'j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP',
-  'j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz',
-  'j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa',
-]
-
-const validatorsWithMembership = [
-  {
-    address: 'j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz',
-    membership: {
-      id: '0',
-      handle: 'alice',
-      rootAccount: 'j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz',
-      controllerAccount: 'j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz',
-      boundAccounts: [],
-      inviteCount: 0,
-      roles: [],
-      isVerified: true,
-      isFoundingMember: true,
-      isCouncilMember: true,
-      createdAt: '2023/08/01',
-      entry: {
-        type: 'genesis',
-      },
-      invitees: [],
-      externalResources: [
-        { source: 'TWITTER', value: 'Alice_twitter' },
-        { source: 'DISCORD', value: 'Alice_discord' },
-        { source: 'TELEGRAM', value: 'Alice_telegram' },
-      ],
-    } as MemberWithDetails,
-  },
-  {
-    address: 'j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa',
-    membership: {
-      id: '1',
-      handle: 'bob',
-      rootAccount: 'j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa',
-      controllerAccount: 'j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa',
-      boundAccounts: [],
-      inviteCount: 0,
-      roles: [],
-      isVerified: true,
-      isFoundingMember: false,
-      isCouncilMember: false,
-      createdAt: '2023/08/02',
-      entry: {
-        type: 'genesis',
-      },
-      invitees: [],
-      externalResources: [
-        { source: 'TWITTER', value: 'Bob_twitter' },
-        { source: 'DISCORD', value: 'Bob_discord' },
-      ],
-    } as MemberWithDetails,
-  },
-  { address: 'j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN', membership: undefined },
-  { address: 'j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP', membership: undefined },
-]
-
-const getMember = (address: Address) =>
-  validatorsWithMembership.find((validator) => validator.address === address)?.membership
 
 export const useValidatorsList = () => {
   const { api } = useApi()
@@ -83,6 +20,26 @@ export const useValidatorsList = () => {
   const [isVerified, setIsVerified] = useState<Verification>(null)
   const [isActive, setIsActive] = useState<State>(null)
   const [visibleValidators, setVisibleValidators] = useState<Validator[]>([])
+  const [validatorsWithMembership, setValidatorsWithMembership] = useState<MemberWithDetails[]>([])
+
+  const allValidatorAddresses = useFirstObservableValue(
+    () =>
+      api?.query.staking.validators
+        .entries()
+        .pipe(map((entries) => entries.map((entry) => entry[0].args[0].toString()))),
+    [api?.isConnected]
+  )
+
+  const variables = {
+    where: { metadata: { validatorAccount_in: allValidatorAddresses } },
+  }
+
+  const { data, loading, error: err } = useGetMembersWithDetailsQuery({ variables })
+
+  useEffect(() => {
+    if (err) error(err)
+    if (!loading && data) setValidatorsWithMembership(data.memberships.map(asMemberWithDetails))
+  }, [data, loading, error])
 
   const getValidatorInfo = (address: string, api: Api): Observable<Validator> => {
     const activeValidators$ = api.query.session.validators()
@@ -104,10 +61,12 @@ export const useValidatorsList = () => {
                 .divn(10 ** 7) // Convert from Perbill to Percent
                 .toNumber()
             : 0
+        const member = validatorsWithMembership.find((member) => member.validatorAccount === address)
+        const isVerified = member?.isVerifiedValidator ?? false
         return {
-          member: getMember(encodedAddress),
+          member,
           address: encodedAddress,
-          isVerified: verifiedValidators.includes(encodedAddress),
+          isVerified,
           isActive: activeValidators.includes(address),
           totalRewards: rewardHistory.reduce((total: BN, data) => total.add(data.eraReward), new BN(0)),
           APR: apr,
@@ -126,7 +85,10 @@ export const useValidatorsList = () => {
     )
   }
 
-  const allValidators = useFirstObservableValue(() => (api ? getValidatorsInfo(api) : of([])), [api?.isConnected])
+  const allValidators = useFirstObservableValue(
+    () => (api ? getValidatorsInfo(api) : of([])),
+    [api?.isConnected, validatorsWithMembership]
+  )
 
   useEffect(() => {
     if (allValidators) {
