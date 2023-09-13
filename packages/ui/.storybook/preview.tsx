@@ -1,4 +1,5 @@
 import { Decorator } from '@storybook/react'
+import { configure } from '@storybook/testing-library'
 import React from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { useForm, FormProvider } from 'react-hook-form'
@@ -14,6 +15,11 @@ import { ModalContextProvider } from '../src/common/providers/modal/provider'
 import { TransactionStatusProvider } from '../src/common/providers/transactionStatus/provider'
 import { MockProvidersDecorator, MockRouterDecorator } from '../src/mocks/providers'
 import { i18next } from '../src/services/i18n'
+import { KeyringContext } from '../src/common/providers/keyring/context'
+import { Keyring } from '@polkadot/ui-keyring'
+
+
+configure({ testIdAttribute: 'id' })
 
 const stylesWrapperDecorator: Decorator = (Story) => (
   <>
@@ -61,11 +67,23 @@ const ModalDecorator: Decorator = (Story) => (
   </TransactionStatusProvider>
 )
 
+const KeyringDecorator: Decorator = (Story) => {
+  const keyring = {
+    encodeAddress: (address: string) => address,
+    decodeAddress: (address: string) => {
+      if (!/^[A-HJ-NP-Za-km-z1-9]{10,}$/.test(address)) throw new Error('Invalid address')
+      else return address
+    },
+  } as unknown as Keyring
+  return <KeyringContext.Provider value={keyring}><Story /></KeyringContext.Provider>
+}
+
 export const decorators = [
   ModalDecorator,
   stylesWrapperDecorator,
   i18nextDecorator,
   RHFDecorator,
+  KeyringDecorator,
   MockProvidersDecorator,
   MockRouterDecorator,
 ]

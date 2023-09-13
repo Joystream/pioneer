@@ -1,3 +1,4 @@
+import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { random } from 'faker'
 import { mapValues, merge } from 'lodash'
 
@@ -55,6 +56,17 @@ const proposalDetails = {
       destinations: [{ __typename: 'FundingRequestDestination', amount: joy(200), account: membership.rootAccount }],
     },
   },
+  FundingRequestMultipleRecipientsProposalDetails: {
+    destinationsList: {
+      __typename: 'FundingRequestDestinationsList',
+      destinations: [
+        { __typename: 'FundingRequestDestination', amount: joy(200), account: membership.rootAccount },
+        { __typename: 'FundingRequestDestination', amount: joy(20), account: member('alice').rootAccount },
+        { __typename: 'FundingRequestDestination', amount: joy(1), account: member('bob').rootAccount },
+        { __typename: 'FundingRequestDestination', amount: joy(500), account: member('charlie').rootAccount },
+      ],
+    },
+  },
   RuntimeUpgradeProposalDetails: { newRuntimeBytecode: { __typename: 'RuntimeWasmBytecode', id: '0' } },
   SetCouncilBudgetIncrementProposalDetails: { newAmount: joy(200) },
   SetCouncilorRewardProposalDetails: { newRewardPerBlock: joy(200) },
@@ -78,10 +90,10 @@ const proposalDetails = {
   VetoProposalDetails: { proposal: { __typename: 'Proposal', id: '0', title: random.words(4) } },
 } as Record<string, RecursivePartial<ProposalWithDetailsFieldsFragment['details']>>
 
-export const proposalDetailsMap = mapValues(
-  proposalDetails,
-  (value, __typename) => Object.assign(value, { __typename }) as Partial<ProposalWithDetailsFieldsFragment['details']>
-)
+export const proposalDetailsMap = mapValues(proposalDetails, (value, key) => {
+  const __typename = key === 'FundingRequestMultipleRecipientsProposalDetails' ? 'FundingRequestProposalDetails' : key
+  return Object.assign(value, { __typename }) as Partial<ProposalWithDetailsFieldsFragment['details']>
+})
 
 export const proposalTypes = Object.keys(proposalDetailsMap) as ProposalDetailsType[]
 
@@ -131,8 +143,54 @@ export const generateProposals = (
     })
   }, Math.min(limit, max - offset))
 
+type ProposalChainProps = {
+  activeProposalCount: number
+  minimumValidatorCount?: number
+  setMaxValidatorCountProposalMaxValidators?: number
+  initialInvitationCount?: number
+  initialInvitationBalance?: string
+
+  councilSize?: number
+  councilBudget?: string
+  councilorReward?: string
+  nextRewardPayments?: number
+
+  onAddStakingAccountCandidate?: jest.Mock
+  onConfirmStakingAccount?: jest.Mock
+  onCreateProposal?: jest.Mock
+  onChangeThreadMode?: jest.Mock
+
+  addStakingAccountCandidateFailure?: string
+  confirmStakingAccountFailure?: string
+  createProposalFailure?: string
+  changeThreadModeFailure?: string
+}
 type Chain = MocksParameters['chain']
-export const proposalsPagesChain = (activeProposalCount: number, extra?: Chain): Chain =>
+export const proposalsPagesChain = (
+  {
+    activeProposalCount,
+    minimumValidatorCount = 4,
+    setMaxValidatorCountProposalMaxValidators = 100,
+    initialInvitationCount = 5,
+    initialInvitationBalance = joy(5),
+
+    councilSize = 3,
+    councilBudget = joy(2000),
+    councilorReward = joy(200),
+    nextRewardPayments = 12345,
+
+    onAddStakingAccountCandidate,
+    onConfirmStakingAccount,
+    onCreateProposal,
+    onChangeThreadMode,
+
+    addStakingAccountCandidateFailure,
+    confirmStakingAccountFailure,
+    createProposalFailure,
+    changeThreadModeFailure,
+  }: ProposalChainProps,
+  extra?: Chain
+): Chain =>
   merge(
     {
       consts: {
@@ -140,6 +198,9 @@ export const proposalsPagesChain = (activeProposalCount: number, extra?: Chain):
           minimumCashoutAllowedLimit: joy(166),
           maximumCashoutAllowedLimit: joy(1_666_666),
         },
+
+        council: { councilSize, idlePeriodDuration: 1, announcingPeriodDuration: 1 },
+        referendum: { voteStageDuration: 1, revealStageDuration: 1 },
 
         members: {
           referralCutMaximumPercent: 50,
@@ -153,7 +214,8 @@ export const proposalsPagesChain = (activeProposalCount: number, extra?: Chain):
 
         proposalsCodex: {
           fundingRequestProposalMaxTotalAmount: joy(166_666),
-          setMaxValidatorCountProposalMaxValidators: 100,
+          fundingRequestProposalMaxAccounts: 2,
+          setMaxValidatorCountProposalMaxValidators,
 
           ...Object.fromEntries(
             proposalTypes.map((type) => [
@@ -174,17 +236,61 @@ export const proposalsPagesChain = (activeProposalCount: number, extra?: Chain):
       },
 
       query: {
-        members: { membershipPrice: joy(20) },
+        council: {
+          budget: councilBudget,
+          councilorReward,
+          nextRewardPayments,
+          stage: { stage: { isIdle: true }, changedAt: 123 },
+        },
+        referendum: { stage: {} },
+
+        members: {
+          initialInvitationCount,
+          initialInvitationBalance,
+          membershipPrice: joy(20),
+          stakingAccountIdMemberStatus: {
+            memberId: 0,
+            confirmed: false,
+            size: 0,
+          },
+        },
+
         proposalsEngine: { activeProposalCount },
-        staking: { minimumValidatorCount: 4 },
+        staking: { minimumValidatorCount },
       },
 
       tx: {
         proposalsCodex: {
-          createProposal: { event: 'Create' },
+          createProposal: { event: 'ProposalCreated', onSend: onCreateProposal, failure: createProposalFailure },
         },
-        members: { confirmStakingAccount: {} },
-        utility: { batch: {} },
+        proposalsDiscussion: {
+          changeThreadMode: {
+            event: 'ThreadModeChanged',
+            onSend: onChangeThreadMode,
+            failure: changeThreadModeFailure,
+          },
+        },
+
+        members: {
+          addStakingAccountCandidate: {
+            event: 'StakingAccountAdded',
+            onSend: onAddStakingAccountCandidate,
+            failure: addStakingAccountCandidateFailure,
+          },
+          confirmStakingAccount: {
+            event: 'StakingAccountConfirmed',
+            onSend: onConfirmStakingAccount,
+            failure: confirmStakingAccountFailure,
+          },
+        },
+
+        utility: {
+          batch: {
+            failure: createProposalFailure,
+            onSend: (transactions: SubmittableExtrinsic<'rxjs'>[]) =>
+              transactions.forEach((transaction) => transaction.signAndSend('')),
+          },
+        },
       },
     } satisfies Chain,
     extra

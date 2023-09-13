@@ -4,6 +4,8 @@ import { useFormContext, Controller } from 'react-hook-form'
 import NumberFormat, { NumberFormatValues, SourceInfo } from 'react-number-format'
 import styled from 'styled-components'
 
+import { asBN, whenDefined } from '@/common/utils'
+
 import { Input, InputProps } from './InputComponent'
 
 interface BaseNumberInputProps extends Omit<InputProps, 'type' | 'defaultValue' | 'onChange'> {
@@ -56,16 +58,14 @@ export const InputNumber = React.memo(({ name, isInBN = false, ...props }: Numbe
     <Controller
       control={formContext.control}
       name={name}
-      render={({ field }) => {
-        return (
-          <BasedInputNumber
-            {...props}
-            value={new BN(field.value)?.toString() ?? ''}
-            onChange={(_, value) => field.onChange(isInBN ? new BN(String(value)) : value)}
-            onBlur={field.onBlur}
-          />
-        )
-      }}
+      render={({ field }) => (
+        <BasedInputNumber
+          {...props}
+          value={whenDefined(field.value, asBN)?.toString()}
+          onChange={(_, value) => field.onChange(isInBN ? new BN(String(value)) : value)}
+          onBlur={field.onBlur}
+        />
+      )}
     />
   )
 })
