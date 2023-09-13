@@ -8,11 +8,18 @@ import { useApi } from '@/api/hooks/useApi'
 import { ERAS_PER_YEAR } from '@/common/constants'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { error } from '@/common/logger'
+import { Address } from '@/common/types'
 import { last } from '@/common/utils'
 import { useGetMembersWithDetailsQuery } from '@/memberships/queries'
 import { MemberWithDetails, asMemberWithDetails } from '@/memberships/types'
 
 import { Verification, State, Validator } from '../types'
+
+interface ValidatorMembership {
+  membership: MemberWithDetails
+  validatorAccount: Address | undefined
+  isVerifiedValidator: boolean | undefined
+}
 
 export const useValidatorsList = () => {
   const { api } = useApi()
@@ -20,7 +27,7 @@ export const useValidatorsList = () => {
   const [isVerified, setIsVerified] = useState<Verification>(null)
   const [isActive, setIsActive] = useState<State>(null)
   const [visibleValidators, setVisibleValidators] = useState<Validator[]>([])
-  const [validatorsWithMembership, setValidatorsWithMembership] = useState<MemberWithDetails[]>([])
+  const [validatorsWithMembership, setValidatorsWithMembership] = useState<ValidatorMembership[]>([])
 
   const allValidatorAddresses = useFirstObservableValue(
     () =>
@@ -38,7 +45,14 @@ export const useValidatorsList = () => {
 
   useEffect(() => {
     if (err) error(err)
-    if (!loading && data) setValidatorsWithMembership(data.memberships.map(asMemberWithDetails))
+    if (!loading && data)
+      setValidatorsWithMembership(
+        data.memberships.map((rawMembership) => ({
+          membership: asMemberWithDetails(rawMembership),
+          validatorAccount: rawMembership.metadata.validatorAccount ?? undefined,
+          isVerifiedValidator: rawMembership.metadata.isVerifiedValidator ?? false,
+        }))
+      )
   }, [data, loading, error])
 
   const getValidatorInfo = (address: string, api: Api): Observable<Validator> => {
@@ -61,8 +75,10 @@ export const useValidatorsList = () => {
                 .divn(10 ** 7) // Convert from Perbill to Percent
                 .toNumber()
             : 0
-        const member = validatorsWithMembership.find((member) => member.validatorAccount === address)
-        const isVerified = member?.isVerifiedValidator ?? false
+        const member = validatorsWithMembership.find(({ validatorAccount }) => validatorAccount === address)?.membership
+        const isVerified =
+          validatorsWithMembership.find(({ validatorAccount }) => validatorAccount === address)?.isVerifiedValidator ??
+          false
         return {
           member,
           address: encodedAddress,
