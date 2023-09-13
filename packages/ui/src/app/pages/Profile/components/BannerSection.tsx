@@ -28,7 +28,13 @@ export const BannerSection = ({ setShouldDismissBanner }: Props) => {
       <TextMedium>
         JOY token is a native crypto asset of Joystream blockchain. It is used for platform governance, purchasing NFTs,
         trading creator tokens, and covering blockchain processing fees. They are listed on&nbsp;
-        <CustomLinkStyle to={'https://www.mexc.com/exchange/JOYSTREAM_USDT?_from=market'} size={'medium'}>
+        <CustomLinkStyle
+          as={'a'}
+          to={''}
+          href="https://www.mexc.com/exchange/JOYSTREAM_USDT?_from=market"
+          target="_blank"
+          size={'medium'}
+        >
           <TextInlineMedium>MEXC</TextInlineMedium>
         </CustomLinkStyle>
         &nbsp;exchange under "JOYSTREAM" ticker.
