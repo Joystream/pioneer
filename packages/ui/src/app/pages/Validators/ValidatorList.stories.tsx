@@ -2,6 +2,8 @@ import { expect } from '@storybook/jest'
 import { Meta, StoryObj } from '@storybook/react'
 import { userEvent, waitFor, within } from '@storybook/testing-library'
 
+import { GetMembersWithDetailsDocument } from '@/memberships/queries'
+import { member } from '@/mocks/data/members'
 import { joy, selectFromDropdown } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
 
@@ -136,6 +138,20 @@ export default {
             },
           },
         },
+        queryNode: [
+          {
+            query: GetMembersWithDetailsDocument,
+            resolver: ({ variables } = {}) => {
+              if (variables?.where) {
+                return {
+                  loading: false,
+                  data: { memberships: [member('alice'), member('bob'), member('charlie'), member('dave')] },
+                }
+              }
+              return { loading: false, data: undefined }
+            },
+          },
+        ],
       }
     },
   },
