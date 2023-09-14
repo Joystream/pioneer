@@ -32,6 +32,7 @@ type Args = {
   hasAccounts: boolean
   hasWallet: boolean
   isRPCNodeConnected: boolean
+<<<<<<< HEAD
   hasRegisteredEmail: boolean
   hasBeenAskedForEmail: boolean
   subscribeEmailError: boolean
@@ -40,6 +41,11 @@ type Args = {
   onTransfer: jest.Mock
   onSubscribeEmail: jest.Mock
   onConfirmEmail: jest.Mock
+=======
+  onBuyMembership: CallableFunction
+  onUpdateMembership: CallableFunction
+  onTransfer: CallableFunction
+>>>>>>> 42c8ac40 (update storybook)
 }
 
 type Story = StoryObj<FC<Args>>
@@ -124,6 +130,12 @@ export default {
                     event: 'MembershipBought',
                     data: [NEW_MEMBER_DATA.id],
                     onSend: args.onBuyMembership,
+                    failure: parameters.txFailure,
+                  },
+                  updateProfile: {
+                    event: 'MembershipUpdated',
+                    data: [MEMBER_DATA.id],
+                    onSend: args.onUpdateMembership,
                     failure: parameters.txFailure,
                   },
                 },
