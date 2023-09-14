@@ -56,6 +56,17 @@ const proposalDetails = {
       destinations: [{ __typename: 'FundingRequestDestination', amount: joy(200), account: membership.rootAccount }],
     },
   },
+  FundingRequestMultipleRecipientsProposalDetails: {
+    destinationsList: {
+      __typename: 'FundingRequestDestinationsList',
+      destinations: [
+        { __typename: 'FundingRequestDestination', amount: joy(200), account: membership.rootAccount },
+        { __typename: 'FundingRequestDestination', amount: joy(20), account: member('alice').rootAccount },
+        { __typename: 'FundingRequestDestination', amount: joy(1), account: member('bob').rootAccount },
+        { __typename: 'FundingRequestDestination', amount: joy(500), account: member('charlie').rootAccount },
+      ],
+    },
+  },
   RuntimeUpgradeProposalDetails: { newRuntimeBytecode: { __typename: 'RuntimeWasmBytecode', id: '0' } },
   SetCouncilBudgetIncrementProposalDetails: { newAmount: joy(200) },
   SetCouncilorRewardProposalDetails: { newRewardPerBlock: joy(200) },
@@ -79,10 +90,10 @@ const proposalDetails = {
   VetoProposalDetails: { proposal: { __typename: 'Proposal', id: '0', title: random.words(4) } },
 } as Record<string, RecursivePartial<ProposalWithDetailsFieldsFragment['details']>>
 
-export const proposalDetailsMap = mapValues(
-  proposalDetails,
-  (value, __typename) => Object.assign(value, { __typename }) as Partial<ProposalWithDetailsFieldsFragment['details']>
-)
+export const proposalDetailsMap = mapValues(proposalDetails, (value, key) => {
+  const __typename = key === 'FundingRequestMultipleRecipientsProposalDetails' ? 'FundingRequestProposalDetails' : key
+  return Object.assign(value, { __typename }) as Partial<ProposalWithDetailsFieldsFragment['details']>
+})
 
 export const proposalTypes = Object.keys(proposalDetailsMap) as ProposalDetailsType[]
 

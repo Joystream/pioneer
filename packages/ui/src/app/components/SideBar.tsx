@@ -7,7 +7,8 @@ import { SidebarConnections } from '@/app/components/SidebarConnections'
 import { MembersRoutes, ProfileRoutes, SettingsRoutes } from '@/app/constants/routes'
 import { BountyRoutes } from '@/bounty/constants'
 import { Arrow } from '@/common/components/icons'
-import { CalamarSymbol, LinkSymbol, LinkSymbolStyle, PolkadotSymbol } from '@/common/components/icons/symbols'
+import { LinkSymbol, LinkSymbolStyle, PolkadotSymbol } from '@/common/components/icons/symbols'
+import { SubscanSymbol } from '@/common/components/icons/symbols/SubscanSymbol'
 import { AppsIcon } from '@/common/components/page/Sidebar/LinksIcons/AppsIcon'
 import { BandwidthIcon } from '@/common/components/page/Sidebar/LinksIcons/BandwidthIcon'
 import { BountyIcon } from '@/common/components/page/Sidebar/LinksIcons/BountyIcon'
@@ -109,7 +110,7 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink icon={<CalamarSymbol />} to="https://calamar.app/joystream">
+              <NavigationLink icon={<SubscanSymbol />} to="https://joystream.subscan.io">
                 Explorer
                 <LinkSymbol color={Colors.Black[500]} className="sidebarLinkSymbol" />
               </NavigationLink>
