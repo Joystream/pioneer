@@ -35,12 +35,7 @@ export const BuyMembershipModal = () => {
     return <BuyMembershipFormModal onClose={hideModal} onSubmit={onSubmit} membershipPrice={membershipPrice} />
   }
 
-  if (
-    (state.matches('buyMembershipTx') ||
-      state.matches('buyValidatorMembershipTx') ||
-      state.matches('bondValidatorAccTx')) &&
-    api
-  ) {
+  if ((state.matches('buyMembershipTx') || state.matches('buyValidatorMembershipTx')) && api) {
     const transaction = api.tx.members.buyMembership(toMemberTransactionParams(state.context.form))
     const { form } = state.context
     const service = state.children.transaction
