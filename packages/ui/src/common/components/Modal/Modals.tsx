@@ -23,6 +23,7 @@ export const RowInline = styled.div`
   width: 100%;
   height: auto;
   align-items: center;
+  gap: 2px;
 `
 
 export const AccountRow = styled.div`

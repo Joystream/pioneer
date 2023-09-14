@@ -7,6 +7,7 @@ import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
+import { BondValidatorAccModal } from './BondValidatorAccModal'
 import { BuyMembershipFormModal, MemberFormFields } from './BuyMembershipFormModal'
 import { BuyMembershipSignModal } from './BuyMembershipSignModal'
 import { BuyMembershipSuccessModal } from './BuyMembershipSuccessModal'
@@ -52,7 +53,24 @@ export const BuyMembershipModal = () => {
         transaction={transaction}
         initialSigner={form.controllerAccount}
         service={service}
-        bondValidatorAcc={state.matches('bondValidatorAccTx')}
+      />
+    )
+  }
+
+  if (state.matches('bondValidatorAccTx') && api && state.context.memberId && state.context.form.validatorAccount) {
+    const transaction = api.tx.members.updateProfile(state.context.memberId, state.context.form.handle, {
+      validatorAccout: state.context.form.validatorAccount,
+    })
+    const { form } = state.context
+    const service = state.children.transaction
+
+    return (
+      <BondValidatorAccModal
+        onClose={hideModal}
+        formData={form}
+        transaction={transaction}
+        initialSigner={form.controllerAccount}
+        service={service}
       />
     )
   }
