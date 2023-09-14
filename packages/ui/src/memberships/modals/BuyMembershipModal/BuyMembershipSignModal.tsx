@@ -85,12 +85,12 @@ export const BuyMembershipSignModal = ({
       <ModalBody>
         <TextMedium>
           {formData.isValidator
-              ?'You intend to create a validator membership.'
+            ? 'You intend to create a validator membership.'
             : 'You intend to create a new membership.'}
         </TextMedium>
-          <TextMedium>
-            The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />.
-          </TextMedium>
+        <TextMedium>
+          The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />.
+        </TextMedium>
         <TextMedium>
           Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
         </TextMedium>
@@ -125,17 +125,15 @@ export const BuyMembershipSignModal = ({
         transactionFee={paymentInfo?.partialFee.toBn()}
         next={{
           disabled: signDisabled,
-          label: formData.isValidator
-              ? 'Create membership'
-            : 'Sign and create a member',
+          label: formData.isValidator ? 'Create membership' : 'Sign and create a member',
           onClick: sign,
         }}
       >
-          <TransactionInfo
-            title="Creation fee:"
-            value={membershipPrice?.toBn()}
-            tooltipText="The price to create a membership."
-          />
+        <TransactionInfo
+          title="Creation fee:"
+          value={membershipPrice?.toBn()}
+          tooltipText="The price to create a membership."
+        />
       </ModalTransactionFooter>
     </TransactionModal>
   )
