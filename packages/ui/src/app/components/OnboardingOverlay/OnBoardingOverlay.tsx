@@ -1,5 +1,5 @@
 import { Wallet } from 'injectweb3-connect'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
@@ -81,6 +81,17 @@ export const OnBoardingOverlay = () => {
   const { isLoading, status } = useOnBoarding()
   const [isOpen, toggle] = useToggle()
   const [endpoints] = useNetworkEndpoints()
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   const openOnBoardingModal = useCallback(() => {
     showModal({ modal: 'OnBoardingModal' })
@@ -88,6 +99,15 @@ export const OnBoardingOverlay = () => {
 
   if (isLoading || !status || status === 'finished' || !api?.isConnected) {
     return null
+  }
+
+  if (windowWidth < 1024) {
+    return (
+      <WrapperMobileMode>
+        <TextHuge bold>To become a member visit this page from desktop</TextHuge>
+        <TextSmall>It requires browser extension</TextSmall>
+      </WrapperMobileMode>
+    )
   }
 
   return (
@@ -234,4 +254,21 @@ export const StepperContainer = styled.div`
   align-items: center;
   padding: 10px;
   justify-content: center;
+`
+
+const WrapperMobileMode = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  background-color: ${Colors.Black[700]};
+  color: ${Colors.White};
+  position: relative;
+  padding: 10px 16px;
+
+  p {
+    text-align: center;
+  }
 `

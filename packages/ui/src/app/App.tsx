@@ -46,10 +46,10 @@ export const App = () => {
   return (
     <Providers>
       <Page>
-        <NavBar />
         <SideBar />
         <Screen>
           <OnBoardingOverlay />
+          <NavBar />
           <Switch>
             {/*// Uncomment to see whole overview section*/}
             {/*<Route path={OverviewRoutes.overview} component={OverviewModule} />*/}
