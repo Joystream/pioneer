@@ -1,5 +1,5 @@
 import { Wallet } from 'injectweb3-connect'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
@@ -20,6 +20,7 @@ import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
 import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
+import { useResponsive } from '@/common/hooks/useResponsive'
 import { useToggle } from '@/common/hooks/useToggle'
 import { OnBoardingStatus } from '@/common/providers/onboarding/types'
 
@@ -81,17 +82,7 @@ export const OnBoardingOverlay = () => {
   const { isLoading, status } = useOnBoarding()
   const [isOpen, toggle] = useToggle()
   const [endpoints] = useNetworkEndpoints()
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth)
-    }
-    window.addEventListener('resize', handleResize)
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
+  const { isMobile } = useResponsive()
 
   const openOnBoardingModal = useCallback(() => {
     showModal({ modal: 'OnBoardingModal' })
@@ -101,7 +92,7 @@ export const OnBoardingOverlay = () => {
     return null
   }
 
-  if (windowWidth < 1024) {
+  if (isMobile) {
     return (
       <WrapperMobileMode>
         <TextHuge bold>To become a member visit this page from desktop</TextHuge>
