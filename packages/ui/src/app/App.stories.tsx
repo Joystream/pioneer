@@ -506,7 +506,7 @@ export const BuyMembershipTxFailure: Story = {
 
     await userEvent.click(getButtonByText(modal, 'Sign and create a member'))
 
-    expect(await modal.findByText('Failure'))
+    expect(await screen.findByText('Failure'))
     expect(await modal.findByText('Some error message'))
   },
 }

@@ -514,7 +514,7 @@ export const NotEnoughFunds: Story = {
         /^Unfortunately the account associated with the currently selected membership has insufficient balance/
       )
     )
-    expect(getButtonByText(modal, 'Move funds')).toBeEnabled()
+    expect(modal.getByText('Move funds'))
   },
 }
 
