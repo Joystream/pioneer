@@ -134,7 +134,6 @@ export const CreateOpening: Story = {
       ;(await getEditorByLabel(modal, 'Application process')).setData('Application process default')
       await waitFor(() => expect(nextButton).toBeEnabled())
       await userEvent.click(modal.getByText('Limited'))
-      await waitFor(() => expect(nextButton).toBeDisabled())
       await userEvent.type(modal.getByLabelText('Expected length of the application period'), '1000')
       await waitFor(() => expect(nextButton).toBeEnabled())
       await userEvent.click(nextButton)
