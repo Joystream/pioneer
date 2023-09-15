@@ -53,8 +53,8 @@ export const BuyMembershipModal = () => {
   }
 
   if (state.matches('bondValidatorAccTx') && api && state.context.memberId && state.context.form.validatorAccount) {
-    const transaction = api.tx.members.updateProfile(state.context.memberId, state.context.form.handle, {
-      validatorAccout: state.context.form.validatorAccount,
+    const transaction = api.tx.members.updateProfile(state.context.memberId.toString(), state.context.form.handle, {
+      validatorAccount: state.context.form.validatorAccount.address,
     })
     const { form } = state.context
     const service = state.children.transaction
