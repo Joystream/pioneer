@@ -155,5 +155,17 @@ export const CreateOpening: Story = {
       await userEvent.type(modal.getByLabelText('Role cooldown period'), '0')
       await userEvent.type(modal.getByLabelText('Reward amount per Block'), '0.1')
     })
+
+    await step('Sign transaction and Create', async () => {
+      await waitFor(async () => {
+        const createButton = getButtonByText(modal, 'Create Opening')
+        if (createButton) {
+          await waitFor(() => expect(createButton).toBeEnabled())
+          await userEvent.click(createButton)
+        }
+        await userEvent.click(modal.getByText('Sign transaction and Create'))
+      })
+      // expect(await waitForModal(modal, 'Success'))
+    })
   },
 }
