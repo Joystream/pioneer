@@ -4,8 +4,8 @@ export const Page = styled.div`
   display: grid;
   position: relative;
   grid-template-columns: 1fr;
-  grid-template-rows: 72px auto;
-  grid-template-areas: 'navbar' 'page';
+  grid-template-rows: 1fr;
+  grid-template-areas: 'page';
   width: 100vw;
   max-width: 100vw;
   min-height: 100vh;
