@@ -22,6 +22,7 @@ import { THREADS_PER_PAGE } from '@/forum/constant'
 import { useForumCategory } from '@/forum/hooks/useForumCategory'
 import { useForumCategoryThreadPage } from '@/forum/hooks/useForumCategoryThreadPage'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
+import { useForumLatestPosts } from '@/forum/hooks/useForumLatestPosts'
 import { MemberStack, moderatorsSummary } from '@/memberships/components/MemberStack'
 
 import { ForumPageLayout } from './components/ForumPageLayout'
@@ -46,6 +47,8 @@ export const ForumCategory = () => {
     },
     { perPage: THREADS_PER_PAGE, page }
   )
+
+  useForumLatestPosts()
 
   const { showModal } = useModal()
 
