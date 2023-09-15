@@ -10,6 +10,7 @@ import { KeyringContextProvider } from '@/common/providers/keyring/provider'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { NetworkEndpointsProvider } from '@/common/providers/network-endpoints/provider'
 import { OnBoardingProvider } from '@/common/providers/onboarding/provider'
+import { ResponsiveProvider } from '@/common/providers/responsive/provider'
 import { TransactionStatusProvider } from '@/common/providers/transactionStatus/provider'
 import { MembershipContextProvider } from '@/memberships/providers/membership/provider'
 
@@ -34,8 +35,10 @@ export const Providers = ({ children }: Props) => (
                       <ModalContextProvider>
                         <OnBoardingProvider>
                           <ImageReportProvider>
-                            <GlobalStyle />
-                            {children}
+                            <ResponsiveProvider>
+                              <GlobalStyle />
+                              {children}
+                            </ResponsiveProvider>
                           </ImageReportProvider>
                         </OnBoardingProvider>
                       </ModalContextProvider>

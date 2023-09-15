@@ -3,28 +3,17 @@ import styled from 'styled-components'
 
 import { MenuIcon } from '@/common/components/icons/MenuIcon'
 import { Colors } from '@/common/constants'
+import { useResponsive } from '@/common/hooks/useResponsive'
 
 import { SideBarSlider } from './SideBarSlider'
 
 export const NavBar = () => {
   const [open, setOpen] = useState(false)
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const { isMobile } = useResponsive()
 
   useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth)
-    }
-    window.addEventListener('resize', handleResize)
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (windowWidth >= 768) {
-      setOpen(false)
-    }
-  }, [windowWidth])
+    if(isMobile) setOpen(false)
+  },[isMobile])
 
   return (
     <>
