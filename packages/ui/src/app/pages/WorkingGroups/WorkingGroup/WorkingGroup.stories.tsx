@@ -112,16 +112,49 @@ export const CreateOpening: Story = {
 
     await userEvent.click(screen.getByText('Add opening'))
     expect(modal.getByText('Create Opening'))
+    const nextButton = getButtonByText(modal, 'Next step')
 
     // // console.log('Modal here ',modal)
 
     await step('Working group & description', async () => {
+      await waitFor(() => expect(nextButton).toBeDisabled())
+      await waitFor(() => expect(modal.getByTestId('opening-title')), { timeout: 3000 })
+
       const openingTitleField = modal.getByTestId('opening-title')
       const shortDescriptionField = modal.getByTestId('short-description')
 
-      await userEvent.type(openingTitleField, 'Membership worker role')
-      await userEvent.type(shortDescriptionField, 'Membership worker role')
-      ;(await getEditorByLabel(modal, 'Description')).setData('Lorem ipsum...')
+      await userEvent.type(await openingTitleField, 'Membership worker role')
+      await userEvent.type(shortDescriptionField, 'Lorem Ipsum...')
+      ;(await getEditorByLabel(modal, 'Description')).setData('Bigger Lorem ipsum...')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+    await step('Duration & Process', async () => {
+      expect(nextButton).toBeDisabled()
+      ;(await getEditorByLabel(modal, 'Application process')).setData('Application process default')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(modal.getByText('Limited'))
+      await waitFor(() => expect(nextButton).toBeDisabled())
+      await userEvent.type(modal.getByLabelText('Expected length of the application period'), '1000')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+    await step('Application Form', async () => {
+      expect(nextButton).toBeDisabled()
+      await userEvent.type(modal.getByRole('textbox'), '🐁?')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(modal.getByText('Add new question'))
+      await waitFor(() => expect(nextButton).toBeDisabled())
+      await userEvent.click(modal.getAllByText('Long answer')[1])
+      await userEvent.type(modal.getAllByRole('textbox')[1], '🐘?')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+      await userEvent.click(nextButton)
+    })
+    await step('Staking Policy & Reward', async () => {
+      expect(nextButton).toBeDisabled()
+      await userEvent.type(modal.getByLabelText('Staking amount *'), '100')
+      await userEvent.type(modal.getByLabelText('Role cooldown period'), '0')
+      await userEvent.type(modal.getByLabelText('Reward amount per Block'), '0.1')
     })
   },
 }
