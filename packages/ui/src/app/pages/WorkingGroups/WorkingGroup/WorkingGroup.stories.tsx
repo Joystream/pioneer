@@ -1,8 +1,11 @@
+import { expect } from '@storybook/jest'
+/* eslint-disable no-console */
 import { Meta, StoryContext, StoryObj } from '@storybook/react'
+import { userEvent, waitFor, within } from '@storybook/testing-library'
 import { FC } from 'react'
 
 import { member } from '@/mocks/data/members'
-import { joy } from '@/mocks/helpers'
+import { getButtonByText, getEditorByLabel, joy, withinModal } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
 import { GetWorkersDocument, GetWorkingGroupDocument } from '@/working-groups/queries'
 
@@ -10,7 +13,6 @@ import { WorkingGroup } from './WorkingGroup'
 
 type Args = {
   isLead: boolean
-  isLoggedIn: boolean
 }
 
 type Story = StoryObj<FC<Args>>
@@ -25,12 +27,12 @@ export default {
   component: WorkingGroup,
 
   args: {
-    isLoggedIn: true,
     isLead: true,
   },
 
   parameters: {
     router: { path: '/:name', href: `/${WG_DATA.name}` },
+    isLoggedIn: true,
     mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
       const alice = member('alice', {
         roles: [
@@ -96,3 +98,30 @@ export default {
 } satisfies Meta<Args>
 
 export const Default: Story = {}
+
+export const CreateOpening: Story = {
+  play: async ({ canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    const closeModal = async (heading: string | HTMLElement) => {
+      const headingElement = heading instanceof HTMLElement ? heading : modal.getByRole('heading', { name: heading })
+      await userEvent.click(headingElement.nextElementSibling as HTMLElement)
+      await userEvent.click(getButtonByText(modal, 'Close'))
+    }
+
+    await userEvent.click(screen.getByText('Add opening'))
+    expect(modal.getByText('Create Opening'))
+
+    // // console.log('Modal here ',modal)
+
+    await step('Working group & description', async () => {
+      const openingTitleField = modal.getByTestId('opening-title')
+      const shortDescriptionField = modal.getByTestId('short-description')
+
+      await userEvent.type(openingTitleField, 'Membership worker role')
+      await userEvent.type(shortDescriptionField, 'Membership worker role')
+      ;(await getEditorByLabel(modal, 'Description')).setData('Lorem ipsum...')
+    })
+  },
+}
