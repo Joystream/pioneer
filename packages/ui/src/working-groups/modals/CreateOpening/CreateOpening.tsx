@@ -115,7 +115,7 @@ export const CreateOpeningModal = () => {
   }
 
   if (state.matches('success')) {
-    return <SuccessModal onClose={hideModal} memberId={activeMember.id} />
+    return <SuccessModal groupId={group} onClose={hideModal} />
   }
 
   return (

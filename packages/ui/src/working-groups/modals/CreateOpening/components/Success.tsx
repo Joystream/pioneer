@@ -6,21 +6,20 @@ import { SuccessSymbol } from '@/common/components/icons/symbols'
 import { Info } from '@/common/components/Info'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
-import { ElectionRoutes } from '@/council/constants'
-import { useCandidateIdByMember } from '@/council/hooks/useCandidateIdByMember'
+import { GroupIdToGroupParam } from '@/working-groups/constants'
+import { GroupIdName } from '@/working-groups/types'
 
 interface SuccessModalProps {
   onClose: () => void
-  memberId: string
+  groupId: GroupIdName
 }
 
-export const SuccessModal = ({ onClose, memberId }: SuccessModalProps) => {
-  const { isLoading, candidateId } = useCandidateIdByMember(memberId)
+export const SuccessModal = ({ onClose, groupId }: SuccessModalProps) => {
   const history = useHistory()
 
   const redirect = () => {
     onClose()
-    history.push(`${ElectionRoutes.currentElection}?candidate=${candidateId}`)
+    history.push(`/working-groups/${GroupIdToGroupParam[groupId].toLowerCase()}`)
   }
 
   return (
@@ -28,12 +27,12 @@ export const SuccessModal = ({ onClose, memberId }: SuccessModalProps) => {
       <ModalHeader onClick={onClose} title="Success" icon={<SuccessSymbol />} />
       <ModalBody>
         <Info>
-          <TextMedium light>You have just successfully announced candidacy.</TextMedium>
+          <TextMedium light>You have just successfully created an opening.</TextMedium>
         </Info>
       </ModalBody>
       <ModalFooter>
-        <ButtonGhost onClick={redirect} size="medium" disabled={isLoading || !candidateId}>
-          See my Announcement
+        <ButtonGhost onClick={redirect} size="medium">
+          Back to Working Group
         </ButtonGhost>
       </ModalFooter>
     </Modal>

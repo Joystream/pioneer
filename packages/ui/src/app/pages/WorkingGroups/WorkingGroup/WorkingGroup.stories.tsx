@@ -1,9 +1,12 @@
+import { OpeningMetadata } from '@joystream/metadata-protobuf'
 import { expect } from '@storybook/jest'
 /* eslint-disable no-console */
 import { Meta, StoryContext, StoryObj } from '@storybook/react'
 import { userEvent, waitFor, within } from '@storybook/testing-library'
+import BN from 'bn.js'
 import { FC } from 'react'
 
+import { metadataFromBytes } from '@/common/model/JoystreamNode'
 import { member } from '@/mocks/data/members'
 import { getButtonByText, getEditorByLabel, joy, withinModal } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
@@ -13,6 +16,7 @@ import { WorkingGroup } from './WorkingGroup'
 
 type Args = {
   isLead: boolean
+  onCreateOpening: jest.Mock
 }
 
 type Story = StoryObj<FC<Args>>
@@ -22,9 +26,26 @@ const WG_DATA = {
   name: 'membership',
 }
 
+const WG_OPENING_DATA = {
+  title: 'Membership worker role',
+  shortDescription: 'Lorem Ipsum...',
+  description: 'Bigger Lorem ipsum...',
+  applicationDetails: 'Application process default',
+  applicationFormQuestions: [
+    { question: '🐁?', type: OpeningMetadata.ApplicationFormQuestion.InputType.TEXT },
+    { question: '🐘?', type: OpeningMetadata.ApplicationFormQuestion.InputType.TEXTAREA },
+  ],
+  hiringLimit: 1,
+  expectedEndingTimestamp: 2000,
+}
+
 export default {
   title: 'Pages/Working Group/WorkingGroup',
   component: WorkingGroup,
+
+  argTypes: {
+    onCreateOpening: { action: 'MembershipWorkingGroup.OpeningCreated' },
+  },
 
   args: {
     isLead: true,
@@ -51,7 +72,17 @@ export default {
       return {
         accounts: parameters.isLoggedIn ? { active: { member: alice } } : { list: [{ member: alice }] },
 
-        // chain: undefined,
+        chain: {
+          tx: {
+            membershipWorkingGroup: {
+              addOpening: {
+                event: 'OpeningCreated',
+                onSend: args.onCreateOpening,
+                failure: parameters.createOpeningFailure,
+              },
+            },
+          },
+        },
 
         queryNode: [
           {
@@ -100,15 +131,15 @@ export default {
 export const Default: Story = {}
 
 export const CreateOpening: Story = {
-  play: async ({ canvasElement, step }) => {
+  play: async ({ args, canvasElement, step }) => {
     const screen = within(canvasElement)
     const modal = withinModal(canvasElement)
 
-    const closeModal = async (heading: string | HTMLElement) => {
-      const headingElement = heading instanceof HTMLElement ? heading : modal.getByRole('heading', { name: heading })
-      await userEvent.click(headingElement.nextElementSibling as HTMLElement)
-      await userEvent.click(getButtonByText(modal, 'Close'))
-    }
+    // const closeModal = async (heading: string | HTMLElement) => {
+    //   const headingElement = heading instanceof HTMLElement ? heading : modal.getByRole('heading', { name: heading })
+    //   await userEvent.click(headingElement.nextElementSibling as HTMLElement)
+    //   await userEvent.click(getButtonByText(modal, 'Close'))
+    // }
 
     await userEvent.click(screen.getByText('Add opening'))
     expect(modal.getByText('Create Opening'))
@@ -134,7 +165,9 @@ export const CreateOpening: Story = {
       ;(await getEditorByLabel(modal, 'Application process')).setData('Application process default')
       await waitFor(() => expect(nextButton).toBeEnabled())
       await userEvent.click(modal.getByText('Limited'))
-      await userEvent.type(modal.getByLabelText('Expected length of the application period'), '1000')
+      const expectedLengthField = modal.getByLabelText('Expected length of the application period')
+      await userEvent.clear(expectedLengthField)
+      await userEvent.type(expectedLengthField, '2000')
       await waitFor(() => expect(nextButton).toBeEnabled())
       await userEvent.click(nextButton)
     })
@@ -152,8 +185,14 @@ export const CreateOpening: Story = {
     await step('Staking Policy & Reward', async () => {
       expect(nextButton).toBeDisabled()
       await userEvent.type(modal.getByLabelText('Staking amount *'), '100')
-      await userEvent.type(modal.getByLabelText('Role cooldown period'), '0')
+      await userEvent.type(modal.getByLabelText('Role cooldown period'), '1000')
       await userEvent.type(modal.getByLabelText('Reward amount per Block'), '0.1')
+      // await waitFor(
+      //   async () => {
+      //     await userEvent.type(modal.getByLabelText('Reward amount per Block'), '0.1')
+      //   },
+      //   { timeout: 3000 }
+      // )
     })
 
     await step('Sign transaction and Create', async () => {
@@ -166,6 +205,24 @@ export const CreateOpening: Story = {
         await userEvent.click(modal.getByText('Sign transaction and Create'))
       })
       // expect(await waitForModal(modal, 'Success'))
+    })
+
+    step('Transaction parameters', () => {
+      const [description, openingType, stakePolicy, rewardPerBlock] = args.onCreateOpening.mock.calls.at(-1)
+
+      console.log('Stake policy === ', stakePolicy)
+      console.log('Reward per Block === ', rewardPerBlock)
+
+      // const { description, ...data } = specificParameters.asCreateWorkingGroupLeadOpening.toJSON()
+
+      expect(stakePolicy).toEqual({
+        stakeAmount: new BN(100),
+        leavingUnstakingPeriod: new BN(1000),
+      })
+      // expect(rewardPerBlock).toEqual(1000000000)
+
+      expect(openingType).toEqual('Regular')
+      expect(metadataFromBytes(OpeningMetadata, description)).toEqual({ ...WG_OPENING_DATA })
     })
   },
 }
