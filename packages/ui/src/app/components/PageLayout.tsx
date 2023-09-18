@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import styled, { css } from 'styled-components'
+import styled, { FlattenSimpleInterpolation, css } from 'styled-components'
 
 import { PageContent } from '../../common/components/page/PageContent'
 import { Breadcrumbs } from '../../common/components/page/Sidebar/Breadcrumbs/Breadcrumbs'
@@ -12,9 +12,18 @@ export interface PageLayoutProps {
   sidebar?: ReactNode
   sidebarScrollable?: boolean
   footer?: ReactNode
+  responsiveStyle?: FlattenSimpleInterpolation
 }
 
-export const PageLayout = ({ header, main, sidebar, sidebarScrollable, footer, lastBreadcrumb }: PageLayoutProps) => (
+export const PageLayout = ({
+  header,
+  main,
+  sidebar,
+  sidebarScrollable,
+  footer,
+  lastBreadcrumb,
+  responsiveStyle,
+}: PageLayoutProps) => (
   <PageContent>
     <Breadcrumbs lastBreadcrumb={lastBreadcrumb} breadcrumbsOptions={breadcrumbsOptions} />
     <PageLayoutContent
@@ -23,12 +32,20 @@ export const PageLayout = ({ header, main, sidebar, sidebarScrollable, footer, l
       sidebar={sidebar}
       sidebarScrollable={sidebarScrollable}
       footer={footer}
+      responsiveStyle={responsiveStyle}
     />
   </PageContent>
 )
 
-export const PageLayoutContent = ({ header, main, sidebar, sidebarScrollable, footer }: PageLayoutProps) => (
-  <PageLayoutComponent header={header} main={main} sidebar={sidebar} footer={footer}>
+export const PageLayoutContent = ({
+  header,
+  main,
+  sidebar,
+  sidebarScrollable,
+  footer,
+  responsiveStyle,
+}: PageLayoutProps) => (
+  <PageLayoutComponent header={header} main={main} sidebar={sidebar} footer={footer} responsiveStyle={responsiveStyle}>
     {header && <PageHeader>{header}</PageHeader>}
     {main && <PageMain>{main}</PageMain>}
     {sidebar && <PageSidebar sidebarScrollable={sidebarScrollable}>{sidebar}</PageSidebar>}
@@ -134,6 +151,7 @@ export const PageLayoutComponent = styled.div<PageLayoutProps>`
       padding-bottom: 16px;
     `};
   ${(props) => {
+    if (props.responsiveStyle) return props.responsiveStyle;
     if (props.main && !props.sidebar && !props.footer) {
       return PageLayoutDefault
     } else if (props.main && props.footer && !props.sidebar) {
