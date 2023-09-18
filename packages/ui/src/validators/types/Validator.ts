@@ -11,3 +11,9 @@ export interface Validator {
   totalRewards: BN
   APR: number
 }
+
+export interface ValidatorMembership {
+  membership: MemberWithDetails
+  validatorAccount: Address | undefined
+  isVerifiedValidator: boolean | undefined
+}

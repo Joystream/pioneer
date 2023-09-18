@@ -7,19 +7,11 @@ import { Api } from '@/api'
 import { useApi } from '@/api/hooks/useApi'
 import { ERAS_PER_YEAR } from '@/common/constants'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
-import { error } from '@/common/logger'
-import { Address } from '@/common/types'
 import { last } from '@/common/utils'
-import { useGetMembersWithDetailsQuery } from '@/memberships/queries'
-import { MemberWithDetails, asMemberWithDetails } from '@/memberships/types'
 
 import { Verification, State, Validator } from '../types'
 
-interface ValidatorMembership {
-  membership: MemberWithDetails
-  validatorAccount: Address | undefined
-  isVerifiedValidator: boolean | undefined
-}
+import { useValidatorMembers } from './useValidatorMembers'
 
 export const useValidatorsList = () => {
   const { api } = useApi()
@@ -27,33 +19,7 @@ export const useValidatorsList = () => {
   const [isVerified, setIsVerified] = useState<Verification>(null)
   const [isActive, setIsActive] = useState<State>(null)
   const [visibleValidators, setVisibleValidators] = useState<Validator[]>([])
-  const [validatorsWithMembership, setValidatorsWithMembership] = useState<ValidatorMembership[]>([])
-
-  const allValidatorAddresses = useFirstObservableValue(
-    () =>
-      api?.query.staking.validators
-        .entries()
-        .pipe(map((entries) => entries.map((entry) => entry[0].args[0].toString()))),
-    [api?.isConnected]
-  )
-
-  const variables = {
-    where: { metadata: { validatorAccount_in: allValidatorAddresses } },
-  }
-
-  const { data, loading, error: err } = useGetMembersWithDetailsQuery({ variables })
-
-  useEffect(() => {
-    if (err) error(err)
-    if (!loading && data)
-      setValidatorsWithMembership(
-        data.memberships.map((rawMembership) => ({
-          membership: asMemberWithDetails(rawMembership),
-          validatorAccount: rawMembership.metadata.validatorAccount ?? undefined,
-          isVerifiedValidator: rawMembership.metadata.isVerifiedValidator ?? false,
-        }))
-      )
-  }, [data, loading, error])
+  const validatorsWithMembership = useValidatorMembers()
 
   const getValidatorInfo = (address: string, api: Api): Observable<Validator> => {
     const activeValidators$ = api.query.session.validators()
@@ -75,9 +41,11 @@ export const useValidatorsList = () => {
                 .divn(10 ** 7) // Convert from Perbill to Percent
                 .toNumber()
             : 0
-        const member = validatorsWithMembership.find(({ validatorAccount }) => validatorAccount === address)?.membership
+        const member = validatorsWithMembership?.find(
+          ({ validatorAccount }) => validatorAccount === address
+        )?.membership
         const isVerified =
-          validatorsWithMembership.find(({ validatorAccount }) => validatorAccount === address)?.isVerifiedValidator ??
+          validatorsWithMembership?.find(({ validatorAccount }) => validatorAccount === address)?.isVerifiedValidator ??
           false
         return {
           member,
@@ -102,7 +70,7 @@ export const useValidatorsList = () => {
   }
 
   const allValidators = useFirstObservableValue(
-    () => (api ? getValidatorsInfo(api) : of([])),
+    () => (api && validatorsWithMembership ? getValidatorsInfo(api) : of([])),
     [api?.isConnected, validatorsWithMembership]
   )
 

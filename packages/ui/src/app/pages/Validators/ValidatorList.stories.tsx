@@ -172,14 +172,14 @@ export const TestsFilters: Story = {
     await step('Verifcation Filter', async () => {
       await selectFromDropdown(screen, verificationFilter, 'verified')
       expect(screen.queryByText('unverifed')).toBeNull()
-      expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(4)
+      expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(3)
       expect(screen.getByText('alice'))
-      expect(screen.getByText('bob'))
+      expect(screen.queryByText('bob')).toBeNull()
       await selectFromDropdown(screen, verificationFilter, 'unverified')
       expect(screen.queryByText('verifed')).toBeNull()
-      expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(7)
+      expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(8)
       expect(screen.queryByText('alice')).toBeNull()
-      expect(screen.queryByText('bob')).toBeNull()
+      expect(screen.getByText('bob'))
       await selectFromDropdown(screen, verificationFilter, 'All')
     })
     await step('State Filter', async () => {
