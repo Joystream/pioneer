@@ -151,7 +151,7 @@ export const PageLayoutComponent = styled.div<PageLayoutProps>`
       padding-bottom: 16px;
     `};
   ${(props) => {
-    if (props.responsiveStyle) return props.responsiveStyle;
+    if (props.responsiveStyle) return props.responsiveStyle
     if (props.main && !props.sidebar && !props.footer) {
       return PageLayoutDefault
     } else if (props.main && props.footer && !props.sidebar) {
