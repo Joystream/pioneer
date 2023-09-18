@@ -80,6 +80,7 @@ const MembershipsGroup = styled.div`
     'accountslist';
   grid-row-gap: 5px;
   width: 100%;
+  overflow: auto;
 `
 
 const MembershipsHeaders = styled(ListHeaders)`
