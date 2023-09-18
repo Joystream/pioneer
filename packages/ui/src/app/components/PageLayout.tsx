@@ -66,13 +66,11 @@ const PageMain = styled.main`
 `
 
 const PageSidebar = styled.aside<Pick<PageLayoutProps, 'sidebarScrollable'>>`
+  position: absolute;
+  top: 0;
+  bottom: 0;
   width: 100%;
   grid-area: sidebar;
-  @media (min-width: 1440px) {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-  }
 
   ${({ sidebarScrollable }) =>
     sidebarScrollable &&
@@ -107,37 +105,20 @@ const PageLayoutWithFooter = css`
 `
 
 const PageLayoutWithSidebar = css`
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto 1fr;
+  grid-template-columns: 1fr ${SidebarWidth};
+  grid-template-rows: auto 1fr;
   grid-template-areas:
-    'header'
-    'main'
-    'sidebar';
-  @media (min-width: 1440px) {
-    grid-template-columns: 1fr ${SidebarWidth};
-    grid-template-rows: auto 1fr;
-    grid-template-areas:
-      'header header'
-      'main sidebar';
-  }
+    'header header'
+    'main sidebar';
 `
 
 const PageLayoutWithSidebarAndFooter = css`
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto 1fr auto;
+  grid-template-columns: 1fr ${SidebarWidth};
+  grid-template-rows: auto 1fr auto;
   grid-template-areas:
-    'header'
-    'main'
-    'sidebar'
-    'footer';
-  @media (min-width: 1440px) {
-    grid-template-columns: 1fr ${SidebarWidth};
-    grid-template-rows: auto 1fr auto;
-    grid-template-areas:
-      'header header'
-      'main sidebar'
-      'footer sidebar';
-  }
+    'header header'
+    'main sidebar'
+    'footer sidebar';
 `
 
 export const PageLayoutComponent = styled.div<PageLayoutProps>`

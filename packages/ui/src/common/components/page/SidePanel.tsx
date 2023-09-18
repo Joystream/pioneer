@@ -20,19 +20,16 @@ export const SidePanel = ({ scrollable, className, children }: SidePanelProps) =
 
 export const SidePanelStyles = styled.div<Pick<SidePanelProps, 'scrollable'>>`
   display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
   width: 100%;
+  max-width: 280px;
+  min-height: 184px;
   height: 100%;
-  padding: 0 24px;
-  @media (min-width: 1440px) {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    max-width: 280px;
-    min-height: 184px;
-    padding-left: 24px;
-    overflow: hidden;
-  }
+  padding-left: 24px;
+  overflow: hidden;
 
   ${({ scrollable }) =>
     scrollable &&
