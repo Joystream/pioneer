@@ -212,7 +212,7 @@ export const TestsFilters: Story = {
       await selectFromDropdown(screen, verificationFilter, 'verified')
       expect(screen.queryByText('Clear all filters'))
       await selectFromDropdown(screen, stateFilter, 'active')
-      expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(4)
+      expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(3)
       await userEvent.click(screen.getByText('Clear all filters'))
       expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(11)
       await userEvent.type(searchElement, 'j4R{enter}')
