@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import { css } from 'styled-components'
 
 import { PageHeaderWithHint } from '@/app/components/PageHeaderWithHint'
 import { PageLayout } from '@/app/components/PageLayout'
@@ -80,7 +81,7 @@ export const Council = () => {
     </SidePanel>
   )
 
-  return <PageLayout header={header} main={main} sidebar={sidebar} />
+  return <PageLayout header={header} main={main} sidebar={sidebar} responsiveStyle={ResponsiveStyle} />
 }
 
 const sortBy = ({ key, isDescending }: CouncilOrder): ((a: Councilor, b: Councilor) => number) => {
@@ -92,3 +93,50 @@ const sortBy = ({ key, isDescending }: CouncilOrder): ((a: Councilor, b: Council
       return (a, b) => (asBN(a[key] ?? 0).gte(asBN(b[key] ?? 0)) ? 1 : -1) * direction
   }
 }
+
+const ResponsiveStyle = css`
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto 1fr;
+  grid-template-areas:
+    'header'
+    'main'
+    'sidebar';
+
+  aside {
+    position: relative;
+    width: 100%;
+    grid-area: sidebar;
+
+    > div {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding: 0 24px;
+    }
+  }
+
+  @media (min-width: 1440px) {
+    grid-template-columns: 9fr 3fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'header header'
+      'main sidebar';
+
+    aside {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+
+      > div {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        max-width: 280px;
+        min-height: 184px;
+        padding-right: 0px;
+        overflow: hidden;
+      }
+    }
+  }
+`
