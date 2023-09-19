@@ -51,10 +51,10 @@ const WG_JSON_OPENING = {
   hiringLimit: 1,
   expectedEndingTimestamp: 2000,
   rewardPerBlock: 20,
-  stakingPolicy:{
+  stakingPolicy: {
     unstakingPeriod: 200,
     amount: 200,
-  }
+  },
 }
 
 export default {
@@ -244,12 +244,15 @@ export const CreateOpeningImport: Story = {
       const uploadField = await modal.findByText(/Browse for file/)
       const previewImportButton = getButtonByText(modal, 'Preview Import')
       expect(previewImportButton).toBeDisabled()
-      
-      await userEvent.upload(uploadField, new File([JSON.stringify(WG_JSON_OPENING)], 'file.json', { type: 'application/json' }))
+
+      await userEvent.upload(
+        uploadField,
+        new File([JSON.stringify(WG_JSON_OPENING)], 'file.json', { type: 'application/json' })
+      )
       expect(await modal.findByText(/File imported successfully, preview your input/))
       await waitFor(() => expect(previewImportButton).toBeEnabled())
       await userEvent.click(previewImportButton)
-      
+
       expect(await modal.findByLabelText('Opening title'))
       expect(nextButton).toBeEnabled()
       await userEvent.click(nextButton)
@@ -273,7 +276,7 @@ export const CreateOpeningImport: Story = {
     step('Transaction parameters', () => {
       const [description, openingType, stakePolicy, rewardPerBlock] = args.onCreateOpening.mock.calls.at(-1)
 
-      console.log('Description metadata === ',metadataFromBytes(OpeningMetadata, description))
+      console.log('Description metadata === ', metadataFromBytes(OpeningMetadata, description))
 
       expect(stakePolicy.toJSON()).toEqual({
         stakeAmount: 200_0000000000,
@@ -282,7 +285,10 @@ export const CreateOpeningImport: Story = {
       expect(new BN(rewardPerBlock).toNumber()).toEqual(200000000000)
 
       expect(openingType).toEqual('Regular')
-      expect(metadataFromBytes(OpeningMetadata, description)).toEqual({ ...WG_OPENING_DATA,expectedEndingTimestamp: undefined })
+      expect(metadataFromBytes(OpeningMetadata, description)).toEqual({
+        ...WG_OPENING_DATA,
+        expectedEndingTimestamp: undefined,
+      })
     })
   },
 }
