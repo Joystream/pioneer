@@ -77,7 +77,11 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
     } else if (network === 'auto-conf' && endpointsAreDefined(autoConfEndpoints)) {
       setEndpoints(autoConfEndpoints)
     } else if (network === 'custom') {
-      setEndpoints(customEndpoints)
+      if (endpointsAreDefined(customEndpoints)) {
+        setEndpoints(customEndpoints)
+      } else {
+        setEndpoints(DEFAULT_NETWORK.endpoints)
+      }
     } else {
       setNetwork(DEFAULT_NETWORK.type)
       setEndpoints(DEFAULT_NETWORK.endpoints)
