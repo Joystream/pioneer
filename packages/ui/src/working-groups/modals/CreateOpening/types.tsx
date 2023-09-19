@@ -76,7 +76,7 @@ export const defaultValues = {
   },
   stakingPolicyAndReward: {
     stakingAmount: undefined,
-    leavingUnstakingPeriod: undefined,
+    leavingUnstakingPeriod: 14400,
     rewardPerBlock: undefined,
   },
   workingGroupAndDescription: {

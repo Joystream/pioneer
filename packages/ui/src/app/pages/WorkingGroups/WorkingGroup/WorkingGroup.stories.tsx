@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
 import { expect } from '@storybook/jest'
 import { Meta, StoryContext, StoryObj } from '@storybook/react'
@@ -36,6 +37,24 @@ const WG_OPENING_DATA = {
   ],
   hiringLimit: 1,
   expectedEndingTimestamp: 2000,
+}
+
+const WG_JSON_OPENING = {
+  title: 'Membership worker role',
+  shortDescription: 'Lorem Ipsum...',
+  description: 'Bigger Lorem ipsum...',
+  applicationDetails: 'Application process default',
+  applicationFormQuestions: [
+    { question: '🐁?', type: 'TEXT' },
+    { question: '🐘?', type: 'TEXTAREA' },
+  ],
+  hiringLimit: 1,
+  expectedEndingTimestamp: 2000,
+  rewardPerBlock: 20,
+  stakingPolicy:{
+    unstakingPeriod: 200,
+    amount: 200,
+  }
 }
 
 export default {
@@ -182,6 +201,7 @@ export const CreateOpening: Story = {
       const createButton = getButtonByText(modal, 'Create Opening')
       expect(createButton).toBeDisabled()
       await userEvent.type(modal.getByLabelText('Staking amount *'), '100')
+      await userEvent.clear(modal.getByLabelText('Role cooldown period'))
       await userEvent.type(modal.getByLabelText('Role cooldown period'), '1000')
       await userEvent.type(modal.getByLabelText('Reward amount per Block'), '0.1')
       await waitFor(() => expect(createButton).toBeEnabled())
@@ -204,6 +224,65 @@ export const CreateOpening: Story = {
 
       expect(openingType).toEqual('Regular')
       expect(metadataFromBytes(OpeningMetadata, description)).toEqual({ ...WG_OPENING_DATA })
+    })
+  },
+}
+export const CreateOpeningImport: Story = {
+  play: async ({ args, canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    await userEvent.click(screen.getByText('Add opening'))
+    expect(modal.getByText('Create Opening'))
+    const nextButton = getButtonByText(modal, 'Next step')
+
+    await step('Import File', async () => {
+      const importButton = getButtonByText(modal, 'Import')
+
+      await userEvent.click(importButton)
+
+      const uploadField = await modal.findByText(/Browse for file/)
+      const previewImportButton = getButtonByText(modal, 'Preview Import')
+      expect(previewImportButton).toBeDisabled()
+      
+      await userEvent.upload(uploadField, new File([JSON.stringify(WG_JSON_OPENING)], 'file.json', { type: 'application/json' }))
+      expect(await modal.findByText(/File imported successfully, preview your input/))
+      await waitFor(() => expect(previewImportButton).toBeEnabled())
+      await userEvent.click(previewImportButton)
+      
+      expect(await modal.findByLabelText('Opening title'))
+      expect(nextButton).toBeEnabled()
+      await userEvent.click(nextButton)
+
+      expect(await modal.findByText('Opening Duration'))
+      expect(nextButton).toBeEnabled()
+      await userEvent.click(nextButton)
+
+      expect(await modal.findByText('Application form'))
+      expect(nextButton).toBeEnabled()
+      await userEvent.click(nextButton)
+
+      expect(await modal.getByLabelText('Staking amount *'))
+      const createButton = getButtonByText(modal, 'Create Opening')
+      await userEvent.click(createButton)
+    })
+    await step('Sign transaction and Create', async () => {
+      expect(await modal.findByText('You intend to create an Opening.'))
+      await userEvent.click(modal.getByText('Sign transaction and Create'))
+    })
+    step('Transaction parameters', () => {
+      const [description, openingType, stakePolicy, rewardPerBlock] = args.onCreateOpening.mock.calls.at(-1)
+
+      console.log('Description metadata === ',metadataFromBytes(OpeningMetadata, description))
+
+      expect(stakePolicy.toJSON()).toEqual({
+        stakeAmount: 200_0000000000,
+        leavingUnstakingPeriod: 200,
+      })
+      expect(new BN(rewardPerBlock).toNumber()).toEqual(200000000000)
+
+      expect(openingType).toEqual('Regular')
+      expect(metadataFromBytes(OpeningMetadata, description)).toEqual({ ...WG_OPENING_DATA,expectedEndingTimestamp: undefined })
     })
   },
 }
