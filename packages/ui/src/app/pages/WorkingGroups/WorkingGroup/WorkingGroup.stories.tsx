@@ -1,6 +1,5 @@
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
 import { expect } from '@storybook/jest'
-/* eslint-disable no-console */
 import { Meta, StoryContext, StoryObj } from '@storybook/react'
 import { userEvent, waitFor, within } from '@storybook/testing-library'
 import BN from 'bn.js'
@@ -145,16 +144,13 @@ export const CreateOpening: Story = {
     expect(modal.getByText('Create Opening'))
     const nextButton = getButtonByText(modal, 'Next step')
 
-    // // console.log('Modal here ',modal)
-
     await step('Working group & description', async () => {
-      await waitFor(() => expect(nextButton).toBeDisabled())
-      await waitFor(() => expect(modal.getByTestId('opening-title')), { timeout: 3000 })
+      const openingTitleField = await modal.findByLabelText('Opening title')
+      const shortDescriptionField = modal.getByLabelText('Short description')
 
-      const openingTitleField = modal.getByTestId('opening-title')
-      const shortDescriptionField = modal.getByTestId('short-description')
+      expect(nextButton).toBeDisabled()
 
-      await userEvent.type(await openingTitleField, 'Membership worker role')
+      await userEvent.type(openingTitleField, 'Membership worker role')
       await userEvent.type(shortDescriptionField, 'Lorem Ipsum...')
       ;(await getEditorByLabel(modal, 'Description')).setData('Bigger Lorem ipsum...')
       await waitFor(() => expect(nextButton).toBeEnabled())
@@ -183,43 +179,28 @@ export const CreateOpening: Story = {
       await userEvent.click(nextButton)
     })
     await step('Staking Policy & Reward', async () => {
-      expect(nextButton).toBeDisabled()
+      const createButton = getButtonByText(modal, 'Create Opening')
+      expect(createButton).toBeDisabled()
       await userEvent.type(modal.getByLabelText('Staking amount *'), '100')
       await userEvent.type(modal.getByLabelText('Role cooldown period'), '1000')
       await userEvent.type(modal.getByLabelText('Reward amount per Block'), '0.1')
-      // await waitFor(
-      //   async () => {
-      //     await userEvent.type(modal.getByLabelText('Reward amount per Block'), '0.1')
-      //   },
-      //   { timeout: 3000 }
-      // )
+      await waitFor(() => expect(createButton).toBeEnabled())
+      await userEvent.click(createButton)
     })
 
     await step('Sign transaction and Create', async () => {
-      await waitFor(async () => {
-        const createButton = getButtonByText(modal, 'Create Opening')
-        if (createButton) {
-          await waitFor(() => expect(createButton).toBeEnabled())
-          await userEvent.click(createButton)
-        }
-        await userEvent.click(modal.getByText('Sign transaction and Create'))
-      })
-      // expect(await waitForModal(modal, 'Success'))
+      expect(await modal.findByText('You intend to create an Opening.'))
+      await userEvent.click(modal.getByText('Sign transaction and Create'))
     })
 
     step('Transaction parameters', () => {
       const [description, openingType, stakePolicy, rewardPerBlock] = args.onCreateOpening.mock.calls.at(-1)
 
-      console.log('Stake policy === ', stakePolicy)
-      console.log('Reward per Block === ', rewardPerBlock)
-
-      // const { description, ...data } = specificParameters.asCreateWorkingGroupLeadOpening.toJSON()
-
-      expect(stakePolicy).toEqual({
-        stakeAmount: new BN(100),
-        leavingUnstakingPeriod: new BN(1000),
+      expect(stakePolicy.toJSON()).toEqual({
+        stakeAmount: 100_0000000000,
+        leavingUnstakingPeriod: 1000,
       })
-      // expect(rewardPerBlock).toEqual(1000000000)
+      expect(new BN(rewardPerBlock).toNumber()).toEqual(1000000000)
 
       expect(openingType).toEqual('Regular')
       expect(metadataFromBytes(OpeningMetadata, description)).toEqual({ ...WG_OPENING_DATA })

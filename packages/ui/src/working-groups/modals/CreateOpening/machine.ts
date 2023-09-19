@@ -4,6 +4,7 @@ import { assign, createMachine, State, Typestate } from 'xstate'
 import { StateSchema } from 'xstate/lib/types'
 
 import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
+import { createType } from '@/common/model/createType'
 import { metadataToBytes, getDataFromEvent } from '@/common/model/JoystreamNode'
 import {
   isTransactionCanceled,
@@ -53,10 +54,10 @@ export const getTxParams = (group: GroupIdName, specifics: CreateOpeningForm) =>
     })),
   }),
   openingType: 'Regular',
-  stakePolicy: {
+  stakePolicy: createType('PalletWorkingGroupStakePolicy', {
     stakeAmount: specifics?.stakingPolicyAndReward?.stakingAmount,
     leavingUnstakingPeriod: specifics?.stakingPolicyAndReward?.leavingUnstakingPeriod,
-  },
+  }),
   rewardPerBlock: new BN(specifics?.stakingPolicyAndReward?.rewardPerBlock).toNumber(),
   group,
 })
