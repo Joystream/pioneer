@@ -167,7 +167,7 @@ export const CreateOpening: Story = {
       const openingTitleField = await modal.findByLabelText('Opening title')
       const shortDescriptionField = modal.getByLabelText('Short description')
 
-      expect(nextButton).toBeDisabled()
+      await waitFor(() => expect(nextButton).toBeDisabled())
 
       await userEvent.type(openingTitleField, 'Membership worker role')
       await userEvent.type(shortDescriptionField, 'Lorem Ipsum...')
@@ -176,7 +176,7 @@ export const CreateOpening: Story = {
       await userEvent.click(nextButton)
     })
     await step('Duration & Process', async () => {
-      expect(nextButton).toBeDisabled()
+      await waitFor(() => expect(nextButton).toBeDisabled())
       ;(await getEditorByLabel(modal, 'Application process')).setData('Application process default')
       await waitFor(() => expect(nextButton).toBeEnabled())
       await userEvent.click(modal.getByText('Limited'))
@@ -187,7 +187,7 @@ export const CreateOpening: Story = {
       await userEvent.click(nextButton)
     })
     await step('Application Form', async () => {
-      expect(nextButton).toBeDisabled()
+      await waitFor(() => expect(nextButton).toBeDisabled())
       await userEvent.type(modal.getByRole('textbox'), '🐁?')
       await waitFor(() => expect(nextButton).toBeEnabled())
       await userEvent.click(modal.getByText('Add new question'))
