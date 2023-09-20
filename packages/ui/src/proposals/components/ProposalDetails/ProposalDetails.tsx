@@ -53,7 +53,7 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   Percentage: Percentage,
   Hash: Hash,
   DestinationsPreview: DestinationsPreview,
-  BlockDurationStatistics: BlockDurationStatistics
+  BlockDurationStatistics: BlockDurationStatistics,
 }
 
 export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBlock }: Props) => {
