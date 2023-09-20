@@ -40,11 +40,7 @@ export const MemberModalTrigger = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
-  @media (min-width: 768px) {
-    cursor: pointer;
-    pointer-events: auto;
-  }
+  cursor: pointer;
 `
 
 export const MemberItemWrap = styled.div<{ kind: MemberItemKind }>`
