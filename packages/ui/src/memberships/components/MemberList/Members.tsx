@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { MembershipOrderByInput } from '@/common/api/queries'
 import { List, ListItem } from '@/common/components/List'
@@ -30,7 +31,7 @@ export const MemberList = ({ isLoading, members, getSortProps, searchFilter }: M
   }
 
   return (
-    <div>
+    <MemberListWrapper>
       <ListHeaders $colLayout={colLayoutByType('Member')}>
         <SortHeader {...getSortProps('handle')}>Memberships</SortHeader>
         <ListHeader>Roles</ListHeader>
@@ -48,6 +49,10 @@ export const MemberList = ({ isLoading, members, getSortProps, searchFilter }: M
           </ListItem>
         ))}
       </List>
-    </div>
+    </MemberListWrapper>
   )
 }
+
+const MemberListWrapper = styled.div`
+  overflow: auto;
+`
