@@ -2,7 +2,7 @@ import React, { ReactElement, useCallback, useMemo } from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
 import { Info } from '@/common/components/Info'
-import { StatisticsThreeColumns } from '@/common/components/statistics'
+import { BlockDurationStatistics, StatisticsThreeColumns } from '@/common/components/statistics'
 import { TooltipContentProp } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
@@ -53,6 +53,7 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   Percentage: Percentage,
   Hash: Hash,
   DestinationsPreview: DestinationsPreview,
+  BlockDurationStatistics: BlockDurationStatistics
 }
 
 export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBlock }: Props) => {
@@ -77,20 +78,20 @@ export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBl
     if (gracePeriod) {
       return [
         {
-          renderType: 'NumberOfBlocks',
-          label: 'Gracing Period',
+          renderType: 'BlockDurationStatistics',
+          title: 'Gracing Period',
           value: gracePeriod,
         },
-      ] as RenderNode[]
+      ] as unknown as RenderNode[]
     }
     if (exactExecutionBlock) {
       return [
         {
-          renderType: 'NumberOfBlocks',
-          label: 'Exact Execution Block',
+          renderType: 'BlockDurationStatistics',
+          title: 'Exact Execution Block',
           value: exactExecutionBlock,
         },
-      ] as RenderNode[]
+      ] as unknown as RenderNode[]
     }
     if (proposalDetails?.type === 'setReferralCut') {
       return [
