@@ -1,0 +1,3 @@
+query GetBackendMemberExists($id: Int!) {
+  memberExist(id: $id)
+}

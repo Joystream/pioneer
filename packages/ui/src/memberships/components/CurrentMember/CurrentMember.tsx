@@ -5,8 +5,8 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ArrowDownExpandedIcon, Icon } from '@/common/components/icons'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
-import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
+import { useNotificationSettings } from '@/memberships/hooks/useNotificationSettings'
 
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '..'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
@@ -18,17 +18,17 @@ export const CurrentMember = () => {
   const { wallet } = useMyAccounts()
   const { members, hasMembers, active } = useMyMemberships()
   const { showModal } = useModal()
-  const [membersEmail] = useLocalStorage<Record<string, string>>('membersEmail')
+  const { activeMemberSettings, activeMemberNotRegistered } = useNotificationSettings()
+  const showSubscriptionModal = active && activeMemberNotRegistered && !activeMemberSettings?.hasBeenAskedForEmail
 
   useEffect(() => {
-    const showSubscriptionModal = active && (!membersEmail || !(active.id in membersEmail))
     if (showSubscriptionModal) {
       showModal<EmailSubscriptionModalCall>({
         modal: 'EmailSubscriptionModal',
         data: { member: active },
       })
     }
-  }, [active])
+  }, [showSubscriptionModal])
 
   if (!wallet) {
     return (

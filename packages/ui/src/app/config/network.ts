@@ -59,9 +59,9 @@ const NODE_RPC_ENDPOINT: PredefinedEndpoint = {
 
 const BACKEND_ENDPOINT: PredefinedEndpoint = {
   mainnet: MAINNET_BACKEND,
-  local: 'ws://127.0.0.1:3000',
+  local: 'http://localhost:3000',
   testnet: TESTNET_BACKEND,
-  'local-mocks': 'ws://127.0.0.1:3000',
+  'local-mocks': 'http://localhost:3000',
 }
 
 export const pickEndpoints = (network: NetworkType): Partial<NetworkEndpoints> => ({

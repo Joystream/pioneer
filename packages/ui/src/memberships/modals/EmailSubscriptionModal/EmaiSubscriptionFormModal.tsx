@@ -8,8 +8,8 @@ import { InputComponent, InputText } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { ModalHeader, ModalTransactionFooter, Row, Modal, ModalBody } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
-import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useYupValidationResolver } from '@/common/utils/validation'
+import { useNotificationSettings } from '@/memberships/hooks/useNotificationSettings'
 
 import { Member } from '../../types'
 
@@ -26,7 +26,7 @@ const EmailSubscriptionSchema = Yup.object().shape({
 })
 
 export const EmailSubscriptionFormModal = ({ onClose, onSubmit, member }: Props) => {
-  const [, setMembersEmail] = useLocalStorage<Record<string, string>>('membersEmail')
+  const { setMemberSettings } = useNotificationSettings()
 
   const form = useForm({
     resolver: useYupValidationResolver<EmailSubscriptionForm>(EmailSubscriptionSchema),
@@ -34,7 +34,7 @@ export const EmailSubscriptionFormModal = ({ onClose, onSubmit, member }: Props)
   })
 
   const onCancelClick = () => {
-    setMembersEmail((emails) => ({ ...emails, [member.id]: '' }))
+    setMemberSettings(member.id, { hasBeenAskedForEmail: true })
     onClose()
   }
 
