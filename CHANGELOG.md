@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.0] - 2023-09-01
+
+### Added
+- Multiple recipient funding request proposal creation.
+
+### Fixed
+- Forum category page reloading multiple time on opening.
+- Broken links to members on forum posts.
+- Reduce the amount of queries from the forum category page.
+
+### Changed
+- Display amount staked by voting for a council candidate instead of their candidacy stake when applicable.
+
 ## [1.5.1] - 2023-07-25
 
 ### Fixed
@@ -173,7 +186,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v1.5.1...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/Joystream/pioneer/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/Joystream/pioneer/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/Joystream/pioneer/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/Joystream/pioneer/compare/v1.3.2...v1.4.0

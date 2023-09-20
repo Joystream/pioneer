@@ -228,6 +228,9 @@ export const FillWorkingGroupLeadOpening: Story = {
 export const FundingRequest: Story = {
   args: { type: 'FundingRequestProposalDetails' },
 }
+export const FundingRequestMultipleRecipients: Story = {
+  args: { type: 'FundingRequestMultipleRecipientsProposalDetails' },
+}
 export const RuntimeUpgrade: Story = {
   args: { type: 'RuntimeUpgradeProposalDetails', constitutionality: 2 },
   parameters: {
