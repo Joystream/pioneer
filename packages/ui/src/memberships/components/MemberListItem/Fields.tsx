@@ -60,6 +60,12 @@ export const MemberItemWrap = styled.div<{ kind: MemberItemKind }>`
 
   ${({ kind }) => kind === 'MemberWithExternal' && 'border-bottom: none;'};
   ${TableListItemAsLinkHover}
+
+  pointer-events: none;
+  @media (min-width: 768px) {
+    cursor: pointer;
+    pointer-events: auto;
+  }
 `
 
 export const MemberColumn = styled.div`
