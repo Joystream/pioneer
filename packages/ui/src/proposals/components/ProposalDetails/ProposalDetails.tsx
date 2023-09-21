@@ -2,7 +2,7 @@ import React, { ReactElement, useCallback, useMemo } from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
 import { Info } from '@/common/components/Info'
-import { StatisticsThreeColumns } from '@/common/components/statistics'
+import { Statistics } from '@/common/components/statistics'
 import { TooltipContentProp } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
@@ -179,11 +179,11 @@ export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBl
 
   return (
     <>
-      <StatisticsThreeColumns>
+      <Statistics>
         {[...(detailsRenderStructure?.structure ?? []), ...additionalDetails, ...extraProposalDetails].map(
           renderProposalDetail
         )}
-      </StatisticsThreeColumns>
+      </Statistics>
       {extraInformation}
     </>
   )

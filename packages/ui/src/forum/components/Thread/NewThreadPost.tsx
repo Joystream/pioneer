@@ -43,6 +43,7 @@ export const NewThreadPost = React.forwardRef(
       <RowGapBlock gap={8} ref={ref}>
         <InputComponent
           inputSize="auto"
+          inputWidth="auto"
           message={postText === '' ? 'This field cannot be empty. Type your message here' : undefined}
         >
           <EditorMemo setNewText={setText} editorRef={editorRef} />

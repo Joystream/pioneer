@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router'
 import { useHistory, useParams } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
@@ -13,6 +13,7 @@ import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/component
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
+import { StatsContent } from '@/common/components/statistics'
 import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
@@ -111,7 +112,7 @@ export const ProposalPreview = () => {
       sidebarScrollable
       header={
         <PageHeaderWrapper>
-          <PageHeaderRow>
+          <HeaderWrapper>
             <PreviousPage>
               <PageTitle>{proposal.title}</PageTitle>
             </PreviousPage>
@@ -133,7 +134,7 @@ export const ProposalPreview = () => {
                 Copy link
               </CopyButtonTemplate>
             </ButtonsGroup>
-          </PageHeaderRow>
+          </HeaderWrapper>
 
           <RowGapBlock gap={24}>
             <BadgeAndTime>
@@ -207,9 +208,82 @@ export const ProposalPreview = () => {
           </RowGapBlock>
         </SidePanel>
       }
+      responsiveStyle={ResponsiveStyle}
     />
   )
 }
 const BadgeAndTime = styled(BadgesRow)`
   gap: 16px;
+`
+
+const ResponsiveStyle = css`
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto 1fr;
+  grid-template-areas:
+    'header'
+    'main'
+    'sidebar';
+
+  aside {
+    position: relative;
+    width: 100%;
+    grid-area: sidebar;
+
+    > div {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+    }
+  }
+
+  @media (min-width: 768px) {
+    grid-template-columns: 8fr 4fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'header header'
+      'main sidebar';
+
+    aside {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      padding-left: 16px;
+
+      > div {
+        min-height: 184px;
+        overflow: hidden;
+      }
+    }
+  }
+
+  @media (min-width: 1440px) {
+    grid-template-columns: 9fr 3fr;
+  }
+
+  ${StatsContent} {
+    gap: 16px;
+  }
+`
+
+const HeaderWrapper = styled(PageHeaderRow)`
+  @media (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    ${ButtonsGroup} {
+      grid-auto-flow: row;
+      grid-row-gap: 8px;
+      width: 100%;
+
+      button {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center:
+        gap: 4px;
+      }
+    }
+  }
 `

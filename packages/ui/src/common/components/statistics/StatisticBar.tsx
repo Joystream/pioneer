@@ -33,7 +33,7 @@ const ThresholdBar = styled.div<{ threshold?: number }>`
   position: relative;
   display: flex;
   align-items: center;
-  width: 223px;
+  flex: 1 1 0%;
 
   ${({ threshold }) =>
     threshold &&
