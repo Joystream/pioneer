@@ -468,7 +468,6 @@ export const InputNotification = styled.div<InputProps>`
   grid-column-gap: 4px;
   align-items: center;
   width: 100%;
-  grid-template-columns: max-content;
   color: ${({ validation }) => {
     switch (validation) {
       case 'invalid':
@@ -500,4 +499,7 @@ const InputNotificationIcon = styled.div`
 
 export const InputNotificationMessage = styled(TextSmall)`
   color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
