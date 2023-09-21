@@ -132,7 +132,7 @@ const ResponsiveStyle = css`
         top: 0;
         right: 0;
         bottom: 0;
-        max-width: 280px;
+        max-width: 100%;
         min-height: 184px;
         padding-right: 0px;
         overflow: hidden;
