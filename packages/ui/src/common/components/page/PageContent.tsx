@@ -5,6 +5,11 @@ export const PageContent = styled.div`
   height: 100%;
   margin-left: 24px;
   padding: 40px 24px 8px 0;
+
+  @media (max-width: 768px) {
+    margin-left: 16px;
+    padding: 40px 16px 8px 0;
+  }
 `
 
 export const PageContentFullHeight = styled.div`

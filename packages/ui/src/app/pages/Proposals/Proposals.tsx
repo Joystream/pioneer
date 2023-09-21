@@ -58,13 +58,13 @@ export const Proposals = () => {
           </SidePanel>
         )
       }
-      responsiveStyle={ResponsiveStyle}
+      responsiveStyle={ProposalsPageResponsiveStyle}
     />
   )
 }
 
 
-const ResponsiveStyle = css`
+export const ProposalsPageResponsiveStyle = css`
   grid-template-columns: 1fr;
   grid-template-rows: auto auto 1fr;
   grid-template-areas:
@@ -80,8 +80,8 @@ const ResponsiveStyle = css`
     > div {
       position: relative;
       width: 100%;
+      max-width: 100%;
       height: 100%;
-      padding: 0 24px;
     }
   }
 
@@ -96,15 +96,10 @@ const ResponsiveStyle = css`
       position: absolute;
       top: 0;
       bottom: 0;
+      padding-left: 16px;
 
       > div {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        max-width: 100%;
         min-height: 184px;
-        padding-right: 0px;
         overflow: hidden;
       }
     }

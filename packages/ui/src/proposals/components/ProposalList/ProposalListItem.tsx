@@ -142,6 +142,10 @@ const ProposalItem = styled(TableListItem)`
       flex-direction: column-reverse;
       gap: 4px;
       align-items: start;
+
+      h5 {
+        white-space: wrap;
+      }
     }
 
     ${ToggleableItemInfoTop} {
