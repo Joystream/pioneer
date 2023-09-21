@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { PageHeaderRow, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { PageTitle } from '@/common/components/page/PageTitle'
@@ -13,14 +14,36 @@ interface ProposalHeaderProps {
 export const FilterPageHeader = React.forwardRef(
   ({ title, children, buttons }: ProposalHeaderProps, ref: React.ForwardedRef<HTMLDivElement>) => (
     <PageHeaderWrapper>
-      <PageHeaderRow>
+      <HeaderWrapper>
         <PageTitle>{title}</PageTitle>
         <ButtonsGroup>
           <div ref={ref} />
           {buttons}
         </ButtonsGroup>
-      </PageHeaderRow>
+      </HeaderWrapper>
       {children}
     </PageHeaderWrapper>
   )
 )
+
+const HeaderWrapper = styled(PageHeaderRow)`
+  @media (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    ${ButtonsGroup} {
+      grid-auto-flow: row;
+      grid-row-gap: 8px;
+      width: 100%;
+
+      button {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center:
+        gap: 4px;
+      }
+    }
+  }
+`
