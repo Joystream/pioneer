@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { ProposalOrderByInput } from '@/common/api/queries'
 import { List } from '@/common/components/List'
@@ -46,7 +47,7 @@ export const ProposalList = ({ proposals, getSortProps, isPast, isLoading }: Pro
         <ProposalListHeader>{isCouncilMember && 'My vote'}</ProposalListHeader>
         <ProposalListHeader />
       </ProposalsListHeaders>
-      <List as="div">
+      <ProposalListWarpper as="div">
         {proposals.map((proposal) => (
           <ProposalListItem
             key={proposal.id}
@@ -56,7 +57,13 @@ export const ProposalList = ({ proposals, getSortProps, isPast, isLoading }: Pro
             isCouncilMember={isCouncilMember}
           />
         ))}
-      </List>
+      </ProposalListWarpper>
     </RowGapBlock>
   )
 }
+
+const ProposalListWarpper = styled(List)`
+  media (max-width: 1440px) {
+    row-gap: 16px;
+  }
+`
