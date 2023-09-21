@@ -33,7 +33,7 @@ export const MyMemberships = () => (
 )
 
 const MyMembershipsHeaderWrapper = styled(PageHeaderRow)`
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     display: flex;
     flex-direction: column;
     gap: 16px;

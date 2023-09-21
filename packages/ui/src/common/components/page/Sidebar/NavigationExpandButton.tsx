@@ -154,7 +154,7 @@ const NavigationItemButton = styled.button<DisabledNavigationLinkProps & Pick<Na
     cursor: not-allowed;
   }
 
-  @media (max-height: 768px) {
+  @media (max-height: 767px) {
     height: 38px;
   }
 `

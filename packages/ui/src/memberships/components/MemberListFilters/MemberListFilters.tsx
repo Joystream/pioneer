@@ -209,7 +209,7 @@ const Wrapper = styled.div`
     width: 440px;
     flex-direction: row-reverse;
 
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
       width: 100%;
       flex-direction: column-reverse;
     }
@@ -232,7 +232,7 @@ const MembersFilterBox = styled(FilterBox)`
     padding: 8px 16px;
     height: 100%;
 
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
       flex-direction: column;
     }
   }
@@ -253,11 +253,11 @@ const FilterContentWrapper = styled.div`
     width: 196px;
   }
 
-  @media (max-width: 425px) {
+  @media (max-width: 424px) {
     flex-direction: column;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     margin-right: auto;
   }
 `

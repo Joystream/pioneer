@@ -222,7 +222,7 @@ const NavigationItemLinkStyles = css<DisabledNavigationLinkProps>`
     color: ${Colors.White};
   }
 
-  @media (max-height: 768px) {
+  @media (max-height: 767px) {
     height: 38px;
   }
 `

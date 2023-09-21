@@ -131,7 +131,7 @@ const ProposalItem = styled(TableListItem)`
     visibility: visible;
   }
 
-  @media (max-width: 1440px) {
+  @media (max-width: 1439px) {
     padding: 16px;
     grid-template-columns: unset;
     grid-row-gap: 24px;

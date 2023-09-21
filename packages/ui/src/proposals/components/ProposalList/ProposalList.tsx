@@ -63,7 +63,7 @@ export const ProposalList = ({ proposals, getSortProps, isPast, isLoading }: Pro
 }
 
 const ProposalListWarpper = styled(List)`
-  media (max-width: 1440px) {
+  @media (max-width: 1439px) {
     row-gap: 16px;
   }
 `
