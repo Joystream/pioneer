@@ -334,4 +334,44 @@ const CandidateCardWrapper = styled(ListItem)`
       }
     }
   }
+
+  @media (max-width: 1439px) {
+    height: fit-content;
+
+    ${CandidateCardContentWrapper} {
+      flex-direction: column;
+      row-gap: 8px;
+
+      ${CandidateCardStatistics} {
+        display: none;
+      }
+    }
+  }
+
+  @media (max-width: 767px) {
+    height: fit-content;
+
+    ${CandidateCardTitle},
+    ${CandidateCardListItem} {
+      text-wrap: wrap;
+    }
+
+    ${CandidateCardImageWrapper} {
+      display: none;
+    }
+
+    ${CandidateCardMemberInfoWrapper} {
+      margin-left: 0;
+    }
+  }
+
+  @media (max-width: 424px) {
+    ${CandidateCardContentWrapper} {
+      padding: 16px;
+    }
+
+    ${CandidateCardArrow} {
+      display: none;
+    }
+  }
 `
