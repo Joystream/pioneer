@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { css } from 'styled-components'
 
 import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
@@ -81,6 +82,50 @@ export const WorkingGroupsOpenings = () => {
           <ActivitiesBlock activities={activities} label="Working Groups Activities" />
         </SidePanel>
       }
+      responsiveStyle={ResponsiveStyle}
     />
   )
 }
+
+
+const ResponsiveStyle = css`
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto 1fr;
+  grid-template-areas:
+    'header'
+    'main'
+    'sidebar';
+
+  aside {
+    position: relative;
+    width: 100%;
+    grid-area: sidebar;
+
+    > div {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+    }
+  }
+
+  @media (min-width: 1440px) {
+    grid-template-columns: 9fr 3fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'header header'
+      'main sidebar';
+
+    aside {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      padding-left: 16px;
+
+      > div {
+        min-height: 184px;
+        overflow: hidden;
+      }
+    }
+  }
+`

@@ -16,13 +16,15 @@ export const WorkingGroupsList = ({ groups }: WorkingGroupsListProps) => {
   return (
     <WorkingGroupListStyles gap={4}>
       <HeaderColumnWrapper>
+        <span />
+        <span />
         <ElementsWrapper>
           <HeaderColumnTitle>Workers</HeaderColumnTitle>
           <HeaderColumnTitle>Current Budget</HeaderColumnTitle>
           <HeaderColumnTitle>Openings</HeaderColumnTitle>
           <HeaderColumnTitle>WG Lead</HeaderColumnTitle>
-          <HeaderColumnTitle />
         </ElementsWrapper>
+        <span />
       </HeaderColumnWrapper>
       <GroupList>
         {groups.map((group) => (
@@ -34,14 +36,18 @@ export const WorkingGroupsList = ({ groups }: WorkingGroupsListProps) => {
 }
 
 const HeaderColumnWrapper = styled.div`
-  display: flex;
-  justify-content: flex-end;
+  display: grid;
+  grid-template-columns: 108px repeat(2, minmax(400px, 1fr)) 40px;
+  grid-template-rows: 1fr;
+  grid-column-gap: 24px;
 `
 
 const ElementsWrapper = styled.div`
-  display: flex;
-  justify-content: space-around;
-  width: 50%;
+  display: grid;
+  grid-template-columns: 64px 116px 30px 140px;
+  justify-content: space-between;
+  width: 100%;
+  grid-column-gap: 8px;
 `
 
 const HeaderColumnTitle = styled.div`
@@ -64,6 +70,15 @@ const GroupList = styled.section`
   width: 100%;
 `
 const WorkingGroupListStyles = styled(RowGapBlock)`
+  overflow: auto;
+  width: calc(100vw - 276px);
+  @media (max-width: 1023px) {
+    width: calc(100vw - 48px);
+  }
+  @media (max-width: 1023px) {
+    width: calc(100vw - 32px);
+  }
+
   ${ListHeaders} {
     padding: 0 24px;
   }
