@@ -95,7 +95,6 @@ export function WorkingGroup() {
   )
 }
 
-
 const ResponsiveStyle = css`
   grid-template-columns: 1fr;
   grid-template-rows: auto auto 1fr;
