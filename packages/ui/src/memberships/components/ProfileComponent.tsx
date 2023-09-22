@@ -1,9 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { QuestionIcon } from '@/common/components/icons'
+import { Tooltip, DefaultTooltip } from '@/common/components/Tooltip'
+
 import { TransferButtonStyled } from '../../accounts/components/TransferButton'
 import { useMyTotalBalances } from '../../accounts/hooks/useMyTotalBalances'
-import { TokenValue } from '../../common/components/typography'
+import { TextSmall, TokenValue } from '../../common/components/typography'
 import { Colors } from '../../common/constants'
 
 import { Memberships } from '.'
@@ -18,7 +21,23 @@ export function ProfileComponent() {
       <MemberBalance>
         <BalanceTitle>Total Balance</BalanceTitle>
         <TotalBalance>
-          <TotalTokenValue value={total} />
+          <TokenDetail>
+            <TotalTokenValue value={total} />
+            <StyledTooltip
+              tooltipLinkText="Learn how to earn JOY’s"
+              tooltipLinkURL="https://www.joystream.org/token#earn"
+              placement="top-start"
+            >
+              <StyledDefaultTooltip>
+                <QuestionIcon />
+              </StyledDefaultTooltip>
+            </StyledTooltip>
+          </TokenDetail>
+          <TextSmall>
+            <BuyTokenLink href="https://www.joystream.org/token/#exchanges" target="_blank">
+              Buy Joy tokens
+            </BuyTokenLink>
+          </TextSmall>
         </TotalBalance>
         <TransferButtonStyled />
       </MemberBalance>
@@ -79,8 +98,33 @@ const TotalBalance = styled.span`
   line-height: 24px;
   color: ${Colors.White};
   font-weight: 700;
+  flex-direction: column;
 `
 
 const TotalTokenValue = styled(TokenValue)`
   color: ${Colors.White};
+`
+const BuyTokenLink = styled.a`
+  color: ${Colors.White};
+  font-weight: 400;
+  text-decoration: underline;
+`
+const TokenDetail = styled.div`
+  display: flex;
+  column-gap: 8px;
+`
+const StyledDefaultTooltip = styled(DefaultTooltip)`
+  margin-top: 4px;
+`
+const StyledTooltip = styled(Tooltip)`
+  background-color: ${Colors.Black[75]};
+  border-color: ${Colors.Black[300]};
+  a {
+    color: ${Colors.Blue[500]};
+    font-weight: 700;
+  }
+  :after {
+    background-color: ${Colors.Black[75]};
+    border-color: ${Colors.Black[300]};
+  }
 `
