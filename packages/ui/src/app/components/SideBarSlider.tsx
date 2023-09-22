@@ -6,6 +6,7 @@ import { NavigationInnerWrapper } from '@/common/components/page/Sidebar/Navigat
 import { SidePaneGlass } from '@/common/components/SidePane'
 import { Animations, Colors } from '@/common/constants'
 import { useEscape } from '@/common/hooks/useEscape'
+import { useResponsive } from '@/common/hooks/useResponsive'
 
 import { SideBarContent } from './SideBar'
 
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export const SideBarSlider = React.memo(({ setOpen }: Props) => {
+  const { size: screenSize } = useResponsive()
   const hideSideBarSlider = () => {
     setOpen(false)
   }
@@ -23,6 +25,8 @@ export const SideBarSlider = React.memo(({ setOpen }: Props) => {
     }
   }
   useEscape(() => hideSideBarSlider())
+
+  if (screenSize === 'xxs' || screenSize === 'xs') return null
 
   return (
     <SidePaneGlass onClick={onBackgroundClick}>
