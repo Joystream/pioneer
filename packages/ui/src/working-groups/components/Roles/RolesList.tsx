@@ -134,6 +134,7 @@ const RoleItemWrapper = styled(ToggleableItemWrap)`
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
   transition: ${Transitions.all};
+  overflow: auto;
 
   ${TableListItemAsLinkHover};
 
