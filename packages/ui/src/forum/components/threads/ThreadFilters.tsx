@@ -61,10 +61,18 @@ const ThreadFiltersBox = styled(FilterBox)`
     display: flex;
     align-items: center;
     gap: 8px;
+
+    @media (max-width: 424px) {
+      flex-direction: column;
+      align-items: start;
+    }
   }
 
   ${SelectContainer} {
-    flex-basis: 220px;
+    @media (min-width: 425px) {
+      flex-basis: 220px;
+      width: 245px;
+    }
   }
 `
 
