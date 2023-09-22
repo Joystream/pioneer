@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { CastVoteOrderByInput } from '@/common/api/queries'
 import { List } from '@/common/components/List'
@@ -27,21 +28,27 @@ export const PastVotesList = () => {
 
   return (
     <RowGapBlock gap={4}>
-      <ListHeaders $colLayout={PastVoteColumns}>
-        <ListHeader>Round</ListHeader>
-        <SortHeader {...getSortProps('createdAt')}>Voted on</SortHeader>
-        <ListHeader>Candidate</ListHeader>
-        <SortHeader {...getSortProps('stake')}>Staked</SortHeader>
-        <SortHeader {...getSortProps('castBy')}>Staking Account</SortHeader>
-        <ListHeader>Stage</ListHeader>
-        <SortHeader {...getSortProps('stakeLocked')}>Stake recovered</SortHeader>
-      </ListHeaders>
-      <List>
-        {votes.map((vote) => (
-          <PastVote vote={vote} key={vote.id} $colLayout={PastVoteColumns} />
-        ))}
-      </List>
+      <ListWrapper gap={4}>
+        <ListHeaders $colLayout={PastVoteColumns}>
+          <ListHeader>Round</ListHeader>
+          <SortHeader {...getSortProps('createdAt')}>Voted on</SortHeader>
+          <ListHeader>Candidate</ListHeader>
+          <SortHeader {...getSortProps('stake')}>Staked</SortHeader>
+          <SortHeader {...getSortProps('castBy')}>Staking Account</SortHeader>
+          <ListHeader>Stage</ListHeader>
+          <SortHeader {...getSortProps('stakeLocked')}>Stake recovered</SortHeader>
+        </ListHeaders>
+        <List>
+          {votes.map((vote) => (
+            <PastVote vote={vote} key={vote.id} $colLayout={PastVoteColumns} />
+          ))}
+        </List>
+      </ListWrapper>
       <Pagination {...pagination} />
     </RowGapBlock>
   )
 }
+
+const ListWrapper = styled(RowGapBlock)`
+  overflow: auto;
+`
