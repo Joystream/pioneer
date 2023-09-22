@@ -157,14 +157,14 @@ const StatsValue = styled.span`
 
 const GroupItem = styled(TableListItem)`
   display: grid;
-  grid-template-columns: 108px 1fr 1fr 40px;
+  grid-template-columns: 108px repeat(2, minmax(400px, 1fr)) 40px;
   grid-template-rows: 1fr;
   grid-column-gap: 24px;
   width: 100%;
   height: 100%;
   max-height: 108px;
   align-items: center;
-  padding: 0 16px 0 0;
+  padding: 0;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
   background-color: ${Colors.White};
