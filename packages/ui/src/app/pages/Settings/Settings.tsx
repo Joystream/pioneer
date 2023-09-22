@@ -286,5 +286,5 @@ export const Settings = () => {
 }
 
 export const Container = styled.div`
-  width: 60%;
+  max-width: 690px;
 `
