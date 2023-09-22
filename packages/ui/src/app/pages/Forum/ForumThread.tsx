@@ -65,7 +65,7 @@ export const ForumThread = () => {
 
     return (
       <PageHeaderWrapper>
-        <PageHeaderRow showOverflow>
+        <HeaderWrapper showOverflow>
           <PreviousPage showOverflow>
             <ThreadTitle thread={thread} />
           </PreviousPage>
@@ -79,7 +79,7 @@ export const ForumThread = () => {
             </CopyButtonTemplate>
             <WatchlistButton threadId={thread.id} />
           </ButtonsGroup>
-        </PageHeaderRow>
+        </HeaderWrapper>
         <RowGapBlock>
           <BadgesRow space={8}>
             {thread.isSticky && (
@@ -129,5 +129,27 @@ const ThreadPinned = styled.span`
 
   & > svg {
     color: ${Colors.Black['500']};
+  }
+`
+
+const HeaderWrapper = styled(PageHeaderRow)`
+  @media (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    ${ButtonsGroup} {
+      grid-auto-flow: row;
+      grid-row-gap: 8px;
+      width: 100%;
+
+      button {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center:
+        gap: 4px;
+      }
+    }
   }
 `
