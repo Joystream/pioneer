@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
 import { expect } from '@storybook/jest'
 import { Meta, StoryContext, StoryObj } from '@storybook/react'
@@ -242,14 +241,17 @@ export const CreateOpeningImport: Story = {
       await userEvent.click(importButton)
 
       const uploadField = await modal.findByText(/Browse for file/)
-      const previewImportButton = getButtonByText(modal, 'Preview Import')
-      expect(previewImportButton).toBeDisabled()
+      expect(getButtonByText(modal, 'Preview Import')).toBeDisabled()
 
       await userEvent.upload(
         uploadField,
         new File([JSON.stringify(WG_JSON_OPENING)], 'file.json', { type: 'application/json' })
       )
+    })
+    await step('Check imported data', async () => {
       expect(await modal.findByText(/File imported successfully, preview your input/))
+
+      const previewImportButton = getButtonByText(modal, 'Preview Import')
       await waitFor(() => expect(previewImportButton).toBeEnabled())
       await userEvent.click(previewImportButton)
 
@@ -275,8 +277,6 @@ export const CreateOpeningImport: Story = {
     })
     step('Transaction parameters', () => {
       const [description, openingType, stakePolicy, rewardPerBlock] = args.onCreateOpening.mock.calls.at(-1)
-
-      console.log('Description metadata === ', metadataFromBytes(OpeningMetadata, description))
 
       expect(stakePolicy.toJSON()).toEqual({
         stakeAmount: 200_0000000000,

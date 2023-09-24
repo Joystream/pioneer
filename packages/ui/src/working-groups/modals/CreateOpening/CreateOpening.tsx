@@ -30,8 +30,6 @@ import { SuccessModal, CreateOpeningSteps as Steps, ImportOpening } from './comp
 import { createOpeningMachine, CreateOpeningMachineState, getTxParams } from './machine'
 import { OpeningConditions, CreateOpeningForm, CreateOpeningModalCall, OpeningSchema, defaultValues } from './types'
 
-const transactionSteps = [{ title: 'Import Opening' }, { title: 'Edit Opening' }, { title: 'Submit Opening' }]
-
 export const CreateOpeningModal = () => {
   const [showImport, setShowImport] = useState<boolean>(false)
 
@@ -106,7 +104,6 @@ export const CreateOpeningModal = () => {
         transaction={createOpeningTx}
         signer={activeMember.controllerAccount}
         service={state.children.transaction}
-        useMultiTransaction={{ steps: transactionSteps, active: 1 }}
         skipQueryNode
       >
         <TextMedium>You intend to create an Opening.</TextMedium>
