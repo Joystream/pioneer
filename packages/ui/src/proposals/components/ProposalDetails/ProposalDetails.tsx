@@ -20,13 +20,13 @@ import {
   Hash,
   Markdown,
   Member,
-  NumberOfBlocks,
   Numeric,
   OpeningLink,
   ProposalLink,
   RuntimeBlob,
   Text,
 } from './renderers'
+import { BlockTimeDisplay } from './renderers/BlockTimeDisplay'
 
 interface Props {
   proposalDetails?: ProposalWithDetails['details']
@@ -42,7 +42,7 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   Text: Text,
   Amount: Amount,
   Numeric: Numeric,
-  NumberOfBlocks: NumberOfBlocks,
+  NumberOfBlocks: BlockDurationStatistics,
   Markdown: Markdown,
   Member: Member,
   Address: Address,
@@ -53,7 +53,7 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   Percentage: Percentage,
   Hash: Hash,
   DestinationsPreview: DestinationsPreview,
-  BlockDurationStatistics: BlockDurationStatistics,
+  BlockTimeDisplay: BlockTimeDisplay,
 }
 
 export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBlock }: Props) => {
@@ -75,24 +75,6 @@ export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBl
   const detailsRenderStructure = useMemo(() => getDetailsRenderStructure(proposalDetails), [proposalDetails])
 
   const additionalDetails = useMemo(() => {
-    if (gracePeriod) {
-      return [
-        {
-          renderType: 'BlockDurationStatistics',
-          title: 'Gracing Period',
-          value: gracePeriod,
-        },
-      ] as unknown as RenderNode[]
-    }
-    if (exactExecutionBlock) {
-      return [
-        {
-          renderType: 'BlockDurationStatistics',
-          title: 'Exact Execution Block',
-          value: exactExecutionBlock,
-        },
-      ] as unknown as RenderNode[]
-    }
     if (proposalDetails?.type === 'setReferralCut') {
       return [
         {
@@ -136,6 +118,28 @@ export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBl
     return []
   }, [membershipPrice, !group, budget])
 
+  const extraProposalDetails = useMemo(() => {
+    if (exactExecutionBlock) {
+      return [
+        {
+          renderType: 'BlockTimeDisplay',
+          label: 'Exact Execution Block',
+          value: exactExecutionBlock,
+        },
+      ] as unknown as RenderNode[]
+    }
+    if (gracePeriod) {
+      return [
+        {
+          renderType: 'NumberOfBlocks',
+          title: 'Gracing Period',
+          value: gracePeriod,
+        },
+      ] as unknown as RenderNode[]
+    }
+    return []
+  }, [])
+
   const extraInformation = useMemo(() => {
     if (proposalDetails?.type === 'updateWorkingGroupBudget') {
       const isDecreasing = proposalDetails.amount.isNeg()
@@ -166,7 +170,9 @@ export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBl
   return (
     <>
       <StatisticsThreeColumns>
-        {[...(detailsRenderStructure?.structure ?? []), ...additionalDetails].map(renderProposalDetail)}
+        {[...(detailsRenderStructure?.structure ?? []), ...additionalDetails, ...extraProposalDetails].map(
+          renderProposalDetail
+        )}
       </StatisticsThreeColumns>
       {extraInformation}
     </>
