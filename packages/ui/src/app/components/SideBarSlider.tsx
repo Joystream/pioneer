@@ -25,7 +25,7 @@ export const SideBarSlider = React.memo(({ setOpen }: Props) => {
   useEscape(() => hideSideBarSlider())
 
   return (
-    <SidePaneGlass onClick={onBackgroundClick}>
+    <SidePaneGlassWrapper onClick={onBackgroundClick}>
       <SideBarWarpper>
         <NavigationInnerWrapper>
           <SliderHeader>
@@ -36,7 +36,7 @@ export const SideBarSlider = React.memo(({ setOpen }: Props) => {
           <SideBarContent />
         </NavigationInnerWrapper>
       </SideBarWarpper>
-    </SidePaneGlass>
+    </SidePaneGlassWrapper>
   )
 })
 
@@ -70,5 +70,11 @@ const CloseIconWrapper = styled.div`
   cursor: pointer;
   &:hover {
     background-color: ${Colors.Black[600]};
+  }
+`
+
+const SidePaneGlassWrapper = styled(SidePaneGlass)`
+  @media (max-width: 767px) {
+    display: flex;
   }
 `
