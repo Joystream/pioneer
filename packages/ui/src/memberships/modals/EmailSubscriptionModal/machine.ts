@@ -7,22 +7,22 @@ import { EmailSubscriptionForm } from './types'
 
 interface Context extends EmailSubscriptionForm {
   email: string
+  signature: string
   timestamp: number
 }
 
 type EmailSubscriptionState =
   | { value: 'prepare'; context: EmptyObject }
   | { value: 'signature'; context: Pick<Context, 'email'> }
-  | { value: 'transaction'; context: Context }
+  | { value: 'register'; context: Context }
   | { value: 'success'; context: Context }
   | { value: 'error'; context: Context }
 
 export type EmailSubscriptionEvent =
   | { type: 'DONE'; email: string }
-  | { type: 'SUCCESS' }
   | { type: 'ERROR' }
   | { type: 'SIGNED'; signature: string; timestamp: number }
-  | { type: 'CANCEL' }
+  | { type: 'SUCCESS' }
 
 export const EmailSubscriptionMachine = createMachine<Partial<Context>, EmailSubscriptionEvent, EmailSubscriptionState>(
   {
@@ -41,19 +41,18 @@ export const EmailSubscriptionMachine = createMachine<Partial<Context>, EmailSub
       signature: {
         on: {
           SIGNED: {
-            target: 'transaction',
-            actions: (_, event) =>
-              assign({
-                signature: event.signature,
-                timestamp: event.timestamp,
-              }),
+            target: 'register',
+            actions: assign({
+              signature: (_, event) => event.signature,
+              timestamp: (_, event) => event.timestamp,
+            }),
           },
-          CANCEL: {
-            target: 'canceled',
+          ERROR: {
+            target: 'error',
           },
         },
       },
-      transaction: {
+      register: {
         on: {
           SUCCESS: {
             target: 'success',
@@ -68,7 +67,7 @@ export const EmailSubscriptionMachine = createMachine<Partial<Context>, EmailSub
           error: 'There was a problem during the email subscription.',
         },
         cancel: {
-          target: 'canceled',
+          target: 'error',
           action: 'prepare',
         },
       }),

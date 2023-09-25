@@ -1,3 +1,13 @@
 query GetBackendMemberExists($id: Int!) {
   memberExist(id: $id)
 }
+
+mutation RegisterBackendMember($id: Int!, $name: String!, $email: String!, $signature: String!, $timestamp: BigInt!) {
+  signup(memberId: $id, name: $name, email: $email, signature: $signature, timestamp: $timestamp)
+}
+
+mutation ConfirmBackendEmail($token: String!) {
+  verifyEmail(token: $token) {
+    email
+  }
+}

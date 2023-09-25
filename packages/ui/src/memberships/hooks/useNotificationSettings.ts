@@ -25,5 +25,6 @@ export const useNotificationSettings = () => {
     activeMemberSettings,
     activeMemberNotRegistered: isNotRegistered,
     setMemberSettings,
+    backendClient,
   }
 }
