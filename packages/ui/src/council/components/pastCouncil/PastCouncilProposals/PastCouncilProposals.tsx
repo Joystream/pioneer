@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { List, ListItem } from '@/common/components/List'
 import { ListHeader } from '@/common/components/List/ListHeader'
@@ -20,7 +21,7 @@ export const PastCouncilProposals = ({ councilId }: Props) => {
   }
 
   return (
-    <RowGapBlock gap={4}>
+    <PastCouncilProposalsListWrapper gap={4}>
       <PastCouncilTabsHeaders $colLayout={PastCouncilProposalsLayout}>
         <ListHeader>Proposal</ListHeader>
         <ListHeader>Stage</ListHeader>
@@ -33,8 +34,15 @@ export const PastCouncilProposals = ({ councilId }: Props) => {
           </ListItem>
         ))}
       </List>
-    </RowGapBlock>
+    </PastCouncilProposalsListWrapper>
   )
 }
 
 export const PastCouncilProposalsLayout = '2fr repeat(3, 1fr)'
+
+const PastCouncilProposalsListWrapper = styled(RowGapBlock)`
+  overflow: auto;
+  li {
+    min-width: 900px;
+  }
+`
