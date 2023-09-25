@@ -12,6 +12,7 @@ import { TextBig, TokenValue } from '@/common/components/typography'
 import { Subscription } from '@/common/components/typography/Subscription'
 import { BorderRad, BulletPoint, Colors, Fonts, Overflow, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { useResponsive } from '@/common/hooks/useResponsive'
 import { isDefined } from '@/common/utils'
 import { VoteForCouncilButton } from '@/council/components/election/VoteForCouncilButton'
 import { WithdrawButton } from '@/council/components/election/WithdrawButton'
@@ -44,6 +45,7 @@ export const CandidateCard = ({
   isPreview,
 }: CandidateCardProps) => {
   const { showModal } = useModal()
+  const { size } = useResponsive()
   const showCandidate = useCallback(() => {
     if (!isPreview) {
       showModal<CandidacyPreviewModalCall>({
@@ -84,13 +86,13 @@ export const CandidateCard = ({
                     <TextBig value bold>
                       {successful}
                     </TextBig>
-                    <Subscription>Past Wins</Subscription>
+                    <Subscription>{size === 'xxs' ? 'W' : 'Past Wins'}</Subscription>
                   </StatiscticContentColumn>
                   <StatiscticContentColumn>
                     <TextBig value bold>
                       {failed}
                     </TextBig>
-                    <Subscription>Past Loses</Subscription>
+                    <Subscription>{size === 'xxs' ? 'L' : 'Past Loses'}</Subscription>
                   </StatiscticContentColumn>
                 </MultiColumnsStatistic>
               </StatsBlock>
@@ -342,13 +344,34 @@ const CandidateCardWrapper = styled(ListItem)`
       flex-direction: column;
       row-gap: 8px;
 
+      ${CandidateCardSummary} {
+        height: fit-content;
+        margin-left: 0;
+      }
+
       ${CandidateCardStatistics} {
-        display: none;
+        position: absolute;
+        top: 16px;
+        right: 48px;
+
+        ${StatsBlock} {
+          height: fit-content;
+          padding: 0;
+          background-color: transparent;
+          box-shadow: none;
+
+          ${StatiscticContentColumn} {
+            flex-direction: row;
+            gap: 4px;
+            align-items: center;
+          }
+        }
       }
     }
   }
 
   @media (max-width: 767px) {
+    grid-template-columns: 1fr;
     height: fit-content;
 
     ${CandidateCardTitle},
@@ -368,6 +391,10 @@ const CandidateCardWrapper = styled(ListItem)`
   @media (max-width: 424px) {
     ${CandidateCardContentWrapper} {
       padding: 16px;
+
+      ${CandidateCardStatistics} {
+        right: 16px;
+      }
     }
 
     ${CandidateCardArrow} {
