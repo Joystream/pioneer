@@ -53,6 +53,7 @@ const AccountInfoWrap = styled.div`
     'accountphoto accountaddress';
   align-items: center;
   width: 100%;
+  min-width: 224px;
   justify-self: start;
 
   & ${BadgeStatus} {
