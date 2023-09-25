@@ -289,7 +289,7 @@ const HeaderWrapper = styled(PageHeaderRow)`
       grid-row-gap: 8px;
       width: 100%;
 
-      button {
+      button, a {
         width: 100%;
         display: flex;
         justify-content: center;
