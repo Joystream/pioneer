@@ -75,7 +75,7 @@ export const CreateOpeningModal = () => {
       rewardPerBlock: specifics.stakingPolicyAndReward.rewardPerBlock?.toNumber(),
     }
     return JSON.stringify(exportValue)
-  },[form.getValues()])
+  }, [form.getValues()])
 
   const goToPrevious = useCallback(() => {
     send('BACK')

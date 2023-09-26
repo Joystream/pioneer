@@ -82,18 +82,12 @@ export const ImportOpening = ({ groupId }: Props) => {
       form.setValue('applicationForm.questions', value.formContent.applicationForm.questions)
       form.setValue('durationAndProcess.duration', value.formContent.durationAndProcess.duration)
       form.setValue('durationAndProcess.details', value.formContent.durationAndProcess.details)
-      form.setValue(
-        'stakingPolicyAndReward.stakingAmount',
-        value.formContent.stakingPolicyAndReward.stakingAmount
-      )
+      form.setValue('stakingPolicyAndReward.stakingAmount', value.formContent.stakingPolicyAndReward.stakingAmount)
       form.setValue(
         'stakingPolicyAndReward.leavingUnstakingPeriod',
         value.formContent.stakingPolicyAndReward.leavingUnstakingPeriod
       )
-      form.setValue(
-        'stakingPolicyAndReward.rewardPerBlock',
-        value.formContent.stakingPolicyAndReward.rewardPerBlock
-      )
+      form.setValue('stakingPolicyAndReward.rewardPerBlock', value.formContent.stakingPolicyAndReward.rewardPerBlock)
       form.setValue('workingGroupAndDescription.groupId', value.formContent.workingGroupAndDescription.groupId)
       form.setValue('workingGroupAndDescription.title', value.formContent.workingGroupAndDescription.title)
       form.setValue('workingGroupAndDescription.description', value.formContent.workingGroupAndDescription.description)
