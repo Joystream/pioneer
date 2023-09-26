@@ -12,7 +12,7 @@ import { CreateOpeningMachineState } from '../machine'
 
 export interface CreateOpeningStepProps {
   matches: CreateOpeningMachineState['matches']
-  groupId: GroupIdName
+  groupId?: GroupIdName
 }
 
 export const CreateOpeningSteps = ({ matches, groupId }: CreateOpeningStepProps) => {

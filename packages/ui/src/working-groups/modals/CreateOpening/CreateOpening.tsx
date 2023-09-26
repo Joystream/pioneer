@@ -14,7 +14,6 @@ import {
   StepperModalWrapper,
 } from '@/common/components/StepperModal'
 import { TextMedium } from '@/common/components/typography'
-import { JOY_DECIMAL_PLACES } from '@/common/constants'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
@@ -59,7 +58,7 @@ export const CreateOpeningModal = () => {
     connectionState,
     createOpeningTx,
   ])
-  const setExportJsonValue = () => {
+  const setExportJsonValue = useMemo(() => {
     const { ...specifics } = form.getValues() as CreateOpeningForm
     const exportValue = {
       applicationDetails: specifics.durationAndProcess.details,
@@ -70,13 +69,13 @@ export const CreateOpeningModal = () => {
         return { question: question.questionField }
       }),
       stakingPolicy: {
-        amount: specifics.stakingPolicyAndReward.stakingAmount / Math.pow(10, JOY_DECIMAL_PLACES),
+        amount: specifics.stakingPolicyAndReward.stakingAmount?.toNumber(),
         unstakingPeriod: specifics.stakingPolicyAndReward.leavingUnstakingPeriod,
       },
-      rewardPerBlock: specifics.stakingPolicyAndReward.rewardPerBlock / Math.pow(10, JOY_DECIMAL_PLACES),
+      rewardPerBlock: specifics.stakingPolicyAndReward.rewardPerBlock?.toNumber(),
     }
-    return exportValue
-  }
+    return JSON.stringify(exportValue)
+  },[form.getValues()])
 
   const goToPrevious = useCallback(() => {
     send('BACK')
@@ -95,7 +94,7 @@ export const CreateOpeningModal = () => {
     return null
   }
 
-  if (state.matches('transaction') && createOpeningTx) {
+  if (state.matches('transaction') && createOpeningTx && group) {
     const tooltipText = `This adds an opening for ${GroupIdToGroupParam[group]}.`
     return (
       <SignTransactionModal
@@ -111,7 +110,7 @@ export const CreateOpeningModal = () => {
     )
   }
 
-  if (state.matches('success')) {
+  if (state.matches('success') && group) {
     return <SuccessModal groupId={group} onClose={hideModal} />
   }
 
@@ -152,7 +151,7 @@ export const CreateOpeningModal = () => {
               {showImport ? 'Preview Import' : 'Import'}
             </ButtonPrimary>
             {isLastStepActive(getSteps(service)) && (
-              <DownloadButtonGhost size="medium" name={'opening.json'} parts={[JSON.stringify(setExportJsonValue())]}>
+              <DownloadButtonGhost size="medium" name={'opening.json'} content={setExportJsonValue}>
                 Export
               </DownloadButtonGhost>
             )}

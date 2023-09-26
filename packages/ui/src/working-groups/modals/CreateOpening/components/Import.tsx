@@ -1,9 +1,9 @@
+import BN from 'bn.js'
 import React, { useEffect, useCallback, useReducer } from 'react'
 import { useFormContext } from 'react-hook-form'
 import * as Yup from 'yup'
 
 import { FileEntry, FileInput } from '@/common/components/forms/FileInput'
-import { JOY_DECIMAL_PLACES } from '@/common/constants'
 import { GroupIdName } from '@/working-groups/types'
 
 import { CreateOpeningForm, OpeningSchema } from '../types'
@@ -31,9 +31,9 @@ const parseContent = (contentJson: any, groupId?: GroupIdName): Pick<Value, 'err
         isLimited: false,
       },
       stakingPolicyAndReward: {
-        stakingAmount: fileContent.stakingPolicy?.amount,
+        stakingAmount: new BN(fileContent.stakingPolicy?.amount),
         leavingUnstakingPeriod: fileContent.stakingPolicy?.unstakingPeriod,
-        rewardPerBlock: fileContent.rewardPerBlock,
+        rewardPerBlock: new BN(fileContent.rewardPerBlock),
       },
       workingGroupAndDescription: {
         groupId: groupId,
@@ -84,7 +84,7 @@ export const ImportOpening = ({ groupId }: Props) => {
       form.setValue('durationAndProcess.details', value.formContent.durationAndProcess.details)
       form.setValue(
         'stakingPolicyAndReward.stakingAmount',
-        value.formContent.stakingPolicyAndReward.stakingAmount * Math.pow(10, JOY_DECIMAL_PLACES)
+        value.formContent.stakingPolicyAndReward.stakingAmount
       )
       form.setValue(
         'stakingPolicyAndReward.leavingUnstakingPeriod',
@@ -92,7 +92,7 @@ export const ImportOpening = ({ groupId }: Props) => {
       )
       form.setValue(
         'stakingPolicyAndReward.rewardPerBlock',
-        value.formContent.stakingPolicyAndReward.rewardPerBlock * Math.pow(10, JOY_DECIMAL_PLACES)
+        value.formContent.stakingPolicyAndReward.rewardPerBlock
       )
       form.setValue('workingGroupAndDescription.groupId', value.formContent.workingGroupAndDescription.groupId)
       form.setValue('workingGroupAndDescription.title', value.formContent.workingGroupAndDescription.title)

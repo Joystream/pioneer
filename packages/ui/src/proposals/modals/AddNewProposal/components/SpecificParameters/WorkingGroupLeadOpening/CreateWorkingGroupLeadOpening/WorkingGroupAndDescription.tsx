@@ -17,6 +17,12 @@ interface Props {
 
 export const WorkingGroupAndDescription = ({ noHeader = false, groupId }: Props) => {
   const { watch, setValue } = useFormContext()
+  const MappedGroupedParams = {
+    ...GroupIdToGroupParam,
+    operationsWorkingGroupAlpha: 'Builders',
+    operationsWorkingGroupBeta: 'HR',
+    operationsWorkingGroupGamma: 'Marketing',
+  }
 
   useEffect(() => {
     setValue('workingGroupAndDescription.groupId', groupId, { shouldValidate: true })
@@ -36,7 +42,7 @@ export const WorkingGroupAndDescription = ({ noHeader = false, groupId }: Props)
       <Row>
         <RowGapBlock gap={20}>
           {groupId ? (
-            <div>Group: {GroupIdToGroupParam[groupId]}</div>
+            <div>Group: {MappedGroupedParams[groupId]}</div>
           ) : (
             <InputComponent
               id="working-group-select"

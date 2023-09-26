@@ -96,9 +96,9 @@ export interface CreateOpeningForm {
     isLimited: boolean
   }
   stakingPolicyAndReward: {
-    stakingAmount: number
+    stakingAmount: BN
     leavingUnstakingPeriod: number
-    rewardPerBlock: number
+    rewardPerBlock: BN
   }
   workingGroupAndDescription: {
     title?: string

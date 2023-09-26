@@ -8,7 +8,7 @@ export const GroupIdToGroupParam = {
   membershipWorkingGroup: 'Membership',
   distributionWorkingGroup: 'Distribution',
   storageWorkingGroup: 'Storage',
-  operationsWorkingGroupAlpha: 'Builders',
-  operationsWorkingGroupBeta: 'HR',
-  operationsWorkingGroupGamma: 'Marketing',
+  operationsWorkingGroupAlpha: 'OperationsAlpha',
+  operationsWorkingGroupBeta: 'OperationsBeta',
+  operationsWorkingGroupGamma: 'OperationsGamma',
 } as const

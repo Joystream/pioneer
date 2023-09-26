@@ -49,10 +49,10 @@ const WG_JSON_OPENING = {
   ],
   hiringLimit: 1,
   expectedEndingTimestamp: 2000,
-  rewardPerBlock: 20,
+  rewardPerBlock: 20_0000000000,
   stakingPolicy: {
     unstakingPeriod: 200,
-    amount: 200,
+    amount: 200_0000000000,
   },
 }
 
@@ -70,7 +70,6 @@ export default {
 
   parameters: {
     router: { path: '/:name', href: `/${WG_DATA.name}` },
-    isLoggedIn: true,
     mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
       const alice = member('alice', {
         roles: [
@@ -86,8 +85,9 @@ export default {
           },
         ],
       })
+      const bob = member('bob')
       return {
-        accounts: parameters.isLoggedIn ? { active: { member: alice } } : { list: [{ member: alice }] },
+        accounts: { active: { member: alice } },
 
         chain: {
           tx: {
@@ -110,7 +110,7 @@ export default {
                 name: WG_DATA.name,
                 budget: joy(200),
                 workers: [],
-                leader: { membershipId: alice.id, isActive: true },
+                leader: { membershipId: bob.id, isActive: true },
               },
             },
           },
@@ -125,7 +125,7 @@ export default {
                     name: WG_DATA.name,
                   },
                   status: 'WorkerStatusActive',
-                  membership: alice,
+                  membership: args.isLead ? bob : alice,
                 },
                 {
                   id: `${WG_DATA.id}-1`,
