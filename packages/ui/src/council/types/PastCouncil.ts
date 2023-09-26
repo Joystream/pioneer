@@ -37,7 +37,7 @@ export const getTotalSpent = (spendingEvents: CouncilSpendingEventFieldsFragment
 
 export const getSpentOnProposals = (fundingRequests: FundingRequestApprovedFragment[]) => {
   return fundingRequests.reduce((sum, fundingRequest) => {
-    const details = asProposalDetails(fundingRequest.proposal.details as DetailsFragment) as FundingRequestDetails
+    const details = asProposalDetails(fundingRequest.details as DetailsFragment) as FundingRequestDetails
     const amount = details.destinations?.reduce((a, b) => a.add(b.amount), BN_ZERO) || BN_ZERO
 
     return sum.add(amount)

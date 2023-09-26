@@ -570,39 +570,36 @@ export type CouncilSpendingEventFieldsFragment = {
 }
 
 export type FundingRequestApprovedFragment = {
-  __typename: 'ProposalExecutedEvent'
-  proposal: {
-    __typename: 'Proposal'
-    details:
-      | { __typename: 'AmendConstitutionProposalDetails' }
-      | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
-      | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
-      | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
-      | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
-      | {
-          __typename: 'FundingRequestProposalDetails'
-          destinationsList?: {
-            __typename: 'FundingRequestDestinationsList'
-            destinations: Array<{ __typename: 'FundingRequestDestination'; amount: string; account: string }>
-          } | null
-        }
-      | { __typename: 'RuntimeUpgradeProposalDetails' }
-      | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
-      | { __typename: 'SetCouncilorRewardProposalDetails' }
-      | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
-      | { __typename: 'SetInitialInvitationCountProposalDetails' }
-      | { __typename: 'SetMaxValidatorCountProposalDetails' }
-      | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
-      | { __typename: 'SetMembershipPriceProposalDetails' }
-      | { __typename: 'SetReferralCutProposalDetails' }
-      | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
-      | { __typename: 'SignalProposalDetails' }
-      | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
-      | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
-      | { __typename: 'UpdateChannelPayoutsProposalDetails' }
-      | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
-      | { __typename: 'VetoProposalDetails' }
-  }
+  __typename: 'Proposal'
+  details:
+    | { __typename: 'AmendConstitutionProposalDetails' }
+    | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+    | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+    | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
+    | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+    | {
+        __typename: 'FundingRequestProposalDetails'
+        destinationsList?: {
+          __typename: 'FundingRequestDestinationsList'
+          destinations: Array<{ __typename: 'FundingRequestDestination'; amount: string; account: string }>
+        } | null
+      }
+    | { __typename: 'RuntimeUpgradeProposalDetails' }
+    | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+    | { __typename: 'SetCouncilorRewardProposalDetails' }
+    | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
+    | { __typename: 'SetInitialInvitationCountProposalDetails' }
+    | { __typename: 'SetMaxValidatorCountProposalDetails' }
+    | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+    | { __typename: 'SetMembershipPriceProposalDetails' }
+    | { __typename: 'SetReferralCutProposalDetails' }
+    | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+    | { __typename: 'SignalProposalDetails' }
+    | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
+    | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+    | { __typename: 'UpdateChannelPayoutsProposalDetails' }
+    | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+    | { __typename: 'VetoProposalDetails' }
 }
 
 export type GetElectedCouncilQueryVariables = Types.Exact<{ [key: string]: never }>
@@ -718,39 +715,36 @@ export type GetPastCouncilQuery = {
     type?: Types.EventTypeOptions | null
   }>
   fundingRequestsApproved: Array<{
-    __typename: 'ProposalExecutedEvent'
-    proposal: {
-      __typename: 'Proposal'
-      details:
-        | { __typename: 'AmendConstitutionProposalDetails' }
-        | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
-        | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
-        | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
-        | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
-        | {
-            __typename: 'FundingRequestProposalDetails'
-            destinationsList?: {
-              __typename: 'FundingRequestDestinationsList'
-              destinations: Array<{ __typename: 'FundingRequestDestination'; amount: string; account: string }>
-            } | null
-          }
-        | { __typename: 'RuntimeUpgradeProposalDetails' }
-        | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
-        | { __typename: 'SetCouncilorRewardProposalDetails' }
-        | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
-        | { __typename: 'SetInitialInvitationCountProposalDetails' }
-        | { __typename: 'SetMaxValidatorCountProposalDetails' }
-        | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
-        | { __typename: 'SetMembershipPriceProposalDetails' }
-        | { __typename: 'SetReferralCutProposalDetails' }
-        | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
-        | { __typename: 'SignalProposalDetails' }
-        | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
-        | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
-        | { __typename: 'UpdateChannelPayoutsProposalDetails' }
-        | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
-        | { __typename: 'VetoProposalDetails' }
-    }
+    __typename: 'Proposal'
+    details:
+      | { __typename: 'AmendConstitutionProposalDetails' }
+      | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
+      | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+      | {
+          __typename: 'FundingRequestProposalDetails'
+          destinationsList?: {
+            __typename: 'FundingRequestDestinationsList'
+            destinations: Array<{ __typename: 'FundingRequestDestination'; amount: string; account: string }>
+          } | null
+        }
+      | { __typename: 'RuntimeUpgradeProposalDetails' }
+      | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+      | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
+      | { __typename: 'SetInitialInvitationCountProposalDetails' }
+      | { __typename: 'SetMaxValidatorCountProposalDetails' }
+      | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+      | { __typename: 'SetMembershipPriceProposalDetails' }
+      | { __typename: 'SetReferralCutProposalDetails' }
+      | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+      | { __typename: 'SignalProposalDetails' }
+      | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
+      | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UpdateChannelPayoutsProposalDetails' }
+      | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+      | { __typename: 'VetoProposalDetails' }
   }>
 }
 
@@ -1424,39 +1418,36 @@ export type GetPastCouncilStatsQuery = {
   __typename: 'Query'
   proposalsApproved: { __typename: 'ProposalExecutedEventConnection'; totalCount: number }
   fundingRequestsApproved: Array<{
-    __typename: 'ProposalExecutedEvent'
-    proposal: {
-      __typename: 'Proposal'
-      details:
-        | { __typename: 'AmendConstitutionProposalDetails' }
-        | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
-        | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
-        | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
-        | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
-        | {
-            __typename: 'FundingRequestProposalDetails'
-            destinationsList?: {
-              __typename: 'FundingRequestDestinationsList'
-              destinations: Array<{ __typename: 'FundingRequestDestination'; amount: string; account: string }>
-            } | null
-          }
-        | { __typename: 'RuntimeUpgradeProposalDetails' }
-        | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
-        | { __typename: 'SetCouncilorRewardProposalDetails' }
-        | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
-        | { __typename: 'SetInitialInvitationCountProposalDetails' }
-        | { __typename: 'SetMaxValidatorCountProposalDetails' }
-        | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
-        | { __typename: 'SetMembershipPriceProposalDetails' }
-        | { __typename: 'SetReferralCutProposalDetails' }
-        | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
-        | { __typename: 'SignalProposalDetails' }
-        | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
-        | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
-        | { __typename: 'UpdateChannelPayoutsProposalDetails' }
-        | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
-        | { __typename: 'VetoProposalDetails' }
-    }
+    __typename: 'Proposal'
+    details:
+      | { __typename: 'AmendConstitutionProposalDetails' }
+      | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
+      | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
+      | {
+          __typename: 'FundingRequestProposalDetails'
+          destinationsList?: {
+            __typename: 'FundingRequestDestinationsList'
+            destinations: Array<{ __typename: 'FundingRequestDestination'; amount: string; account: string }>
+          } | null
+        }
+      | { __typename: 'RuntimeUpgradeProposalDetails' }
+      | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
+      | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
+      | { __typename: 'SetInitialInvitationCountProposalDetails' }
+      | { __typename: 'SetMaxValidatorCountProposalDetails' }
+      | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
+      | { __typename: 'SetMembershipPriceProposalDetails' }
+      | { __typename: 'SetReferralCutProposalDetails' }
+      | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
+      | { __typename: 'SignalProposalDetails' }
+      | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
+      | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UpdateChannelPayoutsProposalDetails' }
+      | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
+      | { __typename: 'VetoProposalDetails' }
   }>
   proposalsRejected: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
   proposalsSlashed: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
@@ -1677,16 +1668,13 @@ export const CouncilSpendingEventFieldsFragmentDoc = gql`
   }
 `
 export const FundingRequestApprovedFragmentDoc = gql`
-  fragment FundingRequestApproved on ProposalExecutedEvent {
-    proposal {
-      details {
-        __typename
-        ... on FundingRequestProposalDetails {
-          destinationsList {
-            destinations {
-              amount
-              account
-            }
+  fragment FundingRequestApproved on Proposal {
+    details {
+      ... on FundingRequestProposalDetails {
+        destinationsList {
+          destinations {
+            amount
+            account
           }
         }
       }
@@ -1883,11 +1871,11 @@ export const GetPastCouncilDocument = gql`
     budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
       ...CouncilSpendingEventFields
     }
-    fundingRequestsApproved: proposalExecutedEvents(
+    fundingRequestsApproved: proposals(
       where: {
-        inBlock_gt: $fromBlock
-        inBlock_lt: $toBlock
-        proposal: { details_json: { isTypeOf_eq: "FundingRequestProposalDetails" } }
+        statusSetAtBlock_gt: $fromBlock
+        statusSetAtBlock_lt: $toBlock
+        details_json: { isTypeOf_eq: "FundingRequestProposalDetails" }
       }
     ) {
       ...FundingRequestApproved
@@ -2765,11 +2753,11 @@ export const GetPastCouncilStatsDocument = gql`
     proposalsApproved: proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
       totalCount
     }
-    fundingRequestsApproved: proposalExecutedEvents(
+    fundingRequestsApproved: proposals(
       where: {
-        inBlock_gt: $startBlock
-        inBlock_lt: $endBlock
-        proposal: { details_json: { isTypeOf_eq: "FundingRequestProposalDetails" } }
+        statusSetAtBlock_gt: $startBlock
+        statusSetAtBlock_lt: $endBlock
+        details_json: { isTypeOf_eq: "FundingRequestProposalDetails" }
       }
     ) {
       ...FundingRequestApproved

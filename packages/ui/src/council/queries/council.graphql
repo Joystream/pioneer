@@ -161,16 +161,13 @@ fragment CouncilSpendingEventFields on BudgetSpendingEvent {
   type
 }
 
-fragment FundingRequestApproved on ProposalExecutedEvent {
-  proposal {
-    details {
-      __typename
-      ... on FundingRequestProposalDetails {
-        destinationsList {
-          destinations {
-            amount
-            account
-          }
+fragment FundingRequestApproved on Proposal {
+  details {
+    ... on FundingRequestProposalDetails {
+      destinationsList {
+        destinations {
+          amount
+          account
         }
       }
     }
@@ -211,11 +208,11 @@ query GetPastCouncil($id: ID!, $fromBlock: Int!, $toBlock: Int!) {
   budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
     ...CouncilSpendingEventFields
   }
-  fundingRequestsApproved: proposalExecutedEvents(
+  fundingRequestsApproved: proposals(
     where: {
-      inBlock_gt: $fromBlock
-      inBlock_lt: $toBlock
-      proposal: { details_json: { isTypeOf_eq: "FundingRequestProposalDetails" } }
+      statusSetAtBlock_gt: $fromBlock
+      statusSetAtBlock_lt: $toBlock
+      details_json: { isTypeOf_eq: "FundingRequestProposalDetails" }
     }
   ) {
     ...FundingRequestApproved
@@ -364,11 +361,11 @@ query GetPastCouncilStats($startBlock: Int!, $endBlock: Int!) {
   proposalsApproved: proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
     totalCount
   }
-  fundingRequestsApproved: proposalExecutedEvents(
+  fundingRequestsApproved: proposals(
     where: {
-      inBlock_gt: $startBlock
-      inBlock_lt: $endBlock
-      proposal: { details_json: { isTypeOf_eq: "FundingRequestProposalDetails" } }
+      statusSetAtBlock_gt: $startBlock
+      statusSetAtBlock_lt: $endBlock
+      details_json: { isTypeOf_eq: "FundingRequestProposalDetails" }
     }
   ) {
     ...FundingRequestApproved
