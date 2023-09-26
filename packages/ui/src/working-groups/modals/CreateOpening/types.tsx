@@ -8,7 +8,7 @@ import { BNSchema, minContext, moreThanMixed } from '@/common/utils/validation'
 import { GroupIdName } from '@/working-groups/types'
 
 export interface OpeningModalData {
-  group: GroupIdName
+  group?: GroupIdName
 }
 
 export type CreateOpeningModalCall = ModalWithDataCall<'CreateOpening', OpeningModalData>
