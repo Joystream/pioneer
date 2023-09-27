@@ -12,18 +12,18 @@ interface Props {
 }
 export const BlockTimeDisplay = ({ label, value }: Props) => {
   const { exactExecutionBlock, createdAt, updates } = value
-  
+
   const getBlockDetails = useMemo(() => {
-    if(updates.length > 0 && createdAt){
+    if (updates.length > 0 && createdAt) {
       const createdAtTimestamp = new Date(createdAt).getTime()
-      const timestamp = createdAtTimestamp + ((exactExecutionBlock - updates[0].inBlock.number) * MILLISECONDS_PER_BLOCK)
+      const timestamp = createdAtTimestamp + (exactExecutionBlock - updates[0].inBlock.number) * MILLISECONDS_PER_BLOCK
 
       return {
         number: exactExecutionBlock,
         timestamp: timestamp,
       } as unknown as Block
     }
-    return { } as unknown as Block
+    return {} as unknown as Block
   }, [value])
   return (
     <StatisticItem title={label}>

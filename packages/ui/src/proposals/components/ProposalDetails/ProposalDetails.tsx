@@ -126,7 +126,7 @@ export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBl
         {
           renderType: 'BlockTimeDisplay',
           label: 'Exact Execution Block',
-          value: {exactExecutionBlock, createdAt, updates},
+          value: { exactExecutionBlock, createdAt, updates },
         },
       ] as unknown as RenderNode[]
     }
