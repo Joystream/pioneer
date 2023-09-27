@@ -1,11 +1,9 @@
 import React from 'react'
 
-import {
-  ApplicationForm,
-  DurationAndProcess,
-  StakingPolicyAndReward,
-  WorkingGroupAndDescription,
-} from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CreateWorkingGroupLeadOpening'
+import { ApplicationForm } from '@/app/pages/WorkingGroups/WorkingGroup/components/CreateOpening/ApplicationForm'
+import { DurationAndProcess } from '@/app/pages/WorkingGroups/WorkingGroup/components/CreateOpening/DurationAndProcess'
+import { StakingPolicyAndReward } from '@/app/pages/WorkingGroups/WorkingGroup/components/CreateOpening/StakingPolicyAndReward'
+import { WorkingGroupAndDescription } from '@/app/pages/WorkingGroups/WorkingGroup/components/CreateOpening/WorkingGroupAndDescription'
 import { GroupIdName } from '@/working-groups/types'
 
 import { CreateOpeningMachineState } from '../machine'
@@ -18,16 +16,16 @@ export interface CreateOpeningStepProps {
 export const CreateOpeningSteps = ({ matches, groupId }: CreateOpeningStepProps) => {
   switch (true) {
     case matches('workingGroupAndDescription'):
-      return <WorkingGroupAndDescription noHeader={true} groupId={groupId} />
+      return <WorkingGroupAndDescription groupId={groupId} />
 
     case matches('durationAndProcess'):
-      return <DurationAndProcess noHeader={true} />
+      return <DurationAndProcess />
 
     case matches('applicationForm'):
-      return <ApplicationForm noHeader={true} />
+      return <ApplicationForm />
 
     case matches('stakingPolicyAndReward'):
-      return <StakingPolicyAndReward noHeader={true} />
+      return <StakingPolicyAndReward />
 
     default:
       return <></>

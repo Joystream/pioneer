@@ -7,7 +7,7 @@ import { CreateOpeningModalCall } from '@/working-groups/modals/CreateOpening/ty
 import { GroupIdName } from '@/working-groups/types'
 
 export interface CreateOpeningButtonProps {
-  group?: GroupIdName
+  group: GroupIdName
 }
 
 export const CreateOpeningButton = ({ group }: CreateOpeningButtonProps) => {

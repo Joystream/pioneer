@@ -6,22 +6,17 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 
-interface Props {
-  noHeader?: boolean
-}
-
-export const ApplicationForm = ({ noHeader = false }: Props) => {
+export const ApplicationForm = () => {
   const { watch, setValue } = useFormContext()
   return (
     <RowGapBlock gap={24}>
-      {noHeader || (
-        <Row>
-          <RowGapBlock gap={8}>
-            <h4>Specific parameters</h4>
-            <TextMedium lighter>Create Working Group Lead Opening</TextMedium>
-          </RowGapBlock>
-        </Row>
-      )}
+      <Row>
+        <RowGapBlock gap={8}>
+          <h4>Specific parameters</h4>
+          <TextMedium lighter>Create Working Group Lead Opening</TextMedium>
+        </RowGapBlock>
+      </Row>
+
       <Row>
         <EditableInputList
           title="Application form"

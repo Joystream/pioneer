@@ -38,7 +38,15 @@ export const CreateOpeningModal = () => {
   const { hideModal, modalData } = useModal<CreateOpeningModalCall>()
 
   const { group } = modalData
-  const context = { hiringTarget: 1, minStake: new BN(50000), group } as OpeningConditions
+  const workingGroupConsts = api?.consts[group]
+
+  const context = {
+    hiringTarget: 1,
+    minStake: new BN(50000),
+    group,
+    minUnstakingPeriodLimit: workingGroupConsts?.minUnstakingPeriodLimit,
+    minimumApplicationStake: workingGroupConsts?.minimumApplicationStake,
+  } as OpeningConditions
   const path = useMemo(() => machineStateConverter(state.value), [state.value])
   const resolver = useYupValidationResolver<CreateOpeningForm>(OpeningSchema, path)
   const form = useForm<CreateOpeningForm>({ resolver, mode: 'onChange', defaultValues, context })

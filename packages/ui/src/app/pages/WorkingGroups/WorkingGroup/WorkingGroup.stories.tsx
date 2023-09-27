@@ -99,6 +99,12 @@ export default {
               },
             },
           },
+          consts: {
+            membershipWorkingGroup: {
+              minimumApplicationStake: joy(10),
+              minUnstakingPeriodLimit: 100,
+            },
+          },
         },
 
         queryNode: [

@@ -5,7 +5,6 @@ import { CKEditor } from '@/common/components/CKEditor'
 import { InputComponent, InputText, InputTextarea } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium } from '@/common/components/typography'
 import { SelectWorkingGroup } from '@/working-groups/components/SelectWorkingGroup'
 import { GroupIdToGroupParam } from '@/working-groups/constants'
 import { GroupIdName } from '@/working-groups/types'
@@ -30,12 +29,6 @@ export const WorkingGroupAndDescription = ({ groupId }: Props) => {
 
   return (
     <RowGapBlock gap={24}>
-      <Row>
-        <RowGapBlock gap={8}>
-          <h4>Specific parameters</h4>
-          <TextMedium lighter>Create Working Group Lead Opening</TextMedium>
-        </RowGapBlock>
-      </Row>
       <Row>
         <RowGapBlock gap={20}>
           {groupId ? (

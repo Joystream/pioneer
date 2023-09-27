@@ -4,11 +4,11 @@ import * as Yup from 'yup'
 
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
 import { ModalWithDataCall } from '@/common/providers/modal/types'
-import { BNSchema, minContext, moreThanMixed } from '@/common/utils/validation'
+import { BNSchema, minContext, minMixed } from '@/common/utils/validation'
 import { GroupIdName } from '@/working-groups/types'
 
 export interface OpeningModalData {
-  group?: GroupIdName
+  group: GroupIdName
 }
 
 export type CreateOpeningModalCall = ModalWithDataCall<'CreateOpening', OpeningModalData>
@@ -49,12 +49,12 @@ export const OpeningSchema = Yup.object().shape({
   }),
   stakingPolicyAndReward: Yup.object().shape({
     stakingAmount: BNSchema.test(
-      minContext('Input must be at least ${min} for proposal to execute', 'leaderOpeningStake', true, 'execution')
+      minContext('Input must be at least ${min} for proposal to execute', 'minimumApplicationStake', true, 'execution')
     ).required('Staking amount is required'),
     leavingUnstakingPeriod: BNSchema.test(
       minContext('Input must be at least ${min} for proposal to execute', 'minUnstakingPeriodLimit', false, 'execution')
     ).required('Leaving unstaking period is required'),
-    rewardPerBlock: BNSchema.test(moreThanMixed(1, 'Amount must be greater than zero')).required(
+    rewardPerBlock: BNSchema.test(minMixed(0, 'Amount must be greater than or equal zero')).required(
       'Reward per block is required'
     ),
   }),

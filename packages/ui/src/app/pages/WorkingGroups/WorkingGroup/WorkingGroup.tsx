@@ -72,9 +72,9 @@ export function WorkingGroup() {
                 </StatusGroup>
               )}
             </PreviousPage>
-            {isLead && currentTab === 'OPENINGS' && (
+            {group && isLead && currentTab === 'OPENINGS' && (
               <ButtonsGroup>
-                <CreateOpeningButton group={group?.id} />
+                <CreateOpeningButton group={group.id} />
               </ButtonsGroup>
             )}
           </PageHeaderRow>
