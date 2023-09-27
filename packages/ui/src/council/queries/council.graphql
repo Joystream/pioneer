@@ -21,6 +21,7 @@ fragment PastCouncilProposalsFields on ProposalVotedEvent {
 fragment PastCouncilWorkingGroupFields on WorkingGroup {
   id
   name
+  budget
 }
 
 fragment PastCouncilBudgetSetEventFields on BudgetSetEvent {
@@ -37,6 +38,11 @@ fragment PastCouncilNewMissedRewardLevelReachedEventFields on NewMissedRewardLev
   groupId
   workerId
   newMissedRewardAmount
+}
+
+fragment PastCouncilBudgetUpdatedEventFields on BudgetUpdatedEvent {
+  groupId
+  budgetChangeAmount
 }
 
 fragment ElectedCouncilFields on ElectedCouncil {
@@ -248,6 +254,9 @@ query GetPastCouncilWorkingGroups($fromBlock: Int!, $toBlock: Int!) {
   }
   newMissedRewardLevelReachedEvents(where: { inBlock_lte: $toBlock }, orderBy: [inBlock_DESC]) {
     ...PastCouncilNewMissedRewardLevelReachedEventFields
+  }
+  budgetUpdatedEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
+    ...PastCouncilBudgetUpdatedEventFields
   }
 }
 
