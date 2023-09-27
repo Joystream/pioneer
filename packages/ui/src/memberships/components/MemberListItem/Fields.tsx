@@ -10,7 +10,7 @@ export const colLayoutByType = (kind: MemberItemKind) => {
   const roles = kind !== 'MyMember' ? 136 : 164
   const created = 90
   const referrer = 50
-  const count = kind !== 'MyMember' ? 20 : 76
+  const count = 76
   const total = 120
 
   switch (kind) {
