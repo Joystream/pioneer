@@ -9,7 +9,7 @@ import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useCouncilStatistics } from '@/council/hooks/useCouncilStatistics'
 import { Percentage } from '@/proposals/components/ProposalDetails/renderers/Percentage'
 import getDetailsRenderStructure, { RenderNode, RenderType } from '@/proposals/helpers/getDetailsRenderStructure'
-import { ProposalWithDetails, UpdateGroupBudgetDetails } from '@/proposals/types'
+import { ProposalStatusUpdates, ProposalWithDetails, UpdateGroupBudgetDetails } from '@/proposals/types'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 import {
@@ -32,6 +32,8 @@ interface Props {
   proposalDetails?: ProposalWithDetails['details']
   gracePeriod?: number
   exactExecutionBlock?: number
+  createdAt?: string
+  updates?: ProposalStatusUpdates[]
 }
 
 export interface ProposalDetailContent {
@@ -56,7 +58,7 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   BlockTimeDisplay: BlockTimeDisplay,
 }
 
-export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBlock }: Props) => {
+export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBlock, createdAt, updates }: Props) => {
   const { api } = useApi()
   const { budget } = useCouncilStatistics()
   const { group } = useWorkingGroup({
@@ -124,7 +126,7 @@ export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBl
         {
           renderType: 'BlockTimeDisplay',
           label: 'Exact Execution Block',
-          value: exactExecutionBlock,
+          value: {exactExecutionBlock, createdAt, updates},
         },
       ] as unknown as RenderNode[]
     }
@@ -138,7 +140,7 @@ export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBl
       ] as unknown as RenderNode[]
     }
     return []
-  }, [])
+  }, [exactExecutionBlock, gracePeriod])
 
   const extraInformation = useMemo(() => {
     if (proposalDetails?.type === 'updateWorkingGroupBudget') {

@@ -1,26 +1,29 @@
-/* eslint-disable no-console */
 import React, { useMemo } from 'react'
 
 import { BlockTime } from '@/common/components/BlockTime'
 import { StatisticItem } from '@/common/components/statistics'
-import { SECONDS_PER_BLOCK } from '@/common/constants'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { Block } from '@/common/types'
+import { ProposalStatusUpdates } from '@/proposals/types'
 
 interface Props {
   label: string
-  value: number
+  value: { exactExecutionBlock: number; createdAt: string; updates: ProposalStatusUpdates[] }
 }
 export const BlockTimeDisplay = ({ label, value }: Props) => {
-  const firstBlockDate = 1670710002
-  const blockInSeconds = value * SECONDS_PER_BLOCK
-  const milliseconds = (firstBlockDate + blockInSeconds) * 1000
-  console.log('Milli seconds ', milliseconds)
-  const timestamp = new Date(milliseconds).toISOString()
+  const { exactExecutionBlock, createdAt, updates } = value
+  
   const getBlockDetails = useMemo(() => {
-    return {
-      number: value,
-      timestamp: timestamp,
-    } as Block
+    if(updates.length > 0 && createdAt){
+      const createdAtTimestamp = new Date(createdAt).getTime()
+      const timestamp = createdAtTimestamp + ((exactExecutionBlock - updates[0].inBlock.number) * MILLISECONDS_PER_BLOCK)
+
+      return {
+        number: exactExecutionBlock,
+        timestamp: timestamp,
+      } as unknown as Block
+    }
+    return { } as unknown as Block
   }, [value])
   return (
     <StatisticItem title={label}>
