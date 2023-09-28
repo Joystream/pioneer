@@ -129,7 +129,12 @@ export type PastCouncilProposalsFieldsFragment = {
   }
 }
 
-export type PastCouncilWorkingGroupFieldsFragment = { __typename: 'WorkingGroup'; id: string; name: string }
+export type PastCouncilWorkingGroupFieldsFragment = {
+  __typename: 'WorkingGroup'
+  id: string
+  name: string
+  budget: string
+}
 
 export type PastCouncilBudgetSetEventFieldsFragment = {
   __typename: 'BudgetSetEvent'
@@ -148,6 +153,12 @@ export type PastCouncilNewMissedRewardLevelReachedEventFieldsFragment = {
   groupId: string
   workerId: string
   newMissedRewardAmount: string
+}
+
+export type PastCouncilBudgetUpdatedEventFieldsFragment = {
+  __typename: 'BudgetUpdatedEvent'
+  groupId: string
+  budgetChangeAmount: string
 }
 
 export type ElectedCouncilFieldsFragment = {
@@ -975,8 +986,7 @@ export type GetPastCouncilWorkingGroupsQueryVariables = Types.Exact<{
 
 export type GetPastCouncilWorkingGroupsQuery = {
   __typename: 'Query'
-  workingGroups: Array<{ __typename: 'WorkingGroup'; id: string; name: string }>
-  budgetSetEvents: Array<{ __typename: 'BudgetSetEvent'; newBudget: string; groupId: string }>
+  workingGroups: Array<{ __typename: 'WorkingGroup'; id: string; name: string; budget: string }>
   rewardPaidEvents: Array<{ __typename: 'RewardPaidEvent'; groupId: string; amount: string }>
   newMissedRewardLevelReachedEvents: Array<{
     __typename: 'NewMissedRewardLevelReachedEvent'
@@ -984,6 +994,7 @@ export type GetPastCouncilWorkingGroupsQuery = {
     workerId: string
     newMissedRewardAmount: string
   }>
+  budgetUpdatedEvents: Array<{ __typename: 'BudgetUpdatedEvent'; groupId: string; budgetChangeAmount: string }>
 }
 
 export type GetCurrentElectionQueryVariables = Types.Exact<{ [key: string]: never }>
@@ -1499,6 +1510,7 @@ export const PastCouncilWorkingGroupFieldsFragmentDoc = gql`
   fragment PastCouncilWorkingGroupFields on WorkingGroup {
     id
     name
+    budget
   }
 `
 export const PastCouncilBudgetSetEventFieldsFragmentDoc = gql`
@@ -1518,6 +1530,12 @@ export const PastCouncilNewMissedRewardLevelReachedEventFieldsFragmentDoc = gql`
     groupId
     workerId
     newMissedRewardAmount
+  }
+`
+export const PastCouncilBudgetUpdatedEventFieldsFragmentDoc = gql`
+  fragment PastCouncilBudgetUpdatedEventFields on BudgetUpdatedEvent {
+    groupId
+    budgetChangeAmount
   }
 `
 export const CouncilMemberFieldsFragmentDoc = gql`
@@ -2046,20 +2064,20 @@ export const GetPastCouncilWorkingGroupsDocument = gql`
     workingGroups {
       ...PastCouncilWorkingGroupFields
     }
-    budgetSetEvents(where: { inBlock_lte: $toBlock }, orderBy: [inBlock_DESC]) {
-      ...PastCouncilBudgetSetEventFields
-    }
     rewardPaidEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
       ...PastCouncilRewardPaidEventFields
     }
-    newMissedRewardLevelReachedEvents(where: { inBlock_lte: $toBlock }, orderBy: [inBlock_DESC]) {
+    newMissedRewardLevelReachedEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
       ...PastCouncilNewMissedRewardLevelReachedEventFields
+    }
+    budgetUpdatedEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
+      ...PastCouncilBudgetUpdatedEventFields
     }
   }
   ${PastCouncilWorkingGroupFieldsFragmentDoc}
-  ${PastCouncilBudgetSetEventFieldsFragmentDoc}
   ${PastCouncilRewardPaidEventFieldsFragmentDoc}
   ${PastCouncilNewMissedRewardLevelReachedEventFieldsFragmentDoc}
+  ${PastCouncilBudgetUpdatedEventFieldsFragmentDoc}
 `
 
 /**
