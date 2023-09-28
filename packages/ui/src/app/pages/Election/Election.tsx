@@ -25,8 +25,8 @@ import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { Election as ElectionType } from '@/council/types/Election'
 
-import { ElectionTabs } from './components/ElectionTabs'
 import { ElectionProgressBar } from './components/ElectionProgressBar'
+import { ElectionTabs } from './components/ElectionTabs'
 
 const displayElectionRound = (election: ElectionType | undefined): string => {
   if (!election) {
@@ -41,8 +41,8 @@ export const Election = () => {
 
   const { isLoading: isLoadingElectionStage, stage: electionStage } = useElectionStage()
   const periodInformation = useCouncilPeriodInformation()
-  const currentBlock = periodInformation?.currentBlock;
-  const remainingPeriod = periodInformation?.remainingPeriod;
+  const currentBlock = periodInformation?.currentBlock
+  const remainingPeriod = periodInformation?.remainingPeriod
   const history = useHistory()
   useCandidatePreviewViaUrlParameter()
 
@@ -89,7 +89,7 @@ export const Election = () => {
 
   const main = (
     <MainPanel>
-      <Statistics style={{gridTemplateColumns: "250px minmax(500px, 1fr)"}}>
+      <Statistics style={{ gridTemplateColumns: '250px minmax(500px, 1fr)' }}>
         <StatisticItem
           title="Round"
           tooltipText="Elections are held in consecutive rounds. This is the number of current election."

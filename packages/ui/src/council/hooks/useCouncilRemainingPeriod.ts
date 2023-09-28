@@ -39,7 +39,7 @@ export const useCouncilPeriodInformation = (until: 'stageEnd' | 'electionEnd' = 
   const { api } = useApi()
 
   return useObservable(() => {
-    if (!api) return 
+    if (!api) return
 
     const periodEnd = electionStageObservable(api).pipe(
       map(({ stage, changedAt: start }) => {
@@ -59,7 +59,9 @@ export const useCouncilPeriodInformation = (until: 'stageEnd' | 'electionEnd' = 
     const currentBlock = api.rpc.chain.subscribeNewHeads().pipe(map(({ number }) => number.toNumber()))
 
     return combineLatest([periodEnd, currentBlock]).pipe(
-      map(([periodEnd, currentBlock]) => { return {currentBlock: currentBlock, remainingPeriod: Math.max(0, periodEnd - currentBlock)} })
+      map(([periodEnd, currentBlock]) => {
+        return { currentBlock: currentBlock, remainingPeriod: Math.max(0, periodEnd - currentBlock) }
+      })
     )
   }, [api?.isConnected])
 }
