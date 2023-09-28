@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { ReactElement, useState, useMemo } from 'react'
+import React, { ReactElement, useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import { MultiStatisticItem, StatisticItemSpacedContent, StatisticLabel } from '@/common/components/statistics'
@@ -9,11 +9,11 @@ import { ProgressBar, ProgressBarProps } from '@/common/components/Progress'
 import { A_SECOND, AN_HOUR, A_DAY, A_MINUTE } from '@/common/constants'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { intersperse} from '@/common/utils'
-import { Colors, Fonts } from '@/common/constants'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { usePopper } from 'react-popper'
-import { TooltipPopupContainer, TooltipText } from '@/common/components/Tooltip'
+import { TooltipText } from '@/common/components/Tooltip'
 import { Placement } from '@popperjs/core'
+import { BorderRad, Colors, Fonts, Transitions, ZIndex } from '@/common/constants'
 
 interface ElectionProgressBarProps extends StatisticItemProps {
   electionStage: string
@@ -62,7 +62,7 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
 
   const constants = useCouncilConstants();
 
-  console.log(`duration: ${duration}, constants: ${JSON.stringify(constants)}, currentBlock = ${currentBlock}`)
+  // console.log(`duration: ${duration}, constants: ${JSON.stringify(constants)}, currentBlock = ${currentBlock}`)
 
   if (!isNaN(duration) && 
       constants?.budgetRefillPeriod !== undefined && 
@@ -84,16 +84,16 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       const date = new Date();
 
       date.setSeconds(date.getSeconds() + _seconds);
-      announcingEndDay = date.toISOString();
+      announcingEndDay = date.toLocaleString("en-US", { timeZone: "Europe/Paris" })
 
       date.setSeconds(date.getSeconds() + Math.floor(constants?.election.votingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)));
-      votingEndDay = date.toISOString();
+      votingEndDay = date.toLocaleString("en-US", { timeZone: "Europe/Paris" });
 
       date.setSeconds(date.getSeconds() + Math.floor(constants?.election.revealingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)));
-      revealingEndDay = date.toISOString();
+      revealingEndDay = date.toLocaleString("en-US", { timeZone: "Europe/Paris" });
 
       date.setSeconds(date.getSeconds() + Math.floor(constants?.idlePeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)));
-      nextRoundEndDay = date.toISOString();
+      nextRoundEndDay = date.toLocaleString("en-US", { timeZone: "Europe/Paris" });
 
       // calculate the end of blocks of each stage
       announcingEndBlock = currentBlock + duration;
@@ -112,17 +112,17 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       const date = new Date();
 
       date.setSeconds(date.getSeconds() + _seconds);
-      votingEndDay = date.toISOString();
+      votingEndDay = date.toLocaleString("en-US", { timeZone: "Europe/Paris" });
 
       const previousDate = date;
       previousDate.setSeconds(previousDate.getSeconds() - Math.floor(constants?.election.votingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)));
-      announcingEndDay = date.toISOString();
+      announcingEndDay = date.toLocaleString("en-US", { timeZone: "Europe/Paris" });
 
       date.setSeconds(date.getSeconds() + Math.floor(constants?.election.revealingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)));
-      revealingEndDay = date.toISOString();
+      revealingEndDay = date.toLocaleString("en-US", { timeZone: "Europe/Paris" });
 
       date.setSeconds(date.getSeconds() + Math.floor(constants?.idlePeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)));
-      nextRoundEndDay = date.toISOString();
+      nextRoundEndDay = date.toLocaleString("en-US", { timeZone: "Europe/Paris" });
 
       // calculate the end of blocks of each stage
       votingEndBlock = currentBlock + duration;
@@ -144,17 +144,17 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       const date = new Date();
 
       date.setSeconds(date.getSeconds() + _seconds);
-      revealingEndDay = date.toISOString();
+      revealingEndDay = date.toLocaleString("en-US", { timeZone: "Europe/Paris" });
 
       const previousDate = date;
       previousDate.setSeconds(previousDate.getSeconds() - Math.floor(constants?.election.revealingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)));
-      votingEndDay = date.toISOString();
+      votingEndDay = date.toLocaleString("en-US", { timeZone: "Europe/Paris" });
 
       previousDate.setSeconds(previousDate.getSeconds() - Math.floor(constants?.election.votingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)));
-      announcingEndDay = date.toISOString();
+      announcingEndDay = date.toLocaleString("en-US", { timeZone: "Europe/Paris" });
 
       date.setSeconds(date.getSeconds() + Math.floor(constants?.idlePeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)));
-      nextRoundEndDay = date.toISOString();
+      nextRoundEndDay = date.toLocaleString("en-US", { timeZone: "Europe/Paris" });
 
       // calculate the end of blocks of each stage
       revealingEndBlock = currentBlock + duration;
@@ -177,16 +177,16 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       const date = new Date();
 
       date.setSeconds(date.getSeconds() + _seconds);
-      nextRoundEndDay = date.toISOString();
+      nextRoundEndDay = date.toLocaleString("en-US", { timeZone: "Europe/Paris" });
 
       date.setSeconds(date.getSeconds() - Math.floor(constants?.idlePeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)));
-      revealingEndDay = date.toISOString();
+      revealingEndDay = date.toLocaleString("en-US", { timeZone: "Europe/Paris" });
 
       date.setSeconds(date.getSeconds() - Math.floor(constants?.election.revealingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)));
-      votingEndDay = date.toISOString();
+      votingEndDay = date.toLocaleString("en-US", { timeZone: "Europe/Paris" });
 
       date.setSeconds(date.getSeconds() - Math.floor(constants?.election.votingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)));
-      announcingEndDay = date.toISOString();
+      announcingEndDay = date.toLocaleString("en-US", { timeZone: "Europe/Paris" });
 
 
       // calculate the end of blocks of each stage
@@ -230,19 +230,19 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
 
       <ProgressBarLayout>
         <TooltipProgressBar start={0} end={announcingProgress / 100} color={announcingColor} 
-          tooltipText={`Announcing stage lasts ${announcingDays} days and ends on ${announcingEndDay} (block # ${announcingEndBlock} block). During this time members can announce that they will stand as candidates for the next council`}
+          tooltipText={`Announcing stage lasts ${announcingDays} days and ends on ${announcingEndDay} CET (block #${announcingEndBlock.toLocaleString("en-US")} block). During this time members can announce that they will stand as candidates for the next council`}
           placement='bottom-start'
         />
         <TooltipProgressBar start={0} end={votingProgress / 100} color={votingColor} 
-          tooltipText={`Voting stage lasts ${votingDays} days and ends on ${votingEndDay} (block # ${votingEndBlock} block). During this time voters can submit votes in favor of candidates`}
+          tooltipText={`Voting stage lasts ${votingDays} days and ends on ${votingEndDay} CET (block #${votingEndBlock.toLocaleString("en-US")} block). During this time voters can submit votes in favor of candidates`}
           placement='bottom-start'
         />
         <TooltipProgressBar start={0} end={revealingProgress / 100} color={revealingColor} 
-          tooltipText={`Revealing stage lasts ${revealingDays} days and ends on ${revealingEndDay} (block # ${revealingEndBlock} block). During this time, voters can reveal their sealed votes. Any valid vote which is unsealed is counter, and in the end a winning set of candidates is selected`}
+          tooltipText={`Revealing stage lasts ${revealingDays} days and ends on ${revealingEndDay} CET (block #${revealingEndBlock.toLocaleString("en-US")} block). During this time, voters can reveal their sealed votes. Any valid vote which is unsealed is counter, and in the end a winning set of candidates is selected`}
           placement='bottom-end'
         />
         <TooltipProgressBar start={0} end={nextRoundProgress / 100} color={nextRoundColor} 
-          tooltipText={`Idle stage lasts ${nextRoundDays} days and ends on ${nextRoundEndDay} (block # ${nextRoundEndBlock} block). After that time, a new round of elections begins`}
+          tooltipText={`Idle stage lasts ${nextRoundDays} days and ends on ${nextRoundEndDay} CET (block #${nextRoundEndBlock.toLocaleString("en-US")} block). After that time, a new round of elections begins`}
           placement='bottom-end'
         />
       </ProgressBarLayout>
@@ -259,39 +259,49 @@ const TooltipProgressBar = (props: TooltipProgressBarProps) => {
   const [isTooltipActive, setTooltipActive] = useState(false)
   const [referenceElementRef, setReferenceElementRef] = useState<HTMLElement | null>(null)
   const [popperElementRef, setPopperElementRef] = useState<HTMLDivElement | null>(null)
-  const [barHeight, setBarHeight] = useState<'small' | 'big' | 'medium'>('small');
+  const [barHeight, setBarHeight] = useState<'small' | 'big' | 'medium'>('small')
+  const [arrowPos, setArrowPos] = useState<number>()
   
-  let movement = 0;
-  if (props.placement === 'bottom-start')
-    movement = 30;
-  else
-    movement = -30;
-
   const { styles, attributes } = usePopper(referenceElementRef, popperElementRef, {
-    placement: props.placement ?? 'bottom-start',
+    placement: props.end === 1 ? 'bottom' : props.placement ?? 'bottom-start',
     modifiers: [
       {
-        name: 'offset',
+        name: "offset",
         options: {
-          offset: [movement, 0]
-        },
-      },
-      {
-        name: 'flip',
-        options: {
-          fallbackPlacements: ['top-start'],
-          boundary: 'clippingParents',
-        },
-      },
+          offset: [0, 5] // [skidding, distance]
+        }
+      }
     ],
   })
+
+  useEffect(() => {
+    if (referenceElementRef) {
+      const barWidth = referenceElementRef.clientWidth
+
+      if (props.placement === 'bottom-start') {
+        if (props.end === 0)
+          setArrowPos(Math.floor(barWidth / 2))
+        else
+          setArrowPos(Math.floor(props.end * barWidth))
+
+        console.log(`bottom-start: barWith: ${barWidth}, arrowPos: ${Math.floor(props.end * barWidth)}`)
+      }
+      else if (props.placement === 'bottom-end') {
+        if (props.end === 0)
+          setArrowPos(Math.floor(barWidth / 2))
+        else
+          setArrowPos(Math.floor(barWidth - props.end * barWidth))
+          
+        console.log(`bottom-end: barWith: ${barWidth}, arrowPos: ${Math.floor(barWidth - props.end * barWidth)}`)
+      }
+    }
+  }, [referenceElementRef, props.end])
 
   const mouseIsOver = () => {
     setBarHeight("medium");
     setTooltipActive(true)
   }
   const mouseLeft = () => {
-    console.log(`mouseLeft is called`);
     setBarHeight("small");
     setTooltipActive(false)
   }
@@ -316,23 +326,103 @@ const TooltipProgressBar = (props: TooltipProgressBarProps) => {
       <ProgressBar {...props} size={barHeight} ref={setReferenceElementRef} {...tooltipHandlers}/>
       {isTooltipActive &&
         (ReactDOM.createPortal(
-              <TooltipPopupContainer
+              <CustomTooltipPopupContainer
                 ref={setPopperElementRef}
                 style={styles.popper}
                 {...attributes.popper}
                 {...popUpHandlers}
+                arrowPos={arrowPos}
                 isTooltipActive={isTooltipActive}
               >
                 <TooltipText>
                   {props?.tooltipText}
                 </TooltipText>
-              </TooltipPopupContainer>,
+              </CustomTooltipPopupContainer>,
               document.body
             ))}
     </>
   )
 }
 
+const CustomTooltipPopupContainer = styled.div<{ isTooltipActive?: boolean; forBig?: boolean, arrowPos?: number}>`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: absolute;
+  width: max-content;
+  min-width: 160px;
+  max-width: 304px;
+  padding: 16px 24px;
+  border: 1px solid ${Colors.Black[900]};
+  background-color: ${Colors.Black[700]};
+  border-radius: ${BorderRad.m};
+  opacity: ${({ isTooltipActive }) => (isTooltipActive ? '1' : '0')};
+  transition: opacity ${Transitions.duration} ease;
+  z-index: ${ZIndex.tooltip};
+
+  &:after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: ${Colors.Black[700]};
+    border: 1px solid ${Colors.Black[900]};
+    transform: rotate(45deg);
+    z-index: 1;
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: -8px;
+    width: calc(100% + 16px);
+    height: calc(100% + 16px);
+    z-index: -1;
+  }
+
+  &[data-popper-placement^='top'] {
+    &:after {
+      bottom: -4px;
+      clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    }
+  }
+  &[data-popper-placement^='bottom'] {
+    &:after {
+      top: -4px;
+      clip-path: polygon(100% 0, 0 0, 0 100%);
+    }
+  }
+  &[data-popper-reference-hidden='true'] {
+    visibility: hidden;
+    pointer-events: none;
+  }
+  &[data-popper-placement='bottom'] {
+    &:after {
+      left:50%;
+    }
+  }
+  &[data-popper-placement='top-start']:after,
+  &[data-popper-placement='bottom-start']:after {
+    left: ${({ arrowPos }) => ( arrowPos ? `${arrowPos + 12}px` : '19px')};
+  }
+  &[data-popper-placement='top-end']:after,
+  &[data-popper-placement='bottom-end']:after {
+    right: ${({ arrowPos }) => (arrowPos ? `${arrowPos + 12}px`: '19px')};
+  }
+  &[data-popper-placement='top-start'] {
+    inset: ${({ forBig }) => (forBig ? 'auto auto 5px -13px !important' : 'auto auto 4px -16px !important')};
+  }
+  &[data-popper-placement='top-end'] {
+    inset: ${({ forBig }) => (forBig ? 'auto -12px 5px auto !important' : 'auto -16px 4px auto !important')};
+  }
+  &[data-popper-placement='bottom-start'] {
+    inset: ${({ forBig }) => (forBig ? '5px auto auto -13px !important' : '4px auto auto -16px !important')};
+  }
+  &[data-popper-placement='bottom-end'] {
+    inset: ${({ forBig }) => (forBig ? '5px -12px auto auto !important' : '4px -16px auto auto !important')};
+  }
+`
 const StatisticBigLabel = styled.div<{strong?: boolean}>`
   font-size: 20px;
   line-height: 28px;
