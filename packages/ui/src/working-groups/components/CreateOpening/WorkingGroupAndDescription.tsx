@@ -28,7 +28,6 @@ export const WorkingGroupAndDescription = ({ groupId }: Props) => {
   }, [groupId])
 
   return (
-    <RowGapBlock gap={24}>
       <Row>
         <RowGapBlock gap={20}>
           {groupId ? (
@@ -80,6 +79,5 @@ export const WorkingGroupAndDescription = ({ groupId }: Props) => {
           </InputComponent>
         </RowGapBlock>
       </Row>
-    </RowGapBlock>
   )
 }

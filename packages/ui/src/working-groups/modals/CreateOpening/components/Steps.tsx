@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { ApplicationForm } from '@/app/pages/WorkingGroups/WorkingGroup/components/CreateOpening/ApplicationForm'
-import { DurationAndProcess } from '@/app/pages/WorkingGroups/WorkingGroup/components/CreateOpening/DurationAndProcess'
-import { StakingPolicyAndReward } from '@/app/pages/WorkingGroups/WorkingGroup/components/CreateOpening/StakingPolicyAndReward'
-import { WorkingGroupAndDescription } from '@/app/pages/WorkingGroups/WorkingGroup/components/CreateOpening/WorkingGroupAndDescription'
+import { ApplicationForm } from '@/working-groups/components/CreateOpening/ApplicationForm'
+import { DurationAndProcess } from '@/working-groups/components/CreateOpening/DurationAndProcess'
+import { StakingPolicyAndReward } from '@/working-groups/components/CreateOpening/StakingPolicyAndReward'
+import { WorkingGroupAndDescription } from '@/working-groups/components/CreateOpening/WorkingGroupAndDescription'
 import { GroupIdName } from '@/working-groups/types'
 
 import { CreateOpeningMachineState } from '../machine'

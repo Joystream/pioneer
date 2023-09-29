@@ -1,13 +1,11 @@
 import React from 'react'
-import { useFormContext } from 'react-hook-form'
 
-import EditableInputList from '@/common/components/EditableInputList/EditableInputList'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
+import { ApplicationForm as ApplicationForm_ } from '@/working-groups/components/CreateOpening/ApplicationForm'
 
 export const ApplicationForm = () => {
-  const { watch, setValue } = useFormContext()
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -18,12 +16,7 @@ export const ApplicationForm = () => {
       </Row>
 
       <Row>
-        <EditableInputList
-          title="Application form"
-          buttonText="Add new question"
-          value={watch('applicationForm.questions')}
-          onChange={(questions) => setValue('applicationForm.questions', questions, { shouldValidate: true })}
-        />
+        <ApplicationForm_ />
       </Row>
     </RowGapBlock>
   )
