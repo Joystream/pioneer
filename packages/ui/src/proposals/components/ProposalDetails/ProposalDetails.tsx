@@ -35,7 +35,7 @@ interface Props {
   proposalDetails?: ProposalWithDetails['details']
   gracePeriod?: number
   exactExecutionBlock?: number
-  createdInBlock?: Block
+  createdInBlock: Block
   createdAt?: string
   updates?: ProposalStatusUpdates[]
 }
@@ -132,13 +132,11 @@ export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBl
           label: 'Exact Execution Block',
           value: {
             number: exactExecutionBlock,
-            timestamp:
-              createdInBlock &&
-              new Date(
-                new Date(createdInBlock.timestamp).getTime() +
-                  (exactExecutionBlock - createdInBlock.number) * MILLISECONDS_PER_BLOCK
-              ).toString(),
-          } as Block,
+            timestamp: new Date(
+              new Date(createdInBlock.timestamp).getTime() +
+                (exactExecutionBlock - createdInBlock.number) * MILLISECONDS_PER_BLOCK
+            ).toString(),
+          },
         },
       ] as unknown as RenderNode[]
     }
