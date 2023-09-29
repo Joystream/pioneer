@@ -46,6 +46,7 @@ type Args = {
   isInDiscussionWhitelist: boolean
   type: ProposalDetailsType
   constitutionality: number
+  exactExecutionBlock: number
   vote1: VoteArg
   vote2: VoteArg
   vote3: VoteArg
@@ -73,6 +74,7 @@ export default {
     isDiscussionOpen: true,
     type: 'SignalProposalDetails',
     constitutionality: 1,
+    exactExecutionBlock: 0,
     vote1: 'None',
     vote2: 'None',
     vote3: 'None',
@@ -155,6 +157,7 @@ export default {
                 status,
                 type: args.type,
                 creator: args.isProposer ? alice : bob,
+                exactExecutionBlock: args.exactExecutionBlock || null,
 
                 discussionThread: {
                   posts: proposalDiscussionPosts,
