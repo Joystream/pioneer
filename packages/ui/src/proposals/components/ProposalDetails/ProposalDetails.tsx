@@ -134,9 +134,11 @@ export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBl
             number: exactExecutionBlock,
             timestamp:
               createdInBlock &&
-              new Date(createdInBlock.timestamp).getTime() +
-                (exactExecutionBlock - createdInBlock.number) * MILLISECONDS_PER_BLOCK,
-          } as unknown as Block,
+              new Date(
+                new Date(createdInBlock.timestamp).getTime() +
+                  (exactExecutionBlock - createdInBlock.number) * MILLISECONDS_PER_BLOCK
+              ).toString(),
+          } as Block,
         },
       ] as unknown as RenderNode[]
     }
