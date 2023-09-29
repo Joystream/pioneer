@@ -2,10 +2,12 @@ import React, { ReactElement, useCallback, useMemo } from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
 import { Info } from '@/common/components/Info'
-import { BlockDurationStatistics, StatisticsThreeColumns } from '@/common/components/statistics'
+import { StatisticsThreeColumns } from '@/common/components/statistics'
 import { TooltipContentProp } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
+import { Block } from '@/common/types'
 import { useCouncilStatistics } from '@/council/hooks/useCouncilStatistics'
 import { Percentage } from '@/proposals/components/ProposalDetails/renderers/Percentage'
 import getDetailsRenderStructure, { RenderNode, RenderType } from '@/proposals/helpers/getDetailsRenderStructure'
@@ -20,6 +22,7 @@ import {
   Hash,
   Markdown,
   Member,
+  NumberOfBlocks,
   Numeric,
   OpeningLink,
   ProposalLink,
@@ -32,6 +35,7 @@ interface Props {
   proposalDetails?: ProposalWithDetails['details']
   gracePeriod?: number
   exactExecutionBlock?: number
+  createdInBlock?: Block
   createdAt?: string
   updates?: ProposalStatusUpdates[]
 }
@@ -44,7 +48,7 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   Text: Text,
   Amount: Amount,
   Numeric: Numeric,
-  NumberOfBlocks: BlockDurationStatistics,
+  NumberOfBlocks: NumberOfBlocks,
   Markdown: Markdown,
   Member: Member,
   Address: Address,
@@ -58,7 +62,7 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   BlockTimeDisplay: BlockTimeDisplay,
 }
 
-export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBlock, createdAt, updates }: Props) => {
+export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBlock, createdInBlock }: Props) => {
   const { api } = useApi()
   const { budget } = useCouncilStatistics()
   const { group } = useWorkingGroup({
@@ -126,7 +130,13 @@ export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBl
         {
           renderType: 'BlockTimeDisplay',
           label: 'Exact Execution Block',
-          value: { exactExecutionBlock, createdAt, updates },
+          value: {
+            number: exactExecutionBlock,
+            timestamp:
+              createdInBlock &&
+              new Date(createdInBlock.timestamp).getTime() +
+                (exactExecutionBlock - createdInBlock.number) * MILLISECONDS_PER_BLOCK,
+          } as unknown as Block,
         },
       ] as unknown as RenderNode[]
     }
@@ -134,7 +144,7 @@ export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBl
       return [
         {
           renderType: 'NumberOfBlocks',
-          title: 'Gracing Period',
+          label: 'Gracing Period',
           value: gracePeriod,
         },
       ] as unknown as RenderNode[]

@@ -184,8 +184,7 @@ export const ProposalPreview = () => {
               proposalDetails={proposal.details}
               gracePeriod={constants?.gracePeriod}
               exactExecutionBlock={proposal.exactExecutionBlock}
-              updates={proposal.proposalStatusUpdates}
-              createdAt={proposal.createdAt}
+              createdInBlock={proposal.createdInBlock}
             />
 
             <RationalePreview rationale={proposal.rationale} />
