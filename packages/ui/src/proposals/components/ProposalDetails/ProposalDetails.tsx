@@ -11,7 +11,7 @@ import { Block } from '@/common/types'
 import { useCouncilStatistics } from '@/council/hooks/useCouncilStatistics'
 import { Percentage } from '@/proposals/components/ProposalDetails/renderers/Percentage'
 import getDetailsRenderStructure, { RenderNode, RenderType } from '@/proposals/helpers/getDetailsRenderStructure'
-import { ProposalStatusUpdates, ProposalWithDetails, UpdateGroupBudgetDetails } from '@/proposals/types'
+import { ProposalWithDetails, UpdateGroupBudgetDetails } from '@/proposals/types'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 import {
