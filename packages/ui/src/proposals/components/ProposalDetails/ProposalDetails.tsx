@@ -36,8 +36,6 @@ interface Props {
   gracePeriod?: number
   exactExecutionBlock?: number
   createdInBlock: Block
-  createdAt?: string
-  updates?: ProposalStatusUpdates[]
 }
 
 export interface ProposalDetailContent {
