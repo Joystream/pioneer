@@ -85,7 +85,6 @@ export default {
           },
         ],
       })
-      const bob = member('bob')
       return {
         accounts: { active: { member: alice } },
 
@@ -116,7 +115,7 @@ export default {
                 name: WG_DATA.name,
                 budget: joy(200),
                 workers: [],
-                leader: { membershipId: bob.id, isActive: true },
+                leader: { membershipId: alice.id, isActive: args.isLead }
               },
             },
           },
@@ -131,7 +130,7 @@ export default {
                     name: WG_DATA.name,
                   },
                   status: 'WorkerStatusActive',
-                  membership: args.isLead ? bob : alice,
+                  membership: alice,
                 },
                 {
                   id: `${WG_DATA.id}-1`,
