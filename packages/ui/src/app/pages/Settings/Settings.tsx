@@ -1,4 +1,6 @@
+import { WsProvider } from '@polkadot/api'
 import React, { useState, useEffect } from 'react'
+import { useForm, FormProvider } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -9,6 +11,7 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent, InputText } from '@/common/components/forms'
 import { WarnedIcon } from '@/common/components/icons/activities'
 // import { LanguageSelect } from '@/common/components/LanguageSelect'
+import { Loading } from '@/common/components/Loading'
 import NetworkInfo from '@/common/components/NetworkInfo/NetworkInfo'
 import { ColumnGapBlock, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
@@ -39,10 +42,17 @@ export const Settings = () => {
     //{ title: t('language'), active: currentTab === 'LANGUAGE', onClick: () => setCurrentTab('LANGUAGE') },
   ]
 
-  const [customFaucetEndpoint, setCustomFaucetEndpoint] = useState<string>('')
-  const [customRpcEndpoint, setCustomRpcEndpoint] = useState<string>('')
-  const [customQueryEndpoint, setCustomQueryEndpoint] = useState<string>('')
+  const form = useForm()
+  const [customFaucetEndpoint, customRpcEndpoint, customQueryEndpoint] = form.watch([
+    'settings.customFaucetEndpoint',
+    'settings.customRpcEndpoint',
+    'settings.customQueryEndpoint',
+  ])
   const [, storeCustomEndpoints] = useLocalStorage<NetworkEndpoints>('custom_endpoint')
+  const [isValidFaucetEndpoint, setIsValidFaucetEndpoint] = useState(true)
+  const [isValidRpcEndpoint, setIsValidRpcEndpoint] = useState(true)
+  const [isValidQueryEndpoint, setIsValidQueryEndpoint] = useState(true)
+  const [customSaveStatus, setCustomSaveStatus] = useState<'Init' | 'Saving' | 'Done'>('Init')
 
   const switchNetwork = (network: NetworkType | null) => {
     if (network) {
@@ -53,9 +63,9 @@ export const Settings = () => {
 
   useEffect(() => {
     if (network === 'custom') {
-      setCustomRpcEndpoint(endpoints.nodeRpcEndpoint)
-      setCustomQueryEndpoint(endpoints.queryNodeEndpoint)
-      setCustomFaucetEndpoint(endpoints.membershipFaucetEndpoint)
+      form.setValue('settings.customRpcEndpoint', endpoints.nodeRpcEndpoint)
+      form.setValue('settings.customQueryEndpoint', endpoints.queryNodeEndpoint)
+      form.setValue('settings.customFaucetEndpoint', endpoints.membershipFaucetEndpoint)
     }
   }, [network, endpoints])
 
@@ -64,17 +74,73 @@ export const Settings = () => {
       /^(http|https):\/\//i.test(customFaucetEndpoint) === false ||
       /^(ws|wss):\/\//i.test(customRpcEndpoint) === false ||
       /^(http|https):\/\//i.test(customQueryEndpoint) === false
-    )
+    ) {
       return
+    }
 
-    storeCustomEndpoints({
-      nodeRpcEndpoint: customRpcEndpoint,
-      queryNodeEndpoint: customQueryEndpoint,
-      membershipFaucetEndpoint: customFaucetEndpoint,
-      queryNodeEndpointSubscription: customQueryEndpoint.replace(/^http?/, 'ws'),
-      configEndpoint: undefined,
-    })
-    window.location.reload()
+    setCustomSaveStatus('Saving')
+
+    const _update = async () => {
+      let needReload = true
+
+      // check faucet endpoint
+      try {
+        const faucetStatusEndpoint = customFaucetEndpoint.replace(new RegExp('register$'), 'status')
+        const response = await fetch(faucetStatusEndpoint)
+        await response.json()
+        setIsValidFaucetEndpoint(true)
+      } catch (err) {
+        setIsValidFaucetEndpoint(false)
+        needReload = false
+      }
+
+      // check GraphQL endpoint
+      try {
+        const query = `
+          query {
+            electedCouncils{
+              id
+            }
+          }`
+        const response = await fetch(customQueryEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query }),
+        })
+        await response.json()
+        setIsValidQueryEndpoint(true)
+      } catch (err) {
+        setIsValidQueryEndpoint(false)
+        needReload = false
+      }
+
+      // check RPC endpoint
+      try {
+        const wsProvider = new WsProvider(customRpcEndpoint, false, undefined, 4000)
+        await wsProvider.connect()
+        setIsValidRpcEndpoint(true)
+      } catch (err) {
+        setIsValidRpcEndpoint(false)
+        needReload = false
+      }
+
+      setCustomSaveStatus('Done')
+
+      if (needReload === true) {
+        storeCustomEndpoints({
+          nodeRpcEndpoint: customRpcEndpoint,
+          queryNodeEndpoint: customQueryEndpoint,
+          membershipFaucetEndpoint: customFaucetEndpoint,
+          queryNodeEndpointSubscription: customQueryEndpoint.replace(/^http?/, 'ws'),
+          configEndpoint: undefined,
+        })
+        window.location.reload()
+      }
+    }
+
+    _update()
   }
 
   return (
@@ -100,7 +166,7 @@ export const Settings = () => {
                     selectSize="l"
                   />
                   {network == 'custom' && (
-                    <>
+                    <FormProvider {...form}>
                       <SettingsWarningInformation icon={<WarnedIcon />} title="Attention">
                         <ColumnGapBlock gap={5}>
                           <TextMedium lighter>
@@ -110,56 +176,70 @@ export const Settings = () => {
                       </SettingsWarningInformation>
                       <InputComponent
                         label={t('customFaucet')}
-                        validation={/^(http|https):\/\//i.test(customFaucetEndpoint) ? undefined : 'invalid'}
+                        validation={
+                          /^(http|https):\/\//i.test(customFaucetEndpoint) && isValidFaucetEndpoint
+                            ? undefined
+                            : 'invalid'
+                        }
                         message={
                           /^(http|https):\/\//i.test(customFaucetEndpoint)
-                            ? undefined
+                            ? isValidFaucetEndpoint
+                              ? undefined
+                              : 'Connection Error'
                             : 'This Faucet endpoint must start with http or https'
                         }
                       >
                         <InputText
                           id="field-custom-faucet"
                           placeholder="Paste faucet URL address"
-                          value={customFaucetEndpoint}
-                          onChange={(e) => setCustomFaucetEndpoint(e.target.value)}
+                          name="settings.customFaucetEndpoint"
                         />
                       </InputComponent>
                       <InputComponent
                         label={t('customRPCNode')}
-                        validation={/^(ws|wss):\/\//i.test(customRpcEndpoint) ? undefined : 'invalid'}
+                        validation={
+                          /^(ws|wss):\/\//i.test(customRpcEndpoint) && isValidRpcEndpoint ? undefined : 'invalid'
+                        }
                         message={
                           /^(ws|wss):\/\//i.test(customRpcEndpoint)
-                            ? undefined
+                            ? isValidRpcEndpoint
+                              ? undefined
+                              : 'Connection Error'
                             : 'This RPC endpoint must start with ws or wss'
                         }
                       >
                         <InputText
                           id="field-custom-rpcnode"
                           placeholder="Paste RPC node"
-                          value={customRpcEndpoint}
-                          onChange={(e) => setCustomRpcEndpoint(e.target.value)}
+                          name="settings.customRpcEndpoint"
                         />
                       </InputComponent>
                       <InputComponent
                         label={t('customQueryNode')}
-                        validation={/^(http|https):\/\//i.test(customQueryEndpoint) ? undefined : 'invalid'}
+                        validation={
+                          /^(http|https):\/\//i.test(customQueryEndpoint) && isValidQueryEndpoint
+                            ? undefined
+                            : 'invalid'
+                        }
                         message={
                           /^(http|https):\/\//i.test(customQueryEndpoint)
-                            ? undefined
+                            ? isValidQueryEndpoint
+                              ? undefined
+                              : 'Connection Error'
                             : 'This Query endpoint must start with http or https'
                         }
                       >
                         <InputText
                           id="field-custom-querynode"
                           placeholder="Paste Query node"
-                          value={customQueryEndpoint}
-                          onChange={(e) => setCustomQueryEndpoint(e.target.value)}
+                          name="settings.customQueryEndpoint"
                         />
                       </InputComponent>
                       <ButtonPrimary onClick={saveSettings} size="medium">
                         Save settings
+                        {customSaveStatus === 'Saving' && <Loading />}
                       </ButtonPrimary>
-                    </>
+                    </FormProvider>
                   )}
                   {endpoints?.configEndpoint && (
                     <ButtonPrimary
