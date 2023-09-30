@@ -115,7 +115,7 @@ export default {
                 name: WG_DATA.name,
                 budget: joy(200),
                 workers: [],
-                leader: { membershipId: alice.id, isActive: args.isLead }
+                leader: { membershipId: alice.id, isActive: args.isLead },
               },
             },
           },

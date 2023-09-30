@@ -6,7 +6,6 @@ import { TextMedium } from '@/common/components/typography'
 import { StakingPolicyAndReward as StakingPolicyAndReward_ } from '@/working-groups/components/CreateOpening/StakingPolicyAndReward'
 
 export const StakingPolicyAndReward = () => {
-
   return (
     <RowGapBlock gap={24}>
       <Row>

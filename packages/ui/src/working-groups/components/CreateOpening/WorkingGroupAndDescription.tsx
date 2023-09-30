@@ -28,56 +28,56 @@ export const WorkingGroupAndDescription = ({ groupId }: Props) => {
   }, [groupId])
 
   return (
-      <Row>
-        <RowGapBlock gap={20}>
-          {groupId ? (
-            <div>Group: {MappedGroupedParams[groupId]}</div>
-          ) : (
-            <InputComponent
-              id="working-group-select"
-              label="Working Group"
-              required
-              inputSize="l"
-              tooltipText="Please select an identifier for working group"
-            >
-              <SelectWorkingGroup
-                id="working-group-select"
-                selectedGroupId={watch('workingGroupAndDescription.groupId')}
-                onChange={(selected) => {
-                  setValue('workingGroupAndDescription.groupId', selected.id, { shouldValidate: true })
-                  setValue('groupId', selected.id)
-                }}
-              />
-            </InputComponent>
-          )}
+    <Row>
+      <RowGapBlock gap={20}>
+        {groupId ? (
+          <div>Group: {MappedGroupedParams[groupId]}</div>
+        ) : (
           <InputComponent
-            id="opening-title"
-            label="Opening title"
-            required
-            inputSize="m"
-            name="workingGroupAndDescription.title"
-          >
-            <InputText id="opening-title" name="workingGroupAndDescription.title" placeholder="Opening title" />
-          </InputComponent>
-          <InputComponent
-            id="short-description"
-            label="Short description"
-            name="workingGroupAndDescription.shortDescription"
+            id="working-group-select"
+            label="Working Group"
             required
             inputSize="l"
+            tooltipText="Please select an identifier for working group"
           >
-            <InputTextarea id="short-description" name="workingGroupAndDescription.shortDescription" />
+            <SelectWorkingGroup
+              id="working-group-select"
+              selectedGroupId={watch('workingGroupAndDescription.groupId')}
+              onChange={(selected) => {
+                setValue('workingGroupAndDescription.groupId', selected.id, { shouldValidate: true })
+                setValue('groupId', selected.id)
+              }}
+            />
           </InputComponent>
-          <InputComponent
-            label="Description"
-            required
-            inputSize="auto"
-            id="field-description"
-            name="workingGroupAndDescription.description"
-          >
-            <CKEditor id="field-description" name="workingGroupAndDescription.description" />
-          </InputComponent>
-        </RowGapBlock>
-      </Row>
+        )}
+        <InputComponent
+          id="opening-title"
+          label="Opening title"
+          required
+          inputSize="m"
+          name="workingGroupAndDescription.title"
+        >
+          <InputText id="opening-title" name="workingGroupAndDescription.title" placeholder="Opening title" />
+        </InputComponent>
+        <InputComponent
+          id="short-description"
+          label="Short description"
+          name="workingGroupAndDescription.shortDescription"
+          required
+          inputSize="l"
+        >
+          <InputTextarea id="short-description" name="workingGroupAndDescription.shortDescription" />
+        </InputComponent>
+        <InputComponent
+          label="Description"
+          required
+          inputSize="auto"
+          id="field-description"
+          name="workingGroupAndDescription.description"
+        >
+          <CKEditor id="field-description" name="workingGroupAndDescription.description" />
+        </InputComponent>
+      </RowGapBlock>
+    </Row>
   )
 }

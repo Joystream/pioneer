@@ -11,7 +11,6 @@ interface Props {
 }
 
 export const WorkingGroupAndDescription = ({ groupId }: Props) => {
-
   return (
     <RowGapBlock gap={24}>
       <Row>

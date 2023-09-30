@@ -51,13 +51,17 @@ export const CreateOpeningModal = () => {
     form.trigger(machineStateConverter(state.value) as keyof CreateOpeningForm)
   }, [machineStateConverter(state.value)])
 
-  const { transaction, feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => {
-    if (api && group) {
-      const { ...specifics } = form.getValues() as CreateOpeningForm
-      const { description, stakePolicy, rewardPerBlock } = getTxParams(group, specifics)
-      return api.tx[group].addOpening(description, 'Regular', stakePolicy, String(rewardPerBlock))
-    }
-  }, [api?.isConnected, activeMember?.id, group, form.formState.isValidating])
+  const { transaction, feeInfo } = useTransactionFee(
+    activeMember?.controllerAccount,
+    () => {
+      if (api && group) {
+        const { ...specifics } = form.getValues() as CreateOpeningForm
+        const { description, stakePolicy, rewardPerBlock } = getTxParams(group, specifics)
+        return api.tx[group].addOpening(description, 'Regular', stakePolicy, String(rewardPerBlock))
+      }
+    },
+    [api?.isConnected, activeMember?.id, group, form.formState.isValidating]
+  )
   const setExportJsonValue = useMemo(() => {
     const { ...specifics } = form.getValues() as CreateOpeningForm
     const exportValue = {
