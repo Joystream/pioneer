@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import styled from 'styled-components'
@@ -32,7 +31,7 @@ import { OpeningConditions, CreateOpeningForm, CreateOpeningModalCall, OpeningSc
 export const CreateOpeningModal = () => {
   const [showImport, setShowImport] = useState<boolean>(false)
 
-  const { api, connectionState } = useApi()
+  const { api } = useApi()
   const { active: activeMember } = useMyMemberships()
   const [state, send, service] = useMachine(createOpeningMachine)
   const { hideModal, modalData } = useModal<CreateOpeningModalCall>()
@@ -41,8 +40,6 @@ export const CreateOpeningModal = () => {
   const workingGroupConsts = api?.consts[group]
 
   const context = {
-    hiringTarget: 1,
-    minStake: new BN(50000),
     group,
     minUnstakingPeriodLimit: workingGroupConsts?.minUnstakingPeriodLimit,
     minimumApplicationStake: workingGroupConsts?.minimumApplicationStake,
@@ -54,18 +51,13 @@ export const CreateOpeningModal = () => {
     form.trigger(machineStateConverter(state.value) as keyof CreateOpeningForm)
   }, [machineStateConverter(state.value)])
 
-  const createOpeningTx = useMemo(() => {
+  const { transaction, feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => {
     if (api && group) {
       const { ...specifics } = form.getValues() as CreateOpeningForm
       const { description, stakePolicy, rewardPerBlock } = getTxParams(group, specifics)
       return api.tx[group].addOpening(description, 'Regular', stakePolicy, String(rewardPerBlock))
     }
-  }, [connectionState, activeMember?.id, form.formState.isValidating, group])
-
-  const { feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => createOpeningTx, [
-    connectionState,
-    createOpeningTx,
-  ])
+  }, [api?.isConnected, activeMember?.id, group, form.formState.isValidating])
   const setExportJsonValue = useMemo(() => {
     const { ...specifics } = form.getValues() as CreateOpeningForm
     const exportValue = {
@@ -102,13 +94,13 @@ export const CreateOpeningModal = () => {
     return null
   }
 
-  if (state.matches('transaction') && createOpeningTx && group) {
+  if (state.matches('transaction') && transaction && group) {
     const tooltipText = `This adds an opening for ${GroupIdToGroupParam[group]}.`
     return (
       <SignTransactionModal
         additionalTransactionInfo={[{ title: 'Create Opening', tooltipText }]}
         buttonText="Sign transaction and Create"
-        transaction={createOpeningTx}
+        transaction={transaction}
         signer={activeMember.controllerAccount}
         service={state.children.transaction}
         skipQueryNode

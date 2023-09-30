@@ -16,8 +16,8 @@ export type CreateOpeningModalCall = ModalWithDataCall<'CreateOpening', OpeningM
 // TODO research runtime constraints
 export interface OpeningConditions {
   group: GroupIdName
-  minStake: BN
-  hiringTarget: number
+  minUnstakingPeriodLimit?: BN
+  minimumApplicationStake?: BN
 }
 
 export interface TransactionContext extends OpeningConditions {
