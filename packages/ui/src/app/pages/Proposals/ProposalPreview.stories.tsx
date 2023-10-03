@@ -144,60 +144,62 @@ export default {
           },
         },
 
-        queryNode: [
-          {
-            query: GetProposalDocument,
-            data: {
-              proposal: generateProposal({
-                id: PROPOSAL_DATA.id,
-                title: PROPOSAL_DATA.title,
-                description: PROPOSAL_DATA.description,
-                status,
-                type: args.type,
-                creator: args.isProposer ? alice : bob,
+        gql: {
+          queries: [
+            {
+              query: GetProposalDocument,
+              data: {
+                proposal: generateProposal({
+                  id: PROPOSAL_DATA.id,
+                  title: PROPOSAL_DATA.title,
+                  description: PROPOSAL_DATA.description,
+                  status,
+                  type: args.type,
+                  creator: args.isProposer ? alice : bob,
 
-                discussionThread: {
-                  posts: proposalDiscussionPosts,
-                  mode: args.isDiscussionOpen
-                    ? { __typename: 'ProposalDiscussionThreadModeOpen' }
-                    : {
-                        __typename: 'ProposalDiscussionThreadModeClosed',
-                        whitelist: {
-                          __typename: 'ProposalDiscussionWhitelist',
-                          members: args.isInDiscussionWhitelist ? [alice] : [],
+                  discussionThread: {
+                    posts: proposalDiscussionPosts,
+                    mode: args.isDiscussionOpen
+                      ? { __typename: 'ProposalDiscussionThreadModeOpen' }
+                      : {
+                          __typename: 'ProposalDiscussionThreadModeClosed',
+                          whitelist: {
+                            __typename: 'ProposalDiscussionWhitelist',
+                            members: args.isInDiscussionWhitelist ? [alice] : [],
+                          },
                         },
-                      },
-                },
+                  },
 
-                proposalStatusUpdates: updates.map((status: ProposalStatus) => ({
-                  inBlock: 123,
-                  createdAt: isoDate('2023/01/02'),
-                  newStatus: { __typename: status },
-                })),
+                  proposalStatusUpdates: updates.map((status: ProposalStatus) => ({
+                    inBlock: 123,
+                    createdAt: isoDate('2023/01/02'),
+                    newStatus: { __typename: status },
+                  })),
 
-                councilApprovals: parameters.councilApprovals ?? constitutionality - 1,
-                votes,
-              }),
-            },
-          },
-
-          {
-            query: GetElectedCouncilDocument,
-            data: {
-              electedCouncils: {
-                id: '0',
-                electedAtBlock: 123,
-                electedAtTime: isoDate('2023/01/02'),
-                councilElections: [{ cycleId: 4 }],
-                councilMembers: [
-                  { id: '0', unpaidReward: '0', stake: joy(200), member: councilors[0] },
-                  { id: '1', unpaidReward: '0', stake: joy(200), member: councilors[1] },
-                  { id: '2', unpaidReward: '0', stake: joy(200), member: councilors[2] },
-                ],
+                  councilApprovals: parameters.councilApprovals ?? constitutionality - 1,
+                  votes,
+                }),
               },
             },
-          },
-        ],
+
+            {
+              query: GetElectedCouncilDocument,
+              data: {
+                electedCouncils: {
+                  id: '0',
+                  electedAtBlock: 123,
+                  electedAtTime: isoDate('2023/01/02'),
+                  councilElections: [{ cycleId: 4 }],
+                  councilMembers: [
+                    { id: '0', unpaidReward: '0', stake: joy(200), member: councilors[0] },
+                    { id: '1', unpaidReward: '0', stake: joy(200), member: councilors[1] },
+                    { id: '2', unpaidReward: '0', stake: joy(200), member: councilors[2] },
+                  ],
+                },
+              },
+            },
+          ],
+        },
       }
     },
   },

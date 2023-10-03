@@ -9,6 +9,10 @@ import { createGlobalStyle } from 'styled-components'
 import { Page, Screen } from '@/common/components/page/Page'
 import { Colors } from '@/common/constants'
 import { GetMemberDocument } from '@/memberships/queries'
+import {
+  GetBackendMemberExistsDocument,
+  RegisterBackendMemberDocument,
+} from '@/memberships/queries/__generated__/backend.generated'
 import { Membership, member } from '@/mocks/data/members'
 import { Container, getButtonByText, joy, selectFromDropdown, withinModal } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
@@ -25,8 +29,10 @@ type Args = {
   hasWallet: boolean
   isRPCNodeConnected: boolean
   hasRegisteredEmail: boolean
+  hasBeenAskedForEmail: boolean
   onBuyMembership: CallableFunction
   onTransfer: CallableFunction
+  onSubscribeEmail: CallableFunction
 }
 
 type Story = StoryObj<FC<Args>>
@@ -58,6 +64,7 @@ export default {
   argTypes: {
     onBuyMembership: { action: 'BuyMembership' },
     onTransfer: { action: 'BalanceTransfer' },
+    onSubscribeEmail: { action: 'SubscribeEmail' },
   },
 
   args: {
@@ -68,6 +75,7 @@ export default {
     hasWallet: true,
     isRPCNodeConnected: true,
     hasRegisteredEmail: true,
+    hasBeenAskedForEmail: true,
   },
 
   parameters: {
@@ -112,15 +120,32 @@ export default {
               },
             },
 
-        queryNode: [
-          {
-            query: GetMemberDocument,
-            data: { membershipByUniqueInput: { ...bob, ...MEMBER_DATA, invitees: [] } },
-          },
-        ],
+        gql: {
+          queries: [
+            {
+              query: GetMemberDocument,
+              data: { membershipByUniqueInput: { ...bob, ...MEMBER_DATA, invitees: [] } },
+            },
+            {
+              query: GetBackendMemberExistsDocument,
+              data: { memberExist: args.hasRegisteredEmail },
+            },
+          ],
+          mutations: [
+            {
+              mutation: RegisterBackendMemberDocument,
+              onSend: () => args.onSubscribeEmail(),
+              data: { signup: '' },
+            },
+          ],
+        },
 
-        localStorage: {
-          membersEmail: args.hasRegisteredEmail ? JSON.stringify({ 0: 'alice@example.com' }) : '',
+        backend: {
+          notificationsSettingsMap: {
+            [bob.id]: {
+              hasBeenAskedForEmail: args.hasBeenAskedForEmail,
+            },
+          },
         },
       }
     },
@@ -426,6 +451,7 @@ export const EmailSubscriptionModalDecline: Story = {
     hasWallet: true,
     isRPCNodeConnected: true,
     hasRegisteredEmail: false,
+    hasBeenAskedForEmail: false,
   },
   play: async ({ canvasElement }) => {
     const modal = withinModal(canvasElement)
@@ -445,6 +471,7 @@ export const EmailSubscriptionModalWrongEmail: Story = {
     hasWallet: true,
     isRPCNodeConnected: true,
     hasRegisteredEmail: false,
+    hasBeenAskedForEmail: false,
   },
   play: async ({ canvasElement }) => {
     const modal = withinModal(canvasElement)
@@ -464,14 +491,16 @@ export const EmailSubscriptionModalSubscribe: Story = {
     hasWallet: true,
     isRPCNodeConnected: true,
     hasRegisteredEmail: false,
+    hasBeenAskedForEmail: false,
   },
-  play: async ({ canvasElement }) => {
+  play: async ({ canvasElement, args: { onSubscribeEmail } }) => {
     const modal = withinModal(canvasElement)
     const button = modal.getByText(/^Sign and Authorize Email/i)
     expect(button.closest('button')).toBeDisabled()
     await userEvent.type(modal.getByPlaceholderText('Add email for notifications here'), 'test@email.com')
     await waitFor(() => expect(button.closest('button')).toBeEnabled())
     await userEvent.click(button)
-    expect(modal.getByText('Pending transaction'))
+    expect(onSubscribeEmail).toHaveBeenCalled()
+    await waitFor(() => expect(modal.getByText('Success!')))
   },
 }

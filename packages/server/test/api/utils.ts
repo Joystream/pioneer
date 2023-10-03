@@ -51,4 +51,7 @@ export const authApi = async (query: string, authToken: string, expectFailure = 
 export const signWith = (member: Member, value: string) => u8aToHex(member.controller.sign(value))
 
 export const jwtRegex = /^ey[\w-]+\.[\w-]+\.[\w-]+$/
-export const verifyEmailLinkRegex = RegExp(String.raw`\b/#/\?verify-email=(${jwtRegex.source.slice(1, -1)})\b`, 's')
+export const verifyEmailLinkRegex = RegExp(
+  String.raw`\b/#/settings\?emailVerificationToken=(${jwtRegex.source.slice(1, -1)})\b`,
+  's'
+)

@@ -97,7 +97,8 @@ export const EmailSubscriptionModal = () => {
     return (
       <FailureModal onClose={hideModal}>
         There was a problem registering your email.
-        <ResultText>We could not register your email at the moment! Please, try again later!</ResultText>
+        <br />
+        We could not register your email at the moment! Please, try again later!
       </FailureModal>
     )
   }

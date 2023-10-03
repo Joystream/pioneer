@@ -8,7 +8,7 @@ export type MemberNotificationSettingsData = {
 
 export type MemberNotificationsRecord = Record<string, MemberNotificationSettingsData>
 
-type BackendContextValue = {
+export type BackendContextValue = {
   backendClient?: ApolloClient<any>
   notificationsSettingsMap?: MemberNotificationsRecord
   setMemberSettings: (memberId: string, settings: Partial<MemberNotificationSettingsData>) => void

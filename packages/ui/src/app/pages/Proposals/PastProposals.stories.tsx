@@ -48,41 +48,43 @@ export default {
       return {
         chain: proposalsPagesChain({ activeProposalCount: 5 }),
 
-        queryNode: [
-          {
-            query: GetProposalsCountDocument,
-            data: { proposalsConnection: { totalCount: args.proposalCount } },
-          },
+        gql: {
+          queries: [
+            {
+              query: GetProposalsCountDocument,
+              data: { proposalsConnection: { totalCount: args.proposalCount } },
+            },
 
-          {
-            query: GetProposalsDocument,
-            resolver: ({ variables } = {}) => ({
-              loading: false,
-              data: {
-                proposals: generateProposals(
-                  {
-                    title: PROPOSAL_DATA.title,
-                    description: PROPOSAL_DATA.description,
-                    creator: alice,
-                    statuses: [
-                      'ProposalStatusCanceledByRuntime',
-                      'ProposalStatusCancelled',
-                      'ProposalStatusExecuted',
-                      'ProposalStatusExecutionFailed',
-                      'ProposalStatusExpired',
-                      'ProposalStatusRejected',
-                      'ProposalStatusSlashed',
-                      'ProposalStatusVetoed',
-                    ],
-                    limit: variables?.limit,
-                    offset: variables?.offset,
-                  },
-                  args.proposalCount
-                ),
-              },
-            }),
-          },
-        ],
+            {
+              query: GetProposalsDocument,
+              resolver: ({ variables } = {}) => ({
+                loading: false,
+                data: {
+                  proposals: generateProposals(
+                    {
+                      title: PROPOSAL_DATA.title,
+                      description: PROPOSAL_DATA.description,
+                      creator: alice,
+                      statuses: [
+                        'ProposalStatusCanceledByRuntime',
+                        'ProposalStatusCancelled',
+                        'ProposalStatusExecuted',
+                        'ProposalStatusExecutionFailed',
+                        'ProposalStatusExpired',
+                        'ProposalStatusRejected',
+                        'ProposalStatusSlashed',
+                        'ProposalStatusVetoed',
+                      ],
+                      limit: variables?.limit,
+                      offset: variables?.offset,
+                    },
+                    args.proposalCount
+                  ),
+                },
+              }),
+            },
+          ],
+        },
       }
     },
   },
