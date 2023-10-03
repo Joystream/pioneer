@@ -46,6 +46,7 @@ export const MockBackendProvider = ({ children }: Props) => {
       value={{
         backendClient: undefined,
         notificationsSettingsMap: undefined,
+        setMemberSettings: () => undefined,
       }}
     >
       {children}
