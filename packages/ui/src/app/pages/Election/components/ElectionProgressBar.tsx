@@ -302,9 +302,9 @@ interface TooltipProgressBarProps extends ProgressBarProps {
 }
 
 const TooltipProgressBar = (props: TooltipProgressBarProps) => {
-  const [isTooltipActive, setTooltipActive] = useState(false)
   const [referenceElementRef, setReferenceElementRef] = useState<HTMLElement | null>(null)
   const [popperElementRef, setPopperElementRef] = useState<HTMLDivElement | null>(null)
+  const [isTooltipActive, setTooltipActive] = useState(false)
   const [barHeight, setBarHeight] = useState<'small' | 'big' | 'medium'>('small')
   const [arrowPos, setArrowPos] = useState<number>()
 
