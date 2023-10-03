@@ -1,6 +1,6 @@
 import { Placement } from '@popperjs/core'
 import BN from 'bn.js'
-import React, { ReactElement, useState, useEffect } from 'react'
+import React, { ReactElement, useState, useEffect, useMemo } from 'react'
 import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
 import styled from 'styled-components'
@@ -25,17 +25,43 @@ interface ElectionProgressBarProps extends StatisticItemProps {
 }
 
 export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
-  const duration = toNumber(props.value)
   const currentBlock = toNumber(props.currentBlock)
+  const duration = toNumber(props.value)
 
-  const _seconds = Math.floor(duration / (A_SECOND / MILLISECONDS_PER_BLOCK))
+  const totalSeconds = Math.floor(duration / (A_SECOND / MILLISECONDS_PER_BLOCK))
   const _minutes = Math.floor(duration / (A_MINUTE / MILLISECONDS_PER_BLOCK))
   const _hours = Math.floor(duration / (AN_HOUR / MILLISECONDS_PER_BLOCK))
   const days = Math.floor(duration / (A_DAY / MILLISECONDS_PER_BLOCK))
 
-  const seconds = _seconds - _minutes * 60
+  const seconds = totalSeconds - _minutes * 60
   const minutes = _minutes - _hours * 60
   const hours = _hours - days * 24
+
+  const defaultStaging = props.electionStage
+  const defaultVerbIndicator = 'ends in'
+  const defaultDaysIndicator = useMemo(
+    () =>
+      intersperse(
+        [
+          [days.toString().padStart(2, '0'), 'day'],
+          [hours.toString().padStart(2, '0'), 'hours'],
+          [minutes.toString().padStart(2, '0'), 'minutes'],
+          [seconds.toString().padStart(2, '0'), 'seconds'],
+        ].flatMap(([amount, unit]) => (amount ? <Period key={unit} amount={amount} unit={''} tiny={false} /> : [])),
+        (index) => <Separator key={index} tiny={true} />
+      ),
+    [days, hours, minutes, seconds]
+  )
+
+  const [stageDescription, setStageDescription] = useState(defaultStaging)
+  const [verbIndicator, setVerbIndicator] = useState(defaultVerbIndicator)
+  const [daysIndicator, setDaysIndicator] = useState<any>(defaultDaysIndicator)
+  const [selectedToolbarStage, setSelectedToolbarStage] = useState('')
+
+  useEffect(() => {
+    if (selectedToolbarStage === '') updateDescription(selectedToolbarStage, false)
+    else updateDescription(selectedToolbarStage, true)
+  }, [defaultDaysIndicator])
 
   let announcingProgress = 0
   let votingProgress = 0
@@ -95,7 +121,7 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       // calculate the end of day of each stage
       const date = new Date()
 
-      date.setSeconds(date.getSeconds() + _seconds)
+      date.setSeconds(date.getSeconds() + totalSeconds)
       announcingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
 
       date.setSeconds(
@@ -129,7 +155,7 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       // calculate the end of day of each stage
       const date = new Date()
 
-      date.setSeconds(date.getSeconds() + _seconds)
+      date.setSeconds(date.getSeconds() + totalSeconds)
       votingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
 
       const previousDate = date
@@ -166,7 +192,7 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       // calculate the end of day of each stage
       const date = new Date()
 
-      date.setSeconds(date.getSeconds() + _seconds)
+      date.setSeconds(date.getSeconds() + totalSeconds)
       revealingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
 
       const previousDate = date
@@ -203,7 +229,7 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       // calculate the end of day of each stage
       const date = new Date()
 
-      date.setSeconds(date.getSeconds() + _seconds)
+      date.setSeconds(date.getSeconds() + totalSeconds)
       nextRoundEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
 
       date.setSeconds(date.getSeconds() - Math.floor(constants?.idlePeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)))
@@ -227,29 +253,58 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
     }
   }
 
+  const updateDescription = (selectedStage: string, choose: boolean) => {
+    if (choose === false || props.electionStage === selectedStage) {
+      setStageDescription(defaultStaging)
+      setVerbIndicator(defaultVerbIndicator)
+      setDaysIndicator(defaultDaysIndicator)
+      setSelectedToolbarStage('')
+      return
+    }
+
+    if (props.electionStage === 'announcing') {
+      if (selectedStage === 'voting') {
+        setStageDescription(selectedStage)
+        setVerbIndicator('begins in')
+        setDaysIndicator(defaultDaysIndicator)
+      }
+    } else if (props.electionStage === 'voting') {
+      if (selectedStage === 'announcing') {
+        setStageDescription(selectedStage)
+        setVerbIndicator('ended on')
+        setDaysIndicator(announcingEndDay)
+      } else if (selectedStage === 'revealing') {
+        setStageDescription(selectedStage)
+        setVerbIndicator('begins in')
+        setDaysIndicator(defaultDaysIndicator)
+      }
+    } else if (props.electionStage === 'revealing') {
+      if (selectedStage === 'announcing') {
+        setStageDescription(selectedStage)
+        setVerbIndicator('ended on')
+        setDaysIndicator(announcingEndDay)
+      } else if (selectedStage === 'voting') {
+        setStageDescription(selectedStage)
+        setVerbIndicator('ended on')
+        setDaysIndicator(votingEndDay)
+      }
+    } else {
+      setStageDescription(defaultStaging)
+      setVerbIndicator(defaultVerbIndicator)
+      setDaysIndicator(defaultDaysIndicator)
+    }
+    setSelectedToolbarStage(selectedStage)
+  }
+
   return (
     <MultiStatisticItem {...props}>
       <StatisticItemSpacedContent key={duration}>
         <StatisticBigLabel>
           <StatisticBigLabel strong={true} style={{ textTransform: 'capitalize' }}>
-            {props.electionStage}
+            {stageDescription}
           </StatisticBigLabel>
-          <StatisticBigLabel strong={false}>ends in</StatisticBigLabel>
-          <StatisticBigLabel>
-            {intersperse(
-              [
-                [days.toString().padStart(2, '0'), 'day'],
-                [hours.toString().padStart(2, '0'), 'hours'],
-                [minutes.toString().padStart(2, '0'), 'minutes'],
-                [seconds.toString().padStart(2, '0'), 'seconds'],
-              ].flatMap(([amount, unit]) =>
-                amount ? <Period key={unit} amount={amount} unit={''} tiny={false} /> : []
-              ),
-              (index) => (
-                <Separator key={index} tiny={true} />
-              )
-            )}
-          </StatisticBigLabel>
+          <StatisticBigLabel strong={false}>{verbIndicator}</StatisticBigLabel>
+          <StatisticBigLabel>{daysIndicator}</StatisticBigLabel>
         </StatisticBigLabel>
         <StatisticLabel>{remainDays} days until next round</StatisticLabel>
       </StatisticItemSpacedContent>
@@ -259,6 +314,8 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
           start={0}
           end={announcingProgress / 100}
           color={announcingColor}
+          barType="announcing"
+          updateDesc={updateDescription}
           tooltipText={`Announcing stage lasts ${announcingDays} days and ends on ${announcingEndDay} CET (block #${announcingEndBlock.toLocaleString(
             'en-US'
           )} block). During this time members can announce that they will stand as candidates for the next council`}
@@ -268,6 +325,8 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
           start={0}
           end={votingProgress / 100}
           color={votingColor}
+          barType="voting"
+          updateDesc={updateDescription}
           tooltipText={`Voting stage lasts ${votingDays} days and ends on ${votingEndDay} CET (block #${votingEndBlock.toLocaleString(
             'en-US'
           )} block). During this time voters can submit votes in favor of candidates`}
@@ -277,6 +336,8 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
           start={0}
           end={revealingProgress / 100}
           color={revealingColor}
+          barType="revealing"
+          updateDesc={updateDescription}
           tooltipText={`Revealing stage lasts ${revealingDays} days and ends on ${revealingEndDay} CET (block #${revealingEndBlock.toLocaleString(
             'en-US'
           )} block). During this time, voters can reveal their sealed votes. Any valid vote which is unsealed is counter, and in the end a winning set of candidates is selected`}
@@ -286,6 +347,8 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
           start={0}
           end={nextRoundProgress / 100}
           color={nextRoundColor}
+          barType="nextround"
+          updateDesc={updateDescription}
           tooltipText={`Idle stage lasts ${nextRoundDays} days and ends on ${nextRoundEndDay} CET (block #${nextRoundEndBlock.toLocaleString(
             'en-US'
           )} block). After that time, a new round of elections begins`}
@@ -297,8 +360,10 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
 }
 
 interface TooltipProgressBarProps extends ProgressBarProps {
+  barType: string
   tooltipText?: string
   placement?: Placement
+  updateDesc: (electionStage: string, inout: boolean) => void
 }
 
 const TooltipProgressBar = (props: TooltipProgressBarProps) => {
@@ -337,10 +402,12 @@ const TooltipProgressBar = (props: TooltipProgressBarProps) => {
   const mouseIsOver = () => {
     setBarHeight('medium')
     setTooltipActive(true)
+    props.updateDesc(props.barType, true)
   }
   const mouseLeft = () => {
     setBarHeight('small')
     setTooltipActive(false)
+    props.updateDesc(props.barType, false)
   }
 
   const tooltipHandlers = {
