@@ -2,7 +2,6 @@ import React, { useEffect, useCallback } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { FailureModal } from '@/common/components/FailureModal'
-import { ResultText } from '@/common/components/Modal'
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useMachine } from '@/common/hooks/useMachine'
