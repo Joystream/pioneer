@@ -19,16 +19,16 @@ const parseContent = (contentJson: any, groupId?: GroupIdName): Pick<Value, 'err
   try {
     const fileContent = JSON.parse(contentJson)
     const formContent: CreateOpeningForm = {
-      target: fileContent.hiringLimit,
       applicationForm: {
         questions: fileContent.applicationFormQuestions?.map((qValue: any) => {
           return { questionField: qValue.question, shortValue: qValue.type === 'TEXT' }
         }),
       },
       durationAndProcess: {
-        duration: 100000,
+        duration: fileContent.expectedEndingTimestamp,
         details: fileContent.applicationDetails,
-        isLimited: false,
+        isLimited: fileContent.expectedEndingTimestamp ? true : false,
+        target: fileContent.hiringLimit,
       },
       stakingPolicyAndReward: {
         stakingAmount: new BN(fileContent.stakingPolicy?.amount),
@@ -78,8 +78,9 @@ export const ImportOpening = ({ groupId }: Props) => {
 
   useEffect(() => {
     if (value?.formContent) {
-      form.setValue('target', value.formContent.target)
+      form.setValue('durationAndProcess.target', value.formContent.durationAndProcess.target)
       form.setValue('applicationForm.questions', value.formContent.applicationForm.questions)
+      form.setValue('durationAndProcess.isLimited', value.formContent.durationAndProcess.isLimited)
       form.setValue('durationAndProcess.duration', value.formContent.durationAndProcess.duration)
       form.setValue('durationAndProcess.details', value.formContent.durationAndProcess.details)
       form.setValue('stakingPolicyAndReward.stakingAmount', value.formContent.stakingPolicyAndReward.stakingAmount)
@@ -98,15 +99,6 @@ export const ImportOpening = ({ groupId }: Props) => {
       form.trigger()
     }
   }, [value])
-  /**
-  useEffect(() => {
-    if (value?.content) {
-      handleChange(value.content)
-      onHide()
-    }
-  }, [value])
-**/
-
   return (
     <>
       Note: This will override current form input.

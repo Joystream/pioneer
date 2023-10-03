@@ -26,7 +26,10 @@ export function WorkingGroup() {
   const { name } = useParams<{ name: string }>()
   const { isLoading, group } = useWorkingGroup({ name: urlParamToWorkingGroupId(name) })
   const { workers } = useMyWorkers()
-  const isLead = useMemo(() => workers.find((w) => w.membership.id === group?.leadId), [workers, group?.leadId])
+  const isLead = useMemo(
+    () => group?.isActive && workers.find((w) => w.membership.id === group?.leadId),
+    [workers, group?.isActive, group?.leadId]
+  )
 
   const tabs = [
     { title: 'Openings', active: currentTab === 'OPENINGS', onClick: () => setCurrentTab('OPENINGS') },

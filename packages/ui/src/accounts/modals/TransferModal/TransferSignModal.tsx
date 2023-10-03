@@ -57,8 +57,7 @@ export function TransferSignModal({ onClose, from, amount, to, service, transact
     service,
     skipQueryNode: true,
   })
-  const fee = paymentInfo?.partialFee || BN_ZERO
-  const canAfford = balanceFrom?.transferable.gte(amount?.add(fee))
+  const canAfford = balanceFrom?.transferable.gte(amount.add(paymentInfo?.partialFee || BN_ZERO))
   const isDisabled = !isReady || !canAfford || !paymentInfo?.partialFee
 
   return (

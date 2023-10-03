@@ -47,7 +47,7 @@ const WG_JSON_OPENING = {
     { question: '🐁?', type: 'TEXT' },
     { question: '🐘?', type: 'TEXTAREA' },
   ],
-  hiringLimit: 1,
+  hiringLimit: 5,
   expectedEndingTimestamp: 2000,
   rewardPerBlock: 20_0000000000,
   stakingPolicy: {
@@ -157,12 +157,6 @@ export const CreateOpening: Story = {
     const screen = within(canvasElement)
     const modal = withinModal(canvasElement)
 
-    // const closeModal = async (heading: string | HTMLElement) => {
-    //   const headingElement = heading instanceof HTMLElement ? heading : modal.getByRole('heading', { name: heading })
-    //   await userEvent.click(headingElement.nextElementSibling as HTMLElement)
-    //   await userEvent.click(getButtonByText(modal, 'Close'))
-    // }
-
     await userEvent.click(screen.getByText('Add opening'))
     expect(modal.getByText('Create Opening'))
     const nextButton = getButtonByText(modal, 'Next step')
@@ -265,6 +259,7 @@ export const CreateOpeningImport: Story = {
       await userEvent.click(nextButton)
 
       expect(await modal.findByText('Opening Duration'))
+      await userEvent.click(modal.getByText('Limited'))
       expect(nextButton).toBeEnabled()
       await userEvent.click(nextButton)
 
@@ -292,7 +287,7 @@ export const CreateOpeningImport: Story = {
       expect(openingType).toEqual('Regular')
       expect(metadataFromBytes(OpeningMetadata, description)).toEqual({
         ...WG_OPENING_DATA,
-        expectedEndingTimestamp: undefined,
+        hiringLimit: 5,
       })
     })
   },

@@ -27,7 +27,6 @@ export interface TransactionContext extends OpeningConditions {
 
 export const OpeningSchema = Yup.object().shape({
   group: Yup.number().optional(),
-  target: Yup.number().optional(),
   applicationForm: Yup.object().shape({
     questions: Yup.array()
       .of(
@@ -46,6 +45,9 @@ export const OpeningSchema = Yup.object().shape({
       is: true,
       then: Yup.number().required('Duration is required'),
     }),
+    target: Yup.number()
+      .min(1, 'Minimum hiring target must be greater than zero')
+      .required('Hiring target is required'),
   }),
   stakingPolicyAndReward: Yup.object().shape({
     stakingAmount: BNSchema.test(
@@ -67,12 +69,11 @@ export const OpeningSchema = Yup.object().shape({
 })
 
 export const defaultValues = {
-  target: 1,
-  // applicationForm: { questions: [] },
   durationAndProcess: {
     details: '',
     duration: 100000,
     isLimited: false,
+    target: 1,
   },
   stakingPolicyAndReward: {
     stakingAmount: undefined,
@@ -88,12 +89,12 @@ export const defaultValues = {
 
 export interface CreateOpeningForm {
   group?: GroupIdName
-  target: number
   applicationForm: { questions?: QuestionValueProps[] }
   durationAndProcess: {
     details?: string
     duration?: number
     isLimited: boolean
+    target: number
   }
   stakingPolicyAndReward: {
     stakingAmount: BN

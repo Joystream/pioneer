@@ -19,7 +19,7 @@ export const CreateOpeningSteps = ({ matches, groupId }: CreateOpeningStepProps)
       return <WorkingGroupAndDescription groupId={groupId} />
 
     case matches('durationAndProcess'):
-      return <DurationAndProcess />
+      return <DurationAndProcess hasHiringTarget />
 
     case matches('applicationForm'):
       return <ApplicationForm />

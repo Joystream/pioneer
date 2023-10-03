@@ -7,11 +7,7 @@ import { useApi } from '@/api/hooks/useApi'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { DownloadButtonGhost } from '@/common/components/buttons/DownloadButtons'
 import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
-import {
-  /*StepDescriptionColumn, */ Stepper,
-  StepperModalBody,
-  StepperModalWrapper,
-} from '@/common/components/StepperModal'
+import { Stepper, StepperModalBody, StepperModalWrapper } from '@/common/components/StepperModal'
 import { TextMedium } from '@/common/components/typography'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
@@ -22,11 +18,11 @@ import { useYupValidationResolver } from '@/common/utils/validation'
 import { machineStateConverter } from '@/council/modals/AnnounceCandidacy/helpers'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { StyledStepperBody } from '@/proposals/modals/AddNewProposal'
-import { GroupIdToGroupParam } from '@/working-groups/constants'
 
 import { SuccessModal, CreateOpeningSteps as Steps, ImportOpening } from './components'
-import { createOpeningMachine, CreateOpeningMachineState, getTxParams } from './machine'
+import { createOpeningMachine, CreateOpeningMachineState } from './machine'
 import { OpeningConditions, CreateOpeningForm, CreateOpeningModalCall, OpeningSchema, defaultValues } from './types'
+import { getTxParams } from './utils'
 
 export const CreateOpeningModal = () => {
   const [showImport, setShowImport] = useState<boolean>(false)
@@ -62,7 +58,7 @@ export const CreateOpeningModal = () => {
     },
     [api?.isConnected, activeMember?.id, group, form.formState.isValidating]
   )
-  const setExportJsonValue = useMemo(() => {
+  const exportedJsonValue = useMemo(() => {
     const { ...specifics } = form.getValues() as CreateOpeningForm
     const exportValue = {
       applicationDetails: specifics.durationAndProcess.details,
@@ -77,6 +73,9 @@ export const CreateOpeningModal = () => {
         unstakingPeriod: specifics.stakingPolicyAndReward.leavingUnstakingPeriod,
       },
       rewardPerBlock: specifics.stakingPolicyAndReward.rewardPerBlock?.toNumber(),
+      expectedEndingTimestamp: specifics?.durationAndProcess?.isLimited
+        ? specifics.durationAndProcess?.duration
+        : undefined,
     }
     return JSON.stringify(exportValue)
   }, [form.getValues()])
@@ -99,15 +98,12 @@ export const CreateOpeningModal = () => {
   }
 
   if (state.matches('transaction') && transaction && group) {
-    const tooltipText = `This adds an opening for ${GroupIdToGroupParam[group]}.`
     return (
       <SignTransactionModal
-        additionalTransactionInfo={[{ title: 'Create Opening', tooltipText }]}
         buttonText="Sign transaction and Create"
         transaction={transaction}
         signer={activeMember.controllerAccount}
         service={state.children.transaction}
-        skipQueryNode
       >
         <TextMedium>You intend to create an Opening.</TextMedium>
       </SignTransactionModal>
@@ -125,7 +121,6 @@ export const CreateOpeningModal = () => {
       <StepperModalBody>
         <StepperOpeningWrapper>
           <Stepper steps={getSteps(service)} />
-          {/* <StepDescriptionColumn></StepDescriptionColumn> */}
           <StyledStepperBody>
             <FormProvider {...form}>
               {showImport ? (
@@ -155,7 +150,7 @@ export const CreateOpeningModal = () => {
               {showImport ? 'Preview Import' : 'Import'}
             </ButtonPrimary>
             {isLastStepActive(getSteps(service)) && (
-              <DownloadButtonGhost size="medium" name={'opening.json'} content={setExportJsonValue}>
+              <DownloadButtonGhost size="medium" name={'opening.json'} content={exportedJsonValue}>
                 Export
               </DownloadButtonGhost>
             )}

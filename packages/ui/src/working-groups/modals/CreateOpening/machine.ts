@@ -1,11 +1,8 @@
-import { OpeningMetadata } from '@joystream/metadata-protobuf'
-import BN from 'bn.js'
 import { assign, createMachine, State, Typestate } from 'xstate'
 import { StateSchema } from 'xstate/lib/types'
 
 import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
-import { createType } from '@/common/model/createType'
-import { metadataToBytes, getDataFromEvent } from '@/common/model/JoystreamNode'
+import { getDataFromEvent } from '@/common/model/JoystreamNode'
 import {
   isTransactionCanceled,
   isTransactionError,
@@ -13,54 +10,8 @@ import {
   transactionMachine,
 } from '@/common/model/machines'
 import { EmptyObject } from '@/common/types'
-import { GroupIdName } from '@/working-groups/types'
 
 import { CreateOpeningForm, TransactionContext } from './types'
-
-/** @joystream/types/augment/augment-api-tx.d.ts
-
-             * Add a job opening for a regular worker/lead role.
-             * Require signed leader origin or the root (to add opening for the leader position).
-             *
-             * # <weight>
-             *
-             * ## Weight
-             * `O (D)` where:
-             * - `D` is the size of `description` in kilobytes
-             * - DB:
-             * - O(1) doesn't depend on the state or parameters
-             * # </weight>
-
-            addOpening: AugmentedSubmittable<(
-              description: Bytes | string | Uint8Array,
-              openingType: PalletWorkingGroupOpeningType | 'Leader' | 'Regular' | number | Uint8Array,
-              stakePolicy: PalletWorkingGroupStakePolicy | { stakeAmount?: any; leavingUnstakingPeriod?: any; },
-              rewardPerBlock: Option<u128> | null | object | string | Uint8Array)
-              => SubmittableExtrinsic<ApiType>, [Bytes, PalletWorkingGroupOpeningType, PalletWorkingGroupStakePolicy, Option<u128>]>; **/
-
-export const getTxParams = (group: GroupIdName, specifics: CreateOpeningForm) => ({
-  description: metadataToBytes(OpeningMetadata, {
-    title: specifics?.workingGroupAndDescription?.title,
-    shortDescription: specifics?.workingGroupAndDescription?.shortDescription,
-    description: specifics?.workingGroupAndDescription?.description,
-    hiringLimit: 1,
-    expectedEndingTimestamp: specifics?.durationAndProcess?.isLimited
-      ? specifics.durationAndProcess?.duration
-      : undefined,
-    applicationDetails: specifics?.durationAndProcess?.details,
-    applicationFormQuestions: specifics?.applicationForm?.questions?.map(({ questionField, shortValue }) => ({
-      question: questionField,
-      type: OpeningMetadata.ApplicationFormQuestion.InputType[shortValue ? 'TEXT' : 'TEXTAREA'],
-    })),
-  }),
-  openingType: 'Regular',
-  stakePolicy: createType('PalletWorkingGroupStakePolicy', {
-    stakeAmount: specifics?.stakingPolicyAndReward?.stakingAmount,
-    leavingUnstakingPeriod: specifics?.stakingPolicyAndReward?.leavingUnstakingPeriod,
-  }),
-  rewardPerBlock: new BN(specifics?.stakingPolicyAndReward?.rewardPerBlock).toNumber(),
-  group,
-})
 
 export type CreateOpeningState =
   | { value: 'requirementsVerification'; context: EmptyObject }

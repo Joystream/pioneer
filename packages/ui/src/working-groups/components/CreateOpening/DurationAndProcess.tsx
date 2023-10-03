@@ -1,13 +1,17 @@
 import React from 'react'
 
 import { CKEditor } from '@/common/components/CKEditor'
-import { InputComponent } from '@/common/components/forms'
+import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { OpeningDuration } from '@/common/components/OpeningDuration/OpeningDuration'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig } from '@/common/components/typography'
 
-export const DurationAndProcess = () => {
+interface Props {
+  hasHiringTarget?: boolean
+}
+
+export const DurationAndProcess = ({ hasHiringTarget }: Props) => {
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -16,6 +20,12 @@ export const DurationAndProcess = () => {
             Opening Duration
           </TextBig>
           <OpeningDuration label="Expected length of the application period" />
+
+          {hasHiringTarget && (
+            <InputComponent label="Hiring Target" required inputSize="m" name="durationAndProcess.target" tight>
+              <InputNumber id="hiring-target" placeholder="0" name="durationAndProcess.target" />
+            </InputComponent>
+          )}
 
           <InputComponent
             label="Application process"
