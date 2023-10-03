@@ -1,4 +1,3 @@
-import { WsProvider } from '@polkadot/api'
 import React, { useState, useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -69,7 +68,85 @@ export const Settings = () => {
     }
   }, [network, endpoints])
 
-  const saveSettings = () => {
+  const checkFaucetEndpoint = async () => {
+    // check faucet endpoint
+    try {
+      const faucetStatusEndpoint = customFaucetEndpoint.replace(new RegExp('register$'), 'status')
+      const response = await fetch(faucetStatusEndpoint)
+      await response.json()
+      setIsValidFaucetEndpoint(true)
+      return true
+    } catch {
+      setIsValidFaucetEndpoint(false)
+      return false
+    }
+  }
+
+  const checkRpcEndpoint = async () => {
+    // check RPC endpoint
+    try {
+      const ws = new WebSocket(customRpcEndpoint)
+      ws.onopen = function () {
+        setIsValidRpcEndpoint(true)
+        return true
+      }
+      ws.onerror = function () {
+        setIsValidRpcEndpoint(false)
+        return false
+      }
+    } catch {
+      setIsValidRpcEndpoint(false)
+      return false
+    }
+
+    // timeout
+    await new Promise((res) => setTimeout(res, 3000))
+  }
+
+  const checkQueryEndpoint = async () => {
+    // check GraphQL endpoint
+    try {
+      const query = `
+        query {
+          electedCouncils{
+            id
+          }
+        }`
+      const response = await fetch(customQueryEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query }),
+      })
+      await response.json()
+      setIsValidQueryEndpoint(true)
+      return true
+    } catch {
+      setIsValidQueryEndpoint(false)
+      return false
+    }
+  }
+
+  useEffect(() => {
+    if (
+      isValidFaucetEndpoint === true &&
+      isValidRpcEndpoint === true &&
+      isValidQueryEndpoint === true &&
+      customSaveStatus === 'Done'
+    ) {
+      storeCustomEndpoints({
+        nodeRpcEndpoint: customRpcEndpoint,
+        queryNodeEndpoint: customQueryEndpoint,
+        membershipFaucetEndpoint: customFaucetEndpoint,
+        queryNodeEndpointSubscription: customQueryEndpoint.replace(/^http?/, 'ws'),
+        configEndpoint: undefined,
+      })
+      window.location.reload()
+    }
+  }, [isValidFaucetEndpoint, isValidRpcEndpoint, isValidQueryEndpoint, customSaveStatus])
+
+  const saveSettings = async () => {
     if (
       /^(http|https):\/\//i.test(customFaucetEndpoint) === false ||
       /^(ws|wss):\/\//i.test(customRpcEndpoint) === false ||
@@ -80,67 +157,9 @@ export const Settings = () => {
 
     setCustomSaveStatus('Saving')
 
-    const _update = async () => {
-      let needReload = true
+    await Promise.all([checkFaucetEndpoint(), checkRpcEndpoint(), checkQueryEndpoint()])
 
-      // check faucet endpoint
-      try {
-        const faucetStatusEndpoint = customFaucetEndpoint.replace(new RegExp('register$'), 'status')
-        const response = await fetch(faucetStatusEndpoint)
-        await response.json()
-        setIsValidFaucetEndpoint(true)
-      } catch (err) {
-        setIsValidFaucetEndpoint(false)
-        needReload = false
-      }
-
-      // check GraphQL endpoint
-      try {
-        const query = `
-          query {
-            electedCouncils{
-              id
-            }
-          }`
-        const response = await fetch(customQueryEndpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ query }),
-        })
-        await response.json()
-        setIsValidQueryEndpoint(true)
-      } catch (err) {
-        setIsValidQueryEndpoint(false)
-        needReload = false
-      }
-
-      // check RPC endpoint
-      try {
-        const wsProvider = new WsProvider(customRpcEndpoint, false, undefined, 4000)
-        await wsProvider.connect()
-        setIsValidRpcEndpoint(true)
-      } catch (err) {
-        setIsValidRpcEndpoint(false)
-        needReload = false
-      }
-
-      setCustomSaveStatus('Done')
-
-      if (needReload === true) {
-        storeCustomEndpoints({
-          nodeRpcEndpoint: customRpcEndpoint,
-          queryNodeEndpoint: customQueryEndpoint,
-          membershipFaucetEndpoint: customFaucetEndpoint,
-          queryNodeEndpointSubscription: customQueryEndpoint.replace(/^http?/, 'ws'),
-          configEndpoint: undefined,
-        })
-        window.location.reload()
-      }
-    }
-
-    _update()
+    setCustomSaveStatus('Done')
   }
 
   return (
@@ -204,7 +223,7 @@ export const Settings = () => {
                           /^(ws|wss):\/\//i.test(customRpcEndpoint)
                             ? isValidRpcEndpoint
                               ? undefined
-                              : 'Connection Error'
+                              : 'Connection Error, Sometimes it failed by network speed, Please try to check once more'
                             : 'This RPC endpoint must start with ws or wss'
                         }
                       >
