@@ -14,4 +14,4 @@ export type BackendContextValue = {
   setMemberSettings: (memberId: string, settings: Partial<MemberNotificationSettingsData>) => void
 }
 
-export const BackendContext = createContext<BackendContextValue>({ setMemberSettings: () => {} })
+export const BackendContext = createContext<BackendContextValue>({ setMemberSettings: () => null })
