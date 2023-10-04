@@ -62,7 +62,7 @@ export const verifyEmail = mutationField('verifyEmail', {
     }
 
     if (member.email === email) {
-      return member
+      return await prisma.member.update({ where: { id: memberId }, data: { unverifiedEmail: null } })
     }
 
     return await prisma.member.update({ where: { id: memberId }, data: { email, unverifiedEmail: null } })

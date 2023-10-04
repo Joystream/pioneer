@@ -12,18 +12,20 @@ export const useNotificationSettings = () => {
   if (!backendContext) throw new Error('Missing backend context')
   const { backendClient, notificationsSettingsMap, setMemberSettings } = backendContext
   const memberExistsQueryEnabled = !!backendClient && !!activeMember?.id
-  const { data } = useGetBackendMemberExistsQuery({
+  const { data, error, loading, refetch } = useGetBackendMemberExistsQuery({
     client: backendClient,
     variables: { id: parseInt(activeMember?.id || '0') },
     skip: !memberExistsQueryEnabled,
   })
-  const isNotRegistered = data && !data.memberExist
 
   const activeMemberSettings = activeMember?.id ? notificationsSettingsMap?.[activeMember.id] : null
 
   return {
     activeMemberSettings,
-    activeMemberNotRegistered: isNotRegistered,
+    activeMemberExistBackendData: data,
+    activeMemberExistBackendError: error,
+    activeMemberExistBackendLoading: memberExistsQueryEnabled && (loading || (!data && !error)),
+    activeMemberExistBackendRefetch: refetch,
     setMemberSettings,
     backendClient,
   }

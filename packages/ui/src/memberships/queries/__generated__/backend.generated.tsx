@@ -9,6 +9,20 @@ export type GetBackendMemberExistsQueryVariables = Types.Exact<{
 
 export type GetBackendMemberExistsQuery = { __typename: 'Query'; memberExist?: boolean | null }
 
+export type GetBackendMeQueryVariables = Types.Exact<{ [key: string]: never }>
+
+export type GetBackendMeQuery = {
+  __typename: 'Query'
+  me?: {
+    __typename: 'Member'
+    id: number
+    name: string
+    email?: string | null
+    unverifiedEmail?: string | null
+    receiveEmails: boolean
+  } | null
+}
+
 export type RegisterBackendMemberMutationVariables = Types.Exact<{
   id: Types.Scalars['Int']
   name: Types.Scalars['String']
@@ -26,6 +40,23 @@ export type ConfirmBackendEmailMutationVariables = Types.Exact<{
 export type ConfirmBackendEmailMutation = {
   __typename: 'Mutation'
   verifyEmail?: { __typename: 'Member'; email?: string | null } | null
+}
+
+export type UpdateBackendMemberMutationVariables = Types.Exact<{
+  email?: Types.InputMaybe<Types.Scalars['String']>
+  receiveEmails?: Types.InputMaybe<Types.Scalars['Boolean']>
+}>
+
+export type UpdateBackendMemberMutation = {
+  __typename: 'Mutation'
+  updateMember?: {
+    __typename: 'Member'
+    id: number
+    name: string
+    email?: string | null
+    unverifiedEmail?: string | null
+    receiveEmails: boolean
+  } | null
 }
 
 export const GetBackendMemberExistsDocument = gql`
@@ -74,6 +105,48 @@ export type GetBackendMemberExistsQueryResult = Apollo.QueryResult<
   GetBackendMemberExistsQuery,
   GetBackendMemberExistsQueryVariables
 >
+export const GetBackendMeDocument = gql`
+  query GetBackendMe {
+    me {
+      id
+      name
+      email
+      unverifiedEmail
+      receiveEmails
+    }
+  }
+`
+
+/**
+ * __useGetBackendMeQuery__
+ *
+ * To run a query within a React component, call `useGetBackendMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBackendMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetBackendMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetBackendMeQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetBackendMeQuery, GetBackendMeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetBackendMeQuery, GetBackendMeQueryVariables>(GetBackendMeDocument, options)
+}
+export function useGetBackendMeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetBackendMeQuery, GetBackendMeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetBackendMeQuery, GetBackendMeQueryVariables>(GetBackendMeDocument, options)
+}
+export type GetBackendMeQueryHookResult = ReturnType<typeof useGetBackendMeQuery>
+export type GetBackendMeLazyQueryHookResult = ReturnType<typeof useGetBackendMeLazyQuery>
+export type GetBackendMeQueryResult = Apollo.QueryResult<GetBackendMeQuery, GetBackendMeQueryVariables>
 export const RegisterBackendMemberDocument = gql`
   mutation RegisterBackendMember($id: Int!, $name: String!, $email: String!, $signature: String!, $timestamp: BigInt!) {
     signup(memberId: $id, name: $name, email: $email, signature: $signature, timestamp: $timestamp)
@@ -163,4 +236,53 @@ export type ConfirmBackendEmailMutationResult = Apollo.MutationResult<ConfirmBac
 export type ConfirmBackendEmailMutationOptions = Apollo.BaseMutationOptions<
   ConfirmBackendEmailMutation,
   ConfirmBackendEmailMutationVariables
+>
+export const UpdateBackendMemberDocument = gql`
+  mutation UpdateBackendMember($email: String, $receiveEmails: Boolean) {
+    updateMember(email: $email, receiveEmails: $receiveEmails) {
+      id
+      name
+      email
+      unverifiedEmail
+      receiveEmails
+    }
+  }
+`
+export type UpdateBackendMemberMutationFn = Apollo.MutationFunction<
+  UpdateBackendMemberMutation,
+  UpdateBackendMemberMutationVariables
+>
+
+/**
+ * __useUpdateBackendMemberMutation__
+ *
+ * To run a mutation, you first call `useUpdateBackendMemberMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBackendMemberMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBackendMemberMutation, { data, loading, error }] = useUpdateBackendMemberMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      receiveEmails: // value for 'receiveEmails'
+ *   },
+ * });
+ */
+export function useUpdateBackendMemberMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateBackendMemberMutation, UpdateBackendMemberMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<UpdateBackendMemberMutation, UpdateBackendMemberMutationVariables>(
+    UpdateBackendMemberDocument,
+    options
+  )
+}
+export type UpdateBackendMemberMutationHookResult = ReturnType<typeof useUpdateBackendMemberMutation>
+export type UpdateBackendMemberMutationResult = Apollo.MutationResult<UpdateBackendMemberMutation>
+export type UpdateBackendMemberMutationOptions = Apollo.BaseMutationOptions<
+  UpdateBackendMemberMutation,
+  UpdateBackendMemberMutationVariables
 >

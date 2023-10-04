@@ -7,6 +7,7 @@ import { WaitModal } from '@/common/components/WaitModal'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { error as logError } from '@/common/logger'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { useNotificationSettings } from '@/memberships/hooks/useNotificationSettings'
 import { EmailSubscriptionModalCall } from '@/memberships/modals/EmailSubscriptionModal/index'
 import { getBackendAuthSignature } from '@/memberships/model/backendAuth'
@@ -19,9 +20,10 @@ import { EmailSubscriptionForm } from './types'
 export const EmailSubscriptionModal = () => {
   const {
     hideModal,
-    modalData: { member },
+    modalData: { onSubscribe },
   } = useModal<EmailSubscriptionModalCall>()
 
+  const { active: member } = useMyMemberships()
   const { wallet } = useMyAccounts()
   const [state, send] = useMachine(EmailSubscriptionMachine)
 
@@ -31,7 +33,7 @@ export const EmailSubscriptionModal = () => {
   })
 
   const generateBackendAuthSignature = useCallback(async () => {
-    if (!wallet) return
+    if (!wallet || !member) return
     try {
       const { signature, timestamp } = await getBackendAuthSignature(member, wallet)
       send('SIGNED', { signature, timestamp })
@@ -43,9 +45,9 @@ export const EmailSubscriptionModal = () => {
 
   const registerEmail = useCallback(async () => {
     const { email, timestamp, signature } = state.context
-    if (!email || !timestamp || !signature) {
+    if (!email || !timestamp || !signature || !member) {
       send('ERROR')
-      logError('Email, timestamp or signature is missing in context')
+      logError('Email, timestamp, signature or member is missing in context')
       return
     }
     try {
@@ -59,6 +61,7 @@ export const EmailSubscriptionModal = () => {
         },
       })
       setMemberSettings(member.id, { accessToken: result?.data?.signup ?? undefined })
+      onSubscribe?.()
       send('SUCCESS')
     } catch (error) {
       logError('Error registering email', error)
@@ -77,6 +80,10 @@ export const EmailSubscriptionModal = () => {
       registerEmail()
     }
   }, [state, registerEmail])
+
+  if (!member) {
+    return null
+  }
 
   if (state.matches('prepare')) {
     return (

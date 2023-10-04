@@ -22,14 +22,15 @@ export const CurrentMember = () => {
   const { wallet } = useMyAccounts()
   const { members, hasMembers, active } = useMyMemberships()
   const { showModal } = useModal()
-  const { activeMemberSettings, activeMemberNotRegistered } = useNotificationSettings()
-  const showSubscriptionModal = active && activeMemberNotRegistered && !activeMemberSettings?.hasBeenAskedForEmail
+  const { activeMemberSettings, activeMemberExistBackendData } = useNotificationSettings()
+  const showSubscriptionModal =
+    active && activeMemberExistBackendData?.memberExist === false && !activeMemberSettings?.hasBeenAskedForEmail
 
   useEffect(() => {
     if (!emailVerificationToken && showSubscriptionModal) {
       showModal<EmailSubscriptionModalCall>({
         modal: 'EmailSubscriptionModal',
-        data: { member: active },
+        data: {},
       })
     }
   }, [showSubscriptionModal])
