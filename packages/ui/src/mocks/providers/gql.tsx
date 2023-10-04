@@ -13,22 +13,30 @@ type Options = { variables?: OptionVariables; skip?: boolean }
 type Result = { loading: boolean; data: any }
 type Resolver = (options?: Options) => Result
 
-type GqlOperationsMap = Map<DocumentNode, Resolver>
-const GqlMockContext = createContext<GqlOperationsMap>(new Map())
+type GqlQueriesMap = Map<DocumentNode, Resolver>
+type GqlMutationsMap = Map<DocumentNode, [(...args: any[]) => void, Resolver]>
+type GqlContextValue = {
+  queries: GqlQueriesMap
+  mutations: GqlMutationsMap
+}
+const GqlMockContext = createContext<GqlContextValue>({
+  queries: new Map(),
+  mutations: new Map(),
+})
 
 export const useQuery = (query: DocumentNode, options?: Options): Result => {
-  const qnMocks = useContext(GqlMockContext)
+  const mockedQueriesMap = useContext(GqlMockContext).queries
 
-  if (!qnMocks.has(query)) {
+  if (!mockedQueriesMap.has(query)) {
     warning('Missing mock query:', (query.definitions[0] as any).name.value ?? query.loc?.source.body)
   }
 
-  const result = qnMocks.get(query)?.(options) ?? { loading: false, data: undefined }
+  const result = mockedQueriesMap.get(query)?.(options) ?? { loading: false, data: undefined }
   return useMemo<Result>(() => result, [JSON.stringify(result)])
 }
 
 export const useLazyQuery = (query: DocumentNode, options?: Options): [() => void, Result] => {
-  const result = useContext(GqlMockContext).get(query)?.(options) ?? { loading: false, data: undefined }
+  const result = useContext(GqlMockContext).queries.get(query)?.(options) ?? { loading: false, data: undefined }
   const [lazyResult, setLazyResult] = useState<Result>({ loading: true, data: undefined })
   const get = useCallback(() => setLazyResult(result), [JSON.stringify(result)])
 
@@ -38,18 +46,25 @@ export const useLazyQuery = (query: DocumentNode, options?: Options): [() => voi
 export const useSubscription = () => ({ data: { stateSubscription: { indexerHead: BLOCK_HEAD } } })
 
 export const useMutation = (mutation: DocumentNode, options?: Options): [() => void, Result] => {
-  const qnMocks = useContext(GqlMockContext)
+  const mockedMutationsMap = useContext(GqlMockContext).mutations
 
-  if (!qnMocks.has(mutation)) {
+  if (!mockedMutationsMap.has(mutation)) {
     warning('Missing mock mutation:', (mutation.definitions[0] as any).name.value ?? mutation.loc?.source.body)
   }
 
-  const result = qnMocks.get(mutation)?.(options) ?? { loading: false, data: undefined }
+  const mockedMutation = mockedMutationsMap.get(mutation)
+  const spy = mockedMutation?.[0]
+  const result = mockedMutation?.[1]?.(options) ?? { loading: false, data: undefined }
+
   const [mutationResult, setMutationResult] = useState<Result>({ loading: true, data: undefined })
-  const mutate = useCallback(() => {
-    setMutationResult(result)
-    return Promise.resolve(result.data)
-  }, [JSON.stringify(result)])
+  const mutate = useCallback(
+    (...args: any[]) => {
+      spy?.(...args)
+      setMutationResult(result)
+      return Promise.resolve(result.data)
+    },
+    [JSON.stringify(result)]
+  )
 
   return [mutate, mutationResult]
 }
@@ -61,28 +76,54 @@ export const useApolloClient = () => ({
 })
 
 type GqlQueryMock = { query: DocumentNode; data?: any; resolver?: Resolver }
-type GqlMutationMock = { mutation: DocumentNode; data?: any; error?: any; resolver?: Resolver; onSend?: () => void }
+type GqlMutationMock = {
+  mutation: DocumentNode
+  data?: any
+  error?: any
+  resolver?: Resolver
+  onSend?: (...args: any[]) => void
+}
 
 export type MockGqlProps = { queries?: GqlQueryMock[]; mutations?: GqlMutationMock[] }
 
 export const MockGqlProvider: FC<MockGqlProps> = ({ children, queries, mutations }) => {
-  const operationsMap = useMemo(() => {
-    const preparedQueries =
-      queries?.map<[DocumentNode, Resolver]>(({ query, data, resolver }) => [
-        query,
-        (options) => resolver?.(options) ?? { loading: false, data },
-      ]) ?? []
-    const preparedMutations =
-      mutations?.map<[DocumentNode, Resolver]>(({ mutation, data, error, resolver, onSend }) => [
-        mutation,
-        (options) => {
-          const result = resolver?.(options) ?? { loading: false, data: error ? undefined : data, error }
-          onSend?.()
-          return result
-        },
-      ]) ?? []
-    return new Map([...preparedQueries, ...preparedMutations])
-  }, [queries, mutations])
+  const queriesMap = useMemo(
+    () =>
+      new Map(
+        queries?.map<[DocumentNode, Resolver]>(({ query, data, resolver }) => [
+          query,
+          (options) => resolver?.(options) ?? { loading: false, data },
+        ]) ?? []
+      ),
+    [queries]
+  )
+  const mutationsMap = useMemo(
+    () =>
+      new Map(
+        mutations?.map<[DocumentNode, [(...args: any[]) => void, Resolver]]>(
+          ({ mutation, data, error, resolver, onSend }) => [
+            mutation,
+            [
+              onSend || (() => undefined),
+              (options) => {
+                const result = resolver?.(options) ?? { loading: false, data: error ? undefined : data, error }
+                return result
+              },
+            ],
+          ]
+        ) ?? []
+      ),
+    [mutations]
+  )
 
-  return <GqlMockContext.Provider value={operationsMap}>{children}</GqlMockContext.Provider>
+  return (
+    <GqlMockContext.Provider
+      value={{
+        queries: queriesMap,
+        mutations: mutationsMap,
+      }}
+    >
+      {children}
+    </GqlMockContext.Provider>
+  )
 }

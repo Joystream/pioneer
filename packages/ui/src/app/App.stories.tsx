@@ -134,7 +134,7 @@ export default {
           mutations: [
             {
               mutation: RegisterBackendMemberDocument,
-              onSend: () => args.onSubscribeEmail(),
+              onSend: (...sendArgs: any[]) => args.onSubscribeEmail(...sendArgs),
               data: { signup: '' },
             },
           ],
@@ -499,8 +499,9 @@ export const EmailSubscriptionModalSubscribe: Story = {
     expect(button.closest('button')).toBeDisabled()
     await userEvent.type(modal.getByPlaceholderText('Add email for notifications here'), 'test@email.com')
     await waitFor(() => expect(button.closest('button')).toBeEnabled())
+    expect(onSubscribeEmail).toHaveBeenCalledTimes(0)
     await userEvent.click(button)
-    expect(onSubscribeEmail).toHaveBeenCalled()
-    await waitFor(() => expect(modal.getByText('Success!')))
+    await waitFor(() => expect(onSubscribeEmail).toHaveBeenCalled(), { timeout: 100 })
+    await waitFor(() => expect(modal.getByText('Success!')), { timeout: 100 })
   },
 }
