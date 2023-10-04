@@ -27,7 +27,7 @@ export const CurrentMember = () => {
   const showSubscriptionModal = active && activeMemberNotRegistered && !activeMemberSettings?.hasBeenAskedForEmail
 
   useEffect(() => {
-    if (showSubscriptionModal) {
+    if (!emailVerificationToken && showSubscriptionModal) {
       showModal<EmailSubscriptionModalCall>({
         modal: 'EmailSubscriptionModal',
         data: { member: active },

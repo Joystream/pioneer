@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 
+import { Loading } from '@/common/components/Loading'
 import { Modal, ModalBody, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
@@ -53,11 +54,13 @@ export const EmailConfirmationModal = () => {
       <ModalHeader onClick={closeConfirmationModal} title="Email confirmation" />
       <ModalBody>
         <TextMedium>
-          {loading
-            ? 'Confirming email...'
-            : error
-            ? 'Unexpected error occurred. Please try again later.'
-            : 'Your email has been confirmed! You can always adjust your notification preferences in settings.'}
+          {loading ? (
+            <Loading text="Confirming email..." withoutMargin />
+          ) : error ? (
+            'Unexpected error occurred. Please try again later.'
+          ) : (
+            'Your email has been confirmed! You can always adjust your notification preferences in settings.'
+          )}
         </TextMedium>
       </ModalBody>
     </Modal>
