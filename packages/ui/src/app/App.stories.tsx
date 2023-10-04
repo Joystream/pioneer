@@ -440,7 +440,7 @@ export const BuyMembershipTxFailure: Story = {
 }
 
 // ----------------------------------------------------------------------------
-// Test Emil Subsciption Modal
+// Test Email Subsciption Modal
 // ----------------------------------------------------------------------------
 export const EmailSubscriptionModalDecline: Story = {
   args: {
@@ -497,11 +497,22 @@ export const EmailSubscriptionModalSubscribe: Story = {
     const modal = withinModal(canvasElement)
     const button = modal.getByText(/^Sign and Authorize Email/i)
     expect(button.closest('button')).toBeDisabled()
-    await userEvent.type(modal.getByPlaceholderText('Add email for notifications here'), 'test@email.com')
+    const testEmail = 'test@email.com'
+    await userEvent.type(modal.getByPlaceholderText('Add email for notifications here'), testEmail)
     await waitFor(() => expect(button.closest('button')).toBeEnabled())
     expect(onSubscribeEmail).toHaveBeenCalledTimes(0)
     await userEvent.click(button)
-    await waitFor(() => expect(onSubscribeEmail).toHaveBeenCalled(), { timeout: 100 })
+    await waitFor(
+      () =>
+        expect(onSubscribeEmail).toHaveBeenCalledWith({
+          variables: expect.objectContaining({
+            id: parseInt(alice.id),
+            name: alice.metadata.name || alice.handle,
+            email: testEmail,
+          }),
+        }),
+      { timeout: 100 }
+    )
     await waitFor(() => expect(modal.getByText('Success!')), { timeout: 100 })
   },
 }
