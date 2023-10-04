@@ -38,6 +38,10 @@ describe('Notifier', () => {
       // Charlie had not registered in the back-end he should not get any notification
       const charlie = { id: 3 }
 
+      // Dave is using the default behavior for general subscriptions
+      // However he should not get any email notifications
+      const dave = await createMember(4, 'dave', undefined, false)
+
       // -------------------
       // Mock QN responses
       // -------------------
@@ -57,6 +61,7 @@ describe('Notifier', () => {
               author: alice.id,
               text: `I [@Alice](#mention?member-id=${alice.id})`,
             }),
+            postAddedEvent(5, { thread: 'qux', text: `Hi [@Dave](#mention?member-id=${dave.id})`, category: 'qux' }),
           ],
         })
         .mockReturnValue({
@@ -88,7 +93,7 @@ describe('Notifier', () => {
           kind: 'FORUM_THREAD_CREATOR',
           entityId: 'post:1',
           isRead: false,
-          status: 'SENT',
+          emailStatus: 'SENT',
           retryCount: 0,
         })
       )
@@ -97,7 +102,7 @@ describe('Notifier', () => {
           eventId: 'event:2',
           memberId: alice.id,
           kind: 'FORUM_POST_MENTION',
-          status: 'SENT',
+          emailStatus: 'SENT',
           retryCount: 0,
         })
       )
@@ -106,7 +111,7 @@ describe('Notifier', () => {
           eventId: 'event:2',
           memberId: bob.id,
           kind: 'FORUM_THREAD_ENTITY_POST',
-          status: 'SENT',
+          emailStatus: 'SENT',
           retryCount: 0,
         })
       )
@@ -115,7 +120,7 @@ describe('Notifier', () => {
           eventId: 'event:3',
           memberId: alice.id,
           kind: 'FORUM_CATEGORY_ENTITY_POST',
-          status: 'SENT',
+          emailStatus: 'SENT',
           retryCount: 0,
         })
       )
@@ -124,11 +129,20 @@ describe('Notifier', () => {
           eventId: 'event:3',
           memberId: bob.id,
           kind: 'FORUM_POST_ALL',
-          status: 'SENT',
+          emailStatus: 'SENT',
           retryCount: 0,
         })
       )
-      expect(notifications).toHaveLength(5)
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: 'event:5',
+          memberId: dave.id,
+          kind: 'FORUM_POST_MENTION',
+          emailStatus: 'IGNORED',
+          retryCount: 0,
+        })
+      )
+      expect(notifications).toHaveLength(6)
 
       // -------------------
       // Check emails
@@ -332,7 +346,7 @@ describe('Notifier', () => {
           memberId: alice.id,
           kind: 'ELECTION_ANNOUNCING_STARTED',
           isRead: false,
-          status: 'SENT',
+          emailStatus: 'SENT',
           retryCount: 0,
         })
       )
@@ -395,7 +409,7 @@ describe('Notifier', () => {
           eventId: votingId,
           memberId: alice.id,
           kind: 'ELECTION_VOTING_STARTED',
-          status: 'SENT',
+          emailStatus: 'SENT',
           retryCount: 0,
         })
       )
@@ -458,7 +472,7 @@ describe('Notifier', () => {
           eventId: revealingId,
           memberId: alice.id,
           kind: 'ELECTION_REVEALING_STARTED',
-          status: 'SENT',
+          emailStatus: 'SENT',
           retryCount: 0,
         })
       )
@@ -524,7 +538,7 @@ describe('Notifier', () => {
             eventId: 'event:1',
             memberId: alice.id,
             kind: 'FORUM_POST_MENTION',
-            status: 'PENDING',
+            emailStatus: 'PENDING',
             retryCount: i + 1,
           })
         )
@@ -542,7 +556,7 @@ describe('Notifier', () => {
           eventId: 'event:1',
           memberId: alice.id,
           kind: 'FORUM_POST_MENTION',
-          status: 'FAILED',
+          emailStatus: 'FAILED',
           retryCount: EMAIL_MAX_RETRY_COUNT,
         })
       )
@@ -598,7 +612,7 @@ describe('Notifier', () => {
           eventId: 'event:1',
           memberId: alice.id,
           kind: 'FORUM_POST_MENTION',
-          status: 'PENDING',
+          emailStatus: 'PENDING',
           retryCount: 1,
         })
       )
@@ -617,7 +631,7 @@ describe('Notifier', () => {
           eventId: 'event:1',
           memberId: alice.id,
           kind: 'FORUM_POST_MENTION',
-          status: 'SENT',
+          emailStatus: 'SENT',
           retryCount: 1,
         })
       )

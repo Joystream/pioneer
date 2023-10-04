@@ -1,5 +1,5 @@
 import { Member } from '@prisma/client'
-import { intArg, mutationField, nonNull, objectType, queryField, stringArg } from 'nexus'
+import { booleanArg, intArg, mutationField, nonNull, objectType, queryField, stringArg } from 'nexus'
 import { Member as NexusMember } from 'nexus-prisma'
 import { error } from 'npmlog'
 import * as Yup from 'yup'
@@ -16,6 +16,8 @@ export const MemberFields = objectType({
     t.field(NexusMember.id)
     t.field(NexusMember.name)
     t.field(NexusMember.email)
+    t.field(NexusMember.unverifiedEmail)
+    t.field(NexusMember.receiveEmails)
   },
 })
 
@@ -63,28 +65,37 @@ export const verifyEmail = mutationField('verifyEmail', {
       return member
     }
 
-    return await prisma.member.update({ where: { id: memberId }, data: { email } })
+    return await prisma.member.update({ where: { id: memberId }, data: { email, unverifiedEmail: null } })
   },
 })
 
-type InitEmailChangeArgs = { email: string }
-export const initEmailChange = mutationField('initEmailChange', {
-  type: 'Boolean',
+type UpdateMemberArgs = { email?: string; receiveEmails?: boolean }
+export const updateMember = mutationField('updateMember', {
+  type: NexusMember.$name,
 
-  args: { email: nonNull(stringArg()) },
+  args: { email: stringArg(), receiveEmails: booleanArg() },
 
-  resolve: async (_, { email }: InitEmailChangeArgs, { req, member }: Context): Promise<boolean> => {
+  resolve: async (_, { email, receiveEmails }: UpdateMemberArgs, { req, member, prisma }: Context): Promise<Member> => {
     if (!member) {
       throw new Error('Unauthorized')
     }
 
-    const isEmailValid = await Yup.string().email().isValid(email)
-    if (!isEmailValid) {
-      throw new Error('Invalid email')
+    let updatedMember = member
+
+    if (email) {
+      const isEmailValid = await Yup.string().email().isValid(email)
+      if (!isEmailValid) {
+        throw new Error('Invalid email')
+      }
+
+      await sendVerificationEmail({ email, memberId: member.id, name: member.name, referer: req?.headers?.referer })
+      updatedMember = await prisma.member.update({ where: { id: member.id }, data: { unverifiedEmail: email } })
     }
 
-    await sendVerificationEmail({ email, memberId: member.id, name: member.name, referer: req?.headers?.referer })
+    if (receiveEmails != null) {
+      updatedMember = await prisma.member.update({ where: { id: member.id }, data: { receiveEmails } })
+    }
 
-    return true
+    return updatedMember
   },
 })

@@ -142,10 +142,13 @@ describe('API: Authentication', () => {
           id
           name
           email
+          unverifiedEmail
         }
       }
     `
-    expect(await authApi(meQuery, authToken)).toEqual({ me: { id: ALICE.id, name: ALICE.name, email: null } })
+    expect(await authApi(meQuery, authToken)).toEqual({
+      me: { id: ALICE.id, name: ALICE.name, email: null, unverifiedEmail: ALICE.email },
+    })
   })
 
   it('Member sign in', async () => {
@@ -253,7 +256,7 @@ describe('API: Authentication', () => {
 
     // Email should be updated
     expect(await prisma.member.findUnique({ where: { id: ALICE.id } })).toEqual(
-      expect.objectContaining({ email: ALICE.email })
+      expect.objectContaining({ email: ALICE.email, unverifiedEmail: null })
     )
   })
 
@@ -263,7 +266,9 @@ describe('API: Authentication', () => {
     const changeEmail = (newEmail: string, token: string, expectFailure = false) => {
       const mutation = gql`
         mutation {
-          initEmailChange(email: ${newEmail})
+          updateMember(email: ${newEmail}) {
+            unverifiedEmail
+          }
         }
       `
       return api(
@@ -276,20 +281,24 @@ describe('API: Authentication', () => {
     }
 
     // Not authenticated
-    expect(await changeEmail('foo', '', true)).toEqual({ initEmailChange: null })
+    expect(await changeEmail('foo', '', true)).toEqual({
+      updateMember: null,
+    })
 
     // Invalid email
-    expect(await changeEmail('foo', authToken, true)).toEqual({ initEmailChange: null })
+    expect(await changeEmail('foo', authToken, true)).toEqual({
+      updateMember: null,
+    })
 
     const newAliceEmail = 'alice-new@example.com'
 
     // Valid email
-    expect(await changeEmail(newAliceEmail, authToken)).toEqual({ initEmailChange: true })
+    expect(await changeEmail(newAliceEmail, authToken)).toEqual({ updateMember: { unverifiedEmail: newAliceEmail } })
     emailVerifyToken = extractEmailToken(newAliceEmail)
 
     // Email should not be updated yet
     expect(await prisma.member.findUnique({ where: { id: ALICE.id } })).toEqual(
-      expect.objectContaining({ email: ALICE.email })
+      expect.objectContaining({ email: ALICE.email, unverifiedEmail: newAliceEmail })
     )
 
     // Verify new email
@@ -299,7 +308,7 @@ describe('API: Authentication', () => {
 
     // Email should be updated
     expect(await prisma.member.findUnique({ where: { id: ALICE.id } })).toEqual(
-      expect.objectContaining({ email: newAliceEmail })
+      expect.objectContaining({ email: newAliceEmail, unverifiedEmail: null })
     )
   })
 })

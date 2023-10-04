@@ -2,13 +2,15 @@
 CREATE TYPE "NotificationKind" AS ENUM ('FORUM_POST_ALL', 'FORUM_POST_MENTION', 'FORUM_POST_REPLY', 'FORUM_THREAD_CREATOR', 'FORUM_THREAD_CONTRIBUTOR', 'FORUM_THREAD_ALL', 'FORUM_THREAD_MENTION', 'ELECTION_ANNOUNCING_STARTED', 'ELECTION_VOTING_STARTED', 'ELECTION_REVEALING_STARTED', 'FORUM_THREAD_ENTITY_POST', 'FORUM_CATEGORY_ENTITY_POST', 'FORUM_CATEGORY_ENTITY_THREAD');
 
 -- CreateEnum
-CREATE TYPE "NotificationStatus" AS ENUM ('PENDING', 'SENT', 'FAILED');
+CREATE TYPE "NotificationEmailStatus" AS ENUM ('PENDING', 'SENT', 'FAILED', 'IGNORED');
 
 -- CreateTable
 CREATE TABLE "Member" (
     "id" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT,
+    "unverifiedEmail" TEXT,
+    "receiveEmails" BOOLEAN NOT NULL DEFAULT true,
 
     CONSTRAINT "Member_pkey" PRIMARY KEY ("id")
 );
@@ -32,7 +34,7 @@ CREATE TABLE "Notification" (
     "kind" "NotificationKind" NOT NULL,
     "eventId" TEXT NOT NULL,
     "entityId" TEXT,
-    "status" "NotificationStatus" NOT NULL DEFAULT 'PENDING',
+    "emailStatus" "NotificationEmailStatus" NOT NULL DEFAULT 'PENDING',
     "retryCount" INTEGER NOT NULL DEFAULT 0,
     "isRead" BOOLEAN NOT NULL DEFAULT false,
 
