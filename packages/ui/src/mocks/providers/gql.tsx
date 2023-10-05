@@ -1,5 +1,5 @@
 import { DocumentNode } from '@apollo/client/core'
-import React, { FC, createContext, useCallback, useContext, useMemo, useState } from 'react'
+import React, { FC, createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
 import { warning } from '@/common/logger'
 
@@ -9,7 +9,7 @@ export { ApolloClient, gql, HttpLink, InMemoryCache } from '@apollo/client/core'
 export { ApolloProvider } from '@apollo/client/react'
 
 type OptionVariables = { where?: Record<string, any>; orderBy?: string | string[]; limit?: number; offset?: number }
-type Options = { variables?: OptionVariables; skip?: boolean }
+type Options = { variables?: OptionVariables; skip?: boolean; onCompleted?: (data: any) => void }
 type Result = { loading: boolean; data: any }
 type Resolver = (options?: Options) => Result
 
@@ -32,6 +32,12 @@ export const useQuery = (query: DocumentNode, options?: Options): Result => {
   }
 
   const result = mockedQueriesMap.get(query)?.(options) ?? { loading: false, data: undefined }
+  useEffect(() => {
+    if (options?.onCompleted) {
+      options?.onCompleted(result.data)
+    }
+  }, [JSON.stringify(result.data)])
+
   return useMemo<Result>(() => result, [JSON.stringify(result)])
 }
 

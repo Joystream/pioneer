@@ -89,7 +89,7 @@ export const SettingsNotificationsTab: FC = () => {
   const handleGenerateNewLinkClick = () => {
     sendUpdateMemberMutation({
       variables: {
-        email: meData?.me?.email ?? '',
+        email: meData?.me?.unverifiedEmail ?? meData?.me?.email ?? '',
       },
     })
     setNewLinkGenerated(true)
