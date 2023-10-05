@@ -8,8 +8,10 @@ import { createGlobalStyle } from 'styled-components'
 
 import { Page, Screen } from '@/common/components/page/Page'
 import { Colors } from '@/common/constants'
+import { EMAIL_VERIFICATION_TOKEN_SEARCH_PARAM } from '@/memberships/constants'
 import { GetMemberDocument } from '@/memberships/queries'
 import {
+  ConfirmBackendEmailDocument,
   GetBackendMemberExistsDocument,
   RegisterBackendMemberDocument,
 } from '@/memberships/queries/__generated__/backend.generated'
@@ -21,6 +23,8 @@ import { App } from './App'
 import { OnBoardingOverlay } from './components/OnboardingOverlay/OnBoardingOverlay'
 import { SideBar } from './components/SideBar'
 
+const MOCK_VERIFICATION_TOKEN = '1234567890'
+
 type Args = {
   isLoggedIn: boolean
   hasMemberships: boolean
@@ -30,9 +34,11 @@ type Args = {
   isRPCNodeConnected: boolean
   hasRegisteredEmail: boolean
   hasBeenAskedForEmail: boolean
+  isConfirmingEmail: boolean
   onBuyMembership: CallableFunction
   onTransfer: CallableFunction
   onSubscribeEmail: CallableFunction
+  onConfirmEmail: CallableFunction
 }
 
 type Story = StoryObj<FC<Args>>
@@ -65,6 +71,7 @@ export default {
     onBuyMembership: { action: 'BuyMembership' },
     onTransfer: { action: 'BalanceTransfer' },
     onSubscribeEmail: { action: 'SubscribeEmail' },
+    onConfirmEmail: { action: 'ConfirmEmail' },
   },
 
   args: {
@@ -76,6 +83,7 @@ export default {
     isRPCNodeConnected: true,
     hasRegisteredEmail: true,
     hasBeenAskedForEmail: true,
+    isConfirmingEmail: false,
   },
 
   parameters: {
@@ -137,6 +145,11 @@ export default {
               onSend: (...sendArgs: any[]) => args.onSubscribeEmail(...sendArgs),
               data: { signup: '' },
             },
+            {
+              mutation: ConfirmBackendEmailDocument,
+              onSend: (...sendArgs: any[]) => args.onConfirmEmail(...sendArgs),
+              data: { confirmEmail: '' },
+            },
           ],
         },
 
@@ -147,6 +160,8 @@ export default {
             },
           },
         },
+
+        routeQuery: args.isConfirmingEmail ? { [EMAIL_VERIFICATION_TOKEN_SEARCH_PARAM]: MOCK_VERIFICATION_TOKEN } : {},
       }
     },
   },
@@ -504,15 +519,37 @@ export const EmailSubscriptionModalSubscribe: Story = {
     await userEvent.click(button)
     await waitFor(
       () =>
-        expect(onSubscribeEmail).toHaveBeenCalledWith({
-          variables: expect.objectContaining({
-            id: parseInt(alice.id),
-            name: alice.metadata.name || alice.handle,
-            email: testEmail,
-          }),
-        }),
+        expect(onSubscribeEmail).toHaveBeenCalledWith(
+          expect.objectContaining({
+            variables: {
+              id: parseInt(alice.id),
+              name: alice.metadata.name || alice.handle,
+              email: testEmail,
+              signature: expect.any(String),
+              timestamp: expect.any(String),
+            },
+          })
+        ),
       { timeout: 100 }
     )
     await waitFor(() => expect(modal.getByText('Success!')), { timeout: 100 })
+  },
+}
+
+// ----------------------------------------------------------------------------
+// Test Email Confirmation Modal
+// ----------------------------------------------------------------------------
+export const EmailConfirmationModal: Story = {
+  args: {
+    isConfirmingEmail: true,
+  },
+  play: async ({ canvasElement, args: { onConfirmEmail } }) => {
+    const modal = withinModal(canvasElement)
+    expect(onConfirmEmail).toHaveBeenCalledWith({
+      variables: {
+        token: MOCK_VERIFICATION_TOKEN,
+      },
+    })
+    expect(modal.getByText(/Your email has been confirmed/))
   },
 }

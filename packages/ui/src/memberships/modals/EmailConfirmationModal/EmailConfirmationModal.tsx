@@ -53,15 +53,15 @@ export const EmailConfirmationModal = () => {
     <Modal onClose={closeConfirmationModal} modalSize="m">
       <ModalHeader onClick={closeConfirmationModal} title="Email confirmation" />
       <ModalBody>
-        <TextMedium>
-          {loading ? (
-            <Loading text="Confirming email..." withoutMargin />
-          ) : error ? (
-            'Unexpected error occurred. Please try again later.'
-          ) : (
-            'Your email has been confirmed! You can always adjust your notification preferences in settings.'
-          )}
-        </TextMedium>
+        {loading ? (
+          <Loading text="Confirming email..." withoutMargin />
+        ) : error ? (
+          <TextMedium>Unexpected error occurred. Please try again later.</TextMedium>
+        ) : (
+          <TextMedium>
+            Your email has been confirmed! You can always adjust your notification preferences in settings.
+          </TextMedium>
+        )}
       </ModalBody>
     </Modal>
   )

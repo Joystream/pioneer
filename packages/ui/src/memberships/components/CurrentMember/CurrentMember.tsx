@@ -8,6 +8,7 @@ import { ArrowDownExpandedIcon, Icon } from '@/common/components/icons'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
+import { EMAIL_VERIFICATION_TOKEN_SEARCH_PARAM } from '@/memberships/constants'
 import { useNotificationSettings } from '@/memberships/hooks/useNotificationSettings'
 
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '..'
@@ -16,8 +17,6 @@ import { EmailConfirmationModalCall } from '../../modals/EmailConfirmationModal'
 import { EmailSubscriptionModalCall } from '../../modals/EmailSubscriptionModal'
 import { SwitchMemberModalCall } from '../../modals/SwitchMemberModal'
 import { AddMembershipButton } from '../AddMembershipButton'
-
-const EMAIL_VERIFICATION_TOKEN_SEARCH_PARAM = 'emailVerificationToken'
 
 export const CurrentMember = () => {
   const { wallet } = useMyAccounts()
