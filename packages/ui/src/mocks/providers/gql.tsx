@@ -80,7 +80,7 @@ export const useApolloClient = () => ({
   query: () => undefined,
   mutate: () => undefined,
 })
-export const makeVar = () => {}
+export const makeVar = () => null
 
 type GqlQueryMock = { query: DocumentNode; data?: any; resolver?: Resolver }
 type GqlMutationMock = {
