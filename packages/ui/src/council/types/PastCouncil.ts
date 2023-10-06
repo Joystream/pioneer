@@ -6,8 +6,10 @@ import { asBlock, Block } from '@/common/types'
 import {
   CouncilSpendingEventFieldsFragment,
   FundingRequestApprovedFragment,
+  PastCouncilBudgetUpdatedEventFieldsFragment,
   PastCouncilDetailedFieldsFragment,
   PastCouncilFieldsFragment,
+  PastCouncilRewardPaidEventFieldsFragment,
 } from '@/council/queries'
 import { asProposalDetails, DetailsFragment, FundingRequestDetails } from '@/proposals/types'
 
@@ -45,13 +47,20 @@ export const getSpentOnProposals = (fundingRequests: FundingRequestApprovedFragm
 }
 
 export const asPastCouncilWithDetails = (
+  workingGroupRewardPaidEvents: PastCouncilRewardPaidEventFieldsFragment[],
+  workingGroupBudgets: PastCouncilBudgetUpdatedEventFieldsFragment[],
   councilFields: PastCouncilDetailedFieldsFragment,
   spendingEvents: CouncilSpendingEventFieldsFragment[],
   fundingRequestsApproved: FundingRequestApprovedFragment[]
 ): PastCouncilWithDetails => {
   return {
     ...asPastCouncil(councilFields),
-    totalSpent: getTotalSpent(spendingEvents),
+    // totalSpent: getTotalSpent(spendingEvents),
+    totalSpent: councilFields.councilMembers
+      .reduce((a, b) => a.add(new BN(b.accumulatedReward)), BN_ZERO)
+      .add(workingGroupBudgets.reduce((a, b) => a.add(new BN(b.budgetChangeAmount)), BN_ZERO))
+      .add(getSpentOnProposals(fundingRequestsApproved))
+      .add(workingGroupRewardPaidEvents.reduce((a, b) => a.add(new BN(b.amount)), BN_ZERO)),
     totalMissedRewards: councilFields.councilMembers.reduce((a, b) => a.add(new BN(b.unpaidReward)), BN_ZERO).neg(),
     totalPaidRewards: councilFields.councilMembers.reduce((a, b) => a.add(new BN(b.accumulatedReward)), BN_ZERO),
     totalSpentOnProposals: getSpentOnProposals(fundingRequestsApproved),
