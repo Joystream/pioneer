@@ -246,13 +246,10 @@ query GetPastCouncilWorkingGroups($fromBlock: Int!, $toBlock: Int!) {
   workingGroups {
     ...PastCouncilWorkingGroupFields
   }
-  budgetSetEvents(where: { inBlock_lte: $toBlock }, orderBy: [inBlock_DESC]) {
-    ...PastCouncilBudgetSetEventFields
-  }
   rewardPaidEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
     ...PastCouncilRewardPaidEventFields
   }
-  newMissedRewardLevelReachedEvents(where: { inBlock_lte: $toBlock }, orderBy: [inBlock_DESC]) {
+  newMissedRewardLevelReachedEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
     ...PastCouncilNewMissedRewardLevelReachedEventFields
   }
   budgetUpdatedEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
