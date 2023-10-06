@@ -162,6 +162,5 @@ export const CreateOpeningModal = () => {
 }
 
 export const StepperOpeningWrapper = styled(StepperModalWrapper)`
-  // grid-template-columns: 220px 336px 1fr;
   grid-template-columns: 220px 1fr;
 `

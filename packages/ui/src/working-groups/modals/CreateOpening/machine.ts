@@ -16,7 +16,6 @@ import { CreateOpeningForm, TransactionContext } from './types'
 export type CreateOpeningState =
   | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
-  | { value: 'warning'; context: EmptyObject }
   | { value: 'workingGroupAndDescription'; context: Required<CreateOpeningForm> }
   | { value: 'durationAndProcess'; context: Required<CreateOpeningForm> }
   | { value: 'applicationForm'; context: Required<CreateOpeningForm> }

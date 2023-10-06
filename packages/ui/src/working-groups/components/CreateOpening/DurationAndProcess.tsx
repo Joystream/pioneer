@@ -22,7 +22,7 @@ export const DurationAndProcess = ({ hasHiringTarget }: Props) => {
           <OpeningDuration label="Expected length of the application period" />
 
           {hasHiringTarget && (
-            <InputComponent label="Hiring Target" required inputSize="m" name="durationAndProcess.target" tight>
+            <InputComponent label="Hiring Target"  id="hiring-target" required inputSize="m" name="durationAndProcess.target" tight>
               <InputNumber id="hiring-target" placeholder="0" name="durationAndProcess.target" />
             </InputComponent>
           )}

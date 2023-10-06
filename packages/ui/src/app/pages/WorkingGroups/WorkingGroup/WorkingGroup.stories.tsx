@@ -25,7 +25,7 @@ const WG_DATA = {
   name: 'membership',
 }
 
-const WG_OPENING_DATA = {
+const WG_OPENING_METADATA = {
   title: 'Membership worker role',
   shortDescription: 'Lorem Ipsum...',
   description: 'Bigger Lorem ipsum...',
@@ -34,21 +34,16 @@ const WG_OPENING_DATA = {
     { question: '🐁?', type: OpeningMetadata.ApplicationFormQuestion.InputType.TEXT },
     { question: '🐘?', type: OpeningMetadata.ApplicationFormQuestion.InputType.TEXTAREA },
   ],
-  hiringLimit: 1,
+  hiringLimit: 5,
   expectedEndingTimestamp: 2000,
 }
 
 const WG_JSON_OPENING = {
-  title: 'Membership worker role',
-  shortDescription: 'Lorem Ipsum...',
-  description: 'Bigger Lorem ipsum...',
-  applicationDetails: 'Application process default',
+  ...WG_OPENING_METADATA,
   applicationFormQuestions: [
     { question: '🐁?', type: 'TEXT' },
     { question: '🐘?', type: 'TEXTAREA' },
   ],
-  hiringLimit: 5,
-  expectedEndingTimestamp: 2000,
   rewardPerBlock: 20_0000000000,
   stakingPolicy: {
     unstakingPeriod: 200,
@@ -177,6 +172,9 @@ export const CreateOpening: Story = {
       await waitFor(() => expect(nextButton).toBeDisabled())
       ;(await getEditorByLabel(modal, 'Application process')).setData('Application process default')
       await waitFor(() => expect(nextButton).toBeEnabled())
+      const hiringTargetField = modal.getByLabelText('Hiring Target')
+      await userEvent.clear(hiringTargetField)
+      await userEvent.type(hiringTargetField, '5')
       await userEvent.click(modal.getByText('Limited'))
       const expectedLengthField = modal.getByLabelText('Expected length of the application period')
       await userEvent.clear(expectedLengthField)
@@ -221,7 +219,7 @@ export const CreateOpening: Story = {
       expect(new BN(rewardPerBlock).toNumber()).toEqual(1000000000)
 
       expect(openingType).toEqual('Regular')
-      expect(metadataFromBytes(OpeningMetadata, description)).toEqual({ ...WG_OPENING_DATA })
+      expect(metadataFromBytes(OpeningMetadata, description)).toEqual(WG_OPENING_METADATA)
     })
   },
 }
@@ -285,10 +283,7 @@ export const CreateOpeningImport: Story = {
       expect(new BN(rewardPerBlock).toNumber()).toEqual(200000000000)
 
       expect(openingType).toEqual('Regular')
-      expect(metadataFromBytes(OpeningMetadata, description)).toEqual({
-        ...WG_OPENING_DATA,
-        hiringLimit: 5,
-      })
+      expect(metadataFromBytes(OpeningMetadata, description)).toEqual(WG_OPENING_METADATA)
     })
   },
 }
