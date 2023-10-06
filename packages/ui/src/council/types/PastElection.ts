@@ -20,6 +20,7 @@ export interface PastElection {
   totalCandidates: number
   revealedVotes: number
   totalVotes: number
+  totalVoteStake: BN
 }
 
 export interface PastElectionWithDetails extends PastElection {
@@ -34,6 +35,7 @@ export const asPastElection = (fields: PastElectionRoundFieldsFragment): PastEle
   totalCandidates: fields.candidates.length,
   revealedVotes: fields.castVotes.filter((castVote) => castVote.voteForId).length,
   totalVotes: fields.castVotes.length,
+  totalVoteStake: sumStakes(fields.castVotes),
 })
 
 export const asPastElectionWithDetails = (

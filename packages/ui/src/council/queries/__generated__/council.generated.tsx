@@ -394,7 +394,7 @@ export type PastElectionRoundFieldsFragment = {
   endedAtTime?: any | null
   endedAtNetwork?: Types.Network | null
   candidates: Array<{ __typename: 'Candidate'; stake: string }>
-  castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null }>
+  castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null; stake: string }>
 }
 
 export type PastElectionRoundDetailedFieldsFragment = {
@@ -1132,7 +1132,7 @@ export type GetPastElectionsQuery = {
     endedAtTime?: any | null
     endedAtNetwork?: Types.Network | null
     candidates: Array<{ __typename: 'Candidate'; stake: string }>
-    castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null }>
+    castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null; stake: string }>
   }>
 }
 
@@ -1635,6 +1635,7 @@ export const PastElectionRoundFieldsFragmentDoc = gql`
     }
     castVotes {
       voteForId
+      stake
     }
   }
 `
