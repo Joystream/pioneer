@@ -87,9 +87,8 @@ export const Settings = () => {
     return await new Promise<boolean>((resolve) => {
       const ws = new WebSocket(customRpcEndpoint)
       const willResolveTo = (succeeded: boolean, timeout?: any) => () => {
-        if (timeout)
-          clearTimeout(timeout)
-        
+        if (timeout) clearTimeout(timeout)
+
         ws.close()
         setIsValidRpcEndpoint(succeeded)
         resolve(succeeded)
