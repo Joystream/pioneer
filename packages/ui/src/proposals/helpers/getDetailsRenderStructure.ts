@@ -41,7 +41,7 @@ export type RenderType =
   | 'Percentage'
   | 'Hash'
   | 'DestinationsPreview'
-
+  | 'BlockTimeDisplay'
 export interface RenderNode {
   label: string
   value: any
