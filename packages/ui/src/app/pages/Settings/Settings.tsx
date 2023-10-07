@@ -73,9 +73,9 @@ export const Settings = () => {
     try {
       const faucetStatusEndpoint = customFaucetEndpoint.replace(new RegExp('register$'), 'status')
       const response = await fetch(faucetStatusEndpoint)
-      await response.json()
-      setIsValidFaucetEndpoint(true)
-      return true
+      const succeeded = response.status < 400
+      setIsValidFaucetEndpoint(succeeded)
+      return succeeded
     } catch {
       setIsValidFaucetEndpoint(false)
       return false
@@ -84,44 +84,30 @@ export const Settings = () => {
 
   const checkRpcEndpoint = async () => {
     // check RPC endpoint
-    try {
+    return await new Promise<boolean>((resolve) => {
       const ws = new WebSocket(customRpcEndpoint)
-      ws.onopen = function () {
-        setIsValidRpcEndpoint(true)
-        return true
+      const willResolveTo = (succeeded: boolean, timeout?: any) => () => {
+        if (timeout)
+          clearTimeout(timeout)
+        
+        ws.close()
+        setIsValidRpcEndpoint(succeeded)
+        resolve(succeeded)
       }
-      ws.onerror = function () {
-        setIsValidRpcEndpoint(false)
-        return false
-      }
-    } catch {
-      setIsValidRpcEndpoint(false)
-      return false
-    }
 
-    // timeout
-    await new Promise((res) => setTimeout(res, 3000))
+      const timeout = setTimeout(willResolveTo(false), 3000)
+      ws.onopen = willResolveTo(true, timeout)
+      ws.onerror = willResolveTo(false, timeout)
+    })
   }
 
   const checkQueryEndpoint = async () => {
     // check GraphQL endpoint
     try {
-      const query = `
-        query {
-          electedCouncils{
-            id
-          }
-        }`
-      const response = await fetch(customQueryEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query }),
-      })
-      await response.json()
-      setIsValidQueryEndpoint(true)
-      return true
+      const response = await fetch(customQueryEndpoint + '?query=%7B__typename%7D')
+      const succeeded = response.status < 400 && JSON.parse(await response.json()).data['__typename'] === 'Query'
+      setIsValidQueryEndpoint(succeeded)
+      return succeeded
     } catch {
       setIsValidQueryEndpoint(false)
       return false
@@ -223,7 +209,7 @@ export const Settings = () => {
                           /^(ws|wss):\/\//i.test(customRpcEndpoint)
                             ? isValidRpcEndpoint
                               ? undefined
-                              : 'Connection Error, Sometimes it failed by network speed, Please try to check once more'
+                              : 'Connection Error. Sometimes it fails due to network speed. Please try to check once more'
                             : 'This RPC endpoint must start with ws or wss'
                         }
                       >
