@@ -84,20 +84,25 @@ export const Settings = () => {
 
   const checkRpcEndpoint = async () => {
     // check RPC endpoint
-    return await new Promise<boolean>((resolve) => {
-      const ws = new WebSocket(customRpcEndpoint)
-      const willResolveTo = (succeeded: boolean, timeout?: any) => () => {
-        if (timeout) clearTimeout(timeout)
+    try {
+      return await new Promise<boolean>((resolve) => {
+        const ws = new WebSocket(customRpcEndpoint)
+        const willResolveTo = (succeeded: boolean, timeout?: any) => () => {
+          if (timeout) clearTimeout(timeout)
 
-        ws.close()
-        setIsValidRpcEndpoint(succeeded)
-        resolve(succeeded)
-      }
+          ws.close()
+          setIsValidRpcEndpoint(succeeded)
+          resolve(succeeded)
+        }
 
-      const timeout = setTimeout(willResolveTo(false), 3000)
-      ws.onopen = willResolveTo(true, timeout)
-      ws.onerror = willResolveTo(false, timeout)
-    })
+        const timeout = setTimeout(willResolveTo(false), 3000)
+        ws.onopen = willResolveTo(true, timeout)
+        ws.onerror = willResolveTo(false, timeout)
+      })
+    } catch {
+      setIsValidRpcEndpoint(false)
+      return false
+    }
   }
 
   const checkQueryEndpoint = async () => {
