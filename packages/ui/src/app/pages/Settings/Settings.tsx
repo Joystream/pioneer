@@ -104,7 +104,7 @@ export const Settings = () => {
     // check GraphQL endpoint
     try {
       const response = await fetch(customQueryEndpoint + '?query=%7B__typename%7D')
-      const succeeded = response.status < 400 && JSON.parse(await response.json()).data['__typename'] === 'Query'
+      const succeeded = response.status < 400 && (await response.json()).data['__typename'] === 'Query'
       setIsValidQueryEndpoint(succeeded)
       return succeeded
     } catch {
