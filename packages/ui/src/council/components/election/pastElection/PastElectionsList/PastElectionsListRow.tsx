@@ -29,7 +29,7 @@ export const PastElectionsListRow = ({ election }: PastElectionsListRowProps) =>
         <></>
       )}
       <TokenValue value={election.totalStake} />
-      <TokenValue value={ election.totalVoteStake} />
+      <TokenValue value={election.totalVoteStake} />
       <Fraction numerator={election.revealedVotes} denominator={election.totalVotes} sameSize />
       <CountInfo count={election.totalCandidates} />
     </PastElectionsListRowItem>
