@@ -11,7 +11,6 @@ import { Fraction } from '@/common/components/typography/Fraction'
 import { ElectionRoutes } from '@/council/constants'
 import { PastElection } from '@/council/types/PastElection'
 import { CountInfo, Info } from '@/memberships/components/MemberListItem/Fields'
-
 interface PastElectionsListRowProps {
   election: PastElection
 }
@@ -29,7 +28,8 @@ export const PastElectionsListRow = ({ election }: PastElectionsListRowProps) =>
       ) : (
         <></>
       )}
-      <TokenValue value={election.totalStake} />
+      <TokenValue value={election.totalCandidatesStake} />
+      <TokenValue value={election.totalVoteStake} />
       <Fraction numerator={election.revealedVotes} denominator={election.totalVotes} sameSize />
       <CountInfo count={election.totalCandidates} />
     </PastElectionsListRowItem>
