@@ -66,7 +66,7 @@ export const PastElections = () => {
   return <PageLayout header={header} main={displayMain()} />
 }
 
-export const PastElectionsColLayout = '48px 100px 100px 100px 80px 80px'
+export const PastElectionsColLayout = '48px 176px 140px 140px 100px 100px'
 
 const PastElectionsListHeaders = styled(ListHeaders)`
   grid-column-gap: 24px;
