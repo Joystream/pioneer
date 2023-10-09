@@ -12,8 +12,8 @@ export const NavBar = () => {
   const { isMobile } = useResponsive()
 
   useEffect(() => {
-    if(isMobile) setOpen(false)
-  },[isMobile])
+    if (isMobile) setOpen(false)
+  }, [isMobile])
 
   return (
     <>
