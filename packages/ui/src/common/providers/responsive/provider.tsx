@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { ResponsiveContext, UseResponsive } from '@/common/providers/responsive/context'
 
@@ -19,19 +19,22 @@ export const ResponsiveProvider = (props: Props) => {
     }
   }, [])
 
-  const value: UseResponsive = {
-    size:
-      windowWidth >= 1440
-        ? 'lg'
-        : windowWidth >= 1024
-        ? 'md'
-        : windowWidth >= 768
-        ? 'sm'
-        : windowWidth >= 425
-        ? 'xs'
-        : 'xxs',
-    isMobile: windowWidth < 1024,
-  }
+  const value: UseResponsive = useMemo(
+    () => ({
+      size:
+        windowWidth >= 1440
+          ? 'lg'
+          : windowWidth >= 1024
+          ? 'md'
+          : windowWidth >= 768
+          ? 'sm'
+          : windowWidth >= 425
+          ? 'xs'
+          : 'xxs',
+      isMobile: windowWidth < 1024,
+    }),
+    [windowWidth]
+  )
 
   return <ResponsiveContext.Provider value={value}>{props.children}</ResponsiveContext.Provider>
 }
