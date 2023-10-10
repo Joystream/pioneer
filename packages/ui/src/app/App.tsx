@@ -7,11 +7,9 @@ import { ImageReportNotification } from '@/app/components/ImageReportNotificatio
 import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { CouncilModule } from '@/app/pages/Council/CouncilModule'
 import { NotFound } from '@/app/pages/NotFound'
-import { GlobalStyle } from '@/app/providers/GlobalStyle'
 import { BountyRoutes } from '@/bounty/constants'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
 import { MaintenanceScreen } from '@/common/components/page/MaintenanceScreen/MaintenanceScreen'
-import { MobileView } from '@/common/components/page/MobileView/MobileView'
 import { Page, Screen } from '@/common/components/page/Page'
 import { NotificationsHolder } from '@/common/components/page/SideNotification'
 import { TransactionStatus } from '@/common/components/TransactionStatus/TransactionStatus'
@@ -82,10 +80,3 @@ export const App = () => {
     </Providers>
   )
 }
-
-export const Mobile = () => (
-  <>
-    <GlobalStyle />
-    <MobileView />
-  </>
-)
