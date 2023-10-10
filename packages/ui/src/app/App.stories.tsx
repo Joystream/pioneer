@@ -34,10 +34,10 @@ type Args = {
   isRPCNodeConnected: boolean
   hasRegisteredEmail: boolean
   hasBeenAskedForEmail: boolean
-  onBuyMembership: CallableFunction
-  onTransfer: CallableFunction
-  onSubscribeEmail: CallableFunction
-  onConfirmEmail: CallableFunction
+  onBuyMembership: jest.Mock
+  onTransfer: jest.Mock
+  onSubscribeEmail: jest.Mock
+  onConfirmEmail: jest.Mock
 }
 
 type Story = StoryObj<FC<Args>>
@@ -513,19 +513,18 @@ export const EmailSubscriptionModalSubscribe: Story = {
     await waitFor(() => expect(button.closest('button')).toBeEnabled())
     expect(onSubscribeEmail).toHaveBeenCalledTimes(0)
     await userEvent.click(button)
+
     await waitFor(
-      () =>
-        expect(onSubscribeEmail).toHaveBeenCalledWith(
-          expect.objectContaining({
-            variables: {
-              id: parseInt(alice.id),
-              name: alice.metadata.name || alice.handle,
-              email: testEmail,
-              signature: expect.any(String),
-              timestamp: expect.any(String),
-            },
-          })
-        ),
+      () => {
+        expect(onSubscribeEmail).toHaveBeenCalledTimes(1)
+        const mutationVariables = onSubscribeEmail.mock.calls[0][0]?.variables
+        expect(mutationVariables).toBeDefined()
+        expect(mutationVariables.id).toBe(parseInt(alice.id))
+        expect(mutationVariables.name).toBe(alice.metadata.name || alice.handle)
+        expect(mutationVariables.email).toBe(testEmail)
+        expect(mutationVariables.signature).toBeDefined()
+        expect(mutationVariables.timestamp).toBeDefined()
+      },
       { timeout: 100 }
     )
     await waitFor(() => expect(modal.getByText('Success!')), { timeout: 100 })
