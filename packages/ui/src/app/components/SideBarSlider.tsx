@@ -47,7 +47,7 @@ export const SideBarWarpper = styled.div`
   right: 0;
   width: 100%;
   max-width: 226px;
-  height: 100vh;
+  height: 100%;
   ${Animations.showSidePane};
 `
 
