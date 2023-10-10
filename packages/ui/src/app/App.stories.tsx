@@ -34,7 +34,6 @@ type Args = {
   isRPCNodeConnected: boolean
   hasRegisteredEmail: boolean
   hasBeenAskedForEmail: boolean
-  isConfirmingEmail: boolean
   onBuyMembership: CallableFunction
   onTransfer: CallableFunction
   onSubscribeEmail: CallableFunction
@@ -83,7 +82,6 @@ export default {
     isRPCNodeConnected: true,
     hasRegisteredEmail: true,
     hasBeenAskedForEmail: true,
-    isConfirmingEmail: false,
   },
 
   parameters: {
@@ -160,8 +158,6 @@ export default {
             },
           },
         },
-
-        routeQuery: args.isConfirmingEmail ? { [EMAIL_VERIFICATION_TOKEN_SEARCH_PARAM]: MOCK_VERIFICATION_TOKEN } : {},
       }
     },
   },
@@ -540,9 +536,7 @@ export const EmailSubscriptionModalSubscribe: Story = {
 // Test Email Confirmation Modal
 // ----------------------------------------------------------------------------
 export const EmailConfirmationModal: Story = {
-  args: {
-    isConfirmingEmail: true,
-  },
+  parameters: { router: { href: `/?${EMAIL_VERIFICATION_TOKEN_SEARCH_PARAM}=${MOCK_VERIFICATION_TOKEN}` } },
   play: async ({ canvasElement, args: { onConfirmEmail } }) => {
     const modal = withinModal(canvasElement)
     expect(onConfirmEmail).toHaveBeenCalledWith({
