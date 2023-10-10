@@ -85,11 +85,6 @@ const PageMain = styled.main`
 const PageSidebar = styled.aside<Pick<PageLayoutProps, 'sidebarScrollable'>>`
   width: 100%;
   grid-area: sidebar;
-  @media (min-width: 1440px) {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-  }
 
   ${({ sidebarScrollable }) =>
     sidebarScrollable &&
@@ -104,7 +99,19 @@ const PageFooter = styled.footer`
   grid-area: footer;
 `
 
-const SidebarWidth = '280px'
+const SidebarStyle = css`
+  aside {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    padding-left: 16px;
+
+    > div {
+      min-height: 184px;
+      overflow: hidden;
+    }
+  }
+`
 
 const PageLayoutDefault = css`
   grid-template-columns: 1fr;
@@ -130,12 +137,14 @@ const PageLayoutWithSidebar = css`
     'header'
     'main'
     'sidebar';
+
   @media (min-width: 1440px) {
-    grid-template-columns: 1fr ${SidebarWidth};
+    grid-template-columns: 9fr 3fr;
     grid-template-rows: auto 1fr;
     grid-template-areas:
       'header header'
       'main sidebar';
+    ${SidebarStyle}
   }
 `
 
@@ -147,13 +156,15 @@ const PageLayoutWithSidebarAndFooter = css`
     'main'
     'sidebar'
     'footer';
+
   @media (min-width: 1440px) {
-    grid-template-columns: 1fr ${SidebarWidth};
+    grid-template-columns: 9fr 3fr;
     grid-template-rows: auto 1fr auto;
     grid-template-areas:
       'header header'
       'main sidebar'
-      'footer sidebar';
+      'footer footer';
+    ${SidebarStyle}
   }
 `
 
@@ -164,13 +175,26 @@ export const PageLayoutComponent = styled.div<PageLayoutProps>`
   grid-row-gap: 24px;
   width: 100%;
   min-height: 100%;
+
+  aside {
+    position: relative;
+    width: 100%;
+    grid-area: sidebar;
+
+    > div {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+    }
+  }
+
   ${(props) =>
     !props.footer &&
     css`
       padding-bottom: 16px;
     `};
   ${(props) => {
-    if (props.responsiveStyle) return props.responsiveStyle
     if (props.main && !props.sidebar && !props.footer) {
       return PageLayoutDefault
     } else if (props.main && props.footer && !props.sidebar) {
@@ -181,4 +205,5 @@ export const PageLayoutComponent = styled.div<PageLayoutProps>`
       return PageLayoutWithSidebarAndFooter
     }
   }};
+  ${(props) => props.responsiveStyle}
 `
