@@ -80,22 +80,23 @@ export const updateMember = mutationField('updateMember', {
       throw new Error('Unauthorized')
     }
 
-    let updatedMember = member
+    const hasChanges = email || receiveEmails != null
+    if (!hasChanges) return member
 
     if (email) {
       const isEmailValid = await Yup.string().email().isValid(email)
       if (!isEmailValid) {
         throw new Error('Invalid email')
       }
-
       await sendVerificationEmail({ email, memberId: member.id, name: member.name, referer: req?.headers?.referer })
-      updatedMember = await prisma.member.update({ where: { id: member.id }, data: { unverifiedEmail: email } })
     }
 
-    if (receiveEmails != null) {
-      updatedMember = await prisma.member.update({ where: { id: member.id }, data: { receiveEmails } })
-    }
-
-    return updatedMember
+    return await prisma.member.update({
+      where: { id: member.id },
+      data: {
+        unverifiedEmail: email ?? undefined,
+        receiveEmails: receiveEmails ?? undefined,
+      },
+    })
   },
 })

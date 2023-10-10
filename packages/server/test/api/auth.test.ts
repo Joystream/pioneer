@@ -298,7 +298,7 @@ describe('API: Authentication', () => {
 
     // Email should not be updated yet
     expect(await prisma.member.findUnique({ where: { id: ALICE.id } })).toEqual(
-      expect.objectContaining({ email: ALICE.email, unverifiedEmail: newAliceEmail })
+      expect.objectContaining({ email: ALICE.email, unverifiedEmail: newAliceEmail, receiveEmails: true })
     )
 
     // Verify new email
