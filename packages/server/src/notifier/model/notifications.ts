@@ -17,11 +17,9 @@ export const notificationsFromEvent =
       (acc, { id, receiveEmails }) => ({ ...acc, [id]: receiveEmails }),
       {}
     )
+    const allMemberIds = Object.keys(membersEmailPreferences).map(Number)
     const notifsByMembers = event.potentialNotifications.flatMap<PotentialNotifByMember>(
-      getEventsByMember(
-        subscriptions,
-        allMembers.map(({ id }) => id)
-      )
+      getEventsByMember(subscriptions, allMemberIds)
     )
     return pickNotifs(notifsByMembers).map<Notification>((notif) => ({
       kind: notif.data.kind,
