@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { MenuIcon } from '@/common/components/icons'
-import { Colors } from '@/common/constants'
+import { Colors, ZIndex } from '@/common/constants'
 import { useResponsive } from '@/common/hooks/useResponsive'
 
 import { SideBarSlider } from './SideBarSlider'
@@ -10,10 +10,6 @@ import { SideBarSlider } from './SideBarSlider'
 export const NavBar = () => {
   const [open, setOpen] = useState(false)
   const { isMobile } = useResponsive()
-
-  useEffect(() => {
-    if (isMobile) setOpen(false)
-  }, [isMobile])
 
   return (
     <>
@@ -29,13 +25,17 @@ export const NavBar = () => {
           <MenuIcon />
         </MenuIconWrapper>
       </Wrapper>
-      {open && <SideBarSlider setOpen={setOpen} />}
+      {isMobile && open && <SideBarSlider setOpen={setOpen} />}
     </>
   )
 }
 
 const Wrapper = styled.div`
   grid-area: navbar;
+  position: sticky;
+  top: 0;
+  z-index: ${ZIndex.navbar};
+  background: ${Colors.White};
   display: flex;
   width: 100%;
   max-width: 100vw;
