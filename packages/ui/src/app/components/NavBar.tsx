@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { MenuIcon } from '@/common/components/icons/MenuIcon'
+import { MenuIcon } from '@/common/components/icons'
 import { Colors } from '@/common/constants'
 import { useResponsive } from '@/common/hooks/useResponsive'
 
