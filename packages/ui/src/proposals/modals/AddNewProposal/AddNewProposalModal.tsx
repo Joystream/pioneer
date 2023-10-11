@@ -381,7 +381,7 @@ export const StepperProposalWrapper = styled(StepperModalWrapper)`
   grid-template-columns: 220px 336px 1fr;
 `
 
-const StyledStepperBody = styled(StepperBody)`
+export const StyledStepperBody = styled(StepperBody)`
   flex-direction: column;
   row-gap: 20px;
 `
