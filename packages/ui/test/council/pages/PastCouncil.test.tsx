@@ -420,7 +420,7 @@ describe('UI: Past Council page', () => {
 
     component.getByText(tabName).click()
 
-    await waitForElementToBeRemoved(() => loaderSelector())
+    if (loaderSelector()) await waitForElementToBeRemoved(() => loaderSelector())
 
     return component
   }
