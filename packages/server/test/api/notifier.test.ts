@@ -245,7 +245,7 @@ describe('API: notifier', () => {
           kind
           eventId
           entityId
-          status
+          emailStatus
           isRead
         }
       }
@@ -271,7 +271,7 @@ describe('API: notifier', () => {
           kind: 'FORUM_POST_ALL',
           eventId: 'post_creation:1',
           entityId: 'post:1',
-          status: 'PENDING',
+          emailStatus: 'PENDING',
           isRead: false,
         },
       ],

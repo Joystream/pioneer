@@ -21,11 +21,13 @@ const sendEmail = async () => {
       id: 1,
       name: 'test',
       email: emailAddress,
+      unverifiedEmail: null,
+      receiveEmails: true,
     },
     memberId: 1,
     isRead: false,
     retryCount: 0,
-    status: 'PENDING' as const,
+    emailStatus: 'PENDING' as const,
   }
 
   const notification = {

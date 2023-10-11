@@ -26,7 +26,7 @@ export const createNotifications = async (): Promise<void> => {
   const progress: ProgressDoc =
     isProgressDoc(initialProgress) && initialProgress.block > STARTING_BLOCK ? clone(initialProgress) : defaultProgress
 
-  const allMemberIds = (await prisma.member.findMany()).map(({ id }) => id)
+  const allMembers = (await prisma.member.findMany()).map(({ id, receiveEmails }) => ({ id, receiveEmails }))
 
   /* eslint-disable-next-line no-constant-condition */
   while (true) {
@@ -51,7 +51,7 @@ export const createNotifications = async (): Promise<void> => {
     if (qnData.events.length === 0) break
 
     // Generate the potential notification based on the query nodes data
-    const events = await Promise.all(qnData.events.map(toNotificationEvents(allMemberIds)))
+    const events = await Promise.all(qnData.events.map(toNotificationEvents(allMembers.map(({ id }) => id))))
 
     // Update the progress
     progress.block = Math.max(progress.block, ...events.map((event) => event.inBlock))
@@ -65,7 +65,7 @@ export const createNotifications = async (): Promise<void> => {
     const subscriptions = await prisma.subscription.findMany({ where: subscriptionFilter })
 
     // Create and save new notifications
-    const notifications = events.flatMap(notificationsFromEvent(subscriptions, allMemberIds))
+    const notifications = events.flatMap(notificationsFromEvent(subscriptions, allMembers))
     info('New notifications', 'Saving', notifications.length, 'new notifications')
     verbose(
       'New notifications',

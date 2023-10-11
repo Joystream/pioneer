@@ -63,7 +63,7 @@ export const signup = mutationField('signup', {
     if (member) {
       throw new Error('Member already exists')
     }
-    await prisma.member.create({ data: { id: args.memberId, name: args.name } })
+    await prisma.member.create({ data: { id: args.memberId, name: args.name, unverifiedEmail: args.email } })
 
     if (args.email) {
       await sendVerificationEmail({

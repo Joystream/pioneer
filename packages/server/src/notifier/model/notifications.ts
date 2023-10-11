@@ -10,9 +10,16 @@ interface PotentialNotifByMember {
   shouldNotify: boolean
 }
 
-export const notificationsFromEvent =
-  (subscriptions: Subscription[], allMemberIds: number[]) =>
-  (event: NotificationEvent): Notification[] => {
+export const notificationsFromEvent = (
+  subscriptions: Subscription[],
+  allMembers: { id: number; receiveEmails: boolean }[]
+) => {
+  const membersEmailPreferences = allMembers.reduce<Record<number, boolean>>(
+    (acc, { id, receiveEmails }) => ({ ...acc, [id]: receiveEmails }),
+    {}
+  )
+  const allMemberIds = Object.keys(membersEmailPreferences).map(Number)
+  return (event: NotificationEvent): Notification[] => {
     const notifsByMembers = event.potentialNotifications.flatMap<PotentialNotifByMember>(
       getEventsByMember(subscriptions, allMemberIds)
     )
@@ -21,8 +28,10 @@ export const notificationsFromEvent =
       eventId: event.id,
       entityId: event.entityId,
       memberId: notif.memberId,
+      emailStatus: membersEmailPreferences[notif.memberId] ? 'PENDING' : 'IGNORED',
     }))
   }
+}
 
 const getEventsByMember =
   (subscriptions: Subscription[], allMemberIds: number[]) =>

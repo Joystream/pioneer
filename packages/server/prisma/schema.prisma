@@ -15,11 +15,13 @@ datasource db {
 }
 
 model Member {
-  id            Int            @id
-  name          String
-  email         String?
-  subscriptions Subscription[]
-  notifications Notification[]
+  id              Int            @id
+  name            String
+  email           String?
+  unverifiedEmail String?
+  receiveEmails   Boolean        @default(true)
+  subscriptions   Subscription[]
+  notifications   Notification[]
 }
 
 model Subscription {
@@ -38,15 +40,15 @@ model Subscription {
 }
 
 model Notification {
-  id         Int                @id @default(autoincrement())
-  member     Member             @relation(fields: [memberId], references: [id])
-  memberId   Int
-  kind       NotificationKind
-  eventId    String
-  entityId   String?
-  status     NotificationStatus @default(PENDING)
-  retryCount Int                @default(0)
-  isRead     Boolean            @default(false)
+  id          Int                     @id @default(autoincrement())
+  member      Member                  @relation(fields: [memberId], references: [id])
+  memberId    Int
+  kind        NotificationKind
+  eventId     String
+  entityId    String?
+  emailStatus NotificationEmailStatus @default(PENDING)
+  retryCount  Int                     @default(0)
+  isRead      Boolean                 @default(false)
 
   @@unique([memberId, eventId])
   @@index(memberId)
@@ -109,8 +111,9 @@ enum NotificationKind {
   // PROPOSAL_ENTITY_DISCUSSION
 }
 
-enum NotificationStatus {
+enum NotificationEmailStatus {
   PENDING
   SENT
   FAILED
+  IGNORED
 }

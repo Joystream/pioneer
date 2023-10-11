@@ -16,7 +16,10 @@ export const processNotifications = async (): Promise<void> => {
     return
   }
 
-  const notifications = await prisma.notification.findMany({ where: { status: 'PENDING' }, include: { member: true } })
+  const notifications = await prisma.notification.findMany({
+    where: { emailStatus: 'PENDING' },
+    include: { member: true },
+  })
   await sendNotifications(notifications, emailProvider)
 }
 
@@ -35,7 +38,7 @@ export const sendNotifications = async (
 
       try {
         await notifyViaEmail(notification)
-        return await prisma.notification.update({ where: { id }, data: { status: 'SENT' } })
+        return await prisma.notification.update({ where: { id }, data: { emailStatus: 'SENT' } })
       } catch (errData) {
         if (retryCount >= EMAIL_MAX_RETRY_COUNT) {
           error(
@@ -43,7 +46,7 @@ export const sendNotifications = async (
             `Failed to email ${notification.id} with ${EMAIL_MAX_RETRY_COUNT} retries. Error:`,
             errorMessage(errData)
           )
-          return await prisma.notification.update({ where: { id }, data: { status: 'FAILED' } })
+          return await prisma.notification.update({ where: { id }, data: { emailStatus: 'FAILED' } })
         } else {
           warn(
             'Email notification failure',
