@@ -32,4 +32,8 @@ export const NavigationInnerWrapper = styled.div`
   color: ${Colors.White};
   background-color: ${Colors.Black[900]};
   z-index: ${ZIndex.navbarInner};
+
+  @media (max-width: 1023px) {
+    grid-template-rows: 76px 1fr 168px;
+  }
 `
