@@ -26,7 +26,6 @@ export const usePastCouncilStats = (id: string) => {
     isLoading: loadingRange || loadingData || loadingCouncil,
     proposalsApproved: data?.proposalsApproved?.totalCount ?? 0,
     proposalsRejected: (data?.proposalsRejected?.totalCount || 0) + (data?.proposalsSlashed?.totalCount || 0),
-    // totalSpent: data && getTotalSpent(data.budgetSpendingEvents),
     totalSpent: data && pastCouncil && pastCouncil.totalSpent,
     spentOnProposals: data && getSpentOnProposals(data.fundingRequestsApproved),
   }
