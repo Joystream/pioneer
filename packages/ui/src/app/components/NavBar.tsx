@@ -36,6 +36,7 @@ const Wrapper = styled.div`
   top: 0;
   z-index: ${ZIndex.navbar};
   background: ${Colors.White};
+  box-shadow: 0px -1px 0px 0px rgba(187, 217, 246, 0.13) inset;
   display: flex;
   width: 100%;
   max-width: 100vw;
