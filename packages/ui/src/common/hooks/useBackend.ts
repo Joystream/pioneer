@@ -23,7 +23,7 @@ export function useBackend<T>(props: LazyMutationOptions): UseBackendLazy<T>
 export function useBackend<T>({ skip = false, ...options }: Props): UseBackend<T> {
   const [data, setData] = useState<T | undefined>()
   const [error, setError] = useState<GraphQLError | undefined>()
-  const backendClient = useContext(BackendContext)
+  const backendClient = useContext(BackendContext)?.backendClient
   const [retry, incrementRetry] = useReducer((retry) => retry + 1, 0)
 
   const queryOptions = 'query' in options ? options : undefined

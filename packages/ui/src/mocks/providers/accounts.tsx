@@ -157,6 +157,9 @@ const WALLET: Wallet = {
     signPayload: async () => ({
       signature: '0x123',
     }),
+    signRaw: async () => ({
+      signature: '0x123',
+    }),
   },
   extension: {},
   getAccounts: async () => [],

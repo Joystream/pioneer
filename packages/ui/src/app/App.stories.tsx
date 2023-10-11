@@ -8,7 +8,13 @@ import { createGlobalStyle } from 'styled-components'
 
 import { Page, Screen } from '@/common/components/page/Page'
 import { Colors } from '@/common/constants'
+import { EMAIL_VERIFICATION_TOKEN_SEARCH_PARAM } from '@/memberships/constants'
 import { GetMemberDocument } from '@/memberships/queries'
+import {
+  ConfirmBackendEmailDocument,
+  GetBackendMemberExistsDocument,
+  RegisterBackendMemberDocument,
+} from '@/memberships/queries/__generated__/backend.generated'
 import { Membership, member } from '@/mocks/data/members'
 import { Container, getButtonByText, joy, selectFromDropdown, withinModal } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
@@ -16,6 +22,8 @@ import { MocksParameters } from '@/mocks/providers'
 import { App } from './App'
 import { OnBoardingOverlay } from './components/OnboardingOverlay/OnBoardingOverlay'
 import { SideBar } from './components/SideBar'
+
+const MOCK_VERIFICATION_TOKEN = '1234567890'
 
 type Args = {
   isLoggedIn: boolean
@@ -25,8 +33,11 @@ type Args = {
   hasWallet: boolean
   isRPCNodeConnected: boolean
   hasRegisteredEmail: boolean
-  onBuyMembership: CallableFunction
-  onTransfer: CallableFunction
+  hasBeenAskedForEmail: boolean
+  onBuyMembership: jest.Mock
+  onTransfer: jest.Mock
+  onSubscribeEmail: jest.Mock
+  onConfirmEmail: jest.Mock
 }
 
 type Story = StoryObj<FC<Args>>
@@ -58,6 +69,8 @@ export default {
   argTypes: {
     onBuyMembership: { action: 'BuyMembership' },
     onTransfer: { action: 'BalanceTransfer' },
+    onSubscribeEmail: { action: 'SubscribeEmail' },
+    onConfirmEmail: { action: 'ConfirmEmail' },
   },
 
   args: {
@@ -68,6 +81,7 @@ export default {
     hasWallet: true,
     isRPCNodeConnected: true,
     hasRegisteredEmail: true,
+    hasBeenAskedForEmail: true,
   },
 
   parameters: {
@@ -112,15 +126,37 @@ export default {
               },
             },
 
-        queryNode: [
-          {
-            query: GetMemberDocument,
-            data: { membershipByUniqueInput: { ...bob, ...MEMBER_DATA, invitees: [] } },
-          },
-        ],
+        gql: {
+          queries: [
+            {
+              query: GetMemberDocument,
+              data: { membershipByUniqueInput: { ...bob, ...MEMBER_DATA, invitees: [] } },
+            },
+            {
+              query: GetBackendMemberExistsDocument,
+              data: { memberExist: args.hasRegisteredEmail },
+            },
+          ],
+          mutations: [
+            {
+              mutation: RegisterBackendMemberDocument,
+              onSend: (...sendArgs: any[]) => args.onSubscribeEmail(...sendArgs),
+              data: { signup: '' },
+            },
+            {
+              mutation: ConfirmBackendEmailDocument,
+              onSend: (...sendArgs: any[]) => args.onConfirmEmail(...sendArgs),
+              data: { confirmEmail: '' },
+            },
+          ],
+        },
 
-        localStorage: {
-          membersEmail: args.hasRegisteredEmail ? JSON.stringify({ 0: 'alice@example.com' }) : '',
+        backend: {
+          notificationsSettingsMap: {
+            [bob.id]: {
+              hasBeenAskedForEmail: args.hasBeenAskedForEmail,
+            },
+          },
         },
       }
     },
@@ -415,7 +451,7 @@ export const BuyMembershipTxFailure: Story = {
 }
 
 // ----------------------------------------------------------------------------
-// Test Emil Subsciption Modal
+// Test Email Subsciption Modal
 // ----------------------------------------------------------------------------
 export const EmailSubscriptionModalDecline: Story = {
   args: {
@@ -426,6 +462,7 @@ export const EmailSubscriptionModalDecline: Story = {
     hasWallet: true,
     isRPCNodeConnected: true,
     hasRegisteredEmail: false,
+    hasBeenAskedForEmail: false,
   },
   play: async ({ canvasElement }) => {
     const modal = withinModal(canvasElement)
@@ -445,6 +482,7 @@ export const EmailSubscriptionModalWrongEmail: Story = {
     hasWallet: true,
     isRPCNodeConnected: true,
     hasRegisteredEmail: false,
+    hasBeenAskedForEmail: false,
   },
   play: async ({ canvasElement }) => {
     const modal = withinModal(canvasElement)
@@ -464,14 +502,47 @@ export const EmailSubscriptionModalSubscribe: Story = {
     hasWallet: true,
     isRPCNodeConnected: true,
     hasRegisteredEmail: false,
+    hasBeenAskedForEmail: false,
   },
-  play: async ({ canvasElement }) => {
+  play: async ({ canvasElement, args: { onSubscribeEmail } }) => {
     const modal = withinModal(canvasElement)
     const button = modal.getByText(/^Sign and Authorize Email/i)
     expect(button.closest('button')).toBeDisabled()
-    await userEvent.type(modal.getByPlaceholderText('Add email for notifications here'), 'test@email.com')
+    const testEmail = 'test@email.com'
+    await userEvent.type(modal.getByPlaceholderText('Add email for notifications here'), testEmail)
     await waitFor(() => expect(button.closest('button')).toBeEnabled())
+    expect(onSubscribeEmail).toHaveBeenCalledTimes(0)
     await userEvent.click(button)
-    expect(modal.getByText('Pending transaction'))
+
+    await waitFor(
+      () => {
+        expect(onSubscribeEmail).toHaveBeenCalledTimes(1)
+        const mutationVariables = onSubscribeEmail.mock.calls[0][0]?.variables
+        expect(mutationVariables).toBeDefined()
+        expect(mutationVariables.id).toBe(parseInt(alice.id))
+        expect(mutationVariables.name).toBe(alice.metadata.name || alice.handle)
+        expect(mutationVariables.email).toBe(testEmail)
+        expect(mutationVariables.signature).toBeDefined()
+        expect(mutationVariables.timestamp).toBeDefined()
+      },
+      { timeout: 100 }
+    )
+    await waitFor(() => expect(modal.getByText('Success!')), { timeout: 100 })
+  },
+}
+
+// ----------------------------------------------------------------------------
+// Test Email Confirmation Modal
+// ----------------------------------------------------------------------------
+export const EmailConfirmationModal: Story = {
+  parameters: { router: { href: `/?${EMAIL_VERIFICATION_TOKEN_SEARCH_PARAM}=${MOCK_VERIFICATION_TOKEN}` } },
+  play: async ({ canvasElement, args: { onConfirmEmail } }) => {
+    const modal = withinModal(canvasElement)
+    expect(onConfirmEmail).toHaveBeenCalledWith({
+      variables: {
+        token: MOCK_VERIFICATION_TOKEN,
+      },
+    })
+    expect(modal.getByText(/Your email has been confirmed/))
   },
 }

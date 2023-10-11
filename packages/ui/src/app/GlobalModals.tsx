@@ -54,6 +54,7 @@ import { MemberModalCall, MemberProfile } from '@/memberships/components/MemberP
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals/BuyMembershipModal'
 import { DisconnectWalletModal, DisconnectWalletModalCall } from '@/memberships/modals/DisconnectWalletModal'
+import { EmailConfirmationModal, EmailConfirmationModalCall } from '@/memberships/modals/EmailConfirmationModal'
 import { EmailSubscriptionModal, EmailSubscriptionModalCall } from '@/memberships/modals/EmailSubscriptionModal'
 import { InviteMemberModal } from '@/memberships/modals/InviteMemberModal'
 import { InviteMemberModalCall } from '@/memberships/modals/InviteMemberModal/types'
@@ -124,6 +125,7 @@ export type ModalNames =
   | ModalName<PostReplyModalCall>
   | ModalName<InviteMemberModalCall>
   | ModalName<EmailSubscriptionModalCall>
+  | ModalName<EmailConfirmationModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -174,6 +176,7 @@ const modals: Record<ModalNames, ReactElement> = {
   ReportContentModal: <ReportContentModal />,
   PostReplyModal: <PostReplyModal />,
   EmailSubscriptionModal: <EmailSubscriptionModal />,
+  EmailConfirmationModal: <EmailConfirmationModal />,
 }
 
 const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
@@ -191,6 +194,7 @@ const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
   'DisconnectWallet',
   'ClaimVestingModal',
   'ReportContentModal',
+  'EmailConfirmationModal',
 ]
 
 export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [

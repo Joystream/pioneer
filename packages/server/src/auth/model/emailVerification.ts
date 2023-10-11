@@ -13,7 +13,8 @@ type SendVerificationEmailOpts = {
 
 export const sendVerificationEmail = async ({ email, memberId, name, referer }: SendVerificationEmailOpts) => {
   const token = createEmailToken({ email, memberId })
-  const verificationUrl = `${referer || PIONEER_URL}/#/?verify-email=${token}`
+  const baseUrl = (referer || PIONEER_URL).replace(/\/$/, '') // get rid of trailing slash
+  const verificationUrl = `${baseUrl}/#/settings?emailVerificationToken=${token}`
 
   await emailProvider.sendEmail({
     to: email,
