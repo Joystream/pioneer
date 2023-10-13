@@ -69,6 +69,13 @@ export const BlockTimeWrapper = styled.div<BlockTimeLayoutProps>`
           ${Separator} {
             color: ${Colors.Black[400]};
           }
+
+          @media (max-width: 425px) {
+            grid-template-rows: auto auto;
+            ${Separator} {
+              display: none;
+            }
+          }
         `
       case 'column':
         return css`
