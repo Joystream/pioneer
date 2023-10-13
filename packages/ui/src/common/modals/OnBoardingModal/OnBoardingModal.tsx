@@ -18,12 +18,14 @@ import { useModal } from '@/common/hooks/useModal'
 import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { useQueryNodeTransactionStatus } from '@/common/hooks/useQueryNodeTransactionStatus'
+import { warning } from '@/common/logger'
 import { onBoardingMachine } from '@/common/modals/OnBoardingModal/machine'
 import { OnBoardingAccount } from '@/common/modals/OnBoardingModal/OnBoardingAccount'
 import { OnBoardingMembership } from '@/common/modals/OnBoardingModal/OnBoardingMembership'
 import { OnBoardingPlugin } from '@/common/modals/OnBoardingModal/OnBoardingPlugin'
 import { OnBoardingStatus, SetMembershipAccount } from '@/common/providers/onboarding/types'
 import { definedValues } from '@/common/utils'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
 import { toExternalResources } from '@/memberships/modals/utils'
@@ -33,11 +35,12 @@ export const OnBoardingModal = () => {
   const { status: realStatus, membershipAccount, setMembershipAccount, isLoading } = useOnBoarding()
   const status = useDebounce(realStatus, 50)
   const [state, send] = useMachine(onBoardingMachine)
-  const [membershipData, setMembershipData] = useState<{ id: string; blockHash: string }>()
-  const transactionStatus = useQueryNodeTransactionStatus(!!membershipData?.blockHash, membershipData?.blockHash)
+  const [membershipData, setMembershipData] = useState<{ id: string; blockHash: string; blockNumber: number }>()
+  const transactionStatus = useQueryNodeTransactionStatus(!!membershipData, membershipData?.blockNumber)
   const apolloClient = useApolloClient()
   const [endpoints] = useNetworkEndpoints()
   const statusRef = useRef<OnBoardingStatus>()
+  const { setActive: setActiveMember, members } = useMyMemberships()
 
   const step = useMemo(() => {
     switch (status ?? statusRef.current) {
@@ -86,12 +89,12 @@ export const OnBoardingModal = () => {
           body: JSON.stringify(membershipData),
         })
 
-        const { error, memberId, blockHash } = await response.json()
+        const { error, memberId, blockHash, block } = await response.json()
 
         if (error) {
           send({ type: 'ERROR' })
         } else {
-          setMembershipData({ id: parseInt(memberId, 16).toString(), blockHash: blockHash })
+          setMembershipData({ id: memberId, blockHash: blockHash, blockNumber: block })
         }
       } catch (err) {
         send({ type: 'ERROR' })
@@ -118,7 +121,21 @@ export const OnBoardingModal = () => {
 
   if (state.matches('success')) {
     const { form } = state.context
-    return <BuyMembershipSuccessModal onClose={hideModal} member={form} memberId={membershipData?.id} />
+    return (
+      <BuyMembershipSuccessModal
+        onClose={() => {
+          const newMember = members.find((member) => member.id === membershipData?.id?.toString())
+          if (newMember) {
+            setActiveMember(newMember)
+          } else {
+            warning('Could not find new member', membershipData?.id?.toString())
+          }
+          hideModal()
+        }}
+        member={form}
+        memberId={membershipData?.id}
+      />
+    )
   }
 
   if (state.matches('transaction') && transactionStatus !== 'confirmed') {

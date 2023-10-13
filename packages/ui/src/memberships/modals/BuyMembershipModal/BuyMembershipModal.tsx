@@ -1,9 +1,12 @@
-import React from 'react'
+import { useApolloClient } from '@apollo/client'
+import React, { useEffect } from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { warning } from '@/common/logger'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
 import { BuyMembershipFormModal, MemberFormFields } from './BuyMembershipFormModal'
@@ -17,6 +20,15 @@ export const BuyMembershipModal = () => {
 
   const membershipPrice = useFirstObservableValue(() => api?.query.members.membershipPrice(), [api?.isConnected])
   const [state, send] = useMachine(buyMembershipMachine)
+  const apolloClient = useApolloClient()
+  const { setActive: setActiveMember, members } = useMyMemberships()
+
+  const isSuccessful = state.matches('success')
+  // refetch data after successful member creation
+  useEffect(() => {
+    if (!isSuccessful) return
+    apolloClient.refetchQueries({ include: 'active' })
+  }, [isSuccessful, apolloClient])
 
   if (state.matches('prepare')) {
     const onSubmit = (params: MemberFormFields) => send({ type: 'DONE', form: params })
@@ -41,9 +53,23 @@ export const BuyMembershipModal = () => {
     )
   }
 
-  if (state.matches('success')) {
+  if (isSuccessful) {
     const { form, memberId } = state.context
-    return <BuyMembershipSuccessModal onClose={hideModal} member={form} memberId={memberId?.toString()} />
+    return (
+      <BuyMembershipSuccessModal
+        onClose={() => {
+          const newMember = members.find((member) => member.id === memberId?.toString())
+          if (newMember) {
+            setActiveMember(newMember)
+          } else {
+            warning('Could not find new member', memberId?.toString())
+          }
+          hideModal()
+        }}
+        member={form}
+        memberId={memberId?.toString()}
+      />
+    )
   }
 
   return null

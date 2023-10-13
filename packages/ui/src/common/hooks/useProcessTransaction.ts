@@ -8,6 +8,8 @@ import { Observable } from 'rxjs'
 import { ActorRef, Sender } from 'xstate'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { useApi } from '@/api/hooks/useApi'
+import { ProxyApi } from '@/proxyApi'
 
 import { error, info } from '../logger'
 import { hasErrorEvent } from '../model/JoystreamNode'
@@ -18,12 +20,14 @@ import { useObservable } from './useObservable'
 import { useTransactionStatus } from './useTransactionStatus'
 
 type SetBlockHash = Dispatch<SetStateAction<string | Hash | undefined>>
+type SetBlockNumber = Dispatch<SetStateAction<number | undefined>>
 
 interface UseSignAndSendTransactionParams {
   transaction: SubmittableExtrinsic<'rxjs'> | undefined
   signer: Address
   service: ActorRef<any>
   setBlockHash?: SetBlockHash
+  setBlockNumber?: SetBlockNumber
 }
 
 const observeTransaction = (
@@ -31,7 +35,9 @@ const observeTransaction = (
   send: Sender<any>,
   fee: BN,
   nodeRpcEndpoint: string,
-  setBlockHash?: SetBlockHash
+  api?: ProxyApi,
+  setBlockHash?: SetBlockHash,
+  setBlockNumber?: SetBlockNumber
 ) => {
   const statusCallback = (result: ISubmittableResult) => {
     const { status, events } = result
@@ -50,6 +56,12 @@ const observeTransaction = (
       ].join('\n')
 
       setBlockHash && setBlockHash(hash)
+
+      if (api && setBlockNumber) {
+        api.rpc.chain.getHeader(hash).subscribe((header) => {
+          setBlockNumber(header.number.toNumber())
+        })
+      }
 
       if (hasErrorEvent(events)) {
         subscription.unsubscribe()
@@ -103,12 +115,14 @@ export const useProcessTransaction = ({
   signer,
   service,
   setBlockHash,
+  setBlockNumber,
 }: UseSignAndSendTransactionParams) => {
   const [state, send] = useActor(service)
   const paymentInfo = useObservable(() => transaction?.paymentInfo(signer), [transaction, signer])
   const { setService } = useTransactionStatus()
   const [endpoints] = useNetworkEndpoints()
   const { allAccounts, wallet } = useMyAccounts()
+  const { api } = useApi()
 
   useEffect(() => {
     setService(service)
@@ -128,7 +142,9 @@ export const useProcessTransaction = ({
       send,
       fee,
       endpoints.nodeRpcEndpoint,
-      setBlockHash
+      api,
+      setBlockHash,
+      setBlockNumber
     )
 
     send('SIGN_EXTERNAL')

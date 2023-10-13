@@ -38,6 +38,7 @@ export const useSignAndSendTransaction = ({
   extraCosts = BN_ZERO,
 }: Params) => {
   const [blockHash, setBlockHash] = useState<Hash | string | undefined>(undefined)
+  const [blockNumber, setBlockNumber] = useState<number | undefined>(undefined)
   const apolloClient = useApolloClient()
   const balance = useBalance(signer)
   const { send, paymentInfo, isReady, isProcessing } = useProcessTransaction({
@@ -45,8 +46,9 @@ export const useSignAndSendTransaction = ({
     signer,
     service,
     setBlockHash,
+    setBlockNumber,
   })
-  const queryNodeStatus = useQueryNodeTransactionStatus(isProcessing, blockHash, skipQueryNode)
+  const queryNodeStatus = useQueryNodeTransactionStatus(isProcessing, blockNumber || blockHash, skipQueryNode)
   const { wallet } = useMyAccounts()
   const { api } = useApi()
 
