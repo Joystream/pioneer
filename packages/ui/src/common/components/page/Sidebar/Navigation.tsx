@@ -21,7 +21,7 @@ export const Navigation = styled.nav`
 export const NavigationInnerWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 76px 1fr 168px;
+  grid-template-rows: 72px 1fr 168px;
   grid-template-areas:
     'barheader'
     'barlinks'
@@ -33,7 +33,7 @@ export const NavigationInnerWrapper = styled.div`
   background-color: ${Colors.Black[900]};
   z-index: ${ZIndex.navbarInner};
 
-  @media (max-width: 1023px) {
+  @media (min-width: 1024px) {
     grid-template-rows: 76px 1fr 168px;
   }
 `
