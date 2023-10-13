@@ -8,7 +8,7 @@ const orderBy = [ForumPostOrderByInput.UpdatedAtDesc]
 
 export const useThreadLatestPost = (threadId: string) => {
   const where = useMemo((): ForumPostWhereInput => ({ thread: { id_eq: threadId }, isVisible_eq: true }), [threadId])
-  const { data } = useGetForumPostsQuery({ variables: { where, orderBy, limit: 1 } })
+  const { data } = useGetForumPostsQuery({ variables: { where, orderBy, limit: 1 }, fetchPolicy: 'cache-first' })
   const rawPost = data?.forumPosts[0]
   return { post: rawPost && asForumPost(rawPost) }
 }

@@ -68,6 +68,7 @@ import { VoteRationale } from '@/proposals/modals/VoteRationale/VoteRationale'
 import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { ApplyForRoleModal, ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { ChangeAccountModal, ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
+import { CreateOpeningModal, CreateOpeningModalCall } from '@/working-groups/modals/CreateOpening'
 import {
   IncreaseWorkerStakeModal,
   IncreaseWorkerStakeModalCall,
@@ -87,6 +88,7 @@ export type ModalNames =
   | ModalName<MoveFundsModalCall>
   | ModalName<AddNewProposalModalCall>
   | ModalName<VoteRationaleModalCall>
+  | ModalName<CreateOpeningModalCall>
   | ModalName<CreateThreadModalCall>
   | ModalName<DeleteThreadModalCall>
   | ModalName<DeletePostModalCall>
@@ -131,6 +133,7 @@ const modals: Record<ModalNames, ReactElement> = {
   ApplyForRoleModal: <ApplyForRoleModal />,
   ApplicationDetails: <ApplicationDetailsModal />,
   SwitchMember: <SwitchMemberModal />,
+  CreateOpening: <CreateOpeningModal />,
   LeaveRole: <LeaveRoleModal />,
   ChangeAccountModal: <ChangeAccountModal />,
   MoveFundsModal: <MoveFundsModal />,
@@ -193,6 +196,7 @@ const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
 export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [
   'AddNewProposalModal',
   'AnnounceCandidateModal',
+  'CreateOpening',
   'CreatePost',
   'CreateThreadModal',
   'ApplyForRoleModal',
