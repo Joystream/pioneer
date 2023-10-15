@@ -34,8 +34,21 @@ export const asPastCouncil = (fields: PastCouncilFieldsFragment): PastCouncil =>
   }),
 })
 
-export const getTotalSpent = (spendingEvents: CouncilSpendingEventFieldsFragment[]) =>
-  spendingEvents.reduce((a, b) => a.add(new BN(b.amount)), BN_ZERO)
+const getTotalSpent = (
+  councilFields: PastCouncilDetailedFieldsFragment,
+  workingGroupBudgets: PastCouncilBudgetUpdatedEventFieldsFragment[],
+  workingGroupRewardPaidEvents: PastCouncilRewardPaidEventFieldsFragment[],
+  fundingRequestsApproved: FundingRequestApprovedFragment[]
+) => {
+  const totalAccumulatedReward = councilFields.councilMembers.reduce(
+    (a, b) => a.add(new BN(b.accumulatedReward)),
+    BN_ZERO
+  )
+  const totalBudgetChange = workingGroupBudgets.reduce((a, b) => a.add(new BN(b.budgetChangeAmount)), BN_ZERO)
+  const totalRewardPaid = workingGroupRewardPaidEvents.reduce((a, b) => a.add(new BN(b.amount)), BN_ZERO)
+  const spentOnProposal = getSpentOnProposals(fundingRequestsApproved)
+  return totalAccumulatedReward.add(totalBudgetChange).add(totalRewardPaid).add(spentOnProposal)
+}
 
 export const getSpentOnProposals = (fundingRequests: FundingRequestApprovedFragment[]) => {
   return fundingRequests.reduce((sum, fundingRequest) => {
@@ -55,12 +68,12 @@ export const asPastCouncilWithDetails = (
 ): PastCouncilWithDetails => {
   return {
     ...asPastCouncil(councilFields),
-    // totalSpent: getTotalSpent(spendingEvents),
-    totalSpent: councilFields.councilMembers
-      .reduce((a, b) => a.add(new BN(b.accumulatedReward)), BN_ZERO)
-      .add(workingGroupBudgets.reduce((a, b) => a.add(new BN(b.budgetChangeAmount)), BN_ZERO))
-      .add(getSpentOnProposals(fundingRequestsApproved))
-      .add(workingGroupRewardPaidEvents.reduce((a, b) => a.add(new BN(b.amount)), BN_ZERO)),
+    totalSpent: getTotalSpent(
+      councilFields,
+      workingGroupBudgets,
+      workingGroupRewardPaidEvents,
+      fundingRequestsApproved
+    ),
     totalMissedRewards: councilFields.councilMembers.reduce((a, b) => a.add(new BN(b.unpaidReward)), BN_ZERO).neg(),
     totalPaidRewards: councilFields.councilMembers.reduce((a, b) => a.add(new BN(b.accumulatedReward)), BN_ZERO),
     totalSpentOnProposals: getSpentOnProposals(fundingRequestsApproved),
