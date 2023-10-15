@@ -287,6 +287,10 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
         setStageDescription(selectedStage)
         setVerbIndicator('ended on')
         setDaysIndicator(votingEndDay)
+      } else if (selectedStage === 'nextround') {
+        setStageDescription('Next Round')
+        setVerbIndicator('starts in')
+        setDaysIndicator(defaultDaysIndicator)
       }
     } else {
       setStageDescription(defaultStaging)
@@ -540,6 +544,7 @@ const ProgressBarLayout = styled.div`
   max-width: 100%;
   margin-top: 8px;
   place-items: center;
+  height: 20px;
 `
 const Period = ({ amount, unit, tiny }: { amount: number | string; unit: string; tiny?: boolean }) => (
   <Days unit={unit} tiny={tiny}>
