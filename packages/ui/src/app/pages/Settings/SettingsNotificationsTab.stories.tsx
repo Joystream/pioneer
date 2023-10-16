@@ -17,6 +17,8 @@ import { SettingsNotificationsTab } from './SettingsNotificationsTab'
 type Args = {
   isRegistered: boolean
   isEmailConfirmed: boolean
+  activeMemberExistBackendLoading: boolean
+  activeMemberExistBackendError: boolean
   onMemberUpdate: CallableFunction
 }
 type Story = StoryObj<FC<Args>>
@@ -37,6 +39,8 @@ export default {
   args: {
     isRegistered: true,
     isEmailConfirmed: true,
+    activeMemberExistBackendLoading: false,
+    activeMemberExistBackendError: false,
   },
 
   parameters: {
@@ -53,7 +57,14 @@ export default {
           queries: [
             {
               query: GetBackendMemberExistsDocument,
-              data: { memberExist: args.isRegistered },
+              resolver: () => ({
+                data:
+                  !args.activeMemberExistBackendLoading && !args.activeMemberExistBackendError
+                    ? { memberExist: args.isRegistered }
+                    : undefined,
+                loading: args.activeMemberExistBackendLoading,
+                error: args.activeMemberExistBackendError,
+              }),
             },
             {
               query: GetBackendMeDocument,
@@ -182,5 +193,37 @@ export const RegisteredConfirmed: Story = {
         },
       })
     )
+  },
+}
+
+// ----------------------------------------------------------------------------
+// Notifications settings: backend error
+// ----------------------------------------------------------------------------
+export const BackendError: Story = {
+  args: {
+    activeMemberExistBackendError: true,
+  },
+
+  play: async ({ canvasElement }) => {
+    const screen = within(canvasElement)
+
+    expect(screen.getByText(/Failed to load notifications settings/i)).toBeInTheDocument()
+    expect(screen.queryByText(/I want to be notified by email/)).toBeNull()
+  },
+}
+
+// ----------------------------------------------------------------------------
+// Notifications settings: backend loading
+// ----------------------------------------------------------------------------
+export const BackendLoading: Story = {
+  args: {
+    activeMemberExistBackendLoading: true,
+  },
+
+  play: async ({ canvasElement }) => {
+    const screen = within(canvasElement)
+
+    await waitFor(() => expect(screen.getByText(/Loading notification settings/i)).toBeInTheDocument())
+    expect(screen.queryByText(/I want to be notified by email/)).toBeNull()
   },
 }

@@ -5,6 +5,7 @@ import * as Yup from 'yup'
 import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
 import { EmptyPagePlaceholder } from '@/common/components/EmptyPagePlaceholder/EmptyPagePlaceholder'
 import { InputComponent, InputText, ToggleCheckbox } from '@/common/components/forms'
+import { Loading } from '@/common/components/Loading'
 import { ColumnGapBlock, MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { TextBig, TextMedium } from '@/common/components/typography'
@@ -105,8 +106,14 @@ export const SettingsNotificationsTab: FC = () => {
     setShowSettingsUpdatedModal(true)
   })
 
-  const loadingContent = 'Loading notification settings'
-  const errorContent = 'Error loading notification settings'
+  const loadingContent = <Loading text="Loading notification settings" />
+  const errorContent = (
+    <Warning
+      title="Failed to load notifications settings"
+      content="Something went wrong. Please try again later."
+      isClosable={false}
+    />
+  )
   const unregisteredContent = (
     <EmptyPagePlaceholder
       title="Subscribe to email notifications"

@@ -13,7 +13,7 @@ export const MockBackendProvider: FC<MockBackendProps> = ({ children, backend })
   return (
     <BackendContext.Provider
       value={{
-        backendClient: undefined,
+        backendClient: { mocked: true } as any, // so that backendClient checks don't skip queries
         notificationsSettingsMap: backend?.notificationsSettingsMap,
         setMemberSettings: (memberId, settings) => backend?.onSetMemberSettings?.(memberId, settings),
       }}
