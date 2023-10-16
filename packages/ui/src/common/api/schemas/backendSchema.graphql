@@ -5,6 +5,8 @@ type Member {
   id: Int!
   name: String!
   email: String
+  unverifiedEmail: String
+  receiveEmails: Boolean!
 }
 
 enum EntitySubscriptionKind {
@@ -62,10 +64,11 @@ enum NotificationKind {
   FORUM_CATEGORY_ENTITY_THREAD
 }
 
-enum NotificationStatus {
+enum NotificationEmailStatus {
   PENDING
   SENT
   FAILED
+  IGNORED
 }
 
 type Notification {
@@ -73,7 +76,7 @@ type Notification {
   kind: NotificationKind!
   eventId: String!
   entityId: String
-  status: NotificationStatus!
+  emailStatus: NotificationEmailStatus!
   isRead: Boolean!
 }
 
@@ -87,7 +90,7 @@ type Mutation {
   signin(memberId: Int!, signature: String!, timestamp: BigInt!): String
   signup(memberId: Int!, name: String!, email: String, signature: String!, timestamp: BigInt!): String
   verifyEmail(token: String!): Member
-  initEmailChange(email: String!): Boolean
+  updateMember(email: String, receiveEmails: Boolean): Member
   entitySubscription(
     kind: EntitySubscriptionKind!
     entityId: String!
@@ -115,7 +118,7 @@ type Query {
     kind: NotificationKind
     eventId: String
     entityId: String
-    status: NotificationStatus
+    emailStatus: NotificationEmailStatus
     isRead: Boolean
   ): [Notification]
 }

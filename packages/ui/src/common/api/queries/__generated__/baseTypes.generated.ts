@@ -13927,6 +13927,8 @@ export type Member = {
   email?: Maybe<Scalars['String']>
   id: Scalars['Int']
   name: Scalars['String']
+  receiveEmails: Scalars['Boolean']
+  unverifiedEmail?: Maybe<Scalars['String']>
 }
 
 export type MemberAccountsUpdatedEvent = BaseGraphQlObject &
@@ -16281,9 +16283,9 @@ export type Mutation = {
   __typename: 'Mutation'
   entitySubscription?: Maybe<EntitySubscription>
   generalSubscriptions?: Maybe<Array<Maybe<GeneralSubscription>>>
-  initEmailChange?: Maybe<Scalars['Boolean']>
   signin?: Maybe<Scalars['String']>
   signup?: Maybe<Scalars['String']>
+  updateMember?: Maybe<Member>
   verifyEmail?: Maybe<Member>
 }
 
@@ -16295,10 +16297,6 @@ export type MutationEntitySubscriptionArgs = {
 
 export type MutationGeneralSubscriptionsArgs = {
   data?: InputMaybe<Array<InputMaybe<GeneralSubscriptionInput>>>
-}
-
-export type MutationInitEmailChangeArgs = {
-  email: Scalars['String']
 }
 
 export type MutationSigninArgs = {
@@ -16313,6 +16311,11 @@ export type MutationSignupArgs = {
   name: Scalars['String']
   signature: Scalars['String']
   timestamp: Scalars['BigInt']
+}
+
+export type MutationUpdateMemberArgs = {
+  email?: InputMaybe<Scalars['String']>
+  receiveEmails?: InputMaybe<Scalars['Boolean']>
 }
 
 export type MutationVerifyEmailArgs = {
@@ -17758,12 +17761,19 @@ export type NotEnoughCandidatesEventWhereUniqueInput = {
 
 export type Notification = {
   __typename: 'Notification'
+  emailStatus: NotificationEmailStatus
   entityId?: Maybe<Scalars['String']>
   eventId: Scalars['String']
   id: Scalars['Int']
   isRead: Scalars['Boolean']
   kind: NotificationKind
-  status: NotificationStatus
+}
+
+export enum NotificationEmailStatus {
+  Failed = 'FAILED',
+  Ignored = 'IGNORED',
+  Pending = 'PENDING',
+  Sent = 'SENT',
 }
 
 export enum NotificationKind {
@@ -17780,12 +17790,6 @@ export enum NotificationKind {
   ForumThreadCreator = 'FORUM_THREAD_CREATOR',
   ForumThreadEntityPost = 'FORUM_THREAD_ENTITY_POST',
   ForumThreadMention = 'FORUM_THREAD_MENTION',
-}
-
-export enum NotificationStatus {
-  Failed = 'FAILED',
-  Pending = 'PENDING',
-  Sent = 'SENT',
 }
 
 export type OfferAcceptedEvent = BaseGraphQlObject &
@@ -25063,12 +25067,12 @@ export type QueryNotEnoughCandidatesEventsConnectionArgs = {
 }
 
 export type QueryNotificationsArgs = {
+  emailStatus?: InputMaybe<NotificationEmailStatus>
   entityId?: InputMaybe<Scalars['String']>
   eventId?: InputMaybe<Scalars['String']>
   id?: InputMaybe<Scalars['String']>
   isRead?: InputMaybe<Scalars['Boolean']>
   kind?: InputMaybe<NotificationKind>
-  status?: InputMaybe<NotificationStatus>
 }
 
 export type QueryOfferAcceptedEventByUniqueInputArgs = {

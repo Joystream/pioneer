@@ -22,7 +22,11 @@ class MailgunEmailProvider implements EmailProvider {
   private mailgunDomain: string
 
   constructor(config: Exclude<typeof MAILGUN_CONFIG, null>) {
-    this.mailgun = new Mailgun(formData).client({ username: 'api', key: config.apiKey })
+    this.mailgun = new Mailgun(formData).client({
+      username: 'api',
+      key: config.apiKey,
+      url: config.url,
+    })
     this.mailgunDomain = config.domain
   }
 
