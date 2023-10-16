@@ -42,7 +42,6 @@ export const asPastElectionWithDetails = (
   fields: PastElectionRoundDetailedFieldsFragment
 ): PastElectionWithDetails => ({
   ...asPastElection(fields),
-  totalCandidatesStake: sumStakes(fields.castVotes),
   votingResults: fields.candidates.map((candidate) => {
     const candidateVotes = fields.castVotes.filter(({ voteForId }) => voteForId === candidate.id)
 
