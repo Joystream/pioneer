@@ -46,8 +46,8 @@ const alice = member('alice')
 const bob = member('bob')
 const charlie = member('charlie')
 
-const MEMBER_DATA = {
-  id: '12',
+const NEW_MEMBER_DATA = {
+  id: alice.id, // we set this to alice's ID so that after member is created, member with same ID can be found in MembershipContext
   handle: 'realbobbybob',
   metadata: {
     name: 'BobbyBob',
@@ -118,7 +118,7 @@ export default {
                 members: {
                   buyMembership: {
                     event: 'MembershipBought',
-                    data: [MEMBER_DATA.id],
+                    data: [NEW_MEMBER_DATA.id],
                     onSend: args.onBuyMembership,
                     failure: parameters.txFailure,
                   },
@@ -130,7 +130,7 @@ export default {
           queries: [
             {
               query: GetMemberDocument,
-              data: { membershipByUniqueInput: { ...bob, ...MEMBER_DATA, invitees: [] } },
+              data: { membershipByUniqueInput: { ...bob, ...NEW_MEMBER_DATA, invitees: [] } },
             },
             {
               query: GetBackendMemberExistsDocument,
@@ -314,10 +314,10 @@ export const FaucetMembership: Story = {
       expect(modal.getByText('Please fill in all the details below.'))
 
       // Check that the CAPTCHA blocks the next step
-      await userEvent.type(modal.getByLabelText('Member Name'), MEMBER_DATA.metadata.name)
-      await userEvent.type(modal.getByLabelText('Membership handle'), MEMBER_DATA.handle)
-      await userEvent.type(modal.getByLabelText('About member'), MEMBER_DATA.metadata.about)
-      await userEvent.type(modal.getByLabelText('Member Avatar'), MEMBER_DATA.metadata.avatar.avatarUri)
+      await userEvent.type(modal.getByLabelText('Member Name'), NEW_MEMBER_DATA.metadata.name)
+      await userEvent.type(modal.getByLabelText('Membership handle'), NEW_MEMBER_DATA.handle)
+      await userEvent.type(modal.getByLabelText('About member'), NEW_MEMBER_DATA.metadata.about)
+      await userEvent.type(modal.getByLabelText('Member Avatar'), NEW_MEMBER_DATA.metadata.avatar.avatarUri)
       await userEvent.click(modal.getByLabelText(/^I agree to the/))
       expect(getButtonByText(modal, 'Create a Membership')).toBeDisabled()
     })
@@ -330,10 +330,10 @@ export const FaucetMembership: Story = {
 const fillMembershipForm = async (modal: Container) => {
   await selectFromDropdown(modal, 'Root account', 'alice')
   await selectFromDropdown(modal, 'Controller account', 'bob')
-  await userEvent.type(modal.getByLabelText('Member Name'), MEMBER_DATA.metadata.name)
-  await userEvent.type(modal.getByLabelText('Membership handle'), MEMBER_DATA.handle)
-  await userEvent.type(modal.getByLabelText('About member'), MEMBER_DATA.metadata.about)
-  await userEvent.type(modal.getByLabelText('Member Avatar'), MEMBER_DATA.metadata.avatar.avatarUri)
+  await userEvent.type(modal.getByLabelText('Member Name'), NEW_MEMBER_DATA.metadata.name)
+  await userEvent.type(modal.getByLabelText('Membership handle'), NEW_MEMBER_DATA.handle)
+  await userEvent.type(modal.getByLabelText('About member'), NEW_MEMBER_DATA.metadata.about)
+  await userEvent.type(modal.getByLabelText('Member Avatar'), NEW_MEMBER_DATA.metadata.avatar.avatarUri)
   await userEvent.click(modal.getByLabelText(/^I agree to the/))
 }
 
@@ -382,28 +382,71 @@ export const BuyMembershipHappy: Story = {
 
     await step('Confirm', async () => {
       expect(await modal.findByText('Success'))
-      expect(modal.getByText(MEMBER_DATA.handle))
+      expect(modal.getByText(NEW_MEMBER_DATA.handle))
 
       expect(args.onBuyMembership).toHaveBeenCalledWith({
         rootAccount: alice.controllerAccount,
         controllerAccount: bob.controllerAccount,
-        handle: MEMBER_DATA.handle,
+        handle: NEW_MEMBER_DATA.handle,
         metadata: metadataToBytes(MembershipMetadata, {
-          name: MEMBER_DATA.metadata.name,
-          about: MEMBER_DATA.metadata.about,
-          avatarUri: MEMBER_DATA.metadata.avatar.avatarUri,
+          name: NEW_MEMBER_DATA.metadata.name,
+          about: NEW_MEMBER_DATA.metadata.about,
+          avatarUri: NEW_MEMBER_DATA.metadata.avatar.avatarUri,
           externalResources: [{ type: MembershipMetadata.ExternalResource.ResourceType.EMAIL, value: 'bobby@bob.com' }],
         }),
         invitingMemberId: undefined,
         referrerId: undefined,
       })
 
-      const viewProfileButton = getButtonByText(modal, 'View my profile')
-      expect(viewProfileButton).toBeEnabled()
-      userEvent.click(viewProfileButton)
+      const doneButton = getButtonByText(modal, 'Done')
+      expect(doneButton).toBeEnabled()
+      userEvent.click(doneButton)
+    })
+  },
+}
 
-      expect(modal.getByText('Profile'))
-      expect(modal.getByText(MEMBER_DATA.handle))
+// in this test, we are testing whether the email subscription modal is shown after the membership is bought
+// there's no easy way to change mocked members mid-story so we start with memberships
+// this way the BuyMembershipModal can set active member, which should trigger the email subscription modal
+export const BuyMembershipEmailSignup: Story = {
+  args: { hasMemberships: true, isLoggedIn: false, hasRegisteredEmail: false, hasBeenAskedForEmail: false },
+
+  play: async ({ args, canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    userEvent.click(getButtonByText(screen, 'Select membership'))
+    const newMemberButton = screen.getByText('New Member') as HTMLElement
+    expect(newMemberButton).toBeEnabled()
+    userEvent.click(newMemberButton)
+    const createButton = getButtonByText(modal, 'Create a Membership')
+    await fillMembershipForm(modal)
+    await waitFor(() => expect(createButton).toBeEnabled())
+    userEvent.click(createButton)
+    userEvent.click(await waitFor(() => getButtonByText(modal, 'Sign and create a member')))
+
+    await step('Confirm', async () => {
+      expect(await modal.findByText('Success'))
+      expect(modal.getByText(NEW_MEMBER_DATA.handle))
+
+      expect(args.onBuyMembership).toHaveBeenCalledWith({
+        rootAccount: alice.controllerAccount,
+        controllerAccount: bob.controllerAccount,
+        handle: NEW_MEMBER_DATA.handle,
+        metadata: metadataToBytes(MembershipMetadata, {
+          name: NEW_MEMBER_DATA.metadata.name,
+          about: NEW_MEMBER_DATA.metadata.about,
+          avatarUri: NEW_MEMBER_DATA.metadata.avatar.avatarUri,
+        }),
+        invitingMemberId: undefined,
+        referrerId: undefined,
+      })
+
+      const doneButton = getButtonByText(modal, 'Done')
+      expect(doneButton).toBeEnabled()
+      userEvent.click(doneButton)
+
+      await waitFor(() => modal.findByText('Sign up to email notifications'))
     })
   },
 }

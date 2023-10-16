@@ -5,8 +5,6 @@ import { useApi } from '@/api/hooks/useApi'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
-import { warning } from '@/common/logger'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
 import { BuyMembershipFormModal, MemberFormFields } from './BuyMembershipFormModal'
@@ -21,7 +19,6 @@ export const BuyMembershipModal = () => {
   const membershipPrice = useFirstObservableValue(() => api?.query.members.membershipPrice(), [api?.isConnected])
   const [state, send] = useMachine(buyMembershipMachine)
   const apolloClient = useApolloClient()
-  const { setActive: setActiveMember, members } = useMyMemberships()
 
   const isSuccessful = state.matches('success')
   // refetch data after successful member creation
@@ -55,21 +52,7 @@ export const BuyMembershipModal = () => {
 
   if (isSuccessful) {
     const { form, memberId } = state.context
-    return (
-      <BuyMembershipSuccessModal
-        onClose={() => {
-          const newMember = members.find((member) => member.id === memberId?.toString())
-          if (newMember) {
-            setActiveMember(newMember)
-          } else {
-            warning('Could not find new member', memberId?.toString())
-          }
-          hideModal()
-        }}
-        member={form}
-        memberId={memberId?.toString()}
-      />
-    )
+    return <BuyMembershipSuccessModal onClose={hideModal} member={form} memberId={memberId?.toString()} />
   }
 
   return null
