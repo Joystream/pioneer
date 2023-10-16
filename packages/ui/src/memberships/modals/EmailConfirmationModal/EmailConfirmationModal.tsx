@@ -9,6 +9,8 @@ import { ModalWithDataCall } from '@/common/providers/modal/types'
 import { useNotificationSettings } from '@/memberships/hooks/useNotificationSettings'
 import { useConfirmBackendEmailMutation } from '@/memberships/queries/__generated__/backend.generated'
 
+import { BackendErrorModal } from '../BackendErrorModal'
+
 export type EmailConfirmationModalCall = ModalWithDataCall<
   'EmailConfirmationModal',
   {
@@ -49,14 +51,16 @@ export const EmailConfirmationModal = () => {
     hideModal()
   }
 
+  if (error) {
+    return <BackendErrorModal onClose={closeConfirmationModal} />
+  }
+
   return (
     <Modal onClose={closeConfirmationModal} modalSize="m">
       <ModalHeader onClick={closeConfirmationModal} title="Email confirmation" />
       <ModalBody>
         {loading ? (
           <Loading text="Confirming email..." withoutMargin />
-        ) : error ? (
-          <TextMedium>Unexpected error occurred. Please try again later.</TextMedium>
         ) : (
           <TextMedium>
             Your email has been confirmed! You can always adjust your notification preferences in settings.

@@ -19,6 +19,7 @@ type Args = {
   isEmailConfirmed: boolean
   activeMemberExistBackendLoading: boolean
   activeMemberExistBackendError: boolean
+  updateMemberError: boolean
   onMemberUpdate: CallableFunction
 }
 type Story = StoryObj<FC<Args>>
@@ -41,6 +42,7 @@ export default {
     isEmailConfirmed: true,
     activeMemberExistBackendLoading: false,
     activeMemberExistBackendError: false,
+    updateMemberError: false,
   },
 
   parameters: {
@@ -82,6 +84,7 @@ export default {
             {
               mutation: UpdateBackendMemberDocument,
               onSend: (...sendArgs: any[]) => args.onMemberUpdate(...sendArgs),
+              error: args.updateMemberError ? new Error('error') : undefined,
             },
           ],
         },
@@ -225,5 +228,30 @@ export const BackendLoading: Story = {
 
     await waitFor(() => expect(screen.getByText(/Loading notification settings/i)).toBeInTheDocument())
     expect(screen.queryByText(/I want to be notified by email/)).toBeNull()
+  },
+}
+
+// ----------------------------------------------------------------------------
+// Notifications settings: update error
+// ----------------------------------------------------------------------------
+export const UpdateError: Story = {
+  args: {
+    updateMemberError: true,
+  },
+
+  play: async ({ canvasElement }) => {
+    const screen = within(canvasElement)
+
+    expect(screen.getByText(/I want to be notified by email/)).toBeInTheDocument()
+
+    const saveChangesButton = getButtonByText(screen, /Save changes/i)
+    const _emailInput = screen.getByText(/Email/).parentElement?.querySelector('input')
+    expect(_emailInput).toBeDefined()
+    const emailInput = _emailInput as HTMLInputElement
+    await waitFor(() => expect(emailInput).toHaveValue(email))
+    userEvent.type(emailInput, 'm')
+    expect(saveChangesButton).toBeEnabled()
+    userEvent.click(saveChangesButton)
+    await waitFor(() => expect(screen.getByText(/Unexpected error/)).toBeInTheDocument())
   },
 }

@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { FailureModal } from '@/common/components/FailureModal'
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { WaitModal } from '@/common/components/WaitModal'
 import { useMachine } from '@/common/hooks/useMachine'
@@ -12,6 +11,8 @@ import { useNotificationSettings } from '@/memberships/hooks/useNotificationSett
 import { EmailSubscriptionModalCall } from '@/memberships/modals/EmailSubscriptionModal/index'
 import { getBackendAuthSignature } from '@/memberships/model/backendAuth'
 import { useRegisterBackendMemberMutation } from '@/memberships/queries/__generated__/backend.generated'
+
+import { BackendErrorModal } from '../BackendErrorModal'
 
 import { EmailSubscriptionFormModal } from './EmaiSubscriptionFormModal'
 import { EmailSubscriptionMachine } from './machine'
@@ -100,13 +101,7 @@ export const EmailSubscriptionModal = () => {
   }
 
   if (state.matches('error')) {
-    return (
-      <FailureModal onClose={hideModal}>
-        There was a problem registering your email.
-        <br />
-        We could not register your email at the moment! Please, try again later!
-      </FailureModal>
-    )
+    return <BackendErrorModal onClose={hideModal} />
   }
 
   if (state.matches('signature')) {
