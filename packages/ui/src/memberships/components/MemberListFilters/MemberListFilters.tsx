@@ -248,9 +248,10 @@ const FieldsHeader = styled.div`
 const FilterContentWrapper = styled.div`
   display: flex;
   gap: 16px;
+  padding: 8px 8px 12px 8px;
 
   ${SelectContainer} {
-    width: 196px;
+    width: 220px;
   }
 
   @media (max-width: 425px) {
