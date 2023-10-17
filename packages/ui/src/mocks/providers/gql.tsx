@@ -33,12 +33,12 @@ export const useQuery = (query: DocumentNode, options?: Options): Result => {
 
   const result = mockedQueriesMap.get(query)?.(options) ?? { loading: false, data: undefined }
   useEffect(() => {
-    if (options?.onCompleted) {
+    if (options?.onCompleted && !result.error && result.data) {
       options?.onCompleted(result.data)
     }
   }, [JSON.stringify(result.data)])
 
-  return useMemo<Result>(() => result, [JSON.stringify(result)])
+  return useMemo<Result>(() => ({ ...result, refetch: () => undefined }), [JSON.stringify(result)])
 }
 
 export const useLazyQuery = (query: DocumentNode, options?: Options): [() => void, Result] => {
@@ -70,7 +70,7 @@ export const useMutation = (mutation: DocumentNode, options?: Options): [() => v
       if (result.error) {
         return Promise.reject(result.error)
       }
-      return Promise.resolve(result.data)
+      return Promise.resolve(result)
     },
     [JSON.stringify(result)]
   )
@@ -85,7 +85,7 @@ export const useApolloClient = () => ({
 })
 export const makeVar = () => null
 
-type GqlQueryMock = { query: DocumentNode; data?: any; resolver?: Resolver }
+type GqlQueryMock = { query: DocumentNode; data?: any; resolver?: Resolver; error?: any }
 type GqlMutationMock = {
   mutation: DocumentNode
   data?: any

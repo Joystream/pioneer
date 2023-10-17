@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import * as Yup from 'yup'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { backendAuthTokenVar } from '@/app/providers/backend/provider'
 import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
 import { EmptyPagePlaceholder } from '@/common/components/EmptyPagePlaceholder/EmptyPagePlaceholder'
 import { InputComponent, InputText, ToggleCheckbox } from '@/common/components/forms'
@@ -157,7 +156,6 @@ export const SettingsNotificationsTab: FC = () => {
         return
       }
       setMemberSettings(activeMember.id, { accessToken: data.signin })
-      backendAuthTokenVar(data.signin)
       await meRefetch()
       setReauthorizationStatus(null)
     } catch (e) {

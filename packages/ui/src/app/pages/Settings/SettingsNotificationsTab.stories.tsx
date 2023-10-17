@@ -4,6 +4,7 @@ import { userEvent, waitFor, within } from '@storybook/testing-library'
 import { FC } from 'react'
 
 import {
+  BackendSigninDocument,
   GetBackendMeDocument,
   GetBackendMemberExistsDocument,
   UpdateBackendMemberDocument,
@@ -14,13 +15,19 @@ import { MocksParameters } from '@/mocks/providers'
 
 import { SettingsNotificationsTab } from './SettingsNotificationsTab'
 
+const SIGNIN_TOKEN = 'new-token'
+
 type Args = {
   isRegistered: boolean
   isEmailConfirmed: boolean
+  isAuthorized: boolean
   activeMemberExistBackendLoading: boolean
   activeMemberExistBackendError: boolean
   updateMemberError: boolean
-  onMemberUpdate: CallableFunction
+  signinError: boolean
+  onMemberUpdate: jest.Mock
+  onSetMemberSettings: jest.Mock
+  onSignin: jest.Mock
 }
 type Story = StoryObj<FC<Args>>
 
@@ -35,14 +42,18 @@ export default {
     isRegistered: { control: { type: 'boolean' } },
     isEmailConfirmed: { control: { type: 'boolean' } },
     onMemberUpdate: { action: 'MemberUpdate' },
+    onSetMemberSettings: { action: 'SetMemberSettings' },
+    onSignin: { action: 'Signin' },
   },
 
   args: {
     isRegistered: true,
     isEmailConfirmed: true,
+    isAuthorized: true,
     activeMemberExistBackendLoading: false,
     activeMemberExistBackendError: false,
     updateMemberError: false,
+    signinError: false,
   },
 
   parameters: {
@@ -70,14 +81,17 @@ export default {
             },
             {
               query: GetBackendMeDocument,
-              data: {
-                me: {
-                  email: args.isEmailConfirmed ? email : null,
-                  unverifiedEmail: args.isEmailConfirmed ? null : email,
-                  receiveEmails: true,
-                  name: 'test',
-                },
-              },
+              data: args.isAuthorized
+                ? {
+                    me: {
+                      email: args.isEmailConfirmed ? email : null,
+                      unverifiedEmail: args.isEmailConfirmed ? null : email,
+                      receiveEmails: true,
+                      name: 'test',
+                    },
+                  }
+                : undefined,
+              error: args.isAuthorized ? undefined : new Error('Unauthorized'),
             },
           ],
           mutations: [
@@ -86,15 +100,24 @@ export default {
               onSend: (...sendArgs: any[]) => args.onMemberUpdate(...sendArgs),
               error: args.updateMemberError ? new Error('error') : undefined,
             },
+            {
+              mutation: BackendSigninDocument,
+              onSend: (...sendArgs: any[]) => args.onSignin(...sendArgs),
+              data: !args.signinError ? { signin: SIGNIN_TOKEN } : undefined,
+              error: args.signinError ? new Error('error') : undefined,
+            },
           ],
         },
 
         backend: {
-          notificationsSettingsMap: {
-            [alice.id]: {
-              accessToken: 'token',
-            },
-          },
+          notificationsSettingsMap: args.isAuthorized
+            ? {
+                [alice.id]: {
+                  accessToken: 'token',
+                },
+              }
+            : {},
+          onSetMemberSettings: (...settingsArgs: any[]) => args.onSetMemberSettings(...settingsArgs),
         },
       }
     },
@@ -252,6 +275,58 @@ export const UpdateError: Story = {
     userEvent.type(emailInput, 'm')
     expect(saveChangesButton).toBeEnabled()
     userEvent.click(saveChangesButton)
+    await waitFor(() => expect(screen.getByText(/Unexpected error/i)).toBeInTheDocument())
+  },
+}
+
+// ----------------------------------------------------------------------------
+// Notifications settings: Unauthorized, happy path
+// ----------------------------------------------------------------------------
+export const UnauthorizedHappy: Story = {
+  args: {
+    isAuthorized: false,
+  },
+
+  play: async ({ args, canvasElement }) => {
+    const screen = within(canvasElement)
+
+    const authorizeButton = await waitFor(() => getButtonByText(screen, /Authorize again/i))
+    expect(authorizeButton).toBeEnabled()
+
+    expect(args.onSignin).toHaveBeenCalledTimes(0)
+    expect(args.onSetMemberSettings).toHaveBeenCalledTimes(0)
+    userEvent.click(authorizeButton)
+    await waitFor(() => expect(args.onSignin).toHaveBeenCalledTimes(1))
+    await waitFor(() => expect(args.onSetMemberSettings).toHaveBeenCalledTimes(1))
+    const signinVariables = args.onSignin.mock.calls[0][0]?.variables
+    expect(signinVariables).toBeDefined()
+    expect(signinVariables.memberId).toBe(parseInt(alice.id))
+    expect(signinVariables.signature).toBeDefined()
+    expect(signinVariables.timestamp).toBeDefined()
+    expect(args.onSetMemberSettings).toHaveBeenCalledWith(alice.id, { accessToken: SIGNIN_TOKEN })
+  },
+}
+
+// ----------------------------------------------------------------------------
+// Notifications settings: Unauthorized, error
+// ----------------------------------------------------------------------------
+export const UnauthorizedError: Story = {
+  args: {
+    isAuthorized: false,
+    signinError: true,
+  },
+
+  play: async ({ args, canvasElement }) => {
+    const screen = within(canvasElement)
+
+    const authorizeButton = await waitFor(() => getButtonByText(screen, /Authorize again/i))
+    expect(authorizeButton).toBeEnabled()
+
+    expect(args.onSignin).toHaveBeenCalledTimes(0)
+    expect(args.onSetMemberSettings).toHaveBeenCalledTimes(0)
+    userEvent.click(authorizeButton)
+    await waitFor(() => expect(args.onSignin).toHaveBeenCalledTimes(1))
+    await waitFor(() => expect(args.onSetMemberSettings).toHaveBeenCalledTimes(0))
     await waitFor(() => expect(screen.getByText(/Unexpected error/i)).toBeInTheDocument())
   },
 }

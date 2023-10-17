@@ -7,7 +7,7 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { BackendContext, MemberNotificationSettingsData, MemberNotificationsRecord } from './context'
 
-export const backendAuthTokenVar = makeVar<string | null>(null)
+const backendAuthTokenVar = makeVar<string | null>(null)
 
 export const BackendProvider = (props: { children: ReactNode }) => {
   const [backendClient, setBackendClient] = useState<ApolloClient<any>>()
@@ -48,15 +48,22 @@ export const BackendProvider = (props: { children: ReactNode }) => {
     backendAuthTokenVar(activeMemberSettings.accessToken)
   }, [backendClient, activeMemberSettings?.accessToken])
 
-  const setMemberSettings = useCallback((memberId: string, settings: Partial<MemberNotificationSettingsData>) => {
-    setNotificationsSettingsMap((prev) => ({
-      ...prev,
-      [memberId]: {
-        ...prev?.[memberId],
-        ...settings,
-      },
-    }))
-  }, [])
+  const setMemberSettings = useCallback(
+    (memberId: string, settings: Partial<MemberNotificationSettingsData>) => {
+      setNotificationsSettingsMap((prev) => ({
+        ...prev,
+        [memberId]: {
+          ...prev?.[memberId],
+          ...settings,
+        },
+      }))
+
+      if (activeMember?.id === memberId && settings.accessToken) {
+        backendAuthTokenVar(settings.accessToken)
+      }
+    },
+    [activeMember?.id]
+  )
 
   return (
     <BackendContext.Provider
