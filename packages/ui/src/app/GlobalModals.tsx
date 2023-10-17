@@ -217,6 +217,8 @@ export const GlobalModals = () => {
 
   const potentialFallback = useGlobalModalHandler(currentModalMachine, hideModal)
 
+  if (screen.width < 768) return null
+
   if (modal && !GUEST_ACCESSIBLE_MODALS.includes(modal as ModalNames) && !activeMember) {
     showModal<SwitchMemberModalCall>({
       modal: 'SwitchMember',
