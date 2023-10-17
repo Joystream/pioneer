@@ -1,7 +1,6 @@
 import React, { FC } from 'react'
 
-import { Modal, ModalBody, ModalHeader } from '@/common/components/Modal'
-import { Warning } from '@/common/components/Warning'
+import { FailureModal } from '@/common/components/FailureModal'
 
 type BackendErrorModalProps = {
   onClose: () => void
@@ -9,14 +8,8 @@ type BackendErrorModalProps = {
 
 export const BackendErrorModal: FC<BackendErrorModalProps> = ({ onClose }) => {
   return (
-    <Modal onClose={onClose} modalSize="m">
-      <ModalHeader onClick={onClose} title="Unexpected error" />
-      <ModalBody>
-        <Warning
-          content="There's been an unexpected error when communicating with notifications service. Please try again later."
-          isClosable={false}
-        />
-      </ModalBody>
-    </Modal>
+    <FailureModal onClose={onClose}>
+      There's been an unexpected error when communicating with notifications service. Please try again later.
+    </FailureModal>
   )
 }

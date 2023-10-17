@@ -252,6 +252,6 @@ export const UpdateError: Story = {
     userEvent.type(emailInput, 'm')
     expect(saveChangesButton).toBeEnabled()
     userEvent.click(saveChangesButton)
-    await waitFor(() => expect(screen.getByText(/Unexpected error/)).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText(/Unexpected error/i)).toBeInTheDocument())
   },
 }
