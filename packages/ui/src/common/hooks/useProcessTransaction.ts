@@ -20,14 +20,12 @@ import { useObservable } from './useObservable'
 import { useTransactionStatus } from './useTransactionStatus'
 
 type SetBlockHash = Dispatch<SetStateAction<string | Hash | undefined>>
-type SetBlockNumber = Dispatch<SetStateAction<number | undefined>>
 
 interface UseSignAndSendTransactionParams {
   transaction: SubmittableExtrinsic<'rxjs'> | undefined
   signer: Address
   service: ActorRef<any>
   setBlockHash?: SetBlockHash
-  setBlockNumber?: SetBlockNumber
 }
 
 const observeTransaction = (
@@ -36,8 +34,7 @@ const observeTransaction = (
   fee: BN,
   nodeRpcEndpoint: string,
   api?: ProxyApi,
-  setBlockHash?: SetBlockHash,
-  setBlockNumber?: SetBlockNumber
+  setBlockHash?: SetBlockHash
 ) => {
   const statusCallback = (result: ISubmittableResult) => {
     const { status, events } = result
@@ -56,12 +53,6 @@ const observeTransaction = (
       ].join('\n')
 
       setBlockHash && setBlockHash(hash)
-
-      if (api && setBlockNumber) {
-        api.rpc.chain.getHeader(hash).subscribe((header) => {
-          setBlockNumber(header.number.toNumber())
-        })
-      }
 
       if (hasErrorEvent(events)) {
         subscription.unsubscribe()
@@ -115,7 +106,6 @@ export const useProcessTransaction = ({
   signer,
   service,
   setBlockHash,
-  setBlockNumber,
 }: UseSignAndSendTransactionParams) => {
   const [state, send] = useActor(service)
   const paymentInfo = useObservable(() => transaction?.paymentInfo(signer), [transaction, signer])
@@ -143,8 +133,7 @@ export const useProcessTransaction = ({
       fee,
       endpoints.nodeRpcEndpoint,
       api,
-      setBlockHash,
-      setBlockNumber
+      setBlockHash
     )
 
     send('SIGN_EXTERNAL')
