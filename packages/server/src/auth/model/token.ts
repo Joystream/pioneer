@@ -35,18 +35,22 @@ export const getAuthenticatedMember = async (req: ExpressContext['req'] | undefi
   if (!token) {
     return null
   }
-  const payload = verify(token, APP_SECRET_KEY)
-  if (!isValidAuthTokenPayload(payload) || payload.exp < Date.now() || !isNumber(payload.memberId)) {
-    return null
-  }
+  try {
+    const payload = verify(token, APP_SECRET_KEY)
+    if (!isValidAuthTokenPayload(payload) || payload.exp < Date.now() || !isNumber(payload.memberId)) {
+      return null
+    }
 
-  const member = await prisma.member.findUnique({ where: { id: payload.memberId } })
-  if (!member) {
-    // this shouldn't happen - if it does, it means that the token was created for a member that no longer exists
-    error('Auth', `Member ${payload.memberId} with valid JWT not found`)
+    const member = await prisma.member.findUnique({ where: { id: payload.memberId } })
+    if (!member) {
+      // this shouldn't happen - if it does, it means that the token was created for a member that no longer exists
+      error('Auth', `Member ${payload.memberId} with valid JWT not found`)
+      return null
+    }
+    return member
+  } catch {
     return null
   }
-  return member
 }
 
 const isValidAuthTokenPayload = (payload: string | JwtPayload): payload is AuthTokenPayload =>

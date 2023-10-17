@@ -7,7 +7,7 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
 import { BackendContext, MemberNotificationSettingsData, MemberNotificationsRecord } from './context'
 
-const backendAuthTokenVar = makeVar<string | null>(null)
+export const backendAuthTokenVar = makeVar<string | null>(null)
 
 export const BackendProvider = (props: { children: ReactNode }) => {
   const [backendClient, setBackendClient] = useState<ApolloClient<any>>()
