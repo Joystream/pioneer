@@ -76,6 +76,9 @@ export const Modal = ({ onClose, modalHeight = 'm', children, modalSize, isDark,
 }
 
 export const ModalGlass = styled.div`
+  @media (max-width: 767px) {
+    display: none;
+  }
   display: flex;
   justify-content: center;
   position: fixed;
@@ -206,6 +209,9 @@ interface ModalWrapProps {
 }
 
 export const ModalWrap = styled.section<ModalWrapProps>`
+  @media (max-width: 767px) {
+    display: none;
+  }
   z-index: ${ZIndex.modal};
   position: absolute;
   inset: 0;
