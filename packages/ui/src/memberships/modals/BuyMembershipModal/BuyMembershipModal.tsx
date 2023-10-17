@@ -4,7 +4,6 @@ import { useApi } from '@/api/hooks/useApi'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
-import { useResponsive } from '@/common/hooks/useResponsive'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
 import { BuyMembershipFormModal, MemberFormFields } from './BuyMembershipFormModal'
@@ -13,14 +12,11 @@ import { BuyMembershipSuccessModal } from './BuyMembershipSuccessModal'
 import { buyMembershipMachine } from './machine'
 
 export const BuyMembershipModal = () => {
-  const { size } = useResponsive()
   const { hideModal } = useModal()
   const { api } = useApi()
 
   const membershipPrice = useFirstObservableValue(() => api?.query.members.membershipPrice(), [api?.isConnected])
   const [state, send] = useMachine(buyMembershipMachine)
-
-  if (size === 'xxs' || size === 'xs') return null
 
   if (state.matches('prepare')) {
     const onSubmit = (params: MemberFormFields) => send({ type: 'DONE', form: params })

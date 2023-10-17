@@ -3,7 +3,6 @@ import styled, { ThemedStyledProps } from 'styled-components'
 
 import { ConnectionStatusDot } from '@/app/components/ConnectionStatusDot'
 import { useEscape } from '@/common/hooks/useEscape'
-import { useResponsive } from '@/common/hooks/useResponsive'
 
 import { Animations, BorderRad, Colors, Fonts, RemoveScrollbar, Shadows, ZIndex } from '../../constants'
 import { CloseButton } from '../buttons'
@@ -58,7 +57,6 @@ interface ModalProps {
 }
 
 export const Modal = ({ onClose, modalHeight = 'm', children, modalSize, isDark, className }: ModalProps) => {
-  const { size: screenSize } = useResponsive()
   function onBackgroundClick(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     if (e.target === e.currentTarget) {
       onClose()
@@ -66,8 +64,6 @@ export const Modal = ({ onClose, modalHeight = 'm', children, modalSize, isDark,
   }
 
   useEscape(() => onClose())
-
-  if ((screenSize === 'xxs' || screenSize === 'xs') && modalSize !== 'xs') return null
 
   return (
     <>

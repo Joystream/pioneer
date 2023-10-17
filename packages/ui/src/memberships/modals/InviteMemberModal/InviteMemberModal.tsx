@@ -5,7 +5,6 @@ import { TextMedium } from '@/common/components/typography'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
-import { useResponsive } from '@/common/hooks/useResponsive'
 import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { Address } from '@/common/types'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
@@ -16,7 +15,6 @@ import { InviteMemberSuccessModal } from './InviteMemberSuccessModal'
 import { inviteMemberMachine } from './machine'
 
 export function InviteMemberModal() {
-  const { size } = useResponsive()
   const { api } = useApi()
   const { hideModal } = useModal()
   const workingGroupBudget = useFirstObservableValue(
@@ -32,8 +30,6 @@ export function InviteMemberModal() {
       send(isBudgetOK ? 'PASS' : 'FAIL')
     }
   }, [workingGroupBudget, membershipPrice])
-
-  if (size === 'xxs' || size === 'xs') return null
 
   if (state.matches('requirementsFailed')) {
     return <InviteMemberRequirementsModal onClose={hideModal} />
