@@ -99,10 +99,6 @@ export const SidePaneGlass = styled.div<{ onClick?: MouseEventHandler<HTMLDivEle
   color: ${Colors.Black[900]};
   z-index: ${ZIndex.modal};
 
-  @media (max-width: 767px) {
-    display: none;
-  }
-
   ${({ onClick }) =>
     onClick
       ? css`

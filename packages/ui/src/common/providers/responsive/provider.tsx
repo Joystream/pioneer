@@ -32,6 +32,7 @@ export const ResponsiveProvider = (props: Props) => {
           ? 'xs'
           : 'xxs',
       isMobile: windowWidth < 1024,
+      supportTransactions: screen.width >= 768,
     }),
     [windowWidth]
   )

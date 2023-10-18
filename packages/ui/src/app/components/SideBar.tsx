@@ -60,7 +60,7 @@ export const SideBar = () => {
 }
 
 export const SideBarContent = () => {
-  const { size } = useResponsive()
+  const { supportTransactions } = useResponsive()
   const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)
   const { stage: electionStage } = useElectionStage()
   const [endpoints] = useNetworkEndpoints()
@@ -77,7 +77,7 @@ export const SideBarContent = () => {
           {/*    Overview*/}
           {/*  </NavigationLink>*/}
           {/*</NavigationLinksItem>*/}
-          {size !== 'xxs' && size !== 'xs' && (
+          {supportTransactions && (
             <NavigationLinksItem>
               <NavigationLink to={ProfileRoutes.profile} icon={<MyProfileIcon />}>
                 My profile
