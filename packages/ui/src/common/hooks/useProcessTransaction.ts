@@ -8,8 +8,6 @@ import { Observable } from 'rxjs'
 import { ActorRef, Sender } from 'xstate'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { useApi } from '@/api/hooks/useApi'
-import { ProxyApi } from '@/proxyApi'
 
 import { error, info } from '../logger'
 import { hasErrorEvent } from '../model/JoystreamNode'
@@ -33,7 +31,6 @@ const observeTransaction = (
   send: Sender<any>,
   fee: BN,
   nodeRpcEndpoint: string,
-  api?: ProxyApi,
   setBlockHash?: SetBlockHash
 ) => {
   const statusCallback = (result: ISubmittableResult) => {
@@ -112,7 +109,6 @@ export const useProcessTransaction = ({
   const { setService } = useTransactionStatus()
   const [endpoints] = useNetworkEndpoints()
   const { allAccounts, wallet } = useMyAccounts()
-  const { api } = useApi()
 
   useEffect(() => {
     setService(service)
@@ -132,7 +128,6 @@ export const useProcessTransaction = ({
       send,
       fee,
       endpoints.nodeRpcEndpoint,
-      api,
       setBlockHash
     )
 
