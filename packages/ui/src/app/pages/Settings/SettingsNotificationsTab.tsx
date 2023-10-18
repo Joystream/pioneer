@@ -11,8 +11,10 @@ import { SuccessModal } from '@/common/components/SuccessModal'
 import { TextBig, TextMedium } from '@/common/components/typography'
 import { Warning } from '@/common/components/Warning'
 import { useModal } from '@/common/hooks/useModal'
+import { error } from '@/common/logger'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { useNotificationSettings } from '@/memberships/hooks/useNotificationSettings'
+import { BackendErrorModal } from '@/memberships/modals/BackendErrorModal'
 import { EmailSubscriptionModalCall } from '@/memberships/modals/EmailSubscriptionModal'
 import {
   useGetBackendMeQuery,
@@ -67,7 +69,7 @@ export const SettingsNotificationsTab: FC = () => {
     skip: !activeMemberSettings?.accessToken,
   })
 
-  const [sendUpdateMemberMutation] = useUpdateBackendMemberMutation({
+  const [sendUpdateMemberMutation, { error: mutationError }] = useUpdateBackendMemberMutation({
     client: backendClient,
   })
   const [newLinkGenerated, setNewLinkGenerated] = useState(false)
@@ -97,12 +99,17 @@ export const SettingsNotificationsTab: FC = () => {
   }
 
   const handleSaveChangesClick = handleSubmit(async (data) => {
-    await sendUpdateMemberMutation({
-      variables: {
-        email: dirtyFields.email ? data.email : undefined,
-        receiveEmails: dirtyFields.receiveEmailNotifications ? data.receiveEmailNotifications : undefined,
-      },
-    })
+    try {
+      await sendUpdateMemberMutation({
+        variables: {
+          email: dirtyFields.email ? data.email : undefined,
+          receiveEmails: dirtyFields.receiveEmailNotifications ? data.receiveEmailNotifications : undefined,
+        },
+      })
+    } catch (e) {
+      error(e)
+    }
+
     setShowSettingsUpdatedModal(true)
   })
 
@@ -176,9 +183,12 @@ You can customize what kind of notifications you receive anytime in settings."
 
   return (
     <>
-      {showSettingsUpdatedModal && (
-        <SuccessModal text="Settings saved successfully" onClose={() => setShowSettingsUpdatedModal(false)} />
-      )}
+      {showSettingsUpdatedModal &&
+        (mutationError ? (
+          <BackendErrorModal onClose={() => setShowSettingsUpdatedModal(false)} />
+        ) : (
+          <SuccessModal text="Settings saved successfully" onClose={() => setShowSettingsUpdatedModal(false)} />
+        ))}
       <SettingsLayout
         saveButton={{
           isVisible: true,

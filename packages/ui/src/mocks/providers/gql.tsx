@@ -10,7 +10,7 @@ export { ApolloProvider } from '@apollo/client/react'
 
 type OptionVariables = { where?: Record<string, any>; orderBy?: string | string[]; limit?: number; offset?: number }
 type Options = { variables?: OptionVariables; skip?: boolean; onCompleted?: (data: any) => void }
-type Result = { loading: boolean; data: any }
+type Result = { loading: boolean; data: any; error?: any }
 type Resolver = (options?: Options) => Result
 
 type GqlQueriesMap = Map<DocumentNode, Resolver>
@@ -67,6 +67,9 @@ export const useMutation = (mutation: DocumentNode, options?: Options): [() => v
     (...args: any[]) => {
       spy?.(...args)
       setMutationResult(result)
+      if (result.error) {
+        return Promise.reject(result.error)
+      }
       return Promise.resolve(result.data)
     },
     [JSON.stringify(result)]

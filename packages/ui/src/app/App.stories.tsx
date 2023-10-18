@@ -34,6 +34,8 @@ type Args = {
   isRPCNodeConnected: boolean
   hasRegisteredEmail: boolean
   hasBeenAskedForEmail: boolean
+  subscribeEmailError: boolean
+  confirmEmailError: boolean
   onBuyMembership: jest.Mock
   onTransfer: jest.Mock
   onSubscribeEmail: jest.Mock
@@ -82,6 +84,8 @@ export default {
     isRPCNodeConnected: true,
     hasRegisteredEmail: true,
     hasBeenAskedForEmail: true,
+    subscribeEmailError: false,
+    confirmEmailError: false,
   },
 
   parameters: {
@@ -141,12 +145,14 @@ export default {
             {
               mutation: RegisterBackendMemberDocument,
               onSend: (...sendArgs: any[]) => args.onSubscribeEmail(...sendArgs),
-              data: { signup: '' },
+              data: !args.subscribeEmailError ? { signup: '' } : undefined,
+              error: args.subscribeEmailError ? new Error('error') : undefined,
             },
             {
               mutation: ConfirmBackendEmailDocument,
               onSend: (...sendArgs: any[]) => args.onConfirmEmail(...sendArgs),
-              data: { confirmEmail: '' },
+              data: !args.confirmEmailError ? { confirmEmail: '' } : undefined,
+              error: args.confirmEmailError ? new Error('error') : undefined,
             },
           ],
         },
@@ -574,10 +580,34 @@ export const EmailSubscriptionModalSubscribe: Story = {
   },
 }
 
+export const EmailSubscriptionModalSubscribeError: Story = {
+  args: {
+    isLoggedIn: true,
+    hasMemberships: true,
+    hasAccounts: true,
+    hasFunds: true,
+    hasWallet: true,
+    isRPCNodeConnected: true,
+    hasRegisteredEmail: false,
+    hasBeenAskedForEmail: false,
+    subscribeEmailError: true,
+  },
+  play: async ({ canvasElement }) => {
+    const modal = withinModal(canvasElement)
+    const button = modal.getByText(/^Sign and Authorize Email/i)
+    expect(button.closest('button')).toBeDisabled()
+    const testEmail = 'test@email.com'
+    await userEvent.type(modal.getByPlaceholderText('Add email for notifications here'), testEmail)
+    await waitFor(() => expect(button.closest('button')).toBeEnabled())
+    await userEvent.click(button)
+    await waitFor(() => expect(modal.getAllByText(/Unexpected error/i)))
+  },
+}
+
 // ----------------------------------------------------------------------------
 // Test Email Confirmation Modal
 // ----------------------------------------------------------------------------
-export const EmailConfirmationModal: Story = {
+export const EmailConfirmationSuccess: Story = {
   parameters: { router: { href: `/?${EMAIL_VERIFICATION_TOKEN_SEARCH_PARAM}=${MOCK_VERIFICATION_TOKEN}` } },
   play: async ({ canvasElement, args: { onConfirmEmail } }) => {
     const modal = withinModal(canvasElement)
@@ -587,5 +617,19 @@ export const EmailConfirmationModal: Story = {
       },
     })
     expect(modal.getByText(/Your email has been confirmed/))
+  },
+}
+
+// ----------------------------------------------------------------------------
+// Email Confirmation Error
+// ----------------------------------------------------------------------------
+export const EmailConfirmationError: Story = {
+  args: {
+    confirmEmailError: true,
+  },
+  parameters: { router: { href: `/?${EMAIL_VERIFICATION_TOKEN_SEARCH_PARAM}=${MOCK_VERIFICATION_TOKEN}` } },
+  play: async ({ canvasElement }) => {
+    const modal = withinModal(canvasElement)
+    await waitFor(() => expect(modal.getAllByText(/Unexpected error/i)))
   },
 }
