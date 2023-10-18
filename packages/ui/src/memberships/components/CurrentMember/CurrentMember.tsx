@@ -21,19 +21,19 @@ import { AddMembershipButton } from '../AddMembershipButton'
 export const CurrentMember = () => {
   const { wallet } = useMyAccounts()
   const { members, hasMembers, active } = useMyMemberships()
-  const { showModal } = useModal()
+  const { showModal, modal } = useModal()
   const { activeMemberSettings, activeMemberExistBackendData } = useNotificationSettings()
   const showSubscriptionModal =
     active && activeMemberExistBackendData?.memberExist === false && !activeMemberSettings?.hasBeenAskedForEmail
 
   useEffect(() => {
-    if (!emailVerificationToken && showSubscriptionModal) {
+    if (!emailVerificationToken && !modal && showSubscriptionModal) {
       showModal<EmailSubscriptionModalCall>({
         modal: 'EmailSubscriptionModal',
         data: {},
       })
     }
-  }, [showSubscriptionModal])
+  }, [showSubscriptionModal, modal])
 
   const history = useHistory()
   const routeQuery = useRouteQuery()
