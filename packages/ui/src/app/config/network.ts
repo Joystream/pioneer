@@ -1,4 +1,4 @@
-export type NetworkType = 'mainnet' | 'local' | 'testnet' | 'auto-conf' | 'local-mocks'
+export type NetworkType = 'mainnet' | 'local' | 'testnet' | 'auto-conf' | 'local-mocks' | 'custom'
 
 export interface NetworkEndpoints {
   nodeRpcEndpoint: string
@@ -28,30 +28,30 @@ type PredefinedEndpoint = { [K in NetworkType]?: string }
 
 const QUERY_NODE_ENDPOINT_SUBSCRIPTION: PredefinedEndpoint = {
   mainnet: MAINNET_QUERY_NODE_SOCKET,
-  local: 'wss://joy-testnet.joystream.org/query-node/server/graphql',
+  local: 'ws://localhost:8081/graphql',
   testnet: TESTNET_QUERY_NODE_SOCKET,
-  'local-mocks': 'wss://joy-testnet.joystream.org/query-node/server/graphql',
+  'local-mocks': 'ws://localhost:8081/graphql',
 }
 
 const QUERY_NODE_ENDPOINT: PredefinedEndpoint = {
   mainnet: MAINNET_QUERY_NODE,
-  local: 'https://joy-testnet.joystream.org/query-node/server/graphql',
+  local: 'http://localhost:8081/graphql',
   testnet: TESTNET_QUERY_NODE,
-  'local-mocks': 'https://joy-testnet.joystream.org/query-node/server/graphql',
+  'local-mocks': 'http://localhost:8081/graphql',
 }
 
 const MEMBERSHIP_FAUCET_ENDPOINT: PredefinedEndpoint = {
   mainnet: MAINNET_MEMBERSHIP_FAUCET_URL,
-  local: 'https://joy-testnet.joystream.org/member-faucet/register',
+  local: 'http://localhost:3002/register',
   testnet: TESTNET_MEMBERSHIP_FAUCET_URL,
-  'local-mocks': 'https://joy-testnet.joystream.org/member-faucet/register',
+  'local-mocks': 'http://localhost:3002/register',
 }
 
 const NODE_RPC_ENDPOINT: PredefinedEndpoint = {
   mainnet: MAINNET_NODE_SOCKET,
-  local: 'wss://joy-testnet.joystream.org/ws-rpc',
+  local: 'ws://127.0.0.1:9944',
   testnet: TESTNET_NODE_SOCKET,
-  'local-mocks': 'wss://joy-testnet.joystream.org/ws-rpc',
+  'local-mocks': 'ws://127.0.0.1:9944',
 }
 
 export const pickEndpoints = (network: NetworkType): Partial<NetworkEndpoints> => ({
