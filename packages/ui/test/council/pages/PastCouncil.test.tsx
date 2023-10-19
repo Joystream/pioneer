@@ -350,13 +350,14 @@ describe('UI: Past Council page', () => {
           )
           seedEvent(
             {
+              id: '1',
               inBlock: 1,
               createdAt: '2021-09-14T11:54:56.127Z',
               network: 'OLYMPIA',
               groupId: WORKER_DATA.groupId,
-              newBudget: 80000,
+              budgetChangeAmount: 80000,
             },
-            'BudgetSetEvent',
+            'BudgetUpdatedEvent',
             mockServer.server
           )
           seedEvent(

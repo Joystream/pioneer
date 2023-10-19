@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.0] - 2023-10-13
+
+### Added
+- Custom network settings.
+- Opening creation modal.
+- Grace period or exact execution block on proposal preview pages.
+
+### Fixed
+- Markdown list color and indentation.
+- Speed-up forum category pages.
+- Past council budget statistics.
+
 ## [1.7.0] - 2023-09-15
 
 ### Added
@@ -193,7 +205,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v1.7.0...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v1.8.0...HEAD
+[1.8.0]: https://github.com/Joystream/pioneer/compare/v1.7.0...v1.8.0
 [1.7.0]: https://github.com/Joystream/pioneer/compare/v1.6.0...v1.7.0
 [1.6.0]: https://github.com/Joystream/pioneer/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/Joystream/pioneer/compare/v1.5.0...v1.5.1
