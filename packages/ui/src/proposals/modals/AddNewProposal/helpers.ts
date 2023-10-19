@@ -3,15 +3,12 @@ import * as Yup from 'yup'
 
 import { Account } from '@/accounts/types'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
-import { BN_ZERO } from '@/common/constants'
 import { BNSchema, lessThanMixed, maxContext, maxMixed, minContext, moreThanMixed } from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
 import { ProposalType } from '@/proposals/types'
 import { ProxyApi } from '@/proxyApi'
 import { GroupIdName } from '@/working-groups/types'
-
-import { Conditions } from '../../../bounty/modals/AddBountyModal/helpers'
 
 export const defaultProposalValues = {
   groupId: undefined,
