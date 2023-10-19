@@ -2,10 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
-import { TokenValueStat } from '@/common/components/statistics'
-import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
-import { useOpening } from '@/working-groups/hooks/useOpening'
-import { urlParamToOpeningId } from '@/working-groups/model/workingGroupName'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
@@ -17,6 +13,7 @@ import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/component
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
+import { TokenValueStat } from '@/common/components/statistics'
 import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
@@ -42,6 +39,9 @@ import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { useVotingRounds } from '@/proposals/hooks/useVotingRounds'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
+import { useOpening } from '@/working-groups/hooks/useOpening'
+import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
+import { urlParamToOpeningId } from '@/working-groups/model/workingGroupName'
 
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()

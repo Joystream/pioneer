@@ -33,8 +33,6 @@ import {
 
 configure({ testIdAttribute: 'id' })
 
-
-
 jest.mock('@/common/components/CKEditor', () => ({
   CKEditor: (props: CKEditorProps) => mockCKEditor(props),
 }))

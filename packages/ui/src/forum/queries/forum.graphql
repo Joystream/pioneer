@@ -164,7 +164,7 @@ fragment ForumPostWithoutReplyFields on ForumPost {
   }
   threadId
   thread {
-     categoryId
+    categoryId
   }
 }
 
