@@ -94,7 +94,7 @@ export const ProposalPreview = () => {
   const myVote = proposal?.votes.find((vote) => vote.voter.id === active?.id && vote.votingRound === currentVotingRound)
   const myVoteStatus = myVote?.voteKind
 
-  if (!proposal || !votes || !opening) {
+  if (!proposal || !votes) {
     if (!proposal && !isLoading) {
       history.replace('/404')
     }
@@ -161,15 +161,19 @@ export const ProposalPreview = () => {
                   <TextInlineMedium lighter>Time left:</TextInlineMedium>{' '}
                   <TextInlineMedium bold>{formatBlocksToDuration(blocksToProposalExecution)}</TextInlineMedium>{' '}
                   <TextInlineMedium lighter>({formatTokenValue(blocksToProposalExecution)} blocks)</TextInlineMedium>
-                  <TokenValueStat
-                    title={`Reward per ${rewardPeriod?.toString()} blocks`}
-                    value={rewardPeriod?.mul(opening.rewardPerBlock)}
-                  />
-                  <TokenValueStat
-                    title="Minimal stake"
-                    tooltipText="Minimal amount of tokens required to be staked for any applicant to such role."
-                    value={opening.stake}
-                  />
+
+                  {opening ?
+                    <>
+                      <TokenValueStat
+                        title={`Reward per ${rewardPeriod?.toString()} blocks`}
+                        value={rewardPeriod?.mul(opening.rewardPerBlock)}
+                      />
+                      <TokenValueStat
+                        title="Minimal stake"
+                        tooltipText="Minimal amount of tokens required to be staked for any applicant to such role."
+                        value={opening.stake}
+                      />
+                    </> : <></>}
                 </TextMedium>
               )}
             </BadgeAndTime>
