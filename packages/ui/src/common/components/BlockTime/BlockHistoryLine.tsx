@@ -7,7 +7,7 @@ import { Fonts } from '@/common/constants'
 import { formatDateString } from '@/common/model/formatters'
 
 import { BlockInfo, BlockInfoProp } from './BlockInfo'
- 
+
 export const BlockHistoryLine = ({ block }: BlockInfoProp) => (
   <BlockHistoryLineContainer>
     <TextInlineSmall lighter>{formatDateString(block.timestamp)}</TextInlineSmall>
