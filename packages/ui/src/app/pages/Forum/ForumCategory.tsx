@@ -13,26 +13,25 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Label, TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
-import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { useSort } from '@/common/hooks/useSort'
-import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { ForumCategoryList } from '@/forum/components/category/ForumCategoryList'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
 import { ThreadList } from '@/forum/components/threads/ThreadList'
 import { THREADS_PER_PAGE } from '@/forum/constant'
 import { useForumCategory } from '@/forum/hooks/useForumCategory'
+import { useForumCategoryThreadPage } from '@/forum/hooks/useForumCategoryThreadPage'
 import { useForumCategoryThreads } from '@/forum/hooks/useForumCategoryThreads'
 import { MemberStack, moderatorsSummary } from '@/memberships/components/MemberStack'
 
 import { ForumPageLayout } from './components/ForumPageLayout'
 
 export const ForumCategory = () => {
-  const [page, setPage] = useState<number>(1)
+  const [page, setPage] = useState<number>(useForumCategoryThreadPage())
   const { id, type } = useParams<{ id: string; type?: 'archive' }>()
   const isArchive = type === 'archive'
 
-  const { category } = useForumCategory(id)
+  const { category, isLoading: isLoadingCategory, hasError } = useForumCategory(id)
   const { order, getSortProps } = useSort<ForumThreadOrderByInput>('updatedAt')
   const {
     isLoading: isLoadingThreads,
@@ -47,19 +46,19 @@ export const ForumCategory = () => {
     },
     { perPage: THREADS_PER_PAGE, page }
   )
-  const isRefetched = useRefetchQueries({
-    interval: MILLISECONDS_PER_BLOCK,
-    include: ['GetForumThreads', 'GetForumThreadsCount'],
-  })
 
   const { showModal } = useModal()
 
-  if (isLoadingThreads && !isRefetched) {
+  if (isLoadingCategory) {
     return <Loading />
   }
 
+  if (hasError) {
+    return <EmptyPagePlaceholder title="Something went wrong fetching this category." copy="" button={null} />
+  }
+
   if (!category) {
-    return <EmptyPagePlaceholder title="There is no any data in the category" copy="" button={null} />
+    return <EmptyPagePlaceholder title="There is no data in the category" copy="" button={null} />
   }
 
   return (
@@ -117,7 +116,7 @@ export const ForumCategory = () => {
             <ThreadList
               threads={threads}
               getSortProps={getSortProps}
-              isLoading={isLoadingThreads && !isRefetched}
+              isLoading={isLoadingThreads}
               isArchive={isArchive}
               page={page}
               pageCount={threadCount && Math.ceil(threadCount / THREADS_PER_PAGE)}

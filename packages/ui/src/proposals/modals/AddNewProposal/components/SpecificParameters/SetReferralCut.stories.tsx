@@ -5,7 +5,7 @@ import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvi
 import { SetReferralCut } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetReferralCut'
 
 export default {
-  title: 'Proposals/AddNewProposalModal/SetReferralCut',
+  title: 'Pages/Proposals/ProposalList/Current/Modals/AddNewProposalModal/SetReferralCut',
   component: SetReferralCut,
 } as Meta
 

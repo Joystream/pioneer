@@ -1,15 +1,39 @@
+import { TextDecoder, TextEncoder } from 'util'
+
 import { BN_THOUSAND } from '@polkadot/util'
 import '@testing-library/jest-dom'
 import { configure, screen } from '@testing-library/react'
 import BN from 'bn.js'
 
+import { UseTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { AddressToBalanceMap, Balances } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
 import { UseModal } from '@/common/providers/modal/types'
-import { UseTransaction } from '@/common/providers/transactionFees/context'
 
 configure({ testIdAttribute: 'id' })
+
+jest.mock('injectweb3-connect', () => {
+  const wallet = {
+    title: 'ExtraWallet',
+    extensionName: 'polkadot-js',
+    logo: { src: 'https://picsum.photos/100?grayscale&blur=2' },
+    updateMetadata: jest.fn(() => Promise.resolve(true)),
+  }
+  const BaseDotsamaWallet = function () {
+    return
+  }
+  BaseDotsamaWallet.prototype = wallet
+
+  return {
+    getWalletBySource: jest.fn(() => ({ ...wallet })),
+    getAllWallets: jest.fn(() => [{ ...wallet }]),
+    BaseDotsamaWallet,
+  }
+})
+
+// Prevent jest from importing workers
+jest.mock('@/common/utils/crypto/worker', () => jest.requireActual('@/common/utils/crypto'))
 
 export const loaderSelector = (multiple = false) =>
   multiple ? screen.getAllByTestId('loading-spinner') : screen.queryByTestId('loading-spinner')
@@ -54,16 +78,17 @@ export const mockDefaultBalance = {
   total: BN_THOUSAND,
 }
 
-const defaultMockedTransactionFee: UseTransaction = {
+const defaultMockedTransactionFee: UseTransactionFee = {
   transaction: undefined,
-  setTransaction: () => undefined,
-  setSigner: () => undefined,
   feeInfo: { transactionFee: BN_ZERO, canAfford: true },
+  isLoading: false,
 }
 
-const mockedTransactionFee = jest.fn(() => defaultMockedTransactionFee)
+export const mockedTransactionFee = jest.fn<UseTransactionFee, [any, () => any, any[]] | []>(
+  () => defaultMockedTransactionFee
+)
 
-export const mockTransactionFee = (value: Partial<UseTransaction>) => {
+export const mockTransactionFee = (value: Partial<UseTransactionFee>) => {
   mockedTransactionFee.mockReturnValue({ ...mockedTransactionFee(), ...value })
 }
 
@@ -110,6 +135,17 @@ declare global {
 global.URL.createObjectURL = jest.fn()
 global.URL.revokeObjectURL = jest.fn()
 
+// Monkey patch `blob.arrayBuffer()` because despite what is on the doc it appears to not be implemented on the latest node 14
+if (!Blob.prototype.arrayBuffer) {
+  Blob.prototype.arrayBuffer = function (): Promise<ArrayBuffer> {
+    return new Promise<ArrayBuffer>((resolve) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve(reader.result as ArrayBuffer)
+      reader.readAsArrayBuffer(this)
+    })
+  }
+}
+
 expect.extend({
   toBeBN: (received: any, expected: BN) => {
     if (!BN.isBN(received)) {
@@ -132,3 +168,7 @@ expect.extend({
     }
   },
 })
+
+// multihases requires both TextEncoder and TextDecoder but is having trouble with resoving them
+global.TextEncoder = TextEncoder
+global.TextDecoder = TextDecoder as any
