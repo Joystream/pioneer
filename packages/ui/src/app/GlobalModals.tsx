@@ -1,11 +1,11 @@
 import { get } from 'lodash'
-import React, { memo, ReactElement, useMemo } from 'react'
+import React, { memo, ReactElement, useEffect, useMemo, useState } from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 
 import { ClaimVestingModalCall } from '@/accounts/modals/ClaimVestingModal'
 import { ClaimVestingModal } from '@/accounts/modals/ClaimVestingModal/ClaimVestingModal'
-import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFundsModal'
 import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'
 // import { AddBountyModal, AddBountyModalCall } from '@/bounty/modals/AddBountyModal'
@@ -68,6 +68,7 @@ import { VoteRationale } from '@/proposals/modals/VoteRationale/VoteRationale'
 import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { ApplyForRoleModal, ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { ChangeAccountModal, ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
+import { CreateOpeningModal, CreateOpeningModalCall } from '@/working-groups/modals/CreateOpening'
 import {
   IncreaseWorkerStakeModal,
   IncreaseWorkerStakeModalCall,
@@ -87,6 +88,7 @@ export type ModalNames =
   | ModalName<MoveFundsModalCall>
   | ModalName<AddNewProposalModalCall>
   | ModalName<VoteRationaleModalCall>
+  | ModalName<CreateOpeningModalCall>
   | ModalName<CreateThreadModalCall>
   | ModalName<DeleteThreadModalCall>
   | ModalName<DeletePostModalCall>
@@ -131,6 +133,7 @@ const modals: Record<ModalNames, ReactElement> = {
   ApplyForRoleModal: <ApplyForRoleModal />,
   ApplicationDetails: <ApplicationDetailsModal />,
   SwitchMember: <SwitchMemberModal />,
+  CreateOpening: <CreateOpeningModal />,
   LeaveRole: <LeaveRoleModal />,
   ChangeAccountModal: <ChangeAccountModal />,
   MoveFundsModal: <MoveFundsModal />,
@@ -193,6 +196,7 @@ const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
 export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [
   'AddNewProposalModal',
   'AnnounceCandidateModal',
+  'CreateOpening',
   'CreatePost',
   'CreateThreadModal',
   'ApplyForRoleModal',
@@ -204,6 +208,12 @@ export const GlobalModals = () => {
   const { active: activeMember } = useMyMemberships()
   const { status } = useTransactionStatus()
   const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
+
+  const [container, setContainer] = useState(document.body)
+  useEffect(() => {
+    const container = document.getElementById('modal-container')
+    if (container) setContainer(container)
+  }, [])
 
   const potentialFallback = useGlobalModalHandler(currentModalMachine, hideModal)
 
@@ -226,7 +236,7 @@ export const GlobalModals = () => {
         {isClosing && <ConfirmModal />}
         {status === 'loadingFees' && <LoaderModal onClose={hideModal} />}
       </TransactionFeesProvider>,
-      document.body
+      container
     )
   }
 

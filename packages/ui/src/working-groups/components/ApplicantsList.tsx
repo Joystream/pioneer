@@ -10,7 +10,7 @@ import { Worker } from './Worker'
 
 export interface WorkersListProps {
   myApplication?: WorkingGroupOpeningApplication
-  hired?: WorkingGroupOpeningApplication
+  hired?: WorkingGroupOpeningApplication[]
   allApplicants?: WorkingGroupOpeningApplication[]
   hiringComplete: boolean
 }
@@ -35,7 +35,9 @@ export const ApplicantsList = ({ hired, allApplicants, myApplication, hiringComp
       {hired && (
         <ContentWithTabs>
           <Label>Hired</Label>
-          <Worker member={hired.member} applicationId={hired.id} />
+          {hired.map((application, index) => (
+            <Worker key={index} member={application.member} applicationId={application.id} />
+          ))}
         </ContentWithTabs>
       )}
       <ContentWithTabs>

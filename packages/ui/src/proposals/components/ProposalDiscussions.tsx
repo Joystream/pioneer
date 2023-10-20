@@ -26,8 +26,8 @@ interface Props {
 }
 
 const hints = {
-  open: 'This is an unmoderated discussioon, everyone can comment.',
-  closed: 'This discussion is closed. Only selected members and the council can comment.',
+  open: 'Open discussion is open for every member to comment on.',
+  closed: 'Closed discussion is only available for council members, white-listed members and creator of the proposal.',
 }
 
 export const ProposalDiscussions = ({ thread, proposalId }: Props) => {

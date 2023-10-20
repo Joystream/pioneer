@@ -10,16 +10,17 @@ import { formatJoyValue } from '../../model/formatters'
 import { Tooltip } from '../Tooltip'
 
 interface ValueSizingProps {
-  size?: 's' | 'm' | 'l'
+  size?: 'xs' | 's' | 'm' | 'l'
 }
 
 interface ValueProps extends ValueSizingProps {
   value?: BN | null
   className?: string
   isLoading?: boolean
+  mjoy?: boolean
 }
 
-export const TokenValue = React.memo(({ className, value, size, isLoading }: ValueProps) => {
+export const TokenValue = React.memo(({ className, value, size, isLoading, mjoy }: ValueProps) => {
   if (isLoading) {
     return <Skeleton id="tokenValueSkeleton" variant="rect" height="32px" width="50%" />
   }
@@ -29,9 +30,15 @@ export const TokenValue = React.memo(({ className, value, size, isLoading }: Val
   }
   return (
     <Tooltip tooltipText={<JOYSuffix>{formatJoyValue(value)}</JOYSuffix>}>
-      <ValueInJoys className={className} size={size}>
-        {formatJoyValue(value, { precision: 2 })}
-      </ValueInJoys>
+      {mjoy ? (
+        <ValueInMJoys className={className} size={size}>
+          {formatJoyValue(value.divn(Math.pow(10, 6)), { precision: 2 })}
+        </ValueInMJoys>
+      ) : (
+        <ValueInJoys className={className} size={size}>
+          {formatJoyValue(value, { precision: 2 })}
+        </ValueInJoys>
+      )}
     </Tooltip>
   )
 })
@@ -60,6 +67,14 @@ export const ValueInJoys = styled(JOYSuffix)<ValueSizingProps>`
 
   ${({ size }) => {
     switch (size) {
+      case 'xs': {
+        return css`
+          font-size: 14px;
+          :after {
+            font-size: 14px;
+          }
+        `
+      }
       case 's': {
         return css`
           font-size: 16px;
@@ -88,4 +103,9 @@ export const ValueInJoys = styled(JOYSuffix)<ValueSizingProps>`
         break
     }
   }}
+`
+export const ValueInMJoys = styled(ValueInJoys)`
+  &:after {
+    content: 'M${CurrencyName.integerValue}';
+  }
 `

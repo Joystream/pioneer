@@ -40,9 +40,9 @@ export const WarningModal = ({ onNext }: AddNewProposalWarningModalProps) => {
           </TextMedium>
         </Info>
         <Checkbox id="aware-of-risks" onChange={setAwareChecked} isChecked={isAwareChecked}>
-          I’m aware of the possible risks associated with creating a proposal.
+          I'm aware of the possible risks associated with creating a proposal.
         </Checkbox>
-        <Checkbox id="aware-of-risks" onChange={setHidingCaution} isChecked={isHidingCaution}>
+        <Checkbox id="do-not-show-again" onChange={setHidingCaution} isChecked={isHidingCaution}>
           Do not show this message again.
         </Checkbox>
       </ModalBody>

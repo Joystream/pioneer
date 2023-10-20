@@ -2,12 +2,23 @@ import BN from 'bn.js'
 import * as Yup from 'yup'
 
 import { Account } from '@/accounts/types'
+import { Api } from '@/api'
+import { CurrencyName } from '@/app/constants/currency'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
-import { BNSchema, lessThanMixed, maxContext, maxMixed, minContext, moreThanMixed } from '@/common/utils/validation'
+import {
+  BNSchema,
+  lessThanMixed,
+  maxContext,
+  maxMixed,
+  minContext,
+  minMixed,
+  moreThanMixed,
+  whenDefined,
+} from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
+import { isValidCSV } from '@/proposals/model/validation'
 import { ProposalType } from '@/proposals/types'
-import { ProxyApi } from '@/proxyApi'
 import { GroupIdName } from '@/working-groups/types'
 
 export const defaultProposalValues = {
@@ -26,11 +37,18 @@ export const defaultProposalValues = {
     discussionWhitelist: [],
     isDiscussionClosed: false,
   },
+  fundingRequest: {
+    payMultiple: false,
+    hasPreviewedInput: true,
+  },
   updateWorkingGroupBudget: {
     isPositive: true,
   },
   durationAndProcess: {
     isLimited: false,
+  },
+  updateChannelPayouts: {
+    cashoutEnabled: true,
   },
 }
 
@@ -56,11 +74,15 @@ export interface AddNewProposalForm {
     signal?: string
   }
   fundingRequest: {
-    amount: BN
-    account: Account
+    amount?: BN
+    account?: Account
+    payMultiple?: boolean
+    csvInput?: string
+    accountsAndAmounts?: { amount: BN; account: string }[]
+    hasPreviewedInput?: boolean
   }
   runtimeUpgrade: {
-    runtime?: ArrayBuffer
+    runtime?: File
   }
   setCouncilorReward: {
     amount?: BN
@@ -140,9 +162,22 @@ export interface AddNewProposalForm {
   setMembershipPrice: {
     amount?: BN
   }
+  updateChannelPayouts: {
+    commitment?: string
+    payloadSize?: number
+    payloadHash?: string
+    minimumCashoutAllowed?: BN
+    maximumCashoutAllowed?: BN
+    cashoutEnabled?: boolean
+    payload: {
+      objectCreationParams: { size_: BN; ipfsContentId: any /* Bytes */ }
+      expectedDataSizeFee: BN
+      expectedDataObjectStateBloatBond: BN
+    }
+  }
 }
 
-export const schemaFactory = (api?: ProxyApi) => {
+export const schemaFactory = (api?: Api) => {
   return Yup.object().shape({
     groupId: Yup.string(),
     proposalType: Yup.object().shape({
@@ -178,18 +213,44 @@ export const schemaFactory = (api?: ProxyApi) => {
       signal: Yup.string().required('Field is required').trim(),
     }),
     fundingRequest: Yup.object().shape({
-      amount: BNSchema.test(moreThanMixed(0, ''))
-        // todo: change funding request to allow upload request in file
-        .test(
-          maxMixed(api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount, 'Maximal amount allowed is ${max}')
-        )
-        .required('Field is required'),
-      account: AccountSchema.required('Field is required'),
+      payMultiple: Yup.boolean().required(),
+      amount: BNSchema.when('payMultiple', {
+        is: false,
+        then: (schema) =>
+          schema
+            .test(moreThanMixed(0, ''))
+            .test(
+              maxMixed(
+                api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount,
+                'Maximal amount allowed is ${max}'
+              )
+            )
+            .required('Field is required'),
+      }),
+      account: AccountSchema.when('payMultiple', {
+        is: false,
+        then: (schema) => schema.required('Field is required'),
+      }),
+      hasPreviewedInput: Yup.boolean().when('payMultiple', {
+        is: true,
+        then: (schema) =>
+          schema
+            .test('previewedinput', 'Please preview', (value) => typeof value !== 'undefined' && value)
+            .required('Field is required'),
+      }),
+      csvInput: Yup.string().when('payMultiple', {
+        is: true,
+        then: (schema) => schema.test(isValidCSV('Not valid CSV format')).required('Field is required'),
+      }),
+      accountsAndAmounts: Yup.array().when('payMultiple', {
+        is: true,
+        then: (schema) => schema.required(),
+      }),
     }),
     runtimeUpgrade: Yup.object().shape({
       runtime: Yup.mixed()
-        .test('byteLength', 'Invalid input', (value: ArrayBuffer) => value.byteLength !== 0)
-        .required('Field is required'),
+        .required('Field is required')
+        .test('byteLength', 'Invalid input', (value: File) => value.size > 0),
     }),
     setCouncilorReward: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, '')).required('Field is required'),
@@ -295,7 +356,7 @@ export const schemaFactory = (api?: ProxyApi) => {
         .required('Field is required'),
     }),
     setMembershipLeadInvitationQuota: Yup.object().shape({
-      count: BNSchema.test(moreThanMixed(0, 'Quota must be greater than zero')).required('Field is required'),
+      count: Yup.number().min(1, 'Quota must be greater than zero').required('Field is required'),
       leadId: Yup.string().test('execution', (value) => !!value),
     }),
     setInitialInvitationBalance: Yup.object().shape({
@@ -314,6 +375,32 @@ export const schemaFactory = (api?: ProxyApi) => {
     }),
     setMembershipPrice: Yup.object().shape({
       amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')).required('Field is required'),
+    }),
+    updateChannelPayouts: Yup.object().shape({
+      payloadSize: Yup.number(),
+      payloadHash: whenDefined('payloadSize', Yup.string().required()),
+      commitment: whenDefined('payloadSize', Yup.string().required()),
+      minimumCashoutAllowed: BNSchema.test(
+        minContext(
+          `Input should be at least \${min}${CurrencyName.integerValue} for proposal to execute`,
+          'minCashoutAllowed',
+          true,
+          'execution'
+        )
+      ).required(),
+      maximumCashoutAllowed: BNSchema.test(
+        minMixed(Yup.ref('minimumCashoutAllowed'), 'Maximum cashout cannot be lower than minimum')
+      )
+        .test(
+          maxContext(
+            `Input should be at most \${max}${CurrencyName.integerValue} for proposal to execute`,
+            'maxCashoutAllowed',
+            true,
+            'execution'
+          )
+        )
+        .required(),
+      channelCashoutsEnabled: Yup.boolean(),
     }),
   })
 }

@@ -8,7 +8,7 @@ import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/comp
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 
 export default {
-  title: 'Proposals/AddNewProposalModal/DecreaseWorkingGroupLeadStake',
+  title: 'Pages/Proposals/ProposalList/Current/Modals/AddNewProposalModal/DecreaseWorkingGroupLeadStake',
   component: DecreaseWorkingGroupLeadStake,
 } as Meta
 
