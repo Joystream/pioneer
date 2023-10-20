@@ -1,6 +1,7 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 
 import { ProxyApi } from '.'
+import { ClientAsyncMessage, WorkerAsyncMessage } from './client/_async'
 import { ClientQueryMessage, WorkerQueryMessage } from './client/query'
 import { ClientTxMessage, WorkerTxMessage } from './client/tx'
 import { ClientProxyMessage, WorkerProxyMessage } from './models/payload'
@@ -12,7 +13,7 @@ export interface ProxyPromisePayload<T = any> {
   result?: T
 }
 
-export type PostMessage<Message extends AnyMessage = AnyMessage> = (message: Message) => void
+export type PostMessage<Message extends AnyMessage = AnyMessage> = (message: Message, asJSON?: boolean) => void
 
 export type ApiKinds = 'derive' | 'query' | 'rpc' | 'tx'
 
@@ -38,7 +39,13 @@ export type WorkerMessage =
   | WorkerQueryMessage
   | WorkerTxMessage
   | WorkerProxyMessage
+  | WorkerAsyncMessage
 
-export type ClientMessage = ClientInitMessage | ClientQueryMessage | ClientTxMessage | ClientProxyMessage
+export type ClientMessage =
+  | ClientInitMessage
+  | ClientQueryMessage
+  | ClientTxMessage
+  | ClientProxyMessage
+  | ClientAsyncMessage
 
 export type AnyMessage = WorkerMessage | ClientMessage

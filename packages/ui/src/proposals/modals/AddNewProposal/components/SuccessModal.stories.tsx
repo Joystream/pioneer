@@ -5,7 +5,7 @@ import { info } from '@/common/logger'
 import { SuccessModal } from '@/proposals/modals/AddNewProposal/components/SuccessModal'
 
 export default {
-  title: 'Proposals/AddNewProposalModal/SuccessModal',
+  title: 'Pages/Proposals/ProposalList/Current/Modals/AddNewProposalModal/SuccessModal',
   component: SuccessModal,
 } as Meta
 

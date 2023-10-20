@@ -19,7 +19,7 @@ const normalFontSize = ({ size }: MarkdownPreviewStylesProps) => {
   }
 }
 
-const normalColor = ({ isReply }: MarkdownPreviewStylesProps) => Colors.Black[isReply ? 600 : 500]
+const normalColor = ({ isReply }: MarkdownPreviewStylesProps) => Colors.Black[isReply ? 800 : 700]
 
 export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProps>`
   .markdown-preview {
@@ -86,7 +86,7 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     font-size: ${normalFontSize};
     line-height: 24px;
     font-weight: 400;
-    color: ${Colors.Black[500]};
+    color: ${normalColor};
   }
   
   .markdown-preview li + li {
@@ -108,7 +108,7 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     counter-reset: ol-list-counter;
   }
 
-  .markdown-preview ol li {
+  .markdown-preview ol > li {
     counter-increment: ol-list-counter;
   }
   
@@ -116,7 +116,7 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     margin-top: 0;
   }
 
-  .markdown-preview ol li::before {
+  .markdown-preview ol > li::before {
     content: counter(ol-list-counter)'.';
     position: absolute;
     left: -20px;

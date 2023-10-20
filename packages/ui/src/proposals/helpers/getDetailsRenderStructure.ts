@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import { omit } from 'lodash'
 
 import { TooltipContentProp } from '@/common/components/Tooltip'
@@ -39,7 +40,8 @@ export type RenderType =
   | 'OpeningLink'
   | 'Percentage'
   | 'Hash'
-
+  | 'DestinationsPreview'
+  | 'BlockTimeDisplay'
 export interface RenderNode {
   label: string
   value: any
@@ -55,23 +57,36 @@ type Mapper<Detail, Key extends keyof Detail> = (
 const destinationsMapper: Mapper<DestinationsDetail, 'destinations'> = (value): RenderNode[] => {
   const result: RenderNode[] = []
 
-  value.forEach((destination) => {
+  if (value.length === 1) {
+    value.forEach((destination) => {
+      result.push({
+        label: 'amount',
+        value: destination.amount,
+        renderType: 'Amount',
+      })
+      result.push({
+        label: 'destination',
+        value: destination.account,
+        renderType: 'Address',
+      })
+    })
+  }
+  if (value.length > 1) {
+    let total = new BN(0)
+    value.forEach((destination) => {
+      total = total.add(destination.amount)
+    })
     result.push({
-      label: 'amount',
-      value: destination.amount,
+      label: 'Total Payment',
+      value: total,
       renderType: 'Amount',
     })
     result.push({
-      label: 'destination',
-      value: destination.account,
-      renderType: 'Address',
+      label: 'Payment Details',
+      value: value,
+      renderType: 'DestinationsPreview',
     })
-    result.push({
-      label: '',
-      value: undefined,
-      renderType: 'Divider',
-    })
-  })
+  }
 
   return result
 }
