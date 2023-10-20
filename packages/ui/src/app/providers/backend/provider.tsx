@@ -48,15 +48,22 @@ export const BackendProvider = (props: { children: ReactNode }) => {
     backendAuthTokenVar(activeMemberSettings.accessToken)
   }, [backendClient, activeMemberSettings?.accessToken])
 
-  const setMemberSettings = useCallback((memberId: string, settings: Partial<MemberNotificationSettingsData>) => {
-    setNotificationsSettingsMap((prev) => ({
-      ...prev,
-      [memberId]: {
-        ...prev?.[memberId],
-        ...settings,
-      },
-    }))
-  }, [])
+  const setMemberSettings = useCallback(
+    (memberId: string, settings: Partial<MemberNotificationSettingsData>) => {
+      setNotificationsSettingsMap((prev) => ({
+        ...prev,
+        [memberId]: {
+          ...prev?.[memberId],
+          ...settings,
+        },
+      }))
+
+      if (activeMember?.id === memberId && settings.accessToken) {
+        backendAuthTokenVar(settings.accessToken)
+      }
+    },
+    [activeMember?.id]
+  )
 
   return (
     <BackendContext.Provider

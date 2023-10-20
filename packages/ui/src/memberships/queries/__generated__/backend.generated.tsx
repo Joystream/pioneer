@@ -59,6 +59,14 @@ export type UpdateBackendMemberMutation = {
   } | null
 }
 
+export type BackendSigninMutationVariables = Types.Exact<{
+  memberId: Types.Scalars['Int']
+  signature: Types.Scalars['String']
+  timestamp: Types.Scalars['BigInt']
+}>
+
+export type BackendSigninMutation = { __typename: 'Mutation'; signin?: string | null }
+
 export const GetBackendMemberExistsDocument = gql`
   query GetBackendMemberExists($id: Int!) {
     memberExist(id: $id)
@@ -285,4 +293,42 @@ export type UpdateBackendMemberMutationResult = Apollo.MutationResult<UpdateBack
 export type UpdateBackendMemberMutationOptions = Apollo.BaseMutationOptions<
   UpdateBackendMemberMutation,
   UpdateBackendMemberMutationVariables
+>
+export const BackendSigninDocument = gql`
+  mutation BackendSignin($memberId: Int!, $signature: String!, $timestamp: BigInt!) {
+    signin(memberId: $memberId, signature: $signature, timestamp: $timestamp)
+  }
+`
+export type BackendSigninMutationFn = Apollo.MutationFunction<BackendSigninMutation, BackendSigninMutationVariables>
+
+/**
+ * __useBackendSigninMutation__
+ *
+ * To run a mutation, you first call `useBackendSigninMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBackendSigninMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [backendSigninMutation, { data, loading, error }] = useBackendSigninMutation({
+ *   variables: {
+ *      memberId: // value for 'memberId'
+ *      signature: // value for 'signature'
+ *      timestamp: // value for 'timestamp'
+ *   },
+ * });
+ */
+export function useBackendSigninMutation(
+  baseOptions?: Apollo.MutationHookOptions<BackendSigninMutation, BackendSigninMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<BackendSigninMutation, BackendSigninMutationVariables>(BackendSigninDocument, options)
+}
+export type BackendSigninMutationHookResult = ReturnType<typeof useBackendSigninMutation>
+export type BackendSigninMutationResult = Apollo.MutationResult<BackendSigninMutation>
+export type BackendSigninMutationOptions = Apollo.BaseMutationOptions<
+  BackendSigninMutation,
+  BackendSigninMutationVariables
 >

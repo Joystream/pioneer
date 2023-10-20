@@ -31,3 +31,7 @@ mutation UpdateBackendMember($email: String, $receiveEmails: Boolean) {
     receiveEmails
   }
 }
+
+mutation BackendSignin($memberId: Int!, $signature: String!, $timestamp: BigInt!) {
+  signin(memberId: $memberId, signature: $signature, timestamp: $timestamp)
+}
