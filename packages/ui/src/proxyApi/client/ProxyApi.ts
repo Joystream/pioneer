@@ -6,8 +6,8 @@ import { firstWhere } from '@/common/utils/rx'
 
 import { deserializeMessage, serializePayload, WorkerProxyMessage } from '../models/payload'
 import { ClientMessage, PostMessage, RawWorkerMessageEvent, WorkerConnectMessage, WorkerInitMessage } from '../types'
-import { workerApi as launchWorker } from '../worker'
 
+import { AsyncProps, _async } from './_async'
 import { query } from './query'
 import { tx } from './tx'
 
@@ -19,9 +19,10 @@ export class ProxyApi extends Events {
   rpc: ApiRx['rpc']
   tx: ApiRx['tx']
   consts: ApiRx['consts']
+  _async: AsyncProps
 
   static create(providerEndpoint: string) {
-    const worker = launchWorker()
+    const worker = new Worker(new URL('../worker', import.meta.url), { type: 'module' })
 
     const messages = fromEvent<RawWorkerMessageEvent>(worker, 'message')
 
@@ -31,7 +32,10 @@ export class ProxyApi extends Events {
       share()
     )
     const postMessage: PostMessage<ClientMessage> = (message) =>
-      worker.postMessage({ ...message, payload: serializePayload(message.payload, workerProxyMessages, postMessage) })
+      worker.postMessage({
+        ...message,
+        payload: serializePayload(message.payload, { messages: workerProxyMessages, postMessage }),
+      })
 
     postMessage({ messageType: 'init', payload: providerEndpoint })
 
@@ -55,6 +59,7 @@ export class ProxyApi extends Events {
       this.query = query('query', messages, postMessage)
       this.rpc = query('rpc', messages, postMessage)
       this.tx = tx(messages, postMessage)
+      this._async = _async(messages, postMessage)
     }
 
     messages

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFundsModal'
 import { useApi } from '@/api/hooks/useApi'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'

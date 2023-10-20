@@ -7,7 +7,7 @@ import React from 'react'
 import { MemoryRouter } from 'react-router'
 import { interpret } from 'xstate'
 
-import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFundsModal'
 import { ApiContext } from '@/api/providers/context'
 import { GlobalModals } from '@/app/GlobalModals'
 import { createType } from '@/common/model/createType'

@@ -11,20 +11,22 @@ import { ProposalType } from '../types'
 export const useProposalConstants = (proposalType?: ProposalType): ProposalConstants | null => {
   const { api, isConnected } = useApi()
 
-  return useMemo(() => {
-    if (!proposalType) {
-      return null
-    }
+  return useMemo(() => proposalConstants(api, proposalType), [proposalType, isConnected])
+}
 
-    const constantKey = proposalTypeToConstantKey.get(proposalType)
+export const proposalConstants = (api?: Pick<Api, 'consts'>, proposalType?: ProposalType) => {
+  if (!proposalType) {
+    return null
+  }
 
-    if (!constantKey) {
-      return null
-    }
-    const constants = api?.consts.proposalsCodex[constantKey]
+  const constantKey = proposalTypeToConstantKey.get(proposalType)
 
-    return constants && extendsProposalPallet(constants) ? asProposalConstants(constants) : null
-  }, [proposalType, isConnected])
+  if (!constantKey) {
+    return null
+  }
+  const constants = api?.consts.proposalsCodex[constantKey]
+
+  return constants && extendsProposalPallet(constants) ? asProposalConstants(constants) : null
 }
 
 const extendsProposalPallet = (
@@ -33,15 +35,13 @@ const extendsProposalPallet = (
   !(proposalType instanceof u128 || proposalType instanceof u32)
 
 const proposalTypeToConstantKey = new Map<ProposalType, keyof Api['consts']['proposalsCodex']>([
+  ['updateChannelPayouts', 'updateChannelPayoutsProposalParameters'],
   ['amendConstitution', 'amendConstitutionProposalParameters'],
   ['cancelWorkingGroupLeadOpening', 'cancelWorkingGroupLeadOpeningProposalParameters'],
-  // ['createBlogPost', 'createBlogPostProposalParameters'],
   ['createWorkingGroupLeadOpening', 'createWorkingGroupLeadOpeningProposalParameters'],
   ['decreaseWorkingGroupLeadStake', 'decreaseWorkingGroupLeadStakeProposalParameters'],
-  // ['editBlogPost', 'editBlogPostProoposalParamters'],
   ['fillWorkingGroupLeadOpening', 'fillWorkingGroupOpeningProposalParameters'],
   ['fundingRequest', 'fundingRequestProposalParameters'],
-  // ['lockBlogPost', 'lockBlogPostProposalParameters'],
   ['runtimeUpgrade', 'runtimeUpgradeProposalParameters'],
   ['setCouncilBudgetIncrement', 'setCouncilBudgetIncrementProposalParameters'],
   ['setCouncilorReward', 'setCouncilorRewardProposalParameters'],
@@ -55,7 +55,6 @@ const proposalTypeToConstantKey = new Map<ProposalType, keyof Api['consts']['pro
   ['signal', 'signalProposalParameters'],
   ['slashWorkingGroupLead', 'slashWorkingGroupLeadProposalParameters'],
   ['terminateWorkingGroupLead', 'terminateWorkingGroupLeadProposalParameters'],
-  // ['unlockBlogPost', 'unlockBlogPostProposalParameters'],
   ['updateWorkingGroupBudget', 'updateWorkingGroupBudgetProposalParameters'],
   ['veto', 'vetoProposalProposalParameters'],
 ])

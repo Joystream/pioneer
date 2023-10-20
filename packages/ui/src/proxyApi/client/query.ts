@@ -39,7 +39,7 @@ export const query = <K extends ApiQueryKinds>(
   )
 
   return apiInterfaceProxy<K>((module, ...path) => (...params) => {
-    const callId = uniqueId(`${apiKind}.${module}.${path.join('.')}.`)
+    const callId = uniqueId(`${apiKind}.${String(module)}.${path.join('.')}.`)
 
     postMessage({
       messageType: apiKind,

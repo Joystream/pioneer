@@ -7,7 +7,7 @@ import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFundsModal'
 import { Account } from '@/accounts/types'
 import { Api } from '@/api'
 import { useApi } from '@/api/hooks/useApi'
@@ -30,7 +30,6 @@ import { useModal } from '@/common/hooks/useModal'
 import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { createType } from '@/common/model/createType'
-// import { createType } from '@joystream/types'
 import { getMaxBlock } from '@/common/model/getMaxBlock'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useYupValidationResolver } from '@/common/utils/validation'
@@ -40,21 +39,22 @@ import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccount
 import { IStakingAccountSchema } from '@/memberships/model/validation'
 import { useMinimumValidatorCount } from '@/proposals/hooks/useMinimumValidatorCount'
 import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
-import { ExecutionRequirementsWarning } from '@/proposals/modals/AddNewProposal/components/ExecutionRequirementsWarning'
-import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
-import { ProposalDetailsStep } from '@/proposals/modals/AddNewProposal/components/ProposalDetailsStep'
-import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
-import { SpecificParametersStep } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SpecificParametersStep'
-import { StakingAccountStep } from '@/proposals/modals/AddNewProposal/components/StakingAccountStep'
-import { SuccessModal } from '@/proposals/modals/AddNewProposal/components/SuccessModal'
-import { TriggerAndDiscussionStep } from '@/proposals/modals/AddNewProposal/components/TriggerAndDiscussionStep'
-import { WarningModal } from '@/proposals/modals/AddNewProposal/components/WarningModal'
-import { getSpecificParameters } from '@/proposals/modals/AddNewProposal/getSpecificParameters'
-import { AddNewProposalForm, defaultProposalValues, schemaFactory } from '@/proposals/modals/AddNewProposal/helpers'
-import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal/index'
-import { addNewProposalMachine, AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 import { ProposalType } from '@/proposals/types'
 import { GroupIdName } from '@/working-groups/types'
+
+import { AddNewProposalModalCall } from '.'
+import { ExecutionRequirementsWarning } from './components/ExecutionRequirementsWarning'
+import { ProposalConstantsWrapper } from './components/ProposalConstantsWrapper'
+import { ProposalDetailsStep } from './components/ProposalDetailsStep'
+import { ProposalTypeStep } from './components/ProposalTypeStep'
+import { SpecificParametersStep } from './components/SpecificParameters/SpecificParametersStep'
+import { StakingAccountStep } from './components/StakingAccountStep'
+import { SuccessModal } from './components/SuccessModal'
+import { TriggerAndDiscussionStep } from './components/TriggerAndDiscussionStep'
+import { WarningModal } from './components/WarningModal'
+import { getSpecificParameters } from './getSpecificParameters'
+import { AddNewProposalForm, defaultProposalValues, schemaFactory } from './helpers'
+import { addNewProposalMachine, AddNewProposalMachineState } from './machine'
 
 export type BaseProposalParams = Exclude<
   Parameters<Api['tx']['proposalsCodex']['createProposal']>[0],
@@ -64,10 +64,12 @@ export type BaseProposalParams = Exclude<
 const minimalSteps = [{ title: 'Bind account for staking' }, { title: 'Create proposal' }]
 
 export const AddNewProposalModal = () => {
-  const { api, connectionState } = useApi()
+  const { api } = useApi()
   const { active: activeMember } = useMyMemberships()
   const minimumValidatorCount = useMinimumValidatorCount()
   const maximumReferralCut = api?.consts.members.referralCutMaximumPercent
+  const minCashoutAllowed = api?.consts.content.minimumCashoutAllowedLimit
+  const maxCashoutAllowed = api?.consts.content.maximumCashoutAllowedLimit
   const currentBlock = useCurrentBlockNumber()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
@@ -75,7 +77,7 @@ export const AddNewProposalModal = () => {
   const [formMap, setFormMap] = useState<Partial<[Account, ProposalType, GroupIdName, boolean]>>([])
   const workingGroupConsts = api?.consts[formMap[2] as GroupIdName]
 
-  const [warningAccepted, setWarningAccepted] = useState<boolean>(true)
+  const [warningAccepted, setWarningAccepted] = useState<boolean>(false)
   const [isExecutionError, setIsExecutionError] = useState<boolean>(false)
 
   const constants = useProposalConstants(formMap[1])
@@ -84,12 +86,16 @@ export const AddNewProposalModal = () => {
   const stakingStatus = useStakingAccountStatus(formMap[0]?.address, activeMember?.id, [state.matches('transaction')])
   const schema = useMemo(() => schemaFactory(api), [!api])
 
+  const path = useMemo(() => machineStateConverter(state.value) as keyof AddNewProposalForm, [state.value])
+
   const form = useForm<AddNewProposalForm>({
-    resolver: useYupValidationResolver<AddNewProposalForm>(schema, machineStateConverter(state.value)),
+    resolver: useYupValidationResolver<AddNewProposalForm>(schema, path),
     mode: 'onChange',
     context: {
       minimumValidatorCount,
       maximumReferralCut,
+      minCashoutAllowed,
+      maxCashoutAllowed,
       leaderOpeningStake: workingGroupConsts?.leaderOpeningStake,
       minUnstakingPeriodLimit: workingGroupConsts?.minUnstakingPeriodLimit,
       stakeLock: 'Proposals',
@@ -103,6 +109,11 @@ export const AddNewProposalModal = () => {
     } as IStakingAccountSchema,
     defaultValues: defaultProposalValues,
   })
+
+  const formValues = form.getValues() as AddNewProposalForm
+  const currentErrors = form.formState.errors[path] ?? {}
+  const serializedCurrentForm = JSON.stringify(formValues[path])
+  const serializedCurrentFormErrors = JSON.stringify(currentErrors)
 
   const mapDependencies = form.watch([
     'stakingAccount.stakingAccount',
@@ -128,15 +139,12 @@ export const AddNewProposalModal = () => {
 
   useEffect(() => {
     form.trigger([])
-  }, [machineStateConverter(state.value)])
+    setWarningAccepted(false)
+  }, [path])
 
   useEffect(() => {
-    setIsExecutionError(
-      Object.values((form.formState.errors as any)[machineStateConverter(state.value)] ?? {}).some(
-        (value) => (value as FieldError).type === 'execution'
-      )
-    )
-  }, [JSON.stringify(form.formState.errors), machineStateConverter(state.value)])
+    setIsExecutionError(Object.values(currentErrors).some((value) => (value as FieldError).type === 'execution'))
+  }, [serializedCurrentFormErrors])
 
   const transactionsSteps = useMemo(
     () =>
@@ -144,39 +152,34 @@ export const AddNewProposalModal = () => {
     [state.context.discussionMode]
   )
 
-  const transaction = useMemo(() => {
-    if (activeMember && api) {
-      const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } =
-        form.getValues() as AddNewProposalForm
+  const { transaction, isLoading, feeInfo } = useTransactionFee(
+    activeMember?.controllerAccount,
+    async () => {
+      if (activeMember && api) {
+        const { proposalDetails, triggerAndDiscussion, stakingAccount, ...specifics } = formValues
 
-      const txBaseParams: BaseProposalParams = {
-        memberId: activeMember?.id,
-        title: proposalDetails?.title,
-        description: proposalDetails?.rationale,
-        ...(stakingAccount.stakingAccount ? { stakingAccountId: stakingAccount.stakingAccount.address } : {}),
-        ...(triggerAndDiscussion.triggerBlock ? { exactExecutionBlock: triggerAndDiscussion.triggerBlock } : {}),
+        const txBaseParams: BaseProposalParams = {
+          memberId: activeMember?.id,
+          title: proposalDetails?.title,
+          description: proposalDetails?.rationale,
+          ...(stakingAccount.stakingAccount ? { stakingAccountId: stakingAccount.stakingAccount.address } : {}),
+          ...(triggerAndDiscussion.triggerBlock ? { exactExecutionBlock: triggerAndDiscussion.triggerBlock } : {}),
+        }
+
+        const txSpecificParameters = await getSpecificParameters(api, specifics)
+
+        if (stakingStatus === 'confirmed') {
+          return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
+        }
+
+        return api.tx.utility.batch([
+          api.tx.members.confirmStakingAccount(activeMember.id, stakingAccount.stakingAccount?.address ?? ''),
+          api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
+        ])
       }
-
-      const txSpecificParameters = getSpecificParameters(api, specifics)
-
-      if (stakingStatus === 'confirmed') {
-        return api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters)
-      }
-
-      return api.tx.utility.batch([
-        api.tx.members.confirmStakingAccount(activeMember.id, stakingAccount.stakingAccount?.address ?? ''),
-        api.tx.proposalsCodex.createProposal(txBaseParams, txSpecificParameters),
-      ])
-    }
-  }, [
-    state.value,
-    connectionState,
-    stakingStatus,
-    form.formState.isValidating,
-    JSON.stringify(form.getValues()?.[machineStateConverter(state.value) as keyof AddNewProposalForm]),
-  ])
-
-  const { feeInfo } = useTransactionFee(activeMember?.controllerAccount, () => transaction, [transaction])
+    },
+    [api?.isConnected, activeMember, stakingStatus, serializedCurrentForm]
+  )
 
   useEffect((): any => {
     if (state.matches('requirementsVerification')) {
@@ -204,23 +207,21 @@ export const AddNewProposalModal = () => {
     }
   }, [state, stakingStatus, feeInfo])
 
-  useEffect(() => setWarningAccepted(!isExecutionError), [isExecutionError])
-
   const goToPrevious = useCallback(() => {
     send('BACK')
     setIsExecutionError(false)
   }, [send])
 
   const shouldDisableNext = useMemo(() => {
+    if (isLoading) {
+      return true
+    }
     if (isExecutionError) {
-      const hasOtherError = Object.values(
-        (form.formState.errors as any)[machineStateConverter(state.value)] ?? {}
-      ).some((value) => (value as FieldError).type !== 'execution')
-
       if (!form.formState.isDirty) {
         return true
       }
 
+      const hasOtherError = Object.values(currentErrors).some((value) => (value as FieldError).type !== 'execution')
       if (!hasOtherError) {
         return !warningAccepted
       }
@@ -229,14 +230,7 @@ export const AddNewProposalModal = () => {
     }
 
     return !form.formState.isValid
-  }, [
-    form.formState.isValid,
-    form.formState.isDirty,
-    isExecutionError,
-    warningAccepted,
-    JSON.stringify(form.getValues()),
-    JSON.stringify(form.formState.errors),
-  ])
+  }, [form.formState.isValid, form.formState.isDirty, isExecutionError, warningAccepted, isLoading])
 
   if (!api || !activeMember || !feeInfo || state.matches('requirementsVerification')) {
     return null
@@ -298,7 +292,7 @@ export const AddNewProposalModal = () => {
   }
 
   if (state.matches('discussionTransaction')) {
-    const { triggerAndDiscussion } = form.getValues() as AddNewProposalForm
+    const { triggerAndDiscussion } = formValues
     const threadMode = createType('PalletProposalsDiscussionThreadModeBTreeSet', {
       closed: triggerAndDiscussion.discussionWhitelist?.map((member) =>
         createType('MemberId', Number.parseInt(member.id))
@@ -325,7 +319,7 @@ export const AddNewProposalModal = () => {
   }
 
   if (state.matches('success')) {
-    const { proposalDetails, proposalType } = form.getValues() as AddNewProposalForm
+    const { proposalDetails, proposalType } = formValues
     return (
       <SuccessModal
         onClose={hideModal}
@@ -387,7 +381,7 @@ export const StepperProposalWrapper = styled(StepperModalWrapper)`
   grid-template-columns: 220px 336px 1fr;
 `
 
-const StyledStepperBody = styled(StepperBody)`
+export const StyledStepperBody = styled(StepperBody)`
   flex-direction: column;
   row-gap: 20px;
 `

@@ -21,7 +21,7 @@ export const WorkerLocks = [
   'Distribution Worker',
 ] as const
 
-export type WorkerLockType = typeof WorkerLocks[number]
+export type WorkerLockType = (typeof WorkerLocks)[number]
 
 export type LockType =
   | PolkadotStakingLock

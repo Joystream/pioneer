@@ -4,10 +4,11 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
+      "@test/*": ["test/*"],
       "@polkadot/api/augment": ["../types/augment/augment-api.ts"],
       "@polkadot/types/augment": ["../types/augment/augment-types.ts"]
     }
   },
-  "include": ["dev", "src", "test","./build.js"],
+  "include": ["dev", "src", "test", "./build.js"],
   "exclude": ["src/bounty/**/*", "test/bounty/**/*", "dev/node-mocks/commands/bounty/**/*"]
 }
