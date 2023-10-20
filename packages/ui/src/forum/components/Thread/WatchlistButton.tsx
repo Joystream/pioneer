@@ -14,14 +14,14 @@ export const WatchlistButton = ({ threadId }: Props) => {
   const addToWatchlist = useCallback(
     (e) => {
       e.stopPropagation()
-      setWatchlist(watchlist ? [...watchlist, threadId] : [threadId])
+      setWatchlist((watchlist = []) => [...watchlist, threadId])
     },
     [watchlist]
   )
   const removeFromWatchlist = useCallback(
     (e) => {
       e.preventDefault()
-      setWatchlist(watchlist?.filter((id) => id !== threadId) ?? [])
+      setWatchlist((watchlist = []) => watchlist.filter((id) => id !== threadId))
     },
     [watchlist]
   )

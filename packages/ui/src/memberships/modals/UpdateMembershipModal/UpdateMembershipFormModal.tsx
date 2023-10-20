@@ -49,7 +49,7 @@ const getUpdateMemberFormInitial = (member: MemberWithDetails) => ({
   id: member.id,
   name: member.name || '',
   handle: member.handle || '',
-  about: '',
+  about: member.about || '',
   avatarUri: process.env.REACT_APP_AVATAR_UPLOAD_URL ? '' : typeof member.avatar === 'string' ? member.avatar : '',
   rootAccount: member.rootAccount,
   controllerAccount: member.controllerAccount,

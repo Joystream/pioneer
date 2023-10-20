@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -29,22 +28,20 @@ export const SetMembershipLeadInvitationQuota = () => {
       <Row>
         <RowGapBlock gap={20}>
           <InputComponent
-            label="Lead Invitation Quota Amount"
+            label="Lead Invitation Quota"
             tight
-            units={CurrencyName.integerValue}
             required
             disabled={isLoading || !group?.leadId}
-            name="setMembershipLeadInvitationQuota.amount"
+            name="setMembershipLeadInvitationQuota.count"
             message={
               !group?.leadId
                 ? "Proposal can't be created because there's no working group lead"
-                : 'Amount must be greater than zero'
+                : 'Quota must be greater than zero'
             }
           >
             <InputNumber
               id="amount-input"
-              name="setMembershipLeadInvitationQuota.amount"
-              isInBN
+              name="setMembershipLeadInvitationQuota.count"
               placeholder="0"
               maxAllowedValue={Math.pow(2, 32) - 1}
               disabled={isLoading || !group?.leadId}

@@ -39,7 +39,7 @@ export const RevealingStageVotes = ({ candidateWithVotes, totalStake, onlyMyVote
         sumOfAllStakes: candidate.totalStake,
         totalStake: totalStake ?? BN_ZERO,
         votes: candidate.votesNumber,
-        ownStake: candidate.ownStake,
+        myStake: candidate.myStake,
         myVotes: candidate.myVotes,
       }))}
     />

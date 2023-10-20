@@ -1,5 +1,7 @@
+import BN from 'bn.js'
 import { omit } from 'lodash'
 
+import { TooltipContentProp } from '@/common/components/Tooltip'
 import { nameMapping } from '@/common/helpers'
 import { isDefined } from '@/common/utils'
 import {
@@ -21,6 +23,7 @@ import {
   CountDetail,
   ProposalDetail,
   OpeningLinkDetail,
+  UpdateChannelPayoutsDetail,
 } from '@/proposals/types'
 
 export type RenderType =
@@ -36,11 +39,14 @@ export type RenderType =
   | 'ProposalLink'
   | 'OpeningLink'
   | 'Percentage'
-
+  | 'Hash'
+  | 'DestinationsPreview'
+  | 'BlockTimeDisplay'
 export interface RenderNode {
-  label?: string
-  value?: any
+  label: string
+  value: any
   renderType: RenderType
+  tooltip?: TooltipContentProp
 }
 
 type Mapper<Detail, Key extends keyof Detail> = (
@@ -51,21 +57,36 @@ type Mapper<Detail, Key extends keyof Detail> = (
 const destinationsMapper: Mapper<DestinationsDetail, 'destinations'> = (value): RenderNode[] => {
   const result: RenderNode[] = []
 
-  value.forEach((destination) => {
+  if (value.length === 1) {
+    value.forEach((destination) => {
+      result.push({
+        label: 'amount',
+        value: destination.amount,
+        renderType: 'Amount',
+      })
+      result.push({
+        label: 'destination',
+        value: destination.account,
+        renderType: 'Address',
+      })
+    })
+  }
+  if (value.length > 1) {
+    let total = new BN(0)
+    value.forEach((destination) => {
+      total = total.add(destination.amount)
+    })
     result.push({
-      label: 'amount',
-      value: destination.amount,
+      label: 'Total Payment',
+      value: total,
       renderType: 'Amount',
     })
     result.push({
-      label: 'destination',
-      value: destination.account,
-      renderType: 'Address',
+      label: 'Payment Details',
+      value: value,
+      renderType: 'DestinationsPreview',
     })
-    result.push({
-      renderType: 'Divider',
-    })
-  })
+  }
 
   return result
 }
@@ -132,15 +153,18 @@ const unstakingPeriodMapper: Mapper<UnstakingPeriodDetail, 'unstakingPeriod'> = 
     },
   ]
 }
-const groupNameMapper: Mapper<GroupNameDetail, 'groupName'> = (value): RenderNode[] => {
-  return [
-    {
-      label: 'Working Group',
-      value: value,
-      renderType: 'Text',
-    },
-  ]
-}
+const textMapper =
+  (label: string, tooltip?: TooltipContentProp): Mapper<GroupNameDetail, 'groupName'> =>
+  (value): RenderNode[] => {
+    return [
+      {
+        label,
+        tooltip,
+        value: value,
+        renderType: 'Text',
+      },
+    ]
+  }
 const memberMapper: Mapper<MemberDetail, 'member'> = (value): RenderNode[] => {
   return [
     {
@@ -167,36 +191,51 @@ const percentageMapper: Mapper<AmountDetail, 'amount'> = (value, type): RenderNo
   ]
 }
 
-const amountMapper: Mapper<AmountDetail, 'amount'> = (value, type): RenderNode[] => {
-  const defaultLabel = 'Amount'
-  const overriddenLabelsBy: Partial<Record<ProposalType, string>> = {
-    decreaseWorkingGroupLeadStake: 'Decrease stake amount',
-    slashWorkingGroupLead: 'Slashing amount',
-  }
-  const overriddenLabel = type && overriddenLabelsBy[type]
-
+const booleanMapper: Mapper<UpdateChannelPayoutsDetail, 'channelCashoutsEnabled'> = (value) => {
   return [
     {
-      label: overriddenLabel || defaultLabel,
-      value: value,
-      renderType: 'Amount',
+      label: 'Payout possibility',
+      renderType: 'Text',
+      value: value ? 'Allowed' : 'Not allowed',
     },
   ]
 }
+
+const amountMapper =
+  (label?: string): Mapper<AmountDetail, 'amount'> =>
+  (value, type): RenderNode[] => {
+    const overriddenLabelsBy: Partial<Record<ProposalType, string>> = {
+      decreaseWorkingGroupLeadStake: 'Decrease stake amount',
+      slashWorkingGroupLead: 'Slashing amount',
+    }
+    return [
+      {
+        label: label ?? (type && overriddenLabelsBy[type]) ?? 'Amount',
+        value: value,
+        renderType: 'Amount',
+      },
+    ]
+  }
 const countMapper: Mapper<CountDetail, 'count'> = (value, type) => {
   const countLabels: Partial<Record<ProposalType, string>> = {
     setInitialInvitationCount: 'Invitations',
     setMaxValidatorCount: 'Validators',
   }
-  const label = type && type in countLabels ? countLabels[type] : 'Count'
   return [
     {
-      label,
+      label: (type && type in countLabels && countLabels[type]) || 'Count',
       value,
       renderType: 'Numeric',
     },
   ]
 }
+
+const hashMapper =
+  (label: string, tooltip?: TooltipContentProp): Mapper<UpdateChannelPayoutsDetail, 'payloadHash'> =>
+  (value) => {
+    return [{ label, value, tooltip, renderType: 'Hash' }]
+  }
+
 const proposalLinkMapper: Mapper<ProposalDetail, 'proposal'> = (value) => {
   return [
     {
@@ -227,12 +266,23 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
   rewardPerBlock: rewardPerBlockMapper,
   stakeAmount: stakeAmountMapper,
   unstakingPeriod: unstakingPeriodMapper,
-  groupName: groupNameMapper,
+  groupName: textMapper('Working Group'),
   member: memberMapper,
-  amount: amountMapper,
+  amount: amountMapper(),
   count: countMapper,
   proposal: proposalLinkMapper,
   openingId: openingLinkMapper,
+  channelCashoutsEnabled: booleanMapper,
+  minCashoutAllowed: amountMapper('Minimal Cashout'),
+  maxCashoutAllowed: amountMapper('Maximal Cashout'),
+  payloadHash: hashMapper('payloadHash', {
+    tooltipText: 'This is the BLAKE3 hash fo the Executable payload file',
+    tooltipLinkURL: 'https://github.com/BLAKE3-team/BLAKE3',
+  }),
+  payloadDataObjectId: textMapper('Data Object Id', {
+    tooltipText:
+      'This is the ID submitted to Chain for the Data Object (payout payload) to be further uploaded to the Storage. It will be displayed after proposal is executed.',
+  }),
 }
 
 const mapProposalDetail = (key: ProposalDetailsKeys, proposalDetails: ProposalWithDetails['details']) => {
@@ -255,6 +305,13 @@ const getDetailsOrder = (proposalDetails: ProposalDetails): ProposalDetailsKeys[
     decreaseWorkingGroupLeadStake: ['groupName', 'member', 'amount'],
     slashWorkingGroupLead: ['groupName', 'member', 'amount'],
     updateWorkingGroupBudget: ['group', 'amount'],
+    updateChannelPayouts: [
+      'channelCashoutsEnabled',
+      'minCashoutAllowed',
+      'maxCashoutAllowed',
+      'payloadHash',
+      'payloadDataObjectId',
+    ],
   }
 
   if (proposalDetails.type) {

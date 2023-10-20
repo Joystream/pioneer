@@ -18,7 +18,7 @@ export const PostInsufficientFundsModal = ({
   requiredAmount,
   postDeposit,
 }: PostInsufficientFundsModalProps) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation('accounts')
   const { hideModal } = useModal()
   const { active } = useMyMemberships()
   return (

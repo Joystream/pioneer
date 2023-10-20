@@ -8,18 +8,16 @@ import { PageHeaderRow, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
+import { EmptyPagePlaceholder } from '@/common/components/EmptyPagePlaceholder/EmptyPagePlaceholder'
 import { LinkIcon } from '@/common/components/icons'
 import { PinIcon } from '@/common/components/icons/PinIcon'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Colors } from '@/common/constants'
-import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { createType } from '@/common/model/createType'
-import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { getUrl } from '@/common/utils/getUrl'
 import { PostList } from '@/forum/components/PostList/PostList'
-import { ForumPostBlock } from '@/forum/components/PostList/PostListItem'
 import { NewThreadPost } from '@/forum/components/Thread/NewThreadPost'
 import { ThreadTitle } from '@/forum/components/Thread/ThreadTitle'
 import { WatchlistButton } from '@/forum/components/Thread/WatchlistButton'
@@ -31,12 +29,7 @@ import { ForumPageLayout } from './components/ForumPageLayout'
 
 export const ForumThread = () => {
   const { id } = useParams<{ id: string }>()
-  const { isLoading: isLoadingThread, thread } = useForumThread(id)
-  const isRefetched = useRefetchQueries({
-    interval: MILLISECONDS_PER_BLOCK,
-    include: ['GetForumThreads'],
-  })
-  const isLoading = isLoadingThread && !isRefetched
+  const { isLoading, thread, hasError } = useForumThread(id)
   const { api } = useApi()
   const { active } = useMyMemberships()
 
@@ -60,7 +53,7 @@ export const ForumThread = () => {
   }
 
   useEffect(() => {
-    if (!isLoading && !thread) {
+    if (!isLoading && !thread && !hasError) {
       history.replace('/404')
     }
   }, [isLoading, thread])
@@ -99,7 +92,7 @@ export const ForumThread = () => {
                 {tag.title}
               </BadgeStatus>
             ))}
-            <BlockTime block={thread.createdInBlock} />
+            <BlockTime block={thread.createdInBlock} layout="reverse" position="end" />
           </BadgesRow>
         </RowGapBlock>
       </PageHeaderWrapper>
@@ -108,8 +101,14 @@ export const ForumThread = () => {
 
   const displayMain = () => (
     <ThreadPanel ref={sideNeighborRef}>
-      <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} />
-      {thread && isThreadActive && <NewThreadPost ref={newPostRef} getTransaction={getTransaction} />}
+      {hasError ? (
+        <EmptyPagePlaceholder title="Something went wrong fetching this thread." copy="" button={null} />
+      ) : (
+        <>
+          <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} />
+          {thread && isThreadActive && <NewThreadPost ref={newPostRef} getTransaction={getTransaction} />}
+        </>
+      )}
     </ThreadPanel>
   )
 
@@ -117,10 +116,8 @@ export const ForumThread = () => {
 }
 
 const ThreadPanel = styled(MainPanel)`
-  ${ForumPostBlock} {
-    width: 60%;
-    margin: 0 auto;
-  }
+  margin: 0 auto;
+  max-width: 1280px;
 `
 
 const ThreadPinned = styled.span`

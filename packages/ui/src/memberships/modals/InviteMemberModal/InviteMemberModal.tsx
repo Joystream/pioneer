@@ -4,6 +4,7 @@ import { useApi } from '@/api/hooks/useApi'
 import { TextMedium } from '@/common/components/typography'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useMachine } from '@/common/hooks/useMachine'
+import { useModal } from '@/common/hooks/useModal'
 import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { Address } from '@/common/types'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
@@ -13,12 +14,9 @@ import { InviteMemberRequirementsModal } from './InviteMemberRequirementsModal'
 import { InviteMemberSuccessModal } from './InviteMemberSuccessModal'
 import { inviteMemberMachine } from './machine'
 
-interface MembershipModalProps {
-  onClose: () => void
-}
-
-export function InviteMemberModal({ onClose }: MembershipModalProps) {
+export function InviteMemberModal() {
   const { api } = useApi()
+  const { hideModal } = useModal()
   const workingGroupBudget = useFirstObservableValue(
     () => api?.query.membershipWorkingGroup.budget(),
     [api?.isConnected]
@@ -34,11 +32,11 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
   }, [workingGroupBudget, membershipPrice])
 
   if (state.matches('requirementsFailed')) {
-    return <InviteMemberRequirementsModal onClose={onClose} />
+    return <InviteMemberRequirementsModal onClose={hideModal} />
   }
 
   if (state.matches('prepare')) {
-    return <InviteMemberFormModal onClose={onClose} onSubmit={(params) => send({ type: 'DONE', form: params })} />
+    return <InviteMemberFormModal onClose={hideModal} onSubmit={(params) => send({ type: 'DONE', form: params })} />
   }
 
   if (state.matches('transaction') && api) {
@@ -60,7 +58,7 @@ export function InviteMemberModal({ onClose }: MembershipModalProps) {
   }
 
   if (state.matches('success')) {
-    return <InviteMemberSuccessModal onClose={onClose} formData={state.context.form} />
+    return <InviteMemberSuccessModal onClose={hideModal} formData={state.context.form} />
   }
 
   return null

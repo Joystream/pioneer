@@ -5,7 +5,7 @@ import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { MemoryRouter } from 'react-router'
 
-import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFundsModal'
 import { ApiContext } from '@/api/providers/context'
 import { GlobalModals } from '@/app/GlobalModals'
 import { CKEditorProps } from '@/common/components/CKEditor'
@@ -127,6 +127,7 @@ describe('UI: Vote for Council Modal', () => {
       })
     )
     stubQuery(api, 'members.stakingAccountIdMemberStatus.size', createType('u64', 0))
+    stubQuery(api, 'referendum.accountsOptedOut.keys', [])
   })
 
   describe('Requirements', () => {

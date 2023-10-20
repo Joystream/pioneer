@@ -24,8 +24,13 @@ export const PastElectionStats = ({
     <StatisticItem title="Ended at">
       {finishedAtBlock ? formatDateString(finishedAtBlock.timestamp) : '-'}
     </StatisticItem>
-    <StatisticItem title="Election round" tooltipText="Lorem ipsum...">
-      <TextHuge bold>{cycleId} round</TextHuge>
+    <StatisticItem
+      title="Election round"
+      tooltipText="Ordinal number of the election round since the genesis block of the network."
+      tooltipLinkText="Learn more"
+      tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council#election"
+    >
+      <TextHuge bold>{cycleId}</TextHuge>
     </StatisticItem>
     <NumericValueStat title="Total candidates" value={totalCandidates} />
     <StatsBlock>

@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
@@ -31,11 +32,13 @@ export interface CandidateCardProps {
   loses?: number
   canVote?: boolean
   isPreview?: boolean
+  myStake?: BN
 }
 
 export const CandidateCard = ({
   candidate: { id, member, info, stake },
   voted,
+  myStake,
   withdrawable,
   canVote,
   isPreview,
@@ -56,7 +59,7 @@ export const CandidateCard = ({
       <CandidateCardImageWrapper>
         <CandidateCardImage imageUrl={info.bannerUri} />
       </CandidateCardImageWrapper>
-      <CandidateCardContentWrapper>
+      <CandidateCardContentWrapper title={member.handle}>
         <CandidateCardContent>
           <CandidateCardMemberInfoWrapper>
             <MemberInfo onlyTop member={member} skipModal={isPreview} />
@@ -97,9 +100,9 @@ export const CandidateCard = ({
             {stake && (
               <CandidateCardStake>
                 <StatsValue>
-                  <TokenValue value={stake} />
+                  <TokenValue value={myStake || stake} />
                 </StatsValue>
-                <Subscription>Staked</Subscription>
+                <Subscription>{voted && myStake ? 'My Stake' : 'Staked'}</Subscription>
               </CandidateCardStake>
             )}
             {withdrawable && (

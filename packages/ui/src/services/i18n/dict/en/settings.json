@@ -5,5 +5,11 @@
   "networkDetails": "Network Details",
   "networkAddress": "Network: ",
   "QueryNodeAddress": "Query Node: ",
-  "faucet": "Faucet: "
+  "faucet": "Faucet: ",
+  "chainInfo": "Chain Information",
+  "rpcBlockheight": "RPC Block Height: ",
+  "qnBlockheight": "Query Node Block Height: ",
+  "customFaucet": "FAUCET",
+  "customRPCNode": "RPC NODE",
+  "customQueryNode": "QUERY NODE"
 }

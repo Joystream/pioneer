@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { BadgeStatus } from '@/common/components/BadgeStatus'
+import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { TextSmall } from '@/common/components/typography'
 import { Colors, Transitions } from '@/common/constants'
 import { camelCaseToText } from '@/common/helpers'
@@ -13,7 +15,10 @@ interface Props {
 export const OptionWorkingGroupOpening = ({ opening }: Props) => (
   <OptionWorkingGroupWrapper>
     <TextSmall>ID: {opening.id}</TextSmall>
-    <OptionWorkingGroupTitle>{camelCaseToText(opening.title)}</OptionWorkingGroupTitle>
+    <ColumnGapBlock gap={8} align="center">
+      <OptionWorkingGroupTitle>{camelCaseToText(opening.title)}</OptionWorkingGroupTitle>
+      {opening.type === 'LEAD' ? <BadgeStatus>LEAD</BadgeStatus> : null}
+    </ColumnGapBlock>
   </OptionWorkingGroupWrapper>
 )
 
@@ -26,6 +31,7 @@ const OptionWorkingGroupWrapper = styled.div`
   max-height: 100%;
   overflow: hidden;
   justify-content: center;
+  gap: 8px;
 
   ${TextSmall} {
     color: ${Colors.Black[500]};

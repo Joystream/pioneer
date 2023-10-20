@@ -1,11 +1,11 @@
 import { get } from 'lodash'
-import React, { memo, ReactElement, useMemo } from 'react'
+import React, { memo, ReactElement, useEffect, useMemo, useState } from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 
 import { ClaimVestingModalCall } from '@/accounts/modals/ClaimVestingModal'
 import { ClaimVestingModal } from '@/accounts/modals/ClaimVestingModal/ClaimVestingModal'
-import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFundsModal'
 import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'
 // import { AddBountyModal, AddBountyModalCall } from '@/bounty/modals/AddBountyModal'
@@ -54,6 +54,8 @@ import { MemberModalCall, MemberProfile } from '@/memberships/components/MemberP
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals/BuyMembershipModal'
 import { DisconnectWalletModal, DisconnectWalletModalCall } from '@/memberships/modals/DisconnectWalletModal'
+import { InviteMemberModal } from '@/memberships/modals/InviteMemberModal'
+import { InviteMemberModalCall } from '@/memberships/modals/InviteMemberModal/types'
 import { SignOutModal } from '@/memberships/modals/SignOutModal/SignOutModal'
 import { SignOutModalCall } from '@/memberships/modals/SignOutModal/types'
 import { SwitchMemberModal, SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
@@ -66,6 +68,7 @@ import { VoteRationale } from '@/proposals/modals/VoteRationale/VoteRationale'
 import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { ApplyForRoleModal, ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { ChangeAccountModal, ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
+import { CreateOpeningModal, CreateOpeningModalCall } from '@/working-groups/modals/CreateOpening'
 import {
   IncreaseWorkerStakeModal,
   IncreaseWorkerStakeModalCall,
@@ -85,6 +88,7 @@ export type ModalNames =
   | ModalName<MoveFundsModalCall>
   | ModalName<AddNewProposalModalCall>
   | ModalName<VoteRationaleModalCall>
+  | ModalName<CreateOpeningModalCall>
   | ModalName<CreateThreadModalCall>
   | ModalName<DeleteThreadModalCall>
   | ModalName<DeletePostModalCall>
@@ -119,6 +123,7 @@ export type ModalNames =
   | ModalName<UpdateMembershipModalCall>
   | ModalName<ReportContentModalCall>
   | ModalName<PostReplyModalCall>
+  | ModalName<InviteMemberModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -128,6 +133,7 @@ const modals: Record<ModalNames, ReactElement> = {
   ApplyForRoleModal: <ApplyForRoleModal />,
   ApplicationDetails: <ApplicationDetailsModal />,
   SwitchMember: <SwitchMemberModal />,
+  CreateOpening: <CreateOpeningModal />,
   LeaveRole: <LeaveRoleModal />,
   ChangeAccountModal: <ChangeAccountModal />,
   MoveFundsModal: <MoveFundsModal />,
@@ -149,6 +155,7 @@ const modals: Record<ModalNames, ReactElement> = {
   RevealVote: <RevealVoteModal />,
   RecoverBalance: <RecoverBalanceModal />,
   IncreaseWorkerStake: <IncreaseWorkerStakeModal />,
+  InviteMemberModal: <InviteMemberModal />,
   OnBoardingModal: <OnBoardingModal />,
   RestoreVotes: <RestoreVotesModal />,
   // AddBounty: <AddBountyModal />,
@@ -189,6 +196,7 @@ const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
 export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [
   'AddNewProposalModal',
   'AnnounceCandidateModal',
+  'CreateOpening',
   'CreatePost',
   'CreateThreadModal',
   'ApplyForRoleModal',
@@ -200,6 +208,12 @@ export const GlobalModals = () => {
   const { active: activeMember } = useMyMemberships()
   const { status } = useTransactionStatus()
   const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
+
+  const [container, setContainer] = useState(document.body)
+  useEffect(() => {
+    const container = document.getElementById('modal-container')
+    if (container) setContainer(container)
+  }, [])
 
   const potentialFallback = useGlobalModalHandler(currentModalMachine, hideModal)
 
@@ -222,7 +236,7 @@ export const GlobalModals = () => {
         {isClosing && <ConfirmModal />}
         {status === 'loadingFees' && <LoaderModal onClose={hideModal} />}
       </TransactionFeesProvider>,
-      document.body
+      container
     )
   }
 

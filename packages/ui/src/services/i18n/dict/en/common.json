@@ -78,7 +78,7 @@
       "opening": {
         "duration": "Duration: {{time}}",
         "past": "Past Opening",
-        "reward": "<0>Reward per 3600 blocks</0><1>{{value}}</1><2>tJOY</2>",
+        "reward": "<0>Reward per 3600 blocks</0><1>{{value}}</1><2>JOY</2>",
         "applications": "<0>Applications</0><1>{{current}}</1>",
         "hired": "<0>Hired</0><1>{{current}}</1><2>/ {{limit}}</2>"
       },

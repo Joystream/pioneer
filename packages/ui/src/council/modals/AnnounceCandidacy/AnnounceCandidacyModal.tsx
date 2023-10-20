@@ -7,7 +7,7 @@ import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFundsModal'
 import { Account } from '@/accounts/types'
 import { useApi } from '@/api/hooks/useApi'
 import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
@@ -257,7 +257,9 @@ export const AnnounceCandidacyModal = () => {
       'Signing this transaction will result in the specified amount of JOY tokens staked for the chosen purpose, resulting in a rivalrous lock applied to this amount until the stake gets recovered.'
     return (
       <SignTransactionModal
-        additionalTransactionInfo={[{ title: 'Add Stake', tooltipText }]}
+        additionalTransactionInfo={[
+          { title: 'Add Stake', value: form.watch('staking.amount') ?? BN_ZERO, tooltipText },
+        ]}
         buttonText="Sign transaction and Announce"
         transaction={announceCandidacyTransaction}
         signer={activeMember.controllerAccount}

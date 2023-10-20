@@ -12,4 +12,6 @@ export const asCategoryWithDetails = (fields: ForumCategoryWithDetailsFieldsFrag
     fields.forumcategoryparent
       ?.filter((subcategory) => subcategory.status.__typename !== 'CategoryStatusRemoved')
       .map(asForumCategory) ?? [],
+
+  moderators: fields.moderators?.map(({ id, membership }) => ({ id, handle: membership.handle })) ?? [],
 })

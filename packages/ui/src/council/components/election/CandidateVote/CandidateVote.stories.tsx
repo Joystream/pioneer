@@ -33,9 +33,9 @@ const args: CandidateVoteProps = {
   candidateId: '1',
   sumOfAllStakes: new BN(5000000),
   totalStake: new BN(500000),
-  ownStake: new BN(32000),
   votes: 20,
   index: 1,
+  myStake: new BN(32000),
   myVotes: [],
 }
 Default.args = args

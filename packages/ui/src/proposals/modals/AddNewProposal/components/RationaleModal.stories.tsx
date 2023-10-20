@@ -5,7 +5,7 @@ import { info } from '@/common/logger'
 import { RationaleModal } from '@/proposals/modals/AddNewProposal/components/RationaleModal'
 
 export default {
-  title: 'Proposals/AddNewProposalModal/RationaleModal',
+  title: 'Pages/Proposals/ProposalList/Current/Modals/AddNewProposalModal/RationaleModal',
   component: RationaleModal,
 } as Meta
 

@@ -1,17 +1,27 @@
 import { isBn } from '@polkadot/util'
 import BN from 'bn.js'
-import { at, get } from 'lodash'
-import React, { useCallback } from 'react'
+import { at, get, merge } from 'lodash'
+import React, { useCallback, useRef } from 'react'
 import { FieldErrors, FieldValues, Resolver } from 'react-hook-form'
+import { FieldError } from 'react-hook-form/dist/types/errors'
+import { DeepMap, DeepPartial } from 'react-hook-form/dist/types/utils'
 import * as Yup from 'yup'
 import { AnyObjectSchema, ValidationError } from 'yup'
 import Reference from 'yup/lib/Reference'
 import { AnyObject } from 'yup/lib/types'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { Loading } from '@/common/components/Loading'
 import { formatJoyValue } from '@/common/model/formatters'
 
 export const BNSchema = Yup.mixed()
+
+export const whenDefined = (key: string, schema: Yup.AnySchema) =>
+  Yup.mixed().when(key, {
+    is: undefined,
+    then: Yup.mixed(),
+    otherwise: schema,
+  })
 
 /*
  *   Both maxContext and minContext allow you to check whether value is bigger or
@@ -152,7 +162,7 @@ export const validStakingAmount = (): Yup.TestConfig<any, AnyObject> => ({
     const minStake: BN | undefined = this.options.context?.minStake
     if (minStake && minStake.gt(stake)) {
       return this.createError({
-        message: 'Minimal stake amount is ${min} tJOY',
+        message: 'Minimal stake amount is ${min} ' + CurrencyName.integerValue,
         params: { min: formatJoyValue(minStake) },
       })
     }
@@ -178,24 +188,27 @@ interface IFormError {
 export const useYupValidationResolver = <T extends FieldValues>(
   validationSchema: AnyObjectSchema,
   path?: string
-): Resolver<T> =>
-  useCallback(
+): Resolver<T> => {
+  const validationsPromise = useRef<Promise<any>>(Promise.resolve())
+
+  return useCallback(
     async (data, context) => {
       let values
+
+      // Deep clone data since it's "by reference" attributes values might change by the time it runs
+      const _data = merge({}, data)
+      const options = {
+        abortEarly: false,
+        context,
+        stripUnknown: true,
+      }
+      const validate = () =>
+        path ? validationSchema.validateSyncAt(path, _data, options) : validationSchema.validateSync(_data, options)
+
+      validationsPromise.current = validationsPromise.current.then(validate, validate)
+
       try {
-        if (path) {
-          values = await validationSchema.validateSyncAt(path, data, {
-            abortEarly: false,
-            context,
-            stripUnknown: true,
-          })
-        } else {
-          values = await validationSchema.validateSync(data, {
-            abortEarly: false,
-            context,
-            stripUnknown: true,
-          })
-        }
+        values = await validationsPromise.current
 
         return {
           values,
@@ -204,21 +217,13 @@ export const useYupValidationResolver = <T extends FieldValues>(
       } catch (errors: any) {
         return {
           values: {},
-          errors: errors.inner?.reduce(
-            (allErrors: Record<string, IFormError>, currentError: ValidationError) => ({
-              ...allErrors,
-              [currentError.path as string]: {
-                type: currentError.type ?? 'validation',
-                message: currentError.message,
-              },
-            }),
-            {}
-          ),
+          errors: convertYupErrorVectorToFieldErrors<T>(errors?.inner ?? [errors ?? Error('Unknown')]),
         }
       }
     },
     [validationSchema, path]
   )
+}
 
 export interface ValidationHelpers {
   errorMessageGetter: (field: string) => string | undefined
@@ -246,3 +251,15 @@ export const enhancedGetErrorMessage = (errors: FieldErrors, depthPath?: string)
 
   return error?.message
 }
+
+export const convertYupErrorVectorToFieldErrors = <T extends FieldValues>(vector: ValidationError[]): FieldErrors<T> =>
+  vector.reduce(
+    (allErrors: Record<string, IFormError>, currentError: ValidationError) => ({
+      ...allErrors,
+      [currentError.path as string]: {
+        type: currentError.type ?? 'validation',
+        message: currentError.message,
+      },
+    }),
+    {}
+  ) as DeepMap<DeepPartial<T>, FieldError>

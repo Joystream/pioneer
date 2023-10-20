@@ -9,7 +9,7 @@ import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFundsModal'
 import { Account } from '@/accounts/types'
 import { Api } from '@/api'
 import { useApi } from '@/api/hooks/useApi'
@@ -186,14 +186,14 @@ export const ApplyForRoleModal = () => {
   const transactionService = state.children.transaction
 
   if (state.matches('transaction') && signer && api && transactionService) {
-    const { stake, form: formFields } = form.getValues()
+    const { stake, form: answers } = form.getValues()
 
     const applyOnOpeningTransaction = api.tx[opening.groupId].applyOnOpening({
       memberId: activeMember?.id,
       openingId: opening.runtimeId,
       roleAccountId: stake.roleAccount.address,
       rewardAccountId: stake.rewardAccount.address,
-      description: metadataToBytes(ApplicationMetadata, { answers: Object.values(formFields ?? {}) as string[] }),
+      description: metadataToBytes(ApplicationMetadata, { answers }),
       stakeParameters: {
         stake: stake.amount,
         stakingAccountId: stake.account?.address,

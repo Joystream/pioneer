@@ -20,7 +20,7 @@ export const WorkingGroupsList = ({ groups }: WorkingGroupsListProps) => {
           <HeaderColumnTitle>Workers</HeaderColumnTitle>
           <HeaderColumnTitle>Current Budget</HeaderColumnTitle>
           <HeaderColumnTitle>Openings</HeaderColumnTitle>
-          <HeaderColumnTitle>Wg leader</HeaderColumnTitle>
+          <HeaderColumnTitle>WG Lead</HeaderColumnTitle>
           <HeaderColumnTitle />
         </ElementsWrapper>
       </HeaderColumnWrapper>
