@@ -108,10 +108,6 @@ export const stubConst = <T>(api: UseApi, constSubPath: string, value: T) => {
 export const stubApi = () => {
   const api: UseApi = {
     api: {
-<<<<<<< HEAD
-=======
-      _async: { chainMetadata: Promise.resolve({}) },
->>>>>>> 3a08da2350b6909bf89b466b97a402e48ec0e90c
       isConnected: true,
     } as unknown as Api,
     isConnected: true,
