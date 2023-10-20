@@ -1,11 +1,13 @@
 import BN from 'bn.js'
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
+import { useApi } from '@/api/hooks/useApi'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { ContextMenu, ContextMenuContainer } from '@/common/components/ContextMenu'
 import { List, ListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
+import { Tooltip } from '@/common/components/Tooltip'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import { Transitions, Fonts, Colors, BorderRad } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
@@ -16,7 +18,10 @@ import { ModalTypes } from '@/working-groups/modals/ChangeAccountModal/constants
 import { LeaveRoleModalCall } from '@/working-groups/modals/LeaveRoleModal'
 import { Worker } from '@/working-groups/types'
 
+import { BN_ZERO } from '../../../common/constants'
+import { useCurrentBlockNumber } from '../../../common/hooks/useCurrentBlockNumber'
 import { workerRoleTitle } from '../../helpers'
+import { getNextPayout } from '../../model/getNextPayout'
 import {
   OpenItemSummaryColumn,
   ToggleableItemInfo,
@@ -31,18 +36,28 @@ export interface RolesListProps {
   workers: Worker[]
 }
 
-export const RolesList = ({ workers }: RolesListProps) => (
-  <List>
-    {workers.map((worker) => (
-      <ListItem key={worker.id} borderless>
-        <RolesListItem worker={worker} />
-      </ListItem>
-    ))}
-  </List>
-)
+export const RolesList = ({ workers }: RolesListProps) => {
+  const blockNumber = useCurrentBlockNumber()
+  const { api } = useApi()
+  const nextPayout = useMemo(
+    () => blockNumber && getNextPayout(workers, blockNumber, api),
+    [workers.length, blockNumber?.toNumber()]
+  )
 
-const RolesListItem = ({ worker }: { worker: Worker }) => {
+  return (
+    <List>
+      {workers.map((worker) => (
+        <ListItem key={worker.id} borderless>
+          <RolesListItem worker={worker} payout={nextPayout} />
+        </ListItem>
+      ))}
+    </List>
+  )
+}
+
+const RolesListItem = ({ worker, payout = BN_ZERO }: { worker: Worker; payout?: BN }) => {
   const { showModal } = useModal()
+
   const changeRewardCallback = useCallback(() => {
     showModal<ChangeAccountModalCall>({
       modal: 'ChangeAccountModal',
@@ -55,7 +70,9 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
       data: { workerId: worker.id },
     })
   }, [])
+
   const { earnings } = useWorkerEarnings(worker.id)
+
   const rewardPeriod = useRewardPeriod(worker.group.id)
 
   const roleRoute = `/working-groups/my-roles/${worker.id}`
@@ -80,13 +97,17 @@ const RolesListItem = ({ worker }: { worker: Worker }) => {
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={worker.rewardPerBlock} />
+            <TokenValue value={earnings} />
           </TextInlineBig>
           <ToggleableSubscriptionWide>Earned total</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={earnings} />
+            <Tooltip
+              tooltipText={<NextPaymentValue>{payout?.gte(BN_ZERO) ? payout?.toString() : '–'}</NextPaymentValue>}
+            >
+              <NextPaymentValue>{payout?.gte(BN_ZERO) ? payout?.toString() : '–'}</NextPaymentValue>
+            </Tooltip>
           </TextInlineBig>
           <ToggleableSubscriptionWide>Next payment in</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
@@ -143,5 +164,22 @@ const RoleTitle = styled(ToggleableItemTitle)`
   &:hover,
   &:focus {
     color: ${Colors.Blue[500]};
+  }
+`
+const NextPaymentValue = styled.span`
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-column-gap: 4px;
+  align-items: baseline;
+  width: fit-content;
+  font-weight: 700;
+  font-family: ${Fonts.Grotesk};
+  &:after {
+    content: 'BLOCKS';
+    display: inline-block;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    color: ${Colors.Black[400]};
   }
 `

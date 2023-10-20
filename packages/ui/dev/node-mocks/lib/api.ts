@@ -3,9 +3,11 @@ import '@joystream/types'
 import { ApiPromise, ApiRx, WsProvider } from '@polkadot/api'
 import { ApiTypes, SubmittableExtrinsic } from '@polkadot/api/types'
 import { createTestKeyring } from '@polkadot/keyring/testing'
+import { KeyringPair } from '@polkadot/keyring/types'
 import { DispatchError, EventRecord } from '@polkadot/types/interfaces/system'
 import { ISubmittableResult, ITuple } from '@polkadot/types/types'
 import chalk from 'chalk'
+import { isString } from 'lodash'
 import { firstValueFrom } from 'rxjs'
 
 const isError = ({ event: { method } }: EventRecord) => method === 'ExtrinsicFailed' || method === 'BatchInterrupted'
@@ -27,7 +29,7 @@ export const getApi = async <T extends ApiTypes>(apiType: T, endpoint = 'ws://12
   return api as Api<T>
 }
 
-const keyring = createTestKeyring()
+export const keyring = createTestKeyring()
 
 const trim = (message: string, maxLength = 80) =>
   message.length > maxLength ? message.slice(0, maxLength) + '...' : message
@@ -40,15 +42,17 @@ const describeTx = (tx: SubmittableExtrinsic<'promise'>) => {
 
 export async function signAndSend(
   tx: SubmittableExtrinsic<'promise'>,
-  signer: string,
+  signer: string | KeyringPair,
   innerTx?: SubmittableExtrinsic<'promise'>
 ) {
   let unsubCb: () => void
 
-  describeTx(innerTx ? innerTx : tx)
+  describeTx(innerTx ?? tx)
+
+  const keyPair = isString(signer) ? keyring.getPair(signer) : signer
 
   return new Promise<EventRecord[]>((resolve) => {
-    tx.signAndSend(keyring.getPair(signer), function ({ events = [], status }: ISubmittableResult) {
+    tx.signAndSend(keyPair, function ({ events = [], status }: ISubmittableResult) {
       console.log(`Transaction status: ${chalk.blue(status.type)}`)
 
       if (status.isInBlock) {

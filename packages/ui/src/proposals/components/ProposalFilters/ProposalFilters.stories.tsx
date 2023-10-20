@@ -10,7 +10,7 @@ import { proposalStatuses } from '@/proposals/model/proposalStatus'
 import { ProposalFilters, ProposalFiltersProps } from '.'
 
 export default {
-  title: 'Proposals/ProposalFilters',
+  title: 'Pages/Proposals/ProposalList/Past/Components/ProposalFilters',
   component: ProposalFilters,
   argTypes: {
     onApply: { action: 'Apply' },

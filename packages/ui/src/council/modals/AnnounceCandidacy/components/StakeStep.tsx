@@ -50,13 +50,9 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
             disabled={!isSomeBalanceGteStake}
             message={errorChecker('account') ? errorMessageGetter('account') : undefined}
             validation={errorChecker('account') ? 'invalid' : undefined}
-            tooltipText={
-              <>
-                When loosing an election the candidacy lock is released and your stake becomes immediately recoverable.
-                If elected the lock is automatically replaced with a council specific lock of the same amount. The
-                councilor lock is released with the next successful election should you not get re-elected.
-              </>
-            }
+            tooltipText="The account holding the stake for the candidate. After announcing the staking account will have locked up REQUIRED_CANDIDACY_STAKE under the relevant council lock. If the candidacy fails - either because the election cycle fails or the candidate receives too few votes, then this lock can be removed by the candidate, otherwise it remains on into the councilorship. Be aware that this stake contributed towards the candidacy does not contribute towards the final election outcome, hence exceeding the minimum bound would only be done for signaling or other social purposes."
+            tooltipLinkText="Learn more"
+            tooltipLinkURL="https://handbook.joystream.org/system/council#candidacy"
           >
             <SelectStakingAccount name="staking.account" minBalance={minStake} lockType="Council Candidate" />
           </InputComponent>

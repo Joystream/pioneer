@@ -1,5 +1,6 @@
 export * from './errorEvents'
 export * from './getDataFromEvent'
 export * from './isModuleEvent'
+export * from './metadataFromBytes'
 export * from './metadataToBytes'
 export * from './types'

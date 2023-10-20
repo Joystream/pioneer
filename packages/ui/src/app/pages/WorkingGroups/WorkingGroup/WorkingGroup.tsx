@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
+import { ButtonsGroup } from '@/common/components/buttons'
 import { Loading } from '@/common/components/Loading'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Tabs } from '@/common/components/Tabs'
 import { nameMapping } from '@/common/helpers'
+import { CreateOpeningButton } from '@/working-groups/components/CreateOpeningButton'
+import { useMyWorkers } from '@/working-groups/hooks/useMyWorkers'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 import { urlParamToWorkingGroupId } from '@/working-groups/model/workingGroupName'
 
@@ -22,6 +25,11 @@ export function WorkingGroup() {
   const [currentTab, setCurrentTab] = useState<Tab>('OPENINGS')
   const { name } = useParams<{ name: string }>()
   const { isLoading, group } = useWorkingGroup({ name: urlParamToWorkingGroupId(name) })
+  const { workers } = useMyWorkers()
+  const isLead = useMemo(
+    () => group?.isActive && workers.find((w) => w.membership.id === group?.leadId),
+    [workers, group?.isActive, group?.leadId]
+  )
 
   const tabs = [
     { title: 'Openings', active: currentTab === 'OPENINGS', onClick: () => setCurrentTab('OPENINGS') },
@@ -58,14 +66,22 @@ export function WorkingGroup() {
     <PageLayout
       header={
         <PageHeaderWrapper>
-          <PreviousPage>
-            <PageTitle>{nameMapping(group?.name ?? name)}</PageTitle>
-            {group?.status && (
-              <StatusGroup>
-                <StatusBadge>{group?.status}</StatusBadge>
-              </StatusGroup>
+          <PageHeaderRow>
+            <PreviousPage>
+              <PageTitle>{nameMapping(group?.name ?? name)}</PageTitle>
+              {group?.status && (
+                <StatusGroup>
+                  <StatusBadge>{group?.status}</StatusBadge>
+                </StatusGroup>
+              )}
+            </PreviousPage>
+            {group && isLead && currentTab === 'OPENINGS' && (
+              <ButtonsGroup>
+                <CreateOpeningButton group={group.id} />
+              </ButtonsGroup>
             )}
-          </PreviousPage>
+          </PageHeaderRow>
+
           <Tabs tabs={tabs} />
         </PageHeaderWrapper>
       }

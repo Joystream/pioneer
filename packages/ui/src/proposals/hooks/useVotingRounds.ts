@@ -28,7 +28,7 @@ export const useVotingRounds = (votes: ProposalVote[] = [], updates: ProposalSta
   const councilSize = useCouncilSize()
 
   const voteRounds: (Omit<VotingRound, 'count'> & { total?: number })[] = useMemo(() => {
-    const decidingCount = updates.filter(({ status }) => status === 'deciding').length || 1
+    const decidingCount = updates.filter(({ status }) => status === 'deciding').length + 1
     const votesByRound = groupBy(votes, propsEquals('votingRound')).sort((a, b) => a[0].votingRound - b[0].votingRound)
 
     const voteRound = (round: number) => ({

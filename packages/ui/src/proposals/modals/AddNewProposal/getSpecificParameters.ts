@@ -5,6 +5,7 @@ import { BN_ZERO } from '@/common/constants'
 import { createType } from '@/common/model/createType'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { last } from '@/common/utils'
+import { asArrayBuffer } from '@/common/utils/file'
 import { AddNewProposalForm } from '@/proposals/modals/AddNewProposal/helpers'
 import { GroupIdToGroupParam } from '@/working-groups/constants'
 import { GroupIdName } from '@/working-groups/types'
@@ -13,7 +14,7 @@ const idToRuntimeId = (id: string): number => Number(last(id.split('-')))
 
 const getWorkingGroupParam = (groupId: GroupIdName | undefined) => groupId && GroupIdToGroupParam[groupId]
 
-export const getSpecificParameters = (
+export const getSpecificParameters = async (
   api: Api,
   specifics: Omit<AddNewProposalForm, 'triggerAndDiscussion' | 'stakingAccount' | 'proposalDetails'>
 ) => {
@@ -29,15 +30,13 @@ export const getSpecificParameters = (
     }
     case 'fundingRequest': {
       return createType('PalletProposalsCodexProposalDetails', {
-        FundingRequest: [
-          { amount: specifics?.fundingRequest?.amount, account: specifics?.fundingRequest?.account?.address },
-        ],
+        FundingRequest: specifics?.fundingRequest?.payMultiple
+          ? specifics?.fundingRequest?.accountsAndAmounts
+          : [{ amount: specifics?.fundingRequest?.amount, account: specifics?.fundingRequest?.account?.address }],
       })
     }
     case 'runtimeUpgrade': {
-      const u8a = specifics?.runtimeUpgrade?.runtime
-        ? new Uint8Array(specifics.runtimeUpgrade.runtime)
-        : new Uint8Array()
+      const u8a = new Uint8Array(await asArrayBuffer(specifics?.runtimeUpgrade?.runtime))
       return createType('PalletProposalsCodexProposalDetails', {
         RuntimeUpgrade: createType('Bytes', u8a),
       })
@@ -175,6 +174,17 @@ export const getSpecificParameters = (
     case 'setMembershipPrice': {
       return createType('PalletProposalsCodexProposalDetails', {
         SetMembershipPrice: specifics?.setMembershipPrice?.amount ?? 0,
+      })
+    }
+    case 'updateChannelPayouts': {
+      return createType('PalletProposalsCodexProposalDetails', {
+        UpdateChannelPayouts: {
+          payload: specifics?.updateChannelPayouts.payload ?? null,
+          minCashoutAllowed: specifics?.updateChannelPayouts.minimumCashoutAllowed,
+          maxCashoutAllowed: specifics?.updateChannelPayouts.maximumCashoutAllowed,
+          channelCashoutsEnabled: specifics.updateChannelPayouts.cashoutEnabled ?? false,
+          commitment: specifics.updateChannelPayouts.commitment ?? null,
+        },
       })
     }
     default:

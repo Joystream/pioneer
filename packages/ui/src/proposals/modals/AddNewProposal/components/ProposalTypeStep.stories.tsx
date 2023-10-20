@@ -7,7 +7,7 @@ import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/comp
 import { ProposalTypeStep } from '@/proposals/modals/AddNewProposal/components/ProposalTypeStep'
 
 export default {
-  title: 'Proposals/AddNewProposalModal/ProposalTypeStep',
+  title: 'Pages/Proposals/ProposalList/Current/Modals/AddNewProposalModal/ProposalTypeStep',
   component: ProposalTypeStep,
 } as Meta
 

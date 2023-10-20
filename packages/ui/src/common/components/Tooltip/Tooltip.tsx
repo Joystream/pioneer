@@ -11,19 +11,24 @@ import { LinkSymbol, LinkSymbolStyle } from '../icons/symbols'
 
 import { DefaultTooltip } from './TooltipDefault'
 
+type TooltipPlacement = 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end'
 export interface TooltipProps extends Omit<TooltipPopupProps, 'popUpHandlers' | 'position'> {
   absolute?: boolean
   maxWidth?: boolean
+  placement?: TooltipPlacement
   children: React.ReactNode
 }
 
-export interface TooltipPopupProps {
-  className?: string
-  tooltipOpen?: boolean
+export interface TooltipContentProp {
   tooltipText?: React.ReactNode
   tooltipTitle?: string
   tooltipLinkText?: React.ReactNode
   tooltipLinkURL?: string
+}
+
+export interface TooltipPopupProps extends TooltipContentProp {
+  className?: string
+  tooltipOpen?: boolean
   popupContent?: React.ReactNode
   offset?: [number, number]
   popUpHandlers: {
@@ -42,6 +47,7 @@ export interface DarkTooltipInnerItemProps {
 export const Tooltip = ({
   absolute,
   maxWidth,
+  placement,
   children,
   tooltipText,
   tooltipOpen = false,
@@ -61,7 +67,7 @@ export const Tooltip = ({
   const [boundaryElement, setBoundaryElement] = useState<HTMLElement | null>(null)
 
   const { styles, attributes } = usePopper(referenceElementRef, popperElementRef, {
-    placement: 'bottom-start',
+    placement: placement || 'bottom-start',
     modifiers: [
       {
         name: 'offset',

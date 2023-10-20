@@ -17,7 +17,7 @@ import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvi
 import { mockDefaultBalance } from '../../../../test/setup'
 
 export default {
-  title: 'App/OnBoardingModal',
+  title: 'App/Modals/OnBoardingModal',
   component: OnBoardingModal,
 } as Meta
 
