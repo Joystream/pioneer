@@ -222,10 +222,15 @@ export const GlobalModals = () => {
 
   const potentialFallback = useGlobalModalHandler(currentModalMachine, hideModal)
 
-  if (!supportTransactions && !NON_TRANSACTIONAL_MODALS.includes(modal as ModalNames))
-    return <NotSupportMobileModal onClose={hideModal} />
+  if (!modal) {
+    return null
+  }
 
-  if (modal && !GUEST_ACCESSIBLE_MODALS.includes(modal as ModalNames) && !activeMember) {
+  if (!supportTransactions && !NON_TRANSACTIONAL_MODALS.includes(modal as ModalNames)) {
+    return <NotSupportMobileModal onClose={hideModal} />
+  }
+
+  if (!GUEST_ACCESSIBLE_MODALS.includes(modal as ModalNames) && !activeMember) {
     showModal<SwitchMemberModalCall>({
       modal: 'SwitchMember',
       data: {
