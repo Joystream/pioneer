@@ -3,10 +3,10 @@ import React, { useMemo, useState } from 'react'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { Account } from '@/accounts/types'
 import { TabProps, Tabs } from '@/common/components/Tabs'
+import { sumStakes } from '@/common/utils/bn'
 import { CandidateVoteList } from '@/council/components/election/CandidateVote/CandidateVoteList'
 import { electionVotingResultComparator } from '@/council/model/electionVotingResultComparator'
 import { ElectionVotingResult, PastElectionWithDetails } from '@/council/types/PastElection'
-import { sumStakes } from '@/common/utils/bn'
 
 interface PastElectionTabsProps {
   election: PastElectionWithDetails
