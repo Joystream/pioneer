@@ -64,7 +64,8 @@ describe('API: notifier', () => {
         }
       }
     `
-    await expect(authApi(wrongMutation1, authToken, true)).rejects.toBeDefined()
+    // expectFailure = true already checks for errors
+    expect(await authApi(wrongMutation1, authToken, true)).toBeFalsy()
 
     const wrongMutation2 = gql`
       mutation {
@@ -73,7 +74,8 @@ describe('API: notifier', () => {
         }
       }
     `
-    await expect(authApi(wrongMutation2, authToken, true)).rejects.toBeDefined()
+    // expectFailure = true already checks for errors
+    expect(await authApi(wrongMutation2, authToken, true)).toBeFalsy()
 
     const generalSubscriptionsMutation = gql`
       mutation {
@@ -132,7 +134,8 @@ describe('API: notifier', () => {
         }
       }
     `
-    await expect(authApi(wrongMutation1, authToken, true)).rejects.toBeDefined()
+    // expectFailure = true already checks for errors
+    expect(await authApi(wrongMutation1, authToken, true)).toBeFalsy()
 
     const wrongMutation2 = gql`
       mutation {
@@ -141,7 +144,8 @@ describe('API: notifier', () => {
         }
       }
     `
-    await expect(authApi(wrongMutation2, authToken, true)).rejects.toBeDefined()
+    // expectFailure = true already checks for errors
+    expect(await authApi(wrongMutation2, authToken, true)).toBeFalsy()
 
     const watchThreadMutation = (id: string) => gql`
         mutation {
@@ -241,7 +245,7 @@ describe('API: notifier', () => {
           kind
           eventId
           entityId
-          isSent
+          emailStatus
           isRead
         }
       }
@@ -254,7 +258,6 @@ describe('API: notifier', () => {
           kind: 'FORUM_POST_ALL',
           eventId: 'post_creation:1',
           entityId: 'post:1',
-          isSent: false,
           isRead: false,
           memberId: ALICE.id,
         },
@@ -268,7 +271,7 @@ describe('API: notifier', () => {
           kind: 'FORUM_POST_ALL',
           eventId: 'post_creation:1',
           entityId: 'post:1',
-          isSent: false,
+          emailStatus: 'PENDING',
           isRead: false,
         },
       ],

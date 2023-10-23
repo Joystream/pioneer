@@ -27,14 +27,16 @@ export const usePageTabs = (tabs: TabsDefinition[]) => {
           hasChanges = !!countOrOptions?.hasChanges
         }
 
+        const isActive = path === history.location.pathname
+
         return {
           title,
           count,
           changes: hasChanges,
-          active: path === history.location.pathname,
-          onClick: () => history.push(path),
+          active: isActive,
+          onClick: () => (!isActive ? history.push(path) : undefined),
         }
       }),
-    [JSON.stringify(tabs)]
+    [JSON.stringify(tabs), history.location.pathname]
   )
 }

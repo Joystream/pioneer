@@ -1,16 +1,18 @@
+import { EMAIL_MAX_RETRY_COUNT } from '@/common/config'
 import { prisma } from '@/common/prisma'
 import { GetForumCategoryDocument, GetNotificationEventsDocument, GetThreadDocument } from '@/common/queries'
 import { run } from '@/notifier'
 
 import { createMember } from './_mocks/notifier/createMember'
 import { postAddedEvent, threadCreatedEvent } from './_mocks/notifier/events'
-import { clearDb, mockRequest, mockSendEmail } from './setup'
+import { electionAnnouncingEvent, electionRevealingEvent, electionVotingEvent } from './_mocks/notifier/events/election'
+import { clearDb, mockRequest, mockEmailProvider } from './setup'
 
 describe('Notifier', () => {
   beforeEach(async () => {
     await clearDb()
     mockRequest.mockReset()
-    mockSendEmail.mockReset()
+    mockEmailProvider.reset()
   })
 
   describe('forum', () => {
@@ -36,6 +38,10 @@ describe('Notifier', () => {
       // Charlie had not registered in the back-end he should not get any notification
       const charlie = { id: 3 }
 
+      // Dave is using the default behavior for general subscriptions
+      // However he should not get any email notifications
+      const dave = await createMember(4, 'dave', undefined, false)
+
       // -------------------
       // Mock QN responses
       // -------------------
@@ -55,6 +61,7 @@ describe('Notifier', () => {
               author: alice.id,
               text: `I [@Alice](#mention?member-id=${alice.id})`,
             }),
+            postAddedEvent(5, { thread: 'qux', text: `Hi [@Dave](#mention?member-id=${dave.id})`, category: 'qux' }),
           ],
         })
         .mockReturnValue({
@@ -86,7 +93,8 @@ describe('Notifier', () => {
           kind: 'FORUM_THREAD_CREATOR',
           entityId: 'post:1',
           isRead: false,
-          isSent: true,
+          emailStatus: 'SENT',
+          retryCount: 0,
         })
       )
       expect(notifications).toContainEqual(
@@ -94,7 +102,8 @@ describe('Notifier', () => {
           eventId: 'event:2',
           memberId: alice.id,
           kind: 'FORUM_POST_MENTION',
-          isSent: true,
+          emailStatus: 'SENT',
+          retryCount: 0,
         })
       )
       expect(notifications).toContainEqual(
@@ -102,7 +111,8 @@ describe('Notifier', () => {
           eventId: 'event:2',
           memberId: bob.id,
           kind: 'FORUM_THREAD_ENTITY_POST',
-          isSent: true,
+          emailStatus: 'SENT',
+          retryCount: 0,
         })
       )
       expect(notifications).toContainEqual(
@@ -110,7 +120,8 @@ describe('Notifier', () => {
           eventId: 'event:3',
           memberId: alice.id,
           kind: 'FORUM_CATEGORY_ENTITY_POST',
-          isSent: true,
+          emailStatus: 'SENT',
+          retryCount: 0,
         })
       )
       expect(notifications).toContainEqual(
@@ -118,61 +129,61 @@ describe('Notifier', () => {
           eventId: 'event:3',
           memberId: bob.id,
           kind: 'FORUM_POST_ALL',
-          isSent: true,
+          emailStatus: 'SENT',
+          retryCount: 0,
         })
       )
-      expect(notifications).toHaveLength(5)
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: 'event:5',
+          memberId: dave.id,
+          kind: 'FORUM_POST_MENTION',
+          emailStatus: 'IGNORED',
+          retryCount: 0,
+        })
+      )
+      expect(notifications).toHaveLength(6)
 
       // -------------------
       // Check emails
       // -------------------
 
-      expect(mockSendEmail).toHaveBeenCalledWith(
+      expect(mockEmailProvider.sentEmails).toContainEqual(
         expect.objectContaining({
           to: alice.email,
           subject: expect.stringContaining('thread:title'),
-          text: expect.stringMatching(
-            /author:handle replied\b.+\b\/#\/forum\/thread\/thread:id\?post=post:1\b.+ Lorem Ipsum/s
-          ),
+          html: expect.stringMatching(/\/#\/forum\/thread\/thread:id\?post=post:1/s),
         })
       )
-      expect(mockSendEmail).toHaveBeenCalledWith(
+      expect(mockEmailProvider.sentEmails).toContainEqual(
         expect.objectContaining({
           to: alice.email,
           subject: expect.stringContaining('thread:title'),
-          text: expect.stringMatching(
-            /author:handle mentioned you\b.+\b\/#\/forum\/thread\/thread:id\?post=post:2\b.+ Lorem Ipsum/s
-          ),
+          html: expect.stringMatching(/\/#\/forum\/thread\/thread:id\?post=post:2/s),
         })
       )
-      expect(mockSendEmail).toHaveBeenCalledWith(
+      expect(mockEmailProvider.sentEmails).toContainEqual(
         expect.objectContaining({
           to: bob.email,
           subject: expect.stringContaining('thread:title'),
-          text: expect.stringMatching(
-            /author:handle posted\b.+\b\/#\/forum\/thread\/thread:id\?post=post:2\b.+ Lorem Ipsum/s
-          ),
+          html: expect.stringMatching(/\/#\/forum\/thread\/thread:id\?post=post:2/s),
         })
       )
-      expect(mockSendEmail).toHaveBeenCalledWith(
+      expect(mockEmailProvider.sentEmails).toContainEqual(
         expect.objectContaining({
           to: alice.email,
           subject: expect.stringContaining('thread:title'),
-          text: expect.stringMatching(
-            /author:handle posted\b.+\b\/#\/forum\/thread\/thread:id\?post=post:3\b.+ Lorem Ipsum/s
-          ),
+          html: expect.stringMatching(/\/#\/forum\/thread\/thread:id\?post=post:3/s),
         })
       )
-      expect(mockSendEmail).toHaveBeenCalledWith(
+      expect(mockEmailProvider.sentEmails).toContainEqual(
         expect.objectContaining({
           to: bob.email,
           subject: expect.stringContaining('thread:title'),
-          text: expect.stringMatching(
-            /author:handle posted\b.+\b\/#\/forum\/thread\/thread:id\?post=post:3\b.+ Lorem Ipsum/s
-          ),
+          html: expect.stringMatching(/\/#\/forum\/thread\/thread:id\?post=post:3/s),
         })
       )
-      expect(mockSendEmail).toHaveBeenCalledTimes(5)
+      expect(mockEmailProvider.sentEmails.length).toBe(5)
     })
 
     it('ThreadCreatedEvent', async () => {
@@ -265,28 +276,377 @@ describe('Notifier', () => {
       // Check emails
       // -------------------
 
-      expect(mockSendEmail).toHaveBeenCalledWith(
+      expect(mockEmailProvider.sentEmails).toContainEqual(
         expect.objectContaining({
           to: alice.email,
           subject: expect.stringContaining('thread:1:title'),
-          text: expect.stringMatching(/author:handle mentioned you\b.+\b\/#\/forum\/thread\/thread:1\b.+ Lorem Ipsum/s),
+          html: expect.stringMatching(/\/#\/forum\/thread\/thread:1/s),
         })
       )
-      expect(mockSendEmail).toHaveBeenCalledWith(
+      expect(mockEmailProvider.sentEmails).toContainEqual(
         expect.objectContaining({
           to: alice.email,
           subject: expect.stringContaining('thread:2:title'),
-          text: expect.stringMatching(/author:handle posted\b.+\b\/#\/forum\/thread\/thread:2\b.+ Lorem Ipsum/s),
+          html: expect.stringMatching(/\/#\/forum\/thread\/thread:2/s),
         })
       )
-      expect(mockSendEmail).toHaveBeenCalledWith(
+      expect(mockEmailProvider.sentEmails).toContainEqual(
         expect.objectContaining({
           to: bob.email,
           subject: expect.stringContaining('thread:3:title'),
-          text: expect.stringMatching(/author:handle posted\b.+\b\/#\/forum\/thread\/thread:3\b.+ Lorem Ipsum/s),
+          html: expect.stringMatching(/\/#\/forum\/thread\/thread:3/s),
         })
       )
-      expect(mockSendEmail).toHaveBeenCalledTimes(3)
+      expect(mockEmailProvider.sentEmails.length).toBe(3)
+    })
+  })
+
+  describe('election', () => {
+    it('ElectionAnnouncingStartedEvent', async () => {
+      // -------------------
+      // Initialize database
+      // -------------------
+
+      // - Alice is using the default behavior for general subscriptions
+      // - Alice should be notified of any election changes
+      const alice = await createMember(1, 'alice')
+
+      // - Bob should not be notified of any election changes
+      await createMember(2, 'bob', [{ kind: 'ELECTION_ANNOUNCING_STARTED', shouldNotify: false }])
+
+      // -------------------
+      // Mock QN responses
+      // -------------------
+
+      const announcingId = 'announcing:id'
+
+      mockRequest
+        .mockReturnValueOnce({
+          events: [electionAnnouncingEvent(announcingId)],
+        })
+        .mockReturnValue({
+          events: [],
+        })
+
+      // -------------------
+      // Run
+      // -------------------
+
+      await run()
+
+      // -------------------
+      // Check notifications
+      // -------------------
+
+      const notifications = await prisma.notification.findMany()
+
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: announcingId,
+          memberId: alice.id,
+          kind: 'ELECTION_ANNOUNCING_STARTED',
+          isRead: false,
+          emailStatus: 'SENT',
+          retryCount: 0,
+        })
+      )
+      expect(notifications).toHaveLength(1)
+
+      // -------------------
+      // Check emails
+      // -------------------
+
+      expect(mockEmailProvider.sentEmails).toContainEqual(
+        expect.objectContaining({
+          to: alice.email,
+          subject: expect.stringContaining('election started'),
+          html: expect.stringMatching(/\/#\/election/s),
+        })
+      )
+      expect(mockEmailProvider.sentEmails.length).toBe(1)
+    })
+
+    it('ElectionVotingStartedEvent', async () => {
+      // -------------------
+      // Initialize database
+      // -------------------
+
+      // - Alice is using the default behavior for general subscriptions
+      // - Alice should be notified of any election changes
+      const alice = await createMember(1, 'alice')
+
+      // - Bob should not be notified of any election changes
+      await createMember(2, 'bob', [{ kind: 'ELECTION_VOTING_STARTED', shouldNotify: false }])
+
+      // -------------------
+      // Mock QN responses
+      // -------------------
+
+      const votingId = 'voting:id'
+
+      mockRequest
+        .mockReturnValueOnce({
+          events: [electionVotingEvent(votingId)],
+        })
+        .mockReturnValue({
+          events: [],
+        })
+
+      // -------------------
+      // Run
+      // -------------------
+
+      await run()
+
+      // -------------------
+      // Check notifications
+      // -------------------
+
+      const notifications = await prisma.notification.findMany()
+
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: votingId,
+          memberId: alice.id,
+          kind: 'ELECTION_VOTING_STARTED',
+          emailStatus: 'SENT',
+          retryCount: 0,
+        })
+      )
+      expect(notifications).toHaveLength(1)
+
+      // -------------------
+      // Check emails
+      // -------------------
+
+      expect(mockEmailProvider.sentEmails).toContainEqual(
+        expect.objectContaining({
+          to: alice.email,
+          subject: expect.stringContaining('voting started'),
+          html: expect.stringMatching(/\/#\/election/s),
+        })
+      )
+      expect(mockEmailProvider.sentEmails.length).toBe(1)
+    })
+
+    it('ElectionRevealingStartedEvent', async () => {
+      // -------------------
+      // Initialize database
+      // -------------------
+
+      // - Alice is using the default behavior for general subscriptions
+      // - Alice should be notified of any election changes
+      const alice = await createMember(1, 'alice')
+
+      // - Bob should not be notified of any election changes
+      await createMember(2, 'bob', [{ kind: 'ELECTION_REVEALING_STARTED', shouldNotify: false }])
+
+      // -------------------
+      // Mock QN responses
+      // -------------------
+
+      const revealingId = 'revealing:id'
+
+      mockRequest
+        .mockReturnValueOnce({
+          events: [electionRevealingEvent(revealingId)],
+        })
+        .mockReturnValue({
+          events: [],
+        })
+
+      // -------------------
+      // Run
+      // -------------------
+
+      await run()
+
+      // -------------------
+      // Check notifications
+      // -------------------
+
+      const notifications = await prisma.notification.findMany()
+
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: revealingId,
+          memberId: alice.id,
+          kind: 'ELECTION_REVEALING_STARTED',
+          emailStatus: 'SENT',
+          retryCount: 0,
+        })
+      )
+      expect(notifications).toHaveLength(1)
+
+      // -------------------
+      // Check emails
+      // -------------------
+
+      expect(mockEmailProvider.sentEmails).toContainEqual(
+        expect.objectContaining({
+          to: alice.email,
+          subject: expect.stringContaining('revealing period started'),
+          html: expect.stringMatching(/\/#\/election/s),
+        })
+      )
+      expect(mockEmailProvider.sentEmails.length).toBe(1)
+    })
+  })
+
+  describe('retries', () => {
+    it('should retry failed notifications', async () => {
+      // -------------------
+      // Initialize database
+      // -------------------
+
+      const alice = await createMember(1, 'alice', [{ kind: 'FORUM_POST_MENTION' }])
+
+      // -------------------
+      // Mock QN responses
+      // -------------------
+
+      mockRequest
+        .mockReturnValueOnce({
+          events: [
+            postAddedEvent(1, {
+              thread: 'foo',
+              threadAuthor: 'foo',
+              text: `Hi [@Alice](#mention?member-id=${alice.id})`,
+            }),
+          ],
+        })
+        .mockReturnValue({
+          events: [],
+        })
+
+      // Enable email provider fails
+      mockEmailProvider.shouldFail = true
+
+      // Run `run()` MAX_EMAIL_RETRY_COUNT times
+
+      for (let i = 0; i < EMAIL_MAX_RETRY_COUNT; i++) {
+        await run()
+
+        // -------------------
+        // Check notifications
+        // -------------------
+
+        const notifications = await prisma.notification.findMany()
+
+        expect(notifications).toContainEqual(
+          expect.objectContaining({
+            eventId: 'event:1',
+            memberId: alice.id,
+            kind: 'FORUM_POST_MENTION',
+            emailStatus: 'PENDING',
+            retryCount: i + 1,
+          })
+        )
+        expect(notifications).toHaveLength(1)
+      }
+
+      // Expect the notification to be marked as failed after retries are exhausted
+
+      await run()
+
+      const notifications = await prisma.notification.findMany()
+
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: 'event:1',
+          memberId: alice.id,
+          kind: 'FORUM_POST_MENTION',
+          emailStatus: 'FAILED',
+          retryCount: EMAIL_MAX_RETRY_COUNT,
+        })
+      )
+
+      // Make sure no emails were sent
+
+      expect(mockEmailProvider.sentEmails.length).toBe(0)
+    })
+
+    it('should properly send retried notifications', async () => {
+      // -------------------
+      // Initialize database
+      // -------------------
+
+      const alice = await createMember(1, 'alice', [{ kind: 'FORUM_POST_MENTION' }])
+
+      // -------------------
+      // Mock QN responses
+      // -------------------
+
+      mockRequest
+        .mockReturnValueOnce({
+          events: [
+            postAddedEvent(1, {
+              thread: 'foo',
+              threadAuthor: 'foo',
+              text: `Hi [@Alice](#mention?member-id=${alice.id})`,
+            }),
+          ],
+        })
+        .mockReturnValue({
+          events: [],
+          forumPostByUniqueInput: {
+            author: { handle: 'author:handle' },
+            thread: { id: 'thread:id', title: 'thread:title' },
+            text: 'Lorem Ipsum',
+          },
+        })
+
+      // Enable email provider fails
+      mockEmailProvider.shouldFail = true
+
+      await run()
+
+      // -------------------
+      // Check notifications
+      // -------------------
+
+      let notifications = await prisma.notification.findMany()
+
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: 'event:1',
+          memberId: alice.id,
+          kind: 'FORUM_POST_MENTION',
+          emailStatus: 'PENDING',
+          retryCount: 1,
+        })
+      )
+      expect(notifications).toHaveLength(1)
+
+      // Disable email provider fails
+      mockEmailProvider.shouldFail = false
+
+      // Expect the notification to be sent
+      await run()
+
+      notifications = await prisma.notification.findMany()
+
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: 'event:1',
+          memberId: alice.id,
+          kind: 'FORUM_POST_MENTION',
+          emailStatus: 'SENT',
+          retryCount: 1,
+        })
+      )
+
+      // Check emails
+
+      expect(mockEmailProvider.sentEmails).toContainEqual(
+        expect.objectContaining({
+          to: alice.email,
+          subject: expect.stringContaining('thread:title'),
+          html: expect.stringMatching(/\/#\/forum\/thread\/thread:id\?post=post:1/s),
+        })
+      )
+
+      expect(mockEmailProvider.sentEmails.length).toBe(1)
     })
   })
 })

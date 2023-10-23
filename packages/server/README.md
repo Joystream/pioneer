@@ -96,7 +96,7 @@ To check the validity of an authorization token:
 
 ```gql
 query {
-  member {
+  me {
     id
     name
     email
@@ -104,7 +104,7 @@ query {
 }
 ```
 
-When ran with a correct `Authorization` header, it returns the member data. Otherwise it returns `null`. The email field will be `null' if the member email address has not yet been verified.
+When ran with a correct `Authorization` header, it returns the authorized member data. Otherwise it returns unauthorized error. The email field will be `null' if the member email address has not yet been verified.
 
 To check that a member is registered in the API:
 
@@ -203,7 +203,7 @@ query {
   notifications {
     kind
     entityId
-    isSent
+    status
   }
 }
 ```
@@ -230,6 +230,8 @@ To run the API to develop locally:
 - `yarn workspace server test`: Run tests.
 - `yarn workspace server dev:notify`: Run the notifier `nodemon` and `ts-node`.
 - `yarn workspace server dev:db:reset`: Clear the database data and re-synchronize its schema.
+- `yarn workspace server dev:emails`: Run live development preview for emails.
+- `yarn workspace server dev:mockEmail email [notificationKind]`: Send mock email.
 - `yarn workspace server codegen`: Run `graphql-codegen`.
 - [`yarn workspace server prisma studio`][prisma studio]: Launch an administration GUI for the database.
 - [`yarn workspace server prisma db push`][prisma db:push]: Synchronize `schema.prisma` with the database schema.

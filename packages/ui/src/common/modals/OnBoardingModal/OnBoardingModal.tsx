@@ -33,8 +33,8 @@ export const OnBoardingModal = () => {
   const { status: realStatus, membershipAccount, setMembershipAccount, isLoading } = useOnBoarding()
   const status = useDebounce(realStatus, 50)
   const [state, send] = useMachine(onBoardingMachine)
-  const [membershipData, setMembershipData] = useState<{ id: string; blockHash: string }>()
-  const transactionStatus = useQueryNodeTransactionStatus(!!membershipData?.blockHash, membershipData?.blockHash)
+  const [membershipData, setMembershipData] = useState<{ id: string; blockHash: string; blockNumber: number }>()
+  const transactionStatus = useQueryNodeTransactionStatus(!!membershipData, membershipData?.blockNumber)
   const apolloClient = useApolloClient()
   const [endpoints] = useNetworkEndpoints()
   const statusRef = useRef<OnBoardingStatus>()
@@ -86,12 +86,12 @@ export const OnBoardingModal = () => {
           body: JSON.stringify(membershipData),
         })
 
-        const { error, memberId, blockHash } = await response.json()
+        const { error, memberId, blockHash, block } = await response.json()
 
         if (error) {
           send({ type: 'ERROR' })
         } else {
-          setMembershipData({ id: parseInt(memberId, 16).toString(), blockHash: blockHash })
+          setMembershipData({ id: memberId, blockHash: blockHash, blockNumber: block })
         }
       } catch (err) {
         send({ type: 'ERROR' })

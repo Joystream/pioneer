@@ -4,10 +4,11 @@ import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { SidebarConnections } from '@/app/components/SidebarConnections'
-import { MembersRoutes, ProfileRoutes, SettingsRoutes } from '@/app/constants/routes'
+import { MembersRoutes, ProfileRoutes } from '@/app/constants/routes'
 import { BountyRoutes } from '@/bounty/constants'
 import { Arrow } from '@/common/components/icons'
-import { CalamarSymbol, LinkSymbol, LinkSymbolStyle, PolkadotSymbol } from '@/common/components/icons/symbols'
+import { LinkSymbol, LinkSymbolStyle, PolkadotSymbol } from '@/common/components/icons/symbols'
+import { SubscanSymbol } from '@/common/components/icons/symbols/SubscanSymbol'
 import { AppsIcon } from '@/common/components/page/Sidebar/LinksIcons/AppsIcon'
 import { BandwidthIcon } from '@/common/components/page/Sidebar/LinksIcons/BandwidthIcon'
 import { BountyIcon } from '@/common/components/page/Sidebar/LinksIcons/BountyIcon'
@@ -38,6 +39,8 @@ import { ForumRoutes } from '@/forum/constant'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
+
+import { SettingsRoutes } from '../pages/Settings/routes'
 
 export const SideBar = () => {
   const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)
@@ -109,7 +112,7 @@ export const SideBar = () => {
               </NavigationLink>
             </NavigationLinksItem>
             <NavigationLinksItem>
-              <NavigationLink icon={<CalamarSymbol />} to="https://calamar.app/joystream">
+              <NavigationLink icon={<SubscanSymbol />} to="https://joystream.subscan.io">
                 Explorer
                 <LinkSymbol color={Colors.Black[500]} className="sidebarLinkSymbol" />
               </NavigationLink>

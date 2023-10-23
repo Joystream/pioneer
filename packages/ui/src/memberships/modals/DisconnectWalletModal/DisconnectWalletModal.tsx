@@ -9,18 +9,21 @@ import { TextHuge, TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SignOutModalCall } from '@/memberships/modals/SignOutModal/types'
 
 const defaultIconSrc = getWalletBySource('polkadot-js')?.logo.src
 
 export const DisconnectWalletModal = () => {
   const { wallet, setWallet } = useMyAccounts()
+  const { setActive } = useMyMemberships()
   const [, setSelectedWallet] = useLocalStorage<Wallet | undefined>('recentWallet')
   const { hideModal } = useModal<SignOutModalCall>()
 
   const DisconnectWallet = () => {
     hideModal()
     setWallet?.(undefined)
+    setActive(undefined)
     setSelectedWallet(undefined)
   }
   return (

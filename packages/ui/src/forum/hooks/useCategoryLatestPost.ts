@@ -1,7 +1,8 @@
+import * as Apollo from '@apollo/client'
 import { useEffect } from 'react'
 
 import { ForumPostOrderByInput, ForumThreadOrderByInput } from '@/common/api/queries'
-import { useGetForumPostsLazyQuery, useGetForumThreadsQuery } from '@/forum/queries'
+import { GetForumPostsDocument, useGetForumThreadsQuery } from '@/forum/queries'
 import { asForumPost, asForumThread } from '@/forum/types'
 
 export const useCategoryLatestPost = (category_eq: string) => {
@@ -25,7 +26,9 @@ export const useCategoryLatestPost = (category_eq: string) => {
       })
   }, [threadData])
 
-  const [fetchPost, { data: postData, loading: loadingPosts }] = useGetForumPostsLazyQuery()
+  const [fetchPost, { data: postData, loading: loadingPosts }] = Apollo.useLazyQuery(GetForumPostsDocument, {
+    fetchPolicy: 'cache-first',
+  })
   const rawPost = postData?.forumPosts[0]
 
   return {

@@ -1,11 +1,11 @@
 import * as Prisma from '@prisma/client'
 import { arg, booleanArg, enumType, list, objectType, queryField, stringArg } from 'nexus'
-import { Notification, NotificationKind } from 'nexus-prisma'
+import { Notification, NotificationKind, NotificationEmailStatus } from 'nexus-prisma'
 
-import { authMemberId } from '@/auth/model/token'
 import { Context } from '@/common/api'
 
 export const NotificationKindEnum = enumType(NotificationKind)
+export const NotificationEmailStatusEnum = enumType(NotificationEmailStatus)
 
 export const NotificationFields = objectType({
   name: Notification.$name,
@@ -15,7 +15,7 @@ export const NotificationFields = objectType({
     t.field(Notification.kind)
     t.field(Notification.eventId)
     t.field(Notification.entityId)
-    t.field(Notification.isSent)
+    t.field(Notification.emailStatus)
     t.field(Notification.isRead)
   },
 })
@@ -29,14 +29,15 @@ export const notificationsQuery = queryField('notifications', {
     kind: arg({ type: NotificationKind.name }),
     eventId: stringArg(),
     entityId: stringArg(),
-    isSent: booleanArg(),
+    emailStatus: arg({ type: NotificationEmailStatus.name }),
     isRead: booleanArg(),
   },
 
-  resolve: async (_, args: QueryArgs, { prisma, req }: Context): Promise<Prisma.Notification[] | null> => {
-    const memberId = (await authMemberId(req))?.id
-    if (!memberId) return null
+  resolve: async (_, args: QueryArgs, { prisma, member }: Context): Promise<Prisma.Notification[] | null> => {
+    if (!member) {
+      throw new Error('Unauthorized')
+    }
 
-    return prisma.notification.findMany({ where: { ...args, memberId } })
+    return prisma.notification.findMany({ where: { ...args, memberId: member.id } })
   },
 })

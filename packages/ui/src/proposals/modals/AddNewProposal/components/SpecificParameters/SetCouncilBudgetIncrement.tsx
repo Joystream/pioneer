@@ -12,7 +12,7 @@ export const SetCouncilBudgetIncrement = () => {
       <Row>
         <RowGapBlock gap={8}>
           <h4>Specific parameters</h4>
-          <TextMedium lighter>Set Council Budget Increment</TextMedium>
+          <TextMedium lighter>Tokens added to council budget every day</TextMedium>
         </RowGapBlock>
       </Row>
       <Row>

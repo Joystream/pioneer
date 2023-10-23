@@ -18,6 +18,7 @@ export const useNetwork = () => {
       ...(endpointsAreDefined(autoConfEndpoints) ? ['auto-conf' as const] : []),
       ...(IS_TESTNET_DEFINED ? ['testnet' as const] : []),
       ...(IS_MAINNET_DEFINED ? ['mainnet' as const] : []),
+      ...['custom' as const],
     ],
     [autoConfEndpoints]
   )

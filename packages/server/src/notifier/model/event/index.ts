@@ -1,5 +1,12 @@
+import { match } from 'ts-pattern'
+
 import { GetNotificationEventsQuery } from '@/common/queries'
 
+import {
+  fromElectionAnnouncingStartedEvent,
+  fromElectionRevealingStartedEvent,
+  fromElectionVotingStartedEvent,
+} from './election'
 import { fromPostAddedEvent, fromThreadCreatedEvent } from './forum'
 import { NotificationEvent } from './utils'
 import { buildEvents } from './utils/buildEvent'
@@ -18,11 +25,13 @@ export const toNotificationEvents =
     const event = anyEvent as ImplementedQNEvent
     const build = buildEvents(allMemberIds, event)
 
-    switch (event.__typename) {
-      case 'PostAddedEvent':
-        return fromPostAddedEvent(event, build)
+    const notifEvent = match(event)
+      .with({ __typename: 'PostAddedEvent' }, (e) => fromPostAddedEvent(e, build))
+      .with({ __typename: 'ThreadCreatedEvent' }, (e) => fromThreadCreatedEvent(e, build))
+      .with({ __typename: 'AnnouncingPeriodStartedEvent' }, (e) => fromElectionAnnouncingStartedEvent(e, build))
+      .with({ __typename: 'VotingPeriodStartedEvent' }, (e) => fromElectionVotingStartedEvent(e, build))
+      .with({ __typename: 'RevealingStageStartedEvent' }, (e) => fromElectionRevealingStartedEvent(e, build))
+      .exhaustive()
 
-      case 'ThreadCreatedEvent':
-        return fromThreadCreatedEvent(event, build)
-    }
+    return notifEvent
   }
