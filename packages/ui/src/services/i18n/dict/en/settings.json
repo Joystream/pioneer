@@ -9,5 +9,9 @@
   "faucet": "Faucet: ",
   "chainInfo": "Chain Information",
   "rpcBlockheight": "RPC Block Height: ",
-  "qnBlockheight": "Query Node Block Height: "
+  "qnBlockheight": "Query Node Block Height: ",
+  "customFaucet": "FAUCET",
+  "customRPCNode": "RPC NODE",
+  "customQueryNode": "QUERY NODE",
+  "customBackend": "BACKEND"
 }

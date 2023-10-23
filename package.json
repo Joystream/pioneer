@@ -16,6 +16,7 @@
     "build:storybook": "wsrun --fast-exit --stages -p @joystream/markdown-editor -c build && wsrun -p @joystream/pioneer -c build:storybook",
     "storybook": "wsrun --exclude-missing -c storybook",
     "test": "wsrun --fast-exit --exclude-missing -c test",
+    "test-storybook": "wsrun --package @joystream/pioneer -c test-storybook",
     "start": "wsrun --package @joystream/pioneer -c start",
     "prepare": "husky install"
   },

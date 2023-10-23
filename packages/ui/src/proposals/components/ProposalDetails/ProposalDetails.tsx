@@ -6,6 +6,8 @@ import { StatisticsThreeColumns } from '@/common/components/statistics'
 import { TooltipContentProp } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
+import { Block } from '@/common/types'
 import { useCouncilStatistics } from '@/council/hooks/useCouncilStatistics'
 import { Percentage } from '@/proposals/components/ProposalDetails/renderers/Percentage'
 import getDetailsRenderStructure, { RenderNode, RenderType } from '@/proposals/helpers/getDetailsRenderStructure'
@@ -15,6 +17,7 @@ import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 import {
   Address,
   Amount,
+  DestinationsPreview,
   Divider,
   Hash,
   Markdown,
@@ -26,9 +29,13 @@ import {
   RuntimeBlob,
   Text,
 } from './renderers'
+import { BlockTimeDisplay } from './renderers/BlockTimeDisplay'
 
 interface Props {
   proposalDetails?: ProposalWithDetails['details']
+  gracePeriod?: number
+  exactExecutionBlock?: number
+  createdInBlock: Block
 }
 
 export interface ProposalDetailContent {
@@ -49,12 +56,16 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   OpeningLink: OpeningLink,
   Percentage: Percentage,
   Hash: Hash,
+  DestinationsPreview: DestinationsPreview,
+  BlockTimeDisplay: BlockTimeDisplay,
 }
 
-export const ProposalDetails = ({ proposalDetails }: Props) => {
+export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBlock, createdInBlock }: Props) => {
   const { api } = useApi()
   const { budget } = useCouncilStatistics()
-  const { group } = useWorkingGroup({ name: (proposalDetails as UpdateGroupBudgetDetails)?.group?.id })
+  const { group } = useWorkingGroup({
+    name: (proposalDetails as UpdateGroupBudgetDetails)?.group?.id,
+  })
   const membershipPrice = useFirstObservableValue(() => api?.query.members.membershipPrice(), [api?.isConnected])
   const renderProposalDetail = useCallback((detail: RenderNode, index: number) => {
     const Component = renderTypeMapper[detail.renderType]
@@ -74,6 +85,16 @@ export const ProposalDetails = ({ proposalDetails }: Props) => {
           renderType: 'Amount',
           label: 'Current membership price',
           value: membershipPrice ?? 0,
+        },
+      ] as RenderNode[]
+    }
+
+    if (proposalDetails?.type === 'fundingRequest') {
+      return [
+        {
+          renderType: 'Amount',
+          label: 'Current Council Budget',
+          value: budget.amount,
         },
       ] as RenderNode[]
     }
@@ -99,7 +120,35 @@ export const ProposalDetails = ({ proposalDetails }: Props) => {
     }
 
     return []
-  }, [membershipPrice, !group])
+  }, [membershipPrice, !group, budget])
+
+  const extraProposalDetails = useMemo(() => {
+    if (exactExecutionBlock) {
+      return [
+        {
+          renderType: 'BlockTimeDisplay',
+          label: 'Exact Execution Block',
+          value: {
+            number: exactExecutionBlock,
+            timestamp: new Date(
+              new Date(createdInBlock.timestamp).getTime() +
+                (exactExecutionBlock - createdInBlock.number) * MILLISECONDS_PER_BLOCK
+            ).toString(),
+          },
+        },
+      ] as unknown as RenderNode[]
+    }
+    if (gracePeriod) {
+      return [
+        {
+          renderType: 'NumberOfBlocks',
+          label: 'Gracing Period',
+          value: gracePeriod,
+        },
+      ] as unknown as RenderNode[]
+    }
+    return []
+  }, [exactExecutionBlock, gracePeriod])
 
   const extraInformation = useMemo(() => {
     if (proposalDetails?.type === 'updateWorkingGroupBudget') {
@@ -131,7 +180,9 @@ export const ProposalDetails = ({ proposalDetails }: Props) => {
   return (
     <>
       <StatisticsThreeColumns>
-        {[...(detailsRenderStructure?.structure ?? []), ...additionalDetails].map(renderProposalDetail)}
+        {[...(detailsRenderStructure?.structure ?? []), ...additionalDetails, ...extraProposalDetails].map(
+          renderProposalDetail
+        )}
       </StatisticsThreeColumns>
       {extraInformation}
     </>
