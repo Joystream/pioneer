@@ -2,6 +2,7 @@ import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/c
 import React, { ReactNode } from 'react'
 
 import { ApiContext } from '@/api/providers/context'
+import { BackendContext } from '@/app/providers/backend/context'
 import { KeyringContext } from '@/common/providers/keyring/context'
 import { MembershipContextProvider } from '@/memberships/providers/membership/provider'
 
@@ -37,4 +38,18 @@ export const MockKeyringProvider = ({ children }: Props) => {
 
 export const MockApiProvider = ({ children }: Props) => {
   return <ApiContext.Provider value={stubApi()}>{children}</ApiContext.Provider>
+}
+
+export const MockBackendProvider = ({ children }: Props) => {
+  return (
+    <BackendContext.Provider
+      value={{
+        backendClient: undefined,
+        notificationsSettingsMap: undefined,
+        setMemberSettings: () => undefined,
+      }}
+    >
+      {children}
+    </BackendContext.Provider>
+  )
 }

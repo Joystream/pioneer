@@ -136,6 +136,14 @@ export const stubApi = () => {
     from([createType('BlockHash', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY')])
   })
 
+  set(api, 'api.rpc.chain.getHeader', () =>
+    from([
+      {
+        number: createType('BlockNumber', 1337),
+      },
+    ])
+  )
+
   return api
 }
 

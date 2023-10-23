@@ -1,6 +1,7 @@
 {
   "network": "Network",
   "language": "Language",
+  "notifications": "Notifications",
   "selectNetwork": "Select Network",
   "networkDetails": "Network Details",
   "networkAddress": "Network: ",

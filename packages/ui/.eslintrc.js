@@ -3,6 +3,11 @@ const baseConfig = require('../../.eslintrc.json')
 const config = {
   ...baseConfig,
   extends: ['plugin:storybook/recommended'],
+  plugins: [...baseConfig.plugins, 'react-hooks'],
+  rules: {
+    ...baseConfig.rules,
+    'react-hooks/rules-of-hooks': 'error',
+  },
 }
 
 const domains = ['accounts', 'memberships', 'working-groups']

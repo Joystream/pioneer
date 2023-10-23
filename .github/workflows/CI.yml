@@ -23,16 +23,17 @@ jobs:
         run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v3
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - if: ${{ steps.yarn-cache.outputs.cache-hit != 'true' }}
-        name: Install dependencies
+      - name: Install dependencies
         run: yarn --immutable
+
+      - name: Verify formatting
+        run: yarn lint
 
   ui-unit-tests:
     needs: install
@@ -62,15 +63,13 @@ jobs:
       - name: Install dependencies
         run: yarn --immutable
 
-      - name: Verify linting
-        run: yarn lint
-
       - name: Build Pioneer
+        working-directory: packages/ui
         run: yarn build
 
       - name: Run tests
-        run: node --max_old_space_size=7000 --expose-gc $(yarn bin jest) --logHeapUsage --silent
         working-directory: packages/ui
+        run: node --max_old_space_size=7000 --expose-gc $(yarn bin jest) --logHeapUsage --silent
 
   interaction-tests:
     needs: install
@@ -149,6 +148,60 @@ jobs:
           COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Run Storybook tests
-        run: yarn workspace @joystream/pioneer test-storybook
+        working-directory: packages/ui
+        run: yarn test-storybook
         env:
           TARGET_URL: https://${{ env.VERCEL_DEPLOYMENT_URL }}
+
+  backend-integration-tests:
+    needs: install
+    timeout-minutes: 60
+    strategy:
+      matrix: { node: ["18.x"], os: [ubuntu-latest] }
+    runs-on: ${{ matrix.os }}
+
+    services:
+      db:
+        image: postgres
+        env: { POSTGRES_PASSWORD: "postgres" }
+        ports: ["5432:5432"]
+        # Set health checks to wait until Postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn --immutable
+
+      - name: Build
+        working-directory: packages/server
+        run: yarn build
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+
+      - name: Run tests
+        working-directory: packages/server
+        run: yarn test --silent
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
