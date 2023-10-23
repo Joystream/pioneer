@@ -191,9 +191,9 @@ export const SettingsNetworkTab = () => {
               </InputComponent>
               <InputComponent
                 label={t('customRPCNode')}
-                validation={isValidUrl(customQueryEndpoint, 'wss?') && isValidRpcEndpoint ? undefined : 'invalid'}
+                validation={isValidUrl(customRpcEndpoint, 'wss?') && isValidRpcEndpoint ? undefined : 'invalid'}
                 message={cond(
-                  [() => !isValidUrl(customQueryEndpoint, 'wss?'), 'This RPC endpoint must start with ws or wss'],
+                  [() => !isValidUrl(customRpcEndpoint, 'wss?'), 'This RPC endpoint must start with ws or wss'],
                   [
                     () => !isValidRpcEndpoint,
                     'Connection Error. Sometimes it fails due to network speed. Please try to check once more',
@@ -264,7 +264,7 @@ export const SettingsNetworkTab = () => {
   )
 }
 
-const isValidUrl = (url: string, prefix = 'https?') => RegExp(String.raw`${prefix}://(?:\w+\.\w+)+/?`, 'i').test(url)
+const isValidUrl = (url: string, prefix = 'https?') => RegExp(String.raw`${prefix}://\w+/?`, 'i').test(url)
 
 export const Container = styled.div`
   width: 60%;
