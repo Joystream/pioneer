@@ -147,53 +147,54 @@ export const MemberListFilters = ({ memberCount, onApply }: MemberListFiltersPro
         <FieldsHeader>
           <ItemCount count={memberCount}>All members</ItemCount>
         </FieldsHeader>
+        <FilterContentWrapper>
+          <SelectMemberRoles
+            value={roles}
+            onChange={(value) => {
+              dispatch({ type: 'change', field: 'roles', value })
+              onApply({ ...filters, roles: value })
+            }}
+            onApply={applyFilters}
+            onClear={() => {
+              dispatch({ type: 'change', field: 'roles', value: [] })
+              onApply({ ...filters, roles: [] })
+            }}
+          />
+          <ToggleContainer>
+            <FilterLabel>Member Type</FilterLabel>
 
-        <SelectMemberRoles
-          value={roles}
-          onChange={(value) => {
-            dispatch({ type: 'change', field: 'roles', value })
-            onApply({ ...filters, roles: value })
-          }}
-          onApply={applyFilters}
-          onClear={() => {
-            dispatch({ type: 'change', field: 'roles', value: [] })
-            onApply({ ...filters, roles: [] })
-          }}
-        />
-        <ToggleContainer>
-          <FilterLabel>Member Type</FilterLabel>
-
-          <TogglableIcon
-            tooltipText="Founding Member"
-            value={onlyFounder}
-            onChange={(value) => {
-              dispatch({ type: 'change', field: 'onlyFounder', value })
-              onApply({ ...filters, onlyFounder: value })
-            }}
-          >
-            <FounderMemberIcon />
-          </TogglableIcon>
-          <TogglableIcon
-            tooltipText="Council Member"
-            value={onlyCouncil}
-            onChange={(value) => {
-              dispatch({ type: 'change', field: 'onlyCouncil', value })
-              onApply({ ...filters, onlyCouncil: value })
-            }}
-          >
-            <CouncilMemberIcon />
-          </TogglableIcon>
-          <TogglableIcon
-            tooltipText="Verified Member"
-            value={onlyVerified}
-            onChange={(value) => {
-              dispatch({ type: 'change', field: 'onlyVerified', value })
-              onApply({ ...filters, onlyVerified: value })
-            }}
-          >
-            <VerifiedMemberIcon />
-          </TogglableIcon>
-        </ToggleContainer>
+            <TogglableIcon
+              tooltipText="Founding Member"
+              value={onlyFounder}
+              onChange={(value) => {
+                dispatch({ type: 'change', field: 'onlyFounder', value })
+                onApply({ ...filters, onlyFounder: value })
+              }}
+            >
+              <FounderMemberIcon />
+            </TogglableIcon>
+            <TogglableIcon
+              tooltipText="Council Member"
+              value={onlyCouncil}
+              onChange={(value) => {
+                dispatch({ type: 'change', field: 'onlyCouncil', value })
+                onApply({ ...filters, onlyCouncil: value })
+              }}
+            >
+              <CouncilMemberIcon />
+            </TogglableIcon>
+            <TogglableIcon
+              tooltipText="Verified Member"
+              value={onlyVerified}
+              onChange={(value) => {
+                dispatch({ type: 'change', field: 'onlyVerified', value })
+                onApply({ ...filters, onlyVerified: value })
+              }}
+            >
+              <VerifiedMemberIcon />
+            </TogglableIcon>
+          </ToggleContainer>
+        </FilterContentWrapper>
       </MembersFilterBox>
     </Wrapper>
   )
@@ -208,16 +209,20 @@ const Wrapper = styled.div`
     width: 440px;
     flex-direction: row-reverse;
 
+    @media (max-width: 768px) {
+      width: 100%;
+      flex-direction: column-reverse;
+    }
+
     label {
       > *:first-child {
-        height: 100%;
+        height: 40px;
       }
     }
   }
 `
 
 const MembersFilterBox = styled(FilterBox)`
-  height: 72px;
   margin-top: 8px;
 
   ${Fields} {
@@ -226,10 +231,10 @@ const MembersFilterBox = styled(FilterBox)`
     gap: 16px;
     padding: 8px 16px;
     height: 100%;
-  }
 
-  ${SelectContainer} {
-    flex-basis: 220px;
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
   }
 `
 
@@ -240,11 +245,30 @@ const FieldsHeader = styled.div`
   margin-right: auto;
 `
 
+const FilterContentWrapper = styled.div`
+  display: flex;
+  gap: 16px;
+  padding: 8px 8px 12px 8px;
+
+  ${SelectContainer} {
+    width: 220px;
+  }
+
+  @media (max-width: 425px) {
+    flex-direction: column;
+  }
+
+  @media (max-width: 768px) {
+    margin-right: auto;
+  }
+`
+
 const ToggleContainer = styled.div`
   display: grid;
   gap: 4px 8px;
   grid-template-columns: auto 1fr;
   height: 48px;
+  width: fit-content;
 
   & > :first-child {
     grid-column: span 3;

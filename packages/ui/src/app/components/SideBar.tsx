@@ -32,6 +32,7 @@ import { NavigationHeader } from '@/common/components/page/Sidebar/NavigationHea
 import { NAVIGATION_LINK_GAP, NavigationLink } from '@/common/components/page/Sidebar/NavigationLink'
 import { Colors, RemoveScrollbar } from '@/common/constants'
 import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
+import { useResponsive } from '@/common/hooks/useResponsive'
 import { useToggle } from '@/common/hooks/useToggle'
 import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
@@ -59,6 +60,7 @@ export const SideBar = () => {
 }
 
 export const SideBarContent = () => {
+  const { supportTransactions } = useResponsive()
   const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)
   const { stage: electionStage } = useElectionStage()
   const [endpoints] = useNetworkEndpoints()
@@ -75,11 +77,13 @@ export const SideBarContent = () => {
           {/*    Overview*/}
           {/*  </NavigationLink>*/}
           {/*</NavigationLinksItem>*/}
-          <NavigationLinksItem>
-            <NavigationLink to={ProfileRoutes.profile} icon={<MyProfileIcon />}>
-              My profile
-            </NavigationLink>
-          </NavigationLinksItem>
+          {supportTransactions && (
+            <NavigationLinksItem>
+              <NavigationLink to={ProfileRoutes.profile} icon={<MyProfileIcon />}>
+                My profile
+              </NavigationLink>
+            </NavigationLinksItem>
+          )}
           <NavigationLinksItem>
             <NavigationLink to={WorkingGroupsRoutes.groups} icon={<WorkingGroupsIcon />}>
               Working Groups

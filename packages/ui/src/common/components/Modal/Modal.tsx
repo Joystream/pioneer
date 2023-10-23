@@ -222,7 +222,7 @@ export const ModalWrap = styled.section<ModalWrapProps>`
     'modalfooter';
   grid-area: modal;
   background-color: ${Colors.White};
-  width: 100%;
+  width: calc(100% - 64px);
   max-width: ${({ modalMaxSize }) => {
     switch (modalMaxSize) {
       case 'xs':
