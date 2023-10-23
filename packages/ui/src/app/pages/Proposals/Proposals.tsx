@@ -63,7 +63,6 @@ export const Proposals = () => {
   )
 }
 
-
 export const ProposalsPageResponsiveStyle = css`
   grid-template-columns: 1fr;
   grid-template-rows: auto auto 1fr;
