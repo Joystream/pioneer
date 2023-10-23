@@ -30,7 +30,7 @@ export const PastElectionStats = ({
       tooltipLinkText="Learn more"
       tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council#election"
     >
-      <TextHuge bold>{cycleId} round</TextHuge>
+      <TextHuge bold>{cycleId}</TextHuge>
     </StatisticItem>
     <NumericValueStat title="Total candidates" value={totalCandidates} />
     <StatsBlock>

@@ -5,7 +5,7 @@ import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvi
 import { SetMembershipLeadInvitationQuota } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetMembershipLeadInvitationQuota'
 
 export default {
-  title: 'Proposals/AddNewProposalModal/SetMembershipLeadInvitationQuota',
+  title: 'Pages/Proposals/ProposalList/Current/Modals/AddNewProposalModal/SetMembershipLeadInvitationQuota',
   component: SetMembershipLeadInvitationQuota,
 } as Meta
 

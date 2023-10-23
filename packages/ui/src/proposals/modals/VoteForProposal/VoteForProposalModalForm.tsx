@@ -91,8 +91,9 @@ export const VoteForProposalModalForm = ({ proposal, send, context }: Props) => 
             </Row>
             {isRejected && (
               <InlineToggleWrap>
-                <Label>Slash Proposal </Label>
+                <Label htmlFor="slash-proposal">Slash Proposal </Label>
                 <ToggleCheckbox
+                  id="slash-proposal"
                   falseLabel="No"
                   trueLabel="Yes"
                   checked={context.voteStatus === 'Slash'}

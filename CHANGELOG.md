@@ -7,7 +7,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.4.0 Ephesus][1.4.0] - 2023-04-12
+## [1.6.0] - 2023-09-01
+
+### Added
+- Multiple recipient funding request proposal creation.
+
+### Fixed
+- Forum category page reloading multiple time on opening.
+- Broken links to members on forum posts.
+- Reduce the amount of queries from the forum category page.
+
+### Changed
+- Display amount staked by voting for a council candidate instead of their candidacy stake when applicable.
+
+## [1.5.1] - 2023-07-25
+
+### Fixed
+- Do not ask for confirmation to close transaction success modals.
+- Correctly match questions and answers in opening application pages.
+- Do not keep showing the total balance after disconnecting a wallet.
+- Show all applicants on closed opening pages.
+
+### Changed
+- Clarify the label copy of the council budget increment proposal input field.
+- Just show past elections cycle id without "round".
+
+## [1.5.0] - 2023-06-06
+
+### Added
+- Support for wallet metadata update.
+- Emoji selection in the text editor.
+- Visual representation of membership verified status.
+- Link in the side bar to the Calamar explorer.
+
+### Fixed
+- Forum false 404 and empty categories during query node outage.
+- Text visibility in the forum.
+- Way too large margins on forum threads.
+- Initial deciding stage view of multiple voting rounds proposal.
+- Fix Apps working group's opening links with ids from the query node.
+
+## [1.4.0 (Ephesus)][1.4.0] - 2023-04-12
 
 ### Added
 - Update Channel Payouts Proposal.
@@ -113,7 +153,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Proposal view crashing due to high amounts of JOY
 
-## [1.0.0 Mainnet][1.0.0] - 2022-12-16
+## [1.0.0 (Mainnet)][1.0.0] - 2022-12-16
 
 ### Added
 - Mainnet network in the setting.
@@ -146,7 +186,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v1.4.0...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/Joystream/pioneer/compare/v1.5.1...v1.6.0
+[1.5.1]: https://github.com/Joystream/pioneer/compare/v1.5.0...v1.5.1
+[1.5.0]: https://github.com/Joystream/pioneer/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/Joystream/pioneer/compare/v1.3.2...v1.4.0
 [1.3.2]: https://github.com/Joystream/pioneer/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/Joystream/pioneer/compare/v1.3.0...v1.3.1

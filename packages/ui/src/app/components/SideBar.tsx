@@ -4,11 +4,10 @@ import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { SidebarConnections } from '@/app/components/SidebarConnections'
-import { MembersRoutes, ProfileRoutes, SettingsRoutes } from '@/app/constants/routes'
+import { MembersRoutes, ProfileRoutes } from '@/app/constants/routes'
 import { BountyRoutes } from '@/bounty/constants'
 import { Arrow } from '@/common/components/icons'
-import { LinkSymbol } from '@/common/components/icons/symbols'
-import { PolkadotSymbol } from '@/common/components/icons/symbols/PolkadotSymbol'
+import { CalamarSymbol, LinkSymbol, LinkSymbolStyle, PolkadotSymbol } from '@/common/components/icons/symbols'
 import { AppsIcon } from '@/common/components/page/Sidebar/LinksIcons/AppsIcon'
 import { BandwidthIcon } from '@/common/components/page/Sidebar/LinksIcons/BandwidthIcon'
 import { BountyIcon } from '@/common/components/page/Sidebar/LinksIcons/BountyIcon'
@@ -29,7 +28,7 @@ import { LogoLink } from '@/common/components/page/Sidebar/LogoLink'
 import { Navigation, NavigationInnerWrapper } from '@/common/components/page/Sidebar/Navigation'
 import { NavigationExpandButton } from '@/common/components/page/Sidebar/NavigationExpandButton'
 import { NavigationHeader } from '@/common/components/page/Sidebar/NavigationHeader'
-import { NavigationLink } from '@/common/components/page/Sidebar/NavigationLink'
+import { NAVIGATION_LINK_GAP, NavigationLink } from '@/common/components/page/Sidebar/NavigationLink'
 import { Colors, RemoveScrollbar } from '@/common/constants'
 import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { useToggle } from '@/common/hooks/useToggle'
@@ -39,6 +38,8 @@ import { ForumRoutes } from '@/forum/constant'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
+
+import { SettingsRoutes } from '../pages/Settings/routes'
 
 export const SideBar = () => {
   const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)
@@ -105,6 +106,12 @@ export const SideBar = () => {
                 icon={<PolkadotSymbol />}
                 to={`https://polkadot.js.org/apps/?rpc=${endpoints.nodeRpcEndpoint}#/explorer`}
               >
+                Chain info
+                <LinkSymbol color={Colors.Black[500]} className="sidebarLinkSymbol" />
+              </NavigationLink>
+            </NavigationLinksItem>
+            <NavigationLinksItem>
+              <NavigationLink icon={<CalamarSymbol />} to="https://calamar.app/joystream">
                 Explorer
                 <LinkSymbol color={Colors.Black[500]} className="sidebarLinkSymbol" />
               </NavigationLink>
@@ -191,6 +198,11 @@ const NavigationLinks = styled.ul`
   overflow: hidden;
   overflow-y: scroll;
   ${RemoveScrollbar};
+
+  ${LinkSymbolStyle} {
+    position: absolute;
+    right: ${NAVIGATION_LINK_GAP}px;
+  }
 `
 
 const NavigationLinksItem = styled.li`

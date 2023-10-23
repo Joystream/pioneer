@@ -4,7 +4,7 @@ import { pick } from 'lodash'
 const extract = <T extends NotificationKind>(...keys: T[]): Pick<typeof NotificationKind, T> =>
   pick(NotificationKind, ...keys)
 
-export type EntitySubscriptionKind = typeof EntitySubscriptionKind[keyof typeof EntitySubscriptionKind]
+export type EntitySubscriptionKind = (typeof EntitySubscriptionKind)[keyof typeof EntitySubscriptionKind]
 export const EntitySubscriptionKind = extract(
   'FORUM_THREAD_ENTITY_POST',
   'FORUM_CATEGORY_ENTITY_POST',
@@ -16,7 +16,7 @@ export const EntitySubscriptionKind = extract(
   // 'PROPOSAL_ENTITY_DISCUSSION'
 )
 
-export type GeneralSubscriptionKind = typeof GeneralSubscriptionKind[keyof typeof GeneralSubscriptionKind]
+export type GeneralSubscriptionKind = (typeof GeneralSubscriptionKind)[keyof typeof GeneralSubscriptionKind]
 export const GeneralSubscriptionKind = extract(
   'FORUM_POST_ALL',
   'FORUM_POST_MENTION',
@@ -25,7 +25,7 @@ export const GeneralSubscriptionKind = extract(
   'FORUM_THREAD_CONTRIBUTOR',
 
   'FORUM_THREAD_ALL',
-  'FORUM_THREAD_MENTION'
+  'FORUM_THREAD_MENTION',
 
   // 'PROPOSAL_CREATED_ALL',
   // 'PROPOSAL_STATUS_ALL',
@@ -36,10 +36,9 @@ export const GeneralSubscriptionKind = extract(
   // 'PROPOSAL_DISCUSSION_CREATOR',
   // 'PROPOSAL_DISCUSSION_CONTRIBUTOR',
 
-  // 'ELECTION_ANNOUNCING_STARTED',
-  // 'ELECTION_VOTING_STARTED',
-  // 'ELECTION_REVEALING_STARTED',
-  // 'ELECTION_COUNCIL_ELECTED'
+  'ELECTION_ANNOUNCING_STARTED',
+  'ELECTION_VOTING_STARTED',
+  'ELECTION_REVEALING_STARTED'
 )
 
 export const isDefaultSubscription = (type: GeneralSubscriptionKind): boolean => defaultSubscriptions.includes(type)
@@ -55,8 +54,7 @@ const defaultSubscriptions: GeneralSubscriptionKind[] = [
   // 'PROPOSAL_DISCUSSION_MENTION',
   // 'PROPOSAL_DISCUSSION_CREATOR',
   // 'PROPOSAL_DISCUSSION_CONTRIBUTOR',
-  // 'ELECTION_ANNOUNCING_STARTED',
-  // 'ELECTION_VOTING_STARTED',
-  // 'ELECTION_REVEALING_STARTED',
-  // 'ELECTION_COUNCIL_ELECTED',
+  'ELECTION_ANNOUNCING_STARTED',
+  'ELECTION_VOTING_STARTED',
+  'ELECTION_REVEALING_STARTED',
 ]

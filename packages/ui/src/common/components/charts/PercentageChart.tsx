@@ -8,14 +8,15 @@ export interface PercentageChartProps {
   percentage: number
   isOnBlack?: boolean
   className?: string
+  small?: boolean
 }
 
-export const PercentageChart = ({ percentage, className, isOnBlack }: PercentageChartProps) => {
+export const PercentageChart = ({ percentage, className, isOnBlack, small }: PercentageChartProps) => {
   const innerPercentage = percentage <= 0 ? 0 : percentage
   return (
-    <PercentageChartContainer className={className} isOnBlack={isOnBlack}>
+    <PercentageChartContainer className={className} isOnBlack={isOnBlack} small={small}>
       <PercentageChartBorder>
-        <PercentageChartText>{Math.min(innerPercentage, 100)}%</PercentageChartText>
+        <PercentageChartText small={small}>{Math.min(innerPercentage, 100)}%</PercentageChartText>
         <PercentageChartSvg viewBox="0 0 34 34" fill="none" color="currentColor">
           <PercentageChartCircle cx="17" cy="17" r="16" percentage={Math.min(innerPercentage, 100)} />
         </PercentageChartSvg>
@@ -24,13 +25,13 @@ export const PercentageChart = ({ percentage, className, isOnBlack }: Percentage
   )
 }
 
-const PercentageChartContainer = styled.div<{ isOnBlack?: boolean }>`
+const PercentageChartContainer = styled.div<{ isOnBlack?: boolean; small?: boolean }>`
   display: flex;
   position: relative;
   justify-content: center;
   align-items: center;
-  width: 44px;
-  height: 44px;
+  width: ${({ small }) => (small ? '24px' : '44px')};
+  height: ${({ small }) => (small ? '24px' : '44px')};
   padding: 1px;
   color: ${({ isOnBlack }) => (isOnBlack ? Colors.White : Colors.Black[900])};
   overflow: hidden;
@@ -46,7 +47,8 @@ const PercentageChartBorder = styled.div`
   border-radius: ${BorderRad.round};
 `
 
-const PercentageChartText = styled(TextInlineSmall)`
+const PercentageChartText = styled(TextInlineSmall)<{ small?: boolean }>`
+  ${({ small }) => (small ? 'font-size:9px;' : '')}
   color: inherit;
   font-weight: 700;
   text-align: center;

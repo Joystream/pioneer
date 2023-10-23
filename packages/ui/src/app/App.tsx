@@ -23,7 +23,7 @@ import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
 import { ExtensionNotification } from './components/ExtensionWarning'
 import { SideBar } from './components/SideBar'
-import { MembersRoutes, ProfileRoutes, SettingsRoutes, TermsRoutes } from './constants/routes'
+import { MembersRoutes, ProfileRoutes, TermsRoutes } from './constants/routes'
 import { GlobalModals } from './GlobalModals'
 import { BountyModule } from './pages/Bounty/BountyModule'
 import { ElectionModule } from './pages/Election/ElectionModule'
@@ -32,7 +32,8 @@ import { Members } from './pages/Members/Members'
 import { MyAccounts } from './pages/Profile/MyAccounts'
 import { MyMemberships } from './pages/Profile/MyMemberships'
 import { ProposalsModule } from './pages/Proposals/ProposalsModule'
-import { Settings } from './pages/Settings/Settings'
+import { SettingsRoutes } from './pages/Settings/routes'
+import { SettingsModule } from './pages/Settings/SettingsModule'
 import { PrivacyPolicy, TermsOfService } from './pages/Terms'
 import { WorkingGroupsModule } from './pages/WorkingGroups/WorkingGroupsModule'
 import { Providers } from './Providers'
@@ -57,10 +58,10 @@ export const App = () => {
             <Route path={ElectionRoutes.currentElection} component={ElectionModule} />
             <Route path={ForumRoutes.forum} component={ForumModule} />
             <Route path={BountyRoutes.bounties} component={BountyModule} />
+            <Route path={SettingsRoutes.settings} component={SettingsModule} />
             <Route exact path={ProfileRoutes.profile} component={MyAccounts} />
             <Route exact path={ProfileRoutes.memberships} component={MyMemberships} />
             <Route exact path={MembersRoutes.members} component={Members} />
-            <Route exact path={SettingsRoutes.settings} component={Settings} />
             <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
             <Route exact path={TermsRoutes.termsOfService} component={TermsOfService} />
             <Route exact path="/404" component={NotFound} />

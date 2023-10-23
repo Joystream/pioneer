@@ -1,11 +1,11 @@
 import { get } from 'lodash'
-import React, { memo, ReactElement, useMemo } from 'react'
+import React, { memo, ReactElement, useEffect, useMemo, useState } from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 
 import { ClaimVestingModalCall } from '@/accounts/modals/ClaimVestingModal'
 import { ClaimVestingModal } from '@/accounts/modals/ClaimVestingModal/ClaimVestingModal'
-import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFundsModal'
 import { RecoverBalanceModal, RecoverBalanceModalCall } from '@/accounts/modals/RecoverBalance'
 import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModal'
 // import { AddBountyModal, AddBountyModalCall } from '@/bounty/modals/AddBountyModal'
@@ -54,6 +54,8 @@ import { MemberModalCall, MemberProfile } from '@/memberships/components/MemberP
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals/BuyMembershipModal'
 import { DisconnectWalletModal, DisconnectWalletModalCall } from '@/memberships/modals/DisconnectWalletModal'
+import { EmailConfirmationModal, EmailConfirmationModalCall } from '@/memberships/modals/EmailConfirmationModal'
+import { EmailSubscriptionModal, EmailSubscriptionModalCall } from '@/memberships/modals/EmailSubscriptionModal'
 import { InviteMemberModal } from '@/memberships/modals/InviteMemberModal'
 import { InviteMemberModalCall } from '@/memberships/modals/InviteMemberModal/types'
 import { SignOutModal } from '@/memberships/modals/SignOutModal/SignOutModal'
@@ -122,6 +124,8 @@ export type ModalNames =
   | ModalName<ReportContentModalCall>
   | ModalName<PostReplyModalCall>
   | ModalName<InviteMemberModalCall>
+  | ModalName<EmailSubscriptionModalCall>
+  | ModalName<EmailConfirmationModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -171,6 +175,8 @@ const modals: Record<ModalNames, ReactElement> = {
   UpdateMembershipModal: <UpdateMembershipModal />,
   ReportContentModal: <ReportContentModal />,
   PostReplyModal: <PostReplyModal />,
+  EmailSubscriptionModal: <EmailSubscriptionModal />,
+  EmailConfirmationModal: <EmailConfirmationModal />,
 }
 
 const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
@@ -188,6 +194,7 @@ const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
   'DisconnectWallet',
   'ClaimVestingModal',
   'ReportContentModal',
+  'EmailConfirmationModal',
 ]
 
 export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [
@@ -204,6 +211,12 @@ export const GlobalModals = () => {
   const { active: activeMember } = useMyMemberships()
   const { status } = useTransactionStatus()
   const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
+
+  const [container, setContainer] = useState(document.body)
+  useEffect(() => {
+    const container = document.getElementById('modal-container')
+    if (container) setContainer(container)
+  }, [])
 
   const potentialFallback = useGlobalModalHandler(currentModalMachine, hideModal)
 
@@ -226,7 +239,7 @@ export const GlobalModals = () => {
         {isClosing && <ConfirmModal />}
         {status === 'loadingFees' && <LoaderModal onClose={hideModal} />}
       </TransactionFeesProvider>,
-      document.body
+      container
     )
   }
 
