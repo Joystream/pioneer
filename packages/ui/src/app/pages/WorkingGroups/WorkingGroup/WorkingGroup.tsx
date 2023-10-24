@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { css } from 'styled-components'
 
 import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { ButtonsGroup } from '@/common/components/buttons'
@@ -90,49 +89,6 @@ export function WorkingGroup() {
       sidebar={displayTabsSidebar()}
       sidebarScrollable
       lastBreadcrumb={nameMapping(group?.name ?? name)}
-      responsiveStyle={ResponsiveStyle}
     />
   )
 }
-
-const ResponsiveStyle = css`
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto 1fr;
-  grid-template-areas:
-    'header'
-    'main'
-    'sidebar';
-
-  aside {
-    position: relative;
-    width: 100%;
-    grid-area: sidebar;
-
-    > div {
-      position: relative;
-      width: 100%;
-      max-width: 100%;
-      height: 100%;
-    }
-  }
-
-  @media (min-width: 1440px) {
-    grid-template-columns: 9fr 3fr;
-    grid-template-rows: auto 1fr;
-    grid-template-areas:
-      'header header'
-      'main sidebar';
-
-    aside {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      padding-left: 16px;
-
-      > div {
-        min-height: 184px;
-        overflow: hidden;
-      }
-    }
-  }
-`
