@@ -3,7 +3,7 @@ import { useLocation } from 'react-router'
 import { useHistory, useParams } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
-import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
+import { PageHeaderWithButtons, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { CopyButtonTemplate } from '@/common/components/buttons'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
@@ -112,7 +112,7 @@ export const ProposalPreview = () => {
       sidebarScrollable
       header={
         <PageHeaderWrapper>
-          <HeaderWrapper>
+          <PageHeaderWithButtons>
             <PreviousPage>
               <PageTitle>{proposal.title}</PageTitle>
             </PreviousPage>
@@ -134,7 +134,7 @@ export const ProposalPreview = () => {
                 Copy link
               </CopyButtonTemplate>
             </ButtonsGroup>
-          </HeaderWrapper>
+          </PageHeaderWithButtons>
 
           <RowGapBlock gap={24}>
             <BadgeAndTime>
@@ -217,26 +217,6 @@ const BadgeAndTime = styled(BadgesRow)`
 `
 
 const ResponsiveStyle = css`
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto 1fr;
-  grid-template-areas:
-    'header'
-    'main'
-    'sidebar';
-
-  aside {
-    position: relative;
-    width: 100%;
-    grid-area: sidebar;
-
-    > div {
-      position: relative;
-      width: 100%;
-      max-width: 100%;
-      height: 100%;
-    }
-  }
-
   @media (min-width: 768px) {
     grid-template-columns: 8fr 4fr;
     grid-template-rows: auto 1fr;
@@ -257,33 +237,7 @@ const ResponsiveStyle = css`
     }
   }
 
-  @media (min-width: 1440px) {
-    grid-template-columns: 9fr 3fr;
-  }
-
   ${StatsContent} {
     gap: 16px;
-  }
-`
-
-const HeaderWrapper = styled(PageHeaderRow)`
-  @media (max-width: 767px) {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-
-    ${ButtonsGroup} {
-      grid-auto-flow: row;
-      grid-row-gap: 8px;
-      width: 100%;
-
-      button {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center:
-        gap: 4px;
-      }
-    }
   }
 `

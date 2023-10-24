@@ -50,7 +50,10 @@ const ThresholdBar = styled.div<{ threshold?: number }>`
 `
 
 const Figure = styled.div`
-  margin-left: auto;
+  display: flex;
+  width: 120px;
+  justify-content: flex-end;
+  align-items: flex-end;
 
   ${NumericValue} {
     font-size: 14px;

@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper, PageHeaderWithButtons } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
@@ -113,7 +113,7 @@ export const MyRole = () => {
       lastBreadcrumb={workerRoleTitle(worker)}
       header={
         <PageHeaderWrapper>
-          <HeaderWrapper>
+          <PageHeaderWithButtons>
             <PreviousPage>
               <PageTitle>{workerRoleTitle(worker)}</PageTitle>
             </PreviousPage>
@@ -133,7 +133,7 @@ export const MyRole = () => {
                 </TransactionButton>
               )}
             </ButtonsGroup>
-          </HeaderWrapper>
+          </PageHeaderWithButtons>
           <RowGapBlock gap={24}>
             <BadgesRow>
               <BadgeStatus inverted size="l" separated>
@@ -222,7 +222,6 @@ export const MyRole = () => {
           <BlockTime block={worker.hiredAtBlock} layout="row" dateLabel="Hired" />
         </PageFooter>
       }
-      responsiveStyle={ResponsiveStyle}
     />
   )
 }
@@ -232,70 +231,4 @@ const RoleAccountHeader = styled.section`
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-end;
-`
-
-const ResponsiveStyle = css`
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto 1fr auto;
-  grid-template-areas:
-    'header'
-    'main'
-    'sidebar'
-    'footer';
-
-  aside {
-    position: relative;
-    width: 100%;
-    grid-area: sidebar;
-
-    > div {
-      position: relative;
-      width: 100%;
-      max-width: 100%;
-      height: 100%;
-    }
-  }
-
-  @media (min-width: 1440px) {
-    grid-template-columns: 9fr 3fr;
-    grid-template-rows: auto 1fr auto;
-    grid-template-areas:
-      'header header'
-      'main sidebar'
-      'footer footer';
-
-    aside {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      padding-left: 16px;
-
-      > div {
-        min-height: 184px;
-        overflow: hidden;
-      }
-    }
-  }
-`
-
-const HeaderWrapper = styled(PageHeaderRow)`
-  @media (max-width: 767px) {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-
-    ${ButtonsGroup} {
-      grid-auto-flow: row;
-      grid-row-gap: 8px;
-      width: 100%;
-
-      button, a {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center:
-        gap: 4px;
-      }
-    }
-  }
 `

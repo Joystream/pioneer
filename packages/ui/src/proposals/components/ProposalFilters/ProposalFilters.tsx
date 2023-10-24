@@ -168,7 +168,7 @@ const Fields = styled.div`
   grid-column-gap: 8px;
   align-items: center;
 
-  @media (max-width: 1023px) {
+  @media (max-width: 1439px) {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(4, 1fr);
     grid-row-gap: 8px;

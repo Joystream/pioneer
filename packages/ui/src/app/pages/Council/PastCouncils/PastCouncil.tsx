@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import styled from 'styled-components'
 
-import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
+import { PageHeaderWithButtons, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
@@ -36,7 +35,7 @@ export const PastCouncil = () => {
 
     return (
       <PageHeaderWrapper>
-        <HeaderWrapper showOverflow>
+        <PageHeaderWithButtons showOverflow>
           <PreviousPage showOverflow>
             <PageTitle>Council #{council.id}</PageTitle>
           </PreviousPage>
@@ -49,7 +48,7 @@ export const PastCouncil = () => {
               Copy link
             </CopyButtonTemplate>
           </ButtonsGroup>
-        </HeaderWrapper>
+        </PageHeaderWithButtons>
         <RowGapBlock>
           <BadgesRow space={8}>
             <BadgeStatus inverted size="l">
@@ -78,25 +77,3 @@ export const PastCouncil = () => {
 
   return <PageLayout header={displayHeader()} main={displayMain()} lastBreadcrumb={'Council #' + id} />
 }
-
-const HeaderWrapper = styled(PageHeaderRow)`
-  @media (max-width: 767px) {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-
-    ${ButtonsGroup} {
-      grid-auto-flow: row;
-      grid-row-gap: 8px;
-      width: 100%;
-
-      button, a {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center:
-        gap: 4px;
-      }
-    }
-  }
-`

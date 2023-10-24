@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import styled, { FlattenSimpleInterpolation, css } from 'styled-components'
 
+import { ButtonsGroup } from '../../common/components/buttons'
 import { PageContent } from '../../common/components/page/PageContent'
 import { Breadcrumbs } from '../../common/components/page/Sidebar/Breadcrumbs/Breadcrumbs'
 import { breadcrumbsOptions } from '../constants/breadcrumbs'
@@ -74,6 +75,28 @@ export const PageHeaderRow = styled.div<{ showOverflow?: boolean }>`
   width: 100%;
   max-width: 100%;
   overflow: ${({ showOverflow }) => (showOverflow ? 'visible' : 'hidden')};
+`
+
+export const PageHeaderWithButtons = styled(PageHeaderRow)`
+  @media (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    ${ButtonsGroup} {
+      grid-auto-flow: row;
+      grid-row-gap: 8px;
+      width: 100%;
+
+      button {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center:
+        gap: 4px;
+      }
+    }
+  }
 `
 
 const PageMain = styled.main`

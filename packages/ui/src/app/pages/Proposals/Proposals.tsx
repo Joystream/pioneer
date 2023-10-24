@@ -64,26 +64,6 @@ export const Proposals = () => {
 }
 
 export const ProposalsPageResponsiveStyle = css`
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto 1fr;
-  grid-template-areas:
-    'header'
-    'main'
-    'sidebar';
-
-  aside {
-    position: relative;
-    width: 100%;
-    grid-area: sidebar;
-
-    > div {
-      position: relative;
-      width: 100%;
-      max-width: 100%;
-      height: 100%;
-    }
-  }
-
   @media (min-width: 768px) {
     grid-template-columns: 7fr 5fr;
     grid-template-rows: auto 1fr;
@@ -102,9 +82,5 @@ export const ProposalsPageResponsiveStyle = css`
         overflow: hidden;
       }
     }
-  }
-
-  @media (min-width: 1440px) {
-    grid-template-columns: 9fr 3fr;
   }
 `

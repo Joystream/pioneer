@@ -1,8 +1,8 @@
 import React, { memo, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
-import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
+import { PageHeaderWithButtons, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { CopyButtonTemplate } from '@/common/components/buttons'
@@ -121,7 +121,7 @@ export const WorkingGroupOpening = () => {
       lastBreadcrumb={opening.title}
       header={
         <PageHeaderWrapper>
-          <HeaderWrapper>
+          <PageHeaderWithButtons>
             <PreviousPage customLink={WorkingGroupsRoutes.openings}>
               <PageTitle>{opening.title}</PageTitle>
             </PreviousPage>
@@ -137,7 +137,7 @@ export const WorkingGroupOpening = () => {
               )}
               {opening.status === OpeningStatuses.OPEN && <ApplyButton />}
             </ButtonsGroup>
-          </HeaderWrapper>
+          </PageHeaderWithButtons>
           <RowGapBlock gap={24}>
             <BadgesRow>
               <BadgeStatus inverted size="l" separated>
@@ -191,7 +191,6 @@ export const WorkingGroupOpening = () => {
           <BlockTime block={opening.createdAtBlock} layout="row" dateLabel="Created" />
         </PageFooter>
       }
-      responsiveStyle={ResponsiveStyle}
     />
   )
 }
@@ -224,70 +223,4 @@ const ApplicationStats = ({
 
 const ApplicationStatsStyles = styled(StatsBlock).attrs({ centered: true })`
   justify-content: start;
-`
-
-const ResponsiveStyle = css`
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto 1fr auto;
-  grid-template-areas:
-    'header'
-    'main'
-    'sidebar'
-    'footer';
-
-  aside {
-    position: relative;
-    width: 100%;
-    grid-area: sidebar;
-
-    > div {
-      position: relative;
-      width: 100%;
-      max-width: 100%;
-      height: 100%;
-    }
-  }
-
-  @media (min-width: 1440px) {
-    grid-template-columns: 9fr 3fr;
-    grid-template-rows: auto 1fr auto;
-    grid-template-areas:
-      'header header'
-      'main sidebar'
-      'footer footer';
-
-    aside {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      padding-left: 16px;
-
-      > div {
-        min-height: 184px;
-        overflow: hidden;
-      }
-    }
-  }
-`
-
-const HeaderWrapper = styled(PageHeaderRow)`
-  @media (max-width: 767px) {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-
-    ${ButtonsGroup} {
-      grid-auto-flow: row;
-      grid-row-gap: 8px;
-      width: 100%;
-
-      button {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center:
-        gap: 4px;
-      }
-    }
-  }
 `
