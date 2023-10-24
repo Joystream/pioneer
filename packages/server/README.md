@@ -32,7 +32,22 @@ It is composed of 3 parts:
 
 ### render.com deployments
 
-### Demo
+### Run with docker
+
+```shell
+yarn workspace server docker:up
+```
+
+This runs the api on: http://localhost:3000
+
+Configurations are available in `packages/server/.env`.
+
+To run the notification script:
+```shell
+yarn workspace server docker:notify
+```
+
+### Demo deployment
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/backend-dev-blueprint)
 
@@ -218,7 +233,7 @@ query {
 
 To run the API to develop locally:
 
-1. `yarn --frozen-lockfile`: Install the dependencies.
+1. `yarn --immutable`: Install the dependencies.
 2. Create and configure a `packages/server/.env`.
 3. Prepare the database and generate the code by running either:
     - `yarn workspace server dev:db:build`: To use docker for the db.
