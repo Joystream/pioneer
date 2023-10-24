@@ -22,6 +22,7 @@ const socialToPlaceholder: Record<Socials, string> = {
   TWITTER: 'Enter Username',
   EMAIL: 'Enter Email',
   LINKEDIN: 'Enter Username',
+  
 }
 
 interface Props {
