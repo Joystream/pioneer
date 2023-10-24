@@ -5,6 +5,7 @@ import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
 import { ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 
 import { TransactionFee } from '../TransactionFee'
 
@@ -33,6 +34,8 @@ export const ModalTransactionFooter: FC<Props> = ({
   children,
 }) => {
   const { feeInfo } = useTransactionFee()
+  const [ignoreValidation] = useLocalStorage('IgnoreValidation', sessionStorage)
+
   return (
     <ModalFooter className={className} twoColumns>
       <ButtonsGroup align="left">
@@ -50,7 +53,7 @@ export const ModalTransactionFooter: FC<Props> = ({
       </TransactionInfoContainer>
       <ButtonsGroup align="right">
         {extraButtons}
-        <ButtonPrimary disabled={next.disabled} onClick={next.onClick} size="medium">
+        <ButtonPrimary disabled={!ignoreValidation && next.disabled} onClick={next.onClick} size="medium">
           {next.label ?? 'Next step'} <Arrow direction="right" />
         </ButtonPrimary>
       </ButtonsGroup>
