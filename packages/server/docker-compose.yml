@@ -1,14 +1,27 @@
 version: '3.4'
 
 volumes:
-  db-data:
+  pioneer-db-data:
+
+networks:
+  default:
+    name: joystream_default
+    external: true
 
 services:
-  db:
+  pioneer-api:
+    image: thesan/pioneer-backend # TODO change this to joystream/...
+    build:
+      context: ../..
+      dockerfile: backend.Dockerfile
+    ports: ['${PORT}:${PORT}']
+    depends_on: [pioneer-db]
+    env_file: [.env] # ensure `.env` exist
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@pioneer-db:5432/${POSTGRES_DB}
+
+  pioneer-db:
     image: postgres:12
-    ports:
-      - '127.0.0.1:${DB_PORT}:5432'
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    env_file:
-      - .env
+    ports: ['127.0.0.1:${DB_PORT}:5432']
+    volumes: ['pioneer-db-data:/var/lib/postgresql/data']
+    env_file: [.env] # ensure `.env` exist
