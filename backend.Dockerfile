@@ -33,6 +33,7 @@ COPY packages/server/docker/prod/notify.sh /usr/bin/notify
 ENV QUERY_NODE_ENDPOINT "https://query.joystream.org/graphql"
 ENV PIONEER_URL "https://pioneerapp.xyz"
 ENV STARTING_BLOCK 1
+ENV NODE_ENV=production
 ENV APP_LOG_LEVEL "verbose"
 ENV PORT 3000
 EXPOSE 3000/tcp

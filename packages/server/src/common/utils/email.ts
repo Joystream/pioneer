@@ -69,6 +69,7 @@ export const createEmailProvider = (): EmailProvider => {
     }
   } catch (err) {
     warn('Email notifications', 'Failed to configure email provider with error:', errorMessage(err))
+    if (process.env['NODE_ENV'] === 'production') throw err
     return LogOnlyEmailProvider
   }
 
