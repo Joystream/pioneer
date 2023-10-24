@@ -8,6 +8,7 @@ import { Colors } from '@/common/constants'
 import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { formatTokenValue } from '@/common/model/formatters'
 import { Block } from '@/common/types'
+
 export interface BlockInfoProp {
   block: Block
   lessInfo?: boolean
@@ -43,6 +44,7 @@ const BlockLink = styled(Link)`
     }
   }
 `
+
 export const BlockInfoContainer = styled.span<Omit<BlockInfoProp, 'block'>>`
   display: ${({ inline }) => (inline ? 'inline-grid' : 'grid')};
   grid-auto-flow: column;

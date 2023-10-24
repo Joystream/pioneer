@@ -12,8 +12,6 @@ export const BlockHistoryLine = ({ block }: BlockInfoProp) => {
   return (
     <BlockHistoryLineContainer>
       <BlockTime block={block} layout="reverse-start" lessInfo />
-
-      {/* <TextInlineSmall lighter>{formatDateString(block.timestamp)}</TextInlineSmall> */}
     </BlockHistoryLineContainer>
   )
 }
