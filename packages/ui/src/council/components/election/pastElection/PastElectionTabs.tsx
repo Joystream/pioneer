@@ -3,6 +3,7 @@ import React, { useMemo, useState } from 'react'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { Account } from '@/accounts/types'
 import { TabProps, Tabs } from '@/common/components/Tabs'
+import { sumStakes } from '@/common/utils/bn'
 import { CandidateVoteList } from '@/council/components/election/CandidateVote/CandidateVoteList'
 import { electionVotingResultComparator } from '@/council/model/electionVotingResultComparator'
 import { ElectionVotingResult, PastElectionWithDetails } from '@/council/types/PastElection'
@@ -52,6 +53,9 @@ export const PastElectionTabs = ({ election }: PastElectionTabsProps) => {
       <CandidateVoteList
         votes={votingResults.map((votingResult, index) => {
           const myVote = getMyVote(votingResult, allAccounts)
+          const myVotesTmp = votingResult.votes.filter((vote) =>
+            allAccounts.some((otherObj) => otherObj.address === vote.castBy)
+          )
 
           return {
             candidateId: votingResult.candidate.id,
@@ -62,7 +66,7 @@ export const PastElectionTabs = ({ election }: PastElectionTabsProps) => {
             votes: votingResult.votes.length,
             index: index + 1,
             myVotes: [],
-            myStake: myVote?.stake,
+            myStake: sumStakes(myVotesTmp),
           }
         })}
       />
