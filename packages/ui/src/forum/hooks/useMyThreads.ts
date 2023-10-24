@@ -5,7 +5,7 @@ import { useGetForumThreadsCountQuery, useGetForumThreadsQuery } from '@/forum/q
 import { asForumThread, ForumThread } from '@/forum/types'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 
-interface UseMyThreadsProps {
+export interface UseMyThreadsProps {
   page: number
   threadsPerPage?: number
   order: SortOrder<ForumThreadOrderByInput>
