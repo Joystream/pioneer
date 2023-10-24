@@ -9564,6 +9564,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react@npm:^18.2.31":
+  version: 18.2.31
+  resolution: "@types/react@npm:18.2.31"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: b11be8e39174d3303e308461400889e353e422d22b01d09795b2c35b7b99d5351716503d9ec5c58e4c2c871249603fa52840d45a34fb5901dd7a26e06129c716
+  languageName: node
+  linkType: hard
+
 "@types/responselike@npm:^1.0.0":
   version: 1.0.0
   resolution: "@types/responselike@npm:1.0.0"
@@ -29486,6 +29497,7 @@ __metadata:
     "@types/node-cron": ^3.0.7
     "@types/npmlog": ^4.1.4
     "@types/prettier": ^2
+    "@types/react": ^18.2.31
     "@typescript-eslint/eslint-plugin": ^5.52.0
     "@typescript-eslint/parser": ^5.52.0
     apollo-server: ^3.11.1

@@ -69,6 +69,7 @@
     "@types/node-cron": "^3.0.7",
     "@types/npmlog": "^4.1.4",
     "@types/prettier": "^2",
+    "@types/react": "^18.2.31",
     "@typescript-eslint/eslint-plugin": "^5.52.0",
     "@typescript-eslint/parser": "^5.52.0",
     "babel": "^6.23.0",
