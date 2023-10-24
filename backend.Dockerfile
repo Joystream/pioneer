@@ -1,9 +1,8 @@
-FROM node:alpine3.17 AS builder
+FROM node:18-alpine3.18 AS builder
 WORKDIR /app
 
 COPY packages/server/package.json ./
 COPY yarn.lock ./
-RUN yarn remove node-cron @joystream/types
 RUN yarn --immutable
 
 COPY tsconfig.json ./base.tsconfig.json
@@ -20,11 +19,9 @@ ENV NODE_ENV=production
 RUN yarn --prod --immutable
 RUN yarn prisma generate
 
-FROM alpine:3.17
+FROM node:18-alpine3.18
 WORKDIR /app
-RUN set -eux; \
-    adduser -u $(getent group www-data | cut -d: -f3) -S -D -G www-data www-data; \
-    apk add --no-cache nodejs
+RUN adduser -u $(getent group www-data | cut -d: -f3) -S -D -G www-data www-data
 USER www-data
 
 COPY --from=builder --chown=www-data /app/dist ./dist

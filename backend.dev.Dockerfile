@@ -1,9 +1,8 @@
-FROM node:alpine3.17 AS builder
+FROM node:18-alpine3.18 AS builder
 WORKDIR /app
 
 COPY packages/server/package.json ./
 COPY yarn.lock ./
-RUN yarn remove node-cron @joystream/types
 RUN yarn --immutable
 
 COPY tsconfig.json ./base.tsconfig.json
@@ -20,7 +19,7 @@ ENV NODE_ENV=production
 RUN yarn --prod --immutable
 RUN yarn prisma generate
 
-FROM postgres:alpine3.17
+FROM postgres:16.0-alpine3.18
 WORKDIR /app
 RUN apk add --no-cache nodejs
 
