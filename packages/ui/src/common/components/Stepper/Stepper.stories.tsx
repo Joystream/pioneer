@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { BlockHistoryLine } from '@/common/components/BlockTime'
+import { BlockTime } from '@/common/components/BlockTime'
 import { TemplateBlock } from '@/common/components/storybookParts/previewStyles'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
 
@@ -32,7 +32,7 @@ Simple.args = {
   ],
 }
 
-const details = <BlockHistoryLine block={randomBlock()} />
+const details = <BlockTime block={randomBlock()} layout="reverse-start" lessInfo />
 export const History = Template.bind({})
 History.args = {
   theme: 'dark',
