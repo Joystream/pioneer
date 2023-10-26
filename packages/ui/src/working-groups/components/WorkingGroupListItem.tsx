@@ -129,9 +129,11 @@ const GroupContent = styled(TextMedium)`
   ${Overflow.DotsTwoLine};
 `
 
+export const groupStatsColLayout = '64px 116px 30px 140px'
+
 const GroupStats = styled.div`
   display: grid;
-  grid-template-columns: 64px 116px 30px 140px;
+  grid-template-columns: ${groupStatsColLayout};
   justify-content: space-between;
   width: 100%;
   grid-column-gap: 8px;
@@ -155,9 +157,11 @@ const StatsValue = styled.span`
   color: ${Colors.Black[900]};
 `
 
+export const groupListColLayout = '108px repeat(2, minmax(400px, 1fr)) 40px'
+
 const GroupItem = styled(TableListItem)`
   display: grid;
-  grid-template-columns: 108px repeat(2, minmax(400px, 1fr)) 40px;
+  grid-template-columns: ${groupListColLayout};
   grid-template-rows: 1fr;
   grid-column-gap: 24px;
   width: 100%;

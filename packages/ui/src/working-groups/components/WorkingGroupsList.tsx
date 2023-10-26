@@ -4,7 +4,11 @@ import styled from 'styled-components'
 import { ListHeaders } from '@/common/components/List/ListHeader'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Colors } from '@/common/constants'
-import { WorkingGroupListItem } from '@/working-groups/components/WorkingGroupListItem'
+import {
+  WorkingGroupListItem,
+  groupListColLayout,
+  groupStatsColLayout,
+} from '@/working-groups/components/WorkingGroupListItem'
 
 import { WorkingGroup } from '../types'
 
@@ -16,15 +20,12 @@ export const WorkingGroupsList = ({ groups }: WorkingGroupsListProps) => {
   return (
     <WorkingGroupListStyles gap={4}>
       <HeaderColumnWrapper>
-        <span />
-        <span />
         <ElementsWrapper>
           <HeaderColumnTitle>Workers</HeaderColumnTitle>
           <HeaderColumnTitle>Current Budget</HeaderColumnTitle>
           <HeaderColumnTitle>Openings</HeaderColumnTitle>
           <HeaderColumnTitle>WG Lead</HeaderColumnTitle>
         </ElementsWrapper>
-        <span />
       </HeaderColumnWrapper>
       <GroupList>
         {groups.map((group) => (
@@ -37,17 +38,18 @@ export const WorkingGroupsList = ({ groups }: WorkingGroupsListProps) => {
 
 const HeaderColumnWrapper = styled.div`
   display: grid;
-  grid-template-columns: 108px repeat(2, minmax(400px, 1fr)) 40px;
+  grid-template-columns: ${groupListColLayout};
   grid-template-rows: 1fr;
   grid-column-gap: 24px;
 `
 
 const ElementsWrapper = styled.div`
   display: grid;
-  grid-template-columns: 64px 116px 30px 140px;
+  grid-template-columns: ${groupStatsColLayout};
   justify-content: space-between;
   width: 100%;
   grid-column-gap: 8px;
+  grid-column: 3;
 `
 
 const HeaderColumnTitle = styled.div`

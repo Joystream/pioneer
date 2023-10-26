@@ -64,7 +64,7 @@ export const SidePane = styled.div<{ topSize?: 'xs' | 's' | 'm' }>`
   background-color: ${Colors.White};
   width: 100%;
   max-width: 552px;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
   ${Animations.showSidePane};
 
