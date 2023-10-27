@@ -7,12 +7,14 @@ import {
   OpeningPositionType,
   OpeningType,
 } from '@/working-groups/hooks/utils/queries'
-import { useGetWorkingGroupOpeningsQuery } from '@/working-groups/queries'
+import { GetWorkingGroupOpeningsQueryVariables, useGetWorkingGroupOpeningsQuery } from '@/working-groups/queries'
 import {
   asWorkingGroupOpening,
   WorkingGroupOpeningStatus,
   WorkingGroupOpeningStatusTypename,
 } from '@/working-groups/types'
+import { toQueryOrderByInput } from '@/common/hooks/useSort'
+import { WorkerOrderByInput, WorkingGroupOpeningOrderByInput } from '@/common/api/queries'
 
 export interface UseOpeningsParams {
   groupId?: string
@@ -35,8 +37,15 @@ export const useOpenings = ({ groupId: group_eq, type, openingsPositionType }: U
     ...getOpeningsWhere(type),
   }
 
-  const { data, loading, error: err } = useGetWorkingGroupOpeningsQuery({ variables: { where } })
+  const variables: GetWorkingGroupOpeningsQueryVariables = {
+    where,
+    order: [WorkingGroupOpeningOrderByInput.CreatedAtDesc, WorkingGroupOpeningOrderByInput.RuntimeIdDesc],
+  }
+
+  const { data, loading, error: err } = useGetWorkingGroupOpeningsQuery({ variables })
   err && error(err)
+
+  console.log(data);
 
   const openings = useMemo(
     () => data?.workingGroupOpenings.map((opening) => asWorkingGroupOpening(opening)) ?? [],
