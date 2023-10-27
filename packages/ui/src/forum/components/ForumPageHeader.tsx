@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 
-import { PageHeaderRow, PageHeaderWrapper } from '@/app/components/PageLayout'
+import { PageHeaderRow, PageHeaderWithButtons, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { ButtonsGroup } from '@/common/components/buttons'
 import { SearchBox } from '@/common/components/forms/FilterBox/FilterSearchBox'
 import { useModal } from '@/common/hooks/useModal'
@@ -19,7 +18,7 @@ export const ForumPageHeader = ({ title, children, buttons, description }: Forum
 
   return (
     <PageHeaderWrapper>
-      <HeaderWrapper>
+      <PageHeaderWithButtons>
         {title}
         <ButtonsGroup>
           <SearchBox
@@ -29,31 +28,9 @@ export const ForumPageHeader = ({ title, children, buttons, description }: Forum
           />
           {buttons}
         </ButtonsGroup>
-      </HeaderWrapper>
+      </PageHeaderWithButtons>
       {description && <PageHeaderRow>{description}</PageHeaderRow>}
       {children}
     </PageHeaderWrapper>
   )
 }
-
-const HeaderWrapper = styled(PageHeaderRow)`
-  @media (max-width: 767px) {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-
-    ${ButtonsGroup} {
-      grid-auto-flow: row;
-      grid-row-gap: 8px;
-      width: 100%;
-
-      button {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center:
-        gap: 4px;
-      }
-    }
-  }
-`
