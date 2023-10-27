@@ -23,7 +23,7 @@ export const VoteLockItem = ({ lock, address, isRecoverable }: LockDetailsProps)
   const voteFor = vote?.voteFor?.member
   const voteForMember = voteFor && asMember(voteFor)
 
-  const remainingPeriod = useCouncilRemainingPeriod('electionEnd')
+  const remainingPeriod = useCouncilRemainingPeriod()
   const recoveryTime = useMemo(
     () =>
       !remainingPeriod
