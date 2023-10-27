@@ -13,7 +13,7 @@
     "ts-node": "ts-node --transpile-only -r tsconfig-paths/register",
     "nodemon": "nodemon --transpile-only -r tsconfig-paths/register",
     "dev:build": "yarn codegen && yarn prisma db push",
-    "dev:db": "yarn docker up db -d",
+    "dev:db": "yarn docker up pioneer-db -d",
     "dev:db:reset": "yarn docker down -v && yarn dev:db && yarn prisma db push",
     "dev:db:build": "yarn dev:db && yarn dev:build",
     "dev:api": "yarn nodemon ./src/common/scripts/startApi.ts",
