@@ -13,7 +13,6 @@ import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/component
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
-import { TokenValueStat } from '@/common/components/statistics'
 import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
@@ -39,14 +38,11 @@ import { useProposalConstants } from '@/proposals/hooks/useProposalConstants'
 import { useVotingRounds } from '@/proposals/hooks/useVotingRounds'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
-import { useOpening } from '@/working-groups/hooks/useOpening'
-import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
-import { urlParamToOpeningId } from '@/working-groups/model/workingGroupName'
 
 export const ProposalPreview = () => {
   const { id } = useParams<{ id: string }>()
   const history = useHistory()
-  const { proposal } = useProposal(id)
+  const { isLoading, proposal } = useProposal(id)
   const { council } = useElectedCouncil()
   const constants = useProposalConstants(proposal?.details.type)
   const loc = useLocation()
@@ -55,9 +51,6 @@ export const ProposalPreview = () => {
 
   const votingRounds = useVotingRounds(proposal?.votes, proposal?.proposalStatusUpdates)
   const [currentVotingRound, setVotingRound] = useState(0)
-
-  const { opening, isLoading } = useOpening(urlParamToOpeningId(id))
-  const rewardPeriod = useRewardPeriod(opening?.groupId)
 
   const votes = votingRounds[currentVotingRound] ?? votingRounds[0]
   useRefetchQueries({ interval: MILLISECONDS_PER_BLOCK, include: ['getProposal', 'GetProposalVotes'] }, [proposal])
@@ -152,7 +145,6 @@ export const ProposalPreview = () => {
               >
                 {camelCaseToText(proposal.status)}
               </BadgeStatus>
-
               <TextMedium>
                 <TextInlineMedium lighter>ID: </TextInlineMedium>
                 <TextInlineMedium bold>{proposal.id}</TextInlineMedium>{' '}
@@ -162,21 +154,6 @@ export const ProposalPreview = () => {
                   <TextInlineMedium lighter>Time left:</TextInlineMedium>{' '}
                   <TextInlineMedium bold>{formatBlocksToDuration(blocksToProposalExecution)}</TextInlineMedium>{' '}
                   <TextInlineMedium lighter>({formatTokenValue(blocksToProposalExecution)} blocks)</TextInlineMedium>
-                  {opening ? (
-                    <>
-                      <TokenValueStat
-                        title={`Reward per ${rewardPeriod?.toString()} blocks`}
-                        value={rewardPeriod?.mul(opening.rewardPerBlock)}
-                      />
-                      <TokenValueStat
-                        title="Minimal stake"
-                        tooltipText="Minimal amount of tokens required to be staked for any applicant to such role."
-                        value={opening.stake}
-                      />
-                    </>
-                  ) : (
-                    <></>
-                  )}
                 </TextMedium>
               )}
             </BadgeAndTime>
