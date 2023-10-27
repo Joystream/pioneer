@@ -49,7 +49,8 @@ export const PastElections = () => {
               <PastElectionsListHeaders $colLayout={PastElectionsColLayout}>
                 <SortHeader {...getSortProps('cycleId')}>Round</SortHeader>
                 <SortHeader {...getSortProps('updatedAt')}>Election ended at</SortHeader>
-                <ListHeader>Total staked</ListHeader>
+                <ListHeader>Total Candidates staked</ListHeader>
+                <ListHeader>Total Votes staked</ListHeader>
                 <ListHeader>Revealed votes</ListHeader>
                 <ListHeader>Total candidates</ListHeader>
               </PastElectionsListHeaders>
@@ -65,7 +66,7 @@ export const PastElections = () => {
   return <PageLayout header={header} main={displayMain()} />
 }
 
-export const PastElectionsColLayout = '48px 176px 156px 100px 100px'
+export const PastElectionsColLayout = '48px 176px 140px 140px 100px 100px'
 
 const PastElectionsListHeaders = styled(ListHeaders)`
   grid-column-gap: 24px;
