@@ -104,7 +104,7 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
         <FieldWrapper>
           <FieldTitleInListItem>My vote</FieldTitleInListItem>
           <StageField>
-            <ProposalItemVoteDetails proposal={proposal} memberId={memberId} isCouncilMember={isCouncilMember} />
+            <ProposalItemVoteDetails proposal={proposal} memberId={memberId} />
           </StageField>
         </FieldWrapper>
       )}

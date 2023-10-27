@@ -129,7 +129,7 @@ const GroupContent = styled(TextMedium)`
   ${Overflow.DotsTwoLine};
 `
 
-export const groupStatsColLayout = '64px 116px 30px 140px'
+export const groupStatsColLayout = '64px 140px 64px 140px'
 
 const GroupStats = styled.div`
   display: grid;
