@@ -14,10 +14,10 @@ services:
           property: connectionString
 
       - key: QUERY_NODE_ENDPOINT
-        value: https://query.joystream.org/graphql
+        sync: false
 
       - key: PIONEER_URL
-        value: https://pioneerapp.xyz
+        sync: false
 
       - key: EMAIL_SENDER
         sync: false
