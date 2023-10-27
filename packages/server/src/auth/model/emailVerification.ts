@@ -3,6 +3,7 @@ import { error } from 'npmlog'
 import { emailProvider } from '@/common/api/email'
 import { PIONEER_URL } from '@/common/config'
 import { renderPioneerEmail } from '@/common/email-templates/pioneer-email'
+import { errorMessage } from '@/common/utils'
 
 import { createEmailToken } from './token'
 
@@ -33,7 +34,7 @@ export const sendVerificationEmail = async ({ email, memberId, name, referer }: 
       }),
     })
   } catch (err) {
-    error('Auth', JSON.stringify(error, null, '2'))
-    throw error
+    error('Auth', errorMessage(err), JSON.stringify(err, null, 2))
+    throw err
   }
 }
