@@ -36,7 +36,6 @@ export const ForumPageHeader = ({ title, children, buttons, description }: Forum
   )
 }
 
-
 const HeaderWrapper = styled(PageHeaderRow)`
   @media (max-width: 767px) {
     display: flex;
