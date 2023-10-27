@@ -1,4 +1,5 @@
 import React from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { Redirect, Route, Switch } from 'react-router-dom'
 
 import '@/services/i18n'
@@ -21,6 +22,7 @@ import { ForumRoutes } from '@/forum/constant'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
+import { ErrorFallback } from './components/ErrorFallback'
 import { ExtensionNotification } from './components/ExtensionWarning'
 import { SideBar } from './components/SideBar'
 import { MembersRoutes, ProfileRoutes, SettingsRoutes, TermsRoutes } from './constants/routes'
@@ -46,31 +48,35 @@ export const App = () => {
     <Providers>
       <Page>
         <SideBar />
-        <Screen>
-          <OnBoardingOverlay />
-          <Switch>
-            {/*// Uncomment to see whole overview section*/}
-            {/*<Route path={OverviewRoutes.overview} component={OverviewModule} />*/}
-            <Route path={WorkingGroupsRoutes.groups} component={WorkingGroupsModule} />
-            <Route path={ProposalsRoutes.home} component={ProposalsModule} />
-            <Route path={CouncilRoutes.council} component={CouncilModule} />
-            <Route path={ElectionRoutes.currentElection} component={ElectionModule} />
-            <Route path={ForumRoutes.forum} component={ForumModule} />
-            <Route path={BountyRoutes.bounties} component={BountyModule} />
-            <Route exact path={ProfileRoutes.profile} component={MyAccounts} />
-            <Route exact path={ProfileRoutes.memberships} component={MyMemberships} />
-            <Route exact path={MembersRoutes.members} component={Members} />
-            <Route exact path={SettingsRoutes.settings} component={Settings} />
-            <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
-            <Route exact path={TermsRoutes.termsOfService} component={TermsOfService} />
-            <Route exact path="/404" component={NotFound} />
-            <Redirect exact from="/" to={WorkingGroupsRoutes.groups} />
-            <Redirect exact from={ProposalsRoutes.home} to={ProposalsRoutes.current} />
-            <Redirect from="*" to="/404" />
-          </Switch>
-        </Screen>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <Screen>
+            <OnBoardingOverlay />
+            <Switch>
+              {/*// Uncomment to see whole overview section*/}
+              {/*<Route path={OverviewRoutes.overview} component={OverviewModule} />*/}
+              <Route path={WorkingGroupsRoutes.groups} component={WorkingGroupsModule} />
+              <Route path={ProposalsRoutes.home} component={ProposalsModule} />
+              <Route path={CouncilRoutes.council} component={CouncilModule} />
+              <Route path={ElectionRoutes.currentElection} component={ElectionModule} />
+              <Route path={ForumRoutes.forum} component={ForumModule} />
+              <Route path={BountyRoutes.bounties} component={BountyModule} />
+              <Route exact path={ProfileRoutes.profile} component={MyAccounts} />
+              <Route exact path={ProfileRoutes.memberships} component={MyMemberships} />
+              <Route exact path={MembersRoutes.members} component={Members} />
+              <Route exact path={SettingsRoutes.settings} component={Settings} />
+              <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
+              <Route exact path={TermsRoutes.termsOfService} component={TermsOfService} />
+              <Route exact path="/404" component={NotFound} />
+              <Redirect exact from="/" to={WorkingGroupsRoutes.groups} />
+              <Redirect exact from={ProposalsRoutes.home} to={ProposalsRoutes.current} />
+              <Redirect from="*" to="/404" />
+            </Switch>
+          </Screen>
+        </ErrorBoundary>
       </Page>
-      <GlobalModals />
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <GlobalModals />
+      </ErrorBoundary>
       <NotificationsHolder>
         <TransactionStatus />
         <ConnectionStatus />
