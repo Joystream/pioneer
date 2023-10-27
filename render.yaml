@@ -77,4 +77,4 @@ services:
 databases:
   - name: db
     region: frankfurt
-    plan: free
+    plan: starter
