@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper, PageHeaderWithButtons } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
@@ -113,7 +113,7 @@ export const MyRole = () => {
       lastBreadcrumb={workerRoleTitle(worker)}
       header={
         <PageHeaderWrapper>
-          <PageHeaderRow>
+          <PageHeaderWithButtons>
             <PreviousPage>
               <PageTitle>{workerRoleTitle(worker)}</PageTitle>
             </PreviousPage>
@@ -133,7 +133,7 @@ export const MyRole = () => {
                 </TransactionButton>
               )}
             </ButtonsGroup>
-          </PageHeaderRow>
+          </PageHeaderWithButtons>
           <RowGapBlock gap={24}>
             <BadgesRow>
               <BadgeStatus inverted size="l" separated>

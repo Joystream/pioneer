@@ -1,4 +1,5 @@
 import React from 'react'
+import { css } from 'styled-components'
 
 import { PageHeaderWithHint } from '@/app/components/PageHeaderWithHint'
 import { PageLayout } from '@/app/components/PageLayout'
@@ -57,6 +58,29 @@ export const Proposals = () => {
           </SidePanel>
         )
       }
+      responsiveStyle={ProposalsPageResponsiveStyle}
     />
   )
 }
+
+export const ProposalsPageResponsiveStyle = css`
+  @media (min-width: 768px) {
+    grid-template-columns: 7fr 5fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'header header'
+      'main sidebar';
+
+    aside {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      padding-left: 16px;
+
+      > div {
+        min-height: 184px;
+        overflow: hidden;
+      }
+    }
+  }
+`

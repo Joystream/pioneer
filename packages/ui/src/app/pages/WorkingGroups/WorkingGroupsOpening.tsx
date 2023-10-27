@@ -2,7 +2,7 @@ import React, { memo, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
+import { PageHeaderWithButtons, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { CopyButtonTemplate } from '@/common/components/buttons'
@@ -121,7 +121,7 @@ export const WorkingGroupOpening = () => {
       lastBreadcrumb={opening.title}
       header={
         <PageHeaderWrapper>
-          <PageHeaderRow>
+          <PageHeaderWithButtons>
             <PreviousPage customLink={WorkingGroupsRoutes.openings}>
               <PageTitle>{opening.title}</PageTitle>
             </PreviousPage>
@@ -137,7 +137,7 @@ export const WorkingGroupOpening = () => {
               )}
               {opening.status === OpeningStatuses.OPEN && <ApplyButton />}
             </ButtonsGroup>
-          </PageHeaderRow>
+          </PageHeaderWithButtons>
           <RowGapBlock gap={24}>
             <BadgesRow>
               <BadgeStatus inverted size="l" separated>

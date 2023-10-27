@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router'
 import { useHistory, useParams } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
+import { PageHeaderWithButtons, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { CopyButtonTemplate } from '@/common/components/buttons'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
@@ -13,6 +13,7 @@ import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/component
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
+import { StatsContent } from '@/common/components/statistics'
 import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
@@ -111,7 +112,7 @@ export const ProposalPreview = () => {
       sidebarScrollable
       header={
         <PageHeaderWrapper>
-          <PageHeaderRow>
+          <PageHeaderWithButtons>
             <PreviousPage>
               <PageTitle>{proposal.title}</PageTitle>
             </PreviousPage>
@@ -133,7 +134,7 @@ export const ProposalPreview = () => {
                 Copy link
               </CopyButtonTemplate>
             </ButtonsGroup>
-          </PageHeaderRow>
+          </PageHeaderWithButtons>
 
           <RowGapBlock gap={24}>
             <BadgeAndTime>
@@ -207,9 +208,36 @@ export const ProposalPreview = () => {
           </RowGapBlock>
         </SidePanel>
       }
+      responsiveStyle={ResponsiveStyle}
     />
   )
 }
 const BadgeAndTime = styled(BadgesRow)`
   gap: 16px;
+`
+
+const ResponsiveStyle = css`
+  @media (min-width: 768px) {
+    grid-template-columns: 8fr 4fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'header header'
+      'main sidebar';
+
+    aside {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      padding-left: 16px;
+
+      > div {
+        min-height: 184px;
+        overflow: hidden;
+      }
+    }
+  }
+
+  ${StatsContent} {
+    gap: 16px;
+  }
 `
