@@ -39,13 +39,8 @@ export const ProposalList = ({ proposals, getSortProps, isPast, isLoading }: Pro
         {getSortProps ? <SortHeader {...getSortProps('title')}>Title</SortHeader> : <ProposalListHeader />}
         <ProposalListHeader>Stage</ProposalListHeader>
         <ProposalListHeader>Proposer</ProposalListHeader>
-        {isPast && getSortProps ? (
-          <SortHeader {...getSortProps('createdAt')}>Ended</SortHeader>
-        ) : (
-          <ProposalListHeader />
-        )}
+        {isPast && getSortProps && <SortHeader {...getSortProps('createdAt')}>Ended</SortHeader>}
         <ProposalListHeader>{isCouncilMember && 'My vote'}</ProposalListHeader>
-        <ProposalListHeader />
       </ProposalsListHeaders>
       <ProposalListWarpper as="div">
         {proposals.map((proposal) => (
