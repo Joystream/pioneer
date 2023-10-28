@@ -1,5 +1,12 @@
-FROM node:18-alpine3.18 AS builder
+FROM node:20-slim AS base
 WORKDIR /app
+
+RUN set -eux; \
+	apt-get update -y; \
+	apt-get install -y --no-install-recommends openssl; \
+	rm -rf /var/lib/apt/list/*
+
+FROM base AS builder
 
 COPY packages/server/package.json ./
 COPY yarn.lock ./
@@ -19,9 +26,8 @@ ENV NODE_ENV=production
 RUN yarn --prod --immutable
 RUN yarn prisma generate
 
-FROM node:18-alpine3.18
-WORKDIR /app
-RUN adduser -u $(getent group www-data | cut -d: -f3) -S -D -G www-data www-data
+FROM base
+
 USER www-data
 
 COPY --from=builder --chown=www-data /app/dist ./dist
