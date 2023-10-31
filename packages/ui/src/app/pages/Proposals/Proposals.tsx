@@ -75,7 +75,6 @@ export const ProposalsPageResponsiveStyle = css`
       position: absolute;
       top: 0;
       bottom: 0;
-      padding-left: 16px;
 
       > div {
         min-height: 184px;
