@@ -48,12 +48,13 @@ export const MemberItemWrap = styled.div<{ kind: MemberItemKind }>`
   position: relative;
   grid-template-columns: ${({ kind }) => colLayoutByType(kind)};
   grid-template-rows: 1fr;
+  grid-column-gap: 16px;
   justify-content: space-between;
   justify-items: start;
   align-items: center;
   width: 100%;
   min-height: ${Sizes.accountHeight};
-  padding: 16px 0 16px 14px;
+  padding: 16px 24px;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
   transition: ${Transitions.all};
