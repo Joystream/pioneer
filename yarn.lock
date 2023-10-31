@@ -3623,7 +3623,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joystream/metadata-protobuf@npm:^2.0.0, @joystream/metadata-protobuf@npm:^2.6.0":
+"@joystream/metadata-protobuf@npm:^2.10.0":
+  version: 2.10.0
+  resolution: "@joystream/metadata-protobuf@npm:2.10.0"
+  dependencies:
+    "@types/iso-3166-2": ^1.0.0
+    "@types/long": ^4.0.1
+    google-protobuf: ^3.14.0
+    i18n-iso-countries: ^6.8.0
+    iso-3166-2: ^1.0.0
+    iso-639-1: ^2.1.9
+    long: ^4.0.0
+    protobufjs: ^6.11.2
+  checksum: 4b56f02d6863d6f1e1cd91075606666224338066c078e77cb2b3bac090dc535a740279711106778c666befa8abc8b08b3f11bedf9b5e8c96f14d92887c8cc3ed
+  languageName: node
+  linkType: hard
+
+"@joystream/metadata-protobuf@npm:^2.6.0":
   version: 2.6.0
   resolution: "@joystream/metadata-protobuf@npm:2.6.0"
   dependencies:
@@ -3657,7 +3673,7 @@ __metadata:
     "@jest/types": ^27.2.5
     "@joystream/js": 1.2.0
     "@joystream/markdown-editor": ^0.1.0
-    "@joystream/metadata-protobuf": ^2.0.0
+    "@joystream/metadata-protobuf": ^2.10.0
     "@joystream/types": ^2.0.0
     "@miragejs/graphql": ^0.1.13
     "@nivo/bar": ^0.79.1

@@ -16,10 +16,11 @@ export interface PastElection {
   id: string
   cycleId: number
   finishedAtBlock?: Block
-  totalStake: BN
+  totalCandidatesStake: BN
   totalCandidates: number
   revealedVotes: number
   totalVotes: number
+  totalVoteStake: BN
 }
 
 export interface PastElectionWithDetails extends PastElection {
@@ -30,17 +31,17 @@ export const asPastElection = (fields: PastElectionRoundFieldsFragment): PastEle
   id: fields.id,
   cycleId: fields.cycleId,
   finishedAtBlock: maybeAsBlock(fields.endedAtBlock, fields.endedAtTime, fields.endedAtNetwork),
-  totalStake: sumStakes(fields.candidates),
+  totalCandidatesStake: sumStakes(fields.candidates),
   totalCandidates: fields.candidates.length,
   revealedVotes: fields.castVotes.filter((castVote) => castVote.voteForId).length,
   totalVotes: fields.castVotes.length,
+  totalVoteStake: sumStakes(fields.castVotes),
 })
 
 export const asPastElectionWithDetails = (
   fields: PastElectionRoundDetailedFieldsFragment
 ): PastElectionWithDetails => ({
   ...asPastElection(fields),
-  totalStake: sumStakes(fields.castVotes),
   votingResults: fields.candidates.map((candidate) => {
     const candidateVotes = fields.castVotes.filter(({ voteForId }) => voteForId === candidate.id)
 
