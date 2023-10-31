@@ -6,7 +6,7 @@ export const PageContent = styled.div`
   margin-left: 24px;
   padding: 40px 24px 8px 0;
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     margin-left: 16px;
     padding: 40px 16px 8px 0;
   }

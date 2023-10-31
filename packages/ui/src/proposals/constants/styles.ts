@@ -7,7 +7,7 @@ export const ProposalColLayout = '296px 148px 156px 60px 1fr'
 export const ProposalsListHeaders = styled(ListHeaders)`
   padding-right: 16px;
   grid-column-gap: 36px;
-  @media (max-width: 1440px) {
+  @media (max-width: 1439px) {
     display: none;
   }
 `

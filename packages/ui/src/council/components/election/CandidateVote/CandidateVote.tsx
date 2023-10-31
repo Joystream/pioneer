@@ -186,7 +186,7 @@ const CandidateVoteWrapper = styled(ListItem)`
     }
   }
 
-  @media (max-width: 425px) {
+  @media (max-width: 424px) {
     padding-right: 8px;
 
     ${CandidateCardArrow} {
