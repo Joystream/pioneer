@@ -1,4 +1,4 @@
-FROM node:20-slim AS base
+FROM node:20 AS base
 WORKDIR /app
 
 RUN set -eux; \
