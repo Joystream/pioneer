@@ -56,19 +56,12 @@ export const SelectToggleButton = ({ isOpen, disabled, onToggleClick }: SelectTo
 )
 
 export const SelectedOption = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  row-gap: 8px;
-  justify-content: between;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
   align-items: center;
   padding: 0 4px 0 16px;
   width: 100%;
-  height: fit-content;
-
-  > div {
-    width: fit-content;
-    margin-right: auto;
-  }
 `
 
 export const EmptyOption = styled.input`
@@ -142,29 +135,24 @@ export const OptionComponentContainer = styled.li<{ disabled?: boolean }>`
 `
 
 export const OptionComponent = styled.div<{ disabled?: boolean }>`
-  display: flex;
-  flex-wrap: wrap;
-  row-gap: 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
   align-items: center;
-  justify-content: between;
   width: 100%;
-  height: fit-content;
+  height: 100%;
   border: none;
   background-color: ${({ disabled }) => (disabled ? Colors.Black[75] : Colors.White)};
   cursor: pointer;
   border-radius: ${BorderRad.s};
   transition: ${Transitions.all};
   min-height: ${Sizes.selectHeight};
+  max-height: ${Sizes.selectHeight};
   padding: 10px 72px 10px 16px;
 
   &:active,
   &:focus {
     outline: none;
-  }
-
-  > div {
-    width: fit-content;
-    margin-right: auto;
   }
 `
 
