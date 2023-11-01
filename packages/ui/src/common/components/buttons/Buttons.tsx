@@ -521,3 +521,9 @@ export const ButtonsGroup = styled.div<{ align?: 'left' | 'center' | 'right' }>`
     }
   }};
 `
+
+export const ResponsiveButtonsGroup = styled(ButtonsGroup)`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+`
