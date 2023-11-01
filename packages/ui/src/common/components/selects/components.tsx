@@ -57,26 +57,25 @@ export const SelectToggleButton = ({ isOpen, disabled, onToggleClick }: SelectTo
 )
 
 export const SelectedOption = styled.div<{ isSmallVariant?: boolean }>`
-  ${(isSmallVariant) => {
-    if (isSmallVariant)
-      return css`
-        display: flex;
-        flex-wrap: wrap;
-        row-gap: 8px;
-        justify-content: between;
-        height: fit-content;
+  ${({ isSmallVariant }) =>
+    isSmallVariant
+      ? css`
+          display: flex;
+          flex-wrap: wrap;
+          row-gap: 8px;
+          justify-content: between;
+          height: fit-content;
 
-        > div {
-          width: fit-content;
-          margin-right: auto;
-        }
-      `
-    return css`
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr;
-    `
-  }}
+          > div {
+            width: fit-content;
+            margin-right: auto;
+          }
+        `
+      : css`
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 1fr;
+        `}
 
   align-items: center;
   width: 100%;
@@ -154,28 +153,27 @@ export const OptionComponentContainer = styled.li<{ disabled?: boolean }>`
 `
 
 export const OptionComponent = styled.div<{ disabled?: boolean; isSmallVariant?: boolean }>`
-  ${(isSmallVariant) => {
-    if (isSmallVariant)
-      return css`
-        display: flex;
-        flex-wrap: wrap;
-        row-gap: 8px;
-        justify-content: between;
-        height: fit-content;
+  ${({ isSmallVariant }) =>
+    isSmallVariant
+      ? css`
+          display: flex;
+          flex-wrap: wrap;
+          row-gap: 8px;
+          justify-content: between;
+          height: fit-content;
 
-        > div {
-          width: fit-content;
-          margin-right: auto;
-        }
-      `
-    return css`
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr;
-      height: 100%;
-      max-height: ${Sizes.selectHeight};
-    `
-  }}
+          > div {
+            width: fit-content;
+            margin-right: auto;
+          }
+        `
+      : css`
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 1fr;
+          height: 100%;
+          max-height: ${Sizes.selectHeight};
+        `}
 
   align-items: center;
   width: 100%;
