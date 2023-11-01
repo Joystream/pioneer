@@ -26,4 +26,6 @@ export const BreadcrumbsNavigation = styled.nav`
   position: absolute;
   top: 6px;
   left: 0;
+  width: 100%;
+  padding-right: 24px;
 `

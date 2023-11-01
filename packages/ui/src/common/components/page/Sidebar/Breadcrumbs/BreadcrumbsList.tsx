@@ -28,6 +28,7 @@ export const BreadcrumbsList = React.memo(
 export const BreadcrumbsListComponent = styled.ul`
   display: inline-flex;
   align-items: center;
+  width: 100%;
   margin: 0;
   padding: 0;
 `
