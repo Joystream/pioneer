@@ -50,7 +50,6 @@ export const ThreadFilters: FC<ThreadFiltersProps> = ({ withinDates, onApply, ch
         onApply={() => update()}
         onClear={() => update({ date: undefined })}
         inputSize="xs"
-        inputWidth="auto"
       />
     </ThreadFiltersBox>
   )

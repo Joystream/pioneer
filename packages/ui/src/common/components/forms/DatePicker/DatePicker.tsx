@@ -24,7 +24,7 @@ interface DatePickerProps extends ControlProps<PartialDateRange> {
   onApply?: () => void
   onClear?: () => void
   inputSize?: 'xs' | 's' | 'm' | 'l' | 'auto' | undefined
-  inputWidth?: 'auto' | 's' | 'xs' | undefined
+  inputWidth?: 's' | 'xs' | undefined
   placeholder?: string
 }
 

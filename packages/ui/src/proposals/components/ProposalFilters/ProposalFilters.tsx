@@ -136,7 +136,6 @@ export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onAppl
             onApply({ ...filters, lifetime: undefined })
           }}
           inputSize="xs"
-          inputWidth="auto"
         />
 
         <SmallMemberSelect

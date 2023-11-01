@@ -132,7 +132,6 @@ const SearchInput = styled(InputComponent).attrs({
   icon: <SearchIcon />,
   borderless: true,
   inputSize: 'auto',
-  inputWidth: 'auto',
 })`
   align-items: stretch;
   height: 100%;
