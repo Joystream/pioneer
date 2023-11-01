@@ -14,6 +14,7 @@ import {
   WhatsappIcon,
   YoutubeIcon,
   TelegramIcon,
+  LinkedinIcon,
 } from '@/common/components/icons/socials'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
@@ -34,6 +35,7 @@ export const socialToIcon: Record<Socials, React.ReactElement> = {
   WECHAT: <WechatIcon />,
   WHATSAPP: <WhatsappIcon />,
   HYPERLINK: <CustomLinkIcon />,
+  LINKEDIN: <LinkedinIcon />,
 }
 
 export const socialMediaList = Object.keys(socialToIcon) as (keyof typeof socialToIcon)[]
