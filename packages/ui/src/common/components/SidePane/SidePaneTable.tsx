@@ -33,7 +33,7 @@ export const SidePaneRow = styled.li`
   }
 
   > *:last-child {
-    padding-left: 24px;
+    margin-left: 24px;
     width: fit-content;
   }
 `
