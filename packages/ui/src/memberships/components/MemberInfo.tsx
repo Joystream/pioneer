@@ -71,7 +71,7 @@ export const MemberInfo = React.memo(
         hideGroup={hideGroup}
         onClick={skipModal ? undefined : showMemberModal}
         skipModal={skipModal}
-        onlyTop={onlyTop || (member.roles.length === 0 && !showIdOrText)}
+        onlyTop={onlyTop}
       >
         <MemberPhoto big={memberSize === 'l'} small={avatarSmall}>
           <MemberPhotoContainer>
@@ -121,7 +121,7 @@ export const MemberInfo = React.memo(
             </IdHeader>
           )}
         </MemberHeaderWrapper>
-        {showRoles && member.roles.length > 0 && <MemberRoles roles={member.roles} size={roleSize} max={maxRoles} />}
+        {showRoles && <MemberRoles roles={member.roles} size={roleSize} max={maxRoles} />}
         {showId && <MemberId>{isString(showIdOrText) ? showIdOrText : `Member ID: ${member.id}`}</MemberId>}
       </MemberInfoWrap>
     )
