@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components'
 import { BorderRad, Colors, RemoveScrollbar, Transitions } from '../constants'
 
 import { CountBadge } from './CountBadge'
+import { HorizontalScroller } from './HorizontalScroller/HorizontalScroller'
 
 export type PageTabSize = 'xs' | 's'
 
@@ -163,7 +164,8 @@ const TabsNav = styled.nav<TabsSize>`
   justify-items: start;
   z-index: 1;
   max-width: calc(100vw - 32px);
-  overflow-x: auto;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
   padding-bottom: 2px;
   ${RemoveScrollbar}
 
