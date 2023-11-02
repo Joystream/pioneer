@@ -64,6 +64,9 @@ const ThreadFiltersBox = styled(FilterBox)`
     @media (max-width: 424px) {
       flex-direction: column;
       align-items: start;
+      > * {
+        width: 100%;
+      }
     }
   }
 
