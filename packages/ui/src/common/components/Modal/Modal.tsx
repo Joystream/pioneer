@@ -175,7 +175,7 @@ export const ModalFooterComponent = styled.footer<{ twoColumns?: boolean }>`
   grid-template-columns: ${({ twoColumns }) => (twoColumns ? '1fr auto' : '1fr')};
   grid-template-rows: 1fr;
   grid-auto-flow: column;
-  grid-column-gap: 40px;
+  grid-column-gap: 16px;
   justify-self: end;
   justify-items: end;
   justify-content: end;
