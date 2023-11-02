@@ -85,10 +85,6 @@ const Box = styled(GhostRouterLink)<{ isArchived: boolean }>`
       flex: 1;
     }
 
-    > *:first-child {
-      min-width: fit-content;
-    }
-
     > *:last-child {
       display: flex;
       flex-direction: column-reverse;
@@ -99,6 +95,11 @@ const Box = styled(GhostRouterLink)<{ isArchived: boolean }>`
 
     @media (max-width: 424px) {
       flex-direction: column;
+
+      > *:first-child {
+        min-width: fit-content;
+      }
+
       > *:last-child {
         width: 100%;
         align-items: flex-start;
