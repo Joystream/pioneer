@@ -4,7 +4,6 @@ import styled, { css } from 'styled-components'
 import { BorderRad, Colors, RemoveScrollbar, Transitions } from '../constants'
 
 import { CountBadge } from './CountBadge'
-import { HorizontalScroller } from './HorizontalScroller/HorizontalScroller'
 
 export type PageTabSize = 'xs' | 's'
 
