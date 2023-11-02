@@ -99,7 +99,7 @@ export const TabContainer = styled.button<TabActiveProps>`
   cursor: pointer;
   transition: ${Transitions.all};
   text-decoration: none;
-  text-wrap: nowrap;
+  white-space: nowrap;
 
   &:before {
     content: '';
@@ -164,7 +164,6 @@ const TabsNav = styled.nav<TabsSize>`
   z-index: 1;
   max-width: calc(100vw - 32px);
   overflow-x: scroll;
-  -webkit-overflow-scrolling: touch;
   padding-bottom: 2px;
   ${RemoveScrollbar}
 
