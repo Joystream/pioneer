@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { MenuIcon } from '@/common/components/icons'
@@ -8,8 +8,7 @@ import { useResponsive } from '@/common/hooks/useResponsive'
 import { SideBarSlider } from './SideBarSlider'
 
 export const NavBar = () => {
-  const [open, setOpen] = useState(false)
-  const { isMobile } = useResponsive()
+  const { openNavSidebar, setOpenNavSidebar } = useResponsive()
 
   return (
     <>
@@ -19,13 +18,13 @@ export const NavBar = () => {
         </Link>
         <MenuIconWrapper
           onClick={() => {
-            setOpen(!open)
+            setOpenNavSidebar(true)
           }}
         >
           <MenuIcon />
         </MenuIconWrapper>
       </Wrapper>
-      {isMobile && open && <SideBarSlider setOpen={setOpen} />}
+      {openNavSidebar && <SideBarSlider />}
     </>
   )
 }
