@@ -153,7 +153,8 @@ const CandidateVoteWrapper = styled(ListItem)`
   grid-template-columns: 32px 224px minmax(224px, 1fr) 120px;
   align-items: center;
   grid-column-gap: 8px;
-  height: 116px;
+  min-height: 116px;
+  height: fit-content;
   padding: 16px 48px 16px 8px;
   cursor: pointer;
 
@@ -176,7 +177,6 @@ const CandidateVoteWrapper = styled(ListItem)`
     padding-left: 32px;
     display: flex;
     flex-direction: column;
-    height: fit-content;
 
     ${VoteIndex} {
       position: absolute;

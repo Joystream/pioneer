@@ -330,7 +330,16 @@ export const AnnounceCandidacyModal = () => {
                   )}
                 />
               )}
-              {state.matches('candidateProfile.summaryAndBanner') && <SummaryAndBannerStep />}
+              {state.matches('candidateProfile.summaryAndBanner') && (
+                <SummaryAndBannerStep
+                  previewButton={
+                    <PreviewButtons
+                      candidate={getCandidateForPreview(form.getValues() as AnnounceCandidacyFrom, activeMember)}
+                      disabled={!form.formState.isValid}
+                    />
+                  }
+                />
+              )}
             </FormProvider>
           </StepperBody>
         </StepperModalWrapper>
@@ -342,14 +351,6 @@ export const AnnounceCandidacyModal = () => {
           onClick: () => send('NEXT'),
         }}
         prev={state.matches('staking') ? { onClick: () => send('BACK') } : undefined}
-        extraButtons={
-          state.matches('candidateProfile.summaryAndBanner') && (
-            <PreviewButtons
-              candidate={getCandidateForPreview(form.getValues() as AnnounceCandidacyFrom, activeMember)}
-              disabled={!form.formState.isValid}
-            />
-          )
-        }
       />
     </Modal>
   )

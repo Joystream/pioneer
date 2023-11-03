@@ -1,11 +1,15 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import { CKEditor } from '@/common/components/CKEditor'
 import { InputComponent, InputText } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 
-export const SummaryAndBannerStep = () => (
+interface Props {
+  previewButton: ReactNode
+}
+
+export const SummaryAndBannerStep = ({ previewButton }: Props) => (
   <RowGapBlock gap={24}>
     <Row>
       <RowGapBlock gap={8}>
@@ -20,6 +24,7 @@ export const SummaryAndBannerStep = () => (
         <InputComponent label="Banner" inputSize="s">
           <InputText placeholder="Image URL" name="summaryAndBanner.banner" />
         </InputComponent>
+        {previewButton}
       </RowGapBlock>
     </Row>
   </RowGapBlock>

@@ -61,10 +61,10 @@ export const SelectedOption = styled.div<{ isSmallVariant?: boolean }>`
     isSmallVariant
       ? css`
           display: flex;
-          flex-wrap: wrap;
+          flex-direction: column;
+          justify-content: center;
           row-gap: 8px;
-          justify-content: between;
-          height: fit-content;
+          height: 118px;
 
           > div {
             width: fit-content;
@@ -157,10 +157,10 @@ export const OptionComponent = styled.div<{ disabled?: boolean; isSmallVariant?:
     isSmallVariant
       ? css`
           display: flex;
-          flex-wrap: wrap;
+          flex-direction: column;
+          justify-content: center;
           row-gap: 8px;
-          justify-content: between;
-          height: fit-content;
+          height: 118px;
 
           > div {
             width: fit-content;
