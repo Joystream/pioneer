@@ -24,6 +24,8 @@ interface PioneerEmailTemplateProps {
   }
 }
 
+const APP_LOGOS = 'https://eu-central-1.linodeobjects.com/atlas-assets/email/logos/pioneer'
+
 const PioneerEmailTemplate = ({
   memberHandle = 'bob',
   text = 'New council election has just started. Follow the link below to announce your candidacy.',
@@ -40,11 +42,7 @@ const PioneerEmailTemplate = ({
     <Body style={bodyStyle}>
       <Container style={containerStyle}>
         <Section style={logoSectionStyle}>
-          <Img
-            src="https://github.com/Joystream/design/blob/master/logo/pioneer/horizontal/color/dark/cropped/png/pioneer-logo@1x.png?raw=true"
-            alt="Pioneer's Logo"
-            style={pioneerLogoStyle}
-          />
+          <Img src={`${APP_LOGOS}/header.png`} alt="Pioneer's Logo" style={pioneerLogoStyle} />
         </Section>
         <Section style={mainSectionStyle}>
           <Heading style={h1Style}>Hi {memberHandle},</Heading>
@@ -56,11 +54,7 @@ const PioneerEmailTemplate = ({
           )}
         </Section>
         <Section style={footerSectionStyle}>
-          <Img
-            src="https://github.com/Joystream/design/blob/master/logo/pioneer/icon/color/light/cropped/png/pioneer-logo@1x.png?raw=true"
-            alt="Small Pioneer logo"
-            style={footerLogoStyle}
-          />
+          <Img src={`${APP_LOGOS}/footer.png`} alt="Small Pioneer logo" style={footerLogoStyle} />
           <Text style={bigLinksStyle}>
             <Link href={PIONEER_URL} style={bigLinkStyle}>
               pioneerapp.xyz

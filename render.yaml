@@ -1,15 +1,11 @@
 services:
   - type: web
     name: api
-    env: node
     region: frankfurt
-    plan: free
+    plan: starter
 
-    repo: https://github.com/Joystream/pioneer
-    branch: feature/backend-poc
-
-    buildCommand: yarn --frozen-lockfile && yarn workspace server build
-    startCommand: yarn workspace server start:api
+    runtime: image
+    image: { url: docker.io/thesan/pioneer-backend:prod }
 
     envVars:
       - key: DATABASE_URL
@@ -18,47 +14,29 @@ services:
           property: connectionString
 
       - key: QUERY_NODE_ENDPOINT
-        fromService:
-          type: cron
-          name: notifier
-          envVarKey: QUERY_NODE_ENDPOINT
+        sync: false
 
       - key: PIONEER_URL
-        fromService:
-          type: cron
-          name: notifier
-          envVarKey: PIONEER_URL
+        sync: false
 
       - key: EMAIL_SENDER
-        fromService:
-          type: cron
-          name: notifier
-          envVarKey: EMAIL_SENDER
+        sync: false
 
       - key: SENDGRID_API_KEY
-        fromService:
-          type: cron
-          name: notifier
-          envVarKey: SENDGRID_API_KEY
+        sync: false
 
       - key: APP_SECRET_KEY
         generateValue: true
 
-      - key: INITIAL_MEMBERSHIPS
-        sync: false
-
   - type: cron
     name: notifier
-    env: node
     region: frankfurt
     plan: starter
 
-    repo: https://github.com/Joystream/pioneer
-    branch: feature/backend-poc
-
-    buildCommand: yarn --frozen-lockfile && yarn workspace server build
-    startCommand: yarn workspace server notify
-    schedule: "*/30 * * * *"
+    runtime: image
+    image: { url: docker.io/thesan/pioneer-backend:prod }
+    dockerCommand: notify
+    schedule: "*/10 * * * *"
 
     envVars:
       - key: DATABASE_URL
@@ -67,16 +45,28 @@ services:
           property: connectionString
 
       - key: QUERY_NODE_ENDPOINT
-        value: https://query.joystream.org/graphql
+        fromService:
+          type: web
+          name: api
+          envVarKey: QUERY_NODE_ENDPOINT
 
       - key: PIONEER_URL
-        value: https://pioneerapp.xyz
+        fromService:
+          type: web
+          name: api
+          envVarKey: PIONEER_URL
 
       - key: EMAIL_SENDER
-        sync: false
+        fromService:
+          type: web
+          name: api
+          envVarKey: EMAIL_SENDER
 
       - key: SENDGRID_API_KEY
-        sync: false
+        fromService:
+          type: web
+          name: api
+          envVarKey: SENDGRID_API_KEY
 
       - key: STARTING_BLOCK
         sync: false
@@ -87,4 +77,4 @@ services:
 databases:
   - name: db
     region: frankfurt
-    plan: free
+    plan: starter

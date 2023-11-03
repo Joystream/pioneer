@@ -2,8 +2,11 @@ import sgMail from '@sendgrid/mail'
 import formData from 'form-data'
 import Mailgun from 'mailgun.js'
 import type MailgunClient from 'mailgun.js/client'
+import { warn } from 'npmlog'
 
 import { EMAIL_SENDER, SENDGRID_CONFIG, MAILGUN_CONFIG } from '@/common/config'
+
+import { errorMessage } from '.'
 
 const createMissingEnvError = (name: string) => Error(`${name} should be defined in environment`)
 
@@ -15,6 +18,12 @@ const toFullEmail = (email: Email) => ({ ...email, from: EMAIL_SENDER })
 
 export interface EmailProvider {
   sendEmail: (email: Email) => Promise<void>
+}
+
+const LogOnlyEmailProvider: EmailProvider = {
+  sendEmail: async (email) => {
+    warn('Email notifications', `Email not send to ${email.to}: ${email.subject}`)
+  },
 }
 
 class MailgunEmailProvider implements EmailProvider {
@@ -46,16 +55,22 @@ class SendgridEmailProvider implements EmailProvider {
 }
 
 export const createEmailProvider = (): EmailProvider => {
-  if (!EMAIL_SENDER) {
-    throw createMissingEnvError('EMAIL_SENDER')
-  }
+  try {
+    if (!EMAIL_SENDER) {
+      throw createMissingEnvError('EMAIL_SENDER')
+    }
 
-  if (!SENDGRID_CONFIG && !MAILGUN_CONFIG) {
-    throw Error('The email provider is not defined correctly')
-  }
+    if (!SENDGRID_CONFIG && !MAILGUN_CONFIG) {
+      throw Error('The email provider is not defined correctly')
+    }
 
-  if (SENDGRID_CONFIG && MAILGUN_CONFIG) {
-    throw Error('Multiple email providers are defined')
+    if (SENDGRID_CONFIG && MAILGUN_CONFIG) {
+      throw Error('Multiple email providers are defined')
+    }
+  } catch (err) {
+    warn('Email notifications', 'Failed to configure email provider with error:', errorMessage(err))
+    if (process.env['NODE_ENV'] === 'production') throw err
+    return LogOnlyEmailProvider
   }
 
   return SENDGRID_CONFIG

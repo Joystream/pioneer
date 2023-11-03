@@ -30,7 +30,26 @@ It is composed of 3 parts:
 
 ## Quick Start
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/feature/backend-poc)
+### render.com deployments
+
+### Run with docker
+
+```shell
+yarn workspace server docker:up
+```
+
+This runs the api on: http://localhost:3000
+
+Configurations are available in `packages/server/.env`.
+
+To run the notification script:
+```shell
+yarn workspace server docker:notify
+```
+
+### Demo deployment
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/backend-dev-blueprint)
 
 > **Warning**
 >
@@ -51,6 +70,10 @@ Mapping existing Joystream memberships id to a name and an email address in the 
 
 In order to customize the default notification behavior with the GraphQL API, an authorization token can be found for each membership in the "Logs" section.
 
+### Production
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/main)
+
 ## Production CLI usage
 
 > **Note**
@@ -59,7 +82,7 @@ In order to customize the default notification behavior with the GraphQL API, an
 
 - `yarn start:api`: starts the API server.
 - `yarn notify`: run the notify job.
-- `yarn start:all`: for environments where cron is not available, starts both the API server, and schedule the notify job every 30 minutes via [`node-cron`](https://www.npmjs.com/package/node-cron).
+- `yarn start:all`: for environments where cron is not available, starts both the API server, and schedule the notify job every 10 minutes via [`node-cron`](https://www.npmjs.com/package/node-cron).
 
 ## API usage
 
@@ -210,7 +233,7 @@ query {
 
 To run the API to develop locally:
 
-1. `yarn --frozen-lockfile`: Install the dependencies.
+1. `yarn --immutable`: Install the dependencies.
 2. Create and configure a `packages/server/.env`.
 3. Prepare the database and generate the code by running either:
     - `yarn workspace server dev:db:build`: To use docker for the db.
