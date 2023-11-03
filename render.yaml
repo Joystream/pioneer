@@ -36,7 +36,7 @@ services:
     runtime: image
     image: { url: docker.io/thesan/pioneer-backend:prod }
     dockerCommand: notify
-    schedule: "*/30 * * * *"
+    schedule: "*/10 * * * *"
 
     envVars:
       - key: DATABASE_URL

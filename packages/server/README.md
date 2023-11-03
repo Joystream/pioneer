@@ -82,7 +82,7 @@ In order to customize the default notification behavior with the GraphQL API, an
 
 - `yarn start:api`: starts the API server.
 - `yarn notify`: run the notify job.
-- `yarn start:all`: for environments where cron is not available, starts both the API server, and schedule the notify job every 30 minutes via [`node-cron`](https://www.npmjs.com/package/node-cron).
+- `yarn start:all`: for environments where cron is not available, starts both the API server, and schedule the notify job every 10 minutes via [`node-cron`](https://www.npmjs.com/package/node-cron).
 
 ## API usage
 
