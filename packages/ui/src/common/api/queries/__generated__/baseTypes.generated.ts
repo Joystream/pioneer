@@ -15362,6 +15362,7 @@ export enum MembershipExternalResourceType {
   Wechat = 'WECHAT',
   Whatsapp = 'WHATSAPP',
   Youtube = 'YOUTUBE',
+  Linkedin = 'LINKEDIN',
 }
 
 export type MembershipExternalResourceUpdateInput = {
