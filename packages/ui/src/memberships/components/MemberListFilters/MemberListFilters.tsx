@@ -220,6 +220,15 @@ const Wrapper = styled.div`
       }
     }
   }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    margin-top: -64px;
+    row-gap: 16px;
+
+    > *:first-child {
+      margin-left: auto;
+    }
+  }
 `
 
 const MembersFilterBox = styled(FilterBox)`
@@ -234,6 +243,7 @@ const MembersFilterBox = styled(FilterBox)`
 
     @media (max-width: 767px) {
       flex-direction: column;
+      padding: 16px;
     }
   }
 `

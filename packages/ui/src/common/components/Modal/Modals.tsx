@@ -52,6 +52,7 @@ export const TransactionAmount = styled.div<TransactionAmountProps>`
 
 export const TransactionInfoContainer = styled.div`
   display: grid;
+  margin-right: 24px;
 `
 
 export const BalanceInfo = styled.div`
