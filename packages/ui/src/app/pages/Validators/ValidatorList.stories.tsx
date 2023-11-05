@@ -197,7 +197,7 @@ export const TestsFilters: Story = {
         await userEvent.type(searchElement, '{enter}')
         expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(1)
       })
-      expect(screen.queryByText('alice'))
+      expect(screen.queryByText('charlie'))
       await userEvent.clear(searchElement)
       await userEvent.type(searchElement, 'j4R')
       await waitFor(async () => {
@@ -215,8 +215,11 @@ export const TestsFilters: Story = {
       expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(3)
       await userEvent.click(screen.getByText('Clear all filters'))
       expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(11)
-      await userEvent.type(searchElement, 'j4R{enter}')
-      expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(9)
+      await userEvent.type(searchElement, 'j4R')
+      await waitFor(async () => {
+        await userEvent.type(searchElement, '{enter}')
+        expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(9)
+      })
       expect(screen.queryByText('Clear all filters'))
       await userEvent.click(screen.getByText('Clear all filters'))
       expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(11)
