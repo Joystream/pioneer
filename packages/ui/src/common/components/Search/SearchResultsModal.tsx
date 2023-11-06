@@ -26,7 +26,7 @@ export type SearchResultsModalCall = ModalWithDataCall<'SearchResults', { search
 
 export const SearchResultsModal = () => {
   const { hideModal, modalData } = useModal<SearchResultsModalCall>()
-  const { isMobile } = useResponsive()
+  const { size } = useResponsive()
   const [search, setSearch] = useState(modalData.search)
   const [activeTab, setActiveTab] = useState<SearchKind>('FORUM')
   const isValid = () => !debouncedSearch || debouncedSearch.length === 0 || debouncedSearch.length > 2
@@ -97,7 +97,7 @@ export const SearchResultsModal = () => {
                   breadcrumbs={<ThreadItemBreadcrumbs id={thread.categoryId} />}
                   to={`${generatePath(ForumRoutes.thread, { id: thread.id })}?post=${id}`}
                   title={thread.title}
-                  onClick={() => isMobile && hideModal()}
+                  onClick={() => (size === 'xxs' || size === 'xs') && hideModal()}
                 >
                   {text}
                 </SearchResultItem>

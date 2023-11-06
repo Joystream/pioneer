@@ -79,3 +79,7 @@ export const MemberRolesColumn = styled(MemberColumn)`
 `
 
 export const MemberControls = styled.div``
+
+export const MemberStakeColumn = styled(MemberColumn)`
+  grid-auto-flow: row;
+`
