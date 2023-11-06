@@ -5,6 +5,7 @@ import { useApi } from '@/api/hooks/useApi'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
 import { BondValidatorAccModal } from './BondValidatorAccModal'
@@ -53,9 +54,13 @@ export const BuyMembershipModal = () => {
   }
 
   if (state.matches('bondValidatorAccTx') && api && state.context.memberId && state.context.form.validatorAccount) {
-    const transaction = api.tx.members.updateProfile(state.context.memberId.toString(), state.context.form.handle, {
-      validatorAccount: state.context.form.validatorAccount.address,
-    })
+    const transaction = api.tx.members.updateProfile(
+      state.context.memberId.toString(),
+      state.context.form.handle,
+      metadataToBytes(MembershipMetadata, {
+        validatorAccount: state.context.form.validatorAccount.address,
+      })
+    )
     const { form } = state.context
     const service = state.children.transaction
 
