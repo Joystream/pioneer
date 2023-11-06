@@ -11,6 +11,7 @@ export const useForumCategoryThreadCount = (category_eq: string, isArchive?: boo
   }
   const { data } = useGetForumThreadsCountQuery({
     variables: { where: { category: { id_eq: category_eq }, status_json } },
+    fetchPolicy: 'cache-first',
   })
   return { threadCount: data?.forumThreadsConnection.totalCount }
 }

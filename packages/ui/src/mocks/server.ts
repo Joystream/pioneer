@@ -110,6 +110,7 @@ export const makeServer = (environment = 'development', endpoints = DEFAULT_NETW
               workSubmittedEvents: getWhereResolver('WorkSubmittedEvent'),
               workSubmittedEventsConnection: getConnectionResolver('WorkSubmittedEventConnection'),
               budgetSetEvents: getWhereResolver('BudgetSetEvent'),
+              budgetUpdatedEvents: getWhereResolver('BudgetUpdatedEvent'),
               budgetSpendingEvents: getWhereResolver('BudgetSpendingEvent'),
               candidates: getWhereResolver('Candidate'),
               candidatesConnection: getConnectionResolver('CandidateConnection'),

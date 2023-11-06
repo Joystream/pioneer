@@ -19,6 +19,7 @@ export const BlockInfo = ({ block, lessInfo, inline }: BlockInfoProp) => {
   const [endpoints] = useNetworkEndpoints()
   return (
     <BlockLink
+      onClick={(evt) => evt.stopPropagation()}
       href={`https://polkadot.js.org/apps/?rpc=${endpoints.nodeRpcEndpoint}/ws-rpc#/explorer/query/${block.number}`}
     >
       <BlockInfoContainer lessInfo={lessInfo} inline={inline}>
