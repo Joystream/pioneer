@@ -22,5 +22,5 @@ export const Page = styled.div`
 
 export const Screen = styled.div`
   grid-area: page;
-  padding: 0 max(calc(50% - 575px), 0px);
+  padding: 0 max(calc(50% - 607px), 0px);
 `
