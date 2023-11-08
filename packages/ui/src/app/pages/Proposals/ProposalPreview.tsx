@@ -226,7 +226,7 @@ const ResponsiveStyle = css`
   ${Statistics} {
     grid-template-columns: 1fr;
 
-    @media (min-width:1440px) {
+    @media (min-width: 1440px) {
       grid-template-columns: 1fr 1fr;
     }
   }
