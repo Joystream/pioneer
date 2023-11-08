@@ -23,10 +23,10 @@ const jwtToken = Yup.object({ iat: Yup.number() })
 
 const AUTH_TOKEN_TTL = 3600_000 * 24 * 90
 
-export const createAuthToken = (memberId: number): string => {
+export const createAuthToken = (memberId: number, secret = APP_SECRET_KEY): string => {
   const exp = Date.now() + AUTH_TOKEN_TTL
   const payload: AuthTokenPayload = { memberId, type: TokenType.Authentication, exp }
-  return sign(payload, APP_SECRET_KEY)
+  return sign(payload, secret)
 }
 
 export const getAuthenticatedMember = async (req: ExpressContext['req'] | undefined): Promise<Member | null> => {

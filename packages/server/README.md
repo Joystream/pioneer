@@ -252,7 +252,7 @@ To run the API to develop locally:
 - [`yarn workspace server prisma db push`][prisma db:push]: Synchronize `schema.prisma` with the database schema.
 - [`yarn workspace server prisma migrate dev`][prisma migrate]: Create a database migration based on the changes to `schema.prisma`.
 - [`yarn workspace server prisma generate`][prisma generate]: Generate the Prisma clients.
-- `yarn workspace server authtoken [member id]`: Generate an authentication token for the provided member.
+- `yarn workspace server dev:authtoken`: Generate an authentication token for the provided member.
 - `yarn workspace server lint:fix`: Fix some code formatting issue.
 
 ### Adding support for more QN events
