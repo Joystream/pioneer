@@ -15356,13 +15356,13 @@ export enum MembershipExternalResourceType {
   Facebook = 'FACEBOOK',
   Hyperlink = 'HYPERLINK',
   Irc = 'IRC',
+  Linkedin = 'LINKEDIN',
   Matrix = 'MATRIX',
   Telegram = 'TELEGRAM',
   Twitter = 'TWITTER',
   Wechat = 'WECHAT',
   Whatsapp = 'WHATSAPP',
   Youtube = 'YOUTUBE',
-  Linkedin = 'LINKEDIN',
 }
 
 export type MembershipExternalResourceUpdateInput = {
@@ -20315,6 +20315,7 @@ export type ProposalDetails =
   | SlashWorkingGroupLeadProposalDetails
   | TerminateWorkingGroupLeadProposalDetails
   | UpdateChannelPayoutsProposalDetails
+  | UpdatePalletFrozenStatusProposalDetails
   | UpdateWorkingGroupBudgetProposalDetails
   | VetoProposalDetails
 
@@ -31369,6 +31370,14 @@ export type UpdateChannelPayoutsProposalDetails = {
   minCashoutAllowed?: Maybe<Scalars['Float']>
   /** The hash of the channel payout payload file */
   payloadHash?: Maybe<Scalars['String']>
+}
+
+export type UpdatePalletFrozenStatusProposalDetails = {
+  __typename: 'UpdatePalletFrozenStatusProposalDetails'
+  /** New frozen status for pallet */
+  frozen: Scalars['Boolean']
+  /** The pallet to update frozen status on */
+  pallet: Scalars['String']
 }
 
 export type UpdateWorkingGroupBudgetProposalDetails = {

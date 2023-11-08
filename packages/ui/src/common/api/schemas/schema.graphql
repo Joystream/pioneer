@@ -2750,6 +2750,7 @@ union ProposalDetails =
   | SetReferralCutProposalDetails
   | VetoProposalDetails
   | UpdateChannelPayoutsProposalDetails
+  | UpdatePalletFrozenStatusProposalDetails
 
 union ProposalStatus =
     ProposalStatusDeciding
@@ -3961,6 +3962,13 @@ type UpdateChannelPayoutsProposalDetails {
   The hash of the channel payout payload file
   """
   payloadHash: String
+}
+type UpdatePalletFrozenStatusProposalDetails {
+    """New frozen status for pallet"""
+  frozen: Boolean!
+
+  """The pallet to update frozen status on"""
+  pallet: String!
 }
 
 type UpdateWorkingGroupBudgetProposalDetails {
