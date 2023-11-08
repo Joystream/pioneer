@@ -209,7 +209,7 @@ const Wrapper = styled.div`
     width: 440px;
     flex-direction: row-reverse;
 
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
       width: 100%;
       flex-direction: column-reverse;
     }
@@ -218,6 +218,15 @@ const Wrapper = styled.div`
       > *:first-child {
         height: 40px;
       }
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    margin-top: -64px;
+    row-gap: 16px;
+
+    > *:first-child {
+      margin-left: auto;
     }
   }
 `
@@ -232,8 +241,9 @@ const MembersFilterBox = styled(FilterBox)`
     padding: 8px 16px;
     height: 100%;
 
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
       flex-direction: column;
+      padding: 16px;
     }
   }
 `
@@ -254,11 +264,11 @@ const FilterContentWrapper = styled.div`
     width: 220px;
   }
 
-  @media (max-width: 425px) {
+  @media (max-width: 424px) {
     flex-direction: column;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     margin-right: auto;
   }
 `

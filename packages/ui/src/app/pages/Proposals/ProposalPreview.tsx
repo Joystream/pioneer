@@ -217,6 +217,12 @@ const BadgeAndTime = styled(BadgesRow)`
 `
 
 const ResponsiveStyle = css`
+  aside {
+    > div {
+      padding: 0;
+    }
+  }
+
   @media (min-width: 768px) {
     grid-template-columns: 8fr 4fr;
     grid-template-rows: auto 1fr;

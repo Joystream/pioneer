@@ -222,9 +222,9 @@ const ButtonContainer = styled.div`
 
 const TextContainer = styled.div`
   display: flex;
-  padding: 13px 0 19px 33px;
+  padding-left: 33px;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   flex: 1;
 
   > *:last-child {

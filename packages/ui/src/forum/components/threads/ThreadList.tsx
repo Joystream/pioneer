@@ -91,6 +91,8 @@ const ThreadCardsStyles = styled.div`
 `
 
 const ThreadListStyles = styled(RowGapBlock)`
+  overflow: auto;
+
   ${ListHeaders} {
     padding: 0 24px;
   }

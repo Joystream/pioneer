@@ -6,16 +6,15 @@ import { NavigationInnerWrapper } from '@/common/components/page/Sidebar/Navigat
 import { SidePaneGlass } from '@/common/components/SidePane'
 import { Animations, Colors } from '@/common/constants'
 import { useEscape } from '@/common/hooks/useEscape'
+import { useResponsive } from '@/common/hooks/useResponsive'
 
 import { SideBarContent } from './SideBar'
 
-interface Props {
-  setOpen: (open: boolean) => void
-}
+export const SideBarSlider = React.memo(() => {
+  const { setOpenNavSidebar } = useResponsive()
 
-export const SideBarSlider = React.memo(({ setOpen }: Props) => {
   const hideSideBarSlider = () => {
-    setOpen(false)
+    setOpenNavSidebar(false)
   }
   const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (e.target === e.currentTarget) {

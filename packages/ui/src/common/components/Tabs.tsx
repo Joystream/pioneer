@@ -99,7 +99,7 @@ export const TabContainer = styled.button<TabActiveProps>`
   cursor: pointer;
   transition: ${Transitions.all};
   text-decoration: none;
-  text-wrap: nowrap;
+  white-space: nowrap;
 
   &:before {
     content: '';
@@ -163,7 +163,7 @@ const TabsNav = styled.nav<TabsSize>`
   justify-items: start;
   z-index: 1;
   max-width: calc(100vw - 32px);
-  overflow-x: auto;
+  overflow-x: scroll;
   padding-bottom: 2px;
   ${RemoveScrollbar}
 

@@ -32,7 +32,7 @@ export const MemberList = ({ isLoading, members, getSortProps, searchFilter }: M
 
   return (
     <MemberListWrapper>
-      <ListHeaders $colLayout={colLayoutByType('Member')}>
+      <ListHeadersWrapper $colLayout={colLayoutByType('Member')}>
         <SortHeader {...getSortProps('handle')}>Memberships</SortHeader>
         <ListHeader>Roles</ListHeader>
         <ListHeader>Created</ListHeader>
@@ -41,7 +41,7 @@ export const MemberList = ({ isLoading, members, getSortProps, searchFilter }: M
         <ListHeader>Terminated</ListHeader>
         <ListHeader>Total Balance</ListHeader>
         <ListHeader>Total Staked</ListHeader>
-      </ListHeaders>
+      </ListHeadersWrapper>
       <List>
         {members.map((member) => (
           <ListItem key={member.handle} borderless>
@@ -55,4 +55,9 @@ export const MemberList = ({ isLoading, members, getSortProps, searchFilter }: M
 
 const MemberListWrapper = styled.div`
   overflow: auto;
+`
+
+const ListHeadersWrapper = styled(ListHeaders)`
+  padding: 0 24px;
+  column-gap: 16px;
 `

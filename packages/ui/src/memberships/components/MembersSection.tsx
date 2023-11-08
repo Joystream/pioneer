@@ -85,4 +85,5 @@ const MembershipsGroup = styled.div`
 
 const MembershipsHeaders = styled(ListHeaders)`
   grid-area: accountstablenav;
+  grid-column-gap: 16px;
 `

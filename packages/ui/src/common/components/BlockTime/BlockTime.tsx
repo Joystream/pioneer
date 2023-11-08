@@ -70,7 +70,7 @@ export const BlockTimeWrapper = styled.div<BlockTimeLayoutProps>`
             color: ${Colors.Black[400]};
           }
 
-          @media (max-width: 425px) {
+          @media (max-width: 424px) {
             grid-template-rows: auto auto;
             ${Separator} {
               display: none;

@@ -206,7 +206,13 @@ export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [
   'VoteForProposalModal',
 ]
 
-const NON_TRANSACTIONAL_MODALS: ModalNames[] = ['Member', 'ApplicationDetails', 'VoteRationaleModal', 'SearchResults']
+const NON_TRANSACTIONAL_MODALS: ModalNames[] = [
+  'Member',
+  'ApplicationDetails',
+  'VoteRationaleModal',
+  'SearchResults',
+  'CandidacyPreview',
+]
 
 export const GlobalModals = () => {
   const { modal, hideModal, currentModalMachine, showModal, modalData, isClosing } = useModal()

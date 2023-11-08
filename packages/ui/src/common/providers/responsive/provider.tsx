@@ -7,6 +7,7 @@ interface Props {
 }
 
 export const ResponsiveProvider = (props: Props) => {
+  const [openNavSidebar, setOpenNavSidebar] = useState(false)
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
 
   useEffect(() => {
@@ -18,6 +19,10 @@ export const ResponsiveProvider = (props: Props) => {
       window.removeEventListener('resize', handleResize)
     }
   }, [])
+
+  useEffect(() => {
+    if (windowWidth >= 1024) setOpenNavSidebar(false)
+  }, [windowWidth])
 
   const value: UseResponsive = useMemo(
     () => ({
@@ -33,8 +38,10 @@ export const ResponsiveProvider = (props: Props) => {
           : 'xxs',
       isMobile: windowWidth < 1024,
       supportTransactions: screen.width >= 768,
+      openNavSidebar,
+      setOpenNavSidebar,
     }),
-    [windowWidth]
+    [windowWidth, openNavSidebar]
   )
 
   return <ResponsiveContext.Provider value={value}>{props.children}</ResponsiveContext.Provider>
