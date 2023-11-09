@@ -1,4 +1,4 @@
-export type NetworkType = 'mainnet' | 'local' | 'testnet' | 'auto-conf' | 'local-mocks'
+export type NetworkType = 'mainnet' | 'local' | 'testnet' | 'auto-conf' | 'local-mocks' | 'custom'
 
 export interface NetworkEndpoints {
   nodeRpcEndpoint: string

@@ -15,5 +15,5 @@ export const randomBlock = (): Block => {
 
 export const randomRawBlock = (): BlockFieldsMock => {
   const { number, timestamp, network } = randomBlock()
-  return { inBlock: number, createdAt: timestamp, network }
+  return { inBlock: number, createdAt: timestamp, network: network || 'OLYMPIA' }
 }
