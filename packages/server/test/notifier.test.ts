@@ -163,6 +163,8 @@ describe('Notifier', () => {
           eventId: 'event:5',
           memberId: alice.id,
           kind: 'FORUM_POST_REPLY',
+          emailStatus: 'SENT',
+          retryCount: 0,
         })
       )
       expect(notifications).toHaveLength(7)
@@ -171,6 +173,7 @@ describe('Notifier', () => {
       // Check emails
       // -------------------
 
+      // Post 1 is on Alice's thread
       expect(mockEmailProvider.sentEmails).toContainEqual(
         expect.objectContaining({
           to: alice.email,
@@ -178,6 +181,7 @@ describe('Notifier', () => {
           html: expect.stringMatching(/\/#\/forum\/thread\/thread:id\?post=post:1/s),
         })
       )
+      // Post 2 mentions Alice
       expect(mockEmailProvider.sentEmails).toContainEqual(
         expect.objectContaining({
           to: alice.email,
@@ -185,6 +189,7 @@ describe('Notifier', () => {
           html: expect.stringMatching(/\/#\/forum\/thread\/thread:id\?post=post:2/s),
         })
       )
+      // Post 2 is on a thread followed by Bob
       expect(mockEmailProvider.sentEmails).toContainEqual(
         expect.objectContaining({
           to: bob.email,
@@ -192,6 +197,7 @@ describe('Notifier', () => {
           html: expect.stringMatching(/\/#\/forum\/thread\/thread:id\?post=post:2/s),
         })
       )
+      // Post 3 is in a category watched by Alice
       expect(mockEmailProvider.sentEmails).toContainEqual(
         expect.objectContaining({
           to: alice.email,
@@ -199,6 +205,7 @@ describe('Notifier', () => {
           html: expect.stringMatching(/\/#\/forum\/thread\/thread:id\?post=post:3/s),
         })
       )
+      // Post 3 is not on a thread or a category muted by Bob (and he subscribed to all posts)
       expect(mockEmailProvider.sentEmails).toContainEqual(
         expect.objectContaining({
           to: bob.email,
@@ -206,7 +213,15 @@ describe('Notifier', () => {
           html: expect.stringMatching(/\/#\/forum\/thread\/thread:id\?post=post:3/s),
         })
       )
-      expect(mockEmailProvider.sentEmails.length).toBe(5)
+      // Post 5 replies to Alice
+      expect(mockEmailProvider.sentEmails).toContainEqual(
+        expect.objectContaining({
+          to: alice.email,
+          subject: expect.stringContaining('thread:title'),
+          html: expect.stringMatching(/\/#\/forum\/thread\/thread:id\?post=post:5/s),
+        })
+      )
+      expect(mockEmailProvider.sentEmails.length).toBe(6)
     })
 
     it('ThreadCreatedEvent', async () => {

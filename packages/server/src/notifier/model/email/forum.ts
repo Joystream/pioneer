@@ -11,8 +11,7 @@ export const fromPostAddedNotification: EmailFromNotificationFn = async ({ id, k
     kind !== 'FORUM_THREAD_CONTRIBUTOR' &&
     kind !== 'FORUM_THREAD_CREATOR' &&
     kind !== 'FORUM_POST_MENTION' &&
-    // TODO: add FORUM_POST_REPLY support (along with event support)
-    // kind !== 'FORUM_POST_REPLY' &&
+    kind !== 'FORUM_POST_REPLY' &&
     kind !== 'FORUM_THREAD_ENTITY_POST' &&
     kind !== 'FORUM_CATEGORY_ENTITY_POST' &&
     kind !== 'FORUM_POST_ALL'
@@ -34,6 +33,7 @@ export const fromPostAddedNotification: EmailFromNotificationFn = async ({ id, k
   const emailSummary: string = match(kind)
     .with('FORUM_THREAD_CONTRIBUTOR', 'FORUM_THREAD_CREATOR', () => `${author} replied in the thread ${thread}.`)
     .with('FORUM_POST_MENTION', () => `${author} mentioned you in the thread ${thread}.`)
+    .with('FORUM_POST_REPLY', () => `${author} replied to your post in the thread ${thread}.`)
     .with(
       'FORUM_THREAD_ENTITY_POST',
       'FORUM_CATEGORY_ENTITY_POST',
@@ -45,6 +45,7 @@ export const fromPostAddedNotification: EmailFromNotificationFn = async ({ id, k
   const emailText: string = match(kind)
     .with('FORUM_THREAD_CONTRIBUTOR', 'FORUM_THREAD_CREATOR', () => `${author} replied in the thread ${thread}.`)
     .with('FORUM_POST_MENTION', () => `${author} mentioned you in the thread ${thread}.`)
+    .with('FORUM_POST_REPLY', () => `${author} replied to your post in the thread ${thread}.`)
     .with(
       'FORUM_THREAD_ENTITY_POST',
       'FORUM_CATEGORY_ENTITY_POST',
