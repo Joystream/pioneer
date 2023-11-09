@@ -20,8 +20,8 @@ export default {
   component: Election,
   args: {
     electionStage: 'announcing',
-    remainingPeriod: 20000,
-    currentBlock: 0,
+    remainingPeriod: 40000,
+    currentBlock: 4802561,
   },
   parameters: {
     router: { path: '', href: '' },
