@@ -23,7 +23,10 @@ describe('Notifier', () => {
 
       // - Alice is using the default behavior for general subscriptions
       // - Alice should be notified of any new post in the category "baz" or it's sub categories
-      const alice = await createMember(1, 'alice', [{ kind: 'FORUM_CATEGORY_ENTITY_POST', entityId: 'baz' }])
+      const alice = await createMember(1, 'alice', [
+        { kind: 'FORUM_THREAD_ENTITY_POST', entityId: 'foo' },
+        { kind: 'FORUM_CATEGORY_ENTITY_POST', entityId: 'baz' },
+      ])
 
       // - By default Bob should be notified of any new post
       // - Bob should not be notified of new post on the thread "foo" or the category "qux"
@@ -49,25 +52,36 @@ describe('Notifier', () => {
       mockRequest
         .mockReturnValueOnce({
           events: [
-            // Mention Bob on a thread created by Alice which is muted by Bob
+            // Mention Bob on a thread created by Alice which she watches and which is muted by Bob
+            // (the thread creation takes priority)
             postAddedEvent(1, {
               thread: 'foo',
               threadAuthor: alice.id,
               text: `Hi [@Bob](#mention?member-id=${bob.id})`,
             }),
-            // Mention Alice on a thread watched by Bob
-            postAddedEvent(2, { thread: 'bar', text: `Hi [@Alice](#mention?member-id=${alice.id})` }),
+            // Reply and mention Alice on a thread created by Alice which is watched by Bob
+            // (the mention takes priority)
+            postAddedEvent(2, {
+              thread: 'bar',
+              threadAuthor: alice.id,
+              text: `Hi [@Alice](#mention?member-id=${alice.id})`,
+              repliesTo: alice.id,
+            }),
             // Post on a thread created by Charlie which is in a category watched by Alice
             postAddedEvent(3, { category: 'baz', threadAuthor: charlie.id }),
-            // Alice mentions herself in a category muted by Bob
+            // Alice replies to and mentions herself in a category muted by Bob
+            // (both reply and mention should be ignored)
             postAddedEvent(4, {
               category: 'qux',
               author: alice.id,
               text: `I [@Alice](#mention?member-id=${alice.id})`,
+              repliesTo: alice.id,
             }),
-            // Reply to Alice and mention Dave in a thread muted by Bob
+            // Reply to Alice and mention Dave on a thread created by Alice which she watches and which is muted by Bob
+            // (the reply takes priority)
             postAddedEvent(5, {
               thread: 'foo',
+              threadAuthor: alice.id,
               text: `Hi [@Dave](#mention?member-id=${dave.id})`,
               repliesTo: alice.id,
             }),
