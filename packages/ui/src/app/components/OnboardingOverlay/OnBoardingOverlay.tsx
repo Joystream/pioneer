@@ -167,6 +167,7 @@ const MainWrapper = styled.div`
   top: 0;
   width: calc(100% - 226px);
   z-index: ${ZIndex.navbar};
+  margin-left: min(calc(720px - 50%), 0px);
 `
 
 const StyledDropDown = styled(DropDownToggle)`
