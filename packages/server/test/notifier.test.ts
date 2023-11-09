@@ -49,19 +49,28 @@ describe('Notifier', () => {
       mockRequest
         .mockReturnValueOnce({
           events: [
+            // Mention Bob on a thread created by Alice which is muted by Bob
             postAddedEvent(1, {
               thread: 'foo',
               threadAuthor: alice.id,
               text: `Hi [@Bob](#mention?member-id=${bob.id})`,
             }),
+            // Mention Alice on a thread watched by Bob
             postAddedEvent(2, { thread: 'bar', text: `Hi [@Alice](#mention?member-id=${alice.id})` }),
+            // Post on a thread created by Charlie which is in a category watched by Alice
             postAddedEvent(3, { category: 'baz', threadAuthor: charlie.id }),
+            // Alice mentions herself in a category muted by Bob
             postAddedEvent(4, {
               category: 'qux',
               author: alice.id,
               text: `I [@Alice](#mention?member-id=${alice.id})`,
             }),
-            postAddedEvent(5, { thread: 'qux', text: `Hi [@Dave](#mention?member-id=${dave.id})`, category: 'qux' }),
+            // Reply to Alice and mention Dave in a thread muted by Bob
+            postAddedEvent(5, {
+              thread: 'foo',
+              text: `Hi [@Dave](#mention?member-id=${dave.id})`,
+              repliesTo: alice.id,
+            }),
           ],
         })
         .mockReturnValue({
@@ -86,6 +95,7 @@ describe('Notifier', () => {
 
       const notifications = await prisma.notification.findMany()
 
+      // Post 1 is on Alice's thread
       expect(notifications).toContainEqual(
         expect.objectContaining({
           eventId: 'event:1',
@@ -97,6 +107,7 @@ describe('Notifier', () => {
           retryCount: 0,
         })
       )
+      // Post 2 mentions Alice
       expect(notifications).toContainEqual(
         expect.objectContaining({
           eventId: 'event:2',
@@ -106,6 +117,7 @@ describe('Notifier', () => {
           retryCount: 0,
         })
       )
+      // Post 2 is on a thread followed by Bob
       expect(notifications).toContainEqual(
         expect.objectContaining({
           eventId: 'event:2',
@@ -115,6 +127,7 @@ describe('Notifier', () => {
           retryCount: 0,
         })
       )
+      // Post 3 is in a category watched by Alice
       expect(notifications).toContainEqual(
         expect.objectContaining({
           eventId: 'event:3',
@@ -124,6 +137,7 @@ describe('Notifier', () => {
           retryCount: 0,
         })
       )
+      // Post 3 is not on a thread or a category muted by Bob (and he subscribed to all posts)
       expect(notifications).toContainEqual(
         expect.objectContaining({
           eventId: 'event:3',
@@ -133,6 +147,7 @@ describe('Notifier', () => {
           retryCount: 0,
         })
       )
+      // Post 5 mentions Dave
       expect(notifications).toContainEqual(
         expect.objectContaining({
           eventId: 'event:5',
@@ -142,7 +157,15 @@ describe('Notifier', () => {
           retryCount: 0,
         })
       )
-      expect(notifications).toHaveLength(6)
+      // Post 5 replies to Alice
+      expect(notifications).toContainEqual(
+        expect.objectContaining({
+          eventId: 'event:5',
+          memberId: alice.id,
+          kind: 'FORUM_POST_REPLY',
+        })
+      )
+      expect(notifications).toHaveLength(7)
 
       // -------------------
       // Check emails
