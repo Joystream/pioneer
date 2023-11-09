@@ -10,7 +10,7 @@ export const fromPostAddedEvent: NotifEventFromQNEvent<'PostAddedEvent'> = async
   const authorId = Number(post.authorId)
 
   const mentionedMemberIds = difference(getMentionedMemberIds(post.text), [authorId])
-  const repliedToMemberIds = post.repliesTo ? [Number(post.repliesTo.authorId)] : []
+  const repliedToMemberIds = difference([Number(post.repliesTo?.authorId)], [NaN, authorId])
   const earlierPosts = post.thread.posts.filter(isOlderThan(post))
   const earlierAuthors = difference(uniq(earlierPosts.map((post) => Number(post.authorId))), [authorId])
   const parentCategoryIds = await getParentCategories(post.thread.categoryId)
