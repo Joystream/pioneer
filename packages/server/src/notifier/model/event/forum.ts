@@ -10,16 +10,16 @@ export const fromPostAddedEvent: NotifEventFromQNEvent<'PostAddedEvent'> = async
   const authorId = Number(post.authorId)
 
   const mentionedMemberIds = difference(getMentionedMemberIds(post.text), [authorId])
+  const repliedToMemberIds = post.repliesTo ? [Number(post.repliesTo.authorId)] : []
   const earlierPosts = post.thread.posts.filter(isOlderThan(post))
   const earlierAuthors = difference(uniq(earlierPosts.map((post) => Number(post.authorId))), [authorId])
   const parentCategoryIds = await getParentCategories(post.thread.categoryId)
 
   const eventData = pick(postAddedEvent, 'inBlock', 'id')
 
-  // TODO: add FORUM_POST_REPLY support
-
   return buildEvents(eventData, post.id, ({ generalEvent, entityEvent }) => [
     generalEvent('FORUM_POST_MENTION', mentionedMemberIds),
+    generalEvent('FORUM_POST_REPLY', repliedToMemberIds),
     generalEvent('FORUM_THREAD_CREATOR', [Number(post.thread.authorId)]),
     generalEvent('FORUM_THREAD_CONTRIBUTOR', earlierAuthors),
     entityEvent('FORUM_THREAD_ENTITY_POST', post.thread.id),
