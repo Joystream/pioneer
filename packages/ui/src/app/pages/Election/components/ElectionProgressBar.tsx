@@ -51,10 +51,7 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
 
   const defaultStaging = props.electionStage
   const defaultVerbIndicator = 'ends in'
-  const defaultDaysIndicator = useMemo(
-    () => convertDurationToTimeString(duration),
-    [duration]
-  )
+  const defaultDaysIndicator = useMemo(() => convertDurationToTimeString(duration), [duration])
 
   const [stageDescription, setStageDescription] = useState(defaultStaging)
   const [verbIndicator, setVerbIndicator] = useState(defaultVerbIndicator)
@@ -264,40 +261,33 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       setSelectedToolbarStage('')
       return
     }
-    debugger
     if (props.electionStage === 'announcing') {
       setStageDescription(selectedStage)
       setVerbIndicator('begins in')
 
       if (selectedStage === 'voting') {
         setDaysIndicator(defaultDaysIndicator)
-      }
-      else if (selectedStage === 'revealing') {
+      } else if (selectedStage === 'revealing') {
         setDaysIndicator(convertDurationToTimeString(votingEndBlock - currentBlock))
-      }
-      else if (selectedStage === 'nextround') {
+      } else if (selectedStage === 'nextround') {
         setDaysIndicator(convertDurationToTimeString(revealingEndBlock - currentBlock))
       }
-    } 
-    else if (props.electionStage === 'voting') {
+    } else if (props.electionStage === 'voting') {
       if (selectedStage === 'announcing') {
         setStageDescription(selectedStage)
         setVerbIndicator('ended on')
         setDaysIndicator(announcingEndDay)
-      } 
-      else {
+      } else {
         setStageDescription(selectedStage)
         setVerbIndicator('begins in')
 
         if (selectedStage === 'revealing') {
           setDaysIndicator(defaultDaysIndicator)
-        }
-        else if (selectedStage === 'nextround') {
+        } else if (selectedStage === 'nextround') {
           setDaysIndicator(convertDurationToTimeString(revealingEndBlock - currentBlock))
-        }  
-      } 
-    } 
-    else if (props.electionStage === 'revealing') {
+        }
+      }
+    } else if (props.electionStage === 'revealing') {
       if (selectedStage === 'announcing') {
         setStageDescription(selectedStage)
         setVerbIndicator('ended on')
@@ -365,8 +355,8 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
             'en-US'
           )} block). During this time, voters can reveal their sealed votes. Any valid vote which is unsealed is counter, and in the end a winning set of candidates is selected`}
           placement="bottom-end"
-        /> 
-        {constants?.idlePeriod != undefined && constants?.idlePeriod > 1 &&
+        />
+        {constants?.idlePeriod != undefined && constants?.idlePeriod > 1 && (
           <TooltipProgressBar
             start={0}
             end={nextRoundProgress / 100}
@@ -378,7 +368,7 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
             )} block). After that time, a new round of elections begins`}
             placement="bottom-end"
           />
-        }
+        )}
       </ProgressBarLayout>
     </MultiStatisticItem>
   )
@@ -557,9 +547,9 @@ const StatisticBigLabel = styled.div<{ strong?: boolean }>`
   display: inline-block;
   color: ${({ strong }) => (strong ? `${Colors.Black[900]}` : `${Colors.Black[400]}`)};
 `
-const ProgressBarLayout = styled.div<{hasIdle?: boolean }>`
+const ProgressBarLayout = styled.div<{ hasIdle?: boolean }>`
   display: grid;
-  grid-template-columns: ${({ hasIdle }) => (hasIdle ? `14fr 3fr 3fr 1fr` : `15fr 3fr 3fr`)};
+  grid-template-columns: ${({ hasIdle }) => (hasIdle ? '14fr 3fr 3fr 1fr' : '15fr 3fr 3fr')};
   gap: 4px;
   width: 100%;
   max-width: 100%;
