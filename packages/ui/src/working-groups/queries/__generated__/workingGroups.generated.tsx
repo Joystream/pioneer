@@ -37,7 +37,6 @@ export type WorkerFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
-      validatorAccount?: string | null
       isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
@@ -86,7 +85,6 @@ export type PastWorkerFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
-      validatorAccount?: string | null
       isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
@@ -164,7 +162,6 @@ export type WorkerDetailedFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
-      validatorAccount?: string | null
       isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
@@ -318,7 +315,6 @@ export type GetWorkersQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -377,7 +373,6 @@ export type GetPastWorkersQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -471,7 +466,6 @@ export type GetDetailedWorkersQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -540,7 +534,6 @@ export type GetWorkerQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -676,7 +669,6 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -840,7 +832,6 @@ export type GetWorkingGroupOpeningQuery = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
-          validatorAccount?: string | null
           isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
@@ -951,7 +942,6 @@ export type WorkingGroupApplicationMentionFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
-      validatorAccount?: string | null
       isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
@@ -1008,7 +998,6 @@ export type GetWorkingGroupApplicationMentionQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -1134,7 +1123,6 @@ export type WorkingGroupApplicationFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
-      validatorAccount?: string | null
       isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
@@ -1208,7 +1196,6 @@ export type GetWorkingGroupApplicationsQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -1302,7 +1289,6 @@ export type GetWorkingGroupApplicationQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }

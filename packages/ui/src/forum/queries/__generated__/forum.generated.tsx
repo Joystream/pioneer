@@ -242,7 +242,6 @@ export type ForumThreadFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
-      validatorAccount?: string | null
       isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
@@ -309,7 +308,6 @@ export type ForumPostFieldsFragment = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -358,7 +356,6 @@ export type ForumPostFieldsFragment = {
             __typename: 'MemberMetadata'
             name?: string | null
             about?: string | null
-            validatorAccount?: string | null
             isVerifiedValidator?: boolean | null
             avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
           }
@@ -403,7 +400,6 @@ export type ForumPostFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
-      validatorAccount?: string | null
       isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
@@ -452,7 +448,6 @@ export type ForumPostFieldsFragment = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
-          validatorAccount?: string | null
           isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
@@ -506,7 +501,6 @@ export type ForumPostWithoutReplyFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
-      validatorAccount?: string | null
       isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
@@ -555,7 +549,6 @@ export type ForumPostWithoutReplyFieldsFragment = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
-          validatorAccount?: string | null
           isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
@@ -610,7 +603,6 @@ export type ForumThreadDetailedFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
-      validatorAccount?: string | null
       isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
@@ -671,7 +663,6 @@ export type ForumThreadMentionFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
-      validatorAccount?: string | null
       isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
@@ -714,7 +705,6 @@ export type ForumPostMentionFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
-      validatorAccount?: string | null
       isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
@@ -1007,7 +997,6 @@ export type GetForumThreadsQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -1090,7 +1079,6 @@ export type GetForumThreadQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -1167,7 +1155,6 @@ export type GetForumPostsQuery = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
-          validatorAccount?: string | null
           isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
@@ -1216,7 +1203,6 @@ export type GetForumPostsQuery = {
               __typename: 'MemberMetadata'
               name?: string | null
               about?: string | null
-              validatorAccount?: string | null
               isVerifiedValidator?: boolean | null
               avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
             }
@@ -1261,7 +1247,6 @@ export type GetForumPostsQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -1310,7 +1295,6 @@ export type GetForumPostsQuery = {
             __typename: 'MemberMetadata'
             name?: string | null
             about?: string | null
-            validatorAccount?: string | null
             isVerifiedValidator?: boolean | null
             avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
           }
@@ -1461,7 +1445,6 @@ export type GetForumPostMentionQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -1510,7 +1493,6 @@ export type GetForumThreadMentionQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }

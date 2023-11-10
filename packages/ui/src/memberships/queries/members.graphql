@@ -15,7 +15,6 @@ fragment MemberFields on Membership {
       # ...on AvatarObject {} - Should be fetched from the Storage system.
       # See https://github.com/Joystream/pioneer/issues/54
     }
-    validatorAccount
     isVerifiedValidator
   }
   isVerified
@@ -56,7 +55,6 @@ fragment MemberWithDetailsFields on Membership {
       # ...on AvatarObject {} - Should be fetched from the Storage system.
       # See https://github.com/Joystream/pioneer/issues/54
     }
-    validatorAccount
     isVerifiedValidator
   }
   entry {

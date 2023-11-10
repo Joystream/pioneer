@@ -14594,7 +14594,6 @@ export type MemberMetadata = BaseGraphQlObject & {
   name?: Maybe<Scalars['String']>
   updatedAt?: Maybe<Scalars['DateTime']>
   updatedById?: Maybe<Scalars['ID']>
-  validatorAccount?: Maybe<Scalars['String']>
   version: Scalars['Int']
 }
 
@@ -14610,7 +14609,6 @@ export type MemberMetadataCreateInput = {
   avatar: Scalars['JSONObject']
   isVerifiedValidator?: InputMaybe<Scalars['Boolean']>
   name?: InputMaybe<Scalars['String']>
-  validatorAccount?: InputMaybe<Scalars['String']>
 }
 
 export type MemberMetadataEdge = {
@@ -14632,8 +14630,6 @@ export enum MemberMetadataOrderByInput {
   NameDesc = 'name_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
-  ValidatorAccountAsc = 'validatorAccount_ASC',
-  ValidatorAccountDesc = 'validatorAccount_DESC',
 }
 
 export type MemberMetadataUpdateInput = {
@@ -14641,7 +14637,6 @@ export type MemberMetadataUpdateInput = {
   avatar?: InputMaybe<Scalars['JSONObject']>
   isVerifiedValidator?: InputMaybe<Scalars['Boolean']>
   name?: InputMaybe<Scalars['String']>
-  validatorAccount?: InputMaybe<Scalars['String']>
 }
 
 export type MemberMetadataWhereInput = {
@@ -14704,11 +14699,6 @@ export type MemberMetadataWhereInput = {
   updatedAt_lte?: InputMaybe<Scalars['DateTime']>
   updatedById_eq?: InputMaybe<Scalars['ID']>
   updatedById_in?: InputMaybe<Array<Scalars['ID']>>
-  validatorAccount_contains?: InputMaybe<Scalars['String']>
-  validatorAccount_endsWith?: InputMaybe<Scalars['String']>
-  validatorAccount_eq?: InputMaybe<Scalars['String']>
-  validatorAccount_in?: InputMaybe<Array<Scalars['String']>>
-  validatorAccount_startsWith?: InputMaybe<Scalars['String']>
 }
 
 export type MemberMetadataWhereUniqueInput = {
@@ -15429,13 +15419,13 @@ export enum MembershipExternalResourceType {
   Facebook = 'FACEBOOK',
   Hyperlink = 'HYPERLINK',
   Irc = 'IRC',
+  Linkedin = 'LINKEDIN',
   Matrix = 'MATRIX',
   Telegram = 'TELEGRAM',
   Twitter = 'TWITTER',
   Wechat = 'WECHAT',
   Whatsapp = 'WHATSAPP',
   Youtube = 'YOUTUBE',
-  Linkedin = 'LINKEDIN',
 }
 
 export type MembershipExternalResourceUpdateInput = {

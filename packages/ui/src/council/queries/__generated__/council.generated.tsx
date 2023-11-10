@@ -27,7 +27,6 @@ export type CouncilMemberFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
-      validatorAccount?: string | null
       isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
@@ -111,7 +110,6 @@ export type PastCouncilProposalsFieldsFragment = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -201,7 +199,6 @@ export type ElectedCouncilFieldsFragment = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -263,7 +260,6 @@ export type ElectionCandidateFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
-      validatorAccount?: string | null
       isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
@@ -318,7 +314,6 @@ export type ElectionRoundFieldsFragment = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -375,7 +370,6 @@ export type LatestElectionRoundFieldsFragment = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -446,7 +440,6 @@ export type PastElectionRoundDetailedFieldsFragment = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -508,7 +501,6 @@ export type ElectionCandidateDetailedFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
-      validatorAccount?: string | null
       isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
@@ -567,7 +559,6 @@ export type CastVoteFieldsFragment = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -671,7 +662,6 @@ export type GetElectedCouncilQuery = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
-          validatorAccount?: string | null
           isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
@@ -812,7 +802,6 @@ export type GetPastCouncilMembersQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -895,7 +884,6 @@ export type GetPastCouncilMembersQuery = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
-          validatorAccount?: string | null
           isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
@@ -984,7 +972,6 @@ export type GetPastCouncilProposalsQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -1060,7 +1047,6 @@ export type GetCurrentElectionQuery = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
-          validatorAccount?: string | null
           isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
@@ -1122,7 +1108,6 @@ export type GetLatestElectionQuery = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
-          validatorAccount?: string | null
           isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
@@ -1216,7 +1201,6 @@ export type GetPastElectionQuery = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
-          validatorAccount?: string | null
           isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
@@ -1285,7 +1269,6 @@ export type GetCandidateQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
-        validatorAccount?: string | null
         isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
@@ -1383,7 +1366,6 @@ export type GetCouncilVotesQuery = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
-          validatorAccount?: string | null
           isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
