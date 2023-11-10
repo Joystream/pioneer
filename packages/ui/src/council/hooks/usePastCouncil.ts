@@ -22,12 +22,14 @@ export const usePastCouncil = (id: string) => {
       councilData?.fundingRequestsApproved &&
       workingGroupData?.rewardPaidEvents &&
       workingGroupData?.budgetUpdatedEvents &&
+      workingGroupData?.channelPaymentMadeEvents &&
       asPastCouncilWithDetails(
         workingGroupData.rewardPaidEvents,
         workingGroupData.budgetUpdatedEvents,
         councilData.electedCouncilByUniqueInput,
         councilData.budgetSpendingEvents,
-        councilData.fundingRequestsApproved
+        councilData.fundingRequestsApproved,
+        workingGroupData.channelPaymentMadeEvents
       ),
   }
 }

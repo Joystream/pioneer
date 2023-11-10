@@ -45,6 +45,14 @@ fragment PastCouncilBudgetUpdatedEventFields on BudgetUpdatedEvent {
   budgetChangeAmount
 }
 
+fragment PastCouncilChannelPaymentMadeEventFields on ChannelPaymentMadeEvent {
+  id
+  amount
+  payer {
+    handle
+  }
+}
+
 fragment ElectedCouncilFields on ElectedCouncil {
   id
   electedAtBlock
@@ -254,6 +262,9 @@ query GetPastCouncilWorkingGroups($fromBlock: Int!, $toBlock: Int!) {
   }
   budgetUpdatedEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
     ...PastCouncilBudgetUpdatedEventFields
+  }
+  channelPaymentMadeEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
+    ...PastCouncilChannelPaymentMadeEventFields
   }
 }
 

@@ -161,6 +161,13 @@ export type PastCouncilBudgetUpdatedEventFieldsFragment = {
   budgetChangeAmount: string
 }
 
+export type PastCouncilChannelPaymentMadeEventFieldsFragment = {
+  __typename: 'ChannelPaymentMadeEvent'
+  id: string
+  amount: string
+  payer: { __typename: 'Membership'; handle: string }
+}
+
 export type ElectedCouncilFieldsFragment = {
   __typename: 'ElectedCouncil'
   id: string
@@ -989,6 +996,12 @@ export type GetPastCouncilWorkingGroupsQuery = {
     newMissedRewardAmount: string
   }>
   budgetUpdatedEvents: Array<{ __typename: 'BudgetUpdatedEvent'; groupId: string; budgetChangeAmount: string }>
+  channelPaymentMadeEvents: Array<{
+    __typename: 'ChannelPaymentMadeEvent'
+    id: string
+    amount: string
+    payer: { __typename: 'Membership'; handle: string }
+  }>
 }
 
 export type GetCurrentElectionQueryVariables = Types.Exact<{ [key: string]: never }>
@@ -1529,6 +1542,15 @@ export const PastCouncilBudgetUpdatedEventFieldsFragmentDoc = gql`
     budgetChangeAmount
   }
 `
+export const PastCouncilChannelPaymentMadeEventFieldsFragmentDoc = gql`
+  fragment PastCouncilChannelPaymentMadeEventFields on ChannelPaymentMadeEvent {
+    id
+    amount
+    payer {
+      handle
+    }
+  }
+`
 export const CouncilMemberFieldsFragmentDoc = gql`
   fragment CouncilMemberFields on CouncilMember {
     id
@@ -2061,11 +2083,15 @@ export const GetPastCouncilWorkingGroupsDocument = gql`
     budgetUpdatedEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
       ...PastCouncilBudgetUpdatedEventFields
     }
+    channelPaymentMadeEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
+      ...PastCouncilChannelPaymentMadeEventFields
+    }
   }
   ${PastCouncilWorkingGroupFieldsFragmentDoc}
   ${PastCouncilRewardPaidEventFieldsFragmentDoc}
   ${PastCouncilNewMissedRewardLevelReachedEventFieldsFragmentDoc}
   ${PastCouncilBudgetUpdatedEventFieldsFragmentDoc}
+  ${PastCouncilChannelPaymentMadeEventFieldsFragmentDoc}
 `
 
 /**

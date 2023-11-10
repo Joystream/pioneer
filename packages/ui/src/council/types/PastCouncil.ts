@@ -7,6 +7,7 @@ import {
   CouncilSpendingEventFieldsFragment,
   FundingRequestApprovedFragment,
   PastCouncilBudgetUpdatedEventFieldsFragment,
+  PastCouncilChannelPaymentMadeEventFieldsFragment,
   PastCouncilDetailedFieldsFragment,
   PastCouncilFieldsFragment,
   PastCouncilRewardPaidEventFieldsFragment,
@@ -38,7 +39,8 @@ const getTotalSpent = (
   councilFields: PastCouncilDetailedFieldsFragment,
   workingGroupBudgets: PastCouncilBudgetUpdatedEventFieldsFragment[],
   workingGroupRewardPaidEvents: PastCouncilRewardPaidEventFieldsFragment[],
-  fundingRequestsApproved: FundingRequestApprovedFragment[]
+  fundingRequestsApproved: FundingRequestApprovedFragment[],
+  channelPaymentMadeEvents: PastCouncilChannelPaymentMadeEventFieldsFragment[]
 ) => {
   const totalAccumulatedReward = councilFields.councilMembers.reduce(
     (a, b) => a.add(new BN(b.accumulatedReward)),
@@ -47,7 +49,14 @@ const getTotalSpent = (
   const totalBudgetChange = workingGroupBudgets.reduce((a, b) => a.add(new BN(b.budgetChangeAmount)), BN_ZERO)
   const totalRewardPaid = workingGroupRewardPaidEvents.reduce((a, b) => a.add(new BN(b.amount)), BN_ZERO)
   const spentOnProposal = getSpentOnProposals(fundingRequestsApproved)
-  return totalAccumulatedReward.add(totalBudgetChange).add(totalRewardPaid).add(spentOnProposal)
+  const totalChannelPaymentMade = channelPaymentMadeEvents
+    .filter((a) => a.payer.handle !== 'jsg_ypp_rewards')
+    .reduce((a, b) => a.add(new BN(b.amount)), BN_ZERO)
+  return totalAccumulatedReward
+    .add(totalBudgetChange)
+    .add(totalRewardPaid)
+    .add(spentOnProposal)
+    .add(totalChannelPaymentMade)
 }
 
 export const getSpentOnProposals = (fundingRequests: FundingRequestApprovedFragment[]) => {
@@ -64,7 +73,8 @@ export const asPastCouncilWithDetails = (
   workingGroupBudgets: PastCouncilBudgetUpdatedEventFieldsFragment[],
   councilFields: PastCouncilDetailedFieldsFragment,
   spendingEvents: CouncilSpendingEventFieldsFragment[],
-  fundingRequestsApproved: FundingRequestApprovedFragment[]
+  fundingRequestsApproved: FundingRequestApprovedFragment[],
+  channelPaymentMadeEvents: PastCouncilChannelPaymentMadeEventFieldsFragment[]
 ): PastCouncilWithDetails => {
   return {
     ...asPastCouncil(councilFields),
@@ -72,7 +82,8 @@ export const asPastCouncilWithDetails = (
       councilFields,
       workingGroupBudgets,
       workingGroupRewardPaidEvents,
-      fundingRequestsApproved
+      fundingRequestsApproved,
+      channelPaymentMadeEvents
     ),
     totalMissedRewards: councilFields.councilMembers.reduce((a, b) => a.add(new BN(b.unpaidReward)), BN_ZERO).neg(),
     totalPaidRewards: councilFields.councilMembers.reduce((a, b) => a.add(new BN(b.accumulatedReward)), BN_ZERO),
