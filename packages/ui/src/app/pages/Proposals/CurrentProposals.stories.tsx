@@ -1405,7 +1405,24 @@ export const SpecificParametersSetMembershipPrice: Story = {
     })
   }),
 }
+export const SpecificParametersUpdatePalletFrozenStatus: Story = {
+  play: specificParametersTest('Update Pallet Frozen Status', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
 
+      await selectFromDropdown(modal, 'CRT feature', 'Enabled')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+    })
+
+    step('Transaction parameters', () => {
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({
+        setPalletFozenStatus: [true, 'ProjectToken'],
+      })
+    })
+  }),
+}
 export const SpecificParametersUpdateWorkingGroupBudget: Story = {
   parameters: {
     councilSize: 3,
