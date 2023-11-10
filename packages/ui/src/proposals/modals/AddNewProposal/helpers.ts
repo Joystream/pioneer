@@ -17,7 +17,7 @@ import {
 } from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
-import { isValidCSV } from '@/proposals/model/validation'
+import { equalValueContext, isValidCSV } from '@/proposals/model/validation'
 import { ProposalType } from '@/proposals/types'
 import { GroupIdName } from '@/working-groups/types'
 
@@ -410,7 +410,7 @@ export const schemaFactory = (api?: Api) => {
       channelCashoutsEnabled: Yup.boolean(),
     }),
     updatePalletFrozenStatus: Yup.object().shape({
-      frozen: Yup.boolean().required('Field is required'),
+      frozen: Yup.boolean().test(equalValueContext('palletFrozenStatus', 'execution')).required('Field is required'),
     }),
   })
 }

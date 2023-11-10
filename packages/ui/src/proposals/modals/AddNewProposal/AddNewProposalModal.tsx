@@ -27,6 +27,7 @@ import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { useObservable } from '@/common/hooks/useObservable'
 import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { isLastStepActive } from '@/common/modals/utils'
 import { createType } from '@/common/model/createType'
@@ -70,6 +71,7 @@ export const AddNewProposalModal = () => {
   const maximumReferralCut = api?.consts.members.referralCutMaximumPercent
   const minCashoutAllowed = api?.consts.content.minimumCashoutAllowedLimit
   const maxCashoutAllowed = api?.consts.content.maximumCashoutAllowedLimit
+  const palletFrozenStatus = useObservable(() => api?.query.projectToken.palletFrozen(), [api?.isConnected])
   const currentBlock = useCurrentBlockNumber()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
@@ -96,6 +98,7 @@ export const AddNewProposalModal = () => {
       maximumReferralCut,
       minCashoutAllowed,
       maxCashoutAllowed,
+      palletFrozenStatus,
       leaderOpeningStake: workingGroupConsts?.leaderOpeningStake,
       minUnstakingPeriodLimit: workingGroupConsts?.minUnstakingPeriodLimit,
       stakeLock: 'Proposals',

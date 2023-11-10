@@ -27,7 +27,7 @@ import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/ma
 
 import { SetInitialInvitationBalance } from './SetInitialInvitationBalance'
 import { SetInitialInvitationCount } from './SetInitialInvitationCount'
-import { UpdatePalletFrozenStatus } from './UpdatePalletFrozenStatus/UpdatePalletFrozenStatus'
+import { UpdatePalletFrozenStatus } from './UpdatePalletFrozenStatus'
 
 interface SpecificParametersStepProps {
   matches: AddNewProposalMachineState['matches']

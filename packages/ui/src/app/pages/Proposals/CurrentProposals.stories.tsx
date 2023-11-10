@@ -1411,7 +1411,7 @@ export const SpecificParametersUpdatePalletFrozenStatus: Story = {
       const nextButton = getButtonByText(modal, 'Create proposal')
       expect(nextButton).toBeDisabled()
 
-      await selectFromDropdown(modal, 'CRT feature', 'Enabled')
+      await userEvent.click(modal.getByTestId('crt-feature-select'))
       await waitFor(() => expect(nextButton).toBeEnabled())
     })
 

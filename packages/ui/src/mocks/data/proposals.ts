@@ -87,7 +87,7 @@ const proposalDetails: Record<ProposalDetailsType, RecursivePartial<ProposalWith
     payloadHash: '0x000000',
   },
   UpdatePalletFrozenStatusProposalDetails: {
-    frozen: true,
+    frozen: false,
     pallet: 'ProjectToken',
   },
   UpdateWorkingGroupBudgetProposalDetails: { amount: joy(200), group: workingGroup },
@@ -261,6 +261,7 @@ export const proposalsPagesChain = (
 
         proposalsEngine: { activeProposalCount },
         staking: { minimumValidatorCount },
+        projectToken: { palletFrozen: false },
       },
 
       tx: {
