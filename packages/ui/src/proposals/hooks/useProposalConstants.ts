@@ -36,6 +36,7 @@ const extendsProposalPallet = (
 
 const proposalTypeToConstantKey = new Map<ProposalType, keyof Api['consts']['proposalsCodex']>([
   ['updateChannelPayouts', 'updateChannelPayoutsProposalParameters'],
+  ['updatePalletFrozenStatus', 'setPalletFozenStatusProposalParameters'],
   ['amendConstitution', 'amendConstitutionProposalParameters'],
   ['cancelWorkingGroupLeadOpening', 'cancelWorkingGroupLeadOpeningProposalParameters'],
   ['createWorkingGroupLeadOpening', 'createWorkingGroupLeadOpeningProposalParameters'],

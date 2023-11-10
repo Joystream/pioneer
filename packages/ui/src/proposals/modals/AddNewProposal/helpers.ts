@@ -50,6 +50,9 @@ export const defaultProposalValues = {
   updateChannelPayouts: {
     cashoutEnabled: true,
   },
+  updatePalletFrozenStatus: {
+    pallet: 'ProjectToken',
+  },
 }
 
 export interface AddNewProposalForm {
@@ -174,6 +177,10 @@ export interface AddNewProposalForm {
       expectedDataSizeFee: BN
       expectedDataObjectStateBloatBond: BN
     }
+  }
+  updatePalletFrozenStatus: {
+    frozen: boolean
+    pallet: string
   }
 }
 
@@ -401,6 +408,9 @@ export const schemaFactory = (api?: Api) => {
         )
         .required(),
       channelCashoutsEnabled: Yup.boolean(),
+    }),
+    updatePalletFrozenStatus: Yup.object().shape({
+      frozen: Yup.boolean().required('Field is required'),
     }),
   })
 }

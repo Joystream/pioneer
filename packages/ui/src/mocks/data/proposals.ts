@@ -86,6 +86,10 @@ const proposalDetails = {
     maxCashoutAllowed: joy(200),
     payloadHash: '0x000000',
   },
+  UpdatePalletFrozenStatusProposalDetails: {
+    frozen: true,
+    pallet: 'ProjectToken',
+  },
   UpdateWorkingGroupBudgetProposalDetails: { amount: joy(200), group: workingGroup },
   VetoProposalDetails: { proposal: { __typename: 'Proposal', id: '0', title: random.words(4) } },
 } as Record<string, RecursivePartial<ProposalWithDetailsFieldsFragment['details']>>
