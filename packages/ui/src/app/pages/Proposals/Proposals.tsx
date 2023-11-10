@@ -58,7 +58,7 @@ export const Proposals = () => {
           </SidePanel>
         )
       }
-      responsiveStyle={ProposalsPageResponsiveStyle}
+      responsiveStyle={proposals.length > 0 ? ProposalsPageResponsiveStyle : undefined}
     />
   )
 }
