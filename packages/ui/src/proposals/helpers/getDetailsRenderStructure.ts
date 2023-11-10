@@ -24,6 +24,7 @@ import {
   ProposalDetail,
   OpeningLinkDetail,
   UpdateChannelPayoutsDetail,
+  UpdatePalletFrozenStatusDetail,
 } from '@/proposals/types'
 
 export type RenderType =
@@ -201,6 +202,16 @@ const booleanMapper: Mapper<UpdateChannelPayoutsDetail, 'channelCashoutsEnabled'
   ]
 }
 
+const palletStatusMapper: Mapper<UpdatePalletFrozenStatusDetail, 'frozen'> = (value) => {
+  return [
+    {
+      label: 'Proposed Status',
+      renderType: 'Text',
+      value: value ? 'Enable' : 'Disable',
+    },
+  ]
+}
+
 const amountMapper =
   (label?: string): Mapper<AmountDetail, 'amount'> =>
   (value, type): RenderNode[] => {
@@ -283,6 +294,7 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
     tooltipText:
       'This is the ID submitted to Chain for the Data Object (payout payload) to be further uploaded to the Storage. It will be displayed after proposal is executed.',
   }),
+  frozen: palletStatusMapper,
 }
 
 const mapProposalDetail = (key: ProposalDetailsKeys, proposalDetails: ProposalWithDetails['details']) => {

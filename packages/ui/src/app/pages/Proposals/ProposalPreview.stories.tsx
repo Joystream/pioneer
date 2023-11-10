@@ -288,6 +288,9 @@ export const TerminateWorkingGroupLead: Story = {
 export const UpdateChannelPayouts: Story = {
   args: { type: 'UpdateChannelPayoutsProposalDetails' },
 }
+export const UpdatePalletFrozenStatus: Story = {
+  args: { type: 'UpdatePalletFrozenStatusProposalDetails' },
+}
 export const UpdateWorkingGroupBudget: Story = {
   args: { type: 'UpdateWorkingGroupBudgetProposalDetails' },
 }

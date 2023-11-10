@@ -80,6 +80,10 @@ export type UpdateChannelPayoutsDetail = {
   payloadHash?: string
   payloadDataObjectId?: string
 }
+export type UpdatePalletFrozenStatusDetail = {
+  frozen?: boolean
+  pallet?: string
+}
 
 export type FundingRequestDetails = ProposalDetailsNew<'fundingRequest', DestinationsDetail>
 export type CreateLeadOpeningDetails = ProposalDetailsNew<
@@ -140,6 +144,11 @@ export type VetoDetails = ProposalDetailsNew<'veto', ProposalDetail>
 
 export type UpdateChannelPayoutsDetails = ProposalDetailsNew<'updateChannelPayouts', UpdateChannelPayoutsDetail>
 
+export type UpdatePalletFrozenStatusProposalDetails = ProposalDetailsNew<
+  'updatePalletFrozenStatus',
+  UpdatePalletFrozenStatusDetail
+>
+
 export type ProposalDetails =
   | BaseProposalDetails
   | FundingRequestDetails
@@ -163,6 +172,7 @@ export type ProposalDetails =
   | SetCouncilorRewardDetails
   | VetoDetails
   | UpdateChannelPayoutsDetails
+  | UpdatePalletFrozenStatusProposalDetails
 
 export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
 
@@ -359,6 +369,12 @@ const asUpdateChannelPayouts: DetailsCast<'UpdateChannelPayoutsProposalDetails'>
   payloadDataObjectId: extra?.payloadDataObjectId,
 })
 
+const asUpdatePalletFrozenStatus: DetailsCast<'UpdatePalletFrozenStatusProposalDetails'> = (fragment) => ({
+  type: 'updatePalletFrozenStatus',
+  frozen: fragment.frozen,
+  pallet: fragment.pallet,
+})
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }, extra?: ProposalExtraDetails): ProposalDetails
 }
@@ -385,6 +401,7 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   VetoProposalDetails: asVeto,
   SetMembershipLeadInvitationQuotaProposalDetails: asSetMembershipLeadInvitationQuota,
   UpdateChannelPayoutsProposalDetails: asUpdateChannelPayouts,
+  UpdatePalletFrozenStatusProposalDetails: asUpdatePalletFrozenStatus,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment, extra?: ProposalExtraDetails): ProposalDetails => {
