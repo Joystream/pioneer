@@ -12,6 +12,7 @@ type PostAddedEventsMock = {
   threadAuthor?: string | number
   author?: string | number
   text?: string
+  repliesTo?: string | number
 }
 export const postAddedEvent = (
   post: number,
@@ -21,6 +22,7 @@ export const postAddedEvent = (
     threadAuthor = `threadAuthor:${thread}`,
     author = `postAuthor:${post}`,
     text = `text:${post}`,
+    repliesTo,
   }: PostAddedEventsMock = {}
 ): GetNotificationEventsQuery['events'][0] =>
   maskFragment(
@@ -34,6 +36,7 @@ export const postAddedEvent = (
       authorId: String(author),
       createdAt: Date(),
       text,
+      repliesTo: { authorId: String(repliesTo) },
       thread: { id: thread, authorId: String(threadAuthor), posts: [], categoryId: category },
     },
   })

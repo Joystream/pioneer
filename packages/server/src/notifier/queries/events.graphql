@@ -7,6 +7,9 @@ fragment PostAddedEventFields on PostAddedEvent {
     authorId
     createdAt
     text
+    repliesTo {
+      authorId
+    }
     thread {
       id
       authorId
