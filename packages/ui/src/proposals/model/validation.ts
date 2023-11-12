@@ -20,11 +20,19 @@ export const isValidCSV = (message: string): Yup.TestConfig<any, AnyObject> => (
     return true
   },
 })
-export const equalValueContext = (contextPath: string, type?: string): Yup.TestConfig<any, AnyObject> => ({
-  name: type ?? 'equalValueContext',
+export const differentFromContext = (msg: string, type?: string): Yup.TestConfig<any, AnyObject> => ({
+  name: type ?? 'differentFromContext',
   exclusive: false,
   test(value: boolean) {
     const validationValue = this.options.context?.palletFrozenStatus
-    return value !== validationValue
+    if (value === validationValue) {
+      return this.createError({
+        message: msg,
+        params: {
+          val: validationValue ? 'disabled' : 'enabled',
+        },
+      })
+    }
+    return true
   },
 })

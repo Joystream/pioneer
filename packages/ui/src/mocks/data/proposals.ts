@@ -261,7 +261,6 @@ export const proposalsPagesChain = (
 
         proposalsEngine: { activeProposalCount },
         staking: { minimumValidatorCount },
-        projectToken: { palletFrozen: false },
       },
 
       tx: {

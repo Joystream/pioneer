@@ -1,14 +1,26 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+import { useFormContext } from 'react-hook-form'
 
-import { InlineToggleWrap, Label, ToggleCheckbox } from '@/common/components/forms'
+import {
+  InlineToggleWrap,
+  InputNotification,
+  InputNotificationIcon,
+  InputNotificationMessage,
+  Label,
+  ToggleCheckbox,
+} from '@/common/components/forms'
+import { AlertSymbol } from '@/common/components/icons/symbols'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
-
-export type PalletFrozenStatus = 'Enabled' | 'Disabled'
+import { enhancedGetErrorMessage } from '@/common/utils/validation'
 
 export const UpdatePalletFrozenStatus = () => {
+  const { watch, formState } = useFormContext()
+  const validationMessage = useMemo(() => {
+    return enhancedGetErrorMessage(formState?.errors)('updatePalletFrozenStatus.frozen') ?? ''
+  }, [JSON.stringify(formState?.errors), watch('updatePalletFrozenStatus.frozen')])
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -25,11 +37,20 @@ export const UpdatePalletFrozenStatus = () => {
           </Tooltip>
         </InlineToggleWrap>
         <ToggleCheckbox
-          falseLabel="Enabled"
-          trueLabel="Disabled"
+          falseLabel="Enable"
+          trueLabel="Disable"
           name="updatePalletFrozenStatus.frozen"
           id="crt-feature-select"
+          checked={watch('updatePalletFrozenStatus.frozen')}
         />
+        {validationMessage && (
+          <InputNotification validation={'invalid'}>
+            <InputNotificationIcon>
+              <AlertSymbol />
+            </InputNotificationIcon>
+            <InputNotificationMessage>{validationMessage}</InputNotificationMessage>
+          </InputNotification>
+        )}
       </Row>
     </RowGapBlock>
   )

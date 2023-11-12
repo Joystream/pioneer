@@ -72,6 +72,7 @@ type Args = {
   onCreateProposal: jest.Mock
   onChangeThreadMode: jest.Mock
   onVote: jest.Mock
+  palletFrozen: boolean
 }
 type Story = StoryObj<FC<Args>>
 
@@ -91,6 +92,7 @@ export default {
   args: {
     isCouncilMember: false,
     proposalCount: 15,
+    palletFrozen: false,
   },
 
   parameters: {
@@ -163,6 +165,9 @@ export default {
             query: {
               members: {
                 stakingAccountIdMemberStatus: parameters.stakingAccountIdMemberStatus,
+              },
+              projectToken: {
+                palletFrozen: args.palletFrozen,
               },
             },
             tx: {
@@ -1409,6 +1414,14 @@ export const SpecificParametersUpdatePalletFrozenStatus: Story = {
   play: specificParametersTest('Update Pallet Frozen Status', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
       const nextButton = getButtonByText(modal, 'Create proposal')
+
+      await userEvent.click(modal.getByTestId('crt-feature-select'))
+      expect(
+        await modal.findByText(
+          /The ProjectToken pallet is currently enabled, so presently this proposal would fail due to execution constraints./
+        )
+      )
+      expect(await modal.findByText(/Warning/))
       expect(nextButton).toBeDisabled()
 
       await userEvent.click(modal.getByTestId('crt-feature-select'))
