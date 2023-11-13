@@ -52,6 +52,7 @@ export const defaultProposalValues = {
   },
   updatePalletFrozenStatus: {
     pallet: 'ProjectToken',
+    default: false,
   },
 }
 
@@ -413,7 +414,11 @@ export const schemaFactory = (api?: Api) => {
       freeze: Yup.boolean()
         .test(
           differentFromContext(
-            'The ProjectToken pallet is currently ${val}, so presently this proposal would fail due to execution constraints.',
+            (isFrozen) =>
+              `The ProjectToken pallet is currently ${
+                isFrozen ? 'disabled' : 'enabled'
+              }, so presently this proposal would fail due to execution constraints.`,
+            'palletFrozenStatus',
             'execution'
           )
         )
