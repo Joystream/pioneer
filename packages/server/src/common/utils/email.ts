@@ -2,7 +2,7 @@ import sgMail from '@sendgrid/mail'
 import formData from 'form-data'
 import Mailgun from 'mailgun.js'
 import type MailgunClient from 'mailgun.js/client'
-import { warn } from 'npmlog'
+import { verbose, warn } from 'npmlog'
 
 import { EMAIL_SENDER, SENDGRID_CONFIG, MAILGUN_CONFIG } from '@/common/config'
 
@@ -14,7 +14,10 @@ export type EmailBody = { text: string } | { html: string }
 export type EmailWithoutRecipient = { subject: string } & EmailBody
 export type Email = { to: string } & EmailWithoutRecipient
 
-const toFullEmail = (email: Email) => ({ ...email, from: EMAIL_SENDER })
+const toFullEmail = (email: Email) => {
+  verbose('EmailProvider', `Send email from ${EMAIL_SENDER} to ${email.to}: "${email.subject}"`)
+  return { ...email, from: EMAIL_SENDER }
+}
 
 export interface EmailProvider {
   sendEmail: (email: Email) => Promise<void>
@@ -22,7 +25,8 @@ export interface EmailProvider {
 
 const LogOnlyEmailProvider: EmailProvider = {
   sendEmail: async (email) => {
-    warn('Email notifications', `Email not send to ${email.to}: ${email.subject}`)
+    toFullEmail(email)
+    warn('EmailProvider', 'Email not send')
   },
 }
 
@@ -68,7 +72,7 @@ export const createEmailProvider = (): EmailProvider => {
       throw Error('Multiple email providers are defined')
     }
   } catch (err) {
-    warn('Email notifications', 'Failed to configure email provider with error:', errorMessage(err))
+    warn('EmailProvider', 'Failed to configure email provider with error:', errorMessage(err))
     if (process.env['NODE_ENV'] === 'production') throw err
     return LogOnlyEmailProvider
   }
