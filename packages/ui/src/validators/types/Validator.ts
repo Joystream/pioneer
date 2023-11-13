@@ -6,14 +6,15 @@ import { MemberWithDetails } from '@/memberships/types'
 export interface Validator {
   member?: MemberWithDetails
   address: Address
-  isVerified: boolean
+  isVerified?: boolean
   isActive: boolean
   totalRewards: BN
   APR: number
 }
 
 export interface ValidatorMembership {
-  membership: MemberWithDetails
-  validatorAccount: Address | undefined
-  isVerifiedValidator: boolean | undefined
+  stashAccount: Address
+  controllerAccount: Address
+  isVerifiedValidator?: boolean
+  membership?: MemberWithDetails
 }

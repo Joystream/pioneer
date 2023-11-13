@@ -41,16 +41,11 @@ export const useValidatorsList = () => {
                 .divn(10 ** 7) // Convert from Perbill to Percent
                 .toNumber()
             : 0
-        const member = validatorsWithMembership?.find(
-          ({ validatorAccount }) => validatorAccount === address
-        )?.membership
-        const isVerified =
-          validatorsWithMembership?.find(({ validatorAccount }) => validatorAccount === address)?.isVerifiedValidator ??
-          false
+        const validatorMembership = validatorsWithMembership?.find(({ stashAccount }) => stashAccount === address)
         return {
-          member,
+          member: validatorMembership?.membership,
           address: encodedAddress,
-          isVerified,
+          isVerified: validatorMembership?.isVerifiedValidator,
           isActive: activeValidators.includes(address),
           totalRewards: rewardHistory.reduce((total: BN, data) => total.add(data.eraReward), new BN(0)),
           APR: apr,

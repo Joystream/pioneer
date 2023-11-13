@@ -18,21 +18,38 @@ export const useValidatorMembers = () => {
     [api?.isConnected]
   )
 
+  const allValidatorsWithCtrlAcc = useFirstObservableValue(
+    () =>
+      allValidatorAddresses &&
+      api &&
+      api.query.staking.bonded
+        .multi(allValidatorAddresses)
+        .pipe(map((entries) => entries.map((entry) => entry.unwrap().toString()))),
+    [allValidatorAddresses, api?.isConnected]
+  )
+
   const variables = {
-    where: { metadata: { validatorAccount_in: allValidatorAddresses } },
+    where: { boundAccounts_containsAny: allValidatorsWithCtrlAcc ?? [] },
   }
 
-  const { data } = useGetMembersWithDetailsQuery({ variables, skip: !!allValidatorAddresses })
+  const { data } = useGetMembersWithDetailsQuery({ variables, skip: !!allValidatorsWithCtrlAcc })
 
-  const validatorsWithMembership: ValidatorMembership[] | undefined = useMemo(
-    () =>
-      data?.memberships?.map((rawMembership) => ({
-        membership: asMemberWithDetails(rawMembership),
-        validatorAccount: rawMembership.metadata.validatorAccount ?? undefined,
-        isVerifiedValidator: rawMembership.metadata.isVerifiedValidator ?? false,
-      })),
-    [data]
-  )
+  const validatorsWithMembership: ValidatorMembership[] | undefined = useMemo(() => {
+    const memberships = data?.memberships?.map((rawMembership) => ({
+      membership: asMemberWithDetails(rawMembership),
+      isVerifiedValidator: rawMembership.metadata.isVerifiedValidator ?? false,
+    }))
+    return (
+      allValidatorAddresses &&
+      allValidatorsWithCtrlAcc &&
+      memberships &&
+      allValidatorAddresses.map((address, index) => ({
+        stashAccount: address,
+        controllerAccount: allValidatorsWithCtrlAcc[index],
+        ...memberships.find(({ membership }) => membership.boundAccounts.includes(address)),
+      }))
+    )
+  }, [data])
 
   return validatorsWithMembership
 }
