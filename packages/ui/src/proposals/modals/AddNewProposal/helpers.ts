@@ -52,7 +52,7 @@ export const defaultProposalValues = {
   },
   updatePalletFrozenStatus: {
     pallet: 'ProjectToken',
-    default: false,
+    freeze: false,
   },
 }
 
