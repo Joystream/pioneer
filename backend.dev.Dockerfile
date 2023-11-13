@@ -1,8 +1,8 @@
-FROM node:18-alpine3.18 AS builder
+FROM node:20-alpine3.18 AS base
 WORKDIR /app
 
 COPY packages/server/package.json ./
-COPY yarn.lock ./
+COPY packages/server/docker/yarn.lock ./
 RUN yarn --immutable
 
 COPY tsconfig.json ./base.tsconfig.json

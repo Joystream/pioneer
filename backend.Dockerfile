@@ -9,7 +9,7 @@ RUN set -eux; \
 FROM base AS builder
 
 COPY packages/server/package.json ./
-COPY yarn.lock ./
+COPY packages/server/docker/yarn.lock ./
 RUN yarn --immutable
 
 COPY tsconfig.json ./base.tsconfig.json
