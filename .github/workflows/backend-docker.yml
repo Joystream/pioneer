@@ -6,10 +6,10 @@ on:
   # Docker images will only be pushed when we manually dispatch this workflow
   workflow_dispatch:
     inputs:
-        docker_image_tag:
-          description: 'Tag to use on docker image, eg. "latest", or "next"'
-          required: true
-          default: 'next'
+      docker_image_tag:
+        description: 'Tag to use on docker image, eg. "latest", or "next"'
+        required: true
+        default: "next"
 
 jobs:
   docker:
@@ -30,9 +30,6 @@ jobs:
 
       - name: Build (production)
         uses: docker/build-push-action@v3
-        env:
-            # required at build time, but can be overridden when running container
-            DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
         with:
           # Do not use local dir context to ensure we can build from a commit directly
           # context: .
@@ -42,12 +39,9 @@ jobs:
 
       - name: Build (dev)
         uses: docker/build-push-action@v3
-        env:
-            # required at build time, but can be overridden when running container
-            DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
         with:
-            # Do not use local dir context to ensure we can build from a commit directly
-            # context: .
-            file: backend.dev.Dockerfile
-            push: ${{ github.event_name == 'workflow_dispatch' }}
-            tags: joystream/pioneer-backend-dev:${{ github.event.inputs.docker_image_tag || 'next' }}
+          # Do not use local dir context to ensure we can build from a commit directly
+          # context: .
+          file: backend.dev.Dockerfile
+          push: ${{ github.event_name == 'workflow_dispatch' }}
+          tags: joystream/pioneer-backend-dev:${{ github.event.inputs.docker_image_tag || 'next' }}
