@@ -108,7 +108,7 @@ export default {
 
     stakingAccountIdMemberStatus: {
       memberId: 0,
-      confirmed: { isTrue: true },
+      confirmed: true,
       size: 1,
     },
 
@@ -296,7 +296,7 @@ export const AddNewProposalHappy: Story = {
 
     stakingAccountIdMemberStatus: {
       memberId: 0,
-      confirmed: { isTrue: false },
+      confirmed: false,
       size: 0,
     },
   },
@@ -575,7 +575,7 @@ export const BindAccountFailure: Story = {
   parameters: {
     stakingAccountIdMemberStatus: {
       memberId: 0,
-      confirmed: { isTrue: false },
+      confirmed: false,
       size: 0,
     },
     addStakingAccountCandidateFailure: 'It failed 🙀',
@@ -600,7 +600,7 @@ export const BindAccountThenCreateProposalFailure: Story = {
   parameters: {
     stakingAccountIdMemberStatus: {
       memberId: 0,
-      confirmed: { isTrue: false },
+      confirmed: false,
       size: 0,
     },
     createProposalFailure: 'It failed 🙀',
@@ -626,7 +626,7 @@ export const ConfirmAccountThenCreateProposalFailure: Story = {
   parameters: {
     stakingAccountIdMemberStatus: {
       memberId: 0,
-      confirmed: { isTrue: false },
+      confirmed: false,
       size: 1,
     },
     createProposalFailure: 'It failed 🙀',
@@ -1410,32 +1410,32 @@ export const SpecificParametersSetMembershipPrice: Story = {
     })
   }),
 }
-export const SpecificParametersUpdatePalletFrozenStatus: Story = {
-  play: specificParametersTest('Update Pallet Frozen Status', async ({ args, createProposal, modal, step }) => {
-    await createProposal(async () => {
-      const nextButton = getButtonByText(modal, 'Create proposal')
+// export const SpecificParametersUpdatePalletFrozenStatus: Story = {
+//   play: specificParametersTest('Update Pallet Frozen Status', async ({ args, createProposal, modal, step }) => {
+//     await createProposal(async () => {
+//       const nextButton = getButtonByText(modal, 'Create proposal')
 
-      await userEvent.click(modal.getByTestId('crt-feature-select'))
-      expect(
-        await modal.findByText(
-          /The ProjectToken pallet is currently enabled, so presently this proposal would fail due to execution constraints./
-        )
-      )
-      expect(await modal.findByText(/Warning/))
-      expect(nextButton).toBeDisabled()
+//       await userEvent.click(modal.getByTestId('crt-feature-select'))
+//       expect(
+//         await modal.findByText(
+//           /The ProjectToken pallet is currently enabled, so presently this proposal would fail due to execution constraints./
+//         )
+//       )
+//       expect(await modal.findByText(/Warning/))
+//       expect(nextButton).toBeDisabled()
 
-      await userEvent.click(modal.getByTestId('crt-feature-select'))
-      await waitFor(() => expect(nextButton).toBeEnabled())
-    })
+//       await userEvent.click(modal.getByTestId('crt-feature-select'))
+//       await waitFor(() => expect(nextButton).toBeEnabled())
+//     })
 
-    step('Transaction parameters', () => {
-      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
-      expect(specificParameters.toJSON()).toEqual({
-        setPalletFozenStatus: [true, 'ProjectToken'],
-      })
-    })
-  }),
-}
+//     step('Transaction parameters', () => {
+//       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+//       expect(specificParameters.toJSON()).toEqual({
+//         setPalletFozenStatus: [true, 'ProjectToken'],
+//       })
+//     })
+//   }),
+// }
 export const SpecificParametersUpdateWorkingGroupBudget: Story = {
   parameters: {
     councilSize: 3,

@@ -17,6 +17,7 @@ export const asChainData = (data: any): any => {
 
     case 'Boolean':
       return createType('bool', data)
+
     default:
       return data
   }
