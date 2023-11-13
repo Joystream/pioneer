@@ -74,6 +74,7 @@ const GroupList = styled.section`
 const WorkingGroupListStyles = styled(RowGapBlock)`
   overflow: auto;
   width: calc(100vw - 276px);
+  max-width: 1150px;
   @media (max-width: 1023px) {
     width: calc(100vw - 48px);
   }

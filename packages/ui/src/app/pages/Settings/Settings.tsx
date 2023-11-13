@@ -153,14 +153,14 @@ export const Settings = () => {
   }
 
   return (
-    <Container>
-      <PageLayout
-        header={
-          <PageHeaderWrapper>
-            <PageTitle>{t('settings')}</PageTitle>
-          </PageHeaderWrapper>
-        }
-        main={
+    <PageLayout
+      header={
+        <PageHeaderWrapper>
+          <PageTitle>{t('settings')}</PageTitle>
+        </PageHeaderWrapper>
+      }
+      main={
+        <Container>
           <MainPanel>
             <RowGapBlock gap={32}>
               <Tabs tabsSize="xs" tabs={tabs} />
@@ -279,9 +279,9 @@ export const Settings = () => {
               </SettingsInformation>
             </RowGapBlock>
           </MainPanel>
-        }
-      />
-    </Container>
+        </Container>
+      }
+    />
   )
 }
 

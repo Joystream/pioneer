@@ -90,7 +90,7 @@ export const SideBarContent = () => {
             </NavigationLink>
           </NavigationLinksItem>
           <NavigationLinksItem>
-            <NavigationLink to={ProposalsRoutes.current} icon={<ProposalsIcon />}>
+            <NavigationLink to={ProposalsRoutes.home} icon={<ProposalsIcon />}>
               Proposals
             </NavigationLink>
           </NavigationLinksItem>

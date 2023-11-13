@@ -13,7 +13,7 @@ import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/component
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
-import { StatsContent } from '@/common/components/statistics'
+import { Statistics, StatsContent } from '@/common/components/statistics'
 import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
@@ -220,6 +220,14 @@ const ResponsiveStyle = css`
   aside {
     > div {
       padding: 0;
+    }
+  }
+
+  ${Statistics} {
+    grid-template-columns: 1fr;
+
+    @media (min-width: 1440px) {
+      grid-template-columns: 1fr 1fr;
     }
   }
 
