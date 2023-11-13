@@ -71,7 +71,7 @@ export const AddNewProposalModal = () => {
   const maximumReferralCut = api?.consts.members.referralCutMaximumPercent
   const minCashoutAllowed = api?.consts.content.minimumCashoutAllowedLimit
   const maxCashoutAllowed = api?.consts.content.maximumCashoutAllowedLimit
-  const palletFrozenStatus = useFirstObservableValue(() => api?.query.projectToken.palletFrozen(), [api?.isConnected])
+  const palletFrozenStatus = useFirstObservableValue(() => api?.query?.projectToken?.palletFrozen(), [api?.isConnected])
   const currentBlock = useCurrentBlockNumber()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
@@ -110,14 +110,12 @@ export const AddNewProposalModal = () => {
         ? currentBlock.addn(constants?.votingPeriod ?? 0).addn(constants?.gracePeriod ?? 0)
         : BN_ZERO,
     } as IStakingAccountSchema,
-    defaultValues: {
-      ...defaultProposalValues,
-      updatePalletFrozenStatus: {
-        pallet: 'ProjectToken',
-        frozen: !palletFrozenStatus,
-      },
-    },
+    defaultValues: defaultProposalValues,
   })
+
+  useEffect(() => {
+    if (palletFrozenStatus !== undefined) form.setValue('updatePalletFrozenStatus.freeze', palletFrozenStatus.isFalse)
+  }, [palletFrozenStatus])
 
   const formValues = form.getValues() as AddNewProposalForm
   const currentErrors = form.formState.errors[path] ?? {}

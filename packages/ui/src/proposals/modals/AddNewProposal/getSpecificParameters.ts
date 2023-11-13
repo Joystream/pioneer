@@ -189,7 +189,7 @@ export const getSpecificParameters = async (
     }
     case 'updatePalletFrozenStatus': {
       return createType('PalletProposalsCodexProposalDetails', {
-        SetPalletFozenStatus: [specifics.updatePalletFrozenStatus.frozen, specifics.updatePalletFrozenStatus.pallet],
+        SetPalletFozenStatus: [specifics.updatePalletFrozenStatus.freeze, specifics.updatePalletFrozenStatus.pallet],
       })
     }
     default:

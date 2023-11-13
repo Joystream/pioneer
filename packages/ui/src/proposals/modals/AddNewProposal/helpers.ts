@@ -50,6 +50,9 @@ export const defaultProposalValues = {
   updateChannelPayouts: {
     cashoutEnabled: true,
   },
+  updatePalletFrozenStatus: {
+    pallet: 'ProjectToken',
+  },
 }
 
 export interface AddNewProposalForm {
@@ -176,7 +179,7 @@ export interface AddNewProposalForm {
     }
   }
   updatePalletFrozenStatus: {
-    frozen: boolean
+    freeze: boolean
     pallet: string
   }
 }
@@ -407,7 +410,7 @@ export const schemaFactory = (api?: Api) => {
       channelCashoutsEnabled: Yup.boolean(),
     }),
     updatePalletFrozenStatus: Yup.object().shape({
-      frozen: Yup.boolean()
+      freeze: Yup.boolean()
         .test(
           differentFromContext(
             'The ProjectToken pallet is currently ${val}, so presently this proposal would fail due to execution constraints.',

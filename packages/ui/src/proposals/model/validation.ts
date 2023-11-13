@@ -24,7 +24,7 @@ export const differentFromContext = (msg: string, type?: string): Yup.TestConfig
   name: type ?? 'differentFromContext',
   exclusive: false,
   test(value: boolean) {
-    const validationValue = this.options.context?.palletFrozenStatus
+    const validationValue = !this.options.context?.palletFrozenStatus.isFalse
     if (value === validationValue) {
       return this.createError({
         message: msg,

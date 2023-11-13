@@ -19,8 +19,8 @@ import { enhancedGetErrorMessage } from '@/common/utils/validation'
 export const UpdatePalletFrozenStatus = () => {
   const { watch, formState } = useFormContext()
   const validationMessage = useMemo(() => {
-    return enhancedGetErrorMessage(formState?.errors)('updatePalletFrozenStatus.frozen') ?? ''
-  }, [JSON.stringify(formState?.errors), watch('updatePalletFrozenStatus.frozen')])
+    return enhancedGetErrorMessage(formState?.errors)('updatePalletFrozenStatus.freeze') ?? ''
+  }, [JSON.stringify(formState?.errors), watch('updatePalletFrozenStatus.freeze')])
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -39,9 +39,8 @@ export const UpdatePalletFrozenStatus = () => {
         <ToggleCheckbox
           falseLabel="Enable"
           trueLabel="Disable"
-          name="updatePalletFrozenStatus.frozen"
+          name="updatePalletFrozenStatus.freeze"
           id="crt-feature-select"
-          checked={watch('updatePalletFrozenStatus.frozen')}
         />
         {validationMessage && (
           <InputNotification validation={'invalid'}>
