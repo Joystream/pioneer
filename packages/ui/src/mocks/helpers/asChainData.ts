@@ -15,6 +15,9 @@ export const asChainData = (data: any): any => {
     case 'String':
       return isNaN(data) ? data : createType('u128', data)
 
+    case 'Boolean':
+      return createType('bool', data)
+
     default:
       return data
   }

@@ -37,6 +37,7 @@ export const proposalDescriptions: ProposalDescriptions = {
   updateChannelPayouts:
     'Proposal to submit the Channel Incentives Payout payload, update the min/max claimable amounts and block/allow claiming of awarded JOYs by channels.',
   runtimeUpgrade: 'Proposal to upgrade version to the new runtime.',
+  updatePalletFrozenStatus: 'Enabling and disabling various features on the blockchain level.',
   createBlogPost: 'Council blog',
   editBlogPost: 'Unlocked blog post can be edited.',
   lockBlogPost: 'When a post is locked it can no longer be modified.',
