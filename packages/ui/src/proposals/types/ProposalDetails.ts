@@ -371,7 +371,7 @@ const asUpdateChannelPayouts: DetailsCast<'UpdateChannelPayoutsProposalDetails'>
 
 const asUpdatePalletFrozenStatus: DetailsCast<'UpdatePalletFrozenStatusProposalDetails'> = (fragment) => ({
   type: 'updatePalletFrozenStatus',
-  frozen: fragment.frozen,
+  freeze: fragment.frozen,
   pallet: fragment.pallet,
 })
 
