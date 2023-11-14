@@ -36,11 +36,11 @@ export const UpdatePalletFrozenStatus = () => {
             <TooltipDefault />
           </Tooltip>
           <ToggleCheckbox
-          falseLabel="Disable"
-          trueLabel="Enable"
-          name="updatePalletFrozenStatus.freeze"
-          id="crt-feature-select"
-        />
+            falseLabel="Disable"
+            trueLabel="Enable"
+            name="updatePalletFrozenStatus.freeze"
+            id="crt-feature-select"
+          />
         </InlineToggleWrap>
         {validationMessage && (
           <InputNotification validation={'invalid'}>
