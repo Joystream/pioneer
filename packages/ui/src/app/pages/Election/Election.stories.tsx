@@ -8,7 +8,7 @@ import { MocksParameters } from '@/mocks/providers'
 import { Election } from './Election'
 
 type Args = {
-  electionStage: 'announcing' | 'revealing' | 'voting' | 'idle'
+  electionStage: 'announcing' | 'revealing' | 'voting' | 'inactive'
   remainingPeriod?: number | BN
   currentBlock?: number | BN
 }
@@ -20,7 +20,7 @@ export default {
   component: Election,
   args: {
     electionStage: 'announcing',
-    remainingPeriod: 40000,
+    remainingPeriod: 10000,
     currentBlock: 4802561,
   },
   parameters: {
@@ -31,7 +31,7 @@ export default {
           consts: {
             council: {
               councilSize: new BN(3),
-              idlePeriodDuration: new BN(1),
+              idlePeriodDuration: new BN(14400),
               announcingPeriodDuration: new BN(129600),
               budgetRefillPeriod: new BN(14400),
               minCandidateStake: new BN(1666666666660000),
@@ -53,10 +53,13 @@ export default {
             council: {
               stage: {
                 stage: {
-                  isIdle: args.electionStage === 'idle' ? true : false,
+                  isIdle: args.electionStage === 'inactive' ? true : false,
                   isAnnouncing: args.electionStage === 'announcing' ? true : false,
                 },
-                changedAt: Number(args.currentBlock) - Number(new BN(129600)) + Number(args.remainingPeriod),
+                changedAt:
+                  args.electionStage === 'inactive'
+                    ? Number(args.currentBlock) - Number(new BN(14400)) + Number(args.remainingPeriod)
+                    : Number(args.currentBlock) - Number(new BN(129600)) + Number(args.remainingPeriod),
               },
             },
             referendum: {

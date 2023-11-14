@@ -66,32 +66,32 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
   let announcingProgress = 0
   let votingProgress = 0
   let revealingProgress = 0
-  const nextRoundProgress = 0
+  let inactiveProgress = 0
 
   let announcingColor = Colors.Blue[500]
   let votingColor = Colors.Blue[500]
-  let revealingColor = Colors.Blue[500]
-  const nextRoundColor = Colors.Blue[500]
+  const revealingColor = Colors.Blue[500]
+  let inactiveColor = Colors.Blue[500]
 
   let remainDays = 0
   let announcingDays = 0
   let votingDays = 0
   let revealingDays = 0
-  let nextRoundDays = 0
+  let inactiveDays = 0
 
   let announcingEndDay = ''
   let votingEndDay = ''
   let revealingEndDay = ''
-  let nextRoundEndDay = ''
+  let inactiveEndDay = ''
 
   let announcingEndBlock = 0
   let votingEndBlock = 0
   let revealingEndBlock = 0
-  let nextRoundEndBlock = 0
+  let inactiveEndBlock = 0
+
+  let progressBarAttr = '1fr 14fr 3fr 3fr'
 
   const constants = useCouncilConstants()
-
-  // console.log(`duration: ${duration}, constants: ${JSON.stringify(constants)}, currentBlock = ${currentBlock}`)
 
   if (
     !isNaN(duration) &&
@@ -104,15 +104,23 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
     announcingDays = Math.floor(constants?.announcingPeriod / constants?.budgetRefillPeriod)
     votingDays = Math.floor(constants?.election.votingPeriod / constants?.budgetRefillPeriod)
     revealingDays = Math.floor(constants?.election.revealingPeriod / constants?.budgetRefillPeriod)
-    nextRoundDays = Math.floor(constants?.idlePeriod / constants?.budgetRefillPeriod)
+    inactiveDays = Math.floor(constants?.idlePeriod / constants?.budgetRefillPeriod)
 
-    if (props.electionStage === 'announcing') {
-      announcingProgress = Math.floor(100 - (100 * duration) / constants?.announcingPeriod)
+    progressBarAttr = `${inactiveDays > 0 ? inactiveDays : 1}fr ${announcingDays > 0 ? announcingDays : 1}fr ${
+      votingDays > 0 ? votingDays : 1
+    }fr ${revealingDays > 0 ? revealingDays : 1}fr`
+
+    if (props.electionStage === 'inactive') {
+      announcingProgress = 0
+      votingProgress = 0
+      revealingProgress = 0
+
+      inactiveProgress = Math.floor(100 - (100 * duration) / constants?.idlePeriod)
       remainDays = Math.floor(
         (duration +
+          constants?.announcingPeriod +
           constants?.election.votingPeriod +
           constants?.election.revealingPeriod +
-          constants?.idlePeriod +
           constants?.budgetRefillPeriod -
           1) /
           constants?.budgetRefillPeriod
@@ -122,6 +130,9 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       const date = new Date()
 
       date.setSeconds(date.getSeconds() + totalSeconds)
+      inactiveEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+
+      date.setSeconds(date.getSeconds() + Math.floor(constants?.announcingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)))
       announcingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
 
       date.setSeconds(
@@ -134,21 +145,61 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       )
       revealingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
 
-      date.setSeconds(date.getSeconds() + Math.floor(constants?.idlePeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)))
-      nextRoundEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      // calculate the end of blocks of each stage
+      inactiveEndBlock = currentBlock + duration
+      announcingEndBlock = inactiveEndBlock + constants?.announcingPeriod
+      votingEndBlock = announcingEndBlock + constants?.election.votingPeriod
+      revealingEndBlock = votingEndBlock + constants?.election.revealingPeriod
+    } else if (props.electionStage === 'announcing') {
+      inactiveProgress = 100
+      inactiveColor = Colors.Blue[200]
+
+      announcingProgress = Math.floor(100 - (100 * duration) / constants?.announcingPeriod)
+      remainDays = Math.floor(
+        (duration +
+          constants?.election.votingPeriod +
+          constants?.election.revealingPeriod +
+          constants?.budgetRefillPeriod -
+          1) /
+          constants?.budgetRefillPeriod
+      )
+
+      // calculate the end of day of each stage
+      const date = new Date()
+
+      date.setSeconds(date.getSeconds() + totalSeconds)
+      announcingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+
+      const previousDate = new Date(date)
+      previousDate.setSeconds(
+        previousDate.getSeconds() - Math.floor(constants?.announcingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
+      )
+      inactiveEndDay = previousDate.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+
+      date.setSeconds(
+        date.getSeconds() + Math.floor(constants?.election.votingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
+      )
+      votingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+
+      date.setSeconds(
+        date.getSeconds() + Math.floor(constants?.election.revealingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
+      )
+      revealingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
 
       // calculate the end of blocks of each stage
       announcingEndBlock = currentBlock + duration
+      inactiveEndBlock = announcingEndBlock - constants?.announcingPeriod
       votingEndBlock = announcingEndBlock + constants?.election.votingPeriod
       revealingEndBlock = votingEndBlock + constants?.election.revealingPeriod
-      nextRoundEndBlock = revealingEndBlock + constants?.idlePeriod
     } else if (props.electionStage === 'voting') {
+      inactiveProgress = 100
       announcingProgress = 100
+      inactiveColor = Colors.Blue[200]
       announcingColor = Colors.Blue[200]
 
       votingProgress = Math.floor(100 - (100 * duration) / constants?.election.votingPeriod)
       remainDays = Math.floor(
-        (duration + constants?.election.revealingPeriod + constants?.idlePeriod + constants?.budgetRefillPeriod - 1) /
+        (duration + constants?.election.revealingPeriod + constants?.budgetRefillPeriod - 1) /
           constants?.budgetRefillPeriod
       )
 
@@ -158,36 +209,38 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       date.setSeconds(date.getSeconds() + totalSeconds)
       votingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
 
-      const previousDate = date
+      const previousDate = new Date(date)
       previousDate.setSeconds(
         previousDate.getSeconds() - Math.floor(constants?.election.votingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
       )
-      announcingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      announcingEndDay = previousDate.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+
+      previousDate.setSeconds(
+        previousDate.getSeconds() - Math.floor(constants?.announcingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
+      )
+      inactiveEndDay = previousDate.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
 
       date.setSeconds(
         date.getSeconds() + Math.floor(constants?.election.revealingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
       )
       revealingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
 
-      date.setSeconds(date.getSeconds() + Math.floor(constants?.idlePeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)))
-      nextRoundEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
-
       // calculate the end of blocks of each stage
       votingEndBlock = currentBlock + duration
       announcingEndBlock = votingEndBlock - constants?.election.votingPeriod
+      inactiveEndBlock = announcingEndBlock - constants?.announcingPeriod
       revealingEndBlock = votingEndBlock + constants?.election.revealingPeriod
-      nextRoundEndBlock = revealingEndBlock + constants?.idlePeriod
     } else if (props.electionStage === 'revealing') {
+      inactiveProgress = 100
       announcingProgress = 100
       votingProgress = 100
 
+      inactiveColor = Colors.Blue[200]
       announcingColor = Colors.Blue[200]
       votingColor = Colors.Blue[200]
 
       revealingProgress = Math.floor(100 - (100 * duration) / constants?.election.revealingPeriod)
-      remainDays = Math.floor(
-        (duration + constants?.idlePeriod + constants?.budgetRefillPeriod - 1) / constants?.budgetRefillPeriod
-      )
+      remainDays = Math.floor((duration + constants?.budgetRefillPeriod - 1) / constants?.budgetRefillPeriod)
 
       // calculate the end of day of each stage
       const date = new Date()
@@ -195,116 +248,96 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       date.setSeconds(date.getSeconds() + totalSeconds)
       revealingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
 
-      const previousDate = date
+      const previousDate = new Date(date)
       previousDate.setSeconds(
         previousDate.getSeconds() -
           Math.floor(constants?.election.revealingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
       )
-      votingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      votingEndDay = previousDate.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
 
       previousDate.setSeconds(
         previousDate.getSeconds() - Math.floor(constants?.election.votingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
       )
-      announcingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      announcingEndDay = previousDate.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
 
-      date.setSeconds(date.getSeconds() + Math.floor(constants?.idlePeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)))
-      nextRoundEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      previousDate.setSeconds(
+        previousDate.getSeconds() - Math.floor(constants?.announcingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
+      )
+      inactiveEndDay = previousDate.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
 
       // calculate the end of blocks of each stage
       revealingEndBlock = currentBlock + duration
       votingEndBlock = revealingEndBlock - constants?.election.revealingPeriod
       announcingEndBlock = votingEndBlock - constants?.election.votingPeriod
-      nextRoundEndBlock = revealingEndBlock + constants?.idlePeriod
-    } else {
-      announcingProgress = 100
-      votingProgress = 100
-      revealingProgress = 100
-
-      announcingColor = Colors.Blue[200]
-      votingColor = Colors.Blue[200]
-      revealingColor = Colors.Blue[200]
-
-      revealingProgress = Math.floor(100 - (100 * duration) / constants?.idlePeriod)
-
-      // calculate the end of day of each stage
-      const date = new Date()
-
-      date.setSeconds(date.getSeconds() + totalSeconds)
-      nextRoundEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
-
-      date.setSeconds(date.getSeconds() - Math.floor(constants?.idlePeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)))
-      revealingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
-
-      date.setSeconds(
-        date.getSeconds() - Math.floor(constants?.election.revealingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
-      )
-      votingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
-
-      date.setSeconds(
-        date.getSeconds() - Math.floor(constants?.election.votingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
-      )
-      announcingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
-
-      // calculate the end of blocks of each stage
-      nextRoundEndBlock = currentBlock + duration
-      revealingEndBlock = nextRoundEndBlock - constants?.idlePeriod
-      votingEndBlock = revealingEndBlock - constants?.election.revealingPeriod
-      announcingEndBlock = votingEndBlock - constants?.election.votingPeriod
+      inactiveEndBlock = announcingEndBlock - constants?.announcingPeriod
     }
   }
 
   const updateDescription = (selectedStage: string, choose: boolean) => {
     if (choose === false || props.electionStage === selectedStage) {
-      setStageDescription(defaultStaging)
-      setVerbIndicator(defaultVerbIndicator)
-      setDaysIndicator(defaultDaysIndicator)
+      if (props.electionStage === 'inactive') {
+        setStageDescription('The Round')
+        setVerbIndicator('begins in')
+        setDaysIndicator(defaultDaysIndicator)
+      } else {
+        setStageDescription(defaultStaging)
+        setVerbIndicator(defaultVerbIndicator)
+        setDaysIndicator(defaultDaysIndicator)
+      }
       setSelectedToolbarStage('')
       return
     }
-    if (props.electionStage === 'announcing') {
+
+    if (props.electionStage === 'inactive') {
       setStageDescription(selectedStage)
       setVerbIndicator('begins in')
 
-      if (selectedStage === 'voting') {
+      if (selectedStage === 'announcing') {
         setDaysIndicator(defaultDaysIndicator)
+      } else if (selectedStage === 'voting') {
+        setDaysIndicator(convertDurationToTimeString(announcingEndBlock - currentBlock))
       } else if (selectedStage === 'revealing') {
         setDaysIndicator(convertDurationToTimeString(votingEndBlock - currentBlock))
-      } else if (selectedStage === 'nextround') {
-        setDaysIndicator(convertDurationToTimeString(revealingEndBlock - currentBlock))
       }
-    } else if (props.electionStage === 'voting') {
-      if (selectedStage === 'announcing') {
+    } else if (props.electionStage === 'announcing') {
+      if (selectedStage === 'inactive') {
         setStageDescription(selectedStage)
         setVerbIndicator('ended on')
-        setDaysIndicator(announcingEndDay)
+        setDaysIndicator(inactiveEndDay)
       } else {
         setStageDescription(selectedStage)
         setVerbIndicator('begins in')
 
-        if (selectedStage === 'revealing') {
+        if (selectedStage === 'voting') {
           setDaysIndicator(defaultDaysIndicator)
-        } else if (selectedStage === 'nextround') {
-          setDaysIndicator(convertDurationToTimeString(revealingEndBlock - currentBlock))
+        } else if (selectedStage === 'revealing') {
+          setDaysIndicator(convertDurationToTimeString(votingEndBlock - currentBlock))
         }
       }
-    } else if (props.electionStage === 'revealing') {
-      if (selectedStage === 'announcing') {
+    } else if (props.electionStage === 'voting') {
+      if (selectedStage === 'inactive') {
+        setStageDescription(selectedStage)
+        setVerbIndicator('ended on')
+        setDaysIndicator(inactiveEndDay)
+      } else if (selectedStage === 'announcing') {
         setStageDescription(selectedStage)
         setVerbIndicator('ended on')
         setDaysIndicator(announcingEndDay)
-      } else if (selectedStage === 'voting') {
+      } else if (selectedStage === 'revealing') {
         setStageDescription(selectedStage)
-        setVerbIndicator('ended on')
-        setDaysIndicator(votingEndDay)
-      } else if (selectedStage === 'nextround') {
-        setStageDescription('Next Round')
-        setVerbIndicator('starts in')
+        setVerbIndicator('begins in')
         setDaysIndicator(defaultDaysIndicator)
       }
-    } else {
-      setStageDescription(defaultStaging)
-      setVerbIndicator(defaultVerbIndicator)
-      setDaysIndicator(defaultDaysIndicator)
+    } else if (props.electionStage === 'revealing') {
+      setStageDescription(selectedStage)
+      setVerbIndicator('ended on')
+      if (selectedStage === 'announcing') {
+        setDaysIndicator(announcingEndDay)
+      } else if (selectedStage === 'voting') {
+        setDaysIndicator(votingEndDay)
+      } else if (selectedStage === 'inactive') {
+        setDaysIndicator(inactiveEndDay)
+      }
     }
     setSelectedToolbarStage(selectedStage)
   }
@@ -322,7 +355,18 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
         <StatisticLabel>{remainDays} days until next round</StatisticLabel>
       </StatisticItemSpacedContent>
 
-      <ProgressBarLayout hasIdle={constants?.idlePeriod != undefined && constants?.idlePeriod > 1}>
+      <ProgressBarLayout layout={progressBarAttr}>
+        <TooltipProgressBar
+          start={0}
+          end={inactiveProgress / 100}
+          color={inactiveColor}
+          barType="inactive"
+          updateDesc={updateDescription}
+          tooltipText={`Idle stage lasts ${inactiveDays} days and ends on ${inactiveEndDay} CET (block #${inactiveEndBlock.toLocaleString(
+            'en-US'
+          )} block). After that time, a new round of elections begins`}
+          placement="bottom-end"
+        />
         <TooltipProgressBar
           start={0}
           end={announcingProgress / 100}
@@ -353,22 +397,9 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
           updateDesc={updateDescription}
           tooltipText={`Revealing stage lasts ${revealingDays} days and ends on ${revealingEndDay} CET (block #${revealingEndBlock.toLocaleString(
             'en-US'
-          )} block). During this time, voters can reveal their sealed votes. Any valid vote which is unsealed is counter, and in the end a winning set of candidates is selected`}
+          )} block). During this time, voters can reveal their sealed votes. Any valid vote which is unsealed is counted, and in the end a winning set of candidates is selected`}
           placement="bottom-end"
         />
-        {constants?.idlePeriod != undefined && constants?.idlePeriod > 1 && (
-          <TooltipProgressBar
-            start={0}
-            end={nextRoundProgress / 100}
-            color={nextRoundColor}
-            barType="nextround"
-            updateDesc={updateDescription}
-            tooltipText={`Idle stage lasts ${nextRoundDays} days and ends on ${nextRoundEndDay} CET (block #${nextRoundEndBlock.toLocaleString(
-              'en-US'
-            )} block). After that time, a new round of elections begins`}
-            placement="bottom-end"
-          />
-        )}
       </ProgressBarLayout>
     </MultiStatisticItem>
   )
@@ -428,7 +459,7 @@ const TooltipProgressBar = (props: TooltipProgressBarProps) => {
   const tooltipHandlers = {
     onClick: (event: React.MouseEvent<HTMLElement>) => {
       event.stopPropagation()
-      setTooltipActive(false)
+      setTooltipActive(true)
     },
     onFocus: mouseIsOver,
     onBlur: mouseLeft,
@@ -547,9 +578,9 @@ const StatisticBigLabel = styled.div<{ strong?: boolean }>`
   display: inline-block;
   color: ${({ strong }) => (strong ? `${Colors.Black[900]}` : `${Colors.Black[400]}`)};
 `
-const ProgressBarLayout = styled.div<{ hasIdle?: boolean }>`
+const ProgressBarLayout = styled.div<{ layout?: string }>`
   display: grid;
-  grid-template-columns: ${({ hasIdle }) => (hasIdle ? '14fr 3fr 3fr 1fr' : '15fr 3fr 3fr')};
+  grid-template-columns: ${({ layout }) => (layout ? layout : '1fr 14fr 3fr 3fr')};
   gap: 4px;
   width: 100%;
   max-width: 100%;
