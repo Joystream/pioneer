@@ -202,16 +202,24 @@ const booleanMapper: Mapper<UpdateChannelPayoutsDetail, 'channelCashoutsEnabled'
   ]
 }
 
-const palletStatusMapper: Mapper<UpdatePalletFrozenStatusDetail, 'frozen'> = (value) => {
+const palletStatusMapper: Mapper<UpdatePalletFrozenStatusDetail, 'freeze'> = (freezePallet) => {
   return [
     {
       label: 'Proposed Status',
       renderType: 'Text',
-      value: value ? 'Enable' : 'Disable',
+      value: freezePallet ? 'Disable' : 'Enable',
     },
   ]
 }
-
+const palletMapper: Mapper<UpdatePalletFrozenStatusDetail, 'pallet'> = (pallet) => {
+  return [
+    {
+      label: 'Pallet',
+      renderType: 'Text',
+      value: pallet,
+    },
+  ]
+}
 const amountMapper =
   (label?: string): Mapper<AmountDetail, 'amount'> =>
   (value, type): RenderNode[] => {
@@ -294,7 +302,8 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
     tooltipText:
       'This is the ID submitted to Chain for the Data Object (payout payload) to be further uploaded to the Storage. It will be displayed after proposal is executed.',
   }),
-  frozen: palletStatusMapper,
+  pallet: palletMapper,
+  freeze: palletStatusMapper,
 }
 
 const mapProposalDetail = (key: ProposalDetailsKeys, proposalDetails: ProposalWithDetails['details']) => {

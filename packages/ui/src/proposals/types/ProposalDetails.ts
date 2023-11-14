@@ -81,7 +81,7 @@ export type UpdateChannelPayoutsDetail = {
   payloadDataObjectId?: string
 }
 export type UpdatePalletFrozenStatusDetail = {
-  frozen?: boolean
+  freeze?: boolean
   pallet?: string
 }
 
