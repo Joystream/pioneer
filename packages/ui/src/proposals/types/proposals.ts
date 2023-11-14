@@ -61,6 +61,7 @@ export type ProposalType =
         | 'unlockBlogPost'
         | 'veto'
         | 'updateChannelPayouts'
+        | 'updatePalletFrozenStatus'
       )
 
 export type DisabledProposal = 'createBlogPost' | 'editBlogPost' | 'lockBlogPost' | 'unlockBlogPost'

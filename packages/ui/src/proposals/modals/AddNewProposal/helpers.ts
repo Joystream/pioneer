@@ -17,7 +17,7 @@ import {
 } from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
-import { isValidCSV } from '@/proposals/model/validation'
+import { differentFromContext, isValidCSV } from '@/proposals/model/validation'
 import { ProposalType } from '@/proposals/types'
 import { GroupIdName } from '@/working-groups/types'
 
@@ -49,6 +49,10 @@ export const defaultProposalValues = {
   },
   updateChannelPayouts: {
     cashoutEnabled: true,
+  },
+  updatePalletFrozenStatus: {
+    pallet: 'ProjectToken',
+    freeze: false,
   },
 }
 
@@ -174,6 +178,10 @@ export interface AddNewProposalForm {
       expectedDataSizeFee: BN
       expectedDataObjectStateBloatBond: BN
     }
+  }
+  updatePalletFrozenStatus: {
+    freeze: boolean
+    pallet: string
   }
 }
 
@@ -401,6 +409,20 @@ export const schemaFactory = (api?: Api) => {
         )
         .required(),
       channelCashoutsEnabled: Yup.boolean(),
+    }),
+    updatePalletFrozenStatus: Yup.object().shape({
+      freeze: Yup.boolean()
+        .test(
+          differentFromContext(
+            (isFrozen) =>
+              `The ProjectToken pallet is currently ${
+                isFrozen ? 'disabled' : 'enabled'
+              }, so presently this proposal would fail due to execution constraints.`,
+            'palletFrozenStatus',
+            'execution'
+          )
+        )
+        .required('Field is required'),
     }),
   })
 }

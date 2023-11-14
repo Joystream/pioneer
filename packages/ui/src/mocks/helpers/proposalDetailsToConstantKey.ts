@@ -32,4 +32,5 @@ const proposalDetailsToConstantKeyMap = new Map<ProposalDetailsType, keyof Api['
   ['UpdateChannelPayoutsProposalDetails', 'updateChannelPayoutsProposalParameters'],
   ['UpdateWorkingGroupBudgetProposalDetails', 'updateWorkingGroupBudgetProposalParameters'],
   ['VetoProposalDetails', 'vetoProposalProposalParameters'],
+  ['UpdatePalletFrozenStatusProposalDetails', 'setPalletFozenStatusProposalParameters'],
 ])

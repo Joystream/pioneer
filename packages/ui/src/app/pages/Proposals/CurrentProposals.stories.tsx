@@ -72,6 +72,7 @@ type Args = {
   onCreateProposal: jest.Mock
   onChangeThreadMode: jest.Mock
   onVote: jest.Mock
+  palletFrozen: boolean
 }
 type Story = StoryObj<FC<Args>>
 
@@ -91,6 +92,7 @@ export default {
   args: {
     isCouncilMember: false,
     proposalCount: 15,
+    palletFrozen: false,
   },
 
   parameters: {
@@ -106,7 +108,7 @@ export default {
 
     stakingAccountIdMemberStatus: {
       memberId: 0,
-      confirmed: { isTrue: true },
+      confirmed: true,
       size: 1,
     },
 
@@ -163,6 +165,9 @@ export default {
             query: {
               members: {
                 stakingAccountIdMemberStatus: parameters.stakingAccountIdMemberStatus,
+              },
+              projectToken: {
+                palletFrozen: args.palletFrozen,
               },
             },
             tx: {
@@ -291,7 +296,7 @@ export const AddNewProposalHappy: Story = {
 
     stakingAccountIdMemberStatus: {
       memberId: 0,
-      confirmed: { isTrue: false },
+      confirmed: false,
       size: 0,
     },
   },
@@ -570,7 +575,7 @@ export const BindAccountFailure: Story = {
   parameters: {
     stakingAccountIdMemberStatus: {
       memberId: 0,
-      confirmed: { isTrue: false },
+      confirmed: false,
       size: 0,
     },
     addStakingAccountCandidateFailure: 'It failed 🙀',
@@ -595,7 +600,7 @@ export const BindAccountThenCreateProposalFailure: Story = {
   parameters: {
     stakingAccountIdMemberStatus: {
       memberId: 0,
-      confirmed: { isTrue: false },
+      confirmed: false,
       size: 0,
     },
     createProposalFailure: 'It failed 🙀',
@@ -621,7 +626,7 @@ export const ConfirmAccountThenCreateProposalFailure: Story = {
   parameters: {
     stakingAccountIdMemberStatus: {
       memberId: 0,
-      confirmed: { isTrue: false },
+      confirmed: false,
       size: 1,
     },
     createProposalFailure: 'It failed 🙀',
@@ -1402,6 +1407,33 @@ export const SpecificParametersSetMembershipPrice: Story = {
     step('Transaction parameters', () => {
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({ setMembershipPrice: 8_0000000000 })
+    })
+  }),
+}
+
+export const SpecificParametersUpdatePalletFrozenStatus: Story = {
+  play: specificParametersTest('Update Pallet Frozen Status', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+
+      await userEvent.click(modal.getByTestId('crt-feature-select'))
+      expect(
+        await modal.findByText(
+          /The ProjectToken pallet is currently enabled, so presently this proposal would fail due to execution constraints./
+        )
+      )
+      expect(await modal.findByText(/Warning/))
+      expect(nextButton).toBeDisabled()
+
+      await userEvent.click(modal.getByTestId('crt-feature-select'))
+      await waitFor(() => expect(nextButton).toBeEnabled())
+    })
+
+    step('Transaction parameters', () => {
+      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({
+        setPalletFozenStatus: [true, 'ProjectToken'],
+      })
     })
   }),
 }
