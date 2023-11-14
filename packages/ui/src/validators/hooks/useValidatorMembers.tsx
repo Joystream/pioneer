@@ -34,11 +34,12 @@ export const useValidatorMembers = () => {
 
   const { data } = useGetMembersWithDetailsQuery({ variables, skip: !!allValidatorsWithCtrlAcc })
 
+  const memberships = data?.memberships?.map((rawMembership) => ({
+    membership: asMemberWithDetails(rawMembership),
+    isVerifiedValidator: rawMembership.metadata.isVerifiedValidator ?? false,
+  }))
+
   const validatorsWithMembership: ValidatorMembership[] | undefined = useMemo(() => {
-    const memberships = data?.memberships?.map((rawMembership) => ({
-      membership: asMemberWithDetails(rawMembership),
-      isVerifiedValidator: rawMembership.metadata.isVerifiedValidator ?? false,
-    }))
     return (
       allValidatorAddresses &&
       allValidatorsWithCtrlAcc &&
@@ -49,7 +50,7 @@ export const useValidatorMembers = () => {
         ...memberships.find(({ membership }) => membership.boundAccounts.includes(address)),
       }))
     )
-  }, [data])
+  }, [data, allValidatorAddresses, allValidatorsWithCtrlAcc])
 
   return validatorsWithMembership
 }
