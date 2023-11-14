@@ -1410,6 +1410,7 @@ export const SpecificParametersSetMembershipPrice: Story = {
     })
   }),
 }
+
 export const SpecificParametersUpdatePalletFrozenStatus: Story = {
   play: specificParametersTest('Update Pallet Frozen Status', async ({ args, createProposal, modal, step }) => {
     await createProposal(async () => {
@@ -1436,6 +1437,7 @@ export const SpecificParametersUpdatePalletFrozenStatus: Story = {
     })
   }),
 }
+
 export const SpecificParametersUpdateWorkingGroupBudget: Story = {
   parameters: {
     councilSize: 3,
