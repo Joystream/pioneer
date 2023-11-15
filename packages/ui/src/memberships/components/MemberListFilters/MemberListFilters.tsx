@@ -101,6 +101,7 @@ const searchFilterOptions: MemberSearchFilter[] = [
   'Wechat',
   'Whatsapp',
   'Youtube',
+  'Linkedin',
 ]
 
 export interface MemberListFiltersProps {

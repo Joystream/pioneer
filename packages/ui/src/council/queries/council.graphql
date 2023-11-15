@@ -116,6 +116,7 @@ fragment PastElectionRoundFields on ElectionRound {
   }
   castVotes {
     voteForId
+    stake
   }
 }
 
