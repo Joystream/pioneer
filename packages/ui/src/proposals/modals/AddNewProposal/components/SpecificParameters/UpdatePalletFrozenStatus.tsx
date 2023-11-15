@@ -31,17 +31,17 @@ export const UpdatePalletFrozenStatus = () => {
       </Row>
       <Row>
         <InlineToggleWrap>
-          <Label>CRT feature</Label>
+          <Label>Creator Tokens</Label>
+          <ToggleCheckbox
+            falseLabel="Disable"
+            trueLabel="Enable"
+            name="updatePalletFrozenStatus.freeze"
+            id="crt-feature-select"
+          />
           <Tooltip tooltipText="You have the flexibility to enable or disable CRT feature.">
             <TooltipDefault />
           </Tooltip>
         </InlineToggleWrap>
-        <ToggleCheckbox
-          falseLabel="Enable"
-          trueLabel="Disable"
-          name="updatePalletFrozenStatus.freeze"
-          id="crt-feature-select"
-        />
         {validationMessage && (
           <InputNotification validation={'invalid'}>
             <InputNotificationIcon>
