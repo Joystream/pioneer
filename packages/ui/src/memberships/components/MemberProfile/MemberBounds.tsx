@@ -18,7 +18,7 @@ export const MemberBounds = ({ account }: Props) => {
     <div>
       {!!account && (
         <AccountMemberRow>
-          <UnknownAccountInfo address={account} placeholderName="Root Account" />
+          <UnknownAccountInfo address={account} placeholderName="Bound Account" />
           <TokenValue value={balance?.total} isLoading={!isDefined(balance?.total)} />
         </AccountMemberRow>
       )}

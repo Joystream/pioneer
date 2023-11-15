@@ -38,14 +38,12 @@ export const OnBoardingPlugin = () => {
           <List>
             <ListItem>
               {getAllWallets().map((wallet) => (
-                <>
-                  <ConnectWalletItem
-                    key={wallet.extensionName}
-                    wallet={wallet}
-                    onClick={() => setSelectedWallet(wallet)}
-                    selected={selectedWallet?.extensionName === wallet.extensionName}
-                  />
-                </>
+                <ConnectWalletItem
+                  key={wallet.extensionName}
+                  wallet={wallet}
+                  onClick={() => setSelectedWallet(wallet)}
+                  selected={selectedWallet?.extensionName === wallet.extensionName}
+                />
               ))}
             </ListItem>
           </List>

@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
+import { AccountRow } from '@/common/components/Modal'
 import { TokenValue } from '@/common/components/typography'
 import { isDefined } from '@/common/utils'
 
@@ -49,20 +50,10 @@ const AccountsDisplay = styled(RowGapBlock)`
   padding: 24px;
 `
 
-export const AccountMemberRow = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+export const AccountMemberRow = styled(AccountRow)`
   grid-template-rows: 2fr;
-  -webkit-align-items: center;
   -webkit-box-align: center;
   -ms-flex-align: center;
-  align-items: center;
-  justify-items: center;
-  width: 100%;
-  min-height: 94px;
-  max-height: 94px;
-  padding: 8px 13px 8px 14px;
-  border: 1px solid #c4ccd6;
-  border-radius: 2px;
-  background-color: #ffffff;
+  justify-items: end;
+  padding: 8px 14px 8px 14px;
 `
