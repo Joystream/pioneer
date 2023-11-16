@@ -25,9 +25,11 @@ import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModa
 import { FailureModal } from '@/common/components/FailureModal'
 import { Loading } from '@/common/components/Loading'
 import { ModalGlass } from '@/common/components/Modal'
+import { NotSupportMobileModal } from '@/common/components/NotSupportMobileModal'
 import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/Search/SearchResultsModal'
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { useModal } from '@/common/hooks/useModal'
+import { useResponsive } from '@/common/hooks/useResponsive'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { ConfirmModal } from '@/common/modals/ConfirmModal/ConfirmModal'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
@@ -198,6 +200,7 @@ const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
   'ClaimVestingModal',
   'ReportContentModal',
   'EmailConfirmationModal',
+  'VoteRationaleModal',
 ]
 
 export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [
@@ -210,10 +213,19 @@ export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [
   'VoteForProposalModal',
 ]
 
+const NON_TRANSACTIONAL_MODALS: ModalNames[] = [
+  'Member',
+  'ApplicationDetails',
+  'VoteRationaleModal',
+  'SearchResults',
+  'CandidacyPreview',
+]
+
 export const GlobalModals = () => {
   const { modal, hideModal, currentModalMachine, showModal, modalData, isClosing } = useModal()
   const { active: activeMember } = useMyMemberships()
   const { status } = useTransactionStatus()
+  const { supportTransactions } = useResponsive()
   const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
 
   const [container, setContainer] = useState(document.body)
@@ -223,6 +235,10 @@ export const GlobalModals = () => {
   }, [])
 
   const potentialFallback = useGlobalModalHandler(currentModalMachine, hideModal)
+
+  if (modal && !supportTransactions && !NON_TRANSACTIONAL_MODALS.includes(modal as ModalNames)) {
+    return <NotSupportMobileModal onClose={hideModal} />
+  }
 
   if (modal && !GUEST_ACCESSIBLE_MODALS.includes(modal as ModalNames) && !activeMember) {
     showModal<SwitchMemberModalCall>({

@@ -16,7 +16,7 @@ import { MemberWithDetails } from '@/memberships/types'
 import { MemberInfo } from '..'
 import { MemberRoles } from '../MemberRoles'
 
-import { CountInfo, MemberColumn, MemberItemWrap, MemberRolesColumn } from './Fields'
+import { CountInfo, MemberColumn, MemberItemWrap, MemberRolesColumn, MemberStakeColumn } from './Fields'
 
 interface MemberListItemProps {
   member: MemberWithDetails
@@ -60,10 +60,10 @@ export const MemberListItem = ({ member, searchFilter }: MemberListItemProps) =>
           <TokenValue value={balance?.total} />
         </MemberColumn>
 
-        <MemberColumn>
-          <TokenValue value={balance?.locked} />
+        <MemberStakeColumn>
           <AccountLocks locks={balance?.locks} />
-        </MemberColumn>
+          <TokenValue value={balance?.locked} />
+        </MemberStakeColumn>
       </MemberItemWrap>
       {searchFilter && !EMPTY_SEARCH_FILTERS.includes(searchFilter) && (
         <ExternalInfo>

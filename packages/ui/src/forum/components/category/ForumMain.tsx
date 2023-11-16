@@ -66,8 +66,16 @@ export const CategoriesListWrapper = styled.div`
   display: grid;
   grid-gap: 20px;
   grid-template-columns: repeat(auto-fill, minmax(540px, 1fr));
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+  }
 `
 
 const StyledThreadCard = styled(ThreadCard)`
   min-width: 330px;
+
+  @media (max-width: 424px) {
+    min-width: 288px;
+  }
 `

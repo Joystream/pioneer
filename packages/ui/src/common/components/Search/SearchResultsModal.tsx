@@ -14,6 +14,7 @@ import { Tabs } from '@/common/components/Tabs'
 import { Fonts } from '@/common/constants'
 import { useEscape } from '@/common/hooks/useEscape'
 import { useModal } from '@/common/hooks/useModal'
+import { useResponsive } from '@/common/hooks/useResponsive'
 import { SearchKind, useSearch } from '@/common/hooks/useSearch'
 import { ModalWithDataCall } from '@/common/providers/modal/types'
 import { ThreadItemBreadcrumbs } from '@/forum/components/threads/ThreadItemBreadcrumbs'
@@ -25,6 +26,7 @@ export type SearchResultsModalCall = ModalWithDataCall<'SearchResults', { search
 
 export const SearchResultsModal = () => {
   const { hideModal, modalData } = useModal<SearchResultsModalCall>()
+  const { size } = useResponsive()
   const [search, setSearch] = useState(modalData.search)
   const [activeTab, setActiveTab] = useState<SearchKind>('FORUM')
   const isValid = () => !debouncedSearch || debouncedSearch.length === 0 || debouncedSearch.length > 2
@@ -95,6 +97,7 @@ export const SearchResultsModal = () => {
                   breadcrumbs={<ThreadItemBreadcrumbs id={thread.categoryId} />}
                   to={`${generatePath(ForumRoutes.thread, { id: thread.id })}?post=${id}`}
                   title={thread.title}
+                  onClick={() => (size === 'xxs' || size === 'xs') && hideModal()}
                 >
                   {text}
                 </SearchResultItem>

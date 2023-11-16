@@ -25,7 +25,7 @@ export const AccountRow = styled.div`
   width: 100%;
   min-height: ${Sizes.accountHeight};
   max-height: ${Sizes.accountHeight};
-  padding: 8px 72px 8px 14px;
+  padding: 8px 14px;
   border: 1px solid ${Colors.Black[300]};
   border-radius: ${BorderRad.s};
   background-color: ${Colors.White};
@@ -52,6 +52,7 @@ export const TransactionAmount = styled.div<TransactionAmountProps>`
 
 export const TransactionInfoContainer = styled.div`
   display: grid;
+  margin-right: 24px;
 `
 
 export const BalanceInfo = styled.div`

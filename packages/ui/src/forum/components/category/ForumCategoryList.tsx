@@ -38,6 +38,8 @@ export const ForumCategoryList = ({ categories, isArchive = false }: ForumCatego
 )
 
 const ForumCategoryListStyles = styled(RowGapBlock)`
+  overflow: auto;
+
   ${ListHeaders} {
     padding: 0px 24px;
   }
