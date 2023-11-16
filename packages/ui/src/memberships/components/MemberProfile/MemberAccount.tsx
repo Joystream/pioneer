@@ -13,7 +13,7 @@ type Props = {
   name: string
 }
 
-export const MemberBounds = ({ account, name }: Props) => {
+export const MemberAccount = ({ account, name }: Props) => {
   const balance = useBalance(account)
   return (
     <div>
