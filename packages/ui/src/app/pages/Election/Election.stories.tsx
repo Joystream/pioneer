@@ -6,46 +6,57 @@ import { GetCurrentElectionDocument } from '@/council/queries'
 import { MocksParameters } from '@/mocks/providers'
 
 import { Election } from './Election'
+import { joy } from '@/mocks/helpers'
 
 type Args = {
   electionStage: 'announcing' | 'revealing' | 'voting' | 'inactive'
-  remainingPeriod?: number | BN
-  currentBlock?: number | BN
+  remainingPeriod: number
 }
 
 type Story = StoryObj<FC<Args>>
 
+
 export default {
   title: 'Pages/Election/Election',
   component: Election,
+  argTypes: {
+    electionStage: {
+      control: { type: 'radio'},
+      options: ['announcing' , 'revealing' , 'voting' , 'inactive']
+    },
+  },
   args: {
     electionStage: 'announcing',
     remainingPeriod: 10000,
-    currentBlock: 4802561,
   },
   parameters: {
-    router: { path: '', href: '' },
-    mocks: ({ args }: StoryContext<Args>): MocksParameters => {
+    currentBlock: 480_2561,
+    idlePeriodDuration: 14400,
+    announcingPeriodDuration: 129600,
+    voteStageDuration: 43200,
+    revealStageDuration: 43200,
+    mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
+      const councilStageDuration = parameters[args.electionStage === 'inactive' ? 'idlePeriodDuration' : 'announcingPeriodDuration']
       return {
         chain: {
           consts: {
             council: {
-              councilSize: new BN(3),
-              idlePeriodDuration: new BN(14400),
-              announcingPeriodDuration: new BN(129600),
-              budgetRefillPeriod: new BN(14400),
-              minCandidateStake: new BN(1666666666660000),
+              councilSize: 3,
+              idlePeriodDuration: parameters.idlePeriodDuration,
+              announcingPeriodDuration: parameters.announcingPeriodDuration,
+              budgetRefillPeriod: 14400,
+              minCandidateStake: joy(166_666.666666),
             },
             referendum: {
-              voteStageDuration: new BN(43200),
-              revealStageDuration: new BN(43200),
-              minimumStake: new BN(1666666666660),
+              voteStageDuration: parameters.voteStageDuration,
+              revealStageDuration: parameters.revealStageDuration,
+              minimumStake: joy(166.666666666),
             },
           },
           rpc: {
             chain: {
               subscribeNewHeads: {
-                number: args.currentBlock,
+                number: parameters.currentBlock,
               },
             },
           },
@@ -53,24 +64,21 @@ export default {
             council: {
               stage: {
                 stage: {
-                  isIdle: args.electionStage === 'inactive' ? true : false,
-                  isAnnouncing: args.electionStage === 'announcing' ? true : false,
+                  isIdle: args.electionStage === 'inactive',
+                  isAnnouncing: args.electionStage === 'announcing',
                 },
-                changedAt:
-                  args.electionStage === 'inactive'
-                    ? Number(args.currentBlock) - Number(new BN(14400)) + Number(args.remainingPeriod)
-                    : Number(args.currentBlock) - Number(new BN(129600)) + Number(args.remainingPeriod),
+                changedAt: Math.max(0, parameters.currentBlock - councilStageDuration + args.remainingPeriod)
               },
             },
             referendum: {
               stage: {
-                isVoting: args.electionStage === 'voting' ? true : false,
-                isRevealing: args.electionStage === 'revealing' ? true : false,
+                isVoting: args.electionStage === 'voting',
+                isRevealing: args.electionStage === 'revealing',
                 asVoting: {
-                  started: Number(args.currentBlock) - Number(new BN(43200)) + Number(args.remainingPeriod),
+                  started: Math.max(0, parameters.currentBlock - parameters.voteStageDuration + args.remainingPeriod),
                 },
                 asRevealing: {
-                  started: Number(args.currentBlock) - Number(new BN(43200)) + Number(args.remainingPeriod),
+                  started: Math.max(0, parameters.currentBlock - parameters.revealStageDuration + args.remainingPeriod),
                 },
               },
             },

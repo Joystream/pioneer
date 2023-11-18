@@ -27,6 +27,7 @@ import { Election as ElectionType } from '@/council/types/Election'
 
 import { ElectionProgressBar } from './components/ElectionProgressBar'
 import { ElectionTabs } from './components/ElectionTabs'
+import styled from 'styled-components'
 
 const displayElectionRound = (election: ElectionType | undefined): string => {
   if (!election) {
@@ -87,9 +88,9 @@ export const Election = () => {
     </PageHeaderWrapper>
   )
 
-  const main = (
+ const main = (
     <MainPanel>
-      <Statistics style={{ gridTemplateColumns: '250px minmax(500px, 1fr)' }}>
+      <StyledStatistics>
         <StatisticItem
           title="Round"
           tooltipText="Elections are held in consecutive rounds. This is the number of current election."
@@ -105,7 +106,7 @@ export const Election = () => {
           title="Election Progress"
           tooltipText="Elections occur periodically. Each has a sequence of stages referred to as the election cycle. Stages are: announcing period, voting period and revealing period."
         />
-      </Statistics>
+      </StyledStatistics>
       {electionStage === 'announcing' && (
         <AnnouncingStage election={election} isLoading={!isRefetched && isLoadingElection} />
       )}
@@ -116,3 +117,7 @@ export const Election = () => {
 
   return <PageLayout header={header} main={main} />
 }
+
+const StyledStatistics = styled(Statistics)`
+  grid-template-columns: 250px minmax(500px, 1fr);
+` 

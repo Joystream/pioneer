@@ -68,11 +68,6 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
   let revealingProgress = 0
   let inactiveProgress = 0
 
-  let announcingColor = Colors.Blue[500]
-  let votingColor = Colors.Blue[500]
-  const revealingColor = Colors.Blue[500]
-  let inactiveColor = Colors.Blue[500]
-
   let remainDays = 0
   let announcingDays = 0
   let votingDays = 0
@@ -130,20 +125,20 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       const date = new Date()
 
       date.setSeconds(date.getSeconds() + totalSeconds)
-      inactiveEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      inactiveEndDay = date.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
       date.setSeconds(date.getSeconds() + Math.floor(constants?.announcingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK)))
-      announcingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      announcingEndDay = date.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
       date.setSeconds(
         date.getSeconds() + Math.floor(constants?.election.votingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
       )
-      votingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      votingEndDay = date.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
       date.setSeconds(
         date.getSeconds() + Math.floor(constants?.election.revealingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
       )
-      revealingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      revealingEndDay = date.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
       // calculate the end of blocks of each stage
       inactiveEndBlock = currentBlock + duration
@@ -152,7 +147,6 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       revealingEndBlock = votingEndBlock + constants?.election.revealingPeriod
     } else if (props.electionStage === 'announcing') {
       inactiveProgress = 100
-      inactiveColor = Colors.Blue[200]
 
       announcingProgress = Math.floor(100 - (100 * duration) / constants?.announcingPeriod)
       remainDays = Math.floor(
@@ -168,23 +162,23 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       const date = new Date()
 
       date.setSeconds(date.getSeconds() + totalSeconds)
-      announcingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      announcingEndDay = date.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
       const previousDate = new Date(date)
       previousDate.setSeconds(
         previousDate.getSeconds() - Math.floor(constants?.announcingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
       )
-      inactiveEndDay = previousDate.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      inactiveEndDay = previousDate.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
       date.setSeconds(
         date.getSeconds() + Math.floor(constants?.election.votingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
       )
-      votingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      votingEndDay = date.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
       date.setSeconds(
         date.getSeconds() + Math.floor(constants?.election.revealingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
       )
-      revealingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      revealingEndDay = date.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
       // calculate the end of blocks of each stage
       announcingEndBlock = currentBlock + duration
@@ -194,8 +188,6 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
     } else if (props.electionStage === 'voting') {
       inactiveProgress = 100
       announcingProgress = 100
-      inactiveColor = Colors.Blue[200]
-      announcingColor = Colors.Blue[200]
 
       votingProgress = Math.floor(100 - (100 * duration) / constants?.election.votingPeriod)
       remainDays = Math.floor(
@@ -207,23 +199,23 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       const date = new Date()
 
       date.setSeconds(date.getSeconds() + totalSeconds)
-      votingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      votingEndDay = date.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
       const previousDate = new Date(date)
       previousDate.setSeconds(
         previousDate.getSeconds() - Math.floor(constants?.election.votingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
       )
-      announcingEndDay = previousDate.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      announcingEndDay = previousDate.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
       previousDate.setSeconds(
         previousDate.getSeconds() - Math.floor(constants?.announcingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
       )
-      inactiveEndDay = previousDate.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      inactiveEndDay = previousDate.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
       date.setSeconds(
         date.getSeconds() + Math.floor(constants?.election.revealingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
       )
-      revealingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      revealingEndDay = date.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
       // calculate the end of blocks of each stage
       votingEndBlock = currentBlock + duration
@@ -235,10 +227,6 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       announcingProgress = 100
       votingProgress = 100
 
-      inactiveColor = Colors.Blue[200]
-      announcingColor = Colors.Blue[200]
-      votingColor = Colors.Blue[200]
-
       revealingProgress = Math.floor(100 - (100 * duration) / constants?.election.revealingPeriod)
       remainDays = Math.floor((duration + constants?.budgetRefillPeriod - 1) / constants?.budgetRefillPeriod)
 
@@ -246,24 +234,24 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       const date = new Date()
 
       date.setSeconds(date.getSeconds() + totalSeconds)
-      revealingEndDay = date.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      revealingEndDay = date.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
       const previousDate = new Date(date)
       previousDate.setSeconds(
         previousDate.getSeconds() -
           Math.floor(constants?.election.revealingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
       )
-      votingEndDay = previousDate.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      votingEndDay = previousDate.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
       previousDate.setSeconds(
         previousDate.getSeconds() - Math.floor(constants?.election.votingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
       )
-      announcingEndDay = previousDate.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      announcingEndDay = previousDate.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
       previousDate.setSeconds(
         previousDate.getSeconds() - Math.floor(constants?.announcingPeriod / (A_SECOND / MILLISECONDS_PER_BLOCK))
       )
-      inactiveEndDay = previousDate.toLocaleString('en-US', { timeZone: 'Europe/Paris' })
+      inactiveEndDay = previousDate.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
       // calculate the end of blocks of each stage
       revealingEndBlock = currentBlock + duration
@@ -359,46 +347,46 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
         <TooltipProgressBar
           start={0}
           end={inactiveProgress / 100}
-          color={inactiveColor}
+          isCurrent={props.electionStage === 'inactive'}
           barType="inactive"
           updateDesc={updateDescription}
           tooltipText={`Idle stage lasts ${inactiveDays} days and ends on ${inactiveEndDay} CET (block #${inactiveEndBlock.toLocaleString(
-            'en-US'
+            'en-gb'
           )} block). After that time, a new round of elections begins`}
-          placement="bottom-end"
+          placement="bottom-start"
         />
         <TooltipProgressBar
           start={0}
           end={announcingProgress / 100}
-          color={announcingColor}
+          isCurrent={props.electionStage === 'announcing'}
           barType="announcing"
           updateDesc={updateDescription}
           tooltipText={`Announcing stage lasts ${announcingDays} days and ends on ${announcingEndDay} CET (block #${announcingEndBlock.toLocaleString(
-            'en-US'
+            'en-gb'
           )} block). During this time members can announce that they will stand as candidates for the next council`}
           placement="bottom-start"
         />
         <TooltipProgressBar
           start={0}
           end={votingProgress / 100}
-          color={votingColor}
+          isCurrent={props.electionStage === 'voting'}
           barType="voting"
           updateDesc={updateDescription}
           tooltipText={`Voting stage lasts ${votingDays} days and ends on ${votingEndDay} CET (block #${votingEndBlock.toLocaleString(
-            'en-US'
+            'en-gb'
           )} block). During this time voters can submit votes in favor of candidates`}
           placement="bottom-start"
         />
         <TooltipProgressBar
           start={0}
           end={revealingProgress / 100}
-          color={revealingColor}
+          isCurrent={props.electionStage === 'revealing'}
           barType="revealing"
           updateDesc={updateDescription}
           tooltipText={`Revealing stage lasts ${revealingDays} days and ends on ${revealingEndDay} CET (block #${revealingEndBlock.toLocaleString(
-            'en-US'
+            'en-gb'
           )} block). During this time, voters can reveal their sealed votes. Any valid vote which is unsealed is counted, and in the end a winning set of candidates is selected`}
-          placement="bottom-end"
+          placement="bottom-start"
         />
       </ProgressBarLayout>
     </MultiStatisticItem>
@@ -409,6 +397,7 @@ interface TooltipProgressBarProps extends ProgressBarProps {
   barType: string
   tooltipText?: string
   placement?: Placement
+  isCurrent: boolean
   updateDesc: (electionStage: string, inout: boolean) => void
 }
 
@@ -473,7 +462,7 @@ const TooltipProgressBar = (props: TooltipProgressBarProps) => {
 
   return (
     <>
-      <ProgressBar {...props} size={barHeight} ref={setReferenceElementRef} {...tooltipHandlers} />
+      <ProgressBar {...props} color={props.isCurrent ? Colors.Blue[500] : Colors.Blue[200]} size={barHeight} ref={setReferenceElementRef} {...tooltipHandlers} />
       {isTooltipActive &&
         ReactDOM.createPortal(
           <CustomTooltipPopupContainer
