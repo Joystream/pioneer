@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
@@ -27,7 +28,6 @@ import { Election as ElectionType } from '@/council/types/Election'
 
 import { ElectionProgressBar } from './components/ElectionProgressBar'
 import { ElectionTabs } from './components/ElectionTabs'
-import styled from 'styled-components'
 
 const displayElectionRound = (election: ElectionType | undefined): string => {
   if (!election) {
@@ -88,7 +88,7 @@ export const Election = () => {
     </PageHeaderWrapper>
   )
 
- const main = (
+  const main = (
     <MainPanel>
       <StyledStatistics>
         <StatisticItem
@@ -120,4 +120,4 @@ export const Election = () => {
 
 const StyledStatistics = styled(Statistics)`
   grid-template-columns: 250px minmax(500px, 1fr);
-` 
+`

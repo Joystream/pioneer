@@ -1,12 +1,11 @@
 import { Meta, StoryContext, StoryObj } from '@storybook/react'
-import BN from 'bn.js'
 import { FC } from 'react'
 
 import { GetCurrentElectionDocument } from '@/council/queries'
+import { joy } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
 
 import { Election } from './Election'
-import { joy } from '@/mocks/helpers'
 
 type Args = {
   electionStage: 'announcing' | 'revealing' | 'voting' | 'inactive'
@@ -15,14 +14,13 @@ type Args = {
 
 type Story = StoryObj<FC<Args>>
 
-
 export default {
   title: 'Pages/Election/Election',
   component: Election,
   argTypes: {
     electionStage: {
-      control: { type: 'radio'},
-      options: ['announcing' , 'revealing' , 'voting' , 'inactive']
+      control: { type: 'radio' },
+      options: ['announcing', 'revealing', 'voting', 'inactive'],
     },
   },
   args: {
@@ -36,7 +34,8 @@ export default {
     voteStageDuration: 43200,
     revealStageDuration: 43200,
     mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
-      const councilStageDuration = parameters[args.electionStage === 'inactive' ? 'idlePeriodDuration' : 'announcingPeriodDuration']
+      const councilStageDuration =
+        parameters[args.electionStage === 'inactive' ? 'idlePeriodDuration' : 'announcingPeriodDuration']
       return {
         chain: {
           consts: {
@@ -67,7 +66,7 @@ export default {
                   isIdle: args.electionStage === 'inactive',
                   isAnnouncing: args.electionStage === 'announcing',
                 },
-                changedAt: Math.max(0, parameters.currentBlock - councilStageDuration + args.remainingPeriod)
+                changedAt: Math.max(0, parameters.currentBlock - councilStageDuration + args.remainingPeriod),
               },
             },
             referendum: {

@@ -1,4 +1,3 @@
-import { Placement } from '@popperjs/core'
 import BN from 'bn.js'
 import React, { ReactElement, useState, useEffect, useMemo } from 'react'
 import ReactDOM from 'react-dom'
@@ -353,7 +352,6 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
           tooltipText={`Idle stage lasts ${inactiveDays} days and ends on ${inactiveEndDay} CET (block #${inactiveEndBlock.toLocaleString(
             'en-gb'
           )} block). After that time, a new round of elections begins`}
-          placement="bottom-start"
         />
         <TooltipProgressBar
           start={0}
@@ -364,7 +362,6 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
           tooltipText={`Announcing stage lasts ${announcingDays} days and ends on ${announcingEndDay} CET (block #${announcingEndBlock.toLocaleString(
             'en-gb'
           )} block). During this time members can announce that they will stand as candidates for the next council`}
-          placement="bottom-start"
         />
         <TooltipProgressBar
           start={0}
@@ -375,7 +372,6 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
           tooltipText={`Voting stage lasts ${votingDays} days and ends on ${votingEndDay} CET (block #${votingEndBlock.toLocaleString(
             'en-gb'
           )} block). During this time voters can submit votes in favor of candidates`}
-          placement="bottom-start"
         />
         <TooltipProgressBar
           start={0}
@@ -386,7 +382,6 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
           tooltipText={`Revealing stage lasts ${revealingDays} days and ends on ${revealingEndDay} CET (block #${revealingEndBlock.toLocaleString(
             'en-gb'
           )} block). During this time, voters can reveal their sealed votes. Any valid vote which is unsealed is counted, and in the end a winning set of candidates is selected`}
-          placement="bottom-start"
         />
       </ProgressBarLayout>
     </MultiStatisticItem>
@@ -396,7 +391,6 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
 interface TooltipProgressBarProps extends ProgressBarProps {
   barType: string
   tooltipText?: string
-  placement?: Placement
   isCurrent: boolean
   updateDesc: (electionStage: string, inout: boolean) => void
 }
@@ -408,8 +402,9 @@ const TooltipProgressBar = (props: TooltipProgressBarProps) => {
   const [barHeight, setBarHeight] = useState<'small' | 'big' | 'medium'>('small')
   const [arrowPos, setArrowPos] = useState<number>()
 
+  const placement = props.end === 0 || props.end === 1 ? 'bottom' : props.end < 0.5 ? 'bottom-start' : 'bottom-end'
   const { styles, attributes } = usePopper(referenceElementRef, popperElementRef, {
-    placement: props.end === 1 ? 'bottom' : props.placement ?? 'bottom-start',
+    placement: placement,
     modifiers: [
       {
         name: 'offset',
@@ -424,12 +419,12 @@ const TooltipProgressBar = (props: TooltipProgressBarProps) => {
     if (referenceElementRef) {
       const barWidth = referenceElementRef.clientWidth
 
-      if (props.placement === 'bottom-start') {
-        if (props.end === 0) setArrowPos(Math.floor(barWidth / 2))
-        else setArrowPos(Math.floor(props.end * barWidth))
-      } else if (props.placement === 'bottom-end') {
-        if (props.end === 0) setArrowPos(Math.floor(barWidth / 2))
-        else setArrowPos(Math.floor(barWidth - props.end * barWidth))
+      if (placement === 'bottom-start') {
+        setArrowPos(Math.floor(props.end * barWidth))
+      } else if (placement === 'bottom-end') {
+        setArrowPos(Math.floor(barWidth - props.end * barWidth))
+      } else {
+        setArrowPos(Math.floor(barWidth))
       }
     }
   }, [referenceElementRef, props.end])
@@ -462,7 +457,13 @@ const TooltipProgressBar = (props: TooltipProgressBarProps) => {
 
   return (
     <>
-      <ProgressBar {...props} color={props.isCurrent ? Colors.Blue[500] : Colors.Blue[200]} size={barHeight} ref={setReferenceElementRef} {...tooltipHandlers} />
+      <ProgressBar
+        {...props}
+        color={props.isCurrent ? Colors.Blue[500] : Colors.Blue[200]}
+        size={barHeight}
+        ref={setReferenceElementRef}
+        {...tooltipHandlers}
+      />
       {isTooltipActive &&
         ReactDOM.createPortal(
           <CustomTooltipPopupContainer
