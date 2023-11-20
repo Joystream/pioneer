@@ -5,7 +5,7 @@ volumes:
 
 services:
   pioneer-api:
-    image: thesan/pioneer-backend # TODO change this to joystream/...
+    image: joystream/pioneer-backend
     build:
       context: ../..
       dockerfile: backend.Dockerfile
