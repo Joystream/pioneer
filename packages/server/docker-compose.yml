@@ -3,11 +3,6 @@ version: '3.4'
 volumes:
   pioneer-db-data:
 
-networks:
-  default:
-    name: joystream_default
-    external: true
-
 services:
   pioneer-api:
     image: thesan/pioneer-backend # TODO change this to joystream/...
