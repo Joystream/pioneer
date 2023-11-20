@@ -16,7 +16,8 @@
     "import"
   ],
   "ignorePatterns": [
-    ".eslintrc.js"
+    ".eslintrc.js",
+    "index.html"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {

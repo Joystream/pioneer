@@ -58,6 +58,7 @@ const ThreadPinIcon = styled(PinIcon)`
 `
 
 const ThreadListItemStyles = styled(TableListItem).attrs({ $colLayout: ThreadsColLayout })<{ $isSticky?: boolean }>`
+  grid-column-gap: 12px;
   height: 80px;
   padding: 12px 24px;
   position: relative;

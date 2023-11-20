@@ -72,6 +72,10 @@ const StepInfo = styled.div`
   height: 100%;
   max-width: 100%;
   overflow: hidden;
+
+  @media (max-width: 1023px) {
+    display: none;
+  }
 `
 
 const StepTransactionInfo = styled(TextInlineSmall)`

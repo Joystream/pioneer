@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
-import styled, { css } from 'styled-components'
+import styled, { FlattenSimpleInterpolation, css } from 'styled-components'
 
+import { ButtonsGroup } from '../../common/components/buttons'
 import { PageContent } from '../../common/components/page/PageContent'
 import { Breadcrumbs } from '../../common/components/page/Sidebar/Breadcrumbs/Breadcrumbs'
 import { breadcrumbsOptions } from '../constants/breadcrumbs'
@@ -12,9 +13,18 @@ export interface PageLayoutProps {
   sidebar?: ReactNode
   sidebarScrollable?: boolean
   footer?: ReactNode
+  responsiveStyle?: FlattenSimpleInterpolation
 }
 
-export const PageLayout = ({ header, main, sidebar, sidebarScrollable, footer, lastBreadcrumb }: PageLayoutProps) => (
+export const PageLayout = ({
+  header,
+  main,
+  sidebar,
+  sidebarScrollable,
+  footer,
+  lastBreadcrumb,
+  responsiveStyle,
+}: PageLayoutProps) => (
   <PageContent>
     <Breadcrumbs lastBreadcrumb={lastBreadcrumb} breadcrumbsOptions={breadcrumbsOptions} />
     <PageLayoutContent
@@ -23,12 +33,20 @@ export const PageLayout = ({ header, main, sidebar, sidebarScrollable, footer, l
       sidebar={sidebar}
       sidebarScrollable={sidebarScrollable}
       footer={footer}
+      responsiveStyle={responsiveStyle}
     />
   </PageContent>
 )
 
-export const PageLayoutContent = ({ header, main, sidebar, sidebarScrollable, footer }: PageLayoutProps) => (
-  <PageLayoutComponent header={header} main={main} sidebar={sidebar} footer={footer}>
+export const PageLayoutContent = ({
+  header,
+  main,
+  sidebar,
+  sidebarScrollable,
+  footer,
+  responsiveStyle,
+}: PageLayoutProps) => (
+  <PageLayoutComponent header={header} main={main} sidebar={sidebar} footer={footer} responsiveStyle={responsiveStyle}>
     {header && <PageHeader>{header}</PageHeader>}
     {main && <PageMain>{main}</PageMain>}
     {sidebar && <PageSidebar sidebarScrollable={sidebarScrollable}>{sidebar}</PageSidebar>}
@@ -59,6 +77,28 @@ export const PageHeaderRow = styled.div<{ showOverflow?: boolean }>`
   overflow: ${({ showOverflow }) => (showOverflow ? 'visible' : 'hidden')};
 `
 
+export const PageHeaderWithButtons = styled(PageHeaderRow)`
+  @media (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    ${ButtonsGroup} {
+      grid-auto-flow: row;
+      grid-row-gap: 8px;
+      width: 100%;
+
+      button, a {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center:
+        gap: 4px;
+      }
+    }
+  }
+`
+
 const PageMain = styled.main`
   width: 100%;
   grid-area: main;
@@ -66,9 +106,6 @@ const PageMain = styled.main`
 `
 
 const PageSidebar = styled.aside<Pick<PageLayoutProps, 'sidebarScrollable'>>`
-  position: absolute;
-  top: 0;
-  bottom: 0;
   width: 100%;
   grid-area: sidebar;
 
@@ -85,7 +122,19 @@ const PageFooter = styled.footer`
   grid-area: footer;
 `
 
-const SidebarWidth = '280px'
+const SidebarStyle = css`
+  aside {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    padding-left: 16px;
+
+    > div {
+      min-height: 184px;
+      overflow: hidden;
+    }
+  }
+`
 
 const PageLayoutDefault = css`
   grid-template-columns: 1fr;
@@ -105,20 +154,41 @@ const PageLayoutWithFooter = css`
 `
 
 const PageLayoutWithSidebar = css`
-  grid-template-columns: 1fr ${SidebarWidth};
-  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto 1fr;
   grid-template-areas:
-    'header header'
-    'main sidebar';
+    'header'
+    'main'
+    'sidebar';
+
+  @media (min-width: 1440px) {
+    grid-template-columns: 9fr 3fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'header header'
+      'main sidebar';
+    ${SidebarStyle}
+  }
 `
 
 const PageLayoutWithSidebarAndFooter = css`
-  grid-template-columns: 1fr ${SidebarWidth};
-  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto 1fr auto;
   grid-template-areas:
-    'header header'
-    'main sidebar'
-    'footer sidebar';
+    'header'
+    'main'
+    'sidebar'
+    'footer';
+
+  @media (min-width: 1440px) {
+    grid-template-columns: 9fr 3fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      'header header'
+      'main sidebar'
+      'footer footer';
+    ${SidebarStyle}
+  }
 `
 
 export const PageLayoutComponent = styled.div<PageLayoutProps>`
@@ -128,6 +198,20 @@ export const PageLayoutComponent = styled.div<PageLayoutProps>`
   grid-row-gap: 24px;
   width: 100%;
   min-height: 100%;
+
+  aside {
+    position: relative;
+    width: 100%;
+    grid-area: sidebar;
+
+    > div {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+    }
+  }
+
   ${(props) =>
     !props.footer &&
     css`
@@ -144,4 +228,5 @@ export const PageLayoutComponent = styled.div<PageLayoutProps>`
       return PageLayoutWithSidebarAndFooter
     }
   }};
+  ${(props) => props.responsiveStyle}
 `

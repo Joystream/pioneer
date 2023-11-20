@@ -20,6 +20,7 @@ import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
 import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
+import { useResponsive } from '@/common/hooks/useResponsive'
 import { useToggle } from '@/common/hooks/useToggle'
 import { OnBoardingStatus } from '@/common/providers/onboarding/types'
 
@@ -81,6 +82,7 @@ export const OnBoardingOverlay = () => {
   const { isLoading, status } = useOnBoarding()
   const [isOpen, toggle] = useToggle()
   const [endpoints] = useNetworkEndpoints()
+  const { isMobile } = useResponsive()
 
   const openOnBoardingModal = useCallback(() => {
     showModal({ modal: 'OnBoardingModal' })
@@ -88,6 +90,15 @@ export const OnBoardingOverlay = () => {
 
   if (isLoading || !status || status === 'finished' || !api?.isConnected) {
     return null
+  }
+
+  if (isMobile) {
+    return (
+      <WrapperMobileMode>
+        <TextHuge bold>To become a member visit this page from desktop</TextHuge>
+        <TextSmall>It requires browser extension</TextSmall>
+      </WrapperMobileMode>
+    )
   }
 
   return (
@@ -211,9 +222,9 @@ const ButtonContainer = styled.div`
 
 const TextContainer = styled.div`
   display: flex;
-  padding: 13px 0 19px 33px;
+  padding-left: 33px;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   flex: 1;
 
   > *:last-child {
@@ -234,4 +245,21 @@ export const StepperContainer = styled.div`
   align-items: center;
   padding: 10px;
   justify-content: center;
+`
+
+const WrapperMobileMode = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  background-color: ${Colors.Black[700]};
+  color: ${Colors.White};
+  position: relative;
+  padding: 10px 16px;
+
+  p {
+    text-align: center;
+  }
 `

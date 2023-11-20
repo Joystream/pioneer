@@ -73,7 +73,7 @@ export const MemberInfo = React.memo(
         skipModal={skipModal}
         onlyTop={onlyTop}
       >
-        <MemberPhoto small={avatarSmall}>
+        <MemberPhoto big={memberSize === 'l'} small={avatarSmall}>
           <MemberPhotoContainer>
             <Avatar avatarUri={member.avatar} />
             {isLead && (
@@ -85,7 +85,7 @@ export const MemberInfo = React.memo(
             )}
           </MemberPhotoContainer>
         </MemberPhoto>
-        <div>
+        <MemberHeaderWrapper>
           <MemberHead>
             <MemberHandle>{member.handle}</MemberHandle>
             {(member.isFoundingMember || member.isCouncilMember || member.isVerified) && (
@@ -120,7 +120,7 @@ export const MemberInfo = React.memo(
               {member.id}
             </IdHeader>
           )}
-        </div>
+        </MemberHeaderWrapper>
         {showRoles && <MemberRoles roles={member.roles} size={roleSize} max={maxRoles} />}
         {showId && <MemberId>{isString(showIdOrText) ? showIdOrText : `Member ID: ${member.id}`}</MemberId>}
       </MemberInfoWrap>
@@ -158,4 +158,8 @@ export const AvatarStarTooltipContainer = styled(DefaultTooltip)<DefaultTooltipP
     border-color: ${Colors.Blue[400]};
     background-color: ${Colors.Blue[400]};
   }
+`
+
+const MemberHeaderWrapper = styled.div`
+  grid-area: memberhead;
 `

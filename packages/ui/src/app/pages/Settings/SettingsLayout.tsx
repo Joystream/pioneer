@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { PageHeader } from '@/app/components/PageHeader'
 import { PageLayout } from '@/app/components/PageLayout'
@@ -40,7 +41,15 @@ export const SettingsLayout = ({ saveButton, children }: SettingsLayoutProps) =>
           }
         />
       }
-      main={<MainPanel>{children}</MainPanel>}
+      main={
+        <Container>
+          <MainPanel>{children}</MainPanel>
+        </Container>
+      }
     />
   )
 }
+
+export const Container = styled.div`
+  max-width: 690px;
+`

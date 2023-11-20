@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { UnknownAccountInfo } from '@/accounts/components/UnknownAccountInfo'
 import { BlockTime } from '@/common/components/BlockTime'
-import { ButtonGhost, ButtonsGroup } from '@/common/components/buttons'
+import { ButtonGhost, ResponsiveButtonsGroup } from '@/common/components/buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { ToggleableItem, ToggleButton } from '@/common/components/buttons/Toggle'
 import { Arrow } from '@/common/components/icons'
@@ -93,14 +93,14 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
                   <UnknownAccountInfo address={role.rewardAccount} placeholderName="Reward account" />
                 </SidePaneColumn>
               </SidePaneRow>
-              <ButtonsGroup align="left">
+              <ResponsiveButtonsGroup align="left">
                 <ButtonGhost size="small" onClick={showApplicationModal}>
                   Application preview <Arrow direction="right" />
                 </ButtonGhost>
                 <LinkButtonGhost size="small" to={`/working-groups/openings/${role?.openingId}`}>
                   Opening preview <Arrow direction="right" />
                 </LinkButtonGhost>
-              </ButtonsGroup>
+              </ResponsiveButtonsGroup>
             </MemberRoleTable>
           </MemberRoleTableContainer>
         )}

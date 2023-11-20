@@ -34,4 +34,7 @@ export const MemberSideRoles = ({ member }: { member: Member }) => {
 
 const RolesDisplay = styled(RowGapBlock)`
   padding: 24px;
+  @media (max-width: 424px) {
+    padding: 24px 16px;
+  }
 `

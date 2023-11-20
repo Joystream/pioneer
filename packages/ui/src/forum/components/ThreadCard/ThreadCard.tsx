@@ -92,6 +92,20 @@ const Box = styled(GhostRouterLink)<{ isArchived: boolean }>`
       justify-content: end;
       gap: 5px;
     }
+
+    @media (max-width: 424px) {
+      flex-direction: column;
+
+      > *:first-child {
+        min-width: fit-content;
+      }
+
+      > *:last-child {
+        width: 100%;
+        align-items: flex-start;
+        justify-content: start;
+      }
+    }
   }
 
   > *:last-child {

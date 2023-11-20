@@ -7,11 +7,9 @@ import { ImageReportNotification } from '@/app/components/ImageReportNotificatio
 import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { CouncilModule } from '@/app/pages/Council/CouncilModule'
 import { NotFound } from '@/app/pages/NotFound'
-import { GlobalStyle } from '@/app/providers/GlobalStyle'
 import { BountyRoutes } from '@/bounty/constants'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
 import { MaintenanceScreen } from '@/common/components/page/MaintenanceScreen/MaintenanceScreen'
-import { MobileView } from '@/common/components/page/MobileView/MobileView'
 import { Page, Screen } from '@/common/components/page/Page'
 import { NotificationsHolder } from '@/common/components/page/SideNotification'
 import { TransactionStatus } from '@/common/components/TransactionStatus/TransactionStatus'
@@ -22,6 +20,7 @@ import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
 import { ExtensionNotification } from './components/ExtensionWarning'
+import { NavBar } from './components/NavBar'
 import { SideBar } from './components/SideBar'
 import { MembersRoutes, ProfileRoutes, TermsRoutes } from './constants/routes'
 import { GlobalModals } from './GlobalModals'
@@ -49,6 +48,7 @@ export const App = () => {
         <SideBar />
         <Screen>
           <OnBoardingOverlay />
+          <NavBar />
           <Switch>
             {/*// Uncomment to see whole overview section*/}
             {/*<Route path={OverviewRoutes.overview} component={OverviewModule} />*/}
@@ -81,10 +81,3 @@ export const App = () => {
     </Providers>
   )
 }
-
-export const Mobile = () => (
-  <>
-    <GlobalStyle />
-    <MobileView />
-  </>
-)

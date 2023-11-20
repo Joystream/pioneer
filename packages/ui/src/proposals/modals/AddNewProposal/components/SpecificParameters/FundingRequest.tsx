@@ -18,12 +18,14 @@ import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium, TextSmall, TextInlineSmall } from '@/common/components/typography'
+import { useResponsive } from '@/common/hooks/useResponsive'
 
 import { PreviewAndValidateModal } from './modals/PreviewAndValidate'
 import { ErrorPrompt, Prompt } from './Prompt'
 
 export const FundingRequest = () => {
   const { watch, setValue, getFieldState } = useFormContext()
+  const { isMobile } = useResponsive()
   const [isPreviewModalShown, setIsPreviewModalShown] = useState(false)
   const [payMultiple] = watch(['fundingRequest.payMultiple'])
   const [hasPreviewedInput] = watch(['fundingRequest.hasPreviewedInput'], { 'fundingRequest.hasPreviewedInput': true })
@@ -51,10 +53,10 @@ export const FundingRequest = () => {
               <Label>Pay multiple</Label>
               <Tooltip
                 tooltipTitle="Pay multiple"
-                tooltipText="For multiple accounts and amounts, follow this CSV pattern:<br/> 
-              account1, amount1<br/> 
-              account2, amount2<br/> 
-              ...<br/> 
+                tooltipText="For multiple accounts and amounts, follow this CSV pattern:<br/>
+              account1, amount1<br/>
+              account2, amount2<br/>
+              ...<br/>
               account20, amount20"
               >
                 <TooltipDefault />
@@ -118,8 +120,8 @@ export const FundingRequest = () => {
             >
               <TokenInput id="amount-input" placeholder="0" name="fundingRequest.amount" />
             </InputComponent>
-            <InputComponent label="Recipient account" required inputSize="l">
-              <SelectAccount name="fundingRequest.account" />
+            <InputComponent label="Recipient account" required inputSize={isMobile ? 'xxl' : 'l'}>
+              <SelectAccount name="fundingRequest.account" isSmallVariant={isMobile} />
             </InputComponent>
           </RowGapBlock>
         )}

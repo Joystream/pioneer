@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 import { useApi } from '@/api/hooks/useApi'
 import { NetworkType, NetworkEndpoints } from '@/app/config'
@@ -157,115 +156,109 @@ export const SettingsNetworkTab = () => {
 
   return (
     <SettingsLayout>
-      <Container>
-        <RowGapBlock gap={32}>
-          <SimpleSelect
-            title={t('selectNetwork')}
-            options={networks}
-            value={network}
-            onChange={switchNetwork}
-            selectSize="l"
-          />
-          {network === 'custom' && (
-            <FormProvider {...form}>
-              <SettingsWarningInformation icon={<WarnedIcon />} title="Attention">
-                <ColumnGapBlock gap={5}>
-                  <TextMedium lighter>
-                    Please beware that using 3rd party QN may result in fraud. Only use trusted providers
-                  </TextMedium>
-                </ColumnGapBlock>
-              </SettingsWarningInformation>
-              <InputComponent
-                label={t('customFaucet')}
-                validation={isValidUrl(customFaucetEndpoint) && isValidFaucetEndpoint ? undefined : 'invalid'}
-                message={cond(
-                  [() => !isValidUrl(customFaucetEndpoint), 'This Faucet endpoint must start with http or https'],
-                  [() => !isValidFaucetEndpoint, 'Connection Error']
-                )}
-              >
-                <InputText
-                  id="field-custom-faucet"
-                  placeholder="Paste faucet URL address"
-                  name="settings.customFaucetEndpoint"
-                />
-              </InputComponent>
-              <InputComponent
-                label={t('customRPCNode')}
-                validation={isValidUrl(customRpcEndpoint, 'wss?') && isValidRpcEndpoint ? undefined : 'invalid'}
-                message={cond(
-                  [() => !isValidUrl(customRpcEndpoint, 'wss?'), 'This RPC endpoint must start with ws or wss'],
-                  [
-                    () => !isValidRpcEndpoint,
-                    'Connection Error. Sometimes it fails due to network speed. Please try to check once more',
-                  ]
-                )}
-              >
-                <InputText id="field-custom-rpcnode" placeholder="Paste RPC node" name="settings.customRpcEndpoint" />
-              </InputComponent>
-              <InputComponent
-                label={t('customQueryNode')}
-                validation={isValidUrl(customQueryEndpoint) && isValidQueryEndpoint ? undefined : 'invalid'}
-                message={cond(
-                  [() => !isValidUrl(customQueryEndpoint), 'This Query endpoint must start with http or https'],
-                  [() => !isValidQueryEndpoint, 'Connection Error']
-                )}
-              >
-                <InputText
-                  id="field-custom-querynode"
-                  placeholder="Paste Query node"
-                  name="settings.customQueryEndpoint"
-                />
-              </InputComponent>
-              <InputComponent
-                label={t('customBackend')}
-                validation={isValidUrl(customBackendEndpoint) && isValidBackendEndpoint ? undefined : 'invalid'}
-                message={cond(
-                  [() => !isValidUrl(customBackendEndpoint), 'This Backend endpoint must start with http or https'],
-                  [() => !isValidBackendEndpoint, 'Connection Error']
-                )}
-              >
-                <InputText
-                  id="field-custom-backend"
-                  placeholder="Paste Backend endpoint"
-                  name="settings.customBackendEndpoint"
-                />
-              </InputComponent>
-              <ButtonPrimary onClick={saveSettings} size="medium">
-                Save settings
-                {customSaveStatus === 'Saving' && <Loading />}
-              </ButtonPrimary>
-            </FormProvider>
-          )}
-          {endpoints?.configEndpoint && (
-            <ButtonPrimary onClick={() => fetchNetworkEndpoints(endpoints.configEndpoint as string)} size="medium">
-              Refresh config
+      <RowGapBlock gap={32}>
+        <SimpleSelect
+          title={t('selectNetwork')}
+          options={networks}
+          value={network}
+          onChange={switchNetwork}
+          selectSize="l"
+        />
+        {network === 'custom' && (
+          <FormProvider {...form}>
+            <SettingsWarningInformation icon={<WarnedIcon />} title="Attention">
+              <ColumnGapBlock gap={5}>
+                <TextMedium lighter>
+                  Please beware that using 3rd party QN may result in fraud. Only use trusted providers
+                </TextMedium>
+              </ColumnGapBlock>
+            </SettingsWarningInformation>
+            <InputComponent
+              label={t('customFaucet')}
+              validation={isValidUrl(customFaucetEndpoint) && isValidFaucetEndpoint ? undefined : 'invalid'}
+              message={cond(
+                [() => !isValidUrl(customFaucetEndpoint), 'This Faucet endpoint must start with http or https'],
+                [() => !isValidFaucetEndpoint, 'Connection Error']
+              )}
+            >
+              <InputText
+                id="field-custom-faucet"
+                placeholder="Paste faucet URL address"
+                name="settings.customFaucetEndpoint"
+              />
+            </InputComponent>
+            <InputComponent
+              label={t('customRPCNode')}
+              validation={isValidUrl(customRpcEndpoint, 'wss?') && isValidRpcEndpoint ? undefined : 'invalid'}
+              message={cond(
+                [() => !isValidUrl(customRpcEndpoint, 'wss?'), 'This RPC endpoint must start with ws or wss'],
+                [
+                  () => !isValidRpcEndpoint,
+                  'Connection Error. Sometimes it fails due to network speed. Please try to check once more',
+                ]
+              )}
+            >
+              <InputText id="field-custom-rpcnode" placeholder="Paste RPC node" name="settings.customRpcEndpoint" />
+            </InputComponent>
+            <InputComponent
+              label={t('customQueryNode')}
+              validation={isValidUrl(customQueryEndpoint) && isValidQueryEndpoint ? undefined : 'invalid'}
+              message={cond(
+                [() => !isValidUrl(customQueryEndpoint), 'This Query endpoint must start with http or https'],
+                [() => !isValidQueryEndpoint, 'Connection Error']
+              )}
+            >
+              <InputText
+                id="field-custom-querynode"
+                placeholder="Paste Query node"
+                name="settings.customQueryEndpoint"
+              />
+            </InputComponent>
+            <InputComponent
+              label={t('customBackend')}
+              validation={isValidUrl(customBackendEndpoint) && isValidBackendEndpoint ? undefined : 'invalid'}
+              message={cond(
+                [() => !isValidUrl(customBackendEndpoint), 'This Backend endpoint must start with http or https'],
+                [() => !isValidBackendEndpoint, 'Connection Error']
+              )}
+            >
+              <InputText
+                id="field-custom-backend"
+                placeholder="Paste Backend endpoint"
+                name="settings.customBackendEndpoint"
+              />
+            </InputComponent>
+            <ButtonPrimary onClick={saveSettings} size="medium">
+              Save settings
+              {customSaveStatus === 'Saving' && <Loading />}
             </ButtonPrimary>
-          )}
-          <NetworkInfo
-            detailsTitle={t('networkDetails')}
-            networkAddress={endpoints.nodeRpcEndpoint}
-            queryNodeAddress={endpoints.queryNodeEndpoint}
-            faucetAddress={endpoints.membershipFaucetEndpoint}
-          />
-          <PolkadotAppInfo rpcUrl={endpoints.nodeRpcEndpoint} />
-          <SettingsInformation icon={<WarnedIcon />} title={t('chainInfo')}>
-            <ColumnGapBlock gap={5}>
-              <TextMedium lighter>{t('rpcBlockheight')}</TextMedium>
-              <TextMedium lighter>{formatTokenValue(header?.number.toNumber())}</TextMedium>
-            </ColumnGapBlock>
-            <ColumnGapBlock gap={5}>
-              <TextMedium lighter>{t('qnBlockheight')}</TextMedium>
-              <TextMedium lighter>{formatTokenValue(queryNodeState?.indexerHead)}</TextMedium>
-            </ColumnGapBlock>
-          </SettingsInformation>
-        </RowGapBlock>
-      </Container>
+          </FormProvider>
+        )}
+        {endpoints?.configEndpoint && (
+          <ButtonPrimary onClick={() => fetchNetworkEndpoints(endpoints.configEndpoint as string)} size="medium">
+            Refresh config
+          </ButtonPrimary>
+        )}
+        <NetworkInfo
+          detailsTitle={t('networkDetails')}
+          networkAddress={endpoints.nodeRpcEndpoint}
+          queryNodeAddress={endpoints.queryNodeEndpoint}
+          faucetAddress={endpoints.membershipFaucetEndpoint}
+        />
+        <PolkadotAppInfo rpcUrl={endpoints.nodeRpcEndpoint} />
+        <SettingsInformation icon={<WarnedIcon />} title={t('chainInfo')}>
+          <ColumnGapBlock gap={5}>
+            <TextMedium lighter>{t('rpcBlockheight')}</TextMedium>
+            <TextMedium lighter>{formatTokenValue(header?.number.toNumber())}</TextMedium>
+          </ColumnGapBlock>
+          <ColumnGapBlock gap={5}>
+            <TextMedium lighter>{t('qnBlockheight')}</TextMedium>
+            <TextMedium lighter>{formatTokenValue(queryNodeState?.indexerHead)}</TextMedium>
+          </ColumnGapBlock>
+        </SettingsInformation>
+      </RowGapBlock>
     </SettingsLayout>
   )
 }
 
 const isValidUrl = (url: string, prefix = 'https?') => RegExp(String.raw`${prefix}://\w+/?`, 'i').test(url)
-
-export const Container = styled.div`
-  width: 60%;
-`

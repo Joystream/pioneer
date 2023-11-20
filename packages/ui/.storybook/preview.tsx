@@ -18,7 +18,6 @@ import { i18next } from '../src/services/i18n'
 import { KeyringContext } from '../src/common/providers/keyring/context'
 import { Keyring } from '@polkadot/ui-keyring'
 
-
 configure({ testIdAttribute: 'id' })
 
 const stylesWrapperDecorator: Decorator = (Story) => (
@@ -75,7 +74,11 @@ const KeyringDecorator: Decorator = (Story) => {
       else return address
     },
   } as unknown as Keyring
-  return <KeyringContext.Provider value={keyring}><Story /></KeyringContext.Provider>
+  return (
+    <KeyringContext.Provider value={keyring}>
+      <Story />
+    </KeyringContext.Provider>
+  )
 }
 
 export const decorators = [
@@ -90,6 +93,7 @@ export const decorators = [
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
+
   backgrounds: {
     default: 'White',
     values: [
@@ -115,6 +119,54 @@ export const parameters = {
       },
     ],
   },
+
+  viewport: {
+    viewports: {
+      xl: {
+        name: 'xl',
+        styles: {
+          width: '1920px',
+          height: '900px',
+        },
+      },
+      lg: {
+        name: 'lg',
+        styles: {
+          width: '1440px',
+          height: '900px',
+        },
+      },
+      md: {
+        name: 'md',
+        styles: {
+          width: '1024px',
+          height: '900px',
+        },
+      },
+      sm: {
+        name: 'sm',
+        styles: {
+          width: '768px',
+          height: '900px',
+        },
+      },
+      xs: {
+        name: 'xs',
+        styles: {
+          width: '425px',
+          height: '900px',
+        },
+      },
+      xxs: {
+        name: 'xxs',
+        styles: {
+          width: '320px',
+          height: '900px',
+        },
+      },
+    },
+  },
+
   options: {
     storySort: {
       method: 'alphabetical',
