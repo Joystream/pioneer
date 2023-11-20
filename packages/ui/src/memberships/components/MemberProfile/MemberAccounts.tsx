@@ -29,4 +29,7 @@ export const MemberAccounts = ({ member }: { member: Member }) => {
 
 const AccountsDisplay = styled(RowGapBlock)`
   padding: 24px;
+  @media (max-width: 424px) {
+    padding: 24px 16px;
+  }
 `

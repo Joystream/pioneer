@@ -33,13 +33,13 @@ interface Props {
 }
 
 export const ApplicationsList = ({ applications, pastApplications }: Props) => (
-  <List>
+  <ListWrapper>
     {applications.map((application) => (
       <ListItem key={application.id}>
         <ApplicationListItem application={application} past={pastApplications} />
       </ListItem>
     ))}
-  </List>
+  </ListWrapper>
 )
 
 const ApplicationListItem = ({ application, past }: { application: WorkingGroupApplication; past?: boolean }) => {
@@ -109,4 +109,8 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
 
 const Title = styled(ToggleableItemTitle)`
   cursor: pointer;
+`
+
+const ListWrapper = styled(List)`
+  overflow: auto;
 `

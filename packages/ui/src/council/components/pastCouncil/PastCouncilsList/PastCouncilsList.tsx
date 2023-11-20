@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { ElectedCouncilOrderByInput } from '@/common/api/queries'
 import { List } from '@/common/components/List'
@@ -27,7 +28,7 @@ export const PastCouncilsList = () => {
   }
 
   return (
-    <RowGapBlock gap={4}>
+    <PastCouncilList gap={4}>
       <PastCouncilListHeaders $colLayout={PastCouncilColLayout}>
         <SortHeader {...getSortProps('electedAtBlock')}>Term</SortHeader>
         <SortHeader {...getSortProps('endedAtBlock')}>Term Ended</SortHeader>
@@ -42,6 +43,10 @@ export const PastCouncilsList = () => {
         ))}
       </List>
       <Pagination {...pagination} />
-    </RowGapBlock>
+    </PastCouncilList>
   )
 }
+
+const PastCouncilList = styled(RowGapBlock)`
+  overflow: auto;
+`

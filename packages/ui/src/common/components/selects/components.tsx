@@ -23,11 +23,12 @@ interface Props {
   onClick: () => void
   disabled?: boolean
   className?: string
+  isSmallVariant?: boolean
 }
 
-export const Option = ({ children, onClick, disabled, className }: Props) => (
+export const Option = ({ children, onClick, disabled, className, isSmallVariant }: Props) => (
   <OptionComponentContainer onClick={onClick} disabled={disabled}>
-    <OptionComponent disabled={disabled} className={className}>
+    <OptionComponent disabled={disabled} className={className} isSmallVariant={isSmallVariant}>
       {children}
     </OptionComponent>
   </OptionComponentContainer>
@@ -55,13 +56,30 @@ export const SelectToggleButton = ({ isOpen, disabled, onToggleClick }: SelectTo
   </ToggleButton>
 )
 
-export const SelectedOption = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
+export const SelectedOption = styled.div<{ isSmallVariant?: boolean }>`
+  ${({ isSmallVariant }) =>
+    isSmallVariant
+      ? css`
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          row-gap: 8px;
+          height: 118px;
+
+          > div {
+            width: fit-content;
+            margin-right: auto;
+          }
+        `
+      : css`
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 1fr;
+        `}
+
   align-items: center;
-  padding: 0 4px 0 16px;
   width: 100%;
+  padding: 0 4px 0 16px;
 `
 
 export const EmptyOption = styled.input`
@@ -134,20 +152,37 @@ export const OptionComponentContainer = styled.li<{ disabled?: boolean }>`
   }}
 `
 
-export const OptionComponent = styled.div<{ disabled?: boolean }>`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
+export const OptionComponent = styled.div<{ disabled?: boolean; isSmallVariant?: boolean }>`
+  ${({ isSmallVariant }) =>
+    isSmallVariant
+      ? css`
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          row-gap: 8px;
+          height: 118px;
+
+          > div {
+            width: fit-content;
+            margin-right: auto;
+          }
+        `
+      : css`
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 1fr;
+          height: 100%;
+          max-height: ${Sizes.selectHeight};
+        `}
+
   align-items: center;
   width: 100%;
-  height: 100%;
   border: none;
   background-color: ${({ disabled }) => (disabled ? Colors.Black[75] : Colors.White)};
   cursor: pointer;
   border-radius: ${BorderRad.s};
   transition: ${Transitions.all};
   min-height: ${Sizes.selectHeight};
-  max-height: ${Sizes.selectHeight};
   padding: 10px 72px 10px 16px;
 
   &:active,

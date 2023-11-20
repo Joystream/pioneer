@@ -18,6 +18,7 @@ const EndpointsSchema = Yup.object().shape({
   queryNodeEndpoint: Yup.string().required(),
   queryNodeEndpointSubscription: Yup.string(),
   membershipFaucetEndpoint: Yup.string(),
+  backendEndpoint: Yup.string(),
 })
 
 export const NetworkEndpointsProvider = ({ children }: Props) => {

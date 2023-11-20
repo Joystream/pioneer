@@ -25,6 +25,7 @@ interface SelectAccountProps extends Pick<SelectProps<AccountOption>, 'id' | 'se
   onChange?: (selected: AccountOption) => void
   filter?: (option: AccountOption) => boolean
   name?: string
+  isSmallVariant?: boolean
 }
 
 interface SelectStakingAccountProps extends SelectAccountProps {
@@ -39,7 +40,17 @@ interface BaseSelectAccountProps extends SelectAccountProps {
 }
 
 export const BaseSelectAccount = React.memo(
-  ({ id, onChange, accounts, filter, selected, disabled, onBlur, isForStaking }: BaseSelectAccountProps) => {
+  ({
+    id,
+    onChange,
+    accounts,
+    filter,
+    selected,
+    disabled,
+    onBlur,
+    isForStaking,
+    isSmallVariant,
+  }: BaseSelectAccountProps) => {
     const options = accounts.filter(filter || (() => true))
 
     const [search, setSearch] = useState('')
@@ -67,7 +78,7 @@ export const BaseSelectAccount = React.memo(
         onChange={change}
         onBlur={onBlur}
         disabled={disabled}
-        renderSelected={renderSelected(isForStaking)}
+        renderSelected={renderSelected(isForStaking, isSmallVariant)}
         placeholder="Select account or paste account address"
         renderList={(onOptionClick) => (
           <OptionListAccount
@@ -75,6 +86,7 @@ export const BaseSelectAccount = React.memo(
             onChange={onOptionClick}
             options={filteredOptions}
             isForStaking={isForStaking}
+            isSmallVariant={isSmallVariant}
           />
         )}
         onSearch={(search) => setSearch(search)}
@@ -83,9 +95,9 @@ export const BaseSelectAccount = React.memo(
   }
 )
 
-const renderSelected = (isForStaking?: boolean) => (option: AccountOption) =>
+const renderSelected = (isForStaking?: boolean, isSmallVariant?: boolean) => (option: AccountOption) =>
   (
-    <SelectedOption>
+    <SelectedOption isSmallVariant={isSmallVariant}>
       <OptionAccount option={option} isForStaking={isForStaking} />
     </SelectedOption>
   )

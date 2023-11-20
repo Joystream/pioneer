@@ -12,21 +12,27 @@ interface Props {
   onChange: (option: AccountOption) => void
   className?: string
   isForStaking?: boolean
+  isSmallVariant?: boolean
 }
 
-export const OptionListAccount = React.memo(({ options, onChange, className, isForStaking }: Props) => {
+export const OptionListAccount = React.memo(({ options, onChange, className, isForStaking, isSmallVariant }: Props) => {
   const freeAccounts = options.filter((option) => (option.optionLocks ? option.optionLocks?.length === 0 : true))
   const lockedAccounts = options.filter((option) => !!option.optionLocks?.length)
   return (
     <OptionsListComponent className={className}>
       {freeAccounts.map((option) => (
-        <Option key={option.address} onClick={() => onChange && onChange(option)}>
+        <Option key={option.address} onClick={() => onChange && onChange(option)} isSmallVariant={isSmallVariant}>
           <OptionAccount option={option} isForStaking={isForStaking} />
         </Option>
       ))}
       {lockedAccounts.map((option) => (
         <AccountLockTooltip boundaryClassName={className} key={option.address} locks={option.optionLocks}>
-          <Option key={option.address} onClick={() => onChange && onChange(option)} disabled>
+          <Option
+            key={option.address}
+            onClick={() => onChange && onChange(option)}
+            disabled
+            isSmallVariant={isSmallVariant}
+          >
             <OptionAccount option={option} isForStaking={isForStaking} />
           </Option>
         </AccountLockTooltip>

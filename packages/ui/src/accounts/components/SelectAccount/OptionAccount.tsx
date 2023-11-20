@@ -5,7 +5,7 @@ import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { AccountLocks, AccountLocksWrapper } from '@/accounts/components/AccountLocks'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { AccountOption } from '@/accounts/types'
-import { BalanceInfoInRow, InfoTitle, InfoValue } from '@/common/components/Modal'
+import { BalanceInfoNarrow, InfoTitle, InfoValue } from '@/common/components/Modal'
 import { TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 
@@ -24,13 +24,13 @@ export const OptionAccount = ({ option, isForStaking }: Props) => {
   return (
     <>
       <AccountInfo account={option} locked={isLocked} />
-      <BalanceInfoInRow>
+      <BalanceInfoNarrow>
         <InfoTitle>{balanceType} balance</InfoTitle>
         <InfoValueWithLocks>
           <Value value={balance} locked={isLocked} />
           <AccountLocks locks={balances?.locks} />
         </InfoValueWithLocks>
-      </BalanceInfoInRow>
+      </BalanceInfoNarrow>
     </>
   )
 }

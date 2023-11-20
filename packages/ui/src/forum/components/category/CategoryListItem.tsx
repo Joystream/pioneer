@@ -96,6 +96,7 @@ export const CategoryListItemStyles = styled(TableListItem)`
   align-items: start;
   height: 128px;
   padding: 14px 24px;
+  grid-column-gap: 12px;
 
   ${TableListItemAsLinkHover};
 

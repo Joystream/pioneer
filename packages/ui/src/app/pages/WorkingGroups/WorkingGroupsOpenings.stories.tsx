@@ -40,10 +40,6 @@ export default {
       })
       return {
         accounts: parameters.isLoggedIn ? { active: { member: alice } } : { list: [{ member: alice }] },
-
-        chain: undefined,
-
-        queryNode: [],
       }
     },
   },
