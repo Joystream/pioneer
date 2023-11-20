@@ -254,6 +254,8 @@ To run the API to develop locally:
 - [`yarn workspace server prisma generate`][prisma generate]: Generate the Prisma clients.
 - `yarn workspace server dev:authtoken`: Generate an authentication token for the provided member.
 - `yarn workspace server lint:fix`: Fix some code formatting issue.
+- `yarn workspace server docker:yarn`: To regenerate the `yarn.lock` used to build the docker image.
+- `yarn workspace server docker build pioneer-api`: To build the `joystream/pioneer-backend` image.
 
 ### Adding support for more QN events
 
