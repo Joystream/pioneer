@@ -1,8 +1,10 @@
 name: Backend Docker
 
 on:
-  push: { branches: [backend, dev, main] }
   pull_request:
+    paths:
+      - packages/server/**
+
   # Docker images will only be pushed when we manually dispatch this workflow
   workflow_dispatch:
     inputs:
