@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 import { useApi } from '@/api/hooks/useApi'
 import { NetworkType, NetworkEndpoints } from '@/app/config'
