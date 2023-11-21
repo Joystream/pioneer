@@ -40,6 +40,10 @@ export type BuyMembershipEvent =
   | { type: 'SUCCESS'; memberId: BN }
   | { type: 'ERROR' }
 
+const isSelfTransition = (context: BuyMembershipContext) =>
+  !!context.form?.validatorAccounts &&
+  (!context.bindingValidtorAccStep || context.form.validatorAccounts.length > context.bindingValidtorAccStep)
+
 export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembershipEvent, BuyMembershipState>({
   initial: 'prepare',
   states: {
@@ -88,7 +92,7 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
             target: 'addStakingAccCandidateTx',
             actions: assign({
               memberId: (context, event) => getDataFromEvent(event.data.events, 'members', 'MembershipBought', 0),
-              bindingValidtorAccStep: 0,
+              bindingValidtorAccStep: (context) => 0,
             }),
             cond: isTransactionSuccess,
           },
@@ -114,8 +118,7 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
             cond: isSelfTransition,
             actions: assign({
               transactionEvents: (context, event) => event.data.events,
-              bindingValidtorAccStep: (context, event) =>
-                context.bindingValidtorAccStep ? 1 : context.bindingValidtorAccStep + 1,
+              bindingValidtorAccStep: (context) => (context.bindingValidtorAccStep ?? 0) + 1,
             }),
           },
           {
@@ -167,7 +170,3 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
     }),
   },
 })
-
-export const isSelfTransition = (context: BuyMembershipContext) =>
-  context.form?.validatorAccounts?.length &&
-  (!context.bindingValidtorAccStep || context.form.validatorAccounts.length > context.bindingValidtorAccStep)
