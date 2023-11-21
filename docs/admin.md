@@ -27,6 +27,62 @@
    ```
    Will build Pioneer inside the `packages/ui/build` folder.
 
+## Deploying the Pioneer notification backend
+
+The following deployment instructions are relying on the [`joystream/pioneer-backend`](https://hub.docker.com/r/joystream/pioneer-backend) docker image.
+Therefore [Docker](https://docs.docker.com) is a requirement.
+
+1.
+   ### Set up an e-mail address on either SendGrid or Mailgun (more options coming soon).
+
+   #### SendGrid
+   1. Sign up for a SendGrid account.
+   2. Verify your Sender e-mail address Identity.
+   3. Create and store your SendGrid API key with full access "Mail Send" permissions.
+
+   #### Mailgun
+   1. Sign up for a Mailgun account.
+   2. Add and verify your domain.
+   3. Store your Mailgun private API key from your dashboard.
+
+2.
+   ### Host a PostgreSQL database
+   Store the database URL which should look like this:
+   ```
+   postgresql://{username}:{password}@{host}:5432/{database name}
+   ```
+3.
+   ### Check you are able to set all required environment variables
+   These are the variables required to go further:
+   - `DATABASE_URL`: URL used to connect to the database (this is not needed for render.com deployment).
+   - `APP_SECRET_KEY`: This a secret key you can generate yourself (this is not needed for render.com deployment).
+   - `QUERY_NODE_ENDPOINT`: Query node to fetch from (in most cases this should be: `https://query.joystream.org/graphql`).
+   - `PIONEER_URL`: The URL of the your Pioneer web application.
+   - `STARTING_BLOCK`: The block to start fetching the events from (in most cases this should be the current block).
+   - `EMAIL_SENDER`: The address to send e-mail with.
+   - Either `SENDGRID_API_KEY`, or `MAILGUN_API_KEY` and `MAILGUN_DOMAIN`.
+   - Also in case you are using Mailgun and are using an EU domain: `MAILGUN_API_URL` should be set to `https://api.eu.mailgun.net`.
+
+4.
+   ### Serve the backend API
+   E.g on a private server with the environment variable - mentioned above - set in a file at the path: `/path/to/.env`, the API can be run with:
+   ```
+   docker run -d -p 80:80 --restart=always --name=api --env-file=/path/to/.env joystream/pioneer-backend
+   ```
+
+5.
+   ### Run the notify script at regular intervals
+   E.g still on a private server the notify script can be run every 10 minutes by setting the following line in the crontab:
+   ```
+   */10 * * * * docker run --name=notify --env-file=/path/to/.env joystream/pioneer-backend notify
+   ```
+
+### Quick start
+
+Alternatively to deploy on [render](render.com) go through step 1 and 3 then click on the button bellow:
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/dev)
+
 ## Under maintenance screen
 
 A "maintenance screen" can temporarily replace the app, in order to occasionally prevent users from using Pioneer (like during sensitive runtime uprade for example).
