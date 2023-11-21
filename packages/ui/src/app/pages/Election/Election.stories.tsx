@@ -83,67 +83,69 @@ export default {
             },
           },
         },
-        queryNode: [
-          {
-            query: GetCurrentElectionDocument,
-            data: {
-              electionRounds: [
-                {
-                  __typename: 'ElectionRound',
-                  cycleId: 23,
-                  candidates: [
-                    {
-                      id: '0000003s',
-                      member: {
-                        id: '0',
-                        name: 'Jennifer_123',
-                        rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-                        controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-                        handle: 'Jennifer_123',
-                        isVerified: true,
-                        isFoundingMember: true,
-                        isCouncilMember: false,
-                        roles: [
-                          {
-                            __typename: 'Worker',
-                            id: 'membershipWorkingGroup-0',
-                            createdAt: '2021',
-                            isLead: true,
-                            group: {
-                              __typename: 'WorkingGroup',
-                              name: 'Jennifer_123',
-                            },
-                          },
-                        ],
-                        boundAccounts: [],
-                        inviteCount: 0,
-                        createdAt: '',
-                        metadata: {
+        gql: {
+          queries: [
+            {
+              query: GetCurrentElectionDocument,
+              data: {
+                electionRounds: [
+                  {
+                    __typename: 'ElectionRound',
+                    cycleId: 23,
+                    candidates: [
+                      {
+                        id: '0000003s',
+                        member: {
+                          id: '0',
                           name: 'Jennifer_123',
+                          rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+                          controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+                          handle: 'Jennifer_123',
+                          isVerified: true,
+                          isFoundingMember: true,
+                          isCouncilMember: false,
+                          roles: [
+                            {
+                              __typename: 'Worker',
+                              id: 'membershipWorkingGroup-0',
+                              createdAt: '2021',
+                              isLead: true,
+                              group: {
+                                __typename: 'WorkingGroup',
+                                name: 'Jennifer_123',
+                              },
+                            },
+                          ],
+                          boundAccounts: [],
+                          inviteCount: 0,
+                          createdAt: '',
+                          metadata: {
+                            name: 'Jennifer_123',
+                          },
                         },
+                        noteMetadata: {
+                          header: 'Jennifer_123',
+                          bannerUri:
+                            'https://upload.wikimedia.org/wikipedia/commons/b/be/Bliss_location%2C_Sonoma_Valley_in_2006.jpg',
+                          bulletPoints: [
+                            'Amet minim mollit non deserunt ullamco est sit liqua dolor',
+                            'Amet minim mollit non deserunt ullamco est sit liqua dolor',
+                            'Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor',
+                          ],
+                          description: 'Test member',
+                        },
+                        stake: '16660000000000',
+                        stakingAccountId: 'j4Sba211111111',
+                        status: 'ACTIVE',
+                        votesReceived: [],
                       },
-                      noteMetadata: {
-                        header: 'Jennifer_123',
-                        bannerUri:
-                          'https://upload.wikimedia.org/wikipedia/commons/b/be/Bliss_location%2C_Sonoma_Valley_in_2006.jpg',
-                        bulletPoints: [
-                          'Amet minim mollit non deserunt ullamco est sit liqua dolor',
-                          'Amet minim mollit non deserunt ullamco est sit liqua dolor',
-                          'Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor Amet minim mollit non deserunt ullamco est sit liqua dolor',
-                        ],
-                        description: 'Test member',
-                      },
-                      stake: '16660000000000',
-                      stakingAccountId: 'j4Sba211111111',
-                      status: 'ACTIVE',
-                      votesReceived: [],
-                    },
-                  ],
-                },
-              ],
+                    ],
+                  },
+                ],
+              },
             },
-          },
-        ],
+          ],
+        }
       }
     },
   },
