@@ -175,13 +175,14 @@ export const ModalFooterComponent = styled.footer<{ twoColumns?: boolean }>`
   grid-template-columns: ${({ twoColumns }) => (twoColumns ? '1fr auto' : '1fr')};
   grid-template-rows: 1fr;
   grid-auto-flow: column;
-  grid-column-gap: 40px;
+  grid-column-gap: 16px;
   justify-self: end;
   justify-items: end;
   justify-content: end;
   align-items: center;
   width: 100%;
-  height: 64px;
+  height: content-fit;
+  min-height: 64px;
   padding: 12px 26px 12px 24px;
   border-radius: 0 0 2px 2px;
   position: relative;
@@ -222,7 +223,7 @@ export const ModalWrap = styled.section<ModalWrapProps>`
     'modalfooter';
   grid-area: modal;
   background-color: ${Colors.White};
-  width: 100%;
+  width: calc(100% - 64px);
   max-width: ${({ modalMaxSize }) => {
     switch (modalMaxSize) {
       case 'xs':

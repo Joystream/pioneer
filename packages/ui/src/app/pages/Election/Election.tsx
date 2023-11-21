@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
+import { PageHeaderWithButtons, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons'
 import { Loading } from '@/common/components/Loading'
@@ -65,7 +65,7 @@ export const Election = () => {
 
   const header = (
     <PageHeaderWrapper>
-      <PageHeaderRow>
+      <PageHeaderWithButtons>
         <PageTitle>Elections</PageTitle>
         <ButtonsGroup>
           <CopyButtonTemplate
@@ -83,7 +83,7 @@ export const Election = () => {
             </>
           )}
         </ButtonsGroup>
-      </PageHeaderRow>
+      </PageHeaderWithButtons>
       <ElectionTabs />
     </PageHeaderWrapper>
   )

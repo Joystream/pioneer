@@ -9,16 +9,17 @@ import { TextMedium } from '../typography'
 import { HighlightedText } from './HighlightedText'
 
 interface SearchResultItemProp {
+  onClick: () => void
   pattern: RegExp | null
   breadcrumbs: ReactNode
   to: string
   title: string
   children: string
 }
-export const SearchResultItem = ({ pattern, breadcrumbs, to, title, children }: SearchResultItemProp) => (
+export const SearchResultItem = ({ pattern, breadcrumbs, to, title, children, onClick }: SearchResultItemProp) => (
   <ResultItemStyle>
     {breadcrumbs}
-    <ResultLink as={GhostRouterLink} to={to}>
+    <ResultLink onClick={onClick} as={GhostRouterLink} to={to}>
       <ResultTitle>
         <HighlightedText pattern={pattern}>{title}</HighlightedText>
       </ResultTitle>

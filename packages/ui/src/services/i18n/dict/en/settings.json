@@ -1,6 +1,7 @@
 {
   "network": "Network",
   "language": "Language",
+  "notifications": "Notifications",
   "selectNetwork": "Select Network",
   "networkDetails": "Network Details",
   "networkAddress": "Network: ",
@@ -11,5 +12,6 @@
   "qnBlockheight": "Query Node Block Height: ",
   "customFaucet": "FAUCET",
   "customRPCNode": "RPC NODE",
-  "customQueryNode": "QUERY NODE"
+  "customQueryNode": "QUERY NODE",
+  "customBackend": "BACKEND"
 }

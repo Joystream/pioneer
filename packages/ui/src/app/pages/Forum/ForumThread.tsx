@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { useApi } from '@/api/hooks/useApi'
-import { PageHeaderRow, PageHeaderWrapper } from '@/app/components/PageLayout'
+import { PageHeaderWithButtons, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
@@ -65,7 +65,7 @@ export const ForumThread = () => {
 
     return (
       <PageHeaderWrapper>
-        <PageHeaderRow showOverflow>
+        <PageHeaderWithButtons showOverflow>
           <PreviousPage showOverflow>
             <ThreadTitle thread={thread} />
           </PreviousPage>
@@ -79,7 +79,7 @@ export const ForumThread = () => {
             </CopyButtonTemplate>
             <WatchlistButton threadId={thread.id} />
           </ButtonsGroup>
-        </PageHeaderRow>
+        </PageHeaderWithButtons>
         <RowGapBlock>
           <BadgesRow space={8}>
             {thread.isSticky && (
@@ -92,7 +92,7 @@ export const ForumThread = () => {
                 {tag.title}
               </BadgeStatus>
             ))}
-            <BlockTime block={thread.createdInBlock} layout="reverse" position="end" />
+            <BlockTime block={thread.createdInBlock} layout="reverse" />
           </BadgesRow>
         </RowGapBlock>
       </PageHeaderWrapper>

@@ -25,9 +25,11 @@ import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModa
 import { FailureModal } from '@/common/components/FailureModal'
 import { Loading } from '@/common/components/Loading'
 import { ModalGlass } from '@/common/components/Modal'
+import { NotSupportMobileModal } from '@/common/components/NotSupportMobileModal'
 import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/Search/SearchResultsModal'
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { useModal } from '@/common/hooks/useModal'
+import { useResponsive } from '@/common/hooks/useResponsive'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { ConfirmModal } from '@/common/modals/ConfirmModal/ConfirmModal'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
@@ -54,6 +56,8 @@ import { MemberModalCall, MemberProfile } from '@/memberships/components/MemberP
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals/BuyMembershipModal'
 import { DisconnectWalletModal, DisconnectWalletModalCall } from '@/memberships/modals/DisconnectWalletModal'
+import { EmailConfirmationModal, EmailConfirmationModalCall } from '@/memberships/modals/EmailConfirmationModal'
+import { EmailSubscriptionModal, EmailSubscriptionModalCall } from '@/memberships/modals/EmailSubscriptionModal'
 import { InviteMemberModal } from '@/memberships/modals/InviteMemberModal'
 import { InviteMemberModalCall } from '@/memberships/modals/InviteMemberModal/types'
 import { SignOutModal } from '@/memberships/modals/SignOutModal/SignOutModal'
@@ -124,6 +128,8 @@ export type ModalNames =
   | ModalName<ReportContentModalCall>
   | ModalName<PostReplyModalCall>
   | ModalName<InviteMemberModalCall>
+  | ModalName<EmailSubscriptionModalCall>
+  | ModalName<EmailConfirmationModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -174,6 +180,8 @@ const modals: Record<ModalNames, ReactElement> = {
   UpdateMembershipModal: <UpdateMembershipModal />,
   ReportContentModal: <ReportContentModal />,
   PostReplyModal: <PostReplyModal />,
+  EmailSubscriptionModal: <EmailSubscriptionModal />,
+  EmailConfirmationModal: <EmailConfirmationModal />,
 }
 
 const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
@@ -191,6 +199,8 @@ const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
   'DisconnectWallet',
   'ClaimVestingModal',
   'ReportContentModal',
+  'EmailConfirmationModal',
+  'VoteRationaleModal',
 ]
 
 export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [
@@ -203,10 +213,19 @@ export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [
   'VoteForProposalModal',
 ]
 
+const NON_TRANSACTIONAL_MODALS: ModalNames[] = [
+  'Member',
+  'ApplicationDetails',
+  'VoteRationaleModal',
+  'SearchResults',
+  'CandidacyPreview',
+]
+
 export const GlobalModals = () => {
   const { modal, hideModal, currentModalMachine, showModal, modalData, isClosing } = useModal()
   const { active: activeMember } = useMyMemberships()
   const { status } = useTransactionStatus()
+  const { supportTransactions } = useResponsive()
   const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
 
   const [container, setContainer] = useState(document.body)
@@ -216,6 +235,10 @@ export const GlobalModals = () => {
   }, [])
 
   const potentialFallback = useGlobalModalHandler(currentModalMachine, hideModal)
+
+  if (modal && !supportTransactions && !NON_TRANSACTIONAL_MODALS.includes(modal as ModalNames)) {
+    return <NotSupportMobileModal onClose={hideModal} />
+  }
 
   if (modal && !GUEST_ACCESSIBLE_MODALS.includes(modal as ModalNames) && !activeMember) {
     showModal<SwitchMemberModalCall>({

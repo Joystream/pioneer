@@ -1,4 +1,5 @@
-import React from 'react'
+import { useApolloClient } from '@apollo/client'
+import React, { useEffect } from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
@@ -17,6 +18,14 @@ export const BuyMembershipModal = () => {
 
   const membershipPrice = useFirstObservableValue(() => api?.query.members.membershipPrice(), [api?.isConnected])
   const [state, send] = useMachine(buyMembershipMachine)
+  const apolloClient = useApolloClient()
+
+  const isSuccessful = state.matches('success')
+  // refetch data after successful member creation
+  useEffect(() => {
+    if (!isSuccessful) return
+    apolloClient.refetchQueries({ include: 'active' })
+  }, [isSuccessful, apolloClient])
 
   if (state.matches('prepare')) {
     const onSubmit = (params: MemberFormFields) => send({ type: 'DONE', form: params })
@@ -41,7 +50,7 @@ export const BuyMembershipModal = () => {
     )
   }
 
-  if (state.matches('success')) {
+  if (isSuccessful) {
     const { form, memberId } = state.context
     return <BuyMembershipSuccessModal onClose={hideModal} member={form} memberId={memberId?.toString()} />
   }

@@ -25,9 +25,20 @@ export const SidePaneColumn = styled.div`
   height: fit-content;
 `
 export const SidePaneRow = styled.li`
-  display: grid;
-  grid-template-columns: 168px 1fr;
-  grid-column-gap: 24px;
+  display: flex;
+  flex-wrap: wrap;
+
+  > *:first-child {
+    width: 168px;
+  }
+
+  > *:last-child {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-left: 24px;
+    width: fit-content;
+  }
 `
 export const SidePaneWideRow = styled(SidePaneRow)`
   grid-template-columns: 1fr;

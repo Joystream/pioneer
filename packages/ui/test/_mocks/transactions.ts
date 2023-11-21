@@ -1,5 +1,5 @@
-import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import { AugmentedEvents } from '@polkadot/api/types'
+import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
@@ -135,6 +135,14 @@ export const stubApi = () => {
   set(api, 'api.rpc.chain.getBlockHash', () => {
     from([createType('BlockHash', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY')])
   })
+
+  set(api, 'api.rpc.chain.getHeader', () =>
+    from([
+      {
+        number: createType('BlockNumber', 1337),
+      },
+    ])
+  )
 
   return api
 }
