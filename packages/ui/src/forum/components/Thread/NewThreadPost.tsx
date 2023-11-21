@@ -41,6 +41,7 @@ export const NewThreadPost = React.forwardRef(
 
     return (
       <RowGapBlock gap={8} ref={ref}>
+
         <InputComponent
           inputSize="auto"
           message={postText === '' ? 'This field cannot be empty. Type your message here' : undefined}
