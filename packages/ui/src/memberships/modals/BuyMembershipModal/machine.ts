@@ -92,7 +92,6 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
             target: 'addStakingAccCandidateTx',
             actions: assign({
               memberId: (context, event) => getDataFromEvent(event.data.events, 'members', 'MembershipBought', 0),
-              bindingValidtorAccStep: (context) => 0,
             }),
             cond: isTransactionSuccess,
           },
@@ -145,9 +144,6 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
         onDone: [
           {
             target: 'success',
-            // actions: assign({
-            //   memberId: (context, event) => getDataFromEvent(event.data.events, 'members', 'MembershipBought', 0),
-            // }),
             cond: isTransactionSuccess,
             actions: assign({ transactionEvents: (context, event) => event.data.events }),
           },

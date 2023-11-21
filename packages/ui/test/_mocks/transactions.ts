@@ -1,5 +1,5 @@
-import { AugmentedEvents } from '@polkadot/api/types'
 import { DeriveBalancesAll } from '@polkadot/api-derive/types'
+import { AugmentedEvents } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { set } from 'lodash'

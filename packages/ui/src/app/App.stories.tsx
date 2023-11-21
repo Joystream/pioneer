@@ -32,7 +32,6 @@ type Args = {
   hasAccounts: boolean
   hasWallet: boolean
   isRPCNodeConnected: boolean
-<<<<<<< HEAD
   hasRegisteredEmail: boolean
   hasBeenAskedForEmail: boolean
   subscribeEmailError: boolean
@@ -41,11 +40,7 @@ type Args = {
   onTransfer: jest.Mock
   onSubscribeEmail: jest.Mock
   onConfirmEmail: jest.Mock
-=======
-  onBuyMembership: CallableFunction
   onUpdateMembership: CallableFunction
-  onTransfer: CallableFunction
->>>>>>> 42c8ac40 (update storybook)
 }
 
 type Story = StoryObj<FC<Args>>
@@ -135,7 +130,7 @@ export default {
                   },
                   updateProfile: {
                     event: 'MembershipUpdated',
-                    data: [MEMBER_DATA.id],
+                    data: [NEW_MEMBER_DATA.id],
                     onSend: args.onUpdateMembership,
                     failure: parameters.updateTxFailure,
                   },
@@ -562,21 +557,21 @@ export const BuyMembershipWithValidatorAccountHappyAndBindHappy: Story = {
 
     await step('Confirm', async () => {
       expect(await modal.findByText('Success'))
-      expect(modal.getByText(MEMBER_DATA.handle))
+      expect(modal.getByText(NEW_MEMBER_DATA.handle))
       expect(args.onBuyMembership).toHaveBeenCalledWith({
         rootAccount: alice.controllerAccount,
         controllerAccount: bob.controllerAccount,
-        handle: MEMBER_DATA.handle,
+        handle: NEW_MEMBER_DATA.handle,
         metadata: metadataToBytes(MembershipMetadata, {
-          name: MEMBER_DATA.metadata.name,
-          about: MEMBER_DATA.metadata.about,
-          avatarUri: MEMBER_DATA.metadata.avatar.avatarUri,
+          name: NEW_MEMBER_DATA.metadata.name,
+          about: NEW_MEMBER_DATA.metadata.about,
+          avatarUri: NEW_MEMBER_DATA.metadata.avatar.avatarUri,
         }),
         invitingMemberId: undefined,
         referrerId: undefined,
       })
 
-      expect(args.onUpdateMembership).toHaveBeenCalledWith(MEMBER_DATA.id, MEMBER_DATA.handle, {
+      expect(args.onUpdateMembership).toHaveBeenCalledWith(NEW_MEMBER_DATA.id, NEW_MEMBER_DATA.handle, {
         validatorAccount: alice.controllerAccount,
       })
 
@@ -585,7 +580,7 @@ export const BuyMembershipWithValidatorAccountHappyAndBindHappy: Story = {
       userEvent.click(viewProfileButton)
 
       expect(modal.getByText('Profile'))
-      expect(modal.getByText(MEMBER_DATA.handle))
+      expect(modal.getByText(NEW_MEMBER_DATA.handle))
     })
   },
 }
@@ -676,11 +671,11 @@ export const BuyMembershipWithValidatorAccountHappyAndBindNotEnoughFunds: Story 
       expect(args.onBuyMembership).toHaveBeenCalledWith({
         rootAccount: alice.controllerAccount,
         controllerAccount: bob.controllerAccount,
-        handle: MEMBER_DATA.handle,
+        handle: NEW_MEMBER_DATA.handle,
         metadata: metadataToBytes(MembershipMetadata, {
-          name: MEMBER_DATA.metadata.name,
-          about: MEMBER_DATA.metadata.about,
-          avatarUri: MEMBER_DATA.metadata.avatar.avatarUri,
+          name: NEW_MEMBER_DATA.metadata.name,
+          about: NEW_MEMBER_DATA.metadata.about,
+          avatarUri: NEW_MEMBER_DATA.metadata.avatar.avatarUri,
         }),
         invitingMemberId: undefined,
         referrerId: undefined,
