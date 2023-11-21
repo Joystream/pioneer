@@ -94,7 +94,7 @@ export interface MemberFormFields {
   avatarUri: File | string | null
   isReferred?: boolean
   isValidator?: boolean
-  validatorAccount?: Account
+  validatorAccounts?: Account[]
   referrer?: Member
   hasTerms?: boolean
   invitor?: Member

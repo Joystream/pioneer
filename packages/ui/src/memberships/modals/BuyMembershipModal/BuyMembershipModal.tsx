@@ -57,37 +57,37 @@ export const BuyMembershipModal = () => {
     state.matches('addStakingAccCandidateTx') &&
     api &&
     state.context.memberId &&
-    state.context.form.validatorAccount
+    state.context.form.validatorAccounts &&
+    state.context.bindingValidtorAccStep
   ) {
     const transaction = api.tx.members.addStakingAccountCandidate(state.context.memberId.toString())
-    const { form } = state.context
     const service = state.children.transaction
 
     return (
       <AddStakingAccCandidateModal
         onClose={hideModal}
-        formData={form}
+        formData={state.context.form}
         transaction={transaction}
-        initialSigner={form.validatorAccount}
+        initialSigner={state.context.form.validatorAccounts[state.context.bindingValidtorAccStep]}
         service={service}
       />
     )
   }
 
-  if (state.matches('confirmStakingAccTx') && api && state.context.memberId && state.context.form.validatorAccount) {
-    const transaction = api.tx.members.confirmStakingAccount(
-      state.context.memberId.toString(),
-      state.context.form.validatorAccount.address
+  if (state.matches('confirmStakingAccTx') && api && state.context.memberId && state.context.form.validatorAccounts) {
+    const transaction = api.tx.utility.batch(
+      state.context.form.validatorAccounts.map(({ address }) =>
+        api.tx.members.confirmStakingAccount(state.context.memberId?.toString() ?? '', address)
+      )
     )
-    const { form } = state.context
     const service = state.children.transaction
 
     return (
       <ConfirmStakingAccModal
         onClose={hideModal}
-        formData={form}
+        formData={state.context.form}
         transaction={transaction}
-        initialSigner={form.controllerAccount}
+        initialSigner={state.context.form.controllerAccount}
         service={service}
       />
     )

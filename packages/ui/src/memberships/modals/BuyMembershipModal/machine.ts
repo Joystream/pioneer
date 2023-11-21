@@ -19,6 +19,7 @@ interface BuyMembershipContext {
   form?: MemberFormFields
   memberId?: BN
   transactionEvents?: EventRecord[]
+  bindingValidtorAccStep?: number
 }
 
 type BuyMembershipState =
@@ -87,6 +88,7 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
             target: 'addStakingAccCandidateTx',
             actions: assign({
               memberId: (context, event) => getDataFromEvent(event.data.events, 'members', 'MembershipBought', 0),
+              bindingValidtorAccStep: 0,
             }),
             cond: isTransactionSuccess,
           },
@@ -108,8 +110,18 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
         src: transactionMachine,
         onDone: [
           {
+            target: 'addStakingAccCandidateTx',
+            cond: isSelfTransition,
+            actions: assign({
+              transactionEvents: (context, event) => event.data.events,
+              bindingValidtorAccStep: (context, event) =>
+                context.bindingValidtorAccStep ? 1 : context.bindingValidtorAccStep + 1,
+            }),
+          },
+          {
             target: 'confirmStakingAccTx',
             cond: isTransactionSuccess,
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
           },
           {
             target: 'error',
@@ -134,6 +146,7 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
             //   memberId: (context, event) => getDataFromEvent(event.data.events, 'members', 'MembershipBought', 0),
             // }),
             cond: isTransactionSuccess,
+            actions: assign({ transactionEvents: (context, event) => event.data.events }),
           },
           {
             target: 'error',
@@ -154,3 +167,7 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
     }),
   },
 })
+
+export const isSelfTransition = (context: BuyMembershipContext) =>
+  context.form?.validatorAccounts?.length &&
+  (!context.bindingValidtorAccStep || context.form.validatorAccounts.length > context.bindingValidtorAccStep)

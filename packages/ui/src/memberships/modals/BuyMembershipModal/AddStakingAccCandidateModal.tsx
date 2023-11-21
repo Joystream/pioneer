@@ -52,7 +52,7 @@ export const AddStakingAccCandidateModal = ({ onClose, formData, transaction, in
       onClose={onClose}
       service={service}
       useMultiTransaction={{
-        steps: [{ title: 'Create Membership' }, { title: 'Bind validator account' }],
+        steps: [{ title: 'Create Membership' }, { title: 'Bind Validator account' }, { title: 'Confirm Validator Account' }],
         active: 1,
       }}
     >
