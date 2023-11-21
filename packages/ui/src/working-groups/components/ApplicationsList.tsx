@@ -87,9 +87,9 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
           <ToggleableSubscriptionWide>Reward per {rewardPeriod?.toString()} blocks.</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
-          <TextInlineBig>
+          <TokenValueWrap>
             <TokenValue value={application.stake} />
-          </TextInlineBig>
+          </TokenValueWrap>
           <Subscription>Staked</Subscription>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
@@ -113,4 +113,10 @@ const Title = styled(ToggleableItemTitle)`
 
 const ListWrapper = styled(List)`
   overflow: auto;
+  ${ListItem} {
+    min-width: 794px;
+  }
+`
+const TokenValueWrap = styled(TextInlineBig)`
+  width: 120px;
 `

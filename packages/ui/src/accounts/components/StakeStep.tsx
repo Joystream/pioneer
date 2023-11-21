@@ -36,7 +36,7 @@ export const StakeStep = ({
   state,
   errors,
 }: StakeStepProps) => {
-  const { isMobile } = useResponsive()
+  const { isMobile, size } = useResponsive()
   const selectAccountFilter = useCallback(
     (account: Account) => !accountsFilter || accountsFilter(account),
     [accountsFilter]
@@ -61,7 +61,7 @@ export const StakeStep = ({
               minBalance={minStake}
               lockType={stakeLock}
               filter={selectAccountFilter}
-              isSmallVariant={isMobile}
+              variant={isMobile ? 's' : size === 'md' ? 'm' : 'l'}
             />
           </InputComponent>
         </RowGapBlock>

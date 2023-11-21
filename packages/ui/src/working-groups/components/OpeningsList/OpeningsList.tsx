@@ -27,6 +27,6 @@ const ListWrapper = styled(List)`
   overflow: auto;
 
   > li {
-    min-width: 850px;
+    min-width: 750px;
   }
 `

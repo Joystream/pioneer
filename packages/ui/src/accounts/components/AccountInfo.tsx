@@ -42,7 +42,7 @@ export const AccountInfo = React.memo(({ account, locked }: AccountInfoProps) =>
   )
 })
 
-const AccountInfoWrap = styled.div`
+export const AccountInfoWrap = styled.div`
   display: grid;
   grid-template-columns: 40px 1fr;
   grid-template-rows: min-content 24px 18px;

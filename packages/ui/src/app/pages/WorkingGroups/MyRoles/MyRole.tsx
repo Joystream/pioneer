@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
-import { PageLayout, PageHeaderWrapper, PageHeaderWithButtons } from '@/app/components/PageLayout'
+import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
@@ -231,4 +231,28 @@ const RoleAccountHeader = styled.section`
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-end;
+`
+
+export const PageHeaderWithButtons = styled(PageHeaderRow)`
+  @media (max-width: 1439px) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  @media (max-width: 767px) {
+    ${ButtonsGroup} {
+      grid-auto-flow: row;
+      grid-row-gap: 8px;
+      width: 100%;
+
+      button, a {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center:
+        gap: 4px;
+      }
+    }
+  }
 `

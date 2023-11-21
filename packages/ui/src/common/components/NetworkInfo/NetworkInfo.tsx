@@ -44,4 +44,8 @@ export default NetworkInfo
 export const CopyText = styled(CopyComponent)`
   font-size: 14px;
   margin-left: 5px;
+
+  > span {
+    white-space: unset;
+  }
 `

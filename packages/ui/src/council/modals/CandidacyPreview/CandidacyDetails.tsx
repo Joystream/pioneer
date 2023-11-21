@@ -52,5 +52,4 @@ const HeaderImage = styled(UserImage)`
 `
 
 const Title = styled.h4`
-  word-break: break-word;
 `

@@ -69,7 +69,7 @@ const GroupList = styled.section`
   grid-template-columns: 1fr;
   grid-auto-rows: 108px;
   grid-row-gap: 8px;
-  width: 100%;
+  min-width: 1123px;
 `
 const WorkingGroupListStyles = styled(RowGapBlock)`
   overflow: auto;

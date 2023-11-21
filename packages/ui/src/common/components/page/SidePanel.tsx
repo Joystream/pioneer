@@ -19,6 +19,8 @@ export const SidePanel = ({ scrollable, className, children }: SidePanelProps) =
 
 export const SidePanelStyles = styled.div<Pick<SidePanelProps, 'scrollable'>>`
   display: flex;
+  flex-direction: column;
+  row-gap: 36px;
   width: 100%;
   height: 100%;
   @media (min-width: 1440px) {
