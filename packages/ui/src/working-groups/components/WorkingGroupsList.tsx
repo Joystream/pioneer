@@ -85,4 +85,8 @@ const WorkingGroupListStyles = styled(RowGapBlock)`
   ${ListHeaders} {
     padding: 0 24px;
   }
+
+  * {
+    word-break: normal;
+  }
 `
