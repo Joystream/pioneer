@@ -148,7 +148,7 @@ export const WorkingGroupOpening = () => {
               </BadgeStatus>
               <StatusBadge />
             </BadgesRow>
-            <Statistics>
+            <StatisticsStyle>
               <DurationStatistics title="Time Left" value={opening.expectedEnding} />
               <TokenValueStat
                 title={`Reward per ${rewardPeriod?.toString()} blocks`}
@@ -166,7 +166,7 @@ export const WorkingGroupOpening = () => {
                 hiring={opening.hiring}
                 status={opening.status}
               />
-            </Statistics>
+            </StatisticsStyle>
           </RowGapBlock>
         </PageHeaderWrapper>
       }
@@ -226,7 +226,6 @@ const ApplicationStatsStyles = styled(StatsBlock).attrs({ centered: true })`
   justify-content: start;
 `
 
-
 const ResponsiveStyle = css`
   aside {
     > div {
@@ -253,5 +252,17 @@ const ResponsiveStyle = css`
         overflow: hidden;
       }
     }
+  }
+`
+
+const StatisticsStyle = styled(Statistics)`
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (min-width: 1440px) {
+    grid-template-columns: repeat(4, 1fr);
   }
 `

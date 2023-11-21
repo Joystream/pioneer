@@ -51,5 +51,4 @@ const HeaderImage = styled(UserImage)`
   width: 100%;
 `
 
-const Title = styled.h4`
-`
+const Title = styled.h4``

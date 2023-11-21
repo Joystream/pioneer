@@ -151,12 +151,12 @@ export const MyRole = () => {
                 </BadgeStatus>
               )}
             </BadgesRow>
-            <Statistics>
+            <StatisticsStyle>
               <MyEarningsStat />
               <StakeStat value={worker.stake} minStake={worker.minStake} />
               <TokenValueStat title="Owed reward" value={worker.owedReward} />
               <NextPayoutStat workers={[worker]} />
-            </Statistics>
+            </StatisticsStyle>
           </RowGapBlock>
         </PageHeaderWrapper>
       }
@@ -254,5 +254,17 @@ export const PageHeaderWithButtons = styled(PageHeaderRow)`
         gap: 4px;
       }
     }
+  }
+`
+
+const StatisticsStyle = styled(Statistics)`
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (min-width: 1440px) {
+    grid-template-columns: repeat(4, 1fr);
   }
 `

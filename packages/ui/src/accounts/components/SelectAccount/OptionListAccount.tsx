@@ -22,7 +22,7 @@ export const OptionListAccount = React.memo(({ options, onChange, className, isF
     <OptionsListComponent className={className}>
       {freeAccounts.map((option) => (
         <Option key={option.address} onClick={() => onChange && onChange(option)} variant={variant}>
-          <OptionAccount option={option} isForStaking={isForStaking} />
+          <OptionAccount option={option} isForStaking={isForStaking} variant={variant} />
         </Option>
       ))}
       {lockedAccounts.map((option) => (
