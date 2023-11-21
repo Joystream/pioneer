@@ -44,6 +44,7 @@ export const PostReplyModal = () => {
   )
 
   useEffect(() => {
+    send({ type: 'SET_EDITABLE', payload: true });
     if (!(feeInfo && requiredAmount && active && balance)) {
       return
     }
@@ -75,15 +76,6 @@ export const PostReplyModal = () => {
           </MainContainer>
         </ModalBody>
         <ModalTransactionFooter
-          extraLeftButtons={
-            <Checkbox
-              id="set-editable"
-              onChange={(payload) => send({ type: 'SET_EDITABLE', payload })}
-              isChecked={state.context.isEditable}
-            >
-              Keep editable
-            </Checkbox>
-          }
           extraButtons={
             <PreviewPostButton author={active as Member} postText={state.context.postText} replyTo={replyTo} />
           }
@@ -102,11 +94,11 @@ export const PostReplyModal = () => {
         additionalTransactionInfo={
           state.context.isEditable
             ? [
-                {
-                  value: postDeposit,
-                  title: 'Post deposit:',
-                },
-              ]
+              {
+                value: postDeposit,
+                title: 'Post deposit:',
+              },
+            ]
             : undefined
         }
         extraButtons={<PreviewPostButton author={active} postText={state.context.postText} replyTo={replyTo} />}

@@ -63,9 +63,6 @@ export const NewThreadPost = React.forwardRef(
           >
             Create post
           </TransactionButton>
-          <Checkbox id="set-editable" onChange={setEditable} isChecked={isEditable}>
-            Keep editable
-          </Checkbox>
         </ButtonsGroup>
       </RowGapBlock>
     )
