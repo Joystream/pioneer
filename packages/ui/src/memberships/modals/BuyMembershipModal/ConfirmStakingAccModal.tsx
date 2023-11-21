@@ -25,7 +25,7 @@ interface SignProps {
   service: ActorRef<any>
 }
 
-export const BondValidatorAccModal = ({ onClose, formData, transaction, initialSigner, service }: SignProps) => {
+export const ConfirmStakingAccModal = ({ onClose, formData, transaction, initialSigner, service }: SignProps) => {
   const { allAccounts } = useMyAccounts()
   const [from, setFrom] = useState(
     initialSigner ?? accountOrNamed(allAccounts, formData.invitor?.controllerAccount || '', 'Controller account')

@@ -5,13 +5,13 @@ import { useApi } from '@/api/hooks/useApi'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
-import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { toMemberTransactionParams } from '@/memberships/modals/utils'
 
-import { BondValidatorAccModal } from './BondValidatorAccModal'
+import { AddStakingAccCandidateModal } from './AddStakingAccCandidateModal'
 import { BuyMembershipFormModal, MemberFormFields } from './BuyMembershipFormModal'
 import { BuyMembershipSignModal } from './BuyMembershipSignModal'
 import { BuyMembershipSuccessModal } from './BuyMembershipSuccessModal'
+import { ConfirmStakingAccModal } from './ConfirmStakingAccModal'
 import { buyMembershipMachine } from './machine'
 
 export const BuyMembershipModal = () => {
@@ -53,19 +53,37 @@ export const BuyMembershipModal = () => {
     )
   }
 
-  if (state.matches('bondValidatorAccTx') && api && state.context.memberId && state.context.form.validatorAccount) {
-    const transaction = api.tx.members.updateProfile(
+  if (
+    state.matches('addStakingAccCandidateTx') &&
+    api &&
+    state.context.memberId &&
+    state.context.form.validatorAccount
+  ) {
+    const transaction = api.tx.members.addStakingAccountCandidate(state.context.memberId.toString())
+    const { form } = state.context
+    const service = state.children.transaction
+
+    return (
+      <AddStakingAccCandidateModal
+        onClose={hideModal}
+        formData={form}
+        transaction={transaction}
+        initialSigner={form.validatorAccount}
+        service={service}
+      />
+    )
+  }
+
+  if (state.matches('confirmStakingAccTx') && api && state.context.memberId && state.context.form.validatorAccount) {
+    const transaction = api.tx.members.confirmStakingAccount(
       state.context.memberId.toString(),
-      state.context.form.handle,
-      metadataToBytes(MembershipMetadata, {
-        validatorAccount: state.context.form.validatorAccount.address,
-      })
+      state.context.form.validatorAccount.address
     )
     const { form } = state.context
     const service = state.children.transaction
 
     return (
-      <BondValidatorAccModal
+      <ConfirmStakingAccModal
         onClose={hideModal}
         formData={form}
         transaction={transaction}
