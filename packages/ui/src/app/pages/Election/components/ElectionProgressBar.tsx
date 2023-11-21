@@ -49,18 +49,17 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
     )
   }
 
-  const defaultStaging = props.electionStage
-  const defaultDaysIndicator = useMemo(() => convertDurationToTimeString(duration), [duration])
+  const endDayOfStage = useMemo(() => convertDurationToTimeString(duration), [duration])
 
-  const [stageDescription, setStageDescription] = useState(defaultStaging)
+  const [stageDescription, setStageDescription] = useState(props.electionStage)
   const [verbIndicator, setVerbIndicator] = useState('ends in')
-  const [daysIndicator, setDaysIndicator] = useState<any>(defaultDaysIndicator)
+  const [daysIndicator, setDaysIndicator] = useState<any>(endDayOfStage)
   const [selectedToolbarStage, setSelectedToolbarStage] = useState('')
 
   useEffect(() => {
     if (selectedToolbarStage === '') updateDescription(selectedToolbarStage, false)
     else updateDescription(selectedToolbarStage, true)
-  }, [defaultDaysIndicator])
+  }, [endDayOfStage])
 
   let announcingProgress = 0
   let votingProgress = 0
@@ -201,71 +200,41 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
   }
 
   const updateDescription = (selectedStage: string, choose: boolean) => {
-    if (choose === false || props.electionStage === selectedStage) {
-      if (props.electionStage === 'inactive') {
-        setStageDescription('The Round')
-        setVerbIndicator('begins in')
-      } else {
-        setStageDescription(defaultStaging)
-        setVerbIndicator('ends in')
-      }
-      setDaysIndicator(defaultDaysIndicator)
+    if (choose == false || props.electionStage === selectedStage) {
+      setStageDescription(props.electionStage === 'inactive' ? 'The Round' : props.electionStage)
+      setVerbIndicator(props.electionStage === 'inactive' ? 'begins in' : 'ends in')
+      setDaysIndicator(endDayOfStage)
       setSelectedToolbarStage('')
       return
     }
 
-    if (props.electionStage === 'inactive') {
-      setStageDescription(selectedStage)
-      setVerbIndicator('begins in')
+    const stages = ['inactive', 'announcing', 'voting', 'revealing']
+    const electionPos = stages.indexOf(props.electionStage)
+    const selectedPos = stages.indexOf(selectedStage)
 
-      if (selectedStage === 'announcing') {
-        setDaysIndicator(defaultDaysIndicator)
-      } else if (selectedStage === 'voting') {
-        setDaysIndicator(convertDurationToTimeString(announcingEndBlock - currentBlock))
-      } else if (selectedStage === 'revealing') {
-        setDaysIndicator(convertDurationToTimeString(votingEndBlock - currentBlock))
-      }
-    } else if (props.electionStage === 'announcing') {
-      if (selectedStage === 'inactive') {
-        setStageDescription(selectedStage)
-        setVerbIndicator('ended on')
-        setDaysIndicator(inactiveEndDay)
-      } else {
-        setStageDescription(selectedStage)
-        setVerbIndicator('begins in')
+    const verbIndicatorArray = [
+      ['', 'begins in', 'begins in', 'begins in'],
+      ['ended on', '', 'begins in', 'begins in'],
+      ['ended on', 'ended on', '', 'begins in'],
+      ['ended on', 'ended on', 'ended on', ''],
+    ]
 
-        if (selectedStage === 'voting') {
-          setDaysIndicator(defaultDaysIndicator)
-        } else if (selectedStage === 'revealing') {
-          setDaysIndicator(convertDurationToTimeString(votingEndBlock - currentBlock))
-        }
-      }
-    } else if (props.electionStage === 'voting') {
-      if (selectedStage === 'inactive') {
-        setStageDescription(selectedStage)
-        setVerbIndicator('ended on')
-        setDaysIndicator(inactiveEndDay)
-      } else if (selectedStage === 'announcing') {
-        setStageDescription(selectedStage)
-        setVerbIndicator('ended on')
-        setDaysIndicator(announcingEndDay)
-      } else if (selectedStage === 'revealing') {
-        setStageDescription(selectedStage)
-        setVerbIndicator('begins in')
-        setDaysIndicator(defaultDaysIndicator)
-      }
-    } else if (props.electionStage === 'revealing') {
-      setStageDescription(selectedStage)
-      setVerbIndicator('ended on')
-      if (selectedStage === 'announcing') {
-        setDaysIndicator(announcingEndDay)
-      } else if (selectedStage === 'voting') {
-        setDaysIndicator(votingEndDay)
-      } else if (selectedStage === 'inactive') {
-        setDaysIndicator(inactiveEndDay)
-      }
-    }
+    const endOfStageArray = [
+      [
+        '',
+        endDayOfStage,
+        convertDurationToTimeString(announcingEndBlock - currentBlock),
+        convertDurationToTimeString(votingEndBlock - currentBlock),
+      ],
+      [inactiveEndDay, '', endDayOfStage, convertDurationToTimeString(votingEndBlock - currentBlock)],
+      [inactiveEndDay, announcingEndDay, '', endDayOfStage],
+      [inactiveEndDay, announcingEndDay, votingEndDay, ''],
+    ]
+
+    setStageDescription(selectedStage)
     setSelectedToolbarStage(selectedStage)
+    setVerbIndicator(verbIndicatorArray[electionPos][selectedPos])
+    setDaysIndicator(endOfStageArray[electionPos][selectedPos])
   }
 
   return (
