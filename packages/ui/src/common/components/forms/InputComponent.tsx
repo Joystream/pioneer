@@ -467,6 +467,7 @@ export const InputNotification = styled.div<InputProps>`
   grid-auto-flow: column;
   grid-column-gap: 4px;
   align-items: center;
+  justify-content: start;
   width: 100%;
   color: ${({ validation }) => {
     switch (validation) {

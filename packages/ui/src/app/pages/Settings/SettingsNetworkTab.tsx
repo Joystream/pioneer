@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { useApi } from '@/api/hooks/useApi'
 import { NetworkType, NetworkEndpoints } from '@/app/config'
@@ -14,6 +15,7 @@ import { PolkadotAppInfo } from '@/common/components/PolkadotAppInfo'
 import { SimpleSelect } from '@/common/components/selects'
 import { SettingsInformation, SettingsWarningInformation } from '@/common/components/SettingsInformation'
 import { TextMedium } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useNetwork } from '@/common/hooks/useNetwork'
 import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
@@ -188,7 +190,7 @@ export const SettingsNetworkTab = () => {
 
             <ButtonPrimary onClick={saveSettings} size="medium">
               Save settings
-              {customSaveStatus === 'Saving' && <Loading />}
+              {customSaveStatus === 'Saving' && <CustomLoading />}
             </ButtonPrimary>
           </FormProvider>
         )}
@@ -279,3 +281,7 @@ const checkFaucetEndpoint = async (endpoint: string) => {
     return false
   }
 }
+
+const CustomLoading = styled(Loading)`
+  fill: ${Colors.White};
+`
