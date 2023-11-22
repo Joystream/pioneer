@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
-import styled from 'styled-components'
 import * as Yup from 'yup'
 import { AnySchema } from 'yup'
 
@@ -9,10 +8,16 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
 import { ButtonPrimary, ButtonGhost } from '@/common/components/buttons'
-import { InlineToggleWrap, InputComponent, InputText, InputTextarea, ToggleCheckbox } from '@/common/components/forms'
+import {
+  InlineToggleWrap,
+  InputComponent,
+  InputText,
+  InputTextarea,
+  Label,
+  ToggleCheckbox,
+} from '@/common/components/forms'
 import { CrossIcon } from '@/common/components/icons'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
-import { AlertSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
 import {
   ModalHeader,
@@ -24,7 +29,7 @@ import {
   ScrolledModalContainer,
 } from '@/common/components/Modal'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
-import { Label, TextMedium, TextSmall } from '@/common/components/typography'
+import { TextMedium, TextSmall } from '@/common/components/typography'
 import { WithNullableValues } from '@/common/types/form'
 import { definedValues } from '@/common/utils'
 import { useYupValidationResolver } from '@/common/utils/validation'
@@ -77,11 +82,6 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
       )
     )
   )
-  // isValidator, stashAccounts should be read from member
-  // const isValidator = member.isValidator ?? false
-  // const stashAccounts = member.stashAccounts ?? []
-  const [stashAccounts, setStashAccounts] = useState([{}])
-  const [isAccountAdded, setIsAccountAdded] = useState(true)
 
   const form = useForm({
     resolver: useYupValidationResolver<UpdateMemberForm>(UpdateMemberSchema),
@@ -94,13 +94,15 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     mode: 'onChange',
   })
 
-  const [controllerAccount, rootAccount, handle, stashAccountSelect, isValidator] = form.watch([
+  const [controllerAccount, rootAccount, handle, isValidator, validatorAccountCandidate] = form.watch([
     'controllerAccount',
     'rootAccount',
     'handle',
-    'stashAccountSelect',
     'isValidator',
+    'validatorAccountCandidate',
   ])
+
+  const [validatorAccounts, setValidatorAccounts] = useState<Account[]>([])
 
   useEffect(() => {
     form.trigger('handle')
@@ -116,26 +118,19 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const canUpdate =
     form.formState.isValid &&
     hasAnyEdits(form.getValues(), getUpdateMemberFormInitial(member)) &&
-    (!isValidator || stashAccounts?.length > 1)
+    (!isValidator || validatorAccounts?.length)
 
-  const addStashAccount = () => {
-    const accountSelection = stashAccountSelect as Account
-    setStashAccounts((prevStashAccounts) => [...prevStashAccounts, accountSelection])
-    form?.setValue('stashAccountSelect' as keyof UpdateMemberForm, undefined)
-  }
-
-  const removeStashAccount = (index: number) => {
-    setStashAccounts((prevAccounts) => prevAccounts.filter((account, ind) => ind !== index))
-  }
-
-  useEffect(() => {
-    const accountSelection = stashAccountSelect as Account
-    if (stashAccounts.some((account) => account === accountSelection)) {
-      setIsAccountAdded(true)
-    } else {
-      setIsAccountAdded(false)
+  const addValidatorAccount = () => {
+    if (validatorAccountCandidate) {
+      setValidatorAccounts([...new Set([validatorAccountCandidate, ...validatorAccounts])])
+      form?.setValue('validatorAccountCandidate' as keyof UpdateMemberForm, undefined)
     }
-  }, [stashAccountSelect])
+  }
+
+  const removeValidatorAccount = (index: number) => {
+    setValidatorAccounts([...validatorAccounts.slice(0, index), ...validatorAccounts.slice(index + 1)])
+  }
+
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
       <ModalHeader onClick={onClose} title="Edit membership" />
@@ -204,70 +199,39 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
               <>
                 <Row>
                   <RowInline>
-                    <InputComponent
-                      id="select-stashAccount"
-                      label="Stash account"
-                      inputSize="l"
-                      tooltipText="Stash account is ... TOOLTIP MUST BE PROVIDED"
-                    >
-                      <SelectAccount id="select-stashAccount" name="stashAccountSelect" />
+                    <InputComponent id="select-validatorAccount" inputSize="l">
+                      <SelectAccount id="select-validatorAccount" name="validatorAccountCandidate" />
                     </InputComponent>
-                    <BtnWrapper pt={30} width={65}>
-                      <ButtonPrimary
-                        size="medium"
-                        onClick={addStashAccount}
-                        disabled={isAccountAdded || stashAccountSelect === undefined}
-                      >
-                        <PlusIcon />
-                      </ButtonPrimary>
-                    </BtnWrapper>
+                    <ButtonPrimary
+                      square
+                      size="large"
+                      onClick={addValidatorAccount}
+                      disabled={!validatorAccountCandidate}
+                    >
+                      <PlusIcon />
+                    </ButtonPrimary>
                   </RowInline>
-                  {isAccountAdded && (
-                    <RowInline>
-                      <TextSmall error>
-                        <InputNotificationIcon>
-                          <AlertSymbol />
-                        </InputNotificationIcon>
-                      </TextSmall>
-                      <TextSmall error>This stash account is already added to the list.</TextSmall>
-                    </RowInline>
-                  )}
-                  {stashAccounts.length < 2 && (
-                    <RowInline>
-                      <TextSmall error>
-                        <InputNotificationIcon>
-                          <AlertSymbol />
-                        </InputNotificationIcon>
-                      </TextSmall>
-                      <TextSmall error>You should add at least 1 stash account.</TextSmall>
-                    </RowInline>
-                  )}
                 </Row>
 
-                {stashAccounts.map((stashAccount, index) => {
-                  if (index !== 0) {
-                    return (
-                      <Row>
-                        <RowInline>
-                          <SelectedAccount account={stashAccount as Account} key={'selected' + index} />
-                          <BtnWrapper width={65}>
-                            <ButtonGhost
-                              size="medium"
-                              onClick={() => {
-                                removeStashAccount(index)
-                              }}
-                            >
-                              <CrossIcon />
-                            </ButtonGhost>
-                          </BtnWrapper>
-                        </RowInline>
-                      </Row>
-                    )
-                  }
-                })}
+                {validatorAccounts.map((account, index) => (
+                  <Row>
+                    <RowInline>
+                      <SelectedAccount account={account as Account} key={'selected' + index} />
+                      <ButtonGhost
+                        square
+                        size="large"
+                        onClick={() => {
+                          removeValidatorAccount(index)
+                        }}
+                      >
+                        <CrossIcon />
+                      </ButtonGhost>
+                    </RowInline>
+                  </Row>
+                ))}
                 <Row>
-                  <RowInline>
-                    <Label>Status</Label>
+                  <RowInline gap={4}>
+                    <Label noMargin>Status</Label>
                     <Tooltip tooltipText="This is the status which indicates the selected account is actually a validator account.">
                       <TooltipDefault />
                     </Tooltip>
@@ -284,13 +248,10 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
           disabled: !canUpdate || isUploading,
           label: isUploading ? <Loading text="Uploading avatar" /> : 'Save changes',
           onClick: () => {
-            stashAccounts.length > 1 &&
-              stashAccounts.map((account, index) => {
-                if (index !== 0) {
-                  form?.register(('stashAccounts[' + (index - 1) + ']') as keyof UpdateMemberForm)
-                  form?.setValue(('stashAccounts[' + (index - 1) + ']') as keyof UpdateMemberForm, account as Account)
-                }
-              })
+            validatorAccounts?.map((account, index) => {
+              form?.register(('validatorAccounts[' + index + ']') as keyof UpdateMemberForm)
+              form?.setValue(('validatorAccounts[' + index + ']') as keyof UpdateMemberForm, account)
+            })
             uploadAvatarAndSubmit(form.getValues())
           },
         }}
@@ -298,35 +259,3 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     </ScrolledModal>
   )
 }
-
-const InputNotificationIcon = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 12px;
-  height: 12px;
-  color: inherit;
-  padding-right: 2px;
-
-  .blackPart,
-  .primaryPart {
-    fill: currentColor;
-  }
-`
-interface PaddingProps {
-  pl?: number
-  pr?: number
-  pt?: number
-  pb?: number
-  width?: number
-}
-
-const BtnWrapper = styled.div<PaddingProps>`
-  padding-right: ${({ pr }) => (pr ? pr + 'px' : '0px')};
-  padding-left: ${({ pl }) => (pl ? pl + 'px' : '0px')};
-  padding-top: ${({ pt }) => (pt ? pt + 'px' : '0px')};
-  padding-bottom: ${({ pb }) => (pb ? pb + 'px' : '0px')};
-  width: ${({ width }) => (width ? width + 'px' : '0px')};
-  display: flex;
-  justify-content: end;
-`

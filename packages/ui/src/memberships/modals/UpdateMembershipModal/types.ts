@@ -10,6 +10,6 @@ export interface UpdateMemberForm {
   controllerAccount?: Account
   externalResources: Record<string, string>
   isValidator?: boolean
-  stashAccountSelect?: Account
-  stashAccounts: Account[]
+  validatorAccountCandidate?: Account
+  validatorAccounts: Account[]
 }

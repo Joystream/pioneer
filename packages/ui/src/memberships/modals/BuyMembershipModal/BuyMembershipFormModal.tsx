@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 
-import { SelectAccount } from '@/accounts/components/SelectAccount'
+import { SelectAccount, SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
@@ -20,7 +20,9 @@ import {
   LabelLink,
   ToggleCheckbox,
 } from '@/common/components/forms'
-import { Arrow } from '@/common/components/icons'
+import { Arrow, CrossIcon } from '@/common/components/icons'
+import { PlusIcon } from '@/common/components/icons/PlusIcon'
+// import { AlertSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
 import {
   ModalFooter,
@@ -86,14 +88,13 @@ const CreateMemberSchema = Yup.object().shape({
 export interface MemberFormFields {
   rootAccount?: Account
   controllerAccount?: Account
-  stashAccountSelect?: Account
-  stashAccounts?: Account[]
   name: string
   handle: string
   about: string
   avatarUri: File | string | null
   isReferred?: boolean
   isValidator?: boolean
+  validatorAccountCandidate?: Account
   validatorAccounts?: Account[]
   referrer?: Member
   hasTerms?: boolean
@@ -109,7 +110,6 @@ const formDefaultValues = {
   avatarUri: null,
   isReferred: false,
   isValidator: false,
-  validatorAccount: undefined,
   referrer: undefined,
   hasTerms: false,
   externalResources: {},
@@ -144,13 +144,16 @@ export const BuyMembershipForm = ({
     },
   })
 
-  const [handle, isReferred, isValidator, referrer, captchaToken] = form.watch([
+  const [handle, isReferred, isValidator, referrer, captchaToken, validatorAccountCandidate] = form.watch([
     'handle',
     'isReferred',
     'isValidator',
     'referrer',
     'captchaToken',
+    'validatorAccountCandidate',
   ])
+
+  const [validatorAccounts, setValidatorAccounts] = useState<Account[]>([])
 
   useEffect(() => {
     if (handle) {
@@ -164,9 +167,20 @@ export const BuyMembershipForm = ({
     }
   }, [data?.membershipsConnection.totalCount])
 
-  const isFormValid = !isUploading && form.formState.isValid
+  const isFormValid = !isUploading && form.formState.isValid && (!isValidator || validatorAccounts?.length)
   const isDisabled =
     type === 'onBoarding' && process.env.REACT_APP_CAPTCHA_SITE_KEY ? !captchaToken || !isFormValid : !isFormValid
+
+  const addValidatorAccount = () => {
+    if (validatorAccountCandidate) {
+      setValidatorAccounts([...new Set([validatorAccountCandidate, ...validatorAccounts])])
+      form?.setValue('validatorAccountCandidate' as keyof MemberFormFields, undefined)
+    }
+  }
+
+  const removeValidatorAccount = (index: number) => {
+    setValidatorAccounts([...validatorAccounts.slice(0, index), ...validatorAccounts.slice(index + 1)])
+  }
 
   return (
     <>
@@ -260,22 +274,46 @@ export const BuyMembershipForm = ({
                 {isValidator && (
                   <>
                     <Row>
-                      <InputComponent
-                        id="select-validatorAccount"
-                        label="Validator account"
-                        inputSize="l"
-                        tooltipText="Validator account is ... TOOLTIP MUST BE PROVIDED"
-                      >
-                        <SelectAccount id="select-validatorAccount" name="validatorAccount" />
-                      </InputComponent>
+                      <RowInline>
+                        <InputComponent id="select-validatorAccount" inputSize="l">
+                          <SelectAccount id="select-validatorAccount" name="validatorAccountCandidate" />
+                        </InputComponent>
+                        <ButtonPrimary
+                          square
+                          size="large"
+                          onClick={addValidatorAccount}
+                          disabled={!validatorAccountCandidate}
+                        >
+                          <PlusIcon />
+                        </ButtonPrimary>
+                      </RowInline>
                     </Row>
-                    <RowInline>
-                      <Label noMargin>Status</Label>
-                      <Tooltip tooltipText="This is the status which indicates the selected account is actually a validator account.">
-                        <TooltipDefault />
-                      </Tooltip>
-                      <TextSmall dark> : {'Unverified'} ! </TextSmall>
-                    </RowInline>
+
+                    {validatorAccounts.map((account, index) => (
+                      <Row>
+                        <RowInline>
+                          <SelectedAccount account={account as Account} key={'selected' + index} />
+                          <ButtonGhost
+                            square
+                            size="large"
+                            onClick={() => {
+                              removeValidatorAccount(index)
+                            }}
+                          >
+                            <CrossIcon />
+                          </ButtonGhost>
+                        </RowInline>
+                      </Row>
+                    ))}
+                    <Row>
+                      <RowInline gap={4}>
+                        <Label noMargin>Status</Label>
+                        <Tooltip tooltipText="This is the status which indicates the selected account is actually a validator account.">
+                          <TooltipDefault />
+                        </Tooltip>
+                        <TextSmall dark> : {'Unverified'} ! </TextSmall>
+                      </RowInline>
+                    </Row>
                   </>
                 )}
               </>
@@ -334,6 +372,10 @@ export const BuyMembershipForm = ({
           <ButtonPrimary
             size="medium"
             onClick={() => {
+              validatorAccounts?.map((account, index) => {
+                form?.register(('validatorAccounts[' + index + ']') as keyof MemberFormFields)
+                form?.setValue(('validatorAccounts[' + index + ']') as keyof MemberFormFields, account)
+              })
               const values = form.getValues()
               uploadAvatarAndSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
             }}
