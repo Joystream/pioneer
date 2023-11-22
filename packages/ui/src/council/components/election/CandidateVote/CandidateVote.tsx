@@ -158,6 +158,10 @@ const CandidateVoteWrapper = styled(ListItem)`
   padding: 16px 48px 16px 8px;
   cursor: pointer;
 
+  * {
+    word-break: normal;
+  }
+
   &:hover,
   &:focus,
   &:focus-within {
