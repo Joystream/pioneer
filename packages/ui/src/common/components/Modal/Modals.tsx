@@ -17,13 +17,14 @@ export const Row = styled.div`
   height: auto;
 `
 
-export const RowInline = styled.div<{ gap?: number }>`
+export const RowInline = styled.div<{ gap?: number; top?: number }>`
   display: flex;
   flex-direction: row;
   width: 100%;
   height: auto;
   align-items: center;
   gap: ${({ gap }) => gap ?? 16}px;
+  margin-top: ${({ top }) => top ?? 0}px;
 `
 
 export const AccountRow = styled.div`

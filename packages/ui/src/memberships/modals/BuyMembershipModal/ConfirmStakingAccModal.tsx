@@ -61,7 +61,7 @@ export const ConfirmStakingAccModal = ({ onClose, formData, transaction, initial
       }}
     >
       <ModalBody>
-        <TextMedium>You are intending to bond your validator account with your membership</TextMedium>
+        <TextMedium>You are intending to confirm your validator account to be bound with your membership</TextMedium>
         <TextMedium>
           Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
         </TextMedium>
@@ -84,7 +84,7 @@ export const ConfirmStakingAccModal = ({ onClose, formData, transaction, initial
         transactionFee={paymentInfo?.partialFee.toBn()}
         next={{
           disabled: signDisabled,
-          label: 'Sign and Bond',
+          label: 'Sign and Confirm',
           onClick: sign,
         }}
       ></ModalTransactionFooter>

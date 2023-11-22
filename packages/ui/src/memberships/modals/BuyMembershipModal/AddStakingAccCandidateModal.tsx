@@ -61,7 +61,7 @@ export const AddStakingAccCandidateModal = ({ onClose, formData, transaction, in
       }}
     >
       <ModalBody>
-        <TextMedium>You are intending to bond your validator account with your membership</TextMedium>
+        <TextMedium>You are intending to bond your validator account with your membership.</TextMedium>
         <TextMedium>
           Fees of <TokenValue value={paymentInfo?.partialFee.toBn()} /> will be applied to the transaction.
         </TextMedium>

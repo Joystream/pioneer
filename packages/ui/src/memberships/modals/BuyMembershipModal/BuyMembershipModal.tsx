@@ -57,8 +57,7 @@ export const BuyMembershipModal = () => {
     state.matches('addStakingAccCandidateTx') &&
     api &&
     state.context.memberId &&
-    state.context.form.validatorAccounts &&
-    state.context.bindingValidtorAccStep
+    state.context.form.validatorAccounts
   ) {
     const transaction = api.tx.members.addStakingAccountCandidate(state.context.memberId.toString())
     const service = state.children.transaction
@@ -68,7 +67,7 @@ export const BuyMembershipModal = () => {
         onClose={hideModal}
         formData={state.context.form}
         transaction={transaction}
-        initialSigner={state.context.form.validatorAccounts[state.context.bindingValidtorAccStep]}
+        initialSigner={state.context.form.validatorAccounts[state.context.bindingValidtorAccStep ?? 0]}
         service={service}
       />
     )

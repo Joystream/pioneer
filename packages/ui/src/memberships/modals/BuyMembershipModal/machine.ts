@@ -41,8 +41,9 @@ export type BuyMembershipEvent =
   | { type: 'ERROR' }
 
 const isSelfTransition = (context: BuyMembershipContext) =>
-  !!context.form?.validatorAccounts &&
-  (!context.bindingValidtorAccStep || context.form.validatorAccounts.length > context.bindingValidtorAccStep)
+  context.form?.validatorAccounts &&
+  context.form?.validatorAccounts.length > 1 &&
+  (!context.bindingValidtorAccStep || context.form.validatorAccounts.length - 1 > context.bindingValidtorAccStep)
 
 export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembershipEvent, BuyMembershipState>({
   initial: 'prepare',

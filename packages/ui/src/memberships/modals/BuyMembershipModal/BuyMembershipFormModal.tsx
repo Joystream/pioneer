@@ -2,6 +2,7 @@ import HCaptcha from '@hcaptcha/react-hcaptcha'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import React, { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import styled from 'styled-components'
 import * as Yup from 'yup'
 
 import { SelectAccount, SelectedAccount } from '@/accounts/components/SelectAccount'
@@ -265,15 +266,24 @@ export const BuyMembershipForm = ({
 
             {type === 'general' && (
               <>
-                <Row>
-                  <InlineToggleWrap>
-                    <Label>I am a validator: </Label>
-                    <ToggleCheckbox trueLabel="Yes" falseLabel="No" name="isValidator" />
-                  </InlineToggleWrap>
-                </Row>
+                <RowInline top={16}>
+                  <Label>I am a validator: </Label>
+                  <ToggleCheckbox trueLabel="Yes" falseLabel="No" name="isValidator" />
+                </RowInline>
                 {isValidator && (
                   <>
-                    <Row>
+                    <SelectValidatorAccountWrapper>
+                      <RowInline gap={4}>
+                        <Label noMargin>Add validator controller account or validator stash account</Label>
+                        <Tooltip tooltipText="This is the status which indicates the selected account is actually a validator account.">
+                          <TooltipDefault />
+                        </Tooltip>
+                        <TextSmall dark>*</TextSmall>
+                      </RowInline>
+                      <TextMedium dark>
+                        If your validator account is not in your signer wallet, paste the account address to the field
+                        below:
+                      </TextMedium>
                       <RowInline>
                         <InputComponent id="select-validatorAccount" inputSize="l">
                           <SelectAccount id="select-validatorAccount" name="validatorAccountCandidate" />
@@ -283,11 +293,12 @@ export const BuyMembershipForm = ({
                           size="large"
                           onClick={addValidatorAccount}
                           disabled={!validatorAccountCandidate}
+                          className="add-button"
                         >
                           <PlusIcon />
                         </ButtonPrimary>
                       </RowInline>
-                    </Row>
+                    </SelectValidatorAccountWrapper>
 
                     {validatorAccounts.map((account, index) => (
                       <Row>
@@ -397,3 +408,10 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: B
     </ScrolledModal>
   )
 }
+
+const SelectValidatorAccountWrapper = styled.div`
+  margin-top: -4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`
