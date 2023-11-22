@@ -1,10 +1,11 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { PageHeader } from '@/app/components/PageHeader'
 import { PageLayout } from '@/app/components/PageLayout'
 import { usePageTabs } from '@/app/hooks/usePageTabs'
+import { BackendContext } from '@/app/providers/backend/context'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { Tabs } from '@/common/components/Tabs'
@@ -22,10 +23,13 @@ export type SettingsLayoutProps = {
 
 export const SettingsLayout = ({ saveButton, children }: SettingsLayoutProps) => {
   const { t } = useTranslation('settings')
+  const backendContext = useContext(BackendContext)
+  const notificationsTab = [t('notifications'), SettingsRoutes.notifications] as const
   const tabs = usePageTabs([
     [t('network'), SettingsRoutes.settings],
-    [t('notifications'), SettingsRoutes.notifications],
+    ...(backendContext.backendClient ? [notificationsTab] : []),
   ])
+
   return (
     <PageLayout
       header={
