@@ -21,9 +21,7 @@ import {
   LabelLink,
   ToggleCheckbox,
 } from '@/common/components/forms'
-import { Arrow, CrossIcon } from '@/common/components/icons'
-import { PlusIcon } from '@/common/components/icons/PlusIcon'
-// import { AlertSymbol } from '@/common/components/icons/symbols'
+import { Arrow, CrossIcon, PlusIcon } from '@/common/components/icons'
 import { Loading } from '@/common/components/Loading'
 import {
   ModalFooter,

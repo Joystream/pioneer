@@ -41,7 +41,7 @@ export type BuyMembershipEvent =
   | { type: 'ERROR' }
 
 const isSelfTransition = (context: BuyMembershipContext) =>
-  context.form?.validatorAccounts &&
+  !!context.form?.validatorAccounts &&
   context.form?.validatorAccounts.length > 1 &&
   (!context.bindingValidtorAccStep || context.form.validatorAccounts.length - 1 > context.bindingValidtorAccStep)
 
