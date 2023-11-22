@@ -210,6 +210,7 @@ const CandidateCardStakeAndControls = styled.div`
   width: fit-content;
   column-gap: 32px;
   margin-top: auto;
+  flex-wrap: wrap;
 `
 
 const CandidateCardStatistics = styled.div`

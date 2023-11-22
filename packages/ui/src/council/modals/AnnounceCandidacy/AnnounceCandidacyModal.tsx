@@ -2,6 +2,7 @@ import { CouncilCandidacyNoteMetadata } from '@joystream/metadata-protobuf'
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
@@ -302,7 +303,7 @@ export const AnnounceCandidacyModal = () => {
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader onClick={hideModal} title="Announce candidacy" />
       <StepperModalBody>
-        <StepperModalWrapper>
+        <StepperWrapperLayout>
           <Stepper steps={getSteps(service)} />
           <StepDescriptionColumn>
             <AnnounceCandidacyConstantsWrapper constants={constants} />
@@ -342,7 +343,7 @@ export const AnnounceCandidacyModal = () => {
               )}
             </FormProvider>
           </StepperBody>
-        </StepperModalWrapper>
+        </StepperWrapperLayout>
       </StepperModalBody>
       <ModalTransactionFooter
         next={{
@@ -355,3 +356,15 @@ export const AnnounceCandidacyModal = () => {
     </Modal>
   )
 }
+
+const StepperWrapperLayout = styled(StepperModalWrapper)`
+  grid-template-columns: 220px 184px 1fr;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: 220px 240px 1fr;
+  }
+
+  @media (min-width: 1440px) {
+    grid-template-columns: 220px 336px 1fr;
+  }
+`

@@ -12,9 +12,10 @@ import { Colors } from '@/common/constants'
 interface Props {
   option: AccountOption
   isForStaking?: boolean
+  variant?: 's' | 'm' | 'l'
 }
 
-export const OptionAccount = ({ option, isForStaking }: Props) => {
+export const OptionAccount = ({ option, isForStaking, variant }: Props) => {
   const balances = useBalance(option.address)
   const balance = isForStaking ? balances?.total : balances?.transferable
   const balanceType = isForStaking ? 'Total' : 'Transferable'
@@ -23,7 +24,7 @@ export const OptionAccount = ({ option, isForStaking }: Props) => {
 
   return (
     <>
-      <AccountInfo account={option} locked={isLocked} />
+      <AccountInfo account={option} locked={isLocked} variant={variant} />
       <BalanceInfoNarrow>
         <InfoTitle>{balanceType} balance</InfoTitle>
         <InfoValueWithLocks>

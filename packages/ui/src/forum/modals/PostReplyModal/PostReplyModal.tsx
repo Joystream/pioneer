@@ -59,7 +59,7 @@ export const PostReplyModal = () => {
 
   if (state.matches(PostReplyStateName.prepare))
     return (
-      <ScrolledModal onClose={hideModal} modalSize="l">
+      <ScrolledModal onClose={hideModal} modalSize="m">
         <ModalHeader title="Reply" onClick={hideModal} />
         <ModalBody>
           <MainContainer>

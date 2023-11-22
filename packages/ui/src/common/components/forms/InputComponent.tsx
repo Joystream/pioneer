@@ -503,3 +503,7 @@ export const InputNotificationMessage = styled(TextSmall)`
   text-overflow: ellipsis;
   white-space: nowrap;
 `
+
+export const TokenInputComponent = styled(InputComponent)`
+  width: calc(min(400px, 100%));
+`
