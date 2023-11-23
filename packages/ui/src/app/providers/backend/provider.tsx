@@ -1,4 +1,4 @@
-import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, makeVar } from '@apollo/client'
+import { ApolloClient, ApolloLink, HttpLink, InMemoryCache, makeVar, useReactiveVar } from '@apollo/client'
 import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
@@ -48,6 +48,13 @@ export const BackendProvider = (props: { children: ReactNode }) => {
     backendAuthTokenVar(activeMemberSettings.accessToken)
   }, [backendClient, activeMemberSettings?.accessToken])
 
+  const authToken = useReactiveVar(backendAuthTokenVar)
+
+  // Refetch backend queries after Apollo client auth token changes (warning: the changes are async).
+  useEffect(() => {
+    backendClient?.refetchQueries({ include: 'active' })
+  }, [authToken])
+
   const setMemberSettings = useCallback(
     (memberId: string, settings: Partial<MemberNotificationSettingsData>) => {
       setNotificationsSettingsMap((prev) => ({
@@ -71,6 +78,7 @@ export const BackendProvider = (props: { children: ReactNode }) => {
         backendClient,
         notificationsSettingsMap,
         setMemberSettings,
+        authToken: authToken ?? undefined,
       }}
       {...props}
     />
