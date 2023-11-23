@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { List, ListItem } from '@/common/components/List'
 import { Colors } from '@/common/constants'
 
+import { ValidatorCard } from '../modals/validatorCard/ValidatorCard'
 import { Validator } from '../types'
 
 import { ValidatorItem } from './ValidatorItem'
@@ -13,6 +14,8 @@ interface ValidatorsListProps {
 }
 
 export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
+  const [cardNumber, selectCard] = useState<number | null>(null)
+
   return (
     <ValidatorsListWrap>
       <ListHeaders>
@@ -23,12 +26,25 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
         <ListHeader>APR</ListHeader>
       </ListHeaders>
       <List>
-        {validators?.map((validator) => (
-          <ListItem key={validator.address}>
+        {validators?.map((validator, index) => (
+          <ListItem
+            key={validator.address}
+            onClick={() => {
+              selectCard(index + 1)
+            }}
+          >
             <ValidatorItem validator={validator} />
           </ListItem>
         ))}
       </List>
+      {cardNumber && validators[cardNumber - 1] && (
+        <ValidatorCard
+          cardNumber={cardNumber}
+          validator={validators[cardNumber - 1]}
+          selectCard={selectCard}
+          totalCards={validators.length}
+        />
+      )}
     </ValidatorsListWrap>
   )
 }

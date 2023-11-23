@@ -91,8 +91,9 @@ export const useValidatorsList = () => {
       .pipe(switchMap((activeEra) => api.query.staking.erasStakers(activeEra.unwrap().index, address)))
     const rewardHistory$ = api.derive.staking.stakerRewards(address)
     const validatorInfo$ = api.query.staking.validators(address)
-    return combineLatest([activeValidators$, stakingInfo$, rewardHistory$, validatorInfo$]).pipe(
-      map(([activeValidators, stakingInfo, rewardHistory, validatorInfo]) => {
+    const slashingSpans$ = api.query.staking.slashingSpans(address)
+    return combineLatest([activeValidators$, stakingInfo$, rewardHistory$, validatorInfo$, slashingSpans$]).pipe(
+      map(([activeValidators, stakingInfo, rewardHistory, validatorInfo, slashingSpans]) => {
         const encodedAddress = encodeAddress(address)
         const apr =
           rewardHistory.length && !stakingInfo.total.toBn().isZero()
@@ -111,6 +112,15 @@ export const useValidatorsList = () => {
           isActive: activeValidators.includes(address),
           totalRewards: rewardHistory.reduce((total: BN, data) => total.add(data.eraReward), new BN(0)),
           APR: apr,
+          slashed: slashingSpans.isSome ? slashingSpans.unwrap().size : 0,
+          staking: {
+            total: stakingInfo.total.toBn(),
+            own: stakingInfo.own.toBn(),
+            others: stakingInfo.others.map((nominator) => ({
+              address: nominator.who.toString(),
+              staking: nominator.value.toBn(),
+            })),
+          },
         }
       })
     )

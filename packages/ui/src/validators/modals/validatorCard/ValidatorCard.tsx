@@ -1,0 +1,89 @@
+import React, { useState } from 'react'
+
+import { UnknownAccountInfo } from '@/accounts/components/UnknownAccountInfo'
+import { CloseButton, ButtonGhost } from '@/common/components/buttons'
+import { Arrow } from '@/common/components/icons'
+import {
+  SidePane,
+  SidePaneGlass,
+  SidePaneHeader,
+  SidePanelTop,
+  SidePaneTitle,
+  SidePaneTopButtonsGroup,
+} from '@/common/components/SidePane'
+import { Tabs } from '@/common/components/Tabs'
+import { useEscape } from '@/common/hooks/useEscape'
+
+import { Validator } from '../../types'
+
+import { Nominators } from './Nominators'
+import { ValidatorDetail } from './ValidatorDetail'
+
+export type ValidatorCardTabs = 'Details' | 'Nominators'
+
+interface Props {
+  cardNumber: number
+  validator: Validator
+  selectCard: (cardNumber: number | null) => void
+  totalCards: number
+}
+
+export const ValidatorCard = React.memo(({ cardNumber, validator, selectCard, totalCards }: Props) => {
+  const hideModal = () => {
+    selectCard(null)
+  }
+  const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (e.target === e.currentTarget) {
+      hideModal()
+    }
+  }
+  useEscape(() => hideModal())
+  const [activeTab, setActiveTab] = useState<ValidatorCardTabs>('Details')
+
+  const onClickRight = () => {
+    selectCard(cardNumber + 1)
+  }
+  const onClickLeft = () => {
+    selectCard(cardNumber - 1)
+  }
+
+  const title = `Validor ${cardNumber} of ${totalCards}`
+  const tabs = [
+    {
+      title: 'Validator details',
+      active: activeTab === 'Details',
+      onClick: () => setActiveTab('Details'),
+    },
+    { title: 'Nominators', active: activeTab === 'Nominators', onClick: () => setActiveTab('Nominators') },
+  ]
+
+  return (
+    <SidePaneGlass onClick={onBackgroundClick}>
+      <SidePane>
+        <SidePaneHeader>
+          <SidePanelTop>
+            <SidePaneTitle>{title}</SidePaneTitle>
+            <SidePaneTopButtonsGroup>
+              <ButtonGhost title="Previous validator" size="small" disabled={cardNumber <= 1} onClick={onClickLeft}>
+                <Arrow direction="left" />
+              </ButtonGhost>
+              <ButtonGhost
+                title="Next validator"
+                size="small"
+                disabled={cardNumber >= totalCards}
+                onClick={onClickRight}
+              >
+                <Arrow direction="right" />
+              </ButtonGhost>
+            </SidePaneTopButtonsGroup>
+            <CloseButton onClick={hideModal} />
+          </SidePanelTop>
+          <UnknownAccountInfo address={validator.address} placeholderName="Validator account" />
+          <Tabs tabs={tabs} tabsSize="xs" />
+        </SidePaneHeader>
+        {activeTab === 'Details' && <ValidatorDetail validator={validator} />}
+        {activeTab === 'Nominators' && <Nominators validator={validator} />}
+      </SidePane>
+    </SidePaneGlass>
+  )
+})

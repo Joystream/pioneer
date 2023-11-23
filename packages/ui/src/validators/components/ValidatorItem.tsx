@@ -11,14 +11,16 @@ import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 import { Validator } from '../types/Validator'
 
 import { ValidatorInfo } from './ValidatorInfo'
+
 interface ValidatorItemProps {
   validator: Validator
+  onClick?: () => void
 }
-export const ValidatorItem = ({ validator }: ValidatorItemProps) => {
+export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
   const { address, member, isVerified, isActive, totalRewards, APR } = validator
 
   return (
-    <ValidatorItemWrapper>
+    <ValidatorItemWrapper onClick={onClick}>
       <ValidatorItemWrap>
         <ValidatorInfo member={member} address={address} />
         {isVerified ? (
