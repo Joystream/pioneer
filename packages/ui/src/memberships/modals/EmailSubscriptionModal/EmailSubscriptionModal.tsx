@@ -28,7 +28,7 @@ export const EmailSubscriptionModal = () => {
   const { wallet } = useMyAccounts()
   const [state, send] = useMachine(EmailSubscriptionMachine)
 
-  const { setMemberSettings, backendClient } = useNotificationSettings()
+  const { activeMemberExistBackendData, setMemberSettings, backendClient } = useNotificationSettings()
   const [sendRegisterbackendMemberMutation] = useRegisterBackendMemberMutation({
     client: backendClient,
   })
@@ -69,6 +69,12 @@ export const EmailSubscriptionModal = () => {
       send('ERROR')
     }
   }, [state, sendRegisterbackendMemberMutation, member])
+
+  useEffect(() => {
+    if (state.matches('prepare') && activeMemberExistBackendData?.memberExist) {
+      hideModal()
+    }
+  }, [state, activeMemberExistBackendData])
 
   useEffect(() => {
     if (state.matches('signature')) {

@@ -98,8 +98,6 @@ export const SettingsNotificationsTab: FC = () => {
   const [reauthorizationStatus, setReauthorizationStatus] = useState<null | 'signature' | 'loading' | 'error'>(null)
 
   const handleSubscribeClick = () => {
-    // TODO: this will show member select if there is no active membership.
-    // However, if the user selects a membership that's already registered, the subscription modal will still show.
     showModal<EmailSubscriptionModalCall>({
       modal: 'EmailSubscriptionModal',
       data: {
