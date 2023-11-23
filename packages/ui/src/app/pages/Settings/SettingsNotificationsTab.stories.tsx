@@ -118,6 +118,7 @@ export default {
               }
             : {},
           onSetMemberSettings: (...settingsArgs: any[]) => args.onSetMemberSettings(...settingsArgs),
+          authToken: SIGNIN_TOKEN,
         },
       }
     },
