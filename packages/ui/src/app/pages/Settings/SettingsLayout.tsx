@@ -18,10 +18,11 @@ export type SettingsLayoutProps = {
     disabled: boolean
     onClick: () => void
   }
+  fullWidth?: boolean
   children?: ReactNode
 }
 
-export const SettingsLayout = ({ saveButton, children }: SettingsLayoutProps) => {
+export const SettingsLayout = ({ saveButton, fullWidth, children }: SettingsLayoutProps) => {
   const { t } = useTranslation('settings')
   const backendContext = useContext(BackendContext)
   const notificationsTab = [t('notifications'), SettingsRoutes.notifications] as const
@@ -46,7 +47,7 @@ export const SettingsLayout = ({ saveButton, children }: SettingsLayoutProps) =>
         />
       }
       main={
-        <Container>
+        <Container fullWidth={fullWidth}>
           <MainPanel>{children}</MainPanel>
         </Container>
       }
@@ -54,6 +55,6 @@ export const SettingsLayout = ({ saveButton, children }: SettingsLayoutProps) =>
   )
 }
 
-export const Container = styled.div`
-  max-width: 690px;
+export const Container = styled.div<{ fullWidth?: boolean }>`
+  max-width: ${({ fullWidth = false }) => (fullWidth ? 'auto' : '690px')};
 `

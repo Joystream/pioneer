@@ -81,6 +81,9 @@ export const SettingsNotificationsTab: FC = () => {
     },
     skip: !activeMemberSettings?.accessToken,
   })
+
+  const isRegistered = activeMemberExistBackendData?.memberExist ?? false
+
   const isUnauthorized =
     (!!activeMember && !activeMemberSettings?.accessToken) || meError?.message.includes('Unauthorized')
 
@@ -239,7 +242,7 @@ You can customize what kind of notifications you receive anytime in settings."
     )
   }
 
-  const mainContent = (
+  const mainContent = () => (
     <MainPanel>
       <RowGapBlock gap={16}>
         <FormProvider {...form}>
@@ -277,11 +280,11 @@ You can customize what kind of notifications you receive anytime in settings."
       return errorContent
     }
 
-    if (activeMemberExistBackendData?.memberExist === false) {
-      return unregisteredContent
+    if (isRegistered) {
+      return mainContent()
     }
 
-    return mainContent
+    return unregisteredContent
   }
 
   return (
@@ -293,6 +296,7 @@ You can customize what kind of notifications you receive anytime in settings."
           <SuccessModal text="Settings saved successfully" onClose={() => setShowSettingsUpdatedModal(false)} />
         ))}
       <SettingsLayout
+        fullWidth={!isRegistered}
         saveButton={{
           isVisible: true,
           disabled: !isDirty,
