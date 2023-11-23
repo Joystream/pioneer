@@ -50,11 +50,14 @@ export default {
               ],
             },
           },
+
           query: {
             balances: {
               totalIssuance: joy(1000000),
             },
+
             timestamp: { now: Date.now() },
+
             session: {
               validators: [
                 'j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D',
@@ -66,9 +69,12 @@ export default {
                 'j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP',
                 'j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ',
                 'j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg',
+                'j4S998Thq5kQHyurofh8QfHrcFN2c1T19gTdMGUVVx5EHKgky',
               ],
             },
+
             staking: {
+              currentEra:  700,
               activeEra: {
                 index: 700,
                 start: Date.now() - 5400000,
@@ -87,11 +93,12 @@ export default {
                   j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: 140,
                   j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: 160,
                   j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: 160,
+                  j4S998Thq5kQHyurofh8QfHrcFN2c1T19gTdMGUVVx5EHKgky: 220,
                 },
               },
               erasValidatorReward: joy(0.123456),
               erasStakers: {
-                total: joy(400),
+                total: joy(0.1),
                 own: joy(0.0001),
                 others: [
                   { who: 'j4WGdFxqTkyAgzJiTbEBeRseP12dPEvJgf2Wy9qkPa68XSP55', value: joy(0.2) },
@@ -113,9 +120,13 @@ export default {
                   { who: 'j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP', value: joy(0.2) },
                   { who: 'j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ', value: joy(0.2) },
                   { who: 'j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg', value: joy(0.2) },
+                  { who: 'j4S998Thq5kQHyurofh8QfHrcFN2c1T19gTdMGUVVx5EHKgky', value: joy(0.2) },
                 ],
               },
               erasTotalStake: joy(130_000),
+              slashingSpans: {
+                size: Math.floor(Math.random() * 2),
+              },
               validators: {
                 entries: [
                   ['j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D'],
