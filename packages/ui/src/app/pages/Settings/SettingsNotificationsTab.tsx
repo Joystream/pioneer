@@ -48,7 +48,7 @@ export const SettingsNotificationsTab: FC = () => {
     activeMemberExistBackendLoading,
     activeMemberExistBackendRefetch,
     backendClient,
-    activeMemberSettings,
+    authToken,
     setMemberSettings,
   } = useNotificationSettings()
   const { showModal } = useModal()
@@ -79,13 +79,12 @@ export const SettingsNotificationsTab: FC = () => {
         receiveEmailNotifications: data.me?.receiveEmails ?? true,
       })
     },
-    skip: !activeMemberSettings?.accessToken,
+    skip: !authToken,
   })
 
   const isRegistered = activeMemberExistBackendData?.memberExist ?? false
 
-  const isUnauthorized =
-    (!!activeMember && !activeMemberSettings?.accessToken) || meError?.message.includes('Unauthorized')
+  const isUnauthorized = (!!activeMember && !authToken) || meError?.message.includes('Unauthorized')
 
   const [sendUpdateMemberMutation, { error: mutationError }] = useUpdateBackendMemberMutation({
     client: backendClient,
