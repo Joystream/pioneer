@@ -74,7 +74,7 @@ export default {
             },
 
             staking: {
-              currentEra:  700,
+              currentEra: 700,
               activeEra: {
                 index: 700,
                 start: Date.now() - 5400000,
