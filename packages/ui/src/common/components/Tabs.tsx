@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled, { css } from 'styled-components'
 
-import { BorderRad, Colors, Transitions } from '../constants'
+import { BorderRad, Colors, RemoveScrollbar, Transitions } from '../constants'
 
 import { CountBadge } from './CountBadge'
 
@@ -64,8 +64,8 @@ const TabsStyles = styled.div<TabsSize>`
           content: '';
           position: absolute;
           left: 0;
-          bottom: -2px;
-          width: calc(100% + 24px);
+          bottom: 0;
+          width: calc(100%);
           height: 1px;
           background-color: ${Colors.Black[200]};
           z-index: -1;
@@ -99,6 +99,7 @@ export const TabContainer = styled.button<TabActiveProps>`
   cursor: pointer;
   transition: ${Transitions.all};
   text-decoration: none;
+  white-space: nowrap;
 
   &:before {
     content: '';
@@ -161,6 +162,10 @@ const TabsNav = styled.nav<TabsSize>`
   align-items: center;
   justify-items: start;
   z-index: 1;
+  max-width: calc(100vw - 32px);
+  overflow-x: scroll;
+  padding-bottom: 2px;
+  ${RemoveScrollbar}
 
   ${TabContainer} {
     font-size: ${({ tabsSize }) => {

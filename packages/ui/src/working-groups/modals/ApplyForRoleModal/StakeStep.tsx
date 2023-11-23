@@ -8,6 +8,7 @@ import { InputComponent, TokenInput } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TokenValue } from '@/common/components/typography'
+import { useResponsive } from '@/common/hooks/useResponsive'
 import { formatJoyValue } from '@/common/model/formatters'
 import { ValidationHelpers } from '@/common/utils/validation'
 
@@ -25,6 +26,7 @@ export interface StakeStepFormFields {
 }
 
 export function StakeStep({ opening, errorChecker, errorMessageGetter }: StakeStepProps) {
+  const { isMobile, size } = useResponsive()
   const minStake = opening.stake
 
   return (
@@ -36,7 +38,7 @@ export function StakeStep({ opening, errorChecker, errorMessageGetter }: StakeSt
           <InputComponent
             label="Select account for Staking"
             required
-            inputSize="l"
+            inputSize={isMobile ? 'xxl' : 'l'}
             validation={errorChecker('account') ? 'invalid' : undefined}
             message={errorChecker('account') ? errorMessageGetter('account') : undefined}
             tooltipText="Staking account will bear the role-specific lock, meaning you will not be able to re-use this account for other purposes, while in the role if your application accepted"
@@ -45,6 +47,7 @@ export function StakeStep({ opening, errorChecker, errorMessageGetter }: StakeSt
               name="stake.account"
               minBalance={minStake}
               lockType={groupToLockId(opening.groupId)}
+              variant={isMobile ? 's' : size === 'md' ? 'm' : 'l'}
             />
           </InputComponent>
           <RowGapBlock gap={8}>
@@ -74,12 +77,16 @@ export function StakeStep({ opening, errorChecker, errorMessageGetter }: StakeSt
             label="Select Role Account"
             id="role-account"
             required
-            inputSize="l"
+            inputSize={isMobile ? 'xxl' : 'l'}
             validation={errorChecker('roleAccount') ? 'invalid' : undefined}
             message={errorChecker('roleAccount') ? errorMessageGetter('account') : undefined}
             tooltipText="We strongly advise you to use a separate role-dedicated account for this application. Role account is used to perform all role-specific actions. This should not be your Controller or Root account, even though this is technically possible."
           >
-            <SelectAccount id="role-account" name="stake.roleAccount" />
+            <SelectAccount
+              id="role-account"
+              name="stake.roleAccount"
+              variant={isMobile ? 's' : size === 'md' ? 'm' : 'l'}
+            />
           </InputComponent>
 
           <h4>4. Select Reward Account</h4>
@@ -90,12 +97,16 @@ export function StakeStep({ opening, errorChecker, errorMessageGetter }: StakeSt
             label="Select Reward Account"
             id="reward-account"
             required
-            inputSize="l"
+            inputSize={isMobile ? 'xxl' : 'l'}
             validation={errorChecker('rewardAccount') ? 'invalid' : undefined}
             message={errorChecker('rewardAccount') ? errorMessageGetter('rewardAccount') : undefined}
             tooltipText="Member controller or root accounts are often chosen for this purpose."
           >
-            <SelectAccount id="reward-account" name="stake.rewardAccount" />
+            <SelectAccount
+              id="reward-account"
+              name="stake.rewardAccount"
+              variant={isMobile ? 's' : size === 'md' ? 'm' : 'l'}
+            />
           </InputComponent>
         </RowGapBlock>
       </Row>

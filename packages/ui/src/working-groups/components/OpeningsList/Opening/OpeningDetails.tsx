@@ -39,7 +39,7 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
           <OpenedItemTitle>{opening.title}</OpenedItemTitle>
         </OpenedTop>
         <TextBig light>{opening.shortDescription}</TextBig>
-        <Statistics withMargin gapSize="s">
+        <StatisticsStyle withMargin>
           <StatsBlock size="m" centered>
             <TextBig>
               <TokenValue value={rewardPeriod?.mul(opening.rewardPerBlock)} />
@@ -79,7 +79,7 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
               </Tooltip>
             </MinStake>
           </StatsBlock>
-        </Statistics>
+        </StatisticsStyle>
         <ButtonsGroup align="right">
           <LinkButtonGhost to={openingRoute} size="medium">
             Learn more
@@ -103,4 +103,12 @@ const MinStake = styled(Subscription)`
   display: flex;
   align-items: center;
   gap: 8px;
+`
+
+const StatisticsStyle = styled(Statistics)`
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
 `

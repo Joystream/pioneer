@@ -113,7 +113,7 @@ export const MyRole = () => {
       lastBreadcrumb={workerRoleTitle(worker)}
       header={
         <PageHeaderWrapper>
-          <PageHeaderRow>
+          <PageHeaderWithButtons>
             <PreviousPage>
               <PageTitle>{workerRoleTitle(worker)}</PageTitle>
             </PreviousPage>
@@ -133,7 +133,7 @@ export const MyRole = () => {
                 </TransactionButton>
               )}
             </ButtonsGroup>
-          </PageHeaderRow>
+          </PageHeaderWithButtons>
           <RowGapBlock gap={24}>
             <BadgesRow>
               <BadgeStatus inverted size="l" separated>
@@ -151,12 +151,12 @@ export const MyRole = () => {
                 </BadgeStatus>
               )}
             </BadgesRow>
-            <Statistics>
+            <StatisticsStyle>
               <MyEarningsStat />
               <StakeStat value={worker.stake} minStake={worker.minStake} />
               <TokenValueStat title="Owed reward" value={worker.owedReward} />
               <NextPayoutStat workers={[worker]} />
-            </Statistics>
+            </StatisticsStyle>
           </RowGapBlock>
         </PageHeaderWrapper>
       }
@@ -231,4 +231,40 @@ const RoleAccountHeader = styled.section`
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-end;
+`
+
+export const PageHeaderWithButtons = styled(PageHeaderRow)`
+  @media (max-width: 1439px) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  @media (max-width: 767px) {
+    ${ButtonsGroup} {
+      grid-auto-flow: row;
+      grid-row-gap: 8px;
+      width: 100%;
+
+      button, a {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center:
+        gap: 4px;
+      }
+    }
+  }
+`
+
+const StatisticsStyle = styled(Statistics)`
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (min-width: 1440px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 `

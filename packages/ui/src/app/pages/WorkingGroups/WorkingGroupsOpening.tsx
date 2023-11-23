@@ -1,8 +1,8 @@
 import React, { memo, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
+import { PageHeaderWithButtons, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { CopyButtonTemplate } from '@/common/components/buttons'
@@ -121,7 +121,7 @@ export const WorkingGroupOpening = () => {
       lastBreadcrumb={opening.title}
       header={
         <PageHeaderWrapper>
-          <PageHeaderRow>
+          <PageHeaderWithButtons>
             <PreviousPage customLink={WorkingGroupsRoutes.openings}>
               <PageTitle>{opening.title}</PageTitle>
             </PreviousPage>
@@ -137,7 +137,7 @@ export const WorkingGroupOpening = () => {
               )}
               {opening.status === OpeningStatuses.OPEN && <ApplyButton />}
             </ButtonsGroup>
-          </PageHeaderRow>
+          </PageHeaderWithButtons>
           <RowGapBlock gap={24}>
             <BadgesRow>
               <BadgeStatus inverted size="l" separated>
@@ -148,7 +148,7 @@ export const WorkingGroupOpening = () => {
               </BadgeStatus>
               <StatusBadge />
             </BadgesRow>
-            <Statistics>
+            <StatisticsStyle>
               <DurationStatistics title="Time Left" value={opening.expectedEnding} />
               <TokenValueStat
                 title={`Reward per ${rewardPeriod?.toString()} blocks`}
@@ -166,7 +166,7 @@ export const WorkingGroupOpening = () => {
                 hiring={opening.hiring}
                 status={opening.status}
               />
-            </Statistics>
+            </StatisticsStyle>
           </RowGapBlock>
         </PageHeaderWrapper>
       }
@@ -177,13 +177,13 @@ export const WorkingGroupOpening = () => {
       }
       sidebar={
         <SidePanel scrollable>
+          {opening.status === OpeningStatuses.OPEN && !activeApplications?.length && <ApplicationStatus />}
           <ApplicantsList
             allApplicants={opening.applications}
             myApplication={myApplication}
             hired={hiredApplicants}
             hiringComplete={opening.status !== OpeningStatuses.OPEN}
           />
-          {opening.status === OpeningStatuses.OPEN && !activeApplications?.length && <ApplicationStatus />}
         </SidePanel>
       }
       footer={
@@ -191,6 +191,7 @@ export const WorkingGroupOpening = () => {
           <BlockTime block={opening.createdAtBlock} layout="row" dateLabel="Created" />
         </PageFooter>
       }
+      responsiveStyle={ResponsiveStyle}
     />
   )
 }
@@ -223,4 +224,45 @@ const ApplicationStats = ({
 
 const ApplicationStatsStyles = styled(StatsBlock).attrs({ centered: true })`
   justify-content: start;
+`
+
+const ResponsiveStyle = css`
+  aside {
+    > div {
+      padding: 0;
+    }
+  }
+
+  @media (min-width: 768px) {
+    grid-template-columns: 8fr 4fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      'header header'
+      'main sidebar'
+      'footer footer';
+
+    aside {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      padding-left: 16px;
+
+      > div {
+        min-height: 184px;
+        overflow: hidden;
+      }
+    }
+  }
+`
+
+const StatisticsStyle = styled(Statistics)`
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (min-width: 1440px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 `

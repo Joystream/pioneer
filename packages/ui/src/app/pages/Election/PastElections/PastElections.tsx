@@ -42,7 +42,7 @@ export const PastElections = () => {
     return (
       <MainPanel>
         <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
-        <RowGapBlock gap={4}>
+        <ListWrapper gap={4}>
           {(!elections || !elections.length) && <TextBig>No elections found</TextBig>}
           {elections && elections.length > 0 && (
             <>
@@ -57,7 +57,7 @@ export const PastElections = () => {
               <PastElectionsList elections={elections} />
             </>
           )}
-        </RowGapBlock>
+        </ListWrapper>
         <Pagination pageCount={pageCount} handlePageChange={setPage} page={page} />
       </MainPanel>
     )
@@ -70,4 +70,8 @@ export const PastElectionsColLayout = '48px 176px 140px 140px 100px 100px'
 
 const PastElectionsListHeaders = styled(ListHeaders)`
   grid-column-gap: 24px;
+`
+
+const ListWrapper = styled(RowGapBlock)`
+  overflow: auto;
 `

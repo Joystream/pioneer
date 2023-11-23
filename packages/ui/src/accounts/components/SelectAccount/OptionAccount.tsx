@@ -5,16 +5,17 @@ import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { AccountLocks, AccountLocksWrapper } from '@/accounts/components/AccountLocks'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { AccountOption } from '@/accounts/types'
-import { BalanceInfoInRow, InfoTitle, InfoValue } from '@/common/components/Modal'
+import { BalanceInfoNarrow, InfoTitle, InfoValue } from '@/common/components/Modal'
 import { TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 
 interface Props {
   option: AccountOption
   isForStaking?: boolean
+  variant?: 's' | 'm' | 'l'
 }
 
-export const OptionAccount = ({ option, isForStaking }: Props) => {
+export const OptionAccount = ({ option, isForStaking, variant }: Props) => {
   const balances = useBalance(option.address)
   const balance = isForStaking ? balances?.total : balances?.transferable
   const balanceType = isForStaking ? 'Total' : 'Transferable'
@@ -23,14 +24,14 @@ export const OptionAccount = ({ option, isForStaking }: Props) => {
 
   return (
     <>
-      <AccountInfo account={option} locked={isLocked} />
-      <BalanceInfoInRow>
+      <AccountInfo account={option} locked={isLocked} variant={variant} />
+      <BalanceInfoNarrow>
         <InfoTitle>{balanceType} balance</InfoTitle>
         <InfoValueWithLocks>
           <Value value={balance} locked={isLocked} />
           <AccountLocks locks={balances?.locks} />
         </InfoValueWithLocks>
-      </BalanceInfoInRow>
+      </BalanceInfoNarrow>
     </>
   )
 }

@@ -2,7 +2,7 @@ import React from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
 import { CurrencyName } from '@/app/constants/currency'
-import { InputComponent, TokenInput } from '@/common/components/forms'
+import { TokenInput, TokenInputComponent } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TokenValue } from '@/common/components/typography'
@@ -25,7 +25,7 @@ export const SetInitialInvitationBalance = () => {
       </Row>
       <Row>
         <RowGapBlock gap={12}>
-          <InputComponent
+          <TokenInputComponent
             name="setInitialInvitationBalance.amount"
             label="Invitation Balance"
             tight
@@ -33,7 +33,7 @@ export const SetInitialInvitationBalance = () => {
             required
           >
             <TokenInput id="amount-input" name="setInitialInvitationBalance.amount" placeholder="0" />
-          </InputComponent>
+          </TokenInputComponent>
           <Row>
             <TextMedium lighter>
               The current balance is <TokenValue value={currentBalance ?? null} />.
