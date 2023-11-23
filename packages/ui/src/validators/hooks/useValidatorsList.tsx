@@ -111,6 +111,15 @@ export const useValidatorsList = () => {
           isActive: activeValidators.includes(address),
           totalRewards: rewardHistory.reduce((total: BN, data) => total.add(data.eraReward), new BN(0)),
           APR: apr,
+          commission: validatorInfo.commission.toNumber() / 10 ** 7,
+          staking: {
+            total: stakingInfo.total.toBn(),
+            own: stakingInfo.own.toBn(),
+            others: stakingInfo.others.map((nominator) => ({
+              address: nominator.who.toString(),
+              staking: nominator.value.toBn(),
+            })),
+          },
         }
       })
     )

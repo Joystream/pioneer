@@ -19,8 +19,10 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
         <ListHeader>Validator</ListHeader>
         <ListHeader>Verification</ListHeader>
         <ListHeader>State</ListHeader>
-        <ListHeader>Total Reward</ListHeader>
-        <ListHeader>APR</ListHeader>
+        <ListHeader>Own Stake</ListHeader>
+        <ListHeader>Total Stake</ListHeader>
+        <ListHeader>Expected Nom APR</ListHeader>
+        <ListHeader>Comission</ListHeader>
       </ListHeaders>
       <List>
         {validators?.map((validator) => (
@@ -55,7 +57,7 @@ const ListHeaders = styled.div`
   display: grid;
   grid-area: validatorstablenav;
   grid-template-rows: 1fr;
-  grid-template-columns: 250px 80px 80px 120px 80px 120px;
+  grid-template-columns: 250px 80px 80px repeat(5, 120px);
   justify-content: space-between;
   width: 100%;
   padding-left: 16px;

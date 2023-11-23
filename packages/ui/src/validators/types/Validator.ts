@@ -10,4 +10,13 @@ export interface Validator {
   isActive: boolean
   totalRewards: BN
   APR: number
+  commission: number
+  staking: {
+    total: BN
+    own: BN
+    others: {
+      address: Address
+      staking: BN
+    }[]
+  }
 }
