@@ -15,14 +15,7 @@ export const Forum = () => {
   return (
     <PageLayout
       header={
-        <ForumPageHeader
-          title={<PageTitle>Forum</PageTitle>}
-          buttons={
-            <ButtonGhost size="medium" onClick={toggle}>
-              Forum Activities
-            </ButtonGhost>
-          }
-        >
+        <ForumPageHeader title={<PageTitle>Forum</PageTitle>}>
           <ForumTabs />
         </ForumPageHeader>
       }
