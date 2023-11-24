@@ -18,6 +18,7 @@ export const Forum = () => {
           <ForumTabs />
         </ForumPageHeader>
       }
+
       main={
         <>
           <ForumMain />
