@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { PageLayout } from '@/app/components/PageLayout'
+import { ButtonGhost } from '@/common/components/buttons'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { useToggle } from '@/common/hooks/useToggle'
 import { ForumMain } from '@/forum/components/category'
@@ -14,7 +15,14 @@ export const Forum = () => {
   return (
     <PageLayout
       header={
-        <ForumPageHeader title={<PageTitle>Forum</PageTitle>}>
+        <ForumPageHeader
+          title={<PageTitle>Forum</PageTitle>}
+          buttons={
+            <ButtonGhost size="medium" onClick={toggle}>
+              Forum Activities
+            </ButtonGhost>
+          }
+        >
           <ForumTabs />
         </ForumPageHeader>
       }
