@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { PageLayout } from '@/app/components/PageLayout'
-import { ButtonGhost } from '@/common/components/buttons'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { useToggle } from '@/common/hooks/useToggle'
 import { ForumMain } from '@/forum/components/category'
