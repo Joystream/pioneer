@@ -25,6 +25,7 @@ interface SelectAccountProps extends Pick<SelectProps<AccountOption>, 'id' | 'se
   onChange?: (selected: AccountOption) => void
   filter?: (option: AccountOption) => boolean
   name?: string
+  variant?: 's' | 'm' | 'l'
 }
 
 interface SelectStakingAccountProps extends SelectAccountProps {
@@ -39,7 +40,7 @@ interface BaseSelectAccountProps extends SelectAccountProps {
 }
 
 export const BaseSelectAccount = React.memo(
-  ({ id, onChange, accounts, filter, selected, disabled, onBlur, isForStaking }: BaseSelectAccountProps) => {
+  ({ id, onChange, accounts, filter, selected, disabled, onBlur, isForStaking, variant }: BaseSelectAccountProps) => {
     const options = accounts.filter(filter || (() => true))
 
     const [search, setSearch] = useState('')
@@ -67,7 +68,7 @@ export const BaseSelectAccount = React.memo(
         onChange={change}
         onBlur={onBlur}
         disabled={disabled}
-        renderSelected={renderSelected(isForStaking)}
+        renderSelected={renderSelected(isForStaking, variant)}
         placeholder="Select account or paste account address"
         renderList={(onOptionClick) => (
           <OptionListAccount
@@ -75,6 +76,7 @@ export const BaseSelectAccount = React.memo(
             onChange={onOptionClick}
             options={filteredOptions}
             isForStaking={isForStaking}
+            variant={variant}
           />
         )}
         onSearch={(search) => setSearch(search)}
@@ -83,9 +85,9 @@ export const BaseSelectAccount = React.memo(
   }
 )
 
-const renderSelected = (isForStaking?: boolean) => (option: AccountOption) =>
+const renderSelected = (isForStaking?: boolean, variant?: 's' | 'm' | 'l') => (option: AccountOption) =>
   (
-    <SelectedOption>
+    <SelectedOption variant={variant}>
       <OptionAccount option={option} isForStaking={isForStaking} />
     </SelectedOption>
   )

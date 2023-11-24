@@ -42,6 +42,9 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
     // Common mocks:
     const rpcChain = {
       getBlockHash: createType('BlockHash', BLOCK_HASH),
+      getHeader: {
+        number: BLOCK_HEAD,
+      },
       subscribeNewHeads: {
         parentHash: BLOCK_HASH,
         number: BLOCK_HEAD,

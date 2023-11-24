@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { CurrencyName } from '@/app/constants/currency'
-import { InputComponent, TokenInput } from '@/common/components/forms'
+import { TokenInput, TokenInputComponent } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
@@ -17,7 +17,7 @@ export const SetMembershipPrice = () => {
       </Row>
       <Row>
         <RowGapBlock gap={20}>
-          <InputComponent
+          <TokenInputComponent
             label="Membership price"
             tight
             units={CurrencyName.integerValue}
@@ -26,7 +26,7 @@ export const SetMembershipPrice = () => {
             name="setMembershipPrice.amount"
           >
             <TokenInput id="amount-input" name="setMembershipPrice.amount" placeholder="0" />
-          </InputComponent>
+          </TokenInputComponent>
         </RowGapBlock>
       </Row>
     </RowGapBlock>

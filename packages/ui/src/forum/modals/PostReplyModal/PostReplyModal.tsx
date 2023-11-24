@@ -7,7 +7,7 @@ import { useApi } from '@/api/hooks/useApi'
 import { CKEditor } from '@/common/components/CKEditor'
 import { Checkbox, InputComponent } from '@/common/components/forms'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
-import { Modal, ModalBody, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
+import { ModalBody, ModalHeader, ModalTransactionFooter, ScrolledModal } from '@/common/components/Modal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { useMachine } from '@/common/hooks/useMachine'
@@ -59,7 +59,7 @@ export const PostReplyModal = () => {
 
   if (state.matches(PostReplyStateName.prepare))
     return (
-      <Modal onClose={hideModal} modalSize="l">
+      <ScrolledModal onClose={hideModal} modalSize="m">
         <ModalHeader title="Reply" onClick={hideModal} />
         <ModalBody>
           <MainContainer>
@@ -89,7 +89,7 @@ export const PostReplyModal = () => {
           }
           next={{ onClick: () => send('NEXT'), disabled: !state.context.postText, label: 'Post a Reply' }}
         />
-      </Modal>
+      </ScrolledModal>
     )
 
   if (state.matches(PostReplyStateName.transaction) && transaction && active && postDeposit) {

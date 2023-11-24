@@ -11,6 +11,12 @@ import { AddressToBalanceMap, Balances } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
 import { UseModal } from '@/common/providers/modal/types'
 
+Object.defineProperty(global, 'screen', {
+  value: {
+    width: 1024,
+  },
+})
+
 configure({ testIdAttribute: 'id' })
 
 jest.mock('injectweb3-connect', () => {

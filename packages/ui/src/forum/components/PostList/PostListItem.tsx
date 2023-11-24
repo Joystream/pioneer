@@ -105,10 +105,10 @@ export const PostListItem = ({
   return (
     <ForumPostBlock ref={ref} isSelected={isSelected} isDiscussion={isDiscussion}>
       <ForumPostStyles>
-        <ForumPostRow>
+        <ForumPostHeader>
           <ForumPostAuthor>{author && <MemberInfo member={author} />}</ForumPostAuthor>
           {createdAtBlock && <BlockTime block={createdAtBlock} layout="reverse" position="end" />}
-        </ForumPostRow>
+        </ForumPostHeader>
         <MessageBody>
           <ModeratedPostWrapper post={post}>
             {repliesTo && (
@@ -270,5 +270,17 @@ export const ForumPostRow = styled.div`
 
   ${BlockTimeWrapper}, ${ButtonsGroup}:last-of-type {
     justify-content: flex-end;
+  }
+`
+
+const ForumPostHeader = styled(ForumPostRow)`
+  @media (max-width: 424px) {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 8px;
+
+    ${BlockTimeWrapper} {
+      justify-items: start;
+    }
   }
 `

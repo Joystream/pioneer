@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useHistory } from 'react-router'
 import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
@@ -6,16 +7,55 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { ArrowDownExpandedIcon, Icon } from '@/common/components/icons'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { useRouteQuery } from '@/common/hooks/useRouteQuery'
+import { EMAIL_VERIFICATION_TOKEN_SEARCH_PARAM } from '@/memberships/constants'
+import { useNotificationSettings } from '@/memberships/hooks/useNotificationSettings'
 
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '..'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
+import { EmailConfirmationModalCall } from '../../modals/EmailConfirmationModal'
+import { EmailSubscriptionModalCall } from '../../modals/EmailSubscriptionModal'
 import { SwitchMemberModalCall } from '../../modals/SwitchMemberModal'
 import { AddMembershipButton } from '../AddMembershipButton'
 
 export const CurrentMember = () => {
   const { wallet } = useMyAccounts()
   const { members, hasMembers, active } = useMyMemberships()
-  const { showModal } = useModal()
+  const { showModal, modal } = useModal()
+  const { activeMemberSettings, activeMemberExistBackendData } = useNotificationSettings()
+  const showSubscriptionModal =
+    active && activeMemberExistBackendData?.memberExist === false && !activeMemberSettings?.hasBeenAskedForEmail
+
+  useEffect(() => {
+    if (!emailVerificationToken && !modal && showSubscriptionModal) {
+      showModal<EmailSubscriptionModalCall>({
+        modal: 'EmailSubscriptionModal',
+        data: {},
+      })
+    }
+  }, [showSubscriptionModal, modal])
+
+  const history = useHistory()
+  const routeQuery = useRouteQuery()
+  const emailVerificationToken = routeQuery.get(EMAIL_VERIFICATION_TOKEN_SEARCH_PARAM)
+  useEffect(() => {
+    if (emailVerificationToken) {
+      const onModalClose = () => {
+        routeQuery.delete(EMAIL_VERIFICATION_TOKEN_SEARCH_PARAM)
+        history.replace({
+          search: routeQuery.toString(),
+        })
+      }
+      showModal<EmailConfirmationModalCall>({
+        modal: 'EmailConfirmationModal',
+        data: {
+          token: emailVerificationToken,
+          onClose: onModalClose,
+        },
+      })
+    }
+  }, [emailVerificationToken])
+
   if (!wallet) {
     return (
       <MembershipButtonsWrapper>

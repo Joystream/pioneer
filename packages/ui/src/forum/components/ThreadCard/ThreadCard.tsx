@@ -44,18 +44,31 @@ export const ThreadCard = ({ thread, className, watchlistButton }: ThreadCardPro
       <TextMedium light truncateLines={3}>
         {thread.initialPostText}
       </TextMedium>
-      <ColumnGapBlock justify="space-between" align="center">
+      <ThreadCardFooter>
+        {watchlistButton && <WatchlistButton threadId={thread.id} />}
         {replies > 0 && (
           <ColumnGapBlock gap={8}>
             <ReplyIcon />
             <CountBadge count={replies} />
           </ColumnGapBlock>
         )}
-        {watchlistButton && <WatchlistButton threadId={thread.id} />}
-      </ColumnGapBlock>
+      </ThreadCardFooter>
     </Box>
   )
 }
+
+const ThreadCardFooter = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row-reverse;
+
+  @media (max-width: 419px) {
+    align-items: start;
+    flex-direction: column-reverse;
+    row-gap: 16px;
+  }
+`
 
 const Box = styled(GhostRouterLink)<{ isArchived: boolean }>`
   ${({ isArchived }) => (isArchived ? `background-color: ${Colors.Black[50]}` : '')};
@@ -92,6 +105,20 @@ const Box = styled(GhostRouterLink)<{ isArchived: boolean }>`
       justify-content: end;
       gap: 5px;
     }
+
+    @media (max-width: 424px) {
+      flex-direction: column;
+
+      > *:first-child {
+        min-width: fit-content;
+      }
+
+      > *:last-child {
+        width: 100%;
+        align-items: flex-start;
+        justify-content: start;
+      }
+    }
   }
 
   > *:last-child {
@@ -99,9 +126,5 @@ const Box = styled(GhostRouterLink)<{ isArchived: boolean }>`
     svg {
       color: ${Colors.Black[400]};
     }
-  }
-
-  ${TextMedium} {
-    max-height: 55px;
   }
 `

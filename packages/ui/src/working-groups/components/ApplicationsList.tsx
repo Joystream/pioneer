@@ -33,13 +33,13 @@ interface Props {
 }
 
 export const ApplicationsList = ({ applications, pastApplications }: Props) => (
-  <List>
+  <ListWrapper>
     {applications.map((application) => (
       <ListItem key={application.id}>
         <ApplicationListItem application={application} past={pastApplications} />
       </ListItem>
     ))}
-  </List>
+  </ListWrapper>
 )
 
 const ApplicationListItem = ({ application, past }: { application: WorkingGroupApplication; past?: boolean }) => {
@@ -87,9 +87,9 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
           <ToggleableSubscriptionWide>Reward per {rewardPeriod?.toString()} blocks.</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
-          <TextInlineBig>
+          <TokenValueWrap>
             <TokenValue value={application.stake} />
-          </TextInlineBig>
+          </TokenValueWrap>
           <Subscription>Staked</Subscription>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
@@ -109,4 +109,14 @@ const ApplicationListItem = ({ application, past }: { application: WorkingGroupA
 
 const Title = styled(ToggleableItemTitle)`
   cursor: pointer;
+`
+
+const ListWrapper = styled(List)`
+  overflow: auto;
+  ${ListItem} {
+    min-width: 794px;
+  }
+`
+const TokenValueWrap = styled(TextInlineBig)`
+  width: 120px;
 `

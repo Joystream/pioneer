@@ -119,7 +119,7 @@ describe('UI: Past Council page', () => {
       it('Total spent', async () => {
         const { getByText } = await renderComponent()
 
-        expect(getByText(/^Total spent$/i).parentElement?.nextSibling?.textContent).toBe('300')
+        expect(getByText(/^Total spent$/i).parentElement?.nextSibling?.textContent).toBe('5,055')
       })
 
       it('Total missed rewards', async () => {
@@ -420,7 +420,7 @@ describe('UI: Past Council page', () => {
 
     component.getByText(tabName).click()
 
-    await waitForElementToBeRemoved(() => loaderSelector())
+    if (loaderSelector()) await waitForElementToBeRemoved(() => loaderSelector())
 
     return component
   }

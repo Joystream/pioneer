@@ -8,6 +8,7 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { ModalBody, ModalTransactionFooter, Row } from '@/common/components/Modal'
 import { Label, TextMedium, TokenValue } from '@/common/components/typography'
+import { useResponsive } from '@/common/hooks/useResponsive'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal, TransactionStep } from '@/common/modals/TransactionModal'
 import { Address } from '@/common/types'
@@ -27,6 +28,7 @@ interface SignProps {
 export const BindStakingAccountModal = ({ onClose, transaction, signer, service, memberId, steps }: SignProps) => {
   const { allAccounts } = useMyAccounts()
   const { member } = useMember(memberId)
+  const { isMobile } = useResponsive()
   const signerAccount = accountOrNamed(allAccounts, signer, 'Account to Bind')
   const { paymentInfo, sign, isReady, canAfford } = useSignAndSendTransaction({
     transaction,
@@ -53,7 +55,11 @@ export const BindStakingAccountModal = ({ onClose, transaction, signer, service,
       </ModalBody>
       <ModalTransactionFooter
         transactionFee={partialFee?.toBn()}
-        next={{ disabled: signDisabled, label: 'Sign transaction and Bind Staking Account', onClick: sign }}
+        next={{
+          disabled: signDisabled,
+          label: isMobile ? 'Sign Transaction' : 'Sign transaction and Bind Staking Account',
+          onClick: sign,
+        }}
       />
     </TransactionModal>
   )

@@ -25,7 +25,8 @@ export const EmptyPagePlaceholder = ({ copy, button, title }: EmptyPagePlacehold
 export const Container = styled(RowGapBlock)`
   place-self: center;
   justify-items: center;
-  width: 420px;
+  max-width: 420px;
+  width: 100%;
   height: fit-content;
   margin-top: 172px;
   text-align: center;

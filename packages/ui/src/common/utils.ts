@@ -143,3 +143,8 @@ export const mapP = <T, R>(list: T[] | readonly T[], mapper: MapperP<T, R>): Pro
 
 export const flatMapP = async <T, R>(list: T[] | readonly T[], mapper: MapperP<T, R | R[]>): Promise<R[]> =>
   Promise.all(flatten(await mapP(list, mapper)))
+
+// Utils
+
+export const cond = <T extends any>(...pairs: [() => any, T][]): T | undefined =>
+  pairs.find(([condition]) => condition())?.[1]
