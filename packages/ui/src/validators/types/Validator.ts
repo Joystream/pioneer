@@ -14,7 +14,7 @@ export interface Validator {
 
 export interface ValidatorMembership {
   stashAccount: Address
-  controllerAccount: Address
+  controllerAccount?: Address
   isVerifiedValidator?: boolean
   membership?: MemberWithDetails
 }

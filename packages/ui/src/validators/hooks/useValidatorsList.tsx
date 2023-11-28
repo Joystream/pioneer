@@ -9,7 +9,7 @@ import { ERAS_PER_YEAR } from '@/common/constants'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { last } from '@/common/utils'
 
-import { Verification, State, Validator } from '../types'
+import { Verification, State, Validator, ValidatorMembership } from '../types'
 
 import { useValidatorMembers } from './useValidatorMembers'
 
@@ -54,10 +54,10 @@ export const useValidatorsList = () => {
     )
   }
 
-  const getValidatorsInfo = (api: Api) => {
-    return api.query.staking.validators.entries().pipe(
-      switchMap((entries) => {
-        const validatorAddresses = entries.map((entry) => entry[0].args[0].toString())
+  const getValidatorsInfo = (api: Api, validatorsWithMembership: ValidatorMembership[]) => {
+    return of(validatorsWithMembership).pipe(
+      switchMap((validatorsWithMembership) => {
+        const validatorAddresses = validatorsWithMembership.map(({ stashAccount }) => stashAccount)
         const validatorInfoObservables = validatorAddresses.map((address) => getValidatorInfo(address, api))
         return combineLatest(validatorInfoObservables)
       })
@@ -65,7 +65,7 @@ export const useValidatorsList = () => {
   }
 
   const allValidators = useFirstObservableValue(
-    () => (api && validatorsWithMembership ? getValidatorsInfo(api) : of([])),
+    () => (api && validatorsWithMembership ? getValidatorsInfo(api, validatorsWithMembership) : of([])),
     [api?.isConnected, validatorsWithMembership]
   )
 

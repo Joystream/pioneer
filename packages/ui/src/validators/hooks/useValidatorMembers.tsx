@@ -24,12 +24,15 @@ export const useValidatorMembers = () => {
       api &&
       api.query.staking.bonded
         .multi(allValidatorAddresses)
-        .pipe(map((entries) => entries.map((entry) => entry.unwrap().toString()))),
+        .pipe(map((entries) => entries.map((entry) => (entry.isSome ? entry.unwrap().toString() : undefined)))),
     [allValidatorAddresses, api?.isConnected]
   )
 
   const variables = {
-    where: { boundAccounts_containsAny: allValidatorsWithCtrlAcc ?? [] },
+    where: {
+      boundAccounts_containsAny:
+        (allValidatorsWithCtrlAcc?.concat(allValidatorAddresses).filter((element) => !element) as string[]) ?? [],
+    },
   }
 
   const { data } = useGetMembersWithDetailsQuery({ variables, skip: !!allValidatorsWithCtrlAcc })
@@ -44,11 +47,18 @@ export const useValidatorMembers = () => {
       allValidatorAddresses &&
       allValidatorsWithCtrlAcc &&
       memberships &&
-      allValidatorAddresses.map((address, index) => ({
-        stashAccount: address,
-        controllerAccount: allValidatorsWithCtrlAcc[index],
-        ...memberships.find(({ membership }) => membership.boundAccounts.includes(address)),
-      }))
+      allValidatorAddresses.map((address, index) => {
+        const controllerAccount = allValidatorsWithCtrlAcc[index]
+        return {
+          stashAccount: address,
+          controllerAccount,
+          ...memberships.find(
+            ({ membership }) =>
+              membership.boundAccounts.includes(address) ||
+              (controllerAccount && membership.boundAccounts.includes(controllerAccount))
+          ),
+        }
+      })
     )
   }, [data, allValidatorAddresses, allValidatorsWithCtrlAcc])
 
