@@ -8,7 +8,7 @@ import { useApi } from '@/api/hooks/useApi'
 import { ERAS_PER_YEAR } from '@/common/constants'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { Address } from '@/common/types'
-import { last } from '@/common/utils'
+import { last, perbillToPercent } from '@/common/utils'
 import { MemberWithDetails } from '@/memberships/types'
 
 import { Verification, State, Validator } from '../types'
@@ -96,13 +96,13 @@ export const useValidatorsList = () => {
         const encodedAddress = encodeAddress(address)
         const apr =
           rewardHistory.length && !stakingInfo.total.toBn().isZero()
-            ? last(rewardHistory)
-                .eraReward.toBn()
-                .muln(ERAS_PER_YEAR)
-                .mul(validatorInfo.commission.toBn())
-                .div(stakingInfo.total.toBn())
-                .divn(10 ** 7) // Convert from Perbill to Percent
-                .toNumber()
+            ? perbillToPercent(
+                last(rewardHistory)
+                  .eraReward.toBn()
+                  .muln(ERAS_PER_YEAR)
+                  .mul(validatorInfo.commission.toBn())
+                  .div(stakingInfo.total.toBn())
+              )
             : 0
         return {
           member: getMember(encodedAddress),
@@ -111,7 +111,7 @@ export const useValidatorsList = () => {
           isActive: activeValidators.includes(address),
           totalRewards: rewardHistory.reduce((total: BN, data) => total.add(data.eraReward), new BN(0)),
           APR: apr,
-          commission: validatorInfo.commission.toNumber() / 10 ** 7,
+          commission: perbillToPercent(validatorInfo.commission.toBn()),
           staking: {
             total: stakingInfo.total.toBn(),
             own: stakingInfo.own.toBn(),

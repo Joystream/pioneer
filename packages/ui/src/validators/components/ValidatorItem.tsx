@@ -55,15 +55,15 @@ const ValidatorItemWrapper = styled.div`
 
 export const ValidatorItemWrap = styled.div`
   display: grid;
-  grid-template-columns: 250px 80px 80px repeat(5, 120px);
+  grid-template-columns: 250px 100px 80px 120px 120px 140px 100px 90px;
   grid-template-rows: 1fr;
   justify-content: space-between;
-  justify-items: end;
+  justify-items: start;
   align-items: center;
   width: 100%;
   height: ${Sizes.accountHeight};
   padding: 16px;
-  margin-left: -1px;
+  margin: -1px;
 
   ${Skeleton} {
     min-width: 80%;
