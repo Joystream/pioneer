@@ -213,7 +213,7 @@ const CandidateCardStakeAndControls = styled.div`
   margin-top: auto;
   flex-wrap: wrap;
 
-  @media(min-width: 1440px){
+  @media (min-width: 1440px) {
     flex-wrap: nowrap;
     min-width: fit-content;
   }
