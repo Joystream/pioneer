@@ -84,7 +84,7 @@ export const SideBarContent = () => {
               <NavigationLink to={ProfileRoutes.profile} icon={<MyProfileIcon />}>
                 My profile
               </NavigationLink>
-            </NavigationLinksItem>
+            </NavigationLinksItem>)}
             <NavigationLinksItem>
               <NavigationLink to={WorkingGroupsRoutes.groups} icon={<WorkingGroupsIcon />}>
                 Working Groups
@@ -196,9 +196,8 @@ export const SideBarContent = () => {
         </AnimateSharedLayout>
         <ProfileComponent />
         <SidebarConnections />
-      </NavigationInnerWrapper>
       {/*<Notifications onClose={onClose} isNotificationsPanelOpen={isNotificationsPanelOpen} />*/}
-    </Navigation>
+    </>
   )
 }
 

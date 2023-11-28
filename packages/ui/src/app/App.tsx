@@ -62,7 +62,7 @@ export const App = () => {
             <Route exact path={ProfileRoutes.profile} component={MyAccounts} />
             <Route exact path={ProfileRoutes.memberships} component={MyMemberships} />
             <Route exact path={MembersRoutes.members} component={Members} />
-            <Route exact path={SettingsRoutes.settings} component={Settings} />
+            <Route exact path={SettingsRoutes.settings} component={SettingsModule} />
             <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
             <Route exact path={TermsRoutes.termsOfService} component={TermsOfService} />
             <Route exact path="/404" component={NotFound} />
