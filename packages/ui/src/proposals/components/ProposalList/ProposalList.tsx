@@ -9,7 +9,12 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { GetSortProps } from '@/common/hooks/useSort'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
-import { ProposalColLayout, ProposalsListHeaders, ProposalListHeader } from '@/proposals/constants'
+import {
+  ProposalColLayout,
+  ProposalsListHeaders,
+  ProposalListHeader,
+  ProposalColLayoutWithVoteDetails,
+} from '@/proposals/constants'
 import { Proposal } from '@/proposals/types'
 
 import { ProposalListItem } from './ProposalListItem'
@@ -35,7 +40,7 @@ export const ProposalList = ({ proposals, getSortProps, isPast, isLoading }: Pro
 
   return (
     <RowGapBlock gap={4}>
-      <ProposalsListHeaders $colLayout={ProposalColLayout}>
+      <ProposalsListHeaders $colLayout={isCouncilMember ? ProposalColLayoutWithVoteDetails : ProposalColLayout}>
         {getSortProps ? <SortHeader {...getSortProps('title')}>Title</SortHeader> : <ProposalListHeader />}
         <ProposalListHeader>Stage</ProposalListHeader>
         <ProposalListHeader>Proposer</ProposalListHeader>
