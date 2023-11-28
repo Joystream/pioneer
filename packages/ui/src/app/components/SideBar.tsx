@@ -84,119 +84,119 @@ export const SideBarContent = () => {
               <NavigationLink to={ProfileRoutes.profile} icon={<MyProfileIcon />}>
                 My profile
               </NavigationLink>
-            </NavigationLinksItem>)}
-            <NavigationLinksItem>
-              <NavigationLink to={WorkingGroupsRoutes.groups} icon={<WorkingGroupsIcon />}>
-                Working Groups
-              </NavigationLink>
             </NavigationLinksItem>
-            <NavigationLinksItem>
-              <NavigationLink to={ProposalsRoutes.current} icon={<ProposalsIcon />}>
-                Proposals
-              </NavigationLink>
-            </NavigationLinksItem>
-            <NavigationLinksItem>
-              <NavigationLink to={CouncilRoutes.council} icon={<CouncilIcon />}>
-                Council
-              </NavigationLink>
-            </NavigationLinksItem>
-            <NavigationLinksItem>
-              <NavigationLink to={electionLink} icon={<ElectionIcon />} indicate={false}>
-                Election
-              </NavigationLink>
-            </NavigationLinksItem>
-            <NavigationLinksItem>
-              <NavigationLink to={ForumRoutes.forum} icon={<ForumIcon />}>
-                Forum
-              </NavigationLink>
-            </NavigationLinksItem>
-            <NavigationLinksItem>
-              <NavigationLink to={generatePath(MembersRoutes.members)} icon={<MembersIcon />}>
-                Members
-              </NavigationLink>
-            </NavigationLinksItem>
-            <NavigationLinksItem>
-              <NavigationLink
-                icon={<PolkadotSymbol />}
-                to={`https://polkadot.js.org/apps/?rpc=${endpoints.nodeRpcEndpoint}#/explorer`}
+          )}
+          <NavigationLinksItem>
+            <NavigationLink to={WorkingGroupsRoutes.groups} icon={<WorkingGroupsIcon />}>
+              Working Groups
+            </NavigationLink>
+          </NavigationLinksItem>
+          <NavigationLinksItem>
+            <NavigationLink to={ProposalsRoutes.home} icon={<ProposalsIcon />}>
+              Proposals
+            </NavigationLink>
+          </NavigationLinksItem>
+          <NavigationLinksItem>
+            <NavigationLink to={CouncilRoutes.council} icon={<CouncilIcon />}>
+              Council
+            </NavigationLink>
+          </NavigationLinksItem>
+          <NavigationLinksItem>
+            <NavigationLink to={electionLink} icon={<ElectionIcon />} indicate={false}>
+              Election
+            </NavigationLink>
+          </NavigationLinksItem>
+          <NavigationLinksItem>
+            <NavigationLink to={ForumRoutes.forum} icon={<ForumIcon />}>
+              Forum
+            </NavigationLink>
+          </NavigationLinksItem>
+          <NavigationLinksItem>
+            <NavigationLink to={generatePath(MembersRoutes.members)} icon={<MembersIcon />}>
+              Members
+            </NavigationLink>
+          </NavigationLinksItem>
+          <NavigationLinksItem>
+            <NavigationLink
+              icon={<PolkadotSymbol />}
+              to={`https://polkadot.js.org/apps/?rpc=${endpoints.nodeRpcEndpoint}#/explorer`}
+            >
+              Chain info
+              <LinkSymbol color={Colors.Black[500]} className="sidebarLinkSymbol" />
+            </NavigationLink>
+          </NavigationLinksItem>
+          <NavigationLinksItem>
+            <NavigationLink icon={<SubscanSymbol />} to="https://joystream.subscan.io">
+              Explorer
+              <LinkSymbol color={Colors.Black[500]} className="sidebarLinkSymbol" />
+            </NavigationLink>
+          </NavigationLinksItem>
+          <NavigationLinksItem>
+            <NavigationLink to={SettingsRoutes.settings} icon={<SettingsIcon />}>
+              Settings
+            </NavigationLink>
+          </NavigationLinksItem>
+          <NavigationLinksItem>
+            <NavigationExpandButton active={comingSoonListActive} onClick={toggleComingSoonListActive}>
+              <Arrow direction="down" size="20" className="nav-icon" />
+              COMING SOON
+            </NavigationExpandButton>
+          </NavigationLinksItem>
+          <AnimatePresence>
+            {comingSoonListActive && (
+              <motion.div
+                initial={{ height: 0 }}
+                animate={{ height: 'auto' }}
+                exit={{ minHeight: 0 }}
+                transition={{ duration: 0.25 }}
               >
-                Chain info
-                <LinkSymbol color={Colors.Black[500]} className="sidebarLinkSymbol" />
-              </NavigationLink>
-            </NavigationLinksItem>
-            <NavigationLinksItem>
-              <NavigationLink icon={<SubscanSymbol />} to="https://joystream.subscan.io">
-                Explorer
-                <LinkSymbol color={Colors.Black[500]} className="sidebarLinkSymbol" />
-              </NavigationLink>
-            </NavigationLinksItem>
-            <NavigationLinksItem>
-              <NavigationLink to={SettingsRoutes.settings} icon={<SettingsIcon />}>
-                Settings
-              </NavigationLink>
-            </NavigationLinksItem>
-            <NavigationLinksItem>
-              <NavigationExpandButton active={comingSoonListActive} onClick={toggleComingSoonListActive}>
-                <Arrow direction="down" size="20" className="nav-icon" />
-                COMING SOON
-              </NavigationExpandButton>
-            </NavigationLinksItem>
-            <AnimatePresence>
-              {comingSoonListActive && (
-                <motion.div
-                  initial={{ height: 0 }}
-                  animate={{ height: 'auto' }}
-                  exit={{ minHeight: 0 }}
-                  transition={{ duration: 0.25 }}
-                >
-                  <NavigationLinksItem>
-                    <NavigationLink to={BountyRoutes.bounties} icon={<BountyIcon />}>
-                      Bounty
-                    </NavigationLink>
-                  </NavigationLinksItem>
-                  <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" icon={<ConstitutionIcon />} disabled>
-                      Constitution
-                    </NavigationLink>
-                  </NavigationLinksItem>
-                  <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" icon={<FinancialsIcon />} disabled>
-                      Financials
-                    </NavigationLink>
-                  </NavigationLinksItem>
-                  <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" icon={<ValidatorsIcon />} disabled>
-                      Validators
-                    </NavigationLink>
-                  </NavigationLinksItem>
-                  <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" icon={<AppsIcon />} disabled>
-                      Apps
-                    </NavigationLink>
-                  </NavigationLinksItem>
-                  <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" icon={<StorageIcon />} disabled>
-                      Storage
-                    </NavigationLink>
-                  </NavigationLinksItem>
-                  <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" icon={<BandwidthIcon />} disabled>
-                      Bandwidth
-                    </NavigationLink>
-                  </NavigationLinksItem>
-                  <NavigationLinksItem>
-                    <NavigationLink to="/inexisting" disabled icon={<ContentIcon />}>
-                      Content
-                    </NavigationLink>
-                  </NavigationLinksItem>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </NavigationLinks>
-        </AnimateSharedLayout>
-        <ProfileComponent />
-        <SidebarConnections />
-      {/*<Notifications onClose={onClose} isNotificationsPanelOpen={isNotificationsPanelOpen} />*/}
+                <NavigationLinksItem>
+                  <NavigationLink to={BountyRoutes.bounties} icon={<BountyIcon />}>
+                    Bounty
+                  </NavigationLink>
+                </NavigationLinksItem>
+                <NavigationLinksItem>
+                  <NavigationLink to="/inexisting" icon={<ConstitutionIcon />} disabled>
+                    Constitution
+                  </NavigationLink>
+                </NavigationLinksItem>
+                <NavigationLinksItem>
+                  <NavigationLink to="/inexisting" icon={<FinancialsIcon />} disabled>
+                    Financials
+                  </NavigationLink>
+                </NavigationLinksItem>
+                <NavigationLinksItem>
+                  <NavigationLink to="/inexisting" icon={<ValidatorsIcon />} disabled>
+                    Validators
+                  </NavigationLink>
+                </NavigationLinksItem>
+                <NavigationLinksItem>
+                  <NavigationLink to="/inexisting" icon={<AppsIcon />} disabled>
+                    Apps
+                  </NavigationLink>
+                </NavigationLinksItem>
+                <NavigationLinksItem>
+                  <NavigationLink to="/inexisting" icon={<StorageIcon />} disabled>
+                    Storage
+                  </NavigationLink>
+                </NavigationLinksItem>
+                <NavigationLinksItem>
+                  <NavigationLink to="/inexisting" icon={<BandwidthIcon />} disabled>
+                    Bandwidth
+                  </NavigationLink>
+                </NavigationLinksItem>
+                <NavigationLinksItem>
+                  <NavigationLink to="/inexisting" disabled icon={<ContentIcon />}>
+                    Content
+                  </NavigationLink>
+                </NavigationLinksItem>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </NavigationLinks>
+      </AnimateSharedLayout>
+      <ProfileComponent />
+      <SidebarConnections />
     </>
   )
 }
