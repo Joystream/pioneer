@@ -153,20 +153,14 @@ export default {
             },
           },
         },
-        queryNode: [
-          {
-            query: GetMembersWithDetailsDocument,
-            resolver: ({ variables } = {}) => {
-              if (variables?.where) {
-                return {
-                  loading: false,
-                  data: { memberships: [member('alice'), member('bob'), member('charlie'), member('dave')] },
-                }
-              }
-              return { loading: false, data: undefined }
+        gql: {
+          queries: [
+            {
+              query: GetMembersWithDetailsDocument,
+              data: { memberships: [member('alice'), member('bob'), member('charlie'), member('dave')] },
             },
-          },
-        ],
+          ],
+        },
       }
     },
   },

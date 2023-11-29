@@ -55,13 +55,9 @@ export const useValidatorsList = () => {
   }
 
   const getValidatorsInfo = (api: Api, validatorsWithMembership: ValidatorMembership[]) => {
-    return of(validatorsWithMembership).pipe(
-      switchMap((validatorsWithMembership) => {
-        const validatorAddresses = validatorsWithMembership.map(({ stashAccount }) => stashAccount)
-        const validatorInfoObservables = validatorAddresses.map((address) => getValidatorInfo(address, api))
-        return combineLatest(validatorInfoObservables)
-      })
-    )
+    const validatorAddresses = validatorsWithMembership.map(({ stashAccount }) => stashAccount)
+    const validatorInfoObservables = validatorAddresses.map((address) => getValidatorInfo(address, api))
+    return combineLatest(validatorInfoObservables)
   }
 
   const allValidators = useFirstObservableValue(
