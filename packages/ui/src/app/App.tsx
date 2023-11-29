@@ -51,7 +51,7 @@ export const App = () => {
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <Screen>
             <OnBoardingOverlay />
-          <NavBar />
+            <NavBar />
             <Switch>
               {/*// Uncomment to see whole overview section*/}
               {/*<Route path={OverviewRoutes.overview} component={OverviewModule} />*/}
@@ -61,11 +61,11 @@ export const App = () => {
               <Route path={ElectionRoutes.currentElection} component={ElectionModule} />
               <Route path={ForumRoutes.forum} component={ForumModule} />
               <Route path={BountyRoutes.bounties} component={BountyModule} />
-            <Route path={SettingsRoutes.settings} component={SettingsModule} />
+              <Route path={SettingsRoutes.settings} component={SettingsModule} />
               <Route exact path={ProfileRoutes.profile} component={MyAccounts} />
               <Route exact path={ProfileRoutes.memberships} component={MyMemberships} />
               <Route exact path={MembersRoutes.members} component={Members} />
-                <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
+              <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
               <Route exact path={TermsRoutes.termsOfService} component={TermsOfService} />
               <Route exact path="/404" component={NotFound} />
               <Redirect exact from="/" to={WorkingGroupsRoutes.groups} />
