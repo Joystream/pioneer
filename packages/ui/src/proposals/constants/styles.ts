@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { ListHeaders, ListHeader } from '@/common/components/List/ListHeader'
 
 export const ProposalColLayout = (isCouncilMember?: boolean, isPast?: boolean) =>
-  `296px 148px 156px${isPast ? ' 60px' : ''}${isCouncilMember ? ' 80px' : ''}`
+  `296px 148px 156px${isPast ? ' 60px' : isCouncilMember ? ' 80px' : ''}`
 
 export const ProposalsListHeaders = styled(ListHeaders)`
   padding-right: 16px;
