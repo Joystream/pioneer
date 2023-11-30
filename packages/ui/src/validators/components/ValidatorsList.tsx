@@ -47,7 +47,7 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
           <Tooltip
             tooltipText="The profile of Verified validator has been entirely verified by the Membership working group."
             tooltipLinkText="Membership working group"
-            tooltipLinkURL="https://pioneerapp.xyz/#/working-groups/membership"
+            tooltipLinkURL={generatePath(WorkingGroupsRoutes.group, { name: 'membership' })}
           >
             <TooltipDefault />
           </Tooltip>
