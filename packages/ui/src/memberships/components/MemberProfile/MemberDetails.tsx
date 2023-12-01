@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-
+import { Link } from '@/common/components/Link'
 import { BlockTime } from '@/common/components/BlockTime'
 import { TransferSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
@@ -35,6 +35,15 @@ export const MemberDetails = React.memo(({ member }: Props) => {
     councilMember = '-',
     initiatingLeaving = '-',
   } = useMemberExtraInfo(member)
+
+  const externalResourceLink: any = {
+    TELEGRAM: 'https://web.telegram.org/k/#@',
+    TWITTER: 'https://twitter.com/',
+    FACEBOOK: 'https://facebook.com/',
+    YOUTUBE: 'https://youtube.com/user/',
+    LINKEDIN: 'https://www.linkedin.com/in/',
+    GITHUB: 'https://github.com/',
+  }
 
   if (isLoading || !memberDetails) {
     return (
@@ -132,7 +141,18 @@ export const MemberDetails = React.memo(({ member }: Props) => {
         memberDetails.externalResources.map((externalResource) => (
           <SidePaneRow key={`${externalResource.source}-externalResources`}>
             <SidePaneLabel text={capitalizeFirstLetter(externalResource.source.toLowerCase())} />
-            <SidePaneText>{externalResource.value}</SidePaneText>
+            <SidePaneText>
+              {externalResourceLink[externalResource.source] ? (
+                <Link
+                  href={`${externalResourceLink[externalResource.source]}${externalResource.value}`}
+                  target="_blank"
+                >
+                  {externalResource.value}
+                </Link>
+              ) : (
+                externalResource.value
+              )}{' '}
+            </SidePaneText>
           </SidePaneRow>
         ))}
     </SidePaneTable>
