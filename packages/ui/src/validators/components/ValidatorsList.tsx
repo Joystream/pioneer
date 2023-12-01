@@ -24,7 +24,7 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
   const [isDescending, setDescending] = useState(false)
 
   const sortedValidators = useMemo(
-    () => validators.sort(Comparator<Validator>(isDescending, sortBy)[sortBy === 'address' ? 'string' : 'number']),
+    () => [...validators].sort(Comparator<Validator>(isDescending, sortBy)[sortBy === 'address' ? 'string' : 'number']),
     [sortBy, isDescending, validators]
   )
 
