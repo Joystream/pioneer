@@ -29,59 +29,85 @@
 
 ## Deploying the Pioneer notification backend
 
-The following deployment instructions are relying on the [`joystream/pioneer-backend`](https://hub.docker.com/r/joystream/pioneer-backend) docker image.
-Therefore [Docker](https://docs.docker.com) is a requirement.
+### Prerequisites
+
+#### Pick and save the following configuration values in a file
+
+- `QUERY_NODE_ENDPOINT=https://<value>`: Query node to fetch from (in most cases this should be: `https://query.joystream.org/graphql`).
+- `PIONEER_URL=https://<value>`: The URL of the your Pioneer web application.
+- `STARTING_BLOCK=<value>`: The block to start fetching the events from (in most cases this should be the current block).
+- `EMAIL_SENDER=<value>`: The address to send e-mail with.
+
+Replace the `<value>` by the actual values.
+
+#### Set up an e-mail provider
+
+To both register users and notify them an email provider needs to be set up. At the moment only SendGrid and Mailgun are supported but custom SMTP configuration is coming soon.
+
+To set up SendGrid:
+1. Sign up for a SendGrid account.
+2. Verify your Sender e-mail address Identity.
+3. Create your SendGrid API key with full access "Mail Send" permissions.
+4. Add this API key to the file mentioned earlier this value is called `SENDGRID_API_KEY=<value>`
+
+To set up Mailgun:
+1. Sign up for a Mailgun account.
+2. Add and verify your domain.
+3. Get your Mailgun private API key from your dashboard.
+4. Add this API key to the file mentioned earlier this value is called `MAILGUN_API_KEY=<value>`
+5. Also add `MAILGUN_DOMAIN=<value>` to the file and if this is an EU domain `MAILGUN_API_URL=https://api.eu.mailgun.net` should be added too.
+
+### Quick start (Render)
+
+To deploy on Render you can simply click on the button bellow:
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/dev)
+
+> **Warning**
+> Only Sendgrid is currently supported with the Render deployment.
+
+### Private server deployment
 
 1.
-   ### Set up an e-mail address on either SendGrid or Mailgun (more options coming soon).
-
-   #### SendGrid
-   1. Sign up for a SendGrid account.
-   2. Verify your Sender e-mail address Identity.
-   3. Create and store your SendGrid API key with full access "Mail Send" permissions.
-
-   #### Mailgun
-   1. Sign up for a Mailgun account.
-   2. Add and verify your domain.
-   3. Store your Mailgun private API key from your dashboard.
+   #### Install docker
+   The following deployment instructions are relying on the [`joystream/pioneer-backend`](https://hub.docker.com/r/joystream/pioneer-backend) docker image.
+   Therefore [Docker](https://docs.docker.com) is a requirement.
 
 2.
-   ### Host a PostgreSQL database
-   Store the database URL which should look like this:
+   #### Host a PostgreSQL database
+   Store the database URL in the file mentioned above. It should look like this:
    ```
-   postgresql://{username}:{password}@{host}:5432/{database name}
+   DATABASE_URL=postgresql://{username}:{password}@{host}:5432/{database name}
    ```
+
 3.
-   ### Check you are able to set all required environment variables
-   These are the variables required to go further:
-   - `DATABASE_URL`: URL used to connect to the database (this is not needed for render.com deployment).
-   - `APP_SECRET_KEY`: This a secret key you can generate yourself (this is not needed for render.com deployment).
-   - `QUERY_NODE_ENDPOINT`: Query node to fetch from (in most cases this should be: `https://query.joystream.org/graphql`).
-   - `PIONEER_URL`: The URL of the your Pioneer web application.
-   - `STARTING_BLOCK`: The block to start fetching the events from (in most cases this should be the current block).
-   - `EMAIL_SENDER`: The address to send e-mail with.
-   - Either `SENDGRID_API_KEY`, or `MAILGUN_API_KEY` and `MAILGUN_DOMAIN`.
-   - Also in case you are using Mailgun and are using an EU domain: `MAILGUN_API_URL` should be set to `https://api.eu.mailgun.net`.
+   #### Upload the configuration file on the server
+   At this point it should have a all the following configuration.
+   ```shell
+   DATABASE_URL=postgresql://{username}:{password}@{host}:5432/{database name}
+   QUERY_NODE_ENDPOINT=https://<value>
+   PIONEER_URL=https://<value>
+   STARTING_BLOCK=<value>
+   EMAIL_SENDER=<value>
+   ```
+
+   In addition it should also have your e-mail provider configuration with either `SENDGRID_API_KEY`, or `MAILGUN_API_KEY`, `MAILGUN_DOMAIN` and maybe `MAILGUN_API_URL=https://api.eu.mailgun.net`
+
+   Finally `APP_SECRET_KEY=<secret value>` should be added to the configuration. It's best to pick this value at random and not to store it anywhere else.
 
 4.
-   ### Serve the backend API
+   #### Serve the backend API
    E.g on a private server with the environment variable - mentioned above - set in a file at the path: `/path/to/.env`, the API can be run with:
    ```
    docker run -d -p 80:80 --restart=always --name=api --env-file=/path/to/.env joystream/pioneer-backend
    ```
 
 5.
-   ### Run the notify script at regular intervals
+   #### Run the notify script at regular intervals
    E.g still on a private server the notify script can be run every 10 minutes by setting the following line in the crontab:
    ```
    */10 * * * * docker run --name=notify --env-file=/path/to/.env joystream/pioneer-backend notify
    ```
-
-### Quick start
-
-Alternatively to deploy on [render](render.com) go through step 1 and 3 then click on the button bellow:
-
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/dev)
 
 ## Under maintenance screen
 
