@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Link } from '@/common/components/Link'
 import { BlockTime } from '@/common/components/BlockTime'
 import { TransferSymbol } from '@/common/components/icons/symbols'
+import { Link } from '@/common/components/Link'
 import { Loading } from '@/common/components/Loading'
 import {
   SidePaneTable,
