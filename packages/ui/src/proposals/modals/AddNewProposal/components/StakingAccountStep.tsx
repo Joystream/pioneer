@@ -13,7 +13,7 @@ interface StakingAccountStepProps {
 }
 
 export const StakingAccountStep = ({ requiredStake }: StakingAccountStepProps) => {
-  const { isMobile } = useResponsive()
+  const { isMobile, size } = useResponsive()
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -45,7 +45,7 @@ export const StakingAccountStep = ({ requiredStake }: StakingAccountStepProps) =
               name="stakingAccount.stakingAccount"
               minBalance={requiredStake}
               lockType="Proposals"
-              isSmallVariant={isMobile}
+              variant={isMobile ? 's' : size === 'md' ? 'm' : 'l'}
             />
           </InputComponent>
         </RowGapBlock>

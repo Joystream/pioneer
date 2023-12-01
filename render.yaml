@@ -5,7 +5,7 @@ services:
     plan: starter
 
     runtime: image
-    image: { url: docker.io/thesan/pioneer-backend:prod }
+    image: { url: docker.io/joystream/pioneer-backend:latest }
 
     envVars:
       - key: DATABASE_URL
@@ -34,7 +34,7 @@ services:
     plan: starter
 
     runtime: image
-    image: { url: docker.io/thesan/pioneer-backend:prod }
+    image: { url: docker.io/joystream/pioneer-backend:latest }
     dockerCommand: notify
     schedule: "*/10 * * * *"
 

@@ -12,6 +12,7 @@ import {
   Label,
   ToggleCheckbox,
   TokenInput,
+  TokenInputComponent,
 } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -163,25 +164,25 @@ export const UpdateChannelPayouts = () => {
       </Row>
 
       <Row>
-        <InputComponent
+        <TokenInputComponent
           label="Minimum Cashout Allowed"
           tight
           units={CurrencyName.integerValue}
           name="updateChannelPayouts.minimumCashoutAllowed"
         >
           <TokenInput id="amount-input" name="updateChannelPayouts.minimumCashoutAllowed" placeholder="0" />
-        </InputComponent>
+        </TokenInputComponent>
       </Row>
 
       <Row>
-        <InputComponent
+        <TokenInputComponent
           label="Maximum Cashout Allowed"
           tight
           units={CurrencyName.integerValue}
           name="updateChannelPayouts.maximumCashoutAllowed"
         >
           <TokenInput id="amount-input" name="updateChannelPayouts.maximumCashoutAllowed" placeholder="0" />
-        </InputComponent>
+        </TokenInputComponent>
       </Row>
 
       {/*<Row>*/}

@@ -81,16 +81,14 @@ export default {
             },
             {
               query: GetBackendMeDocument,
-              data: args.isAuthorized
-                ? {
-                    me: {
-                      email: args.isEmailConfirmed ? email : null,
-                      unverifiedEmail: args.isEmailConfirmed ? null : email,
-                      receiveEmails: true,
-                      name: 'test',
-                    },
-                  }
-                : undefined,
+              data: {
+                me: {
+                  email: args.isEmailConfirmed ? email : null,
+                  unverifiedEmail: args.isEmailConfirmed ? null : email,
+                  receiveEmails: true,
+                  name: 'test',
+                },
+              },
               error: args.isAuthorized ? undefined : new Error('Unauthorized'),
             },
           ],
@@ -110,14 +108,8 @@ export default {
         },
 
         backend: {
-          notificationsSettingsMap: args.isAuthorized
-            ? {
-                [alice.id]: {
-                  accessToken: 'token',
-                },
-              }
-            : {},
           onSetMemberSettings: (...settingsArgs: any[]) => args.onSetMemberSettings(...settingsArgs),
+          authToken: SIGNIN_TOKEN,
         },
       }
     },

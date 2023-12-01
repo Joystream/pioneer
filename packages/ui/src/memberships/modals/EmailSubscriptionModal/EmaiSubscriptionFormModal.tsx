@@ -77,5 +77,5 @@ export const EmailSubscriptionFormModal = ({ onClose, onSubmit }: Props) => {
 }
 
 const StyledFooter = styled(ModalTransactionFooter)`
-  grid-column-gap: 20px;
+  grid-column-gap: 0;
 `

@@ -97,6 +97,10 @@ const ItemsWrapper = styled.div`
   width: 100%;
   padding: 10px 0;
   overflow-x: hidden;
+
+  @media (min-width: 1440px) {
+    column-gap: 24px;
+  }
 `
 
 const ButtonWrapper = styled.div`

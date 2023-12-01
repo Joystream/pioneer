@@ -100,9 +100,9 @@ export const MockGqlProvider: FC<MockGqlProps> = ({ children, queries, mutations
   const queriesMap = useMemo(
     () =>
       new Map(
-        queries?.map<[DocumentNode, Resolver]>(({ query, data, resolver }) => [
+        queries?.map<[DocumentNode, Resolver]>(({ query, data, error, resolver }) => [
           query,
-          (options) => resolver?.(options) ?? { loading: false, data },
+          (options) => resolver?.(options) ?? { loading: false, data: error ? undefined : data, error },
         ]) ?? []
       ),
     [queries]

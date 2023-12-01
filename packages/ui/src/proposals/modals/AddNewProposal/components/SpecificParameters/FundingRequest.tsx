@@ -12,6 +12,7 @@ import {
   ToggleCheckbox,
   TokenInput,
   InputTextarea,
+  TokenInputComponent,
 } from '@/common/components/forms'
 import { Arrow } from '@/common/components/icons'
 import { Row } from '@/common/components/Modal'
@@ -25,7 +26,7 @@ import { ErrorPrompt, Prompt } from './Prompt'
 
 export const FundingRequest = () => {
   const { watch, setValue, getFieldState } = useFormContext()
-  const { isMobile } = useResponsive()
+  const { isMobile, size } = useResponsive()
   const [isPreviewModalShown, setIsPreviewModalShown] = useState(false)
   const [payMultiple] = watch(['fundingRequest.payMultiple'])
   const [hasPreviewedInput] = watch(['fundingRequest.hasPreviewedInput'], { 'fundingRequest.hasPreviewedInput': true })
@@ -110,7 +111,7 @@ export const FundingRequest = () => {
           </RowGapBlock>
         ) : (
           <RowGapBlock gap={20}>
-            <InputComponent
+            <TokenInputComponent
               label="Amount"
               tight
               units={CurrencyName.integerValue}
@@ -119,9 +120,9 @@ export const FundingRequest = () => {
               name="fundingRequest.amount"
             >
               <TokenInput id="amount-input" placeholder="0" name="fundingRequest.amount" />
-            </InputComponent>
+            </TokenInputComponent>
             <InputComponent label="Recipient account" required inputSize={isMobile ? 'xxl' : 'l'}>
-              <SelectAccount name="fundingRequest.account" isSmallVariant={isMobile} />
+              <SelectAccount name="fundingRequest.account" variant={isMobile ? 's' : size === 'md' ? 'm' : 'l'} />
             </InputComponent>
           </RowGapBlock>
         )}

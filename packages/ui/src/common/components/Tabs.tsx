@@ -64,7 +64,7 @@ const TabsStyles = styled.div<TabsSize>`
           content: '';
           position: absolute;
           left: 0;
-          bottom: -2px;
+          bottom: 0;
           width: calc(100%);
           height: 1px;
           background-color: ${Colors.Black[200]};
