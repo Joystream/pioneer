@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 import { sum } from 'lodash'
-import React, { ReactElement, useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
 import styled from 'styled-components'
@@ -13,9 +13,10 @@ import {
   StatisticItemProps,
 } from '@/common/components/statistics'
 import { TooltipText } from '@/common/components/Tooltip'
-import { A_SECOND, AN_HOUR, A_DAY, A_MINUTE, BorderRad, Colors, Fonts, Transitions, ZIndex } from '@/common/constants'
-import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
-import { toNumber, intersperse } from '@/common/utils'
+import { DurationValue } from '@/common/components/typography/DurationValue'
+import { AN_HOUR, A_DAY, A_MINUTE, BorderRad, Colors, Transitions, ZIndex } from '@/common/constants'
+import { splitDuration, MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
+import { toNumber } from '@/common/utils'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 
 interface ElectionProgressBarProps extends StatisticItemProps {
@@ -27,26 +28,22 @@ interface ElectionProgressBarProps extends StatisticItemProps {
 export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
   const currentBlock = toNumber(props.currentBlock)
   const duration = toNumber(props.value)
-  const totalSeconds = Math.floor(duration / (A_SECOND / MILLISECONDS_PER_BLOCK))
 
   const convertDurationToTimeString = (duration: number) => {
-    const _totalSeconds = Math.floor(duration / (A_SECOND / MILLISECONDS_PER_BLOCK))
-    const _minutes = Math.floor(duration / (A_MINUTE / MILLISECONDS_PER_BLOCK))
-    const _hours = Math.floor(duration / (AN_HOUR / MILLISECONDS_PER_BLOCK))
-    const days = Math.floor(duration / (A_DAY / MILLISECONDS_PER_BLOCK))
-    const seconds = _totalSeconds - _minutes * 60
-    const minutes = _minutes - _hours * 60
-    const hours = _hours - days * 24
+    const format = splitDuration([
+      [A_DAY, 'd'],
+      [AN_HOUR, 'h'],
+      [A_MINUTE, 'm'],
+    ])
 
-    return intersperse(
-      [
-        [days.toString().padStart(2, '0'), 'day'],
-        [hours.toString().padStart(2, '0'), 'hours'],
-        [minutes.toString().padStart(2, '0'), 'minutes'],
-        [seconds.toString().padStart(2, '0'), 'seconds'],
-      ].flatMap(([amount, unit]) => (amount ? <Period key={unit} amount={amount} unit={''} tiny={false} /> : [])),
-      (index) => <Separator key={index} tiny={true} />
-    )
+    const formatDurationDate = (duration: number): [string | number, string][] => {
+      if (duration * MILLISECONDS_PER_BLOCK < A_MINUTE) {
+        return [['< 1', 'm']]
+      }
+      return format(duration * MILLISECONDS_PER_BLOCK)
+    }
+
+    return <DurationValue value={formatDurationDate(duration)} />
   }
 
   const endDayOfStage = useMemo(() => convertDurationToTimeString(duration), [duration])
@@ -86,18 +83,25 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
 
   const constants = useCouncilConstants()
 
+  const blockDurationToMs = (blockDuration: number) => blockDuration * MILLISECONDS_PER_BLOCK
+  const blockToDate = (duration: number) => {
+    const now = Date.now()
+    const msDuration = blockDurationToMs(duration)
+    return new Date(now + msDuration).toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
+  }
+  const blockDurationToDays = (blockDuration: number) => Math.floor(blockDurationToMs(blockDuration) / A_DAY)
+
   if (
     !isNaN(duration) &&
-    constants?.budgetRefillPeriod !== undefined &&
     constants?.election.votingPeriod != undefined &&
     constants?.election.revealingPeriod != undefined &&
     constants?.idlePeriod != undefined
   ) {
     // calculate the days per each stage
-    announcingDays = Math.floor(constants?.announcingPeriod / constants?.budgetRefillPeriod)
-    votingDays = Math.floor(constants?.election.votingPeriod / constants?.budgetRefillPeriod)
-    revealingDays = Math.floor(constants?.election.revealingPeriod / constants?.budgetRefillPeriod)
-    inactiveDays = Math.floor(constants?.idlePeriod / constants?.budgetRefillPeriod)
+    announcingDays = blockDurationToDays(constants?.announcingPeriod)
+    votingDays = blockDurationToDays(constants?.election.votingPeriod)
+    revealingDays = blockDurationToDays(constants?.election.revealingPeriod)
+    inactiveDays = blockDurationToDays(constants?.idlePeriod)
 
     // calculate progress bar layout
     progressBarAttr = `${inactiveDays > 0 ? inactiveDays : 1}fr ${announcingDays > 0 ? announcingDays : 1}fr ${
@@ -111,7 +115,7 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       constants?.announcingPeriod,
       constants?.election.votingPeriod,
       constants?.election.revealingPeriod,
-      constants?.budgetRefillPeriod - 1,
+      A_DAY / MILLISECONDS_PER_BLOCK - 1,
     ]
 
     inactiveProgress = [Math.floor(100 - (100 * duration) / constants?.idlePeriod), 100, 100, 100][currentPosition]
@@ -122,57 +126,31 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
     revealingProgress = [0, 0, 0, Math.floor(100 - (100 * duration) / constants?.election.revealingPeriod)][
       currentPosition
     ]
-    remainDays = Math.floor((duration + sum(gaps.slice(currentPosition))) / constants?.budgetRefillPeriod)
+    remainDays = blockDurationToDays(duration + sum(gaps.slice(currentPosition)))
 
-    const today = new Date()
-
-    const inactiveEndDate = new Date()
-    inactiveEndDate.setSeconds(
-      today.getSeconds() +
-        [
-          totalSeconds,
-          totalSeconds - Math.floor(sum(gaps.slice(0, 1)) / (A_SECOND / MILLISECONDS_PER_BLOCK)),
-          totalSeconds - Math.floor(sum(gaps.slice(0, 2)) / (A_SECOND / MILLISECONDS_PER_BLOCK)),
-          totalSeconds - Math.floor(sum(gaps.slice(0, 3)) / (A_SECOND / MILLISECONDS_PER_BLOCK)),
-        ][currentPosition]
+    inactiveEndDay = blockToDate(
+      [duration, duration - sum(gaps.slice(0, 1)), duration - sum(gaps.slice(0, 2)), duration - sum(gaps.slice(0, 3))][
+        currentPosition
+      ]
     )
-    inactiveEndDay = inactiveEndDate.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
-    const announcingEndDate = new Date()
-    announcingEndDate.setSeconds(
-      today.getSeconds() +
-        [
-          totalSeconds + Math.floor(sum(gaps.slice(0, 1)) / (A_SECOND / MILLISECONDS_PER_BLOCK)),
-          totalSeconds,
-          totalSeconds - Math.floor(sum(gaps.slice(1, 2)) / (A_SECOND / MILLISECONDS_PER_BLOCK)),
-          totalSeconds - Math.floor(sum(gaps.slice(1, 3)) / (A_SECOND / MILLISECONDS_PER_BLOCK)),
-        ][currentPosition]
+    announcingEndDay = blockToDate(
+      [duration + sum(gaps.slice(0, 1)), duration, duration - sum(gaps.slice(1, 2)), duration - sum(gaps.slice(1, 3))][
+        currentPosition
+      ]
     )
-    announcingEndDay = announcingEndDate.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
-    const votingEndDate = new Date()
-    votingEndDate.setSeconds(
-      today.getSeconds() +
-        [
-          totalSeconds + Math.floor(sum(gaps.slice(0, 2)) / (A_SECOND / MILLISECONDS_PER_BLOCK)),
-          totalSeconds + Math.floor(sum(gaps.slice(1, 2)) / (A_SECOND / MILLISECONDS_PER_BLOCK)),
-          totalSeconds,
-          totalSeconds - Math.floor(sum(gaps.slice(2, 3)) / (A_SECOND / MILLISECONDS_PER_BLOCK)),
-        ][currentPosition]
+    votingEndDay = blockToDate(
+      [duration + sum(gaps.slice(0, 2)), duration + sum(gaps.slice(1, 2)), duration, duration - sum(gaps.slice(2, 3))][
+        currentPosition
+      ]
     )
-    votingEndDay = votingEndDate.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
-    const revealingEndDate = new Date()
-    revealingEndDate.setSeconds(
-      today.getSeconds() +
-        [
-          totalSeconds + Math.floor(sum(gaps.slice(0, 3)) / (A_SECOND / MILLISECONDS_PER_BLOCK)),
-          totalSeconds + Math.floor(sum(gaps.slice(1, 3)) / (A_SECOND / MILLISECONDS_PER_BLOCK)),
-          totalSeconds + Math.floor(sum(gaps.slice(2, 3)) / (A_SECOND / MILLISECONDS_PER_BLOCK)),
-          totalSeconds,
-        ][currentPosition]
+    revealingEndDay = blockToDate(
+      [duration + sum(gaps.slice(0, 3)), duration + sum(gaps.slice(1, 3)), duration + sum(gaps.slice(2, 3)), duration][
+        currentPosition
+      ]
     )
-    revealingEndDay = revealingEndDate.toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 
     inactiveEndBlock =
       currentBlock +
@@ -212,13 +190,6 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
     const electionPos = stages.indexOf(props.electionStage)
     const selectedPos = stages.indexOf(selectedStage)
 
-    const verbIndicatorArray = [
-      ['', 'begins in', 'begins in', 'begins in'],
-      ['ended on', '', 'begins in', 'begins in'],
-      ['ended on', 'ended on', '', 'begins in'],
-      ['ended on', 'ended on', 'ended on', ''],
-    ]
-
     const endOfStageArray = [
       [
         '',
@@ -233,7 +204,7 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
 
     setStageDescription(selectedStage)
     setSelectedToolbarStage(selectedStage)
-    setVerbIndicator(verbIndicatorArray[electionPos][selectedPos])
+    setVerbIndicator(selectedPos > electionPos ? 'begins in' : 'ended on')
     setDaysIndicator(endOfStageArray[electionPos][selectedPos])
   }
 
@@ -485,37 +456,4 @@ const ProgressBarLayout = styled.div<{ layout?: string }>`
   margin-top: 8px;
   place-items: center;
   height: 20px;
-`
-const Period = ({ amount, unit, tiny }: { amount: number | string; unit: string; tiny?: boolean }) => (
-  <Days unit={unit} tiny={tiny}>
-    {amount} <Unit tiny={tiny}>{unit}</Unit>
-  </Days>
-)
-
-const Days = styled.div<{ unit?: string; tiny?: boolean }>`
-  display: inline-grid;
-  position: relative;
-  grid-auto-flow: column;
-  grid-column-gap: ${({ tiny }) => (tiny ? '0' : '4px')};
-  align-items: baseline;
-  width: fit-content;
-  color: ${({ tiny }) => (tiny ? `${Colors.Black[400]}` : `${Colors.Black[900]}`)};
-  font-size: ${({ tiny }) => (tiny ? '12px' : '20px')};
-  font-weight: ${({ tiny }) => (tiny ? '400' : '700')};
-  font-family: ${Fonts.Grotesk};
-`
-
-const Unit = styled.span<{ tiny?: boolean }>`
-  display: inline-block;
-  font-size: ${({ tiny }) => (tiny ? '12px' : '14px')};
-  line-height: 20px;
-  font-weight: 400;
-  color: ${Colors.Black[400]};
-  font-family: ${Fonts.Grotesk};
-`
-
-const Separator = styled<(props: { tiny?: boolean }) => ReactElement>(() => <span>:</span>)`
-  display: inline-block;
-  color: ${({ tiny }) => (tiny ? `${Colors.Black[400]}` : `${Colors.Black[900]}`)};
-  margin: ${({ tiny }) => (tiny ? '0' : '0 8px')};
 `

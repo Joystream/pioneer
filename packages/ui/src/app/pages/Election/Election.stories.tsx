@@ -151,4 +151,15 @@ export default {
   },
 } satisfies Meta<Args>
 
-export const Default: Story = {}
+export const Inactive: Story = {
+  args: { electionStage: 'inactive' },
+}
+export const Announcing: Story = {
+  args: { electionStage: 'announcing' },
+}
+export const Voting: Story = {
+  args: { electionStage: 'voting' },
+}
+export const Revealing: Story = {
+  args: { electionStage: 'revealing' },
+}
