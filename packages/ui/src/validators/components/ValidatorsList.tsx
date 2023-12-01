@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useMemo, useState } from 'react'
+import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { List, ListItem } from '@/common/components/List'
@@ -6,6 +7,8 @@ import { ListHeader } from '@/common/components/List/ListHeader'
 import { SortHeader } from '@/common/components/List/SortHeader'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Colors } from '@/common/constants'
+import { Comparator } from '@/common/model/Comparator'
+import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
 import { Validator } from '../types'
 
@@ -16,32 +19,30 @@ interface ValidatorsListProps {
 }
 
 export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
-  const [sortByApr, setSortByApr] = useState<'asc' | 'desc' | undefined>(undefined)
-  const [sortByCommission, setSortByCommission] = useState<'asc' | 'desc' | undefined>(undefined)
-  const [sortedValidators, setSortedValidators] = useState<Validator[]>([])
+  type SortKey = 'address' | 'APR' | 'commission'
+  const [sortBy, setSortBy] = useState<SortKey>('address')
+  const [isDescending, setDescending] = useState(false)
 
-  useEffect(() => {
-    setSortedValidators(validators)
-  }, [validators])
+  const sortedValidators = useMemo(
+    () => validators.sort(Comparator<Validator>(isDescending, sortBy)[sortBy === 'address' ? 'string' : 'number']),
+    [sortBy, isDescending, validators]
+  )
 
-  useEffect(() => {
-    if (!sortByApr) return
-    setSortedValidators(sortedValidators.sort((a, b) => (sortByApr === 'desc' ? a.APR - b.APR : b.APR - a.APR)))
-  }, [sortByApr])
-
-  useEffect(() => {
-    if (!sortByCommission) return
-    setSortedValidators(
-      sortedValidators.sort((a, b) =>
-        sortByCommission === 'desc' ? a.commission - b.commission : b.commission - a.commission
-      )
-    )
-  }, [sortByCommission])
+  const onSort = (key: SortKey) => {
+    if (key === sortBy) {
+      setDescending(!isDescending)
+    } else {
+      setDescending(false)
+      setSortBy(key)
+    }
+  }
 
   return (
     <ValidatorsListWrap>
       <ListHeaders>
-        <ListHeader>Validator</ListHeader>
+        <SortHeader onSort={() => onSort('address')} isActive={sortBy === 'address'} isDescending={isDescending}>
+          Validator
+        </SortHeader>
         <ListHeader>
           Verification
           <Tooltip
@@ -55,25 +56,22 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
         <ListHeader>State</ListHeader>
         <ListHeader>Own Stake</ListHeader>
         <ListHeader>Total Stake</ListHeader>
-        <SortHeader
-          onSort={() => {
-            setSortByApr(!sortByApr ? 'desc' : sortByApr === 'desc' ? 'asc' : undefined)
-          }}
-          isActive={!!sortByApr}
-          isDescending={sortByApr === 'desc'}
-        >
+        <SortHeader onSort={() => onSort('APR')} isActive={sortBy === 'APR'} isDescending={isDescending}>
           Expected Nom APR
-          <Tooltip tooltipText="This column shows the expected APR for nominators who are nominating funds for the chosen validator. The APR is subject to the amount staked and have a diminishing return for higher token amounts.">
+          <Tooltip
+            tooltipText={
+              <p>
+                This column shows the expected APR for nominators who are nominating funds for the chosen validator. The
+                APR is subject to the amount staked and have a diminishing return for higher token amounts. This is
+                calculated as follow: <code>Last reward extrapolated over a year</code> times{' '}
+                <code>The nominator commission</code> divided by <code>The total staked by the validator</code>
+              </p>
+            }
+          >
             <TooltipDefault />
           </Tooltip>
         </SortHeader>
-        <SortHeader
-          onSort={() => {
-            setSortByCommission(!sortByCommission ? 'desc' : sortByCommission === 'desc' ? 'asc' : undefined)
-          }}
-          isActive={!!sortByCommission}
-          isDescending={sortByCommission === 'desc'}
-        >
+        <SortHeader onSort={() => onSort('commission')} isActive={sortBy === 'commission'} isDescending={isDescending}>
           Commission
         </SortHeader>
       </ListHeaders>
