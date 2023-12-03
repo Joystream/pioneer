@@ -114,7 +114,7 @@ export const MemberRoles = ({ size, max, wrapable, roles, isOnDark, memberDetail
                       </SocialLink>
                     </Tooltip>
                   )
-                case 'LINKEDIN': 
+                case 'LINKEDIN':
                   return (
                     <Tooltip tooltipText={`${item.source}: ${item.value}`}>
                       <SocialLink isOnDark={isOnDark}>
