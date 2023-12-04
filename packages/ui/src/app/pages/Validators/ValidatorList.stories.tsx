@@ -270,7 +270,7 @@ export const TestsFilters: Story = {
       ).toBeTruthy()
       await userEvent.click(screen.getByText('Commission'))
       expect(
-        screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[0]
+        screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[1]
           .innerText === '20%'
       ).toBeTruthy()
     })
