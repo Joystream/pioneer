@@ -5,13 +5,15 @@
     "controllerAccount": "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
     "boundAccounts": [
       "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-      "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY"
+      "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+      "j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW"
     ],
     "boundAccountsEvents": [],
     "handle": "alice",
     "metadata": {
       "name": "nesciunt ea",
-      "about": "Hic qui esse ea error eum enim recusandae nisi a. Sit consequatur expedita quo repellat rem facere itaque quia. Et maiores nobis et ut nihil. Id est soluta sunt necessitatibus tempora vitae quas labore possimus. Ullam necessitatibus corporis omnis quod dolore recusandae. Nesciunt at tempora odio ipsum ipsam consequatur velit.\n \rLaboriosam ut minima. Veritatis omnis quam quo saepe. Ut dolorum id. Sint dicta earum maiores et. Ipsum hic optio sunt magnam neque rerum ut possimus et. Adipisci sed officiis rerum inventore omnis rem rerum provident."
+      "about": "Hic qui esse ea error eum enim recusandae nisi a. Sit consequatur expedita quo repellat rem facere itaque quia. Et maiores nobis et ut nihil. Id est soluta sunt necessitatibus tempora vitae quas labore possimus. Ullam necessitatibus corporis omnis quod dolore recusandae. Nesciunt at tempora odio ipsum ipsam consequatur velit.\n \rLaboriosam ut minima. Veritatis omnis quam quo saepe. Ut dolorum id. Sint dicta earum maiores et. Ipsum hic optio sunt magnam neque rerum ut possimus et. Adipisci sed officiis rerum inventore omnis rem rerum provident.",
+      "isVerifiedValidator": true
     },
     "isVerified": true,
     "isFoundingMember": true,
@@ -31,13 +33,15 @@
     "rootAccount": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
     "controllerAccount": "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
     "boundAccounts": [
-      "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty"
+      "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
+      "j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP"
     ],
     "boundAccountsEvents": [],
     "handle": "bob",
     "metadata": {
       "name": "soluta voluptas",
-      "about": "Nulla corporis quo dolorem. Sint quia dignissimos. Et sit dolore fuga in alias voluptatibus. Natus repudiandae debitis exercitationem quasi aut. Alias in expedita aut provident in quia quod doloremque ipsum.\n \rDistinctio provident pariatur alias ut hic ipsa eum doloremque. Harum ipsum quae aut quod consequatur laboriosam delectus minus aut. Ea eaque ducimus. Ut quia ex molestiae et.\n \rVoluptatibus rem perferendis molestiae. Quia quibusdam optio quo sed error voluptas occaecati. Ratione voluptates consequatur rerum numquam. Voluptas dignissimos soluta voluptatem reprehenderit ea fuga et inventore. Blanditiis amet quasi nihil et ad rerum molestiae sed officiis."
+      "about": "Nulla corporis quo dolorem. Sint quia dignissimos. Et sit dolore fuga in alias voluptatibus. Natus repudiandae debitis exercitationem quasi aut. Alias in expedita aut provident in quia quod doloremque ipsum.\n \rDistinctio provident pariatur alias ut hic ipsa eum doloremque. Harum ipsum quae aut quod consequatur laboriosam delectus minus aut. Ea eaque ducimus. Ut quia ex molestiae et.\n \rVoluptatibus rem perferendis molestiae. Quia quibusdam optio quo sed error voluptas occaecati. Ratione voluptates consequatur rerum numquam. Voluptas dignissimos soluta voluptatem reprehenderit ea fuga et inventore. Blanditiis amet quasi nihil et ad rerum molestiae sed officiis.",
+      "isVerifiedValidator": false
     },
     "isVerified": true,
     "isFoundingMember": true,
@@ -56,12 +60,13 @@
     "id": "2",
     "rootAccount": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
     "controllerAccount": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
-    "boundAccounts": [],
+    "boundAccounts": ["j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz"],
     "boundAccountsEvents": [],
     "handle": "charlie",
     "metadata": {
       "name": "explicabo et",
-      "about": "Dignissimos numquam itaque natus eum quas voluptate laboriosam quod. Culpa accusamus earum ipsum voluptatum amet. Ad voluptas at assumenda quis eius in."
+      "about": "Dignissimos numquam itaque natus eum quas voluptate laboriosam quod. Culpa accusamus earum ipsum voluptatum amet. Ad voluptas at assumenda quis eius in.",
+      "isVerifiedValidator": true
     },
     "isVerified": true,
     "isFoundingMember": true,
@@ -80,12 +85,13 @@
     "id": "3",
     "rootAccount": "5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy",
     "controllerAccount": "5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy",
-    "boundAccounts": [],
+    "boundAccounts": ["j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa"],
     "boundAccountsEvents": [],
     "handle": "dave",
     "metadata": {
       "name": "architecto deleniti",
-      "about": "Cumque vero a aspernatur esse optio. Libero saepe voluptatem est est qui. Velit quidem sed. Aliquid temporibus id ea aut vel qui recusandae magni. Aliquam cupiditate cupiditate aut doloribus sit nemo. Aliquid ut iure ullam non."
+      "about": "Cumque vero a aspernatur esse optio. Libero saepe voluptatem est est qui. Velit quidem sed. Aliquid temporibus id ea aut vel qui recusandae magni. Aliquam cupiditate cupiditate aut doloribus sit nemo. Aliquid ut iure ullam non.",
+      "isVerifiedValidator": true
     },
     "isVerified": true,
     "isFoundingMember": true,
