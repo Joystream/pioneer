@@ -265,13 +265,13 @@ export const TestsFilters: Story = {
     await step('Sort', async () => {
       await userEvent.click(screen.getByText('Commission'))
       expect(
-        screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[1]
-          .innerText === '1%'
+        screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[1].innerText ===
+          '1%'
       ).toBeTruthy()
       await userEvent.click(screen.getByText('Commission'))
       expect(
-        screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[1]
-          .innerText === '20%'
+        screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[1].innerText ===
+          '20%'
       ).toBeTruthy()
     })
   },
