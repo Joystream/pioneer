@@ -95,20 +95,21 @@ export const MemberRoles = ({ size, max, wrapable, roles, isOnDark, memberDetail
             )
           )}
           {memberDetails?.externalResources &&
-            memberDetails?.externalResources.map((item: any) => {
+            memberDetails?.externalResources.map((item: any, key: number) => {
               switch (item.source) {
                 case 'TELEGRAM':
                   return (
-                    <Tooltip tooltipText={`${item.source}: ${item.value}`}>
+                    <Tooltip key={key} tooltipText={`${item.source}: ${item.value}`}>
                       <SocialLink isOnDark={isOnDark}>
                         <TelegramIcon />
+                        {item.key}
                       </SocialLink>
                     </Tooltip>
                   )
 
                 case 'TWITTER':
                   return (
-                    <Tooltip tooltipText={`${item.source}: ${item.value}`}>
+                    <Tooltip key={key} tooltipText={`${item.source}: ${item.value}`}>
                       <SocialLink isOnDark={isOnDark}>
                         <TwitterIcon />
                       </SocialLink>
@@ -116,7 +117,7 @@ export const MemberRoles = ({ size, max, wrapable, roles, isOnDark, memberDetail
                   )
                 case 'LINKEDIN':
                   return (
-                    <Tooltip tooltipText={`${item.source}: ${item.value}`}>
+                    <Tooltip key={key} tooltipText={`${item.source}: ${item.value}`}>
                       <SocialLink isOnDark={isOnDark}>
                         <LinkedinIcon />
                       </SocialLink>
@@ -124,7 +125,7 @@ export const MemberRoles = ({ size, max, wrapable, roles, isOnDark, memberDetail
                   )
                 case 'YOUTUBE':
                   return (
-                    <Tooltip tooltipText={`${item.source}: ${item.value}`}>
+                    <Tooltip key={key} tooltipText={`${item.source}: ${item.value}`}>
                       <SocialLink isOnDark={isOnDark}>
                         <YoutubeIcon />
                       </SocialLink>
@@ -132,7 +133,7 @@ export const MemberRoles = ({ size, max, wrapable, roles, isOnDark, memberDetail
                   )
                 case 'FACEBOOK':
                   return (
-                    <Tooltip tooltipText={`${item.source}: ${item.value}`}>
+                    <Tooltip key={key} tooltipText={`${item.source}: ${item.value}`}>
                       <SocialLink isOnDark={isOnDark}>
                         <FacebookIcon />
                       </SocialLink>

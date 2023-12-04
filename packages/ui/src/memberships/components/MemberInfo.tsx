@@ -63,6 +63,7 @@ export const MemberInfo = React.memo(
     const showMemberModal = useShowMemberModal(member.id)
     const showRoles = !onlyTop && !hideGroup && !showIdOrText
     const showId = !onlyTop && !!showIdOrText
+
     const { member: memberDetails } = useMember(member.id)
 
     return (
@@ -123,7 +124,7 @@ export const MemberInfo = React.memo(
             </IdHeader>
           )}
         </MemberHeaderWrapper>
-        {showRoles && (
+        {showRoles && memberDetails && (
           <MemberRoles
             isOnDark={isOnDark}
             roles={member.roles}
