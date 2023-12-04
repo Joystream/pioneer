@@ -3,14 +3,11 @@ import BN from 'bn.js'
 import { Address } from '@/common/types'
 import { MemberWithDetails } from '@/memberships/types'
 
-export interface Validator {
-  member?: MemberWithDetails
-  address: Address
+export interface ValidatorWithDetails extends ValidatorMembership {
   isVerified?: boolean
   isActive: boolean
   totalRewards: BN
   APR: number
-  commission: number
   staking: {
     total: BN
     own: BN
@@ -26,4 +23,5 @@ export interface ValidatorMembership {
   controllerAccount?: Address
   isVerifiedValidator?: boolean
   membership?: MemberWithDetails
+  commission: number
 }

@@ -10,21 +10,24 @@ import { Colors } from '@/common/constants'
 import { Comparator } from '@/common/model/Comparator'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
-import { Validator } from '../types'
+import { ValidatorWithDetails } from '../types'
 
 import { ValidatorItem } from './ValidatorItem'
 
 interface ValidatorsListProps {
-  validators: Validator[]
+  validators: ValidatorWithDetails[]
 }
 
 export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
-  type SortKey = 'address' | 'APR' | 'commission'
-  const [sortBy, setSortBy] = useState<SortKey>('address')
+  type SortKey = 'stashAccount' | 'APR' | 'commission'
+  const [sortBy, setSortBy] = useState<SortKey>('stashAccount')
   const [isDescending, setDescending] = useState(false)
 
   const sortedValidators = useMemo(
-    () => [...validators].sort(Comparator<Validator>(isDescending, sortBy)[sortBy === 'address' ? 'string' : 'number']),
+    () =>
+      [...validators].sort(
+        Comparator<ValidatorWithDetails>(isDescending, sortBy)[sortBy === 'stashAccount' ? 'string' : 'number']
+      ),
     [sortBy, isDescending, validators]
   )
 
@@ -40,7 +43,11 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
   return (
     <ValidatorsListWrap>
       <ListHeaders>
-        <SortHeader onSort={() => onSort('address')} isActive={sortBy === 'address'} isDescending={isDescending}>
+        <SortHeader
+          onSort={() => onSort('stashAccount')}
+          isActive={sortBy === 'stashAccount'}
+          isDescending={isDescending}
+        >
           Validator
         </SortHeader>
         <ListHeader>
@@ -77,7 +84,7 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
       </ListHeaders>
       <List>
         {sortedValidators?.map((validator) => (
-          <ListItem key={validator.address}>
+          <ListItem key={validator.stashAccount}>
             <ValidatorItem validator={validator} />
           </ListItem>
         ))}

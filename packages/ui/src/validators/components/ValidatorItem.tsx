@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { TableListItemAsLinkHover } from '@/common/components/List'
@@ -8,19 +9,19 @@ import { Skeleton } from '@/common/components/Skeleton'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 
-import { Validator } from '../types/Validator'
+import { ValidatorWithDetails } from '../types/Validator'
 
 import { ValidatorInfo } from './ValidatorInfo'
 interface ValidatorItemProps {
-  validator: Validator
+  validator: ValidatorWithDetails
 }
 export const ValidatorItem = ({ validator }: ValidatorItemProps) => {
-  const { address, member, isVerified, isActive, commission, APR, staking } = validator
+  const { stashAccount, membership, isVerified, isActive, commission, APR, staking } = validator
 
   return (
     <ValidatorItemWrapper>
       <ValidatorItemWrap>
-        <ValidatorInfo member={member} address={address} />
+        <ValidatorInfo member={membership} address={encodeAddress(stashAccount)} />
         {isVerified ? (
           <BadgeStatus inverted size="l">
             verified
