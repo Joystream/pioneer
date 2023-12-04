@@ -130,8 +130,7 @@ const asApiMethod = (value: any) => {
   }
 
   if (isObject(value) && 'entries' in value && isArray(value.entries)) {
-    const entries = value.entries.map((entry) => [{ args: [asChainData(entry)] }])
-    method.entries = () => of(entries)
+    method.entries = () => of(asChainData(value.entries))
   }
 
   if (isObject(value) && 'multi' in value && isArray(value.multi)) {
