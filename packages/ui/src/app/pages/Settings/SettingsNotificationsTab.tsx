@@ -48,7 +48,7 @@ export const SettingsNotificationsTab: FC = () => {
     activeMemberExistBackendLoading,
     activeMemberExistBackendRefetch,
     backendClient,
-    activeMemberSettings,
+    authToken,
     setMemberSettings,
   } = useNotificationSettings()
   const { showModal } = useModal()
@@ -79,10 +79,12 @@ export const SettingsNotificationsTab: FC = () => {
         receiveEmailNotifications: data.me?.receiveEmails ?? true,
       })
     },
-    skip: !activeMemberSettings?.accessToken,
+    skip: !authToken,
   })
-  const isUnauthorized =
-    (!!activeMember && !activeMemberSettings?.accessToken) || meError?.message.includes('Unauthorized')
+
+  const isRegistered = activeMemberExistBackendData?.memberExist ?? false
+
+  const isUnauthorized = (!!activeMember && !authToken) || meError?.message.includes('Unauthorized')
 
   const [sendUpdateMemberMutation, { error: mutationError }] = useUpdateBackendMemberMutation({
     client: backendClient,
@@ -95,8 +97,6 @@ export const SettingsNotificationsTab: FC = () => {
   const [reauthorizationStatus, setReauthorizationStatus] = useState<null | 'signature' | 'loading' | 'error'>(null)
 
   const handleSubscribeClick = () => {
-    // TODO: this will show member select if there is no active membership.
-    // However, if the user selects a membership that's already registered, the subscription modal will still show.
     showModal<EmailSubscriptionModalCall>({
       modal: 'EmailSubscriptionModal',
       data: {
@@ -239,7 +239,7 @@ You can customize what kind of notifications you receive anytime in settings."
     )
   }
 
-  const mainContent = (
+  const mainContent = () => (
     <MainPanel>
       <RowGapBlock gap={16}>
         <FormProvider {...form}>
@@ -277,11 +277,11 @@ You can customize what kind of notifications you receive anytime in settings."
       return errorContent
     }
 
-    if (activeMemberExistBackendData?.memberExist === false) {
-      return unregisteredContent
+    if (isRegistered) {
+      return mainContent()
     }
 
-    return mainContent
+    return unregisteredContent
   }
 
   return (
@@ -293,6 +293,7 @@ You can customize what kind of notifications you receive anytime in settings."
           <SuccessModal text="Settings saved successfully" onClose={() => setShowSettingsUpdatedModal(false)} />
         ))}
       <SettingsLayout
+        fullWidth={!isRegistered}
         saveButton={{
           isVisible: true,
           disabled: !isDirty,

@@ -14583,6 +14583,7 @@ export type MemberMetadata = BaseGraphQlObject & {
   deletedById?: Maybe<Scalars['ID']>
   externalResources?: Maybe<Array<MembershipExternalResource>>
   id: Scalars['ID']
+  isVerifiedValidator?: Maybe<Scalars['Boolean']>
   member?: Maybe<Membership>
   membercreatedeventmetadata?: Maybe<Array<MemberCreatedEvent>>
   memberinvitedeventmetadata?: Maybe<Array<MemberInvitedEvent>>
@@ -14606,6 +14607,7 @@ export type MemberMetadataConnection = {
 export type MemberMetadataCreateInput = {
   about?: InputMaybe<Scalars['String']>
   avatar: Scalars['JSONObject']
+  isVerifiedValidator?: InputMaybe<Scalars['Boolean']>
   name?: InputMaybe<Scalars['String']>
 }
 
@@ -14622,6 +14624,8 @@ export enum MemberMetadataOrderByInput {
   CreatedAtDesc = 'createdAt_DESC',
   DeletedAtAsc = 'deletedAt_ASC',
   DeletedAtDesc = 'deletedAt_DESC',
+  IsVerifiedValidatorAsc = 'isVerifiedValidator_ASC',
+  IsVerifiedValidatorDesc = 'isVerifiedValidator_DESC',
   NameAsc = 'name_ASC',
   NameDesc = 'name_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
@@ -14631,6 +14635,7 @@ export enum MemberMetadataOrderByInput {
 export type MemberMetadataUpdateInput = {
   about?: InputMaybe<Scalars['String']>
   avatar?: InputMaybe<Scalars['JSONObject']>
+  isVerifiedValidator?: InputMaybe<Scalars['Boolean']>
   name?: InputMaybe<Scalars['String']>
 }
 
@@ -14664,6 +14669,8 @@ export type MemberMetadataWhereInput = {
   externalResources_some?: InputMaybe<MembershipExternalResourceWhereInput>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
+  isVerifiedValidator_eq?: InputMaybe<Scalars['Boolean']>
+  isVerifiedValidator_in?: InputMaybe<Array<Scalars['Boolean']>>
   member?: InputMaybe<MembershipWhereInput>
   membercreatedeventmetadata_every?: InputMaybe<MemberCreatedEventWhereInput>
   membercreatedeventmetadata_none?: InputMaybe<MemberCreatedEventWhereInput>
@@ -15412,13 +15419,13 @@ export enum MembershipExternalResourceType {
   Facebook = 'FACEBOOK',
   Hyperlink = 'HYPERLINK',
   Irc = 'IRC',
+  Linkedin = 'LINKEDIN',
   Matrix = 'MATRIX',
   Telegram = 'TELEGRAM',
   Twitter = 'TWITTER',
   Wechat = 'WECHAT',
   Whatsapp = 'WHATSAPP',
   Youtube = 'YOUTUBE',
-  Linkedin = 'LINKEDIN',
 }
 
 export type MembershipExternalResourceUpdateInput = {

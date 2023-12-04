@@ -134,5 +134,10 @@ const asApiMethod = (value: any) => {
     method.entries = () => of(entries)
   }
 
+  if (isObject(value) && 'multi' in value && isArray(value.multi)) {
+    const multi = value.multi.map((entry) => ({ unwrap: () => entry }))
+    method.multi = () => of(multi)
+  }
+
   return method
 }

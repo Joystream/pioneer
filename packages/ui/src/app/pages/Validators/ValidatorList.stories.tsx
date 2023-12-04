@@ -2,6 +2,8 @@ import { expect } from '@storybook/jest'
 import { Meta, StoryObj } from '@storybook/react'
 import { userEvent, waitFor, within } from '@storybook/testing-library'
 
+import { GetMembersWithDetailsDocument } from '@/memberships/queries'
+import { member } from '@/mocks/data/members'
 import { joy, selectFromDropdown } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
 
@@ -73,6 +75,21 @@ export default {
                 index: 700,
                 start: Date.now() - 5400000,
               },
+              bonded: {
+                multi: [
+                  'j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D',
+                  'j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW',
+                  'j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP',
+                  'j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz',
+                  'j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa',
+                  'j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN',
+                  'j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP',
+                  'j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ',
+                  'j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg',
+                  'j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt',
+                  'j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM',
+                ],
+              },
               counterForValidators: 12,
               counterForNominators: 20,
               erasRewardPoints: {
@@ -136,6 +153,14 @@ export default {
             },
           },
         },
+        gql: {
+          queries: [
+            {
+              query: GetMembersWithDetailsDocument,
+              data: { memberships: [member('alice'), member('bob'), member('charlie'), member('dave')] },
+            },
+          ],
+        },
       }
     },
   },
@@ -158,12 +183,12 @@ export const TestsFilters: Story = {
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(4))
       expect(screen.queryByText('unverifed')).toBeNull()
       expect(screen.getByText('alice'))
-      expect(screen.getByText('bob'))
+      expect(screen.queryByText('bob')).toBeNull()
       await selectFromDropdown(screen, verificationFilter, 'unverified')
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(7))
       expect(screen.queryByText('verifed')).toBeNull()
       expect(screen.queryByText('alice')).toBeNull()
-      expect(screen.queryByText('bob')).toBeNull()
+      expect(screen.getByText('bob'))
       await selectFromDropdown(screen, verificationFilter, 'All')
     })
     await step('State Filter', async () => {
@@ -181,7 +206,7 @@ export const TestsFilters: Story = {
         await userEvent.type(searchElement, '{enter}')
         expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(1)
       })
-      expect(screen.queryByText('alice'))
+      expect(screen.queryByText('charlie'))
       await userEvent.clear(searchElement)
       await userEvent.type(searchElement, 'j4R')
       await waitFor(async () => {
