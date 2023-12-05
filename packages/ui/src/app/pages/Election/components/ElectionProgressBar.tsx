@@ -84,7 +84,6 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
   const remainDays = periodInformation && blockDurationToDays(revealingEndBlock - currentBlock)
 
   if (
-    !isNaN(remainingPeriod) &&
     constants?.election.votingPeriod != undefined &&
     constants?.election.revealingPeriod != undefined &&
     constants?.idlePeriod != undefined
