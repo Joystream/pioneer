@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import { clamp } from 'lodash'
 import React, { useState, useEffect, useMemo } from 'react'
 import ReactDOM from 'react-dom'
@@ -16,7 +15,6 @@ import { TooltipText } from '@/common/components/Tooltip'
 import { DurationValue } from '@/common/components/typography/DurationValue'
 import { AN_HOUR, A_DAY, A_MINUTE, BorderRad, Colors, Transitions, ZIndex } from '@/common/constants'
 import { splitDuration, MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
-import { toNumber } from '@/common/utils'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { useCouncilPeriodInformation } from '@/council/hooks/useCouncilPeriodInformation'
 
