@@ -8,7 +8,6 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePaneBody, SidePaneLabel, SidePaneRow, SidePaneText } from '@/common/components/SidePane'
 import { NumericValueStat, StatisticsThreeColumns } from '@/common/components/statistics'
 import { TextSmall } from '@/common/components/typography'
-import LineChart from '@/validators/components/LineChart'
 
 import { Validator } from '../../types'
 
@@ -44,10 +43,6 @@ export const ValidatorDetail = ({ validator }: Props) => {
               </Stat>
             </ModalStatistics>
           </RowGapBlock>
-          <RewardPointsChartWrapper>
-            <LineChart />
-          </RewardPointsChartWrapper>
-
           <RowGapBlock gap={4}>
             <h6>About</h6>
             <MarkdownPreview
@@ -89,8 +84,4 @@ const ModalStatistics = styled(StatisticsThreeColumns)`
 
 const Stat = styled(NumericValueStat)`
   padding: 20px 12px 20px 16px;
-`
-const RewardPointsChartWrapper = styled.div`
-  width: 100%;
-  height: 200px;
 `
