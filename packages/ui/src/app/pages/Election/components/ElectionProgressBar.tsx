@@ -87,7 +87,7 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
       return clamp(((currentBlock - start) * 100) / (end - start), 0, 100)
     })
   const [inactiveProgress, announcingProgress, votingProgress, revealingProgress] = progresses ?? []
-  const remainDays = periodInformation && blockDurationToDays(periodInformation.remainingPeriod)
+  const remainDays = periodInformation && blockDurationToDays(revealingEndBlock - currentBlock)
 
   if (
     !isNaN(duration) &&
@@ -153,7 +153,7 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
           isCurrent={props.electionStage === 'inactive'}
           barType="inactive"
           updateDesc={updateDescription}
-          tooltipText={`Idle stage lasts ${inactiveDays} days and ends on ${inactiveEndDay} CET (block #${inactiveEndBlock.toLocaleString(
+          tooltipText={`Idle stage lasts ${inactiveDays} days and ends on ${inactiveEndDay} CET (block #${inactiveEndBlock?.toLocaleString(
             'en-gb'
           )} block). After that time, a new round of elections begins`}
         />
@@ -163,7 +163,7 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
           isCurrent={props.electionStage === 'announcing'}
           barType="announcing"
           updateDesc={updateDescription}
-          tooltipText={`Announcing stage lasts ${announcingDays} days and ends on ${announcingEndDay} CET (block #${announcingEndBlock.toLocaleString(
+          tooltipText={`Announcing stage lasts ${announcingDays} days and ends on ${announcingEndDay} CET (block #${announcingEndBlock?.toLocaleString(
             'en-gb'
           )} block). During this time members can announce that they will stand as candidates for the next council`}
         />
@@ -173,7 +173,7 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
           isCurrent={props.electionStage === 'voting'}
           barType="voting"
           updateDesc={updateDescription}
-          tooltipText={`Voting stage lasts ${votingDays} days and ends on ${votingEndDay} CET (block #${votingEndBlock.toLocaleString(
+          tooltipText={`Voting stage lasts ${votingDays} days and ends on ${votingEndDay} CET (block #${votingEndBlock?.toLocaleString(
             'en-gb'
           )} block). During this time voters can submit votes in favor of candidates`}
         />
@@ -183,7 +183,7 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
           isCurrent={props.electionStage === 'revealing'}
           barType="revealing"
           updateDesc={updateDescription}
-          tooltipText={`Revealing stage lasts ${revealingDays} days and ends on ${revealingEndDay} CET (block #${revealingEndBlock.toLocaleString(
+          tooltipText={`Revealing stage lasts ${revealingDays} days and ends on ${revealingEndDay} CET (block #${revealingEndBlock?.toLocaleString(
             'en-gb'
           )} block). During this time, voters can reveal their sealed votes. Any valid vote which is unsealed is counted, and in the end a winning set of candidates is selected`}
         />

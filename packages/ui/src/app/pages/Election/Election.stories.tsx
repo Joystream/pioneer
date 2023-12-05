@@ -20,7 +20,7 @@ export default {
   argTypes: {
     electionStage: {
       control: { type: 'radio' },
-      options: ['announcing', 'revealing', 'voting', 'inactive'],
+      options: ['inactive', 'announcing', 'voting', 'revealing'],
     },
   },
   args: {
@@ -30,6 +30,7 @@ export default {
   parameters: {
     currentBlock: 480_2561,
     idlePeriodDuration: 14400,
+    budgetRefillPeriod: 14400,
     announcingPeriodDuration: 129600,
     voteStageDuration: 43200,
     revealStageDuration: 43200,
@@ -43,6 +44,7 @@ export default {
               councilSize: 3,
               idlePeriodDuration: parameters.idlePeriodDuration,
               announcingPeriodDuration: parameters.announcingPeriodDuration,
+              budgetRefillPeriod: parameters.budgetRefillPeriod,
               minCandidateStake: joy(166_666.666666),
             },
             referendum: {
