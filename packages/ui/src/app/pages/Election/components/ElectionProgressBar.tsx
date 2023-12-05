@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import { sum } from 'lodash'
+import { clamp } from 'lodash'
 import React, { useState, useEffect, useMemo } from 'react'
 import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
@@ -18,6 +18,7 @@ import { AN_HOUR, A_DAY, A_MINUTE, BorderRad, Colors, Transitions, ZIndex } from
 import { splitDuration, MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { toNumber } from '@/common/utils'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
+import { useCouncilPeriodInformation } from '@/council/hooks/useCouncilPeriodInformation'
 
 interface ElectionProgressBarProps extends StatisticItemProps {
   electionStage: string
@@ -25,28 +26,36 @@ interface ElectionProgressBarProps extends StatisticItemProps {
   currentBlock?: number | BN
 }
 
+const blockDurationToMs = (blockDuration: number) => blockDuration * MILLISECONDS_PER_BLOCK
+const blockToDate = (duration: number) => {
+  const now = Date.now()
+  const msDuration = blockDurationToMs(duration)
+  return new Date(now + msDuration).toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
+}
+const blockDurationToDays = (blockDuration: number) => Math.floor(blockDurationToMs(blockDuration) / A_DAY)
+
+const Duration = (duration: number) => {
+  const format = splitDuration([
+    [A_DAY, 'd'],
+    [AN_HOUR, 'h'],
+    [A_MINUTE, 'm'],
+  ])
+
+  const formatDurationDate = (duration: number): [string | number, string][] => {
+    if (duration * MILLISECONDS_PER_BLOCK < A_MINUTE) {
+      return [['< 1', 'm']]
+    }
+    return format(duration * MILLISECONDS_PER_BLOCK)
+  }
+
+  return <DurationValue value={formatDurationDate(duration)} />
+}
+
 export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
   const currentBlock = toNumber(props.currentBlock)
   const duration = toNumber(props.value)
 
-  const convertDurationToTimeString = (duration: number) => {
-    const format = splitDuration([
-      [A_DAY, 'd'],
-      [AN_HOUR, 'h'],
-      [A_MINUTE, 'm'],
-    ])
-
-    const formatDurationDate = (duration: number): [string | number, string][] => {
-      if (duration * MILLISECONDS_PER_BLOCK < A_MINUTE) {
-        return [['< 1', 'm']]
-      }
-      return format(duration * MILLISECONDS_PER_BLOCK)
-    }
-
-    return <DurationValue value={formatDurationDate(duration)} />
-  }
-
-  const endDayOfStage = useMemo(() => convertDurationToTimeString(duration), [duration])
+  const endDayOfStage = useMemo(() => Duration(duration), [duration])
 
   const [stageDescription, setStageDescription] = useState(props.electionStage)
   const [verbIndicator, setVerbIndicator] = useState('ends in')
@@ -58,38 +67,27 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
     else updateDescription(selectedToolbarStage, true)
   }, [endDayOfStage])
 
-  let announcingProgress = 0
-  let votingProgress = 0
-  let revealingProgress = 0
-  let inactiveProgress = 0
-
-  let remainDays = 0
   let announcingDays = 0
   let votingDays = 0
   let revealingDays = 0
   let inactiveDays = 0
 
-  let announcingEndDay = ''
-  let votingEndDay = ''
-  let revealingEndDay = ''
-  let inactiveEndDay = ''
-
-  let announcingEndBlock = 0
-  let votingEndBlock = 0
-  let revealingEndBlock = 0
-  let inactiveEndBlock = 0
-
   let progressBarAttr = '1fr 14fr 3fr 3fr'
 
   const constants = useCouncilConstants()
+  const periodInformation = useCouncilPeriodInformation()
 
-  const blockDurationToMs = (blockDuration: number) => blockDuration * MILLISECONDS_PER_BLOCK
-  const blockToDate = (duration: number) => {
-    const now = Date.now()
-    const msDuration = blockDurationToMs(duration)
-    return new Date(now + msDuration).toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
-  }
-  const blockDurationToDays = (blockDuration: number) => Math.floor(blockDurationToMs(blockDuration) / A_DAY)
+  const [inactiveEndBlock, announcingEndBlock, votingEndBlock, revealingEndBlock] = periodInformation?.periodEnds ?? []
+  const endDates = periodInformation?.periodEnds.map((block) => blockToDate(block - currentBlock))
+  const [inactiveEndDay, announcingEndDay, votingEndDay, revealingEndDay] = endDates ?? []
+  const progresses =
+    periodInformation &&
+    periodInformation.periodEnds.map((end, index) => {
+      const start = periodInformation.periodStarts[index]
+      return clamp(((currentBlock - start) * 100) / (end - start), 0, 100)
+    })
+  const [inactiveProgress, announcingProgress, votingProgress, revealingProgress] = progresses ?? []
+  const remainDays = periodInformation && blockDurationToDays(periodInformation.remainingPeriod)
 
   if (
     !isNaN(duration) &&
@@ -107,74 +105,6 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
     progressBarAttr = `${inactiveDays > 0 ? inactiveDays : 1}fr ${announcingDays > 0 ? announcingDays : 1}fr ${
       votingDays > 0 ? votingDays : 1
     }fr ${revealingDays > 0 ? revealingDays : 1}fr`
-
-    // calculate progress status variables
-    const stages = ['inactive', 'announcing', 'voting', 'revealing']
-    const currentPosition = stages.indexOf(props.electionStage)
-    const gaps = [
-      constants?.announcingPeriod,
-      constants?.election.votingPeriod,
-      constants?.election.revealingPeriod,
-      A_DAY / MILLISECONDS_PER_BLOCK - 1,
-    ]
-
-    inactiveProgress = [Math.floor(100 - (100 * duration) / constants?.idlePeriod), 100, 100, 100][currentPosition]
-    announcingProgress = [0, Math.floor(100 - (100 * duration) / constants?.announcingPeriod), 100, 100][
-      currentPosition
-    ]
-    votingProgress = [0, 0, Math.floor(100 - (100 * duration) / constants?.election.votingPeriod), 100][currentPosition]
-    revealingProgress = [0, 0, 0, Math.floor(100 - (100 * duration) / constants?.election.revealingPeriod)][
-      currentPosition
-    ]
-    remainDays = blockDurationToDays(duration + sum(gaps.slice(currentPosition)))
-
-    inactiveEndDay = blockToDate(
-      [duration, duration - sum(gaps.slice(0, 1)), duration - sum(gaps.slice(0, 2)), duration - sum(gaps.slice(0, 3))][
-        currentPosition
-      ]
-    )
-
-    announcingEndDay = blockToDate(
-      [duration + sum(gaps.slice(0, 1)), duration, duration - sum(gaps.slice(1, 2)), duration - sum(gaps.slice(1, 3))][
-        currentPosition
-      ]
-    )
-
-    votingEndDay = blockToDate(
-      [duration + sum(gaps.slice(0, 2)), duration + sum(gaps.slice(1, 2)), duration, duration - sum(gaps.slice(2, 3))][
-        currentPosition
-      ]
-    )
-
-    revealingEndDay = blockToDate(
-      [duration + sum(gaps.slice(0, 3)), duration + sum(gaps.slice(1, 3)), duration + sum(gaps.slice(2, 3)), duration][
-        currentPosition
-      ]
-    )
-
-    inactiveEndBlock =
-      currentBlock +
-      [duration, duration - sum(gaps.slice(0, 1)), duration - sum(gaps.slice(0, 2)), duration - sum(gaps.slice(0, 3))][
-        currentPosition
-      ]
-
-    announcingEndBlock =
-      currentBlock +
-      [duration + sum(gaps.slice(0, 1)), duration, duration - sum(gaps.slice(1, 2)), duration - sum(gaps.slice(1, 3))][
-        currentPosition
-      ]
-
-    votingEndBlock =
-      currentBlock +
-      [duration + sum(gaps.slice(0, 2)), duration + sum(gaps.slice(1, 2)), duration, duration - sum(gaps.slice(2, 3))][
-        currentPosition
-      ]
-
-    revealingEndBlock =
-      currentBlock +
-      [duration + sum(gaps.slice(0, 3)), duration + sum(gaps.slice(1, 3)), duration + sum(gaps.slice(2, 3)), duration][
-        currentPosition
-      ]
   }
 
   const updateDescription = (selectedStage: string, choose: boolean) => {
@@ -191,13 +121,8 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
     const selectedPos = stages.indexOf(selectedStage)
 
     const endOfStageArray = [
-      [
-        '',
-        endDayOfStage,
-        convertDurationToTimeString(announcingEndBlock - currentBlock),
-        convertDurationToTimeString(votingEndBlock - currentBlock),
-      ],
-      [inactiveEndDay, '', endDayOfStage, convertDurationToTimeString(votingEndBlock - currentBlock)],
+      ['', endDayOfStage, Duration(announcingEndBlock - currentBlock), Duration(votingEndBlock - currentBlock)],
+      [inactiveEndDay, '', endDayOfStage, Duration(votingEndBlock - currentBlock)],
       [inactiveEndDay, announcingEndDay, '', endDayOfStage],
       [inactiveEndDay, announcingEndDay, votingEndDay, ''],
     ]

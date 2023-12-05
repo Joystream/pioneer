@@ -43,7 +43,6 @@ export default {
               councilSize: 3,
               idlePeriodDuration: parameters.idlePeriodDuration,
               announcingPeriodDuration: parameters.announcingPeriodDuration,
-              budgetRefillPeriod: 14400,
               minCandidateStake: joy(166_666.666666),
             },
             referendum: {
@@ -151,9 +150,6 @@ export default {
   },
 } satisfies Meta<Args>
 
-export const Inactive: Story = {
-  args: { electionStage: 'inactive' },
-}
 export const Announcing: Story = {
   args: { electionStage: 'announcing' },
 }
