@@ -59,9 +59,9 @@ export const useStakingAccountsLocks = ({
   )
 
   const isVoting = lockType === 'Voting'
-  const votingOptOutAccounts = useVotingOptOutAccounts({ skip: !isVoting })
+  const votingOptOutAccounts = useVotingOptOutAccounts()
   useEffect(() => {
-    if (!isVoting) return
+    if (!isVoting || !votingOptOutAccounts) return
 
     setAccountWithLocks(
       accountsWithLocks.map(({ address, optionLocks, ...account }): StakingAccount => {

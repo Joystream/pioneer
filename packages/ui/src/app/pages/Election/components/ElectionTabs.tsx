@@ -13,6 +13,7 @@ export const ElectionTabs = () => {
   const pages: TabsDefinition[] = [
     ['Past Votes', ElectionRoutes.pastVotes],
     ['Past Elections', ElectionRoutes.pastElections],
+    ['Blacklisted Accounts', ElectionRoutes.pastElections],
   ]
 
   if (electionStage !== 'inactive') {
