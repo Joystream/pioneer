@@ -1,3 +1,4 @@
+import { BN } from '@polkadot/util'
 export * from './utils/bn'
 
 import { Reducer } from './types/helpers'
@@ -25,6 +26,8 @@ export const toNumber = (value: any): number => value?.toNumber?.() ?? (isNumber
 // Math:
 
 export const clamp = (min: number, value: number, max: number) => Math.max(min, Math.min(max, value))
+
+export const perbillToPercent = (perbill: BN) => perbill.toNumber() / 10 ** 7
 
 // Objects:
 
