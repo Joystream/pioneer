@@ -67,11 +67,20 @@ export const SidePane = styled.div<{ topSize?: 'xs' | 's' | 'm' }>`
   position: relative;
   background-color: ${Colors.White};
   width: 100%;
-  max-width: 552px;
   height: 100%;
   overflow: hidden;
   ${Animations.showSidePane};
 
+  @media screen and (min-width: 320px) and (max-width: 768px) {
+    max-width: 100%;
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 1440px) {
+    max-width: 90%;
+  }
+  @media screen and (min-width: 1440px) {
+    max-width: 1200px;
+  }
   ${({ topSize }) => {
     switch (topSize) {
       case 'xs':
