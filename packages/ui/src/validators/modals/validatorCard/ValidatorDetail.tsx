@@ -8,11 +8,12 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePaneBody, SidePaneLabel, SidePaneRow, SidePaneText } from '@/common/components/SidePane'
 import { NumericValueStat, StatisticsThreeColumns } from '@/common/components/statistics'
 import { TextSmall } from '@/common/components/typography'
+import { plural } from '@/common/helpers'
 
-import { Validator } from '../../types'
+import { ValidatorWithDetails } from '../../types'
 
 interface Props {
-  validator: Validator
+  validator: ValidatorWithDetails
 }
 
 export const ValidatorDetail = ({ validator }: Props) => {
@@ -29,13 +30,13 @@ export const ValidatorDetail = ({ validator }: Props) => {
               <Stat size="s" value={validator.isVerified ? 'Verified' : 'Unverified'}>
                 <TextSmall lighter>Status</TextSmall>
               </Stat>
-              <Stat size="s" value={validator.slashed.toString()}>
+              <Stat size="s" value={`${validator.slashed} time${plural(validator.slashed)}`}>
                 <TextSmall lighter>Slashed</TextSmall>
               </Stat>
               <Stat size="s" value={0}>
                 <TextSmall lighter>Uptime</TextSmall>
               </Stat>
-              <Stat size="s" value={validator.APR.toString()}>
+              <Stat size="s" value={validator.APR.toString() + '%'}>
                 <TextSmall lighter>Average APR</TextSmall>
               </Stat>
               <Stat size="s" value={validator.staking.others.length}>
@@ -45,19 +46,19 @@ export const ValidatorDetail = ({ validator }: Props) => {
           </RowGapBlock>
           <RowGapBlock gap={4}>
             <h6>About</h6>
-            <MarkdownPreview
-              markdown={
-                'I am part of the team building the Joystream network. Feel free to follow me on twitter, or contact me on telegram! @jen29291 on both.'
-              }
-            />
+            <MarkdownPreview markdown={validator.membership?.about ?? ''} />
           </RowGapBlock>
           <SidePaneRow>
             <SidePaneLabel text="Email" />
-            <SidePaneText>Alice1@joystream.com</SidePaneText>
+            <SidePaneText>
+              {validator.membership?.externalResources?.find(({ source }) => source === 'EMAIL')?.value ?? '-'}
+            </SidePaneText>
           </SidePaneRow>
           <SidePaneRow>
             <SidePaneLabel text="Website" />
-            <SidePaneText>Alice1joystream.com</SidePaneText>
+            <SidePaneText>
+              {validator.membership?.externalResources?.find(({ source }) => source === 'HYPERLINK')?.value ?? '-'}
+            </SidePaneText>
           </SidePaneRow>
           <SidePaneRow>
             <SidePaneLabel text="State" />

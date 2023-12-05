@@ -15,22 +15,26 @@ import { MemberWithDetails } from '@/memberships/types'
 interface ValidatorInfoProps {
   address: Address
   member?: MemberWithDetails
-  isOnDark?: boolean
+  size?: 's' | 'l'
 }
 
-export const ValidatorInfo = React.memo(({ address, member }: ValidatorInfoProps) => {
+export const ValidatorInfo = React.memo(({ address, member, size = 's' }: ValidatorInfoProps) => {
   const twitter = member?.externalResources?.find(({ source }) => source === 'TWITTER')
   const telegram = member?.externalResources?.find(({ source }) => source === 'TELEGRAM')
   const discord = member?.externalResources?.find(({ source }) => source === 'DISCORD')
 
   return (
-    <ValidatorInfoWrap>
+    <ValidatorInfoWrap size={size}>
       <PhotoWrapper>
-        <AccountPhoto>
-          {member ? <Avatar avatarUri={member.avatar} /> : <Identicon size={40} theme={'beachball'} value={address} />}
+        <AccountPhoto size={size}>
+          {member ? (
+            <Avatar avatarUri={member.avatar} />
+          ) : (
+            <Identicon size={size === 'l' ? 80 : 40} theme={'beachball'} value={address} />
+          )}
         </AccountPhoto>
       </PhotoWrapper>
-      <ValidatorHandle className="accountName">
+      <ValidatorHandle className="accountName" size={size}>
         {member?.handle ?? 'Unknown'}
         {(twitter || telegram || discord) && (
           <MemberIcons>
@@ -63,13 +67,11 @@ export const ValidatorInfo = React.memo(({ address, member }: ValidatorInfoProps
   )
 })
 
-const ValidatorInfoWrap = styled.div`
+const ValidatorInfoWrap = styled.div<{ size?: 's' | 'l' }>`
   display: grid;
-  grid-template-columns: 40px 1fr;
-  grid-template-rows: min-content 24px 18px;
+  grid-template-columns: ${({ size }) => (size === 'l' ? '80px' : '40px')} 1fr;
   grid-column-gap: 12px;
   grid-template-areas:
-    'accountphoto accounttype'
     'accountphoto accountname'
     'accountphoto accountaddress';
   align-items: center;
@@ -77,14 +79,14 @@ const ValidatorInfoWrap = styled.div`
   justify-self: start;
 `
 
-const AccountPhoto = styled.div`
+const AccountPhoto = styled.div<{ size?: 's' | 'l' }>`
   display: flex;
   justify-content: flex-end;
   align-items: center;
   align-content: center;
   align-self: center;
-  height: 40px;
-  width: 40px;
+  height: ${({ size }) => (size === 'l' ? '80px' : '40px')};
+  width: ${({ size }) => (size === 'l' ? '80px' : '40px')};
   border-radius: ${BorderRad.full};
   overflow: hidden;
 `
@@ -94,12 +96,12 @@ const PhotoWrapper = styled.div`
   position: relative;
 `
 
-const ValidatorHandle = styled.h5`
+const ValidatorHandle = styled.h5<{ size?: 's' | 'l' }>`
   grid-area: accountname;
   max-width: 100%;
   margin: 0;
   padding: 0;
-  font-size: 16px;
+  font-size: ${({ size }) => (size === 'l' ? '20px' : '16px')};
   line-height: 24px;
   font-weight: 700;
   color: ${Colors.Black[900]};
@@ -113,10 +115,12 @@ const ValidatorHandle = styled.h5`
   grid-column-gap: 4px;
   align-items: center;
   width: fit-content;
+  margin-top: auto;
 `
 
 const AccountCopyAddress = styled(CopyComponent)`
   grid-area: accountaddress;
+  margin-bottom: auto;
 `
 const SocialTooltip = styled(DefaultTooltip)`
   > svg {

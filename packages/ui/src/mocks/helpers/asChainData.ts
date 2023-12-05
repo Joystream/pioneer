@@ -20,4 +20,8 @@ export const asChainData = (data: any): any => {
   }
 }
 
-const withUnwrap = (data: Record<any, any>) => Object.defineProperty(data, 'unwrap', { value: () => data })
+const withUnwrap = (data: Record<any, any>) =>
+  Object.defineProperties(data, {
+    unwrap: { value: () => data },
+    isSome: { value: Object.keys(data).length > 0 },
+  })

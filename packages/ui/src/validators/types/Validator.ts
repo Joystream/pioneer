@@ -4,7 +4,6 @@ import { Address } from '@/common/types'
 import { MemberWithDetails } from '@/memberships/types'
 
 export interface ValidatorWithDetails extends ValidatorMembership {
-  isVerified?: boolean
   isActive: boolean
   totalRewards: BN
   APR: number
@@ -22,7 +21,6 @@ export interface ValidatorWithDetails extends ValidatorMembership {
 export interface ValidatorMembership {
   stashAccount: Address
   controllerAccount?: Address
-  isVerifiedValidator?: boolean
   membership?: MemberWithDetails
   commission: number
 }

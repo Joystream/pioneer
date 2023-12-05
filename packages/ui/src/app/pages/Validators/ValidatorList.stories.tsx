@@ -151,7 +151,7 @@ export default {
               },
               erasValidatorReward: joy(0.123456),
               erasStakers: {
-                total: joy(0.1),
+                total: joy(400),
                 own: joy(0.0001),
                 others: [
                   { who: 'j4WGdFxqTkyAgzJiTbEBeRseP12dPEvJgf2Wy9qkPa68XSP55', value: joy(0.2) },
@@ -178,7 +178,10 @@ export default {
               },
               erasTotalStake: joy(130_000),
               slashingSpans: {
-                size: Math.floor(Math.random() * 2),
+                spanIndex: 18,
+                lastStart: 1331,
+                lastNonzeroSlash: 0,
+                prior: [70, 1, 164],
               },
               validators: {
                 entries: [

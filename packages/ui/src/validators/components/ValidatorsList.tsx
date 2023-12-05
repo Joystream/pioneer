@@ -97,12 +97,12 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
           </ListItem>
         ))}
       </List>
-      {cardNumber && validators[cardNumber - 1] && (
+      {cardNumber && sortedValidators[cardNumber - 1] && (
         <ValidatorCard
           cardNumber={cardNumber}
-          validator={validators[cardNumber - 1]}
+          validator={sortedValidators[cardNumber - 1]}
           selectCard={selectCard}
-          totalCards={validators.length}
+          totalCards={sortedValidators.length}
         />
       )}
     </ValidatorsListWrap>

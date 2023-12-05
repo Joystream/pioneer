@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { UnknownAccountInfo } from '@/accounts/components/UnknownAccountInfo'
+import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { CloseButton, ButtonGhost } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
 import {
@@ -13,8 +13,9 @@ import {
 } from '@/common/components/SidePane'
 import { Tabs } from '@/common/components/Tabs'
 import { useEscape } from '@/common/hooks/useEscape'
+import { ValidatorInfo } from '@/validators/components/ValidatorInfo'
 
-import { Validator } from '../../types'
+import { ValidatorWithDetails } from '../../types'
 
 import { Nominators } from './Nominators'
 import { ValidatorDetail } from './ValidatorDetail'
@@ -23,7 +24,7 @@ export type ValidatorCardTabs = 'Details' | 'Nominators'
 
 interface Props {
   cardNumber: number
-  validator: Validator
+  validator: ValidatorWithDetails
   selectCard: (cardNumber: number | null) => void
   totalCards: number
 }
@@ -78,7 +79,7 @@ export const ValidatorCard = React.memo(({ cardNumber, validator, selectCard, to
             </SidePaneTopButtonsGroup>
             <CloseButton onClick={hideModal} />
           </SidePanelTop>
-          <UnknownAccountInfo address={validator.address} placeholderName="Validator account" />
+          <ValidatorInfo member={validator.membership} address={encodeAddress(validator.stashAccount)} size='l' />
           <Tabs tabs={tabs} tabsSize="xs" />
         </SidePaneHeader>
         {activeTab === 'Details' && <ValidatorDetail validator={validator} />}
