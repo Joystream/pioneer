@@ -118,7 +118,9 @@ const asApiConst = (value: any) => {
 }
 const asApiMethod = (value: any) => {
   if (isFunction(value)) {
-    return value
+    type ArgumentsType<T> = T extends (...args: infer A) => any ? A : never
+    type FunctionArgs = ArgumentsType<typeof value>
+    return (args: FunctionArgs) => of(asChainData(value(args)))
   } else if (value instanceof Observable) {
     return () => value
   }

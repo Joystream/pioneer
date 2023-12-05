@@ -2,6 +2,7 @@ import { expect } from '@storybook/jest'
 import { Meta, StoryObj } from '@storybook/react'
 import { userEvent, waitFor, within } from '@storybook/testing-library'
 
+import { Address } from '@/common/types'
 import { GetMembersWithDetailsDocument } from '@/memberships/queries'
 import { member } from '@/mocks/data/members'
 import { joy, selectFromDropdown } from '@/mocks/helpers'
@@ -36,20 +37,55 @@ export default {
                 { era: 699, eraReward: joy(0.123456) },
                 { era: 700, eraReward: joy(0.123456) },
               ],
-              stakerRewards: [
-                {
-                  eraReward: joy(0.7),
-                },
-                {
-                  eraReward: joy(0.79),
-                },
-                {
-                  eraReward: joy(0.3),
-                },
-                {
-                  eraReward: joy(0.8),
-                },
-              ],
+              stakerRewards: (address: Address) => {
+                const validatorRewards = [
+                  {
+                    address: 'j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D',
+                    rewards: [{ eraReward: joy(0.5) }],
+                  },
+                  {
+                    address: 'j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW',
+                    rewards: [{ eraReward: joy(0.5) }],
+                  },
+                  {
+                    address: 'j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP',
+                    rewards: [{ eraReward: joy(0.9) }],
+                  },
+                  {
+                    address: 'j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz',
+                    rewards: [{ eraReward: joy(0.1) }],
+                  },
+                  {
+                    address: 'j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa',
+                    rewards: [{ eraReward: joy(0.1) }],
+                  },
+                  {
+                    address: 'j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN',
+                    rewards: [{ eraReward: joy(0.8) }],
+                  },
+                  {
+                    address: 'j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP',
+                    rewards: [{ eraReward: joy(0.4) }],
+                  },
+                  {
+                    address: 'j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ',
+                    rewards: [{ eraReward: joy(0.6) }],
+                  },
+                  {
+                    address: 'j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg',
+                    rewards: [{ eraReward: joy(0.7) }],
+                  },
+                  {
+                    address: 'j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt',
+                    rewards: [{ eraReward: joy(0.7) }],
+                  },
+                  {
+                    address: 'j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM',
+                    rewards: [{ eraReward: joy(0.7) }],
+                  },
+                ]
+                return validatorRewards.find((validatorReward) => validatorReward.address === address)?.rewards ?? []
+              },
             },
           },
           query: {
@@ -263,6 +299,16 @@ export const TestsFilters: Story = {
     })
 
     await step('Sort', async () => {
+      await userEvent.click(screen.getByText('Expected Nom APR'))
+      expect(
+        screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[0].innerText ===
+          '2%'
+      ).toBeTruthy()
+      await userEvent.click(screen.getByText('Expected Nom APR'))
+      expect(
+        screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[0].innerText ===
+          '18%'
+      ).toBeTruthy()
       await userEvent.click(screen.getByText('Commission'))
       expect(
         screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[1].innerText ===
