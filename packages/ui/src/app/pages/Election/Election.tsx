@@ -21,7 +21,6 @@ import { RevealingStage } from '@/council/components/election/revealing/Revealin
 import { VotingStage } from '@/council/components/election/voting/VotingStage'
 import { ElectionRoutes } from '@/council/constants'
 import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidatePreviewViaUrlParameter'
-import { useCouncilPeriodInformation } from '@/council/hooks/useCouncilPeriodInformation'
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { Election as ElectionType } from '@/council/types/Election'
@@ -41,9 +40,6 @@ export const Election = () => {
   const { isLoading: isLoadingElection, election } = useCurrentElection()
 
   const { isLoading: isLoadingElectionStage, stage: electionStage } = useElectionStage()
-  const periodInformation = useCouncilPeriodInformation()
-  const currentBlock = periodInformation?.currentBlock
-  const remainingPeriod = periodInformation?.remainingPeriod
   const history = useHistory()
   useCandidatePreviewViaUrlParameter()
 
@@ -100,9 +96,7 @@ export const Election = () => {
           </TextHuge>
         </StatisticItem>
         <ElectionProgressBar
-          value={remainingPeriod}
           electionStage={electionStage}
-          currentBlock={currentBlock}
           title="Election Progress"
           tooltipText="Elections occur periodically. Each has a sequence of stages referred to as the election cycle. Stages are: announcing period, voting period and revealing period."
         />

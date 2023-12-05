@@ -22,8 +22,6 @@ import { useCouncilPeriodInformation } from '@/council/hooks/useCouncilPeriodInf
 
 interface ElectionProgressBarProps extends StatisticItemProps {
   electionStage: string
-  value?: number | BN
-  currentBlock?: number | BN
 }
 
 const blockDurationToMs = (blockDuration: number) => blockDuration * MILLISECONDS_PER_BLOCK
@@ -34,7 +32,7 @@ const blockToDate = (duration: number) => {
 }
 const blockDurationToDays = (blockDuration: number) => Math.floor(blockDurationToMs(blockDuration) / A_DAY)
 
-const Duration = (duration: number) => {
+const Duration = ({ duration }: { duration: number }) => {
   const format = splitDuration([
     [A_DAY, 'd'],
     [AN_HOUR, 'h'],
@@ -52,10 +50,11 @@ const Duration = (duration: number) => {
 }
 
 export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
-  const currentBlock = toNumber(props.currentBlock)
-  const duration = toNumber(props.value)
+  const periodInformation = useCouncilPeriodInformation()
+  const currentBlock = periodInformation?.currentBlock ?? 0
+  const remainingPeriod = periodInformation?.remainingPeriod ?? 0
 
-  const endDayOfStage = useMemo(() => Duration(duration), [duration])
+  const endDayOfStage = useMemo(() => <Duration duration={remainingPeriod} />, [remainingPeriod])
 
   const [stageDescription, setStageDescription] = useState(props.electionStage)
   const [verbIndicator, setVerbIndicator] = useState('ends in')
@@ -75,22 +74,19 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
   let progressBarAttr = '1fr 14fr 3fr 3fr'
 
   const constants = useCouncilConstants()
-  const periodInformation = useCouncilPeriodInformation()
 
   const [inactiveEndBlock, announcingEndBlock, votingEndBlock, revealingEndBlock] = periodInformation?.periodEnds ?? []
   const endDates = periodInformation?.periodEnds.map((block) => blockToDate(block - currentBlock))
   const [inactiveEndDay, announcingEndDay, votingEndDay, revealingEndDay] = endDates ?? []
-  const progresses =
-    periodInformation &&
-    periodInformation.periodEnds.map((end, index) => {
-      const start = periodInformation.periodStarts[index]
-      return clamp(((currentBlock - start) * 100) / (end - start), 0, 100)
-    })
+  const progresses = periodInformation?.periodEnds.map((end, index) => {
+    const start = periodInformation.periodStarts[index]
+    return clamp(((currentBlock - start) * 100) / (end - start), 0, 100)
+  })
   const [inactiveProgress, announcingProgress, votingProgress, revealingProgress] = progresses ?? []
   const remainDays = periodInformation && blockDurationToDays(revealingEndBlock - currentBlock)
 
   if (
-    !isNaN(duration) &&
+    !isNaN(remainingPeriod) &&
     constants?.election.votingPeriod != undefined &&
     constants?.election.revealingPeriod != undefined &&
     constants?.idlePeriod != undefined
@@ -121,8 +117,13 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
     const selectedPos = stages.indexOf(selectedStage)
 
     const endOfStageArray = [
-      ['', endDayOfStage, Duration(announcingEndBlock - currentBlock), Duration(votingEndBlock - currentBlock)],
-      [inactiveEndDay, '', endDayOfStage, Duration(votingEndBlock - currentBlock)],
+      [
+        '',
+        endDayOfStage,
+        <Duration duration={announcingEndBlock - currentBlock} />,
+        <Duration duration={votingEndBlock - currentBlock} />,
+      ],
+      [inactiveEndDay, '', endDayOfStage, <Duration duration={votingEndBlock - currentBlock} />],
       [inactiveEndDay, announcingEndDay, '', endDayOfStage],
       [inactiveEndDay, announcingEndDay, votingEndDay, ''],
     ]
@@ -135,7 +136,7 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
 
   return (
     <MultiStatisticItem {...props}>
-      <StatisticItemSpacedContent key={duration}>
+      <StatisticItemSpacedContent key={remainingPeriod}>
         <StatisticBigLabel>
           <StatisticBigLabel strong={true} style={{ textTransform: 'capitalize' }}>
             {stageDescription}
