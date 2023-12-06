@@ -1,23 +1,40 @@
 # Administrating a Pioneer instance
 
 > **Warning**
-> Any environment variable prefixed with `REACT_APP_` set in the building environment will be **accessible by anyone** on Pioneer frontend.
+> Any environment variable prefixed with `REACT_APP_` set in the building environment will be **accessible by anyone** on Pioneer front-end.
 
-## Deploying Pioneer
+## Deploying Pioneer front-end
+
+### Quick start (Vercel)
+
+To deploy Pioneer on Vercel click on the button bellow:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FJoystream%2Fpioneer&env=REACT_APP_MAINNET_NODE_SOCKET,REACT_APP_MAINNET_QUERY_NODE,REACT_APP_MAINNET_QUERY_NODE_SOCKET&envDescription=More%20information%20at%3A&envLink=https%3A%2F%2Fgithub.com%2FJoystream%2Fpioneer%2Fblob%2Fdev%2Fdocs%2Fadmin.md&project-name=pioneer&repository-name=pioneer)
 
 1.
    ### Configure the network Pioneer should connect to by default
 
-   To do so define `REACT_APP_TESTNET_NODE_SOCKET`, `REACT_APP_TESTNET_QUERY_NODE`, `REACT_APP_TESTNET_QUERY_NODE_SOCKET`, and `REACT_APP_TESTNET_MEMBERSHIP_FAUCET_URL`.
+   To do so define `REACT_APP_MAINNET_NODE_SOCKET`, `REACT_APP_MAINNET_QUERY_NODE`, `REACT_APP_MAINNET_QUERY_NODE_SOCKET`, and `REACT_APP_MAINNET_MEMBERSHIP_FAUCET_URL`.
 
-   For example, for the Joystream testnet:
+   For example, for the Joystream mainnet:
 
    ```shell
-   REACT_APP_TESTNET_NODE_SOCKET=wss://rpc.joystream.org:9944
-   REACT_APP_TESTNET_QUERY_NODE=https://query.joystream.org/graphql
-   REACT_APP_TESTNET_QUERY_NODE_SOCKET=wss://query.joystream.org/graphql
-   REACT_APP_TESTNET_MEMBERSHIP_FAUCET_URL=https://18.234.141.38.nip.io/member-faucet/register
+   REACT_APP_MAINNET_NODE_SOCKET=wss://rpc.joystream.org:9944
+   REACT_APP_MAINNET_QUERY_NODE=https://query.joystream.org/graphql
+   REACT_APP_MAINNET_QUERY_NODE_SOCKET=wss://query.joystream.org/graphql
    ```
+
+  Additionally a membership faucet, [a notification back-end](deploying-the-pioneer-notification-back-end), or an Avatar upload service can be configured with e.g:
+
+   ```shell
+   REACT_APP_MAINNET_MEMBERSHIP_FAUCET_URL=https://faucet.joystream.org/member-faucet/register`
+   REACT_APP_MAINNET_BACKEND=https://api-7zai.onrender.com`
+   REACT_APP_AVATAR_UPLOAD_URL=https://atlas-services.joystream.org/avatars
+   ```
+
+   > **Warning**
+   >
+   > `faucet.joystream.org` requires a specific CAPTCHA key to be set in: `REACT_APP_CAPTCHA_SITE_KEY`.
 
 2.
    ### Run the deployment script
@@ -27,18 +44,18 @@
    ```
    Will build Pioneer inside the `packages/ui/build` folder.
 
-## Deploying the Pioneer notification backend
+## Deploying the Pioneer notification back-end
 
 ### Prerequisites
 
-#### Pick and save the following configuration values in a file
+#### Configure the Pioneer back-end
 
 - `QUERY_NODE_ENDPOINT=https://<value>`: Query node to fetch from (in most cases this should be: `https://query.joystream.org/graphql`).
 - `PIONEER_URL=https://<value>`: The URL of the your Pioneer web application.
 - `STARTING_BLOCK=<value>`: The block to start fetching the events from (in most cases this should be the current block).
 - `EMAIL_SENDER=<value>`: The address to send e-mail with.
 
-Replace the `<value>` by the actual values.
+Replace the `<value>` by the actual values and save the configuration in a file.
 
 #### Set up an e-mail provider
 
@@ -59,7 +76,7 @@ To set up Mailgun:
 
 ### Quick start (Render)
 
-To deploy on Render you can simply click on the button bellow:
+To deploy on Render click on the button bellow:
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/dev)
 

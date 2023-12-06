@@ -1,11 +1,84 @@
 # Mocking
 
-There are two types of mocks used by the Pioneer
+There are 3 ways to mock data to develop on Pioneer
 
-1. GraphQL (query-node) mocks
-2. Local node mocks
+- Storybook mocks
+- Local node mocks
+- GraphQL (query-node) mocks (**deprecated**)
 
-### Node mocks
+## Storybook mocks
+
+In stories data are mocked using the [MockProvidersDecorator](../packages/ui/src/mocks/providers/index.tsx). This Decorator expects either an object or a function returning an object in the story parameter. This object has the following structure:
+
+```yml
+{
+  accounts: {
+    active: account and membership data or handle defined in the list property
+    list: list of account and membership data
+    hasWallet: boolean
+  }
+
+  chain: {
+    consts: This mirrors the Joystream API consts structure. The contants can simply be defined with JS primitives (no need to create types).
+
+    query: This mirrors the Joystream API query structure. This too can be defined with simple JS primitive no need to defined functions returning RXjs subscription returning Polkadot types (although this is accepted too for edge cases).
+
+    derive: Same as query.
+
+    rpc: Same as query.
+
+    tx: {
+      [module]: {
+        [extrinsic]: {
+          data: The data returned on success
+          failure: If this is defined and a non empty string the mocked transaction fails with this message
+          event: The name of the chain event triggered by this transaction
+          fee: The fee of the transaction
+          onCall: This is called whenever the tx function is called (so whenever the transaction is updated)
+          onSend: This is called when the transaction is sent
+        }
+      }
+    }
+  }
+
+  gql: {
+    queries: [
+      {
+        query: DocumentNode,
+        data: The data fields returned when the query succeeds
+        error: If this is defined the query will fail witht this value as it's error
+        resolver: The resolver to run for the query if defined it will ovewrite both data and error
+      }
+    ]
+
+    mutations: [
+      {
+        mutation: DocumentNode
+        data: The data fields returned when the mutation succeeds
+        error: If this is defined the mutation will fail witht this value as it's error
+        resolver: The resolver to run for the mutation if defined it will ovewrite both data and error
+        onSend: This is called when the mutation is sent
+      }
+    ]
+  }
+
+  localStorage: { [property name]: string value }
+
+  backend: {
+    notificationsSettingsMap?: BackendContextValue['notificationsSettingsMap']
+    onSetMemberSettings?: (memberId: string, settings: any) => void
+    authToken: string
+  }
+
+}
+```
+
+> *Note*
+> Most properties of this object are optionals. Only what's needed to render the stories and run the tests should be mocked.
+
+For more details check existing stories like: [ProposalPreview.stories.tsx](../packages/ui/src/app/pages/Proposals/ProposalPreview.stories.tsx).
+
+## Node mocks
 
 To test most of the extrinsics requires existing on-chain data. To create some on-chain objects use the `yarn run node-mocks` script or use the polkadot apps wallet application to create them beforehand.
 
@@ -96,7 +169,10 @@ The available aliases are: `post`, `opening`, `thread`, `bounty`, `candidacy`, `
 
 You can also connect to the node using [Polkadot apps wallet](README.md#connecting-to-the-joystream-node-using-polkadot-app-wallet) to interact with the node.
 
-### Query-node Mocks
+## Query-node Mocks
+
+> *Warning*
+> These mocks are now deprecated they are still heavily used by the legacy tests suites and some old stories. However no new tests or stories should depend on MirageJS and the legacy tests and stories should be removed progressively.
 
 To mock the query-node server we use [Mirage JS](https://miragejs.com/) in tests, storybook data and for local development.
 
