@@ -79,7 +79,7 @@ export const ValidatorCard = React.memo(({ cardNumber, validator, selectCard, to
             </SidePaneTopButtonsGroup>
             <CloseButton onClick={hideModal} />
           </SidePanelTop>
-          <ValidatorInfo member={validator.membership} address={encodeAddress(validator.stashAccount)} size='l' />
+          <ValidatorInfo member={validator.membership} address={encodeAddress(validator.stashAccount)} size="l" />
           <Tabs tabs={tabs} tabsSize="xs" />
         </SidePaneHeader>
         {activeTab === 'Details' && <ValidatorDetail validator={validator} />}

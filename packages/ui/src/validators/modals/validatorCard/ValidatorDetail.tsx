@@ -6,9 +6,11 @@ import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { ModalFooter } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePaneBody, SidePaneLabel, SidePaneRow, SidePaneText } from '@/common/components/SidePane'
-import { NumericValueStat, StatisticsThreeColumns } from '@/common/components/statistics'
+import { NumericValueStat, StatisticsThreeColumns, TokenValueStat } from '@/common/components/statistics'
 import { TextSmall } from '@/common/components/typography'
+import { BN_ZERO } from '@/common/constants'
 import { plural } from '@/common/helpers'
+import RewardPointsChart from '@/validators/components/RewardPointChart'
 
 import { ValidatorWithDetails } from '../../types'
 
@@ -24,25 +26,28 @@ export const ValidatorDetail = ({ validator }: Props) => {
           <RowGapBlock gap={4}>
             <h6>Key elements</h6>
             <ModalStatistics>
-              <Stat size="s" value={20000}>
+              <TokenValueStat size="s" value={validator.totalRewards}>
                 <TextSmall lighter>Total reward</TextSmall>
+              </TokenValueStat>
+              <Stat size="s" value={validator.APR.toString() + '%'}>
+                <TextSmall lighter>Average APR</TextSmall>
               </Stat>
-              <Stat size="s" value={validator.isVerified ? 'Verified' : 'Unverified'}>
+              <TokenValueStat size="s" value={validator.staking.others.reduce((a, b) => a.add(b.staking), BN_ZERO)}>
+                <TextSmall lighter>Staked by nominators</TextSmall>
+              </TokenValueStat>
+              <Stat size="s" value={validator.isVerifiedValidator ? 'Verified' : 'Unverified'}>
                 <TextSmall lighter>Status</TextSmall>
               </Stat>
               <Stat size="s" value={`${validator.slashed} time${plural(validator.slashed)}`}>
                 <TextSmall lighter>Slashed</TextSmall>
               </Stat>
-              <Stat size="s" value={0}>
-                <TextSmall lighter>Uptime</TextSmall>
-              </Stat>
-              <Stat size="s" value={validator.APR.toString() + '%'}>
-                <TextSmall lighter>Average APR</TextSmall>
-              </Stat>
-              <Stat size="s" value={validator.staking.others.length}>
-                <TextSmall lighter>Nominators</TextSmall>
-              </Stat>
             </ModalStatistics>
+          </RowGapBlock>
+          <RowGapBlock gap={4}>
+            <h6>Era points</h6>
+            <RewardPointsChartWrapper>
+              <RewardPointsChart rewardPointsHistory={validator.rewardPointsHistory} />
+            </RewardPointsChartWrapper>
           </RowGapBlock>
           <RowGapBlock gap={4}>
             <h6>About</h6>
@@ -85,4 +90,9 @@ const ModalStatistics = styled(StatisticsThreeColumns)`
 
 const Stat = styled(NumericValueStat)`
   padding: 20px 12px 20px 16px;
+`
+
+const RewardPointsChartWrapper = styled.div`
+  width: 100%;
+  height: 200px;
 `

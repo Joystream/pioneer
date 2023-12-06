@@ -95,8 +95,8 @@ export const useValidatorsList = () => {
             else return true
           })
           .filter((validator) => {
-            if (isVerified === 'verified') return validator.membership?.isVerifiedValidator
-            else if (isVerified === 'unverified') return !validator.membership?.isVerifiedValidator
+            if (isVerified === 'verified') return validator.isVerifiedValidator
+            else if (isVerified === 'unverified') return !validator.isVerifiedValidator
             else return true
           })
           .filter((validator) => {

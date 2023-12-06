@@ -1,5 +1,8 @@
 import { createType } from '@joystream/types'
+import { AccountId32 } from '@polkadot/types/interfaces'
 import { mapValues } from 'lodash'
+
+import { encodeAddress } from '@/accounts/model/encodeAddress'
 
 export const asChainData = (data: any): any => {
   switch (Object.getPrototypeOf(data).constructor.name) {
@@ -24,4 +27,5 @@ const withUnwrap = (data: Record<any, any>) =>
   Object.defineProperties(data, {
     unwrap: { value: () => data },
     isSome: { value: Object.keys(data).length > 0 },
+    get: { value: (key: AccountId32) => data[encodeAddress(key.toString())] },
   })

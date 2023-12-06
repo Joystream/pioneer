@@ -18,13 +18,13 @@ interface ValidatorItemProps {
   onClick?: () => void
 }
 export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
-  const { stashAccount, membership, isActive, commission, APR, staking } = validator
+  const { stashAccount, membership, isVerifiedValidator, isActive, commission, APR, staking } = validator
 
   return (
     <ValidatorItemWrapper onClick={onClick}>
       <ValidatorItemWrap>
         <ValidatorInfo member={membership} address={encodeAddress(stashAccount)} />
-        {membership?.isVerifiedValidator ? (
+        {isVerifiedValidator ? (
           <BadgeStatus inverted size="l">
             verified
           </BadgeStatus>
