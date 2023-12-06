@@ -20,7 +20,6 @@ export default {
     // },
   
     parameters: {
-      // router: { path: '/blacklisted-accounts', href: '/blacklisted-accounts' },
       mocks: (/*{ args, parameters }: StoryContext<Args>*/): MocksParameters => {
         return {
         //   accounts: { active: { member: alice } },
@@ -42,8 +41,14 @@ export default {
             //   },
             // },
             query:{
+              council:{
+                stage: { stage: { isIdle: true }, changedAt: 123 },
+              },
               referendum: {
-                accountsOptedOut: ['5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY','5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY']
+                accountsOptedOut: {
+                  keys: ['5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY','5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY','5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY']
+                },
+                stage: {}
               }
             }
           },

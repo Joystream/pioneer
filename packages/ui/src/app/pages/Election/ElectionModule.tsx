@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router'
 
 import { ElectionRoutes } from '@/council/constants'
 
-import { BlacklistedAccounts } from './BlacklistedAccounts'
+import { BlacklistedAccounts } from './BlacklistedAccounts/BlacklistedAccounts'
 import { Election } from './Election'
 import { PastElection } from './PastElections/PastElection'
 import { PastElections } from './PastElections/PastElections'

@@ -7,7 +7,7 @@ export const CouncilRoutes = {
 type CouncilRoutesType = typeof CouncilRoutes
 
 export const ElectionRoutes = {
-  blacklistedAccounts: '/blacklisted-accounts',
+  blacklistedAccounts: '/election/blacklisted-accounts',
   currentElection: '/election',
   myVotes: '/election/my-votes',
   pastElections: '/election/past-elections',
