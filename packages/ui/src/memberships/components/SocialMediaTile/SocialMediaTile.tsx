@@ -47,12 +47,22 @@ export interface SocialMediaTileProps {
   id: string
 }
 
+export const socialTitle = (social: Socials) => {
+  switch (social) {
+    case 'TWITTER':
+      return 'X'
+
+    default:
+      return capitalizeFirstLetter(social.toLowerCase())
+  }
+}
+
 export const SocialMediaTile = React.memo(({ social, onClick, active, id }: SocialMediaTileProps) => {
   return (
     <Wrapper id={id} onClick={onClick} active={active}>
       <RowGapBlock align="center" gap={2}>
         {socialToIcon[social]}
-        <TextMedium value>{capitalizeFirstLetter(social.toLowerCase())}</TextMedium>
+        <TextMedium value>{socialTitle(social)}</TextMedium>
       </RowGapBlock>
     </Wrapper>
   )
