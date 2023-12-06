@@ -8,10 +8,10 @@ import { SidePaneBody } from '@/common/components/SidePane'
 import { TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
 
-import { Validator } from '../../types'
+import { ValidatorWithDetails } from '../../types'
 
 interface Props {
-  validator: Validator
+  validator: ValidatorWithDetails
 }
 
 export const Nominators = ({ validator }: Props) => {
