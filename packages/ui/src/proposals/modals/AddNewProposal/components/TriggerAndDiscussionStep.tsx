@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
+import { useApi } from '@/api/hooks/useApi'
 import { CloseButton } from '@/common/components/buttons'
 import { InlineToggleWrap, InputComponent, Label, ToggleCheckbox, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
@@ -13,11 +14,10 @@ import { inBlocksDate } from '@/common/model/inBlocksDate'
 import { MemberInfo } from '@/memberships/components'
 import { SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
-import { useApi } from '@/api/hooks/useApi'
 
 export const TriggerAndDiscussionStep = () => {
   const { watch, setValue } = useFormContext()
-  const { api } = useApi();
+  const { api } = useApi()
   const [discussionWhitelist, isDiscussionClosed, trigger, triggerBlock] = watch([
     'triggerAndDiscussion.discussionWhitelist',
     'triggerAndDiscussion.isDiscussionClosed',
@@ -27,7 +27,7 @@ export const TriggerAndDiscussionStep = () => {
 
   const addMemberToWhitelist = (member: Member) => updateWhitelist([...discussionWhitelist, member])
 
-  const maxWhiteList = api?.consts.proposalsDiscussion.maxWhiteListSize || 0;
+  const maxWhiteList = useMemo(() => api?.consts.proposalsDiscussion.maxWhiteListSize.toNumber() || 0, [])
 
   const removeMemberFromWhitelist = (member: Member) =>
     updateWhitelist(discussionWhitelist.filter((m: Member) => m.id !== member.id))
