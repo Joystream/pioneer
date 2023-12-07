@@ -202,6 +202,6 @@ jobs:
 
       - name: Run tests
         working-directory: packages/server
-        run: yarn bin jest --silent
+        run: node $(yarn bin jest) --silent
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
