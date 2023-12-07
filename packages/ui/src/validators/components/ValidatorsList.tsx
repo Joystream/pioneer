@@ -10,6 +10,7 @@ import { Colors } from '@/common/constants'
 import { Comparator } from '@/common/model/Comparator'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
+import { NominatingRedirectModal } from '../modals/NominatingRedirectModal'
 import { ValidatorCard } from '../modals/validatorCard/ValidatorCard'
 import { ValidatorWithDetails } from '../types'
 
@@ -43,16 +44,17 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
   }
 
   return (
-    <ValidatorsListWrap>
-      <ListHeaders>
-        <SortHeader
+    <>
+      <ValidatorsListWrap>
+        <ListHeaders>
+          <SortHeader
           onSort={() => onSort('stashAccount')}
           isActive={sortBy === 'stashAccount'}
           isDescending={isDescending}
         >
           Validator
         </SortHeader>
-        <ListHeader>
+          <ListHeader>
           Verification
           <Tooltip
             tooltipText="The profile of Verified validator has been entirely verified by the Membership working group."
@@ -62,10 +64,10 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
             <TooltipDefault />
           </Tooltip>
         </ListHeader>
-        <ListHeader>State</ListHeader>
-        <ListHeader>Own Stake</ListHeader>
+          <ListHeader>State</ListHeader>
+          <ListHeader>Own Stake</ListHeader>
         <ListHeader>Total Stake</ListHeader>
-        <SortHeader onSort={() => onSort('APR', true)} isActive={sortBy === 'APR'} isDescending={isDescending}>
+          <SortHeader onSort={() => onSort('APR', true)} isActive={sortBy === 'APR'} isDescending={isDescending}>
           Expected Nom APR
           <Tooltip
             tooltipText={
@@ -87,20 +89,20 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
         >
           Commission
         </SortHeader>
-      </ListHeaders>
-      <List>
-        {sortedValidators?.map((validator, index) => (
-          <ListItem
+        </ListHeaders>
+        <List>
+          {sortedValidators?.map((validator, index) => (
+            <ListItem
             key={validator.stashAccount}
             onClick={() => {
               selectCard(index + 1)
             }}
           >
-            <ValidatorItem validator={validator} />
-          </ListItem>
-        ))}
-      </List>
-      {cardNumber && sortedValidators[cardNumber - 1] && (
+              <ValidatorItem validator={validator} />
+            </ListItem>
+          ))}
+        </List>
+        {cardNumber && sortedValidators[cardNumber - 1] && (
         <ValidatorCard
           cardNumber={cardNumber}
           validator={sortedValidators[cardNumber - 1]}
@@ -109,6 +111,8 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
         />
       )}
     </ValidatorsListWrap>
+      <NominatingRedirectModal />
+    </>
   )
 }
 

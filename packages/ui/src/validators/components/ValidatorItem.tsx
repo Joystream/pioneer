@@ -8,6 +8,7 @@ import { TableListItemAsLinkHover } from '@/common/components/List'
 import { Skeleton } from '@/common/components/Skeleton'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
+import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 
 import { ValidatorWithDetails } from '../types/Validator'
 
@@ -19,7 +20,10 @@ interface ValidatorItemProps {
 }
 export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
   const { stashAccount, membership, isVerifiedValidator, isActive, commission, APR, staking } = validator
-
+  const [, setShow] = useLocalStorage<boolean>('NominateRedirectModal')
+  const showNominateRedirectModal = () => {
+    setShow(true)
+  }
   return (
     <ValidatorItemWrapper onClick={onClick}>
       <ValidatorItemWrap>
@@ -38,7 +42,9 @@ export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
         <TokenValue size="xs" value={staking.total} />
         <TextMedium bold>{APR}%</TextMedium>
         <TextMedium bold>{commission}%</TextMedium>
-        <ButtonPrimary size="small">Nominate</ButtonPrimary>
+        <ButtonPrimary size="small" onClick={showNominateRedirectModal}>
+          Nominate
+        </ButtonPrimary>
       </ValidatorItemWrap>
     </ValidatorItemWrapper>
   )
