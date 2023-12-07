@@ -302,22 +302,22 @@ export const TestsFilters: Story = {
       await userEvent.click(screen.getByText('Expected Nom APR'))
       expect(
         screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[0].innerText ===
-          '2%'
+          '18%'
       ).toBeTruthy()
       await userEvent.click(screen.getByText('Expected Nom APR'))
       expect(
         screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[0].innerText ===
-          '18%'
-      ).toBeTruthy()
-      await userEvent.click(screen.getByText('Commission'))
-      expect(
-        screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[1].innerText ===
-          '1%'
+          '2%'
       ).toBeTruthy()
       await userEvent.click(screen.getByText('Commission'))
       expect(
         screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[1].innerText ===
           '20%'
+      ).toBeTruthy()
+      await userEvent.click(screen.getByText('Commission'))
+      expect(
+        screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[1].innerText ===
+          '1%'
       ).toBeTruthy()
     })
   },

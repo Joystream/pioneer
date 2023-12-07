@@ -31,11 +31,11 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
     [sortBy, isDescending, validators]
   )
 
-  const onSort = (key: SortKey) => {
+  const onSort = (key: SortKey, descendingByDefault = false) => {
     if (key === sortBy) {
       setDescending(!isDescending)
     } else {
-      setDescending(false)
+      setDescending(descendingByDefault)
       setSortBy(key)
     }
   }
@@ -63,7 +63,7 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
         <ListHeader>State</ListHeader>
         <ListHeader>Own Stake</ListHeader>
         <ListHeader>Total Stake</ListHeader>
-        <SortHeader onSort={() => onSort('APR')} isActive={sortBy === 'APR'} isDescending={isDescending}>
+        <SortHeader onSort={() => onSort('APR', true)} isActive={sortBy === 'APR'} isDescending={isDescending}>
           Expected Nom APR
           <Tooltip
             tooltipText={
@@ -78,7 +78,11 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
             <TooltipDefault />
           </Tooltip>
         </SortHeader>
-        <SortHeader onSort={() => onSort('commission')} isActive={sortBy === 'commission'} isDescending={isDescending}>
+        <SortHeader
+          onSort={() => onSort('commission', true)}
+          isActive={sortBy === 'commission'}
+          isDescending={isDescending}
+        >
           Commission
         </SortHeader>
       </ListHeaders>
