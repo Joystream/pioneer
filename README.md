@@ -25,6 +25,8 @@
 ## Clone this repository
 git clone git@github.com:Joystream/pioneer.git
 
+cd pioneer
+
 ## Install npm packages
 yarn --immutable
 
@@ -34,7 +36,7 @@ yarn start
 ## To start local storybook instance
 yarn storybook
 
-## To run tests
+## To run tests (the back-end tests require docker in order to run)
 yarn test
 ```
 
