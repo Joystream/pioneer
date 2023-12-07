@@ -23,7 +23,7 @@ const RewardPointChart = ({ rewardPointsHistory }: Data) => {
     labels: eras,
     datasets: [
       {
-        label: 'Era point',
+        label: 'Era points',
         data: rewardPoints,
         fill: false,
         borderColor: 'blue',
@@ -32,7 +32,7 @@ const RewardPointChart = ({ rewardPointsHistory }: Data) => {
         pointRadius: 0,
       },
       {
-        label: 'Average point',
+        label: 'Average points',
         data: averageLine,
         fill: false,
         borderColor: 'black',

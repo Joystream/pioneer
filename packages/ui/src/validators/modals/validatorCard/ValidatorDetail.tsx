@@ -8,7 +8,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePaneBody, SidePaneLabel, SidePaneRow, SidePaneText } from '@/common/components/SidePane'
 import { NumericValueStat, StatisticsThreeColumns, TokenValueStat } from '@/common/components/statistics'
 import { TextSmall } from '@/common/components/typography'
-import { BN_ZERO } from '@/common/constants'
+import { BN_ZERO, ERA_DEPTH } from '@/common/constants'
 import { plural } from '@/common/helpers'
 import RewardPointsChart from '@/validators/components/RewardPointChart'
 
@@ -40,6 +40,14 @@ export const ValidatorDetail = ({ validator }: Props) => {
               </Stat>
               <Stat size="s" value={`${validator.slashed} time${plural(validator.slashed)}`}>
                 <TextSmall lighter>Slashed</TextSmall>
+              </Stat>
+              <Stat
+                size="s"
+                value={`${Math.round(
+                  (validator.rewardPointsHistory.filter(({ rewardPoints }) => rewardPoints).length / ERA_DEPTH) * 100
+                )}%`}
+              >
+                <TextSmall lighter>Uptime</TextSmall>
               </Stat>
             </ModalStatistics>
           </RowGapBlock>
