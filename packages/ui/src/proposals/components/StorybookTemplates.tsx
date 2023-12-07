@@ -2,8 +2,13 @@ import React, { FC } from 'react'
 
 import { Modal, ModalHeader } from '@/common/components/Modal'
 import { StepperStep } from '@/common/components/Stepper'
-import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
-import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
+import {
+  StepDescriptionColumn,
+  Stepper,
+  StepperBody,
+  StepperModalBody,
+  StepperModalWrapper,
+} from '@/common/components/StepperModal'
 
 const steps: StepperStep[] = [
   { title: 'Proposal type', type: 'past' },
@@ -18,11 +23,11 @@ export const AddNewProposalTemplate: FC<{ title: string }> = ({ title, children 
   <Modal onClose={() => undefined} modalSize="l" modalHeight="xl">
     <ModalHeader onClick={() => undefined} title={`Creating new proposal: ${title}`} />
     <StepperModalBody>
-      <StepperProposalWrapper>
+      <StepperModalWrapper>
         <Stepper steps={steps} />
         <StepDescriptionColumn></StepDescriptionColumn>
         <StepperBody>{children}</StepperBody>
-      </StepperProposalWrapper>
+      </StepperModalWrapper>
     </StepperModalBody>
   </Modal>
 )

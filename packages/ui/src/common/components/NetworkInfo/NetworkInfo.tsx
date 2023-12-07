@@ -13,10 +13,11 @@ export interface NetworkInfoProps {
   networkAddress: string
   queryNodeAddress: string
   faucetAddress?: string
+  backendAddress?: string
 }
 
 const NetworkInfo: React.FC<NetworkInfoProps> = React.memo(
-  ({ detailsTitle, networkAddress, queryNodeAddress, faucetAddress }) => {
+  ({ detailsTitle, networkAddress, queryNodeAddress, faucetAddress, backendAddress }) => {
     const { t } = useTranslation('settings')
     return (
       <SettingsInformation title={detailsTitle} icon={<WarnedIcon />}>
@@ -32,6 +33,10 @@ const NetworkInfo: React.FC<NetworkInfoProps> = React.memo(
           <TextMedium lighter>{t('faucet')}</TextMedium>
           <CopyText copyText={faucetAddress ?? 'none'} disabled={!faucetAddress} />
         </ColumnGapBlock>
+        <ColumnGapBlock gap={3}>
+          <TextMedium lighter>{t('backend')}</TextMedium>
+          <CopyText copyText={backendAddress ?? 'none'} disabled={!backendAddress} />
+        </ColumnGapBlock>
       </SettingsInformation>
     )
   }
@@ -44,4 +49,8 @@ export default NetworkInfo
 export const CopyText = styled(CopyComponent)`
   font-size: 14px;
   margin-left: 5px;
+
+  > span {
+    white-space: unset;
+  }
 `

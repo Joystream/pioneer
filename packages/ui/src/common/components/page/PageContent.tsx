@@ -3,8 +3,14 @@ import styled from 'styled-components'
 export const PageContent = styled.div`
   position: relative;
   height: 100%;
-  margin-left: 24px;
+  margin-left: max(calc(50% - 583px), 24px);
   padding: 40px 24px 8px 0;
+  margin-right: max(calc(50% - 607px), 0px);
+
+  @media (max-width: 767px) {
+    margin-left: 16px;
+    padding: 40px 16px 8px 0;
+  }
 `
 
 export const PageContentFullHeight = styled.div`

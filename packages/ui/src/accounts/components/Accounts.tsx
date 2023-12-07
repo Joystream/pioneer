@@ -99,6 +99,7 @@ interface HeaderProps {
 }
 
 const AccountsWrap = styled.div`
+  overflow: auto;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 16px auto;

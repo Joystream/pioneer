@@ -8,9 +8,17 @@ import { Stepper as StepperComponent, StepperProps, StepperTheme } from './Stepp
 
 export const StepperModalWrapper = styled.div`
   display: grid;
-  grid-template-columns: 184px 336px 1fr;
+  grid-template-columns: 184px 184px 1fr;
   min-height: 200px;
   height: 100%;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: 184px 240px 1fr;
+  }
+
+  @media (min-width: 1440px) {
+    grid-template-columns: 184px 336px 1fr;
+  }
 `
 
 export const Stepper = (props: StepperProps) => (

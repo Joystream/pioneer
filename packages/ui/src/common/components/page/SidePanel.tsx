@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components'
 
 import { BorderRad, RemoveScrollbar } from '@/common/constants'
 
-import { ActivitiesList } from '../Activities'
 import { ActivityItem } from '../Activities/ActivityComponent'
 
 interface SidePanelProps {
@@ -20,16 +19,19 @@ export const SidePanel = ({ scrollable, className, children }: SidePanelProps) =
 
 export const SidePanelStyles = styled.div<Pick<SidePanelProps, 'scrollable'>>`
   display: flex;
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
+  flex-direction: column;
+  row-gap: 36px;
   width: 100%;
-  max-width: 280px;
-  min-height: 184px;
   height: 100%;
-  padding-left: 24px;
-  overflow: hidden;
+  @media (min-width: 1440px) {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    max-width: 280px;
+    min-height: 184px;
+    overflow: hidden;
+  }
 
   ${({ scrollable }) =>
     scrollable &&
@@ -42,10 +44,6 @@ export const SidePanelStyles = styled.div<Pick<SidePanelProps, 'scrollable'>>`
   &:after {
     content: '';
     height: 24px;
-  }
-
-  ${ActivitiesList} {
-    margin: 0 -16px;
   }
 
   ${ActivityItem} {

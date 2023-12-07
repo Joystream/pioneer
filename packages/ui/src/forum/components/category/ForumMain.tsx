@@ -64,10 +64,22 @@ export const ForumMain = () => {
 }
 export const CategoriesListWrapper = styled.div`
   display: grid;
-  grid-gap: 20px;
+  grid-gap: 16px;
   grid-template-columns: repeat(auto-fill, minmax(540px, 1fr));
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 1440px) {
+    grid-gap: 24px;
+  }
 `
 
 const StyledThreadCard = styled(ThreadCard)`
   min-width: 330px;
+
+  @media (max-width: 424px) {
+    min-width: 288px;
+  }
 `

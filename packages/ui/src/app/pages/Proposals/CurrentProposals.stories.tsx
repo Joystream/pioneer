@@ -173,95 +173,97 @@ export default {
           }
         ),
 
-        queryNode: [
-          {
-            query: GetProposalsCountDocument,
-            data: { proposalsConnection: { totalCount: args.proposalCount } },
-          },
+        gql: {
+          queries: [
+            {
+              query: GetProposalsCountDocument,
+              data: { proposalsConnection: { totalCount: args.proposalCount } },
+            },
 
-          {
-            query: GetProposalsDocument,
-            resolver: ({ variables } = {}) => ({
-              loading: false,
-              data: {
-                proposals: generateProposals(
-                  {
-                    title: PROPOSAL_DATA.title,
-                    description: PROPOSAL_DATA.description,
-                    creator: alice,
-                    statuses: ['ProposalStatusGracing', 'ProposalStatusDormant', 'ProposalStatusDeciding'],
-                    limit: variables?.limit,
-                    offset: variables?.offset,
-                  },
-                  args.proposalCount
-                ),
-              },
-            }),
-          },
-
-          {
-            query: GetProposalVotesDocument,
-            data: {
-              proposalVotedEvents: [],
-            },
-          },
-
-          {
-            query: GetProposalsEventsDocument,
-            data: { events: [] },
-          },
-
-          {
-            query: SearchMembersDocument,
-            data: {
-              memberships: [alice],
-            },
-          },
-          {
-            query: GetMemberDocument,
-            data: {
-              membershipByUniqueInput: alice,
-            },
-          },
-
-          {
-            query: GetWorkingGroupsDocument,
-            data: {
-              workingGroups: [forumWG, storageWG],
-            },
-          },
-          {
-            query: GetWorkingGroupDocument,
-            data: {
-              workingGroupByUniqueInput: forumWG,
-            },
-          },
-          {
-            query: GetWorkingGroupOpeningsDocument,
-            data: {
-              workingGroupOpenings: [OPENING_DATA],
-            },
-          },
-          {
-            query: GetWorkingGroupApplicationsDocument,
-            data: {
-              workingGroupApplications: [
-                {
-                  id: 'storageWorkingGroup-15',
-                  runtimeId: 15,
-                  opening: OPENING_DATA,
-                  answers: [
-                    { answer: 'Foo', question: { question: '🐁?' } },
-                    { answer: 'Bar', question: { question: '🐘?' } },
-                  ],
-                  status: { __typename: 'ApplicationStatusPending' },
-                  applicant: alice,
-                  createdInEvent: { inBlock: 234, createdAt: isoDate('2023/01/04') },
+            {
+              query: GetProposalsDocument,
+              resolver: ({ variables } = {}) => ({
+                loading: false,
+                data: {
+                  proposals: generateProposals(
+                    {
+                      title: PROPOSAL_DATA.title,
+                      description: PROPOSAL_DATA.description,
+                      creator: alice,
+                      statuses: ['ProposalStatusGracing', 'ProposalStatusDormant', 'ProposalStatusDeciding'],
+                      limit: variables?.limit,
+                      offset: variables?.offset,
+                    },
+                    args.proposalCount
+                  ),
                 },
-              ],
+              }),
             },
-          },
-        ],
+
+            {
+              query: GetProposalVotesDocument,
+              data: {
+                proposalVotedEvents: [],
+              },
+            },
+
+            {
+              query: GetProposalsEventsDocument,
+              data: { events: [] },
+            },
+
+            {
+              query: SearchMembersDocument,
+              data: {
+                memberships: [alice],
+              },
+            },
+            {
+              query: GetMemberDocument,
+              data: {
+                membershipByUniqueInput: alice,
+              },
+            },
+
+            {
+              query: GetWorkingGroupsDocument,
+              data: {
+                workingGroups: [forumWG, storageWG],
+              },
+            },
+            {
+              query: GetWorkingGroupDocument,
+              data: {
+                workingGroupByUniqueInput: forumWG,
+              },
+            },
+            {
+              query: GetWorkingGroupOpeningsDocument,
+              data: {
+                workingGroupOpenings: [OPENING_DATA],
+              },
+            },
+            {
+              query: GetWorkingGroupApplicationsDocument,
+              data: {
+                workingGroupApplications: [
+                  {
+                    id: 'storageWorkingGroup-15',
+                    runtimeId: 15,
+                    opening: OPENING_DATA,
+                    answers: [
+                      { answer: 'Foo', question: { question: '🐁?' } },
+                      { answer: 'Bar', question: { question: '🐘?' } },
+                    ],
+                    status: { __typename: 'ApplicationStatusPending' },
+                    applicant: alice,
+                    createdInEvent: { inBlock: 234, createdAt: isoDate('2023/01/04') },
+                  },
+                ],
+              },
+            },
+          ],
+        },
       }
     },
   },

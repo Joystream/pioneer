@@ -1,0 +1,37 @@
+query GetBackendMemberExists($id: Int!) {
+  memberExist(id: $id)
+}
+
+query GetBackendMe {
+  me {
+    id
+    name
+    email
+    unverifiedEmail
+    receiveEmails
+  }
+}
+
+mutation RegisterBackendMember($id: Int!, $name: String!, $email: String!, $signature: String!, $timestamp: BigInt!) {
+  signup(memberId: $id, name: $name, email: $email, signature: $signature, timestamp: $timestamp)
+}
+
+mutation ConfirmBackendEmail($token: String!) {
+  verifyEmail(token: $token) {
+    email
+  }
+}
+
+mutation UpdateBackendMember($email: String, $receiveEmails: Boolean) {
+  updateMember(email: $email, receiveEmails: $receiveEmails) {
+    id
+    name
+    email
+    unverifiedEmail
+    receiveEmails
+  }
+}
+
+mutation BackendSignin($memberId: Int!, $signature: String!, $timestamp: BigInt!) {
+  signin(memberId: $memberId, signature: $signature, timestamp: $timestamp)
+}

@@ -14,6 +14,7 @@ import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provi
 
 import { Address } from '../types'
 
+import { useFirstObservableValue } from './useFirstObservableValue'
 import { useProcessTransaction } from './useProcessTransaction'
 import { useQueryNodeTransactionStatus } from './useQueryNodeTransactionStatus'
 
@@ -40,15 +41,18 @@ export const useSignAndSendTransaction = ({
   const [blockHash, setBlockHash] = useState<Hash | string | undefined>(undefined)
   const apolloClient = useApolloClient()
   const balance = useBalance(signer)
+  const { api } = useApi()
   const { send, paymentInfo, isReady, isProcessing } = useProcessTransaction({
     transaction,
     signer,
     service,
     setBlockHash,
   })
-  const queryNodeStatus = useQueryNodeTransactionStatus(isProcessing, blockHash, skipQueryNode)
+  const blockNumber = useFirstObservableValue(() => {
+    if (blockHash) return api?.rpc.chain.getHeader(blockHash)
+  }, [api?.isConnected, blockHash])?.number.toNumber()
+  const queryNodeStatus = useQueryNodeTransactionStatus(isProcessing, blockNumber || blockHash, skipQueryNode)
   const { wallet } = useMyAccounts()
-  const { api } = useApi()
 
   const sign = useCallback(() => {
     if (wallet && api) {

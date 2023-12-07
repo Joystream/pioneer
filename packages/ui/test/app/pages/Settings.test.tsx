@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { Settings } from '@/app/pages/Settings/Settings'
+import { SettingsNetworkTab } from '@/app/pages/Settings/SettingsNetworkTab'
 import { NetworkEndpointsProvider } from '@/common/providers/network-endpoints/provider'
 
 import { MockQueryNodeProviders } from '../../_mocks/providers'
@@ -49,7 +49,7 @@ describe('Settings', () => {
       <MemoryRouter>
         <NetworkEndpointsProvider>
           <MockQueryNodeProviders>
-            <Settings />
+            <SettingsNetworkTab />
           </MockQueryNodeProviders>
         </NetworkEndpointsProvider>
       </MemoryRouter>

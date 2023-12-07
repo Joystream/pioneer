@@ -42,6 +42,9 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
     // Common mocks:
     const rpcChain = {
       getBlockHash: createType('BlockHash', BLOCK_HASH),
+      getHeader: {
+        number: BLOCK_HEAD,
+      },
       subscribeNewHeads: {
         parentHash: BLOCK_HASH,
         number: BLOCK_HEAD,
@@ -129,6 +132,11 @@ const asApiMethod = (value: any) => {
   if (isObject(value) && 'entries' in value && isArray(value.entries)) {
     const entries = value.entries.map((entry) => [{ args: [asChainData(entry)] }])
     method.entries = () => of(entries)
+  }
+
+  if (isObject(value) && 'multi' in value && isArray(value.multi)) {
+    const multi = value.multi.map((entry) => ({ unwrap: () => entry }))
+    method.multi = () => of(multi)
   }
 
   return method

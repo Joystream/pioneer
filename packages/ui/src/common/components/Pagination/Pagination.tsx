@@ -5,6 +5,7 @@ import styled from 'styled-components'
 
 import { Arrow } from '@/common/components/icons'
 import { BorderRad, Colors, Fonts, Transitions } from '@/common/constants/styles'
+import { useResponsive } from '@/common/hooks/useResponsive'
 
 interface PaginationProps {
   pageCount?: number
@@ -14,6 +15,7 @@ interface PaginationProps {
 
 export const Pagination: FC<PaginationProps> = ({ pageCount = 0, handlePageChange, page }) => {
   const history = useHistory()
+  const { size } = useResponsive()
 
   if (pageCount < 2) {
     return null
@@ -27,8 +29,8 @@ export const Pagination: FC<PaginationProps> = ({ pageCount = 0, handlePageChang
     <StyledPaginateContainer>
       <ReactPaginate
         pageCount={pageCount}
-        marginPagesDisplayed={3}
-        pageRangeDisplayed={3}
+        marginPagesDisplayed={size === 'xxs' || size === 'xs' ? 1 : 3}
+        pageRangeDisplayed={size === 'xxs' ? 1 : 3}
         containerClassName="pagination"
         pageLinkClassName="pagination__link"
         pageClassName="page"
