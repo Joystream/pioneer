@@ -1,5 +1,8 @@
 # Pioneer backend
 
+> [!NOTE]
+> For a more general Pioneer documentation see [Dev Readme](/docs/README.md).
+
 ## Overview
 
 A backend for the [Pioneer UI](../ui).
@@ -234,6 +237,7 @@ To run the API to develop locally:
     - `yarn workspace server dev:db:build`: To use docker for the db.
     - Otherwise `yarn workspace dev:build`: Once the configured db is running.
 4. `yarn workspace server dev:api`: Start the server.
+5. `yarn workspace server dev:notify`: Run the notifier with `nodemon`.
 
 ### Some other useful scripts
 
