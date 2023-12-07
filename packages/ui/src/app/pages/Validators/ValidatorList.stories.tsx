@@ -88,14 +88,11 @@ export default {
               },
             },
           },
-
           query: {
             balances: {
               totalIssuance: joy(1000000),
             },
-
             timestamp: { now: Date.now() },
-
             session: {
               validators: [
                 'j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D',
@@ -107,12 +104,9 @@ export default {
                 'j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP',
                 'j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ',
                 'j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg',
-                'j4S998Thq5kQHyurofh8QfHrcFN2c1T19gTdMGUVVx5EHKgky',
               ],
             },
-
             staking: {
-              currentEra: 700,
               activeEra: {
                 index: 700,
                 start: Date.now() - 5400000,
@@ -140,7 +134,7 @@ export default {
                   [
                     { args: [1090] },
                     {
-                      total: 72000,
+                      total: 18000,
                       individual: {
                         j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
                         j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
@@ -159,7 +153,7 @@ export default {
                   [
                     { args: [1000] },
                     {
-                      total: 72000,
+                      total: 18000,
                       individual: {
                         j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
                         j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
@@ -175,7 +169,7 @@ export default {
                   [
                     { args: [1040] },
                     {
-                      total: 72000,
+                      total: 18000,
                       individual: {
                         j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
                         j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
@@ -192,7 +186,7 @@ export default {
                   [
                     { args: [1100] },
                     {
-                      total: 72000,
+                      total: 18000,
                       individual: {
                         j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
                         j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP: Math.floor(Math.random() * 800 + 200),
@@ -209,7 +203,7 @@ export default {
                   [
                     { args: [1030] },
                     {
-                      total: 72000,
+                      total: 18000,
                       individual: {
                         j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
                         j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
@@ -227,7 +221,7 @@ export default {
                   [
                     { args: [1020] },
                     {
-                      total: 72000,
+                      total: 18000,
                       individual: {
                         j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
                         j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
@@ -246,7 +240,7 @@ export default {
                   [
                     { args: [1060] },
                     {
-                      total: 72000,
+                      total: 18000,
                       individual: {
                         j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
                         j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
@@ -262,7 +256,7 @@ export default {
                   [
                     { args: [1050] },
                     {
-                      total: 72000,
+                      total: 18000,
                       individual: {
                         j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
                         j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
@@ -277,7 +271,7 @@ export default {
                   [
                     { args: [1070] },
                     {
-                      total: 72000,
+                      total: 18000,
                       individual: {
                         j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
                         j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
@@ -295,7 +289,7 @@ export default {
                   [
                     { args: [990] },
                     {
-                      total: 72000,
+                      total: 18000,
                       individual: {
                         j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
                         j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
@@ -313,7 +307,7 @@ export default {
                   [
                     { args: [1080] },
                     {
-                      total: 72000,
+                      total: 18000,
                       individual: {
                         j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
                         j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
@@ -332,7 +326,7 @@ export default {
                   [
                     { args: [1010] },
                     {
-                      total: 72000,
+                      total: 18000,
                       individual: {
                         j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
                         j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
@@ -373,7 +367,6 @@ export default {
                   { who: 'j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP', value: joy(0.2) },
                   { who: 'j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ', value: joy(0.2) },
                   { who: 'j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg', value: joy(0.2) },
-                  { who: 'j4S998Thq5kQHyurofh8QfHrcFN2c1T19gTdMGUVVx5EHKgky', value: joy(0.2) },
                 ],
               },
               erasTotalStake: joy(130_000),
@@ -462,12 +455,10 @@ export const TestsFilters: Story = {
     await step('Verifcation Filter', async () => {
       await selectFromDropdown(screen, verificationFilter, 'verified')
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(3))
-      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(3))
       expect(screen.queryByText('unverifed')).toBeNull()
       expect(screen.getByText('alice'))
       expect(screen.queryByText('bob')).toBeNull()
       await selectFromDropdown(screen, verificationFilter, 'unverified')
-      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(8))
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(8))
       expect(screen.queryByText('verifed')).toBeNull()
       expect(screen.queryByText('alice')).toBeNull()
@@ -476,7 +467,6 @@ export const TestsFilters: Story = {
     })
     await step('State Filter', async () => {
       await selectFromDropdown(screen, stateFilter, 'active')
-      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(9))
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(9))
       expect(screen.queryByText('waiting')).toBeNull()
       await selectFromDropdown(screen, stateFilter, 'waiting')
@@ -506,11 +496,7 @@ export const TestsFilters: Story = {
       expect(screen.queryByText('Clear all filters'))
       await selectFromDropdown(screen, stateFilter, 'active')
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(3))
-      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(3))
       await userEvent.click(screen.getByText('Clear all filters'))
-      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(11))
-      await userEvent.type(searchElement, 'j4R{enter}')
-      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(9))
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(11))
       await userEvent.type(searchElement, 'j4R{enter}')
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(9))
