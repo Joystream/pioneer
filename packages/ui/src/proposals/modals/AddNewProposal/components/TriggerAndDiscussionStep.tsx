@@ -13,9 +13,11 @@ import { inBlocksDate } from '@/common/model/inBlocksDate'
 import { MemberInfo } from '@/memberships/components'
 import { SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
+import { useApi } from '@/api/hooks/useApi'
 
 export const TriggerAndDiscussionStep = () => {
   const { watch, setValue } = useFormContext()
+  const { api } = useApi();
   const [discussionWhitelist, isDiscussionClosed, trigger, triggerBlock] = watch([
     'triggerAndDiscussion.discussionWhitelist',
     'triggerAndDiscussion.isDiscussionClosed',
@@ -24,8 +26,12 @@ export const TriggerAndDiscussionStep = () => {
   ])
 
   const addMemberToWhitelist = (member: Member) => updateWhitelist([...discussionWhitelist, member])
+
+  const maxWhiteList = api?.consts.proposalsDiscussion.maxWhiteListSize || 0;
+
   const removeMemberFromWhitelist = (member: Member) =>
     updateWhitelist(discussionWhitelist.filter((m: Member) => m.id !== member.id))
+
   const updateWhitelist = (members: Member[]) =>
     setValue('triggerAndDiscussion.discussionWhitelist', members, { shouldValidate: true })
 
@@ -88,18 +94,18 @@ export const TriggerAndDiscussionStep = () => {
               label="Add member to whitelist"
               required
               inputSize="l"
-              disabled={discussionWhitelist.length < 20 ? false : true}
+              disabled={discussionWhitelist.length < maxWhiteList ? false : true}
             >
               <SelectMember
                 onChange={(member) => addMemberToWhitelist(member)}
                 filter={(member) =>
                   !discussionWhitelist.find((whitelistMember: Member) => whitelistMember.id === member.id)
                 }
-                disabled={discussionWhitelist.length < 20 ? false : true}
+                disabled={discussionWhitelist.length < maxWhiteList ? false : true}
               />
             </InputComponent>
-            {discussionWhitelist.length >= 20 && (
-              <WhitelistMaxinum>Maximum whitelist size of 20 members is reached</WhitelistMaxinum>
+            {discussionWhitelist.length >= maxWhiteList && (
+              <WhitelistMaxinum>Maximum whitelist size of {maxWhiteList} members is reached</WhitelistMaxinum>
             )}
             <WhitelistContainer>
               {discussionWhitelist.map((member: Member) => (
@@ -144,7 +150,6 @@ const WhitelistRemoveMember = styled(CloseButton)`
   height: 16px;
   color: ${Colors.Black[900]};
 `
-
 const WhitelistMaxinum = styled.div`
   background-color: ${Colors.Blue[400]};
   padding: 10px 15px;
