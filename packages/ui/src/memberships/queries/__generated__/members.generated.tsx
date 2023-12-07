@@ -19,6 +19,7 @@ export type MemberFieldsFragment = {
     __typename: 'MemberMetadata'
     name?: string | null
     about?: string | null
+    isVerifiedValidator?: boolean | null
     avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
   }
   roles: Array<{
@@ -53,6 +54,7 @@ export type MemberWithDetailsFieldsFragment = {
     __typename: 'MemberMetadata'
     name?: string | null
     about?: string | null
+    isVerifiedValidator?: boolean | null
     externalResources?: Array<{
       __typename: 'MembershipExternalResource'
       type: Types.MembershipExternalResourceType
@@ -98,6 +100,7 @@ export type MemberWithDetailsFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -131,6 +134,7 @@ export type MemberWithDetailsFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -189,6 +193,7 @@ export type GetMembersQuery = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -233,6 +238,7 @@ export type GetMembersWithDetailsQuery = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       externalResources?: Array<{
         __typename: 'MembershipExternalResource'
         type: Types.MembershipExternalResourceType
@@ -278,6 +284,7 @@ export type GetMembersWithDetailsQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -311,6 +318,7 @@ export type GetMembersWithDetailsQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -376,6 +384,7 @@ export type GetMemberQuery = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       externalResources?: Array<{
         __typename: 'MembershipExternalResource'
         type: Types.MembershipExternalResourceType
@@ -421,6 +430,7 @@ export type GetMemberQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -454,6 +464,7 @@ export type GetMemberQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -512,6 +523,7 @@ export type SearchMembersQuery = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -563,6 +575,7 @@ export type GetMemberMentionQuery = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -651,6 +664,7 @@ export const MemberFieldsFragmentDoc = gql`
           avatarUri
         }
       }
+      isVerifiedValidator
     }
     isVerified
     isFoundingMember
@@ -689,6 +703,7 @@ export const MemberWithDetailsFieldsFragmentDoc = gql`
           avatarUri
         }
       }
+      isVerifiedValidator
     }
     entry {
       ... on MembershipEntryInvited {

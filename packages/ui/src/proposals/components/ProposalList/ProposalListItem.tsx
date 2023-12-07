@@ -61,7 +61,7 @@ export const ProposalListItem = ({ proposal, isPast, memberId, isCouncilMember }
     <ProposalItem
       as={GhostRouterLink}
       to={generatePath(ProposalsRoutes.preview, { id: proposal.id })}
-      $colLayout={ProposalColLayout}
+      $colLayout={ProposalColLayout(isCouncilMember, isPast)}
       $isPast={!isProposalActive(proposal.status)}
     >
       <FieldWrapper>
