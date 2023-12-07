@@ -3,6 +3,7 @@ import { map } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
+import { perbillToPercent } from '@/common/utils'
 import { useGetMembersWithDetailsQuery } from '@/memberships/queries'
 import { asMemberWithDetails } from '@/memberships/types'
 
@@ -10,28 +11,35 @@ import { ValidatorMembership } from '../types'
 
 export const useValidatorMembers = () => {
   const { api } = useApi()
-  const allValidatorAddresses = useFirstObservableValue(
+  const allValidators = useFirstObservableValue(
     () =>
-      api?.query.staking.validators
-        .entries()
-        .pipe(map((entries) => entries.map((entry) => entry[0].args[0].toString()))),
+      api?.query.staking.validators.entries().pipe(
+        map((entries) =>
+          entries.map((entry) => ({
+            address: entry[0].args[0].toString(),
+            commission: perbillToPercent(entry[1].commission.toBn()),
+          }))
+        )
+      ),
     [api?.isConnected]
   )
 
   const allValidatorsWithCtrlAcc = useFirstObservableValue(
     () =>
-      allValidatorAddresses &&
+      allValidators &&
       api &&
       api.query.staking.bonded
-        .multi(allValidatorAddresses)
+        .multi(allValidators.map(({ address }) => address))
         .pipe(map((entries) => entries.map((entry) => (entry.isSome ? entry.unwrap().toString() : undefined)))),
-    [allValidatorAddresses, api?.isConnected]
+    [allValidators, api?.isConnected]
   )
 
   const variables = {
     where: {
       boundAccounts_containsAny:
-        (allValidatorsWithCtrlAcc?.concat(allValidatorAddresses).filter((element) => !element) as string[]) ?? [],
+        (allValidatorsWithCtrlAcc
+          ?.concat(allValidators?.map(({ address }) => address))
+          .filter((element) => !element) as string[]) ?? [],
     },
   }
 
@@ -44,14 +52,15 @@ export const useValidatorMembers = () => {
 
   const validatorsWithMembership: ValidatorMembership[] | undefined = useMemo(() => {
     return (
-      allValidatorAddresses &&
+      allValidators &&
       allValidatorsWithCtrlAcc &&
       memberships &&
-      allValidatorAddresses.map((address, index) => {
+      allValidators.map(({ address, commission }, index) => {
         const controllerAccount = allValidatorsWithCtrlAcc[index]
         return {
           stashAccount: address,
           controllerAccount,
+          commission,
           ...memberships.find(
             ({ membership }) =>
               membership.boundAccounts.includes(address) ||
@@ -60,7 +69,7 @@ export const useValidatorMembers = () => {
         }
       })
     )
-  }, [data, allValidatorAddresses, allValidatorsWithCtrlAcc])
+  }, [data, allValidators, allValidatorsWithCtrlAcc])
 
   return validatorsWithMembership
 }
