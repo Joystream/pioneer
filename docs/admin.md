@@ -1,6 +1,6 @@
 # Administrating a Pioneer instance
 
-> **Warning**
+> [!CAUTION]
 > Any environment variable prefixed with `REACT_APP_` set in the building environment will be **accessible by anyone** on Pioneer front-end.
 
 ## Deploying Pioneer front-end
@@ -32,9 +32,8 @@ To deploy Pioneer on Vercel click on the button bellow:
    REACT_APP_AVATAR_UPLOAD_URL=https://atlas-services.joystream.org/avatars
    ```
 
-   > **Warning**
-   >
-   > `faucet.joystream.org` requires a specific CAPTCHA key to be set in: `REACT_APP_CAPTCHA_SITE_KEY`.
+   > [!IMPORTANT]
+   > `faucet.joystream.org` requires a specific [hCaptcha](https://www.hcaptcha.com/) key to be set in: `REACT_APP_CAPTCHA_SITE_KEY`.
 
 2.
    ### Run the deployment script
@@ -80,7 +79,7 @@ To deploy on Render click on the button bellow:
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/dev)
 
-> **Warning**
+> [!WARNING]
 > Only Sendgrid is currently supported with the Render deployment.
 
 ### Private server deployment
@@ -176,7 +175,7 @@ A longer term solution is to fetch a blacklist from a url. This url can be defin
    ```
    For JSON responses with particularly complex structures, a [JSONPath](https://github.com/dchester/jsonpath#jsonpath-syntax) can be set in `IMAGE_SAFETY_BLACKLIST_JSON_PATH`.
 
-> **Note**
+> [!NOTE]
 > If both method 1 and 2 are used, both blacklists are merged together.
 
 If needed `IMAGE_SAFETY_BLACKLIST_HEADERS` can define the headers (`\n` separated) passed to the request made to `IMAGE_SAFETY_BLACKLIST_URL`. e.g:
@@ -189,9 +188,9 @@ IMAGE_SAFETY_BLACKLIST_HEADERS="Authorization: Bearer API_KEY"
 Given an api key `keyXYZ`, a base `appXYZ`, and a table `tableXYZ` with the following structure:
 | image | page | blacklisted |
 | --- | --- | --- |
-| https://example.com/x.png | https://dao.joystream.org/#/forum/thread/1 | [X] |
-| https://example.com/y.png | https://dao.joystream.org/#/forum/thread/1 | [ ] |
-| https://example.com/z.png | https://dao.joystream.org/#/forum/thread/2 | [X] |
+| https://example.com/x.png | https://pioneerapp.xyz/#/forum/thread/1 | [X] |
+| https://example.com/y.png | https://pioneerapp.xyz/#/forum/thread/1 | [ ] |
+| https://example.com/z.png | https://pioneerapp.xyz/#/forum/thread/2 | [X] |
 
 This configuration:
 
@@ -237,17 +236,17 @@ Similarly to the blacklist api, a `REACT_APP_IMAGE_SAFETY_REPORT_HEADERS` can de
 REACT_APP_IMAGE_SAFETY_REPORT_HEADERS="Authorization Bearer API_KEY\nContent-Type:application/json"
 ```
 
-> **Warning**
+> [!WARNING]
 > Unlike fetching the blacklist which happens on the build step, this happens on the front-end. Therefore (just as with any environment variable prefixed with `REACT_APP_`) any sensitive information set in `REACT_APP_IMAGE_REPORT_API_URL` or `REACT_APP_IMAGE_SAFETY_REPORT_HEADERS` will be **accessible by anyone**.
 
-> **Warning**
+> [!CAUTION]
 > No CAPTCHA nor any other way to securely prevent some users from spamming the third party API is currently supported.
 
 #### Example: Airtable api
 Given an api key `keyXYZ` (with write access to the table), a base `appXYZ`, and a table `tableXYZ` with the following structure:
 | src | page |
 | --- | --- |
-| https://example.com/x.png | https://dao.joystream.org/#/forum/thread/1 |
+| https://example.com/x.png | https://pioneerapp.xyz/#/forum/thread/1 |
 
 This configuration:
 
@@ -258,5 +257,5 @@ REACT_APP_IMAGE_SAFETY_REPORT_BODY_TEMPLATE={"records":[{"fields":{"src":"{image
 
 Will allow users to report image urls and the page they were reported from, into the `tableXYZ`.
 
-> **Warning**
+> [!CAUTION]
 > Because this is making `tableXYZ` public by making `keyXYZ` accessible to anyone. The actually blacklisted url, should probably be stored somewhere else (where `tableXYZ` cannot write). Otherwise this would allow anyone to blacklist any image.

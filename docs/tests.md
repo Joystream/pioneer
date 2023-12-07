@@ -11,7 +11,7 @@ The project's [storybook](https://storybook.js.org/) is build by the CI and avai
 To run the local instance (project root or `packages/ui` directory):
 
 ```bash
-yarn run storybook
+yarn storybook
 ```
 
 Stories are written on files write next to the component they are rendering. E.g for `packages/ui/src/app/pages/Proposals/ProposalPreview.tsx` the stories are in `packages/ui/src/app/pages/Proposals/ProposalPreview.stories.tsx`.
@@ -23,7 +23,7 @@ The Pioneer Storybook has 3 type of stories:
    2. They serve as smoke tests for the CI. Meaning that if a page breaks in due to change it should be reported by the CI.
 - The pages and App which have `play` functions. These are tests they rely on slightly modified versions of Jest and the Testing Library.
 
-> *Warning*
+> [!NOTE]
 > Some stories currently do not fit in any of these 3 categories. They are single components but which rely on Query node mocks to run. These stories should be progressively removed.
 
 One of the main advantage of having tests done in the stories is that the same mocks are used to both write the stories (and often to also create the page itself) and to write the tests. It also makes it easier to debug the tests by providing a visual feed back of everything it does.
@@ -32,7 +32,7 @@ For more information the mocks see
 
 ## Integration tests
 
-> *Warning*
+> [!WARNING]
 > These tests are now deprecated they should be progressively be replaced by [Storybook interaction tests](#storybook).
 
 Pioneer use [jest](https://jestjs.io/) to run automated tests and [testing-library](https://testing-library.com/) as testing utilities. The [query-node mocks](mocks.md#query-node-mocks) uses the same setup as the front-end mocks.
@@ -109,4 +109,5 @@ The repository has enabled the continuous integration for every commit that land
 - The application preview on Vercel
 - The storybook preview on Vercel
 
-**Note**: Only the PRs that pass CI check can be included in the `main` branch.
+> [!NOTE]
+> Only the PRs that pass CI check can be merged to the `dev` branch.

@@ -73,7 +73,7 @@ In stories data are mocked using the [MockProvidersDecorator](../packages/ui/src
 }
 ```
 
-> *Note*
+> [!NOTE]
 > Most properties of this object are optionals. Only what's needed to render the stories and run the tests should be mocked.
 
 For more details check existing stories like: [ProposalPreview.stories.tsx](../packages/ui/src/app/pages/Proposals/ProposalPreview.stories.tsx).
@@ -171,7 +171,7 @@ You can also connect to the node using [Polkadot apps wallet](README.md#connecti
 
 ## Query-node Mocks
 
-> *Warning*
+> [!WARNING]
 > These mocks are now deprecated they are still heavily used by the legacy tests suites and some old stories. However no new tests or stories should depend on MirageJS and the legacy tests and stories should be removed progressively.
 
 To mock the query-node server we use [Mirage JS](https://miragejs.com/) in tests, storybook data and for local development.

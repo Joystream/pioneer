@@ -1,7 +1,7 @@
 # Pioneer front-end App
 
-> *Note*
-> For a more general Pioneer documentation see [Dev Readme](docs/README.md).
+> [!NOTE]
+> For a more general Pioneer documentation see [Dev Readme](/docs/README.md).
 
 ## Tech stack
 
@@ -245,6 +245,12 @@ import { useGetMembersQuery } from '@/memberships/queries'
 const { loading, data } = useGetMembersQuery()
 ```
 
+### Code generation
+
+Some GraphQL related tools use code generation to scaffold types and react hooks from GraphQL schemas and queries.
+
+After updating any of the `*.graphql` files run the `yarn queries:generated` script.
+
 ## ProxyApi
 
 To interact with the Joystream node a [polkadot{.js} API instance as to be created](https://polkadot.js.org/docs/api/start/create). Because part of the instance creation is resource intensive it results in the App freezing on lower spec machines. In order to solve this issue Pioneer creates the API instance in a web worker and all interaction with the API are done via the web worker.
@@ -252,12 +258,6 @@ To interact with the Joystream node a [polkadot{.js} API instance as to be creat
 This is done seamlessly by using on the main thread a `ProxyApi` which has the same type signature than the `ApiRx` instance. The `ProxyApi` forwards the calls to the `ApiRx` created on the web worker and forward the returned data too.
 
 This feature can be disabled by running Pioneer with `DISABLE_PROXY_API=true`.
-
-### Code generation
-
-Some GraphQL related tools use code generation to scaffold types and react hooks from GraphQL schemas and queries.
-
-After updating `packages/ui/src/api` any of `*.graphql` files run `yarn queries:generated` script in the `@joystream/pioneer` package.
 
 # Tips & Tricks
 

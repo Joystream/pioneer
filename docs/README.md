@@ -30,10 +30,10 @@ graph TB
     subgraph P["<h2>Pioneer<h2/>"]
         direction TB
 
-        App(("<a href='https://github.com/Joystream/pioneer/tree/dev/packages/ui'><strong>Pioneer App
+        App(("<a href='/packages/ui'><strong>Pioneer App
         front-end</strong></a>"))
 
-        Backend("<a href='https://github.com/Joystream/pioneer/tree/dev/packages/server'>Pioneer Notification
+        Backend("<a href='/packages/server'>Pioneer Notification
         back-end</a> (optional)");
 
         App<-->|"<a href='https://graphql.org/'>GraphQL</a>
@@ -71,6 +71,11 @@ graph TB
 
 ### Pioneer front-end App
 
+
+> [!TIP]
+> Read more about the Pioneer front-end App architecture and key concepts [here](/packages/ui/README.md).
+
+
  To start Pioneer run:
  ```shell
  yarn start
@@ -92,7 +97,7 @@ As shown above the Pioneer front-end relies the state of the Joystream blockchai
    1. [App](https://pioneer-2-storybook-joystream.vercel.app/?path=/story/app) these stories allow to interact with non domain specific feature like the On boarding flow or the sidebar.
    2. [Pages](https://pioneer-2-storybook-joystream.vercel.app/?path=/story/pages) these stories render the pages based on fully mocked data (which can partially be changed through the stories controls).
 
-   > **Warning**
+   > [!IMPORTANT]
    > After developing a feature using a story, the feature should still be tested on the app with an actual network.
 
    Read more about the Storybook mocks [here](mocks.md#storybook-mocks).
@@ -101,7 +106,7 @@ As shown above the Pioneer front-end relies the state of the Joystream blockchai
 
    Pioneer will by default connect to the Joystream main network. This can be enough to develop or develop feature based on the current version of the Mainnet chain, however changing state of the Mainnet for development is costly, time consuming, and should be avoided in most cases.
 
-   > **Note**
+   > [!TIP]
    > To make sure that Pioneer is connected to the Mainnet go to the Settings on the "Network" tab the "Select Network" should be set to "Mainnet". Additionally "Network Details" section (on the same page) can be checked to make sure the environment variable are indeed pointing to the Mainnet.
 
 - #### Method 3: Connect to a Joystream playgrounds
@@ -114,12 +119,10 @@ As shown above the Pioneer front-end relies the state of the Joystream blockchai
 
    Read the [Running the Joystream ecosystem locally](testenv.md) docs on how to run Pioneer with the Joystream testnet locally.
 
-Read more about the Pioneer front-end App architecture and key concepts [here](/packages/ui/README.md).
-
 ### Pioneer back-end
 
-Read about the Pioneer backend architecture and key concepts [here](/packages/server/README.md).
-
+> [!TIP]
+> Read about the Pioneer backend architecture and key concepts [here](/packages/server/README.md).
 
 ## Testing
 
