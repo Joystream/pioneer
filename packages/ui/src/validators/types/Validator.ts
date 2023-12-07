@@ -30,5 +30,4 @@ export interface ValidatorMembership {
   isVerifiedValidator?: boolean
   membership?: MemberWithDetails
   commission: number
-  commission: number
 }

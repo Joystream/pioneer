@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { encodeAddress } from '@/accounts/model/encodeAddress'
-import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { TableListItemAsLinkHover } from '@/common/components/List'
@@ -10,7 +9,6 @@ import { Skeleton } from '@/common/components/Skeleton'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 
-import { ValidatorWithDetails } from '../types/Validator'
 import { ValidatorWithDetails } from '../types/Validator'
 
 import { ValidatorInfo } from './ValidatorInfo'
@@ -40,10 +38,6 @@ export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
         <TokenValue size="xs" value={staking.total} />
         <TextMedium bold>{APR}%</TextMedium>
         <TextMedium bold>{commission}%</TextMedium>
-        <TokenValue size="xs" value={staking.own} />
-        <TokenValue size="xs" value={staking.total} />
-        <TextMedium bold>{APR}%</TextMedium>
-        <TextMedium bold>{commission}%</TextMedium>
         <ButtonPrimary size="small">Nominate</ButtonPrimary>
       </ValidatorItemWrap>
     </ValidatorItemWrapper>
@@ -64,7 +58,6 @@ const ValidatorItemWrapper = styled.div`
 
 export const ValidatorItemWrap = styled.div`
   display: grid;
-  grid-template-columns: 250px 100px 80px 120px 120px 140px 100px 90px;
   grid-template-columns: 250px 100px 80px 120px 120px 140px 100px 90px;
   grid-template-rows: 1fr;
   justify-content: space-between;
