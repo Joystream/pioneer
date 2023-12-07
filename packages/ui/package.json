@@ -20,7 +20,8 @@
     "i18n:json2csv": "node ./src/services/i18n/utils/converter.js --input=\"./src/services/i18n/dict\" --output=\"./src/services/i18n/utils/csv\"",
     "i18n:csv2json": "node ./src/services/i18n/utils/converter.js --from=csv --input=\"./src/services/i18n/utils/csv\" --output=\"./src/services/i18n/dict\" && yarn prettier \"./src/services/i18n/dict/**/*.json\" --print-width 20 --write --loglevel warn",
     "test-storybook": "test-storybook",
-    "test": "jest"
+    "test-legacy": "jest",
+    "test": "yarn test-legacy && yarn test-storybook"
   },
   "dependencies": {
     "@apollo/client": "3.5.7",

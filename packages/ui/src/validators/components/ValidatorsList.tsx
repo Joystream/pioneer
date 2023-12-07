@@ -1,12 +1,19 @@
 import React, { useMemo, useState } from 'react'
 import { generatePath } from 'react-router-dom'
+import React, { useMemo, useState } from 'react'
+import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { List, ListItem } from '@/common/components/List'
 import { ListHeader } from '@/common/components/List/ListHeader'
 import { SortHeader } from '@/common/components/List/SortHeader'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
+import { ListHeader } from '@/common/components/List/ListHeader'
+import { SortHeader } from '@/common/components/List/SortHeader'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Colors } from '@/common/constants'
+import { Comparator } from '@/common/model/Comparator'
+import { WorkingGroupsRoutes } from '@/working-groups/constants'
 import { Comparator } from '@/common/model/Comparator'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
@@ -17,11 +24,10 @@ import { ValidatorItem } from './ValidatorItem'
 
 interface ValidatorsListProps {
   validators: ValidatorWithDetails[]
+  validators: ValidatorWithDetails[]
 }
 
 export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
-  const [cardNumber, selectCard] = useState<number | null>(null)
-
   type SortKey = 'stashAccount' | 'APR' | 'commission'
   const [sortBy, setSortBy] = useState<SortKey>('stashAccount')
   const [isDescending, setDescending] = useState(false)
@@ -34,11 +40,11 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
     [sortBy, isDescending, validators]
   )
 
-  const onSort = (key: SortKey) => {
+  const onSort = (key: SortKey, descendingByDefault = false) => {
     if (key === sortBy) {
       setDescending(!isDescending)
     } else {
-      setDescending(false)
+      setDescending(descendingByDefault)
       setSortBy(key)
     }
   }
@@ -66,7 +72,7 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
         <ListHeader>State</ListHeader>
         <ListHeader>Own Stake</ListHeader>
         <ListHeader>Total Stake</ListHeader>
-        <SortHeader onSort={() => onSort('APR')} isActive={sortBy === 'APR'} isDescending={isDescending}>
+        <SortHeader onSort={() => onSort('APR', true)} isActive={sortBy === 'APR'} isDescending={isDescending}>
           Expected Nom APR
           <Tooltip
             tooltipText={
@@ -81,7 +87,11 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
             <TooltipDefault />
           </Tooltip>
         </SortHeader>
-        <SortHeader onSort={() => onSort('commission')} isActive={sortBy === 'commission'} isDescending={isDescending}>
+        <SortHeader
+          onSort={() => onSort('commission', true)}
+          isActive={sortBy === 'commission'}
+          isDescending={isDescending}
+        >
           Commission
         </SortHeader>
       </ListHeaders>
@@ -132,10 +142,16 @@ const ListHeaders = styled.div`
   grid-area: validatorstablenav;
   grid-template-rows: 1fr;
   grid-template-columns: 250px 100px 80px 120px 120px 140px 100px 90px;
+  grid-template-columns: 250px 100px 80px 120px 120px 140px 100px 90px;
   justify-content: space-between;
   width: 100%;
   padding: 0 16px;
+  padding: 0 16px;
 
+  span {
+    display: flex;
+    justify-content: flex-end;
+    gap: 4px;
   span {
     display: flex;
     justify-content: flex-end;

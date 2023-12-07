@@ -462,10 +462,12 @@ export const TestsFilters: Story = {
     await step('Verifcation Filter', async () => {
       await selectFromDropdown(screen, verificationFilter, 'verified')
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(3))
+      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(3))
       expect(screen.queryByText('unverifed')).toBeNull()
       expect(screen.getByText('alice'))
       expect(screen.queryByText('bob')).toBeNull()
       await selectFromDropdown(screen, verificationFilter, 'unverified')
+      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(8))
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(8))
       expect(screen.queryByText('verifed')).toBeNull()
       expect(screen.queryByText('alice')).toBeNull()
@@ -474,6 +476,7 @@ export const TestsFilters: Story = {
     })
     await step('State Filter', async () => {
       await selectFromDropdown(screen, stateFilter, 'active')
+      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(9))
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(9))
       expect(screen.queryByText('waiting')).toBeNull()
       await selectFromDropdown(screen, stateFilter, 'waiting')
@@ -503,7 +506,11 @@ export const TestsFilters: Story = {
       expect(screen.queryByText('Clear all filters'))
       await selectFromDropdown(screen, stateFilter, 'active')
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(3))
+      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(3))
       await userEvent.click(screen.getByText('Clear all filters'))
+      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(11))
+      await userEvent.type(searchElement, 'j4R{enter}')
+      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(9))
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(11))
       await userEvent.type(searchElement, 'j4R{enter}')
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(9))
@@ -516,22 +523,22 @@ export const TestsFilters: Story = {
       await userEvent.click(screen.getByText('Expected Nom APR'))
       expect(
         screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[0].innerText ===
-          '2%'
+          '18%'
       ).toBeTruthy()
       await userEvent.click(screen.getByText('Expected Nom APR'))
       expect(
         screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[0].innerText ===
-          '18%'
-      ).toBeTruthy()
-      await userEvent.click(screen.getByText('Commission'))
-      expect(
-        screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[1].innerText ===
-          '1%'
+          '2%'
       ).toBeTruthy()
       await userEvent.click(screen.getByText('Commission'))
       expect(
         screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[1].innerText ===
           '20%'
+      ).toBeTruthy()
+      await userEvent.click(screen.getByText('Commission'))
+      expect(
+        screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[1].innerText ===
+          '1%'
       ).toBeTruthy()
     })
   },

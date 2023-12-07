@@ -44,6 +44,7 @@ export const useValidatorsList = () => {
                 .eraReward.toBn()
                 .muln(ERAS_PER_YEAR)
                 .muln(commission)
+                .muln(commission)
                 .div(stakingInfo.total.toBn())
                 .toNumber()
             : 0
