@@ -21,9 +21,9 @@ export const asChainData = (data: any): any => {
   }
 }
 
-// const withUnwrap = (data: Record<any, any>) => Object.defineProperty(data, 'unwrap', { value: () => data })
-const withComputed = (data: Record<any, any>) => Object.defineProperties(data, {
-  unwrap: { value: () => data },
-  isSome: { value: Object.keys(data).length > 0 },
-  keys: { value: () => of(Object.keys(data).map(entry => ({ args: [entry] }))) },
-})
+const withComputed = (data: Record<any, any>) =>
+  Object.defineProperties(data, {
+    unwrap: { value: () => data },
+    isSome: { value: Object.keys(data).length > 0 },
+    keys: { value: () => of(Object.keys(data).map((entry) => ({ args: [entry] }))) },
+  })

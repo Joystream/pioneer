@@ -28,7 +28,7 @@ export const BlacklistedAccount = ({ address }: Prop) => {
         <BlacklistedAccountBalance>
           <InfoTitle>Total Balance: </InfoTitle>
           <InfoValue>
-            <TokenValue value={balance?.total} size='xs' />
+            <TokenValue value={balance?.total} size="xs" />
           </InfoValue>
         </BlacklistedAccountBalance>
       </BlacklistedAccountInfoWrap>
@@ -52,5 +52,5 @@ const BlacklistedAccountCopyAddress = styled(AccountCopyAddress)`
   color: ${Colors.Black[900]};
 `
 const BlacklistedAccountRow = styled(AccountRow)`
-max-width: 378px;
+  max-width: 378px;
 `
