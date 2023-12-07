@@ -43,9 +43,10 @@ export const ValidatorDetail = ({ validator }: Props) => {
               </Stat>
               <Stat
                 size="s"
-                value={`${Math.round(
-                  (validator.rewardPointsHistory.filter(({ rewardPoints }) => rewardPoints).length / ERA_DEPTH) * 100
-                )}%`}
+                value={`${(
+                  (validator.rewardPointsHistory.filter(({ rewardPoints }) => rewardPoints).length / ERA_DEPTH) *
+                  100
+                ).toFixed(3)}%`}
               >
                 <TextSmall lighter>Uptime</TextSmall>
               </Stat>
