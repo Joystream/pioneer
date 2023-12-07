@@ -2,9 +2,9 @@
 
 There are 3 ways to mock data to develop on Pioneer
 
-- Storybook mocks
-- Local node mocks
-- GraphQL (query-node) mocks (**deprecated**)
+- [Storybook mocks](#storybook-mocks))
+- [Local node mocks](#node-mock)
+- [GraphQL (query-node) mocks (**deprecated**)](#query-node-mocks)
 
 ## Storybook mocks
 
@@ -104,7 +104,7 @@ To show help:
 yarn node-mocks --help
 ```
 
-#### Chain spec
+#### Chain spec (**deprecated**)
 
 Another way to influence the on-chain state for testing purpose, is to provide a customize `chain-spec.json` file when running a Joystream node:
 

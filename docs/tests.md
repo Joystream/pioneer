@@ -28,7 +28,8 @@ The Pioneer Storybook has 3 type of stories:
 
 One of the main advantage of having tests done in the stories is that the same mocks are used to both write the stories (and often to also create the page itself) and to write the tests. It also makes it easier to debug the tests by providing a visual feed back of everything it does.
 
-For more information the mocks see
+> [!IMPORTANT]
+> Read how to mock data in the pages stories and tests [here](mocks.md#storybook-mocks)
 
 ## Integration tests
 
