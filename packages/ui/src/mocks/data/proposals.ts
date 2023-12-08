@@ -213,7 +213,7 @@ export const proposalsPagesChain = (
         },
 
         proposalsDiscussion: {
-          maxWhiteListSize: 20
+          maxWhiteListSize: 20,
         },
 
         proposalsCodex: {
