@@ -212,6 +212,10 @@ export const proposalsPagesChain = (
           titleMaxLength: 40,
         },
 
+        proposalsDiscussion: {
+          maxWhiteListSize: 20
+        },
+
         proposalsCodex: {
           fundingRequestProposalMaxTotalAmount: joy(166_666),
           fundingRequestProposalMaxAccounts: 2,
