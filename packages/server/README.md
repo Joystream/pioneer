@@ -1,5 +1,8 @@
 # Pioneer backend
 
+> [!NOTE]
+> For a more general Pioneer documentation see [Dev Readme](/docs/README.md).
+
 ## Overview
 
 A backend for the [Pioneer UI](../ui).
@@ -30,8 +33,6 @@ It is composed of 3 parts:
 
 ## Quick Start
 
-### render.com deployments
-
 ### Run with docker
 
 ```shell
@@ -51,8 +52,7 @@ yarn workspace server docker:notify
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/backend-dev-blueprint)
 
-> **Warning**
->
+> [!IMPORTANT]
 > This deployments will require to go through the [render.com](https://render.com/) registration, which includes providing a payment method due to the [cron job cost](https://render.com/pricing#cronjobs).
 >
 > The [render.com database free tier](https://render.com/docs/free#free-postgresql-databases) ends after 90 days.
@@ -72,12 +72,11 @@ In order to customize the default notification behavior with the GraphQL API, an
 
 ### Production
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/dev)
+To deploy a production instance check the [admin documentation](docs/admin.md#deploying-the-pioneer-notification-back-end)
 
 ## Production CLI usage
 
-> **Note**
->
+> [!NOTE]
 > The following commands are ran from the `server` directory. To run them from the monorepos root: `yarn` should be replaced by `yarn workspace server`.
 
 - `yarn start:api`: starts the API server.
@@ -227,8 +226,7 @@ query {
 
 ### Run locally
 
-> **Note**
->
+> [!NOTE]
 > The following commands are ran from the monorepos root.
 
 To run the API to develop locally:
@@ -239,6 +237,7 @@ To run the API to develop locally:
     - `yarn workspace server dev:db:build`: To use docker for the db.
     - Otherwise `yarn workspace dev:build`: Once the configured db is running.
 4. `yarn workspace server dev:api`: Start the server.
+5. `yarn workspace server dev:notify`: Run the notifier with `nodemon`.
 
 ### Some other useful scripts
 
