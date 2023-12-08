@@ -60,7 +60,7 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
               name="staking.account"
               minBalance={minStake}
               lockType="Council Candidate"
-              variant={isMobile ? 's' : size === 'md' ? 'm' : 'l'}
+              variant={size === 'lg' ? 'l' : 's'}
             />
           </InputComponent>
           <RowGapBlock gap={8}>

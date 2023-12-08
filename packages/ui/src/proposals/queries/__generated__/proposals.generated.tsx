@@ -23,6 +23,7 @@ export type WorkerProposalDetailsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -101,6 +102,7 @@ export type ProposalFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -141,6 +143,7 @@ export type VoteFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -186,6 +189,7 @@ export type VoteWithDetailsFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -237,6 +241,7 @@ export type ProposalWithDetailsFieldsFragment = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -308,6 +313,7 @@ export type ProposalWithDetailsFieldsFragment = {
               __typename: 'MemberMetadata'
               name?: string | null
               about?: string | null
+              isVerifiedValidator?: boolean | null
               avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
             }
             roles: Array<{
@@ -352,6 +358,7 @@ export type ProposalWithDetailsFieldsFragment = {
               __typename: 'MemberMetadata'
               name?: string | null
               about?: string | null
+              isVerifiedValidator?: boolean | null
               avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
             }
             roles: Array<{
@@ -412,6 +419,7 @@ export type ProposalWithDetailsFieldsFragment = {
               __typename: 'MemberMetadata'
               name?: string | null
               about?: string | null
+              isVerifiedValidator?: boolean | null
               avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
             }
             roles: Array<{
@@ -455,6 +463,7 @@ export type ProposalWithDetailsFieldsFragment = {
               __typename: 'MemberMetadata'
               name?: string | null
               about?: string | null
+              isVerifiedValidator?: boolean | null
               avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
             }
             roles: Array<{
@@ -496,6 +505,7 @@ export type ProposalWithDetailsFieldsFragment = {
               __typename: 'MemberMetadata'
               name?: string | null
               about?: string | null
+              isVerifiedValidator?: boolean | null
               avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
             }
             roles: Array<{
@@ -565,6 +575,7 @@ export type ProposalWithDetailsFieldsFragment = {
             __typename: 'MemberMetadata'
             name?: string | null
             about?: string | null
+            isVerifiedValidator?: boolean | null
             avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
           }
           roles: Array<{
@@ -610,6 +621,7 @@ export type ProposalWithDetailsFieldsFragment = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
+          isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
         roles: Array<{
@@ -671,6 +683,7 @@ export type ProposalWithDetailsFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -724,6 +737,7 @@ export type DiscussionPostFieldsFragment = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -769,6 +783,7 @@ export type DiscussionPostFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -821,6 +836,7 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -915,6 +931,7 @@ export type ProposalDiscussionPostMentionFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -1002,6 +1019,7 @@ export type GetProposalsQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -1069,6 +1087,7 @@ export type GetProposalQuery = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
+          isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
         roles: Array<{
@@ -1140,6 +1159,7 @@ export type GetProposalQuery = {
                 __typename: 'MemberMetadata'
                 name?: string | null
                 about?: string | null
+                isVerifiedValidator?: boolean | null
                 avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
               }
               roles: Array<{
@@ -1184,6 +1204,7 @@ export type GetProposalQuery = {
                 __typename: 'MemberMetadata'
                 name?: string | null
                 about?: string | null
+                isVerifiedValidator?: boolean | null
                 avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
               }
               roles: Array<{
@@ -1244,6 +1265,7 @@ export type GetProposalQuery = {
                 __typename: 'MemberMetadata'
                 name?: string | null
                 about?: string | null
+                isVerifiedValidator?: boolean | null
                 avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
               }
               roles: Array<{
@@ -1287,6 +1309,7 @@ export type GetProposalQuery = {
                 __typename: 'MemberMetadata'
                 name?: string | null
                 about?: string | null
+                isVerifiedValidator?: boolean | null
                 avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
               }
               roles: Array<{
@@ -1328,6 +1351,7 @@ export type GetProposalQuery = {
                 __typename: 'MemberMetadata'
                 name?: string | null
                 about?: string | null
+                isVerifiedValidator?: boolean | null
                 avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
               }
               roles: Array<{
@@ -1397,6 +1421,7 @@ export type GetProposalQuery = {
               __typename: 'MemberMetadata'
               name?: string | null
               about?: string | null
+              isVerifiedValidator?: boolean | null
               avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
             }
             roles: Array<{
@@ -1442,6 +1467,7 @@ export type GetProposalQuery = {
             __typename: 'MemberMetadata'
             name?: string | null
             about?: string | null
+            isVerifiedValidator?: boolean | null
             avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
           }
           roles: Array<{
@@ -1503,6 +1529,7 @@ export type GetProposalQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -1580,6 +1607,7 @@ export type GetVoteWithDetailsQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -1646,6 +1674,7 @@ export type GetProposalVotesQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -1747,6 +1776,7 @@ export type GetProposalDiscussionPostMentionQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{

@@ -54,8 +54,8 @@ export const OnBoardingPlugin = () => {
               Extension is blocking Pioneer from access
             </TextBig>
             <TextMedium lighter>
-              Change the settings of the wallet browser plugin to allow it access to dao.joystream.org and reload the
-              page
+              Change the settings of the wallet browser plugin to allow it access to {window.location.host} and reload
+              the page
             </TextMedium>
           </RedBox>
         )}

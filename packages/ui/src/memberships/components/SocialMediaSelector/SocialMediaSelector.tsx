@@ -5,9 +5,10 @@ import styled from 'styled-components'
 
 import { InputComponent, InputText } from '@/common/components/forms'
 import { TextBig, TextMedium } from '@/common/components/typography'
-import { capitalizeFirstLetter } from '@/common/helpers'
 import { socialMediaList, SocialMediaTile, Socials } from '@/memberships/components/SocialMediaTile/SocialMediaTile'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
+
+import { socialTitle } from '../SocialMediaTile/SocialMediaTile'
 
 const socialToPlaceholder: Record<Socials, string> = {
   HYPERLINK: 'Enter URL',
@@ -80,7 +81,7 @@ export const SocialMediaSelector = ({ initialSocials }: Props) => {
           id={social + 1}
           inputSize="m"
           name={`externalResources.${social}`}
-          label={capitalizeFirstLetter(social.toLowerCase())}
+          label={socialTitle(social)}
         >
           <InputText
             id={`${social.toLowerCase()}-input`}

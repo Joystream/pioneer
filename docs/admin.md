@@ -1,23 +1,39 @@
 # Administrating a Pioneer instance
 
-> **Warning**
-> Any environment variable prefixed with `REACT_APP_` set in the building environment will be **accessible by anyone** on Pioneer frontend.
+> [!CAUTION]
+> Any environment variable prefixed with `REACT_APP_` set in the building environment will be **accessible by anyone** on Pioneer front-end.
 
-## Deploying Pioneer
+## Deploying Pioneer front-end
+
+### Quick start (Vercel)
+
+To deploy Pioneer on Vercel click on the button bellow:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FJoystream%2Fpioneer&env=REACT_APP_MAINNET_NODE_SOCKET,REACT_APP_MAINNET_QUERY_NODE,REACT_APP_MAINNET_QUERY_NODE_SOCKET&envDescription=More%20information%20at%3A&envLink=https%3A%2F%2Fgithub.com%2FJoystream%2Fpioneer%2Fblob%2Fdev%2Fdocs%2Fadmin.md&project-name=pioneer&repository-name=pioneer)
 
 1.
    ### Configure the network Pioneer should connect to by default
 
-   To do so define `REACT_APP_TESTNET_NODE_SOCKET`, `REACT_APP_TESTNET_QUERY_NODE`, `REACT_APP_TESTNET_QUERY_NODE_SOCKET`, and `REACT_APP_TESTNET_MEMBERSHIP_FAUCET_URL`.
+   To do so define `REACT_APP_MAINNET_NODE_SOCKET`, `REACT_APP_MAINNET_QUERY_NODE`, `REACT_APP_MAINNET_QUERY_NODE_SOCKET`, and `REACT_APP_MAINNET_MEMBERSHIP_FAUCET_URL`.
 
-   For example, for the Joystream testnet:
+   For example, for the Joystream mainnet:
 
    ```shell
-   REACT_APP_TESTNET_NODE_SOCKET=wss://rpc.joystream.org:9944
-   REACT_APP_TESTNET_QUERY_NODE=https://query.joystream.org/graphql
-   REACT_APP_TESTNET_QUERY_NODE_SOCKET=wss://query.joystream.org/graphql
-   REACT_APP_TESTNET_MEMBERSHIP_FAUCET_URL=https://18.234.141.38.nip.io/member-faucet/register
+   REACT_APP_MAINNET_NODE_SOCKET=wss://rpc.joystream.org:9944
+   REACT_APP_MAINNET_QUERY_NODE=https://query.joystream.org/graphql
+   REACT_APP_MAINNET_QUERY_NODE_SOCKET=wss://query.joystream.org/graphql
    ```
+
+  Additionally a membership faucet, [a notification back-end](deploying-the-pioneer-notification-back-end), or an Avatar upload service can be configured with e.g:
+
+   ```shell
+   REACT_APP_MAINNET_MEMBERSHIP_FAUCET_URL=https://faucet.joystream.org/member-faucet/register`
+   REACT_APP_MAINNET_BACKEND=https://api-7zai.onrender.com`
+   REACT_APP_AVATAR_UPLOAD_URL=https://atlas-services.joystream.org/avatars
+   ```
+
+   > [!IMPORTANT]
+   > `faucet.joystream.org` requires a specific [hCaptcha](https://www.hcaptcha.com/) key to be set in: `REACT_APP_CAPTCHA_SITE_KEY`.
 
 2.
    ### Run the deployment script
@@ -26,6 +42,88 @@
    yarn run build
    ```
    Will build Pioneer inside the `packages/ui/build` folder.
+
+## Deploying the Pioneer notification back-end
+
+### Prerequisites
+
+#### Configure the Pioneer back-end
+
+- `QUERY_NODE_ENDPOINT=https://<value>`: Query node to fetch from (in most cases this should be: `https://query.joystream.org/graphql`).
+- `PIONEER_URL=https://<value>`: The URL of the your Pioneer web application.
+- `STARTING_BLOCK=<value>`: The block to start fetching the events from (in most cases this should be the current block).
+- `EMAIL_SENDER=<value>`: The address to send e-mail with.
+
+Replace the `<value>` by the actual values and save the configuration in a file.
+
+#### Set up an e-mail provider
+
+To both register users and notify them an email provider needs to be set up. At the moment only SendGrid and Mailgun are supported but custom SMTP configuration is coming soon.
+
+To set up SendGrid:
+1. Sign up for a SendGrid account.
+2. Verify your Sender e-mail address Identity.
+3. Create your SendGrid API key with full access "Mail Send" permissions.
+4. Add this API key to the file mentioned earlier this value is called `SENDGRID_API_KEY=<value>`
+
+To set up Mailgun:
+1. Sign up for a Mailgun account.
+2. Add and verify your domain.
+3. Get your Mailgun private API key from your dashboard.
+4. Add this API key to the file mentioned earlier this value is called `MAILGUN_API_KEY=<value>`
+5. Also add `MAILGUN_DOMAIN=<value>` to the file and if this is an EU domain `MAILGUN_API_URL=https://api.eu.mailgun.net` should be added too.
+
+### Quick start (Render)
+
+To deploy on Render click on the button bellow:
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/dev)
+
+> [!WARNING]
+> Only Sendgrid is currently supported with the Render deployment.
+
+### Private server deployment
+
+1.
+   #### Install docker
+   The following deployment instructions are relying on the [`joystream/pioneer-backend`](https://hub.docker.com/r/joystream/pioneer-backend) docker image.
+   Therefore [Docker](https://docs.docker.com) is a requirement.
+
+2.
+   #### Host a PostgreSQL database
+   Store the database URL in the file mentioned above. It should look like this:
+   ```
+   DATABASE_URL=postgresql://{username}:{password}@{host}:5432/{database name}
+   ```
+
+3.
+   #### Upload the configuration file on the server
+   At this point it should have a all the following configuration.
+   ```shell
+   DATABASE_URL=postgresql://{username}:{password}@{host}:5432/{database name}
+   QUERY_NODE_ENDPOINT=https://<value>
+   PIONEER_URL=https://<value>
+   STARTING_BLOCK=<value>
+   EMAIL_SENDER=<value>
+   ```
+
+   In addition it should also have your e-mail provider configuration with either `SENDGRID_API_KEY`, or `MAILGUN_API_KEY`, `MAILGUN_DOMAIN` and maybe `MAILGUN_API_URL=https://api.eu.mailgun.net`
+
+   Finally `APP_SECRET_KEY=<secret value>` should be added to the configuration. It's best to pick this value at random and not to store it anywhere else.
+
+4.
+   #### Serve the backend API
+   E.g on a private server with the environment variable - mentioned above - set in a file at the path: `/path/to/.env`, the API can be run with:
+   ```
+   docker run -d -p 80:80 --restart=always --name=api --env-file=/path/to/.env joystream/pioneer-backend
+   ```
+
+5.
+   #### Run the notify script at regular intervals
+   E.g still on a private server the notify script can be run every 10 minutes by setting the following line in the crontab:
+   ```
+   */10 * * * * docker run --name=notify --env-file=/path/to/.env joystream/pioneer-backend notify
+   ```
 
 ## Under maintenance screen
 
@@ -77,7 +175,7 @@ A longer term solution is to fetch a blacklist from a url. This url can be defin
    ```
    For JSON responses with particularly complex structures, a [JSONPath](https://github.com/dchester/jsonpath#jsonpath-syntax) can be set in `IMAGE_SAFETY_BLACKLIST_JSON_PATH`.
 
-> **Note**
+> [!NOTE]
 > If both method 1 and 2 are used, both blacklists are merged together.
 
 If needed `IMAGE_SAFETY_BLACKLIST_HEADERS` can define the headers (`\n` separated) passed to the request made to `IMAGE_SAFETY_BLACKLIST_URL`. e.g:
@@ -90,9 +188,9 @@ IMAGE_SAFETY_BLACKLIST_HEADERS="Authorization: Bearer API_KEY"
 Given an api key `keyXYZ`, a base `appXYZ`, and a table `tableXYZ` with the following structure:
 | image | page | blacklisted |
 | --- | --- | --- |
-| https://example.com/x.png | https://dao.joystream.org/#/forum/thread/1 | [X] |
-| https://example.com/y.png | https://dao.joystream.org/#/forum/thread/1 | [ ] |
-| https://example.com/z.png | https://dao.joystream.org/#/forum/thread/2 | [X] |
+| https://example.com/x.png | https://pioneerapp.xyz/#/forum/thread/1 | [X] |
+| https://example.com/y.png | https://pioneerapp.xyz/#/forum/thread/1 | [ ] |
+| https://example.com/z.png | https://pioneerapp.xyz/#/forum/thread/2 | [X] |
 
 This configuration:
 
@@ -138,17 +236,17 @@ Similarly to the blacklist api, a `REACT_APP_IMAGE_SAFETY_REPORT_HEADERS` can de
 REACT_APP_IMAGE_SAFETY_REPORT_HEADERS="Authorization Bearer API_KEY\nContent-Type:application/json"
 ```
 
-> **Warning**
+> [!WARNING]
 > Unlike fetching the blacklist which happens on the build step, this happens on the front-end. Therefore (just as with any environment variable prefixed with `REACT_APP_`) any sensitive information set in `REACT_APP_IMAGE_REPORT_API_URL` or `REACT_APP_IMAGE_SAFETY_REPORT_HEADERS` will be **accessible by anyone**.
 
-> **Warning**
+> [!CAUTION]
 > No CAPTCHA nor any other way to securely prevent some users from spamming the third party API is currently supported.
 
 #### Example: Airtable api
 Given an api key `keyXYZ` (with write access to the table), a base `appXYZ`, and a table `tableXYZ` with the following structure:
 | src | page |
 | --- | --- |
-| https://example.com/x.png | https://dao.joystream.org/#/forum/thread/1 |
+| https://example.com/x.png | https://pioneerapp.xyz/#/forum/thread/1 |
 
 This configuration:
 
@@ -159,5 +257,5 @@ REACT_APP_IMAGE_SAFETY_REPORT_BODY_TEMPLATE={"records":[{"fields":{"src":"{image
 
 Will allow users to report image urls and the page they were reported from, into the `tableXYZ`.
 
-> **Warning**
+> [!CAUTION]
 > Because this is making `tableXYZ` public by making `keyXYZ` accessible to anyone. The actually blacklisted url, should probably be stored somewhere else (where `tableXYZ` cannot write). Otherwise this would allow anyone to blacklist any image.
