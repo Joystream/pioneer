@@ -3,33 +3,20 @@ import { useForm, FormProvider } from 'react-hook-form'
 import * as Yup from 'yup'
 import { AnySchema } from 'yup'
 
-import { filterAccount, SelectAccount, SelectedAccount } from '@/accounts/components/SelectAccount'
+import { filterAccount, SelectAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { Account } from '@/accounts/types'
-import { ButtonPrimary, ButtonGhost } from '@/common/components/buttons'
-import {
-  InlineToggleWrap,
-  InputComponent,
-  InputText,
-  InputTextarea,
-  Label,
-  ToggleCheckbox,
-} from '@/common/components/forms'
-import { CrossIcon } from '@/common/components/icons'
-import { PlusIcon } from '@/common/components/icons/PlusIcon'
+import { InputComponent, InputText, InputTextarea } from '@/common/components/forms'
 import { Loading } from '@/common/components/Loading'
 import {
   ModalHeader,
   ModalTransactionFooter,
   Row,
-  RowInline,
   ScrolledModal,
   ScrolledModalBody,
   ScrolledModalContainer,
 } from '@/common/components/Modal'
-import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
-import { TextMedium, TextSmall } from '@/common/components/typography'
+import { TextMedium } from '@/common/components/typography'
 import { WithNullableValues } from '@/common/types/form'
 import { definedValues } from '@/common/utils'
 import { useYupValidationResolver } from '@/common/utils/validation'
@@ -94,15 +81,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     mode: 'onChange',
   })
 
-  const [controllerAccount, rootAccount, handle, isValidator, validatorAccountCandidate] = form.watch([
-    'controllerAccount',
-    'rootAccount',
-    'handle',
-    'isValidator',
-    'validatorAccountCandidate',
-  ])
-
-  const [validatorAccounts, setValidatorAccounts] = useState<Account[]>([])
+  const [controllerAccount, rootAccount, handle] = form.watch(['controllerAccount', 'rootAccount', 'handle'])
 
   useEffect(() => {
     form.trigger('handle')
@@ -115,21 +94,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
 
-  const canUpdate =
-    form.formState.isValid &&
-    hasAnyEdits(form.getValues(), getUpdateMemberFormInitial(member)) &&
-    (!isValidator || validatorAccounts?.length)
-
-  const addValidatorAccount = () => {
-    if (validatorAccountCandidate) {
-      setValidatorAccounts([...new Set([validatorAccountCandidate, ...validatorAccounts])])
-      form?.setValue('validatorAccountCandidate' as keyof UpdateMemberForm, undefined)
-    }
-  }
-
-  const removeValidatorAccount = (index: number) => {
-    setValidatorAccounts([...validatorAccounts.slice(0, index), ...validatorAccounts.slice(index + 1)])
-  }
+  const canUpdate = form.formState.isValid && hasAnyEdits(form.getValues(), getUpdateMemberFormInitial(member))
 
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
@@ -188,58 +153,6 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
                 member.externalResources ? member.externalResources.map((resource) => resource.source) : []
               }
             />
-
-            <Row>
-              <InlineToggleWrap>
-                <Label>I am a validator: </Label>
-                <ToggleCheckbox trueLabel="Yes" falseLabel="No" name="isValidator" />
-              </InlineToggleWrap>
-            </Row>
-            {isValidator && (
-              <>
-                <Row>
-                  <RowInline>
-                    <InputComponent id="select-validatorAccount" inputSize="l">
-                      <SelectAccount id="select-validatorAccount" name="validatorAccountCandidate" />
-                    </InputComponent>
-                    <ButtonPrimary
-                      square
-                      size="large"
-                      onClick={addValidatorAccount}
-                      disabled={!validatorAccountCandidate}
-                    >
-                      <PlusIcon />
-                    </ButtonPrimary>
-                  </RowInline>
-                </Row>
-
-                {validatorAccounts.map((account, index) => (
-                  <Row>
-                    <RowInline>
-                      <SelectedAccount account={account as Account} key={'selected' + index} />
-                      <ButtonGhost
-                        square
-                        size="large"
-                        onClick={() => {
-                          removeValidatorAccount(index)
-                        }}
-                      >
-                        <CrossIcon />
-                      </ButtonGhost>
-                    </RowInline>
-                  </Row>
-                ))}
-                <Row>
-                  <RowInline gap={4}>
-                    <Label noMargin>Status</Label>
-                    <Tooltip tooltipText="This is the status which indicates the selected account is actually a validator account.">
-                      <TooltipDefault />
-                    </Tooltip>
-                    <TextSmall dark> : {'Unverified'} ! </TextSmall>
-                  </RowInline>
-                </Row>
-              </>
-            )}
           </FormProvider>
         </ScrolledModalContainer>
       </ScrolledModalBody>
@@ -247,13 +160,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
         next={{
           disabled: !canUpdate || isUploading,
           label: isUploading ? <Loading text="Uploading avatar" /> : 'Save changes',
-          onClick: () => {
-            validatorAccounts?.map((account, index) => {
-              form?.register(('validatorAccounts[' + index + ']') as keyof UpdateMemberForm)
-              form?.setValue(('validatorAccounts[' + index + ']') as keyof UpdateMemberForm, account)
-            })
-            uploadAvatarAndSubmit(form.getValues())
-          },
+          onClick: () => uploadAvatarAndSubmit(form.getValues()),
         }}
       />
     </ScrolledModal>
