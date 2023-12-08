@@ -26,7 +26,7 @@ export const RecoverButton = React.memo(({ memberId, lock, address, isRecoverabl
     }
   }, [address, lock, memberId])
 
-  if (!isRecoverable || !memberId) {
+  if (!isRecoverable) {
     return null
   }
 
