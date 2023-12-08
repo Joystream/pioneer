@@ -458,6 +458,7 @@ type MemberMetadata implements BaseGraphQLObject {
   about: String
   member: Membership
   externalResources: [MembershipExternalResource!]
+  isVerifiedValidator: Boolean
   membercreatedeventmetadata: [MemberCreatedEvent!]
   memberinvitedeventmetadata: [MemberInvitedEvent!]
   memberprofileupdatedeventnewMetadata: [MemberProfileUpdatedEvent!]
@@ -8309,6 +8310,8 @@ input MemberMetadataWhereInput {
   about_startsWith: String
   about_endsWith: String
   about_in: [String!]
+  isVerifiedValidator_eq: Boolean
+  isVerifiedValidator_in: [Boolean!]
   member: MembershipWhereInput
   externalResources_none: MembershipExternalResourceWhereInput
   externalResources_some: MembershipExternalResourceWhereInput
@@ -8341,12 +8344,14 @@ input MemberMetadataCreateInput {
   name: String
   avatar: JSONObject!
   about: String
+  isVerifiedValidator: Boolean
 }
 
 input MemberMetadataUpdateInput {
   name: String
   avatar: JSONObject
   about: String
+  isVerifiedValidator: Boolean
 }
 
 input ProposalDiscussionWhitelistWhereInput {
@@ -35075,6 +35080,8 @@ enum MemberMetadataOrderByInput {
   name_DESC
   about_ASC
   about_DESC
+  isVerifiedValidator_ASC
+  isVerifiedValidator_DESC
 }
 
 enum MemberProfileUpdatedEventOrderByInput {
