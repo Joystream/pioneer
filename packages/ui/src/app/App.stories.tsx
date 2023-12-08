@@ -510,7 +510,7 @@ export const BuyMembershipNotEnoughFund: Story = {
 
 export const BuyMembershipTxFailure: Story = {
   args: { hasMemberships: false, isLoggedIn: false },
-  parameters: { BuyMembershipTxFailure: 'Some error message' },
+  parameters: { buyMembershipTxFailure: 'Some error message' },
 
   play: async ({ canvasElement }) => {
     const screen = within(canvasElement)
