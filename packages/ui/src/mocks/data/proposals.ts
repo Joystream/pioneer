@@ -242,7 +242,7 @@ export const proposalsPagesChain = (
           nextRewardPayments,
           stage: { stage: { isIdle: true }, changedAt: 123 },
         },
-        referendum: { stage: {} },
+        referendum: { stage: {}, accountsOptedOut: { keys: [] } },
 
         members: {
           initialInvitationCount,
