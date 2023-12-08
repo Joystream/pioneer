@@ -16,16 +16,17 @@ import { Account } from '../types'
 interface AccountInfoProps {
   account: Account
   locked?: boolean
+  variant?: 's' | 'm' | 'l'
 }
 
-export const AccountInfo = React.memo(({ account, locked }: AccountInfoProps) => {
+export const AccountInfo = React.memo(({ account, locked, variant }: AccountInfoProps) => {
   const { active } = useMyMemberships()
 
   return (
     <AccountInfoWrap>
       <PhotoWrapper>
         <AccountPhoto>
-          <Identicon size={40} theme={'beachball'} value={account.address} />
+          <Identicon size={variant === 's' || variant === 'm' ? 28 : 40} theme={'beachball'} value={account.address} />
         </AccountPhoto>
         {locked && (
           <LockIconWrapper>
@@ -42,7 +43,7 @@ export const AccountInfo = React.memo(({ account, locked }: AccountInfoProps) =>
   )
 })
 
-const AccountInfoWrap = styled.div`
+export const AccountInfoWrap = styled.div`
   display: grid;
   grid-template-columns: 40px 1fr;
   grid-template-rows: min-content 24px 18px;

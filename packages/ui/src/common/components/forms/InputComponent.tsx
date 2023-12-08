@@ -467,6 +467,7 @@ export const InputNotification = styled.div<InputProps>`
   grid-auto-flow: column;
   grid-column-gap: 4px;
   align-items: center;
+  justify-content: start;
   width: 100%;
   color: ${({ validation }) => {
     switch (validation) {
@@ -502,4 +503,8 @@ export const InputNotificationMessage = styled(TextSmall)`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+`
+
+export const TokenInputComponent = styled(InputComponent)`
+  width: calc(min(400px, 100%));
 `

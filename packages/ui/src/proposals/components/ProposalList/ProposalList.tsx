@@ -35,7 +35,7 @@ export const ProposalList = ({ proposals, getSortProps, isPast, isLoading }: Pro
 
   return (
     <RowGapBlock gap={4}>
-      <ProposalsListHeaders $colLayout={ProposalColLayout}>
+      <ProposalsListHeaders $colLayout={ProposalColLayout(isCouncilMember, isPast)}>
         {getSortProps ? <SortHeader {...getSortProps('title')}>Title</SortHeader> : <ProposalListHeader />}
         <ProposalListHeader>Stage</ProposalListHeader>
         <ProposalListHeader>Proposer</ProposalListHeader>
@@ -58,7 +58,7 @@ export const ProposalList = ({ proposals, getSortProps, isPast, isLoading }: Pro
 }
 
 const ProposalListWarpper = styled(List)`
-  media (max-width: 1439px) {
+  @media (max-width: 1439px) {
     row-gap: 16px;
   }
 `

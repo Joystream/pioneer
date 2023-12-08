@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "license": "GPL-3.0-only",
   "scripts": {
     "prisma": "prisma",
@@ -9,7 +9,7 @@
     "docker:up": "./docker/up.sh",
     "docker:notify": "yarn docker run pioneer-api notify",
     "docker:yarn": "./docker/yarn.sh",
-    "test": "jest --runInBand",
+    "test": "yarn dev:db && yarn dev:build && jest --runInBand",
     "tsc": "tsc",
     "ts-node": "ts-node --transpile-only -r tsconfig-paths/register",
     "nodemon": "nodemon --transpile-only -r tsconfig-paths/register",

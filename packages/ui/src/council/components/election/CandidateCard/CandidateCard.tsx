@@ -209,7 +209,14 @@ const CandidateCardStakeAndControls = styled.div`
   align-items: flex-end;
   width: fit-content;
   column-gap: 32px;
+  row-gap: 8px;
   margin-top: auto;
+  flex-wrap: wrap;
+
+  @media (min-width: 1440px) {
+    flex-wrap: nowrap;
+    min-width: fit-content;
+  }
 `
 
 const CandidateCardStatistics = styled.div`

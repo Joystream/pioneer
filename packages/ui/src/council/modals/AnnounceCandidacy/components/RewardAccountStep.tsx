@@ -7,7 +7,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { useResponsive } from '@/common/hooks/useResponsive'
 
 export const RewardAccountStep = () => {
-  const { isMobile } = useResponsive()
+  const { isMobile, size } = useResponsive()
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -23,7 +23,7 @@ export const RewardAccountStep = () => {
             required
             inputSize={isMobile ? 'xxl' : 'l'}
           >
-            <SelectAccount name="reward.account" isSmallVariant={isMobile} />
+            <SelectAccount name="reward.account" variant={isMobile ? 's' : size === 'md' ? 'm' : 'l'} />
           </InputComponent>
         </RowGapBlock>
       </Row>

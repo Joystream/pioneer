@@ -33,9 +33,6 @@ export const SidePaneRow = styled.li`
   }
 
   > *:last-child {
-    display: flex;
-    gap: 16px;
-    align-items: center;
     margin-left: 24px;
     width: fit-content;
   }

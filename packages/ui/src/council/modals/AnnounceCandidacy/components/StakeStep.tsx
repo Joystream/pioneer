@@ -22,7 +22,7 @@ interface StakingStepProps extends ValidationHelpers {
 }
 
 export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessageGetter }: StakingStepProps) => {
-  const { isMobile } = useResponsive()
+  const { isMobile, size } = useResponsive()
   const form = useFormContext()
   const [stake] = form.watch(['staking.amount'])
   const balances = useMyBalances()
@@ -60,7 +60,7 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
               name="staking.account"
               minBalance={minStake}
               lockType="Council Candidate"
-              isSmallVariant={isMobile}
+              variant={size === 'lg' ? 'l' : 's'}
             />
           </InputComponent>
           <RowGapBlock gap={8}>

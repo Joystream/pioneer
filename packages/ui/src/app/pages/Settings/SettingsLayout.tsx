@@ -1,10 +1,11 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { PageHeader } from '@/app/components/PageHeader'
 import { PageLayout } from '@/app/components/PageLayout'
 import { usePageTabs } from '@/app/hooks/usePageTabs'
+import { BackendContext } from '@/app/providers/backend/context'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { Tabs } from '@/common/components/Tabs'
@@ -17,15 +18,19 @@ export type SettingsLayoutProps = {
     disabled: boolean
     onClick: () => void
   }
+  fullWidth?: boolean
   children?: ReactNode
 }
 
-export const SettingsLayout = ({ saveButton, children }: SettingsLayoutProps) => {
+export const SettingsLayout = ({ saveButton, fullWidth, children }: SettingsLayoutProps) => {
   const { t } = useTranslation('settings')
+  const backendContext = useContext(BackendContext)
+  const notificationsTab = [t('notifications'), SettingsRoutes.notifications] as const
   const tabs = usePageTabs([
     [t('network'), SettingsRoutes.settings],
-    [t('notifications'), SettingsRoutes.notifications],
+    ...(backendContext.backendClient ? [notificationsTab] : []),
   ])
+
   return (
     <PageLayout
       header={
@@ -42,7 +47,7 @@ export const SettingsLayout = ({ saveButton, children }: SettingsLayoutProps) =>
         />
       }
       main={
-        <Container>
+        <Container fullWidth={fullWidth}>
           <MainPanel>{children}</MainPanel>
         </Container>
       }
@@ -50,6 +55,6 @@ export const SettingsLayout = ({ saveButton, children }: SettingsLayoutProps) =>
   )
 }
 
-export const Container = styled.div`
-  max-width: 690px;
+export const Container = styled.div<{ fullWidth?: boolean }>`
+  max-width: ${({ fullWidth = false }) => (fullWidth ? 'auto' : '690px')};
 `

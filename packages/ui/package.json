@@ -1,6 +1,6 @@
 {
   "name": "@joystream/pioneer",
-  "version": "1.9.0",
+  "version": "2.0.0",
   "license": "GPL-3.0-only",
   "scripts": {
     "build": "node --max_old_space_size=4096 ./build.js",
@@ -20,7 +20,8 @@
     "i18n:json2csv": "node ./src/services/i18n/utils/converter.js --input=\"./src/services/i18n/dict\" --output=\"./src/services/i18n/utils/csv\"",
     "i18n:csv2json": "node ./src/services/i18n/utils/converter.js --from=csv --input=\"./src/services/i18n/utils/csv\" --output=\"./src/services/i18n/dict\" && yarn prettier \"./src/services/i18n/dict/**/*.json\" --print-width 20 --write --loglevel warn",
     "test-storybook": "test-storybook",
-    "test": "jest"
+    "test-legacy": "jest",
+    "test": "yarn test-legacy && yarn test-storybook"
   },
   "dependencies": {
     "@apollo/client": "3.5.7",
@@ -68,6 +69,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.4.2",
+    "react-error-boundary": "^3.1.4",
     "react-hook-form": "^7.29.0",
     "react-i18next": "^11.15.1",
     "react-intersection-observer": "^8.32.1",

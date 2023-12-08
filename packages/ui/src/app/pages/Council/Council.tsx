@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import styled from 'styled-components'
 
 import { PageHeaderWithHint } from '@/app/components/PageHeaderWithHint'
 import { PageLayout } from '@/app/components/PageLayout'
@@ -43,7 +44,7 @@ export const Council = () => {
   const rewardPerDay = useMemo(() => reward?.period?.mul(reward?.amount ?? asBN(0)) ?? asBN(0), [reward])
   const main = (
     <MainPanel>
-      <Statistics>
+      <StatisticsStyle>
         {electionStage === 'inactive' ? (
           <BlockDurationStatistics title="Normal period remaining length" value={idlePeriodRemaining} />
         ) : (
@@ -64,7 +65,7 @@ export const Council = () => {
             { label: 'Per Week', value: rewardPerDay.mul(asBN(7)) },
           ]}
         />
-      </Statistics>
+      </StatisticsStyle>
 
       {!isCouncilorLoading && sortedCouncilors.length === 0 ? (
         <NotFoundText>There is no council member at the moment</NotFoundText>
@@ -92,3 +93,11 @@ const sortBy = ({ key, isDescending }: CouncilOrder): ((a: Councilor, b: Council
       return (a, b) => (asBN(a[key] ?? 0).gte(asBN(b[key] ?? 0)) ? 1 : -1) * direction
   }
 }
+
+const StatisticsStyle = styled(Statistics)`
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+`

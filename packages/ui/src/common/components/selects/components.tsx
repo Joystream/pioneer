@@ -1,6 +1,8 @@
 import React, { MouseEventHandler, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
+import { AccountInfoWrap } from '@/accounts/components/AccountInfo'
+
 import {
   Animations,
   BorderRad,
@@ -23,12 +25,12 @@ interface Props {
   onClick: () => void
   disabled?: boolean
   className?: string
-  isSmallVariant?: boolean
+  variant?: 's' | 'm' | 'l'
 }
 
-export const Option = ({ children, onClick, disabled, className, isSmallVariant }: Props) => (
+export const Option = ({ children, onClick, disabled, className, variant }: Props) => (
   <OptionComponentContainer onClick={onClick} disabled={disabled}>
-    <OptionComponent disabled={disabled} className={className} isSmallVariant={isSmallVariant}>
+    <OptionComponent disabled={disabled} className={className} variant={variant}>
       {children}
     </OptionComponent>
   </OptionComponentContainer>
@@ -56,9 +58,9 @@ export const SelectToggleButton = ({ isOpen, disabled, onToggleClick }: SelectTo
   </ToggleButton>
 )
 
-export const SelectedOption = styled.div<{ isSmallVariant?: boolean }>`
-  ${({ isSmallVariant }) =>
-    isSmallVariant
+export const SelectedOption = styled.div<{ variant?: 's' | 'm' | 'l' }>`
+  ${({ variant }) =>
+    variant === 's'
       ? css`
           display: flex;
           flex-direction: column;
@@ -69,6 +71,26 @@ export const SelectedOption = styled.div<{ isSmallVariant?: boolean }>`
           > div {
             width: fit-content;
             margin-right: auto;
+          }
+
+          ${AccountInfoWrap} {
+            grid-template-areas:
+              'accountphoto accounttype'
+              'accountphoto accountname'
+              'accountaddress accountaddress';
+          }
+        `
+      : variant === 'm'
+      ? css`
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 1fr;
+
+          ${AccountInfoWrap} {
+            grid-template-areas:
+              'accountphoto accounttype'
+              'accountphoto accountname'
+              'accountaddress accountaddress';
           }
         `
       : css`
@@ -152,9 +174,9 @@ export const OptionComponentContainer = styled.li<{ disabled?: boolean }>`
   }}
 `
 
-export const OptionComponent = styled.div<{ disabled?: boolean; isSmallVariant?: boolean }>`
-  ${({ isSmallVariant }) =>
-    isSmallVariant
+export const OptionComponent = styled.div<{ disabled?: boolean; variant?: 's' | 'm' | 'l' }>`
+  ${({ variant }) =>
+    variant === 's' || variant === 'm'
       ? css`
           display: flex;
           flex-direction: column;
