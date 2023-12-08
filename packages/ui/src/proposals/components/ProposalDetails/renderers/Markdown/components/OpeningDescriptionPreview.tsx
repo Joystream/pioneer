@@ -4,7 +4,7 @@ import React from 'react'
 import { CloseButton } from '@/common/components/buttons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import {
-  SidePane,
+  SignalSidePane,
   SidePaneBody,
   SidePaneGlass,
   SidePaneHeader,
@@ -29,7 +29,7 @@ export const OpeningDescriptionPreview = ({ onClose, description }: DescriptionP
 
   return (
     <SidePaneGlass onClick={onBackgroundClick}>
-      <SidePane topSize="s">
+      <SignalSidePane topSize="s">
         <SidePaneHeader>
           <SidePanelTop>
             <SidePaneTitle>Signal Description</SidePaneTitle>
@@ -41,7 +41,7 @@ export const OpeningDescriptionPreview = ({ onClose, description }: DescriptionP
             <MarkdownPreview markdown={description} />
           </DescriptionContainer>
         </SidePaneBody>
-      </SidePane>
+      </SignalSidePane>
     </SidePaneGlass>
   )
 }
