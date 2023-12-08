@@ -76,7 +76,11 @@ export const BuyMembershipSignModal = ({
       useMultiTransaction={
         formData.isValidator
           ? {
-              steps: [{ title: 'Create Membership' }, { title: 'Bind validator account' }],
+              steps: [
+                { title: 'Create Membership' },
+                { title: 'Bind Validator Account' },
+                { title: 'Confirm Validator Account' },
+              ],
               active: 0,
             }
           : undefined

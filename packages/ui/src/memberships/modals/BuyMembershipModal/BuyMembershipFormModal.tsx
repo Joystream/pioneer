@@ -70,7 +70,6 @@ const isRequired = 'This field is required.'
 const CreateMemberSchema = Yup.object().shape({
   rootAccount: AccountSchema.required(isRequired),
   controllerAccount: AccountSchema.required(isRequired),
-  stashAccountSelect: AccountSchema,
   avatarUri: AvatarURISchema,
   name: Yup.string().required(isRequired),
   handle: HandleSchema.required(isRequired).matches(
@@ -172,7 +171,7 @@ export const BuyMembershipForm = ({
 
   const addValidatorAccount = () => {
     if (validatorAccountCandidate) {
-      setValidatorAccounts([...new Set([validatorAccountCandidate, ...validatorAccounts])])
+      setValidatorAccounts([...new Set([...validatorAccounts, validatorAccountCandidate])])
       form?.setValue('validatorAccountCandidate' as keyof MemberFormFields, undefined)
     }
   }
@@ -314,15 +313,6 @@ export const BuyMembershipForm = ({
                         </RowInline>
                       </Row>
                     ))}
-                    <Row>
-                      <RowInline gap={4}>
-                        <Label noMargin>Status</Label>
-                        <Tooltip tooltipText="This is the status which indicates the selected account is actually a validator account.">
-                          <TooltipDefault />
-                        </Tooltip>
-                        <TextSmall dark> : {'Unverified'} ! </TextSmall>
-                      </RowInline>
-                    </Row>
                   </>
                 )}
               </>

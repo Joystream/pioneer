@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/client'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
@@ -29,15 +29,39 @@ export const BuyMembershipModal = () => {
     apolloClient.refetchQueries({ include: 'active' })
   }, [isSuccessful, apolloClient])
 
+  const buyTransaction = useMemo(
+    () => state.context.form && api?.tx.members.buyMembership(toMemberTransactionParams(state.context.form)),
+    [api?.isConnected, state.context.form]
+  )
+  const bindTransaction = useMemo(
+    () => state.context.memberId && api?.tx.members.addStakingAccountCandidate(state.context.memberId.toString()),
+    [state.context, state.context.memberId]
+  )
+  const conFirmTransaction = useMemo(
+    () =>
+      state.context.memberId &&
+      state.context.form?.validatorAccounts &&
+      (state.context.form.validatorAccounts.length > 1
+        ? api?.tx.utility.batch(
+            state.context.form.validatorAccounts.map(({ address }) =>
+              api.tx.members.confirmStakingAccount(state.context.memberId?.toString() ?? '', address)
+            )
+          )
+        : api?.tx.members.confirmStakingAccount(
+            state.context.memberId.toString(),
+            state.context.form.validatorAccounts[0].address
+          )),
+    [api?.isConnected, state.context.memberId, state.context.form?.validatorAccounts]
+  )
+
   if (state.matches('prepare')) {
     const onSubmit = (params: MemberFormFields) =>
-      send({ type: params.isValidator ? 'DONEWITHVAL' : 'DONE', form: params })
+      send({ type: params.isValidator ? 'DONE_IS_VALIDATOR' : 'DONE', form: params })
 
     return <BuyMembershipFormModal onClose={hideModal} onSubmit={onSubmit} membershipPrice={membershipPrice} />
   }
 
-  if ((state.matches('buyMembershipTx') || state.matches('buyValidatorMembershipTx')) && api) {
-    const transaction = api.tx.members.buyMembership(toMemberTransactionParams(state.context.form))
+  if ((state.matches('buyMembershipTx') || state.matches('buyValidatorMembershipTx')) && buyTransaction) {
     const { form } = state.context
     const service = state.children.transaction
 
@@ -46,47 +70,31 @@ export const BuyMembershipModal = () => {
         onClose={hideModal}
         membershipPrice={membershipPrice}
         formData={form}
-        transaction={transaction}
+        transaction={buyTransaction}
         initialSigner={form.controllerAccount}
         service={service}
       />
     )
   }
 
-  if (
-    state.matches('addStakingAccCandidateTx') &&
-    api &&
-    state.context.memberId &&
-    state.context.form.validatorAccounts
-  ) {
-    const transaction = api.tx.members.addStakingAccountCandidate(state.context.memberId.toString())
+  if (state.matches('addStakingAccCandidateTx') && bindTransaction && state.context.form.validatorAccounts) {
     const service = state.children.transaction
 
     return (
       <AddStakingAccCandidateModal
-        onClose={hideModal}
-        formData={state.context.form}
-        transaction={transaction}
-        initialSigner={state.context.form.validatorAccounts[state.context.bindingValidtorAccStep ?? 0]}
+        transaction={bindTransaction}
+        signer={state.context.form.validatorAccounts[state.context.bindingValidtorAccStep ?? 0]}
         service={service}
       />
     )
   }
 
-  if (state.matches('confirmStakingAccTx') && api && state.context.memberId && state.context.form.validatorAccounts) {
-    const transaction = api.tx.utility.batch(
-      state.context.form.validatorAccounts.map(({ address }) =>
-        api.tx.members.confirmStakingAccount(state.context.memberId?.toString() ?? '', address)
-      )
-    )
+  if (state.matches('confirmStakingAccTx') && conFirmTransaction && state.context.form.controllerAccount) {
     const service = state.children.transaction
-
     return (
       <ConfirmStakingAccModal
-        onClose={hideModal}
-        formData={state.context.form}
-        transaction={transaction}
-        initialSigner={state.context.form.controllerAccount}
+        transaction={conFirmTransaction}
+        signer={state.context.form.controllerAccount}
         service={service}
       />
     )

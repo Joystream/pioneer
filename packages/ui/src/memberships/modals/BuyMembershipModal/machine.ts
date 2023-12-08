@@ -36,7 +36,7 @@ export type BuyMembershipEvent =
   | { type: 'PASS' }
   | { type: 'FAIL' }
   | { type: 'DONE'; form: MemberFormFields }
-  | { type: 'DONEWITHVAL'; form: MemberFormFields }
+  | { type: 'DONE_IS_VALIDATOR'; form: MemberFormFields }
   | { type: 'SUCCESS'; memberId: BN }
   | { type: 'ERROR' }
 
@@ -54,7 +54,7 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
           target: 'buyMembershipTx',
           actions: assign({ form: (_, event) => event.form }),
         },
-        DONEWITHVAL: {
+        DONE_IS_VALIDATOR: {
           target: 'buyValidatorMembershipTx',
           actions: assign({ form: (_, event) => event.form }),
         },

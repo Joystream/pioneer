@@ -100,7 +100,7 @@ export default {
 
     mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
       const account = (member: Membership) => ({
-        balances: member !== dave ? (args.hasFunds ? parameters.totalBalance : 0) : 0,
+        balances: args.hasFunds ? parameters.totalBalance : 0,
         ...(args.hasMemberships ? { member } : { account: { name: member.handle, address: member.controllerAccount } }),
       })
       return {
@@ -134,7 +134,7 @@ export default {
                     event: 'MembershipBought',
                     data: [NEW_MEMBER_DATA.id],
                     onSend: args.onBuyMembership,
-                    failure: parameters.txFailure,
+                    failure: parameters.buyMembershipTxFailure,
                   },
                   addStakingAccountCandidate: {
                     event: 'StakingAccountAdded',
@@ -508,7 +508,7 @@ export const BuyMembershipNotEnoughFund: Story = {
 
 export const BuyMembershipTxFailure: Story = {
   args: { hasMemberships: false, isLoggedIn: false },
-  parameters: { txFailure: 'Some error message' },
+  parameters: { BuyMembershipTxFailure: 'Some error message' },
 
   play: async ({ canvasElement }) => {
     const screen = within(canvasElement)
@@ -528,18 +528,24 @@ export const BuyMembershipTxFailure: Story = {
   },
 }
 
-const fillMembershipFormWithValidatorAcc = async (modal: Container) => {
+const fillMembershipFormWithOneValidatorAcc = async (modal: Container) => {
   await fillMembershipForm(modal)
   const validatorChechButton = modal.getAllByText('Yes')[1]
   await userEvent.click(validatorChechButton)
   expect(await modal.findByText(/^If your validator account/))
   await selectFromDropdown(modal, /^If your validator account/, 'charlie')
-  // await selectFromDropdown(modal, /^If your validator account/, 'dave')
   const addButton = document.getElementsByClassName('add-button')[0]
   await userEvent.click(addButton)
 }
 
-export const BuyMembershipWithValidatorAccountHappyAndBindHappy: Story = {
+const fillMembershipFormWithTwoValidatorAcc = async (modal: Container) => {
+  await fillMembershipFormWithOneValidatorAcc(modal)
+  await selectFromDropdown(modal, /^If your validator account/, 'dave')
+  const addButton = document.getElementsByClassName('add-button')[0]
+  await userEvent.click(addButton)
+}
+
+export const BuyMembershipHappyBindOneValidatorHappy: Story = {
   args: { hasMemberships: false, isLoggedIn: false },
 
   play: async ({ args, canvasElement, step }) => {
@@ -555,7 +561,7 @@ export const BuyMembershipWithValidatorAccountHappyAndBindHappy: Story = {
 
       await step('Fill', async () => {
         expect(createButton).toBeDisabled()
-        await fillMembershipFormWithValidatorAcc(modal)
+        await fillMembershipFormWithOneValidatorAcc(modal)
         await waitFor(() => expect(createButton).toBeEnabled())
       })
 
@@ -604,10 +610,91 @@ export const BuyMembershipWithValidatorAccountHappyAndBindHappy: Story = {
         invitingMemberId: undefined,
         referrerId: undefined,
       })
-
       expect(args.onAddStakingAccount).toHaveBeenCalledWith(NEW_MEMBER_DATA.id)
+      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(NEW_MEMBER_DATA.id, charlie.controllerAccount)
 
-      expect(args.batchTx).toHaveBeenCalledTimes(1)
+      const doneButton = getButtonByText(modal, 'Done')
+      expect(doneButton).toBeEnabled()
+      userEvent.click(doneButton)
+    })
+  },
+}
+
+export const BuyMembershipHappyAddTwoValidatorHappy: Story = {
+  args: { hasMemberships: false, isLoggedIn: false },
+
+  play: async ({ args, canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    expect(screen.queryByText('Become a member')).toBeNull()
+
+    await userEvent.click(getButtonByText(screen, 'Join Now'))
+
+    await step('Form', async () => {
+      const createButton = getButtonByText(modal, 'Create a Membership')
+
+      await step('Fill', async () => {
+        expect(createButton).toBeDisabled()
+        await fillMembershipFormWithTwoValidatorAcc(modal)
+        await waitFor(() => expect(createButton).toBeEnabled())
+      })
+
+      await userEvent.click(createButton)
+    })
+
+    await step('Create membership', async () => {
+      expect(modal.getByText('You intend to create a validator membership.'))
+      expect(modal.getByText('Creation fee:')?.nextSibling?.textContent).toBe('20')
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'bob' }))
+
+      await userEvent.click(getButtonByText(modal, 'Create membership'))
+    })
+
+    await step('Add first validator account', async () => {
+      expect(await modal.findByText('You are intending to bond your validator account with your membership.'))
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'charlie' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and Bond'))
+    })
+
+    await step('Add second validator account', async () => {
+      expect(await modal.findByText('You are intending to bond your validator account with your membership.'))
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'dave' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and Bond'))
+    })
+
+    await step('Confirm validator account', async () => {
+      expect(
+        await modal.findByText('You are intending to confirm your validator account to be bound with your membership')
+      )
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'bob' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and Confirm'))
+    })
+
+    await step('Confirm', async () => {
+      expect(await modal.findByText('Success'))
+      expect(modal.getByText(NEW_MEMBER_DATA.handle))
+      expect(args.onBuyMembership).toHaveBeenCalledWith({
+        rootAccount: alice.controllerAccount,
+        controllerAccount: bob.controllerAccount,
+        handle: NEW_MEMBER_DATA.handle,
+        metadata: metadataToBytes(MembershipMetadata, {
+          name: NEW_MEMBER_DATA.metadata.name,
+          about: NEW_MEMBER_DATA.metadata.about,
+          avatarUri: NEW_MEMBER_DATA.metadata.avatar.avatarUri,
+        }),
+        invitingMemberId: undefined,
+        referrerId: undefined,
+      })
+      expect(args.onAddStakingAccount).toHaveBeenCalledTimes(4) // means 2 times, due to the React hook 'useMomo'
+      expect(args.batchTx).toHaveBeenCalledTimes(2)
 
       const doneButton = getButtonByText(modal, 'Done')
       expect(doneButton).toBeEnabled()
@@ -626,7 +713,7 @@ export const BuyMembershipWithValidatorAccountNotEnoughFunds: Story = {
 
     await userEvent.click(getButtonByText(screen, 'Join Now'))
 
-    await fillMembershipFormWithValidatorAcc(modal)
+    await fillMembershipFormWithOneValidatorAcc(modal)
     const createButton = getButtonByText(modal, 'Create a Membership')
     await waitFor(() => expect(createButton).toBeEnabled())
     await userEvent.click(createButton)
@@ -636,9 +723,9 @@ export const BuyMembershipWithValidatorAccountNotEnoughFunds: Story = {
   },
 }
 
-export const BuyMembershipTxWithValidatorAccountFailure: Story = {
+export const BuyMembershipWithValidatorAccountFailure: Story = {
   args: { hasMemberships: false, isLoggedIn: false },
-  parameters: { txFailure: 'Some error message' },
+  parameters: { buyMembershipTxFailure: 'Some error message' },
 
   play: async ({ canvasElement }) => {
     const screen = within(canvasElement)
@@ -646,7 +733,7 @@ export const BuyMembershipTxWithValidatorAccountFailure: Story = {
 
     await userEvent.click(getButtonByText(screen, 'Join Now'))
 
-    await fillMembershipFormWithValidatorAcc(modal)
+    await fillMembershipFormWithOneValidatorAcc(modal)
     const createButton = getButtonByText(modal, 'Create a Membership')
     await waitFor(() => expect(createButton).toBeEnabled())
     await userEvent.click(createButton)
@@ -658,7 +745,7 @@ export const BuyMembershipTxWithValidatorAccountFailure: Story = {
   },
 }
 
-export const BuyMembershipHappyAddValidatorAccFailure: Story = {
+export const BuyMembershipHappyAddOneValidatorFailure: Story = {
   args: { hasMemberships: false, isLoggedIn: false },
   parameters: { addStakingAccountTxFailure: 'Some error message' },
 
@@ -675,7 +762,7 @@ export const BuyMembershipHappyAddValidatorAccFailure: Story = {
 
       await step('Fill', async () => {
         expect(createButton).toBeDisabled()
-        await fillMembershipFormWithValidatorAcc(modal)
+        await fillMembershipFormWithOneValidatorAcc(modal)
         await waitFor(() => expect(createButton).toBeEnabled())
       })
 
@@ -706,7 +793,7 @@ export const BuyMembershipHappyAddValidatorAccFailure: Story = {
 
 export const BuyMembershipAddValidatorAccHappyConfirmTxFailure: Story = {
   args: { hasMemberships: false, isLoggedIn: false },
-  parameters: { batchTxFailure: 'Some error message' },
+  parameters: { confirmStakingAccountTxFailure: 'Some error message' },
 
   play: async ({ canvasElement, step }) => {
     const screen = within(canvasElement)
@@ -721,7 +808,7 @@ export const BuyMembershipAddValidatorAccHappyConfirmTxFailure: Story = {
 
       await step('Fill', async () => {
         expect(createButton).toBeDisabled()
-        await fillMembershipFormWithValidatorAcc(modal)
+        await fillMembershipFormWithOneValidatorAcc(modal)
         await waitFor(() => expect(createButton).toBeEnabled())
       })
 
@@ -760,6 +847,69 @@ export const BuyMembershipAddValidatorAccHappyConfirmTxFailure: Story = {
   },
 }
 
+export const BuyMembershipAddTwoValidatorAccHappyConfirmTxFailure: Story = {
+  args: { hasMemberships: false, isLoggedIn: false },
+  parameters: { batchTxFailure: 'Some error message' },
+
+  play: async ({ canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    expect(screen.queryByText('Become a member')).toBeNull()
+
+    await userEvent.click(getButtonByText(screen, 'Join Now'))
+
+    await step('Form', async () => {
+      const createButton = getButtonByText(modal, 'Create a Membership')
+
+      await step('Fill', async () => {
+        expect(createButton).toBeDisabled()
+        await fillMembershipFormWithTwoValidatorAcc(modal)
+        await waitFor(() => expect(createButton).toBeEnabled())
+      })
+
+      await userEvent.click(createButton)
+    })
+
+    await step('Create membership', async () => {
+      expect(modal.getByText('You intend to create a validator membership.'))
+      expect(modal.getByText('Creation fee:')?.nextSibling?.textContent).toBe('20')
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'bob' }))
+
+      await userEvent.click(getButtonByText(modal, 'Create membership'))
+    })
+
+    await step('Add first validator account', async () => {
+      expect(await modal.findByText('You are intending to bond your validator account with your membership.'))
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'charlie' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and Bond'))
+    })
+
+    await step('Add second validator account', async () => {
+      expect(await modal.findByText('You are intending to bond your validator account with your membership.'))
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'dave' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and Bond'))
+    })
+
+    await step('Confirm validator account', async () => {
+      expect(
+        await modal.findByText('You are intending to confirm your validator account to be bound with your membership')
+      )
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'bob' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and Confirm'))
+
+      expect(await modal.findByText('Failure'))
+      expect(await modal.findByText('Some error message'))
+    })
+  },
+}
 // ----------------------------------------------------------------------------
 // Test Email Subsciption Modal
 // ----------------------------------------------------------------------------
