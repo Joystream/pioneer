@@ -78,7 +78,6 @@ export const UpdateMembershipModal = () => {
               ? (params.externalResources.LINKEDIN = params.externalResources?.LINKEDIN.split('/in/')[1])
               : params.externalResources?.LINKEDIN
           }
-          console.log(params.externalResources)
           send('DONE', { form: params })
         }}
         member={member}
