@@ -38,7 +38,7 @@ export const UpdateMembershipModal = () => {
               ? (params.externalResources.TWITTER = params.externalResources.TWITTER.split('@')[1])
               : params.externalResources.TWITTER
             isURL(params.externalResources?.TWITTER)
-              ? (params.externalResources.TWITTER = new URL(params.externalResources.TWITTER).pathname.substring(1))
+              ? (params.externalResources.TWITTER = params.externalResources.TWITTER.split('twitter.com/')[1])
               : params.externalResources?.TWITTER
           }
           if (params.externalResources?.GITHUB) {
@@ -46,7 +46,7 @@ export const UpdateMembershipModal = () => {
               ? (params.externalResources.GITHUB = params.externalResources.GITHUB.split('@')[1])
               : params.externalResources.GITHUB
             isURL(params.externalResources?.GITHUB)
-              ? (params.externalResources.GITHUB = new URL(params.externalResources.GITHUB).pathname.substring(1))
+              ? (params.externalResources.GITHUB = params.externalResources.GITHUB.split('github.com/')[1])
               : params.externalResources?.GITHUB
           }
           if (params.externalResources?.TELEGRAM) {
@@ -66,7 +66,7 @@ export const UpdateMembershipModal = () => {
               ? (params.externalResources.FACEBOOK = params.externalResources.FACEBOOK.split('@')[1])
               : params.externalResources.FACEBOOK
             isURL(params.externalResources?.FACEBOOK)
-              ? (params.externalResources.FACEBOOK = new URL(params.externalResources.FACEBOOK).pathname.substring(1))
+              ? (params.externalResources.FACEBOOK = params.externalResources.FACEBOOK.split('facebook.com/')[1])
               : params.externalResources?.FACEBOOK
           }
 
@@ -75,7 +75,7 @@ export const UpdateMembershipModal = () => {
               ? (params.externalResources.LINKEDIN = params.externalResources.LINKEDIN.split('@')[1])
               : params.externalResources.LINKEDIN
             isURL(params.externalResources?.LINKEDIN)
-              ? (params.externalResources.LINKEDIN = params.externalResources?.LINKEDIN.split('/')[4])
+              ? (params.externalResources.LINKEDIN = params.externalResources?.LINKEDIN.split('/in/')[1])
               : params.externalResources?.LINKEDIN
           }
 
