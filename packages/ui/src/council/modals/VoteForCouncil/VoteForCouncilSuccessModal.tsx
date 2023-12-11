@@ -21,7 +21,6 @@ export const VoteForCouncilSuccessModal = ({ onClose, candidateId }: Props) => {
   const { candidate } = useCandidate(candidateId)
 
   const goToElection = useCallback(() => {
-    history.push(generatePath(ElectionRoutes.currentElection))
     onClose()
   }, [onClose])
 
