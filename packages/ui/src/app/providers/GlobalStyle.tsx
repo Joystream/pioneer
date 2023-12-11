@@ -39,7 +39,6 @@ export const GlobalStyle = createGlobalStyle`
 
   *, *:before, *:after {
     box-sizing: border-box;
-    word-break: break-word;
   }
   *::selection, *:before::selection, *:after::selection {
     color: ${Colors.Blue[50]};
