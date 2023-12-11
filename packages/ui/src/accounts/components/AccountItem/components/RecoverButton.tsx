@@ -16,7 +16,6 @@ interface Props {
 export const RecoverButton = React.memo(({ memberId, lock, address, isRecoverable, isSmall }: Props) => {
   const { showModal } = useModal()
   const onClick = useCallback(() => {
-
     if (isRecoverableLock(lock)) {
       showModal<RecoverBalanceModalCall>({
         modal: 'RecoverBalance',
