@@ -430,6 +430,7 @@ enum MembershipExternalResourceType {
   WECHAT
   WHATSAPP
   LINKEDIN
+  GITHUB
 }
 
 type MemberMetadata implements BaseGraphQLObject {
