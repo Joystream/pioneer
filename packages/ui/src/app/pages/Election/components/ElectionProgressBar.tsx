@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
 import styled from 'styled-components'
 
+import { List, ListItem } from '@/common/components/List'
 import { ProgressBar, ProgressBarProps } from '@/common/components/Progress'
 import {
   MultiStatisticItem,
@@ -12,11 +13,15 @@ import {
   StatisticItemProps,
 } from '@/common/components/statistics'
 import { TooltipText } from '@/common/components/Tooltip'
+import { TextSmall } from '@/common/components/typography'
 import { DurationValue } from '@/common/components/typography/DurationValue'
 import { AN_HOUR, A_DAY, A_MINUTE, BorderRad, Colors, Transitions, ZIndex } from '@/common/constants'
+import { useResponsive } from '@/common/hooks/useResponsive'
 import { splitDuration, MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { useCouncilConstants } from '@/council/hooks/useCouncilConstants'
 import { useCouncilPeriodInformation } from '@/council/hooks/useCouncilPeriodInformation'
+
+import { ElectionProgressCardItem } from './ElectionProgressCardItem'
 
 interface ElectionProgressBarProps extends StatisticItemProps {
   electionStage: string
@@ -48,6 +53,8 @@ const Duration = ({ duration }: { duration: number }) => {
 }
 
 export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
+  const { size } = useResponsive()
+
   const periodInformation = useCouncilPeriodInformation()
   const currentBlock = periodInformation?.currentBlock ?? 0
   const remainingPeriod = periodInformation?.remainingPeriod ?? 0
@@ -132,8 +139,8 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
   }
 
   return (
-    <MultiStatisticItem {...props}>
-      <StatisticItemSpacedContent key={remainingPeriod}>
+    <MultiStatisticItem size={size === 'xxs' || size === 'xs' ? 's' : 'l'} {...props}>
+      <StatisticItemSpacedContent key={remainingPeriod} size={size}>
         <StatisticBigLabel>
           <StatisticBigLabel strong={true} style={{ textTransform: 'capitalize' }}>
             {stageDescription}
@@ -186,6 +193,49 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
           )} block). During this time, voters can reveal their sealed votes. Any valid vote which is unsealed is counted, and in the end a winning set of candidates is selected`}
         />
       </ProgressBarLayout>
+      {(size === 'xxs' || size === 'xs') && (
+        <>
+          <StatisticMidLabel>Stages</StatisticMidLabel>
+          <List>
+            <ListItem key="inactive" borderless>
+              <ElectionProgressCardItem
+                title="Inactive"
+                progress={inactiveProgress / 100}
+                text={`Idle stage lasts ${inactiveDays} days and ends on ${inactiveEndDay} CET (block #${inactiveEndBlock?.toLocaleString(
+                  'en-gb'
+                )} block). After that time, a new round of elections begins`}
+              />
+            </ListItem>
+            <ListItem key="announcing" borderless>
+              <ElectionProgressCardItem
+                title="Announcing"
+                progress={announcingProgress / 100}
+                text={`Announcing stage lasts ${announcingDays} days and ends on ${announcingEndDay} CET (block #${announcingEndBlock?.toLocaleString(
+                  'en-gb'
+                )} block). During this time members can announce that they will stand as candidates for the next council`}
+              />
+            </ListItem>
+            <ListItem key="voting" borderless>
+              <ElectionProgressCardItem
+                title="Voting"
+                progress={votingProgress / 100}
+                text={`Voting stage lasts ${votingDays} days and ends on ${votingEndDay} CET (block #${votingEndBlock?.toLocaleString(
+                  'en-gb'
+                )} block). During this time voters can submit votes in favor of candidates`}
+              />
+            </ListItem>
+            <ListItem key="Revealing" borderless>
+              <ElectionProgressCardItem
+                title="Revealing"
+                progress={revealingProgress / 100}
+                text={`Revealing stage lasts ${revealingDays} days and ends on ${revealingEndDay} CET (block #${revealingEndBlock?.toLocaleString(
+                  'en-gb'
+                )} block). During this time, voters can reveal their sealed votes. Any valid vote which is unsealed is counted, and in the end a winning set of candidates is selected`}
+              />
+            </ListItem>
+          </List>
+        </>
+      )}
     </MultiStatisticItem>
   )
 }
@@ -368,6 +418,7 @@ const StatisticBigLabel = styled.div<{ strong?: boolean }>`
   line-height: 28px;
   margin-right: 6px;
   display: inline-block;
+  font-weight: 700;
   color: ${({ strong }) => (strong ? `${Colors.Black[900]}` : `${Colors.Black[400]}`)};
 `
 const ProgressBarLayout = styled.div<{ layout?: string }>`
@@ -379,4 +430,11 @@ const ProgressBarLayout = styled.div<{ layout?: string }>`
   margin-top: 8px;
   place-items: center;
   height: 20px;
+`
+const StatisticMidLabel = styled(TextSmall)`
+  color: ${Colors.Black[500]};
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 16px 4px 8px 4px;
 `

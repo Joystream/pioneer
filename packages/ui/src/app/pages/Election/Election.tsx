@@ -11,6 +11,7 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { StatisticItem, Statistics } from '@/common/components/statistics'
 import { TextHuge } from '@/common/components/typography'
 import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
+import { useResponsive } from '@/common/hooks/useResponsive'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { getUrl } from '@/common/utils/getUrl'
 import { AnnounceCandidacyButton } from '@/council/components/election/announcing/AnnounceCandidacyButton'
@@ -37,6 +38,7 @@ const displayElectionRound = (election: ElectionType | undefined): string => {
 }
 
 export const Election = () => {
+  const { size } = useResponsive()
   const { isLoading: isLoadingElection, election } = useCurrentElection()
 
   const { isLoading: isLoadingElectionStage, stage: electionStage } = useElectionStage()
@@ -86,7 +88,7 @@ export const Election = () => {
 
   const main = (
     <MainPanel>
-      <StyledStatistics>
+      <StyledStatistics size={size}>
         <StatisticItem
           title="Round"
           tooltipText="Elections are held in consecutive rounds. This is the number of current election."
@@ -112,6 +114,11 @@ export const Election = () => {
   return <PageLayout header={header} main={main} />
 }
 
-const StyledStatistics = styled(Statistics)`
-  grid-template-columns: 250px minmax(500px, 1fr);
+const StyledStatistics = styled(Statistics)<{ size: string }>`
+  grid-template-columns: ${({ size }) =>
+    size === 'xxs'
+      ? 'repeat(auto-fit, minmax(238px, 1fr))'
+      : size === 'xs'
+      ? 'repeat(auto-fit, minmax(400px, 1fr))'
+      : '200px minmax(400px, 1fr)'};
 `
