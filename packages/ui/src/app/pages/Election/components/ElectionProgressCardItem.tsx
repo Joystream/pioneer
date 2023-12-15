@@ -75,7 +75,8 @@ const ProgressCardItemWrap = styled.div`
   align-items: center;
   width: 100%;
   height: 54px;
-  padding: 16px 4px 8px 16px;
+  padding-left: 16px;
+  padding-right: 4px;
   margin-left: -1px;
 
   ${Skeleton} {
@@ -102,5 +103,5 @@ const StatisticBigLabel = styled.div<{ strong?: boolean }>`
 
 const StyledDropDown = styled(DropDownToggle)`
   row-gap: 16px;
-  padding: 16px;
+  padding: 0px 16px 16px 16px;
 `

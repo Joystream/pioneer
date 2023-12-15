@@ -27,11 +27,12 @@ interface ElectionProgressBarProps extends StatisticItemProps {
   electionStage: string
 }
 
+const GENESIS_BLOCK_TIMESTAMP = 1670693046000
+
 const blockDurationToMs = (blockDuration: number) => blockDuration * MILLISECONDS_PER_BLOCK
-const blockToDate = (duration: number) => {
-  const now = Date.now()
-  const msDuration = blockDurationToMs(duration)
-  return new Date(now + msDuration).toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
+const blockToDate = (block: number) => {
+  const msDuration = blockDurationToMs(block)
+  return new Date(GENESIS_BLOCK_TIMESTAMP + msDuration).toLocaleString('en-gb', { timeZone: 'Europe/Paris' })
 }
 const blockDurationToDays = (blockDuration: number) => Math.floor(blockDurationToMs(blockDuration) / A_DAY)
 
@@ -81,8 +82,9 @@ export const ElectionProgressBar = (props: ElectionProgressBarProps) => {
   const constants = useCouncilConstants()
 
   const [inactiveEndBlock, announcingEndBlock, votingEndBlock, revealingEndBlock] = periodInformation?.periodEnds ?? []
-  const endDates = periodInformation?.periodEnds.map((block) => blockToDate(block - currentBlock))
+  const endDates = periodInformation?.periodEnds.map((block) => blockToDate(block))
   const [inactiveEndDay, announcingEndDay, votingEndDay, revealingEndDay] = endDates ?? []
+
   const progresses = periodInformation?.periodEnds.map((end, index) => {
     const start = periodInformation.periodStarts[index]
     return clamp(((currentBlock - start) * 100) / (end - start), 0, 100)
