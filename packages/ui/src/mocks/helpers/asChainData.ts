@@ -1,5 +1,4 @@
 import { createType } from '@joystream/types'
-import { AccountId32 } from '@polkadot/types/interfaces'
 import { mapValues } from 'lodash'
 
 import { encodeAddress } from '@/accounts/model/encodeAddress'
@@ -27,5 +26,12 @@ const withUnwrap = (data: Record<any, any>) =>
   Object.defineProperties(data, {
     unwrap: { value: () => data },
     isSome: { value: Object.keys(data).length > 0 },
-    get: { value: (key: AccountId32) => data[encodeAddress(key.toString())] },
+    get: {
+      value: (key: any) => {
+        if (key.toRawType?.() === 'AccountId') {
+          return data[encodeAddress(key.toString())]
+        }
+        return data[key.toString()]
+      },
+    },
   })

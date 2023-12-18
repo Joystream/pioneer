@@ -62,12 +62,10 @@ export const ValidatorItemWrap = styled.div`
   grid-template-rows: 1fr;
   justify-content: space-between;
   justify-items: start;
-  justify-items: start;
   align-items: center;
   width: 100%;
   height: ${Sizes.accountHeight};
   padding: 16px;
-  margin: -1px;
   margin: -1px;
 
   ${Skeleton} {
