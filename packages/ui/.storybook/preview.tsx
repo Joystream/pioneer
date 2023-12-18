@@ -12,6 +12,7 @@ import { NotificationsHolder } from '../src/common/components/page/SideNotificat
 import { TransactionStatus } from '../src/common/components/TransactionStatus/TransactionStatus'
 import { Colors } from '../src/common/constants'
 import { ModalContextProvider } from '../src/common/providers/modal/provider'
+import { ValidatorContextProvider } from '../src/validators/providers/provider'
 import { TransactionStatusProvider } from '../src/common/providers/transactionStatus/provider'
 import { MockProvidersDecorator, MockRouterDecorator } from '../src/mocks/providers'
 import { i18next } from '../src/services/i18n'
@@ -54,15 +55,17 @@ const RHFDecorator: Decorator = (Story) => {
 
 const ModalDecorator: Decorator = (Story) => (
   <TransactionStatusProvider>
-    <ModalContextProvider>
-      <OnBoardingProvider>
-        <Story />
-        <GlobalModals />
-        <NotificationsHolder>
-          <TransactionStatus />
-        </NotificationsHolder>
-      </OnBoardingProvider>
-    </ModalContextProvider>
+    <ValidatorContextProvider>
+      <ModalContextProvider>
+        <OnBoardingProvider>
+          <Story />
+          <GlobalModals />
+          <NotificationsHolder>
+            <TransactionStatus />
+          </NotificationsHolder>
+        </OnBoardingProvider>
+      </ModalContextProvider>
+    </ValidatorContextProvider>
   </TransactionStatusProvider>
 )
 
