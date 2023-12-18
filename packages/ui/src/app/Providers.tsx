@@ -13,7 +13,6 @@ import { OnBoardingProvider } from '@/common/providers/onboarding/provider'
 import { ResponsiveProvider } from '@/common/providers/responsive/provider'
 import { TransactionStatusProvider } from '@/common/providers/transactionStatus/provider'
 import { MembershipContextProvider } from '@/memberships/providers/membership/provider'
-import { ValidatorContextProvider } from '@/validators/providers/provider'
 
 import { BackendProvider } from './providers/backend/provider'
 import { GlobalStyle } from './providers/GlobalStyle'
@@ -32,24 +31,22 @@ export const Providers = ({ children }: Props) => (
             <TransactionStatusProvider>
               <BalancesContextProvider>
                 <MembershipContextProvider>
-                  <ValidatorContextProvider>
-                    <HashRouter>
-                      <RouteActions>
-                        <ModalContextProvider>
-                          <BackendProvider>
-                            <OnBoardingProvider>
-                              <ImageReportProvider>
-                                <ResponsiveProvider>
-                                  <GlobalStyle />
-                                  {children}
-                                </ResponsiveProvider>
-                              </ImageReportProvider>
-                            </OnBoardingProvider>
-                          </BackendProvider>
-                        </ModalContextProvider>
-                      </RouteActions>
-                    </HashRouter>
-                  </ValidatorContextProvider>
+                  <HashRouter>
+                    <RouteActions>
+                      <ModalContextProvider>
+                        <BackendProvider>
+                          <OnBoardingProvider>
+                            <ImageReportProvider>
+                              <ResponsiveProvider>
+                                <GlobalStyle />
+                                {children}
+                              </ResponsiveProvider>
+                            </ImageReportProvider>
+                          </OnBoardingProvider>
+                        </BackendProvider>
+                      </ModalContextProvider>
+                    </RouteActions>
+                  </HashRouter>
                 </MembershipContextProvider>
               </BalancesContextProvider>
             </TransactionStatusProvider>

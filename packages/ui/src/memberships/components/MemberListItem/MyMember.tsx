@@ -47,7 +47,7 @@ export const MyMemberListItem = ({ member }: { member: Member }) => {
         <CountInfo count={invited} />
       </MemberColumn>
       <MemberControls>
-        <EditMembershipButton member={member} size="small" className="edit-button">
+        <EditMembershipButton member={member} size="small">
           <EditSymbol />
         </EditMembershipButton>
       </MemberControls>

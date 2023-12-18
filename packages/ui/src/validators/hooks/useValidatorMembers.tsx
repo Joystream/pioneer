@@ -1,31 +1,15 @@
-import React, { ReactNode, useMemo } from 'react'
+import { useMemo } from 'react'
 import { map } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
-import { Address } from '@/common/types'
 import { perbillToPercent } from '@/common/utils'
 import { useGetMembersWithDetailsQuery } from '@/memberships/queries'
 import { asMemberWithDetails } from '@/memberships/types'
 
 import { ValidatorMembership } from '../types'
 
-import { ValidatorsContext } from './context'
-
-interface Props {
-  children: ReactNode
-}
-
-export interface UseValidators {
-  allValidators?: {
-    address: Address
-    commission: number
-  }[]
-  allValidatorsWithCtrlAcc?: (string | undefined)[]
-  validatorsWithMembership?: ValidatorMembership[]
-}
-
-export const ValidatorContextProvider = (props: Props) => {
+export const useValidatorMembers = () => {
   const { api } = useApi()
   const allValidators = useFirstObservableValue(
     () =>
@@ -87,11 +71,5 @@ export const ValidatorContextProvider = (props: Props) => {
     )
   }, [data, allValidators, allValidatorsWithCtrlAcc])
 
-  const value = {
-    allValidators,
-    allValidatorsWithCtrlAcc,
-    validatorsWithMembership,
-  }
-
-  return <ValidatorsContext.Provider value={value}>{props.children}</ValidatorsContext.Provider>
+  return validatorsWithMembership
 }

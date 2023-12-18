@@ -31,9 +31,9 @@ export const Warning = ({ title, content, isClosable, additionalContent, icon, i
       <HeaderWrapper>
         {icon === 'alert' && <AlertSymbol />}
         {icon === 'info' && <InfoSymbol />}
-        {title ? <h5>{title}</h5> : content && <TextMedium light>{content}</TextMedium>}
+        {title && <h5>{title}</h5>}
       </HeaderWrapper>
-      {title && content && <TextMedium light>{content}</TextMedium>}
+      {content && <TextMedium light>{content}</TextMedium>}
       {additionalContent}
     </WarningBlock>
   )

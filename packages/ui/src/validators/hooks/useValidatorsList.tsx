@@ -11,7 +11,7 @@ import { last } from '@/common/utils'
 
 import { Verification, State, ValidatorWithDetails, ValidatorMembership } from '../types'
 
-import { useValidators } from './useValidators'
+import { useValidatorMembers } from './useValidatorMembers'
 
 export const useValidatorsList = () => {
   const { api } = useApi()
@@ -19,7 +19,7 @@ export const useValidatorsList = () => {
   const [isVerified, setIsVerified] = useState<Verification>(null)
   const [isActive, setIsActive] = useState<State>(null)
   const [visibleValidators, setVisibleValidators] = useState<ValidatorWithDetails[]>([])
-  const { validatorsWithMembership: validators } = useValidators()
+  const validators = useValidatorMembers()
 
   const getValidatorInfo = (validator: ValidatorMembership, api: Api): Observable<ValidatorWithDetails> => {
     const { stashAccount: address, commission } = validator

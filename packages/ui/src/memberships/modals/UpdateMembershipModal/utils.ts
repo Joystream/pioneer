@@ -13,30 +13,14 @@ export const hasAnyEdits = (form: Record<string, any>, initial: Record<string, a
   return !!getChangedFields(form, initial).length
 }
 
-export const hasAnyMetadateChanges = (form: Record<string, any>, initial: Record<string, any>) => {
-  const metadataFields = ['about', 'avatarUri', 'externalResources', 'validatorAccounts']
-  return metadataFields.some((key) => {
-    const initialValue = initial[key === 'avatarUri' ? 'avatar' : key] || ''
-    const formValue = form[key] || ''
-    if (initialValue !== formValue) {
-      if (key === 'externalResources' || key === 'validatorAccounts') {
-        return JSON.stringify(initialValue) !== JSON.stringify(formValue)
-      }
-      return true
-    }
-    return false
-  })
-}
-
 export const getChangedFields = (form: Record<string, any>, initial: Record<string, any>) => {
   const changedFields = []
 
   for (const key of Object.keys(form)) {
-    if (key === 'validatorCandidate') continue
     const initialValue = initial[key === 'avatarUri' ? 'avatar' : key] || ''
     const formValue = form[key]?.address ?? (form[key] || '')
     if (initialValue !== formValue) {
-      if (key === 'externalResources' || key === 'validatorAccounts') {
+      if (key === 'externalResources') {
         if (JSON.stringify(initialValue) !== JSON.stringify(formValue)) changedFields.push(key)
       } else {
         changedFields.push(key)
