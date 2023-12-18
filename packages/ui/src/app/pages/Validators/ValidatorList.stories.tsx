@@ -1,12 +1,14 @@
 import { expect } from '@storybook/jest'
 import { Meta, StoryObj } from '@storybook/react'
 import { userEvent, waitFor, within } from '@storybook/testing-library'
+import React from 'react'
 
 import { Address } from '@/common/types'
 import { GetMembersWithDetailsDocument } from '@/memberships/queries'
 import { member } from '@/mocks/data/members'
 import { joy, selectFromDropdown } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
+import { ValidatorContextProvider } from '@/validators/providers/provider'
 
 import { ValidatorList } from './ValidatorList'
 
@@ -14,7 +16,6 @@ type Args = object
 
 export default {
   title: 'Pages/Validators/ValidatorList',
-  component: ValidatorList,
 
   parameters: {
     mocks: (): MocksParameters => {
@@ -438,6 +439,12 @@ export default {
       }
     },
   },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  render: (args) => (
+    <ValidatorContextProvider>
+      <ValidatorList />
+    </ValidatorContextProvider>
+  ),
 } satisfies Meta<Args>
 
 type Story = StoryObj<typeof ValidatorList>
