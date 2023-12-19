@@ -4320,12 +4320,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@joystream/js@npm:^1.2.0":
-  version: 1.6.3
-  resolution: "@joystream/js@npm:1.6.3"
+"@joystream/js@npm:1.2.0":
+  version: 1.2.0
+  resolution: "@joystream/js@npm:1.2.0"
   dependencies:
-    "@joystream/metadata-protobuf": ^2.12.0
-    "@joystream/types": ^2.0.0
+    "@joystream/metadata-protobuf": ^2.6.0
+    "@joystream/types": ~0.20.5
     "@polkadot/util-crypto": 9.5.1
     axios: ^1.2.1
     buffer: ^6.0.3
@@ -4333,7 +4333,24 @@ __metadata:
     long: ^5.2.1
     merkletreejs: ^0.3.9
     protobufjs: ^6.11.3
-  checksum: 9bf79eb3746579f485e06a8f6ae29b1c8ef34c630ed5afa7a426cf45790dffab7fe988e456148b70a42b17071e5d0debeae4c5ed0f53d4ca57b9dbda0b8b8bec
+  checksum: d0762fc60c4f4ffe0a6804140fd2516b5b04beccd028f75cd16ba9e7c44658263f4fe6dc85ddf237c83f14445ed0b6d8d2f5c7b4f4efb457fd18a877376ed4a3
+  languageName: node
+  linkType: hard
+
+"@joystream/js@patch:@joystream/js@npm%3A1.2.0#./.yarn/patches/@joystream-js-npm-1.2.0-a8795e7496.patch::locator=pioneer%40workspace%3A.":
+  version: 1.2.0
+  resolution: "@joystream/js@patch:@joystream/js@npm%3A1.2.0#./.yarn/patches/@joystream-js-npm-1.2.0-a8795e7496.patch::version=1.2.0&hash=089693&locator=pioneer%40workspace%3A."
+  dependencies:
+    "@joystream/metadata-protobuf": ^2.6.0
+    "@joystream/types": ~0.20.5
+    "@polkadot/util-crypto": 9.5.1
+    axios: ^1.2.1
+    buffer: ^6.0.3
+    lodash: ^4.17.21
+    long: ^5.2.1
+    merkletreejs: ^0.3.9
+    protobufjs: ^6.11.3
+  checksum: fabefdd3923443920e868ff0240df5337bc298e2e0f361dbb662a218dc1a16f6d11de48f1a352c45ec309686fee00d93ed898967f30a2ce6c6834808c66a5c96
   languageName: node
   linkType: hard
 
@@ -4375,7 +4392,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joystream/metadata-protobuf@npm:^2.12.0":
+"@joystream/metadata-protobuf@npm:^2.12.0, @joystream/metadata-protobuf@npm:^2.6.0":
   version: 2.12.0
   resolution: "@joystream/metadata-protobuf@npm:2.12.0"
   dependencies:
@@ -4407,7 +4424,7 @@ __metadata:
     "@graphql-codegen/typescript-react-apollo": ^3.1.4
     "@hcaptcha/react-hcaptcha": ^1.4.4
     "@jest/types": ^27.2.5
-    "@joystream/js": ^1.2.0
+    "@joystream/js": 1.2.0
     "@joystream/markdown-editor": ^0.1.0
     "@joystream/metadata-protobuf": ^2.12.0
     "@joystream/types": ^2.0.0
@@ -4538,6 +4555,22 @@ __metadata:
     lodash: ^4.17.15
     moment: ^2.24.0
   checksum: f2713ceeecb6afa6761fda15334971390bacd40297407fced606b2d92b18dcd0c22f641912d9cc78af049884a8a16d854d729ef642b36f47fc9d1a11054d615c
+  languageName: node
+  linkType: hard
+
+"@joystream/types@npm:~0.20.5":
+  version: 0.20.5
+  resolution: "@joystream/types@npm:0.20.5"
+  dependencies:
+    "@polkadot/api": 8.9.1
+    "@polkadot/keyring": 9.5.1
+    "@polkadot/types": 8.9.1
+    "@types/lodash": ^4.14.157
+    "@types/vfile": ^4.0.0
+    ajv: ^6.11.0
+    lodash: ^4.17.15
+    moment: ^2.24.0
+  checksum: a3e310f358d7aa6d51a39d639f6ceec5052959abd38bc3ef34339a3c411ea91647d4fe50d09361d2aecd7d254da5d90b774e44dc67656cf1a5cd72aa89b0ba7b
   languageName: node
   linkType: hard
 
