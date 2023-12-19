@@ -4917,6 +4917,7 @@ __metadata:
     babel-plugin-import-graphql: ^2.8.1
     babel-plugin-styled-components: ^2.1.3
     chalk: ^4.1.2
+    chart.js: ^4.4.1
     clean-webpack-plugin: ^4.0.0
     copy-webpack-plugin: ^9.0.1
     cross-env: ^7.0.3
@@ -4952,6 +4953,7 @@ __metadata:
     prettier: ^2.8.8
     raw-loader: ^4.0.2
     react: ^17.0.2
+    react-chartjs-2: ^5.2.0
     react-dom: ^17.0.2
     react-dropzone: ^11.4.2
     react-error-boundary: ^3.1.4
@@ -5087,6 +5089,13 @@ __metadata:
   version: 3.4.0
   resolution: "@juggle/resize-observer@npm:3.4.0"
   checksum: 2505028c05cc2e17639fcad06218b1c4b60f932a4ebb4b41ab546ef8c157031ae377e3f560903801f6d01706dbefd4943b6c4704bf19ed86dfa1c62f1473a570
+  languageName: node
+  linkType: hard
+
+"@kurkle/color@npm:^0.3.0":
+  version: 0.3.2
+  resolution: "@kurkle/color@npm:0.3.2"
+  checksum: 79e97b31f8f6efb28c69d373f94b0c7480226fe8ec95221f518ac998e156444a496727ce47de6d728eb5c3369288e794cba82cae34253deb0d472d3bfe080e49
   languageName: node
   linkType: hard
 
@@ -13020,6 +13029,15 @@ __metadata:
   version: 0.7.0
   resolution: "chardet@npm:0.7.0"
   checksum: 6fd5da1f5d18ff5712c1e0aed41da200d7c51c28f11b36ee3c7b483f3696dabc08927fc6b227735eb8f0e1215c9a8abd8154637f3eff8cada5959df7f58b024d
+  languageName: node
+  linkType: hard
+
+"chart.js@npm:^4.4.1":
+  version: 4.4.1
+  resolution: "chart.js@npm:4.4.1"
+  dependencies:
+    "@kurkle/color": ^0.3.0
+  checksum: 8c108f137824ea0e3d79914708b409298c12ed7d16da99a40ca3cab51466ef7b0068ad82ac0addeb288b938fe0621d3e5a6a913b60e72a729aa42aa96705fcad
   languageName: node
   linkType: hard
 
@@ -28321,6 +28339,16 @@ __metadata:
   bin:
     rc: ./cli.js
   checksum: 2e26e052f8be2abd64e6d1dabfbd7be03f80ec18ccbc49562d31f617d0015fbdbcf0f9eed30346ea6ab789e0fdfe4337f033f8016efdbee0df5354751842080e
+  languageName: node
+  linkType: hard
+
+"react-chartjs-2@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "react-chartjs-2@npm:5.2.0"
+  peerDependencies:
+    chart.js: ^4.1.1
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: ace702185be1450e5888a8bcd8b5fc1995067e3b11d236764a67f5567a3d7c32ff16923b8d48d3d39bda6e45135da6c044c9b43fbe8e1978f95aca9d2c0ce348
   languageName: node
   linkType: hard
 

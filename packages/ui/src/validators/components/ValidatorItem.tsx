@@ -12,17 +12,19 @@ import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 import { ValidatorWithDetails } from '../types/Validator'
 
 import { ValidatorInfo } from './ValidatorInfo'
+
 interface ValidatorItemProps {
   validator: ValidatorWithDetails
+  onClick?: () => void
 }
-export const ValidatorItem = ({ validator }: ValidatorItemProps) => {
-  const { stashAccount, membership, isVerified, isActive, commission, APR, staking } = validator
+export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
+  const { stashAccount, membership, isVerifiedValidator, isActive, commission, APR, staking } = validator
 
   return (
-    <ValidatorItemWrapper>
+    <ValidatorItemWrapper onClick={onClick}>
       <ValidatorItemWrap>
         <ValidatorInfo member={membership} address={encodeAddress(stashAccount)} />
-        {isVerified ? (
+        {isVerifiedValidator ? (
           <BadgeStatus inverted size="l">
             verified
           </BadgeStatus>

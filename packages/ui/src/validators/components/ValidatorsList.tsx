@@ -10,6 +10,7 @@ import { Colors } from '@/common/constants'
 import { Comparator } from '@/common/model/Comparator'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
+import { ValidatorCard } from '../modals/validatorCard/ValidatorCard'
 import { ValidatorWithDetails } from '../types'
 
 import { ValidatorItem } from './ValidatorItem'
@@ -19,6 +20,7 @@ interface ValidatorsListProps {
 }
 
 export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
+  const [cardNumber, selectCard] = useState<number | null>(null)
   type SortKey = 'stashAccount' | 'APR' | 'commission'
   const [sortBy, setSortBy] = useState<SortKey>('stashAccount')
   const [isDescending, setDescending] = useState(false)
@@ -87,12 +89,25 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
         </SortHeader>
       </ListHeaders>
       <List>
-        {sortedValidators?.map((validator) => (
-          <ListItem key={validator.stashAccount}>
+        {sortedValidators?.map((validator, index) => (
+          <ListItem
+            key={validator.stashAccount}
+            onClick={() => {
+              selectCard(index + 1)
+            }}
+          >
             <ValidatorItem validator={validator} />
           </ListItem>
         ))}
       </List>
+      {cardNumber && sortedValidators[cardNumber - 1] && (
+        <ValidatorCard
+          cardNumber={cardNumber}
+          validator={sortedValidators[cardNumber - 1]}
+          selectCard={selectCard}
+          totalCards={sortedValidators.length}
+        />
+      )}
     </ValidatorsListWrap>
   )
 }
