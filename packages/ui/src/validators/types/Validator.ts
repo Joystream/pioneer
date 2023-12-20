@@ -3,10 +3,15 @@ import BN from 'bn.js'
 import { Address } from '@/common/types'
 import { MemberWithDetails } from '@/memberships/types'
 
+export interface RewardPoints {
+  era: number
+  rewardPoints: number
+}
+
 export interface ValidatorWithDetails extends ValidatorMembership {
-  isVerified?: boolean
   isActive: boolean
   totalRewards: BN
+  rewardPointsHistory: RewardPoints[]
   APR: number
   staking: {
     total: BN
@@ -16,6 +21,7 @@ export interface ValidatorWithDetails extends ValidatorMembership {
       staking: BN
     }[]
   }
+  slashed: number
 }
 
 export interface ValidatorMembership {

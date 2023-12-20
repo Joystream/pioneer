@@ -22,6 +22,10 @@ const normalFontSize = ({ size }: MarkdownPreviewStylesProps) => {
 const normalColor = ({ isReply }: MarkdownPreviewStylesProps) => Colors.Black[isReply ? 800 : 700]
 
 export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProps>`
+  * {
+    word-break: normal;
+  }
+
   .markdown-preview {
     width: 100%;
   }
@@ -188,7 +192,6 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     border-spacing: 0;
     border-collapse: collapse;
     display: block;
-    width: max-content;
     max-width: 100%;
     overflow: auto;
     margin-top: 8px;
