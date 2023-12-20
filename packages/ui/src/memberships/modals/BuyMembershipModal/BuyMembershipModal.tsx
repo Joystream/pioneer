@@ -55,15 +55,14 @@ export const BuyMembershipModal = () => {
   )
 
   if (state.matches('prepare')) {
-    const onSubmit = (params: MemberFormFields) =>
-      send({ type: params.isValidator ? 'DONE_IS_VALIDATOR' : 'DONE', form: params })
+    const onSubmit = (params: MemberFormFields) => send({ type: 'DONE', form: params })
 
     return <BuyMembershipFormModal onClose={hideModal} onSubmit={onSubmit} membershipPrice={membershipPrice} />
   }
 
-  if ((state.matches('buyMembershipTx') || state.matches('buyValidatorMembershipTx')) && buyTransaction) {
+  if (state.matches('buyMembershipTx') && buyTransaction) {
     const { form } = state.context
-    const service = state.children.transaction
+    const service = state.children.buyMembership
 
     return (
       <BuyMembershipSignModal
@@ -78,7 +77,7 @@ export const BuyMembershipModal = () => {
   }
 
   if (state.matches('addStakingAccCandidateTx') && bindTransaction && state.context.form.validatorAccounts) {
-    const service = state.children.transaction
+    const service = state.children.addStakingAccCandidate
 
     return (
       <AddStakingAccCandidateModal
@@ -90,7 +89,7 @@ export const BuyMembershipModal = () => {
   }
 
   if (state.matches('confirmStakingAccTx') && conFirmTransaction && state.context.form.controllerAccount) {
-    const service = state.children.transaction
+    const service = state.children.confirmStakingAcc
     return (
       <ConfirmStakingAccModal
         transaction={conFirmTransaction}

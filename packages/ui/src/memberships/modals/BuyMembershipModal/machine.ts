@@ -25,7 +25,6 @@ interface BuyMembershipContext {
 type BuyMembershipState =
   | { value: 'prepare'; context: EmptyObject }
   | { value: 'buyMembershipTx'; context: { form: MemberFormFields } }
-  | { value: 'buyValidatorMembershipTx'; context: { form: MemberFormFields } }
   | { value: 'addStakingAccCandidateTx'; context: { form: MemberFormFields } }
   | { value: 'confirmStakingAccTx'; context: { form: MemberFormFields } }
   | { value: 'success'; context: Required<BuyMembershipContext> }
@@ -36,7 +35,6 @@ export type BuyMembershipEvent =
   | { type: 'PASS' }
   | { type: 'FAIL' }
   | { type: 'DONE'; form: MemberFormFields }
-  | { type: 'DONE_IS_VALIDATOR'; form: MemberFormFields }
   | { type: 'SUCCESS'; memberId: BN }
   | { type: 'ERROR' }
 
@@ -54,39 +52,11 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
           target: 'buyMembershipTx',
           actions: assign({ form: (_, event) => event.form }),
         },
-        DONE_IS_VALIDATOR: {
-          target: 'buyValidatorMembershipTx',
-          actions: assign({ form: (_, event) => event.form }),
-        },
       },
     },
     buyMembershipTx: {
       invoke: {
-        id: 'transaction',
-        src: transactionMachine,
-        onDone: [
-          {
-            target: 'success',
-            actions: assign({
-              memberId: (context, event) => getDataFromEvent(event.data.events, 'members', 'MembershipBought', 0),
-            }),
-            cond: isTransactionSuccess,
-          },
-          {
-            target: 'error',
-            cond: isTransactionError,
-            actions: assign({ transactionEvents: (context, event) => event.data.events }),
-          },
-          {
-            target: 'canceled',
-            cond: isTransactionCanceled,
-          },
-        ],
-      },
-    },
-    buyValidatorMembershipTx: {
-      invoke: {
-        id: 'transaction',
+        id: 'buyMembership',
         src: transactionMachine,
         onDone: [
           {
@@ -94,7 +64,14 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
             actions: assign({
               memberId: (context, event) => getDataFromEvent(event.data.events, 'members', 'MembershipBought', 0),
             }),
-            cond: isTransactionSuccess,
+            cond: (context, event) => isTransactionSuccess(context, event) && context.form?.isValidator,
+          },
+          {
+            target: 'success',
+            actions: assign({
+              memberId: (context, event) => getDataFromEvent(event.data.events, 'members', 'MembershipBought', 0),
+            }),
+            cond: (context, event) => isTransactionSuccess(context, event) && !context.form?.isValidator,
           },
           {
             target: 'error',
@@ -110,7 +87,7 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
     },
     addStakingAccCandidateTx: {
       invoke: {
-        id: 'transaction',
+        id: 'addStakingAccCandidate',
         src: transactionMachine,
         onDone: [
           {
@@ -140,7 +117,7 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
     },
     confirmStakingAccTx: {
       invoke: {
-        id: 'transaction',
+        id: 'confirmStakingAcc',
         src: transactionMachine,
         onDone: [
           {
