@@ -64,7 +64,7 @@ export const buyMembershipMachine = createMachine<BuyMembershipContext, BuyMembe
             actions: assign({
               memberId: (context, event) => getDataFromEvent(event.data.events, 'members', 'MembershipBought', 0),
             }),
-            cond: (context, event) => isTransactionSuccess(context, event) && context.form?.isValidator,
+            cond: (context, event) => isTransactionSuccess(context, event) && !!context.form?.isValidator,
           },
           {
             target: 'success',
