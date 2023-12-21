@@ -10,15 +10,20 @@ import { NumericValueStat, StatisticsThreeColumns, TokenValueStat } from '@/comm
 import { TextSmall } from '@/common/components/typography'
 import { BN_ZERO, ERA_DEPTH } from '@/common/constants'
 import { plural } from '@/common/helpers'
+import { useModal } from '@/common/hooks/useModal'
 import RewardPointsChart from '@/validators/components/RewardPointChart'
 
 import { ValidatorWithDetails } from '../../types'
+import { NominatingRedirectModalCall } from '../NominatingRedirectModal'
 
 interface Props {
   validator: ValidatorWithDetails
+  hideModal: () => void
 }
 
-export const ValidatorDetail = ({ validator }: Props) => {
+export const ValidatorDetail = ({ validator, hideModal }: Props) => {
+  const { showModal } = useModal<NominatingRedirectModalCall>()
+
   return (
     <>
       <SidePaneBody>
@@ -81,7 +86,13 @@ export const ValidatorDetail = ({ validator }: Props) => {
         </Details>
       </SidePaneBody>
       <ModalFooter>
-        <ButtonPrimary size="small" onClick={() => alert('You select this validator to nominate')}>
+        <ButtonPrimary
+          size="small"
+          onClick={() => {
+            hideModal()
+            showModal({ modal: 'NominatingRedirect' })
+          }}
+        >
           Nominate
         </ButtonPrimary>
       </ModalFooter>
