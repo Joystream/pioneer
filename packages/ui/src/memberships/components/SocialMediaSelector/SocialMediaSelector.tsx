@@ -10,8 +10,7 @@ import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMem
 
 import { socialTitle } from '../SocialMediaTile/SocialMediaTile'
 
-// TODO Partial after upgrading @joystream/metadata-protobuf
-const socialToPlaceholder: Partial<Record<Socials, string>> = {
+const socialToPlaceholder: Record<Socials, string> = {
   HYPERLINK: 'Enter URL',
   WECHAT: 'Enter Username',
   IRC: 'Enter Username',
@@ -24,6 +23,7 @@ const socialToPlaceholder: Partial<Record<Socials, string>> = {
   TWITTER: 'Enter Username',
   EMAIL: 'Enter Email',
   LINKEDIN: 'Enter Username',
+  GITHUB: 'Enter Username',
 }
 
 interface Props {
