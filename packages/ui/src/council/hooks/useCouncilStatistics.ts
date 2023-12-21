@@ -11,7 +11,10 @@ export const useCouncilStatistics = () => {
 
   const councilSize = api?.consts.council.councilSize
   const singleCouncilorReward = useFirstObservableValue(() => api?.query.council.councilorReward(), [api?.isConnected])
-  const fullCouncilReward = useMemo(() => singleCouncilorReward && councilSize?.mul(singleCouncilorReward), [councilSize, singleCouncilorReward])
+  const fullCouncilReward = useMemo(
+    () => singleCouncilorReward && councilSize?.mul(singleCouncilorReward),
+    [councilSize, singleCouncilorReward]
+  )
 
   const budgetAmount = useFirstObservableValue(() => api?.query.council.budget(), [api?.isConnected])
 
