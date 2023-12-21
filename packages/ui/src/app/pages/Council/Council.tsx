@@ -41,7 +41,7 @@ export const Council = () => {
 
   const isCouncilorLoading = !isRefetched && (isLoading || isLoadingCouncilors)
 
-  const rewardPerDay = useMemo(() => reward?.period?.mul(reward?.amount ?? asBN(0)) ?? asBN(0), [reward])
+  const rewardPerDay = useMemo(() => reward?.period?.mul(reward?.singleCouncilorAmount ?? asBN(0)) ?? asBN(0), [reward])
   const main = (
     <MainPanel>
       <StatisticsStyle>
