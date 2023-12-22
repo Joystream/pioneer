@@ -116,7 +116,13 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
 
 const ResponsiveWrap = styled.div`
   overflow: auto;
-  max-width: 100%;
+  max-width: calc(100vw - 32px);
+  @media (min-width: 768px) {
+    max-width: calc(100vw - 48px);
+  }
+  @media (min-width: 1024px) {
+    max-width: calc(100vw - 274px);
+  }
 `
 
 const ValidatorsListWrap = styled.div`
