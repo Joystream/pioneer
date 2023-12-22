@@ -390,7 +390,7 @@ export const BuyMembershipHappy: Story = {
       expect(await modal.findByText('Success'))
       expect(modal.getByText(NEW_MEMBER_DATA.handle))
 
-      expect(args.onBuyMembership).toHaveBeenCalledWith({
+      expect(args.onBuyMembership).toHaveBeenCalledWith(bob.controllerAccount, {
         rootAccount: alice.controllerAccount,
         controllerAccount: bob.controllerAccount,
         handle: NEW_MEMBER_DATA.handle,
@@ -435,7 +435,7 @@ export const BuyMembershipEmailSignup: Story = {
       expect(await modal.findByText('Success'))
       expect(modal.getByText(NEW_MEMBER_DATA.handle))
 
-      expect(args.onBuyMembership).toHaveBeenCalledWith({
+      expect(args.onBuyMembership).toHaveBeenCalledWith(bob.controllerAccount, {
         rootAccount: alice.controllerAccount,
         controllerAccount: bob.controllerAccount,
         handle: NEW_MEMBER_DATA.handle,
