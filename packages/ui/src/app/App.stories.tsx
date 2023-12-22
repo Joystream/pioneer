@@ -1,5 +1,6 @@
 import { metadataToBytes } from '@joystream/js/utils'
 import { MembershipMetadata } from '@joystream/metadata-protobuf'
+import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { expect } from '@storybook/jest'
 import { Meta, StoryContext, StoryObj } from '@storybook/react'
 import { userEvent, waitFor, within } from '@storybook/testing-library'
@@ -44,7 +45,6 @@ type Args = {
   onConfirmEmail: jest.Mock
   onAddStakingAccount: jest.Mock
   onConfirmStakingAccount: jest.Mock
-  batchTx: jest.Mock
 }
 
 type Story = StoryObj<FC<Args>>
@@ -81,7 +81,6 @@ export default {
     onConfirmEmail: { action: 'ConfirmEmail' },
     onAddStakingAccount: { action: 'AddStakingAccount' },
     onConfirmStakingAccount: { action: 'ConfirmStakingAccount' },
-    batchTx: { action: 'BatchTx' },
   },
 
   args: {
@@ -154,7 +153,8 @@ export default {
                 utility: {
                   batch: {
                     event: 'TxBatch',
-                    onSend: args.batchTx,
+                    onSend: (transactions: SubmittableExtrinsic<'rxjs'>[]) =>
+                      transactions.forEach((transaction) => transaction.signAndSend('')),
                     failure: parameters.batchTxFailure,
                   },
                 },
@@ -612,7 +612,9 @@ export const BuyMembershipHappyBindOneValidatorHappy: Story = {
         invitingMemberId: undefined,
         referrerId: undefined,
       })
+      expect(args.onAddStakingAccount).toHaveBeenCalledTimes(1)
       expect(args.onAddStakingAccount).toHaveBeenCalledWith(NEW_MEMBER_DATA.id)
+      expect(args.onConfirmStakingAccount).toHaveBeenCalledTimes(1)
       expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(NEW_MEMBER_DATA.id, charlie.controllerAccount)
 
       const doneButton = getButtonByText(modal, 'Done')
@@ -696,7 +698,10 @@ export const BuyMembershipHappyAddTwoValidatorHappy: Story = {
         referrerId: undefined,
       })
       expect(args.onAddStakingAccount).toHaveBeenCalledTimes(2)
-      expect(args.batchTx).toHaveBeenCalledTimes(1)
+      expect(args.onAddStakingAccount).toHaveBeenCalledWith(NEW_MEMBER_DATA.id)
+      expect(args.onConfirmStakingAccount).toHaveBeenCalledTimes(2)
+      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(NEW_MEMBER_DATA.id, charlie.controllerAccount)
+      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(NEW_MEMBER_DATA.id, dave.controllerAccount)
 
       const doneButton = getButtonByText(modal, 'Done')
       expect(doneButton).toBeEnabled()
