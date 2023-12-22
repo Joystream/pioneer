@@ -530,21 +530,16 @@ export const BuyMembershipTxFailure: Story = {
   },
 }
 
-const fillMembershipFormWithOneValidatorAcc = async (modal: Container) => {
+const fillMembershipFormValidatorAccounts = async (modal: Container, accounts: string[]) => {
   await fillMembershipForm(modal)
   const validatorChechButton = modal.getAllByText('Yes')[1]
   await userEvent.click(validatorChechButton)
   expect(await modal.findByText(/^If your validator account/))
-  await selectFromDropdown(modal, /^If your validator account/, 'charlie')
-  const addButton = document.getElementsByClassName('add-button')[0]
-  await userEvent.click(addButton)
-}
-
-const fillMembershipFormWithTwoValidatorAcc = async (modal: Container) => {
-  await fillMembershipFormWithOneValidatorAcc(modal)
-  await selectFromDropdown(modal, /^If your validator account/, 'dave')
-  const addButton = document.getElementsByClassName('add-button')[0]
-  await userEvent.click(addButton)
+  for (const account of accounts) {
+    await selectFromDropdown(modal, /^If your validator account/, account)
+    const addButton = document.getElementsByClassName('add-button')[0]
+    await userEvent.click(addButton)
+  }
 }
 
 export const BuyMembershipHappyBindOneValidatorHappy: Story = {
@@ -563,7 +558,7 @@ export const BuyMembershipHappyBindOneValidatorHappy: Story = {
 
       await step('Fill', async () => {
         expect(createButton).toBeDisabled()
-        await fillMembershipFormWithOneValidatorAcc(modal)
+        await fillMembershipFormValidatorAccounts(modal, ['charlie'])
         await waitFor(() => expect(createButton).toBeEnabled())
       })
 
@@ -640,7 +635,7 @@ export const BuyMembershipHappyAddTwoValidatorHappy: Story = {
 
       await step('Fill', async () => {
         expect(createButton).toBeDisabled()
-        await fillMembershipFormWithTwoValidatorAcc(modal)
+        await fillMembershipFormValidatorAccounts(modal, ['charlie', 'dave'])
         await waitFor(() => expect(createButton).toBeEnabled())
       })
 
@@ -720,7 +715,7 @@ export const BuyMembershipWithValidatorAccountNotEnoughFunds: Story = {
 
     await userEvent.click(getButtonByText(screen, 'Join Now'))
 
-    await fillMembershipFormWithOneValidatorAcc(modal)
+    await fillMembershipFormValidatorAccounts(modal, ['charlie'])
     const createButton = getButtonByText(modal, 'Create a Membership')
     await waitFor(() => expect(createButton).toBeEnabled())
     await userEvent.click(createButton)
@@ -740,7 +735,7 @@ export const BuyMembershipWithValidatorAccountFailure: Story = {
 
     await userEvent.click(getButtonByText(screen, 'Join Now'))
 
-    await fillMembershipFormWithOneValidatorAcc(modal)
+    await fillMembershipFormValidatorAccounts(modal, ['charlie'])
     const createButton = getButtonByText(modal, 'Create a Membership')
     await waitFor(() => expect(createButton).toBeEnabled())
     await userEvent.click(createButton)
@@ -769,7 +764,7 @@ export const BuyMembershipHappyAddOneValidatorFailure: Story = {
 
       await step('Fill', async () => {
         expect(createButton).toBeDisabled()
-        await fillMembershipFormWithOneValidatorAcc(modal)
+        await fillMembershipFormValidatorAccounts(modal, ['charlie'])
         await waitFor(() => expect(createButton).toBeEnabled())
       })
 
@@ -815,7 +810,7 @@ export const BuyMembershipAddValidatorAccHappyConfirmTxFailure: Story = {
 
       await step('Fill', async () => {
         expect(createButton).toBeDisabled()
-        await fillMembershipFormWithOneValidatorAcc(modal)
+        await fillMembershipFormValidatorAccounts(modal, ['charlie'])
         await waitFor(() => expect(createButton).toBeEnabled())
       })
 
@@ -871,7 +866,7 @@ export const BuyMembershipAddTwoValidatorAccHappyConfirmTxFailure: Story = {
 
       await step('Fill', async () => {
         expect(createButton).toBeDisabled()
-        await fillMembershipFormWithTwoValidatorAcc(modal)
+        await fillMembershipFormValidatorAccounts(modal, ['charlie', 'dave'])
         await waitFor(() => expect(createButton).toBeEnabled())
       })
 
