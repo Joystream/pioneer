@@ -29,30 +29,25 @@ export const BuyMembershipModal = () => {
     apolloClient.refetchQueries({ include: 'active' })
   }, [isSuccessful, apolloClient])
 
+  const memberId = state.context.memberId?.toString()
+
   const buyTransaction = useMemo(
     () => state.context.form && api?.tx.members.buyMembership(toMemberTransactionParams(state.context.form)),
     [api?.isConnected, state.context.form]
   )
   const bindTransaction = useMemo(
-    () => state.context.memberId && api?.tx.members.addStakingAccountCandidate(state.context.memberId.toString()),
-    [state.context, state.context.memberId]
+    () => memberId && api?.tx.members.addStakingAccountCandidate(memberId),
+    [api?.isConnected, memberId]
   )
-  const conFirmTransaction = useMemo(
-    () =>
-      state.context.memberId &&
-      state.context.form?.validatorAccounts &&
-      (state.context.form.validatorAccounts.length > 1
-        ? api?.tx.utility.batch(
-            state.context.form.validatorAccounts.map(({ address }) =>
-              api.tx.members.confirmStakingAccount(state.context.memberId?.toString() ?? '', address)
-            )
-          )
-        : api?.tx.members.confirmStakingAccount(
-            state.context.memberId.toString(),
-            state.context.form.validatorAccounts[0].address
-          )),
-    [api?.isConnected, state.context.memberId, state.context.form?.validatorAccounts]
-  )
+  const conFirmTransaction = useMemo(() => {
+    const validatorAccounts = state.context.form?.validatorAccounts
+
+    if (!api || !memberId || !validatorAccounts) return
+
+    const confirmTxs = validatorAccounts.map(({ address }) => api.tx.members.confirmStakingAccount(memberId, address))
+
+    return confirmTxs.length > 1 ? api.tx.utility.batch(confirmTxs) : confirmTxs[0]
+  }, [api?.isConnected, memberId, state.context.form?.validatorAccounts])
 
   if (state.matches('prepare')) {
     const onSubmit = (params: MemberFormFields) => send({ type: 'DONE', form: params })

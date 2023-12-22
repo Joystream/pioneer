@@ -695,8 +695,8 @@ export const BuyMembershipHappyAddTwoValidatorHappy: Story = {
         invitingMemberId: undefined,
         referrerId: undefined,
       })
-      expect(args.onAddStakingAccount).toHaveBeenCalledTimes(4) // means 2 times: get the fee info and sign the tx
-      expect(args.batchTx).toHaveBeenCalledTimes(2)
+      expect(args.onAddStakingAccount).toHaveBeenCalledTimes(2)
+      expect(args.batchTx).toHaveBeenCalledTimes(1)
 
       const doneButton = getButtonByText(modal, 'Done')
       expect(doneButton).toBeEnabled()
