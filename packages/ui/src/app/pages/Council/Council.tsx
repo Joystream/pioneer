@@ -59,7 +59,7 @@ export const Council = () => {
         />
 
         <MultiValueStat
-          title="Single Councilor Reward"
+          title="Single Councillor Reward"
           values={[
             { label: 'Per Day', value: rewardPerDay },
             { label: 'Per Week', value: rewardPerDay.mul(asBN(7)) },
