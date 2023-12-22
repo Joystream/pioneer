@@ -1,6 +1,8 @@
 import { createType } from '@joystream/types'
 import { mapValues } from 'lodash'
 
+import { encodeAddress } from '@/accounts/model/encodeAddress'
+
 export const asChainData = (data: any): any => {
   switch (Object.getPrototypeOf(data).constructor.name) {
     case 'Object':
@@ -20,4 +22,16 @@ export const asChainData = (data: any): any => {
   }
 }
 
-const withUnwrap = (data: Record<any, any>) => Object.defineProperty(data, 'unwrap', { value: () => data })
+const withUnwrap = (data: Record<any, any>) =>
+  Object.defineProperties(data, {
+    unwrap: { value: () => data },
+    isSome: { value: Object.keys(data).length > 0 },
+    get: {
+      value: (key: any) => {
+        if (key.toRawType?.() === 'AccountId') {
+          return data[encodeAddress(key.toString())]
+        }
+        return data[key.toString()]
+      },
+    },
+  })

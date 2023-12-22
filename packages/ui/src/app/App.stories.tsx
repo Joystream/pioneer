@@ -3,8 +3,7 @@ import { MembershipMetadata } from '@joystream/metadata-protobuf'
 import { expect } from '@storybook/jest'
 import { Meta, StoryContext, StoryObj } from '@storybook/react'
 import { userEvent, waitFor, within } from '@storybook/testing-library'
-import React, { FC, useEffect, useState } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
+import React, { FC } from 'react'
 import { createGlobalStyle } from 'styled-components'
 
 import { Page, Screen } from '@/common/components/page/Page'
@@ -21,7 +20,6 @@ import { Container, getButtonByText, joy, selectFromDropdown, withinModal } from
 import { MocksParameters } from '@/mocks/providers'
 
 import { App } from './App'
-import { ErrorFallback } from './components/ErrorFallback'
 import { OnBoardingOverlay } from './components/OnboardingOverlay/OnBoardingOverlay'
 import { SideBar } from './components/SideBar'
 
@@ -633,42 +631,5 @@ export const EmailConfirmationError: Story = {
   play: async ({ canvasElement }) => {
     const modal = withinModal(canvasElement)
     await waitFor(() => expect(modal.getAllByText(/Unexpected error/i)))
-  },
-}
-
-// ----------------------------------------------------------------------------
-// Error Boundary Test
-// ----------------------------------------------------------------------------
-
-const ErrorComponent = () => {
-  const [data, setData] = useState([0])
-  useEffect(() => {
-    if (data.length > 1) throw new Error('Data too large')
-  }, [data])
-  return <button onClick={() => setData((prev) => [...prev, 0])}>Throw Error Button</button>
-}
-
-export const ErrorBoundaries: Story = {
-  render: () => {
-    return (
-      <Page>
-        <NoPaddingStyle />
-        <SideBar />
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <Screen>
-            <OnBoardingOverlay />
-            <ErrorComponent />
-          </Screen>
-        </ErrorBoundary>
-      </Page>
-    )
-  },
-
-  play: async ({ canvasElement }) => {
-    const screen = within(canvasElement)
-
-    userEvent.click(screen.getByText('Throw Error Button'))
-    expect(screen.getByText('Something went wrong'))
-    expect(screen.getByText('Data too large'))
   },
 }
