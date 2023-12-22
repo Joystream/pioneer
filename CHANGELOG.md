@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2023-12-22
+
+### Added
+- Widget which represents visually the progress of the current election.
+
+### Changed
+- Show reward for single councillor on council page.
+
+### Fixed
+- Vote recovery from the My Profile page.
+
+## [2.1.1] - 2023-12-11
+
+### Fixed
+- Vote again button sometime linking to the wrong candidate.
+
 ## [2.1.0] - 2023-12-08
 
 ### Added
@@ -249,7 +265,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v2.1.0...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/Joystream/pioneer/compare/v2.1.1...v2.2.0
+[2.1.1]: https://github.com/Joystream/pioneer/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/Joystream/pioneer/compare/v2.0.2...v2.1.0
 [2.0.2]: https://github.com/Joystream/pioneer/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/Joystream/pioneer/compare/v2.0.0...v2.0.1
