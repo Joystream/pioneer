@@ -39,11 +39,11 @@ export const useValidatorMembers = () => {
       boundAccounts_containsAny:
         (allValidatorsWithCtrlAcc
           ?.concat(allValidators?.map(({ address }) => address))
-          .filter((element) => !element) as string[]) ?? [],
+          .filter((element) => !!element) as string[]) ?? [],
     },
   }
 
-  const { data } = useGetMembersWithDetailsQuery({ variables, skip: !!allValidatorsWithCtrlAcc })
+  const { data } = useGetMembersWithDetailsQuery({ variables, skip: !allValidatorsWithCtrlAcc })
 
   const memberships = data?.memberships?.map((rawMembership) => ({
     membership: asMemberWithDetails(rawMembership),

@@ -21,7 +21,6 @@ export const useValidatorsList = () => {
   const [isActive, setIsActive] = useState<State>(null)
   const [visibleValidators, setVisibleValidators] = useState<ValidatorWithDetails[]>([])
   const validators = useValidatorMembers()
-
   const validatorRewardPointsHistory = useFirstObservableValue(
     () => api?.query.staking.erasRewardPoints.entries(),
     [api?.isConnected]
@@ -57,8 +56,9 @@ export const useValidatorsList = () => {
           totalRewards: rewardHistory.reduce((total: BN, data) => total.add(data.eraReward), new BN(0)),
           rewardPointsHistory,
           APR: apr,
-          slashed:
-            slashingSpans.unwrap().prior.length + (slashingSpans.unwrap().lastNonzeroSlash.toNumber() > 0 ? 1 : 0),
+          slashed: slashingSpans.isSome
+            ? slashingSpans.unwrap().prior.length + (slashingSpans.unwrap().lastNonzeroSlash.toNumber() > 0 ? 1 : 0)
+            : 0,
           staking: {
             total: stakingInfo.total.toBn(),
             own: stakingInfo.own.toBn(),
