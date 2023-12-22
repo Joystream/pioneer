@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { PageHeader } from '@/app/components/PageHeader'
 import { PageLayout } from '@/app/components/PageLayout'
@@ -37,7 +38,8 @@ export const ValidatorList = () => {
       header={
         <RowGapBlock gap={24}>
           <PageHeader title="Validators" tabs={<ValidatorsTabs />} />
-          <Statistics>
+
+          <StatisticsStyle>
             <ValidatorsState
               activeValidatorsCount={activeValidatorsCount}
               allValidatorsCount={allValidatorsCount}
@@ -51,7 +53,7 @@ export const ValidatorList = () => {
             />
             <Era eraStartedOn={eraStartedOn} eraDuration={eraDuration} now={now} eraRewardPoints={eraRewardPoints} />
             <Rewards totalRewards={totalRewards} lastRewards={lastRewards} />
-          </Statistics>
+          </StatisticsStyle>
           <ValidatorsFilter filter={filter} />
         </RowGapBlock>
       }
@@ -59,3 +61,15 @@ export const ValidatorList = () => {
     />
   )
 }
+
+const StatisticsStyle = styled(Statistics)`
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (min-width: 1440px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+`
