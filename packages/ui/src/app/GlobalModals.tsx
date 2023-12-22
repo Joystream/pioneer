@@ -69,6 +69,7 @@ import { AddNewProposalModal, AddNewProposalModalCall } from '@/proposals/modals
 import { VoteForProposalModal, VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { VoteRationale } from '@/proposals/modals/VoteRationale/VoteRationale'
+import { NominatingRedirectModal, NominatingRedirectModalCall } from '@/validators/modals/NominatingRedirectModal'
 import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { ApplyForRoleModal, ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { ChangeAccountModal, ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
@@ -130,6 +131,7 @@ export type ModalNames =
   | ModalName<InviteMemberModalCall>
   | ModalName<EmailSubscriptionModalCall>
   | ModalName<EmailConfirmationModalCall>
+  | ModalName<NominatingRedirectModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -182,6 +184,7 @@ const modals: Record<ModalNames, ReactElement> = {
   PostReplyModal: <PostReplyModal />,
   EmailSubscriptionModal: <EmailSubscriptionModal />,
   EmailConfirmationModal: <EmailConfirmationModal />,
+  NominatingRedirect: <NominatingRedirectModal />,
 }
 
 const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
@@ -201,6 +204,7 @@ const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
   'ReportContentModal',
   'EmailConfirmationModal',
   'VoteRationaleModal',
+  'NominatingRedirect',
 ]
 
 export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [
