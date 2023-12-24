@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { List, ListItem } from '@/common/components/List'
 import { ListHeader } from '@/common/components/List/ListHeader'
 import { SortHeader } from '@/common/components/List/SortHeader'
+import { Loading } from '@/common/components/Loading'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { Colors } from '@/common/constants'
 import { Comparator } from '@/common/model/Comparator'
@@ -14,7 +15,6 @@ import { ValidatorCard } from '../modals/validatorCard/ValidatorCard'
 import { ValidatorWithDetails } from '../types'
 
 import { ValidatorItem } from './ValidatorItem'
-import { Loading } from '@/common/components/Loading'
 
 interface ValidatorsListProps {
   validators: ValidatorWithDetails[]
