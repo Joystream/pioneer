@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo } from 'react'
+import React, { ReactNode, useMemo, useState } from 'react'
 import { map } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
@@ -17,6 +17,7 @@ interface Props {
 }
 
 export interface UseValidators {
+  fetchValidators: (fetchValidators: boolean) => void
   allValidators?: {
     address: Address
     commission: number
@@ -27,18 +28,19 @@ export interface UseValidators {
 
 export const ValidatorContextProvider = (props: Props) => {
   const { api } = useApi()
-  const allValidators = useFirstObservableValue(
-    () =>
-      api?.query.staking.validators.entries().pipe(
-        map((entries) =>
-          entries.map((entry) => ({
-            address: entry[0].args[0].toString(),
-            commission: perbillToPercent(entry[1].commission.toBn()),
-          }))
-        )
-      ),
-    [api?.isConnected]
-  )
+  const [validatorRelatedPage, fetchValidators] = useState(false)
+
+  const allValidators = useFirstObservableValue(() => {
+    if (!validatorRelatedPage) return undefined
+    return api?.query.staking.validators.entries().pipe(
+      map((entries) =>
+        entries.map((entry) => ({
+          address: entry[0].args[0].toString(),
+          commission: perbillToPercent(entry[1].commission.toBn()),
+        }))
+      )
+    )
+  }, [api?.isConnected, validatorRelatedPage])
 
   const allValidatorsWithCtrlAcc = useFirstObservableValue(
     () =>
@@ -55,7 +57,7 @@ export const ValidatorContextProvider = (props: Props) => {
       boundAccounts_containsAny:
         (allValidatorsWithCtrlAcc
           ?.concat(allValidators?.map(({ address }) => address))
-          .filter((element) => !element) as string[]) ?? [],
+          .filter((element) => !!element) as string[]) ?? [],
     },
   }
 
@@ -88,6 +90,7 @@ export const ValidatorContextProvider = (props: Props) => {
   }, [data, allValidators, allValidatorsWithCtrlAcc])
 
   const value = {
+    fetchValidators,
     allValidators,
     allValidatorsWithCtrlAcc,
     validatorsWithMembership,

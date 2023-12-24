@@ -20,7 +20,11 @@ export const useValidatorsList = () => {
   const [isVerified, setIsVerified] = useState<Verification>(null)
   const [isActive, setIsActive] = useState<State>(null)
   const [visibleValidators, setVisibleValidators] = useState<ValidatorWithDetails[]>([])
-  const { validatorsWithMembership: validators } = useValidators()
+  const { fetchValidators, validatorsWithMembership: validators } = useValidators()
+
+  useEffect(() => {
+    fetchValidators(true)
+  }, [])
 
   const validatorRewardPointsHistory = useFirstObservableValue(
     () => api?.query.staking.erasRewardPoints.entries(),
