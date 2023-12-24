@@ -54,14 +54,30 @@ export const ValidatorContextProvider = (props: Props) => {
 
   const variables = {
     where: {
-      boundAccounts_containsAny:
-        (allValidatorsWithCtrlAcc
-          ?.concat(allValidators?.map(({ address }) => address))
-          .filter((element) => !!element) as string[]) ?? [],
+      OR: [
+        {
+          rootAccount_in:
+            (allValidatorsWithCtrlAcc
+              ?.concat(allValidators?.map(({ address }) => address))
+              .filter((element) => !!element) as string[]) ?? [],
+        },
+        {
+          controllerAccount_in:
+            (allValidatorsWithCtrlAcc
+              ?.concat(allValidators?.map(({ address }) => address))
+              .filter((element) => !!element) as string[]) ?? [],
+        },
+        {
+          boundAccounts_containsAny:
+            (allValidatorsWithCtrlAcc
+              ?.concat(allValidators?.map(({ address }) => address))
+              .filter((element) => !!element) as string[]) ?? [],
+        },
+      ],
     },
   }
 
-  const { data } = useGetMembersWithDetailsQuery({ variables, skip: !!allValidatorsWithCtrlAcc })
+  const { data } = useGetMembersWithDetailsQuery({ variables, skip: !allValidatorsWithCtrlAcc })
 
   const memberships = data?.memberships?.map((rawMembership) => ({
     membership: asMemberWithDetails(rawMembership),
@@ -81,6 +97,10 @@ export const ValidatorContextProvider = (props: Props) => {
           commission,
           ...memberships.find(
             ({ membership }) =>
+              membership.rootAccount === address ||
+              membership.rootAccount === controllerAccount ||
+              membership.controllerAccount === address ||
+              membership.controllerAccount === controllerAccount ||
               membership.boundAccounts.includes(address) ||
               (controllerAccount && membership.boundAccounts.includes(controllerAccount))
           ),
