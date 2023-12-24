@@ -14,6 +14,7 @@ import { ValidatorCard } from '../modals/validatorCard/ValidatorCard'
 import { ValidatorWithDetails } from '../types'
 
 import { ValidatorItem } from './ValidatorItem'
+import { Loading } from '@/common/components/Loading'
 
 interface ValidatorsListProps {
   validators: ValidatorWithDetails[]
@@ -42,6 +43,7 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
     }
   }
 
+  if (validators.length === 0) return <Loading />
   return (
     <ResponsiveWrap>
       <ValidatorsListWrap>

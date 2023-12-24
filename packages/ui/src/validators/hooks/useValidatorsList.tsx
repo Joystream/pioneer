@@ -7,7 +7,6 @@ import { Api } from '@/api'
 import { useApi } from '@/api/hooks/useApi'
 import { ERAS_PER_YEAR } from '@/common/constants'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
-import { createType } from '@/common/model/createType'
 import { last } from '@/common/utils'
 
 import { Verification, State, ValidatorWithDetails, ValidatorMembership } from '../types'
