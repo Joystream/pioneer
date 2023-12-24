@@ -48,7 +48,7 @@ export const useValidatorsList = () => {
             : 0
         const rewardPointsHistory = validatorRewardPointsHistory.map((entry) => ({
           era: entry[0].args[0].toNumber(),
-          rewardPoints: entry[1].individual.get(createType('AccountId', address))?.toNumber() ?? 0,
+          rewardPoints: (entry[1].individual.toJSON()[address] ?? 0) as number,
         }))
         return {
           ...validator,
