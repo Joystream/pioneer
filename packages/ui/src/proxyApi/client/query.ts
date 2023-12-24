@@ -2,10 +2,11 @@ import { AnyTuple } from '@polkadot/types/types'
 import { uniqueId } from 'lodash'
 import { filter, Observable, map, share } from 'rxjs'
 
-import { ProxyApi } from '..'
 import { deserializeMessage } from '../models/payload'
 import { ApiKinds, PostMessage, RawWorkerMessageEvent } from '../types'
 import { apiInterfaceProxy } from '../utils/proxy'
+
+import { ProxyApi } from './ProxyApi'
 
 export type ApiQueryKinds = Exclude<ApiKinds, 'tx'>
 
