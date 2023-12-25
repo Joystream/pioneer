@@ -1,6 +1,5 @@
 export const ValidatorsRoutes = {
   list: '/validators',
-  validatordashboard: '/validators/validator dashboard',
 } as const
 
 type ValidatorsRoutesType = typeof ValidatorsRoutes
