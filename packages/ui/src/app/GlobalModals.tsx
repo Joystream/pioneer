@@ -229,7 +229,7 @@ export const GlobalModals = () => {
   const { modal, hideModal, currentModalMachine, showModal, modalData, isClosing } = useModal()
   const { active: activeMember } = useMyMemberships()
   const { status } = useTransactionStatus()
-  const { supportTransactions } = useResponsive()
+  const { isMobileWallet } = useResponsive()
   const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
 
   const [container, setContainer] = useState(document.body)
@@ -240,7 +240,7 @@ export const GlobalModals = () => {
 
   const potentialFallback = useGlobalModalHandler(currentModalMachine, hideModal)
 
-  if (modal && !supportTransactions && !NON_TRANSACTIONAL_MODALS.includes(modal as ModalNames)) {
+  if (isMobileWallet && modal && !NON_TRANSACTIONAL_MODALS.includes(modal as ModalNames)) {
     return <NotSupportMobileModal onClose={hideModal} />
   }
 
