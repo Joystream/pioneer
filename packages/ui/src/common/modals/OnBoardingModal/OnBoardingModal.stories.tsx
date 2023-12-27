@@ -35,6 +35,8 @@ const useMyAccounts: UseAccounts = {
     { name: 'Bob Account', address: '5DWS57CtERHpNehXCPcNoHGKutQYGrwvaEF5zXb26Fz9rcQp' },
   ],
   error: undefined,
+  isWalletConnected: true,
+  isConnectingWallet: false,
 }
 
 const useMyBalances: AddressToBalanceMap = {

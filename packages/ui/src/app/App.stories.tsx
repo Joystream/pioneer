@@ -30,7 +30,7 @@ type Args = {
   hasMemberships: boolean
   hasFunds: boolean
   hasAccounts: boolean
-  hasWallet: boolean
+  isWalletConnected: boolean
   isRPCNodeConnected: boolean
   hasRegisteredEmail: boolean
   hasBeenAskedForEmail: boolean
@@ -80,7 +80,7 @@ export default {
     hasMemberships: true,
     hasAccounts: true,
     hasFunds: true,
-    hasWallet: true,
+    isWalletConnected: true,
     isRPCNodeConnected: true,
     hasRegisteredEmail: true,
     hasBeenAskedForEmail: true,
@@ -100,7 +100,7 @@ export default {
         accounts: {
           active: args.isLoggedIn ? 'alice' : undefined,
           list: args.hasMemberships || args.hasAccounts ? [account(alice), account(bob), account(charlie)] : [],
-          hasWallet: args.hasWallet,
+          isWalletConnected: args.isWalletConnected,
         },
 
         chain: !args.isRPCNodeConnected
@@ -222,7 +222,7 @@ export const SwitchMembership: Story = {
 // ----------------------------------------------------------------------------
 
 export const OnBoardingOverlayStory: Story = {
-  args: { hasWallet: false, hasAccounts: false, hasFunds: false, hasMemberships: false, isLoggedIn: false },
+  args: { isWalletConnected: false, hasAccounts: false, hasFunds: false, hasMemberships: false, isLoggedIn: false },
 
   name: 'On Boarding Overlay',
 
@@ -250,7 +250,7 @@ const expectActiveStepToBe = (modal: Container, text: string) =>
   )
 
 export const ConnectWallet: Story = {
-  args: { hasWallet: false, hasAccounts: false, hasFunds: false, hasMemberships: false, isLoggedIn: false },
+  args: { isWalletConnected: false, hasAccounts: false, hasFunds: false, hasMemberships: false, isLoggedIn: false },
 
   play: async ({ canvasElement }) => {
     const screen = within(canvasElement)
@@ -508,7 +508,7 @@ export const EmailSubscriptionModalDecline: Story = {
     hasMemberships: true,
     hasAccounts: true,
     hasFunds: true,
-    hasWallet: true,
+    isWalletConnected: true,
     isRPCNodeConnected: true,
     hasRegisteredEmail: false,
     hasBeenAskedForEmail: false,
@@ -528,7 +528,7 @@ export const EmailSubscriptionModalWrongEmail: Story = {
     hasMemberships: true,
     hasAccounts: true,
     hasFunds: true,
-    hasWallet: true,
+    isWalletConnected: true,
     isRPCNodeConnected: true,
     hasRegisteredEmail: false,
     hasBeenAskedForEmail: false,
@@ -548,7 +548,7 @@ export const EmailSubscriptionModalSubscribe: Story = {
     hasMemberships: true,
     hasAccounts: true,
     hasFunds: true,
-    hasWallet: true,
+    isWalletConnected: true,
     isRPCNodeConnected: true,
     hasRegisteredEmail: false,
     hasBeenAskedForEmail: false,
@@ -586,7 +586,7 @@ export const EmailSubscriptionModalSubscribeError: Story = {
     hasMemberships: true,
     hasAccounts: true,
     hasFunds: true,
-    hasWallet: true,
+    isWalletConnected: true,
     isRPCNodeConnected: true,
     hasRegisteredEmail: false,
     hasBeenAskedForEmail: false,

@@ -49,7 +49,7 @@ type AccountMock = {
 
 type Active = AccountMock | Membership['handle']
 
-type MockAccounts = { active?: Active; list?: AccountMock[]; hasWallet?: boolean } | undefined
+type MockAccounts = { active?: Active; list?: AccountMock[]; isWalletConnected?: boolean } | undefined
 
 export type MockAccountsProps = { accounts?: MockAccounts }
 
@@ -122,7 +122,9 @@ export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts
     allAccounts,
     hasAccounts: true,
     isLoading: false,
-    wallet: accounts.hasWallet === false ? undefined : WALLET,
+    wallet: accounts.isWalletConnected === false ? undefined : WALLET,
+    isWalletConnected: accounts.isWalletConnected !== false,
+    isConnectingWallet: false,
   }
 
   const membershipContextValue: MyMemberships = {

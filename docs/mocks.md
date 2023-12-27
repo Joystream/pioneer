@@ -15,7 +15,7 @@ In stories data are mocked using the [MockProvidersDecorator](../packages/ui/src
   accounts: {
     active: account and membership data or handle defined in the list property
     list: list of account and membership data
-    hasWallet: boolean
+    isWalletConnected: boolean
   }
 
   chain: {
