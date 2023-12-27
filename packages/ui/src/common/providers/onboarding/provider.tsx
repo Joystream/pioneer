@@ -21,21 +21,27 @@ const hasAccount = (allAccounts: Account[], address: string) => {
 }
 
 const useOnBoarding = (): UseOnBoarding => {
-  const { isLoading: isLoadingAccounts, error: accountsError, hasAccounts, allAccounts, wallet } = useMyAccounts()
+  const {
+    isLoading: isLoadingAccounts,
+    isConnectingWallet,
+    isWalletConnected,
+    hasAccounts,
+    allAccounts,
+  } = useMyAccounts()
   const { total: totalBalance } = useMyTotalBalances()
   const { isLoading: isLoadingMembers, hasMembers } = useMyMemberships()
   const [membershipAccount, setMembershipAccount] = useLocalStorage<string | undefined>('onboarding-membership-account')
 
-  if (totalBalance.gtn(0) && wallet) {
+  if (!isWalletConnected) {
+    return { isLoading: isConnectingWallet, status: 'installPlugin' }
+  }
+
+  if (totalBalance.gtn(0)) {
     return { isLoading: false, status: 'finished' }
   }
 
   if (isLoadingAccounts || isLoadingMembers) {
     return { isLoading: true }
-  }
-
-  if (accountsError === 'NO_EXTENSION' || !wallet) {
-    return { isLoading: false, status: 'installPlugin' }
   }
 
   if (!hasMembers && (!hasAccounts || !membershipAccount || !hasAccount(allAccounts, membershipAccount))) {

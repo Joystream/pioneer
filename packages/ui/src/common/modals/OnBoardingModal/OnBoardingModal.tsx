@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { asOnBoardingSteps, onBoardingSteps } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
+import { LoaderModal } from '@/app/GlobalModals'
 import { CloseButton } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
 import { WarningIcon } from '@/common/components/icons/WarningIcon'
@@ -131,7 +132,11 @@ export const OnBoardingModal = () => {
     )
   }
 
-  if (status === 'finished' || isLoading || !status) {
+  if (isLoading) {
+    return <LoaderModal onClose={hideModal} />
+  }
+
+  if (status === 'finished' || !status) {
     return null
   }
 
