@@ -17,7 +17,7 @@ interface Props {
 }
 
 export interface UseValidators {
-  fetchValidators: (fetchValidators: boolean) => void
+  setShouldFetchValidators: (fetchValidators: boolean) => void
   allValidators?: {
     address: Address
     commission: number
@@ -28,10 +28,11 @@ export interface UseValidators {
 
 export const ValidatorContextProvider = (props: Props) => {
   const { api } = useApi()
-  const [validatorRelatedPage, fetchValidators] = useState(false)
+
+  const [shouldFetchValidators, setShouldFetchValidators] = useState(false)
 
   const allValidators = useFirstObservableValue(() => {
-    if (!validatorRelatedPage) return undefined
+    if (!shouldFetchValidators) return undefined
     return api?.query.staking.validators.entries().pipe(
       map((entries) =>
         entries.map((entry) => ({
@@ -40,7 +41,7 @@ export const ValidatorContextProvider = (props: Props) => {
         }))
       )
     )
-  }, [api?.isConnected, validatorRelatedPage])
+  }, [api?.isConnected, shouldFetchValidators])
 
   const allValidatorsWithCtrlAcc = useFirstObservableValue(
     () =>
@@ -110,7 +111,7 @@ export const ValidatorContextProvider = (props: Props) => {
   }, [data, allValidators, allValidatorsWithCtrlAcc])
 
   const value = {
-    fetchValidators,
+    setShouldFetchValidators,
     allValidators,
     allValidatorsWithCtrlAcc,
     validatorsWithMembership,

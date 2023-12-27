@@ -133,11 +133,7 @@ export const BuyMembershipForm = ({
   const [formHandleMap, setFormHandleMap] = useState('')
   const { isUploading, uploadAvatarAndSubmit } = useUploadAvatarAndSubmit(onSubmit)
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
-  const { fetchValidators, allValidators, allValidatorsWithCtrlAcc } = useValidators()
-
-  useEffect(() => {
-    fetchValidators(true)
-  }, [])
+  const { allValidators, allValidatorsWithCtrlAcc } = useValidators()
 
   const form = useForm<MemberFormFields>({
     resolver: useYupValidationResolver(CreateMemberSchema),
@@ -160,17 +156,18 @@ export const BuyMembershipForm = ({
   ])
 
   const [validatorAccounts, setValidatorAccounts] = useState<Account[]>([])
+  const validatorAddresses = useMemo(() => {
+    if (!allValidatorsWithCtrlAcc || !allValidators) return
+    return (
+      [...allValidatorsWithCtrlAcc, ...allValidators.map(({ address }) => address)].filter(
+        (element) => !!element
+      ) as string[]
+    ).map(encodeAddress)
+  }, [allValidators, allValidatorsWithCtrlAcc])
+
   const isValidValidatorAccount = useMemo(
-    () =>
-      validatorAccountCandidate &&
-      (
-        allValidatorsWithCtrlAcc
-          ?.concat(allValidators?.map(({ address }) => address))
-          .filter((element) => !!element) as string[]
-      )
-        .map(encodeAddress)
-        .includes(encodeAddress(validatorAccountCandidate.address)),
-    [allValidators, allValidatorsWithCtrlAcc, validatorAccountCandidate]
+    () => validatorAccountCandidate && validatorAddresses?.includes(encodeAddress(validatorAccountCandidate.address)),
+    [allValidators, allValidatorsWithCtrlAcc, validatorAddresses, validatorAccountCandidate]
   )
 
   useEffect(() => {
@@ -303,7 +300,11 @@ export const BuyMembershipForm = ({
                       </TextMedium>
                       <RowInline>
                         <InputComponent id="select-validatorAccount" inputSize="l">
-                          <SelectAccount id="select-validatorAccount" name="validatorAccountCandidate" />
+                          <SelectAccount
+                            id="select-validatorAccount"
+                            name="validatorAccountCandidate"
+                            filter={(account) => !!validatorAddresses?.includes(encodeAddress(account.address))}
+                          />
                         </InputComponent>
                         <ButtonPrimary
                           square

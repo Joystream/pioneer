@@ -629,8 +629,8 @@ export const BuyMembershipTxFailure: Story = {
 
 const fillMembershipFormValidatorAccounts = async (modal: Container, accounts: string[]) => {
   await fillMembershipForm(modal)
-  const validatorChechButton = modal.getAllByText('Yes')[1]
-  await userEvent.click(validatorChechButton)
+  const validatorCheckButton = modal.getAllByText('Yes')[1]
+  await userEvent.click(validatorCheckButton)
   expect(await modal.findByText(/^If your validator account/))
   for (const account of accounts) {
     await selectFromDropdown(modal, /^If your validator account/, account)
@@ -811,8 +811,15 @@ export const InvalidValidatorAccountInput: Story = {
     const modal = withinModal(canvasElement)
 
     await userEvent.click(getButtonByText(screen, 'Join Now'))
-
-    await fillMembershipFormValidatorAccounts(modal, ['alice'])
+    await fillMembershipForm(modal)
+    const validatorCheckButton = modal.getAllByText('Yes')[1]
+    await userEvent.click(validatorCheckButton)
+    const validatorAddressInputElement = document.getElementById('select-validatorAccount-input')
+    expect(validatorAddressInputElement).not.toBeNull()
+    await userEvent.paste(
+      validatorAddressInputElement as HTMLElement,
+      '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'
+    )
 
     expect(modal.getByText('This account is neither a validator controller account nor a validator stash account.'))
     const addButton = document.getElementsByClassName('add-button')[0]

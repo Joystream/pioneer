@@ -2,4 +2,4 @@ import { createContext } from 'react'
 
 import { UseValidators } from './provider'
 
-export const ValidatorsContext = createContext<UseValidators>({ fetchValidators: () => {} })
+export const ValidatorsContext = createContext<UseValidators>({ setShouldFetchValidators: () => {} })
