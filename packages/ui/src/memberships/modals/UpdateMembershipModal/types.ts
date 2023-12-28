@@ -1,4 +1,5 @@
 import { Account } from '@/accounts/types'
+import { Address } from '@/common/types'
 
 export interface UpdateMemberForm {
   id: string
@@ -9,4 +10,7 @@ export interface UpdateMemberForm {
   rootAccount?: Account
   controllerAccount?: Account
   externalResources: Record<string, string>
+  isValidator?: boolean
+  validatorAccountCandidate?: Account
+  validatorAccounts?: Address[]
 }

@@ -11,7 +11,7 @@ import { last } from '@/common/utils'
 
 import { Verification, State, ValidatorWithDetails, ValidatorMembership } from '../types'
 
-import { useValidatorMembers } from './useValidatorMembers'
+import { useValidators } from './useValidators'
 
 export const useValidatorsList = () => {
   const { api } = useApi()
@@ -19,7 +19,8 @@ export const useValidatorsList = () => {
   const [isVerified, setIsVerified] = useState<Verification>(null)
   const [isActive, setIsActive] = useState<State>(null)
   const [visibleValidators, setVisibleValidators] = useState<ValidatorWithDetails[]>([])
-  const validators = useValidatorMembers()
+  const { validatorsWithMembership: validators } = useValidators()
+
   const validatorRewardPointsHistory = useFirstObservableValue(
     () => api?.query.staking.erasRewardPoints.entries(),
     [api?.isConnected]
