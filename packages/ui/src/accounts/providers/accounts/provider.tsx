@@ -114,7 +114,7 @@ export const AccountsContextProvider = (props: Props) => {
         setIsExtensionLoaded(true)
         if (recentWallet && foundWallets.includes(recentWallet)) {
           const possibleWallet = getWalletBySource(recentWallet)
-          setSelectedWallet(possibleWallet)
+          handleSetWallet(possibleWallet, true)
         }
       },
       () => setExtensionError('NO_EXTENSION'),
@@ -124,10 +124,10 @@ export const AccountsContextProvider = (props: Props) => {
   )
 
   const handleSetWallet = useCallback(
-    async (wallet?: Wallet) => {
+    async (wallet: Wallet | undefined, isReady = isExtensionLoaded) => {
       setSelectedWallet(wallet)
 
-      if (!isExtensionLoaded || !wallet) return
+      if (!isReady || !wallet) return
 
       setExtensionError(undefined)
       setIsConnectingWallet(true)
