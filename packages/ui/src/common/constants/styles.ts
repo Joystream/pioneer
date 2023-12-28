@@ -102,6 +102,14 @@ export const ZIndex = {
   sideNotification: 90,
 }
 
+export const BreakPoints = {
+  lg: 1440,
+  md: 1024,
+  sm: 768,
+  xs: 425,
+  xxs: 0,
+} as const
+
 export const BorderRad = {
   s: '2px',
   m: '4px',
