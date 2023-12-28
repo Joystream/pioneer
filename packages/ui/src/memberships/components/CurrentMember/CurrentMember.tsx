@@ -65,7 +65,7 @@ export const CurrentMember = () => {
     if (isMobileWallet) {
       const wallets = getAllWallets().filter((wallet) => wallet.installed)
       if (wallets.length > 0) {
-        return setWallet?.(wallets[0])
+        return setWallet?.(wallets.at(-1))
       }
     }
     showModal({ modal: 'OnBoardingModal' })
