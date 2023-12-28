@@ -1,12 +1,14 @@
 import HCaptcha from '@hcaptcha/react-hcaptcha'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import styled from 'styled-components'
 import * as Yup from 'yup'
 
-import { SelectAccount } from '@/accounts/components/SelectAccount'
+import { SelectAccount, SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { Account } from '@/accounts/types'
 import { TermsRoutes } from '@/app/constants/routes'
 import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
@@ -20,13 +22,15 @@ import {
   LabelLink,
   ToggleCheckbox,
 } from '@/common/components/forms'
-import { Arrow } from '@/common/components/icons'
+import { Arrow, CrossIcon, PlusIcon } from '@/common/components/icons'
+import { AlertSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
 import {
   ModalFooter,
   ModalFooterGroup,
   ModalHeader,
   Row,
+  RowInline,
   ScrolledModal,
   ScrolledModalBody,
   ScrolledModalContainer,
@@ -34,13 +38,14 @@ import {
 } from '@/common/components/Modal'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TransactionInfo } from '@/common/components/TransactionInfo'
-import { TextMedium } from '@/common/components/typography'
+import { TextMedium, TextSmall } from '@/common/components/typography'
 import { definedValues } from '@/common/utils'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { AvatarInput } from '@/memberships/components/AvatarInput'
 import { SocialMediaSelector } from '@/memberships/components/SocialMediaSelector/SocialMediaSelector'
 import { useUploadAvatarAndSubmit } from '@/memberships/hooks/useUploadAvatarAndSubmit'
 import { useGetMembersCountQuery } from '@/memberships/queries'
+import { useValidators } from '@/validators/hooks/useValidators'
 
 import { SelectMember } from '../../components/SelectMember'
 import {
@@ -76,6 +81,7 @@ const CreateMemberSchema = Yup.object().shape({
   ),
   hasTerms: Yup.boolean().required().oneOf([true]),
   isReferred: Yup.boolean(),
+  isValidator: Yup.boolean(),
   referrer: ReferrerSchema,
   externalResources: ExternalResourcesSchema,
 })
@@ -88,6 +94,9 @@ export interface MemberFormFields {
   about: string
   avatarUri: File | string | null
   isReferred?: boolean
+  isValidator?: boolean
+  validatorAccountCandidate?: Account
+  validatorAccounts?: Account[]
   referrer?: Member
   hasTerms?: boolean
   invitor?: Member
@@ -101,6 +110,7 @@ const formDefaultValues = {
   about: '',
   avatarUri: null,
   isReferred: false,
+  isValidator: false,
   referrer: undefined,
   hasTerms: false,
   externalResources: {},
@@ -135,7 +145,30 @@ export const BuyMembershipForm = ({
     },
   })
 
-  const [handle, isReferred, referrer, captchaToken] = form.watch(['handle', 'isReferred', 'referrer', 'captchaToken'])
+  const [handle, isReferred, isValidator, referrer, captchaToken, validatorAccountCandidate] = form.watch([
+    'handle',
+    'isReferred',
+    'isValidator',
+    'referrer',
+    'captchaToken',
+    'validatorAccountCandidate',
+  ])
+
+  const { allValidators, allValidatorsWithCtrlAcc } = useValidators({ skip: isValidator ?? true })
+  const [validatorAccounts, setValidatorAccounts] = useState<Account[]>([])
+  const validatorAddresses = useMemo(() => {
+    if (!allValidatorsWithCtrlAcc || !allValidators) return
+    return (
+      [...allValidatorsWithCtrlAcc, ...allValidators.map(({ address }) => address)].filter(
+        (element) => !!element
+      ) as string[]
+    ).map(encodeAddress)
+  }, [allValidators, allValidatorsWithCtrlAcc])
+
+  const isValidValidatorAccount = useMemo(
+    () => validatorAccountCandidate && validatorAddresses?.includes(encodeAddress(validatorAccountCandidate.address)),
+    [allValidators, allValidatorsWithCtrlAcc, validatorAddresses, validatorAccountCandidate]
+  )
 
   useEffect(() => {
     if (handle) {
@@ -149,9 +182,20 @@ export const BuyMembershipForm = ({
     }
   }, [data?.membershipsConnection.totalCount])
 
-  const isFormValid = !isUploading && form.formState.isValid
+  const isFormValid = !isUploading && form.formState.isValid && (!isValidator || validatorAccounts?.length)
   const isDisabled =
     type === 'onBoarding' && process.env.REACT_APP_CAPTCHA_SITE_KEY ? !captchaToken || !isFormValid : !isFormValid
+
+  const addValidatorAccount = () => {
+    if (validatorAccountCandidate && isValidValidatorAccount) {
+      setValidatorAccounts([...new Set([...validatorAccounts, validatorAccountCandidate])])
+      form?.setValue('validatorAccountCandidate' as keyof MemberFormFields, undefined)
+    }
+  }
+
+  const removeValidatorAccount = (index: number) => {
+    setValidatorAccounts([...validatorAccounts.slice(0, index), ...validatorAccounts.slice(index + 1)])
+  }
 
   return (
     <>
@@ -234,6 +278,79 @@ export const BuyMembershipForm = ({
 
             <SocialMediaSelector />
 
+            {type === 'general' && (
+              <>
+                <RowInline top={16}>
+                  <Label>I am a validator: </Label>
+                  <ToggleCheckbox trueLabel="Yes" falseLabel="No" name="isValidator" />
+                </RowInline>
+                {isValidator && (
+                  <>
+                    <SelectValidatorAccountWrapper>
+                      <RowInline gap={4}>
+                        <Label noMargin>Add validator controller account or validator stash account</Label>
+                        <Tooltip tooltipText="This is the status which indicates the selected account is actually a validator account.">
+                          <TooltipDefault />
+                        </Tooltip>
+                        <TextSmall dark>*</TextSmall>
+                      </RowInline>
+                      <TextMedium dark>
+                        If your validator account is not in your signer wallet, paste the account address to the field
+                        below:
+                      </TextMedium>
+                      <RowInline>
+                        <InputComponent id="select-validatorAccount" inputSize="l">
+                          <SelectAccount
+                            id="select-validatorAccount"
+                            name="validatorAccountCandidate"
+                            filter={(account) => !!validatorAddresses?.includes(encodeAddress(account.address))}
+                          />
+                        </InputComponent>
+                        <ButtonPrimary
+                          square
+                          size="large"
+                          onClick={addValidatorAccount}
+                          disabled={!isValidValidatorAccount}
+                          className="add-button"
+                        >
+                          <PlusIcon />
+                        </ButtonPrimary>
+                      </RowInline>
+                      {validatorAccountCandidate && !isValidValidatorAccount && (
+                        <RowInline gap={2}>
+                          <TextSmall error>
+                            <InputNotificationIcon>
+                              <AlertSymbol />
+                            </InputNotificationIcon>
+                          </TextSmall>
+                          <TextSmall error>
+                            This account is neither a validator controller account nor a validator stash account.
+                          </TextSmall>
+                        </RowInline>
+                      )}
+                    </SelectValidatorAccountWrapper>
+
+                    {validatorAccounts.map((account, index) => (
+                      <Row>
+                        <RowInline>
+                          <SelectedAccount account={account as Account} key={'selected' + index} />
+                          <ButtonGhost
+                            square
+                            size="large"
+                            onClick={() => {
+                              removeValidatorAccount(index)
+                            }}
+                          >
+                            <CrossIcon />
+                          </ButtonGhost>
+                        </RowInline>
+                      </Row>
+                    ))}
+                  </>
+                )}
+              </>
+            )}
+
             {process.env.REACT_APP_CAPTCHA_SITE_KEY && type === 'onBoarding' && (
               <Row>
                 <HCaptcha
@@ -287,6 +404,10 @@ export const BuyMembershipForm = ({
           <ButtonPrimary
             size="medium"
             onClick={() => {
+              validatorAccounts?.map((account, index) => {
+                form?.register(('validatorAccounts[' + index + ']') as keyof MemberFormFields)
+                form?.setValue(('validatorAccounts[' + index + ']') as keyof MemberFormFields, account)
+              })
               const values = form.getValues()
               uploadAvatarAndSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
             }}
@@ -308,3 +429,25 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: B
     </ScrolledModal>
   )
 }
+
+const SelectValidatorAccountWrapper = styled.div`
+  margin-top: -4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`
+
+const InputNotificationIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 12px;
+  height: 12px;
+  color: inherit;
+  padding-right: 2px;
+
+  .blackPart,
+  .primaryPart {
+    fill: currentColor;
+  }
+`

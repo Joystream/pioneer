@@ -1,5 +1,6 @@
 import { metadataToBytes } from '@joystream/js/utils'
 import { MembershipMetadata } from '@joystream/metadata-protobuf'
+import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { expect } from '@storybook/jest'
 import { Meta, StoryContext, StoryObj } from '@storybook/react'
 import { userEvent, waitFor, within } from '@storybook/testing-library'
@@ -9,7 +10,12 @@ import { createGlobalStyle } from 'styled-components'
 import { Page, Screen } from '@/common/components/page/Page'
 import { Colors } from '@/common/constants'
 import { EMAIL_VERIFICATION_TOKEN_SEARCH_PARAM } from '@/memberships/constants'
-import { GetMemberDocument } from '@/memberships/queries'
+import {
+  GetMemberActionDetailsDocument,
+  GetMemberDocument,
+  GetMembersCountDocument,
+  GetMembersWithDetailsDocument,
+} from '@/memberships/queries'
 import {
   ConfirmBackendEmailDocument,
   GetBackendMemberExistsDocument,
@@ -40,6 +46,8 @@ type Args = {
   onTransfer: jest.Mock
   onSubscribeEmail: jest.Mock
   onConfirmEmail: jest.Mock
+  onAddStakingAccount: jest.Mock
+  onConfirmStakingAccount: jest.Mock
 }
 
 type Story = StoryObj<FC<Args>>
@@ -47,6 +55,7 @@ type Story = StoryObj<FC<Args>>
 const alice = member('alice')
 const bob = member('bob')
 const charlie = member('charlie')
+const dave = member('dave')
 
 const NEW_MEMBER_DATA = {
   id: alice.id, // we set this to alice's ID so that after member is created, member with same ID can be found in MembershipContext
@@ -73,6 +82,8 @@ export default {
     onTransfer: { action: 'BalanceTransfer' },
     onSubscribeEmail: { action: 'SubscribeEmail' },
     onConfirmEmail: { action: 'ConfirmEmail' },
+    onAddStakingAccount: { action: 'AddStakingAccount' },
+    onConfirmStakingAccount: { action: 'ConfirmStakingAccount' },
   },
 
   args: {
@@ -99,7 +110,10 @@ export default {
       return {
         accounts: {
           active: args.isLoggedIn ? 'alice' : undefined,
-          list: args.hasMemberships || args.hasAccounts ? [account(alice), account(bob), account(charlie)] : [],
+          list:
+            args.hasMemberships || args.hasAccounts
+              ? [account(alice), account(bob), account(charlie), account(dave)]
+              : [],
           hasWallet: args.hasWallet,
         },
 
@@ -110,6 +124,71 @@ export default {
                 members: { membershipPrice: joy(20) },
                 council: { stage: { stage: { isIdle: true }, changedAt: 123 } },
                 referendum: { stage: {} },
+                staking: {
+                  bonded: {
+                    multi: [
+                      'j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D',
+                      'j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW',
+                      'j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP',
+                      'j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz',
+                      'j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa',
+                      'j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN',
+                      'j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP',
+                      'j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ',
+                      'j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg',
+                      'j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt',
+                      'j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM',
+                    ],
+                  },
+                  validators: {
+                    entries: [
+                      [
+                        { args: ['5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y'] },
+                        { commission: 0.05 * 10 ** 9, blocked: false },
+                      ],
+                      [
+                        { args: ['5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy'] },
+                        { commission: 0.1 * 10 ** 9, blocked: false },
+                      ],
+                      [
+                        { args: ['j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP'] },
+                        { commission: 0.05 * 10 ** 9, blocked: false },
+                      ],
+                      [
+                        { args: ['j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz'] },
+                        { commission: 0.15 * 10 ** 9, blocked: false },
+                      ],
+                      [
+                        { args: ['j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa'] },
+                        { commission: 0.2 * 10 ** 9, blocked: false },
+                      ],
+                      [
+                        { args: ['j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN'] },
+                        { commission: 0.01 * 10 ** 9, blocked: false },
+                      ],
+                      [
+                        { args: ['j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP'] },
+                        { commission: 0.03 * 10 ** 9, blocked: false },
+                      ],
+                      [
+                        { args: ['j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ'] },
+                        { commission: 0.05 * 10 ** 9, blocked: false },
+                      ],
+                      [
+                        { args: ['j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg'] },
+                        { commission: 0.05 * 10 ** 9, blocked: false },
+                      ],
+                      [
+                        { args: ['j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt'] },
+                        { commission: 0.05 * 10 ** 9, blocked: false },
+                      ],
+                      [
+                        { args: ['j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM'] },
+                        { commission: 0.05 * 10 ** 9, blocked: false },
+                      ],
+                    ],
+                  },
+                },
               },
 
               tx: {
@@ -124,7 +203,27 @@ export default {
                     event: 'MembershipBought',
                     data: [NEW_MEMBER_DATA.id],
                     onSend: args.onBuyMembership,
-                    failure: parameters.txFailure,
+                    failure: parameters.buyMembershipTxFailure,
+                  },
+                  addStakingAccountCandidate: {
+                    event: 'StakingAccountAdded',
+                    data: [NEW_MEMBER_DATA.id],
+                    onSend: args.onAddStakingAccount,
+                    failure: parameters.addStakingAccountTxFailure,
+                  },
+                  confirmStakingAccount: {
+                    event: 'StakingAccountConfirmed',
+                    data: [NEW_MEMBER_DATA.id],
+                    onSend: args.onConfirmStakingAccount,
+                    failure: parameters.confirmStakingAccountTxFailure,
+                  },
+                },
+                utility: {
+                  batch: {
+                    event: 'TxBatch',
+                    onSend: (transactions: SubmittableExtrinsic<'rxjs'>[]) =>
+                      transactions.forEach((transaction) => transaction.signAndSend('')),
+                    failure: parameters.batchTxFailure,
                   },
                 },
               },
@@ -139,6 +238,35 @@ export default {
             {
               query: GetBackendMemberExistsDocument,
               data: { memberExist: args.hasRegisteredEmail },
+            },
+            {
+              query: GetMemberDocument,
+              data: { membershipByUniqueInput: member('alice') },
+            },
+            {
+              query: GetMembersCountDocument,
+              data: { membershipsConnection: { totalCount: 0 } },
+            },
+            {
+              query: GetMembersWithDetailsDocument,
+              data: { memberships: [member('alice'), member('bob'), member('charlie'), member('dave')] },
+            },
+            {
+              query: GetMemberActionDetailsDocument,
+              data: {
+                stakeSlashedEventsConnection: {
+                  totalCount: 2,
+                },
+                terminatedLeaderEventsConnection: {
+                  totalCount: 3,
+                },
+                terminatedWorkerEventsConnection: {
+                  totalCount: 4,
+                },
+                memberInvitedEventsConnection: {
+                  totalCount: 0,
+                },
+              },
             },
           ],
           mutations: [
@@ -479,7 +607,7 @@ export const BuyMembershipNotEnoughFund: Story = {
 
 export const BuyMembershipTxFailure: Story = {
   args: { hasMemberships: false, isLoggedIn: false },
-  parameters: { txFailure: 'Some error message' },
+  parameters: { buyMembershipTxFailure: 'Some error message' },
 
   play: async ({ canvasElement }) => {
     const screen = within(canvasElement)
@@ -494,11 +622,418 @@ export const BuyMembershipTxFailure: Story = {
 
     await userEvent.click(getButtonByText(modal, 'Sign and create a member'))
 
-    expect(await screen.findByText('Failure'))
+    expect(await modal.findByText('Failure'))
     expect(await modal.findByText('Some error message'))
   },
 }
 
+const fillMembershipFormValidatorAccounts = async (modal: Container, accounts: string[]) => {
+  await fillMembershipForm(modal)
+  const validatorCheckButton = modal.getAllByText('Yes')[1]
+  await userEvent.click(validatorCheckButton)
+  expect(await modal.findByText(/^If your validator account/))
+  for (const account of accounts) {
+    await selectFromDropdown(modal, /^If your validator account/, account)
+    const addButton = document.getElementsByClassName('add-button')[0]
+    await userEvent.click(addButton)
+  }
+}
+
+export const BuyMembershipHappyBindOneValidatorHappy: Story = {
+  args: { hasMemberships: false, isLoggedIn: false },
+
+  play: async ({ args, canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    expect(screen.queryByText('Become a member')).toBeNull()
+
+    await userEvent.click(getButtonByText(screen, 'Join Now'))
+
+    await step('Form', async () => {
+      const createButton = getButtonByText(modal, 'Create a Membership')
+
+      await step('Fill', async () => {
+        expect(createButton).toBeDisabled()
+        await fillMembershipFormValidatorAccounts(modal, ['charlie'])
+        await waitFor(() => expect(createButton).toBeEnabled())
+      })
+
+      await userEvent.click(createButton)
+    })
+
+    await step('Create membership', async () => {
+      expect(modal.getByText('You intend to create a validator membership.'))
+      expect(modal.getByText('Creation fee:')?.nextSibling?.textContent).toBe('20')
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'bob' }))
+
+      await userEvent.click(getButtonByText(modal, 'Create membership'))
+    })
+
+    await step('Add validator account', async () => {
+      expect(await modal.findByText('You are intending to bond your validator account with your membership.'))
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'charlie' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and Bond'))
+    })
+
+    await step('Confirm validator account', async () => {
+      expect(
+        await modal.findByText('You are intending to confirm your validator account to be bound with your membership')
+      )
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'bob' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and Confirm'))
+    })
+
+    await step('Confirm', async () => {
+      expect(await modal.findByText('Success'))
+      expect(modal.getByText(NEW_MEMBER_DATA.handle))
+      expect(args.onBuyMembership).toHaveBeenCalledWith({
+        rootAccount: alice.controllerAccount,
+        controllerAccount: bob.controllerAccount,
+        handle: NEW_MEMBER_DATA.handle,
+        metadata: metadataToBytes(MembershipMetadata, {
+          name: NEW_MEMBER_DATA.metadata.name,
+          about: NEW_MEMBER_DATA.metadata.about,
+          avatarUri: NEW_MEMBER_DATA.metadata.avatar.avatarUri,
+        }),
+        invitingMemberId: undefined,
+        referrerId: undefined,
+      })
+      expect(args.onAddStakingAccount).toHaveBeenCalledTimes(1)
+      expect(args.onAddStakingAccount).toHaveBeenCalledWith(NEW_MEMBER_DATA.id)
+      expect(args.onConfirmStakingAccount).toHaveBeenCalledTimes(1)
+      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(NEW_MEMBER_DATA.id, charlie.controllerAccount)
+
+      const doneButton = getButtonByText(modal, 'Done')
+      expect(doneButton).toBeEnabled()
+      userEvent.click(doneButton)
+    })
+  },
+}
+
+export const BuyMembershipHappyAddTwoValidatorHappy: Story = {
+  args: { hasMemberships: false, isLoggedIn: false },
+
+  play: async ({ args, canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    expect(screen.queryByText('Become a member')).toBeNull()
+
+    await userEvent.click(getButtonByText(screen, 'Join Now'))
+
+    await step('Form', async () => {
+      const createButton = getButtonByText(modal, 'Create a Membership')
+
+      await step('Fill', async () => {
+        expect(createButton).toBeDisabled()
+        await fillMembershipFormValidatorAccounts(modal, ['charlie', 'dave'])
+        await waitFor(() => expect(createButton).toBeEnabled())
+      })
+
+      await userEvent.click(createButton)
+    })
+
+    await step('Create membership', async () => {
+      expect(modal.getByText('You intend to create a validator membership.'))
+      expect(modal.getByText('Creation fee:')?.nextSibling?.textContent).toBe('20')
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'bob' }))
+
+      await userEvent.click(getButtonByText(modal, 'Create membership'))
+    })
+
+    await step('Add first validator account', async () => {
+      expect(await modal.findByText('You are intending to bond your validator account with your membership.'))
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'charlie' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and Bond'))
+    })
+
+    await step('Add second validator account', async () => {
+      expect(await modal.findByText('You are intending to bond your validator account with your membership.'))
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'dave' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and Bond'))
+    })
+
+    await step('Confirm validator account', async () => {
+      expect(
+        await modal.findByText('You are intending to confirm your validator account to be bound with your membership')
+      )
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'bob' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and Confirm'))
+    })
+
+    await step('Confirm', async () => {
+      expect(await modal.findByText('Success'))
+      expect(modal.getByText(NEW_MEMBER_DATA.handle))
+      expect(args.onBuyMembership).toHaveBeenCalledWith({
+        rootAccount: alice.controllerAccount,
+        controllerAccount: bob.controllerAccount,
+        handle: NEW_MEMBER_DATA.handle,
+        metadata: metadataToBytes(MembershipMetadata, {
+          name: NEW_MEMBER_DATA.metadata.name,
+          about: NEW_MEMBER_DATA.metadata.about,
+          avatarUri: NEW_MEMBER_DATA.metadata.avatar.avatarUri,
+        }),
+        invitingMemberId: undefined,
+        referrerId: undefined,
+      })
+      expect(args.onAddStakingAccount).toHaveBeenCalledTimes(2)
+      expect(args.onAddStakingAccount).toHaveBeenCalledWith(NEW_MEMBER_DATA.id)
+      expect(args.onConfirmStakingAccount).toHaveBeenCalledTimes(2)
+      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(NEW_MEMBER_DATA.id, charlie.controllerAccount)
+      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(NEW_MEMBER_DATA.id, dave.controllerAccount)
+
+      const doneButton = getButtonByText(modal, 'Done')
+      expect(doneButton).toBeEnabled()
+      userEvent.click(doneButton)
+    })
+  },
+}
+
+export const InvalidValidatorAccountInput: Story = {
+  args: { hasMemberships: false, isLoggedIn: false },
+  parameters: { totalBalance: 20 },
+
+  play: async ({ canvasElement }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    await userEvent.click(getButtonByText(screen, 'Join Now'))
+    await fillMembershipForm(modal)
+    const validatorCheckButton = modal.getAllByText('Yes')[1]
+    await userEvent.click(validatorCheckButton)
+    const validatorAddressInputElement = document.getElementById('select-validatorAccount-input')
+    expect(validatorAddressInputElement).not.toBeNull()
+    await userEvent.paste(
+      validatorAddressInputElement as HTMLElement,
+      '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'
+    )
+
+    expect(modal.getByText('This account is neither a validator controller account nor a validator stash account.'))
+    const addButton = document.getElementsByClassName('add-button')[0]
+    expect(addButton).toBeDisabled()
+  },
+}
+
+export const BuyMembershipWithValidatorAccountNotEnoughFunds: Story = {
+  args: { hasMemberships: false, isLoggedIn: false },
+  parameters: { totalBalance: 20 },
+
+  play: async ({ canvasElement }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    await userEvent.click(getButtonByText(screen, 'Join Now'))
+
+    await fillMembershipFormValidatorAccounts(modal, ['charlie'])
+    const createButton = getButtonByText(modal, 'Create a Membership')
+    await waitFor(() => expect(createButton).toBeEnabled())
+    await userEvent.click(createButton)
+
+    expect(modal.getByText('Insufficient funds to cover the membership creation.'))
+    expect(getButtonByText(modal, 'Create membership')).toBeDisabled()
+  },
+}
+
+export const BuyMembershipWithValidatorAccountFailure: Story = {
+  args: { hasMemberships: false, isLoggedIn: false },
+  parameters: { buyMembershipTxFailure: 'Some error message' },
+
+  play: async ({ canvasElement }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    await userEvent.click(getButtonByText(screen, 'Join Now'))
+
+    await fillMembershipFormValidatorAccounts(modal, ['charlie'])
+    const createButton = getButtonByText(modal, 'Create a Membership')
+    await waitFor(() => expect(createButton).toBeEnabled())
+    await userEvent.click(createButton)
+
+    await userEvent.click(getButtonByText(modal, 'Create membership'))
+
+    expect(await modal.findByText('Failure'))
+    expect(await modal.findByText('Some error message'))
+  },
+}
+
+export const BuyMembershipHappyAddOneValidatorFailure: Story = {
+  args: { hasMemberships: false, isLoggedIn: false },
+  parameters: { addStakingAccountTxFailure: 'Some error message' },
+
+  play: async ({ canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    expect(screen.queryByText('Become a member')).toBeNull()
+
+    await userEvent.click(getButtonByText(screen, 'Join Now'))
+
+    await step('Form', async () => {
+      const createButton = getButtonByText(modal, 'Create a Membership')
+
+      await step('Fill', async () => {
+        expect(createButton).toBeDisabled()
+        await fillMembershipFormValidatorAccounts(modal, ['charlie'])
+        await waitFor(() => expect(createButton).toBeEnabled())
+      })
+
+      await userEvent.click(createButton)
+    })
+
+    await step('Create membership', async () => {
+      expect(modal.getByText('You intend to create a validator membership.'))
+      expect(modal.getByText('Creation fee:')?.nextSibling?.textContent).toBe('20')
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'bob' }))
+
+      await userEvent.click(getButtonByText(modal, 'Create membership'))
+    })
+
+    await step('Add Validator Account Tx Failure', async () => {
+      expect(await modal.findByText('You are intending to bond your validator account with your membership.'))
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'charlie' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and Bond'))
+
+      expect(await modal.findByText('Failure'))
+      expect(await modal.findByText('Some error message'))
+    })
+  },
+}
+
+export const BuyMembershipAddValidatorAccHappyConfirmTxFailure: Story = {
+  args: { hasMemberships: false, isLoggedIn: false },
+  parameters: { confirmStakingAccountTxFailure: 'Some error message' },
+
+  play: async ({ canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    expect(screen.queryByText('Become a member')).toBeNull()
+
+    await userEvent.click(getButtonByText(screen, 'Join Now'))
+
+    await step('Form', async () => {
+      const createButton = getButtonByText(modal, 'Create a Membership')
+
+      await step('Fill', async () => {
+        expect(createButton).toBeDisabled()
+        await fillMembershipFormValidatorAccounts(modal, ['charlie'])
+        await waitFor(() => expect(createButton).toBeEnabled())
+      })
+
+      await userEvent.click(createButton)
+    })
+
+    await step('Create membership', async () => {
+      expect(modal.getByText('You intend to create a validator membership.'))
+      expect(modal.getByText('Creation fee:')?.nextSibling?.textContent).toBe('20')
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'bob' }))
+
+      await userEvent.click(getButtonByText(modal, 'Create membership'))
+    })
+
+    await step('Add validator account', async () => {
+      expect(await modal.findByText('You are intending to bond your validator account with your membership.'))
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'charlie' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and Bond'))
+    })
+
+    await step('Confirm validator account', async () => {
+      expect(
+        await modal.findByText('You are intending to confirm your validator account to be bound with your membership')
+      )
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'bob' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and Confirm'))
+
+      expect(await modal.findByText('Failure'))
+      expect(await modal.findByText('Some error message'))
+    })
+  },
+}
+
+export const BuyMembershipAddTwoValidatorAccHappyConfirmTxFailure: Story = {
+  args: { hasMemberships: false, isLoggedIn: false },
+  parameters: { batchTxFailure: 'Some error message' },
+
+  play: async ({ canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    expect(screen.queryByText('Become a member')).toBeNull()
+
+    await userEvent.click(getButtonByText(screen, 'Join Now'))
+
+    await step('Form', async () => {
+      const createButton = getButtonByText(modal, 'Create a Membership')
+
+      await step('Fill', async () => {
+        expect(createButton).toBeDisabled()
+        await fillMembershipFormValidatorAccounts(modal, ['charlie', 'dave'])
+        await waitFor(() => expect(createButton).toBeEnabled())
+      })
+
+      await userEvent.click(createButton)
+    })
+
+    await step('Create membership', async () => {
+      expect(modal.getByText('You intend to create a validator membership.'))
+      expect(modal.getByText('Creation fee:')?.nextSibling?.textContent).toBe('20')
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'bob' }))
+
+      await userEvent.click(getButtonByText(modal, 'Create membership'))
+    })
+
+    await step('Add first validator account', async () => {
+      expect(await modal.findByText('You are intending to bond your validator account with your membership.'))
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'charlie' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and Bond'))
+    })
+
+    await step('Add second validator account', async () => {
+      expect(await modal.findByText('You are intending to bond your validator account with your membership.'))
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'dave' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and Bond'))
+    })
+
+    await step('Confirm validator account', async () => {
+      expect(
+        await modal.findByText('You are intending to confirm your validator account to be bound with your membership')
+      )
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'bob' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and Confirm'))
+
+      expect(await modal.findByText('Failure'))
+      expect(await modal.findByText('Some error message'))
+    })
+  },
+}
 // ----------------------------------------------------------------------------
 // Test Email Subsciption Modal
 // ----------------------------------------------------------------------------
