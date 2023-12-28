@@ -133,7 +133,6 @@ export const BuyMembershipForm = ({
   const [formHandleMap, setFormHandleMap] = useState('')
   const { isUploading, uploadAvatarAndSubmit } = useUploadAvatarAndSubmit(onSubmit)
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
-  const { allValidators, allValidatorsWithCtrlAcc } = useValidators()
 
   const form = useForm<MemberFormFields>({
     resolver: useYupValidationResolver(CreateMemberSchema),
@@ -155,6 +154,7 @@ export const BuyMembershipForm = ({
     'validatorAccountCandidate',
   ])
 
+  const { allValidators, allValidatorsWithCtrlAcc } = useValidators({ skip: isValidator ?? true })
   const [validatorAccounts, setValidatorAccounts] = useState<Account[]>([])
   const validatorAddresses = useMemo(() => {
     if (!allValidatorsWithCtrlAcc || !allValidators) return
