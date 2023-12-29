@@ -8,7 +8,8 @@ import { perbillToPercent } from '@/common/utils'
 import { useGetMembersWithDetailsQuery } from '@/memberships/queries'
 import { asMemberWithDetails } from '@/memberships/types'
 
-import { ValidatorMembership } from '../types'
+import { useExtraValidatorDetails } from '../hooks/useExtraValidatorDetails'
+import { ValidatorMembership, ValidatorWithDetails } from '../types'
 
 import { ValidatorsContext } from './context'
 
@@ -18,18 +19,21 @@ interface Props {
 
 export interface UseValidators {
   setShouldFetchValidators: (fetchValidators: boolean) => void
+  setShouldFetchExtraDetails: (fetchValidators: boolean) => void
   allValidators?: {
     address: Address
     commission: number
   }[]
   allValidatorsWithCtrlAcc?: (string | undefined)[]
   validatorsWithMembership?: ValidatorMembership[]
+  validatorsWithDetails?: ValidatorWithDetails[]
 }
 
 export const ValidatorContextProvider = (props: Props) => {
   const { api } = useApi()
 
   const [shouldFetchValidators, setShouldFetchValidators] = useState(false)
+  const [shouldFetchExtraDetails, setShouldFetchExtraDetails] = useState(false)
 
   const allValidators = useFirstObservableValue(() => {
     if (!shouldFetchValidators) return undefined
@@ -110,11 +114,18 @@ export const ValidatorContextProvider = (props: Props) => {
     )
   }, [data, allValidators, allValidatorsWithCtrlAcc])
 
+  const validatorsWithDetails = useExtraValidatorDetails({
+    validatorWithMemberships: validatorsWithMembership ?? [],
+    skip: !shouldFetchExtraDetails,
+  })
+
   const value = {
     setShouldFetchValidators,
+    setShouldFetchExtraDetails,
     allValidators,
     allValidatorsWithCtrlAcc,
     validatorsWithMembership,
+    validatorsWithDetails,
   }
 
   return <ValidatorsContext.Provider value={value}>{props.children}</ValidatorsContext.Provider>
