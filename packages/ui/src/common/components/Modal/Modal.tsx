@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import styled, { ThemedStyledProps } from 'styled-components'
+import styled, { ThemedStyledProps, css } from 'styled-components'
 
 import { ConnectionStatusDot } from '@/app/components/ConnectionStatusDot'
 import { useEscape } from '@/common/hooks/useEscape'
@@ -207,6 +207,17 @@ export const ModalWrap = styled.section<ModalWrapProps>`
   z-index: ${ZIndex.modal};
   position: absolute;
   inset: 0;
+  ${({ modalMaxSize }) => {
+    switch (modalMaxSize) {
+      case 'm':
+      case 'l':
+        return css`
+          @media (max-width: ${BreakPoints.sm - 1}px) {
+            bottom: auto;
+          }
+        `
+    }
+  }};
   margin: auto auto;
   display: grid;
   @media only screen and (max-height: 700px) {
