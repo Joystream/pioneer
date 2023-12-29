@@ -63,7 +63,7 @@ export const SideBar = () => {
 }
 
 export const SideBarContent = () => {
-  const { isWalletConnected } = useMyAccounts()
+  const { wallet } = useMyAccounts()
   const { isMobileWallet } = useResponsive()
   const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)
   const { stage: electionStage } = useElectionStage()
@@ -81,7 +81,7 @@ export const SideBarContent = () => {
           {/*    Overview*/}
           {/*  </NavigationLink>*/}
           {/*</NavigationLinksItem>*/}
-          {(!isMobileWallet || isWalletConnected) && (
+          {(!isMobileWallet || wallet) && (
             <NavigationLinksItem>
               <NavigationLink to={ProfileRoutes.profile} icon={<MyProfileIcon />}>
                 My profile

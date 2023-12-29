@@ -239,7 +239,7 @@ const MOBILE_SUPPORTED_MODALS: ModalNames[] = [
 export const GlobalModals = () => {
   const { modal, hideModal, currentModalMachine, showModal, modalData, isClosing } = useModal()
   const { active: activeMember } = useMyMemberships()
-  const { isWalletConnected } = useMyAccounts()
+  const { wallet } = useMyAccounts()
   const { status } = useTransactionStatus()
   const { isMobileWallet } = useResponsive()
   const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
@@ -252,7 +252,7 @@ export const GlobalModals = () => {
 
   const potentialFallback = useGlobalModalHandler(currentModalMachine, hideModal)
 
-  const mobileSupported = isWalletConnected ? MOBILE_SUPPORTED_MODALS : NON_TRANSACTIONAL_MODALS
+  const mobileSupported = wallet ? MOBILE_SUPPORTED_MODALS : NON_TRANSACTIONAL_MODALS
   if (isMobileWallet && modal && !mobileSupported.includes(modal as ModalNames)) {
     return <NotSupportMobileModal onClose={hideModal} />
   }
