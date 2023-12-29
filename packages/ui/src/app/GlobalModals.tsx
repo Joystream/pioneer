@@ -3,6 +3,7 @@ import React, { memo, ReactElement, useEffect, useMemo, useState } from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { ClaimVestingModalCall } from '@/accounts/modals/ClaimVestingModal'
 import { ClaimVestingModal } from '@/accounts/modals/ClaimVestingModal/ClaimVestingModal'
 import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFundsModal'
@@ -225,11 +226,24 @@ const NON_TRANSACTIONAL_MODALS: ModalNames[] = [
   'CandidacyPreview',
 ]
 
+const MOBILE_SUPPORTED_MODALS: ModalNames[] = [
+  ...NON_TRANSACTIONAL_MODALS,
+  'SwitchMember',
+  'DisconnectWallet',
+  'SignOut',
+  'CreatePost',
+  'PostReplyModal',
+  'CreateThreadModal',
+  'EmailSubscriptionModal',
+  'EmailConfirmationModal',
+]
+
 export const GlobalModals = () => {
   const { modal, hideModal, currentModalMachine, showModal, modalData, isClosing } = useModal()
   const { active: activeMember } = useMyMemberships()
+  const { wallet } = useMyAccounts()
   const { status } = useTransactionStatus()
-  const { supportTransactions } = useResponsive()
+  const { isMobileWallet } = useResponsive()
   const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
 
   const [container, setContainer] = useState(document.body)
@@ -240,7 +254,8 @@ export const GlobalModals = () => {
 
   const potentialFallback = useGlobalModalHandler(currentModalMachine, hideModal)
 
-  if (modal && !supportTransactions && !NON_TRANSACTIONAL_MODALS.includes(modal as ModalNames)) {
+  const mobileSupported = wallet ? MOBILE_SUPPORTED_MODALS : NON_TRANSACTIONAL_MODALS
+  if (isMobileWallet && modal && !mobileSupported.includes(modal as ModalNames)) {
     return <NotSupportMobileModal onClose={hideModal} />
   }
 
