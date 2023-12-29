@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { Link } from '@/common/components/Link'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useToggle } from '@/common/hooks/useToggle'
@@ -11,7 +11,6 @@ import { Checkbox } from '../../common/components/forms'
 import { ArrowRightIcon } from '../../common/components/icons'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../common/components/Modal'
 import { TextMedium } from '../../common/components/typography'
-import { Colors } from '../../common/constants'
 
 export const ValidatorsInfo = () => {
   const title = 'Nominating validators on Joystream'
@@ -47,17 +46,14 @@ export const ValidatorsInfo = () => {
               </TextMedium>
               <TextMedium>
                 To begin, review each validator's performance metrics by clicking on their name in the list. When you're
-                ready to nominate, add the validators you'd like to nominate to by clicking the "Nominate" button on the
-                list or directly on the validator’s profile. Once you've selected your validators, click the "Proceed"
+                ready to nominate, add the validators you'd like to nominate by clicking the "Nominate" button on the
+                list or directly on the validator’s profile. Once you've selected a validator, click the "Proceed"
                 button to initiate the nomination process.
               </TextMedium>
             </RowGapBlock>
             <TextMedium>
               You can learn more about the Pioneer nomination{' '}
-              <Link to="#" style={{ color: Colors.Blue[500], textDecoration: 'underline' }}>
-                system here
-              </Link>
-              .
+              <Link href="https://handbook.joystream.org/system/nomination">system here</Link>.
             </TextMedium>
           </RowGapBlock>
         </ModalBody>
