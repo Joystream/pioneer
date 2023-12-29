@@ -69,7 +69,7 @@ const ValidatorItemWrapper = styled.div`
 
 export const ValidatorItemWrap = styled.div`
   display: grid;
-  grid-template-columns: 250px 100px 80px 120px 120px 140px 100px 90px;
+  grid-template-columns: 250px 110px 80px 140px 140px 140px 100px 90px;
   grid-template-rows: 1fr;
   justify-content: space-between;
   justify-items: start;
