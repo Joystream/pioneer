@@ -1,7 +1,7 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 
-import { ProxyApi } from '.'
 import { ClientAsyncMessage, WorkerAsyncMessage } from './client/_async'
+import { ProxyApi } from './client/ProxyApi'
 import { ClientQueryMessage, WorkerQueryMessage } from './client/query'
 import { ClientTxMessage, WorkerTxMessage } from './client/tx'
 import { ClientProxyMessage, WorkerProxyMessage } from './models/payload'
