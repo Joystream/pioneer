@@ -232,6 +232,7 @@ const MOBILE_SUPPORTED_MODALS: ModalNames[] = [
   'DisconnectWallet',
   'SignOut',
   'CreatePost',
+  'PostReplyModal',
   'CreateThreadModal',
 ]
 
