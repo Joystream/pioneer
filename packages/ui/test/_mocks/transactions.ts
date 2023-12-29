@@ -265,8 +265,6 @@ export const stubAccounts = (allAccounts: Account[], myAccounts: Partial<UseAcco
     isLoading: false,
     allAccounts,
     hasAccounts,
-    isWalletConnected: hasAccounts,
-    isConnectingWallet: false,
     ...myAccounts,
   })
 
