@@ -24,7 +24,10 @@ type Context = UpdateMembershipContext & TransactionContext
 
 type UpdateMembershipState =
   | { value: 'prepare'; context: EmptyObject }
-  | { value: 'transaction'; context: Required<UpdateMembershipContext> }
+  | { value: 'updateMembershipTx'; context: Required<UpdateMembershipContext> }
+  | { value: 'removeStakingAccTx'; context: Required<UpdateMembershipContext> }
+  | { value: 'addStakingAccCandidateTx'; context: Required<UpdateMembershipContext> }
+  | { value: 'confirmStakingAccTx'; context: Required<UpdateMembershipContext> }
   | { value: 'success'; context: Required<UpdateMembershipContext> }
   | { value: 'error'; context: Required<Context> }
 
@@ -41,14 +44,74 @@ export const updateMembershipMachine = createMachine<Context, UpdateMembershipEv
     prepare: {
       on: {
         DONE: {
-          target: 'transaction',
+          target: 'updateMembershipTx',
           actions: assign({ form: (_, event) => event.form }),
         },
       },
     },
-    transaction: {
+    updateMembershipTx: {
       invoke: {
-        id: 'transaction',
+        id: 'updateMembership',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'removeStakingAccTx',
+            cond: isTransactionSuccess,
+          },
+          {
+            target: 'error',
+            cond: isTransactionError,
+          },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
+        ],
+      },
+    },
+    removeStakingAccTx: {
+      invoke: {
+        id: 'removeStakingAcc',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'addStakingAccCandidateTx',
+            cond: isTransactionSuccess,
+          },
+          {
+            target: 'error',
+            cond: isTransactionError,
+          },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
+        ],
+      },
+    },
+    addStakingAccCandidateTx: {
+      invoke: {
+        id: 'addStakingAccCandidate',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'confirmStakingAccTx',
+            cond: isTransactionSuccess,
+          },
+          {
+            target: 'error',
+            cond: isTransactionError,
+          },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
+        ],
+      },
+    },
+    confirmStakingAccTx: {
+      invoke: {
+        id: 'confirmStakingAcc',
         src: transactionMachine,
         onDone: [
           {

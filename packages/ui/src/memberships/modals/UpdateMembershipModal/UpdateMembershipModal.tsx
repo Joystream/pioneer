@@ -33,7 +33,46 @@ export const UpdateMembershipModal = () => {
     )
   }
 
-  if (state.matches('transaction')) {
+  if (state.matches('updateMembershipTx')) {
+    return (
+      <SignTransactionModal
+        buttonText="Sign and update a member"
+        transaction={createBatch(state.context.form, api, member)}
+        signer={member.controllerAccount}
+        service={state.children.transaction}
+      >
+        <TextMedium>You intend to update your membership.</TextMedium>
+      </SignTransactionModal>
+    )
+  }
+
+  if (state.matches('removeStakingAccTx')) {
+    return (
+      <SignTransactionModal
+        buttonText="Sign and update a member"
+        transaction={createBatch(state.context.form, api, member)}
+        signer={member.controllerAccount}
+        service={state.children.transaction}
+      >
+        <TextMedium>You intend to update your membership.</TextMedium>
+      </SignTransactionModal>
+    )
+  }
+
+  if (state.matches('addStakingAccCandidateTx')) {
+    return (
+      <SignTransactionModal
+        buttonText="Sign and update a member"
+        transaction={createBatch(state.context.form, api, member)}
+        signer={member.controllerAccount}
+        service={state.children.transaction}
+      >
+        <TextMedium>You intend to update your membership.</TextMedium>
+      </SignTransactionModal>
+    )
+  }
+
+  if (state.matches('confirmStakingAccTx')) {
     return (
       <SignTransactionModal
         buttonText="Sign and update a member"
