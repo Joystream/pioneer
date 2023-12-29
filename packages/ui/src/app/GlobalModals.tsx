@@ -234,6 +234,8 @@ const MOBILE_SUPPORTED_MODALS: ModalNames[] = [
   'CreatePost',
   'PostReplyModal',
   'CreateThreadModal',
+  'EmailSubscriptionModal',
+  'EmailConfirmationModal',
 ]
 
 export const GlobalModals = () => {
