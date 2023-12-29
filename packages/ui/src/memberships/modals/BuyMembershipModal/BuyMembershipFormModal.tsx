@@ -154,7 +154,7 @@ export const BuyMembershipForm = ({
     'validatorAccountCandidate',
   ])
 
-  const { allValidators, allValidatorsWithCtrlAcc } = useValidators({ skip: isValidator ?? true })
+  const { allValidators, allValidatorsWithCtrlAcc } = useValidators({ skip: !isValidator })
   const [validatorAccounts, setValidatorAccounts] = useState<Account[]>([])
   const validatorAddresses = useMemo(() => {
     if (!allValidatorsWithCtrlAcc || !allValidators) return
@@ -430,7 +430,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: B
   )
 }
 
-const SelectValidatorAccountWrapper = styled.div`
+export const SelectValidatorAccountWrapper = styled.div`
   margin-top: -4px;
   display: flex;
   flex-direction: column;
