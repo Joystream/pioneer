@@ -2,7 +2,7 @@ import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types'
 import { Keyring } from '@polkadot/ui-keyring'
 import { decodeAddress } from '@polkadot/util-crypto'
 import { getWalletBySource, Wallet } from 'injectweb3-connect'
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { debounceTime, filter, skip } from 'rxjs/operators'
 
 import { encodeAddress } from '@/accounts/model/encodeAddress'
@@ -23,8 +23,6 @@ export interface UseAccounts {
   error?: ExtensionError
   wallet?: Wallet
   setWallet?: (wallet: Wallet | undefined) => void
-  isWalletConnected: boolean
-  isConnectingWallet: boolean
 }
 
 interface Props {
@@ -106,7 +104,6 @@ export const AccountsContextProvider = (props: Props) => {
   const [selectedWallet, setSelectedWallet] = useState<Wallet>()
   const [extensionError, setExtensionError] = useState<ExtensionError>()
   const [recentWallet, setRecentWallet] = useLocalStorage<string | undefined>('recentWallet')
-  const [isConnectingWallet, setIsConnectingWallet] = useState(false)
 
   useEffect(
     onExtensionLoaded(
@@ -123,28 +120,24 @@ export const AccountsContextProvider = (props: Props) => {
     []
   )
 
-  const handleSetWallet = useCallback(
-    async (wallet?: Wallet) => {
-      setSelectedWallet(wallet)
+  useEffect(() => {
+    if (!isExtensionLoaded || !selectedWallet) {
+      return
+    }
 
-      if (!isExtensionLoaded || !wallet) return
-
-      setExtensionError(undefined)
-      setIsConnectingWallet(true)
-      try {
-        await loadKeysFromExtension(keyring, wallet)
-        setRecentWallet(wallet.extensionName)
-      } catch (error) {
+    setExtensionError(undefined)
+    loadKeysFromExtension(keyring, selectedWallet)
+      .then(() => {
+        setRecentWallet(selectedWallet.extensionName)
+      })
+      .catch((error: Error) => {
         setSelectedWallet(undefined)
 
         if (error?.message.includes('not allowed to interact') || error?.message.includes('Rejected')) {
           setExtensionError('APP_REJECTED')
         }
-      }
-      setIsConnectingWallet(false)
-    },
-    [isExtensionLoaded]
-  )
+      })
+  }, [isExtensionLoaded, selectedWallet])
 
   const accounts = useObservable(
     () =>
@@ -176,11 +169,9 @@ export const AccountsContextProvider = (props: Props) => {
     allAccounts,
     hasAccounts,
     isLoading: !isExtensionLoaded || !accounts,
-    setWallet: handleSetWallet,
+    setWallet: setSelectedWallet,
     wallet: selectedWallet,
     error: extensionError,
-    isWalletConnected: extensionError !== 'NO_EXTENSION' && !!selectedWallet && !isConnectingWallet,
-    isConnectingWallet,
   }
 
   if (extensionError || !selectedWallet?.extension) {
