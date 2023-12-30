@@ -1,14 +1,13 @@
-import React, { ReactNode, useMemo, useState } from 'react'
 import { BN } from '@polkadot/util'
+import React, { ReactNode, useMemo, useState } from 'react'
 import { of, map, switchMap, Observable, combineLatest } from 'rxjs'
 
 import { Api } from '@/api'
-import { ERAS_PER_YEAR } from '@/common/constants'
-import { last } from '@/common/utils'
 import { useApi } from '@/api/hooks/useApi'
+import { ERAS_PER_YEAR } from '@/common/constants'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { Address } from '@/common/types'
-import { perbillToPercent } from '@/common/utils'
+import { perbillToPercent, last } from '@/common/utils'
 import { useGetMembersWithDetailsQuery } from '@/memberships/queries'
 import { asMemberWithDetails } from '@/memberships/types'
 
