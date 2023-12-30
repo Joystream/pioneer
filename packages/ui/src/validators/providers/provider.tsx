@@ -117,12 +117,12 @@ export const ValidatorContextProvider = (props: Props) => {
   }, [data, allValidators, allValidatorsWithCtrlAcc])
 
   const validatorRewardPointsHistory = useFirstObservableValue(() => {
-    if (shouldFetchExtraDetails) return
+    if (!shouldFetchExtraDetails) return
     return api?.query.staking.erasRewardPoints.entries()
   }, [api?.isConnected, shouldFetchExtraDetails])
 
   const activeValidators = useFirstObservableValue(() => {
-    if (shouldFetchExtraDetails) return
+    if (!shouldFetchExtraDetails) return
     return api?.query.session.validators()
   }, [api?.isConnected, shouldFetchExtraDetails])
 
