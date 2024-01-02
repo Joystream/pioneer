@@ -42,6 +42,10 @@ export const BlacklistedAccounts = () => {
       )
   }, [votingOptOutAccounts, page])
 
+  useEffect(() => {
+    setTotal(new BN(0))
+  }, [page])
+
   const header = (
     <PageHeaderWrapper>
       <PageHeaderRow>

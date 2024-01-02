@@ -9,9 +9,9 @@ import { BlacklistedAccounts } from './BlacklistedAccounts'
 type Story = StoryObj<FC<Args>>
 
 const allAccounts = [
-  { member: member('bob'), balance: 200 },
-  { member: member('charlie'), balance: 300 },
-  { member: member('alice'), balance: 500 },
+  { member: member('bob'), balances: 200 },
+  { member: member('charlie'), balances: 300 },
+  { member: member('alice'), balances: 500 },
 ]
 
 export default {
