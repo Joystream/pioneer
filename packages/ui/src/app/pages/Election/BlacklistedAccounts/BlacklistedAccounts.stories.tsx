@@ -2,7 +2,6 @@ import { Args, Meta, StoryObj } from '@storybook/react'
 import { FC } from 'react'
 
 import { member } from '@/mocks/data/members'
-import { joy } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
 
 import { BlacklistedAccounts } from './BlacklistedAccounts'
@@ -10,9 +9,9 @@ import { BlacklistedAccounts } from './BlacklistedAccounts'
 type Story = StoryObj<FC<Args>>
 
 const allAccounts = [
-  { member: member('bob'), balance: joy(20) },
-  { member: member('charlie'), balance: joy(20) },
-  { member: member('alice'), balance: joy(20) },
+  { member: member('bob'), balance: 200 },
+  { member: member('charlie'), balance: 300 },
+  { member: member('alice'), balance: 500 },
 ]
 
 export default {
@@ -29,9 +28,9 @@ export default {
             },
             referendum: {
               accountsOptedOut: {
-                keys: Array.from({ length: 5 })
-                  .fill(allAccounts.map(({ member }) => member.controllerAccount))
-                  .flat(),
+                keys: Array.from({ length: 23 }).map(
+                  (_, index) => allAccounts[index % allAccounts.length].member.controllerAccount
+                ),
               },
               stage: {},
             },

@@ -145,7 +145,10 @@ export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts
 }
 
 const asBalance = (balance: Balance = 0): BN =>
-  (balance instanceof BN ? balance : createType('BalanceOf', joy(balance))) as BN
+  createType(
+    'BalanceOf',
+    balance instanceof BN ? balance : new BN(typeof balance === 'string' ? balance : joy(balance))
+  ) as BN
 
 const WALLET: Wallet = {
   installed: true,
