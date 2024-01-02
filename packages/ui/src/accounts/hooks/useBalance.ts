@@ -14,10 +14,9 @@ export const useBalance = (address: Address = ''): Balances | null => {
   const allMyBalances = useMyBalances()
   const myBalances = allMyBalances?.[address]
 
-  const balances = useFirstObservableValue(
-    () => (isDefined(allMyBalances) && address && !myBalances ? api?.derive.balances.all(address) : undefined),
-    [address, !myBalances]
-  )
+  const balances = useFirstObservableValue(() => {
+    return isDefined(allMyBalances) && address && !myBalances ? api?.derive.balances.all(address) : undefined
+  }, [address, !myBalances])
 
   if (myBalances) {
     return myBalances

@@ -5,10 +5,14 @@ import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 
 import { encodeAddress } from '../model/encodeAddress'
 
-export const useVotingOptOutAccounts = () => {
+interface Props {
+  skip?: boolean
+}
+
+export const useVotingOptOutAccounts = ({ skip }: Props = {}) => {
   const { api } = useApi()
   const accountsOptedOut = useFirstObservableValue(() => {
-    return api?.query.referendum?.accountsOptedOut.keys()
+    return skip ? undefined : api?.query.referendum?.accountsOptedOut.keys()
   }, [api?.isConnected])
   return useMemo(() => accountsOptedOut?.map((key) => encodeAddress(key.args[0])), [accountsOptedOut])
 }
