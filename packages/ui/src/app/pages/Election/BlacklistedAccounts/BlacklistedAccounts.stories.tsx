@@ -23,11 +23,6 @@ export default {
       return {
         accounts: { list: allAccounts },
         chain: {
-          derive: {
-            balances: {
-              all: {},
-            },
-          },
           query: {
             council: {
               stage: { stage: { isIdle: true }, changedAt: 123 },
