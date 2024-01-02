@@ -3,6 +3,7 @@ import React from 'react'
 import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { SidebarConnections } from '@/app/components/SidebarConnections'
 import { MembersRoutes, ProfileRoutes } from '@/app/constants/routes'
 import { BountyRoutes } from '@/bounty/constants'
@@ -62,7 +63,8 @@ export const SideBar = () => {
 }
 
 export const SideBarContent = () => {
-  const { supportTransactions } = useResponsive()
+  const { wallet } = useMyAccounts()
+  const { isMobileWallet } = useResponsive()
   const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)
   const { stage: electionStage } = useElectionStage()
   const [endpoints] = useNetworkEndpoints()
@@ -79,7 +81,7 @@ export const SideBarContent = () => {
           {/*    Overview*/}
           {/*  </NavigationLink>*/}
           {/*</NavigationLinksItem>*/}
-          {supportTransactions && (
+          {(!isMobileWallet || wallet) && (
             <NavigationLinksItem>
               <NavigationLink to={ProfileRoutes.profile} icon={<MyProfileIcon />}>
                 My profile

@@ -8,21 +8,26 @@ import { TableListItemAsLinkHover } from '@/common/components/List'
 import { Skeleton } from '@/common/components/Skeleton'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
+import { useModal } from '@/common/hooks/useModal'
 
+import { NominatingRedirectModalCall } from '../modals/NominatingRedirectModal'
 import { ValidatorWithDetails } from '../types/Validator'
 
 import { ValidatorInfo } from './ValidatorInfo'
+
 interface ValidatorItemProps {
   validator: ValidatorWithDetails
+  onClick?: () => void
 }
-export const ValidatorItem = ({ validator }: ValidatorItemProps) => {
-  const { stashAccount, membership, isVerified, isActive, commission, APR, staking } = validator
+export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
+  const { stashAccount, membership, isVerifiedValidator, isActive, commission, APR, staking } = validator
+  const { showModal } = useModal<NominatingRedirectModalCall>()
 
   return (
-    <ValidatorItemWrapper>
+    <ValidatorItemWrapper onClick={onClick}>
       <ValidatorItemWrap>
         <ValidatorInfo member={membership} address={encodeAddress(stashAccount)} />
-        {isVerified ? (
+        {isVerifiedValidator ? (
           <BadgeStatus inverted size="l">
             verified
           </BadgeStatus>
@@ -36,7 +41,15 @@ export const ValidatorItem = ({ validator }: ValidatorItemProps) => {
         <TokenValue size="xs" value={staking.total} />
         <TextMedium bold>{APR}%</TextMedium>
         <TextMedium bold>{commission}%</TextMedium>
-        <ButtonPrimary size="small">Nominate</ButtonPrimary>
+        <ButtonPrimary
+          size="small"
+          onClick={(e) => {
+            e.stopPropagation()
+            showModal({ modal: 'NominatingRedirect' })
+          }}
+        >
+          Nominate
+        </ButtonPrimary>
       </ValidatorItemWrap>
     </ValidatorItemWrapper>
   )

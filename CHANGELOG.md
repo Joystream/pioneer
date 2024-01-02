@@ -7,6 +7,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 2023-12-29
+
+### Added
+- Support for forum action and email registration on mobile.
+
+## [2.2.0] - 2023-12-22
+
+### Added
+- Widget which represents visually the progress of the current election.
+
+### Changed
+- Show reward for single councillor on council page.
+
+### Fixed
+- Vote recovery from the My Profile page.
+
+## [2.1.1] - 2023-12-11
+
+### Fixed
+- Vote again button sometime linking to the wrong candidate.
+
+## [2.1.0] - 2023-12-08
+
+### Added
+- Display error messages when a page or a modal crashes instead of crashing the whole app.
+- Make some members social links clickable.
+
+### Fixed
+- Runtime upgrade proposal creation.
+- Various UI bugs on responsive devices.
+
+### Changed
+- Expand the size of the Signal side pane.
+- Rename Twitter to X.
+
+## [2.0.2] - 2023-11-27
+
+### Remove
+- Remove forum activities button.
+
+## [2.0.1] - 2023-11-24
+
+### Fixed
+- Some proposal page breaking on opening their rationale.
+
 ## [2.0.0 (Notifications and RWD)][2.0.0] - 2023-11-23
 
 ### Added
@@ -225,7 +270,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v2.0.0...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v2.3.0...HEAD
+[2.3.0]: https://github.com/Joystream/pioneer/compare/v2.2.0...v2.3.0
+[2.2.0]: https://github.com/Joystream/pioneer/compare/v2.1.1...v2.2.0
+[2.1.1]: https://github.com/Joystream/pioneer/compare/v2.1.0...v2.1.1
+[2.1.0]: https://github.com/Joystream/pioneer/compare/v2.0.2...v2.1.0
+[2.0.2]: https://github.com/Joystream/pioneer/compare/v2.0.1...v2.0.2
+[2.0.1]: https://github.com/Joystream/pioneer/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/Joystream/pioneer/compare/v1.9.0...v2.0.0
 [1.9.0]: https://github.com/Joystream/pioneer/compare/v1.8.0...v1.9.0
 [1.8.0]: https://github.com/Joystream/pioneer/compare/v1.7.0...v1.8.0

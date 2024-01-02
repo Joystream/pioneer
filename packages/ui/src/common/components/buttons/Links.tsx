@@ -40,7 +40,7 @@ const getPadding = (props: LinkProps) => {
 
 export function LinkPrimary({ className, children, size, square, disabled, href }: LinkProps) {
   return (
-    <LinkPrimaryStyles className={className} size={size} square={square} disabled={disabled} href={href}>
+    <LinkPrimaryStyles className={className} size={size} square={square} disabled={disabled} href={href} target="blank">
       <LinkInnerWrapper size={size}>{children}</LinkInnerWrapper>
     </LinkPrimaryStyles>
   )
@@ -48,7 +48,14 @@ export function LinkPrimary({ className, children, size, square, disabled, href 
 
 export function LinkSecondary({ className, children, size, square, disabled, href }: LinkProps) {
   return (
-    <LinkSecondaryStyles className={className} size={size} square={square} disabled={disabled} href={href}>
+    <LinkSecondaryStyles
+      className={className}
+      size={size}
+      square={square}
+      disabled={disabled}
+      href={href}
+      target="blank"
+    >
       <LinkInnerWrapper size={size}>{children}</LinkInnerWrapper>
     </LinkSecondaryStyles>
   )
@@ -56,14 +63,21 @@ export function LinkSecondary({ className, children, size, square, disabled, hre
 
 export function LinkGhost({ className, children, size, square, disabled, href }: LinkProps) {
   return (
-    <LinkGhostStyles className={className} size={size} square={square} disabled={disabled} href={href}>
+    <LinkGhostStyles className={className} size={size} square={square} disabled={disabled} href={href} target="blank">
       <LinkInnerWrapper size={size}>{children}</LinkInnerWrapper>
     </LinkGhostStyles>
   )
 }
 export function LinkBareGhost({ className, children, size, square, disabled, href }: LinkProps) {
   return (
-    <LinkBareGhostStyles className={className} size={size} square={square} disabled={disabled} href={href}>
+    <LinkBareGhostStyles
+      className={className}
+      size={size}
+      square={square}
+      disabled={disabled}
+      href={href}
+      target="blank"
+    >
       <LinkInnerWrapper size={size}>{children}</LinkInnerWrapper>
     </LinkBareGhostStyles>
   )
@@ -84,6 +98,7 @@ export function LinkLink({
       href={href}
       accentColor={accentColor}
       size="small"
+      target="blank"
     >
       <LinkInnerWrapper size="small">{children}</LinkInnerWrapper>
     </LinkLinkStyles>
