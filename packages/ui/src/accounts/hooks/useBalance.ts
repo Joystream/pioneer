@@ -28,6 +28,7 @@ export const useBalance = (address: Address = ''): Balances | null => {
 
   return balances ? toBalances(balances) : null
 }
+
 export const useBalances = (addresses: Address[]): Map<string, Balances | undefined> => {
   const { api } = useApi()
   const allMyBalances = useMyBalances()
@@ -35,7 +36,7 @@ export const useBalances = (addresses: Address[]): Map<string, Balances | undefi
   const [definedBalances, setDefinedBalances] = useState(new Map<string, Balances>())
   useEffect(() => {
     addresses.forEach((address) => {
-      if (definedBalances.get(address)) return
+      if (definedBalances.has(address)) return
       addressToBalances(api, allMyBalances, address).then((balances) => {
         if (balances) setDefinedBalances((entries) => new Map([...entries.entries(), [address, balances]]))
       })

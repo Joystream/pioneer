@@ -1,34 +1,32 @@
 import { Identicon } from '@polkadot/react-identicon'
+import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
 import { AccountCopyAddress, AccountInfoWrap, AccountPhoto, PhotoWrapper } from '@/accounts/components/AccountInfo'
-import { useBalance } from '@/accounts/hooks/useBalance'
 import { AccountRow, BalanceInfoInRow, InfoTitle, InfoValue } from '@/common/components/Modal'
 import { TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { shortenAddress } from '@/common/model/formatters'
 
 interface Prop {
-  address: string
+  account: { address: string; balance: BN | undefined }
 }
 
-export const BlacklistedAccount = ({ address }: Prop) => {
-  const balance = useBalance(address)
-
+export const BlacklistedAccount = ({ account }: Prop) => {
   return (
     <BlacklistedAccountRow>
       <BlacklistedAccountInfoWrap>
         <PhotoWrapper>
           <AccountPhoto>
-            <Identicon size={28} theme={'beachball'} value={address} />
+            <Identicon size={28} theme={'beachball'} value={account.address} />
           </AccountPhoto>
         </PhotoWrapper>
-        <BlacklistedAccountCopyAddress altText={shortenAddress(address)} copyText={address} />
+        <BlacklistedAccountCopyAddress altText={shortenAddress(account.address)} copyText={account.address} />
         <BlacklistedAccountBalance>
           <InfoTitle>Total Balance: </InfoTitle>
           <InfoValue>
-            <TokenValue value={balance?.total} size="xs" />
+            <TokenValue value={account.balance} size="xs" />
           </InfoValue>
         </BlacklistedAccountBalance>
       </BlacklistedAccountInfoWrap>

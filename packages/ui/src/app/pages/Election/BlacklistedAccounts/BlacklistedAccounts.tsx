@@ -1,10 +1,9 @@
-import BN from 'bn.js'
-import React, { useEffect, useMemo, useState } from 'react'
+import { BN_ZERO } from '@polkadot/util'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { useBalances } from '@/accounts/hooks/useBalance'
 import { useVotingOptOutAccounts } from '@/accounts/hooks/useVotingOptOutAccounts'
-import { Balances } from '@/accounts/types'
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { InfoSymbol } from '@/common/components/icons/symbols'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
@@ -18,25 +17,22 @@ import { ElectionTabs } from '../components/ElectionTabs'
 
 import { BlacklistedAccount } from './BlacklistedAccount'
 
-interface TotalBalanceProp {
-  addresses: string[]
-}
-
 export const BlacklistedAccounts = () => {
   const ACCOUNTS_PER_PAGE = 18
   const [page, setPage] = useState(1)
   const votingOptOutAccounts = useVotingOptOutAccounts()
-  const [paginatedAccounts, setPaginatedAccounts] = useState<string[] | undefined>()
-
-  useEffect(() => {
-    if (votingOptOutAccounts && votingOptOutAccounts.length > 0) {
-      setPaginatedAccounts(
-        votingOptOutAccounts.filter(
-          (votingOptOutAccount, i) => i >= ACCOUNTS_PER_PAGE * (page - 1) && i < page * ACCOUNTS_PER_PAGE
-        )
-      )
-    }
-  }, [votingOptOutAccounts, page])
+  const balances = useBalances(votingOptOutAccounts || [])
+  const totalBalance = useMemo(
+    () => Array.from(balances.values()).reduce((prev, value) => value?.total.add(prev) ?? prev, BN_ZERO),
+    [balances]
+  )
+  const paginatedAccounts = useMemo(
+    () =>
+      votingOptOutAccounts
+        ?.slice((page - 1) * ACCOUNTS_PER_PAGE, page * ACCOUNTS_PER_PAGE)
+        .map((address) => ({ address, balance: balances.get(address)?.total })),
+    [votingOptOutAccounts, page, balances]
+  )
 
   const header = (
     <PageHeaderWrapper>
@@ -64,7 +60,7 @@ export const BlacklistedAccounts = () => {
           {(!votingOptOutAccounts || !votingOptOutAccounts.length) && <TextBig>No accounts found</TextBig>}
           {paginatedAccounts && paginatedAccounts.length > 0 && (
             <>
-              <TotalBalance addresses={votingOptOutAccounts || []} />
+              <TokenValueStat title="Total balance of all accounts" value={totalBalance} />
               <Pagination
                 pageCount={votingOptOutAccounts && Math.ceil(votingOptOutAccounts.length / ACCOUNTS_PER_PAGE)}
                 handlePageChange={setPage}
@@ -73,8 +69,8 @@ export const BlacklistedAccounts = () => {
 
               <h6>Accounts ({votingOptOutAccounts?.length})</h6>
               <BlacklistedAccountsList>
-                {paginatedAccounts.map((address, i) => (
-                  <BlacklistedAccount key={i} address={address} />
+                {paginatedAccounts.map((account, i) => (
+                  <BlacklistedAccount key={i} account={account} />
                 ))}
               </BlacklistedAccountsList>
               <Pagination
@@ -90,19 +86,6 @@ export const BlacklistedAccounts = () => {
   }
 
   return <PageLayout header={header} main={displayMain()} />
-}
-
-const TotalBalance = ({ addresses }: TotalBalanceProp) => {
-  const balances = useBalances(addresses)
-  const total = useMemo(() => {
-    let prev = new BN(0)
-    balances.forEach((value: Balances | undefined) => {
-      prev = value ? prev.add(value.total) : prev
-    })
-    return prev
-  }, [balances])
-
-  return <TokenValueStat title="Total balance of all accounts" value={total} />
 }
 
 const Container = styled.div`
