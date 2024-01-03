@@ -11,8 +11,8 @@ describe('UI: UpdatedMembershipModal - helpers', () => {
     handle: 'alice_handle',
     about: '',
     avatarUri: '',
-    rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-    controllerAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+    rootAccount: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
+    controllerAccount: 'j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT',
     isFoundingMember: true,
     isVerified: true,
     inviteCount: 5,
@@ -24,11 +24,11 @@ describe('UI: UpdatedMembershipModal - helpers', () => {
     about: '',
     avatarUri: '',
     rootAccount: {
-      address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+      address: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
       name: '',
     },
     controllerAccount: {
-      address: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+      address: 'j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT',
       name: '',
     },
   }

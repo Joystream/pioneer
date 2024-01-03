@@ -42,7 +42,7 @@ describe('formatters', () => {
   })
 
   describe('shortenAddress', () => {
-    const address = '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty'
+    const address = 'j4UYhDYJ4pz2ihhDDzu69v2JTVeGaGmTebmBdWaX2ANVinXyE'
 
     it('Shortens addresses', () => {
       expect(shortenAddress(address)).toEqual('5FHneW46x...hjJM694ty')

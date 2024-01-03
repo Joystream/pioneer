@@ -23,7 +23,7 @@ const Template: Story = () => {
             member: {
               id: '0',
               name: 'Alice member',
-              controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+              controllerAccount: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
             },
           },
         }}

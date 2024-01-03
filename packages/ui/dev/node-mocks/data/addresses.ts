@@ -1,11 +1,11 @@
-export const ALICE = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'
-export const ALICE_STASH = '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY'
-export const BOB = '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty'
-export const BOB_STASH = '5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc'
-export const CHARLIE = '5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y'
-export const DAVE = '5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy'
-export const EVE = '5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw'
-export const FERDIE = '5CiPPseXPECbkjWCa6MnjNokrgYjMqmKndv2rSnekmSK2DjL'
+export const ALICE = 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf'
+export const ALICE_STASH = 'j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT'
+export const BOB = 'j4UYhDYJ4pz2ihhDDzu69v2JTVeGaGmTebmBdWaX2ANVinXyE'
+export const BOB_STASH = 'j4X5AiyNC4497MpJLtyGdgEAS4JjDEjkRvtUPgZkiYudW5zox'
+export const CHARLIE = 'j4UbMHiS79yvMLJctXggUugkkKmwxG5LW2YSy3ap8SmgF5qW9'
+export const DAVE = 'j4SR5Mty5Mzy2dPTunA6TD4gBTwbSb8wRTabvu2gsLqC271d4'
+export const EVE = 'j4WXe5CtD6NkEM1KUXP5BLB4sTN77PFL4edS3c7eXAAHP83aF'
+export const FERDIE = 'j4RyHxutVFwhdbLwwr4oUaXWkP4dJrjLVWaYUDzpyBqawfcV3'
 
 export const accountsMap = {
   alice: ALICE,
