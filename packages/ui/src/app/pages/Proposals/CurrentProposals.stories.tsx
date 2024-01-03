@@ -777,7 +777,7 @@ export const SpecificParametersFundingRequest: Story = {
     step('Transaction parameters', () => {
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({
-        fundingRequest: [{ account: alice.controllerAccount, amount: 100_0000000000 }],
+        fundingRequest: [{ account: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY', amount: 100_0000000000 }],
       })
     })
   }),
@@ -864,8 +864,8 @@ export const SpecificParametersMultipleFundingRequest: Story = {
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({
         fundingRequest: [
-          { account: alice.controllerAccount, amount: 500_0000000000 },
-          { account: bob.controllerAccount, amount: 500_0000000000 },
+          { account: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY', amount: 500_0000000000 },
+          { account: '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty', amount: 500_0000000000 },
         ],
       })
     })
