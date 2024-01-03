@@ -6,6 +6,7 @@ import { useBalances } from '@/accounts/hooks/useBalance'
 import { useVotingOptOutAccounts } from '@/accounts/hooks/useVotingOptOutAccounts'
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { InfoSymbol } from '@/common/components/icons/symbols'
+import { Loading } from '@/common/components/Loading'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { Pagination } from '@/common/components/Pagination'
@@ -42,6 +43,10 @@ export const BlacklistedAccounts = () => {
       <ElectionTabs />
     </PageHeaderWrapper>
   )
+
+  if (!votingOptOutAccounts) {
+    return <PageLayout header={header} main={<Loading />} />
+  }
 
   const warningContent = (
     <Container>
