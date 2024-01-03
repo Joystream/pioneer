@@ -29,7 +29,7 @@ export const BlacklistedAccounts = () => {
   const [paginatedAccounts, setPaginatedAccounts] = useState<string[] | undefined>()
 
   useEffect(() => {
-    if (votingOptOutAccounts && votingOptOutAccounts.length > 0){
+    if (votingOptOutAccounts && votingOptOutAccounts.length > 0) {
       setPaginatedAccounts(
         votingOptOutAccounts.filter(
           (votingOptOutAccount, i) => i >= ACCOUNTS_PER_PAGE * (page - 1) && i < page * ACCOUNTS_PER_PAGE
@@ -64,7 +64,7 @@ export const BlacklistedAccounts = () => {
           {(!votingOptOutAccounts || !votingOptOutAccounts.length) && <TextBig>No accounts found</TextBig>}
           {paginatedAccounts && paginatedAccounts.length > 0 && (
             <>
-            <TotalBalance addresses={votingOptOutAccounts || []} />
+              <TotalBalance addresses={votingOptOutAccounts || []} />
               <Pagination
                 pageCount={votingOptOutAccounts && Math.ceil(votingOptOutAccounts.length / ACCOUNTS_PER_PAGE)}
                 handlePageChange={setPage}
@@ -100,7 +100,7 @@ const TotalBalance = ({ addresses }: TotalBalanceProp) => {
       prev = value ? prev.add(value.total) : prev
     })
     return prev
-  },[balances])
+  }, [balances])
 
   return <TokenValueStat title="Total balance of all accounts" value={total} />
 }
