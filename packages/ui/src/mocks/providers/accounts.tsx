@@ -4,7 +4,6 @@ import { PolkadotLogo, Wallet } from 'injectweb3-connect'
 import { isObject, isString, mapValues } from 'lodash'
 import React, { FC, useCallback, useEffect, useState } from 'react'
 
-import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContext } from '@/accounts/providers/balances/context'
@@ -66,7 +65,7 @@ export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts
 
     const accountData = list.flatMap(
       ({ balances, member, account: { name = member?.handle, address = member?.controllerAccount } = {} }) =>
-        whenDefined(address, (address) => ({ name, address: encodeAddress(address), balances, member })) ?? []
+        whenDefined(address, (address) => ({ name, address, balances, member })) ?? []
     )
 
     const allAccounts: Account[] = accountData.map(({ name, address }) => ({ name, address }))
