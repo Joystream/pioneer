@@ -1,6 +1,5 @@
 import { createType } from '@joystream/types'
 import { mapValues } from 'lodash'
-// import { of } from 'rxjs'
 
 import { encodeAddress } from '@/accounts/model/encodeAddress'
 
