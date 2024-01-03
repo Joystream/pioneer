@@ -368,7 +368,7 @@ describe('UI: Past Council page', () => {
               network: 'OLYMPIA',
               groupId: WORKER_DATA.groupId,
               workerId: WORKER_DATA.id,
-              rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+              rewardAccount: 'j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT',
               amount: 6050,
               type: 'REGULAR',
             },
