@@ -29,21 +29,21 @@ export const useBalance = (address: Address = ''): Balances | null => {
   return balances ? toBalances(balances) : null
 }
 
-export const useBalances = (addresses: Address[]): Map<string, Balances | undefined> => {
+export const useBalances = (addresses: Address[] | undefined): Map<string, Balances | undefined> => {
   const { api } = useApi()
   const allMyBalances = useMyBalances()
 
   const [definedBalances, setDefinedBalances] = useState(new Map<string, Balances>())
   useEffect(() => {
-    addresses.forEach((address) => {
+    addresses?.forEach((address) => {
       if (definedBalances.has(address)) return
       addressToBalances(api, allMyBalances, address).then((balances) => {
         if (balances) setDefinedBalances((entries) => new Map([...entries.entries(), [address, balances]]))
       })
     })
-  }, [api, allMyBalances])
+  }, [api, allMyBalances, addresses])
 
-  return useMemo(() => new Map(addresses.map((address) => [address, definedBalances.get(address)])), [definedBalances])
+  return useMemo(() => new Map(addresses?.map((address) => [address, definedBalances.get(address)])), [definedBalances])
 }
 
 const addressToBalances = async (

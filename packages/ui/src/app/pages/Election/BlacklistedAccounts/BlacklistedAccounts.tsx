@@ -21,7 +21,7 @@ export const BlacklistedAccounts = () => {
   const ACCOUNTS_PER_PAGE = 18
   const [page, setPage] = useState(1)
   const votingOptOutAccounts = useVotingOptOutAccounts()
-  const balances = useBalances(votingOptOutAccounts || [])
+  const balances = useBalances(votingOptOutAccounts)
   const totalBalance = useMemo(
     () => Array.from(balances.values()).reduce((prev, value) => value?.total.add(prev) ?? prev, BN_ZERO),
     [balances]
