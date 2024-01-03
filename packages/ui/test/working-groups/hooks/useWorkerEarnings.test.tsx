@@ -24,7 +24,7 @@ const baseEvent = {
   network: 'OLYMPIA',
   groupId: 'membershipWorkingGroup',
   type: 'REGULAR',
-  rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+  rewardAccount: 'j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT',
 }
 
 const rewardPaidEvents = [
