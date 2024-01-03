@@ -224,6 +224,7 @@ const NON_TRANSACTIONAL_MODALS: ModalNames[] = [
   'VoteRationaleModal',
   'SearchResults',
   'CandidacyPreview',
+  'EmailConfirmationModal',
 ]
 
 const MOBILE_SUPPORTED_MODALS: ModalNames[] = [
@@ -235,7 +236,6 @@ const MOBILE_SUPPORTED_MODALS: ModalNames[] = [
   'PostReplyModal',
   'CreateThreadModal',
   'EmailSubscriptionModal',
-  'EmailConfirmationModal',
 ]
 
 export const GlobalModals = () => {

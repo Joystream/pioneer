@@ -211,6 +211,8 @@ export const ModalWrap = styled.section<ModalWrapProps>`
     switch (modalMaxSize) {
       case 'm':
       case 'l':
+        // HACK: Move modals to the top on mobile because SubWallet shows the keyboard on the viewport
+        // instead of reducing the viewport size (at least on Android).
         return css`
           @media (max-width: ${BreakPoints.sm - 1}px) {
             bottom: auto;

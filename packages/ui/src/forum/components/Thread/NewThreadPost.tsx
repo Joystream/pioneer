@@ -89,6 +89,8 @@ const EditorMemo = React.memo(({ setNewText, editorRef }: MemoEditorProps) => (
   />
 ))
 
+// HACK: Let the user scroll down to write because SubWallet shows the keyboard on the viewport
+// instead of reducing the viewport size (at least on Android).
 const Wrapper = styled(RowGapBlock)`
   @media (max-width: ${BreakPoints.sm - 1}px) {
     &:has(.ck-focused) {
