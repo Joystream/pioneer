@@ -35,7 +35,11 @@ export const Warning = ({ title, content, isClosable, additionalContent, icon, i
           {title && <h5>{title}</h5>}
         </HeaderWrapper>
       )}
-      {content && <TextMedium light>{content}</TextMedium>}
+      {content && (
+        <TextMedium as="div" inter light>
+          {content}
+        </TextMedium>
+      )}
       {additionalContent}
     </WarningBlock>
   )
