@@ -63,9 +63,20 @@ const SelectFields = styled.div`
   * {
     width: 184px;
   }
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    * {
+      width: 100%;
+    }
+  }
 `
 const Fields = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 8px;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
 `

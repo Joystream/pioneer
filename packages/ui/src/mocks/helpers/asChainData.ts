@@ -26,6 +26,7 @@ const withUnwrap = (data: Record<any, any>) =>
   Object.defineProperties(data, {
     unwrap: { value: () => data },
     isSome: { value: Object.keys(data).length > 0 },
+    toJSON: { value: () => data },
     get: {
       value: (key: any) => {
         if (key.toRawType?.() === 'AccountId') {

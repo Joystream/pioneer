@@ -1,5 +1,7 @@
 import React from 'react'
+import styled from 'styled-components'
 
+import { PageHeader } from '@/app/components/PageHeader'
 import { PageLayout } from '@/app/components/PageLayout'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Statistics } from '@/common/components/statistics'
@@ -12,6 +14,7 @@ import { ValidatorsList } from '@/validators/components/ValidatorsList'
 import { useStakingStatistics } from '@/validators/hooks/useStakingStatistics'
 import { useValidatorsList } from '@/validators/hooks/useValidatorsList'
 
+import { ValidatorsTabs } from './components/ValidatorsTabs'
 export const ValidatorList = () => {
   const {
     eraStartedOn,
@@ -34,7 +37,9 @@ export const ValidatorList = () => {
     <PageLayout
       header={
         <RowGapBlock gap={24}>
-          <Statistics>
+          <PageHeader title="Validators" tabs={<ValidatorsTabs />} />
+
+          <StatisticsStyle>
             <ValidatorsState
               activeValidatorsCount={activeValidatorsCount}
               allValidatorsCount={allValidatorsCount}
@@ -48,7 +53,7 @@ export const ValidatorList = () => {
             />
             <Era eraStartedOn={eraStartedOn} eraDuration={eraDuration} now={now} eraRewardPoints={eraRewardPoints} />
             <Rewards totalRewards={totalRewards} lastRewards={lastRewards} />
-          </Statistics>
+          </StatisticsStyle>
           <ValidatorsFilter filter={filter} />
         </RowGapBlock>
       }
@@ -56,3 +61,15 @@ export const ValidatorList = () => {
     />
   )
 }
+
+const StatisticsStyle = styled(Statistics)`
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (min-width: 1440px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+`

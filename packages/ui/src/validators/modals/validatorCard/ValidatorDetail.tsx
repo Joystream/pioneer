@@ -49,7 +49,7 @@ export const ValidatorDetail = ({ validator, hideModal }: Props) => {
               <Stat
                 size="s"
                 value={`${(
-                  (validator.rewardPointsHistory.filter(({ rewardPoints }) => rewardPoints).length / ERA_DEPTH) *
+                  (validator.rewardPointsHistory.filter(({ rewardPoints }) => rewardPoints).length / (ERA_DEPTH + 1)) *
                   100
                 ).toFixed(3)}%`}
               >
