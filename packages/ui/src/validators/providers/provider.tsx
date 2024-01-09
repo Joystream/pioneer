@@ -1,13 +1,25 @@
-import { BN } from '@polkadot/util'
+import BN from 'bn.js'
 import React, { ReactNode, useMemo, useState } from 'react'
-import { of, map, switchMap, Observable, combineLatest } from 'rxjs'
+import {
+  AsyncSubject,
+  BehaviorSubject,
+  combineLatest,
+  map,
+  merge,
+  Observable,
+  scan,
+  share,
+  switchMap,
+  take,
+} from 'rxjs'
 
 import { Api } from '@/api'
 import { useApi } from '@/api/hooks/useApi'
-import { ERAS_PER_YEAR } from '@/common/constants'
+import { BN_ZERO, ERAS_PER_YEAR } from '@/common/constants'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
+import { useObservableArray } from '@/common/hooks/useObservableArray'
 import { Address } from '@/common/types'
-import { perbillToPercent, last } from '@/common/utils'
+import { perbillToPercent } from '@/common/utils'
 import { useGetMembersWithDetailsQuery } from '@/memberships/queries'
 import { asMemberWithDetails } from '@/memberships/types'
 
@@ -38,7 +50,8 @@ export const ValidatorContextProvider = (props: Props) => {
   const [shouldFetchExtraDetails, setShouldFetchExtraDetails] = useState(false)
 
   const allValidators = useFirstObservableValue(() => {
-    if (!shouldFetchValidators) return undefined
+    if (!shouldFetchValidators) return
+
     return api?.query.staking.validators.entries().pipe(
       map((entries) =>
         entries.map((entry) => ({
@@ -49,15 +62,13 @@ export const ValidatorContextProvider = (props: Props) => {
     )
   }, [api?.isConnected, shouldFetchValidators])
 
-  const allValidatorsWithCtrlAcc = useFirstObservableValue(
-    () =>
-      allValidators &&
-      api &&
-      api.query.staking.bonded
-        .multi(allValidators.map(({ address }) => address))
-        .pipe(map((entries) => entries.map((entry) => (entry.isSome ? entry.unwrap().toString() : undefined)))),
-    [allValidators, api?.isConnected]
-  )
+  const allValidatorsWithCtrlAcc = useFirstObservableValue(() => {
+    if (!allValidators) return
+
+    return api?.query.staking.bonded
+      .multi(allValidators.map(({ address }) => address))
+      .pipe(map((entries) => entries.map((entry) => (entry.isSome ? entry.unwrap().toString() : undefined))))
+  }, [allValidators, api?.isConnected])
 
   const variables = {
     where: {
@@ -92,96 +103,74 @@ export const ValidatorContextProvider = (props: Props) => {
   }))
 
   const validatorsWithMembership: ValidatorMembership[] | undefined = useMemo(() => {
-    return (
-      allValidators &&
-      allValidatorsWithCtrlAcc &&
-      memberships &&
-      allValidators.map(({ address, commission }, index) => {
-        const controllerAccount = allValidatorsWithCtrlAcc[index]
-        return {
-          stashAccount: address,
-          controllerAccount,
-          commission,
-          ...memberships.find(
-            ({ membership }) =>
-              membership.rootAccount === address ||
-              membership.rootAccount === controllerAccount ||
-              membership.controllerAccount === address ||
-              membership.controllerAccount === controllerAccount ||
-              membership.boundAccounts.includes(address) ||
-              (controllerAccount && membership.boundAccounts.includes(controllerAccount))
-          ),
-        }
-      })
-    )
+    if (!allValidators || !allValidatorsWithCtrlAcc || !memberships) return
+
+    return allValidators.map(({ address, commission }, index) => {
+      const controllerAccount = allValidatorsWithCtrlAcc[index]
+      return {
+        stashAccount: address,
+        controllerAccount,
+        commission,
+        ...memberships.find(
+          ({ membership }) =>
+            membership.rootAccount === address ||
+            membership.rootAccount === controllerAccount ||
+            membership.controllerAccount === address ||
+            membership.controllerAccount === controllerAccount ||
+            membership.boundAccounts.includes(address) ||
+            (controllerAccount && membership.boundAccounts.includes(controllerAccount))
+        ),
+      }
+    })
   }, [data, allValidators, allValidatorsWithCtrlAcc])
 
-  const validatorRewardPointsHistory = useFirstObservableValue(() => {
-    if (!shouldFetchExtraDetails) return
-    return api?.query.staking.erasRewardPoints.entries()
-  }, [api?.isConnected, shouldFetchExtraDetails])
+  const validatorsRewards$ = useMemo(() => {
+    if (!api || !shouldFetchExtraDetails) return
 
-  const activeValidators = useFirstObservableValue(() => {
-    if (!shouldFetchExtraDetails) return
-    return api?.query.session.validators()
-  }, [api?.isConnected, shouldFetchExtraDetails])
+    const eraPoints$ = api.query.staking.erasRewardPoints.entries()
+    const eraPayouts$ = api.query.staking.erasValidatorReward.entries()
 
-  const getValidatorInfo = (validator: ValidatorMembership, api: Api): Observable<ValidatorWithDetails> => {
-    if (!activeValidators || !validatorRewardPointsHistory) return of()
-    const { stashAccount: address, commission } = validator
-    const stakingInfo$ = api.query.staking
-      .activeEra()
-      .pipe(switchMap((activeEra) => api.query.staking.erasStakers(activeEra.unwrap().index, address)))
-    const rewardHistory$ = api.derive.staking.stakerRewards(address)
-    const slashingSpans$ = api.query.staking.slashingSpans(address)
-    return combineLatest([stakingInfo$, rewardHistory$, slashingSpans$]).pipe(
-      map(([stakingInfo, rewardHistory, slashingSpans]) => {
-        const apr =
-          rewardHistory.length && !stakingInfo.total.toBn().isZero()
-            ? last(rewardHistory)
-                .eraReward.toBn()
-                .muln(ERAS_PER_YEAR)
-                .muln(commission)
-                .div(stakingInfo.total.toBn())
-                .toNumber()
-            : 0
-        const rewardPointsHistory = validatorRewardPointsHistory.map((entry) => ({
-          era: entry[0].args[0].toNumber(),
-          rewardPoints: (entry[1].individual.toJSON()[address] ?? 0) as number,
-        }))
-        return {
-          ...validator,
-          isActive: activeValidators.includes(address),
-          totalRewards: rewardHistory.reduce((total: BN, data) => total.add(data.eraReward), new BN(0)),
-          rewardPointsHistory,
-          APR: apr,
-          slashed: slashingSpans.isSome
-            ? slashingSpans.unwrap().prior.length + (slashingSpans.unwrap().lastNonzeroSlash.toNumber() > 0 ? 1 : 0)
-            : 0,
-          staking: {
-            total: stakingInfo.total.toBn(),
-            own: stakingInfo.own.toBn(),
-            others: stakingInfo.others.map((nominator) => ({
-              address: nominator.who.toString(),
-              staking: nominator.value.toBn(),
-            })),
-          },
-        }
-      })
+    return combineLatest([eraPoints$, eraPayouts$]).pipe(
+      map(([points, payouts]) => {
+        const payoutsMap = new Map(payouts.map(([era, amount]) => [era.args[0].toNumber(), amount.value.toBn()]))
+
+        return points
+          .map((entry) => {
+            const era = entry[0].args[0].toNumber()
+            const totalPoints = entry[1].total.toNumber()
+            const individual = entry[1].individual.toJSON() as Record<string, number>
+            const totalPayout = payoutsMap.get(era) ?? BN_ZERO
+            return { era, totalPoints, individual, totalPayout }
+          })
+          .sort((a, b) => b.era - a.era)
+          .slice(1) // Remove the current period
+      }),
+      take(1),
+      share({ connector: () => new AsyncSubject(), resetOnComplete: false })
     )
-  }
+  }, [api?.isConnected, shouldFetchExtraDetails])
 
-  const getValidatorsInfo = (api: Api, validators: ValidatorMembership[]) => {
-    const validatorInfoObservables = validators.map((validator) => getValidatorInfo(validator, api))
-    return combineLatest(validatorInfoObservables)
-  }
+  const activeValidators$ = useMemo(() => {
+    if (!shouldFetchExtraDetails) return
 
-  const validatorsWithDetails = useFirstObservableValue(
-    () =>
-      api && validatorsWithMembership && validatorRewardPointsHistory && activeValidators
-        ? getValidatorsInfo(api, validatorsWithMembership)
-        : of([]),
-    [api?.isConnected, validatorsWithMembership, validatorRewardPointsHistory, activeValidators]
+    return api?.query.session
+      .validators()
+      .pipe(take(1), share({ connector: () => new AsyncSubject(), resetOnComplete: false }))
+  }, [api?.isConnected, shouldFetchExtraDetails])
+
+  const validatorsWithDetails = useObservableArray<ValidatorMembership, ValidatorWithDetails>(
+    validatorsWithMembership,
+    (validator) => {
+      if (!api || !validatorsRewards$) return
+
+      return activeValidators$?.pipe(
+        switchMap((activeValidators) => {
+          const isActive = activeValidators.includes(validator.stashAccount)
+          return getValidatorInfo({ ...validator, isActive }, validatorsRewards$, api)
+        })
+      )
+    },
+    { key: 'stashAccount', skip: !api || !validatorsRewards$ || !activeValidators$ }
   )
 
   const value = {
@@ -194,4 +183,72 @@ export const ValidatorContextProvider = (props: Props) => {
   }
 
   return <ValidatorsContext.Provider value={value}>{props.children}</ValidatorsContext.Provider>
+}
+
+type RewardsObservable = Observable<
+  {
+    era: number
+    totalPoints: number
+    individual: Record<string, number>
+    totalPayout: BN
+  }[]
+>
+
+const getValidatorInfo = (
+  validator: ValidatorWithDetails,
+  validatorsRewards$: RewardsObservable,
+  api: Api
+): Observable<ValidatorWithDetails> => {
+  const address = validator.stashAccount
+
+  const stakes$ = api.query.staking.activeEra().pipe(
+    take(1),
+    switchMap((activeEra) => api.query.staking.erasStakers(activeEra.unwrap().index, address)), // TODO handle potential unwrap failure
+    map((stakingInfo) => {
+      const total = stakingInfo.total.toBn()
+      const nominators = stakingInfo.others.map((nominator) => ({
+        address: nominator.who.toString(),
+        staking: nominator.value.toBn(),
+      }))
+
+      return { staking: { total, own: stakingInfo.own.toBn(), others: nominators } }
+    })
+  )
+
+  const rewards$ = validatorsRewards$.pipe(
+    map((allRewards) => {
+      const rewards = allRewards.flatMap(({ era, totalPoints, individual, totalPayout }) => {
+        if (!individual[address]) return []
+        const eraPoints = Number(individual[address])
+        const eraReward = totalPayout.muln(eraPoints / totalPoints)
+        return { era, eraReward, eraPoints }
+      })
+
+      return {
+        rewardPointsHistory: rewards.map(({ era, eraPoints }) => ({ era, rewardPoints: eraPoints })),
+        totalRewards: rewards.reduce((total, { eraReward }) => total.add(eraReward ?? BN_ZERO), BN_ZERO),
+        latestReward: rewards[0]?.eraReward,
+      }
+    })
+  )
+
+  const slashing$ = api.query.staking.slashingSpans(address).pipe(
+    take(1),
+    map((slashingSpans) => {
+      if (!slashingSpans.isSome) return { slashed: 0 }
+      const { prior, lastNonzeroSlash } = slashingSpans.unwrap()
+      return { slashed: prior.length + (lastNonzeroSlash.gtn(0) ? 1 : 0) }
+    })
+  )
+
+  return merge(new BehaviorSubject({}), stakes$, rewards$, slashing$).pipe(
+    scan((validator: ValidatorWithDetails, part) => ({ ...part, ...validator }), validator),
+    map((validator) => {
+      const { commission, staking } = validator
+      if (!('latestReward' in validator) || !staking || staking.total.isZero()) return validator
+
+      const apr = Number(validator.latestReward.muln(ERAS_PER_YEAR).muln(commission).div(staking.total))
+      return { ...validator, APR: apr }
+    })
+  )
 }
