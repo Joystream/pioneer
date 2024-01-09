@@ -25,6 +25,12 @@ interface Props {
 export const ValidatorDetail = ({ validator, hideModal }: Props) => {
   const { showModal } = useModal<NominatingRedirectModalCall>()
 
+  const uptime = whenDefined(
+    validator.rewardPointsHistory,
+    (rewardPointsHistory) =>
+      `${((rewardPointsHistory.filter(({ rewardPoints }) => rewardPoints).length / (ERA_DEPTH + 1)) * 100).toFixed(3)}%`
+  )
+
   return (
     <>
       <SidePaneBody>
@@ -47,23 +53,19 @@ export const ValidatorDetail = ({ validator, hideModal }: Props) => {
               <Stat size="s" value={whenDefined(validator.slashed, (slashed) => `${slashed} time${plural(slashed)}`)}>
                 <TextSmall lighter>Slashed</TextSmall>
               </Stat>
-              <Stat
-                size="s"
-                value={`${(
-                  (validator.rewardPointsHistory.filter(({ rewardPoints }) => rewardPoints).length / (ERA_DEPTH + 1)) *
-                  100
-                ).toFixed(3)}%`}
-              >
+              <Stat size="s" value={uptime}>
                 <TextSmall lighter>Uptime</TextSmall>
               </Stat>
             </ModalStatistics>
           </RowGapBlock>
-          <RowGapBlock gap={4}>
-            <h6>Era points</h6>
-            <RewardPointsChartWrapper>
-              <RewardPointsChart rewardPointsHistory={validator.rewardPointsHistory} />
-            </RewardPointsChartWrapper>
-          </RowGapBlock>
+          {validator.rewardPointsHistory && (
+            <RowGapBlock gap={4}>
+              <h6>Era points</h6>
+              <RewardPointsChartWrapper>
+                <RewardPointsChart rewardPointsHistory={validator.rewardPointsHistory} />
+              </RewardPointsChartWrapper>
+            </RowGapBlock>
+          )}
           <RowGapBlock gap={4}>
             <h6>About</h6>
             <MarkdownPreview markdown={validator.membership?.about ?? ''} />

@@ -10,8 +10,8 @@ export interface RewardPoints {
 
 export interface ValidatorWithDetails extends ValidatorMembership {
   isActive: boolean
-  totalRewards: BN
-  rewardPointsHistory: RewardPoints[]
+  totalRewards?: BN
+  rewardPointsHistory?: RewardPoints[]
   APR?: number
   staking?: {
     total: BN
