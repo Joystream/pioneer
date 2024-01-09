@@ -11,6 +11,7 @@ import { TextSmall } from '@/common/components/typography'
 import { BN_ZERO, ERA_DEPTH } from '@/common/constants'
 import { plural } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
+import { whenDefined } from '@/common/utils'
 import RewardPointsChart from '@/validators/components/RewardPointChart'
 
 import { ValidatorWithDetails } from '../../types'
@@ -34,16 +35,16 @@ export const ValidatorDetail = ({ validator, hideModal }: Props) => {
               <TokenValueStat size="s" value={validator.totalRewards}>
                 <TextSmall lighter>Total reward</TextSmall>
               </TokenValueStat>
-              <Stat size="s" value={validator.APR.toString() + '%'}>
+              <Stat size="s" value={whenDefined(validator.APR, (apr) => `${apr}%`)}>
                 <TextSmall lighter>Average APR</TextSmall>
               </Stat>
-              <TokenValueStat size="s" value={validator.staking.others.reduce((a, b) => a.add(b.staking), BN_ZERO)}>
+              <TokenValueStat size="s" value={validator.staking?.others.reduce((a, b) => a.add(b.staking), BN_ZERO)}>
                 <TextSmall lighter>Staked by nominators</TextSmall>
               </TokenValueStat>
               <Stat size="s" value={validator.isVerifiedValidator ? 'Verified' : 'Unverified'}>
                 <TextSmall lighter>Status</TextSmall>
               </Stat>
-              <Stat size="s" value={`${validator.slashed} time${plural(validator.slashed)}`}>
+              <Stat size="s" value={whenDefined(validator.slashed, (slashed) => `${slashed} time${plural(slashed)}`)}>
                 <TextSmall lighter>Slashed</TextSmall>
               </Stat>
               <Stat

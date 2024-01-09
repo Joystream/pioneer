@@ -12,8 +12,8 @@ export interface ValidatorWithDetails extends ValidatorMembership {
   isActive: boolean
   totalRewards: BN
   rewardPointsHistory: RewardPoints[]
-  APR: number
-  staking: {
+  APR?: number
+  staking?: {
     total: BN
     own: BN
     others: {
@@ -21,7 +21,7 @@ export interface ValidatorWithDetails extends ValidatorMembership {
       staking: BN
     }[]
   }
-  slashed: number
+  slashed?: number
 }
 
 export interface ValidatorMembership {

@@ -9,6 +9,7 @@ import { Skeleton } from '@/common/components/Skeleton'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { whenDefined } from '@/common/utils'
 
 import { NominatingRedirectModalCall } from '../modals/NominatingRedirectModal'
 import { ValidatorWithDetails } from '../types/Validator'
@@ -37,9 +38,9 @@ export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
         <BadgeStatus inverted size="l">
           {isActive ? 'active' : 'waiting'}
         </BadgeStatus>
-        <TokenValue size="xs" value={staking.own} />
-        <TokenValue size="xs" value={staking.total} />
-        <TextMedium bold>{APR}%</TextMedium>
+        <TokenValue size="xs" value={staking?.own} />
+        <TokenValue size="xs" value={staking?.total} />
+        <TextMedium bold>{whenDefined(APR, (apr) => `${apr}%`) ?? '-'}</TextMedium>
         <TextMedium bold>{commission}%</TextMedium>
         <ButtonPrimary
           size="small"
