@@ -8,8 +8,19 @@ export interface RewardPoints {
   rewardPoints: number
 }
 
+export interface Validator {
+  stashAccount: Address
+  controllerAccount?: Address
+  commission: number
+}
+
+export interface ValidatorMembership extends Validator {
+  isVerifiedValidator?: boolean
+  membership?: MemberWithDetails
+}
+
 export interface ValidatorWithDetails extends ValidatorMembership {
-  isActive: boolean
+  isActive?: boolean
   totalRewards?: BN
   rewardPointsHistory?: RewardPoints[]
   APR?: number
@@ -22,12 +33,4 @@ export interface ValidatorWithDetails extends ValidatorMembership {
     }[]
   }
   slashed?: number
-}
-
-export interface ValidatorMembership {
-  stashAccount: Address
-  controllerAccount?: Address
-  isVerifiedValidator?: boolean
-  membership?: MemberWithDetails
-  commission: number
 }

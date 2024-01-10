@@ -154,20 +154,19 @@ export const BuyMembershipForm = ({
     'validatorAccountCandidate',
   ])
 
-  const { allValidators, allValidatorsWithCtrlAcc } = useValidators({ skip: isValidator ?? true })
+  const validators = useValidators({ skip: isValidator ?? true })
   const [validatorAccounts, setValidatorAccounts] = useState<Account[]>([])
-  const validatorAddresses = useMemo(() => {
-    if (!allValidatorsWithCtrlAcc || !allValidators) return
-    return (
-      [...allValidatorsWithCtrlAcc, ...allValidators.map(({ address }) => address)].filter(
-        (element) => !!element
-      ) as string[]
-    ).map(encodeAddress)
-  }, [allValidators, allValidatorsWithCtrlAcc])
+  const validatorAddresses = useMemo(
+    () =>
+      validators
+        ?.flatMap(({ stashAccount: stash, controllerAccount: ctrl }) => (ctrl ? [stash, ctrl] : [stash]))
+        .map(encodeAddress),
+    [validators]
+  )
 
   const isValidValidatorAccount = useMemo(
     () => validatorAccountCandidate && validatorAddresses?.includes(encodeAddress(validatorAccountCandidate.address)),
-    [allValidators, allValidatorsWithCtrlAcc, validatorAddresses, validatorAccountCandidate]
+    [validatorAccountCandidate, validatorAddresses]
   )
 
   useEffect(() => {
