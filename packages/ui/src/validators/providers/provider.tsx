@@ -25,7 +25,12 @@ interface Props {
   children: ReactNode
 }
 
-type ValidatorDetailsOptions = { filter: ValidatorDetailsFilter; order: ValidatorDetailsOrder }
+type ValidatorDetailsOptions = {
+  filter: ValidatorDetailsFilter
+  order: ValidatorDetailsOrder
+  start: number
+  end: number
+}
 
 export interface UseValidators {
   setShouldFetchValidators: (shouldFetchValidators: boolean) => void
@@ -148,6 +153,7 @@ export const ValidatorContextProvider = (props: Props) => {
         const direction = validatorDetailsOptions.order.isDescending ? -1 : 1
         return direction * compareValidators(a, b, validatorDetailsOptions.order.key)
       })
+      .slice(validatorDetailsOptions.start, validatorDetailsOptions.end)
   }, [data, filteredValidators, validatorDetailsOptions])
 
   const validatorsRewards$ = useMemo(() => {

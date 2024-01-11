@@ -7,6 +7,7 @@ import { List, ListItem } from '@/common/components/List'
 import { ListHeader } from '@/common/components/List/ListHeader'
 import { SortHeader } from '@/common/components/List/SortHeader'
 import { Loading } from '@/common/components/Loading'
+import { Pagination, PaginationProps } from '@/common/components/Pagination'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { Colors } from '@/common/constants'
@@ -20,9 +21,10 @@ import { ValidatorItem } from './ValidatorItem'
 interface ValidatorsListProps {
   validators: ValidatorWithDetails[] | undefined
   order: ValidatorDetailsOrder & { sortBy: (key: ValidatorDetailsOrder['key']) => () => void }
+  pagination: PaginationProps
 }
 
-export const ValidatorsList = ({ validators, order }: ValidatorsListProps) => {
+export const ValidatorsList = ({ validators, order, pagination }: ValidatorsListProps) => {
   const { t } = useTranslation('validators')
   const [cardNumber, selectCard] = useState<number | null>(null)
 
@@ -31,76 +33,86 @@ export const ValidatorsList = ({ validators, order }: ValidatorsListProps) => {
   if (!validators.length) return <NotFoundText>{t('common:forms.noResults')}</NotFoundText>
 
   return (
-    <ResponsiveWrap>
-      <ValidatorsListWrap>
-        <ListHeaders>
-          <SortHeader
-            onSort={order.sortBy('default')}
-            isActive={order.key === 'default'}
-            isDescending={order.isDescending}
-          >
-            Validator
-          </SortHeader>
-          <ListHeader>
-            Verification
-            <Tooltip
-              tooltipText="The profile of Verified validator has been entirely verified by the Membership working group."
-              tooltipLinkText="Membership working group"
-              tooltipLinkURL={generatePath(WorkingGroupsRoutes.group, { name: 'membership' })}
+    <Wrapper>
+      <ResponsiveWrap>
+        <ValidatorsListWrap>
+          <ListHeaders>
+            <SortHeader
+              onSort={order.sortBy('default')}
+              isActive={order.key === 'default'}
+              isDescending={order.isDescending}
             >
-              <TooltipDefault />
-            </Tooltip>
-          </ListHeader>
-          <ListHeader>State</ListHeader>
-          <ListHeader>Own Stake</ListHeader>
-          <ListHeader>Total Stake</ListHeader>
-          <ListHeader>
-            Expected Nom APR
-            <Tooltip
-              tooltipText={
-                <p>
-                  This column shows the expected APR for nominators who are nominating funds for the chosen validator.
-                  The APR is subject to the amount staked and have a diminishing return for higher token amounts. This
-                  is calculated as follow: <code>Last reward extrapolated over a year</code> times{' '}
-                  <code>The nominator commission</code> divided by <code>The total staked by the validator</code>
-                </p>
-              }
+              Validator
+            </SortHeader>
+            <ListHeader>
+              Verification
+              <Tooltip
+                tooltipText="The profile of Verified validator has been entirely verified by the Membership working group."
+                tooltipLinkText="Membership working group"
+                tooltipLinkURL={generatePath(WorkingGroupsRoutes.group, { name: 'membership' })}
+              >
+                <TooltipDefault />
+              </Tooltip>
+            </ListHeader>
+            <ListHeader>State</ListHeader>
+            <ListHeader>Own Stake</ListHeader>
+            <ListHeader>Total Stake</ListHeader>
+            <ListHeader>
+              Expected Nom APR
+              <Tooltip
+                tooltipText={
+                  <p>
+                    This column shows the expected APR for nominators who are nominating funds for the chosen validator.
+                    The APR is subject to the amount staked and have a diminishing return for higher token amounts. This
+                    is calculated as follow: <code>Last reward extrapolated over a year</code> times{' '}
+                    <code>The nominator commission</code> divided by <code>The total staked by the validator</code>
+                  </p>
+                }
+              >
+                <TooltipDefault />
+              </Tooltip>
+            </ListHeader>
+            <SortHeader
+              onSort={order.sortBy('commission')}
+              isActive={order.key === 'commission'}
+              isDescending={order.isDescending}
             >
-              <TooltipDefault />
-            </Tooltip>
-          </ListHeader>
-          <SortHeader
-            onSort={order.sortBy('commission')}
-            isActive={order.key === 'commission'}
-            isDescending={order.isDescending}
-          >
-            Commission
-          </SortHeader>
-        </ListHeaders>
-        <List>
-          {validators?.map((validator, index) => (
-            <ListItem
-              key={validator.stashAccount}
-              onClick={() => {
-                selectCard(index + 1)
-              }}
-            >
-              <ValidatorItem validator={validator} />
-            </ListItem>
-          ))}
-        </List>
-        {cardNumber && validators[cardNumber - 1] && (
-          <ValidatorCard
-            cardNumber={cardNumber}
-            validator={validators[cardNumber - 1]}
-            selectCard={selectCard}
-            totalCards={validators.length}
-          />
-        )}
-      </ValidatorsListWrap>
-    </ResponsiveWrap>
+              Commission
+            </SortHeader>
+          </ListHeaders>
+          <List>
+            {validators?.map((validator, index) => (
+              <ListItem
+                key={validator.stashAccount}
+                onClick={() => {
+                  selectCard(index + 1)
+                }}
+              >
+                <ValidatorItem validator={validator} />
+              </ListItem>
+            ))}
+          </List>
+          {cardNumber && validators[cardNumber - 1] && (
+            <ValidatorCard
+              cardNumber={cardNumber}
+              validator={validators[cardNumber - 1]}
+              selectCard={selectCard}
+              totalCards={validators.length}
+            />
+          )}
+        </ValidatorsListWrap>
+      </ResponsiveWrap>
+      <Pagination {...pagination} />
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: end;
+`
 
 const ResponsiveWrap = styled.div`
   overflow: auto;
