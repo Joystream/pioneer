@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -7,6 +8,7 @@ import { ListHeader } from '@/common/components/List/ListHeader'
 import { SortHeader } from '@/common/components/List/SortHeader'
 import { Loading } from '@/common/components/Loading'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
+import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { Colors } from '@/common/constants'
 import { Comparator } from '@/common/model/Comparator'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
@@ -17,10 +19,11 @@ import { ValidatorWithDetails } from '../types'
 import { ValidatorItem } from './ValidatorItem'
 
 interface ValidatorsListProps {
-  validators: ValidatorWithDetails[]
+  validators: ValidatorWithDetails[] | undefined
 }
 
 export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
+  const { t } = useTranslation('validators')
   const [cardNumber, selectCard] = useState<number | null>(null)
   type SortKey = 'stashAccount' | 'APR' | 'commission'
   const [sortBy, setSortBy] = useState<SortKey>('stashAccount')
@@ -28,7 +31,7 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
 
   const sortedValidators = useMemo(
     () =>
-      [...validators].sort(
+      [...(validators ?? [])].sort(
         Comparator<ValidatorWithDetails>(isDescending, sortBy)[sortBy === 'stashAccount' ? 'string' : 'number']
       ),
     [sortBy, isDescending, validators]
@@ -43,7 +46,10 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
     }
   }
 
-  if (validators.length === 0) return <Loading />
+  if (!validators) return <Loading />
+
+  if (!validators.length) return <NotFoundText>{t('common:forms.noResults')}</NotFoundText>
+
   return (
     <ResponsiveWrap>
       <ValidatorsListWrap>

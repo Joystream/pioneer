@@ -34,3 +34,9 @@ export interface ValidatorWithDetails extends ValidatorMembership {
   }
   slashed?: number
 }
+
+export interface ValidatorDetailsFilter {
+  search?: string
+  isVerified?: boolean
+  isActive?: boolean
+}

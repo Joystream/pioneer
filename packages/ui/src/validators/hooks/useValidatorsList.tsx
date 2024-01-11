@@ -7,11 +7,7 @@ export const useValidatorsList = () => {
   const [isVerified, setIsVerified] = useState<boolean>()
   const [isActive, setIsActive] = useState<boolean>()
 
-  const {
-    setShouldFetchValidators,
-    setValidatorDetailsFilter,
-    validatorsWithDetails = [],
-  } = useContext(ValidatorsContext)
+  const { setShouldFetchValidators, setValidatorDetailsFilter, validatorsWithDetails } = useContext(ValidatorsContext)
 
   useEffect(() => {
     setShouldFetchValidators(true)
