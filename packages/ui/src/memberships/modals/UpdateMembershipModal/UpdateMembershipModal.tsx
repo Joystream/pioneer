@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { useApi } from '@/api/hooks/useApi'
 import { TextMedium } from '@/common/components/typography'
@@ -23,6 +23,32 @@ export const UpdateMembershipModal = () => {
   } = useModal<UpdateMembershipModalCall>()
   const [state, send] = useMachine(updateMembershipMachine)
 
+  const updateMembershipTransaction = useMemo(
+    () => state.context.form && createBatch(state.context.form, api, member),
+    [api?.isConnected, state.context.form]
+  )
+  const unbondValidatorAccTransaction = useMemo(() => {
+    if (!state.context.form?.id || !api) return
+    return api.tx.members.removeStakingAccount(state.context.form.id)
+  }, [api?.isConnected, state.context.form?.id])
+
+  const bondValidatorAccTransaction = useMemo(() => {
+    if (!state.context.form?.id || !api) return
+    return api.tx.members.addStakingAccountCandidate(state.context.form.id)
+  }, [api?.isConnected, state.context.form?.id])
+
+  const conFirmTransaction = useMemo(() => {
+    const validatorAccounts = state.context.form?.validatorAccounts
+
+    if (!api || !state.context.form?.id || !validatorAccounts) return
+
+    const confirmTxs = validatorAccounts.map((address) =>
+      api.tx.members.confirmStakingAccount(state.context.form?.id ?? '', address)
+    )
+
+    return confirmTxs.length > 1 ? api.tx.utility.batch(confirmTxs) : confirmTxs[0]
+  }, [api?.isConnected, state.context.form?.id, state.context.form?.validatorAccounts])
+
   if (state.matches('prepare')) {
     return (
       <UpdateMembershipFormModal
@@ -34,53 +60,67 @@ export const UpdateMembershipModal = () => {
   }
 
   if (state.matches('updateMembershipTx')) {
+    if (!updateMembershipTransaction) {
+      send('SKIP_UPDATE_MEMBERSHIP')
+    }
     return (
       <SignTransactionModal
         buttonText="Sign and update a member"
-        transaction={createBatch(state.context.form, api, member)}
+        transaction={updateMembershipTransaction}
         signer={member.controllerAccount}
-        service={state.children.transaction}
+        service={state.children.updateMembership}
       >
         <TextMedium>You intend to update your membership.</TextMedium>
       </SignTransactionModal>
     )
   }
 
-  if (state.matches('removeStakingAccTx')) {
+  if (state.matches('removeStakingAccTx') && updateMembershipTransaction) {
+    if (
+      !state.context.form.validatorAccountsToBeRemoved ||
+      state.context.form.validatorAccountsToBeRemoved.length === 0
+    ) {
+      send('SKIP_UNBONDING')
+      return null
+    }
     return (
       <SignTransactionModal
-        buttonText="Sign and update a member"
-        transaction={createBatch(state.context.form, api, member)}
-        signer={member.controllerAccount}
-        service={state.children.transaction}
+        buttonText="Sign and unbond"
+        transaction={unbondValidatorAccTransaction}
+        signer={state.context.form.validatorAccountsToBeRemoved[state.context.unbondingValidatorAccStep ?? 0]}
+        service={state.children.removeStakingAcc}
       >
-        <TextMedium>You intend to update your membership.</TextMedium>
+        <TextMedium>You intend to remove the validator account from your membership.</TextMedium>
       </SignTransactionModal>
     )
   }
 
-  if (state.matches('addStakingAccCandidateTx')) {
+  if (state.matches('addStakingAccCandidateTx') && bondValidatorAccTransaction) {
+    if (!state.context.form.validatorAccounts || state.context.form.validatorAccounts.length === 0) {
+      send('SKIP_BONDING')
+      return null
+    }
     return (
       <SignTransactionModal
-        buttonText="Sign and update a member"
-        transaction={createBatch(state.context.form, api, member)}
-        signer={member.controllerAccount}
-        service={state.children.transaction}
+        buttonText="Sign and bond"
+        transaction={bondValidatorAccTransaction}
+        signer={state.context.form.validatorAccounts[state.context.bondingValidatorAccStep ?? 0]}
+        service={state.children.addStakingAccCandidate}
       >
-        <TextMedium>You intend to update your membership.</TextMedium>
+        <TextMedium>You intend to to bond new validator account with your membership.</TextMedium>
       </SignTransactionModal>
     )
   }
 
-  if (state.matches('confirmStakingAccTx')) {
+  if (state.matches('confirmStakingAccTx') && conFirmTransaction) {
     return (
       <SignTransactionModal
-        buttonText="Sign and update a member"
-        transaction={createBatch(state.context.form, api, member)}
+        buttonText="Sign and confirm"
+        transaction={conFirmTransaction}
         signer={member.controllerAccount}
-        service={state.children.transaction}
+        service={state.children.confirmStakingAcc}
       >
-        <TextMedium>You intend to update your membership.</TextMedium>
+        <TextMedium>You intend to confirm your validator account to be bound with your membership.</TextMedium>
       </SignTransactionModal>
     )
   }

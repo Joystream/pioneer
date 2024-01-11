@@ -18,6 +18,7 @@ import { MyMemberships } from './MyMemberships'
 const alice = member('alice')
 const bob = member('bob')
 const charlie = member('charlie')
+const dave = member('dave')
 
 const NEW_MEMBER_DATA = {
   id: alice.id,
@@ -56,7 +57,6 @@ export default {
     router: {
       href: '/profile/memberships',
     },
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
       const account = (member: Membership) => ({
         balances: parameters.totalBalance,
@@ -65,7 +65,7 @@ export default {
       return {
         accounts: {
           active: 'alice',
-          list: [account(alice), account(bob), account(charlie)],
+          list: [account(alice), account(bob), account(charlie), account(dave)],
           hasWallet: true,
         },
         chain: {
@@ -316,6 +316,240 @@ export const UpdateMembershipFailure: Story = {
     await step('Confirm', async () => {
       expect(await modal.findByText('Failure'))
       expect(await modal.findByText('There was a problem updating membership.'))
+    })
+  },
+}
+
+export const BondValidatorAccountHappy: Story = {
+  play: async ({ args, canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    await waitFor(() => expect(screen.getByText('alice')))
+    const editButton = document.getElementsByClassName('edit-button')[0]
+    await userEvent.click(editButton)
+
+    await step('Form', async () => {
+      const saveButton = getButtonByText(modal, 'Save changes')
+      expect(saveButton).toBeDisabled()
+      await fillMembershipForm(modal)
+      await waitFor(() => expect(saveButton).toBeEnabled())
+      await userEvent.click(saveButton)
+    })
+
+    await step('Sign', async () => {
+      expect(modal.getByText('Authorize transaction'))
+      expect(modal.getByText('You intend to update your membership.'))
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'alice' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and update a member'))
+    })
+
+    await step('Confirm', async () => {
+      expect(await modal.findByText('Success'))
+      expect(modal.getByText('alice'))
+      expect(args.batchTx).toHaveBeenCalledTimes(1)
+
+      const viewProfileButton = getButtonByText(modal, 'View my profile')
+      expect(viewProfileButton).toBeEnabled()
+      userEvent.click(viewProfileButton)
+      expect(modal.getByText('alice'))
+    })
+  },
+}
+
+export const BondValidatorAccountFailure: Story = {
+  play: async ({ args, canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    await waitFor(() => expect(screen.getByText('alice')))
+    const editButton = document.getElementsByClassName('edit-button')[0]
+    await userEvent.click(editButton)
+
+    await step('Form', async () => {
+      const saveButton = getButtonByText(modal, 'Save changes')
+      expect(saveButton).toBeDisabled()
+      await fillMembershipForm(modal)
+      await waitFor(() => expect(saveButton).toBeEnabled())
+      await userEvent.click(saveButton)
+    })
+
+    await step('Sign', async () => {
+      expect(modal.getByText('Authorize transaction'))
+      expect(modal.getByText('You intend to update your membership.'))
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'alice' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and update a member'))
+    })
+
+    await step('Confirm', async () => {
+      expect(await modal.findByText('Success'))
+      expect(modal.getByText('alice'))
+      expect(args.batchTx).toHaveBeenCalledTimes(1)
+
+      const viewProfileButton = getButtonByText(modal, 'View my profile')
+      expect(viewProfileButton).toBeEnabled()
+      userEvent.click(viewProfileButton)
+      expect(modal.getByText('alice'))
+    })
+  },
+}
+
+export const UnbondValidatorAccountHappy: Story = {
+  play: async ({ args, canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    await waitFor(() => expect(screen.getByText('alice')))
+    const editButton = document.getElementsByClassName('edit-button')[0]
+    await userEvent.click(editButton)
+
+    await step('Form', async () => {
+      const saveButton = getButtonByText(modal, 'Save changes')
+      expect(saveButton).toBeDisabled()
+      await fillMembershipForm(modal)
+      await waitFor(() => expect(saveButton).toBeEnabled())
+      await userEvent.click(saveButton)
+    })
+
+    await step('Sign', async () => {
+      expect(modal.getByText('Authorize transaction'))
+      expect(modal.getByText('You intend to update your membership.'))
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'alice' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and update a member'))
+    })
+
+    await step('Confirm', async () => {
+      expect(await modal.findByText('Success'))
+      expect(modal.getByText('alice'))
+      expect(args.batchTx).toHaveBeenCalledTimes(1)
+
+      const viewProfileButton = getButtonByText(modal, 'View my profile')
+      expect(viewProfileButton).toBeEnabled()
+      userEvent.click(viewProfileButton)
+      expect(modal.getByText('alice'))
+    })
+  },
+}
+
+export const UnbondValidatorAccountFailure: Story = {
+  play: async ({ args, canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    await waitFor(() => expect(screen.getByText('alice')))
+    const editButton = document.getElementsByClassName('edit-button')[0]
+    await userEvent.click(editButton)
+
+    await step('Form', async () => {
+      const saveButton = getButtonByText(modal, 'Save changes')
+      expect(saveButton).toBeDisabled()
+      await fillMembershipForm(modal)
+      await waitFor(() => expect(saveButton).toBeEnabled())
+      await userEvent.click(saveButton)
+    })
+
+    await step('Sign', async () => {
+      expect(modal.getByText('Authorize transaction'))
+      expect(modal.getByText('You intend to update your membership.'))
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'alice' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and update a member'))
+    })
+
+    await step('Confirm', async () => {
+      expect(await modal.findByText('Success'))
+      expect(modal.getByText('alice'))
+      expect(args.batchTx).toHaveBeenCalledTimes(1)
+
+      const viewProfileButton = getButtonByText(modal, 'View my profile')
+      expect(viewProfileButton).toBeEnabled()
+      userEvent.click(viewProfileButton)
+      expect(modal.getByText('alice'))
+    })
+  },
+}
+
+export const UpdateValidatorAccountsHappy: Story = {
+  play: async ({ args, canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    await waitFor(() => expect(screen.getByText('alice')))
+    const editButton = document.getElementsByClassName('edit-button')[0]
+    await userEvent.click(editButton)
+
+    await step('Form', async () => {
+      const saveButton = getButtonByText(modal, 'Save changes')
+      expect(saveButton).toBeDisabled()
+      await fillMembershipForm(modal)
+      await waitFor(() => expect(saveButton).toBeEnabled())
+      await userEvent.click(saveButton)
+    })
+
+    await step('Sign', async () => {
+      expect(modal.getByText('Authorize transaction'))
+      expect(modal.getByText('You intend to update your membership.'))
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'alice' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and update a member'))
+    })
+
+    await step('Confirm', async () => {
+      expect(await modal.findByText('Success'))
+      expect(modal.getByText('alice'))
+      expect(args.batchTx).toHaveBeenCalledTimes(1)
+
+      const viewProfileButton = getButtonByText(modal, 'View my profile')
+      expect(viewProfileButton).toBeEnabled()
+      userEvent.click(viewProfileButton)
+      expect(modal.getByText('alice'))
+    })
+  },
+}
+
+export const UpdateValidatorAccountsFailure: Story = {
+  play: async ({ args, canvasElement, step }) => {
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    await waitFor(() => expect(screen.getByText('alice')))
+    const editButton = document.getElementsByClassName('edit-button')[0]
+    await userEvent.click(editButton)
+
+    await step('Form', async () => {
+      const saveButton = getButtonByText(modal, 'Save changes')
+      expect(saveButton).toBeDisabled()
+      await fillMembershipForm(modal)
+      await waitFor(() => expect(saveButton).toBeEnabled())
+      await userEvent.click(saveButton)
+    })
+
+    await step('Sign', async () => {
+      expect(modal.getByText('Authorize transaction'))
+      expect(modal.getByText('You intend to update your membership.'))
+      expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
+      expect(modal.getByRole('heading', { name: 'alice' }))
+
+      await userEvent.click(getButtonByText(modal, 'Sign and update a member'))
+    })
+
+    await step('Confirm', async () => {
+      expect(await modal.findByText('Success'))
+      expect(modal.getByText('alice'))
+      expect(args.batchTx).toHaveBeenCalledTimes(1)
+
+      const viewProfileButton = getButtonByText(modal, 'View my profile')
+      expect(viewProfileButton).toBeEnabled()
+      userEvent.click(viewProfileButton)
+      expect(modal.getByText('alice'))
     })
   },
 }

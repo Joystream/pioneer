@@ -6,7 +6,8 @@
     "boundAccounts": [
       "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
       "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
-      "j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW"
+      "j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW",
+      "j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz"
     ],
     "boundAccountsEvents": [],
     "handle": "alice",
@@ -31,7 +32,7 @@
   {
     "id": "1",
     "rootAccount": "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
-    "controllerAccount": "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
+    "controllerAccount": "j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW",
     "boundAccounts": [
       "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
       "j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP"
@@ -59,7 +60,7 @@
   {
     "id": "2",
     "rootAccount": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
-    "controllerAccount": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
+    "controllerAccount": "j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz",
     "boundAccounts": ["j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz"],
     "boundAccountsEvents": [],
     "handle": "charlie",

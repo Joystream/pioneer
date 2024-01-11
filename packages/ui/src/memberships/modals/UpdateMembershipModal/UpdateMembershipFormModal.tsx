@@ -69,12 +69,19 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: handleMap } } })
   const context = { size: data?.membershipsConnection.totalCount, isHandleChanged: handleMap !== member.handle }
   const { uploadAvatarAndSubmit, isUploading } = useUploadAvatarAndSubmit<UpdateMemberForm>((fields) =>
-    onSubmit(
-      changedOrNull(
+    onSubmit({
+      ...changedOrNull(
         { ...fields, externalResources: { ...definedValues(fields.externalResources) } },
         updateMemberFormInitial
-      )
-    )
+      ),
+      id: fields.id,
+      validatorAccounts: isValidator
+        ? fields.validatorAccounts?.filter((address) => !initialValidatorAccounts.includes(address))
+        : [],
+      validatorAccountsToBeRemoved: isValidator
+        ? initialValidatorAccounts.filter((address) => !fields.validatorAccounts?.includes(address))
+        : initialValidatorAccounts,
+    })
   )
 
   const updateMemberFormInitial = useMemo(
@@ -149,10 +156,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   }
 
   const setValidatorAccounts = (accounts: Address[]) => {
-    form?.unregister('validatorAccounts' as keyof UpdateMemberForm)
-    validatorAccounts?.map((account, index) => {
-      form?.unregister(('validatorAccounts[' + index + ']') as keyof UpdateMemberForm)
-    })
+    form?.setValue('validatorAccounts' as keyof UpdateMemberForm, [])
     accounts.map((account, index) => {
       form?.register(('validatorAccounts[' + index + ']') as keyof UpdateMemberForm)
       form?.setValue(('validatorAccounts[' + index + ']') as keyof UpdateMemberForm, account)
