@@ -44,7 +44,10 @@ export const ValidatorDetail = ({ validator, hideModal }: Props) => {
               <Stat size="s" value={whenDefined(validator.APR, (apr) => `${apr}%`)}>
                 <TextSmall lighter>Average APR</TextSmall>
               </Stat>
-              <TokenValueStat size="s" value={validator.staking?.others.reduce((a, b) => a.add(b.staking), BN_ZERO)}>
+              <TokenValueStat
+                size="s"
+                value={validator.staking?.nominators.reduce((a, b) => a.add(b.staking), BN_ZERO)}
+              >
                 <TextSmall lighter>Staked by nominators</TextSmall>
               </TokenValueStat>
               <Stat size="s" value={validator.isVerifiedValidator ? 'Verified' : 'Unverified'}>

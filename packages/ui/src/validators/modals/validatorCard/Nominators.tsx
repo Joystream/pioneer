@@ -19,7 +19,7 @@ export const Nominators = ({ validator }: Props) => {
     <SidePaneBody>
       <Details gap={24}>
         <RowGapBlock gap={4}>
-          <Title>{`Nominators (${validator.staking?.others.length})`}</Title>
+          <Title>{`Nominators (${validator.staking?.nominators.length})`}</Title>
         </RowGapBlock>
         <RowGapBlock gap={4}>
           <ListHeaders>
@@ -27,7 +27,7 @@ export const Nominators = ({ validator }: Props) => {
             <ListHeader>Total staked</ListHeader>
           </ListHeaders>
           <NominatorList>
-            {validator.staking?.others?.map(({ address, staking }, index) => (
+            {validator.staking?.nominators?.map(({ address, staking }, index) => (
               <ListItem key={index} borderless>
                 <ValidatorItemWrap>
                   <UnknownAccountInfo address={address} placeholderName="Nominator account" />

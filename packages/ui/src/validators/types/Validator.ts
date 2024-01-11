@@ -27,7 +27,7 @@ export interface ValidatorWithDetails extends ValidatorMembership {
   staking?: {
     total: BN
     own: BN
-    others: {
+    nominators: {
       address: Address
       staking: BN
     }[]

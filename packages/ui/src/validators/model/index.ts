@@ -91,7 +91,7 @@ export const getValidatorInfo = (
         staking: nominator.value.toBn(),
       }))
 
-      return { staking: { total, own: stakingInfo.own.toBn(), others: nominators } }
+      return { staking: { total, own: stakingInfo.own.toBn(), nominators } }
     })
   )
 
