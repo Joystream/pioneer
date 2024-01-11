@@ -10,8 +10,14 @@ import { isDefined, perbillToPercent } from '@/common/utils'
 import { useGetMembersWithDetailsQuery } from '@/memberships/queries'
 import { asMemberWithDetails } from '@/memberships/types'
 
-import { getValidatorFilter, getValidatorInfo } from '../model'
-import { Validator, ValidatorDetailsFilter, ValidatorMembership, ValidatorWithDetails } from '../types'
+import { compareValidators, getValidatorsFilters, getValidatorInfo } from '../model'
+import {
+  Validator,
+  ValidatorDetailsFilter,
+  ValidatorMembership,
+  ValidatorDetailsOrder,
+  ValidatorWithDetails,
+} from '../types'
 
 import { ValidatorsContext } from './context'
 
@@ -19,9 +25,11 @@ interface Props {
   children: ReactNode
 }
 
+type ValidatorDetailsOptions = { filter: ValidatorDetailsFilter; order: ValidatorDetailsOrder }
+
 export interface UseValidators {
   setShouldFetchValidators: (shouldFetchValidators: boolean) => void
-  setValidatorDetailsFilter: (validatorDetailsFilter?: ValidatorDetailsFilter) => void
+  setValidatorDetailsOptions: (options: ValidatorDetailsOptions) => void
   validators?: Validator[]
   validatorsWithDetails?: ValidatorWithDetails[]
 }
@@ -30,7 +38,7 @@ export const ValidatorContextProvider = (props: Props) => {
   const { api } = useApi()
 
   const [shouldFetchValidators, setShouldFetchValidators] = useState(false)
-  const [validatorDetailsFilter, setValidatorDetailsFilter] = useState<ValidatorDetailsFilter>()
+  const [validatorDetailsOptions, setValidatorDetailsOptions] = useState<ValidatorDetailsOptions>()
 
   const allValidators = useFirstObservableValue(() => {
     if (!shouldFetchValidators) return
@@ -60,27 +68,27 @@ export const ValidatorContextProvider = (props: Props) => {
   }, [allValidators, api?.isConnected])
 
   const activeValidators$ = useMemo(() => {
-    if (!validatorDetailsFilter) return
+    if (!validatorDetailsOptions) return
 
     return api?.query.session.validators().pipe(
       take(1),
       map((activeAccs) => activeAccs.map(encodeAddress)),
       freezeObservable
     )
-  }, [api?.isConnected, !validatorDetailsFilter])
+  }, [api?.isConnected, !validatorDetailsOptions])
 
   const filteredValidators = useFirstObservableValue(() => {
-    if (!allValidatorsWithCtrlAcc || !validatorDetailsFilter || !activeValidators$) return
+    if (!allValidatorsWithCtrlAcc || !validatorDetailsOptions || !activeValidators$) return
 
     const getAddressesByIsActive = map((activeValidators: string[]) =>
       allValidatorsWithCtrlAcc.filter(
-        ({ stashAccount }) => activeValidators.includes(stashAccount) === validatorDetailsFilter.isActive
+        ({ stashAccount }) => activeValidators.includes(stashAccount) === validatorDetailsOptions.filter.isActive
       )
     )
-    return isDefined(validatorDetailsFilter.isActive)
+    return isDefined(validatorDetailsOptions.filter.isActive)
       ? activeValidators$.pipe(getAddressesByIsActive)
       : of(allValidatorsWithCtrlAcc)
-  }, [allValidatorsWithCtrlAcc, validatorDetailsFilter, activeValidators$])
+  }, [allValidatorsWithCtrlAcc, validatorDetailsOptions, activeValidators$])
 
   const variables = useMemo(() => {
     if (!filteredValidators) return
@@ -105,7 +113,7 @@ export const ValidatorContextProvider = (props: Props) => {
   }))
 
   const validatorsWithMembership: ValidatorMembership[] | undefined = useMemo(() => {
-    if (!memberships || !filteredValidators || !validatorDetailsFilter) return
+    if (!memberships || !filteredValidators || !validatorDetailsOptions) return
 
     const validators = filteredValidators.map((validator) => {
       const { stashAccount, controllerAccount } = validator
@@ -130,15 +138,20 @@ export const ValidatorContextProvider = (props: Props) => {
       return { ...validator, ...boundMemberships[0] }
     })
 
-    return getValidatorFilter(validatorDetailsFilter).reduce(
-      (validators: ValidatorMembership[], filter): ValidatorMembership[] =>
-        filter ? validators.filter(filter) : validators,
-      validators
-    )
-  }, [data, filteredValidators, validatorDetailsFilter])
+    return getValidatorsFilters(validatorDetailsOptions.filter)
+      .reduce(
+        (validators: ValidatorMembership[], predicate): ValidatorMembership[] =>
+          predicate ? validators.filter(predicate) : validators,
+        validators
+      )
+      .sort((a, b) => {
+        const direction = validatorDetailsOptions.order.isDescending ? -1 : 1
+        return direction * compareValidators(a, b, validatorDetailsOptions.order.key)
+      })
+  }, [data, filteredValidators, validatorDetailsOptions])
 
   const validatorsRewards$ = useMemo(() => {
-    if (!api || !validatorDetailsFilter) return
+    if (!api || !validatorDetailsOptions) return
 
     const eraPoints$ = api.query.staking.erasRewardPoints.entries()
     const eraPayouts$ = api.query.staking.erasValidatorReward.entries()
@@ -161,7 +174,7 @@ export const ValidatorContextProvider = (props: Props) => {
       }),
       freezeObservable
     )
-  }, [api?.isConnected, !validatorDetailsFilter])
+  }, [api?.isConnected, !validatorDetailsOptions])
 
   const validatorsWithDetails = useObservable(() => {
     if (!api || !validatorsWithMembership || !activeValidators$ || !validatorsRewards$) return
@@ -186,7 +199,7 @@ export const ValidatorContextProvider = (props: Props) => {
 
   const value = {
     setShouldFetchValidators,
-    setValidatorDetailsFilter,
+    setValidatorDetailsOptions,
     validators: allValidatorsWithCtrlAcc,
     validatorsWithDetails,
   }

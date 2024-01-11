@@ -31,7 +31,7 @@ export const ValidatorList = () => {
     acitveNominatorsCount,
     allNominatorsCount,
   } = useStakingStatistics()
-  const { validatorsWithDetails, filter } = useValidatorsList()
+  const { validatorsWithDetails, order, filter } = useValidatorsList()
 
   return (
     <PageLayout
@@ -57,7 +57,7 @@ export const ValidatorList = () => {
           <ValidatorsFilter filter={filter} />
         </RowGapBlock>
       }
-      main={<ValidatorsList validators={validatorsWithDetails} />}
+      main={<ValidatorsList validators={validatorsWithDetails} order={order} />}
     />
   )
 }

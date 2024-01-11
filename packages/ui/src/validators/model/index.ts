@@ -5,9 +5,9 @@ import { Api } from '@/api'
 import { BN_ZERO, ERAS_PER_YEAR } from '@/common/constants'
 import { isDefined } from '@/common/utils'
 
-import { ValidatorDetailsFilter, ValidatorMembership, ValidatorWithDetails } from '../types'
+import { ValidatorDetailsFilter, ValidatorDetailsOrder, ValidatorMembership, ValidatorWithDetails } from '../types'
 
-export const getValidatorFilter = ({ isVerified, search = '' }: ValidatorDetailsFilter) => {
+export const getValidatorsFilters = ({ isVerified, search = '' }: ValidatorDetailsFilter) => {
   const s = search.toLowerCase()
   const isMatch = (value: string | undefined) => value && value.toLowerCase().search(s) >= 0
 
@@ -20,6 +20,31 @@ export const getValidatorFilter = ({ isVerified, search = '' }: ValidatorDetails
       (({ membership, stashAccount, controllerAccount }: ValidatorMembership) =>
         isMatch(membership?.handle) || isMatch(stashAccount) || isMatch(controllerAccount)),
   ]
+}
+
+export const compareValidators = (
+  a: ValidatorMembership,
+  b: ValidatorMembership,
+  key: ValidatorDetailsOrder['key']
+) => {
+  switch (key) {
+    case 'default': {
+      if (!a.isVerifiedValidator !== !b.isVerifiedValidator) {
+        return a.isVerifiedValidator ? -1 : 1
+      }
+
+      const handleA = a.membership?.handle
+      const handleB = b.membership?.handle
+      if ((handleA || handleB) && handleA !== handleB) {
+        return !handleA ? 1 : !handleB ? -1 : handleA.localeCompare(handleB)
+      }
+
+      return a.stashAccount.localeCompare(b.stashAccount)
+    }
+
+    case 'commission':
+      return a.commission - b.commission
+  }
 }
 
 type EraRewards = {

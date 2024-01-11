@@ -40,3 +40,8 @@ export interface ValidatorDetailsFilter {
   isVerified?: boolean
   isActive?: boolean
 }
+
+export interface ValidatorDetailsOrder {
+  key: 'default' | 'commission'
+  isDescending: boolean
+}

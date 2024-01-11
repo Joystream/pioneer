@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
@@ -10,41 +10,21 @@ import { Loading } from '@/common/components/Loading'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { Colors } from '@/common/constants'
-import { Comparator } from '@/common/model/Comparator'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
 import { ValidatorCard } from '../modals/validatorCard/ValidatorCard'
-import { ValidatorWithDetails } from '../types'
+import { ValidatorDetailsOrder, ValidatorWithDetails } from '../types'
 
 import { ValidatorItem } from './ValidatorItem'
 
 interface ValidatorsListProps {
   validators: ValidatorWithDetails[] | undefined
+  order: ValidatorDetailsOrder & { sortBy: (key: ValidatorDetailsOrder['key']) => () => void }
 }
 
-export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
+export const ValidatorsList = ({ validators, order }: ValidatorsListProps) => {
   const { t } = useTranslation('validators')
   const [cardNumber, selectCard] = useState<number | null>(null)
-  type SortKey = 'stashAccount' | 'APR' | 'commission'
-  const [sortBy, setSortBy] = useState<SortKey>('stashAccount')
-  const [isDescending, setDescending] = useState(false)
-
-  const sortedValidators = useMemo(
-    () =>
-      [...(validators ?? [])].sort(
-        Comparator<ValidatorWithDetails>(isDescending, sortBy)[sortBy === 'stashAccount' ? 'string' : 'number']
-      ),
-    [sortBy, isDescending, validators]
-  )
-
-  const onSort = (key: SortKey, descendingByDefault = false) => {
-    if (key === sortBy) {
-      setDescending(!isDescending)
-    } else {
-      setDescending(descendingByDefault)
-      setSortBy(key)
-    }
-  }
 
   if (!validators) return <Loading />
 
@@ -55,9 +35,9 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
       <ValidatorsListWrap>
         <ListHeaders>
           <SortHeader
-            onSort={() => onSort('stashAccount')}
-            isActive={sortBy === 'stashAccount'}
-            isDescending={isDescending}
+            onSort={order.sortBy('default')}
+            isActive={order.key === 'default'}
+            isDescending={order.isDescending}
           >
             Validator
           </SortHeader>
@@ -74,7 +54,7 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
           <ListHeader>State</ListHeader>
           <ListHeader>Own Stake</ListHeader>
           <ListHeader>Total Stake</ListHeader>
-          <SortHeader onSort={() => onSort('APR', true)} isActive={sortBy === 'APR'} isDescending={isDescending}>
+          <ListHeader>
             Expected Nom APR
             <Tooltip
               tooltipText={
@@ -88,17 +68,17 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
             >
               <TooltipDefault />
             </Tooltip>
-          </SortHeader>
+          </ListHeader>
           <SortHeader
-            onSort={() => onSort('commission', true)}
-            isActive={sortBy === 'commission'}
-            isDescending={isDescending}
+            onSort={order.sortBy('commission')}
+            isActive={order.key === 'commission'}
+            isDescending={order.isDescending}
           >
             Commission
           </SortHeader>
         </ListHeaders>
         <List>
-          {sortedValidators?.map((validator, index) => (
+          {validators?.map((validator, index) => (
             <ListItem
               key={validator.stashAccount}
               onClick={() => {
@@ -109,12 +89,12 @@ export const ValidatorsList = ({ validators }: ValidatorsListProps) => {
             </ListItem>
           ))}
         </List>
-        {cardNumber && sortedValidators[cardNumber - 1] && (
+        {cardNumber && validators[cardNumber - 1] && (
           <ValidatorCard
             cardNumber={cardNumber}
-            validator={sortedValidators[cardNumber - 1]}
+            validator={validators[cardNumber - 1]}
             selectCard={selectCard}
-            totalCards={sortedValidators.length}
+            totalCards={validators.length}
           />
         )}
       </ValidatorsListWrap>
