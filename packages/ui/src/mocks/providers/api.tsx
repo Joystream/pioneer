@@ -123,6 +123,21 @@ const asApiMethod = (value: any) => {
     return (args: FunctionArgs) => of(asChainData(value(args)))
   } else if (value instanceof Observable) {
     return () => value
+  } else if (value instanceof Map) {
+    return Object.defineProperties(
+      (key: Parameters<(typeof value)['get']>[0]) => {
+        switch (typeof value.keys().next()) {
+          case 'string':
+            return of(asChainData(value.get(String(key))))
+          case 'number':
+            return of(asChainData(value.get(Number(key))))
+        }
+      },
+      {
+        size: { value: () => of(asChainData(value.size)) },
+        entries: { value: () => of(Array.from(asChainData(value.entries()))) },
+      }
+    )
   }
 
   const method = () => of(asChainData(value))

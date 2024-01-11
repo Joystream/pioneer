@@ -1,5 +1,5 @@
 import React, { ReactNode, useMemo, useState } from 'react'
-import { AsyncSubject, combineLatest, map, Observable, of, share, take } from 'rxjs'
+import { combineLatest, map, Observable, of, ReplaySubject, share, take } from 'rxjs'
 
 import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { useApi } from '@/api/hooks/useApi'
@@ -216,7 +216,7 @@ export const ValidatorContextProvider = (props: Props) => {
 const validatorsWithDetailsCache = new Map<string, Observable<ValidatorWithDetails>>()
 
 const freezeObservable: <T extends any>(o: Observable<T>) => Observable<T> = share({
-  connector: () => new AsyncSubject(),
+  connector: () => new ReplaySubject(1),
   resetOnComplete: false,
   resetOnError: false,
   resetOnRefCountZero: false,

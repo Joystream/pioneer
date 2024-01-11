@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import { BehaviorSubject, map, merge, Observable, scan, share, switchMap, take } from 'rxjs'
+import { map, merge, Observable, of, ReplaySubject, scan, share, switchMap, take } from 'rxjs'
 
 import { Api } from '@/api'
 import { BN_ZERO, ERAS_PER_YEAR } from '@/common/constants'
@@ -13,7 +13,7 @@ export const getValidatorsFilters = ({ isVerified, search = '' }: ValidatorDetai
 
   return [
     // Verification filter
-    isDefined(isVerified) && ((v: ValidatorMembership) => v.isVerifiedValidator === isVerified),
+    isDefined(isVerified) && ((v: ValidatorMembership) => !!v.isVerifiedValidator === isVerified),
 
     // Search filter
     s.length > 2 &&
@@ -104,7 +104,7 @@ export const getValidatorInfo = (
     })
   )
 
-  return merge(status$, stakes$, rewards$, slashing$).pipe(
+  return merge(of({}), status$, stakes$, rewards$, slashing$).pipe(
     scan((validator: ValidatorWithDetails, part) => ({ ...part, ...validator }), validator),
     map((validator) => {
       const { commission, staking } = validator
@@ -115,7 +115,7 @@ export const getValidatorInfo = (
       return { ...validator, APR: apr }
     }),
     share({
-      connector: () => new BehaviorSubject(validator),
+      connector: () => new ReplaySubject(1),
       resetOnError: false,
       resetOnComplete: false,
       resetOnRefCountZero: false,
