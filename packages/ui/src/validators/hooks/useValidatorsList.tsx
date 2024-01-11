@@ -1,4 +1,4 @@
-import { useContext, useEffect, useReducer, useState } from 'react'
+import { useContext, useEffect, useMemo, useReducer, useState } from 'react'
 
 import { ValidatorsContext } from '../providers/context'
 import { ValidatorDetailsOrder } from '../types'
@@ -9,6 +9,7 @@ export const useValidatorsList = () => {
   const [search, setSearch] = useState('')
   const [isVerified, setIsVerified] = useState<boolean>()
   const [isActive, setIsActive] = useState<boolean>()
+  const filter = useMemo(() => ({ search, isVerified, isActive }), [search, isVerified, isActive])
 
   const [order, onSort] = useReducer(
     (state: ValidatorDetailsOrder, key: ValidatorDetailsOrder['key']) => ({
@@ -22,8 +23,8 @@ export const useValidatorsList = () => {
 
   useEffect(() => {
     setShouldFetchValidators(true)
-    setValidatorDetailsOptions({ filter: { search, isVerified, isActive }, order })
-  }, [search, isVerified, isActive, order])
+    setValidatorDetailsOptions({ filter, order })
+  }, [filter, order])
 
   return {
     validatorsWithDetails,

@@ -88,12 +88,12 @@ export const ValidatorContextProvider = (props: Props) => {
     return isDefined(validatorDetailsOptions.filter.isActive)
       ? activeValidators$.pipe(getAddressesByIsActive)
       : of(allValidatorsWithCtrlAcc)
-  }, [allValidatorsWithCtrlAcc, validatorDetailsOptions, activeValidators$])
+  }, [allValidatorsWithCtrlAcc, validatorDetailsOptions?.filter, activeValidators$])
 
   const variables = useMemo(() => {
-    if (!filteredValidators) return
+    if (!allValidatorsWithCtrlAcc || !validatorDetailsOptions) return
 
-    const addresses = filteredValidators.flatMap(({ stashAccount: stash, controllerAccount: ctrl }) =>
+    const addresses = allValidatorsWithCtrlAcc.flatMap(({ stashAccount: stash, controllerAccount: ctrl }) =>
       ctrl ? [stash, ctrl] : [stash]
     )
     const accountsFilter = [
@@ -103,7 +103,7 @@ export const ValidatorContextProvider = (props: Props) => {
     ]
 
     return { where: { OR: accountsFilter } }
-  }, [filteredValidators])
+  }, [allValidatorsWithCtrlAcc, !validatorDetailsOptions])
 
   const { data } = useGetMembersWithDetailsQuery({ variables, skip: !variables })
 
