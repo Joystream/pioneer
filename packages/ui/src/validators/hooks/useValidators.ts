@@ -10,7 +10,7 @@ export const useValidators = ({ skip = false }: Props = {}) => {
 
   useEffect(() => {
     if (!skip) setShouldFetchValidators(true)
-  }, [])
+  }, [skip])
 
   return { allValidators, allValidatorsWithCtrlAcc, validatorsWithMembership }
 }
