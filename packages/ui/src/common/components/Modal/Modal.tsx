@@ -149,14 +149,13 @@ export const ModalBody = styled.div`
 `
 
 interface ModalFooterProps {
-  twoColumns?: boolean
   children?: ReactNode
   className?: string
 }
 
-export const ModalFooter = ({ twoColumns = false, children, className }: ModalFooterProps) => {
+export const ModalFooter = ({ children, className }: ModalFooterProps) => {
   return (
-    <ModalFooterComponent twoColumns={twoColumns} className={className}>
+    <ModalFooterComponent className={className}>
       {children}
       <ModalConnectionStatusDot onlyPerformance />
     </ModalFooterComponent>
@@ -169,7 +168,7 @@ const ModalConnectionStatusDot = styled(ConnectionStatusDot)`
   top: calc(50% - 10px);
 `
 
-export const ModalFooterComponent = styled.footer<{ twoColumns?: boolean }>`
+export const ModalFooterComponent = styled.footer`
   display: inline-flex;
   flex-wrap: wrap;
   grid-area: modalfooter;
@@ -183,18 +182,10 @@ export const ModalFooterComponent = styled.footer<{ twoColumns?: boolean }>`
   padding: 12px 26px 12px 24px;
   border-radius: 0 0 2px 2px;
   position: relative;
-`
 
-export const ModalFooterGroup = styled.div<{ left?: boolean }>`
-  display: grid;
-  grid-auto-flow: column;
-  align-items: center;
-  width: fit-content;
-  height: 100%;
-  justify-self: ${({ left }) => (left ? 'start' : 'end')};
-  grid-column-gap: 40px;
-  justify-items: ${({ left }) => (left ? 'start' : 'end')};
-  justify-content: ${({ left }) => (left ? 'start' : 'end')};
+  @media (min-width: ${BreakPoints.sm}px) {
+    flex-flow: nowrap;
+  }
 `
 
 interface ModalWrapProps {
