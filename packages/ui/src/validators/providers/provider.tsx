@@ -19,6 +19,7 @@ export interface UseValidators {
   setValidatorDetailsOptions: (options: ValidatorDetailsOptions) => void
   validators?: Validator[]
   validatorsWithDetails?: ValidatorWithDetails[]
+  size?: number
 }
 
 export const ValidatorContextProvider = (props: Props) => {
@@ -53,13 +54,14 @@ export const ValidatorContextProvider = (props: Props) => {
     )
   }, [allValidators, api?.isConnected])
 
-  const { validatorsWithDetails, setValidatorDetailsOptions } = useValidatorsWithDetails(allValidatorsWithCtrlAcc)
+  const { validatorsWithDetails, size, setValidatorDetailsOptions } = useValidatorsWithDetails(allValidatorsWithCtrlAcc)
 
   const value = {
     setShouldFetchValidators,
     setValidatorDetailsOptions,
     validators: allValidatorsWithCtrlAcc,
     validatorsWithDetails,
+    size,
   }
 
   return <ValidatorsContext.Provider value={value}>{props.children}</ValidatorsContext.Provider>

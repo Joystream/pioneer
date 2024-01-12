@@ -20,6 +20,11 @@ export type ValidatorDetailsOptions = {
   end: number
 }
 
+type AggregateResult = {
+  validators: ValidatorWithDetails[]
+  size: number
+}
+
 export const useValidatorsWithDetails = (allValidatorsWithCtrlAcc: Validator[] | undefined) => {
   const { api } = useApi()
 
@@ -110,12 +115,12 @@ export const useValidatorsWithDetails = (allValidatorsWithCtrlAcc: Validator[] |
     )
   }, [api?.isConnected, !validatorDetailsOptions])
 
-  const validatorsWithDetails = useObservable(() => {
+  const aggregated = useObservable<AggregateResult>(() => {
     if (!api || !validatorsWithMembership || !validatorsRewards$ || !activeValidators$ || !validatorDetailsOptions) {
       return
     }
 
-    if (!validatorsWithMembership.length) return of([])
+    if (!validatorsWithMembership.length) return of({ validators: [], size: 0 })
 
     const { filter, order, start, end } = validatorDetailsOptions
 
@@ -126,40 +131,50 @@ export const useValidatorsWithDetails = (allValidatorsWithCtrlAcc: Validator[] |
           : of(validators)
     )
 
-    const filterSortPaginate = map((validators: ValidatorWithDetails[]): ValidatorWithDetails[] =>
-      getValidatorsFilters(filter)
-        .reduce(
-          (validators: ValidatorWithDetails[], predicate): ValidatorWithDetails[] =>
-            predicate ? validators.filter(predicate) : validators,
-          validators
-        )
+    const filterSortPaginate = map((validators: ValidatorWithDetails[]): AggregateResult => {
+      const filtered = getValidatorsFilters(filter).reduce(
+        (validators: ValidatorWithDetails[], predicate): ValidatorWithDetails[] =>
+          predicate ? validators.filter(predicate) : validators,
+        validators
+      )
+
+      const sortedPaginated = filtered
         .sort((a, b) => {
           const direction = order.isDescending ? -1 : 1
           return direction * compareValidators(a, b, order.key)
         })
         .slice(start, end)
-    )
 
-    const getInfo = switchMap(
-      (validators: ValidatorWithDetails[]): Observable<ValidatorWithDetails[]> =>
-        combineLatest(
-          validators.flatMap((validator) => {
-            const address = validator.stashAccount
+      return { validators: sortedPaginated, size: filtered.length }
+    })
 
-            if (!validatorsWithDetailsCache.has(address)) {
-              const validator$ = getValidatorInfo(validator, activeValidators$, validatorsRewards$, api)
-              validatorsWithDetailsCache.set(address, validator$)
-            }
+    const getInfo = switchMap(({ validators, size }: AggregateResult): Observable<AggregateResult> => {
+      if (validators.length === 0) return of({ validators: [], size: 0 })
 
-            return validatorsWithDetailsCache.get(address) as Observable<ValidatorWithDetails>
-          })
-        )
-    )
+      const withInfo = combineLatest(
+        validators.flatMap((validator) => {
+          const address = validator.stashAccount
+
+          if (!validatorsWithDetailsCache.has(address)) {
+            const validator$ = getValidatorInfo(validator, activeValidators$, validatorsRewards$, api)
+            validatorsWithDetailsCache.set(address, validator$)
+          }
+
+          return validatorsWithDetailsCache.get(address) as Observable<ValidatorWithDetails>
+        })
+      )
+
+      return combineLatest({ validators: withInfo, size: of(size) })
+    })
 
     return of(validatorsWithMembership).pipe(filterByState, filterSortPaginate, getInfo)
   }, [api?.isConnected, validatorsWithMembership, validatorsRewards$, activeValidators$, validatorDetailsOptions])
 
-  return { validatorsWithDetails, setValidatorDetailsOptions }
+  return {
+    validatorsWithDetails: aggregated?.validators,
+    size: aggregated?.size,
+    setValidatorDetailsOptions,
+  }
 }
 
 const validatorsWithDetailsCache = new Map<string, Observable<ValidatorWithDetails>>()

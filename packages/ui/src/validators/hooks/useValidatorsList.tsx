@@ -1,7 +1,5 @@
 import { useContext, useEffect, useMemo, useReducer, useState } from 'react'
 
-import { whenDefined } from '@/common/utils'
-
 import { ValidatorsContext } from '../providers/context'
 import { ValidatorDetailsOrder } from '../types'
 
@@ -22,17 +20,21 @@ export const useValidatorsList = () => {
     { key: 'default', isDescending: false }
   )
 
-  const { setShouldFetchValidators, setValidatorDetailsOptions, validatorsWithDetails, validators } =
-    useContext(ValidatorsContext)
+  const {
+    setShouldFetchValidators,
+    setValidatorDetailsOptions,
+    validatorsWithDetails,
+    size = 0,
+  } = useContext(ValidatorsContext)
 
   const [page, setPage] = useState(1)
   const pagination = useMemo(
     () => ({
       page,
       handlePageChange: setPage,
-      pageCount: whenDefined(validators?.length, (total) => Math.ceil(total / VALIDATOR_PER_PAGE)),
+      pageCount: Math.ceil(size / VALIDATOR_PER_PAGE),
     }),
-    [page, validators]
+    [page, size]
   )
 
   useEffect(() => {
