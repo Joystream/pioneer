@@ -5,7 +5,7 @@ import { Api } from '@/api'
 import { BN_ZERO, ERAS_PER_YEAR } from '@/common/constants'
 import { isDefined } from '@/common/utils'
 
-import { ValidatorDetailsFilter, ValidatorDetailsOrder, ValidatorMembership, ValidatorWithDetails } from '../types'
+import { ValidatorDetailsFilter, ValidatorDetailsOrder, ValidatorWithDetails } from '../types'
 
 export const getValidatorsFilters = ({ isVerified, search = '' }: ValidatorDetailsFilter) => {
   const s = search.toLowerCase()
@@ -13,18 +13,23 @@ export const getValidatorsFilters = ({ isVerified, search = '' }: ValidatorDetai
 
   return [
     // Verification filter
-    isDefined(isVerified) && ((v: ValidatorMembership) => !!v.isVerifiedValidator === isVerified),
+    isDefined(isVerified) && ((v: ValidatorWithDetails) => !!v.isVerifiedValidator === isVerified),
 
     // Search filter
     s.length > 2 &&
-      (({ membership, stashAccount, controllerAccount }: ValidatorMembership) =>
+      (({ membership, stashAccount, controllerAccount }: ValidatorWithDetails) =>
         isMatch(membership?.handle) || isMatch(stashAccount) || isMatch(controllerAccount)),
   ]
 }
 
+export const filterValidatorsByIsActive = (validators: ValidatorWithDetails[], isActive: boolean) =>
+  map((activeValidators: string[]) =>
+    validators.filter(({ stashAccount }) => activeValidators.includes(stashAccount) === isActive)
+  )
+
 export const compareValidators = (
-  a: ValidatorMembership,
-  b: ValidatorMembership,
+  a: ValidatorWithDetails,
+  b: ValidatorWithDetails,
   key: ValidatorDetailsOrder['key']
 ) => {
   switch (key) {

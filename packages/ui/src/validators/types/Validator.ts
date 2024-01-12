@@ -14,25 +14,20 @@ export interface Validator {
   commission: number
 }
 
-export interface ValidatorMembership extends Validator {
+export interface ValidatorWithDetails extends Validator {
   isVerifiedValidator?: boolean
   membership?: MemberWithDetails
-}
-
-export interface ValidatorWithDetails extends ValidatorMembership {
   isActive?: boolean
   totalRewards?: BN
   rewardPointsHistory?: RewardPoints[]
   APR?: number
-  staking?: {
-    total: BN
-    own: BN
-    nominators: {
-      address: Address
-      staking: BN
-    }[]
-  }
+  staking?: { total: BN; own: BN; nominators: Nominator[] }
   slashed?: number
+}
+
+interface Nominator {
+  address: Address
+  staking: BN
 }
 
 export interface ValidatorDetailsFilter {
