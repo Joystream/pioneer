@@ -785,7 +785,7 @@ export const SpecificParametersFundingRequest: Story = {
 
 export const SpecificParametersMultipleFundingRequest: Story = {
   play: specificParametersTest('Funding Request', async ({ args, createProposal, modal, step }) => {
-    const bob = member('bob')
+    const dave = member('dave')
     const charlie = member('charlie')
     await createProposal(async () => {
       const nextButton = getButtonByText(modal, 'Create proposal')
@@ -797,7 +797,7 @@ export const SpecificParametersMultipleFundingRequest: Story = {
 
       // Invalid
       await userEvent.clear(csvField)
-      await userEvent.type(csvField, `${alice.controllerAccount},500${bob.controllerAccount},500`)
+      await userEvent.type(csvField, `${alice.controllerAccount},500${dave.controllerAccount},500`)
       expect(await modal.findByText(/Not valid CSV format/))
       // ensure its not being open-able while the CSV syntax is valid
       const previewButton = getButtonByText(modal, 'Preview and Validate')
@@ -807,7 +807,7 @@ export const SpecificParametersMultipleFundingRequest: Story = {
 
       // Invalid Accounts error
       await userEvent.clear(csvField)
-      await userEvent.type(csvField, `5GNJqTPy,500\n${bob.controllerAccount},500`)
+      await userEvent.type(csvField, `5GNJqTPy,500\n${dave.controllerAccount},500`)
 
       await waitFor(() => expect(modal.queryByText(/Not valid CSV format/)).toBeNull())
       expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
@@ -820,7 +820,7 @@ export const SpecificParametersMultipleFundingRequest: Story = {
 
       // Max Amount error
       await userEvent.clear(csvField)
-      await userEvent.type(csvField, `${alice.controllerAccount},166667\n${bob.controllerAccount},500`)
+      await userEvent.type(csvField, `${alice.controllerAccount},166667\n${dave.controllerAccount},500`)
       expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
       expect(nextButton).toBeDisabled()
       await waitFor(() => expect(previewButton).toBeEnabled())
@@ -833,7 +833,7 @@ export const SpecificParametersMultipleFundingRequest: Story = {
       await userEvent.clear(csvField)
       await userEvent.type(
         csvField,
-        `${alice.controllerAccount},400\n${bob.controllerAccount},500\n${charlie.controllerAccount},500`
+        `${alice.controllerAccount},400\n${dave.controllerAccount},500\n${charlie.controllerAccount},500`
       )
       expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
       expect(nextButton).toBeDisabled()
@@ -852,7 +852,7 @@ export const SpecificParametersMultipleFundingRequest: Story = {
 
       // Valid
       await userEvent.clear(csvField)
-      await userEvent.type(csvField, `${alice.controllerAccount},500\n${bob.controllerAccount},500`)
+      await userEvent.type(csvField, `${alice.controllerAccount},500\n${dave.controllerAccount},500`)
       expect(nextButton).toBeDisabled()
 
       await waitFor(() => expect(previewButton).toBeEnabled())
@@ -865,7 +865,7 @@ export const SpecificParametersMultipleFundingRequest: Story = {
       expect(specificParameters.toJSON()).toEqual({
         fundingRequest: [
           { account: alice.controllerAccount, amount: 500_0000000000 },
-          { account: bob.controllerAccount, amount: 500_0000000000 },
+          { account: dave.controllerAccount, amount: 500_0000000000 },
         ],
       })
     })
