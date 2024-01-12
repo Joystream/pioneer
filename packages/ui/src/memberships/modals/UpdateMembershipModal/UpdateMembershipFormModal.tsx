@@ -19,6 +19,7 @@ import {
   ScrolledModalBody,
   ScrolledModalContainer,
 } from '@/common/components/Modal'
+import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium, TextSmall } from '@/common/components/typography'
 import { Warning } from '@/common/components/Warning'
@@ -41,7 +42,7 @@ import { changedOrNull, hasAnyEdits, hasAnyMetadateChanges, membershipExternalRe
 
 interface Props {
   onClose: () => void
-  onSubmit: (params: WithNullableValues<UpdateMemberForm>) => void
+  onSubmit: (params: WithNullableValues<UpdateMemberForm>, memberId: string, controllerAccount: string) => void
   member: MemberWithDetails
 }
 
@@ -69,19 +70,22 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: handleMap } } })
   const context = { size: data?.membershipsConnection.totalCount, isHandleChanged: handleMap !== member.handle }
   const { uploadAvatarAndSubmit, isUploading } = useUploadAvatarAndSubmit<UpdateMemberForm>((fields) =>
-    onSubmit({
-      ...changedOrNull(
-        { ...fields, externalResources: { ...definedValues(fields.externalResources) } },
-        updateMemberFormInitial
-      ),
-      id: fields.id,
-      validatorAccounts: isValidator
-        ? fields.validatorAccounts?.filter((address) => !initialValidatorAccounts.includes(address))
-        : [],
-      validatorAccountsToBeRemoved: isValidator
-        ? initialValidatorAccounts.filter((address) => !fields.validatorAccounts?.includes(address))
-        : initialValidatorAccounts,
-    })
+    onSubmit(
+      {
+        ...changedOrNull(
+          { ...fields, externalResources: { ...definedValues(fields.externalResources) } },
+          updateMemberFormInitial
+        ),
+        validatorAccounts: isValidator
+          ? fields.validatorAccounts?.filter((address) => !initialValidatorAccounts.includes(address))
+          : [],
+        validatorAccountsToBeRemoved: isValidator
+          ? initialValidatorAccounts.filter((address) => !fields.validatorAccounts?.includes(address))
+          : initialValidatorAccounts,
+      },
+      member.id,
+      member.controllerAccount
+    )
   )
 
   const updateMemberFormInitial = useMemo(
@@ -265,25 +269,28 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
                   </RowInline>
                 </SelectValidatorAccountWrapper>
 
-                {validatorAccounts?.map((address, index) => (
-                  <Row>
-                    <RowInline>
-                      <SelectedAccount
-                        account={accountOrNamed(allAccounts, address, 'Unsaved account')}
-                        key={'selected' + index}
-                      />
-                      <ButtonGhost
-                        square
-                        size="large"
-                        onClick={() => {
-                          removeValidatorAccount(index)
-                        }}
-                      >
-                        <CrossIcon />
-                      </ButtonGhost>
-                    </RowInline>
-                  </Row>
-                ))}
+                <RowGapBlock gap={16} className="validator-accounts">
+                  {validatorAccounts?.map((address, index) => (
+                    <Row>
+                      <RowInline>
+                        <SelectedAccount
+                          account={accountOrNamed(allAccounts, address, 'Unsaved account')}
+                          key={'selected' + index}
+                        />
+                        <ButtonGhost
+                          square
+                          size="large"
+                          onClick={() => {
+                            removeValidatorAccount(index)
+                          }}
+                          className="remove-button"
+                        >
+                          <CrossIcon />
+                        </ButtonGhost>
+                      </RowInline>
+                    </Row>
+                  ))}
+                </RowGapBlock>
               </>
             )}
           </FormProvider>

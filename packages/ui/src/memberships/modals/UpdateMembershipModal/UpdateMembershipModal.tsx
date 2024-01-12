@@ -23,59 +23,42 @@ export const UpdateMembershipModal = () => {
   } = useModal<UpdateMembershipModalCall>()
   const [state, send] = useMachine(updateMembershipMachine)
 
-  const updateMembershipTransaction = useMemo(
-    () => state.context.form && createBatch(state.context.form, api, member),
-    [api?.isConnected, state.context.form]
+  const unbondValidatorAccTransaction = useMemo(
+    () => api?.tx.members.removeStakingAccount(member.id),
+    [api?.isConnected]
   )
-  const unbondValidatorAccTransaction = useMemo(() => {
-    if (!state.context.form?.id || !api) return
-    return api.tx.members.removeStakingAccount(state.context.form.id)
-  }, [api?.isConnected, state.context.form?.id])
 
-  const bondValidatorAccTransaction = useMemo(() => {
-    if (!state.context.form?.id || !api) return
-    return api.tx.members.addStakingAccountCandidate(state.context.form.id)
-  }, [api?.isConnected, state.context.form?.id])
+  const bondValidatorAccTransaction = useMemo(
+    () => api?.tx.members.addStakingAccountCandidate(member.id),
+    [api?.isConnected]
+  )
 
   const conFirmTransaction = useMemo(() => {
     const validatorAccounts = state.context.form?.validatorAccounts
 
-    if (!api || !state.context.form?.id || !validatorAccounts) return
+    if (!api || !validatorAccounts) return
 
-    const confirmTxs = validatorAccounts.map((address) =>
-      api.tx.members.confirmStakingAccount(state.context.form?.id ?? '', address)
-    )
+    const confirmTxs = validatorAccounts.map((address) => api.tx.members.confirmStakingAccount(member.id, address))
 
     return confirmTxs.length > 1 ? api.tx.utility.batch(confirmTxs) : confirmTxs[0]
-  }, [api?.isConnected, state.context.form?.id, state.context.form?.validatorAccounts])
+  }, [api?.isConnected, state.context.form?.validatorAccounts])
+
+  const updateMembershipTransaction = useMemo(
+    () => state.context.form && createBatch(state.context.form, api, member),
+    [api?.isConnected, state.context.form]
+  )
 
   if (state.matches('prepare')) {
     return (
       <UpdateMembershipFormModal
         onClose={hideModal}
-        onSubmit={(params) => send('DONE', { form: params })}
+        onSubmit={(params, memberId, controllerAccount) => send('DONE', { form: params, memberId, controllerAccount })}
         member={member}
       />
     )
   }
 
-  if (state.matches('updateMembershipTx')) {
-    if (!updateMembershipTransaction) {
-      send('SKIP_UPDATE_MEMBERSHIP')
-    }
-    return (
-      <SignTransactionModal
-        buttonText="Sign and update a member"
-        transaction={updateMembershipTransaction}
-        signer={member.controllerAccount}
-        service={state.children.updateMembership}
-      >
-        <TextMedium>You intend to update your membership.</TextMedium>
-      </SignTransactionModal>
-    )
-  }
-
-  if (state.matches('removeStakingAccTx') && updateMembershipTransaction) {
+  if (state.matches('removeStakingAccTx') && unbondValidatorAccTransaction) {
     if (
       !state.context.form.validatorAccountsToBeRemoved ||
       state.context.form.validatorAccountsToBeRemoved.length === 0
@@ -121,6 +104,23 @@ export const UpdateMembershipModal = () => {
         service={state.children.confirmStakingAcc}
       >
         <TextMedium>You intend to confirm your validator account to be bound with your membership.</TextMedium>
+      </SignTransactionModal>
+    )
+  }
+
+  if (state.matches('updateMembershipTx')) {
+    if (!updateMembershipTransaction) {
+      send('SKIP_UPDATE_MEMBERSHIP')
+      return null
+    }
+    return (
+      <SignTransactionModal
+        buttonText="Sign and update a member"
+        transaction={updateMembershipTransaction}
+        signer={member.controllerAccount}
+        service={state.children.updateMembership}
+      >
+        <TextMedium>You intend to update your membership.</TextMedium>
       </SignTransactionModal>
     )
   }

@@ -60,32 +60,11 @@ export const updateMembershipMachine = createMachine<Context, UpdateMembershipEv
     prepare: {
       on: {
         DONE: {
-          target: 'updateMembershipTx',
-          actions: assign({ form: (_, event) => event.form }),
+          target: 'removeStakingAccTx',
+          actions: assign({
+            form: (_, event) => event.form,
+          }),
         },
-      },
-    },
-    updateMembershipTx: {
-      invoke: {
-        id: 'updateMembership',
-        src: transactionMachine,
-        onDone: [
-          {
-            target: 'removeStakingAccTx',
-            cond: isTransactionSuccess,
-          },
-          {
-            target: 'error',
-            cond: isTransactionError,
-          },
-          {
-            target: 'canceled',
-            cond: isTransactionCanceled,
-          },
-        ],
-      },
-      on: {
-        SKIP_UPDATE_MEMBERSHIP: 'removeStakingAccTx',
       },
     },
     removeStakingAccTx: {
@@ -145,12 +124,32 @@ export const updateMembershipMachine = createMachine<Context, UpdateMembershipEv
         ],
       },
       on: {
-        SKIP_BONDING: 'success',
+        SKIP_BONDING: 'updateMembershipTx',
       },
     },
     confirmStakingAccTx: {
       invoke: {
         id: 'confirmStakingAcc',
+        src: transactionMachine,
+        onDone: [
+          {
+            target: 'updateMembershipTx',
+            cond: isTransactionSuccess,
+          },
+          {
+            target: 'error',
+            cond: isTransactionError,
+          },
+          {
+            target: 'canceled',
+            cond: isTransactionCanceled,
+          },
+        ],
+      },
+    },
+    updateMembershipTx: {
+      invoke: {
+        id: 'updateMembership',
         src: transactionMachine,
         onDone: [
           {
@@ -166,6 +165,9 @@ export const updateMembershipMachine = createMachine<Context, UpdateMembershipEv
             cond: isTransactionCanceled,
           },
         ],
+      },
+      on: {
+        SKIP_UPDATE_MEMBERSHIP: 'success',
       },
     },
     ...transactionModalFinalStatusesFactory({
