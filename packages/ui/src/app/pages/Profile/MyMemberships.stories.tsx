@@ -496,7 +496,7 @@ export const UnbondValidatorAccountFailure: Story = {
 }
 
 export const BondValidatorAccountsHappy: Story = {
-  play: async ({args, canvasElement, step }) => {
+  play: async ({ args, canvasElement, step }) => {
     const screen = within(canvasElement)
     const modal = withinModal(canvasElement)
 
@@ -576,7 +576,6 @@ export const BondValidatorAccountFailure: Story = {
       expect(await modal.findByText('Failure'))
       expect(await modal.findByText('There was a problem updating membership.'))
     })
-
   },
 }
 
