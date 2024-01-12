@@ -456,7 +456,7 @@ export const TestsFilters: Story = {
       await selectFromDropdown(screen, verificationFilter, 'verified')
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(3))
       expect(screen.queryByText('unverifed')).toBeNull()
-      expect(screen.getByText('alice'))
+      expect(screen.getAllByText('alice').length).toEqual(2)
       expect(screen.queryByText('bob')).toBeNull()
       await selectFromDropdown(screen, verificationFilter, 'unverified')
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(8))
@@ -480,15 +480,15 @@ export const TestsFilters: Story = {
         await userEvent.type(searchElement, '{enter}')
         expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(1)
       })
-      expect(screen.queryByText('charlie'))
+      expect(screen.queryByText('alice'))
       await userEvent.clear(searchElement)
       await userEvent.type(searchElement, 'j4R')
       await waitFor(async () => {
         await userEvent.type(searchElement, '{enter}')
         expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(9)
       })
-      expect(screen.queryByText('alice'))
       expect(screen.queryByText('bob'))
+      expect(screen.queryByText('dave'))
     })
 
     await step('Clear Filter', async () => {
