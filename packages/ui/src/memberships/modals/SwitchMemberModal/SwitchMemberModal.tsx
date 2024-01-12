@@ -135,8 +135,8 @@ const SwitchModalFooter = styled(ModalFooter)`
   width: 100%;
   height: auto;
   padding: 16px;
-  grid-auto-flow: row;
   justify-items: start;
+  flex-flow: wrap;
 `
 
 const MembersList = styled.ul<{ memberIndicatorOffset?: string }>`
