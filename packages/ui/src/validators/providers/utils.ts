@@ -109,14 +109,14 @@ export const getValidatorInfo = (
     })
   )
 
-  return merge(of({}), status$, stakes$, rewards$, slashing$).pipe(
+  return merge(of({}), status$, rewards$, stakes$, slashing$).pipe(
     scan((validator: ValidatorWithDetails, part) => ({ ...part, ...validator }), validator),
     map((validator) => {
       const { commission, staking } = validator
       if (!('latestReward' in validator) || !staking || staking.total.isZero()) return validator
 
-      const latestReward = validator.latestReward as BN
-      const apr = Number(latestReward.muln(ERAS_PER_YEAR).muln(commission).div(staking.total))
+      const latestReward = validator.latestReward
+      const apr = latestReward && Number(latestReward.muln(ERAS_PER_YEAR).muln(commission).div(staking.total))
       return { ...validator, APR: apr }
     }),
     share({
