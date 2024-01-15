@@ -17,7 +17,7 @@ const generateRewardPaidEvent = (mocks: Mocks) => {
       ...randomBlock(),
       groupId: worker?.groupId,
       workerId: worker?.id.toString(),
-      rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+      rewardAccount: 'j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT',
       amount: randomFromRange(100, 1000) * 10,
       type: 'REGULAR',
     }
@@ -32,9 +32,9 @@ const generateBudgetSpending = (mocks: Mocks) => () => {
     ...randomBlock(),
     groupId: worker?.groupId,
     workerId: worker?.id.toString(),
-    rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+    rewardAccount: 'j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT',
     amount: randomFromRange(0, 10000),
-    reciever: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+    reciever: 'j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT',
   }
 }
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
+import { BreakPoints } from '@/common/constants'
 import { ResponsiveContext, UseResponsive } from '@/common/providers/responsive/context'
 
 interface Props {
@@ -27,17 +28,17 @@ export const ResponsiveProvider = (props: Props) => {
   const value: UseResponsive = useMemo(
     () => ({
       size:
-        windowWidth >= 1440
+        windowWidth >= BreakPoints.lg
           ? 'lg'
-          : windowWidth >= 1024
+          : windowWidth >= BreakPoints.md
           ? 'md'
-          : windowWidth >= 768
+          : windowWidth >= BreakPoints.sm
           ? 'sm'
-          : windowWidth >= 425
+          : windowWidth >= BreakPoints.xs
           ? 'xs'
           : 'xxs',
       isMobile: windowWidth < 1024,
-      supportTransactions: screen.width >= 768,
+      isMobileWallet: screen.width < 768,
       openNavSidebar,
       setOpenNavSidebar,
     }),

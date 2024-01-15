@@ -146,6 +146,11 @@ const asApiMethod = (value: any) => {
     method.size = () => of(asChainData(value.size))
   }
 
+  if (isObject(value) && 'keys' in value && isArray(value.keys)) {
+    const keys = value.keys.map((entry) => ({ args: [asChainData(entry)] }))
+    method.keys = () => of(keys)
+  }
+
   if (isObject(value) && 'entries' in value && isArray(value.entries)) {
     method.entries = () => of(asChainData(value.entries))
   }

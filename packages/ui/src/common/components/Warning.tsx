@@ -28,12 +28,18 @@ export const Warning = ({ title, content, isClosable, additionalContent, icon, i
   return (
     <WarningBlock gap={8} isYellow={isYellow}>
       {isClosable !== false && <StyledCloseButton onClick={toggleOpen} />}
-      <HeaderWrapper>
-        {icon === 'alert' && <AlertSymbol />}
-        {icon === 'info' && <InfoSymbol />}
-        {title && <h5>{title}</h5>}
-      </HeaderWrapper>
-      {content && <TextMedium light>{content}</TextMedium>}
+      {(icon || title) && (
+        <HeaderWrapper>
+          {icon === 'alert' && <AlertSymbol />}
+          {icon === 'info' && <InfoSymbol />}
+          {title && <h5>{title}</h5>}
+        </HeaderWrapper>
+      )}
+      {content && (
+        <TextMedium as="div" inter light>
+          {content}
+        </TextMedium>
+      )}
       {additionalContent}
     </WarningBlock>
   )
