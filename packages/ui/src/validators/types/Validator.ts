@@ -8,26 +8,35 @@ export interface RewardPoints {
   rewardPoints: number
 }
 
-export interface ValidatorWithDetails extends ValidatorMembership {
-  isActive: boolean
-  totalRewards: BN
-  rewardPointsHistory: RewardPoints[]
-  APR: number
-  staking: {
-    total: BN
-    own: BN
-    others: {
-      address: Address
-      staking: BN
-    }[]
-  }
-  slashed: number
-}
-
-export interface ValidatorMembership {
+export interface Validator {
   stashAccount: Address
   controllerAccount?: Address
+  commission: number
+}
+
+export interface ValidatorWithDetails extends Validator {
   isVerifiedValidator?: boolean
   membership?: MemberWithDetails
-  commission: number
+  isActive?: boolean
+  totalRewards?: BN
+  rewardPointsHistory?: RewardPoints[]
+  APR?: number
+  staking?: { total: BN; own: BN; nominators: Nominator[] }
+  slashed?: number
+}
+
+interface Nominator {
+  address: Address
+  staking: BN
+}
+
+export interface ValidatorDetailsFilter {
+  search?: string
+  isVerified?: boolean
+  isActive?: boolean
+}
+
+export interface ValidatorDetailsOrder {
+  key: 'default' | 'commission'
+  isDescending: boolean
 }

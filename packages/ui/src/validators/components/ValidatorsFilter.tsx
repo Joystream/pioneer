@@ -5,16 +5,14 @@ import { FilterBox } from '@/common/components/forms/FilterBox'
 import { SearchBox } from '@/common/components/forms/FilterBox/FilterSearchBox'
 import { FilterSelect } from '@/common/components/selects'
 
-import { Verification, State } from '../types'
-
 interface ValidatorFilterProps {
   filter: {
     search: string
     setSearch: (search: string) => void
-    isVerified: Verification
-    setIsVerified: (isVerified: Verification) => void
-    isActive: State
-    setIsActive: (isActive: State) => void
+    isVerified: boolean | undefined
+    setIsVerified: (isVerified: boolean | undefined) => void
+    isActive: boolean | undefined
+    setIsActive: (isActive: boolean | undefined) => void
   }
 }
 
@@ -24,12 +22,17 @@ export const ValidatorsFilter = ({ filter }: ValidatorFilterProps) => {
     setSearch(filter.search)
   }, [filter.search])
   const display = () => filter.setSearch(search)
+
+  const { isVerified, isActive } = filter
+  const verificationValue = isVerified === true ? 'verified' : isVerified === false ? 'unverified' : undefined
+  const stateValue = isActive === true ? 'active' : isActive === false ? 'waiting' : undefined
+
   const clear =
-    filter.search || filter.isVerified || filter.isActive
+    filter.search || verificationValue || stateValue
       ? () => {
           filter.setSearch('')
-          filter.setIsVerified(null)
-          filter.setIsActive(null)
+          filter.setIsVerified(undefined)
+          filter.setIsActive(undefined)
         }
       : undefined
 
@@ -40,14 +43,14 @@ export const ValidatorsFilter = ({ filter }: ValidatorFilterProps) => {
           <FilterSelect
             title="Verification"
             options={['verified', 'unverified']}
-            value={filter.isVerified}
-            onChange={filter.setIsVerified}
+            value={verificationValue}
+            onChange={(value) => filter.setIsVerified(value === null ? undefined : value === 'verified')}
           />
           <FilterSelect
             title="State"
             options={['active', 'waiting']}
-            value={filter.isActive}
-            onChange={filter.setIsActive}
+            value={stateValue}
+            onChange={(value) => filter.setIsActive(value === null ? undefined : value === 'active')}
           />
         </SelectFields>
         <SearchBox label="Search" value={search} onApply={display} onChange={setSearch} />
