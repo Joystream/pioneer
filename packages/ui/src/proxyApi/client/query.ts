@@ -1,6 +1,6 @@
 import { AnyTuple } from '@polkadot/types/types'
 import { uniqueId } from 'lodash'
-import { filter, Observable, map, share } from 'rxjs'
+import { filter, Observable, map } from 'rxjs'
 
 import { deserializeMessage } from '../models/payload'
 import { ApiKinds, PostMessage, RawWorkerMessageEvent } from '../types'
@@ -35,25 +35,29 @@ export const query = <K extends ApiQueryKinds>(
 ) => {
   const queryMessages = messages.pipe(
     filter(({ data }) => data.messageType === apiKind),
-    deserializeMessage<WorkerQueryMessage<K>>(),
-    share()
+    deserializeMessage<WorkerQueryMessage<K>>()
   )
 
-  return apiInterfaceProxy<K>((module, ...path) => (...params) => {
-    const callId = uniqueId(`${apiKind}.${String(module)}.${path.join('.')}.`)
+  return apiInterfaceProxy<K>(
+    (module, ...path) =>
+      (...params) =>
+        new Observable((subscriber) => {
+          const callId = uniqueId(`${apiKind}.${String(module)}.${path.join('.')}.`)
 
-    postMessage({
-      messageType: apiKind,
-      module,
-      path,
-      callId,
-      payload: params,
-    } as ClientQueryMessage<K>)
+          postMessage({
+            messageType: apiKind,
+            module,
+            path,
+            callId,
+            payload: params,
+          } as ClientQueryMessage<K>)
 
-    return queryMessages.pipe(
-      filter((message) => message.callId === callId),
-      map(({ payload }) => payload),
-      share()
-    )
-  })
+          return queryMessages
+            .pipe(
+              filter((message) => message.callId === callId),
+              map((message) => message.payload)
+            )
+            .subscribe((value) => subscriber.next(value))
+        })
+  )
 }
