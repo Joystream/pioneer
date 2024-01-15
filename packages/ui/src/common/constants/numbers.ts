@@ -1,6 +1,8 @@
 import BN from 'bn.js'
 
-export const JOY_DECIMAL_PLACES = 10
+import { CHAIN_PROPERTIES } from '@/app/constants/chain'
+
+export const JOY_DECIMAL_PLACES = CHAIN_PROPERTIES.tokenDecimals[0]
 
 export const ED = new BN(10)
 export const BN_ZERO = new BN(0)
