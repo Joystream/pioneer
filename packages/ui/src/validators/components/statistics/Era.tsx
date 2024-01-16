@@ -12,25 +12,25 @@ import {
   formatDurationDate,
 } from '@/common/components/statistics'
 import { DurationValue } from '@/common/components/typography/DurationValue'
+import { ERA_DURATION } from '@/common/constants'
 
 interface EraProps {
   eraStartedOn: Option<u64> | undefined
-  eraDuration: number
-  now: u64 | undefined
+  now: number
   eraRewardPoints: PalletStakingEraRewardPoints | undefined
 }
 
-export const Era = ({ eraStartedOn, eraDuration, now, eraRewardPoints }: EraProps) => {
+export const Era = ({ eraStartedOn, now, eraRewardPoints }: EraProps) => {
   const { nextReward, percentage } = useMemo(() => {
-    const nextReward = now && eraStartedOn && eraDuration - (Number(now) - Number(eraStartedOn))
-    const totalDuration = Number(eraDuration)
+    const nextReward = now && eraStartedOn && ERA_DURATION - (now - Number(eraStartedOn))
+    const totalDuration = Number(ERA_DURATION)
     const percentage = nextReward ? Math.ceil(100 - (nextReward / totalDuration) * 100) : 0
     return {
       nextReward: formatDurationDate(nextReward ?? 0),
       totalDuration: formatDurationDate(totalDuration ?? 0),
       percentage,
     }
-  }, [eraStartedOn, eraDuration, now])
+  }, [eraStartedOn, now])
   return (
     <StatisticItem
       title="era"
