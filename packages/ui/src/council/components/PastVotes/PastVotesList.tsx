@@ -17,12 +17,12 @@ import { PastVoteColumns } from './styles'
 
 export const PastVotesList = () => {
   const { order, getSortProps } = useSort<CastVoteOrderByInput>('createdAt')
-  const { votes, isLoading, pagination } = useMyPastVotes({ order })
+  const { votes, pagination } = useMyPastVotes({ order })
 
-  if (isLoading) {
+  if (!votes) {
     return <Loading />
   }
-  if (!votes?.length) {
+  if (!votes.length) {
     return <NotFoundText>You have no past votes.</NotFoundText>
   }
 
