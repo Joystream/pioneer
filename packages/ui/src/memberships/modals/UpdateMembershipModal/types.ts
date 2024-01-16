@@ -13,4 +13,5 @@ export interface UpdateMemberForm {
   isValidator?: boolean
   validatorAccountCandidate?: Account
   validatorAccounts?: Address[]
+  validatorAccountsToBeRemoved?: Address[]
 }
