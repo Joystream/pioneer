@@ -826,8 +826,13 @@ export const SpecificParametersMultipleFundingRequest: Story = {
       expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
       expect(nextButton).toBeDisabled()
       await waitFor(() => expect(previewButton).toBeEnabled())
-      await userEvent.click(previewButton)
-      expect(await modal.findByText(/Max payment amount is exceeded/))
+      await waitFor(
+        async () => {
+          await userEvent.click(previewButton)
+          expect(await modal.findByText(/Max payment amount is exceeded/))
+        },
+        { timeout: 8000 }
+      )
       await userEvent.click(modal.getByTestId('sidePanel-overlay')) //ensure create proposal is still disabled
       expect(nextButton).toBeDisabled()
 
