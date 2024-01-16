@@ -6,6 +6,7 @@ import { AnySchema } from 'yup'
 import { filterAccount, SelectAccount, SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent, InputText, InputTextarea, Label, ToggleCheckbox } from '@/common/components/forms'
 import { CrossIcon, PlusIcon } from '@/common/components/icons'
@@ -56,11 +57,17 @@ const UpdateMemberSchema = Yup.object().shape({
 
 export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) => {
   const { allAccounts } = useMyAccounts()
-  const { allValidators, allValidatorsWithCtrlAcc } = useValidators()
+  const validators = useValidators()
+  const validatorAddresses = useMemo(
+    () =>
+      validators
+        ?.flatMap(({ stashAccount: stash, controllerAccount: ctrl }) => (ctrl ? [stash, ctrl] : [stash]))
+        .map(encodeAddress),
+    [validators]
+  )
   const isValidatorAccount = useCallback(
-    (address: Address): boolean | undefined =>
-      allValidators?.map(({ address }) => address).includes(address) || allValidatorsWithCtrlAcc?.includes(address),
-    [allValidators, allValidatorsWithCtrlAcc]
+    (address: Address): boolean | undefined => validatorAddresses?.includes(address),
+    [validatorAddresses]
   )
   const initialValidatorAccounts = useMemo(
     () => member.boundAccounts.filter((address) => isValidatorAccount(address)),
