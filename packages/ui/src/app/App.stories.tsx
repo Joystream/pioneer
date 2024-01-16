@@ -816,10 +816,7 @@ export const InvalidValidatorAccountInput: Story = {
     await userEvent.click(validatorCheckButton)
     const validatorAddressInputElement = document.getElementById('select-validatorAccount-input')
     expect(validatorAddressInputElement).not.toBeNull()
-    await userEvent.paste(
-      validatorAddressInputElement as HTMLElement,
-      '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'
-    )
+    await userEvent.paste(validatorAddressInputElement as HTMLElement, alice.controllerAccount)
 
     expect(modal.getByText('This account is neither a validator controller account nor a validator stash account.'))
     const addButton = document.getElementsByClassName('add-button')[0]
