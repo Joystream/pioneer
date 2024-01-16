@@ -777,7 +777,7 @@ export const SpecificParametersFundingRequest: Story = {
     step('Transaction parameters', () => {
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({
-        fundingRequest: [{ account: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY', amount: 100_0000000000 }],
+        fundingRequest: [{ account: alice.controllerAccount, amount: 100_0000000000 }],
       })
     })
   }),
@@ -785,9 +785,9 @@ export const SpecificParametersFundingRequest: Story = {
 
 export const SpecificParametersMultipleFundingRequest: Story = {
   play: specificParametersTest('Funding Request', async ({ args, createProposal, modal, step }) => {
-    const aliceAddress = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'
-    const bobAddress = '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty'
-    const charlieAddess = member('charlie').controllerAccount
+    const aliceAddress = alice.controllerAccount
+    const bobAddress = member('bob').controllerAccount
+    const charlieAddress = member('charlie').controllerAccount
 
     await createProposal(async () => {
       const nextButton = getButtonByText(modal, 'Create proposal')
@@ -833,7 +833,7 @@ export const SpecificParametersMultipleFundingRequest: Story = {
 
       // Max Allowed Accounts error
       await userEvent.clear(csvField)
-      await userEvent.type(csvField, `${aliceAddress},400\n${bobAddress},500\n${charlieAddess},500`)
+      await userEvent.type(csvField, `${aliceAddress},400\n${bobAddress},500\n${charlieAddress},500`)
       expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
       expect(nextButton).toBeDisabled()
       await waitFor(() => expect(previewButton).toBeEnabled())
