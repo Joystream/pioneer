@@ -1,13 +1,13 @@
 import { Vec } from '@polkadot/types'
 import { AccountId } from '@polkadot/types/interfaces'
 import BN from 'bn.js'
-import { map, merge, Observable, of, ReplaySubject, scan, share, switchMap, take } from 'rxjs'
+import { combineLatest, map, Observable, of, OperatorFunction, pipe, ReplaySubject, share, switchMap, take } from 'rxjs'
 
 import { Api } from '@/api'
 import { BN_ZERO, ERAS_PER_YEAR } from '@/common/constants'
 import { isDefined } from '@/common/utils'
 
-import { ValidatorDetailsFilter, ValidatorDetailsOrder, ValidatorWithDetails } from '../types'
+import { ValidatorDetailsFilter, ValidatorDetailsOrder, ValidatorInfo, ValidatorWithDetails } from '../types'
 
 export const getValidatorsFilters = ({ isVerified, search = '' }: ValidatorDetailsFilter) => {
   const s = search.toLowerCase()
@@ -15,12 +15,12 @@ export const getValidatorsFilters = ({ isVerified, search = '' }: ValidatorDetai
 
   return [
     // Verification filter
-    isDefined(isVerified) && ((v: ValidatorWithDetails) => !!v.isVerifiedValidator === isVerified),
+    isDefined(isVerified) && (({ validator }: ValidatorInfo) => of(!!validator.isVerifiedValidator === isVerified)),
 
     // Search filter
     s.length > 2 &&
-      (({ membership, stashAccount, controllerAccount }: ValidatorWithDetails) =>
-        isMatch(membership?.handle) || isMatch(stashAccount) || isMatch(controllerAccount)),
+      (({ validator: { membership, stashAccount, controllerAccount } }: ValidatorInfo) =>
+        of(isMatch(membership?.handle) || isMatch(stashAccount) || isMatch(controllerAccount))),
   ]
 }
 
@@ -29,28 +29,33 @@ export const filterValidatorsByIsActive = (validators: ValidatorWithDetails[], i
     validators.filter(({ stashAccount }) => activeValidators.includes(stashAccount) === isActive)
   )
 
-export const compareValidators = (
-  a: ValidatorWithDetails,
-  b: ValidatorWithDetails,
+export const getValidatorSortingFns = (
   key: ValidatorDetailsOrder['key']
-) => {
+): [
+  (item: ValidatorInfo) => Observable<ValidatorWithDetails>,
+  (a: ValidatorWithDetails, b: ValidatorWithDetails) => number
+] => {
   switch (key) {
-    case 'default': {
-      if (!a.isVerifiedValidator !== !b.isVerifiedValidator) {
-        return a.isVerifiedValidator ? -1 : 1
-      }
+    case 'default':
+      return [
+        (item) => of(item.validator),
+        (a, b) => {
+          if (!a.isVerifiedValidator !== !b.isVerifiedValidator) {
+            return a.isVerifiedValidator ? -1 : 1
+          }
 
-      const handleA = a.membership?.handle
-      const handleB = b.membership?.handle
-      if ((handleA || handleB) && handleA !== handleB) {
-        return !handleA ? 1 : !handleB ? -1 : handleA.localeCompare(handleB)
-      }
+          const handleA = a.membership?.handle
+          const handleB = b.membership?.handle
+          if ((handleA || handleB) && handleA !== handleB) {
+            return !handleA ? 1 : !handleB ? -1 : handleA.localeCompare(handleB)
+          }
 
-      return a.stashAccount.localeCompare(b.stashAccount)
-    }
+          return a.stashAccount.localeCompare(b.stashAccount)
+        },
+      ]
 
     case 'commission':
-      return a.commission - b.commission
+      return [(item) => of(item.validator), (a, b) => a.commission - b.commission]
   }
 }
 
@@ -66,30 +71,34 @@ export const getValidatorInfo = (
   activeValidators$: Observable<Vec<AccountId>>,
   validatorsRewards$: Observable<EraRewards[]>,
   api: Api
-): Observable<ValidatorWithDetails> => {
+): ValidatorInfo => {
   const address = validator.stashAccount
 
-  const status$ = activeValidators$.pipe(map((activeValidators) => ({ isActive: activeValidators.includes(address) })))
+  const isActive$ = activeValidators$.pipe(
+    map((activeValidators) => ({ isActive: activeValidators.includes(address) })),
+    keepFirst()
+  )
 
-  const rewards$ = validatorsRewards$.pipe(
-    map((allRewards) => {
-      const rewards = allRewards.flatMap(({ era, totalPoints, individual, totalPayout }) => {
+  const rewardHistory$ = validatorsRewards$.pipe(
+    map((allRewards) =>
+      allRewards.flatMap(({ era, totalPoints, individual, totalPayout }) => {
         if (!individual[address]) return []
         const eraPoints = Number(individual[address])
         const eraReward = totalPayout.muln(eraPoints / totalPoints)
         return { era, eraReward, eraPoints }
       })
-
-      return {
-        rewardPointsHistory: rewards.map(({ era, eraPoints }) => ({ era, rewardPoints: eraPoints })),
-        totalRewards: rewards.reduce((total, { eraReward }) => total.add(eraReward ?? BN_ZERO), BN_ZERO),
-        latestReward: rewards[0]?.eraReward,
-      }
-    })
+    )
   )
 
-  const stakes$ = api.query.staking.activeEra().pipe(
-    take(1),
+  const reward$ = rewardHistory$.pipe(
+    map((rewards) => ({
+      rewardPointsHistory: rewards.map(({ era, eraPoints }) => ({ era, rewardPoints: eraPoints })),
+      totalRewards: rewards.reduce((total, { eraReward }) => total.add(eraReward ?? BN_ZERO), BN_ZERO),
+    })),
+    keepFirst()
+  )
+
+  const staking$ = api.query.staking.activeEra().pipe(
     switchMap((activeEra) => api.query.staking.erasStakers(activeEra.unwrap().index, address)), // TODO handle potential unwrap failure
     map((stakingInfo) => {
       const total = stakingInfo.total.toBn()
@@ -99,33 +108,39 @@ export const getValidatorInfo = (
       }))
 
       return { staking: { total, own: stakingInfo.own.toBn(), nominators } }
-    })
+    }),
+    keepFirst()
   )
 
-  const slashing$ = api.query.staking.slashingSpans(address).pipe(
-    take(1),
+  const apr$ = combineLatest([rewardHistory$, staking$]).pipe(
+    map(([rewards, { staking }]) => {
+      const commission = validator.commission
+      const latestReward = rewards.at(0)?.eraReward
+      const apr = latestReward && Number(latestReward.muln(ERAS_PER_YEAR).muln(commission).div(staking.total))
+      return { APR: apr }
+    }),
+    keepFirst()
+  )
+
+  const slashed$ = api.query.staking.slashingSpans(address).pipe(
     map((slashingSpans) => {
       if (!slashingSpans.isSome) return { slashed: 0 }
       const { prior, lastNonzeroSlash } = slashingSpans.unwrap()
       return { slashed: prior.length + (lastNonzeroSlash.gtn(0) ? 1 : 0) }
-    })
+    }),
+    keepFirst()
   )
 
-  return merge(of({}), status$, rewards$, stakes$, slashing$).pipe(
-    scan((validator: ValidatorWithDetails, part) => ({ ...part, ...validator }), validator),
-    map((validator) => {
-      const { commission, staking } = validator
-      if (!('latestReward' in validator) || !staking || staking.total.isZero()) return validator
+  return { validator, isActive$, reward$, apr$, staking$, slashed$ }
+}
 
-      const latestReward = validator.latestReward
-      const apr = latestReward && Number(latestReward.muln(ERAS_PER_YEAR).muln(commission).div(staking.total))
-      return { ...validator, APR: apr }
-    }),
+export const keepFirst = <T>(): OperatorFunction<T, T> =>
+  pipe(
+    take(1),
     share({
       connector: () => new ReplaySubject(1),
-      resetOnError: false,
       resetOnComplete: false,
+      resetOnError: false,
       resetOnRefCountZero: false,
     })
   )
-}
