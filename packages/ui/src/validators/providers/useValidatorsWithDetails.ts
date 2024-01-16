@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { combineLatest, map, Observable, of, ReplaySubject, share, switchMap, take } from 'rxjs'
 
-import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { useApi } from '@/api/hooks/useApi'
 import { BN_ZERO } from '@/common/constants'
 import { useObservable } from '@/common/hooks/useObservable'
@@ -86,7 +85,6 @@ export const useValidatorsWithDetails = (allValidatorsWithCtrlAcc: Validator[] |
     const eraPayouts$ = api.query.staking.erasValidatorReward.entries()
 
     return combineLatest([eraPoints$, eraPayouts$]).pipe(
-      take(1),
       map(([points, payouts]) => {
         const payoutsMap = new Map(payouts.map(([era, amount]) => [era.args[0].toNumber(), amount.value.toBn()]))
 
@@ -101,18 +99,14 @@ export const useValidatorsWithDetails = (allValidatorsWithCtrlAcc: Validator[] |
           .sort((a, b) => b.era - a.era)
           .slice(1) // Remove the current period
       }),
-      freezeObservable
+      keepFirst
     )
   }, [api?.isConnected, !validatorDetailsOptions])
 
   const activeValidators$ = useMemo(() => {
     if (!validatorDetailsOptions) return
 
-    return api?.query.session.validators().pipe(
-      take(1),
-      map((activeAccs) => activeAccs.map(encodeAddress)),
-      freezeObservable
-    )
+    return api?.query.session.validators().pipe(keepFirst)
   }, [api?.isConnected, !validatorDetailsOptions])
 
   const aggregated = useObservable<AggregateResult>(() => {
@@ -179,9 +173,13 @@ export const useValidatorsWithDetails = (allValidatorsWithCtrlAcc: Validator[] |
 
 const validatorsWithDetailsCache = new Map<string, Observable<ValidatorWithDetails>>()
 
-const freezeObservable: <T>(o: Observable<T>) => Observable<T> = share({
-  connector: () => new ReplaySubject(1),
-  resetOnComplete: false,
-  resetOnError: false,
-  resetOnRefCountZero: false,
-})
+const keepFirst = <T>(o: Observable<T>): Observable<T> =>
+  o.pipe(
+    take(1),
+    share({
+      connector: () => new ReplaySubject(1),
+      resetOnComplete: false,
+      resetOnError: false,
+      resetOnRefCountZero: false,
+    })
+  )

@@ -1,3 +1,5 @@
+import { Vec } from '@polkadot/types'
+import { AccountId } from '@polkadot/types/interfaces'
 import BN from 'bn.js'
 import { map, merge, Observable, of, ReplaySubject, scan, share, switchMap, take } from 'rxjs'
 
@@ -23,7 +25,7 @@ export const getValidatorsFilters = ({ isVerified, search = '' }: ValidatorDetai
 }
 
 export const filterValidatorsByIsActive = (validators: ValidatorWithDetails[], isActive: boolean) =>
-  map((activeValidators: string[]) =>
+  map((activeValidators: Vec<AccountId>) =>
     validators.filter(({ stashAccount }) => activeValidators.includes(stashAccount) === isActive)
   )
 
@@ -61,7 +63,7 @@ type EraRewards = {
 
 export const getValidatorInfo = (
   validator: ValidatorWithDetails,
-  activeValidators$: Observable<string[]>,
+  activeValidators$: Observable<Vec<AccountId>>,
   validatorsRewards$: Observable<EraRewards[]>,
   api: Api
 ): Observable<ValidatorWithDetails> => {
@@ -109,14 +111,14 @@ export const getValidatorInfo = (
     })
   )
 
-  return merge(of({}), status$, stakes$, rewards$, slashing$).pipe(
+  return merge(of({}), status$, rewards$, stakes$, slashing$).pipe(
     scan((validator: ValidatorWithDetails, part) => ({ ...part, ...validator }), validator),
     map((validator) => {
       const { commission, staking } = validator
       if (!('latestReward' in validator) || !staking || staking.total.isZero()) return validator
 
-      const latestReward = validator.latestReward as BN
-      const apr = Number(latestReward.muln(ERAS_PER_YEAR).muln(commission).div(staking.total))
+      const latestReward = validator.latestReward
+      const apr = latestReward && Number(latestReward.muln(ERAS_PER_YEAR).muln(commission).div(staking.total))
       return { ...validator, APR: apr }
     }),
     share({
