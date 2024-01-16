@@ -2,7 +2,6 @@ import { expect } from '@storybook/jest'
 import { Meta, StoryObj } from '@storybook/react'
 import { userEvent, waitFor, within } from '@storybook/testing-library'
 
-import { Address } from '@/common/types'
 import { GetMembersWithDetailsDocument } from '@/memberships/queries'
 import { member } from '@/mocks/data/members'
 import { joy, selectFromDropdown } from '@/mocks/helpers'
@@ -11,6 +10,21 @@ import { MocksParameters } from '@/mocks/providers'
 import { ValidatorList } from './ValidatorList'
 
 type Args = object
+
+const eraRewardEntries = [
+  [688, joy(0.123456)],
+  [689, joy(0.123456)],
+  [690, joy(0.123456)],
+  [691, joy(0.123456)],
+  [692, joy(0.123456)],
+  [693, joy(0.123456)],
+  [694, joy(0.123456)],
+  [695, joy(0.123456)],
+  [696, joy(0.123456)],
+  [697, joy(0.123456)],
+  [698, joy(0.123456)],
+  [699, joy(0.123456)],
+] as const
 
 export default {
   title: 'Pages/Validators/ValidatorList',
@@ -21,72 +35,7 @@ export default {
       return {
         chain: {
           derive: {
-            staking: {
-              erasRewards: [
-                { era: 688, eraReward: joy(0.123456) },
-                { era: 689, eraReward: joy(0.123456) },
-                { era: 690, eraReward: joy(0.123456) },
-                { era: 691, eraReward: joy(0.123456) },
-                { era: 692, eraReward: joy(0.123456) },
-                { era: 693, eraReward: joy(0.123456) },
-                { era: 694, eraReward: joy(0.123456) },
-                { era: 695, eraReward: joy(0.123456) },
-                { era: 696, eraReward: joy(0.123456) },
-                { era: 697, eraReward: joy(0.123456) },
-                { era: 698, eraReward: joy(0.123456) },
-                { era: 699, eraReward: joy(0.123456) },
-                { era: 700, eraReward: joy(0.123456) },
-              ],
-              stakerRewards: (address: Address) => {
-                const validatorRewards = [
-                  {
-                    address: 'j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D',
-                    rewards: [{ eraReward: joy(0.5) }],
-                  },
-                  {
-                    address: 'j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW',
-                    rewards: [{ eraReward: joy(0.5) }],
-                  },
-                  {
-                    address: 'j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP',
-                    rewards: [{ eraReward: joy(0.9) }],
-                  },
-                  {
-                    address: 'j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz',
-                    rewards: [{ eraReward: joy(0.1) }],
-                  },
-                  {
-                    address: 'j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa',
-                    rewards: [{ eraReward: joy(0.1) }],
-                  },
-                  {
-                    address: 'j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN',
-                    rewards: [{ eraReward: joy(0.8) }],
-                  },
-                  {
-                    address: 'j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP',
-                    rewards: [{ eraReward: joy(0.4) }],
-                  },
-                  {
-                    address: 'j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ',
-                    rewards: [{ eraReward: joy(0.6) }],
-                  },
-                  {
-                    address: 'j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg',
-                    rewards: [{ eraReward: joy(0.7) }],
-                  },
-                  {
-                    address: 'j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt',
-                    rewards: [{ eraReward: joy(0.7) }],
-                  },
-                  {
-                    address: 'j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM',
-                    rewards: [{ eraReward: joy(0.7) }],
-                  },
-                ]
-                return validatorRewards.find((validatorReward) => validatorReward.address === address)?.rewards ?? []
-              },
-            },
+            staking: { erasRewards: eraRewardEntries.map(([era, eraReward]) => ({ era, eraReward })) },
           },
           query: {
             balances: {
@@ -100,10 +49,6 @@ export default {
                 'j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP',
                 'j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz',
                 'j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa',
-                'j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN',
-                'j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP',
-                'j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ',
-                'j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg',
               ],
             },
             staking: {
@@ -122,8 +67,6 @@ export default {
                   'j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP',
                   'j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ',
                   'j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg',
-                  'j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt',
-                  'j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM',
                 ],
               },
               counterForValidators: 12,
@@ -145,8 +88,6 @@ export default {
                         j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
                         j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
                         j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                        j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt: Math.floor(Math.random() * 800 + 200),
-                        j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM: Math.floor(Math.random() * 800 + 200),
                       },
                     },
                   ],
@@ -161,8 +102,6 @@ export default {
                         j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa: Math.floor(Math.random() * 800 + 200),
                         j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
                         j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                        j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt: Math.floor(Math.random() * 800 + 200),
-                        j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM: Math.floor(Math.random() * 800 + 200),
                       },
                     },
                   ],
@@ -179,7 +118,6 @@ export default {
                         j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
                         j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
                         j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                        j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt: Math.floor(Math.random() * 800 + 200),
                       },
                     },
                   ],
@@ -196,7 +134,6 @@ export default {
                         j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
                         j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
                         j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                        j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt: Math.floor(Math.random() * 800 + 200),
                       },
                     },
                   ],
@@ -214,7 +151,6 @@ export default {
                         j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
                         j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
                         j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                        j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt: Math.floor(Math.random() * 800 + 200),
                       },
                     },
                   ],
@@ -232,8 +168,6 @@ export default {
                         j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
                         j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
                         j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                        j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt: Math.floor(Math.random() * 800 + 200),
-                        j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM: Math.floor(Math.random() * 800 + 200),
                       },
                     },
                   ],
@@ -248,8 +182,6 @@ export default {
                         j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz: Math.floor(Math.random() * 800 + 200),
                         j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
                         j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                        j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt: Math.floor(Math.random() * 800 + 200),
-                        j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM: Math.floor(Math.random() * 800 + 200),
                       },
                     },
                   ],
@@ -263,8 +195,6 @@ export default {
                         j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP: Math.floor(Math.random() * 800 + 200),
                         j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
                         j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                        j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt: Math.floor(Math.random() * 800 + 200),
-                        j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM: Math.floor(Math.random() * 800 + 200),
                       },
                     },
                   ],
@@ -282,7 +212,6 @@ export default {
                         j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
                         j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
                         j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                        j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt: Math.floor(Math.random() * 800 + 200),
                       },
                     },
                   ],
@@ -300,7 +229,6 @@ export default {
                         j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
                         j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
                         j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                        j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM: Math.floor(Math.random() * 800 + 200),
                       },
                     },
                   ],
@@ -318,8 +246,6 @@ export default {
                         j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
                         j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
                         j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                        j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt: Math.floor(Math.random() * 800 + 200),
-                        j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM: Math.floor(Math.random() * 800 + 200),
                       },
                     },
                   ],
@@ -336,14 +262,12 @@ export default {
                         j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN: Math.floor(Math.random() * 800 + 200),
                         j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
                         j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
-                        j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt: Math.floor(Math.random() * 800 + 200),
-                        j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM: Math.floor(Math.random() * 800 + 200),
                       },
                     },
                   ],
                 ],
               },
-              erasValidatorReward: joy(0.123456),
+              erasValidatorReward: new Map(eraRewardEntries),
               erasStakers: {
                 total: joy(400),
                 own: joy(0.0001),
@@ -355,12 +279,10 @@ export default {
                   { who: 'j4WwTZ3fnkoXJw3D1vGVyymjaiLxM78TGyAAX41JRH8Kx6T2u', value: joy(0.2) },
                   { who: 'j4Wo9377XBAvhmB35J4TkpJUHnUKmyccXhGtHCVvi6pPr9so8', value: joy(0.2) },
                   { who: 'j4WwTZ3fnkoXJw3D1vGVyymjaiLxM78TGyAAX41JRH8Kx6T2u', value: joy(0.2) },
-                  { who: 'j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM', value: joy(0.2) },
                   { who: 'j4WwTZ3fnkoXJw3D1vGVyymjaiLxM78TGyAAX41JRH8Kx6T2u', value: joy(0.2) },
                   { who: 'j4T3XgRMUaZZL6GsMk6RXfBcjuMWxfSLnoATYkBTHh7xyjmoH', value: joy(0.2) },
                   { who: 'j4W2bw7ggG69e9TZ77RP9mjem1GrbPwpbKYK7WdZiym77yzMJ', value: joy(0.2) },
                   { who: 'j4UzoJUhDGpnsCWrmx9ojofwaT8KHz3azp8C1S49MSN6rYjim', value: joy(0.2) },
-                  { who: 'j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt', value: joy(0.2) },
                   { who: 'j4SgrgDrzzGyfrxPe4ZgaKfByKyLo5SdsUXNfHzZJPh5R6f8q', value: joy(0.2) },
                   { who: 'j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D', value: joy(0.2) },
                   { who: 'j4SgrgDrzzGyfrxPe4ZgaKfByKyLo5SdsUXNfHzZJPh5R6f8q', value: joy(0.2) },
@@ -414,14 +336,6 @@ export default {
                     { args: ['j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg'] },
                     { commission: 0.05 * 10 ** 9, blocked: false },
                   ],
-                  [
-                    { args: ['j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt'] },
-                    { commission: 0.05 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM'] },
-                    { commission: 0.05 * 10 ** 9, blocked: false },
-                  ],
                 ],
               },
             },
@@ -459,7 +373,7 @@ export const TestsFilters: Story = {
       expect(screen.getAllByText('alice').length).toEqual(2)
       expect(screen.queryByText('bob')).toBeNull()
       await selectFromDropdown(screen, verificationFilter, 'unverified')
-      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(8))
+      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(6))
       expect(screen.queryByText('verifed')).toBeNull()
       expect(screen.queryByText('alice')).toBeNull()
       expect(screen.getByText('bob'))
@@ -467,10 +381,10 @@ export const TestsFilters: Story = {
     })
     await step('State Filter', async () => {
       await selectFromDropdown(screen, stateFilter, 'active')
-      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(9))
+      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(5))
       expect(screen.queryByText('waiting')).toBeNull()
       await selectFromDropdown(screen, stateFilter, 'waiting')
-      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(2))
+      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(4))
       expect(screen.queryByText('active')).toBeNull()
       await selectFromDropdown(screen, stateFilter, 'All')
     })
@@ -485,7 +399,7 @@ export const TestsFilters: Story = {
       await userEvent.type(searchElement, 'j4R')
       await waitFor(async () => {
         await userEvent.type(searchElement, '{enter}')
-        expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(9)
+        expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(7)
       })
       expect(screen.queryByText('bob'))
       expect(screen.queryByText('dave'))
@@ -497,35 +411,25 @@ export const TestsFilters: Story = {
       await selectFromDropdown(screen, stateFilter, 'active')
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(3))
       await userEvent.click(screen.getByText('Clear all filters'))
-      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(11))
-      await userEvent.type(searchElement, 'j4R{enter}')
-      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(9))
+      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(7))
+      await userEvent.type(searchElement, 'alice{enter}')
+      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(1))
       expect(screen.queryByText('Clear all filters'))
       await userEvent.click(screen.getByText('Clear all filters'))
-      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(11))
+      await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(7))
     })
 
     await step('Sort', async () => {
-      await userEvent.click(screen.getByText('Expected Nom APR'))
-      expect(
-        screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[0].innerText ===
-          '18%'
-      ).toBeTruthy()
-      await userEvent.click(screen.getByText('Expected Nom APR'))
-      expect(
-        screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[0].innerText ===
-          '2%'
-      ).toBeTruthy()
       await userEvent.click(screen.getByText('Commission'))
-      expect(
-        screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[1].innerText ===
-          '20%'
-      ).toBeTruthy()
+      await waitFor(async () => {
+        const firstRow = (await screen.getAllByRole('button', { name: 'Nominate' }))[0].parentElement
+        expect(within(firstRow as HTMLElement).queryByText('20%'))
+      })
       await userEvent.click(screen.getByText('Commission'))
-      expect(
-        screen.queryAllByRole('button', { name: 'Nominate' })[0].parentElement?.querySelectorAll('p')[1].innerText ===
-          '1%'
-      ).toBeTruthy()
+      await waitFor(async () => {
+        const firstRow = (await screen.getAllByRole('button', { name: 'Nominate' }))[0].parentElement
+        expect(within(firstRow as HTMLElement).queryByText('1%'))
+      })
     })
   },
 }

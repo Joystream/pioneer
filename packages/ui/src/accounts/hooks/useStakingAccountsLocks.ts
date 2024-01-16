@@ -65,7 +65,7 @@ export const useStakingAccountsLocks = ({
 
     setAccountWithLocks(
       accountsWithLocks.map(({ address, optionLocks, ...account }): StakingAccount => {
-        const isOptOut = votingOptOutAccounts.includes(address)
+        const isOptOut = votingOptOutAccounts?.includes(address)
         return { address, ...account, optionLocks: isOptOut ? [...optionLocks, 'optOutLock'] : optionLocks }
       })
     )

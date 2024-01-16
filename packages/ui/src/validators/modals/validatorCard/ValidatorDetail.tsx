@@ -11,6 +11,7 @@ import { TextSmall } from '@/common/components/typography'
 import { BN_ZERO, ERA_DEPTH } from '@/common/constants'
 import { plural } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
+import { whenDefined } from '@/common/utils'
 import RewardPointsChart from '@/validators/components/RewardPointChart'
 
 import { ValidatorWithDetails } from '../../types'
@@ -24,6 +25,12 @@ interface Props {
 export const ValidatorDetail = ({ validator, hideModal }: Props) => {
   const { showModal } = useModal<NominatingRedirectModalCall>()
 
+  const uptime = whenDefined(
+    validator.rewardPointsHistory,
+    (rewardPointsHistory) =>
+      `${((rewardPointsHistory.filter(({ rewardPoints }) => rewardPoints).length / (ERA_DEPTH + 1)) * 100).toFixed(3)}%`
+  )
+
   return (
     <>
       <SidePaneBody>
@@ -34,35 +41,34 @@ export const ValidatorDetail = ({ validator, hideModal }: Props) => {
               <TokenValueStat size="s" value={validator.totalRewards}>
                 <TextSmall lighter>Total reward</TextSmall>
               </TokenValueStat>
-              <Stat size="s" value={validator.APR.toString() + '%'}>
+              <Stat size="s" value={whenDefined(validator.APR, (apr) => `${apr}%`)}>
                 <TextSmall lighter>Average APR</TextSmall>
               </Stat>
-              <TokenValueStat size="s" value={validator.staking.others.reduce((a, b) => a.add(b.staking), BN_ZERO)}>
+              <TokenValueStat
+                size="s"
+                value={validator.staking?.nominators.reduce((a, b) => a.add(b.staking), BN_ZERO)}
+              >
                 <TextSmall lighter>Staked by nominators</TextSmall>
               </TokenValueStat>
               <Stat size="s" value={validator.isVerifiedValidator ? 'Verified' : 'Unverified'}>
                 <TextSmall lighter>Status</TextSmall>
               </Stat>
-              <Stat size="s" value={`${validator.slashed} time${plural(validator.slashed)}`}>
+              <Stat size="s" value={whenDefined(validator.slashed, (slashed) => `${slashed} time${plural(slashed)}`)}>
                 <TextSmall lighter>Slashed</TextSmall>
               </Stat>
-              <Stat
-                size="s"
-                value={`${(
-                  (validator.rewardPointsHistory.filter(({ rewardPoints }) => rewardPoints).length / (ERA_DEPTH + 1)) *
-                  100
-                ).toFixed(3)}%`}
-              >
+              <Stat size="s" value={uptime}>
                 <TextSmall lighter>Uptime</TextSmall>
               </Stat>
             </ModalStatistics>
           </RowGapBlock>
-          <RowGapBlock gap={4}>
-            <h6>Era points</h6>
-            <RewardPointsChartWrapper>
-              <RewardPointsChart rewardPointsHistory={validator.rewardPointsHistory} />
-            </RewardPointsChartWrapper>
-          </RowGapBlock>
+          {validator.rewardPointsHistory && (
+            <RowGapBlock gap={4}>
+              <h6>Era points</h6>
+              <RewardPointsChartWrapper>
+                <RewardPointsChart rewardPointsHistory={validator.rewardPointsHistory} />
+              </RewardPointsChartWrapper>
+            </RowGapBlock>
+          )}
           <RowGapBlock gap={4}>
             <h6>About</h6>
             <MarkdownPreview markdown={validator.membership?.about ?? ''} />

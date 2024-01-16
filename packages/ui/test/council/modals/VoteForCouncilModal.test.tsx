@@ -91,7 +91,7 @@ describe('UI: Vote for Council Modal', () => {
 
   const getNextStepButton = () => getButton(/Next step/i)
 
-  const resetVotes = (castBy = '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU') => {
+  const resetVotes = (castBy = 'j4RxqjYM8Jt5gnJr8eHUiv59GtrvxkSFCEoLyQUFW6JZaQRku') => {
     seedCouncilVotes(server.server, [
       { id: '0', electionRoundId: '0', voteForId: null, castBy },
       { id: '1', electionRoundId: '1', voteForId: null, castBy: alice.address },

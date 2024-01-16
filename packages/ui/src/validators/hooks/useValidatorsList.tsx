@@ -1,48 +1,56 @@
-import { useContext, useEffect, useState } from 'react'
-
-import { encodeAddress } from '@/accounts/model/encodeAddress'
+import { useContext, useEffect, useMemo, useReducer, useState } from 'react'
 
 import { ValidatorsContext } from '../providers/context'
-import { Verification, State, ValidatorWithDetails } from '../types'
+import { ValidatorDetailsOrder } from '../types'
+
+const VALIDATOR_PER_PAGE = 7
+const DESCENDING_KEYS: ValidatorDetailsOrder['key'][] = ['commission']
 
 export const useValidatorsList = () => {
   const [search, setSearch] = useState('')
-  const [isVerified, setIsVerified] = useState<Verification>(null)
-  const [isActive, setIsActive] = useState<State>(null)
-  const [visibleValidators, setVisibleValidators] = useState<ValidatorWithDetails[]>([])
-  const { setShouldFetchValidators, setShouldFetchExtraDetails, validatorsWithDetails } = useContext(ValidatorsContext)
+  const [isVerified, setIsVerified] = useState<boolean>()
+  const [isActive, setIsActive] = useState<boolean>()
+  const filter = useMemo(() => ({ search, isVerified, isActive }), [search, isVerified, isActive])
+
+  const [order, handleSort] = useReducer(
+    (state: ValidatorDetailsOrder, key: ValidatorDetailsOrder['key']) => ({
+      key,
+      isDescending: key !== state.key ? DESCENDING_KEYS.includes(key) : !state.isDescending,
+    }),
+    { key: 'default', isDescending: false }
+  )
+
+  const {
+    setShouldFetchValidators,
+    setValidatorDetailsOptions,
+    validatorsWithDetails,
+    size = 0,
+  } = useContext(ValidatorsContext)
+
+  const [page, setPage] = useState(1)
+  const pagination = useMemo(
+    () => ({
+      page,
+      handlePageChange: setPage,
+      pageCount: Math.ceil(size / VALIDATOR_PER_PAGE),
+    }),
+    [page, size]
+  )
 
   useEffect(() => {
     setShouldFetchValidators(true)
-    setShouldFetchExtraDetails(true)
-  }, [])
-
-  useEffect(() => {
-    if (validatorsWithDetails) {
-      setVisibleValidators(
-        validatorsWithDetails
-          .filter((validator) => {
-            if (isActive === 'active') return validator.isActive
-            else if (isActive === 'waiting') return !validator.isActive
-            else return true
-          })
-          .filter((validator) => {
-            if (isVerified === 'verified') return validator.isVerifiedValidator
-            else if (isVerified === 'unverified') return !validator.isVerifiedValidator
-            else return true
-          })
-          .filter((validator) => {
-            return (
-              encodeAddress(validator.stashAccount).includes(search) || validator.membership?.handle.includes(search)
-            )
-          })
-      )
-    }
-  }, [validatorsWithDetails, search, isVerified, isActive])
+    setValidatorDetailsOptions({
+      filter,
+      order,
+      start: (page - 1) * VALIDATOR_PER_PAGE,
+      end: page * VALIDATOR_PER_PAGE,
+    })
+  }, [filter, order, page])
 
   return {
-    visibleValidators,
-    length: visibleValidators.length,
+    validatorsWithDetails,
+    pagination,
+    order: { ...order, sortBy: (key: ValidatorDetailsOrder['key']) => () => handleSort(key) },
     filter: {
       search,
       setSearch,
