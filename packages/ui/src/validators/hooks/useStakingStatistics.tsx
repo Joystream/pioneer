@@ -4,6 +4,7 @@ import { combineLatest, map } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
+import { useObservable } from '@/common/hooks/useObservable'
 
 export const useStakingStatistics = () => {
   const { api } = useApi()
@@ -24,7 +25,7 @@ export const useStakingStatistics = () => {
   const totalIssuance = useFirstObservableValue(() => api?.query.balances.totalIssuance(), [api?.isConnected])
   const currentStaking = useFirstObservableValue(
     () => activeEra && api && api.query.staking.erasTotalStake(activeEra.eraIndex),
-    [api?.isConnected]
+    [api?.isConnected, activeEra]
   )
   const activeValidators = useFirstObservableValue(() => api?.query.session.validators(), [api?.isConnected])
   const stakers = useFirstObservableValue(
@@ -33,7 +34,7 @@ export const useStakingStatistics = () => {
       api &&
       activeEra &&
       combineLatest(activeValidators.map((address) => api.query.staking.erasStakers(activeEra.eraIndex, address))),
-    [api?.isConnected]
+    [api?.isConnected, activeEra, activeValidators]
   )
   const acitveNominators = useMemo(() => {
     const nominators = stakers?.map((validator) => validator.others.map((nominator) => nominator.who.toString()))
@@ -57,9 +58,9 @@ export const useStakingStatistics = () => {
     () => (totalIssuance && currentStaking ? currentStaking.muln(1000).div(totalIssuance).toNumber() / 10 : 0),
     [currentStaking, totalIssuance]
   )
-  const eraRewardPoints = useFirstObservableValue(
+  const eraRewardPoints = useObservable(
     () => activeEra && api && api.query.staking.erasRewardPoints(activeEra.eraIndex),
-    [api?.isConnected]
+    [api?.isConnected, activeEra]
   )
   return {
     eraStartedOn: activeEra?.eraStartedOn,
