@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { combineLatest, map, merge, Observable, of, scan, switchMap } from 'rxjs'
+import { combineLatest, map, merge, Observable, of, scan, switchMap, throttleTime } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
 import { BN_ZERO } from '@/common/constants'
@@ -142,6 +142,7 @@ export const useValidatorsWithDetails = (allValidatorsWithCtrlAcc: Validator[] |
           scan((validator: ValidatorWithDetails, part) => ({ ...validator, ...part }), validator)
         )
       ),
+      throttleTime(10, undefined, { leading: false, trailing: true }),
       switchMap((validators) => size$.pipe(map((size) => (!validators[0] && size > 0 ? undefined : validators))))
     )
   }, [filteredValidatorsInfo$, size$, validatorDetailsOptions?.start, validatorDetailsOptions?.order])
