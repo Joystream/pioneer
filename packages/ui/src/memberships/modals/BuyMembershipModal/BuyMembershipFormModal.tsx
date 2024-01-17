@@ -429,7 +429,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: B
   )
 }
 
-const SelectValidatorAccountWrapper = styled.div`
+export const SelectValidatorAccountWrapper = styled.div`
   margin-top: -4px;
   display: flex;
   flex-direction: column;
