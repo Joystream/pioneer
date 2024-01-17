@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { combineLatest, map, merge, Observable, of, scan } from 'rxjs'
+import { combineLatest, map, merge, Observable, of, scan, switchMap } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
 import { BN_ZERO } from '@/common/constants'
@@ -127,8 +127,8 @@ export const useValidatorsWithDetails = (allValidatorsWithCtrlAcc: Validator[] |
     return [filtered$, size$]
   }, [validatorsInfo$, validatorDetailsOptions?.filter])
 
-  const validatorsWithDetails = useObservable<ValidatorWithDetails[]>(() => {
-    if (!filteredValidatorsInfo$ || !validatorDetailsOptions) return
+  const validatorsWithDetails = useObservable<ValidatorWithDetails[] | undefined>(() => {
+    if (!filteredValidatorsInfo$ || !size$ || !validatorDetailsOptions) return
 
     const { order, start, end } = validatorDetailsOptions
     const sortDirection = order.isDescending ? -1 : 1
@@ -141,9 +141,10 @@ export const useValidatorsWithDetails = (allValidatorsWithCtrlAcc: Validator[] |
         merge(of(validator), ...Object.values(rest)).pipe(
           scan((validator: ValidatorWithDetails, part) => ({ ...validator, ...part }), validator)
         )
-      )
+      ),
+      switchMap((validators) => size$.pipe(map((size) => (!validators[0] && size > 0 ? undefined : validators))))
     )
-  }, [filteredValidatorsInfo$, validatorDetailsOptions])
+  }, [filteredValidatorsInfo$, size$, validatorDetailsOptions?.start, validatorDetailsOptions?.order])
 
   return {
     validatorsWithDetails,
