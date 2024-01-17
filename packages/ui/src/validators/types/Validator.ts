@@ -38,7 +38,7 @@ export interface ValidatorDetailsFilter {
 }
 
 export interface ValidatorDetailsOrder {
-  key: 'default' | 'commission'
+  key: 'default' | 'commission' | 'apr'
   isDescending: boolean
 }
 

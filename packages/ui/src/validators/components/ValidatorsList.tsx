@@ -57,7 +57,7 @@ export const ValidatorsList = ({ validators, order, pagination }: ValidatorsList
             <ListHeader>State</ListHeader>
             <ListHeader>Own Stake</ListHeader>
             <ListHeader>Total Stake</ListHeader>
-            <ListHeader>
+            <SortHeader onSort={order.sortBy('apr')} isActive={order.key === 'apr'} isDescending={order.isDescending}>
               Expected Nom APR
               <Tooltip
                 tooltipText={
@@ -71,7 +71,7 @@ export const ValidatorsList = ({ validators, order, pagination }: ValidatorsList
               >
                 <TooltipDefault />
               </Tooltip>
-            </ListHeader>
+            </SortHeader>
             <SortHeader
               onSort={order.sortBy('commission')}
               isActive={order.key === 'commission'}

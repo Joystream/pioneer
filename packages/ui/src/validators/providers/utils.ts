@@ -1,7 +1,7 @@
 import { Vec } from '@polkadot/types'
 import { AccountId } from '@polkadot/types/interfaces'
 import BN from 'bn.js'
-import { combineLatest, map, Observable, of, OperatorFunction, pipe, ReplaySubject, share, switchMap, take } from 'rxjs'
+import { map, Observable, of, OperatorFunction, pipe, ReplaySubject, share, switchMap, take } from 'rxjs'
 
 import { Api } from '@/api'
 import { BN_ZERO, ERAS_PER_YEAR } from '@/common/constants'
@@ -63,6 +63,12 @@ export const getValidatorSortingFns = (
 
     case 'commission':
       return [(item) => of(item.validator), (a, b) => a.commission - b.commission]
+
+    case 'apr':
+      return [
+        (item) => item.apr$.pipe(map(({ APR }) => ({ ...item.validator, APR }))),
+        (a, b) => (a.APR ?? -1) - (b.APR ?? -1),
+      ]
   }
 }
 
@@ -119,12 +125,20 @@ export const getValidatorInfo = (
     keepFirst()
   )
 
-  const apr$ = combineLatest([rewardHistory$, staking$]).pipe(
-    map(([rewards, { staking }]) => {
-      const commission = validator.commission
-      const latestReward = rewards.at(0)?.eraReward
-      const apr = latestReward && Number(latestReward.muln(ERAS_PER_YEAR).muln(commission).div(staking.total))
-      return { APR: apr }
+  const apr$ = staking$.pipe(
+    switchMap(({ staking }) => {
+      if (staking.total.isZero()) return of({})
+
+      return rewardHistory$.pipe(
+        map((rewards) => {
+          const commission = validator.commission
+          const latestReward = rewards.at(0)?.eraReward
+          if (!latestReward) return {}
+
+          const apr = Number(latestReward.muln(ERAS_PER_YEAR).muln(commission).div(staking.total))
+          return { APR: apr }
+        })
+      )
     }),
     keepFirst()
   )
