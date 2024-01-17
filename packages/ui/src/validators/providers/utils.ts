@@ -9,11 +9,18 @@ import { isDefined } from '@/common/utils'
 
 import { ValidatorDetailsFilter, ValidatorDetailsOrder, ValidatorInfo, ValidatorWithDetails } from '../types'
 
-export const getValidatorsFilters = ({ isVerified, search = '' }: ValidatorDetailsFilter) => {
+export const getValidatorsFilters = ({
+  isActive,
+  isVerified,
+  search = '',
+}: ValidatorDetailsFilter): (false | ((i: ValidatorInfo) => Observable<unknown>))[] => {
   const s = search.toLowerCase()
   const isMatch = (value: string | undefined) => value && value.toLowerCase().search(s) >= 0
 
   return [
+    // Status filter
+    isDefined(isActive) && (({ isActive$ }) => isActive$.pipe(map((validator) => validator.isActive === isActive))),
+
     // Verification filter
     isDefined(isVerified) && (({ validator }: ValidatorInfo) => of(!!validator.isVerifiedValidator === isVerified)),
 
