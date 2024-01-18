@@ -34,7 +34,7 @@ export const ModalTransactionFooter: FC<Props> = ({
 }) => {
   const { feeInfo } = useTransactionFee()
   return (
-    <ModalFooter className={className} twoColumns>
+    <ModalFooter className={className}>
       <ButtonsGroup align="left">
         {extraLeftButtons}
         {prev && !prev.disabled && (
