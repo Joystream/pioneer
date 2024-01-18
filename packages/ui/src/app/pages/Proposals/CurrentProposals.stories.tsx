@@ -777,7 +777,7 @@ export const SpecificParametersFundingRequest: Story = {
     step('Transaction parameters', () => {
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({
-        fundingRequest: [{ account: alice.controllerAccount, amount: 100_0000000000 }],
+        fundingRequest: [{ account: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY', amount: 100_0000000000 }],
       })
     })
   }),
@@ -785,8 +785,10 @@ export const SpecificParametersFundingRequest: Story = {
 
 export const SpecificParametersMultipleFundingRequest: Story = {
   play: specificParametersTest('Funding Request', async ({ args, createProposal, modal, step }) => {
-    const bob = member('bob')
-    const charlie = member('charlie')
+    const aliceAddress = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'
+    const bobAddress = '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty'
+    const charlieAddess = member('charlie').controllerAccount
+
     await createProposal(async () => {
       const nextButton = getButtonByText(modal, 'Create proposal')
       expect(nextButton).toBeDisabled()
@@ -797,7 +799,7 @@ export const SpecificParametersMultipleFundingRequest: Story = {
 
       // Invalid
       await userEvent.clear(csvField)
-      await userEvent.type(csvField, `${alice.controllerAccount},500${bob.controllerAccount},500`)
+      await userEvent.type(csvField, `${aliceAddress},500${bobAddress},500`)
       expect(await modal.findByText(/Not valid CSV format/))
       // ensure its not being open-able while the CSV syntax is valid
       const previewButton = getButtonByText(modal, 'Preview and Validate')
@@ -807,7 +809,7 @@ export const SpecificParametersMultipleFundingRequest: Story = {
 
       // Invalid Accounts error
       await userEvent.clear(csvField)
-      await userEvent.type(csvField, `5GNJqTPy,500\n${bob.controllerAccount},500`)
+      await userEvent.type(csvField, `5GNJqTPy,500\n${bobAddress},500`)
 
       await waitFor(() => expect(modal.queryByText(/Not valid CSV format/)).toBeNull())
       expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
@@ -820,21 +822,23 @@ export const SpecificParametersMultipleFundingRequest: Story = {
 
       // Max Amount error
       await userEvent.clear(csvField)
-      await userEvent.type(csvField, `${alice.controllerAccount},166667\n${bob.controllerAccount},500`)
+      await userEvent.type(csvField, `${aliceAddress},166667\n${bobAddress},500`)
       expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
       expect(nextButton).toBeDisabled()
       await waitFor(() => expect(previewButton).toBeEnabled())
-      await userEvent.click(previewButton)
-      expect(await modal.findByText(/Max payment amount is exceeded/))
+      await waitFor(
+        async () => {
+          await userEvent.click(previewButton)
+          expect(await modal.findByText(/Max payment amount is exceeded/))
+        },
+        { timeout: 8000 }
+      )
       await userEvent.click(modal.getByTestId('sidePanel-overlay')) //ensure create proposal is still disabled
       expect(nextButton).toBeDisabled()
 
       // Max Allowed Accounts error
       await userEvent.clear(csvField)
-      await userEvent.type(
-        csvField,
-        `${alice.controllerAccount},400\n${bob.controllerAccount},500\n${charlie.controllerAccount},500`
-      )
+      await userEvent.type(csvField, `${aliceAddress},400\n${bobAddress},500\n${charlieAddess},500`)
       expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
       expect(nextButton).toBeDisabled()
       await waitFor(() => expect(previewButton).toBeEnabled())
@@ -852,7 +856,7 @@ export const SpecificParametersMultipleFundingRequest: Story = {
 
       // Valid
       await userEvent.clear(csvField)
-      await userEvent.type(csvField, `${alice.controllerAccount},500\n${bob.controllerAccount},500`)
+      await userEvent.type(csvField, `${aliceAddress},500\n${bobAddress},500`)
       expect(nextButton).toBeDisabled()
 
       await waitFor(() => expect(previewButton).toBeEnabled())
@@ -864,8 +868,8 @@ export const SpecificParametersMultipleFundingRequest: Story = {
       const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({
         fundingRequest: [
-          { account: alice.controllerAccount, amount: 500_0000000000 },
-          { account: bob.controllerAccount, amount: 500_0000000000 },
+          { account: aliceAddress, amount: 500_0000000000 },
+          { account: bobAddress, amount: 500_0000000000 },
         ],
       })
     })

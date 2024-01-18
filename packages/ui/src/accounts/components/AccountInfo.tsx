@@ -62,7 +62,7 @@ export const AccountInfoWrap = styled.div`
   }
 `
 
-const AccountPhoto = styled.div`
+export const AccountPhoto = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -75,7 +75,7 @@ const AccountPhoto = styled.div`
   overflow: hidden;
 `
 
-const PhotoWrapper = styled.div`
+export const PhotoWrapper = styled.div`
   grid-area: accountphoto;
   position: relative;
 `
@@ -98,7 +98,7 @@ const StyledLockIcon = styled(LockIcon)`
   height: 12px;
 `
 
-const AccountName = styled.h5<{ locked?: boolean }>`
+export const AccountName = styled.h5<{ locked?: boolean }>`
   grid-area: accountname;
   max-width: 100%;
   margin: 0;
@@ -127,6 +127,6 @@ const OptionalAccountType = ({ active, address }: OptionalAccountTypeParams) => 
   return null
 }
 
-const AccountCopyAddress = styled(CopyComponent)`
+export const AccountCopyAddress = styled(CopyComponent)`
   grid-area: accountaddress;
 `
