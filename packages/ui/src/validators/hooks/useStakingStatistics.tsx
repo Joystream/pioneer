@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { combineLatest, map } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
-import { ERA_DURATION } from '@/common/constants'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useObservable } from '@/common/hooks/useObservable'
 
 export const useStakingStatistics = () => {
@@ -19,46 +19,49 @@ export const useStakingStatistics = () => {
     [api?.isConnected]
   )
 
-  const now = useObservable(() => api?.query.timestamp.now(), [api?.isConnected])
-  const totalIssuance = useObservable(() => api?.query.balances.totalIssuance(), [api?.isConnected])
-  const currentStaking = useObservable(
+  const totalIssuance = useFirstObservableValue(() => api?.query.balances.totalIssuance(), [api?.isConnected])
+  const currentStaking = useFirstObservableValue(
     () => activeEra && api && api.query.staking.erasTotalStake(activeEra.eraIndex),
-    [activeEra, api?.isConnected]
+    [api?.isConnected, activeEra]
   )
-  const activeValidators = useObservable(() => api?.query.session.validators(), [api?.isConnected])
-  const stakers = useObservable(
+  const activeValidators = useFirstObservableValue(() => api?.query.session.validators(), [api?.isConnected])
+  const stakers = useFirstObservableValue(
     () =>
       activeValidators &&
       api &&
       activeEra &&
       combineLatest(activeValidators.map((address) => api.query.staking.erasStakers(activeEra.eraIndex, address))),
-    [api?.isConnected, activeValidators, activeEra]
+    [api?.isConnected, activeEra, activeValidators]
   )
   const acitveNominators = useMemo(() => {
     const nominators = stakers?.map((validator) => validator.others.map((nominator) => nominator.who.toString()))
     const uniqueNominators = [...new Set(nominators?.flat())]
     return uniqueNominators
   }, [stakers])
-  const allValidatorsCount = useObservable(() => api?.query.staking.counterForValidators(), [api?.isConnected])
-  const allNominatorsCount = useObservable(() => api?.query.staking.counterForNominators(), [api?.isConnected])
-  const lastValidatorRewards = useObservable(
+  const allValidatorsCount = useFirstObservableValue(
+    () => api?.query.staking.counterForValidators(),
+    [api?.isConnected]
+  )
+  const allNominatorsCount = useFirstObservableValue(
+    () => api?.query.staking.counterForNominators(),
+    [api?.isConnected]
+  )
+  const lastValidatorRewards = useFirstObservableValue(
     () => activeEra && api && api.query.staking.erasValidatorReward(activeEra.eraIndex.subn(1)),
     [activeEra, api?.isConnected]
   )
-  const totalRewards = useObservable(() => api?.derive.staking.erasRewards(), [api?.isConnected])
+  const totalRewards = useFirstObservableValue(() => api?.derive.staking.erasRewards(), [api?.isConnected])
   const stakingPercentage = useMemo(
     () => (totalIssuance && currentStaking ? currentStaking.muln(1000).div(totalIssuance).toNumber() / 10 : 0),
     [currentStaking, totalIssuance]
   )
   const eraRewardPoints = useObservable(
     () => activeEra && api && api.query.staking.erasRewardPoints(activeEra.eraIndex),
-    [activeEra, api?.isConnected]
+    [api?.isConnected, activeEra]
   )
   return {
     eraStartedOn: activeEra?.eraStartedOn,
-    eraDuration: ERA_DURATION,
     eraRewardPoints,
-    now,
     idealStaking: new BN(totalIssuance ?? 0).divn(2),
     currentStaking: new BN(currentStaking ?? 0),
     stakingPercentage,

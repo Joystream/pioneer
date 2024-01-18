@@ -1,6 +1,6 @@
 import { Option, u64 } from '@polkadot/types'
 import { PalletStakingEraRewardPoints } from '@polkadot/types/lookup'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { PercentageChart } from '@/common/components/charts/PercentageChart'
 import { BlockIcon } from '@/common/components/icons'
@@ -12,25 +12,31 @@ import {
   formatDurationDate,
 } from '@/common/components/statistics'
 import { DurationValue } from '@/common/components/typography/DurationValue'
+import { ERA_DURATION } from '@/common/constants'
+import { whenDefined } from '@/common/utils'
 
 interface EraProps {
   eraStartedOn: Option<u64> | undefined
-  eraDuration: number
-  now: u64 | undefined
   eraRewardPoints: PalletStakingEraRewardPoints | undefined
 }
 
-export const Era = ({ eraStartedOn, eraDuration, now, eraRewardPoints }: EraProps) => {
-  const { nextReward, percentage } = useMemo(() => {
-    const nextReward = now && eraStartedOn && eraDuration - (Number(now) - Number(eraStartedOn))
-    const totalDuration = Number(eraDuration)
-    const percentage = nextReward ? Math.ceil(100 - (nextReward / totalDuration) * 100) : 0
-    return {
-      nextReward: formatDurationDate(nextReward ?? 0),
-      totalDuration: formatDurationDate(totalDuration ?? 0),
-      percentage,
-    }
-  }, [eraStartedOn, eraDuration, now])
+export const Era = ({ eraStartedOn, eraRewardPoints }: EraProps) => {
+  const [spentDuration, setSpentDuration] = useState<number>()
+
+  const { nextReward, percentage } = useMemo(
+    () => ({
+      nextReward: whenDefined(spentDuration, (d) => ERA_DURATION - d),
+      percentage: spentDuration && Math.ceil((100 * ERA_DURATION) / spentDuration),
+    }),
+    [spentDuration]
+  )
+
+  useEffect(() => {
+    if (!eraStartedOn) return
+    const interval = setInterval(() => setSpentDuration(Math.max(0, Date.now() - Number(eraStartedOn))), 1000)
+    return () => clearInterval(interval)
+  }, [eraStartedOn])
+
   return (
     <StatisticItem
       title="era"
@@ -38,12 +44,12 @@ export const Era = ({ eraStartedOn, eraDuration, now, eraRewardPoints }: EraProp
       tooltipTitle="Era"
       tooltipLinkText="What is an era"
       tooltipLinkURL="TBD"
-      actionElement={<PercentageChart percentage={percentage} small />}
+      actionElement={<PercentageChart percentage={percentage ?? 0} small />}
     >
       <StatisticItemSpacedContent>
         <StatisticLabel>Next Reward</StatisticLabel>
         <div>
-          <DurationValue value={nextReward} />
+          <DurationValue value={formatDurationDate(nextReward ?? 0)} />
         </div>
       </StatisticItemSpacedContent>
       <StatisticItemSpacedContent>

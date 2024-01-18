@@ -18,8 +18,6 @@ import { ValidatorsTabs } from './components/ValidatorsTabs'
 export const ValidatorList = () => {
   const {
     eraStartedOn,
-    eraDuration,
-    now,
     eraRewardPoints,
     totalRewards,
     lastRewards,
@@ -51,7 +49,7 @@ export const ValidatorList = () => {
               currentStaking={currentStaking}
               stakingPercentage={stakingPercentage}
             />
-            <Era eraStartedOn={eraStartedOn} eraDuration={eraDuration} now={now} eraRewardPoints={eraRewardPoints} />
+            <Era eraStartedOn={eraStartedOn} eraRewardPoints={eraRewardPoints} />
             <Rewards totalRewards={totalRewards} lastRewards={lastRewards} />
           </StatisticsStyle>
           <ValidatorsFilter filter={filter} />
