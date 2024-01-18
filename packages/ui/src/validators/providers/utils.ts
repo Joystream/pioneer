@@ -1,13 +1,14 @@
 import { Vec } from '@polkadot/types'
 import { AccountId } from '@polkadot/types/interfaces'
-import BN from 'bn.js'
-import { map, Observable, of, OperatorFunction, pipe, ReplaySubject, share, switchMap, take } from 'rxjs'
+import { map, Observable, of, OperatorFunction, ReplaySubject, share, switchMap } from 'rxjs'
 
 import { Api } from '@/api'
 import { BN_ZERO, ERAS_PER_YEAR } from '@/common/constants'
 import { isDefined } from '@/common/utils'
 
 import { ValidatorDetailsFilter, ValidatorDetailsOrder, ValidatorInfo, ValidatorWithDetails } from '../types'
+
+import { CommonValidatorsQueries } from './useValidatorsQueries'
 
 export const getValidatorsFilters = ({
   isActive,
@@ -72,17 +73,9 @@ export const getValidatorSortingFns = (
   }
 }
 
-type EraRewards = {
-  era: number
-  totalPoints: number
-  individual: Record<string, number>
-  totalPayout: BN
-}
-
 export const getValidatorInfo = (
   validator: ValidatorWithDetails,
-  activeValidators$: Observable<Vec<AccountId>>,
-  validatorsRewards$: Observable<EraRewards[]>,
+  { activeValidators$, validatorsRewards$ }: CommonValidatorsQueries,
   api: Api
 ): ValidatorInfo => {
   const address = validator.stashAccount
@@ -94,10 +87,10 @@ export const getValidatorInfo = (
 
   const rewardHistory$ = validatorsRewards$.pipe(
     map((allRewards) =>
-      allRewards.flatMap(({ era, totalPoints, individual, totalPayout }) => {
+      allRewards.flatMap(({ era, totalPoints, individual, totalReward }) => {
         if (!individual[address]) return []
         const eraPoints = Number(individual[address])
-        const eraReward = totalPayout.muln(eraPoints / totalPoints)
+        const eraReward = totalReward.muln(eraPoints / totalPoints)
         return { era, eraReward, eraPoints }
       })
     )
@@ -156,12 +149,9 @@ export const getValidatorInfo = (
 }
 
 export const keepFirst = <T>(): OperatorFunction<T, T> =>
-  pipe(
-    take(1),
-    share({
-      connector: () => new ReplaySubject(1),
-      resetOnComplete: false,
-      resetOnError: false,
-      resetOnRefCountZero: false,
-    })
-  )
+  share({
+    connector: () => new ReplaySubject(1),
+    resetOnComplete: false,
+    resetOnError: false,
+    resetOnRefCountZero: false,
+  })

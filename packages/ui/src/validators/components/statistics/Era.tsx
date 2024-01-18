@@ -1,5 +1,3 @@
-import { Option, u64 } from '@polkadot/types'
-import { PalletStakingEraRewardPoints } from '@polkadot/types/lookup'
 import React, { useEffect, useMemo, useState } from 'react'
 
 import { PercentageChart } from '@/common/components/charts/PercentageChart'
@@ -16,8 +14,8 @@ import { ERA_DURATION } from '@/common/constants'
 import { whenDefined } from '@/common/utils'
 
 interface EraProps {
-  eraStartedOn: Option<u64> | undefined
-  eraRewardPoints: PalletStakingEraRewardPoints | undefined
+  eraStartedOn: number | undefined
+  eraRewardPoints: number | undefined
 }
 
 export const Era = ({ eraStartedOn, eraRewardPoints }: EraProps) => {
@@ -58,7 +56,7 @@ export const Era = ({ eraStartedOn, eraRewardPoints }: EraProps) => {
           {eraRewardPoints && (
             <NumericValue>
               <BlockIcon />
-              {eraRewardPoints.total.toNumber() / 20} / {eraRewardPoints?.total.toNumber()}
+              {eraRewardPoints / 20} / {eraRewardPoints}
             </NumericValue>
           )}
         </div>
