@@ -1,27 +1,22 @@
 import { useMemo, useState } from 'react'
-import { combineLatest, map, Observable, of, ReplaySubject, share, switchMap, take } from 'rxjs'
+import { combineLatest, map, merge, Observable, of, scan, switchMap, throttleTime } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
 import { BN_ZERO } from '@/common/constants'
 import { useObservable } from '@/common/hooks/useObservable'
-import { isDefined } from '@/common/utils'
+import { filterObservableList, mapObservableList, sortObservableList } from '@/common/model/ObservableList'
 import { useGetMembersWithDetailsQuery } from '@/memberships/queries'
 import { asMemberWithDetails } from '@/memberships/types'
 
-import { Validator, ValidatorDetailsFilter, ValidatorDetailsOrder, ValidatorWithDetails } from '../types'
+import { Validator, ValidatorDetailsFilter, ValidatorDetailsOrder, ValidatorInfo, ValidatorWithDetails } from '../types'
 
-import { compareValidators, getValidatorsFilters, getValidatorInfo, filterValidatorsByIsActive } from './utils'
+import { getValidatorSortingFns, getValidatorsFilters, getValidatorInfo, keepFirst } from './utils'
 
 export type ValidatorDetailsOptions = {
   filter: ValidatorDetailsFilter
   order: ValidatorDetailsOrder
   start: number
   end: number
-}
-
-type AggregateResult = {
-  validators: ValidatorWithDetails[]
-  size: number
 }
 
 export const useValidatorsWithDetails = (allValidatorsWithCtrlAcc: Validator[] | undefined) => {
@@ -99,87 +94,62 @@ export const useValidatorsWithDetails = (allValidatorsWithCtrlAcc: Validator[] |
           .sort((a, b) => b.era - a.era)
           .slice(1) // Remove the current period
       }),
-      keepFirst
+      keepFirst()
     )
   }, [api?.isConnected, !validatorDetailsOptions])
 
   const activeValidators$ = useMemo(() => {
     if (!validatorDetailsOptions) return
 
-    return api?.query.session.validators().pipe(keepFirst)
+    return api?.query.session.validators().pipe(keepFirst())
   }, [api?.isConnected, !validatorDetailsOptions])
 
-  const aggregated = useObservable<AggregateResult>(() => {
-    if (!api || !validatorsWithMembership || !validatorsRewards$ || !activeValidators$ || !validatorDetailsOptions) {
-      return
-    }
+  const validatorsInfo$ = useMemo(() => {
+    if (!api || !validatorsWithMembership || !validatorsRewards$ || !activeValidators$) return
 
-    if (!validatorsWithMembership.length) return of({ validators: [], size: 0 })
-
-    const { filter, order, start, end } = validatorDetailsOptions
-
-    const filterByState = switchMap(
-      (validators: ValidatorWithDetails[]): Observable<ValidatorWithDetails[]> =>
-        isDefined(filter.isActive)
-          ? activeValidators$.pipe(filterValidatorsByIsActive(validators, filter.isActive))
-          : of(validators)
+    const validatorsInfo = validatorsWithMembership.map((validator) =>
+      getValidatorInfo(validator, activeValidators$, validatorsRewards$, api)
     )
 
-    const filterSortPaginate = map((validators: ValidatorWithDetails[]): AggregateResult => {
-      const filtered = getValidatorsFilters(filter).reduce(
-        (validators: ValidatorWithDetails[], predicate): ValidatorWithDetails[] =>
-          predicate ? validators.filter(predicate) : validators,
-        validators
-      )
+    return of(validatorsInfo)
+  }, [api?.isConnected, validatorsWithMembership, validatorsRewards$, activeValidators$])
 
-      const sortedPaginated = filtered
-        .sort((a, b) => {
-          const direction = order.isDescending ? -1 : 1
-          return direction * compareValidators(a, b, order.key)
-        })
-        .slice(start, end)
+  const [filteredValidatorsInfo$, size$] = useMemo<[Observable<ValidatorInfo[]>, Observable<number>] | []>(() => {
+    if (!validatorsInfo$ || !validatorDetailsOptions) return []
 
-      return { validators: sortedPaginated, size: filtered.length }
-    })
+    const filtered$ = getValidatorsFilters(validatorDetailsOptions.filter).reduce(
+      (validators$, predicate) => (predicate ? validators$.pipe(filterObservableList(predicate)) : validators$),
+      validatorsInfo$
+    )
 
-    const getInfo = switchMap(({ validators, size }: AggregateResult): Observable<AggregateResult> => {
-      if (validators.length === 0) return of({ validators: [], size: 0 })
+    const size$ = filtered$.pipe(map((filtered) => filtered.length))
 
-      const withInfo = combineLatest(
-        validators.flatMap((validator) => {
-          const address = validator.stashAccount
+    return [filtered$, size$]
+  }, [validatorsInfo$, validatorDetailsOptions?.filter])
 
-          if (!validatorsWithDetailsCache.has(address)) {
-            const validator$ = getValidatorInfo(validator, activeValidators$, validatorsRewards$, api)
-            validatorsWithDetailsCache.set(address, validator$)
-          }
+  const validatorsWithDetails = useObservable<ValidatorWithDetails[] | undefined>(() => {
+    if (!filteredValidatorsInfo$ || !size$ || !validatorDetailsOptions) return
 
-          return validatorsWithDetailsCache.get(address) as Observable<ValidatorWithDetails>
-        })
-      )
+    const { order, start, end } = validatorDetailsOptions
+    const sortDirection = order.isDescending ? -1 : 1
+    const [sortMapFn, sortCompareFn] = getValidatorSortingFns(order.key)
 
-      return combineLatest({ validators: withInfo, size: of(size) })
-    })
-
-    return of(validatorsWithMembership).pipe(filterByState, filterSortPaginate, getInfo)
-  }, [api?.isConnected, validatorsWithMembership, validatorsRewards$, activeValidators$, validatorDetailsOptions])
+    return filteredValidatorsInfo$.pipe(
+      sortObservableList(sortMapFn, (a, b) => sortCompareFn(a, b) * sortDirection),
+      map((validators) => validators.slice(start, end)),
+      mapObservableList<ValidatorInfo, ValidatorWithDetails>(({ validator, ...rest }) =>
+        merge(of(validator), ...Object.values(rest)).pipe(
+          scan((validator: ValidatorWithDetails, part) => ({ ...validator, ...part }), validator)
+        )
+      ),
+      throttleTime(10, undefined, { leading: false, trailing: true }),
+      switchMap((validators) => size$.pipe(map((size) => (!validators[0] && size > 0 ? undefined : validators))))
+    )
+  }, [filteredValidatorsInfo$, size$, validatorDetailsOptions?.start, validatorDetailsOptions?.order])
 
   return {
-    validatorsWithDetails: aggregated?.validators,
-    size: aggregated?.size,
+    validatorsWithDetails,
+    size: useObservable(() => size$, [size$]),
     setValidatorDetailsOptions,
   }
 }
-
-const validatorsWithDetailsCache = new Map<string, Observable<ValidatorWithDetails>>()
-
-const keepFirst = <T>(o: Observable<T>): Observable<T> =>
-  o.pipe(
-    take(1),
-    share({
-      connector: () => new ReplaySubject(1),
-      resetOnComplete: false,
-      resetOnError: false,
-      resetOnRefCountZero: false,
-    })
-  )
