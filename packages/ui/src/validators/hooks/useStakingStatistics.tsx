@@ -1,5 +1,5 @@
 import { BN } from '@polkadot/util'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { combineLatest, map } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
@@ -8,7 +8,7 @@ import { useObservable } from '@/common/hooks/useObservable'
 
 export const useStakingStatistics = () => {
   const { api } = useApi()
-  const activeEra = useFirstObservableValue(
+  const activeEra = useObservable(
     () =>
       api?.query.staking.activeEra().pipe(
         map((activeEra) => ({
@@ -18,9 +18,6 @@ export const useStakingStatistics = () => {
       ),
     [api?.isConnected]
   )
-
-  const [now, setNow] = useState(Date.now())
-  setInterval(() => setNow(Date.now()), 1000)
 
   const totalIssuance = useFirstObservableValue(() => api?.query.balances.totalIssuance(), [api?.isConnected])
   const currentStaking = useFirstObservableValue(
@@ -65,7 +62,6 @@ export const useStakingStatistics = () => {
   return {
     eraStartedOn: activeEra?.eraStartedOn,
     eraRewardPoints,
-    now,
     idealStaking: new BN(totalIssuance ?? 0).divn(2),
     currentStaking: new BN(currentStaking ?? 0),
     stakingPercentage,
