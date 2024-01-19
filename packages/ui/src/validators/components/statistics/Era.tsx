@@ -11,20 +11,23 @@ import {
 } from '@/common/components/statistics'
 import { DurationValue } from '@/common/components/typography/DurationValue'
 import { ERA_DURATION } from '@/common/constants'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { whenDefined } from '@/common/utils'
 
 interface EraProps {
   eraStartedOn: number | undefined
-  eraRewardPoints: number | undefined
 }
 
-export const Era = ({ eraStartedOn, eraRewardPoints }: EraProps) => {
+const POINTS_PER_BLOCK = 20
+
+export const Era = ({ eraStartedOn }: EraProps) => {
   const [spentDuration, setSpentDuration] = useState<number>()
 
-  const { nextReward, percentage } = useMemo(
+  const { nextReward, percentage, blocks } = useMemo(
     () => ({
       nextReward: whenDefined(spentDuration, (d) => ERA_DURATION - d),
-      percentage: spentDuration && Math.ceil((100 * ERA_DURATION) / spentDuration),
+      percentage: spentDuration && Math.ceil((100 * spentDuration) / ERA_DURATION),
+      blocks: spentDuration && Math.floor(spentDuration / MILLISECONDS_PER_BLOCK),
     }),
     [spentDuration]
   )
@@ -41,7 +44,6 @@ export const Era = ({ eraStartedOn, eraRewardPoints }: EraProps) => {
       tooltipText="One era consists of 6 epochs with 1 hour duration each."
       tooltipTitle="Era"
       tooltipLinkText="What is an era"
-      tooltipLinkURL="TBD"
       actionElement={<PercentageChart percentage={percentage ?? 0} small />}
     >
       <StatisticItemSpacedContent>
@@ -53,10 +55,9 @@ export const Era = ({ eraStartedOn, eraRewardPoints }: EraProps) => {
       <StatisticItemSpacedContent>
         <StatisticLabel>Blocks / Points</StatisticLabel>
         <div>
-          {eraRewardPoints && (
+          {blocks && (
             <NumericValue>
-              <BlockIcon />
-              {eraRewardPoints / 20} / {eraRewardPoints}
+              <BlockIcon /> {blocks} / {blocks * POINTS_PER_BLOCK}
             </NumericValue>
           )}
         </div>

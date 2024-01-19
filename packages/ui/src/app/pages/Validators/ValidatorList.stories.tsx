@@ -160,7 +160,6 @@ export default {
                 index: activeEra.index,
                 start: activeEra.start,
               },
-              erasRewardPoints: new Map([[activeEra.index, { total: activeEra.points }]]),
               erasStakers: (_: any, address: keyof typeof validators) => activeEra.stakers(address),
               counterForNominators: 20,
 

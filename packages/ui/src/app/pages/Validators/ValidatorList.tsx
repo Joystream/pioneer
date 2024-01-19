@@ -22,7 +22,6 @@ export const ValidatorList = () => {
   const {
     eraIndex,
     eraStartedOn,
-    eraRewardPoints,
     totalRewards,
     lastRewards,
     idealStaking,
@@ -51,7 +50,7 @@ export const ValidatorList = () => {
               currentStaking={eraStake ?? BN_ZERO}
               stakingPercentage={stakingPercentage}
             />
-            <Era eraStartedOn={eraStartedOn} eraRewardPoints={eraRewardPoints} />
+            <Era eraStartedOn={eraStartedOn} />
             <Rewards totalRewards={totalRewards} lastRewards={lastRewards} />
           </StatisticsStyle>
           <ValidatorsFilter filter={format.filter} />
