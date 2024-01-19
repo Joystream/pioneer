@@ -126,13 +126,13 @@ const asApiMethod = (value: any) => {
   if (isFunction(value)) {
     type ArgumentsType<T> = T extends (...args: infer A) => any ? A : never
     type FunctionArgs = ArgumentsType<typeof value>
-    return (args: FunctionArgs) => of(asChainData(value(args)))
+    return (...args: FunctionArgs) => of(asChainData(value(...args)))
   } else if (value instanceof Observable) {
     return () => value
   } else if (value instanceof Map) {
     return Object.defineProperties(
       (key: Parameters<(typeof value)['get']>[0]) => {
-        switch (typeof value.keys().next()) {
+        switch (typeof value.keys().next().value) {
           case 'string':
             return of(asChainData(value.get(String(key))))
           case 'number':

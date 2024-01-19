@@ -11,20 +11,111 @@ import { ValidatorList } from './ValidatorList'
 
 type Args = object
 
-const eraRewardEntries = [
-  [688, joy(0.123456)],
-  [689, joy(0.123456)],
-  [690, joy(0.123456)],
-  [691, joy(0.123456)],
-  [692, joy(0.123456)],
-  [693, joy(0.123456)],
-  [694, joy(0.123456)],
-  [695, joy(0.123456)],
-  [696, joy(0.123456)],
-  [697, joy(0.123456)],
-  [698, joy(0.123456)],
-  [699, joy(0.123456)],
-] as const
+const validators = {
+  j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: {
+    commission: 0.05 * 10 ** 9,
+    totalStake: joy(400),
+    ownStake: joy(0.0001),
+    nominators: {
+      j4WGdFxqTkyAgzJiTbEBeRseP12dPEvJgf2Wy9qkPa68XSP55: { stake: joy(0.2) },
+      j4UQEfPFnKwGuHytxs9YEouLnhnSNkPDgNm9tKeB7an3dRaiy: { stake: joy(0.2) },
+    },
+  },
+  j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: {
+    commission: 0.1 * 10 ** 9,
+    totalStake: joy(400),
+    ownStake: joy(0.0001),
+    nominators: {
+      j4T3XgRMUaZZL6GsMk6RXfBcjuMWxfSLnoATYkBTHh7xyjmoH: { stake: joy(0.2) },
+      j4UQEfPFnKwGuHytxs9YEouLnhnSNkPDgNm9tKeB7an3dRaiy: { stake: joy(0.2) },
+      j4W2bw7ggG69e9TZ77RP9mjem1GrbPwpbKYK7WdZiym77yzMJ: { stake: joy(0.2) },
+      j4UzoJUhDGpnsCWrmx9ojofwaT8KHz3azp8C1S49MSN6rYjim: { stake: joy(0.2) },
+    },
+  },
+  j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP: {
+    commission: 0.05 * 10 ** 9,
+    totalStake: joy(400),
+    ownStake: joy(0.0001),
+    nominators: {
+      j4SgrgDrzzGyfrxPe4ZgaKfByKyLo5SdsUXNfHzZJPh5R6f8q: { stake: joy(0.2) },
+      j4UQEfPFnKwGuHytxs9YEouLnhnSNkPDgNm9tKeB7an3dRaiy: { stake: joy(0.2) },
+      j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: { stake: joy(0.2) },
+      j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: { stake: joy(0.2) },
+    },
+  },
+  j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz: {
+    commission: 0.15 * 10 ** 9,
+    totalStake: joy(400),
+    ownStake: joy(0.0001),
+    nominators: {
+      j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: { stake: joy(0.2) },
+      j4UQEfPFnKwGuHytxs9YEouLnhnSNkPDgNm9tKeB7an3dRaiy: { stake: joy(0.2) },
+      j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: { stake: joy(0.2) },
+    },
+  },
+  j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa: {
+    commission: 0.2 * 10 ** 9,
+    totalStake: joy(400),
+    ownStake: joy(0.0001),
+    nominators: {
+      j4WwTZ3fnkoXJw3D1vGVyymjaiLxM78TGyAAX41JRH8Kx6T2u: { stake: joy(0.2) },
+      j4UQEfPFnKwGuHytxs9YEouLnhnSNkPDgNm9tKeB7an3dRaiy: { stake: joy(0.2) },
+      j4WqZwj6KjB4DbxknxyJB1ZkeVrPRGmg6DUGw2YkuAy7jUERg: { stake: joy(0.2) },
+      j4Wo9377XBAvhmB35J4TkpJUHnUKmyccXhGtHCVvi6pPr9so8: { stake: joy(0.2) },
+    },
+  },
+  j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN: {
+    commission: 0.01 * 10 ** 9,
+    totalStake: joy(400),
+    ownStake: joy(0.0001),
+  },
+  j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: {
+    commission: 0.03 * 10 ** 9,
+    totalStake: joy(400),
+    ownStake: joy(0.0001),
+  },
+  j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: {
+    commission: 0.05 * 10 ** 9,
+    totalStake: joy(400),
+    ownStake: joy(0.0001),
+  },
+  j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: {
+    commission: 0.05 * 10 ** 9,
+    totalStake: joy(400),
+    ownStake: joy(0.0001),
+  },
+}
+
+const activeEra = {
+  index: 700,
+  start: Date.now() - 5400000,
+  points: 18_000,
+  stakers: (address: keyof typeof validators) => {
+    const validator = validators[address]
+    const nominators = 'nominators' in validator ? validator.nominators : []
+    const others = Object.entries(nominators).map(([who, data]) => ({ who, value: data.stake }))
+    return { total: validator.totalStake, own: validator.ownStake, others }
+  },
+}
+
+const mocksValidatorsPoints = (...validatorIndexes: number[]) => {
+  const addresses = Object.keys(validators)
+  return Object.fromEntries(validatorIndexes.map((index) => [addresses[index], Math.floor(Math.random() * 800 + 200)]))
+}
+const pastEras = {
+  688: { eraReward: joy(0.123456), eraPoints: 18_000, validators: mocksValidatorsPoints(0, 1, 2, 3) },
+  689: { eraReward: joy(0.123456), eraPoints: 18_000, validators: mocksValidatorsPoints(2, 3, 4) },
+  690: { eraReward: joy(0.123456), eraPoints: 18_000, validators: mocksValidatorsPoints(1, 2, 3) },
+  691: { eraReward: joy(0.123456), eraPoints: 18_000, validators: mocksValidatorsPoints(0, 1, 3, 4) },
+  692: { eraReward: joy(0.123456), eraPoints: 18_000, validators: mocksValidatorsPoints(1, 3, 4) },
+  693: { eraReward: joy(0.123456), eraPoints: 18_000, validators: mocksValidatorsPoints(0, 1, 3, 4) },
+  694: { eraReward: joy(0.123456), eraPoints: 18_000, validators: mocksValidatorsPoints(1, 3, 4) },
+  695: { eraReward: joy(0.123456), eraPoints: 18_000, validators: mocksValidatorsPoints() },
+  696: { eraReward: joy(0.123456), eraPoints: 18_000, validators: mocksValidatorsPoints(1) },
+  697: { eraReward: joy(0.123456), eraPoints: 18_000, validators: mocksValidatorsPoints(1, 2, 4) },
+  698: { eraReward: joy(0.123456), eraPoints: 18_000, validators: mocksValidatorsPoints(0, 1, 2, 3, 4) },
+  699: { eraReward: joy(0.123456), eraPoints: 18_000, validators: mocksValidatorsPoints(1, 2, 3, 4) },
+}
 
 export default {
   title: 'Pages/Validators/ValidatorList',
@@ -35,312 +126,56 @@ export default {
       return {
         chain: {
           derive: {
-            staking: { erasRewards: eraRewardEntries.map(([era, eraReward]) => ({ era, eraReward })) },
+            staking: {
+              erasRewards: Object.entries(pastEras).map(([era, data]) => ({ era, eraReward: data.eraReward })),
+              erasPoints: Object.entries(pastEras).map(([era, data]) => ({
+                era,
+                eraPoints: data.eraPoints,
+                validators: data.validators,
+              })),
+            },
           },
+
           query: {
             balances: {
               totalIssuance: joy(1000000),
             },
-            timestamp: { now: Date.now() },
+
             session: {
-              validators: [
-                'j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D',
-                'j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW',
-                'j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP',
-                'j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz',
-                'j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa',
-              ],
+              validators: Object.entries(validators).flatMap(([address, data]) =>
+                'nominators' in data ? address : []
+              ),
             },
+
             staking: {
+              validators: {
+                entries: Object.entries(validators).map(([address, { commission }]) => [
+                  { args: [address] },
+                  { commission, blocked: false },
+                ]),
+              },
+              bonded: { multi: Object.keys(validators) },
+
               activeEra: {
-                index: 700,
-                start: Date.now() - 5400000,
+                index: activeEra.index,
+                start: activeEra.start,
               },
-              bonded: {
-                multi: [
-                  'j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D',
-                  'j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW',
-                  'j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP',
-                  'j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz',
-                  'j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa',
-                  'j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN',
-                  'j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP',
-                  'j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ',
-                  'j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg',
-                ],
-              },
-              counterForValidators: 12,
+              erasRewardPoints: new Map([[activeEra.index, { total: activeEra.points }]]),
+              erasStakers: (_: any, address: keyof typeof validators) => activeEra.stakers(address),
               counterForNominators: 20,
-              erasRewardPoints: {
-                total: 18000,
-                entries: [
-                  [
-                    { args: [1090] },
-                    {
-                      total: 18000,
-                      individual: {
-                        j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
-                        j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
-                        j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP: Math.floor(Math.random() * 800 + 200),
-                        j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz: Math.floor(Math.random() * 800 + 200),
-                        j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa: Math.floor(Math.random() * 800 + 200),
-                        j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN: Math.floor(Math.random() * 800 + 200),
-                        j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
-                        j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
-                        j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                      },
-                    },
-                  ],
-                  [
-                    { args: [1000] },
-                    {
-                      total: 18000,
-                      individual: {
-                        j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
-                        j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
-                        j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz: Math.floor(Math.random() * 800 + 200),
-                        j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa: Math.floor(Math.random() * 800 + 200),
-                        j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
-                        j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                      },
-                    },
-                  ],
-                  [
-                    { args: [1040] },
-                    {
-                      total: 18000,
-                      individual: {
-                        j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
-                        j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
-                        j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz: Math.floor(Math.random() * 800 + 200),
-                        j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa: Math.floor(Math.random() * 800 + 200),
-                        j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN: Math.floor(Math.random() * 800 + 200),
-                        j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
-                        j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
-                        j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                      },
-                    },
-                  ],
-                  [
-                    { args: [1100] },
-                    {
-                      total: 18000,
-                      individual: {
-                        j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
-                        j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP: Math.floor(Math.random() * 800 + 200),
-                        j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz: Math.floor(Math.random() * 800 + 200),
-                        j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa: Math.floor(Math.random() * 800 + 200),
-                        j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN: Math.floor(Math.random() * 800 + 200),
-                        j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
-                        j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
-                        j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                      },
-                    },
-                  ],
-                  [
-                    { args: [1030] },
-                    {
-                      total: 18000,
-                      individual: {
-                        j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
-                        j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
-                        j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP: Math.floor(Math.random() * 800 + 200),
-                        j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz: Math.floor(Math.random() * 800 + 200),
-                        j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa: Math.floor(Math.random() * 800 + 200),
-                        j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN: Math.floor(Math.random() * 800 + 200),
-                        j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
-                        j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
-                        j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                      },
-                    },
-                  ],
-                  [
-                    { args: [1020] },
-                    {
-                      total: 18000,
-                      individual: {
-                        j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
-                        j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
-                        j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP: Math.floor(Math.random() * 800 + 200),
-                        j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz: Math.floor(Math.random() * 800 + 200),
-                        j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa: Math.floor(Math.random() * 800 + 200),
-                        j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN: Math.floor(Math.random() * 800 + 200),
-                        j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
-                        j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
-                        j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                      },
-                    },
-                  ],
-                  [
-                    { args: [1060] },
-                    {
-                      total: 18000,
-                      individual: {
-                        j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
-                        j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
-                        j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP: Math.floor(Math.random() * 800 + 200),
-                        j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz: Math.floor(Math.random() * 800 + 200),
-                        j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
-                        j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                      },
-                    },
-                  ],
-                  [
-                    { args: [1050] },
-                    {
-                      total: 18000,
-                      individual: {
-                        j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
-                        j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
-                        j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP: Math.floor(Math.random() * 800 + 200),
-                        j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
-                        j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                      },
-                    },
-                  ],
-                  [
-                    { args: [1070] },
-                    {
-                      total: 18000,
-                      individual: {
-                        j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
-                        j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
-                        j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP: Math.floor(Math.random() * 800 + 200),
-                        j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz: Math.floor(Math.random() * 800 + 200),
-                        j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa: Math.floor(Math.random() * 800 + 200),
-                        j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN: Math.floor(Math.random() * 800 + 200),
-                        j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
-                        j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
-                        j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                      },
-                    },
-                  ],
-                  [
-                    { args: [990] },
-                    {
-                      total: 18000,
-                      individual: {
-                        j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
-                        j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
-                        j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP: Math.floor(Math.random() * 800 + 200),
-                        j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz: Math.floor(Math.random() * 800 + 200),
-                        j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa: Math.floor(Math.random() * 800 + 200),
-                        j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN: Math.floor(Math.random() * 800 + 200),
-                        j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
-                        j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
-                        j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                      },
-                    },
-                  ],
-                  [
-                    { args: [1080] },
-                    {
-                      total: 18000,
-                      individual: {
-                        j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
-                        j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
-                        j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP: Math.floor(Math.random() * 800 + 200),
-                        j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz: Math.floor(Math.random() * 800 + 200),
-                        j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa: Math.floor(Math.random() * 800 + 200),
-                        j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN: Math.floor(Math.random() * 800 + 200),
-                        j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
-                        j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
-                        j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: Math.floor(Math.random() * 800 + 200),
-                      },
-                    },
-                  ],
-                  [
-                    { args: [1010] },
-                    {
-                      total: 18000,
-                      individual: {
-                        j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: Math.floor(Math.random() * 800 + 200),
-                        j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: Math.floor(Math.random() * 800 + 200),
-                        j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP: Math.floor(Math.random() * 800 + 200),
-                        j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz: Math.floor(Math.random() * 800 + 200),
-                        j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa: Math.floor(Math.random() * 800 + 200),
-                        j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN: Math.floor(Math.random() * 800 + 200),
-                        j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: Math.floor(Math.random() * 800 + 200),
-                        j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: Math.floor(Math.random() * 800 + 200),
-                      },
-                    },
-                  ],
-                ],
-              },
-              erasValidatorReward: new Map(eraRewardEntries),
-              erasStakers: {
-                total: joy(400),
-                own: joy(0.0001),
-                others: [
-                  { who: 'j4WGdFxqTkyAgzJiTbEBeRseP12dPEvJgf2Wy9qkPa68XSP55', value: joy(0.2) },
-                  { who: 'j4UQEfPFnKwGuHytxs9YEouLnhnSNkPDgNm9tKeB7an3dRaiy', value: joy(0.2) },
-                  { who: 'j4WwTZ3fnkoXJw3D1vGVyymjaiLxM78TGyAAX41JRH8Kx6T2u', value: joy(0.2) },
-                  { who: 'j4WqZwj6KjB4DbxknxyJB1ZkeVrPRGmg6DUGw2YkuAy7jUERg', value: joy(0.2) },
-                  { who: 'j4WwTZ3fnkoXJw3D1vGVyymjaiLxM78TGyAAX41JRH8Kx6T2u', value: joy(0.2) },
-                  { who: 'j4Wo9377XBAvhmB35J4TkpJUHnUKmyccXhGtHCVvi6pPr9so8', value: joy(0.2) },
-                  { who: 'j4WwTZ3fnkoXJw3D1vGVyymjaiLxM78TGyAAX41JRH8Kx6T2u', value: joy(0.2) },
-                  { who: 'j4WwTZ3fnkoXJw3D1vGVyymjaiLxM78TGyAAX41JRH8Kx6T2u', value: joy(0.2) },
-                  { who: 'j4T3XgRMUaZZL6GsMk6RXfBcjuMWxfSLnoATYkBTHh7xyjmoH', value: joy(0.2) },
-                  { who: 'j4W2bw7ggG69e9TZ77RP9mjem1GrbPwpbKYK7WdZiym77yzMJ', value: joy(0.2) },
-                  { who: 'j4UzoJUhDGpnsCWrmx9ojofwaT8KHz3azp8C1S49MSN6rYjim', value: joy(0.2) },
-                  { who: 'j4SgrgDrzzGyfrxPe4ZgaKfByKyLo5SdsUXNfHzZJPh5R6f8q', value: joy(0.2) },
-                  { who: 'j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D', value: joy(0.2) },
-                  { who: 'j4SgrgDrzzGyfrxPe4ZgaKfByKyLo5SdsUXNfHzZJPh5R6f8q', value: joy(0.2) },
-                  { who: 'j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP', value: joy(0.2) },
-                  { who: 'j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ', value: joy(0.2) },
-                  { who: 'j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg', value: joy(0.2) },
-                ],
-              },
+
               erasTotalStake: joy(130_000),
+
               slashingSpans: {
                 spanIndex: 18,
                 lastStart: 1331,
                 lastNonzeroSlash: 0,
                 prior: [70, 1, 164],
               },
-              validators: {
-                entries: [
-                  [
-                    { args: ['j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D'] },
-                    { commission: 0.05 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW'] },
-                    { commission: 0.1 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP'] },
-                    { commission: 0.05 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz'] },
-                    { commission: 0.15 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa'] },
-                    { commission: 0.2 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN'] },
-                    { commission: 0.01 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP'] },
-                    { commission: 0.03 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ'] },
-                    { commission: 0.05 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg'] },
-                    { commission: 0.05 * 10 ** 9, blocked: false },
-                  ],
-                ],
-              },
             },
           },
         },
+
         gql: {
           queries: [
             {
