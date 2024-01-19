@@ -75,7 +75,7 @@ export const getValidatorSortingFns = (
 
 export const getValidatorInfo = (
   validator: ValidatorWithDetails,
-  { activeValidators$, validatorsRewards$ }: CommonValidatorsQueries,
+  { activeValidators$, stakers$, validatorsRewards$ }: CommonValidatorsQueries,
   api: Api
 ): ValidatorInfo => {
   const address = validator.stashAccount
@@ -104,9 +104,11 @@ export const getValidatorInfo = (
     keepFirst()
   )
 
-  const staking$ = api.query.staking.activeEra().pipe(
-    switchMap((activeEra) => api.query.staking.erasStakers(activeEra.unwrap().index, address)), // TODO handle potential unwrap failure
+  const staking$ = stakers$.pipe(
+    switchMap((stakers) => stakers.get(address.toString()) ?? of(undefined)),
     map((stakingInfo) => {
+      if (!stakingInfo) return { staking: { total: BN_ZERO, own: BN_ZERO, nominators: [] } }
+
       const total = stakingInfo.total.toBn()
       const nominators = stakingInfo.others.map((nominator) => ({
         address: nominator.who.toString(),

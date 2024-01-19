@@ -45,6 +45,7 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
     }
     const defaultQuery = {
       session: { validators: [] },
+      staking: { activeEra: {} },
     }
     const rpcChain = {
       getBlockHash: createType('BlockHash', BLOCK_HASH),

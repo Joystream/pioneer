@@ -1,14 +1,19 @@
 import { Vec } from '@polkadot/types'
 import { AccountId } from '@polkadot/types/interfaces'
+import { PalletStakingExposure } from '@polkadot/types/lookup'
 import BN from 'bn.js'
 import { useMemo } from 'react'
-import { Observable, combineLatest, map } from 'rxjs'
+import { Observable, combineLatest, map, switchMap } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
 
 import { keepFirst } from './utils'
 
+type ActiveEra = { index: number; startedOn: number }
+
 type ActiveValidators = Vec<AccountId>
+
+type Stakers = Map<string, Observable<PalletStakingExposure>>
 
 type EraRewards = {
   era: number
@@ -18,7 +23,9 @@ type EraRewards = {
 }
 
 export type CommonValidatorsQueries = {
+  activeEra$: Observable<ActiveEra>
   activeValidators$: Observable<ActiveValidators>
+  stakers$: Observable<Stakers>
   validatorsRewards$: Observable<EraRewards[]>
 }
 
@@ -30,8 +37,29 @@ export const useValidatorsQueries = (): CommonValidatorsQueries | undefined => {
 
     const activeValidators$ = api.query.session.validators().pipe(keepFirst())
 
-    const erasRewards$ = api.derive.staking.erasRewards().pipe(keepFirst())
-    const eraRewardPoints$ = api.derive.staking.erasPoints().pipe(keepFirst())
+    const activeEra$ = api.query.staking.activeEra().pipe(
+      map((activeEra) => ({
+        index: activeEra.unwrap().index.toNumber(),
+        startedOn: activeEra.unwrap().start.unwrap().toNumber(),
+      })),
+      keepFirst()
+    )
+
+    const stakers$ = activeValidators$.pipe(
+      map(
+        (activeValidators) =>
+          new Map(
+            activeValidators.map((account) => {
+              const staker$ = activeEra$.pipe(switchMap(({ index }) => api.query.staking.erasStakers(index, account)))
+              return [account.toString(), staker$]
+            })
+          )
+      ),
+      keepFirst()
+    )
+
+    const erasRewards$ = api.derive.staking.erasRewards()
+    const eraRewardPoints$ = api.derive.staking.erasPoints()
 
     const validatorsRewards$ = combineLatest([erasRewards$, eraRewardPoints$]).pipe(
       map(([erasRewards, eraRewardPoints]) =>
@@ -54,9 +82,10 @@ export const useValidatorsQueries = (): CommonValidatorsQueries | undefined => {
             ),
           }
         })
-      )
+      ),
+      keepFirst()
     )
 
-    return { activeValidators$, validatorsRewards$ }
+    return { activeEra$, activeValidators$, stakers$, validatorsRewards$ }
   }, [api?.isConnected])
 }
