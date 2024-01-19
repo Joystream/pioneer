@@ -3,7 +3,6 @@ import { combineLatest, map, switchMap } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
 import { BN_ZERO, ERA_PER_MONTH } from '@/common/constants'
-import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useObservable } from '@/common/hooks/useObservable'
 
 import { CommonValidatorsQueries } from '../providers/useValidatorsQueries'
@@ -24,9 +23,9 @@ export const useStakingStatistics = ({
     )
   }, [api?.isConnected, activeEra$])
 
-  const totalIssuance = useFirstObservableValue(() => api?.query.balances.totalIssuance(), [api?.isConnected])
+  const totalIssuance = useObservable(() => api?.query.balances.totalIssuance(), [api?.isConnected])
 
-  const allNominatorsCount = useFirstObservableValue(
+  const allNominatorsCount = useObservable(
     () => api?.query.staking.counterForNominators(),
     [api?.isConnected]
   )?.toNumber()
