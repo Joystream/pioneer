@@ -3,10 +3,33 @@ import { mapValues } from 'lodash'
 
 import { encodeAddress } from '@/accounts/model/encodeAddress'
 
-export const asChainData = (data: any): any => {
+const mockApiMethods = (mapFn: (data: any) => any) => (_data: any) => {
+  const data = mapFn(_data)
+  if (!data || typeof data !== 'object') return data
+
+  try {
+    return Object.defineProperties(data, {
+      unwrap: { value: () => data },
+      toJSON: { value: () => data },
+      isSome: { value: Object.keys(data).length > 0 },
+      get: {
+        value: (key: any) => {
+          if (key.toRawType?.() === 'AccountId') {
+            return data[encodeAddress(key.toString())]
+          }
+          return data[key.toString()]
+        },
+      },
+    })
+  } catch {
+    return data
+  }
+}
+
+export const asChainData = mockApiMethods((data: any): any => {
   switch (Object.getPrototypeOf(data).constructor.name) {
     case 'Object':
-      return withUnwrap(mapValues(data, asChainData))
+      return mapValues(data, asChainData)
 
     case 'Array':
       return data.map(asChainData)
@@ -20,19 +43,4 @@ export const asChainData = (data: any): any => {
     default:
       return data
   }
-}
-
-const withUnwrap = (data: Record<any, any>) =>
-  Object.defineProperties(data, {
-    unwrap: { value: () => data },
-    isSome: { value: Object.keys(data).length > 0 },
-    toJSON: { value: () => data },
-    get: {
-      value: (key: any) => {
-        if (key.toRawType?.() === 'AccountId') {
-          return data[encodeAddress(key.toString())]
-        }
-        return data[key.toString()]
-      },
-    },
-  })
+})

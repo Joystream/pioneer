@@ -40,6 +40,12 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
     if (!chain) return
 
     // Common mocks:
+    const defaultDerive = {
+      staking: { erasRewards: [], erasPoints: [] },
+    }
+    const defaultQuery = {
+      session: { validators: [] },
+    }
     const rpcChain = {
       getBlockHash: createType('BlockHash', BLOCK_HASH),
       getHeader: {
@@ -58,8 +64,8 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
       _async: { chainMetadata: Promise.resolve({}) } as Api['_async'],
       isConnected: true,
       consts: asApi('consts', asApiConst),
-      derive: asApi('derive', asApiMethod),
-      query: asApi('query', asApiMethod),
+      derive: asApi('derive', asApiMethod, defaultDerive),
+      query: asApi('query', asApiMethod, defaultQuery),
       rpc: asApi('rpc', asApiMethod, { chain: rpcChain }),
       tx: asApi('tx', fromTxMock),
     }
@@ -156,8 +162,7 @@ const asApiMethod = (value: any) => {
   }
 
   if (isObject(value) && 'multi' in value && isArray(value.multi)) {
-    const multi = value.multi.map((entry) => ({ unwrap: () => entry }))
-    method.multi = () => of(multi)
+    method.multi = () => of(asChainData(value.multi))
   }
 
   return method

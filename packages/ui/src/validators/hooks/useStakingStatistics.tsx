@@ -76,6 +76,6 @@ export const useStakingStatistics = ({
     activeNominatorsCount: activeEra?.activeNominatorsCount,
     allNominatorsCount,
     totalRewards: validatorsRewards?.reduce((sum, { totalReward }) => sum.add(totalReward), BN_ZERO),
-    lastRewards: validatorsRewards?.[0].totalReward,
+    lastRewards: validatorsRewards?.[0]?.totalReward,
   }
 }
