@@ -127,7 +127,7 @@ export const getValidatorInfo = (
       return rewardHistory$.pipe(
         map((rewards) => {
           const commission = validator.commission
-          const latestReward = rewards.at(0)?.eraReward
+          const latestReward = rewards.at(-1)?.eraReward
           if (!latestReward) return {}
 
           const apr = Number(latestReward.muln(ERAS_PER_YEAR).muln(commission).div(staking.total))
