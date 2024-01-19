@@ -1,90 +1,17 @@
 import { expect } from '@storybook/jest'
 import { Meta, StoryObj } from '@storybook/react'
 import { userEvent, waitFor, within } from '@storybook/testing-library'
+import { of } from 'rxjs'
 
 import { GetMembersWithDetailsDocument } from '@/memberships/queries'
 import { member } from '@/mocks/data/members'
+import { validators } from '@/mocks/data/validators'
 import { joy, selectFromDropdown } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
 
 import { ValidatorList } from './ValidatorList'
 
 type Args = object
-
-const validators = {
-  j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: {
-    commission: 0.05 * 10 ** 9,
-    totalStake: joy(400),
-    ownStake: joy(0.0001),
-    nominators: {
-      j4WGdFxqTkyAgzJiTbEBeRseP12dPEvJgf2Wy9qkPa68XSP55: { stake: joy(0.2) },
-      j4UQEfPFnKwGuHytxs9YEouLnhnSNkPDgNm9tKeB7an3dRaiy: { stake: joy(0.2) },
-    },
-  },
-  j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW: {
-    commission: 0.1 * 10 ** 9,
-    totalStake: joy(400),
-    ownStake: joy(0.0001),
-    nominators: {
-      j4T3XgRMUaZZL6GsMk6RXfBcjuMWxfSLnoATYkBTHh7xyjmoH: { stake: joy(0.2) },
-      j4UQEfPFnKwGuHytxs9YEouLnhnSNkPDgNm9tKeB7an3dRaiy: { stake: joy(0.2) },
-      j4W2bw7ggG69e9TZ77RP9mjem1GrbPwpbKYK7WdZiym77yzMJ: { stake: joy(0.2) },
-      j4UzoJUhDGpnsCWrmx9ojofwaT8KHz3azp8C1S49MSN6rYjim: { stake: joy(0.2) },
-    },
-  },
-  j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP: {
-    commission: 0.05 * 10 ** 9,
-    totalStake: joy(400),
-    ownStake: joy(0.0001),
-    nominators: {
-      j4SgrgDrzzGyfrxPe4ZgaKfByKyLo5SdsUXNfHzZJPh5R6f8q: { stake: joy(0.2) },
-      j4UQEfPFnKwGuHytxs9YEouLnhnSNkPDgNm9tKeB7an3dRaiy: { stake: joy(0.2) },
-      j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D: { stake: joy(0.2) },
-      j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: { stake: joy(0.2) },
-    },
-  },
-  j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz: {
-    commission: 0.15 * 10 ** 9,
-    totalStake: joy(400),
-    ownStake: joy(0.0001),
-    nominators: {
-      j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: { stake: joy(0.2) },
-      j4UQEfPFnKwGuHytxs9YEouLnhnSNkPDgNm9tKeB7an3dRaiy: { stake: joy(0.2) },
-      j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: { stake: joy(0.2) },
-    },
-  },
-  j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa: {
-    commission: 0.2 * 10 ** 9,
-    totalStake: joy(400),
-    ownStake: joy(0.0001),
-    nominators: {
-      j4WwTZ3fnkoXJw3D1vGVyymjaiLxM78TGyAAX41JRH8Kx6T2u: { stake: joy(0.2) },
-      j4UQEfPFnKwGuHytxs9YEouLnhnSNkPDgNm9tKeB7an3dRaiy: { stake: joy(0.2) },
-      j4WqZwj6KjB4DbxknxyJB1ZkeVrPRGmg6DUGw2YkuAy7jUERg: { stake: joy(0.2) },
-      j4Wo9377XBAvhmB35J4TkpJUHnUKmyccXhGtHCVvi6pPr9so8: { stake: joy(0.2) },
-    },
-  },
-  j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN: {
-    commission: 0.01 * 10 ** 9,
-    totalStake: joy(400),
-    ownStake: joy(0.0001),
-  },
-  j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP: {
-    commission: 0.03 * 10 ** 9,
-    totalStake: joy(400),
-    ownStake: joy(0.0001),
-  },
-  j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ: {
-    commission: 0.05 * 10 ** 9,
-    totalStake: joy(400),
-    ownStake: joy(0.0001),
-  },
-  j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg: {
-    commission: 0.05 * 10 ** 9,
-    totalStake: joy(400),
-    ownStake: joy(0.0001),
-  },
-}
 
 const activeEra = {
   index: 700,
@@ -142,8 +69,8 @@ export default {
             },
 
             session: {
-              validators: Object.entries(validators).flatMap(([address, data]) =>
-                'nominators' in data ? address : []
+              validators: of(
+                Object.entries(validators).flatMap(([address, data]) => ('nominators' in data ? address : []))
               ),
             },
 
@@ -205,12 +132,12 @@ export const TestsFilters: Story = {
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(3))
       expect(screen.queryByText('unverifed')).toBeNull()
       expect(screen.getAllByText('alice').length).toEqual(2)
-      expect(screen.queryByText('bob')).toBeNull()
+      expect(screen.queryByText('dave')).toBeNull()
       await selectFromDropdown(screen, verificationFilter, 'unverified')
       await waitFor(() => expect(screen.queryAllByRole('button', { name: 'Nominate' })).toHaveLength(6))
       expect(screen.queryByText('verifed')).toBeNull()
       expect(screen.queryByText('alice')).toBeNull()
-      expect(screen.getByText('bob'))
+      expect(screen.getByText('dave'))
       await selectFromDropdown(screen, verificationFilter, 'All')
     })
     await step('State Filter', async () => {

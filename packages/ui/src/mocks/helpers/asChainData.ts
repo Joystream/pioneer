@@ -1,4 +1,5 @@
 import { createType } from '@joystream/types'
+import { isAddress } from '@polkadot/util-crypto'
 import { mapValues } from 'lodash'
 
 import { encodeAddress } from '@/accounts/model/encodeAddress'
@@ -38,7 +39,9 @@ export const asChainData = mockApiMethods((data: any): any => {
       return createType('u128', data)
 
     case 'String':
-      return isNaN(data) ? data : createType('u128', data)
+      if (!isNaN(data)) return createType('u128', data)
+      if (isAddress(data)) return createType('AccountId', data)
+      return createType('Text', data)
 
     default:
       return data
