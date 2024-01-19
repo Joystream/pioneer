@@ -20,11 +20,12 @@ import { ValidatorItem } from './ValidatorItem'
 
 interface ValidatorsListProps {
   validators: ValidatorWithDetails[] | undefined
+  eraIndex: number | undefined
   order: ValidatorDetailsOrder & { sortBy: (key: ValidatorDetailsOrder['key']) => () => void }
   pagination: PaginationProps
 }
 
-export const ValidatorsList = ({ validators, order, pagination }: ValidatorsListProps) => {
+export const ValidatorsList = ({ validators, eraIndex, order, pagination }: ValidatorsListProps) => {
   const { t } = useTranslation('validators')
   const [cardNumber, selectCard] = useState<number | null>(null)
 
@@ -96,6 +97,7 @@ export const ValidatorsList = ({ validators, order, pagination }: ValidatorsList
             <ValidatorCard
               cardNumber={cardNumber}
               validator={validators[cardNumber - 1]}
+              eraIndex={eraIndex}
               selectCard={selectCard}
               totalCards={validators.length}
             />

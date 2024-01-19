@@ -9,7 +9,7 @@ import { useObservable } from '@/common/hooks/useObservable'
 
 import { CommonValidatorsQueries } from '../providers/useValidatorsQueries'
 
-type ActiveEra = { startedOn: number; eraStake: BN; eraPoints: number }
+type ActiveEra = { index: number; startedOn: number; eraStake: BN; eraPoints: number }
 
 export const useStakingStatistics = ({
   activeEra$,
@@ -23,14 +23,14 @@ export const useStakingStatistics = ({
     if (!api || !activeEra$) return
 
     return activeEra$.pipe(
-      switchMap(({ index, startedOn }) => {
-        const eraStake$ = api.query.staking.erasTotalStake(index).pipe(map((eraStake) => ({ eraStake })))
+      switchMap((era) => {
+        const eraStake$ = api.query.staking.erasTotalStake(era.index).pipe(map((eraStake) => ({ eraStake })))
 
         const eraPoints$ = api.query.staking
-          .erasRewardPoints(index)
+          .erasRewardPoints(era.index)
           .pipe(map((eraPoints) => ({ eraPoints: eraPoints.total.toNumber() })))
 
-        return merge(of({ startedOn }), eraStake$, eraPoints$)
+        return merge(of(era), eraStake$, eraPoints$)
       }),
       scan((activeEra, prop) => ({ ...activeEra, ...prop }), {})
     )
@@ -66,6 +66,7 @@ export const useStakingStatistics = ({
   const validatorsRewards = useObservable(() => validatorsRewards$, [validatorsRewards$])
 
   return {
+    eraIndex: activeEra?.index,
     eraStartedOn: activeEra?.startedOn,
     eraRewardPoints: activeEra?.eraPoints,
     eraStake: activeEra?.eraStake,

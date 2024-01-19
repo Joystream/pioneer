@@ -20,6 +20,7 @@ export const ValidatorList = () => {
   const { validatorsWithDetails, validatorsQueries, allValidatorsCount, format } = useValidatorsList()
 
   const {
+    eraIndex,
     eraStartedOn,
     eraRewardPoints,
     totalRewards,
@@ -56,7 +57,14 @@ export const ValidatorList = () => {
           <ValidatorsFilter filter={format.filter} />
         </RowGapBlock>
       }
-      main={<ValidatorsList validators={validatorsWithDetails} order={format.order} pagination={format.pagination} />}
+      main={
+        <ValidatorsList
+          validators={validatorsWithDetails}
+          eraIndex={eraIndex}
+          order={format.order}
+          pagination={format.pagination}
+        />
+      }
     />
   )
 }
