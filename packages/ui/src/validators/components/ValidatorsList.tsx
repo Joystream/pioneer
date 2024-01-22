@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import { List, ListItem } from '@/common/components/List'
 import { ListHeader } from '@/common/components/List/ListHeader'
 import { SortHeader } from '@/common/components/List/SortHeader'
-import { Loading } from '@/common/components/Loading'
 import { Pagination, PaginationProps } from '@/common/components/Pagination'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
@@ -17,6 +16,7 @@ import { ValidatorCard } from '../modals/validatorCard/ValidatorCard'
 import { ValidatorDetailsOrder, ValidatorWithDetails } from '../types'
 
 import { ValidatorItem } from './ValidatorItem'
+import { ValidatorItemLoading } from './ValidatorItemLoading'
 
 interface ValidatorsListProps {
   validators: ValidatorWithDetails[] | undefined
@@ -28,9 +28,7 @@ export const ValidatorsList = ({ validators, order, pagination }: ValidatorsList
   const { t } = useTranslation('validators')
   const [cardNumber, selectCard] = useState<number | null>(null)
 
-  if (!validators) return <Loading />
-
-  if (!validators.length) return <NotFoundText>{t('common:forms.noResults')}</NotFoundText>
+  if (validators && !validators.length) return <NotFoundText>{t('common:forms.noResults')}</NotFoundText>
 
   return (
     <Wrapper>
@@ -80,25 +78,31 @@ export const ValidatorsList = ({ validators, order, pagination }: ValidatorsList
               Commission
             </SortHeader>
           </ListHeaders>
-          <List>
-            {validators?.map((validator, index) => (
-              <ListItem
-                key={validator.stashAccount}
-                onClick={() => {
-                  selectCard(index + 1)
-                }}
-              >
-                <ValidatorItem validator={validator} />
-              </ListItem>
-            ))}
-          </List>
-          {cardNumber && validators[cardNumber - 1] && (
-            <ValidatorCard
-              cardNumber={cardNumber}
-              validator={validators[cardNumber - 1]}
-              selectCard={selectCard}
-              totalCards={validators.length}
-            />
+          {!validators ? (
+            <ValidatorItemLoading count={5} />
+          ) : (
+            <>
+              <List>
+                {validators?.map((validator, index) => (
+                  <ListItem
+                    key={validator.stashAccount}
+                    onClick={() => {
+                      selectCard(index + 1)
+                    }}
+                  >
+                    <ValidatorItem validator={validator} />
+                  </ListItem>
+                ))}
+              </List>
+              {cardNumber && validators[cardNumber - 1] && (
+                <ValidatorCard
+                  cardNumber={cardNumber}
+                  validator={validators[cardNumber - 1]}
+                  selectCard={selectCard}
+                  totalCards={validators.length}
+                />
+              )}
+            </>
           )}
         </ValidatorsListWrap>
       </ResponsiveWrap>
@@ -121,6 +125,9 @@ const ResponsiveWrap = styled.div`
   @media (min-width: 768px) {
     max-width: calc(100vw - 48px);
   }
+  @media (min-width: 1024px) {
+    max-width: calc(100vw - 274px);
+  }
 `
 
 const ValidatorsListWrap = styled.div`
@@ -131,7 +138,7 @@ const ValidatorsListWrap = styled.div`
     'validatorstablenav'
     'validatorslist';
   grid-row-gap: 4px;
-  min-width: 977px;
+  min-width: 1166px;
 
   ${List} {
     gap: 8px;
