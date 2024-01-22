@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react'
-import { combineLatest, map, merge, Observable, of, scan, switchMap, throttleTime } from 'rxjs'
+import { map, merge, Observable, of, scan, switchMap, throttleTime } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
-import { BN_ZERO } from '@/common/constants'
 import { useObservable } from '@/common/hooks/useObservable'
 import { filterObservableList, mapObservableList, sortObservableList } from '@/common/model/ObservableList'
 import { useGetMembersWithDetailsQuery } from '@/memberships/queries'
@@ -10,7 +9,8 @@ import { asMemberWithDetails } from '@/memberships/types'
 
 import { Validator, ValidatorDetailsFilter, ValidatorDetailsOrder, ValidatorInfo, ValidatorWithDetails } from '../types'
 
-import { getValidatorSortingFns, getValidatorsFilters, getValidatorInfo, keepFirst } from './utils'
+import { CommonValidatorsQueries } from './useValidatorsQueries'
+import { getValidatorSortingFns, getValidatorsFilters, getValidatorInfo } from './utils'
 
 export type ValidatorDetailsOptions = {
   filter: ValidatorDetailsFilter
@@ -19,7 +19,10 @@ export type ValidatorDetailsOptions = {
   end: number
 }
 
-export const useValidatorsWithDetails = (allValidatorsWithCtrlAcc: Validator[] | undefined) => {
+export const useValidatorsWithDetails = (
+  allValidatorsWithCtrlAcc: Validator[] | undefined,
+  validatorsQueries: CommonValidatorsQueries | undefined
+) => {
   const { api } = useApi()
 
   const [validatorDetailsOptions, setValidatorDetailsOptions] = useState<ValidatorDetailsOptions>()
@@ -73,46 +76,15 @@ export const useValidatorsWithDetails = (allValidatorsWithCtrlAcc: Validator[] |
     })
   }, [data, allValidatorsWithCtrlAcc, !validatorDetailsOptions])
 
-  const validatorsRewards$ = useMemo(() => {
-    if (!api || !validatorDetailsOptions) return
-
-    const eraPoints$ = api.query.staking.erasRewardPoints.entries()
-    const eraPayouts$ = api.query.staking.erasValidatorReward.entries()
-
-    return combineLatest([eraPoints$, eraPayouts$]).pipe(
-      map(([points, payouts]) => {
-        const payoutsMap = new Map(payouts.map(([era, amount]) => [era.args[0].toNumber(), amount.value.toBn()]))
-
-        return points
-          .map((entry) => {
-            const era = entry[0].args[0].toNumber()
-            const totalPoints = entry[1].total.toNumber()
-            const individual = entry[1].individual.toJSON() as Record<string, number>
-            const totalPayout = payoutsMap.get(era) ?? BN_ZERO
-            return { era, totalPoints, individual, totalPayout }
-          })
-          .sort((a, b) => b.era - a.era)
-          .slice(1) // Remove the current period
-      }),
-      keepFirst()
-    )
-  }, [api?.isConnected, !validatorDetailsOptions])
-
-  const activeValidators$ = useMemo(() => {
-    if (!validatorDetailsOptions) return
-
-    return api?.query.session.validators().pipe(keepFirst())
-  }, [api?.isConnected, !validatorDetailsOptions])
-
   const validatorsInfo$ = useMemo(() => {
-    if (!api || !validatorsWithMembership || !validatorsRewards$ || !activeValidators$) return
+    if (!api || !validatorsWithMembership || !validatorsQueries) return
 
     const validatorsInfo = validatorsWithMembership.map((validator) =>
-      getValidatorInfo(validator, activeValidators$, validatorsRewards$, api)
+      getValidatorInfo(validator, validatorsQueries, api)
     )
 
     return of(validatorsInfo)
-  }, [api?.isConnected, validatorsWithMembership, validatorsRewards$, activeValidators$])
+  }, [api?.isConnected, validatorsWithMembership, validatorsQueries])
 
   const [filteredValidatorsInfo$, size$] = useMemo<[Observable<ValidatorInfo[]>, Observable<number>] | []>(() => {
     if (!validatorsInfo$ || !validatorDetailsOptions) return []

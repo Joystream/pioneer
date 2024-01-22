@@ -8,7 +8,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePaneBody, SidePaneLabel, SidePaneRow, SidePaneText } from '@/common/components/SidePane'
 import { NumericValueStat, StatisticsThreeColumns, TokenValueStat } from '@/common/components/statistics'
 import { TextSmall } from '@/common/components/typography'
-import { BN_ZERO, ERA_DEPTH } from '@/common/constants'
+import { BN_ZERO } from '@/common/constants'
 import { plural } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
 import { whenDefined } from '@/common/utils'
@@ -19,17 +19,20 @@ import { NominatingRedirectModalCall } from '../NominatingRedirectModal'
 
 interface Props {
   validator: ValidatorWithDetails
+  eraIndex: number | undefined
   hideModal: () => void
 }
 
-export const ValidatorDetail = ({ validator, hideModal }: Props) => {
+export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
   const { showModal } = useModal<NominatingRedirectModalCall>()
 
-  const uptime = whenDefined(
-    validator.rewardPointsHistory,
-    (rewardPointsHistory) =>
-      `${((rewardPointsHistory.filter(({ rewardPoints }) => rewardPoints).length / (ERA_DEPTH + 1)) * 100).toFixed(3)}%`
-  )
+  const uptime = whenDefined(validator.rewardPointsHistory, (rewardPointsHistory) => {
+    const firstEra = rewardPointsHistory.at(0)?.era
+    if (!eraIndex || !firstEra) return
+    const totalEras = eraIndex - firstEra
+    const validatedEra = rewardPointsHistory.filter(({ rewardPoints }) => rewardPoints > 0).length
+    return `${((validatedEra / totalEras) * 100).toFixed(1)}%`
+  })
 
   return (
     <>

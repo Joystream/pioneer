@@ -20,11 +20,12 @@ import { ValidatorItem } from './ValidatorItem'
 
 interface ValidatorsListProps {
   validators: ValidatorWithDetails[] | undefined
+  eraIndex: number | undefined
   order: ValidatorDetailsOrder & { sortBy: (key: ValidatorDetailsOrder['key']) => () => void }
   pagination: PaginationProps
 }
 
-export const ValidatorsList = ({ validators, order, pagination }: ValidatorsListProps) => {
+export const ValidatorsList = ({ validators, eraIndex, order, pagination }: ValidatorsListProps) => {
   const { t } = useTranslation('validators')
   const [cardNumber, selectCard] = useState<number | null>(null)
 
@@ -64,8 +65,19 @@ export const ValidatorsList = ({ validators, order, pagination }: ValidatorsList
                   <p>
                     This column shows the expected APR for nominators who are nominating funds for the chosen validator.
                     The APR is subject to the amount staked and have a diminishing return for higher token amounts. This
-                    is calculated as follow: <code>Last reward extrapolated over a year</code> times{' '}
-                    <code>The nominator commission</code> divided by <code>The total staked by the validator</code>
+                    is calculated as follow:
+                    <br />
+                    <code>Yearly Reward * Commission / Stake</code>
+                    <dl>
+                      <dt>Reward:</dt>
+                      <dd>Average reward generated (during the last 30 days) extrapolated over a year.</dd>
+
+                      <dt>Commission:</dt>
+                      <dd>Current nominator commission.</dd>
+
+                      <dt>Stake:</dt>
+                      <dd>Current total stake (validator + nominators).</dd>
+                    </dl>
                   </p>
                 }
               >
@@ -96,6 +108,7 @@ export const ValidatorsList = ({ validators, order, pagination }: ValidatorsList
             <ValidatorCard
               cardNumber={cardNumber}
               validator={validators[cardNumber - 1]}
+              eraIndex={eraIndex}
               selectCard={selectCard}
               totalCards={validators.length}
             />

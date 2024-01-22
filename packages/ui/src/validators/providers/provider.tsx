@@ -8,6 +8,7 @@ import { perbillToPercent } from '@/common/utils'
 import { Validator, ValidatorWithDetails } from '../types'
 
 import { ValidatorsContext } from './context'
+import { CommonValidatorsQueries, useValidatorsQueries } from './useValidatorsQueries'
 import { ValidatorDetailsOptions, useValidatorsWithDetails } from './useValidatorsWithDetails'
 
 interface Props {
@@ -20,6 +21,7 @@ export interface UseValidators {
   validators?: Validator[]
   validatorsWithDetails?: ValidatorWithDetails[]
   size?: number
+  validatorsQueries?: CommonValidatorsQueries
 }
 
 export const ValidatorContextProvider = (props: Props) => {
@@ -54,7 +56,12 @@ export const ValidatorContextProvider = (props: Props) => {
     )
   }, [allValidators, api?.isConnected])
 
-  const { validatorsWithDetails, size, setValidatorDetailsOptions } = useValidatorsWithDetails(allValidatorsWithCtrlAcc)
+  const validatorsQueries = useValidatorsQueries()
+
+  const { validatorsWithDetails, size, setValidatorDetailsOptions } = useValidatorsWithDetails(
+    allValidatorsWithCtrlAcc,
+    validatorsQueries
+  )
 
   const value = {
     setShouldFetchValidators,
@@ -62,6 +69,7 @@ export const ValidatorContextProvider = (props: Props) => {
     validators: allValidatorsWithCtrlAcc,
     validatorsWithDetails,
     size,
+    validatorsQueries,
   }
 
   return <ValidatorsContext.Provider value={value}>{props.children}</ValidatorsContext.Provider>

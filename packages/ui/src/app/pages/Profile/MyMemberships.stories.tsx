@@ -11,6 +11,7 @@ import {
   GetMembersWithDetailsDocument,
 } from '@/memberships/queries'
 import { Membership, member } from '@/mocks/data/members'
+import { validators } from '@/mocks/data/validators'
 import { Container, getButtonByText, joy, selectFromDropdown, withinModal } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
 
@@ -71,69 +72,13 @@ export default {
             members: { membershipPrice: joy(20) },
             membershipWorkingGroup: { budget: joy(166666_66) },
             staking: {
-              bonded: {
-                multi: [
-                  'j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D',
-                  'j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW',
-                  'j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP',
-                  'j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz',
-                  'j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa',
-                  'j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN',
-                  'j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP',
-                  'j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ',
-                  'j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg',
-                  'j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt',
-                  'j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM',
-                ],
-              },
               validators: {
-                entries: [
-                  [
-                    { args: ['j4RLnWh3DWgc9u4CMprqxfBhq3kthXhvZDmnpjEtETFVm446D'] },
-                    { commission: 0.05 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW'] },
-                    { commission: 0.1 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP'] },
-                    { commission: 0.05 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz'] },
-                    { commission: 0.15 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4RjraznxDKae1aGL2L2xzXPSf8qCjFbjuw9sPWkoiy1UqWCa'] },
-                    { commission: 0.2 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN'] },
-                    { commission: 0.01 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4RxTMa1QVucodYPfQGA2JrHxZP944dfJ8qdDDYKU4QbJCWNP'] },
-                    { commission: 0.03 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4Rxkb1w9yB6WXroB2npKjRJJxwxbD8JjSQwMZFB31cf5aZAJ'] },
-                    { commission: 0.05 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4RyLBbSUBvipuQLkjLyUGeFWEzmrnfYdpteDa2gYNoM13qEg'] },
-                    { commission: 0.05 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4ShWRXxTG4K5Q5H7KXmdWN8HnaaLwppqM7GdiSwAy3eTLsJt'] },
-                    { commission: 0.05 * 10 ** 9, blocked: false },
-                  ],
-                  [
-                    { args: ['j4WfB3TD4tFgrJpCmUi8P3wPp3EocyC5At9ZM2YUpmKGJ1FWM'] },
-                    { commission: 0.05 * 10 ** 9, blocked: false },
-                  ],
-                ],
+                entries: Object.entries(validators).map(([address, { commission }]) => [
+                  { args: [address] },
+                  { commission, blocked: false },
+                ]),
               },
+              bonded: { multi: Object.keys(validators) },
             },
           },
           derive: {

@@ -28,8 +28,8 @@ export const ValidatorsInfo = () => {
 
   if (!notShowAgain && showModal)
     return (
-      <Modal modalSize="s" onClose={closeModal}>
-        <ModalHeader title={title} onClick={closeModal} />
+      <Modal modalSize="s" onClose={checkModal}>
+        <ModalHeader title={title} onClick={checkModal} />
         <ModalBody>
           <RowGapBlock gap={16}>
             <RowGapBlock gap={24}>
