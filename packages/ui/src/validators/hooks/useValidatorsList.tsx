@@ -21,10 +21,12 @@ export const useValidatorsList = () => {
   )
 
   const {
+    validators,
     setShouldFetchValidators,
     setValidatorDetailsOptions,
     validatorsWithDetails,
     size = 0,
+    validatorsQueries,
   } = useContext(ValidatorsContext)
 
   const [page, setPage] = useState(1)
@@ -47,8 +49,7 @@ export const useValidatorsList = () => {
     })
   }, [filter, order, page])
 
-  return {
-    validatorsWithDetails,
+  const format = {
     pagination,
     order: { ...order, sortBy: (key: ValidatorDetailsOrder['key']) => () => handleSort(key) },
     filter: {
@@ -60,4 +61,7 @@ export const useValidatorsList = () => {
       setIsActive,
     },
   }
+  const allValidatorsCount = validators?.length
+
+  return { validatorsWithDetails, validatorsQueries, allValidatorsCount, format }
 }

@@ -8,7 +8,6 @@ import * as Yup from 'yup'
 import { SelectAccount, SelectedAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { Account } from '@/accounts/types'
 import { TermsRoutes } from '@/app/constants/routes'
 import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
@@ -154,18 +153,15 @@ export const BuyMembershipForm = ({
     'validatorAccountCandidate',
   ])
 
-  const validators = useValidators({ skip: isValidator ?? true })
+  const validators = useValidators({ skip: !isValidator ?? true })
   const [validatorAccounts, setValidatorAccounts] = useState<Account[]>([])
   const validatorAddresses = useMemo(
-    () =>
-      validators
-        ?.flatMap(({ stashAccount: stash, controllerAccount: ctrl }) => (ctrl ? [stash, ctrl] : [stash]))
-        .map(encodeAddress),
+    () => validators?.flatMap(({ stashAccount: stash, controllerAccount: ctrl }) => (ctrl ? [stash, ctrl] : [stash])),
     [validators]
   )
 
   const isValidValidatorAccount = useMemo(
-    () => validatorAccountCandidate && validatorAddresses?.includes(encodeAddress(validatorAccountCandidate.address)),
+    () => validatorAccountCandidate && validatorAddresses?.includes(validatorAccountCandidate.address),
     [validatorAccountCandidate, validatorAddresses]
   )
 
@@ -302,7 +298,7 @@ export const BuyMembershipForm = ({
                           <SelectAccount
                             id="select-validatorAccount"
                             name="validatorAccountCandidate"
-                            filter={(account) => !!validatorAddresses?.includes(encodeAddress(account.address))}
+                            filter={(account) => !!validatorAddresses?.includes(account.address)}
                           />
                         </InputComponent>
                         <ButtonPrimary

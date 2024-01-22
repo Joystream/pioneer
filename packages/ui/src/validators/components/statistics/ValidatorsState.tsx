@@ -5,14 +5,14 @@ import { NumericValue, StatisticItem, StatisticItemSpacedContent, StatisticLabel
 interface ValidatorsStateProps {
   activeValidatorsCount: number
   allValidatorsCount: number
-  acitveNominatorsCount: number
+  activeNominatorsCount: number
   allNominatorsCount: number
 }
 
 export const ValidatorsState = ({
   activeValidatorsCount,
   allValidatorsCount,
-  acitveNominatorsCount,
+  activeNominatorsCount,
   allNominatorsCount,
 }: ValidatorsStateProps) => {
   return (
@@ -32,7 +32,7 @@ export const ValidatorsState = ({
       <StatisticItemSpacedContent>
         <StatisticLabel>Nominator (Active / Total)</StatisticLabel>
         <NumericValue>
-          {acitveNominatorsCount} / {allNominatorsCount}
+          {activeNominatorsCount} / {allNominatorsCount}
         </NumericValue>
       </StatisticItemSpacedContent>
     </StatisticItem>
