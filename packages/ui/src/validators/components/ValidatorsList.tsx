@@ -65,8 +65,19 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
                   <p>
                     This column shows the expected APR for nominators who are nominating funds for the chosen validator.
                     The APR is subject to the amount staked and have a diminishing return for higher token amounts. This
-                    is calculated as follow: <code>Last reward extrapolated over a year</code> times{' '}
-                    <code>The nominator commission</code> divided by <code>The total staked by the validator</code>
+                    is calculated as follow:
+                    <br />
+                    <code>Yearly Reward * Commission / Stake</code>
+                    <dl>
+                      <dt>Reward:</dt>
+                      <dd>Average reward generated (during the last 30 days) extrapolated over a year.</dd>
+
+                      <dt>Commission:</dt>
+                      <dd>Current nominator commission.</dd>
+
+                      <dt>Stake:</dt>
+                      <dd>Current total stake (validator + nominators).</dd>
+                    </dl>
                   </p>
                 }
               >
