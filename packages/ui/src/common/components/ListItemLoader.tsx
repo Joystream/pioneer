@@ -28,7 +28,7 @@ export const ListItemLoader = ({ children, count = 1, id, gap, ...styleProps }: 
   )
 }
 
-const ListWrapper = styled.span<{ gap?: string }>`
+const ListWrapper = styled.div<{ gap?: string }>`
   gap: ${({ gap }) => gap ?? '0'};
 `
 

@@ -9,7 +9,7 @@ import { SortHeader } from '@/common/components/List/SortHeader'
 import { Pagination, PaginationProps } from '@/common/components/Pagination'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
-import { Colors } from '@/common/constants'
+import { BreakPoints, Colors } from '@/common/constants'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
 import { ValidatorCard } from '../modals/validatorCard/ValidatorCard'
@@ -91,7 +91,7 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
             </SortHeader>
           </ListHeaders>
           {!validators ? (
-            <ValidatorItemLoading count={5} />
+            <ValidatorItemLoading count={7} />
           ) : (
             <>
               <List>
@@ -135,10 +135,10 @@ const ResponsiveWrap = styled.div`
   overflow: auto;
   align-self: stretch;
   max-width: calc(100vw - 32px);
-  @media (min-width: 768px) {
+  @media (min-width: ${BreakPoints.sm}px) {
     max-width: calc(100vw - 48px);
   }
-  @media (min-width: 1024px) {
+  @media (min-width: ${BreakPoints.md}px) {
     max-width: calc(100vw - 274px);
   }
 `
