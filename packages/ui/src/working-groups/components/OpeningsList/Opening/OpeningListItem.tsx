@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React from 'react'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
@@ -44,9 +45,9 @@ export const OpeningListItem = ({ opening, past, onClick }: OpeningListItemProps
       <ToggleableItemSummary>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={rewardPeriod?.mul(opening.rewardPerBlock)} />
+            <TokenValue value={rewardPeriod?.mul(opening.rewardPerBlock).mul(new BN(7))} />
           </TextInlineBig>
-          <ToggleableSubscriptionWide>Reward per {rewardPeriod?.toString()} blocks.</ToggleableSubscriptionWide>
+          <ToggleableSubscriptionWide>Reward per week.</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>
         <OpenItemSummaryColumn>
           <TextBig>{opening.applicants}</TextBig>

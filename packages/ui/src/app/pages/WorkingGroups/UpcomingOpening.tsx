@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React, { memo } from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -83,8 +84,8 @@ export const UpcomingOpening = () => {
                 from={opening.expectedStart}
               />
               <TokenValueStat
-                title={`Reward per ${rewardPeriod?.toString()} blocks`}
-                value={rewardPeriod?.mul(opening.rewardPerBlock)}
+                title={'Reward per week'}
+                value={rewardPeriod?.mul(opening.rewardPerBlock).mul(new BN(7))}
               />
               {opening.hiringLimit ? (
                 <NumericValueStat title="Hiring limit" value={opening.hiringLimit} />

@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React, { memo, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import styled, { css } from 'styled-components'
@@ -151,8 +152,8 @@ export const WorkingGroupOpening = () => {
             <StatisticsStyle>
               <DurationStatistics title="Time Left" value={opening.expectedEnding} />
               <TokenValueStat
-                title={`Reward per ${rewardPeriod?.toString()} blocks`}
-                value={rewardPeriod?.mul(opening.rewardPerBlock)}
+                title={'Reward per week'}
+                value={rewardPeriod?.mul(opening.rewardPerBlock).mul(new BN(7))}
               />
               <TokenValueStat
                 title="Minimal stake"

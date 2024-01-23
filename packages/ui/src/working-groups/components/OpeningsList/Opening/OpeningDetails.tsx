@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -42,9 +43,9 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
         <StatisticsStyle withMargin>
           <StatsBlock size="m" centered>
             <TextBig>
-              <TokenValue value={rewardPeriod?.mul(opening.rewardPerBlock)} />
+              <TokenValue value={rewardPeriod?.mul(opening.rewardPerBlock).mul(new BN(7))} />
             </TextBig>
-            <Subscription>Reward per {rewardPeriod?.toString()} blocks</Subscription>
+            <Subscription>Reward per week</Subscription>
           </StatsBlock>
           <StatsBlock size="m" centered>
             <MultiColumnsStatistic>
