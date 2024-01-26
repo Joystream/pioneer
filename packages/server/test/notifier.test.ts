@@ -74,7 +74,7 @@ describe('Notifier', () => {
             postAddedEvent(4, {
               category: 'qux',
               author: alice.id,
-              text: `I [@Alice](#mention?member-id=${alice.id})`,
+              text: `Hi [@Alice](#mention?member-id=${alice.id})`,
               repliesTo: alice.id,
             }),
             // Reply to Alice and mention Dave on a thread created by Alice which she watches and which is muted by Bob
@@ -84,6 +84,13 @@ describe('Notifier', () => {
               threadAuthor: alice.id,
               text: `Hi [@Dave](#mention?member-id=${dave.id})`,
               repliesTo: alice.id,
+            }),
+            // Alice post in a thread she created in a category muted by Bob
+            // (no notification should be created)
+            postAddedEvent(6, {
+              author: alice.id,
+              threadAuthor: alice.id,
+              category: 'qux',
             }),
           ],
         })

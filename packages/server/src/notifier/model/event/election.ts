@@ -15,7 +15,7 @@ export const fromElectionAnnouncingStartedEvent: NotifEventFromQNEvent<'Announci
 ) => {
   const announcingPeriodStartedEvent = useFragment(ElectionAnnouncingStartedEventFieldsFragmentDoc, event)
   const eventData = pick(announcingPeriodStartedEvent, 'inBlock', 'id')
-  return buildEvents(eventData, eventData.id, ({ generalEvent }) => [
+  return buildEvents(eventData, eventData.id, [], ({ generalEvent }) => [
     generalEvent('ELECTION_ANNOUNCING_STARTED', 'ANY'),
   ])
 }
@@ -26,7 +26,9 @@ export const fromElectionVotingStartedEvent: NotifEventFromQNEvent<'VotingPeriod
 ) => {
   const votingPeriodStartedEvent = useFragment(ElectionVotingStartedEventFieldsFragmentDoc, event)
   const eventData = pick(votingPeriodStartedEvent, 'inBlock', 'id')
-  return buildEvents(eventData, eventData.id, ({ generalEvent }) => [generalEvent('ELECTION_VOTING_STARTED', 'ANY')])
+  return buildEvents(eventData, eventData.id, [], ({ generalEvent }) => [
+    generalEvent('ELECTION_VOTING_STARTED', 'ANY'),
+  ])
 }
 
 export const fromElectionRevealingStartedEvent: NotifEventFromQNEvent<'RevealingStageStartedEvent'> = async (
@@ -35,5 +37,7 @@ export const fromElectionRevealingStartedEvent: NotifEventFromQNEvent<'Revealing
 ) => {
   const revealingPeriodStartedEvent = useFragment(ElectionRevealingStartedFieldsFragmentDoc, event)
   const eventData = pick(revealingPeriodStartedEvent, 'inBlock', 'id')
-  return buildEvents(eventData, eventData.id, ({ generalEvent }) => [generalEvent('ELECTION_REVEALING_STARTED', 'ANY')])
+  return buildEvents(eventData, eventData.id, [], ({ generalEvent }) => [
+    generalEvent('ELECTION_REVEALING_STARTED', 'ANY'),
+  ])
 }
