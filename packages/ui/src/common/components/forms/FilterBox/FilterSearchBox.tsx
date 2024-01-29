@@ -43,7 +43,7 @@ export const SearchBox = React.memo(({ value, onApply, onChange, label, displayR
   const change = onChange && (({ target }: ChangeEvent<HTMLInputElement>) => onChange(target.value))
   const isValid = () => !value || value.length === 0 || value.length > 2
   const keyDown =
-    !isValid() || !value || !onApply ? undefined : ({ key }: React.KeyboardEvent) => key === 'Enter' && onApply()
+    !isValid() || !onApply ? undefined : ({ key }: React.KeyboardEvent) => key === 'Enter' && onApply()
   const reset =
     onChange &&
     onApply &&
