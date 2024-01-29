@@ -1,4 +1,4 @@
-import { difference, pick, uniq } from 'lodash'
+import { pick, uniq } from 'lodash'
 
 import { PostAddedEventFieldsFragmentDoc, ThreadCreatedEventFieldsFragmentDoc, useFragment } from '@/common/queries'
 
@@ -8,7 +8,7 @@ export const fromPostAddedEvent: NotifEventFromQNEvent<'PostAddedEvent'> = async
   const postAddedEvent = useFragment(PostAddedEventFieldsFragmentDoc, event)
   const post = postAddedEvent.post
 
-  const mentionedMemberIds = difference(getMentionedMemberIds(post.text))
+  const mentionedMemberIds = getMentionedMemberIds(post.text)
   const repliedToMemberId = post.repliesTo && [Number(post.repliesTo.authorId)]
   const earlierPosts = post.thread.posts.filter(isOlderThan(post))
   const earlierAuthors = uniq(earlierPosts.map((post) => Number(post.authorId)))
