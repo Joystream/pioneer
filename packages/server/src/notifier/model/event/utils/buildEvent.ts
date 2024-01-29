@@ -1,4 +1,4 @@
-import { intersection } from 'lodash'
+import { difference, intersection } from 'lodash'
 import { verbose } from 'npmlog'
 
 import { getTypename } from '@/common/utils'
@@ -8,14 +8,11 @@ import { BuildEvents, ImplementedQNEvent, NotificationEvent, NotifsBuilder, Pote
 
 export const buildEvents =
   (allMemberIds: number[], event: ImplementedQNEvent): BuildEvents =>
-  (eventData, entityId, build): NotificationEvent => {
-    const generalEvent: NotifsBuilder['generalEvent'] = (kind, members) => {
-      if (members.length === 0) return []
-
-      const isDefault = isDefaultSubscription(kind)
-      const relatedMembers = members === 'ANY' ? 'ANY' : { ids: intersection(members, allMemberIds) }
-
-      return { kind, relatedMembers, isDefault }
+  (eventData, entityId, excludeMembers, build): NotificationEvent => {
+    const generalEvent: NotifsBuilder['generalEvent'] = (kind, _members) => {
+      const relatedMembers = getRelatedMembers(allMemberIds, _members, excludeMembers)
+      if (!relatedMembers) return []
+      return { kind, relatedMembers, isDefault: isDefaultSubscription(kind) }
     }
 
     const entityEvent: NotifsBuilder['entityEvent'] = (kind, relatedEntityId) => ({ kind, relatedEntityId })
@@ -28,3 +25,14 @@ export const buildEvents =
 
     return { ...eventData, entityId, potentialNotifications }
   }
+
+const getRelatedMembers = (
+  allMemberIds: number[],
+  members: 'ANY' | (number | string)[],
+  excludeMemberIds: (number | string)[]
+): 'ANY' | { ids: number[] } | undefined => {
+  if (members === 'ANY') return 'ANY'
+
+  const ids = intersection(difference(members.map(Number), excludeMemberIds.map(Number)), allMemberIds)
+  return ids.length > 0 ? { ids } : undefined
+}
