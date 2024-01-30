@@ -23,7 +23,7 @@ export const Rewards = ({ totalRewards, lastRewards }: RewardsProps) => {
         <TokenValue size="l" value={totalRewards} />
       </StatisticItemSpacedContent>
       <StatisticItemSpacedContent>
-        <StatisticLabel> Last </StatisticLabel>
+        <StatisticLabel>Last Era</StatisticLabel>
         <TokenValue size="l" value={lastRewards} />
       </StatisticItemSpacedContent>
     </StatisticItem>
