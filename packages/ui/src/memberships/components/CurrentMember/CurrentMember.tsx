@@ -1,9 +1,9 @@
-import { getAllWallets } from 'injectweb3-connect'
 import React, { useEffect } from 'react'
 import { useHistory } from 'react-router'
 import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { getAllWallets } from '@/accounts/model/wallets'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ArrowDownExpandedIcon, Icon, Loader } from '@/common/components/icons'
 import { BorderRad, Colors, Transitions } from '@/common/constants'

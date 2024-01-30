@@ -1,11 +1,12 @@
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types'
 import { Keyring } from '@polkadot/ui-keyring'
 import { decodeAddress } from '@polkadot/util-crypto'
-import { getWalletBySource, Wallet } from 'injectweb3-connect'
+import { Wallet } from 'injectweb3-connect'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { debounceTime, filter, skip } from 'rxjs/operators'
 
 import { encodeAddress } from '@/accounts/model/encodeAddress'
+import { getWalletBySource } from '@/accounts/model/wallets'
 import { useKeyring } from '@/common/hooks/useKeyring'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useObservable } from '@/common/hooks/useObservable'

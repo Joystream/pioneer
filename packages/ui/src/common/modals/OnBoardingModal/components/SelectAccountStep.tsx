@@ -1,5 +1,5 @@
 import { BN_ZERO } from '@polkadot/util'
-import { getWalletBySource } from 'injectweb3-connect'
+import { PolkadotLogo } from 'injectweb3-connect'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
@@ -19,8 +19,6 @@ interface Props {
   onAccountSelect?: (account: string) => void
 }
 
-const defaultIconSrc = getWalletBySource('polkadot-js')?.logo.src
-
 export const SelectAccountStep = ({ onAccountSelect }: Props) => {
   const [selectedAccountAddress, setSelectedAccountAddress] = useState<string>()
   const { allAccounts, setWallet, wallet } = useMyAccounts()
@@ -35,7 +33,7 @@ export const SelectAccountStep = ({ onAccountSelect }: Props) => {
       <ScrolledModalBody>
         <ContentWrapper>
           <IconsWrapper>
-            <WalletImg src={wallet?.logo.src ?? defaultIconSrc} alt={wallet?.logo.alt ?? wallet?.extensionName} />
+            <WalletImg src={wallet?.logo.src ?? PolkadotLogo} alt={wallet?.logo.alt ?? wallet?.extensionName} />
             <ConnectIcon />
             <JoystreamLogo />
           </IconsWrapper>

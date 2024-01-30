@@ -1,4 +1,4 @@
-import { getWalletBySource, Wallet } from 'injectweb3-connect'
+import { PolkadotLogo, Wallet } from 'injectweb3-connect'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -14,13 +14,11 @@ interface ConnectWalletItemProps {
   onClick: () => void
 }
 
-const defaultIconSrc = getWalletBySource('polkadot-js')?.logo.src
-
 export const ConnectWalletItem = ({ wallet, selected, onClick }: ConnectWalletItemProps) => {
   return (
     <SelectListWrapper selected={selected} onClick={onClick}>
       <InnerWrapper>
-        <img src={wallet.logo.src ?? defaultIconSrc} alt={wallet.logo.alt ?? wallet.extensionName} />
+        <img src={wallet.logo.src ?? PolkadotLogo} alt={wallet.logo.alt ?? wallet.extensionName} />
         <RowGapBlock>
           <TextBig bold value>
             {wallet.title}

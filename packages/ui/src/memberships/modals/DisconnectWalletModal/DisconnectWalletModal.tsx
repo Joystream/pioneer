@@ -1,4 +1,4 @@
-import { getWalletBySource, Wallet } from 'injectweb3-connect'
+import { PolkadotLogo, Wallet } from 'injectweb3-connect'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -11,8 +11,6 @@ import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { SignOutModalCall } from '@/memberships/modals/SignOutModal/types'
-
-const defaultIconSrc = getWalletBySource('polkadot-js')?.logo.src
 
 export const DisconnectWalletModal = () => {
   const { wallet, setWallet } = useMyAccounts()
@@ -32,7 +30,7 @@ export const DisconnectWalletModal = () => {
         <CloseButton onClick={hideModal} />
       </DisconnectButtonWrapper>
       <AvatarWrapper>
-        <img src={wallet?.logo.src ?? defaultIconSrc} alt={wallet?.logo.alt ?? wallet?.extensionName} />
+        <img src={wallet?.logo.src ?? PolkadotLogo} alt={wallet?.logo.alt ?? wallet?.extensionName} />
       </AvatarWrapper>
       <ContentWrapper>
         <TextHuge>Disconnect Wallet ?</TextHuge>

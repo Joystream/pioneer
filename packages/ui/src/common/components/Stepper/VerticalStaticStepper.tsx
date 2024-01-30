@@ -1,7 +1,7 @@
-import { getAllWallets } from 'injectweb3-connect'
 import React from 'react'
 import styled from 'styled-components'
 
+import { getAllWallets } from '@/accounts/model/wallets'
 import { TextHuge, TextInlineBig, TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { MemberAvatar } from '@/memberships/components/Avatar'
