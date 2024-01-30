@@ -1,5 +1,5 @@
 export const ExternalResourceLink = {
-  TELEGRAM: 'https://web.telegram.org/k/#@',
+  TELEGRAM: 'https://t.me/',
   TWITTER: 'https://twitter.com/',
   FACEBOOK: 'https://facebook.com/',
   YOUTUBE: 'https://youtube.com/user/',
