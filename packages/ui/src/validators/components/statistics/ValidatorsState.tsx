@@ -20,13 +20,15 @@ export const ValidatorsState = ({
       <StatisticItemSpacedContent>
         <StatisticLabel>Validator (Active / Waiting)</StatisticLabel>
         <NumericValue>
-          {activeValidatorsCount} / {allValidatorsCount - activeValidatorsCount}
+          {activeValidatorsCount && allValidatorsCount
+            ? `${activeValidatorsCount} / ${allValidatorsCount - activeValidatorsCount}`
+            : ''}
         </NumericValue>
       </StatisticItemSpacedContent>
       <StatisticItemSpacedContent>
         <StatisticLabel>Nominator (Active / Total)</StatisticLabel>
         <NumericValue>
-          {activeNominatorsCount} / {allNominatorsCount}
+          {activeNominatorsCount && allNominatorsCount ? `${activeNominatorsCount} / ${allNominatorsCount}` : ''}
         </NumericValue>
       </StatisticItemSpacedContent>
     </StatisticItem>

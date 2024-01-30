@@ -12,7 +12,7 @@ import {
 import { DurationValue } from '@/common/components/typography/DurationValue'
 import { ERA_DURATION } from '@/common/constants'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
-import { whenDefined } from '@/common/utils'
+import { isNumber, whenDefined } from '@/common/utils'
 
 interface EraProps {
   eraStartedOn: number | undefined
@@ -44,13 +44,11 @@ export const Era = ({ eraStartedOn }: EraProps) => {
       tooltipText="One era consists of 6 epochs with 1 hour duration each."
       tooltipTitle="Era"
       tooltipLinkText="What is an era"
-      actionElement={<PercentageChart percentage={percentage ?? 0} small />}
+      actionElement={isNumber(percentage) && <PercentageChart percentage={percentage} small />}
     >
       <StatisticItemSpacedContent>
         <StatisticLabel>Next Reward</StatisticLabel>
-        <div>
-          <DurationValue value={formatDurationDate(nextReward ?? 0)} />
-        </div>
+        <div>{isNumber(nextReward) && <DurationValue value={formatDurationDate(nextReward)} />}</div>
       </StatisticItemSpacedContent>
       <StatisticItemSpacedContent>
         <StatisticLabel>Blocks / Points</StatisticLabel>
