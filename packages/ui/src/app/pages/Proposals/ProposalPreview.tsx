@@ -120,7 +120,6 @@ export const ProposalPreview = () => {
             <ButtonsGroup>
               {active?.id === proposal.proposer.id &&
                 proposal.votes.length === 0 &&
-                proposal.status !== 'cancelled' &&
                 (proposal.status === 'deciding' || proposal.status === 'dormant') && (
                   <CancelProposalButton member={active} proposalId={proposal.id} />
                 )}
