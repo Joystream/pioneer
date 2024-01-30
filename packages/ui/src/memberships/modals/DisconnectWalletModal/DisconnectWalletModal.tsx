@@ -1,8 +1,9 @@
-import { PolkadotLogo, Wallet } from 'injectweb3-connect'
+import { Wallet } from 'injectweb3-connect'
 import React from 'react'
 import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { DefaultWalletIcon } from '@/accounts/model/wallets'
 import { ButtonGhost, ButtonPrimary, CloseButton } from '@/common/components/buttons'
 import { Modal } from '@/common/components/Modal'
 import { TextHuge, TextMedium } from '@/common/components/typography'
@@ -30,7 +31,7 @@ export const DisconnectWalletModal = () => {
         <CloseButton onClick={hideModal} />
       </DisconnectButtonWrapper>
       <AvatarWrapper>
-        <img src={wallet?.logo.src ?? PolkadotLogo} alt={wallet?.logo.alt ?? wallet?.extensionName} />
+        <img src={wallet?.logo.src ?? DefaultWalletIcon} alt={wallet?.logo.alt ?? wallet?.extensionName} />
       </AvatarWrapper>
       <ContentWrapper>
         <TextHuge>Disconnect Wallet ?</TextHuge>

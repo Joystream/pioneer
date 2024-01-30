@@ -1,10 +1,10 @@
 import { BN_ZERO } from '@polkadot/util'
-import { PolkadotLogo } from 'injectweb3-connect'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
+import { DefaultWalletIcon } from '@/accounts/model/wallets'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ConnectIcon } from '@/common/components/icons/ConnectIcon'
 import { JoystreamLogo } from '@/common/components/icons/JoystreamLogo'
@@ -33,7 +33,7 @@ export const SelectAccountStep = ({ onAccountSelect }: Props) => {
       <ScrolledModalBody>
         <ContentWrapper>
           <IconsWrapper>
-            <WalletImg src={wallet?.logo.src ?? PolkadotLogo} alt={wallet?.logo.alt ?? wallet?.extensionName} />
+            <WalletImg src={wallet?.logo.src ?? DefaultWalletIcon} alt={wallet?.logo.alt ?? wallet?.extensionName} />
             <ConnectIcon />
             <JoystreamLogo />
           </IconsWrapper>
