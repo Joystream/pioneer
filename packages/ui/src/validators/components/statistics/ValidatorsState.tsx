@@ -16,13 +16,7 @@ export const ValidatorsState = ({
   allNominatorsCount,
 }: ValidatorsStateProps) => {
   return (
-    <StatisticItem
-      title="validators and Nominators"
-      tooltipText="tooltip text..."
-      tooltipTitle="Validators State"
-      tooltipLinkText="link..."
-      tooltipLinkURL="#"
-    >
+    <StatisticItem title="validators and Nominators">
       <StatisticItemSpacedContent>
         <StatisticLabel>Validator (Active / Waiting)</StatisticLabel>
         <NumericValue>
