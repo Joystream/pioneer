@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React from 'react'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
@@ -16,7 +15,7 @@ import {
   ToggleableItemWrap,
   OpenItemSummaryColumn,
 } from '@/working-groups/components/ToggleableItemStyledComponents'
-import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
+import { asWeeklyRewards } from '@/working-groups/model/asWeeklyRewards'
 import { WorkingGroupOpening } from '@/working-groups/types'
 
 export type OpeningListItemProps = {
@@ -26,7 +25,6 @@ export type OpeningListItemProps = {
 }
 
 export const OpeningListItem = ({ opening, past, onClick }: OpeningListItemProps) => {
-  const rewardPeriod = useRewardPeriod(opening.groupId)
   const hiringTarget = opening.hiring.limit || 1
 
   return (
@@ -45,7 +43,7 @@ export const OpeningListItem = ({ opening, past, onClick }: OpeningListItemProps
       <ToggleableItemSummary>
         <OpenItemSummaryColumn>
           <TextInlineBig>
-            <TokenValue value={rewardPeriod?.mul(opening.rewardPerBlock).mul(new BN(7))} />
+            <TokenValue value={asWeeklyRewards(opening.rewardPerBlock)} />
           </TextInlineBig>
           <ToggleableSubscriptionWide>Reward per week.</ToggleableSubscriptionWide>
         </OpenItemSummaryColumn>

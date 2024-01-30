@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -19,14 +18,13 @@ import {
   OpenedTop,
   OpenedWrapper,
 } from '@/working-groups/components/ToggleableItemStyledComponents'
-import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
+import { asWeeklyRewards } from '@/working-groups/model/asWeeklyRewards'
 import { isOpeningOpen } from '@/working-groups/model/isOpeningOpen'
 import { groupNameToURLParam } from '@/working-groups/model/workingGroupName'
 
 export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps) => {
   const { showModal } = useModal()
-  const rewardPeriod = useRewardPeriod(opening.groupId)
   const groupName = groupNameToURLParam(nameMapping(opening.groupName))
   const openingRoute = `/working-groups/openings/${groupName}-${opening.runtimeId}`
 
@@ -43,7 +41,7 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
         <StatisticsStyle withMargin>
           <StatsBlock size="m" centered>
             <TextBig>
-              <TokenValue value={rewardPeriod?.mul(opening.rewardPerBlock).mul(new BN(7))} />
+              <TokenValue value={asWeeklyRewards(opening.rewardPerBlock)} />
             </TextBig>
             <Subscription>Reward per week</Subscription>
           </StatsBlock>

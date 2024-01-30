@@ -1,4 +1,3 @@
-import BN from 'bn.js'
 import React, { memo } from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -18,13 +17,12 @@ import { NumericValueStat } from '@/common/components/statistics/NumericValueSta
 import { TextSmall } from '@/common/components/typography'
 import { ApplicationStatusWrapper } from '@/working-groups/components/ApplicationStatusWrapper'
 import { OpeningIcon } from '@/working-groups/components/OpeningIcon'
-import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { useUpcomingOpening } from '@/working-groups/hooks/useUpcomingOpening'
+import { asWeeklyRewards } from '@/working-groups/model/asWeeklyRewards'
 
 export const UpcomingOpening = () => {
   const { id } = useParams<{ id: string }>()
   const { isLoading, opening } = useUpcomingOpening(id)
-  const rewardPeriod = useRewardPeriod(opening?.groupId)
 
   if (isLoading || !opening) {
     return (
@@ -83,10 +81,7 @@ export const UpcomingOpening = () => {
                 value={opening.expectedEnding}
                 from={opening.expectedStart}
               />
-              <TokenValueStat
-                title={'Reward per week'}
-                value={rewardPeriod?.mul(opening.rewardPerBlock).mul(new BN(7))}
-              />
+              <TokenValueStat title={'Reward per week'} value={asWeeklyRewards(opening.rewardPerBlock)} />
               {opening.hiringLimit ? (
                 <NumericValueStat title="Hiring limit" value={opening.hiringLimit} />
               ) : (
