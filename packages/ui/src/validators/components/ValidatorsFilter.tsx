@@ -25,8 +25,8 @@ export const ValidatorsFilter = ({ filter }: ValidatorFilterProps) => {
   const display = () => filter.setSearch(search)
 
   const { isVerified, isActive } = filter
-  const verificationValue = isVerified === true ? 'verified' : isVerified === false ? 'unverified' : undefined
-  const stateValue = isActive === true ? 'active' : isActive === false ? 'waiting' : undefined
+  const verificationValue = isVerified === true ? 'verified' : isVerified === false ? 'unverified' : null
+  const stateValue = isActive === true ? 'active' : isActive === false ? 'waiting' : null
 
   const clear =
     filter.search || verificationValue || stateValue
