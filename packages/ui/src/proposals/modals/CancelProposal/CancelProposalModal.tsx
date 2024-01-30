@@ -7,7 +7,6 @@ import { TextMedium } from '@/common/components/typography'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
-import { createType } from '@/common/model/createType'
 import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 
 import { CancelProposalModalCall } from './types'
@@ -26,16 +25,15 @@ export const CancelProposalModal = () => {
   const [state, send] = useMachine(machine, { context: { validateBeforeTransaction: true } })
   const { api, isConnected } = useApi()
 
-  const transaction = useMemo(() => {
-    if (api && isConnected) {
-      return api.tx.proposalsEngine.cancelProposal(
-        createType('MemberId', Number.parseInt(member.id)),
-        createType('ProposalId', Number.parseInt(proposalId))
-      )
-    }
-  }, [modalData, isConnected])
-
-  const { feeInfo } = useTransactionFee(member.controllerAccount, () => transaction, [transaction])
+  const { transaction, feeInfo } = useTransactionFee(
+    member.controllerAccount,
+    () => {
+      if (api && isConnected) {
+        return api.tx.proposalsEngine.cancelProposal(member.id, proposalId)
+      }
+    },
+    [modalData, isConnected]
+  )
 
   useEffect(() => {
     if (state.matches('requirementsVerification')) {
