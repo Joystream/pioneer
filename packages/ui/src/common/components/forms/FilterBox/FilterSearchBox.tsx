@@ -40,10 +40,16 @@ interface SearchBoxProps extends ControlProps<string> {
   displayReset?: boolean
 }
 export const SearchBox = React.memo(({ value, onApply, onChange, label, displayReset }: SearchBoxProps) => {
+  const [message, setMessage] = useState('')
+  useEffect(() => {
+    setMessage('')
+  }, [value])
   const change = onChange && (({ target }: ChangeEvent<HTMLInputElement>) => onChange(target.value))
   const isValid = () => !value || value.length === 0 || value.length > 2
-  const keyDown =
-    !isValid() || !onApply ? undefined : ({ key }: React.KeyboardEvent) => key === 'Enter' && onApply()
+  const keyDown = !onApply
+    ? undefined
+    : ({ key }: React.KeyboardEvent) =>
+        key === 'Enter' && (isValid() ? onApply() : setMessage('Minimum of 3 characters is required'))
   const reset =
     onChange &&
     onApply &&
@@ -54,11 +60,7 @@ export const SearchBox = React.memo(({ value, onApply, onChange, label, displayR
   return (
     <SearchBoxWrapper>
       <FilterLabel>{label}</FilterLabel>
-      <SearchInput
-        inputSize={label ? 'xs' : 's'}
-        validation={isValid() ? undefined : 'invalid'}
-        message={isValid() ? '' : 'Minimum of 3 characters is required'}
-      >
+      <SearchInput inputSize={label ? 'xs' : 's'} validation={isValid() ? undefined : 'invalid'} message={message}>
         <InputText placeholder="Search" value={value} onChange={change} onKeyDown={keyDown} />
         {displayReset && value && (
           <ClearButton onClick={reset} size="small" borderless>
