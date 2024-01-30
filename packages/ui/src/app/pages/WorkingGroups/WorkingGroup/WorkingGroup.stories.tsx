@@ -212,7 +212,9 @@ export const CreateOpening: Story = {
     })
 
     step('Transaction parameters', () => {
-      const [description, openingType, stakePolicy, rewardPerBlock] = args.onCreateOpening.mock.calls.at(-1)
+      const [signer, description, openingType, stakePolicy, rewardPerBlock] = args.onCreateOpening.mock.calls.at(-1)
+
+      expect(signer).toBe(member('alice').controllerAccount)
 
       expect(stakePolicy.toJSON()).toEqual({
         stakeAmount: 100_0000000000,
@@ -276,7 +278,9 @@ export const CreateOpeningImport: Story = {
       await userEvent.click(modal.getByText('Sign transaction and Create'))
     })
     step('Transaction parameters', () => {
-      const [description, openingType, stakePolicy, rewardPerBlock] = args.onCreateOpening.mock.calls.at(-1)
+      const [signer, description, openingType, stakePolicy, rewardPerBlock] = args.onCreateOpening.mock.calls.at(-1)
+
+      expect(signer).toBe(member('alice').controllerAccount)
 
       expect(stakePolicy.toJSON()).toEqual({
         stakeAmount: 200_0000000000,
