@@ -88,6 +88,9 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
               isDescending={order.isDescending}
             >
               Commission
+              <Tooltip tooltipText={<p>The validator commission on the nominators rewards</p>}>
+                <TooltipDefault />
+              </Tooltip>
             </SortHeader>
           </ListHeaders>
           {!validators ? (
