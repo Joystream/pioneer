@@ -4,12 +4,14 @@ import styled from 'styled-components'
 
 import { CopyComponent } from '@/common/components/CopyComponent'
 import { DiscordIcon, TelegramIcon, TwitterIcon } from '@/common/components/icons/socials'
+import { Link } from '@/common/components/Link'
 import { DefaultTooltip, Tooltip } from '@/common/components/Tooltip'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
 import { shortenAddress } from '@/common/model/formatters'
 import { Address } from '@/common/types'
 import { MemberIcons } from '@/memberships/components'
 import { Avatar } from '@/memberships/components/Avatar'
+import { externalResourceLink } from '@/memberships/constants'
 import { MemberWithDetails } from '@/memberships/types'
 
 interface ValidatorInfoProps {
@@ -39,18 +41,18 @@ export const ValidatorInfo = React.memo(({ address, member, size = 's' }: Valida
         {(twitter || telegram || discord) && (
           <MemberIcons>
             {twitter && (
-              <Tooltip tooltipText={twitter.value}>
+              <Link onClick={(e) => e.stopPropagation()} href={`${externalResourceLink.TELEGRAM}${twitter.value}`}>
                 <SocialTooltip>
                   <TwitterIcon />
                 </SocialTooltip>
-              </Tooltip>
+              </Link>
             )}
             {telegram && (
-              <Tooltip tooltipText={telegram.value}>
+              <Link onClick={(e) => e.stopPropagation()} href={`${externalResourceLink.TELEGRAM}${telegram.value}`}>
                 <SocialTooltip>
                   <TelegramIcon />
                 </SocialTooltip>
-              </Tooltip>
+              </Link>
             )}
             {discord && (
               <Tooltip tooltipText={discord.value}>
