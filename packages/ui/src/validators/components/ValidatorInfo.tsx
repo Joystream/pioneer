@@ -11,7 +11,7 @@ import { shortenAddress } from '@/common/model/formatters'
 import { Address } from '@/common/types'
 import { MemberIcons } from '@/memberships/components'
 import { Avatar } from '@/memberships/components/Avatar'
-import { externalResourceLink } from '@/memberships/constants'
+import { ExternalResourceLink } from '@/memberships/constants'
 import { MemberWithDetails } from '@/memberships/types'
 
 interface ValidatorInfoProps {
@@ -41,14 +41,14 @@ export const ValidatorInfo = React.memo(({ address, member, size = 's' }: Valida
         {(twitter || telegram || discord) && (
           <MemberIcons>
             {twitter && (
-              <Link onClick={(e) => e.stopPropagation()} href={`${externalResourceLink.TELEGRAM}${twitter.value}`}>
+              <Link onClick={(e) => e.stopPropagation()} href={`${ExternalResourceLink.TWITTER}${twitter.value}`}>
                 <SocialTooltip>
                   <TwitterIcon />
                 </SocialTooltip>
               </Link>
             )}
             {telegram && (
-              <Link onClick={(e) => e.stopPropagation()} href={`${externalResourceLink.TELEGRAM}${telegram.value}`}>
+              <Link onClick={(e) => e.stopPropagation()} href={`${ExternalResourceLink.TELEGRAM}${telegram.value}`}>
                 <SocialTooltip>
                   <TelegramIcon />
                 </SocialTooltip>

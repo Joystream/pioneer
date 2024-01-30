@@ -13,7 +13,8 @@ import {
   SidePaneLabel,
   EmptyBody,
 } from '@/common/components/SidePane'
-import { externalResourceLink } from '@/memberships/constants'
+import { has } from '@/common/utils/object'
+import { ExternalResourceLink } from '@/memberships/constants'
 import { useIsMyMembership } from '@/memberships/hooks/useIsMyMembership'
 import { useMemberExtraInfo } from '@/memberships/hooks/useMemberExtraInfo'
 
@@ -135,9 +136,9 @@ export const MemberDetails = React.memo(({ member }: Props) => {
           <SidePaneRow key={`${externalResource.source}-externalResources`}>
             <SidePaneLabel text={socialTitle(externalResource.source)} />
             <SidePaneText>
-              {externalResourceLink[externalResource.source] ? (
+              {has(externalResource.source, ExternalResourceLink) ? (
                 <Link
-                  href={`${externalResourceLink[externalResource.source]}${externalResource.value}`}
+                  href={`${ExternalResourceLink[externalResource.source]}${externalResource.value}`}
                   target="_blank"
                 >
                   {externalResource.value}

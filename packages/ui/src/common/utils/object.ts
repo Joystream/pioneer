@@ -22,3 +22,6 @@ const mapEntries = (
   transform: (x: any, key?: string | number, context?: AnyObject) => any,
   context?: AnyObject
 ): [any, any][] => entries.map(([key, value]) => [key, transform(value, key, context)])
+
+export const has = <K extends string | number, T extends Record<any, any>>(key: K, o: T): key is Extract<keyof T, K> =>
+  key in o
