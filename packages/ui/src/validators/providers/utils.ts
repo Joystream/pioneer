@@ -130,7 +130,14 @@ export const getValidatorInfo = (
 
           const commission = validator.commission
           const averageReward = rewards.reduce((sum, reward) => sum.add(reward.eraReward), BN_ZERO).divn(rewards.length)
-          const apr = Number(averageReward.muln(ERAS_PER_YEAR).muln(commission).div(staking.total))
+          const apr =
+            Number(
+              averageReward
+                .muln(ERAS_PER_YEAR)
+                .muln(100 - commission)
+                .muln(100)
+                .div(staking.total)
+            ) / 100
           return { APR: apr }
         })
       )

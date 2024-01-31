@@ -68,7 +68,9 @@ export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
             <RowGapBlock gap={4}>
               <h6>Era points</h6>
               <RewardPointsChartWrapper>
-                <RewardPointsChart rewardPointsHistory={validator.rewardPointsHistory} />
+                <div>
+                  <RewardPointsChart rewardPointsHistory={validator.rewardPointsHistory} />
+                </div>
               </RewardPointsChartWrapper>
             </RowGapBlock>
           )}
@@ -115,6 +117,14 @@ const Details = styled(RowGapBlock)`
 
 const ModalStatistics = styled(StatisticsThreeColumns)`
   grid-gap: 10px;
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 424px) {
+    grid-template-columns: 1fr;
+  }
 `
 
 const Stat = styled(NumericValueStat)`
@@ -123,5 +133,10 @@ const Stat = styled(NumericValueStat)`
 
 const RewardPointsChartWrapper = styled.div`
   width: 100%;
-  height: 200px;
+  overflow: auto;
+
+  > div {
+    min-width: 500px;
+    height: 200px;
+  }
 `

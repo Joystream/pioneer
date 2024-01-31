@@ -29,7 +29,7 @@ export const NominatingRedirectModal = () => {
           size="medium"
           href="https://polkadot.js.org/apps/?rpc=wss://rpc.joystream.org:9944#/staking/actions"
         >
-          Norminate <ArrowRightIcon white />
+          Nominate <ArrowRightIcon white />
         </LinkPrimary>
       </ModalFooter>
     </Modal>

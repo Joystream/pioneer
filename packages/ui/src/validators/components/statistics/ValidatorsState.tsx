@@ -16,23 +16,21 @@ export const ValidatorsState = ({
   allNominatorsCount,
 }: ValidatorsStateProps) => {
   return (
-    <StatisticItem
-      title="validators and Nominators"
-      tooltipText="tooltip text..."
-      tooltipTitle="Validators State"
-      tooltipLinkText="link..."
-      tooltipLinkURL="#"
-    >
+    <StatisticItem title="validators and Nominators">
       <StatisticItemSpacedContent>
         <StatisticLabel>Validator (Active / Waiting)</StatisticLabel>
         <NumericValue>
-          {activeValidatorsCount} / {allValidatorsCount - activeValidatorsCount}
+          {`${activeValidatorsCount > 0 ? activeValidatorsCount : '-'} / ${
+            allValidatorsCount && activeValidatorsCount ? allValidatorsCount - activeValidatorsCount : '-'
+          }`}
         </NumericValue>
       </StatisticItemSpacedContent>
       <StatisticItemSpacedContent>
         <StatisticLabel>Nominator (Active / Total)</StatisticLabel>
         <NumericValue>
-          {activeNominatorsCount} / {allNominatorsCount}
+          {`${activeNominatorsCount > 0 ? activeValidatorsCount : '-'} / ${
+            activeNominatorsCount && allNominatorsCount ? allNominatorsCount : '-'
+          }`}
         </NumericValue>
       </StatisticItemSpacedContent>
     </StatisticItem>

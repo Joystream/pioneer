@@ -65,7 +65,7 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
                     The APR is subject to the amount staked and have a diminishing return for higher token amounts. This
                     is calculated as follow:
                     <br />
-                    <code>Yearly Reward * Commission / Stake</code>
+                    <code>Yearly Reward * (1 - Commission) / Stake</code>
                     <dl>
                       <dt>Reward:</dt>
                       <dd>Average reward generated (during the last 30 days) extrapolated over a year.</dd>
@@ -88,6 +88,9 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
               isDescending={order.isDescending}
             >
               Commission
+              <Tooltip tooltipText={<p>The validator commission on the nominators rewards</p>}>
+                <TooltipDefault />
+              </Tooltip>
             </SortHeader>
           </ListHeaders>
           {!validators ? (

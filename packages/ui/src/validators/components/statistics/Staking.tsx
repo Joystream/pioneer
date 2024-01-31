@@ -20,10 +20,10 @@ export const Staking = ({ idealStaking, currentStaking, stakingPercentage }: Sta
   return (
     <StatisticItem
       title="staking"
-      tooltipText="tooltip text..."
-      tooltipTitle="staking tooltip title"
-      tooltipLinkText="link..."
-      tooltipLinkURL="#"
+      tooltipText="The ideal staking amount is 50% of the total tokens."
+      tooltipTitle="Staking Amount"
+      tooltipLinkText="Handbook"
+      tooltipLinkURL="https://handbook.joystream.org/system/accounts-and-staking"
       actionElement={Percentage}
     >
       <StatisticItemSpacedContent>

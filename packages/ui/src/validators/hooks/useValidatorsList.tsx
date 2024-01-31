@@ -4,7 +4,7 @@ import { ValidatorsContext } from '../providers/context'
 import { ValidatorDetailsOrder } from '../types'
 
 const VALIDATOR_PER_PAGE = 7
-const DESCENDING_KEYS: ValidatorDetailsOrder['key'][] = ['apr', 'commission']
+const DESCENDING_KEYS: ValidatorDetailsOrder['key'][] = ['apr']
 
 export const useValidatorsList = () => {
   const [search, setSearch] = useState('')

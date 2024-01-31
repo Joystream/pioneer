@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { FilterBox } from '@/common/components/forms/FilterBox'
+import { InputNotification } from '@/common/components/forms'
+import { Fields, FilterBox } from '@/common/components/forms/FilterBox'
 import { SearchBox } from '@/common/components/forms/FilterBox/FilterSearchBox'
 import { FilterSelect } from '@/common/components/selects'
 
@@ -24,8 +25,8 @@ export const ValidatorsFilter = ({ filter }: ValidatorFilterProps) => {
   const display = () => filter.setSearch(search)
 
   const { isVerified, isActive } = filter
-  const verificationValue = isVerified === true ? 'verified' : isVerified === false ? 'unverified' : undefined
-  const stateValue = isActive === true ? 'active' : isActive === false ? 'waiting' : undefined
+  const verificationValue = isVerified === true ? 'verified' : isVerified === false ? 'unverified' : null
+  const stateValue = isActive === true ? 'active' : isActive === false ? 'waiting' : null
 
   const clear =
     filter.search || verificationValue || stateValue
@@ -37,8 +38,8 @@ export const ValidatorsFilter = ({ filter }: ValidatorFilterProps) => {
       : undefined
 
   return (
-    <FilterBox onClear={clear}>
-      <Fields>
+    <ValidatorFilterBox onClear={clear}>
+      <ResponsiveWrapper>
         <SelectFields>
           <FilterSelect
             title="Verification"
@@ -54,10 +55,16 @@ export const ValidatorsFilter = ({ filter }: ValidatorFilterProps) => {
           />
         </SelectFields>
         <SearchBox label="Search" value={search} onApply={display} onChange={setSearch} />
-      </Fields>
-    </FilterBox>
+      </ResponsiveWrapper>
+    </ValidatorFilterBox>
   )
 }
+
+const ValidatorFilterBox = styled(FilterBox)`
+  ${Fields} {
+    padding-bottom: 22px;
+  }
+`
 
 const SelectFields = styled.div`
   display: flex;
@@ -74,10 +81,15 @@ const SelectFields = styled.div`
     }
   }
 `
-const Fields = styled.div`
+const ResponsiveWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 8px;
+
+  ${InputNotification} {
+    top: unset;
+    bottom: 2px;
+  }
 
   @media (max-width: 767px) {
     flex-direction: column;

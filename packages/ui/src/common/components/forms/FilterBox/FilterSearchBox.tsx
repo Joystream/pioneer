@@ -41,9 +41,16 @@ interface SearchBoxProps extends ControlProps<string> {
 }
 export const SearchBox = React.memo(({ value, onApply, onChange, label, displayReset }: SearchBoxProps) => {
   const change = onChange && (({ target }: ChangeEvent<HTMLInputElement>) => onChange(target.value))
-  const isValid = () => !value || value.length === 0 || value.length > 2
-  const keyDown =
-    !isValid() || !value || !onApply ? undefined : ({ key }: React.KeyboardEvent) => key === 'Enter' && onApply()
+  const isValid = !value || value.length === 0 || value.length > 2
+  const [showInvalid, setShowInvalid] = useState(false)
+  useEffect(() => {
+    if (isValid) setShowInvalid(false)
+  }, [isValid])
+  const keyDown = ({ key }: React.KeyboardEvent) => {
+    if (key !== 'Enter') return
+    if (!isValid) return setShowInvalid(true)
+    onApply?.()
+  }
   const reset =
     onChange &&
     onApply &&
@@ -56,8 +63,8 @@ export const SearchBox = React.memo(({ value, onApply, onChange, label, displayR
       <FilterLabel>{label}</FilterLabel>
       <SearchInput
         inputSize={label ? 'xs' : 's'}
-        validation={isValid() ? undefined : 'invalid'}
-        message={isValid() ? '' : 'Minimum of 3 characters is required'}
+        validation={showInvalid ? 'invalid' : undefined}
+        message={showInvalid ? 'Minimum of 3 characters is required' : undefined}
       >
         <InputText placeholder="Search" value={value} onChange={change} onKeyDown={keyDown} />
         {displayReset && value && (
