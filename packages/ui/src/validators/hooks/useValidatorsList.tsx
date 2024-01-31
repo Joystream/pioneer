@@ -17,7 +17,7 @@ export const useValidatorsList = () => {
       key,
       isDescending: key !== state.key ? DESCENDING_KEYS.includes(key) : !state.isDescending,
     }),
-    { key: 'commission', isDescending: false }
+    { key: 'default', isDescending: false }
   )
 
   const {
