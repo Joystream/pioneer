@@ -34,7 +34,12 @@ messages.subscribe(({ data }) => {
     ApiRx.create({ provider })
       .pipe(first())
       .subscribe((api) => {
-        postMessage({ messageType: 'init', payload: { consts: api.consts } })
+        const initPayload = {
+          consts: api.consts,
+          genesisHash: api.genesisHash,
+          runtimeVersion: api.runtimeVersion,
+        }
+        postMessage({ messageType: 'init', payload: initPayload })
         postMessage({ messageType: 'isConnected', payload: true })
         api.on('connected', () => self.postMessage({ messageType: 'isConnected', payload: true }))
         api.on('disconnected', () => self.postMessage({ messageType: 'isConnected', payload: false }))
