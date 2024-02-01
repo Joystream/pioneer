@@ -28,7 +28,7 @@ export const ValidatorsState = ({
       <StatisticItemSpacedContent>
         <StatisticLabel>Nominator (Active / Total)</StatisticLabel>
         <NumericValue>
-          {`${activeNominatorsCount > 0 ? activeValidatorsCount : '-'} / ${
+          {`${activeNominatorsCount > 0 ? activeNominatorsCount : '-'} / ${
             activeNominatorsCount && allNominatorsCount ? allNominatorsCount : '-'
           }`}
         </NumericValue>

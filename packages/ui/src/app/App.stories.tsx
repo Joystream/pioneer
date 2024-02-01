@@ -166,8 +166,8 @@ export default {
                 utility: {
                   batch: {
                     event: 'TxBatch',
-                    onSend: (transactions: SubmittableExtrinsic<'rxjs'>[]) =>
-                      transactions.forEach((transaction) => transaction.signAndSend('')),
+                    onSend: (signer: string, transactions: SubmittableExtrinsic<'rxjs'>[]) =>
+                      transactions.forEach((transaction) => transaction.signAndSend(signer)),
                     failure: parameters.batchTxFailure,
                   },
                 },
@@ -637,7 +637,7 @@ export const BuyMembershipHappyBindOneValidatorHappy: Story = {
     await step('Confirm', async () => {
       expect(await modal.findByText('Success'))
       expect(modal.getByText(NEW_MEMBER_DATA.handle))
-      expect(args.onBuyMembership).toHaveBeenCalledWith({
+      expect(args.onBuyMembership).toHaveBeenCalledWith(bob.controllerAccount, {
         rootAccount: alice.controllerAccount,
         controllerAccount: bob.controllerAccount,
         handle: NEW_MEMBER_DATA.handle,
@@ -650,9 +650,13 @@ export const BuyMembershipHappyBindOneValidatorHappy: Story = {
         referrerId: undefined,
       })
       expect(args.onAddStakingAccount).toHaveBeenCalledTimes(1)
-      expect(args.onAddStakingAccount).toHaveBeenCalledWith(NEW_MEMBER_DATA.id)
+      expect(args.onAddStakingAccount).toHaveBeenCalledWith(charlie.controllerAccount, NEW_MEMBER_DATA.id)
       expect(args.onConfirmStakingAccount).toHaveBeenCalledTimes(1)
-      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(NEW_MEMBER_DATA.id, charlie.controllerAccount)
+      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(
+        bob.controllerAccount,
+        NEW_MEMBER_DATA.id,
+        charlie.controllerAccount
+      )
 
       const doneButton = getButtonByText(modal, 'Done')
       expect(doneButton).toBeEnabled()
@@ -722,7 +726,7 @@ export const BuyMembershipHappyAddTwoValidatorHappy: Story = {
     await step('Confirm', async () => {
       expect(await modal.findByText('Success'))
       expect(modal.getByText(NEW_MEMBER_DATA.handle))
-      expect(args.onBuyMembership).toHaveBeenCalledWith({
+      expect(args.onBuyMembership).toHaveBeenCalledWith(bob.controllerAccount, {
         rootAccount: alice.controllerAccount,
         controllerAccount: bob.controllerAccount,
         handle: NEW_MEMBER_DATA.handle,
@@ -735,10 +739,19 @@ export const BuyMembershipHappyAddTwoValidatorHappy: Story = {
         referrerId: undefined,
       })
       expect(args.onAddStakingAccount).toHaveBeenCalledTimes(2)
-      expect(args.onAddStakingAccount).toHaveBeenCalledWith(NEW_MEMBER_DATA.id)
+      expect(args.onAddStakingAccount).toHaveBeenCalledWith(charlie.controllerAccount, NEW_MEMBER_DATA.id)
+      expect(args.onAddStakingAccount).toHaveBeenCalledWith(dave.controllerAccount, NEW_MEMBER_DATA.id)
       expect(args.onConfirmStakingAccount).toHaveBeenCalledTimes(2)
-      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(NEW_MEMBER_DATA.id, charlie.controllerAccount)
-      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(NEW_MEMBER_DATA.id, dave.controllerAccount)
+      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(
+        bob.controllerAccount,
+        NEW_MEMBER_DATA.id,
+        charlie.controllerAccount
+      )
+      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(
+        bob.controllerAccount,
+        NEW_MEMBER_DATA.id,
+        dave.controllerAccount
+      )
 
       const doneButton = getButtonByText(modal, 'Done')
       expect(doneButton).toBeEnabled()
