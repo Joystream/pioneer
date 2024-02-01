@@ -1,8 +1,8 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen, waitForElementToBeRemoved, within } from '@testing-library/react'
-import { BaseDotsamaWallet } from 'injectweb3-connect'
 import React from 'react'
 
+import { PioneerWallet } from '@/accounts/model/PioneerWallet'
 import { GlobalModals } from '@/app/GlobalModals'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { CurrentMember } from '@/memberships/components/CurrentMember'
@@ -31,7 +31,7 @@ describe('UI: CurrentMember component', () => {
   const mockServer = setupMockServer()
 
   beforeAll(async () => {
-    stubAccounts([alice, aliceStash, bob, bobStash], { wallet: new BaseDotsamaWallet({ title: 'ExtraWallet' }) })
+    stubAccounts([alice, aliceStash, bob, bobStash], { wallet: new PioneerWallet({ title: 'ExtraWallet' }) })
     await cryptoWaitReady()
   })
 

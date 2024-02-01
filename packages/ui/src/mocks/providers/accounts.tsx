@@ -1,6 +1,6 @@
 import { createType } from '@joystream/types'
 import BN from 'bn.js'
-import { PolkadotLogo, Wallet } from 'injectweb3-connect'
+import { PolkadotLogo } from 'injectweb3-connect'
 import { isObject, isString, mapValues } from 'lodash'
 import React, { FC, useCallback, useEffect, useState } from 'react'
 
@@ -8,6 +8,7 @@ import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { Account, AddressToBalanceMap, LockType } from '@/accounts/types'
+import { Wallet } from '@/accounts/types/wallet'
 import { whenDefined } from '@/common/utils'
 import { MembershipContext } from '@/memberships/providers/membership/context'
 import { MyMemberships } from '@/memberships/providers/membership/provider'
@@ -156,14 +157,10 @@ const WALLET: Wallet = {
   title: 'bar',
   installUrl: 'http://example.com',
   logo: { src: PolkadotLogo, alt: 'Wallet logo' },
-  signer: {
-    signPayload: async () => ({
-      signature: '0x123',
-    }),
-    signRaw: async () => ({
-      signature: '0x123',
-    }),
-  },
+  getSigner: () => ({
+    signPayload: async () => ({ id: 0, signature: '0x123' }),
+    signRaw: async () => ({ id: 0, signature: '0x123' }),
+  }),
   extension: {},
   getAccounts: async () => [],
   subscribeAccounts: () => undefined,

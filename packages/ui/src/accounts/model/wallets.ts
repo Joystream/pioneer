@@ -1,20 +1,28 @@
-import { BaseDotsamaWallet, InjectedWindow, SubwalletLogo, TalismanLogo, Wallet } from 'injectweb3-connect'
+import { InjectedWindow, PolkadotLogo, SubwalletLogo, TalismanLogo } from 'injectweb3-connect'
+import { groupBy } from 'lodash'
 
-export { PolkadotLogo as DefaultWalletIcon } from 'injectweb3-connect'
+import { Wallet } from '../types/wallet'
 
-export function getAllWallets() {
-  const unknownWallets = Object.keys((window as Window & InjectedWindow)?.injectedWeb3 ?? {})
-    .filter((name) => !recommendedWalletsNames.includes(name))
-    .map((wallet) => new BaseDotsamaWallet({ extensionName: wallet }))
+import { PioneerWallet } from './PioneerWallet'
 
-  return [...recommendedWallets, ...unknownWallets]
+export const DefaultWalletIcon = PolkadotLogo
+
+export function getAllWallets(): Wallet[] {
+  const installedWalletsNames = Object.keys((window as Window & InjectedWindow)?.injectedWeb3 ?? {})
+  const unknownWallets = installedWalletsNames.filter((name) => !recommendedWalletsNames.includes(name)).map(asWallet)
+  const { installed = [], recommended = [] } = groupBy(recommendedWallets, (wallet) =>
+    installedWalletsNames.includes(wallet.extensionName) ? 'installed' : 'recommended'
+  )
+
+  return [...installed, ...unknownWallets, ...recommended]
 }
 
-export function getWalletBySource(source: string): Wallet | undefined {
-  return (
-    recommendedWallets.find((wallet) => wallet.extensionName === source) ??
-    new BaseDotsamaWallet({ extensionName: source })
-  )
+export function getWalletBySource(source: string): Wallet {
+  return recommendedWallets.find((wallet) => wallet.extensionName === source) ?? asWallet(source)
+}
+
+function asWallet(source: string): Wallet {
+  return new PioneerWallet({ extensionName: source, logo: walletLogos.get(source) })
 }
 
 const recommendedWallets = [
@@ -32,5 +40,8 @@ const recommendedWallets = [
     installUrl: 'https://www.subwallet.app/download.html',
     logo: { src: SubwalletLogo, alt: 'Subwallet Logo' },
   },
-].map((data) => new BaseDotsamaWallet(data))
+].map((data) => new PioneerWallet(data))
+
 const recommendedWalletsNames = recommendedWallets.map((wallet) => wallet.extensionName)
+
+const walletLogos = new Map([['polkadot-js', { src: PolkadotLogo, alt: 'Polkadotjs Logo' }]])

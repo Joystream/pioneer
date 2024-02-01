@@ -1,8 +1,8 @@
-import { Wallet } from 'injectweb3-connect'
 import React from 'react'
 import styled from 'styled-components'
 
 import { DefaultWalletIcon } from '@/accounts/model/wallets'
+import { Wallet } from '@/accounts/types/wallet'
 import { CheckboxIcon } from '@/common/components/icons'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextMedium } from '@/common/components/typography'

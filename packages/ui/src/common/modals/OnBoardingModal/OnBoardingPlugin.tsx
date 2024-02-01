@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { getAllWallets } from '@/accounts/model/wallets'
+import { Wallet } from '@/accounts/types/wallet'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { List, ListItem } from '@/common/components/List'

@@ -1,8 +1,8 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { renderHook } from '@testing-library/react-hooks'
-import { BaseDotsamaWallet } from 'injectweb3-connect'
 import React from 'react'
 
+import { PioneerWallet } from '@/accounts/model/PioneerWallet'
 import { ApiContext } from '@/api/providers/context'
 import { UseApi } from '@/api/providers/provider'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
@@ -19,7 +19,7 @@ import { stubAccounts, stubBalances } from '../../_mocks/transactions'
 
 let mockUseLocalStorage: [string | undefined, () => void] = [undefined, jest.fn()]
 
-const wallet = new BaseDotsamaWallet({ title: 'ExtraWallet' })
+const wallet = new PioneerWallet({ title: 'ExtraWallet' })
 
 jest.mock('@/common/hooks/useLocalStorage', () => ({
   useLocalStorage: () => mockUseLocalStorage,
