@@ -137,8 +137,8 @@ export default {
             utility: {
               batch: {
                 event: 'TxBatch',
-                onSend: (transactions: SubmittableExtrinsic<'rxjs'>[]) =>
-                  transactions.forEach((transaction) => transaction.signAndSend('')),
+                onSend: (signer: string, transactions: SubmittableExtrinsic<'rxjs'>[]) =>
+                  transactions.forEach((transaction) => transaction.signAndSend(signer)),
                 failure: parameters.batchTxFailure,
               },
             },
@@ -355,12 +355,22 @@ export const UpdateValidatorAccountsHappy: Story = {
       expect(await modal.findByText('Success'))
       expect(modal.getByText('alice'))
       expect(args.onRemoveStakingAccount).toHaveBeenCalledTimes(2)
-      expect(args.onRemoveStakingAccount).toBeCalledWith(alice.id)
+      expect(args.onRemoveStakingAccount).toBeCalledWith(bob.controllerAccount, alice.id)
+      expect(args.onRemoveStakingAccount).toBeCalledWith(charlie.controllerAccount, alice.id)
       expect(args.onAddStakingAccount).toHaveBeenCalledTimes(2)
-      expect(args.onAddStakingAccount).toHaveBeenCalledWith(alice.id)
+      expect(args.onAddStakingAccount).toHaveBeenCalledWith(alice.controllerAccount, alice.id)
+      expect(args.onAddStakingAccount).toHaveBeenCalledWith(dave.controllerAccount, alice.id)
       expect(args.onConfirmStakingAccount).toHaveBeenCalledTimes(2)
-      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(alice.id, alice.controllerAccount)
-      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(alice.id, dave.controllerAccount)
+      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(
+        alice.controllerAccount,
+        alice.id,
+        alice.controllerAccount
+      )
+      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(
+        alice.controllerAccount,
+        alice.id,
+        dave.controllerAccount
+      )
     })
   },
 }
@@ -404,7 +414,8 @@ export const UnbondValidatorAccountsHappy: Story = {
       expect(await modal.findByText('Success'))
       expect(modal.getByText('alice'))
       expect(args.onRemoveStakingAccount).toHaveBeenCalledTimes(2)
-      expect(args.onRemoveStakingAccount).toBeCalledWith(alice.id)
+      expect(args.onRemoveStakingAccount).toBeCalledWith(bob.controllerAccount, alice.id)
+      expect(args.onRemoveStakingAccount).toBeCalledWith(charlie.controllerAccount, alice.id)
     })
   },
 }
@@ -485,10 +496,19 @@ export const BondValidatorAccountsHappy: Story = {
       expect(await modal.findByText('Success'))
       expect(modal.getByText('alice'))
       expect(args.onAddStakingAccount).toHaveBeenCalledTimes(2)
-      expect(args.onAddStakingAccount).toHaveBeenCalledWith(alice.id)
+      expect(args.onAddStakingAccount).toHaveBeenCalledWith(alice.controllerAccount, alice.id)
+      expect(args.onAddStakingAccount).toHaveBeenCalledWith(dave.controllerAccount, alice.id)
       expect(args.onConfirmStakingAccount).toHaveBeenCalledTimes(2)
-      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(alice.id, alice.controllerAccount)
-      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(alice.id, dave.controllerAccount)
+      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(
+        alice.controllerAccount,
+        alice.id,
+        alice.controllerAccount
+      )
+      expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(
+        alice.controllerAccount,
+        alice.id,
+        dave.controllerAccount
+      )
     })
   },
 }
