@@ -2,7 +2,7 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { renderHook } from '@testing-library/react-hooks'
 import React from 'react'
 
-import { PioneerWallet } from '@/accounts/model/PioneerWallet'
+import { PioneerWallet } from '@/accounts/model/wallets'
 import { ApiContext } from '@/api/providers/context'
 import { UseApi } from '@/api/providers/provider'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'

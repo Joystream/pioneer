@@ -2,7 +2,7 @@ import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, screen, waitForElementToBeRemoved, within } from '@testing-library/react'
 import React from 'react'
 
-import { PioneerWallet } from '@/accounts/model/PioneerWallet'
+import { PioneerWallet } from '@/accounts/model/wallets'
 import { GlobalModals } from '@/app/GlobalModals'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
 import { CurrentMember } from '@/memberships/components/CurrentMember'

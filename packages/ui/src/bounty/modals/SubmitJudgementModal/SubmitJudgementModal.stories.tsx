@@ -47,6 +47,7 @@ const useMyAccounts: UseAccounts = {
   hasAccounts: false,
   allAccounts: [{ name: 'Alice Account', address: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf' }],
   error: undefined,
+  allWallets: [],
 }
 
 const useMyMemberships = {

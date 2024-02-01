@@ -3,7 +3,7 @@ import { act, fireEvent, render, waitFor } from '@testing-library/react'
 import { useMachine } from '@xstate/react'
 import React from 'react'
 
-import { PioneerWallet } from '@/accounts/model/PioneerWallet'
+import { PioneerWallet } from '@/accounts/model/wallets'
 import { ApiContext } from '@/api/providers/context'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'

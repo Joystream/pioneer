@@ -30,6 +30,7 @@ const useMyAccounts: UseAccounts = {
     { name: 'Alice Account', address: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf' },
     { name: 'Bob Account', address: '5DWS57CtERHpNehXCPcNoHGKutQYGrwvaEF5zXb26Fz9rcQp' },
   ],
+  allWallets: [],
   error: undefined,
 }
 

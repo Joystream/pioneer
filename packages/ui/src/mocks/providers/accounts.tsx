@@ -124,6 +124,7 @@ export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts
     hasAccounts: true,
     isLoading: false,
     wallet: accounts.hasWallet === false ? undefined : WALLET,
+    allWallets: [],
   }
 
   const membershipContextValue: MyMemberships = {
