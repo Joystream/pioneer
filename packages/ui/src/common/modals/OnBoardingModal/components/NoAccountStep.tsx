@@ -9,10 +9,7 @@ import { HorizontalStaticStepper } from '@/common/components/Stepper/HorizontalS
 import { TextExtraHuge } from '@/common/components/typography'
 import { OnBoardingTextFooter } from '@/common/modals/OnBoardingModal'
 
-const steps = [
-  'Open the extension with the icon in your browser bar',
-  'Create an account according to the displayed instructions',
-]
+const steps = ['Connect Pioneer to the selected wallet', 'Create an account according to the displayed instructions']
 
 export const NoAccountStep = () => {
   const { setWallet } = useMyAccounts()

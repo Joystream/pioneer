@@ -5,7 +5,6 @@ import React, { ReactNode, useEffect, useState } from 'react'
 import { debounceTime, filter, skip } from 'rxjs/operators'
 
 import { encodeAddress } from '@/accounts/model/encodeAddress'
-import { getWalletBySource } from '@/accounts/model/wallets'
 import { Wallet } from '@/accounts/types/wallet'
 import { useKeyring } from '@/common/hooks/useKeyring'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
@@ -14,6 +13,7 @@ import { useObservable } from '@/common/hooks/useObservable'
 import { Account } from '../../types'
 
 import { AccountsContext } from './context'
+import { useWallets } from './useWallets'
 
 type ExtensionError = 'NO_EXTENSION' | 'APP_REJECTED'
 
@@ -22,6 +22,7 @@ export interface UseAccounts {
   hasAccounts: boolean
   isLoading: boolean
   error?: ExtensionError
+  allWallets: Wallet[]
   wallet?: Wallet
   setWallet?: (wallet: Wallet | undefined) => void
 }
@@ -64,62 +65,19 @@ const loadKeysFromExtension = async (keyring: Keyring, wallet: Wallet) => {
   })
 }
 
-// Extensions is not always ready on application load, hence the check
-const onExtensionLoaded =
-  (onSuccess: (foundWallets: string[]) => void, onFail: () => void, recentWallet?: string) => () => {
-    const interval = 20
-    const timeout = 1000
-    let timeElapsed = 0
-
-    const intervalId = setInterval(() => {
-      const extensionsKeys = Object.keys((window as any)?.injectedWeb3 ?? {})
-      if (extensionsKeys.length) {
-        if (!recentWallet) {
-          clearInterval(intervalId)
-          onSuccess(extensionsKeys)
-        } else if (extensionsKeys.includes(recentWallet)) {
-          // some wallets load slower which will cause error when trying to preload them hence the check
-          clearInterval(intervalId)
-          onSuccess(extensionsKeys)
-        } else if (timeElapsed >= timeout) {
-          // if wallet in storage was disabled we don't want to wait for it too long
-          clearInterval(intervalId)
-          onSuccess(extensionsKeys)
-        }
-        timeElapsed += interval
-      } else {
-        timeElapsed += interval
-        if (timeElapsed >= timeout) {
-          clearInterval(intervalId)
-          onFail()
-        }
-      }
-    }, interval)
-
-    return () => clearInterval(intervalId)
-  }
-
 export const AccountsContextProvider = (props: Props) => {
   const keyring = useKeyring()
+  const allWallets = useWallets()
   const [isExtensionLoaded, setIsExtensionLoaded] = useState(false)
   const [selectedWallet, setSelectedWallet] = useState<Wallet>()
   const [extensionError, setExtensionError] = useState<ExtensionError>()
   const [recentWallet, setRecentWallet] = useLocalStorage<string | undefined>('recentWallet')
 
-  useEffect(
-    onExtensionLoaded(
-      (foundWallets) => {
-        setIsExtensionLoaded(true)
-        if (recentWallet && foundWallets.includes(recentWallet)) {
-          const possibleWallet = getWalletBySource(recentWallet)
-          setSelectedWallet(possibleWallet)
-        }
-      },
-      () => setExtensionError('NO_EXTENSION'),
-      recentWallet
-    ),
-    []
-  )
+  useEffect(() => {
+    setIsExtensionLoaded(true)
+    const cachedWallet = recentWallet && allWallets.find((wallet) => wallet.extensionName === recentWallet)
+    if (cachedWallet) setSelectedWallet(cachedWallet)
+  }, [allWallets])
 
   useEffect(() => {
     if (!isExtensionLoaded || !selectedWallet) {
@@ -172,6 +130,7 @@ export const AccountsContextProvider = (props: Props) => {
     isLoading: !isExtensionLoaded || !accounts,
     setWallet: setSelectedWallet,
     wallet: selectedWallet,
+    allWallets,
     error: extensionError,
   }
 
