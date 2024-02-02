@@ -167,5 +167,4 @@ const WALLET: Wallet = {
   subscribeAccounts: () => undefined,
   updateMetadata: async () => false,
   walletAccountToInjectedAccountWithMeta: () => ({ address: '0x123', meta: { source: '' } }),
-  transformError: () => Error(),
 }

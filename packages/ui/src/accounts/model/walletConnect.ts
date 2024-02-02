@@ -2,7 +2,7 @@ import { Signer } from '@polkadot/api/types'
 import { WalletConnectModal } from '@walletconnect/modal'
 import { SessionTypes } from '@walletconnect/types'
 import { IUniversalProvider, UniversalProvider } from '@walletconnect/universal-provider'
-import { WalletAccount } from 'injectweb3-connect'
+import { SubscriptionFn, WalletAccount } from 'injectweb3-connect'
 
 import { PioneerWallet } from './wallets'
 
@@ -57,10 +57,17 @@ export class WalletConnect extends PioneerWallet {
         const source = this.extensionName
         return { address, source }
       })
+
+    walletConnectModal.closeModal()
   }
 
   getAccounts = async (): Promise<WalletAccount[]> => {
-    return this._accounts ?? []
+    return Promise.resolve(this._accounts ?? [])
+  }
+
+  subscribeAccounts: (callback: SubscriptionFn) => Promise<() => void> = (callback) => {
+    callback(this._accounts ?? [])
+    return Promise.resolve(() => undefined)
   }
 
   public getSigner = (address: string): Signer => ({
