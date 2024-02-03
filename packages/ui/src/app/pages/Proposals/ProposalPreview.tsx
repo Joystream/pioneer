@@ -15,6 +15,7 @@ import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics, StatsContent } from '@/common/components/statistics'
 import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
+import { TokenValue } from '@/common/components/typography/TokenValue'
 import { camelCaseToText } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
 import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
@@ -42,20 +43,19 @@ import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { proposalPastStatuses } from '@/proposals/model/proposalStatus'
 
 export const ProposalPreview = () => {
-  const { id } = useParams<{ id: string }>()
   const history = useHistory()
+  const { id } = useParams<{ id: string }>()
   const { isLoading, proposal } = useProposal(id)
-  const { council } = useElectedCouncil()
   const constants = useProposalConstants(proposal?.details.type)
+  const blocksToProposalExecution = useBlocksToProposalExecution(proposal, constants)
+  useRefetchQueries({ interval: MILLISECONDS_PER_BLOCK, include: ['getProposal', 'GetProposalVotes'] }, [proposal])
+
+  const { council } = useElectedCouncil()
   const loc = useLocation()
   const voteId = new URLSearchParams(loc.search).get('showVote')
-  const blocksToProposalExecution = useBlocksToProposalExecution(proposal, constants)
-
   const votingRounds = useVotingRounds(proposal?.votes, proposal?.proposalStatusUpdates)
   const [currentVotingRound, setVotingRound] = useState(0)
-
   const votes = votingRounds[currentVotingRound] ?? votingRounds[0]
-  useRefetchQueries({ interval: MILLISECONDS_PER_BLOCK, include: ['getProposal', 'GetProposalVotes'] }, [proposal])
   const notVoted = useMemo(() => {
     if (
       !proposal ||
@@ -210,6 +210,11 @@ export const ProposalPreview = () => {
             <RowGapBlock gap={16}>
               <Label>Proposer</Label>
               <MemberInfo member={proposal.proposer} />
+            </RowGapBlock>
+
+            <RowGapBlock gap={16}>
+              <Label>Stake</Label>
+              {constants ? <TokenValue value={constants.requiredStake} /> : 'Loading...'}
             </RowGapBlock>
           </RowGapBlock>
         </SidePanel>
