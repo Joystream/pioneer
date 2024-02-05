@@ -2,7 +2,7 @@ import { Signer } from '@polkadot/api/types'
 import { WalletConnectModal } from '@walletconnect/modal'
 import { SessionTypes } from '@walletconnect/types'
 import { IUniversalProvider, UniversalProvider } from '@walletconnect/universal-provider'
-import { SubscriptionFn, WalletAccount } from 'injectweb3-connect'
+import { MetadataDef, SubscriptionFn, WalletAccount } from 'injectweb3-connect'
 
 import { PioneerWallet } from './wallets'
 
@@ -31,6 +31,7 @@ export class WalletConnect extends PioneerWallet {
       projectId: this._projectId,
       relayUrl: 'wss://relay.walletconnect.com',
     })
+    this._provider = provider
 
     const requiredNamespaces = {
       polkadot: {
@@ -49,6 +50,7 @@ export class WalletConnect extends PioneerWallet {
     }
     // await session approval from the wallet app
     const walletConnectSession = await approval()
+    this._walletConnectSession = walletConnectSession
 
     this._accounts = Object.values(walletConnectSession.namespaces)
       .flatMap((namespace) => namespace.accounts)
@@ -69,6 +71,8 @@ export class WalletConnect extends PioneerWallet {
     callback(this._accounts ?? [])
     return Promise.resolve(() => undefined)
   }
+
+  updateMetadata: (chainInfo: MetadataDef) => Promise<boolean> = () => Promise.resolve(true)
 
   public getSigner = (address: string): Signer => ({
     signPayload: (transactionPayload) => {
