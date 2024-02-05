@@ -67,6 +67,7 @@ import { SwitchMemberModal, SwitchMemberModalCall } from '@/memberships/modals/S
 import { TransferInviteModal, TransferInvitesModalCall } from '@/memberships/modals/TransferInviteModal'
 import { UpdateMembershipModal, UpdateMembershipModalCall } from '@/memberships/modals/UpdateMembershipModal'
 import { AddNewProposalModal, AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'
+import { CancelProposalModal, CancelProposalModalCall } from '@/proposals/modals/CancelProposal'
 import { VoteForProposalModal, VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { VoteRationale } from '@/proposals/modals/VoteRationale/VoteRationale'
@@ -133,6 +134,7 @@ export type ModalNames =
   | ModalName<EmailSubscriptionModalCall>
   | ModalName<EmailConfirmationModalCall>
   | ModalName<NominatingRedirectModalCall>
+  | ModalName<CancelProposalModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -186,6 +188,7 @@ const modals: Record<ModalNames, ReactElement> = {
   EmailSubscriptionModal: <EmailSubscriptionModal />,
   EmailConfirmationModal: <EmailConfirmationModal />,
   NominatingRedirect: <NominatingRedirectModal />,
+  CancelProposalModal: <CancelProposalModal />,
 }
 
 const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
