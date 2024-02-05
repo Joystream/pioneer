@@ -13,7 +13,9 @@ export const MemberCreated = React.memo(({ member }: MemberCreatedProps) => {
     <MemeberCreated>
       <MemberCreatedDate>{new Date(member.createdAt).toLocaleDateString('en-GB')}</MemberCreatedDate>
       {member.entry && member.entry.type !== 'genesis' && (
-        <MemberCreatedBlock>{member.entry.block.number} block</MemberCreatedBlock>
+        <MemberCreatedBlock>
+          {member.entry.block.number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} block
+        </MemberCreatedBlock>
       )}
     </MemeberCreated>
   )

@@ -64,7 +64,15 @@ export type MemberWithDetailsFieldsFragment = {
   }
   entry:
     | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-    | { __typename: 'MembershipEntryGifted' }
+    | {
+        __typename: 'MembershipEntryGifted'
+        membershipGiftedEvent?: {
+          __typename: 'MembershipGiftedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        } | null
+      }
     | {
         __typename: 'MembershipEntryInvited'
         memberInvitedEvent?: {
@@ -248,7 +256,15 @@ export type GetMembersWithDetailsQuery = {
     }
     entry:
       | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | { __typename: 'MembershipEntryGifted' }
+      | {
+          __typename: 'MembershipEntryGifted'
+          membershipGiftedEvent?: {
+            __typename: 'MembershipGiftedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
       | {
           __typename: 'MembershipEntryInvited'
           memberInvitedEvent?: {
@@ -394,7 +410,15 @@ export type GetMemberQuery = {
     }
     entry:
       | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | { __typename: 'MembershipEntryGifted' }
+      | {
+          __typename: 'MembershipEntryGifted'
+          membershipGiftedEvent?: {
+            __typename: 'MembershipGiftedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
       | {
           __typename: 'MembershipEntryInvited'
           memberInvitedEvent?: {
@@ -715,6 +739,13 @@ export const MemberWithDetailsFieldsFragmentDoc = gql`
       }
       ... on MembershipEntryPaid {
         membershipBoughtEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+      ... on MembershipEntryGifted {
+        membershipGiftedEvent {
           createdAt
           inBlock
           network
