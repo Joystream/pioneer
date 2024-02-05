@@ -88,5 +88,9 @@ export class WalletConnect extends PioneerWallet {
         },
       })
     },
+    signRaw: () => {
+      // TODO
+      return Promise.resolve({ id: 0, signature: '0x' })
+    },
   })
 }
