@@ -19,8 +19,8 @@ import { enhancedGetErrorMessage } from '@/common/utils/validation'
 export const UpdatePalletFrozenStatus = () => {
   const { watch, formState } = useFormContext()
   const validationMessage = useMemo(() => {
-    return enhancedGetErrorMessage(formState?.errors)('updatePalletFrozenStatus.freeze') ?? ''
-  }, [JSON.stringify(formState?.errors), watch('updatePalletFrozenStatus.freeze')])
+    return enhancedGetErrorMessage(formState?.errors)('updatePalletFrozenStatus.enable') ?? ''
+  }, [JSON.stringify(formState?.errors), watch('updatePalletFrozenStatus.enable')])
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -33,9 +33,9 @@ export const UpdatePalletFrozenStatus = () => {
         <InlineToggleWrap>
           <Label>Creator Tokens</Label>
           <ToggleCheckbox
-            falseLabel="Enable"
-            trueLabel="Disable"
-            name="updatePalletFrozenStatus.freeze"
+            falseLabel="Disable"
+            trueLabel="Enable"
+            name="updatePalletFrozenStatus.enable"
             id="crt-feature-select"
           />
           <Tooltip tooltipText="You have the flexibility to enable or disable CRT feature.">

@@ -114,7 +114,7 @@ export const AddNewProposalModal = () => {
   })
 
   useEffect(() => {
-    if (palletFrozenStatus !== undefined) form.setValue('updatePalletFrozenStatus.freeze', palletFrozenStatus.isFalse)
+    if (palletFrozenStatus !== undefined) form.setValue('updatePalletFrozenStatus.enable', palletFrozenStatus.isTrue)
   }, [palletFrozenStatus])
 
   const formValues = form.getValues() as AddNewProposalForm
