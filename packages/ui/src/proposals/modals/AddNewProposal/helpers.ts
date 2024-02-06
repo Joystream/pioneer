@@ -17,7 +17,7 @@ import {
 } from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
-import { differentFromContext, isValidCSV } from '@/proposals/model/validation'
+import { equalToContext, isValidCSV } from '@/proposals/model/validation'
 import { ProposalType } from '@/proposals/types'
 import { GroupIdName } from '@/working-groups/types'
 
@@ -52,7 +52,7 @@ export const defaultProposalValues = {
   },
   updatePalletFrozenStatus: {
     pallet: 'ProjectToken',
-    freeze: false,
+    enable: false,
   },
 }
 
@@ -180,7 +180,7 @@ export interface AddNewProposalForm {
     }
   }
   updatePalletFrozenStatus: {
-    freeze: boolean
+    enable: boolean
     pallet: string
   }
 }
@@ -411,12 +411,12 @@ export const schemaFactory = (api?: Api) => {
       channelCashoutsEnabled: Yup.boolean(),
     }),
     updatePalletFrozenStatus: Yup.object().shape({
-      freeze: Yup.boolean()
+      enable: Yup.boolean()
         .test(
-          differentFromContext(
-            (isFrozen) =>
+          equalToContext(
+            (enable) =>
               `The ProjectToken pallet is currently ${
-                isFrozen ? 'disabled' : 'enabled'
+                enable ? 'enabled' : 'disabled'
               }, so presently this proposal would fail due to execution constraints.`,
             'palletFrozenStatus',
             'execution'

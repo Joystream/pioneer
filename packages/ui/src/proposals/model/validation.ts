@@ -22,20 +22,20 @@ export const isValidCSV = (message: string): Yup.TestConfig<any, AnyObject> => (
   },
 })
 
-export const differentFromContext = (
+export const equalToContext = (
   msg: (value: any) => string,
   contextPath: string,
   type?: string
 ): Yup.TestConfig<any, AnyObject> => ({
-  name: type ?? 'differentFromContext',
+  name: type ?? 'equalToContext',
   exclusive: false,
   test(value: boolean) {
     const validationValue = get(this.options.context, contextPath).toJSON()
-    if (value === validationValue) {
-      return this.createError({
+    return (
+      value === validationValue ||
+      this.createError({
         message: msg(value),
       })
-    }
-    return true
+    )
   },
 })

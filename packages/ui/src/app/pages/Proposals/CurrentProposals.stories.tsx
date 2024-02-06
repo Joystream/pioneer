@@ -1422,7 +1422,7 @@ export const SpecificParametersUpdatePalletFrozenStatus: Story = {
     await createProposal(async () => {
       const nextButton = getButtonByText(modal, 'Create proposal')
 
-      await userEvent.click(modal.getByTestId('crt-feature-select'))
+      await userEvent.click(modal.getByText('Enable'))
       expect(
         await modal.findByText(
           /The ProjectToken pallet is currently enabled, so presently this proposal would fail due to execution constraints./
@@ -1431,7 +1431,7 @@ export const SpecificParametersUpdatePalletFrozenStatus: Story = {
       expect(await modal.findByText(/Warning/))
       expect(nextButton).toBeDisabled()
 
-      await userEvent.click(modal.getByTestId('crt-feature-select'))
+      await userEvent.click(modal.getByText('Disable'))
       await waitFor(() => expect(nextButton).toBeEnabled())
     })
 
