@@ -1,7 +1,7 @@
 import { ApiRx } from '@polkadot/api'
 import { getPolkadotApiChainInfo } from 'injectweb3-connect'
 
-import { ProxyApi } from '@/proxyApi'
+import { ProxyApi } from '@/proxyApi/client/ProxyApi'
 
 import { MetadataDef } from '../types'
 

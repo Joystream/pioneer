@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react'
-import styled, { ThemedStyledProps } from 'styled-components'
+import styled, { ThemedStyledProps, css } from 'styled-components'
 
 import { ConnectionStatusDot } from '@/app/components/ConnectionStatusDot'
 import { useEscape } from '@/common/hooks/useEscape'
 
-import { Animations, BorderRad, Colors, Fonts, RemoveScrollbar, Shadows, ZIndex } from '../../constants'
+import { Animations, BorderRad, BreakPoints, Colors, Fonts, RemoveScrollbar, Shadows, ZIndex } from '../../constants'
 import { CloseButton } from '../buttons'
 import { TextMedium, ValueInJoys } from '../typography'
 
@@ -149,14 +149,13 @@ export const ModalBody = styled.div`
 `
 
 interface ModalFooterProps {
-  twoColumns?: boolean
   children?: ReactNode
   className?: string
 }
 
-export const ModalFooter = ({ twoColumns = false, children, className }: ModalFooterProps) => {
+export const ModalFooter = ({ children, className }: ModalFooterProps) => {
   return (
-    <ModalFooterComponent twoColumns={twoColumns} className={className}>
+    <ModalFooterComponent className={className}>
       {children}
       <ModalConnectionStatusDot onlyPerformance />
     </ModalFooterComponent>
@@ -169,15 +168,12 @@ const ModalConnectionStatusDot = styled(ConnectionStatusDot)`
   top: calc(50% - 10px);
 `
 
-export const ModalFooterComponent = styled.footer<{ twoColumns?: boolean }>`
-  display: inline-grid;
+export const ModalFooterComponent = styled.footer`
+  display: inline-flex;
+  flex-wrap: wrap;
   grid-area: modalfooter;
-  grid-template-columns: ${({ twoColumns }) => (twoColumns ? '1fr auto' : '1fr')};
-  grid-template-rows: 1fr;
-  grid-auto-flow: column;
-  grid-column-gap: 16px;
+  gap: 16px;
   justify-self: end;
-  justify-items: end;
   justify-content: end;
   align-items: center;
   width: 100%;
@@ -186,18 +182,10 @@ export const ModalFooterComponent = styled.footer<{ twoColumns?: boolean }>`
   padding: 12px 26px 12px 24px;
   border-radius: 0 0 2px 2px;
   position: relative;
-`
 
-export const ModalFooterGroup = styled.div<{ left?: boolean }>`
-  display: grid;
-  grid-auto-flow: column;
-  align-items: center;
-  width: fit-content;
-  height: 100%;
-  justify-self: ${({ left }) => (left ? 'start' : 'end')};
-  grid-column-gap: 40px;
-  justify-items: ${({ left }) => (left ? 'start' : 'end')};
-  justify-content: ${({ left }) => (left ? 'start' : 'end')};
+  @media (min-width: ${BreakPoints.sm}px) {
+    flex-flow: nowrap;
+  }
 `
 
 interface ModalWrapProps {
@@ -210,6 +198,19 @@ export const ModalWrap = styled.section<ModalWrapProps>`
   z-index: ${ZIndex.modal};
   position: absolute;
   inset: 0;
+  ${({ modalMaxSize }) => {
+    switch (modalMaxSize) {
+      case 'm':
+      case 'l':
+        // HACK: Move modals to the top on mobile because SubWallet shows the keyboard on the viewport
+        // instead of reducing the viewport size (at least on Android).
+        return css`
+          @media (max-width: ${BreakPoints.sm - 1}px) {
+            bottom: auto;
+          }
+        `
+    }
+  }};
   margin: auto auto;
   display: grid;
   @media only screen and (max-height: 700px) {
@@ -223,7 +224,10 @@ export const ModalWrap = styled.section<ModalWrapProps>`
     'modalfooter';
   grid-area: modal;
   background-color: ${Colors.White};
-  width: calc(100% - 64px);
+  width: 100%;
+  @media (min-width: ${BreakPoints.sm}px) {
+    width: calc(100% - 64px);
+  }
   max-width: ${({ modalMaxSize }) => {
     switch (modalMaxSize) {
       case 'xs':
@@ -280,7 +284,10 @@ export const ModalHeaderIcon = styled.div`
 
 export const ScrolledModal = styled(Modal)`
   &${ModalWrap} {
-    max-height: calc(100% - 128px);
+    max-height: 100%;
+    @media only screen and (min-height: 800px) {
+      max-height: calc(100% - 128px);
+    }
     grid-template-rows: auto 1fr auto;
     position: fixed;
   }

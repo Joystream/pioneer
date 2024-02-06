@@ -1,5 +1,5 @@
 import BN from 'bn.js'
-import React, { useCallback } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { BadgeStatus } from '@/common/components/BadgeStatus'
@@ -46,14 +46,14 @@ export const CandidateCard = ({
 }: CandidateCardProps) => {
   const { showModal } = useModal()
   const { size } = useResponsive()
-  const showCandidate = useCallback(() => {
+  const showCandidate = () => {
     if (!isPreview) {
       showModal<CandidacyPreviewModalCall>({
         modal: 'CandidacyPreview',
         data: { id },
       })
     }
-  }, [showModal, isPreview])
+  }
   const { isLoading: loadingStats, successful, failed } = useMemberCandidacyStats(member.id)
 
   return (

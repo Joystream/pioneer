@@ -121,8 +121,8 @@ export const UpdateWorkingGroupBudget = () => {
               <TextMedium>
                 Next Council payment is in <DurationValue value={formatDurationDate(milisecondsLeft)} /> at block number{' '}
                 <TextInlineMedium bold>{formatTokenValue(nextPaymentBlock as BN)}</TextInlineMedium>. With amount{' '}
-                <TokenValue value={reward.amount} />. Expected payouts can be impacted by hiring and firing decisions
-                made before the date of payout.
+                <TokenValue value={reward.fullCouncilAmount} />. Expected payouts can be impacted by hiring and firing
+                decisions made before the date of payout.
               </TextMedium>
             </Info>
           )}

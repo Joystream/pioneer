@@ -35,8 +35,8 @@ import { ApplicationStatusWrapper } from '@/working-groups/components/Applicatio
 import { OpeningIcon } from '@/working-groups/components/OpeningIcon'
 import { MappedStatuses, OpeningStatuses, WorkingGroupsRoutes } from '@/working-groups/constants'
 import { useOpening } from '@/working-groups/hooks/useOpening'
-import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
+import { asWeeklyRewards } from '@/working-groups/model/asWeeklyRewards'
 import { urlParamToOpeningId } from '@/working-groups/model/workingGroupName'
 import { WorkingGroupOpening as WorkingGroupOpeningType } from '@/working-groups/types'
 
@@ -62,7 +62,6 @@ export const WorkingGroupOpening = () => {
       return activeApplications.find(({ id }) => id === activeMembership?.id)
     }
   }, [opening?.id, activeMembership?.id])
-  const rewardPeriod = useRewardPeriod(opening?.groupId)
 
   if (isLoading || !opening) {
     return (
@@ -150,10 +149,7 @@ export const WorkingGroupOpening = () => {
             </BadgesRow>
             <StatisticsStyle>
               <DurationStatistics title="Time Left" value={opening.expectedEnding} />
-              <TokenValueStat
-                title={`Reward per ${rewardPeriod?.toString()} blocks`}
-                value={rewardPeriod?.mul(opening.rewardPerBlock)}
-              />
+              <TokenValueStat title={'Reward per week'} value={asWeeklyRewards(opening.rewardPerBlock)} />
               <TokenValueStat
                 title="Minimal stake"
                 tooltipText="Minimum tokens free of rivalrous locks required as application stake to this role."

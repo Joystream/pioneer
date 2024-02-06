@@ -23,7 +23,7 @@ export const Proposals = () => {
   const { order, getSortProps } = useSort<ProposalOrderByInput>('statusSetAtTime')
 
   const { proposals, isLoading, pagination } = useProposals({ order: order, status: 'active' })
-  const isRefetched = useRefetchQueries({ interval: MILLISECONDS_PER_BLOCK, include: ['getProposals'] })
+  useRefetchQueries({ interval: MILLISECONDS_PER_BLOCK, include: ['getProposals'] })
   const { activities } = useProposalsActivities()
 
   return (
@@ -37,9 +37,9 @@ export const Proposals = () => {
         />
       }
       main={
-        proposals.length || (!isRefetched && isLoading) ? (
+        proposals.length || isLoading ? (
           <MainPanel>
-            <ProposalList getSortProps={getSortProps} proposals={proposals} isLoading={!isRefetched && isLoading} />
+            <ProposalList getSortProps={getSortProps} proposals={proposals} isLoading={isLoading} />
             <Pagination {...pagination} />
           </MainPanel>
         ) : (
