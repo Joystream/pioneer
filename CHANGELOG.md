@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.5.0] - 2024-02-05
+
+### Added
+- Cancel proposal button.
+
+### Changed
+- Display weekly opening rewards instead of daily.
+
+## [2.4.2] - 2024-01-29
+
+### Fixed
+- Fix infinite proposal page reload for CMs.
+
 ## [2.4.1] - 2024-01-29
 
 ### Fixed
@@ -292,7 +305,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v2.4.1...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v2.5.0...HEAD
+[2.5.0]: https://github.com/Joystream/pioneer/compare/v2.4.2...v2.5.0
+[2.4.2]: https://github.com/Joystream/pioneer/compare/v2.4.1...v2.4.2
 [2.4.1]: https://github.com/Joystream/pioneer/compare/v2.4.0...v2.4.1
 [2.4.0]: https://github.com/Joystream/pioneer/compare/v2.3.1...v2.4.0
 [2.3.1]: https://github.com/Joystream/pioneer/compare/v2.3.0...v2.3.1
