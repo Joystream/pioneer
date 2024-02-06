@@ -82,7 +82,15 @@ export type MemberWithDetailsFieldsFragment = {
           network: Types.Network
         } | null
       }
-    | { __typename: 'MembershipEntryMemberCreated' }
+    | {
+        __typename: 'MembershipEntryMemberCreated'
+        memberCreatedEvent?: {
+          __typename: 'MemberCreatedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        } | null
+      }
     | {
         __typename: 'MembershipEntryPaid'
         membershipBoughtEvent?: {
@@ -274,7 +282,15 @@ export type GetMembersWithDetailsQuery = {
             network: Types.Network
           } | null
         }
-      | { __typename: 'MembershipEntryMemberCreated' }
+      | {
+          __typename: 'MembershipEntryMemberCreated'
+          memberCreatedEvent?: {
+            __typename: 'MemberCreatedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
       | {
           __typename: 'MembershipEntryPaid'
           membershipBoughtEvent?: {
@@ -428,7 +444,15 @@ export type GetMemberQuery = {
             network: Types.Network
           } | null
         }
-      | { __typename: 'MembershipEntryMemberCreated' }
+      | {
+          __typename: 'MembershipEntryMemberCreated'
+          memberCreatedEvent?: {
+            __typename: 'MemberCreatedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
       | {
           __typename: 'MembershipEntryPaid'
           membershipBoughtEvent?: {
@@ -746,6 +770,13 @@ export const MemberWithDetailsFieldsFragmentDoc = gql`
       }
       ... on MembershipEntryGifted {
         membershipGiftedEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+      ... on MembershipEntryMemberCreated {
+        memberCreatedEvent {
           createdAt
           inBlock
           network
