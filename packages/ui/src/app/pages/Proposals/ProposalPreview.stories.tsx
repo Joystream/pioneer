@@ -51,6 +51,7 @@ type Args = {
   vote2: VoteArg
   vote3: VoteArg
   onVote: jest.Mock
+  onCancel: jest.Mock
 }
 type Story = StoryObj<FC<Args>>
 
@@ -65,6 +66,7 @@ export default {
     vote2: { control: { type: 'inline-radio' }, options: voteArgs },
     vote3: { control: { type: 'inline-radio' }, options: voteArgs },
     onVote: { action: 'ProposalsEngine.Voted' },
+    onCancel: { action: 'ProposalsEngine.Cancelled' },
   },
 
   args: {
@@ -142,65 +144,72 @@ export default {
                 onSend: args.onVote,
                 failure: parameters.txFailure,
               },
+              cancelProposal: {
+                event: 'Cancelled',
+                onSend: args.onCancel,
+                failure: parameters.txFailure,
+              },
             },
           },
         },
 
-        queryNode: [
-          {
-            query: GetProposalDocument,
-            data: {
-              proposal: generateProposal({
-                id: PROPOSAL_DATA.id,
-                title: PROPOSAL_DATA.title,
-                description: PROPOSAL_DATA.description,
-                status,
-                type: args.type,
-                creator: args.isProposer ? alice : bob,
-                exactExecutionBlock: args.exactExecutionBlock || null,
+        gql: {
+          queries: [
+            {
+              query: GetProposalDocument,
+              data: {
+                proposal: generateProposal({
+                  id: PROPOSAL_DATA.id,
+                  title: PROPOSAL_DATA.title,
+                  description: PROPOSAL_DATA.description,
+                  status,
+                  type: args.type,
+                  creator: args.isProposer ? alice : bob,
+                  exactExecutionBlock: args.exactExecutionBlock || null,
 
-                discussionThread: {
-                  posts: proposalDiscussionPosts,
-                  mode: args.isDiscussionOpen
-                    ? { __typename: 'ProposalDiscussionThreadModeOpen' }
-                    : {
-                        __typename: 'ProposalDiscussionThreadModeClosed',
-                        whitelist: {
-                          __typename: 'ProposalDiscussionWhitelist',
-                          members: args.isInDiscussionWhitelist ? [alice] : [],
+                  discussionThread: {
+                    posts: proposalDiscussionPosts,
+                    mode: args.isDiscussionOpen
+                      ? { __typename: 'ProposalDiscussionThreadModeOpen' }
+                      : {
+                          __typename: 'ProposalDiscussionThreadModeClosed',
+                          whitelist: {
+                            __typename: 'ProposalDiscussionWhitelist',
+                            members: args.isInDiscussionWhitelist ? [alice] : [],
+                          },
                         },
-                      },
-                },
+                  },
 
-                proposalStatusUpdates: updates.map((status: ProposalStatus) => ({
-                  inBlock: 123,
-                  createdAt: isoDate('2023/01/02'),
-                  newStatus: { __typename: status },
-                })),
+                  proposalStatusUpdates: updates.map((status: ProposalStatus) => ({
+                    inBlock: 123,
+                    createdAt: isoDate('2023/01/02'),
+                    newStatus: { __typename: status },
+                  })),
 
-                councilApprovals: parameters.councilApprovals ?? constitutionality - 1,
-                votes,
-              }),
-            },
-          },
-
-          {
-            query: GetElectedCouncilDocument,
-            data: {
-              electedCouncils: {
-                id: '0',
-                electedAtBlock: 123,
-                electedAtTime: isoDate('2023/01/02'),
-                councilElections: [{ cycleId: 4 }],
-                councilMembers: [
-                  { id: '0', unpaidReward: '0', stake: joy(200), member: councilors[0] },
-                  { id: '1', unpaidReward: '0', stake: joy(200), member: councilors[1] },
-                  { id: '2', unpaidReward: '0', stake: joy(200), member: councilors[2] },
-                ],
+                  councilApprovals: parameters.councilApprovals ?? constitutionality - 1,
+                  votes,
+                }),
               },
             },
-          },
-        ],
+
+            {
+              query: GetElectedCouncilDocument,
+              data: {
+                electedCouncils: {
+                  id: '0',
+                  electedAtBlock: 123,
+                  electedAtTime: isoDate('2023/01/02'),
+                  councilElections: [{ cycleId: 4 }],
+                  councilMembers: [
+                    { id: '0', unpaidReward: '0', stake: joy(200), member: councilors[0] },
+                    { id: '1', unpaidReward: '0', stake: joy(200), member: councilors[1] },
+                    { id: '2', unpaidReward: '0', stake: joy(200), member: councilors[2] },
+                  ],
+                },
+              },
+            },
+          ],
+        },
       }
     },
   },
@@ -607,5 +616,35 @@ export const TestVoteTxFailure: Story = {
 
     expect(await modal.findByText('Failure'))
     expect(await modal.findByText('Some error message'))
+  },
+}
+
+export const TestCancelProposalHappy: Story = {
+  args: { type: 'SignalProposalDetails', isCouncilMember: false, isProposer: true },
+
+  name: 'Test CancelProposal Happy',
+
+  play: async ({ canvasElement, step, args: { onCancel } }) => {
+    const activeMember = member('alice')
+
+    const screen = within(canvasElement)
+    const modal = withinModal(canvasElement)
+
+    await step('Cancel', async () => {
+      await userEvent.click(screen.getByText('Cancel Proposal'))
+
+      await step('Sign', async () => {
+        expect(await modal.findByText('Authorize transaction'))
+        expect(modal.getByText('You intend to cancel your proposal.'))
+
+        await userEvent.click(modal.getByText(/^Sign And Cancel Proposal/))
+      })
+
+      await step('Confirm', async () => {
+        expect(await modal.findByText('Your propsal has been cancelled.'))
+
+        expect(onCancel).toHaveBeenLastCalledWith(activeMember.id, PROPOSAL_DATA.id)
+      })
+    })
   },
 }

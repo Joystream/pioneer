@@ -2,6 +2,7 @@ import HCaptcha from '@hcaptcha/react-hcaptcha'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
 import React, { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import styled from 'styled-components'
 import * as Yup from 'yup'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
@@ -24,7 +25,6 @@ import { Arrow } from '@/common/components/icons'
 import { Loading } from '@/common/components/Loading'
 import {
   ModalFooter,
-  ModalFooterGroup,
   ModalHeader,
   Row,
   ScrolledModal,
@@ -247,55 +247,52 @@ export const BuyMembershipForm = ({
           </ScrolledModalContainer>
         </FormProvider>
       </ScrolledModalBody>
-      <ModalFooter twoColumns>
-        <ModalFooterGroup left>
-          {type === 'onBoarding' && (
-            <ButtonGhost onClick={changeMembershipAccount} size="medium">
-              <Arrow direction="left" />
-              Change account
-            </ButtonGhost>
-          )}
-          <Checkbox
-            id="privacy-policy-agreement"
-            onChange={(hasTerms) => form.setValue('hasTerms', hasTerms, { shouldValidate: true })}
-          >
-            <TextMedium colorInherit>
-              I agree to the{' '}
-              <LabelLink to={TermsRoutes.termsOfService} target="_blank">
-                Terms of Service
-              </LabelLink>{' '}
-              and{' '}
-              <LabelLink to={TermsRoutes.privacyPolicy} target="_blank">
-                Privacy Policy
-              </LabelLink>
-              .
-            </TextMedium>
-          </Checkbox>
-        </ModalFooterGroup>
-        <ModalFooterGroup>
-          {type === 'general' && (
-            <TransactionInfoContainer>
-              <TransactionInfo
-                title="Creation fee:"
-                value={membershipPrice?.toBn()}
-                tooltipText="Creation fee is the price of membership, it is managed by council through the proposal system. It is inclusive of transaction fee."
-                tooltipLinkURL="https://joystream.gitbook.io/joystream-handbook/governance/proposals"
-                tooltipLinkText="Learn more"
-              />
-            </TransactionInfoContainer>
-          )}
-          <ButtonPrimary
-            size="medium"
-            onClick={() => {
-              const values = form.getValues()
-              uploadAvatarAndSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
-            }}
-            disabled={isDisabled}
-          >
-            {isUploading ? <Loading text="Uploading avatar" /> : 'Create a Membership'}
-          </ButtonPrimary>
-        </ModalFooterGroup>
-      </ModalFooter>
+
+      <StyledFooter>
+        {type === 'onBoarding' && (
+          <ButtonGhost onClick={changeMembershipAccount} size="medium">
+            <Arrow direction="left" />
+            Change account
+          </ButtonGhost>
+        )}
+        <Checkbox
+          id="privacy-policy-agreement"
+          onChange={(hasTerms) => form.setValue('hasTerms', hasTerms, { shouldValidate: true })}
+        >
+          <TextMedium colorInherit>
+            I agree to the{' '}
+            <LabelLink to={TermsRoutes.termsOfService} target="_blank">
+              Terms of Service
+            </LabelLink>{' '}
+            and{' '}
+            <LabelLink to={TermsRoutes.privacyPolicy} target="_blank">
+              Privacy Policy
+            </LabelLink>
+            .
+          </TextMedium>
+        </Checkbox>
+        {type === 'general' && (
+          <TransactionInfoContainer>
+            <TransactionInfo
+              title="Creation fee:"
+              value={membershipPrice?.toBn()}
+              tooltipText="Creation fee is the price of membership, it is managed by council through the proposal system. It is inclusive of transaction fee."
+              tooltipLinkURL="https://joystream.gitbook.io/joystream-handbook/governance/proposals"
+              tooltipLinkText="Learn more"
+            />
+          </TransactionInfoContainer>
+        )}
+        <ButtonPrimary
+          size="medium"
+          onClick={() => {
+            const values = form.getValues()
+            uploadAvatarAndSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
+          }}
+          disabled={isDisabled}
+        >
+          {isUploading ? <Loading text="Uploading avatar" /> : 'Create a Membership'}
+        </ButtonPrimary>
+      </StyledFooter>
     </>
   )
 }
@@ -308,3 +305,9 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: B
     </ScrolledModal>
   )
 }
+
+export const StyledFooter = styled(ModalFooter)`
+  & > label:first-child {
+    margin-right: auto;
+  }
+`

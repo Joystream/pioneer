@@ -3,6 +3,7 @@ import React, { memo, ReactElement, useEffect, useMemo, useState } from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { ClaimVestingModalCall } from '@/accounts/modals/ClaimVestingModal'
 import { ClaimVestingModal } from '@/accounts/modals/ClaimVestingModal/ClaimVestingModal'
 import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFundsModal'
@@ -25,9 +26,11 @@ import { TransferModal, TransferModalCall } from '@/accounts/modals/TransferModa
 import { FailureModal } from '@/common/components/FailureModal'
 import { Loading } from '@/common/components/Loading'
 import { ModalGlass } from '@/common/components/Modal'
+import { NotSupportMobileModal } from '@/common/components/NotSupportMobileModal'
 import { SearchResultsModal, SearchResultsModalCall } from '@/common/components/Search/SearchResultsModal'
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { useModal } from '@/common/hooks/useModal'
+import { useResponsive } from '@/common/hooks/useResponsive'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
 import { ConfirmModal } from '@/common/modals/ConfirmModal/ConfirmModal'
 import { OnBoardingModal, OnBoardingModalCall } from '@/common/modals/OnBoardingModal'
@@ -54,6 +57,8 @@ import { MemberModalCall, MemberProfile } from '@/memberships/components/MemberP
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BuyMembershipModal, BuyMembershipModalCall } from '@/memberships/modals/BuyMembershipModal'
 import { DisconnectWalletModal, DisconnectWalletModalCall } from '@/memberships/modals/DisconnectWalletModal'
+import { EmailConfirmationModal, EmailConfirmationModalCall } from '@/memberships/modals/EmailConfirmationModal'
+import { EmailSubscriptionModal, EmailSubscriptionModalCall } from '@/memberships/modals/EmailSubscriptionModal'
 import { InviteMemberModal } from '@/memberships/modals/InviteMemberModal'
 import { InviteMemberModalCall } from '@/memberships/modals/InviteMemberModal/types'
 import { SignOutModal } from '@/memberships/modals/SignOutModal/SignOutModal'
@@ -62,9 +67,11 @@ import { SwitchMemberModal, SwitchMemberModalCall } from '@/memberships/modals/S
 import { TransferInviteModal, TransferInvitesModalCall } from '@/memberships/modals/TransferInviteModal'
 import { UpdateMembershipModal, UpdateMembershipModalCall } from '@/memberships/modals/UpdateMembershipModal'
 import { AddNewProposalModal, AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'
+import { CancelProposalModal, CancelProposalModalCall } from '@/proposals/modals/CancelProposal'
 import { VoteForProposalModal, VoteForProposalModalCall } from '@/proposals/modals/VoteForProposal'
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { VoteRationale } from '@/proposals/modals/VoteRationale/VoteRationale'
+import { NominatingRedirectModal, NominatingRedirectModalCall } from '@/validators/modals/NominatingRedirectModal'
 import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { ApplyForRoleModal, ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { ChangeAccountModal, ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
@@ -124,6 +131,10 @@ export type ModalNames =
   | ModalName<ReportContentModalCall>
   | ModalName<PostReplyModalCall>
   | ModalName<InviteMemberModalCall>
+  | ModalName<EmailSubscriptionModalCall>
+  | ModalName<EmailConfirmationModalCall>
+  | ModalName<NominatingRedirectModalCall>
+  | ModalName<CancelProposalModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
   Member: <MemberProfile />,
@@ -174,6 +185,10 @@ const modals: Record<ModalNames, ReactElement> = {
   UpdateMembershipModal: <UpdateMembershipModal />,
   ReportContentModal: <ReportContentModal />,
   PostReplyModal: <PostReplyModal />,
+  EmailSubscriptionModal: <EmailSubscriptionModal />,
+  EmailConfirmationModal: <EmailConfirmationModal />,
+  NominatingRedirect: <NominatingRedirectModal />,
+  CancelProposalModal: <CancelProposalModal />,
 }
 
 const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
@@ -191,6 +206,9 @@ const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
   'DisconnectWallet',
   'ClaimVestingModal',
   'ReportContentModal',
+  'EmailConfirmationModal',
+  'VoteRationaleModal',
+  'NominatingRedirect',
 ]
 
 export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [
@@ -203,10 +221,32 @@ export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [
   'VoteForProposalModal',
 ]
 
+const NON_TRANSACTIONAL_MODALS: ModalNames[] = [
+  'Member',
+  'ApplicationDetails',
+  'VoteRationaleModal',
+  'SearchResults',
+  'CandidacyPreview',
+  'EmailConfirmationModal',
+]
+
+const MOBILE_SUPPORTED_MODALS: ModalNames[] = [
+  ...NON_TRANSACTIONAL_MODALS,
+  'SwitchMember',
+  'DisconnectWallet',
+  'SignOut',
+  'CreatePost',
+  'PostReplyModal',
+  'CreateThreadModal',
+  'EmailSubscriptionModal',
+]
+
 export const GlobalModals = () => {
   const { modal, hideModal, currentModalMachine, showModal, modalData, isClosing } = useModal()
   const { active: activeMember } = useMyMemberships()
+  const { wallet } = useMyAccounts()
   const { status } = useTransactionStatus()
+  const { isMobileWallet } = useResponsive()
   const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
 
   const [container, setContainer] = useState(document.body)
@@ -216,6 +256,11 @@ export const GlobalModals = () => {
   }, [])
 
   const potentialFallback = useGlobalModalHandler(currentModalMachine, hideModal)
+
+  const mobileSupported = wallet ? MOBILE_SUPPORTED_MODALS : NON_TRANSACTIONAL_MODALS
+  if (isMobileWallet && modal && !mobileSupported.includes(modal as ModalNames)) {
+    return <NotSupportMobileModal onClose={hideModal} />
+  }
 
   if (modal && !GUEST_ACCESSIBLE_MODALS.includes(modal as ModalNames) && !activeMember) {
     showModal<SwitchMemberModalCall>({

@@ -10,9 +10,10 @@ export interface MultiTransactionStepProps {
   stepTitle: string
   active: boolean
   past: boolean
+  showInfo: boolean
 }
 
-export const MultiTransactionStep = ({ stepNumber, stepTitle, active, past }: MultiTransactionStepProps) => {
+export const MultiTransactionStep = ({ stepNumber, stepTitle, active, past, showInfo }: MultiTransactionStepProps) => {
   return (
     <Step active={active} past={past}>
       <StepArrow>
@@ -20,10 +21,12 @@ export const MultiTransactionStep = ({ stepNumber, stepTitle, active, past }: Mu
       </StepArrow>
       <StepContent>
         <StepNumber>{stepNumber}</StepNumber>
-        <StepInfo>
-          <StepTransactionInfo lighter>Transaction {stepNumber}</StepTransactionInfo>
-          <StepTransactionTitle bold>{stepTitle}</StepTransactionTitle>
-        </StepInfo>
+        {showInfo && (
+          <StepInfo>
+            <StepTransactionInfo lighter>Transaction {stepNumber}</StepTransactionInfo>
+            <StepTransactionTitle bold>{stepTitle}</StepTransactionTitle>
+          </StepInfo>
+        )}
       </StepContent>
     </Step>
   )

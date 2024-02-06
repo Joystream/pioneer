@@ -3,10 +3,11 @@ import { AnyTuple } from '@polkadot/types/types'
 import { uniqueId } from 'lodash'
 import { filter, map, Observable, share } from 'rxjs'
 
-import { ProxyApi } from '..'
 import { deserializeMessage } from '../models/payload'
 import { PostMessage, ProxyPromisePayload, RawWorkerMessageEvent } from '../types'
 import { apiInterfaceProxy } from '../utils/proxy'
+
+import { ProxyApi } from './ProxyApi'
 
 type ObservableMethods = (typeof ObservableMethods)[number]
 

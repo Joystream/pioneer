@@ -101,45 +101,47 @@ export default {
           },
         },
 
-        queryNode: [
-          {
-            query: GetWorkingGroupDocument,
-            data: {
-              workingGroupByUniqueInput: {
-                id: WG_DATA.id,
-                name: WG_DATA.name,
-                budget: joy(200),
-                workers: [],
-                leader: { membershipId: alice.id, isActive: args.isLead },
+        gql: {
+          queries: [
+            {
+              query: GetWorkingGroupDocument,
+              data: {
+                workingGroupByUniqueInput: {
+                  id: WG_DATA.id,
+                  name: WG_DATA.name,
+                  budget: joy(200),
+                  workers: [],
+                  leader: { membershipId: alice.id, isActive: args.isLead },
+                },
               },
             },
-          },
-          {
-            query: GetWorkersDocument,
-            data: {
-              workers: [
-                {
-                  id: `${WG_DATA.id}-0`,
-                  group: {
-                    id: WG_DATA.id,
-                    name: WG_DATA.name,
+            {
+              query: GetWorkersDocument,
+              data: {
+                workers: [
+                  {
+                    id: `${WG_DATA.id}-0`,
+                    group: {
+                      id: WG_DATA.id,
+                      name: WG_DATA.name,
+                    },
+                    status: 'WorkerStatusActive',
+                    membership: alice,
                   },
-                  status: 'WorkerStatusActive',
-                  membership: alice,
-                },
-                {
-                  id: `${WG_DATA.id}-1`,
-                  group: {
-                    id: WG_DATA.id,
-                    name: WG_DATA.name,
+                  {
+                    id: `${WG_DATA.id}-1`,
+                    group: {
+                      id: WG_DATA.id,
+                      name: WG_DATA.name,
+                    },
+                    status: 'WorkerStatusActive',
+                    membership: member('charlie'),
                   },
-                  status: 'WorkerStatusActive',
-                  membership: member('charlie'),
-                },
-              ],
+                ],
+              },
             },
-          },
-        ],
+          ],
+        },
       }
     },
   },

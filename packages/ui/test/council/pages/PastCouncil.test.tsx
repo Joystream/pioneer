@@ -119,7 +119,7 @@ describe('UI: Past Council page', () => {
       it('Total spent', async () => {
         const { getByText } = await renderComponent()
 
-        expect(getByText(/^Total spent$/i).parentElement?.nextSibling?.textContent).toBe('300')
+        expect(getByText(/^Total spent$/i).parentElement?.nextSibling?.textContent).toBe('5,055')
       })
 
       it('Total missed rewards', async () => {
@@ -368,7 +368,7 @@ describe('UI: Past Council page', () => {
               network: 'OLYMPIA',
               groupId: WORKER_DATA.groupId,
               workerId: WORKER_DATA.id,
-              rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+              rewardAccount: 'j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT',
               amount: 6050,
               type: 'REGULAR',
             },
@@ -420,7 +420,7 @@ describe('UI: Past Council page', () => {
 
     component.getByText(tabName).click()
 
-    await waitForElementToBeRemoved(() => loaderSelector())
+    if (loaderSelector()) await waitForElementToBeRemoved(() => loaderSelector())
 
     return component
   }

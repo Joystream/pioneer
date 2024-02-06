@@ -16,16 +16,17 @@ import { Account } from '../types'
 interface AccountInfoProps {
   account: Account
   locked?: boolean
+  variant?: 's' | 'm' | 'l'
 }
 
-export const AccountInfo = React.memo(({ account, locked }: AccountInfoProps) => {
+export const AccountInfo = React.memo(({ account, locked, variant }: AccountInfoProps) => {
   const { active } = useMyMemberships()
 
   return (
     <AccountInfoWrap>
       <PhotoWrapper>
         <AccountPhoto>
-          <Identicon size={40} theme={'beachball'} value={account.address} />
+          <Identicon size={variant === 's' || variant === 'm' ? 28 : 40} theme={'beachball'} value={account.address} />
         </AccountPhoto>
         {locked && (
           <LockIconWrapper>
@@ -42,7 +43,7 @@ export const AccountInfo = React.memo(({ account, locked }: AccountInfoProps) =>
   )
 })
 
-const AccountInfoWrap = styled.div`
+export const AccountInfoWrap = styled.div`
   display: grid;
   grid-template-columns: 40px 1fr;
   grid-template-rows: min-content 24px 18px;
@@ -53,6 +54,7 @@ const AccountInfoWrap = styled.div`
     'accountphoto accountaddress';
   align-items: center;
   width: 100%;
+  min-width: 224px;
   justify-self: start;
 
   & ${BadgeStatus} {
@@ -60,7 +62,7 @@ const AccountInfoWrap = styled.div`
   }
 `
 
-const AccountPhoto = styled.div`
+export const AccountPhoto = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -73,7 +75,7 @@ const AccountPhoto = styled.div`
   overflow: hidden;
 `
 
-const PhotoWrapper = styled.div`
+export const PhotoWrapper = styled.div`
   grid-area: accountphoto;
   position: relative;
 `
@@ -96,7 +98,7 @@ const StyledLockIcon = styled(LockIcon)`
   height: 12px;
 `
 
-const AccountName = styled.h5<{ locked?: boolean }>`
+export const AccountName = styled.h5<{ locked?: boolean }>`
   grid-area: accountname;
   max-width: 100%;
   margin: 0;
@@ -125,6 +127,6 @@ const OptionalAccountType = ({ active, address }: OptionalAccountTypeParams) => 
   return null
 }
 
-const AccountCopyAddress = styled(CopyComponent)`
+export const AccountCopyAddress = styled(CopyComponent)`
   grid-area: accountaddress;
 `

@@ -1,5 +1,5 @@
-import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import { AugmentedEvents } from '@polkadot/api/types'
+import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
@@ -122,10 +122,10 @@ export const stubApi = () => {
   set(api, 'api.rpc.chain.subscribeNewHeads', () =>
     from([
       createType('Header', {
-        parentHash: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+        parentHash: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
         number: 1337,
-        stateRoot: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-        extrinsicsRoot: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+        stateRoot: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
+        extrinsicsRoot: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
         digest: {
           logs: [],
         },
@@ -133,8 +133,16 @@ export const stubApi = () => {
     ])
   )
   set(api, 'api.rpc.chain.getBlockHash', () => {
-    from([createType('BlockHash', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY')])
+    from([createType('BlockHash', 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf')])
   })
+
+  set(api, 'api.rpc.chain.getHeader', () =>
+    from([
+      {
+        number: createType('BlockNumber', 1337),
+      },
+    ])
+  )
 
   return api
 }
@@ -225,7 +233,7 @@ export const stubBalances = ({ available, lockId, locked }: Balances) => {
   const deriveBalances = {
     availableBalance: createType('Balance', availableBalance),
     lockedBalance: createType('Balance', lockedBalance),
-    accountId: createType('AccountId', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
+    accountId: createType('AccountId', 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf'),
     accountNonce: createType('Index', 1),
     freeBalance: createType('Balance', availableBalance.add(lockedBalance)),
     frozenFee: new BN(0),

@@ -42,6 +42,9 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
     // Common mocks:
     const rpcChain = {
       getBlockHash: createType('BlockHash', BLOCK_HASH),
+      getHeader: {
+        number: BLOCK_HEAD,
+      },
       subscribeNewHeads: {
         parentHash: BLOCK_HASH,
         number: BLOCK_HEAD,
@@ -115,7 +118,9 @@ const asApiConst = (value: any) => {
 }
 const asApiMethod = (value: any) => {
   if (isFunction(value)) {
-    return value
+    type ArgumentsType<T> = T extends (...args: infer A) => any ? A : never
+    type FunctionArgs = ArgumentsType<typeof value>
+    return (args: FunctionArgs) => of(asChainData(value(args)))
   } else if (value instanceof Observable) {
     return () => value
   }
@@ -126,9 +131,18 @@ const asApiMethod = (value: any) => {
     method.size = () => of(asChainData(value.size))
   }
 
+  if (isObject(value) && 'keys' in value && isArray(value.keys)) {
+    const keys = value.keys.map((entry) => ({ args: [asChainData(entry)] }))
+    method.keys = () => of(keys)
+  }
+
   if (isObject(value) && 'entries' in value && isArray(value.entries)) {
-    const entries = value.entries.map((entry) => [{ args: [asChainData(entry)] }])
-    method.entries = () => of(entries)
+    method.entries = () => of(asChainData(value.entries))
+  }
+
+  if (isObject(value) && 'multi' in value && isArray(value.multi)) {
+    const multi = value.multi.map((entry) => ({ unwrap: () => entry }))
+    method.multi = () => of(multi)
   }
 
   return method

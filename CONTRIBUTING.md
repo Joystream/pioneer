@@ -10,7 +10,7 @@ If you're looking for an issue to fix, take a look at the issues tagged [Good fi
 
 ## Contributing code
 
-Please follow the guide in the main [README](/README.md) on how to get started.
+Please follow the development guide [README](docs/README.md) to get started.
 
 ### Submitting Changes
 
@@ -18,13 +18,13 @@ Please create a pull request from your fork. We may suggest some changes or impr
 
 The below guidelines will help you understand what it takes for the PR to be accepted:
 
-- Write tests (when including business logic) or add a storyboook (when you're creating a new component).
+- Write stories (with Storybook) to test your code, have a look [at the testing documentaion](docs/tests.md).
 - Provide a good PR title – it will be used as a commit message when the PR is merged
 - Follow the code style & make sure that your PR passes the CI
 - Use GitHub's special keywords to reference and/or close the issue automatically
 - Make sure that you've described your assumptions, unusual fixes or other information that may help the reviewer understand your code
-- Don't worry about squashing your commits – GitHub will do it for you. However, make your commit history clean as it will be included in the commit description as well.
+- Don't worry about squashing your commits – GitHub will do it for you.
 
 ### Branching strategy
 
-All PRs land in the `main` branch. Other branches are short-lived for development purposes. However, the archival branches exists under `/arch/*` – those consists prepared components or code that was not included in the main branch, but might be needed at later stage.
+All PRs land in the `dev` branch. The everything added to `main` gets deployed to [production](https://pioneerapp.xyz). Other branches are short-lived for development purposes. However, the archival branches exists under `/arch/*` – those consists prepared components or code that was not included in the main branch, but might be needed at later stage.

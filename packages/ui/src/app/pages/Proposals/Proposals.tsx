@@ -1,4 +1,5 @@
 import React from 'react'
+import { css } from 'styled-components'
 
 import { PageHeaderWithHint } from '@/app/components/PageHeaderWithHint'
 import { PageLayout } from '@/app/components/PageLayout'
@@ -22,7 +23,7 @@ export const Proposals = () => {
   const { order, getSortProps } = useSort<ProposalOrderByInput>('statusSetAtTime')
 
   const { proposals, isLoading, pagination } = useProposals({ order: order, status: 'active' })
-  const isRefetched = useRefetchQueries({ interval: MILLISECONDS_PER_BLOCK, include: ['getProposals'] })
+  useRefetchQueries({ interval: MILLISECONDS_PER_BLOCK, include: ['getProposals'] })
   const { activities } = useProposalsActivities()
 
   return (
@@ -36,9 +37,9 @@ export const Proposals = () => {
         />
       }
       main={
-        proposals.length || (!isRefetched && isLoading) ? (
+        proposals.length || isLoading ? (
           <MainPanel>
-            <ProposalList getSortProps={getSortProps} proposals={proposals} isLoading={!isRefetched && isLoading} />
+            <ProposalList getSortProps={getSortProps} proposals={proposals} isLoading={isLoading} />
             <Pagination {...pagination} />
           </MainPanel>
         ) : (
@@ -57,6 +58,29 @@ export const Proposals = () => {
           </SidePanel>
         )
       }
+      responsiveStyle={proposals.length > 0 ? ProposalsPageResponsiveStyle : undefined}
     />
   )
 }
+
+export const ProposalsPageResponsiveStyle = css`
+  @media (min-width: 768px) {
+    grid-template-columns: 7fr 5fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'header header'
+      'main sidebar';
+
+    aside {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      padding-left: 16px;
+
+      > div {
+        min-height: 184px;
+        overflow: hidden;
+      }
+    }
+  }
+`

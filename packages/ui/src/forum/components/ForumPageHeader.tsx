@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { PageHeaderRow, PageHeaderWrapper } from '@/app/components/PageLayout'
+import { PageHeaderRow, PageHeaderWithButtons, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { ButtonsGroup } from '@/common/components/buttons'
 import { SearchBox } from '@/common/components/forms/FilterBox/FilterSearchBox'
 import { useModal } from '@/common/hooks/useModal'
@@ -18,7 +18,7 @@ export const ForumPageHeader = ({ title, children, buttons, description }: Forum
 
   return (
     <PageHeaderWrapper>
-      <PageHeaderRow>
+      <PageHeaderWithButtons>
         {title}
         <ButtonsGroup>
           <SearchBox
@@ -28,7 +28,7 @@ export const ForumPageHeader = ({ title, children, buttons, description }: Forum
           />
           {buttons}
         </ButtonsGroup>
-      </PageHeaderRow>
+      </PageHeaderWithButtons>
       {description && <PageHeaderRow>{description}</PageHeaderRow>}
       {children}
     </PageHeaderWrapper>

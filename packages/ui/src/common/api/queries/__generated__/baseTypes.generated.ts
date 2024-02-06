@@ -11673,6 +11673,26 @@ export type EnglishAuctionStartedEventWhereUniqueInput = {
   id: Scalars['ID']
 }
 
+export type EntitySubscription = {
+  __typename: 'EntitySubscription'
+  entityId: Scalars['String']
+  id?: Maybe<Scalars['Int']>
+  kind: EntitySubscriptionKind
+  status: EntitySubscriptionStatus
+}
+
+export enum EntitySubscriptionKind {
+  ForumCategoryEntityPost = 'FORUM_CATEGORY_ENTITY_POST',
+  ForumCategoryEntityThread = 'FORUM_CATEGORY_ENTITY_THREAD',
+  ForumThreadEntityPost = 'FORUM_THREAD_ENTITY_POST',
+}
+
+export enum EntitySubscriptionStatus {
+  Default = 'DEFAULT',
+  Mute = 'MUTE',
+  Watch = 'WATCH',
+}
+
 export type Event = {
   /** Blocknumber of the block in which the event was emitted. */
   inBlock: Scalars['Int']
@@ -12674,6 +12694,33 @@ export type FundingRequestProposalDetails = {
   __typename: 'FundingRequestProposalDetails'
   /** Related list of funding request destinations */
   destinationsList?: Maybe<FundingRequestDestinationsList>
+}
+
+export type GeneralSubscription = {
+  __typename: 'GeneralSubscription'
+  id?: Maybe<Scalars['Int']>
+  kind: GeneralSubscriptionKind
+  shouldNotify: Scalars['Boolean']
+  shouldNotifyByEmail: Scalars['Boolean']
+}
+
+export type GeneralSubscriptionInput = {
+  kind: GeneralSubscriptionKind
+  shouldNotify?: InputMaybe<Scalars['Boolean']>
+  shouldNotifyByEmail?: InputMaybe<Scalars['Boolean']>
+}
+
+export enum GeneralSubscriptionKind {
+  ElectionAnnouncingStarted = 'ELECTION_ANNOUNCING_STARTED',
+  ElectionRevealingStarted = 'ELECTION_REVEALING_STARTED',
+  ElectionVotingStarted = 'ELECTION_VOTING_STARTED',
+  ForumPostAll = 'FORUM_POST_ALL',
+  ForumPostMention = 'FORUM_POST_MENTION',
+  ForumPostReply = 'FORUM_POST_REPLY',
+  ForumThreadAll = 'FORUM_THREAD_ALL',
+  ForumThreadContributor = 'FORUM_THREAD_CONTRIBUTOR',
+  ForumThreadCreator = 'FORUM_THREAD_CREATOR',
+  ForumThreadMention = 'FORUM_THREAD_MENTION',
 }
 
 export type GeoCoordinates = BaseGraphQlObject & {
@@ -13875,6 +13922,15 @@ export type LicenseWhereUniqueInput = {
   id: Scalars['ID']
 }
 
+export type Member = {
+  __typename: 'Member'
+  email?: Maybe<Scalars['String']>
+  id: Scalars['Int']
+  name: Scalars['String']
+  receiveEmails: Scalars['Boolean']
+  unverifiedEmail?: Maybe<Scalars['String']>
+}
+
 export type MemberAccountsUpdatedEvent = BaseGraphQlObject &
   Event & {
     __typename: 'MemberAccountsUpdatedEvent'
@@ -14527,6 +14583,7 @@ export type MemberMetadata = BaseGraphQlObject & {
   deletedById?: Maybe<Scalars['ID']>
   externalResources?: Maybe<Array<MembershipExternalResource>>
   id: Scalars['ID']
+  isVerifiedValidator?: Maybe<Scalars['Boolean']>
   member?: Maybe<Membership>
   membercreatedeventmetadata?: Maybe<Array<MemberCreatedEvent>>
   memberinvitedeventmetadata?: Maybe<Array<MemberInvitedEvent>>
@@ -14550,6 +14607,7 @@ export type MemberMetadataConnection = {
 export type MemberMetadataCreateInput = {
   about?: InputMaybe<Scalars['String']>
   avatar: Scalars['JSONObject']
+  isVerifiedValidator?: InputMaybe<Scalars['Boolean']>
   name?: InputMaybe<Scalars['String']>
 }
 
@@ -14566,6 +14624,8 @@ export enum MemberMetadataOrderByInput {
   CreatedAtDesc = 'createdAt_DESC',
   DeletedAtAsc = 'deletedAt_ASC',
   DeletedAtDesc = 'deletedAt_DESC',
+  IsVerifiedValidatorAsc = 'isVerifiedValidator_ASC',
+  IsVerifiedValidatorDesc = 'isVerifiedValidator_DESC',
   NameAsc = 'name_ASC',
   NameDesc = 'name_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
@@ -14575,6 +14635,7 @@ export enum MemberMetadataOrderByInput {
 export type MemberMetadataUpdateInput = {
   about?: InputMaybe<Scalars['String']>
   avatar?: InputMaybe<Scalars['JSONObject']>
+  isVerifiedValidator?: InputMaybe<Scalars['Boolean']>
   name?: InputMaybe<Scalars['String']>
 }
 
@@ -14608,6 +14669,8 @@ export type MemberMetadataWhereInput = {
   externalResources_some?: InputMaybe<MembershipExternalResourceWhereInput>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
+  isVerifiedValidator_eq?: InputMaybe<Scalars['Boolean']>
+  isVerifiedValidator_in?: InputMaybe<Array<Scalars['Boolean']>>
   member?: InputMaybe<MembershipWhereInput>
   membercreatedeventmetadata_every?: InputMaybe<MemberCreatedEventWhereInput>
   membercreatedeventmetadata_none?: InputMaybe<MemberCreatedEventWhereInput>
@@ -16224,6 +16287,49 @@ export type MetaprotocolTransactionSuccessful = {
   videoCategoryUpdated?: Maybe<Video>
 }
 
+export type Mutation = {
+  __typename: 'Mutation'
+  entitySubscription?: Maybe<EntitySubscription>
+  generalSubscriptions?: Maybe<Array<Maybe<GeneralSubscription>>>
+  signin?: Maybe<Scalars['String']>
+  signup?: Maybe<Scalars['String']>
+  updateMember?: Maybe<Member>
+  verifyEmail?: Maybe<Member>
+}
+
+export type MutationEntitySubscriptionArgs = {
+  entityId: Scalars['String']
+  kind: EntitySubscriptionKind
+  status: EntitySubscriptionStatus
+}
+
+export type MutationGeneralSubscriptionsArgs = {
+  data?: InputMaybe<Array<InputMaybe<GeneralSubscriptionInput>>>
+}
+
+export type MutationSigninArgs = {
+  memberId: Scalars['Int']
+  signature: Scalars['String']
+  timestamp: Scalars['BigInt']
+}
+
+export type MutationSignupArgs = {
+  email?: InputMaybe<Scalars['String']>
+  memberId: Scalars['Int']
+  name: Scalars['String']
+  signature: Scalars['String']
+  timestamp: Scalars['BigInt']
+}
+
+export type MutationUpdateMemberArgs = {
+  email?: InputMaybe<Scalars['String']>
+  receiveEmails?: InputMaybe<Scalars['Boolean']>
+}
+
+export type MutationVerifyEmailArgs = {
+  token: Scalars['String']
+}
+
 export enum Network {
   Alexandria = 'ALEXANDRIA',
   Babylon = 'BABYLON',
@@ -17659,6 +17765,39 @@ export type NotEnoughCandidatesEventWhereInput = {
 
 export type NotEnoughCandidatesEventWhereUniqueInput = {
   id: Scalars['ID']
+}
+
+export type Notification = {
+  __typename: 'Notification'
+  emailStatus: NotificationEmailStatus
+  entityId?: Maybe<Scalars['String']>
+  eventId: Scalars['String']
+  id: Scalars['Int']
+  isRead: Scalars['Boolean']
+  kind: NotificationKind
+}
+
+export enum NotificationEmailStatus {
+  Failed = 'FAILED',
+  Ignored = 'IGNORED',
+  Pending = 'PENDING',
+  Sent = 'SENT',
+}
+
+export enum NotificationKind {
+  ElectionAnnouncingStarted = 'ELECTION_ANNOUNCING_STARTED',
+  ElectionRevealingStarted = 'ELECTION_REVEALING_STARTED',
+  ElectionVotingStarted = 'ELECTION_VOTING_STARTED',
+  ForumCategoryEntityPost = 'FORUM_CATEGORY_ENTITY_POST',
+  ForumCategoryEntityThread = 'FORUM_CATEGORY_ENTITY_THREAD',
+  ForumPostAll = 'FORUM_POST_ALL',
+  ForumPostMention = 'FORUM_POST_MENTION',
+  ForumPostReply = 'FORUM_POST_REPLY',
+  ForumThreadAll = 'FORUM_THREAD_ALL',
+  ForumThreadContributor = 'FORUM_THREAD_CONTRIBUTOR',
+  ForumThreadCreator = 'FORUM_THREAD_CREATOR',
+  ForumThreadEntityPost = 'FORUM_THREAD_ENTITY_POST',
+  ForumThreadMention = 'FORUM_THREAD_MENTION',
 }
 
 export type OfferAcceptedEvent = BaseGraphQlObject &
@@ -22134,6 +22273,7 @@ export type Query = {
   englishAuctionStartedEventByUniqueInput?: Maybe<EnglishAuctionStartedEvent>
   englishAuctionStartedEvents: Array<EnglishAuctionStartedEvent>
   englishAuctionStartedEventsConnection: EnglishAuctionStartedEventConnection
+  entitySubscriptions?: Maybe<Array<Maybe<EntitySubscription>>>
   events: Array<Event>
   forumCategories: Array<ForumCategory>
   forumCategoriesConnection: ForumCategoryConnection
@@ -22153,6 +22293,7 @@ export type Query = {
   fundingRequestDestinationsListByUniqueInput?: Maybe<FundingRequestDestinationsList>
   fundingRequestDestinationsLists: Array<FundingRequestDestinationsList>
   fundingRequestDestinationsListsConnection: FundingRequestDestinationsListConnection
+  generalSubscriptions?: Maybe<Array<Maybe<GeneralSubscription>>>
   geoCoordinates: Array<GeoCoordinates>
   geoCoordinatesByUniqueInput?: Maybe<GeoCoordinates>
   geoCoordinatesConnection: GeoCoordinatesConnection
@@ -22180,6 +22321,7 @@ export type Query = {
   licenseByUniqueInput?: Maybe<License>
   licenses: Array<License>
   licensesConnection: LicenseConnection
+  me?: Maybe<Member>
   memberAccountsUpdatedEventByUniqueInput?: Maybe<MemberAccountsUpdatedEvent>
   memberAccountsUpdatedEvents: Array<MemberAccountsUpdatedEvent>
   memberAccountsUpdatedEventsConnection: MemberAccountsUpdatedEventConnection
@@ -22189,6 +22331,7 @@ export type Query = {
   memberCreatedEventByUniqueInput?: Maybe<MemberCreatedEvent>
   memberCreatedEvents: Array<MemberCreatedEvent>
   memberCreatedEventsConnection: MemberCreatedEventConnection
+  memberExist?: Maybe<Scalars['Boolean']>
   memberInvitedEventByUniqueInput?: Maybe<MemberInvitedEvent>
   memberInvitedEvents: Array<MemberInvitedEvent>
   memberInvitedEventsConnection: MemberInvitedEventConnection
@@ -22250,6 +22393,7 @@ export type Query = {
   notEnoughCandidatesEventByUniqueInput?: Maybe<NotEnoughCandidatesEvent>
   notEnoughCandidatesEvents: Array<NotEnoughCandidatesEvent>
   notEnoughCandidatesEventsConnection: NotEnoughCandidatesEventConnection
+  notifications?: Maybe<Array<Maybe<Notification>>>
   offerAcceptedEventByUniqueInput?: Maybe<OfferAcceptedEvent>
   offerAcceptedEvents: Array<OfferAcceptedEvent>
   offerAcceptedEventsConnection: OfferAcceptedEventConnection
@@ -24140,6 +24284,13 @@ export type QueryEnglishAuctionStartedEventsConnectionArgs = {
   where?: InputMaybe<EnglishAuctionStartedEventWhereInput>
 }
 
+export type QueryEntitySubscriptionsArgs = {
+  entityId?: InputMaybe<Scalars['String']>
+  id?: InputMaybe<Scalars['String']>
+  kind?: InputMaybe<EntitySubscriptionKind>
+  status?: InputMaybe<EntitySubscriptionStatus>
+}
+
 export type QueryEventsArgs = {
   limit?: InputMaybe<Scalars['Int']>
   offset?: InputMaybe<Scalars['Int']>
@@ -24265,6 +24416,12 @@ export type QueryFundingRequestDestinationsListsConnectionArgs = {
   last?: InputMaybe<Scalars['Int']>
   orderBy?: InputMaybe<Array<FundingRequestDestinationsListOrderByInput>>
   where?: InputMaybe<FundingRequestDestinationsListWhereInput>
+}
+
+export type QueryGeneralSubscriptionsArgs = {
+  kind?: InputMaybe<GeneralSubscriptionKind>
+  shouldNotify?: InputMaybe<Scalars['Boolean']>
+  shouldNotifyByEmail?: InputMaybe<Scalars['Boolean']>
 }
 
 export type QueryGeoCoordinatesArgs = {
@@ -24505,6 +24662,10 @@ export type QueryMemberCreatedEventsConnectionArgs = {
   last?: InputMaybe<Scalars['Int']>
   orderBy?: InputMaybe<Array<MemberCreatedEventOrderByInput>>
   where?: InputMaybe<MemberCreatedEventWhereInput>
+}
+
+export type QueryMemberExistArgs = {
+  id?: InputMaybe<Scalars['Int']>
 }
 
 export type QueryMemberInvitedEventByUniqueInputArgs = {
@@ -24912,6 +25073,15 @@ export type QueryNotEnoughCandidatesEventsConnectionArgs = {
   last?: InputMaybe<Scalars['Int']>
   orderBy?: InputMaybe<Array<NotEnoughCandidatesEventOrderByInput>>
   where?: InputMaybe<NotEnoughCandidatesEventWhereInput>
+}
+
+export type QueryNotificationsArgs = {
+  emailStatus?: InputMaybe<NotificationEmailStatus>
+  entityId?: InputMaybe<Scalars['String']>
+  eventId?: InputMaybe<Scalars['String']>
+  id?: InputMaybe<Scalars['String']>
+  isRead?: InputMaybe<Scalars['Boolean']>
+  kind?: InputMaybe<NotificationKind>
 }
 
 export type QueryOfferAcceptedEventByUniqueInputArgs = {

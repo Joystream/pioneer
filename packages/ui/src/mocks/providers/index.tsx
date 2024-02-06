@@ -4,12 +4,15 @@ import React, { useMemo } from 'react'
 
 import { MockAccountsProps, MockAccountsProvider } from './accounts'
 import { MockApiProvider, MockApiProps } from './api'
-import { MockQNProps, MockQNProvider } from './query-node'
+import { MockBackendProps, MockBackendProvider } from './backend'
+import { MockGqlProps, MockGqlProvider } from './gql'
 import { MockLocalStorage, useMockLocalStorage } from './useMockLocalStorage'
 
 export * from './router'
 
-export type MocksParameters = MockApiProps & MockQNProps & MockAccountsProps & MockLocalStorage
+export type MocksParameters = MockApiProps & { gql?: MockGqlProps } & MockBackendProps &
+  MockAccountsProps &
+  MockLocalStorage
 
 type Context = StoryContext & {
   parameters: { mocks?: MocksParameters | ((storyContext: StoryContext) => MocksParameters) }
@@ -25,11 +28,13 @@ export const MockProvidersDecorator = (Story: CallableFunction, storyContext: Co
 
   return (
     <MockApiProvider chain={mocks?.chain}>
-      <MockQNProvider queryNode={mocks?.queryNode}>
+      <MockGqlProvider queries={mocks?.gql?.queries} mutations={mocks?.gql?.mutations}>
         <MockAccountsProvider accounts={mocks?.accounts}>
-          <Story />
+          <MockBackendProvider backend={mocks?.backend}>
+            <Story />
+          </MockBackendProvider>
         </MockAccountsProvider>
-      </MockQNProvider>
+      </MockGqlProvider>
     </MockApiProvider>
   )
 }

@@ -1,3 +1,4 @@
+import { BN } from '@polkadot/util'
 export * from './utils/bn'
 
 import { Reducer } from './types/helpers'
@@ -25,6 +26,8 @@ export const toNumber = (value: any): number => value?.toNumber?.() ?? (isNumber
 // Math:
 
 export const clamp = (min: number, value: number, max: number) => Math.max(min, Math.min(max, value))
+
+export const perbillToPercent = (perbill: BN) => perbill.toNumber() / 10 ** 7
 
 // Objects:
 
@@ -143,3 +146,8 @@ export const mapP = <T, R>(list: T[] | readonly T[], mapper: MapperP<T, R>): Pro
 
 export const flatMapP = async <T, R>(list: T[] | readonly T[], mapper: MapperP<T, R | R[]>): Promise<R[]> =>
   Promise.all(flatten(await mapP(list, mapper)))
+
+// Utils
+
+export const cond = <T extends any>(...pairs: [() => any, T][]): T | undefined =>
+  pairs.find(([condition]) => condition())?.[1]

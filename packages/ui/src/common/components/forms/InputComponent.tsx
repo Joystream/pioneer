@@ -45,14 +45,14 @@ export interface InputProps<Element extends HTMLElement = HTMLInputElement> exte
 
 export interface InputElementProps {
   disabled?: boolean
-  inputSize?: 'xs' | 's' | 'm' | 'l' | 'xl' | 'auto' | undefined
+  inputSize?: 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl' | 'auto' | undefined
   icon?: React.ReactElement
   iconRight?: boolean
   copy?: boolean
   units?: string
   validation?: 'invalid' | 'valid' | 'warning' | undefined
   borderless?: boolean
-  inputWidth?: 'auto' | 's' | 'xs' | undefined
+  inputWidth?: 's' | 'xs' | undefined
   tight?: boolean
 }
 
@@ -252,14 +252,12 @@ export const InputElement = styled.div<InputElementProps>`
   width: ${({ tight }) => (tight ? 'fit-content' : '100%')};
   min-width: ${({ inputWidth }) => {
     switch (inputWidth) {
-      case 'auto':
-        return null
       case 's':
         return '320px'
       case 'xs':
         return '200px'
       default:
-        return '400px'
+        return null
     }
   }};
 `
@@ -314,6 +312,8 @@ export const InputContainer = styled.div<InputElementProps>`
         return '80px'
       case 'xl':
         return '104px'
+      case 'xxl':
+        return '118px'
     }
   }};
   border: 1px solid
@@ -467,8 +467,8 @@ export const InputNotification = styled.div<InputProps>`
   grid-auto-flow: column;
   grid-column-gap: 4px;
   align-items: center;
+  justify-content: start;
   width: 100%;
-  grid-template-columns: max-content;
   color: ${({ validation }) => {
     switch (validation) {
       case 'invalid':
@@ -500,4 +500,11 @@ export const InputNotificationIcon = styled.div`
 
 export const InputNotificationMessage = styled(TextSmall)`
   color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
+export const TokenInputComponent = styled(InputComponent)`
+  width: calc(min(400px, 100%));
 `

@@ -344,7 +344,7 @@ export const AddNewProposalModal = () => {
         title={'Creating new proposal' + (state.context.type ? ': ' + camelCaseToText(state.context.type) : '')}
       />
       <StepperModalBody>
-        <StepperProposalWrapper>
+        <StepperModalWrapper>
           <Stepper steps={getSteps(service)} />
           <StepDescriptionColumn>
             <ProposalConstantsWrapper constants={constants} />
@@ -363,7 +363,7 @@ export const AddNewProposalModal = () => {
               {isExecutionError && <ExecutionRequirementsWarning />}
             </FormProvider>
           </StyledStepperBody>
-        </StepperProposalWrapper>
+        </StepperModalWrapper>
       </StepperModalBody>
       <ModalTransactionFooter
         transactionFee={isLastStepActive(getSteps(service)) ? feeInfo.transactionFee : undefined}
@@ -383,10 +383,6 @@ export const AddNewProposalModal = () => {
     </Modal>
   )
 }
-
-export const StepperProposalWrapper = styled(StepperModalWrapper)`
-  grid-template-columns: 220px 336px 1fr;
-`
 
 export const StyledStepperBody = styled(StepperBody)`
   flex-direction: column;

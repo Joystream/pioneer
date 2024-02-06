@@ -33,7 +33,7 @@ const ThresholdBar = styled.div<{ threshold?: number }>`
   position: relative;
   display: flex;
   align-items: center;
-  width: 223px;
+  flex: 1 1 0%;
 
   ${({ threshold }) =>
     threshold &&
@@ -50,6 +50,10 @@ const ThresholdBar = styled.div<{ threshold?: number }>`
 `
 
 const Figure = styled.div`
+  display: flex;
+  width: 120px;
+  justify-content: flex-end;
+  align-items: flex-end;
   margin-left: auto;
 
   ${NumericValue} {

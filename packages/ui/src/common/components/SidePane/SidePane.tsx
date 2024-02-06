@@ -14,6 +14,10 @@ export const SidePaneHeader = styled.div`
   max-height: 100%;
   padding: 12px 24px 0;
   background-color: ${Colors.White};
+
+  @media (max-width: 424px) {
+    padding: 12px 16px 0;
+  }
 `
 
 export const SidePanelTop = styled.div`
@@ -64,9 +68,55 @@ export const SidePane = styled.div<{ topSize?: 'xs' | 's' | 'm' }>`
   background-color: ${Colors.White};
   width: 100%;
   max-width: 552px;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
   ${Animations.showSidePane};
+
+  ${({ topSize }) => {
+    switch (topSize) {
+      case 'xs':
+        return css`
+          grid-template-rows: auto 1fr;
+
+          ${SidePaneHeader} {
+            padding: 12px 24px;
+          }
+        `
+      case 's':
+        return css`
+          ${SidePaneHeader} {
+            align-content: space-between;
+          }
+        `
+    }
+  }};
+`
+
+export const SignalSidePane = styled.div<{ topSize?: 'xs' | 's' | 'm' }>`
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: minmax(auto, ${({ topSize }) => (topSize === 's' ? '132px' : '192px')}) 1fr auto;
+  grid-template-areas:
+    'sidepaneheader'
+    'sidepanebody'
+    'modalfooter';
+  grid-area: modal;
+  position: relative;
+  background-color: ${Colors.White};
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  ${Animations.showSidePane};
+
+  @media screen and (min-width: 320px) and (max-width: 768px) {
+    max-width: 100%;
+  }
+  @media screen and (min-width: 768px) and (max-width: 1440px) {
+    max-width: 90%;
+  }
+  @media screen and (min-width: 1440px) {
+    max-width: 1200px;
+  }
 
   ${({ topSize }) => {
     switch (topSize) {

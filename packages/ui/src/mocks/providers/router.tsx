@@ -20,7 +20,7 @@ export const MockRouterDecorator: Decorator = (Story, { parameters }) => {
       <div id="modal-container" />
       <MemoryRouter initialEntries={[storyPath]}>
         <Switch>
-          <Route component={Story} path={options.path ?? storyPath} />
+          <Route component={Story} path={options.path ?? storyPath.replace(/[?#].*/, '')} />
 
           {Object.entries(options.actions ?? {}).map(([path, action]) => (
             <Route

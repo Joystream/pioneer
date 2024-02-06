@@ -144,7 +144,10 @@ export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts
 }
 
 const asBalance = (balance: Balance = 0): BN =>
-  (balance instanceof BN ? balance : createType('BalanceOf', joy(balance))) as BN
+  createType(
+    'BalanceOf',
+    balance instanceof BN ? balance : new BN(typeof balance === 'string' ? balance : joy(balance))
+  ) as BN
 
 const WALLET: Wallet = {
   installed: true,
@@ -153,7 +156,14 @@ const WALLET: Wallet = {
   title: 'bar',
   installUrl: 'http://example.com',
   logo: { src: PolkadotLogo, alt: 'Wallet logo' },
-  signer: {},
+  signer: {
+    signPayload: async () => ({
+      signature: '0x123',
+    }),
+    signRaw: async () => ({
+      signature: '0x123',
+    }),
+  },
   extension: {},
   getAccounts: async () => [],
   subscribeAccounts: () => undefined,

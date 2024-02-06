@@ -1,0 +1,49 @@
+name: Backend Docker
+
+on:
+  pull_request:
+    paths:
+      - packages/server/**
+
+  # Docker images will only be pushed when we manually dispatch this workflow
+  workflow_dispatch:
+    inputs:
+      docker_image_tag:
+        description: 'Tag to use on docker image, eg. "latest", or "next"'
+        required: true
+        default: "next"
+
+jobs:
+  docker:
+    name: Build Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to DockerHub
+        if: github.event_name == 'workflow_dispatch'
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build (production)
+        uses: docker/build-push-action@v3
+        with:
+          # Do not use local dir context to ensure we can build from a commit directly
+          # context: .
+          file: backend.Dockerfile
+          push: ${{ github.event_name == 'workflow_dispatch' }}
+          tags: joystream/pioneer-backend:${{ github.event.inputs.docker_image_tag || 'next' }}
+
+      - name: Build (dev)
+        uses: docker/build-push-action@v3
+        with:
+          # Do not use local dir context to ensure we can build from a commit directly
+          # context: .
+          file: backend.dev.Dockerfile
+          push: ${{ github.event_name == 'workflow_dispatch' }}
+          tags: joystream/pioneer-backend-dev:${{ github.event.inputs.docker_image_tag || 'next' }}

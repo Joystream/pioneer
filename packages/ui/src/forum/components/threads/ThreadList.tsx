@@ -83,14 +83,22 @@ export const ThreadList = ({
   )
 }
 
-const ThreadCardsStyles = styled.div`
+export const ThreadCardsStyles = styled.div`
   display: grid;
-  padding: 20px 0;
-  grid-gap: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-gap: 16px;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (min-width: 1440px) {
+    grid-gap: 24px;
+  }
 `
 
 const ThreadListStyles = styled(RowGapBlock)`
+  overflow: auto;
+
   ${ListHeaders} {
     padding: 0 24px;
   }

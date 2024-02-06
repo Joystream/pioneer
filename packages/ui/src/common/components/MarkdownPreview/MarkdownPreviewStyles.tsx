@@ -22,6 +22,10 @@ const normalFontSize = ({ size }: MarkdownPreviewStylesProps) => {
 const normalColor = ({ isReply }: MarkdownPreviewStylesProps) => Colors.Black[isReply ? 800 : 700]
 
 export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProps>`
+  * {
+    word-break: normal;
+  }
+
   .markdown-preview {
     width: 100%;
   }
@@ -77,7 +81,6 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     line-height: 1.5;
     font-weight: 400;
     color: ${normalColor};
-    word-break: break-word;
   }
 
   .markdown-preview li {
@@ -88,7 +91,7 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     font-weight: 400;
     color: ${normalColor};
   }
-  
+
   .markdown-preview li + li {
     margin-top: 8px;
   }
@@ -111,7 +114,7 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
   .markdown-preview ol > li {
     counter-increment: ol-list-counter;
   }
-  
+
   .markdown-preview ol li p {
     margin-top: 0;
   }
@@ -189,7 +192,6 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
     border-spacing: 0;
     border-collapse: collapse;
     display: block;
-    width: max-content;
     max-width: 100%;
     overflow: auto;
     margin-top: 8px;
@@ -199,18 +201,18 @@ export const MarkdownPreviewStyles = createGlobalStyle<MarkdownPreviewStylesProp
   .markdown-preview table th {
     font-weight: 600;
   }
-  
+
   .markdown-preview table th,
   .markdown-preview table td {
     padding: 6px 13px;
     border: 1px solid #d0d7de;
   }
-  
+
   .markdown-preview table tr {
     background-color: #ffffff;
     border-top: 1px solid hsla(210,18%,87%,1);
   }
-  
+
   .markdown-preview table tr:nth-child(2n) {
     background-color: #f6f8fa;
   }
