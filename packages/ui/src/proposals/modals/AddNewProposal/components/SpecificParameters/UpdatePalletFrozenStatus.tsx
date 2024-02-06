@@ -33,8 +33,8 @@ export const UpdatePalletFrozenStatus = () => {
         <InlineToggleWrap>
           <Label>Creator Tokens</Label>
           <ToggleCheckbox
-            falseLabel="Disable"
-            trueLabel="Enable"
+            falseLabel="Enable"
+            trueLabel="Disable"
             name="updatePalletFrozenStatus.freeze"
             id="crt-feature-select"
           />

@@ -414,9 +414,9 @@ export const schemaFactory = (api?: Api) => {
       freeze: Yup.boolean()
         .test(
           differentFromContext(
-            (isFrozen) =>
+            (freeze) =>
               `The ProjectToken pallet is currently ${
-                isFrozen ? 'disabled' : 'enabled'
+                freeze ? 'disabled' : 'enabled'
               }, so presently this proposal would fail due to execution constraints.`,
             'palletFrozenStatus',
             'execution'
