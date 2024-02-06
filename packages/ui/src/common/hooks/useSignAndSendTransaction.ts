@@ -10,6 +10,7 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useApi } from '@/api/hooks/useApi'
 import { getChainMetadata } from '@/api/utils/getChainMetadata'
 import { BN_ZERO } from '@/common/constants'
+import { error } from '@/common/logger'
 import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
 
 import { Address } from '../types'
@@ -57,7 +58,11 @@ export const useSignAndSendTransaction = ({
   const sign = useCallback(() => {
     if (wallet && api) {
       return getChainMetadata(api).then(async (metadata) => {
-        await wallet.updateMetadata(metadata)
+        try {
+          await wallet.updateMetadata(metadata)
+        } catch {
+          error(`Pioneer could not update the Wallet (${wallet.extensionName}) metadata.`)
+        }
         send('SIGN')
       })
     }
