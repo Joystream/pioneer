@@ -32,12 +32,7 @@ export const UpdatePalletFrozenStatus = () => {
       <Row>
         <InlineToggleWrap>
           <Label>Creator Tokens</Label>
-          <ToggleCheckbox
-            falseLabel="Disable"
-            trueLabel="Enable"
-            name="updatePalletFrozenStatus.enable"
-            id="crt-feature-select"
-          />
+          <ToggleCheckbox falseLabel="Disable" trueLabel="Enable" name="updatePalletFrozenStatus.enable" />
           <Tooltip tooltipText="You have the flexibility to enable or disable CRT feature.">
             <TooltipDefault />
           </Tooltip>
