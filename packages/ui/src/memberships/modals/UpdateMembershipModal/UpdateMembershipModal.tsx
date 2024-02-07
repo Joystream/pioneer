@@ -14,6 +14,15 @@ import { updateMembershipMachine } from './machine'
 import { UpdateMembershipFormModal } from './UpdateMembershipFormModal'
 import { UpdateMembershipSuccessModal } from './UpdateMembershipSuccessModal'
 
+export const isURL = (str: string) => {
+  try {
+    const newUrl = new URL(str)
+    return newUrl.protocol === 'http:' || newUrl.protocol === 'https:'
+  } catch (err) {
+    return false
+  }
+}
+
 export const UpdateMembershipModal = () => {
   const { api } = useApi()
   const { active } = useMyMemberships()
@@ -27,7 +36,54 @@ export const UpdateMembershipModal = () => {
     return (
       <UpdateMembershipFormModal
         onClose={hideModal}
-        onSubmit={(params) => send('DONE', { form: params })}
+        onSubmit={(params) => {
+          if (params.externalResources?.TWITTER && params.externalResources?.TWITTER) {
+            params.externalResources?.TWITTER.match(/@/g)
+              ? (params.externalResources.TWITTER = params.externalResources.TWITTER.split('@')[1])
+              : params.externalResources.TWITTER
+            isURL(params.externalResources?.TWITTER)
+              ? (params.externalResources.TWITTER = params.externalResources.TWITTER.split('twitter.com/')[1])
+              : params.externalResources?.TWITTER
+          }
+          if (params.externalResources?.GITHUB && params.externalResources?.GITHUB) {
+            params.externalResources?.GITHUB.match(/@/g)
+              ? (params.externalResources.GITHUB = params.externalResources.GITHUB.split('@')[1])
+              : params.externalResources.GITHUB
+            isURL(params.externalResources?.GITHUB)
+              ? (params.externalResources.GITHUB = params.externalResources.GITHUB.split('github.com/')[1])
+              : params.externalResources?.GITHUB
+          }
+          if (params.externalResources?.TELEGRAM && params.externalResources?.TELEGRAM) {
+            params.externalResources?.TELEGRAM.match(/@/g)
+              ? (params.externalResources.TELEGRAM = params.externalResources.TELEGRAM.split('@')[1])
+              : params.externalResources.TELEGRAM
+          }
+
+          if (params.externalResources?.YOUTUBE && params.externalResources?.YOUTUBE) {
+            params.externalResources?.YOUTUBE.match(/@/g)
+              ? (params.externalResources.YOUTUBE = params.externalResources.YOUTUBE.split('@')[1])
+              : params.externalResources.YOUTUBE
+          }
+
+          if (params.externalResources?.FACEBOOK && params.externalResources?.FACEBOOK) {
+            params.externalResources?.FACEBOOK.match(/@/g)
+              ? (params.externalResources.FACEBOOK = params.externalResources.FACEBOOK.split('@')[1])
+              : params.externalResources.FACEBOOK
+            isURL(params.externalResources?.FACEBOOK)
+              ? (params.externalResources.FACEBOOK = params.externalResources.FACEBOOK.split('facebook.com/')[1])
+              : params.externalResources?.FACEBOOK
+          }
+
+          if (params.externalResources?.LINKEDIN && params.externalResources?.LINKEDIN) {
+            params.externalResources?.LINKEDIN.match(/@/g)
+              ? (params.externalResources.LINKEDIN = params.externalResources.LINKEDIN.split('@')[1])
+              : params.externalResources.LINKEDIN
+            isURL(params.externalResources?.LINKEDIN)
+              ? (params.externalResources.LINKEDIN = params.externalResources?.LINKEDIN.split('/in/')[1])
+              : params.externalResources?.LINKEDIN
+          }
+          send('DONE', { form: params })
+        }}
         member={member}
       />
     )
