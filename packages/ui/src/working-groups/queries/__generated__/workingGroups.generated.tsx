@@ -45,6 +45,7 @@ export type WorkerFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -93,6 +94,7 @@ export type PastWorkerFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -170,6 +172,7 @@ export type WorkerDetailedFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -323,6 +326,7 @@ export type GetWorkersQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -381,6 +385,7 @@ export type GetPastWorkersQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -474,6 +479,7 @@ export type GetDetailedWorkersQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -542,6 +548,7 @@ export type GetWorkerQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -677,6 +684,7 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -840,6 +848,7 @@ export type GetWorkingGroupOpeningQuery = {
           id: string
           createdAt: any
           isLead: boolean
+          isActive: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
         stakingaccountaddedeventmember?: Array<{
@@ -950,6 +959,7 @@ export type WorkingGroupApplicationMentionFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -1006,6 +1016,7 @@ export type GetWorkingGroupApplicationMentionQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -1131,6 +1142,7 @@ export type WorkingGroupApplicationFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -1204,6 +1216,7 @@ export type GetWorkingGroupApplicationsQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -1297,6 +1310,7 @@ export type GetWorkingGroupApplicationQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{

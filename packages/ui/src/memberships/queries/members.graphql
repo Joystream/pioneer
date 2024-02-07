@@ -28,6 +28,7 @@ fragment MemberFields on Membership {
     }
     createdAt
     isLead
+    isActive
   }
   createdAt
   stakingaccountaddedeventmember {
