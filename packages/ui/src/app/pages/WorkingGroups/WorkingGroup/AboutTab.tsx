@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
@@ -6,6 +6,7 @@ import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
 import { StatisticItem, Statistics, TokenValueStat } from '@/common/components/statistics'
 import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
+import { wgListItemMappings } from '@/common/helpers'
 import { isDefined } from '@/common/utils'
 import { WorkersList } from '@/working-groups/components/WorkersList'
 import { useGroupStatistics } from '@/working-groups/hooks/useGroupStatistics'
@@ -20,6 +21,7 @@ interface Props {
 
 export const AboutTab = ({ workingGroup }: Props) => {
   const { statistics } = useGroupStatistics(workingGroup.id)
+  const { subtitle } = useMemo(() => wgListItemMappings(workingGroup.name), [workingGroup.name])
 
   return (
     <MainPanel>
@@ -68,12 +70,10 @@ export const AboutTab = ({ workingGroup }: Props) => {
             {workingGroup.statusMessage && <MarkdownPreview markdown={workingGroup.statusMessage} />}
           </RowGapBlock>
         )}
-        {workingGroup.about && (
-          <RowGapBlock gap={16}>
-            <h4>About</h4>
-            <MarkdownPreview markdown={workingGroup.about} />
-          </RowGapBlock>
-        )}
+        <RowGapBlock gap={16}>
+          <h4>About</h4>
+          <MarkdownPreview markdown={subtitle} />
+        </RowGapBlock>
       </RowGapBlock>
     </MainPanel>
   )
