@@ -37,6 +37,7 @@ export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member
 export const asMemberRole = (data: MemberFieldsFragment['roles'][0]): MemberRole => ({
   id: data.id,
   isLead: data.isLead,
+  isActive: data.isActive,
   groupName: asWorkingGroupName(data.group.name),
   createdAt: data.createdAt,
 })

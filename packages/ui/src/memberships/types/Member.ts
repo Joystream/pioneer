@@ -13,6 +13,7 @@ export interface MemberRole {
   groupName: string
   createdAt?: string
   isLead: boolean
+  isActive: boolean
 }
 
 export interface Member {
