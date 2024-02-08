@@ -282,7 +282,7 @@ export const NoAccount: Story = {
     const modal = withinModal(canvasElement)
     expectActiveStepToBe(modal, 'Connect account')
     expect(modal.getByText('Connect account', { selector: '[class^=ModalBody] *' }))
-    expect(getButtonByText(modal, 'Return to wallet selection')).toBeEnabled()
+    expect(getButtonByText(modal, 'Change wallet')).toBeEnabled()
     expect(getButtonByText(modal, 'Connect Account')).toBeDisabled()
     expect(modal.queryByText('alice')).toBeNull()
   },
@@ -303,7 +303,7 @@ export const FaucetMembership: Story = {
       expectActiveStepToBe(modal, 'Connect account')
       expect(modal.getByText('Connect account', { selector: '[class^=ModalBody] *' }))
 
-      expect(getButtonByText(modal, 'Return to wallet selection')).toBeEnabled()
+      expect(getButtonByText(modal, 'Change wallet')).toBeEnabled()
 
       const connectAccountButton = getButtonByText(modal, 'Connect Account')
       expect(connectAccountButton).toBeDisabled()
@@ -353,6 +353,7 @@ export const BuyMembershipHappy: Story = {
     expect(screen.queryByText('Become a member')).toBeNull()
 
     await userEvent.click(getButtonByText(screen, 'Join Now'))
+    await userEvent.click(await modal.findByText('New Member'))
 
     await step('Form', async () => {
       const createButton = getButtonByText(modal, 'Create a Membership')
@@ -466,6 +467,7 @@ export const BuyMembershipNotEnoughFund: Story = {
     const modal = withinModal(canvasElement)
 
     await userEvent.click(getButtonByText(screen, 'Join Now'))
+    await userEvent.click(await modal.findByText('New Member'))
 
     await fillMembershipForm(modal)
     const createButton = getButtonByText(modal, 'Create a Membership')
@@ -486,6 +488,7 @@ export const BuyMembershipTxFailure: Story = {
     const modal = withinModal(canvasElement)
 
     await userEvent.click(getButtonByText(screen, 'Join Now'))
+    await userEvent.click(await modal.findByText('New Member'))
 
     await fillMembershipForm(modal)
     const createButton = getButtonByText(modal, 'Create a Membership')
