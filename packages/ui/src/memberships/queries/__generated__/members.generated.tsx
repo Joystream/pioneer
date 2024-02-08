@@ -65,7 +65,15 @@ export type MemberWithDetailsFieldsFragment = {
   }
   entry:
     | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-    | { __typename: 'MembershipEntryGifted' }
+    | {
+        __typename: 'MembershipEntryGifted'
+        membershipGiftedEvent?: {
+          __typename: 'MembershipGiftedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        } | null
+      }
     | {
         __typename: 'MembershipEntryInvited'
         memberInvitedEvent?: {
@@ -75,7 +83,15 @@ export type MemberWithDetailsFieldsFragment = {
           network: Types.Network
         } | null
       }
-    | { __typename: 'MembershipEntryMemberCreated' }
+    | {
+        __typename: 'MembershipEntryMemberCreated'
+        memberCreatedEvent?: {
+          __typename: 'MemberCreatedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        } | null
+      }
     | {
         __typename: 'MembershipEntryPaid'
         membershipBoughtEvent?: {
@@ -253,7 +269,15 @@ export type GetMembersWithDetailsQuery = {
     }
     entry:
       | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | { __typename: 'MembershipEntryGifted' }
+      | {
+          __typename: 'MembershipEntryGifted'
+          membershipGiftedEvent?: {
+            __typename: 'MembershipGiftedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
       | {
           __typename: 'MembershipEntryInvited'
           memberInvitedEvent?: {
@@ -263,7 +287,15 @@ export type GetMembersWithDetailsQuery = {
             network: Types.Network
           } | null
         }
-      | { __typename: 'MembershipEntryMemberCreated' }
+      | {
+          __typename: 'MembershipEntryMemberCreated'
+          memberCreatedEvent?: {
+            __typename: 'MemberCreatedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
       | {
           __typename: 'MembershipEntryPaid'
           membershipBoughtEvent?: {
@@ -402,7 +434,15 @@ export type GetMemberQuery = {
     }
     entry:
       | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | { __typename: 'MembershipEntryGifted' }
+      | {
+          __typename: 'MembershipEntryGifted'
+          membershipGiftedEvent?: {
+            __typename: 'MembershipGiftedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
       | {
           __typename: 'MembershipEntryInvited'
           memberInvitedEvent?: {
@@ -412,7 +452,15 @@ export type GetMemberQuery = {
             network: Types.Network
           } | null
         }
-      | { __typename: 'MembershipEntryMemberCreated' }
+      | {
+          __typename: 'MembershipEntryMemberCreated'
+          memberCreatedEvent?: {
+            __typename: 'MemberCreatedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
       | {
           __typename: 'MembershipEntryPaid'
           membershipBoughtEvent?: {
@@ -729,6 +777,20 @@ export const MemberWithDetailsFieldsFragmentDoc = gql`
       }
       ... on MembershipEntryPaid {
         membershipBoughtEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+      ... on MembershipEntryGifted {
+        membershipGiftedEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+      ... on MembershipEntryMemberCreated {
+        memberCreatedEvent {
           createdAt
           inBlock
           network

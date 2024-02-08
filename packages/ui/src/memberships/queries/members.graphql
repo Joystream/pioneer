@@ -73,6 +73,20 @@ fragment MemberWithDetailsFields on Membership {
         network
       }
     }
+    ... on MembershipEntryGifted {
+      membershipGiftedEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+    ... on MembershipEntryMemberCreated {
+      memberCreatedEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
     ... on MembershipEntryGenesis {
       phantom
     }

@@ -47,8 +47,11 @@ const asMemberEntry = (entry: MemberWithDetailsFieldsFragment['entry']): MemberE
     return { type: 'paid', block: asBlock(entry.membershipBoughtEvent) }
   } else if (entry.__typename === 'MembershipEntryInvited' && entry.memberInvitedEvent) {
     return { type: 'invited', block: asBlock(entry.memberInvitedEvent) }
+  } else if (entry.__typename === 'MembershipEntryGifted' && entry.membershipGiftedEvent) {
+    return { type: 'gifted', block: asBlock(entry.membershipGiftedEvent) }
+  } else if (entry.__typename === 'MembershipEntryMemberCreated' && entry.memberCreatedEvent) {
+    return { type: 'created', block: asBlock(entry.memberCreatedEvent) }
   }
-
   return { type: 'genesis' }
 }
 

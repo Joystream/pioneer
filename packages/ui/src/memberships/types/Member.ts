@@ -47,7 +47,17 @@ export type PaidEntry = {
   block: Block
 }
 
-export type MemberEntry = GenesisEntry | InvitedEntry | PaidEntry
+export type GiftedEntry = {
+  type: 'gifted'
+  block: Block
+}
+
+export type CreatedEntry = {
+  type: 'created'
+  block: Block
+}
+
+export type MemberEntry = GenesisEntry | InvitedEntry | PaidEntry | GiftedEntry | CreatedEntry
 // Temporary fix for: https://github.com/Joystream/pioneer/issues/1493
 export type InvitedMember = Member // & { entry: InvitedEntry }
 
