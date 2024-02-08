@@ -6,6 +6,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { useWallets } from '@/accounts/providers/accounts/useWallets'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { Account, AddressToBalanceMap, LockType } from '@/accounts/types'
 import { Wallet } from '@/accounts/types/wallet'
@@ -116,6 +117,8 @@ export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts
     [members]
   )
 
+  const allWallets = useWallets()
+
   if (!accounts) return <>{children}</>
 
   // Set contexts
@@ -124,7 +127,7 @@ export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts
     hasAccounts: true,
     isLoading: false,
     wallet: accounts.hasWallet === false ? undefined : WALLET,
-    allWallets: [],
+    allWallets: allWallets.map((wallet) => ({ ...wallet, installed: false })),
   }
 
   const membershipContextValue: MyMemberships = {

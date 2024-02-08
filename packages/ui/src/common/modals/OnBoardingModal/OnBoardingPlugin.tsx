@@ -27,7 +27,9 @@ export const OnBoardingPlugin = () => {
     <>
       <ScrolledModalBody>
         <Wrapper>
-          <TextExtraHuge bold>Select Wallet</TextExtraHuge>
+          <TextExtraHuge as="h3" bold>
+            Select Wallet
+          </TextExtraHuge>
           <TextSmall>Select which wallet you want to use to connect with.</TextSmall>
           <List>
             {allWallets.map((wallet) => (

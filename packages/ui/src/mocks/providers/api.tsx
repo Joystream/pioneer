@@ -62,6 +62,7 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
       query: asApi('query', asApiMethod),
       rpc: asApi('rpc', asApiMethod, { chain: rpcChain }),
       tx: asApi('tx', fromTxMock),
+      genesisHash: createType('Hash', '0x123456789'),
     }
 
     return watchForMissingProps(api, 'api') as Api
