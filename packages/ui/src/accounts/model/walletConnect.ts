@@ -4,6 +4,8 @@ import { SessionTypes } from '@walletconnect/types'
 import { IUniversalProvider, UniversalProvider } from '@walletconnect/universal-provider'
 import { MetadataDef, SubscriptionFn, WalletAccount } from 'injectweb3-connect'
 
+import WalletConnectLogo from '@/app/assets/images/logos/WalletConnect.svg'
+
 import { PioneerWallet } from './wallets'
 
 export class WalletConnect extends PioneerWallet {
@@ -19,7 +21,7 @@ export class WalletConnect extends PioneerWallet {
     super({
       extensionName: 'WalletConnect',
       title: 'WalletConnect',
-      logo: { src: '', alt: 'WalletConnect Logo' },
+      logo: { src: WalletConnectLogo, alt: 'WalletConnect Logo' },
     })
 
     this._projectId = projectId
