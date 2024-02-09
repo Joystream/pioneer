@@ -16,8 +16,8 @@ import { isLastStepActive } from '@/common/modals/utils'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { machineStateConverter } from '@/council/modals/AnnounceCandidacy/helpers'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { StyledStepperBody } from '@/proposals/modals/AddNewProposal'
+import { useWorker } from '@/working-groups/hooks/useWorker'
 
 import { SuccessModal, CreateOpeningSteps as Steps, ImportOpening } from './components'
 import { createOpeningMachine, CreateOpeningMachineState } from './machine'
@@ -28,11 +28,11 @@ export const CreateOpeningModal = () => {
   const [showImport, setShowImport] = useState<boolean>(false)
 
   const { api } = useApi()
-  const { active: activeMember } = useMyMemberships()
   const [state, send, service] = useMachine(createOpeningMachine)
   const { hideModal, modalData } = useModal<CreateOpeningModalCall>()
 
-  const { group } = modalData
+  const group = modalData.worker.group.id
+  const { worker } = useWorker(modalData.worker.id)
   const workingGroupConsts = api?.consts[group]
 
   const context = {
@@ -48,7 +48,7 @@ export const CreateOpeningModal = () => {
   }, [machineStateConverter(state.value)])
 
   const { transaction, feeInfo } = useTransactionFee(
-    activeMember?.controllerAccount,
+    worker?.roleAccount,
     () => {
       if (api && group) {
         const { ...specifics } = form.getValues() as CreateOpeningForm
@@ -56,8 +56,9 @@ export const CreateOpeningModal = () => {
         return api.tx[group].addOpening(description, 'Regular', stakePolicy, String(rewardPerBlock))
       }
     },
-    [api?.isConnected, activeMember?.id, group, form.formState.isValidating]
+    [api?.isConnected, worker?.roleAccount, group, form.formState.isValidating]
   )
+
   const exportedJsonValue = useMemo(() => {
     const { ...specifics } = form.getValues() as CreateOpeningForm
     const exportValue = {
@@ -91,18 +92,18 @@ export const CreateOpeningModal = () => {
     if (state.matches('beforeTransaction')) {
       return feeInfo?.canAfford ? send('NEXT') : send('FAIL')
     }
-  }, [state, activeMember?.id, feeInfo])
+  }, [state, feeInfo])
 
-  if (!activeMember || state.matches('requirementsFailed')) {
+  if (state.matches('requirementsFailed')) {
     return null
   }
 
-  if (state.matches('transaction') && transaction && group) {
+  if (state.matches('transaction') && transaction && worker) {
     return (
       <SignTransactionModal
         buttonText="Sign transaction and Create"
         transaction={transaction}
-        signer={activeMember.controllerAccount}
+        signer={worker.roleAccount}
         service={state.children.transaction}
       >
         <TextMedium>You intend to create an Opening.</TextMedium>

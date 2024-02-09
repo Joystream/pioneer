@@ -26,7 +26,7 @@ export function WorkingGroup() {
   const { name } = useParams<{ name: string }>()
   const { isLoading, group } = useWorkingGroup({ name: urlParamToWorkingGroupId(name) })
   const { workers } = useMyWorkers()
-  const isLead = useMemo(
+  const lead = useMemo(
     () => group?.isActive && workers.find((w) => w.membership.id === group?.leadId),
     [workers, group?.isActive, group?.leadId]
   )
@@ -75,9 +75,9 @@ export function WorkingGroup() {
                 </StatusGroup>
               )}
             </PreviousPage>
-            {group && isLead && currentTab === 'OPENINGS' && (
+            {group && lead && currentTab === 'OPENINGS' && (
               <ButtonsGroup>
-                <CreateOpeningButton group={group.id} />
+                <CreateOpeningButton worker={lead} />
               </ButtonsGroup>
             )}
           </PageHeaderRow>
