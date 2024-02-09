@@ -209,6 +209,8 @@ const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
   'EmailConfirmationModal',
   'VoteRationaleModal',
   'NominatingRedirect',
+  'CreateOpening',
+  'LeaveRole',
 ]
 
 export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [
