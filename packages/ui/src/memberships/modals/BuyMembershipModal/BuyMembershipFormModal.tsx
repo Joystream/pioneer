@@ -181,7 +181,7 @@ export const BuyMembershipForm = ({
     !isUploading &&
     form.formState.isValid &&
     (!isValidator ||
-      (validatorAccountCandidates?.filter((account) => !account).length === 0 &&
+      (validatorAccountCandidates?.filter((account) => !account || !isValidValidatorAccount(account)).length === 0 &&
         validatorAccountCandidates?.filter((account) => !!account).length))
   const isDisabled =
     type === 'onBoarding' && process.env.REACT_APP_CAPTCHA_SITE_KEY ? !captchaToken || !isFormValid : !isFormValid

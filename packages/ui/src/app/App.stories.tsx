@@ -782,8 +782,8 @@ export const InvalidValidatorAccountInput: Story = {
     await userEvent.paste(validatorAddressInputElement as HTMLElement, alice.controllerAccount)
 
     expect(modal.getByText('This account is neither a validator controller account nor a validator stash account.'))
-    const addButton = document.getElementsByClassName('add-button')[0]
-    expect(addButton).toBeDisabled()
+    const createButton = getButtonByText(modal, 'Create a Membership')
+    expect(createButton).toBeDisabled()
   },
 }
 
