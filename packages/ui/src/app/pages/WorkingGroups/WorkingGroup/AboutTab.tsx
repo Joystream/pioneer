@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react'
 
+import { ExternalLinkButtonGhost } from '@/common/components/buttons/LinkButtons'
+import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
@@ -21,7 +23,7 @@ interface Props {
 
 export const AboutTab = ({ workingGroup }: Props) => {
   const { statistics } = useGroupStatistics(workingGroup.id)
-  const { subtitle } = useMemo(() => wgListItemMappings(workingGroup.name), [workingGroup.name])
+  const { subtitle, tooltipLink } = useMemo(() => wgListItemMappings(workingGroup.name), [workingGroup.name])
 
   return (
     <MainPanel>
@@ -73,6 +75,12 @@ export const AboutTab = ({ workingGroup }: Props) => {
         <RowGapBlock gap={16}>
           <h4>About</h4>
           <MarkdownPreview markdown={subtitle} />
+          {tooltipLink && (
+            <ExternalLinkButtonGhost size="small" href={tooltipLink} disabled={false} target="_blank">
+              Learn more from Knowlage Book
+              <LinkSymbol />
+            </ExternalLinkButtonGhost>
+          )}
         </RowGapBlock>
       </RowGapBlock>
     </MainPanel>
