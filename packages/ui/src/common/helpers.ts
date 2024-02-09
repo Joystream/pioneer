@@ -37,57 +37,55 @@ export const wgListItemMappings = (value: string) => {
       return {
         subtitle:
           'A diverse set of contributors, such as Developers, Designers and Product Managers, responsible for development of infrastructure and user facing applications.',
-        tooltipLink: 'https://joystream.gitbook.io/testnet-workspace/system/builders',
+        tooltipLink: 'https://handbook.joystream.org/system/builders',
       }
     case 'Storage':
       return {
         subtitle:
           'Broadly responsible for ensuring storage infrastructure uptime, namely running complete and up-to-date copy of the content directory and accept inbound uploads from end users.',
-        tooltipLink: 'https://joystream.gitbook.io/testnet-workspace/system/storage',
+        tooltipLink: 'https://handbook.joystream.org/system/storage',
       }
     case 'Content':
       return {
         subtitle:
           'Monitor publishing of the new content into the content directory, respond to the reported publications and adjudicate possible dispute processes.',
-        tooltipLink: 'https://joystream.gitbook.io/testnet-workspace/system/content-directory',
+        tooltipLink: 'https://handbook.joystream.org/system/content-directory',
       }
     case 'Distribution':
       return {
         subtitle:
           'Run and maintain distributor nodes that deliver large volumes of upstream data to a large number of simultaneous end users.',
-        tooltipLink: 'https://joystream.gitbook.io/testnet-workspace/system/storage#distributor',
+        tooltipLink: 'https://handbook.joystream.org/system/storage#distributor',
       }
     case 'App':
       return {
         subtitle:
           'Apps group runs multiple video streaming apps working on Joystream blockchain and provides support to all external app operators.',
-        tooltipLink: 'https://joystream.gitbook.io/testnet-workspace/system/gateways',
+        tooltipLink: 'https://handbook.joystream.org/system/gateways',
       }
     case 'Operations Beta':
       return {
         subtitle:
           'Human Resources working group is responsible for integrating new members greeting, onboarding, catalyzing and nurturing, as well as managing bounties.',
-        tooltipLink:
-          'https://joystream.gitbook.io/testnet-workspace/testnet/council-period-scoring/human-resources-score',
+        tooltipLink: 'https://handbook.joystream.org/system/human-resources',
       }
     case 'Operations Gamma':
       return {
         subtitle:
           'Marketing group is responsible for increasing the outreach, sharing the content from the platform with the world, spreading the news about platform development, new members acquisition and overall growth.',
-        tooltipLink: 'https://joystream.gitbook.io/testnet-workspace/system/marketers',
+        tooltipLink: 'https://handbook.joystream.org/system/marketers',
       }
     case 'Membership':
       return {
         subtitle:
           'Membership group is responsible for new memberships invitations, referral rewards for existing members and overall process of adding more members via referral scheme.',
-        tooltipLink:
-          'https://joystream.gitbook.io/testnet-workspace/testnet/council-period-scoring/human-resources-score',
+        tooltipLink: 'https://handbook.joystream.org/system/memberships',
       }
     case 'Forum':
       return {
         subtitle:
           'Monitor and supervise public communication channels for compliance with usage policies as decided through the governance system.',
-        tooltipLink: 'https://joystream.gitbook.io/testnet-workspace/system/forum',
+        tooltipLink: 'https://handbook.joystream.org/system/forum',
       }
     default:
       return {
