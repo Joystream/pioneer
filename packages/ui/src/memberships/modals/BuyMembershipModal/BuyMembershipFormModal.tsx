@@ -315,7 +315,7 @@ export const BuyMembershipForm = ({
                 </RowInline>
                 {isValidator && (
                   <>
-                    <SelectValidatorAccountWrapper>
+                    <SelectValidatorAccountWrapper className="validator-accounts">
                       <RowInline gap={4}>
                         <Label noMargin>Add validator controller account or validator stash account</Label>
                         <Tooltip tooltipText="This is the status which indicates the selected account is actually a validator account.">
@@ -327,46 +327,46 @@ export const BuyMembershipForm = ({
                         If your validator account is not in your signer wallet, paste the account address to the field
                         below:
                       </TextMedium>
-                    </SelectValidatorAccountWrapper>
-                    {validatorAccountCandidates?.map((account, index) => (
-                      <Row>
-                        <RowInline>
-                          <InputComponent id="select-validatorAccount" inputSize="l">
-                            <SelectAccount
-                              id="select-validatorAccount"
-                              name={`validatorAccountCandidates[${index}]`}
-                              filter={(account) => validatorAccountSelectorFilter(index, account)}
-                            />
-                          </InputComponent>
-                          <ButtonGhost
-                            square
-                            size="large"
-                            onClick={() => {
-                              removeValidatorAccount(index)
-                            }}
-                          >
-                            <CrossIcon />
-                          </ButtonGhost>
-                        </RowInline>
-                        {!isValidValidatorAccount(account) && (
-                          <RowInline gap={2}>
-                            <TextSmall error>
-                              <InputNotificationIcon>
-                                <AlertSymbol />
-                              </InputNotificationIcon>
-                            </TextSmall>
-                            <TextSmall error>
-                              This account is neither a validator controller account nor a validator stash account.
-                            </TextSmall>
+                      {validatorAccountCandidates?.map((account, index) => (
+                        <Row>
+                          <RowInline>
+                            <InputComponent id="select-validatorAccount" inputSize="l">
+                              <SelectAccount
+                                id="select-validatorAccount"
+                                name={`validatorAccountCandidates[${index}]`}
+                                filter={(account) => validatorAccountSelectorFilter(index, account)}
+                              />
+                            </InputComponent>
+                            <ButtonGhost
+                              square
+                              size="large"
+                              onClick={() => {
+                                removeValidatorAccount(index)
+                              }}
+                            >
+                              <CrossIcon />
+                            </ButtonGhost>
                           </RowInline>
-                        )}
-                      </Row>
-                    ))}
-                    <RowInline justify="end">
-                      <ButtonPrimary size="small" onClick={addValidatorAccount} className="add-button">
-                        <PlusIcon /> Add Validator Account
-                      </ButtonPrimary>
-                    </RowInline>
+                          {!isValidValidatorAccount(account) && (
+                            <RowInline gap={2}>
+                              <TextSmall error>
+                                <InputNotificationIcon>
+                                  <AlertSymbol />
+                                </InputNotificationIcon>
+                              </TextSmall>
+                              <TextSmall error>
+                                This account is neither a validator controller account nor a validator stash account.
+                              </TextSmall>
+                            </RowInline>
+                          )}
+                        </Row>
+                      ))}
+                      <RowInline justify="end">
+                        <ButtonPrimary size="small" onClick={addValidatorAccount} className="add-button">
+                          <PlusIcon /> Add Validator Account
+                        </ButtonPrimary>
+                      </RowInline>
+                    </SelectValidatorAccountWrapper>
                   </>
                 )}
               </>
