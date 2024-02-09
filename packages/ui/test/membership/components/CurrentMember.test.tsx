@@ -5,6 +5,7 @@ import React from 'react'
 import { PioneerWallet } from '@/accounts/model/wallets'
 import { GlobalModals } from '@/app/GlobalModals'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { OnBoardingProvider } from '@/common/providers/onboarding/provider'
 import { CurrentMember } from '@/memberships/components/CurrentMember'
 import { seedMember, seedMembers } from '@/mocks/data'
 
@@ -88,12 +89,14 @@ describe('UI: CurrentMember component', () => {
     return render(
       <MockKeyringProvider>
         <MockQueryNodeProviders>
-          <MockBackendProvider>
-            <ModalContextProvider>
-              <CurrentMember />
-              <GlobalModals />
-            </ModalContextProvider>
-          </MockBackendProvider>
+          <OnBoardingProvider>
+            <MockBackendProvider>
+              <ModalContextProvider>
+                <CurrentMember />
+                <GlobalModals />
+              </ModalContextProvider>
+            </MockBackendProvider>
+          </OnBoardingProvider>
         </MockQueryNodeProviders>
       </MockKeyringProvider>
     )
