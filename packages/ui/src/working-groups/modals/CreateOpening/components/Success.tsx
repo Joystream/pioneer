@@ -1,25 +1,28 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { generatePath, useHistory } from 'react-router-dom'
 
 import { ButtonGhost } from '@/common/components/buttons'
 import { SuccessSymbol } from '@/common/components/icons/symbols'
 import { Info } from '@/common/components/Info'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
-import { GroupIdToGroupParam } from '@/working-groups/constants'
-import { GroupIdName } from '@/working-groups/types'
+import { nameMapping } from '@/common/helpers'
+import { WorkingGroupsRoutes } from '@/working-groups/constants'
+import { groupNameToURLParam } from '@/working-groups/model/workingGroupName'
 
 interface SuccessModalProps {
   onClose: () => void
-  groupId: GroupIdName
+  groupName: string
+  openingRuntimeId: number
 }
 
-export const SuccessModal = ({ onClose, groupId }: SuccessModalProps) => {
+export const SuccessModal = ({ onClose, groupName, openingRuntimeId }: SuccessModalProps) => {
   const history = useHistory()
 
+  const openingId = `${groupNameToURLParam(nameMapping(groupName))}-${openingRuntimeId}`
   const redirect = () => {
     onClose()
-    history.push(`/working-groups/${GroupIdToGroupParam[groupId].toLowerCase()}`)
+    history.push(generatePath(WorkingGroupsRoutes.openingById, { id: openingId }))
   }
 
   return (
@@ -32,7 +35,7 @@ export const SuccessModal = ({ onClose, groupId }: SuccessModalProps) => {
       </ModalBody>
       <ModalFooter>
         <ButtonGhost onClick={redirect} size="medium">
-          Back to Working Group
+          See my Opening
         </ButtonGhost>
       </ModalFooter>
     </Modal>

@@ -1,3 +1,4 @@
+import { merge } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import styled from 'styled-components'
@@ -21,7 +22,13 @@ import { useWorker } from '@/working-groups/hooks/useWorker'
 
 import { SuccessModal, CreateOpeningSteps as Steps, ImportOpening } from './components'
 import { createOpeningMachine, CreateOpeningMachineState } from './machine'
-import { OpeningConditions, CreateOpeningForm, CreateOpeningModalCall, OpeningSchema, defaultValues } from './types'
+import {
+  OpeningConditions,
+  CreateOpeningForm,
+  CreateOpeningModalCall,
+  OpeningSchema,
+  defaultValues as _defaultValue,
+} from './types'
 import { getTxParams } from './utils'
 
 export const CreateOpeningModal = () => {
@@ -32,16 +39,31 @@ export const CreateOpeningModal = () => {
   const { hideModal, modalData } = useModal<CreateOpeningModalCall>()
 
   const group = modalData.worker.group.id
+  const groupName = modalData.worker.group.name
   const { worker } = useWorker(modalData.worker.id)
-  const workingGroupConsts = api?.consts[group]
 
-  const context = {
-    group,
-    minUnstakingPeriodLimit: workingGroupConsts?.minUnstakingPeriodLimit,
-    minimumApplicationStake: workingGroupConsts?.minimumApplicationStake,
-  } as OpeningConditions
+  const context = useMemo(
+    () =>
+      ({
+        group,
+        minUnstakingPeriodLimit: api?.consts[group].minUnstakingPeriodLimit,
+        minimumApplicationStake: api?.consts[group].minimumApplicationStake,
+      } as OpeningConditions),
+    [api?.isConnected]
+  )
   const path = useMemo(() => machineStateConverter(state.value), [state.value])
   const resolver = useYupValidationResolver<CreateOpeningForm>(OpeningSchema, path)
+  const defaultValues = useMemo(
+    () =>
+      merge({}, _defaultValue, {
+        stakingPolicyAndReward: {
+          stakingAmount: context.minimumApplicationStake,
+          leavingUnstakingPeriod: context.minUnstakingPeriodLimit?.toNumber(),
+        },
+      }),
+    [context]
+  )
+
   const form = useForm<CreateOpeningForm>({ resolver, mode: 'onChange', defaultValues, context })
   useEffect(() => {
     form.trigger(machineStateConverter(state.value) as keyof CreateOpeningForm)
@@ -86,9 +108,6 @@ export const CreateOpeningModal = () => {
   }, [send])
 
   useEffect((): any => {
-    if (state.matches('requirementsVerification')) {
-      return feeInfo && send(feeInfo.canAfford ? 'NEXT' : 'FAIL')
-    }
     if (state.matches('beforeTransaction')) {
       return feeInfo?.canAfford ? send('NEXT') : send('FAIL')
     }
@@ -112,7 +131,7 @@ export const CreateOpeningModal = () => {
   }
 
   if (state.matches('success') && group) {
-    return <SuccessModal groupId={group} onClose={hideModal} />
+    return <SuccessModal onClose={hideModal} groupName={groupName} openingRuntimeId={state.context.openingId} />
   }
 
   return (
