@@ -9,7 +9,7 @@ import { metadataFromBytes } from '@/common/model/JoystreamNode'
 import { member } from '@/mocks/data/members'
 import { getButtonByText, getEditorByLabel, joy, withinModal } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
-import { GetWorkersDocument, GetWorkingGroupDocument } from '@/working-groups/queries'
+import { GetWorkerDocument, GetWorkersDocument, GetWorkingGroupDocument } from '@/working-groups/queries'
 
 import { WorkingGroup } from './WorkingGroup'
 
@@ -66,23 +66,28 @@ export default {
   parameters: {
     router: { path: '/:name', href: `/${WG_DATA.name}` },
     mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
-      const alice = member('alice', {
-        roles: [
-          {
-            __typename: 'Worker',
-            id: `${WG_DATA.id}-0`,
-            createdAt: '2021',
-            isLead: args.isLead,
-            isActive: true,
-            group: {
-              __typename: 'WorkingGroup',
-              name: WG_DATA.name,
-            },
-          },
-        ],
-      })
+      const alice = member('alice')
+
+      const role = {
+        __typename: 'Worker',
+        id: `${WG_DATA.id}-0`,
+        application: { opening: {} },
+        entry: {},
+        createdAt: '2021',
+        isLead: args.isLead,
+        isActive: true,
+        status: 'WorkerStatusActive',
+        roleAccount: alice.controllerAccount,
+        group: {
+          __typename: 'WorkingGroup',
+          ...WG_DATA,
+        },
+      } as const
+
+      const worker = { ...role, membership: alice }
+
       return {
-        accounts: { active: { member: alice } },
+        accounts: { active: { member: { ...alice, roles: [role] } } },
 
         chain: {
           tx: {
@@ -108,8 +113,7 @@ export default {
               query: GetWorkingGroupDocument,
               data: {
                 workingGroupByUniqueInput: {
-                  id: WG_DATA.id,
-                  name: WG_DATA.name,
+                  ...WG_DATA,
                   budget: joy(200),
                   workers: [],
                   leader: { membershipId: alice.id, isActive: args.isLead },
@@ -120,15 +124,7 @@ export default {
               query: GetWorkersDocument,
               data: {
                 workers: [
-                  {
-                    id: `${WG_DATA.id}-0`,
-                    group: {
-                      id: WG_DATA.id,
-                      name: WG_DATA.name,
-                    },
-                    status: 'WorkerStatusActive',
-                    membership: alice,
-                  },
+                  worker,
                   {
                     id: `${WG_DATA.id}-1`,
                     group: {
@@ -140,6 +136,10 @@ export default {
                   },
                 ],
               },
+            },
+            {
+              query: GetWorkerDocument,
+              data: { workerByUniqueInput: worker },
             },
           ],
         },
@@ -199,9 +199,15 @@ export const CreateOpening: Story = {
     await step('Staking Policy & Reward', async () => {
       const createButton = getButtonByText(modal, 'Create Opening')
       expect(createButton).toBeDisabled()
-      await userEvent.type(modal.getByLabelText('Staking amount *'), '100')
-      await userEvent.clear(modal.getByLabelText('Role cooldown period'))
-      await userEvent.type(modal.getByLabelText('Role cooldown period'), '1000')
+
+      const stakeAmountField = modal.getByLabelText('Staking amount *')
+      await userEvent.clear(stakeAmountField)
+      await userEvent.type(stakeAmountField, '100')
+
+      const coolDownField = modal.getByLabelText('Role cooldown period')
+      await userEvent.clear(coolDownField)
+      await userEvent.type(coolDownField, '1000')
+
       await userEvent.type(modal.getByLabelText('Reward amount per Block'), '0.1')
       await waitFor(() => expect(createButton).toBeEnabled())
       await userEvent.click(createButton)
