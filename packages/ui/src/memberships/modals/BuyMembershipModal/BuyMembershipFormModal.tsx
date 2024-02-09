@@ -94,7 +94,6 @@ export interface MemberFormFields {
   avatarUri: File | string | null
   isReferred?: boolean
   isValidator?: boolean
-  validatorAccountCandidates?: (Account | undefined)[]
   validatorAccounts?: Account[]
   referrer?: Member
   hasTerms?: boolean
@@ -110,7 +109,7 @@ const formDefaultValues = {
   avatarUri: null,
   isReferred: false,
   isValidator: false,
-  validatorAccountCandidates: [undefined],
+  validatorAccounts: [],
   referrer: undefined,
   hasTerms: false,
   externalResources: {},
@@ -145,14 +144,14 @@ export const BuyMembershipForm = ({
     },
   })
 
-  const [handle, isReferred, isValidator, referrer, captchaToken, validatorAccountCandidates] = form.watch([
+  const [handle, isReferred, isValidator, referrer, captchaToken] = form.watch([
     'handle',
     'isReferred',
     'isValidator',
     'referrer',
     'captchaToken',
-    'validatorAccountCandidates',
   ])
+  const [validatorAccounts, setValidatorAccounts] = useState<(Account | undefined)[]>([undefined])
 
   const validators = useValidators({ skip: !isValidator ?? true })
   const validatorAddresses = useMemo(
@@ -181,47 +180,31 @@ export const BuyMembershipForm = ({
     !isUploading &&
     form.formState.isValid &&
     (!isValidator ||
-      (validatorAccountCandidates?.filter((account) => !account || !isValidValidatorAccount(account)).length === 0 &&
-        validatorAccountCandidates?.filter((account) => !!account).length))
+      (validatorAccounts?.filter((account) => !account || !isValidValidatorAccount(account)).length === 0 &&
+        validatorAccounts?.filter((account) => !!account).length))
   const isDisabled =
     type === 'onBoarding' && process.env.REACT_APP_CAPTCHA_SITE_KEY ? !captchaToken || !isFormValid : !isFormValid
 
-  const addValidatorAccount = () => {
-    setValidatorAccounts([...(validatorAccountCandidates ?? []), undefined])
-    form?.setValue('validatorAccountCandidate' as keyof MemberFormFields, undefined)
+  const addValidatorAccount = (index: number, value: Account | undefined) => {
+    setValidatorAccounts((accounts) => accounts.toSpliced(index, 1, value))
   }
 
   const removeValidatorAccount = (index: number) => {
-    validatorAccountCandidates &&
-      setValidatorAccounts([
-        ...validatorAccountCandidates.slice(0, index),
-        ...validatorAccountCandidates.slice(index + 1),
-      ])
-  }
-
-  const setValidatorAccounts = (accounts: (Account | undefined)[]) => {
-    form?.setValue('validatorAccountCandidates' as keyof MemberFormFields, [])
-    accounts.map((account, index) => {
-      form?.register(('validatorAccountCandidates[' + index + ']') as keyof MemberFormFields)
-      form?.setValue(('validatorAccountCandidates[' + index + ']') as keyof MemberFormFields, account)
-    })
+    validatorAccounts && setValidatorAccounts((accounts) => accounts.toSpliced(index, 1))
   }
 
   const validatorAccountSelectorFilter = (index: number, account: Account) =>
-    (!validatorAccountCandidates ||
-      ![...validatorAccountCandidates.slice(0, index), ...validatorAccountCandidates.slice(index + 1)].find(
+    (!validatorAccounts ||
+      ![...validatorAccounts.toSpliced(index, 1)].find(
         (accountOrUndefined) => accountOrUndefined?.address === account.address
       )) &&
     !!validatorAddresses?.includes(account.address)
 
   const submit = () => {
-    const validatorAccounts = (validatorAccountCandidates?.filter(
-      (account, index, self) => !!account && index === self.findIndex((t) => t?.address === account.address)
-    ) ?? []) as Account[]
-    validatorAccounts.forEach((account, index) => {
-      form?.register(('validatorAccounts[' + index + ']') as keyof MemberFormFields)
-      form?.setValue(('validatorAccounts[' + index + ']') as keyof MemberFormFields, account)
-    })
+    const accounts = (validatorAccounts.filter((account) => !!account) as Account[]).filter((account, index, self) =>
+      self.slice(index + 1).every(({ address }) => address !== account.address)
+    )
+    form.setValue('validatorAccounts' as keyof MemberFormFields, accounts)
     const values = form.getValues()
     uploadAvatarAndSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
   }
@@ -327,13 +310,13 @@ export const BuyMembershipForm = ({
                         If your validator account is not in your signer wallet, paste the account address to the field
                         below:
                       </TextMedium>
-                      {validatorAccountCandidates?.map((account, index) => (
+                      {validatorAccounts?.map((account, index) => (
                         <Row>
                           <RowInline>
-                            <InputComponent id="select-validatorAccount" inputSize="l">
+                            <InputComponent inputSize="l">
                               <SelectAccount
-                                id="select-validatorAccount"
-                                name={`validatorAccountCandidates[${index}]`}
+                                selected={account}
+                                onChange={(account) => addValidatorAccount(index, account)}
                                 filter={(account) => validatorAccountSelectorFilter(index, account)}
                               />
                             </InputComponent>
@@ -362,7 +345,11 @@ export const BuyMembershipForm = ({
                         </Row>
                       ))}
                       <RowInline justify="end">
-                        <ButtonPrimary size="small" onClick={addValidatorAccount} className="add-button">
+                        <ButtonPrimary
+                          size="small"
+                          className="add-button"
+                          onClick={() => addValidatorAccount(validatorAccounts.length, undefined)}
+                        >
                           <PlusIcon /> Add Validator Account
                         </ButtonPrimary>
                       </RowInline>
@@ -447,7 +434,7 @@ export const SelectValidatorAccountWrapper = styled.div`
   gap: 8px;
 `
 
-const InputNotificationIcon = styled.div`
+export const InputNotificationIcon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
