@@ -1,11 +1,11 @@
 import HCaptcha from '@hcaptcha/react-hcaptcha'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
-import { SelectAccount, SelectedAccount } from '@/accounts/components/SelectAccount'
+import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { Account } from '@/accounts/types'
@@ -94,7 +94,7 @@ export interface MemberFormFields {
   avatarUri: File | string | null
   isReferred?: boolean
   isValidator?: boolean
-  validatorAccountCandidate?: Account
+  validatorAccountCandidates?: (Account | undefined)[]
   validatorAccounts?: Account[]
   referrer?: Member
   hasTerms?: boolean
@@ -110,6 +110,7 @@ const formDefaultValues = {
   avatarUri: null,
   isReferred: false,
   isValidator: false,
+  validatorAccountCandidates: [undefined],
   referrer: undefined,
   hasTerms: false,
   externalResources: {},
@@ -144,25 +145,24 @@ export const BuyMembershipForm = ({
     },
   })
 
-  const [handle, isReferred, isValidator, referrer, captchaToken, validatorAccountCandidate] = form.watch([
+  const [handle, isReferred, isValidator, referrer, captchaToken, validatorAccountCandidates] = form.watch([
     'handle',
     'isReferred',
     'isValidator',
     'referrer',
     'captchaToken',
-    'validatorAccountCandidate',
+    'validatorAccountCandidates',
   ])
 
   const validators = useValidators({ skip: !isValidator ?? true })
-  const [validatorAccounts, setValidatorAccounts] = useState<Account[]>([])
   const validatorAddresses = useMemo(
     () => validators?.flatMap(({ stashAccount: stash, controllerAccount: ctrl }) => (ctrl ? [stash, ctrl] : [stash])),
     [validators]
   )
 
-  const isValidValidatorAccount = useMemo(
-    () => validatorAccountCandidate && validatorAddresses?.includes(validatorAccountCandidate.address),
-    [validatorAccountCandidate, validatorAddresses]
+  const isValidValidatorAccount = useCallback(
+    (account: Account | undefined) => !account || validatorAddresses?.includes(account.address),
+    [validatorAddresses]
   )
 
   useEffect(() => {
@@ -177,19 +177,53 @@ export const BuyMembershipForm = ({
     }
   }, [data?.membershipsConnection.totalCount])
 
-  const isFormValid = !isUploading && form.formState.isValid && (!isValidator || validatorAccounts?.length)
+  const isFormValid =
+    !isUploading &&
+    form.formState.isValid &&
+    (!isValidator ||
+      (validatorAccountCandidates?.filter((account) => !account).length === 0 &&
+        validatorAccountCandidates?.filter((account) => !!account).length))
   const isDisabled =
     type === 'onBoarding' && process.env.REACT_APP_CAPTCHA_SITE_KEY ? !captchaToken || !isFormValid : !isFormValid
 
   const addValidatorAccount = () => {
-    if (validatorAccountCandidate && isValidValidatorAccount) {
-      setValidatorAccounts([...new Set([...validatorAccounts, validatorAccountCandidate])])
-      form?.setValue('validatorAccountCandidate' as keyof MemberFormFields, undefined)
-    }
+    setValidatorAccounts([...(validatorAccountCandidates ?? []), undefined])
+    form?.setValue('validatorAccountCandidate' as keyof MemberFormFields, undefined)
   }
 
   const removeValidatorAccount = (index: number) => {
-    setValidatorAccounts([...validatorAccounts.slice(0, index), ...validatorAccounts.slice(index + 1)])
+    validatorAccountCandidates &&
+      setValidatorAccounts([
+        ...validatorAccountCandidates.slice(0, index),
+        ...validatorAccountCandidates.slice(index + 1),
+      ])
+  }
+
+  const setValidatorAccounts = (accounts: (Account | undefined)[]) => {
+    form?.setValue('validatorAccountCandidates' as keyof MemberFormFields, [])
+    accounts.map((account, index) => {
+      form?.register(('validatorAccountCandidates[' + index + ']') as keyof MemberFormFields)
+      form?.setValue(('validatorAccountCandidates[' + index + ']') as keyof MemberFormFields, account)
+    })
+  }
+
+  const validatorAccountSelectorFilter = (index: number, account: Account) =>
+    (!validatorAccountCandidates ||
+      ![...validatorAccountCandidates.slice(0, index), ...validatorAccountCandidates.slice(index + 1)].find(
+        (accountOrUndefined) => accountOrUndefined?.address === account.address
+      )) &&
+    !!validatorAddresses?.includes(account.address)
+
+  const submit = () => {
+    const validatorAccounts = (validatorAccountCandidates?.filter(
+      (account, index, self) => !!account && index === self.findIndex((t) => t?.address === account.address)
+    ) ?? []) as Account[]
+    validatorAccounts.forEach((account, index) => {
+      form?.register(('validatorAccounts[' + index + ']') as keyof MemberFormFields)
+      form?.setValue(('validatorAccounts[' + index + ']') as keyof MemberFormFields, account)
+    })
+    const values = form.getValues()
+    uploadAvatarAndSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
   }
 
   return (
@@ -293,42 +327,17 @@ export const BuyMembershipForm = ({
                         If your validator account is not in your signer wallet, paste the account address to the field
                         below:
                       </TextMedium>
-                      <RowInline>
-                        <InputComponent id="select-validatorAccount" inputSize="l">
-                          <SelectAccount
-                            id="select-validatorAccount"
-                            name="validatorAccountCandidate"
-                            filter={(account) => !!validatorAddresses?.includes(account.address)}
-                          />
-                        </InputComponent>
-                        <ButtonPrimary
-                          square
-                          size="large"
-                          onClick={addValidatorAccount}
-                          disabled={!isValidValidatorAccount}
-                          className="add-button"
-                        >
-                          <PlusIcon />
-                        </ButtonPrimary>
-                      </RowInline>
-                      {validatorAccountCandidate && !isValidValidatorAccount && (
-                        <RowInline gap={2}>
-                          <TextSmall error>
-                            <InputNotificationIcon>
-                              <AlertSymbol />
-                            </InputNotificationIcon>
-                          </TextSmall>
-                          <TextSmall error>
-                            This account is neither a validator controller account nor a validator stash account.
-                          </TextSmall>
-                        </RowInline>
-                      )}
                     </SelectValidatorAccountWrapper>
-
-                    {validatorAccounts.map((account, index) => (
+                    {validatorAccountCandidates?.map((account, index) => (
                       <Row>
                         <RowInline>
-                          <SelectedAccount account={account as Account} key={'selected' + index} />
+                          <InputComponent id="select-validatorAccount" inputSize="l">
+                            <SelectAccount
+                              id="select-validatorAccount"
+                              name={`validatorAccountCandidates[${index}]`}
+                              filter={(account) => validatorAccountSelectorFilter(index, account)}
+                            />
+                          </InputComponent>
                           <ButtonGhost
                             square
                             size="large"
@@ -339,8 +348,25 @@ export const BuyMembershipForm = ({
                             <CrossIcon />
                           </ButtonGhost>
                         </RowInline>
+                        {!isValidValidatorAccount(account) && (
+                          <RowInline gap={2}>
+                            <TextSmall error>
+                              <InputNotificationIcon>
+                                <AlertSymbol />
+                              </InputNotificationIcon>
+                            </TextSmall>
+                            <TextSmall error>
+                              This account is neither a validator controller account nor a validator stash account.
+                            </TextSmall>
+                          </RowInline>
+                        )}
                       </Row>
                     ))}
+                    <RowInline justify="end">
+                      <ButtonPrimary size="small" onClick={addValidatorAccount} className="add-button">
+                        <PlusIcon /> Add Validator Account
+                      </ButtonPrimary>
+                    </RowInline>
                   </>
                 )}
               </>
@@ -396,18 +422,7 @@ export const BuyMembershipForm = ({
               />
             </TransactionInfoContainer>
           )}
-          <ButtonPrimary
-            size="medium"
-            onClick={() => {
-              validatorAccounts?.map((account, index) => {
-                form?.register(('validatorAccounts[' + index + ']') as keyof MemberFormFields)
-                form?.setValue(('validatorAccounts[' + index + ']') as keyof MemberFormFields, account)
-              })
-              const values = form.getValues()
-              uploadAvatarAndSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
-            }}
-            disabled={isDisabled}
-          >
+          <ButtonPrimary size="medium" onClick={submit} disabled={isDisabled}>
             {isUploading ? <Loading text="Uploading avatar" /> : 'Create a Membership'}
           </ButtonPrimary>
         </ModalFooterGroup>
