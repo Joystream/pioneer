@@ -74,7 +74,7 @@ export const AboutTab = ({ workingGroup }: Props) => {
         )}
         <RowGapBlock gap={16}>
           <h4>About</h4>
-          <MarkdownPreview markdown={defaultDescription} />
+          <MarkdownPreview markdown={workingGroup.about || defaultDescription} />
           {handbookLink && (
             <ExternalLinkButtonGhost size="small" href={handbookLink} disabled={false} target="_blank">
               Learn more from Knowlage Book
