@@ -46,7 +46,6 @@ export type ProposalType =
         | 'slashWorkingGroupLead'
         | 'setWorkingGroupLeadReward'
         | 'terminateWorkingGroupLead'
-        | 'amendConstitution'
         | 'cancelWorkingGroupLeadOpening'
         | 'setMembershipPrice'
         | 'setCouncilBudgetIncrement'
@@ -55,15 +54,11 @@ export type ProposalType =
         | 'setInitialInvitationCount'
         | 'setMembershipLeadInvitationQuota'
         | 'setReferralCut'
-        | 'createBlogPost'
-        | 'editBlogPost'
-        | 'lockBlogPost'
-        | 'unlockBlogPost'
         | 'veto'
         | 'updateChannelPayouts'
       )
 
-export type DisabledProposal = 'createBlogPost' | 'editBlogPost' | 'lockBlogPost' | 'unlockBlogPost'
+export type DisabledProposal = 'veto'
 
 export interface Proposal {
   id: string

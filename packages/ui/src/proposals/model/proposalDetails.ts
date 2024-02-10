@@ -13,7 +13,6 @@ export const proposalDetails: ProposalType[] = [
   'slashWorkingGroupLead',
   'setWorkingGroupLeadReward',
   'terminateWorkingGroupLead',
-  'amendConstitution',
   'cancelWorkingGroupLeadOpening',
   'setMembershipPrice',
   'setCouncilBudgetIncrement',
