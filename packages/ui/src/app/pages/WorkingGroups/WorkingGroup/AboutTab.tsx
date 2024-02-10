@@ -23,7 +23,7 @@ interface Props {
 
 export const AboutTab = ({ workingGroup }: Props) => {
   const { statistics } = useGroupStatistics(workingGroup.id)
-  const { subtitle, tooltipLink } = useMemo(() => wgListItemMappings(workingGroup.name), [workingGroup.name])
+  const { defaultDescription, handbookLink } = useMemo(() => wgListItemMappings(workingGroup.name), [workingGroup.name])
 
   return (
     <MainPanel>
@@ -74,9 +74,9 @@ export const AboutTab = ({ workingGroup }: Props) => {
         )}
         <RowGapBlock gap={16}>
           <h4>About</h4>
-          <MarkdownPreview markdown={subtitle} />
-          {tooltipLink && (
-            <ExternalLinkButtonGhost size="small" href={tooltipLink} disabled={false} target="_blank">
+          <MarkdownPreview markdown={defaultDescription} />
+          {handbookLink && (
+            <ExternalLinkButtonGhost size="small" href={handbookLink} disabled={false} target="_blank">
               Learn more from Knowlage Book
               <LinkSymbol />
             </ExternalLinkButtonGhost>
