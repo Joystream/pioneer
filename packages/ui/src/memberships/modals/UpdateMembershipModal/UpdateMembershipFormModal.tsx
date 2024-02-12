@@ -1,3 +1,4 @@
+import { difference } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import * as Yup from 'yup'
@@ -6,41 +7,37 @@ import { AnySchema } from 'yup'
 import { filterAccount, SelectAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
-import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { Account } from '@/accounts/types'
-import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
-import { InputComponent, InputText, InputTextarea, Label, ToggleCheckbox } from '@/common/components/forms'
-import { CrossIcon, PlusIcon } from '@/common/components/icons'
-import { AlertSymbol } from '@/common/components/icons/symbols'
+import { InputComponent, InputText, InputTextarea } from '@/common/components/forms'
 import { Loading } from '@/common/components/Loading'
 import {
   ModalHeader,
   ModalTransactionFooter,
   Row,
-  RowInline,
   ScrolledModal,
   ScrolledModalBody,
   ScrolledModalContainer,
 } from '@/common/components/Modal'
-import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
-import { TextMedium, TextSmall } from '@/common/components/typography'
+import { TextMedium } from '@/common/components/typography'
 import { Warning } from '@/common/components/Warning'
 import { WithNullableValues } from '@/common/types/form'
 import { definedValues } from '@/common/utils'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { AvatarInput } from '@/memberships/components/AvatarInput'
+import { SelectValidatorAccounts, useSelectValidatorAccounts } from '@/memberships/components/SelectValidatorAccounts'
 import { SocialMediaSelector } from '@/memberships/components/SocialMediaSelector/SocialMediaSelector'
 import { useUploadAvatarAndSubmit } from '@/memberships/hooks/useUploadAvatarAndSubmit'
 import { useGetMembersCountQuery } from '@/memberships/queries'
-import { useValidators } from '@/validators/hooks/useValidators'
 
 import { AvatarURISchema, ExternalResourcesSchema, HandleSchema } from '../../model/validation'
 import { MemberWithDetails } from '../../types'
-import { InputNotificationIcon, SelectValidatorAccountWrapper } from '../BuyMembershipModal/BuyMembershipFormModal'
 
 import { UpdateMemberForm } from './types'
 import { changedOrNull, hasAnyEdits, hasAnyMetadateChanges, membershipExternalResourceToObject } from './utils'
 
+type FormFields = Omit<UpdateMemberForm, 'validatorAccounts' | 'validatorAccountsToBeRemoved'> & {
+  validatorAddresses: string[]
+}
 interface Props {
   onClose: () => void
   onSubmit: (params: WithNullableValues<UpdateMemberForm>, memberId: string, controllerAccount: string) => void
@@ -57,18 +54,23 @@ const UpdateMemberSchema = Yup.object().shape({
 
 export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) => {
   const { allAccounts } = useMyAccounts()
-  const validators = useValidators()
-  const validatorAddresses = useMemo(
+
+  const boundAccounts: Account[] = useMemo(
     () =>
-      validators
-        ?.flatMap(({ stashAccount: stash, controllerAccount: ctrl }) => (ctrl ? [stash, ctrl] : [stash]))
-        .map(encodeAddress),
-    [validators]
+      member.boundAccounts.map(
+        (address) =>
+          allAccounts.find((account) => account.address === address) ??
+          accountOrNamed(allAccounts, address, 'Unsaved account')
+      ),
+    [allAccounts, member]
   )
-  const initialValidatorAccounts = useMemo(
-    () => member.boundAccounts.filter((address) => validatorAddresses?.includes(address)),
-    [member.boundAccounts, validatorAddresses]
-  )
+  const selectValidatorAccounts = useSelectValidatorAccounts(boundAccounts)
+  const {
+    initialValidatorAccounts,
+    state: { isValidator, accounts: validatorAccounts },
+    isValidatorAccount,
+  } = selectValidatorAccounts
+
   const updateMemberFormInitial = useMemo(
     () => ({
       id: member.id,
@@ -80,19 +82,16 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
       controllerAccount: member.controllerAccount,
       externalResources: membershipExternalResourceToObject(member.externalResources) ?? {},
       isValidator: initialValidatorAccounts.length > 0,
-      validatorAccounts: initialValidatorAccounts,
+      validatorAddresses: initialValidatorAccounts.map((account) => account.address),
     }),
     [member, initialValidatorAccounts]
-  )
-  const isValidValidatorAccount = useCallback(
-    (account: Account | undefined) => !account || validatorAddresses?.includes(account.address),
-    [validatorAddresses]
   )
 
   const [handleMap, setHandleMap] = useState<string>(member.handle)
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: handleMap } } })
   const context = { size: data?.membershipsConnection.totalCount, isHandleChanged: handleMap !== member.handle }
-  const { uploadAvatarAndSubmit, isUploading } = useUploadAvatarAndSubmit<UpdateMemberForm>((fields) =>
+
+  const { uploadAvatarAndSubmit, isUploading } = useUploadAvatarAndSubmit<FormFields>((fields) =>
     onSubmit(
       {
         ...changedOrNull(
@@ -100,11 +99,11 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
           updateMemberFormInitial
         ),
         validatorAccounts: isValidator
-          ? fields.validatorAccounts?.filter((address) => !initialValidatorAccounts.includes(address))
+          ? difference(fields.validatorAddresses, updateMemberFormInitial.validatorAddresses)
           : [],
         validatorAccountsToBeRemoved: isValidator
-          ? initialValidatorAccounts.filter((address) => !fields.validatorAccounts?.includes(address))
-          : initialValidatorAccounts,
+          ? difference(updateMemberFormInitial.validatorAddresses, fields.validatorAddresses)
+          : updateMemberFormInitial.validatorAddresses,
       },
       member.id,
       member.controllerAccount
@@ -117,26 +116,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     mode: 'onChange',
   })
 
-  useEffect(() => {
-    form.reset({
-      ...updateMemberFormInitial,
-      rootAccount: accountOrNamed(allAccounts, member.rootAccount, 'Root Account'),
-      controllerAccount: accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account'),
-    })
-  }, [updateMemberFormInitial, member, allAccounts])
-
-  const [controllerAccount, rootAccount, handle, isValidator] = form.watch([
-    'controllerAccount',
-    'rootAccount',
-    'handle',
-    'isValidator',
-  ])
-  const [validatorAccounts, setValidatorAccounts] = useState<(Account | undefined)[]>([])
-  useEffect(() => {
-    setValidatorAccounts([
-      ...initialValidatorAccounts.map((address) => accountOrNamed(allAccounts, address, 'Unsaved account')),
-    ])
-  }, [initialValidatorAccounts, allAccounts])
+  const [controllerAccount, rootAccount, handle] = form.watch(['controllerAccount', 'rootAccount', 'handle'])
 
   useEffect(() => {
     form.trigger('handle')
@@ -149,28 +129,12 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
 
-  const addValidatorAccount = (index: number, value: Account | undefined) => {
-    setValidatorAccounts((accounts) => accounts.toSpliced(index, 1, value))
-  }
-
-  const removeValidatorAccount = (index: number) => {
-    validatorAccounts && setValidatorAccounts((accounts) => accounts.toSpliced(index, 1))
-  }
-
-  const validatorAccountSelectorFilter = (index: number, account: Account) =>
-    (!validatorAccounts ||
-      ![...validatorAccounts.toSpliced(index, 1)].find(
-        (accountOrUndefined) => accountOrUndefined?.address === account.address
-      )) &&
-    !!validatorAddresses?.includes(account.address)
-
   const formData = useMemo(
     () =>
       ({
         ...form.getValues(),
-        validatorAccounts: (validatorAccounts.filter((account) => !!account) as Account[]).map(
-          ({ address }) => address
-        ),
+        isValidator,
+        validatorAddresses: validatorAccounts.flatMap((account) => account?.address ?? []),
       } as UpdateMemberForm),
     [form.getValues(), validatorAccounts]
   )
@@ -179,13 +143,12 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     form.formState.isValid &&
     hasAnyEdits(formData, updateMemberFormInitial) &&
     (!isValidator ||
-      (validatorAccounts?.filter((account) => !account || !isValidValidatorAccount(account)).length === 0 &&
-        validatorAccounts?.filter((account) => !!account).length))
+      (validatorAccounts.length > 0 && validatorAccounts.every((account) => account && isValidatorAccount(account))))
 
   const willBecomeUnverifiedValidator =
     updateMemberFormInitial.isValidator && hasAnyMetadateChanges(formData, updateMemberFormInitial)
 
-  const submit = () => uploadAvatarAndSubmit(formData)
+  const submit = () => uploadAvatarAndSubmit(formData as FormFields)
 
   return (
     <ScrolledModal modalSize="m" modalHeight="m" onClose={onClose}>
@@ -254,72 +217,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
               />
             )}
 
-            <RowInline top={16}>
-              <Label>I am a validator: </Label>
-              <ToggleCheckbox trueLabel="Yes" falseLabel="No" name="isValidator" />
-            </RowInline>
-
-            {isValidator && (
-              <>
-                <SelectValidatorAccountWrapper className="validator-accounts">
-                  <RowInline gap={4}>
-                    <Label noMargin>Add validator controller account or validator stash account</Label>
-                    <Tooltip tooltipText="This is the status which indicates the selected account is actually a validator account.">
-                      <TooltipDefault />
-                    </Tooltip>
-                    <TextSmall dark>*</TextSmall>
-                  </RowInline>
-                  <TextMedium dark>
-                    If your validator account is not in your signer wallet, paste the account address to the field
-                    below:
-                  </TextMedium>
-                  {validatorAccounts?.map((account, index) => (
-                    <Row>
-                      <RowInline>
-                        <InputComponent inputSize="l">
-                          <SelectAccount
-                            selected={account}
-                            onChange={(account) => addValidatorAccount(index, account)}
-                            filter={(account) => validatorAccountSelectorFilter(index, account)}
-                          />
-                        </InputComponent>
-                        <ButtonGhost
-                          square
-                          size="large"
-                          onClick={() => {
-                            removeValidatorAccount(index)
-                          }}
-                          className="remove-button"
-                        >
-                          <CrossIcon />
-                        </ButtonGhost>
-                      </RowInline>
-                      {!isValidValidatorAccount(account) && (
-                        <RowInline gap={2}>
-                          <TextSmall error>
-                            <InputNotificationIcon>
-                              <AlertSymbol />
-                            </InputNotificationIcon>
-                          </TextSmall>
-                          <TextSmall error>
-                            This account is neither a validator controller account nor a validator stash account.
-                          </TextSmall>
-                        </RowInline>
-                      )}
-                    </Row>
-                  ))}
-                  <RowInline justify="end">
-                    <ButtonPrimary
-                      size="small"
-                      className="add-button"
-                      onClick={() => addValidatorAccount(validatorAccounts.length, undefined)}
-                    >
-                      <PlusIcon /> Add Validator Account
-                    </ButtonPrimary>
-                  </RowInline>
-                </SelectValidatorAccountWrapper>
-              </>
-            )}
+            <SelectValidatorAccounts {...selectValidatorAccounts} />
           </FormProvider>
         </ScrolledModalContainer>
       </ScrolledModalBody>

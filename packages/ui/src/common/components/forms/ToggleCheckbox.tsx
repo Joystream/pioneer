@@ -20,7 +20,7 @@ export interface Props {
   onBlur?: any
 }
 
-function BaseToggleCheckbox({
+export function BaseToggleCheckbox({
   id,
   isRequired,
   disabled,
