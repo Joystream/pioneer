@@ -11,7 +11,6 @@ export interface UpdateMemberForm {
   controllerAccount?: Account
   externalResources: Record<string, string>
   isValidator?: boolean
-  validatorAccountCandidate?: Account
   validatorAccounts?: Address[]
   validatorAccountsToBeRemoved?: Address[]
 }
