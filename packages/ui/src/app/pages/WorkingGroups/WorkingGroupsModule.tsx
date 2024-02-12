@@ -7,7 +7,7 @@ import { MyApplications } from './MyApplications'
 import { MyRole } from './MyRoles/MyRole'
 import { MyRoles } from './MyRoles/MyRoles'
 import { UpcomingOpening } from './UpcomingOpening'
-import { WorkingGroup } from './WorkingGroup'
+import { WorkingGroup, WorkingGroupHistory, WorkingGroupOpenings } from './WorkingGroup'
 import { WorkingGroups } from './WorkingGroups'
 import { WorkingGroupOpening } from './WorkingGroupsOpening'
 import { WorkingGroupsOpenings } from './WorkingGroupsOpenings'
@@ -22,5 +22,7 @@ export const WorkingGroupsModule = () => (
     <Route exact path={WorkingGroupsRoutes.myRoles} component={MyRoles} />
     <Route exact path={WorkingGroupsRoutes.myRole} component={MyRole} />
     <Route exact path={WorkingGroupsRoutes.group} component={WorkingGroup} />
+    <Route exact path={WorkingGroupsRoutes.groupOpenings} component={WorkingGroupOpenings} />
+    <Route exact path={WorkingGroupsRoutes.groupHistory} component={WorkingGroupHistory} />
   </Switch>
 )
