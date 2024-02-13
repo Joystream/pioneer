@@ -116,6 +116,14 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
     mode: 'onChange',
   })
 
+  useEffect(() => {
+    form.reset({
+      ...updateMemberFormInitial,
+      rootAccount: accountOrNamed(allAccounts, member.rootAccount, 'Root Account'),
+      controllerAccount: accountOrNamed(allAccounts, member.controllerAccount, 'Controller Account'),
+    })
+  }, [updateMemberFormInitial, member, allAccounts])
+
   const [controllerAccount, rootAccount, handle] = form.watch(['controllerAccount', 'rootAccount', 'handle'])
 
   useEffect(() => {
