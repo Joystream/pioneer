@@ -5,9 +5,17 @@ import { FC } from 'react'
 import { member } from '@/mocks/data/members'
 import { joy } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
-import { GetWorkersDocument, GetWorkingGroupDocument, GetBudgetSpendingDocument } from '@/working-groups/queries'
+import {
+  GetWorkersDocument,
+  GetWorkingGroupDocument,
+  GetWorkingGroupOpeningsDocument,
+  CountWorkingGroupOpeningsDocument,
+  GetWorkersCountDocument,
+  GetPastWorkersDocument,
+  GetGroupEventsDocument,
+} from '@/working-groups/queries'
 
-import { WorkingGroup } from './WorkingGroup'
+import { WorkingGroupHistory } from './WorkingGroupHistory'
 
 type Args = {
   isLead: boolean
@@ -22,8 +30,8 @@ const WG_DATA = {
 }
 
 export default {
-  title: 'Pages/Working Group/WorkingGroup',
-  component: WorkingGroup,
+  title: 'Pages/Working Group/WorkingGroupHistory',
+  component: WorkingGroupHistory,
 
   args: {
     isLead: true,
@@ -31,11 +39,11 @@ export default {
 
   parameters: {
     router: {
-      path: '/working-groups/:name',
-      href: `/working-groups/${WG_DATA.name}`,
+      path: '/working-groups/:name/history',
+      href: `/working-groups/${WG_DATA.name}/history`,
       actions: {
-        '/working-groups/:name/history': linkTo('Pages/Working Group/WorkingGroupHistory'),
         '/working-groups/:name/openings': linkTo('Pages/Working Group/WorkingGroupOpenings'),
+        '/working-groups/:name': linkTo('Pages/Working Group/WorkingGroup'),
       },
     },
     mocks: ({ args }: StoryContext<Args>): MocksParameters => {
@@ -55,8 +63,6 @@ export default {
         ],
       })
       return {
-        accounts: { active: { member: alice } },
-
         gql: {
           queries: [
             {
@@ -97,22 +103,66 @@ export default {
               },
             },
             {
-              query: GetBudgetSpendingDocument,
+              query: GetWorkingGroupOpeningsDocument,
               data: {
-                budgetSpendingEvents: [
+                workingGroupOpenings: [],
+              },
+            },
+            {
+              query: CountWorkingGroupOpeningsDocument,
+              data: {
+                workingGroupOpeningsConnection: {
+                  totalCount: 0,
+                },
+              },
+            },
+            {
+              query: GetWorkersCountDocument,
+              data: {
+                workersConnection: {
+                  totalCount: 2,
+                },
+              },
+            },
+            {
+              query: GetGroupEventsDocument,
+              data: {
+                appliedOnOpeningEvents: [],
+                applicationWithdrawnEvents: [],
+                budgetSpendingEvents: [],
+                stakeDecreasedEvents: [],
+                stakeIncreasedEvents: [],
+                openingAddedEvents: [],
+                openingCanceledEvents: [],
+                openingFilledEvents: [],
+                workerExitedEvents: [],
+                statusTextChangedEvents: [],
+                budgetSetEvents: [],
+                stakeSlashedEvents: [],
+                terminatedWorkerEvents: [],
+                terminatedLeaderEvents: [],
+                workerRewardAmountUpdatedEvents: [],
+              },
+            },
+            {
+              query: GetPastWorkersDocument,
+              data: {
+                workers: [
                   {
-                    id: 1,
-                    groupId: WG_DATA.id,
-                    reciever: '',
-                    amount: joy(100),
-                    rationale: 'first spending',
-                  },
-                  {
-                    id: 2,
-                    groupId: WG_DATA.id,
-                    reciever: '',
-                    amount: joy(42),
-                    rationale: 'second spending',
+                    id: `${WG_DATA.id}-3`,
+                    entry: {
+                      createdAt: '2022-03-11T22:33:21.602Z',
+                      inBlock: 99256,
+                      network: 'OLYMPIA',
+                    },
+                    status: {
+                      workerExitedEvent: {
+                        createdAt: '2023-03-14T13:19:20.840Z',
+                        inBlock: 102543,
+                        network: 'OLYMPIA',
+                      },
+                    },
+                    membership: member('dave'),
                   },
                 ],
               },
