@@ -32,7 +32,6 @@ export const getChangedFields = (form: Record<string, any>, initial: Record<stri
   const changedFields = []
 
   for (const key of Object.keys(form)) {
-    if (key === 'validatorCandidate') continue
     const initialValue = initial[key === 'avatarUri' ? 'avatar' : key] || ''
     const formValue = form[key]?.address ?? (form[key] || '')
     if (initialValue !== formValue) {

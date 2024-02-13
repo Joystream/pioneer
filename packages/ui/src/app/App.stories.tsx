@@ -577,10 +577,14 @@ const fillMembershipFormValidatorAccounts = async (modal: Container, accounts: s
   const validatorCheckButton = modal.getAllByText('Yes')[1]
   await userEvent.click(validatorCheckButton)
   expect(await modal.findByText(/^If your validator account/))
-  for (const account of accounts) {
-    await selectFromDropdown(modal, /^If your validator account/, account)
-    const addButton = document.getElementsByClassName('add-button')[0]
+  const validatorAccountsContainer = document.getElementsByClassName('validator-accounts')[0]
+  const addButton = modal.getByText('Add Validator Account')
+  for (let i = 0; i < accounts.length; i++) {
     await userEvent.click(addButton)
+  }
+  const selectors = validatorAccountsContainer.querySelectorAll('input')
+  for (let i = 0; i < accounts.length; i++) {
+    await selectFromDropdown(modal, selectors[i], accounts[i])
   }
 }
 
@@ -772,13 +776,16 @@ export const InvalidValidatorAccountInput: Story = {
     await fillMembershipForm(modal)
     const validatorCheckButton = modal.getAllByText('Yes')[1]
     await userEvent.click(validatorCheckButton)
-    const validatorAddressInputElement = document.getElementById('select-validatorAccount-input')
+    const validatorAccountsContainer = document.getElementsByClassName('validator-accounts')[0]
+    const addButton = modal.getByText('Add Validator Account')
+    await userEvent.click(addButton)
+    const validatorAddressInputElement = validatorAccountsContainer.querySelectorAll('input')[0]
     expect(validatorAddressInputElement).not.toBeNull()
     await userEvent.paste(validatorAddressInputElement as HTMLElement, alice.controllerAccount)
 
     expect(modal.getByText('This account is neither a validator controller account nor a validator stash account.'))
-    const addButton = document.getElementsByClassName('add-button')[0]
-    expect(addButton).toBeDisabled()
+    const createButton = getButtonByText(modal, 'Create a Membership')
+    expect(createButton).toBeDisabled()
   },
 }
 

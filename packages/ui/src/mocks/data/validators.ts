@@ -53,7 +53,7 @@ export const validators = {
       j4Wo9377XBAvhmB35J4TkpJUHnUKmyccXhGtHCVvi6pPr9so8: { stake: joy(0.2) },
     },
   },
-  j4RuqkJ2Xqf3NTVRYBUqgbatKVZ31mbK59fWnq4ZzfZvhbhbN: {
+  j4WXe5CtD6NkEM1KUXP5BLB4sTN77PFL4edS3c7eXAAHP83aF: {
     commission: 0.01 * 10 ** 9,
     totalStake: joy(400),
     ownStake: joy(0.0001),

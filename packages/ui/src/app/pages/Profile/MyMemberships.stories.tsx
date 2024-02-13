@@ -21,6 +21,7 @@ const alice = member('alice')
 const bob = member('bob')
 const charlie = member('charlie')
 const dave = member('dave')
+const eve = member('eve')
 
 const NEW_MEMBER_DATA = {
   id: alice.id,
@@ -64,7 +65,7 @@ export default {
       return {
         accounts: {
           active: 'alice',
-          list: [account(alice), account(bob), account(charlie), account(dave)],
+          list: [account(alice), account(bob), account(charlie), account(dave), account(eve)],
           hasWallet: true,
         },
         chain: {
@@ -157,7 +158,7 @@ export default {
             },
             {
               query: GetMembersWithDetailsDocument,
-              data: { memberships: [member('alice'), member('bob'), member('charlie'), member('dave')] },
+              data: { memberships: [member('alice'), member('bob'), member('charlie'), member('dave'), member('eve')] },
             },
             {
               query: GetMemberActionDetailsDocument,
@@ -265,19 +266,30 @@ export const UpdateMembershipFailure: Story = {
 }
 
 const addValidatorAccounts = async (modal: Container, accounts: string[]) => {
-  for (const account of accounts) {
-    await selectFromDropdown(modal, /^If your validator account/, account)
-    const addButton = document.getElementsByClassName('add-button')[0]
+  const validatorAccountsContainer = document.getElementsByClassName('validator-accounts')[0]
+  const addButton = modal.getByText('Add Validator Account')
+  for (let i = 0; i < accounts.length; i++) {
     await userEvent.click(addButton)
+  }
+  const selectors = validatorAccountsContainer.querySelectorAll('input')
+  for (let i = 0; i < accounts.length; i++) {
+    await selectFromDropdown(modal, selectors[selectors.length - (accounts.length - i)], accounts[i])
   }
 }
 
 const removeValidatorAccounts = async (accounts: string[]) => {
   const validatorAccountsContainer = within(document.getElementsByClassName('validator-accounts')[0] as HTMLElement)
+  const nthParentElement = (element: HTMLElement, n: number) => {
+    let parent = element as HTMLElement | null
+    for (let i = 0; i < n; i++) {
+      parent = parent?.parentElement ?? null
+    }
+    return parent
+  }
   for (const account of accounts) {
-    const removeButton = validatorAccountsContainer
-      .getByText(account)
-      .parentElement?.parentElement?.parentElement?.querySelector('.remove-button')
+    const removeButton = nthParentElement(validatorAccountsContainer.getByText(account), 8)?.querySelector(
+      '.remove-button'
+    )
     if (!removeButton) throw `Not found the '${account}' account to removed.`
     await userEvent.click(removeButton)
   }
@@ -297,7 +309,7 @@ export const UpdateValidatorAccountsHappy: Story = {
       expect(saveButton).toBeDisabled()
       await fillMembershipForm(modal)
       await removeValidatorAccounts(['bob', 'charlie'])
-      await addValidatorAccounts(modal, ['alice', 'dave'])
+      await addValidatorAccounts(modal, ['dave', 'eve'])
       await waitFor(() => expect(saveButton).toBeEnabled())
       await userEvent.click(saveButton)
     })
@@ -318,18 +330,18 @@ export const UpdateValidatorAccountsHappy: Story = {
       await userEvent.click(getButtonByText(modal, 'Sign and unbond'))
     })
 
-    await step('Add Validator Account: alice', async () => {
+    await step('Add Validator Account: dave', async () => {
       await waitFor(() => expect(modal.getByText('Authorize transaction')))
       expect(modal.getByText('You intend to to bond new validator account with your membership.'))
       expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
-      expect(modal.getByRole('heading', { name: 'alice' }))
+      expect(modal.getByRole('heading', { name: 'dave' }))
 
       await userEvent.click(getButtonByText(modal, 'Sign and bond'))
     })
 
-    await step('Add Validator Account: dave', async () => {
+    await step('Add Validator Account: eve', async () => {
       await waitFor(() => expect(modal.getByText('Authorize transaction')))
-      expect(modal.getByRole('heading', { name: 'dave' }))
+      expect(modal.getByRole('heading', { name: 'eve' }))
 
       await userEvent.click(getButtonByText(modal, 'Sign and bond'))
     })
@@ -358,18 +370,18 @@ export const UpdateValidatorAccountsHappy: Story = {
       expect(args.onRemoveStakingAccount).toBeCalledWith(bob.controllerAccount, alice.id)
       expect(args.onRemoveStakingAccount).toBeCalledWith(charlie.controllerAccount, alice.id)
       expect(args.onAddStakingAccount).toHaveBeenCalledTimes(2)
-      expect(args.onAddStakingAccount).toHaveBeenCalledWith(alice.controllerAccount, alice.id)
       expect(args.onAddStakingAccount).toHaveBeenCalledWith(dave.controllerAccount, alice.id)
+      expect(args.onAddStakingAccount).toHaveBeenCalledWith(eve.controllerAccount, alice.id)
       expect(args.onConfirmStakingAccount).toHaveBeenCalledTimes(2)
       expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(
         alice.controllerAccount,
         alice.id,
-        alice.controllerAccount
+        dave.controllerAccount
       )
       expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(
         alice.controllerAccount,
         alice.id,
-        dave.controllerAccount
+        eve.controllerAccount
       )
     })
   },
@@ -463,23 +475,23 @@ export const BondValidatorAccountsHappy: Story = {
     await step('Form', async () => {
       const saveButton = getButtonByText(modal, 'Save changes')
       expect(saveButton).toBeDisabled()
-      await waitFor(() => addValidatorAccounts(modal, ['alice', 'dave']))
+      await waitFor(() => addValidatorAccounts(modal, ['dave', 'eve']))
       await waitFor(() => expect(saveButton).toBeEnabled())
       await userEvent.click(saveButton)
     })
 
-    await step('Add Validator Account: alice', async () => {
+    await step('Add Validator Account: dave', async () => {
       await waitFor(() => expect(modal.getByText('Authorize transaction')))
       expect(modal.getByText('You intend to to bond new validator account with your membership.'))
       expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
-      expect(modal.getByRole('heading', { name: 'alice' }))
+      expect(modal.getByRole('heading', { name: 'dave' }))
 
       await userEvent.click(getButtonByText(modal, 'Sign and bond'))
     })
 
-    await step('Add Validator Account: dave', async () => {
+    await step('Add Validator Account: eve', async () => {
       await waitFor(() => expect(modal.getByText('Authorize transaction')))
-      expect(modal.getByRole('heading', { name: 'dave' }))
+      expect(modal.getByRole('heading', { name: 'eve' }))
 
       await userEvent.click(getButtonByText(modal, 'Sign and bond'))
     })
@@ -496,18 +508,18 @@ export const BondValidatorAccountsHappy: Story = {
       expect(await modal.findByText('Success'))
       expect(modal.getByText('alice'))
       expect(args.onAddStakingAccount).toHaveBeenCalledTimes(2)
-      expect(args.onAddStakingAccount).toHaveBeenCalledWith(alice.controllerAccount, alice.id)
       expect(args.onAddStakingAccount).toHaveBeenCalledWith(dave.controllerAccount, alice.id)
+      expect(args.onAddStakingAccount).toHaveBeenCalledWith(eve.controllerAccount, alice.id)
       expect(args.onConfirmStakingAccount).toHaveBeenCalledTimes(2)
       expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(
         alice.controllerAccount,
         alice.id,
-        alice.controllerAccount
+        dave.controllerAccount
       )
       expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(
         alice.controllerAccount,
         alice.id,
-        dave.controllerAccount
+        eve.controllerAccount
       )
     })
   },
@@ -526,16 +538,16 @@ export const BondValidatorAccountFailure: Story = {
     await step('Form', async () => {
       const saveButton = getButtonByText(modal, 'Save changes')
       expect(saveButton).toBeDisabled()
-      await waitFor(() => addValidatorAccounts(modal, ['alice']))
+      await waitFor(() => addValidatorAccounts(modal, ['dave']))
       await waitFor(() => expect(saveButton).toBeEnabled())
       await userEvent.click(saveButton)
     })
 
-    await step('Add Validator Account: alice', async () => {
+    await step('Add Validator Account: dave', async () => {
       await waitFor(() => expect(modal.getByText('Authorize transaction')))
       expect(modal.getByText('You intend to to bond new validator account with your membership.'))
       expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
-      expect(modal.getByRole('heading', { name: 'alice' }))
+      expect(modal.getByRole('heading', { name: 'dave' }))
 
       await userEvent.click(getButtonByText(modal, 'Sign and bond'))
       expect(await modal.findByText('Failure'))
@@ -557,23 +569,23 @@ export const UnbondValidatorAccountHappyConfirmFailure: Story = {
     await step('Form', async () => {
       const saveButton = getButtonByText(modal, 'Save changes')
       expect(saveButton).toBeDisabled()
-      await waitFor(() => addValidatorAccounts(modal, ['alice', 'dave']))
+      await waitFor(() => addValidatorAccounts(modal, ['dave', 'eve']))
       await waitFor(() => expect(saveButton).toBeEnabled())
       await userEvent.click(saveButton)
     })
 
-    await step('Add Validator Account: alice', async () => {
+    await step('Add Validator Account: dave', async () => {
       await waitFor(() => expect(modal.getByText('Authorize transaction')))
       expect(modal.getByText('You intend to to bond new validator account with your membership.'))
       expect(modal.getByText('Transaction fee:')?.nextSibling?.textContent).toBe('5')
-      expect(modal.getByRole('heading', { name: 'alice' }))
+      expect(modal.getByRole('heading', { name: 'dave' }))
 
       await userEvent.click(getButtonByText(modal, 'Sign and bond'))
     })
 
-    await step('Add Validator Account: dave', async () => {
+    await step('Add Validator Account: eve', async () => {
       await waitFor(() => expect(modal.getByText('Authorize transaction')))
-      expect(modal.getByRole('heading', { name: 'dave' }))
+      expect(modal.getByRole('heading', { name: 'eve' }))
 
       await userEvent.click(getButtonByText(modal, 'Sign and bond'))
     })
