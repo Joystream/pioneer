@@ -73,6 +73,7 @@ export default {
             id: `${WG_DATA.id}-0`,
             createdAt: '2021',
             isLead: args.isLead,
+            isActive: true,
             group: {
               __typename: 'WorkingGroup',
               name: WG_DATA.name,

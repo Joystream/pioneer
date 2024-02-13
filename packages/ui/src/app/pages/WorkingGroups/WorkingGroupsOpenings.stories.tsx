@@ -31,6 +31,7 @@ export default {
             id: 'string',
             createdAt: '2021',
             isLead: args.isLead,
+            isActive: true,
             group: {
               __typename: 'WorkingGroup',
               name: 'string',
