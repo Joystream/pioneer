@@ -130,6 +130,7 @@ export const SelectValidatorAccounts = ({ isValidatorAccount, state, onChange }:
                     onClick={() => {
                       RemoveAccount(index)
                     }}
+                    className="remove-button"
                   >
                     <CrossIcon />
                   </ButtonGhost>

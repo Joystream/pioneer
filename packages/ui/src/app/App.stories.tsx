@@ -579,7 +579,7 @@ const fillMembershipFormValidatorAccounts = async (modal: Container, accounts: s
   expect(await modal.findByText(/^If your validator account/))
   const validatorAccountsContainer = document.getElementsByClassName('validator-accounts')[0]
   const addButton = modal.getByText('Add Validator Account')
-  for (let i = 0; i < accounts.length - 1; i++) {
+  for (let i = 0; i < accounts.length; i++) {
     await userEvent.click(addButton)
   }
   const selectors = validatorAccountsContainer.querySelectorAll('input')
