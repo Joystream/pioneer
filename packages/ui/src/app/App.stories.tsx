@@ -777,6 +777,8 @@ export const InvalidValidatorAccountInput: Story = {
     const validatorCheckButton = modal.getAllByText('Yes')[1]
     await userEvent.click(validatorCheckButton)
     const validatorAccountsContainer = document.getElementsByClassName('validator-accounts')[0]
+    const addButton = modal.getByText('Add Validator Account')
+    await userEvent.click(addButton)
     const validatorAddressInputElement = validatorAccountsContainer.querySelectorAll('input')[0]
     expect(validatorAddressInputElement).not.toBeNull()
     await userEvent.paste(validatorAddressInputElement as HTMLElement, alice.controllerAccount)
