@@ -11,7 +11,7 @@ import { getButtonByText, getEditorByLabel, joy, withinModal } from '@/mocks/hel
 import { MocksParameters } from '@/mocks/providers'
 import { GetWorkersDocument, GetWorkingGroupDocument } from '@/working-groups/queries'
 
-import { WorkingGroup } from './WorkingGroup'
+import { WorkingGroupOpenings } from './WorkingGroupOpenings'
 
 type Args = {
   isLead: boolean
@@ -53,7 +53,7 @@ const WG_JSON_OPENING = {
 
 export default {
   title: 'Pages/Working Group/WorkingGroup',
-  component: WorkingGroup,
+  component: WorkingGroupOpenings,
 
   argTypes: {
     onCreateOpening: { action: 'MembershipWorkingGroup.OpeningCreated' },
@@ -64,7 +64,7 @@ export default {
   },
 
   parameters: {
-    router: { path: '/:name', href: `/${WG_DATA.name}` },
+    router: { path: '/:name/openings', href: `/${WG_DATA.name}/openings` },
     mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
       const alice = member('alice', {
         roles: [
