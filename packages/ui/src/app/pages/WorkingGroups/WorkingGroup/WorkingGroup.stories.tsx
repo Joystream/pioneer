@@ -21,12 +21,12 @@ type Args = {
 type Story = StoryObj<FC<Args>>
 
 const WG_DATA = {
-  id: 'membershipWorkingGroup',
-  name: 'membership',
+  id: 'operationsWorkingGroupAlpha',
+  name: 'operationsWorkingGroupAlpha',
 }
 
 const WG_OPENING_METADATA = {
-  title: 'Membership worker role',
+  title: 'Builder worker role',
   shortDescription: 'Lorem Ipsum...',
   description: 'Bigger Lorem ipsum...',
   applicationDetails: 'Application process default',
@@ -56,7 +56,7 @@ export default {
   component: WorkingGroup,
 
   argTypes: {
-    onCreateOpening: { action: 'MembershipWorkingGroup.OpeningCreated' },
+    onCreateOpening: { action: 'OperationsWorkingGroupAlpha.OpeningCreated' },
   },
 
   args: {
@@ -91,7 +91,7 @@ export default {
 
         chain: {
           tx: {
-            membershipWorkingGroup: {
+            operationsWorkingGroupAlpha: {
               addOpening: {
                 event: 'OpeningCreated',
                 onSend: args.onCreateOpening,
@@ -100,7 +100,7 @@ export default {
             },
           },
           consts: {
-            membershipWorkingGroup: {
+            operationsWorkingGroupAlpha: {
               minimumApplicationStake: joy(10),
               minUnstakingPeriodLimit: 100,
             },
@@ -165,12 +165,13 @@ export const CreateOpening: Story = {
 
       await waitFor(() => expect(nextButton).toBeDisabled())
 
-      await userEvent.type(openingTitleField, 'Membership worker role')
+      await userEvent.type(openingTitleField, 'Builder worker role')
       await userEvent.type(shortDescriptionField, 'Lorem Ipsum...')
       ;(await getEditorByLabel(modal, 'Description')).setData('Bigger Lorem ipsum...')
       await waitFor(() => expect(nextButton).toBeEnabled())
       await userEvent.click(nextButton)
     })
+
     await step('Duration & Process', async () => {
       await waitFor(() => expect(nextButton).toBeDisabled())
       ;(await getEditorByLabel(modal, 'Application process')).setData('Application process default')
@@ -185,6 +186,7 @@ export const CreateOpening: Story = {
       await waitFor(() => expect(nextButton).toBeEnabled())
       await userEvent.click(nextButton)
     })
+
     await step('Application Form', async () => {
       await waitFor(() => expect(nextButton).toBeDisabled())
       await userEvent.type(modal.getByRole('textbox'), '🐁?')
@@ -196,6 +198,7 @@ export const CreateOpening: Story = {
       await waitFor(() => expect(nextButton).toBeEnabled())
       await userEvent.click(nextButton)
     })
+
     await step('Staking Policy & Reward', async () => {
       const createButton = getButtonByText(modal, 'Create Opening')
       expect(createButton).toBeDisabled()
@@ -230,8 +233,14 @@ export const CreateOpening: Story = {
       expect(openingType).toEqual('Regular')
       expect(metadataFromBytes(OpeningMetadata, description)).toEqual(WG_OPENING_METADATA)
     })
+
+    await step('Link to new Opening', async () => {
+      const openingLink = (await modal.findByText('See my Opening')).parentElement as Element
+      expect(openingLink.getAttribute('href')).toBe('/working-groups/openings/builders-1')
+    })
   },
 }
+
 export const CreateOpeningImport: Story = {
   play: async ({ args, canvasElement, step }) => {
     const screen = within(canvasElement)
@@ -254,6 +263,7 @@ export const CreateOpeningImport: Story = {
         new File([JSON.stringify(WG_JSON_OPENING)], 'file.json', { type: 'application/json' })
       )
     })
+
     await step('Check imported data', async () => {
       expect(await modal.findByText(/File imported successfully, preview your input/))
 
@@ -278,10 +288,12 @@ export const CreateOpeningImport: Story = {
       const createButton = getButtonByText(modal, 'Create Opening')
       await userEvent.click(createButton)
     })
+
     await step('Sign transaction and Create', async () => {
       expect(await modal.findByText('You intend to create an Opening.'))
       await userEvent.click(modal.getByText('Sign transaction and Create'))
     })
+
     step('Transaction parameters', () => {
       const [description, openingType, stakePolicy, rewardPerBlock] = args.onCreateOpening.mock.calls.at(-1)
 

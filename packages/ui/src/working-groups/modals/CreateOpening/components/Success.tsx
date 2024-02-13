@@ -1,7 +1,7 @@
 import React from 'react'
-import { generatePath, useHistory } from 'react-router-dom'
+import { generatePath } from 'react-router-dom'
 
-import { ButtonGhost } from '@/common/components/buttons'
+import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { SuccessSymbol } from '@/common/components/icons/symbols'
 import { Info } from '@/common/components/Info'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
@@ -17,13 +17,7 @@ interface SuccessModalProps {
 }
 
 export const SuccessModal = ({ onClose, groupName, openingRuntimeId }: SuccessModalProps) => {
-  const history = useHistory()
-
-  const openingId = `${groupNameToURLParam(nameMapping(groupName))}-${openingRuntimeId}`
-  const redirect = () => {
-    onClose()
-    history.push(generatePath(WorkingGroupsRoutes.openingById, { id: openingId }))
-  }
+  const openingId = `${groupNameToURLParam(nameMapping(groupName))}${openingRuntimeId}`
 
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
@@ -34,9 +28,13 @@ export const SuccessModal = ({ onClose, groupName, openingRuntimeId }: SuccessMo
         </Info>
       </ModalBody>
       <ModalFooter>
-        <ButtonGhost onClick={redirect} size="medium">
+        <LinkButtonGhost
+          size="medium"
+          to={generatePath(WorkingGroupsRoutes.openingById, { id: openingId })}
+          onClick={onClose}
+        >
           See my Opening
-        </ButtonGhost>
+        </LinkButtonGhost>
       </ModalFooter>
     </Modal>
   )
