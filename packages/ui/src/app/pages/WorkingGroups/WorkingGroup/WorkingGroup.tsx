@@ -16,7 +16,7 @@ export const WorkingGroup = () => {
 
   return (
     <PageLayout
-      header={<WorkingGroupPageHeader />}
+      header={<WorkingGroupPageHeader group={group} />}
       main={isLoading || !group ? <Loading /> : <AboutTab workingGroup={group} />}
       sidebar={!isLoading && group && <AboutTabSidebar workingGroup={group} />}
       sidebarScrollable

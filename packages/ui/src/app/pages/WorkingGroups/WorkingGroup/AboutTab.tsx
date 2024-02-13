@@ -77,7 +77,7 @@ export const AboutTab = ({ workingGroup }: Props) => {
           <MarkdownPreview markdown={workingGroup.about || defaultDescription} />
           {handbookLink && (
             <ExternalLinkButtonGhost size="small" href={handbookLink} disabled={false} target="_blank">
-              Learn more from Knowlage Book
+              Learn more from the Handbook
               <LinkSymbol />
             </ExternalLinkButtonGhost>
           )}

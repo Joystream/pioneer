@@ -15,7 +15,7 @@ export function WorkingGroupOpenings() {
 
   return (
     <PageLayout
-      header={<WorkingGroupPageHeader withButtons />}
+      header={<WorkingGroupPageHeader group={group} withButtons />}
       main={isLoading || !group ? <Loading /> : <OpeningsTab workingGroup={group} />}
       sidebar={!isLoading && group && <OpeningsTabSidebar workingGroup={group} />}
       sidebarScrollable

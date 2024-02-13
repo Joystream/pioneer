@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { generatePath, useParams } from 'react-router-dom'
 
 import { usePageTabs, TabsDefinition } from '@/app/hooks/usePageTabs'
 import { Tabs } from '@/common/components/Tabs'
@@ -13,7 +13,7 @@ const workingGroupTabs: TabsDefinition[] = [
 
 export const WorkingGroupTabs = () => {
   const { name } = useParams<{ name: string }>()
-  const tabs = usePageTabs(workingGroupTabs.map(([title, path]) => [title, path.replace(':name', name)]))
+  const tabs = usePageTabs(workingGroupTabs.map(([title, path]) => [title, generatePath(path, { name })]))
 
   return <Tabs tabs={tabs} />
 }

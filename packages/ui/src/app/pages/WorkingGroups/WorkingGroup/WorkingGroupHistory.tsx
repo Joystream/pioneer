@@ -15,7 +15,7 @@ export function WorkingGroupHistory() {
 
   return (
     <PageLayout
-      header={<WorkingGroupPageHeader />}
+      header={<WorkingGroupPageHeader group={group} />}
       main={isLoading || !group ? <Loading /> : <HistoryTab workingGroup={group} />}
       sidebar={!isLoading && group && <HistoryTabSidebar workingGroup={group} />}
       sidebarScrollable
