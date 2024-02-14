@@ -18,7 +18,6 @@ import { getSteps } from '@/common/model/machines/getSteps'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { machineStateConverter } from '@/council/modals/AnnounceCandidacy/helpers'
 import { StyledStepperBody } from '@/proposals/modals/AddNewProposal'
-import { useWorker } from '@/working-groups/hooks/useWorker'
 
 import { SuccessModal, CreateOpeningSteps as Steps, ImportOpening } from './components'
 import { createOpeningMachine, CreateOpeningMachineState } from './machine'
@@ -38,9 +37,8 @@ export const CreateOpeningModal = () => {
   const [state, send, service] = useMachine(createOpeningMachine)
   const { hideModal, modalData } = useModal<CreateOpeningModalCall>()
 
-  const group = modalData.worker.group.id
-  const groupName = modalData.worker.group.name
-  const { worker } = useWorker(modalData.worker.id)
+  const { id: group, name: groupName } = modalData.group
+  const signer = modalData.leadAccount
 
   const context = useMemo(
     () =>
@@ -70,7 +68,7 @@ export const CreateOpeningModal = () => {
   }, [machineStateConverter(state.value)])
 
   const { transaction, feeInfo } = useTransactionFee(
-    worker?.roleAccount,
+    signer,
     () => {
       if (api && group) {
         const { ...specifics } = form.getValues() as CreateOpeningForm
@@ -78,7 +76,7 @@ export const CreateOpeningModal = () => {
         return api.tx[group].addOpening(description, 'Regular', stakePolicy, String(rewardPerBlock))
       }
     },
-    [api?.isConnected, worker?.roleAccount, group, form.formState.isValidating]
+    [api?.isConnected, signer, group, form.formState.isValidating]
   )
 
   const exportedJsonValue = useMemo(() => {
@@ -117,12 +115,12 @@ export const CreateOpeningModal = () => {
     return null
   }
 
-  if (state.matches('transaction') && transaction && worker) {
+  if (state.matches('transaction') && transaction) {
     return (
       <SignTransactionModal
         buttonText="Sign transaction and Create"
         transaction={transaction}
-        signer={worker.roleAccount}
+        signer={signer}
         service={state.children.transaction}
       >
         <TextMedium>You intend to create an Opening.</TextMedium>

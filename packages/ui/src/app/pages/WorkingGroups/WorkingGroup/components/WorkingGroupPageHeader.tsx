@@ -1,10 +1,8 @@
-import React, { useMemo } from 'react'
-import { useParams } from 'react-router-dom'
+import React from 'react'
 
 import { PageHeader } from '@/app/components/PageHeader'
 import { nameMapping } from '@/common/helpers'
 import { CreateOpeningButton } from '@/working-groups/components/CreateOpeningButton'
-import { useMyWorkers } from '@/working-groups/hooks/useMyWorkers'
 import { WorkingGroup } from '@/working-groups/types'
 
 import { StatusBadge, StatusGroup } from '../../components/StatusBadges'
@@ -12,21 +10,15 @@ import { StatusBadge, StatusGroup } from '../../components/StatusBadges'
 import { WorkingGroupTabs } from './WorkingGroupTabs'
 
 interface WorkingGroupPageHeaderProps {
+  name: string
   group: WorkingGroup | undefined
   withButtons?: boolean
 }
 
-export const WorkingGroupPageHeader = React.memo(({ group, withButtons = false }: WorkingGroupPageHeaderProps) => {
-  const { name } = useParams<{ name: string }>()
-  const { workers } = useMyWorkers()
-  const lead = useMemo(
-    () => group?.isActive && workers.find((w) => w.membership.id === group?.leadId),
-    [workers, group?.isActive, group?.leadId]
-  )
-
+export const WorkingGroupPageHeader = React.memo(({ name, group, withButtons }: WorkingGroupPageHeaderProps) => {
   return (
     <PageHeader
-      title={nameMapping(group?.name ?? name)}
+      title={nameMapping(name)}
       canGoBack
       status={
         group?.status && (
@@ -35,7 +27,7 @@ export const WorkingGroupPageHeader = React.memo(({ group, withButtons = false }
           </StatusGroup>
         )
       }
-      buttons={withButtons && group && lead && <CreateOpeningButton worker={lead} />}
+      buttons={withButtons && <CreateOpeningButton name={name} group={group} />}
       tabs={<WorkingGroupTabs />}
     />
   )

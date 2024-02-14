@@ -11,12 +11,14 @@ import { AboutTab, AboutTabSidebar } from './AboutTab'
 import { WorkingGroupPageHeader } from './components/WorkingGroupPageHeader'
 
 export const WorkingGroup = () => {
-  const { name } = useParams<{ name: string }>()
-  const { isLoading, group } = useWorkingGroup({ name: urlParamToWorkingGroupId(name) })
+  const params = useParams<{ name: string }>()
+  const name = urlParamToWorkingGroupId(params.name)
+
+  const { isLoading, group } = useWorkingGroup({ name })
 
   return (
     <PageLayout
-      header={<WorkingGroupPageHeader group={group} />}
+      header={<WorkingGroupPageHeader name={name} group={group} />}
       main={isLoading || !group ? <Loading /> : <AboutTab workingGroup={group} />}
       sidebar={!isLoading && group && <AboutTabSidebar workingGroup={group} />}
       sidebarScrollable

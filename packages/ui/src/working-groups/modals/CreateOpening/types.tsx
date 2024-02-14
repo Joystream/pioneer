@@ -5,10 +5,11 @@ import * as Yup from 'yup'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
 import { ModalWithDataCall } from '@/common/providers/modal/types'
 import { BNSchema, minContext, minMixed } from '@/common/utils/validation'
-import { GroupIdName, Worker } from '@/working-groups/types'
+import { GroupIdName, WorkingGroup } from '@/working-groups/types'
 
 export interface OpeningModalData {
-  worker: Worker
+  group: WorkingGroup
+  leadAccount: string
 }
 
 export type CreateOpeningModalCall = ModalWithDataCall<'CreateOpening', OpeningModalData>
