@@ -10,12 +10,14 @@ import { WorkingGroupPageHeader } from './components/WorkingGroupPageHeader'
 import { HistoryTab, HistoryTabSidebar } from './HistoryTab'
 
 export function WorkingGroupHistory() {
-  const { name } = useParams<{ name: string }>()
-  const { isLoading, group } = useWorkingGroup({ name: urlParamToWorkingGroupId(name) })
+  const params = useParams<{ name: string }>()
+  const name = urlParamToWorkingGroupId(params.name)
+
+  const { isLoading, group } = useWorkingGroup({ name })
 
   return (
     <PageLayout
-      header={<WorkingGroupPageHeader group={group} />}
+      header={<WorkingGroupPageHeader name={name} group={group} />}
       main={isLoading || !group ? <Loading /> : <HistoryTab workingGroup={group} />}
       sidebar={!isLoading && group && <HistoryTabSidebar workingGroup={group} />}
       sidebarScrollable

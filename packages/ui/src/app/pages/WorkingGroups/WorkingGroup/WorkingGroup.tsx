@@ -7,18 +7,21 @@ import { nameMapping } from '@/common/helpers'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 import { urlParamToWorkingGroupId } from '@/working-groups/model/workingGroupName'
 
-import { AboutTab, AboutTabSidebar } from './AboutTab'
+import { AboutTab } from './AboutTab'
+import { WorkerListSidebar } from './components/WorkerListSidebar'
 import { WorkingGroupPageHeader } from './components/WorkingGroupPageHeader'
 
 export const WorkingGroup = () => {
-  const { name } = useParams<{ name: string }>()
-  const { isLoading, group } = useWorkingGroup({ name: urlParamToWorkingGroupId(name) })
+  const params = useParams<{ name: string }>()
+  const name = urlParamToWorkingGroupId(params.name)
+
+  const { isLoading, group } = useWorkingGroup({ name })
 
   return (
     <PageLayout
-      header={<WorkingGroupPageHeader group={group} />}
+      header={<WorkingGroupPageHeader name={name} group={group} />}
       main={isLoading || !group ? <Loading /> : <AboutTab workingGroup={group} />}
-      sidebar={!isLoading && group && <AboutTabSidebar workingGroup={group} />}
+      sidebar={!isLoading && group && <WorkerListSidebar workingGroup={group} />}
       sidebarScrollable
       lastBreadcrumb={nameMapping(group?.name ?? name)}
     />

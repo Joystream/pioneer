@@ -6,18 +6,21 @@ import { Loading } from '@/common/components/Loading'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 import { urlParamToWorkingGroupId } from '@/working-groups/model/workingGroupName'
 
+import { WorkerListSidebar } from './components/WorkerListSidebar'
 import { WorkingGroupPageHeader } from './components/WorkingGroupPageHeader'
-import { OpeningsTab, OpeningsTabSidebar } from './OpeningsTab'
+import { OpeningsTab } from './OpeningsTab'
 
 export function WorkingGroupOpenings() {
-  const { name } = useParams<{ name: string }>()
-  const { isLoading, group } = useWorkingGroup({ name: urlParamToWorkingGroupId(name) })
+  const params = useParams<{ name: string }>()
+  const name = urlParamToWorkingGroupId(params.name)
+
+  const { isLoading, group } = useWorkingGroup({ name })
 
   return (
     <PageLayout
-      header={<WorkingGroupPageHeader group={group} withButtons />}
+      header={<WorkingGroupPageHeader name={name} group={group} withButtons />}
       main={isLoading || !group ? <Loading /> : <OpeningsTab workingGroup={group} />}
-      sidebar={!isLoading && group && <OpeningsTabSidebar workingGroup={group} />}
+      sidebar={!isLoading && group && <WorkerListSidebar workingGroup={group} />}
       sidebarScrollable
       lastBreadcrumb="Openings"
     />

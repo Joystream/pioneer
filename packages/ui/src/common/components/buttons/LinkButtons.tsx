@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { MouseEventHandler } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
@@ -12,6 +12,7 @@ export interface LinkButtonProps extends LinkButtonSizingProps {
   children?: React.ReactNode
   disabled?: boolean
   to: string
+  onClick?: MouseEventHandler
 }
 
 interface LinkButtonSizingProps {
@@ -39,41 +40,41 @@ const getPadding = (props: BasicLinkButtonStylesProps) => {
   return props.$square ? '8px' : '8px 16px'
 }
 
-export function LinkButtonPrimary({ className, children, size, square, disabled, to }: LinkButtonProps) {
+export function LinkButtonPrimary({ children, size, square, ...props }: LinkButtonProps) {
   return (
-    <LinkButtonPrimaryStyles className={className} size={size} $square={square} disabled={disabled} to={to}>
+    <LinkButtonPrimaryStyles size={size} $square={square} {...props}>
       <LinkButtonInnerWrapper size={size}>{children}</LinkButtonInnerWrapper>
     </LinkButtonPrimaryStyles>
   )
 }
 
-export function LinkButtonSecondary({ className, children, size, square, disabled, to }: LinkButtonProps) {
+export function LinkButtonSecondary({ children, size, square, ...props }: LinkButtonProps) {
   return (
-    <LinkButtonSecondaryStyles className={className} size={size} $square={square} disabled={disabled} to={to}>
+    <LinkButtonSecondaryStyles size={size} $square={square} {...props}>
       <LinkButtonInnerWrapper size={size}>{children}</LinkButtonInnerWrapper>
     </LinkButtonSecondaryStyles>
   )
 }
 
-export function LinkButtonGhost({ className, children, size, square, disabled, to }: LinkButtonProps) {
+export function LinkButtonGhost({ children, size, square, ...props }: LinkButtonProps) {
   return (
-    <LinkButtonGhostStyles className={className} size={size} $square={square} disabled={disabled} to={to}>
+    <LinkButtonGhostStyles size={size} $square={square} {...props}>
       <LinkButtonInnerWrapper size={size}>{children}</LinkButtonInnerWrapper>
     </LinkButtonGhostStyles>
   )
 }
 
-export function LinkButtonBareGhost({ className, children, size, square, disabled, to }: LinkButtonProps) {
+export function LinkButtonBareGhost({ children, size, square, ...props }: LinkButtonProps) {
   return (
-    <LinkButtonBareGhostStyles className={className} size={size} $square={square} disabled={disabled} to={to}>
+    <LinkButtonBareGhostStyles size={size} $square={square} {...props}>
       <LinkButtonInnerWrapper size={size}>{children}</LinkButtonInnerWrapper>
     </LinkButtonBareGhostStyles>
   )
 }
 
-export function LinkButtonLink({ className, children, square, disabled, to }: LinkButtonProps) {
+export function LinkButtonLink({ children, square, ...props }: LinkButtonProps) {
   return (
-    <LinkButtonLinkStyles className={className} $square={square} disabled={disabled} to={to} size="small">
+    <LinkButtonLinkStyles $square={square} {...props} size="small">
       <LinkButtonInnerWrapper size="small">{children}</LinkButtonInnerWrapper>
     </LinkButtonLinkStyles>
   )
