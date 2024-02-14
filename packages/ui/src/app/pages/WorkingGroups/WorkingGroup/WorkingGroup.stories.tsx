@@ -10,12 +10,12 @@ import { member } from '@/mocks/data/members'
 import { getButtonByText, getEditorByLabel, joy, withinModal } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
 import {
-  GetWorkerDocument,
   GetWorkersDocument,
   GetWorkingGroupDocument,
   GetGroupDebtDocument,
   GetBudgetSpendingDocument,
   GetPastWorkersDocument,
+  GetRoleAccountsDocument,
 } from '@/working-groups/queries'
 
 import { WorkingGroupsModule } from '../WorkingGroupsModule'
@@ -74,6 +74,7 @@ export default {
     router: { path: '/working-groups/:name', href: `/working-groups/${WG_DATA.name}` },
     mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
       const alice = member('alice')
+      const charlie = member('charlie')
 
       const role = {
         __typename: 'Worker',
@@ -84,14 +85,21 @@ export default {
         isLead: args.isLead,
         isActive: true,
         status: 'WorkerStatusActive',
-        roleAccount: alice.controllerAccount,
-        group: {
-          __typename: 'WorkingGroup',
-          ...WG_DATA,
-        },
+        group: { __typename: 'WorkingGroup', ...WG_DATA },
       } as const
 
-      const worker = { ...role, membership: alice }
+      const workers = [
+        { ...role, membership: alice },
+        {
+          id: `${WG_DATA.id}-1`,
+          group: {
+            id: WG_DATA.id,
+            name: WG_DATA.name,
+          },
+          status: 'WorkerStatusActive',
+          membership: charlie,
+        },
+      ]
 
       return {
         accounts: { active: { member: { ...alice, roles: [role] } } },
@@ -130,26 +138,15 @@ export default {
             },
             {
               query: GetWorkersDocument,
-              data: {
-                workers: [
-                  worker,
-                  {
-                    id: `${WG_DATA.id}-1`,
-                    group: {
-                      id: WG_DATA.id,
-                      name: WG_DATA.name,
-                    },
-                    status: 'WorkerStatusActive',
-                    membership: member('charlie'),
-                  },
-                ],
-              },
+              data: { workers },
             },
 
             // Opening tab
             {
-              query: GetWorkerDocument,
-              data: { workerByUniqueInput: worker },
+              query: GetRoleAccountsDocument,
+              data: {
+                workers: args.isLead ? [{ roleAccount: alice.controllerAccount }] : [],
+              },
             },
             {
               query: GetGroupDebtDocument,
