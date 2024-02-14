@@ -9,9 +9,16 @@ import { metadataFromBytes } from '@/common/model/JoystreamNode'
 import { member } from '@/mocks/data/members'
 import { getButtonByText, getEditorByLabel, joy, withinModal } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
-import { GetWorkerDocument, GetWorkersDocument, GetWorkingGroupDocument } from '@/working-groups/queries'
+import {
+  GetWorkerDocument,
+  GetWorkersDocument,
+  GetWorkingGroupDocument,
+  GetGroupDebtDocument,
+  GetBudgetSpendingDocument,
+  GetPastWorkersDocument,
+} from '@/working-groups/queries'
 
-import { WorkingGroup } from './WorkingGroup'
+import { WorkingGroupsModule } from '../WorkingGroupsModule'
 
 type Args = {
   isLead: boolean
@@ -52,8 +59,8 @@ const WG_JSON_OPENING = {
 }
 
 export default {
-  title: 'Pages/Working Group/WorkingGroup',
-  component: WorkingGroup,
+  title: 'Pages/Working Group',
+  component: WorkingGroupsModule,
 
   argTypes: {
     onCreateOpening: { action: 'OperationsWorkingGroupAlpha.OpeningCreated' },
@@ -64,7 +71,7 @@ export default {
   },
 
   parameters: {
-    router: { path: '/:name', href: `/${WG_DATA.name}` },
+    router: { path: '/working-groups/:name', href: `/working-groups/${WG_DATA.name}` },
     mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
       const alice = member('alice')
 
@@ -109,6 +116,7 @@ export default {
 
         gql: {
           queries: [
+            // Common
             {
               query: GetWorkingGroupDocument,
               data: {
@@ -137,9 +145,72 @@ export default {
                 ],
               },
             },
+
+            // Opening tab
             {
               query: GetWorkerDocument,
               data: { workerByUniqueInput: worker },
+            },
+            {
+              query: GetGroupDebtDocument,
+              data: {
+                workers: [
+                  {
+                    missingRewardAmount: joy(12),
+                  },
+                  {
+                    missingRewardAmount: joy(25),
+                  },
+                ],
+              },
+            },
+
+            // About tab
+            {
+              query: GetBudgetSpendingDocument,
+              data: {
+                budgetSpendingEvents: [
+                  {
+                    id: 1,
+                    groupId: WG_DATA.id,
+                    reciever: '',
+                    amount: joy(100),
+                    rationale: 'first spending',
+                  },
+                  {
+                    id: 2,
+                    groupId: WG_DATA.id,
+                    reciever: '',
+                    amount: joy(42),
+                    rationale: 'second spending',
+                  },
+                ],
+              },
+            },
+
+            // History tab
+            {
+              query: GetPastWorkersDocument,
+              data: {
+                workers: [
+                  {
+                    id: `${WG_DATA.id}-3`,
+                    entry: {
+                      createdAt: '2022-03-11T22:33:21.602Z',
+                      inBlock: 99256,
+                      network: 'OLYMPIA',
+                    },
+                    status: {
+                      workerExitedEvent: {
+                        createdAt: '2023-03-14T13:19:20.840Z',
+                        inBlock: 102543,
+                        network: 'OLYMPIA',
+                      },
+                    },
+                    membership: member('dave'),
+                  },
+                ],
+              },
             },
           ],
         },
@@ -148,9 +219,29 @@ export default {
   },
 } satisfies Meta<Args>
 
-export const Default: Story = {}
+// Preview
+
+export const About: Story = {}
+
+export const Openings: Story = {
+  parameters: {
+    router: { path: '/working-groups/:name/openings', href: `/working-groups/${WG_DATA.name}/openings` },
+  },
+}
+
+export const History: Story = {
+  parameters: {
+    router: { path: '/working-groups/:name/history', href: `/working-groups/${WG_DATA.name}/history` },
+  },
+}
+
+// Tests
 
 export const CreateOpening: Story = {
+  parameters: {
+    router: { path: '/working-groups/:name/openings', href: `/working-groups/${WG_DATA.name}/openings` },
+  },
+
   play: async ({ args, canvasElement, step }) => {
     const screen = within(canvasElement)
     const modal = withinModal(canvasElement)
@@ -242,6 +333,10 @@ export const CreateOpening: Story = {
 }
 
 export const CreateOpeningImport: Story = {
+  parameters: {
+    router: { path: '/working-groups/:name/openings', href: `/working-groups/${WG_DATA.name}/openings` },
+  },
+
   play: async ({ args, canvasElement, step }) => {
     const screen = within(canvasElement)
     const modal = withinModal(canvasElement)

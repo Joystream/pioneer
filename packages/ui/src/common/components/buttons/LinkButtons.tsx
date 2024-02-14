@@ -89,6 +89,10 @@ export const ExternalLinkButtonPrimary = ({ disabled, ...props }: ExternalLinkBu
   <ExternalLinkButtonPrimaryStyles {...props} href={disabled ? undefined : props.href} $disabled={disabled} />
 )
 
+export const ExternalLinkButtonGhost = ({ disabled, ...props }: ExternalLinkButtonProps) => (
+  <ExternalLinkButtonGhostStyles {...props} href={disabled ? undefined : props.href} $disabled={disabled} />
+)
+
 export const LinkButtonInnerWrapper = styled.span<LinkButtonSizingProps>`
   display: grid;
   grid-auto-flow: column;
@@ -117,6 +121,7 @@ export const BasicLinkButtonStyles = css<BasicLinkButtonStylesProps>`
     position: relative;
     justify-content: center;
     align-items: center;
+    gap: 8px;
     width: fit-content;
     min-width: ${getHeight};
     ${(props) => {
@@ -334,6 +339,10 @@ export const BasicLinkButtonGhostStyles = css<BasicLinkButtonStylesProps>`
 
 export const LinkButtonGhostStyles = styled(Link)<LinkButtonStyleProps>`
   ${BasicLinkButtonGhostStyles};
+`
+
+const ExternalLinkButtonGhostStyles = styled.a`
+  ${BasicLinkButtonGhostStyles}
 `
 
 export const LinkButtonBareGhostStyles = styled(Link)<LinkButtonStyleProps>`
