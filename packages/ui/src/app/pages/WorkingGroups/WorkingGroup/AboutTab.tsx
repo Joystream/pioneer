@@ -5,14 +5,11 @@ import { LinkSymbol } from '@/common/components/icons/symbols'
 import { Loading } from '@/common/components/Loading'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
-import { SidePanel } from '@/common/components/page/SidePanel'
 import { StatisticItem, Statistics, TokenValueStat } from '@/common/components/statistics'
 import { NumericValueStat } from '@/common/components/statistics/NumericValueStat'
 import { wgListItemMappings } from '@/common/helpers'
 import { isDefined } from '@/common/utils'
-import { WorkersList } from '@/working-groups/components/WorkersList'
 import { useGroupStatistics } from '@/working-groups/hooks/useGroupStatistics'
-import { useWorkers } from '@/working-groups/hooks/useWorkers'
 import { WorkingGroup } from '@/working-groups/types'
 
 import { StatusBadge, StatusGroup, StatusTitleGroup } from '../components/StatusBadges'
@@ -84,16 +81,5 @@ export const AboutTab = ({ workingGroup }: Props) => {
         </RowGapBlock>
       </RowGapBlock>
     </MainPanel>
-  )
-}
-
-export const AboutTabSidebar = ({ workingGroup }: Props) => {
-  const { workers } = useWorkers({ groupId: workingGroup.id ?? '', status: 'active' })
-  const lead = workers?.find((worker) => worker.member.id === workingGroup.leadId)
-
-  return (
-    <SidePanel scrollable>
-      <WorkersList lead={lead} workers={workers} />
-    </SidePanel>
   )
 }

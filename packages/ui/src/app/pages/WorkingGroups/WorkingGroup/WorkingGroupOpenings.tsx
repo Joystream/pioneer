@@ -6,8 +6,9 @@ import { Loading } from '@/common/components/Loading'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 import { urlParamToWorkingGroupId } from '@/working-groups/model/workingGroupName'
 
+import { WorkerListSidebar } from './components/WorkerListSidebar'
 import { WorkingGroupPageHeader } from './components/WorkingGroupPageHeader'
-import { OpeningsTab, OpeningsTabSidebar } from './OpeningsTab'
+import { OpeningsTab } from './OpeningsTab'
 
 export function WorkingGroupOpenings() {
   const params = useParams<{ name: string }>()
@@ -19,7 +20,7 @@ export function WorkingGroupOpenings() {
     <PageLayout
       header={<WorkingGroupPageHeader name={name} group={group} withButtons />}
       main={isLoading || !group ? <Loading /> : <OpeningsTab workingGroup={group} />}
-      sidebar={!isLoading && group && <OpeningsTabSidebar workingGroup={group} />}
+      sidebar={!isLoading && group && <WorkerListSidebar workingGroup={group} />}
       sidebarScrollable
       lastBreadcrumb="Openings"
     />
