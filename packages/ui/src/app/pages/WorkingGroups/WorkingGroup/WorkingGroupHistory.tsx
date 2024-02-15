@@ -3,15 +3,13 @@ import { useParams } from 'react-router-dom'
 
 import { PageLayout } from '@/app/components/PageLayout'
 import { Loading } from '@/common/components/Loading'
-import { nameMapping } from '@/common/helpers'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 import { urlParamToWorkingGroupId } from '@/working-groups/model/workingGroupName'
 
-import { AboutTab } from './AboutTab'
-import { WorkerListSidebar } from './components/WorkerListSidebar'
 import { WorkingGroupPageHeader } from './components/WorkingGroupPageHeader'
+import { HistoryTab, HistoryTabSidebar } from './HistoryTab'
 
-export const WorkingGroup = () => {
+export function WorkingGroupHistory() {
   const params = useParams<{ name: string }>()
   const name = urlParamToWorkingGroupId(params.name)
 
@@ -20,10 +18,10 @@ export const WorkingGroup = () => {
   return (
     <PageLayout
       header={<WorkingGroupPageHeader name={name} group={group} />}
-      main={isLoading || !group ? <Loading /> : <AboutTab workingGroup={group} />}
-      sidebar={!isLoading && group && <WorkerListSidebar workingGroup={group} />}
+      main={isLoading || !group ? <Loading /> : <HistoryTab workingGroup={group} />}
+      sidebar={!isLoading && group && <HistoryTabSidebar workingGroup={group} />}
       sidebarScrollable
-      lastBreadcrumb={nameMapping(name)}
+      lastBreadcrumb="History"
     />
   )
 }

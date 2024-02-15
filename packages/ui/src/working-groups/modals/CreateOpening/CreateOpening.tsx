@@ -1,3 +1,4 @@
+import { merge } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import styled from 'styled-components'
@@ -16,39 +17,58 @@ import { isLastStepActive } from '@/common/modals/utils'
 import { getSteps } from '@/common/model/machines/getSteps'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { machineStateConverter } from '@/council/modals/AnnounceCandidacy/helpers'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { StyledStepperBody } from '@/proposals/modals/AddNewProposal'
 
 import { SuccessModal, CreateOpeningSteps as Steps, ImportOpening } from './components'
 import { createOpeningMachine, CreateOpeningMachineState } from './machine'
-import { OpeningConditions, CreateOpeningForm, CreateOpeningModalCall, OpeningSchema, defaultValues } from './types'
+import {
+  OpeningConditions,
+  CreateOpeningForm,
+  CreateOpeningModalCall,
+  OpeningSchema,
+  defaultValues as _defaultValue,
+} from './types'
 import { getTxParams } from './utils'
 
 export const CreateOpeningModal = () => {
   const [showImport, setShowImport] = useState<boolean>(false)
 
   const { api } = useApi()
-  const { active: activeMember } = useMyMemberships()
   const [state, send, service] = useMachine(createOpeningMachine)
   const { hideModal, modalData } = useModal<CreateOpeningModalCall>()
 
-  const { group } = modalData
-  const workingGroupConsts = api?.consts[group]
+  const { id: group, name: groupName } = modalData.group
+  const signer = modalData.leadAccount
 
-  const context = {
-    group,
-    minUnstakingPeriodLimit: workingGroupConsts?.minUnstakingPeriodLimit,
-    minimumApplicationStake: workingGroupConsts?.minimumApplicationStake,
-  } as OpeningConditions
+  const context = useMemo(
+    () =>
+      ({
+        group,
+        minUnstakingPeriodLimit: api?.consts[group].minUnstakingPeriodLimit,
+        minimumApplicationStake: api?.consts[group].minimumApplicationStake,
+      } as OpeningConditions),
+    [api?.isConnected]
+  )
   const path = useMemo(() => machineStateConverter(state.value), [state.value])
   const resolver = useYupValidationResolver<CreateOpeningForm>(OpeningSchema, path)
+  const defaultValues = useMemo(
+    () =>
+      merge({}, _defaultValue, {
+        stakingPolicyAndReward: {
+          stakingAmount: context.minimumApplicationStake,
+          leavingUnstakingPeriod: context.minUnstakingPeriodLimit?.toNumber(),
+        },
+      }),
+    [context]
+  )
+
   const form = useForm<CreateOpeningForm>({ resolver, mode: 'onChange', defaultValues, context })
   useEffect(() => {
     form.trigger(machineStateConverter(state.value) as keyof CreateOpeningForm)
   }, [machineStateConverter(state.value)])
 
   const { transaction, feeInfo } = useTransactionFee(
-    activeMember?.controllerAccount,
+    signer,
     () => {
       if (api && group) {
         const { ...specifics } = form.getValues() as CreateOpeningForm
@@ -56,8 +76,9 @@ export const CreateOpeningModal = () => {
         return api.tx[group].addOpening(description, 'Regular', stakePolicy, String(rewardPerBlock))
       }
     },
-    [api?.isConnected, activeMember?.id, group, form.formState.isValidating]
+    [api?.isConnected, signer, group, form.formState.isValidating]
   )
+
   const exportedJsonValue = useMemo(() => {
     const { ...specifics } = form.getValues() as CreateOpeningForm
     const exportValue = {
@@ -85,24 +106,21 @@ export const CreateOpeningModal = () => {
   }, [send])
 
   useEffect((): any => {
-    if (state.matches('requirementsVerification')) {
-      return feeInfo && send(feeInfo.canAfford ? 'NEXT' : 'FAIL')
-    }
     if (state.matches('beforeTransaction')) {
       return feeInfo?.canAfford ? send('NEXT') : send('FAIL')
     }
-  }, [state, activeMember?.id, feeInfo])
+  }, [state, feeInfo])
 
-  if (!activeMember || state.matches('requirementsFailed')) {
+  if (state.matches('requirementsFailed')) {
     return null
   }
 
-  if (state.matches('transaction') && transaction && group) {
+  if (state.matches('transaction') && transaction) {
     return (
       <SignTransactionModal
         buttonText="Sign transaction and Create"
         transaction={transaction}
-        signer={activeMember.controllerAccount}
+        signer={signer}
         service={state.children.transaction}
       >
         <TextMedium>You intend to create an Opening.</TextMedium>
@@ -111,7 +129,7 @@ export const CreateOpeningModal = () => {
   }
 
   if (state.matches('success') && group) {
-    return <SuccessModal groupId={group} onClose={hideModal} />
+    return <SuccessModal onClose={hideModal} groupName={groupName} openingRuntimeId={state.context.openingId} />
   }
 
   return (

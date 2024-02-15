@@ -27,6 +27,7 @@ export type MemberFieldsFragment = {
     id: string
     createdAt: any
     isLead: boolean
+    isActive: boolean
     group: { __typename: 'WorkingGroup'; name: string }
   }>
   stakingaccountaddedeventmember?: Array<{
@@ -64,7 +65,15 @@ export type MemberWithDetailsFieldsFragment = {
   }
   entry:
     | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-    | { __typename: 'MembershipEntryGifted' }
+    | {
+        __typename: 'MembershipEntryGifted'
+        membershipGiftedEvent?: {
+          __typename: 'MembershipGiftedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        } | null
+      }
     | {
         __typename: 'MembershipEntryInvited'
         memberInvitedEvent?: {
@@ -74,7 +83,15 @@ export type MemberWithDetailsFieldsFragment = {
           network: Types.Network
         } | null
       }
-    | { __typename: 'MembershipEntryMemberCreated' }
+    | {
+        __typename: 'MembershipEntryMemberCreated'
+        memberCreatedEvent?: {
+          __typename: 'MemberCreatedEvent'
+          createdAt: any
+          inBlock: number
+          network: Types.Network
+        } | null
+      }
     | {
         __typename: 'MembershipEntryPaid'
         membershipBoughtEvent?: {
@@ -108,6 +125,7 @@ export type MemberWithDetailsFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -142,6 +160,7 @@ export type MemberWithDetailsFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -157,6 +176,7 @@ export type MemberWithDetailsFieldsFragment = {
     id: string
     createdAt: any
     isLead: boolean
+    isActive: boolean
     group: { __typename: 'WorkingGroup'; name: string }
   }>
   stakingaccountaddedeventmember?: Array<{
@@ -201,6 +221,7 @@ export type GetMembersQuery = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -248,7 +269,15 @@ export type GetMembersWithDetailsQuery = {
     }
     entry:
       | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | { __typename: 'MembershipEntryGifted' }
+      | {
+          __typename: 'MembershipEntryGifted'
+          membershipGiftedEvent?: {
+            __typename: 'MembershipGiftedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
       | {
           __typename: 'MembershipEntryInvited'
           memberInvitedEvent?: {
@@ -258,7 +287,15 @@ export type GetMembersWithDetailsQuery = {
             network: Types.Network
           } | null
         }
-      | { __typename: 'MembershipEntryMemberCreated' }
+      | {
+          __typename: 'MembershipEntryMemberCreated'
+          memberCreatedEvent?: {
+            __typename: 'MemberCreatedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
       | {
           __typename: 'MembershipEntryPaid'
           membershipBoughtEvent?: {
@@ -292,6 +329,7 @@ export type GetMembersWithDetailsQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -326,6 +364,7 @@ export type GetMembersWithDetailsQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -341,6 +380,7 @@ export type GetMembersWithDetailsQuery = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -394,7 +434,15 @@ export type GetMemberQuery = {
     }
     entry:
       | { __typename: 'MembershipEntryGenesis'; phantom?: number | null }
-      | { __typename: 'MembershipEntryGifted' }
+      | {
+          __typename: 'MembershipEntryGifted'
+          membershipGiftedEvent?: {
+            __typename: 'MembershipGiftedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
       | {
           __typename: 'MembershipEntryInvited'
           memberInvitedEvent?: {
@@ -404,7 +452,15 @@ export type GetMemberQuery = {
             network: Types.Network
           } | null
         }
-      | { __typename: 'MembershipEntryMemberCreated' }
+      | {
+          __typename: 'MembershipEntryMemberCreated'
+          memberCreatedEvent?: {
+            __typename: 'MemberCreatedEvent'
+            createdAt: any
+            inBlock: number
+            network: Types.Network
+          } | null
+        }
       | {
           __typename: 'MembershipEntryPaid'
           membershipBoughtEvent?: {
@@ -438,6 +494,7 @@ export type GetMemberQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -472,6 +529,7 @@ export type GetMemberQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -487,6 +545,7 @@ export type GetMemberQuery = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -531,6 +590,7 @@ export type SearchMembersQuery = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -583,6 +643,7 @@ export type GetMemberMentionQuery = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -677,6 +738,7 @@ export const MemberFieldsFragmentDoc = gql`
       }
       createdAt
       isLead
+      isActive
     }
     createdAt
     stakingaccountaddedeventmember {
@@ -715,6 +777,20 @@ export const MemberWithDetailsFieldsFragmentDoc = gql`
       }
       ... on MembershipEntryPaid {
         membershipBoughtEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+      ... on MembershipEntryGifted {
+        membershipGiftedEvent {
+          createdAt
+          inBlock
+          network
+        }
+      }
+      ... on MembershipEntryMemberCreated {
+        memberCreatedEvent {
           createdAt
           inBlock
           network

@@ -1,6 +1,8 @@
 export const WorkingGroupsRoutes = {
   groups: '/working-groups',
   group: '/working-groups/:name',
+  groupOpenings: '/working-groups/:name/openings',
+  groupHistory: '/working-groups/:name/history',
   openings: '/working-groups/openings',
   openingById: '/working-groups/openings/:id',
   upcomingOpenings: '/working-groups/openings/upcoming/:id',

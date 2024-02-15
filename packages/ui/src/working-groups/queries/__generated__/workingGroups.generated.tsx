@@ -45,6 +45,7 @@ export type WorkerFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -93,6 +94,7 @@ export type PastWorkerFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -170,6 +172,7 @@ export type WorkerDetailedFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -282,6 +285,15 @@ export type GetWorkingGroupsQuery = {
   }>
 }
 
+export type GetRoleAccountsQueryVariables = Types.Exact<{
+  where?: Types.InputMaybe<Types.WorkerWhereInput>
+}>
+
+export type GetRoleAccountsQuery = {
+  __typename: 'Query'
+  workers: Array<{ __typename: 'Worker'; roleAccount: string }>
+}
+
 export type GetWorkersQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.WorkerWhereInput>
   offset?: Types.InputMaybe<Types.Scalars['Int']>
@@ -323,6 +335,7 @@ export type GetWorkersQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -381,6 +394,7 @@ export type GetPastWorkersQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -474,6 +488,7 @@ export type GetDetailedWorkersQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -542,6 +557,7 @@ export type GetWorkerQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -677,6 +693,7 @@ export type WorkingGroupOpeningDetailedFieldsFragment = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -840,6 +857,7 @@ export type GetWorkingGroupOpeningQuery = {
           id: string
           createdAt: any
           isLead: boolean
+          isActive: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
         stakingaccountaddedeventmember?: Array<{
@@ -950,6 +968,7 @@ export type WorkingGroupApplicationMentionFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -1006,6 +1025,7 @@ export type GetWorkingGroupApplicationMentionQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -1131,6 +1151,7 @@ export type WorkingGroupApplicationFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -1204,6 +1225,7 @@ export type GetWorkingGroupApplicationsQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -1297,6 +1319,7 @@ export type GetWorkingGroupApplicationQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -1856,6 +1879,45 @@ export function useGetWorkingGroupsLazyQuery(
 export type GetWorkingGroupsQueryHookResult = ReturnType<typeof useGetWorkingGroupsQuery>
 export type GetWorkingGroupsLazyQueryHookResult = ReturnType<typeof useGetWorkingGroupsLazyQuery>
 export type GetWorkingGroupsQueryResult = Apollo.QueryResult<GetWorkingGroupsQuery, GetWorkingGroupsQueryVariables>
+export const GetRoleAccountsDocument = gql`
+  query GetRoleAccounts($where: WorkerWhereInput) {
+    workers(where: $where) {
+      roleAccount
+    }
+  }
+`
+
+/**
+ * __useGetRoleAccountsQuery__
+ *
+ * To run a query within a React component, call `useGetRoleAccountsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRoleAccountsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRoleAccountsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetRoleAccountsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetRoleAccountsQuery, GetRoleAccountsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetRoleAccountsQuery, GetRoleAccountsQueryVariables>(GetRoleAccountsDocument, options)
+}
+export function useGetRoleAccountsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetRoleAccountsQuery, GetRoleAccountsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetRoleAccountsQuery, GetRoleAccountsQueryVariables>(GetRoleAccountsDocument, options)
+}
+export type GetRoleAccountsQueryHookResult = ReturnType<typeof useGetRoleAccountsQuery>
+export type GetRoleAccountsLazyQueryHookResult = ReturnType<typeof useGetRoleAccountsLazyQuery>
+export type GetRoleAccountsQueryResult = Apollo.QueryResult<GetRoleAccountsQuery, GetRoleAccountsQueryVariables>
 export const GetWorkersDocument = gql`
   query GetWorkers($where: WorkerWhereInput, $offset: Int, $limit: Int) {
     workers(where: $where, offset: $offset, limit: $limit) {
