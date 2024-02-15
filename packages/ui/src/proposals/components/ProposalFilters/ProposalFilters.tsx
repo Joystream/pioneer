@@ -40,12 +40,13 @@ const filterReducer = (filters: ProposalFiltersState, action: Action): ProposalF
     case 'change':
       return {
         ...filters,
-        [action.field]: typeof action.value == 'string' ? toCamelCase(action.value) : action.value,
+        [action.field]:
+          action.field !== 'search' && typeof action.value === 'string' ? toCamelCase(action.value) : action.value,
       }
 
     case 'update':
       return {
-        search: toCamelCase(action.value.search) || '',
+        search: action.value.search || '',
         stage: toCamelCase(action.value.stage),
         type: toCamelCase(action.value.type),
         lifetime:
