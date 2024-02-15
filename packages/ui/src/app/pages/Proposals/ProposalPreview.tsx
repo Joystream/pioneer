@@ -23,6 +23,7 @@ import { getUrl } from '@/common/utils/getUrl'
 import { useElectedCouncil } from '@/council/hooks/useElectedCouncil'
 import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { CancelProposalButton } from '@/proposals/components/CancelProposalButton'
 import { ProposalDetails } from '@/proposals/components/ProposalDetails/ProposalDetails'
 import { ProposalDiscussions } from '@/proposals/components/ProposalDiscussions'
 import { ProposalHistory } from '@/proposals/components/ProposalHistory'
@@ -117,6 +118,11 @@ export const ProposalPreview = () => {
               <PageTitle>{proposal.title}</PageTitle>
             </PreviousPage>
             <ButtonsGroup>
+              {active?.id === proposal.proposer.id &&
+                proposal.votes.length === 0 &&
+                (proposal.status === 'deciding' || proposal.status === 'dormant') && (
+                  <CancelProposalButton member={active} proposalId={proposal.id} />
+                )}
               {active?.isCouncilMember &&
                 proposal.status === 'deciding' &&
                 (!hasVoted ? (

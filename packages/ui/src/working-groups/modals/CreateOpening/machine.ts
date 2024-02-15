@@ -14,7 +14,6 @@ import { EmptyObject } from '@/common/types'
 import { CreateOpeningForm, TransactionContext } from './types'
 
 export type CreateOpeningState =
-  | { value: 'requirementsVerification'; context: EmptyObject }
   | { value: 'requirementsFailed'; context: EmptyObject }
   | { value: 'workingGroupAndDescription'; context: Required<CreateOpeningForm> }
   | { value: 'durationAndProcess'; context: Required<CreateOpeningForm> }
@@ -37,9 +36,8 @@ export type CreateOpeningMachineState = State<
 type Context = CreateOpeningForm & TransactionContext
 
 export const createOpeningMachine = createMachine<Partial<Context>, CreateOpeningEvent, CreateOpeningState>({
-  initial: 'requirementsVerification',
+  initial: 'workingGroupAndDescription',
   states: {
-    requirementsVerification: { on: { FAIL: 'requirementsFailed', NEXT: 'workingGroupAndDescription' } },
     requirementsFailed: { type: 'final' },
     workingGroupAndDescription: {
       meta: {

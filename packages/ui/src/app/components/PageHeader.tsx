@@ -12,22 +12,29 @@ export interface PageHeaderProps {
   tabs?: ReactNode
   video?: ReactNode
   badges?: ReactNode
+  status?: ReactNode
 }
 
-export const PageHeader = React.memo(({ title, buttons, tabs, video, badges, canGoBack = false }: PageHeaderProps) => (
-  <PageHeaderWrapper>
-    <PageHeaderRow>
-      {canGoBack ? (
-        <PreviousPage>
-          <PageTitle>{title}</PageTitle>
-        </PreviousPage>
-      ) : (
-        <PageTitle>{title}</PageTitle>
-      )}
-      <ButtonsGroup>{buttons}</ButtonsGroup>
-    </PageHeaderRow>
-    {badges}
-    {tabs}
-    {video}
-  </PageHeaderWrapper>
-))
+export const PageHeader = React.memo(
+  ({ title, buttons, tabs, video, badges, status, canGoBack = false }: PageHeaderProps) => (
+    <PageHeaderWrapper>
+      <PageHeaderRow>
+        {canGoBack ? (
+          <PreviousPage>
+            <PageTitle>{title}</PageTitle>
+            {status}
+          </PreviousPage>
+        ) : (
+          <>
+            <PageTitle>{title}</PageTitle>
+            {status}
+          </>
+        )}
+        <ButtonsGroup>{buttons}</ButtonsGroup>
+      </PageHeaderRow>
+      {badges}
+      {tabs}
+      {video}
+    </PageHeaderWrapper>
+  )
+)
