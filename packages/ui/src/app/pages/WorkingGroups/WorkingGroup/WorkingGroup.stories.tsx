@@ -71,7 +71,7 @@ export default {
   },
 
   parameters: {
-    router: { path: '/working-groups/:name', href: `/working-groups/${WG_DATA.name}` },
+    router: { path: '/working-groups/:name', href: '/working-groups/builders' },
     mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
       const alice = member('alice')
       const charlie = member('charlie')
@@ -218,17 +218,27 @@ export default {
 
 // Preview
 
-export const About: Story = {}
+export const About: Story = {
+  play: ({ canvasElement }) => {
+    expect(within(canvasElement).getByRole('heading', { name: 'Builders' }))
+  },
+}
 
 export const Openings: Story = {
   parameters: {
-    router: { path: '/working-groups/:name/openings', href: `/working-groups/${WG_DATA.name}/openings` },
+    router: { path: '/working-groups/:name/openings', href: '/working-groups/builders/openings' },
+  },
+  play: ({ canvasElement }) => {
+    expect(within(canvasElement).getByRole('heading', { name: 'Builders' }))
   },
 }
 
 export const History: Story = {
   parameters: {
-    router: { path: '/working-groups/:name/history', href: `/working-groups/${WG_DATA.name}/history` },
+    router: { path: '/working-groups/:name/history', href: '/working-groups/builders/history' },
+  },
+  play: ({ canvasElement }) => {
+    expect(within(canvasElement).getByRole('heading', { name: 'Builders' }))
   },
 }
 
@@ -236,7 +246,7 @@ export const History: Story = {
 
 export const CreateOpening: Story = {
   parameters: {
-    router: { path: '/working-groups/:name/openings', href: `/working-groups/${WG_DATA.name}/openings` },
+    router: { path: '/working-groups/:name/openings', href: '/working-groups/builders/openings' },
   },
 
   play: async ({ args, canvasElement, step }) => {
@@ -333,7 +343,7 @@ export const CreateOpening: Story = {
 
 export const CreateOpeningImport: Story = {
   parameters: {
-    router: { path: '/working-groups/:name/openings', href: `/working-groups/${WG_DATA.name}/openings` },
+    router: { path: '/working-groups/:name/openings', href: '/working-groups/builders/openings' },
   },
 
   play: async ({ args, canvasElement, step }) => {

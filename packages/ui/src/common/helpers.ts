@@ -1,4 +1,5 @@
 import { SUPPORTED_IMAGES } from '@/memberships/model/validation'
+import { asWorkingGroupName } from '@/working-groups/types'
 
 export const capitalizeFirstLetter = <T extends string>(str: T) =>
   (str.charAt(0).toUpperCase() + str.slice(1)) as Capitalize<T>
@@ -17,7 +18,8 @@ export const isInFuture = (time: string) => {
 }
 
 export const nameMapping = (value: string) => {
-  switch (value) {
+  const name = asWorkingGroupName(value)
+  switch (name) {
     case 'Operations Alpha':
       return 'Builders'
     case 'App':
@@ -27,7 +29,7 @@ export const nameMapping = (value: string) => {
     case 'Operations Gamma':
       return 'Marketing'
     default:
-      return value
+      return name
   }
 }
 

@@ -112,8 +112,7 @@ export interface MemberListFiltersProps {
 export const MemberListFilters = ({ memberCount, onApply }: MemberListFiltersProps) => {
   const [filters, dispatch] = useReducer(filterReducer, MemberListEmptyFilter)
   const searchSlot = useRef<HTMLDivElement>(null)
-  const { search, roles, onlyCouncil, onlyFounder, onlyVerified } = filters
-
+  const { search, roles, onlyCouncil, onlyFounder, onlyVerified, searchFilter } = filters
   const applyFilters = () => onApply(filters)
   const clear = isFilterEmpty(filters)
     ? undefined
@@ -131,7 +130,7 @@ export const MemberListFilters = ({ memberCount, onApply }: MemberListFiltersPro
       <div ref={searchSlot}>
         <SimpleSelect
           options={searchFilterOptions}
-          value={filters.searchFilter}
+          value={searchFilter}
           renderOption={renderSocialOption}
           onChange={(value: MemberSearchFilter | null) =>
             value && dispatch({ type: 'change', field: 'searchFilter', value })
@@ -144,6 +143,7 @@ export const MemberListFilters = ({ memberCount, onApply }: MemberListFiltersPro
         onApply={applyFilters}
         onClear={clear}
         onSearch={onSearch}
+        minCharacterLimit={searchFilter === 'Membership_ID' ? 1 : undefined}
       >
         <FieldsHeader>
           <ItemCount count={memberCount}>All members</ItemCount>
