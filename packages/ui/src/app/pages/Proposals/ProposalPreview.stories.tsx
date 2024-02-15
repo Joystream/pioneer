@@ -664,7 +664,7 @@ export const TestCancelProposalHappy: Story = {
       await step('Confirm', async () => {
         expect(await modal.findByText('Your propsal has been cancelled.'))
 
-        expect(onCancel).toHaveBeenLastCalledWith(activeMember.id, PROPOSAL_DATA.id)
+        expect(onCancel).toHaveBeenLastCalledWith(activeMember.controllerAccount, activeMember.id, PROPOSAL_DATA.id)
       })
     })
   },
