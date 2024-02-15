@@ -23,7 +23,7 @@ export const WorkingGroup = () => {
       main={isLoading || !group ? <Loading /> : <AboutTab workingGroup={group} />}
       sidebar={!isLoading && group && <WorkerListSidebar workingGroup={group} />}
       sidebarScrollable
-      lastBreadcrumb={nameMapping(group?.name ?? name)}
+      lastBreadcrumb={nameMapping(name)}
     />
   )
 }
