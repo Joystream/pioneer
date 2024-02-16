@@ -9,7 +9,7 @@ import { LinkSymbol } from '@/common/components/icons/symbols'
 import { List, ListItem } from '@/common/components/List'
 import { ScrolledModalBody } from '@/common/components/Modal'
 import { TextBig, TextExtraHuge, TextMedium, TextSmall } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
+import { BreakPoints, Colors } from '@/common/constants'
 import { ConnectWalletItem } from '@/common/modals/OnBoardingModal/components/ConnectWalletItem'
 import { OnBoardingTextFooter } from '@/common/modals/OnBoardingModal/OnBoardingModal'
 
@@ -97,11 +97,15 @@ const Wrapper = styled.div`
   max-width: 592px;
   height: 100%;
   margin: 0 auto;
-  padding: 36px 24px 24px;
+  padding: 36px 12px 24px;
   text-align: center;
 
   > *:nth-child(2) {
     color: ${Colors.Black[400]};
+  }
+
+  @media (min-width: ${BreakPoints.sm}px) {
+    padding: 36px 24px 24px;
   }
 `
 

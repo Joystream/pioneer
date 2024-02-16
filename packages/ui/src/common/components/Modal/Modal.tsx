@@ -172,14 +172,14 @@ export const ModalFooterComponent = styled.footer`
   display: inline-flex;
   flex-wrap: wrap;
   grid-area: modalfooter;
-  gap: 16px;
+  gap: 16px 4px;
   justify-self: end;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   height: content-fit;
   min-height: 64px;
-  padding: 12px 26px 12px 24px;
+  padding: 12px;
   border-radius: 0 0 2px 2px;
   position: relative;
   max-width: 100vw;
@@ -193,6 +193,7 @@ export const ModalFooterComponent = styled.footer`
 
   @media (min-width: ${BreakPoints.sm}px) {
     flex-wrap: nowrap;
+    padding: 12px 26px 12px 24px;
   }
 `
 
@@ -318,7 +319,11 @@ export const ScrolledModalContainer = styled.div`
   grid-row-gap: 16px;
   width: 100%;
   height: 100%;
-  padding: 24px 24px 20px;
+  padding: 24px 12px 20px;
+
+  @media (min-width: ${BreakPoints.sm}px) {
+    padding: 24px 24px 20px;
+  }
 
   &:after {
     content: '';

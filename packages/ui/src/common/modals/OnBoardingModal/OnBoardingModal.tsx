@@ -11,7 +11,7 @@ import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper'
 import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
-import { Colors } from '@/common/constants'
+import { BreakPoints, Colors } from '@/common/constants'
 import { useDebounce } from '@/common/hooks/useDebounce'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
@@ -193,9 +193,13 @@ const StepperWrapper = styled.div`
   align-items: center;
   width: 100%;
   max-width: 100vw;
-  padding: 24px 52px;
+  padding: 24px 12px;
   position: relative;
   background-color: ${Colors.Black[700]};
+
+  @media (min-width: ${BreakPoints.sm}px) {
+    padding: 24px 52px;
+  }
 `
 
 const StyledModal = styled(ScrolledModal)`

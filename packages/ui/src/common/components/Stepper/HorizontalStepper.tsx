@@ -53,7 +53,6 @@ const StepTitle = styled.h6`
   text-transform: capitalize;
   transition: ${Transitions.all};
   font-weight: 400;
-  padding-left: 8px;
   color: ${Colors.Black[400]};
 `
 
@@ -78,7 +77,7 @@ export const StepCircle = styled.span`
 `
 
 export const Step = styled.div<{ step: StepToRender }>`
-  align-self: baseline;
+  align-self: flex-start;
   display: flex;
   flex-direction: column;
   gap: 8px;
