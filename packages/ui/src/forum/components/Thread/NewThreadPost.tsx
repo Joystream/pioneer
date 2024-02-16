@@ -62,6 +62,7 @@ export const NewThreadPost = React.forwardRef(
                 })
             }}
             disabled={postText === ''}
+            isResponsive
           >
             Create post
           </TransactionButton>
