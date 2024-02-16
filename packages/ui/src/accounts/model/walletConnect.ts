@@ -1,7 +1,8 @@
 import { Signer } from '@polkadot/api/types'
 import { WalletConnectModal } from '@walletconnect/modal'
 import { SessionTypes } from '@walletconnect/types'
-import { IUniversalProvider, UniversalProvider } from '@walletconnect/universal-provider'
+import { UniversalProvider } from '@walletconnect/universal-provider'
+import type { UniversalProvider as Provider } from '@walletconnect/universal-provider/dist/types/UniversalProvider.d.ts'
 import { MetadataDef, SubscriptionFn, WalletAccount } from 'injectweb3-connect'
 
 import WalletConnectLogo from '@/app/assets/images/logos/WalletConnect.svg'
@@ -13,8 +14,7 @@ export class WalletConnect extends PioneerWallet {
 
   protected _projectId: string
   protected _chainCAIP: string
-  protected _provider: IUniversalProvider | undefined
-  protected _walletConnectSession: SessionTypes.Struct | undefined
+  protected _provider: Provider | undefined
   protected _accounts: WalletAccount[] | undefined
 
   constructor(projectId: string, genesisHash: string) {
@@ -29,11 +29,29 @@ export class WalletConnect extends PioneerWallet {
   }
 
   enable = async (): Promise<void> => {
-    const provider = await UniversalProvider.init({
-      projectId: this._projectId,
-      relayUrl: 'wss://relay.walletconnect.com',
-    })
-    this._provider = provider
+    this._provider =
+      this._provider ??
+      (await UniversalProvider.init({
+        projectId: this._projectId,
+        relayUrl: 'wss://relay.walletconnect.com',
+      }))
+
+    this._provider.session = await this._getSession(this._provider)
+
+    this._accounts = Object.values(this._provider.session.namespaces)
+      .flatMap((namespace) => namespace.accounts)
+      .map((account): WalletAccount => {
+        const address = account.split(':')[2]
+        const source = this.extensionName
+        return { address, source }
+      })
+  }
+
+  _getSession = async (provider: Provider): Promise<SessionTypes.Struct> => {
+    if (provider.session) return provider.session
+
+    const lastSession = provider.client.session.getAll().at(-1)
+    if (lastSession) return lastSession
 
     const requiredNamespaces = {
       polkadot: {
@@ -42,27 +60,22 @@ export class WalletConnect extends PioneerWallet {
         events: ['chainChanged", "accountsChanged'],
       },
     }
+
     const { uri, approval } = await provider.client.connect({ requiredNamespaces })
 
-    const walletConnectModal = new WalletConnectModal({ projectId: this._projectId })
+    const wcModal = new WalletConnectModal({ projectId: this._projectId })
 
     // if there is a URI from the client connect step open the modal
     if (uri) {
-      walletConnectModal.openModal({ uri })
+      wcModal.openModal({ uri })
     }
+
     // await session approval from the wallet app
-    const walletConnectSession = await approval()
-    this._walletConnectSession = walletConnectSession
+    const session = await approval()
 
-    this._accounts = Object.values(walletConnectSession.namespaces)
-      .flatMap((namespace) => namespace.accounts)
-      .map((account): WalletAccount => {
-        const address = account.split(':')[2]
-        const source = this.extensionName
-        return { address, source }
-      })
+    wcModal.closeModal()
 
-    walletConnectModal.closeModal()
+    return session
   }
 
   getAccounts = async (): Promise<WalletAccount[]> => {
@@ -78,12 +91,11 @@ export class WalletConnect extends PioneerWallet {
 
   public getSigner = (address: string): Signer => ({
     signPayload: (transactionPayload) => {
-      if (!this._provider?.client) throw Error('The WalletConnect was accessed before it was enabled.')
-      if (!this._walletConnectSession) throw Error('walletConnectSession is not available yet.')
+      if (!this._provider?.session) throw Error('The WalletConnect was accessed before it was enabled.')
 
       return this._provider.client.request({
         chainId: this._chainCAIP,
-        topic: this._walletConnectSession.topic,
+        topic: this._provider.session.topic,
         request: {
           method: 'polkadot_signTransaction',
           params: { address, transactionPayload },
