@@ -42,7 +42,7 @@ type Balances =
       vestingLocked?: Balance
     }
 
-type AccountMock = {
+export type AccountMock = {
   balances?: Balances
   account?: { name: string; address: string }
   member?: Membership

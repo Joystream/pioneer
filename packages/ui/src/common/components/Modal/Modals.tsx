@@ -78,7 +78,7 @@ export const InfoTitle = styled.span`
   color: ${Colors.Black[400]};
 `
 
-export const InfoValue = styled.span`
+export const InfoValue = styled.div`
   text-align: right;
   text-align: -webkit-right;
   line-height: 20px;

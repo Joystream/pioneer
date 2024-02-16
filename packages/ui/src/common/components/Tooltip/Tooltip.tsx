@@ -366,7 +366,7 @@ export const TooltipComponent = styled.i<{ maxWidth?: boolean }>`
   }
 `
 
-export const TooltipContainer = styled.span<{ absolute?: boolean; maxWidth?: boolean }>`
+export const TooltipContainer = styled.div<{ absolute?: boolean; maxWidth?: boolean }>`
   display: inline-flex;
   position: ${({ absolute }) => (absolute ? 'absolute' : 'relative')};
   right: ${({ absolute }) => (absolute ? '-24px' : 'auto')};

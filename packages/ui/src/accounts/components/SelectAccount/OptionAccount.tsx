@@ -1,21 +1,22 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
-import { AccountLocks, AccountLocksWrapper } from '@/accounts/components/AccountLocks'
+import { AccountLocks } from '@/accounts/components/AccountLocks'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { AccountOption } from '@/accounts/types'
 import { BalanceInfoNarrow, InfoTitle, InfoValue } from '@/common/components/Modal'
 import { TokenValue } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
+import { BreakPoints, Colors } from '@/common/constants'
 
 interface Props {
   option: AccountOption
   isForStaking?: boolean
   variant?: 's' | 'm' | 'l'
+  isSelected?: boolean
 }
 
-export const OptionAccount = ({ option, isForStaking, variant }: Props) => {
+export const OptionAccount = ({ option, isForStaking, variant, isSelected }: Props) => {
   const balances = useBalance(option.address)
   const balance = isForStaking ? balances?.total : balances?.transferable
   const balanceType = isForStaking ? 'Total' : 'Transferable'
@@ -25,23 +26,34 @@ export const OptionAccount = ({ option, isForStaking, variant }: Props) => {
   return (
     <>
       <AccountInfo account={option} locked={isLocked} variant={variant} />
-      <BalanceInfoNarrow>
+      <BalanceContainer isSelected={isSelected}>
         <InfoTitle>{balanceType} balance</InfoTitle>
-        <InfoValueWithLocks>
+        <InfoValue>
           <Value value={balance} locked={isLocked} />
           <AccountLocks locks={balances?.locks} />
-        </InfoValueWithLocks>
-      </BalanceInfoNarrow>
+        </InfoValue>
+      </BalanceContainer>
     </>
   )
 }
 
-const Value = styled(TokenValue)<{ locked?: boolean }>`
-  color: ${({ locked }) => (locked ? Colors.Black[500] : 'default')};
+const BalanceContainer = styled(BalanceInfoNarrow)<Pick<Props, 'isSelected'>>`
+  gap: 12px;
+
+  @media (max-width: ${BreakPoints.sm - 1}px) {
+    ${({ isSelected }) =>
+      isSelected
+        ? css`
+            display: none;
+          `
+        : css`
+            ${InfoValue} {
+              display: contents;
+            }
+          `};
+  }
 `
 
-export const InfoValueWithLocks = styled(InfoValue)`
-  ${AccountLocksWrapper} {
-    right: 0;
-  }
+const Value = styled(TokenValue)<{ locked?: boolean }>`
+  color: ${({ locked }) => (locked ? Colors.Black[500] : 'default')};
 `
