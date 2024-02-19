@@ -26,7 +26,7 @@ export class WalletConnect extends BaseDotsamaWallet {
     this._chainCAIP = `polkadot:${genesisHash.slice(2, 34)}`
   }
 
-  enable = async (): Promise<void> => {
+  public enable = async (): Promise<void> => {
     this._provider =
       this._provider ??
       (await UniversalProvider.init({
@@ -45,7 +45,7 @@ export class WalletConnect extends BaseDotsamaWallet {
       })
   }
 
-  _getSession = async (provider: Provider): Promise<SessionTypes.Struct> => {
+  protected _getSession = async (provider: Provider): Promise<SessionTypes.Struct> => {
     if (provider.session) return provider.session
 
     const lastSession = provider.client.session.getAll().at(-1)
@@ -76,16 +76,16 @@ export class WalletConnect extends BaseDotsamaWallet {
     return session
   }
 
-  getAccounts = async (): Promise<WalletAccount[]> => {
+  public getAccounts = async (): Promise<WalletAccount[]> => {
     return Promise.resolve(this._accounts ?? [])
   }
 
-  subscribeAccounts: (callback: SubscriptionFn) => Promise<() => void> = (callback) => {
+  public subscribeAccounts: (callback: SubscriptionFn) => Promise<() => void> = (callback) => {
     callback(this._accounts ?? [])
     return Promise.resolve(() => undefined)
   }
 
-  updateMetadata: (chainInfo: MetadataDef) => Promise<boolean> = () => Promise.resolve(true)
+  public updateMetadata: (chainInfo: MetadataDef) => Promise<boolean> = () => Promise.resolve(true)
 
   public get signer(): Signer {
     return {
@@ -101,9 +101,18 @@ export class WalletConnect extends BaseDotsamaWallet {
           },
         })
       },
-      signRaw: () => {
-        // TODO
-        return Promise.resolve({ id: 0, signature: '0x' })
+
+      signRaw: (raw) => {
+        if (!this._provider?.session) throw Error('The WalletConnect was accessed before it was enabled.')
+
+        return this._provider.client.request({
+          chainId: this._chainCAIP,
+          topic: this._provider.session.topic,
+          request: {
+            method: 'polkadot_signMessage',
+            params: { address: raw.address, message: raw.data },
+          },
+        })
       },
     }
   }
