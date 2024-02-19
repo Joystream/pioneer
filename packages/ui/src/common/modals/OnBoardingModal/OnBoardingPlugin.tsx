@@ -1,8 +1,8 @@
+import { Wallet } from 'injectweb3-connect'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { Wallet } from '@/accounts/types/wallet'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { LinkPrimary } from '@/common/components/buttons/Links'
 import { LinkSymbol } from '@/common/components/icons/symbols'

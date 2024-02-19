@@ -1,9 +1,9 @@
 import { cryptoWaitReady } from '@polkadot/util-crypto'
 import { act, fireEvent, render, waitFor } from '@testing-library/react'
 import { useMachine } from '@xstate/react'
+import { BaseDotsamaWallet } from 'injectweb3-connect'
 import React from 'react'
 
-import { PioneerWallet } from '@/accounts/model/wallets'
 import { ApiContext } from '@/api/providers/context'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
@@ -30,7 +30,7 @@ describe('UI: TransactionButton', () => {
   stubTransaction(api, txPath)
 
   beforeAll(async () => {
-    const wallet = new PioneerWallet({ title: 'ExtraWallet' })
+    const wallet = new BaseDotsamaWallet({ title: 'ExtraWallet' })
     stubAccounts([{ ...alice, name: 'Alice Account' }], {
       wallet,
     })

@@ -124,7 +124,7 @@ export const useProcessTransaction = ({
     const fee = paymentInfo.partialFee.toBn()
 
     observeTransaction(
-      transaction.signAndSend(signer, { signer: wallet?.getSigner(signer) }),
+      transaction.signAndSend(signer, { signer: wallet?.signer }),
       send,
       fee,
       endpoints.nodeRpcEndpoint,

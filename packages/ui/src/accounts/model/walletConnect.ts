@@ -3,13 +3,11 @@ import { WalletConnectModal } from '@walletconnect/modal'
 import { SessionTypes } from '@walletconnect/types'
 import { UniversalProvider } from '@walletconnect/universal-provider'
 import type { UniversalProvider as Provider } from '@walletconnect/universal-provider/dist/types/UniversalProvider.d.ts'
-import { MetadataDef, SubscriptionFn, WalletAccount } from 'injectweb3-connect'
+import { BaseDotsamaWallet, MetadataDef, SubscriptionFn, WalletAccount } from 'injectweb3-connect'
 
 import WalletConnectLogo from '@/app/assets/images/logos/WalletConnect.svg'
 
-import { PioneerWallet } from './wallets'
-
-export class WalletConnect extends PioneerWallet {
+export class WalletConnect extends BaseDotsamaWallet {
   public static source = 'WalletConnect'
 
   protected _projectId: string
@@ -89,22 +87,24 @@ export class WalletConnect extends PioneerWallet {
 
   updateMetadata: (chainInfo: MetadataDef) => Promise<boolean> = () => Promise.resolve(true)
 
-  public getSigner = (address: string): Signer => ({
-    signPayload: (transactionPayload) => {
-      if (!this._provider?.session) throw Error('The WalletConnect was accessed before it was enabled.')
+  public get signer(): Signer {
+    return {
+      signPayload: (transactionPayload) => {
+        if (!this._provider?.session) throw Error('The WalletConnect was accessed before it was enabled.')
 
-      return this._provider.client.request({
-        chainId: this._chainCAIP,
-        topic: this._provider.session.topic,
-        request: {
-          method: 'polkadot_signTransaction',
-          params: { address, transactionPayload },
-        },
-      })
-    },
-    signRaw: () => {
-      // TODO
-      return Promise.resolve({ id: 0, signature: '0x' })
-    },
-  })
+        return this._provider.client.request({
+          chainId: this._chainCAIP,
+          topic: this._provider.session.topic,
+          request: {
+            method: 'polkadot_signTransaction',
+            params: { address: transactionPayload.address, transactionPayload },
+          },
+        })
+      },
+      signRaw: () => {
+        // TODO
+        return Promise.resolve({ id: 0, signature: '0x' })
+      },
+    }
+  }
 }
