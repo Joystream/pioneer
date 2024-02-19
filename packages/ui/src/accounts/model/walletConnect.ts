@@ -4,6 +4,7 @@ import { SessionTypes } from '@walletconnect/types'
 import { UniversalProvider } from '@walletconnect/universal-provider'
 import type { UniversalProvider as Provider } from '@walletconnect/universal-provider/dist/types/UniversalProvider.d.ts'
 import { BaseDotsamaWallet, MetadataDef, SubscriptionFn, WalletAccount } from 'injectweb3-connect'
+import { Observable } from 'rxjs'
 
 import WalletConnectLogo from '@/app/assets/images/logos/WalletConnect.svg'
 
@@ -15,7 +16,10 @@ export class WalletConnect extends BaseDotsamaWallet {
   protected _provider: Provider | undefined
   protected _accounts: WalletAccount[] | undefined
 
-  constructor(projectId: string, genesisHash: string) {
+  protected _disconnection$: Observable<void>
+  protected _disconnect: () => void
+
+  constructor(projectId: string, genesisHash: string, disconnection$: Observable<void>, disconnect: () => void) {
     super({
       extensionName: 'WalletConnect',
       title: 'WalletConnect',
@@ -24,6 +28,8 @@ export class WalletConnect extends BaseDotsamaWallet {
 
     this._projectId = projectId
     this._chainCAIP = `polkadot:${genesisHash.slice(2, 34)}`
+    this._disconnection$ = disconnection$
+    this._disconnect = disconnect
   }
 
   public enable = async (): Promise<void> => {
@@ -36,6 +42,8 @@ export class WalletConnect extends BaseDotsamaWallet {
 
     this._provider.session = await this._getSession(this._provider)
 
+    this._handleDisconnection(this._provider)
+
     this._accounts = Object.values(this._provider.session.namespaces)
       .flatMap((namespace) => namespace.accounts)
       .map((account): WalletAccount => {
@@ -45,7 +53,7 @@ export class WalletConnect extends BaseDotsamaWallet {
       })
   }
 
-  protected _getSession = async (provider: Provider): Promise<SessionTypes.Struct> => {
+  protected async _getSession(provider: Provider): Promise<SessionTypes.Struct> {
     if (provider.session) return provider.session
 
     const lastSession = provider.client.session.getAll().at(-1)
@@ -74,6 +82,37 @@ export class WalletConnect extends BaseDotsamaWallet {
     wcModal.closeModal()
 
     return session
+  }
+
+  protected _handleDisconnection(provider: Provider): void {
+    const appDisconnectHandler = () => {
+      if (!this._provider?.session) return
+
+      reset()
+
+      // `client.disconnect` doesn't work (it keeps the connection opened).
+      provider.client.disconnect({
+        topic: this._provider.session.topic,
+        reason: { code: -1, message: 'Disconnected by client!' },
+      })
+    }
+    const disconnectSubscription = this._disconnection$.subscribe(appDisconnectHandler)
+
+    const walletDisconnectHandler = () => {
+      reset()
+      this._disconnect()
+    }
+    provider.client.once('session_delete', walletDisconnectHandler)
+    provider.client.once('session_expire', walletDisconnectHandler)
+
+    const reset = () => {
+      if (!this._provider?.session) return
+
+      disconnectSubscription.unsubscribe()
+      this._provider?.client.off('session_delete', walletDisconnectHandler)
+      this._provider?.client.off('session_expire', walletDisconnectHandler)
+      this._provider.session = undefined
+    }
   }
 
   public getAccounts = async (): Promise<WalletAccount[]> => {

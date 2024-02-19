@@ -116,7 +116,7 @@ export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts
     [members]
   )
 
-  const allWallets = useWallets()
+  const { allWallets } = useWallets()
 
   if (!accounts) return <>{children}</>
 
