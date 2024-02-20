@@ -1,7 +1,7 @@
 import { InjectedWindow, Wallet } from 'injectweb3-connect'
 import { groupBy } from 'lodash'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Subject } from 'rxjs'
+import { Subject, firstValueFrom } from 'rxjs'
 
 import { WalletConnect } from '@/accounts/model/walletConnect'
 import { RecommendedWallets, RecommendedWalletsNames, asWallet } from '@/accounts/model/wallets'
@@ -17,7 +17,8 @@ export type UseWallets = {
   walletState?: WalletState
 }
 
-const WalletDisconnection = new Subject<void>()
+const genesisHash$ = new Subject<string>()
+const WalletDisconnection$ = new Subject<void>()
 
 export const useWallets = (): UseWallets => {
   const [installedWalletsNames, setInstalledWalletsNames] = useState<string[]>([])
@@ -51,12 +52,16 @@ export const useWallets = (): UseWallets => {
   }, [installedWalletsNames])
 
   const { api } = useApi()
+  useEffect(() => {
+    if (api) genesisHash$.next(api.genesisHash.toHex())
+  }, [api?.isConnected])
+
   const walletConnect = useMemo(() => {
-    const genesisHash = api?.genesisHash.toHex()
     const wcProjectId: string | undefined = process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID
-    if (genesisHash && wcProjectId) {
-      return new WalletConnect(wcProjectId, genesisHash, WalletDisconnection, () => setWallet(undefined))
-    }
+    if (!wcProjectId) return
+
+    const genesisHash = firstValueFrom(genesisHash$)
+    return new WalletConnect(wcProjectId, genesisHash, WalletDisconnection$, () => setWallet(undefined))
   }, [api?.isConnected])
 
   const allWallets = useMemo(
@@ -93,7 +98,7 @@ const useSelectedWallet = (allWallets: Wallet[]) => {
       _setWallet(wallet)
       setWalletState('READY')
       setRecentWallet(wallet.extensionName)
-      return () => WalletDisconnection.next()
+      return () => WalletDisconnection$.next()
     } catch (error) {
       const message: string = error?.message?.toLowerCase()
       if (message.includes('not allowed to interact') || message.includes('rejected')) {

@@ -12,14 +12,20 @@ export class WalletConnect extends BaseDotsamaWallet {
   public static source = 'WalletConnect'
 
   protected _projectId: string
-  protected _chainCAIP: string
+  protected _genesisHash: Promise<string>
+  protected _chainCAIP: string | undefined
   protected _provider: Provider | undefined
   protected _accounts: WalletAccount[] | undefined
 
   protected _disconnection$: Observable<void>
   protected _disconnect: () => void
 
-  constructor(projectId: string, genesisHash: string, disconnection$: Observable<void>, disconnect: () => void) {
+  constructor(
+    projectId: string,
+    genesisHash: Promise<string>,
+    disconnection$: Observable<void>,
+    disconnect: () => void
+  ) {
     super({
       extensionName: 'WalletConnect',
       title: 'WalletConnect',
@@ -27,7 +33,7 @@ export class WalletConnect extends BaseDotsamaWallet {
     })
 
     this._projectId = projectId
-    this._chainCAIP = `polkadot:${genesisHash.slice(2, 34)}`
+    this._genesisHash = genesisHash
     this._disconnection$ = disconnection$
     this._disconnect = disconnect
   }
@@ -40,7 +46,9 @@ export class WalletConnect extends BaseDotsamaWallet {
         relayUrl: 'wss://relay.walletconnect.com',
       }))
 
-    this._provider.session = await this._getSession(this._provider)
+    this._chainCAIP = await this._genesisHash.then((hash) => `polkadot:${hash.slice(2, 34)}`)
+
+    this._provider.session = await this._getSession(this._provider, this._chainCAIP as string)
 
     if (!this._provider.session) {
       throw Error('The connection failed or was cancelled.')
@@ -61,7 +69,7 @@ export class WalletConnect extends BaseDotsamaWallet {
       })
   }
 
-  protected async _getSession(provider: Provider): Promise<SessionTypes.Struct | undefined> {
+  protected async _getSession(provider: Provider, chainCAIP: string): Promise<SessionTypes.Struct | undefined> {
     if (provider.session) return provider.session
 
     const lastSession = provider.client.session.getAll().at(-1)
@@ -70,7 +78,7 @@ export class WalletConnect extends BaseDotsamaWallet {
     const requiredNamespaces = {
       polkadot: {
         methods: ['polkadot_signTransaction', 'polkadot_signMessage'],
-        chains: [this._chainCAIP],
+        chains: [chainCAIP],
         events: ['chainChanged", "accountsChanged'],
       },
     }
@@ -142,7 +150,9 @@ export class WalletConnect extends BaseDotsamaWallet {
   public get signer(): Signer {
     return {
       signPayload: (transactionPayload) => {
-        if (!this._provider?.session) throw Error('The WalletConnect was accessed before it was enabled.')
+        if (!this._provider?.session || !this._chainCAIP) {
+          throw Error('The WalletConnect was accessed before it was enabled.')
+        }
 
         return this._provider.client.request({
           chainId: this._chainCAIP,
@@ -155,7 +165,9 @@ export class WalletConnect extends BaseDotsamaWallet {
       },
 
       signRaw: (raw) => {
-        if (!this._provider?.session) throw Error('The WalletConnect was accessed before it was enabled.')
+        if (!this._provider?.session || !this._chainCAIP) {
+          throw Error('The WalletConnect was accessed before it was enabled.')
+        }
 
         return this._provider.client.request({
           chainId: this._chainCAIP,
