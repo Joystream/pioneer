@@ -6,6 +6,7 @@ import type { UniversalProvider as Provider } from '@walletconnect/universal-pro
 import { BaseDotsamaWallet, MetadataDef, SubscriptionFn, WalletAccount } from 'injectweb3-connect'
 import { Observable } from 'rxjs'
 
+import PioneerLogo from '@/app/assets/images/logos/Pioneer.png'
 import WalletConnectLogo from '@/app/assets/images/logos/WalletConnect.svg'
 
 export class WalletConnect extends BaseDotsamaWallet {
@@ -44,6 +45,12 @@ export class WalletConnect extends BaseDotsamaWallet {
       (await UniversalProvider.init({
         projectId: this._projectId,
         relayUrl: 'wss://relay.walletconnect.com',
+        metadata: {
+          name: 'Pioneer',
+          description: 'Joystream Governance App',
+          icons: [PioneerLogo],
+          url: window.location.origin + window.location.pathname,
+        },
       }))
 
     this._chainCAIP = await this._genesisHash.then((hash) => `polkadot:${hash.slice(2, 34)}`)
