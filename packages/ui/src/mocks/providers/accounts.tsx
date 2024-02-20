@@ -127,6 +127,7 @@ export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts
     isLoading: false,
     wallet: accounts.hasWallet === false ? undefined : WALLET,
     allWallets: allWallets.map((wallet) => ({ ...wallet, installed: false })),
+    walletState: accounts.hasWallet ? 'READY' : undefined,
   }
 
   const membershipContextValue: MyMemberships = {
