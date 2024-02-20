@@ -84,7 +84,7 @@ export const AccountsContextProvider = (props: Props) => {
     )
   }, [keyring, wallet])
 
-  const hasAccounts = allAccounts?.length !== 0
+  const hasAccounts = !!allAccounts?.length
 
   const value: UseAccounts = {
     allAccounts: allAccounts ?? [],

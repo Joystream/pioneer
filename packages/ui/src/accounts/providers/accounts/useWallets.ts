@@ -1,6 +1,6 @@
 import { InjectedWindow, Wallet } from 'injectweb3-connect'
 import { groupBy } from 'lodash'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Subject } from 'rxjs'
 
 import { WalletConnect } from '@/accounts/model/walletConnect'
@@ -69,63 +69,46 @@ export const useWallets = (): UseWallets => {
     [walletExtensions, walletConnect]
   )
 
-  const { wallet, setWallet, state } = useSelectedWallet(allWallets)
+  const { wallet, setWallet, walletState } = useSelectedWallet(allWallets)
 
-  return { allWallets, wallet, setWallet, walletState: state }
+  return { allWallets, wallet, setWallet, walletState }
 }
 
 const useSelectedWallet = (allWallets: Wallet[]) => {
-  const [wallet, setWallet] = useState<Wallet>()
-  const [selectedWallet, setSelectedWallet] = useState<Wallet>()
+  const [wallet, _setWallet] = useState<Wallet>()
   const [recentWallet, setRecentWallet] = useLocalStorage<string | undefined>('recentWallet')
-  const [appRejected, setAppRejected] = useState<boolean>(false)
+  const [walletState, setWalletState] = useState<WalletState>()
 
-  useEffect(() => {
-    if (!selectedWallet) {
+  const setWallet = useCallback(async (wallet: Wallet | undefined) => {
+    if (!wallet) {
+      _setWallet(undefined)
+      setWalletState(undefined)
       setRecentWallet(undefined)
-      setWallet(undefined)
       return
     }
 
-    setAppRejected(false)
-    enableWallet(selectedWallet)
-      .then(() => {
-        setRecentWallet(selectedWallet.extensionName)
-        setWallet(selectedWallet)
-      })
-      .catch((error: Error) => {
-        setSelectedWallet(undefined)
+    setWalletState('ENABLING')
+    try {
+      await wallet.enable('Pioneer')
+      _setWallet(wallet)
+      setWalletState('READY')
+      setRecentWallet(wallet.extensionName)
+      return () => WalletDisconnection.next()
+    } catch (error) {
+      if (error?.message.includes('not allowed to interact') || error?.message.includes('Rejected')) {
+        setWalletState('APP_REJECTED')
+      }
+    }
+  }, [])
 
-        if (error?.message.includes('not allowed to interact') || error?.message.includes('Rejected')) {
-          setAppRejected(true)
-        }
-      })
-
-    return () => WalletDisconnection.next()
-  }, [selectedWallet])
+  const initialRecentWallet = useRef(recentWallet)
+  const cachedWallet = initialRecentWallet.current
+    ? allWallets.find((wallet) => wallet.extensionName === initialRecentWallet.current)
+    : undefined
 
   useEffect(() => {
-    const cachedWallet = recentWallet && allWallets.find((wallet) => wallet.extensionName === recentWallet)
-    if (cachedWallet) setSelectedWallet(cachedWallet)
-  }, [allWallets])
+    if (cachedWallet) setWallet(cachedWallet)
+  }, [cachedWallet?.extensionName])
 
-  return {
-    wallet,
-    setWallet: setSelectedWallet,
-    state: walletState(appRejected, selectedWallet, wallet),
-  }
-}
-
-async function enableWallet(wallet: Wallet) {
-  await wallet.enable('Pioneer')
-}
-
-function walletState(
-  appRejected: boolean,
-  selectedWallet: Wallet | undefined,
-  wallet: Wallet | undefined
-): WalletState {
-  if (wallet) return 'READY'
-  if (appRejected) return 'APP_REJECTED'
-  if (selectedWallet) return 'ENABLING'
+  return { wallet, setWallet, walletState }
 }
