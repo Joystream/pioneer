@@ -43,7 +43,6 @@ export class WalletConnect extends BaseDotsamaWallet {
     this._provider.session = await this._getSession(this._provider)
 
     if (!this._provider.session) {
-      this._disconnect()
       throw Error('The connection failed or was cancelled.')
     }
 

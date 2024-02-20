@@ -34,7 +34,7 @@ const useOnBoarding = (): UseOnBoarding => {
     return { isLoading: true }
   }
 
-  if (!walletState) {
+  if (!walletState || walletState === 'APP_REJECTED') {
     return { isLoading: false, status: 'installPlugin' }
   }
 

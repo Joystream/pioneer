@@ -95,9 +95,11 @@ const useSelectedWallet = (allWallets: Wallet[]) => {
       setRecentWallet(wallet.extensionName)
       return () => WalletDisconnection.next()
     } catch (error) {
-      if (error?.message.includes('not allowed to interact') || error?.message.includes('Rejected')) {
-        setWalletState('APP_REJECTED')
+      const message: string = error?.message?.toLowerCase()
+      if (message.includes('not allowed to interact') || message.includes('rejected')) {
+        return setWalletState('APP_REJECTED')
       }
+      setWalletState(undefined)
     }
   }, [])
 
