@@ -49,12 +49,16 @@ export class WalletConnect extends BaseDotsamaWallet {
 
     this._handleDisconnection(this._provider)
 
-    this._accounts = Object.values(this._provider.session.namespaces)
+    const { session } = this._provider
+    this._accounts = Object.values(session.namespaces)
       .flatMap((namespace) => namespace.accounts)
-      .map((account): WalletAccount => {
-        const address = account.split(':')[2]
-        const source = this.extensionName
-        return { address, source }
+      .map((account, index): WalletAccount => {
+        const peerWalletName = session.peer.metadata.name
+        return {
+          name: `${peerWalletName} account ${index + 1}`,
+          address: account.split(':')[2],
+          source: this.extensionName,
+        }
       })
   }
 
