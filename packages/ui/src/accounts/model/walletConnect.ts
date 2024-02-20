@@ -42,6 +42,11 @@ export class WalletConnect extends BaseDotsamaWallet {
 
     this._provider.session = await this._getSession(this._provider)
 
+    if (!this._provider.session) {
+      this._disconnect()
+      throw Error('The connection failed or was cancelled.')
+    }
+
     this._handleDisconnection(this._provider)
 
     this._accounts = Object.values(this._provider.session.namespaces)
@@ -53,7 +58,7 @@ export class WalletConnect extends BaseDotsamaWallet {
       })
   }
 
-  protected async _getSession(provider: Provider): Promise<SessionTypes.Struct> {
+  protected async _getSession(provider: Provider): Promise<SessionTypes.Struct | undefined> {
     if (provider.session) return provider.session
 
     const lastSession = provider.client.session.getAll().at(-1)
@@ -71,17 +76,22 @@ export class WalletConnect extends BaseDotsamaWallet {
 
     const wcModal = new WalletConnectModal({ projectId: this._projectId })
 
+    if (!uri) return
+
     // if there is a URI from the client connect step open the modal
-    if (uri) {
-      wcModal.openModal({ uri })
-    }
+    wcModal.openModal({ uri })
 
-    // await session approval from the wallet app
-    const session = await approval()
+    const modalClosedP = new Promise<undefined>((resolve) => {
+      const unsubscribe = wcModal.subscribeModal((state) => {
+        if (state.open) return
 
-    wcModal.closeModal()
+        unsubscribe()
+        resolve(undefined)
+      })
+    })
 
-    return session
+    // await session approval from the wallet app or the modal getting closed
+    return Promise.race([approval(), modalClosedP]).finally(wcModal.closeModal)
   }
 
   protected _handleDisconnection(provider: Provider): void {

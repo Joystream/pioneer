@@ -58,13 +58,13 @@ describe('useOnBoarding', () => {
 
     describe('Loaded', () => {
       beforeEach(() => {
-        stubAccounts([], { error: undefined, wallet })
+        stubAccounts([], { walletState: 'READY', wallet })
         useMyMemberships.isLoading = false
         useApi.isConnected = true
       })
 
       it('Install plugin', async () => {
-        stubAccounts([], { error: 'NO_EXTENSION', wallet: undefined })
+        stubAccounts([], { wallet: undefined })
 
         const { isLoading, status } = await renderUseOnBoarding()
 
@@ -80,7 +80,7 @@ describe('useOnBoarding', () => {
       })
 
       it('Create membership', async () => {
-        stubAccounts([alice], { error: undefined, wallet })
+        stubAccounts([alice], { walletState: 'READY', wallet })
         stubBalances({ available: 0 })
         mockUseLocalStorage = [getAccount('alice'), jest.fn()]
 

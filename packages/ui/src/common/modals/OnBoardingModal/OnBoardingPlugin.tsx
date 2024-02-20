@@ -1,5 +1,5 @@
 import { Wallet } from 'injectweb3-connect'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
@@ -15,13 +15,7 @@ import { OnBoardingTextFooter } from '@/common/modals/OnBoardingModal/OnBoarding
 
 export const OnBoardingPlugin = () => {
   const [selectedWallet, setSelectedWallet] = useState<Wallet>()
-  const { allWallets, setWallet, error } = useMyAccounts()
-
-  useEffect(() => {
-    if (error === 'APP_REJECTED') {
-      setSelectedWallet(undefined)
-    }
-  }, [error])
+  const { allWallets, setWallet, walletState } = useMyAccounts()
 
   return (
     <>
@@ -44,7 +38,7 @@ export const OnBoardingPlugin = () => {
             ))}
           </List>
         </Wrapper>
-        {error === 'APP_REJECTED' && (
+        {walletState === 'APP_REJECTED' && (
           <RedBox>
             <TextBig bold value>
               Extension is blocking Pioneer from access

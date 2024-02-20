@@ -1,5 +1,3 @@
-import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types'
-import { Keyring } from '@polkadot/ui-keyring'
 import { InjectedWindow, Wallet } from 'injectweb3-connect'
 import { groupBy } from 'lodash'
 import { useEffect, useMemo, useState } from 'react'
@@ -8,16 +6,15 @@ import { Subject } from 'rxjs'
 import { WalletConnect } from '@/accounts/model/walletConnect'
 import { RecommendedWallets, RecommendedWalletsNames, asWallet } from '@/accounts/model/wallets'
 import { useApi } from '@/api/hooks/useApi'
-import { useKeyring } from '@/common/hooks/useKeyring'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 
-type ExtensionError = 'NO_EXTENSION' | 'APP_REJECTED'
+type WalletState = undefined | 'ENABLING' | 'READY' | 'APP_REJECTED'
 
 export type UseWallets = {
   allWallets: Wallet[]
   wallet?: Wallet
   setWallet?: (wallet: Wallet | undefined) => void
-  error?: ExtensionError
+  walletState?: WalletState
 }
 
 const WalletDisconnection = new Subject<void>()
@@ -72,41 +69,40 @@ export const useWallets = (): UseWallets => {
     [walletExtensions, walletConnect]
   )
 
-  const { wallet, setWallet, error } = useSelectedWallet(allWallets)
+  const { wallet, setWallet, state } = useSelectedWallet(allWallets)
 
-  return { allWallets, wallet, setWallet, error }
+  return { allWallets, wallet, setWallet, walletState: state }
 }
 
 const useSelectedWallet = (allWallets: Wallet[]) => {
-  const keyring = useKeyring()
+  const [wallet, setWallet] = useState<Wallet>()
   const [selectedWallet, setSelectedWallet] = useState<Wallet>()
   const [recentWallet, setRecentWallet] = useLocalStorage<string | undefined>('recentWallet')
-
-  const setWallet = (wallet: Wallet | undefined) => {
-    setSelectedWallet(wallet)
-    if (!wallet) setRecentWallet(undefined)
-  }
+  const [appRejected, setAppRejected] = useState<boolean>(false)
 
   useEffect(() => {
-    if (!selectedWallet) return
+    if (!selectedWallet) {
+      setRecentWallet(undefined)
+      setWallet(undefined)
+      return
+    }
 
-    setExtensionError(undefined)
-    loadKeysFromExtension(keyring, selectedWallet)
+    setAppRejected(false)
+    enableWallet(selectedWallet)
       .then(() => {
         setRecentWallet(selectedWallet.extensionName)
+        setWallet(selectedWallet)
       })
       .catch((error: Error) => {
         setSelectedWallet(undefined)
 
         if (error?.message.includes('not allowed to interact') || error?.message.includes('Rejected')) {
-          setExtensionError('APP_REJECTED')
+          setAppRejected(true)
         }
       })
 
     return () => WalletDisconnection.next()
   }, [selectedWallet])
-
-  const [extensionError, setExtensionError] = useState<ExtensionError>()
 
   useEffect(() => {
     const cachedWallet = recentWallet && allWallets.find((wallet) => wallet.extensionName === recentWallet)
@@ -114,42 +110,22 @@ const useSelectedWallet = (allWallets: Wallet[]) => {
   }, [allWallets])
 
   return {
-    wallet: selectedWallet,
-    setWallet,
-    error: extensionError,
+    wallet,
+    setWallet: setSelectedWallet,
+    state: walletState(appRejected, selectedWallet, wallet),
   }
 }
 
-async function loadKeysFromExtension(keyring: Keyring, wallet: Wallet) {
+async function enableWallet(wallet: Wallet) {
   await wallet.enable('Pioneer')
-
-  const injectedAccounts = await wallet.getAccounts()
-
-  if (!isKeyringLoaded(keyring)) {
-    keyring.loadAll({ isDevelopment: false }, injectedAccounts.map(wallet.walletAccountToInjectedAccountWithMeta))
-  }
-
-  await wallet.subscribeAccounts((accounts) => {
-    const current = keyring.getAccounts()
-
-    const addresses = accounts?.map(({ address }) => address) ?? []
-
-    current.forEach(({ address }) => {
-      if (!addresses.includes(address)) {
-        keyring.forgetAccount(address)
-      }
-    })
-
-    accounts
-      ?.map(wallet.walletAccountToInjectedAccountWithMeta)
-      .forEach((injected: InjectedAccountWithMeta) => keyring.addExternal(injected.address, injected.meta))
-  })
 }
 
-function isKeyringLoaded(keyring: Keyring) {
-  try {
-    return !!keyring.keyring
-  } catch {
-    return false
-  }
+function walletState(
+  appRejected: boolean,
+  selectedWallet: Wallet | undefined,
+  wallet: Wallet | undefined
+): WalletState {
+  if (wallet) return 'READY'
+  if (appRejected) return 'APP_REJECTED'
+  if (selectedWallet) return 'ENABLING'
 }

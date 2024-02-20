@@ -21,7 +21,7 @@ const hasAccount = (allAccounts: Account[], address: string) => {
 }
 
 const useOnBoarding = (): UseOnBoarding => {
-  const { isLoading: isLoadingAccounts, error: accountsError, hasAccounts, allAccounts, wallet } = useMyAccounts()
+  const { isLoading: isLoadingAccounts, walletState, hasAccounts, allAccounts } = useMyAccounts()
   const { total: totalBalance } = useMyTotalBalances()
   const { isLoading: isLoadingMembers, hasMembers } = useMyMemberships()
   const [membershipAccount, setMembershipAccount] = useLocalStorage<string | undefined>('onboarding-membership-account')
@@ -34,7 +34,7 @@ const useOnBoarding = (): UseOnBoarding => {
     return { isLoading: true }
   }
 
-  if (accountsError === 'NO_EXTENSION' || !wallet) {
+  if (!walletState) {
     return { isLoading: false, status: 'installPlugin' }
   }
 
