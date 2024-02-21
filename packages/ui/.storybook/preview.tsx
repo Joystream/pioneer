@@ -16,6 +16,7 @@ import { TransactionStatusProvider } from '../src/common/providers/transactionSt
 import { MockProvidersDecorator, MockRouterDecorator } from '../src/mocks/providers'
 import { i18next } from '../src/services/i18n'
 import { KeyringContext } from '../src/common/providers/keyring/context'
+import { ValidatorContextProvider } from '../src/validators/providers/provider'
 import { Keyring } from '@polkadot/ui-keyring'
 
 configure({ testIdAttribute: 'id' })
@@ -56,11 +57,13 @@ const ModalDecorator: Decorator = (Story) => (
   <TransactionStatusProvider>
     <ModalContextProvider>
       <OnBoardingProvider>
-        <Story />
-        <GlobalModals />
-        <NotificationsHolder>
-          <TransactionStatus />
-        </NotificationsHolder>
+        <ValidatorContextProvider>
+          <Story />
+          <GlobalModals />
+          <NotificationsHolder>
+            <TransactionStatus />
+          </NotificationsHolder>
+        </ValidatorContextProvider>
       </OnBoardingProvider>
     </ModalContextProvider>
   </TransactionStatusProvider>

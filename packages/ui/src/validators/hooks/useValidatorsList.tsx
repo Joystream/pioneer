@@ -1,116 +1,57 @@
-import { BN } from '@polkadot/util'
-import { useEffect, useState } from 'react'
-import { of, map, switchMap, Observable, combineLatest } from 'rxjs'
+import { useContext, useEffect, useMemo, useReducer, useState } from 'react'
 
-import { encodeAddress } from '@/accounts/model/encodeAddress'
-import { Api } from '@/api'
-import { useApi } from '@/api/hooks/useApi'
-import { ERAS_PER_YEAR } from '@/common/constants'
-import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
-import { createType } from '@/common/model/createType'
-import { last } from '@/common/utils'
+import { ValidatorsContext } from '../providers/context'
+import { ValidatorDetailsOrder } from '../types'
 
-import { Verification, State, ValidatorWithDetails, ValidatorMembership } from '../types'
-
-import { useValidatorMembers } from './useValidatorMembers'
+const VALIDATOR_PER_PAGE = 7
+const DESCENDING_KEYS: ValidatorDetailsOrder['key'][] = ['apr']
 
 export const useValidatorsList = () => {
-  const { api } = useApi()
   const [search, setSearch] = useState('')
-  const [isVerified, setIsVerified] = useState<Verification>(null)
-  const [isActive, setIsActive] = useState<State>(null)
-  const [visibleValidators, setVisibleValidators] = useState<ValidatorWithDetails[]>([])
-  const validators = useValidatorMembers()
+  const [isVerified, setIsVerified] = useState<boolean>()
+  const [isActive, setIsActive] = useState<boolean>()
+  const filter = useMemo(() => ({ search, isVerified, isActive }), [search, isVerified, isActive])
 
-  const validatorRewardPointsHistory = useFirstObservableValue(
-    () => api?.query.staking.erasRewardPoints.entries(),
-    [api?.isConnected]
+  const [order, handleSort] = useReducer(
+    (state: ValidatorDetailsOrder, key: ValidatorDetailsOrder['key']) => ({
+      key,
+      isDescending: key !== state.key ? DESCENDING_KEYS.includes(key) : !state.isDescending,
+    }),
+    { key: 'default', isDescending: false }
   )
-  const activeValidators = useFirstObservableValue(() => api?.query.session.validators(), [api?.isConnected])
 
-  const getValidatorInfo = (validator: ValidatorMembership, api: Api): Observable<ValidatorWithDetails> => {
-    if (!activeValidators || !validatorRewardPointsHistory) return of()
-    const { stashAccount: address, commission } = validator
-    const stakingInfo$ = api.query.staking
-      .activeEra()
-      .pipe(switchMap((activeEra) => api.query.staking.erasStakers(activeEra.unwrap().index, address)))
-    const rewardHistory$ = api.derive.staking.stakerRewards(address)
-    const slashingSpans$ = api.query.staking.slashingSpans(address)
-    return combineLatest([stakingInfo$, rewardHistory$, slashingSpans$]).pipe(
-      map(([stakingInfo, rewardHistory, slashingSpans]) => {
-        const apr =
-          rewardHistory.length && !stakingInfo.total.toBn().isZero()
-            ? last(rewardHistory)
-                .eraReward.toBn()
-                .muln(ERAS_PER_YEAR)
-                .muln(commission)
-                .div(stakingInfo.total.toBn())
-                .toNumber()
-            : 0
-        const rewardPointsHistory = validatorRewardPointsHistory.map((entry) => ({
-          era: entry[0].args[0].toNumber(),
-          rewardPoints: entry[1].individual.get(createType('AccountId', address))?.toNumber() ?? 0,
-        }))
-        return {
-          ...validator,
-          isActive: activeValidators.includes(address),
-          totalRewards: rewardHistory.reduce((total: BN, data) => total.add(data.eraReward), new BN(0)),
-          rewardPointsHistory,
-          APR: apr,
-          slashed:
-            slashingSpans.unwrap().prior.length + (slashingSpans.unwrap().lastNonzeroSlash.toNumber() > 0 ? 1 : 0),
-          staking: {
-            total: stakingInfo.total.toBn(),
-            own: stakingInfo.own.toBn(),
-            others: stakingInfo.others.map((nominator) => ({
-              address: nominator.who.toString(),
-              staking: nominator.value.toBn(),
-            })),
-          },
-        }
-      })
-    )
-  }
+  const {
+    validators,
+    setShouldFetchValidators,
+    setValidatorDetailsOptions,
+    validatorsWithDetails,
+    size = 0,
+    validatorsQueries,
+  } = useContext(ValidatorsContext)
 
-  const getValidatorsInfo = (api: Api, validators: ValidatorMembership[]) => {
-    const validatorInfoObservables = validators.map((validator) => getValidatorInfo(validator, api))
-    return combineLatest(validatorInfoObservables)
-  }
-
-  const allValidatorsWithDetails = useFirstObservableValue(
-    () =>
-      api && validators && validatorRewardPointsHistory && activeValidators
-        ? getValidatorsInfo(api, validators)
-        : of([]),
-    [api?.isConnected, validators, validatorRewardPointsHistory, activeValidators]
+  const [page, setPage] = useState(1)
+  const pagination = useMemo(
+    () => ({
+      page,
+      handlePageChange: setPage,
+      pageCount: Math.ceil(size / VALIDATOR_PER_PAGE),
+    }),
+    [page, size]
   )
 
   useEffect(() => {
-    if (allValidatorsWithDetails) {
-      setVisibleValidators(
-        allValidatorsWithDetails
-          .filter((validator) => {
-            if (isActive === 'active') return validator.isActive
-            else if (isActive === 'waiting') return !validator.isActive
-            else return true
-          })
-          .filter((validator) => {
-            if (isVerified === 'verified') return validator.isVerifiedValidator
-            else if (isVerified === 'unverified') return !validator.isVerifiedValidator
-            else return true
-          })
-          .filter((validator) => {
-            return (
-              encodeAddress(validator.stashAccount).includes(search) || validator.membership?.handle.includes(search)
-            )
-          })
-      )
-    }
-  }, [allValidatorsWithDetails, search, isVerified, isActive])
+    setShouldFetchValidators(true)
+    setValidatorDetailsOptions({
+      filter,
+      order,
+      start: (page - 1) * VALIDATOR_PER_PAGE,
+      end: page * VALIDATOR_PER_PAGE,
+    })
+  }, [filter, order, page])
 
-  return {
-    visibleValidators,
-    length: visibleValidators.length,
+  const format = {
+    pagination,
+    order: { ...order, sortBy: (key: ValidatorDetailsOrder['key']) => () => handleSort(key) },
     filter: {
       search,
       setSearch,
@@ -120,4 +61,7 @@ export const useValidatorsList = () => {
       setIsActive,
     },
   }
+  const allValidatorsCount = validators?.length
+
+  return { validatorsWithDetails, validatorsQueries, allValidatorsCount, format }
 }
