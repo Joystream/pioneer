@@ -17,6 +17,17 @@ export const Row = styled.div`
   height: auto;
 `
 
+export const RowInline = styled.div<{ justify?: string; gap?: number; top?: number }>`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: auto;
+  align-items: center;
+  justify-content: ${({ justify }) => justify ?? 'flex-start'};
+  gap: ${({ gap }) => gap ?? 16}px;
+  margin-top: ${({ top }) => top ?? 0}px;
+`
+
 export const AccountRow = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;

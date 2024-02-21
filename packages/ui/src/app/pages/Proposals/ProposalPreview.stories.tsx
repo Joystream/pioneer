@@ -475,7 +475,13 @@ export const TestVoteHappy: Story = {
         )
         expect(within(confirmText).getByText('Approve'))
 
-        expect(onVote).toHaveBeenLastCalledWith(activeMember.id, PROPOSAL_DATA.id, 'Approve', 'Some rationale')
+        expect(onVote).toHaveBeenLastCalledWith(
+          activeMember.controllerAccount,
+          activeMember.id,
+          PROPOSAL_DATA.id,
+          'Approve',
+          'Some rationale'
+        )
 
         await userEvent.click(modal.getByText('Back to proposals'))
       })
@@ -509,7 +515,13 @@ export const TestVoteHappy: Story = {
         )
         expect(within(confirmText).getByText('Reject'))
 
-        expect(onVote).toHaveBeenLastCalledWith(activeMember.id, PROPOSAL_DATA.id, 'Reject', 'Some rationale')
+        expect(onVote).toHaveBeenLastCalledWith(
+          activeMember.controllerAccount,
+          activeMember.id,
+          PROPOSAL_DATA.id,
+          'Reject',
+          'Some rationale'
+        )
 
         await userEvent.click(modal.getByText('Back to proposals'))
       })
@@ -545,7 +557,13 @@ export const TestVoteHappy: Story = {
         )
         expect(within(confirmText).getByText('Slash'))
 
-        expect(onVote).toHaveBeenLastCalledWith(activeMember.id, PROPOSAL_DATA.id, 'Slash', 'Some rationale')
+        expect(onVote).toHaveBeenLastCalledWith(
+          activeMember.controllerAccount,
+          activeMember.id,
+          PROPOSAL_DATA.id,
+          'Slash',
+          'Some rationale'
+        )
 
         await userEvent.click(modal.getByText('Back to proposals'))
       })
@@ -573,7 +591,13 @@ export const TestVoteHappy: Story = {
         )
         expect(within(confirmText).getByText('Abstain'))
 
-        expect(onVote).toHaveBeenLastCalledWith(activeMember.id, PROPOSAL_DATA.id, 'Abstain', 'Some rationale')
+        expect(onVote).toHaveBeenLastCalledWith(
+          activeMember.controllerAccount,
+          activeMember.id,
+          PROPOSAL_DATA.id,
+          'Abstain',
+          'Some rationale'
+        )
       })
     })
   },
@@ -640,7 +664,7 @@ export const TestCancelProposalHappy: Story = {
       await step('Confirm', async () => {
         expect(await modal.findByText('Your propsal has been cancelled.'))
 
-        expect(onCancel).toHaveBeenLastCalledWith(activeMember.id, PROPOSAL_DATA.id)
+        expect(onCancel).toHaveBeenLastCalledWith(activeMember.controllerAccount, activeMember.id, PROPOSAL_DATA.id)
       })
     })
   },

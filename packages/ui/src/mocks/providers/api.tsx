@@ -40,6 +40,13 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
     if (!chain) return
 
     // Common mocks:
+    const defaultDerive = {
+      staking: { erasRewards: [], erasPoints: [] },
+    }
+    const defaultQuery = {
+      session: { validators: [] },
+      staking: { activeEra: {} },
+    }
     const rpcChain = {
       getBlockHash: createType('BlockHash', BLOCK_HASH),
       getHeader: {
@@ -58,8 +65,8 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
       _async: { chainMetadata: Promise.resolve({}) } as Api['_async'],
       isConnected: true,
       consts: asApi('consts', asApiConst),
-      derive: asApi('derive', asApiMethod),
-      query: asApi('query', asApiMethod),
+      derive: asApi('derive', asApiMethod, defaultDerive),
+      query: asApi('query', asApiMethod, defaultQuery),
       rpc: asApi('rpc', asApiMethod, { chain: rpcChain }),
       tx: asApi('tx', fromTxMock),
     }
@@ -120,9 +127,24 @@ const asApiMethod = (value: any) => {
   if (isFunction(value)) {
     type ArgumentsType<T> = T extends (...args: infer A) => any ? A : never
     type FunctionArgs = ArgumentsType<typeof value>
-    return (args: FunctionArgs) => of(asChainData(value(args)))
+    return (...args: FunctionArgs) => of(asChainData(value(...args)))
   } else if (value instanceof Observable) {
     return () => value
+  } else if (value instanceof Map) {
+    return Object.defineProperties(
+      (key: Parameters<(typeof value)['get']>[0]) => {
+        switch (typeof value.keys().next().value) {
+          case 'string':
+            return of(asChainData(value.get(String(key))))
+          case 'number':
+            return of(asChainData(value.get(Number(key))))
+        }
+      },
+      {
+        size: { value: () => of(asChainData(value.size)) },
+        entries: { value: () => of(Array.from(asChainData(value.entries()))) },
+      }
+    )
   }
 
   const method = () => of(asChainData(value))
@@ -141,8 +163,7 @@ const asApiMethod = (value: any) => {
   }
 
   if (isObject(value) && 'multi' in value && isArray(value.multi)) {
-    const multi = value.multi.map((entry) => ({ unwrap: () => entry }))
-    method.multi = () => of(multi)
+    method.multi = () => of(asChainData(value.multi))
   }
 
   return method

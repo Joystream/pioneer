@@ -33,8 +33,8 @@ export const fromTxMock = (
     onCall?.(...args)
     return {
       paymentInfo,
-      signAndSend: () => {
-        onSend?.(...args)
+      signAndSend: (signer: string) => {
+        onSend?.(signer, ...args)
         return txResult
       },
     }

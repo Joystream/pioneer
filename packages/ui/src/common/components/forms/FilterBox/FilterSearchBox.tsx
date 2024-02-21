@@ -6,7 +6,6 @@ import { InputComponent, InputNotification, InputText } from '@/common/component
 import { CrossIcon, SearchIcon } from '@/common/components/icons'
 import { Colors } from '@/common/constants'
 
-import { useDebounce } from '../../../hooks/useDebounce'
 import { ButtonLink } from '../../buttons'
 import { ControlProps } from '../types'
 
@@ -51,11 +50,19 @@ interface SearchBoxProps extends ControlProps<string> {
 }
 export const SearchBox = React.memo(
   ({ value, onApply, onChange, label, displayReset, minCharacterLimit = 3 }: SearchBoxProps) => {
-    const debouncedValue = useDebounce(value, 300)
     const change = onChange && (({ target }: ChangeEvent<HTMLInputElement>) => onChange(target.value))
-    const isValid = () => !debouncedValue || debouncedValue.length === 0 || debouncedValue.length >= minCharacterLimit
 
-    const keyDown = !isValid() || !onApply ? undefined : ({ key }: React.KeyboardEvent) => key === 'Enter' && onApply()
+    const isValid = !value || value.length === 0 || value.length >= minCharacterLimit
+    const [showInvalid, setShowInvalid] = useState(false)
+    useEffect(() => {
+      if (isValid) setShowInvalid(false)
+    }, [isValid])
+
+    const keyDown = ({ key }: React.KeyboardEvent) => {
+      if (key !== 'Enter') return
+      if (!isValid) return setShowInvalid(true)
+      onApply?.()
+    }
 
     const reset =
       onChange &&
@@ -70,8 +77,8 @@ export const SearchBox = React.memo(
         <FilterLabel>{label}</FilterLabel>
         <SearchInput
           inputSize={label ? 'xs' : 's'}
-          validation={isValid() ? undefined : 'invalid'}
-          message={isValid() ? '' : `Minimum of ${minCharacterLimit} characters is required`}
+          validation={showInvalid ? 'invalid' : undefined}
+          message={showInvalid ? `Minimum of ${minCharacterLimit} characters is required` : undefined}
         >
           <InputText placeholder="Search" value={value} onChange={change} onKeyDown={keyDown} />
           {displayReset && value && (

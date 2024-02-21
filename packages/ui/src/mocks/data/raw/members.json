@@ -6,7 +6,8 @@
     "boundAccounts": [
       "j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf",
       "j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT",
-      "j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW"
+      "j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW",
+      "j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz"
     ],
     "boundAccountsEvents": [],
     "handle": "alice",
@@ -31,9 +32,9 @@
   {
     "id": "1",
     "rootAccount": "j4X5AiyNC4497MpJLtyGdgEAS4JjDEjkRvtUPgZkiYudW5zox",
-    "controllerAccount": "j4UYhDYJ4pz2ihhDDzu69v2JTVeGaGmTebmBdWaX2ANVinXyE",
+    "controllerAccount": "j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW",
     "boundAccounts": [
-      "j4UYhDYJ4pz2ihhDDzu69v2JTVeGaGmTebmBdWaX2ANVinXyE",
+      "j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW",
       "j4Rc8VUXGYAx7FNbVZBFU72rQw3GaCuG2AkrUQWnWTh5SpemP"
     ],
     "boundAccountsEvents": [],
@@ -41,7 +42,7 @@
     "metadata": {
       "name": "soluta voluptas",
       "about": "Nulla corporis quo dolorem. Sint quia dignissimos. Et sit dolore fuga in alias voluptatibus. Natus repudiandae debitis exercitationem quasi aut. Alias in expedita aut provident in quia quod doloremque ipsum.\n \rDistinctio provident pariatur alias ut hic ipsa eum doloremque. Harum ipsum quae aut quod consequatur laboriosam delectus minus aut. Ea eaque ducimus. Ut quia ex molestiae et.\n \rVoluptatibus rem perferendis molestiae. Quia quibusdam optio quo sed error voluptas occaecati. Ratione voluptates consequatur rerum numquam. Voluptas dignissimos soluta voluptatem reprehenderit ea fuga et inventore. Blanditiis amet quasi nihil et ad rerum molestiae sed officiis.",
-      "isVerifiedValidator": false
+      "isVerifiedValidator": true
     },
     "isVerified": true,
     "isFoundingMember": true,
@@ -59,7 +60,7 @@
   {
     "id": "2",
     "rootAccount": "j4UbMHiS79yvMLJctXggUugkkKmwxG5LW2YSy3ap8SmgF5qW9",
-    "controllerAccount": "j4UbMHiS79yvMLJctXggUugkkKmwxG5LW2YSy3ap8SmgF5qW9",
+    "controllerAccount": "j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz",
     "boundAccounts": ["j4Rh1cHtZFAQYGh7Y8RZwoXbkAPtZN46FmuYpKNiR3P2Dc2oz"],
     "boundAccountsEvents": [],
     "handle": "charlie",
@@ -91,7 +92,7 @@
     "metadata": {
       "name": "architecto deleniti",
       "about": "Cumque vero a aspernatur esse optio. Libero saepe voluptatem est est qui. Velit quidem sed. Aliquid temporibus id ea aut vel qui recusandae magni. Aliquam cupiditate cupiditate aut doloribus sit nemo. Aliquid ut iure ullam non.",
-      "isVerifiedValidator": true
+      "isVerifiedValidator": false
     },
     "isVerified": true,
     "isFoundingMember": true,

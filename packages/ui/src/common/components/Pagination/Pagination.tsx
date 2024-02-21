@@ -7,7 +7,7 @@ import { Arrow } from '@/common/components/icons'
 import { BorderRad, Colors, Fonts, Transitions } from '@/common/constants/styles'
 import { useResponsive } from '@/common/hooks/useResponsive'
 
-interface PaginationProps {
+export interface PaginationProps {
   pageCount?: number
   handlePageChange: (page: number) => void
   page?: number

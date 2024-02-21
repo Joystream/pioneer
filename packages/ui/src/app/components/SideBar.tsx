@@ -40,6 +40,7 @@ import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { ForumRoutes } from '@/forum/constant'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
+import { ValidatorsRoutes } from '@/validators/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
 import { SettingsRoutes } from '../pages/Settings/routes'
@@ -131,6 +132,11 @@ export const SideBarContent = () => {
             <NavigationLink icon={<SubscanSymbol />} to="https://joystream.subscan.io">
               Explorer
               <LinkSymbol color={Colors.Black[500]} className="sidebarLinkSymbol" />
+            </NavigationLink>
+          </NavigationLinksItem>
+          <NavigationLinksItem>
+            <NavigationLink to={ValidatorsRoutes.list} icon={<ValidatorsIcon />}>
+              Validators
             </NavigationLink>
           </NavigationLinksItem>
           <NavigationLinksItem>
