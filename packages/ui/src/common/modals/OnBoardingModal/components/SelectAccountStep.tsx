@@ -14,7 +14,6 @@ import { TextExtraHuge, TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 
 import { ConnectAccountItem } from './ConnectAccountItem'
-import { ResetWalletButton } from './ResetWalletButton'
 
 interface Props {
   onAccountSelect?: (account: string) => void
@@ -22,7 +21,7 @@ interface Props {
 
 export const SelectAccountStep = ({ onAccountSelect }: Props) => {
   const [selectedAccountAddress, setSelectedAccountAddress] = useState<string>()
-  const { allAccounts, wallet } = useMyAccounts()
+  const { allAccounts, setWallet, wallet } = useMyAccounts()
   const balances = useMyBalances()
 
   const onConfirm = () => {
@@ -59,7 +58,9 @@ export const SelectAccountStep = ({ onAccountSelect }: Props) => {
         </ContentWrapper>
       </ScrolledModalBody>
       <StyledFooter>
-        <ResetWalletButton />
+        <ButtonPrimary size="medium" onClick={() => setWallet?.(undefined)}>
+          Return to wallet selection
+        </ButtonPrimary>
         <ButtonPrimary onClick={onConfirm} disabled={!selectedAccountAddress} size="medium">
           Connect Account
         </ButtonPrimary>

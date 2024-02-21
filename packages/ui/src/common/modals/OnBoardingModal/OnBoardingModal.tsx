@@ -24,15 +24,12 @@ import { OnBoardingMembership } from '@/common/modals/OnBoardingModal/OnBoarding
 import { OnBoardingPlugin } from '@/common/modals/OnBoardingModal/OnBoardingPlugin'
 import { OnBoardingStatus, SetMembershipAccount } from '@/common/providers/onboarding/types'
 import { definedValues } from '@/common/utils'
-import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
-import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { toExternalResources } from '@/memberships/modals/utils'
 
 export const OnBoardingModal = () => {
-  const { showModal, hideModal } = useModal()
-  const { hasMembers } = useMyMemberships()
+  const { hideModal } = useModal()
   const { status: realStatus, membershipAccount, setMembershipAccount, isLoading } = useOnBoarding()
   const status = useDebounce(realStatus, 50)
   const [state, send] = useMachine(onBoardingMachine)
@@ -63,12 +60,6 @@ export const OnBoardingModal = () => {
         return null
     }
   }, [status, membershipAccount])
-
-  useEffect(() => {
-    if (status === 'finished' && !hasMembers) {
-      showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
-    }
-  }, [status])
 
   useEffect(() => {
     async function submitNewMembership(form: MemberFormFields) {
@@ -192,8 +183,8 @@ const StepperWrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  max-width: 100vw;
-  padding: 24px 52px;
+  padding: 0 52px;
+  height: 80px;
   position: relative;
   background-color: ${Colors.Black[700]};
 `

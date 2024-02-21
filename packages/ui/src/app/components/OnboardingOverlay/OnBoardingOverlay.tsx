@@ -88,8 +88,17 @@ export const OnBoardingOverlay = () => {
     showModal({ modal: 'OnBoardingModal' })
   }, [wallet, selectedWallet])
 
-  if (isMobile || isLoading || !status || status === 'finished' || !api?.isConnected) {
+  if (isLoading || !status || status === 'finished' || !api?.isConnected) {
     return null
+  }
+
+  if (isMobile) {
+    return (
+      <WrapperMobileMode>
+        <TextHuge bold>To become a member visit this page from desktop</TextHuge>
+        <TextSmall>It requires browser extension</TextSmall>
+      </WrapperMobileMode>
+    )
   }
 
   return (
@@ -236,4 +245,21 @@ export const StepperContainer = styled.div`
   align-items: center;
   padding: 10px;
   justify-content: center;
+`
+
+const WrapperMobileMode = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  background-color: ${Colors.Black[700]};
+  color: ${Colors.White};
+  position: relative;
+  padding: 10px 16px;
+
+  p {
+    text-align: center;
+  }
 `

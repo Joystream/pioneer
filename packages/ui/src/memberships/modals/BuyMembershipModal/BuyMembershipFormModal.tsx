@@ -248,8 +248,14 @@ export const BuyMembershipForm = ({
         </FormProvider>
       </ScrolledModalBody>
 
-      <ModalFooter>
-        <StyledCheckbox
+      <StyledFooter>
+        {type === 'onBoarding' && (
+          <ButtonGhost onClick={changeMembershipAccount} size="medium">
+            <Arrow direction="left" />
+            Change account
+          </ButtonGhost>
+        )}
+        <Checkbox
           id="privacy-policy-agreement"
           onChange={(hasTerms) => form.setValue('hasTerms', hasTerms, { shouldValidate: true })}
         >
@@ -264,7 +270,7 @@ export const BuyMembershipForm = ({
             </LabelLink>
             .
           </TextMedium>
-        </StyledCheckbox>
+        </Checkbox>
         {type === 'general' && (
           <TransactionInfoContainer>
             <TransactionInfo
@@ -276,25 +282,17 @@ export const BuyMembershipForm = ({
             />
           </TransactionInfoContainer>
         )}
-        <FooterRow>
-          {type === 'onBoarding' && (
-            <ButtonGhost onClick={changeMembershipAccount} size="medium">
-              <Arrow direction="left" />
-              Change account
-            </ButtonGhost>
-          )}
-          <ButtonPrimary
-            size="medium"
-            onClick={() => {
-              const values = form.getValues()
-              uploadAvatarAndSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
-            }}
-            disabled={isDisabled}
-          >
-            {isUploading ? <Loading text="Uploading avatar" /> : 'Create a Membership'}
-          </ButtonPrimary>
-        </FooterRow>
-      </ModalFooter>
+        <ButtonPrimary
+          size="medium"
+          onClick={() => {
+            const values = form.getValues()
+            uploadAvatarAndSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
+          }}
+          disabled={isDisabled}
+        >
+          {isUploading ? <Loading text="Uploading avatar" /> : 'Create a Membership'}
+        </ButtonPrimary>
+      </StyledFooter>
     </>
   )
 }
@@ -308,16 +306,8 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: B
   )
 }
 
-const StyledCheckbox = styled(Checkbox)`
-  flex-shrink: 1;
-`
-
-const FooterRow = styled.div`
-  display: flex;
-  max-width: 100%;
-  gap: 16px;
-  flex-grow: 1;
-  > *:nth-last-child(1) {
-    margin: 0 0 0 auto;
+export const StyledFooter = styled(ModalFooter)`
+  & > label:first-child {
+    margin-right: auto;
   }
 `

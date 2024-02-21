@@ -174,7 +174,7 @@ export const ModalFooterComponent = styled.footer`
   grid-area: modalfooter;
   gap: 16px;
   justify-self: end;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
   width: 100%;
   height: content-fit;
@@ -182,17 +182,9 @@ export const ModalFooterComponent = styled.footer`
   padding: 12px 26px 12px 24px;
   border-radius: 0 0 2px 2px;
   position: relative;
-  max-width: 100vw;
-
-  > :nth-child(1) {
-    margin: 0 auto 0 0;
-  }
-  > :nth-last-child(1) {
-    margin: 0 0 0 auto;
-  }
 
   @media (min-width: ${BreakPoints.sm}px) {
-    flex-wrap: nowrap;
+    flex-flow: nowrap;
   }
 `
 

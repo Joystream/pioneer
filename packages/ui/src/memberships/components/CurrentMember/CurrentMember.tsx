@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useHistory } from 'react-router'
 import styled from 'styled-components'
 
@@ -8,6 +8,7 @@ import { ArrowDownExpandedIcon, Icon, Loader } from '@/common/components/icons'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
+import { useResponsive } from '@/common/hooks/useResponsive'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
 import { EMAIL_VERIFICATION_TOKEN_SEARCH_PARAM } from '@/memberships/constants'
 import { useNotificationSettings } from '@/memberships/hooks/useNotificationSettings'
@@ -17,6 +18,7 @@ import { useMyMemberships } from '../../hooks/useMyMemberships'
 import { EmailConfirmationModalCall } from '../../modals/EmailConfirmationModal'
 import { EmailSubscriptionModalCall } from '../../modals/EmailSubscriptionModal'
 import { SwitchMemberModalCall } from '../../modals/SwitchMemberModal'
+import { AddMembershipButton } from '../AddMembershipButton'
 
 export const CurrentMember = () => {
   const { allWallets, setWallet } = useMyAccounts()
@@ -26,6 +28,7 @@ export const CurrentMember = () => {
   const { activeMemberSettings, activeMemberExistBackendData } = useNotificationSettings()
   const showSubscriptionModal =
     active && activeMemberExistBackendData?.memberExist === false && !activeMemberSettings?.hasBeenAskedForEmail
+  const { isMobileWallet } = useResponsive()
 
   useEffect(() => {
     if (!emailVerificationToken && !modal && showSubscriptionModal) {
@@ -57,27 +60,33 @@ export const CurrentMember = () => {
     }
   }, [emailVerificationToken])
 
-  const handleOnboarding = () => {
-    const wallets = allWallets.filter((wallet) => wallet.installed)
-    if (wallets.length === 1) {
-      setWallet?.(wallets.at(-1))
+  const handleConnectWallet = () => {
+    if (isMobileWallet) {
+      const wallets = allWallets.filter((wallet) => wallet.installed)
+      if (wallets.length > 0) {
+        return setWallet?.(wallets.at(-1))
+      }
     }
     showModal({ modal: 'OnBoardingModal' })
   }
 
-  if (status !== 'finished') {
+  if (status === 'installPlugin') {
     return (
       <MembershipButtonsWrapper>
-        <MembershipActionButton onClick={handleOnboarding} size="large" disabled={isLoading}>
+        <MembershipActionButton onClick={handleConnectWallet} size="large" disabled={isLoading}>
           {isLoading && <Loader />}
-          {status === 'installPlugin' ? 'Connect Wallet' : 'Join Now'}
+          Connect Wallet
         </MembershipActionButton>
       </MembershipButtonsWrapper>
     )
   }
 
   if (!hasMembers) {
-    return <SwitchMembershipButton>Join Now</SwitchMembershipButton>
+    return (
+      <MembershipButtonsWrapper>
+        <AddMembershipButton size="large">Join Now</AddMembershipButton>
+      </MembershipButtonsWrapper>
+    )
   }
 
   return (
@@ -91,19 +100,17 @@ export const CurrentMember = () => {
           </SwitchArrow>
         </SwitchMember>
       )}
-      {!active && <SwitchMembershipButton>Select membership</SwitchMembershipButton>}
+      {!active && (
+        <MembershipButtonsWrapper>
+          <MembershipActionButton
+            onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })}
+            size="large"
+          >
+            Select membership
+          </MembershipActionButton>
+        </MembershipButtonsWrapper>
+      )}
     </>
-  )
-}
-
-const SwitchMembershipButton: FC = ({ children }) => {
-  const { showModal } = useModal()
-  return (
-    <MembershipButtonsWrapper>
-      <MembershipActionButton onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })} size="large">
-        {children}
-      </MembershipActionButton>
-    </MembershipButtonsWrapper>
   )
 }
 

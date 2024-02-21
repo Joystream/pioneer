@@ -26,16 +26,16 @@ export const OnBoardingPlugin = () => {
           </TextExtraHuge>
           <TextSmall>Select which wallet you want to use to connect with.</TextSmall>
           <List>
-            {allWallets.map((wallet) => (
-              <ListItem>
+            <ListItem>
+              {allWallets.map((wallet) => (
                 <ConnectWalletItem
                   key={wallet.extensionName}
                   wallet={wallet}
                   onClick={() => setSelectedWallet(wallet)}
                   selected={selectedWallet?.extensionName === wallet.extensionName}
                 />
-              </ListItem>
-            ))}
+              ))}
+            </ListItem>
           </List>
         </Wrapper>
         {walletState === 'APP_REJECTED' && (
@@ -94,10 +94,10 @@ const Wrapper = styled.div`
   align-items: center;
   gap: 5px;
   width: 100%;
-  max-width: 592px;
+  max-width: 640px;
   height: 100%;
   margin: 0 auto;
-  padding: 36px 24px 24px;
+  padding: 36px 0 24px;
   text-align: center;
 
   > *:nth-child(2) {

@@ -51,12 +51,15 @@ export const TransactionAmount = styled.div<TransactionAmountProps>`
 `
 
 export const TransactionInfoContainer = styled.div`
+  display: grid;
   margin-right: 24px;
 `
 
 export const BalanceInfo = styled.div`
-  display: flex;
+  display: inline-grid;
   position: relative;
+  grid-template-columns: 1fr 168px;
+  grid-template-rows: 1fr;
   align-items: center;
 `
 
@@ -65,7 +68,7 @@ export const BalanceInfoInRow = styled(BalanceInfo)`
 `
 
 export const BalanceInfoNarrow = styled(BalanceInfo)`
-  gap: 4px;
+  grid-template-columns: 1fr 128px;
   width: auto;
 `
 
