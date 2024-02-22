@@ -2,12 +2,12 @@ import React from 'react'
 
 import { LinkGhost, LinkPrimary } from '@/common/components/buttons/Links'
 import { ArrowRightIcon } from '@/common/components/icons'
+import { Link } from '@/common/components/Link'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextBig, TextInlineBig } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 
 import { NominatingRedirectModalCall } from './types'
-import { Link } from '@/common/components/Link'
 
 export const NominatingRedirectModal = () => {
   const { hideModal } = useModal<NominatingRedirectModalCall>()
