@@ -84,8 +84,9 @@ const useSelectedWallet = (allWallets: Wallet[]) => {
   const [recentWallet, setRecentWallet] = useLocalStorage<string | undefined>('recentWallet')
   const [walletState, setWalletState] = useState<WalletState>()
 
-  const setWallet = useCallback(async (wallet: Wallet | undefined) => {
+  const setWallet = useCallback(async (wallet: Wallet | undefined): Promise<void> => {
     if (!wallet) {
+      WalletDisconnection$.next()
       _setWallet(undefined)
       setWalletState(undefined)
       setRecentWallet(undefined)
@@ -98,7 +99,7 @@ const useSelectedWallet = (allWallets: Wallet[]) => {
       _setWallet(wallet)
       setWalletState('READY')
       setRecentWallet(wallet.extensionName)
-      return () => WalletDisconnection$.next()
+      return
     } catch (error) {
       const message: string = error?.message?.toLowerCase()
       if (message.includes('not allowed to interact') || message.includes('rejected')) {

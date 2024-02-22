@@ -113,16 +113,15 @@ export class WalletConnect extends BaseDotsamaWallet {
   }
 
   protected _handleDisconnection(provider: Provider): void {
-    const appDisconnectHandler = () => {
+    const appDisconnectHandler = async () => {
       if (!this._provider?.session) return
 
-      reset()
-
-      // `client.disconnect` doesn't work (it keeps the connection opened).
-      provider.client.disconnect({
+      await provider.client.disconnect({
         topic: this._provider.session.topic,
         reason: { code: -1, message: 'Disconnected by client!' },
       })
+
+      reset()
     }
     const disconnectSubscription = this._disconnection$.subscribe(appDisconnectHandler)
 
