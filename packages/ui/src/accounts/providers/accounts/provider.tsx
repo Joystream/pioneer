@@ -1,28 +1,23 @@
 import { InjectedAccountWithMeta } from '@polkadot/extension-inject/types'
 import { Keyring } from '@polkadot/ui-keyring'
 import { decodeAddress } from '@polkadot/util-crypto'
-import { getWalletBySource, Wallet } from 'injectweb3-connect'
-import React, { ReactNode, useEffect, useState } from 'react'
-import { debounceTime, filter, skip } from 'rxjs/operators'
+import { Wallet } from 'injectweb3-connect'
+import React, { ReactNode, useEffect } from 'react'
+import { debounceTime, filter, map, of } from 'rxjs'
 
 import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { useKeyring } from '@/common/hooks/useKeyring'
-import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useObservable } from '@/common/hooks/useObservable'
 
 import { Account } from '../../types'
 
 import { AccountsContext } from './context'
+import { UseWallets, useWallets } from './useWallets'
 
-type ExtensionError = 'NO_EXTENSION' | 'APP_REJECTED'
-
-export interface UseAccounts {
+export type UseAccounts = UseWallets & {
   allAccounts: Account[]
   hasAccounts: boolean
   isLoading: boolean
-  error?: ExtensionError
-  wallet?: Wallet
-  setWallet?: (wallet: Wallet | undefined) => void
 }
 
 interface Props {
@@ -37,9 +32,7 @@ function isKeyringLoaded(keyring: Keyring) {
   }
 }
 
-const loadKeysFromExtension = async (keyring: Keyring, wallet: Wallet) => {
-  await wallet.enable('Pioneer')
-
+const loadKeysFromWallet = async (keyring: Keyring, wallet: Wallet) => {
   const injectedAccounts = await wallet.getAccounts()
 
   if (!isKeyringLoaded(keyring)) {
@@ -63,119 +56,44 @@ const loadKeysFromExtension = async (keyring: Keyring, wallet: Wallet) => {
   })
 }
 
-// Extensions is not always ready on application load, hence the check
-const onExtensionLoaded =
-  (onSuccess: (foundWallets: string[]) => void, onFail: () => void, recentWallet?: string) => () => {
-    const interval = 20
-    const timeout = 1000
-    let timeElapsed = 0
-
-    const intervalId = setInterval(() => {
-      const extensionsKeys = Object.keys((window as any)?.injectedWeb3 ?? {})
-      if (extensionsKeys.length) {
-        if (!recentWallet) {
-          clearInterval(intervalId)
-          onSuccess(extensionsKeys)
-        } else if (extensionsKeys.includes(recentWallet)) {
-          // some wallets load slower which will cause error when trying to preload them hence the check
-          clearInterval(intervalId)
-          onSuccess(extensionsKeys)
-        } else if (timeElapsed >= timeout) {
-          // if wallet in storage was disabled we don't want to wait for it too long
-          clearInterval(intervalId)
-          onSuccess(extensionsKeys)
-        }
-        timeElapsed += interval
-      } else {
-        timeElapsed += interval
-        if (timeElapsed >= timeout) {
-          clearInterval(intervalId)
-          onFail()
-        }
-      }
-    }, interval)
-
-    return () => clearInterval(intervalId)
-  }
-
 export const AccountsContextProvider = (props: Props) => {
   const keyring = useKeyring()
-  const [isExtensionLoaded, setIsExtensionLoaded] = useState(false)
-  const [selectedWallet, setSelectedWallet] = useState<Wallet>()
-  const [extensionError, setExtensionError] = useState<ExtensionError>()
-  const [recentWallet, setRecentWallet] = useLocalStorage<string | undefined>('recentWallet')
 
-  useEffect(
-    onExtensionLoaded(
-      (foundWallets) => {
-        setIsExtensionLoaded(true)
-        if (recentWallet && foundWallets.includes(recentWallet)) {
-          const possibleWallet = getWalletBySource(recentWallet)
-          setSelectedWallet(possibleWallet)
-        }
-      },
-      () => setExtensionError('NO_EXTENSION'),
-      recentWallet
-    ),
-    []
-  )
+  const { allWallets, wallet, setWallet, walletState } = useWallets()
 
   useEffect(() => {
-    if (!isExtensionLoaded || !selectedWallet) {
-      return
-    }
+    if (wallet) loadKeysFromWallet(keyring, wallet)
+  }, [keyring, wallet])
 
-    setExtensionError(undefined)
-    loadKeysFromExtension(keyring, selectedWallet)
-      .then(() => {
-        setRecentWallet(selectedWallet.extensionName)
-      })
-      .catch((error: Error) => {
-        setSelectedWallet(undefined)
+  const allAccounts: Account[] | undefined = useObservable(() => {
+    if (!wallet) return of(undefined)
 
-        if (error?.message.includes('not allowed to interact') || error?.message.includes('Rejected')) {
-          setExtensionError('APP_REJECTED')
-        }
-      })
-  }, [isExtensionLoaded, selectedWallet])
-
-  const accounts = useObservable(
-    () =>
-      keyring.accounts.subject.asObservable().pipe(
-        debounceTime(20),
-        filter((accounts) => !!accounts),
-        skip(1)
-      ),
-    [keyring]
-  )
-  const allAccounts: Account[] = []
-
-  if (accounts && selectedWallet) {
-    allAccounts.push(
-      ...Object.values(accounts).map((account) => {
-        const publicKey = decodeAddress(account.json.address)
-        return {
-          address: encodeAddress(publicKey),
-          name: account.json.meta.name,
-          source: account.json.meta.source as string,
-        }
-      })
+    return keyring.accounts.subject.asObservable().pipe(
+      debounceTime(200),
+      filter((accounts) => !!accounts),
+      map((accounts) =>
+        Object.values(accounts).map((account) => {
+          const publicKey = decodeAddress(account.json.address)
+          return {
+            address: encodeAddress(publicKey),
+            name: account.json.meta.name,
+            source: account.json.meta.source as string,
+          }
+        })
+      )
     )
-  }
+  }, [keyring, wallet])
 
-  const hasAccounts = allAccounts.length !== 0
+  const hasAccounts = !!allAccounts?.length
 
   const value: UseAccounts = {
-    allAccounts,
+    allAccounts: allAccounts ?? [],
     hasAccounts,
-    isLoading: !isExtensionLoaded || !accounts,
-    setWallet: setSelectedWallet,
-    wallet: selectedWallet,
-    error: extensionError,
-  }
-
-  if (extensionError || !selectedWallet?.extension) {
-    value.isLoading = false
+    isLoading: walletState === 'READY' && !allAccounts,
+    wallet,
+    setWallet,
+    allWallets,
+    walletState,
   }
 
   return <AccountsContext.Provider value={value}>{props.children}</AccountsContext.Provider>

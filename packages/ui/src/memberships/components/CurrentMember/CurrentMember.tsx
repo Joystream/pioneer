@@ -1,4 +1,3 @@
-import { getAllWallets } from 'injectweb3-connect'
 import React, { useEffect } from 'react'
 import { useHistory } from 'react-router'
 import styled from 'styled-components'
@@ -22,7 +21,7 @@ import { SwitchMemberModalCall } from '../../modals/SwitchMemberModal'
 import { AddMembershipButton } from '../AddMembershipButton'
 
 export const CurrentMember = () => {
-  const { setWallet } = useMyAccounts()
+  const { allWallets, setWallet } = useMyAccounts()
   const { status, isLoading } = useOnBoarding()
   const { members, hasMembers, active } = useMyMemberships()
   const { showModal, modal } = useModal()
@@ -63,7 +62,7 @@ export const CurrentMember = () => {
 
   const handleConnectWallet = () => {
     if (isMobileWallet) {
-      const wallets = getAllWallets().filter((wallet) => wallet.installed)
+      const wallets = allWallets.filter((wallet) => wallet.installed)
       if (wallets.length > 0) {
         return setWallet?.(wallets.at(-1))
       }

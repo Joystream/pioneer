@@ -29,7 +29,10 @@ export type RawClientMessageEvent = MessageEvent<{
 
 export type RawMessageEvent = RawWorkerMessageEvent | RawClientMessageEvent
 
-export type WorkerInitMessage = { messageType: 'init'; payload: { consts: ProxyApi['consts'] } }
+export type WorkerInitMessage = {
+  messageType: 'init'
+  payload: Pick<ProxyApi, 'consts' | 'genesisHash' | 'runtimeVersion'>
+}
 export type ClientInitMessage = { messageType: 'init'; payload: string }
 export type WorkerConnectMessage = { messageType: 'isConnected'; payload: boolean }
 

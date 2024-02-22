@@ -266,6 +266,7 @@ export const stubAccounts = (allAccounts: Account[], myAccounts: Partial<UseAcco
     allAccounts,
     hasAccounts,
     ...myAccounts,
+    allWallets: [],
   })
 
   const balance = mockedBalances()

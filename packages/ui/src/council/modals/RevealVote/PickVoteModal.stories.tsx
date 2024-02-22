@@ -2,6 +2,7 @@ import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
+import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { ModalContext } from '@/common/providers/modal/context'
 import { VotingAttempt } from '@/council/hooks/useCommitment'
 
@@ -23,13 +24,14 @@ interface Props {
   showModal: () => void
 }
 
-const useAccounts = {
+const useAccounts: UseAccounts = {
   isLoading: false,
   allAccounts: [
     { name: 'Alice Account', address: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf' },
     { name: 'Bob Account', address: '5DWS57CtERHpNehXCPcNoHGKutQYGrwvaEF5zXb26Fz9rcQp' },
   ],
   hasAccounts: true,
+  allWallets: [],
 }
 
 const Template: Story<Props> = ({ votes, hideModal, showModal }) => {

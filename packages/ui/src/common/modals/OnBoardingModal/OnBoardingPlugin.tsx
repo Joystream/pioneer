@@ -1,9 +1,10 @@
-import { getAllWallets, Wallet } from 'injectweb3-connect'
-import React, { useCallback, useEffect, useState } from 'react'
+import { Wallet } from 'injectweb3-connect'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { ButtonPrimary } from '@/common/components/buttons'
+import { LinkPrimary } from '@/common/components/buttons/Links'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import { List, ListItem } from '@/common/components/List'
 import { ScrolledModalBody } from '@/common/components/Modal'
@@ -14,30 +15,19 @@ import { OnBoardingTextFooter } from '@/common/modals/OnBoardingModal/OnBoarding
 
 export const OnBoardingPlugin = () => {
   const [selectedWallet, setSelectedWallet] = useState<Wallet>()
-  const { setWallet, error } = useMyAccounts()
-  const handleClick = useCallback(() => {
-    if (!selectedWallet?.installed && selectedWallet?.installUrl) {
-      window.open(selectedWallet.installUrl, '_blank')
-    } else if (selectedWallet?.installed) {
-      setWallet?.(selectedWallet)
-    }
-  }, [selectedWallet])
-
-  useEffect(() => {
-    if (error === 'APP_REJECTED') {
-      setSelectedWallet(undefined)
-    }
-  }, [error])
+  const { allWallets, setWallet, walletState } = useMyAccounts()
 
   return (
     <>
       <ScrolledModalBody>
         <Wrapper>
-          <TextExtraHuge bold>Select Wallet</TextExtraHuge>
+          <TextExtraHuge as="h3" bold>
+            Select Wallet
+          </TextExtraHuge>
           <TextSmall>Select which wallet you want to use to connect with.</TextSmall>
           <List>
             <ListItem>
-              {getAllWallets().map((wallet) => (
+              {allWallets.map((wallet) => (
                 <ConnectWalletItem
                   key={wallet.extensionName}
                   wallet={wallet}
@@ -48,7 +38,7 @@ export const OnBoardingPlugin = () => {
             </ListItem>
           </List>
         </Wrapper>
-        {error === 'APP_REJECTED' && (
+        {walletState === 'APP_REJECTED' && (
           <RedBox>
             <TextBig bold value>
               Extension is blocking Pioneer from access
@@ -60,24 +50,41 @@ export const OnBoardingPlugin = () => {
           </RedBox>
         )}
       </ScrolledModalBody>
+      <WalletSelectionFooter selectedWallet={selectedWallet} setWallet={setWallet} />
+    </>
+  )
+}
+
+type WalletSelectionFooterProps = {
+  selectedWallet: Wallet | undefined
+  setWallet?: (wallet: Wallet | undefined) => void
+}
+
+const WalletSelectionFooter = ({ selectedWallet, setWallet }: WalletSelectionFooterProps) => {
+  const isInstalledWallet = selectedWallet?.installed
+  const recommendedWalletUrl = !isInstalledWallet && selectedWallet?.installUrl
+
+  if (recommendedWalletUrl) {
+    return (
       <OnBoardingTextFooter
         text="Please reload the page after installing the plugin!"
         button={
-          <>
-            <StyledButton disabled={!selectedWallet} onClick={handleClick} size="medium">
-              {selectedWallet?.installed ? (
-                'Select Wallet'
-              ) : (
-                <>
-                  <LinkSymbol />
-                  Install extension
-                </>
-              )}
-            </StyledButton>
-          </>
+          <StyledLink size="medium" href={recommendedWalletUrl}>
+            <LinkSymbol /> Install extension
+          </StyledLink>
         }
       />
-    </>
+    )
+  }
+
+  return (
+    <OnBoardingTextFooter
+      button={
+        <StyledButton size="medium" onClick={() => setWallet?.(selectedWallet)} disabled={!selectedWallet}>
+          Select Wallet
+        </StyledButton>
+      }
+    />
   )
 }
 
@@ -98,7 +105,14 @@ const Wrapper = styled.div`
   }
 `
 
+const StyledLink = styled(LinkPrimary)`
+  margin-left: auto;
+  path {
+    fill: ${Colors.White} !important;
+  }
+`
 const StyledButton = styled(ButtonPrimary)`
+  margin-left: auto;
   path {
     fill: ${Colors.White} !important;
   }

@@ -334,11 +334,11 @@ export const ConnectWallet: Story = {
 
     const modal = withinModal(canvasElement)
     expectActiveStepToBe(modal, 'Connect wallet')
-    expect(modal.getByText('Select Wallet'))
-    const pluginButton = getButtonByText(modal, 'Install extension')
+    expect(modal.getByRole('heading', { name: 'Select Wallet' }))
+    const pluginButton = getButtonByText(modal, 'Select Wallet')
     expect(pluginButton).toBeDisabled()
-    await userEvent.click(modal.getByText('Polkadot.js'))
-    expect(pluginButton).toBeEnabled()
+    await userEvent.click(modal.getByText('Talisman'))
+    expect(await getButtonByText(modal, 'Install extension')).toBeEnabled()
   },
 }
 
