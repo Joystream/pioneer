@@ -9,24 +9,30 @@ interface ListItemLoaderProps {
   count?: number
   height?: string
   id?: string
+  gap?: string
+  padding?: string
 }
 
-export const ListItemLoader = ({ children, count = 1, id, ...styleProps }: ListItemLoaderProps) => {
+export const ListItemLoader = ({ children, count = 1, id, gap, ...styleProps }: ListItemLoaderProps) => {
   return (
-    <span id={id}>
+    <ListWrapper gap={gap} id={id}>
       {repeat(
         (index) => (
-          <Wrapper key={index} {...styleProps}>
+          <ItemWrapper key={index} {...styleProps}>
             {children}
-          </Wrapper>
+          </ItemWrapper>
         ),
         count
       )}
-    </span>
+    </ListWrapper>
   )
 }
 
-const Wrapper = styled.div<ListItemLoaderProps>`
+const ListWrapper = styled.div<{ gap?: string }>`
+  gap: ${({ gap }) => gap ?? '0'};
+`
+
+const ItemWrapper = styled.div<ListItemLoaderProps>`
   width: 100%;
   display: grid;
   height: ${({ height }) => height ?? '94px'};
@@ -34,5 +40,5 @@ const Wrapper = styled.div<ListItemLoaderProps>`
   grid-template-columns: ${({ columnsTemplate }) => columnsTemplate};
   justify-content: space-between;
   align-items: center;
-  padding: 16px 8px 16px 16px;
+  padding: ${({ padding }) => padding ?? '16px 8px 16px 16px'};
 `

@@ -23,13 +23,14 @@ import { ValidatorDetail } from './ValidatorDetail'
 export type ValidatorCardTabs = 'Details' | 'Nominators'
 
 interface Props {
+  eraIndex: number | undefined
   cardNumber: number
   validator: ValidatorWithDetails
   selectCard: (cardNumber: number | null) => void
   totalCards: number
 }
 
-export const ValidatorCard = React.memo(({ cardNumber, validator, selectCard, totalCards }: Props) => {
+export const ValidatorCard = React.memo(({ cardNumber, validator, eraIndex, selectCard, totalCards }: Props) => {
   const hideModal = () => {
     selectCard(null)
   }
@@ -82,7 +83,7 @@ export const ValidatorCard = React.memo(({ cardNumber, validator, selectCard, to
           <ValidatorInfo member={validator.membership} address={encodeAddress(validator.stashAccount)} size="l" />
           <Tabs tabs={tabs} tabsSize="xs" />
         </SidePaneHeader>
-        {activeTab === 'Details' && <ValidatorDetail validator={validator} hideModal={hideModal} />}
+        {activeTab === 'Details' && <ValidatorDetail validator={validator} eraIndex={eraIndex} hideModal={hideModal} />}
         {activeTab === 'Nominators' && <Nominators validator={validator} />}
       </SidePane>
     </SidePaneGlass>

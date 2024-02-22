@@ -8,9 +8,10 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePaneBody, SidePaneLabel, SidePaneRow, SidePaneText } from '@/common/components/SidePane'
 import { NumericValueStat, StatisticsThreeColumns, TokenValueStat } from '@/common/components/statistics'
 import { TextSmall } from '@/common/components/typography'
-import { BN_ZERO, ERA_DEPTH } from '@/common/constants'
+import { BN_ZERO } from '@/common/constants'
 import { plural } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
+import { whenDefined } from '@/common/utils'
 import RewardPointsChart from '@/validators/components/RewardPointChart'
 
 import { ValidatorWithDetails } from '../../types'
@@ -18,11 +19,20 @@ import { NominatingRedirectModalCall } from '../NominatingRedirectModal'
 
 interface Props {
   validator: ValidatorWithDetails
+  eraIndex: number | undefined
   hideModal: () => void
 }
 
-export const ValidatorDetail = ({ validator, hideModal }: Props) => {
+export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
   const { showModal } = useModal<NominatingRedirectModalCall>()
+
+  const uptime = whenDefined(validator.rewardPointsHistory, (rewardPointsHistory) => {
+    const firstEra = rewardPointsHistory.at(0)?.era
+    if (!eraIndex || !firstEra) return
+    const totalEras = eraIndex - firstEra
+    const validatedEra = rewardPointsHistory.filter(({ rewardPoints }) => rewardPoints > 0).length
+    return `${((validatedEra / totalEras) * 100).toFixed(1)}%`
+  })
 
   return (
     <>
@@ -34,35 +44,36 @@ export const ValidatorDetail = ({ validator, hideModal }: Props) => {
               <TokenValueStat size="s" value={validator.totalRewards}>
                 <TextSmall lighter>Total reward</TextSmall>
               </TokenValueStat>
-              <Stat size="s" value={validator.APR.toString() + '%'}>
+              <Stat size="s" value={whenDefined(validator.APR, (apr) => `${apr}%`)}>
                 <TextSmall lighter>Average APR</TextSmall>
               </Stat>
-              <TokenValueStat size="s" value={validator.staking.others.reduce((a, b) => a.add(b.staking), BN_ZERO)}>
+              <TokenValueStat
+                size="s"
+                value={validator.staking?.nominators.reduce((a, b) => a.add(b.staking), BN_ZERO)}
+              >
                 <TextSmall lighter>Staked by nominators</TextSmall>
               </TokenValueStat>
               <Stat size="s" value={validator.isVerifiedValidator ? 'Verified' : 'Unverified'}>
                 <TextSmall lighter>Status</TextSmall>
               </Stat>
-              <Stat size="s" value={`${validator.slashed} time${plural(validator.slashed)}`}>
+              <Stat size="s" value={whenDefined(validator.slashed, (slashed) => `${slashed} time${plural(slashed)}`)}>
                 <TextSmall lighter>Slashed</TextSmall>
               </Stat>
-              <Stat
-                size="s"
-                value={`${(
-                  (validator.rewardPointsHistory.filter(({ rewardPoints }) => rewardPoints).length / ERA_DEPTH) *
-                  100
-                ).toFixed(3)}%`}
-              >
+              <Stat size="s" value={uptime}>
                 <TextSmall lighter>Uptime</TextSmall>
               </Stat>
             </ModalStatistics>
           </RowGapBlock>
-          <RowGapBlock gap={4}>
-            <h6>Era points</h6>
-            <RewardPointsChartWrapper>
-              <RewardPointsChart rewardPointsHistory={validator.rewardPointsHistory} />
-            </RewardPointsChartWrapper>
-          </RowGapBlock>
+          {validator.rewardPointsHistory && (
+            <RowGapBlock gap={4}>
+              <h6>Era points</h6>
+              <RewardPointsChartWrapper>
+                <div>
+                  <RewardPointsChart rewardPointsHistory={validator.rewardPointsHistory} />
+                </div>
+              </RewardPointsChartWrapper>
+            </RowGapBlock>
+          )}
           <RowGapBlock gap={4}>
             <h6>About</h6>
             <MarkdownPreview markdown={validator.membership?.about ?? ''} />
@@ -106,6 +117,14 @@ const Details = styled(RowGapBlock)`
 
 const ModalStatistics = styled(StatisticsThreeColumns)`
   grid-gap: 10px;
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 424px) {
+    grid-template-columns: 1fr;
+  }
 `
 
 const Stat = styled(NumericValueStat)`
@@ -114,5 +133,10 @@ const Stat = styled(NumericValueStat)`
 
 const RewardPointsChartWrapper = styled.div`
   width: 100%;
-  height: 200px;
+  overflow: auto;
+
+  > div {
+    min-width: 500px;
+    height: 200px;
+  }
 `
