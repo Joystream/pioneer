@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0 (Validator dashboard)][3.0.0] - 2024-02-21
+
+### Added
+- Validator dashboard.
+- Binding validator accounts to new or existing memberships.
+
+## [2.6.0] - 2024-02-15
+
+### Added
+- Separate urls for each working group tabs.
+- Default descriptions for each working group about tab.
+
+### Fixed
+- Searching for members by id.
+- General search box behavior. 
+- Show members active roles only.
+- Show creation date on member profiles.
+- Fix opening creation for lead with separate role and controller accounts.
+- OneKey wallet extension support.
+
 ## [2.5.0] - 2024-02-05
 
 ### Added
@@ -305,7 +325,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v2.5.0...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/Joystream/pioneer/compare/v2.6.0...v3.0.0
+[2.6.0]: https://github.com/Joystream/pioneer/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/Joystream/pioneer/compare/v2.4.2...v2.5.0
 [2.4.2]: https://github.com/Joystream/pioneer/compare/v2.4.1...v2.4.2
 [2.4.1]: https://github.com/Joystream/pioneer/compare/v2.4.0...v2.4.1

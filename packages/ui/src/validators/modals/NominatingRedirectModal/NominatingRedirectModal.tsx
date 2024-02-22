@@ -2,6 +2,7 @@ import React from 'react'
 
 import { LinkGhost, LinkPrimary } from '@/common/components/buttons/Links'
 import { ArrowRightIcon } from '@/common/components/icons'
+import { Link } from '@/common/components/Link'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextBig, TextInlineBig } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
@@ -17,8 +18,8 @@ export const NominatingRedirectModal = () => {
       <ModalBody>
         <TextBig>
           Nomination functionality is still in the development but in the meantime you can nominate validators in{' '}
-          <TextInlineBig bold>Polkadot.js app</TextInlineBig>. In order to do that you should click the “
-          <TextInlineBig bold>+ Nominator</TextInlineBig>” button on the polkadot website.
+          <TextInlineBig bold>Polkadot.js app</TextInlineBig>. Learn how in{' '}
+          <Link href="https://gleev.xyz/video/829659">this video</Link>.
         </TextBig>
       </ModalBody>
       <ModalFooter>
@@ -29,7 +30,7 @@ export const NominatingRedirectModal = () => {
           size="medium"
           href="https://polkadot.js.org/apps/?rpc=wss://rpc.joystream.org:9944#/staking/actions"
         >
-          Norminate <ArrowRightIcon white />
+          Nominate <ArrowRightIcon white />
         </LinkPrimary>
       </ModalFooter>
     </Modal>

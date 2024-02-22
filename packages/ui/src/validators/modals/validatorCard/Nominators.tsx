@@ -19,7 +19,7 @@ export const Nominators = ({ validator }: Props) => {
     <SidePaneBody>
       <Details gap={24}>
         <RowGapBlock gap={4}>
-          <Title>{`Nominators (${validator.staking.others.length})`}</Title>
+          <Title>{`Nominators (${validator.staking?.nominators.length})`}</Title>
         </RowGapBlock>
         <RowGapBlock gap={4}>
           <ListHeaders>
@@ -27,12 +27,12 @@ export const Nominators = ({ validator }: Props) => {
             <ListHeader>Total staked</ListHeader>
           </ListHeaders>
           <NominatorList>
-            {validator.staking.others?.map(({ address, staking }, index) => (
+            {validator.staking?.nominators?.map(({ address, staking }, index) => (
               <ListItem key={index} borderless>
-                <ValidatorItemWrap>
+                <NominatorItemWrap>
                   <UnknownAccountInfo address={address} placeholderName="Nominator account" />
                   <TokenValue size="xs" value={staking} />
-                </ValidatorItemWrap>
+                </NominatorItemWrap>
               </ListItem>
             ))}
           </NominatorList>
@@ -51,10 +51,9 @@ const Title = styled.h4`
 const NominatorList = styled(List)`
   gap: 8px;
 `
-const ValidatorItemWrap = styled.div`
+const NominatorItemWrap = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
   justify-content: space-between;
   justify-items: end;
   align-items: center;
@@ -65,6 +64,11 @@ const ValidatorItemWrap = styled.div`
   cursor: pointer;
   transition: ${Transitions.all};
   ${TableListItemAsLinkHover}
+
+  @media (max-width: 424px) {
+    grid-gap: 8px;
+    grid-template-columns: 1fr;
+  }
 `
 const ListHeaders = styled.div`
   display: grid;
