@@ -1,12 +1,14 @@
 import BN from 'bn.js'
 import React, { FC, ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { ButtonGhost, ButtonPrimary, ButtonsGroup } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons'
-import { ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
+import { BalanceInfoNarrow, ModalFooter, TransactionInfoContainer } from '@/common/components/Modal'
 
-import { TransactionFee } from '../TransactionFee'
+import { TransactionInfo } from '../TransactionInfo'
 
 interface ButtonState {
   disabled?: boolean
@@ -33,6 +35,8 @@ export const ModalTransactionFooter: FC<Props> = ({
   children,
 }) => {
   const { feeInfo } = useTransactionFee()
+  const { t } = useTranslation()
+
   return (
     <ModalFooter className={className}>
       <ButtonsGroup align="left">
@@ -44,11 +48,16 @@ export const ModalTransactionFooter: FC<Props> = ({
           </ButtonGhost>
         )}
       </ButtonsGroup>
-      <TransactionInfoContainer>
+      <InfoContainer>
         {children}
-        {(transactionFee || feeInfo) && <TransactionFee value={transactionFee ?? (feeInfo?.transactionFee as BN)} />}
-      </TransactionInfoContainer>
-      <ButtonsGroup align="right">
+        {(transactionFee || feeInfo) && (
+          <TransactionInfo
+            title={t('modals.transactionFee.label')}
+            value={transactionFee ?? (feeInfo?.transactionFee as BN)}
+          />
+        )}
+      </InfoContainer>
+      <ButtonsGroup>
         {extraButtons}
         <ButtonPrimary disabled={next.disabled} onClick={next.onClick} size="medium">
           {next.label ?? 'Next step'} <Arrow direction="right" />
@@ -57,3 +66,13 @@ export const ModalTransactionFooter: FC<Props> = ({
     </ModalFooter>
   )
 }
+
+const InfoContainer = styled(TransactionInfoContainer)`
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto auto;
+  column-gap: 8px;
+  > ${BalanceInfoNarrow} {
+    display: contents;
+  }
+`

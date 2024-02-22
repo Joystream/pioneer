@@ -60,7 +60,7 @@ interface BuyMembershipFormModalProps {
   membershipPrice?: BalanceOf
 }
 
-interface BuyMembershipFormProps extends Omit<BuyMembershipFormModalProps, 'onClose'> {
+export interface BuyMembershipFormProps extends Omit<BuyMembershipFormModalProps, 'onClose'> {
   type: 'onBoarding' | 'general'
   membershipAccount?: string
   changeMembershipAccount?: () => void
@@ -300,17 +300,16 @@ export const BuyMembershipForm = ({
             />
           </TransactionInfoContainer>
         )}
-        <FooterRow>
-          {type === 'onBoarding' && (
-            <ButtonGhost onClick={changeMembershipAccount} size="medium">
-              <Arrow direction="left" />
-              Change account
-            </ButtonGhost>
-          )}
-          <ButtonPrimary size="medium" onClick={submit} disabled={isDisabled}>
-            {isUploading ? <Loading text="Uploading avatar" /> : 'Create a Membership'}
-          </ButtonPrimary>
-        </FooterRow>
+
+        {type === 'onBoarding' && (
+          <ButtonGhost onClick={changeMembershipAccount} size="medium">
+            <Arrow direction="left" />
+            Change account
+          </ButtonGhost>
+        )}
+        <ButtonPrimary size="medium" onClick={submit} disabled={isDisabled}>
+          {isUploading ? <Loading text="Uploading avatar" /> : 'Create a Membership'}
+        </ButtonPrimary>
       </ModalFooter>
     </>
   )
@@ -327,14 +326,5 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: B
 
 const StyledCheckbox = styled(Checkbox)`
   flex-shrink: 1;
-`
-
-const FooterRow = styled.div`
-  display: flex;
-  max-width: 100%;
-  gap: 16px;
-  flex-grow: 1;
-  > *:nth-last-child(1) {
-    margin: 0 0 0 auto;
-  }
+  margin-right: auto;
 `

@@ -27,7 +27,7 @@ export const OnBoardingPlugin = () => {
           <TextSmall>Select which wallet you want to use to connect with.</TextSmall>
           <List>
             {allWallets.map((wallet) => (
-              <ListItem>
+              <ListItem key={wallet.extensionName}>
                 <ConnectWalletItem
                   key={wallet.extensionName}
                   wallet={wallet}

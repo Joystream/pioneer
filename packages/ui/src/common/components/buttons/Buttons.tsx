@@ -509,15 +509,24 @@ export const ButtonsGroup = styled.div<{ align?: 'left' | 'center' | 'right' }>`
   grid-column-gap: 8px;
   align-items: center;
   width: fit-content;
-  justify-self: ${({ align }) => {
+  ${({ align }) => {
     switch (align) {
       case 'left':
-      default:
-        return 'start'
+        return css`
+          justify-self: start;
+          margin-right: auto;
+        `
       case 'center':
-        return 'center'
+        return css`
+          justify-self: center;
+          margin-left: auto;
+          margin-right: auto;
+        `
       case 'right':
-        return 'end'
+        return css`
+          justify-self: end;
+          margin-left: auto;
+        `
     }
   }};
 `

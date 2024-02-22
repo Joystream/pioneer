@@ -34,7 +34,6 @@ export const TransactionInfo = ({
           tooltipLinkText={tooltipLinkText}
           tooltipText={tooltipText}
           tooltipLinkURL={tooltipLinkURL}
-          absolute
         >
           <TooltipDefault />
         </Tooltip>
