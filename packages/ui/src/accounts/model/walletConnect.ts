@@ -1,8 +1,7 @@
 import { Signer } from '@polkadot/api/types'
 import { WalletConnectModal } from '@walletconnect/modal'
 import { SessionTypes } from '@walletconnect/types'
-import { UniversalProvider } from '@walletconnect/universal-provider'
-import type { UniversalProvider as Provider } from '@walletconnect/universal-provider/dist/types/UniversalProvider.d.ts'
+import Provider from '@walletconnect/universal-provider'
 import { BaseDotsamaWallet, MetadataDef, SubscriptionFn, WalletAccount } from 'injectweb3-connect'
 import { Observable } from 'rxjs'
 
@@ -42,7 +41,7 @@ export class WalletConnect extends BaseDotsamaWallet {
   public enable = async (): Promise<void> => {
     this._provider =
       this._provider ??
-      (await UniversalProvider.init({
+      (await Provider.init({
         projectId: this._projectId,
         relayUrl: 'wss://relay.walletconnect.com',
         metadata: {
@@ -143,7 +142,7 @@ export class WalletConnect extends BaseDotsamaWallet {
   }
 
   public getAccounts = async (): Promise<WalletAccount[]> => {
-    return Promise.resolve(this._accounts ?? [])
+    return this._accounts ?? []
   }
 
   public subscribeAccounts: (callback: SubscriptionFn) => Promise<() => void> = (callback) => {

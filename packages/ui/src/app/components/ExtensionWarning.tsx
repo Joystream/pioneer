@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 
-// import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { SideNotification } from '@/common/components/page/SideNotification'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
