@@ -601,6 +601,7 @@ export const BuyMembershipHappyBindOneValidatorHappy: Story = {
     expect(screen.queryByText('Become a member')).toBeNull()
 
     await userEvent.click(getButtonByText(screen, 'Join Now'))
+    await userEvent.click(await modal.findByText('New Member'))
 
     await step('Form', async () => {
       const createButton = getButtonByText(modal, 'Create a Membership')
@@ -682,6 +683,7 @@ export const BuyMembershipHappyAddTwoValidatorHappy: Story = {
     expect(screen.queryByText('Become a member')).toBeNull()
 
     await userEvent.click(getButtonByText(screen, 'Join Now'))
+    await userEvent.click(await modal.findByText('New Member'))
 
     await step('Form', async () => {
       const createButton = getButtonByText(modal, 'Create a Membership')
@@ -776,6 +778,8 @@ export const InvalidValidatorAccountInput: Story = {
     const modal = withinModal(canvasElement)
 
     await userEvent.click(getButtonByText(screen, 'Join Now'))
+    await userEvent.click(await modal.findByText('New Member'))
+
     await fillMembershipForm(modal)
     const validatorCheckButton = modal.getAllByText('Yes')[1]
     await userEvent.click(validatorCheckButton)
@@ -801,6 +805,7 @@ export const BuyMembershipWithValidatorAccountNotEnoughFunds: Story = {
     const modal = withinModal(canvasElement)
 
     await userEvent.click(getButtonByText(screen, 'Join Now'))
+    await userEvent.click(await modal.findByText('New Member'))
 
     await fillMembershipFormValidatorAccounts(modal, ['charlie'])
     const createButton = getButtonByText(modal, 'Create a Membership')
@@ -821,6 +826,7 @@ export const BuyMembershipWithValidatorAccountFailure: Story = {
     const modal = withinModal(canvasElement)
 
     await userEvent.click(getButtonByText(screen, 'Join Now'))
+    await userEvent.click(await modal.findByText('New Member'))
 
     await fillMembershipFormValidatorAccounts(modal, ['charlie'])
     const createButton = getButtonByText(modal, 'Create a Membership')
@@ -845,6 +851,7 @@ export const BuyMembershipHappyAddOneValidatorFailure: Story = {
     expect(screen.queryByText('Become a member')).toBeNull()
 
     await userEvent.click(getButtonByText(screen, 'Join Now'))
+    await userEvent.click(await modal.findByText('New Member'))
 
     await step('Form', async () => {
       const createButton = getButtonByText(modal, 'Create a Membership')
@@ -891,6 +898,7 @@ export const BuyMembershipAddValidatorAccHappyConfirmTxFailure: Story = {
     expect(screen.queryByText('Become a member')).toBeNull()
 
     await userEvent.click(getButtonByText(screen, 'Join Now'))
+    await userEvent.click(await modal.findByText('New Member'))
 
     await step('Form', async () => {
       const createButton = getButtonByText(modal, 'Create a Membership')
@@ -947,6 +955,7 @@ export const BuyMembershipAddTwoValidatorAccHappyConfirmTxFailure: Story = {
     expect(screen.queryByText('Become a member')).toBeNull()
 
     await userEvent.click(getButtonByText(screen, 'Join Now'))
+    await userEvent.click(await modal.findByText('New Member'))
 
     await step('Form', async () => {
       const createButton = getButtonByText(modal, 'Create a Membership')
