@@ -25,7 +25,7 @@ import {
   SimpleSearchWorkingGroupOpeningsQuery,
 } from '@/working-groups/queries'
 
-enum MentionType {
+export enum MentionType {
   General = 'general',
   Proposal = 'proposal',
   ProposalPost = 'proposal_post',
