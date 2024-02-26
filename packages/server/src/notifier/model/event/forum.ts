@@ -1,14 +1,23 @@
 import { pick, uniq } from 'lodash'
 
-import { PostAddedEventFieldsFragmentDoc, ThreadCreatedEventFieldsFragmentDoc, useFragment } from '@/common/queries'
+import {
+  GetCurrentRolesQuery,
+  PostAddedEventFieldsFragmentDoc,
+  ThreadCreatedEventFieldsFragmentDoc,
+  useFragment,
+} from '@/common/queries'
 
 import { NotifEventFromQNEvent, isOlderThan, getMentionedMemberIds, getParentCategories } from './utils'
 
-export const fromPostAddedEvent: NotifEventFromQNEvent<'PostAddedEvent'> = async (event, buildEvents) => {
+export const fromPostAddedEvent: NotifEventFromQNEvent<'PostAddedEvent'> = async (
+  event,
+  buildEvents,
+  roles: GetCurrentRolesQuery
+) => {
   const postAddedEvent = useFragment(PostAddedEventFieldsFragmentDoc, event)
   const post = postAddedEvent.post
 
-  const mentionedMemberIds = getMentionedMemberIds(post.text)
+  const mentionedMemberIds = getMentionedMemberIds(post.text, roles)
   const repliedToMemberId = post.repliesTo && [Number(post.repliesTo.authorId)]
   const earlierPosts = post.thread.posts.filter(isOlderThan(post))
   const earlierAuthors = uniq(earlierPosts.map((post) => Number(post.authorId)))
@@ -27,11 +36,15 @@ export const fromPostAddedEvent: NotifEventFromQNEvent<'PostAddedEvent'> = async
   ])
 }
 
-export const fromThreadCreatedEvent: NotifEventFromQNEvent<'ThreadCreatedEvent'> = async (event, buildEvents) => {
+export const fromThreadCreatedEvent: NotifEventFromQNEvent<'ThreadCreatedEvent'> = async (
+  event,
+  buildEvents,
+  roles: GetCurrentRolesQuery
+) => {
   const threadCreatedEvent = useFragment(ThreadCreatedEventFieldsFragmentDoc, event)
   const thread = threadCreatedEvent.thread
 
-  const mentionedMemberIds = getMentionedMemberIds(threadCreatedEvent.text)
+  const mentionedMemberIds = getMentionedMemberIds(threadCreatedEvent.text, roles)
   const parentCategoryIds = await getParentCategories(thread.categoryId)
 
   const eventData = pick(threadCreatedEvent, 'inBlock', 'id')

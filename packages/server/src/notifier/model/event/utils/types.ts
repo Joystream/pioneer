@@ -22,5 +22,6 @@ export type BuildEvents = (
 
 export type NotifEventFromQNEvent<T extends ImplementedQNEvent['__typename']> = (
   event: QNEvent<T>,
-  buildEvents: BuildEvents
+  buildEvents: BuildEvents,
+  ...args: any[]
 ) => Promise<NotificationEvent>

@@ -1,6 +1,6 @@
 import { match } from 'ts-pattern'
 
-import { GetNotificationEventsQuery } from '@/common/queries'
+import { GetCurrentRolesQuery, GetNotificationEventsQuery } from '@/common/queries'
 import { NotificationEvent } from '@/notifier/types'
 
 import {
@@ -17,7 +17,7 @@ export { isGeneralPotentialNotif, isEntityPotentialNotif } from './utils'
 type AnyQNEvent = GetNotificationEventsQuery['events'][0]
 
 export const toNotificationEvents =
-  (allMemberIds: number[]) =>
+  (allMemberIds: number[], roles: GetCurrentRolesQuery) =>
   async (anyEvent: AnyQNEvent): Promise<NotificationEvent> => {
     // NOTE: The conversion to ImplementedQNEvent assumes that the QN will only return
     // events with fragments defined in the codegen document.
@@ -26,7 +26,7 @@ export const toNotificationEvents =
     const build = buildEvents(allMemberIds, event)
 
     const notifEvent = match(event)
-      .with({ __typename: 'PostAddedEvent' }, (e) => fromPostAddedEvent(e, build))
+      .with({ __typename: 'PostAddedEvent' }, (e) => fromPostAddedEvent(e, build, roles))
       .with({ __typename: 'ThreadCreatedEvent' }, (e) => fromThreadCreatedEvent(e, build))
       .with({ __typename: 'AnnouncingPeriodStartedEvent' }, (e) => fromElectionAnnouncingStartedEvent(e, build))
       .with({ __typename: 'VotingPeriodStartedEvent' }, (e) => fromElectionVotingStartedEvent(e, build))

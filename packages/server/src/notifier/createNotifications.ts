@@ -5,7 +5,7 @@ import { info, verbose, warn } from 'npmlog'
 
 import { QUERY_NODE_ENDPOINT, STARTING_BLOCK } from '@/common/config'
 import { prisma } from '@/common/prisma'
-import { GetNotificationEventsDocument } from '@/common/queries'
+import { GetCurrentRolesDocument, GetNotificationEventsDocument } from '@/common/queries'
 import { count, getTypename } from '@/common/utils'
 
 import { toNotificationEvents } from './model/event'
@@ -23,6 +23,8 @@ export const createNotifications = async (): Promise<void> => {
 
   const allMembers = (await prisma.member.findMany()).map(({ id, receiveEmails }) => ({ id, receiveEmails }))
 
+  const qnRoles = await request(QUERY_NODE_ENDPOINT, GetCurrentRolesDocument)
+
   /* eslint-disable-next-line no-constant-condition */
   while (true) {
     // Save the current process
@@ -34,20 +36,25 @@ export const createNotifications = async (): Promise<void> => {
 
     // Fetch events from the query nodes and break if non are found
     const qnVariables = { from: progress.block, exclude: progress.eventIds }
-    const qnData = await request(QUERY_NODE_ENDPOINT, GetNotificationEventsDocument, qnVariables)
+    const qnEvents = await request(QUERY_NODE_ENDPOINT, GetNotificationEventsDocument, qnVariables)
     info(
       'QN events',
-      `Received ${qnData.events.length} new events`,
-      mapValues(groupBy(qnData.events, getTypename), count),
+      `Received ${qnEvents.events.length} new events`,
+      mapValues(groupBy(qnEvents.events, getTypename), count),
       `from block ${progress.block} onward excluding`,
       progress.eventIds
     )
 
-    if (qnData.events.length === 0) break
+    if (qnEvents.events.length === 0) break
 
     // Generate the potential notification based on the query nodes data
     const events: NotificationEvent[] = await Promise.all(
-      qnData.events.map(toNotificationEvents(allMembers.map(({ id }) => id)))
+      qnEvents.events.map(
+        toNotificationEvents(
+          allMembers.map(({ id }) => id),
+          qnRoles
+        )
+      )
     )
 
     // Update the progress
