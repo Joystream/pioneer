@@ -62,7 +62,7 @@ export const useWallets = (): UseWallets => {
 
     const genesisHash = firstValueFrom(genesisHash$)
     return new WalletConnect(wcProjectId, genesisHash, WalletDisconnection$, () => setWallet(undefined))
-  }, [api?.isConnected])
+  }, [])
 
   const allWallets = useMemo(
     () => [
