@@ -1,12 +1,12 @@
 import { uniq } from 'lodash'
 
-import { EntitiyPotentialNotif, GeneralPotentialNotif, PotentialNotif } from './types'
+import { EntityPotentialNotif, GeneralPotentialNotif, PotentialNotif } from '@/notifier/types'
 
 export { getParentCategories } from './getParentCategories'
-export { NotifEventFromQNEvent, NotificationEvent, PotentialNotif } from './types'
+export { NotifEventFromQNEvent } from './types'
 
 export const isGeneralPotentialNotif = (p: PotentialNotif): p is GeneralPotentialNotif => 'relatedMembers' in p
-export const isEntityPotentialNotif = (p: PotentialNotif): p is EntitiyPotentialNotif => 'relatedEntityId' in p
+export const isEntityPotentialNotif = (p: PotentialNotif): p is EntityPotentialNotif => 'relatedEntityId' in p
 
 type Created = { createdAt: any }
 export const isOlderThan =

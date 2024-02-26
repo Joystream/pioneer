@@ -1,6 +1,7 @@
 import { match } from 'ts-pattern'
 
 import { GetNotificationEventsQuery } from '@/common/queries'
+import { NotificationEvent } from '@/notifier/types'
 
 import {
   fromElectionAnnouncingStartedEvent,
@@ -8,11 +9,10 @@ import {
   fromElectionVotingStartedEvent,
 } from './election'
 import { fromPostAddedEvent, fromThreadCreatedEvent } from './forum'
-import { NotificationEvent } from './utils'
 import { buildEvents } from './utils/buildEvent'
 import { ImplementedQNEvent } from './utils/types'
 
-export { NotificationEvent, PotentialNotif, isGeneralPotentialNotif, isEntityPotentialNotif } from './utils'
+export { isGeneralPotentialNotif, isEntityPotentialNotif } from './utils'
 
 type AnyQNEvent = GetNotificationEventsQuery['events'][0]
 

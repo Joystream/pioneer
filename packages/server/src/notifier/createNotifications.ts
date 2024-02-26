@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { Prisma, Subscription } from '@prisma/client'
 import { request } from 'graphql-request'
 import { clone, groupBy, isEqual, isObject, mapValues } from 'lodash'
 import { info, verbose, warn } from 'npmlog'
@@ -11,20 +11,15 @@ import { count, getTypename } from '@/common/utils'
 import { toNotificationEvents } from './model/event'
 import { notificationsFromEvent } from './model/notifications'
 import { filterSubscriptions } from './model/subscriptionFilters'
-
-interface ProgressDoc {
-  block: number
-  eventIds: string[]
-}
-const isProgressDoc = (consumed: any): consumed is ProgressDoc => isObject(consumed)
-const defaultProgress: ProgressDoc = { block: STARTING_BLOCK, eventIds: [] }
-const PROGRESS_KEY = { key: 'Progress' }
+import { Notification, NotificationEvent, PotentialNotif, ProgressDocument } from './types'
 
 export const createNotifications = async (): Promise<void> => {
   // Check the last block that where processed
   const { value: initialProgress } = (await prisma.store.findUnique({ where: PROGRESS_KEY })) ?? {}
-  const progress: ProgressDoc =
-    isProgressDoc(initialProgress) && initialProgress.block > STARTING_BLOCK ? clone(initialProgress) : defaultProgress
+  const progress: ProgressDocument =
+    isProgressDocument(initialProgress) && initialProgress.block > STARTING_BLOCK
+      ? clone(initialProgress)
+      : defaultProgress
 
   const allMembers = (await prisma.member.findMany()).map(({ id, receiveEmails }) => ({ id, receiveEmails }))
 
@@ -51,21 +46,23 @@ export const createNotifications = async (): Promise<void> => {
     if (qnData.events.length === 0) break
 
     // Generate the potential notification based on the query nodes data
-    const events = await Promise.all(qnData.events.map(toNotificationEvents(allMembers.map(({ id }) => id))))
+    const events: NotificationEvent[] = await Promise.all(
+      qnData.events.map(toNotificationEvents(allMembers.map(({ id }) => id)))
+    )
 
     // Update the progress
     progress.block = Math.max(progress.block, ...events.map((event) => event.inBlock))
     progress.eventIds = events.flatMap((event) => (event.inBlock === progress.block ? event.id : []))
 
-    const potentialNotifs = events.flatMap((event) => event.potentialNotifications)
+    const potentialNotifs: PotentialNotif[] = events.flatMap((event) => event.potentialNotifications)
     if (potentialNotifs.length === 0) continue
 
     // Fetch subscription related to the events
     const subscriptionFilter = { OR: filterSubscriptions(potentialNotifs) }
-    const subscriptions = await prisma.subscription.findMany({ where: subscriptionFilter })
+    const subscriptions: Subscription[] = await prisma.subscription.findMany({ where: subscriptionFilter })
 
     // Create and save new notifications
-    const notifications = events.flatMap(notificationsFromEvent(subscriptions, allMembers))
+    const notifications: Notification[] = events.flatMap(notificationsFromEvent(subscriptions, allMembers))
     info('New notifications', 'Saving', notifications.length, 'new notifications')
     verbose(
       'New notifications',
@@ -79,3 +76,7 @@ export const createNotifications = async (): Promise<void> => {
     }
   }
 }
+
+const isProgressDocument = (consumed: any): consumed is ProgressDocument => isObject(consumed)
+const defaultProgress: ProgressDocument = { block: STARTING_BLOCK, eventIds: [] }
+const PROGRESS_KEY = { key: 'Progress' }
