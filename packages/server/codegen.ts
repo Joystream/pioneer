@@ -1,9 +1,7 @@
 import { CodegenConfig } from '@graphql-codegen/cli'
 
-import { QUERY_NODE_ENDPOINT } from './src/common/config'
-
 const config: CodegenConfig = {
-  schema: QUERY_NODE_ENDPOINT,
+  schema: './src/common/queries/schema.graphql',
 
   documents: ['src/*/queries/**/*.graphql'],
 
