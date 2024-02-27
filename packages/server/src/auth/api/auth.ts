@@ -1,12 +1,11 @@
-import { pick } from 'lodash'
 import { arg, intArg, mutationField, nonNull, stringArg } from 'nexus'
 import * as Yup from 'yup'
 
 import { verifySignature } from '@/auth/model/signature'
-import { createAuthToken, createEmailToken } from '@/auth/model/token'
+import { createAuthToken } from '@/auth/model/token'
 import { Context } from '@/common/api'
-import { PIONEER_URL } from '@/common/config'
-import { configEmailProvider } from '@/common/utils/email'
+
+import { sendVerificationEmail } from '../model/emailVerification'
 
 interface SignInArgs {
   memberId: number
@@ -26,7 +25,7 @@ export const signin = mutationField('signin', {
   resolve: async (_, args: SignInArgs): Promise<string | null> => {
     const verification = await verifySignature(args.signature, args.memberId, args.timestamp)
     if (verification !== 'VALID') {
-      return null
+      throw new Error('Invalid signature')
     }
 
     return createAuthToken(args.memberId)
@@ -52,19 +51,26 @@ export const signup = mutationField('signup', {
   resolve: async (_, args: SignUpArgs, { req, prisma }: Context): Promise<string | null> => {
     const verification = await verifySignature(args.signature, args.memberId, args.timestamp)
     if (verification !== 'VALID') {
-      return null
+      throw new Error('Invalid signature')
     }
 
-    await prisma.member.create({ data: { id: args.memberId, name: args.name } })
+    if (args.email && !(await Yup.string().email().isValid(args.email))) {
+      throw new Error('Invalid email')
+    }
 
-    if (args.email && (await Yup.string().email().isValid(args.email))) {
-      const token = createEmailToken(pick(args as Required<SignUpArgs>, 'email', 'memberId'))
-      const verificationUrl = `${req?.headers.referer ?? PIONEER_URL}/#/?verify-email=${token}`
+    // check if the member already exists
+    const member = await prisma.member.findUnique({ where: { id: args.memberId } })
+    if (member) {
+      throw new Error('Member already exists')
+    }
+    await prisma.member.create({ data: { id: args.memberId, name: args.name, unverifiedEmail: args.email } })
 
-      await configEmailProvider()({
-        to: args.email,
-        subject: 'Confirm your email for Pioneer',
-        text: `Token:${token}\nWith link to :${verificationUrl}`,
+    if (args.email) {
+      await sendVerificationEmail({
+        email: args.email,
+        memberId: args.memberId,
+        name: args.name,
+        referer: req?.headers?.referer,
       })
     }
 

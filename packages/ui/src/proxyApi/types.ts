@@ -1,7 +1,7 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 
-import { ProxyApi } from '.'
 import { ClientAsyncMessage, WorkerAsyncMessage } from './client/_async'
+import { ProxyApi } from './client/ProxyApi'
 import { ClientQueryMessage, WorkerQueryMessage } from './client/query'
 import { ClientTxMessage, WorkerTxMessage } from './client/tx'
 import { ClientProxyMessage, WorkerProxyMessage } from './models/payload'
@@ -29,7 +29,10 @@ export type RawClientMessageEvent = MessageEvent<{
 
 export type RawMessageEvent = RawWorkerMessageEvent | RawClientMessageEvent
 
-export type WorkerInitMessage = { messageType: 'init'; payload: { consts: ProxyApi['consts'] } }
+export type WorkerInitMessage = {
+  messageType: 'init'
+  payload: Pick<ProxyApi, 'consts' | 'genesisHash' | 'runtimeVersion'>
+}
 export type ClientInitMessage = { messageType: 'init'; payload: string }
 export type WorkerConnectMessage = { messageType: 'isConnected'; payload: boolean }
 

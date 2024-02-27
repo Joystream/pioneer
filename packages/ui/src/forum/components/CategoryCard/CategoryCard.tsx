@@ -68,6 +68,14 @@ const Box = styled(Link)<{ archivedStyles?: boolean; ignoreHover?: boolean }>`
   padding: 19px;
   height: 108px;
 
+  @media (max-width: 767px) {
+    height: fit-content;
+
+    ${TextMedium} {
+      display: flex;
+    }
+  }
+
   > *:nth-child(1) {
     display: grid;
     row-gap: 5px;
@@ -96,6 +104,10 @@ const Box = styled(Link)<{ archivedStyles?: boolean; ignoreHover?: boolean }>`
     display: flex;
     align-items: center;
     color: ${Colors.Black[300]};
+
+    @media (max-width: 424px) {
+      display: none;
+    }
 
     :hover {
       color: ${Colors.LogoPurple};

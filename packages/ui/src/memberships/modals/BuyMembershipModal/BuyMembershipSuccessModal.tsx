@@ -1,14 +1,14 @@
 import React from 'react'
 
-import { ButtonPrimary } from '@/common/components/buttons'
+import { ButtonGhost } from '@/common/components/buttons'
 import { SuccessIcon } from '@/common/components/icons'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
-import { useModal } from '@/common/hooks/useModal'
+import { warning } from '@/common/logger'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { MemberRow } from '@/memberships/modals/components'
 
 import { MemberInfo } from '../../components'
-import { MemberModalCall } from '../../components/MemberProfile'
 import { Member } from '../../types'
 
 import { MemberFormFields } from './BuyMembershipFormModal'
@@ -20,18 +20,21 @@ interface Props {
 }
 
 export const BuyMembershipSuccessModal = ({ onClose, member, memberId }: Props) => {
-  const { showModal } = useModal()
-  const viewMember = () => {
-    onClose()
+  const { setActive: setActiveMember, members } = useMyMemberships()
 
-    if (memberId) {
-      showModal<MemberModalCall>({ modal: 'Member', data: { id: memberId } })
+  const handleClose = () => {
+    const newMember = members.find((member) => member.id === memberId?.toString())
+    if (newMember) {
+      setActiveMember(newMember)
+    } else {
+      warning('Could not find new member', memberId?.toString())
     }
+    onClose()
   }
 
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
-      <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
+      <ModalHeader onClick={handleClose} title="Success" icon={<SuccessIcon />} />
       <ModalBody>
         <TextMedium>You have just successfully created a new membership</TextMedium>
         <MemberRow>
@@ -39,9 +42,9 @@ export const BuyMembershipSuccessModal = ({ onClose, member, memberId }: Props) 
         </MemberRow>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimary size="medium" disabled={!memberId} onClick={viewMember}>
-          View my profile
-        </ButtonPrimary>
+        <ButtonGhost size="medium" disabled={!memberId} onClick={handleClose}>
+          Done
+        </ButtonGhost>
       </ModalFooter>
     </Modal>
   )

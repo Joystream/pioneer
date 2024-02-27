@@ -1,6 +1,5 @@
 import React from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
-import styled from 'styled-components'
 import * as Yup from 'yup'
 
 import { ButtonGhost } from '@/common/components/buttons'
@@ -8,35 +7,24 @@ import { InputComponent, InputText } from '@/common/components/forms'
 import { Info } from '@/common/components/Info'
 import { ModalHeader, ModalTransactionFooter, Row, Modal, ModalBody } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
-import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useYupValidationResolver } from '@/common/utils/validation'
-
-import { Member } from '../../types'
 
 import { EmailSubscriptionForm } from './types'
 
 interface Props {
   onClose: () => void
   onSubmit: (params: EmailSubscriptionForm) => void
-  member: Member
 }
 
 const EmailSubscriptionSchema = Yup.object().shape({
   email: Yup.string().email().required('This field is required.'),
 })
 
-export const EmailSubscriptionFormModal = ({ onClose, onSubmit, member }: Props) => {
-  const [, setMembersEmail] = useLocalStorage<Record<string, string>>('memberEmail')
-
+export const EmailSubscriptionFormModal = ({ onClose, onSubmit }: Props) => {
   const form = useForm({
     resolver: useYupValidationResolver<EmailSubscriptionForm>(EmailSubscriptionSchema),
     mode: 'onChange',
   })
-
-  const onCancelClick = () => {
-    setMembersEmail((emails) => ({ ...emails, [member.id]: '' }))
-    onClose()
-  }
 
   const onSubmitClick = () => {
     onSubmit({
@@ -47,8 +35,8 @@ export const EmailSubscriptionFormModal = ({ onClose, onSubmit, member }: Props)
   const isValid = !form.getValues('email') || form.getFieldState('email').invalid
 
   return (
-    <Modal modalSize="m" modalHeight="m" onClose={onCancelClick}>
-      <ModalHeader onClick={onCancelClick} title="Sign up to email notifications" />
+    <Modal modalSize="m" modalHeight="m" onClose={onClose}>
+      <ModalHeader onClick={onClose} title="Sign up to email notifications" />
       <ModalBody>
         <FormProvider {...form}>
           <Row>
@@ -72,21 +60,18 @@ export const EmailSubscriptionFormModal = ({ onClose, onSubmit, member }: Props)
           </Info>
         </Row>
       </ModalBody>
-      <StyledFooter
+      <ModalTransactionFooter
         next={{
           disabled: isValid,
           label: 'Sign and Authorize Email',
           onClick: onSubmitClick,
         }}
-      >
-        <ButtonGhost size="medium" onClick={onCancelClick}>
-          Not now
-        </ButtonGhost>
-      </StyledFooter>
+        extraButtons={
+          <ButtonGhost size="medium" onClick={onClose}>
+            Not now
+          </ButtonGhost>
+        }
+      />
     </Modal>
   )
 }
-
-const StyledFooter = styled(ModalTransactionFooter)`
-  grid-column-gap: 20px;
-`

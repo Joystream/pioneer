@@ -262,7 +262,7 @@ describe('UI: Announce Candidacy Modal', () => {
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
         )
 
-        expect(screen.queryByText(/^maximum length is \d+ symbols/i)).not.toBeNull()
+        await waitFor(() => expect(screen.getByText(/^maximum length is \d+ symbols/i)))
         expect(await getNextStepButton()).toBeDisabled()
       })
 
@@ -271,7 +271,7 @@ describe('UI: Announce Candidacy Modal', () => {
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua!Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua'
         )
 
-        expect(screen.queryByText(/^maximum length is \d+ symbols/i)).not.toBeNull()
+        await waitFor(() => expect(screen.getByText(/^maximum length is \d+ symbols/i)))
         expect(await getNextStepButton()).toBeDisabled()
       })
 

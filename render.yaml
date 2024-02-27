@@ -2,10 +2,10 @@ services:
   - type: web
     name: api
     region: frankfurt
-    plan: free
+    plan: starter
 
     runtime: image
-    image: { url: docker.io/thesan/pioneer-backend:prod }
+    image: { url: docker.io/joystream/pioneer-backend:latest }
 
     envVars:
       - key: DATABASE_URL
@@ -28,18 +28,15 @@ services:
       - key: APP_SECRET_KEY
         generateValue: true
 
-      - key: INITIAL_MEMBERSHIPS
-        sync: false
-
   - type: cron
     name: notifier
     region: frankfurt
     plan: starter
 
     runtime: image
-    image: { url: docker.io/thesan/pioneer-backend:prod }
+    image: { url: docker.io/joystream/pioneer-backend:latest }
     dockerCommand: notify
-    schedule: "*/30 * * * *"
+    schedule: "*/10 * * * *"
 
     envVars:
       - key: DATABASE_URL
@@ -80,4 +77,4 @@ services:
 databases:
   - name: db
     region: frankfurt
-    plan: free
+    plan: starter

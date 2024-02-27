@@ -15,6 +15,7 @@ fragment MemberFields on Membership {
       # ...on AvatarObject {} - Should be fetched from the Storage system.
       # See https://github.com/Joystream/pioneer/issues/54
     }
+    isVerifiedValidator
   }
   isVerified
   isFoundingMember
@@ -27,6 +28,7 @@ fragment MemberFields on Membership {
     }
     createdAt
     isLead
+    isActive
   }
   createdAt
   stakingaccountaddedeventmember {
@@ -54,6 +56,7 @@ fragment MemberWithDetailsFields on Membership {
       # ...on AvatarObject {} - Should be fetched from the Storage system.
       # See https://github.com/Joystream/pioneer/issues/54
     }
+    isVerifiedValidator
   }
   entry {
     ... on MembershipEntryInvited {
@@ -65,6 +68,20 @@ fragment MemberWithDetailsFields on Membership {
     }
     ... on MembershipEntryPaid {
       membershipBoughtEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+    ... on MembershipEntryGifted {
+      membershipGiftedEvent {
+        createdAt
+        inBlock
+        network
+      }
+    }
+    ... on MembershipEntryMemberCreated {
+      memberCreatedEvent {
         createdAt
         inBlock
         network

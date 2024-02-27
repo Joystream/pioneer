@@ -1,42 +1,28 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import accountImg from '@/app/assets/images/OnBoarding/accountImage.png'
-import { ButtonPrimary } from '@/common/components/buttons'
 import { ScrolledModalBody } from '@/common/components/Modal'
 import { HorizontalStaticStepper } from '@/common/components/Stepper/HorizontalStaticStepper'
 import { TextExtraHuge } from '@/common/components/typography'
 import { OnBoardingTextFooter } from '@/common/modals/OnBoardingModal'
 
-const steps = [
-  'Open the extension with the icon in your browser bar',
-  'Create an account according to the displayed instructions',
-]
+import { ResetWalletButton } from './ResetWalletButton'
 
-export const NoAccountStep = () => {
-  const { setWallet } = useMyAccounts()
+const steps = ['Connect Pioneer to the selected wallet', 'Create an account according to the displayed instructions']
 
-  return (
-    <>
-      <ScrolledModalBody>
-        <Wrapper>
-          <AccountImage src={accountImg} />
-          <TextExtraHuge bold>Create an account</TextExtraHuge>
-          <HorizontalStaticStepper steps={steps} />
-        </Wrapper>
-      </ScrolledModalBody>
-      <OnBoardingTextFooter
-        text="Please reload the page after account creation!"
-        button={
-          <ButtonPrimary size="medium" onClick={() => setWallet?.(undefined)}>
-            Return to wallet selection
-          </ButtonPrimary>
-        }
-      />
-    </>
-  )
-}
+export const NoAccountStep = () => (
+  <>
+    <ScrolledModalBody>
+      <Wrapper>
+        <AccountImage src={accountImg} />
+        <TextExtraHuge bold>Create an account</TextExtraHuge>
+        <HorizontalStaticStepper steps={steps} />
+      </Wrapper>
+    </ScrolledModalBody>
+    <OnBoardingTextFooter text="Please reload the page after account creation!" button={<ResetWalletButton />} />
+  </>
+)
 
 const AccountImage = styled.img`
   object-fit: contain;

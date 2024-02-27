@@ -45,8 +45,9 @@ const modalData = {
 const useMyAccounts: UseAccounts = {
   isLoading: false,
   hasAccounts: false,
-  allAccounts: [{ name: 'Alice Account', address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY' }],
-  error: undefined,
+  allAccounts: [{ name: 'Alice Account', address: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf' }],
+  walletState: 'READY',
+  allWallets: [],
 }
 
 const useMyMemberships = {

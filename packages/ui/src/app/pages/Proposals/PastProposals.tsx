@@ -17,6 +17,7 @@ import { useProposals } from '@/proposals/hooks/useProposals'
 import { useProposalsActivities } from '@/proposals/hooks/useProposalsActivities'
 
 import { ProposalsTabs } from './components/ProposalsTabs'
+import { ProposalsPageResponsiveStyle } from './Proposals'
 
 export const PastProposals = () => {
   const searchSlot = useRef<HTMLDivElement>(null)
@@ -56,6 +57,7 @@ export const PastProposals = () => {
           <ActivitiesBlock activities={activities} label="Proposals Activities" />
         </SidePanel>
       }
+      responsiveStyle={ProposalsPageResponsiveStyle}
     />
   )
 }

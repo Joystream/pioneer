@@ -26,17 +26,18 @@ export interface NotificationEvent {
 }
 
 export interface NotifsBuilder {
-  generalEvent: (kind: GeneralSubscriptionKind, members: 'ANY' | number[]) => PartialNotif | []
+  generalEvent: (kind: GeneralSubscriptionKind, members: 'ANY' | (number | string)[]) => PartialNotif | []
   entityEvent: (kind: EntitySubscriptionKind, entityId: string) => PartialNotif
 }
 
 export type BuildEvents = (
   eventData: Omit<NotificationEvent, 'entityId' | 'potentialNotifications'>,
   entityId: string,
+  excludeMembers: (number | string)[],
   build: (b: NotifsBuilder) => (PartialNotif | [])[]
 ) => NotificationEvent
 
 export type NotifEventFromQNEvent<T extends ImplementedQNEvent['__typename']> = (
   event: QNEvent<T>,
   buildEvents: BuildEvents
-) => NotificationEvent | Promise<NotificationEvent>
+) => Promise<NotificationEvent>

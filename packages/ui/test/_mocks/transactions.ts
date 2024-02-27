@@ -1,9 +1,9 @@
-import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import { AugmentedEvents } from '@polkadot/api/types'
+import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
-import { asyncScheduler, from, Observable, of, scheduled } from 'rxjs'
+import { from, Observable, of } from 'rxjs'
 
 import { toBalances } from '@/accounts/model/toBalances'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
@@ -13,60 +13,14 @@ import { UseApi } from '@/api/providers/provider'
 import { BN_ZERO } from '@/common/constants'
 import { createType } from '@/common/model/createType'
 import { ExtractTuple } from '@/common/model/JoystreamNode'
+import { createErrorEvents, createSuccessEvents, stubTransactionResult } from '@/mocks/helpers/transactions'
 import { proposalDetails } from '@/proposals/model/proposalDetails'
 
 import { mockedBalances, mockedMyBalances, mockedUseMyAccounts } from '../setup'
 
 import { createBalanceLock, createRuntimeDispatchInfo } from './chainTypes'
 
-const createSuccessEvents = (data: any[], section: string, method: string) => [
-  {
-    phase: { ApplyExtrinsic: 2 },
-    event: { index: '0x0502', data, method, section },
-  },
-  {
-    phase: { ApplyExtrinsic: 2 },
-    event: { index: '0x0000', data: [{ weight: 190949000, class: 'Normal', paysFee: 'Yes' }] },
-  },
-]
-
 export const currentStubErrorMessage = 'Balance too low to send value.'
-const findMetaError = () => ({
-  docs: [currentStubErrorMessage],
-})
-
-const createErrorEvents = () => [
-  {
-    phase: { ApplyExtrinsic: 2 },
-    event: {
-      index: '0x0001',
-      data: [
-        { Module: { index: new BN(5), error: new BN(3) }, isModule: true, registry: { findMetaError } },
-        { weight: 190949000, class: 'Normal', paysFee: 'Yes' },
-      ],
-      section: 'system',
-      method: 'ExtrinsicFailed',
-    },
-  },
-]
-
-export const stubTransactionResult = (events: any[]) =>
-  scheduled(
-    from([
-      {
-        status: { isReady: true, type: 'Ready' },
-      },
-      {
-        status: { type: 'InBlock', isInBlock: true, asInBlock: '0x93XXX' },
-        events: [...events],
-      },
-      {
-        status: { type: 'Finalized', isFinalized: true, asFinalized: '0x93XXX' },
-        events: [...events],
-      },
-    ]),
-    asyncScheduler
-  )
 
 const createBatchSuccessEvents = () => [
   {
@@ -96,7 +50,7 @@ const createBatchErrorEvents = () => [
 ]
 
 export const stubTransactionFailure = (transaction: any) => {
-  set(transaction, 'signAndSend', () => stubTransactionResult(createErrorEvents()))
+  set(transaction, 'signAndSend', () => stubTransactionResult(createErrorEvents(currentStubErrorMessage)))
 }
 
 type PartialTuple<T extends AnyTuple> = Partial<T>
@@ -168,10 +122,10 @@ export const stubApi = () => {
   set(api, 'api.rpc.chain.subscribeNewHeads', () =>
     from([
       createType('Header', {
-        parentHash: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+        parentHash: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
         number: 1337,
-        stateRoot: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-        extrinsicsRoot: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+        stateRoot: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
+        extrinsicsRoot: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
         digest: {
           logs: [],
         },
@@ -179,8 +133,16 @@ export const stubApi = () => {
     ])
   )
   set(api, 'api.rpc.chain.getBlockHash', () => {
-    from([createType('BlockHash', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY')])
+    from([createType('BlockHash', 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf')])
   })
+
+  set(api, 'api.rpc.chain.getHeader', () =>
+    from([
+      {
+        number: createType('BlockNumber', 1337),
+      },
+    ])
+  )
 
   return api
 }
@@ -271,7 +233,7 @@ export const stubBalances = ({ available, lockId, locked }: Balances) => {
   const deriveBalances = {
     availableBalance: createType('Balance', availableBalance),
     lockedBalance: createType('Balance', lockedBalance),
-    accountId: createType('AccountId', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
+    accountId: createType('AccountId', 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf'),
     accountNonce: createType('Index', 1),
     freeBalance: createType('Balance', availableBalance.add(lockedBalance)),
     frozenFee: new BN(0),
@@ -304,6 +266,7 @@ export const stubAccounts = (allAccounts: Account[], myAccounts: Partial<UseAcco
     allAccounts,
     hasAccounts,
     ...myAccounts,
+    allWallets: [],
   })
 
   const balance = mockedBalances()

@@ -2,8 +2,7 @@ import * as React from 'react'
 import { ChangeEvent } from 'react'
 import styled from 'styled-components'
 
-import { ButtonBareGhost } from '@/common/components/buttons'
-import { TransactionButton } from '@/common/components/buttons/TransactionButton'
+import { ButtonBareGhost, ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent, InputNotification, InputText, ToggleCheckbox } from '@/common/components/forms'
 import { BinIcon } from '@/common/components/icons'
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
@@ -53,10 +52,10 @@ const EditableInputList: React.FC<EditableInputListProps> = React.memo(
           <TextHuge bold value>
             {title}
           </TextHuge>
-          <TransactionButton style="primary" size="medium" onClick={() => addFields()}>
+          <ButtonPrimary size="medium" onClick={() => addFields()}>
             <PlusIcon />
             {buttonText}
-          </TransactionButton>
+          </ButtonPrimary>
         </HeaderWrapper>
         {value.map((questionFields, index) => (
           <InputWrapper key={index}>

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { BlockTime } from '@/common/components/BlockTime'
 import { TransferSymbol } from '@/common/components/icons/symbols'
+import { Link } from '@/common/components/Link'
 import { Loading } from '@/common/components/Loading'
 import {
   SidePaneTable,
@@ -12,13 +13,15 @@ import {
   SidePaneLabel,
   EmptyBody,
 } from '@/common/components/SidePane'
-import { capitalizeFirstLetter } from '@/common/helpers'
+import { has } from '@/common/utils/object'
+import { ExternalResourceLink } from '@/memberships/constants'
 import { useIsMyMembership } from '@/memberships/hooks/useIsMyMembership'
 import { useMemberExtraInfo } from '@/memberships/hooks/useMemberExtraInfo'
 
 import { useMember } from '../../hooks/useMembership'
 import { Member } from '../../types'
 import { MemberInfo } from '../MemberInfo'
+import { socialTitle } from '../SocialMediaTile/SocialMediaTile'
 import { TransferInviteButton } from '../TransferInviteButton'
 
 type Props = { member: Member }
@@ -131,8 +134,19 @@ export const MemberDetails = React.memo(({ member }: Props) => {
       {memberDetails?.externalResources &&
         memberDetails.externalResources.map((externalResource) => (
           <SidePaneRow key={`${externalResource.source}-externalResources`}>
-            <SidePaneLabel text={capitalizeFirstLetter(externalResource.source.toLowerCase())} />
-            <SidePaneText>{externalResource.value}</SidePaneText>
+            <SidePaneLabel text={socialTitle(externalResource.source)} />
+            <SidePaneText>
+              {has(externalResource.source, ExternalResourceLink) ? (
+                <Link
+                  href={`${ExternalResourceLink[externalResource.source]}${externalResource.value}`}
+                  target="_blank"
+                >
+                  {externalResource.value}
+                </Link>
+              ) : (
+                externalResource.value
+              )}{' '}
+            </SidePaneText>
           </SidePaneRow>
         ))}
     </SidePaneTable>
@@ -149,4 +163,6 @@ const AboutInvite = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+  align-items: center;
+  gap: 8px;
 `

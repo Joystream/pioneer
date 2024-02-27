@@ -10,6 +10,7 @@ import { Info } from '@/common/components/Info'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TokenValue } from '@/common/components/typography'
+import { useResponsive } from '@/common/hooks/useResponsive'
 import { formatJoyValue } from '@/common/model/formatters'
 import { ValidationHelpers } from '@/common/utils/validation'
 import { SelectedMember } from '@/memberships/components/SelectMember'
@@ -21,6 +22,7 @@ interface StakingStepProps extends ValidationHelpers {
 }
 
 export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessageGetter }: StakingStepProps) => {
+  const { isMobile, size } = useResponsive()
   const form = useFormContext()
   const [stake] = form.watch(['staking.amount'])
   const balances = useMyBalances()
@@ -46,7 +48,7 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
           <InputComponent
             label="Select account for Staking"
             required
-            inputSize="l"
+            inputSize={isMobile ? 'xxl' : 'l'}
             disabled={!isSomeBalanceGteStake}
             message={errorChecker('account') ? errorMessageGetter('account') : undefined}
             validation={errorChecker('account') ? 'invalid' : undefined}
@@ -54,7 +56,12 @@ export const StakeStep = ({ candidacyMember, minStake, errorChecker, errorMessag
             tooltipLinkText="Learn more"
             tooltipLinkURL="https://handbook.joystream.org/system/council#candidacy"
           >
-            <SelectStakingAccount name="staking.account" minBalance={minStake} lockType="Council Candidate" />
+            <SelectStakingAccount
+              name="staking.account"
+              minBalance={minStake}
+              lockType="Council Candidate"
+              variant={size === 'lg' ? 'l' : 's'}
+            />
           </InputComponent>
           <RowGapBlock gap={8}>
             <h4>2. Stake</h4>

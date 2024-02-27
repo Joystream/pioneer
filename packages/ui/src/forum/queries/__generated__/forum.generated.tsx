@@ -242,6 +242,7 @@ export type ForumThreadFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -249,6 +250,7 @@ export type ForumThreadFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -307,6 +309,7 @@ export type ForumPostFieldsFragment = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -314,6 +317,7 @@ export type ForumPostFieldsFragment = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -354,6 +358,7 @@ export type ForumPostFieldsFragment = {
             __typename: 'MemberMetadata'
             name?: string | null
             about?: string | null
+            isVerifiedValidator?: boolean | null
             avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
           }
           roles: Array<{
@@ -361,6 +366,7 @@ export type ForumPostFieldsFragment = {
             id: string
             createdAt: any
             isLead: boolean
+            isActive: boolean
             group: { __typename: 'WorkingGroup'; name: string }
           }>
           stakingaccountaddedeventmember?: Array<{
@@ -397,6 +403,7 @@ export type ForumPostFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -404,6 +411,7 @@ export type ForumPostFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -444,6 +452,7 @@ export type ForumPostFieldsFragment = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
+          isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
         roles: Array<{
@@ -451,6 +460,7 @@ export type ForumPostFieldsFragment = {
           id: string
           createdAt: any
           isLead: boolean
+          isActive: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
         stakingaccountaddedeventmember?: Array<{
@@ -496,6 +506,7 @@ export type ForumPostWithoutReplyFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -503,6 +514,7 @@ export type ForumPostWithoutReplyFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -543,6 +555,7 @@ export type ForumPostWithoutReplyFieldsFragment = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
+          isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
         roles: Array<{
@@ -550,6 +563,7 @@ export type ForumPostWithoutReplyFieldsFragment = {
           id: string
           createdAt: any
           isLead: boolean
+          isActive: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
         stakingaccountaddedeventmember?: Array<{
@@ -596,6 +610,7 @@ export type ForumThreadDetailedFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -603,6 +618,7 @@ export type ForumThreadDetailedFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -655,6 +671,7 @@ export type ForumThreadMentionFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -662,6 +679,7 @@ export type ForumThreadMentionFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -696,6 +714,7 @@ export type ForumPostMentionFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -703,6 +722,7 @@ export type ForumPostMentionFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -987,6 +1007,7 @@ export type GetForumThreadsQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -994,6 +1015,7 @@ export type GetForumThreadsQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -1068,6 +1090,7 @@ export type GetForumThreadQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -1075,6 +1098,7 @@ export type GetForumThreadQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -1143,6 +1167,7 @@ export type GetForumPostsQuery = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
+          isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
         roles: Array<{
@@ -1150,6 +1175,7 @@ export type GetForumPostsQuery = {
           id: string
           createdAt: any
           isLead: boolean
+          isActive: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
         stakingaccountaddedeventmember?: Array<{
@@ -1190,6 +1216,7 @@ export type GetForumPostsQuery = {
               __typename: 'MemberMetadata'
               name?: string | null
               about?: string | null
+              isVerifiedValidator?: boolean | null
               avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
             }
             roles: Array<{
@@ -1197,6 +1224,7 @@ export type GetForumPostsQuery = {
               id: string
               createdAt: any
               isLead: boolean
+              isActive: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
             stakingaccountaddedeventmember?: Array<{
@@ -1233,6 +1261,7 @@ export type GetForumPostsQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -1240,6 +1269,7 @@ export type GetForumPostsQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -1280,6 +1310,7 @@ export type GetForumPostsQuery = {
             __typename: 'MemberMetadata'
             name?: string | null
             about?: string | null
+            isVerifiedValidator?: boolean | null
             avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
           }
           roles: Array<{
@@ -1287,6 +1318,7 @@ export type GetForumPostsQuery = {
             id: string
             createdAt: any
             isLead: boolean
+            isActive: boolean
             group: { __typename: 'WorkingGroup'; name: string }
           }>
           stakingaccountaddedeventmember?: Array<{
@@ -1429,6 +1461,7 @@ export type GetForumPostMentionQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -1436,6 +1469,7 @@ export type GetForumPostMentionQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -1476,6 +1510,7 @@ export type GetForumThreadMentionQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -1483,6 +1518,7 @@ export type GetForumThreadMentionQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{

@@ -23,6 +23,7 @@ export type WorkerProposalDetailsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -30,6 +31,7 @@ export type WorkerProposalDetailsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -101,6 +103,7 @@ export type ProposalFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -108,6 +111,7 @@ export type ProposalFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -141,6 +145,7 @@ export type VoteFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -148,6 +153,7 @@ export type VoteFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -186,6 +192,7 @@ export type VoteWithDetailsFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -193,6 +200,7 @@ export type VoteWithDetailsFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -237,6 +245,7 @@ export type ProposalWithDetailsFieldsFragment = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -244,6 +253,7 @@ export type ProposalWithDetailsFieldsFragment = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -308,6 +318,7 @@ export type ProposalWithDetailsFieldsFragment = {
               __typename: 'MemberMetadata'
               name?: string | null
               about?: string | null
+              isVerifiedValidator?: boolean | null
               avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
             }
             roles: Array<{
@@ -315,6 +326,7 @@ export type ProposalWithDetailsFieldsFragment = {
               id: string
               createdAt: any
               isLead: boolean
+              isActive: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
             stakingaccountaddedeventmember?: Array<{
@@ -352,6 +364,7 @@ export type ProposalWithDetailsFieldsFragment = {
               __typename: 'MemberMetadata'
               name?: string | null
               about?: string | null
+              isVerifiedValidator?: boolean | null
               avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
             }
             roles: Array<{
@@ -359,6 +372,7 @@ export type ProposalWithDetailsFieldsFragment = {
               id: string
               createdAt: any
               isLead: boolean
+              isActive: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
             stakingaccountaddedeventmember?: Array<{
@@ -412,6 +426,7 @@ export type ProposalWithDetailsFieldsFragment = {
               __typename: 'MemberMetadata'
               name?: string | null
               about?: string | null
+              isVerifiedValidator?: boolean | null
               avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
             }
             roles: Array<{
@@ -419,6 +434,7 @@ export type ProposalWithDetailsFieldsFragment = {
               id: string
               createdAt: any
               isLead: boolean
+              isActive: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
             stakingaccountaddedeventmember?: Array<{
@@ -455,6 +471,7 @@ export type ProposalWithDetailsFieldsFragment = {
               __typename: 'MemberMetadata'
               name?: string | null
               about?: string | null
+              isVerifiedValidator?: boolean | null
               avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
             }
             roles: Array<{
@@ -462,6 +479,7 @@ export type ProposalWithDetailsFieldsFragment = {
               id: string
               createdAt: any
               isLead: boolean
+              isActive: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
             stakingaccountaddedeventmember?: Array<{
@@ -496,6 +514,7 @@ export type ProposalWithDetailsFieldsFragment = {
               __typename: 'MemberMetadata'
               name?: string | null
               about?: string | null
+              isVerifiedValidator?: boolean | null
               avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
             }
             roles: Array<{
@@ -503,6 +522,7 @@ export type ProposalWithDetailsFieldsFragment = {
               id: string
               createdAt: any
               isLead: boolean
+              isActive: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
             stakingaccountaddedeventmember?: Array<{
@@ -565,6 +585,7 @@ export type ProposalWithDetailsFieldsFragment = {
             __typename: 'MemberMetadata'
             name?: string | null
             about?: string | null
+            isVerifiedValidator?: boolean | null
             avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
           }
           roles: Array<{
@@ -572,6 +593,7 @@ export type ProposalWithDetailsFieldsFragment = {
             id: string
             createdAt: any
             isLead: boolean
+            isActive: boolean
             group: { __typename: 'WorkingGroup'; name: string }
           }>
           stakingaccountaddedeventmember?: Array<{
@@ -610,6 +632,7 @@ export type ProposalWithDetailsFieldsFragment = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
+          isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
         roles: Array<{
@@ -617,6 +640,7 @@ export type ProposalWithDetailsFieldsFragment = {
           id: string
           createdAt: any
           isLead: boolean
+          isActive: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
         stakingaccountaddedeventmember?: Array<{
@@ -671,6 +695,7 @@ export type ProposalWithDetailsFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -678,6 +703,7 @@ export type ProposalWithDetailsFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -724,6 +750,7 @@ export type DiscussionPostFieldsFragment = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -731,6 +758,7 @@ export type DiscussionPostFieldsFragment = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -769,6 +797,7 @@ export type DiscussionPostFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -776,6 +805,7 @@ export type DiscussionPostFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -821,6 +851,7 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -828,6 +859,7 @@ export type DiscussionPostWithoutReplyFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -915,6 +947,7 @@ export type ProposalDiscussionPostMentionFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -922,6 +955,7 @@ export type ProposalDiscussionPostMentionFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -1002,6 +1036,7 @@ export type GetProposalsQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -1009,6 +1044,7 @@ export type GetProposalsQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -1069,6 +1105,7 @@ export type GetProposalQuery = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
+          isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
         roles: Array<{
@@ -1076,6 +1113,7 @@ export type GetProposalQuery = {
           id: string
           createdAt: any
           isLead: boolean
+          isActive: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
         stakingaccountaddedeventmember?: Array<{
@@ -1140,6 +1178,7 @@ export type GetProposalQuery = {
                 __typename: 'MemberMetadata'
                 name?: string | null
                 about?: string | null
+                isVerifiedValidator?: boolean | null
                 avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
               }
               roles: Array<{
@@ -1147,6 +1186,7 @@ export type GetProposalQuery = {
                 id: string
                 createdAt: any
                 isLead: boolean
+                isActive: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
               stakingaccountaddedeventmember?: Array<{
@@ -1184,6 +1224,7 @@ export type GetProposalQuery = {
                 __typename: 'MemberMetadata'
                 name?: string | null
                 about?: string | null
+                isVerifiedValidator?: boolean | null
                 avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
               }
               roles: Array<{
@@ -1191,6 +1232,7 @@ export type GetProposalQuery = {
                 id: string
                 createdAt: any
                 isLead: boolean
+                isActive: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
               stakingaccountaddedeventmember?: Array<{
@@ -1244,6 +1286,7 @@ export type GetProposalQuery = {
                 __typename: 'MemberMetadata'
                 name?: string | null
                 about?: string | null
+                isVerifiedValidator?: boolean | null
                 avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
               }
               roles: Array<{
@@ -1251,6 +1294,7 @@ export type GetProposalQuery = {
                 id: string
                 createdAt: any
                 isLead: boolean
+                isActive: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
               stakingaccountaddedeventmember?: Array<{
@@ -1287,6 +1331,7 @@ export type GetProposalQuery = {
                 __typename: 'MemberMetadata'
                 name?: string | null
                 about?: string | null
+                isVerifiedValidator?: boolean | null
                 avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
               }
               roles: Array<{
@@ -1294,6 +1339,7 @@ export type GetProposalQuery = {
                 id: string
                 createdAt: any
                 isLead: boolean
+                isActive: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
               stakingaccountaddedeventmember?: Array<{
@@ -1328,6 +1374,7 @@ export type GetProposalQuery = {
                 __typename: 'MemberMetadata'
                 name?: string | null
                 about?: string | null
+                isVerifiedValidator?: boolean | null
                 avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
               }
               roles: Array<{
@@ -1335,6 +1382,7 @@ export type GetProposalQuery = {
                 id: string
                 createdAt: any
                 isLead: boolean
+                isActive: boolean
                 group: { __typename: 'WorkingGroup'; name: string }
               }>
               stakingaccountaddedeventmember?: Array<{
@@ -1397,6 +1445,7 @@ export type GetProposalQuery = {
               __typename: 'MemberMetadata'
               name?: string | null
               about?: string | null
+              isVerifiedValidator?: boolean | null
               avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
             }
             roles: Array<{
@@ -1404,6 +1453,7 @@ export type GetProposalQuery = {
               id: string
               createdAt: any
               isLead: boolean
+              isActive: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
             stakingaccountaddedeventmember?: Array<{
@@ -1442,6 +1492,7 @@ export type GetProposalQuery = {
             __typename: 'MemberMetadata'
             name?: string | null
             about?: string | null
+            isVerifiedValidator?: boolean | null
             avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
           }
           roles: Array<{
@@ -1449,6 +1500,7 @@ export type GetProposalQuery = {
             id: string
             createdAt: any
             isLead: boolean
+            isActive: boolean
             group: { __typename: 'WorkingGroup'; name: string }
           }>
           stakingaccountaddedeventmember?: Array<{
@@ -1503,6 +1555,7 @@ export type GetProposalQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -1510,6 +1563,7 @@ export type GetProposalQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -1580,6 +1634,7 @@ export type GetVoteWithDetailsQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -1587,6 +1642,7 @@ export type GetVoteWithDetailsQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -1646,6 +1702,7 @@ export type GetProposalVotesQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -1653,6 +1710,7 @@ export type GetProposalVotesQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -1747,6 +1805,7 @@ export type GetProposalDiscussionPostMentionQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -1754,6 +1813,7 @@ export type GetProposalDiscussionPostMentionQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{

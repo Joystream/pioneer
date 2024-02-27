@@ -30,15 +30,15 @@ export const getSpecificParameters = async (
     }
     case 'fundingRequest': {
       return createType('PalletProposalsCodexProposalDetails', {
-        FundingRequest: [
-          { amount: specifics?.fundingRequest?.amount, account: specifics?.fundingRequest?.account?.address },
-        ],
+        FundingRequest: specifics?.fundingRequest?.payMultiple
+          ? specifics?.fundingRequest?.accountsAndAmounts
+          : [{ amount: specifics?.fundingRequest?.amount, account: specifics?.fundingRequest?.account?.address }],
       })
     }
     case 'runtimeUpgrade': {
       const u8a = new Uint8Array(await asArrayBuffer(specifics?.runtimeUpgrade?.runtime))
       return createType('PalletProposalsCodexProposalDetails', {
-        RuntimeUpgrade: createType('Bytes', u8a),
+        RuntimeUpgrade: createType('Bytes', '0x' + Buffer.from(u8a).toString('hex')),
       })
     }
     case 'createWorkingGroupLeadOpening': {

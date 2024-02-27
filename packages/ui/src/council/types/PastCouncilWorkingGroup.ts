@@ -3,7 +3,7 @@ import BN from 'bn.js'
 import { BN_ZERO } from '@/common/constants'
 import { arrayGroupBy } from '@/common/utils'
 import {
-  PastCouncilBudgetSetEventFieldsFragment,
+  PastCouncilBudgetUpdatedEventFieldsFragment,
   PastCouncilNewMissedRewardLevelReachedEventFieldsFragment,
   PastCouncilRewardPaidEventFieldsFragment,
   PastCouncilWorkingGroupFieldsFragment,
@@ -34,9 +34,9 @@ const getTotalMissedReward = (
 
 export const asPastCouncilWorkingGroup =
   (
-    budgetSetEvents: PastCouncilBudgetSetEventFieldsFragment[],
     rewardPaidEvents: PastCouncilRewardPaidEventFieldsFragment[],
-    newMissedRewardLevelReachedEvents: PastCouncilNewMissedRewardLevelReachedEventFieldsFragment[]
+    newMissedRewardLevelReachedEvents: PastCouncilNewMissedRewardLevelReachedEventFieldsFragment[],
+    budgetUpdatedEvents: PastCouncilBudgetUpdatedEventFieldsFragment[]
   ) =>
   (fields: PastCouncilWorkingGroupFieldsFragment): PastCouncilWorkingGroup => ({
     id: fields.id,
@@ -45,5 +45,7 @@ export const asPastCouncilWorkingGroup =
       .filter((rewardEvent) => rewardEvent.groupId === fields.id)
       .reduce((a, b) => a.add(new BN(b.amount)), BN_ZERO),
     totalMissedReward: getTotalMissedReward(newMissedRewardLevelReachedEvents, fields.id),
-    budget: new BN(budgetSetEvents.find((budgetEvent) => budgetEvent.groupId === fields.id)?.newBudget ?? 0),
+    budget: budgetUpdatedEvents
+      .filter((updatedEvent) => updatedEvent.groupId === fields.id)
+      .reduce((a, b) => a.add(new BN(b.budgetChangeAmount)), BN_ZERO),
   })

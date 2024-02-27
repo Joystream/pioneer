@@ -129,6 +129,12 @@ query GetWorkingGroups {
   }
 }
 
+query GetRoleAccounts($where: WorkerWhereInput) {
+  workers(where: $where) {
+    roleAccount
+  }
+}
+
 query GetWorkers($where: WorkerWhereInput, $offset: Int, $limit: Int) {
   workers(where: $where, offset: $offset, limit: $limit) {
     ...WorkerFields

@@ -17,7 +17,7 @@ import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvi
 import { mockDefaultBalance } from '../../../../test/setup'
 
 export default {
-  title: 'App/OnBoardingModal',
+  title: 'App/Modals/OnBoardingModal',
   component: OnBoardingModal,
 } as Meta
 
@@ -31,10 +31,11 @@ const useMyAccounts: UseAccounts = {
   isLoading: false,
   hasAccounts: false,
   allAccounts: [
-    { name: 'Alice Account', address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY' },
+    { name: 'Alice Account', address: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf' },
     { name: 'Bob Account', address: '5DWS57CtERHpNehXCPcNoHGKutQYGrwvaEF5zXb26Fz9rcQp' },
   ],
-  error: undefined,
+  walletState: 'READY',
+  allWallets: [],
 }
 
 const useMyBalances: AddressToBalanceMap = {

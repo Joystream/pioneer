@@ -24,7 +24,7 @@ Default.args = {
       id: '0',
       runtimeId: 1,
       group: { id: 'forumWorkingGroup', name: 'forum' },
-      membership: { id: '0', controllerAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY' },
+      membership: { id: '0', controllerAccount: 'j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT' },
       status: 'WorkerStatusActive',
       rewardPerBlock: BN_TEN,
       stake: new BN(1000),

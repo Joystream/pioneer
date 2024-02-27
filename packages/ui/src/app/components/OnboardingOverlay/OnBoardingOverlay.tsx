@@ -20,6 +20,7 @@ import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useModal } from '@/common/hooks/useModal'
 import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
+import { useResponsive } from '@/common/hooks/useResponsive'
 import { useToggle } from '@/common/hooks/useToggle'
 import { OnBoardingStatus } from '@/common/providers/onboarding/types'
 
@@ -81,12 +82,13 @@ export const OnBoardingOverlay = () => {
   const { isLoading, status } = useOnBoarding()
   const [isOpen, toggle] = useToggle()
   const [endpoints] = useNetworkEndpoints()
+  const { isMobile } = useResponsive()
 
   const openOnBoardingModal = useCallback(() => {
     showModal({ modal: 'OnBoardingModal' })
   }, [wallet, selectedWallet])
 
-  if (isLoading || !status || status === 'finished' || !api?.isConnected) {
+  if (isMobile || isLoading || !status || status === 'finished' || !api?.isConnected) {
     return null
   }
 
@@ -211,9 +213,9 @@ const ButtonContainer = styled.div`
 
 const TextContainer = styled.div`
   display: flex;
-  padding: 13px 0 19px 33px;
+  padding-left: 33px;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   flex: 1;
 
   > *:last-child {

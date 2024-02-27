@@ -119,7 +119,7 @@ describe('UI: Past Council page', () => {
       it('Total spent', async () => {
         const { getByText } = await renderComponent()
 
-        expect(getByText(/^Total spent$/i).parentElement?.nextSibling?.textContent).toBe('300')
+        expect(getByText(/^Total spent$/i).parentElement?.nextSibling?.textContent).toBe('5,055')
       })
 
       it('Total missed rewards', async () => {
@@ -350,13 +350,14 @@ describe('UI: Past Council page', () => {
           )
           seedEvent(
             {
+              id: '1',
               inBlock: 1,
               createdAt: '2021-09-14T11:54:56.127Z',
               network: 'OLYMPIA',
               groupId: WORKER_DATA.groupId,
-              newBudget: 80000,
+              budgetChangeAmount: 80000,
             },
-            'BudgetSetEvent',
+            'BudgetUpdatedEvent',
             mockServer.server
           )
           seedEvent(
@@ -367,7 +368,7 @@ describe('UI: Past Council page', () => {
               network: 'OLYMPIA',
               groupId: WORKER_DATA.groupId,
               workerId: WORKER_DATA.id,
-              rewardAccount: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+              rewardAccount: 'j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT',
               amount: 6050,
               type: 'REGULAR',
             },
@@ -419,7 +420,7 @@ describe('UI: Past Council page', () => {
 
     component.getByText(tabName).click()
 
-    await waitForElementToBeRemoved(() => loaderSelector())
+    if (loaderSelector()) await waitForElementToBeRemoved(() => loaderSelector())
 
     return component
   }

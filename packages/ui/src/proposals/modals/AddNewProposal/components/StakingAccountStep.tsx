@@ -6,12 +6,14 @@ import { InputComponent } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TokenValue } from '@/common/components/typography'
+import { useResponsive } from '@/common/hooks/useResponsive'
 
 interface StakingAccountStepProps {
   requiredStake: BN
 }
 
 export const StakingAccountStep = ({ requiredStake }: StakingAccountStepProps) => {
+  const { isMobile, size } = useResponsive()
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -35,7 +37,7 @@ export const StakingAccountStep = ({ requiredStake }: StakingAccountStepProps) =
             tooltipText="The budget is the root resource pool for all token minting in the working group, and the size of the pool is denoted by budget."
             tooltipLinkURL="https://joystream.gitbook.io/joystream-handbook/key-concepts/staking#locks-1"
             tooltipLinkText="Learn more"
-            inputSize="l"
+            inputSize={isMobile ? 'xxl' : 'l'}
             required
             name="stakingAccount.stakingAccount"
           >
@@ -43,6 +45,7 @@ export const StakingAccountStep = ({ requiredStake }: StakingAccountStepProps) =
               name="stakingAccount.stakingAccount"
               minBalance={requiredStake}
               lockType="Proposals"
+              variant={isMobile ? 's' : size === 'md' ? 'm' : 'l'}
             />
           </InputComponent>
         </RowGapBlock>

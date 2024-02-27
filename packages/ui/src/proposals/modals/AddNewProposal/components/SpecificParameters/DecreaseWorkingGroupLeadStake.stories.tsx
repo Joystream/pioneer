@@ -1,14 +1,19 @@
 import { Meta, Story } from '@storybook/react'
 import React from 'react'
 
-import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
+import {
+  StepDescriptionColumn,
+  Stepper,
+  StepperBody,
+  StepperModalBody,
+  StepperModalWrapper,
+} from '@/common/components/StepperModal'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
-import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
 import { ProposalConstantsWrapper } from '@/proposals/modals/AddNewProposal/components/ProposalConstantsWrapper'
 import { DecreaseWorkingGroupLeadStake } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/DecreaseWorkingGroupLeadStake'
 
 export default {
-  title: 'Proposals/AddNewProposalModal/DecreaseWorkingGroupLeadStake',
+  title: 'Pages/Proposals/ProposalList/Current/Modals/AddNewProposalModal/DecreaseWorkingGroupLeadStake',
   component: DecreaseWorkingGroupLeadStake,
 } as Meta
 
@@ -16,7 +21,7 @@ const Template: Story = () => {
   return (
     <MockApolloProvider members workingGroups workers>
       <StepperModalBody>
-        <StepperProposalWrapper>
+        <StepperModalWrapper>
           <Stepper steps={[]} />
           <StepDescriptionColumn>
             <ProposalConstantsWrapper constants={null} />
@@ -24,7 +29,7 @@ const Template: Story = () => {
           <StepperBody>
             <DecreaseWorkingGroupLeadStake />
           </StepperBody>
-        </StepperProposalWrapper>
+        </StepperModalWrapper>
       </StepperModalBody>
     </MockApolloProvider>
   )

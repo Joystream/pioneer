@@ -1,4 +1,5 @@
 export * from './AlertSymbol'
+export * from './InfoSymbol'
 export * from './EditSymbol'
 export * from './FailureSymbol'
 export * from './HomeSymbol'

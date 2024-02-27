@@ -1,0 +1,4 @@
+networks:
+  default:
+    name: joystream_default
+    external: true

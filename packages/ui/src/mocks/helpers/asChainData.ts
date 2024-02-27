@@ -1,8 +1,33 @@
+import { createType } from '@joystream/types'
+import { isAddress } from '@polkadot/util-crypto'
 import { mapValues } from 'lodash'
 
-import { asBN } from '@/common/utils'
+import { encodeAddress } from '@/accounts/model/encodeAddress'
 
-export const asChainData = (data: any): any => {
+const mockApiMethods = (mapFn: (data: any) => any) => (_data: any) => {
+  const data = mapFn(_data)
+  if (!data || typeof data !== 'object') return data
+
+  try {
+    return Object.defineProperties(data, {
+      unwrap: { value: () => data },
+      toJSON: { value: () => data },
+      isSome: { value: Object.keys(data).length > 0 },
+      get: {
+        value: (key: any) => {
+          if (key.toRawType?.() === 'AccountId') {
+            return data[encodeAddress(key.toString())]
+          }
+          return data[key.toString()]
+        },
+      },
+    })
+  } catch {
+    return data
+  }
+}
+
+export const asChainData = mockApiMethods((data: any): any => {
   switch (Object.getPrototypeOf(data).constructor.name) {
     case 'Object':
       return mapValues(data, asChainData)
@@ -11,12 +36,14 @@ export const asChainData = (data: any): any => {
       return data.map(asChainData)
 
     case 'Number':
-      return asBN(data)
+      return createType('u128', data)
 
     case 'String':
-      return isNaN(data) ? data : asBN(data)
+      if (!isNaN(data)) return createType('u128', data)
+      if (isAddress(data)) return createType('AccountId', data)
+      return createType('Text', data)
 
     default:
       return data
   }
-}
+})

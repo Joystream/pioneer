@@ -40,12 +40,13 @@ const filterReducer = (filters: ProposalFiltersState, action: Action): ProposalF
     case 'change':
       return {
         ...filters,
-        [action.field]: typeof action.value == 'string' ? toCamelCase(action.value) : action.value,
+        [action.field]:
+          action.field !== 'search' && typeof action.value === 'string' ? toCamelCase(action.value) : action.value,
       }
 
     case 'update':
       return {
-        search: toCamelCase(action.value.search) || '',
+        search: action.value.search || '',
         stage: toCamelCase(action.value.stage),
         type: toCamelCase(action.value.type),
         lifetime:
@@ -136,7 +137,6 @@ export const ProposalFilters = ({ searchSlot, stages, types, withinDates, onAppl
             onApply({ ...filters, lifetime: undefined })
           }}
           inputSize="xs"
-          inputWidth="auto"
         />
 
         <SmallMemberSelect
@@ -167,4 +167,10 @@ const Fields = styled.div`
   grid-template-columns: repeat(4, 1fr);
   grid-column-gap: 8px;
   align-items: center;
+
+  @media (max-width: 1439px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 1fr);
+    grid-row-gap: 8px;
+  }
 `

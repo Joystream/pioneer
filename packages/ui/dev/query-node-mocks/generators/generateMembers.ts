@@ -66,8 +66,8 @@ let nextId = 0
 
 const generateBaseMember = () => ({
   id: String(nextId++),
-  rootAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
-  controllerAccount: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
+  rootAccount: 'j4RxqjYM8Jt5gnJr8eHUiv59GtrvxkSFCEoLyQUFW6JZaQRku',
+  controllerAccount: 'j4RxqjYM8Jt5gnJr8eHUiv59GtrvxkSFCEoLyQUFW6JZaQRku',
   boundAccounts: [],
   boundAccountsEvents: [],
   handle: `${faker.lorem.word()}_${faker.lorem.word()}_${nextId}`,

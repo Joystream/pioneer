@@ -7,11 +7,14 @@ interface StatisticsLayoutProps {
 
 export const Statistics = styled.div<StatisticsLayoutProps>`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: ${({ gapSize }) => (gapSize === 's' ? '16px' : '24px')};
+  grid-template-columns: repeat(auto-fit, minmax(238px, 1fr));
+  gap: 16px;
   width: 100%;
   max-width: 100%;
   ${({ withMargin }) => (withMargin ? 'margin-top: 8px;' : null)};
+  @media (min-width: 1440px) {
+    gap: ${({ gapSize }) => (gapSize === 's' ? '16px' : '24px')};
+  }
 `
 
 export const StatisticsThreeColumns = styled.div<StatisticsLayoutProps>`

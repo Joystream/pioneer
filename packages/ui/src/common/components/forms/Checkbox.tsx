@@ -6,6 +6,7 @@ import { CheckboxIcon, CheckboxIconStyles } from '../icons/CheckboxIcon'
 
 export interface CheckboxProps {
   id: string
+  className?: string
   isRequired?: boolean
   children?: React.ReactNode
   enabled?: boolean
@@ -13,7 +14,15 @@ export interface CheckboxProps {
   onChange?: (value: boolean) => void
 }
 
-export function Checkbox({ id, isRequired, children, enabled = true, isChecked = false, onChange }: CheckboxProps) {
+export function Checkbox({
+  id,
+  className,
+  isRequired,
+  children,
+  enabled = true,
+  isChecked = false,
+  onChange,
+}: CheckboxProps) {
   const [isStateChecked, setStateChecked] = useState(isChecked)
 
   useEffect(() => {
@@ -22,6 +31,7 @@ export function Checkbox({ id, isRequired, children, enabled = true, isChecked =
 
   return (
     <CheckboxLabel
+      className={className}
       htmlFor={id}
       onClick={(event) => {
         event.preventDefault()

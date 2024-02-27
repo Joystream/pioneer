@@ -9,6 +9,7 @@ import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 import { Label } from './Label'
 
 export interface Props {
+  id?: string
   isRequired?: boolean
   disabled?: boolean
   checked?: boolean
@@ -19,7 +20,8 @@ export interface Props {
   onBlur?: any
 }
 
-function BaseToggleCheckbox({
+export function BaseToggleCheckbox({
+  id,
   isRequired,
   disabled,
   checked,
@@ -40,6 +42,7 @@ function BaseToggleCheckbox({
       <ToggleLabel onClick={onClick(true)}>{trueLabel}</ToggleLabel>
       <ToggleStyledInput isChecked={checked ?? false} hasNoOffState={hasNoOffState}>
         <ToggleInput
+          id={id}
           type="checkbox"
           disabled={disabled}
           checked={checked}
@@ -115,13 +118,13 @@ const ToggleStyledInput = styled.label<ToggleStyledInputProps>`
   margin: 0 10px;
   position: relative;
   border-radius: ${BorderRad.full};
-  background-color: ${(hasNoOffState) => (hasNoOffState ? Colors.Blue[500] : Colors.Black[300])};
+  background-color: ${({ hasNoOffState }) => (hasNoOffState ? Colors.Blue[500] : Colors.Black[300])};
   cursor: pointer;
   transition: ${Transitions.all};
 
   &:hover,
   &:focus {
-    background-color: ${(hasNoOffState) => (hasNoOffState ? Colors.Blue[400] : Colors.Black[200])};
+    background-color: ${({ hasNoOffState }) => (hasNoOffState ? Colors.Blue[400] : Colors.Black[200])};
   }
 
   &:after {

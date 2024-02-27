@@ -21,6 +21,7 @@ fragment PastCouncilProposalsFields on ProposalVotedEvent {
 fragment PastCouncilWorkingGroupFields on WorkingGroup {
   id
   name
+  budget
 }
 
 fragment PastCouncilBudgetSetEventFields on BudgetSetEvent {
@@ -37,6 +38,19 @@ fragment PastCouncilNewMissedRewardLevelReachedEventFields on NewMissedRewardLev
   groupId
   workerId
   newMissedRewardAmount
+}
+
+fragment PastCouncilBudgetUpdatedEventFields on BudgetUpdatedEvent {
+  groupId
+  budgetChangeAmount
+}
+
+fragment PastCouncilChannelPaymentMadeEventFields on ChannelPaymentMadeEvent {
+  id
+  amount
+  payer {
+    handle
+  }
 }
 
 fragment ElectedCouncilFields on ElectedCouncil {
@@ -110,6 +124,7 @@ fragment PastElectionRoundFields on ElectionRound {
   }
   castVotes {
     voteForId
+    stake
   }
 }
 
@@ -161,16 +176,13 @@ fragment CouncilSpendingEventFields on BudgetSpendingEvent {
   type
 }
 
-fragment FundingRequestApproved on ProposalExecutedEvent {
-  proposal {
-    details {
-      __typename
-      ... on FundingRequestProposalDetails {
-        destinationsList {
-          destinations {
-            amount
-            account
-          }
+fragment FundingRequestApproved on Proposal {
+  details {
+    ... on FundingRequestProposalDetails {
+      destinationsList {
+        destinations {
+          amount
+          account
         }
       }
     }
@@ -211,11 +223,11 @@ query GetPastCouncil($id: ID!, $fromBlock: Int!, $toBlock: Int!) {
   budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
     ...CouncilSpendingEventFields
   }
-  fundingRequestsApproved: proposalExecutedEvents(
+  fundingRequestsApproved: proposals(
     where: {
-      inBlock_gt: $fromBlock
-      inBlock_lt: $toBlock
-      proposal: { details_json: { isTypeOf_eq: "FundingRequestProposalDetails" } }
+      statusSetAtBlock_gt: $fromBlock
+      statusSetAtBlock_lt: $toBlock
+      details_json: { isTypeOf_eq: "FundingRequestProposalDetails" }
     }
   ) {
     ...FundingRequestApproved
@@ -243,14 +255,17 @@ query GetPastCouncilWorkingGroups($fromBlock: Int!, $toBlock: Int!) {
   workingGroups {
     ...PastCouncilWorkingGroupFields
   }
-  budgetSetEvents(where: { inBlock_lte: $toBlock }, orderBy: [inBlock_DESC]) {
-    ...PastCouncilBudgetSetEventFields
-  }
   rewardPaidEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
     ...PastCouncilRewardPaidEventFields
   }
-  newMissedRewardLevelReachedEvents(where: { inBlock_lte: $toBlock }, orderBy: [inBlock_DESC]) {
+  newMissedRewardLevelReachedEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
     ...PastCouncilNewMissedRewardLevelReachedEventFields
+  }
+  budgetUpdatedEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
+    ...PastCouncilBudgetUpdatedEventFields
+  }
+  channelPaymentMadeEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
+    ...PastCouncilChannelPaymentMadeEventFields
   }
 }
 
@@ -364,11 +379,11 @@ query GetPastCouncilStats($startBlock: Int!, $endBlock: Int!) {
   proposalsApproved: proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
     totalCount
   }
-  fundingRequestsApproved: proposalExecutedEvents(
+  fundingRequestsApproved: proposals(
     where: {
-      inBlock_gt: $startBlock
-      inBlock_lt: $endBlock
-      proposal: { details_json: { isTypeOf_eq: "FundingRequestProposalDetails" } }
+      statusSetAtBlock_gt: $startBlock
+      statusSetAtBlock_lt: $endBlock
+      details_json: { isTypeOf_eq: "FundingRequestProposalDetails" }
     }
   ) {
     ...FundingRequestApproved

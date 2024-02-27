@@ -1,15 +1,25 @@
 import { Decorator } from '@storybook/react'
+import { configure } from '@storybook/testing-library'
 import React from 'react'
 import { I18nextProvider } from 'react-i18next'
 import { useForm, FormProvider } from 'react-hook-form'
-import { MemoryRouter, Redirect, Route, Switch } from 'react-router'
 import { createGlobalStyle } from 'styled-components'
 
-import { NotFound } from '../src/app/pages/NotFound'
+import { GlobalModals } from '../src/app/GlobalModals'
 import { GlobalStyle } from '../src/app/providers/GlobalStyle'
+import { OnBoardingProvider } from '../src/common/providers/onboarding/provider'
+import { NotificationsHolder } from '../src/common/components/page/SideNotification'
+import { TransactionStatus } from '../src/common/components/TransactionStatus/TransactionStatus'
 import { Colors } from '../src/common/constants'
-import { MockProvidersDecorator } from '../src/mocks/providers'
+import { ModalContextProvider } from '../src/common/providers/modal/provider'
+import { TransactionStatusProvider } from '../src/common/providers/transactionStatus/provider'
+import { MockProvidersDecorator, MockRouterDecorator } from '../src/mocks/providers'
 import { i18next } from '../src/services/i18n'
+import { KeyringContext } from '../src/common/providers/keyring/context'
+import { ValidatorContextProvider } from '../src/validators/providers/provider'
+import { Keyring } from '@polkadot/ui-keyring'
+
+configure({ testIdAttribute: 'id' })
 
 const stylesWrapperDecorator: Decorator = (Story) => (
   <>
@@ -43,26 +53,50 @@ const RHFDecorator: Decorator = (Story) => {
   )
 }
 
-const RouterDecorator: Decorator = (Story, { parameters }) => (
-  <MemoryRouter initialEntries={[`/story/${parameters.router?.href ?? ''}`]}>
-    <Switch>
-      <Route component={Story} path={`/story/${parameters.router?.path ?? ''}`} />
-      <Route exact path="/404" component={NotFound} />
-      <Redirect from="*" to="/404" />
-    </Switch>
-  </MemoryRouter>
+const ModalDecorator: Decorator = (Story) => (
+  <TransactionStatusProvider>
+    <ModalContextProvider>
+      <OnBoardingProvider>
+        <ValidatorContextProvider>
+          <Story />
+          <GlobalModals />
+          <NotificationsHolder>
+            <TransactionStatus />
+          </NotificationsHolder>
+        </ValidatorContextProvider>
+      </OnBoardingProvider>
+    </ModalContextProvider>
+  </TransactionStatusProvider>
 )
 
+const KeyringDecorator: Decorator = (Story) => {
+  const keyring = {
+    encodeAddress: (address: string) => address,
+    decodeAddress: (address: string) => {
+      if (!/^[A-HJ-NP-Za-km-z1-9]{10,}$/.test(address)) throw new Error('Invalid address')
+      else return address
+    },
+  } as unknown as Keyring
+  return (
+    <KeyringContext.Provider value={keyring}>
+      <Story />
+    </KeyringContext.Provider>
+  )
+}
+
 export const decorators = [
+  ModalDecorator,
   stylesWrapperDecorator,
   i18nextDecorator,
   RHFDecorator,
+  KeyringDecorator,
   MockProvidersDecorator,
-  RouterDecorator,
+  MockRouterDecorator,
 ]
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
+
   backgrounds: {
     default: 'White',
     values: [
@@ -88,10 +122,58 @@ export const parameters = {
       },
     ],
   },
+
+  viewport: {
+    viewports: {
+      xl: {
+        name: 'xl',
+        styles: {
+          width: '1920px',
+          height: '900px',
+        },
+      },
+      lg: {
+        name: 'lg',
+        styles: {
+          width: '1440px',
+          height: '900px',
+        },
+      },
+      md: {
+        name: 'md',
+        styles: {
+          width: '1024px',
+          height: '900px',
+        },
+      },
+      sm: {
+        name: 'sm',
+        styles: {
+          width: '768px',
+          height: '900px',
+        },
+      },
+      xs: {
+        name: 'xs',
+        styles: {
+          width: '425px',
+          height: '900px',
+        },
+      },
+      xxs: {
+        name: 'xxs',
+        styles: {
+          width: '320px',
+          height: '900px',
+        },
+      },
+    },
+  },
+
   options: {
     storySort: {
       method: 'alphabetical',
-      order: ['Common'],
+      order: ['App', 'Pages', 'Common'],
     },
   },
 }

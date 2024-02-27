@@ -7,6 +7,170 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0 (Validator dashboard)][3.0.0] - 2024-02-21
+
+### Added
+- Validator dashboard.
+- Binding validator accounts to new or existing memberships.
+
+## [2.6.0] - 2024-02-15
+
+### Added
+- Separate urls for each working group tabs.
+- Default descriptions for each working group about tab.
+
+### Fixed
+- Searching for members by id.
+- General search box behavior. 
+- Show members active roles only.
+- Show creation date on member profiles.
+- Fix opening creation for lead with separate role and controller accounts.
+- OneKey wallet extension support.
+
+## [2.5.0] - 2024-02-05
+
+### Added
+- Cancel proposal button.
+
+### Changed
+- Display weekly opening rewards instead of daily.
+
+## [2.4.2] - 2024-01-29
+
+### Fixed
+- Fix infinite proposal page reload for CMs.
+
+## [2.4.1] - 2024-01-29
+
+### Fixed
+- Don't notify people of their own messages in threads they created.
+
+## [2.4.0] - 2024-01-18
+
+### Added
+- Display blacklisted accounts in the election module.
+- Allow hiding the sidebar "Total balance".
+
+### Changed
+- Link block heights to the Subscan block explorer.
+
+### Fixed
+- Fix past election page endless refresh issue.
+
+## [2.3.1] - 2024-01-12
+
+### Fixed
+- On boarding modal footer.
+
+## [2.3.0] - 2023-12-29
+
+### Added
+- Support for forum action and email registration on mobile.
+
+## [2.2.0] - 2023-12-22
+
+### Added
+- Widget which represents visually the progress of the current election.
+
+### Changed
+- Show reward for single councillor on council page.
+
+### Fixed
+- Vote recovery from the My Profile page.
+
+## [2.1.1] - 2023-12-11
+
+### Fixed
+- Vote again button sometime linking to the wrong candidate.
+
+## [2.1.0] - 2023-12-08
+
+### Added
+- Display error messages when a page or a modal crashes instead of crashing the whole app.
+- Make some members social links clickable.
+
+### Fixed
+- Runtime upgrade proposal creation.
+- Various UI bugs on responsive devices.
+
+### Changed
+- Expand the size of the Signal side pane.
+- Rename Twitter to X.
+
+## [2.0.2] - 2023-11-27
+
+### Remove
+- Remove forum activities button.
+
+## [2.0.1] - 2023-11-24
+
+### Fixed
+- Some proposal page breaking on opening their rationale.
+
+## [2.0.0 (Notifications and RWD)][2.0.0] - 2023-11-23
+
+### Added
+- Email notifications support for forum and elections events.
+- New responsive web design.
+- Add account balances in the membership pane.
+
+### Fixed
+- Past councils spending amounts.
+
+## [1.9.0] - 2023-11-03
+
+### Added
+- Linkedin to membership social profile
+
+### Fixed
+- Proposal history blocks styles.
+- Past election total staked value.
+- Past election "My contributed votes value".
+
+## [1.8.0] - 2023-10-13
+
+### Added
+- Custom network settings.
+- Opening creation modal.
+- Grace period or exact execution block on proposal preview pages.
+
+### Fixed
+- Markdown list color and indentation.
+- Speed-up forum category pages.
+- Past council budget statistics.
+
+## [1.7.0] - 2023-09-15
+
+### Added
+- Improve the multiple recipient funding request proposal preview.
+- Links to buy and earn $JOY.
+- Link to `joystream.subscan.io`.
+
+## [1.6.0] - 2023-09-01
+
+### Added
+- Multiple recipient funding request proposal creation.
+
+### Fixed
+- Forum category page reloading multiple time on opening.
+- Broken links to members on forum posts.
+- Reduce the amount of queries from the forum category page.
+
+### Changed
+- Display amount staked by voting for a council candidate instead of their candidacy stake when applicable.
+
+## [1.5.1] - 2023-07-25
+
+### Fixed
+- Do not ask for confirmation to close transaction success modals.
+- Correctly match questions and answers in opening application pages.
+- Do not keep showing the total balance after disconnecting a wallet.
+- Show all applicants on closed opening pages.
+
+### Changed
+- Clarify the label copy of the council budget increment proposal input field.
+- Just show past elections cycle id without "round".
+
 ## [1.5.0] - 2023-06-06
 
 ### Added
@@ -161,7 +325,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v1.5.0...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/Joystream/pioneer/compare/v2.6.0...v3.0.0
+[2.6.0]: https://github.com/Joystream/pioneer/compare/v2.5.0...v2.6.0
+[2.5.0]: https://github.com/Joystream/pioneer/compare/v2.4.2...v2.5.0
+[2.4.2]: https://github.com/Joystream/pioneer/compare/v2.4.1...v2.4.2
+[2.4.1]: https://github.com/Joystream/pioneer/compare/v2.4.0...v2.4.1
+[2.4.0]: https://github.com/Joystream/pioneer/compare/v2.3.1...v2.4.0
+[2.3.1]: https://github.com/Joystream/pioneer/compare/v2.3.0...v2.3.1
+[2.3.0]: https://github.com/Joystream/pioneer/compare/v2.2.0...v2.3.0
+[2.2.0]: https://github.com/Joystream/pioneer/compare/v2.1.1...v2.2.0
+[2.1.1]: https://github.com/Joystream/pioneer/compare/v2.1.0...v2.1.1
+[2.1.0]: https://github.com/Joystream/pioneer/compare/v2.0.2...v2.1.0
+[2.0.2]: https://github.com/Joystream/pioneer/compare/v2.0.1...v2.0.2
+[2.0.1]: https://github.com/Joystream/pioneer/compare/v2.0.0...v2.0.1
+[2.0.0]: https://github.com/Joystream/pioneer/compare/v1.9.0...v2.0.0
+[1.9.0]: https://github.com/Joystream/pioneer/compare/v1.8.0...v1.9.0
+[1.8.0]: https://github.com/Joystream/pioneer/compare/v1.7.0...v1.8.0
+[1.7.0]: https://github.com/Joystream/pioneer/compare/v1.6.0...v1.7.0
+[1.6.0]: https://github.com/Joystream/pioneer/compare/v1.5.1...v1.6.0
+[1.5.1]: https://github.com/Joystream/pioneer/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/Joystream/pioneer/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/Joystream/pioneer/compare/v1.3.2...v1.4.0
 [1.3.2]: https://github.com/Joystream/pioneer/compare/v1.3.1...v1.3.2

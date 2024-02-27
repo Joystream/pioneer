@@ -5,7 +5,7 @@ import { TableListItem } from '@/common/components/List'
 import { ListHeaders } from '@/common/components/List/ListHeader'
 import { Colors } from '@/common/constants'
 
-export const PastVoteColumns = '48px 176px 146px 156px 156px 72px 132px'
+export const PastVoteColumns = '48px 176px 146px 156px 224px 72px 132px'
 
 export const PastVoteListHeaders = styled(ListHeaders)`
   grid-column-gap: 12px;

@@ -2,7 +2,6 @@ import * as Prisma from '@prisma/client'
 import { arg, booleanArg, enumType, inputObjectType, list, mutationField, objectType, queryField } from 'nexus'
 import { Subscription } from 'nexus-prisma'
 
-import { authMemberId } from '@/auth/model/token'
 import { Context } from '@/common/api'
 import { GeneralSubscriptionKind, isDefaultSubscription } from '@/notifier/model/subscriptionKinds'
 
@@ -46,11 +45,12 @@ export const generalSubscriptionsQuery = queryField('generalSubscriptions', {
     shouldNotifyByEmail: booleanArg(),
   },
 
-  resolve: async (_, args: QueryArgs, { prisma, req }: Context): Promise<GeneralSubscription[] | null> => {
-    const memberId = (await authMemberId(req))?.id
-    if (!memberId) return null
+  resolve: async (_, args: QueryArgs, { prisma, member }: Context): Promise<GeneralSubscription[] | null> => {
+    if (!member) {
+      throw new Error('Unauthorized')
+    }
 
-    const where = { ...args, kind: args.kind ?? { in: GeneralSubscriptionKindKeys }, memberId }
+    const where = { ...args, kind: args.kind ?? { in: GeneralSubscriptionKindKeys }, memberId: member.id }
     const currents = (await prisma.subscription.findMany({ where })) as GeneralSubscription[]
 
     return GeneralSubscriptionKindKeys.flatMap((kind) => {
@@ -80,12 +80,13 @@ export const generalSubscriptionsMutation = mutationField('generalSubscriptions'
 
   args: { data: list(generalSubscriptionsInput) },
 
-  resolve: async (_, { data }: MutationArgs, { prisma, req }: Context): Promise<Prisma.Subscription[] | null> => {
-    const memberId = (await authMemberId(req))?.id
-    if (!memberId) return null
+  resolve: async (_, { data }: MutationArgs, { prisma, member }: Context): Promise<Prisma.Subscription[] | null> => {
+    if (!member) {
+      throw new Error('Unauthorized')
+    }
 
     const kind = { in: GeneralSubscriptionKindKeys }
-    const currents = await prisma.subscription.findMany({ where: { kind, memberId } })
+    const currents = await prisma.subscription.findMany({ where: { kind, memberId: member.id } })
 
     const transactions = data.flatMap((input) => {
       const { shouldNotify = true, shouldNotifyByEmail = true } = input
@@ -99,7 +100,7 @@ export const generalSubscriptionsMutation = mutationField('generalSubscriptions'
         const notifyByDefault = isDefaultSubscription(input.kind)
         return shouldNotify === notifyByDefault && shouldNotifyByEmail === notifyByDefault
           ? []
-          : prisma.subscription.create({ data: { ...input, memberId } })
+          : prisma.subscription.create({ data: { ...input, memberId: member.id } })
       }
     })
 

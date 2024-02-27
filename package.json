@@ -16,16 +16,14 @@
     "build:storybook": "wsrun --fast-exit --stages -p @joystream/markdown-editor -c build && wsrun -p @joystream/pioneer -c build:storybook",
     "storybook": "wsrun --exclude-missing -c storybook",
     "test": "wsrun --fast-exit --exclude-missing -c test",
+    "test-storybook": "wsrun --package @joystream/pioneer -c test-storybook",
     "start": "wsrun --package @joystream/pioneer -c start",
     "prepare": "husky install"
   },
   "dependencies": {
-    "eslint-plugin-import": "^2.23.4",
     "wsrun": "^5.2.4"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.50.0",
-    "@typescript-eslint/parser": "^5.50.0",
     "husky": ">=6",
     "lint-staged": ">=10"
   },
@@ -52,7 +50,7 @@
     "@joystream/js@1.2.0": "patch:@joystream/js@npm%3A1.2.0#./.yarn/patches/@joystream-js-npm-1.2.0-a8795e7496.patch"
   },
   "engines": {
-    "node": ">=14.18.0",
+    "node": ">=18",
     "yarn": "^1.22.0"
   },
   "lint-staged": {

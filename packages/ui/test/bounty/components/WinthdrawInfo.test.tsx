@@ -6,7 +6,7 @@ import { WithdrawInfo, WithdrawInfoProps } from '@/bounty/components/WithdrawInf
 import { formatTokenValue } from '@/common/model/formatters'
 
 describe('UI: WithdrawInfo', () => {
-  const account = { name: 'Alice Account', address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY' }
+  const account = { name: 'Alice Account', address: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf' }
   const amount = new BN(1000)
   const amountTitle = 'amount-title'
   const stakingFromTitle = 'staking-from-title'

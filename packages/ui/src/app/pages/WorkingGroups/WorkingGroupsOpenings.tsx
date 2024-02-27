@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import styled from 'styled-components'
 
 import { PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
@@ -60,11 +61,11 @@ export const WorkingGroupsOpenings = () => {
       }
       main={
         <MainPanel>
-          <Statistics>
+          <StatisticsStyle>
             <MyRolesStat />
             <MyStakeStat />
             <MyEarningsStat />
-          </Statistics>
+          </StatisticsStyle>
           <ContentWithTabs>
             <Tabs tabsSize="xs" tabs={openingsTabs} />
             {activeTab === 'OPENINGS' && (
@@ -84,3 +85,11 @@ export const WorkingGroupsOpenings = () => {
     />
   )
 }
+
+const StatisticsStyle = styled(Statistics)`
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+`

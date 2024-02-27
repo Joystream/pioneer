@@ -1,5 +1,8 @@
 # Pioneer backend
 
+> [!NOTE]
+> For a more general Pioneer documentation see [Dev Readme](/docs/README.md).
+
 ## Overview
 
 A backend for the [Pioneer UI](../ui).
@@ -30,10 +33,26 @@ It is composed of 3 parts:
 
 ## Quick Start
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/feature/backend-poc)
+### Run with docker
 
-> **Warning**
->
+```shell
+yarn workspace server docker:up
+```
+
+This runs the api on: http://localhost:3000
+
+Configurations are available in `packages/server/.env`.
+
+To run the notification script:
+```shell
+yarn workspace server docker:notify
+```
+
+### Demo deployment
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Joystream/pioneer/tree/backend-dev-blueprint)
+
+> [!IMPORTANT]
 > This deployments will require to go through the [render.com](https://render.com/) registration, which includes providing a payment method due to the [cron job cost](https://render.com/pricing#cronjobs).
 >
 > The [render.com database free tier](https://render.com/docs/free#free-postgresql-databases) ends after 90 days.
@@ -51,15 +70,18 @@ Mapping existing Joystream memberships id to a name and an email address in the 
 
 In order to customize the default notification behavior with the GraphQL API, an authorization token can be found for each membership in the "Logs" section.
 
+### Production
+
+To deploy a production instance check the [admin documentation](docs/admin.md#deploying-the-pioneer-notification-back-end)
+
 ## Production CLI usage
 
-> **Note**
->
+> [!NOTE]
 > The following commands are ran from the `server` directory. To run them from the monorepos root: `yarn` should be replaced by `yarn workspace server`.
 
 - `yarn start:api`: starts the API server.
 - `yarn notify`: run the notify job.
-- `yarn start:all`: for environments where cron is not available, starts both the API server, and schedule the notify job every 30 minutes via [`node-cron`](https://www.npmjs.com/package/node-cron).
+- `yarn start:all`: for environments where cron is not available, starts both the API server, and schedule the notify job every 10 minutes via [`node-cron`](https://www.npmjs.com/package/node-cron).
 
 ## API usage
 
@@ -88,7 +110,7 @@ To check the validity of an authorization token:
 
 ```gql
 query {
-  member {
+  me {
     id
     name
     email
@@ -96,7 +118,7 @@ query {
 }
 ```
 
-When ran with a correct `Authorization` header, it returns the member data. Otherwise it returns `null`. The email field will be `null' if the member email address has not yet been verified.
+When ran with a correct `Authorization` header, it returns the authorized member data. Otherwise it returns unauthorized error. The email field will be `null' if the member email address has not yet been verified.
 
 To check that a member is registered in the API:
 
@@ -195,7 +217,7 @@ query {
   notifications {
     kind
     entityId
-    isSent
+    status
   }
 }
 ```
@@ -204,31 +226,35 @@ query {
 
 ### Run locally
 
-> **Note**
->
+> [!NOTE]
 > The following commands are ran from the monorepos root.
 
 To run the API to develop locally:
 
-1. `yarn --frozen-lockfile`: Install the dependencies.
+1. `yarn --immutable`: Install the dependencies.
 2. Create and configure a `packages/server/.env`.
 3. Prepare the database and generate the code by running either:
     - `yarn workspace server dev:db:build`: To use docker for the db.
     - Otherwise `yarn workspace dev:build`: Once the configured db is running.
 4. `yarn workspace server dev:api`: Start the server.
+5. `yarn workspace server dev:notify`: Run the notifier with `nodemon`.
 
 ### Some other useful scripts
 
 - `yarn workspace server test`: Run tests.
 - `yarn workspace server dev:notify`: Run the notifier `nodemon` and `ts-node`.
 - `yarn workspace server dev:db:reset`: Clear the database data and re-synchronize its schema.
+- `yarn workspace server dev:emails`: Run live development preview for emails.
+- `yarn workspace server dev:mockEmail email [notificationKind]`: Send mock email.
 - `yarn workspace server codegen`: Run `graphql-codegen`.
 - [`yarn workspace server prisma studio`][prisma studio]: Launch an administration GUI for the database.
 - [`yarn workspace server prisma db push`][prisma db:push]: Synchronize `schema.prisma` with the database schema.
 - [`yarn workspace server prisma migrate dev`][prisma migrate]: Create a database migration based on the changes to `schema.prisma`.
 - [`yarn workspace server prisma generate`][prisma generate]: Generate the Prisma clients.
-- `yarn workspace server authtoken [member id]`: Generate an authentication token for the provided member.
+- `yarn workspace server dev:authtoken`: Generate an authentication token for the provided member.
 - `yarn workspace server lint:fix`: Fix some code formatting issue.
+- `yarn workspace server docker:yarn`: To regenerate the `yarn.lock` used to build the docker image.
+- `yarn workspace server docker build pioneer-api`: To build the `joystream/pioneer-backend` image.
 
 ### Adding support for more QN events
 

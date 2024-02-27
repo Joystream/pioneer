@@ -4,14 +4,13 @@ import styled from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { filterByText } from '@/accounts/components/SelectAccount/helpers'
-import { InfoValueWithLocks } from '@/accounts/components/SelectAccount/OptionAccount'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { isValidAddress } from '@/accounts/model/isValidAddress'
 import { Account, AccountOption } from '@/accounts/types'
 import { VestingLockIcon } from '@/common/components/icons/locks/VestingLockIcon'
-import { BalanceInfoInRow } from '@/common/components/Modal'
+import { BalanceInfoInRow, InfoValue } from '@/common/components/Modal'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { Option, OptionsListComponent, Select, SelectedOption } from '@/common/components/selects'
 import { TextMedium, TokenValue } from '@/common/components/typography'
@@ -91,9 +90,9 @@ export const VestingListItem = ({ option, vestingClaimable }: { option: AccountO
         <VestingLockIcon />
         <TextMedium bold>Vesting</TextMedium>
       </ColumnGapBlock>
-      <InfoValueWithLocks>
+      <InfoValue>
         <TokenValue value={vestingClaimable} />
-      </InfoValueWithLocks>
+      </InfoValue>
     </VestingInfoRow>
   </>
 )
