@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0] - 2024-02-27
+
+### Added
+- Wallet Connect support.
+- Mobile support for member onboarding, creation, and update.
+- Link to nomination video guide.
+
+### Fixed
+- Autocomplete popup showing under post update toolbar.
+
 ## [3.0.0 (Validator dashboard)][3.0.0] - 2024-02-21
 
 ### Added
@@ -325,7 +335,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v3.0.0...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v3.1.0...HEAD
+[3.1.0]: https://github.com/Joystream/pioneer/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/Joystream/pioneer/compare/v2.6.0...v3.0.0
 [2.6.0]: https://github.com/Joystream/pioneer/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/Joystream/pioneer/compare/v2.4.2...v2.5.0
