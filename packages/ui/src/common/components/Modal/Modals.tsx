@@ -63,7 +63,9 @@ export const TransactionAmount = styled.div<TransactionAmountProps>`
 
 export const TransactionInfoContainer = styled.div`
   display: grid;
-  margin-right: 24px;
+  align-items: center;
+  grid-template-columns: 1fr auto auto;
+  column-gap: 8px;
 `
 
 export const BalanceInfo = styled.div`
@@ -78,11 +80,6 @@ export const BalanceInfoInRow = styled(BalanceInfo)`
   justify-self: end;
 `
 
-export const BalanceInfoNarrow = styled(BalanceInfo)`
-  grid-template-columns: 1fr 128px;
-  width: auto;
-`
-
 export const InfoTitle = styled.span`
   font-size: 10px;
   line-height: 16px;
@@ -92,7 +89,7 @@ export const InfoTitle = styled.span`
   color: ${Colors.Black[400]};
 `
 
-export const InfoValue = styled.span`
+export const InfoValue = styled.div`
   text-align: right;
   text-align: -webkit-right;
   line-height: 20px;

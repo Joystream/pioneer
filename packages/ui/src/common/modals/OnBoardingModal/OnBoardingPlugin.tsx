@@ -9,7 +9,7 @@ import { LinkSymbol } from '@/common/components/icons/symbols'
 import { List, ListItem } from '@/common/components/List'
 import { ScrolledModalBody } from '@/common/components/Modal'
 import { TextBig, TextExtraHuge, TextMedium, TextSmall } from '@/common/components/typography'
-import { Colors } from '@/common/constants'
+import { BreakPoints, Colors } from '@/common/constants'
 import { ConnectWalletItem } from '@/common/modals/OnBoardingModal/components/ConnectWalletItem'
 import { OnBoardingTextFooter } from '@/common/modals/OnBoardingModal/OnBoardingModal'
 
@@ -26,16 +26,16 @@ export const OnBoardingPlugin = () => {
           </TextExtraHuge>
           <TextSmall>Select which wallet you want to use to connect with.</TextSmall>
           <List>
-            <ListItem>
-              {allWallets.map((wallet) => (
+            {allWallets.map((wallet) => (
+              <ListItem key={wallet.extensionName}>
                 <ConnectWalletItem
                   key={wallet.extensionName}
                   wallet={wallet}
                   onClick={() => setSelectedWallet(wallet)}
                   selected={selectedWallet?.extensionName === wallet.extensionName}
                 />
-              ))}
-            </ListItem>
+              </ListItem>
+            ))}
           </List>
         </Wrapper>
         {walletState === 'APP_REJECTED' && (
@@ -94,14 +94,18 @@ const Wrapper = styled.div`
   align-items: center;
   gap: 5px;
   width: 100%;
-  max-width: 640px;
+  max-width: 592px;
   height: 100%;
   margin: 0 auto;
-  padding: 36px 0 24px;
+  padding: 36px 12px 24px;
   text-align: center;
 
   > *:nth-child(2) {
     color: ${Colors.Black[400]};
+  }
+
+  @media (min-width: ${BreakPoints.sm}px) {
+    padding: 36px 24px 24px;
   }
 `
 

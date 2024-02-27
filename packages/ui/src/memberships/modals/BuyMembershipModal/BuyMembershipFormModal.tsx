@@ -60,7 +60,7 @@ interface BuyMembershipFormModalProps {
   membershipPrice?: BalanceOf
 }
 
-interface BuyMembershipFormProps extends Omit<BuyMembershipFormModalProps, 'onClose'> {
+export interface BuyMembershipFormProps extends Omit<BuyMembershipFormModalProps, 'onClose'> {
   type: 'onBoarding' | 'general'
   membershipAccount?: string
   changeMembershipAccount?: () => void
@@ -271,14 +271,9 @@ export const BuyMembershipForm = ({
           </ScrolledModalContainer>
         </FormProvider>
       </ScrolledModalBody>
-      <StyledFooter>
-        {type === 'onBoarding' && (
-          <ButtonGhost onClick={changeMembershipAccount} size="medium">
-            <Arrow direction="left" />
-            Change account
-          </ButtonGhost>
-        )}
-        <Checkbox
+
+      <ModalFooter>
+        <StyledCheckbox
           id="privacy-policy-agreement"
           onChange={(hasTerms) => form.setValue('hasTerms', hasTerms, { shouldValidate: true })}
         >
@@ -293,7 +288,7 @@ export const BuyMembershipForm = ({
             </LabelLink>
             .
           </TextMedium>
-        </Checkbox>
+        </StyledCheckbox>
         {type === 'general' && (
           <TransactionInfoContainer>
             <TransactionInfo
@@ -305,10 +300,17 @@ export const BuyMembershipForm = ({
             />
           </TransactionInfoContainer>
         )}
+
+        {type === 'onBoarding' && (
+          <ButtonGhost onClick={changeMembershipAccount} size="medium">
+            <Arrow direction="left" />
+            Change account
+          </ButtonGhost>
+        )}
         <ButtonPrimary size="medium" onClick={submit} disabled={isDisabled}>
           {isUploading ? <Loading text="Uploading avatar" /> : 'Create a Membership'}
         </ButtonPrimary>
-      </StyledFooter>
+      </ModalFooter>
     </>
   )
 }
@@ -322,8 +324,7 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: B
   )
 }
 
-export const StyledFooter = styled(ModalFooter)`
-  & > label:first-child {
-    margin-right: auto;
-  }
+const StyledCheckbox = styled(Checkbox)`
+  flex-shrink: 1;
+  margin-right: auto;
 `

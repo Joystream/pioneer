@@ -1,60 +1,40 @@
-import { Meta, Story } from '@storybook/react'
-import React, { ReactNode, useState } from 'react'
+import { Meta, StoryFn } from '@storybook/react'
+import React, { useState } from 'react'
+import styled from 'styled-components'
 
-import { AccountsContextProvider } from '@/accounts/providers/accounts/provider'
 import { Account } from '@/accounts/types'
 import { InputComponent } from '@/common/components/forms'
-import { Warning } from '@/common/components/Warning'
-import { KeyringContextProvider } from '@/common/providers/keyring/provider'
-import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+import { MocksParameters } from '@/mocks/providers'
 
 import { SelectAccount } from '.'
+import { mockAccounts } from './OptionListAccount.stories'
 
 export default {
   title: 'Accounts/SelectAccount',
   component: SelectAccount,
-} as Meta
 
-const renderWarning = (accountSelect: ReactNode) => (
-  <>
-    <Warning
-      isClosable={false}
-      title="Warning: the Polkadot.js extension can't run in an iframe !"
-      content={
-        <>
-          To render this component properly:{' '}
-          <a href={window.location.href} target="_blank">
-            Open the canvas in a new tab
-          </a>
-        </>
-      }
-    />
-    <br />
-    {accountSelect}
-  </>
-)
+  parameters: {
+    mocks: {
+      accounts: { list: mockAccounts },
+    } satisfies MocksParameters,
+  },
+} satisfies Meta
 
-export const Default: Story = () => {
+export const Default: StoryFn = () => {
   const [selected, setSelected] = useState<Account>()
 
-  const accountSelect = (
-    <InputComponent
+  return (
+    <StyledInputComponent
       label="Account select"
       tooltipText="Lorem ipsum dolor sit amet consectetur, adipisicing elit."
       required
       inputSize="l"
     >
       <SelectAccount selected={selected} onChange={setSelected} />
-    </InputComponent>
-  )
-
-  return window.self === window.top ? (
-    <MockApolloProvider members>
-      <KeyringContextProvider>
-        <AccountsContextProvider>{accountSelect}</AccountsContextProvider>
-      </KeyringContextProvider>
-    </MockApolloProvider>
-  ) : (
-    renderWarning(accountSelect)
+    </StyledInputComponent>
   )
 }
+
+const StyledInputComponent = styled(InputComponent)`
+  max-width: 856px;
+`

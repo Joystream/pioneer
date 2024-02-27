@@ -85,7 +85,7 @@ export class WalletConnect extends BaseDotsamaWallet {
       polkadot: {
         methods: ['polkadot_signTransaction', 'polkadot_signMessage'],
         chains: [chainCAIP],
-        events: ['chainChanged", "accountsChanged'],
+        events: ['chainChanged', 'accountsChanged'],
       },
     }
 

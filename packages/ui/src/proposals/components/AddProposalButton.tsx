@@ -5,7 +5,6 @@ import { TransactionButton } from '@/common/components/buttons/TransactionButton
 import { PlusIcon } from '@/common/components/icons/PlusIcon'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { useModal } from '@/common/hooks/useModal'
-import { useResponsive } from '@/common/hooks/useResponsive'
 import { AddNewProposalModalCall } from '@/proposals/modals/AddNewProposal'
 
 export const AddProposalButton = () => {
@@ -23,10 +22,6 @@ export const AddProposalButton = () => {
     [api?.isConnected]
   )
   const areProposalSlotsAvailable = api && maxProposals && currentProposals?.lt(maxProposals)
-
-  const { size } = useResponsive()
-
-  if (size === 'xxs' || size === 'xs') return null
 
   return (
     <TransactionButton
