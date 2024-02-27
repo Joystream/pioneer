@@ -19,9 +19,10 @@ export interface ContextMenuProps {
   items: ContextMenuItem[]
   size?: ButtonSize
   title?: string
+  isResponsive?: boolean
 }
 
-export const ContextMenu = ({ items, size, title }: ContextMenuProps) => {
+export const ContextMenu = ({ items, size, title, isResponsive }: ContextMenuProps) => {
   const [isMenuVisible, setMenuVisible] = useState(false)
   const [referenceElementRef, setReferenceElementRef] = useState<HTMLDivElement | null>(null)
   const [popperElementRef, setPopperElementRef] = useState<HTMLDivElement | null>(null)
@@ -56,6 +57,7 @@ export const ContextMenu = ({ items, size, title }: ContextMenuProps) => {
         size={size ?? 'medium'}
         {...contextMenuHandlers}
         title={title ?? 'Context menu'}
+        isResponsive={isResponsive}
       >
         <KebabMenuIcon />
       </TransactionButton>

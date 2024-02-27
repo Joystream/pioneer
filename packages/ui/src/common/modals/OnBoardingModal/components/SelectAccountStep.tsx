@@ -1,10 +1,10 @@
 import { BN_ZERO } from '@polkadot/util'
-import { getWalletBySource } from 'injectweb3-connect'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
+import { DefaultWalletIcon } from '@/accounts/model/wallets'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ConnectIcon } from '@/common/components/icons/ConnectIcon'
 import { JoystreamLogo } from '@/common/components/icons/JoystreamLogo'
@@ -14,16 +14,15 @@ import { TextExtraHuge, TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 
 import { ConnectAccountItem } from './ConnectAccountItem'
+import { ResetWalletButton } from './ResetWalletButton'
 
 interface Props {
   onAccountSelect?: (account: string) => void
 }
 
-const defaultIconSrc = getWalletBySource('polkadot-js')?.logo.src
-
 export const SelectAccountStep = ({ onAccountSelect }: Props) => {
   const [selectedAccountAddress, setSelectedAccountAddress] = useState<string>()
-  const { allAccounts, setWallet, wallet } = useMyAccounts()
+  const { allAccounts, wallet } = useMyAccounts()
   const balances = useMyBalances()
 
   const onConfirm = () => {
@@ -35,7 +34,7 @@ export const SelectAccountStep = ({ onAccountSelect }: Props) => {
       <ScrolledModalBody>
         <ContentWrapper>
           <IconsWrapper>
-            <WalletImg src={wallet?.logo.src ?? defaultIconSrc} alt={wallet?.logo.alt ?? wallet?.extensionName} />
+            <WalletImg src={wallet?.logo.src ?? DefaultWalletIcon} alt={wallet?.logo.alt ?? wallet?.extensionName} />
             <ConnectIcon />
             <JoystreamLogo />
           </IconsWrapper>
@@ -60,9 +59,7 @@ export const SelectAccountStep = ({ onAccountSelect }: Props) => {
         </ContentWrapper>
       </ScrolledModalBody>
       <StyledFooter>
-        <ButtonPrimary size="medium" onClick={() => setWallet?.(undefined)}>
-          Return to wallet selection
-        </ButtonPrimary>
+        <ResetWalletButton />
         <ButtonPrimary onClick={onConfirm} disabled={!selectedAccountAddress} size="medium">
           Connect Account
         </ButtonPrimary>

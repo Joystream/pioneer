@@ -36,6 +36,7 @@ export const EditMembershipButton = ({ className, children, member }: Props) => 
       className={className}
       square
       disabled={isTransactionPending || !memberWithDetails}
+      isResponsive
     >
       {children}
     </TransactionButton>

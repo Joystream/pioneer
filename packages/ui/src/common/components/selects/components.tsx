@@ -6,6 +6,7 @@ import { AccountInfoWrap } from '@/accounts/components/AccountInfo'
 import {
   Animations,
   BorderRad,
+  BreakPoints,
   Colors,
   Overflow,
   RemoveScrollbar,
@@ -25,12 +26,11 @@ interface Props {
   onClick: () => void
   disabled?: boolean
   className?: string
-  variant?: 's' | 'm' | 'l'
 }
 
-export const Option = ({ children, onClick, disabled, className, variant }: Props) => (
+export const Option = ({ children, onClick, disabled, className }: Props) => (
   <OptionComponentContainer onClick={onClick} disabled={disabled}>
-    <OptionComponent disabled={disabled} className={className} variant={variant}>
+    <OptionComponent disabled={disabled} className={className}>
       {children}
     </OptionComponent>
   </OptionComponentContainer>
@@ -174,28 +174,25 @@ export const OptionComponentContainer = styled.li<{ disabled?: boolean }>`
   }}
 `
 
-export const OptionComponent = styled.div<{ disabled?: boolean; variant?: 's' | 'm' | 'l' }>`
-  ${({ variant }) =>
-    variant === 's' || variant === 'm'
-      ? css`
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          row-gap: 8px;
-          height: 118px;
+export const OptionComponent = styled.div<{ disabled?: boolean }>`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 8px;
+  height: 118px;
 
-          > div {
-            width: fit-content;
-            margin-right: auto;
-          }
-        `
-      : css`
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          grid-template-rows: 1fr;
-          height: 100%;
-          max-height: ${Sizes.selectHeight};
-        `}
+  > div {
+    width: fit-content;
+    margin-right: auto;
+  }
+
+  @media (min-width: ${BreakPoints.sm}px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    height: 100%;
+    max-height: ${Sizes.selectHeight};
+  }
 
   align-items: center;
   width: 100%;

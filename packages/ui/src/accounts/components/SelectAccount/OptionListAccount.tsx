@@ -9,7 +9,7 @@ import { OptionAccount } from './OptionAccount'
 
 interface Props {
   options: AccountOption[]
-  onChange: (option: AccountOption) => void
+  onChange?: (option: AccountOption) => void
   className?: string
   isForStaking?: boolean
   variant?: 's' | 'm' | 'l'
@@ -21,13 +21,13 @@ export const OptionListAccount = React.memo(({ options, onChange, className, isF
   return (
     <OptionsListComponent className={className}>
       {freeAccounts.map((option) => (
-        <Option key={option.address} onClick={() => onChange && onChange(option)} variant={variant}>
+        <Option key={option.address} onClick={() => onChange && onChange(option)}>
           <OptionAccount option={option} isForStaking={isForStaking} variant={variant} />
         </Option>
       ))}
       {lockedAccounts.map((option) => (
         <AccountLockTooltip boundaryClassName={className} key={option.address} locks={option.optionLocks}>
-          <Option key={option.address} onClick={() => onChange && onChange(option)} disabled variant={variant}>
+          <Option key={option.address} onClick={() => onChange && onChange(option)} disabled>
             <OptionAccount option={option} isForStaking={isForStaking} />
           </Option>
         </AccountLockTooltip>

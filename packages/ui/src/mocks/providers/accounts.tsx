@@ -6,6 +6,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react'
 
 import { AccountsContext } from '@/accounts/providers/accounts/context'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
+import { useWallets } from '@/accounts/providers/accounts/useWallets'
 import { BalancesContext } from '@/accounts/providers/balances/context'
 import { Account, AddressToBalanceMap, LockType } from '@/accounts/types'
 import { whenDefined } from '@/common/utils'
@@ -41,7 +42,7 @@ type Balances =
       vestingLocked?: Balance
     }
 
-type AccountMock = {
+export type AccountMock = {
   balances?: Balances
   account?: { name: string; address: string }
   member?: Membership
@@ -115,6 +116,8 @@ export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts
     [members]
   )
 
+  const { allWallets } = useWallets()
+
   if (!accounts) return <>{children}</>
 
   // Set contexts
@@ -123,6 +126,8 @@ export const MockAccountsProvider: FC<MockAccountsProps> = ({ children, accounts
     hasAccounts: true,
     isLoading: false,
     wallet: accounts.hasWallet === false ? undefined : WALLET,
+    allWallets: allWallets.map((wallet) => ({ ...wallet, installed: false })),
+    walletState: accounts.hasWallet ? 'READY' : undefined,
   }
 
   const membershipContextValue: MyMemberships = {
