@@ -80,11 +80,6 @@ export const BalanceInfoInRow = styled(BalanceInfo)`
   justify-self: end;
 `
 
-export const BalanceInfoNarrow = styled(BalanceInfo)`
-  gap: 4px;
-  width: auto;
-`
-
 export const InfoTitle = styled.span`
   font-size: 10px;
   line-height: 16px;

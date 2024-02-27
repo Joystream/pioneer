@@ -5,7 +5,7 @@ import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { AccountLocks } from '@/accounts/components/AccountLocks'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { AccountOption } from '@/accounts/types'
-import { BalanceInfoNarrow, InfoTitle, InfoValue } from '@/common/components/Modal'
+import { BalanceInfo, InfoTitle } from '@/common/components/Modal'
 import { TokenValue } from '@/common/components/typography'
 import { BreakPoints, Colors } from '@/common/constants'
 
@@ -26,18 +26,24 @@ export const OptionAccount = ({ option, isForStaking, variant, isSelected }: Pro
   return (
     <>
       <AccountInfo account={option} locked={isLocked} variant={variant} />
-      <BalanceContainer isSelected={isSelected}>
+      <StyledBalanceInfo isSelected={isSelected}>
         <InfoTitle>{balanceType} balance</InfoTitle>
-        <InfoValue>
+        <InfoContainer>
           <Value value={balance} locked={isLocked} />
           <AccountLocks locks={balances?.locks} />
-        </InfoValue>
-      </BalanceContainer>
+        </InfoContainer>
+      </StyledBalanceInfo>
     </>
   )
 }
 
-const BalanceContainer = styled(BalanceInfoNarrow)<Pick<Props, 'isSelected'>>`
+const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+`
+
+const StyledBalanceInfo = styled(BalanceInfo)<Pick<Props, 'isSelected'>>`
   gap: 12px;
 
   @media (max-width: ${BreakPoints.sm - 1}px) {
@@ -47,7 +53,8 @@ const BalanceContainer = styled(BalanceInfoNarrow)<Pick<Props, 'isSelected'>>`
             display: none;
           `
         : css`
-            ${InfoValue} {
+            display: flex;
+            ${InfoContainer} {
               display: contents;
             }
           `};

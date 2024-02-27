@@ -7,7 +7,7 @@ import { member } from '@/mocks/data/members'
 import { MocksParameters } from '@/mocks/providers'
 import { AccountMock } from '@/mocks/providers/accounts'
 
-import { OptionListAccount } from './OptionListAccount'
+import { OptionListAccount as OptionListAccountComponent } from './OptionListAccount'
 
 export const mockAccounts: AccountMock[] = [
   { member: member('alice'), balances: { transferable: 0.00001, locks: ['Apps Worker'] } },
@@ -23,7 +23,7 @@ export const mockAccounts: AccountMock[] = [
 
 export default {
   title: 'Accounts/SelectAccount/OptionListAccount',
-  component: OptionListAccount,
+  component: OptionListAccountComponent,
 
   parameters: {
     mocks: {
@@ -34,7 +34,7 @@ export default {
   excludeStories: ['mockAccounts'],
 } satisfies Meta
 
-export const Default: StoryFn = () => {
+export const OptionListAccount: StoryFn = () => {
   const { allAccounts } = useMyAccounts()
 
   const free = allAccounts.slice(0, 3)
@@ -45,7 +45,7 @@ export const Default: StoryFn = () => {
   return <AccountsOptions options={[...free, ...locked]} />
 }
 
-const AccountsOptions = styled(OptionListAccount)`
+const AccountsOptions = styled(OptionListAccountComponent)`
   position: static;
   transform: none;
   max-height: none;
