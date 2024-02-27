@@ -366,13 +366,14 @@ export const AddNewProposalModal = () => {
           label: isLastStepActive(getSteps(service)) ? 'Create proposal' : 'Next step',
           onClick: () => send('NEXT'),
         }}
-      >
-        {isExecutionError && (
-          <Checkbox isRequired onChange={setWarningAccepted} id="execution-requirement">
-            I understand the implications of overriding the execution constraints validation.
-          </Checkbox>
-        )}
-      </ModalTransactionFooter>
+        extraLeftButtons={
+          isExecutionError && (
+            <Checkbox isRequired onChange={setWarningAccepted} id="execution-requirement">
+              I understand the implications of overriding the execution constraints validation.
+            </Checkbox>
+          )
+        }
+      />
     </Modal>
   )
 }

@@ -1,6 +1,5 @@
 import React from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
-import styled from 'styled-components'
 import * as Yup from 'yup'
 
 import { ButtonGhost } from '@/common/components/buttons'
@@ -61,21 +60,18 @@ export const EmailSubscriptionFormModal = ({ onClose, onSubmit }: Props) => {
           </Info>
         </Row>
       </ModalBody>
-      <StyledFooter
+      <ModalTransactionFooter
         next={{
           disabled: isValid,
           label: 'Sign and Authorize Email',
           onClick: onSubmitClick,
         }}
-      >
-        <ButtonGhost size="medium" onClick={onClose}>
-          Not now
-        </ButtonGhost>
-      </StyledFooter>
+        extraButtons={
+          <ButtonGhost size="medium" onClick={onClose}>
+            Not now
+          </ButtonGhost>
+        }
+      />
     </Modal>
   )
 }
-
-const StyledFooter = styled(ModalTransactionFooter)`
-  grid-column-gap: 0;
-`

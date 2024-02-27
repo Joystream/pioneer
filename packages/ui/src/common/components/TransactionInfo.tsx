@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 import React from 'react'
 
-import { BalanceInfoNarrow, InfoTitle, InfoValue } from './Modal'
+import { InfoTitle, InfoValue } from './Modal'
 import { Tooltip, TooltipDefault } from './Tooltip'
 import { TokenValue } from './typography'
 
@@ -23,12 +23,12 @@ export const TransactionInfo = ({
   tooltipLinkURL,
 }: TransactionInfoProps) => {
   return (
-    <BalanceInfoNarrow>
+    <>
       <InfoTitle>{title}</InfoTitle>
       <InfoValue>
         <TokenValue value={value} />
       </InfoValue>
-      {tooltipText && (
+      {tooltipText ? (
         <Tooltip
           tooltipTitle={tooltipTitle}
           tooltipLinkText={tooltipLinkText}
@@ -37,7 +37,9 @@ export const TransactionInfo = ({
         >
           <TooltipDefault />
         </Tooltip>
+      ) : (
+        <span></span>
       )}
-    </BalanceInfoNarrow>
+    </>
   )
 }

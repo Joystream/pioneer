@@ -5,7 +5,7 @@ import { ConnectionStatusDot } from '@/app/components/ConnectionStatusDot'
 import { useEscape } from '@/common/hooks/useEscape'
 
 import { Animations, BorderRad, BreakPoints, Colors, Fonts, RemoveScrollbar, Shadows, ZIndex } from '../../constants'
-import { CloseButton } from '../buttons'
+import { ButtonsGroup, CloseButton } from '../buttons'
 import { TextMedium, ValueInJoys } from '../typography'
 
 interface ModalHeaderBasicProps {
@@ -188,6 +188,11 @@ export const ModalFooterComponent = styled.footer`
     flex-wrap: nowrap;
     gap: 16px;
     padding: 12px 26px 12px 24px;
+
+    ${ButtonsGroup} {
+      gap: 16px;
+    }
+  }
   }
 `
 
