@@ -15,7 +15,7 @@ interface UsePastElectionsProps {
 
 export const usePastElections = ({ page = 1, order }: UsePastElectionsProps) => {
   const variables = {
-    orderBy: [toQueryOrderByInput<ElectionRoundOrderByInput>(order)],
+    orderBy: toQueryOrderByInput<ElectionRoundOrderByInput>(order),
     limit: ELECTION_PER_PAGE,
     offset: (page - 1) * ELECTION_PER_PAGE,
   }
