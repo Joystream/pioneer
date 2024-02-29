@@ -2,7 +2,7 @@ services:
   - type: web
     name: api
     region: frankfurt
-    plan: starter
+    plan: free
 
     runtime: image
     image: { url: docker.io/joystream/pioneer-backend:next }
@@ -77,4 +77,4 @@ services:
 databases:
   - name: db
     region: frankfurt
-    plan: starter
+    plan: free
