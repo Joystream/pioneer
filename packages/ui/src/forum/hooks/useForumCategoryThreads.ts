@@ -35,7 +35,7 @@ export const useForumCategoryThreads = (
   const { data: threadsData } = useGetForumThreadsQuery({
     variables: {
       where: where(filters, categoryId, isArchive),
-      orderBy: [ForumThreadOrderByInput.IsStickyDesc, toQueryOrderByInput<ForumThreadOrderByInput>(options.order)],
+      orderBy: [ForumThreadOrderByInput.IsStickyDesc, ...toQueryOrderByInput<ForumThreadOrderByInput>(options.order)],
       ...(!pagination
         ? { limit: 30 }
         : {

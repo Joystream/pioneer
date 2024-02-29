@@ -33,7 +33,10 @@ export const useProposals = ({
   perPage = 10,
   fetchAll = false,
 }: UseProposalsProps): UseProposals => {
-  const orderBy = order ? toQueryOrderByInput<ProposalOrderByInput>(order) : ProposalOrderByInput.CreatedAtDesc
+  const orderBy = toQueryOrderByInput<ProposalOrderByInput>(order, {
+    orderKey: 'createdAt',
+    isDescending: order?.isDescending ?? false,
+  })
 
   const where = useMemo(() => {
     const where: ProposalWhereInput = filters?.stage
