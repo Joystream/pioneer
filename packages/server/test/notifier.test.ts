@@ -102,7 +102,6 @@ describe('Notifier', () => {
             forumPostByUniqueInput: {
               author: { handle: 'author:handle' },
               thread: { id: 'thread:id', title: 'thread:title' },
-              text: 'Lorem Ipsum',
             },
           })
 
@@ -306,7 +305,6 @@ describe('Notifier', () => {
             forumPostByUniqueInput: {
               author: { handle: 'author:handle' },
               thread: { id: 'thread:id', title: 'thread:title' },
-              text: 'Lorem Ipsum',
             },
           })
         // -------------------
@@ -385,11 +383,7 @@ describe('Notifier', () => {
                 return { forumCategoryByUniqueInput: { parentId: variables.id === 'bar' ? 'foo' : null } }
               case GetThreadDocument:
                 return {
-                  forumThreadByUniqueInput: {
-                    author: { handle: 'author:handle' },
-                    title: `${variables.id}:title`,
-                    initialPost: { text: 'Lorem Ipsum' },
-                  },
+                  forumThreadByUniqueInput: { author: { handle: 'author:handle' }, title: `${variables.id}:title` },
                 }
             }
           })
@@ -812,7 +806,6 @@ describe('Notifier', () => {
           forumPostByUniqueInput: {
             author: { handle: 'author:handle' },
             thread: { id: 'thread:id', title: 'thread:title' },
-            text: 'Lorem Ipsum',
           },
         })
 

@@ -7,7 +7,6 @@ interface ForumPost {
   author: string
   threadId: string
   thread: string
-  text: string
 }
 const cachedForumPosts: { [id: string]: ForumPost } = {}
 export const getForumPost = async (id: string): Promise<ForumPost> => {
@@ -21,7 +20,6 @@ export const getForumPost = async (id: string): Promise<ForumPost> => {
       author: post.author.handle,
       threadId: post.thread.id,
       thread: post.thread.title,
-      text: post.text,
     }
   }
 
@@ -31,7 +29,6 @@ export const getForumPost = async (id: string): Promise<ForumPost> => {
 interface ForumThread {
   author: string
   title: string
-  text?: string
 }
 const cachedForumThreads: { [id: string]: ForumThread } = {}
 export const getForumThread = async (id: string): Promise<ForumThread> => {
@@ -44,7 +41,6 @@ export const getForumThread = async (id: string): Promise<ForumThread> => {
     cachedForumThreads[id] = {
       author: thread.author.handle,
       title: thread.title,
-      text: thread.initialPost?.text,
     }
   }
 
