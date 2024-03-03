@@ -20,8 +20,8 @@ export type BuildEvents = (
   build: (b: NotifsBuilder) => (PartialNotif | [])[]
 ) => NotificationEvent
 
-export type NotifEventFromQNEvent<T extends ImplementedQNEvent['__typename']> = (
+export type NotifEventFromQNEvent<T extends ImplementedQNEvent['__typename'], Args extends any[] = []> = (
   event: QNEvent<T>,
   buildEvents: BuildEvents,
-  ...args: any[]
+  ...args: Args
 ) => Promise<NotificationEvent>

@@ -27,7 +27,7 @@ export const toNotificationEvents =
 
     const notifEvent = match(event)
       .with({ __typename: 'PostAddedEvent' }, (e) => fromPostAddedEvent(e, build, roles))
-      .with({ __typename: 'ThreadCreatedEvent' }, (e) => fromThreadCreatedEvent(e, build))
+      .with({ __typename: 'ThreadCreatedEvent' }, (e) => fromThreadCreatedEvent(e, build, roles))
       .with({ __typename: 'AnnouncingPeriodStartedEvent' }, (e) => fromElectionAnnouncingStartedEvent(e, build))
       .with({ __typename: 'VotingPeriodStartedEvent' }, (e) => fromElectionVotingStartedEvent(e, build))
       .with({ __typename: 'RevealingStageStartedEvent' }, (e) => fromElectionRevealingStartedEvent(e, build))

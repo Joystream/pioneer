@@ -9,10 +9,10 @@ import {
 
 import { NotifEventFromQNEvent, isOlderThan, getMentionedMemberIds, getParentCategories } from './utils'
 
-export const fromPostAddedEvent: NotifEventFromQNEvent<'PostAddedEvent'> = async (
+export const fromPostAddedEvent: NotifEventFromQNEvent<'PostAddedEvent', [GetCurrentRolesQuery]> = async (
   event,
   buildEvents,
-  roles: GetCurrentRolesQuery
+  roles
 ) => {
   const postAddedEvent = useFragment(PostAddedEventFieldsFragmentDoc, event)
   const post = postAddedEvent.post
@@ -36,10 +36,10 @@ export const fromPostAddedEvent: NotifEventFromQNEvent<'PostAddedEvent'> = async
   ])
 }
 
-export const fromThreadCreatedEvent: NotifEventFromQNEvent<'ThreadCreatedEvent'> = async (
+export const fromThreadCreatedEvent: NotifEventFromQNEvent<'ThreadCreatedEvent', [GetCurrentRolesQuery]> = async (
   event,
   buildEvents,
-  roles: GetCurrentRolesQuery
+  roles
 ) => {
   const threadCreatedEvent = useFragment(ThreadCreatedEventFieldsFragmentDoc, event)
   const thread = threadCreatedEvent.thread

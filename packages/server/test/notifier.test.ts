@@ -17,7 +17,7 @@ describe('Notifier', () => {
 
   describe('forum', () => {
     describe('PostAddedEvent', () => {
-      it('No roles', async () => {
+      it('Member notifications', async () => {
         // -------------------
         // Initialize database
         // -------------------
@@ -247,7 +247,7 @@ describe('Notifier', () => {
         expect(mockEmailProvider.sentEmails.length).toBe(6)
       })
 
-      it('DAO roles', async () => {
+      it('Role notifications', async () => {
         // -------------------
         // Initialize database
         // -------------------
@@ -326,137 +326,193 @@ describe('Notifier', () => {
         expect(notifications).toContainEqual(expect.objectContaining({ entityId: 'post:1', memberId: bob.id }))
         expect(notifications).toContainEqual(expect.objectContaining({ entityId: 'post:1', memberId: charlie.id }))
 
-        // Post 2 notify forum WG members
+        // Post 2 notify forum workers
         expect(notifications).toContainEqual(expect.objectContaining({ entityId: 'post:2', memberId: alice.id }))
         expect(notifications).toContainEqual(expect.objectContaining({ entityId: 'post:2', memberId: bob.id }))
 
-        // Post 3 notify forum WG members
+        // Post 3 notify forum lead
         expect(notifications).toContainEqual(expect.objectContaining({ entityId: 'post:3', memberId: alice.id }))
 
         // Post 4 notify all leads
         expect(notifications).toContainEqual(expect.objectContaining({ entityId: 'post:4', memberId: alice.id }))
         expect(notifications).toContainEqual(expect.objectContaining({ entityId: 'post:4', memberId: charlie.id }))
 
-        // Post 5 notify forum WG members
+        // Post 5 notify councilors
         expect(notifications).toContainEqual(expect.objectContaining({ entityId: 'post:5', memberId: bob.id }))
 
         expect(notifications).toHaveLength(9)
       })
     })
 
-    it('ThreadCreatedEvent', async () => {
-      // -------------------
-      // Initialize database
-      // -------------------
+    describe('ThreadCreatedEvent', () => {
+      it('Member notifications', async () => {
+        // -------------------
+        // Initialize database
+        // -------------------
 
-      // - Alice is using the default behavior for general subscriptions
-      // - Alice should get notified of any new thread in bar or it's sub categories
-      const alice = await createMember(1, 'alice', [{ kind: 'FORUM_CATEGORY_ENTITY_THREAD', entityId: 'bar' }])
+        // - Alice is using the default behavior for general subscriptions
+        // - Alice should get notified of any new thread in bar or it's sub categories
+        const alice = await createMember(1, 'alice', [{ kind: 'FORUM_CATEGORY_ENTITY_THREAD', entityId: 'bar' }])
 
-      // - By default Bob should be notified of any new thread
-      // - Bob should not be notified of threads created in category foo or it's sub categories (bar)
-      const bob = await createMember(2, 'bob', [
-        { kind: 'FORUM_THREAD_ALL' },
-        { kind: 'FORUM_CATEGORY_ENTITY_THREAD', entityId: 'foo', shouldNotify: false },
-      ])
+        // - By default Bob should be notified of any new thread
+        // - Bob should not be notified of threads created in category foo or it's sub categories (bar)
+        const bob = await createMember(2, 'bob', [
+          { kind: 'FORUM_THREAD_ALL' },
+          { kind: 'FORUM_CATEGORY_ENTITY_THREAD', entityId: 'foo', shouldNotify: false },
+        ])
 
-      // -------------------
-      // Mock QN responses
-      // -------------------
+        // -------------------
+        // Mock QN responses
+        // -------------------
 
-      mockRequest
-        .mockReturnValueOnce({ workers: [], electedCouncils: [] })
-        .mockReturnValueOnce({
-          events: [
-            threadCreatedEvent(1, {
-              category: 'foo',
-              text: `Hi [@Alice](#mention?member-id=${alice.id}) and [@Bob](#mention?member-id=${bob.id})`,
-            }),
-            threadCreatedEvent(2, { text: `Hi [@Bob](#mention?member-id=${bob.id})`, category: 'bar' }),
-            threadCreatedEvent(3, { author: alice.id, text: `I [@Alice](#mention?member-id=${alice.id})` }),
-          ],
-        })
-        .mockImplementation((_: string, doc: any, variables: any) => {
-          switch (doc) {
-            case GetNotificationEventsDocument:
-              return { events: [] }
-            case GetForumCategoryDocument:
-              return { forumCategoryByUniqueInput: { parentId: variables.id === 'bar' ? 'foo' : null } }
-            case GetThreadDocument:
-              return {
-                forumThreadByUniqueInput: {
-                  author: { handle: 'author:handle' },
-                  title: `${variables.id}:title`,
-                  initialPost: { text: 'Lorem Ipsum' },
-                },
-              }
-          }
-        })
+        mockRequest
+          .mockReturnValueOnce({ workers: [], electedCouncils: [] })
+          .mockReturnValueOnce({
+            events: [
+              threadCreatedEvent(1, {
+                category: 'foo',
+                text: `Hi [@Alice](#mention?member-id=${alice.id}) and [@Bob](#mention?member-id=${bob.id})`,
+              }),
+              threadCreatedEvent(2, { text: `Hi [@Bob](#mention?member-id=${bob.id})`, category: 'bar' }),
+              threadCreatedEvent(3, { author: alice.id, text: `I [@Alice](#mention?member-id=${alice.id})` }),
+            ],
+          })
+          .mockImplementation((_: string, doc: any, variables: any) => {
+            switch (doc) {
+              case GetNotificationEventsDocument:
+                return { events: [] }
+              case GetForumCategoryDocument:
+                return { forumCategoryByUniqueInput: { parentId: variables.id === 'bar' ? 'foo' : null } }
+              case GetThreadDocument:
+                return {
+                  forumThreadByUniqueInput: {
+                    author: { handle: 'author:handle' },
+                    title: `${variables.id}:title`,
+                    initialPost: { text: 'Lorem Ipsum' },
+                  },
+                }
+            }
+          })
 
-      // -------------------
-      // Run
-      // -------------------
+        // -------------------
+        // Run
+        // -------------------
 
-      await run()
+        await run()
 
-      // -------------------
-      // Check notifications
-      // -------------------
+        // -------------------
+        // Check notifications
+        // -------------------
 
-      const notifications = await prisma.notification.findMany()
+        const notifications = await prisma.notification.findMany()
 
-      expect(notifications).toContainEqual(
-        expect.objectContaining({
-          eventId: 'event:1',
-          memberId: alice.id,
-          kind: 'FORUM_THREAD_MENTION',
-          entityId: 'thread:1',
-        })
-      )
-      expect(notifications).toContainEqual(
-        expect.objectContaining({
-          eventId: 'event:2',
-          memberId: alice.id,
-          kind: 'FORUM_CATEGORY_ENTITY_THREAD',
-          entityId: 'thread:2',
-        })
-      )
-      expect(notifications).toContainEqual(
-        expect.objectContaining({
-          eventId: 'event:3',
-          memberId: bob.id,
-          kind: 'FORUM_THREAD_ALL',
-          entityId: 'thread:3',
-        })
-      )
-      expect(notifications).toHaveLength(3)
+        expect(notifications).toContainEqual(
+          expect.objectContaining({
+            eventId: 'event:1',
+            memberId: alice.id,
+            kind: 'FORUM_THREAD_MENTION',
+            entityId: 'thread:1',
+          })
+        )
+        expect(notifications).toContainEqual(
+          expect.objectContaining({
+            eventId: 'event:2',
+            memberId: alice.id,
+            kind: 'FORUM_CATEGORY_ENTITY_THREAD',
+            entityId: 'thread:2',
+          })
+        )
+        expect(notifications).toContainEqual(
+          expect.objectContaining({
+            eventId: 'event:3',
+            memberId: bob.id,
+            kind: 'FORUM_THREAD_ALL',
+            entityId: 'thread:3',
+          })
+        )
+        expect(notifications).toHaveLength(3)
 
-      // -------------------
-      // Check emails
-      // -------------------
+        // -------------------
+        // Check emails
+        // -------------------
 
-      expect(mockEmailProvider.sentEmails).toContainEqual(
-        expect.objectContaining({
-          to: alice.email,
-          subject: expect.stringContaining('thread:1:title'),
-          html: expect.stringMatching(/\/#\/forum\/thread\/thread:1/s),
-        })
-      )
-      expect(mockEmailProvider.sentEmails).toContainEqual(
-        expect.objectContaining({
-          to: alice.email,
-          subject: expect.stringContaining('thread:2:title'),
-          html: expect.stringMatching(/\/#\/forum\/thread\/thread:2/s),
-        })
-      )
-      expect(mockEmailProvider.sentEmails).toContainEqual(
-        expect.objectContaining({
-          to: bob.email,
-          subject: expect.stringContaining('thread:3:title'),
-          html: expect.stringMatching(/\/#\/forum\/thread\/thread:3/s),
-        })
-      )
-      expect(mockEmailProvider.sentEmails.length).toBe(3)
+        expect(mockEmailProvider.sentEmails).toContainEqual(
+          expect.objectContaining({
+            to: alice.email,
+            subject: expect.stringContaining('thread:1:title'),
+            html: expect.stringMatching(/\/#\/forum\/thread\/thread:1/s),
+          })
+        )
+        expect(mockEmailProvider.sentEmails).toContainEqual(
+          expect.objectContaining({
+            to: alice.email,
+            subject: expect.stringContaining('thread:2:title'),
+            html: expect.stringMatching(/\/#\/forum\/thread\/thread:2/s),
+          })
+        )
+        expect(mockEmailProvider.sentEmails).toContainEqual(
+          expect.objectContaining({
+            to: bob.email,
+            subject: expect.stringContaining('thread:3:title'),
+            html: expect.stringMatching(/\/#\/forum\/thread\/thread:3/s),
+          })
+        )
+        expect(mockEmailProvider.sentEmails.length).toBe(3)
+      })
+
+      it('Role notifications', async () => {
+        // -------------------
+        // Initialize database
+        // -------------------
+
+        const alice = await createMember(1, 'alice')
+        const bob = await createMember(2, 'bob')
+
+        // -------------------
+        // Mock QN responses
+        // -------------------
+
+        mockRequest
+          .mockReturnValueOnce({
+            workers: [{ groupId: 'forumWorkingGroup', isLead: true, membershipId: alice.id.toString() }],
+            electedCouncils: [{ councilMembers: [{ memberId: bob.id.toString() }] }],
+          })
+          .mockReturnValueOnce({
+            events: [
+              threadCreatedEvent(1, { text: 'Hi [@Forum Lead](#mention?role=lead_forumWorkingGroup)' }),
+              threadCreatedEvent(2, { text: 'Hi [@Council](#mention?role=council)' }),
+              threadCreatedEvent(3, { author: alice.id, text: 'Hi [@Dao](#mention?role=dao)' }),
+            ],
+          })
+          .mockReturnValue({
+            events: [],
+            forumCategoryByUniqueInput: { parentId: null },
+            forumThreadByUniqueInput: { author: { handle: 'author:handle' }, title: 'thread:title' },
+          })
+
+        // -------------------
+        // Run
+        // -------------------
+
+        await run()
+
+        // -------------------
+        // Check notifications
+        // -------------------
+
+        const notifications = await prisma.notification.findMany()
+
+        // Thread 1 notify forum lead
+        expect(notifications).toContainEqual(expect.objectContaining({ entityId: 'thread:1', memberId: alice.id }))
+
+        // Thread 2 notify councilors
+        expect(notifications).toContainEqual(expect.objectContaining({ entityId: 'thread:2', memberId: bob.id }))
+
+        // Thread 3 notify DAO (except for Alice who posted the thread)
+        expect(notifications).toContainEqual(expect.objectContaining({ entityId: 'thread:3', memberId: bob.id }))
+
+        expect(notifications).toHaveLength(3)
+      })
     })
   })
 
