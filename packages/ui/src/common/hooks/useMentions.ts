@@ -288,13 +288,6 @@ const roleMentionData: MentionItem[] = [
     helper: 'council',
   },
   {
-    id: '@WG Workers',
-    itemId: 'workers',
-    type: MentionType.Role,
-    name: 'WG Workers',
-    helper: ['workinggroupworkers', 'workers', 'wgworkers'],
-  },
-  {
     id: '@WG Leads',
     itemId: 'leads',
     type: MentionType.Role,

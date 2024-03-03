@@ -202,8 +202,7 @@ export const Mention = ({ children, type, itemId }: MentionProps) => {
           case 'council':
             return generatePath(CouncilRoutes.council)
 
-          case 'workers':
-          case 'lead':
+          case 'leads':
             return generatePath(WorkingGroupsRoutes.groups)
 
           default:

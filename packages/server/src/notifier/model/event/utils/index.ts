@@ -42,7 +42,7 @@ export const getMentionedMemberIds = (text: string, roles: GetCurrentRolesQuery)
 
         case 'workers': {
           if (!groupId) {
-            return workers.map((worker) => Number(worker.membershipId))
+            return []
           }
           return workers.filter((worker) => worker.groupId === groupId).map((worker) => Number(worker.membershipId))
         }
