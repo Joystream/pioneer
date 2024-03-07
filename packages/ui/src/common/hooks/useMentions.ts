@@ -1,6 +1,7 @@
 import { useApolloClient, DocumentNode } from '@apollo/client'
 import { useCallback } from 'react'
 
+import { fuzzyMatches } from '@/common/model/fuzzyMatch'
 import { debounce } from '@/common/utils'
 import {
   SimpleSearchForumPostDocument,
@@ -16,6 +17,7 @@ import {
   SimpleSearchProposalDiscussionQuery,
 } from '@/proposals/queries'
 import { i18next } from '@/services/i18n'
+import { urlParamToWorkingGroupId } from '@/working-groups/model/workingGroupName'
 import {
   SimpleSearchWorkingGroupApplicationsDocument,
   SimpleSearchWorkingGroupApplicationsQuery,
@@ -23,11 +25,12 @@ import {
   SimpleSearchWorkingGroupOpeningsQuery,
 } from '@/working-groups/queries'
 
-enum MentionType {
+export enum MentionType {
   General = 'general',
   Proposal = 'proposal',
   ProposalPost = 'proposal_post',
   Member = 'member',
+  Role = 'role',
   ForumThread = 'forum_thread',
   ForumPost = 'forum_post',
   Opening = 'opening',
@@ -40,7 +43,7 @@ export interface MentionItem {
   name: string
   type: MentionType
   addon?: unknown
-  helper?: string
+  helper?: string | string[]
 }
 
 export type MentionFn = (text: string) => Promise<MentionItem[] | undefined>
@@ -66,13 +69,17 @@ export const useMentions = (): UseMentions => {
   )
 
   const mentionMembers = useCallback(async (text: string) => {
+    const roleMentions = fuzzyMatches(roleMentionData, 'helper', text.toLowerCase()).slice(0, 5)
+
     const { data } = await query<SimpleSearchMembersQuery>(SimpleSearchMembersDocument)(text)
-    return data.memberships.map<MentionItem>(({ id, handle }) => ({
+    const memberMentions = data.memberships.map<MentionItem>(({ id, handle }) => ({
       id: `@${handle}`,
       itemId: id,
       type: MentionType.Member,
       name: handle,
     }))
+
+    return [...roleMentions, ...memberMentions]
   }, [])
 
   const mentionProposals = useCallback(async (text: string) => {
@@ -249,3 +256,49 @@ const itemRenderer = ({ id, itemId, type, helper }: MentionItem) => {
 }
 
 const sliceDescription = (text: string) => text.slice(0, 33) + '...'
+
+const roleMentionData: MentionItem[] = [
+  ...['Storage', 'Membership', 'Content', 'Forum', 'Builders', 'Apps', 'HR', 'Marketing'].flatMap(
+    (wg): MentionItem[] => {
+      const workerType = `${wg} Workers`
+      const leadType = `${wg} Lead`
+      return [
+        {
+          id: `@${workerType}`,
+          itemId: `workers_${urlParamToWorkingGroupId(wg.toLocaleLowerCase())}`,
+          type: MentionType.Role,
+          name: workerType,
+          helper: workerType.toLocaleLowerCase(),
+        },
+        {
+          id: `@${leadType}`,
+          itemId: `lead_${urlParamToWorkingGroupId(wg.toLocaleLowerCase())}`,
+          type: MentionType.Role,
+          name: leadType,
+          helper: leadType.toLocaleLowerCase(),
+        },
+      ]
+    }
+  ),
+  {
+    id: '@Council',
+    itemId: 'council',
+    type: MentionType.Role,
+    name: 'Council',
+    helper: 'council',
+  },
+  {
+    id: '@WG Leads',
+    itemId: 'leads',
+    type: MentionType.Role,
+    name: 'WG Leads',
+    helper: ['workinggroupleads', 'leads', 'wgleads'],
+  },
+  {
+    id: '@Dao',
+    itemId: 'dao',
+    type: MentionType.Role,
+    name: 'Dao',
+    helper: ['dao', 'all'],
+  },
+]

@@ -1,6 +1,7 @@
-import { Meta, Story } from '@storybook/react'
+import { Meta } from '@storybook/react'
 import React from 'react'
 
+import { MentionType } from '@/common/hooks/useMentions'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
 
 import { Mention, MentionProps } from './Mention'
@@ -8,52 +9,44 @@ import { Mention, MentionProps } from './Mention'
 export default {
   title: 'Common/Mention',
   component: Mention,
-} as Meta
+  render: (args) => (
+    <MockApolloProvider members proposals workers workingGroups forum>
+      <Mention {...args}>Mention</Mention>
+    </MockApolloProvider>
+  ),
+} as Meta<MentionProps>
 
-const Template: Story<MentionProps> = (args) => (
-  <MockApolloProvider members proposals workers workingGroups forum>
-    <Mention {...args}>Mention</Mention>
-  </MockApolloProvider>
-)
-
-export const Proposal = Template.bind({})
-Proposal.args = {
-  type: 'proposal',
+export const Proposal = {
+  type: MentionType.Proposal,
   itemId: '1',
 }
 
-export const ProposalDiscussionEntry = Template.bind({})
-ProposalDiscussionEntry.args = {
-  type: 'proposalDiscussionEntry',
+export const ProposalPost = {
+  type: MentionType.ProposalPost,
   itemId: '1',
 }
 
-export const ForumThread = Template.bind({})
-ForumThread.args = {
-  type: 'forumThread',
+export const ForumThread = {
+  type: MentionType.ForumThread,
   itemId: '1',
 }
 
-export const ForumPost = Template.bind({})
-ForumPost.args = {
-  type: 'forumPost',
+export const ForumPost = {
+  type: MentionType.ForumPost,
   itemId: '1',
 }
 
-export const Member = Template.bind({})
-Member.args = {
-  type: 'member',
+export const Member = {
+  type: MentionType.Member,
   itemId: '1',
 }
 
-export const Opening = Template.bind({})
-Opening.args = {
-  type: 'opening',
+export const Opening = {
+  type: MentionType.Opening,
   itemId: 'forumWorkingGroup-0',
 }
 
-export const Application = Template.bind({})
-Application.args = {
-  type: 'application',
+export const Application = {
+  type: MentionType.Application,
   itemId: 'forumWorkingGroup-0',
 }
