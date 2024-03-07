@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.0] - 2024-03-07
+
+### Added
+- Role mention.
+
+### Fixed
+- Proposal default order.
+
 ## [3.1.0] - 2024-02-27
 
 ### Added
@@ -31,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Searching for members by id.
-- General search box behavior. 
+- General search box behavior.
 - Show members active roles only.
 - Show creation date on member profiles.
 - Fix opening creation for lead with separate role and controller accounts.
@@ -335,7 +343,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v3.1.0...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v3.2.0...HEAD
+[3.2.0]: https://github.com/Joystream/pioneer/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/Joystream/pioneer/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/Joystream/pioneer/compare/v2.6.0...v3.0.0
 [2.6.0]: https://github.com/Joystream/pioneer/compare/v2.5.0...v2.6.0

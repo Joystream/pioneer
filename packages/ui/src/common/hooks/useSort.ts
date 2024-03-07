@@ -13,10 +13,14 @@ export interface SortOrder<Order extends BaseSortKey> {
   isDescending: boolean
 }
 
-export function toQueryOrderByInput<Order extends BaseSortKey>(order: SortOrder<Order>) {
-  const value = order.isDescending ? `${order.orderKey}_DESC` : `${order.orderKey}_ASC`
+export function toQueryOrderByInput<Order extends BaseSortKey>(...orders: (SortOrder<Order> | undefined)[]): Order[] {
+  return orders.flatMap((order) => {
+    if (!order) return []
 
-  return value as Order
+    const value = order.isDescending ? `${order.orderKey}_DESC` : `${order.orderKey}_ASC`
+
+    return value as Order
+  })
 }
 
 export type GetSortProps<Order extends BaseSortKey> = (key: OrderKey<Order>) => {

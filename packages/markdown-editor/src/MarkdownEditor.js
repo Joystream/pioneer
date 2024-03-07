@@ -72,6 +72,9 @@ function prepareLink({ type, itemId, addon }) {
     case 'member': {
       return `#mention?member-id=${itemId}`
     }
+    case 'role': {
+      return `#mention?role=${itemId}`
+    }
     case 'proposal': {
       return `#mention?proposal-id=${itemId}`
     }

@@ -2,8 +2,9 @@ import { NotificationKind, Prisma } from '@prisma/client'
 import { uniq } from 'lodash'
 
 import { Subset } from '@/common/utils/types'
+import { PotentialNotif } from '@/notifier/types'
 
-import { isEntityPotentialNotif, PotentialNotif } from './event'
+import { isEntityPotentialNotif } from './event'
 
 type Filter = Subset<
   Prisma.SubscriptionWhereInput,
