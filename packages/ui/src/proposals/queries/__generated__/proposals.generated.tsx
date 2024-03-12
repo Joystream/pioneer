@@ -85,6 +85,7 @@ export type ProposalFieldsFragment = {
     | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
     | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
     | { __typename: 'UpdateChannelPayoutsProposalDetails' }
+    | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
     | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
     | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
     | { __typename: 'VetoProposalDetails' }
@@ -543,6 +544,7 @@ export type ProposalWithDetailsFieldsFragment = {
         maxCashoutAllowed?: string | null
         payloadHash?: string | null
       }
+    | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
     | { __typename: 'UpdatePalletFrozenStatusProposalDetails'; frozen: boolean; pallet: string }
     | {
         __typename: 'UpdateWorkingGroupBudgetProposalDetails'
@@ -912,6 +914,7 @@ export type ProposalMentionFieldsFragment = {
     | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
     | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
     | { __typename: 'UpdateChannelPayoutsProposalDetails' }
+    | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
     | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
     | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
     | { __typename: 'VetoProposalDetails' }
@@ -1021,6 +1024,7 @@ export type GetProposalsQuery = {
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
+      | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
@@ -1406,6 +1410,7 @@ export type GetProposalQuery = {
           maxCashoutAllowed?: string | null
           payloadHash?: string | null
         }
+      | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails'; frozen: boolean; pallet: string }
       | {
           __typename: 'UpdateWorkingGroupBudgetProposalDetails'
@@ -1766,6 +1771,7 @@ export type GetProposalMentionQuery = {
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
+      | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
@@ -1880,6 +1886,7 @@ export type GetLatestProposalByMemberIdQuery = {
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
+      | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
@@ -1893,7 +1900,7 @@ export type GetPayloadDataObjectIdQueryVariables = Types.Exact<{
 
 export type GetPayloadDataObjectIdQuery = {
   __typename: 'Query'
-  channelPayoutsUpdatedEvents: Array<{ __typename: 'ChannelPayoutsUpdatedEvent'; payloadDataObjectId: string }>
+  channelPayoutsUpdatedEvents: Array<{ __typename: 'ChannelPayoutsUpdatedEvent'; payloadDataObjectId?: string | null }>
 }
 
 export const VoteFieldsFragmentDoc = gql`

@@ -21,9 +21,10 @@ import { TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { capitalizeFirstLetter } from '@/common/helpers'
 
-export type Socials = keyof typeof MembershipMetadata.ExternalResource.ResourceType
+// TODO remove 'GITHUB' and Partial after upgrading @joystream/metadata-protobuf
+export type Socials = keyof typeof MembershipMetadata.ExternalResource.ResourceType | 'GITHUB'
 
-export const socialToIcon: Record<Socials, React.ReactElement> = {
+export const socialToIcon: Partial<Record<Socials, React.ReactElement>> = {
   EMAIL: <EmailIcon />,
   TWITTER: <TwitterIcon />,
   TELEGRAM: <TelegramIcon />,
