@@ -23,7 +23,7 @@ import { capitalizeFirstLetter } from '@/common/helpers'
 
 export type Socials = keyof typeof MembershipMetadata.ExternalResource.ResourceType
 
-export const socialToIcon: Record<Socials, React.ReactElement> = {
+export const socialToIcon: Partial<Record<Socials, React.ReactElement>> = {
   EMAIL: <EmailIcon />,
   TWITTER: <TwitterIcon />,
   TELEGRAM: <TelegramIcon />,

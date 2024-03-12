@@ -27,7 +27,7 @@ export const fromTxMock = (
   const event = failure ? createErrorEvents(failure) : createSuccessEvents(eventData, moduleName, eventName)
   const txResult = stubTransactionResult(event)
 
-  const paymentInfo = () => of({ partialFee: createType('BalanceOf', joy(fee)) })
+  const paymentInfo = () => of({ partialFee: createType('BalanceOf', new BN(joy(fee))) })
 
   return (...args: any[]) => {
     onCall?.(...args)

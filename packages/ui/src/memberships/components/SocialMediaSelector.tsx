@@ -9,7 +9,7 @@ import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMem
 
 import { SocialMediaInput, SocialMediaSelectorList } from './SocialMediaSelector/SocialMediaSelector'
 
-const socialToPlaceholder: Record<Socials, string> = {
+const socialToPlaceholder: Partial<Record<Socials, string>> = {
   HYPERLINK: 'Enter URL',
   WECHAT: 'Enter Username',
   IRC: 'Enter Username',

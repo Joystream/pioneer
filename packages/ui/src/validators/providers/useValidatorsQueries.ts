@@ -1,5 +1,3 @@
-import { Vec } from '@polkadot/types'
-import { AccountId } from '@polkadot/types/interfaces'
 import { PalletStakingExposure } from '@polkadot/types/lookup'
 import BN from 'bn.js'
 import { useMemo } from 'react'
@@ -11,7 +9,7 @@ import { keepFirst } from './utils'
 
 type ActiveEra = { index: number; startedOn: number }
 
-type ActiveValidators = Vec<AccountId>
+type ActiveValidators = string[]
 
 type Stakers = Map<string, Observable<PalletStakingExposure>>
 
@@ -35,7 +33,10 @@ export const useValidatorsQueries = (): CommonValidatorsQueries | undefined => {
   return useMemo<CommonValidatorsQueries | undefined>(() => {
     if (!api) return
 
-    const activeValidators$ = api.query.session.validators().pipe(keepFirst())
+    const activeValidators$ = api.query.session.validators().pipe(
+      map((activeAccounts) => activeAccounts.map((account) => account.toString())),
+      keepFirst()
+    )
 
     const activeEra$ = api.query.staking.activeEra().pipe(
       map((activeEra) => ({
