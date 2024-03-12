@@ -28,5 +28,5 @@ const usePayloadDataObjectId = (proposal: GetProposalQuery['proposal']): string 
     variables: { inBlock: inBlock ?? 0, payloadHash: payloadHash ?? '' },
     skip: !inBlock || !payloadHash,
   })
-  return data?.channelPayoutsUpdatedEvents[0].payloadDataObjectId
+  return data?.channelPayoutsUpdatedEvents[0].payloadDataObjectId ?? undefined
 }

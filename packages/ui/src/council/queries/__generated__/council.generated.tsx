@@ -93,6 +93,7 @@ export type PastCouncilProposalsFieldsFragment = {
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
+      | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
@@ -635,6 +636,7 @@ export type FundingRequestApprovedFragment = {
     | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
     | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
     | { __typename: 'UpdateChannelPayoutsProposalDetails' }
+    | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
     | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
     | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
     | { __typename: 'VetoProposalDetails' }
@@ -783,6 +785,7 @@ export type GetPastCouncilQuery = {
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
+      | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
@@ -880,6 +883,7 @@ export type GetPastCouncilMembersQuery = {
         | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
         | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
         | { __typename: 'UpdateChannelPayoutsProposalDetails' }
+        | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
         | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
         | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
         | { __typename: 'VetoProposalDetails' }
@@ -970,6 +974,7 @@ export type GetPastCouncilProposalsQuery = {
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
+      | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
@@ -1511,6 +1516,7 @@ export type GetPastCouncilStatsQuery = {
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
+      | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
