@@ -7,7 +7,6 @@ query GetPost($id: ID!) {
       id
       title
     }
-    text
   }
 }
 
@@ -17,9 +16,6 @@ query GetThread($id: ID!) {
       handle
     }
     title
-    initialPost {
-      text
-    }
   }
 }
 

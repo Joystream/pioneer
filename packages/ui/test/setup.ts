@@ -106,6 +106,7 @@ export const mockedUseMyAccounts = jest.fn<UseAccounts, []>(() => ({
   allAccounts: [],
   hasAccounts: false,
   isLoading: true,
+  allWallets: [],
 }))
 
 jest.mock('@/accounts/hooks/useMyAccounts', () => ({

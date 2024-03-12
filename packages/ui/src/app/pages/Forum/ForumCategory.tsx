@@ -82,6 +82,7 @@ export const ForumCategory = () => {
               style="primary"
               size="medium"
               onClick={() => showModal({ modal: 'CreateThreadModal', data: { categoryId: id } })}
+              isResponsive
             >
               <PlusIcon /> Add New Thread
             </TransactionButton>

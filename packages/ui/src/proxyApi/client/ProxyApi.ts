@@ -19,6 +19,8 @@ export class ProxyApi extends Events {
   rpc: ApiRx['rpc']
   tx: ApiRx['tx']
   consts: ApiRx['consts']
+  genesisHash: ApiRx['genesisHash']
+  runtimeVersion: ApiRx['runtimeVersion']
   _async: AsyncProps
 
   static create(providerEndpoint: string) {
@@ -42,7 +44,7 @@ export class ProxyApi extends Events {
     return messages.pipe(
       firstWhere(({ data }) => data.messageType === 'init'),
       deserializeMessage<WorkerInitMessage>(),
-      map(({ payload }) => new ProxyApi(messages, postMessage, payload.consts)),
+      map(({ payload }) => new ProxyApi(messages, postMessage, payload)),
       share()
     )
   }
@@ -50,11 +52,13 @@ export class ProxyApi extends Events {
   constructor(
     messages: Observable<RawWorkerMessageEvent>,
     postMessage: PostMessage<ClientMessage>,
-    consts: ProxyApi['consts']
+    initPayload: WorkerInitMessage['payload']
   ) {
     super()
     {
-      this.consts = consts
+      this.consts = initPayload.consts
+      this.genesisHash = initPayload.genesisHash
+      this.runtimeVersion = initPayload.runtimeVersion
       this.derive = query('derive', messages, postMessage)
       this.query = query('query', messages, postMessage)
       this.rpc = query('rpc', messages, postMessage)

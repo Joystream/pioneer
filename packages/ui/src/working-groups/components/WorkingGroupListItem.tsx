@@ -31,7 +31,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
 
   const groupAddress = `/working-groups/${groupNameToURLParam(nameMapping(group.name))}`
   const isLeadActive = lead && group.isActive
-  const { subtitle, tooltipLink, groupName } = useMemo(
+  const { defaultDescription, handbookLink, groupName } = useMemo(
     () => ({ ...wgListItemMappings(group.name), groupName: nameMapping(group.name) }),
     [group.name]
   )
@@ -45,7 +45,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
         <Tooltip
           tooltipTitle={groupName}
           tooltipText=""
-          tooltipLinkURL={tooltipLink}
+          tooltipLinkURL={handbookLink}
           tooltipLinkText="Learn more about this group"
         >
           <GroupTitle as={GhostRouterLink} to={groupAddress}>
@@ -53,7 +53,7 @@ export function WorkingGroupListItem({ group }: WorkingGroupProps) {
           </GroupTitle>
         </Tooltip>
         <GroupContent as={GhostRouterLink} to={groupAddress}>
-          {subtitle}
+          {defaultDescription}
         </GroupContent>
       </GroupContentBlock>
       <GroupStats>

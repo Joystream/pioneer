@@ -20,7 +20,7 @@ export interface Props {
   onBlur?: any
 }
 
-function BaseToggleCheckbox({
+export function BaseToggleCheckbox({
   id,
   isRequired,
   disabled,
@@ -118,13 +118,13 @@ const ToggleStyledInput = styled.label<ToggleStyledInputProps>`
   margin: 0 10px;
   position: relative;
   border-radius: ${BorderRad.full};
-  background-color: ${(hasNoOffState) => (hasNoOffState ? Colors.Blue[500] : Colors.Black[300])};
+  background-color: ${({ hasNoOffState }) => (hasNoOffState ? Colors.Blue[500] : Colors.Black[300])};
   cursor: pointer;
   transition: ${Transitions.all};
 
   &:hover,
   &:focus {
-    background-color: ${(hasNoOffState) => (hasNoOffState ? Colors.Blue[400] : Colors.Black[200])};
+    background-color: ${({ hasNoOffState }) => (hasNoOffState ? Colors.Blue[400] : Colors.Black[200])};
   }
 
   &:after {

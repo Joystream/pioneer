@@ -9,9 +9,16 @@ import { metadataFromBytes } from '@/common/model/JoystreamNode'
 import { member } from '@/mocks/data/members'
 import { getButtonByText, getEditorByLabel, joy, withinModal } from '@/mocks/helpers'
 import { MocksParameters } from '@/mocks/providers'
-import { GetWorkersDocument, GetWorkingGroupDocument } from '@/working-groups/queries'
+import {
+  GetWorkersDocument,
+  GetWorkingGroupDocument,
+  GetGroupDebtDocument,
+  GetBudgetSpendingDocument,
+  GetPastWorkersDocument,
+  GetRoleAccountsDocument,
+} from '@/working-groups/queries'
 
-import { WorkingGroup } from './WorkingGroup'
+import { WorkingGroupsModule } from '../WorkingGroupsModule'
 
 type Args = {
   isLead: boolean
@@ -21,12 +28,12 @@ type Args = {
 type Story = StoryObj<FC<Args>>
 
 const WG_DATA = {
-  id: 'membershipWorkingGroup',
-  name: 'membership',
+  id: 'operationsWorkingGroupAlpha',
+  name: 'operationsWorkingGroupAlpha',
 }
 
 const WG_OPENING_METADATA = {
-  title: 'Membership worker role',
+  title: 'Builder worker role',
   shortDescription: 'Lorem Ipsum...',
   description: 'Bigger Lorem ipsum...',
   applicationDetails: 'Application process default',
@@ -52,11 +59,11 @@ const WG_JSON_OPENING = {
 }
 
 export default {
-  title: 'Pages/Working Group/WorkingGroup',
-  component: WorkingGroup,
+  title: 'Pages/Working Group',
+  component: WorkingGroupsModule,
 
   argTypes: {
-    onCreateOpening: { action: 'MembershipWorkingGroup.OpeningCreated' },
+    onCreateOpening: { action: 'OperationsWorkingGroupAlpha.OpeningCreated' },
   },
 
   args: {
@@ -64,28 +71,42 @@ export default {
   },
 
   parameters: {
-    router: { path: '/:name', href: `/${WG_DATA.name}` },
+    router: { path: '/working-groups/:name', href: '/working-groups/builders' },
     mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
-      const alice = member('alice', {
-        roles: [
-          {
-            __typename: 'Worker',
-            id: `${WG_DATA.id}-0`,
-            createdAt: '2021',
-            isLead: args.isLead,
-            group: {
-              __typename: 'WorkingGroup',
-              name: WG_DATA.name,
-            },
+      const alice = member('alice')
+      const charlie = member('charlie')
+
+      const role = {
+        __typename: 'Worker',
+        id: `${WG_DATA.id}-0`,
+        application: { opening: {} },
+        entry: {},
+        createdAt: '2021',
+        isLead: args.isLead,
+        isActive: true,
+        status: 'WorkerStatusActive',
+        group: { __typename: 'WorkingGroup', ...WG_DATA },
+      } as const
+
+      const workers = [
+        { ...role, membership: alice },
+        {
+          id: `${WG_DATA.id}-1`,
+          group: {
+            id: WG_DATA.id,
+            name: WG_DATA.name,
           },
-        ],
-      })
+          status: 'WorkerStatusActive',
+          membership: charlie,
+        },
+      ]
+
       return {
-        accounts: { active: { member: alice } },
+        accounts: { active: { member: { ...alice, roles: [role] } } },
 
         chain: {
           tx: {
-            membershipWorkingGroup: {
+            operationsWorkingGroupAlpha: {
               addOpening: {
                 event: 'OpeningCreated',
                 onSend: args.onCreateOpening,
@@ -94,7 +115,7 @@ export default {
             },
           },
           consts: {
-            membershipWorkingGroup: {
+            operationsWorkingGroupAlpha: {
               minimumApplicationStake: joy(10),
               minUnstakingPeriodLimit: 100,
             },
@@ -103,12 +124,12 @@ export default {
 
         gql: {
           queries: [
+            // Common
             {
               query: GetWorkingGroupDocument,
               data: {
                 workingGroupByUniqueInput: {
-                  id: WG_DATA.id,
-                  name: WG_DATA.name,
+                  ...WG_DATA,
                   budget: joy(200),
                   workers: [],
                   leader: { membershipId: alice.id, isActive: args.isLead },
@@ -117,25 +138,73 @@ export default {
             },
             {
               query: GetWorkersDocument,
+              data: { workers },
+            },
+
+            // Opening tab
+            {
+              query: GetRoleAccountsDocument,
+              data: {
+                workers: args.isLead ? [{ roleAccount: alice.controllerAccount }] : [],
+              },
+            },
+            {
+              query: GetGroupDebtDocument,
               data: {
                 workers: [
                   {
-                    id: `${WG_DATA.id}-0`,
-                    group: {
-                      id: WG_DATA.id,
-                      name: WG_DATA.name,
-                    },
-                    status: 'WorkerStatusActive',
-                    membership: alice,
+                    missingRewardAmount: joy(12),
                   },
                   {
-                    id: `${WG_DATA.id}-1`,
-                    group: {
-                      id: WG_DATA.id,
-                      name: WG_DATA.name,
+                    missingRewardAmount: joy(25),
+                  },
+                ],
+              },
+            },
+
+            // About tab
+            {
+              query: GetBudgetSpendingDocument,
+              data: {
+                budgetSpendingEvents: [
+                  {
+                    id: 1,
+                    groupId: WG_DATA.id,
+                    reciever: '',
+                    amount: joy(100),
+                    rationale: 'first spending',
+                  },
+                  {
+                    id: 2,
+                    groupId: WG_DATA.id,
+                    reciever: '',
+                    amount: joy(42),
+                    rationale: 'second spending',
+                  },
+                ],
+              },
+            },
+
+            // History tab
+            {
+              query: GetPastWorkersDocument,
+              data: {
+                workers: [
+                  {
+                    id: `${WG_DATA.id}-3`,
+                    entry: {
+                      createdAt: '2022-03-11T22:33:21.602Z',
+                      inBlock: 99256,
+                      network: 'OLYMPIA',
                     },
-                    status: 'WorkerStatusActive',
-                    membership: member('charlie'),
+                    status: {
+                      workerExitedEvent: {
+                        createdAt: '2023-03-14T13:19:20.840Z',
+                        inBlock: 102543,
+                        network: 'OLYMPIA',
+                      },
+                    },
+                    membership: member('dave'),
                   },
                 ],
               },
@@ -147,9 +216,39 @@ export default {
   },
 } satisfies Meta<Args>
 
-export const Default: Story = {}
+// Preview
+
+export const About: Story = {
+  play: ({ canvasElement }) => {
+    expect(within(canvasElement).getByRole('heading', { name: 'Builders' }))
+  },
+}
+
+export const Openings: Story = {
+  parameters: {
+    router: { path: '/working-groups/:name/openings', href: '/working-groups/builders/openings' },
+  },
+  play: ({ canvasElement }) => {
+    expect(within(canvasElement).getByRole('heading', { name: 'Builders' }))
+  },
+}
+
+export const History: Story = {
+  parameters: {
+    router: { path: '/working-groups/:name/history', href: '/working-groups/builders/history' },
+  },
+  play: ({ canvasElement }) => {
+    expect(within(canvasElement).getByRole('heading', { name: 'Builders' }))
+  },
+}
+
+// Tests
 
 export const CreateOpening: Story = {
+  parameters: {
+    router: { path: '/working-groups/:name/openings', href: '/working-groups/builders/openings' },
+  },
+
   play: async ({ args, canvasElement, step }) => {
     const screen = within(canvasElement)
     const modal = withinModal(canvasElement)
@@ -164,12 +263,13 @@ export const CreateOpening: Story = {
 
       await waitFor(() => expect(nextButton).toBeDisabled())
 
-      await userEvent.type(openingTitleField, 'Membership worker role')
+      await userEvent.type(openingTitleField, 'Builder worker role')
       await userEvent.type(shortDescriptionField, 'Lorem Ipsum...')
       ;(await getEditorByLabel(modal, 'Description')).setData('Bigger Lorem ipsum...')
       await waitFor(() => expect(nextButton).toBeEnabled())
       await userEvent.click(nextButton)
     })
+
     await step('Duration & Process', async () => {
       await waitFor(() => expect(nextButton).toBeDisabled())
       ;(await getEditorByLabel(modal, 'Application process')).setData('Application process default')
@@ -184,6 +284,7 @@ export const CreateOpening: Story = {
       await waitFor(() => expect(nextButton).toBeEnabled())
       await userEvent.click(nextButton)
     })
+
     await step('Application Form', async () => {
       await waitFor(() => expect(nextButton).toBeDisabled())
       await userEvent.type(modal.getByRole('textbox'), '🐁?')
@@ -195,12 +296,19 @@ export const CreateOpening: Story = {
       await waitFor(() => expect(nextButton).toBeEnabled())
       await userEvent.click(nextButton)
     })
+
     await step('Staking Policy & Reward', async () => {
       const createButton = getButtonByText(modal, 'Create Opening')
       expect(createButton).toBeDisabled()
-      await userEvent.type(modal.getByLabelText('Staking amount *'), '100')
-      await userEvent.clear(modal.getByLabelText('Role cooldown period'))
-      await userEvent.type(modal.getByLabelText('Role cooldown period'), '1000')
+
+      const stakeAmountField = modal.getByLabelText('Staking amount *')
+      await userEvent.clear(stakeAmountField)
+      await userEvent.type(stakeAmountField, '100')
+
+      const coolDownField = modal.getByLabelText('Role cooldown period')
+      await userEvent.clear(coolDownField)
+      await userEvent.type(coolDownField, '1000')
+
       await userEvent.type(modal.getByLabelText('Reward amount per Block'), '0.1')
       await waitFor(() => expect(createButton).toBeEnabled())
       await userEvent.click(createButton)
@@ -212,7 +320,9 @@ export const CreateOpening: Story = {
     })
 
     step('Transaction parameters', () => {
-      const [description, openingType, stakePolicy, rewardPerBlock] = args.onCreateOpening.mock.calls.at(-1)
+      const [signer, description, openingType, stakePolicy, rewardPerBlock] = args.onCreateOpening.mock.calls.at(-1)
+
+      expect(signer).toBe(member('alice').controllerAccount)
 
       expect(stakePolicy.toJSON()).toEqual({
         stakeAmount: 100_0000000000,
@@ -223,9 +333,19 @@ export const CreateOpening: Story = {
       expect(openingType).toEqual('Regular')
       expect(metadataFromBytes(OpeningMetadata, description)).toEqual(WG_OPENING_METADATA)
     })
+
+    await step('Link to new Opening', async () => {
+      const openingLink = (await modal.findByText('See my Opening')).parentElement as Element
+      expect(openingLink.getAttribute('href')).toBe('/working-groups/openings/builders-1')
+    })
   },
 }
+
 export const CreateOpeningImport: Story = {
+  parameters: {
+    router: { path: '/working-groups/:name/openings', href: '/working-groups/builders/openings' },
+  },
+
   play: async ({ args, canvasElement, step }) => {
     const screen = within(canvasElement)
     const modal = withinModal(canvasElement)
@@ -247,6 +367,7 @@ export const CreateOpeningImport: Story = {
         new File([JSON.stringify(WG_JSON_OPENING)], 'file.json', { type: 'application/json' })
       )
     })
+
     await step('Check imported data', async () => {
       expect(await modal.findByText(/File imported successfully, preview your input/))
 
@@ -271,12 +392,16 @@ export const CreateOpeningImport: Story = {
       const createButton = getButtonByText(modal, 'Create Opening')
       await userEvent.click(createButton)
     })
+
     await step('Sign transaction and Create', async () => {
       expect(await modal.findByText('You intend to create an Opening.'))
       await userEvent.click(modal.getByText('Sign transaction and Create'))
     })
+
     step('Transaction parameters', () => {
-      const [description, openingType, stakePolicy, rewardPerBlock] = args.onCreateOpening.mock.calls.at(-1)
+      const [signer, description, openingType, stakePolicy, rewardPerBlock] = args.onCreateOpening.mock.calls.at(-1)
+
+      expect(signer).toBe(member('alice').controllerAccount)
 
       expect(stakePolicy.toJSON()).toEqual({
         stakeAmount: 200_0000000000,

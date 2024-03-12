@@ -504,20 +504,31 @@ export const ButtonLinkStyles = styled.button<ButtonProps>`
 `
 
 export const ButtonsGroup = styled.div<{ align?: 'left' | 'center' | 'right' }>`
-  display: grid;
-  grid-auto-flow: column;
-  grid-column-gap: 8px;
-  align-items: center;
-  width: fit-content;
-  justify-self: ${({ align }) => {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 8px;
+
+  ${({ align }) => {
     switch (align) {
       case 'left':
-      default:
-        return 'start'
+        return css`
+          justify-content: start;
+          justify-self: start;
+          margin-right: auto;
+        `
       case 'center':
-        return 'center'
+        return css`
+          justify-content: center;
+          justify-self: center;
+          margin-left: auto;
+          margin-right: auto;
+        `
       case 'right':
-        return 'end'
+        return css`
+          justify-content: end;
+          justify-self: end;
+          margin-left: auto;
+        `
     }
   }};
 `

@@ -1,26 +1,23 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { generatePath } from 'react-router-dom'
 
-import { ButtonGhost } from '@/common/components/buttons'
+import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { SuccessSymbol } from '@/common/components/icons/symbols'
 import { Info } from '@/common/components/Info'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
-import { GroupIdToGroupParam } from '@/working-groups/constants'
-import { GroupIdName } from '@/working-groups/types'
+import { nameMapping } from '@/common/helpers'
+import { WorkingGroupsRoutes } from '@/working-groups/constants'
+import { groupNameToURLParam } from '@/working-groups/model/workingGroupName'
 
 interface SuccessModalProps {
   onClose: () => void
-  groupId: GroupIdName
+  groupName: string
+  openingRuntimeId: number
 }
 
-export const SuccessModal = ({ onClose, groupId }: SuccessModalProps) => {
-  const history = useHistory()
-
-  const redirect = () => {
-    onClose()
-    history.push(`/working-groups/${GroupIdToGroupParam[groupId].toLowerCase()}`)
-  }
+export const SuccessModal = ({ onClose, groupName, openingRuntimeId }: SuccessModalProps) => {
+  const openingId = `${groupNameToURLParam(nameMapping(groupName))}${openingRuntimeId}`
 
   return (
     <Modal modalSize="m" modalHeight="s" onClose={onClose}>
@@ -31,9 +28,13 @@ export const SuccessModal = ({ onClose, groupId }: SuccessModalProps) => {
         </Info>
       </ModalBody>
       <ModalFooter>
-        <ButtonGhost onClick={redirect} size="medium">
-          Back to Working Group
-        </ButtonGhost>
+        <LinkButtonGhost
+          size="medium"
+          to={generatePath(WorkingGroupsRoutes.openingById, { id: openingId })}
+          onClick={onClose}
+        >
+          See my Opening
+        </LinkButtonGhost>
       </ModalFooter>
     </Modal>
   )

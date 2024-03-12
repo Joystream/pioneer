@@ -18,7 +18,7 @@ import {
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SidePaneGlass, SidePaneTitle, SidePanelTop } from '@/common/components/SidePane'
 import { StatisticButton } from '@/common/components/statistics/StatisticButton'
-import { TransactionFee } from '@/common/components/TransactionFee'
+import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TextInlineBig, TokenValue } from '@/common/components/typography'
 import {
   CustomAccountRow,
@@ -91,7 +91,7 @@ export const DestinationsPreview = ({ label, value }: Props) => {
             </PreviewPanelBody>
             <ModalFooter>
               <TransactionInfoContainer>
-                <TransactionFee title={'Total amount'} value={totalAmount} />
+                <TransactionInfo title={'Total amount'} value={totalAmount} />
               </TransactionInfoContainer>
             </ModalFooter>
           </PreviewPanel>

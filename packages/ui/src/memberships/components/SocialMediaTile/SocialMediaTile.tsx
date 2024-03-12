@@ -74,7 +74,6 @@ const Wrapper = styled.div<{ active?: boolean }>`
   user-select: none;
   place-items: center;
   height: 92px;
-  width: 120px;
   border: 1px solid ${Colors.Black[300]};
   border-radius: ${BorderRad.m};
   text-align: center;

@@ -12,9 +12,11 @@
 	<strong>
         <a href="https://pioneerapp.xyz">Live app</a>
         •
+        <a href="https://pioneer-2-storybook.vercel.app">Storybook</a>
+        •
         <a href="docs/README.md">Docs</a>
         •
-        <a href="https://pioneer-2-storybook.vercel.app">Storybook</a>
+        <a href="CHANGELOG.md">Changelog</a>
 	</strong>
 </p>
 

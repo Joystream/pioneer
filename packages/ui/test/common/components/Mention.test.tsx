@@ -14,6 +14,7 @@ import {
   ProposalDiscussionEntryTooltipProps,
 } from '@/common/components/Mention/PrposalDiscussionEntryTooltip'
 import { cutText } from '@/common/helpers'
+import { MentionType } from '@/common/hooks/useMentions'
 import { formatTokenValue } from '@/common/model/formatters'
 import { Block } from '@/common/types'
 import { ForumPostMention, ForumThreadMention } from '@/forum/types'
@@ -43,7 +44,7 @@ describe('UI: Mention', () => {
   it('should render component', () => {
     const props: Omit<MentionProps, 'children'> = {
       itemId: '1',
-      type: 'member',
+      type: MentionType.Member,
     }
     const expected = 'test-text'
     render(

@@ -29,7 +29,7 @@ import {
   SidePanelTop,
   SidePaneTitle,
 } from '@/common/components/SidePane'
-import { TransactionFee } from '@/common/components/TransactionFee'
+import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 import { useKeyring } from '@/common/hooks/useKeyring'
@@ -167,7 +167,7 @@ export const PreviewAndValidateModal = ({ onClose }: PreviewAndValidateModalProp
         </PreviewPanelBody>
         <ModalFooter>
           <TransactionInfoContainer>
-            <TransactionFee title={'Total amount'} value={totalAmount} />
+            <TransactionInfo title={'Total amount'} value={totalAmount} />
           </TransactionInfoContainer>
         </ModalFooter>
       </PreviewPanel>

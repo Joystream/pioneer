@@ -3,8 +3,9 @@ import { verbose } from 'npmlog'
 
 import { getTypename } from '@/common/utils'
 import { isDefaultSubscription } from '@/notifier/model/subscriptionKinds'
+import { NotificationEvent, PotentialNotif } from '@/notifier/types'
 
-import { BuildEvents, ImplementedQNEvent, NotificationEvent, NotifsBuilder, PotentialNotif } from './types'
+import { BuildEvents, ImplementedQNEvent, NotifsBuilder } from './types'
 
 export const buildEvents =
   (allMemberIds: number[], event: ImplementedQNEvent): BuildEvents =>

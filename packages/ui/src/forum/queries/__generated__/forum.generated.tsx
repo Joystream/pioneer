@@ -250,6 +250,7 @@ export type ForumThreadFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -316,6 +317,7 @@ export type ForumPostFieldsFragment = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -364,6 +366,7 @@ export type ForumPostFieldsFragment = {
             id: string
             createdAt: any
             isLead: boolean
+            isActive: boolean
             group: { __typename: 'WorkingGroup'; name: string }
           }>
           stakingaccountaddedeventmember?: Array<{
@@ -408,6 +411,7 @@ export type ForumPostFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -456,6 +460,7 @@ export type ForumPostFieldsFragment = {
           id: string
           createdAt: any
           isLead: boolean
+          isActive: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
         stakingaccountaddedeventmember?: Array<{
@@ -509,6 +514,7 @@ export type ForumPostWithoutReplyFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -557,6 +563,7 @@ export type ForumPostWithoutReplyFieldsFragment = {
           id: string
           createdAt: any
           isLead: boolean
+          isActive: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
         stakingaccountaddedeventmember?: Array<{
@@ -611,6 +618,7 @@ export type ForumThreadDetailedFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -671,6 +679,7 @@ export type ForumThreadMentionFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -713,6 +722,7 @@ export type ForumPostMentionFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -1005,6 +1015,7 @@ export type GetForumThreadsQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -1087,6 +1098,7 @@ export type GetForumThreadQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -1163,6 +1175,7 @@ export type GetForumPostsQuery = {
           id: string
           createdAt: any
           isLead: boolean
+          isActive: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
         stakingaccountaddedeventmember?: Array<{
@@ -1211,6 +1224,7 @@ export type GetForumPostsQuery = {
               id: string
               createdAt: any
               isLead: boolean
+              isActive: boolean
               group: { __typename: 'WorkingGroup'; name: string }
             }>
             stakingaccountaddedeventmember?: Array<{
@@ -1255,6 +1269,7 @@ export type GetForumPostsQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -1303,6 +1318,7 @@ export type GetForumPostsQuery = {
             id: string
             createdAt: any
             isLead: boolean
+            isActive: boolean
             group: { __typename: 'WorkingGroup'; name: string }
           }>
           stakingaccountaddedeventmember?: Array<{
@@ -1453,6 +1469,7 @@ export type GetForumPostMentionQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -1501,6 +1518,7 @@ export type GetForumThreadMentionQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{

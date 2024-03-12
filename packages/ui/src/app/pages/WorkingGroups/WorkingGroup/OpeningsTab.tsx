@@ -3,15 +3,12 @@ import styled from 'styled-components'
 
 import { CountBadge } from '@/common/components/CountBadge'
 import { MainPanel } from '@/common/components/page/PageContent'
-import { SidePanel } from '@/common/components/page/SidePanel'
 import { Statistics, TokenValueStat } from '@/common/components/statistics'
 import { Label } from '@/common/components/typography'
 import { LoadingOpenings } from '@/working-groups/components/OpeningsList'
-import { WorkersList } from '@/working-groups/components/WorkersList'
 import { useGroupDebt } from '@/working-groups/hooks/useGroupDebt'
 import { useOpenings } from '@/working-groups/hooks/useOpenings'
 import { useUpcomingOpenings } from '@/working-groups/hooks/useUpcomingOpenings'
-import { useWorkers } from '@/working-groups/hooks/useWorkers'
 import { WorkingGroup } from '@/working-groups/types'
 
 interface Props {
@@ -64,17 +61,6 @@ export const OpeningsTab = ({ workingGroup }: Props) => {
         </OpeningsCategory>
       </OpeningsCategories>
     </MainPanel>
-  )
-}
-
-export const OpeningsTabSidebar = ({ workingGroup }: Props) => {
-  const { workers } = useWorkers({ groupId: workingGroup.id ?? '', status: 'active' })
-  const lead = workers?.find((worker) => worker.member.id === workingGroup.leadId)
-
-  return (
-    <SidePanel scrollable>
-      <WorkersList lead={lead} workers={workers} />
-    </SidePanel>
   )
 }
 

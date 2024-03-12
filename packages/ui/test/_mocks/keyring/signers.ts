@@ -8,7 +8,7 @@ export const aliceStash = {
 }
 export const bob = {
   name: 'bob',
-  address: 'j4UYhDYJ4pz2ihhDDzu69v2JTVeGaGmTebmBdWaX2ANVinXyE',
+  address: 'j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW',
 }
 export const bobStash = {
   name: 'bob_stash',

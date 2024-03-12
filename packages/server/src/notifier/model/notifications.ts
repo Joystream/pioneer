@@ -1,8 +1,8 @@
-import { Prisma, Subscription } from '@prisma/client'
+import { Subscription } from '@prisma/client'
 
-import { isGeneralPotentialNotif, NotificationEvent, PotentialNotif } from './event'
+import { Notification, NotificationEvent, PotentialNotif } from '@/notifier/types'
 
-type Notification = Prisma.NotificationCreateManyInput
+import { isGeneralPotentialNotif } from './event'
 
 interface PotentialNotifByMember {
   data: PotentialNotif

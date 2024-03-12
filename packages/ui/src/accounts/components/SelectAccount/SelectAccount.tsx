@@ -39,7 +39,7 @@ interface BaseSelectAccountProps extends SelectAccountProps {
   isForStaking?: boolean
 }
 
-export const BaseSelectAccount = React.memo(
+const BaseSelectAccount = React.memo(
   ({ id, onChange, accounts, filter, selected, disabled, onBlur, isForStaking, variant }: BaseSelectAccountProps) => {
     const options = accounts.filter(filter || (() => true))
 
@@ -88,7 +88,7 @@ export const BaseSelectAccount = React.memo(
 const renderSelected = (isForStaking?: boolean, variant?: 's' | 'm' | 'l') => (option: AccountOption) =>
   (
     <SelectedOption variant={variant}>
-      <OptionAccount option={option} isForStaking={isForStaking} />
+      <OptionAccount option={option} isForStaking={isForStaking} isSelected />
     </SelectedOption>
   )
 

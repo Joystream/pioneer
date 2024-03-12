@@ -1,6 +1,6 @@
 {
   "name": "@joystream/pioneer",
-  "version": "2.5.0",
+  "version": "3.2.0",
   "license": "GPL-3.0-only",
   "scripts": {
     "build": "node --max_old_space_size=4096 ./build.js",
@@ -50,6 +50,8 @@
     "@types/react-router-dom": "^5.3.1",
     "@types/react-transition-group": "^4.4.3",
     "@types/styled-components": "^5.1.15",
+    "@walletconnect/modal": "^2.6.2",
+    "@walletconnect/universal-provider": "^2.11.0",
     "@xstate/react": "^1.6.1",
     "chart.js": "^4.4.1",
     "copy-webpack-plugin": "^9.0.1",
@@ -120,6 +122,7 @@
     "@types/yargs": "^17.0.3",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
+    "@walletconnect/types": "^2.11.0",
     "babel-jest": "^27.2.5",
     "babel-loader": "^8.2.2",
     "babel-plugin-import-graphql": "^2.8.1",

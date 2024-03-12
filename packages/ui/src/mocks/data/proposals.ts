@@ -291,8 +291,8 @@ export const proposalsPagesChain = (
         utility: {
           batch: {
             failure: createProposalFailure,
-            onSend: (transactions: SubmittableExtrinsic<'rxjs'>[]) =>
-              transactions.forEach((transaction) => transaction.signAndSend('')),
+            onSend: (signer: string, transactions: SubmittableExtrinsic<'rxjs'>[]) =>
+              transactions.forEach((transaction) => transaction.signAndSend(signer)),
           },
         },
       },

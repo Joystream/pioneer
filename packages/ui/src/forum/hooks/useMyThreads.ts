@@ -31,7 +31,7 @@ export const useMyThreads = ({ page, threadsPerPage = 5, order }: UseMyThreadsPr
     },
     limit: threadsPerPage,
     offset: (page - 1) * threadsPerPage,
-    orderBy: [ForumThreadOrderByInput.IsStickyDesc, toQueryOrderByInput<ForumThreadOrderByInput>(order)],
+    orderBy: [ForumThreadOrderByInput.IsStickyDesc, ...toQueryOrderByInput<ForumThreadOrderByInput>(order)],
   }
   const { loading: loadingPosts, data: threadsData } = useGetForumThreadsQuery({ variables })
   const { loading: loadingCount, data: countData } = useGetForumThreadsCountQuery({
