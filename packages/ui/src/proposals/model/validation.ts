@@ -30,7 +30,7 @@ export const equalToContext = (
   name: type ?? 'equalToContext',
   exclusive: false,
   test(value: boolean) {
-    const validationValue = get(this.options.context, contextPath).toJSON()
+    const validationValue = get(this.options.context, contextPath)
     return (
       value === validationValue ||
       this.createError({

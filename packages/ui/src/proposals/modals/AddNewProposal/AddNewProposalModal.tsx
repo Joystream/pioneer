@@ -71,7 +71,10 @@ export const AddNewProposalModal = () => {
   const maximumReferralCut = api?.consts.members.referralCutMaximumPercent
   const minCashoutAllowed = api?.consts.content.minimumCashoutAllowedLimit
   const maxCashoutAllowed = api?.consts.content.maximumCashoutAllowedLimit
-  const palletFrozenStatus = useFirstObservableValue(() => api?.query?.projectToken?.palletFrozen(), [api?.isConnected])
+  const palletFrozenStatus = useFirstObservableValue(
+    () => api?.query?.projectToken?.palletFrozen(),
+    [api?.isConnected]
+  )?.isTrue
   const currentBlock = useCurrentBlockNumber()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
@@ -114,7 +117,7 @@ export const AddNewProposalModal = () => {
   })
 
   useEffect(() => {
-    if (palletFrozenStatus !== undefined) form.setValue('updatePalletFrozenStatus.enable', palletFrozenStatus.isTrue)
+    if (palletFrozenStatus !== undefined) form.setValue('updatePalletFrozenStatus.enable', palletFrozenStatus)
   }, [palletFrozenStatus])
 
   const formValues = form.getValues() as AddNewProposalForm
