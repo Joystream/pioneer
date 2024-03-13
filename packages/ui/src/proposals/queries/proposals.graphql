@@ -190,6 +190,10 @@ fragment ProposalWithDetailsFields on Proposal {
       maxCashoutAllowed
       payloadHash
     }
+    ... on UpdatePalletFrozenStatusProposalDetails {
+      frozen
+      pallet
+    }
   }
   discussionThread {
     id

@@ -1,6 +1,6 @@
 {
   "name": "@joystream/pioneer",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "license": "GPL-3.0-only",
   "scripts": {
     "build": "node --max_old_space_size=4096 ./build.js",
@@ -29,7 +29,7 @@
     "@joystream/js": "1.2.0",
     "@joystream/markdown-editor": "^0.1.0",
     "@joystream/metadata-protobuf": "^2.10.0",
-    "@joystream/types": "^2.0.0",
+    "@joystream/types": "4.2.0",
     "@nivo/bar": "^0.79.1",
     "@nivo/core": "^0.79.0",
     "@noble/hashes": "^1.1.5",

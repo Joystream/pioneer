@@ -17,15 +17,15 @@ export const block = {
   inBlock: 12345,
 }
 
-export const workingGroup = { __typename: 'WorkingGroup', id: '0', name: 'Operations Alpha' }
+export const workingGroup = { __typename: 'WorkingGroup' as const, id: '0', name: 'Operations Alpha' }
 export const workingGroupOpening = {
-  __typename: 'WorkingGroupOpening',
+  __typename: 'WorkingGroupOpening' as const,
   id: '0',
   group: workingGroup,
-  metadata: { __typename: 'WorkingGroupOpeningMetadata', description: 'Lorem ipsum...' },
+  metadata: { __typename: 'WorkingGroupOpeningMetadata' as const, description: 'Lorem ipsum...' },
 }
 export const worker = {
-  __typename: 'Worker',
+  __typename: 'Worker' as const,
   createdAt: isoDate('01/02/2023'),
   group: workingGroup,
   membership,
