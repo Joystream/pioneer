@@ -10,4 +10,5 @@ module.exports = {
    */
   roots: undefined,
   testMatch: ['<rootDir>/src/app/**/*.stories.tsx'],
+  testTimeout: 30_000,
 }

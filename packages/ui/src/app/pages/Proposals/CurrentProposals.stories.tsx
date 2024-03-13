@@ -478,7 +478,7 @@ export const AddNewProposalHappy: Story = {
         expect(await waitForModal(modal, 'Success'))
       })
 
-      step('Transaction parameters', () => {
+      await step('Transaction parameters', () => {
         expect(args.onAddStakingAccountCandidate).toHaveBeenCalledWith(alice.controllerAccount, alice.id)
 
         expect(args.onConfirmStakingAccount).toHaveBeenCalledWith(
@@ -757,7 +757,7 @@ export const SpecificParametersSignal: Story = {
       expect(nextButton).toBeEnabled()
     })
 
-    step('Transaction parameters', () => {
+    await step('Transaction parameters', () => {
       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toHuman()).toEqual({ Signal: 'Lorem ipsum...' })
     })
@@ -785,7 +785,7 @@ export const SpecificParametersFundingRequest: Story = {
       await waitFor(() => expect(modal.queryByText(/Maximal amount allowed is \d+/)).toBeNull())
     })
 
-    step('Transaction parameters', () => {
+    await step('Transaction parameters', () => {
       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({
         fundingRequest: [{ account: alice.controllerAccount, amount: 100_0000000000 }],
@@ -875,7 +875,7 @@ export const SpecificParametersMultipleFundingRequest: Story = {
       await userEvent.click(modal.getByTestId('sidePanel-overlay'))
     })
 
-    step('Transaction parameters', () => {
+    await step('Transaction parameters', () => {
       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({
         fundingRequest: [
@@ -912,7 +912,7 @@ export const SpecificParametersSetReferralCut: Story = {
       userEvent.click(modal.getByText(EXECUTION_WARNING_BOX))
     })
 
-    step('Transaction parameters', () => {
+    await step('Transaction parameters', () => {
       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({ setReferralCut: 100 })
     })
@@ -959,7 +959,7 @@ export const SpecificParametersDecreaseWorkingGroupLeadStake: Story = {
       expect(amountField).toHaveValue('500')
     })
 
-    step('Transaction parameters', () => {
+    await step('Transaction parameters', () => {
       const leaderId = 10 // Set on the mock QN query
       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({
@@ -997,7 +997,7 @@ export const SpecificParametersTerminateWorkingGroupLead: Story = {
       userEvent.type(amountField, '2000')
     })
 
-    step('Transaction parameters', () => {
+    await step('Transaction parameters', () => {
       const leaderId = 10 // Set on the mock QN query
       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({
@@ -1063,7 +1063,7 @@ export const SpecificParametersCreateWorkingGroupLeadOpening: Story = {
       await userEvent.type(modal.getByLabelText('Reward amount per Block'), '0.1')
     })
 
-    step('Transaction parameters', () => {
+    await step('Transaction parameters', () => {
       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       const { description, ...data } = specificParameters.asCreateWorkingGroupLeadOpening.toJSON()
 
@@ -1128,7 +1128,7 @@ export const SpecificParametersSetWorkingGroupLeadReward: Story = {
       await userEvent.type(amountField, '10')
     })
 
-    step('Transaction parameters', () => {
+    await step('Transaction parameters', () => {
       const leaderId = 10 // Set on the mock QN query
       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({
@@ -1165,7 +1165,7 @@ export const SpecificParametersSetMaxValidatorCount: Story = {
       await userEvent.type(amountField, '10')
     })
 
-    step('Transaction parameters', () => {
+    await step('Transaction parameters', () => {
       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({ setMaxValidatorCount: 10 })
     })
@@ -1185,7 +1185,7 @@ export const SpecificParametersCancelWorkingGroupLeadOpening: Story = {
       userEvent.click(body.getByText('Hire Storage Working Group Lead'))
     })
 
-    step('Transaction parameters', () => {
+    await step('Transaction parameters', () => {
       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({ cancelWorkingGroupLeadOpening: [12, 'Storage'] })
     })
@@ -1218,7 +1218,7 @@ export const SpecificParametersSetCouncilBudgetIncrement: Story = {
       await userEvent.type(amountField, '500')
     })
 
-    step('Transaction parameters', () => {
+    await step('Transaction parameters', () => {
       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({ setCouncilBudgetIncrement: 500_0000000000 })
     })
@@ -1245,7 +1245,7 @@ export const SpecificParametersSetCouncilorReward: Story = {
       await userEvent.type(amountField, '10')
     })
 
-    step('Transaction parameters', () => {
+    await step('Transaction parameters', () => {
       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({ setCouncilorReward: 10_0000000000 })
     })
@@ -1282,7 +1282,7 @@ export const SpecificParametersSetMembershipLeadInvitationQuota: Story = {
         await userEvent.type(amountField, '3')
       })
 
-      step('Transaction parameters', () => {
+      await step('Transaction parameters', () => {
         const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
         expect(specificParameters.toJSON()).toEqual({ setMembershipLeadInvitationQuota: 3 })
       })
@@ -1320,7 +1320,7 @@ export const SpecificParametersFillWorkingGroupLeadOpening: Story = {
       expect(modal.getByText('Bar'))
     })
 
-    step('Transaction parameters', () => {
+    await step('Transaction parameters', () => {
       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({
         fillWorkingGroupLeadOpening: {
@@ -1361,7 +1361,7 @@ export const SpecificParametersSetInitialInvitationCount: Story = {
       await userEvent.type(countField, '7')
     })
 
-    step('Transaction parameters', () => {
+    await step('Transaction parameters', () => {
       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({ setInitialInvitationCount: 7 })
     })
@@ -1391,7 +1391,7 @@ export const SpecificParametersSetInitialInvitationBalance: Story = {
       await userEvent.type(amountField, '7')
     })
 
-    step('Transaction parameters', () => {
+    await step('Transaction parameters', () => {
       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({ setInitialInvitationBalance: 7_0000000000 })
     })
@@ -1416,7 +1416,7 @@ export const SpecificParametersSetMembershipPrice: Story = {
       await userEvent.type(amountField, '8')
     })
 
-    step('Transaction parameters', () => {
+    await step('Transaction parameters', () => {
       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({ setMembershipPrice: 8_0000000000 })
     })
@@ -1441,8 +1441,8 @@ export const SpecificParametersUpdatePalletFrozenStatus: Story = {
       await waitFor(() => expect(nextButton).toBeEnabled())
     })
 
-    step('Transaction parameters', () => {
-      const [, specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+    await step('Transaction parameters', () => {
+      const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({
         setPalletFozenStatus: [true, 'ProjectToken'],
       })
@@ -1502,7 +1502,7 @@ export const SpecificParametersUpdateWorkingGroupBudget: Story = {
       await userEvent.type(amountField, '99')
     })
 
-    step('Transaction parameters', () => {
+    await step('Transaction parameters', () => {
       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
       expect(specificParameters.toJSON()).toEqual({
         updateWorkingGroupBudget: [99_0000000000, 'Forum', 'Negative'],
@@ -1537,9 +1537,9 @@ export const SpecificParametersRuntimeUpgrade: Story = {
       expect(within(confirmation).getByText('valid.wasm'))
     })
 
-    step('Transaction parameters', () => {
+    await step('Transaction parameters', () => {
       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
-      expect(specificParameters.toJSON()).toEqual({ runtimeUpgrade: '0x' })
+      expect(specificParameters.toJSON()).toEqual({ runtimeUpgrade: '0x00' })
     })
   }),
 }
