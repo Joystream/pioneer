@@ -120,6 +120,7 @@ export type GetForumEventsQuery = {
     | { __typename: 'BountyRemovedEvent' }
     | { __typename: 'BountyVetoedEvent' }
     | { __typename: 'BudgetBalanceSetEvent' }
+    | { __typename: 'BudgetFundedEvent' }
     | { __typename: 'BudgetIncrementUpdatedEvent' }
     | { __typename: 'BudgetRefillEvent' }
     | { __typename: 'BudgetRefillPlannedEvent' }

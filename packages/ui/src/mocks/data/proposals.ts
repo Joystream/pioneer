@@ -35,7 +35,7 @@ export const proposalDiscussionPosts: RecursivePartial<ProposalPost>[] = forumPo
     discussionThread: { id: threadId } as Partial<ProposalPost['discussionThread']>,
   }))
 
-const proposalDetails = {
+const proposalDetails: Record<ProposalDetailsType, RecursivePartial<ProposalWithDetailsFieldsFragment['details']>> = {
   AmendConstitutionProposalDetails: {},
   CancelWorkingGroupLeadOpeningProposalDetails: { opening: workingGroupOpening },
   CreateWorkingGroupLeadOpeningProposalDetails: {
@@ -86,9 +86,14 @@ const proposalDetails = {
     maxCashoutAllowed: joy(200),
     payloadHash: '0x000000',
   },
+  UpdatePalletFrozenStatusProposalDetails: {
+    frozen: false,
+    pallet: 'ProjectToken',
+  },
   UpdateWorkingGroupBudgetProposalDetails: { amount: joy(200), group: workingGroup },
   VetoProposalDetails: { proposal: { __typename: 'Proposal', id: '0', title: random.words(4) } },
-} as Record<string, RecursivePartial<ProposalWithDetailsFieldsFragment['details']>>
+  UpdateGlobalNftLimitProposalDetails: {},
+}
 
 export const proposalDetailsMap = mapValues(proposalDetails, (value, key) => {
   const __typename = key === 'FundingRequestMultipleRecipientsProposalDetails' ? 'FundingRequestProposalDetails' : key

@@ -27,6 +27,7 @@ import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/ma
 
 import { SetInitialInvitationBalance } from './SetInitialInvitationBalance'
 import { SetInitialInvitationCount } from './SetInitialInvitationCount'
+import { UpdatePalletFrozenStatus } from './UpdatePalletFrozenStatus'
 
 interface SpecificParametersStepProps {
   matches: AddNewProposalMachineState['matches']
@@ -81,6 +82,9 @@ export const SpecificParametersStep = ({ matches }: SpecificParametersStepProps)
     }
     case matches('specificParameters.updateChannelPayouts'): {
       return <UpdateChannelPayouts />
+    }
+    case matches('specificParameters.updatePalletFrozenStatus'): {
+      return <UpdatePalletFrozenStatus />
     }
     default:
       return null

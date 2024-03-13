@@ -146,6 +146,216 @@ export type AnnouncingPeriodStartedEventWhereUniqueInput = {
   id: Scalars['ID']
 }
 
+export type App = BaseGraphQlObject & {
+  __typename: 'App'
+  appChannels: Array<Channel>
+  appVideos: Array<Video>
+  authKey?: Maybe<Scalars['String']>
+  bigIcon?: Maybe<Scalars['String']>
+  category?: Maybe<Scalars['String']>
+  createdAt: Scalars['DateTime']
+  createdById: Scalars['ID']
+  deletedAt?: Maybe<Scalars['DateTime']>
+  deletedById?: Maybe<Scalars['ID']>
+  description?: Maybe<Scalars['String']>
+  id: Scalars['ID']
+  mediumIcon?: Maybe<Scalars['String']>
+  /** The name of the App */
+  name: Scalars['String']
+  /** Tagline of the app */
+  oneLiner?: Maybe<Scalars['String']>
+  ownerMember: Membership
+  ownerMemberId: Scalars['String']
+  /** List of platforms on which the app will be available, e.g. [mobile, web, native] */
+  platforms?: Maybe<Array<Scalars['String']>>
+  smallIcon?: Maybe<Scalars['String']>
+  termsOfService?: Maybe<Scalars['String']>
+  updatedAt?: Maybe<Scalars['DateTime']>
+  updatedById?: Maybe<Scalars['ID']>
+  /** Url to the app */
+  useUri?: Maybe<Scalars['String']>
+  version: Scalars['Int']
+  /** Url where user can read more about the project or company for this app */
+  websiteUrl?: Maybe<Scalars['String']>
+}
+
+export type AppConnection = {
+  __typename: 'AppConnection'
+  edges: Array<AppEdge>
+  pageInfo: PageInfo
+  totalCount: Scalars['Int']
+}
+
+export type AppCreateInput = {
+  authKey?: InputMaybe<Scalars['String']>
+  bigIcon?: InputMaybe<Scalars['String']>
+  category?: InputMaybe<Scalars['String']>
+  description?: InputMaybe<Scalars['String']>
+  mediumIcon?: InputMaybe<Scalars['String']>
+  name: Scalars['String']
+  oneLiner?: InputMaybe<Scalars['String']>
+  ownerMember: Scalars['ID']
+  platforms?: InputMaybe<Array<Scalars['String']>>
+  smallIcon?: InputMaybe<Scalars['String']>
+  termsOfService?: InputMaybe<Scalars['String']>
+  useUri?: InputMaybe<Scalars['String']>
+  websiteUrl?: InputMaybe<Scalars['String']>
+}
+
+export type AppEdge = {
+  __typename: 'AppEdge'
+  cursor: Scalars['String']
+  node: App
+}
+
+export enum AppOrderByInput {
+  AuthKeyAsc = 'authKey_ASC',
+  AuthKeyDesc = 'authKey_DESC',
+  BigIconAsc = 'bigIcon_ASC',
+  BigIconDesc = 'bigIcon_DESC',
+  CategoryAsc = 'category_ASC',
+  CategoryDesc = 'category_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  DeletedAtAsc = 'deletedAt_ASC',
+  DeletedAtDesc = 'deletedAt_DESC',
+  DescriptionAsc = 'description_ASC',
+  DescriptionDesc = 'description_DESC',
+  MediumIconAsc = 'mediumIcon_ASC',
+  MediumIconDesc = 'mediumIcon_DESC',
+  NameAsc = 'name_ASC',
+  NameDesc = 'name_DESC',
+  OneLinerAsc = 'oneLiner_ASC',
+  OneLinerDesc = 'oneLiner_DESC',
+  OwnerMemberAsc = 'ownerMember_ASC',
+  OwnerMemberDesc = 'ownerMember_DESC',
+  SmallIconAsc = 'smallIcon_ASC',
+  SmallIconDesc = 'smallIcon_DESC',
+  TermsOfServiceAsc = 'termsOfService_ASC',
+  TermsOfServiceDesc = 'termsOfService_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+  UseUriAsc = 'useUri_ASC',
+  UseUriDesc = 'useUri_DESC',
+  WebsiteUrlAsc = 'websiteUrl_ASC',
+  WebsiteUrlDesc = 'websiteUrl_DESC',
+}
+
+export type AppUpdateInput = {
+  authKey?: InputMaybe<Scalars['String']>
+  bigIcon?: InputMaybe<Scalars['String']>
+  category?: InputMaybe<Scalars['String']>
+  description?: InputMaybe<Scalars['String']>
+  mediumIcon?: InputMaybe<Scalars['String']>
+  name?: InputMaybe<Scalars['String']>
+  oneLiner?: InputMaybe<Scalars['String']>
+  ownerMember?: InputMaybe<Scalars['ID']>
+  platforms?: InputMaybe<Array<Scalars['String']>>
+  smallIcon?: InputMaybe<Scalars['String']>
+  termsOfService?: InputMaybe<Scalars['String']>
+  useUri?: InputMaybe<Scalars['String']>
+  websiteUrl?: InputMaybe<Scalars['String']>
+}
+
+export type AppWhereInput = {
+  AND?: InputMaybe<Array<AppWhereInput>>
+  NOT?: InputMaybe<Array<AppWhereInput>>
+  OR?: InputMaybe<Array<AppWhereInput>>
+  appChannels_every?: InputMaybe<ChannelWhereInput>
+  appChannels_none?: InputMaybe<ChannelWhereInput>
+  appChannels_some?: InputMaybe<ChannelWhereInput>
+  appVideos_every?: InputMaybe<VideoWhereInput>
+  appVideos_none?: InputMaybe<VideoWhereInput>
+  appVideos_some?: InputMaybe<VideoWhereInput>
+  authKey_contains?: InputMaybe<Scalars['String']>
+  authKey_endsWith?: InputMaybe<Scalars['String']>
+  authKey_eq?: InputMaybe<Scalars['String']>
+  authKey_in?: InputMaybe<Array<Scalars['String']>>
+  authKey_startsWith?: InputMaybe<Scalars['String']>
+  bigIcon_contains?: InputMaybe<Scalars['String']>
+  bigIcon_endsWith?: InputMaybe<Scalars['String']>
+  bigIcon_eq?: InputMaybe<Scalars['String']>
+  bigIcon_in?: InputMaybe<Array<Scalars['String']>>
+  bigIcon_startsWith?: InputMaybe<Scalars['String']>
+  category_contains?: InputMaybe<Scalars['String']>
+  category_endsWith?: InputMaybe<Scalars['String']>
+  category_eq?: InputMaybe<Scalars['String']>
+  category_in?: InputMaybe<Array<Scalars['String']>>
+  category_startsWith?: InputMaybe<Scalars['String']>
+  createdAt_eq?: InputMaybe<Scalars['DateTime']>
+  createdAt_gt?: InputMaybe<Scalars['DateTime']>
+  createdAt_gte?: InputMaybe<Scalars['DateTime']>
+  createdAt_lt?: InputMaybe<Scalars['DateTime']>
+  createdAt_lte?: InputMaybe<Scalars['DateTime']>
+  createdById_eq?: InputMaybe<Scalars['ID']>
+  createdById_in?: InputMaybe<Array<Scalars['ID']>>
+  deletedAt_all?: InputMaybe<Scalars['Boolean']>
+  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
+  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
+  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
+  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
+  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
+  deletedById_eq?: InputMaybe<Scalars['ID']>
+  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
+  description_contains?: InputMaybe<Scalars['String']>
+  description_endsWith?: InputMaybe<Scalars['String']>
+  description_eq?: InputMaybe<Scalars['String']>
+  description_in?: InputMaybe<Array<Scalars['String']>>
+  description_startsWith?: InputMaybe<Scalars['String']>
+  id_eq?: InputMaybe<Scalars['ID']>
+  id_in?: InputMaybe<Array<Scalars['ID']>>
+  mediumIcon_contains?: InputMaybe<Scalars['String']>
+  mediumIcon_endsWith?: InputMaybe<Scalars['String']>
+  mediumIcon_eq?: InputMaybe<Scalars['String']>
+  mediumIcon_in?: InputMaybe<Array<Scalars['String']>>
+  mediumIcon_startsWith?: InputMaybe<Scalars['String']>
+  name_contains?: InputMaybe<Scalars['String']>
+  name_endsWith?: InputMaybe<Scalars['String']>
+  name_eq?: InputMaybe<Scalars['String']>
+  name_in?: InputMaybe<Array<Scalars['String']>>
+  name_startsWith?: InputMaybe<Scalars['String']>
+  oneLiner_contains?: InputMaybe<Scalars['String']>
+  oneLiner_endsWith?: InputMaybe<Scalars['String']>
+  oneLiner_eq?: InputMaybe<Scalars['String']>
+  oneLiner_in?: InputMaybe<Array<Scalars['String']>>
+  oneLiner_startsWith?: InputMaybe<Scalars['String']>
+  ownerMember?: InputMaybe<MembershipWhereInput>
+  platforms_containsAll?: InputMaybe<Array<Scalars['String']>>
+  platforms_containsAny?: InputMaybe<Array<Scalars['String']>>
+  platforms_containsNone?: InputMaybe<Array<Scalars['String']>>
+  smallIcon_contains?: InputMaybe<Scalars['String']>
+  smallIcon_endsWith?: InputMaybe<Scalars['String']>
+  smallIcon_eq?: InputMaybe<Scalars['String']>
+  smallIcon_in?: InputMaybe<Array<Scalars['String']>>
+  smallIcon_startsWith?: InputMaybe<Scalars['String']>
+  termsOfService_contains?: InputMaybe<Scalars['String']>
+  termsOfService_endsWith?: InputMaybe<Scalars['String']>
+  termsOfService_eq?: InputMaybe<Scalars['String']>
+  termsOfService_in?: InputMaybe<Array<Scalars['String']>>
+  termsOfService_startsWith?: InputMaybe<Scalars['String']>
+  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
+  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
+  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
+  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
+  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
+  updatedById_eq?: InputMaybe<Scalars['ID']>
+  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
+  useUri_contains?: InputMaybe<Scalars['String']>
+  useUri_endsWith?: InputMaybe<Scalars['String']>
+  useUri_eq?: InputMaybe<Scalars['String']>
+  useUri_in?: InputMaybe<Array<Scalars['String']>>
+  useUri_startsWith?: InputMaybe<Scalars['String']>
+  websiteUrl_contains?: InputMaybe<Scalars['String']>
+  websiteUrl_endsWith?: InputMaybe<Scalars['String']>
+  websiteUrl_eq?: InputMaybe<Scalars['String']>
+  websiteUrl_in?: InputMaybe<Array<Scalars['String']>>
+  websiteUrl_startsWith?: InputMaybe<Scalars['String']>
+}
+
+export type AppWhereUniqueInput = {
+  id: Scalars['ID']
+}
+
 export type ApplicationFormQuestion = BaseGraphQlObject & {
   __typename: 'ApplicationFormQuestion'
   applicationformquestionanswerquestion?: Maybe<Array<ApplicationFormQuestionAnswer>>
@@ -1244,7 +1454,7 @@ export type AuctionTypeEnglish = {
   /** Auction extension time */
   extensionPeriod: Scalars['Int']
   /** Minimal step between auction bids */
-  minimalBidStep: Scalars['Float']
+  minimalBidStep: Scalars['BigInt']
   /** Block when auction is supposed to end */
   plannedEndAtBlock: Scalars['Int']
 }
@@ -2531,7 +2741,7 @@ export type BountyEntryStatusRejected = {
 
 export type BountyEntryStatusWinner = {
   __typename: 'BountyEntryStatusWinner'
-  reward: Scalars['Float']
+  reward: Scalars['BigInt']
 }
 
 export type BountyEntryStatusWithdrawn = {
@@ -2735,15 +2945,15 @@ export type BountyFundingLimited = {
   /** Maximum allowed funding period */
   fundingPeriod: Scalars['Int']
   /** Upper boundary for a bounty funding */
-  maxFundingAmount: Scalars['Float']
+  maxFundingAmount: Scalars['BigInt']
   /** Minimum amount of funds for a successful bounty */
-  minFundingAmount: Scalars['Float']
+  minFundingAmount: Scalars['BigInt']
 }
 
 export type BountyFundingPerpetual = {
   __typename: 'BountyFundingPerpetual'
   /** Desired funding */
-  target: Scalars['Float']
+  target: Scalars['BigInt']
 }
 
 export type BountyFundingType = BountyFundingLimited | BountyFundingPerpetual
@@ -3555,6 +3765,163 @@ export type BudgetBalanceSetEventWhereInput = {
 }
 
 export type BudgetBalanceSetEventWhereUniqueInput = {
+  id: Scalars['ID']
+}
+
+export type BudgetFundedEvent = BaseGraphQlObject &
+  Event & {
+    __typename: 'BudgetFundedEvent'
+    /** Amount added to the current budget */
+    amount: Scalars['BigInt']
+    createdAt: Scalars['DateTime']
+    createdById: Scalars['ID']
+    deletedAt?: Maybe<Scalars['DateTime']>
+    deletedById?: Maybe<Scalars['ID']>
+    group: WorkingGroup
+    groupId: Scalars['String']
+    id: Scalars['ID']
+    /** Blocknumber of the block in which the event was emitted. */
+    inBlock: Scalars['Int']
+    /** Hash of the extrinsic which caused the event to be emitted */
+    inExtrinsic?: Maybe<Scalars['String']>
+    /** Index of event in block from which it was emitted. */
+    indexInBlock: Scalars['Int']
+    member: Membership
+    memberId: Scalars['String']
+    /** Network the block was produced in */
+    network: Network
+    /** Rationale provided by the member */
+    rationale: Scalars['String']
+    /** Filtering options for interface implementers */
+    type?: Maybe<EventTypeOptions>
+    updatedAt?: Maybe<Scalars['DateTime']>
+    updatedById?: Maybe<Scalars['ID']>
+    version: Scalars['Int']
+  }
+
+export type BudgetFundedEventConnection = {
+  __typename: 'BudgetFundedEventConnection'
+  edges: Array<BudgetFundedEventEdge>
+  pageInfo: PageInfo
+  totalCount: Scalars['Int']
+}
+
+export type BudgetFundedEventCreateInput = {
+  amount: Scalars['String']
+  group: Scalars['ID']
+  inBlock: Scalars['Float']
+  inExtrinsic?: InputMaybe<Scalars['String']>
+  indexInBlock: Scalars['Float']
+  member: Scalars['ID']
+  network: Network
+  rationale: Scalars['String']
+}
+
+export type BudgetFundedEventEdge = {
+  __typename: 'BudgetFundedEventEdge'
+  cursor: Scalars['String']
+  node: BudgetFundedEvent
+}
+
+export enum BudgetFundedEventOrderByInput {
+  AmountAsc = 'amount_ASC',
+  AmountDesc = 'amount_DESC',
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  DeletedAtAsc = 'deletedAt_ASC',
+  DeletedAtDesc = 'deletedAt_DESC',
+  GroupAsc = 'group_ASC',
+  GroupDesc = 'group_DESC',
+  InBlockAsc = 'inBlock_ASC',
+  InBlockDesc = 'inBlock_DESC',
+  InExtrinsicAsc = 'inExtrinsic_ASC',
+  InExtrinsicDesc = 'inExtrinsic_DESC',
+  IndexInBlockAsc = 'indexInBlock_ASC',
+  IndexInBlockDesc = 'indexInBlock_DESC',
+  MemberAsc = 'member_ASC',
+  MemberDesc = 'member_DESC',
+  NetworkAsc = 'network_ASC',
+  NetworkDesc = 'network_DESC',
+  RationaleAsc = 'rationale_ASC',
+  RationaleDesc = 'rationale_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC',
+}
+
+export type BudgetFundedEventUpdateInput = {
+  amount?: InputMaybe<Scalars['String']>
+  group?: InputMaybe<Scalars['ID']>
+  inBlock?: InputMaybe<Scalars['Float']>
+  inExtrinsic?: InputMaybe<Scalars['String']>
+  indexInBlock?: InputMaybe<Scalars['Float']>
+  member?: InputMaybe<Scalars['ID']>
+  network?: InputMaybe<Network>
+  rationale?: InputMaybe<Scalars['String']>
+}
+
+export type BudgetFundedEventWhereInput = {
+  AND?: InputMaybe<Array<BudgetFundedEventWhereInput>>
+  NOT?: InputMaybe<Array<BudgetFundedEventWhereInput>>
+  OR?: InputMaybe<Array<BudgetFundedEventWhereInput>>
+  amount_eq?: InputMaybe<Scalars['BigInt']>
+  amount_gt?: InputMaybe<Scalars['BigInt']>
+  amount_gte?: InputMaybe<Scalars['BigInt']>
+  amount_in?: InputMaybe<Array<Scalars['BigInt']>>
+  amount_lt?: InputMaybe<Scalars['BigInt']>
+  amount_lte?: InputMaybe<Scalars['BigInt']>
+  createdAt_eq?: InputMaybe<Scalars['DateTime']>
+  createdAt_gt?: InputMaybe<Scalars['DateTime']>
+  createdAt_gte?: InputMaybe<Scalars['DateTime']>
+  createdAt_lt?: InputMaybe<Scalars['DateTime']>
+  createdAt_lte?: InputMaybe<Scalars['DateTime']>
+  createdById_eq?: InputMaybe<Scalars['ID']>
+  createdById_in?: InputMaybe<Array<Scalars['ID']>>
+  deletedAt_all?: InputMaybe<Scalars['Boolean']>
+  deletedAt_eq?: InputMaybe<Scalars['DateTime']>
+  deletedAt_gt?: InputMaybe<Scalars['DateTime']>
+  deletedAt_gte?: InputMaybe<Scalars['DateTime']>
+  deletedAt_lt?: InputMaybe<Scalars['DateTime']>
+  deletedAt_lte?: InputMaybe<Scalars['DateTime']>
+  deletedById_eq?: InputMaybe<Scalars['ID']>
+  deletedById_in?: InputMaybe<Array<Scalars['ID']>>
+  group?: InputMaybe<WorkingGroupWhereInput>
+  id_eq?: InputMaybe<Scalars['ID']>
+  id_in?: InputMaybe<Array<Scalars['ID']>>
+  inBlock_eq?: InputMaybe<Scalars['Int']>
+  inBlock_gt?: InputMaybe<Scalars['Int']>
+  inBlock_gte?: InputMaybe<Scalars['Int']>
+  inBlock_in?: InputMaybe<Array<Scalars['Int']>>
+  inBlock_lt?: InputMaybe<Scalars['Int']>
+  inBlock_lte?: InputMaybe<Scalars['Int']>
+  inExtrinsic_contains?: InputMaybe<Scalars['String']>
+  inExtrinsic_endsWith?: InputMaybe<Scalars['String']>
+  inExtrinsic_eq?: InputMaybe<Scalars['String']>
+  inExtrinsic_in?: InputMaybe<Array<Scalars['String']>>
+  inExtrinsic_startsWith?: InputMaybe<Scalars['String']>
+  indexInBlock_eq?: InputMaybe<Scalars['Int']>
+  indexInBlock_gt?: InputMaybe<Scalars['Int']>
+  indexInBlock_gte?: InputMaybe<Scalars['Int']>
+  indexInBlock_in?: InputMaybe<Array<Scalars['Int']>>
+  indexInBlock_lt?: InputMaybe<Scalars['Int']>
+  indexInBlock_lte?: InputMaybe<Scalars['Int']>
+  member?: InputMaybe<MembershipWhereInput>
+  network_eq?: InputMaybe<Network>
+  network_in?: InputMaybe<Array<Network>>
+  rationale_contains?: InputMaybe<Scalars['String']>
+  rationale_endsWith?: InputMaybe<Scalars['String']>
+  rationale_eq?: InputMaybe<Scalars['String']>
+  rationale_in?: InputMaybe<Array<Scalars['String']>>
+  rationale_startsWith?: InputMaybe<Scalars['String']>
+  updatedAt_eq?: InputMaybe<Scalars['DateTime']>
+  updatedAt_gt?: InputMaybe<Scalars['DateTime']>
+  updatedAt_gte?: InputMaybe<Scalars['DateTime']>
+  updatedAt_lt?: InputMaybe<Scalars['DateTime']>
+  updatedAt_lte?: InputMaybe<Scalars['DateTime']>
+  updatedById_eq?: InputMaybe<Scalars['ID']>
+  updatedById_in?: InputMaybe<Array<Scalars['ID']>>
+}
+
+export type BudgetFundedEventWhereUniqueInput = {
   id: Scalars['ID']
 }
 
@@ -6305,6 +6672,8 @@ export type Channel = BaseGraphQlObject & {
   deletedById?: Maybe<Scalars['ID']>
   /** The description of a Channel */
   description?: Maybe<Scalars['String']>
+  entryApp?: Maybe<App>
+  entryAppId?: Maybe<Scalars['String']>
   id: Scalars['ID']
   /** Flag signaling whether a channel is censored. */
   isCensored: Scalars['Boolean']
@@ -6324,6 +6693,8 @@ export type Channel = BaseGraphQlObject & {
   rewardAccount: Scalars['String']
   /** The title of the Channel */
   title?: Maybe<Scalars['String']>
+  /** Number of videos ever created in this channel */
+  totalVideosCreated: Scalars['Int']
   updatedAt?: Maybe<Scalars['DateTime']>
   updatedById?: Maybe<Scalars['ID']>
   version: Scalars['Int']
@@ -6498,6 +6869,7 @@ export type ChannelCreateInput = {
   createdInBlock: Scalars['Float']
   cumulativeRewardClaimed?: InputMaybe<Scalars['String']>
   description?: InputMaybe<Scalars['String']>
+  entryApp?: InputMaybe<Scalars['ID']>
   isCensored: Scalars['Boolean']
   isPublic?: InputMaybe<Scalars['Boolean']>
   language?: InputMaybe<Scalars['ID']>
@@ -6506,6 +6878,7 @@ export type ChannelCreateInput = {
   privilegeLevel?: InputMaybe<Scalars['Float']>
   rewardAccount: Scalars['String']
   title?: InputMaybe<Scalars['String']>
+  totalVideosCreated: Scalars['Float']
 }
 
 export type ChannelDeletedByModeratorEvent = BaseGraphQlObject & {
@@ -6662,8 +7035,8 @@ export type ChannelEdge = {
 export type ChannelFundsWithdrawnEvent = BaseGraphQlObject &
   Event & {
     __typename: 'ChannelFundsWithdrawnEvent'
-    /** Destination account ID */
-    account: Scalars['String']
+    /** Destination account ID. Null in case the funds destination was Council */
+    account?: Maybe<Scalars['String']>
     /** Content actor */
     actor: ContentActor
     /** Reward amount claimed */
@@ -6698,7 +7071,7 @@ export type ChannelFundsWithdrawnEventConnection = {
 }
 
 export type ChannelFundsWithdrawnEventCreateInput = {
-  account: Scalars['String']
+  account?: InputMaybe<Scalars['String']>
   actor: Scalars['JSONObject']
   amount: Scalars['String']
   channel: Scalars['ID']
@@ -6951,6 +7324,8 @@ export enum ChannelOrderByInput {
   DeletedAtDesc = 'deletedAt_DESC',
   DescriptionAsc = 'description_ASC',
   DescriptionDesc = 'description_DESC',
+  EntryAppAsc = 'entryApp_ASC',
+  EntryAppDesc = 'entryApp_DESC',
   IsCensoredAsc = 'isCensored_ASC',
   IsCensoredDesc = 'isCensored_DESC',
   IsPublicAsc = 'isPublic_ASC',
@@ -6967,6 +7342,8 @@ export enum ChannelOrderByInput {
   RewardAccountDesc = 'rewardAccount_DESC',
   TitleAsc = 'title_ASC',
   TitleDesc = 'title_DESC',
+  TotalVideosCreatedAsc = 'totalVideosCreated_ASC',
+  TotalVideosCreatedDesc = 'totalVideosCreated_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
 }
@@ -7148,16 +7525,14 @@ export type ChannelPayoutsUpdatedEvent = BaseGraphQlObject & {
   inExtrinsic?: Maybe<Scalars['String']>
   /** Index of event in block from which it was emitted. */
   indexInBlock: Scalars['Int']
-  /** Is the commitment valid. Most recent commitment would be considered valid */
-  isCommitmentValid: Scalars['Boolean']
   /** Maximum amount of channel reward cashout allowed at a time */
   maxCashoutAllowed?: Maybe<Scalars['BigInt']>
   /** Minimum amount of channel reward cashout allowed at a time */
   minCashoutAllowed?: Maybe<Scalars['BigInt']>
   /** Network the block was produced in. */
   network: Network
-  payloadDataObject: StorageDataObject
-  payloadDataObjectId: Scalars['String']
+  payloadDataObject?: Maybe<StorageDataObject>
+  payloadDataObjectId?: Maybe<Scalars['String']>
   /** Hash of the serialized channel payouts payload */
   payloadHash?: Maybe<Scalars['String']>
   /** Size of the serialized channel payouts payload */
@@ -7180,11 +7555,10 @@ export type ChannelPayoutsUpdatedEventCreateInput = {
   inBlock: Scalars['Float']
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
-  isCommitmentValid: Scalars['Boolean']
   maxCashoutAllowed?: InputMaybe<Scalars['String']>
   minCashoutAllowed?: InputMaybe<Scalars['String']>
   network: Network
-  payloadDataObject: Scalars['ID']
+  payloadDataObject?: InputMaybe<Scalars['ID']>
   payloadHash?: InputMaybe<Scalars['String']>
   payloadSize?: InputMaybe<Scalars['String']>
 }
@@ -7210,8 +7584,6 @@ export enum ChannelPayoutsUpdatedEventOrderByInput {
   InExtrinsicDesc = 'inExtrinsic_DESC',
   IndexInBlockAsc = 'indexInBlock_ASC',
   IndexInBlockDesc = 'indexInBlock_DESC',
-  IsCommitmentValidAsc = 'isCommitmentValid_ASC',
-  IsCommitmentValidDesc = 'isCommitmentValid_DESC',
   MaxCashoutAllowedAsc = 'maxCashoutAllowed_ASC',
   MaxCashoutAllowedDesc = 'maxCashoutAllowed_DESC',
   MinCashoutAllowedAsc = 'minCashoutAllowed_ASC',
@@ -7234,7 +7606,6 @@ export type ChannelPayoutsUpdatedEventUpdateInput = {
   inBlock?: InputMaybe<Scalars['Float']>
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
-  isCommitmentValid?: InputMaybe<Scalars['Boolean']>
   maxCashoutAllowed?: InputMaybe<Scalars['String']>
   minCashoutAllowed?: InputMaybe<Scalars['String']>
   network?: InputMaybe<Network>
@@ -7288,8 +7659,6 @@ export type ChannelPayoutsUpdatedEventWhereInput = {
   indexInBlock_in?: InputMaybe<Array<Scalars['Int']>>
   indexInBlock_lt?: InputMaybe<Scalars['Int']>
   indexInBlock_lte?: InputMaybe<Scalars['Int']>
-  isCommitmentValid_eq?: InputMaybe<Scalars['Boolean']>
-  isCommitmentValid_in?: InputMaybe<Array<Scalars['Boolean']>>
   maxCashoutAllowed_eq?: InputMaybe<Scalars['BigInt']>
   maxCashoutAllowed_gt?: InputMaybe<Scalars['BigInt']>
   maxCashoutAllowed_gte?: InputMaybe<Scalars['BigInt']>
@@ -7332,8 +7701,8 @@ export type ChannelPayoutsUpdatedEventWhereUniqueInput = {
 export type ChannelRewardClaimedAndWithdrawnEvent = BaseGraphQlObject &
   Event & {
     __typename: 'ChannelRewardClaimedAndWithdrawnEvent'
-    /** Destination account ID */
-    account: Scalars['String']
+    /** Destination account ID. Null in case the funds destination was Council */
+    account?: Maybe<Scalars['String']>
     /** Content actor */
     actor: ContentActor
     /** Reward amount claimed */
@@ -7368,7 +7737,7 @@ export type ChannelRewardClaimedAndWithdrawnEventConnection = {
 }
 
 export type ChannelRewardClaimedAndWithdrawnEventCreateInput = {
-  account: Scalars['String']
+  account?: InputMaybe<Scalars['String']>
   actor: Scalars['JSONObject']
   amount: Scalars['String']
   channel: Scalars['ID']
@@ -7631,6 +8000,7 @@ export type ChannelUpdateInput = {
   createdInBlock?: InputMaybe<Scalars['Float']>
   cumulativeRewardClaimed?: InputMaybe<Scalars['String']>
   description?: InputMaybe<Scalars['String']>
+  entryApp?: InputMaybe<Scalars['ID']>
   isCensored?: InputMaybe<Scalars['Boolean']>
   isPublic?: InputMaybe<Scalars['Boolean']>
   language?: InputMaybe<Scalars['ID']>
@@ -7639,6 +8009,7 @@ export type ChannelUpdateInput = {
   privilegeLevel?: InputMaybe<Scalars['Float']>
   rewardAccount?: InputMaybe<Scalars['String']>
   title?: InputMaybe<Scalars['String']>
+  totalVideosCreated?: InputMaybe<Scalars['Float']>
 }
 
 export type ChannelVisibilitySetByModeratorEvent = BaseGraphQlObject & {
@@ -7883,6 +8254,7 @@ export type ChannelWhereInput = {
   description_eq?: InputMaybe<Scalars['String']>
   description_in?: InputMaybe<Array<Scalars['String']>>
   description_startsWith?: InputMaybe<Scalars['String']>
+  entryApp?: InputMaybe<AppWhereInput>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
   isCensored_eq?: InputMaybe<Scalars['Boolean']>
@@ -7914,6 +8286,12 @@ export type ChannelWhereInput = {
   title_eq?: InputMaybe<Scalars['String']>
   title_in?: InputMaybe<Array<Scalars['String']>>
   title_startsWith?: InputMaybe<Scalars['String']>
+  totalVideosCreated_eq?: InputMaybe<Scalars['Int']>
+  totalVideosCreated_gt?: InputMaybe<Scalars['Int']>
+  totalVideosCreated_gte?: InputMaybe<Scalars['Int']>
+  totalVideosCreated_in?: InputMaybe<Array<Scalars['Int']>>
+  totalVideosCreated_lt?: InputMaybe<Scalars['Int']>
+  totalVideosCreated_lte?: InputMaybe<Scalars['Int']>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -9735,7 +10113,7 @@ export type CouncilStage = CouncilStageAnnouncing | CouncilStageElection | Counc
 export type CouncilStageAnnouncing = {
   __typename: 'CouncilStageAnnouncing'
   /** Number of candidates aspiring to be elected as council members. */
-  candidatesCount: Scalars['Float']
+  candidatesCount: Scalars['BigInt']
   /** Block number at which the stage ends */
   endsAt: Scalars['Int']
 }
@@ -9743,7 +10121,7 @@ export type CouncilStageAnnouncing = {
 export type CouncilStageElection = {
   __typename: 'CouncilStageElection'
   /** Number of candidates aspiring to be elected as council members. */
-  candidatesCount: Scalars['Float']
+  candidatesCount: Scalars['BigInt']
 }
 
 export type CouncilStageIdle = {
@@ -9997,9 +10375,9 @@ export type CreateWorkingGroupLeadOpeningProposalDetails = {
   /** The opening metadata */
   metadata?: Maybe<WorkingGroupOpeningMetadata>
   /** Initial workers' reward per block */
-  rewardPerBlock: Scalars['Float']
+  rewardPerBlock: Scalars['BigInt']
   /** Min. application / role stake amount */
-  stakeAmount: Scalars['Float']
+  stakeAmount: Scalars['BigInt']
   /** Role stake unstaking period in blocks */
   unstakingPeriod: Scalars['Int']
 }
@@ -10409,7 +10787,7 @@ export type DataObjectTypeVideoThumbnail = {
 export type DecreaseWorkingGroupLeadStakeProposalDetails = {
   __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails'
   /** Amount to decrease the stake by */
-  amount: Scalars['Float']
+  amount: Scalars['BigInt']
   /** The lead that should be affected */
   lead?: Maybe<Worker>
 }
@@ -11750,6 +12128,7 @@ export enum EventTypeOptions {
   BountyRemovedEvent = 'BountyRemovedEvent',
   BountyVetoedEvent = 'BountyVetoedEvent',
   BudgetBalanceSetEvent = 'BudgetBalanceSetEvent',
+  BudgetFundedEvent = 'BudgetFundedEvent',
   BudgetIncrementUpdatedEvent = 'BudgetIncrementUpdatedEvent',
   BudgetRefillEvent = 'BudgetRefillEvent',
   BudgetRefillPlannedEvent = 'BudgetRefillPlannedEvent',
@@ -14415,6 +14794,8 @@ export type MemberInvitedEvent = BaseGraphQlObject &
     inExtrinsic?: Maybe<Scalars['String']>
     /** Index of event in block from which it was emitted. */
     indexInBlock: Scalars['Int']
+    /** Member's initial, invitation-locked balance */
+    initialBalance: Scalars['BigInt']
     invitingMember: Membership
     invitingMemberId: Scalars['String']
     metadata: MemberMetadata
@@ -14445,6 +14826,7 @@ export type MemberInvitedEventCreateInput = {
   inBlock: Scalars['Float']
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock: Scalars['Float']
+  initialBalance: Scalars['String']
   invitingMember: Scalars['ID']
   metadata: Scalars['ID']
   network: Network
@@ -14473,6 +14855,8 @@ export enum MemberInvitedEventOrderByInput {
   InExtrinsicDesc = 'inExtrinsic_DESC',
   IndexInBlockAsc = 'indexInBlock_ASC',
   IndexInBlockDesc = 'indexInBlock_DESC',
+  InitialBalanceAsc = 'initialBalance_ASC',
+  InitialBalanceDesc = 'initialBalance_DESC',
   InvitingMemberAsc = 'invitingMember_ASC',
   InvitingMemberDesc = 'invitingMember_DESC',
   MetadataAsc = 'metadata_ASC',
@@ -14493,6 +14877,7 @@ export type MemberInvitedEventUpdateInput = {
   inBlock?: InputMaybe<Scalars['Float']>
   inExtrinsic?: InputMaybe<Scalars['String']>
   indexInBlock?: InputMaybe<Scalars['Float']>
+  initialBalance?: InputMaybe<Scalars['String']>
   invitingMember?: InputMaybe<Scalars['ID']>
   metadata?: InputMaybe<Scalars['ID']>
   network?: InputMaybe<Network>
@@ -14548,6 +14933,12 @@ export type MemberInvitedEventWhereInput = {
   indexInBlock_in?: InputMaybe<Array<Scalars['Int']>>
   indexInBlock_lt?: InputMaybe<Scalars['Int']>
   indexInBlock_lte?: InputMaybe<Scalars['Int']>
+  initialBalance_eq?: InputMaybe<Scalars['BigInt']>
+  initialBalance_gt?: InputMaybe<Scalars['BigInt']>
+  initialBalance_gte?: InputMaybe<Scalars['BigInt']>
+  initialBalance_in?: InputMaybe<Array<Scalars['BigInt']>>
+  initialBalance_lt?: InputMaybe<Scalars['BigInt']>
+  initialBalance_lte?: InputMaybe<Scalars['BigInt']>
   invitingMember?: InputMaybe<MembershipWhereInput>
   metadata?: InputMaybe<MemberMetadataWhereInput>
   network_eq?: InputMaybe<Network>
@@ -14723,8 +15114,10 @@ export type MemberProfileUpdatedEvent = BaseGraphQlObject &
     memberId: Scalars['String']
     /** Network the block was produced in */
     network: Network
-    /** New member handle. Null means no new value was provided. */
+    /** New member handle (utf-8 string). Null means no new value was provided. */
     newHandle?: Maybe<Scalars['String']>
+    /** New member handle (raw hex string). Null means no new value was provided. */
+    newHandleRaw?: Maybe<Scalars['String']>
     newMetadata: MemberMetadata
     newMetadataId: Scalars['String']
     /** Filtering options for interface implementers */
@@ -14748,6 +15141,7 @@ export type MemberProfileUpdatedEventCreateInput = {
   member: Scalars['ID']
   network: Network
   newHandle?: InputMaybe<Scalars['String']>
+  newHandleRaw?: InputMaybe<Scalars['String']>
   newMetadata: Scalars['ID']
 }
 
@@ -14772,6 +15166,8 @@ export enum MemberProfileUpdatedEventOrderByInput {
   MemberDesc = 'member_DESC',
   NetworkAsc = 'network_ASC',
   NetworkDesc = 'network_DESC',
+  NewHandleRawAsc = 'newHandleRaw_ASC',
+  NewHandleRawDesc = 'newHandleRaw_DESC',
   NewHandleAsc = 'newHandle_ASC',
   NewHandleDesc = 'newHandle_DESC',
   NewMetadataAsc = 'newMetadata_ASC',
@@ -14787,6 +15183,7 @@ export type MemberProfileUpdatedEventUpdateInput = {
   member?: InputMaybe<Scalars['ID']>
   network?: InputMaybe<Network>
   newHandle?: InputMaybe<Scalars['String']>
+  newHandleRaw?: InputMaybe<Scalars['String']>
   newMetadata?: InputMaybe<Scalars['ID']>
 }
 
@@ -14831,6 +15228,11 @@ export type MemberProfileUpdatedEventWhereInput = {
   member?: InputMaybe<MembershipWhereInput>
   network_eq?: InputMaybe<Network>
   network_in?: InputMaybe<Array<Network>>
+  newHandleRaw_contains?: InputMaybe<Scalars['String']>
+  newHandleRaw_endsWith?: InputMaybe<Scalars['String']>
+  newHandleRaw_eq?: InputMaybe<Scalars['String']>
+  newHandleRaw_in?: InputMaybe<Array<Scalars['String']>>
+  newHandleRaw_startsWith?: InputMaybe<Scalars['String']>
   newHandle_contains?: InputMaybe<Scalars['String']>
   newHandle_endsWith?: InputMaybe<Scalars['String']>
   newHandle_eq?: InputMaybe<Scalars['String']>
@@ -15005,6 +15407,7 @@ export type MembersByHandleSearchResult = Membership
 /** Stored information about a registered user */
 export type Membership = BaseGraphQlObject & {
   __typename: 'Membership'
+  appownerMember?: Maybe<Array<App>>
   auctionbidcanceledeventmember?: Maybe<Array<AuctionBidCanceledEvent>>
   auctionbidcanceledeventownerMember?: Maybe<Array<AuctionBidCanceledEvent>>
   auctionbidmadeeventmember?: Maybe<Array<AuctionBidMadeEvent>>
@@ -15023,6 +15426,7 @@ export type Membership = BaseGraphQlObject & {
   bountycreator?: Maybe<Array<Bounty>>
   bountyentryworker?: Maybe<Array<BountyEntry>>
   bountyoracle?: Maybe<Array<Bounty>>
+  budgetfundedeventmember?: Maybe<Array<BudgetFundedEvent>>
   buynowcanceledeventownerMember?: Maybe<Array<BuyNowCanceledEvent>>
   buynowpriceupdatedeventownerMember?: Maybe<Array<BuyNowPriceUpdatedEvent>>
   channelpaymentmadeeventpayer?: Maybe<Array<ChannelPaymentMadeEvent>>
@@ -15048,8 +15452,10 @@ export type Membership = BaseGraphQlObject & {
   externalResources?: Maybe<Array<MembershipExternalResource>>
   forumpostauthor?: Maybe<Array<ForumPost>>
   forumthreadauthor?: Maybe<Array<ForumThread>>
-  /** The unique handle chosen by member */
+  /** The unique handle chosen by member as utf-8 */
   handle: Scalars['String']
+  /** The unique handle chosen by member as raw hex representation */
+  handleRaw: Scalars['String']
   id: Scalars['ID']
   /** Current count of invites left to send. */
   inviteCount: Scalars['Int']
@@ -15109,6 +15515,8 @@ export type Membership = BaseGraphQlObject & {
   stakingaccountaddedeventmember?: Maybe<Array<StakingAccountAddedEvent>>
   stakingaccountconfirmedeventmember?: Maybe<Array<StakingAccountConfirmedEvent>>
   stakingaccountremovedeventmember?: Maybe<Array<StakingAccountRemovedEvent>>
+  /** Number of channels ever created by this member */
+  totalChannelsCreated: Scalars['Int']
   updatedAt?: Maybe<Scalars['DateTime']>
   updatedById?: Maybe<Scalars['ID']>
   version: Scalars['Int']
@@ -15306,6 +15714,7 @@ export type MembershipCreateInput = {
   controllerAccount: Scalars['String']
   entry: Scalars['JSONObject']
   handle: Scalars['String']
+  handleRaw: Scalars['String']
   inviteCount: Scalars['Float']
   invitedBy?: InputMaybe<Scalars['ID']>
   isCouncilMember: Scalars['Boolean']
@@ -15314,6 +15723,7 @@ export type MembershipCreateInput = {
   metadata: Scalars['ID']
   referredBy?: InputMaybe<Scalars['ID']>
   rootAccount: Scalars['String']
+  totalChannelsCreated: Scalars['Float']
 }
 
 export type MembershipEdge = {
@@ -15417,6 +15827,7 @@ export enum MembershipExternalResourceType {
   Discord = 'DISCORD',
   Email = 'EMAIL',
   Facebook = 'FACEBOOK',
+  Github = 'GITHUB',
   Hyperlink = 'HYPERLINK',
   Irc = 'IRC',
   Linkedin = 'LINKEDIN',
@@ -15652,6 +16063,8 @@ export enum MembershipOrderByInput {
   CreatedAtDesc = 'createdAt_DESC',
   DeletedAtAsc = 'deletedAt_ASC',
   DeletedAtDesc = 'deletedAt_DESC',
+  HandleRawAsc = 'handleRaw_ASC',
+  HandleRawDesc = 'handleRaw_DESC',
   HandleAsc = 'handle_ASC',
   HandleDesc = 'handle_DESC',
   InviteCountAsc = 'inviteCount_ASC',
@@ -15670,6 +16083,8 @@ export enum MembershipOrderByInput {
   ReferredByDesc = 'referredBy_DESC',
   RootAccountAsc = 'rootAccount_ASC',
   RootAccountDesc = 'rootAccount_DESC',
+  TotalChannelsCreatedAsc = 'totalChannelsCreated_ASC',
+  TotalChannelsCreatedDesc = 'totalChannelsCreated_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
 }
@@ -15811,6 +16226,7 @@ export type MembershipUpdateInput = {
   controllerAccount?: InputMaybe<Scalars['String']>
   entry?: InputMaybe<Scalars['JSONObject']>
   handle?: InputMaybe<Scalars['String']>
+  handleRaw?: InputMaybe<Scalars['String']>
   inviteCount?: InputMaybe<Scalars['Float']>
   invitedBy?: InputMaybe<Scalars['ID']>
   isCouncilMember?: InputMaybe<Scalars['Boolean']>
@@ -15819,12 +16235,16 @@ export type MembershipUpdateInput = {
   metadata?: InputMaybe<Scalars['ID']>
   referredBy?: InputMaybe<Scalars['ID']>
   rootAccount?: InputMaybe<Scalars['String']>
+  totalChannelsCreated?: InputMaybe<Scalars['Float']>
 }
 
 export type MembershipWhereInput = {
   AND?: InputMaybe<Array<MembershipWhereInput>>
   NOT?: InputMaybe<Array<MembershipWhereInput>>
   OR?: InputMaybe<Array<MembershipWhereInput>>
+  appownerMember_every?: InputMaybe<AppWhereInput>
+  appownerMember_none?: InputMaybe<AppWhereInput>
+  appownerMember_some?: InputMaybe<AppWhereInput>
   auctionbidcanceledeventmember_every?: InputMaybe<AuctionBidCanceledEventWhereInput>
   auctionbidcanceledeventmember_none?: InputMaybe<AuctionBidCanceledEventWhereInput>
   auctionbidcanceledeventmember_some?: InputMaybe<AuctionBidCanceledEventWhereInput>
@@ -15876,6 +16296,9 @@ export type MembershipWhereInput = {
   bountyoracle_every?: InputMaybe<BountyWhereInput>
   bountyoracle_none?: InputMaybe<BountyWhereInput>
   bountyoracle_some?: InputMaybe<BountyWhereInput>
+  budgetfundedeventmember_every?: InputMaybe<BudgetFundedEventWhereInput>
+  budgetfundedeventmember_none?: InputMaybe<BudgetFundedEventWhereInput>
+  budgetfundedeventmember_some?: InputMaybe<BudgetFundedEventWhereInput>
   buynowcanceledeventownerMember_every?: InputMaybe<BuyNowCanceledEventWhereInput>
   buynowcanceledeventownerMember_none?: InputMaybe<BuyNowCanceledEventWhereInput>
   buynowcanceledeventownerMember_some?: InputMaybe<BuyNowCanceledEventWhereInput>
@@ -15948,6 +16371,11 @@ export type MembershipWhereInput = {
   forumthreadauthor_every?: InputMaybe<ForumThreadWhereInput>
   forumthreadauthor_none?: InputMaybe<ForumThreadWhereInput>
   forumthreadauthor_some?: InputMaybe<ForumThreadWhereInput>
+  handleRaw_contains?: InputMaybe<Scalars['String']>
+  handleRaw_endsWith?: InputMaybe<Scalars['String']>
+  handleRaw_eq?: InputMaybe<Scalars['String']>
+  handleRaw_in?: InputMaybe<Array<Scalars['String']>>
+  handleRaw_startsWith?: InputMaybe<Scalars['String']>
   handle_contains?: InputMaybe<Scalars['String']>
   handle_endsWith?: InputMaybe<Scalars['String']>
   handle_eq?: InputMaybe<Scalars['String']>
@@ -16101,6 +16529,12 @@ export type MembershipWhereInput = {
   stakingaccountremovedeventmember_every?: InputMaybe<StakingAccountRemovedEventWhereInput>
   stakingaccountremovedeventmember_none?: InputMaybe<StakingAccountRemovedEventWhereInput>
   stakingaccountremovedeventmember_some?: InputMaybe<StakingAccountRemovedEventWhereInput>
+  totalChannelsCreated_eq?: InputMaybe<Scalars['Int']>
+  totalChannelsCreated_gt?: InputMaybe<Scalars['Int']>
+  totalChannelsCreated_gte?: InputMaybe<Scalars['Int']>
+  totalChannelsCreated_in?: InputMaybe<Array<Scalars['Int']>>
+  totalChannelsCreated_lt?: InputMaybe<Scalars['Int']>
+  totalChannelsCreated_lte?: InputMaybe<Scalars['Int']>
   updatedAt_eq?: InputMaybe<Scalars['DateTime']>
   updatedAt_gt?: InputMaybe<Scalars['DateTime']>
   updatedAt_gte?: InputMaybe<Scalars['DateTime']>
@@ -16129,7 +16563,7 @@ export type MembershipWhereInput = {
 }
 
 export type MembershipWhereUniqueInput = {
-  handle?: InputMaybe<Scalars['String']>
+  handleRaw?: InputMaybe<Scalars['String']>
   id?: InputMaybe<Scalars['ID']>
 }
 
@@ -20454,6 +20888,8 @@ export type ProposalDetails =
   | SlashWorkingGroupLeadProposalDetails
   | TerminateWorkingGroupLeadProposalDetails
   | UpdateChannelPayoutsProposalDetails
+  | UpdateGlobalNftLimitProposalDetails
+  | UpdatePalletFrozenStatusProposalDetails
   | UpdateWorkingGroupBudgetProposalDetails
   | VetoProposalDetails
 
@@ -22034,6 +22470,7 @@ export type Query = {
   announcingPeriodStartedEventByUniqueInput?: Maybe<AnnouncingPeriodStartedEvent>
   announcingPeriodStartedEvents: Array<AnnouncingPeriodStartedEvent>
   announcingPeriodStartedEventsConnection: AnnouncingPeriodStartedEventConnection
+  appByUniqueInput?: Maybe<App>
   applicationFormQuestionAnswerByUniqueInput?: Maybe<ApplicationFormQuestionAnswer>
   applicationFormQuestionAnswers: Array<ApplicationFormQuestionAnswer>
   applicationFormQuestionAnswersConnection: ApplicationFormQuestionAnswerConnection
@@ -22046,6 +22483,8 @@ export type Query = {
   appliedOnOpeningEventByUniqueInput?: Maybe<AppliedOnOpeningEvent>
   appliedOnOpeningEvents: Array<AppliedOnOpeningEvent>
   appliedOnOpeningEventsConnection: AppliedOnOpeningEventConnection
+  apps: Array<App>
+  appsConnection: AppConnection
   auctionBidCanceledEventByUniqueInput?: Maybe<AuctionBidCanceledEvent>
   auctionBidCanceledEvents: Array<AuctionBidCanceledEvent>
   auctionBidCanceledEventsConnection: AuctionBidCanceledEventConnection
@@ -22103,6 +22542,9 @@ export type Query = {
   budgetBalanceSetEventByUniqueInput?: Maybe<BudgetBalanceSetEvent>
   budgetBalanceSetEvents: Array<BudgetBalanceSetEvent>
   budgetBalanceSetEventsConnection: BudgetBalanceSetEventConnection
+  budgetFundedEventByUniqueInput?: Maybe<BudgetFundedEvent>
+  budgetFundedEvents: Array<BudgetFundedEvent>
+  budgetFundedEventsConnection: BudgetFundedEventConnection
   budgetIncrementUpdatedEventByUniqueInput?: Maybe<BudgetIncrementUpdatedEvent>
   budgetIncrementUpdatedEvents: Array<BudgetIncrementUpdatedEvent>
   budgetIncrementUpdatedEventsConnection: BudgetIncrementUpdatedEventConnection
@@ -22696,6 +23138,10 @@ export type QueryAnnouncingPeriodStartedEventsConnectionArgs = {
   where?: InputMaybe<AnnouncingPeriodStartedEventWhereInput>
 }
 
+export type QueryAppByUniqueInputArgs = {
+  where: AppWhereUniqueInput
+}
+
 export type QueryApplicationFormQuestionAnswerByUniqueInputArgs = {
   where: ApplicationFormQuestionAnswerWhereUniqueInput
 }
@@ -22774,6 +23220,22 @@ export type QueryAppliedOnOpeningEventsConnectionArgs = {
   last?: InputMaybe<Scalars['Int']>
   orderBy?: InputMaybe<Array<AppliedOnOpeningEventOrderByInput>>
   where?: InputMaybe<AppliedOnOpeningEventWhereInput>
+}
+
+export type QueryAppsArgs = {
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  orderBy?: InputMaybe<Array<AppOrderByInput>>
+  where?: InputMaybe<AppWhereInput>
+}
+
+export type QueryAppsConnectionArgs = {
+  after?: InputMaybe<Scalars['String']>
+  before?: InputMaybe<Scalars['String']>
+  first?: InputMaybe<Scalars['Int']>
+  last?: InputMaybe<Scalars['Int']>
+  orderBy?: InputMaybe<Array<AppOrderByInput>>
+  where?: InputMaybe<AppWhereInput>
 }
 
 export type QueryAuctionBidCanceledEventByUniqueInputArgs = {
@@ -23154,6 +23616,26 @@ export type QueryBudgetBalanceSetEventsConnectionArgs = {
   last?: InputMaybe<Scalars['Int']>
   orderBy?: InputMaybe<Array<BudgetBalanceSetEventOrderByInput>>
   where?: InputMaybe<BudgetBalanceSetEventWhereInput>
+}
+
+export type QueryBudgetFundedEventByUniqueInputArgs = {
+  where: BudgetFundedEventWhereUniqueInput
+}
+
+export type QueryBudgetFundedEventsArgs = {
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  orderBy?: InputMaybe<Array<BudgetFundedEventOrderByInput>>
+  where?: InputMaybe<BudgetFundedEventWhereInput>
+}
+
+export type QueryBudgetFundedEventsConnectionArgs = {
+  after?: InputMaybe<Scalars['String']>
+  before?: InputMaybe<Scalars['String']>
+  first?: InputMaybe<Scalars['Int']>
+  last?: InputMaybe<Scalars['Int']>
+  orderBy?: InputMaybe<Array<BudgetFundedEventOrderByInput>>
+  where?: InputMaybe<BudgetFundedEventWhereInput>
 }
 
 export type QueryBudgetIncrementUpdatedEventByUniqueInputArgs = {
@@ -28405,19 +28887,19 @@ export type SearchSearchResult = Channel | Video
 export type SetCouncilBudgetIncrementProposalDetails = {
   __typename: 'SetCouncilBudgetIncrementProposalDetails'
   /** New (proposed) amount the council budget should be increased by per each budget period */
-  newAmount: Scalars['Float']
+  newAmount: Scalars['BigInt']
 }
 
 export type SetCouncilorRewardProposalDetails = {
   __typename: 'SetCouncilorRewardProposalDetails'
   /** New (proposed) council members' reward per block */
-  newRewardPerBlock: Scalars['Float']
+  newRewardPerBlock: Scalars['BigInt']
 }
 
 export type SetInitialInvitationBalanceProposalDetails = {
   __typename: 'SetInitialInvitationBalanceProposalDetails'
   /** The new (proposed) initial balance credited to controller account of an invitee (locked for transaction fee payments only) */
-  newInitialInvitationBalance: Scalars['Float']
+  newInitialInvitationBalance: Scalars['BigInt']
 }
 
 export type SetInitialInvitationCountProposalDetails = {
@@ -28441,7 +28923,7 @@ export type SetMembershipLeadInvitationQuotaProposalDetails = {
 export type SetMembershipPriceProposalDetails = {
   __typename: 'SetMembershipPriceProposalDetails'
   /** New (proposed) membership price */
-  newPrice: Scalars['Float']
+  newPrice: Scalars['BigInt']
 }
 
 export type SetReferralCutProposalDetails = {
@@ -28455,7 +28937,7 @@ export type SetWorkingGroupLeadRewardProposalDetails = {
   /** The lead that should be affected */
   lead?: Maybe<Worker>
   /** Lead's new (proposed) reward per block */
-  newRewardPerBlock: Scalars['Float']
+  newRewardPerBlock: Scalars['BigInt']
 }
 
 export type SignalProposalDetails = {
@@ -28467,7 +28949,7 @@ export type SignalProposalDetails = {
 export type SlashWorkingGroupLeadProposalDetails = {
   __typename: 'SlashWorkingGroupLeadProposalDetails'
   /** Amount to slash the stake by */
-  amount: Scalars['Float']
+  amount: Scalars['BigInt']
   /** The lead that should be affected */
   lead?: Maybe<Worker>
 }
@@ -29643,6 +30125,8 @@ export type StorageBag = BaseGraphQlObject & {
   distributionBuckets: Array<DistributionBucket>
   id: Scalars['ID']
   objects: Array<StorageDataObject>
+  /** Total size of data objects in Bag */
+  objectsSize: Scalars['BigInt']
   /** Owner of the storage bag */
   owner: StorageBagOwner
   storageBuckets: Array<StorageBucket>
@@ -29659,6 +30143,7 @@ export type StorageBagConnection = {
 }
 
 export type StorageBagCreateInput = {
+  objectsSize: Scalars['String']
   owner: Scalars['JSONObject']
 }
 
@@ -29673,6 +30158,8 @@ export enum StorageBagOrderByInput {
   CreatedAtDesc = 'createdAt_DESC',
   DeletedAtAsc = 'deletedAt_ASC',
   DeletedAtDesc = 'deletedAt_DESC',
+  ObjectsSizeAsc = 'objectsSize_ASC',
+  ObjectsSizeDesc = 'objectsSize_DESC',
   UpdatedAtAsc = 'updatedAt_ASC',
   UpdatedAtDesc = 'updatedAt_DESC',
 }
@@ -29710,6 +30197,7 @@ export type StorageBagOwnerWorkingGroup = {
 }
 
 export type StorageBagUpdateInput = {
+  objectsSize?: InputMaybe<Scalars['String']>
   owner?: InputMaybe<Scalars['JSONObject']>
 }
 
@@ -29737,6 +30225,12 @@ export type StorageBagWhereInput = {
   distributionBuckets_some?: InputMaybe<DistributionBucketWhereInput>
   id_eq?: InputMaybe<Scalars['ID']>
   id_in?: InputMaybe<Array<Scalars['ID']>>
+  objectsSize_eq?: InputMaybe<Scalars['BigInt']>
+  objectsSize_gt?: InputMaybe<Scalars['BigInt']>
+  objectsSize_gte?: InputMaybe<Scalars['BigInt']>
+  objectsSize_in?: InputMaybe<Array<Scalars['BigInt']>>
+  objectsSize_lt?: InputMaybe<Scalars['BigInt']>
+  objectsSize_lte?: InputMaybe<Scalars['BigInt']>
   objects_every?: InputMaybe<StorageDataObjectWhereInput>
   objects_none?: InputMaybe<StorageDataObjectWhereInput>
   objects_some?: InputMaybe<StorageDataObjectWhereInput>
@@ -30199,7 +30693,7 @@ export type TerminateWorkingGroupLeadProposalDetails = {
   /** Lead that's supposed to be terminated */
   lead?: Maybe<Worker>
   /** Optionally - the amount to slash the lead's stake by */
-  slashingAmount?: Maybe<Scalars['Float']>
+  slashingAmount?: Maybe<Scalars['BigInt']>
 }
 
 export type TerminatedLeaderEvent = BaseGraphQlObject &
@@ -31265,7 +31759,7 @@ export type TransactionalStatus =
 
 export type TransactionalStatusBuyNow = {
   __typename: 'TransactionalStatusBuyNow'
-  price: Scalars['Float']
+  price: Scalars['BigInt']
 }
 
 export type TransactionalStatusIdle = {
@@ -31279,7 +31773,7 @@ export type TransactionalStatusInitiatedOfferToMember = {
   /** Member identifier */
   memberId: Scalars['Int']
   /** Whether member should pay to accept offer (optional) */
-  price?: Maybe<Scalars['Float']>
+  price?: Maybe<Scalars['BigInt']>
 }
 
 export type TransactionalStatusUpdate = BaseGraphQlObject & {
@@ -31534,17 +32028,33 @@ export type UpdateChannelPayoutsProposalDetails = {
   /** Merkle root of the channel payouts */
   commitment?: Maybe<Scalars['String']>
   /** Maximum amount of channel reward cashout allowed at a time */
-  maxCashoutAllowed?: Maybe<Scalars['Float']>
+  maxCashoutAllowed?: Maybe<Scalars['BigInt']>
   /** Minimum amount of channel reward cashout allowed at a time */
-  minCashoutAllowed?: Maybe<Scalars['Float']>
+  minCashoutAllowed?: Maybe<Scalars['BigInt']>
   /** The hash of the channel payout payload file */
   payloadHash?: Maybe<Scalars['String']>
+}
+
+export type UpdateGlobalNftLimitProposalDetails = {
+  __typename: 'UpdateGlobalNftLimitProposalDetails'
+  /** New daily NFT limit set in the proposal (if any) */
+  newDailyNftLimit?: Maybe<Scalars['Int']>
+  /** New weekly NFT limit set in the proposal (if any) */
+  newWeeklyNftLimit?: Maybe<Scalars['Int']>
+}
+
+export type UpdatePalletFrozenStatusProposalDetails = {
+  __typename: 'UpdatePalletFrozenStatusProposalDetails'
+  /** New frozen status for pallet */
+  frozen: Scalars['Boolean']
+  /** The pallet to update frozen status on */
+  pallet: Scalars['String']
 }
 
 export type UpdateWorkingGroupBudgetProposalDetails = {
   __typename: 'UpdateWorkingGroupBudgetProposalDetails'
   /** Amount to increase / decrease the working group budget by (will be decudted from / appended to council budget accordingly) */
-  amount: Scalars['Float']
+  amount: Scalars['BigInt']
   /** Related working group */
   group?: Maybe<WorkingGroup>
 }
@@ -31594,6 +32104,8 @@ export type Video = BaseGraphQlObject & {
   duration?: Maybe<Scalars['Int']>
   englishauctionsettledeventvideo?: Maybe<Array<EnglishAuctionSettledEvent>>
   englishauctionstartedeventvideo?: Maybe<Array<EnglishAuctionStartedEvent>>
+  entryApp?: Maybe<App>
+  entryAppId?: Maybe<Scalars['String']>
   /** Whether or not Video contains marketing */
   hasMarketing?: Maybe<Scalars['Boolean']>
   id: Scalars['ID']
@@ -31603,12 +32115,12 @@ export type Video = BaseGraphQlObject & {
   isCommentSectionEnabled: Scalars['Boolean']
   /** Whether the Video contains explicit material. */
   isExplicit?: Maybe<Scalars['Boolean']>
-  /** Is video featured or not */
-  isFeatured: Scalars['Boolean']
   /** Whether the Video is supposed to be publically displayed */
   isPublic?: Maybe<Scalars['Boolean']>
   /** Is reactions feature enabled on video (true if enabled i.e. video can be reacted) */
   isReactionFeatureEnabled: Scalars['Boolean']
+  /** Whether the video is a short format, vertical video (e.g. Youtube Shorts, TikTok, Instagram Reels) */
+  isShort?: Maybe<Scalars['Boolean']>
   language?: Maybe<Language>
   languageId?: Maybe<Scalars['String']>
   license?: Maybe<License>
@@ -31647,6 +32159,8 @@ export type Video = BaseGraphQlObject & {
   videoStateBloatBond: Scalars['BigInt']
   videoreactedeventvideo?: Maybe<Array<VideoReactedEvent>>
   videoreactionspreferenceeventvideo?: Maybe<Array<VideoReactionsPreferenceEvent>>
+  /** Video ID coming from YPP */
+  ytVideoId?: Maybe<Scalars['String']>
 }
 
 export type VideoAssetsDeletedByModeratorEvent = BaseGraphQlObject & {
@@ -31975,13 +32489,14 @@ export type VideoCreateInput = {
   createdInBlock: Scalars['Float']
   description?: InputMaybe<Scalars['String']>
   duration?: InputMaybe<Scalars['Float']>
+  entryApp?: InputMaybe<Scalars['ID']>
   hasMarketing?: InputMaybe<Scalars['Boolean']>
   isCensored: Scalars['Boolean']
   isCommentSectionEnabled: Scalars['Boolean']
   isExplicit?: InputMaybe<Scalars['Boolean']>
-  isFeatured: Scalars['Boolean']
   isPublic?: InputMaybe<Scalars['Boolean']>
   isReactionFeatureEnabled: Scalars['Boolean']
+  isShort?: InputMaybe<Scalars['Boolean']>
   language?: InputMaybe<Scalars['ID']>
   license?: InputMaybe<Scalars['ID']>
   media?: InputMaybe<Scalars['ID']>
@@ -31992,6 +32507,7 @@ export type VideoCreateInput = {
   thumbnailPhoto?: InputMaybe<Scalars['ID']>
   title?: InputMaybe<Scalars['String']>
   videoStateBloatBond: Scalars['String']
+  ytVideoId?: InputMaybe<Scalars['String']>
 }
 
 export type VideoDeletedByModeratorEvent = BaseGraphQlObject & {
@@ -32537,6 +33053,8 @@ export enum VideoOrderByInput {
   DescriptionDesc = 'description_DESC',
   DurationAsc = 'duration_ASC',
   DurationDesc = 'duration_DESC',
+  EntryAppAsc = 'entryApp_ASC',
+  EntryAppDesc = 'entryApp_DESC',
   HasMarketingAsc = 'hasMarketing_ASC',
   HasMarketingDesc = 'hasMarketing_DESC',
   IsCensoredAsc = 'isCensored_ASC',
@@ -32545,12 +33063,12 @@ export enum VideoOrderByInput {
   IsCommentSectionEnabledDesc = 'isCommentSectionEnabled_DESC',
   IsExplicitAsc = 'isExplicit_ASC',
   IsExplicitDesc = 'isExplicit_DESC',
-  IsFeaturedAsc = 'isFeatured_ASC',
-  IsFeaturedDesc = 'isFeatured_DESC',
   IsPublicAsc = 'isPublic_ASC',
   IsPublicDesc = 'isPublic_DESC',
   IsReactionFeatureEnabledAsc = 'isReactionFeatureEnabled_ASC',
   IsReactionFeatureEnabledDesc = 'isReactionFeatureEnabled_DESC',
+  IsShortAsc = 'isShort_ASC',
+  IsShortDesc = 'isShort_DESC',
   LanguageAsc = 'language_ASC',
   LanguageDesc = 'language_DESC',
   LicenseAsc = 'license_ASC',
@@ -32573,6 +33091,8 @@ export enum VideoOrderByInput {
   UpdatedAtDesc = 'updatedAt_DESC',
   VideoStateBloatBondAsc = 'videoStateBloatBond_ASC',
   VideoStateBloatBondDesc = 'videoStateBloatBond_DESC',
+  YtVideoIdAsc = 'ytVideoId_ASC',
+  YtVideoIdDesc = 'ytVideoId_DESC',
 }
 
 export type VideoReactedEvent = BaseGraphQlObject &
@@ -33195,13 +33715,14 @@ export type VideoUpdateInput = {
   createdInBlock?: InputMaybe<Scalars['Float']>
   description?: InputMaybe<Scalars['String']>
   duration?: InputMaybe<Scalars['Float']>
+  entryApp?: InputMaybe<Scalars['ID']>
   hasMarketing?: InputMaybe<Scalars['Boolean']>
   isCensored?: InputMaybe<Scalars['Boolean']>
   isCommentSectionEnabled?: InputMaybe<Scalars['Boolean']>
   isExplicit?: InputMaybe<Scalars['Boolean']>
-  isFeatured?: InputMaybe<Scalars['Boolean']>
   isPublic?: InputMaybe<Scalars['Boolean']>
   isReactionFeatureEnabled?: InputMaybe<Scalars['Boolean']>
+  isShort?: InputMaybe<Scalars['Boolean']>
   language?: InputMaybe<Scalars['ID']>
   license?: InputMaybe<Scalars['ID']>
   media?: InputMaybe<Scalars['ID']>
@@ -33212,6 +33733,7 @@ export type VideoUpdateInput = {
   thumbnailPhoto?: InputMaybe<Scalars['ID']>
   title?: InputMaybe<Scalars['String']>
   videoStateBloatBond?: InputMaybe<Scalars['String']>
+  ytVideoId?: InputMaybe<Scalars['String']>
 }
 
 export type VideoVisibilitySetByModeratorEvent = BaseGraphQlObject & {
@@ -33462,6 +33984,7 @@ export type VideoWhereInput = {
   englishauctionstartedeventvideo_every?: InputMaybe<EnglishAuctionStartedEventWhereInput>
   englishauctionstartedeventvideo_none?: InputMaybe<EnglishAuctionStartedEventWhereInput>
   englishauctionstartedeventvideo_some?: InputMaybe<EnglishAuctionStartedEventWhereInput>
+  entryApp?: InputMaybe<AppWhereInput>
   hasMarketing_eq?: InputMaybe<Scalars['Boolean']>
   hasMarketing_in?: InputMaybe<Array<Scalars['Boolean']>>
   id_eq?: InputMaybe<Scalars['ID']>
@@ -33472,12 +33995,12 @@ export type VideoWhereInput = {
   isCommentSectionEnabled_in?: InputMaybe<Array<Scalars['Boolean']>>
   isExplicit_eq?: InputMaybe<Scalars['Boolean']>
   isExplicit_in?: InputMaybe<Array<Scalars['Boolean']>>
-  isFeatured_eq?: InputMaybe<Scalars['Boolean']>
-  isFeatured_in?: InputMaybe<Array<Scalars['Boolean']>>
   isPublic_eq?: InputMaybe<Scalars['Boolean']>
   isPublic_in?: InputMaybe<Array<Scalars['Boolean']>>
   isReactionFeatureEnabled_eq?: InputMaybe<Scalars['Boolean']>
   isReactionFeatureEnabled_in?: InputMaybe<Array<Scalars['Boolean']>>
+  isShort_eq?: InputMaybe<Scalars['Boolean']>
+  isShort_in?: InputMaybe<Array<Scalars['Boolean']>>
   language?: InputMaybe<LanguageWhereInput>
   license?: InputMaybe<LicenseWhereInput>
   media?: InputMaybe<StorageDataObjectWhereInput>
@@ -33556,6 +34079,11 @@ export type VideoWhereInput = {
   videoreactionspreferenceeventvideo_every?: InputMaybe<VideoReactionsPreferenceEventWhereInput>
   videoreactionspreferenceeventvideo_none?: InputMaybe<VideoReactionsPreferenceEventWhereInput>
   videoreactionspreferenceeventvideo_some?: InputMaybe<VideoReactionsPreferenceEventWhereInput>
+  ytVideoId_contains?: InputMaybe<Scalars['String']>
+  ytVideoId_endsWith?: InputMaybe<Scalars['String']>
+  ytVideoId_eq?: InputMaybe<Scalars['String']>
+  ytVideoId_in?: InputMaybe<Array<Scalars['String']>>
+  ytVideoId_startsWith?: InputMaybe<Scalars['String']>
 }
 
 export type VideoWhereUniqueInput = {
@@ -35681,6 +36209,7 @@ export type WorkingGroup = BaseGraphQlObject & {
   appliedonopeningeventgroup?: Maybe<Array<AppliedOnOpeningEvent>>
   /** Current working group budget (JOY) */
   budget: Scalars['BigInt']
+  budgetfundedeventgroup?: Maybe<Array<BudgetFundedEvent>>
   budgetseteventgroup?: Maybe<Array<BudgetSetEvent>>
   budgetspendingeventgroup?: Maybe<Array<BudgetSpendingEvent>>
   budgetupdatedeventgroup?: Maybe<Array<BudgetUpdatedEvent>>
@@ -36439,6 +36968,9 @@ export type WorkingGroupWhereInput = {
   budget_in?: InputMaybe<Array<Scalars['BigInt']>>
   budget_lt?: InputMaybe<Scalars['BigInt']>
   budget_lte?: InputMaybe<Scalars['BigInt']>
+  budgetfundedeventgroup_every?: InputMaybe<BudgetFundedEventWhereInput>
+  budgetfundedeventgroup_none?: InputMaybe<BudgetFundedEventWhereInput>
+  budgetfundedeventgroup_some?: InputMaybe<BudgetFundedEventWhereInput>
   budgetseteventgroup_every?: InputMaybe<BudgetSetEventWhereInput>
   budgetseteventgroup_none?: InputMaybe<BudgetSetEventWhereInput>
   budgetseteventgroup_some?: InputMaybe<BudgetSetEventWhereInput>

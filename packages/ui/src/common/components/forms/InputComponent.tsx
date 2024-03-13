@@ -484,7 +484,7 @@ export const InputNotification = styled.div<InputProps>`
   }};
 `
 
-const InputNotificationIcon = styled.div`
+export const InputNotificationIcon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;

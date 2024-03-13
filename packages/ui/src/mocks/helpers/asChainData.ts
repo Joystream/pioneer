@@ -43,6 +43,9 @@ export const asChainData = mockApiMethods((data: any): any => {
       if (isAddress(data)) return createType('AccountId', data)
       return createType('Text', data)
 
+    case 'Boolean':
+      return createType('bool', data)
+
     default:
       return data
   }
