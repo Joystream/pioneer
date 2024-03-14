@@ -132,7 +132,6 @@ export default {
             council: {
               budget: joy(1000),
               councilorReward: joy(1),
-              stage: { stage: { isIdle: true }, changedAt: 123 },
             },
             referendum: { stage: {} },
           },

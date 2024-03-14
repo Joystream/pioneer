@@ -23,9 +23,6 @@ export default {
         accounts: { list: allAccounts },
         chain: {
           query: {
-            council: {
-              stage: { stage: { isIdle: true }, changedAt: 123 },
-            },
             referendum: {
               accountsOptedOut: {
                 keys: Array.from({ length: 23 }).map(
