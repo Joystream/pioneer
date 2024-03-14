@@ -7,6 +7,7 @@ import { createGlobalStyle } from 'styled-components'
 
 import { GlobalModals } from '../src/app/GlobalModals'
 import { GlobalStyle } from '../src/app/providers/GlobalStyle'
+import { ResponsiveProvider } from '../src/common/providers/responsive/provider'
 import { OnBoardingProvider } from '../src/common/providers/onboarding/provider'
 import { NotificationsHolder } from '../src/common/components/page/SideNotification'
 import { TransactionStatus } from '../src/common/components/TransactionStatus/TransactionStatus'
@@ -53,16 +54,18 @@ const RHFDecorator: Decorator = (Story) => {
   )
 }
 
-const ModalDecorator: Decorator = (Story) => (
+const Providers: Decorator = (Story) => (
   <TransactionStatusProvider>
     <ModalContextProvider>
       <OnBoardingProvider>
         <ValidatorContextProvider>
-          <Story />
-          <GlobalModals />
-          <NotificationsHolder>
-            <TransactionStatus />
-          </NotificationsHolder>
+          <ResponsiveProvider>
+            <Story />
+            <GlobalModals />
+            <NotificationsHolder>
+              <TransactionStatus />
+            </NotificationsHolder>
+          </ResponsiveProvider>
         </ValidatorContextProvider>
       </OnBoardingProvider>
     </ModalContextProvider>
@@ -85,7 +88,7 @@ const KeyringDecorator: Decorator = (Story) => {
 }
 
 export const decorators = [
-  ModalDecorator,
+  Providers,
   stylesWrapperDecorator,
   i18nextDecorator,
   RHFDecorator,
