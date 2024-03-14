@@ -123,8 +123,6 @@ export default {
           : {
               query: {
                 members: { membershipPrice: joy(20) },
-                council: { stage: { stage: { isIdle: true }, changedAt: 123 } },
-                referendum: { stage: {} },
                 staking: {
                   validators: {
                     entries: Object.entries(validators).map(([address, { commission }]) => [
