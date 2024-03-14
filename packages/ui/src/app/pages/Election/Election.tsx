@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import React from 'react'
 import styled from 'styled-components'
 
 import { PageHeaderWithButtons, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
+import { EmptyPagePlaceholder } from '@/common/components/EmptyPagePlaceholder/EmptyPagePlaceholder'
 import { LinkIcon } from '@/common/components/icons'
 import { Loading } from '@/common/components/Loading'
 import { MainPanel } from '@/common/components/page/PageContent'
@@ -24,7 +24,7 @@ import { ElectionRoutes } from '@/council/constants'
 import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidatePreviewViaUrlParameter'
 import { useCurrentElection } from '@/council/hooks/useCurrentElection'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
-import { Election as ElectionType } from '@/council/types/Election'
+import { ElectionStage, Election as ElectionType } from '@/council/types/Election'
 
 import { ElectionProgressBar } from './components/ElectionProgressBar'
 import { ElectionTabs } from './components/ElectionTabs'
@@ -42,7 +42,6 @@ export const Election = () => {
   const { isLoading: isLoadingElection, election } = useCurrentElection()
 
   const { isLoading: isLoadingElectionStage, stage: electionStage } = useElectionStage()
-  const history = useHistory()
   useCandidatePreviewViaUrlParameter()
 
   useRefetchQueries({ after: electionStage === 'announcing' }, [electionStage])
@@ -50,12 +49,6 @@ export const Election = () => {
     { when: electionStage === 'announcing', interval: MILLISECONDS_PER_BLOCK, include: ['GetCurrentElection'] },
     [electionStage]
   )
-
-  useEffect(() => {
-    if (!isLoadingElectionStage && electionStage === 'inactive') {
-      history.replace(ElectionRoutes.pastElections)
-    }
-  }, [electionStage])
 
   if (isLoadingElectionStage) {
     return <PageLayout header={null} main={<Loading />} />
@@ -88,21 +81,26 @@ export const Election = () => {
 
   const main = (
     <MainPanel>
-      <StyledStatistics size={size}>
-        <StatisticItem
-          title="Round"
-          tooltipText="Elections are held in consecutive rounds. This is the number of current election."
-        >
-          <TextHuge id="election-round-value" bold>
-            {displayElectionRound(election)}
-          </TextHuge>
-        </StatisticItem>
+      <StyledStatistics size={size} stage={electionStage}>
+        {electionStage !== 'inactive' && (
+          <StatisticItem
+            title="Round"
+            tooltipText="Elections are held in consecutive rounds. This is the number of current election."
+          >
+            <TextHuge id="election-round-value" bold>
+              {displayElectionRound(election)}
+            </TextHuge>
+          </StatisticItem>
+        )}
         <ElectionProgressBar
           electionStage={electionStage}
           title="Election Progress"
           tooltipText="Elections occur periodically. Each has a sequence of stages referred to as the election cycle. Stages are: announcing period, voting period and revealing period."
         />
       </StyledStatistics>
+      {electionStage === 'inactive' && (
+        <EmptyPagePlaceholder title="There are no ongoing elections" copy="" button={null} />
+      )}
       {electionStage === 'announcing' && (
         <AnnouncingStage election={election} isLoading={!isRefetched && isLoadingElection} />
       )}
@@ -114,11 +112,7 @@ export const Election = () => {
   return <PageLayout header={header} main={main} />
 }
 
-const StyledStatistics = styled(Statistics)<{ size: string }>`
-  grid-template-columns: ${({ size }) =>
-    size === 'xxs'
-      ? 'repeat(auto-fit, minmax(238px, 1fr))'
-      : size === 'xs'
-      ? 'repeat(auto-fit, minmax(400px, 1fr))'
-      : '200px minmax(400px, 1fr)'};
+const StyledStatistics = styled(Statistics)<{ size: string; stage: ElectionStage }>`
+  grid-template-columns: ${({ size, stage }) =>
+    stage === 'inactive' || size === 'xxs' || size === 'xs' ? '1fr' : '200px 1fr'};
 `
