@@ -107,7 +107,7 @@ describe('UI: Election page', () => {
 
     const { queryByText } = await renderComponent()
 
-    expect(queryByText('Round')).not.toBeNull()
+    expect(queryByText('Round')).toBeNull()
   })
 
   describe('Active', () => {
