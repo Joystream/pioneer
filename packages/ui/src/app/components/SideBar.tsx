@@ -36,7 +36,6 @@ import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { useResponsive } from '@/common/hooks/useResponsive'
 import { useToggle } from '@/common/hooks/useToggle'
 import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
-import { useElectionStage } from '@/council/hooks/useElectionStage'
 import { ForumRoutes } from '@/forum/constant'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
@@ -67,10 +66,9 @@ export const SideBarContent = () => {
   const { wallet } = useMyAccounts()
   const { isMobileWallet } = useResponsive()
   const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)
-  const { stage: electionStage } = useElectionStage()
   const [endpoints] = useNetworkEndpoints()
 
-  const electionLink = electionStage === 'inactive' ? ElectionRoutes.pastElections : ElectionRoutes.currentElection
+  const electionLink = ElectionRoutes.currentElection
 
   return (
     <>

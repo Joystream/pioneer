@@ -46,7 +46,7 @@ export const Council = () => {
     <MainPanel>
       <StatisticsStyle>
         {electionStage === 'inactive' ? (
-          <BlockDurationStatistics title="Normal period remaining length" value={idlePeriodRemaining} />
+          <BlockDurationStatistics title="Idle stage remaining length" value={idlePeriodRemaining} />
         ) : (
           <ViewElectionButton />
         )}

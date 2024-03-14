@@ -8,7 +8,7 @@ import { MocksParameters } from '@/mocks/providers'
 import { Election } from './Election'
 
 type Args = {
-  electionStage: 'announcing' | 'revealing' | 'voting' | 'inactive'
+  electionStage: 'inactive' | 'announcing' | 'revealing' | 'voting'
   remainingPeriod: number
 }
 
@@ -152,6 +152,9 @@ export default {
   },
 } satisfies Meta<Args>
 
+export const Idle: Story = {
+  args: { electionStage: 'inactive' },
+}
 export const Announcing: Story = {
   args: { electionStage: 'announcing' },
 }
