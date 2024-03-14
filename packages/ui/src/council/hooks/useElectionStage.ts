@@ -26,9 +26,9 @@ export const useElectionStage = (): UseElectionStage => {
 export const electionStageObservable = (api: Api) => {
   const councilObservable = api.query.council.stage().pipe(
     concatMap(({ stage: councilStage, changedAt }): Observable<StageInfo> => {
-      if (councilStage.isIdle.valueOf()) {
+      if (councilStage.isIdle) {
         return of({ stage: 'inactive', changedAt })
-      } else if (councilStage.isAnnouncing.valueOf()) {
+      } else if (councilStage.isAnnouncing) {
         return of({ stage: 'announcing', changedAt })
       }
       return EMPTY
@@ -36,9 +36,9 @@ export const electionStageObservable = (api: Api) => {
   )
   const referendumObservable = api.query.referendum.stage().pipe(
     concatMap((referendumStage): Observable<StageInfo> => {
-      if (referendumStage.isVoting.valueOf()) {
+      if (referendumStage.isVoting) {
         return of({ stage: 'voting', changedAt: referendumStage.asVoting.started })
-      } else if (referendumStage.isRevealing.valueOf()) {
+      } else if (referendumStage.isRevealing) {
         return of({ stage: 'revealing', changedAt: referendumStage.asRevealing.started })
       }
       return EMPTY
