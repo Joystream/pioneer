@@ -171,7 +171,7 @@ describe('UI: TransferModal', () => {
         stubTransactionSuccess(transfer, 'balances', 'Transfer', [
           createType('AccountId', alice.address),
           createType('AccountId', bob.address),
-          createType('Balance', 50),
+          createType('u128', 50),
         ])
       })
 

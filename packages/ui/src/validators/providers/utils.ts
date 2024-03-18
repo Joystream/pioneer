@@ -1,5 +1,3 @@
-import { Vec } from '@polkadot/types'
-import { AccountId } from '@polkadot/types/interfaces'
 import { map, Observable, of, OperatorFunction, ReplaySubject, share, switchMap } from 'rxjs'
 
 import { Api } from '@/api'
@@ -31,11 +29,6 @@ export const getValidatorsFilters = ({
         of(isMatch(membership?.handle) || isMatch(stashAccount) || isMatch(controllerAccount))),
   ]
 }
-
-export const filterValidatorsByIsActive = (validators: ValidatorWithDetails[], isActive: boolean) =>
-  map((activeValidators: Vec<AccountId>) =>
-    validators.filter(({ stashAccount }) => activeValidators.includes(stashAccount) === isActive)
-  )
 
 export const getValidatorSortingFns = (
   key: ValidatorDetailsOrder['key']
