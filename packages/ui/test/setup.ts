@@ -181,4 +181,6 @@ expect.extend({
 global.TextEncoder = TextEncoder
 global.TextDecoder = TextDecoder as any
 
-;(global as any).Buffer = Buffer
+const glob: any = global
+
+glob.Buffer = Buffer
