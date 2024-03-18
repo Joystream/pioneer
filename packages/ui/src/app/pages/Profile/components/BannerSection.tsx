@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import { CurrencyName } from '@/app/constants/currency'
 import { CloseButton } from '@/common/components/buttons'
-import { LinkButtonLinkStyles } from '@/common/components/buttons/LinkButtons'
 import { Arrow, QuestionIcon } from '@/common/components/icons'
+import { Link } from '@/common/components/Link'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { DefaultTooltip } from '@/common/components/Tooltip'
 import { TextInlineMedium, TextMedium } from '@/common/components/typography/Text'
@@ -21,26 +22,20 @@ export const BannerSection = ({ setShouldDismissBanner }: Props) => {
           <BannerTooltip>
             <QuestionIcon />
           </BannerTooltip>
-          <TextInlineMedium bold={true}>What is Joy Token?</TextInlineMedium>
+          <TextInlineMedium bold={true}>What is the {CurrencyName.integerValue} Token?</TextInlineMedium>
         </BannerTitle>
         <CloseButton onClick={() => setShouldDismissBanner(true)} />
       </BannerHeader>
       <TextMedium>
-        JOY token is a native crypto asset of Joystream blockchain. It is used for platform governance, purchasing NFTs,
-        trading creator tokens, and covering blockchain processing fees. They are listed on&nbsp;
-        <CustomLinkStyle
-          as={'a'}
-          to={''}
-          href="https://www.mexc.com/exchange/JOYSTREAM_USDT?_from=market"
-          target="_blank"
-          size={'medium'}
-        >
-          <TextInlineMedium>MEXC</TextInlineMedium>
-        </CustomLinkStyle>
-        &nbsp;exchange under "JOYSTREAM" ticker.
+        The {CurrencyName.integerValue} token is the native crypto asset of the Joystream blockchain. It is used for
+        platform governance, purchasing NFTs, trading creator tokens, and covering the&nbsp;blockchain processing fees.{' '}
+        <StyledLink dark href="https://www.joystream.org/token/#exchanges">
+          This token is listed on several exchanges.
+        </StyledLink>
       </TextMedium>
       <TextLink href="https://www.joystream.org/token#earn" target="_blank">
-        <TextInlineMedium bold={true}>Learn how to earn JOY's</TextInlineMedium> <Arrow size={'24'} direction="right" />
+        <TextInlineMedium bold={true}>Learn how to earn {CurrencyName.integerValue}s</TextInlineMedium>{' '}
+        <Arrow size={'24'} direction="right" />
       </TextLink>
     </Banner>
   )
@@ -71,8 +66,6 @@ const TextLink = styled.a`
 const BannerTooltip = styled(DefaultTooltip)`
   margin-top: 1px;
 `
-const CustomLinkStyle = styled(LinkButtonLinkStyles)`
-  display: inline-flex;
-  // margin-left: 2px;
-  // margin-right: 2px;
+const StyledLink = styled(Link)`
+  font-family: inherit;
 `
