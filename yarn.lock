@@ -4788,20 +4788,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@joystream/js@npm:latest":
-  version: 1.11.0
-  resolution: "@joystream/js@npm:1.11.0"
+"@joystream/js@npm:1.10.0":
+  version: 1.10.0
+  resolution: "@joystream/js@npm:1.10.0"
   dependencies:
     "@joystream/metadata-protobuf": ^2.15.0
-    "@joystream/types": ^4.4.0
-    "@polkadot/util-crypto": ^12.6.2
+    "@joystream/types": ^4.0.0
+    "@polkadot/util-crypto": 11.1.1
     axios: ^1.2.1
     buffer: ^6.0.3
     lodash: ^4.17.21
     long: ^5.2.1
     merkletreejs: ^0.3.9
     protobufjs: ^6.11.3
-  checksum: f731368bb10820a5b9506d7dffc8b9689b1a83e886d54454b43553714672f14a00ed4fe403b0e37faf1bef17ac79f1f2aad1f563ffcdda7a1241774885358a46
+  checksum: 87c995817e5aa08d89e0c39e47eed9a750ec75239007b9a2413d1f0dfdc83531e8d91e330d1d43464a78e9e556b5d51864944ccc70755e966f952f30343e2df8
   languageName: node
   linkType: hard
 
@@ -4843,7 +4843,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joystream/metadata-protobuf@npm:^2.15.0, @joystream/metadata-protobuf@npm:latest":
+"@joystream/metadata-protobuf@npm:2.15.0, @joystream/metadata-protobuf@npm:^2.15.0":
   version: 2.15.0
   resolution: "@joystream/metadata-protobuf@npm:2.15.0"
   dependencies:
@@ -4875,9 +4875,9 @@ __metadata:
     "@graphql-codegen/typescript-react-apollo": ^3.1.4
     "@hcaptcha/react-hcaptcha": ^1.4.4
     "@jest/types": ^27.2.5
-    "@joystream/js": latest
+    "@joystream/js": 1.10.0
     "@joystream/markdown-editor": ^0.1.0
-    "@joystream/metadata-protobuf": latest
+    "@joystream/metadata-protobuf": 2.15.0
     "@joystream/types": 4.3.0
     "@miragejs/graphql": ^0.1.13
     "@nivo/bar": ^0.79.1
@@ -5009,37 +5009,6 @@ __metadata:
     lodash: ^4.17.15
     moment: ^2.24.0
   checksum: f79cf15b189fdedf301799797ea635f5a547fdf193fb04fcc3e444af510a498bc17af7b0f1485bcbd1bb72dcc19e52387b41ea736c216222da7107adc1c9a07b
-  languageName: node
-  linkType: hard
-
-"@joystream/types@npm:^2.0.0":
-  version: 2.2.0
-  resolution: "@joystream/types@npm:2.2.0"
-  dependencies:
-    "@polkadot/api": 8.9.1
-    "@polkadot/keyring": 9.5.1
-    "@polkadot/types": 8.9.1
-    "@types/lodash": ^4.14.157
-    "@types/vfile": ^4.0.0
-    ajv: ^6.11.0
-    lodash: ^4.17.15
-    moment: ^2.24.0
-  checksum: f2713ceeecb6afa6761fda15334971390bacd40297407fced606b2d92b18dcd0c22f641912d9cc78af049884a8a16d854d729ef642b36f47fc9d1a11054d615c
-  languageName: node
-  linkType: hard
-
-"@joystream/types@npm:^4.4.0":
-  version: 4.4.0
-  resolution: "@joystream/types@npm:4.4.0"
-  dependencies:
-    "@polkadot/api": 10.7.1
-    "@polkadot/keyring": ^12.6.2
-    "@polkadot/types": 10.7.1
-    "@types/lodash": ^4.14.157
-    "@types/vfile": ^4.0.0
-    lodash: ^4.17.15
-    moment: ^2.24.0
-  checksum: 6c81dbef3bf70a6f1fa5fc884195e5d7da07abf13af6de427b587e05d46dc4c2d0716d7932b073425117442eb7929b12503b40d885e127ccdf9aff8074501e0c
   languageName: node
   linkType: hard
 
@@ -11553,7 +11522,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:^6.1.0, ajv@npm:^6.10.0, ajv@npm:^6.11.0, ajv@npm:^6.12.4, ajv@npm:^6.12.5":
+"ajv@npm:^6.1.0, ajv@npm:^6.10.0, ajv@npm:^6.12.4, ajv@npm:^6.12.5":
   version: 6.12.6
   resolution: "ajv@npm:6.12.6"
   dependencies:
