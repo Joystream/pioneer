@@ -2,6 +2,7 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 
 import { CountBadge, CountBadgeComponent } from '@/common/components/CountBadge'
+import { FacebookIcon, TwitterIcon, YoutubeIcon, TelegramIcon, LinkedinIcon } from '@/common/components/icons/socials'
 import { LinkSymbol } from '@/common/components/icons/symbols'
 import {
   DarkTooltipInnerItemProps,
@@ -24,6 +25,8 @@ export interface MemberRolesProps {
   size?: 'l' | 'm'
   roles: MemberRole[]
   wrapable?: boolean
+  memberDetails?: any
+  isOnDark?: boolean
 }
 
 export const rolesToMap = (roles: MemberRole[]): Map<string, MemberRole[]> => {
@@ -43,7 +46,7 @@ export const rolesToMap = (roles: MemberRole[]): Map<string, MemberRole[]> => {
   return mapRoles
 }
 
-export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) => {
+export const MemberRoles = ({ size, max, wrapable, roles, isOnDark, memberDetails }: MemberRolesProps) => {
   if (!roles || !roles.length) {
     roles = []
   }
@@ -92,6 +95,55 @@ export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) =>
               </Tooltip>
             )
           )}
+          {memberDetails?.externalResources &&
+            memberDetails?.externalResources.map((item: any, key: number) => {
+              switch (item.source) {
+                case 'TELEGRAM':
+                  return (
+                    <Tooltip key={key} tooltipText={`${item.source}: ${item.value}`}>
+                      <SocialLink isOnDark={isOnDark}>
+                        <TelegramIcon />
+                        {item.key}
+                      </SocialLink>
+                    </Tooltip>
+                  )
+
+                case 'TWITTER':
+                  return (
+                    <Tooltip key={key} tooltipText={`${item.source}: ${item.value}`}>
+                      <SocialLink isOnDark={isOnDark}>
+                        <TwitterIcon />
+                      </SocialLink>
+                    </Tooltip>
+                  )
+                case 'LINKEDIN':
+                  return (
+                    <Tooltip key={key} tooltipText={`${item.source}: ${item.value}`}>
+                      <SocialLink isOnDark={isOnDark}>
+                        <LinkedinIcon />
+                      </SocialLink>
+                    </Tooltip>
+                  )
+                case 'YOUTUBE':
+                  return (
+                    <Tooltip key={key} tooltipText={`${item.source}: ${item.value}`}>
+                      <SocialLink isOnDark={isOnDark}>
+                        <YoutubeIcon />
+                      </SocialLink>
+                    </Tooltip>
+                  )
+                case 'FACEBOOK':
+                  return (
+                    <Tooltip key={key} tooltipText={`${item.source}: ${item.value}`}>
+                      <SocialLink isOnDark={isOnDark}>
+                        <FacebookIcon />
+                      </SocialLink>
+                    </Tooltip>
+                  )
+                default:
+                  break
+              }
+            })}
           {hiddenRoles > 0 && (
             <Tooltip
               key="hidden"
@@ -181,6 +233,33 @@ export const MemberRoleHelp = styled(DefaultTooltip)<MemberRoleTooltipProps & Da
   }
 `
 
+export const SocialLink = styled(DefaultTooltip)<MemberRoleTooltipProps & DarkTooltipInnerItemProps>`
+  width: ${({ size }) => (size === 'l' ? '24px' : '16px')};
+  height: ${({ size }) => (size === 'l' ? '24px' : '16px')};
+  font-size: ${({ size }) => (size === 'l' ? '10px' : '6px')};
+  line-height: 1;
+  font-family: ${Fonts.Inter};
+  font-weight: 700;
+  ${({ isOnDark }) =>
+    isOnDark
+      ? css`
+          color: ${Colors.Black[300]};
+          background-color: ${Colors.Black[600]};
+          border-color: ${Colors.Black[600]};
+        `
+      : css`
+          color: ${Colors.Black[600]};
+          background-color: ${Colors.Black[100]};
+          border-color: ${Colors.Black[100]};
+        `};
+
+  ${TooltipComponent}:hover > &,
+  ${TooltipComponent}:focus > & {
+    color: ${Colors.White} !important;
+    background-color: ${Colors.Blue[500]} !important;
+    border-color: ${Colors.Blue[500]} !important;
+  }
+`
 export const MemberRoleHelpGroupItem = styled(MemberRoleHelp)<MemberRoleTooltipProps & DarkTooltipInnerItemProps>`
   width: fit-content;
   min-width: ${({ size }) => (size === 'l' ? '24px' : '16px')};
