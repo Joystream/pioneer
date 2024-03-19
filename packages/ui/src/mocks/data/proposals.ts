@@ -245,7 +245,6 @@ export const proposalsPagesChain = (
           budget: councilBudget,
           councilorReward,
           nextRewardPayments,
-          stage: { stage: { isIdle: true }, changedAt: 123 },
         },
         referendum: { stage: {} },
 

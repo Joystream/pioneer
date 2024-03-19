@@ -4,6 +4,7 @@ import { BN_THOUSAND } from '@polkadot/util'
 import '@testing-library/jest-dom'
 import { configure, screen } from '@testing-library/react'
 import BN from 'bn.js'
+import { Buffer } from 'buffer/'
 
 import { UseTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
@@ -179,3 +180,7 @@ expect.extend({
 // multihases requires both TextEncoder and TextDecoder but is having trouble with resoving them
 global.TextEncoder = TextEncoder
 global.TextDecoder = TextDecoder as any
+
+const glob: any = global
+
+glob.Buffer = Buffer

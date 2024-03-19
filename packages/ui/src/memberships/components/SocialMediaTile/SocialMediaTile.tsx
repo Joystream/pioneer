@@ -15,16 +15,16 @@ import {
   YoutubeIcon,
   TelegramIcon,
   LinkedinIcon,
+  GithubIcon,
 } from '@/common/components/icons/socials'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { capitalizeFirstLetter } from '@/common/helpers'
 
-// TODO remove 'GITHUB' and Partial after upgrading @joystream/metadata-protobuf
-export type Socials = keyof typeof MembershipMetadata.ExternalResource.ResourceType | 'GITHUB'
+export type Socials = keyof typeof MembershipMetadata.ExternalResource.ResourceType
 
-export const socialToIcon: Partial<Record<Socials, React.ReactElement>> = {
+export const socialToIcon: Record<Socials, React.ReactElement> = {
   EMAIL: <EmailIcon />,
   TWITTER: <TwitterIcon />,
   TELEGRAM: <TelegramIcon />,
@@ -37,6 +37,7 @@ export const socialToIcon: Partial<Record<Socials, React.ReactElement>> = {
   WHATSAPP: <WhatsappIcon />,
   HYPERLINK: <CustomLinkIcon />,
   LINKEDIN: <LinkedinIcon />,
+  GITHUB: <GithubIcon />,
 }
 
 export const socialMediaList = Object.keys(socialToIcon) as (keyof typeof socialToIcon)[]
