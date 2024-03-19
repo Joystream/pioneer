@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.4.0] - 2024-03-19
+
+### Fixed
+- Validator APR not showing.
+
+### Added
+- Github member links.
+
+### Changed
+- JOY token banner copy.
+
 ## [3.3.1] - 2024-03-14
 
 ### Added
@@ -152,7 +163,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.9.0] - 2023-11-03
 
 ### Added
-- Linkedin to membership social profile
+- Linkedin to membership social profile.
 
 ### Fixed
 - Proposal history blocks styles.
@@ -357,7 +368,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v3.3.0...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v3.4.0...HEAD
+[3.4.0]: https://github.com/Joystream/pioneer/compare/v3.3.1...v3.4.0
 [3.3.1]: https://github.com/Joystream/pioneer/compare/v3.3.0...v3.3.1
 [3.3.0]: https://github.com/Joystream/pioneer/compare/v3.2.0...v3.3.0
 [3.2.0]: https://github.com/Joystream/pioneer/compare/v3.1.0...v3.2.0
