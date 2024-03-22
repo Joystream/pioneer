@@ -75,6 +75,7 @@ export const AddNewProposalModal = () => {
     () => api?.query?.projectToken?.palletFrozen(),
     [api?.isConnected]
   )?.isTrue
+  const councilBudget = useFirstObservableValue(() => api?.query.council.budget(), [api?.isConnected])
   const currentBlock = useCurrentBlockNumber()
   const { hideModal, showModal } = useModal<AddNewProposalModalCall>()
   const [state, send, service] = useMachine(addNewProposalMachine)
@@ -102,6 +103,7 @@ export const AddNewProposalModal = () => {
       minCashoutAllowed,
       maxCashoutAllowed,
       palletFrozenStatus,
+      councilBudget,
       leaderOpeningStake: workingGroupConsts?.leaderOpeningStake,
       minUnstakingPeriodLimit: workingGroupConsts?.minUnstakingPeriodLimit,
       stakeLock: 'Proposals',

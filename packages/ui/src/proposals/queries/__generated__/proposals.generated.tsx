@@ -68,6 +68,7 @@ export type ProposalFieldsFragment = {
     | { __typename: 'AmendConstitutionProposalDetails' }
     | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
     | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+    | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
     | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
     | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
     | { __typename: 'FundingRequestProposalDetails' }
@@ -297,6 +298,7 @@ export type ProposalWithDetailsFieldsFragment = {
         metadata?: { __typename: 'WorkingGroupOpeningMetadata'; description?: string | null } | null
         group?: { __typename: 'WorkingGroup'; id: string; name: string } | null
       }
+    | { __typename: 'DecreaseCouncilBudgetProposalDetails'; amount: string }
     | {
         __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails'
         amount: string
@@ -897,6 +899,7 @@ export type ProposalMentionFieldsFragment = {
     | { __typename: 'AmendConstitutionProposalDetails' }
     | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
     | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+    | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
     | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
     | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
     | { __typename: 'FundingRequestProposalDetails' }
@@ -1007,6 +1010,7 @@ export type GetProposalsQuery = {
       | { __typename: 'AmendConstitutionProposalDetails' }
       | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
       | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
       | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'FundingRequestProposalDetails' }
@@ -1163,6 +1167,7 @@ export type GetProposalQuery = {
           metadata?: { __typename: 'WorkingGroupOpeningMetadata'; description?: string | null } | null
           group?: { __typename: 'WorkingGroup'; id: string; name: string } | null
         }
+      | { __typename: 'DecreaseCouncilBudgetProposalDetails'; amount: string }
       | {
           __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails'
           amount: string
@@ -1754,6 +1759,7 @@ export type GetProposalMentionQuery = {
       | { __typename: 'AmendConstitutionProposalDetails' }
       | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
       | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
       | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'FundingRequestProposalDetails' }
@@ -1869,6 +1875,7 @@ export type GetLatestProposalByMemberIdQuery = {
       | { __typename: 'AmendConstitutionProposalDetails' }
       | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
       | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
       | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'FundingRequestProposalDetails' }
@@ -2139,6 +2146,9 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       ... on UpdatePalletFrozenStatusProposalDetails {
         frozen
         pallet
+      }
+      ... on DecreaseCouncilBudgetProposalDetails {
+        amount
       }
     }
     discussionThread {

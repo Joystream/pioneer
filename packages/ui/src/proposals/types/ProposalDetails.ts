@@ -149,6 +149,8 @@ export type UpdatePalletFrozenStatusProposalDetails = ProposalDetailsNew<
   UpdatePalletFrozenStatusDetail
 >
 
+export type DecreaseCouncilBudgetDetails = ProposalDetailsNew<'decreaseCouncilBudget', AmountDetail>
+
 export type ProposalDetails =
   | BaseProposalDetails
   | FundingRequestDetails
@@ -173,6 +175,7 @@ export type ProposalDetails =
   | VetoDetails
   | UpdateChannelPayoutsDetails
   | UpdatePalletFrozenStatusProposalDetails
+  | DecreaseCouncilBudgetDetails
 
 export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
 
@@ -375,6 +378,13 @@ const asUpdatePalletFrozenStatus: DetailsCast<'UpdatePalletFrozenStatusProposalD
   pallet: fragment.pallet,
 })
 
+const asDecreaseCouncilBudget: DetailsCast<'DecreaseCouncilBudgetProposalDetails'> = (
+  fragment
+): DecreaseCouncilBudgetDetails => ({
+  type: 'decreaseCouncilBudget',
+  amount: asBN(fragment.amount),
+})
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }, extra?: ProposalExtraDetails): ProposalDetails
 }
@@ -402,6 +412,7 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   SetMembershipLeadInvitationQuotaProposalDetails: asSetMembershipLeadInvitationQuota,
   UpdateChannelPayoutsProposalDetails: asUpdateChannelPayouts,
   UpdatePalletFrozenStatusProposalDetails: asUpdatePalletFrozenStatus,
+  DecreaseCouncilBudgetProposalDetails: asDecreaseCouncilBudget,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment, extra?: ProposalExtraDetails): ProposalDetails => {

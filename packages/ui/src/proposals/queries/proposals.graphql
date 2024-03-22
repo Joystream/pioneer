@@ -194,6 +194,9 @@ fragment ProposalWithDetailsFields on Proposal {
       frozen
       pallet
     }
+    ... on DecreaseCouncilBudgetProposalDetails {
+      amount
+    }
   }
   discussionThread {
     id

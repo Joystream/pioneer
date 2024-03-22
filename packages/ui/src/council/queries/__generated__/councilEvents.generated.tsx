@@ -117,6 +117,7 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'CommentPinnedEvent' }
     | { __typename: 'CommentReactedEvent' }
     | { __typename: 'CommentTextUpdatedEvent' }
+    | { __typename: 'CouncilBudgetDecreasedEvent' }
     | { __typename: 'CouncilBudgetFundedEvent' }
     | { __typename: 'CouncilorRewardUpdatedEvent'; id: string; createdAt: any; rewardAmount: string }
     | { __typename: 'EnglishAuctionSettledEvent' }

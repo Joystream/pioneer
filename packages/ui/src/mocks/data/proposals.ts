@@ -93,6 +93,9 @@ const proposalDetails: Record<ProposalDetailsType, RecursivePartial<ProposalWith
   UpdateWorkingGroupBudgetProposalDetails: { amount: joy(200), group: workingGroup },
   VetoProposalDetails: { proposal: { __typename: 'Proposal', id: '0', title: random.words(4) } },
   UpdateGlobalNftLimitProposalDetails: {},
+  DecreaseCouncilBudgetProposalDetails: {
+    amount: joy(1_000_000),
+  },
 }
 
 export const proposalDetailsMap = mapValues(proposalDetails, (value, key) => {

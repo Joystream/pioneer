@@ -46,6 +46,7 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'signal' }; context: Required<TriggerAndDiscussionContext> }
   | { value: { specificParameters: 'updateChannelPayouts' }; context: Required<TriggerAndDiscussionContext> }
   | { value: { specificParameters: 'updatePalletFrozenStatus' }; context: Required<TriggerAndDiscussionContext> }
+  | { value: { specificParameters: 'decreaseCouncilBudget' }; context: Required<TriggerAndDiscussionContext> }
   | { value: { specificParameters: 'fundingRequest' }; context: Required<TriggerAndDiscussionContext> }
   | { value: { specificParameters: 'runtimeUpgrade' }; context: Required<TriggerAndDiscussionContext> }
   | { value: { specificParameters: 'setReferralCut' }; context: Required<TriggerAndDiscussionContext> }
@@ -220,10 +221,12 @@ export const addNewProposalMachine = createMachine<
             { target: 'setInitialInvitationCount', cond: isType('setInitialInvitationCount') },
             { target: 'updateChannelPayouts', cond: isType('updateChannelPayouts') },
             { target: 'updatePalletFrozenStatus', cond: isType('updatePalletFrozenStatus') },
+            { target: 'decreaseCouncilBudget', cond: isType('decreaseCouncilBudget') },
           ],
         },
         updateChannelPayouts: {},
         updatePalletFrozenStatus: {},
+        decreaseCouncilBudget: {},
         signal: {},
         setMaxValidatorCount: {},
         setReferralCut: {},

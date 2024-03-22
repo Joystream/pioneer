@@ -25,6 +25,7 @@ import {
 import { FillWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/FillWorkingGroupLeadOpening'
 import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 
+import { DecreaseCouncilBudget } from './DecreaseCouncilBudget'
 import { SetInitialInvitationBalance } from './SetInitialInvitationBalance'
 import { SetInitialInvitationCount } from './SetInitialInvitationCount'
 import { UpdatePalletFrozenStatus } from './UpdatePalletFrozenStatus'
@@ -85,6 +86,9 @@ export const SpecificParametersStep = ({ matches }: SpecificParametersStepProps)
     }
     case matches('specificParameters.updatePalletFrozenStatus'): {
       return <UpdatePalletFrozenStatus />
+    }
+    case matches('specificParameters.decreaseCouncilBudget'): {
+      return <DecreaseCouncilBudget />
     }
     default:
       return null
