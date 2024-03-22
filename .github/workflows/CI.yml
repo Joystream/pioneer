@@ -110,7 +110,7 @@ jobs:
             BRANCH=$(echo -n '${{ env.LABEL }}' | cut -d ':' -f2-)
           fi
 
-          URL_BRANCH=$(echo -n "$BRANCH" | tr -d '#' | tr -c '[:alnum:]' '-' | tr '[:upper:]' '[:lower:]')
+          URL_BRANCH=$(echo -n "$BRANCH" | sed 's/\//-/' | tr -d '/#' | tr -c '[:alnum:]' '-' | tr '[:upper:]' '[:lower:]')
           SUBDOMAIN="${{ env.PROJECT }}-${{ env.PREFIX }}-$URL_BRANCH-joystream"
 
           if [ ${#SUBDOMAIN} -gt 63 ]; then
