@@ -76,6 +76,7 @@ export type PastCouncilProposalsFieldsFragment = {
       | { __typename: 'AmendConstitutionProposalDetails' }
       | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
       | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
       | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'FundingRequestProposalDetails' }
@@ -613,6 +614,7 @@ export type FundingRequestApprovedFragment = {
     | { __typename: 'AmendConstitutionProposalDetails' }
     | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
     | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+    | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
     | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
     | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
     | {
@@ -762,6 +764,7 @@ export type GetPastCouncilQuery = {
       | { __typename: 'AmendConstitutionProposalDetails' }
       | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
       | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
       | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
       | {
@@ -866,6 +869,7 @@ export type GetPastCouncilMembersQuery = {
         | { __typename: 'AmendConstitutionProposalDetails' }
         | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
         | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+        | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
         | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
         | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
         | { __typename: 'FundingRequestProposalDetails' }
@@ -957,6 +961,7 @@ export type GetPastCouncilProposalsQuery = {
       | { __typename: 'AmendConstitutionProposalDetails' }
       | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
       | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
       | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'FundingRequestProposalDetails' }
@@ -1493,6 +1498,7 @@ export type GetPastCouncilStatsQuery = {
       | { __typename: 'AmendConstitutionProposalDetails' }
       | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
       | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
       | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
       | {
