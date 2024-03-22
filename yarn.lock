@@ -4878,7 +4878,7 @@ __metadata:
     "@joystream/js": 1.10.0
     "@joystream/markdown-editor": ^0.1.0
     "@joystream/metadata-protobuf": 2.15.0
-    "@joystream/types": 4.2.0
+    "@joystream/types": 4.3.0
     "@miragejs/graphql": ^0.1.13
     "@nivo/bar": ^0.79.1
     "@nivo/core": ^0.79.0
@@ -4997,33 +4997,33 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joystream/types@npm:4.2.0":
-  version: 4.2.0
-  resolution: "@joystream/types@npm:4.2.0"
+"@joystream/types@npm:4.3.0":
+  version: 4.3.0
+  resolution: "@joystream/types@npm:4.3.0"
   dependencies:
-    "@polkadot/api": 8.9.1
-    "@polkadot/keyring": 9.5.1
-    "@polkadot/types": 8.9.1
+    "@polkadot/api": 10.1.4
+    "@polkadot/keyring": 11.1.1
+    "@polkadot/types": 10.1.4
     "@types/lodash": ^4.14.157
     "@types/vfile": ^4.0.0
     lodash: ^4.17.15
     moment: ^2.24.0
-  checksum: 5724bc37c595f9ecbad6d5ebb451aeebc8bdb44a32ea27c06da2298d9946cfe09ad1e427e2199174c00403207b4ea4e50af693fea7a856457821c58ce999f8a5
+  checksum: f79cf15b189fdedf301799797ea635f5a547fdf193fb04fcc3e444af510a498bc17af7b0f1485bcbd1bb72dcc19e52387b41ea736c216222da7107adc1c9a07b
   languageName: node
   linkType: hard
 
-"@joystream/types@patch:@joystream/types@npm%3A4.2.0#./.yarn/patches/@joystream-types-npm-4.2.0-4719d4f75b.patch::locator=pioneer%40workspace%3A.":
-  version: 4.2.0
-  resolution: "@joystream/types@patch:@joystream/types@npm%3A4.2.0#./.yarn/patches/@joystream-types-npm-4.2.0-4719d4f75b.patch::version=4.2.0&hash=ee13ac&locator=pioneer%40workspace%3A."
+"@joystream/types@patch:@joystream/types@npm%3A4.3.0#./.yarn/patches/@joystream-types-npm-4.3.0-542438a0b6.patch::locator=pioneer%40workspace%3A.":
+  version: 4.3.0
+  resolution: "@joystream/types@patch:@joystream/types@npm%3A4.3.0#./.yarn/patches/@joystream-types-npm-4.3.0-542438a0b6.patch::version=4.3.0&hash=754a5a&locator=pioneer%40workspace%3A."
   dependencies:
-    "@polkadot/api": 8.9.1
-    "@polkadot/keyring": 9.5.1
-    "@polkadot/types": 8.9.1
+    "@polkadot/api": 10.1.4
+    "@polkadot/keyring": 11.1.1
+    "@polkadot/types": 10.1.4
     "@types/lodash": ^4.14.157
     "@types/vfile": ^4.0.0
     lodash: ^4.17.15
     moment: ^2.24.0
-  checksum: 73ec8a4e04a5e44e74da0c295ff9b78a3f0e5258ed91289ae3c7e7c786fa2dea30224e91ddc167800c88dd4fb35c332a30c5d0c8e0ab15b2e50cf9d9fb849050
+  checksum: 0e54b9ab31ff7a10d741e4bf28aa22093bf50bb5d9fea30d3bd1711799de86fa6a49c273484eb64de0f8fdd8b71a769a0f3bca1f5e3b9c8af0ce8d04d8178128
   languageName: node
   linkType: hard
 

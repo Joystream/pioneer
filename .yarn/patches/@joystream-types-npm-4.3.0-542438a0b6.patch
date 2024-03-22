@@ -1,8 +1,8 @@
 diff --git a/lib/augment/augment-api-consts.d.ts b/lib/augment/augment-api-consts.d.ts
-index 97d68f66db2d7a10d66ade9d13dba4412dc8b878..eb3e12268ae2657e53c9b7454711e8e0d5270e74 100644
+index 59edee6fd28f10b7387854cbd268af5d81c32e95..a941f6061303bdfdd7dcb0f11d5ae7f13ac86ccc 100644
 --- a/lib/augment/augment-api-consts.d.ts
 +++ b/lib/augment/augment-api-consts.d.ts
-@@ -543,6 +543,10 @@ declare module '@polkadot/api-base/types/consts' {
+@@ -545,6 +545,10 @@ declare module '@polkadot/api-base/types/consts' {
               * Exports 'Create Working Group Lead Opening' proposal parameters.
               **/
              createWorkingGroupLeadOpeningProposalParameters: PalletProposalsEngineProposalParameters & AugmentedConst<ApiType>;
@@ -13,7 +13,7 @@ index 97d68f66db2d7a10d66ade9d13dba4412dc8b878..eb3e12268ae2657e53c9b7454711e8e0
              /**
               * Exports 'Decrease Working Group Lead Stake' proposal parameters.
               **/
-@@ -593,6 +597,9 @@ declare module '@polkadot/api-base/types/consts' {
+@@ -595,6 +599,9 @@ declare module '@polkadot/api-base/types/consts' {
               * Exports 'Set Membership Price' proposal parameters.
               **/
              setMembershipPriceProposalParameters: PalletProposalsEngineProposalParameters & AugmentedConst<ApiType>;
@@ -24,10 +24,10 @@ index 97d68f66db2d7a10d66ade9d13dba4412dc8b878..eb3e12268ae2657e53c9b7454711e8e0
              setReferralCutProposalParameters: PalletProposalsEngineProposalParameters & AugmentedConst<ApiType>;
              /**
 diff --git a/lib/augment/augment-api-errors.d.ts b/lib/augment/augment-api-errors.d.ts
-index 10e774687a13a19b3aed49a2e7ccab3b643deb70..c3d69e95d56601f914a8014c80ba304a162e3b60 100644
+index 212fa506e92851c9363da175227e51acd82d7b7b..0df1bc42fa97274cc2cd093e6756b752ed584baa 100644
 --- a/lib/augment/augment-api-errors.d.ts
 +++ b/lib/augment/augment-api-errors.d.ts
-@@ -1049,6 +1049,10 @@ declare module '@polkadot/api-base/types/errors' {
+@@ -1051,6 +1051,10 @@ declare module '@polkadot/api-base/types/errors' {
               * The member is not a councilor.
               **/
              NotCouncilor: AugmentedError<ApiType>;
@@ -38,18 +38,7 @@ index 10e774687a13a19b3aed49a2e7ccab3b643deb70..c3d69e95d56601f914a8014c80ba304a
              /**
               * The same account is recieving funds from the same request twice
               **/
-@@ -2325,6 +2329,10 @@ declare module '@polkadot/api-base/types/errors' {
-              * The token has no active sale at the moment
-              **/
-             NoActiveSale: AugmentedError<ApiType>;
-+            /**
-+             * Attempting to sell more than amm provided supply
-+             **/
-+            NotEnoughTokenMintedByAmmForThisSale: AugmentedError<ApiType>;
-             /**
-              * Amount of tokens to purchase on sale exceeds the quantity of tokens still available on the sale
-              **/
-@@ -2555,6 +2563,10 @@ declare module '@polkadot/api-base/types/errors' {
+@@ -2561,6 +2565,10 @@ declare module '@polkadot/api-base/types/errors' {
               * Invalid working group budget capacity parameter
               **/
              InvalidWorkingGroupBudgetCapacity: AugmentedError<ApiType>;
@@ -61,10 +50,10 @@ index 10e774687a13a19b3aed49a2e7ccab3b643deb70..c3d69e95d56601f914a8014c80ba304a
               * Require root origin in extrinsics
               **/
 diff --git a/lib/augment/augment-api-events.d.ts b/lib/augment/augment-api-events.d.ts
-index 072c50b1abb65a4b42bbf8ff51f398b4df6cea3f..3bd9907184071d1427bb11725ec7b3617ceae835 100644
+index 59ff772d793c8018d05f85f7be7f8ff957e7e860..4718e7187ae45d1193bb24b76f025ec7ff29df3b 100644
 --- a/lib/augment/augment-api-events.d.ts
 +++ b/lib/augment/augment-api-events.d.ts
-@@ -735,6 +735,12 @@ declare module '@polkadot/api-base/types/events' {
+@@ -737,6 +737,12 @@ declare module '@polkadot/api-base/types/events' {
               * Candidate remark message
               **/
              CandidateRemarked: AugmentedEvent<ApiType, [u64, Bytes]>;
@@ -78,10 +67,10 @@ index 072c50b1abb65a4b42bbf8ff51f398b4df6cea3f..3bd9907184071d1427bb11725ec7b361
               * Fund the council budget.
               * Params:
 diff --git a/lib/augment/augment-api-tx.d.ts b/lib/augment/augment-api-tx.d.ts
-index 90cd37b6e71ebd739b9513ba79a31006aa8eb070..43d0a5b0d5d53605fdd6a206fee41a65833b973f 100644
+index 5867fa5553c31df55802a85b9090194665948706..91456ba5cc66e26763a3813159cd3b1fdbe5e636 100644
 --- a/lib/augment/augment-api-tx.d.ts
 +++ b/lib/augment/augment-api-tx.d.ts
-@@ -2054,6 +2054,18 @@ declare module '@polkadot/api-base/types/submittable' {
+@@ -2058,6 +2058,18 @@ declare module '@polkadot/api-base/types/submittable' {
               * # </weight>
               **/
              councilorRemark: AugmentedSubmittable<(councilorId: u64 | AnyNumber | Uint8Array, msg: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, Bytes]>;
@@ -100,7 +89,7 @@ index 90cd37b6e71ebd739b9513ba79a31006aa8eb070..43d0a5b0d5d53605fdd6a206fee41a65
              /**
               * Fund the council budget by a member.
               * <weight>
-@@ -4866,6 +4878,8 @@ declare module '@polkadot/api-base/types/submittable' {
+@@ -4880,6 +4892,8 @@ declare module '@polkadot/api-base/types/submittable' {
                  UpdateChannelPayouts: any;
              } | {
                  SetPalletFozenStatus: any;
@@ -140,10 +129,10 @@ index 542ca8d27f03154d9b777e44b9f99ec1af5934f1..8912bf744469466a6cb83aae87a18005
                  fundingRequests: string;
              };
 diff --git a/lib/augment/types-lookup.d.ts b/lib/augment/types-lookup.d.ts
-index 51207a437d7caaf9ff08ffbe92357993079a4374..e1a03f2db19894b448d7b8a158681e6da7347dfb 100644
+index acdce735ed42cbad308438b176a7a04cf74a2cc2..09005c39796cdc1bca81c0fc7c400c2a4089ce72 100644
 --- a/lib/augment/types-lookup.d.ts
 +++ b/lib/augment/types-lookup.d.ts
-@@ -541,6 +541,8 @@ declare module '@polkadot/types/lookup' {
+@@ -543,6 +543,8 @@ declare module '@polkadot/types/lookup' {
          readonly asBudgetIncrementUpdated: u128;
          readonly isCouncilorRewardUpdated: boolean;
          readonly asCouncilorRewardUpdated: u128;
@@ -152,7 +141,7 @@ index 51207a437d7caaf9ff08ffbe92357993079a4374..e1a03f2db19894b448d7b8a158681e6d
          readonly isRequestFunded: boolean;
          readonly asRequestFunded: ITuple<[AccountId32, u128]>;
          readonly isCouncilBudgetFunded: boolean;
-@@ -549,7 +551,7 @@ declare module '@polkadot/types/lookup' {
+@@ -551,7 +553,7 @@ declare module '@polkadot/types/lookup' {
          readonly asCouncilorRemarked: ITuple<[u64, Bytes]>;
          readonly isCandidateRemarked: boolean;
          readonly asCandidateRemarked: ITuple<[u64, Bytes]>;
@@ -161,7 +150,7 @@ index 51207a437d7caaf9ff08ffbe92357993079a4374..e1a03f2db19894b448d7b8a158681e6d
      }
      /** @name PalletReferendumRawEvent (70) */
      interface PalletReferendumRawEvent extends Enum {
-@@ -1617,7 +1619,9 @@ declare module '@polkadot/types/lookup' {
+@@ -1619,7 +1621,9 @@ declare module '@polkadot/types/lookup' {
          readonly asUpdateChannelPayouts: PalletContentUpdateChannelPayoutsParametersRecord;
          readonly isSetPalletFozenStatus: boolean;
          readonly asSetPalletFozenStatus: ITuple<[bool, PalletCommonFreezablePallet]>;
@@ -172,7 +161,7 @@ index 51207a437d7caaf9ff08ffbe92357993079a4374..e1a03f2db19894b448d7b8a158681e6d
      }
      /** @name PalletCommonFundingRequestParameters (214) */
      interface PalletCommonFundingRequestParameters extends Struct {
-@@ -2847,6 +2851,10 @@ declare module '@polkadot/types/lookup' {
+@@ -2849,6 +2853,10 @@ declare module '@polkadot/types/lookup' {
          readonly asSetCouncilorReward: {
              readonly councilorReward: u128;
          } & Struct;
@@ -183,7 +172,7 @@ index 51207a437d7caaf9ff08ffbe92357993079a4374..e1a03f2db19894b448d7b8a158681e6d
          readonly isFundingRequest: boolean;
          readonly asFundingRequest: {
              readonly fundingRequests: Vec<PalletCommonFundingRequestParameters>;
-@@ -2867,7 +2875,7 @@ declare module '@polkadot/types/lookup' {
+@@ -2869,7 +2877,7 @@ declare module '@polkadot/types/lookup' {
              readonly candidateId: u64;
              readonly msg: Bytes;
          } & Struct;
@@ -192,7 +181,7 @@ index 51207a437d7caaf9ff08ffbe92357993079a4374..e1a03f2db19894b448d7b8a158681e6d
      }
      /** @name PalletReferendumCall (380) */
      interface PalletReferendumCall extends Enum {
-@@ -4439,7 +4447,8 @@ declare module '@polkadot/types/lookup' {
+@@ -4441,7 +4449,8 @@ declare module '@polkadot/types/lookup' {
          readonly isZeroTokensFunding: boolean;
          readonly isCandidateDoesNotExist: boolean;
          readonly isInsufficientBalanceForTransfer: boolean;
@@ -202,20 +191,7 @@ index 51207a437d7caaf9ff08ffbe92357993079a4374..e1a03f2db19894b448d7b8a158681e6d
      }
      /** @name PalletReferendumReferendumStage (525) */
      interface PalletReferendumReferendumStage extends Enum {
-@@ -5128,10 +5137,11 @@ declare module '@polkadot/types/lookup' {
-         readonly isInsufficientTokenBalance: boolean;
-         readonly isOutstandingAmmProvidedSupplyTooLarge: boolean;
-         readonly isCurveSlopeParametersTooLow: boolean;
-+        readonly isNotEnoughTokenMintedByAmmForThisSale: boolean;
-         readonly isTargetPatronageRateIsHigherThanCurrentRate: boolean;
-         readonly isYearlyPatronageRateLimitExceeded: boolean;
-         readonly isPalletFrozen: boolean;
--        readonly type: 'ArithmeticError' | 'InsufficientTransferrableBalance' | 'TokenDoesNotExist' | 'AccountInformationDoesNotExist' | 'TransferDestinationMemberDoesNotExist' | 'MerkleProofVerificationFailure' | 'TokenSymbolAlreadyInUse' | 'InitialAllocationToNonExistingMember' | 'AccountAlreadyExists' | 'TooManyTransferOutputs' | 'TokenIssuanceNotInIdleState' | 'InsufficientJoyBalance' | 'JoyTransferSubjectToDusting' | 'AttemptToRemoveNonOwnedAccountUnderPermissionedMode' | 'AttemptToRemoveNonEmptyAccount' | 'CannotJoinWhitelistInPermissionlessMode' | 'CannotDeissueTokenWithOutstandingAccounts' | 'NoUpcomingSale' | 'NoActiveSale' | 'InsufficientBalanceForTokenPurchase' | 'NotEnoughTokensOnSale' | 'SaleStartingBlockInThePast' | 'SaleAccessProofRequired' | 'SaleAccessProofParticipantIsNotSender' | 'SalePurchaseCapExceeded' | 'MaxVestingSchedulesPerAccountPerTokenReached' | 'PreviousSaleNotFinalized' | 'NoTokensToRecover' | 'SaleDurationTooShort' | 'SaleDurationIsZero' | 'SaleUpperBoundQuantityIsZero' | 'SaleCapPerMemberIsZero' | 'SaleUnitPriceIsZero' | 'SalePurchaseAmountIsZero' | 'CannotInitSaleIfAmmIsActive' | 'RevenueSplitTimeToStartTooShort' | 'RevenueSplitDurationTooShort' | 'RevenueSplitAlreadyActiveForToken' | 'RevenueSplitNotActiveForToken' | 'RevenueSplitDidNotEnd' | 'RevenueSplitNotOngoing' | 'UserAlreadyParticipating' | 'InsufficientBalanceForSplitParticipation' | 'UserNotParticipantingInAnySplit' | 'CannotParticipateInSplitWithZeroAmount' | 'CannotIssueSplitWithZeroAllocationAmount' | 'CannotModifySupplyWhenRevenueSplitsAreActive' | 'RevenueSplitRateIsZero' | 'BurnAmountIsZero' | 'BurnAmountGreaterThanAccountTokensAmount' | 'NotInAmmState' | 'InvalidCurveParameters' | 'DeadlineExpired' | 'SlippageToleranceExceeded' | 'InsufficientTokenBalance' | 'OutstandingAmmProvidedSupplyTooLarge' | 'CurveSlopeParametersTooLow' | 'TargetPatronageRateIsHigherThanCurrentRate' | 'YearlyPatronageRateLimitExceeded' | 'PalletFrozen';
-+        readonly type: 'ArithmeticError' | 'InsufficientTransferrableBalance' | 'TokenDoesNotExist' | 'AccountInformationDoesNotExist' | 'TransferDestinationMemberDoesNotExist' | 'MerkleProofVerificationFailure' | 'TokenSymbolAlreadyInUse' | 'InitialAllocationToNonExistingMember' | 'AccountAlreadyExists' | 'TooManyTransferOutputs' | 'TokenIssuanceNotInIdleState' | 'InsufficientJoyBalance' | 'JoyTransferSubjectToDusting' | 'AttemptToRemoveNonOwnedAccountUnderPermissionedMode' | 'AttemptToRemoveNonEmptyAccount' | 'CannotJoinWhitelistInPermissionlessMode' | 'CannotDeissueTokenWithOutstandingAccounts' | 'NoUpcomingSale' | 'NoActiveSale' | 'InsufficientBalanceForTokenPurchase' | 'NotEnoughTokensOnSale' | 'SaleStartingBlockInThePast' | 'SaleAccessProofRequired' | 'SaleAccessProofParticipantIsNotSender' | 'SalePurchaseCapExceeded' | 'MaxVestingSchedulesPerAccountPerTokenReached' | 'PreviousSaleNotFinalized' | 'NoTokensToRecover' | 'SaleDurationTooShort' | 'SaleDurationIsZero' | 'SaleUpperBoundQuantityIsZero' | 'SaleCapPerMemberIsZero' | 'SaleUnitPriceIsZero' | 'SalePurchaseAmountIsZero' | 'CannotInitSaleIfAmmIsActive' | 'RevenueSplitTimeToStartTooShort' | 'RevenueSplitDurationTooShort' | 'RevenueSplitAlreadyActiveForToken' | 'RevenueSplitNotActiveForToken' | 'RevenueSplitDidNotEnd' | 'RevenueSplitNotOngoing' | 'UserAlreadyParticipating' | 'InsufficientBalanceForSplitParticipation' | 'UserNotParticipantingInAnySplit' | 'CannotParticipateInSplitWithZeroAmount' | 'CannotIssueSplitWithZeroAllocationAmount' | 'CannotModifySupplyWhenRevenueSplitsAreActive' | 'RevenueSplitRateIsZero' | 'BurnAmountIsZero' | 'BurnAmountGreaterThanAccountTokensAmount' | 'NotInAmmState' | 'InvalidCurveParameters' | 'DeadlineExpired' | 'SlippageToleranceExceeded' | 'InsufficientTokenBalance' | 'OutstandingAmmProvidedSupplyTooLarge' | 'CurveSlopeParametersTooLow' | 'NotEnoughTokenMintedByAmmForThisSale' | 'TargetPatronageRateIsHigherThanCurrentRate' | 'YearlyPatronageRateLimitExceeded' | 'PalletFrozen';
-     }
-     /** @name PalletProposalsEngineProposal (603) */
-     interface PalletProposalsEngineProposal extends Struct {
-@@ -5250,7 +5260,8 @@ declare module '@polkadot/types/lookup' {
+@@ -5253,7 +5262,8 @@ declare module '@polkadot/types/lookup' {
          readonly isInvalidLeadApplicationId: boolean;
          readonly isInvalidProposalId: boolean;
          readonly isArithmeticError: boolean;
@@ -226,7 +202,7 @@ index 51207a437d7caaf9ff08ffbe92357993079a4374..e1a03f2db19894b448d7b8a158681e6d
      /** @name PalletWorkingGroupOpening (615) */
      interface PalletWorkingGroupOpening extends Struct {
 diff --git a/lib/cjs/augment/lookup.js b/lib/cjs/augment/lookup.js
-index 8bf556fc98e14e0ce12ac4ff0fe38123ad262b94..d28fb16456837ef81cddf49eeb35ef8b23c00297 100644
+index 23d5c9d63ca89dc370c72d73c513991506d7fe40..d1dc47ce3454a4b95c310dd0335740573489174a 100644
 --- a/lib/cjs/augment/lookup.js
 +++ b/lib/cjs/augment/lookup.js
 @@ -544,6 +544,7 @@ exports.default = {
@@ -266,15 +242,6 @@ index 8bf556fc98e14e0ce12ac4ff0fe38123ad262b94..d28fb16456837ef81cddf49eeb35ef8b
      },
      /**
       * Lookup525: pallet_referendum::ReferendumStage<BlockNumber, bounded_collections::weak_bounded_vec::WeakBoundedVec<pallet_referendum::OptionResult<MemberId, VotePower>, S>>
-@@ -4494,7 +4499,7 @@ exports.default = {
-      * Lookup602: pallet_project_token::errors::Error<T>
-      **/
-     PalletProjectTokenErrorsError: {
--        _enum: ['ArithmeticError', 'InsufficientTransferrableBalance', 'TokenDoesNotExist', 'AccountInformationDoesNotExist', 'TransferDestinationMemberDoesNotExist', 'MerkleProofVerificationFailure', 'TokenSymbolAlreadyInUse', 'InitialAllocationToNonExistingMember', 'AccountAlreadyExists', 'TooManyTransferOutputs', 'TokenIssuanceNotInIdleState', 'InsufficientJoyBalance', 'JoyTransferSubjectToDusting', 'AttemptToRemoveNonOwnedAccountUnderPermissionedMode', 'AttemptToRemoveNonEmptyAccount', 'CannotJoinWhitelistInPermissionlessMode', 'CannotDeissueTokenWithOutstandingAccounts', 'NoUpcomingSale', 'NoActiveSale', 'InsufficientBalanceForTokenPurchase', 'NotEnoughTokensOnSale', 'SaleStartingBlockInThePast', 'SaleAccessProofRequired', 'SaleAccessProofParticipantIsNotSender', 'SalePurchaseCapExceeded', 'MaxVestingSchedulesPerAccountPerTokenReached', 'PreviousSaleNotFinalized', 'NoTokensToRecover', 'SaleDurationTooShort', 'SaleDurationIsZero', 'SaleUpperBoundQuantityIsZero', 'SaleCapPerMemberIsZero', 'SaleUnitPriceIsZero', 'SalePurchaseAmountIsZero', 'CannotInitSaleIfAmmIsActive', 'RevenueSplitTimeToStartTooShort', 'RevenueSplitDurationTooShort', 'RevenueSplitAlreadyActiveForToken', 'RevenueSplitNotActiveForToken', 'RevenueSplitDidNotEnd', 'RevenueSplitNotOngoing', 'UserAlreadyParticipating', 'InsufficientBalanceForSplitParticipation', 'UserNotParticipantingInAnySplit', 'CannotParticipateInSplitWithZeroAmount', 'CannotIssueSplitWithZeroAllocationAmount', 'CannotModifySupplyWhenRevenueSplitsAreActive', 'RevenueSplitRateIsZero', 'BurnAmountIsZero', 'BurnAmountGreaterThanAccountTokensAmount', 'NotInAmmState', 'InvalidCurveParameters', 'DeadlineExpired', 'SlippageToleranceExceeded', 'InsufficientTokenBalance', 'OutstandingAmmProvidedSupplyTooLarge', 'CurveSlopeParametersTooLow', 'TargetPatronageRateIsHigherThanCurrentRate', 'YearlyPatronageRateLimitExceeded', 'PalletFrozen']
-+        _enum: ['ArithmeticError', 'InsufficientTransferrableBalance', 'TokenDoesNotExist', 'AccountInformationDoesNotExist', 'TransferDestinationMemberDoesNotExist', 'MerkleProofVerificationFailure', 'TokenSymbolAlreadyInUse', 'InitialAllocationToNonExistingMember', 'AccountAlreadyExists', 'TooManyTransferOutputs', 'TokenIssuanceNotInIdleState', 'InsufficientJoyBalance', 'JoyTransferSubjectToDusting', 'AttemptToRemoveNonOwnedAccountUnderPermissionedMode', 'AttemptToRemoveNonEmptyAccount', 'CannotJoinWhitelistInPermissionlessMode', 'CannotDeissueTokenWithOutstandingAccounts', 'NoUpcomingSale', 'NoActiveSale', 'InsufficientBalanceForTokenPurchase', 'NotEnoughTokensOnSale', 'SaleStartingBlockInThePast', 'SaleAccessProofRequired', 'SaleAccessProofParticipantIsNotSender', 'SalePurchaseCapExceeded', 'MaxVestingSchedulesPerAccountPerTokenReached', 'PreviousSaleNotFinalized', 'NoTokensToRecover', 'SaleDurationTooShort', 'SaleDurationIsZero', 'SaleUpperBoundQuantityIsZero', 'SaleCapPerMemberIsZero', 'SaleUnitPriceIsZero', 'SalePurchaseAmountIsZero', 'CannotInitSaleIfAmmIsActive', 'RevenueSplitTimeToStartTooShort', 'RevenueSplitDurationTooShort', 'RevenueSplitAlreadyActiveForToken', 'RevenueSplitNotActiveForToken', 'RevenueSplitDidNotEnd', 'RevenueSplitNotOngoing', 'UserAlreadyParticipating', 'InsufficientBalanceForSplitParticipation', 'UserNotParticipantingInAnySplit', 'CannotParticipateInSplitWithZeroAmount', 'CannotIssueSplitWithZeroAllocationAmount', 'CannotModifySupplyWhenRevenueSplitsAreActive', 'RevenueSplitRateIsZero', 'BurnAmountIsZero', 'BurnAmountGreaterThanAccountTokensAmount', 'NotInAmmState', 'InvalidCurveParameters', 'DeadlineExpired', 'SlippageToleranceExceeded', 'InsufficientTokenBalance', 'OutstandingAmmProvidedSupplyTooLarge', 'CurveSlopeParametersTooLow', 'NotEnoughTokenMintedByAmmForThisSale', 'TargetPatronageRateIsHigherThanCurrentRate', 'YearlyPatronageRateLimitExceeded', 'PalletFrozen']
-     },
-     /**
-      * Lookup603: pallet_proposals_engine::types::Proposal<BlockNumber, ProposerId, Balance, sp_core::crypto::AccountId32>
 @@ -4572,7 +4577,7 @@ exports.default = {
       * Lookup614: pallet_proposals_codex::Error<T>
       **/
@@ -285,7 +252,7 @@ index 8bf556fc98e14e0ce12ac4ff0fe38123ad262b94..d28fb16456837ef81cddf49eeb35ef8b
      /**
       * Lookup615: pallet_working_group::types::Opening<BlockNumber, Balance, primitive_types::H256>
 diff --git a/lib/mjs/augment/lookup.js b/lib/mjs/augment/lookup.js
-index 7593e56595583291c09e7eff73102158e55b9e70..76f59e138ec0039ac8322e48c8ddf0cf473750f2 100644
+index 7f10085159ebd54e03771940c213d9dbf9db5444..5ccd38f65f2c51283a38eb6307f06941212fbc41 100644
 --- a/lib/mjs/augment/lookup.js
 +++ b/lib/mjs/augment/lookup.js
 @@ -542,6 +542,7 @@ export default {
@@ -325,15 +292,6 @@ index 7593e56595583291c09e7eff73102158e55b9e70..76f59e138ec0039ac8322e48c8ddf0cf
      },
      /**
       * Lookup525: pallet_referendum::ReferendumStage<BlockNumber, bounded_collections::weak_bounded_vec::WeakBoundedVec<pallet_referendum::OptionResult<MemberId, VotePower>, S>>
-@@ -4492,7 +4497,7 @@ export default {
-      * Lookup602: pallet_project_token::errors::Error<T>
-      **/
-     PalletProjectTokenErrorsError: {
--        _enum: ['ArithmeticError', 'InsufficientTransferrableBalance', 'TokenDoesNotExist', 'AccountInformationDoesNotExist', 'TransferDestinationMemberDoesNotExist', 'MerkleProofVerificationFailure', 'TokenSymbolAlreadyInUse', 'InitialAllocationToNonExistingMember', 'AccountAlreadyExists', 'TooManyTransferOutputs', 'TokenIssuanceNotInIdleState', 'InsufficientJoyBalance', 'JoyTransferSubjectToDusting', 'AttemptToRemoveNonOwnedAccountUnderPermissionedMode', 'AttemptToRemoveNonEmptyAccount', 'CannotJoinWhitelistInPermissionlessMode', 'CannotDeissueTokenWithOutstandingAccounts', 'NoUpcomingSale', 'NoActiveSale', 'InsufficientBalanceForTokenPurchase', 'NotEnoughTokensOnSale', 'SaleStartingBlockInThePast', 'SaleAccessProofRequired', 'SaleAccessProofParticipantIsNotSender', 'SalePurchaseCapExceeded', 'MaxVestingSchedulesPerAccountPerTokenReached', 'PreviousSaleNotFinalized', 'NoTokensToRecover', 'SaleDurationTooShort', 'SaleDurationIsZero', 'SaleUpperBoundQuantityIsZero', 'SaleCapPerMemberIsZero', 'SaleUnitPriceIsZero', 'SalePurchaseAmountIsZero', 'CannotInitSaleIfAmmIsActive', 'RevenueSplitTimeToStartTooShort', 'RevenueSplitDurationTooShort', 'RevenueSplitAlreadyActiveForToken', 'RevenueSplitNotActiveForToken', 'RevenueSplitDidNotEnd', 'RevenueSplitNotOngoing', 'UserAlreadyParticipating', 'InsufficientBalanceForSplitParticipation', 'UserNotParticipantingInAnySplit', 'CannotParticipateInSplitWithZeroAmount', 'CannotIssueSplitWithZeroAllocationAmount', 'CannotModifySupplyWhenRevenueSplitsAreActive', 'RevenueSplitRateIsZero', 'BurnAmountIsZero', 'BurnAmountGreaterThanAccountTokensAmount', 'NotInAmmState', 'InvalidCurveParameters', 'DeadlineExpired', 'SlippageToleranceExceeded', 'InsufficientTokenBalance', 'OutstandingAmmProvidedSupplyTooLarge', 'CurveSlopeParametersTooLow', 'TargetPatronageRateIsHigherThanCurrentRate', 'YearlyPatronageRateLimitExceeded', 'PalletFrozen']
-+        _enum: ['ArithmeticError', 'InsufficientTransferrableBalance', 'TokenDoesNotExist', 'AccountInformationDoesNotExist', 'TransferDestinationMemberDoesNotExist', 'MerkleProofVerificationFailure', 'TokenSymbolAlreadyInUse', 'InitialAllocationToNonExistingMember', 'AccountAlreadyExists', 'TooManyTransferOutputs', 'TokenIssuanceNotInIdleState', 'InsufficientJoyBalance', 'JoyTransferSubjectToDusting', 'AttemptToRemoveNonOwnedAccountUnderPermissionedMode', 'AttemptToRemoveNonEmptyAccount', 'CannotJoinWhitelistInPermissionlessMode', 'CannotDeissueTokenWithOutstandingAccounts', 'NoUpcomingSale', 'NoActiveSale', 'InsufficientBalanceForTokenPurchase', 'NotEnoughTokensOnSale', 'SaleStartingBlockInThePast', 'SaleAccessProofRequired', 'SaleAccessProofParticipantIsNotSender', 'SalePurchaseCapExceeded', 'MaxVestingSchedulesPerAccountPerTokenReached', 'PreviousSaleNotFinalized', 'NoTokensToRecover', 'SaleDurationTooShort', 'SaleDurationIsZero', 'SaleUpperBoundQuantityIsZero', 'SaleCapPerMemberIsZero', 'SaleUnitPriceIsZero', 'SalePurchaseAmountIsZero', 'CannotInitSaleIfAmmIsActive', 'RevenueSplitTimeToStartTooShort', 'RevenueSplitDurationTooShort', 'RevenueSplitAlreadyActiveForToken', 'RevenueSplitNotActiveForToken', 'RevenueSplitDidNotEnd', 'RevenueSplitNotOngoing', 'UserAlreadyParticipating', 'InsufficientBalanceForSplitParticipation', 'UserNotParticipantingInAnySplit', 'CannotParticipateInSplitWithZeroAmount', 'CannotIssueSplitWithZeroAllocationAmount', 'CannotModifySupplyWhenRevenueSplitsAreActive', 'RevenueSplitRateIsZero', 'BurnAmountIsZero', 'BurnAmountGreaterThanAccountTokensAmount', 'NotInAmmState', 'InvalidCurveParameters', 'DeadlineExpired', 'SlippageToleranceExceeded', 'InsufficientTokenBalance', 'OutstandingAmmProvidedSupplyTooLarge', 'CurveSlopeParametersTooLow', 'NotEnoughTokenMintedByAmmForThisSale', 'TargetPatronageRateIsHigherThanCurrentRate', 'YearlyPatronageRateLimitExceeded', 'PalletFrozen']
-     },
-     /**
-      * Lookup603: pallet_proposals_engine::types::Proposal<BlockNumber, ProposerId, Balance, sp_core::crypto::AccountId32>
 @@ -4570,7 +4575,7 @@ export default {
       * Lookup614: pallet_proposals_codex::Error<T>
       **/
@@ -344,10 +302,10 @@ index 7593e56595583291c09e7eff73102158e55b9e70..76f59e138ec0039ac8322e48c8ddf0cf
      /**
       * Lookup615: pallet_working_group::types::Opening<BlockNumber, Balance, primitive_types::H256>
 diff --git a/src/augment/augment-api-consts.ts b/src/augment/augment-api-consts.ts
-index 257d9f4c769c28f05b9a0e756aab260117e1494d..0891560b39295aed68ac2ef0bc59be66df8712da 100644
+index c82de3001ca3561eb2417f0d81d6239f0429ce5d..605e476ad088f6cdb49a49185c58b2a6b546bf51 100644
 --- a/src/augment/augment-api-consts.ts
 +++ b/src/augment/augment-api-consts.ts
-@@ -547,6 +547,10 @@ declare module '@polkadot/api-base/types/consts' {
+@@ -553,6 +553,10 @@ declare module '@polkadot/api-base/types/consts' {
         * Exports 'Create Working Group Lead Opening' proposal parameters.
         **/
        createWorkingGroupLeadOpeningProposalParameters: PalletProposalsEngineProposalParameters & AugmentedConst<ApiType>;
@@ -358,7 +316,7 @@ index 257d9f4c769c28f05b9a0e756aab260117e1494d..0891560b39295aed68ac2ef0bc59be66
        /**
         * Exports 'Decrease Working Group Lead Stake' proposal parameters.
         **/
-@@ -597,6 +601,9 @@ declare module '@polkadot/api-base/types/consts' {
+@@ -603,6 +607,9 @@ declare module '@polkadot/api-base/types/consts' {
         * Exports 'Set Membership Price' proposal parameters.
         **/
        setMembershipPriceProposalParameters: PalletProposalsEngineProposalParameters & AugmentedConst<ApiType>;
@@ -369,10 +327,10 @@ index 257d9f4c769c28f05b9a0e756aab260117e1494d..0891560b39295aed68ac2ef0bc59be66
        setReferralCutProposalParameters: PalletProposalsEngineProposalParameters & AugmentedConst<ApiType>;
        /**
 diff --git a/src/augment/augment-api-errors.ts b/src/augment/augment-api-errors.ts
-index fe980a38d72541ee77758614415321f174955042..ac244c4e12f7cb34499232f35f6d6413b51fe500 100644
+index 98b5b35477a3dc227aae75109abdaa2bc6dc7d4b..ea3f7eeec6a01e7f165c2bf8a9b5f7b34b4d0e2d 100644
 --- a/src/augment/augment-api-errors.ts
 +++ b/src/augment/augment-api-errors.ts
-@@ -1053,6 +1053,10 @@ declare module '@polkadot/api-base/types/errors' {
+@@ -1059,6 +1059,10 @@ declare module '@polkadot/api-base/types/errors' {
         * The member is not a councilor.
         **/
        NotCouncilor: AugmentedError<ApiType>;
@@ -383,18 +341,7 @@ index fe980a38d72541ee77758614415321f174955042..ac244c4e12f7cb34499232f35f6d6413
        /**
         * The same account is recieving funds from the same request twice
         **/
-@@ -2329,6 +2333,10 @@ declare module '@polkadot/api-base/types/errors' {
-        * The token has no active sale at the moment
-        **/
-       NoActiveSale: AugmentedError<ApiType>;
-+      /**
-+       * Attempting to sell more than amm provided supply
-+       **/
-+      NotEnoughTokenMintedByAmmForThisSale: AugmentedError<ApiType>;
-       /**
-        * Amount of tokens to purchase on sale exceeds the quantity of tokens still available on the sale
-        **/
-@@ -2559,6 +2567,10 @@ declare module '@polkadot/api-base/types/errors' {
+@@ -2569,6 +2573,10 @@ declare module '@polkadot/api-base/types/errors' {
         * Invalid working group budget capacity parameter
         **/
        InvalidWorkingGroupBudgetCapacity: AugmentedError<ApiType>;
@@ -406,10 +353,10 @@ index fe980a38d72541ee77758614415321f174955042..ac244c4e12f7cb34499232f35f6d6413
         * Require root origin in extrinsics
         **/
 diff --git a/src/augment/augment-api-events.ts b/src/augment/augment-api-events.ts
-index 952750d53c4466c3a9f8f1d35fe8fc3cbacfe914..3aac3b3788272bea79db57e21c3cd7f3edde2294 100644
+index 26e6f1fd2f0bd3f6036ef5e1c279bc32094648e0..6c562bb6a6d17f62e1b0b01cad4c4f7af371bf7e 100644
 --- a/src/augment/augment-api-events.ts
 +++ b/src/augment/augment-api-events.ts
-@@ -705,6 +705,12 @@ declare module '@polkadot/api-base/types/events' {
+@@ -711,6 +711,12 @@ declare module '@polkadot/api-base/types/events' {
         * Candidate remark message
         **/
        CandidateRemarked: AugmentedEvent<ApiType, [u64, Bytes]>;
@@ -423,10 +370,10 @@ index 952750d53c4466c3a9f8f1d35fe8fc3cbacfe914..3aac3b3788272bea79db57e21c3cd7f3
         * Fund the council budget.
         * Params:
 diff --git a/src/augment/augment-api-tx.ts b/src/augment/augment-api-tx.ts
-index a6fad3678aa4164151cf5354ec4483c98d7d4425..9b46a0a642aca5908dfb7638077af898a8ae4d9e 100644
+index ab25a69a7cd8860a711a190a76961adcc41380fb..e20e15b13fdad15fe3b2da65122d2183fbfe77b0 100644
 --- a/src/augment/augment-api-tx.ts
 +++ b/src/augment/augment-api-tx.ts
-@@ -1626,6 +1626,18 @@ declare module '@polkadot/api-base/types/submittable' {
+@@ -1634,6 +1634,18 @@ declare module '@polkadot/api-base/types/submittable' {
         * # </weight>
         **/
        councilorRemark: AugmentedSubmittable<(councilorId: u64 | AnyNumber | Uint8Array, msg: Bytes | string | Uint8Array) => SubmittableExtrinsic<ApiType>, [u64, Bytes]>;
@@ -445,7 +392,7 @@ index a6fad3678aa4164151cf5354ec4483c98d7d4425..9b46a0a642aca5908dfb7638077af898
        /**
         * Fund the council budget by a member.
         * <weight>
-@@ -4219,7 +4231,7 @@ declare module '@polkadot/api-base/types/submittable' {
+@@ -4227,7 +4239,7 @@ declare module '@polkadot/api-base/types/submittable' {
         * - O(1) doesn't depend on the state or parameters
         * # </weight>
         **/
@@ -455,7 +402,7 @@ index a6fad3678aa4164151cf5354ec4483c98d7d4425..9b46a0a642aca5908dfb7638077af898
      proposalsDiscussion: {
        /**
 diff --git a/src/augment/lookup.ts b/src/augment/lookup.ts
-index 67b8aee38f57dd0edb7a4a501bd0740b5d713c23..3cdbdf6a839aa9cc72ccbd1e68ad7d06ece67117 100644
+index 143f41ba8e42a170842715bcfaaf4ffaa6e07954..9df1510838ab8d4003f47a0615d00055f40d936c 100644
 --- a/src/augment/lookup.ts
 +++ b/src/augment/lookup.ts
 @@ -544,6 +544,7 @@ export default {
@@ -495,15 +442,6 @@ index 67b8aee38f57dd0edb7a4a501bd0740b5d713c23..3cdbdf6a839aa9cc72ccbd1e68ad7d06
    },
    /**
     * Lookup525: pallet_referendum::ReferendumStage<BlockNumber, bounded_collections::weak_bounded_vec::WeakBoundedVec<pallet_referendum::OptionResult<MemberId, VotePower>, S>>
-@@ -4494,7 +4499,7 @@ export default {
-    * Lookup602: pallet_project_token::errors::Error<T>
-    **/
-   PalletProjectTokenErrorsError: {
--    _enum: ['ArithmeticError', 'InsufficientTransferrableBalance', 'TokenDoesNotExist', 'AccountInformationDoesNotExist', 'TransferDestinationMemberDoesNotExist', 'MerkleProofVerificationFailure', 'TokenSymbolAlreadyInUse', 'InitialAllocationToNonExistingMember', 'AccountAlreadyExists', 'TooManyTransferOutputs', 'TokenIssuanceNotInIdleState', 'InsufficientJoyBalance', 'JoyTransferSubjectToDusting', 'AttemptToRemoveNonOwnedAccountUnderPermissionedMode', 'AttemptToRemoveNonEmptyAccount', 'CannotJoinWhitelistInPermissionlessMode', 'CannotDeissueTokenWithOutstandingAccounts', 'NoUpcomingSale', 'NoActiveSale', 'InsufficientBalanceForTokenPurchase', 'NotEnoughTokensOnSale', 'SaleStartingBlockInThePast', 'SaleAccessProofRequired', 'SaleAccessProofParticipantIsNotSender', 'SalePurchaseCapExceeded', 'MaxVestingSchedulesPerAccountPerTokenReached', 'PreviousSaleNotFinalized', 'NoTokensToRecover', 'SaleDurationTooShort', 'SaleDurationIsZero', 'SaleUpperBoundQuantityIsZero', 'SaleCapPerMemberIsZero', 'SaleUnitPriceIsZero', 'SalePurchaseAmountIsZero', 'CannotInitSaleIfAmmIsActive', 'RevenueSplitTimeToStartTooShort', 'RevenueSplitDurationTooShort', 'RevenueSplitAlreadyActiveForToken', 'RevenueSplitNotActiveForToken', 'RevenueSplitDidNotEnd', 'RevenueSplitNotOngoing', 'UserAlreadyParticipating', 'InsufficientBalanceForSplitParticipation', 'UserNotParticipantingInAnySplit', 'CannotParticipateInSplitWithZeroAmount', 'CannotIssueSplitWithZeroAllocationAmount', 'CannotModifySupplyWhenRevenueSplitsAreActive', 'RevenueSplitRateIsZero', 'BurnAmountIsZero', 'BurnAmountGreaterThanAccountTokensAmount', 'NotInAmmState', 'InvalidCurveParameters', 'DeadlineExpired', 'SlippageToleranceExceeded', 'InsufficientTokenBalance', 'OutstandingAmmProvidedSupplyTooLarge', 'CurveSlopeParametersTooLow', 'TargetPatronageRateIsHigherThanCurrentRate', 'YearlyPatronageRateLimitExceeded', 'PalletFrozen']
-+    _enum: ['ArithmeticError', 'InsufficientTransferrableBalance', 'TokenDoesNotExist', 'AccountInformationDoesNotExist', 'TransferDestinationMemberDoesNotExist', 'MerkleProofVerificationFailure', 'TokenSymbolAlreadyInUse', 'InitialAllocationToNonExistingMember', 'AccountAlreadyExists', 'TooManyTransferOutputs', 'TokenIssuanceNotInIdleState', 'InsufficientJoyBalance', 'JoyTransferSubjectToDusting', 'AttemptToRemoveNonOwnedAccountUnderPermissionedMode', 'AttemptToRemoveNonEmptyAccount', 'CannotJoinWhitelistInPermissionlessMode', 'CannotDeissueTokenWithOutstandingAccounts', 'NoUpcomingSale', 'NoActiveSale', 'InsufficientBalanceForTokenPurchase', 'NotEnoughTokensOnSale', 'SaleStartingBlockInThePast', 'SaleAccessProofRequired', 'SaleAccessProofParticipantIsNotSender', 'SalePurchaseCapExceeded', 'MaxVestingSchedulesPerAccountPerTokenReached', 'PreviousSaleNotFinalized', 'NoTokensToRecover', 'SaleDurationTooShort', 'SaleDurationIsZero', 'SaleUpperBoundQuantityIsZero', 'SaleCapPerMemberIsZero', 'SaleUnitPriceIsZero', 'SalePurchaseAmountIsZero', 'CannotInitSaleIfAmmIsActive', 'RevenueSplitTimeToStartTooShort', 'RevenueSplitDurationTooShort', 'RevenueSplitAlreadyActiveForToken', 'RevenueSplitNotActiveForToken', 'RevenueSplitDidNotEnd', 'RevenueSplitNotOngoing', 'UserAlreadyParticipating', 'InsufficientBalanceForSplitParticipation', 'UserNotParticipantingInAnySplit', 'CannotParticipateInSplitWithZeroAmount', 'CannotIssueSplitWithZeroAllocationAmount', 'CannotModifySupplyWhenRevenueSplitsAreActive', 'RevenueSplitRateIsZero', 'BurnAmountIsZero', 'BurnAmountGreaterThanAccountTokensAmount', 'NotInAmmState', 'InvalidCurveParameters', 'DeadlineExpired', 'SlippageToleranceExceeded', 'InsufficientTokenBalance', 'OutstandingAmmProvidedSupplyTooLarge', 'CurveSlopeParametersTooLow', 'NotEnoughTokenMintedByAmmForThisSale', 'TargetPatronageRateIsHigherThanCurrentRate', 'YearlyPatronageRateLimitExceeded', 'PalletFrozen']
-   },
-   /**
-    * Lookup603: pallet_proposals_engine::types::Proposal<BlockNumber, ProposerId, Balance, sp_core::crypto::AccountId32>
 @@ -4572,7 +4577,7 @@ export default {
     * Lookup614: pallet_proposals_codex::Error<T>
     **/
@@ -514,10 +452,10 @@ index 67b8aee38f57dd0edb7a4a501bd0740b5d713c23..3cdbdf6a839aa9cc72ccbd1e68ad7d06
    /**
     * Lookup615: pallet_working_group::types::Opening<BlockNumber, Balance, primitive_types::H256>
 diff --git a/src/augment/types-lookup.ts b/src/augment/types-lookup.ts
-index 4323a4c231fc177eeda9a95aec83f52a13b34ea1..aa03d9b1e544a8fe8ad99d4431d6e58c44290cc8 100644
+index a531a38dfed759679fe57c67a40242b9a7a5e5eb..d8991e52489645a42b626cfdaa58d370eb8f2bb5 100644
 --- a/src/augment/types-lookup.ts
 +++ b/src/augment/types-lookup.ts
-@@ -582,6 +582,8 @@ declare module '@polkadot/types/lookup' {
+@@ -587,6 +587,8 @@ declare module '@polkadot/types/lookup' {
      readonly asBudgetIncrementUpdated: u128;
      readonly isCouncilorRewardUpdated: boolean;
      readonly asCouncilorRewardUpdated: u128;
@@ -526,7 +464,7 @@ index 4323a4c231fc177eeda9a95aec83f52a13b34ea1..aa03d9b1e544a8fe8ad99d4431d6e58c
      readonly isRequestFunded: boolean;
      readonly asRequestFunded: ITuple<[AccountId32, u128]>;
      readonly isCouncilBudgetFunded: boolean;
-@@ -590,7 +592,7 @@ declare module '@polkadot/types/lookup' {
+@@ -595,7 +597,7 @@ declare module '@polkadot/types/lookup' {
      readonly asCouncilorRemarked: ITuple<[u64, Bytes]>;
      readonly isCandidateRemarked: boolean;
      readonly asCandidateRemarked: ITuple<[u64, Bytes]>;
@@ -535,7 +473,7 @@ index 4323a4c231fc177eeda9a95aec83f52a13b34ea1..aa03d9b1e544a8fe8ad99d4431d6e58c
    }
  
    /** @name PalletReferendumRawEvent (70) */
-@@ -1741,7 +1743,9 @@ declare module '@polkadot/types/lookup' {
+@@ -1746,7 +1748,9 @@ declare module '@polkadot/types/lookup' {
      readonly asUpdateChannelPayouts: PalletContentUpdateChannelPayoutsParametersRecord;
      readonly isSetPalletFozenStatus: boolean;
      readonly asSetPalletFozenStatus: ITuple<[bool, PalletCommonFreezablePallet]>;
@@ -546,7 +484,7 @@ index 4323a4c231fc177eeda9a95aec83f52a13b34ea1..aa03d9b1e544a8fe8ad99d4431d6e58c
    }
  
    /** @name PalletCommonFundingRequestParameters (214) */
-@@ -3048,6 +3052,10 @@ declare module '@polkadot/types/lookup' {
+@@ -3053,6 +3057,10 @@ declare module '@polkadot/types/lookup' {
      readonly asSetCouncilorReward: {
        readonly councilorReward: u128;
      } & Struct;
@@ -557,7 +495,7 @@ index 4323a4c231fc177eeda9a95aec83f52a13b34ea1..aa03d9b1e544a8fe8ad99d4431d6e58c
      readonly isFundingRequest: boolean;
      readonly asFundingRequest: {
        readonly fundingRequests: Vec<PalletCommonFundingRequestParameters>;
-@@ -3068,7 +3076,7 @@ declare module '@polkadot/types/lookup' {
+@@ -3073,7 +3081,7 @@ declare module '@polkadot/types/lookup' {
        readonly candidateId: u64;
        readonly msg: Bytes;
      } & Struct;
@@ -566,7 +504,7 @@ index 4323a4c231fc177eeda9a95aec83f52a13b34ea1..aa03d9b1e544a8fe8ad99d4431d6e58c
    }
  
    /** @name PalletReferendumCall (380) */
-@@ -4712,7 +4720,8 @@ declare module '@polkadot/types/lookup' {
+@@ -4717,7 +4725,8 @@ declare module '@polkadot/types/lookup' {
      readonly isZeroTokensFunding: boolean;
      readonly isCandidateDoesNotExist: boolean;
      readonly isInsufficientBalanceForTransfer: boolean;
@@ -576,20 +514,7 @@ index 4323a4c231fc177eeda9a95aec83f52a13b34ea1..aa03d9b1e544a8fe8ad99d4431d6e58c
    }
  
    /** @name PalletReferendumReferendumStage (525) */
-@@ -5449,10 +5458,11 @@ declare module '@polkadot/types/lookup' {
-     readonly isInsufficientTokenBalance: boolean;
-     readonly isOutstandingAmmProvidedSupplyTooLarge: boolean;
-     readonly isCurveSlopeParametersTooLow: boolean;
-+    readonly isNotEnoughTokenMintedByAmmForThisSale: boolean;
-     readonly isTargetPatronageRateIsHigherThanCurrentRate: boolean;
-     readonly isYearlyPatronageRateLimitExceeded: boolean;
-     readonly isPalletFrozen: boolean;
--    readonly type: 'ArithmeticError' | 'InsufficientTransferrableBalance' | 'TokenDoesNotExist' | 'AccountInformationDoesNotExist' | 'TransferDestinationMemberDoesNotExist' | 'MerkleProofVerificationFailure' | 'TokenSymbolAlreadyInUse' | 'InitialAllocationToNonExistingMember' | 'AccountAlreadyExists' | 'TooManyTransferOutputs' | 'TokenIssuanceNotInIdleState' | 'InsufficientJoyBalance' | 'JoyTransferSubjectToDusting' | 'AttemptToRemoveNonOwnedAccountUnderPermissionedMode' | 'AttemptToRemoveNonEmptyAccount' | 'CannotJoinWhitelistInPermissionlessMode' | 'CannotDeissueTokenWithOutstandingAccounts' | 'NoUpcomingSale' | 'NoActiveSale' | 'InsufficientBalanceForTokenPurchase' | 'NotEnoughTokensOnSale' | 'SaleStartingBlockInThePast' | 'SaleAccessProofRequired' | 'SaleAccessProofParticipantIsNotSender' | 'SalePurchaseCapExceeded' | 'MaxVestingSchedulesPerAccountPerTokenReached' | 'PreviousSaleNotFinalized' | 'NoTokensToRecover' | 'SaleDurationTooShort' | 'SaleDurationIsZero' | 'SaleUpperBoundQuantityIsZero' | 'SaleCapPerMemberIsZero' | 'SaleUnitPriceIsZero' | 'SalePurchaseAmountIsZero' | 'CannotInitSaleIfAmmIsActive' | 'RevenueSplitTimeToStartTooShort' | 'RevenueSplitDurationTooShort' | 'RevenueSplitAlreadyActiveForToken' | 'RevenueSplitNotActiveForToken' | 'RevenueSplitDidNotEnd' | 'RevenueSplitNotOngoing' | 'UserAlreadyParticipating' | 'InsufficientBalanceForSplitParticipation' | 'UserNotParticipantingInAnySplit' | 'CannotParticipateInSplitWithZeroAmount' | 'CannotIssueSplitWithZeroAllocationAmount' | 'CannotModifySupplyWhenRevenueSplitsAreActive' | 'RevenueSplitRateIsZero' | 'BurnAmountIsZero' | 'BurnAmountGreaterThanAccountTokensAmount' | 'NotInAmmState' | 'InvalidCurveParameters' | 'DeadlineExpired' | 'SlippageToleranceExceeded' | 'InsufficientTokenBalance' | 'OutstandingAmmProvidedSupplyTooLarge' | 'CurveSlopeParametersTooLow' | 'TargetPatronageRateIsHigherThanCurrentRate' | 'YearlyPatronageRateLimitExceeded' | 'PalletFrozen';
-+    readonly type: 'ArithmeticError' | 'InsufficientTransferrableBalance' | 'TokenDoesNotExist' | 'AccountInformationDoesNotExist' | 'TransferDestinationMemberDoesNotExist' | 'MerkleProofVerificationFailure' | 'TokenSymbolAlreadyInUse' | 'InitialAllocationToNonExistingMember' | 'AccountAlreadyExists' | 'TooManyTransferOutputs' | 'TokenIssuanceNotInIdleState' | 'InsufficientJoyBalance' | 'JoyTransferSubjectToDusting' | 'AttemptToRemoveNonOwnedAccountUnderPermissionedMode' | 'AttemptToRemoveNonEmptyAccount' | 'CannotJoinWhitelistInPermissionlessMode' | 'CannotDeissueTokenWithOutstandingAccounts' | 'NoUpcomingSale' | 'NoActiveSale' | 'InsufficientBalanceForTokenPurchase' | 'NotEnoughTokensOnSale' | 'SaleStartingBlockInThePast' | 'SaleAccessProofRequired' | 'SaleAccessProofParticipantIsNotSender' | 'SalePurchaseCapExceeded' | 'MaxVestingSchedulesPerAccountPerTokenReached' | 'PreviousSaleNotFinalized' | 'NoTokensToRecover' | 'SaleDurationTooShort' | 'SaleDurationIsZero' | 'SaleUpperBoundQuantityIsZero' | 'SaleCapPerMemberIsZero' | 'SaleUnitPriceIsZero' | 'SalePurchaseAmountIsZero' | 'CannotInitSaleIfAmmIsActive' | 'RevenueSplitTimeToStartTooShort' | 'RevenueSplitDurationTooShort' | 'RevenueSplitAlreadyActiveForToken' | 'RevenueSplitNotActiveForToken' | 'RevenueSplitDidNotEnd' | 'RevenueSplitNotOngoing' | 'UserAlreadyParticipating' | 'InsufficientBalanceForSplitParticipation' | 'UserNotParticipantingInAnySplit' | 'CannotParticipateInSplitWithZeroAmount' | 'CannotIssueSplitWithZeroAllocationAmount' | 'CannotModifySupplyWhenRevenueSplitsAreActive' | 'RevenueSplitRateIsZero' | 'BurnAmountIsZero' | 'BurnAmountGreaterThanAccountTokensAmount' | 'NotInAmmState' | 'InvalidCurveParameters' | 'DeadlineExpired' | 'SlippageToleranceExceeded' | 'InsufficientTokenBalance' | 'OutstandingAmmProvidedSupplyTooLarge' | 'CurveSlopeParametersTooLow' | 'NotEnoughTokenMintedByAmmForThisSale' | 'TargetPatronageRateIsHigherThanCurrentRate' | 'YearlyPatronageRateLimitExceeded' | 'PalletFrozen';
-   }
- 
-   /** @name PalletProposalsEngineProposal (603) */
-@@ -5580,7 +5590,8 @@ declare module '@polkadot/types/lookup' {
+@@ -5586,7 +5595,8 @@ declare module '@polkadot/types/lookup' {
      readonly isInvalidLeadApplicationId: boolean;
      readonly isInvalidProposalId: boolean;
      readonly isArithmeticError: boolean;
