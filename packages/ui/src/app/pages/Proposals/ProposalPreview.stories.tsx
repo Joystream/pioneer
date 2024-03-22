@@ -218,12 +218,6 @@ export default {
 // ProposalPreview
 // ----------------------------------------------------------------------------
 
-export const AmendConstitution: Story = {
-  args: { type: 'AmendConstitutionProposalDetails', constitutionality: 2 },
-  parameters: {
-    statuses: ['ProposalStatusDeciding', 'ProposalStatusDormant', 'ProposalStatusDeciding'] satisfies ProposalStatus[],
-  },
-}
 export const CancelWorkingGroupLeadOpening: Story = {
   args: { type: 'CancelWorkingGroupLeadOpeningProposalDetails' },
 }
@@ -302,8 +296,19 @@ export const UpdatePalletFrozenStatus: Story = {
 export const UpdateWorkingGroupBudget: Story = {
   args: { type: 'UpdateWorkingGroupBudgetProposalDetails' },
 }
+export const DecreaseCouncilBudget: Story = {
+  args: { type: 'DecreaseCouncilBudgetProposalDetails' },
+}
+
+// Disabled proposals
 export const Veto: Story = {
   args: { type: 'VetoProposalDetails' },
+}
+export const AmendConstitution: Story = {
+  args: { type: 'AmendConstitutionProposalDetails', constitutionality: 2 },
+  parameters: {
+    statuses: ['ProposalStatusDeciding', 'ProposalStatusDormant', 'ProposalStatusDeciding'] satisfies ProposalStatus[],
+  },
 }
 
 // ----------------------------------------------------------------------------

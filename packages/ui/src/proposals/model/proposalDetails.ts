@@ -25,6 +25,7 @@ export const proposalDetails: ProposalType[] = [
   'veto',
   'updateChannelPayouts',
   'updatePalletFrozenStatus',
+  'decreaseCouncilBudget',
 ]
 
 export const enabledProposals: ProposalType[] = [
@@ -49,6 +50,7 @@ export const enabledProposals: ProposalType[] = [
   'setMembershipPrice',
   'updateChannelPayouts',
   'updatePalletFrozenStatus',
+  'decreaseCouncilBudget',
 ]
 
 export const typenameToProposalDetails = (typename: string): ProposalType => {
