@@ -192,6 +192,11 @@ export const getSpecificParameters = async (
         SetPalletFozenStatus: [!specifics.updatePalletFrozenStatus.enable, specifics.updatePalletFrozenStatus.pallet],
       })
     }
+    case 'decreaseCouncilBudget': {
+      return createType('PalletProposalsCodexProposalDetails', {
+        DecreaseCouncilBudget: specifics.decreaseCouncilBudget?.amount,
+      })
+    }
     default:
       return createType('PalletProposalsCodexProposalDetails', { Signal: '' })
   }

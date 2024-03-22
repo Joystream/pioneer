@@ -183,6 +183,9 @@ export interface AddNewProposalForm {
     enable: boolean
     pallet: string
   }
+  decreaseCouncilBudget: {
+    amount?: BN
+  }
 }
 
 export const schemaFactory = (api?: Api) => {
@@ -423,6 +426,18 @@ export const schemaFactory = (api?: Api) => {
           )
         )
         .required('Field is required'),
+    }),
+    decreaseCouncilBudget: Yup.object().shape({
+      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero'))
+        .test(
+          maxContext(
+            `The current council budget is \${max}${CurrencyName.integerValue}`,
+            'councilBudget',
+            true,
+            'execution'
+          )
+        )
+        .required(),
     }),
   })
 }

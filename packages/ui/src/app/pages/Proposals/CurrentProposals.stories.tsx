@@ -1543,3 +1543,37 @@ export const SpecificParametersRuntimeUpgrade: Story = {
     })
   }),
 }
+
+export const SpecificParametersDecreaseCouncilBudget: Story = {
+  parameters: {
+    councilBudget: joy(500),
+  },
+  play: specificParametersTest('Decrease Council Budget', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      const amountField = await modal.findByLabelText('Amount')
+
+      // Invalid price set to 0
+      await userEvent.type(amountField, '0')
+      expect(await modal.findByText('Amount must be greater than zero'))
+      expect(nextButton).toBeDisabled()
+
+      // Invalid price set to 0
+      await userEvent.clear(amountField)
+      await userEvent.type(amountField, '600')
+      expect(await modal.findByText('The current council budget is 500JOY'))
+      expect(nextButton).toBeDisabled()
+
+      // Valid
+      await userEvent.clear(amountField)
+      await userEvent.type(amountField, '8')
+    })
+
+    await step('Transaction parameters', () => {
+      const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({ decreaseCouncilBudget: 8_0000000000 })
+    })
+  }),
+}
