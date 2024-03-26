@@ -9,19 +9,19 @@ import { asBN, whenDefined } from '@/common/utils'
 import { Input, InputProps } from './InputComponent'
 
 interface BaseNumberInputProps extends Omit<InputProps, 'type' | 'defaultValue' | 'onChange'> {
-  maxAllowedValue?: number
+  maxAllowedValue?: number // At most MAX_SAFE_INTEGER (otherwise InputNumber might not be the right component).
   onChange?: (event: React.ChangeEvent<HTMLInputElement>, numberValue: number) => void
 }
 
-const BasedInputNumber = React.memo(
-  ({ id, onChange, value = '', maxAllowedValue = 2 ** 32, ...props }: BaseNumberInputProps) => {
+export const BasedInputNumber = React.memo(
+  ({ id, onChange, value = '', maxAllowedValue = 2 ** 32 - 1, ...props }: BaseNumberInputProps) => {
     const onInputChange = useCallback(
       ({ floatValue = 0 }: NumberFormatValues, { event }: SourceInfo) => onChange?.(event, floatValue),
       [onChange]
     )
 
     const isAllowed = useCallback(
-      ({ floatValue = 0 }: NumberFormatValues) => floatValue < maxAllowedValue,
+      ({ floatValue = 0 }: NumberFormatValues) => floatValue <= maxAllowedValue,
       [maxAllowedValue]
     )
 
