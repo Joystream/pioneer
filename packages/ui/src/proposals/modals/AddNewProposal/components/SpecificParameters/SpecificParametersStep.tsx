@@ -25,6 +25,7 @@ import {
 import { FillWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/FillWorkingGroupLeadOpening'
 import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 
+import { SetEraPayoutDampingFactor } from './SetEraPayoutDampingFactor'
 import { SetInitialInvitationBalance } from './SetInitialInvitationBalance'
 import { SetInitialInvitationCount } from './SetInitialInvitationCount'
 import { UpdatePalletFrozenStatus } from './UpdatePalletFrozenStatus'
@@ -86,6 +87,8 @@ export const SpecificParametersStep = ({ matches }: SpecificParametersStepProps)
     case matches('specificParameters.updatePalletFrozenStatus'): {
       return <UpdatePalletFrozenStatus />
     }
+    case matches('specificParameters.setEraPayoutDampingFactor'):
+      return <SetEraPayoutDampingFactor />
     default:
       return null
   }

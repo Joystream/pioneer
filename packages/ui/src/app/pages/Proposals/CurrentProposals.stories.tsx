@@ -1543,3 +1543,22 @@ export const SpecificParametersRuntimeUpgrade: Story = {
     })
   }),
 }
+
+export const SpecificParametersSetEraPayoutDampingFactor: Story = {
+  play: specificParametersTest('Set Era Payout Damping Factor', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      const factorField = await modal.findByLabelText('Damping factor')
+      await userEvent.type(factorField, '60')
+    })
+
+    await step('Transaction parameters', () => {
+      const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({
+        setEraPayoutDampingFactor: 60,
+      })
+    })
+  }),
+}
