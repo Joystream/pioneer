@@ -299,6 +299,9 @@ export const UpdateChannelPayouts: Story = {
 export const UpdatePalletFrozenStatus: Story = {
   args: { type: 'UpdatePalletFrozenStatusProposalDetails' },
 }
+export const SetEraPayoutDampingFactor: Story = {
+  args: { type: 'SetEraPayoutDampingFactorProposalDetails' },
+}
 export const UpdateWorkingGroupBudget: Story = {
   args: { type: 'UpdateWorkingGroupBudgetProposalDetails' },
 }

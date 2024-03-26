@@ -235,11 +235,16 @@ const countMapper: Mapper<CountDetail, 'count'> = (value, type) => {
   const countLabels: Partial<Record<ProposalType, string>> = {
     setInitialInvitationCount: 'Invitations',
     setMaxValidatorCount: 'Validators',
+    setEraPayoutDampingFactor: 'Damping factor',
+  }
+  const units: Partial<Record<ProposalType, string>> = {
+    setEraPayoutDampingFactor: '%',
   }
   return [
     {
       label: (type && type in countLabels && countLabels[type]) || 'Count',
       value,
+      units: type && type in units && units[type],
       renderType: 'Numeric',
     },
   ]

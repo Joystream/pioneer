@@ -149,6 +149,8 @@ export type UpdatePalletFrozenStatusProposalDetails = ProposalDetailsNew<
   UpdatePalletFrozenStatusDetail
 >
 
+export type SetEraPayoutDampingFactorProposalDetails = ProposalDetailsNew<'setEraPayoutDampingFactor', CountDetail>
+
 export type ProposalDetails =
   | BaseProposalDetails
   | FundingRequestDetails
@@ -173,6 +175,7 @@ export type ProposalDetails =
   | VetoDetails
   | UpdateChannelPayoutsDetails
   | UpdatePalletFrozenStatusProposalDetails
+  | SetEraPayoutDampingFactorProposalDetails
 
 export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
 
@@ -375,6 +378,11 @@ const asUpdatePalletFrozenStatus: DetailsCast<'UpdatePalletFrozenStatusProposalD
   pallet: fragment.pallet,
 })
 
+const asSetEraPayoutDampingFactor: DetailsCast<'SetEraPayoutDampingFactorProposalDetails'> = (fragment) => ({
+  type: 'setEraPayoutDampingFactor',
+  count: fragment.dampingFactor,
+})
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }, extra?: ProposalExtraDetails): ProposalDetails
 }
@@ -402,6 +410,7 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   SetMembershipLeadInvitationQuotaProposalDetails: asSetMembershipLeadInvitationQuota,
   UpdateChannelPayoutsProposalDetails: asUpdateChannelPayouts,
   UpdatePalletFrozenStatusProposalDetails: asUpdatePalletFrozenStatus,
+  SetEraPayoutDampingFactorProposalDetails: asSetEraPayoutDampingFactor,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment, extra?: ProposalExtraDetails): ProposalDetails => {
