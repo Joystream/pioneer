@@ -194,7 +194,11 @@ fragment ProposalWithDetailsFields on Proposal {
       frozen
       pallet
     }
+    ... on SetEraPayoutDampingFactorProposalDetails {
+      dampingFactor
+    }
   }
+
   discussionThread {
     id
     posts {
