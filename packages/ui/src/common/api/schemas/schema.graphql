@@ -2590,6 +2590,2599 @@ union ProposalDetails =
   | UpdateChannelPayoutsProposalDetails
   | UpdatePalletFrozenStatusProposalDetails
   | UpdateGlobalNftLimitProposalDetails
+type StandardDeleteResponse {
+  id: ID!
+}
+
+type BaseModel implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+}
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+type BaseModelUUID implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+enum Network {
+  BABYLON
+  ALEXANDRIA
+  ROME
+  GIZA
+  OLYMPIA
+}
+
+enum EventTypeOptions {
+  AnnouncingPeriodStartedEvent
+  ApplicationWithdrawnEvent
+  AppliedOnOpeningEvent
+  AuctionBidCanceledEvent
+  AuctionBidMadeEvent
+  AuctionCanceledEvent
+  BidMadeCompletingAuctionEvent
+  BountyCanceledEvent
+  BountyCreatedEvent
+  BountyCreatorCherryWithdrawalEvent
+  BountyFundedEvent
+  BountyFundingWithdrawalEvent
+  BountyMaxFundingReachedEvent
+  BountyRemovedEvent
+  BountyVetoedEvent
+  BudgetBalanceSetEvent
+  BudgetFundedEvent
+  BudgetIncrementUpdatedEvent
+  BudgetRefillEvent
+  BudgetRefillPlannedEvent
+  BudgetSetEvent
+  BudgetSpendingEvent
+  BudgetUpdatedEvent
+  BuyNowCanceledEvent
+  BuyNowPriceUpdatedEvent
+  CandidacyNoteSetEvent
+  CandidacyStakeReleaseEvent
+  CandidacyWithdrawEvent
+  CategoryArchivalStatusUpdatedEvent
+  CategoryCreatedEvent
+  CategoryDeletedEvent
+  CategoryMembershipOfModeratorUpdatedEvent
+  CategoryStickyThreadUpdateEvent
+  ChannelFundsWithdrawnEvent
+  ChannelRewardClaimedAndWithdrawnEvent
+  ChannelRewardClaimedEvent
+  CommentCreatedEvent
+  CommentDeletedEvent
+  CommentModeratedEvent
+  CommentPinnedEvent
+  CommentReactedEvent
+  CommentTextUpdatedEvent
+  CouncilBudgetFundedEvent
+  CouncilorRewardUpdatedEvent
+  EnglishAuctionSettledEvent
+  EnglishAuctionStartedEvent
+  InitialInvitationBalanceUpdatedEvent
+  InitialInvitationCountUpdatedEvent
+  InvitesTransferredEvent
+  LeaderInvitationQuotaUpdatedEvent
+  LeaderSetEvent
+  LeaderUnsetEvent
+  MemberAccountsUpdatedEvent
+  MemberBannedFromChannelEvent
+  MemberCreatedEvent
+  MemberInvitedEvent
+  MemberProfileUpdatedEvent
+  MemberVerificationStatusUpdatedEvent
+  MembershipBoughtEvent
+  MembershipGiftedEvent
+  MembershipPriceUpdatedEvent
+  MetaprotocolTransactionStatusEvent
+  NewCandidateEvent
+  NewCouncilElectedEvent
+  NewCouncilNotElectedEvent
+  NewMissedRewardLevelReachedEvent
+  NftBoughtEvent
+  NftIssuedEvent
+  NftSlingedBackToTheOriginalArtistEvent
+  NotEnoughCandidatesEvent
+  OfferAcceptedEvent
+  OfferCanceledEvent
+  OfferStartedEvent
+  OpenAuctionBidAcceptedEvent
+  OpenAuctionStartedEvent
+  OpeningAddedEvent
+  OpeningCanceledEvent
+  OpeningFilledEvent
+  OracleJudgmentSubmittedEvent
+  PostAddedEvent
+  PostDeletedEvent
+  PostModeratedEvent
+  PostTextUpdatedEvent
+  ProposalCancelledEvent
+  ProposalCreatedEvent
+  ProposalDecisionMadeEvent
+  ProposalDiscussionPostCreatedEvent
+  ProposalDiscussionPostDeletedEvent
+  ProposalDiscussionPostUpdatedEvent
+  ProposalDiscussionThreadModeChangedEvent
+  ProposalExecutedEvent
+  ProposalStatusUpdatedEvent
+  ProposalVotedEvent
+  ReferendumFinishedEvent
+  ReferendumStartedEvent
+  ReferendumStartedForcefullyEvent
+  ReferralCutUpdatedEvent
+  RequestFundedEvent
+  RevealingStageStartedEvent
+  RewardPaidEvent
+  RewardPaymentEvent
+  StakeDecreasedEvent
+  StakeIncreasedEvent
+  StakeReleasedEvent
+  StakeSlashedEvent
+  StakingAccountAddedEvent
+  StakingAccountConfirmedEvent
+  StakingAccountRemovedEvent
+  StatusTextChangedEvent
+  TerminatedLeaderEvent
+  TerminatedWorkerEvent
+  ThreadCreatedEvent
+  ThreadDeletedEvent
+  ThreadMetadataUpdatedEvent
+  ThreadModeratedEvent
+  ThreadMovedEvent
+  VideoReactedEvent
+  VideoReactionsPreferenceEvent
+  VoteCastEvent
+  VoteRevealedEvent
+  VotingPeriodStartedEvent
+  WorkEntrantFundsWithdrawnEvent
+  WorkEntryAnnouncedEvent
+  WorkEntrySlashedEvent
+  WorkEntryWithdrawnEvent
+  WorkSubmittedEvent
+  WorkerExitedEvent
+  WorkerRewardAccountUpdatedEvent
+  WorkerRewardAmountUpdatedEvent
+  WorkerRoleAccountUpdatedEvent
+  WorkerStartedLeavingEvent
+}
+
+type WorkingGroupOpening implements BaseGraphQLObject {
+  id: ID!
+
+  """
+  Time of opening creation
+  """
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  OpeningId in specific working group module
+  """
+  runtimeId: Int!
+  group: WorkingGroup!
+  groupId: String!
+  applications: [WorkingGroupApplication!]!
+
+  """
+  Type of the opening (Leader/Regular)
+  """
+  type: WorkingGroupOpeningType!
+
+  """
+  Current opening status
+  """
+  status: WorkingGroupOpeningStatus!
+  metadata: WorkingGroupOpeningMetadata!
+  metadataId: String!
+
+  """
+  Min. application/role stake amount
+  """
+  stakeAmount: BigInt!
+
+  """
+  Role stake unstaking period in blocks
+  """
+  unstakingPeriod: Int!
+
+  """
+  Initial workers' reward per block
+  """
+  rewardPerBlock: BigInt!
+  createdInEvent: OpeningAddedEvent!
+  appliedonopeningeventopening: [AppliedOnOpeningEvent!]
+  openingcanceledeventopening: [OpeningCanceledEvent!]
+  openingfilledeventopening: [OpeningFilledEvent!]
+}
+
+enum WorkingGroupOpeningType {
+  REGULAR
+  LEADER
+}
+
+union WorkingGroupOpeningStatus = OpeningStatusOpen | OpeningStatusFilled | OpeningStatusCancelled
+
+"""
+GraphQL representation of BigInt
+"""
+scalar BigInt
+
+enum RewardPaymentType {
+  REGULAR
+  MISSED
+}
+
+type ForumPost implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  author: Membership!
+  authorId: String!
+  thread: ForumThread!
+  threadId: String!
+
+  """
+  Content of the post (md-formatted)
+  """
+  text: String!
+  repliesTo: ForumPost
+  repliesToId: String
+
+  """
+  Current post status
+  """
+  status: PostStatus!
+
+  """
+  True if the post is either Active or Locked
+  """
+  isVisible: Boolean!
+
+  """
+  The origin of the post (either thread creation event or regular PostAdded event)
+  """
+  origin: PostOrigin!
+  edits: [PostTextUpdatedEvent!]!
+  deletedInEvent: PostDeletedEvent
+  deletedInEventId: String
+  forumpostrepliesTo: [ForumPost!]
+  forumthreadinitialPost: [ForumThread!]
+  postaddedeventpost: [PostAddedEvent!]
+  postmoderatedeventpost: [PostModeratedEvent!]
+}
+
+union PostStatus = PostStatusActive | PostStatusLocked | PostStatusModerated | PostStatusRemoved
+
+union PostOrigin = PostOriginThreadInitial | PostOriginThreadReply
+
+type ForumThreadTag implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  threads: [ForumThread!]!
+
+  """
+  Number of non-removed threads currently assigned to the tag
+  """
+  visibleThreadsCount: Int!
+}
+
+type BountyEntrantWhitelist implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  phantom: Int
+  members: [Membership!]!
+  bountyentrantWhitelist: [Bounty!]
+}
+
+type BountyContribution implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  bounty: Bounty!
+  bountyId: String!
+  contributor: Membership
+
+  """
+  The id of the contributor
+  """
+  contributorId: String
+
+  """
+  Amount of the contribution
+  """
+  amount: BigInt!
+  bountyFundedEvents: [BountyFundedEvent!]!
+  withdrawnInEvent: BountyFundingWithdrawalEvent
+}
+
+type BountyEntry implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  bounty: Bounty!
+  bountyId: String!
+  worker: Membership!
+  workerId: String!
+
+  """
+  Staking account with the work entry stake
+  """
+  stakingAccount: String
+
+  """
+  Whether at least one work has been submitted
+  """
+  workSubmitted: Boolean!
+
+  """
+  Work entry status
+  """
+  status: BountyEntryStatus!
+  announcedInEvent: WorkEntryAnnouncedEvent!
+  withdrawnInEvent: WorkEntryWithdrawnEvent
+  slashedInEvent: WorkEntrySlashedEvent
+  works: [WorkSubmittedEvent!]
+  cashedOutInEvent: WorkEntrantFundsWithdrawnEvent
+}
+
+union BountyEntryStatus =
+    BountyEntryStatusWorking
+  | BountyEntryStatusWithdrawn
+  | BountyEntryStatusWinner
+  | BountyEntryStatusPassed
+  | BountyEntryStatusRejected
+
+type Bounty implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Bounty title
+  """
+  title: String
+
+  """
+  Bounty description
+  """
+  description: String
+
+  """
+  Bounty image uri
+  """
+  bannerImageUri: String
+
+  """
+  Amount of funding provided by the creator
+  """
+  cherry: BigInt!
+
+  """
+  Stake minimum amount required to submit work entry to the bounty
+  """
+  entrantStake: BigInt!
+  creator: Membership
+  creatorId: String
+  oracle: Membership
+  oracleId: String
+
+  """
+  Bounty funding type
+  """
+  fundingType: BountyFundingType!
+  entrantWhitelist: BountyEntrantWhitelist
+  entrantWhitelistId: String
+
+  """
+  Number of blocks from end of funding period until people can no longer submit bounty submissions
+  """
+  workPeriod: Int!
+
+  """
+  Number of block from end of work period until oracle can no longer decide winners
+  """
+  judgingPeriod: Int!
+
+  """
+  Current bounty stage
+  """
+  stage: BountyStage!
+
+  """
+  Total amount once contributed to the bounty (excluding the cherry)
+  """
+  totalFunding: BigInt!
+  discussionThread: ForumThread
+  discussionThreadId: String
+  contributions: [BountyContribution!]
+  entries: [BountyEntry!]
+
+  """
+  If true the bounty lifecycle ended and its state will not change anymore
+  """
+  isTerminated: Boolean!
+  createdInEvent: BountyCreatedEvent!
+  canceledEvent: BountyCanceledEvent
+  vetoedEvent: BountyVetoedEvent
+  maxFundingReachedEvent: BountyMaxFundingReachedEvent
+  removedInEvent: BountyRemovedEvent
+  judgment: OracleJudgmentSubmittedEvent
+  bountycreatorcherrywithdrawaleventbounty: [BountyCreatorCherryWithdrawalEvent!]
+  worksubmittedeventbounty: [WorkSubmittedEvent!]
+}
+
+union BountyFundingType = BountyFundingPerpetual | BountyFundingLimited
+
+enum BountyStage {
+  Funding
+  Expired
+  WorkSubmission
+  Judgment
+  Successful
+  Failed
+}
+
+type ForumThread implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  author: Membership!
+  authorId: String!
+  category: ForumCategory!
+  categoryId: String!
+
+  """
+  Thread title
+  """
+  title: String!
+  posts: [ForumPost!]!
+  initialPost: ForumPost
+  initialPostId: String
+
+  """
+  Number of non-deleted posts in the thread
+  """
+  visiblePostsCount: Int!
+
+  """
+  Whether the thread is sticky in the category
+  """
+  isSticky: Boolean!
+  createdInEvent: ThreadCreatedEvent!
+
+  """
+  Current thread status
+  """
+  status: ThreadStatus!
+
+  """
+  True if the thread is either Active or Locked
+  """
+  isVisible: Boolean!
+  metadataUpdates: [ThreadMetadataUpdatedEvent!]!
+  madeStickyInEvents: [CategoryStickyThreadUpdateEvent!]!
+  movedInEvents: [ThreadMovedEvent!]!
+  tags: [ForumThreadTag!]!
+  bountydiscussionThread: [Bounty!]
+  threaddeletedeventthread: [ThreadDeletedEvent!]
+  threadmoderatedeventthread: [ThreadModeratedEvent!]
+}
+
+union ThreadStatus = ThreadStatusActive | ThreadStatusLocked | ThreadStatusModerated | ThreadStatusRemoved
+
+type ForumCategory implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  parent: ForumCategory
+  parentId: String
+
+  """
+  Category title
+  """
+  title: String!
+
+  """
+  Category description
+  """
+  description: String!
+  threads: [ForumThread!]!
+  moderators: [Worker!]!
+  createdInEvent: CategoryCreatedEvent!
+
+  """
+  Current category status
+  """
+  status: CategoryStatus!
+  categoryarchivalstatusupdatedeventcategory: [CategoryArchivalStatusUpdatedEvent!]
+  categorydeletedeventcategory: [CategoryDeletedEvent!]
+  categorymembershipofmoderatorupdatedeventcategory: [CategoryMembershipOfModeratorUpdatedEvent!]
+  categorystickythreadupdateeventcategory: [CategoryStickyThreadUpdateEvent!]
+  forumcategoryparent: [ForumCategory!]
+  threadmovedeventoldCategory: [ThreadMovedEvent!]
+  threadmovedeventnewCategory: [ThreadMovedEvent!]
+}
+
+union CategoryStatus = CategoryStatusActive | CategoryStatusArchived | CategoryStatusRemoved
+
+type Worker implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  WorkerId in specific working group module
+  """
+  runtimeId: Int!
+  group: WorkingGroup!
+
+  """
+  The id the group that the worker belongs to
+  """
+  groupId: String!
+  membership: Membership!
+  membershipId: String!
+
+  """
+  Worker's role account
+  """
+  roleAccount: String!
+
+  """
+  Worker's reward account
+  """
+  rewardAccount: String!
+
+  """
+  Worker's staking account
+  """
+  stakeAccount: String!
+
+  """
+  Current worker status
+  """
+  status: WorkerStatus!
+
+  """
+  Whether the worker is also the working group lead
+  """
+  isLead: Boolean!
+
+  """
+  Whether the worker is currently active
+  """
+  isActive: Boolean!
+
+  """
+  Current role stake (in JOY)
+  """
+  stake: BigInt!
+
+  """
+  Current reward per block
+  """
+  rewardPerBlock: BigInt!
+
+  """
+  The reward amount the worker is currently missing (due to empty working group budget)
+  """
+  missingRewardAmount: BigInt
+  payouts: [RewardPaidEvent!]!
+  slashes: [StakeSlashedEvent!]!
+  entry: OpeningFilledEvent!
+  entryId: String!
+  application: WorkingGroupApplication!
+  applicationId: String!
+
+  """
+  Worker's storage data
+  """
+  storage: String
+  managedForumCategories: [ForumCategory!]!
+  categoryarchivalstatusupdatedeventactor: [CategoryArchivalStatusUpdatedEvent!]
+  categorydeletedeventactor: [CategoryDeletedEvent!]
+  categorymembershipofmoderatorupdatedeventmoderator: [CategoryMembershipOfModeratorUpdatedEvent!]
+  categorystickythreadupdateeventactor: [CategoryStickyThreadUpdateEvent!]
+  leaderseteventworker: [LeaderSetEvent!]
+  leaderunseteventleader: [LeaderUnsetEvent!]
+  memberverificationstatusupdatedeventworker: [MemberVerificationStatusUpdatedEvent!]
+  newmissedrewardlevelreachedeventworker: [NewMissedRewardLevelReachedEvent!]
+  postmoderatedeventactor: [PostModeratedEvent!]
+  stakedecreasedeventworker: [StakeDecreasedEvent!]
+  stakeincreasedeventworker: [StakeIncreasedEvent!]
+  terminatedleadereventworker: [TerminatedLeaderEvent!]
+  terminatedworkereventworker: [TerminatedWorkerEvent!]
+  threadmoderatedeventactor: [ThreadModeratedEvent!]
+  threadmovedeventactor: [ThreadMovedEvent!]
+  workerexitedeventworker: [WorkerExitedEvent!]
+  workerrewardaccountupdatedeventworker: [WorkerRewardAccountUpdatedEvent!]
+  workerrewardamountupdatedeventworker: [WorkerRewardAmountUpdatedEvent!]
+  workerroleaccountupdatedeventworker: [WorkerRoleAccountUpdatedEvent!]
+  workerstartedleavingeventworker: [WorkerStartedLeavingEvent!]
+  workinggroupleader: [WorkingGroup!]
+}
+
+union WorkerStatus = WorkerStatusActive | WorkerStatusLeaving | WorkerStatusLeft | WorkerStatusTerminated
+
+type WorkingGroupApplication implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  ApplicationId in specific working group module
+  """
+  runtimeId: Int!
+  opening: WorkingGroupOpening!
+  openingId: String!
+  applicant: Membership!
+  applicantId: String!
+
+  """
+  Application stake
+  """
+  stake: BigInt!
+
+  """
+  Applicant's initial role account
+  """
+  roleAccount: String!
+
+  """
+  Applicant's initial reward account
+  """
+  rewardAccount: String!
+
+  """
+  Applicant's initial staking account
+  """
+  stakingAccount: String!
+  answers: [ApplicationFormQuestionAnswer!]!
+
+  """
+  Current application status
+  """
+  status: WorkingGroupApplicationStatus!
+  createdInEvent: AppliedOnOpeningEvent!
+  applicationwithdrawneventapplication: [ApplicationWithdrawnEvent!]
+  workerapplication: [Worker!]
+}
+
+union WorkingGroupApplicationStatus =
+    ApplicationStatusPending
+  | ApplicationStatusAccepted
+  | ApplicationStatusRejected
+  | ApplicationStatusWithdrawn
+  | ApplicationStatusCancelled
+
+type ApplicationFormQuestionAnswer implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  application: WorkingGroupApplication!
+  applicationId: String!
+  question: ApplicationFormQuestion!
+  questionId: String!
+
+  """
+  Applicant's answer
+  """
+  answer: String!
+}
+
+type ApplicationFormQuestion implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  openingMetadata: WorkingGroupOpeningMetadata!
+  openingMetadataId: String!
+
+  """
+  The question itself
+  """
+  question: String
+
+  """
+  Type of the question (UI answer input type)
+  """
+  type: ApplicationFormQuestionType!
+
+  """
+  Index of the question
+  """
+  index: Int!
+  applicationformquestionanswerquestion: [ApplicationFormQuestionAnswer!]
+}
+
+enum ApplicationFormQuestionType {
+  TEXT
+  TEXTAREA
+}
+
+type WorkingGroupOpeningMetadata implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Whether the originally provided metadata was valid
+  """
+  originallyValid: Boolean!
+
+  """
+  Opening title
+  """
+  title: String
+
+  """
+  Opening short description
+  """
+  shortDescription: String
+
+  """
+  Opening description (md-formatted)
+  """
+  description: String
+
+  """
+  Expected max. number of applicants that will be hired
+  """
+  hiringLimit: Int
+
+  """
+  Expected time when the opening will close
+  """
+  expectedEnding: DateTime
+
+  """
+  Md-formatted text explaining the application process
+  """
+  applicationDetails: String
+  applicationFormQuestions: [ApplicationFormQuestion!]!
+  upcomingworkinggroupopeningmetadata: [UpcomingWorkingGroupOpening!]
+  workinggroupopeningmetadata: [WorkingGroupOpening!]
+}
+
+type UpcomingWorkingGroupOpening implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  createdInEvent: StatusTextChangedEvent!
+  createdInEventId: String!
+  group: WorkingGroup!
+  groupId: String!
+
+  """
+  Expected opening start time
+  """
+  expectedStart: DateTime
+
+  """
+  Expected min. application/role stake amount
+  """
+  stakeAmount: BigInt
+
+  """
+  Expected reward per block
+  """
+  rewardPerBlock: BigInt
+  metadata: WorkingGroupOpeningMetadata!
+  metadataId: String!
+}
+
+union WorkingGroupMetadataActionResult =
+    UpcomingOpeningAdded
+  | UpcomingOpeningRemoved
+  | WorkingGroupMetadataSet
+  | InvalidActionMetadata
+
+type WorkingGroupMetadata implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Working group status
+  """
+  status: String
+
+  """
+  Working group status message
+  """
+  statusMessage: String
+
+  """
+  Working group about text
+  """
+  about: String
+
+  """
+  Working group description text
+  """
+  description: String
+  setInEvent: StatusTextChangedEvent!
+  setInEventId: String!
+  group: WorkingGroup!
+  groupId: String!
+  workinggroupmetadata: [WorkingGroup!]
+}
+
+type WorkingGroup implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Working group name
+  """
+  name: String!
+  metadata: WorkingGroupMetadata
+  metadataId: String
+  leader: Worker
+  leaderId: String
+  workers: [Worker!]!
+  openings: [WorkingGroupOpening!]!
+
+  """
+  Current working group budget (JOY)
+  """
+  budget: BigInt!
+  applicationwithdrawneventgroup: [ApplicationWithdrawnEvent!]
+  appliedonopeningeventgroup: [AppliedOnOpeningEvent!]
+  budgetfundedeventgroup: [BudgetFundedEvent!]
+  budgetseteventgroup: [BudgetSetEvent!]
+  budgetspendingeventgroup: [BudgetSpendingEvent!]
+  budgetupdatedeventgroup: [BudgetUpdatedEvent!]
+  leaderseteventgroup: [LeaderSetEvent!]
+  leaderunseteventgroup: [LeaderUnsetEvent!]
+  newmissedrewardlevelreachedeventgroup: [NewMissedRewardLevelReachedEvent!]
+  openingaddedeventgroup: [OpeningAddedEvent!]
+  openingcanceledeventgroup: [OpeningCanceledEvent!]
+  openingfilledeventgroup: [OpeningFilledEvent!]
+  rewardpaideventgroup: [RewardPaidEvent!]
+  stakedecreasedeventgroup: [StakeDecreasedEvent!]
+  stakeincreasedeventgroup: [StakeIncreasedEvent!]
+  stakeslashedeventgroup: [StakeSlashedEvent!]
+  statustextchangedeventgroup: [StatusTextChangedEvent!]
+  terminatedleadereventgroup: [TerminatedLeaderEvent!]
+  terminatedworkereventgroup: [TerminatedWorkerEvent!]
+  upcomingworkinggroupopeninggroup: [UpcomingWorkingGroupOpening!]
+  workerexitedeventgroup: [WorkerExitedEvent!]
+  workerrewardaccountupdatedeventgroup: [WorkerRewardAccountUpdatedEvent!]
+  workerrewardamountupdatedeventgroup: [WorkerRewardAmountUpdatedEvent!]
+  workerroleaccountupdatedeventgroup: [WorkerRoleAccountUpdatedEvent!]
+  workerstartedleavingeventgroup: [WorkerStartedLeavingEvent!]
+  workinggroupmetadatagroup: [WorkingGroupMetadata!]
+}
+
+type GeoCoordinates implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  latitude: Float!
+  longitude: Float!
+  nodelocationmetadatacoordinates: [NodeLocationMetadata!]
+}
+
+type DistributionBucketFamilyGeographicArea implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Geographical area (continent / country / subdivision)
+  """
+  area: GeographicalArea!
+  distributionBucketFamilyMetadata: DistributionBucketFamilyMetadata!
+  distributionBucketFamilyMetadataId: String!
+}
+
+union GeographicalArea = GeographicalAreaContinent | GeographicalAreaCountry | GeographicalAreaSubdivistion
+
+type DistributionBucketFamilyMetadata implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Name of the geographical region covered by the family (ie.: us-east-1)
+  """
+  region: String
+
+  """
+  Optional, more specific description of the region covered by the family
+  """
+  description: String
+  areas: [DistributionBucketFamilyGeographicArea!]!
+
+  """
+  List of targets (hosts/ips) best suited latency measurements for the family
+  """
+  latencyTestTargets: [String!]
+  distributionbucketfamilymetadata: [DistributionBucketFamily!]
+}
+
+type DistributionBucketFamily implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  metadata: DistributionBucketFamilyMetadata
+  metadataId: String
+  buckets: [DistributionBucket!]!
+}
+
+type DistributionBucket implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  family: DistributionBucketFamily!
+  familyId: String!
+
+  """
+  Bucket index within the family
+  """
+  bucketIndex: Int!
+  operators: [DistributionBucketOperator!]!
+
+  """
+  Whether the bucket is accepting any new bags
+  """
+  acceptingNewBags: Boolean!
+
+  """
+  Whether the bucket is currently distributing content
+  """
+  distributing: Boolean!
+  bags: [StorageBag!]!
+}
+
+type DistributionBucketOperator implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  distributionBucket: DistributionBucket!
+  distributionBucketId: String!
+
+  """
+  ID of the distribution group worker
+  """
+  workerId: Int!
+
+  """
+  Current operator status
+  """
+  status: DistributionBucketOperatorStatus!
+  metadata: DistributionBucketOperatorMetadata
+  metadataId: String
+}
+
+enum DistributionBucketOperatorStatus {
+  INVITED
+  ACTIVE
+}
+
+type DistributionBucketOperatorMetadata implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Root distributor node api endpoint
+  """
+  nodeEndpoint: String
+  nodeLocation: NodeLocationMetadata
+  nodeLocationId: String
+
+  """
+  Additional information about the node/operator
+  """
+  extra: String
+  distributionbucketoperatormetadata: [DistributionBucketOperator!]
+}
+
+type NodeLocationMetadata implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  ISO 3166-1 alpha-2 country code (2 letters)
+  """
+  countryCode: String
+
+  """
+  City name
+  """
+  city: String
+  coordinates: GeoCoordinates
+  coordinatesId: String
+  distributionbucketoperatormetadatanodeLocation: [DistributionBucketOperatorMetadata!]
+  storagebucketoperatormetadatanodeLocation: [StorageBucketOperatorMetadata!]
+}
+
+type StorageBucketOperatorMetadata implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Root node endpoint
+  """
+  nodeEndpoint: String
+  nodeLocation: NodeLocationMetadata
+  nodeLocationId: String
+
+  """
+  Additional information about the node/operator
+  """
+  extra: String
+  storagebucketoperatorMetadata: [StorageBucket!]
+}
+
+type StorageBucket implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Current bucket operator status
+  """
+  operatorStatus: StorageBucketOperatorStatus!
+  operatorMetadata: StorageBucketOperatorMetadata
+  operatorMetadataId: String
+
+  """
+  Whether the bucket is accepting any new storage bags
+  """
+  acceptingNewBags: Boolean!
+  bags: [StorageBag!]!
+
+  """
+  Bucket's data object size limit in bytes
+  """
+  dataObjectsSizeLimit: BigInt!
+
+  """
+  Bucket's data object count limit
+  """
+  dataObjectCountLimit: BigInt!
+
+  """
+  Number of assigned data objects
+  """
+  dataObjectsCount: BigInt!
+
+  """
+  Total size of assigned data objects
+  """
+  dataObjectsSize: BigInt!
+}
+
+union StorageBucketOperatorStatus =
+    StorageBucketOperatorStatusMissing
+  | StorageBucketOperatorStatusInvited
+  | StorageBucketOperatorStatusActive
+
+type StorageBag implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  objects: [StorageDataObject!]!
+
+  """
+  Total size of data objects in Bag
+  """
+  objectsSize: BigInt!
+  storageBuckets: [StorageBucket!]!
+  distributionBuckets: [DistributionBucket!]!
+
+  """
+  Owner of the storage bag
+  """
+  owner: StorageBagOwner!
+}
+
+union StorageBagOwner =
+    StorageBagOwnerCouncil
+  | StorageBagOwnerWorkingGroup
+  | StorageBagOwnerMember
+  | StorageBagOwnerChannel
+  | StorageBagOwnerDAO
+
+type ChannelNftCollectors implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  channel: Channel!
+  channelId: String!
+  member: Membership
+  memberId: String
+  curatorGroup: CuratorGroup
+  curatorGroupId: String
+
+  """
+  Amount of NFTs owned in the channel
+  """
+  amount: Int!
+
+  """
+  Time of last NFT amount increase
+  """
+  lastIncreaseAt: DateTime!
+}
+
+type Curator implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Type needs to have at least one non-relation entity. This value is not used.
+  """
+  dummy: Int
+  curatorGroups: [CuratorAgentPermissions!]!
+}
+
+type CuratorAgentPermissions implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  curatorGroup: CuratorGroup!
+  curatorGroupId: String!
+  curator: Curator!
+  curatorId: String!
+
+  """
+  List of member's permissions
+  """
+  permissions: [String!]!
+}
+
+union ContentActor = ContentActorCurator | ContentActorMember | ContentActorLead
+
+type VideoCategory implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  The name of the category
+  """
+  name: String
+
+  """
+  The description of the category
+  """
+  description: String
+
+  """
+  Count of category's videos with an uploaded asset that are public and not censored.
+  """
+  activeVideosCounter: Int!
+  parentCategory: VideoCategory
+  parentCategoryId: String
+  videos: [Video!]!
+  nfts: [OwnedNft!]!
+  createdInBlock: Int!
+  nftissuedeventvideoCategory: [NftIssuedEvent!]
+  videocategoryparentCategory: [VideoCategory!]
+}
+
+type TransactionalStatusUpdate implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  nft: OwnedNft!
+  nftId: String!
+
+  """
+  NFT's non-auction transactional status (if any)
+  """
+  transactionalStatus: TransactionalStatus
+  transactionalStatusAuction: Auction
+  transactionalStatusAuctionId: String
+
+  """
+  Block number at which change happened
+  """
+  changedAt: Int!
+}
+
+union TransactionalStatus =
+    TransactionalStatusIdle
+  | TransactionalStatusInitiatedOfferToMember
+  | TransactionalStatusBuyNow
+
+"""
+Represents NFT details
+"""
+type OwnedNft implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  video: Video!
+  videoCategory: VideoCategory
+  videoCategoryId: String
+  auctions: [Auction!]!
+  ownerMember: Membership
+  ownerMemberId: String
+
+  """
+  NFT's metadata
+  """
+  metadata: String!
+
+  """
+  NFT's non-auction transactional status (if any)
+  """
+  transactionalStatus: TransactionalStatus
+  transactionalStatusAuction: Auction
+  transactionalStatusAuctionId: String
+  transactionalStatusUpdates: [TransactionalStatusUpdate!]!
+
+  """
+  Creator royalty
+  """
+  creatorRoyalty: Float
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
+
+  """
+  Is NFT owned by channel
+  """
+  isOwnedByChannel: Boolean!
+  creatorChannel: Channel!
+  creatorChannelId: String!
+
+  """
+  NFT's last sale price (if any)
+  """
+  lastSalePrice: BigInt
+
+  """
+  NFT's last sale date (if any)
+  """
+  lastSaleDate: DateTime
+  bids: [Bid!]!
+}
+
+"""
+Represents NFT auction
+"""
+type Auction implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  nft: OwnedNft!
+  nftId: String!
+  initialOwner: Membership
+  initialOwnerId: String
+  winningMember: Membership
+  winningMemberId: String
+
+  """
+  Auction starting price
+  """
+  startingPrice: BigInt!
+
+  """
+  Whether auction can be completed instantly
+  """
+  buyNowPrice: BigInt
+
+  """
+  The type of auction
+  """
+  auctionType: AuctionType!
+  topBid: Bid
+  topBidId: String
+  bids: [Bid!]!
+
+  """
+  Block when auction starts
+  """
+  startsAtBlock: Int!
+
+  """
+  Block when auction ended
+  """
+  endedAtBlock: Int
+
+  """
+  Is auction canceled
+  """
+  isCanceled: Boolean!
+
+  """
+  Is auction completed
+  """
+  isCompleted: Boolean!
+  whitelistedMembers: [Membership!]!
+  englishauctionstartedeventauction: [EnglishAuctionStartedEvent!]
+  openauctionstartedeventauction: [OpenAuctionStartedEvent!]
+  ownednfttransactionalStatusAuction: [OwnedNft!]
+  transactionalstatusupdatetransactionalStatusAuction: [TransactionalStatusUpdate!]
+}
+
+union AuctionType = AuctionTypeEnglish | AuctionTypeOpen
+
+"""
+Represents bid in NFT auction
+"""
+type Bid implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  auction: Auction!
+  auctionId: String!
+  nft: OwnedNft!
+  nftId: String!
+  auctionTopBid: Auction
+  bidder: Membership!
+  bidderId: String!
+
+  """
+  Amount bidded
+  """
+  amount: BigInt!
+
+  """
+  Sign for canceled bid
+  """
+  isCanceled: Boolean!
+
+  """
+  Block in which the bid was placed
+  """
+  createdInBlock: Int!
+
+  """
+  Index of event in block where bid was made.
+  """
+  indexInBlock: Int!
+  auctionbidmadeeventpreviousTopBid: [AuctionBidMadeEvent!]
+  bidmadecompletingauctioneventwinningBid: [BidMadeCompletingAuctionEvent!]
+  bidmadecompletingauctioneventpreviousTopBid: [BidMadeCompletingAuctionEvent!]
+  englishauctionsettledeventwinningBid: [EnglishAuctionSettledEvent!]
+  openauctionbidacceptedeventwinningBid: [OpenAuctionBidAcceptedEvent!]
+}
+
+type NftSellOrderMadeEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+  video: Video!
+  videoId: String!
+
+  """
+  Content actor acting as NFT owner.
+  """
+  contentActor: ContentActor!
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
+
+  """
+  Offer's price.
+  """
+  price: BigInt!
+}
+
+type CuratorGroup implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Is group active or not
+  """
+  isActive: Boolean!
+  channels: [Channel!]!
+  nftCollectorInChannels: [ChannelNftCollectors!]!
+  curators: [CuratorAgentPermissions!]!
+  auctionbidcanceledeventownerCuratorGroup: [AuctionBidCanceledEvent!]
+  auctionbidmadeeventownerCuratorGroup: [AuctionBidMadeEvent!]
+  auctioncanceledeventownerCuratorGroup: [AuctionCanceledEvent!]
+  bidmadecompletingauctioneventownerCuratorGroup: [BidMadeCompletingAuctionEvent!]
+  buynowcanceledeventownerCuratorGroup: [BuyNowCanceledEvent!]
+  buynowpriceupdatedeventownerCuratorGroup: [BuyNowPriceUpdatedEvent!]
+  englishauctionsettledeventownerCuratorGroup: [EnglishAuctionSettledEvent!]
+  englishauctionstartedeventownerCuratorGroup: [EnglishAuctionStartedEvent!]
+  nftboughteventownerCuratorGroup: [NftBoughtEvent!]
+  nftissuedeventownerCuratorGroup: [NftIssuedEvent!]
+  nftsellordermadeeventownerCuratorGroup: [NftSellOrderMadeEvent!]
+  nftslingedbacktotheoriginalartisteventownerCuratorGroup: [NftSlingedBackToTheOriginalArtistEvent!]
+  offeracceptedeventownerCuratorGroup: [OfferAcceptedEvent!]
+  offercanceledeventownerCuratorGroup: [OfferCanceledEvent!]
+  offerstartedeventownerCuratorGroup: [OfferStartedEvent!]
+  openauctionbidacceptedeventownerCuratorGroup: [OpenAuctionBidAcceptedEvent!]
+  openauctionstartedeventownerCuratorGroup: [OpenAuctionStartedEvent!]
+  ownednftownerCuratorGroup: [OwnedNft!]
+}
+
+type VideoSubtitle implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  video: Video!
+  videoId: String!
+
+  """
+  Subtitle's type
+  """
+  type: String!
+  language: Language
+  languageId: String
+
+  """
+  MIME type description of format used for this subtitle
+  """
+  mimeType: String!
+  asset: StorageDataObject
+  assetId: String
+}
+
+type Language implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Language identifier ISO 639-1
+  """
+  iso: String!
+  createdInBlock: Int!
+  channellanguage: [Channel!]
+  videolanguage: [Video!]
+  videosubtitlelanguage: [VideoSubtitle!]
+}
+
+type Collaborator implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  channel: Channel!
+  channelId: String!
+  member: Membership!
+  memberId: String!
+
+  """
+  List of member's permissions
+  """
+  permissions: [String!]!
+}
+
+"""
+Direct channel payment by any member by-passing the council payouts
+"""
+type ChannelPaymentMadeEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+  payer: Membership!
+  payerId: String!
+
+  """
+  Amount of the payment
+  """
+  amount: BigInt!
+
+  """
+  Payment and payee context
+  """
+  paymentContext: PaymentContext
+  payeeChannel: Channel
+  payeeChannelId: String
+
+  """
+  Reason of the payment
+  """
+  rationale: String
+}
+
+union PaymentContext = PaymentContextVideo | PaymentContextChannel
+
+type CommentReaction implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  The Reaction id
+  """
+  reactionId: Int!
+  member: Membership!
+
+  """
+  ID of the member that reacted
+  """
+  memberId: String!
+  comment: Comment!
+  commentId: String!
+  video: Video!
+  videoId: String!
+}
+
+type CommentReactionsCountByReactionId implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  The reaction id
+  """
+  reactionId: Int!
+
+  """
+  No of times the comment has been reacted with given reaction Id
+  """
+  count: Int!
+  comment: Comment!
+  commentId: String!
+  video: Video!
+  videoId: String!
+}
+
+type Comment implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  author: Membership!
+  authorId: String!
+
+  """
+  Comment text
+  """
+  text: String!
+  video: Video!
+  videoId: String!
+
+  """
+  Status of the comment; either it is visible, deleted, or moderated (deleted by moderator)
+  """
+  status: CommentStatus!
+  reactions: [CommentReaction!]!
+  reactionsCountByReactionId: [CommentReactionsCountByReactionId!]!
+  parentComment: Comment
+  parentCommentId: String
+
+  """
+  How many comments has replied to this comment
+  """
+  repliesCount: Int!
+
+  """
+  Total number of reactions to this comment
+  """
+  reactionsCount: Int!
+
+  """
+  Sum of replies and reactions
+  """
+  reactionsAndRepliesCount: Int!
+
+  """
+  Whether comment has been edited or not
+  """
+  isEdited: Boolean!
+  edits: [CommentTextUpdatedEvent!]!
+  deletedInEvent: CommentDeletedEvent
+  moderatedInEvent: CommentModeratedEvent
+  commentparentComment: [Comment!]
+  commentcreatedeventcomment: [CommentCreatedEvent!]
+  commentpinnedeventcomment: [CommentPinnedEvent!]
+  commentreactedeventcomment: [CommentReactedEvent!]
+}
+
+enum CommentStatus {
+  VISIBLE
+  DELETED
+  MODERATED
+}
+
+enum VideoReactionOptions {
+  LIKE
+  UNLIKE
+}
+
+type Channel implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  entryApp: App
+  entryAppId: String
+  ownerMember: Membership
+  ownerMemberId: String
+  ownerCuratorGroup: CuratorGroup
+  ownerCuratorGroupId: String
+
+  """
+  The title of the Channel
+  """
+  title: String
+
+  """
+  The description of a Channel
+  """
+  description: String
+
+  """
+  Count of channel's videos with an uploaded asset that are public and not censored.
+  """
+  activeVideosCounter: Int!
+  coverPhoto: StorageDataObject
+  coverPhotoId: String
+  avatarPhoto: StorageDataObject
+  avatarPhotoId: String
+
+  """
+  Flag signaling whether a channel is public.
+  """
+  isPublic: Boolean
+
+  """
+  Flag signaling whether a channel is censored.
+  """
+  isCensored: Boolean!
+  language: Language
+  languageId: String
+  videos: [Video!]!
+
+  """
+  Number of the block the channel was created in
+  """
+  createdInBlock: Int!
+  collaborators: [Collaborator!]!
+  bannedMembers: [Membership!]!
+  channelNftCollectors: [ChannelNftCollectors!]!
+
+  """
+  Channel's reward account, storing the income from the nft sales and channel payouts.
+  """
+  rewardAccount: String!
+
+  """
+  Value of channel state bloat bond fee paid by channel creator
+  """
+  channelStateBloatBond: BigInt!
+
+  """
+  Channel's privilege level
+  """
+  privilegeLevel: Int
+
+  """
+  Cumulative rewards claimed by this channel
+  """
+  cumulativeRewardClaimed: BigInt
+  claimedRewards: [ChannelRewardClaimedEvent!]!
+
+  """
+  Number of videos ever created in this channel
+  """
+  totalVideosCreated: Int!
+  channelfundswithdrawneventchannel: [ChannelFundsWithdrawnEvent!]
+  channelpaymentmadeeventpayeeChannel: [ChannelPaymentMadeEvent!]
+  channelrewardclaimedandwithdrawneventchannel: [ChannelRewardClaimedAndWithdrawnEvent!]
+  commentcreatedeventvideoChannel: [CommentCreatedEvent!]
+  commentdeletedeventvideoChannel: [CommentDeletedEvent!]
+  commentmoderatedeventvideoChannel: [CommentModeratedEvent!]
+  commentpinnedeventvideoChannel: [CommentPinnedEvent!]
+  commentreactedeventvideoChannel: [CommentReactedEvent!]
+  commenttextupdatedeventvideoChannel: [CommentTextUpdatedEvent!]
+  memberbannedfromchanneleventchannel: [MemberBannedFromChannelEvent!]
+  ownednftcreatorChannel: [OwnedNft!]
+  videoreactedeventvideoChannel: [VideoReactedEvent!]
+}
+
+type License implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  License code defined by Joystream
+  """
+  code: Int
+
+  """
+  Attribution (if required by the license)
+  """
+  attribution: String
+
+  """
+  Custom license content
+  """
+  customText: String
+  videolicense: [Video!]
+}
+
+type VideoMediaEncoding implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Encoding of the video media object
+  """
+  codecName: String
+
+  """
+  Media container format
+  """
+  container: String
+
+  """
+  Content MIME type
+  """
+  mimeMediaType: String
+  videomediametadataencoding: [VideoMediaMetadata!]
+}
+
+type VideoMediaMetadata implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  encoding: VideoMediaEncoding
+  encodingId: String
+
+  """
+  Video media width in pixels
+  """
+  pixelWidth: Int
+
+  """
+  Video media height in pixels
+  """
+  pixelHeight: Int
+
+  """
+  Video media size in bytes
+  """
+  size: BigInt
+  video: Video
+  createdInBlock: Int!
+}
+
+type VideoReaction implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  The Reaction
+  """
+  reaction: VideoReactionOptions!
+  member: Membership!
+
+  """
+  ID of the member that reacted
+  """
+  memberId: String!
+  video: Video!
+  videoId: String!
+}
+
+type VideoReactionsCountByReactionType implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  The reaction option
+  """
+  reaction: VideoReactionOptions!
+
+  """
+  No of times the video has been reacted with given reaction
+  """
+  count: Int!
+  video: Video!
+  videoId: String!
+}
+
+type Video implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  entryApp: App
+  entryAppId: String
+  channel: Channel!
+  channelId: String!
+  category: VideoCategory
+  categoryId: String
+
+  """
+  The title of the video
+  """
+  title: String
+
+  """
+  The description of the Video
+  """
+  description: String
+
+  """
+  Video duration in seconds
+  """
+  duration: Int
+  thumbnailPhoto: StorageDataObject
+  thumbnailPhotoId: String
+  language: Language
+  languageId: String
+
+  """
+  Whether or not Video contains marketing
+  """
+  hasMarketing: Boolean
+
+  """
+  If the Video was published on other platform before beeing published on Joystream - the original publication date
+  """
+  publishedBeforeJoystream: DateTime
+
+  """
+  Whether the Video is supposed to be publically displayed
+  """
+  isPublic: Boolean
+
+  """
+  Flag signaling whether a video is censored.
+  """
+  isCensored: Boolean!
+  nft: OwnedNft
+  nftId: String
+
+  """
+  Whether the Video contains explicit material.
+  """
+  isExplicit: Boolean
+  license: License
+  licenseId: String
+  media: StorageDataObject
+  mediaId: String
+
+  """
+  Value of video state bloat bond fee paid by channel owner
+  """
+  videoStateBloatBond: BigInt!
+  mediaMetadata: VideoMediaMetadata
+  mediaMetadataId: String
+  createdInBlock: Int!
+  subtitles: [VideoSubtitle!]!
+
+  """
+  Is comment section enabled (true if enabled)
+  """
+  isCommentSectionEnabled: Boolean!
+  pinnedComment: Comment
+  comments: [Comment!]!
+
+  """
+  Comments count
+  """
+  commentsCount: Int!
+
+  """
+  Is reactions feature enabled on video (true if enabled i.e. video can be reacted)
+  """
+  isReactionFeatureEnabled: Boolean!
+  reactions: [VideoReaction!]!
+  reactionsCountByReactionId: [VideoReactionsCountByReactionType!]!
+
+  """
+  Reactions count
+  """
+  reactionsCount: Int!
+
+  """
+  Video ID coming from YPP
+  """
+  ytVideoId: String
+
+  """
+  Whether the video is a short format, vertical video (e.g. Youtube Shorts, TikTok, Instagram Reels)
+  """
+  isShort: Boolean
+  auctionbidcanceledeventvideo: [AuctionBidCanceledEvent!]
+  auctionbidmadeeventvideo: [AuctionBidMadeEvent!]
+  auctioncanceledeventvideo: [AuctionCanceledEvent!]
+  bidmadecompletingauctioneventvideo: [BidMadeCompletingAuctionEvent!]
+  buynowcanceledeventvideo: [BuyNowCanceledEvent!]
+  buynowpriceupdatedeventvideo: [BuyNowPriceUpdatedEvent!]
+  commentcreatedeventvideo: [CommentCreatedEvent!]
+  commentdeletedeventvideo: [CommentDeletedEvent!]
+  commentmoderatedeventvideo: [CommentModeratedEvent!]
+  commentpinnedeventvideo: [CommentPinnedEvent!]
+  commentreactedeventvideo: [CommentReactedEvent!]
+  commentreactionvideo: [CommentReaction!]
+  commentreactionscountbyreactionidvideo: [CommentReactionsCountByReactionId!]
+  commenttextupdatedeventvideo: [CommentTextUpdatedEvent!]
+  englishauctionsettledeventvideo: [EnglishAuctionSettledEvent!]
+  englishauctionstartedeventvideo: [EnglishAuctionStartedEvent!]
+  nftboughteventvideo: [NftBoughtEvent!]
+  nftissuedeventvideo: [NftIssuedEvent!]
+  nftsellordermadeeventvideo: [NftSellOrderMadeEvent!]
+  nftslingedbacktotheoriginalartisteventvideo: [NftSlingedBackToTheOriginalArtistEvent!]
+  offeracceptedeventvideo: [OfferAcceptedEvent!]
+  offercanceledeventvideo: [OfferCanceledEvent!]
+  offerstartedeventvideo: [OfferStartedEvent!]
+  openauctionbidacceptedeventvideo: [OpenAuctionBidAcceptedEvent!]
+  openauctionstartedeventvideo: [OpenAuctionStartedEvent!]
+  videoreactedeventvideo: [VideoReactedEvent!]
+  videoreactionspreferenceeventvideo: [VideoReactionsPreferenceEvent!]
+}
+
+type ChannelPayoutsUpdatedEvent implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Hash of the extrinsic which caused the event to be emitted.
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in.
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Merkle root of the channel payouts
+  """
+  commitment: String
+  payloadDataObject: StorageDataObject
+  payloadDataObjectId: String
+
+  """
+  Size of the serialized channel payouts payload
+  """
+  payloadSize: BigInt
+
+  """
+  Hash of the serialized channel payouts payload
+  """
+  payloadHash: String
+
+  """
+  Minimum amount of channel reward cashout allowed at a time
+  """
+  minCashoutAllowed: BigInt
+
+  """
+  Maximum amount of channel reward cashout allowed at a time
+  """
+  maxCashoutAllowed: BigInt
+
+  """
+  Can channel cashout the rewards
+  """
+  channelCashoutsEnabled: Boolean
+}
+
+type StorageDataObject implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Whether the data object was uploaded and accepted by the storage provider
+  """
+  isAccepted: Boolean!
+
+  """
+  Data object size in bytes
+  """
+  size: BigInt!
+  storageBag: StorageBag!
+  storageBagId: String!
+
+  """
+  IPFS content hash
+  """
+  ipfsHash: String!
+
+  """
+  The type of the asset that the data object represents (if known)
+  """
+  type: DataObjectType!
+
+  """
+  State Bloat Bond for removing the data object
+  """
+  stateBloatBond: BigInt!
+
+  """
+  If the object is no longer used as an asset - the time at which it was unset (if known)
+  """
+  unsetAt: DateTime
+  videoThumbnail: Video
+  videoMedia: Video
+  videoSubtitle: VideoSubtitle
+  channelcoverPhoto: [Channel!]
+  channelavatarPhoto: [Channel!]
+  channelpayoutsupdatedeventpayloadDataObject: [ChannelPayoutsUpdatedEvent!]
+}
+
+union DataObjectType =
+    DataObjectTypeChannelAvatar
+  | DataObjectTypeChannelCoverPhoto
+  | DataObjectTypeVideoMedia
+  | DataObjectTypeVideoThumbnail
+  | DataObjectTypeVideoSubtitle
+  | DataObjectTypeChannelPayoutsPayload
+  | DataObjectTypeUnknown
+
+type FundingRequestDestination implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Amount of funds requested
+  """
+  amount: BigInt!
+
+  """
+  Destination account
+  """
+  account: String!
+  list: FundingRequestDestinationsList!
+  listId: String!
+}
+
+type FundingRequestDestinationsList implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  phantom: Int
+  destinations: [FundingRequestDestination!]!
+}
+
+type MembershipExternalResource implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+  type: MembershipExternalResourceType!
+  value: String!
+  memberMetadata: MemberMetadata!
+  memberMetadataId: String!
+  member: Membership
+  memberId: String
+}
+
+enum MembershipExternalResourceType {
+  EMAIL
+  HYPERLINK
+  TWITTER
+  TELEGRAM
+  DISCORD
+  FACEBOOK
+  YOUTUBE
+  MATRIX
+  IRC
+  WECHAT
+  WHATSAPP
+  LINKEDIN
+  GITHUB
+}
+
+type MemberMetadata implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Member's name
+  """
+  name: String
+
+  """
+  Avatar data object
+  """
+  avatar: Avatar
+
+  """
+  Short text chosen by member to share information about themselves
+  """
+  about: String
+  member: Membership
+  externalResources: [MembershipExternalResource!]
+  isVerifiedValidator: Boolean
+  membercreatedeventmetadata: [MemberCreatedEvent!]
+  memberinvitedeventmetadata: [MemberInvitedEvent!]
+  memberprofileupdatedeventnewMetadata: [MemberProfileUpdatedEvent!]
+  membershipboughteventmetadata: [MembershipBoughtEvent!]
+  membershipgiftedeventmetadata: [MembershipGiftedEvent!]
+}
+
+union Avatar = AvatarObject | AvatarUri
+
+union ProposalIntermediateStatus = ProposalStatusDeciding | ProposalStatusGracing | ProposalStatusDormant
+
+enum ProposalVoteKind {
+  APPROVE
+  REJECT
+  SLASH
+  ABSTAIN
+}
+
+union ProposalDecisionStatus =
+    ProposalStatusDormant
+  | ProposalStatusGracing
+  | ProposalStatusVetoed
+  | ProposalStatusSlashed
+  | ProposalStatusRejected
+  | ProposalStatusExpired
+  | ProposalStatusCancelled
+  | ProposalStatusCanceledByRuntime
+
+union ProposalExecutionStatus = ProposalStatusExecuted | ProposalStatusExecutionFailed
+
+type Proposal implements BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Proposal title
+  """
+  title: String!
+
+  """
+  Proposal description
+  """
+  description: String!
+
+  """
+  Proposal details depending on proposal type
+  """
+  details: ProposalDetails!
+
+  """
+  Staking account with proposal stake (in case a stake is required)
+  """
+  stakingAccount: String
+  creator: Membership!
+  creatorId: String!
+  createdInEvent: ProposalCreatedEvent!
+
+  """
+  Exact block number the proposal is supposed to be executed at (if specified)
+  """
+  exactExecutionBlock: Int
+  discussionThread: ProposalDiscussionThread!
+
+  """
+  How many prior councils have already approved the proposal (starts with 0)
+  """
+  councilApprovals: Int!
+  proposalStatusUpdates: [ProposalStatusUpdatedEvent!]!
+  votes: [ProposalVotedEvent!]!
+
+  """
+  Current proposal status
+  """
+  status: ProposalStatus!
+
+  """
+  If true then the proposal status is final and will not change form this point
+  """
+  isFinalized: Boolean
+
+  """
+  Number of the block the current status was set at
+  """
+  statusSetAtBlock: Int!
+
+  """
+  Time the current status was set at (based on block timestamp)
+  """
+  statusSetAtTime: DateTime!
+  proposalcancelledeventproposal: [ProposalCancelledEvent!]
+  proposaldecisionmadeeventproposal: [ProposalDecisionMadeEvent!]
+  proposalexecutedeventproposal: [ProposalExecutedEvent!]
+}
+
+union ProposalDetails =
+    SignalProposalDetails
+  | RuntimeUpgradeProposalDetails
+  | FundingRequestProposalDetails
+  | SetMaxValidatorCountProposalDetails
+  | CreateWorkingGroupLeadOpeningProposalDetails
+  | FillWorkingGroupLeadOpeningProposalDetails
+  | UpdateWorkingGroupBudgetProposalDetails
+  | DecreaseWorkingGroupLeadStakeProposalDetails
+  | SlashWorkingGroupLeadProposalDetails
+  | SetWorkingGroupLeadRewardProposalDetails
+  | TerminateWorkingGroupLeadProposalDetails
+  | AmendConstitutionProposalDetails
+  | CancelWorkingGroupLeadOpeningProposalDetails
+  | SetMembershipPriceProposalDetails
+  | SetCouncilBudgetIncrementProposalDetails
+  | SetCouncilorRewardProposalDetails
+  | SetInitialInvitationBalanceProposalDetails
+  | SetInitialInvitationCountProposalDetails
+  | SetMembershipLeadInvitationQuotaProposalDetails
+  | SetReferralCutProposalDetails
+  | VetoProposalDetails
+  | UpdateChannelPayoutsProposalDetails
+  | UpdatePalletFrozenStatusProposalDetails
+  | UpdateGlobalNftLimitProposalDetails
+  | SetEraPayoutDampingFactorProposalDetails
 
 union ProposalStatus =
     ProposalStatusDeciding
@@ -3326,6 +5919,13 @@ type SetCouncilorRewardProposalDetails {
   New (proposed) council members' reward per block
   """
   newRewardPerBlock: BigInt!
+}
+
+type SetEraPayoutDampingFactorProposalDetails {
+  """
+  Proposed validator payout damping factor
+  """
+  dampingFactor: Int!
 }
 
 type SetInitialInvitationBalanceProposalDetails {

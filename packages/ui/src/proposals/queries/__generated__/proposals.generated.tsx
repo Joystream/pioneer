@@ -74,6 +74,7 @@ export type ProposalFieldsFragment = {
     | { __typename: 'RuntimeUpgradeProposalDetails' }
     | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
     | { __typename: 'SetCouncilorRewardProposalDetails' }
+    | { __typename: 'SetEraPayoutDampingFactorProposalDetails' }
     | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
     | { __typename: 'SetInitialInvitationCountProposalDetails' }
     | { __typename: 'SetMaxValidatorCountProposalDetails' }
@@ -400,6 +401,7 @@ export type ProposalWithDetailsFieldsFragment = {
       }
     | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: string }
     | { __typename: 'SetCouncilorRewardProposalDetails'; newRewardPerBlock: string }
+    | { __typename: 'SetEraPayoutDampingFactorProposalDetails'; dampingFactor: number }
     | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: string }
     | { __typename: 'SetInitialInvitationCountProposalDetails'; newInitialInvitationsCount: number }
     | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
@@ -903,6 +905,7 @@ export type ProposalMentionFieldsFragment = {
     | { __typename: 'RuntimeUpgradeProposalDetails' }
     | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
     | { __typename: 'SetCouncilorRewardProposalDetails' }
+    | { __typename: 'SetEraPayoutDampingFactorProposalDetails' }
     | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
     | { __typename: 'SetInitialInvitationCountProposalDetails' }
     | { __typename: 'SetMaxValidatorCountProposalDetails' }
@@ -1013,6 +1016,7 @@ export type GetProposalsQuery = {
       | { __typename: 'RuntimeUpgradeProposalDetails' }
       | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
       | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetEraPayoutDampingFactorProposalDetails' }
       | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
       | { __typename: 'SetInitialInvitationCountProposalDetails' }
       | { __typename: 'SetMaxValidatorCountProposalDetails' }
@@ -1266,6 +1270,7 @@ export type GetProposalQuery = {
         }
       | { __typename: 'SetCouncilBudgetIncrementProposalDetails'; newAmount: string }
       | { __typename: 'SetCouncilorRewardProposalDetails'; newRewardPerBlock: string }
+      | { __typename: 'SetEraPayoutDampingFactorProposalDetails'; dampingFactor: number }
       | { __typename: 'SetInitialInvitationBalanceProposalDetails'; newInitialInvitationBalance: string }
       | { __typename: 'SetInitialInvitationCountProposalDetails'; newInitialInvitationsCount: number }
       | { __typename: 'SetMaxValidatorCountProposalDetails'; newMaxValidatorCount: number }
@@ -1760,6 +1765,7 @@ export type GetProposalMentionQuery = {
       | { __typename: 'RuntimeUpgradeProposalDetails' }
       | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
       | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetEraPayoutDampingFactorProposalDetails' }
       | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
       | { __typename: 'SetInitialInvitationCountProposalDetails' }
       | { __typename: 'SetMaxValidatorCountProposalDetails' }
@@ -1875,6 +1881,7 @@ export type GetLatestProposalByMemberIdQuery = {
       | { __typename: 'RuntimeUpgradeProposalDetails' }
       | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
       | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetEraPayoutDampingFactorProposalDetails' }
       | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
       | { __typename: 'SetInitialInvitationCountProposalDetails' }
       | { __typename: 'SetMaxValidatorCountProposalDetails' }
@@ -2139,6 +2146,9 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       ... on UpdatePalletFrozenStatusProposalDetails {
         frozen
         pallet
+      }
+      ... on SetEraPayoutDampingFactorProposalDetails {
+        dampingFactor
       }
     }
     discussionThread {
