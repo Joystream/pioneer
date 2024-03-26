@@ -18,7 +18,7 @@ export const CancelProposalModal = () => {
     () =>
       defaultTransactionModalMachine(
         'There was a problem cancelling your proposal.',
-        'Your propsal has been cancelled.'
+        'Your proposal has been cancelled.'
       ),
     []
   )
