@@ -39,7 +39,7 @@ export type AmountDetail = {
 export type StakeAmountDetail = {
   stakeAmount: BN
 }
-export type UnstakingPeriodDetail = {
+type UnstakingPeriodDetail = {
   unstakingPeriod: BN
 }
 export type RewardPerBlockDetail = {
@@ -60,6 +60,10 @@ export type GroupNameDetail = {
 
 export type CountDetail = {
   count: number
+}
+
+export type BlockDetail = {
+  blocks: number
 }
 
 export type ProposalDetail = {
