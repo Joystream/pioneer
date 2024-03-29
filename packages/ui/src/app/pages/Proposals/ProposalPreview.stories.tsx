@@ -299,6 +299,9 @@ export const UpdateWorkingGroupBudget: Story = {
 export const DecreaseCouncilBudget: Story = {
   args: { type: 'DecreaseCouncilBudgetProposalDetails' },
 }
+export const UpdateTokenPalletTokenConstraints: Story = {
+  args: { type: 'UpdateTokenPalletTokenConstraintsProposalDetails' },
+}
 
 // Disabled proposals
 export const Veto: Story = {

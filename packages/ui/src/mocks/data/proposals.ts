@@ -94,6 +94,17 @@ const proposalDetails: Record<ProposalDetailsType, RecursivePartial<ProposalWith
   VetoProposalDetails: { proposal: { __typename: 'Proposal', id: '0', title: random.words(4) } },
   UpdateGlobalNftLimitProposalDetails: {},
   DecreaseCouncilBudgetProposalDetails: { amount: joy(100) },
+  UpdateTokenPalletTokenConstraintsProposalDetails: {
+    maxYearlyRate: 500_000,
+    minAmmSlope: undefined,
+    minSaleDuration: 200,
+    minRevenueSplitDuration: undefined,
+    minRevenueSplitTimeToStart: 5,
+    salePlatformFee: 10_000,
+    ammBuyTxFees: undefined,
+    ammSellTxFees: 30_000,
+    bloatBond: joy(0.1),
+  },
 }
 
 export const proposalDetailsMap = mapValues(proposalDetails, (value, key) => {
