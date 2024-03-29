@@ -6,7 +6,7 @@ import { TextSmall } from '@/common/components/typography'
 
 interface Props {
   label: string
-  value: BN
+  value?: BN | number
   units?: string
 }
 

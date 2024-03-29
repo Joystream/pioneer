@@ -176,21 +176,17 @@ const memberMapper: Mapper<MemberDetail, 'member'> = (value): RenderNode[] => {
   ]
 }
 
-const percentageMapper: Mapper<AmountDetail, 'amount'> = (value, type): RenderNode[] => {
-  const defaultLabel = 'Percentage'
-  const overriddenLabelsBy: Partial<Record<ProposalType, string>> = {
-    setReferralCut: 'Proposed referral cut',
-  }
-  const overriddenLabel = type && overriddenLabelsBy[type]
-
-  return [
-    {
-      label: overriddenLabel || defaultLabel,
-      renderType: 'Percentage',
-      value,
-    },
-  ]
-}
+const percentageMapper =
+  (label = 'Percentage'): Mapper<AmountDetail, 'amount'> =>
+  (value): (RenderNode & { units: '%' })[] =>
+    [
+      {
+        label,
+        renderType: 'Numeric',
+        units: '%',
+        value,
+      },
+    ]
 
 const booleanMapper: Mapper<UpdateChannelPayoutsDetail, 'channelCashoutsEnabled'> = (value) => {
   return [
@@ -310,7 +306,7 @@ const mapProposalDetail = (key: ProposalDetailsKeys, proposalDetails: ProposalWi
   const value = proposalDetails[key as keyof typeof proposalDetails]
 
   if (percentageProposalsAmount.includes(proposalDetails.type as ProposalType) && key === 'amount') {
-    return percentageMapper((value as any).toNumber(), proposalDetails.type)
+    return percentageMapper('Proposed referral cut')((value as any).toNumber(), proposalDetails.type)
   }
 
   if (!mappers[key]) {

@@ -9,7 +9,6 @@ import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { Block } from '@/common/types'
 import { useCouncilStatistics } from '@/council/hooks/useCouncilStatistics'
-import { Percentage } from '@/proposals/components/ProposalDetails/renderers/Percentage'
 import getDetailsRenderStructure, { RenderNode, RenderType } from '@/proposals/helpers/getDetailsRenderStructure'
 import { ProposalWithDetails, UpdateGroupBudgetDetails } from '@/proposals/types'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
@@ -54,7 +53,6 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   Divider: Divider,
   ProposalLink: ProposalLink,
   OpeningLink: OpeningLink,
-  Percentage: Percentage,
   Hash: Hash,
   DestinationsPreview: DestinationsPreview,
   BlockTimeDisplay: BlockTimeDisplay,
