@@ -132,6 +132,7 @@ export default {
             council: {
               budget: joy(1000),
               councilorReward: joy(1),
+              eraPayoutDampingFactor: 70,
             },
             referendum: { stage: {} },
           },

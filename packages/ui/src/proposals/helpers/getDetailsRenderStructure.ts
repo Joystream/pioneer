@@ -39,7 +39,6 @@ export type RenderType =
   | 'Divider'
   | 'ProposalLink'
   | 'OpeningLink'
-  | 'Percentage'
   | 'Hash'
   | 'DestinationsPreview'
   | 'BlockTimeDisplay'

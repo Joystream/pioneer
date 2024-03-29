@@ -246,6 +246,7 @@ export const proposalsPagesChain = (
           budget: councilBudget,
           councilorReward,
           nextRewardPayments,
+          eraPayoutDampingFactor: 70,
         },
         referendum: { stage: {} },
 
