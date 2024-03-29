@@ -149,7 +149,10 @@ export type UpdatePalletFrozenStatusProposalDetails = ProposalDetailsNew<
   UpdatePalletFrozenStatusDetail
 >
 
-export type SetEraPayoutDampingFactorProposalDetails = ProposalDetailsNew<'setEraPayoutDampingFactor', CountDetail>
+export type SetEraPayoutDampingFactorProposalDetails = ProposalDetailsNew<
+  'setEraPayoutDampingFactor',
+  { multiplier: number }
+>
 
 export type ProposalDetails =
   | BaseProposalDetails
@@ -380,7 +383,7 @@ const asUpdatePalletFrozenStatus: DetailsCast<'UpdatePalletFrozenStatusProposalD
 
 const asSetEraPayoutDampingFactor: DetailsCast<'SetEraPayoutDampingFactorProposalDetails'> = (fragment) => ({
   type: 'setEraPayoutDampingFactor',
-  count: fragment.dampingFactor,
+  multiplier: fragment.dampingFactor,
 })
 
 interface DetailsCast<T extends ProposalDetailsTypename> {
