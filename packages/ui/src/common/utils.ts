@@ -34,6 +34,8 @@ export const perbillToPercent = (perbill: BN) => perbill.toNumber() / 10 ** 7
 
 export const permillToPercent = (permill: number) => permill / 10 ** 4
 
+export const percentToPermill = (percent: number) => percent * 10 ** 4
+
 // Objects:
 
 interface EqualsOption {

@@ -29,6 +29,7 @@ import { DecreaseCouncilBudget } from './DecreaseCouncilBudget'
 import { SetInitialInvitationBalance } from './SetInitialInvitationBalance'
 import { SetInitialInvitationCount } from './SetInitialInvitationCount'
 import { UpdatePalletFrozenStatus } from './UpdatePalletFrozenStatus'
+import { UpdateTokenPalletTokenConstraints } from './UpdateTokenPalletTokenConstraints'
 
 interface SpecificParametersStepProps {
   matches: AddNewProposalMachineState['matches']
@@ -89,6 +90,9 @@ export const SpecificParametersStep = ({ matches }: SpecificParametersStepProps)
     }
     case matches('specificParameters.decreaseCouncilBudget'): {
       return <DecreaseCouncilBudget />
+    }
+    case matches('specificParameters.updateTokenPalletTokenConstraints'): {
+      return <UpdateTokenPalletTokenConstraints />
     }
     default:
       return null

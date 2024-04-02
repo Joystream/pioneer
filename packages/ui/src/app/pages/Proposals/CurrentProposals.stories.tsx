@@ -1577,3 +1577,66 @@ export const SpecificParametersDecreaseCouncilBudget: Story = {
     })
   }),
 }
+
+export const SpecificUpdateTokenPalletTokenConstraints: Story = {
+  play: specificParametersTest(
+    'Update Token Pallet Token Constraints',
+    async ({ args, createProposal, modal, step }) => {
+      await createProposal(async () => {
+        const nextButton = getButtonByText(modal, 'Create proposal')
+        expect(nextButton).toBeDisabled()
+
+        const maxYearlyRate = await modal.findByLabelText('Maximum yearly rate')
+        const minAmmSlope = await modal.findByLabelText('Minimum AMM slope')
+        const minSaleDuration = await modal.findByLabelText('Minimum sale duration')
+        const minRevenueSplitDuration = await modal.findByLabelText('Minimum revenue split duration')
+        const minRevenueSplitTimeToStart = await modal.findByLabelText('Minimum revenue split time to start')
+        const salePlatformFee = await modal.findByLabelText('Sale platform fee')
+        const ammBuyTxFees = await modal.findByLabelText('AMM buy transaction fees')
+        const ammSellTxFees = await modal.findByLabelText('AMM sell transaction fees')
+        const bloatBond = await modal.findByLabelText('Bloat bond')
+
+        // Valid
+        await userEvent.type(maxYearlyRate, '40')
+        await waitFor(() => expect(nextButton).toBeEnabled())
+
+        // Invalid min AMM slope
+        await userEvent.type(minAmmSlope, '0')
+        await waitFor(() => expect(nextButton).toBeDisabled())
+
+        // Invalid Bloat bond
+        await userEvent.clear(minAmmSlope)
+        await userEvent.type(minAmmSlope, '1')
+        await waitFor(() => expect(nextButton).toBeEnabled())
+        await userEvent.type(bloatBond, '0')
+        await waitFor(() => expect(nextButton).toBeDisabled())
+
+        // Valid again
+        await userEvent.clear(bloatBond)
+        await userEvent.type(bloatBond, '2')
+        await userEvent.type(minSaleDuration, '100')
+        await userEvent.type(minRevenueSplitDuration, '200')
+        await userEvent.type(minRevenueSplitTimeToStart, '300')
+        await userEvent.type(salePlatformFee, '1')
+        await userEvent.type(ammBuyTxFees, '2')
+        await userEvent.type(ammSellTxFees, '3')
+        await waitFor(() => expect(nextButton).toBeEnabled())
+      })
+
+      await step('Transaction parameters', () => {
+        const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+        expect(specificParameters.toJSON().updateTokenPalletTokenConstraints).toEqual({
+          maxYearlyRate: 0.4 * 1_000_000,
+          minAmmSlope: Number(joy(1)),
+          minSaleDuration: 100,
+          minRevenueSplitDuration: 200,
+          minRevenueSplitTimeToStart: 300,
+          salePlatformFee: 0.01 * 1_000_000,
+          ammBuyTxFees: 0.02 * 1_000_000,
+          ammSellTxFees: 0.03 * 1_000_000,
+          bloatBond: Number(joy(2)),
+        })
+      })
+    }
+  ),
+}

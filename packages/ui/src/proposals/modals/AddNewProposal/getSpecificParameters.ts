@@ -4,7 +4,7 @@ import { Api } from '@/api'
 import { BN_ZERO } from '@/common/constants'
 import { createType } from '@/common/model/createType'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
-import { last } from '@/common/utils'
+import { last, percentToPermill, whenDefined } from '@/common/utils'
 import { asArrayBuffer } from '@/common/utils/file'
 import { AddNewProposalForm } from '@/proposals/modals/AddNewProposal/helpers'
 import { GroupIdToGroupParam } from '@/working-groups/constants'
@@ -195,6 +195,22 @@ export const getSpecificParameters = async (
     case 'decreaseCouncilBudget': {
       return createType('PalletProposalsCodexProposalDetails', {
         DecreaseCouncilBudget: specifics.decreaseCouncilBudget?.amount,
+      })
+    }
+    case 'updateTokenPalletTokenConstraints': {
+      const values = specifics.updateTokenPalletTokenConstraints
+      return createType('PalletProposalsCodexProposalDetails', {
+        UpdateTokenPalletTokenConstraints: {
+          maxYearlyRate: createType('Option<Permill>', whenDefined(values?.maxYearlyRate, percentToPermill)),
+          minAmmSlope: values?.minAmmSlope,
+          minSaleDuration: values?.minSaleDuration,
+          minRevenueSplitDuration: values?.minRevenueSplitDuration,
+          minRevenueSplitTimeToStart: values?.minRevenueSplitTimeToStart,
+          salePlatformFee: createType('Option<Permill>', whenDefined(values?.salePlatformFee, percentToPermill)),
+          ammBuyTxFees: createType('Option<Permill>', whenDefined(values?.ammBuyTxFees, percentToPermill)),
+          ammSellTxFees: createType('Option<Permill>', whenDefined(values?.ammSellTxFees, percentToPermill)),
+          bloatBond: values?.bloatBond,
+        },
       })
     }
     default:

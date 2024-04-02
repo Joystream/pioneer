@@ -59,4 +59,5 @@ const proposalTypeToConstantKey = new Map<ProposalType, keyof Api['consts']['pro
   ['updateWorkingGroupBudget', 'updateWorkingGroupBudgetProposalParameters'],
   ['veto', 'vetoProposalProposalParameters'],
   ['decreaseCouncilBudget', 'decreaseCouncilBudgetProposalParameters'],
+  ['updateTokenPalletTokenConstraints', 'updateTokenPalletTokenConstraints'],
 ])
