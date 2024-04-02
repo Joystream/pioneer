@@ -1553,7 +1553,7 @@ export const SpecificParametersDecreaseCouncilBudget: Story = {
       const nextButton = getButtonByText(modal, 'Create proposal')
       expect(nextButton).toBeDisabled()
 
-      const amountField = await modal.findByLabelText('Amount')
+      const amountField = await modal.findByLabelText('Decrease budget by')
 
       // Invalid price set to 0
       await userEvent.type(amountField, '0')
