@@ -309,15 +309,15 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
   freeze: palletStatusMapper,
 
   // UpdateTokenPalletTokenConstraints
-  maxYearlyRate: percentageMapper('Maximum yearly rate'),
-  minAmmSlope: amountMapper('Minimum AMM slope'),
-  minSaleDuration: blocksMapper('Minimum sale duration'),
-  minRevenueSplitDuration: blocksMapper('Minimum revenue split duration'),
-  minRevenueSplitTimeToStart: blocksMapper('Minimum revenue split time to start'),
-  salePlatformFee: percentageMapper('Sale platform fee'),
-  ammBuyTxFees: percentageMapper('AMM buy transaction fees'),
-  ammSellTxFees: percentageMapper('AMM sell transaction fees'),
-  bloatBond: amountMapper('Bloat bond'),
+  maxYearlyRate: percentageMapper('Proposed maximum yearly rate'),
+  minAmmSlope: amountMapper('Proposed minimum AMM slope'),
+  minSaleDuration: blocksMapper('Proposed minimum sale duration'),
+  minRevenueSplitDuration: blocksMapper('Proposed minimum revenue split duration'),
+  minRevenueSplitTimeToStart: blocksMapper('Proposed minimum revenue split time to start'),
+  salePlatformFee: percentageMapper('Proposed sale platform fee'),
+  ammBuyTxFees: percentageMapper('Proposed AMM buy transaction fees'),
+  ammSellTxFees: percentageMapper('Proposed AMM sell transaction fees'),
+  bloatBond: amountMapper('Proposed bloat bond'),
 }
 
 const mapProposalDetail = (key: ProposalDetailsKeys, proposalDetails: ProposalWithDetails['details']) => {

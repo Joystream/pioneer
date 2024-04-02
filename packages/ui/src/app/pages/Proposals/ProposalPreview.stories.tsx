@@ -134,6 +134,17 @@ export default {
               councilorReward: joy(1),
             },
             referendum: { stage: {} },
+            projectToken: {
+              ammBuyTxFees: 10_000,
+              ammSellTxFees: 20_000,
+              bloatBond: joy(0.1),
+              maxYearlyPatronageRate: 500_000,
+              minAmmSlopeParameter: joy(10),
+              minRevenueSplitDuration: 100,
+              minRevenueSplitTimeToStart: 200,
+              minSaleDuration: 300,
+              salePlatformFee: 30_000,
+            },
           },
 
           tx: {
