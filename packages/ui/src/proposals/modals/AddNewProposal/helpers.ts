@@ -428,7 +428,10 @@ export const schemaFactory = (api?: Api) => {
         .required('Field is required'),
     }),
     setEraPayoutDampingFactor: Yup.object().shape({
-      dampingFactor: Yup.number().required('Field is required'),
+      dampingFactor: Yup.number()
+        .min(0, 'The value must be between 0 and 100%.')
+        .max(100, 'The value must be between 0 and 100%.')
+        .required('Field is required'),
     }),
   })
 }
