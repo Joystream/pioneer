@@ -87,7 +87,7 @@ export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBl
       ] as RenderNode[]
     }
 
-    if (proposalDetails?.type === 'fundingRequest') {
+    if (proposalDetails?.type === 'fundingRequest' || proposalDetails?.type === 'decreaseCouncilBudget') {
       return [
         {
           renderType: 'Amount',

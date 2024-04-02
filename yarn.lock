@@ -5012,6 +5012,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@joystream/types@patch:@joystream/types@npm%3A4.3.0#./.yarn/patches/@joystream-types-npm-4.3.0-542438a0b6.patch::locator=pioneer%40workspace%3A.":
+  version: 4.3.0
+  resolution: "@joystream/types@patch:@joystream/types@npm%3A4.3.0#./.yarn/patches/@joystream-types-npm-4.3.0-542438a0b6.patch::version=4.3.0&hash=754a5a&locator=pioneer%40workspace%3A."
+  dependencies:
+    "@polkadot/api": 10.1.4
+    "@polkadot/keyring": 11.1.1
+    "@polkadot/types": 10.1.4
+    "@types/lodash": ^4.14.157
+    "@types/vfile": ^4.0.0
+    lodash: ^4.17.15
+    moment: ^2.24.0
+  checksum: 0e54b9ab31ff7a10d741e4bf28aa22093bf50bb5d9fea30d3bd1711799de86fa6a49c273484eb64de0f8fdd8b71a769a0f3bca1f5e3b9c8af0ce8d04d8178128
+  languageName: node
+  linkType: hard
+
 "@jridgewell/gen-mapping@npm:^0.3.0, @jridgewell/gen-mapping@npm:^0.3.2":
   version: 0.3.3
   resolution: "@jridgewell/gen-mapping@npm:0.3.3"

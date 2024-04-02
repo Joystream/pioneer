@@ -166,6 +166,7 @@ export type GetForumEventsQuery = {
     | { __typename: 'CommentPinnedEvent' }
     | { __typename: 'CommentReactedEvent' }
     | { __typename: 'CommentTextUpdatedEvent' }
+    | { __typename: 'CouncilBudgetDecreasedEvent' }
     | { __typename: 'CouncilBudgetFundedEvent' }
     | { __typename: 'CouncilorRewardUpdatedEvent' }
     | { __typename: 'EnglishAuctionSettledEvent' }

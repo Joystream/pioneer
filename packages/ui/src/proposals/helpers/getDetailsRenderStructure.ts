@@ -222,6 +222,7 @@ const amountMapper =
     const overriddenLabelsBy: Partial<Record<ProposalType, string>> = {
       decreaseWorkingGroupLeadStake: 'Decrease stake amount',
       slashWorkingGroupLead: 'Slashing amount',
+      decreaseCouncilBudget: 'Decrease budget by',
     }
     return [
       {
