@@ -1,12 +1,20 @@
 import React from 'react'
 
+import { useApi } from '@/api/hooks/useApi'
 import { CurrencyName } from '@/app/constants/currency'
 import { InputComponent, InputNumber, TokenInput } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
+import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
+import { formatJoyValue } from '@/common/model/formatters'
+import { whenDefined } from '@/common/utils'
+import { crtConstraints$ } from '@/proposals/model/crtConstraints'
 
 export const UpdateTokenPalletTokenConstraints = () => {
+  const { api } = useApi()
+  const current = useFirstObservableValue(() => crtConstraints$(api), [api?.isConnected])
+
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -21,6 +29,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="maxYearlyRate"
             name="updateTokenPalletTokenConstraints.maxYearlyRate"
             label="Maximum yearly rate"
+            message={`Currently: ${current?.maxYearlyRate ?? '-'}%`}
             units="%"
             inputWidth="s"
             tight
@@ -32,6 +41,9 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="minAmmSlope"
             name="updateTokenPalletTokenConstraints.minAmmSlope"
             label="Minimum AMM slope"
+            message={`Currently: ${whenDefined(current?.minAmmSlope, formatJoyValue) ?? '-'} ${
+              CurrencyName.integerValue
+            }`}
             units={CurrencyName.integerValue}
             inputWidth="s"
             tight
@@ -43,6 +55,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="minSaleDuration"
             name="updateTokenPalletTokenConstraints.minSaleDuration"
             label="Minimum sale duration"
+            message={`Currently: ${current?.minSaleDuration ?? '-'} blocks`}
             units="blocks"
             inputWidth="s"
             tight
@@ -58,6 +71,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="minRevenueSplitDuration"
             name="updateTokenPalletTokenConstraints.minRevenueSplitDuration"
             label="Minimum revenue split duration"
+            message={`Currently: ${current?.minSaleDuration ?? '-'} blocks`}
             units="blocks"
             inputWidth="s"
             tight
@@ -73,6 +87,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="minRevenueSplitTimeToStart"
             name="updateTokenPalletTokenConstraints.minRevenueSplitTimeToStart"
             label="Minimum revenue split time to start"
+            message={`Currently: ${current?.minSaleDuration ?? '-'} blocks`}
             units="blocks"
             inputWidth="s"
             tight
@@ -88,6 +103,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="salePlatformFee"
             name="updateTokenPalletTokenConstraints.salePlatformFee"
             label="Sale platform fee"
+            message={`Currently: ${current?.salePlatformFee ?? '-'}%`}
             units="%"
             inputWidth="s"
             tight
@@ -103,6 +119,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="ammBuyTxFees"
             name="updateTokenPalletTokenConstraints.ammBuyTxFees"
             label="AMM buy transaction fees"
+            message={`Currently: ${current?.ammBuyTxFees ?? '-'}%`}
             units="%"
             inputWidth="s"
             tight
@@ -114,6 +131,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="ammSellTxFees"
             name="updateTokenPalletTokenConstraints.ammSellTxFees"
             label="AMM sell transaction fees"
+            message={`Currently: ${current?.ammSellTxFees ?? '-'}%`}
             units="%"
             inputWidth="s"
             tight
@@ -125,6 +143,9 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="bloatBond"
             name="updateTokenPalletTokenConstraints.bloatBond"
             label="Bloat bond"
+            message={`Currently: ${whenDefined(current?.bloatBond, formatJoyValue) ?? '-'} ${
+              CurrencyName.integerValue
+            }`}
             units={CurrencyName.integerValue}
             inputWidth="s"
             tight
