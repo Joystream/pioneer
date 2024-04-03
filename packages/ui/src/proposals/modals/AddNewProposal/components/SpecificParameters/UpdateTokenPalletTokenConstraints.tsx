@@ -34,7 +34,12 @@ export const UpdateTokenPalletTokenConstraints = () => {
             inputWidth="s"
             tight
           >
-            <InputNumber id="maxYearlyRate" name="updateTokenPalletTokenConstraints.maxYearlyRate" placeholder="100" />
+            <InputNumber
+              id="maxYearlyRate"
+              name="updateTokenPalletTokenConstraints.maxYearlyRate"
+              decimalScale={4}
+              placeholder="100"
+            />
           </InputComponent>
 
           <InputComponent
@@ -111,6 +116,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             <InputNumber
               id="salePlatformFee"
               name="updateTokenPalletTokenConstraints.salePlatformFee"
+              decimalScale={4}
               placeholder="0"
             />
           </InputComponent>
@@ -124,7 +130,12 @@ export const UpdateTokenPalletTokenConstraints = () => {
             inputWidth="s"
             tight
           >
-            <InputNumber id="ammBuyTxFees" name="updateTokenPalletTokenConstraints.ammBuyTxFees" placeholder="0" />
+            <InputNumber
+              id="ammBuyTxFees"
+              name="updateTokenPalletTokenConstraints.ammBuyTxFees"
+              decimalScale={4}
+              placeholder="0"
+            />
           </InputComponent>
 
           <InputComponent
@@ -136,7 +147,13 @@ export const UpdateTokenPalletTokenConstraints = () => {
             inputWidth="s"
             tight
           >
-            <InputNumber id="ammSellTxFees" name="updateTokenPalletTokenConstraints.ammSellTxFees" placeholder="0" />
+            <InputNumber
+              id="ammSellTxFees"
+              name="updateTokenPalletTokenConstraints.ammSellTxFees"
+              placeholder="0"
+              decimalScale={4}
+              isInBN={false}
+            />
           </InputComponent>
 
           <InputComponent

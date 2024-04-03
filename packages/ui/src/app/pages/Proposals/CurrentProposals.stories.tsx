@@ -1623,13 +1623,13 @@ export const SpecificUpdateTokenPalletTokenConstraints: Story = {
 
         // Valid again
         await userEvent.clear(bloatBond)
-        await userEvent.type(bloatBond, '2')
+        await userEvent.type(bloatBond, '0.01')
         await userEvent.type(minSaleDuration, '100')
         await userEvent.type(minRevenueSplitDuration, '200')
         await userEvent.type(minRevenueSplitTimeToStart, '300')
-        await userEvent.type(salePlatformFee, '1')
-        await userEvent.type(ammBuyTxFees, '2')
-        await userEvent.type(ammSellTxFees, '3')
+        await userEvent.type(salePlatformFee, '0.1')
+        await userEvent.type(ammBuyTxFees, '0.2')
+        await userEvent.type(ammSellTxFees, '0.3')
         await waitFor(() => expect(nextButton).toBeEnabled())
       })
 
@@ -1641,10 +1641,10 @@ export const SpecificUpdateTokenPalletTokenConstraints: Story = {
           minSaleDuration: 100,
           minRevenueSplitDuration: 200,
           minRevenueSplitTimeToStart: 300,
-          salePlatformFee: 0.01 * 1_000_000,
-          ammBuyTxFees: 0.02 * 1_000_000,
-          ammSellTxFees: 0.03 * 1_000_000,
-          bloatBond: Number(joy(2)),
+          salePlatformFee: 0.001 * 1_000_000,
+          ammBuyTxFees: 0.002 * 1_000_000,
+          ammSellTxFees: 0.003 * 1_000_000,
+          bloatBond: Number(joy(0.01)),
         })
       })
     }

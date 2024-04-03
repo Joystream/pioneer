@@ -453,14 +453,22 @@ export const schemaFactory = (api?: Api) => {
     }),
     updateTokenPalletTokenConstraints: Yup.object()
       .shape({
-        maxYearlyRate: Yup.number().min(0, 'Rate must be 0 or greater').max(100, 'Rate must be 100 or less'),
+        maxYearlyRate: Yup.number()
+          .min(0, 'Rate must be 0 or greater')
+          .max(10 ** 6, 'Rate must be 100 or less'),
         minAmmSlope: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')),
         minSaleDuration: Yup.number().min(0, 'Duration must be 0 or greater'),
         minRevenueSplitDuration: Yup.number().min(0, 'Duration must be 0 or greater'),
         minRevenueSplitTimeToStart: Yup.number().min(0, 'Duration must be 0 or greater'),
-        salePlatformFee: Yup.number().min(0, 'Rate must be 0 or greater').max(100, 'Rate must be 100 or less'),
-        ammBuyTxFees: Yup.number().min(0, 'Rate must be 0 or greater').max(100, 'Rate must be 100 or less'),
-        ammSellTxFees: Yup.number().min(0, 'Rate must be 0 or greater').max(100, 'Rate must be 100 or less'),
+        salePlatformFee: Yup.number()
+          .min(0, 'Rate must be 0 or greater')
+          .max(10 ** 6, 'Rate must be 100 or less'),
+        ammBuyTxFees: Yup.number()
+          .min(0, 'Rate must be 0 or greater')
+          .max(10 ** 6, 'Rate must be 100 or less'),
+        ammSellTxFees: Yup.number()
+          .min(0, 'Rate must be 0 or greater')
+          .max(10 ** 6, 'Rate must be 100 or less'),
         bloatBond: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')),
       })
       .test((fields) => {
