@@ -71,7 +71,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="minRevenueSplitDuration"
             name="updateTokenPalletTokenConstraints.minRevenueSplitDuration"
             label="Minimum revenue split duration"
-            message={`Currently: ${current?.minSaleDuration ?? '-'} blocks`}
+            message={`Currently: ${current?.minRevenueSplitDuration ?? '-'} blocks`}
             units="blocks"
             inputWidth="s"
             tight
@@ -87,7 +87,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="minRevenueSplitTimeToStart"
             name="updateTokenPalletTokenConstraints.minRevenueSplitTimeToStart"
             label="Minimum revenue split time to start"
-            message={`Currently: ${current?.minSaleDuration ?? '-'} blocks`}
+            message={`Currently: ${current?.minRevenueSplitTimeToStart ?? '-'} blocks`}
             units="blocks"
             inputWidth="s"
             tight

@@ -415,7 +415,7 @@ const asUpdateTokenPalletTokenConstraints: DetailsCast<'UpdateTokenPalletTokenCo
   minSaleDuration: fragment.minSaleDuration ?? undefined,
   minRevenueSplitDuration: fragment.minRevenueSplitDuration ?? undefined,
   minRevenueSplitTimeToStart: fragment.minRevenueSplitTimeToStart ?? undefined,
-  salePlatformFee: whenDefined(fragment.maxYearlyRate, permillToPercent),
+  salePlatformFee: whenDefined(fragment.salePlatformFee, permillToPercent),
   ammBuyTxFees: whenDefined(fragment.ammBuyTxFees, permillToPercent),
   ammSellTxFees: whenDefined(fragment.ammSellTxFees, permillToPercent),
   bloatBond: whenDefined(fragment.bloatBond, asBN),
