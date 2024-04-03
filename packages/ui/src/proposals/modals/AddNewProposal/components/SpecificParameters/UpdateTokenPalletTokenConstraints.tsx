@@ -29,7 +29,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="maxYearlyRate"
             name="updateTokenPalletTokenConstraints.maxYearlyRate"
             label="Maximum yearly rate"
-            message={`Currently: ${current?.maxYearlyRate ?? '-'}%`}
+            sublabel={`Currently: ${current?.maxYearlyRate ?? '-'}%`}
             units="%"
             inputWidth="s"
             tight
@@ -41,7 +41,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="minAmmSlope"
             name="updateTokenPalletTokenConstraints.minAmmSlope"
             label="Minimum AMM slope"
-            message={`Currently: ${whenDefined(current?.minAmmSlope, formatJoyValue) ?? '-'} ${
+            sublabel={`Currently: ${whenDefined(current?.minAmmSlope, formatJoyValue) ?? '-'} ${
               CurrencyName.integerValue
             }`}
             units={CurrencyName.integerValue}
@@ -55,7 +55,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="minSaleDuration"
             name="updateTokenPalletTokenConstraints.minSaleDuration"
             label="Minimum sale duration"
-            message={`Currently: ${current?.minSaleDuration ?? '-'} blocks`}
+            sublabel={`Currently: ${current?.minSaleDuration ?? '-'} blocks`}
             units="blocks"
             inputWidth="s"
             tight
@@ -71,7 +71,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="minRevenueSplitDuration"
             name="updateTokenPalletTokenConstraints.minRevenueSplitDuration"
             label="Minimum revenue split duration"
-            message={`Currently: ${current?.minRevenueSplitDuration ?? '-'} blocks`}
+            sublabel={`Currently: ${current?.minRevenueSplitDuration ?? '-'} blocks`}
             units="blocks"
             inputWidth="s"
             tight
@@ -87,7 +87,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="minRevenueSplitTimeToStart"
             name="updateTokenPalletTokenConstraints.minRevenueSplitTimeToStart"
             label="Minimum revenue split time to start"
-            message={`Currently: ${current?.minRevenueSplitTimeToStart ?? '-'} blocks`}
+            sublabel={`Currently: ${current?.minRevenueSplitTimeToStart ?? '-'} blocks`}
             units="blocks"
             inputWidth="s"
             tight
@@ -103,7 +103,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="salePlatformFee"
             name="updateTokenPalletTokenConstraints.salePlatformFee"
             label="Sale platform fee"
-            message={`Currently: ${current?.salePlatformFee ?? '-'}%`}
+            sublabel={`Currently: ${current?.salePlatformFee ?? '-'}%`}
             units="%"
             inputWidth="s"
             tight
@@ -119,7 +119,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="ammBuyTxFees"
             name="updateTokenPalletTokenConstraints.ammBuyTxFees"
             label="AMM buy transaction fees"
-            message={`Currently: ${current?.ammBuyTxFees ?? '-'}%`}
+            sublabel={`Currently: ${current?.ammBuyTxFees ?? '-'}%`}
             units="%"
             inputWidth="s"
             tight
@@ -131,7 +131,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="ammSellTxFees"
             name="updateTokenPalletTokenConstraints.ammSellTxFees"
             label="AMM sell transaction fees"
-            message={`Currently: ${current?.ammSellTxFees ?? '-'}%`}
+            sublabel={`Currently: ${current?.ammSellTxFees ?? '-'}%`}
             units="%"
             inputWidth="s"
             tight
@@ -143,7 +143,7 @@ export const UpdateTokenPalletTokenConstraints = () => {
             id="bloatBond"
             name="updateTokenPalletTokenConstraints.bloatBond"
             label="Bloat bond"
-            message={`Currently: ${whenDefined(current?.bloatBond, formatJoyValue) ?? '-'} ${
+            sublabel={`Currently: ${whenDefined(current?.bloatBond, formatJoyValue) ?? '-'} ${
               CurrencyName.integerValue
             }`}
             units={CurrencyName.integerValue}
