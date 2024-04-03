@@ -95,15 +95,15 @@ const proposalDetails: Record<ProposalDetailsType, RecursivePartial<ProposalWith
   UpdateGlobalNftLimitProposalDetails: {},
   DecreaseCouncilBudgetProposalDetails: { amount: joy(100) },
   UpdateTokenPalletTokenConstraintsProposalDetails: {
-    maxYearlyRate: 500_000,
+    maxYearlyRate: 0.4 * 10 ** 6,
     minAmmSlope: undefined,
     minSaleDuration: 200,
     minRevenueSplitDuration: undefined,
     minRevenueSplitTimeToStart: 5,
     salePlatformFee: 10_000,
     ammBuyTxFees: undefined,
-    ammSellTxFees: 30_000,
-    bloatBond: joy(0.1),
+    ammSellTxFees: 0.003 * 10 ** 6,
+    bloatBond: joy(0.01),
   },
 }
 
