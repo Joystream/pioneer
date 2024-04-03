@@ -4,17 +4,18 @@ import { useFormContext, Controller } from 'react-hook-form'
 import NumberFormat, { NumberFormatValues, SourceInfo } from 'react-number-format'
 import styled from 'styled-components'
 
-import { asBN, whenDefined } from '@/common/utils'
+import { asBN, powerOf10, whenDefined } from '@/common/utils'
 
 import { Input, InputProps } from './InputComponent'
 
 interface BaseNumberInputProps extends Omit<InputProps, 'type' | 'defaultValue' | 'onChange'> {
+  decimalScale?: number
   maxAllowedValue?: number
   onChange?: (event: React.ChangeEvent<HTMLInputElement>, numberValue: number) => void
 }
 
 const BasedInputNumber = React.memo(
-  ({ id, onChange, value = '', maxAllowedValue = 2 ** 32, ...props }: BaseNumberInputProps) => {
+  ({ id, onChange, value = '', maxAllowedValue = 2 ** 32, decimalScale = 0, ...props }: BaseNumberInputProps) => {
     const onInputChange = useCallback(
       ({ floatValue = 0 }: NumberFormatValues, { event }: SourceInfo) => onChange?.(event, floatValue),
       [onChange]
@@ -34,7 +35,7 @@ const BasedInputNumber = React.memo(
         onValueChange={onInputChange}
         autoComplete="off"
         customInput={StyledNumberInput}
-        decimalScale={0}
+        decimalScale={decimalScale}
         isAllowed={isAllowed}
         allowNegative={false}
         thousandSeparator
@@ -54,6 +55,8 @@ export const InputNumber = React.memo(({ name, isInBN = false, ...props }: Numbe
     return <BasedInputNumber {...props} />
   }
 
+  const exp = props.decimalScale ?? 0
+
   return (
     <Controller
       control={formContext.control}
@@ -61,8 +64,14 @@ export const InputNumber = React.memo(({ name, isInBN = false, ...props }: Numbe
       render={({ field }) => (
         <BasedInputNumber
           {...props}
-          value={whenDefined(field.value, asBN)?.toString()}
-          onChange={(_, value) => field.onChange(isInBN ? new BN(String(value)) : value)}
+          value={whenDefined(field.value, (value) => {
+            const num = isInBN ? asBN(value).toNumber() : value // TODO convert to number safely
+            return String(num / 10 ** exp)
+          })}
+          onChange={(_, numValue) => {
+            const value = isInBN ? new BN(numValue).mul(powerOf10(exp)) : numValue * 10 ** exp
+            return field.onChange(value)
+          }}
           onBlur={field.onBlur}
         />
       )}
