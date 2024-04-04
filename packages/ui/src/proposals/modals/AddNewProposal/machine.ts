@@ -47,6 +47,11 @@ export type AddNewProposalState =
   | { value: { specificParameters: 'updateChannelPayouts' }; context: Required<TriggerAndDiscussionContext> }
   | { value: { specificParameters: 'updatePalletFrozenStatus' }; context: Required<TriggerAndDiscussionContext> }
   | { value: { specificParameters: 'setEraPayoutDampingFactor' }; context: Required<TriggerAndDiscussionContext> }
+  | { value: { specificParameters: 'decreaseCouncilBudget' }; context: Required<TriggerAndDiscussionContext> }
+  | {
+      value: { specificParameters: 'updateTokenPalletTokenConstraints' }
+      context: Required<TriggerAndDiscussionContext>
+    }
   | { value: { specificParameters: 'fundingRequest' }; context: Required<TriggerAndDiscussionContext> }
   | { value: { specificParameters: 'runtimeUpgrade' }; context: Required<TriggerAndDiscussionContext> }
   | { value: { specificParameters: 'setReferralCut' }; context: Required<TriggerAndDiscussionContext> }
@@ -222,11 +227,15 @@ export const addNewProposalMachine = createMachine<
             { target: 'updateChannelPayouts', cond: isType('updateChannelPayouts') },
             { target: 'updatePalletFrozenStatus', cond: isType('updatePalletFrozenStatus') },
             { target: 'setEraPayoutDampingFactor', cond: isType('setEraPayoutDampingFactor') },
+            { target: 'decreaseCouncilBudget', cond: isType('decreaseCouncilBudget') },
+            { target: 'updateTokenPalletTokenConstraints', cond: isType('updateTokenPalletTokenConstraints') },
           ],
         },
         updateChannelPayouts: {},
         updatePalletFrozenStatus: {},
         setEraPayoutDampingFactor: {},
+        decreaseCouncilBudget: {},
+        updateTokenPalletTokenConstraints: {},
         signal: {},
         setMaxValidatorCount: {},
         setReferralCut: {},

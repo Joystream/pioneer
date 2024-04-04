@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 
 import { KeysOfUnion } from '@/common/types/helpers'
-import { asBN } from '@/common/utils'
+import { asBN, permillToPercent, whenDefined } from '@/common/utils'
 import { asWorkingGroupName, GroupIdName } from '@/working-groups/types'
 
 import { asMember, Member } from '../../memberships/types'
@@ -39,7 +39,7 @@ export type AmountDetail = {
 export type StakeAmountDetail = {
   stakeAmount: BN
 }
-export type UnstakingPeriodDetail = {
+type UnstakingPeriodDetail = {
   unstakingPeriod: BN
 }
 export type RewardPerBlockDetail = {
@@ -60,6 +60,10 @@ export type GroupNameDetail = {
 
 export type CountDetail = {
   count: number
+}
+
+export type BlockDetail = {
+  blocks: number
 }
 
 export type ProposalDetail = {
@@ -83,6 +87,17 @@ export type UpdateChannelPayoutsDetail = {
 export type UpdatePalletFrozenStatusDetail = {
   freeze?: boolean
   pallet?: string
+}
+type UpdateTokenPalletTokenConstraintsDetail = {
+  maxYearlyRate?: number
+  minAmmSlope?: BN
+  minSaleDuration?: number
+  minRevenueSplitDuration?: number
+  minRevenueSplitTimeToStart?: number
+  salePlatformFee?: number
+  ammBuyTxFees?: number
+  ammSellTxFees?: number
+  bloatBond?: BN
 }
 
 export type FundingRequestDetails = ProposalDetailsNew<'fundingRequest', DestinationsDetail>
@@ -154,6 +169,13 @@ export type SetEraPayoutDampingFactorProposalDetails = ProposalDetailsNew<
   { multiplier: number }
 >
 
+export type DecreaseCouncilBudgetDetails = ProposalDetailsNew<'decreaseCouncilBudget', AmountDetail>
+
+export type UpdateTokenPalletTokenConstraintsDetails = ProposalDetailsNew<
+  'updateTokenPalletTokenConstraints',
+  UpdateTokenPalletTokenConstraintsDetail
+>
+
 export type ProposalDetails =
   | BaseProposalDetails
   | FundingRequestDetails
@@ -179,6 +201,8 @@ export type ProposalDetails =
   | UpdateChannelPayoutsDetails
   | UpdatePalletFrozenStatusProposalDetails
   | SetEraPayoutDampingFactorProposalDetails
+  | DecreaseCouncilBudgetDetails
+  | UpdateTokenPalletTokenConstraintsDetails
 
 export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
 
@@ -386,6 +410,28 @@ const asSetEraPayoutDampingFactor: DetailsCast<'SetEraPayoutDampingFactorProposa
   multiplier: fragment.dampingFactor,
 })
 
+const asDecreaseCouncilBudget: DetailsCast<'DecreaseCouncilBudgetProposalDetails'> = (
+  fragment
+): DecreaseCouncilBudgetDetails => ({
+  type: 'decreaseCouncilBudget',
+  amount: asBN(fragment.amount),
+})
+
+const asUpdateTokenPalletTokenConstraints: DetailsCast<'UpdateTokenPalletTokenConstraintsProposalDetails'> = (
+  fragment
+): UpdateTokenPalletTokenConstraintsDetails => ({
+  type: 'updateTokenPalletTokenConstraints',
+  maxYearlyRate: whenDefined(fragment.maxYearlyRate, permillToPercent),
+  minAmmSlope: whenDefined(fragment.minAmmSlope, asBN),
+  minSaleDuration: fragment.minSaleDuration ?? undefined,
+  minRevenueSplitDuration: fragment.minRevenueSplitDuration ?? undefined,
+  minRevenueSplitTimeToStart: fragment.minRevenueSplitTimeToStart ?? undefined,
+  salePlatformFee: whenDefined(fragment.salePlatformFee, permillToPercent),
+  ammBuyTxFees: whenDefined(fragment.ammBuyTxFees, permillToPercent),
+  ammSellTxFees: whenDefined(fragment.ammSellTxFees, permillToPercent),
+  bloatBond: whenDefined(fragment.bloatBond, asBN),
+})
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }, extra?: ProposalExtraDetails): ProposalDetails
 }
@@ -414,6 +460,8 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   UpdateChannelPayoutsProposalDetails: asUpdateChannelPayouts,
   UpdatePalletFrozenStatusProposalDetails: asUpdatePalletFrozenStatus,
   SetEraPayoutDampingFactorProposalDetails: asSetEraPayoutDampingFactor,
+  DecreaseCouncilBudgetProposalDetails: asDecreaseCouncilBudget,
+  UpdateTokenPalletTokenConstraintsProposalDetails: asUpdateTokenPalletTokenConstraints,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment, extra?: ProposalExtraDetails): ProposalDetails => {

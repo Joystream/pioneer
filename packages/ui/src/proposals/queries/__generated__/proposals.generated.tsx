@@ -68,6 +68,7 @@ export type ProposalFieldsFragment = {
     | { __typename: 'AmendConstitutionProposalDetails' }
     | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
     | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+    | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
     | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
     | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
     | { __typename: 'FundingRequestProposalDetails' }
@@ -87,6 +88,7 @@ export type ProposalFieldsFragment = {
     | { __typename: 'UpdateChannelPayoutsProposalDetails' }
     | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
     | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
+    | { __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails' }
     | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
     | { __typename: 'VetoProposalDetails' }
   creator: {
@@ -297,6 +299,7 @@ export type ProposalWithDetailsFieldsFragment = {
         metadata?: { __typename: 'WorkingGroupOpeningMetadata'; description?: string | null } | null
         group?: { __typename: 'WorkingGroup'; id: string; name: string } | null
       }
+    | { __typename: 'DecreaseCouncilBudgetProposalDetails'; amount: string }
     | {
         __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails'
         amount: string
@@ -546,6 +549,18 @@ export type ProposalWithDetailsFieldsFragment = {
       }
     | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
     | { __typename: 'UpdatePalletFrozenStatusProposalDetails'; frozen: boolean; pallet: string }
+    | {
+        __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails'
+        maxYearlyRate?: number | null
+        minAmmSlope?: string | null
+        minSaleDuration?: number | null
+        minRevenueSplitDuration?: number | null
+        minRevenueSplitTimeToStart?: number | null
+        salePlatformFee?: number | null
+        ammBuyTxFees?: number | null
+        ammSellTxFees?: number | null
+        bloatBond?: string | null
+      }
     | {
         __typename: 'UpdateWorkingGroupBudgetProposalDetails'
         amount: string
@@ -897,6 +912,7 @@ export type ProposalMentionFieldsFragment = {
     | { __typename: 'AmendConstitutionProposalDetails' }
     | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
     | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+    | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
     | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
     | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
     | { __typename: 'FundingRequestProposalDetails' }
@@ -916,6 +932,7 @@ export type ProposalMentionFieldsFragment = {
     | { __typename: 'UpdateChannelPayoutsProposalDetails' }
     | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
     | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
+    | { __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails' }
     | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
     | { __typename: 'VetoProposalDetails' }
   status:
@@ -1007,6 +1024,7 @@ export type GetProposalsQuery = {
       | { __typename: 'AmendConstitutionProposalDetails' }
       | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
       | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
       | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'FundingRequestProposalDetails' }
@@ -1026,6 +1044,7 @@ export type GetProposalsQuery = {
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
+      | { __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
     creator: {
@@ -1163,6 +1182,7 @@ export type GetProposalQuery = {
           metadata?: { __typename: 'WorkingGroupOpeningMetadata'; description?: string | null } | null
           group?: { __typename: 'WorkingGroup'; id: string; name: string } | null
         }
+      | { __typename: 'DecreaseCouncilBudgetProposalDetails'; amount: string }
       | {
           __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails'
           amount: string
@@ -1412,6 +1432,18 @@ export type GetProposalQuery = {
         }
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails'; frozen: boolean; pallet: string }
+      | {
+          __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails'
+          maxYearlyRate?: number | null
+          minAmmSlope?: string | null
+          minSaleDuration?: number | null
+          minRevenueSplitDuration?: number | null
+          minRevenueSplitTimeToStart?: number | null
+          salePlatformFee?: number | null
+          ammBuyTxFees?: number | null
+          ammSellTxFees?: number | null
+          bloatBond?: string | null
+        }
       | {
           __typename: 'UpdateWorkingGroupBudgetProposalDetails'
           amount: string
@@ -1754,6 +1786,7 @@ export type GetProposalMentionQuery = {
       | { __typename: 'AmendConstitutionProposalDetails' }
       | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
       | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
       | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'FundingRequestProposalDetails' }
@@ -1773,6 +1806,7 @@ export type GetProposalMentionQuery = {
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
+      | { __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
     status:
@@ -1869,6 +1903,7 @@ export type GetLatestProposalByMemberIdQuery = {
       | { __typename: 'AmendConstitutionProposalDetails' }
       | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
       | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
       | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'FundingRequestProposalDetails' }
@@ -1888,6 +1923,7 @@ export type GetLatestProposalByMemberIdQuery = {
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
+      | { __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
   }>
@@ -2139,6 +2175,20 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       ... on UpdatePalletFrozenStatusProposalDetails {
         frozen
         pallet
+      }
+      ... on DecreaseCouncilBudgetProposalDetails {
+        amount
+      }
+      ... on UpdateTokenPalletTokenConstraintsProposalDetails {
+        maxYearlyRate
+        minAmmSlope
+        minSaleDuration
+        minRevenueSplitDuration
+        minRevenueSplitTimeToStart
+        salePlatformFee
+        ammBuyTxFees
+        ammSellTxFees
+        bloatBond
       }
     }
     discussionThread {

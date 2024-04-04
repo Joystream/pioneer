@@ -5,6 +5,7 @@ import { Account } from '@/accounts/types'
 import { Api } from '@/api'
 import { CurrencyName } from '@/app/constants/currency'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
+import { isDefined } from '@/common/utils'
 import {
   BNSchema,
   lessThanMixed,
@@ -185,6 +186,20 @@ export interface AddNewProposalForm {
   }
   setEraPayoutDampingFactor: {
     dampingFactor?: number
+  }
+  decreaseCouncilBudget?: {
+    amount?: BN
+  }
+  updateTokenPalletTokenConstraints?: {
+    maxYearlyRate?: number
+    minAmmSlope?: BN
+    minSaleDuration?: number
+    minRevenueSplitDuration?: number
+    minRevenueSplitTimeToStart?: number
+    salePlatformFee?: number
+    ammBuyTxFees?: number
+    ammSellTxFees?: number
+    bloatBond?: BN
   }
 }
 
@@ -433,5 +448,41 @@ export const schemaFactory = (api?: Api) => {
         .max(100, 'The value must be between 0 and 100%.')
         .required('Field is required'),
     }),
+    decreaseCouncilBudget: Yup.object().shape({
+      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero'))
+        .test(
+          maxContext(
+            `The current council budget is \${max}${CurrencyName.integerValue}`,
+            'councilBudget',
+            true,
+            'execution'
+          )
+        )
+        .required(),
+    }),
+    updateTokenPalletTokenConstraints: Yup.object()
+      .shape({
+        maxYearlyRate: Yup.number()
+          .min(0, 'Rate must be 0 or greater')
+          .max(10 ** 6, 'Rate must be 100 or less'),
+        minAmmSlope: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')),
+        minSaleDuration: Yup.number().min(0, 'Duration must be 0 or greater'),
+        minRevenueSplitDuration: Yup.number().min(0, 'Duration must be 0 or greater'),
+        minRevenueSplitTimeToStart: Yup.number().min(0, 'Duration must be 0 or greater'),
+        salePlatformFee: Yup.number()
+          .min(0, 'Rate must be 0 or greater')
+          .max(10 ** 6, 'Rate must be 100 or less'),
+        ammBuyTxFees: Yup.number()
+          .min(0, 'Rate must be 0 or greater')
+          .max(10 ** 6, 'Rate must be 100 or less'),
+        ammSellTxFees: Yup.number()
+          .min(0, 'Rate must be 0 or greater')
+          .max(10 ** 6, 'Rate must be 100 or less'),
+        bloatBond: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')),
+      })
+      .test((fields) => {
+        if (fields && Object.values(fields).some(isDefined)) return true
+        return new Yup.ValidationError('At least one field is required', fields, 'updateTokenPalletTokenConstraints')
+      }),
   })
 }
