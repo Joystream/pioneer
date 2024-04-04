@@ -42,11 +42,13 @@ export type RenderType =
   | 'Hash'
   | 'DestinationsPreview'
   | 'BlockTimeDisplay'
+
 export interface RenderNode {
   label: string
   value: any
   renderType: RenderType
   tooltip?: TooltipContentProp
+  units?: string
 }
 
 type Mapper<Detail, Key extends keyof Detail> = (
