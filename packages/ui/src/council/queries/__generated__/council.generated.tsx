@@ -83,6 +83,7 @@ export type PastCouncilProposalsFieldsFragment = {
       | { __typename: 'RuntimeUpgradeProposalDetails' }
       | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
       | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetEraPayoutDampingFactorProposalDetails' }
       | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
       | { __typename: 'SetInitialInvitationCountProposalDetails' }
       | { __typename: 'SetMaxValidatorCountProposalDetails' }
@@ -628,6 +629,7 @@ export type FundingRequestApprovedFragment = {
     | { __typename: 'RuntimeUpgradeProposalDetails' }
     | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
     | { __typename: 'SetCouncilorRewardProposalDetails' }
+    | { __typename: 'SetEraPayoutDampingFactorProposalDetails' }
     | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
     | { __typename: 'SetInitialInvitationCountProposalDetails' }
     | { __typename: 'SetMaxValidatorCountProposalDetails' }
@@ -779,6 +781,7 @@ export type GetPastCouncilQuery = {
       | { __typename: 'RuntimeUpgradeProposalDetails' }
       | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
       | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetEraPayoutDampingFactorProposalDetails' }
       | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
       | { __typename: 'SetInitialInvitationCountProposalDetails' }
       | { __typename: 'SetMaxValidatorCountProposalDetails' }
@@ -879,6 +882,7 @@ export type GetPastCouncilMembersQuery = {
         | { __typename: 'RuntimeUpgradeProposalDetails' }
         | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
         | { __typename: 'SetCouncilorRewardProposalDetails' }
+        | { __typename: 'SetEraPayoutDampingFactorProposalDetails' }
         | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
         | { __typename: 'SetInitialInvitationCountProposalDetails' }
         | { __typename: 'SetMaxValidatorCountProposalDetails' }
@@ -972,6 +976,7 @@ export type GetPastCouncilProposalsQuery = {
       | { __typename: 'RuntimeUpgradeProposalDetails' }
       | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
       | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetEraPayoutDampingFactorProposalDetails' }
       | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
       | { __typename: 'SetInitialInvitationCountProposalDetails' }
       | { __typename: 'SetMaxValidatorCountProposalDetails' }
@@ -1516,6 +1521,7 @@ export type GetPastCouncilStatsQuery = {
       | { __typename: 'RuntimeUpgradeProposalDetails' }
       | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
       | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetEraPayoutDampingFactorProposalDetails' }
       | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
       | { __typename: 'SetInitialInvitationCountProposalDetails' }
       | { __typename: 'SetMaxValidatorCountProposalDetails' }

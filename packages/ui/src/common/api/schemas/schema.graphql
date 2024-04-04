@@ -2593,6 +2593,7 @@ union ProposalDetails =
   | UpdateGlobalNftLimitProposalDetails
   | DecreaseCouncilBudgetProposalDetails
   | UpdateTokenPalletTokenConstraintsProposalDetails
+  | SetEraPayoutDampingFactorProposalDetails
 
 union ProposalStatus =
     ProposalStatusDeciding
@@ -3336,6 +3337,13 @@ type SetCouncilorRewardProposalDetails {
   New (proposed) council members' reward per block
   """
   newRewardPerBlock: BigInt!
+}
+
+type SetEraPayoutDampingFactorProposalDetails {
+  """
+  Proposed validator payout damping factor
+  """
+  dampingFactor: Int!
 }
 
 type SetInitialInvitationBalanceProposalDetails {
