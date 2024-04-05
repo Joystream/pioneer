@@ -4,7 +4,7 @@ import * as Yup from 'yup'
 
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
 import { ModalWithDataCall } from '@/common/providers/modal/types'
-import { BNSchema, minContext, minMixed } from '@/common/utils/validation'
+import { BNSchema, NumberSchema, minContext, minMixed } from '@/common/utils/validation'
 import { GroupIdName, WorkingGroup } from '@/working-groups/types'
 
 export interface OpeningModalData {
@@ -44,11 +44,11 @@ export const OpeningSchema = Yup.object().shape({
     isLimited: Yup.boolean(),
     duration: Yup.number().when('isLimited', {
       is: true,
-      then: Yup.number().required('Duration is required'),
+      then: NumberSchema.required('Duration is required'),
     }),
-    target: Yup.number()
-      .min(1, 'Minimum hiring target must be greater than zero')
-      .required('Hiring target is required'),
+    target: NumberSchema.min(1, 'Minimum hiring target must be greater than zero').required(
+      'Hiring target is required'
+    ),
   }),
   stakingPolicyAndReward: Yup.object().shape({
     stakingAmount: BNSchema.test(
