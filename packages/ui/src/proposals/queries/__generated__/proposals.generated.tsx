@@ -88,6 +88,7 @@ export type ProposalFieldsFragment = {
     | { __typename: 'UpdateChannelPayoutsProposalDetails' }
     | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
     | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
+    | { __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails' }
     | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
     | { __typename: 'VetoProposalDetails' }
   creator: {
@@ -549,6 +550,18 @@ export type ProposalWithDetailsFieldsFragment = {
     | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
     | { __typename: 'UpdatePalletFrozenStatusProposalDetails'; frozen: boolean; pallet: string }
     | {
+        __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails'
+        maxYearlyRate?: number | null
+        minAmmSlope?: string | null
+        minSaleDuration?: number | null
+        minRevenueSplitDuration?: number | null
+        minRevenueSplitTimeToStart?: number | null
+        salePlatformFee?: number | null
+        ammBuyTxFees?: number | null
+        ammSellTxFees?: number | null
+        bloatBond?: string | null
+      }
+    | {
         __typename: 'UpdateWorkingGroupBudgetProposalDetails'
         amount: string
         group?: { __typename: 'WorkingGroup'; id: string; name: string } | null
@@ -919,6 +932,7 @@ export type ProposalMentionFieldsFragment = {
     | { __typename: 'UpdateChannelPayoutsProposalDetails' }
     | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
     | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
+    | { __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails' }
     | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
     | { __typename: 'VetoProposalDetails' }
   status:
@@ -1030,6 +1044,7 @@ export type GetProposalsQuery = {
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
+      | { __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
     creator: {
@@ -1418,6 +1433,18 @@ export type GetProposalQuery = {
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails'; frozen: boolean; pallet: string }
       | {
+          __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails'
+          maxYearlyRate?: number | null
+          minAmmSlope?: string | null
+          minSaleDuration?: number | null
+          minRevenueSplitDuration?: number | null
+          minRevenueSplitTimeToStart?: number | null
+          salePlatformFee?: number | null
+          ammBuyTxFees?: number | null
+          ammSellTxFees?: number | null
+          bloatBond?: string | null
+        }
+      | {
           __typename: 'UpdateWorkingGroupBudgetProposalDetails'
           amount: string
           group?: { __typename: 'WorkingGroup'; id: string; name: string } | null
@@ -1779,6 +1806,7 @@ export type GetProposalMentionQuery = {
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
+      | { __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
     status:
@@ -1895,6 +1923,7 @@ export type GetLatestProposalByMemberIdQuery = {
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
+      | { __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
   }>
@@ -2149,6 +2178,17 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
       }
       ... on DecreaseCouncilBudgetProposalDetails {
         amount
+      }
+      ... on UpdateTokenPalletTokenConstraintsProposalDetails {
+        maxYearlyRate
+        minAmmSlope
+        minSaleDuration
+        minRevenueSplitDuration
+        minRevenueSplitTimeToStart
+        salePlatformFee
+        ammBuyTxFees
+        ammSellTxFees
+        bloatBond
       }
     }
     discussionThread {

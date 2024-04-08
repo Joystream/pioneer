@@ -197,6 +197,22 @@ export const getSpecificParameters = async (
         DecreaseCouncilBudget: specifics.decreaseCouncilBudget?.amount,
       })
     }
+    case 'updateTokenPalletTokenConstraints': {
+      const values = specifics.updateTokenPalletTokenConstraints
+      return createType('PalletProposalsCodexProposalDetails', {
+        UpdateTokenPalletTokenConstraints: {
+          maxYearlyRate: createType('Option<Permill>', values?.maxYearlyRate),
+          minAmmSlope: values?.minAmmSlope,
+          minSaleDuration: values?.minSaleDuration,
+          minRevenueSplitDuration: values?.minRevenueSplitDuration,
+          minRevenueSplitTimeToStart: values?.minRevenueSplitTimeToStart,
+          salePlatformFee: createType('Option<Permill>', values?.salePlatformFee),
+          ammBuyTxFees: createType('Option<Permill>', values?.ammBuyTxFees),
+          ammSellTxFees: createType('Option<Permill>', values?.ammSellTxFees),
+          bloatBond: values?.bloatBond,
+        },
+      })
+    }
     default:
       return createType('PalletProposalsCodexProposalDetails', { Signal: '' })
   }

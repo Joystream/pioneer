@@ -38,6 +38,7 @@ export const proposalDescriptions: ProposalDescriptions = {
   runtimeUpgrade: 'Proposal to upgrade version to the new runtime.',
   updatePalletFrozenStatus: 'Enabling and disabling various features on the blockchain level.',
   decreaseCouncilBudget: 'Reduce the council budget by burning part of the tokens',
+  updateTokenPalletTokenConstraints: 'Update CRT pallet constraints.',
   createBlogPost: 'Council blog',
   editBlogPost: 'Unlocked blog post can be edited.',
   lockBlogPost: 'When a post is locked it can no longer be modified.',

@@ -197,6 +197,17 @@ fragment ProposalWithDetailsFields on Proposal {
     ... on DecreaseCouncilBudgetProposalDetails {
       amount
     }
+    ... on UpdateTokenPalletTokenConstraintsProposalDetails {
+      maxYearlyRate
+      minAmmSlope
+      minSaleDuration
+      minRevenueSplitDuration
+      minRevenueSplitTimeToStart
+      salePlatformFee
+      ammBuyTxFees
+      ammSellTxFees
+      bloatBond
+    }
   }
   discussionThread {
     id

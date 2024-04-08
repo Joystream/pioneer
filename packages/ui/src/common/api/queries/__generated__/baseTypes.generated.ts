@@ -21030,6 +21030,7 @@ export type ProposalDetails =
   | UpdateChannelPayoutsProposalDetails
   | UpdateGlobalNftLimitProposalDetails
   | UpdatePalletFrozenStatusProposalDetails
+  | UpdateTokenPalletTokenConstraintsProposalDetails
   | UpdateWorkingGroupBudgetProposalDetails
   | VetoProposalDetails
 
@@ -32212,6 +32213,28 @@ export type UpdatePalletFrozenStatusProposalDetails = {
   frozen: Scalars['Boolean']
   /** The pallet to update frozen status on */
   pallet: Scalars['String']
+}
+
+export type UpdateTokenPalletTokenConstraintsProposalDetails = {
+  __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails'
+  /** Proposed ratio of fees charged on top of each token purchase from the AMM (in part per million) */
+  ammBuyTxFees?: Maybe<Scalars['Int']>
+  /** Proposed ratio of fees charged on top of each token sold to the AMM (in part per million) */
+  ammSellTxFees?: Maybe<Scalars['Int']>
+  /** Proposed	bloat bond value used during account creation */
+  bloatBond?: Maybe<Scalars['BigInt']>
+  /** Proposed maximum patronage yearly interest rate (in part per million) */
+  maxYearlyRate?: Maybe<Scalars['Int']>
+  /** Proposed minimum value of the slope amm parameter */
+  minAmmSlope?: Maybe<Scalars['BigInt']>
+  /** Proposed minimum block duration for a revenue split */
+  minRevenueSplitDuration?: Maybe<Scalars['Int']>
+  /** Proposed minimum blocks between revenue share issuance block and actual revenue share starting block */
+  minRevenueSplitTimeToStart?: Maybe<Scalars['Int']>
+  /** Proposed minimum block duration of sales */
+  minSaleDuration?: Maybe<Scalars['Int']>
+  /** Proposed platform fee ratio charged on top of each sale and burned (in part per million) */
+  salePlatformFee?: Maybe<Scalars['Int']>
 }
 
 export type UpdateWorkingGroupBudgetProposalDetails = {

@@ -10,7 +10,6 @@ import {
   ProposalWithDetails,
   RewardPerBlockDetail,
   StakeAmountDetail,
-  UnstakingPeriodDetail,
   GroupDetail,
   GroupNameDetail,
   MemberDetail,
@@ -25,6 +24,7 @@ import {
   OpeningLinkDetail,
   UpdateChannelPayoutsDetail,
   UpdatePalletFrozenStatusDetail,
+  BlockDetail,
 } from '@/proposals/types'
 
 export type RenderType =
@@ -145,15 +145,19 @@ const stakeAmountMapper: Mapper<StakeAmountDetail, 'stakeAmount'> = (value): Ren
     },
   ]
 }
-const unstakingPeriodMapper: Mapper<UnstakingPeriodDetail, 'unstakingPeriod'> = (value): RenderNode[] => {
-  return [
-    {
-      label: 'Leaving unstaking period',
-      value: value,
-      renderType: 'NumberOfBlocks',
-    },
-  ]
-}
+
+const blocksMapper =
+  (label: string): Mapper<BlockDetail, 'blocks'> =>
+  (value): RenderNode[] => {
+    return [
+      {
+        label,
+        value,
+        renderType: 'NumberOfBlocks',
+      },
+    ]
+  }
+
 const textMapper =
   (label: string, tooltip?: TooltipContentProp): Mapper<GroupNameDetail, 'groupName'> =>
   (value): RenderNode[] => {
@@ -232,19 +236,21 @@ const amountMapper =
       },
     ]
   }
-const countMapper: Mapper<CountDetail, 'count'> = (value, type) => {
-  const countLabels: Partial<Record<ProposalType, string>> = {
-    setInitialInvitationCount: 'Invitations',
-    setMaxValidatorCount: 'Validators',
+const countMapper =
+  (label = ''): Mapper<CountDetail, 'count'> =>
+  (value, type) => {
+    const countLabels: Partial<Record<ProposalType, string>> = {
+      setInitialInvitationCount: 'Invitations',
+      setMaxValidatorCount: 'Validators',
+    }
+    return [
+      {
+        label: label || (type && type in countLabels && countLabels[type]) || 'Count',
+        value,
+        renderType: 'Numeric',
+      },
+    ]
   }
-  return [
-    {
-      label: (type && type in countLabels && countLabels[type]) || 'Count',
-      value,
-      renderType: 'Numeric',
-    },
-  ]
-}
 
 const hashMapper =
   (label: string, tooltip?: TooltipContentProp): Mapper<UpdateChannelPayoutsDetail, 'payloadHash'> =>
@@ -281,11 +287,11 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
   signalText: signalTextMapper,
   rewardPerBlock: rewardPerBlockMapper,
   stakeAmount: stakeAmountMapper,
-  unstakingPeriod: unstakingPeriodMapper,
+  unstakingPeriod: blocksMapper('Leaving unstaking period'),
   groupName: textMapper('Working Group'),
   member: memberMapper,
   amount: amountMapper(),
-  count: countMapper,
+  count: countMapper(),
   proposal: proposalLinkMapper,
   openingId: openingLinkMapper,
   channelCashoutsEnabled: booleanMapper,
@@ -301,6 +307,17 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
   }),
   pallet: palletMapper,
   freeze: palletStatusMapper,
+
+  // UpdateTokenPalletTokenConstraints
+  maxYearlyRate: percentageMapper('Proposed maximum yearly rate'),
+  minAmmSlope: amountMapper('Proposed minimum AMM slope'),
+  minSaleDuration: blocksMapper('Proposed minimum sale duration'),
+  minRevenueSplitDuration: blocksMapper('Proposed minimum revenue split duration'),
+  minRevenueSplitTimeToStart: blocksMapper('Proposed minimum revenue split time to start'),
+  salePlatformFee: percentageMapper('Proposed sale platform fee'),
+  ammBuyTxFees: percentageMapper('Proposed AMM buy transaction fees'),
+  ammSellTxFees: percentageMapper('Proposed AMM sell transaction fees'),
+  bloatBond: amountMapper('Proposed bloat bond'),
 }
 
 const mapProposalDetail = (key: ProposalDetailsKeys, proposalDetails: ProposalWithDetails['details']) => {
