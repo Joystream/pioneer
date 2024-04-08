@@ -34,7 +34,7 @@
     "@babel/parser": "~7.21.0",
     "@babel/traverse": "~7.21.0",
     "@babel/types": "~7.21.0",
-    "@joystream/types": "patch:@joystream/types@npm%3A4.3.0#./.yarn/patches/@joystream-types-npm-4.3.0-542438a0b6.patch",
+    "@joystream/types": "4.5.0",
     "@polkadot/api": "10.1.4",
     "@polkadot/api-contract": "10.1.4",
     "@polkadot/api-derive": "10.1.4",
