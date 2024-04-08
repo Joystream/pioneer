@@ -8,6 +8,7 @@ import { QuestionValueProps } from '@/common/components/EditableInputList/Editab
 import { isDefined } from '@/common/utils'
 import {
   BNSchema,
+  NumberSchema,
   lessThanMixed,
   maxContext,
   maxMixed,
@@ -224,8 +225,7 @@ export const schemaFactory = (api?: Api) => {
       trigger: Yup.boolean(),
       triggerBlock: Yup.number().when('trigger', {
         is: true,
-        then: Yup.number()
-          .test(minContext('The minimum block number is ${min}', 'minTriggerBlock', false))
+        then: NumberSchema.test(minContext('The minimum block number is ${min}', 'minTriggerBlock', false))
           .test(maxContext('The maximum block number is ${max}', 'maxTriggerBlock', false))
           .required('Field is required'),
       }),
@@ -300,7 +300,7 @@ export const schemaFactory = (api?: Api) => {
       isLimited: Yup.boolean(),
       duration: Yup.number().when('isLimited', {
         is: true,
-        then: Yup.number().required('Field is required'),
+        then: NumberSchema.required('Field is required'),
       }),
     }),
     applicationForm: Yup.object().shape({
@@ -369,20 +369,19 @@ export const schemaFactory = (api?: Api) => {
       ),
     }),
     setReferralCut: Yup.object().shape({
-      referralCut: Yup.number()
-        .test(
-          maxContext(
-            'Input must be equal or less than ${max}% for proposal to execute',
-            'maximumReferralCut',
-            false,
-            'execution'
-          )
+      referralCut: NumberSchema.test(
+        maxContext(
+          'Input must be equal or less than ${max}% for proposal to execute',
+          'maximumReferralCut',
+          false,
+          'execution'
         )
+      )
         .max(100, 'Value exceed maximal percentage')
         .required('Field is required'),
     }),
     setMembershipLeadInvitationQuota: Yup.object().shape({
-      count: Yup.number().min(1, 'Quota must be greater than zero').required('Field is required'),
+      count: NumberSchema.min(1, 'Quota must be greater than zero').required('Field is required'),
       leadId: Yup.string().test('execution', (value) => !!value),
     }),
     setInitialInvitationBalance: Yup.object().shape({
@@ -443,8 +442,7 @@ export const schemaFactory = (api?: Api) => {
         .required('Field is required'),
     }),
     setEraPayoutDampingFactor: Yup.object().shape({
-      dampingFactor: Yup.number()
-        .min(0, 'The value must be between 0 and 100%.')
+      dampingFactor: NumberSchema.min(0, 'The value must be between 0 and 100%.')
         .max(100, 'The value must be between 0 and 100%.')
         .required('Field is required'),
     }),
@@ -462,22 +460,14 @@ export const schemaFactory = (api?: Api) => {
     }),
     updateTokenPalletTokenConstraints: Yup.object()
       .shape({
-        maxYearlyRate: Yup.number()
-          .min(0, 'Rate must be 0 or greater')
-          .max(10 ** 6, 'Rate must be 100 or less'),
+        maxYearlyRate: NumberSchema.min(0, 'Rate must be 0 or greater').max(10 ** 6, 'Rate must be 100 or less'),
         minAmmSlope: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')),
-        minSaleDuration: Yup.number().min(0, 'Duration must be 0 or greater'),
-        minRevenueSplitDuration: Yup.number().min(0, 'Duration must be 0 or greater'),
-        minRevenueSplitTimeToStart: Yup.number().min(0, 'Duration must be 0 or greater'),
-        salePlatformFee: Yup.number()
-          .min(0, 'Rate must be 0 or greater')
-          .max(10 ** 6, 'Rate must be 100 or less'),
-        ammBuyTxFees: Yup.number()
-          .min(0, 'Rate must be 0 or greater')
-          .max(10 ** 6, 'Rate must be 100 or less'),
-        ammSellTxFees: Yup.number()
-          .min(0, 'Rate must be 0 or greater')
-          .max(10 ** 6, 'Rate must be 100 or less'),
+        minSaleDuration: NumberSchema.min(0, 'Duration must be 0 or greater'),
+        minRevenueSplitDuration: NumberSchema.min(0, 'Duration must be 0 or greater'),
+        minRevenueSplitTimeToStart: NumberSchema.min(0, 'Duration must be 0 or greater'),
+        salePlatformFee: NumberSchema.min(0, 'Rate must be 0 or greater').max(10 ** 6, 'Rate must be 100 or less'),
+        ammBuyTxFees: NumberSchema.min(0, 'Rate must be 0 or greater').max(10 ** 6, 'Rate must be 100 or less'),
+        ammSellTxFees: NumberSchema.min(0, 'Rate must be 0 or greater').max(10 ** 6, 'Rate must be 100 or less'),
         bloatBond: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')),
       })
       .test((fields) => {

@@ -4,7 +4,7 @@ import { useFormContext, Controller } from 'react-hook-form'
 import NumberFormat, { NumberFormatValues, SourceInfo } from 'react-number-format'
 import styled from 'styled-components'
 
-import { asBN, powerOf10, whenDefined } from '@/common/utils'
+import { asBN, divToNum, whenDefined } from '@/common/utils'
 
 import { Input, InputProps } from './InputComponent'
 
@@ -55,7 +55,7 @@ export const InputNumber = React.memo(({ name, isInBN = false, ...props }: Numbe
     return <BasedInputNumber {...props} />
   }
 
-  const exp = props.decimalScale ?? 0
+  const exp = 10 ** (props.decimalScale ?? 0)
 
   return (
     <Controller
@@ -65,11 +65,18 @@ export const InputNumber = React.memo(({ name, isInBN = false, ...props }: Numbe
         <BasedInputNumber
           {...props}
           value={whenDefined(field.value, (value) => {
-            const num = isInBN ? asBN(value).toNumber() : value // TODO convert to number safely
-            return String(num / 10 ** exp)
+            if (value === undefined || value === null) {
+              return ''
+            }
+            const numValue = isInBN ? divToNum(asBN(value), exp) : value / exp
+            return numValue.toFixed(props.decimalScale ?? 0)
           })}
-          onChange={(_, numValue) => {
-            const value = isInBN ? new BN(numValue).mul(powerOf10(exp)) : numValue * 10 ** exp
+          onChange={(event, numValue) => {
+            if (!event) return
+            if (event.target.value === '') {
+              return field.onChange(null)
+            }
+            const value = isInBN ? new BN(numValue).muln(exp) : numValue * exp
             return field.onChange(value)
           }}
           onBlur={field.onBlur}
