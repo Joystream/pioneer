@@ -37,6 +37,7 @@ export const proposalDescriptions: ProposalDescriptions = {
     'Proposal to submit the Channel Incentives Payout payload, update the min/max claimable amounts and block/allow claiming of awarded JOYs by channels.',
   runtimeUpgrade: 'Proposal to upgrade version to the new runtime.',
   updatePalletFrozenStatus: 'Enabling and disabling various features on the blockchain level.',
+  setEraPayoutDampingFactor: 'Apply a multiplier to the validator rewards to reduce or increase them.',
   decreaseCouncilBudget: 'Reduce the council budget by burning part of the tokens',
   updateTokenPalletTokenConstraints: 'Update CRT pallet constraints.',
   createBlogPost: 'Council blog',

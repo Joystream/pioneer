@@ -39,15 +39,16 @@ export type RenderType =
   | 'Divider'
   | 'ProposalLink'
   | 'OpeningLink'
-  | 'Percentage'
   | 'Hash'
   | 'DestinationsPreview'
   | 'BlockTimeDisplay'
+
 export interface RenderNode {
   label: string
   value: any
   renderType: RenderType
   tooltip?: TooltipContentProp
+  units?: string
 }
 
 type Mapper<Detail, Key extends keyof Detail> = (
@@ -307,6 +308,9 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
   }),
   pallet: palletMapper,
   freeze: palletStatusMapper,
+
+  // SetEraPayoutDampingFactor
+  multiplier: percentageMapper('Validator reward multiplier'),
 
   // UpdateTokenPalletTokenConstraints
   maxYearlyRate: percentageMapper('Proposed maximum yearly rate'),

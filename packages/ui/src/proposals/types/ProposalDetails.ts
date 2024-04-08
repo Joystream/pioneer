@@ -164,6 +164,11 @@ export type UpdatePalletFrozenStatusProposalDetails = ProposalDetailsNew<
   UpdatePalletFrozenStatusDetail
 >
 
+export type SetEraPayoutDampingFactorProposalDetails = ProposalDetailsNew<
+  'setEraPayoutDampingFactor',
+  { multiplier: number }
+>
+
 export type DecreaseCouncilBudgetDetails = ProposalDetailsNew<'decreaseCouncilBudget', AmountDetail>
 
 export type UpdateTokenPalletTokenConstraintsDetails = ProposalDetailsNew<
@@ -195,6 +200,7 @@ export type ProposalDetails =
   | VetoDetails
   | UpdateChannelPayoutsDetails
   | UpdatePalletFrozenStatusProposalDetails
+  | SetEraPayoutDampingFactorProposalDetails
   | DecreaseCouncilBudgetDetails
   | UpdateTokenPalletTokenConstraintsDetails
 
@@ -399,6 +405,11 @@ const asUpdatePalletFrozenStatus: DetailsCast<'UpdatePalletFrozenStatusProposalD
   pallet: fragment.pallet,
 })
 
+const asSetEraPayoutDampingFactor: DetailsCast<'SetEraPayoutDampingFactorProposalDetails'> = (fragment) => ({
+  type: 'setEraPayoutDampingFactor',
+  multiplier: fragment.dampingFactor,
+})
+
 const asDecreaseCouncilBudget: DetailsCast<'DecreaseCouncilBudgetProposalDetails'> = (
   fragment
 ): DecreaseCouncilBudgetDetails => ({
@@ -448,6 +459,7 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   SetMembershipLeadInvitationQuotaProposalDetails: asSetMembershipLeadInvitationQuota,
   UpdateChannelPayoutsProposalDetails: asUpdateChannelPayouts,
   UpdatePalletFrozenStatusProposalDetails: asUpdatePalletFrozenStatus,
+  SetEraPayoutDampingFactorProposalDetails: asSetEraPayoutDampingFactor,
   DecreaseCouncilBudgetProposalDetails: asDecreaseCouncilBudget,
   UpdateTokenPalletTokenConstraintsProposalDetails: asUpdateTokenPalletTokenConstraints,
 }

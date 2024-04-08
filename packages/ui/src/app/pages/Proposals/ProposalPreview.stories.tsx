@@ -132,6 +132,7 @@ export default {
             council: {
               budget: joy(1000),
               councilorReward: joy(1),
+              eraPayoutDampingFactor: 70,
             },
             referendum: { stage: {} },
             projectToken: {
@@ -303,6 +304,9 @@ export const UpdateChannelPayouts: Story = {
 }
 export const UpdatePalletFrozenStatus: Story = {
   args: { type: 'UpdatePalletFrozenStatusProposalDetails' },
+}
+export const SetEraPayoutDampingFactor: Story = {
+  args: { type: 'SetEraPayoutDampingFactorProposalDetails' },
 }
 export const UpdateWorkingGroupBudget: Story = {
   args: { type: 'UpdateWorkingGroupBudgetProposalDetails' },
@@ -683,7 +687,7 @@ export const TestCancelProposalHappy: Story = {
       })
 
       await step('Confirm', async () => {
-        expect(await modal.findByText('Your propsal has been cancelled.'))
+        expect(await modal.findByText('Your proposal has been cancelled.'))
 
         expect(onCancel).toHaveBeenLastCalledWith(activeMember.controllerAccount, activeMember.id, PROPOSAL_DATA.id)
       })

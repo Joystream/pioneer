@@ -194,6 +194,9 @@ fragment ProposalWithDetailsFields on Proposal {
       frozen
       pallet
     }
+    ... on SetEraPayoutDampingFactorProposalDetails {
+      dampingFactor
+    }
     ... on DecreaseCouncilBudgetProposalDetails {
       amount
     }
@@ -209,6 +212,7 @@ fragment ProposalWithDetailsFields on Proposal {
       bloatBond
     }
   }
+
   discussionThread {
     id
     posts {

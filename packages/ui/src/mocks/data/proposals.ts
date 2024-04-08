@@ -93,6 +93,7 @@ const proposalDetails: Record<ProposalDetailsType, RecursivePartial<ProposalWith
   UpdateWorkingGroupBudgetProposalDetails: { amount: joy(200), group: workingGroup },
   VetoProposalDetails: { proposal: { __typename: 'Proposal', id: '0', title: random.words(4) } },
   UpdateGlobalNftLimitProposalDetails: {},
+  SetEraPayoutDampingFactorProposalDetails: { dampingFactor: 60 },
   DecreaseCouncilBudgetProposalDetails: { amount: joy(100) },
   UpdateTokenPalletTokenConstraintsProposalDetails: {
     maxYearlyRate: 0.4 * 10 ** 6,
@@ -257,6 +258,7 @@ export const proposalsPagesChain = (
           budget: councilBudget,
           councilorReward,
           nextRewardPayments,
+          eraPayoutDampingFactor: 70,
         },
         referendum: { stage: {} },
 

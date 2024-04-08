@@ -62,6 +62,13 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
 export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBlock, createdInBlock }: Props) => {
   const { api } = useApi()
   const { budget } = useCouncilStatistics()
+
+  const validatorRewardMultiplier = useFirstObservableValue(() => {
+    if (proposalDetails?.type === 'setEraPayoutDampingFactor') {
+      return api?.query.council.eraPayoutDampingFactor()
+    }
+  }, [api?.isConnected, proposalDetails?.type])
+
   const { group } = useWorkingGroup({
     name: (proposalDetails as UpdateGroupBudgetDetails)?.group?.id,
   })
@@ -120,6 +127,17 @@ export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBl
           renderType: 'Amount',
           label: 'Expected WG Budget',
           value: group?.budget?.add(proposalDetails.amount),
+        },
+      ] as RenderNode[]
+    }
+
+    if (proposalDetails?.type === 'setEraPayoutDampingFactor') {
+      return [
+        {
+          renderType: 'Numeric',
+          units: '%',
+          label: 'Current multiplier',
+          value: validatorRewardMultiplier,
         },
       ] as RenderNode[]
     }

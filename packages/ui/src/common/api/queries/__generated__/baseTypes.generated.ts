@@ -21017,6 +21017,7 @@ export type ProposalDetails =
   | RuntimeUpgradeProposalDetails
   | SetCouncilBudgetIncrementProposalDetails
   | SetCouncilorRewardProposalDetails
+  | SetEraPayoutDampingFactorProposalDetails
   | SetInitialInvitationBalanceProposalDetails
   | SetInitialInvitationCountProposalDetails
   | SetMaxValidatorCountProposalDetails
@@ -29058,6 +29059,12 @@ export type SetCouncilorRewardProposalDetails = {
   __typename: 'SetCouncilorRewardProposalDetails'
   /** New (proposed) council members' reward per block */
   newRewardPerBlock: Scalars['BigInt']
+}
+
+export type SetEraPayoutDampingFactorProposalDetails = {
+  __typename: 'SetEraPayoutDampingFactorProposalDetails'
+  /** Proposed validator payout damping factor */
+  dampingFactor: Scalars['Int']
 }
 
 export type SetInitialInvitationBalanceProposalDetails = {

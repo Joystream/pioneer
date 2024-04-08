@@ -26,6 +26,7 @@ import { FillWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/c
 import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 
 import { DecreaseCouncilBudget } from './DecreaseCouncilBudget'
+import { SetEraPayoutDampingFactor } from './SetEraPayoutDampingFactor'
 import { SetInitialInvitationBalance } from './SetInitialInvitationBalance'
 import { SetInitialInvitationCount } from './SetInitialInvitationCount'
 import { UpdatePalletFrozenStatus } from './UpdatePalletFrozenStatus'
@@ -87,6 +88,9 @@ export const SpecificParametersStep = ({ matches }: SpecificParametersStepProps)
     }
     case matches('specificParameters.updatePalletFrozenStatus'): {
       return <UpdatePalletFrozenStatus />
+    }
+    case matches('specificParameters.setEraPayoutDampingFactor'): {
+      return <SetEraPayoutDampingFactor />
     }
     case matches('specificParameters.decreaseCouncilBudget'): {
       return <DecreaseCouncilBudget />

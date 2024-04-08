@@ -189,7 +189,13 @@ export const getSpecificParameters = async (
     }
     case 'updatePalletFrozenStatus': {
       return createType('PalletProposalsCodexProposalDetails', {
+        // NOTE: The "SetPalletFozenStatus" typo comes from the runtime so it should be fixed there first.
         SetPalletFozenStatus: [!specifics.updatePalletFrozenStatus.enable, specifics.updatePalletFrozenStatus.pallet],
+      })
+    }
+    case 'setEraPayoutDampingFactor': {
+      return createType('PalletProposalsCodexProposalDetails', {
+        setEraPayoutDampingFactor: createType('Percent', specifics?.setEraPayoutDampingFactor?.dampingFactor ?? 100),
       })
     }
     case 'decreaseCouncilBudget': {

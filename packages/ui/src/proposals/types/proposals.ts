@@ -62,6 +62,7 @@ export type ProposalType =
         | 'veto'
         | 'updateChannelPayouts'
         | 'updatePalletFrozenStatus'
+        | 'setEraPayoutDampingFactor'
         | 'decreaseCouncilBudget'
         | 'updateTokenPalletTokenConstraints'
       )

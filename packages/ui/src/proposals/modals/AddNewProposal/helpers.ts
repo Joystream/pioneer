@@ -184,6 +184,9 @@ export interface AddNewProposalForm {
     enable: boolean
     pallet: string
   }
+  setEraPayoutDampingFactor: {
+    dampingFactor?: number
+  }
   decreaseCouncilBudget?: {
     amount?: BN
   }
@@ -437,6 +440,12 @@ export const schemaFactory = (api?: Api) => {
             'execution'
           )
         )
+        .required('Field is required'),
+    }),
+    setEraPayoutDampingFactor: Yup.object().shape({
+      dampingFactor: Yup.number()
+        .min(0, 'The value must be between 0 and 100%.')
+        .max(100, 'The value must be between 0 and 100%.')
         .required('Field is required'),
     }),
     decreaseCouncilBudget: Yup.object().shape({

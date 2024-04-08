@@ -1554,6 +1554,38 @@ export const SpecificParametersRuntimeUpgrade: Story = {
   }),
 }
 
+export const SpecificParametersSetEraPayoutDampingFactor: Story = {
+  play: specificParametersTest('Set Era Payout Damping Factor', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      // Valid
+      const factorField = await modal.findByLabelText('Validator reward multiplier')
+      await userEvent.type(factorField, '60')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+
+      // Invalid
+      await userEvent.clear(factorField)
+      await userEvent.type(factorField, '200')
+      await modal.findByText('The value must be between 0 and 100%.')
+      await waitFor(() => expect(nextButton).toBeDisabled())
+
+      // Valid again
+      await userEvent.clear(factorField)
+      await userEvent.type(factorField, '60')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+    })
+
+    await step('Transaction parameters', () => {
+      const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({
+        setEraPayoutDampingFactor: 60,
+      })
+    })
+  }),
+}
+
 export const SpecificParametersDecreaseCouncilBudget: Story = {
   parameters: {
     councilBudget: joy(500),
