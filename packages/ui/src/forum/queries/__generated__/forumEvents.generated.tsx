@@ -299,6 +299,7 @@ export type GetForumEventsQuery = {
         actor: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
       }
     | { __typename: 'ThreadMovedEvent' }
+    | { __typename: 'VestedBudgetSpendingEvent' }
     | { __typename: 'VideoReactedEvent' }
     | { __typename: 'VideoReactionsPreferenceEvent' }
     | { __typename: 'VoteCastEvent' }

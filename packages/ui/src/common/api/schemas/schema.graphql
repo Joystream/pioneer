@@ -162,6 +162,7 @@ enum EventTypeOptions {
   ThreadMetadataUpdatedEvent
   ThreadModeratedEvent
   ThreadMovedEvent
+  VestedBudgetSpendingEvent
   VideoReactedEvent
   VideoReactionsPreferenceEvent
   VoteCastEvent
@@ -967,6 +968,7 @@ type WorkingGroup implements BaseGraphQLObject {
   terminatedleadereventgroup: [TerminatedLeaderEvent!]
   terminatedworkereventgroup: [TerminatedWorkerEvent!]
   upcomingworkinggroupopeninggroup: [UpcomingWorkingGroupOpening!]
+  vestedbudgetspendingeventgroup: [VestedBudgetSpendingEvent!]
   workerexitedeventgroup: [WorkerExitedEvent!]
   workerrewardaccountupdatedeventgroup: [WorkerRewardAccountUpdatedEvent!]
   workerrewardamountupdatedeventgroup: [WorkerRewardAmountUpdatedEvent!]
@@ -6662,6 +6664,17 @@ type UpcomingWorkingGroupOpeningEdge {
 type UpcomingWorkingGroupOpeningConnection {
   totalCount: Int!
   edges: [UpcomingWorkingGroupOpeningEdge!]!
+  pageInfo: PageInfo!
+}
+
+type VestedBudgetSpendingEventEdge {
+  node: VestedBudgetSpendingEvent!
+  cursor: String!
+}
+
+type VestedBudgetSpendingEventConnection {
+  totalCount: Int!
+  edges: [VestedBudgetSpendingEventEdge!]!
   pageInfo: PageInfo!
 }
 
@@ -12671,6 +12684,114 @@ input BudgetUpdatedEventUpdateInput {
   budgetChangeAmount: String
 }
 
+input VestedBudgetSpendingEventWhereInput {
+  id_eq: ID
+  id_in: [ID!]
+  createdAt_eq: DateTime
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  createdById_eq: ID
+  createdById_in: [ID!]
+  updatedAt_eq: DateTime
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  updatedById_eq: ID
+  updatedById_in: [ID!]
+  deletedAt_all: Boolean
+  deletedAt_eq: DateTime
+  deletedAt_lt: DateTime
+  deletedAt_lte: DateTime
+  deletedAt_gt: DateTime
+  deletedAt_gte: DateTime
+  deletedById_eq: ID
+  deletedById_in: [ID!]
+  inExtrinsic_eq: String
+  inExtrinsic_contains: String
+  inExtrinsic_startsWith: String
+  inExtrinsic_endsWith: String
+  inExtrinsic_in: [String!]
+  inBlock_eq: Int
+  inBlock_gt: Int
+  inBlock_gte: Int
+  inBlock_lt: Int
+  inBlock_lte: Int
+  inBlock_in: [Int!]
+  network_eq: Network
+  network_in: [Network!]
+  indexInBlock_eq: Int
+  indexInBlock_gt: Int
+  indexInBlock_gte: Int
+  indexInBlock_lt: Int
+  indexInBlock_lte: Int
+  indexInBlock_in: [Int!]
+  receiver_eq: String
+  receiver_contains: String
+  receiver_startsWith: String
+  receiver_endsWith: String
+  receiver_in: [String!]
+  amount_eq: BigInt
+  amount_gt: BigInt
+  amount_gte: BigInt
+  amount_lt: BigInt
+  amount_lte: BigInt
+  amount_in: [BigInt!]
+  perBlock_eq: BigInt
+  perBlock_gt: BigInt
+  perBlock_gte: BigInt
+  perBlock_lt: BigInt
+  perBlock_lte: BigInt
+  perBlock_in: [BigInt!]
+  startingBlock_eq: Int
+  startingBlock_gt: Int
+  startingBlock_gte: Int
+  startingBlock_lt: Int
+  startingBlock_lte: Int
+  startingBlock_in: [Int!]
+  rationale_eq: String
+  rationale_contains: String
+  rationale_startsWith: String
+  rationale_endsWith: String
+  rationale_in: [String!]
+  group: WorkingGroupWhereInput
+  AND: [VestedBudgetSpendingEventWhereInput!]
+  OR: [VestedBudgetSpendingEventWhereInput!]
+  NOT: [VestedBudgetSpendingEventWhereInput!]
+}
+
+input VestedBudgetSpendingEventWhereUniqueInput {
+  id: ID!
+}
+
+input VestedBudgetSpendingEventCreateInput {
+  inExtrinsic: String
+  inBlock: Float!
+  network: Network!
+  indexInBlock: Float!
+  group: ID!
+  receiver: String!
+  amount: String!
+  perBlock: String!
+  startingBlock: Float!
+  rationale: String
+}
+
+input VestedBudgetSpendingEventUpdateInput {
+  inExtrinsic: String
+  inBlock: Float
+  network: Network
+  indexInBlock: Float
+  group: ID
+  receiver: String
+  amount: String
+  perBlock: String
+  startingBlock: Float
+  rationale: String
+}
+
 input WorkingGroupWhereInput {
   id_eq: ID
   id_in: [ID!]
@@ -12775,6 +12896,9 @@ input WorkingGroupWhereInput {
   upcomingworkinggroupopeninggroup_none: UpcomingWorkingGroupOpeningWhereInput
   upcomingworkinggroupopeninggroup_some: UpcomingWorkingGroupOpeningWhereInput
   upcomingworkinggroupopeninggroup_every: UpcomingWorkingGroupOpeningWhereInput
+  vestedbudgetspendingeventgroup_none: VestedBudgetSpendingEventWhereInput
+  vestedbudgetspendingeventgroup_some: VestedBudgetSpendingEventWhereInput
+  vestedbudgetspendingeventgroup_every: VestedBudgetSpendingEventWhereInput
   workerexitedeventgroup_none: WorkerExitedEventWhereInput
   workerexitedeventgroup_some: WorkerExitedEventWhereInput
   workerexitedeventgroup_every: WorkerExitedEventWhereInput
@@ -26835,6 +26959,69 @@ type BudgetUpdatedEvent implements Event & BaseGraphQLObject {
   budgetChangeAmount: BigInt!
 }
 
+type VestedBudgetSpendingEvent implements Event & BaseGraphQLObject {
+  id: ID!
+  createdAt: DateTime!
+  createdById: ID!
+  updatedAt: DateTime
+  updatedById: ID
+  deletedAt: DateTime
+  deletedById: ID
+  version: Int!
+
+  """
+  Hash of the extrinsic which caused the event to be emitted
+  """
+  inExtrinsic: String
+
+  """
+  Blocknumber of the block in which the event was emitted.
+  """
+  inBlock: Int!
+
+  """
+  Network the block was produced in
+  """
+  network: Network!
+
+  """
+  Index of event in block from which it was emitted.
+  """
+  indexInBlock: Int!
+
+  """
+  Filtering options for interface implementers
+  """
+  type: EventTypeOptions
+  group: WorkingGroup!
+  groupId: String!
+
+  """
+  Receiver account address
+  """
+  receiver: String!
+
+  """
+  Amount vested (this amount is fully locked until the starting block is reached)
+  """
+  amount: BigInt!
+
+  """
+  Amount unlock at every block
+  """
+  perBlock: BigInt!
+
+  """
+  Block height when the vesting schedule starts
+  """
+  startingBlock: Int!
+
+  """
+  Optional rationale
+  """
+  rationale: String
+}
+
 type OpeningFilledEvent implements Event & BaseGraphQLObject {
   id: ID!
   createdAt: DateTime!
@@ -33204,6 +33391,21 @@ type Query {
     where: UpcomingWorkingGroupOpeningWhereInput
     orderBy: [UpcomingWorkingGroupOpeningOrderByInput!]
   ): UpcomingWorkingGroupOpeningConnection!
+  vestedBudgetSpendingEvents(
+    offset: Int
+    limit: Int = 50
+    where: VestedBudgetSpendingEventWhereInput
+    orderBy: [VestedBudgetSpendingEventOrderByInput!]
+  ): [VestedBudgetSpendingEvent!]!
+  vestedBudgetSpendingEventByUniqueInput(where: VestedBudgetSpendingEventWhereUniqueInput!): VestedBudgetSpendingEvent
+  vestedBudgetSpendingEventsConnection(
+    first: Int
+    after: String
+    last: Int
+    before: String
+    where: VestedBudgetSpendingEventWhereInput
+    orderBy: [VestedBudgetSpendingEventOrderByInput!]
+  ): VestedBudgetSpendingEventConnection!
   videoAssetsDeletedByModeratorEvents(
     offset: Int
     limit: Int = 50
@@ -37528,6 +37730,35 @@ enum UpcomingWorkingGroupOpeningOrderByInput {
   rewardPerBlock_DESC
   metadata_ASC
   metadata_DESC
+}
+
+enum VestedBudgetSpendingEventOrderByInput {
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  deletedAt_ASC
+  deletedAt_DESC
+  inExtrinsic_ASC
+  inExtrinsic_DESC
+  inBlock_ASC
+  inBlock_DESC
+  network_ASC
+  network_DESC
+  indexInBlock_ASC
+  indexInBlock_DESC
+  group_ASC
+  group_DESC
+  receiver_ASC
+  receiver_DESC
+  amount_ASC
+  amount_DESC
+  perBlock_ASC
+  perBlock_DESC
+  startingBlock_ASC
+  startingBlock_DESC
+  rationale_ASC
+  rationale_DESC
 }
 
 enum VideoAssetsDeletedByModeratorEventOrderByInput {

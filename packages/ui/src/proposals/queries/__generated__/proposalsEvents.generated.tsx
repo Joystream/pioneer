@@ -332,6 +332,7 @@ export type GetProposalsEventsQuery = {
     | { __typename: 'ThreadMetadataUpdatedEvent' }
     | { __typename: 'ThreadModeratedEvent' }
     | { __typename: 'ThreadMovedEvent' }
+    | { __typename: 'VestedBudgetSpendingEvent' }
     | { __typename: 'VideoReactedEvent' }
     | { __typename: 'VideoReactionsPreferenceEvent' }
     | { __typename: 'VoteCastEvent' }
