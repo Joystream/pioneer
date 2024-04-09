@@ -96,14 +96,14 @@ const proposalDetails: Record<ProposalDetailsType, RecursivePartial<ProposalWith
   SetEraPayoutDampingFactorProposalDetails: { dampingFactor: 60 },
   DecreaseCouncilBudgetProposalDetails: { amount: joy(100) },
   UpdateTokenPalletTokenConstraintsProposalDetails: {
-    maxYearlyRate: 0.4 * 10 ** 6,
+    maxYearlyRate: 400_000,
     minAmmSlope: undefined,
     minSaleDuration: 200,
     minRevenueSplitDuration: undefined,
     minRevenueSplitTimeToStart: 5,
-    salePlatformFee: 10_000,
+    salePlatformFee: 0,
     ammBuyTxFees: undefined,
-    ammSellTxFees: 0.003 * 10 ** 6,
+    ammSellTxFees: 300,
     bloatBond: joy(0.01),
   },
 }

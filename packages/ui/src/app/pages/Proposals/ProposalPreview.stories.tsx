@@ -136,15 +136,15 @@ export default {
             },
             referendum: { stage: {} },
             projectToken: {
-              ammBuyTxFees: 10_000,
-              ammSellTxFees: 20_000,
+              ammBuyTxFees: 1_000,
+              ammSellTxFees: 2_000,
               bloatBond: joy(0.1),
               maxYearlyPatronageRate: 500_000,
               minAmmSlopeParameter: joy(10),
               minRevenueSplitDuration: 100,
               minRevenueSplitTimeToStart: 200,
               minSaleDuration: 300,
-              salePlatformFee: 30_000,
+              salePlatformFee: 3_000,
             },
           },
 
