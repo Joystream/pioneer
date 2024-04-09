@@ -7,6 +7,7 @@ import '@/services/i18n'
 import { ImageReportNotification } from '@/app/components/ImageReportNotification'
 import { OnBoardingOverlay } from '@/app/components/OnboardingOverlay/OnBoardingOverlay'
 import { CouncilModule } from '@/app/pages/Council/CouncilModule'
+import { ErrorPage } from '@/app/pages/ErrorPage'
 import { NotFound } from '@/app/pages/NotFound'
 import { BountyRoutes } from '@/bounty/constants'
 import { ConnectionStatus } from '@/common/components/ConnectionStatus'
@@ -21,7 +22,7 @@ import { ProposalsRoutes } from '@/proposals/constants/routes'
 import { ValidatorsRoutes } from '@/validators/constants/routes'
 import { WorkingGroupsRoutes } from '@/working-groups/constants/routes'
 
-import { ErrorFallback } from './components/ErrorFallback'
+import { ModalErrorFallback, PageErrorFallback } from './components/ErrorFallback'
 import { ExtensionNotification } from './components/ExtensionWarning'
 import { NavBar } from './components/NavBar'
 import { SideBar } from './components/SideBar'
@@ -50,7 +51,7 @@ export const App = () => {
     <Providers>
       <Page>
         <SideBar />
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <ErrorBoundary FallbackComponent={PageErrorFallback}>
           <Screen>
             <OnBoardingOverlay />
             <NavBar />
@@ -70,6 +71,7 @@ export const App = () => {
               <Route path={ValidatorsRoutes.list} component={ValidatorsModule} />
               <Route exact path={TermsRoutes.privacyPolicy} component={PrivacyPolicy} />
               <Route exact path={TermsRoutes.termsOfService} component={TermsOfService} />
+              <Route exact path="/error" component={ErrorPage} />
               <Route exact path="/404" component={NotFound} />
               <Redirect exact from="/" to={WorkingGroupsRoutes.groups} />
               <Redirect exact from={ProposalsRoutes.home} to={ProposalsRoutes.current} />
@@ -78,7 +80,7 @@ export const App = () => {
           </Screen>
         </ErrorBoundary>
       </Page>
-      <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <ErrorBoundary FallbackComponent={ModalErrorFallback}>
         <GlobalModals />
       </ErrorBoundary>
       <NotificationsHolder>
