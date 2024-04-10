@@ -12,7 +12,9 @@ export interface NumericValueStatProps extends StatisticItemProps {
 }
 
 export const NumericValueStat: FC<NumericValueStatProps> = (props) => {
-  if (!isDefined(props.value)) {
+  const value = typeof props.value === 'number' ? props.value.toString() : props.value
+
+  if (!isDefined(value)) {
     return (
       <StatisticItem {...props}>
         <span>-</span>
@@ -22,7 +24,7 @@ export const NumericValueStat: FC<NumericValueStatProps> = (props) => {
 
   return (
     <StatisticItem {...props}>
-      <NumericValue>{formatTokenValue(props.value)}</NumericValue>
+      <NumericValue>{formatTokenValue(value)}</NumericValue>
       {props.children}
     </StatisticItem>
   )
