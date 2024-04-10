@@ -109,9 +109,7 @@ export const AddNewProposalModal = () => {
       stakingStatus,
       requiredAmount: constants?.requiredStake,
       maxTriggerBlock: getMaxBlock(currentBlock),
-      minTriggerBlock: currentBlock
-        ? currentBlock.addn(constants?.votingPeriod ?? 0).addn(constants?.gracePeriod ?? 0)
-        : BN_ZERO,
+      minTriggerBlock: currentBlock ? currentBlock.addn(constants?.gracePeriod ?? 0) : BN_ZERO,
     } as IStakingAccountSchema,
     defaultValues: defaultProposalValues,
   })
