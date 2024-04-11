@@ -1,32 +1,23 @@
 import { usePastCouncil } from '@/council/hooks/usePastCouncil'
-import { useGetCouncilBlockRangeQuery, useGetPastCouncilStatsQuery } from '@/council/queries'
-import { getSpentOnProposals } from '@/council/types/PastCouncil'
+import { useGetPastCouncilStatsQuery } from '@/council/queries'
 
+// NOTE: This hook is used for the past councils table. It's called once per row.
 export const usePastCouncilStats = (id: string) => {
-  const { loading: loadingRange, data: rangeData } = useGetCouncilBlockRangeQuery({
-    variables: {
-      where: {
-        id,
-      },
-    },
-  })
-
-  const council = rangeData?.electedCouncilByUniqueInput
+  const { isLoading: loadingCouncil, council: pastCouncil, term } = usePastCouncil(id)
 
   const { loading: loadingData, data } = useGetPastCouncilStatsQuery({
     variables: {
-      startBlock: council?.electedAtBlock ?? 0,
-      endBlock: council?.endedAtBlock ?? 0,
+      startBlock: term?.fromBlock ?? 0,
+      endBlock: term?.toBlock ?? 0,
     },
+    skip: !term.toBlock,
   })
 
-  const { isLoading: loadingCouncil, council: pastCouncil } = usePastCouncil(id)
-
   return {
-    isLoading: loadingRange || loadingData || loadingCouncil,
+    isLoading: loadingData || loadingCouncil,
     proposalsApproved: data?.proposalsApproved?.totalCount ?? 0,
     proposalsRejected: (data?.proposalsRejected?.totalCount || 0) + (data?.proposalsSlashed?.totalCount || 0),
-    totalSpent: data && pastCouncil && pastCouncil.totalSpent,
-    spentOnProposals: data && getSpentOnProposals(data.fundingRequestsApproved),
+    totalSpent: pastCouncil?.totalSpent,
+    spentOnProposals: pastCouncil?.totalSpentOnProposals,
   }
 }

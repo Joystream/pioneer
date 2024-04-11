@@ -80,16 +80,17 @@ describe('UI: Past Council page', () => {
 
     describe('Stats', () => {
       beforeEach(async () => {
-        seedProposal(testProposals[0], mockServer.server)
+        const proposal = testProposals[1]
+        seedProposal(proposal, mockServer.server)
         seedEvent(
           {
             id: '0',
             inBlock: 5,
             createdAt: '2021-10-07T11:47:39.042Z',
             network: 'OLYMPIA',
-            proposalId: testProposals[0].id,
+            proposalId: proposal.id,
           },
-          'ProposalExecutedEvent',
+          'ProposalDecisionMadeEvent',
           mockServer.server
         )
         seedEvent(

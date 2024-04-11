@@ -90,14 +90,27 @@ const getFilter = (where: Record<string, any>) => {
       }
     }
 
-    if (['gte', 'lte'].includes(type)) {
-      const resultToBoolean: (a: number) => boolean = type == 'gte' ? (a) => a >= 0 : (a) => a <= 0
+    if (['gte', 'gt', 'lte', 'lt'].includes(type)) {
+      const compare = (a: number, b: number): boolean => {
+        switch (type) {
+          case 'gte':
+            return a >= b
+          case 'gt':
+            return a > b
+          case 'lte':
+            return a <= b
+          case 'lt':
+            return a < b
+          default:
+            return false
+        }
+      }
       if (['createdAt', 'statusSetAtTime'].includes(field)) {
         filters.push((model: Record<string, any>) =>
-          resultToBoolean(new Date(model[field]).getTime() - new Date(checkValue).getTime())
+          compare(new Date(model[field]).getTime(), new Date(checkValue).getTime())
         )
       } else {
-        filters.push((model: Record<string, any>) => resultToBoolean(model[field] - checkValue))
+        filters.push((model: Record<string, any>) => compare(model[field], checkValue))
       }
     }
 

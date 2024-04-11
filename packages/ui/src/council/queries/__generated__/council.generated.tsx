@@ -751,11 +751,6 @@ export type GetPastCouncilQuery = {
     endedAtTime?: any | null
     councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: string; unpaidReward: string }>
   } | null
-  budgetSpendingEvents: Array<{
-    __typename: 'BudgetSpendingEvent'
-    amount: string
-    type?: Types.EventTypeOptions | null
-  }>
   fundingRequestsApproved: Array<{
     __typename: 'Proposal'
     details:
@@ -1487,47 +1482,8 @@ export type GetPastCouncilStatsQueryVariables = Types.Exact<{
 export type GetPastCouncilStatsQuery = {
   __typename: 'Query'
   proposalsApproved: { __typename: 'ProposalExecutedEventConnection'; totalCount: number }
-  fundingRequestsApproved: Array<{
-    __typename: 'Proposal'
-    details:
-      | { __typename: 'AmendConstitutionProposalDetails' }
-      | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
-      | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
-      | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
-      | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
-      | {
-          __typename: 'FundingRequestProposalDetails'
-          destinationsList?: {
-            __typename: 'FundingRequestDestinationsList'
-            destinations: Array<{ __typename: 'FundingRequestDestination'; amount: string; account: string }>
-          } | null
-        }
-      | { __typename: 'RuntimeUpgradeProposalDetails' }
-      | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
-      | { __typename: 'SetCouncilorRewardProposalDetails' }
-      | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
-      | { __typename: 'SetInitialInvitationCountProposalDetails' }
-      | { __typename: 'SetMaxValidatorCountProposalDetails' }
-      | { __typename: 'SetMembershipLeadInvitationQuotaProposalDetails' }
-      | { __typename: 'SetMembershipPriceProposalDetails' }
-      | { __typename: 'SetReferralCutProposalDetails' }
-      | { __typename: 'SetWorkingGroupLeadRewardProposalDetails' }
-      | { __typename: 'SignalProposalDetails' }
-      | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
-      | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
-      | { __typename: 'UpdateChannelPayoutsProposalDetails' }
-      | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
-      | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
-      | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
-      | { __typename: 'VetoProposalDetails' }
-  }>
   proposalsRejected: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
   proposalsSlashed: { __typename: 'ProposalDecisionMadeEventConnection'; totalCount: number }
-  budgetSpendingEvents: Array<{
-    __typename: 'BudgetSpendingEvent'
-    amount: string
-    type?: Types.EventTypeOptions | null
-  }>
 }
 
 export type GetCouncilorElectionEventQueryVariables = Types.Exact<{
@@ -1957,21 +1913,21 @@ export const GetPastCouncilDocument = gql`
     electedCouncilByUniqueInput(where: { id: $id }) {
       ...PastCouncilDetailedFields
     }
-    budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
-      ...CouncilSpendingEventFields
-    }
     fundingRequestsApproved: proposals(
       where: {
-        statusSetAtBlock_gt: $fromBlock
-        statusSetAtBlock_lt: $toBlock
         details_json: { isTypeOf_eq: "FundingRequestProposalDetails" }
+        OR: [
+          { status_json: { isTypeOf_eq: "ProposalStatusExecuted" } }
+          { status_json: { isTypeOf_eq: "ProposalStatusGracing" } }
+        ]
+        proposaldecisionmadeeventproposal_some: { inBlock_gte: $fromBlock }
+        proposaldecisionmadeeventproposal_none: { inBlock_gt: $toBlock }
       }
     ) {
       ...FundingRequestApproved
     }
   }
   ${PastCouncilDetailedFieldsFragmentDoc}
-  ${CouncilSpendingEventFieldsFragmentDoc}
   ${FundingRequestApprovedFragmentDoc}
 `
 
@@ -2846,15 +2802,6 @@ export const GetPastCouncilStatsDocument = gql`
     proposalsApproved: proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
       totalCount
     }
-    fundingRequestsApproved: proposals(
-      where: {
-        statusSetAtBlock_gt: $startBlock
-        statusSetAtBlock_lt: $endBlock
-        details_json: { isTypeOf_eq: "FundingRequestProposalDetails" }
-      }
-    ) {
-      ...FundingRequestApproved
-    }
     proposalsRejected: proposalDecisionMadeEventsConnection(
       where: {
         inBlock_gt: $startBlock
@@ -2873,12 +2820,7 @@ export const GetPastCouncilStatsDocument = gql`
     ) {
       totalCount
     }
-    budgetSpendingEvents(where: { inBlock_gte: $startBlock, inBlock_lte: $endBlock }) {
-      ...CouncilSpendingEventFields
-    }
   }
-  ${FundingRequestApprovedFragmentDoc}
-  ${CouncilSpendingEventFieldsFragmentDoc}
 `
 
 /**
