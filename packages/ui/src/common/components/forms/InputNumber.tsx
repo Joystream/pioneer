@@ -69,7 +69,7 @@ export const InputNumber = React.memo(({ name, isInBN = false, ...props }: Numbe
               return ''
             }
             const numValue = isInBN ? divToNum(asBN(value), exp) : value / exp
-            return numValue.toFixed(props.decimalScale ?? 0)
+            return numValue.toString()
           })}
           onChange={(event, numValue) => {
             if (!event) return
