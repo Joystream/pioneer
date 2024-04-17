@@ -117,6 +117,7 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'CommentPinnedEvent' }
     | { __typename: 'CommentReactedEvent' }
     | { __typename: 'CommentTextUpdatedEvent' }
+    | { __typename: 'CouncilBudgetDecreasedEvent' }
     | { __typename: 'CouncilBudgetFundedEvent' }
     | { __typename: 'CouncilorRewardUpdatedEvent'; id: string; createdAt: any; rewardAmount: string }
     | { __typename: 'EnglishAuctionSettledEvent' }
@@ -214,6 +215,7 @@ export type GetCouncilEventsQuery = {
     | { __typename: 'ThreadMetadataUpdatedEvent' }
     | { __typename: 'ThreadModeratedEvent' }
     | { __typename: 'ThreadMovedEvent' }
+    | { __typename: 'VestedBudgetSpendingEvent' }
     | { __typename: 'VideoReactedEvent' }
     | { __typename: 'VideoReactionsPreferenceEvent' }
     | { __typename: 'VoteCastEvent' }

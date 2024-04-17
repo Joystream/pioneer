@@ -9,8 +9,8 @@ import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { Block } from '@/common/types'
 import { useCouncilStatistics } from '@/council/hooks/useCouncilStatistics'
-import { Percentage } from '@/proposals/components/ProposalDetails/renderers/Percentage'
 import getDetailsRenderStructure, { RenderNode, RenderType } from '@/proposals/helpers/getDetailsRenderStructure'
+import { crtConstraints$ } from '@/proposals/model/crtConstraints'
 import { ProposalWithDetails, UpdateGroupBudgetDetails } from '@/proposals/types'
 import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
@@ -54,7 +54,6 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   Divider: Divider,
   ProposalLink: ProposalLink,
   OpeningLink: OpeningLink,
-  Percentage: Percentage,
   Hash: Hash,
   DestinationsPreview: DestinationsPreview,
   BlockTimeDisplay: BlockTimeDisplay,
@@ -63,6 +62,13 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
 export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBlock, createdInBlock }: Props) => {
   const { api } = useApi()
   const { budget } = useCouncilStatistics()
+
+  const validatorRewardMultiplier = useFirstObservableValue(() => {
+    if (proposalDetails?.type === 'setEraPayoutDampingFactor') {
+      return api?.query.council.eraPayoutDampingFactor()
+    }
+  }, [api?.isConnected, proposalDetails?.type])
+
   const { group } = useWorkingGroup({
     name: (proposalDetails as UpdateGroupBudgetDetails)?.group?.id,
   })
@@ -78,6 +84,12 @@ export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBl
 
   const detailsRenderStructure = useMemo(() => getDetailsRenderStructure(proposalDetails), [proposalDetails])
 
+  const crtConstraints = useFirstObservableValue(() => {
+    if (api && proposalDetails?.type === 'updateTokenPalletTokenConstraints') {
+      return crtConstraints$(api)
+    }
+  }, [proposalDetails?.type, api?.isConnected])
+
   const additionalDetails = useMemo(() => {
     if (proposalDetails?.type === 'setReferralCut') {
       return [
@@ -89,7 +101,7 @@ export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBl
       ] as RenderNode[]
     }
 
-    if (proposalDetails?.type === 'fundingRequest') {
+    if (proposalDetails?.type === 'fundingRequest' || proposalDetails?.type === 'decreaseCouncilBudget') {
       return [
         {
           renderType: 'Amount',
@@ -119,8 +131,73 @@ export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBl
       ] as RenderNode[]
     }
 
+    if (proposalDetails?.type === 'setEraPayoutDampingFactor') {
+      return [
+        {
+          renderType: 'Numeric',
+          units: '%',
+          label: 'Current multiplier',
+          value: validatorRewardMultiplier,
+        },
+      ] as RenderNode[]
+    }
+
+    if (proposalDetails?.type === 'updateTokenPalletTokenConstraints') {
+      return [
+        {
+          renderType: 'Numeric',
+          label: 'Current maximum yearly rate',
+          units: '%',
+          value: crtConstraints?.maxYearlyRate,
+        },
+        {
+          renderType: 'Amount',
+          label: 'Current minimum AMM slope',
+          value: crtConstraints?.minAmmSlope,
+        },
+        {
+          renderType: 'NumberOfBlocks',
+          label: 'Current minimum sale duration',
+          value: crtConstraints?.minSaleDuration,
+        },
+        {
+          renderType: 'NumberOfBlocks',
+          label: 'Current minimum revenue split duration',
+          value: crtConstraints?.minRevenueSplitDuration,
+        },
+        {
+          renderType: 'NumberOfBlocks',
+          label: 'Current minimum revenue split time to start',
+          value: crtConstraints?.minRevenueSplitTimeToStart,
+        },
+        {
+          renderType: 'Numeric',
+          label: 'Current sale platform fee',
+          units: '%',
+          value: crtConstraints?.salePlatformFee,
+        },
+        {
+          renderType: 'Numeric',
+          label: 'Current AMM buy transaction fees',
+          units: '%',
+          value: crtConstraints?.ammBuyTxFees,
+        },
+        {
+          renderType: 'Numeric',
+          label: 'Current AMM sell transaction fees',
+          units: '%',
+          value: crtConstraints?.ammSellTxFees,
+        },
+        {
+          renderType: 'Amount',
+          label: 'Current bloat bond',
+          value: crtConstraints?.bloatBond,
+        },
+      ] as RenderNode[]
+    }
+
     return []
-  }, [membershipPrice, !group, budget])
+  }, [membershipPrice, !group, budget, crtConstraints])
 
   const extraProposalDetails = useMemo(() => {
     if (exactExecutionBlock) {
@@ -173,17 +250,34 @@ export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBl
     return null
   }, [proposalDetails?.type, budget.amount?.toString(), !group])
 
+  const renderNodes = useMemo(() => {
+    const renderStructure = (detailsRenderStructure?.structure ?? []) as RenderNode[]
+
+    if (proposalDetails?.type === 'updateTokenPalletTokenConstraints') {
+      return [
+        ...[...renderStructure, ...additionalDetails]
+          .map((node) => ({
+            ...node,
+            key: node.label
+              .toLowerCase()
+              .replace(/^current (.*)./, '$1')
+              .replace('proposed ', ''),
+          }))
+          .sort((a, b) => a.key.localeCompare(b.key)),
+        ...extraProposalDetails,
+      ]
+    }
+
+    return [...renderStructure, ...additionalDetails, ...extraProposalDetails]
+  }, [proposalDetails?.type, detailsRenderStructure, additionalDetails, extraProposalDetails])
+
   if (!proposalDetails) {
     return null
   }
 
   return (
     <>
-      <Statistics>
-        {[...(detailsRenderStructure?.structure ?? []), ...additionalDetails, ...extraProposalDetails].map(
-          renderProposalDetail
-        )}
-      </Statistics>
+      <Statistics>{renderNodes.map(renderProposalDetail)}</Statistics>
       {extraInformation}
     </>
   )

@@ -7,7 +7,7 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { InputComponent, InputNumber } from '@/common/components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader, Row, TransactionAmount } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
-import { maxContext, useYupValidationResolver } from '@/common/utils/validation'
+import { maxContext, NumberSchema, useYupValidationResolver } from '@/common/utils/validation'
 import { InviteMembershipFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { AccountSchema } from '@/memberships/model/validation'
 
@@ -29,8 +29,7 @@ const formDefaultValues = {
 
 const TransferInviteSchema = Yup.object().shape({
   from: AccountSchema.required('This field is required'),
-  amount: Yup.number()
-    .min(1, 'Number of invitation has to be greater than 0')
+  amount: NumberSchema.min(1, 'Number of invitation has to be greater than 0')
     .test(maxContext('You only have ${max} invites left.', 'inviteCount', false))
     .required('This field is required'),
   to: AccountSchema.required('This field is required'),

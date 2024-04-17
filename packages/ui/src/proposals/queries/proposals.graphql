@@ -194,7 +194,25 @@ fragment ProposalWithDetailsFields on Proposal {
       frozen
       pallet
     }
+    ... on SetEraPayoutDampingFactorProposalDetails {
+      dampingFactor
+    }
+    ... on DecreaseCouncilBudgetProposalDetails {
+      amount
+    }
+    ... on UpdateTokenPalletTokenConstraintsProposalDetails {
+      maxYearlyRate
+      minAmmSlope
+      minSaleDuration
+      minRevenueSplitDuration
+      minRevenueSplitTimeToStart
+      salePlatformFee
+      ammBuyTxFees
+      ammSellTxFees
+      bloatBond
+    }
   }
+
   discussionThread {
     id
     posts {

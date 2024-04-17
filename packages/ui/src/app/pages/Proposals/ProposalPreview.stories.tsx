@@ -132,8 +132,20 @@ export default {
             council: {
               budget: joy(1000),
               councilorReward: joy(1),
+              eraPayoutDampingFactor: 70,
             },
             referendum: { stage: {} },
+            projectToken: {
+              ammBuyTxFees: 1_000,
+              ammSellTxFees: 2_000,
+              bloatBond: joy(0.1),
+              maxYearlyPatronageRate: 500_000,
+              minAmmSlopeParameter: joy(10),
+              minRevenueSplitDuration: 100,
+              minRevenueSplitTimeToStart: 200,
+              minSaleDuration: 300,
+              salePlatformFee: 3_000,
+            },
           },
 
           tx: {
@@ -218,12 +230,6 @@ export default {
 // ProposalPreview
 // ----------------------------------------------------------------------------
 
-export const AmendConstitution: Story = {
-  args: { type: 'AmendConstitutionProposalDetails', constitutionality: 2 },
-  parameters: {
-    statuses: ['ProposalStatusDeciding', 'ProposalStatusDormant', 'ProposalStatusDeciding'] satisfies ProposalStatus[],
-  },
-}
 export const CancelWorkingGroupLeadOpening: Story = {
   args: { type: 'CancelWorkingGroupLeadOpeningProposalDetails' },
 }
@@ -299,11 +305,28 @@ export const UpdateChannelPayouts: Story = {
 export const UpdatePalletFrozenStatus: Story = {
   args: { type: 'UpdatePalletFrozenStatusProposalDetails' },
 }
+export const SetEraPayoutDampingFactor: Story = {
+  args: { type: 'SetEraPayoutDampingFactorProposalDetails' },
+}
 export const UpdateWorkingGroupBudget: Story = {
   args: { type: 'UpdateWorkingGroupBudgetProposalDetails' },
 }
+export const DecreaseCouncilBudget: Story = {
+  args: { type: 'DecreaseCouncilBudgetProposalDetails' },
+}
+export const UpdateTokenPalletTokenConstraints: Story = {
+  args: { type: 'UpdateTokenPalletTokenConstraintsProposalDetails' },
+}
+
+// Disabled proposals
 export const Veto: Story = {
   args: { type: 'VetoProposalDetails' },
+}
+export const AmendConstitution: Story = {
+  args: { type: 'AmendConstitutionProposalDetails', constitutionality: 2 },
+  parameters: {
+    statuses: ['ProposalStatusDeciding', 'ProposalStatusDormant', 'ProposalStatusDeciding'] satisfies ProposalStatus[],
+  },
 }
 
 // ----------------------------------------------------------------------------
@@ -664,7 +687,7 @@ export const TestCancelProposalHappy: Story = {
       })
 
       await step('Confirm', async () => {
-        expect(await modal.findByText('Your propsal has been cancelled.'))
+        expect(await modal.findByText('Your proposal has been cancelled.'))
 
         expect(onCancel).toHaveBeenLastCalledWith(activeMember.controllerAccount, activeMember.id, PROPOSAL_DATA.id)
       })

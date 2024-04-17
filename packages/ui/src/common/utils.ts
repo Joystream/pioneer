@@ -15,8 +15,11 @@ export const isString = (something: unknown): something is string => typeof some
 
 export const isRecord = (something: unknown): something is Obj => typeof something === 'object' && something !== null
 
-export const whenDefined = <T extends any, R>(something: T | undefined, fn: (something: T) => R): R | undefined => {
-  if (isDefined(something)) return fn(something)
+export const whenDefined = <T extends any, R>(
+  something: T | undefined | null,
+  fn: (something: T) => R
+): R | undefined => {
+  if (isDefined(something) && something !== null) return fn(something)
 }
 
 // Type Casting:
@@ -28,6 +31,8 @@ export const toNumber = (value: any): number => value?.toNumber?.() ?? (isNumber
 export const clamp = (min: number, value: number, max: number) => Math.max(min, Math.min(max, value))
 
 export const perbillToPercent = (perbill: BN) => perbill.toNumber() / 10 ** 7
+
+export const permillToPercent = (permill: number) => permill / 10 ** 4
 
 // Objects:
 
