@@ -2,6 +2,7 @@ export type NetworkType = 'mainnet' | 'local' | 'testnet' | 'auto-conf' | 'local
 
 export interface NetworkEndpoints {
   nodeRpcEndpoint: string
+  nodeHttpRpcEndpoint: string
   queryNodeEndpoint: string
   queryNodeEndpointSubscription: string
   membershipFaucetEndpoint: string

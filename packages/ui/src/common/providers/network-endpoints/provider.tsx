@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import React, { ReactNode, Reducer, useCallback, useEffect, useReducer, useState } from 'react'
 import * as Yup from 'yup'
 
 import { DEFAULT_NETWORK, NetworkEndpoints, pickEndpoints } from '@/app/config'
@@ -21,9 +21,22 @@ const EndpointsSchema = Yup.object().shape({
   backendEndpoint: Yup.string(),
 })
 
+// HACK Pioneer should store the actual HTTP-RPC endpoint.
+const endpointReducer: Reducer<NetworkEndpoints | undefined, Omit<NetworkEndpoints, 'nodeHttpRpcEndpoint'>> = (
+  _,
+  newEndpoints
+): NetworkEndpoints => ({
+  ...newEndpoints,
+  nodeHttpRpcEndpoint: newEndpoints.nodeRpcEndpoint
+    .replace('ws:', 'http:')
+    .replace('wss:', 'https:')
+    .replace('ws-rpc', 'http-rpc')
+    .replace(':9944', ''),
+})
+
 export const NetworkEndpointsProvider = ({ children }: Props) => {
   const { network, setNetwork } = useNetwork()
-  const [endpoints, setEndpoints] = useState<NetworkEndpoints>()
+  const [endpoints, setEndpoints] = useReducer(endpointReducer, undefined)
   const [autoConfEndpoints, storeAutoConfEndpoints] = useLocalStorage<NetworkEndpoints>('auto_network_config')
   const [isLoading, setIsLoading] = useState(false)
   const [customEndpoints] = useLocalStorage<NetworkEndpoints>('custom_endpoint')

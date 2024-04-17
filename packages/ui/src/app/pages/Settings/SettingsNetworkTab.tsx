@@ -41,7 +41,7 @@ export const SettingsNetworkTab = () => {
     'settings.customQueryEndpoint',
     'settings.customBackendEndpoint',
   ])
-  const [, storeCustomEndpoints] = useLocalStorage<NetworkEndpoints>('custom_endpoint')
+  const [, storeCustomEndpoints] = useLocalStorage<Omit<NetworkEndpoints, 'nodeHttpRpcEndpoint'>>('custom_endpoint')
   const [isValidFaucetEndpoint, setIsValidFaucetEndpoint] = useState(true)
   const [isValidRpcEndpoint, setIsValidRpcEndpoint] = useState(true)
   const [isValidQueryEndpoint, setIsValidQueryEndpoint] = useState(true)
