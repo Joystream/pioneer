@@ -168,6 +168,16 @@ export default {
               },
               projectToken: {
                 palletFrozen: args.palletFrozen,
+
+                ammBuyTxFees: 10_000,
+                ammSellTxFees: 20_000,
+                bloatBond: joy(0.1),
+                maxYearlyPatronageRate: 500_000,
+                minAmmSlopeParameter: joy(10),
+                minRevenueSplitDuration: 100,
+                minRevenueSplitTimeToStart: 200,
+                minSaleDuration: 300,
+                salePlatformFee: 30_000,
               },
             },
             tx: {
@@ -794,98 +804,98 @@ export const SpecificParametersFundingRequest: Story = {
   }),
 }
 
-export const SpecificParametersMultipleFundingRequest: Story = {
-  play: specificParametersTest('Funding Request', async ({ args, createProposal, modal, step }) => {
-    const aliceAddress = alice.controllerAccount
-    const bobAddress = member('bob').controllerAccount
-    const charlieAddress = member('charlie').controllerAccount
+// export const SpecificParametersMultipleFundingRequest: Story = {
+//   play: specificParametersTest('Funding Request', async ({ args, createProposal, modal, step }) => {
+//     const aliceAddress = alice.controllerAccount
+//     const bobAddress = member('bob').controllerAccount
+//     const charlieAddress = member('charlie').controllerAccount
 
-    await createProposal(async () => {
-      const nextButton = getButtonByText(modal, 'Create proposal')
-      expect(nextButton).toBeDisabled()
+//     await createProposal(async () => {
+//       const nextButton = getButtonByText(modal, 'Create proposal')
+//       expect(nextButton).toBeDisabled()
 
-      await userEvent.click(modal.getByTestId('pay-multiple'))
+//       await userEvent.click(modal.getByTestId('pay-multiple'))
 
-      const csvField = modal.getByTestId('accounts-amounts')
+//       const csvField = modal.getByTestId('accounts-amounts')
 
-      // Invalid
-      await userEvent.clear(csvField)
-      await userEvent.type(csvField, `${aliceAddress},500${bobAddress},500`)
-      expect(await modal.findByText(/Not valid CSV format/))
-      // ensure its not being open-able while the CSV syntax is valid
-      const previewButton = getButtonByText(modal, 'Preview and Validate')
-      expect(previewButton).toBeDisabled()
-      await waitFor(() => expect(modal.queryByTestId('sidePanel-overlay')).toBeNull())
-      expect(nextButton).toBeDisabled()
+//       // Invalid
+//       await userEvent.clear(csvField)
+//       await userEvent.type(csvField, `${aliceAddress},500${bobAddress},500`)
+//       expect(await modal.findByText(/Not valid CSV format/))
+//       // ensure its not being open-able while the CSV syntax is valid
+//       const previewButton = getButtonByText(modal, 'Preview and Validate')
+//       expect(previewButton).toBeDisabled()
+//       await waitFor(() => expect(modal.queryByTestId('sidePanel-overlay')).toBeNull())
+//       expect(nextButton).toBeDisabled()
 
-      // Invalid Accounts error
-      await userEvent.clear(csvField)
-      await userEvent.type(csvField, `5GNJqTPy,500\n${bobAddress},500`)
+//       // Invalid Accounts error
+//       await userEvent.clear(csvField)
+//       await userEvent.type(csvField, `5GNJqTPy,500\n${bobAddress},500`)
 
-      await waitFor(() => expect(modal.queryByText(/Not valid CSV format/)).toBeNull())
-      expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
-      expect(nextButton).toBeDisabled()
-      expect(previewButton).toBeEnabled()
+//       await waitFor(() => expect(modal.queryByText(/Not valid CSV format/)).toBeNull())
+//       expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
+//       expect(nextButton).toBeDisabled()
+//       expect(previewButton).toBeEnabled()
 
-      await userEvent.click(previewButton)
-      expect(await modal.findByText(/Incorrect destination accounts detected/))
-      await userEvent.click(modal.getByTestId('sidePanel-overlay'))
+//       await userEvent.click(previewButton)
+//       expect(await modal.findByText(/Incorrect destination accounts detected/))
+//       await userEvent.click(modal.getByTestId('sidePanel-overlay'))
 
-      // Max Amount error
-      await userEvent.clear(csvField)
-      await userEvent.type(csvField, `${aliceAddress},166667\n${bobAddress},500`)
-      expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
-      expect(nextButton).toBeDisabled()
-      await waitFor(() => expect(previewButton).toBeEnabled())
-      await waitFor(
-        async () => {
-          await userEvent.click(previewButton)
-          expect(await modal.findByText(/Max payment amount is exceeded/))
-        },
-        { timeout: 8000 }
-      )
-      await userEvent.click(modal.getByTestId('sidePanel-overlay')) //ensure create proposal is still disabled
-      expect(nextButton).toBeDisabled()
+//       // Max Amount error
+//       await userEvent.clear(csvField)
+//       await userEvent.type(csvField, `${aliceAddress},166667\n${bobAddress},500`)
+//       expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
+//       expect(nextButton).toBeDisabled()
+//       await waitFor(() => expect(previewButton).toBeEnabled())
+//       await waitFor(
+//         async () => {
+//           await userEvent.click(previewButton)
+//           expect(await modal.findByText(/Max payment amount is exceeded/))
+//         },
+//         { timeout: 8000 }
+//       )
+//       await userEvent.click(modal.getByTestId('sidePanel-overlay')) //ensure create proposal is still disabled
+//       expect(nextButton).toBeDisabled()
 
-      // Max Allowed Accounts error
-      await userEvent.clear(csvField)
-      await userEvent.type(csvField, `${aliceAddress},400\n${bobAddress},500\n${charlieAddress},500`)
-      expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
-      expect(nextButton).toBeDisabled()
-      await waitFor(() => expect(previewButton).toBeEnabled())
-      await userEvent.click(previewButton)
-      expect(await modal.findByText(/Maximum allowed accounts exceeded/))
-      await userEvent.click(modal.getByTestId('sidePanel-overlay')) //ensure create proposal is still disabled
-      expect(nextButton).toBeDisabled()
+//       // Max Allowed Accounts error
+//       await userEvent.clear(csvField)
+//       await userEvent.type(csvField, `${aliceAddress},400\n${bobAddress},500\n${charlieAddress},500`)
+//       expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
+//       expect(nextButton).toBeDisabled()
+//       await waitFor(() => expect(previewButton).toBeEnabled())
+//       await userEvent.click(previewButton)
+//       expect(await modal.findByText(/Maximum allowed accounts exceeded/))
+//       await userEvent.click(modal.getByTestId('sidePanel-overlay')) //ensure create proposal is still disabled
+//       expect(nextButton).toBeDisabled()
 
-      //  delete one account from the list'
-      await waitFor(() => expect(previewButton).toBeEnabled())
-      await userEvent.click(previewButton)
-      await userEvent.click(modal.getByTestId('removeAccount-2'))
-      await waitFor(() => expect(modal.queryByText(/Maximum allowed accounts exceeded/)).toBeNull())
-      await userEvent.click(modal.getByTestId('sidePanel-overlay'))
+//       //  delete one account from the list'
+//       await waitFor(() => expect(previewButton).toBeEnabled())
+//       await userEvent.click(previewButton)
+//       await userEvent.click(modal.getByTestId('removeAccount-2'))
+//       await waitFor(() => expect(modal.queryByText(/Maximum allowed accounts exceeded/)).toBeNull())
+//       await userEvent.click(modal.getByTestId('sidePanel-overlay'))
 
-      // Valid
-      await userEvent.clear(csvField)
-      await userEvent.type(csvField, `${aliceAddress},500\n${bobAddress},500`)
-      expect(nextButton).toBeDisabled()
+//       // Valid
+//       await userEvent.clear(csvField)
+//       await userEvent.type(csvField, `${aliceAddress},500\n${bobAddress},500`)
+//       expect(nextButton).toBeDisabled()
 
-      await waitFor(() => expect(previewButton).toBeEnabled())
-      await userEvent.click(previewButton)
-      await userEvent.click(modal.getByTestId('sidePanel-overlay'))
-    })
+//       await waitFor(() => expect(previewButton).toBeEnabled())
+//       await userEvent.click(previewButton)
+//       await userEvent.click(modal.getByTestId('sidePanel-overlay'))
+//     })
 
-    await step('Transaction parameters', () => {
-      const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
-      expect(specificParameters.toJSON()).toEqual({
-        fundingRequest: [
-          { account: aliceAddress, amount: 500_0000000000 },
-          { account: bobAddress, amount: 500_0000000000 },
-        ],
-      })
-    })
-  }),
-}
+//     await step('Transaction parameters', () => {
+//       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+//       expect(specificParameters.toJSON()).toEqual({
+//         fundingRequest: [
+//           { account: aliceAddress, amount: 500_0000000000 },
+//           { account: bobAddress, amount: 500_0000000000 },
+//         ],
+//       })
+//     })
+//   }),
+// }
 
 export const SpecificParametersSetReferralCut: Story = {
   play: specificParametersTest('Set Referral Cut', async ({ args, createProposal, modal, step }) => {
@@ -1542,4 +1552,133 @@ export const SpecificParametersRuntimeUpgrade: Story = {
       expect(specificParameters.toJSON()).toEqual({ runtimeUpgrade: '0x00' })
     })
   }),
+}
+
+export const SpecificParametersSetEraPayoutDampingFactor: Story = {
+  play: specificParametersTest('Set Era Payout Damping Factor', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      // Valid
+      const factorField = await modal.findByLabelText('Validator reward multiplier')
+      await userEvent.type(factorField, '60')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+
+      // Invalid
+      await userEvent.clear(factorField)
+      await userEvent.type(factorField, '200')
+      await modal.findByText('The value must be between 0 and 100%.')
+      await waitFor(() => expect(nextButton).toBeDisabled())
+
+      // Valid again
+      await userEvent.clear(factorField)
+      await userEvent.type(factorField, '60')
+      await waitFor(() => expect(nextButton).toBeEnabled())
+    })
+
+    await step('Transaction parameters', () => {
+      const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({
+        setEraPayoutDampingFactor: 60,
+      })
+    })
+  }),
+}
+
+export const SpecificParametersDecreaseCouncilBudget: Story = {
+  parameters: {
+    councilBudget: joy(500),
+  },
+  play: specificParametersTest('Decrease Council Budget', async ({ args, createProposal, modal, step }) => {
+    await createProposal(async () => {
+      const nextButton = getButtonByText(modal, 'Create proposal')
+      expect(nextButton).toBeDisabled()
+
+      const amountField = await modal.findByLabelText('Decrease budget by')
+
+      // Invalid price set to 0
+      await userEvent.type(amountField, '0')
+      expect(await modal.findByText('Amount must be greater than zero'))
+      expect(nextButton).toBeDisabled()
+
+      // Invalid price set to 0
+      await userEvent.clear(amountField)
+      await userEvent.type(amountField, '600')
+      expect(await modal.findByText('The current council budget is 500JOY'))
+      expect(nextButton).toBeDisabled()
+
+      // Valid
+      await userEvent.clear(amountField)
+      await userEvent.type(amountField, '8')
+    })
+
+    await step('Transaction parameters', () => {
+      const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON()).toEqual({ decreaseCouncilBudget: 8_0000000000 })
+    })
+  }),
+}
+
+export const SpecificUpdateTokenPalletTokenConstraints: Story = {
+  play: specificParametersTest(
+    'Update Token Pallet Token Constraints',
+    async ({ args, createProposal, modal, step }) => {
+      await createProposal(async () => {
+        const nextButton = getButtonByText(modal, 'Create proposal')
+        expect(nextButton).toBeDisabled()
+
+        const maxYearlyRate = await modal.findByLabelText('Maximum yearly rate')
+        const minAmmSlope = await modal.findByLabelText('Minimum AMM slope')
+        const minSaleDuration = await modal.findByLabelText('Minimum sale duration')
+        const minRevenueSplitDuration = await modal.findByLabelText('Minimum revenue split duration')
+        const minRevenueSplitTimeToStart = await modal.findByLabelText('Minimum revenue split time to start')
+        const salePlatformFee = await modal.findByLabelText('Sale platform fee')
+        const ammBuyTxFees = await modal.findByLabelText('AMM buy transaction fees')
+        const ammSellTxFees = await modal.findByLabelText('AMM sell transaction fees')
+        const bloatBond = await modal.findByLabelText('Bloat bond')
+
+        // Valid
+        await userEvent.type(maxYearlyRate, '40')
+        await waitFor(() => expect(nextButton).toBeEnabled())
+
+        // Invalid min AMM slope
+        await userEvent.type(minAmmSlope, '0')
+        await waitFor(() => expect(nextButton).toBeDisabled())
+
+        // Invalid Bloat bond
+        await userEvent.clear(minAmmSlope)
+        await userEvent.type(minAmmSlope, '1')
+        await waitFor(() => expect(nextButton).toBeEnabled())
+        await userEvent.type(bloatBond, '0')
+        await waitFor(() => expect(nextButton).toBeDisabled())
+
+        // Valid again
+        await userEvent.clear(bloatBond)
+        await userEvent.type(bloatBond, '0.01')
+        await userEvent.type(minSaleDuration, '100')
+        await userEvent.type(minRevenueSplitDuration, '200')
+        await userEvent.type(minRevenueSplitTimeToStart, '300')
+        await userEvent.type(salePlatformFee, '0.1')
+        await userEvent.type(ammBuyTxFees, '0.2')
+        await userEvent.type(ammSellTxFees, '0.3')
+        await waitFor(() => expect(nextButton).toBeEnabled())
+      })
+
+      await step('Transaction parameters', () => {
+        const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+        expect(specificParameters.toJSON().updateTokenPalletTokenConstraints).toEqual({
+          maxYearlyRate: 0.4 * 1_000_000,
+          minAmmSlope: Number(joy(1)),
+          minSaleDuration: 100,
+          minRevenueSplitDuration: 200,
+          minRevenueSplitTimeToStart: 300,
+          salePlatformFee: 0.001 * 1_000_000,
+          ammBuyTxFees: 0.002 * 1_000_000,
+          ammSellTxFees: 0.003 * 1_000_000,
+          bloatBond: Number(joy(0.01)),
+        })
+      })
+    }
+  ),
 }

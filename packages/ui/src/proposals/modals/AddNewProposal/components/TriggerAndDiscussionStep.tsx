@@ -61,12 +61,7 @@ export const TriggerAndDiscussionStep = () => {
             name="triggerAndDiscussion.triggerBlock"
             message={triggerBlock ? `≈ ${inBlocksDate(triggerBlock)}` : ''}
           >
-            <InputNumber
-              id="triggerBlock"
-              placeholder="0"
-              name="triggerAndDiscussion.triggerBlock"
-              maxAllowedValue={Math.pow(2, 32)}
-            />
+            <InputNumber id="triggerBlock" placeholder="0" name="triggerAndDiscussion.triggerBlock" />
           </InputComponent>
         )}
       </RowGapBlock>

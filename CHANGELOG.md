@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [3.5.0 (Luxor)][3.5.0] - 2024-03-18
+
+### Added
+- Decrease council budget proposal.
+- Update CRT pallet constraints proposal.
+- Set Era Payout Damping Factor proposal.
+
+### Fixed
+- Keep the app usable if an error happen.
+- Number input behavior.
+
 ## [3.4.0] - 2024-03-19
 
 ### Fixed
@@ -368,7 +380,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v3.4.0...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v3.5.0...HEAD
+[3.5.0]: https://github.com/Joystream/pioneer/compare/v3.4.0...v3.5.0
 [3.4.0]: https://github.com/Joystream/pioneer/compare/v3.3.1...v3.4.0
 [3.3.1]: https://github.com/Joystream/pioneer/compare/v3.3.0...v3.3.1
 [3.3.0]: https://github.com/Joystream/pioneer/compare/v3.2.0...v3.3.0

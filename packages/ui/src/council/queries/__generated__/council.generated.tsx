@@ -76,12 +76,14 @@ export type PastCouncilProposalsFieldsFragment = {
       | { __typename: 'AmendConstitutionProposalDetails' }
       | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
       | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
       | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'FundingRequestProposalDetails' }
       | { __typename: 'RuntimeUpgradeProposalDetails' }
       | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
       | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetEraPayoutDampingFactorProposalDetails' }
       | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
       | { __typename: 'SetInitialInvitationCountProposalDetails' }
       | { __typename: 'SetMaxValidatorCountProposalDetails' }
@@ -95,6 +97,7 @@ export type PastCouncilProposalsFieldsFragment = {
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
+      | { __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
     creator: {
@@ -613,6 +616,7 @@ export type FundingRequestApprovedFragment = {
     | { __typename: 'AmendConstitutionProposalDetails' }
     | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
     | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+    | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
     | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
     | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
     | {
@@ -625,6 +629,7 @@ export type FundingRequestApprovedFragment = {
     | { __typename: 'RuntimeUpgradeProposalDetails' }
     | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
     | { __typename: 'SetCouncilorRewardProposalDetails' }
+    | { __typename: 'SetEraPayoutDampingFactorProposalDetails' }
     | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
     | { __typename: 'SetInitialInvitationCountProposalDetails' }
     | { __typename: 'SetMaxValidatorCountProposalDetails' }
@@ -638,6 +643,7 @@ export type FundingRequestApprovedFragment = {
     | { __typename: 'UpdateChannelPayoutsProposalDetails' }
     | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
     | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
+    | { __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails' }
     | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
     | { __typename: 'VetoProposalDetails' }
 }
@@ -762,6 +768,7 @@ export type GetPastCouncilQuery = {
       | { __typename: 'AmendConstitutionProposalDetails' }
       | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
       | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
       | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
       | {
@@ -774,6 +781,7 @@ export type GetPastCouncilQuery = {
       | { __typename: 'RuntimeUpgradeProposalDetails' }
       | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
       | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetEraPayoutDampingFactorProposalDetails' }
       | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
       | { __typename: 'SetInitialInvitationCountProposalDetails' }
       | { __typename: 'SetMaxValidatorCountProposalDetails' }
@@ -787,6 +795,7 @@ export type GetPastCouncilQuery = {
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
+      | { __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
   }>
@@ -866,12 +875,14 @@ export type GetPastCouncilMembersQuery = {
         | { __typename: 'AmendConstitutionProposalDetails' }
         | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
         | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+        | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
         | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
         | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
         | { __typename: 'FundingRequestProposalDetails' }
         | { __typename: 'RuntimeUpgradeProposalDetails' }
         | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
         | { __typename: 'SetCouncilorRewardProposalDetails' }
+        | { __typename: 'SetEraPayoutDampingFactorProposalDetails' }
         | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
         | { __typename: 'SetInitialInvitationCountProposalDetails' }
         | { __typename: 'SetMaxValidatorCountProposalDetails' }
@@ -885,6 +896,7 @@ export type GetPastCouncilMembersQuery = {
         | { __typename: 'UpdateChannelPayoutsProposalDetails' }
         | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
         | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
+        | { __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails' }
         | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
         | { __typename: 'VetoProposalDetails' }
       creator: {
@@ -957,12 +969,14 @@ export type GetPastCouncilProposalsQuery = {
       | { __typename: 'AmendConstitutionProposalDetails' }
       | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
       | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
       | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'FundingRequestProposalDetails' }
       | { __typename: 'RuntimeUpgradeProposalDetails' }
       | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
       | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetEraPayoutDampingFactorProposalDetails' }
       | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
       | { __typename: 'SetInitialInvitationCountProposalDetails' }
       | { __typename: 'SetMaxValidatorCountProposalDetails' }
@@ -976,6 +990,7 @@ export type GetPastCouncilProposalsQuery = {
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
+      | { __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
     creator: {
@@ -1493,6 +1508,7 @@ export type GetPastCouncilStatsQuery = {
       | { __typename: 'AmendConstitutionProposalDetails' }
       | { __typename: 'CancelWorkingGroupLeadOpeningProposalDetails' }
       | { __typename: 'CreateWorkingGroupLeadOpeningProposalDetails' }
+      | { __typename: 'DecreaseCouncilBudgetProposalDetails' }
       | { __typename: 'DecreaseWorkingGroupLeadStakeProposalDetails' }
       | { __typename: 'FillWorkingGroupLeadOpeningProposalDetails' }
       | {
@@ -1505,6 +1521,7 @@ export type GetPastCouncilStatsQuery = {
       | { __typename: 'RuntimeUpgradeProposalDetails' }
       | { __typename: 'SetCouncilBudgetIncrementProposalDetails' }
       | { __typename: 'SetCouncilorRewardProposalDetails' }
+      | { __typename: 'SetEraPayoutDampingFactorProposalDetails' }
       | { __typename: 'SetInitialInvitationBalanceProposalDetails' }
       | { __typename: 'SetInitialInvitationCountProposalDetails' }
       | { __typename: 'SetMaxValidatorCountProposalDetails' }
@@ -1518,6 +1535,7 @@ export type GetPastCouncilStatsQuery = {
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
+      | { __typename: 'UpdateTokenPalletTokenConstraintsProposalDetails' }
       | { __typename: 'UpdateWorkingGroupBudgetProposalDetails' }
       | { __typename: 'VetoProposalDetails' }
   }>
