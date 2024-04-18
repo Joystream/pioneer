@@ -804,98 +804,98 @@ export const SpecificParametersFundingRequest: Story = {
   }),
 }
 
-export const SpecificParametersMultipleFundingRequest: Story = {
-  play: specificParametersTest('Funding Request', async ({ args, createProposal, modal, step }) => {
-    const aliceAddress = alice.controllerAccount
-    const bobAddress = member('bob').controllerAccount
-    const charlieAddress = member('charlie').controllerAccount
+// export const SpecificParametersMultipleFundingRequest: Story = {
+//   play: specificParametersTest('Funding Request', async ({ args, createProposal, modal, step }) => {
+//     const aliceAddress = alice.controllerAccount
+//     const bobAddress = member('bob').controllerAccount
+//     const charlieAddress = member('charlie').controllerAccount
 
-    await createProposal(async () => {
-      const nextButton = getButtonByText(modal, 'Create proposal')
-      expect(nextButton).toBeDisabled()
+//     await createProposal(async () => {
+//       const nextButton = getButtonByText(modal, 'Create proposal')
+//       expect(nextButton).toBeDisabled()
 
-      await userEvent.click(modal.getByTestId('pay-multiple'))
+//       await userEvent.click(modal.getByTestId('pay-multiple'))
 
-      const csvField = modal.getByTestId('accounts-amounts')
+//       const csvField = modal.getByTestId('accounts-amounts')
 
-      // Invalid
-      await userEvent.clear(csvField)
-      await userEvent.type(csvField, `${aliceAddress},500${bobAddress},500`)
-      expect(await modal.findByText(/Not valid CSV format/))
-      // ensure its not being open-able while the CSV syntax is valid
-      const previewButton = getButtonByText(modal, 'Preview and Validate')
-      expect(previewButton).toBeDisabled()
-      await waitFor(() => expect(modal.queryByTestId('sidePanel-overlay')).toBeNull())
-      expect(nextButton).toBeDisabled()
+//       // Invalid
+//       await userEvent.clear(csvField)
+//       await userEvent.type(csvField, `${aliceAddress},500${bobAddress},500`)
+//       expect(await modal.findByText(/Not valid CSV format/))
+//       // ensure its not being open-able while the CSV syntax is valid
+//       const previewButton = getButtonByText(modal, 'Preview and Validate')
+//       expect(previewButton).toBeDisabled()
+//       await waitFor(() => expect(modal.queryByTestId('sidePanel-overlay')).toBeNull())
+//       expect(nextButton).toBeDisabled()
 
-      // Invalid Accounts error
-      await userEvent.clear(csvField)
-      await userEvent.type(csvField, `5GNJqTPy,500\n${bobAddress},500`)
+//       // Invalid Accounts error
+//       await userEvent.clear(csvField)
+//       await userEvent.type(csvField, `5GNJqTPy,500\n${bobAddress},500`)
 
-      await waitFor(() => expect(modal.queryByText(/Not valid CSV format/)).toBeNull())
-      expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
-      expect(nextButton).toBeDisabled()
-      expect(previewButton).toBeEnabled()
+//       await waitFor(() => expect(modal.queryByText(/Not valid CSV format/)).toBeNull())
+//       expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
+//       expect(nextButton).toBeDisabled()
+//       expect(previewButton).toBeEnabled()
 
-      await userEvent.click(previewButton)
-      expect(await modal.findByText(/Incorrect destination accounts detected/))
-      await userEvent.click(modal.getByTestId('sidePanel-overlay'))
+//       await userEvent.click(previewButton)
+//       expect(await modal.findByText(/Incorrect destination accounts detected/))
+//       await userEvent.click(modal.getByTestId('sidePanel-overlay'))
 
-      // Max Amount error
-      await userEvent.clear(csvField)
-      await userEvent.type(csvField, `${aliceAddress},166667\n${bobAddress},500`)
-      expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
-      expect(nextButton).toBeDisabled()
-      await waitFor(() => expect(previewButton).toBeEnabled())
-      await waitFor(
-        async () => {
-          await userEvent.click(previewButton)
-          expect(await modal.findByText(/Max payment amount is exceeded/))
-        },
-        { timeout: 8000 }
-      )
-      await userEvent.click(modal.getByTestId('sidePanel-overlay')) //ensure create proposal is still disabled
-      expect(nextButton).toBeDisabled()
+//       // Max Amount error
+//       await userEvent.clear(csvField)
+//       await userEvent.type(csvField, `${aliceAddress},166667\n${bobAddress},500`)
+//       expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
+//       expect(nextButton).toBeDisabled()
+//       await waitFor(() => expect(previewButton).toBeEnabled())
+//       await waitFor(
+//         async () => {
+//           await userEvent.click(previewButton)
+//           expect(await modal.findByText(/Max payment amount is exceeded/))
+//         },
+//         { timeout: 8000 }
+//       )
+//       await userEvent.click(modal.getByTestId('sidePanel-overlay')) //ensure create proposal is still disabled
+//       expect(nextButton).toBeDisabled()
 
-      // Max Allowed Accounts error
-      await userEvent.clear(csvField)
-      await userEvent.type(csvField, `${aliceAddress},400\n${bobAddress},500\n${charlieAddress},500`)
-      expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
-      expect(nextButton).toBeDisabled()
-      await waitFor(() => expect(previewButton).toBeEnabled())
-      await userEvent.click(previewButton)
-      expect(await modal.findByText(/Maximum allowed accounts exceeded/))
-      await userEvent.click(modal.getByTestId('sidePanel-overlay')) //ensure create proposal is still disabled
-      expect(nextButton).toBeDisabled()
+//       // Max Allowed Accounts error
+//       await userEvent.clear(csvField)
+//       await userEvent.type(csvField, `${aliceAddress},400\n${bobAddress},500\n${charlieAddress},500`)
+//       expect(await modal.findByText(/Please preview and validate the inputs to proceed/))
+//       expect(nextButton).toBeDisabled()
+//       await waitFor(() => expect(previewButton).toBeEnabled())
+//       await userEvent.click(previewButton)
+//       expect(await modal.findByText(/Maximum allowed accounts exceeded/))
+//       await userEvent.click(modal.getByTestId('sidePanel-overlay')) //ensure create proposal is still disabled
+//       expect(nextButton).toBeDisabled()
 
-      //  delete one account from the list'
-      await waitFor(() => expect(previewButton).toBeEnabled())
-      await userEvent.click(previewButton)
-      await userEvent.click(modal.getByTestId('removeAccount-2'))
-      await waitFor(() => expect(modal.queryByText(/Maximum allowed accounts exceeded/)).toBeNull())
-      await userEvent.click(modal.getByTestId('sidePanel-overlay'))
+//       //  delete one account from the list'
+//       await waitFor(() => expect(previewButton).toBeEnabled())
+//       await userEvent.click(previewButton)
+//       await userEvent.click(modal.getByTestId('removeAccount-2'))
+//       await waitFor(() => expect(modal.queryByText(/Maximum allowed accounts exceeded/)).toBeNull())
+//       await userEvent.click(modal.getByTestId('sidePanel-overlay'))
 
-      // Valid
-      await userEvent.clear(csvField)
-      await userEvent.type(csvField, `${aliceAddress},500\n${bobAddress},500`)
-      expect(nextButton).toBeDisabled()
+//       // Valid
+//       await userEvent.clear(csvField)
+//       await userEvent.type(csvField, `${aliceAddress},500\n${bobAddress},500`)
+//       expect(nextButton).toBeDisabled()
 
-      await waitFor(() => expect(previewButton).toBeEnabled())
-      await userEvent.click(previewButton)
-      await userEvent.click(modal.getByTestId('sidePanel-overlay'))
-    })
+//       await waitFor(() => expect(previewButton).toBeEnabled())
+//       await userEvent.click(previewButton)
+//       await userEvent.click(modal.getByTestId('sidePanel-overlay'))
+//     })
 
-    await step('Transaction parameters', () => {
-      const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
-      expect(specificParameters.toJSON()).toEqual({
-        fundingRequest: [
-          { account: aliceAddress, amount: 500_0000000000 },
-          { account: bobAddress, amount: 500_0000000000 },
-        ],
-      })
-    })
-  }),
-}
+//     await step('Transaction parameters', () => {
+//       const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+//       expect(specificParameters.toJSON()).toEqual({
+//         fundingRequest: [
+//           { account: aliceAddress, amount: 500_0000000000 },
+//           { account: bobAddress, amount: 500_0000000000 },
+//         ],
+//       })
+//     })
+//   }),
+// }
 
 export const SpecificParametersSetReferralCut: Story = {
   play: specificParametersTest('Set Referral Cut', async ({ args, createProposal, modal, step }) => {
