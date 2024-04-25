@@ -19,7 +19,7 @@ import {
 } from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
-import { equalToContext, isValidCSV } from '@/proposals/model/validation'
+import { equalToContext } from '@/proposals/model/validation'
 import { ProposalType } from '@/proposals/types'
 import { GroupIdName } from '@/working-groups/types'
 
@@ -263,10 +263,6 @@ export const schemaFactory = (api?: Api) => {
           schema
             .test('previewedinput', 'Please preview', (value) => typeof value !== 'undefined' && value)
             .required('Field is required'),
-      }),
-      csvInput: Yup.string().when('payMultiple', {
-        is: true,
-        then: (schema) => schema.test(isValidCSV('Not valid CSV format')).required('Field is required'),
       }),
       accountsAndAmounts: Yup.array().when('payMultiple', {
         is: true,

@@ -20,25 +20,36 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium, TextSmall, TextInlineSmall } from '@/common/components/typography'
 import { useResponsive } from '@/common/hooks/useResponsive'
+import { isValidCSV } from '@/proposals/model/isValidCsv'
 
 import { PreviewAndValidateModal } from './modals/PreviewAndValidate'
 import { ErrorPrompt, Prompt } from './Prompt'
 
 export const FundingRequest = () => {
-  const { watch, setValue, getFieldState } = useFormContext()
+  const { watch, setValue } = useFormContext()
   const { isMobile, size } = useResponsive()
   const [isPreviewModalShown, setIsPreviewModalShown] = useState(false)
   const [payMultiple] = watch(['fundingRequest.payMultiple'])
-  const [hasPreviewedInput] = watch(['fundingRequest.hasPreviewedInput'], { 'fundingRequest.hasPreviewedInput': true })
-  const csvInput = watch('fundingRequest.csvInput')
+
+  const [hasPreviewedInput, setHasPreviewedInput] = useState(false)
+  const [canPreviewInput, setCanPreviewInput] = useState(false)
+
   useEffect(() => {
-    if (getFieldState('fundingRequest.accountsAndAmounts')) {
-      setValue('fundingRequest.accountsAndAmounts', undefined, { shouldValidate: true })
-      setValue('fundingRequest.hasPreviewedInput', false, { shouldValidate: true })
-    }
-  }, [csvInput])
-  const canPreviewInput =
-    getFieldState('fundingRequest.csvInput').isDirty && !getFieldState('fundingRequest.csvInput').error
+    const subscription = watch((data, info) => {
+      if (info.name !== 'fundingRequest.csvInput' || info.type !== 'change') return
+
+      const isCsvInpuValid = isValidCSV(data.fundingRequest.csvInput)
+      setCanPreviewInput(isCsvInpuValid !== canPreviewInput)
+
+      if (hasPreviewedInput) {
+        setHasPreviewedInput(false)
+        setValue('fundingRequest.accountsAndAmounts', undefined, { shouldValidate: true })
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [watch])
+
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -90,7 +101,8 @@ export const FundingRequest = () => {
             <InputComponent
               label="Destination accounts and transfer amounts"
               required
-              message={'You can select up to 20 recipients'}
+              message={canPreviewInput ? 'You can select up to 20 recipients' : 'Not valid CSV format'}
+              validation={canPreviewInput ? undefined : 'invalid'}
               name="fundingRequest.csvInput"
               id="accounts-amounts"
               inputSize="xl"

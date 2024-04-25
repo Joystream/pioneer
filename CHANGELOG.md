@@ -7,8 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.5.1] - 2024-04-25
 
-## [3.5.0 (Luxor)][3.5.0] - 2024-03-18
+### Fixed
+- Proxy API becoming unresponsive.
+
+## [3.5.0 (Luxor)][3.5.0] - 2024-04-18
 
 ### Added
 - Decrease council budget proposal.
@@ -380,7 +384,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v3.5.0...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v3.5.1...HEAD
+[3.5.1]: https://github.com/Joystream/pioneer/compare/v3.5.0...v3.5.1
 [3.5.0]: https://github.com/Joystream/pioneer/compare/v3.4.0...v3.5.0
 [3.4.0]: https://github.com/Joystream/pioneer/compare/v3.3.1...v3.4.0
 [3.3.1]: https://github.com/Joystream/pioneer/compare/v3.3.0...v3.3.1
