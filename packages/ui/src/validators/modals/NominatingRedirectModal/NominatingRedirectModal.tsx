@@ -6,11 +6,13 @@ import { Link } from '@/common/components/Link'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { TextBig, TextInlineBig } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { usePolkadotAppLink } from '@/common/hooks/usePolkadotAppLink'
 
 import { NominatingRedirectModalCall } from './types'
 
 export const NominatingRedirectModal = () => {
   const { hideModal } = useModal<NominatingRedirectModalCall>()
+  const polkadotAppLink = usePolkadotAppLink()
 
   return (
     <Modal modalSize="m" onClose={hideModal}>
@@ -23,13 +25,10 @@ export const NominatingRedirectModal = () => {
         </TextBig>
       </ModalBody>
       <ModalFooter>
-        <LinkGhost size="medium" href="https://polkadot.js.org/apps/?rpc=wss://rpc.joystream.org:9944#/staking/targets">
+        <LinkGhost size="medium" href={`${polkadotAppLink}/staking/targets`}>
           View detailed stats
         </LinkGhost>
-        <LinkPrimary
-          size="medium"
-          href="https://polkadot.js.org/apps/?rpc=wss://rpc.joystream.org:9944#/staking/actions"
-        >
+        <LinkPrimary size="medium" href={`${polkadotAppLink}/staking/actions`}>
           Nominate <ArrowRightIcon white />
         </LinkPrimary>
       </ModalFooter>
