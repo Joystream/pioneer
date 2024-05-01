@@ -16,6 +16,8 @@ import { formatJoyValue } from '@/common/model/formatters'
 
 export const BNSchema = Yup.mixed()
 
+export const NumberSchema = Yup.number().transform((_, value) => value ?? undefined)
+
 export const whenDefined = (key: string, schema: Yup.AnySchema) =>
   Yup.mixed().when(key, {
     is: undefined,

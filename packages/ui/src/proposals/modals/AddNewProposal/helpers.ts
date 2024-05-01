@@ -5,8 +5,10 @@ import { Account } from '@/accounts/types'
 import { Api } from '@/api'
 import { CurrencyName } from '@/app/constants/currency'
 import { QuestionValueProps } from '@/common/components/EditableInputList/EditableInputList'
+import { isDefined } from '@/common/utils'
 import {
   BNSchema,
+  NumberSchema,
   lessThanMixed,
   maxContext,
   maxMixed,
@@ -17,7 +19,7 @@ import {
 } from '@/common/utils/validation'
 import { AccountSchema, StakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
-import { equalToContext, isValidCSV } from '@/proposals/model/validation'
+import { equalToContext } from '@/proposals/model/validation'
 import { ProposalType } from '@/proposals/types'
 import { GroupIdName } from '@/working-groups/types'
 
@@ -183,6 +185,23 @@ export interface AddNewProposalForm {
     enable: boolean
     pallet: string
   }
+  setEraPayoutDampingFactor: {
+    dampingFactor?: number
+  }
+  decreaseCouncilBudget?: {
+    amount?: BN
+  }
+  updateTokenPalletTokenConstraints?: {
+    maxYearlyRate?: number
+    minAmmSlope?: BN
+    minSaleDuration?: number
+    minRevenueSplitDuration?: number
+    minRevenueSplitTimeToStart?: number
+    salePlatformFee?: number
+    ammBuyTxFees?: number
+    ammSellTxFees?: number
+    bloatBond?: BN
+  }
 }
 
 export const schemaFactory = (api?: Api) => {
@@ -206,8 +225,7 @@ export const schemaFactory = (api?: Api) => {
       trigger: Yup.boolean(),
       triggerBlock: Yup.number().when('trigger', {
         is: true,
-        then: Yup.number()
-          .test(minContext('The minimum block number is ${min}', 'minTriggerBlock', false))
+        then: NumberSchema.test(minContext('The minimum block number is ${min}', 'minTriggerBlock', false))
           .test(maxContext('The maximum block number is ${max}', 'maxTriggerBlock', false))
           .required('Field is required'),
       }),
@@ -246,10 +264,6 @@ export const schemaFactory = (api?: Api) => {
             .test('previewedinput', 'Please preview', (value) => typeof value !== 'undefined' && value)
             .required('Field is required'),
       }),
-      csvInput: Yup.string().when('payMultiple', {
-        is: true,
-        then: (schema) => schema.test(isValidCSV('Not valid CSV format')).required('Field is required'),
-      }),
       accountsAndAmounts: Yup.array().when('payMultiple', {
         is: true,
         then: (schema) => schema.required(),
@@ -282,7 +296,7 @@ export const schemaFactory = (api?: Api) => {
       isLimited: Yup.boolean(),
       duration: Yup.number().when('isLimited', {
         is: true,
-        then: Yup.number().required('Field is required'),
+        then: NumberSchema.required('Field is required'),
       }),
     }),
     applicationForm: Yup.object().shape({
@@ -351,20 +365,19 @@ export const schemaFactory = (api?: Api) => {
       ),
     }),
     setReferralCut: Yup.object().shape({
-      referralCut: Yup.number()
-        .test(
-          maxContext(
-            'Input must be equal or less than ${max}% for proposal to execute',
-            'maximumReferralCut',
-            false,
-            'execution'
-          )
+      referralCut: NumberSchema.test(
+        maxContext(
+          'Input must be equal or less than ${max}% for proposal to execute',
+          'maximumReferralCut',
+          false,
+          'execution'
         )
+      )
         .max(100, 'Value exceed maximal percentage')
         .required('Field is required'),
     }),
     setMembershipLeadInvitationQuota: Yup.object().shape({
-      count: Yup.number().min(1, 'Quota must be greater than zero').required('Field is required'),
+      count: NumberSchema.min(1, 'Quota must be greater than zero').required('Field is required'),
       leadId: Yup.string().test('execution', (value) => !!value),
     }),
     setInitialInvitationBalance: Yup.object().shape({
@@ -424,5 +437,38 @@ export const schemaFactory = (api?: Api) => {
         )
         .required('Field is required'),
     }),
+    setEraPayoutDampingFactor: Yup.object().shape({
+      dampingFactor: NumberSchema.min(0, 'The value must be between 0 and 100%.')
+        .max(100, 'The value must be between 0 and 100%.')
+        .required('Field is required'),
+    }),
+    decreaseCouncilBudget: Yup.object().shape({
+      amount: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero'))
+        .test(
+          maxContext(
+            `The current council budget is \${max}${CurrencyName.integerValue}`,
+            'councilBudget',
+            true,
+            'execution'
+          )
+        )
+        .required(),
+    }),
+    updateTokenPalletTokenConstraints: Yup.object()
+      .shape({
+        maxYearlyRate: NumberSchema.min(0, 'Rate must be 0 or greater').max(10 ** 6, 'Rate must be 100 or less'),
+        minAmmSlope: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')),
+        minSaleDuration: NumberSchema.min(0, 'Duration must be 0 or greater'),
+        minRevenueSplitDuration: NumberSchema.min(0, 'Duration must be 0 or greater'),
+        minRevenueSplitTimeToStart: NumberSchema.min(0, 'Duration must be 0 or greater'),
+        salePlatformFee: NumberSchema.min(0, 'Rate must be 0 or greater').max(10 ** 6, 'Rate must be 100 or less'),
+        ammBuyTxFees: NumberSchema.min(0, 'Rate must be 0 or greater').max(10 ** 6, 'Rate must be 100 or less'),
+        ammSellTxFees: NumberSchema.min(0, 'Rate must be 0 or greater').max(10 ** 6, 'Rate must be 100 or less'),
+        bloatBond: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')),
+      })
+      .test((fields) => {
+        if (fields && Object.values(fields).some(isDefined)) return true
+        return new Yup.ValidationError('At least one field is required', fields, 'updateTokenPalletTokenConstraints')
+      }),
   })
 }

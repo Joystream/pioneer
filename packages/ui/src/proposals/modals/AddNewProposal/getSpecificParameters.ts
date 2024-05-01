@@ -189,7 +189,34 @@ export const getSpecificParameters = async (
     }
     case 'updatePalletFrozenStatus': {
       return createType('PalletProposalsCodexProposalDetails', {
+        // NOTE: The "SetPalletFozenStatus" typo comes from the runtime so it should be fixed there first.
         SetPalletFozenStatus: [!specifics.updatePalletFrozenStatus.enable, specifics.updatePalletFrozenStatus.pallet],
+      })
+    }
+    case 'setEraPayoutDampingFactor': {
+      return createType('PalletProposalsCodexProposalDetails', {
+        setEraPayoutDampingFactor: createType('Percent', specifics?.setEraPayoutDampingFactor?.dampingFactor ?? 100),
+      })
+    }
+    case 'decreaseCouncilBudget': {
+      return createType('PalletProposalsCodexProposalDetails', {
+        DecreaseCouncilBudget: specifics.decreaseCouncilBudget?.amount,
+      })
+    }
+    case 'updateTokenPalletTokenConstraints': {
+      const values = specifics.updateTokenPalletTokenConstraints
+      return createType('PalletProposalsCodexProposalDetails', {
+        UpdateTokenPalletTokenConstraints: {
+          maxYearlyRate: createType('Option<Permill>', values?.maxYearlyRate),
+          minAmmSlope: values?.minAmmSlope,
+          minSaleDuration: values?.minSaleDuration,
+          minRevenueSplitDuration: values?.minRevenueSplitDuration,
+          minRevenueSplitTimeToStart: values?.minRevenueSplitTimeToStart,
+          salePlatformFee: createType('Option<Permill>', values?.salePlatformFee),
+          ammBuyTxFees: createType('Option<Permill>', values?.ammBuyTxFees),
+          ammSellTxFees: createType('Option<Permill>', values?.ammSellTxFees),
+          bloatBond: values?.bloatBond,
+        },
       })
     }
     default:

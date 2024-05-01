@@ -40,7 +40,7 @@ export const SetReferralCut = () => {
               id="amount-input"
               name="setReferralCut.referralCut"
               placeholder="0"
-              maxAllowedValue={Math.pow(2, 8)}
+              maxAllowedValue={2 ** 8 - 1}
             />
           </InputComponent>
         </RowGapBlock>

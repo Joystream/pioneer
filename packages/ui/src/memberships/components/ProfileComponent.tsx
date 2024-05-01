@@ -42,7 +42,7 @@ export function ProfileComponent() {
           </TokenDetail>
           <TextSmall>
             <BuyTokenLink href="https://www.joystream.org/token/#exchanges" target="_blank">
-              Buy Joy tokens
+              Buy JOY tokens
             </BuyTokenLink>
           </TextSmall>
         </TotalBalance>
