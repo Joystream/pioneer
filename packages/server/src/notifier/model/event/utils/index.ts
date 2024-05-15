@@ -12,7 +12,7 @@ type Created = { createdAt: any }
 export const isOlderThan =
   <A extends Created>(a: A) =>
   <B extends Created>(b: B): boolean =>
-    Date.parse(String(a)) > Date.parse(String(b))
+    Date.parse(String(a.createdAt)) > Date.parse(String(b.createdAt))
 
 export const getMentionedMemberIds = (text: string, roles: GetCurrentRolesQuery): number[] =>
   uniq(
