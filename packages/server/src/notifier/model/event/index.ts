@@ -9,6 +9,7 @@ import {
   fromElectionVotingStartedEvent,
 } from './election'
 import { fromPostAddedEvent, fromThreadCreatedEvent } from './forum'
+import { fromProposalPostAddedEvent } from './proposal'
 import { buildEvents } from './utils/buildEvent'
 import { ImplementedQNEvent } from './utils/types'
 
@@ -28,6 +29,7 @@ export const toNotificationEvents =
     const notifEvent = match(event)
       .with({ __typename: 'PostAddedEvent' }, (e) => fromPostAddedEvent(e, build, roles))
       .with({ __typename: 'ThreadCreatedEvent' }, (e) => fromThreadCreatedEvent(e, build, roles))
+      .with({ __typename: 'ProposalDiscussionPostCreatedEvent' }, (e) => fromProposalPostAddedEvent(e, build, roles))
       .with({ __typename: 'AnnouncingPeriodStartedEvent' }, (e) => fromElectionAnnouncingStartedEvent(e, build))
       .with({ __typename: 'VotingPeriodStartedEvent' }, (e) => fromElectionVotingStartedEvent(e, build))
       .with({ __typename: 'RevealingStageStartedEvent' }, (e) => fromElectionRevealingStartedEvent(e, build))

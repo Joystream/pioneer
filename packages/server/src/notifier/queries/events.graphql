@@ -53,27 +53,30 @@ fragment ElectionRevealingStartedFields on RevealingStageStartedEvent {
   inBlock
 }
 
-# fragment ProposalDiscussionPostCreatedEventFields on ProposalDiscussionPostCreatedEvent {
-#   __typename
-#   id
-#   inBlock
-#   post {
-#     id
-#     authorId
-#     text
-#     discussionThread {
-#       id
-#       proposal {
-#         id
-#         creatorId
-#       }
-#       posts {
-#         authorId
-#         text
-#       }
-#     }
-#   }
-# }
+fragment ProposalDiscussionPostCreatedEventFields on ProposalDiscussionPostCreatedEvent {
+  __typename
+  id
+  inBlock
+  post {
+    id
+    authorId
+    createdAt
+    text
+    repliesTo {
+      authorId
+    }
+    discussionThread {
+      proposal {
+        id # Users subscribe to proposals rather than proposal discussions
+        creatorId
+      }
+      posts {
+        authorId
+        createdAt
+      }
+    }
+  }
+}
 
 query GetNotificationEvents($from: Int, $exclude: [ID!]) {
   events(
@@ -85,6 +88,7 @@ query GetNotificationEvents($from: Int, $exclude: [ID!]) {
         VotingPeriodStartedEvent
         RevealingStageStartedEvent
         # PostTextUpdatedEvent
+        ProposalDiscussionPostCreatedEvent
       ]
       inBlock_gte: $from
       NOT: { id_in: $exclude }
@@ -106,8 +110,8 @@ query GetNotificationEvents($from: Int, $exclude: [ID!]) {
     ... on RevealingStageStartedEvent {
       ...ElectionRevealingStartedFields
     }
-    # ... on ProposalDiscussionPostCreatedEvent {
-    #   ...ProposalDiscussionPostCreatedEventFields
-    # }
+    ... on ProposalDiscussionPostCreatedEvent {
+      ...ProposalDiscussionPostCreatedEventFields
+    }
   }
 }
