@@ -16,7 +16,6 @@ fragment PostAddedEventFields on PostAddedEvent {
       posts {
         authorId
         createdAt
-        text
       }
       categoryId
     }
