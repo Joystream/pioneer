@@ -752,9 +752,11 @@ describe('Notifier', () => {
           })
           .mockReturnValue({
             events: [],
-            proposalByUniqueInput: {
-              title: 'proposal:title',
-              creator: { handle: 'creator:handle' },
+            proposalDiscussionPostByUniqueInput: {
+              author: { handle: 'proposal:title' },
+              discussionThread: {
+                proposal: { id: 'proposal:id', title: 'proposal:title' },
+              },
             },
           })
 
@@ -836,7 +838,53 @@ describe('Notifier', () => {
         // Check emails
         // -------------------
 
-        // TODO
+        expect(mockEmailProvider.sentEmails).toContainEqual(
+          expect.objectContaining({
+            to: bob.email,
+            subject: expect.stringContaining('proposal:title'),
+            html: expect.stringMatching(/\/#\/proposals\/preview\/proposal:id\?post=post:1/s),
+          })
+        )
+
+        expect(mockEmailProvider.sentEmails).toContainEqual(
+          expect.objectContaining({
+            to: alice.email,
+            subject: expect.stringContaining('proposal:title'),
+            html: expect.stringMatching(/\/#\/proposals\/preview\/proposal:id\?post=post:2/s),
+          })
+        )
+
+        expect(mockEmailProvider.sentEmails).toContainEqual(
+          expect.objectContaining({
+            to: alice.email,
+            subject: expect.stringContaining('proposal:title'),
+            html: expect.stringMatching(/\/#\/proposals\/preview\/proposal:id\?post=post:3/s),
+          })
+        )
+
+        expect(mockEmailProvider.sentEmails).toContainEqual(
+          expect.objectContaining({
+            to: alice.email,
+            subject: expect.stringContaining('proposal:title'),
+            html: expect.stringMatching(/\/#\/proposals\/preview\/proposal:id\?post=post:4/s),
+          })
+        )
+
+        expect(mockEmailProvider.sentEmails).toContainEqual(
+          expect.objectContaining({
+            to: alice.email,
+            subject: expect.stringContaining('proposal:title'),
+            html: expect.stringMatching(/\/#\/proposals\/preview\/proposal:id\?post=post:5/s),
+          })
+        )
+
+        expect(mockEmailProvider.sentEmails).toContainEqual(
+          expect.objectContaining({
+            to: alice.email,
+            subject: expect.stringContaining('proposal:title'),
+            html: expect.stringMatching(/\/#\/proposals\/preview\/proposal:id\?post=post:6/s),
+          })
+        )
       })
     })
   })
