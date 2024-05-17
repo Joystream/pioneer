@@ -886,6 +886,66 @@ describe('Notifier', () => {
           })
         )
       })
+
+      it('Role notifications', async () => {
+        // -------------------
+        // Initialize database
+        // -------------------
+
+        const alice = await createMember(1, 'alice')
+        const bob = await createMember(2, 'bob')
+
+        // -------------------
+        // Mock QN responses
+        // -------------------
+
+        mockRequest
+          .mockReturnValueOnce({
+            workers: [{ groupId: 'forumWorkingGroup', isLead: true, membershipId: alice.id.toString() }],
+            electedCouncils: [{ councilMembers: [{ memberId: bob.id.toString() }] }],
+          })
+          .mockReturnValueOnce({
+            events: [
+              proposalDiscussionPostCreatedEvent(1, {
+                text: 'Hello [@Forum Lead](#mention?role=lead_forumWorkingGroup)',
+              }),
+              proposalDiscussionPostCreatedEvent(2, { text: 'Hello [@Council](#mention?role=council)' }),
+              proposalDiscussionPostCreatedEvent(3, { author: alice.id, text: 'Hello [@Dao](#mention?role=dao)' }),
+            ],
+          })
+          .mockReturnValue({
+            events: [],
+            proposalDiscussionPostByUniqueInput: {
+              author: { handle: 'proposal:title' },
+              discussionThread: {
+                proposal: { id: 'proposal:id', title: 'proposal:title' },
+              },
+            },
+          })
+
+        // -------------------
+        // Run
+        // -------------------
+
+        await run()
+
+        // -------------------
+        // Check notifications
+        // -------------------
+
+        const notifications = await prisma.notification.findMany()
+
+        // Post 1 notify forum lead
+        expect(notifications).toContainEqual(expect.objectContaining({ entityId: 'post:1', memberId: alice.id }))
+
+        // Post 2 notify councilors
+        expect(notifications).toContainEqual(expect.objectContaining({ entityId: 'post:2', memberId: bob.id }))
+
+        // Post 3 notify DAO (except for Alice who posted the thread)
+        expect(notifications).toContainEqual(expect.objectContaining({ entityId: 'post:3', memberId: bob.id }))
+
+        expect(notifications).toHaveLength(3)
+      })
     })
   })
 
