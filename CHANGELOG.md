@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.6.0] - 2024-05-28
+
+### Added
+- Notification support for proposal discussions.
+
+### Fixed
+- Copy fixes.
+
 ## [3.5.2] - 2024-05-01
 
 ### Fixed
@@ -389,8 +397,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v3.5.2...HEAD
-[3.5.1]: https://github.com/Joystream/pioneer/compare/v3.5.1...v3.5.2
+[unreleased]: https://github.com/Joystream/pioneer/compare/v3.6.0...HEAD
+[3.6.0]: https://github.com/Joystream/pioneer/compare/v3.5.2...v3.6.0
+[3.5.2]: https://github.com/Joystream/pioneer/compare/v3.5.1...v3.5.2
 [3.5.1]: https://github.com/Joystream/pioneer/compare/v3.5.0...v3.5.1
 [3.5.0]: https://github.com/Joystream/pioneer/compare/v3.4.0...v3.5.0
 [3.4.0]: https://github.com/Joystream/pioneer/compare/v3.3.1...v3.4.0
