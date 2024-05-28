@@ -4,7 +4,7 @@ import { GetForumCategoryDocument, GetNotificationEventsDocument, GetThreadDocum
 import { run } from '@/notifier'
 
 import { createMember } from './_mocks/notifier/createMember'
-import { postAddedEvent, threadCreatedEvent } from './_mocks/notifier/events'
+import { postAddedEvent, proposalDiscussionPostCreatedEvent, threadCreatedEvent } from './_mocks/notifier/events'
 import { electionAnnouncingEvent, electionRevealingEvent, electionVotingEvent } from './_mocks/notifier/events/election'
 import { clearDb, mockRequest, mockEmailProvider } from './setup'
 
@@ -702,6 +702,250 @@ describe('Notifier', () => {
         })
       )
       expect(mockEmailProvider.sentEmails.length).toBe(1)
+    })
+  })
+
+  describe('proposal', () => {
+    describe('ProposalDiscussionPostCreatedEvent', () => {
+      it('Member notifications', async () => {
+        // -------------------
+        // Initialize database
+        // -------------------
+
+        // - Alice is using the default behavior for general subscriptions
+        // - Alice should be notified of any post from the foo proposal
+        const alice = await createMember(1, 'alice', [{ kind: 'PROPOSAL_ENTITY_DISCUSSION', entityId: 'foo' }])
+
+        // - Bob should be notified of all proposal discussion post
+        // - Bob should not be notified of discussions on the foo and bar proposals
+        const bob = await createMember(2, 'bob', [
+          { kind: 'PROPOSAL_DISCUSSION_ALL' },
+          { kind: 'PROPOSAL_ENTITY_DISCUSSION', entityId: 'foo', shouldNotify: false },
+          { kind: 'PROPOSAL_ENTITY_DISCUSSION', entityId: 'bar', shouldNotify: false },
+        ])
+
+        // -------------------
+        // Mock QN responses
+        // -------------------
+
+        mockRequest
+          .mockReturnValueOnce({ workers: [], electedCouncils: [] })
+          .mockReturnValueOnce({
+            events: [
+              // Bob should be notified as he is subscribed to all proposal discussion.
+              proposalDiscussionPostCreatedEvent(1),
+              // (the rest of the post are on proposals ignored by Bob)
+              // Alice should be notified as she is subscribed to the foo proposal.
+              proposalDiscussionPostCreatedEvent(2, { proposal: 'foo' }),
+              // Alice should be notified as she is mentioned in the post. Bob should be notified too.
+              proposalDiscussionPostCreatedEvent(3, {
+                text: `Hi [@Alice](#mention?member-id=${alice.id})`,
+                proposal: 'bar',
+              }),
+              // Alice should be notified as she is the proposal creator.
+              proposalDiscussionPostCreatedEvent(4, { proposalCreator: alice.id, proposal: 'bar' }),
+              // Alice should be notified as she is replied to.
+              proposalDiscussionPostCreatedEvent(5, { repliesTo: alice.id, proposal: 'bar' }),
+              // Alice should be notified as she wrote a post in the discussion.
+              proposalDiscussionPostCreatedEvent(6, { posts: [{ author: alice.id }], proposal: 'bar' }),
+            ],
+          })
+          .mockReturnValue({
+            events: [],
+            proposalDiscussionPostByUniqueInput: {
+              author: { handle: 'proposal:title' },
+              discussionThread: {
+                proposal: { id: 'proposal:id', title: 'proposal:title' },
+              },
+            },
+          })
+
+        // -------------------
+        // Run
+        // -------------------
+
+        await run()
+
+        // -------------------
+        // Check notifications
+        // -------------------
+
+        const notifications = await prisma.notification.findMany()
+
+        // Post 1 is not in the proposal foo or bar
+        expect(notifications).toContainEqual(
+          expect.objectContaining({
+            eventId: 'event:1',
+            memberId: bob.id,
+            kind: 'PROPOSAL_DISCUSSION_ALL',
+            entityId: 'post:1',
+          })
+        )
+
+        // Post 2 is the proposal watched by Alice
+        expect(notifications).toContainEqual(
+          expect.objectContaining({
+            eventId: 'event:2',
+            memberId: alice.id,
+            kind: 'PROPOSAL_ENTITY_DISCUSSION',
+            entityId: 'post:2',
+          })
+        )
+
+        // Post 3 mentions Alice
+        expect(notifications).toContainEqual(
+          expect.objectContaining({
+            eventId: 'event:3',
+            memberId: alice.id,
+            kind: 'PROPOSAL_DISCUSSION_MENTION',
+            entityId: 'post:3',
+          })
+        )
+
+        // Post 4 is on a proposal created by Alice
+        expect(notifications).toContainEqual(
+          expect.objectContaining({
+            eventId: 'event:4',
+            memberId: alice.id,
+            kind: 'PROPOSAL_DISCUSSION_CREATOR',
+            entityId: 'post:4',
+          })
+        )
+
+        // Post 5 replies to Alice
+        expect(notifications).toContainEqual(
+          expect.objectContaining({
+            eventId: 'event:5',
+            memberId: alice.id,
+            kind: 'PROPOSAL_DISCUSSION_REPLY',
+            entityId: 'post:5',
+          })
+        )
+
+        // Post 6 is on a discussion where Alice wrote a post
+        expect(notifications).toContainEqual(
+          expect.objectContaining({
+            eventId: 'event:6',
+            memberId: alice.id,
+            kind: 'PROPOSAL_DISCUSSION_CONTRIBUTOR',
+            entityId: 'post:6',
+          })
+        )
+
+        expect(notifications).toHaveLength(6)
+
+        // -------------------
+        // Check emails
+        // -------------------
+
+        expect(mockEmailProvider.sentEmails).toContainEqual(
+          expect.objectContaining({
+            to: bob.email,
+            subject: expect.stringContaining('proposal:title'),
+            html: expect.stringMatching(/\/#\/proposals\/preview\/proposal:id\?post=post:1/s),
+          })
+        )
+
+        expect(mockEmailProvider.sentEmails).toContainEqual(
+          expect.objectContaining({
+            to: alice.email,
+            subject: expect.stringContaining('proposal:title'),
+            html: expect.stringMatching(/\/#\/proposals\/preview\/proposal:id\?post=post:2/s),
+          })
+        )
+
+        expect(mockEmailProvider.sentEmails).toContainEqual(
+          expect.objectContaining({
+            to: alice.email,
+            subject: expect.stringContaining('proposal:title'),
+            html: expect.stringMatching(/\/#\/proposals\/preview\/proposal:id\?post=post:3/s),
+          })
+        )
+
+        expect(mockEmailProvider.sentEmails).toContainEqual(
+          expect.objectContaining({
+            to: alice.email,
+            subject: expect.stringContaining('proposal:title'),
+            html: expect.stringMatching(/\/#\/proposals\/preview\/proposal:id\?post=post:4/s),
+          })
+        )
+
+        expect(mockEmailProvider.sentEmails).toContainEqual(
+          expect.objectContaining({
+            to: alice.email,
+            subject: expect.stringContaining('proposal:title'),
+            html: expect.stringMatching(/\/#\/proposals\/preview\/proposal:id\?post=post:5/s),
+          })
+        )
+
+        expect(mockEmailProvider.sentEmails).toContainEqual(
+          expect.objectContaining({
+            to: alice.email,
+            subject: expect.stringContaining('proposal:title'),
+            html: expect.stringMatching(/\/#\/proposals\/preview\/proposal:id\?post=post:6/s),
+          })
+        )
+      })
+
+      it('Role notifications', async () => {
+        // -------------------
+        // Initialize database
+        // -------------------
+
+        const alice = await createMember(1, 'alice')
+        const bob = await createMember(2, 'bob')
+
+        // -------------------
+        // Mock QN responses
+        // -------------------
+
+        mockRequest
+          .mockReturnValueOnce({
+            workers: [{ groupId: 'forumWorkingGroup', isLead: true, membershipId: alice.id.toString() }],
+            electedCouncils: [{ councilMembers: [{ memberId: bob.id.toString() }] }],
+          })
+          .mockReturnValueOnce({
+            events: [
+              proposalDiscussionPostCreatedEvent(1, {
+                text: 'Hello [@Forum Lead](#mention?role=lead_forumWorkingGroup)',
+              }),
+              proposalDiscussionPostCreatedEvent(2, { text: 'Hello [@Council](#mention?role=council)' }),
+              proposalDiscussionPostCreatedEvent(3, { author: alice.id, text: 'Hello [@Dao](#mention?role=dao)' }),
+            ],
+          })
+          .mockReturnValue({
+            events: [],
+            proposalDiscussionPostByUniqueInput: {
+              author: { handle: 'proposal:title' },
+              discussionThread: {
+                proposal: { id: 'proposal:id', title: 'proposal:title' },
+              },
+            },
+          })
+
+        // -------------------
+        // Run
+        // -------------------
+
+        await run()
+
+        // -------------------
+        // Check notifications
+        // -------------------
+
+        const notifications = await prisma.notification.findMany()
+
+        // Post 1 notify forum lead
+        expect(notifications).toContainEqual(expect.objectContaining({ entityId: 'post:1', memberId: alice.id }))
+
+        // Post 2 notify councilors
+        expect(notifications).toContainEqual(expect.objectContaining({ entityId: 'post:2', memberId: bob.id }))
+
+        // Post 3 notify DAO (except for Alice who posted the thread)
+        expect(notifications).toContainEqual(expect.objectContaining({ entityId: 'post:3', memberId: bob.id }))
+
+        expect(notifications).toHaveLength(3)
+      })
     })
   })
 
