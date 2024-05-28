@@ -13,7 +13,7 @@ export const fromElectionAnnouncingStartedNotification: EmailFromNotificationFn 
     html: renderPioneerEmail({
       memberHandle: member.name,
       summary: 'New election started.',
-      text: 'New Joystream council has just been elected and announcing period for the next election has started. Follow the link below to announce your candidacy.',
+      text: 'New election announcing period has just started. Follow the link below to announce your candidacy.',
       button: {
         label: 'See on Pioneer',
         href: `${PIONEER_URL}/#/election`,

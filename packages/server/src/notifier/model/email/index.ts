@@ -9,6 +9,7 @@ import {
   fromElectionVotingStartedNotification,
 } from './election'
 import { fromPostAddedNotification, fromThreadCreatedNotification } from './forum'
+import { fromProposalPostCreatedNotification } from './proposal'
 import { Notification, hasEmailAddress } from './utils'
 
 export const createEmailNotifier =
@@ -25,6 +26,7 @@ export const createEmailNotifier =
     const emailHandlers = [
       fromPostAddedNotification,
       fromThreadCreatedNotification,
+      fromProposalPostCreatedNotification,
       fromElectionAnnouncingStartedNotification,
       fromElectionVotingStartedNotification,
       fromElectionRevealingStartedNotification,
