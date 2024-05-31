@@ -5,6 +5,7 @@ import { DEFAULT_NETWORK, NetworkEndpoints, pickEndpoints } from '@/app/config'
 import { Loading } from '@/common/components/Loading'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useNetwork } from '@/common/hooks/useNetwork'
+import { Optional } from '@/common/types'
 import { objectEquals } from '@/common/utils'
 
 import { NetworkEndpointsContext } from './context'
@@ -21,17 +22,19 @@ const EndpointsSchema = Yup.object().shape({
   backendEndpoint: Yup.string(),
 })
 
-// HACK Pioneer should store the actual HTTP-RPC endpoint.
-const endpointReducer: Reducer<NetworkEndpoints | undefined, Omit<NetworkEndpoints, 'nodeHttpRpcEndpoint'>> = (
+// HACK will approximately guess the http endpoint
+const endpointReducer: Reducer<NetworkEndpoints | undefined, Optional<NetworkEndpoints, 'nodeHttpRpcEndpoint'>> = (
   _,
   newEndpoints
 ): NetworkEndpoints => ({
   ...newEndpoints,
-  nodeHttpRpcEndpoint: newEndpoints.nodeRpcEndpoint
-    .replace('ws:', 'http:')
-    .replace('wss:', 'https:')
-    .replace('ws-rpc', 'http-rpc')
-    .replace(':9944', ''),
+  nodeHttpRpcEndpoint:
+    newEndpoints.nodeHttpRpcEndpoint ??
+    newEndpoints.nodeRpcEndpoint
+      .replace('ws:', 'http:')
+      .replace('wss:', 'https:')
+      .replace('ws-rpc', 'http-rpc')
+      .replace(':9944', ''),
 })
 
 export const NetworkEndpointsProvider = ({ children }: Props) => {
