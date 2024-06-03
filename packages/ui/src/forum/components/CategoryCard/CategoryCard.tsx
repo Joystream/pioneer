@@ -62,6 +62,7 @@ const StyledBadge = styled(Link)`
 
 const Box = styled(Link)<{ archivedStyles?: boolean; ignoreHover?: boolean }>`
   display: flex;
+  flex: 1 0 48%;
   column-gap: 15px;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
