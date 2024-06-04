@@ -97,7 +97,7 @@ const useMetamask = (): Metamask[] => {
 
   const metamask: Metamask | undefined = useMemo(() => {
     const snapId = process.env.REACT_APP_METAMASK_SNAP_ID
-    const isMetaMask = (window as any)?.ethereum?.isMetaMask
+    const isMetaMask = !!window.ethereum && '_metamask' in window.ethereum
     if (!snapId || !isMetaMask) return
 
     return new Metamask(snapId, endpoints.nodeHttpRpcEndpoint)
