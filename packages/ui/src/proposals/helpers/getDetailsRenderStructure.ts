@@ -42,6 +42,7 @@ export type RenderType =
   | 'Hash'
   | 'DestinationsPreview'
   | 'BlockTimeDisplay'
+  | 'AddressesPreview'
 
 export interface RenderNode {
   label: string
