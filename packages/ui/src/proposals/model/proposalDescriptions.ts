@@ -40,6 +40,7 @@ export const proposalDescriptions: ProposalDescriptions = {
   setEraPayoutDampingFactor: 'Apply a multiplier to the validator rewards to reduce or increase them.',
   decreaseCouncilBudget: 'Reduce the council budget by burning part of the tokens',
   updateTokenPalletTokenConstraints: 'Update CRT pallet constraints.',
+  updateArgoBridgeConstraints: 'Update Argo Bridge constraints.',
   createBlogPost: 'Council blog',
   editBlogPost: 'Unlocked blog post can be edited.',
   lockBlogPost: 'When a post is locked it can no longer be modified.',

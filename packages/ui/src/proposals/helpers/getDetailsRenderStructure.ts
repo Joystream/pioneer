@@ -278,6 +278,40 @@ const openingLinkMapper: Mapper<OpeningLinkDetail, 'openingId'> = (value) => {
     },
   ]
 }
+const addressMapper =
+  (label: string) =>
+  (value: string): RenderNode[] => {
+    return [
+      {
+        label,
+        value,
+        renderType: 'Address',
+      },
+    ]
+  }
+const addressesMapper =
+  (label: string) =>
+  (value: string[]): RenderNode[] => {
+    return [
+      {
+        label,
+        value,
+        renderType: 'AddressesPreview',
+      },
+    ]
+  }
+
+const listMapper =
+  (label: string) =>
+  (value: unknown[]): RenderNode[] => {
+    return [
+      {
+        label,
+        value: value.map(String).join(', '),
+        renderType: 'Text',
+      },
+    ]
+  }
 
 const percentageProposalsAmount: ProposalType[] = ['setReferralCut']
 
@@ -323,6 +357,13 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
   ammBuyTxFees: percentageMapper('Proposed AMM buy transaction fees'),
   ammSellTxFees: percentageMapper('Proposed AMM sell transaction fees'),
   bloatBond: amountMapper('Proposed bloat bond'),
+
+  // UpdateArgoBridgeConstraints
+  operatorAccount: addressMapper('Operator Account'),
+  pauserAccounts: addressesMapper('Pauser Accounts'),
+  bridgingFee: amountMapper('Proposed bridging fee'),
+  thawnDuration: blocksMapper('Proposed thawn duration'),
+  remoteChains: listMapper('Remote Chains'),
 }
 
 const mapProposalDetail = (key: ProposalDetailsKeys, proposalDetails: ProposalWithDetails['details']) => {
