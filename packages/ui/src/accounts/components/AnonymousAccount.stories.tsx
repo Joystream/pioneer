@@ -5,25 +5,25 @@ import React from 'react'
 import { Row } from '@/common/components/storybookParts/previewStyles'
 import { joy } from '@/mocks/helpers'
 
-import { AnonymousAccount } from './AnonymousAccount'
+import { AnonymousAccount as Component } from './AnonymousAccount'
 
 type Args = {
   address: string
-  amount?: string
+  amount?: number
 }
 
 export default {
   title: 'Accounts/AnonymousAccount',
-  component: AnonymousAccount,
+  component: Component,
   args: {
     address: 'j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT',
-    amount: joy(10),
+    amount: 10,
   },
 } as Meta<Args>
 
-export const Default: StoryFn<Args> = ({ address, amount }) => (
+export const AnonymousAccount: StoryFn<Args> = ({ address, amount }) => (
   <Row>
-    <AnonymousAccount address={address} amount={amount ? new BN(amount) : undefined} />
-    <AnonymousAccount address={address} />
+    <Component address={address} amount={amount ? new BN(joy(amount)) : undefined} />
+    <Component address={address} />
   </Row>
 )

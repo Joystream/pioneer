@@ -1,19 +1,17 @@
 import { Meta } from '@storybook/react'
-import BN from 'bn.js'
 
-import { AccountInfo } from './AccountInfo'
+import { AccountInfo as Component } from './AccountInfo'
 
 export default {
   title: 'Accounts/AccountInfo',
-  component: AccountInfo,
+  component: Component,
   args: {
     account: {
       name: 'Alice',
       address: 'j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT',
     },
-    amount: new BN(1000000),
     lockType: 'Invitation',
   },
 } as Meta
 
-export const Default = {}
+export const AccountInfo = {}
