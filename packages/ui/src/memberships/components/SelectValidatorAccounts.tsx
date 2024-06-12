@@ -3,56 +3,56 @@ import styled from 'styled-components'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { Account } from '@/accounts/types'
-import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
 import { BaseToggleCheckbox, InputComponent, Label } from '@/common/components/forms'
-import { CrossIcon, PlusIcon } from '@/common/components/icons'
-import { AlertSymbol } from '@/common/components/icons/symbols'
-import { Row, RowInline } from '@/common/components/Modal'
+import { FieldList } from '@/common/components/forms/FieldList'
+import { RowInline } from '@/common/components/Modal'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { TextMedium, TextSmall } from '@/common/components/typography'
-import { toSpliced } from '@/common/model/Polyfill'
+import { mapCloneDelete, mapCloneSet } from '@/common/utils'
 import { useValidators } from '@/validators/hooks/useValidators'
 
 type SelectValidatorAccountsState = {
   isValidator: boolean
-  accounts: (Account | undefined)[]
+  accounts: Map<string, Account>
 }
 
 type Action =
   | { type: 'SetInitialAccounts'; value: Account[] }
   | { type: 'ToggleIsValidator'; value: boolean }
-  | { type: 'AddAccount'; value: { index: number; account?: Account } }
-  | { type: 'RemoveAccount'; value: { index: number } }
+  | { type: 'AddAccount'; value: { key: string; account: Account } }
+  | { type: 'RemoveAccount'; value: { key: string } }
 
 const reducer = (state: SelectValidatorAccountsState, action: Action): SelectValidatorAccountsState => {
   switch (action.type) {
     case 'SetInitialAccounts': {
-      return { isValidator: true, accounts: action.value }
+      const accounts = new Map(action.value.map((account, index) => [String(index), account]))
+      return { isValidator: true, accounts }
     }
     case 'ToggleIsValidator': {
       return { ...state, isValidator: action.value }
     }
     case 'AddAccount': {
-      const { index, account } = action.value
-      return { ...state, accounts: toSpliced(state.accounts, index, 1, account) }
+      const { key, account } = action.value
+      return { ...state, accounts: mapCloneSet(state.accounts, key, account) }
     }
     case 'RemoveAccount': {
-      const { index } = action.value
-      return { ...state, accounts: toSpliced(state.accounts, index, 1) }
+      const { key } = action.value
+      return { ...state, accounts: mapCloneDelete(state.accounts, key) }
     }
   }
 }
 
 type UseSelectValidatorAccounts = {
   isValidatorAccount: (account: Account) => boolean
-  initialValidatorAccounts: Account[]
+  initialValidatorAccounts?: Account[]
   state: SelectValidatorAccountsState
   onChange: (action: Action) => void
 }
 export const useSelectValidatorAccounts = (boundAccounts: Account[] = []): UseSelectValidatorAccounts => {
-  const [state, dispatch] = useReducer(reducer, { isValidator: false, accounts: [] })
+  const [state, dispatch] = useReducer(reducer, { isValidator: false, accounts: new Map() })
+  const hasNoBoundAccounts = boundAccounts.length === 0
 
-  const validators = useValidators({ skip: !state.isValidator && boundAccounts.length === 0 })
+  const validators = useValidators({ skip: !state.isValidator && hasNoBoundAccounts })
   const validatorAddresses = useMemo(
     () => validators?.flatMap(({ stashAccount: stash, controllerAccount: ctrl }) => (ctrl ? [stash, ctrl] : [stash])),
     [validators]
@@ -77,17 +77,14 @@ export const useSelectValidatorAccounts = (boundAccounts: Account[] = []): UseSe
   return { initialValidatorAccounts, state, isValidatorAccount, onChange: dispatch }
 }
 
-export const SelectValidatorAccounts = ({ isValidatorAccount, state, onChange }: UseSelectValidatorAccounts) => {
+export const SelectValidatorAccounts = ({
+  isValidatorAccount,
+  state,
+  onChange,
+  initialValidatorAccounts,
+}: UseSelectValidatorAccounts) => {
   const handleIsValidatorChange = (value: boolean) => onChange({ type: 'ToggleIsValidator', value })
-
-  const AddAccount = (index: number, account: Account | undefined) =>
-    onChange({ type: 'AddAccount', value: { index, account } })
-  const RemoveAccount = (index: number) => onChange({ type: 'RemoveAccount', value: { index } })
-
-  const validatorAccountSelectorFilter = (index: number, account: Account) =>
-    toSpliced(state.accounts, index, 1).every(
-      (accountOrUndefined) => accountOrUndefined?.address !== account.address
-    ) && isValidatorAccount(account)
+  const selectedAddresses = Array.from(state.accounts.values()).map(({ address }) => address)
 
   return (
     <>
@@ -101,7 +98,7 @@ export const SelectValidatorAccounts = ({ isValidatorAccount, state, onChange }:
         />
       </RowInline>
 
-      {state.isValidator && (
+      {initialValidatorAccounts && state.isValidator && (
         <>
           <SelectValidatorAccountWrapper className="validator-accounts">
             <RowInline gap={4}>
@@ -111,53 +108,39 @@ export const SelectValidatorAccounts = ({ isValidatorAccount, state, onChange }:
               </Tooltip>
               <TextSmall dark>*</TextSmall>
             </RowInline>
+
             <TextMedium dark>
               If your validator account is not in your signer wallet, paste the account address to the field below:
             </TextMedium>
-            {state.accounts.map((account, index) => (
-              <Row>
-                <RowInline>
-                  <InputComponent inputSize="l">
+
+            <FieldList
+              render={(key) => {
+                const account = state.accounts.get(key)
+                const isInvalid = account && !isValidatorAccount(account)
+
+                return (
+                  <InputComponent
+                    message={
+                      isInvalid
+                        ? 'This account is neither a validator controller account nor a validator stash account.'
+                        : undefined
+                    }
+                    validation={isInvalid ? 'invalid' : undefined}
+                    inputSize="l"
+                  >
                     <SelectAccount
                       selected={account}
-                      onChange={(account) => AddAccount(index, account)}
-                      filter={(account) => validatorAccountSelectorFilter(index, account)}
+                      onChange={(account) => onChange({ type: 'AddAccount', value: { key, account } })}
+                      filter={(account) => !selectedAddresses.includes(account.address) && isValidatorAccount(account)}
                     />
                   </InputComponent>
-                  <ButtonGhost
-                    square
-                    size="large"
-                    onClick={() => {
-                      RemoveAccount(index)
-                    }}
-                    className="remove-button"
-                  >
-                    <CrossIcon />
-                  </ButtonGhost>
-                </RowInline>
-                {account && !isValidatorAccount(account) && (
-                  <RowInline gap={2}>
-                    <TextSmall error>
-                      <InputNotificationIcon>
-                        <AlertSymbol />
-                      </InputNotificationIcon>
-                    </TextSmall>
-                    <TextSmall error>
-                      This account is neither a validator controller account nor a validator stash account.
-                    </TextSmall>
-                  </RowInline>
-                )}
-              </Row>
-            ))}
-            <RowInline justify="end">
-              <ButtonPrimary
-                size="small"
-                className="add-button"
-                onClick={() => AddAccount(state.accounts.length, undefined)}
-              >
-                <PlusIcon /> Add Validator Account
-              </ButtonPrimary>
-            </RowInline>
+                )
+              }}
+              unmount={(key) => onChange({ type: 'RemoveAccount', value: { key } })}
+              addLabel="Add Validator Account"
+              initialSize={initialValidatorAccounts.length}
+              align="end"
+            />
           </SelectValidatorAccountWrapper>
         </>
       )}
@@ -170,19 +153,4 @@ const SelectValidatorAccountWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-`
-
-const InputNotificationIcon = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 12px;
-  height: 12px;
-  color: inherit;
-  padding-right: 2px;
-
-  .blackPart,
-  .primaryPart {
-    fill: currentColor;
-  }
 `

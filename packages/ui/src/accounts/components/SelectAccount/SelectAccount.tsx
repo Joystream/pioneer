@@ -41,7 +41,13 @@ interface BaseSelectAccountProps extends SelectAccountProps {
 
 const BaseSelectAccount = React.memo(
   ({ id, onChange, accounts, filter, selected, disabled, onBlur, isForStaking, variant }: BaseSelectAccountProps) => {
-    const options = accounts.filter(filter || (() => true))
+    const options = !filter
+      ? accounts
+      : accounts.filter(
+          (account) =>
+            account.address === selected?.address || // Always keep the selected account (otherwise the select behavior is strange)
+            filter(account)
+        )
 
     const [search, setSearch] = useState('')
 

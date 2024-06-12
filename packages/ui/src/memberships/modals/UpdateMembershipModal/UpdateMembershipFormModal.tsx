@@ -66,8 +66,8 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   )
   const selectValidatorAccounts = useSelectValidatorAccounts(boundAccounts)
   const {
-    initialValidatorAccounts,
-    state: { isValidator, accounts: validatorAccounts },
+    initialValidatorAccounts = [],
+    state: { isValidator, accounts: accountsMap },
     isValidatorAccount,
   } = selectValidatorAccounts
 
@@ -137,12 +137,13 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const filterRoot = useCallback(filterAccount(controllerAccount), [controllerAccount])
   const filterController = useCallback(filterAccount(rootAccount), [rootAccount])
 
+  const validatorAccounts = useMemo(() => Array.from(accountsMap.values()), [accountsMap])
   const formData = useMemo(
     () =>
       ({
         ...form.getValues(),
         isValidator,
-        validatorAddresses: validatorAccounts.flatMap((account) => account?.address ?? []),
+        validatorAddresses: validatorAccounts.map(({ address }) => address),
       } as UpdateMemberForm),
     [form.getValues(), validatorAccounts]
   )
@@ -150,8 +151,7 @@ export const UpdateMembershipFormModal = ({ onClose, onSubmit, member }: Props) 
   const canUpdate =
     form.formState.isValid &&
     hasAnyEdits(formData, updateMemberFormInitial) &&
-    (!isValidator ||
-      (validatorAccounts.length > 0 && validatorAccounts.every((account) => account && isValidatorAccount(account))))
+    (!isValidator || (validatorAccounts.length > 0 && validatorAccounts.every(isValidatorAccount)))
 
   const willBecomeUnverifiedValidator =
     updateMemberFormInitial.isValidator && hasAnyMetadateChanges(formData, updateMemberFormInitial)
