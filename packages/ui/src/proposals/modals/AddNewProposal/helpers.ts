@@ -480,8 +480,8 @@ export const schemaFactory = (api?: Api) => {
     updateArgoBridgeConstraints: Yup.object()
       .shape({
         operatorAccount: AccountSchema,
-        pauserAccounts: Yup.array().of(AccountSchema),
-        bridgingFee: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')),
+        pauserAccounts: Yup.array(AccountSchema),
+        bridgingFee: BNSchema.test(minMixed(0, 'Amount must be 0 or greater')),
         thawnDuration: NumberSchema.min(0, 'Duration must be 0 or greater'),
         remoteChains: Yup.array(Yup.number()),
       })
