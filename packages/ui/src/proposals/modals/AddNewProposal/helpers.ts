@@ -202,6 +202,13 @@ export interface AddNewProposalForm {
     ammSellTxFees?: number
     bloatBond?: BN
   }
+  updateArgoBridgeConstraints?: {
+    operatorAccount?: Account
+    pauserAccounts?: (Account | undefined)[]
+    bridgingFee?: BN
+    thawnDuration?: number
+    remoteChains?: (number | undefined)[]
+  }
 }
 
 export const schemaFactory = (api?: Api) => {
@@ -469,6 +476,18 @@ export const schemaFactory = (api?: Api) => {
       .test((fields) => {
         if (fields && Object.values(fields).some(isDefined)) return true
         return new Yup.ValidationError('At least one field is required', fields, 'updateTokenPalletTokenConstraints')
+      }),
+    updateArgoBridgeConstraints: Yup.object()
+      .shape({
+        operatorAccount: AccountSchema,
+        pauserAccounts: Yup.array().of(AccountSchema),
+        bridgingFee: BNSchema.test(moreThanMixed(0, 'Amount must be greater than zero')),
+        thawnDuration: NumberSchema.min(0, 'Duration must be 0 or greater'),
+        remoteChains: Yup.array(Yup.number()),
+      })
+      .test((fields) => {
+        if (fields && Object.values(fields).some(isDefined)) return true
+        throw new Yup.ValidationError('At least one field is required', fields, 'updateTokenPalletTokenConstraints')
       }),
   })
 }
