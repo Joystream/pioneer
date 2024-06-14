@@ -57,3 +57,14 @@ export const selectFromDropdown = async (container: Container, label: string | R
 
   await userEvent.click(within(optionsWrapper).getByText(name))
 }
+
+export const findBySelector = (
+  container: HTMLElement,
+  selector: string,
+  options?: WaitForOptions
+): Promise<HTMLElement> =>
+  waitFor(() => {
+    const element = container.querySelector(selector)
+    if (!element) throw `Element with selector ${selector} not found`
+    return element as HTMLElement
+  }, options)
