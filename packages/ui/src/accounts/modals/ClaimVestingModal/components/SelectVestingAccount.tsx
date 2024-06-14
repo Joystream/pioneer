@@ -14,7 +14,6 @@ import { BalanceInfoInRow, InfoValue } from '@/common/components/Modal'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { Option, OptionsListComponent, Select, SelectedOption } from '@/common/components/selects'
 import { TextMedium, TokenValue } from '@/common/components/typography'
-import { useKeyring } from '@/common/hooks/useKeyring'
 
 interface SelectVestingAccountProps {
   selected?: Account
@@ -29,12 +28,11 @@ export const SelectVestingAccount = ({ selected, onChange, id, disabled }: Selec
   const [search, setSearch] = useState('')
 
   const filteredOptions = useMemo(() => filterByText(options, search), [search, options])
-  const keyring = useKeyring()
 
   const notSelected = !selected || selected?.address !== search
 
   useEffect(() => {
-    if (filteredOptions.length === 0 && isValidAddress(search, keyring) && notSelected) {
+    if (filteredOptions.length === 0 && isValidAddress(search) && notSelected) {
       onChange?.(accountOrNamed(options, search, 'Unsaved account'))
     }
   }, [filteredOptions, search, notSelected])
