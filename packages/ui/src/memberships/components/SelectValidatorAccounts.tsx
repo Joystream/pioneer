@@ -13,31 +13,31 @@ import { useValidators } from '@/validators/hooks/useValidators'
 
 type SelectValidatorAccountsState = {
   isValidator: boolean
-  accounts: Map<string, Account>
+  accounts: Map<number, Account>
 }
 
 type Action =
   | { type: 'SetInitialAccounts'; value: Account[] }
   | { type: 'ToggleIsValidator'; value: boolean }
-  | { type: 'AddAccount'; value: { key: string; account: Account } }
-  | { type: 'RemoveAccount'; value: { key: string } }
+  | { type: 'AddAccount'; value: { index: number; account: Account } }
+  | { type: 'RemoveAccount'; value: { index: number } }
 
 const reducer = (state: SelectValidatorAccountsState, action: Action): SelectValidatorAccountsState => {
   switch (action.type) {
     case 'SetInitialAccounts': {
-      const accounts = new Map(action.value.map((account, index) => [String(index), account]))
+      const accounts = new Map(action.value.map((account, index) => [index, account]))
       return { isValidator: true, accounts }
     }
     case 'ToggleIsValidator': {
       return { ...state, isValidator: action.value }
     }
     case 'AddAccount': {
-      const { key, account } = action.value
-      return { ...state, accounts: mapCloneSet(state.accounts, key, account) }
+      const { index, account } = action.value
+      return { ...state, accounts: mapCloneSet(state.accounts, index, account) }
     }
     case 'RemoveAccount': {
-      const { key } = action.value
-      return { ...state, accounts: mapCloneDelete(state.accounts, key) }
+      const { index } = action.value
+      return { ...state, accounts: mapCloneDelete(state.accounts, index) }
     }
   }
 }
@@ -114,8 +114,8 @@ export const SelectValidatorAccounts = ({
             </TextMedium>
 
             <FieldList
-              render={(key) => {
-                const account = state.accounts.get(key)
+              render={({ index }) => {
+                const account = state.accounts.get(index)
                 const isInvalid = account && !isValidatorAccount(account)
 
                 return (
@@ -130,13 +130,13 @@ export const SelectValidatorAccounts = ({
                   >
                     <SelectAccount
                       selected={account}
-                      onChange={(account) => onChange({ type: 'AddAccount', value: { key, account } })}
+                      onChange={(account) => onChange({ type: 'AddAccount', value: { index: index, account } })}
                       filter={(account) => !selectedAddresses.includes(account.address) && isValidatorAccount(account)}
                     />
                   </InputComponent>
                 )
               }}
-              unmount={(key) => onChange({ type: 'RemoveAccount', value: { key } })}
+              unmount={({ index }) => onChange({ type: 'RemoveAccount', value: { index } })}
               addLabel="Add Validator Account"
               initialSize={initialValidatorAccounts.length}
               align="end"

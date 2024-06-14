@@ -42,12 +42,12 @@ export const Default: StoryObj<Args> = {
       <FieldList
         {...props}
         name="input"
-        render={(key) => (
+        render={({ name }) => (
           <InputComponent>
-            <InputText name={key} />
+            <InputText name={name} />
           </InputComponent>
         )}
-        unmount={(key) => form.unregister(key)}
+        unmount={({ name }) => form.unregister(name)}
         initialSize={initial?.length}
       />
     )

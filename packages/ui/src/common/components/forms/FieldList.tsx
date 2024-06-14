@@ -5,9 +5,11 @@ import styled from 'styled-components'
 import { ButtonGhost, ButtonPrimary } from '../buttons'
 import { CrossIcon, PlusIcon } from '../icons'
 
+type FieldProps<Name extends string> = { name: `${Name}.${number}`; id?: string; index: number }
 type Props<Name extends string> = {
-  render: (name: `${Name}.${number}`, index: number) => ReactNode
-  unmount?: (name: `${Name}.${number}`, index: number) => void
+  render: (props: FieldProps<Name>) => ReactNode
+  unmount?: (props: FieldProps<Name>) => void
+  id?: string
   name?: Name
   initialSize?: number
   addLabel?: string
@@ -35,7 +37,8 @@ const reducer = (state: State, action: Action): State => {
 export function FieldList<Key extends string>({
   render,
   unmount,
-  name: namePrefix = 'field' as Key,
+  id,
+  name = 'field' as Key,
   initialSize = 0,
   addLabel,
   ...styleProps
@@ -52,19 +55,20 @@ export function FieldList<Key extends string>({
   }
 
   return (
-    <Container ref={container} {...styleProps}>
+    <Container {...styleProps} ref={container} id={id}>
       {ids.map((index) => {
-        const name = `${namePrefix}.${index}` as const
+        const fieldProps = { name: `${name}.${index}` as const, id: `${id}-${index}`, index }
         return (
           <Fragment key={index}>
-            {render(name, index)}
+            {render(fieldProps)}
             <ButtonGhost
               square
               size="large"
               onClick={() => {
                 dispatch({ type: 'remove', index })
-                unmount?.(name, index)
+                unmount?.(fieldProps)
               }}
+              id={`${fieldProps.id}-remove`}
               className="remove-button"
             >
               <CrossIcon />
