@@ -1,10 +1,10 @@
 import { Meta } from '@storybook/react'
 
-import { AccountInfo as Component } from './AccountInfo'
+import { AccountInfo } from './AccountInfo'
 
 export default {
   title: 'Accounts/AccountInfo',
-  component: Component,
+  component: AccountInfo,
   args: {
     account: {
       name: 'Alice',
@@ -14,4 +14,6 @@ export default {
   },
 } as Meta
 
-export const AccountInfo = {}
+export const Default = {
+  name: 'AccountInfo',
+}
