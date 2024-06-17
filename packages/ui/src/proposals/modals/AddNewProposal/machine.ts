@@ -52,6 +52,7 @@ export type AddNewProposalState =
       value: { specificParameters: 'updateTokenPalletTokenConstraints' }
       context: Required<TriggerAndDiscussionContext>
     }
+  | { value: { specificParameters: 'updateArgoBridgeConstraints' }; context: Required<TriggerAndDiscussionContext> }
   | { value: { specificParameters: 'fundingRequest' }; context: Required<TriggerAndDiscussionContext> }
   | { value: { specificParameters: 'runtimeUpgrade' }; context: Required<TriggerAndDiscussionContext> }
   | { value: { specificParameters: 'setReferralCut' }; context: Required<TriggerAndDiscussionContext> }
@@ -229,6 +230,7 @@ export const addNewProposalMachine = createMachine<
             { target: 'setEraPayoutDampingFactor', cond: isType('setEraPayoutDampingFactor') },
             { target: 'decreaseCouncilBudget', cond: isType('decreaseCouncilBudget') },
             { target: 'updateTokenPalletTokenConstraints', cond: isType('updateTokenPalletTokenConstraints') },
+            { target: 'updateArgoBridgeConstraints', cond: isType('updateArgoBridgeConstraints') },
           ],
         },
         updateChannelPayouts: {},
@@ -236,6 +238,7 @@ export const addNewProposalMachine = createMachine<
         setEraPayoutDampingFactor: {},
         decreaseCouncilBudget: {},
         updateTokenPalletTokenConstraints: {},
+        updateArgoBridgeConstraints: {},
         signal: {},
         setMaxValidatorCount: {},
         setReferralCut: {},

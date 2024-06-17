@@ -61,4 +61,5 @@ const proposalTypeToConstantKey = new Map<ProposalType, keyof Api['consts']['pro
   ['setEraPayoutDampingFactor', 'setEraPayoutDampingFactorProposalParameters'],
   ['decreaseCouncilBudget', 'decreaseCouncilBudgetProposalParameters'],
   ['updateTokenPalletTokenConstraints', 'updateTokenPalletTokenConstraints'],
+  ['updateArgoBridgeConstraints', 'updateArgoBridgeConstraints'],
 ])

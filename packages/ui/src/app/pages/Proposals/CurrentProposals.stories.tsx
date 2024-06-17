@@ -12,6 +12,7 @@ import { member } from '@/mocks/data/members'
 import { generateProposals, MAX_ACTIVE_PROPOSAL, proposalsPagesChain } from '@/mocks/data/proposals'
 import {
   Container,
+  findBySelector,
   getButtonByText,
   getEditorByLabel,
   isoDate,
@@ -115,6 +116,10 @@ export default {
     mocks: ({ args, parameters }: StoryContext<Args>): MocksParameters => {
       const alice = member('alice', { isCouncilMember: args.isCouncilMember })
 
+      const aliceAddress = alice.controllerAccount
+      const bobAddress = member('bob').controllerAccount
+      const charlieAddress = member('charlie').controllerAccount
+
       const forumWG = {
         id: 'forumWorkingGroup',
         name: 'forumWorkingGroup',
@@ -166,6 +171,7 @@ export default {
               members: {
                 stakingAccountIdMemberStatus: parameters.stakingAccountIdMemberStatus,
               },
+
               projectToken: {
                 palletFrozen: args.palletFrozen,
 
@@ -178,6 +184,14 @@ export default {
                 minRevenueSplitTimeToStart: 200,
                 minSaleDuration: 300,
                 salePlatformFee: 30_000,
+              },
+
+              argoBridge: {
+                operatorAccount: aliceAddress,
+                pauserAccounts: [bobAddress, charlieAddress],
+                bridgingFee: joy(0.1),
+                thawnDuration: 200,
+                remoteChains: [37, 42],
               },
             },
             tx: {
@@ -1681,4 +1695,55 @@ export const SpecificUpdateTokenPalletTokenConstraints: Story = {
       })
     }
   ),
+}
+
+export const SpecificParametersUpdateArgoBridgeConstraints: Story = {
+  play: specificParametersTest('Update Argo Bridge Constraints', async ({ args, createProposal, modal, step }) => {
+    const aliceAddress = alice.controllerAccount
+    const bobAddress = member('bob').controllerAccount
+    const daveAddress = member('dave').controllerAccount
+
+    await createProposal(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      // Set Bob as operator
+      const operatorAccountSelector = await modal.findByTestId('operatorAccount')
+      await userEvent.click(await findBySelector(operatorAccountSelector, '.ui-toggle'))
+      await userEvent.type(await modal.findByTestId('operatorAccount-input'), bobAddress)
+
+      // Set Alice and Dave as pausers, and remove Charlie
+      const pauserAccountSection = await modal.findByTestId('pauserAccounts')
+      await selectFromDropdown(modal, await modal.findByTestId('pauserAccounts-0'), 'alice')
+      const addPauserAccountButton = await within(pauserAccountSection).findByRole('button', { name: 'Add account' })
+      await userEvent.click(addPauserAccountButton)
+      await userEvent.type(await modal.findByTestId('pauserAccounts-2-input'), daveAddress)
+      await userEvent.click(await within(pauserAccountSection).findByTestId('pauserAccounts-1-remove'))
+
+      // Set bridging fee to 0.2 JOY
+      const bridgingFeeAmount = await modal.findByLabelText('Bridging fee')
+      await userEvent.clear(bridgingFeeAmount)
+      await userEvent.type(bridgingFeeAmount, '0.2')
+
+      // Set thawn duration to 100 blocks
+      const thawnDuration = await modal.findByLabelText('Thawn duration')
+      await userEvent.clear(thawnDuration)
+      await userEvent.type(thawnDuration, '100')
+
+      // Add remote chain 123 (leave the rest)
+      const addRemoteChainButton = await modal.findByRole('button', { name: 'Add chain' })
+      await userEvent.click(addRemoteChainButton)
+      await userEvent.type(await modal.findByTestId('remoteChains-2'), '123')
+    })
+
+    await step('Transaction parameters', () => {
+      const [, , specificParameters] = args.onCreateProposal.mock.calls.at(-1)
+      expect(specificParameters.toJSON().updateArgoBridgeConstraints).toEqual({
+        operatorAccount: bobAddress,
+        pauserAccounts: [aliceAddress, daveAddress],
+        bridgingFee: Number(joy(0.2)),
+        thawnDuration: 100,
+        remoteChains: [37, 42, 123],
+      })
+    })
+  }),
 }

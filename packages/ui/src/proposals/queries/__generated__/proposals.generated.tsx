@@ -86,6 +86,7 @@ export type ProposalFieldsFragment = {
     | { __typename: 'SignalProposalDetails' }
     | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
     | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+    | { __typename: 'UpdateArgoBridgeConstraintsProposalDetails' }
     | { __typename: 'UpdateChannelPayoutsProposalDetails' }
     | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
     | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
@@ -543,6 +544,14 @@ export type ProposalWithDetailsFieldsFragment = {
         } | null
       }
     | {
+        __typename: 'UpdateArgoBridgeConstraintsProposalDetails'
+        operatorAccount?: string | null
+        pauserAccounts?: Array<string> | null
+        bridgingFee?: string | null
+        thawnDuration?: number | null
+        remoteChains?: Array<number> | null
+      }
+    | {
         __typename: 'UpdateChannelPayoutsProposalDetails'
         channelCashoutsEnabled?: boolean | null
         minCashoutAllowed?: string | null
@@ -932,6 +941,7 @@ export type ProposalMentionFieldsFragment = {
     | { __typename: 'SignalProposalDetails' }
     | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
     | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+    | { __typename: 'UpdateArgoBridgeConstraintsProposalDetails' }
     | { __typename: 'UpdateChannelPayoutsProposalDetails' }
     | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
     | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
@@ -1045,6 +1055,7 @@ export type GetProposalsQuery = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UpdateArgoBridgeConstraintsProposalDetails' }
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
@@ -1429,6 +1440,14 @@ export type GetProposalQuery = {
           } | null
         }
       | {
+          __typename: 'UpdateArgoBridgeConstraintsProposalDetails'
+          operatorAccount?: string | null
+          pauserAccounts?: Array<string> | null
+          bridgingFee?: string | null
+          thawnDuration?: number | null
+          remoteChains?: Array<number> | null
+        }
+      | {
           __typename: 'UpdateChannelPayoutsProposalDetails'
           channelCashoutsEnabled?: boolean | null
           minCashoutAllowed?: string | null
@@ -1809,6 +1828,7 @@ export type GetProposalMentionQuery = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UpdateArgoBridgeConstraintsProposalDetails' }
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
@@ -1927,6 +1947,7 @@ export type GetLatestProposalByMemberIdQuery = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UpdateArgoBridgeConstraintsProposalDetails' }
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
@@ -2199,6 +2220,13 @@ export const ProposalWithDetailsFieldsFragmentDoc = gql`
         ammBuyTxFees
         ammSellTxFees
         bloatBond
+      }
+      ... on UpdateArgoBridgeConstraintsProposalDetails {
+        operatorAccount
+        pauserAccounts
+        bridgingFee
+        thawnDuration
+        remoteChains
       }
     }
     discussionThread {

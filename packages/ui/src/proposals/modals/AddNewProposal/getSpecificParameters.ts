@@ -1,5 +1,7 @@
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
+import { uniq } from 'lodash'
 
+import { isValidAddress } from '@/accounts/model/isValidAddress'
 import { Api } from '@/api'
 import { BN_ZERO } from '@/common/constants'
 import { createType } from '@/common/model/createType'
@@ -216,6 +218,22 @@ export const getSpecificParameters = async (
           ammBuyTxFees: createType('Option<Permill>', values?.ammBuyTxFees),
           ammSellTxFees: createType('Option<Permill>', values?.ammSellTxFees),
           bloatBond: values?.bloatBond,
+        },
+      })
+    }
+    case 'updateArgoBridgeConstraints': {
+      const values = specifics.updateArgoBridgeConstraints
+      return createType('PalletProposalsCodexProposalDetails', {
+        UpdateArgoBridgeConstraints: {
+          operatorAccount: values?.operatorAccount?.address,
+          pauserAccounts: uniq(
+            values?.pauserAccounts?.flatMap((account) =>
+              account?.address && isValidAddress(account.address) ? account.address : []
+            )
+          ),
+          bridgingFee: values?.bridgingFee,
+          thawnDuration: values?.thawnDuration,
+          remoteChains: values?.remoteChains?.filter((chain) => typeof chain === 'number'),
         },
       })
     }

@@ -29,6 +29,7 @@ import { DecreaseCouncilBudget } from './DecreaseCouncilBudget'
 import { SetEraPayoutDampingFactor } from './SetEraPayoutDampingFactor'
 import { SetInitialInvitationBalance } from './SetInitialInvitationBalance'
 import { SetInitialInvitationCount } from './SetInitialInvitationCount'
+import { UpdateArgoBridgeConstraints } from './UpdateArgoBridgeConstraints'
 import { UpdatePalletFrozenStatus } from './UpdatePalletFrozenStatus'
 import { UpdateTokenPalletTokenConstraints } from './UpdateTokenPalletTokenConstraints'
 
@@ -97,6 +98,9 @@ export const SpecificParametersStep = ({ matches }: SpecificParametersStepProps)
     }
     case matches('specificParameters.updateTokenPalletTokenConstraints'): {
       return <UpdateTokenPalletTokenConstraints />
+    }
+    case matches('specificParameters.updateArgoBridgeConstraints'): {
+      return <UpdateArgoBridgeConstraints />
     }
     default:
       return null

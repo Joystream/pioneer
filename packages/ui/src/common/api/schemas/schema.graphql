@@ -2596,6 +2596,7 @@ union ProposalDetails =
   | DecreaseCouncilBudgetProposalDetails
   | UpdateTokenPalletTokenConstraintsProposalDetails
   | SetEraPayoutDampingFactorProposalDetails
+  | UpdateArgoBridgeConstraintsProposalDetails
 
 union ProposalStatus =
     ProposalStatusDeciding
@@ -3520,6 +3521,14 @@ type UpcomingOpeningAdded {
 
 type UpcomingOpeningRemoved {
   upcomingOpeningId: String!
+}
+
+type UpdateArgoBridgeConstraintsProposalDetails {
+  operatorAccount: String
+  pauserAccounts: [String!]
+  bridgingFee: BigInt
+  thawnDuration: Int
+  remoteChains: [Int!]
 }
 
 type UpdateChannelPayoutsProposalDetails {

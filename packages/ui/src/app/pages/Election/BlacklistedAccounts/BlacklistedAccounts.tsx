@@ -2,6 +2,7 @@ import { BN_ZERO } from '@polkadot/util'
 import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
+import { AnonymousAccount } from '@/accounts/components/AnonymousAccount'
 import { useBalances } from '@/accounts/hooks/useBalance'
 import { useVotingOptOutAccounts } from '@/accounts/hooks/useVotingOptOutAccounts'
 import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
@@ -15,8 +16,6 @@ import { TextBig, TextInlineMedium } from '@/common/components/typography'
 import { Warning } from '@/common/components/Warning'
 
 import { ElectionTabs } from '../components/ElectionTabs'
-
-import { BlacklistedAccount } from './BlacklistedAccount'
 
 export const BlacklistedAccounts = () => {
   const ACCOUNTS_PER_PAGE = 18
@@ -75,7 +74,7 @@ export const BlacklistedAccounts = () => {
               <h6>Accounts ({votingOptOutAccounts?.length})</h6>
               <BlacklistedAccountsList>
                 {paginatedAccounts.map((account, i) => (
-                  <BlacklistedAccount key={i} account={account} />
+                  <AnonymousAccount key={i} address={account.address} amount={account.balance} />
                 ))}
               </BlacklistedAccountsList>
               <Pagination

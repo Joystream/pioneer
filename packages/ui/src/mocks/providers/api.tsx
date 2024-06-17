@@ -12,6 +12,7 @@ import { warning } from '@/common/logger'
 import { createType } from '@/common/model/createType'
 
 import { asChainData } from '../helpers/asChainData'
+import { asDerivedBalances } from '../helpers/asDerivedBalances'
 import { TxMock, fromTxMock } from '../helpers/transactions'
 
 export const BLOCK_HEAD = 1337
@@ -42,6 +43,7 @@ export const MockApiProvider: FC<MockApiProps> = ({ children, chain }) => {
     // Common mocks:
     const defaultDerive = {
       staking: { erasRewards: [], erasPoints: [] },
+      balances: { all: asDerivedBalances({}) },
     }
     const defaultQuery = {
       session: { validators: [] },

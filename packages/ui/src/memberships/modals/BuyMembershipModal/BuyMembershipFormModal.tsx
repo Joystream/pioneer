@@ -144,7 +144,7 @@ export const BuyMembershipForm = ({
   const selectValidatorAccounts = useSelectValidatorAccounts()
   const {
     isValidatorAccount,
-    state: { isValidator, accounts: validatorAccounts },
+    state: { isValidator, accounts: accountsMap },
   } = selectValidatorAccounts
 
   useEffect(() => {
@@ -159,17 +159,17 @@ export const BuyMembershipForm = ({
     }
   }, [data?.membershipsConnection.totalCount])
 
+  const validatorAccounts = Array.from(accountsMap.values())
   const isFormValid =
     !isUploading &&
     form.formState.isValid &&
-    (!isValidator ||
-      (validatorAccounts.length > 0 && validatorAccounts.every((account) => account && isValidatorAccount(account))))
+    (!isValidator || (validatorAccounts.length > 0 && validatorAccounts.every(isValidatorAccount)))
 
   const isDisabled =
     type === 'onBoarding' && process.env.REACT_APP_CAPTCHA_SITE_KEY ? !captchaToken || !isFormValid : !isFormValid
 
   const submit = () => {
-    const accounts = uniqBy(validatorAccounts as Account[], 'address')
+    const accounts = uniqBy(validatorAccounts, 'address')
     form.setValue('validatorAccounts', accounts)
     const values = form.getValues()
     uploadAvatarAndSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
