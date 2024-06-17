@@ -100,6 +100,14 @@ type UpdateTokenPalletTokenConstraintsDetail = {
   bloatBond?: BN
 }
 
+type UpdateArgoBridgeConstraintsDetail = {
+  operatorAccount?: string
+  pauserAccounts?: string[]
+  bridgingFee?: BN
+  thawnDuration?: number
+  remoteChains?: number[]
+}
+
 export type FundingRequestDetails = ProposalDetailsNew<'fundingRequest', DestinationsDetail>
 export type CreateLeadOpeningDetails = ProposalDetailsNew<
   'createWorkingGroupLeadOpening',
@@ -176,6 +184,11 @@ export type UpdateTokenPalletTokenConstraintsDetails = ProposalDetailsNew<
   UpdateTokenPalletTokenConstraintsDetail
 >
 
+export type UpdateArgoBridgeConstraintsDetails = ProposalDetailsNew<
+  'updateArgoBridgeConstraints',
+  UpdateArgoBridgeConstraintsDetail
+>
+
 export type ProposalDetails =
   | BaseProposalDetails
   | FundingRequestDetails
@@ -203,6 +216,7 @@ export type ProposalDetails =
   | SetEraPayoutDampingFactorProposalDetails
   | DecreaseCouncilBudgetDetails
   | UpdateTokenPalletTokenConstraintsDetails
+  | UpdateArgoBridgeConstraintsDetails
 
 export type ProposalDetailsKeys = KeysOfUnion<ProposalDetails>
 
@@ -432,6 +446,17 @@ const asUpdateTokenPalletTokenConstraints: DetailsCast<'UpdateTokenPalletTokenCo
   bloatBond: whenDefined(fragment.bloatBond, asBN),
 })
 
+const asUpdateArgoBridgeConstraints: DetailsCast<'UpdateArgoBridgeConstraintsProposalDetails'> = (
+  fragment
+): UpdateArgoBridgeConstraintsDetails => ({
+  type: 'updateArgoBridgeConstraints',
+  operatorAccount: fragment.operatorAccount ?? undefined,
+  pauserAccounts: fragment.pauserAccounts ?? undefined,
+  bridgingFee: whenDefined(fragment.bridgingFee, asBN),
+  thawnDuration: fragment.thawnDuration ?? undefined,
+  remoteChains: fragment.remoteChains ?? undefined,
+})
+
 interface DetailsCast<T extends ProposalDetailsTypename> {
   (fragment: DetailsFragment & { __typename: T }, extra?: ProposalExtraDetails): ProposalDetails
 }
@@ -462,6 +487,7 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   SetEraPayoutDampingFactorProposalDetails: asSetEraPayoutDampingFactor,
   DecreaseCouncilBudgetProposalDetails: asDecreaseCouncilBudget,
   UpdateTokenPalletTokenConstraintsProposalDetails: asUpdateTokenPalletTokenConstraints,
+  UpdateArgoBridgeConstraintsProposalDetails: asUpdateArgoBridgeConstraints,
 }
 
 export const asProposalDetails = (fragment: DetailsFragment, extra?: ProposalExtraDetails): ProposalDetails => {

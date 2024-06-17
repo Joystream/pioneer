@@ -65,6 +65,7 @@ export type ProposalType =
         | 'setEraPayoutDampingFactor'
         | 'decreaseCouncilBudget'
         | 'updateTokenPalletTokenConstraints'
+        | 'updateArgoBridgeConstraints'
       )
 
 export type DisabledProposal = 'createBlogPost' | 'editBlogPost' | 'lockBlogPost' | 'unlockBlogPost'

@@ -21029,6 +21029,7 @@ export type ProposalDetails =
   | SignalProposalDetails
   | SlashWorkingGroupLeadProposalDetails
   | TerminateWorkingGroupLeadProposalDetails
+  | UpdateArgoBridgeConstraintsProposalDetails
   | UpdateChannelPayoutsProposalDetails
   | UpdateGlobalNftLimitProposalDetails
   | UpdatePalletFrozenStatusProposalDetails
@@ -32214,6 +32215,15 @@ export type UpcomingWorkingGroupOpeningWhereInput = {
 
 export type UpcomingWorkingGroupOpeningWhereUniqueInput = {
   id: Scalars['ID']
+}
+
+export type UpdateArgoBridgeConstraintsProposalDetails = {
+  __typename: 'UpdateArgoBridgeConstraintsProposalDetails'
+  bridgingFee?: Maybe<Scalars['BigInt']>
+  operatorAccount?: Maybe<Scalars['String']>
+  pauserAccounts?: Maybe<Array<Scalars['String']>>
+  remoteChains?: Maybe<Array<Scalars['Int']>>
+  thawnDuration?: Maybe<Scalars['Int']>
 }
 
 export type UpdateChannelPayoutsProposalDetails = {

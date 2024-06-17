@@ -106,6 +106,13 @@ const proposalDetails: Record<ProposalDetailsType, RecursivePartial<ProposalWith
     ammSellTxFees: 300,
     bloatBond: joy(0.01),
   },
+  UpdateArgoBridgeConstraintsProposalDetails: {
+    operatorAccount: membership.rootAccount,
+    pauserAccounts: [member('alice').rootAccount, member('bob').rootAccount],
+    bridgingFee: joy(1),
+    thawnDuration: 100,
+    remoteChains: [1, 2, 3], // TODO check right value
+  },
 }
 
 export const proposalDetailsMap = mapValues(proposalDetails, (value, key) => {

@@ -16,6 +16,7 @@ import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 
 import {
   Address,
+  AddressesPreview,
   Amount,
   DestinationsPreview,
   Divider,
@@ -57,6 +58,7 @@ const renderTypeMapper: Partial<Record<RenderType, ProposalDetailContent>> = {
   Hash: Hash,
   DestinationsPreview: DestinationsPreview,
   BlockTimeDisplay: BlockTimeDisplay,
+  AddressesPreview: AddressesPreview,
 }
 
 export const ProposalDetails = ({ proposalDetails, gracePeriod, exactExecutionBlock, createdInBlock }: Props) => {

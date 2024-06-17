@@ -211,6 +211,13 @@ fragment ProposalWithDetailsFields on Proposal {
       ammSellTxFees
       bloatBond
     }
+    ... on UpdateArgoBridgeConstraintsProposalDetails {
+      operatorAccount
+      pauserAccounts
+      bridgingFee
+      thawnDuration
+      remoteChains
+    }
   }
 
   discussionThread {
