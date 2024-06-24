@@ -62,9 +62,9 @@ const NODE_RPC_ENDPOINT: PredefinedEndpoint = {
 
 const NODE_HTTP_RPC_ENDPOINT: PredefinedEndpoint = {
   mainnet: MAINNET_NODE_HTTP_RPC,
-  local: 'http://127.0.0.1:9933', // TODO: check
+  local: 'http://127.0.0.1:9933',
   testnet: TESTNET_NODE_HTTP_RPC,
-  'local-mocks': 'http://127.0.0.1:9933', // TODO: check
+  'local-mocks': 'http://127.0.0.1:9933',
 }
 
 const BACKEND_ENDPOINT: PredefinedEndpoint = {

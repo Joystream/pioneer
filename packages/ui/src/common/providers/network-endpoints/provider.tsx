@@ -1,11 +1,10 @@
-import React, { ReactNode, Reducer, useCallback, useEffect, useReducer, useState } from 'react'
+import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import * as Yup from 'yup'
 
 import { DEFAULT_NETWORK, NetworkEndpoints, pickEndpoints } from '@/app/config'
 import { Loading } from '@/common/components/Loading'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
 import { useNetwork } from '@/common/hooks/useNetwork'
-import { Optional } from '@/common/types'
 import { objectEquals } from '@/common/utils'
 
 import { NetworkEndpointsContext } from './context'
@@ -22,24 +21,9 @@ const EndpointsSchema = Yup.object().shape({
   backendEndpoint: Yup.string(),
 })
 
-// HACK will approximately guess the http endpoint
-const endpointReducer: Reducer<NetworkEndpoints | undefined, Optional<NetworkEndpoints, 'nodeHttpRpcEndpoint'>> = (
-  _,
-  newEndpoints
-): NetworkEndpoints => ({
-  ...newEndpoints,
-  nodeHttpRpcEndpoint:
-    newEndpoints.nodeHttpRpcEndpoint ??
-    newEndpoints.nodeRpcEndpoint
-      .replace('ws:', 'http:')
-      .replace('wss:', 'https:')
-      .replace('ws-rpc', 'http-rpc')
-      .replace(':9944', ''),
-})
-
 export const NetworkEndpointsProvider = ({ children }: Props) => {
   const { network, setNetwork } = useNetwork()
-  const [endpoints, setEndpoints] = useReducer(endpointReducer, undefined)
+  const [endpoints, setEndpoints] = useState<NetworkEndpoints>()
   const [autoConfEndpoints, storeAutoConfEndpoints] = useLocalStorage<NetworkEndpoints>('auto_network_config')
   const [isLoading, setIsLoading] = useState(false)
   const [customEndpoints] = useLocalStorage<NetworkEndpoints>('custom_endpoint')
