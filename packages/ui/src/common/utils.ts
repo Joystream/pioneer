@@ -143,6 +143,19 @@ export const arrayGroupBy = (items: Item[], key: keyof Item) =>
     {}
   )
 
+// Maps:
+
+export const mapCloneSet = <K extends any, V extends any>(map: Map<K, V>, key: K, value: V): Map<K, V> => {
+  const clone = new Map(map)
+  clone.set(key, value)
+  return clone
+}
+export const mapCloneDelete = <K extends any, V extends any>(map: Map<K, V>, key: K): Map<K, V> => {
+  const clone = new Map(map)
+  clone.delete(key)
+  return clone
+}
+
 // Promises:
 
 type MapperP<T, R> = (value: T, index: number, array: T[] | readonly T[]) => Promise<R>

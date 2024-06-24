@@ -5019,9 +5019,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@joystream/types@npm:4.5.0":
-  version: 4.5.0
-  resolution: "@joystream/types@npm:4.5.0"
+"@joystream/types@npm:4.6.0":
+  version: 4.6.0
+  resolution: "@joystream/types@npm:4.6.0"
   dependencies:
     "@polkadot/api": 10.7.1
     "@polkadot/keyring": ^12.6.2
@@ -5030,7 +5030,7 @@ __metadata:
     "@types/vfile": ^4.0.0
     lodash: ^4.17.15
     moment: ^2.24.0
-  checksum: a77eea2bd5ed6ed59a81e6db2d42f597182541efd0a40620831925dbffe390cefe2cb0b4f509c22d96e3a1bf1dc5294a1cfd6fae5044a37fd325c13ff5664a17
+  checksum: 862d7387c3af55fefdb5a33c3669e6696cf4d9c66a5ab3e18004eae0e618e14c3eb7185890c443cfc6504172411adb98355d6f83d19dc4782b41037e02b400a7
   languageName: node
   linkType: hard
 

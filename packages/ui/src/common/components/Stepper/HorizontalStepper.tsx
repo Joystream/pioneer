@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled, { css } from 'styled-components'
 
 import { asStepsToRender, StepperStep, StepToRender } from '@/common/components/Stepper/types'
@@ -16,15 +16,15 @@ export const HorizontalStepper = ({ steps }: HorizontalStepperProps) => {
   return (
     <HorizontalStepperWrapper>
       {stepsToRender.map((step, index) => (
-        <>
-          <Step step={step} key={`horizontal-stepper-${index}`}>
+        <Fragment key={`horizontal-stepper-${index}`}>
+          <Step step={step}>
             <StepCircle>{step.isPast ? <CheckboxIcon /> : index + 1}</StepCircle>
             <StepBody>
               <StepTitle>{step.title}</StepTitle>
             </StepBody>
           </Step>
           {index < stepsToRender.length - 1 && <Separator />}
-        </>
+        </Fragment>
       ))}
     </HorizontalStepperWrapper>
   )

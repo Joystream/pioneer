@@ -11,6 +11,7 @@ const mockApiMethods = (mapFn: (data: any) => any) => (_data: any) => {
   try {
     return Object.defineProperties(data, {
       unwrap: { value: () => data },
+      unwrapOr: { value: () => data },
       toJSON: { value: () => data },
       isSome: { value: Object.keys(data).length > 0 },
       get: {

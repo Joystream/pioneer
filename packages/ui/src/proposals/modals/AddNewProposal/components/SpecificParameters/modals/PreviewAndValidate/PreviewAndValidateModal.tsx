@@ -32,7 +32,6 @@ import {
 import { TransactionInfo } from '@/common/components/TransactionInfo'
 import { TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
-import { useKeyring } from '@/common/hooks/useKeyring'
 import { formatJoyValue } from '@/common/model/formatters'
 import { joy } from '@/mocks/helpers'
 
@@ -52,7 +51,6 @@ export const PreviewAndValidateModal = ({ onClose }: PreviewAndValidateModalProp
   const { setValue, getValues } = useFormContext()
   const maxTotalAmount = api?.consts.proposalsCodex.fundingRequestProposalMaxTotalAmount
   const maxAllowedAccounts = api?.consts.proposalsCodex.fundingRequestProposalMaxAccounts?.toNumber()
-  const keyring = useKeyring()
   const { allAccounts } = useMyAccounts()
   const accounts = allAccounts as AccountOption[]
   const [previewAccounts, setPreviewAccounts] = useState<AccountAndAmount[]>([])
@@ -98,7 +96,7 @@ export const PreviewAndValidateModal = ({ onClose }: PreviewAndValidateModalProp
       csvInput.map((item: string) => {
         const splitAccountsAndAmounts = item.split(',')
         const amount = new BN(joy(splitAccountsAndAmounts[1]))
-        const isValidAccount = isValidAddress(splitAccountsAndAmounts[0], keyring)
+        const isValidAccount = isValidAddress(splitAccountsAndAmounts[0])
         return {
           account: accountOrNamed(accounts, splitAccountsAndAmounts[0], 'Unknown Member'),
           amount: amount,

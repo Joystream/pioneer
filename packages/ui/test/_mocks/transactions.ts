@@ -1,5 +1,4 @@
 import { AugmentedEvents } from '@polkadot/api/types'
-import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
@@ -7,18 +6,19 @@ import { from, Observable, of } from 'rxjs'
 
 import { toBalances } from '@/accounts/model/toBalances'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { Account, LockType } from '@/accounts/types'
+import { Account } from '@/accounts/types'
 import { Api } from '@/api'
 import { UseApi } from '@/api/providers/provider'
 import { BN_ZERO } from '@/common/constants'
 import { createType } from '@/common/model/createType'
 import { ExtractTuple } from '@/common/model/JoystreamNode'
+import { asDerivedBalances } from '@/mocks/helpers/asDerivedBalances'
 import { createErrorEvents, createSuccessEvents, stubTransactionResult } from '@/mocks/helpers/transactions'
 import { proposalDetails } from '@/proposals/model/proposalDetails'
 
 import { mockedBalances, mockedMyBalances, mockedUseMyAccounts } from '../setup'
 
-import { createBalanceLock, createRuntimeDispatchInfo } from './chainTypes'
+import { createRuntimeDispatchInfo } from './chainTypes'
 
 export const currentStubErrorMessage = 'Balance too low to send value.'
 
@@ -224,33 +224,8 @@ export const stubCouncilAndReferendum = (
   stubQuery(api, 'council.nextRewardPayments', new BN(1000))
 }
 
-type Balances = { available?: number; locked?: number; lockId?: LockType }
-
-export const stubBalances = ({ available, lockId, locked }: Balances) => {
-  const availableBalance = new BN(available ?? 0)
-  const lockedBalance = new BN(locked ?? 0)
-
-  const deriveBalances = {
-    availableBalance: createType('Balance', availableBalance),
-    lockedBalance: createType('Balance', lockedBalance),
-    accountId: createType('AccountId', 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf'),
-    accountNonce: createType('Index', 1),
-    freeBalance: createType('Balance', availableBalance.add(lockedBalance)),
-    frozenFee: new BN(0),
-    frozenMisc: new BN(0),
-    isVesting: false,
-    lockedBreakdown: lockedBalance.eq(BN_ZERO) ? [] : [createBalanceLock(locked!, lockId ?? 'Bound Staking Account')],
-    reservedBalance: new BN(0),
-    vestedBalance: new BN(0),
-    vestedClaimable: new BN(0),
-    vestingEndBlock: createType('BlockNumber', 1234),
-    vestingLocked: new BN(0),
-    vestingPerBlock: new BN(0),
-    vestingTotal: new BN(0),
-    votingBalance: new BN(0),
-    vesting: [],
-  } as unknown as DeriveBalancesAll
-
+export const stubBalances = ({ available, lockId, locked }: Parameters<typeof asDerivedBalances>[0]) => {
+  const deriveBalances = asDerivedBalances({ available, lockId, locked })
   const balance = toBalances(deriveBalances)
   mockedBalances.mockReturnValue(balance)
 

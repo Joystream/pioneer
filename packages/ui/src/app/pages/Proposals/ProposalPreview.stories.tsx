@@ -317,6 +317,9 @@ export const DecreaseCouncilBudget: Story = {
 export const UpdateTokenPalletTokenConstraints: Story = {
   args: { type: 'UpdateTokenPalletTokenConstraintsProposalDetails' },
 }
+export const UpdateArgoBridgeConstraints: Story = {
+  args: { type: 'UpdateArgoBridgeConstraintsProposalDetails' },
+}
 
 // Disabled proposals
 export const Veto: Story = {

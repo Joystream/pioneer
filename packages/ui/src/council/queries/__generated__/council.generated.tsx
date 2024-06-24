@@ -94,6 +94,7 @@ export type PastCouncilProposalsFieldsFragment = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UpdateArgoBridgeConstraintsProposalDetails' }
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
@@ -640,6 +641,7 @@ export type FundingRequestApprovedFragment = {
     | { __typename: 'SignalProposalDetails' }
     | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
     | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+    | { __typename: 'UpdateArgoBridgeConstraintsProposalDetails' }
     | { __typename: 'UpdateChannelPayoutsProposalDetails' }
     | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
     | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
@@ -792,6 +794,7 @@ export type GetPastCouncilQuery = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UpdateArgoBridgeConstraintsProposalDetails' }
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
@@ -893,6 +896,7 @@ export type GetPastCouncilMembersQuery = {
         | { __typename: 'SignalProposalDetails' }
         | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
         | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+        | { __typename: 'UpdateArgoBridgeConstraintsProposalDetails' }
         | { __typename: 'UpdateChannelPayoutsProposalDetails' }
         | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
         | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
@@ -987,6 +991,7 @@ export type GetPastCouncilProposalsQuery = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UpdateArgoBridgeConstraintsProposalDetails' }
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }
@@ -1532,6 +1537,7 @@ export type GetPastCouncilStatsQuery = {
       | { __typename: 'SignalProposalDetails' }
       | { __typename: 'SlashWorkingGroupLeadProposalDetails' }
       | { __typename: 'TerminateWorkingGroupLeadProposalDetails' }
+      | { __typename: 'UpdateArgoBridgeConstraintsProposalDetails' }
       | { __typename: 'UpdateChannelPayoutsProposalDetails' }
       | { __typename: 'UpdateGlobalNftLimitProposalDetails' }
       | { __typename: 'UpdatePalletFrozenStatusProposalDetails' }

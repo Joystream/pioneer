@@ -65,7 +65,7 @@ export function TransferSignModal({ onClose, from, amount, to, service, transact
       <ModalBody>
         <SignTransferContainer>
           <Row>
-            <TextMedium margin="xl">
+            <TextMedium margin="xl" as="div">
               You are transferring <TokenValue value={amount} /> stake from “{from.name}” account to “{to.name}”{' '}
               destination.
             </TextMedium>

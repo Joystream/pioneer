@@ -33,10 +33,10 @@ interface TransactionButtonProps extends ButtonProps {
   isResponsive?: boolean
 }
 
-export const TransactionButton = ({ isResponsive, disabled, ...props }: TransactionButtonProps) => {
+export const TransactionButton = ({ isResponsive, disabled, style, ...props }: TransactionButtonProps) => {
   const { isTransactionPending } = useTransactionStatus()
 
-  const Button = buttonTypes[props.style]
+  const Button = buttonTypes[style]
 
   return (
     <TransactionButtonWrapper isResponsive={isResponsive}>
