@@ -221,7 +221,7 @@ export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [
 ]
 
 export const GlobalModals = () => {
-  const { modal, hideModal, currentModalMachine, showModal, modalData, isClosing } = useModal()
+  const { modal, hideModal, currentModalMachine, showModal, isClosing } = useModal()
   const { active: activeMember } = useMyMemberships()
   const { status } = useTransactionStatus()
   const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
@@ -235,12 +235,8 @@ export const GlobalModals = () => {
   const potentialFallback = useGlobalModalHandler(currentModalMachine, hideModal)
 
   if (modal && !GUEST_ACCESSIBLE_MODALS.includes(modal as ModalNames) && !activeMember) {
-    showModal<SwitchMemberModalCall>({
-      modal: 'SwitchMember',
-      data: {
-        originalModalName: modal as ModalNames,
-        originalModalData: modalData,
-      },
+    showModal({
+      modal: 'OnBoardingModal',
     })
     return null
   }
