@@ -1,3 +1,4 @@
+import { random } from 'lodash'
 import React, { useState, useEffect } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -35,15 +36,18 @@ export const SettingsNetworkTab = () => {
   const [endpoints, fetchNetworkEndpoints] = useNetworkEndpoints()
 
   const form = useForm()
-  const [customFaucetEndpoint, customRpcEndpoint, customQueryEndpoint, customBackendEndpoint] = form.watch([
-    'settings.customFaucetEndpoint',
-    'settings.customRpcEndpoint',
-    'settings.customQueryEndpoint',
-    'settings.customBackendEndpoint',
-  ])
+  const [customFaucetEndpoint, customWsRpcEndpoint, customHttpRpcEndpoint, customQueryEndpoint, customBackendEndpoint] =
+    form.watch([
+      'settings.customFaucetEndpoint',
+      'settings.customWsRpcEndpoint',
+      'settings.customHttpRpcEndpoint',
+      'settings.customQueryEndpoint',
+      'settings.customBackendEndpoint',
+    ])
   const [, storeCustomEndpoints] = useLocalStorage<NetworkEndpoints>('custom_endpoint')
   const [isValidFaucetEndpoint, setIsValidFaucetEndpoint] = useState(true)
-  const [isValidRpcEndpoint, setIsValidRpcEndpoint] = useState(true)
+  const [isValidWsRpcEndpoint, setIsValidWsRpcEndpoint] = useState(true)
+  const [isValidHttpRpcEndpoint, setIsValidHttpRpcEndpoint] = useState(true)
   const [isValidQueryEndpoint, setIsValidQueryEndpoint] = useState(true)
   const [isValidBackendEndpoint, setIsValidBackendEndpoint] = useState(true)
   const [customSaveStatus, setCustomSaveStatus] = useState<'Init' | 'Saving' | 'Done'>('Init')
@@ -57,7 +61,8 @@ export const SettingsNetworkTab = () => {
 
   useEffect(() => {
     if (network === 'custom') {
-      form.setValue('settings.customRpcEndpoint', endpoints.nodeRpcEndpoint)
+      form.setValue('settings.customWsRpcEndpoint', endpoints.nodeRpcEndpoint)
+      form.setValue('settings.customHttpRpcEndpoint', endpoints.nodeHttpRpcEndpoint)
       form.setValue('settings.customQueryEndpoint', endpoints.queryNodeEndpoint)
       form.setValue('settings.customFaucetEndpoint', endpoints.membershipFaucetEndpoint ?? '')
       form.setValue('settings.customBackendEndpoint', endpoints.backendEndpoint ?? '')
@@ -66,14 +71,16 @@ export const SettingsNetworkTab = () => {
 
   useEffect(() => {
     if (
-      isValidRpcEndpoint &&
+      isValidWsRpcEndpoint &&
+      isValidHttpRpcEndpoint &&
       isValidQueryEndpoint &&
       isValidFaucetEndpoint &&
       isValidBackendEndpoint &&
       customSaveStatus === 'Done'
     ) {
       storeCustomEndpoints({
-        nodeRpcEndpoint: customRpcEndpoint,
+        nodeRpcEndpoint: customWsRpcEndpoint,
+        nodeHttpRpcEndpoint: customHttpRpcEndpoint,
         queryNodeEndpoint: customQueryEndpoint,
         queryNodeEndpointSubscription: customQueryEndpoint.replace(/^http?/, 'ws'),
         membershipFaucetEndpoint: customFaucetEndpoint || undefined,
@@ -82,11 +89,12 @@ export const SettingsNetworkTab = () => {
       })
       window.location.reload()
     }
-  }, [isValidFaucetEndpoint, isValidRpcEndpoint, isValidQueryEndpoint, customSaveStatus])
+  }, [isValidFaucetEndpoint, isValidWsRpcEndpoint, isValidQueryEndpoint, customSaveStatus])
 
   const saveSettings = async () => {
     if (
-      !isValidRPCUrl(customRpcEndpoint) ||
+      !isValidWsUrl(customWsRpcEndpoint) ||
+      !isValidHttpUrl(customHttpRpcEndpoint) ||
       !isValidQNUrl(customQueryEndpoint) ||
       !isValidFaucetUrl(customFaucetEndpoint) ||
       !isValidBackendUrl(customBackendEndpoint)
@@ -97,7 +105,8 @@ export const SettingsNetworkTab = () => {
     setCustomSaveStatus('Saving')
 
     await Promise.all([
-      checkEndpoint(customRpcEndpoint, checkRpcEndpoint, setIsValidRpcEndpoint),
+      checkEndpoint(customWsRpcEndpoint, checkWsRpcEndpoint, setIsValidWsRpcEndpoint),
+      checkEndpoint(customHttpRpcEndpoint, checkHttpRpcEndpoint, setIsValidHttpRpcEndpoint),
       checkEndpoint(customQueryEndpoint, checkGQLEndpoint, setIsValidQueryEndpoint),
       checkEndpoint(customFaucetEndpoint, checkFaucetEndpoint, setIsValidFaucetEndpoint),
       checkEndpoint(customBackendEndpoint, checkGQLEndpoint, setIsValidBackendEndpoint),
@@ -127,17 +136,36 @@ export const SettingsNetworkTab = () => {
             </SettingsWarningInformation>
 
             <InputComponent
-              label={t('customRPCNode')}
-              validation={isValidRPCUrl(customRpcEndpoint) && isValidRpcEndpoint ? undefined : 'invalid'}
+              label={t('customWsRpcNode')}
+              validation={isValidWsUrl(customWsRpcEndpoint) && isValidWsRpcEndpoint ? undefined : 'invalid'}
               message={cond(
-                [() => !isValidRPCUrl(customRpcEndpoint), 'This RPC endpoint must start with ws or wss'],
+                [() => !isValidWsUrl(customWsRpcEndpoint), 'This WS RPC endpoint must start with ws or wss'],
                 [
-                  () => !isValidRpcEndpoint,
+                  () => !isValidWsRpcEndpoint,
                   'Connection Error. Sometimes it fails due to network speed. Please try to check once more',
                 ]
               )}
             >
-              <InputText id="field-custom-rpcnode" placeholder="Paste RPC node" name="settings.customRpcEndpoint" />
+              <InputText
+                id="field-custom-wsrpcnode"
+                placeholder="Paste WS RPC node"
+                name="settings.customWsRpcEndpoint"
+              />
+            </InputComponent>
+
+            <InputComponent
+              label={t('customHttpRpcNode')}
+              validation={isValidHttpUrl(customHttpRpcEndpoint) && isValidHttpRpcEndpoint ? undefined : 'invalid'}
+              message={cond(
+                [() => !isValidHttpUrl(customHttpRpcEndpoint), 'This HTTP RPC endpoint must start with http or https'],
+                [() => !isValidHttpRpcEndpoint, 'Connection Error']
+              )}
+            >
+              <InputText
+                id="field-custom-httprpcnode"
+                placeholder="Paste HTTP RPC node"
+                name="settings.customHttpRpcEndpoint"
+              />
             </InputComponent>
 
             <InputComponent
@@ -201,8 +229,10 @@ export const SettingsNetworkTab = () => {
         )}
         <NetworkInfo
           detailsTitle={t('networkDetails')}
-          networkAddress={endpoints.nodeRpcEndpoint}
-          queryNodeAddress={endpoints.queryNodeEndpoint}
+          networkWsAddress={endpoints.nodeRpcEndpoint}
+          networkHttpAddress={endpoints.nodeHttpRpcEndpoint}
+          queryNodeHttpAddress={endpoints.queryNodeEndpoint}
+          queryNodeWsAddress={endpoints.queryNodeEndpointSubscription}
           faucetAddress={endpoints.membershipFaucetEndpoint}
           backendAddress={endpoints.backendEndpoint}
         />
@@ -226,7 +256,8 @@ type IsValidOptions = { prefix?: 'https?' | 'wss?'; isRequired?: boolean }
 const isValid = (url: string, { prefix = 'https?', isRequired = true }: IsValidOptions = {}) =>
   (isRequired === false && url === '') || RegExp(String.raw`${prefix}://\w+/?`, 'i').test(url)
 
-const isValidRPCUrl = (url: string) => isValid(url, { prefix: 'wss?' })
+const isValidWsUrl = (url: string) => isValid(url, { prefix: 'wss?' })
+const isValidHttpUrl = (url: string) => isValid(url, { prefix: 'https?' })
 const isValidQNUrl = (url: string) => isValid(url)
 const isValidFaucetUrl = (url: string) => isValid(url, { isRequired: false })
 const isValidBackendUrl = (url: string) => isValid(url, { isRequired: false })
@@ -241,8 +272,8 @@ const checkEndpoint = async (
   return isValid
 }
 
-const checkRpcEndpoint = async (endpoint: string) => {
-  // check RPC endpoint
+const checkWsRpcEndpoint = async (endpoint: string) => {
+  // check WS RPC endpoint
   try {
     return await new Promise<boolean>((resolve) => {
       const ws = new WebSocket(endpoint)
@@ -256,6 +287,25 @@ const checkRpcEndpoint = async (endpoint: string) => {
       ws.onopen = willResolveTo(true, timeout)
       ws.onerror = willResolveTo(false, timeout)
     })
+  } catch {
+    return false
+  }
+}
+
+const checkHttpRpcEndpoint = async (endpoint: string) => {
+  // check HTTP RPC endpoint
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: random(Number.MAX_SAFE_INTEGER),
+        jsonrpc: '2.0',
+        method: 'system_name',
+        params: [],
+      }),
+    })
+    return response.status < 400 && (await response.json()).result === 'Joystream Node'
   } catch {
     return false
   }
