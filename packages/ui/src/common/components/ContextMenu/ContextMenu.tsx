@@ -44,7 +44,6 @@ export const ContextMenu = ({ items, size, title, isResponsive }: ContextMenuPro
       event.stopPropagation()
       setMenuVisible(!isMenuVisible)
     },
-    onBlur: () => setMenuVisible(false),
   }
 
   useOutsideClick(popperElementRef, isMenuVisible, () => setMenuVisible(false))
