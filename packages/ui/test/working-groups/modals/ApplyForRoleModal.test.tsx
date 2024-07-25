@@ -135,11 +135,7 @@ describe('UI: ApplyForRoleModal', () => {
       await renderModal()
 
       expect(showModal).toBeCalledWith({
-        modal: 'SwitchMember',
-        data: {
-          originalModalData: modalData,
-          originalModalName: 'ApplyForRoleModal',
-        },
+        modal: 'OnBoardingModal',
       })
       showModal.mockClear()
     })
