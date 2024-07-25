@@ -3,6 +3,7 @@ import React, { memo, ReactElement, useEffect, useMemo, useState } from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { ClaimVestingModalCall } from '@/accounts/modals/ClaimVestingModal'
 import { ClaimVestingModal } from '@/accounts/modals/ClaimVestingModal/ClaimVestingModal'
 import { MoveFundsModal, MoveFundsModalCall } from '@/accounts/modals/MoveFundsModal'
@@ -221,10 +222,11 @@ export const MODAL_WITH_CLOSE_CONFIRMATION: ModalNames[] = [
 ]
 
 export const GlobalModals = () => {
-  const { modal, hideModal, currentModalMachine, showModal, isClosing } = useModal()
+  const { modal, hideModal, currentModalMachine, showModal, modalData, isClosing } = useModal()
   const { active: activeMember } = useMyMemberships()
   const { status } = useTransactionStatus()
   const Modal = useMemo(() => (modal && modal in modals ? memo(() => modals[modal as ModalNames]) : null), [modal])
+  const { wallet } = useMyAccounts()
 
   const [container, setContainer] = useState(document.body)
   useEffect(() => {
@@ -235,9 +237,19 @@ export const GlobalModals = () => {
   const potentialFallback = useGlobalModalHandler(currentModalMachine, hideModal)
 
   if (modal && !GUEST_ACCESSIBLE_MODALS.includes(modal as ModalNames) && !activeMember) {
-    showModal({
-      modal: 'OnBoardingModal',
-    })
+    if (wallet) {
+      showModal<SwitchMemberModalCall>({
+        modal: 'SwitchMember',
+        data: {
+          originalModalName: modal as ModalNames,
+          originalModalData: modalData,
+        },
+      })
+    } else {
+      showModal({
+        modal: 'OnBoardingModal',
+      })
+    }
     return null
   }
 
