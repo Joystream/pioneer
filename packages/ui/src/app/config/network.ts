@@ -2,6 +2,7 @@ export type NetworkType = 'mainnet' | 'local' | 'testnet' | 'auto-conf' | 'local
 
 export interface NetworkEndpoints {
   nodeRpcEndpoint: string
+  nodeHttpRpcEndpoint: string
   queryNodeEndpoint: string
   queryNodeEndpointSubscription: string
   membershipFaucetEndpoint: string
@@ -10,6 +11,7 @@ export interface NetworkEndpoints {
 }
 
 const TESTNET_NODE_SOCKET = process.env.REACT_APP_TESTNET_NODE_SOCKET
+const TESTNET_NODE_HTTP_RPC = process.env.REACT_APP_TESTNET_NODE_HTTP_RPC
 const TESTNET_QUERY_NODE = process.env.REACT_APP_TESTNET_QUERY_NODE
 const TESTNET_QUERY_NODE_SOCKET = process.env.REACT_APP_TESTNET_QUERY_NODE_SOCKET
 const TESTNET_MEMBERSHIP_FAUCET_URL = process.env.REACT_APP_TESTNET_MEMBERSHIP_FAUCET_URL
@@ -19,6 +21,7 @@ export const IS_TESTNET_DEFINED =
   TESTNET_NODE_SOCKET && TESTNET_QUERY_NODE && TESTNET_QUERY_NODE_SOCKET && TESTNET_MEMBERSHIP_FAUCET_URL
 
 const MAINNET_NODE_SOCKET = process.env.REACT_APP_MAINNET_NODE_SOCKET
+const MAINNET_NODE_HTTP_RPC = process.env.REACT_APP_MAINNET_NODE_HTTP_RPC
 const MAINNET_QUERY_NODE = process.env.REACT_APP_MAINNET_QUERY_NODE
 const MAINNET_QUERY_NODE_SOCKET = process.env.REACT_APP_MAINNET_QUERY_NODE_SOCKET
 const MAINNET_MEMBERSHIP_FAUCET_URL = process.env.REACT_APP_MAINNET_MEMBERSHIP_FAUCET_URL
@@ -57,6 +60,13 @@ const NODE_RPC_ENDPOINT: PredefinedEndpoint = {
   'local-mocks': 'ws://127.0.0.1:9944',
 }
 
+const NODE_HTTP_RPC_ENDPOINT: PredefinedEndpoint = {
+  mainnet: MAINNET_NODE_HTTP_RPC,
+  local: 'http://127.0.0.1:9933',
+  testnet: TESTNET_NODE_HTTP_RPC,
+  'local-mocks': 'http://127.0.0.1:9933',
+}
+
 const BACKEND_ENDPOINT: PredefinedEndpoint = {
   mainnet: MAINNET_BACKEND,
   local: 'http://localhost:3000',
@@ -66,6 +76,7 @@ const BACKEND_ENDPOINT: PredefinedEndpoint = {
 
 export const pickEndpoints = (network: NetworkType): Partial<NetworkEndpoints> => ({
   nodeRpcEndpoint: NODE_RPC_ENDPOINT[network],
+  nodeHttpRpcEndpoint: NODE_HTTP_RPC_ENDPOINT[network],
   queryNodeEndpoint: QUERY_NODE_ENDPOINT[network],
   queryNodeEndpointSubscription: QUERY_NODE_ENDPOINT_SUBSCRIPTION[network],
   membershipFaucetEndpoint: MEMBERSHIP_FAUCET_ENDPOINT[network],

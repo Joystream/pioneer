@@ -2,7 +2,6 @@ import React, { FC, useEffect } from 'react'
 import { useHistory } from 'react-router'
 import styled from 'styled-components'
 
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { ArrowDownExpandedIcon, Icon, Loader } from '@/common/components/icons'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
@@ -19,7 +18,6 @@ import { EmailSubscriptionModalCall } from '../../modals/EmailSubscriptionModal'
 import { SwitchMemberModalCall } from '../../modals/SwitchMemberModal'
 
 export const CurrentMember = () => {
-  const { allWallets, setWallet } = useMyAccounts()
   const { status, isLoading } = useOnBoarding()
   const { members, hasMembers, active } = useMyMemberships()
   const { showModal, modal } = useModal()
@@ -57,18 +55,14 @@ export const CurrentMember = () => {
     }
   }, [emailVerificationToken])
 
-  const handleOnboarding = () => {
-    const wallets = allWallets.filter((wallet) => wallet.installed)
-    if (wallets.length === 1) {
-      setWallet?.(wallets.at(-1))
-    }
-    showModal({ modal: 'OnBoardingModal' })
-  }
-
   if (status !== 'finished') {
     return (
       <MembershipButtonsWrapper>
-        <MembershipActionButton onClick={handleOnboarding} size="large" disabled={isLoading}>
+        <MembershipActionButton
+          onClick={() => showModal({ modal: 'OnBoardingModal' })}
+          size="large"
+          disabled={isLoading}
+        >
           {isLoading && <Loader />}
           {status === 'installPlugin' ? 'Connect Wallet' : 'Join Now'}
         </MembershipActionButton>

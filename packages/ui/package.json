@@ -1,6 +1,6 @@
 {
   "name": "@joystream/pioneer",
-  "version": "3.7.1",
+  "version": "3.7.2",
   "license": "GPL-3.0-only",
   "scripts": {
     "build": "node --max_old_space_size=4096 ./build.js",
@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@apollo/client": "3.5.7",
+    "@chainsafe/metamask-polkadot-adapter": "^0.6.0",
     "@hcaptcha/react-hcaptcha": "^1.4.4",
     "@joystream/js": "1.10.0",
     "@joystream/markdown-editor": "^0.1.0",
@@ -97,6 +98,7 @@
     "@babel/preset-env": "7",
     "@babel/preset-react": "7",
     "@babel/preset-typescript": "7",
+    "@chainsafe/metamask-polkadot-types": "^0.6.0",
     "@graphql-codegen/cli": "^2.2.0",
     "@graphql-codegen/near-operation-file-preset": "^2.1.4",
     "@graphql-codegen/typescript": "^2.2.2",
