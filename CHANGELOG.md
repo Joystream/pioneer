@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.7.1] - 2024-07-07
+
+### Fixed
+- Forum post context menu.
+
 ## [3.7.0 (Petra)][3.7.0] - 2024-06-17
 
 ### Added
@@ -402,7 +407,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v3.7.0...HEAD
+[unreleased]: https://github.com/Joystream/pioneer/compare/v3.7.1...HEAD
+[3.7.1]: https://github.com/Joystream/pioneer/compare/v3.7.0...v3.7.1
 [3.7.0]: https://github.com/Joystream/pioneer/compare/v3.6.0...v3.7.0
 [3.6.0]: https://github.com/Joystream/pioneer/compare/v3.5.2...v3.6.0
 [3.5.2]: https://github.com/Joystream/pioneer/compare/v3.5.1...v3.5.2
