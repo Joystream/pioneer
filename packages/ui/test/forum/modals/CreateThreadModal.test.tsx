@@ -80,11 +80,7 @@ describe('CreateThreadModal', () => {
       useMyMemberships.active = undefined
       renderModal()
       expect(useModal.showModal).toBeCalledWith({
-        modal: 'SwitchMember',
-        data: {
-          originalModalName: 'CreateThreadModal',
-          originalModalData: useModal.modalData,
-        },
+        modal: 'OnBoardingModal',
       })
     })
 
