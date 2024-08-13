@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 
+import { WorkingGroupOpeningOrderByInput } from '@/common/api/queries'
 import { error } from '@/common/logger'
 import {
   getOpeningsPositionType,
@@ -7,7 +8,7 @@ import {
   OpeningPositionType,
   OpeningType,
 } from '@/working-groups/hooks/utils/queries'
-import { useGetWorkingGroupOpeningsQuery } from '@/working-groups/queries'
+import { GetWorkingGroupOpeningsQueryVariables, useGetWorkingGroupOpeningsQuery } from '@/working-groups/queries'
 import {
   asWorkingGroupOpening,
   WorkingGroupOpeningStatus,
@@ -35,7 +36,12 @@ export const useOpenings = ({ groupId: group_eq, type, openingsPositionType }: U
     ...getOpeningsWhere(type),
   }
 
-  const { data, loading, error: err } = useGetWorkingGroupOpeningsQuery({ variables: { where } })
+  const variables: GetWorkingGroupOpeningsQueryVariables = {
+    where,
+    order: [WorkingGroupOpeningOrderByInput.CreatedAtDesc, WorkingGroupOpeningOrderByInput.RuntimeIdDesc],
+  }
+
+  const { data, loading, error: err } = useGetWorkingGroupOpeningsQuery({ variables })
   err && error(err)
 
   const openings = useMemo(
