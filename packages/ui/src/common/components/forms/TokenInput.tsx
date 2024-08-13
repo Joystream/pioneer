@@ -18,7 +18,7 @@ export interface BaseTokenInputProps extends Omit<InputProps, 'type' | 'defaultV
 }
 
 const BasedTokenInput = React.memo(
-  ({ id, onChange, value: joyValue, maxAllowedValue = powerOf2(128), ...props }: BaseTokenInputProps) => {
+  ({ id, onChange, value: joyValue, maxAllowedValue = powerOf2(64), ...props }: BaseTokenInputProps) => {
     const [inputValue, setInputValue] = useState('')
 
     const onInputChange = useCallback(
