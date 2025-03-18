@@ -2,11 +2,7 @@ import React from 'react'
 
 export function ExplorerSymbol() {
   return (
-    <svg
-      viewBox="11 11 23 23"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg viewBox="11 11 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clip-path="url(#clip0_5874_7536)">
         <rect width="44" height="44" rx="8" fill="url(#paint0_linear_5874_7536)"></rect>
         <path
