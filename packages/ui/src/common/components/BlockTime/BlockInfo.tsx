@@ -19,7 +19,7 @@ export const BlockInfo = ({ block, lessInfo, inline }: BlockInfoProp) => {
   const [endpoints] = useNetworkEndpoints()
   const blockLink =
     endpoints.nodeRpcEndpoint == process.env.REACT_APP_MAINNET_NODE_SOCKET
-      ? 'joystream.subscan.io/block'
+      ? 'explorer.joystream.org/#/blocks'
       : `polkadot.js.org/apps/?rpc=${endpoints.nodeRpcEndpoint}/ws-rpc#/explorer/query`
   return (
     <BlockLink onClick={(evt) => evt.stopPropagation()} href={`https://${blockLink}/${block.number}`}>
