@@ -75,7 +75,8 @@ jobs:
     needs: install
     timeout-minutes: 60
     strategy:
-      matrix: { node: ["18.x"], os: [ubuntu-latest] }
+      # Temporary fix for: https://github.com/microsoft/playwright/issues/30368
+      matrix: { node: ["18.x"], os: [ubuntu-22.04] }
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
