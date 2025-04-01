@@ -1,27 +1,27 @@
 import React from 'react'
 
-import { Icon } from '../../../icons'
-
 export const ValidatorsIcon = () => (
-  <Icon
-    size="20"
-    viewBox="0 0 20 20"
-    preserveAspectRatio="xMidYMid meet"
-    fill="none"
-    color="currentColor"
-    className="nav-icon"
-  >
+  <svg viewBox="11 11 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0.666016" width="44" height="44" rx="8" fill="url(#paint0_linear_5145_24902)"></rect>
     <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M14.0001 8.70081L7.83342 4.95587L2.43098 8.23671L8.75006 12.0282V18.6541L14.0001 15.4659V8.70081ZM7.08339 18.7553V12.9718L1.66675 9.72182V15.4659L7.08339 18.7553ZM1.66675 8.74994L1.71312 8.67265L1.66675 8.70081V8.74994Z"
-      fill="currentColor"
-    />
-    <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M19.1667 1.37146L13.6208 6.66667L10 4.09877L11.1073 2.55107L13.4407 4.20587L17.8456 0L19.1667 1.37146Z"
-      fill="currentColor"
-    />
-  </Icon>
+      d="M26.791 19.3753L21.541 24.6253L18.916 22.0003M21.5621 12.5593L14.6739 16.4949C14.0506 16.8509 13.666 17.5136 13.666 18.2314V25.7585C13.666 26.482 14.0567 27.149 14.6878 27.5029L21.7388 31.4569C22.3414 31.7948 23.0759 31.7978 23.6812 31.4647L30.6302 27.6407C31.2691 27.2891 31.666 26.6177 31.666 25.8884V18.2474C31.666 17.5211 31.2723 16.8519 30.6374 16.4991L23.5256 12.5476C22.9141 12.2079 22.1695 12.2123 21.5621 12.5593Z"
+      stroke="#1B202C"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    ></path>
+    <defs>
+      <linearGradient
+        id="paint0_linear_5145_24902"
+        x1="0.666016"
+        y1="0"
+        x2="44.666"
+        y2="44"
+        gradientUnits="userSpaceOnUse"
+      >
+        <stop stop-color="#1B202C" stop-opacity="0.05"></stop>
+        <stop offset="1" stop-color="#1B202C" stop-opacity="0"></stop>
+      </linearGradient>
+    </defs>
+  </svg>
 )
