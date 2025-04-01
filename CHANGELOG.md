@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.7.3] - 2025-04-01
+
+### Fixed
+- Replace joystream.subscan.io links with explorer.joystream.org.
+
 ## [3.7.2] - 2024-08-10
 
 ### Fixed
@@ -412,8 +417,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.1] - 2022-12-02
 
-[unreleased]: https://github.com/Joystream/pioneer/compare/v3.7.2...HEAD
-[3.8.0]: https://github.com/Joystream/pioneer/compare/v3.7.1...v3.7.2
+[unreleased]: https://github.com/Joystream/pioneer/compare/v3.7.3...HEAD
+[3.7.3]: https://github.com/Joystream/pioneer/compare/v3.7.2...v3.7.3
+[3.7.2]: https://github.com/Joystream/pioneer/compare/v3.7.1...v3.7.2
 [3.7.1]: https://github.com/Joystream/pioneer/compare/v3.7.0...v3.7.1
 [3.7.0]: https://github.com/Joystream/pioneer/compare/v3.6.0...v3.7.0
 [3.6.0]: https://github.com/Joystream/pioneer/compare/v3.5.2...v3.6.0
