@@ -30,7 +30,7 @@ export const PastCouncilListItem = ({ council }: Props) => {
       as={GhostRouterLink}
       to={generatePath(CouncilRoutes.pastCouncil, { id: council.id })}
     >
-      <Info>#{council.id}</Info>
+      <Info>#{council.electionCycleId}</Info>
       <BlockTime block={council.endedAt} layout="reverse-start" lessInfo />
       {isLoading ? <Loading withoutMargin /> : <TokenValue value={totalSpent} />}
       {isLoading ? <Loading withoutMargin /> : <TokenValue value={spentOnProposals} />}

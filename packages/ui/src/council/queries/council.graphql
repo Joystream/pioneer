@@ -71,6 +71,9 @@ fragment PastCouncilFields on ElectedCouncil {
   endedAtBlock
   endedAtNetwork
   endedAtTime
+  councilElections {
+    cycleId
+  }
 }
 
 fragment PastCouncilDetailedFields on ElectedCouncil {

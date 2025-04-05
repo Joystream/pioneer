@@ -37,7 +37,7 @@ export const PastCouncil = () => {
       <PageHeaderWrapper>
         <PageHeaderWithButtons showOverflow>
           <PreviousPage showOverflow>
-            <PageTitle>Council #{council.id}</PageTitle>
+            <PageTitle>Council #{council.electionCycleId}</PageTitle>
           </PreviousPage>
           <ButtonsGroup>
             <CopyButtonTemplate

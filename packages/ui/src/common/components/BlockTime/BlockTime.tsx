@@ -36,7 +36,7 @@ const Separator = styled.span`
   line-height: inherit;
 `
 
-const AboutText = styled(TextMedium)`
+export const AboutText = styled(TextMedium)`
   color: ${Colors.Black[600]};
   width: max-content;
 `

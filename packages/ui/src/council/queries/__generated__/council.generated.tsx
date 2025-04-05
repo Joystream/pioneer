@@ -235,6 +235,7 @@ export type PastCouncilFieldsFragment = {
   endedAtBlock?: number | null
   endedAtNetwork?: Types.Network | null
   endedAtTime?: any | null
+  councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
 }
 
 export type PastCouncilDetailedFieldsFragment = {
@@ -244,6 +245,7 @@ export type PastCouncilDetailedFieldsFragment = {
   endedAtNetwork?: Types.Network | null
   endedAtTime?: any | null
   councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: string; unpaidReward: string }>
+  councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
 }
 
 export type ElectionCandidateFieldsFragment = {
@@ -733,6 +735,7 @@ export type GetPastCouncilsQuery = {
     endedAtBlock?: number | null
     endedAtNetwork?: Types.Network | null
     endedAtTime?: any | null
+    councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
   }>
 }
 
@@ -758,6 +761,7 @@ export type GetPastCouncilQuery = {
     endedAtNetwork?: Types.Network | null
     endedAtTime?: any | null
     councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: string; unpaidReward: string }>
+    councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
   } | null
   budgetSpendingEvents: Array<{
     __typename: 'BudgetSpendingEvent'
@@ -1658,6 +1662,9 @@ export const PastCouncilFieldsFragmentDoc = gql`
     endedAtBlock
     endedAtNetwork
     endedAtTime
+    councilElections {
+      cycleId
+    }
   }
 `
 export const PastCouncilDetailedFieldsFragmentDoc = gql`
