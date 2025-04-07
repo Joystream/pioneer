@@ -100,8 +100,8 @@ export const Council = () => {
           ]}
         />
 
-        <CustomStatisticItem>
-          <StatisticItemSpacedContent>
+        <StatisticItem>
+          <StatisticItemSpacedContent style={{ marginBottom: '8px' }}>
             <StatisticLabel>Started At</StatisticLabel>
 
             {council && (
@@ -120,7 +120,7 @@ export const Council = () => {
               </CustomBlockTimeWrapper>
             )}
           </StatisticItemSpacedContent>
-        </CustomStatisticItem>
+        </StatisticItem>
       </StatisticsStyle>
 
       {!isCouncilorLoading && sortedCouncilors.length === 0 ? (
@@ -159,8 +159,4 @@ const StatisticsStyle = styled(Statistics)`
 `
 const CustomBlockTimeWrapper = styled(BlockTimeWrapper)`
   grid-row-gap: 2px;
-`
-const CustomStatisticItem = styled(StatisticItem)`
-  display: grid;
-  gap: 8px;
 `
