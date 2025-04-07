@@ -109,6 +109,10 @@ fragment ElectionRoundFields on ElectionRound {
   candidates {
     ...ElectionCandidateFields
   }
+  castVotes {
+    voteForId
+    stake
+  }
 }
 
 fragment LatestElectionRoundFields on ElectionRound {

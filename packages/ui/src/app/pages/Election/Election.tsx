@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { PageHeaderWithButtons, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
@@ -9,7 +9,8 @@ import { Loading } from '@/common/components/Loading'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { StatisticItem, Statistics } from '@/common/components/statistics'
-import { TextHuge } from '@/common/components/typography'
+import { TextHuge, TextInlineSmall, TokenValue } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
 import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { useResponsive } from '@/common/hooks/useResponsive'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
@@ -49,6 +50,8 @@ export const Election = () => {
     { when: electionStage === 'announcing', interval: MILLISECONDS_PER_BLOCK, include: ['GetCurrentElection'] },
     [electionStage]
   )
+
+  const totalVotes = useMemo(() => election?.candidates.reduce((prev, next) => prev + next.votesNumber, 0), [election])
 
   if (isLoadingElectionStage) {
     return <PageLayout header={null} main={<Loading />} />
@@ -98,6 +101,31 @@ export const Election = () => {
           tooltipText="Elections occur periodically. Each has a sequence of stages referred to as the election cycle. Stages are: announcing period, voting period and revealing period."
         />
       </StyledStatistics>
+      {(electionStage == 'revealing' || electionStage == 'voting') && (
+        <StyledStatistics size={size} stage={electionStage}>
+          <StatisticItem title={`${electionStage == 'revealing' ? 'Revealed' : 'Total'} Votes`}>
+            <TextHuge id="election-round-value" bold>
+              {electionStage == 'revealing' && (
+                <>
+                  {election?.revealedVotes} <ValueDivider>/</ValueDivider>{' '}
+                </>
+              )}
+              {totalVotes}
+            </TextHuge>
+          </StatisticItem>
+          <StatisticItem title={`${electionStage == 'revealing' ? 'Revealed' : 'Total'} Stake`}>
+            <TextHuge id="election-round-value" bold>
+              {electionStage == 'revealing' && (
+                <>
+                  <TokenValue value={election?.totalRevealedVoteStake} /> <ValueDivider>/</ValueDivider>{' '}
+                </>
+              )}
+              <TokenValue value={election?.totalElectionStake} />
+            </TextHuge>
+          </StatisticItem>
+        </StyledStatistics>
+      )}
+
       {electionStage === 'inactive' && (
         <EmptyPagePlaceholder title="There are no ongoing elections" copy="" button={null} />
       )}
@@ -115,4 +143,7 @@ export const Election = () => {
 const StyledStatistics = styled(Statistics)<{ size: string; stage: ElectionStage }>`
   grid-template-columns: ${({ size, stage }) =>
     stage === 'inactive' || size === 'xxs' || size === 'xs' ? '1fr' : '200px 1fr'};
+`
+const ValueDivider = styled(TextInlineSmall)`
+  color: ${Colors.Black[500]};
 `

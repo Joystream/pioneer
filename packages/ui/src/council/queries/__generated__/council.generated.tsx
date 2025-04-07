@@ -354,6 +354,7 @@ export type ElectionRoundFieldsFragment = {
     }
     votesReceived: Array<{ __typename: 'CastVote'; id: string }>
   }>
+  castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null; stake: string }>
 }
 
 export type LatestElectionRoundFieldsFragment = {
@@ -411,6 +412,7 @@ export type LatestElectionRoundFieldsFragment = {
     }
     votesReceived: Array<{ __typename: 'CastVote'; id: string }>
   }>
+  castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null; stake: string }>
 }
 
 export type PastElectionRoundFieldsFragment = {
@@ -1122,6 +1124,7 @@ export type GetCurrentElectionQuery = {
       }
       votesReceived: Array<{ __typename: 'CastVote'; id: string }>
     }>
+    castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null; stake: string }>
   }>
 }
 
@@ -1184,6 +1187,7 @@ export type GetLatestElectionQuery = {
       }
       votesReceived: Array<{ __typename: 'CastVote'; id: string }>
     }>
+    castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null; stake: string }>
   }>
 }
 
@@ -1704,6 +1708,10 @@ export const ElectionRoundFieldsFragmentDoc = gql`
     cycleId
     candidates {
       ...ElectionCandidateFields
+    }
+    castVotes {
+      voteForId
+      stake
     }
   }
   ${ElectionCandidateFieldsFragmentDoc}
