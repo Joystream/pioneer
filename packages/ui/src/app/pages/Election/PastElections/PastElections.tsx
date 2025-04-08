@@ -53,6 +53,7 @@ export const PastElections = () => {
                 <ListHeader>Total Votes staked</ListHeader>
                 <ListHeader>Revealed votes</ListHeader>
                 <ListHeader>Total candidates</ListHeader>
+                <ListHeader>Result</ListHeader>
               </PastElectionsListHeaders>
               <PastElectionsList elections={elections} />
             </>
@@ -66,7 +67,7 @@ export const PastElections = () => {
   return <PageLayout header={header} main={displayMain()} />
 }
 
-export const PastElectionsColLayout = '48px 176px 140px 140px 100px 100px'
+export const PastElectionsColLayout = '48px 176px 140px 140px 100px 100px 48px'
 
 const PastElectionsListHeaders = styled(ListHeaders)`
   grid-column-gap: 24px;

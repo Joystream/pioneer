@@ -133,6 +133,11 @@ fragment PastElectionRoundFields on ElectionRound {
     voteForId
     stake
   }
+  nextElectedCouncil {
+    councilElections {
+      cycleId
+    }
+  }
 }
 
 fragment PastElectionRoundDetailedFields on ElectionRound {

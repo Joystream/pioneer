@@ -1,8 +1,16 @@
+import BN from 'bn.js'
 import React from 'react'
 
-import { NumericValueStat, StatisticBar, StatisticItem, Statistics, StatsBlock } from '@/common/components/statistics'
-import { TextHuge } from '@/common/components/typography'
-import { formatDateString } from '@/common/model/formatters'
+import {
+  FractionValue,
+  NumericValueStat,
+  StatisticBar,
+  StatisticItem,
+  Statistics,
+  StatsBlock,
+} from '@/common/components/statistics'
+import { TextHuge, TextSmall, ValueInJoys } from '@/common/components/typography'
+import { formatDateString, formatJoyValue } from '@/common/model/formatters'
 import { Block } from '@/common/types'
 
 interface PastElectionStatsProps {
@@ -11,6 +19,8 @@ interface PastElectionStatsProps {
   totalCandidates: number
   revealedVotes: number
   totalVotes: number
+  totalRevealedVoteStake: BN
+  totalVoteStake: BN
 }
 
 export const PastElectionStats = ({
@@ -19,6 +29,8 @@ export const PastElectionStats = ({
   totalCandidates,
   revealedVotes,
   totalVotes,
+  totalRevealedVoteStake,
+  totalVoteStake,
 }: PastElectionStatsProps) => (
   <Statistics>
     <StatisticItem title="Ended at">
@@ -42,5 +54,13 @@ export const PastElectionStats = ({
         denominator={totalVotes + ' votes'}
       />
     </StatsBlock>
+    <StatisticItem title="Revealed Stake">
+      <TextSmall>
+        <FractionValue
+          numerator={<ValueInJoys size="xs">{formatJoyValue(totalRevealedVoteStake, { precision: 2 })}</ValueInJoys>}
+          denominator={<ValueInJoys size="xs">{formatJoyValue(totalVoteStake, { precision: 2 })}</ValueInJoys>}
+        />
+      </TextSmall>
+    </StatisticItem>
   </Statistics>
 )

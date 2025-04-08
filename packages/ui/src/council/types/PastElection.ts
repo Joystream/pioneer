@@ -21,22 +21,29 @@ export interface PastElection {
   revealedVotes: number
   totalVotes: number
   totalVoteStake: BN
+  result: 'successful' | 'failed'
+  totalRevealedVoteStake: BN
 }
 
 export interface PastElectionWithDetails extends PastElection {
   votingResults: ElectionVotingResult[]
 }
 
-export const asPastElection = (fields: PastElectionRoundFieldsFragment): PastElection => ({
-  id: fields.id,
-  cycleId: fields.cycleId,
-  finishedAtBlock: maybeAsBlock(fields.endedAtBlock, fields.endedAtTime, fields.endedAtNetwork),
-  totalCandidatesStake: sumStakes(fields.candidates),
-  totalCandidates: fields.candidates.length,
-  revealedVotes: fields.castVotes.filter((castVote) => castVote.voteForId).length,
-  totalVotes: fields.castVotes.length,
-  totalVoteStake: sumStakes(fields.castVotes),
-})
+export const asPastElection = (fields: PastElectionRoundFieldsFragment): PastElection => {
+  const revealedVotesArray = fields.castVotes.filter((castVote) => castVote.voteForId)
+  return {
+    id: fields.id,
+    cycleId: fields.cycleId,
+    finishedAtBlock: maybeAsBlock(fields.endedAtBlock, fields.endedAtTime, fields.endedAtNetwork),
+    totalCandidatesStake: sumStakes(fields.candidates),
+    totalCandidates: fields.candidates.length,
+    revealedVotes: revealedVotesArray.length,
+    totalVotes: fields.castVotes.length,
+    totalVoteStake: sumStakes(fields.castVotes),
+    result: fields.nextElectedCouncil ? 'successful' : 'failed',
+    totalRevealedVoteStake: sumStakes(revealedVotesArray),
+  }
+}
 
 export const asPastElectionWithDetails = (
   fields: PastElectionRoundDetailedFieldsFragment

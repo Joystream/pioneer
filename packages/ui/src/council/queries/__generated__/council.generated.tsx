@@ -424,6 +424,10 @@ export type PastElectionRoundFieldsFragment = {
   endedAtNetwork?: Types.Network | null
   candidates: Array<{ __typename: 'Candidate'; stake: string }>
   castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null; stake: string }>
+  nextElectedCouncil?: {
+    __typename: 'ElectedCouncil'
+    councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
+  } | null
 }
 
 export type PastElectionRoundDetailedFieldsFragment = {
@@ -491,6 +495,10 @@ export type PastElectionRoundDetailedFieldsFragment = {
     voteForId?: string | null
     castBy: string
   }>
+  nextElectedCouncil?: {
+    __typename: 'ElectedCouncil'
+    councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
+  } | null
 }
 
 export type ElectionCandidateDetailedFieldsFragment = {
@@ -1208,6 +1216,10 @@ export type GetPastElectionsQuery = {
     endedAtNetwork?: Types.Network | null
     candidates: Array<{ __typename: 'Candidate'; stake: string }>
     castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null; stake: string }>
+    nextElectedCouncil?: {
+      __typename: 'ElectedCouncil'
+      councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
+    } | null
   }>
 }
 
@@ -1289,6 +1301,10 @@ export type GetPastElectionQuery = {
       voteForId?: string | null
       castBy: string
     }>
+    nextElectedCouncil?: {
+      __typename: 'ElectedCouncil'
+      councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
+    } | null
   } | null
 }
 
@@ -1736,6 +1752,11 @@ export const PastElectionRoundFieldsFragmentDoc = gql`
     castVotes {
       voteForId
       stake
+    }
+    nextElectedCouncil {
+      councilElections {
+        cycleId
+      }
     }
   }
 `

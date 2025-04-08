@@ -3,7 +3,10 @@ import { generatePath } from 'react-router'
 import styled from 'styled-components'
 
 import { PastElectionsColLayout } from '@/app/pages/Election/PastElections/PastElections'
+import { IconWrap } from '@/common/components/Activities/ActivityIcon'
 import { BlockTime } from '@/common/components/BlockTime'
+import { CheckboxIcon } from '@/common/components/icons'
+import { ClosedIcon } from '@/common/components/icons/activities'
 import { TableListItem, TableListItemAsLinkHover } from '@/common/components/List'
 import { GhostRouterLink } from '@/common/components/RouterLink'
 import { TokenValue } from '@/common/components/typography'
@@ -33,6 +36,15 @@ export const PastElectionsListRow = ({ election }: PastElectionsListRowProps) =>
       <TokenValue value={election.totalVoteStake} />
       <Fraction numerator={election.revealedVotes} denominator={election.totalVotes} sameSize />
       <CountInfo count={election.totalCandidates} />
+      {election.result == 'successful' ? (
+        <StyledIconWrap iconStyle="positive">
+          <CheckboxIcon />
+        </StyledIconWrap>
+      ) : (
+        <StyledIconWrap iconStyle="negative">
+          <ClosedIcon />
+        </StyledIconWrap>
+      )}
     </PastElectionsListRowItem>
   )
 }
@@ -42,4 +54,7 @@ const PastElectionsListRowItem = styled(TableListItem)`
   grid-column-gap: 24px;
 
   ${TableListItemAsLinkHover};
+`
+const StyledIconWrap = styled(IconWrap)`
+  grid-area: auto;
 `
