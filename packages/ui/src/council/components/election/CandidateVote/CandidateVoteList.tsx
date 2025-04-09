@@ -5,13 +5,14 @@ import { CandidateVote, CandidateVoteProps } from './CandidateVote'
 
 interface VotesListProps {
   votes: CandidateVoteProps[]
+  isSuccessfulPastElection?: boolean
 }
 
-export const CandidateVoteList = ({ votes }: VotesListProps) => {
+export const CandidateVoteList = ({ votes, isSuccessfulPastElection }: VotesListProps) => {
   return (
     <VotesListStyles>
       {votes.map((vote, index) => (
-        <CandidateVote key={index} {...vote} />
+        <CandidateVote shouldHighlight={isSuccessfulPastElection && index < 3} key={index} {...vote} />
       ))}
     </VotesListStyles>
   )

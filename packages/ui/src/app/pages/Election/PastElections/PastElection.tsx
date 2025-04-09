@@ -14,7 +14,7 @@ import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { getUrl } from '@/common/utils/getUrl'
 import { PastElectionStats } from '@/council/components/election/pastElection/PastElectionStats'
 import { PastElectionTabs } from '@/council/components/election/pastElection/PastElectionTabs'
-import { ElectionRoutes } from '@/council/constants'
+import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
 import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidatePreviewViaUrlParameter'
 import { usePastElection } from '@/council/hooks/usePastElection'
 
@@ -58,7 +58,7 @@ export const PastElection = () => {
               Past Election
             </BadgeStatus>
             {election.result == 'successful' ? (
-              <StyledBadge to={generatePath(ElectionRoutes.pastElection, { id: election.id })} succeeded>
+              <StyledBadge to={generatePath(CouncilRoutes.pastCouncil, { id: election.id })} succeeded>
                 Successful
               </StyledBadge>
             ) : (

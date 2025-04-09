@@ -69,6 +69,7 @@ export const PastElectionTabs = ({ election }: PastElectionTabsProps) => {
             myStake: sumStakes(myVotesTmp),
           }
         })}
+        isSuccessfulPastElection={election.result === 'successful' && tab === 'votingResults'}
       />
     )
   }
