@@ -1,6 +1,7 @@
 import { BN } from '@polkadot/util'
 
 import { BN_ZERO } from '@/common/constants'
+import { sumStakes } from '@/common/utils'
 import { LatestElectionRoundFieldsFragment } from '@/council/queries'
 import { asElectionCandidate } from '@/council/types/Candidate'
 
@@ -10,9 +11,14 @@ export interface LatestElection extends Election {
   isFinished: boolean
 }
 
-export const asLatestElection = (fields: LatestElectionRoundFieldsFragment): LatestElection => ({
-  cycleId: fields.cycleId,
-  candidates: fields.candidates.map(asElectionCandidate),
-  isFinished: fields.isFinished,
-  totalElectionStake: fields.candidates.reduce((prev, next) => prev.add(new BN(next.votePower)), BN_ZERO),
-})
+export const asLatestElection = (fields: LatestElectionRoundFieldsFragment): LatestElection => {
+  const revealedVotesArray = fields.castVotes.filter((castVote) => castVote.voteForId)
+  return {
+    cycleId: fields.cycleId,
+    candidates: fields.candidates.map(asElectionCandidate),
+    isFinished: fields.isFinished,
+    totalElectionStake: fields.candidates.reduce((prev, next) => prev.add(new BN(next.votePower)), BN_ZERO),
+    revealedVotes: revealedVotesArray.length,
+    totalRevealedVoteStake: sumStakes(revealedVotesArray),
+  }
+}
