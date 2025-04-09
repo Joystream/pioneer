@@ -3,7 +3,6 @@
   "version": "3.7.2",
   "license": "GPL-3.0-only",
   "scripts": {
-    "postbuild": "react-snap",
     "build": "node --max_old_space_size=4096 ./build.js",
     "build:storybook": "storybook build -o build-storybook",
     "lint": "yarn lint:prettier --check && yarn lint:eslint --max-warnings=0",
@@ -151,7 +150,6 @@
     "mock-local-storage": "^1.1.17",
     "prettier": "^2.8.8",
     "raw-loader": "^4.0.2",
-    "react-snap": "^1.23.0",
     "storybook": "^7.0.18",
     "ts-loader": "^9.2.6",
     "ts-node": "^10.4.0",
