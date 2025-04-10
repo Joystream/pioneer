@@ -65,7 +65,7 @@ export const Council = () => {
   const sortedCouncilors = useMemo(() => councilors.sort(sortBy(order)), [councilors])
   const header = (
     <PageHeaderWithHint
-      title={`Council ${council ? '#' + Number(council.electionCycleId) : ''}`}
+      title={`Council ${council ? '#' + parseInt(council.id, 36) : ''}`}
       hintType="council"
       tabs={<CouncilTabs />}
     />
@@ -111,7 +111,7 @@ export const Council = () => {
             )}
           </StatisticItemSpacedContent>
           <StatisticItemSpacedContent>
-            <StatisticLabel>Ends At</StatisticLabel>
+            <StatisticLabel>Estimated end</StatisticLabel>
             {council && (
               <CustomBlockTimeWrapper>
                 <AboutText>{formatDateString(endsAt.timestamp)}</AboutText>
@@ -158,4 +158,6 @@ const StatisticsStyle = styled(Statistics)`
 `
 const CustomBlockTimeWrapper = styled(BlockTimeWrapper)`
   grid-row-gap: 2px;
+  min-width: 165px;
+  justify-content: flex-start;
 `
