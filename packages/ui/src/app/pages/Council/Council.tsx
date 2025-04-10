@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 
