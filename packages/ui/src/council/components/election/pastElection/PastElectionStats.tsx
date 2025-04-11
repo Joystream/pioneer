@@ -54,13 +54,11 @@ export const PastElectionStats = ({
         denominator={totalVotes + ' votes'}
       />
     </StatsBlock>
-    <StatisticItem title="Revealed Stake">
-      <TextSmall>
-        <FractionValue
-          numerator={<ValueInJoys size="xs">{formatJoyValue(totalRevealedVoteStake, { precision: 2 })}</ValueInJoys>}
-          denominator={<ValueInJoys size="xs">{formatJoyValue(totalVoteStake, { precision: 2 })}</ValueInJoys>}
-        />
-      </TextSmall>
-    </StatisticItem>
+      <StatisticBar
+        title="Revealed stake"
+        value={totalRevealedVoteStake.divn(1e6).toNumber() / totalVoteStake.divn(1e6).toNumber()}
+        numerator={<ValueInMJoys as={'span'} size="xs">{formatJoyValue(totalRevealedVoteStake.divn(1e6), { precision: 2 })}</ValueInMJoys>}
+        denominator={<ValueInMJoys as={'span'} size="xs">{formatJoyValue(totalVoteStake.divn(1e6), { precision: 2 })}</ValueInMJoys>}
+      />
   </Statistics>
 )
