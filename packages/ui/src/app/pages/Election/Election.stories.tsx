@@ -138,8 +138,8 @@ export default {
                         stake: '16660000000000',
                         stakingAccountId: 'j4Sba211111111',
                         status: 'ACTIVE',
-                        votesReceived: [{ id: '0000036i' }, { id: '0000036h' }],
-                        votePower: '3000000000000000',
+                        votesReceived: [{ id: '0000036i' }],
+                        votePower: '1000000000000000',
                       },
                     ],
                     castVotes: [
