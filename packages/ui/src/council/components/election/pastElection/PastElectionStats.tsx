@@ -1,15 +1,8 @@
 import BN from 'bn.js'
 import React from 'react'
 
-import {
-  FractionValue,
-  NumericValueStat,
-  StatisticBar,
-  StatisticItem,
-  Statistics,
-  StatsBlock,
-} from '@/common/components/statistics'
-import { TextHuge, TextSmall, ValueInJoys } from '@/common/components/typography'
+import { NumericValueStat, StatisticBar, StatisticItem, Statistics, StatsBlock } from '@/common/components/statistics'
+import { TextHuge, ValueInMJoys } from '@/common/components/typography'
 import { formatDateString, formatJoyValue } from '@/common/model/formatters'
 import { Block } from '@/common/types'
 
@@ -54,11 +47,22 @@ export const PastElectionStats = ({
         denominator={totalVotes + ' votes'}
       />
     </StatsBlock>
+    <StatsBlock>
       <StatisticBar
         title="Revealed stake"
         value={totalRevealedVoteStake.divn(1e6).toNumber() / totalVoteStake.divn(1e6).toNumber()}
-        numerator={<ValueInMJoys as={'span'} size="xs">{formatJoyValue(totalRevealedVoteStake.divn(1e6), { precision: 2 })}</ValueInMJoys>}
-        denominator={<ValueInMJoys as={'span'} size="xs">{formatJoyValue(totalVoteStake.divn(1e6), { precision: 2 })}</ValueInMJoys>}
+        figureWidth={152}
+        numerator={
+          <ValueInMJoys as={'span'} size="xs">
+            {formatJoyValue(totalRevealedVoteStake.divn(1e6), { precision: 2 })}
+          </ValueInMJoys>
+        }
+        denominator={
+          <ValueInMJoys as={'span'} size="xs">
+            {formatJoyValue(totalVoteStake.divn(1e6), { precision: 2 })}
+          </ValueInMJoys>
+        }
       />
+    </StatsBlock>
   </Statistics>
 )

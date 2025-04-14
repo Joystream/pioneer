@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { PageHeaderWithButtons, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
@@ -50,8 +50,6 @@ export const Election = () => {
     { when: electionStage === 'announcing', interval: MILLISECONDS_PER_BLOCK, include: ['GetCurrentElection'] },
     [electionStage]
   )
-
-  const totalVotes = useMemo(() => election?.candidates.reduce((prev, next) => prev + next.votesNumber, 0), [election])
 
   if (isLoadingElectionStage) {
     return <PageLayout header={null} main={<Loading />} />
@@ -110,17 +108,17 @@ export const Election = () => {
                   {election?.revealedVotes} <ValueDivider>/</ValueDivider>{' '}
                 </>
               )}
-              {totalVotes}
+              {election?.votesNumber}
             </TextHuge>
           </StatisticItem>
           <StatisticItem title={`${electionStage == 'revealing' ? 'Revealed' : 'Total'} Stake`}>
             <TextHuge id="election-round-value" bold>
               {electionStage == 'revealing' && (
                 <>
-                  <TokenValue value={election?.totalRevealedVoteStake} /> <ValueDivider>/</ValueDivider>{' '}
+                  <TokenValue value={election?.totalElectionStake} /> <ValueDivider>/</ValueDivider>{' '}
                 </>
               )}
-              <TokenValue value={election?.totalElectionStake} />
+              <TokenValue value={election?.totalVotesStake} />
             </TextHuge>
           </StatisticItem>
         </StyledStatistics>

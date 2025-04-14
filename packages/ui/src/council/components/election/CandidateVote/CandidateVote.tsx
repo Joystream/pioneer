@@ -30,7 +30,6 @@ export interface CandidateVoteProps {
   index: number
   myVotes: MyCastVote[]
   myStake?: BN
-  shouldHighlight?: boolean
 }
 
 const AllRevealedButton = (
@@ -48,7 +47,6 @@ export const CandidateVote = ({
   index,
   myStake,
   myVotes,
-  shouldHighlight,
 }: CandidateVoteProps) => {
   const { showModal } = useModal()
   const showCandidate = useCallback(() => {
@@ -64,7 +62,7 @@ export const CandidateVote = ({
   const RevealButton = <RevealVoteButton myVotes={myVotes} voteForHandle={member.handle} />
 
   return (
-    <CandidateVoteWrapper className={`${shouldHighlight && 'highlight'}`} onClick={showCandidate}>
+    <CandidateVoteWrapper onClick={showCandidate}>
       <VoteIndex lighter inter>
         {index}
       </VoteIndex>
@@ -162,16 +160,6 @@ const CandidateVoteWrapper = styled(ListItem)`
 
   * {
     word-break: normal;
-  }
-  &.highlight {
-    border-left: 3px solid ${Colors.Blue[500]};
-    border-right: 3px solid ${Colors.Blue[500]};
-  }
-  &.highlight:nth-child(3) {
-    border-bottom: 3px solid ${Colors.Blue[500]};
-  }
-  &.highlight:nth-child(1) {
-    border-top: 3px solid ${Colors.Blue[500]};
   }
   &:hover,
   &:focus,
