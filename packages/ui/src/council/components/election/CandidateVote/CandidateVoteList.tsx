@@ -45,7 +45,7 @@ export const CandidateVoteList = ({ votes, isSuccessfulPastElection }: VotesList
         </>
       ) : (
         <VotesListStyles>
-          {winners.map((vote, index) => (
+          {votes.map((vote, index) => (
             <CandidateVote key={index} {...vote} />
           ))}
         </VotesListStyles>

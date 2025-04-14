@@ -102,7 +102,7 @@ export const Election = () => {
       {(electionStage == 'revealing' || electionStage == 'voting') && (
         <StyledStatistics size={size} stage={electionStage}>
           <StatisticItem title={`${electionStage == 'revealing' ? 'Revealed' : 'Total'} Votes`}>
-            <TextHuge id="election-round-value" bold>
+            <TextHuge bold>
               {electionStage == 'revealing' && (
                 <>
                   {election?.revealedVotes} <ValueDivider>/</ValueDivider>{' '}
@@ -112,7 +112,7 @@ export const Election = () => {
             </TextHuge>
           </StatisticItem>
           <StatisticItem title={`${electionStage == 'revealing' ? 'Revealed' : 'Total'} Stake`}>
-            <TextHuge id="election-round-value" bold>
+            <TextHuge bold>
               {electionStage == 'revealing' && (
                 <>
                   <TokenValue value={election?.totalElectionStake} /> <ValueDivider>/</ValueDivider>{' '}
