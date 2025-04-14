@@ -49,12 +49,12 @@ export const Council = () => {
       periodInformation && council
         ? {
             number: periodInformation.periodEnds[3],
-            timestamp: new Date(
-              new Date(council.electedAt.timestamp).getTime() +
-                (periodInformation.periodEnds[3] - council.electedAt.number) * MILLISECONDS_PER_BLOCK
-            ).toISOString(),
+            timestamp: (
+              new Date().getTime() +
+              (periodInformation.periodEnds[3] - periodInformation.currentBlock) * MILLISECONDS_PER_BLOCK
+            ).toString(),
           }
-        : { number: 0, timestamp: new Date().toString() },
+        : { number: 0, timestamp: new Date().getTime().toString() },
     [periodInformation, council]
   )
 
@@ -114,7 +114,7 @@ export const Council = () => {
             <StatisticLabel>Estimated end</StatisticLabel>
             {council && (
               <CustomBlockTimeWrapper>
-                <AboutText>{formatDateString(endsAt.timestamp)}</AboutText>
+                <AboutText>{formatDateString(Number(endsAt.timestamp))}</AboutText>
                 <BlockInfo block={endsAt} lessInfo={true} />
               </CustomBlockTimeWrapper>
             )}
