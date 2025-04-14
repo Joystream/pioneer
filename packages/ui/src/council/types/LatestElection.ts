@@ -11,14 +11,12 @@ export interface LatestElection extends Election {
   isFinished: boolean
 }
 
-export const asLatestElection = (fields: LatestElectionRoundFieldsFragment): LatestElection => {
-  const revealedVotesArray = fields.castVotes.filter((castVote) => castVote.voteForId)
-  return {
-    cycleId: fields.cycleId,
-    candidates: fields.candidates.map(asElectionCandidate),
-    isFinished: fields.isFinished,
-    totalElectionStake: fields.candidates.reduce((prev, next) => prev.add(new BN(next.votePower)), BN_ZERO),
-    revealedVotes: revealedVotesArray.length,
-    totalRevealedVoteStake: sumStakes(revealedVotesArray),
-  }
-}
+export const asLatestElection = (fields: LatestElectionRoundFieldsFragment): LatestElection => ({
+  cycleId: fields.cycleId,
+  candidates: fields.candidates.map(asElectionCandidate),
+  isFinished: fields.isFinished,
+  totalElectionStake: fields.candidates.reduce((prev, next) => prev.add(new BN(next.votePower)), BN_ZERO),
+  revealedVotes: fields.castVotes.filter((castVote) => castVote.voteForId).length,
+  totalVotesStake: sumStakes(fields.castVotes),
+  votesNumber: fields.castVotes.length,
+})
