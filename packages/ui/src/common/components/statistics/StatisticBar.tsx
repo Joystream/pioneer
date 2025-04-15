@@ -11,9 +11,17 @@ import { NumericValue } from './NumericValueStat'
 export interface StatisticBarProps extends StatisticHeaderProps, FractionValueProps {
   value: number
   threshold?: number
+  figureWidth?: number
 }
 
-export const StatisticBar = ({ value, threshold, numerator, denominator, ...headerProps }: StatisticBarProps) => (
+export const StatisticBar = ({
+  value,
+  threshold,
+  figureWidth,
+  numerator,
+  denominator,
+  ...headerProps
+}: StatisticBarProps) => (
   <>
     <StatisticHeader {...headerProps} />
 
@@ -22,7 +30,7 @@ export const StatisticBar = ({ value, threshold, numerator, denominator, ...head
         <ProgressBar end={value} />
       </ThresholdBar>
 
-      <Figure>
+      <Figure figureWidth={figureWidth}>
         <FractionValue numerator={numerator} denominator={denominator} />
       </Figure>
     </StatsContent>
@@ -49,9 +57,9 @@ const ThresholdBar = styled.div<{ threshold?: number }>`
     `};
 `
 
-const Figure = styled.div`
+const Figure = styled.div<{ figureWidth?: number }>`
   display: flex;
-  width: 120px;
+  width: ${({ figureWidth }) => figureWidth || 120}px;
   justify-content: flex-end;
   align-items: flex-end;
   margin-left: auto;

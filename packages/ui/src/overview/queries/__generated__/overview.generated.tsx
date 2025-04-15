@@ -103,6 +103,7 @@ export type GetAllDeadLinesQuery = {
       }
       votesReceived: Array<{ __typename: 'CastVote'; id: string }>
     }>
+    castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null; stake: string }>
   }>
   proposals: Array<{ __typename: 'Proposal'; updatedAt?: any | null; id: string; title: string }>
   upcomingWorkingGroupOpenings?: Array<{
@@ -247,6 +248,10 @@ export const GetAllDeadLinesDocument = gql`
       cycleId
       candidates {
         ...ElectionCandidateFields
+      }
+      castVotes {
+        voteForId
+        stake
       }
     }
     proposals(

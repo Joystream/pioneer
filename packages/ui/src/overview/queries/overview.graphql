@@ -52,6 +52,10 @@ query GetAllDeadLines($proposalCreator: MembershipWhereInput, $group: WorkingGro
     candidates {
       ...ElectionCandidateFields
     }
+    castVotes {
+      voteForId
+      stake
+    }
   }
   proposals(
     where: { creator: $proposalCreator, isFinalized_eq: false, status_json: { isTypeOf_eq: "ProposalStatusDeciding" } }

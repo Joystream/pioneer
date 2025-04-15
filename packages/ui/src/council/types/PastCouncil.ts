@@ -17,6 +17,7 @@ import { asProposalDetails, DetailsFragment, FundingRequestDetails } from '@/pro
 export interface PastCouncil {
   id: string
   endedAt: Block
+  electionCycleId: number | undefined
 }
 
 export interface PastCouncilWithDetails extends PastCouncil {
@@ -28,6 +29,7 @@ export interface PastCouncilWithDetails extends PastCouncil {
 
 export const asPastCouncil = (fields: PastCouncilFieldsFragment): PastCouncil => ({
   id: fields.id,
+  electionCycleId: fields.councilElections[0]?.cycleId,
   endedAt: asBlock({
     createdAt: fields.endedAtTime,
     inBlock: fields.endedAtBlock ?? -1,

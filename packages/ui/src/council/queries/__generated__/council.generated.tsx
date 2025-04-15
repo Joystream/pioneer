@@ -235,6 +235,7 @@ export type PastCouncilFieldsFragment = {
   endedAtBlock?: number | null
   endedAtNetwork?: Types.Network | null
   endedAtTime?: any | null
+  councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
 }
 
 export type PastCouncilDetailedFieldsFragment = {
@@ -244,6 +245,7 @@ export type PastCouncilDetailedFieldsFragment = {
   endedAtNetwork?: Types.Network | null
   endedAtTime?: any | null
   councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: string; unpaidReward: string }>
+  councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
 }
 
 export type ElectionCandidateFieldsFragment = {
@@ -352,6 +354,7 @@ export type ElectionRoundFieldsFragment = {
     }
     votesReceived: Array<{ __typename: 'CastVote'; id: string }>
   }>
+  castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null; stake: string }>
 }
 
 export type LatestElectionRoundFieldsFragment = {
@@ -409,6 +412,7 @@ export type LatestElectionRoundFieldsFragment = {
     }
     votesReceived: Array<{ __typename: 'CastVote'; id: string }>
   }>
+  castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null; stake: string }>
 }
 
 export type PastElectionRoundFieldsFragment = {
@@ -420,6 +424,10 @@ export type PastElectionRoundFieldsFragment = {
   endedAtNetwork?: Types.Network | null
   candidates: Array<{ __typename: 'Candidate'; stake: string }>
   castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null; stake: string }>
+  nextElectedCouncil?: {
+    __typename: 'ElectedCouncil'
+    councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
+  } | null
 }
 
 export type PastElectionRoundDetailedFieldsFragment = {
@@ -487,6 +495,10 @@ export type PastElectionRoundDetailedFieldsFragment = {
     voteForId?: string | null
     castBy: string
   }>
+  nextElectedCouncil?: {
+    __typename: 'ElectedCouncil'
+    councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
+  } | null
 }
 
 export type ElectionCandidateDetailedFieldsFragment = {
@@ -733,6 +745,7 @@ export type GetPastCouncilsQuery = {
     endedAtBlock?: number | null
     endedAtNetwork?: Types.Network | null
     endedAtTime?: any | null
+    councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
   }>
 }
 
@@ -758,6 +771,7 @@ export type GetPastCouncilQuery = {
     endedAtNetwork?: Types.Network | null
     endedAtTime?: any | null
     councilMembers: Array<{ __typename: 'CouncilMember'; accumulatedReward: string; unpaidReward: string }>
+    councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
   } | null
   budgetSpendingEvents: Array<{
     __typename: 'BudgetSpendingEvent'
@@ -1118,6 +1132,7 @@ export type GetCurrentElectionQuery = {
       }
       votesReceived: Array<{ __typename: 'CastVote'; id: string }>
     }>
+    castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null; stake: string }>
   }>
 }
 
@@ -1180,6 +1195,7 @@ export type GetLatestElectionQuery = {
       }
       votesReceived: Array<{ __typename: 'CastVote'; id: string }>
     }>
+    castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null; stake: string }>
   }>
 }
 
@@ -1200,6 +1216,10 @@ export type GetPastElectionsQuery = {
     endedAtNetwork?: Types.Network | null
     candidates: Array<{ __typename: 'Candidate'; stake: string }>
     castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null; stake: string }>
+    nextElectedCouncil?: {
+      __typename: 'ElectedCouncil'
+      councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
+    } | null
   }>
 }
 
@@ -1281,6 +1301,10 @@ export type GetPastElectionQuery = {
       voteForId?: string | null
       castBy: string
     }>
+    nextElectedCouncil?: {
+      __typename: 'ElectedCouncil'
+      councilElections: Array<{ __typename: 'ElectionRound'; cycleId: number }>
+    } | null
   } | null
 }
 
@@ -1658,6 +1682,9 @@ export const PastCouncilFieldsFragmentDoc = gql`
     endedAtBlock
     endedAtNetwork
     endedAtTime
+    councilElections {
+      cycleId
+    }
   }
 `
 export const PastCouncilDetailedFieldsFragmentDoc = gql`
@@ -1698,6 +1725,10 @@ export const ElectionRoundFieldsFragmentDoc = gql`
     candidates {
       ...ElectionCandidateFields
     }
+    castVotes {
+      voteForId
+      stake
+    }
   }
   ${ElectionCandidateFieldsFragmentDoc}
 `
@@ -1721,6 +1752,11 @@ export const PastElectionRoundFieldsFragmentDoc = gql`
     castVotes {
       voteForId
       stake
+    }
+    nextElectedCouncil {
+      councilElections {
+        cycleId
+      }
     }
   }
 `

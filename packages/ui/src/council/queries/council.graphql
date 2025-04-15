@@ -71,6 +71,9 @@ fragment PastCouncilFields on ElectedCouncil {
   endedAtBlock
   endedAtNetwork
   endedAtTime
+  councilElections {
+    cycleId
+  }
 }
 
 fragment PastCouncilDetailedFields on ElectedCouncil {
@@ -106,6 +109,10 @@ fragment ElectionRoundFields on ElectionRound {
   candidates {
     ...ElectionCandidateFields
   }
+  castVotes {
+    voteForId
+    stake
+  }
 }
 
 fragment LatestElectionRoundFields on ElectionRound {
@@ -125,6 +132,11 @@ fragment PastElectionRoundFields on ElectionRound {
   castVotes {
     voteForId
     stake
+  }
+  nextElectedCouncil {
+    councilElections {
+      cycleId
+    }
   }
 }
 

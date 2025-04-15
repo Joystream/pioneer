@@ -12201,6 +12201,7 @@ export enum EntitySubscriptionKind {
   ForumCategoryEntityPost = 'FORUM_CATEGORY_ENTITY_POST',
   ForumCategoryEntityThread = 'FORUM_CATEGORY_ENTITY_THREAD',
   ForumThreadEntityPost = 'FORUM_THREAD_ENTITY_POST',
+  ProposalEntityDiscussion = 'PROPOSAL_ENTITY_DISCUSSION',
 }
 
 export enum EntitySubscriptionStatus {
@@ -13240,6 +13241,11 @@ export enum GeneralSubscriptionKind {
   ForumThreadContributor = 'FORUM_THREAD_CONTRIBUTOR',
   ForumThreadCreator = 'FORUM_THREAD_CREATOR',
   ForumThreadMention = 'FORUM_THREAD_MENTION',
+  ProposalDiscussionAll = 'PROPOSAL_DISCUSSION_ALL',
+  ProposalDiscussionContributor = 'PROPOSAL_DISCUSSION_CONTRIBUTOR',
+  ProposalDiscussionCreator = 'PROPOSAL_DISCUSSION_CREATOR',
+  ProposalDiscussionMention = 'PROPOSAL_DISCUSSION_MENTION',
+  ProposalDiscussionReply = 'PROPOSAL_DISCUSSION_REPLY',
 }
 
 export type GeoCoordinates = BaseGraphQlObject & {
@@ -18372,6 +18378,11 @@ export enum NotificationKind {
   ForumThreadCreator = 'FORUM_THREAD_CREATOR',
   ForumThreadEntityPost = 'FORUM_THREAD_ENTITY_POST',
   ForumThreadMention = 'FORUM_THREAD_MENTION',
+  ProposalDiscussionAll = 'PROPOSAL_DISCUSSION_ALL',
+  ProposalDiscussionContributor = 'PROPOSAL_DISCUSSION_CONTRIBUTOR',
+  ProposalDiscussionCreator = 'PROPOSAL_DISCUSSION_CREATOR',
+  ProposalDiscussionMention = 'PROPOSAL_DISCUSSION_MENTION',
+  ProposalDiscussionReply = 'PROPOSAL_DISCUSSION_REPLY',
 }
 
 export type OfferAcceptedEvent = BaseGraphQlObject &

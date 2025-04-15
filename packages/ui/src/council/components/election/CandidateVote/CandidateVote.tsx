@@ -161,7 +161,6 @@ const CandidateVoteWrapper = styled(ListItem)`
   * {
     word-break: normal;
   }
-
   &:hover,
   &:focus,
   &:focus-within {
