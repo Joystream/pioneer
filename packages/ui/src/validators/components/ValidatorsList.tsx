@@ -92,6 +92,7 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
                 <TooltipDefault />
               </Tooltip>
             </SortHeader>
+            <ListHeader>Actions</ListHeader>
           </ListHeaders>
           {!validators ? (
             <ValidatorItemLoading count={7} />
@@ -168,7 +169,7 @@ const ListHeaders = styled.div`
   display: grid;
   grid-area: validatorstablenav;
   grid-template-rows: 1fr;
-  grid-template-columns: 250px 110px 80px 140px 140px 140px 100px 90px;
+  grid-template-columns: 250px 110px 80px 140px 140px 140px 100px 1fr;
   justify-content: space-between;
   width: 100%;
   padding: 0 16px;

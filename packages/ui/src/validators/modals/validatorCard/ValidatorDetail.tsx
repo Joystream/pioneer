@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { ButtonPrimary } from '@/common/components/buttons'
+import { ButtonPrimary, ButtonSecondary, ButtonGhost } from '@/common/components/buttons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { ModalFooter } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -15,7 +15,12 @@ import { whenDefined } from '@/common/utils'
 import RewardPointsChart from '@/validators/components/RewardPointChart'
 
 import { ValidatorWithDetails } from '../../types'
+import { BondModalCall } from '../BondModal'
+import { NominateValidatorModalCall } from '../NominateValidatorModal'
 import { NominatingRedirectModalCall } from '../NominatingRedirectModal'
+import { PayoutModalCall } from '../PayoutModal'
+import { StakeModalCall } from '../StakeModal'
+import { UnbondModalCall } from '../UnbondModal'
 
 interface Props {
   validator: ValidatorWithDetails
@@ -25,6 +30,11 @@ interface Props {
 
 export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
   const { showModal } = useModal<NominatingRedirectModalCall>()
+  const { showModal: showNominateModal } = useModal<NominateValidatorModalCall>()
+  const { showModal: showStakeModal } = useModal<StakeModalCall>()
+  const { showModal: showBondModal } = useModal<BondModalCall>()
+  const { showModal: showUnbondModal } = useModal<UnbondModalCall>()
+  const { showModal: showPayoutModal } = useModal<PayoutModalCall>()
 
   const uptime = whenDefined(validator.rewardPointsHistory, (rewardPointsHistory) => {
     const firstEra = rewardPointsHistory.at(0)?.era
@@ -33,6 +43,36 @@ export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
     const validatedEra = rewardPointsHistory.filter(({ rewardPoints }) => rewardPoints > 0).length
     return `${((validatedEra / totalEras) * 100).toFixed(1)}%`
   })
+
+  const handleActionClick = (action: string) => {
+    const validatorAddress = validator.stashAccount
+    
+    switch (action) {
+      case 'Nominate':
+        hideModal()
+        showNominateModal({ modal: 'NominateValidator', data: { validatorAddress } })
+        break
+      case 'Stake':
+        hideModal()
+        showStakeModal({ modal: 'Stake', data: { validatorAddress } })
+        break
+      case 'Bond':
+        hideModal()
+        showBondModal({ modal: 'Bond', data: { validatorAddress } })
+        break
+      case 'Unbond':
+        hideModal()
+        showUnbondModal({ modal: 'Unbond', data: { validatorAddress } })
+        break
+      case 'Payout':
+        hideModal()
+        showPayoutModal({ modal: 'Payout', data: { validatorAddress } })
+        break
+      default:
+        hideModal()
+        showModal({ modal: 'NominatingRedirect' })
+    }
+  }
 
   return (
     <>
@@ -97,15 +137,38 @@ export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
         </Details>
       </SidePaneBody>
       <ModalFooter>
-        <ButtonPrimary
-          size="small"
-          onClick={() => {
-            hideModal()
-            showModal({ modal: 'NominatingRedirect' })
-          }}
-        >
-          Nominate
-        </ButtonPrimary>
+        <ActionButtonsContainer>
+          <ButtonPrimary
+            size="small"
+            onClick={() => handleActionClick('Nominate')}
+          >
+            Nominate
+          </ButtonPrimary>
+          <ButtonSecondary
+            size="small"
+            onClick={() => handleActionClick('Stake')}
+          >
+            Stake
+          </ButtonSecondary>
+          <ButtonGhost
+            size="small"
+            onClick={() => handleActionClick('Bond')}
+          >
+            Bond
+          </ButtonGhost>
+          <ButtonGhost
+            size="small"
+            onClick={() => handleActionClick('Unbond')}
+          >
+            Unbond
+          </ButtonGhost>
+          <ButtonGhost
+            size="small"
+            onClick={() => handleActionClick('Payout')}
+          >
+            Payout
+          </ButtonGhost>
+        </ActionButtonsContainer>
       </ModalFooter>
     </>
   )
@@ -139,4 +202,13 @@ const RewardPointsChartWrapper = styled.div`
     min-width: 500px;
     height: 200px;
   }
+`
+
+const ActionButtonsContainer = styled.div`
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
 `
