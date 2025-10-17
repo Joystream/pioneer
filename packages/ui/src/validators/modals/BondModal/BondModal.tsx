@@ -11,14 +11,12 @@ import { Address } from '@/common/types'
 import { BondModalCall } from '@/validators/modals/BondModal/types'
 
 interface Props {
-  validatorAddress: Address
+  validatorAddress?: Address
 }
 
 export const BondModal = () => {
   const { modalData } = useModal<BondModalCall>()
   const validatorAddress = modalData?.validatorAddress
-
-  if (!validatorAddress) return null
   
   return <BondModalInner validatorAddress={validatorAddress} />
 }
@@ -48,12 +46,16 @@ const BondModalInner = ({ validatorAddress }: Props) => {
       <ModalBody>
         <RowGapBlock gap={16}>
           <TextMedium>
-            You are about to bond your tokens with this validator. Bonding tokens means you are 
-            committing them to support the validator's operations and potentially become a validator yourself.
+            {validatorAddress 
+              ? "You are about to bond your tokens with this validator. Bonding tokens means you are committing them to support the validator's operations and potentially become a validator yourself."
+              : "You are about to bond your tokens. Bonding tokens means you are committing them to the staking system and can later nominate validators or become a validator yourself."
+            }
           </TextMedium>
-          <TextMedium>
-            <strong>Validator Address:</strong> {validatorAddress}
-          </TextMedium>
+          {validatorAddress && (
+            <TextMedium>
+              <strong>Validator Address:</strong> {validatorAddress}
+            </TextMedium>
+          )}
           <TextMedium>
             <strong>Note:</strong> This is a preview implementation. The actual transaction will be implemented 
             in a separate PR for testing.

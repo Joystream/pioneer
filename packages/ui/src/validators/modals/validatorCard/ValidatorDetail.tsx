@@ -21,6 +21,7 @@ import { NominatingRedirectModalCall } from '../NominatingRedirectModal'
 import { PayoutModalCall } from '../PayoutModal'
 import { StakeModalCall } from '../StakeModal'
 import { UnbondModalCall } from '../UnbondModal'
+import { useBondedAccounts } from '@/validators/hooks/useBondedAccounts'
 
 interface Props {
   validator: ValidatorWithDetails
@@ -35,6 +36,7 @@ export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
   const { showModal: showBondModal } = useModal<BondModalCall>()
   const { showModal: showUnbondModal } = useModal<UnbondModalCall>()
   const { showModal: showPayoutModal } = useModal<PayoutModalCall>()
+  const { hasBondedAccounts } = useBondedAccounts()
 
   const uptime = whenDefined(validator.rewardPointsHistory, (rewardPointsHistory) => {
     const firstEra = rewardPointsHistory.at(0)?.era
@@ -144,30 +146,22 @@ export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
           >
             Nominate
           </ButtonPrimary>
-          <ButtonSecondary
-            size="small"
-            onClick={() => handleActionClick('Stake')}
-          >
-            Stake
-          </ButtonSecondary>
-          <ButtonGhost
-            size="small"
-            onClick={() => handleActionClick('Bond')}
-          >
-            Bond
-          </ButtonGhost>
-          <ButtonGhost
-            size="small"
-            onClick={() => handleActionClick('Unbond')}
-          >
-            Unbond
-          </ButtonGhost>
-          <ButtonGhost
-            size="small"
-            onClick={() => handleActionClick('Payout')}
-          >
-            Payout
-          </ButtonGhost>
+          {hasBondedAccounts && (
+            <>
+              <ButtonGhost
+                size="small"
+                onClick={() => handleActionClick('Bond')}
+              >
+                Bond
+              </ButtonGhost>
+              <ButtonGhost
+                size="small"
+                onClick={() => handleActionClick('Unbond')}
+              >
+                Unbond
+              </ButtonGhost>
+            </>
+          )}
         </ActionButtonsContainer>
       </ModalFooter>
     </>

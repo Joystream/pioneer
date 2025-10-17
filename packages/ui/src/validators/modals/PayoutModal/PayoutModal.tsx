@@ -11,14 +11,12 @@ import { Address } from '@/common/types'
 import { PayoutModalCall } from '@/validators/modals/PayoutModal/types'
 
 interface Props {
-  validatorAddress: Address
+  validatorAddress?: Address
 }
 
 export const PayoutModal = () => {
   const { modalData } = useModal<PayoutModalCall>()
   const validatorAddress = modalData?.validatorAddress
-
-  if (!validatorAddress) return null
   
   return <PayoutModalInner validatorAddress={validatorAddress} />
 }
@@ -48,12 +46,16 @@ const PayoutModalInner = ({ validatorAddress }: Props) => {
       <ModalBody>
         <RowGapBlock gap={16}>
           <TextMedium>
-            You are about to claim your payout from this validator. This will transfer any earned 
-            rewards to your account.
+            {validatorAddress 
+              ? "You are about to claim your payout from this validator. This will transfer any earned rewards to your account."
+              : "You are about to claim all available payouts from your nominated validators. This will transfer any earned rewards to your account."
+            }
           </TextMedium>
-          <TextMedium>
-            <strong>Validator Address:</strong> {validatorAddress}
-          </TextMedium>
+          {validatorAddress && (
+            <TextMedium>
+              <strong>Validator Address:</strong> {validatorAddress}
+            </TextMedium>
+          )}
           <TextMedium>
             <strong>Note:</strong> This is a preview implementation. The actual transaction will be implemented 
             in a separate PR for testing.

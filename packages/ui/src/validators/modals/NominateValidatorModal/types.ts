@@ -1,6 +1,7 @@
 export interface NominateValidatorModalCall {
   modal: 'NominateValidator'
   data: {
-    validatorAddress: string
+    validatorAddress?: string
+    validatorAddresses?: string[]
   }
 }

@@ -11,6 +11,7 @@ import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { whenDefined } from '@/common/utils'
 import { KebabMenuIcon } from '@/common/components/icons'
+import { CheckboxIcon } from '@/common/components/icons'
 
 import { BondModalCall } from '@/validators/modals/BondModal'
 import { NominateValidatorModalCall } from '@/validators/modals/NominateValidatorModal'
@@ -18,6 +19,7 @@ import { NominatingRedirectModalCall } from '@/validators/modals/NominatingRedir
 import { PayoutModalCall } from '@/validators/modals/PayoutModal'
 import { StakeModalCall } from '@/validators/modals/StakeModal'
 import { UnbondModalCall } from '@/validators/modals/UnbondModal'
+import { useBondedAccounts } from '@/validators/hooks/useBondedAccounts'
 import { ValidatorWithDetails } from '@/validators/types/Validator'
 
 import { ValidatorInfo } from './ValidatorInfo'
@@ -27,8 +29,11 @@ interface ValidatorItemProps {
   onClick?: () => void
   openDropdownId: string | null
   setOpenDropdownId: (id: string | null) => void
+  isSelected?: boolean
+  onSelectionChange?: (validatorId: string, selected: boolean) => void
+  showCheckbox?: boolean
 }
-export const ValidatorItem = ({ validator, onClick, openDropdownId, setOpenDropdownId }: ValidatorItemProps) => {
+export const ValidatorItem = ({ validator, onClick, openDropdownId, setOpenDropdownId, isSelected = false, onSelectionChange, showCheckbox = false }: ValidatorItemProps) => {
   const { stashAccount, membership, isVerifiedValidator, isActive, commission, APR, staking } = validator
   const { showModal } = useModal<NominatingRedirectModalCall>()
   const { showModal: showNominateModal } = useModal<NominateValidatorModalCall>()
@@ -38,6 +43,7 @@ export const ValidatorItem = ({ validator, onClick, openDropdownId, setOpenDropd
   const { showModal: showPayoutModal } = useModal<PayoutModalCall>()
   const dropdownRef = useRef<HTMLDivElement>(null)
   
+  const { hasBondedAccounts } = useBondedAccounts()
   const validatorId = encodeAddress(stashAccount)
   const isThisDropdownOpen = openDropdownId === validatorId
 
@@ -93,7 +99,25 @@ export const ValidatorItem = ({ validator, onClick, openDropdownId, setOpenDropd
         }
       }}
     >
-      <ValidatorItemWrap>
+      <ValidatorItemWrap showCheckbox={showCheckbox}>
+        {showCheckbox && (
+          <CheckboxContainer>
+            <CheckboxWrapper 
+              onClick={(e) => {
+                e.stopPropagation()
+                onSelectionChange?.(validatorId, !isSelected)
+              }}
+            >
+              <CheckboxInput
+                type="checkbox"
+                checked={isSelected}
+                onChange={() => onSelectionChange?.(validatorId, !isSelected)}
+                onClick={(e) => e.stopPropagation()}
+              />
+              <CheckboxIcon />
+            </CheckboxWrapper>
+          </CheckboxContainer>
+        )}
         <ValidatorInfo member={membership} address={encodeAddress(stashAccount)} />
         {isVerifiedValidator ? (
           <BadgeStatus inverted size="l">
@@ -128,30 +152,22 @@ export const ValidatorItem = ({ validator, onClick, openDropdownId, setOpenDropd
               }}>
                 Nominate
               </DropdownItem>
-              <DropdownItem onClick={(e) => {
-                e.stopPropagation()
-                handleActionClick('Stake')
-              }}>
-                Stake
-              </DropdownItem>
-              <DropdownItem onClick={(e) => {
-                e.stopPropagation()
-                handleActionClick('Bond')
-              }}>
-                Bond
-              </DropdownItem>
-              <DropdownItem onClick={(e) => {
-                e.stopPropagation()
-                handleActionClick('Unbond')
-              }}>
-                Unbond
-              </DropdownItem>
-              <DropdownItem onClick={(e) => {
-                e.stopPropagation()
-                handleActionClick('Payout')
-              }}>
-                Payout
-              </DropdownItem>
+              {hasBondedAccounts && (
+                <>
+                  <DropdownItem onClick={(e) => {
+                    e.stopPropagation()
+                    handleActionClick('Bond')
+                  }}>
+                    Bond
+                  </DropdownItem>
+                  <DropdownItem onClick={(e) => {
+                    e.stopPropagation()
+                    handleActionClick('Unbond')
+                  }}>
+                    Unbond
+                  </DropdownItem>
+                </>
+              )}
             </DropdownMenuContainer>
           )}
         </ActionsContainer>
@@ -177,9 +193,9 @@ const ValidatorItemWrapper = styled.div`
   }
 `
 
-export const ValidatorItemWrap = styled.div`
+export const ValidatorItemWrap = styled.div<{ showCheckbox?: boolean }>`
   display: grid;
-  grid-template-columns: 250px 110px 80px 140px 140px 140px 100px 1fr;
+  grid-template-columns: ${({ showCheckbox }) => showCheckbox ? '40px ' : ''}250px 110px 80px 140px 140px 140px 100px 1fr;
   grid-template-rows: 1fr;
   justify-content: space-between;
   justify-items: start;
@@ -192,6 +208,40 @@ export const ValidatorItemWrap = styled.div`
   ${Skeleton} {
     min-width: 80%;
     height: 1.2rem;
+  }
+`
+
+const CheckboxContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 4px;
+`
+
+const CheckboxWrapper = styled.div`
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+`
+
+const CheckboxInput = styled.input`
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+  
+  &:checked + svg {
+    color: ${Colors.Blue[500]};
+  }
+  
+  &:not(:checked) + svg {
+    color: ${Colors.Black[300]};
   }
 `
 
