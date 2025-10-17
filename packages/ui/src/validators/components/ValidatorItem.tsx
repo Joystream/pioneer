@@ -1,15 +1,16 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
-import { ButtonPrimary, ButtonSecondary, ButtonGhost } from '@/common/components/buttons'
+import { ButtonGhost } from '@/common/components/buttons'
 import { TableListItemAsLinkHover } from '@/common/components/List'
 import { Skeleton } from '@/common/components/Skeleton'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { whenDefined } from '@/common/utils'
+import { KebabMenuIcon } from '@/common/components/icons'
 
 import { BondModalCall } from '@/validators/modals/BondModal'
 import { NominateValidatorModalCall } from '@/validators/modals/NominateValidatorModal'
@@ -24,8 +25,10 @@ import { ValidatorInfo } from './ValidatorInfo'
 interface ValidatorItemProps {
   validator: ValidatorWithDetails
   onClick?: () => void
+  openDropdownId: string | null
+  setOpenDropdownId: (id: string | null) => void
 }
-export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
+export const ValidatorItem = ({ validator, onClick, openDropdownId, setOpenDropdownId }: ValidatorItemProps) => {
   const { stashAccount, membership, isVerifiedValidator, isActive, commission, APR, staking } = validator
   const { showModal } = useModal<NominatingRedirectModalCall>()
   const { showModal: showNominateModal } = useModal<NominateValidatorModalCall>()
@@ -33,9 +36,30 @@ export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
   const { showModal: showBondModal } = useModal<BondModalCall>()
   const { showModal: showUnbondModal } = useModal<UnbondModalCall>()
   const { showModal: showPayoutModal } = useModal<PayoutModalCall>()
+  const dropdownRef = useRef<HTMLDivElement>(null)
+  
+  const validatorId = encodeAddress(stashAccount)
+  const isThisDropdownOpen = openDropdownId === validatorId
 
-  const handleActionClick = (e: React.MouseEvent, action: string) => {
-    e.stopPropagation()
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        if (isThisDropdownOpen) {
+          setOpenDropdownId(null)
+        }
+      }
+    }
+
+    if (isThisDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isThisDropdownOpen, setOpenDropdownId])
+
+  const handleActionClick = (action: string) => {
     const validatorAddress = encodeAddress(stashAccount)
     
     switch (action) {
@@ -57,10 +81,18 @@ export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
       default:
         showModal({ modal: 'NominatingRedirect' })
     }
+    setOpenDropdownId(null)
   }
 
   return (
-    <ValidatorItemWrapper onClick={onClick}>
+    <ValidatorItemWrapper 
+      onClick={onClick}
+      onMouseEnter={() => {
+        if (openDropdownId !== null && openDropdownId !== validatorId) {
+          setOpenDropdownId(null)
+        }
+      }}
+    >
       <ValidatorItemWrap>
         <ValidatorInfo member={membership} address={encodeAddress(stashAccount)} />
         {isVerifiedValidator ? (
@@ -77,38 +109,52 @@ export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
         <TokenValue size="xs" value={staking?.total} />
         <TextMedium bold>{whenDefined(APR, (apr) => `${apr}%`) ?? '-'}</TextMedium>
         <TextMedium bold>{commission}%</TextMedium>
-        <ActionButtons>
-          <ButtonPrimary
+        <ActionsContainer ref={dropdownRef}>
+          <ActionButton
             size="small"
-            onClick={(e) => handleActionClick(e, 'Nominate')}
-          >
-            Nominate
-          </ButtonPrimary>
-          <ButtonSecondary
-            size="small"
-            onClick={(e) => handleActionClick(e, 'Stake')}
-          >
-            Stake
-          </ButtonSecondary>
-          <ButtonGhost
-            size="small"
-            onClick={(e) => handleActionClick(e, 'Bond')}
-          >
-            Bond
-          </ButtonGhost>
-          <ButtonGhost
-            size="small"
-            onClick={(e) => handleActionClick(e, 'Unbond')}
-          >
-            Unbond
-          </ButtonGhost>
-          <ButtonGhost
-            size="small"
-            onClick={(e) => handleActionClick(e, 'Payout')}
-          >
-            Payout
-          </ButtonGhost>
-        </ActionButtons>
+            onClick={(e) => {
+              e.stopPropagation()
+              setOpenDropdownId(isThisDropdownOpen ? null : validatorId)
+            }}
+          > 
+            Actions ▼
+            <KebabMenuIcon />
+          </ActionButton>
+          {isThisDropdownOpen && (
+            <DropdownMenuContainer onClick={(e) => e.stopPropagation()}>
+              <DropdownItem onClick={(e) => {
+                e.stopPropagation()
+                handleActionClick('Nominate')
+              }}>
+                Nominate
+              </DropdownItem>
+              <DropdownItem onClick={(e) => {
+                e.stopPropagation()
+                handleActionClick('Stake')
+              }}>
+                Stake
+              </DropdownItem>
+              <DropdownItem onClick={(e) => {
+                e.stopPropagation()
+                handleActionClick('Bond')
+              }}>
+                Bond
+              </DropdownItem>
+              <DropdownItem onClick={(e) => {
+                e.stopPropagation()
+                handleActionClick('Unbond')
+              }}>
+                Unbond
+              </DropdownItem>
+              <DropdownItem onClick={(e) => {
+                e.stopPropagation()
+                handleActionClick('Payout')
+              }}>
+                Payout
+              </DropdownItem>
+            </DropdownMenuContainer>
+          )}
+        </ActionsContainer>
       </ValidatorItemWrap>
     </ValidatorItemWrapper>
   )
@@ -122,8 +168,13 @@ const ValidatorItemWrapper = styled.div`
   border-radius: ${BorderRad.s};
   cursor: pointer;
   transition: ${Transitions.all};
+  position: relative;
 
   ${TableListItemAsLinkHover}
+  
+  &:hover {
+    z-index: 10;
+  }
 `
 
 export const ValidatorItemWrap = styled.div`
@@ -144,11 +195,52 @@ export const ValidatorItemWrap = styled.div`
   }
 `
 
-const ActionButtons = styled.div`
+const ActionsContainer = styled.div`
   display: flex;
   gap: 4px;
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
   width: 100%;
+  position: relative;
+  z-index: 1;
+`
+
+const ActionButton = styled(ButtonGhost)`
+  padding: 4px 12px;
+  min-width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: ${Colors.Blue[600]};
+  color: ${Colors.White};
+`
+
+const DropdownMenuContainer = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: ${Colors.White};
+  border: 1px solid ${Colors.Black[200]};
+  border-radius: ${BorderRad.s};
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  width: 100%;
+  margin-top: 4px;
+`
+
+const DropdownItem = styled.div`
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: ${Colors.Black[900]};
+  border-bottom: 1px solid ${Colors.Black[100]};
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  &:hover {
+    background: ${Colors.Black[50]};
+  }
 `

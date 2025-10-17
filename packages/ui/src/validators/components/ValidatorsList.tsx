@@ -28,6 +28,7 @@ interface ValidatorsListProps {
 export const ValidatorsList = ({ validators, eraIndex, order, pagination }: ValidatorsListProps) => {
   const { t } = useTranslation('validators')
   const [cardNumber, selectCard] = useState<number | null>(null)
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
 
   if (validators && !validators.length) return <NotFoundText>{t('common:forms.noResults')}</NotFoundText>
 
@@ -106,7 +107,11 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
                       selectCard(index + 1)
                     }}
                   >
-                    <ValidatorItem validator={validator} />
+                    <ValidatorItem 
+                      validator={validator} 
+                      openDropdownId={openDropdownId}
+                      setOpenDropdownId={setOpenDropdownId}
+                    />
                   </ListItem>
                 ))}
               </List>
