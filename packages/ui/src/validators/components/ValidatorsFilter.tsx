@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
+import { ButtonPrimary } from '@/common/components/buttons'
 import { InputNotification } from '@/common/components/forms'
 import { Fields, FilterBox } from '@/common/components/forms/FilterBox'
 import { SearchBox } from '@/common/components/forms/FilterBox/FilterSearchBox'
 import { FilterSelect } from '@/common/components/selects'
+import { useModal } from '@/common/hooks/useModal'
+import { BondModalCall } from '@/validators/modals/BondModal/types'
+import { PayoutModalCall } from '@/validators/modals/PayoutModal/types'
 
 interface ValidatorFilterProps {
   filter: {
@@ -19,6 +23,9 @@ interface ValidatorFilterProps {
 
 export const ValidatorsFilter = ({ filter }: ValidatorFilterProps) => {
   const [search, setSearch] = useState('')
+  const { showModal: showBondModal } = useModal<BondModalCall>()
+  const { showModal: showPayoutModal } = useModal<PayoutModalCall>()
+
   useEffect(() => {
     setSearch(filter.search)
   }, [filter.search])
@@ -54,7 +61,17 @@ export const ValidatorsFilter = ({ filter }: ValidatorFilterProps) => {
             onChange={(value) => filter.setIsActive(value === null ? undefined : value === 'active')}
           />
         </SelectFields>
-        <SearchBox label="Search" value={search} onApply={display} onChange={setSearch} />
+        <SearchAndButtonsWrapper>
+          <SearchBox label="Search" value={search} onApply={display} onChange={setSearch} />
+          <ButtonsWrapper>
+            <ButtonPrimary size="small" onClick={() => showPayoutModal({ modal: 'Payout', data: {} })}>
+              Payout
+            </ButtonPrimary>
+            <ButtonPrimary size="small" onClick={() => showBondModal({ modal: 'Bond', data: {} })}>
+              Bond
+            </ButtonPrimary>
+          </ButtonsWrapper>
+        </SearchAndButtonsWrapper>
       </ResponsiveWrapper>
     </ValidatorFilterBox>
   )
@@ -93,5 +110,33 @@ const ResponsiveWrapper = styled.div`
 
   @media (max-width: 767px) {
     flex-direction: column;
+  }
+`
+
+const SearchAndButtonsWrapper = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 1;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    width: 100%;
+  }
+`
+
+const ButtonsWrapper = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-top: 17px;
+
+  @media (max-width: 767px) {
+    margin-top: 0;
+    width: 100%;
+    
+    button {
+      flex: 1;
+    }
   }
 `

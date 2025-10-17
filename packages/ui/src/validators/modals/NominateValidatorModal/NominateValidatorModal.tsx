@@ -1,24 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React, { useMemo, useState } from 'react'
+import styled from 'styled-components'
+import BN from 'bn.js'
 
 import { useApi } from '@/api/hooks/useApi'
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { ButtonPrimary, ButtonSecondary } from '@/common/components/buttons'
+import { ButtonPrimary } from '@/common/components/buttons'
+import { Checkbox } from '@/common/components/forms'
+import { InputComponent, InputText, Label } from '@/common/components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium, TextSmall } from '@/common/components/typography'
+import { TextMedium, TokenValue } from '@/common/components/typography'
+import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { Address } from '@/common/types'
-import { CheckboxIcon } from '@/common/components/icons'
-import { Colors } from '@/common/constants'
-import styled from 'styled-components'
+import { useBondedAccounts } from '@/validators/hooks/useBondedAccounts'
 
 import { NominateValidatorModalCall } from '@/validators/modals/NominateValidatorModal/types'
 
-interface BondedAccount {
-  address: Address
-  bondedAmount: string
-  isSelected: boolean
-}
+import { nominateMachine } from './machine'
 
 interface Props {
   validatorAddresses: Address[]
@@ -27,212 +26,184 @@ interface Props {
 export const NominateValidatorModal = () => {
   const { modalData } = useModal<NominateValidatorModalCall>()
   const validatorAddress = modalData?.validatorAddress
-  const validatorAddresses = modalData?.validatorAddresses
+  const validatorAddresses = modalData?.validatorAddresses || (validatorAddress ? [validatorAddress] : [])
 
-  // Support both single and multiple validator addresses
-  const addresses = validatorAddresses || (validatorAddress ? [validatorAddress] : [])
-
-  if (addresses.length === 0) return null
+  if (!validatorAddresses.length) return null
   
-  return <NominateValidatorModalInner validatorAddresses={addresses} />
+  return <NominateValidatorModalInner validatorAddresses={validatorAddresses} />
 }
 
 const NominateValidatorModalInner = ({ validatorAddresses }: Props) => {
   const { hideModal } = useModal<NominateValidatorModalCall>()
   const { api } = useApi()
-  const { allAccounts } = useMyAccounts()
-  const [bondedAccounts, setBondedAccounts] = useState<BondedAccount[]>([])
-  const [selectedBondedAccount, setSelectedBondedAccount] = useState<Address | null>(null)
+  const { bondedAccounts, isLoading } = useBondedAccounts()
+  const [selectedAccounts, setSelectedAccounts] = useState<string[]>([])
+  const [state, send, service] = useMachine(nominateMachine)
 
-  // Simulate fetching bonded accounts (in real implementation, this would query the blockchain)
-  useEffect(() => {
-    // Mock bonded accounts - in real implementation, query staking.ledger for each account
-    const mockBondedAccounts: BondedAccount[] = allAccounts
-      .filter(account => account.name?.includes('bonded') || Math.random() > 0.7) // Mock filter
-      .map(account => ({
-        address: account.address,
-        bondedAmount: (Math.random() * 10000).toFixed(2),
-        isSelected: false
-      }))
-
-    setBondedAccounts(mockBondedAccounts)
-    if (mockBondedAccounts.length > 0) {
-      setSelectedBondedAccount(mockBondedAccounts[0].address)
+  const handleToggleAccount = (address: string) => {
+    if (selectedAccounts.includes(address)) {
+      setSelectedAccounts(selectedAccounts.filter((addr) => addr !== address))
+    } else {
+      setSelectedAccounts([...selectedAccounts, address])
     }
-  }, [allAccounts])
-
-  const handleBondedAccountSelection = (address: Address) => {
-    setSelectedBondedAccount(address)
   }
 
-  const handleNominate = async () => {
-    if (!api || !selectedBondedAccount) {
-      console.error('API not available or no account selected')
+  const handleNominate = () => {
+    if (selectedAccounts.length === 0) {
       return
     }
-
-    try {
-      // TODO: Implement actual nomination transaction
-      // This would typically involve:
-      // 1. Creating a nomination transaction with multiple validators
-      // 2. Signing it with the selected bonded account
-      // 3. Submitting to the network
-      
-      console.log('Nominating validators:', validatorAddresses)
-      console.log('Using bonded account:', selectedBondedAccount)
-      
-      // For now, just show the redirect modal
-      hideModal()
-    } catch (error) {
-      console.error('Nomination failed:', error)
-    }
+    send('NEXT')
   }
 
-  const isMultipleValidators = validatorAddresses.length > 1
+  // Create batch transactions for each selected account
+  // In Substrate staking, each controller can only nominate for one stash account
+  // So we create one transaction per selected bonded account
+  const transactions = useMemo(() => {
+    if (!api || selectedAccounts.length === 0) {
+      return []
+    }
+    return selectedAccounts.map((accountAddress) => {
+      // api.tx.staking.nominate takes an array of validator addresses
+      return {
+        address: accountAddress,
+        tx: api.tx.staking.nominate(validatorAddresses)
+      }
+    })
+  }, [api, selectedAccounts, validatorAddresses])
+
+  // For simplicity, we'll process the first selected account
+  // In a more complete implementation, you'd want to handle multiple transactions
+  const currentTransaction = transactions[0]
+
+  if (state.matches('transaction') && currentTransaction) {
+    return (
+      <SignTransactionModal
+        transaction={currentTransaction.tx}
+        signer={currentTransaction.address}
+        service={service}
+        buttonText="Sign and Nominate"
+      >
+        <RowGapBlock gap={16}>
+          <TextMedium>
+            You are nominating {validatorAddresses.length} validator{validatorAddresses.length > 1 ? 's' : ''}. 
+            Your bonded tokens will be used to support these validators.
+          </TextMedium>
+          <TextMedium>
+            <strong>Bonded Account:</strong> {currentTransaction.address}
+          </TextMedium>
+          <RowGapBlock gap={4}>
+            <TextMedium><strong>Validators ({validatorAddresses.length}):</strong></TextMedium>
+            {validatorAddresses.slice(0, 3).map((address) => (
+              <TextMedium key={address} lighter style={{ fontSize: '12px', wordBreak: 'break-all' }}>
+                {address}
+              </TextMedium>
+            ))}
+            {validatorAddresses.length > 3 && (
+              <TextMedium lighter>...and {validatorAddresses.length - 3} more</TextMedium>
+            )}
+          </RowGapBlock>
+          {transactions.length > 1 && (
+            <TextMedium lighter>
+              Note: Nominating with {transactions.length} bonded accounts. This transaction is for the first account.
+            </TextMedium>
+          )}
+        </RowGapBlock>
+      </SignTransactionModal>
+    )
+  }
 
   return (
-    <Modal modalSize="l" onClose={hideModal}>
-      <ModalHeader 
-        title={isMultipleValidators ? `Nominate ${validatorAddresses.length} Validators` : "Nominate Validator"} 
-        onClick={hideModal} 
-      />
+    <Modal modalSize="m" onClose={hideModal}>
+      <ModalHeader title="Nominate Validator" onClick={hideModal} />
       <ModalBody>
         <RowGapBlock gap={16}>
           <TextMedium>
-            {isMultipleValidators 
-              ? `You are about to nominate ${validatorAddresses.length} validators. Nominating validators means you want to support them in the validator set and potentially earn rewards from their validation activities.`
-              : "You are about to nominate this validator. Nominating a validator means you want to support them in the validator set and potentially earn rewards from their validation activities."
-            }
+            You are about to nominate {validatorAddresses.length} validator{validatorAddresses.length > 1 ? 's' : ''}. 
+            Nominating validators means you want to support them in the validator set and potentially earn rewards 
+            from their validation activities.
           </TextMedium>
           
-          <ValidatorsList>
-            <TextMedium><strong>Validators to nominate:</strong></TextMedium>
-            {validatorAddresses.map((address, index) => (
-              <ValidatorItem key={address}>
-                <TextSmall>{index + 1}. {address}</TextSmall>
-              </ValidatorItem>
-            ))}
-          </ValidatorsList>
+          <RowGapBlock gap={8}>
+            <TextMedium><strong>Selected Validators ({validatorAddresses.length}):</strong></TextMedium>
+            <ValidatorAddressList>
+              {validatorAddresses.map((address) => (
+                <AddressItem key={address}>{address}</AddressItem>
+              ))}
+            </ValidatorAddressList>
+          </RowGapBlock>
 
-          {bondedAccounts.length > 0 && (
-            <BondedAccountsSection>
-              <TextMedium><strong>Select bonded account:</strong></TextMedium>
-              <BondedAccountsList>
+          <RowGapBlock gap={8}>
+            <TextMedium><strong>Select Bonded Accounts to Nominate With:</strong></TextMedium>
+            {isLoading ? (
+              <TextMedium>Loading bonded accounts...</TextMedium>
+            ) : bondedAccounts.length === 0 ? (
+              <TextMedium>No bonded accounts found. You need to bond tokens first.</TextMedium>
+            ) : (
+              <AccountsList>
                 {bondedAccounts.map((account) => (
-                  <BondedAccountItem 
-                    key={account.address}
-                    isSelected={selectedBondedAccount === account.address}
-                    onClick={() => handleBondedAccountSelection(account.address)}
-                  >
-                    <CheckboxWrapper>
-                      <CheckboxInput
-                        type="radio"
-                        name="bondedAccount"
-                        checked={selectedBondedAccount === account.address}
-                        onChange={() => handleBondedAccountSelection(account.address)}
-                        onClick={(e) => e.stopPropagation()}
-                      />
-                      <CheckboxIcon />
-                    </CheckboxWrapper>
+                  <AccountItem key={account.address} onClick={() => handleToggleAccount(account.address)}>
+                    <Checkbox
+                      id={`account-${account.address}`}
+                      isChecked={selectedAccounts.includes(account.address)}
+                      onChange={() => handleToggleAccount(account.address)}
+                    />
                     <AccountInfo>
-                      <TextSmall><strong>{account.address}</strong></TextSmall>
-                      <TextSmall>Bonded: {account.bondedAmount} JOY</TextSmall>
+                      <TextMedium>{account.address}</TextMedium>
+                      <TokenValue size="xs" value={new BN(account.bondedAmount)} />
                     </AccountInfo>
-                  </BondedAccountItem>
+                  </AccountItem>
                 ))}
-              </BondedAccountsList>
-            </BondedAccountsSection>
-          )}
-
-          <TextMedium>
-            <strong>Note:</strong> This is a preview implementation. The actual transaction will be implemented 
-            in a separate PR for testing.
-          </TextMedium>
+              </AccountsList>
+            )}
+          </RowGapBlock>
         </RowGapBlock>
       </ModalBody>
       <ModalFooter>
-        <ButtonSecondary size="medium" onClick={hideModal}>
-          Cancel
-        </ButtonSecondary>
         <ButtonPrimary 
           size="medium" 
           onClick={handleNominate}
-          disabled={!selectedBondedAccount}
+          disabled={selectedAccounts.length === 0 || bondedAccounts.length === 0}
         >
-          {isMultipleValidators ? `Nominate ${validatorAddresses.length} Validators` : 'Nominate Validator'}
+          Next: Sign Transaction
         </ButtonPrimary>
       </ModalFooter>
     </Modal>
   )
 }
 
-const ValidatorsList = styled.div`
+const ValidatorAddressList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 12px;
-  background: ${Colors.Black[50]};
+  gap: 4px;
+  max-height: 150px;
+  overflow-y: auto;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 4px;
 `
 
-const ValidatorItem = styled.div`
-  padding: 4px 0;
+const AddressItem = styled(TextMedium)`
+  font-size: 12px;
+  word-break: break-all;
 `
 
-const BondedAccountsSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`
-
-const BondedAccountsList = styled.div`
+const AccountsList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-height: 200px;
-  overflow-y: auto;
 `
 
-const BondedAccountItem = styled.div<{ isSelected: boolean }>`
+const AccountItem = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 12px;
-  border: 1px solid ${({ isSelected }) => isSelected ? Colors.Blue[500] : Colors.Black[200]};
+  background: rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   cursor: pointer;
-  background: ${({ isSelected }) => isSelected ? Colors.Blue[50] : Colors.White};
-  transition: all 0.2s ease;
 
   &:hover {
-    border-color: ${Colors.Blue[500]};
-    background: ${Colors.Blue[50]};
-  }
-`
-
-const CheckboxWrapper = styled.div`
-  position: relative;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-`
-
-const CheckboxInput = styled.input`
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-  
-  &:checked + svg {
-    color: ${Colors.Blue[500]};
-  }
-  
-  &:not(:checked) + svg {
-    color: ${Colors.Black[300]};
+    background: rgba(0, 0, 0, 0.15);
   }
 `
 
@@ -240,4 +211,12 @@ const AccountInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
+  flex: 1;
+  min-width: 0;
+
+  ${TextMedium} {
+    font-size: 12px;
+    word-break: break-all;
+  }
 `
+

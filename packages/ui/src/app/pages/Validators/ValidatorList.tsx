@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { PageHeader } from '@/app/components/PageHeader'
@@ -18,6 +18,7 @@ import { useValidatorsList } from '@/validators/hooks/useValidatorsList'
 import { ValidatorsTabs } from './components/ValidatorsTabs'
 export const ValidatorList = () => {
   const { validatorsWithDetails, validatorsQueries, allValidatorsCount, format } = useValidatorsList()
+  const [selectedValidators, setSelectedValidators] = useState<string[]>([])
 
   const {
     eraIndex,
@@ -62,6 +63,8 @@ export const ValidatorList = () => {
           eraIndex={eraIndex}
           order={format.order}
           pagination={format.pagination}
+          selectedValidators={selectedValidators}
+          onSelectionChange={setSelectedValidators}
         />
       }
     />

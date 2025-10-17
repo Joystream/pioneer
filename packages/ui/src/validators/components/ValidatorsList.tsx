@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { ButtonPrimary, ButtonSecondary } from '@/common/components/buttons'
+import { ButtonPrimary } from '@/common/components/buttons'
+import { Checkbox } from '@/common/components/forms'
 import { List, ListItem } from '@/common/components/List'
 import { ListHeader } from '@/common/components/List/ListHeader'
 import { SortHeader } from '@/common/components/List/SortHeader'
@@ -13,11 +14,9 @@ import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { BreakPoints, Colors } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
-import { BondModalCall } from '@/validators/modals/BondModal'
-import { NominateValidatorModalCall } from '@/validators/modals/NominateValidatorModal'
-import { PayoutModalCall } from '@/validators/modals/PayoutModal'
-import { useBondedAccounts } from '@/validators/hooks/useBondedAccounts'
 
+import { useBondedAccounts } from '../hooks/useBondedAccounts'
+import { NominateValidatorModalCall } from '../modals/NominateValidatorModal/types'
 import { ValidatorCard } from '../modals/validatorCard/ValidatorCard'
 import { ValidatorDetailsOrder, ValidatorWithDetails } from '../types'
 
@@ -29,70 +28,51 @@ interface ValidatorsListProps {
   eraIndex: number | undefined
   order: ValidatorDetailsOrder & { sortBy: (key: ValidatorDetailsOrder['key']) => () => void }
   pagination: PaginationProps
+  selectedValidators: string[]
+  onSelectionChange: (selected: string[]) => void
 }
 
-export const ValidatorsList = ({ validators, eraIndex, order, pagination }: ValidatorsListProps) => {
+export const ValidatorsList = ({ validators, eraIndex, order, pagination, selectedValidators, onSelectionChange }: ValidatorsListProps) => {
   const { t } = useTranslation('validators')
   const [cardNumber, selectCard] = useState<number | null>(null)
-  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
-  const [selectedValidators, setSelectedValidators] = useState<Set<string>>(new Set())
-  
-  const { showModal: showBondModal } = useModal<BondModalCall>()
-  const { showModal: showPayoutModal } = useModal<PayoutModalCall>()
-  const { showModal: showNominateModal } = useModal<NominateValidatorModalCall>()
-  
-  const { bondedAccounts, hasBondedAccounts } = useBondedAccounts()
-  
-  // Show checkboxes only if user has bonded accounts
-  const showCheckboxes = hasBondedAccounts
+  const { hasBondedAccounts } = useBondedAccounts()
+  const { showModal } = useModal<NominateValidatorModalCall>()
 
-  const handleValidatorSelection = (validatorId: string, selected: boolean) => {
-    setSelectedValidators(prev => {
-      const newSet = new Set(prev)
-      if (selected) {
-        newSet.add(validatorId)
-      } else {
-        newSet.delete(validatorId)
-      }
-      return newSet
+  const handleToggleValidator = (stashAccount: string) => {
+    if (selectedValidators.includes(stashAccount)) {
+      onSelectionChange(selectedValidators.filter((addr) => addr !== stashAccount))
+    } else {
+      onSelectionChange([...selectedValidators, stashAccount])
+    }
+  }
+
+  const handleNominateSelected = () => {
+    showModal({ 
+      modal: 'NominateValidator', 
+      data: { 
+        validatorAddresses: selectedValidators 
+      } 
     })
-  }
-
-  const handleBondClick = () => {
-    showBondModal({ modal: 'Bond', data: {} })
-  }
-
-  const handlePayoutClick = () => {
-    showPayoutModal({ modal: 'Payout', data: {} })
-  }
-
-  const handleNominateClick = () => {
-    const selectedValidatorAddresses = Array.from(selectedValidators)
-    showNominateModal({ modal: 'NominateValidator', data: { validatorAddresses: selectedValidatorAddresses } })
   }
 
   if (validators && !validators.length) return <NotFoundText>{t('common:forms.noResults')}</NotFoundText>
 
+  const showCheckboxes = hasBondedAccounts
+  const showNominateButton = showCheckboxes && selectedValidators.length > 0
+
   return (
     <Wrapper>
+      {showNominateButton && (
+        <NominateButtonWrapper>
+          <ButtonPrimary size="medium" onClick={handleNominateSelected}>
+            Nominate {selectedValidators.length} Validator{selectedValidators.length > 1 ? 's' : ''}
+          </ButtonPrimary>
+        </NominateButtonWrapper>
+      )}
       <ResponsiveWrap>
-        <ValidatorsListWrap>
-          <GlobalActionsContainer>
-            <ActionButtons>
-              <ButtonSecondary size="small" onClick={handlePayoutClick}>
-                Payout
-              </ButtonSecondary>
-              <ButtonPrimary size="small" onClick={handleBondClick}>
-                Bond
-              </ButtonPrimary>
-              {selectedValidators.size > 0 && (
-                <ButtonPrimary size="small" onClick={handleNominateClick}>
-                  Nominate ({selectedValidators.size})
-                </ButtonPrimary>
-              )}
-            </ActionButtons>
-          </GlobalActionsContainer>
-          <ListHeaders showCheckbox={showCheckboxes}>
+        <ValidatorsListWrap $showCheckboxes={showCheckboxes}>
+          <ListHeaders $showCheckboxes={showCheckboxes}>
+            {showCheckboxes && <ListHeader />}
             <SortHeader
               onSort={order.sortBy('default')}
               isActive={order.key === 'default'}
@@ -149,7 +129,6 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
                 <TooltipDefault />
               </Tooltip>
             </SortHeader>
-            <ListHeader>Actions</ListHeader>
           </ListHeaders>
           {!validators ? (
             <ValidatorItemLoading count={7} />
@@ -157,20 +136,30 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
             <>
               <List>
                 {validators?.map((validator, index) => (
-                  <ListItem
-                    key={validator.stashAccount}
-                    onClick={() => {
-                      selectCard(index + 1)
-                    }}
-                  >
-                    <ValidatorItem 
-                      validator={validator} 
-                      openDropdownId={openDropdownId}
-                      setOpenDropdownId={setOpenDropdownId}
-                      isSelected={selectedValidators.has(validator.stashAccount)}
-                      onSelectionChange={handleValidatorSelection}
-                      showCheckbox={showCheckboxes}
-                    />
+                  <ListItem key={validator.stashAccount}>
+                    <ValidatorItemContainer>
+                      {showCheckboxes && (
+                        <CheckboxWrapper
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleToggleValidator(validator.stashAccount)
+                          }}
+                        >
+                          <Checkbox
+                            id={`validator-${validator.stashAccount}`}
+                            isChecked={selectedValidators.includes(validator.stashAccount)}
+                            onChange={() => handleToggleValidator(validator.stashAccount)}
+                          />
+                        </CheckboxWrapper>
+                      )}
+                      <ValidatorItemClickable
+                        onClick={() => {
+                          selectCard(index + 1)
+                        }}
+                      >
+                        <ValidatorItem validator={validator} showCheckbox={showCheckboxes} />
+                      </ValidatorItemClickable>
+                    </ValidatorItemContainer>
                   </ListItem>
                 ))}
               </List>
@@ -199,6 +188,13 @@ const Wrapper = styled.div`
   align-items: end;
 `
 
+const NominateButtonWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 0;
+`
+
 const ResponsiveWrap = styled.div`
   overflow: auto;
   align-self: stretch;
@@ -211,7 +207,7 @@ const ResponsiveWrap = styled.div`
   }
 `
 
-const ValidatorsListWrap = styled.div`
+const ValidatorsListWrap = styled.div<{ $showCheckboxes: boolean }>`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 16px auto;
@@ -219,7 +215,7 @@ const ValidatorsListWrap = styled.div`
     'validatorstablenav'
     'validatorslist';
   grid-row-gap: 4px;
-  min-width: 1166px;
+  min-width: ${({ $showCheckboxes }) => ($showCheckboxes ? '1226px' : '1166px')};
 
   ${List} {
     gap: 8px;
@@ -229,25 +225,14 @@ const ValidatorsListWrap = styled.div`
   }
 `
 
-const GlobalActionsContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 8px 16px;
-  border-bottom: 1px solid ${Colors.Black[100]};
-`
-
-const ActionButtons = styled.div`
-  display: flex;
-  gap: 8px;
-  align-items: center;
-`
-
-const ListHeaders = styled.div<{ showCheckbox?: boolean }>`
+const ListHeaders = styled.div<{ $showCheckboxes: boolean }>`
   display: grid;
   grid-area: validatorstablenav;
   grid-template-rows: 1fr;
-  grid-template-columns: ${({ showCheckbox }) => showCheckbox ? '40px ' : ''}250px 110px 80px 140px 140px 140px 100px 1fr;
+  grid-template-columns: ${({ $showCheckboxes }) => 
+    $showCheckboxes 
+      ? '60px 250px 110px 80px 140px 140px 140px 100px 90px' 
+      : '250px 110px 80px 140px 140px 140px 100px 90px'};
   justify-content: space-between;
   width: 100%;
   padding: 0 16px;
@@ -257,4 +242,24 @@ const ListHeaders = styled.div<{ showCheckbox?: boolean }>`
     justify-content: flex-end;
     gap: 4px;
   }
+`
+
+const ValidatorItemContainer = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+`
+
+const CheckboxWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  padding: 0 16px;
+  flex-shrink: 0;
+`
+
+const ValidatorItemClickable = styled.div`
+  flex: 1;
+  cursor: pointer;
 `
