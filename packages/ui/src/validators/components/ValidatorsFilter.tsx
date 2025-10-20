@@ -7,8 +7,10 @@ import { Fields, FilterBox } from '@/common/components/forms/FilterBox'
 import { SearchBox } from '@/common/components/forms/FilterBox/FilterSearchBox'
 import { FilterSelect } from '@/common/components/selects'
 import { useModal } from '@/common/hooks/useModal'
+import { useBondedAccounts } from '@/validators/hooks/useBondedAccounts'
 import { BondModalCall } from '@/validators/modals/BondModal/types'
 import { PayoutModalCall } from '@/validators/modals/PayoutModal/types'
+import { UnbondModalCall } from '@/validators/modals/UnbondModal/types'
 
 interface ValidatorFilterProps {
   filter: {
@@ -25,6 +27,8 @@ export const ValidatorsFilter = ({ filter }: ValidatorFilterProps) => {
   const [search, setSearch] = useState('')
   const { showModal: showBondModal } = useModal<BondModalCall>()
   const { showModal: showPayoutModal } = useModal<PayoutModalCall>()
+  const { showModal: showUnbondModal } = useModal<UnbondModalCall>()
+  const { hasBondedAccounts } = useBondedAccounts()
 
   useEffect(() => {
     setSearch(filter.search)
@@ -69,6 +73,11 @@ export const ValidatorsFilter = ({ filter }: ValidatorFilterProps) => {
             <ButtonPrimary size="small" onClick={() => showBondModal({ modal: 'Bond', data: {} })}>
               Bond
             </ButtonPrimary>
+            {hasBondedAccounts && (
+              <ButtonPrimary size="small" onClick={() => showUnbondModal({ modal: 'Unbond', data: {} })}>
+                Unbond
+              </ButtonPrimary>
+            )}
           </ButtonsWrapper>
           <SearchBox label="Search" value={search} onApply={display} onChange={setSearch} />
         </SearchAndButtonsWrapper>
