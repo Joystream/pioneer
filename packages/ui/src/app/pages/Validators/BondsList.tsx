@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { PageHeader } from '@/app/components/PageHeader'
@@ -12,6 +12,7 @@ import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { useBondedAccounts } from '@/validators/hooks/useBondedAccounts'
+import { useMyValidatorStatus } from '@/validators/hooks/useMyValidatorStatus'
 import { BondModalCall } from '@/validators/modals/BondModal'
 import { UnbondModalCall } from '@/validators/modals/UnbondModal'
 import { ChangeSessionKeysModalCall } from '@/validators/modals/ChangeSessionKeysModal'
@@ -22,6 +23,9 @@ import { ValidatorsTabs } from './components/ValidatorsTabs'
 
 export const BondsList = () => {
   const { bondedAccounts, isLoading } = useBondedAccounts()
+  const { validatorStatuses, isLoading: isLoadingValidatorStatus } = useMyValidatorStatus(
+    bondedAccounts.map((acc) => acc.address)
+  )
   const { showModal: showBondModal } = useModal<BondModalCall>()
   const { showModal: showUnbondModal } = useModal<UnbondModalCall>()
   const { showModal: showChangeKeysModal } = useModal<ChangeSessionKeysModalCall>()
@@ -47,6 +51,24 @@ export const BondsList = () => {
     setOpenDropdownId(null)
   }
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (openDropdownId) {
+        const dropdowns = document.querySelectorAll('[data-dropdown-menu]')
+        const isClickInside = Array.from(dropdowns).some((dropdown) => dropdown.contains(event.target as Node))
+        if (!isClickInside) {
+          setOpenDropdownId(null)
+        }
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [openDropdownId])
+
   return (
     <PageLayout
       header={
@@ -62,7 +84,7 @@ export const BondsList = () => {
       main={
         <MainContent>
           <h4>My Bonded Accounts</h4>
-          {isLoading ? (
+          {isLoading || isLoadingValidatorStatus ? (
             <TextMedium>Loading bonded accounts...</TextMedium>
           ) : bondedAccounts.length === 0 ? (
             <EmptyState>
@@ -78,50 +100,80 @@ export const BondsList = () => {
                 <ListHeader>Account Address</ListHeader>
                 <ListHeader>Bonded Amount</ListHeader>
                 <ListHeader>Status</ListHeader>
+                <ListHeader>Validator</ListHeader>
                 <ListHeader>Actions</ListHeader>
               </ListHeaders>
               <List>
-                {bondedAccounts.map((account) => (
-                  <ListItem key={account.address}>
-                    <BondedAccountRow>
-                      <AccountAddress>
-                        <TextMedium>{account.address}</TextMedium>
-                      </AccountAddress>
-                      <BondedAmount>
-                        <TokenValue size="m" value={new BN(account.bondedAmount)} />
-                      </BondedAmount>
-                      <Status>
-                        <StatusBadge active={account.hasStakingLock}>
-                          {account.hasStakingLock ? 'Active' : 'Inactive'}
-                        </StatusBadge>
-                      </Status>
-                      <ActionsContainer>
-                        <ActionButton
-                          size="small"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setOpenDropdownId(openDropdownId === account.address ? null : account.address)
-                          }}
-                        >
-                          <KebabMenuIcon />
-                        </ActionButton>
-                        {openDropdownId === account.address && (
-                          <DropdownMenuContainer>
-                            <DropdownItem onClick={() => handleUnbond(account.address)}>
-                              Unbond
-                            </DropdownItem>
-                            <DropdownItem onClick={() => handleStopValidating(account.address)}>
-                              Stop Validating
-                            </DropdownItem>
-                            <DropdownItem onClick={() => handleChangeSessionKeys(account.address)}>
-                              Change Session Keys
-                            </DropdownItem>
-                          </DropdownMenuContainer>
-                        )}
-                      </ActionsContainer>
-                    </BondedAccountRow>
-                  </ListItem>
-                ))}
+                {bondedAccounts.map((account) => {
+                  const validatorStatus = validatorStatuses.get(account.address)
+                  const isValidator = validatorStatus?.isValidator || false
+                  const hasSessionKeys = validatorStatus?.hasSessionKeys || false
+
+                  return (
+                    <ListItem key={account.address}>
+                      <BondedAccountRow>
+                        <AccountAddress>
+                          <TextMedium>{account.address}</TextMedium>
+                        </AccountAddress>
+                        <BondedAmount>
+                          <TokenValue size="m" value={new BN(account.bondedAmount)} />
+                        </BondedAmount>
+                        <Status>
+                          <StatusBadge active={account.hasStakingLock}>
+                            {account.hasStakingLock ? 'Bonded' : 'Inactive'}
+                          </StatusBadge>
+                        </Status>
+                        <ValidatorStatus>
+                          {isValidator ? (
+                            <StatusBadge active={hasSessionKeys}>
+                              {hasSessionKeys ? 'Validating' : 'Validator (No Keys)'}
+                            </StatusBadge>
+                          ) : (
+                            <TextMedium>-</TextMedium>
+                          )}
+                        </ValidatorStatus>
+                        <ActionsContainer data-dropdown-menu>
+                          {isValidator && hasSessionKeys && (
+                            <StopButton
+                              size="small"
+                              onClick={() => handleStopValidating(account.address)}
+                            >
+                              Stop
+                            </StopButton>
+                          )}
+                          <ActionButton
+                            size="small"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setOpenDropdownId(openDropdownId === account.address ? null : account.address)
+                            }}
+                          >
+                            <KebabMenuIcon />
+                          </ActionButton>
+                          {openDropdownId === account.address && (
+                            <DropdownMenuContainer data-dropdown-menu>
+                              <DropdownItem onClick={() => handleUnbond(account.address)}>
+                                Unbond
+                              </DropdownItem>
+                              {isValidator && (
+                                <>
+                                  {hasSessionKeys && (
+                                    <DropdownItem onClick={() => handleStopValidating(account.address)}>
+                                      Stop Validating
+                                    </DropdownItem>
+                                  )}
+                                  <DropdownItem onClick={() => handleChangeSessionKeys(account.address)}>
+                                    Change Session Keys
+                                  </DropdownItem>
+                                </>
+                              )}
+                            </DropdownMenuContainer>
+                          )}
+                        </ActionsContainer>
+                      </BondedAccountRow>
+                    </ListItem>
+                  )
+                })}
               </List>
             </>
           )}
@@ -155,7 +207,7 @@ const EmptyState = styled.div`
 
 const ListHeaders = styled.div`
   display: grid;
-  grid-template-columns: 1fr 200px 120px 100px;
+  grid-template-columns: 1fr 200px 120px 150px 180px;
   gap: 16px;
   padding: 0 16px;
   margin-bottom: 8px;
@@ -163,7 +215,7 @@ const ListHeaders = styled.div`
 
 const BondedAccountRow = styled.div`
   display: grid;
-  grid-template-columns: 1fr 200px 120px 100px;
+  grid-template-columns: 1fr 200px 120px 150px 180px;
   gap: 16px;
   padding: 16px;
   align-items: center;
@@ -185,6 +237,11 @@ const Status = styled.div`
   justify-content: flex-start;
 `
 
+const ValidatorStatus = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`
+
 const StatusBadge = styled.div<{ active: boolean }>`
   padding: 4px 12px;
   border-radius: ${BorderRad.s};
@@ -192,13 +249,26 @@ const StatusBadge = styled.div<{ active: boolean }>`
   color: ${({ active }) => active ? Colors.Green[500] : Colors.Black[500]};
   font-size: 14px;
   font-weight: 600;
+  white-space: nowrap;
 `
 
 const ActionsContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 8px;
   position: relative;
+`
+
+const StopButton = styled(ButtonSecondary)`
+  background: ${Colors.Red[50]};
+  color: ${Colors.Red[500]};
+  border-color: ${Colors.Red[200]};
+  
+  &:hover {
+    background: ${Colors.Red[100]};
+    border-color: ${Colors.Red[300]};
+  }
 `
 
 const ActionButton = styled(ButtonGhost)`
