@@ -70,10 +70,12 @@ import { VoteForProposalModal, VoteForProposalModalCall } from '@/proposals/moda
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { VoteRationale } from '@/proposals/modals/VoteRationale/VoteRationale'
 import { BondModal, BondModalCall } from '@/validators/modals/BondModal'
+import { ChangeSessionKeysModal, ChangeSessionKeysModalCall } from '@/validators/modals/ChangeSessionKeysModal'
 import { NominateValidatorModal } from '@/validators/modals/NominateValidatorModal'
 import { NominateValidatorModalCall } from '@/validators/modals/NominateValidatorModal/types'
 import { NominatingRedirectModal, NominatingRedirectModalCall } from '@/validators/modals/NominatingRedirectModal'
 import { PayoutModal, PayoutModalCall } from '@/validators/modals/PayoutModal'
+import { StopValidatingModal, StopValidatingModalCall } from '@/validators/modals/StopValidatingModal'
 import { UnbondModal, UnbondModalCall } from '@/validators/modals/UnbondModal'
 import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { ApplyForRoleModal, ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
@@ -141,6 +143,8 @@ export type ModalNames =
   | ModalName<UnbondModalCall>
   | ModalName<PayoutModalCall>
   | ModalName<NominateValidatorModalCall>
+  | ModalName<ChangeSessionKeysModalCall>
+  | ModalName<StopValidatingModalCall>
   | ModalName<CancelProposalModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
@@ -199,6 +203,8 @@ const modals: Record<ModalNames, ReactElement> = {
   Unbond: <UnbondModal />,
   Payout: <PayoutModal />,
   NominateValidator: <NominateValidatorModal />,
+  ChangeSessionKeys: <ChangeSessionKeysModal />,
+  StopValidating: <StopValidatingModal />,
   CancelProposalModal: <CancelProposalModal />,
 }
 
@@ -220,6 +226,12 @@ const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
   'EmailConfirmationModal',
   'VoteRationaleModal',
   'NominatingRedirect',
+  'Bond',
+  'Unbond',
+  'Payout',
+  'NominateValidator',
+  'ChangeSessionKeys',
+  'StopValidating',
   'CreateOpening',
   'LeaveRole',
 ]

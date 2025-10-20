@@ -1,63 +1,31 @@
-import { EventRecord } from '@polkadot/types/interfaces/system'
-import { assign, createMachine } from 'xstate'
-
-import { transactionModalFinalStatusesFactory } from '@/common/modals/utils'
-import {
-  isTransactionCanceled,
-  isTransactionError,
-  isTransactionSuccess,
-  transactionMachine,
-} from '@/common/model/machines'
+import { createMachine } from 'xstate'
 
 interface NominateContext {
-  transactionEvents?: EventRecord[]
+  transactionEvents?: any[]
 }
 
-type NominateState =
-  | { value: 'prepare'; context: NominateContext }
-  | { value: 'transaction'; context: NominateContext }
-  | { value: 'success'; context: NominateContext }
-  | { value: 'error'; context: NominateContext }
-  | { value: 'canceled'; context: NominateContext }
-
-type NominateEvent = { type: 'NEXT' } | { type: 'FAIL' }
-
-export const nominateMachine = createMachine<NominateContext, NominateEvent, NominateState>({
+export const nominateMachine = createMachine<NominateContext>({
+  id: 'nominate',
   initial: 'prepare',
-  context: {},
   states: {
     prepare: {
       on: {
         NEXT: 'transaction',
-        FAIL: 'error',
       },
     },
     transaction: {
-      invoke: {
-        id: 'transaction',
-        src: transactionMachine,
-        onDone: [
-          {
-            target: 'success',
-            cond: isTransactionSuccess,
-          },
-          {
-            target: 'error',
-            cond: isTransactionError,
-            actions: assign({ transactionEvents: (context, event) => event.data.events }),
-          },
-          {
-            target: 'canceled',
-            cond: isTransactionCanceled,
-          },
-        ],
+      on: {
+        FAIL: 'error',
+        SUCCESS: 'success',
       },
     },
-    ...transactionModalFinalStatusesFactory({
-      metaMessages: {
-        error: 'There was a problem nominating validators.',
-        success: 'You have successfully nominated validators!',
+    success: {
+      type: 'final',
+    },
+    error: {
+      on: {
+        RETRY: 'transaction',
       },
-    }),
+    },
   },
 })

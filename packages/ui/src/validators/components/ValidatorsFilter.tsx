@@ -62,7 +62,6 @@ export const ValidatorsFilter = ({ filter }: ValidatorFilterProps) => {
           />
         </SelectFields>
         <SearchAndButtonsWrapper>
-          <SearchBox label="Search" value={search} onApply={display} onChange={setSearch} />
           <ButtonsWrapper>
             <ButtonPrimary size="small" onClick={() => showPayoutModal({ modal: 'Payout', data: {} })}>
               Payout
@@ -71,6 +70,7 @@ export const ValidatorsFilter = ({ filter }: ValidatorFilterProps) => {
               Bond
             </ButtonPrimary>
           </ButtonsWrapper>
+          <SearchBox label="Search" value={search} onApply={display} onChange={setSearch} />
         </SearchAndButtonsWrapper>
       </ResponsiveWrapper>
     </ValidatorFilterBox>
@@ -80,7 +80,12 @@ export const ValidatorsFilter = ({ filter }: ValidatorFilterProps) => {
 const ValidatorFilterBox = styled(FilterBox)`
   ${Fields} {
     padding-bottom: 22px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
+
 `
 
 const SelectFields = styled.div`
@@ -100,8 +105,10 @@ const SelectFields = styled.div`
 `
 const ResponsiveWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-between;
+
   gap: 8px;
+  width: 100%;
 
   ${InputNotification} {
     top: unset;
@@ -115,14 +122,10 @@ const ResponsiveWrapper = styled.div`
 
 const SearchAndButtonsWrapper = styled.div`
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
+  justify-content: flex-end;
   gap: 8px;
   flex: 1;
-
-  @media (max-width: 767px) {
-    flex-direction: column;
-    width: 100%;
-  }
 `
 
 const ButtonsWrapper = styled.div`
