@@ -10,7 +10,7 @@ import { SortHeader } from '@/common/components/List/SortHeader'
 import { Pagination, PaginationProps } from '@/common/components/Pagination'
 import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
-import { BreakPoints, Colors } from '@/common/constants'
+import { Colors } from '@/common/constants'
 import { useValidatorsList } from '@/validators/hooks/useValidatorsList'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
 
@@ -278,18 +278,14 @@ const Wrapper = styled.div`
   flex-direction: column;
   gap: 8px;
   align-items: end;
+  flex: 1;
+  min-width: 0;
 `
 
 const ResponsiveWrap = styled.div`
   overflow: auto;
   align-self: stretch;
-  max-width: calc(100vw - 32px);
-  @media (min-width: ${BreakPoints.sm}px) {
-    max-width: calc(100vw - 48px);
-  }
-  @media (min-width: ${BreakPoints.md}px) {
-    max-width: calc(100vw - 274px);
-  }
+  width: 100%;
 `
 
 const ValidatorsListWrap = styled.div`
@@ -300,7 +296,7 @@ const ValidatorsListWrap = styled.div`
     'validatorstablenav'
     'validatorslist';
   grid-row-gap: 4px;
-  min-width: 1166px;
+  min-width: 0;
 
   ${List} {
     gap: 8px;
@@ -314,7 +310,7 @@ const ListHeaders = styled.div`
   display: grid;
   grid-area: validatorstablenav;
   grid-template-rows: 1fr;
-  grid-template-columns: 250px 110px 80px 140px 140px 140px 100px 1fr;
+  grid-template-columns: 2fr 1fr 0.8fr 1.4fr 1.4fr 1.4fr 1fr 1fr;
   justify-content: space-between;
   width: 100%;
   padding: 0 16px;

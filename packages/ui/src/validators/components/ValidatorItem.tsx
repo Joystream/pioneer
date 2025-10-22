@@ -139,7 +139,7 @@ const ValidatorItemWrapper = styled.div`
 
 export const ValidatorItemWrap = styled.div`
   display: grid;
-  grid-template-columns: 250px 110px 80px 140px 140px 140px 100px 1fr;
+  grid-template-columns: 2fr 1fr 0.8fr 1.4fr 1.4fr 1.4fr 1fr 1fr;
   grid-template-rows: 1fr;
   justify-content: space-between;
   justify-items: start;
