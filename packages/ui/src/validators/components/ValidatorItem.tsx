@@ -87,7 +87,7 @@ export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
         <TextMedium bold>{commission}%</TextMedium>
         <ActionButtons>
           {isValidatorSelected ? (
-            <ButtonPrimary size="small" onClick={(e) => handleActionClick(e, 'Select')} disabled={false}>
+            <ButtonPrimary size="small" onClick={(e) => handleActionClick(e, 'Select')} disabled={true}>
               Selected
             </ButtonPrimary>
           ) : (

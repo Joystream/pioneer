@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { ButtonPrimary, ButtonGhost } from '@/common/components/buttons'
 import { CopyButton } from '@/common/components/buttons/CopyButton'
+import { Arrow } from '@/common/components/icons/ArrowIcon'
 import { TextMedium, TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 
@@ -61,7 +62,7 @@ export const SelectedValidatorsPanel = ({ onProceed }: SelectedValidatorsPanelPr
           </ButtonGhost>
         )}
         <ButtonPrimary size="medium" onClick={onProceed} disabled={selectedValidators.length === 0}>
-          Proceed &gt;
+          Proceed <Arrow direction="right" />
         </ButtonPrimary>
       </PanelFooter>
     </PanelContainer>
