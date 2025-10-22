@@ -202,7 +202,7 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
                         selectCard(index + 1)
                       }}
                     >
-                      <ValidatorItem validator={validator} />
+                      <ValidatorItem validator={validator} isNominated={false} />
                     </ListItem>
                   ))}
                 </List>
@@ -242,8 +242,6 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
         nominatingController={stashAccountData?.nominatingController}
         stashAccount={stashAccountData?.stashAccount}
         valueBonded={stashAccountData?.valueBonded ? stashAccountData.valueBonded.toString() : '0'}
-        nominatingControllerBalance={stashAccountData?.nominatingController?.balance}
-        stashAccountBalance={stashAccountData?.stashAccount?.balance}
       />
       <NominateValidatorsModal
         isOpen={isNominateModalOpen}

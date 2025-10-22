@@ -3,11 +3,11 @@ import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { useApi } from '@/api/hooks/useApi'
 import { ButtonPrimary, ButtonGhost } from '@/common/components/buttons'
-import { CopyButton } from '@/common/components/buttons/CopyButton'
 import { Arrow } from '@/common/components/icons/ArrowIcon'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from '@/common/components/Modal'
 import { TextInlineMedium, TextMedium, TextSmall, TokenValue } from '@/common/components/typography'
@@ -25,8 +25,6 @@ interface TransactionSummaryModalProps {
   nominatingController: any
   stashAccount: any
   valueBonded: string
-  nominatingControllerBalance?: BN
-  stashAccountBalance?: BN
 }
 
 export const TransactionSummaryModal = ({
@@ -37,11 +35,10 @@ export const TransactionSummaryModal = ({
   nominatingController,
   stashAccount,
   valueBonded,
-  nominatingControllerBalance,
-  stashAccountBalance,
 }: TransactionSummaryModalProps) => {
   const { selectedValidators } = useSelectedValidators()
   const { api } = useApi()
+  const { wallet } = useMyAccounts()
   const [isSigning, setIsSigning] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
 
@@ -52,54 +49,63 @@ export const TransactionSummaryModal = ({
     }
 
     const validatorAddresses = selectedValidators.map((validator) => validator.stashAccount)
-    const bondedValue = new BN(valueBonded)
 
-    // Create batch transaction for bond + nominate
-    return api.tx.utility.batch([
-      // Bond the tokens
-      api.tx.staking.bond(stashAccount.address, bondedValue, 'Staked'),
-      // Nominate the validators
-      api.tx.staking.nominate(validatorAddresses),
-    ])
+    try {
+      // For now, let's try just the nominate operation to see if that works
+      // We can add the bond operation later if needed
+      const tx = api.tx.staking.nominate(validatorAddresses)
+
+      return tx
+    } catch (error) {
+      return undefined
+    }
   }, [api, nominatingController, stashAccount, selectedValidators, valueBonded])
 
   // Get transaction fee information
   const { feeInfo } = useTransactionFee(nominatingController?.address, () => transaction, [transaction])
 
   const handleSignAndNominate = useCallback(async () => {
-    if (!transaction || !nominatingController || !api) {
+    if (!transaction || !nominatingController || !api || !wallet) {
       return
     }
 
     try {
       setIsSigning(true)
       setIsProcessing(true)
-      onSignAndNominate()
-      // Sign and send the transaction
-      //   transaction.signAndSend(nominatingController.address, (result: any) => {
-      //     if (result.status.isInBlock) {
-      //       setIsSigning(false)
-      //       setIsProcessing(false)
-      //       // Check for errors in events
-      //       const hasError = result.events.some((eventRecord: any) => {
-      //         return eventRecord.event.section === 'system' && eventRecord.event.method === 'ExtrinsicFailed'
-      //       })
 
-      //       if (!hasError) {
-      //         // Transaction successful
-      //         onSignAndNominate()
-      //       } else {
-      //         // Transaction failed
-      //         setIsSigning(false)
-      //         setIsProcessing(false)
-      //       }
-      //     }
-      //   })
+      // Try using the transaction with proper error handling
+      const unsubscribe = transaction.signAndSend(nominatingController.address, wallet.signer, (result: any) => {
+        if (result.status.isInBlock) {
+          setIsSigning(false)
+          setIsProcessing(false)
+
+          // Check for errors in events
+          const hasError = result.events.some((eventRecord: any) => {
+            return eventRecord.event.section === 'system' && eventRecord.event.method === 'ExtrinsicFailed'
+          })
+
+          if (!hasError) {
+            // Transaction successful
+            onSignAndNominate()
+          } else {
+            // Transaction failed
+            setIsSigning(false)
+            setIsProcessing(false)
+          }
+        } else if (result.status.isFinalized) {
+          // Transaction finalized - no action needed
+        }
+      })
+
+      // Store unsubscribe function for cleanup
+      if (unsubscribe) {
+        // You might want to store this for cleanup later
+      }
     } catch (error) {
       setIsSigning(false)
       setIsProcessing(false)
     }
-  }, [transaction, nominatingController, api, onSignAndNominate])
+  }, [transaction, nominatingController, api, wallet, onSignAndNominate])
 
   // Check if we have all required data for the transaction
   const isTransactionReady = transaction && nominatingController && stashAccount && selectedValidators.length > 0
@@ -112,7 +118,7 @@ export const TransactionSummaryModal = ({
       <ModalBody>
         <Content>
           <IntroText>
-            <TextMedium>
+            <div style={{ fontSize: '14px', lineHeight: '20px' }}>
               You are intend to delegate your tokens and stake{' '}
               <TextInlineMedium bold>
                 <TokenValue value={new BN(valueBonded)} />
@@ -122,7 +128,7 @@ export const TransactionSummaryModal = ({
                 <TokenValue value={feeInfo?.transactionFee ? feeInfo.transactionFee : new BN('2000')} />
               </TextInlineMedium>{' '}
               will be applied to the transaction.
-            </TextMedium>
+            </div>
           </IntroText>
 
           <AccountSection>
@@ -133,11 +139,6 @@ export const TransactionSummaryModal = ({
                   <AccountInfo>
                     <SelectedAccount account={nominatingController} />
                   </AccountInfo>
-                  <AccountBalance>
-                    <TextSmall style={{ color: Colors.Black[600] }}>TOTAL BALANCE</TextSmall>
-                    <TokenValue value={nominatingControllerBalance} />
-                  </AccountBalance>
-                  <CopyButton textToCopy={encodeAddress(nominatingController.address)} />
                 </AccountDisplay>
               ) : (
                 <TextSmall>Not selected</TextSmall>
@@ -151,11 +152,6 @@ export const TransactionSummaryModal = ({
                   <AccountInfo>
                     <SelectedAccount account={stashAccount} />
                   </AccountInfo>
-                  <AccountBalance>
-                    <TextSmall style={{ color: Colors.Black[600] }}>TOTAL BALANCE</TextSmall>
-                    <TokenValue value={stashAccountBalance} />
-                  </AccountBalance>
-                  <CopyButton textToCopy={encodeAddress(stashAccount.address)} />
                 </AccountDisplay>
               ) : (
                 <TextSmall>Not selected</TextSmall>
@@ -251,13 +247,6 @@ const AccountDisplay = styled.div`
   background: ${Colors.Black[50]};
   border: 1px solid ${Colors.Black[200]};
   border-radius: 4px;
-`
-
-const AccountBalance = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
 `
 
 const AccountInfo = styled.div`

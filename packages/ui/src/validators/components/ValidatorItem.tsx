@@ -25,8 +25,9 @@ import { ValidatorInfo } from './ValidatorInfo'
 interface ValidatorItemProps {
   validator: ValidatorWithDetails
   onClick?: () => void
+  isNominated?: boolean
 }
-export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
+export const ValidatorItem = ({ validator, onClick, isNominated = false }: ValidatorItemProps) => {
   const { stashAccount, membership, isVerifiedValidator, isActive, commission, APR, staking } = validator
   const { showModal } = useModal<NominatingRedirectModalCall>()
   const { showModal: showNominateModal } = useModal<NominateValidatorModalCall>()
@@ -86,7 +87,11 @@ export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
         <TextMedium bold>{whenDefined(APR, (apr) => `${apr}%`) ?? '-'}</TextMedium>
         <TextMedium bold>{commission}%</TextMedium>
         <ActionButtons>
-          {isValidatorSelected ? (
+          {isNominated ? (
+            <ButtonPrimary size="small" onClick={(e) => handleActionClick(e, 'Nominate')}>
+              Nominate
+            </ButtonPrimary>
+          ) : isValidatorSelected ? (
             <ButtonPrimary size="small" onClick={(e) => handleActionClick(e, 'Select')} disabled={true}>
               Selected
             </ButtonPrimary>
