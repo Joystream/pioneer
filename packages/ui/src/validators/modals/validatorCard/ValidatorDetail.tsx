@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { ButtonPrimary, ButtonSecondary, ButtonGhost } from '@/common/components/buttons'
+import { ButtonPrimary } from '@/common/components/buttons'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview'
 import { ModalFooter } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
@@ -142,9 +142,9 @@ export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
             size="small"
             onClick={() => handleActionClick('Nominate')}
           >
-            Nominate
+            Select
           </ButtonPrimary>
-          <ButtonSecondary
+          {/* <ButtonSecondary
             size="small"
             onClick={() => handleActionClick('Stake')}
           >
@@ -167,7 +167,7 @@ export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
             onClick={() => handleActionClick('Payout')}
           >
             Payout
-          </ButtonGhost>
+          </ButtonGhost> */}
         </ActionButtonsContainer>
       </ModalFooter>
     </>

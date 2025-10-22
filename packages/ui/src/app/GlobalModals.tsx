@@ -70,10 +70,10 @@ import { VoteForProposalModal, VoteForProposalModalCall } from '@/proposals/moda
 import { VoteRationaleModalCall } from '@/proposals/modals/VoteRationale/types'
 import { VoteRationale } from '@/proposals/modals/VoteRationale/VoteRationale'
 import { BondModal, BondModalCall } from '@/validators/modals/BondModal'
-import { NominateValidatorModal, NominateValidatorModalCall } from '@/validators/modals/NominateValidatorModal'
+import { NominateValidatorModal } from '@/validators/modals/NominateValidatorModal'
+import { NominateValidatorModalCall } from '@/validators/modals/NominateValidatorModal/types'
 import { NominatingRedirectModal, NominatingRedirectModalCall } from '@/validators/modals/NominatingRedirectModal'
 import { PayoutModal, PayoutModalCall } from '@/validators/modals/PayoutModal'
-import { StakeModal, StakeModalCall } from '@/validators/modals/StakeModal'
 import { UnbondModal, UnbondModalCall } from '@/validators/modals/UnbondModal'
 import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { ApplyForRoleModal, ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
@@ -137,11 +137,10 @@ export type ModalNames =
   | ModalName<EmailSubscriptionModalCall>
   | ModalName<EmailConfirmationModalCall>
   | ModalName<NominatingRedirectModalCall>
-  | ModalName<NominateValidatorModalCall>
-  | ModalName<StakeModalCall>
   | ModalName<BondModalCall>
   | ModalName<UnbondModalCall>
   | ModalName<PayoutModalCall>
+  | ModalName<NominateValidatorModalCall>
   | ModalName<CancelProposalModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
@@ -196,11 +195,10 @@ const modals: Record<ModalNames, ReactElement> = {
   EmailSubscriptionModal: <EmailSubscriptionModal />,
   EmailConfirmationModal: <EmailConfirmationModal />,
   NominatingRedirect: <NominatingRedirectModal />,
-  NominateValidator: <NominateValidatorModal />,
-  Stake: <StakeModal />,
   Bond: <BondModal />,
   Unbond: <UnbondModal />,
   Payout: <PayoutModal />,
+  NominateValidator: <NominateValidatorModal />,
   CancelProposalModal: <CancelProposalModal />,
 }
 
@@ -222,11 +220,6 @@ const GUEST_ACCESSIBLE_MODALS: ModalNames[] = [
   'EmailConfirmationModal',
   'VoteRationaleModal',
   'NominatingRedirect',
-  'NominateValidator',
-  'Stake',
-  'Bond',
-  'Unbond',
-  'Payout',
   'CreateOpening',
   'LeaveRole',
 ]

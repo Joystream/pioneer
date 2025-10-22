@@ -3,14 +3,13 @@ import styled from 'styled-components'
 
 import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { BadgeStatus } from '@/common/components/BadgeStatus'
-import { ButtonPrimary, ButtonSecondary, ButtonGhost } from '@/common/components/buttons'
+import { ButtonPrimary } from '@/common/components/buttons'
 import { TableListItemAsLinkHover } from '@/common/components/List'
 import { Skeleton } from '@/common/components/Skeleton'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { whenDefined } from '@/common/utils'
-
 import { BondModalCall } from '@/validators/modals/BondModal'
 import { NominateValidatorModalCall } from '@/validators/modals/NominateValidatorModal'
 import { NominatingRedirectModalCall } from '@/validators/modals/NominatingRedirectModal'
@@ -18,6 +17,8 @@ import { PayoutModalCall } from '@/validators/modals/PayoutModal'
 import { StakeModalCall } from '@/validators/modals/StakeModal'
 import { UnbondModalCall } from '@/validators/modals/UnbondModal'
 import { ValidatorWithDetails } from '@/validators/types/Validator'
+
+import { useSelectedValidators } from '../context/SelectedValidatorsContext'
 
 import { ValidatorInfo } from './ValidatorInfo'
 
@@ -33,12 +34,16 @@ export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
   const { showModal: showBondModal } = useModal<BondModalCall>()
   const { showModal: showUnbondModal } = useModal<UnbondModalCall>()
   const { showModal: showPayoutModal } = useModal<PayoutModalCall>()
+  const { isSelected, toggleSelection, selectedValidators, maxSelection } = useSelectedValidators()
 
   const handleActionClick = (e: React.MouseEvent, action: string) => {
     e.stopPropagation()
     const validatorAddress = encodeAddress(stashAccount)
-    
+
     switch (action) {
+      case 'Select':
+        toggleSelection(validator)
+        break
       case 'Nominate':
         showNominateModal({ modal: 'NominateValidator', data: { validatorAddress } })
         break
@@ -59,6 +64,9 @@ export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
     }
   }
 
+  const isValidatorSelected = isSelected(validator)
+  const canSelect = !isValidatorSelected && selectedValidators.length < maxSelection
+
   return (
     <ValidatorItemWrapper onClick={onClick}>
       <ValidatorItemWrap>
@@ -78,13 +86,16 @@ export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
         <TextMedium bold>{whenDefined(APR, (apr) => `${apr}%`) ?? '-'}</TextMedium>
         <TextMedium bold>{commission}%</TextMedium>
         <ActionButtons>
-          <ButtonPrimary
-            size="small"
-            onClick={(e) => handleActionClick(e, 'Nominate')}
-          >
-            Nominate
-          </ButtonPrimary>
-          <ButtonSecondary
+          {isValidatorSelected ? (
+            <ButtonPrimary size="small" onClick={(e) => handleActionClick(e, 'Select')} disabled={false}>
+              Selected
+            </ButtonPrimary>
+          ) : (
+            <ButtonPrimary size="small" onClick={(e) => handleActionClick(e, 'Select')} disabled={!canSelect}>
+              {canSelect ? 'Select' : 'Max Reached'}
+            </ButtonPrimary>
+          )}
+          {/* <ButtonSecondary
             size="small"
             onClick={(e) => handleActionClick(e, 'Stake')}
           >
@@ -107,7 +118,7 @@ export const ValidatorItem = ({ validator, onClick }: ValidatorItemProps) => {
             onClick={(e) => handleActionClick(e, 'Payout')}
           >
             Payout
-          </ButtonGhost>
+          </ButtonGhost> */}
         </ActionButtons>
       </ValidatorItemWrap>
     </ValidatorItemWrapper>

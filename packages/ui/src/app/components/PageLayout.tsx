@@ -14,6 +14,7 @@ export interface PageLayoutProps {
   sidebarScrollable?: boolean
   footer?: ReactNode
   responsiveStyle?: FlattenSimpleInterpolation
+  fullWidth?: boolean
 }
 
 export const PageLayout = ({
@@ -24,8 +25,9 @@ export const PageLayout = ({
   footer,
   lastBreadcrumb,
   responsiveStyle,
+  fullWidth,
 }: PageLayoutProps) => (
-  <PageContent>
+  <PageContent fullWidth={fullWidth}>
     <Breadcrumbs lastBreadcrumb={lastBreadcrumb} breadcrumbsOptions={breadcrumbsOptions} />
     <PageLayoutContent
       header={header}
