@@ -44,31 +44,37 @@ export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
     return `${((validatedEra / totalEras) * 100).toFixed(1)}%`
   })
 
-  const handleActionClick = (action: string) => {
+  const handleActionClick = async (action: string) => {
     const validatorAddress = validator.stashAccount
-    
+
     switch (action) {
       case 'Nominate':
+        await new Promise((resolve) => setTimeout(resolve, 0)) // Make async
         hideModal()
         showNominateModal({ modal: 'NominateValidator', data: { validatorAddress } })
         break
       case 'Stake':
+        await new Promise((resolve) => setTimeout(resolve, 0)) // Make async
         hideModal()
         showStakeModal({ modal: 'Stake', data: { validatorAddress } })
         break
       case 'Bond':
+        await new Promise((resolve) => setTimeout(resolve, 0)) // Make async
         hideModal()
         showBondModal({ modal: 'Bond', data: { validatorAddress } })
         break
       case 'Unbond':
+        await new Promise((resolve) => setTimeout(resolve, 0)) // Make async
         hideModal()
         showUnbondModal({ modal: 'Unbond', data: { validatorAddress } })
         break
       case 'Payout':
+        await new Promise((resolve) => setTimeout(resolve, 0)) // Make async
         hideModal()
         showPayoutModal({ modal: 'Payout', data: { validatorAddress } })
         break
       default:
+        await new Promise((resolve) => setTimeout(resolve, 0)) // Make async
         hideModal()
         showModal({ modal: 'NominatingRedirect' })
     }
@@ -138,11 +144,8 @@ export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
       </SidePaneBody>
       <ModalFooter>
         <ActionButtonsContainer>
-          <ButtonPrimary
-            size="small"
-            onClick={() => handleActionClick('Nominate')}
-          >
-            Select
+          <ButtonPrimary size="small" onClick={() => handleActionClick('Nominate')}>
+            Nominate
           </ButtonPrimary>
           {/* <ButtonSecondary
             size="small"
