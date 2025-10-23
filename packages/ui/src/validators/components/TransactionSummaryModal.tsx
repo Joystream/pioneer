@@ -1,21 +1,21 @@
 import { BN } from '@polkadot/util'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
-import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { encodeAddress } from '@/accounts/model/encodeAddress'
+import { useBalance } from '@/accounts/hooks/useBalance'
+import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
 import { useApi } from '@/api/hooks/useApi'
-import { ButtonPrimary, ButtonGhost } from '@/common/components/buttons'
+import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons/ArrowIcon'
-import { Modal, ModalHeader, ModalBody, ModalFooter } from '@/common/components/Modal'
+import { Modal, ModalHeader, ModalBody } from '@/common/components/Modal'
 import { TextInlineMedium, TextMedium, TextSmall, TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
+import { useMachine } from '@/common/hooks/useMachine'
+import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
+import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 
 import { useSelectedValidators } from '../context/SelectedValidatorsContext'
-
-import { ValidatorInfo } from './ValidatorInfo'
 
 interface TransactionSummaryModalProps {
   isOpen: boolean
@@ -37,80 +37,142 @@ export const TransactionSummaryModal = ({
   valueBonded,
 }: TransactionSummaryModalProps) => {
   const { selectedValidators } = useSelectedValidators()
-  const { api } = useApi()
-  const { wallet } = useMyAccounts()
-  const [isSigning, setIsSigning] = useState(false)
-  const [isProcessing, setIsProcessing] = useState(false)
+  const { api, isConnected } = useApi()
 
-  // Create the staking transaction
+  // Create state machine for transaction flow
+  const machine = useMemo(
+    () =>
+      defaultTransactionModalMachine(
+        'There was a problem bonding and nominating validators.',
+        'Your nomination has been submitted successfully.'
+      ),
+    []
+  )
+  const [state, send] = useMachine(machine, { context: { validateBeforeTransaction: true } })
+
+  // Create transaction directly
   const transaction = useMemo(() => {
-    if (!api || !nominatingController || !stashAccount || !selectedValidators.length) {
+    if (!api || !isConnected || !nominatingController || !stashAccount || !valueBonded || !selectedValidators.length) {
       return undefined
     }
 
-    const validatorAddresses = selectedValidators.map((validator) => validator.stashAccount)
-
     try {
-      // For now, let's try just the nominate operation to see if that works
-      // We can add the bond operation later if needed
-      const tx = api.tx.staking.nominate(validatorAddresses)
+      const bondedValue = new BN(valueBonded)
 
-      return tx
-    } catch (error) {
+      return api.tx.utility.batch([
+        api.tx.staking.bond(nominatingController.address, bondedValue, 'Staked'),
+        api.tx.staking.nominate(selectedValidators.map((validator) => validator.stashAccount)),
+      ])
+    } catch (err) {
       return undefined
     }
-  }, [api, nominatingController, stashAccount, selectedValidators, valueBonded])
+  }, [api, isConnected, nominatingController, stashAccount, valueBonded, selectedValidators])
 
-  // Get transaction fee information
-  const { feeInfo } = useTransactionFee(nominatingController?.address, () => transaction, [transaction])
+  const [transactionFee, setTransactionFee] = useState<BN | undefined>(undefined)
+  const balance = useBalance(stashAccount?.address)
 
-  const handleSignAndNominate = useCallback(async () => {
-    if (!transaction || !nominatingController || !api || !wallet) {
-      return
-    }
-
-    try {
-      setIsSigning(true)
-      setIsProcessing(true)
-
-      // Try using the transaction with proper error handling
-      const unsubscribe = transaction.signAndSend(nominatingController.address, wallet.signer, (result: any) => {
-        if (result.status.isInBlock) {
-          setIsSigning(false)
-          setIsProcessing(false)
-
-          // Check for errors in events
-          const hasError = result.events.some((eventRecord: any) => {
-            return eventRecord.event.section === 'system' && eventRecord.event.method === 'ExtrinsicFailed'
-          })
-
-          if (!hasError) {
-            // Transaction successful
-            onSignAndNominate()
-          } else {
-            // Transaction failed
-            setIsSigning(false)
-            setIsProcessing(false)
-          }
-        } else if (result.status.isFinalized) {
-          // Transaction finalized - no action needed
-        }
+  useEffect(() => {
+    if (transaction && stashAccount?.address) {
+      const subscription = transaction.paymentInfo(stashAccount.address).subscribe((info: any) => {
+        setTransactionFee(info.partialFee.toBn())
       })
 
-      // Store unsubscribe function for cleanup
-      if (unsubscribe) {
-        // You might want to store this for cleanup later
-      }
-    } catch (error) {
-      setIsSigning(false)
-      setIsProcessing(false)
+      return () => subscription.unsubscribe()
     }
-  }, [transaction, nominatingController, api, wallet, onSignAndNominate])
+  }, [transaction, stashAccount?.address])
 
-  // Check if we have all required data for the transaction
-  const isTransactionReady = transaction && nominatingController && stashAccount && selectedValidators.length > 0
+  // Create feeInfo object
+  const feeInfo = useMemo(() => {
+    if (!transactionFee || !balance) return undefined
 
+    return {
+      transactionFee,
+      canAfford: balance.transferable.gte(transactionFee),
+    }
+  }, [transactionFee, balance])
+
+  // Verify requirements when transaction and fee info are ready
+  useEffect(() => {
+    if (isOpen && state.matches('requirementsVerification')) {
+      if (transaction && feeInfo) {
+        send('PASS')
+      }
+    }
+  }, [isOpen, state, transaction, feeInfo, send])
+
+  useEffect(() => {
+    if (state.matches('success')) {
+      onSignAndNominate()
+    }
+  }, [state, onSignAndNominate])
+
+  // Don't render anything if modal is not open
   if (!isOpen) return null
+
+  // Show insufficient funds modal if requirements failed
+  // When closed, it should close all modals
+  if (state.matches('requirementsFailed') && stashAccount && feeInfo) {
+    return <InsufficientFundsModal onClose={onClose} address={stashAccount.address} amount={feeInfo.transactionFee} />
+  }
+
+  // Also show insufficient funds modal when user clicks button without enough funds
+  if (state.matches('beforeTransaction') && feeInfo && !feeInfo.canAfford && stashAccount) {
+    return <InsufficientFundsModal onClose={onClose} address={stashAccount.address} amount={feeInfo.transactionFee} />
+  }
+
+  // Show sign transaction modal when in transaction state
+  if (state.matches('transaction') && transaction && stashAccount) {
+    return (
+      <SignTransactionModal
+        buttonText="Sign and Nominate"
+        transaction={transaction}
+        signer={stashAccount.address}
+        service={state.children.transaction}
+        skipQueryNode={true}
+      >
+        <Content>
+          <IntroText>
+            <div style={{ fontSize: '14px', lineHeight: '20px' }}>
+              You are about to bond{' '}
+              <TextInlineMedium bold>
+                <TokenValue value={new BN(valueBonded)} />
+              </TextInlineMedium>{' '}
+              from your stash account and nominate {selectedValidators.length} validator
+              {selectedValidators.length !== 1 ? 's' : ''}.
+            </div>
+          </IntroText>
+
+          <AccountSection>
+            <AccountItem>
+              <AccountLabel>Stash account (bonding & paying fees)</AccountLabel>
+              {stashAccount ? (
+                <AccountDisplay>
+                  <AccountInfo>
+                    <SelectedAccount account={stashAccount} />
+                  </AccountInfo>
+                </AccountDisplay>
+              ) : (
+                <TextSmall>Not selected</TextSmall>
+              )}
+            </AccountItem>
+
+            <AccountItem>
+              <AccountLabel>Controller account (managing nominations)</AccountLabel>
+              {nominatingController ? (
+                <AccountDisplay>
+                  <AccountInfo>
+                    <SelectedAccount account={nominatingController} />
+                  </AccountInfo>
+                </AccountDisplay>
+              ) : (
+                <TextSmall>Not selected</TextSmall>
+              )}
+            </AccountItem>
+          </AccountSection>
+        </Content>
+      </SignTransactionModal>
+    )
+  }
 
   return (
     <StyledModal onClose={onClose} modalSize="l">
@@ -123,9 +185,9 @@ export const TransactionSummaryModal = ({
               <TextInlineMedium bold>
                 <TokenValue value={new BN(valueBonded)} />
               </TextInlineMedium>{' '}
-              from your controller account. Fees of{' '}
+              from your controller account. Fees{' '}
               <TextInlineMedium bold>
-                <TokenValue value={feeInfo?.transactionFee ? feeInfo.transactionFee : new BN('2000')} />
+                <TokenValue value={feeInfo?.transactionFee || new BN('2000')} />
               </TextInlineMedium>{' '}
               will be applied to the transaction.
             </div>
@@ -134,19 +196,6 @@ export const TransactionSummaryModal = ({
           <AccountSection>
             <AccountItem>
               <AccountLabel>Staking from controller account</AccountLabel>
-              {nominatingController ? (
-                <AccountDisplay>
-                  <AccountInfo>
-                    <SelectedAccount account={nominatingController} />
-                  </AccountInfo>
-                </AccountDisplay>
-              ) : (
-                <TextSmall>Not selected</TextSmall>
-              )}
-            </AccountItem>
-
-            <AccountItem>
-              <AccountLabel>Fee paid from account</AccountLabel>
               {stashAccount ? (
                 <AccountDisplay>
                   <AccountInfo>
@@ -157,54 +206,62 @@ export const TransactionSummaryModal = ({
                 <TextSmall>Not selected</TextSmall>
               )}
             </AccountItem>
-          </AccountSection>
 
-          <ValidatorsSection>
-            <ValidatorsHeader>
-              <TextMedium bold>Nominated validators ({selectedValidators.length})</TextMedium>
-            </ValidatorsHeader>
-            <ValidatorsList>
-              {selectedValidators.map((validator) => (
-                <ValidatorItem key={validator.stashAccount}>
-                  <ValidatorInfo member={validator.membership} address={encodeAddress(validator.stashAccount)} />
-                </ValidatorItem>
-              ))}
-            </ValidatorsList>
-          </ValidatorsSection>
+            <AccountItem>
+              <AccountLabel>Fee paid from account</AccountLabel>
+              {nominatingController ? (
+                <AccountDisplay>
+                  <AccountInfo>
+                    <SelectedAccount account={nominatingController} />
+                  </AccountInfo>
+                </AccountDisplay>
+              ) : (
+                <TextSmall>Not selected</TextSmall>
+              )}
+            </AccountItem>
+          </AccountSection>
         </Content>
       </ModalBody>
-      <ModalFooter>
-        <FooterContent>
-          <ButtonGhost size="medium" onClick={onBack}>
-            <Arrow direction="left" /> Back
-          </ButtonGhost>
+      <FooterWrapper>
+        <ButtonGhost size="medium" onClick={onBack}>
+          <Arrow direction="left" /> Back
+        </ButtonGhost>
+        <TransactionValue>
           <TransactionSummary>
-            <SummaryItem>
-              <TextSmall>AMOUNT:</TextSmall>
-              <TextInlineMedium bold>
-                <TokenValue value={new BN(valueBonded)} />
-              </TextInlineMedium>
-            </SummaryItem>
-            <SummaryItem>
-              <TextSmall>TRANSACTION FEE:</TextSmall>
-              <TextInlineMedium bold>
-                {feeInfo?.transactionFee ? (
-                  <TokenValue value={feeInfo.transactionFee} />
-                ) : (
-                  <TokenValue value={new BN('2000')} />
-                )}
-              </TextInlineMedium>
-            </SummaryItem>
+            AMOUNT:{' '}
+            <TextInlineMedium bold>
+              <TokenValue value={new BN(valueBonded)} />
+            </TextInlineMedium>
           </TransactionSummary>
+          <TransactionSummary>
+            TRANSACTION FEES:{' '}
+            <TextInlineMedium bold>
+              <TokenValue value={feeInfo?.transactionFee || new BN('2000')} />
+            </TextInlineMedium>
+          </TransactionSummary>
+        </TransactionValue>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
           <ButtonPrimary
             size="medium"
-            onClick={handleSignAndNominate}
-            disabled={!isTransactionReady || isSigning || isProcessing}
+            onClick={() => {
+              // Check funds before proceeding
+              if (feeInfo && !feeInfo.canAfford) {
+                send('FAIL')
+              } else {
+                send('PASS')
+              }
+            }}
+            disabled={!transaction || !feeInfo || !state.matches('beforeTransaction')}
           >
-            {isSigning || isProcessing ? 'Processing...' : 'Sign and Nominate'} <Arrow direction="right" />
+            {!transaction || !feeInfo
+              ? 'Loading...'
+              : !state.matches('beforeTransaction')
+              ? 'Checking...'
+              : 'Sign and Nominate'}{' '}
+            <Arrow direction="right" />
           </ButtonPrimary>
-        </FooterContent>
-      </ModalFooter>
+        </div>
+      </FooterWrapper>
     </StyledModal>
   )
 }
@@ -212,6 +269,7 @@ export const TransactionSummaryModal = ({
 const Content = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 24px;
 `
 
@@ -221,7 +279,21 @@ const IntroText = styled.div`
   border-radius: 4px;
   color: ${Colors.Black[400]};
 `
-
+const TransactionSummary = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+  color: ${Colors.Black[600]};
+`
+const TransactionValue = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+`
 const AccountSection = styled.div`
   display: flex;
   flex-direction: column;
@@ -236,6 +308,7 @@ const AccountItem = styled.div`
 
 const AccountLabel = styled(TextMedium)`
   font-weight: 600;
+  padding: 4px 16px;
   color: ${Colors.Black[600]};
 `
 
@@ -255,56 +328,13 @@ const AccountInfo = styled.div`
   gap: 8px;
 `
 
-const ValidatorsSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`
-
-const ValidatorsHeader = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`
-
-const ValidatorsList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-height: 200px;
-  overflow-y: auto;
-`
-
-const ValidatorItem = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px;
-  background: ${Colors.White};
-  border: 1px solid ${Colors.Black[200]};
-  border-radius: 4px;
-`
-
-const FooterContent = styled.div`
+const FooterWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
-`
-
-const TransactionSummary = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  color: ${Colors.Black[400]};
-`
-
-const SummaryItem = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  padding: 16px 24px;
+  border-top: 1px solid ${Colors.Black[200]};
 `
 
 const StyledModal = styled(Modal)`

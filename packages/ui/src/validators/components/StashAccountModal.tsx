@@ -23,9 +23,19 @@ export const StashAccountModal = ({ isOpen, onClose, onContinue, onBack }: Stash
   const [valueBonded, setValueBonded] = useState(new BN(0))
   const [paymentDestination, setPaymentDestination] = useState<Account | undefined>(undefined)
 
+  // Minimum bonding threshold: 1.6666 kJOY = 1,666,600,000,000,000 (in smallest unit)
+  const MIN_BONDING_THRESHOLD = new BN('1666600000000')
+
   // Validation function
   const isFormValid = () => {
-    return nominatingController && stashAccount && valueBonded && valueBonded.gt(new BN(0))
+    return nominatingController && stashAccount && valueBonded && valueBonded.gte(MIN_BONDING_THRESHOLD)
+  }
+
+  const getValidationError = () => {
+    if (valueBonded.gt(new BN(0)) && valueBonded.lt(MIN_BONDING_THRESHOLD)) {
+      return 'The bonded amount must be at least 1.6666 kJOY smallest units'
+    }
+    return null
   }
 
   const handleStashAccountChange = (account: Account | undefined) => {
@@ -33,10 +43,6 @@ export const StashAccountModal = ({ isOpen, onClose, onContinue, onBack }: Stash
     if (account) {
       if (!paymentDestination) {
         setPaymentDestination(account)
-      }
-
-      if (!nominatingController) {
-        setNominatingController(account)
       }
 
       const previousBondedValue = getPreviousBondedValue(account.address)
@@ -101,9 +107,11 @@ export const StashAccountModal = ({ isOpen, onClose, onContinue, onBack }: Stash
 
           <InputComponent
             label="Value bonded"
-            tooltipText="Amount of JOY tokens to bond for staking"
+            tooltipText="Amount of JOY tokens to bond for staking (minimum: 1.6666 kJOY)"
             required
             units="JOY"
+            validation={getValidationError() ? 'invalid' : undefined}
+            message={getValidationError() || undefined}
           >
             <TokenInput value={valueBonded} onChange={(_, value) => setValueBonded(value)} />
           </InputComponent>
@@ -141,7 +149,7 @@ export const StashAccountModal = ({ isOpen, onClose, onContinue, onBack }: Stash
           <ButtonPrimary
             size="medium"
             onClick={() => onContinue({ nominatingController, stashAccount, valueBonded })}
-            disabled={!isFormValid() || valueBonded.isZero()}
+            disabled={!isFormValid()}
           >
             Continue <Arrow direction="right" />
           </ButtonPrimary>

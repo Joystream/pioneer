@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { ButtonPrimary, ButtonGhost } from '@/common/components/buttons'
-import { CopyButton } from '@/common/components/buttons/CopyButton'
 import { Arrow } from '@/common/components/icons/ArrowIcon'
 import { TextMedium, TextSmall } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
@@ -46,7 +45,6 @@ export const SelectedValidatorsPanel = ({ onProceed }: SelectedValidatorsPanelPr
               <ValidatorItem key={validator.stashAccount}>
                 <ValidatorInfo member={validator.membership} address={encodeAddress(validator.stashAccount)} />
                 <ValidatorActions>
-                  <CopyButton textToCopy={encodeAddress(validator.stashAccount)} />
                   <RemoveButton onClick={() => handleRemoveValidator(validator)}>×</RemoveButton>
                 </ValidatorActions>
               </ValidatorItem>

@@ -69,7 +69,8 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
   const handleStashModalContinue = (data: { nominatingController: any; stashAccount: any; valueBonded: BN }) => {
     setIsStashModalOpen(false)
     setStashAccountData(data)
-    setIsTransactionSummaryModalOpen(true)
+    setIsNominateModalOpen(true)
+    //
   }
 
   const handleStashModalBack = () => {
@@ -83,25 +84,25 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
 
   const handleTransactionSummaryModalBack = () => {
     setIsTransactionSummaryModalOpen(false)
-    setIsStashModalOpen(true)
+    setIsNominateModalOpen(true)
   }
 
   const handleTransactionSummaryModalClose = () => {
     setIsTransactionSummaryModalOpen(false)
+    // Clear all selections and reset state when closing due to error
+    clearSelection()
+    setStashAccountData(null)
   }
 
   const handleTransactionSummaryModalContinue = () => {
     // Close the transaction summary modal
-    setIsTransactionSummaryModalOpen(false)
-
-    // For now, proceed to the final confirmation modal
-    // In a real implementation, this would trigger the actual transaction signing
-    setIsNominateModalOpen(true)
+    //setIsTransactionSummaryModalOpen(false)
+    //setIsNominateModalOpen(true)
   }
 
   const handleNominateModalBack = () => {
     setIsNominateModalOpen(false)
-    setIsTransactionSummaryModalOpen(true)
+    setIsStashModalOpen(true)
   }
 
   const handleNominateModalClose = () => {
@@ -110,8 +111,8 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
 
   const handleBondAndNominate = () => {
     setIsNominateModalOpen(false)
-    // Show success modal after successful transaction
-    setIsSuccessModalOpen(true)
+    setIsTransactionSummaryModalOpen(true)
+    //setIsSuccessModalOpen(true)
   }
 
   const handleSuccessModalClose = () => {
@@ -120,8 +121,6 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
 
   const handleSuccessModalContinue = () => {
     setIsSuccessModalOpen(false)
-    // Clear selected validators and return to validator list
-    // This will allow users to select and nominate more validators
     clearSelection()
   }
 
@@ -234,15 +233,6 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
         onContinue={handleStashModalContinue}
         onBack={handleStashModalBack}
       />
-      <TransactionSummaryModal
-        isOpen={isTransactionSummaryModalOpen}
-        onClose={handleTransactionSummaryModalClose}
-        onBack={handleTransactionSummaryModalBack}
-        onSignAndNominate={handleTransactionSummaryModalContinue}
-        nominatingController={stashAccountData?.nominatingController}
-        stashAccount={stashAccountData?.stashAccount}
-        valueBonded={stashAccountData?.valueBonded ? stashAccountData.valueBonded.toString() : '0'}
-      />
       <NominateValidatorsModal
         isOpen={isNominateModalOpen}
         onClose={handleNominateModalClose}
@@ -252,6 +242,16 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
         stashAccount={stashAccountData?.stashAccount}
         valueBonded={stashAccountData?.valueBonded ? stashAccountData.valueBonded : new BN(0)}
       />
+      <TransactionSummaryModal
+        isOpen={isTransactionSummaryModalOpen}
+        onClose={handleTransactionSummaryModalClose}
+        onBack={handleTransactionSummaryModalBack}
+        onSignAndNominate={handleTransactionSummaryModalContinue}
+        nominatingController={stashAccountData?.nominatingController}
+        stashAccount={stashAccountData?.stashAccount}
+        valueBonded={stashAccountData?.valueBonded ? stashAccountData.valueBonded.toString() : '0'}
+      />
+
       <StakingSuccessModal
         isOpen={isSuccessModalOpen}
         onClose={handleSuccessModalClose}
