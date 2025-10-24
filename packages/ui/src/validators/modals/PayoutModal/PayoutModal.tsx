@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useApi } from '@/api/hooks/useApi'
-import { ButtonPrimary } from '@/common/components/buttons'
+import { ButtonPrimary, ButtonSecondary } from '@/common/components/buttons'
+import { InputComponent, InputText } from '@/common/components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium } from '@/common/components/typography'
+import { SuccessModal } from '@/common/components/SuccessModal'
+import { TextMedium, TextSmall } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { Address } from '@/common/types'
-
+import { useStakingQueries, useStakingTransactions } from '@/validators/hooks/useStakingSDK'
 import { PayoutModalCall } from '@/validators/modals/PayoutModal/types'
 
 interface Props {
@@ -19,50 +22,181 @@ export const PayoutModal = () => {
   const validatorAddress = modalData?.validatorAddress
 
   if (!validatorAddress) return null
-  
+
   return <PayoutModalInner validatorAddress={validatorAddress} />
 }
 
 const PayoutModalInner = ({ validatorAddress }: Props) => {
   const { hideModal } = useModal<PayoutModalCall>()
   const { api } = useApi()
+  const { allAccounts } = useMyAccounts()
+  const { payoutStakers, isConnected } = useStakingTransactions()
+  const { getStakingRewards } = useStakingQueries()
+
+  const [era, setEra] = useState('1')
+  const [availableRewards, setAvailableRewards] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
+  const isMountedRef = useRef(true)
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false
+    }
+  }, [])
+
+  useEffect(() => {
+    const loadRewards = async () => {
+      if (!allAccounts[0]?.address) return
+
+      try {
+        const rewards = await getStakingRewards(allAccounts[0].address)
+        if (isMountedRef.current) {
+          setAvailableRewards(rewards)
+        }
+      } catch (err) {
+        if (isMountedRef.current) {
+          setError('Failed to load rewards')
+        }
+      }
+    }
+
+    loadRewards()
+  }, [allAccounts])
 
   const handlePayout = async () => {
-    if (!api) {
-      console.error('API not available')
+    if (!api || !isConnected) {
+      setError('API not connected')
       return
     }
 
-    try {
-      // TODO: Implement actual payout transaction
-      console.log('Claiming payout from validator:', validatorAddress)
-      hideModal()
-    } catch (error) {
-      console.error('Payout failed:', error)
+    if (!allAccounts[0]?.address) {
+      setError('No account selected')
+      return
     }
+
+    const eraNumber = parseInt(era)
+    if (!era || isNaN(eraNumber) || eraNumber <= 0) {
+      setError('Please enter a valid era number')
+      return
+    }
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      // Validate payoutStakers function exists
+      if (typeof payoutStakers !== 'function') {
+        throw new Error('Payout function not available')
+      }
+
+      const payoutTx = payoutStakers(validatorAddress, eraNumber)
+
+      if (!payoutTx || typeof payoutTx.signAndSend !== 'function') {
+        throw new Error('Invalid transaction object')
+      }
+
+      await payoutTx.signAndSend(allAccounts[0])
+
+      if (isMountedRef.current) {
+        setSuccess(true)
+      }
+    } catch (err) {
+      if (isMountedRef.current) {
+        setError(err instanceof Error ? err.message : 'Payout failed')
+      }
+    } finally {
+      if (isMountedRef.current) {
+        setIsLoading(false)
+      }
+    }
+  }
+
+  const handleEraChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    if (value === '' || (!isNaN(parseInt(value)) && parseInt(value) > 0)) {
+      setEra(value)
+    }
+  }
+
+  if (success) {
+    return (
+      <SuccessModal
+        onClose={hideModal}
+        text={`Payout transaction submitted successfully! Rewards for era ${era} will be processed.`}
+      />
+    )
   }
 
   return (
     <Modal modalSize="m" onClose={hideModal}>
-      <ModalHeader title="Claim Payout" onClick={hideModal} />
+      <ModalHeader title="Payout Rewards" onClick={hideModal} />
       <ModalBody>
         <RowGapBlock gap={16}>
-          <TextMedium>
-            You are about to claim your payout from this validator. This will transfer any earned 
-            rewards to your account.
-          </TextMedium>
+          <TextMedium>Claim earned rewards from this validator for previous eras.</TextMedium>
+
           <TextMedium>
             <strong>Validator Address:</strong> {validatorAddress}
           </TextMedium>
-          <TextMedium>
-            <strong>Note:</strong> This is a preview implementation. The actual transaction will be implemented 
-            in a separate PR for testing.
-          </TextMedium>
+
+          <InputComponent label="Era to Payout" required inputSize="m" id="payout-era">
+            <InputText
+              id="payout-era"
+              placeholder="Enter era number"
+              value={era}
+              onChange={handleEraChange}
+              type="number"
+              min="1"
+            />
+          </InputComponent>
+
+          {availableRewards.length > 0 && (
+            <div>
+              <TextMedium>
+                <strong>Available Rewards:</strong>
+              </TextMedium>
+              <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                {availableRewards.map((reward, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      padding: '8px',
+                      border: '1px solid #ccc',
+                      margin: '4px 0',
+                      borderRadius: '4px',
+                    }}
+                  >
+                    <TextSmall>Era: {reward.era}</TextSmall>
+                    <TextSmall>Amount: {reward.amount} JOY</TextSmall>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {error && (
+            <TextSmall style={{ color: 'red' }}>
+              <strong>Error:</strong> {error}
+            </TextSmall>
+          )}
+
+          <TextSmall>
+            <strong>Note:</strong> You can only payout rewards for eras that have ended. Rewards are calculated based on
+            your nominations and the validator's performance.
+          </TextSmall>
         </RowGapBlock>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimary size="medium" onClick={handlePayout}>
-          Claim Payout
+        <ButtonSecondary size="medium" onClick={hideModal}>
+          Cancel
+        </ButtonSecondary>
+        <ButtonPrimary
+          size="medium"
+          onClick={handlePayout}
+          disabled={isLoading || !era || isNaN(parseInt(era)) || parseInt(era) <= 0 || !allAccounts[0]?.address}
+        >
+          {isLoading ? 'Paying out...' : 'Payout Rewards'}
         </ButtonPrimary>
       </ModalFooter>
     </Modal>

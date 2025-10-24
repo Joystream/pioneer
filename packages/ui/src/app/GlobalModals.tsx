@@ -74,7 +74,11 @@ import { NominateValidatorModal } from '@/validators/modals/NominateValidatorMod
 import { NominateValidatorModalCall } from '@/validators/modals/NominateValidatorModal/types'
 import { NominatingRedirectModal, NominatingRedirectModalCall } from '@/validators/modals/NominatingRedirectModal'
 import { PayoutModal, PayoutModalCall } from '@/validators/modals/PayoutModal'
+import { RebagModal, RebagModalCall } from '@/validators/modals/RebagModal'
+import { RebondModal, RebondModalCall } from '@/validators/modals/RebondModal'
+import { StakeModal, StakeModalCall } from '@/validators/modals/StakeModal'
 import { UnbondModal, UnbondModalCall } from '@/validators/modals/UnbondModal'
+import { ValidateModal, ValidateModalCall } from '@/validators/modals/ValidateModal'
 import { ApplicationDetailsModal, ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
 import { ApplyForRoleModal, ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
 import { ChangeAccountModal, ChangeAccountModalCall } from '@/working-groups/modals/ChangeAccountModal'
@@ -141,6 +145,10 @@ export type ModalNames =
   | ModalName<UnbondModalCall>
   | ModalName<PayoutModalCall>
   | ModalName<NominateValidatorModalCall>
+  | ModalName<StakeModalCall>
+  | ModalName<ValidateModalCall>
+  | ModalName<RebagModalCall>
+  | ModalName<RebondModalCall>
   | ModalName<CancelProposalModalCall>
 
 const modals: Record<ModalNames, ReactElement> = {
@@ -199,6 +207,10 @@ const modals: Record<ModalNames, ReactElement> = {
   Unbond: <UnbondModal />,
   Payout: <PayoutModal />,
   NominateValidator: <NominateValidatorModal />,
+  Stake: <StakeModal />,
+  Validate: <ValidateModal />,
+  Rebag: <RebagModal />,
+  Rebond: <RebondModal />,
   CancelProposalModal: <CancelProposalModal />,
 }
 

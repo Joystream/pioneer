@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { encodeAddress } from '@/accounts/model/encodeAddress'
@@ -11,15 +11,16 @@ import { BorderRad, Colors, Sizes, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { whenDefined } from '@/common/utils'
 import { BondModalCall } from '@/validators/modals/BondModal'
-import { NominateValidatorModalCall } from '@/validators/modals/NominateValidatorModal'
 import { NominatingRedirectModalCall } from '@/validators/modals/NominatingRedirectModal'
 import { PayoutModalCall } from '@/validators/modals/PayoutModal'
-import { StakeModalCall } from '@/validators/modals/StakeModal'
+import { RebagModalCall } from '@/validators/modals/RebagModal'
+import { RebondModalCall } from '@/validators/modals/RebondModal'
 import { UnbondModalCall } from '@/validators/modals/UnbondModal'
 import { ValidatorWithDetails } from '@/validators/types/Validator'
 
 import { useSelectedValidators } from '../context/SelectedValidatorsContext'
 
+import { ValidatorActionsDropdown } from './ValidatorActionsDropdown'
 import { ValidatorInfo } from './ValidatorInfo'
 
 interface ValidatorItemProps {
@@ -30,12 +31,13 @@ interface ValidatorItemProps {
 export const ValidatorItem = ({ validator, onClick, isNominated = false }: ValidatorItemProps) => {
   const { stashAccount, membership, isVerifiedValidator, isActive, commission, APR, staking } = validator
   const { showModal } = useModal<NominatingRedirectModalCall>()
-  const { showModal: showNominateModal } = useModal<NominateValidatorModalCall>()
-  const { showModal: showStakeModal } = useModal<StakeModalCall>()
   const { showModal: showBondModal } = useModal<BondModalCall>()
   const { showModal: showUnbondModal } = useModal<UnbondModalCall>()
   const { showModal: showPayoutModal } = useModal<PayoutModalCall>()
+  const { showModal: showRebagModal } = useModal<RebagModalCall>()
+  const { showModal: showRebondModal } = useModal<RebondModalCall>()
   const { isSelected, toggleSelection, selectedValidators, maxSelection } = useSelectedValidators()
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   const handleActionClick = (e: React.MouseEvent, action: string) => {
     e.stopPropagation()
@@ -44,12 +46,6 @@ export const ValidatorItem = ({ validator, onClick, isNominated = false }: Valid
     switch (action) {
       case 'Select':
         toggleSelection(validator)
-        break
-      case 'Nominate':
-        showNominateModal({ modal: 'NominateValidator', data: { validatorAddress } })
-        break
-      case 'Stake':
-        showStakeModal({ modal: 'Stake', data: { validatorAddress } })
         break
       case 'Bond':
         showBondModal({ modal: 'Bond', data: { validatorAddress } })
@@ -60,6 +56,12 @@ export const ValidatorItem = ({ validator, onClick, isNominated = false }: Valid
       case 'Payout':
         showPayoutModal({ modal: 'Payout', data: { validatorAddress } })
         break
+      case 'Rebag':
+        showRebagModal({ modal: 'Rebag', data: { validatorAddress } })
+        break
+      case 'Rebond':
+        showRebondModal({ modal: 'Rebond', data: { validatorAddress } })
+        break
       default:
         showModal({ modal: 'NominatingRedirect' })
     }
@@ -69,7 +71,7 @@ export const ValidatorItem = ({ validator, onClick, isNominated = false }: Valid
   const canSelect = !isValidatorSelected && selectedValidators.length < maxSelection
 
   return (
-    <ValidatorItemWrapper onClick={onClick}>
+    <ValidatorItemWrapper onClick={onClick} $isDropdownOpen={isDropdownOpen}>
       <ValidatorItemWrap>
         <ValidatorInfo member={membership} address={encodeAddress(stashAccount)} />
         {isVerifiedValidator ? (
@@ -88,49 +90,49 @@ export const ValidatorItem = ({ validator, onClick, isNominated = false }: Valid
         <TextMedium bold>{commission}%</TextMedium>
         <ActionButtons>
           {isNominated ? (
-            <ButtonPrimary size="small" onClick={(e) => handleActionClick(e, 'Nominate')}>
+            <ButtonPrimary
+              size="small"
+              onClick={(e) => handleActionClick(e, 'Nominate')}
+              title="Nominate this validator to receive rewards. You can change nominations each era without unbonding."
+            >
               Nominate
             </ButtonPrimary>
           ) : isValidatorSelected ? (
-            <ButtonPrimary size="small" onClick={(e) => handleActionClick(e, 'Select')} disabled={true}>
+            <ButtonPrimary
+              size="small"
+              onClick={(e) => handleActionClick(e, 'Select')}
+              disabled={true}
+              title="This validator is already selected for nomination."
+            >
               Selected
             </ButtonPrimary>
           ) : (
-            <ButtonPrimary size="small" onClick={(e) => handleActionClick(e, 'Select')} disabled={!canSelect}>
+            <ButtonPrimary
+              size="small"
+              onClick={(e) => handleActionClick(e, 'Select')}
+              disabled={!canSelect}
+              title={canSelect ? 'Select this validator for nomination' : 'Maximum number of validators selected'}
+            >
               {canSelect ? 'Select' : 'Max Reached'}
             </ButtonPrimary>
           )}
-          {/* <ButtonSecondary
-            size="small"
-            onClick={(e) => handleActionClick(e, 'Stake')}
-          >
-            Stake
-          </ButtonSecondary>
-          <ButtonGhost
-            size="small"
-            onClick={(e) => handleActionClick(e, 'Bond')}
-          >
-            Bond
-          </ButtonGhost>
-          <ButtonGhost
-            size="small"
-            onClick={(e) => handleActionClick(e, 'Unbond')}
-          >
-            Unbond
-          </ButtonGhost>
-          <ButtonGhost
-            size="small"
-            onClick={(e) => handleActionClick(e, 'Payout')}
-          >
-            Payout
-          </ButtonGhost> */}
+          <ValidatorActionsDropdown
+            onActionClick={(action) => {
+              const mockEvent = {
+                stopPropagation: () => {},
+                preventDefault: () => {},
+              } as React.MouseEvent
+              handleActionClick(mockEvent, action)
+            }}
+            onOpenChange={setIsDropdownOpen}
+          />
         </ActionButtons>
       </ValidatorItemWrap>
     </ValidatorItemWrapper>
   )
 }
 
-const ValidatorItemWrapper = styled.div`
+const ValidatorItemWrapper = styled.div<{ $isDropdownOpen?: boolean }>`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -138,6 +140,8 @@ const ValidatorItemWrapper = styled.div`
   border-radius: ${BorderRad.s};
   cursor: pointer;
   transition: ${Transitions.all};
+  position: relative;
+  z-index: ${({ $isDropdownOpen }) => ($isDropdownOpen ? 99997 : 1)};
 
   ${TableListItemAsLinkHover}
 `
@@ -161,10 +165,13 @@ export const ValidatorItemWrap = styled.div`
 `
 
 const ActionButtons = styled.div`
+  position: relative;
+  z-index: 1;
   display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
+  gap: 8px;
+  flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: center;
   width: 100%;
+  min-height: 40px;
 `

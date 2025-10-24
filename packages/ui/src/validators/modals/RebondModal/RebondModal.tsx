@@ -11,30 +11,30 @@ import { TextMedium, TextSmall } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { Address } from '@/common/types'
 import { useStakingQueries, useStakingTransactions } from '@/validators/hooks/useStakingSDK'
-import { UnbondModalCall } from '@/validators/modals/UnbondModal/types'
+import { RebondModalCall } from '@/validators/modals/RebondModal/types'
 
 interface Props {
   validatorAddress: Address
 }
 
-export const UnbondModal = () => {
-  const { modalData } = useModal<UnbondModalCall>()
+export const RebondModal = () => {
+  const { modalData } = useModal<RebondModalCall>()
   const validatorAddress = modalData?.validatorAddress
 
   if (!validatorAddress) return null
 
-  return <UnbondModalInner validatorAddress={validatorAddress} />
+  return <RebondModalInner validatorAddress={validatorAddress} />
 }
 
-const UnbondModalInner = ({ validatorAddress }: Props) => {
-  const { hideModal } = useModal<UnbondModalCall>()
+const RebondModalInner = ({ validatorAddress }: Props) => {
+  const { hideModal } = useModal<RebondModalCall>()
   const { api } = useApi()
   const { allAccounts } = useMyAccounts()
-  const { unbond, isConnected } = useStakingTransactions()
-  const { getStakingInfo } = useStakingQueries()
+  const { rebond, isConnected } = useStakingTransactions()
+  const { getUnbondingInfo } = useStakingQueries()
 
   const [amount, setAmount] = useState('')
-  const [maxBonded, setMaxBonded] = useState<bigint>(BigInt(0))
+  const [unbondingInfo, setUnbondingInfo] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
@@ -58,23 +58,21 @@ const UnbondModalInner = ({ validatorAddress }: Props) => {
   }
 
   useEffect(() => {
-    const loadStakingInfo = async () => {
+    const loadUnbondingInfo = async () => {
       if (!allAccounts[0]?.address) return
 
       try {
-        const stakingInfo = await getStakingInfo(allAccounts[0].address)
-        if (isMountedRef.current) {
-          setMaxBonded(stakingInfo.activeBonded)
-        }
+        const info = await getUnbondingInfo(allAccounts[0].address)
+        setUnbondingInfo(info)
       } catch (err) {
-        setError('Failed to load staking info')
+        setError('Failed to load unbonding info')
       }
     }
 
-    loadStakingInfo()
+    loadUnbondingInfo()
   }, [allAccounts])
 
-  const handleUnbond = async () => {
+  const handleRebond = async () => {
     if (!api || !isConnected) {
       setError('API not connected')
       return
@@ -85,9 +83,9 @@ const UnbondModalInner = ({ validatorAddress }: Props) => {
       return
     }
 
-    const unbondAmount = joyToBalance(amount)
-    if (unbondAmount > maxBonded) {
-      setError('Amount exceeds bonded balance')
+    const rebondAmount = joyToBalance(amount)
+    if (unbondingInfo && rebondAmount > unbondingInfo.totalUnbonding) {
+      setError('Amount exceeds unbonding balance')
       return
     }
 
@@ -95,20 +93,16 @@ const UnbondModalInner = ({ validatorAddress }: Props) => {
     setError(null)
 
     try {
-      const unbondTx = unbond(unbondAmount)
-      await unbondTx.signAndSend(allAccounts[0])
+      const rebondTx = rebond(rebondAmount)
+      await rebondTx.signAndSend(allAccounts[0])
 
       if (isMountedRef.current) {
         setSuccess(true)
       }
     } catch (err) {
-      if (isMountedRef.current) {
-        setError(err instanceof Error ? err.message : 'Unbonding failed')
-      }
+      setError(err instanceof Error ? err.message : 'Rebonding failed')
     } finally {
-      if (isMountedRef.current) {
-        setIsLoading(false)
-      }
+      setIsLoading(false)
     }
   }
 
@@ -120,51 +114,59 @@ const UnbondModalInner = ({ validatorAddress }: Props) => {
   }
 
   const handleMaxAmount = () => {
-    setAmount(balanceToJoy(maxBonded))
+    if (unbondingInfo) {
+      setAmount(balanceToJoy(unbondingInfo.totalUnbonding))
+    }
   }
 
   if (success) {
     return (
       <SuccessModal
         onClose={hideModal}
-        text={`Unbond transaction submitted successfully! You have unbonded ${amount} JOY tokens. They will be available for withdrawal after 28 days.`}
+        text={`Rebond transaction submitted successfully! You have rebonded ${amount} JOY tokens to active staking.`}
       />
     )
   }
 
   return (
     <Modal modalSize="m" onClose={hideModal}>
-      <ModalHeader title="Unbond Tokens" onClick={hideModal} />
+      <ModalHeader title="Rebond Tokens" onClick={hideModal} />
       <ModalBody>
         <RowGapBlock gap={16}>
-          <TextMedium>
-            Unbond your tokens. They will be subject to a 28-day unbonding period before withdrawal.
-          </TextMedium>
+          <TextMedium>Rebond your unbonding tokens to active staking.</TextMedium>
 
           <TextMedium>
-            <strong>Validator Address:</strong> {validatorAddress}
+            <strong>Account Address:</strong> {validatorAddress}
           </TextMedium>
 
-          <TextMedium>
-            <strong>Bonded Balance:</strong> {balanceToJoy(maxBonded)} JOY
-          </TextMedium>
+          {unbondingInfo && (
+            <div>
+              <TextMedium>
+                <strong>Unbonding Info:</strong>
+              </TextMedium>
+              <TextSmall>Total Unbonding: {balanceToJoy(unbondingInfo.totalUnbonding)} JOY</TextSmall>
+              <TextSmall>Unbonding Chunks: {unbondingInfo.chunks.length}</TextSmall>
+            </div>
+          )}
 
-          <InputComponent label="Amount to Unbond (JOY)" required inputSize="m" id="unbond-amount">
+          <InputComponent label="Amount to Rebond (JOY)" required inputSize="m" id="rebond-amount">
             <InputText
-              id="unbond-amount"
-              placeholder="Enter amount to unbond"
+              id="rebond-amount"
+              placeholder="Enter amount to rebond"
               value={amount}
               onChange={handleAmountChange}
               type="number"
-              step="0.1"
+              step="0.001"
               min="0"
-              max={balanceToJoy(maxBonded)}
+              // max={unbondingInfo ? balanceToJoy(unbondingInfo.totalUnbonding) : undefined}
             />
           </InputComponent>
 
-          <ButtonSecondary size="small" onClick={handleMaxAmount}>
-            Use Max Amount
-          </ButtonSecondary>
+          {unbondingInfo && (
+            <ButtonSecondary size="small" onClick={handleMaxAmount}>
+              Use Max Amount
+            </ButtonSecondary>
+          )}
 
           {error && (
             <TextSmall style={{ color: 'red' }}>
@@ -173,8 +175,8 @@ const UnbondModalInner = ({ validatorAddress }: Props) => {
           )}
 
           <TextSmall>
-            <strong>Important:</strong> Unbonded tokens will be locked for 28 days before you can withdraw them. During
-            this period, they will not earn rewards.
+            <strong>Note:</strong> Rebonding converts your unbonding tokens back to active staking. This will restart
+            the unbonding period if you decide to unbond again.
           </TextSmall>
         </RowGapBlock>
       </ModalBody>
@@ -182,8 +184,8 @@ const UnbondModalInner = ({ validatorAddress }: Props) => {
         <ButtonSecondary size="medium" onClick={hideModal}>
           Cancel
         </ButtonSecondary>
-        <ButtonPrimary size="medium" onClick={handleUnbond} disabled={isLoading || !amount || parseFloat(amount) <= 0}>
-          {isLoading ? 'Unbonding...' : 'Unbond Tokens'}
+        <ButtonPrimary size="medium" onClick={handleRebond} disabled={isLoading || !amount || parseFloat(amount) <= 0}>
+          {isLoading ? 'Rebonding...' : 'Rebond Tokens'}
         </ButtonPrimary>
       </ModalFooter>
     </Modal>

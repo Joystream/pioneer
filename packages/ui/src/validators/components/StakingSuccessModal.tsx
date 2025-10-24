@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { ButtonPrimary } from '@/common/components/buttons'
-import { Congratelation } from '@/common/components/icons/Congratelation'
+import { SuccessIcon } from '@/common/components/icons'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from '@/common/components/Modal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
@@ -27,7 +27,7 @@ export const StakingSuccessModal = ({
 
   return (
     <StyledModal onClose={onClose} modalSize="m">
-      <ModalHeader onClick={onClose} title="Success" icon={<Congratelation />} />
+      <ModalHeader onClick={onClose} title="Success" icon={<SuccessIcon />} />
       <ModalBody>
         <Content>
           <SuccessMessage>

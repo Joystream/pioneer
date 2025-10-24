@@ -1,13 +1,17 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
+import { SelectAccount } from '@/accounts/components/SelectAccount'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useApi } from '@/api/hooks/useApi'
-import { ButtonPrimary } from '@/common/components/buttons'
+import { ButtonPrimary, ButtonSecondary } from '@/common/components/buttons'
+import { InputComponent, InputText } from '@/common/components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { TextMedium } from '@/common/components/typography'
+import { SuccessModal } from '@/common/components/SuccessModal'
+import { TextMedium, TextSmall } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
 import { Address } from '@/common/types'
-
+import { useStakingTransactions } from '@/validators/hooks/useStakingSDK'
 import { BondModalCall } from '@/validators/modals/BondModal/types'
 
 interface Props {
@@ -19,27 +23,77 @@ export const BondModal = () => {
   const validatorAddress = modalData?.validatorAddress
 
   if (!validatorAddress) return null
-  
+
   return <BondModalInner validatorAddress={validatorAddress} />
 }
 
 const BondModalInner = ({ validatorAddress }: Props) => {
   const { hideModal } = useModal<BondModalCall>()
   const { api } = useApi()
+  const { allAccounts } = useMyAccounts()
+  const { bond, isConnected } = useStakingTransactions()
+
+  const [amount, setAmount] = useState('')
+  const [controller, setController] = useState('')
+  const [payee, setPayee] = useState('Stash')
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
+  const isMountedRef = useRef(true)
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false
+    }
+  }, [])
+
+  const joyToBalance = (joy: string): bigint => BigInt(parseFloat(joy) * 1_000_000_000_000)
 
   const handleBond = async () => {
-    if (!api) {
-      console.error('API not available')
+    if (!api || !isConnected) {
+      setError('API not connected')
       return
     }
 
-    try {
-      // TODO: Implement actual bonding transaction
-      console.log('Bonding with validator:', validatorAddress)
-      hideModal()
-    } catch (error) {
-      console.error('Bonding failed:', error)
+    if (!amount || parseFloat(amount) <= 0) {
+      setError('Please enter a valid amount')
+      return
     }
+
+    if (!controller) {
+      setError('Please select a controller account')
+      return
+    }
+
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const bondTx = bond(controller, joyToBalance(amount), payee)
+      await bondTx.signAndSend(allAccounts[0])
+
+      if (isMountedRef.current) {
+        setSuccess(true)
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Bonding failed')
+    }
+  }
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    if (value === '' || (!isNaN(parseFloat(value)) && parseFloat(value) >= 0)) {
+      setAmount(value)
+    }
+  }
+
+  if (success) {
+    return (
+      <SuccessModal
+        onClose={hideModal}
+        text={`Bond transaction submitted successfully! You have bonded ${amount} JOY tokens.`}
+      />
+    )
   }
 
   return (
@@ -48,21 +102,66 @@ const BondModalInner = ({ validatorAddress }: Props) => {
       <ModalBody>
         <RowGapBlock gap={16}>
           <TextMedium>
-            You are about to bond your tokens with this validator. Bonding tokens means you are 
-            committing them to support the validator's operations and potentially become a validator yourself.
+            Bond your tokens to support this validator. Bonded tokens are locked and can earn rewards.
           </TextMedium>
+
           <TextMedium>
             <strong>Validator Address:</strong> {validatorAddress}
           </TextMedium>
-          <TextMedium>
-            <strong>Note:</strong> This is a preview implementation. The actual transaction will be implemented 
-            in a separate PR for testing.
-          </TextMedium>
+
+          <InputComponent label="Amount to Bond (JOY)" required inputSize="m" id="bond-amount">
+            <InputText
+              id="bond-amount"
+              placeholder="Enter amount to bond"
+              value={amount}
+              onChange={handleAmountChange}
+              type="number"
+              step="0.1"
+              min="0"
+            />
+          </InputComponent>
+
+          <InputComponent label="Controller Account" required inputSize="l" id="controller-account">
+            <SelectAccount
+              onChange={(account) => setController(account?.address || '')}
+              selected={allAccounts.find((acc) => acc.address === controller)}
+              placeholder="Select controller account"
+            />
+          </InputComponent>
+
+          <InputComponent label="Payee" inputSize="m" id="payee">
+            <InputText
+              id="payee"
+              placeholder="Select payee"
+              value={payee}
+              onChange={(e) => setPayee(e.target.value)}
+              list="payee-options"
+            />
+            <datalist id="payee-options">
+              <option value="Stash">Stash (same as controller)</option>
+              <option value="Controller">Controller</option>
+              <option value="Account">Specific account</option>
+            </datalist>
+          </InputComponent>
+
+          {error && (
+            <TextSmall style={{ color: 'red' }}>
+              <strong>Error:</strong> {error}
+            </TextSmall>
+          )}
+
+          <TextSmall>
+            <strong>Note:</strong> This transaction will bond your tokens to the staking system. Bonded tokens are
+            locked and cannot be transferred until unbonded.
+          </TextSmall>
         </RowGapBlock>
       </ModalBody>
       <ModalFooter>
-        <ButtonPrimary size="medium" onClick={handleBond}>
-          Bond Tokens
+        <ButtonSecondary size="medium" onClick={hideModal}>
+          Cancel
+        </ButtonSecondary>
+        <ButtonPrimary size="medium" onClick={handleBond} disabled={isLoading || !amount || !controller}>
+          {isLoading ? 'Bonding...' : 'Bond Tokens'}
         </ButtonPrimary>
       </ModalFooter>
     </Modal>

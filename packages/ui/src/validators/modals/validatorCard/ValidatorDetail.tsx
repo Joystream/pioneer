@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { ButtonPrimary } from '@/common/components/buttons'
@@ -14,6 +14,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { whenDefined } from '@/common/utils'
 import RewardPointsChart from '@/validators/components/RewardPointChart'
 
+import { ValidatorActionsDropdown } from '../../components/ValidatorActionsDropdown'
 import { ValidatorWithDetails } from '../../types'
 import { BondModalCall } from '../BondModal'
 import { NominateValidatorModalCall } from '../NominateValidatorModal'
@@ -35,6 +36,7 @@ export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
   const { showModal: showBondModal } = useModal<BondModalCall>()
   const { showModal: showUnbondModal } = useModal<UnbondModalCall>()
   const { showModal: showPayoutModal } = useModal<PayoutModalCall>()
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   const uptime = whenDefined(validator.rewardPointsHistory, (rewardPointsHistory) => {
     const firstEra = rewardPointsHistory.at(0)?.era
@@ -143,34 +145,15 @@ export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
         </Details>
       </SidePaneBody>
       <ModalFooter>
-        <ActionButtonsContainer>
-          <ButtonPrimary size="small" onClick={() => handleActionClick('Nominate')}>
+        <ActionButtonsContainer $isDropdownOpen={isDropdownOpen}>
+          <ButtonPrimary
+            size="small"
+            onClick={() => handleActionClick('Nominate')}
+            title="Nominate this validator to receive rewards. You can change nominations each era without unbonding."
+          >
             Nominate
           </ButtonPrimary>
-          {/* <ButtonSecondary
-            size="small"
-            onClick={() => handleActionClick('Stake')}
-          >
-            Stake
-          </ButtonSecondary>
-          <ButtonGhost
-            size="small"
-            onClick={() => handleActionClick('Bond')}
-          >
-            Bond
-          </ButtonGhost>
-          <ButtonGhost
-            size="small"
-            onClick={() => handleActionClick('Unbond')}
-          >
-            Unbond
-          </ButtonGhost>
-          <ButtonGhost
-            size="small"
-            onClick={() => handleActionClick('Payout')}
-          >
-            Payout
-          </ButtonGhost> */}
+          <ValidatorActionsDropdown onActionClick={handleActionClick} onOpenChange={setIsDropdownOpen} />
         </ActionButtonsContainer>
       </ModalFooter>
     </>
@@ -207,11 +190,13 @@ const RewardPointsChartWrapper = styled.div`
   }
 `
 
-const ActionButtonsContainer = styled.div`
+const ActionButtonsContainer = styled.div<{ $isDropdownOpen?: boolean }>`
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
   width: 100%;
+  position: relative;
+  z-index: ${({ $isDropdownOpen }) => ($isDropdownOpen ? 99997 : 1)};
 `
