@@ -44,6 +44,7 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
   const [isNominateModalOpen, setIsNominateModalOpen] = useState(false)
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [stashAccountData, setStashAccountData] = useState<any>(null)
+  const [nominatedValidatorAddresses, setNominatedValidatorAddresses] = useState<Set<string>>(new Set())
   const { format } = useValidatorsList()
   const { selectedValidators, clearSelection } = useSelectedValidators()
 
@@ -93,6 +94,13 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
   }
 
   const handleTransactionSummaryModalContinue = () => {
+    // Mark the selected validators as nominated
+    const newNominatedAddresses = new Set(nominatedValidatorAddresses)
+    selectedValidators.forEach((validator) => {
+      newNominatedAddresses.add(validator.stashAccount)
+    })
+    setNominatedValidatorAddresses(newNominatedAddresses)
+
     setIsTransactionSummaryModalOpen(false)
     setIsSuccessModalOpen(true)
     clearSelection()
@@ -203,7 +211,10 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
                         selectCard(index + 1)
                       }}
                     >
-                      <ValidatorItem validator={validator} />
+                      <ValidatorItem
+                        validator={validator}
+                        isNominated={nominatedValidatorAddresses.has(validator.stashAccount)}
+                      />
                     </ListItem>
                   ))}
                 </List>
@@ -214,6 +225,7 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
                     eraIndex={eraIndex}
                     selectCard={selectCard}
                     totalCards={validators.length}
+                    isNominated={nominatedValidatorAddresses.has(validators[cardNumber - 1].stashAccount)}
                   />
                 )}
               </>

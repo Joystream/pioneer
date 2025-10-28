@@ -27,9 +27,10 @@ interface Props {
   validator: ValidatorWithDetails
   eraIndex: number | undefined
   hideModal: () => void
+  isNominated?: boolean
 }
 
-export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
+export const ValidatorDetail = ({ validator, eraIndex, hideModal, isNominated = false }: Props) => {
   const { showModal } = useModal<NominatingRedirectModalCall>()
   const { showModal: showNominateModal } = useModal<NominateValidatorModalCall>()
   const { showModal: showStakeModal } = useModal<StakeModalCall>()
@@ -152,7 +153,15 @@ export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
       </SidePaneBody>
       <ModalFooter>
         <ActionButtonsContainer>
-          {isValidatorSelected ? (
+          {isNominated ? (
+            <ButtonPrimary
+              size="small"
+              onClick={() => handleActionClick('Nominate')}
+              title="Nominate this validator to receive rewards. You can change nominations each era without unbonding."
+            >
+              Nominate
+            </ButtonPrimary>
+          ) : isValidatorSelected ? (
             <ButtonPrimary
               size="small"
               onClick={() => handleActionClick('Select')}
