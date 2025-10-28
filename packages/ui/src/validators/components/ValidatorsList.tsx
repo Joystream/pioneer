@@ -89,15 +89,13 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
 
   const handleTransactionSummaryModalClose = () => {
     setIsTransactionSummaryModalOpen(false)
-    // Clear all selections and reset state when closing due to error
-    clearSelection()
     setStashAccountData(null)
   }
 
   const handleTransactionSummaryModalContinue = () => {
-    // Close the transaction summary modal
-    //setIsTransactionSummaryModalOpen(false)
-    //setIsNominateModalOpen(true)
+    setIsTransactionSummaryModalOpen(false)
+    setIsSuccessModalOpen(true)
+    clearSelection()
   }
 
   const handleNominateModalBack = () => {

@@ -12,13 +12,19 @@ export const useStakingSDK = () => {
     // Mock staking manager for now - will be replaced with real SDK
     return {
       // Mock transaction methods - will be replaced with real SDK methods
-      bond: () => ({ signAndSend: () => Promise.resolve() }),
-      unbond: () => ({ signAndSend: () => Promise.resolve() }),
-      nominate: () => ({ signAndSend: () => Promise.resolve() }),
+      bond: (controller: string, amount: bigint, payee: string) =>
+        api.tx.staking.bond(controller, amount.toString(), payee),
+      unbond: (amount: bigint) => api.tx.staking.unbond(amount.toString()),
+      nominate: (targets: string[]) => api.tx.staking.nominate(targets),
       validate: () => ({ signAndSend: () => Promise.resolve() }),
       payoutStakers: () => ({ signAndSend: () => Promise.resolve() }),
       rebag: () => ({ signAndSend: () => Promise.resolve() }),
       rebond: () => ({ signAndSend: () => Promise.resolve() }),
+      bondAndNominate: (controller: string, amount: bigint, targets: string[], payee: string) =>
+        api.tx.utility.batch([
+          api.tx.staking.bond(controller, amount.toString(), payee),
+          api.tx.staking.nominate(targets),
+        ]),
 
       // Mock query methods - will be replaced with real SDK methods
       getStakingInfo: async (accountId: string) => ({
@@ -285,9 +291,9 @@ export const useStakingTransactions = () => {
   }
 
   // Batch transactions
-  const bondAndNominate = (amount: bigint, targets: string[], payee: string) => {
+  const bondAndNominate = (controller: string, amount: bigint, targets: string[], payee: string) => {
     if (!staking) throw new Error('Staking SDK not connected')
-    return staking.bondAndNominate(amount, targets, payee)
+    return staking.bondAndNominate(controller, amount, targets, payee)
   }
 
   return {

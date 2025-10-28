@@ -1,21 +1,16 @@
 import { BN } from '@polkadot/util'
-import React, { useEffect, useMemo, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { SelectedAccount } from '@/accounts/components/SelectAccount'
-import { useBalance } from '@/accounts/hooks/useBalance'
-import { InsufficientFundsModal } from '@/accounts/modals/InsufficientFundsModal'
-import { useApi } from '@/api/hooks/useApi'
 import { ButtonGhost, ButtonPrimary } from '@/common/components/buttons'
 import { Arrow } from '@/common/components/icons/ArrowIcon'
 import { Modal, ModalHeader, ModalBody } from '@/common/components/Modal'
 import { TextInlineMedium, TextMedium, TextSmall, TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
-import { useMachine } from '@/common/hooks/useMachine'
-import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
-import { defaultTransactionModalMachine } from '@/common/model/machines/defaultTransactionModalMachine'
 
 import { useSelectedValidators } from '../context/SelectedValidatorsContext'
+import { useStakingTransactions } from '../hooks/useStakingSDK'
 
 interface TransactionSummaryModalProps {
   isOpen: boolean
@@ -37,141 +32,23 @@ export const TransactionSummaryModal = ({
   valueBonded,
 }: TransactionSummaryModalProps) => {
   const { selectedValidators } = useSelectedValidators()
-  const { api, isConnected } = useApi()
+  const { bondAndNominate, isConnected } = useStakingTransactions()
 
-  // Create state machine for transaction flow
-  const machine = useMemo(
-    () =>
-      defaultTransactionModalMachine(
-        'There was a problem bonding and nominating validators.',
-        'Your nomination has been submitted successfully.'
-      ),
-    []
-  )
-  const [state, send] = useMachine(machine, { context: { validateBeforeTransaction: true } })
+  if (!isOpen) return null
 
-  // Create transaction directly
-  const transaction = useMemo(() => {
-    if (!api || !isConnected || !nominatingController || !stashAccount || !valueBonded || !selectedValidators.length) {
-      return undefined
+  const handleBondAndNominate = async () => {
+    if (!isConnected || !nominatingController || !stashAccount || !valueBonded || !selectedValidators.length) {
+      return
     }
 
     try {
-      const bondedValue = new BN(valueBonded)
-
-      return api.tx.utility.batch([
-        api.tx.staking.bond(nominatingController.address, bondedValue, 'Staked'),
-        api.tx.staking.nominate(selectedValidators.map((validator) => validator.stashAccount)),
-      ])
-    } catch (err) {
-      return undefined
-    }
-  }, [api, isConnected, nominatingController, stashAccount, valueBonded, selectedValidators])
-
-  const [transactionFee, setTransactionFee] = useState<BN | undefined>(undefined)
-  const balance = useBalance(stashAccount?.address)
-
-  useEffect(() => {
-    if (transaction && stashAccount?.address) {
-      const subscription = transaction.paymentInfo(stashAccount.address).subscribe((info: any) => {
-        setTransactionFee(info.partialFee.toBn())
-      })
-
-      return () => subscription.unsubscribe()
-    }
-  }, [transaction, stashAccount?.address])
-
-  // Create feeInfo object
-  const feeInfo = useMemo(() => {
-    if (!transactionFee || !balance) return undefined
-
-    return {
-      transactionFee,
-      canAfford: balance.transferable.gte(transactionFee),
-    }
-  }, [transactionFee, balance])
-
-  // Verify requirements when transaction and fee info are ready
-  useEffect(() => {
-    if (isOpen && state.matches('requirementsVerification')) {
-      if (transaction && feeInfo) {
-        send('PASS')
-      }
-    }
-  }, [isOpen, state, transaction, feeInfo, send])
-
-  useEffect(() => {
-    if (state.matches('success')) {
+      const amount = BigInt(valueBonded)
+      const targets = selectedValidators.map((validator) => validator.stashAccount)
+      await bondAndNominate(nominatingController.address, amount, targets, 'Staked')
       onSignAndNominate()
+    } catch (error) {
+      onClose()
     }
-  }, [state, onSignAndNominate])
-
-  // Don't render anything if modal is not open
-  if (!isOpen) return null
-
-  // Show insufficient funds modal if requirements failed
-  // When closed, it should close all modals
-  if (state.matches('requirementsFailed') && stashAccount && feeInfo) {
-    return <InsufficientFundsModal onClose={onClose} address={stashAccount.address} amount={feeInfo.transactionFee} />
-  }
-
-  // Also show insufficient funds modal when user clicks button without enough funds
-  if (state.matches('beforeTransaction') && feeInfo && !feeInfo.canAfford && stashAccount) {
-    return <InsufficientFundsModal onClose={onClose} address={stashAccount.address} amount={feeInfo.transactionFee} />
-  }
-
-  // Show sign transaction modal when in transaction state
-  if (state.matches('transaction') && transaction && stashAccount) {
-    return (
-      <SignTransactionModal
-        buttonText="Sign and Nominate"
-        transaction={transaction}
-        signer={stashAccount.address}
-        service={state.children.transaction}
-        skipQueryNode={true}
-      >
-        <Content>
-          <IntroText>
-            <div style={{ fontSize: '14px', lineHeight: '20px' }}>
-              You are about to bond{' '}
-              <TextInlineMedium bold>
-                <TokenValue value={new BN(valueBonded)} />
-              </TextInlineMedium>{' '}
-              from your stash account and nominate {selectedValidators.length} validator
-              {selectedValidators.length !== 1 ? 's' : ''}.
-            </div>
-          </IntroText>
-
-          <AccountSection>
-            <AccountItem>
-              <AccountLabel>Stash account (bonding & paying fees)</AccountLabel>
-              {stashAccount ? (
-                <AccountDisplay>
-                  <AccountInfo>
-                    <SelectedAccount account={stashAccount} />
-                  </AccountInfo>
-                </AccountDisplay>
-              ) : (
-                <TextSmall>Not selected</TextSmall>
-              )}
-            </AccountItem>
-
-            <AccountItem>
-              <AccountLabel>Controller account (managing nominations)</AccountLabel>
-              {nominatingController ? (
-                <AccountDisplay>
-                  <AccountInfo>
-                    <SelectedAccount account={nominatingController} />
-                  </AccountInfo>
-                </AccountDisplay>
-              ) : (
-                <TextSmall>Not selected</TextSmall>
-              )}
-            </AccountItem>
-          </AccountSection>
-        </Content>
-      </SignTransactionModal>
-    )
   }
 
   return (
@@ -181,15 +58,12 @@ export const TransactionSummaryModal = ({
         <Content>
           <IntroText>
             <div style={{ fontSize: '14px', lineHeight: '20px' }}>
-              You are intend to delegate your tokens and stake{' '}
+              You are about to bond{' '}
               <TextInlineMedium bold>
                 <TokenValue value={new BN(valueBonded)} />
               </TextInlineMedium>{' '}
-              from your controller account. Fees{' '}
-              <TextInlineMedium bold>
-                <TokenValue value={feeInfo?.transactionFee || new BN('2000')} />
-              </TextInlineMedium>{' '}
-              will be applied to the transaction.
+              from your stash account and nominate {selectedValidators.length} validator
+              {selectedValidators.length !== 1 ? 's' : ''}.
             </div>
           </IntroText>
 
@@ -233,32 +107,14 @@ export const TransactionSummaryModal = ({
               <TokenValue value={new BN(valueBonded)} />
             </TextInlineMedium>
           </TransactionSummary>
-          <TransactionSummary>
-            TRANSACTION FEES:{' '}
-            <TextInlineMedium bold>
-              <TokenValue value={feeInfo?.transactionFee || new BN('2000')} />
-            </TextInlineMedium>
-          </TransactionSummary>
         </TransactionValue>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
           <ButtonPrimary
             size="medium"
-            onClick={() => {
-              // Check funds before proceeding
-              if (feeInfo && !feeInfo.canAfford) {
-                send('FAIL')
-              } else {
-                send('PASS')
-              }
-            }}
-            disabled={!transaction || !feeInfo || !state.matches('beforeTransaction')}
+            onClick={handleBondAndNominate}
+            disabled={!isConnected || !stashAccount || !nominatingController || !selectedValidators.length}
           >
-            {!transaction || !feeInfo
-              ? 'Loading...'
-              : !state.matches('beforeTransaction')
-              ? 'Checking...'
-              : 'Sign and Nominate'}{' '}
-            <Arrow direction="right" />
+            Sign and Nominate <Arrow direction="right" />
           </ButtonPrimary>
         </div>
       </FooterWrapper>

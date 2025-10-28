@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { ButtonPrimary } from '@/common/components/buttons'
@@ -13,8 +13,8 @@ import { plural } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
 import { whenDefined } from '@/common/utils'
 import RewardPointsChart from '@/validators/components/RewardPointChart'
+import { useSelectedValidators } from '@/validators/context/SelectedValidatorsContext'
 
-import { ValidatorActionsDropdown } from '../../components/ValidatorActionsDropdown'
 import { ValidatorWithDetails } from '../../types'
 import { BondModalCall } from '../BondModal'
 import { NominateValidatorModalCall } from '../NominateValidatorModal'
@@ -36,7 +36,7 @@ export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
   const { showModal: showBondModal } = useModal<BondModalCall>()
   const { showModal: showUnbondModal } = useModal<UnbondModalCall>()
   const { showModal: showPayoutModal } = useModal<PayoutModalCall>()
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const { isSelected, toggleSelection, selectedValidators, maxSelection } = useSelectedValidators()
 
   const uptime = whenDefined(validator.rewardPointsHistory, (rewardPointsHistory) => {
     const firstEra = rewardPointsHistory.at(0)?.era
@@ -46,10 +46,16 @@ export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
     return `${((validatedEra / totalEras) * 100).toFixed(1)}%`
   })
 
+  const isValidatorSelected = isSelected(validator)
+  const canSelect = !isValidatorSelected && selectedValidators.length < maxSelection
+
   const handleActionClick = async (action: string) => {
     const validatorAddress = validator.stashAccount
 
     switch (action) {
+      case 'Select':
+        toggleSelection(validator)
+        break
       case 'Nominate':
         await new Promise((resolve) => setTimeout(resolve, 0)) // Make async
         hideModal()
@@ -145,15 +151,26 @@ export const ValidatorDetail = ({ validator, eraIndex, hideModal }: Props) => {
         </Details>
       </SidePaneBody>
       <ModalFooter>
-        <ActionButtonsContainer $isDropdownOpen={isDropdownOpen}>
-          <ButtonPrimary
-            size="small"
-            onClick={() => handleActionClick('Nominate')}
-            title="Nominate this validator to receive rewards. You can change nominations each era without unbonding."
-          >
-            Nominate
-          </ButtonPrimary>
-          <ValidatorActionsDropdown onActionClick={handleActionClick} onOpenChange={setIsDropdownOpen} />
+        <ActionButtonsContainer>
+          {isValidatorSelected ? (
+            <ButtonPrimary
+              size="small"
+              onClick={() => handleActionClick('Select')}
+              disabled={true}
+              title="This validator is already selected for nomination."
+            >
+              Selected
+            </ButtonPrimary>
+          ) : (
+            <ButtonPrimary
+              size="small"
+              onClick={() => handleActionClick('Select')}
+              disabled={!canSelect}
+              title={canSelect ? 'Select this validator for nomination' : 'Maximum number of validators selected'}
+            >
+              {canSelect ? 'Select' : 'Max Reached'}
+            </ButtonPrimary>
+          )}
         </ActionButtonsContainer>
       </ModalFooter>
     </>
@@ -190,7 +207,7 @@ const RewardPointsChartWrapper = styled.div`
   }
 `
 
-const ActionButtonsContainer = styled.div<{ $isDropdownOpen?: boolean }>`
+const ActionButtonsContainer = styled.div`
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
@@ -198,5 +215,4 @@ const ActionButtonsContainer = styled.div<{ $isDropdownOpen?: boolean }>`
   align-items: center;
   width: 100%;
   position: relative;
-  z-index: ${({ $isDropdownOpen }) => ($isDropdownOpen ? 99997 : 1)};
 `

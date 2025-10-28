@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { SuccessIcon } from '@/common/components/icons'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from '@/common/components/Modal'
-import { TextMedium, TokenValue } from '@/common/components/typography'
+import { TokenValue } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
 
 interface StakingSuccessModalProps {
@@ -31,10 +31,10 @@ export const StakingSuccessModal = ({
       <ModalBody>
         <Content>
           <SuccessMessage>
-            <TextMedium>
+            <div style={{ fontSize: '14px', lineHeight: '20px' }}>
               You have just successfully staked <TokenValue value={new BN(stakedAmount)} /> with{' '}
               <strong>{validatorCount} validators</strong>!
-            </TextMedium>
+            </div>
           </SuccessMessage>
         </Content>
       </ModalBody>
