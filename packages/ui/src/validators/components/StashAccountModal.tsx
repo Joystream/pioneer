@@ -24,7 +24,8 @@ export const StashAccountModal = ({ isOpen, onClose, onContinue, onBack }: Stash
   const [paymentDestination, setPaymentDestination] = useState<Account | undefined>(undefined)
 
   // Minimum bonding threshold: 1.6666 kJOY = 1,666,600,000,000,000 (in smallest unit)
-  const MIN_BONDING_THRESHOLD = new BN('1666600000000')
+  const MIN_BONDING_THRESHOLD = new BN('166660000')
+  // const MIN_BONDING_THRESHOLD = new BN('16666000000000')
 
   // Validation function
   const isFormValid = () => {

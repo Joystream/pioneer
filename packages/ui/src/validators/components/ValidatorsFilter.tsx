@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
+import { ButtonPrimary } from '@/common/components/buttons'
 import { InputNotification } from '@/common/components/forms'
 import { Fields, FilterBox } from '@/common/components/forms/FilterBox'
 import { SearchBox } from '@/common/components/forms/FilterBox/FilterSearchBox'
 import { FilterSelect } from '@/common/components/selects'
+import { useModal } from '@/common/hooks/useModal'
+import { useSelectedValidators } from '@/validators/context/SelectedValidatorsContext'
+import { BondModalCall } from '@/validators/modals/BondModal'
+import { PayoutModalCall } from '@/validators/modals/PayoutModal'
 
 interface ValidatorFilterProps {
   filter: {
@@ -15,10 +20,15 @@ interface ValidatorFilterProps {
     isActive: boolean | undefined
     setIsActive: (isActive: boolean | undefined) => void
   }
+  onNominate?: () => void
 }
 
-export const ValidatorsFilter = ({ filter }: ValidatorFilterProps) => {
+export const ValidatorsFilter = ({ filter, onNominate }: ValidatorFilterProps) => {
   const [search, setSearch] = useState('')
+  const { showModal: showPayoutModal } = useModal<PayoutModalCall>()
+  const { showModal: showBondModal } = useModal<BondModalCall>()
+  const { selectedValidators } = useSelectedValidators()
+
   useEffect(() => {
     setSearch(filter.search)
   }, [filter.search])
@@ -37,6 +47,20 @@ export const ValidatorsFilter = ({ filter }: ValidatorFilterProps) => {
         }
       : undefined
 
+  const handlePayout = () => {
+    showPayoutModal({ modal: 'Payout' })
+  }
+
+  const handleBond = () => {
+    showBondModal({ modal: 'Bond' })
+  }
+
+  const handleNominate = () => {
+    if (onNominate) {
+      onNominate()
+    }
+  }
+
   return (
     <ValidatorFilterBox onClear={clear}>
       <ResponsiveWrapper>
@@ -54,7 +78,22 @@ export const ValidatorsFilter = ({ filter }: ValidatorFilterProps) => {
             onChange={(value) => filter.setIsActive(value === null ? undefined : value === 'active')}
           />
         </SelectFields>
-        <SearchBox label="Search" value={search} onApply={display} onChange={setSearch} />
+        <RightSection>
+          <ActionButtons>
+            <ButtonPrimary size="small" onClick={handlePayout}>
+              Payout
+            </ButtonPrimary>
+            <ButtonPrimary size="small" onClick={handleBond}>
+              Bond
+            </ButtonPrimary>
+            {selectedValidators.length > 0 && (
+              <ButtonPrimary size="small" onClick={handleNominate}>
+                Nominate ({selectedValidators.length})
+              </ButtonPrimary>
+            )}
+          </ActionButtons>
+          <SearchBox label="Search" value={search} onApply={display} onChange={setSearch} />
+        </RightSection>
       </ResponsiveWrapper>
     </ValidatorFilterBox>
   )
@@ -94,4 +133,17 @@ const ResponsiveWrapper = styled.div`
   @media (max-width: 767px) {
     flex-direction: column;
   }
+`
+
+const RightSection = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`
+
+const ActionButtons = styled.div`
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  align-items: center;
 `

@@ -261,20 +261,25 @@ export const GlobalModals = () => {
 
   const potentialFallback = useGlobalModalHandler(currentModalMachine, hideModal)
 
-  if (modal && !GUEST_ACCESSIBLE_MODALS.includes(modal as ModalNames) && !activeMember) {
-    if (wallet) {
-      showModal<SwitchMemberModalCall>({
-        modal: 'SwitchMember',
-        data: {
-          originalModalName: modal as ModalNames,
-          originalModalData: modalData,
-        },
-      })
-    } else {
-      showModal({
-        modal: 'OnBoardingModal',
-      })
+  useEffect(() => {
+    if (modal && !GUEST_ACCESSIBLE_MODALS.includes(modal as ModalNames) && !activeMember) {
+      if (wallet) {
+        showModal<SwitchMemberModalCall>({
+          modal: 'SwitchMember',
+          data: {
+            originalModalName: modal as ModalNames,
+            originalModalData: modalData,
+          },
+        })
+      } else {
+        showModal({
+          modal: 'OnBoardingModal',
+        })
+      }
     }
+  }, [modal, activeMember, wallet, modalData, showModal])
+
+  if (modal && !GUEST_ACCESSIBLE_MODALS.includes(modal as ModalNames) && !activeMember) {
     return null
   }
 

@@ -10,24 +10,10 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { TextMedium, TextSmall } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
-import { Address } from '@/common/types'
 import { useStakingTransactions } from '@/validators/hooks/useStakingSDK'
 import { BondModalCall } from '@/validators/modals/BondModal/types'
 
-interface Props {
-  validatorAddress: Address
-}
-
 export const BondModal = () => {
-  const { modalData } = useModal<BondModalCall>()
-  const validatorAddress = modalData?.validatorAddress
-
-  if (!validatorAddress) return null
-
-  return <BondModalInner validatorAddress={validatorAddress} />
-}
-
-const BondModalInner = ({ validatorAddress }: Props) => {
   const { hideModal } = useModal<BondModalCall>()
   const { api } = useApi()
   const { allAccounts } = useMyAccounts()
@@ -52,6 +38,7 @@ const BondModalInner = ({ validatorAddress }: Props) => {
   const handleBond = async () => {
     if (!api || !isConnected) {
       setError('API not connected')
+
       return
     }
 
@@ -62,6 +49,11 @@ const BondModalInner = ({ validatorAddress }: Props) => {
 
     if (!controller) {
       setError('Please select a controller account')
+      return
+    }
+
+    if (!allAccounts || allAccounts.length === 0) {
+      setError('No accounts available')
       return
     }
 
@@ -76,7 +68,13 @@ const BondModalInner = ({ validatorAddress }: Props) => {
         setSuccess(true)
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Bonding failed')
+      if (isMountedRef.current) {
+        setError(err instanceof Error ? err.message : 'Bonding failed')
+      }
+    } finally {
+      if (isMountedRef.current) {
+        setIsLoading(false)
+      }
     }
   }
 
@@ -101,13 +99,7 @@ const BondModalInner = ({ validatorAddress }: Props) => {
       <ModalHeader title="Bond Tokens" onClick={hideModal} />
       <ModalBody>
         <RowGapBlock gap={16}>
-          <TextMedium>
-            Bond your tokens to support this validator. Bonded tokens are locked and can earn rewards.
-          </TextMedium>
-
-          <TextMedium>
-            <strong>Validator Address:</strong> {validatorAddress}
-          </TextMedium>
+          <TextMedium>Bond your tokens for staking. Bonded tokens are locked and can earn rewards.</TextMedium>
 
           <InputComponent label="Amount to Bond (JOY)" required inputSize="m" id="bond-amount">
             <InputText

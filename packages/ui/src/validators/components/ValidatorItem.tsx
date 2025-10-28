@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { encodeAddress } from '@/accounts/model/encodeAddress'
@@ -13,14 +13,14 @@ import { whenDefined } from '@/common/utils'
 import { BondModalCall } from '@/validators/modals/BondModal'
 import { NominatingRedirectModalCall } from '@/validators/modals/NominatingRedirectModal'
 import { PayoutModalCall } from '@/validators/modals/PayoutModal'
-import { RebagModalCall } from '@/validators/modals/RebagModal'
-import { RebondModalCall } from '@/validators/modals/RebondModal'
-import { UnbondModalCall } from '@/validators/modals/UnbondModal'
+// import { RebagModalCall } from '@/validators/modals/RebagModal'
+// import { RebondModalCall } from '@/validators/modals/RebondModal'
+// import { UnbondModalCall } from '@/validators/modals/UnbondModal'
 import { ValidatorWithDetails } from '@/validators/types/Validator'
 
 import { useSelectedValidators } from '../context/SelectedValidatorsContext'
 
-import { ValidatorActionsDropdown } from './ValidatorActionsDropdown'
+// import { ValidatorActionsDropdown } from './ValidatorActionsDropdown'
 import { ValidatorInfo } from './ValidatorInfo'
 
 interface ValidatorItemProps {
@@ -32,12 +32,12 @@ export const ValidatorItem = ({ validator, onClick, isNominated = false }: Valid
   const { stashAccount, membership, isVerifiedValidator, isActive, commission, APR, staking } = validator
   const { showModal } = useModal<NominatingRedirectModalCall>()
   const { showModal: showBondModal } = useModal<BondModalCall>()
-  const { showModal: showUnbondModal } = useModal<UnbondModalCall>()
+  // const { showModal: showUnbondModal } = useModal<UnbondModalCall>()
   const { showModal: showPayoutModal } = useModal<PayoutModalCall>()
-  const { showModal: showRebagModal } = useModal<RebagModalCall>()
-  const { showModal: showRebondModal } = useModal<RebondModalCall>()
+  // const { showModal: showRebagModal } = useModal<RebagModalCall>()
+  // const { showModal: showRebondModal } = useModal<RebondModalCall>()
   const { isSelected, toggleSelection, selectedValidators, maxSelection } = useSelectedValidators()
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  // const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   const handleActionClick = (e: React.MouseEvent, action: string) => {
     e.stopPropagation()
@@ -50,18 +50,10 @@ export const ValidatorItem = ({ validator, onClick, isNominated = false }: Valid
       case 'Bond':
         showBondModal({ modal: 'Bond', data: { validatorAddress } })
         break
-      case 'Unbond':
-        showUnbondModal({ modal: 'Unbond', data: { validatorAddress } })
-        break
       case 'Payout':
         showPayoutModal({ modal: 'Payout', data: { validatorAddress } })
         break
-      case 'Rebag':
-        showRebagModal({ modal: 'Rebag', data: { validatorAddress } })
-        break
-      case 'Rebond':
-        showRebondModal({ modal: 'Rebond', data: { validatorAddress } })
-        break
+
       default:
         showModal({ modal: 'NominatingRedirect' })
     }
@@ -71,7 +63,7 @@ export const ValidatorItem = ({ validator, onClick, isNominated = false }: Valid
   const canSelect = !isValidatorSelected && selectedValidators.length < maxSelection
 
   return (
-    <ValidatorItemWrapper onClick={onClick} $isDropdownOpen={isDropdownOpen}>
+    <ValidatorItemWrapper onClick={onClick}>
       <ValidatorItemWrap>
         <ValidatorInfo member={membership} address={encodeAddress(stashAccount)} />
         {isVerifiedValidator ? (
@@ -116,23 +108,13 @@ export const ValidatorItem = ({ validator, onClick, isNominated = false }: Valid
               {canSelect ? 'Select' : 'Max Reached'}
             </ButtonPrimary>
           )}
-          <ValidatorActionsDropdown
-            onActionClick={(action) => {
-              const mockEvent = {
-                stopPropagation: () => {},
-                preventDefault: () => {},
-              } as React.MouseEvent
-              handleActionClick(mockEvent, action)
-            }}
-            onOpenChange={setIsDropdownOpen}
-          />
         </ActionButtons>
       </ValidatorItemWrap>
     </ValidatorItemWrapper>
   )
 }
 
-const ValidatorItemWrapper = styled.div<{ $isDropdownOpen?: boolean }>`
+const ValidatorItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -141,7 +123,7 @@ const ValidatorItemWrapper = styled.div<{ $isDropdownOpen?: boolean }>`
   cursor: pointer;
   transition: ${Transitions.all};
   position: relative;
-  z-index: ${({ $isDropdownOpen }) => ($isDropdownOpen ? 99997 : 1)};
+  z-index: 1;
 
   ${TableListItemAsLinkHover}
 `

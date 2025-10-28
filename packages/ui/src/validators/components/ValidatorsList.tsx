@@ -124,10 +124,14 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
     clearSelection()
   }
 
+  const handleNominate = () => {
+    handleProceed()
+  }
+
   return (
     <MainContainer>
       <Wrapper>
-        <ValidatorsFilter filter={format.filter} />
+        <ValidatorsFilter filter={format.filter} onNominate={handleNominate} />
         <ResponsiveWrap>
           <ValidatorsListWrap>
             <ListHeaders>
@@ -201,7 +205,7 @@ export const ValidatorsList = ({ validators, eraIndex, order, pagination }: Vali
                         selectCard(index + 1)
                       }}
                     >
-                      <ValidatorItem validator={validator} isNominated={false} />
+                      <ValidatorItem validator={validator} />
                     </ListItem>
                   ))}
                 </List>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 
+import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { Account } from '@/accounts/types'
 import { useApi } from '@/api/hooks/useApi'
 import { ButtonPrimary, ButtonSecondary } from '@/common/components/buttons'
 import { InputComponent, InputText } from '@/common/components/forms'
@@ -14,25 +16,26 @@ import { useStakingQueries, useStakingTransactions } from '@/validators/hooks/us
 import { PayoutModalCall } from '@/validators/modals/PayoutModal/types'
 
 interface Props {
-  validatorAddress: Address
+  validatorAddress?: Address
 }
 
 export const PayoutModal = () => {
   const { modalData } = useModal<PayoutModalCall>()
-  const validatorAddress = modalData?.validatorAddress
-
-  if (!validatorAddress) return null
+  const validatorAddress = (modalData as { validatorAddress?: string })?.validatorAddress
 
   return <PayoutModalInner validatorAddress={validatorAddress} />
 }
 
-const PayoutModalInner = ({ validatorAddress }: Props) => {
+const PayoutModalInner = ({ validatorAddress: initialValidatorAddress }: Props) => {
   const { hideModal } = useModal<PayoutModalCall>()
   const { api } = useApi()
   const { allAccounts } = useMyAccounts()
   const { payoutStakers, isConnected } = useStakingTransactions()
   const { getStakingRewards } = useStakingQueries()
 
+  const [validatorAccount, setValidatorAccount] = useState<Account | undefined>(
+    initialValidatorAddress ? ({ address: initialValidatorAddress } as Account) : undefined
+  )
   const [era, setEra] = useState('1')
   const [availableRewards, setAvailableRewards] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -76,6 +79,11 @@ const PayoutModalInner = ({ validatorAddress }: Props) => {
       return
     }
 
+    if (!validatorAccount?.address) {
+      setError('Please select a validator address')
+      return
+    }
+
     const eraNumber = parseInt(era)
     if (!era || isNaN(eraNumber) || eraNumber <= 0) {
       setError('Please enter a valid era number')
@@ -91,7 +99,7 @@ const PayoutModalInner = ({ validatorAddress }: Props) => {
         throw new Error('Payout function not available')
       }
 
-      const payoutTx = payoutStakers(validatorAddress, eraNumber)
+      const payoutTx = payoutStakers(validatorAccount.address, eraNumber)
 
       if (!payoutTx || typeof payoutTx.signAndSend !== 'function') {
         throw new Error('Invalid transaction object')
@@ -134,11 +142,15 @@ const PayoutModalInner = ({ validatorAddress }: Props) => {
       <ModalHeader title="Payout Rewards" onClick={hideModal} />
       <ModalBody>
         <RowGapBlock gap={16}>
-          <TextMedium>Claim earned rewards from this validator for previous eras.</TextMedium>
+          <TextMedium>Claim earned rewards from a validator for previous eras.</TextMedium>
 
-          <TextMedium>
-            <strong>Validator Address:</strong> {validatorAddress}
-          </TextMedium>
+          <InputComponent label="Validator Address" required inputSize="l" id="validator-address">
+            <SelectAccount
+              onChange={setValidatorAccount}
+              selected={validatorAccount}
+              placeholder="Select or paste validator address"
+            />
+          </InputComponent>
 
           <InputComponent label="Era to Payout" required inputSize="m" id="payout-era">
             <InputText
@@ -194,7 +206,14 @@ const PayoutModalInner = ({ validatorAddress }: Props) => {
         <ButtonPrimary
           size="medium"
           onClick={handlePayout}
-          disabled={isLoading || !era || isNaN(parseInt(era)) || parseInt(era) <= 0 || !allAccounts[0]?.address}
+          disabled={
+            isLoading ||
+            !validatorAccount?.address ||
+            !era ||
+            isNaN(parseInt(era)) ||
+            parseInt(era) <= 0 ||
+            !allAccounts[0]?.address
+          }
         >
           {isLoading ? 'Paying out...' : 'Payout Rewards'}
         </ButtonPrimary>
