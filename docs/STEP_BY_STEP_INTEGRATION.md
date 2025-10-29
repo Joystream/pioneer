@@ -19,7 +19,7 @@ Replace the mock staking implementation with the **real Joystream SDK** for prod
 
 ### File to Update
 
-`E:\work\joystream\pioneer\packages\ui\src\validators\hooks\useStakingSDK.ts`
+`\joystream\pioneer\packages\ui\src\validators\hooks\useStakingSDK.ts`
 
 ### Changes Required
 
@@ -49,7 +49,7 @@ const staking = useMemo(() => {
 #### Option A: Install from npm (Recommended)
 
 ```bash
-cd E:\work\joystream\pioneer
+cd \joystream\pioneer
 yarn add @joystream/sdk-core@latest
 ```
 
@@ -57,19 +57,19 @@ yarn add @joystream/sdk-core@latest
 
 ```bash
 # Build SDK
-cd E:\work\joystream\sdk
+cd \joystream\sdk
 yarn build
 yarn link
 
 # Link in Pioneer
-cd E:\work\joystream\pioneer\packages\ui
+cd \joystream\pioneer\packages\ui
 yarn link @joystream/sdk-core
 ```
 
 #### Verify Installation
 
 ```bash
-cd E:\work\joystream\pioneer
+cd \joystream\pioneer
 yarn list @joystream/sdk-core
 ```
 
@@ -83,7 +83,7 @@ yarn list @joystream/sdk-core
 
 ### Step 2: Update useStakingSDK Hook
 
-Open file: `E:\work\joystream\pioneer\packages\ui\src\validators\hooks\useStakingSDK.ts`
+Open file: `\joystream\pioneer\packages\ui\src\validators\hooks\useStakingSDK.ts`
 
 #### Current Code (Mock Implementation):
 
@@ -164,7 +164,7 @@ These will automatically use the real SDK methods!
 #### Terminal 1: Start Joystream Node (Optional - or use testnet)
 
 ```bash
-cd E:\work\joystream\sdk\test-setup
+cd \joystream\sdk\test-setup
 ./up.sh
 ```
 
@@ -178,7 +178,7 @@ wss://testnet.joystream.org/rpc
 #### Terminal 2: Start Pioneer UI
 
 ```bash
-cd E:\work\joystream\pioneer\packages\ui
+cd \joystream\pioneer\packages\ui
 yarn dev
 ```
 
@@ -329,7 +329,7 @@ Cannot find module '@joystream/sdk-core/staking'
 **Solution:**
 
 ```bash
-cd E:\work\joystream\pioneer
+cd \joystream\pioneer
 yarn add @joystream/sdk-core@latest
 # or
 yarn link @joystream/sdk-core
@@ -484,15 +484,15 @@ When integration is successful, you'll have:
 
 ### Documentation
 
-- **SDK Staking Guide:** `E:\work\joystream\sdk\SDK_STAKING_README.md`
-- **Features List:** `E:\work\joystream\sdk\STAKING_FEATURES_IMPLEMENTED.md`
-- **API Reference:** `E:\work\joystream\sdk\packages\core\src\staking\README.md`
-- **Integration Guide:** `E:\work\joystream\sdk\PIONEER_SDK_INTEGRATION_GUIDE.md`
+- **SDK Staking Guide:** `\joystream\sdk\SDK_STAKING_README.md`
+- **Features List:** `\joystream\sdk\STAKING_FEATURES_IMPLEMENTED.md`
+- **API Reference:** `\joystream\sdk\packages\core\src\staking\README.md`
+- **Integration Guide:** `\joystream\sdk\PIONEER_SDK_INTEGRATION_GUIDE.md`
 
 ### Examples
 
-- **SDK Examples:** `E:\work\joystream\sdk\examples\staking\`
-- **Test Suite:** `E:\work\joystream\sdk\packages\core\src\staking\__tests__\`
+- **SDK Examples:** `\joystream\sdk\examples\staking\`
+- **Test Suite:** `\joystream\sdk\packages\core\src\staking\__tests__\`
 
 ### Support
 
